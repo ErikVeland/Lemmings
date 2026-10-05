@@ -18,17 +18,24 @@ Each player has three initials and a portrait from the original lemming sprites.
 
 The primary action changes with the selection: **Add player**, **Play as** or **Done**.
 Enter does the primary action. Arrow keys choose portraits.
+From the library or a completed turn, **Play as** can leave Hot Seat after
+confirmation. The shared session stays saved and the selected player returns to
+their solo progress. A failed checkpoint save blocks the switch.
 
 Deleting a player removes their campaign progress, saved runs, replay movies,
 scores, records and achievements. It also removes a shared campaign that they
 host. You cannot undo a deletion. You cannot delete the last player. During a run,
 you cannot delete the host, the current player or a Hot Seat player.
+The profile change saves before background checkpoint and replay cleanup begins.
+Playlist cleanup uses a non-blocking writer lock. Files that cannot be removed
+stay on disk, with a notice on the profile page. Corrupt checkpoint data stays
+untouched, and checkpoint removal retains the cross-process lock file.
 
 The first profile, initially called LEM, retains existing campaign progress.
 New profiles start their own campaigns and achievements. Graphics and audio
 settings remain shared.
 
-Finish the current run before changing players. You can add and edit players
+Finish the current run or return to the library before changing players. You can add and edit players
 during a run. Opening profile selection pauses play. A run belongs to the profile
 that started it. Renaming initials or changing the portrait does not change that
 identity or erase records.

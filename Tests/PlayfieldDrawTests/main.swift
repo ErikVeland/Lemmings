@@ -1170,6 +1170,9 @@ private func testMacArtworkCropStaysPixelAligned() throws {
         "The sprite cache leaked an assigned backpack onto an unassigned lemming")
     }
   }
+  let seasonal = try ["xmas", "holiday"].map { family in
+    try ClassicMacArtwork(directory: app.appendingPathComponent("Contents/Resources/MacArtwork/" + family))
+  }
   var checkedFrames = 0
   for pose in ClassicLemmingPose.allCases where ClassicSkillBackpack.kind(for: actor(true, true, pose: pose)) != nil {
     for left in [false, true] {
@@ -1180,6 +1183,11 @@ private func testMacArtworkCropStaysPixelAligned() throws {
         var artwork = [(try pc.rgba(using: view.palette), pc.width, pc.height, 1)]
         if let mf = mac?.lemming(pose: pose, left: left, tick: tick) {
           artwork.append((mf.rgba, mf.width, mf.height, 2))
+        }
+        for seasonalArtwork in seasonal {
+          if let frame = seasonalArtwork.lemming(pose: pose, left: left, tick: tick) {
+            artwork.append((frame.rgba, frame.width, frame.height, 2))
+          }
         }
         for (rgba, width, height, scale) in artwork {
           let image = ClassicSkillBackpack.image(rgba: rgba, width: width, height: height,

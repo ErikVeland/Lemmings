@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-05",
+  "scope": "Research-only native Builder-chain timing policy on two exact bundled Classic fan levels",
+  "nativeLibrarySHA256": "bb2e421d2c9c078d61c20a89030772156f8ad88dc5fde7bcc5e366cf2cbc19e2",
+  "probeBinarySHA256": "e4cb497a49b02de42752f5963a2297feea8a3bb723cf389ee2001160c45a235b",
+  "policy": "Assign the first Builder to lemming 0 at each tick 1 through 282; after each Builder-to-other-action transition, immediately reassign Builder up to 15 total assignments; stop a variant at the first loss when all lemmings are required. Test the natural release rate and an explicit rate 99.",
+  "records": [
+    {
+      "identity": "fan:lldb-61/lm_set15.dat#1",
+      "archiveSHA256": "4fb22ca4ef883e331f68c551bd0d3039bc42d306a8852533e9edc0b544e29525",
+      "population": 5,
+      "required": 5,
+      "naturalReleaseRate": 1,
+      "variants": 8460,
+      "acceptedBuilderAssignments": 5793,
+      "bestSavedRequired": "0/5",
+      "initialStateHash": "788ca86e84fc6a64d06c11e8d4331e21646224ca1cda46c409b3b0b7ad9ec048"
+    },
+    {
+      "identity": "fan:lldb-15/Mikepak10.dat#9",
+      "archiveSHA256": "12190548cbd30b6adde34254a2934f99037d427d6a1046e3413665f30cad640d",
+      "population": 1,
+      "required": 1,
+      "naturalReleaseRate": 99,
+      "variants": 8460,
+      "acceptedBuilderAssignments": 45570,
+      "bestSavedRequired": "0/1",
+      "initialStateHash": "bea5b762eb697356b033f20cb9d37b601eea7f389439b0260a87f5f4a46b51b6"
+    }
+  ],
+  "coordinatedFollowUp": {
+    "identity": "fan:lldb-61/lm_set15.dat#1",
+    "firstLossProbeBinarySHA256": "83c3b726471a34e4a428b7b136365bf70f61cb0ef0f40474e61ed33d68299756",
+    "twoBuilderLeadWorkerTrace": "Builder assignments to lemming 0 at ticks 97 and 129 are accepted. Lemming 1 falls out at tick 275 near (902,164), before lemming 0's next useful Builder at tick 321.",
+    "coordinatedProbeBinarySHA256": "d39ef45a3498944b350b6e2df036965b001c3c1da2954f810f8f72f92014b9ba",
+    "policy": "For each active worker, assign its first Builder when walking right past a threshold from x=770 through x=795, then reassign at each Builder-to-other-action transition, up to 12 per worker; test natural and rate-99 release settings.",
+    "variants": 624,
+    "bestSavedRequired": "0/5",
+    "fixedThresholdTraceBinarySHA256": "f69f8ad1ef4de73809a034146d0f33ed3b5a2a86ac2f9065ab65b1c333b6003d",
+    "fixedThresholdTrace": "At x=780 with a 12-Builder limit, all four released workers receive Builders. Lemming 0 builds left to (736,112) at tick 513, turns right around (716,102), then the immediate-chain policy builds it away from the exit. Lemming 1 splats at tick 1812 with zero saved.",
+    "rightThresholdProbeBinarySHA256": "ca68c96e1e03a9db6db0e0790926a0bb119e1dd3218ab26808b9c4bf83a5054b",
+    "rightThresholdRange": "x=796 through x=900, up to 12 Builders per worker, natural and rate-99 release settings",
+    "rightThresholdVariants": 2520,
+    "rightThresholdBestSavedRequired": "0/5",
+    "leftThresholdProbeBinarySHA256": "71da76bb1ab995bcc584a7dc47a3b2394fb8016b43a2c1868c2480011fb77dea",
+    "leftThresholdRange": "x=760 through x=769, up to 12 Builders per worker, natural and rate-99 release settings",
+    "leftThresholdVariants": 240,
+    "leftThresholdBestSavedRequired": "0/5"
+  },
+  "interpretation": "The single-worker macro cannot test delayed or interleaved assignments. The coordinated macro tests a narrow spatial policy, not all multi-worker routes. These failures do not show native impossibility or source physics divergence. No winning replay or score was produced."
+}

@@ -5,12 +5,12 @@ import AppKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "1.7.9"
-    static let subtitle = "Macintosh artwork for NeoLemmix and more fan solutions"
+    static let notesVersion = "1.8"
+    static let subtitle = "Sharper pixels and better sound"
     static let sections = [
-        ("Macintosh artwork for NeoLemmix", "Choose Macintosh artwork for matching terrain, lemmings and skill icons. Custom pieces keep their own graphics. Physics and rewind stay the same."),
-        ("More fan solutions", "The ledger now records 2,401 Classic fan wins, 96 more than 1.7.8. More packs use the correct hatch rules and seasonal artwork."),
-        ("Lemmings 3 corrections", "Extra lemmings face the correct direction, and selected stair contacts improve. All 41 retained routes pass. Lemmings 2 and 3 remain Preview.")
+        ("Sharper pixel artwork", "Game artwork, controls, previews and original movies keep crisp pixels when scaled."),
+        ("NeoLemmix sound effects", "Hatches, skill assignments, rescues, deaths and nukes now play sound effects through your selected sound bank."),
+        ("The music comes back", "After the last nuke explosion, the funeral dirge spins back up to normal speed, even on a failed result. Lemmings 2 and 3 remain Preview.")
     ]
     private let defaults: UserDefaults
     private let build: Int

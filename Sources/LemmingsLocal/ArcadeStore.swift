@@ -13,7 +13,7 @@ import NxlvKit
     private var canWrite = true
     private var pendingReplayIDs: Set<UUID> = []
     private let bundledProofs: TrolleyBundledProofs?
-    private let playlistDataRemover: (String) -> Void
+    private let playlistDataRemover: (String) throws -> Void
     var profilesAreWritable: Bool { canWrite }
 
     /// The house rule and shared campaign survive app restarts.
@@ -161,7 +161,9 @@ import NxlvKit
 
     init(file: URL? = nil, bundledProofs: TrolleyBundledProofs? = .load(), defaults: UserDefaults = .standard,
          checkpoints: RunRecoveryStore? = nil,
-         playlistDataRemover: @escaping (String) -> Void = { LevelPlaylistStore.removeData(profileID: $0) }) {
+         playlistDataRemover: @escaping (String) throws -> Void = {
+             try LevelPlaylistStore.removeDataChecked(at: LevelPlaylistStore.fileURL(profileID: $0))
+         }) {
         self.bundledProofs = bundledProofs
         self.defaults = defaults
         self.playlistDataRemover = playlistDataRemover
@@ -235,7 +237,7 @@ import NxlvKit
         return id != records.activeProfileID && id != playingProfileID && !sessionProfileIDs.contains(id)
     }
     /// Removes a player, their records, campaign progress, saved runs and replay movies.
-    @discardableResult func deleteProfile(_ id: String) -> Bool {
+    @discardableResult func deleteProfile(_ id: String, backgroundCleanup: Bool = false) -> Bool {
         guard canWrite, storageError == nil else { return false }
         let previous = records
         guard let replays = records.removeProfile(id) else { return false }
@@ -251,11 +253,27 @@ import NxlvKit
         }
         if previous.activeProfileID == id { endHotSeat() }
         let folder = file.deletingLastPathComponent()
-        for replay in replays { try? FileManager.default.removeItem(at: folder.appendingPathComponent(replay.relativePath)) }
-        try? recoveryStore.discard(profileID: id)
+        let replayURLs = replays.map { folder.appendingPathComponent($0.relativePath) }
+        let recoveryStore = recoveryStore
+        let cleanup: @Sendable () -> String? = {
+            do {
+                try recoveryStore.discard(profileID: id)
+                for url in replayURLs where FileManager.default.fileExists(atPath: url.path) {
+                    try FileManager.default.removeItem(at: url)
+                }
+                return nil
+            } catch { return "Player deleted. Some saved files could not be removed: " + error.localizedDescription }
+        }
+        if backgroundCleanup {
+            Task { [weak self] in
+                let notice = await Task.detached(priority: .utility, operation: cleanup).value
+                if let notice { self?.storageNotice = notice }
+            }
+        } else if let notice = cleanup() { storageNotice = notice }
         PrecisionZoomController.shared.removeProfile(id)
         removeSavedProgress(of: id)
-        playlistDataRemover(id)
+        do { try playlistDataRemover(id) }
+        catch { storageNotice = "Player deleted. Some playlists could not be removed: " + error.localizedDescription }
         return true
     }
     private func removeSavedProgress(of id: String) {

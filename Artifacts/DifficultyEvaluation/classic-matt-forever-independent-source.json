@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-05",
+  "identity": {
+    "engine": "classic",
+    "packID": "fan:lldb-248",
+    "levelID": "MATTPCK1.DAT#2"
+  },
+  "title": "Forever Friends",
+  "sourceURL": "https://lldb.camanis.net/level/248/3",
+  "sourceReplaySHA256": "039fe378d33a5396e3ba0c242b6589ffcf35a8d6c6e63409dd3e1269260b98ea",
+  "sourceMainJSSHA256": "c467eab99315555391542d7c79a2976b28c1c674dadd01ccf261d7792eabeace",
+  "sourceBrowser": "Firefox 151.0.2 headless; media.volume_scale 0.0",
+  "sourceAssetRequests": 34,
+  "sourceProxyErrors": [],
+  "sourceJavaScriptErrors": [],
+  "sourceDAT": {
+    "bytes": 6381,
+    "sha256": "7270aee2cf59119ee9a8eca166a35238dfd24f7b5a0529020d0f14178e745fbb",
+    "matchesBundledDAT": true
+  },
+  "bundledArchiveSHA256": "bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854",
+  "sourceResult": {
+    "savedCount": 2,
+    "requiredCount": 2,
+    "totalCount": 2,
+    "totalCycles": 5566,
+    "hasTimeRemaining": true
+  },
+  "sourceScreenshotSHA256ByCycle": {
+    "130": "05222d96ad6df77b2e65720cffab55897ce3cd4f6b1700c9e2db788ceb576056",
+    "142": "10b0bb169994c01dd613772458648398034ccf57082844c84267addd526221c7",
+    "2000": "ca839c2a21d59fb00007adf4df952cbdad5e8467ff5c690788512c03a38f0518",
+    "2200": "97cee4532e5d913aa11e0d37de44132c265b534198664e13554d1cd17b38b859",
+    "2257": "b1314895623b6ae06c00b642b670e05e2f122d8824e243ca2cd9c4072e5b19e1",
+    "2269": "1776420b2742cffeb9010466e25a78ff2ee76eda0ea859d9b4ae85a685d5f750",
+    "2600": "e9ae01886699e4f8a84ab7c4a86fbc70ca79eba8339708e4e25f6ec0ba6dc771",
+    "2800": "4e4698713ae3c76d4abf835ad1fc177eba51908416d6b255ea36acbde864bdff"
+  },
+  "nativeComparison": {
+    "mechanics": "golems",
+    "assignmentRules": "source replay",
+    "initialHash": "d353b4f4591cd09b83fe7e817be38ac3e7235b07fcff517db5612266c8b14722",
+    "saved": 0,
+    "required": 2,
+    "endedAtTick": 2851,
+    "sourceInputSHA256": "512c220f89b22e2d2d43e5eeed83e37dfd3cc0e2d54a49110079e19d731cdd92"
+  },
+  "interpretation": "The independent source player saves both workers on the byte-matched DAT. The native source-rule replay loses both before the source completion cycle. This is an outcome divergence, not an intermediate state parity localisation. Screen captures support subsequent visual inspection but are not pixel or lemming-state comparisons.",
+  "ledgerEffect": "No native win, replay digest or difficulty score promoted."
+}

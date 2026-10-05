@@ -254,6 +254,141 @@ private func check(_ value: @autoclosure () throws -> Bool, _ message: String) t
 }
 
 extension AppDelegate {
+  fileprivate func testSoloHotSeatRoundTrips() throws {
+    if window == nil { buildInterface() }
+    loadContent(); returnToLibrary(); installKeyboardShortcuts()
+    let store = ArcadeStore.shared
+    store.endHotSeat()
+    _ = store.addProfile(initials: "TWO", portrait: 2, select: false)
+    let index = dataSets.firstIndex { $0.set.title == .lemmings }!
+    gamePicker.selectItem(at: index); selectDataSet()
+    func progress(_ count: Int) -> ClassicGameFlow.Progress {
+      var game = ClassicGameFlow(campaign: dataSets[index].set.campaign)
+      for position in 0..<count {
+        game.selectLevel(rank: 0, position: position); game.beginPlaying()
+        game.finishLevel(saved: 10, required: 1, total: 10); game.acknowledgeResults()
+      }
+      var normalised = ClassicGameFlow(campaign: dataSets[index].set.campaign)
+      normalised.restore(game.progress)
+      return normalised.progress
+    }
+    let solo = progress(1), shared = progress(3)
+    let baseKey = "\(flowProgressKey).\(dataSetID(dataSets[index]))"
+    let soloKey = store.progressKey(baseKey)
+    UserDefaults.standard.set(try JSONEncoder().encode(solo), forKey: soloKey)
+    store.prepareHotSeat()
+    let sharedID = store.hotSeatID!
+    let sharedKey = store.progressKey(baseKey)
+    UserDefaults.standard.set(try JSONEncoder().encode(shared), forKey: sharedKey)
+    selectDataSet()
+    func press(_ title: String) throws {
+      func buttons(_ view: NSView) -> [NSButton] { (view as? NSButton).map { [$0] } ?? view.subviews.flatMap(buttons) }
+      guard let page = GameScreen.shared.controllerPage(in: window),
+            let button = buttons(page).first(where: { $0.title == title }) else {
+        throw IntegrationFailure(message: "Missing mode confirmation: " + title)
+      }
+      button.performClick(nil)
+    }
+    func pressTile(_ title: String) throws {
+      let view = ArcadeWindow.shared.arcadeView
+      window.contentView?.layoutSubtreeIfNeeded()
+      let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+      view.cacheDisplay(in: view.bounds, to: bitmap)
+      let control = view.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement }
+        .first { $0.accessibilityLabel() == title }
+      try check(control?.accessibilityPerformPress() == true, "Missing mode tile: " + title)
+    }
+    for _ in 0..<3 {
+      showProfiles(); try pressTile("Return to solo"); try press("Return to solo")
+      try check(!store.hotSeatIsActive && store.hotSeatID == nil && !GameScreen.shared.isPresented,
+        "Return to solo stayed in Hot Seat")
+      try check(flow?.progress == solo, "Return to solo retained the Hot Seat campaign in memory")
+      try check(playfield.overlayProfileInitials == store.records.activeProfile.initials,
+        "Solo library displayed Hot Seat players")
+      returnToLibrary()
+      try check(try JSONDecoder().decode(ClassicGameFlow.Progress.self, from: UserDefaults.standard.data(forKey: soloKey)!) == solo,
+        "Returning to the library wrote shared progress over solo progress")
+      showProfiles(); try pressTile("Hot Seat"); try pressTile("Choose a game")
+      try check(store.hotSeatID == sharedID && !GameScreen.shared.isPresented, "Hot Seat returned to solo")
+      try check(flow?.progress == shared, "Hot Seat retained the solo campaign in memory")
+      returnToLibrary()
+      try check(try JSONDecoder().decode(ClassicGameFlow.Progress.self, from: UserDefaults.standard.data(forKey: sharedKey)!) == shared,
+        "Returning to the library wrote solo progress over Hot Seat progress")
+    }
+    print("PASS repeated Solo/Hot Seat mode, campaign, save namespace and library round trips")
+    store.endHotSeat(); selectDataSet(); returnToLibrary()
+  }
+  fileprivate func testProfileSessionActions() throws {
+    if window == nil { buildInterface() }
+    loadContent(); returnToLibrary(); installKeyboardShortcuts()
+    let store = ArcadeStore.shared
+    let host = store.records.activeProfileID
+    let guest = store.addProfile(initials: "PAL", portrait: 1, select: false)!
+    store.prepareHotSeat()
+    let oldSession = store.hotSeatID
+    gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
+    selectDataSet(); loadLevel(at: 0); phase = .playing
+    saveRunCheckpoint(immediately: true); returnToLibrary()
+    try check(menuRecovery?.hotSeatID == oldSession, "Fixture has no saved Hot Seat run")
+    let view = ArcadeWindow.shared.arcadeView
+    func render(_ name: String) throws {
+      window.contentView?.layoutSubtreeIfNeeded()
+      guard let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds) else {
+        throw IntegrationFailure(message: "No profile/session render")
+      }
+      view.cacheDisplay(in: view.bounds, to: bitmap)
+      let folder = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent(".build/session-reliability")
+      try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+      try bitmap.representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent(name + ".png"))
+    }
+    func press(_ title: String) throws {
+      func buttons(_ view: NSView) -> [NSButton] { (view as? NSButton).map { [$0] } ?? view.subviews.flatMap(buttons) }
+      guard let page = GameScreen.shared.controllerPage(in: window),
+            let button = buttons(page).first(where: { $0.title == title }) else {
+        throw IntegrationFailure(message: "Missing action " + title)
+      }
+      button.performClick(nil)
+    }
+    showHotSeat()
+    try press("Save and return to library")
+    try render("hot-seat-before")
+    let scale = GamePageLayout.scale(in: view.bounds.size)
+    let offset = CGPoint(x: (view.bounds.width - 1120 * scale) / 2, y: (view.bounds.height - 720 * scale) / 2)
+    let point = view.convert(CGPoint(x: offset.x + 418 * scale, y: offset.y + 658 * scale), to: nil)
+    view.mouseDown(with: NSEvent.mouseEvent(with: .leftMouseDown, location: point, modifierFlags: [], timestamp: 1,
+      windowNumber: window.windowNumber, context: nil, eventNumber: 1, clickCount: 1, pressure: 1)!)
+    try press("Start new Hot Seat")
+    try check(store.hotSeatID != oldSession && store.hotSeatIsActive && !GameScreen.shared.isPresented,
+      "Start new Hot Seat did not continue to the library")
+    try check(store.savedHotSeats.contains { $0.id == oldSession }, "Starting Hot Seat lost the old session")
+    try check(menuRecovery == nil, "New Hot Seat kept the previous session's Resume action")
+    try check(playfield.overlayProfileInitials == store.sessionProfiles.map(\.initials).joined(separator: " v "),
+      "Hot Seat home screen retained the previous player badge")
+    showProfiles(); view.selectProfile(guest)
+    try render("profile-switch")
+    try check(view.profilePrimaryTitle == "Play as PAL", "Hot Seat made profile switching unavailable")
+    view.performProfilePrimaryAction()
+    try check(store.records.activeProfileID == host && store.hotSeatIsActive, "Switching did not wait for confirmation")
+    try press("Play as PAL")
+    try check(store.records.activeProfileID == guest.id && !store.hotSeatIsActive && !GameScreen.shared.isPresented,
+      "Profile switch did not reach solo play")
+    store.selectProfile(host)
+    try check(store.resumeHotSeat(id: oldSession!), "Profile switch lost the saved Hot Seat")
+    store.endHotSeat(); returnToLibrary()
+    print("PASS mouse Start new Hot Seat, saved session retention and confirmed profile switch")
+  }
+  fileprivate func testReportedRecovery() throws {
+    if window == nil { buildInterface() }
+    loadContent()
+    guard let path = ProcessInfo.processInfo.environment["LEMMINGS_RECOVERY_FIXTURE"] else { return }
+    var object = try JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: path))) as! [String: Any]
+    object["profileID"] = ArcadeStore.shared.playingProfileID
+    object.removeValue(forKey: "hotSeatID")
+    let checkpoint = try JSONDecoder().decode(RunRecovery.self, from: JSONSerialization.data(withJSONObject: object))
+    restoreRun(checkpoint)
+    print("RECOVERY diagnostic", checkpoint.dataSetID, checkpoint.levelFingerprint, arcadeLevel?.conditions?.levelFingerprint ?? "nil", session?.currentTick ?? -1, checkpoint.tick)
+    try check(arcadeRunID == checkpoint.runID && session?.currentTick == checkpoint.tick, "Reported saved run failed to restore")
+  }
   fileprivate func testSelectionSettings() throws {
     let preferences = SettingsWindow(settings: ClassicSettings(), options: settingsOptions())
     var applied: [LemmingSelectionStyle] = []
@@ -468,12 +603,12 @@ extension AppDelegate {
     var presses = 0
     let button = GameAccessibleElement(owner: owner, label: "Retry", frame: CGRect(x: 10, y: 10, width: 80, height: 30), press: { presses += 1 })
     try check(button.accessibilityPerformPress() && presses == 1 && button.accessibilityFrame().width == 80, "Accessible action or screen frame failed")
-    let backgroundPress = await Task.detached { button.accessibilityPerformPress() }.value
+    let backgroundPress = await Task.detached { @Sendable [button] in button.accessibilityPerformPress() }.value
     try check(backgroundPress && presses == 2, "Background accessibility action failed")
     var editedValue = "Before"
     button.readValue = { editedValue }
     button.writeValue = { editedValue = $0 }
-    let backgroundValue = await Task.detached {
+    let backgroundValue = await Task.detached { @Sendable [button] in
       button.setAccessibilityValue("After")
       button.setAccessibilityFocused(true)
       return button.accessibilityValue() as? String
@@ -652,8 +787,14 @@ extension AppDelegate {
         "Cancelling player setup changed the shared run")
     }
     showProfiles()
-    try check(!view.canSwitch && store.hotSeatID == sharedID && arcadeRunID == runID,
-      "Profile selection could switch an active Hot Seat to solo")
+    try check(view.canSwitch && store.hotSeatID == sharedID && arcadeRunID == runID,
+      "A completed Hot Seat turn could not select another profile")
+    view.selectProfile(guest); view.performProfilePrimaryAction()
+    try check(store.hotSeatID == sharedID && arcadeRunID == runID,
+      "Profile selection changed a shared run before confirmation")
+    (GameScreen.shared.controllerPage(in: window) as? GameMenuPage)?.onBack?()
+    try check(store.hotSeatID == sharedID && arcadeRunID == runID,
+      "Cancelling a profile switch changed the shared run")
     window.contentView?.layoutSubtreeIfNeeded()
     view.layoutSubtreeIfNeeded()
     let profileBitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
@@ -1163,6 +1304,8 @@ extension AppDelegate {
       settings.reduceMotion = false; settings.reduceFlashes = false
       picker.selectItem(at: 29); levelChanged()
       if phase == .briefing { advancePhase() }
+      // Measure simulation throughput without the key-window countdown.
+      playfield.startCountdown.cancel()
       isPaused = false; panel.isPaused = false; applyDisplayMode()
       session?.adjustRate(by: 99)
       speedControl.variableEnabled = true; speedControl.reset(at: ProcessInfo.processInfo.systemUptime)
@@ -1981,14 +2124,99 @@ extension AppDelegate {
       guard let ghost = LevelHintWindow.shared.solutionWindow else { throw IntegrationFailure(message: "Confirmed solution did not open") }
       ghost.stop()
       try check(ghost.playback.session !== current && isPaused, "Ghost used or resumed the live attempt")
+      if let journey = LearningJourneyLibrary.journey {
+        let entries = Array(journey.lessons.prefix(3).map(\.entry))
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let store = try LevelPlaylistStore(file: directory.appendingPathComponent("playlists.json"))
+        let playlist = try LevelPlaylist(id: LearningJourney.playlistID, name: "Journey migration", entries: entries)
+        try store.add(playlist, select: false)
+        let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+          pool: .init(id: LearningJourney.version, summary: "Journey migration"), entries: entries, currentIndex: 1)
+        try store.startRun(run, hotSeatID: nil)
+        try store.removeExcludedLearningLessons([entries[1].identity])
+        try check(store.activeRun?.id == run.id && store.activeRun?.currentEntry.identity == entries[2].identity,
+          "Withdrawing a current lesson lost run identity or failed to advance")
+        let reloaded = try LevelPlaylistStore(file: store.file)
+        try check(reloaded.activeRun == store.activeRun && reloaded.learningProgress == store.learningProgress,
+          "Journey migration did not persist or invented progress")
+        let shared = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+          pool: run.pool, entries: entries, currentIndex: 1)
+        try store.startRun(shared, hotSeatID: "test-shared-owner")
+        try store.removeExcludedLearningLessons([entries[0].identity, entries[1].identity])
+        try check(store.activeRun?.id == shared.id && store.activeRunHotSeatID == "test-shared-owner"
+          && store.activeRun?.currentEntry.identity == entries[2].identity
+          && store.savedRuns.first?.run.id == run.id && store.savedRuns.first?.hotSeatID == nil
+          && store.savedRuns.first?.run.currentEntry.identity == entries[2].identity,
+          "Journey migration changed a saved or shared run owner or position")
+      }
       let expected = ghost.playback.solution.replay.expected!
       for _ in 0..<min(338, expected.ticks) { ghost.advance() }
       try capture(ghost.page, name: "solution-playing-\(mode)")
       button("Pause", in: ghost.page)!.performClick(nil)
-      button("1x", in: ghost.page)!.performClick(nil)
-      try check(button("3x", in: ghost.page) != nil, "Replay speed did not increase")
-      button("3x", in: ghost.page)!.performClick(nil)
-      try check(button("10x", in: ghost.page) != nil, "Replay speed did not reach 10x")
+      try check(ghost.page.bounds.size == window.contentView!.bounds.size,
+        "Replay did not fill the game window")
+      try check(ghost.field.frame.width == ghost.page.bounds.width && ghost.field.frame.height > ghost.page.bounds.height * 0.65,
+        "Replay retained its small menu canvas")
+      for target in [2.0, 3, 5, 10] {
+        button("Speed +", in: ghost.page)!.performClick(nil)
+        try check(ghost.speedControl.target == target, "Replay skipped a shared speed tier")
+      }
+      button("10×", in: ghost.page)!.performClick(nil)
+      try check(ghost.speedControl.target == 1, "Replay speed toggle did not return to normal")
+      let baseZoom = ghost.field.viewport.zoom
+      button("Zoom 1×", in: ghost.page)!.performClick(nil)
+      try check(ghost.field.viewport.zoom == baseZoom * 2, "Replay 2× zoom failed")
+      try capture(ghost.page, name: "solution-zoom-\(mode)")
+      button("Zoom 2×", in: ghost.page)!.performClick(nil)
+      try check(ghost.field.viewport.zoom == baseZoom * 4, "Replay 4× zoom failed")
+      button("Zoom 4×", in: ghost.page)!.performClick(nil)
+      button("Goal", in: ghost.page)!.performClick(nil)
+      let freeX = ghost.field.viewport.scrollX
+      button("Play", in: ghost.page)!.performClick(nil)
+      ghost.advance()
+      try check(ghost.field.viewport.scrollX == freeX, "Automatic tracking overrode the free camera")
+      button("Pause", in: ghost.page)!.performClick(nil)
+      button("Home", in: ghost.page)!.performClick(nil)
+      button("Next", in: ghost.page)!.performClick(nil)
+      try check(button("Tracking", in: ghost.page) != nil, "Replay did not track an unassigned lemming")
+      func replayTargets(_ view: NSView) throws {
+        for child in view.subviews {
+          if let control = child as? NSButton {
+            let rect = control.convert(control.bounds, to: ghost.page)
+            try check(ghost.page.bounds.contains(rect), "Replay button outside page: \(control.title)")
+            let hit = ghost.page.hitTest(CGPoint(x: rect.midX, y: rect.midY))
+            try check(hit === control || hit?.isDescendant(of: control) == true, "Replay button target blocked: \(control.title)")
+          } else { try replayTargets(child) }
+        }
+      }
+      try replayTargets(ghost.page)
+      func replayKey(_ character: String, code: UInt16, flags: NSEvent.ModifierFlags = [], type: NSEvent.EventType = .keyDown) -> NSEvent {
+        NSEvent.keyEvent(with: type, location: .zero, modifierFlags: flags,
+          timestamp: ProcessInfo.processInfo.systemUptime, windowNumber: window.windowNumber, context: nil,
+          characters: character, charactersIgnoringModifiers: character, isARepeat: false, keyCode: code)!
+      }
+      try check(ghost.handleKey(replayKey("z", code: 6)), "Replay did not own Z")
+      try check(ghost.field.viewport.zoom == baseZoom * 2, "Replay Z did not zoom")
+      _ = ghost.handleKey(replayKey("z", code: 6))
+      ghost.speedControl.press(.shift, at: ProcessInfo.processInfo.systemUptime)
+      _ = ghost.handleKey(replayKey("z", code: 6, flags: .shift))
+      try check(ghost.field.viewport.zoom == baseZoom * 4 && !ghost.speedControl.state.isHeld,
+        "Superzoom retained a temporary speed boost")
+      _ = ghost.handleKey(replayKey("z", code: 6, flags: .shift))
+      try check(ghost.handleKey(replayKey("f", code: 3)), "Replay did not own F")
+      _ = ghost.handleKey(replayKey("f", code: 3, type: .keyUp))
+      try check(ghost.speedControl.target > 1, "Replay F did not use shared speed control")
+      ghost.speedControl.reset()
+      _ = ghost.handleKey(replayKey("h", code: 4))
+      try check(button("Free view", in: ghost.page) != nil, "Replay H did not cancel tracking")
+      try check(!ghost.handleKey(replayKey("h", code: 4, flags: .command)), "Replay swallowed an app shortcut")
+      let fullFrame = ghost.page.frame
+      ghost.page.frame.size = CGSize(width: 800, height: 600)
+      ghost.page.needsLayout = true; ghost.page.layoutSubtreeIfNeeded()
+      try replayTargets(ghost.page)
+      try capture(ghost.page, name: "solution-small-\(mode)")
+      ghost.page.frame = fullFrame; ghost.page.needsLayout = true; ghost.page.layoutSubtreeIfNeeded()
       button("Back 1s", in: ghost.page)!.performClick(nil)
       try check(ghost.field.session === ghost.playback.session,
         "Seeking solution replay left the canvas on a stale session")
@@ -2385,6 +2613,10 @@ extension AppDelegate {
   }
 
   fileprivate func testHintsFromControlsHelp() async throws {
+    guard ProcessInfo.processInfo.environment["LEMMINGS_TEST_WINDOWS"] == "foreground" else {
+      print("SKIP controls-help focus checks: require an explicitly authorised foreground run")
+      return
+    }
     GameScreen.shared.dismissAll()
     launchMode = .singleTitle; activeTitle = .lemmings
     gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
@@ -3396,6 +3628,48 @@ extension AppDelegate {
     try store.add(journey.playlist())
     playlistStoreCache = (arcade.records.activeProfileID, store)
     let entries = journey.lessons.map(\.entry)
+    // Migrate both Solo and Hot Seat queues without changing ownership or progress.
+    let migrationFile = directory.appendingPathComponent("migration.json")
+    let migrationStore = try LevelPlaylistStore(file: migrationFile)
+    try migrationStore.add(journey.playlist())
+    let oldPool = try LevelPool(id: "learning-11", summary: "Earlier journey")
+    let solo = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID), pool: oldPool,
+      entries: Array(entries.prefix(3)), currentIndex: 1)
+    try migrationStore.startRun(solo, hotSeatID: nil)
+    let withdrawn = try LevelPlaylistEntry(identity: .init(engine: .classic, packID: "fan:withdrawn", levelID: "1"),
+      catalogueRevision: "test", sourceRevision: "test", packNameSnapshot: "Withdrawn", levelNameSnapshot: "Withdrawn", levelNumberSnapshot: 1)
+    let shared = try LevelSequenceRun(source: solo.source, pool: oldPool,
+      entries: [entries[0], withdrawn, entries[2]], currentIndex: 1)
+    try migrationStore.startRun(shared, hotSeatID: "shared-owner")
+    let progressBefore = migrationStore.learningProgress
+    try migrationStore.migrateLearningJourney(journey)
+    try check(migrationStore.activeRun?.id == shared.id && migrationStore.activeRunHotSeatID == "shared-owner"
+      && migrationStore.activeRun?.currentEntry.identity == entries[1].identity
+      && migrationStore.activeRun?.pool.id == LearningJourney.version,
+      "Community migration lost owner/run identity or retained a withdrawn lesson")
+    try check(migrationStore.savedRuns.first?.run.id == solo.id && migrationStore.savedRuns.first?.hotSeatID == nil
+      && migrationStore.savedRuns.first?.run.currentEntry.identity == entries[1].identity
+      && migrationStore.learningProgress == progressBefore,
+      "Community migration changed saved Solo ownership or fabricated progress")
+    let restored = try LevelPlaylistStore(file: migrationFile)
+    try check(restored.activeRun == migrationStore.activeRun && restored.savedRuns.map(\.run) == migrationStore.savedRuns.map(\.run)
+      && restored.savedRuns.map(\.hotSeatID) == migrationStore.savedRuns.map(\.hotSeatID),
+      "Community migration was not persistent and idempotent")
+    let futureRun = try LevelSequenceRun(source: solo.source, pool: .init(id: "learning-999", summary: "Future"), entries: [withdrawn])
+    try check(try journey.migrating(futureRun) == futureRun, "Community migration downgraded a future journey")
+    let custom = try LevelSequenceRun(source: .playlist(UUID()), pool: oldPool, entries: [withdrawn])
+    try check(try journey.migrating(custom) == custom, "Community migration changed a user playlist")
+    let finished = try LevelSequenceRun(source: solo.source, pool: oldPool, entries: entries + [withdrawn], currentIndex: entries.count)
+    try check(try journey.migrating(finished) == nil, "An exhausted revised path repeated completed visits")
+    var encoded = try JSONSerialization.jsonObject(with: JSONEncoder().encode(journey)) as! [String: Any]
+    var rows = encoded["lessons"] as! [[String: Any]]
+    var placement = rows[0]["placement"] as! [String: Any]
+    placement["sourceRevision"] = "stale"; rows[0]["placement"] = placement; encoded["lessons"] = rows
+    let invalid = try JSONDecoder().decode(LearningJourney.self, from: JSONSerialization.data(withJSONObject: encoded))
+    var rejected = false
+    do { _ = try invalid.validated() } catch { rejected = true }
+    try check(rejected, "Runtime accepted stale community placement evidence")
+    print("PASS community placement validation and saved Solo/Hot Seat migration")
     let first = entries[0].identity
     func waitForLaunch() async throws {
       for _ in 0..<3000 where playlistFanLoadTask != nil || levelBrowserLaunchTask != nil {
@@ -3431,7 +3705,7 @@ extension AppDelegate {
         + ((view as? NSTextField).map { [$0.stringValue] } ?? [])
         + view.subviews.flatMap(labels)
     }
-    try check(labels(hub).contains(where: { $0.contains("Just dig!") })
+    try check(labels(hub).contains(where: { $0.contains(entries[0].levelNameSnapshot) })
       && buttons(hub).contains(where: { $0.title == "Let's play" })
       && !buttons(hub).contains(where: { $0.title == "Continue" }),
       "A new Hot Seat inherited another session's journey position: \(labels(hub)), \(buttons(hub).map(\.title))")
@@ -3462,18 +3736,18 @@ extension AppDelegate {
     let ready = GameScreen.shared.controllerPage(in: window)
     try check(arcade.hotSeatIsActive && store.activeRunHotSeatID == arcade.hotSeatID
       && sequencePlayingIdentity == first
-      && artworkLevel?.title == "Just dig!"
+      && artworkLevel?.title == entries[0].levelNameSnapshot
       && store.activeRun?.entries.count == journey.lessons.count
       && isPaused
       && store.savedRuns.contains(where: { $0.run.id == soloID })
       && ready.map { buttons($0).contains(where: { $0.title.hasPrefix("Ready,") }) } == true,
       "New Hot Seat did not start the learning journey or show Ready")
-    print("PASS new solo and Hot Seat journeys start at Just dig! despite prior player progress; handover remains paused")
+    print("PASS new solo and Hot Seat journeys start at the first curated lesson despite prior player progress; handover remains paused")
 
     // Follow the actual mixed-campaign route that previously drew snow as marble.
     GameScreen.shared.dismissAll()
     try check(try store.advanceLearningJourney(runID: store.activeRun!.id, won: true),
-      "The Hot Seat journey did not advance to its floater lesson")
+      "The Hot Seat journey did not advance to its second lesson")
     returnToLibrary()
     sequencePlaylistStore = store
     settings.graphics = .macintosh
@@ -3491,6 +3765,12 @@ extension AppDelegate {
 
     // Keep the snow-art regression independent of generated lesson order.
     returnToLibrary()
+    let snowFailures: Set<String> = await withCheckedContinuation { continuation in
+      ensureFanPacksResolved(forPackIDs: ["fan:lldb-535"], title: "Snow artwork test") {
+        continuation.resume(returning: $0)
+      }
+    }
+    try check(snowFailures.isEmpty, "The snow artwork pack could not be resolved")
     guard let snowEntry = levelCatalogue.packs.flatMap(\.levels).first(where: {
       $0.identity.packID == "fan:lldb-535" && $0.levelName == "Floating Down!"
     }) else { throw IntegrationFailure(message: "The snow artwork fixture is missing") }
@@ -4027,7 +4307,18 @@ extension AppDelegate {
       try press("Ready, " + arcade.playingProfile!.initials)
       if index + 1 < entries.count {
         _ = arcade.passSessionTurn(after: arcade.playingProfileID)
+        let previousContent = window.contentView
+        let previousScreen = flow?.screen
+        let previousOverlay = playfield.overlayTitle
+        // Force the Classic destination through background preparation.
+        loadedArtworkDirectory = nil
         try check(continueActiveSequence(completed: entry.identity, runID: shared.id), "Shared sequence failed to advance")
+        if levelBrowserLaunchTask != nil {
+          try check(window.contentView === previousContent && flow?.screen == previousScreen
+            && playfield.overlayTitle == previousOverlay,
+            "Next turn exposed the library while the next level was preparing")
+          try capture("next-turn-pending", window.contentView!)
+        }
         try await waitForLaunch()
       }
     }
@@ -5422,7 +5713,7 @@ Task { @MainActor in
     subject.prepareArcadeTests()
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
-    #if !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
+    #if !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -5433,7 +5724,34 @@ Task { @MainActor in
     try testPointerAssignment()
     #endif
     #endif
-    #if SELECTION_HDR_TESTS
+    #if CONSOLIDATION_TESTS
+    try subject.testSoloHotSeatRoundTrips()
+    try subject.testReportedRecovery()
+    try subject.testProfileSessionActions()
+    try subject.testHotSeatBoundaries()
+    try subject.testHandoverPreviousLevel()
+    try subject.testRunRecovery()
+    try subject.testFanRunRecovery()
+    try subject.testNeoRunRecovery()
+    try await subject.testPlaylistSessions()
+    try subject.testSequenceNavigationGuards()
+    try await subject.testLearningJourneyEntriesResolve()
+    try await subject.testLearningJourneySessionsStart()
+    try await subject.testLevelHints()
+    try testL3OpeningStory()
+    print("1.8.x consolidation integration tests passed.")
+    #elseif PROFILE_SESSION_TESTS
+    try subject.testSoloHotSeatRoundTrips()
+    try subject.testReportedRecovery()
+    try subject.testProfileSessionActions()
+    try subject.testHotSeatBoundaries()
+    try subject.testHandoverPreviousLevel()
+    try subject.testRunRecovery()
+    try subject.testFanRunRecovery()
+    try subject.testNeoRunRecovery()
+    try await subject.testPlaylistSessions()
+    try subject.testSequenceNavigationGuards()
+    #elseif SELECTION_HDR_TESTS
     try await subject.testSelectionRendering()
     print("Selection integration tests passed.")
     #elseif NEO_RECOVERY_TESTS
@@ -5713,6 +6031,14 @@ extension AppDelegate {
     phase = .playing; panel.isMenuMode = false
     installKeyboardShortcuts()
     if let keyboard = gameplayKeyboard {
+      // The older Classic monitor runs before the shared camera handler.
+      for repeated in [false, true] {
+        let home = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+          windowNumber: window.windowNumber, context: nil, characters: "h", charactersIgnoringModifiers: "h",
+          isARepeat: repeated, keyCode: 4)!
+        try check(handleClassicKeyboardEvent(home) != nil && !GameScreen.shared.isPresented,
+          "Classic monitor stole H for hints before camera routing")
+      }
       try validateCameraKeyboard(keyboard, name: "classic")
       keyboard.bind(to: window)
     }

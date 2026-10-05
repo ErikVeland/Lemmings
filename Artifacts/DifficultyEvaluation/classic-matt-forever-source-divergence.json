@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-05",
+  "identity": {
+    "engine": "classic",
+    "packID": "fan:lldb-248",
+    "levelID": "MATTPCK1.DAT#2"
+  },
+  "title": "Forever Friends",
+  "sourcePage": "https://lldb.camanis.net/level/248/3",
+  "sourceWatchURL": "https://lldb.camanis.net/level/play/248/3/Forever-Friends#s=Y2baJxrPwMjMoM7BwMDGUMnMwMDM6KYEYqc8BpKMMaogduQBEFn6AURmJILEM6YyMDAxsFUxMnAyhMswAcmVNiDxyJ0MQLZHEVCOIYwPbMJ3EJluBRRhDDkBYrdmMQPVZDaB2Jk2jECVKwA",
+  "bundledArchiveSHA256": "bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854",
+  "sourceReplaySHA256": "039fe378d33a5396e3ba0c242b6589ffcf35a8d6c6e63409dd3e1269260b98ea",
+  "sourceReplayHeader": {
+    "gameMode": 3,
+    "saved": 2,
+    "completionCycle": 5566
+  },
+  "decodedInputs": 23,
+  "nativeTickOffsetFromSource": -1,
+  "sourceBuiltNativeTracerSHA256": "a66b8dd8882ebe9e86d31d8d8c703c5f22d3fc745abd3123edfa6626a6770d4d",
+  "nativeInputReplaySHA256": "512c220f89b22e2d2d43e5eeed83e37dfd3cc0e2d54a49110079e19d731cdd92",
+  "selectedOriginalInitialHash": "a75fa1b9bd6e37b3e32dee857ae387b68b04ae777a3a72ca752366d5428faca7",
+  "experimentalGolemsInitialHash": "d353b4f4591cd09b83fe7e817be38ac3e7235b07fcff517db5612266c8b14722",
+  "nativeResults": [
+    {
+      "mechanics": "original",
+      "sourceReplayAssignmentRules": false,
+      "result": "Builder for lemming 0 rejected at tick 142"
+    },
+    {
+      "mechanics": "golems",
+      "sourceReplayAssignmentRules": false,
+      "result": "Digger for lemming 0 rejected at tick 2257"
+    },
+    {
+      "mechanics": "golems",
+      "sourceReplayAssignmentRules": true,
+      "result": "Completed loss: 0 of 2 saved at tick 2851",
+      "trace": [
+        { "tick": 2200, "saved": 0, "lost": 0, "lemmings": ["0:631,128:climbing", "1:679,134:building"] },
+        { "tick": 2257, "saved": 0, "lost": 0, "lemmings": ["0:631,100:climbing", "1:657,144:walking"] },
+        { "tick": 2400, "saved": 0, "lost": 0, "lemmings": ["0:631,118:digging", "1:671,142:walking"] },
+        { "tick": 2600, "saved": 0, "lost": 0, "lemmings": ["0:616,156:walking", "1:635,156:falling"] },
+        { "tick": 2800, "saved": 0, "lost": 0, "lemmings": ["0:417,139:walking", "1:438,139:walking"] }
+      ]
+    }
+  ],
+  "alternateObjectSemantics": "Rendering the same exact level with Golems object semantics left the initial state hash and Golems source-rule loss unchanged.",
+  "directedNativeTimingSearch": {
+    "sourceRulePath": "golemsFallingBuilder",
+    "finalStrictReplayProbeSHA256": "4aa6f580747cf9d8c254989d2e7343a621646ad222827834c4435a4177cbb1de",
+    "sourceAssemblyInspectedSHA256": "38cb69f18f5055821a496336a948fc30596e56c607c3ddddfb4675be78a5873e",
+    "tests": [
+      {
+        "description": "Digger 0 at native tick 2257 shifted from -120 to +120, all other source inputs fixed",
+        "attempts": 241,
+        "completed": 191,
+        "rejected": 50,
+        "best": "No saved worker. Shift +12 kept both workers active until the six-minute limit at tick 6122.",
+        "logSHA256": "30457b2b6b3df46244f54da298e96af0c9ec1e7e175f481ebf0e7fe59fb38793"
+      },
+      {
+        "description": "Fix Digger 0 at +12; move each subsequent source action except Builder 1 at tick 3147 independently by -60 to +60 ticks",
+        "attempts": 847,
+        "completed": 744,
+        "rejected": 103,
+        "best": "Moving Builder 0 at tick 2884 by -60 and Builder 1 at tick 3147 by -27 produced 1/2 saved.",
+        "logSHA256": "17141041d7be36aa6b8be9256c50b70a449566b2e75412f79d5eee89e8b7b092"
+      },
+      {
+        "description": "Fix those three shifts; independently move the remaining Builder 1 actions at ticks 2899, 3718, 3919 and 4925 by -120 to +120 ticks",
+        "attempts": 964,
+        "completed": 898,
+        "rejected": 66,
+        "best": "At most 1/2 saved; no full win.",
+        "logSHA256": "42941eceb5e93b59943aa5c32ff80ebfeb8a1fcf7e15f91a3d678c8af13e48e9"
+      }
+    ],
+    "bestPartialReplaySHA256": "3f239a103eda33c01ef5f8ab38848a64978683702a83e87c26e0669d09761432",
+    "bestPartialStrictSourceRuleOutcome": {
+      "didWin": false,
+      "saved": 1,
+      "required": 2,
+      "ticks": 6122,
+      "stateHash": "936d5a60673c24a40d02de69cb90ba28551de3a544b8298d7a6a6b9a0c6eb473"
+    },
+    "bestPartialOrdinaryAssignment": "Digger 0 at tick 2269 is rejected by ordinary assignment. The partial route relies on the source replay assignment path."
+  },
+  "sourcePhysicsParity": "Unverified. The published header records 2 saved at cycle 5566, while the unchanged native source-rule route loses both workers before the next published Builder. The timing variants are native-only probes and do not locate the first source-state divergence. A source-engine intermediate state trace is needed before changing movement or terrain physics.",
+  "ledgerEffect": "No native win, replay digest or difficulty score was promoted."
+}

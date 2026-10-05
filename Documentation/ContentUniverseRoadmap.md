@@ -120,9 +120,18 @@ strict mode that fails while any required mechanic remains unsupported. The
 current-format replay decoder is covered by synthetic tests. Real reference
 replays and native result comparison remain mandatory external evidence.
 
-### 1.8 — Lemmings 2 and Lemmings 3 completion
+### 1.8 — Mac polish
 
-Make sequel completion verification the 1.8 exit gate. Keep the current Preview
+Ship clearer pixel rendering, NeoLemmix gameplay sound effects and reliable
+music recovery after a nuke. Include the verified L3 Brick pickup correction.
+Keep L2 and L3 labelled Preview and NeoLemmix labelled Beta. Validate the frozen
+candidate with muted offscreen app checks, retained replay checks, signing,
+notarisation and public download and update-feed verification. Full sequel
+completion is the separate 1.9 gate.
+
+### 1.9 — Lemmings 2 and Lemmings 3 completion
+
+Make sequel completion verification the 1.9 exit gate. Keep the current Preview
 labels until every condition passes:
 
 - preserve and replay a winning route for all 120 Lemmings 2 levels and all 90
@@ -137,8 +146,8 @@ labels until every condition passes:
 - verify app-session completion, saved-run recovery, replay identity and result
   records against the current engine and content revisions.
 
-The current baseline is 75/120 Lemmings 2 routes and 43/90 Lemmings 3 routes.
-The missing 92 routes are an open verification gap, not evidence that those
+The current baseline is 75/120 Lemmings 2 routes and 52/90 Lemmings 3 routes.
+The missing 83 routes are an open verification gap, not evidence that those
 levels are broken. A passing load or smoke check does not close this gate.
 
 ### 2.0 — iPhone and iPad release

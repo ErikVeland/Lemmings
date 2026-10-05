@@ -175,8 +175,9 @@ import NxlvKit
         if let recovery {
             _ = try recovery.validated()
             // A newer engine must not strand a saved run; the replay below checks the state.
-            guard recovery.l3 != nil, recovery.profileID == ArcadeStore.shared.playingProfileID,
-              recovery.hotSeatID == ArcadeStore.shared.hotSeatID else { throw RunRecoveryError.differentGame }
+            guard recovery.l3 != nil else { throw RunRecoveryError.differentGame }
+            guard recovery.profileID == ArcadeStore.shared.playingProfileID,
+              recovery.hotSeatID == ArcadeStore.shared.hotSeatID else { throw RunRecoveryError.differentSession }
         }
         if let expectedSourceRevision {
             guard let selection else {

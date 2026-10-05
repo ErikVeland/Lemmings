@@ -66,6 +66,13 @@ if sys.argv[1] == 'collect':
     if scenarios['official']: write(OUT / 'scenarios.json', scenarios)
     print(f'Collected {len(changed)} upgraded fan profiles and {len(solutions)} replay references.')
 elif sys.argv[1] == 'report':
+    current = read(ROOT / 'Resources/Progression/learning.json')
+    if current.get('placementPolicy') == 'redux-community-1':
+        from human_journey import report
+        report(current, read(OUT / 'curriculum.json'), read(OUT / 'human-review-queue.json'),
+               read(OUT / 'transitions.json'))
+        print(f"Reported {len(current['lessons'])} community-anchored lessons.")
+        raise SystemExit(0)
     rows = {key(r): r for r in read(BASE)}
     for row in read(OUT / 'fan-evidence.json'):
         original = rows.get(key(row), {})

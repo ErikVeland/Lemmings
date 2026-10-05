@@ -1,0 +1,3 @@
+PASS six original L3 voices, declared rates, signed/unsigned PCM, malformed files and event timing
+PASS L3 bottom deaths are distinct from other losses
+PASS L3 positioned exit, death and brick cues, with no paused duplicates

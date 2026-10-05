@@ -4,40 +4,41 @@
       "confirmedScored": 120,
       "corpusLevels": 120,
       "pack": "Lemmings",
-      "selected": 30
+      "selected": 43
     },
     {
       "confirmedScored": 100,
       "corpusLevels": 100,
       "pack": "Oh No! More Lemmings",
-      "selected": 39
+      "selected": 34
     },
     {
       "confirmedScored": 4,
       "corpusLevels": 4,
       "pack": "Xmas Lemmings 1991",
-      "selected": 1
+      "selected": 0
     },
     {
       "confirmedScored": 4,
       "corpusLevels": 4,
       "pack": "Xmas Lemmings 1992",
-      "selected": 0
+      "selected": 1
     },
     {
       "confirmedScored": 32,
       "corpusLevels": 32,
       "pack": "Holiday Lemmings 1993",
-      "selected": 9
+      "selected": 2
     },
     {
       "confirmedScored": 32,
       "corpusLevels": 32,
       "pack": "Holiday Lemmings 1994",
-      "selected": 14
+      "selected": 6
     }
   ],
-  "eligiblePool": 1710,
+  "eligiblePool": 1720,
   "scope": "Classic mechanics only, per user direction. L2/L3 evidence remains outside this journey.",
+  "selectionPolicy": "Community reference and exact-variant review; campaign size is not a quota.",
   "sizeReference": 292
 }

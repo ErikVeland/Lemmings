@@ -424,7 +424,7 @@ func isBetterPartial(_ candidate: Candidate, than current: Candidate) -> Bool {
     if proposed.releasedCount != previous.releasedCount { return proposed.releasedCount > previous.releasedCount }
     return Score(current, field) < Score(candidate, field)
 }
-@MainActor func consider(_ c: Candidate) {
+func consider(_ c: Candidate) {
     if c.sim.tickCount < lastForcedTick { return }
     if c.sim.isComplete && c.sim.didWin, best.map({ Score($0, field) < Score(c, field) }) ?? true { best = c }
     if bestPartial.map({ isBetterPartial(c, than: $0) }) ?? true { bestPartial = c }

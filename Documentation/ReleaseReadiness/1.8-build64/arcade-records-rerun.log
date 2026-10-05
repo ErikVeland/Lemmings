@@ -1,0 +1,2 @@
+UI test windows: offscreen; audio: muted
+FAIL: Session history was left writable by an older app version

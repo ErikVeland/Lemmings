@@ -1,6 +1,8 @@
 import AppKit
 import NxlvKit
 
+@MainActor protocol GameFullWindowPage: AnyObject {}
+
 /// Menus stay in the game window and return to the screen beneath them.
 @MainActor final class GameScreen {
     static let shared = GameScreen()
@@ -212,7 +214,7 @@ import NxlvKit
         scrollerStyle = .overlay
         autohidesScrollers = true
         let size = contentSize
-        let documentSize = page is KeyboardOverlayView ? size : GamePageLayout.documentSize(in: size)
+        let documentSize = (page is KeyboardOverlayView || page is GameFullWindowPage) ? size : GamePageLayout.documentSize(in: size)
         hasHorizontalScroller = documentSize.width > size.width + 0.5
         hasVerticalScroller = documentSize.height > size.height + 0.5
         page.frame = CGRect(origin: .zero, size: documentSize)
@@ -387,7 +389,7 @@ import NxlvKit
     }
 }
 
-@MainActor final class GameActionButton: NSButton {
+@MainActor class GameActionButton: NSButton {
     var onPress: (() -> Void)?
     private let primary: Bool
     private let renderer = GameMenuArtwork.renderer()

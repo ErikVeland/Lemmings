@@ -74,7 +74,7 @@ public enum ClassicSceneFrame {
     }
 }
 
-/// Extends the liquid body behind terrain without changing collision masks.
+/// Extends the liquid body down to terrain without changing collision masks.
 enum ClassicLiquidFill {
     static func draw(source: [UInt8], sourceWidth: Int, sourceHeight: Int,
         x: Int, y: Int, into pixels: inout [UInt8], width: Int, height: Int,
@@ -101,8 +101,8 @@ enum ClassicLiquidFill {
         for column in left..<right {
             for row in max(0, y)..<height {
                 let p = (row * width + column) * 4
-                // Terrain hides the liquid locally; bridges must not cut off the column below.
-                if solid[(row / scale) * (width / scale) + column / scale] != 0 { continue }
+                // A floor separates this pool from any empty cavity beneath it.
+                if solid[(row / scale) * (width / scale) + column / scale] != 0 { break }
                 guard row >= top, pixels[p + 3] == 0 else { continue }
                 pixels[p] = UInt8((colour >> 16) & 255)
                 pixels[p + 1] = UInt8((colour >> 8) & 255)

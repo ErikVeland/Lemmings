@@ -28,7 +28,12 @@ enum FailureMoodDecision {
 @MainActor final class FailureMoodTransition {
   nonisolated(unsafe) private var timer: Timer?
   private let duration: Double
-  init(duration: Double = 0.9) { self.duration = duration }
+  private let recoveryDuration: Double
+  private var currentDuration: Double = 0.9
+  init(duration: Double = 0.9, recoveryDuration: Double? = nil) {
+    self.duration = duration
+    self.recoveryDuration = recoveryDuration ?? duration
+  }
   private var startedAt = 0.0
   private var startAmount: CGFloat = 0
   private var targetAmount: CGFloat = 0
@@ -36,27 +41,30 @@ enum FailureMoodDecision {
   private(set) var amount: CGFloat = 0
   var onChange: ((CGFloat) -> Void)?
 
-  func set(active: Bool) {
+  func set(active: Bool, now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
     let target: CGFloat = active ? 1 : 0
     guard target != targetAmount else { return }
     targetAmount = target
     timer?.invalidate()
     startAmount = amount
-    startedAt = ProcessInfo.processInfo.systemUptime
+    startedAt = now
+    currentDuration = active ? duration : recoveryDuration
     timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 30.0, repeats: true) { [weak self] _ in
       MainActor.assumeIsolated {
         guard let self else { return }
-        let progress = min(1, max(0, (ProcessInfo.processInfo.systemUptime - self.startedAt) / self.duration))
-        let eased = progress * progress * (3 - 2 * progress)
-        self.amount = self.startAmount + (self.targetAmount - self.startAmount) * CGFloat(eased)
-        self.onChange?(self.amount)
-        if progress >= 1 {
-          self.timer?.invalidate()
-          self.timer = nil
-        }
+        self.advance(at: ProcessInfo.processInfo.systemUptime)
       }
     }
     onChange?(amount)
+  }
+
+  func advance(at now: TimeInterval) {
+    guard timer != nil else { return }
+    let progress = min(1, max(0, (now - startedAt) / currentDuration))
+    let eased = progress * progress * (3 - 2 * progress)
+    amount = startAmount + (targetAmount - startAmount) * CGFloat(eased)
+    onChange?(amount)
+    if progress >= 1 { timer?.invalidate(); timer = nil }
   }
 
   deinit { timer?.invalidate() }
@@ -68,8 +76,8 @@ enum FailureMoodDecision {
   private(set) var rate: Double = 1
   var onChange: ((Double) -> Void)?
 
-  init(duration: Double = 0.9) {
-    transition = FailureMoodTransition(duration: duration)
+  init(duration: Double = 0.9, recoveryDuration: Double = NukeMusicSweep.returnDuration) {
+    transition = FailureMoodTransition(duration: duration, recoveryDuration: recoveryDuration)
     transition.onChange = { [weak self] amount in
       guard let self else { return }
       self.rate = 1 - 0.28 * Double(amount)
@@ -103,7 +111,7 @@ enum FailureMoodDecision {
   private var startTick: Int?
   private var returnStartedAt: TimeInterval?
   private var returnAmount: CGFloat = 0
-  static let returnDuration: TimeInterval = 0.28
+  static let returnDuration: TimeInterval = 2.4
   private(set) var amount: CGFloat = 0
   var onChange: ((CGFloat) -> Void)?
 

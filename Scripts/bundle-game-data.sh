@@ -26,6 +26,7 @@ mkdir -p "$resources_dir/Hints"
 cp "$project_dir/Resources/Hints/classic.json" "$resources_dir/Hints/classic.json"
 cp "$project_dir/Resources/Hints/solutions.json" "$resources_dir/Hints/solutions.json"
 mkdir -p "$resources_dir/Progression"
+cp "$project_dir/Resources/Progression/exclusions.json" "$resources_dir/Progression/exclusions.json"
 cp "$project_dir/Resources/Progression/learning.json" "$resources_dir/Progression/learning.json"
 cp "$project_dir/Resources/Progression/solutions.json" "$resources_dir/Progression/solutions.json"
 # Event sounds that no original bank supplies, named after the event.

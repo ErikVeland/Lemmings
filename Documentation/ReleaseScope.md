@@ -1,16 +1,12 @@
 # Release scope
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-The current public macOS release is 1.7.9 build 63. The
-[1.7.9 distribution record](ReleaseReadiness/1.7.9Build63Distribution.md) records
-the notarised slim download, full-soundtrack update, signed feed and validation
-limits. This release adds Macintosh artwork and Classic pixel controls for
-NeoLemmix, expands fan replay evidence, and corrects L3 extra direction and
-selected stair contacts. The slim download is recommended for fresh installations.
-The full Sparkle update preserves bundled music. L2 and L3 remain Preview and
-NeoLemmix remains Beta. Separate target archives are not published.
-Foreground shipping-app launch and audible checks were not run for 1.7.9.
-Updated 4 October 2026 for this release.
+The current public macOS release is 1.8 build 64. The
+[distribution record](ReleaseReadiness/1.8Build64Distribution.md) records the
+notarised downloads, signed feed and validation limits. This release polishes
+pixel rendering and audio and corrects L3 Brick pickups. L2/L3 remain Preview,
+with completion planned for 1.9. NeoLemmix remains Beta.
+Updated 5 October 2026.
 Automated checks support the recorded routes;
 remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)
 and the current [Classic validation](ReleaseReadiness/ClassicValidation-current.md).
@@ -118,7 +114,7 @@ Both play through their campaigns with original artwork, music and interfaces.
 Lemmings 3 keeps provisional rules in several areas, and its environmental
 effects, movie soundtracks and story transitions are incomplete.
 
-The 1.8 roadmap makes completion verification the exit gate for both sequels.
+The 1.9 roadmap makes completion verification the exit gate for both sequels.
 They remain Preview until all advertised levels have winning-route evidence,
 engine-fidelity comparisons, continuous progression, recovery checks, media
 closure and verified endings.

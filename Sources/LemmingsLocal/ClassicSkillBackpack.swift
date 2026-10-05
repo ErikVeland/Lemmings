@@ -43,11 +43,15 @@ import NxlvKit
         guard rgba[source + 3] > 0 else { continue }
         let r = Int(rgba[source]), g = Int(rgba[source + 1]), b = Int(rgba[source + 2])
         if g > 100 && g > r * 2 && g > b * 2 { hairTop = min(hairTop, y) }
-        if b > 128 && b > r * 2 && b > g * 2 { body.append((x, y)) }
+        // Seasonal lemmings wear red coats instead of the usual blue suit.
+        if (b > 128 && b > r * 2 && b > g * 2)
+          || (r > 128 && r > g * 2 && r > b * 2) { body.append((x, y)) }
       }
     }
     // Ignore the umbrella shaft and tools. The torso starts below the hair.
-    let torso = body.filter { $0.y >= hairTop + 3 * pixelScale }
+    let uprightTorso = body.filter { $0.y >= hairTop + 3 * pixelScale }
+    // Some seasonal digging frames tuck the head below the coat.
+    let torso = uprightTorso.isEmpty ? body : uprightTorso
     if let kind, let top = torso.map(\.y).min() {
       // Umbrella poses turn the lemming's body against its travel direction.
       let left = (pose == .floating || pose == .umbrellaOpening) ? !left : left

@@ -1,0 +1,6 @@
+UI test windows: offscreen; audio: muted
+PASS stalled encoding preserves input responsiveness, rejects partial movies and stops unused capture work
+PASS 51 exact video ticks, upright frames, non-silent module/SFX audio, half/double-speed exports; 0.73s
+PASS exact 17.5 Hz L2 and 23 Hz L3 movie clocks
+PASS encoded directional ghosts: all 41 frames, slopes, reversal, fall, climb, camera shifts and unequal live/replay render cadence
+PASS game-font replay controls, 0.25x through 8x speeds, pause and source-audio lifecycle

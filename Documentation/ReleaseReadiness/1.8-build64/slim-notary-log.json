@@ -1,0 +1,193 @@
+{
+  "logFormatVersion": 1,
+  "jobId": "a9164117-3882-40bd-b4d9-cef6b415bcb9",
+  "status": "Accepted",
+  "statusSummary": "Ready for distribution",
+  "statusCode": 0,
+  "archiveFilename": "slim-submission.zip",
+  "uploadDate": "2026-10-05T08:16:39.873Z",
+  "sha256": "eb2268eb160d286cadaae3275a2e661b61927cdd2723758fb10bad824270968a",
+  "ticketContents": [
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "e153c4bbbcd823fa239afea5860d9fa52ad33ce6",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "4b2e056b4b1e7b3dc94da3be1172414d47063700",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/MacOS/Updater",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "e153c4bbbcd823fa239afea5860d9fa52ad33ce6",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/MacOS/Updater",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "4b2e056b4b1e7b3dc94da3be1172414d47063700",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Updater.app",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "e153c4bbbcd823fa239afea5860d9fa52ad33ce6",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Updater.app",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "4b2e056b4b1e7b3dc94da3be1172414d47063700",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "aa837f90a9d86021476fee2f90735c8eacdb7609",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "d566c9506f8ba07932023641f31f1338b3ad4796",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "cd68306f76eddcd29d5a0b27918ac56572ef04cb",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "852b988ec153dd335c7b4df8bd4827cccf3bfbb6",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Downloader.xpc",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "6549cfc4a0d48f5b3c834023a9aa9544fc80d9f7",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Downloader.xpc",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "3603f6aefb5bf91ed13d49a1858f01b56ae0e4a0",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Installer.xpc",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "0e0356c9cd9427386b6a8ad493364274f93b4fa7",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Installer.xpc",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "9ad94ef304debe9fb00f872a39d077a47f83eb58",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libNxlvKit.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "c81ce3191c8dd3fc7678b8b93e6f075e0cf0a11f",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libNxlvKit.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "758d9104caade8359cbfa1523e608f313cc4a529",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Autoupdate",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "168a1ceb19905c5486171780ddd75a5faf46d19f",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Autoupdate",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "709b3764ff08b66e2c6191512f8067399d91468c",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/MacOS/LemmingsLocal",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "aa837f90a9d86021476fee2f90735c8eacdb7609",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/MacOS/LemmingsLocal",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "d566c9506f8ba07932023641f31f1338b3ad4796",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libNxlvKit.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "c81ce3191c8dd3fc7678b8b93e6f075e0cf0a11f",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libNxlvKit.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "758d9104caade8359cbfa1523e608f313cc4a529",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "168a1ceb19905c5486171780ddd75a5faf46d19f",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "709b3764ff08b66e2c6191512f8067399d91468c",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Sparkle",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "cd68306f76eddcd29d5a0b27918ac56572ef04cb",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Sparkle",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "852b988ec153dd335c7b4df8bd4827cccf3bfbb6",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/MacOS/Downloader",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "6549cfc4a0d48f5b3c834023a9aa9544fc80d9f7",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/MacOS/Downloader",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "3603f6aefb5bf91ed13d49a1858f01b56ae0e4a0",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/MacOS/Installer",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "0e0356c9cd9427386b6a8ad493364274f93b4fa7",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/MacOS/Installer",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "9ad94ef304debe9fb00f872a39d077a47f83eb58",
+      "arch": "arm64"
+    }
+  ],
+  "issues": null
+}

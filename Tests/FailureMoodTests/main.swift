@@ -28,3 +28,26 @@ check(label(1, 0, 0, 1, 1, true, true).visible == "SAFE", "A finished win was no
 check(label(0, 1, 0, 1, 1, false, false).accessibility == "1 of 1 deaths remain before failure",
   "The compact counter lost its accessible meaning")
 print("PASS remaining deaths, last chance, funeral threshold, safe goal and unreleased lemmings")
+
+MainActor.assumeIsolated {
+  let transition = FailureMoodTransition(duration: 0.9, recoveryDuration: NukeMusicSweep.returnDuration)
+  transition.set(active: true, now: 0)
+  transition.advance(at: 0.9)
+  check(transition.amount == 1, "Slowdown did not finish")
+  transition.set(active: false, now: 1)
+  check(transition.amount == 1, "Recovery jumped at the final explosion")
+  transition.advance(at: 1.9)
+  check(transition.amount > 0.5, "Recovery finished at the old abrupt timing")
+  transition.set(active: false, now: 2)
+  transition.advance(at: 2.2)
+  check(abs(transition.amount - 0.5) < 0.0001, "Repeated updates restarted recovery")
+  let halfway = transition.amount
+  transition.set(active: true, now: 2.2)
+  check(transition.amount == halfway, "Rewind jumped when reversing recovery")
+  transition.advance(at: 3.2)
+  check(transition.amount == 1, "Rewind failed to restore the mood")
+  transition.set(active: false, now: 4)
+  transition.advance(at: 4 + NukeMusicSweep.returnDuration)
+  check(transition.amount < 0.0001, "Recovery did not reach normal")
+}
+print("PASS gradual 2.4-second recovery, continuous reversal and repeated updates")

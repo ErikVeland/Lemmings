@@ -53,7 +53,9 @@ extension RunMovie {
 }
 
 @MainActor func verifyMovie() async throws {
-  let recorder = ReplayMovieRecorder(ticksPerSecond: 17)
+  // The cold encoder receives these frames faster than real-time playback.
+  // verifyStalledRecording separately checks the production admission deadline.
+  let recorder = ReplayMovieRecorder(ticksPerSecond: 17, admissionTimeout: .seconds(10))
   let tone = (0..<11025).map { Float(sin(Double($0) * 2 * .pi * 900 / 44100) * 0.4) }
   let module = URL(fileURLWithPath: "Sources/Music/lemmings_2_music_mod_tsyu/endtune.mod")
   recorder.setMusic(url: module, gain: 0.25)
@@ -131,7 +133,9 @@ extension RunMovie {
 
 @MainActor func verifyDirectionalGhostMovie() async throws {
   let live = SpeedTrails(), movie = SpeedTrails()
-  let recorder = ReplayMovieRecorder(ticksPerSecond: 17)
+  // The cold encoder receives these frames faster than real-time playback.
+  // verifyStalledRecording separately checks the production admission deadline.
+  let recorder = ReplayMovieRecorder(ticksPerSecond: 17, admissionTimeout: .seconds(10))
   let size = CGSize(width: 640, height: 320)
   let sprite = NSImage(cgImage: ReplayFrameCapture.image(size: CGSize(width: 16, height: 20)) {
     NSColor.green.setFill(); CGRect(x: 0, y: 0, width: 16, height: 20).fill()

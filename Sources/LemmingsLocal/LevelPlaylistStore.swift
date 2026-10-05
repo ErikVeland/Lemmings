@@ -139,26 +139,30 @@ import NxlvKit
     }
 
     static func removeData(at file: URL) {
+        try? removeDataChecked(at: file)
+    }
+
+    static func removeDataChecked(at file: URL) throws {
         let manager = FileManager.default
-        try? manager.createDirectory(
+        try manager.createDirectory(
             at: file.deletingLastPathComponent(), withIntermediateDirectories: true)
         let lockFile = file.appendingPathExtension("lock")
         let descriptor = open(
             lockFile.path,
             O_CREAT | O_RDWR,
             S_IRUSR | S_IWUSR)
-        guard descriptor >= 0 else { return }
+        guard descriptor >= 0 else { throw NSError(domain: NSPOSIXErrorDomain, code: Int(errno)) }
         defer { close(descriptor) }
-        guard flock(descriptor, LOCK_EX) == 0 else { return }
+        guard flock(descriptor, LOCK_EX | LOCK_NB) == 0 else { throw Failure.busy }
         defer { flock(descriptor, LOCK_UN) }
         let prefix = file.lastPathComponent + ".unreadable-"
-        let preserved = (try? manager.contentsOfDirectory(
+        let preserved = try manager.contentsOfDirectory(
             at: file.deletingLastPathComponent(),
-            includingPropertiesForKeys: nil))?.filter {
+            includingPropertiesForKeys: nil).filter {
                 $0.lastPathComponent.hasPrefix(prefix)
-            } ?? []
-        for target in [file, file.appendingPathExtension("backup")] + preserved {
-            try? manager.removeItem(at: target)
+        }
+        for target in [file, file.appendingPathExtension("backup")] + preserved where manager.fileExists(atPath: target.path) {
+            try manager.removeItem(at: target)
         }
     }
 
@@ -169,6 +173,49 @@ import NxlvKit
     init(file: URL) throws {
         self.file = file
         try load()
+        try removeExcludedLearningLessons(LearningJourneyLibrary.excludedIdentities)
+        if let journey = LearningJourneyLibrary.journey { try migrateLearningJourney(journey) }
+    }
+
+    /// Retain run identity, owner and completed visits when an editorial lesson is withdrawn.
+    func removeExcludedLearningLessons(_ excluded: Set<LevelCatalogueIdentity>) throws {
+        guard !excluded.isEmpty else { return }
+        func revised(_ run: LevelSequenceRun) throws -> LevelSequenceRun? {
+            guard run.source == .playlist(LearningJourney.playlistID) else { return run }
+            let kept = run.entries.enumerated().filter { !excluded.contains($0.element.identity) }
+            guard !kept.isEmpty else { return nil }
+            let next = kept.firstIndex { $0.offset >= run.currentIndex } ?? kept.count - 1
+            return try LevelSequenceRun(id: run.id, source: run.source, pool: run.pool,
+                entries: kept.map(\.element), currentIndex: next, seed: run.seed,
+                algorithm: run.algorithm, createdAt: run.createdAt)
+        }
+        let previous = document
+        let active = try document.activeRun.flatMap(revised)
+        var changed = active != document.activeRun
+        document.activeRun = active
+        if active == nil { document.activeRunHotSeatID = nil; document.activeRunL2Progress = nil }
+        document.savedRuns = try savedRuns.compactMap { saved in
+            guard let run = try revised(saved.run) else { changed = true; return nil }
+            changed = changed || run != saved.run
+            return SavedRun(run: run, hotSeatID: saved.hotSeatID, l2Progress: saved.l2Progress)
+        }
+        guard changed else { document = previous; return }
+        do { try save() } catch { document = previous; throw error }
+    }
+
+    func migrateLearningJourney(_ journey: LearningJourney) throws {
+        let previous = document
+        let active = try document.activeRun.flatMap { try journey.migrating($0) }
+        var changed = active != document.activeRun
+        document.activeRun = active
+        if active == nil { document.activeRunHotSeatID = nil; document.activeRunL2Progress = nil }
+        document.savedRuns = try savedRuns.compactMap { saved in
+            guard let run = try journey.migrating(saved.run) else { changed = true; return nil }
+            changed = changed || run != saved.run
+            return SavedRun(run: run, hotSeatID: saved.hotSeatID, l2Progress: saved.l2Progress)
+        }
+        guard changed else { document = previous; return }
+        do { try save() } catch { document = previous; throw error }
     }
 
     func playlist(id: UUID) -> LevelPlaylist? {
