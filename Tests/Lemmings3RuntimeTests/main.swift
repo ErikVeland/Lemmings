@@ -701,6 +701,15 @@ do {
                 let perm = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/PERM%03d.OBS", candidate.permanentObjectsReference))))
                 let temp = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/TEMP%03d.OBS", candidate.temporaryObjectsReference))))
                 var run = try Lemmings3Runtime(level: candidate, style: tribeStyle, permanent: perm, temporary: temp)
+                if tribe == .shadow && index == 3 {
+                    try require(run.creatures.count == 1 && run.creatures[0].kind == .buzzard && !run.creatures[0].alive,
+                        "L3 Shadow 4 placed Buzzard stays inert as in the original DOS hatch run")
+                    var inert = run
+                    for _ in 0..<451 { inert.step() }
+                    try require(inert.creatures[0].x == run.creatures[0].x && inert.creatures[0].y == run.creatures[0].y &&
+                        inert.lemmings.filter { $0.id >= candidate.extraLemmings }.allSatisfy { $0.state != .dead },
+                        "L3 Shadow 4 hatch avoids the inactive Buzzard")
+                }
                 if tribe == .shadow && index == 17 {
                     try require(run.lemmings.count == 8 && [4, 5, 6].allSatisfy {
                         run.lemmings[$0].tool == .grenade && run.lemmings[$0].quantity == 4

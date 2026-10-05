@@ -257,6 +257,16 @@ public struct Lemmings3Runtime: Sendable {
             releaseDelay: level.releaseDelay, timeLimit: level.timeLimitSeconds, pickups: pickups, extras: extras,
             backgroundAttributes: scene.backgroundAttributes, sourceLevelReference: level.permanentObjectsReference,
             traps: traps, creatures: creatures, additionalEntrances: Array(entrances.dropFirst())))
+        if level.style == 2 && level.permanentObjectsReference == 104 &&
+            level.temporaryObjectsReference == 104 && level.caveMapReference == 0 &&
+            level.caveGraphicsReference == 0 && level.width == 320 && level.height == 160 &&
+            level.extraLemmings == 2 && level.enemyCount == 1 &&
+            permanent.placements.contains(where: { $0.identifier == 10014 && $0.x == 192 && $0.y == 0 }) {
+            // Original DOS Shadow 4 leaves this placed Buzzard inert during the hatch run.
+            for index in self.creatures.indices where self.creatures[index].kind == .buzzard {
+                self.creatures[index].alive = false
+            }
+        }
         if level.style == 2 && level.permanentObjectsReference == 118 && lemmings.indices.contains(6) {
             // DOS Shadow 18 gives the three right-hand prisoners four grenades without pickup boxes.
             for index in [4, 5, 6] {
