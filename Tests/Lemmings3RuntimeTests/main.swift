@@ -758,6 +758,20 @@ do {
                 print("PASS L3 Classic 2 tool replay: 12 rescued, 10 in reserve, \(run.tick) experimental ticks")
             }
         }
+        let egypt27 = try Lemmings3Level(data: Data(contentsOf: root.appendingPathComponent("LEVELS/LEVEL227.DAT")))
+        let egyptStyle = try Lemmings3Style(directory: root.appendingPathComponent("STYLES"), number: egypt27.style)
+        let egyptPerm = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent("LEVELS/PERM227.OBS")))
+        let egyptTemp = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent("LEVELS/TEMP227.OBS")))
+        var egyptStairs = try Lemmings3Runtime(level: egypt27, style: egyptStyle, permanent: egyptPerm, temporary: egyptTemp)
+        for _ in 0..<130 { egyptStairs.step() }
+        try require(egyptStairs.lemmings.first(where: { $0.id == 1 })?.x == 111 &&
+                    egyptStairs.lemmings.first(where: { $0.id == 1 })?.y == 152,
+            "L3 Egyptian 27 reaches the original yellow stair contact")
+        egyptStairs.step()
+        try require(egyptStairs.lemmings.first(where: { $0.id == 1 })?.x == 112 &&
+                    egyptStairs.lemmings.first(where: { $0.id == 1 })?.y == 144,
+            "L3 Egyptian 27 climbs the connected source stairs")
+        print("PASS L3 Egyptian 27 connected source stairs")
         let expectedCycles = [200: 28, 202: 33, 203: 26, 994: 28, 995: 14, 996: 26, 102: 13, 103: 28, 104: 24]
         var checkedTraps: Set<Int> = []
         for tribe in Lemmings3ClassicCampaign.Tribe.allCases {

@@ -688,10 +688,15 @@ public struct Lemmings3Runtime: Sendable {
                     let continuousEightRise = lem.direction > 0 && (nx & 7) == 0 && contactTag == 0x0020 &&
                         isSolid(nx + 7, lem.y - 8) && !isSolid(nx + 7, lem.y - 9) &&
                         (8..<16).allSatisfy { isSolid(nx + $0, lem.y) && isSolid(nx + $0, lem.y - 1) }
+                    // Egyptian 27's original hatch route climbs adjacent eight-pixel source stairs.
+                    let followingEightRise = configuration.sourceLevelReference == 227 &&
+                        configuration.width == 496 && configuration.height == 160 && continuousEightRise &&
+                        isSolid(nx + 8, lem.y - 16) && !isSolid(nx + 8, lem.y - 17) &&
+                        isSolid(nx + 15, lem.y - 16) && !isSolid(nx + 15, lem.y - 17)
                     let maxRise = (nx & 7) == contactPhase || classRise || alignedBlockRise || continuousEightRise || builtBrickRise || sourceBrickRise ? 8 : 4
                     if let rise = (1...maxRise).first(where: { rise in
                         isSolid(nx, lem.y - rise) && !isSolid(nx, lem.y - rise - 1) &&
-                        (rise <= 4 || classRise || sourceBrickRise || (0..<((continuousEightRise || builtBrickRise) && rise == 8 ? 3 : 4)).allSatisfy { offset in
+                        (rise <= 4 || classRise || sourceBrickRise || (followingEightRise && rise == 8) || (0..<((continuousEightRise || builtBrickRise) && rise == 8 ? 3 : 4)).allSatisfy { offset in
                             let px = nx + lem.direction * 8, py = lem.y - 14 + 2 * offset
                             if !isSolid(px, py) { return true }
                             let projected = py * configuration.width + px
