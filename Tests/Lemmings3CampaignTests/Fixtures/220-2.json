@@ -3,7 +3,7 @@
     "lost" : 2,
     "reserves" : 0,
     "saved" : 2,
-    "stateHash" : "43f04bebf1dd070756ffefef5eae23540e3402cb63afc9e42b5ed40bd2d67e61",
+    "stateHash" : "e8970780a11e53051f3c4600708caac7d630224d60e36eea66011a0c2f2dcfd1",
     "ticks" : 9660
   },
   "initialStateHash" : "7544c366536f1c6af377f61785da0f0eb17464eb72963832ce7987c588ca8295",
@@ -15,86 +15,64 @@
       "tick" : 200
     },
     {
-      "action" : "walker",
-      "lemming" : 0,
-      "tick" : 224
-    },
-    {
-      "action" : "use",
-      "direction" : "downRight",
-      "lemming" : 0,
-      "tick" : 225
-    },
-    {
       "action" : "use",
       "direction" : "up",
       "lemming" : 1,
       "tick" : 240
     },
     {
-      "action" : "walker",
-      "lemming" : 1,
-      "tick" : 264
-    },
-    {
-      "action" : "use",
-      "direction" : "downLeft",
-      "lemming" : 1,
-      "tick" : 265
-    },
-    {
-      "action" : "walker",
+      "action" : "jumper",
       "lemming" : 0,
-      "tick" : 276
+      "tick" : 284
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 1,
+      "tick" : 324
     },
     {
       "action" : "drop",
       "lemming" : 0,
-      "tick" : 300
-    },
-    {
-      "action" : "walker",
-      "lemming" : 1,
-      "tick" : 316
+      "tick" : 343
     },
     {
       "action" : "drop",
       "lemming" : 1,
-      "tick" : 340
+      "tick" : 383
     },
     {
       "action" : "use",
       "direction" : "right",
       "lemming" : 0,
-      "tick" : 347
+      "tick" : 390
     },
     {
       "action" : "use",
       "direction" : "left",
       "lemming" : 1,
-      "tick" : 387
+      "tick" : 430
     },
     {
       "action" : "drop",
       "lemming" : 0,
-      "tick" : 530
+      "tick" : 573
     },
     {
       "action" : "drop",
       "lemming" : 1,
-      "tick" : 550
+      "tick" : 593
     },
     {
       "action" : "use",
       "direction" : "right",
       "lemming" : 0,
-      "tick" : 754
+      "tick" : 797
     },
     {
       "action" : "use",
       "direction" : "left",
       "lemming" : 1,
-      "tick" : 778
+      "tick" : 821
     }
   ],
   "level" : 220,

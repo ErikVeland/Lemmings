@@ -3,7 +3,7 @@
     "lost" : 0,
     "reserves" : 22,
     "saved" : 12,
-    "stateHash" : "246bfb670242621f3a705b0225b31ba221e01818ee21ca755601ea23d1a4ab7c",
+    "stateHash" : "1f91ab731d5eb79b8cbbff9ed7c8c65823ed10f4e91bd89653bf2435c2d8359c",
     "ticks" : 2993
   },
   "initialStateHash" : "11d1394a5c73dacb68fbb9b68af3ce8250cbff8ad42f6e6ecdd577e9b372d57c",
@@ -75,20 +75,25 @@
     },
     {
       "action" : "use",
-      "direction" : "up",
+      "direction" : "upRight",
       "lemming" : 2,
       "tick" : 819
     },
     {
       "action" : "walker",
       "lemming" : 2,
-      "tick" : 883
+      "tick" : 851
+    },
+    {
+      "action" : "walker",
+      "lemming" : 2,
+      "tick" : 851
     },
     {
       "action" : "use",
       "direction" : "upLeft",
       "lemming" : 2,
-      "tick" : 884
+      "tick" : 852
     },
     {
       "action" : "walker",

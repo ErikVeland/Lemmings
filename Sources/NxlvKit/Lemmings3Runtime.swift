@@ -378,22 +378,37 @@ public struct Lemmings3Runtime: Sendable {
         if lem.quantity == 0 { lem.tool = nil }
     }
     private mutating func work(_ lem: inout Lemming) {
-        guard lem.age % 8 == 0 else { return }
         guard let tool = lem.tool, lem.quantity > 0 else { lem.state = .walking; return }
+        let verticalBricks = tool == .bricks && lem.workDirection == .up
+        guard lem.age % (verticalBricks ? 16 : 8) == 0 else { return }
         let dx = lem.workDirection.dx, dy = lem.workDirection.dy
-        // Eight-pixel work steps are provisional pending original-engine traces.
-        let nx = lem.x + dx * 8, ny = lem.y + dy * 8
-        let left = dx == 0 ? lem.x - 4 : (dx > 0 ? lem.x + 1 : nx)
+        let step = verticalBricks ? 4 : 8
+        let nx = lem.x + dx * step, ny = lem.y + dy * step
+        let left = verticalBricks ? lem.x / 8 * 8 : (dx == 0 ? lem.x - 4 : (dx > 0 ? lem.x + 1 : nx))
         let top = tool == .bricks ? ny : (dy > 0 ? lem.y : ny - 16)
-        let height = tool == .bricks ? 8 : (dy > 0 ? 8 : 16)
+        let height = tool == .bricks ? step : (dy > 0 ? 8 : 16)
         let cells = (top..<(top + height)).flatMap { y in (left..<(left + 8)).map { (x: $0, y: y) } }
         guard inBounds(nx, ny), cells.allSatisfy({ inBounds($0.x, $0.y) }),
               !cells.contains(where: { configuration.backgroundAttributes[$0.y * configuration.width + $0.x] & 0x20 != 0 }) else {
             lem.state = .walking; return
         }
         if tool == .spade && !cells.contains(where: { isSolid($0.x, $0.y) }) { lem.state = .walking; return }
-        if tool == .bricks && cells.allSatisfy({ isSolid($0.x, $0.y) }) { lem.state = .walking; return }
-        if tool == .bricks && ((ny - 16)..<ny).contains(where: { isSolid(nx, $0) }) { lem.state = .walking; return }
+        if tool == .bricks {
+            if verticalBricks {
+                let ordinaryRock = cells.contains { cell in
+                    isSolid(cell.x, cell.y) && attributes[cell.y * configuration.width + cell.x] != 0x2020
+                }
+                let blockedHeadroom = ((ny - 16)..<ny).contains { y in
+                    isSolid(nx, y) && attributes[y * configuration.width + nx] != 0x2020
+                }
+                if ordinaryRock || blockedHeadroom { lem.state = .walking; return }
+            } else {
+                if cells.allSatisfy({ isSolid($0.x, $0.y) }) ||
+                    ((ny - 16)..<ny).contains(where: { isSolid(nx, $0) }) {
+                    lem.state = .walking; return
+                }
+            }
+        }
         for cell in cells {
             let index = cell.y * configuration.width + cell.x
             attributes[index] = tool == .bricks ? 0x2020 : configuration.backgroundAttributes[index]
@@ -743,6 +758,16 @@ public struct Lemmings3Runtime: Sendable {
                     lem.mobilityTool = nil; lem.mobilityTicks = 0
                 } else {
                     lem.x = nx
+                    let trailingX = lem.x - lem.direction * 8
+                    if inBounds(trailingX, lem.y - 17) {
+                        for y in (lem.y - 17)...(lem.y - 16) {
+                            let cell = y * configuration.width + trailingX
+                            if attributes[cell] == 0x2020 && terrainEdits[cell] != true {
+                                attributes[cell] = configuration.backgroundAttributes[cell]
+                                terrainEdits[cell] = false
+                            }
+                        }
+                    }
                     lem.mobilityTicks -= 1
                     if lem.mobilityTicks.isMultiple(of: 8) { consumeTool(&lem) }
                     if lem.mobilityTicks == 0 {

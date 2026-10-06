@@ -282,6 +282,27 @@ do {
     let twoShimmyPickups = try shimmyDistance(stock: 16)
     try require(oneShimmyPickup == 64 && twoShimmyPickups == 128,
                 "L3 Shimmy distance scales with pickup stock")
+    var ceilingTags = stockTags
+    ceilingTags[47 * 256 + 48] = 0x2020
+    ceilingTags[48 * 256 + 52] = 0x20
+    var ceilingWear = try Lemmings3Runtime(configuration: .init(width: 256, height: 96, attributes: ceilingTags,
+        entrance: .init(x: 32, y: 64), exits: [.init(x: 240, y: 64)], total: 1, releaseDelay: 1,
+        pickups: [.init(id: 0, tool: .shimmy, x: 32, y: 56),
+                  .init(id: 1, tool: .bricks, x: 48, y: 40)]))
+    ceilingWear.step()
+    try require(ceilingWear.useTool(to: 0, direction: .right), "L3 activates Shimmy below source dirt")
+    for _ in 0..<100 where ceilingWear.lemmings[0].x < 56 { ceilingWear.step() }
+    try require(ceilingWear.lemmings[0].state == .shimmying &&
+                ceilingWear.attributes[47 * 256 + 48] == 0x1000 &&
+                ceilingWear.attributes[48 * 256 + 48] == 0x1000 &&
+                ceilingWear.terrainEdits[47 * 256 + 48] == false &&
+                ceilingWear.terrainEdits[48 * 256 + 48] == false &&
+                ceilingWear.attributes[48 * 256 + 52] == 0x20 &&
+                ceilingWear.pickups[1].y == 40,
+                "L3 Shimmy wears source ceiling behind the actor and preserves permanent terrain")
+    ceilingWear.step()
+    try require(ceilingWear.pickups[1].y == 42,
+                "L3 placed Bricks fall after Shimmy removes their last support pixel")
     var interrupted = try shimmyGame()
     for _ in 0..<12 { interrupted.step() }
     _ = interrupted.useTool(to: 0, direction: .right)
@@ -441,6 +462,29 @@ do {
     try require(builder.lemmings[0].tool == nil && builder.pickups.last?.quantity == 7, "L3 preserves quantity on drop")
     builder.step()
     try require(builder.lemmings[0].tool == nil, "L3 does not immediately reclaim its dropped box")
+    var verticalTags = [UInt16](repeating: 0x1000, count: 64 * 64)
+    for y in 48..<64 { for x in 0..<40 { verticalTags[y * 64 + x] = 0x20 } }
+    for y in 24..<64 { for x in 40..<48 { verticalTags[y * 64 + x] = 0x20 } }
+    var verticalBuilder = try Lemmings3Runtime(configuration: .init(width: 64, height: 64,
+        attributes: verticalTags, entrance: .init(x: 8, y: 48), exits: [.init(x: 52, y: 46)],
+        total: 1, releaseInterval: 1000, releaseDelay: 1000,
+        pickups: [.init(id: 0, tool: .bricks, x: 32, y: 40)],
+        extras: [.init(x: 39, y: 48, direction: 1)]))
+    verticalBuilder.step()
+    try require(verticalBuilder.lemmings[0].tool == .bricks &&
+                verticalBuilder.useTool(to: 0, direction: .up),
+                "L3 starts vertical Bricks beside an intact rock wall")
+    verticalBuilder.step()
+    try require(verticalBuilder.lemmings[0].y == 44 && verticalBuilder.lemmings[0].quantity == 7,
+                "L3 vertical Bricks raise the actor four pixels per placement")
+    for _ in 0..<16 { verticalBuilder.step() }
+    let verticalCellsMatch = (40..<48).allSatisfy { y in
+        (32..<40).allSatisfy { verticalBuilder.attributes[y * 64 + $0] == 0x2020 } &&
+        (40..<48).allSatisfy { verticalBuilder.attributes[y * 64 + $0] == 0x20 }
+    }
+    try require(verticalBuilder.lemmings[0].x == 39 && verticalBuilder.lemmings[0].y == 40 &&
+                verticalBuilder.lemmings[0].quantity == 6 && verticalCellsMatch,
+                "L3 vertical Bricks align to eight-pixel cells without replacing adjacent rock")
     var dropTags = [UInt16](repeating: 0x1000, count: 128 * 64)
     for y in 48..<64 { for x in 0..<128 { dropTags[y * 128 + x] = 0x20 } }
     for y in 24..<32 { for x in 40..<64 { dropTags[y * 128 + x] = 0x20 } }

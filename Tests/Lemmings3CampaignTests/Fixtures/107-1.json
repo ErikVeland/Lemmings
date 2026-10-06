@@ -3,7 +3,7 @@
     "lost" : 1,
     "reserves" : 0,
     "saved" : 1,
-    "stateHash" : "d157190a38ec3cf543f9c2e388d00d560c03fe093412a9014b062a3394d49b23",
+    "stateHash" : "42a042260d054d1c2f95f22e2ebbdb94f4746635ecfdb3e71a7929a8517d9c2f",
     "ticks" : 9660
   },
   "initialStateHash" : "de5ef2c75bc64de419b68453de9fac536684c2a6468a6cb46c439241300bb67c",
@@ -17,7 +17,7 @@
     {
       "action" : "jumper",
       "lemming" : 1,
-      "tick" : 1622
+      "tick" : 1666
     }
   ],
   "level" : 107,
