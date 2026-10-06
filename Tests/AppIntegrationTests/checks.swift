@@ -4757,7 +4757,8 @@ extension AppDelegate {
     let speedClick = panel.onSpeedPress
     var forwardedSpeedClick: (TimeInterval, Int)?
     panel.onSpeedPress = { forwardedSpeedClick = ($0, $1) }
-    let speedPoint = crtView.viewPoint(fromSource: CGPoint(x: 450, y: 360))!
+    let speedBounds = panel.speedControlBounds
+    let speedPoint = crtView.viewPoint(fromSource: CGPoint(x: speedBounds.midX, y: speedBounds.midY + 320))!
     let doubleClick = NSEvent.mouseEvent(with: .leftMouseDown,
       location: crtView.convert(speedPoint, to: nil), modifierFlags: [], timestamp: 42,
       windowNumber: window.windowNumber, context: nil, eventNumber: 1, clickCount: 2, pressure: 1)!
