@@ -5796,7 +5796,8 @@ extension AppDelegate {
   host.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 1120, height: 720))
   let priorWindow = GameScreen.shared.gameWindow
   defer { GameScreen.shared.dismissAll(); GameScreen.shared.gameWindow = priorWindow }
-  let url = URL(fileURLWithPath: "Sources/Ports/LEM3CD/MOVIE/INTRO.FLI")
+  let source = try BundledGameResources.lemmings3()
+  let url = source.appendingPathComponent("MOVIE/INTRO.FLI")
   let audio = OriginalMovieAudioProbe()
   let opening = try OriginalMoviePlayer(url: url, soundtrack: audio, returnsToGameWhenFinished: true)
   var handovers = 0
@@ -5830,7 +5831,6 @@ extension AppDelegate {
   try check(skips == 1 && !GameScreen.shared.isPresented && skipAudio.stopCount > 0,
     "Skipped L3 introduction did not return to the game")
 
-  let source = URL(fileURLWithPath: "Sources/Ports/LEM3CD")
   let isolated = output.appendingPathComponent("missing-media-root")
   try? FileManager.default.removeItem(at: isolated)
   try FileManager.default.createDirectory(at: isolated, withIntermediateDirectories: true)
