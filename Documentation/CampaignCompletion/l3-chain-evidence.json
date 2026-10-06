@@ -2,7 +2,7 @@
   "gaps" : [
     {
       "level" : 22,
-      "population" : 28,
+      "population" : 36,
       "tribe" : "Classic"
     },
     {
@@ -229,24 +229,24 @@
     },
     {
       "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/020-34.json",
-      "fixtureSHA256" : "1c345a03c3a942a5968b4ffe504e4bb40c11e5a90d2899c1a98ca3b734aa8043",
+      "fixtureSHA256" : "29dd8329426d3fdeeee4c350a19d5e20d6465eb9831326cdc95920e7f1bdec33",
       "level" : 20,
-      "lost" : 8,
+      "lost" : 0,
       "population" : 34,
-      "reserves" : 20,
-      "saved" : 8,
-      "stateHash" : "8a3d416051c32262997007341024fe8e6e3f42d6e0ef9ac1956d26fe8c218385",
-      "ticks" : 5520
+      "reserves" : 24,
+      "saved" : 12,
+      "stateHash" : "d208096c6533363e678b4e098b786d7a78d78448ad7ae38dca3d5787601606ac",
+      "ticks" : 2343
     },
     {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/021-28.json",
-      "fixtureSHA256" : "7f7aed5905737b5523cea541344bd7af3239fa5f78e6ff40bf3b262e0c8e1541",
+      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/021-36.json",
+      "fixtureSHA256" : "0f4dd87b8c2b33537fa9575bf31b8eb01a9928ecc75a9dd96c8697ea92e3448e",
       "level" : 21,
       "lost" : 0,
-      "population" : 28,
-      "reserves" : 18,
+      "population" : 36,
+      "reserves" : 26,
       "saved" : 10,
-      "stateHash" : "fbb71e6583a8ebabddf723c951ecc212a0327bfd230a1ea762a23c73ed50d22c",
+      "stateHash" : "4fec23c69dffd60090061f18cc535e293a9e5b024334390555c2db5e5ba6cc66",
       "ticks" : 5775
     },
     {
