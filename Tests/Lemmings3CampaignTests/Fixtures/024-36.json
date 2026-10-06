@@ -1,12 +1,12 @@
 {
   "expected" : {
     "lost" : 0,
-    "reserves" : 10,
+    "reserves" : 26,
     "saved" : 10,
-    "stateHash" : "408f25b41515484024b760e92dc2228b39ca240408e8387344bea9cfd0f06a3d",
+    "stateHash" : "5921f4bd2f2122bce68d630d21eda5db14c96b87d0b786cc330a9a6ce54cd10a",
     "ticks" : 2328
   },
-  "initialStateHash" : "86da850d7707aa673563a6e0a4dfb36c5dc4528fe86f928a1ea0f7a4251af108",
+  "initialStateHash" : "9d17fefb89284c161445f52b49548c842f41d3dbbb8982d6961dc8926b996041",
   "inputs" : [
     {
       "action" : "blocker",
@@ -132,6 +132,6 @@
   ],
   "level" : 24,
   "levelSHA256" : "ee41ebb53aa3f2d8d22f06b2f51145770dd6c7e4599c9d11495c191b315e96a3",
-  "population" : 20,
+  "population" : 36,
   "version" : 1
 }
