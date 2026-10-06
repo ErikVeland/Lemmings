@@ -356,6 +356,25 @@ guard multiHatchGame.released == 1,
       nextHatchScore.distance == activeDistance + 2 * firstHatchDistance + 2 * secondHatchDistance else {
     fatalError("Solver lost the release-order offset after the first actor")
 }
+var quotaGame = try Lemmings3Runtime(configuration: .init(width: 128, height: 64,
+    attributes: multiHatchTags, entrance: .init(x: 20, y: 20), exits: [.init(x: 20, y: 20)],
+    total: 20, releaseInterval: 100, releaseDelay: 1, timeLimit: 60,
+    additionalEntrances: [.init(x: 100, y: 20)]))
+let quotaField = L3DistanceField(quotaGame)
+let quotaScore = L3Score(L3Candidate(game: quotaGame, detector: L3Detector()), field: quotaField)
+guard quotaGame.reserve == 20, quotaGame.pendingReleases == 10,
+      quotaScore.distance == 5 * firstHatchDistance + 5 * secondHatchDistance else {
+    fatalError("Solver treated protected reserve actors as pending hatch releases")
+}
+quotaGame.step()
+let quotaActiveDistance = quotaGame.lemmings.filter(\.active).reduce(0) {
+    $0 + quotaField.distance(x: $1.x, y: $1.y)
+}
+let nextQuotaScore = L3Score(L3Candidate(game: quotaGame, detector: L3Detector()), field: quotaField)
+guard quotaGame.reserve == 19, quotaGame.pendingReleases == 9,
+      nextQuotaScore.distance == quotaActiveDistance + 4 * firstHatchDistance + 5 * secondHatchDistance else {
+    fatalError("Solver scored unreleased reserve actors beyond the current release quota")
+}
 print("PASS L3 solver offers accepted Brick and Spade directions from retained routes")
 print("PASS L3 solver offers a useful tool site on Classic 03")
 print("PASS L3 solver offers the retained Shadow 08 same-tick builder turn")
@@ -365,3 +384,4 @@ print("PASS L3 solver replay-verifies a seeded abort completion")
 print("PASS L3 solver replay-verifies an unseeded End Run after a rescue")
 print("PASS L3 solver retains releasable blockers in its survivor score")
 print("PASS L3 solver scores unreleased actors from their release-order hatches")
+print("PASS L3 solver excludes protected reserve actors from hatch distance")

@@ -255,9 +255,10 @@ struct L3Score: Comparable, Sendable {
         let active = game.lemmings.filter(\.active).reduce(0) { $0 + field.distance(x: $1.x, y: $1.y) }
         let entrances = [game.configuration.entrance] + game.configuration.additionalEntrances
         let hatchDistances = entrances.map { field.distance(x: $0.x, y: $0.y) }
-        let completeCycles = game.reserve / hatchDistances.count
+        let pending = game.pendingReleases
+        let completeCycles = pending / hatchDistances.count
         let firstHatch = game.released % hatchDistances.count
-        let remainingHatches = (0..<(game.reserve % hatchDistances.count)).reduce(0) { sum, index in
+        let remainingHatches = (0..<(pending % hatchDistances.count)).reduce(0) { sum, index in
             sum + hatchDistances[(firstHatch + index) % hatchDistances.count]
         }
         saved = game.saved

@@ -157,6 +157,7 @@ public struct Lemmings3Runtime: Sendable {
         return trap.startFrame + max(0, tick - start - trap.cyclePause) / (trap.frameDelay + 1)
     }
     public var reserve: Int { configuration.total - released }
+    public var pendingReleases: Int { max(0, releaseTarget - released) }
     public var survivors: Int { saved + reserve }
     private var releaseTarget: Int {
         min(configuration.total, 10 + lemmings.filter { $0.id >= configuration.extras.count && $0.state == .dead }.count)
