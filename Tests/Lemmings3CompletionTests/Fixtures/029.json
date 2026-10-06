@@ -3,10 +3,10 @@
     "lost" : 11,
     "reserves" : 10,
     "saved" : 1,
-    "stateHash" : "ff05ee63a9a569e528821c61757e05cb10e42c460e0c71245bfbab8d58b2e560",
+    "stateHash" : "d057890e122e30f7bc504478f4c7718fc6f733a81ea90abddb66a0fc73de95b2",
     "ticks" : 288
   },
-  "initialStateHash" : "76256cd73ab61708684369f95b9be2b16cd22e30655f4b74045d4b23e8b285eb",
+  "initialStateHash" : "f419e2fb2ea31820a11d4c88761d3800bc23b7ecc67b6bce2e2dad3acdb39158",
   "inputs" : [
     {
       "action" : "walker",
