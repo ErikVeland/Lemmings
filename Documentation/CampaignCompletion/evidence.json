@@ -7,7 +7,7 @@
     "ohYesMoreLemmings": 60,
     "xmasLemmings1991": 4,
     "xmasLemmings1992": 4,
-    "lemmings3": 68
+    "lemmings3": 69
   },
   "fixtures": [
     {
@@ -2559,6 +2559,16 @@
       "lost": 3,
       "reserves": 10,
       "ticks": 800
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/024.json",
+      "sha256": "e06941b83aea6179311d0adbdc65c023fabbdf430968a904a315688f3fdfa3b0",
+      "game": "lemmings3",
+      "level": 24,
+      "saved": 1,
+      "lost": 19,
+      "reserves": 0,
+      "ticks": 1788
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/101.json",
