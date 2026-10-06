@@ -2195,9 +2195,14 @@ import NxlvKit
         let points = game.blastFlashes.map { (x: $0.x + 17, y: $0.y + 20) }
             + game.lemmings.filter { $0.state == .exploding && $0.age == 16 }.map { (x: $0.x, y: $0.y - 6) }
         guard !points.isEmpty else { return }
-        let cores = points.map { NSRect(x: origin.x + (CGFloat($0.x - 3) - cameraX) * zoom,
-            y: origin.y + (CGFloat($0.y - 3) - cameraY) * zoom * 1.2, width: 6 * zoom, height: 6 * zoom * 1.2) }
-        hdrOverlay?.pulse(cores: cores.map(precisionLens.display), fullScreen: fullScreenHDRFlashes)
+        let cores = points.map { CGRect(x: $0.x - 3, y: $0.y - 3, width: 6, height: 6) }
+        hdrOverlay?.pulse(cores: cores, fullScreen: fullScreenHDRFlashes) { [weak self] world in
+            guard let self else { return nil }
+            return self.precisionLens.display(CGRect(
+                x: self.origin.x + (world.minX - self.cameraX) * self.zoom,
+                y: self.origin.y + (world.minY - self.cameraY) * self.zoom * 1.2,
+                width: world.width * self.zoom, height: world.height * self.zoom * 1.2))
+        }
     }
     private var explosion: Lemmings2Explosion?
     func load(level: Lemmings2Level, style: Lemmings2Style, sprites bank: Lemmings2Sprites, intern: Lemmings2SpecialGraphics, explosion: Lemmings2Explosion, walker: Lemmings2Walker?, resetPresentation: Bool = true) throws {

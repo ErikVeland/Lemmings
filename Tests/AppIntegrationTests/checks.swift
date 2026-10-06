@@ -5739,6 +5739,7 @@ Task { @MainActor in
     try await subject.testLearningJourneySessionsStart()
     try await subject.testLevelHints()
     try testL3OpeningStory()
+    try subject.testSuperSpeedPresentation()
     print("1.8.x consolidation integration tests passed.")
     #elseif PROFILE_SESSION_TESTS
     try subject.testSoloHotSeatRoundTrips()

@@ -6646,17 +6646,18 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func flashExplosions(previous: Set<Int>) {
     guard settings.cinematicExplosionsEnabled, let session else { return }
     let fresh = session.lemmings.filter { $0.pose == .explosion && !previous.contains($0.id) }
-    let cores: [CGRect] = fresh.compactMap { lemming in
-      let point = playfield.viewport.viewPoint(fromLevel: CGPoint(x:lemming.x,y:lemming.y-6))
-      guard playfield.bounds.contains(point) else { return nil }
+    let cores = fresh.map { CGRect(x: $0.x - 3, y: $0.y - 9, width: 6, height: 6) }
+    guard !cores.isEmpty else { return }
+    screenFlash.pulse(cores: cores, fullScreen: true) { [weak self] world in
+      guard let self else { return nil }
+      let point = self.playfield.viewport.viewPoint(fromLevel: CGPoint(x: world.midX, y: world.midY))
       let centre: CGPoint
-      if tubeIsActive {
-        guard let curved = crtView.viewPoint(fromSource:point) else { return nil }
-        centre = screenFlash.convert(curved,from:crtView)
-      } else { centre = screenFlash.convert(point,from:playfield) }
-      return CGRect(x:centre.x-3,y:centre.y-3,width:6,height:6)
+      if self.tubeIsActive {
+        guard let curved = self.crtView.viewPoint(fromSource: point) else { return nil }
+        centre = self.screenFlash.convert(curved, from: self.crtView)
+      } else { centre = self.screenFlash.convert(point, from: self.playfield) }
+      return CGRect(x: centre.x - 3, y: centre.y - 3, width: 6, height: 6)
     }
-    if !cores.isEmpty { screenFlash.pulse(cores:cores,fullScreen:true) }
   }
 
   private func captureReplayFrame() {

@@ -30,3 +30,15 @@ swiftc -O -swift-version 6 -I "$module_dir" "${objects[@]}" \
 "$build_dir/JourneyResources" "$build_dir/pool.json" "$resources" \
   "$project_dir/Artifacts/LearningJourney/source-resources.json"
 python3 "$project_dir/Tools/DifficultyDiagnostics/human_journey.py"
+
+# A level count or stored win flag is not a proof. Re-run every selected route.
+swiftc -O -swift-version 6 -I "$module_dir" "${objects[@]}" \
+  "$project_dir/Tools/DifficultyDiagnostics/JourneyReplays/main.swift" \
+  "$project_dir/Sources/LemmingsLocal/GameAssetCache.swift" \
+  "$project_dir/Sources/LemmingsLocal/FanLevelLibrary.swift" \
+  -o "$build_dir/JourneyReplays"
+"$build_dir/JourneyReplays" "$resources" \
+  "$project_dir/Resources/Progression/learning.json" \
+  "$project_dir/Resources/Progression/solutions.json" \
+  "$build_dir/native-replay-validation.json"
+cp "$build_dir/native-replay-validation.json" "$project_dir/Artifacts/LearningJourney/native-replay-validation.json"

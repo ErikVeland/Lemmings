@@ -67,7 +67,7 @@ if sys.argv[1] == 'collect':
     print(f'Collected {len(changed)} upgraded fan profiles and {len(solutions)} replay references.')
 elif sys.argv[1] == 'report':
     current = read(ROOT / 'Resources/Progression/learning.json')
-    if current.get('placementPolicy') == 'redux-community-1':
+    if current.get('placementPolicy') in {'redux-community-1', 'redux-calibrated-2'}:
         from human_journey import report
         report(current, read(OUT / 'curriculum.json'), read(OUT / 'human-review-queue.json'),
                read(OUT / 'transitions.json'))

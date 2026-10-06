@@ -25,6 +25,35 @@ func require(_ value: Bool, _ message: String) throws {
   try require(!idle.hasAllocatedFlashMask && idle.layer?.isHidden == true,
     "Clearing the last flash left an idle mask or visible frame")
   print("PASS idle HDR overlay skips masks and clears the last effect")
+  var camera = CGPoint(x: 100, y: 20)
+  var zoom: CGFloat = 2
+  let world = CGRect(x: 397, y: 97, width: 6, height: 6)
+  idle.pulse(cores: [world], fullScreen: true) { rect in
+    CGRect(x: (rect.minX - camera.x) * zoom, y: (rect.minY - camera.y) * zoom,
+           width: rect.width * zoom, height: rect.height * zoom)
+  }
+  let sampleTime = ProcessInfo.processInfo.systemUptime
+  let first = idle.explosionSamples(now: sampleTime)[0]
+  camera = CGPoint(x: 180, y: 30)
+  let moved = idle.explosionSamples(now: sampleTime)[0]
+  try require(abs(first.x - moved.x - Float(80 * zoom / idle.bounds.width)) < 0.0001
+    && abs(first.y - moved.y - Float(10 * zoom / idle.bounds.height)) < 0.0001,
+    "A world blast followed the camera instead of its detonation point")
+  zoom = 3
+  let magnified = idle.explosionSamples(now: sampleTime)[0]
+  try require(abs(magnified.x - Float((400 - camera.x) * zoom / idle.bounds.width)) < 0.0001
+    && magnified.z == first.z && magnified.w == first.w,
+    "Zoom moved the blast origin or restarted its age/exposure")
+  camera.x = 2000
+  try require(idle.explosionSamples(now: sampleTime)[0].x < 0,
+    "An offscreen blast was clamped to the viewport")
+  camera.x = 100
+  idle.frame.size = CGSize(width: 800, height: 600)
+  try require(abs(idle.explosionSamples(now: sampleTime)[0].x - Float(300 * zoom / 800)) < 0.0001,
+    "Resize retained the old normalized screen position")
+  idle.clear()
+  try require(idle.explosionSamples(now: sampleTime).isEmpty, "Clearing retained world anchors")
+  print("PASS world-anchored explosions across camera pan, zoom, resize and offscreen travel")
   let flashes = [ExplosionFlash(rect:CGRect(x:1,y:1,width:2,height:2),strength:1,expiresAt:20),
                  ExplosionFlash(rect:CGRect(x:5,y:5,width:1,height:1),strength:0.5,expiresAt:20)]
   let combined = ExplosionHDR.textureMask(width: 8, height: 8, flashes: flashes, now: 10)

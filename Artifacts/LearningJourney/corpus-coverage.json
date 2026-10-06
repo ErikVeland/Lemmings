@@ -4,37 +4,37 @@
       "confirmedScored": 120,
       "corpusLevels": 120,
       "pack": "Lemmings",
-      "selected": 43
+      "selected": 42
     },
     {
       "confirmedScored": 100,
       "corpusLevels": 100,
       "pack": "Oh No! More Lemmings",
-      "selected": 34
+      "selected": 32
     },
     {
       "confirmedScored": 4,
       "corpusLevels": 4,
       "pack": "Xmas Lemmings 1991",
-      "selected": 0
+      "selected": 1
     },
     {
       "confirmedScored": 4,
       "corpusLevels": 4,
       "pack": "Xmas Lemmings 1992",
-      "selected": 1
-    },
-    {
-      "confirmedScored": 32,
-      "corpusLevels": 32,
-      "pack": "Holiday Lemmings 1993",
       "selected": 2
     },
     {
       "confirmedScored": 32,
       "corpusLevels": 32,
+      "pack": "Holiday Lemmings 1993",
+      "selected": 5
+    },
+    {
+      "confirmedScored": 32,
+      "corpusLevels": 32,
       "pack": "Holiday Lemmings 1994",
-      "selected": 6
+      "selected": 7
     }
   ],
   "eligiblePool": 1720,

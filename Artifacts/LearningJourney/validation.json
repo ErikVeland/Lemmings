@@ -2,10 +2,10 @@
   "checks": [
     "Exact source revisions and native winning replay identities required",
     "Redux file hashes and community order pinned",
-    "Fan admission requires an exact-version human review",
+    "Full 292-level size; solution estimates are distinguished from human reviews",
     "No fabricated precision, rank floors, cumulative clamps or application-pattern deduplication",
     "Adjacent reference gaps are checked without changing any placement score"
   ],
-  "limits": "Redux ordinal positions are not equal human-difficulty units. Classic counterparts differ from Redux. A replay proves a route, not novice discovery. Fan comparisons are unapproved review aids.",
-  "policy": "redux-community-1"
+  "limits": "Redux ordinal positions are not equal human-difficulty units. Classic counterparts differ from Redux. A replay proves a route, not novice discovery. Solution comparisons are estimated grades, not claims of human review.",
+  "policy": "redux-calibrated-2"
 }

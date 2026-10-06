@@ -103,17 +103,52 @@ class CommunityJourneyTests(unittest.TestCase):
 
     def test_harder_classic_variant_is_held_for_review(self):
         titles = {l['entry']['levelNameSnapshot'] for l in self.manifest['lessons']}
-        self.assertNotIn('A Block from Home', titles)
+        for lesson in self.manifest['lessons']:
+            if lesson['entry']['levelNameSnapshot'] == 'A Block from Home':
+                self.assertNotEqual(lesson['placement']['basis'], 'reduxClassicCounterpart')
         queue = journey.read(ROOT / 'Artifacts/LearningJourney/human-review-queue.json')
         block = next(r for r in queue if r['title'] == 'A Block from Home')
         self.assertTrue(any('ten percentage points' in r for r in block['risks']))
 
-    def test_no_unreviewed_fan_is_admitted(self):
-        reviews = {journey.key(r): r for r in journey.read(ROOT / 'Artifacts/LearningJourney/human-reviews.json')['reviews']}
+    def test_full_journey_and_estimates_remain_explicit(self):
+        self.assertEqual(len(self.manifest['lessons']), 292)
+        fans = [l for l in self.manifest['lessons'] if l['entry']['identity']['packID'].startswith('fan:')]
+        self.assertGreater(len(fans), 100)
+        for lesson in fans:
+            self.assertIn(lesson['placement']['basis'], ['solutionEstimate', 'reviewedFan'])
+            if lesson['placement']['basis'] == 'solutionEstimate':
+                self.assertTrue(lesson['needsSupport'])
+                self.assertGreater(lesson['placement']['upper'] - lesson['placement']['lower'], 20)
+        self.assertEqual(self.plan['targetSize'], 292)
+
+    def test_failed_native_proofs_and_duplicate_titles_do_not_fill_slots(self):
+        titles = [journey.normalized(l['entry']['levelNameSnapshot']) for l in self.manifest['lessons']]
+        self.assertEqual(len(titles), len(set(titles)))
+        rejected = {journey.key(r) for r in journey.read(journey.OUT / 'replay-rejections.json')}
+        self.assertTrue(rejected.isdisjoint({journey.key(l) for l in self.manifest['lessons']}))
+
+    def test_estimated_beginner_routes_are_forgiving(self):
+        for lesson in self.plan['lessons']:
+            if lesson['placement']['basis'] == 'solutionEstimate' and lesson['placement']['position'] < 180:
+                c = lesson['context']
+                self.assertEqual(c['narrowActions'], 0)
+                self.assertLessEqual(len(c['usedSkills']), 3)
+                self.assertLessEqual(c['jobChanges'], 1)
+                self.assertFalse(len(c['usedSkills']) > 1 and c['exhaustedUsedSkills'] and c['savedAboveRequirement'] == 0)
+
+    def test_estimated_additions_have_visible_interactive_objects(self):
+        sources = {journey.key(r): r for r in self.resources}
         for lesson in self.manifest['lessons']:
-            if lesson['entry']['identity']['packID'].startswith('fan:'):
-                self.assertIn(journey.key(lesson), reviews)
-                self.assertEqual(lesson['placement']['basis'], 'reviewedFan')
+            visible = sources[journey.key(lesson)]['interactiveVisibility']
+            self.assertTrue(any(v['effect'] == 1 for v in visible))
+            self.assertTrue(all(v['visibleFraction'] >= .2 for v in visible))
+
+    def test_every_lesson_has_its_exact_bundled_solution(self):
+        bundled = journey.read(ROOT / 'Resources/Progression/solutions.json')
+        pool = {journey.key(r): r for r in self.pool}
+        for lesson in self.manifest['lessons']:
+            row = pool[journey.key(lesson)]
+            self.assertTrue(journey.valid_witness(row, bundled[row['initialHash']]))
 
     def test_order_uses_independent_reference_positions_without_clamping(self):
         for lesson, goal in zip(self.manifest['lessons'], self.plan['lessons']):
@@ -139,6 +174,15 @@ class CommunityJourneyTests(unittest.TestCase):
         self.assertEqual(actual, journey.build(list(reversed(self.pool)), *args))
         self.assertEqual(actual[0], self.manifest)
         self.assertEqual(actual[1], self.plan)
+
+    def test_all_selected_routes_have_exact_native_winning_proofs(self):
+        proofs = journey.read(ROOT / 'Artifacts/LearningJourney/native-replay-validation.json')
+        expected = {(journey.key(r['entry']), r['entry']['sourceRevision'], r['placement']['replayRevision'])
+                    for r in self.manifest['lessons']}
+        actual = {(journey.key(r), r['sourceRevision'], r['replayRevision']) for r in proofs if r['passed']}
+        self.assertEqual(len(proofs), 292)
+        self.assertTrue(all(r['passed'] for r in proofs))
+        self.assertEqual(actual, expected)
 
     def test_altered_winning_route_cannot_reuse_a_difficulty_profile(self):
         row, replay, _ = self.fixture()

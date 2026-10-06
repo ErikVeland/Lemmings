@@ -1436,9 +1436,14 @@ import NxlvKit
         lastBlastTick = game.tick
         let fresh = game.blasts.filter { $0.tick == game.tick }
         guard !fresh.isEmpty else { return }
-        let cores = fresh.map { NSRect(x: origin.x + (CGFloat($0.x - 3) - cameraX) * zoom,
-            y: origin.y + (CGFloat($0.y - 3) - cameraY) * zoom, width: 6 * zoom, height: 6 * zoom) }
-        hdrOverlay?.pulse(cores: cores.map(precisionLens.display), fullScreen: fullScreenHDRFlashes)
+        let cores = fresh.map { CGRect(x: $0.x - 3, y: $0.y - 3, width: 6, height: 6) }
+        hdrOverlay?.pulse(cores: cores, fullScreen: fullScreenHDRFlashes) { [weak self] world in
+            guard let self else { return nil }
+            return self.precisionLens.display(CGRect(
+                x: self.origin.x + (world.minX - self.cameraX) * self.zoom,
+                y: self.origin.y + (world.minY - self.cameraY) * self.zoom,
+                width: world.width * self.zoom, height: world.height * self.zoom))
+        }
     }
     var game: Lemmings3Runtime? { didSet { updateSpeedTrails() } }
     var rewindOriginTick: Int?
