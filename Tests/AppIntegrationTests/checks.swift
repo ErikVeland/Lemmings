@@ -4769,7 +4769,7 @@ extension AppDelegate {
       "CRT speed button lost the native double-click count or timestamp")
     var presses = 0
     panel.onButton = { if $0 == .rateDown { presses += 1 } }
-    tubeClick(CGPoint(x: 40, y: 340))
+    tubeClick(CGPoint(x: 16, y: speedBounds.midY + 320))
     try await Task.sleep(nanoseconds: 450_000_000)
     try check(presses >= 3, "detached CRT panel did not repeat a held rate button")
     crtView.onMouseUp?()
@@ -4779,12 +4779,13 @@ extension AppDelegate {
     var scrolled: Double?
     panel.levelSize = CGSize(width: 1600, height: 160)
     panel.onMinimapScroll = { scrolled = $0 }
-    tubeClick(CGPoint(x: 550, y: 330))
+    let map = panel.minimapBounds
+    tubeClick(CGPoint(x: map.midX, y: map.midY + 320))
     try check(scrolled != nil, "CRT minimap click did not scroll")
     scrolled = nil
-    crtView.onMouseDragged?(CGPoint(x: 560, y: 350))
+    crtView.onMouseDragged?(CGPoint(x: panel.timeline.frame.midX, y: panel.timeline.frame.midY + 320))
     try check(scrolled == nil, "CRT timeline drag moved the minimap")
-    crtView.onMouseDragged?(CGPoint(x: 560, y: 330))
+    crtView.onMouseDragged?(CGPoint(x: map.midX + 1, y: map.midY + 320))
     try check(scrolled != nil, "CRT minimap drag did not scroll")
     crtView.onMouseUp?()
     settings.display = .flat
