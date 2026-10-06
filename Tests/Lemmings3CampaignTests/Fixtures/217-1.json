@@ -1,12 +1,12 @@
 {
   "expected" : {
-    "lost" : 3,
+    "lost" : 2,
     "reserves" : 0,
-    "saved" : 2,
-    "stateHash" : "17f1fad3a4028454f2dce196885040ce7940a676b1b5f481a2f78877e2a5e9cb",
+    "saved" : 3,
+    "stateHash" : "c34e4d3c3a5a294f88eabd6b9a3eca2006416a2b1381f9ef0d5c8deefb133d6e",
     "ticks" : 8280
   },
-  "initialStateHash" : "115b2d95641e1c63f4c0daaf89b7bdbd5da833c29a100950e8023aafa84fe15d",
+  "initialStateHash" : "3927b2c31ee8588c542642f7f7a0b5f4903b5583e3344712647532afeffbb8cc",
   "inputs" : [
     {
       "action" : "jumper",

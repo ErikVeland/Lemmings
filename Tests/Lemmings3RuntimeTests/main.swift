@@ -684,12 +684,12 @@ do {
             if [16, 20, 22].contains(number) { try require(!run.configuration.additionalEntrances.isEmpty, "L3 native multi-hatch level \(number)") }
             if number == 19 { try require(!run.configuration.traps.isEmpty, "L3 native rockfall trap") }
             if number == 20 {
-                for _ in 0..<70 { run.step() }
-                let before = run.lemmings.first { $0.id == 2 }
+                for _ in 0..<173 { run.step() }
+                let before = run.lemmings.first { $0.id == 3 }
                 try require(before?.x == 135 && before?.y == 138 && before?.direction == 1,
                     "L3 Classic 20 reaches the original eight-pixel stair contact")
                 run.step()
-                let after = run.lemmings.first { $0.id == 2 }
+                let after = run.lemmings.first { $0.id == 3 }
                 try require(after?.x == 136 && after?.y == 130 && after?.direction == 1,
                     "L3 Classic 20 climbs the original stair without a tool")
             }
@@ -802,6 +802,23 @@ do {
                 let perm = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/PERM%03d.OBS", candidate.permanentObjectsReference))))
                 let temp = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/TEMP%03d.OBS", candidate.temporaryObjectsReference))))
                 var run = try Lemmings3Runtime(level: candidate, style: tribeStyle, permanent: perm, temporary: temp)
+                let dosFirstHatch: (x: Int, y: Int)? = switch number {
+                case 105: (260, 48)
+                case 110: (260, 22)
+                case 116: (36, 16)
+                case 219: (276, 16)
+                default: nil
+                }
+                if let dosFirstHatch {
+                    try require(run.configuration.entrance.x == dosFirstHatch.x &&
+                                run.configuration.entrance.y == dosFirstHatch.y,
+                        "L3 original DOS first hatch position for level \(number)")
+                    var firstRelease = run
+                    for _ in 0...candidate.releaseDelay { firstRelease.step() }
+                    try require(firstRelease.released == 1 &&
+                                firstRelease.lemmings.first(where: { $0.id == candidate.extraLemmings })?.x == dosFirstHatch.x,
+                        "L3 original DOS first hatch release for level \(number)")
+                }
                 if tribe == .shadow && index == 3 {
                     try require(run.creatures.count == 1 && run.creatures[0].kind == .buzzard && !run.creatures[0].alive,
                         "L3 Shadow 4 placed Buzzard stays inert as in the original DOS hatch run")
