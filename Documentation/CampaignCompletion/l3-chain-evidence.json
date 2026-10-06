@@ -11,8 +11,8 @@
       "tribe" : "Shadow"
     },
     {
-      "level" : 218,
-      "population" : 3,
+      "level" : 221,
+      "population" : 2,
       "tribe" : "Egyptian"
     }
   ],
@@ -655,6 +655,39 @@
       "saved" : 3,
       "stateHash" : "c34e4d3c3a5a294f88eabd6b9a3eca2006416a2b1381f9ef0d5c8deefb133d6e",
       "ticks" : 8280
+    },
+    {
+      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/218-3.json",
+      "fixtureSHA256" : "140e68a0f3417ef6abd985e892410f5955228e2014813713e012faed126a79b1",
+      "level" : 218,
+      "lost" : 8,
+      "population" : 3,
+      "reserves" : 0,
+      "saved" : 3,
+      "stateHash" : "3cc0c1b4e943c116451ab1a6a8c5047870e99f5382a6a142fed1c1fe0a7a04f8",
+      "ticks" : 377
+    },
+    {
+      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/219-3.json",
+      "fixtureSHA256" : "1af5d97c5cdfb0fd9234fa1d0c79356803d9c4037ba7d08449619c5008f871c0",
+      "level" : 219,
+      "lost" : 0,
+      "population" : 3,
+      "reserves" : 0,
+      "saved" : 3,
+      "stateHash" : "9f3b9073a179562a27f619db669a4848f6f2d6abe6a41d5adea510fc8338671e",
+      "ticks" : 551
+    },
+    {
+      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/220-3.json",
+      "fixtureSHA256" : "8034492775d7b035bc08643b5532794798f1b83cc912c255224ffdb36a5ce738",
+      "level" : 220,
+      "lost" : 3,
+      "population" : 3,
+      "reserves" : 0,
+      "saved" : 2,
+      "stateHash" : "bf6d198f99624a0e12d2b1777a6716b1c320c12b5d1b43ef99957918c5201924",
+      "ticks" : 9660
     }
   ]
 }
