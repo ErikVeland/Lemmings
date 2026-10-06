@@ -1,12 +1,12 @@
 {
   "expected" : {
     "lost" : 0,
-    "reserves" : 10,
+    "reserves" : 11,
     "saved" : 10,
-    "stateHash" : "d142037ac57736926a009988001a1449e691c56235e9b7bb92d9dcd0374e70d9",
+    "stateHash" : "1aa37be86d9ab5a079c07e2acabb20fdefa594382d512a31e12e9758eacca9e2",
     "ticks" : 443
   },
-  "initialStateHash" : "1e2b90933a393267ea8d25ae869694074feb1bf92900e4f7fc4c0d83c5deba73",
+  "initialStateHash" : "a0056252baa053098d3a2580de893086343a8084bb0a4e08041d9dfa0021dfad",
   "inputs" : [
     {
       "action" : "walker",
@@ -161,6 +161,6 @@
   ],
   "level" : 113,
   "levelSHA256" : "1f2ba6845895842bb9f36326d89637995a185a92e433ebd8a675965d1cd4cb00",
-  "population" : 20,
+  "population" : 21,
   "version" : 1
 }
