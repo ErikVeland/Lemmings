@@ -251,6 +251,8 @@ public struct Lemmings3Runtime: Sendable {
                 if definition.flags == 0x4001 && tag & 0x4000 != 0 { exits.append(Point(x: x, y: y)) }
             }
         }
+        // DOS captures of Shadow 5/10/16 and Egyptian 19 start at the last placed hatch.
+        entrances.reverse()
         guard let entrance = entrances.first else { throw SequelDataError.invalid("Missing Chronicles entrance trigger.") }
         guard extras.count == level.extraLemmings else { throw SequelDataError.invalid("Chronicles extra-lemming count does not match its placements.") }
         guard creatures.count == level.enemyCount else { throw SequelDataError.invalid("Chronicles creature count does not match its placements.") }

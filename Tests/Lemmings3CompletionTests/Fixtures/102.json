@@ -3,22 +3,22 @@
     "lost" : 0,
     "reserves" : 10,
     "saved" : 10,
-    "stateHash" : "4d1e4931dfe3b2e7666e38b81a377d3b6c9346a67218f294170169032877e0cb",
-    "ticks" : 500
+    "stateHash" : "03b887b3803572e9b6aebeed08eac9b8e79c30acce17250e6c3c9a1e7a242e74",
+    "ticks" : 508
   },
-  "initialStateHash" : "a49d03b36ac238fcd663307f881f92a2f203d5572a6dcc2db436e901272347c6",
+  "initialStateHash" : "be569649de3e3cf531c8dd271dff23f03bb4217e00f3bfb3fe12d2b9fc52b6ee",
   "inputs" : [
     {
       "action" : "use",
-      "direction" : "upLeft",
+      "direction" : "upRight",
       "lemming" : 0,
-      "tick" : 183
+      "tick" : 164
     },
     {
       "action" : "use",
-      "direction" : "upRight",
+      "direction" : "upLeft",
       "lemming" : 1,
-      "tick" : 187
+      "tick" : 206
     }
   ],
   "level" : 102,
