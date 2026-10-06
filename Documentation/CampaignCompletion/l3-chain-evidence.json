@@ -1,7 +1,7 @@
 {
   "gaps" : [
     {
-      "level" : 23,
+      "level" : 24,
       "population" : 36,
       "tribe" : "Classic"
     },
@@ -259,6 +259,17 @@
       "saved" : 10,
       "stateHash" : "4727e3f66cfcbb6435aa64547ec3ff605748218f4529be22c027f7543fbd8327",
       "ticks" : 2040
+    },
+    {
+      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/023-36.json",
+      "fixtureSHA256" : "61b741ff9f33a922698958fcb943a2db779cf94874cd8b46b83846260e449e58",
+      "level" : 23,
+      "lost" : 3,
+      "population" : 36,
+      "reserves" : 26,
+      "saved" : 10,
+      "stateHash" : "bdb85732e40ca01262b2f1fe3d72a9f38d10e323c896a4af0f95009297c34dab",
+      "ticks" : 800
     },
     {
       "fixture" : "Tests\/Lemmings3CompletionTests\/Fixtures\/101.json",
