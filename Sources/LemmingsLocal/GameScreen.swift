@@ -1,6 +1,23 @@
 import AppKit
 import NxlvKit
 
+/// A status inside the current screen. Navigation keeps its existing input targets.
+@MainActor final class GameLoadingIndicator: NSView {
+    override var isFlipped: Bool { true }
+    override init(frame: NSRect) {
+        super.init(frame: frame)
+        setAccessibilityElement(true)
+        setAccessibilityRole(.staticText)
+        setAccessibilityLabel("Loading")
+    }
+    required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
+    override func hitTest(_ point: NSPoint) -> NSView? { nil }
+    override func draw(_ dirtyRect: NSRect) {
+        GameStyle.fill(bounds, .black)
+        GameControlText.draw("Loading...", in: bounds.insetBy(dx: 8, dy: 2), alignment: .center, role: .heading)
+    }
+}
+
 @MainActor protocol GameFullWindowPage: AnyObject {}
 
 /// Menus stay in the game window and return to the screen beneath them.
@@ -16,6 +33,34 @@ import NxlvKit
         let container: GamePageContainer
     }
     private var pages: [Page] = []
+    private var loadingID: UUID?
+    private var loadingView: GameLoadingIndicator?
+    @discardableResult func beginLoading(owner: NSWindow) -> UUID {
+        clearLoading()
+        let id = UUID()
+        loadingID = id
+        let indicator = GameLoadingIndicator(frame: .zero)
+        if let page = pages.last?.view as? GameMenuPage {
+            page.installLoadingIndicator(indicator)
+        } else if let root = owner.contentView {
+            indicator.frame = CGRect(x: max(8, (root.bounds.width - 192) / 2),
+                y: root.isFlipped ? 12 : max(0, root.bounds.height - 44), width: 192, height: 32)
+            indicator.autoresizingMask = [.minXMargin, .maxXMargin, root.isFlipped ? .maxYMargin : .minYMargin]
+            root.addSubview(indicator)
+        }
+        loadingView = indicator
+        NSAccessibility.post(element: indicator, notification: .valueChanged)
+        return id
+    }
+    func endLoading(_ id: UUID) {
+        guard loadingID == id else { return }
+        clearLoading()
+    }
+    func clearLoading() {
+        loadingView?.removeFromSuperview()
+        loadingView = nil
+        loadingID = nil
+    }
     let keyboardNavigation = DialogKeyboardNavigation()
     private var keyboardMonitor: Any?
     private var sheetObservers: [NSObjectProtocol] = []
@@ -237,6 +282,10 @@ import NxlvKit
 
 /// A full game page for settings, help and long lists.
 @MainActor final class GameMenuPage: NSView {
+    func installLoadingIndicator(_ indicator: NSView) {
+        indicator.frame = CGRect(x: 864, y: 110, width: 192, height: 32)
+        canvas.addSubview(indicator)
+    }
     var onBack: (() -> Void)?
     var onHorizontalNavigation: ((Int) -> Void)?
     let body = NSView()

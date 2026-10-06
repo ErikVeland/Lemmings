@@ -159,6 +159,10 @@ Keep the current menu visible and usable until the destination is ready. Back,
 another destination or a different selection cancels pending preparation. Do not
 show a separate screen for internal loading work. Show an error only when the
 player needs to act. Hot Seat still waits at Ready before play begins.
+Show a compact bitmap Loading status on the current screen during preparation.
+It must not intercept input or survive cancellation, failure or completion.
+Opening the curated journey must not scan future fan packs. Validate the current
+entry when it starts or resumes, then check later packs when they are reached.
 
 ## Fresh level start
 

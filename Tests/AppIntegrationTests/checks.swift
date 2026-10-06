@@ -5626,6 +5626,40 @@ private actor ContentBrowserArtworkFixture {
 }
 
 extension AppDelegate {
+  fileprivate func testJourneyLoadingFeedback() throws {
+    GameScreen.shared.dismissAll()
+    let page = GameMenuPage(title: "Oh My! All Lemmings!")
+    var pressed = false
+    let button = page.addPrimaryAction("Resume") { pressed = true }
+    GameScreen.shared.present(page, owner: window)
+    let first = GameScreen.shared.beginLoading(owner: window)
+    let second = GameScreen.shared.beginLoading(owner: window)
+    GameScreen.shared.endLoading(first)
+    func indicators(_ view: NSView) -> [GameLoadingIndicator] {
+      (view as? GameLoadingIndicator).map { [$0] } ?? view.subviews.flatMap(indicators)
+    }
+    try check(indicators(page).count == 1, "An old completion cleared the current loading state")
+    let indicator = indicators(page)[0]
+    try check(indicator.hitTest(CGPoint(x: 10, y: 10)) == nil, "Loading feedback intercepted navigation")
+    button.performClick(nil)
+    try check(pressed, "Loading feedback disabled the menu action")
+    page.frame = CGRect(x: 0, y: 0, width: 1120, height: 720)
+    page.layoutSubtreeIfNeeded()
+    if let bitmap = page.bitmapImageRepForCachingDisplay(in: page.bounds) {
+      page.cacheDisplay(in: page.bounds, to: bitmap)
+      try bitmap.representation(using: .png, properties: [:])?.write(to: URL(fileURLWithPath: ".build/journey-loading.png"))
+    }
+    GameScreen.shared.endLoading(second)
+    try check(indicators(page).isEmpty, "Finished load left stale feedback")
+    GameScreen.shared.dismissAll()
+    let start = ProcessInfo.processInfo.systemUptime
+    presentLearningJourney()
+    try check(playlistFanLoadTask == nil, "Journey hub eagerly validated future fan packs")
+    try check(GameScreen.shared.controllerPage(in: window) != nil, "Journey hub did not appear immediately")
+    print("PASS journey hub has no fan-pack scan; loading status renders, preserves input and ignores stale completions (hub \(Int((ProcessInfo.processInfo.systemUptime - start) * 1000)) ms)")
+    GameScreen.shared.dismissAll()
+  }
+
   fileprivate func testLoadingLatency() async throws {
     if window == nil { buildInterface() }
     func measure(_ name: String, _ work: () throws -> Void) rethrows {
@@ -5737,6 +5771,7 @@ Task { @MainActor in
     try subject.testSequenceNavigationGuards()
     try await subject.testLearningJourneyEntriesResolve()
     try await subject.testLearningJourneySessionsStart()
+    try subject.testJourneyLoadingFeedback()
     try await subject.testLevelHints()
     try testL3OpeningStory()
     try subject.testSuperSpeedPresentation()
