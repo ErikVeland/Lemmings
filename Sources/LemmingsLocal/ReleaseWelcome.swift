@@ -5,12 +5,15 @@ import AppKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "1.8"
-    static let subtitle = "Sharper pixels and better sound"
+    static let notesVersion = "1.8.1"
+    static let subtitle = "The full journey, sharper pixels and steadier effects"
     static let sections = [
+        ("The full journey", "Oh My! All Lemmings! returns to 292 curated levels, official and fan, in a Redux-anchored order. Your history and progress carry over."),
+        ("Explosions stay on the terrain", "Pan, zoom, resize or use CRT curvature and each blast stays where it happened, in Classic, NeoLemmix, Lemmings 2 and Lemmings 3."),
         ("Sharper pixel artwork", "Game artwork, controls, previews and original movies keep crisp pixels when scaled."),
-        ("NeoLemmix sound effects", "Hatches, skill assignments, rescues, deaths and nukes now play sound effects through your selected sound bank."),
-        ("The music comes back", "After the last nuke explosion, the funeral dirge spins back up to normal speed, even on a failed result. Lemmings 2 and 3 remain Preview.")
+        ("The music comes back", "After the last nuke explosion, the funeral dirge spins back up to normal speed, even on a failed result."),
+        ("NeoLemmix sound and controls", "Hatches, assignments, rescues, deaths and nukes play sound effects. The - and + keys match the on-screen buttons, and each level opens on the first hatch. NeoLemmix remains Beta."),
+        ("Closer Lemmings 3", "Hatch order, Bricks, Shimmy wear and Mole wall patrols follow the original more closely. Lemmings 2 and 3 remain Preview.")
     ]
     private let defaults: UserDefaults
     private let build: Int
