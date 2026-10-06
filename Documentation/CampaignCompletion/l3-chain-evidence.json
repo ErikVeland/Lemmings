@@ -382,36 +382,36 @@
       "ticks" : 700
     },
     {
-      "fixture" : "Tests\/Lemmings3CompletionTests\/Fixtures\/110.json",
-      "fixtureSHA256" : "9251dd641edd944a5f7f7c1c4b53d5c1f83a1d2af4e757ec9eec2911b42598f3",
+      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/110-23.json",
+      "fixtureSHA256" : "5db04bbce967d2a64de7651a61ab7c52ff09235aeb7b494283375ca3a8afbaba",
       "level" : 110,
-      "lost" : 22,
+      "lost" : 3,
       "population" : 23,
-      "reserves" : 0,
-      "saved" : 2,
-      "stateHash" : "1d6894c362ea3932ad5f5ed88f57713ae5aee6967d4fb837a93865ef07a42894",
-      "ticks" : 942
+      "reserves" : 10,
+      "saved" : 11,
+      "stateHash" : "21eae181e8476c2f29f6d0ced95f7093af6e4a1d421458a3817fd33a9502a636",
+      "ticks" : 1492
     },
     {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/111-2.json",
-      "fixtureSHA256" : "06d547580ad346b9537413e85da16bbda434f6a6259ce55cfeae4779a4aae484",
+      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/111-21.json",
+      "fixtureSHA256" : "6bc75af0db79fa2fdd2c121921d4c00cea824c4d6705f6a7240b70c7e6b8768c",
       "level" : 111,
-      "lost" : 0,
-      "population" : 2,
-      "reserves" : 0,
+      "lost" : 8,
+      "population" : 21,
+      "reserves" : 11,
       "saved" : 2,
-      "stateHash" : "cbc2ae3a7df4264e3bae23c40a3257f2e2489c751a364a1f7176e8d923771078",
-      "ticks" : 341
+      "stateHash" : "cfdc8631fa380a2d70b78fd2135b3ef864215067b43bf7e032a559289d271653",
+      "ticks" : 4600
     },
     {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/112-2.json",
-      "fixtureSHA256" : "5ce238a30c37529a8f241265a0cbb6593a48f496a59ae487ad902b5b0da6b7bd",
+      "fixture" : "Tests\/Lemmings3CompletionTests\/Fixtures\/112.json",
+      "fixtureSHA256" : "4bced6cff0bb6ad6e2913e71a235feaae0138a6e61836fe3dc433d222995832d",
       "level" : 112,
-      "lost" : 1,
-      "population" : 2,
+      "lost" : 12,
+      "population" : 13,
       "reserves" : 0,
       "saved" : 1,
-      "stateHash" : "b56a70db748417f38fba9df8eb3521ac8e161def44424b235dbee825573ad06e",
+      "stateHash" : "6b1af4eac6879255767f00522af1cfc66b81d02c6c552da406d2c5a82c85208a",
       "ticks" : 2115
     },
     {
