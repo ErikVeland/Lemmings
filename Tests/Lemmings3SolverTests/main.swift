@@ -44,7 +44,7 @@ var cursor = 0
 var detector = L3Detector()
 _ = detector.update(game)
 var offeredAtTurn: [Int] = []
-while game.tick < 560 {
+while !game.isComplete && game.tick < 560 {
     while cursor < fixture.inputs.count && fixture.inputs[cursor].tick == game.tick {
         guard L3Replay.apply(fixture.inputs[cursor], to: &game) else { fatalError("Shadow 08 prefix failed") }
         cursor += 1
@@ -82,7 +82,7 @@ guard egyptianFixture.levelSHA256 == L3Replay.digest(egyptianLevel.rawData),
       egyptianFixture.initialStateHash == L3Replay.stateHash(egyptianGame) else {
     fatalError("Egyptian 01 fixture does not match the exact source level")
 }
-while egyptianGame.tick < 241 { egyptianGame.step() }
+while !egyptianGame.isComplete && egyptianGame.tick < 241 { egyptianGame.step() }
 assertOfferedToolDirections(egyptianGame, lemming: 0, tool: .spade, label: "Egyptian 01 Spade holder")
 
 let classic = try Lemmings3ClassicCampaign(root: root, tribe: .classic)
@@ -106,7 +106,7 @@ _ = classicDetector.update(classicGame)
 var classicCursor = 0
 var offeredSpadeSite = false
 var fallbackCoveredNoTool = false
-while classicGame.tick < 198 {
+while !classicGame.isComplete && classicGame.tick < 198 {
     while classicCursor < classicFixture.inputs.count && classicFixture.inputs[classicCursor].tick == classicGame.tick {
         guard L3Replay.apply(classicFixture.inputs[classicCursor], to: &classicGame) else {
             fatalError("Classic 03 fixture prefix failed")
@@ -240,7 +240,8 @@ var endRunBase = try Lemmings3Runtime(configuration: .init(width: 128, height: 6
     extras: [.init(x: 20, y: 40, direction: 1), .init(x: 96, y: 40, direction: 1)]))
 endRunBase.step()
 guard endRunBase.assign(.blocker, to: 1) else { fatalError("L3 End Run test could not set its live blocker") }
-while (endRunBase.lemmings[0].state != .exiting || endRunBase.lemmings[0].age < 8) && endRunBase.tick < 30 {
+while !endRunBase.isComplete &&
+      (endRunBase.lemmings[0].state != .exiting || endRunBase.lemmings[0].age < 8) && endRunBase.tick < 30 {
     endRunBase.step()
 }
 guard endRunBase.saved == 0, endRunBase.lemmings[0].state == .exiting,
@@ -304,7 +305,7 @@ guard egyptian18Fixture.levelSHA256 == L3Replay.digest(egyptian18Level.rawData),
     fatalError("Egyptian 18 fixture does not match the exact source level")
 }
 var egyptian18Cursor = 0
-while egyptian18Game.tick < 30 {
+while !egyptian18Game.isComplete && egyptian18Game.tick < 30 {
     while egyptian18Cursor < egyptian18Fixture.inputs.count &&
           egyptian18Fixture.inputs[egyptian18Cursor].tick == egyptian18Game.tick {
         guard L3Replay.apply(egyptian18Fixture.inputs[egyptian18Cursor], to: &egyptian18Game) else {
