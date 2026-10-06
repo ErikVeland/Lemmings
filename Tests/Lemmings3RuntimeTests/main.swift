@@ -17,6 +17,13 @@ do {
     try require(Lemmings3Runtime.Tool(sourceIdentifier: 5002) == .spade &&
                 Lemmings3Runtime.Tool.spade.initialQuantity == 8,
                 "L3 source object 5002 is an eight-use Spade")
+    try require(Lemmings3Runtime.Tool(sourceIdentifier: 5007) == .clock &&
+                Lemmings3Runtime.Tool.clock.sourceIdentifier == 5007,
+                "L3 source object 5007 is a time clock")
+    try require(Lemmings3Runtime.Tool(sourceIdentifier: 5009) == .grenade &&
+                Lemmings3Runtime.Tool.grenade.sourceIdentifier == 5009 &&
+                Lemmings3Runtime.Tool.grenade.initialQuantity == 4,
+                "L3 source object 5009 is a four-grenade box")
     let record = Data([7, 0, 32, 0, 0, 0, 2, 0, 1, 1, 1, 0, 0, 0, 0])
     let sequential = try Lemmings3StyleBank(objects: record, frames: Data([0, 0, 1, 1, 0, 0, 16]), blocks: Data())
     try require(try sequential.attributes(object: 7) == [0x1000], "L3 sequential native attribute words")
@@ -772,6 +779,15 @@ do {
                     egyptStairs.lemmings.first(where: { $0.id == 1 })?.y == 144,
             "L3 Egyptian 27 climbs the connected source stairs")
         print("PASS L3 Egyptian 27 connected source stairs")
+        let egypt25 = try Lemmings3Level(data: Data(contentsOf: root.appendingPathComponent("LEVELS/LEVEL225.DAT")))
+        let egypt25Perm = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent("LEVELS/PERM225.OBS")))
+        let egypt25Temp = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent("LEVELS/TEMP225.OBS")))
+        let egypt25Run = try Lemmings3Runtime(level: egypt25, style: egyptStyle,
+            permanent: egypt25Perm, temporary: egypt25Temp)
+        try require(egypt25Run.pickups.count == 66 && egypt25Run.pickups.allSatisfy {
+            $0.tool == .grenade && $0.quantity == 4
+        }, "L3 Egyptian 25 imports all 66 four-grenade boxes")
+        print("PASS L3 Egyptian 25 grenade boxes")
         let expectedCycles = [200: 28, 202: 33, 203: 26, 994: 28, 995: 14, 996: 26, 102: 13, 103: 28, 104: 24]
         var checkedTraps: Set<Int> = []
         for tribe in Lemmings3ClassicCampaign.Tribe.allCases {

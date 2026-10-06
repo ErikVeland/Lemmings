@@ -14,13 +14,21 @@ public struct Lemmings3Runtime: Sendable {
             switch sourceIdentifier {
             case 5003: self = .hadoken
             case 5006: self = .shimmy
+            case 5007: self = .clock
+            case 5009: self = .grenade
             default:
                 guard let tool = Self(rawValue: sourceIdentifier) else { return nil }
                 self = tool
             }
         }
         public var sourceIdentifier: Int {
-            switch self { case .hadoken: 5003; case .shimmy: 5006; default: rawValue }
+            switch self {
+            case .hadoken: 5003
+            case .shimmy: 5006
+            case .grenade: 5009
+            case .clock: 5007
+            default: rawValue
+            }
         }
         public var initialQuantity: Int { self == .bricks || self == .spade || self == .shimmy || self == .sucker ? 8 : (self == .grenade ? 4 : 1) }
         public var label: String { switch self { case .bricks: "B"; case .bomb: "BO"; case .spade: "D"; case .shimmy: "SH"; case .sucker: "CL"; case .umbrella: "U"; case .hadoken: "H"; case .grenade: "G"; case .swimmer: "S"; case .clock: "C" } }
