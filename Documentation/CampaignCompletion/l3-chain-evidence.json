@@ -11,8 +11,8 @@
       "tribe" : "Shadow"
     },
     {
-      "level" : 221,
-      "population" : 2,
+      "level" : 218,
+      "population" : 4,
       "tribe" : "Egyptian"
     }
   ],
@@ -647,80 +647,47 @@
     },
     {
       "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/214-13.json",
-      "fixtureSHA256" : "58e4dcd1cc5cc4d3a268c68b6d358a1a34b9c82b7b3cf044aac9690b5cc00ac3",
+      "fixtureSHA256" : "e27eca96ab5a0f801b8fccc8f2144b1d69118a961fe6be96d7750925a80e65d4",
       "level" : 214,
-      "lost" : 15,
+      "lost" : 3,
       "population" : 13,
-      "reserves" : 0,
-      "saved" : 1,
-      "stateHash" : "cf0bac915a43522d8849158a2c44e466d5f77b6d58a8551e28c3ed6ea61a4b30",
+      "reserves" : 3,
+      "saved" : 10,
+      "stateHash" : "da7ca0b3d21c602eeaa73ec6da24e132d4d44215f2a8b16a7a6a2f29ea7e8864",
       "ticks" : 6969
     },
     {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/215-1.json",
-      "fixtureSHA256" : "d21977d33098926dcb548747650ee42f9311447db3f57aeb705b6121535d5b52",
+      "fixture" : "Tests\/Lemmings3CompletionTests\/Fixtures\/215.json",
+      "fixtureSHA256" : "14c80a707c73bb46bd25f4685a186cb05473f79dbe378e0a14bf3119f063e7a0",
       "level" : 215,
-      "lost" : 1,
-      "population" : 1,
-      "reserves" : 0,
-      "saved" : 1,
-      "stateHash" : "910e533ff4942d81df3e393834fb60d4c3f0ad5c835b6c47e1b8ef1ad8cf8949",
+      "lost" : 3,
+      "population" : 13,
+      "reserves" : 1,
+      "saved" : 10,
+      "stateHash" : "a0bb8c08145f80e7fc8df310c6a55d609f29d606d28d65a1e4733e4366359913",
       "ticks" : 4830
     },
     {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/216-1.json",
-      "fixtureSHA256" : "0ab2285865dcf33119c0f78732cfc79d8c8e323c3dfebce5463a0c9da13a8272",
+      "fixture" : "Tests\/Lemmings3CompletionTests\/Fixtures\/216.json",
+      "fixtureSHA256" : "24bdeeb23cafef84b54827cb8d958574b10e193f6e23cc617836ad6ef14307a8",
       "level" : 216,
       "lost" : 0,
-      "population" : 1,
-      "reserves" : 0,
-      "saved" : 1,
-      "stateHash" : "c08afa2ede0a9b495e87c22fe1db2752ed08965726f82372065822fdadbcb306",
-      "ticks" : 2751
+      "population" : 11,
+      "reserves" : 1,
+      "saved" : 10,
+      "stateHash" : "881be4ae5f4096eccced6fcb7e44a94351392dd05362a39161eb2b92f7d36997",
+      "ticks" : 2622
     },
     {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/217-1.json",
-      "fixtureSHA256" : "da766d8633b0c85a81d91184433213de2002fd0c03706f9ae575878bcee4d61c",
+      "fixture" : "Tests\/Lemmings3CompletionTests\/Fixtures\/217.json",
+      "fixtureSHA256" : "6d9149e37022be7356af317fbdd0183c4d42f2bd21fb2d726e752a34aedb3fac",
       "level" : 217,
-      "lost" : 2,
-      "population" : 1,
+      "lost" : 11,
+      "population" : 11,
       "reserves" : 0,
-      "saved" : 3,
-      "stateHash" : "c34e4d3c3a5a294f88eabd6b9a3eca2006416a2b1381f9ef0d5c8deefb133d6e",
+      "saved" : 4,
+      "stateHash" : "8b77f671dc4bb302d5d507f5d1d78dd8c9e3f3f29043b53890f3779da502e24a",
       "ticks" : 8280
-    },
-    {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/218-3.json",
-      "fixtureSHA256" : "140e68a0f3417ef6abd985e892410f5955228e2014813713e012faed126a79b1",
-      "level" : 218,
-      "lost" : 8,
-      "population" : 3,
-      "reserves" : 0,
-      "saved" : 3,
-      "stateHash" : "3cc0c1b4e943c116451ab1a6a8c5047870e99f5382a6a142fed1c1fe0a7a04f8",
-      "ticks" : 377
-    },
-    {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/219-3.json",
-      "fixtureSHA256" : "1af5d97c5cdfb0fd9234fa1d0c79356803d9c4037ba7d08449619c5008f871c0",
-      "level" : 219,
-      "lost" : 0,
-      "population" : 3,
-      "reserves" : 0,
-      "saved" : 3,
-      "stateHash" : "9f3b9073a179562a27f619db669a4848f6f2d6abe6a41d5adea510fc8338671e",
-      "ticks" : 551
-    },
-    {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/220-3.json",
-      "fixtureSHA256" : "8034492775d7b035bc08643b5532794798f1b83cc912c255224ffdb36a5ce738",
-      "level" : 220,
-      "lost" : 3,
-      "population" : 3,
-      "reserves" : 0,
-      "saved" : 2,
-      "stateHash" : "bf6d198f99624a0e12d2b1777a6716b1c320c12b5d1b43ef99957918c5201924",
-      "ticks" : 9660
     }
   ]
 }
