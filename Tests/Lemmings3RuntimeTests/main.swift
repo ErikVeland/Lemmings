@@ -703,6 +703,26 @@ do {
                 try require(after?.x == 160 && after?.y == 360 && after?.direction == 1,
                     "L3 Classic 28 climbs the supplied stair without a tool")
             }
+            if number == 23 {
+                while !run.isComplete && run.tick < 179 { run.step() }
+                try require(run.tick == 179, "L3 Classic 23 stays active until the first short stair")
+                let firstBefore = run.lemmings.first { $0.id == 3 }
+                try require(firstBefore?.x == 159 && firstBefore?.y == 280 && firstBefore?.direction == 1,
+                    "L3 Classic 23 reaches the first original short stair")
+                run.step()
+                let firstAfter = run.lemmings.first { $0.id == 3 }
+                try require(firstAfter?.x == 160 && firstAfter?.y == 272 && firstAfter?.direction == 1,
+                    "L3 Classic 23 climbs the first original short stair")
+                while !run.isComplete && run.tick < 392 { run.step() }
+                try require(run.tick == 392, "L3 Classic 23 stays active until the second short stair")
+                let secondBefore = run.lemmings.first { $0.id == 3 }
+                try require(secondBefore?.x == 327 && secondBefore?.y == 360 && secondBefore?.direction == 1,
+                    "L3 Classic 23 reaches the second original short stair")
+                run.step()
+                let secondAfter = run.lemmings.first { $0.id == 3 }
+                try require(secondAfter?.x == 328 && secondAfter?.y == 352 && secondAfter?.direction == 1,
+                    "L3 Classic 23 climbs the second original short stair")
+            }
             if number == 5 {
                 try require(run.creatures.count == 1 && run.creatures[0].kind == .fatale, "L3 Classic 5 decodes native Fatale placement")
                 var badHeader = candidate.rawData; badHeader[28] = 0; badHeader[29] = 0

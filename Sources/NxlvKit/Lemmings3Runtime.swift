@@ -670,8 +670,14 @@ public struct Lemmings3Runtime: Sendable {
                         let px = nx + lem.direction * 8, py = lem.y - 14 + 2 * offset
                         return inBounds(px, py) && attributes[py * configuration.width + px] & 0x0040 != 0
                     }.count
+                    let shortStairRise = lem.direction > 0 && projectedClassCount == 1 &&
+                        inBounds(nx + 40, lem.y + 8) && inBounds(nx + 40, lem.y - 8) &&
+                        isSolid(nx - 16, lem.y + 8) && !isSolid(nx - 16, lem.y + 7) &&
+                        isSolid(nx - 8, lem.y) && !isSolid(nx - 8, lem.y - 1) &&
+                        isSolid(nx + 32, lem.y - 8) && !isSolid(nx + 40, lem.y + 8) &&
+                        configuration.attributes[(lem.y - 8) * configuration.width + nx + 40] & 0x0020 == 0
                     let classRise = (nx & 7) == (lem.direction > 0 ? 0 : 7) && contactTag == 0x0060 &&
-                        projectedClassCount >= (lem.direction > 0 ? 4 : 1)
+                        (projectedClassCount >= (lem.direction > 0 ? 4 : 1) || shortStairRise)
                     let sourceBrickRise = lem.direction < 0 && (nx & 7) == 7 &&
                         contactTag == 0x0060 &&
                         inBounds(nx - 8, lem.y - 8) &&
