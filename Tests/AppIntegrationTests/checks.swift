@@ -984,10 +984,10 @@ extension AppDelegate {
       }
     }
     try check(pops == 3 && session?.isComplete == false, "Classic did not retain its explosion tails after three pops")
-    updateFailureMood(at: lastPopTime + 0.14)
+    updateFailureMood(at: lastPopTime + NukeMusicSweep.returnDuration / 2)
     try check(abs(nukeMood.amount - 0.5) < 0.0001, "Classic did not open its filter on the last audible pop")
     phase = .results
-    updateFailureMood(at: lastPopTime + 0.3)
+    updateFailureMood(at: lastPopTime + NukeMusicSweep.returnDuration + 0.02)
     try check(nukeMood.amount == 0, "Classic results interrupted the filter return")
     print("PASS Classic waits for all three audible nuke pops, then restores the filter through tails and results")
   }
