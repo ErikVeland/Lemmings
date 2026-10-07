@@ -878,6 +878,15 @@ do {
                         inert.lemmings.filter { $0.id >= candidate.extraLemmings }.allSatisfy { $0.state != .dead },
                         "L3 Shadow 4 hatch avoids the inactive Buzzard")
                 }
+                if tribe == .shadow && index == 20 {
+                    try require(run.creatures.count == 1 && run.creatures[0].kind == .buzzard && !run.creatures[0].alive,
+                        "L3 Shadow 21 placed Buzzard stays inert as in the original DOS hatch run")
+                    var inert = run
+                    for _ in 0..<451 { inert.step() }
+                    try require(inert.creatures[0].x == run.creatures[0].x && inert.creatures[0].y == run.creatures[0].y &&
+                        inert.lemmings.first(where: { $0.id == 0 })?.state != .dead,
+                        "L3 Shadow 21 prisoner survives the inactive Buzzard")
+                }
                 if tribe == .shadow && index == 6 {
                     var corridor = try Lemmings3Runtime(level: candidate, style: tribeStyle,
                         permanent: perm, temporary: temp, total: 22)

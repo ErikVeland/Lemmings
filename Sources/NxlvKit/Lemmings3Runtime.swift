@@ -280,6 +280,14 @@ public struct Lemmings3Runtime: Sendable {
                 self.creatures[index].alive = false
             }
         }
+        if level.style == 2 && level.permanentObjectsReference == 121 &&
+            level.temporaryObjectsReference == 121 && level.width == 576 && level.height == 336 &&
+            level.extraLemmings == 1 && level.enemyCount == 1 {
+            // The original DOS no-input hatch run keeps this Buzzard stationary and its prisoner alive.
+            for index in self.creatures.indices where self.creatures[index].kind == .buzzard {
+                self.creatures[index].alive = false
+            }
+        }
         if level.style == 2 && level.permanentObjectsReference == 118 && lemmings.indices.contains(6) {
             // DOS Shadow 18 gives the three right-hand prisoners four grenades without pickup boxes.
             for index in [4, 5, 6] {
