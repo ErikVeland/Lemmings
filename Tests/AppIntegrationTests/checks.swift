@@ -984,10 +984,10 @@ extension AppDelegate {
       }
     }
     try check(pops == 3 && session?.isComplete == false, "Classic did not retain its explosion tails after three pops")
-    updateFailureMood(at: lastPopTime + 0.14)
+    updateFailureMood(at: lastPopTime + NukeMusicSweep.returnDuration / 2)
     try check(abs(nukeMood.amount - 0.5) < 0.0001, "Classic did not open its filter on the last audible pop")
     phase = .results
-    updateFailureMood(at: lastPopTime + 0.3)
+    updateFailureMood(at: lastPopTime + NukeMusicSweep.returnDuration + 0.02)
     try check(nukeMood.amount == 0, "Classic results interrupted the filter return")
     print("PASS Classic waits for all three audible nuke pops, then restores the filter through tails and results")
   }
@@ -4757,7 +4757,8 @@ extension AppDelegate {
     let speedClick = panel.onSpeedPress
     var forwardedSpeedClick: (TimeInterval, Int)?
     panel.onSpeedPress = { forwardedSpeedClick = ($0, $1) }
-    let speedPoint = crtView.viewPoint(fromSource: CGPoint(x: 450, y: 360))!
+    let speedBounds = panel.speedControlBounds
+    let speedPoint = crtView.viewPoint(fromSource: CGPoint(x: speedBounds.midX, y: speedBounds.midY + 320))!
     let doubleClick = NSEvent.mouseEvent(with: .leftMouseDown,
       location: crtView.convert(speedPoint, to: nil), modifierFlags: [], timestamp: 42,
       windowNumber: window.windowNumber, context: nil, eventNumber: 1, clickCount: 2, pressure: 1)!
@@ -4768,7 +4769,7 @@ extension AppDelegate {
       "CRT speed button lost the native double-click count or timestamp")
     var presses = 0
     panel.onButton = { if $0 == .rateDown { presses += 1 } }
-    tubeClick(CGPoint(x: 40, y: 340))
+    tubeClick(CGPoint(x: 16, y: speedBounds.midY + 320))
     try await Task.sleep(nanoseconds: 450_000_000)
     try check(presses >= 3, "detached CRT panel did not repeat a held rate button")
     crtView.onMouseUp?()
@@ -4778,12 +4779,13 @@ extension AppDelegate {
     var scrolled: Double?
     panel.levelSize = CGSize(width: 1600, height: 160)
     panel.onMinimapScroll = { scrolled = $0 }
-    tubeClick(CGPoint(x: 550, y: 330))
+    let map = panel.minimapBounds
+    tubeClick(CGPoint(x: map.midX, y: map.midY + 320))
     try check(scrolled != nil, "CRT minimap click did not scroll")
     scrolled = nil
-    crtView.onMouseDragged?(CGPoint(x: 560, y: 350))
+    crtView.onMouseDragged?(CGPoint(x: panel.timeline.frame.midX, y: panel.timeline.frame.midY + 320))
     try check(scrolled == nil, "CRT timeline drag moved the minimap")
-    crtView.onMouseDragged?(CGPoint(x: 560, y: 330))
+    crtView.onMouseDragged?(CGPoint(x: map.midX + 1, y: map.midY + 320))
     try check(scrolled != nil, "CRT minimap drag did not scroll")
     crtView.onMouseUp?()
     settings.display = .flat
@@ -5626,6 +5628,40 @@ private actor ContentBrowserArtworkFixture {
 }
 
 extension AppDelegate {
+  fileprivate func testJourneyLoadingFeedback() throws {
+    GameScreen.shared.dismissAll()
+    let page = GameMenuPage(title: "Oh My! All Lemmings!")
+    var pressed = false
+    let button = page.addPrimaryAction("Resume") { pressed = true }
+    GameScreen.shared.present(page, owner: window)
+    let first = GameScreen.shared.beginLoading(owner: window)
+    let second = GameScreen.shared.beginLoading(owner: window)
+    GameScreen.shared.endLoading(first)
+    func indicators(_ view: NSView) -> [GameLoadingIndicator] {
+      (view as? GameLoadingIndicator).map { [$0] } ?? view.subviews.flatMap(indicators)
+    }
+    try check(indicators(page).count == 1, "An old completion cleared the current loading state")
+    let indicator = indicators(page)[0]
+    try check(indicator.hitTest(CGPoint(x: 10, y: 10)) == nil, "Loading feedback intercepted navigation")
+    button.performClick(nil)
+    try check(pressed, "Loading feedback disabled the menu action")
+    page.frame = CGRect(x: 0, y: 0, width: 1120, height: 720)
+    page.layoutSubtreeIfNeeded()
+    if let bitmap = page.bitmapImageRepForCachingDisplay(in: page.bounds) {
+      page.cacheDisplay(in: page.bounds, to: bitmap)
+      try bitmap.representation(using: .png, properties: [:])?.write(to: URL(fileURLWithPath: ".build/journey-loading.png"))
+    }
+    GameScreen.shared.endLoading(second)
+    try check(indicators(page).isEmpty, "Finished load left stale feedback")
+    GameScreen.shared.dismissAll()
+    let start = ProcessInfo.processInfo.systemUptime
+    presentLearningJourney()
+    try check(playlistFanLoadTask == nil, "Journey hub eagerly validated future fan packs")
+    try check(GameScreen.shared.controllerPage(in: window) != nil, "Journey hub did not appear immediately")
+    print("PASS journey hub has no fan-pack scan; loading status renders, preserves input and ignores stale completions (hub \(Int((ProcessInfo.processInfo.systemUptime - start) * 1000)) ms)")
+    GameScreen.shared.dismissAll()
+  }
+
   fileprivate func testLoadingLatency() async throws {
     if window == nil { buildInterface() }
     func measure(_ name: String, _ work: () throws -> Void) rethrows {
@@ -5737,6 +5773,7 @@ Task { @MainActor in
     try subject.testSequenceNavigationGuards()
     try await subject.testLearningJourneyEntriesResolve()
     try await subject.testLearningJourneySessionsStart()
+    try subject.testJourneyLoadingFeedback()
     try await subject.testLevelHints()
     try testL3OpeningStory()
     try subject.testSuperSpeedPresentation()

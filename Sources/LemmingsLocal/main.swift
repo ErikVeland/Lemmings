@@ -2469,6 +2469,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func cancelLevelSelectionLoading() {
+    GameScreen.shared.clearLoading()
     let pendingSequenceRunID = sequenceLaunchRunID
     levelBrowserLoadTask?.cancel()
     levelBrowserDiscoveryTask?.cancel()
@@ -2507,7 +2508,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if let warm = levelBrowserWarmTask, !warm.isCancelled { discoveryTask = warm }
     else { discoveryTask = makeLevelBrowserDiscoveryTask() }
     levelBrowserDiscoveryTask = discoveryTask
+    let loading = GameScreen.shared.beginLoading(owner: window)
     levelBrowserLoadTask = Task { [weak self] in
+      defer { GameScreen.shared.endLoading(loading) }
       guard let discovery = await discoveryTask.value,
             !Task.isCancelled, let self,
             self.window.attachedSheet == nil else { return }
@@ -4041,36 +4044,29 @@ let achievementProgressKey = "ClassicAchievementProgress"
       GameScreen.shared.message(Self.allLemmingsMenuTitle, detail: "The learning path is missing from this build.")
       return
     }
-    ensureFanPacksResolved(for: journey.lessons.map(\.entry), title: Self.allLemmingsMenuTitle) { [weak self] failures in
-      guard let self else { return }
-      do {
-        let store = try self.playlistStore()
-        let playlist = try journey.playlist()
-        if let existing = store.playlist(id: playlist.id) {
-          if existing.entries != playlist.entries { try store.update(playlist, select: false) }
-        } else { try store.add(playlist, select: false) }
-        guard failures.isEmpty else {
-          GameScreen.shared.message("Journey unavailable", detail: "A required fan pack could not be read.")
-          return
-        }
-        let active = store.activeRun.flatMap {
-          $0.source == .playlist(LearningJourney.playlistID) && $0.pool.id == LearningJourney.version
-            && store.activeRunHotSeatID == ArcadeStore.shared.hotSeatID ? $0 : nil
-        }
-        let progress = store.learningProgress
-        let pending = journey.lessons.map(\.entry)
-        let next = active?.currentEntry ?? pending.first
-        let lesson = journey.lessons.first { $0.entry.identity == next?.identity }
-        let page = LearningJourneyMenu.hub(next: lesson, solved: progress.solvedCount(in: journey),
-          total: journey.lessons.count, later: progress.revisit(in: journey).count, resume: active != nil,
-          play: { [weak self] in
-            guard let self else { return }
-            if active != nil { self.startActiveSequence() }
-            else { self.startLearningEntries(pending, in: store) }
-          }, revisit: { [weak self] in self?.presentLearningRevisit() })
-        GameScreen.shared.present(page, owner: self.window)
-      } catch { GameScreen.shared.message("Journey unavailable", detail: error.localizedDescription) }
-    }
+    do {
+      let store = try self.playlistStore()
+      let playlist = try journey.playlist()
+      if let existing = store.playlist(id: playlist.id) {
+        if existing.entries != playlist.entries { try store.update(playlist, select: false) }
+      } else { try store.add(playlist, select: false) }
+      let active = store.activeRun.flatMap {
+        $0.source == .playlist(LearningJourney.playlistID) && $0.pool.id == LearningJourney.version
+          && store.activeRunHotSeatID == ArcadeStore.shared.hotSeatID ? $0 : nil
+      }
+      let progress = store.learningProgress
+      let pending = journey.lessons.map(\.entry)
+      let next = active?.currentEntry ?? pending.first
+      let lesson = journey.lessons.first { $0.entry.identity == next?.identity }
+      let page = LearningJourneyMenu.hub(next: lesson, solved: progress.solvedCount(in: journey),
+        total: journey.lessons.count, later: progress.revisit(in: journey).count, resume: active != nil,
+        play: { [weak self] in
+          guard let self else { return }
+          if active != nil { self.startActiveSequence() }
+          else { self.startLearningEntries(pending, in: store) }
+        }, revisit: { [weak self] in self?.presentLearningRevisit() })
+      GameScreen.shared.present(page, owner: self.window)
+    } catch { GameScreen.shared.message("Journey unavailable", detail: error.localizedDescription) }
   }
 
   private func startLearningEntries(_ entries: [LevelPlaylistEntry], in store: LevelPlaylistStore,
@@ -4149,7 +4145,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let originalRunID = store.activeRun?.id
     let begin: (Bool, LevelSequenceRun) -> Void = { [weak self] hotSeat, run in
       guard let self else { return }
-      self.ensureFanPacksResolved(for: run.entries, title: "Start session") { [weak self] failures in
+      let required = run.source == .playlist(LearningJourney.playlistID) ? [run.currentEntry] : run.entries
+      self.ensureFanPacksResolved(for: required, title: "Start session") { [weak self] failures in
         guard let self else { return }
         guard ArcadeStore.shared === arcade,
               arcade.records.activeProfileID == ownerProfileID,
@@ -4159,7 +4156,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
           GameScreen.shared.message("Session not started", detail: "The player or saved session changed. Choose the playlist again.")
           return
         }
-        if let blocked = run.entries.first(where: {
+        if let blocked = required.first(where: {
           failures.contains($0.identity.packID) || !self.sequenceEntryCanStart($0, run: run)
         }) {
           GameScreen.shared.message("Session not started",
@@ -4594,6 +4591,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
     playlistFanLoadTask?.cancel()
     playlistFanDiscoveryTask?.cancel()
+    let loading = GameScreen.shared.beginLoading(owner: window)
     let discoveryTask = Task.detached(priority: .userInitiated) {
       () -> ([LevelBrowserFanPackDiscovery], Set<String>) in
       var discoveries: [LevelBrowserFanPackDiscovery] = []
@@ -4627,6 +4625,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     playlistFanDiscoveryTask = discoveryTask
     playlistFanLoadTask = Task { [weak self] in
+      defer { GameScreen.shared.endLoading(loading) }
       let (discoveries, failures) = await discoveryTask.value
       guard !Task.isCancelled, let self,
             self.window.attachedSheet == nil else { return }
@@ -4753,6 +4752,23 @@ let achievementProgressKey = "ClassicAchievementProgress"
     do {
       let store = try playlistStore()
       guard let run = store.activeRun else { return }
+      let owner = ArcadeStore.shared.records.activeProfileID
+      let hotSeat = ArcadeStore.shared.hotSeatID
+      ensureFanPacksResolved(for: [run.currentEntry], title: "Resume session") { [weak self] _ in
+        guard let self, self.playlistStoreCache?.store === store,
+              ArcadeStore.shared.records.activeProfileID == owner,
+              ArcadeStore.shared.hotSeatID == hotSeat,
+              store.activeRun?.id == run.id,
+              store.activeRun?.currentEntry.identity == run.currentEntry.identity else { return }
+        self.startResolvedActiveSequence()
+      }
+    } catch { GameScreen.shared.message("Run unavailable", detail: error.localizedDescription) }
+  }
+
+  private func startResolvedActiveSequence() {
+    do {
+      let store = try playlistStore()
+      guard let run = store.activeRun else { return }
       if store.activeRunHotSeatID != ArcadeStore.shared.hotSeatID {
         resumeSequenceSession(runID: run.id, hotSeatID: store.activeRunHotSeatID, store: store)
         return
@@ -4798,11 +4814,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
             throw error
           }
           self.sequencePlaylistStore = store
-          if let run = store.activeRun {
-            self.ensureFanPacksResolved(for: run.entries, title: "Resume session") { [weak self] _ in
-              self?.startActiveSequence()
-            }
-          }
+          self.startActiveSequence()
         } catch { GameScreen.shared.message("Session not resumed", detail: error.localizedDescription) }
       }
   }
@@ -4962,7 +4974,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func beginBackgroundLevelLaunch() -> UUID {
     levelBrowserLaunchTask?.cancel()
     levelBrowserLaunchTask = nil
-    let launchID = UUID()
+    let launchID = GameScreen.shared.beginLoading(owner: window)
     levelBrowserLaunchID = launchID
     return launchID
   }
@@ -5042,6 +5054,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
                 self.window.attachedSheet == nil else { return }
           self.levelBrowserLaunchTask = nil
           self.levelBrowserLaunchID = nil
+          defer { GameScreen.shared.endLoading(launchID) }
           switch preparation {
           case let .failed(message):
             self.clearSequenceLaunch(sequenceRunID)
@@ -5080,6 +5093,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
                 self.window.attachedSheet == nil else { return }
           self.levelBrowserLaunchTask = nil
           self.levelBrowserLaunchID = nil
+          defer { GameScreen.shared.endLoading(launchID) }
           switch preparation {
           case let .failed(message):
             self.clearSequenceLaunch(sequenceRunID)
@@ -6099,6 +6113,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.viewport.viewSize = playfield.bounds.size
     playfield.viewport.scrollY = 0
     if let entrance = new.entranceX { playfield.viewport.center(on: Double(entrance)) }
+    if let entranceY = new.entranceY {
+      playfield.viewport.scroll(dx: 0, dy: Double(entranceY) - playfield.viewport.visibleSize.height / 2)
+    }
     panel.terrainImage = playfield.levelImage
     syncPanelViewport()
     updateStatus()
@@ -7526,12 +7543,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     keyboard.rate = { [weak self] delta in
       guard let self else { return }
-      let adjustment = self.session?.rateLabel == "Interval" ? -delta : delta
-      self.handle(adjustment < 0 ? .rateDown : .rateUp)
+      self.handle(delta < 0 ? .rateDown : .rateUp)
     }
     keyboard.rateLimit = { [weak self] direction in
       guard let self, let session = self.session else { return }
-      session.setRateLimit(maximum: direction > 0)
+      // The panel shows a spawn interval in NeoLemmix, so its "+" is the slowest rate.
+      session.setRateLimit(maximum: session.rateLabel == "Interval" ? direction < 0 : direction > 0)
       self.playfield.needsDisplay = true; self.panel.needsDisplay = true
       self.updateStatus()
     }

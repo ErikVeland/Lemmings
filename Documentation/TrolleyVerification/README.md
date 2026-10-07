@@ -1,6 +1,6 @@
 # Rescue maximum verification
 
-This audit covered 562 bundled level identities. It produced 242 proven maxima and 225 completed solutions without optimality proofs. It collected no winning witness for 95 levels. Classic Lemmings has a winning replay for every level. Coverage of the other campaigns remains incomplete.
+This audit covered 562 bundled level identities. It produced 242 proven maxima and 250 completed solutions without optimality proofs. It collected no winning witness for 70 levels. Classic Lemmings has a winning replay for every level. Coverage of the other campaigns remains incomplete.
 
 See the [level-by-level results](levels.md) for every campaign level and the [full evidence data](audit.json) for exact conditions and notes.
 
@@ -17,7 +17,7 @@ Maximum saveable means the population minus unavoidable sacrifices. A successful
 | Lemmings 2: The Tribes | 120 | 2 | 72 | 46 |
 | Holiday Lemmings 1993 | 32 | 24 | 8 | 0 |
 | Oh Yes! More Lemmings | 60 | 39 | 21 | 0 |
-| All New World of Lemmings | 90 | 0 | 41 | 49 |
+| All New World of Lemmings | 90 | 0 | 66 | 24 |
 | Holiday Lemmings 1994 | 32 | 22 | 10 | 0 |
 
 Tribes uses 60 Lemmings for the campaign audit. Preserved fixtures also cover 12 carry-over configurations. Each certificate applies only to its exact population.
