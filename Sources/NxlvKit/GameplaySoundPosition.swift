@@ -10,8 +10,14 @@ public struct GameplaySoundPoint: Sendable, Hashable {
 public struct PositionedSoundCue: Sendable {
     public let effect: ClassicSoundEffect
     public let point: GameplaySoundPoint?
-    public init(_ effect: ClassicSoundEffect, at point: GameplaySoundPoint? = nil) {
+    /// A named NeoLemmix sample takes precedence over the selected Classic effect.
+    public let sampleName: String?
+    /// Missing trap samples can use the Classic effect. Other gadgets stay silent.
+    public let allowsFallback: Bool
+    public init(_ effect: ClassicSoundEffect, at point: GameplaySoundPoint? = nil,
+                sampleName: String? = nil, allowsFallback: Bool = true) {
         self.effect = effect; self.point = point
+        self.sampleName = sampleName; self.allowsFallback = allowsFallback
     }
 }
 

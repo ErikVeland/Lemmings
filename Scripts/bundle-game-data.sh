@@ -49,11 +49,25 @@ case "$2" in
     python3 "$project_dir/Tools/FanLevelCatalog/prune.py" "$project_dir/Content/LevelPacks"
     rsync -a --include='*.zip' --include='*.json' --exclude='*' \
       "$project_dir/Content/LevelPacks/" "$resources_dir/LevelPacks/"
-    # CE levels and DMA styles. Scripts/prepare-neolemmix-content.sh makes them.
+    # CE levels, DMA styles and stock gadget sounds. Scripts/prepare-neolemmix-content.sh makes them.
     if [[ ! -f "$project_dir/Content/NeoLemmix/manifest.json" ]]; then
       echo "Missing NeoLemmix packs. Run Scripts/prepare-neolemmix-content.sh." >&2
       exit 1
     fi
+    python3 - "$project_dir/Content/NeoLemmix" <<'NEOSOUNDS'
+import hashlib, json, pathlib, sys
+root = pathlib.Path(sys.argv[1])
+manifest = json.loads((root / 'manifest.json').read_text())
+expected = {name + '.wav' for name in
+            ['chain', 'electric', 'fire', 'slurp', 'teleporter', 'tenton', 'thud', 'thunk', 'weedgulp']}
+hashes = manifest.get('soundSHA256', {})
+if set(hashes) != expected:
+    sys.exit('Missing NeoLemmix stock sound manifest. Run Scripts/prepare-neolemmix-content.sh.')
+for name, digest in hashes.items():
+    path = root / 'sound' / name
+    if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != digest:
+        sys.exit(f'Invalid NeoLemmix stock sound {name}. Run Scripts/prepare-neolemmix-content.sh.')
+NEOSOUNDS
     rsync -a --delete --exclude=.DS_Store \
       "$project_dir/Content/NeoLemmix/" "$resources_dir/NeoLemmix/"
     rsync "${copy_options[@]}" --delete --delete-excluded \

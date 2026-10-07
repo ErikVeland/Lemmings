@@ -20,8 +20,9 @@ SOURCE = 'https://www.lemmingsforums.net/index.php?topic=4374.0'
 RANKS = ['Gentle', 'Quirky', 'Zany', 'Manic', 'Lunatic']
 BASIC = {'climber', 'floater', 'bomber', 'blocker', 'builder', 'basher', 'miner', 'digger'}
 POLICY = 'redux-calibrated-2'
-VERSION = 'learning-13'
-TARGET = 292
+VERSION = 'learning-14'
+BASE_TARGET = 292
+TARGET = 294
 # An explicit counterpart with a changed title, not a fuzzy fan-level match.
 ALIASES = {'ataskforbombers': 'ataskforblockersandbombers'}
 
@@ -233,6 +234,9 @@ def stage(value):
 
 
 def build(pool, witnesses, resources, reference, reviews):
+    additions = read(OUT / 'required-additions.json')
+    required = {key(r) for r in additions}
+    required_candidates = {}
     resource_by_id = {key(r): r for r in resources}
     excluded = {key(r) for r in read(ROOT / 'Resources/Progression/exclusions.json')}
     references = {r['reference']: r for r in reference}
@@ -255,6 +259,9 @@ def build(pool, witnesses, resources, reference, reviews):
         if any(value < 0 for value in context['spareUsedSkills'].values()):
             pending.append({'identity': row['entry']['identity'], 'title': row['entry']['levelNameSnapshot'],
                             'status': 'replay assignment count exceeds inventory; successful-input audit required'})
+            continue
+        if ident in required:
+            required_candidates[ident] = (row, context)
             continue
         contexts[ident], candidates[ident] = context, row
         if row['official']:
@@ -339,7 +346,7 @@ def build(pool, witnesses, resources, reference, reviews):
             'comparisons': [{'reference': n['reference']['reference'], 'position': n['placement']['position'],
                 'distance': round(distance(context, n['context']), 4)} for n in neighbours]})
     pack_counts = collections.Counter(item['row']['entry']['identity']['packID'] for item in selected)
-    slots = TARGET - len(selected)
+    slots = BASE_TARGET - len(selected)
     for index in range(slots):
         target = 40 + (760 * index / max(1, slots - 1))
         used_titles = {normalized(item['row']['entry']['levelNameSnapshot']) for item in selected}
@@ -353,10 +360,48 @@ def build(pool, witnesses, resources, reference, reviews):
         chosen = min(options, key=selection_cost)
         extras.remove(chosen); selected.append(chosen)
         pack_counts[chosen['row']['entry']['identity']['packID']] += 1
+    # Preserve the existing selection, then insert the two promised additions.
+    # Required entries still need exact source resources and winning native routes.
+    assert len(required) == TARGET - BASE_TARGET
+    for addition in additions:
+        ident = key(addition)
+        assert ident in required_candidates, f'Missing exact evidence for required addition: {ident}'
+        row, context = required_candidates[ident]
+        visibility = resource_by_id[ident].get('interactiveVisibility')
+        assert visibility and any(v['effect'] == 1 for v in visibility)
+        assert all(v['visibleFraction'] >= .2 for v in visibility)
+        if addition['basis'] == 'reduxPortCounterpart':
+            reference = references[addition['reference']]
+            assert normalized(row['entry']['levelNameSnapshot']) == normalized(reference['title'])
+            value = reference['ordinal'] * 5.0
+            lower, upper = max(0, value - 10), min(1000, value + 10)
+            neighbours = []
+        else:
+            assert addition['basis'] == 'solutionEstimate'
+            value, lower, upper, neighbours = estimate(context, anchor_rows)
+            lower = min(lower, max(0, value - calibration_deviation))
+            upper = max(upper, min(1000, value + calibration_deviation))
+            reference = neighbours[0]['reference']
+        placement = {'basis': addition['basis'], 'reference': reference['reference'],
+            'sourceURL': SOURCE, 'position': value, 'lower': lower, 'upper': upper,
+            'sourceRevision': row['entry']['sourceRevision'], 'replayRevision': context['replayRevision']}
+        item = {'row': row, 'context': context, 'reference': reference, 'placement': placement,
+            'variantDifferences': addition.get('variantDifferences', []),
+            'comparisons': [{'reference': n['reference']['reference'], 'position': n['placement']['position'],
+                'distance': round(distance(context, n['context']), 4)} for n in neighbours]}
+        selected.append(item)
+        pending.append({'identity': row['entry']['identity'], 'sourceRevision': row['entry']['sourceRevision'],
+            'title': row['entry']['levelNameSnapshot'], 'pack': row['entry']['packNameSnapshot'],
+            'status': 'included with port counterpart evidence; human variant review still needed'
+                if addition['basis'] == 'reduxPortCounterpart' else 'included with an estimated grade; human review still needed',
+            'context': context, 'risks': risks(context) + item['variantDifferences'],
+            'comparisons': item['comparisons'], 'placement': placement})
+    assert len(selected) == TARGET
     admitted = {key(item['row']): item for item in selected}
     for row in pending:
         if key(row) in admitted:
-            row['status'] = 'included with an estimated grade; human review still needed'
+            if admitted[key(row)]['placement']['basis'] != 'reduxPortCounterpart':
+                row['status'] = 'included with an estimated grade; human review still needed'
             row['placement'] = admitted[key(row)]['placement']
     calibration = []
     for anchor in anchor_rows:
@@ -374,11 +419,11 @@ def build(pool, witnesses, resources, reference, reviews):
         concepts = sorted(set(context['usedSkills']))
         new = sorted(set(concepts) - practiced)
         focus = ('Discover: ' if new else 'Practise: ') + ' + '.join(s.capitalize() for s in (new or concepts)[:2])
-        objective = 'community:' + item['reference']['reference'] if placement['basis'] == 'reduxClassicCounterpart' else 'placement:' + key(row)
+        objective = 'community:' + item['reference']['reference'] if placement['basis'] in ['reduxClassicCounterpart', 'reduxPortCounterpart'] else 'placement:' + key(row)
         lesson = {'entry': row['entry'], 'objective': objective, 'score': row['profile']['overallScore'],
                   'intrinsicDemand': row['profile']['overallScore'], 'demand': value, 'stage': stage(value),
                   'preparationGaps': new if len(concepts) > 1 and item['reference']['ordinal'] > 7 else [], 'concepts': concepts, 'introduced': new, 'focus': focus,
-                  'needsSupport': bool(context['narrowActions'] or delta > 35 or placement['basis'] == 'solutionEstimate'), 'placement': placement}
+                  'needsSupport': bool(context['narrowActions'] or delta > 35 or placement['basis'] in ['solutionEstimate', 'reduxPortCounterpart']), 'placement': placement}
         lessons.append(lesson)
         curriculum.append({'identity': row['entry']['identity'], 'objective': objective, 'lesson': focus,
                            'level': row['entry']['levelNameSnapshot'], 'purpose': 'Community-ordered practice with an exact native winning witness',
@@ -391,11 +436,11 @@ def build(pool, witnesses, resources, reference, reviews):
                             'newSkills': new, 'risks': risks(context), 'variantDifferences': item['variantDifferences']})
         practiced.update(concepts)
     manifest = {'version': VERSION, 'placementPolicy': POLICY, 'lessons': lessons}
-    plan = {'version': 'curriculum-7', 'poolSize': len(pool), 'targetSize': TARGET,
+    plan = {'version': 'curriculum-8', 'poolSize': len(pool), 'targetSize': TARGET,
             'calibration': {'method': 'leave-one-reference-out', 'samples': len(calibration),
                 'medianAbsolutePositionError': sorted(calibration)[len(calibration)//2],
                 'meaning': 'Diagnostic error against community order; not a human playtest pass.'}, 'lessons': curriculum,
-            'selectionPolicy': '292 levels: Redux reference spine plus resource-aware solution comparisons, repeated practice and pack diversity. Estimated grades retain uncertainty. No score clamping.',
+            'selectionPolicy': '294 levels: existing 292-level selection plus the required Macintosh and DOS additions. Redux reference spine plus resource-aware solution comparisons, repeated practice and pack diversity. Estimated grades retain uncertainty. No score clamping.',
             'limits': 'Redux ordinal positions are not equal human-difficulty units. Classic counterparts differ from Redux. A replay proves a route, not novice discovery. Solution comparisons are estimated grades, not claims of human review.'}
     pending.sort(key=lambda r: key(r))
     return manifest, plan, pending, transitions
@@ -425,7 +470,7 @@ def report(manifest, plan, pending, transitions):
     write(OUT / 'validation.json', {'policy': POLICY, 'checks': [
         'Exact source revisions and native winning replay identities required',
         'Redux file hashes and community order pinned',
-        'Full 292-level size; solution estimates are distinguished from human reviews',
+        'Full 294-level size; solution estimates are distinguished from human reviews',
         'No fabricated precision, rank floors, cumulative clamps or application-pattern deduplication',
         'Adjacent reference gaps are checked without changing any placement score'],
         'limits': plan['limits']})
@@ -433,7 +478,7 @@ def report(manifest, plan, pending, transitions):
         f"{len(lessons)} curated Classic-mechanics levels: a full journey equivalent to Classic, Oh No! and the Christmas campaigns combined.", '',
         f"[Redux's community order]({SOURCE}) supplies the reference spine. The remaining official and fan levels are placed by comparisons with five reference solutions. Actual assignments, worker changes, skill combinations, bursts of input, timing evidence and resource pressure inform those comparisons.", '',
         'Resource pressure uses the skills actually spent and the route’s rescue margin. Release cadence is considered alongside input density. High rescue percentages, rapid release rates and large inventories never assign a grade by themselves. All selected levels have an exact-version winning replay. Explicit unsuitable-level exclusions remain in force. Estimated additions need an initial-state visibility audit and exclude mostly concealed exits or traps. This pixel-visibility check does not prove that the route or all visual information is obvious.', '',
-        'The first seven teaching levels stay intact. Repeated practice is retained. Selection targets coverage across the curve, limits repeated fan packs and avoids long repetitive witnesses. Estimated beginner additions cannot have measured narrow timing, more than three skill types, multiple worker role changes, or an exhausted combination with no rescue margin. It does not raise or lower grades to make adjacent numbers look smooth. The production generator fails if it cannot supply all 292 levels.', '',
+        'The first seven teaching levels stay intact. Repeated practice is retained. Selection targets coverage across the curve, limits repeated fan packs and avoids long repetitive witnesses. Estimated beginner additions cannot have measured narrow timing, more than three skill types, multiple worker role changes, or an exhausted combination with no rescue margin. It does not raise or lower grades to make adjacent numbers look smooth. The production generator fails if it cannot supply all 294 levels. The two promised 1.8.2 additions are mandatory and retain exact native witnesses. Port counterparts use the Redux position with recorded conversion differences; they do not claim human variant review.', '',
         '## Estimated grades and review', '',
         'A solutionEstimate is an estimate of solving demands against the references, not a human-reviewed difficulty label. Its lower and upper bounds include disagreement among comparable solutions and at least the median held-out calibration error. They are uncertainty ranges, not confidence intervals. Unknown discovery and incomplete timing tests add uncertainty. A named, exact-version human review can replace that estimate. human-review-queue.json includes both selected estimates and reserves; inclusion is explicitly recorded.', '',
         'For human review, record an ordinary completion, what had to be discovered, hints used, execution retries and whether spare resources offered recovery. Compare nearby reference levels played by the same person. Hidden-information checks remain a human-review requirement. No human observations are fabricated.', '',

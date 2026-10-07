@@ -636,6 +636,18 @@
     "title" : "Subterranean Exit"
   },
   {
+    "detail" : "20\/20 saved at tick 1622; exact final state verified",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "lm_set08.dat#5",
+      "packID" : "fan:lldb-48"
+    },
+    "passed" : true,
+    "replayRevision" : "6b3721b8a476d012594d70f588ee548a1454aac9481bbc88688e71b6f9797342",
+    "sourceRevision" : "95b37b388bb5652ba263eb615c158b2c08513f9c7f877d8d43c2b9816e5beb2a",
+    "title" : "Going their separate ways"
+  },
+  {
     "detail" : "60\/53 saved at tick 1563; exact final state verified",
     "identity" : {
       "engine" : "classic",
@@ -1402,6 +1414,18 @@
     "replayRevision" : "SHA256 digest: baf3ce2ecbc01e2bd5d5aeff8f3fe7acc7a1c95b7501765640d6e7eb63a51e4f",
     "sourceRevision" : "b193b220e77b2847f328114b0956e0f6a46e135b5d9f7017c08c0eabaa3cad1c",
     "title" : "Sudenly lemming"
+  },
+  {
+    "detail" : "66\/44 saved at tick 3899; exact final state verified",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "50:Tricky:21:0:5",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "passed" : true,
+    "replayRevision" : "113252336b6facd4dbff7520dea59dd324dae59e18d5d00e7c5a1086991532ba",
+    "sourceRevision" : "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+    "title" : "All the 6`s ........"
   },
   {
     "detail" : "80\/64 saved at tick 4041; exact final state verified",

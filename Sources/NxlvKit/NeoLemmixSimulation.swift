@@ -1192,6 +1192,8 @@ public struct NeoLemmixReplayCommand: Codable, Equatable, Sendable {
 
 public enum NeoLemmixEvent: Codable, Equatable, Sendable {
     case entrancesOpened
+    case builderWarning(lemmingID: Int)
+    case hitSteel(lemmingID: Int)
     case hatched(lemmingID: Int, entranceID: Int)
     case assignment(NeoLemmixAssignmentResult)
     case spawnIntervalChanged(Int)
@@ -2798,6 +2800,7 @@ private extension NeoLemmixSimulation {
                     lemming.lastPortalZoneID = zone.id
                     return
                 case .animation, .animationOnce:
+                    lastTickEvents.append(.hazardTriggered(lemmingID: lemming.id, zoneID: zone.id, effect: zone.effect))
                     if gadgetAnimatingZoneIDs == nil { gadgetAnimatingZoneIDs = [] }
                     gadgetAnimatingZoneIDs?.insert(zone.id)
                     if zone.effect == .animationOnce { disabledZoneIDs.insert(zone.id) }
@@ -3482,6 +3485,8 @@ private extension NeoLemmixSimulation {
                 shade: 12 - lemming.bricksRemaining
             )
             emitTerrainAdded(lemmingID: lemming.id, count: count)
+        } else if lemming.animationFrame == 10 && lemming.bricksRemaining <= 3 {
+            lastTickEvents.append(.builderWarning(lemmingID: lemming.id))
         } else if lemming.animationFrame == 0 {
             defer { lemming.constructivePositionFreeze = false }
             lemming.bricksRemaining -= 1
@@ -3545,6 +3550,8 @@ private extension NeoLemmixSimulation {
                 shade: 12 - lemming.bricksRemaining
             )
             emitTerrainAdded(lemmingID: lemming.id, count: count)
+        } else if lemming.animationFrame == 10 && lemming.bricksRemaining <= 3 {
+            lastTickEvents.append(.builderWarning(lemmingID: lemming.id))
         } else if lemming.animationFrame == 15 {
             if lemming.placedBrick != true {
                 transition(&lemming, to: .walking, turn: true)
@@ -3598,6 +3605,9 @@ private extension NeoLemmixSimulation {
             emitTerrainAdded(lemmingID: lemming.id, count: count)
         } else if lemming.animationFrame == 0 {
             lemming.bricksRemaining -= 1
+            if lemming.bricksRemaining < 3 {
+                lastTickEvents.append(.builderWarning(lemmingID: lemming.id))
+            }
             if lemming.placedBrick != true {
                 let nextY = lemming.position.y - 9 + lemming.bricksRemaining
                     + (lemming.stackLow == true ? 1 : 0)
@@ -3637,6 +3647,9 @@ private extension NeoLemmixSimulation {
                 direction: lemming.direction
             )
             if blocked {
+                if terrain.isSteel(x: lemming.position.x, y: lemming.position.y) {
+                    lastTickEvents.append(.hitSteel(lemmingID: lemming.id))
+                }
                 transition(&lemming, to: .walking)
             } else if removed == 0 {
                 transition(&lemming, to: .falling)
@@ -3690,7 +3703,8 @@ private extension NeoLemmixSimulation {
             }
             return true
         }
-        func turnBasher(_ lemming: inout NeoLemmixLemming) {
+        func turnBasher(_ lemming: inout NeoLemmixLemming, steelSound: Bool) {
+            if steelSound { lastTickEvents.append(.hitSteel(lemmingID: lemming.id)) }
             lemming.position.x -= lemming.direction.rawValue
             transition(&lemming, to: .walking, turn: true)
         }
@@ -3740,13 +3754,13 @@ private extension NeoLemmixSimulation {
                 transition(&lemming, to: .walking)
             } else if (0...2).contains(delta) {
                 if basherIsIndestructible(lemming.position.x, lemming.position.y + delta) {
-                    turnBasher(&lemming)
+                    turnBasher(&lemming, steelSound: terrain.isSteel(x: lemming.position.x, y: lemming.position.y + delta - 4))
                 } else {
                     lemming.position.y += delta
                 }
             } else if delta == -1 || delta == -2 {
                 if basherIsIndestructible(lemming.position.x, lemming.position.y + delta) {
-                    turnBasher(&lemming)
+                    turnBasher(&lemming, steelSound: terrain.isSteel(x: lemming.position.x, y: lemming.position.y + delta - 4))
                 } else if !canStepUp(
                     lemming.position.x,
                     lemming.position.y,
@@ -3757,7 +3771,7 @@ private extension NeoLemmixSimulation {
                         lemming.position.x + lemming.direction.rawValue,
                         lemming.position.y + 2
                     ) {
-                        turnBasher(&lemming)
+                        turnBasher(&lemming, steelSound: terrain.isSteel(x: lemming.position.x + lemming.direction.rawValue, y: lemming.position.y + delta) || terrain.isSteel(x: lemming.position.x + lemming.direction.rawValue, y: lemming.position.y + delta + 1))
                     } else {
                         lemming.position.x -= lemming.direction.rawValue
                     }
@@ -3766,7 +3780,7 @@ private extension NeoLemmixSimulation {
                 }
             } else if delta < -2 {
                 if basherIsIndestructible(lemming.position.x, lemming.position.y) {
-                    turnBasher(&lemming)
+                    turnBasher(&lemming, steelSound: (-5 ... -3).contains { terrain.isSteel(x: lemming.position.x, y: lemming.position.y + $0) })
                 } else {
                     lemming.position.x -= lemming.direction.rawValue
                 }
@@ -3888,9 +3902,10 @@ private extension NeoLemmixSimulation {
         return true
     }
 
-    mutating func turnFencer(_ lemming: inout NeoLemmixLemming, undoRise: Bool) {
+    mutating func turnFencer(_ lemming: inout NeoLemmixLemming, undoRise: Bool, steelSound: Bool) {
         lemming.position.x -= lemming.direction.rawValue
         if undoRise { lemming.position.y += 1 }
+        if steelSound { lastTickEvents.append(.hitSteel(lemmingID: lemming.id)) }
         transition(&lemming, to: .walking, turn: true)
     }
 
@@ -3980,7 +3995,7 @@ private extension NeoLemmixSimulation {
                 y: lemming.position.y - 3,
                 skill: .fencer,
                 direction: lemming.direction
-            ) { turnFencer(&lemming, undoRise: undoRise) }
+            ) { turnFencer(&lemming, undoRise: undoRise, steelSound: terrain.isSteel(x: lemming.position.x, y: lemming.position.y - 4)) }
         } else if ground == -1 || ground == -2 {
             if isIndestructible(
                 x: lemming.position.x,
@@ -3988,7 +4003,7 @@ private extension NeoLemmixSimulation {
                 skill: .fencer,
                 direction: lemming.direction
             ) {
-                turnFencer(&lemming, undoRise: undoRise)
+                turnFencer(&lemming, undoRise: undoRise, steelSound: terrain.isSteel(x: lemming.position.x, y: lemming.position.y + ground - 4))
             } else if !fencerStepUpIsClear(
                 x: lemming.position.x,
                 y: lemming.position.y,
@@ -4002,7 +4017,7 @@ private extension NeoLemmixSimulation {
                     skill: .fencer,
                     direction: lemming.direction
                 ) {
-                    turnFencer(&lemming, undoRise: undoRise)
+                    turnFencer(&lemming, undoRise: undoRise, steelSound: terrain.isSteel(x: nextX, y: lemming.position.y + ground) || terrain.isSteel(x: nextX, y: lemming.position.y + ground + 1))
                 } else {
                     lemming.position.x -= lemming.direction.rawValue
                     if undoRise { lemming.position.y += 1 }
@@ -4017,7 +4032,7 @@ private extension NeoLemmixSimulation {
                 skill: .fencer,
                 direction: lemming.direction
             ) {
-                turnFencer(&lemming, undoRise: undoRise)
+                turnFencer(&lemming, undoRise: undoRise, steelSound: (-5 ... -3).contains { terrain.isSteel(x: lemming.position.x, y: lemming.position.y + $0) })
             } else {
                 lemming.position.x -= lemming.direction.rawValue
             }
@@ -4114,7 +4129,10 @@ private extension NeoLemmixSimulation {
         func minerIsIndestructible(_ x: Int, _ y: Int) -> Bool {
             isIndestructible(x: x, y: y, skill: .miner, direction: lemming.direction)
         }
-        func turnMiner(_ lemming: inout NeoLemmixLemming) {
+        func turnMiner(_ lemming: inout NeoLemmixLemming, steelX: Int, steelY: Int) {
+            if terrain.isSteel(x: steelX, y: steelY) {
+                lastTickEvents.append(.hitSteel(lemmingID: lemming.id))
+            }
             if terrain.isSolid(x: lemming.position.x, y: lemming.position.y - 1) {
                 lemming.position.y -= 1
             }
@@ -4142,14 +4160,14 @@ private extension NeoLemmixSimulation {
                 lemming.position.y - 1
             ) && minerIsIndestructible(lemming.position.x, lemming.position.y - 1) {
                 lemming.position.x -= 2 * direction
-                turnMiner(&lemming)
+                turnMiner(&lemming, steelX: lemming.position.x + 2 * direction, steelY: lemming.position.y - 1)
             } else if lemming.animationFrame == 3,
                       minerIsIndestructible(
                         lemming.position.x - direction,
                         lemming.position.y - 2
                       ) {
                 lemming.position.x -= 2 * direction
-                turnMiner(&lemming)
+                turnMiner(&lemming, steelX: lemming.position.x + direction, steelY: lemming.position.y - 2)
             } else if !terrain.isSolid(
                 x: lemming.position.x - direction,
                 y: lemming.position.y - 1
@@ -4166,15 +4184,17 @@ private extension NeoLemmixSimulation {
                 lemming.fallDistance += 1
             } else if minerIsIndestructible(lemming.position.x, lemming.position.y - 2) {
                 lemming.position.x -= direction
-                turnMiner(&lemming)
+                turnMiner(&lemming, steelX: lemming.position.x + direction, steelY: lemming.position.y - 2)
             } else if !terrain.isSolid(x: lemming.position.x, y: lemming.position.y) {
                 lemming.position.y += 1
                 transition(&lemming, to: .falling)
             } else if minerIsIndestructible(
                 lemming.position.x + direction,
                 lemming.position.y - 2
-            ) || minerIsIndestructible(lemming.position.x, lemming.position.y) {
-                turnMiner(&lemming)
+            ) {
+                turnMiner(&lemming, steelX: lemming.position.x + direction, steelY: lemming.position.y - 2)
+            } else if minerIsIndestructible(lemming.position.x, lemming.position.y) {
+                turnMiner(&lemming, steelX: lemming.position.x, steelY: lemming.position.y)
             }
         }
     }

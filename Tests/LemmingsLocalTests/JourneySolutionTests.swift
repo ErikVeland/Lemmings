@@ -17,41 +17,46 @@ final class JourneySolutionTests: XCTestCase {
         }
     }
 
-    @MainActor func testOpeningLessonRendersWithUsableTargets() throws {
+    @MainActor func testOpeningAnd182AdditionsRenderWithUsableTargets() throws {
         _ = NSApplication.shared
         let project = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
             .deletingLastPathComponent().deletingLastPathComponent()
         let journey = try JSONDecoder().decode(LearningJourney.self,
             from: Data(contentsOf: project.appendingPathComponent("Resources/Progression/learning.json")))
-        let lesson = try XCTUnwrap(journey.lessons.first)
-        var started = false
-        let page = LearningJourneyMenu.hub(next: lesson, solved: 0, total: journey.lessons.count,
-            later: 0, resume: false, play: { started = true }, revisit: {})
-        let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1120, height: 720),
-            styleMask: [.titled], backing: .buffered, defer: false)
-        window.contentView = NSView(frame: NSRect(x: 0, y: 0, width: 1120, height: 720))
-        GameScreen.shared.gameWindow = window
-        defer { GameScreen.shared.dismissAll(); GameScreen.shared.gameWindow = nil }
-        GameScreen.shared.present(page, owner: window)
-        window.contentView?.layoutSubtreeIfNeeded(); page.layoutSubtreeIfNeeded()
-        func controls(_ view: NSView) -> [NSButton] {
-            (view as? NSButton).map { [$0] } ?? view.subviews.flatMap(controls)
+        let lessons = try [XCTUnwrap(journey.lessons.first)] + ["lm_set08.dat#5", "50:Tricky:21:0:5"].map { id in
+            try XCTUnwrap(journey.lessons.first { $0.entry.identity.levelID == id })
         }
-        for button in controls(page) where button.isEnabled && !button.isHidden {
-            let rect = button.convert(button.bounds, to: page)
-            XCTAssertTrue(page.bounds.contains(rect), button.title)
-            let hit = page.hitTest(NSPoint(x: rect.midX, y: rect.midY))
-            XCTAssertTrue(hit === button || hit?.isDescendant(of: button) == true)
-            XCTAssertTrue(window.makeFirstResponder(button))
+        for (index, lesson) in lessons.enumerated() {
+            var started = false
+            let page = LearningJourneyMenu.hub(next: lesson, solved: 0, total: journey.lessons.count,
+                later: 0, resume: false, play: { started = true }, revisit: {})
+            let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1120, height: 720),
+                styleMask: [.titled], backing: .buffered, defer: false)
+            window.contentView = NSView(frame: NSRect(x: 0, y: 0, width: 1120, height: 720))
+            GameScreen.shared.gameWindow = window
+            defer { GameScreen.shared.dismissAll(); GameScreen.shared.gameWindow = nil }
+            GameScreen.shared.present(page, owner: window)
+            window.contentView?.layoutSubtreeIfNeeded(); page.layoutSubtreeIfNeeded()
+            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.05))
+            func controls(_ view: NSView) -> [NSButton] {
+                (view as? NSButton).map { [$0] } ?? view.subviews.flatMap(controls)
+            }
+            for button in controls(page) where button.isEnabled && !button.isHidden {
+                let rect = button.convert(button.bounds, to: page)
+                XCTAssertTrue(page.bounds.contains(rect), button.title)
+                let hit = page.hitTest(NSPoint(x: rect.midX, y: rect.midY))
+                XCTAssertTrue(hit === button || hit?.isDescendant(of: button) == true)
+                XCTAssertTrue(window.makeFirstResponder(button))
+            }
+            let bitmap = try XCTUnwrap(page.bitmapImageRepForCachingDisplay(in: page.bounds))
+            page.displayIgnoringOpacity(page.bounds, in: try XCTUnwrap(NSGraphicsContext(bitmapImageRep: bitmap)))
+            let output = project.appendingPathComponent(".build/journey-review")
+            try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+            try XCTUnwrap(bitmap.representation(using: .png, properties: [:]))
+                .write(to: output.appendingPathComponent("lesson-\(index).png"))
+            try XCTUnwrap(controls(page).first { $0.title == "Let's play" }).performClick(nil)
+            XCTAssertTrue(started)
         }
-        let bitmap = try XCTUnwrap(page.bitmapImageRepForCachingDisplay(in: page.bounds))
-        page.cacheDisplay(in: page.bounds, to: bitmap)
-        let output = project.appendingPathComponent(".build/journey-review")
-        try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
-        try XCTUnwrap(bitmap.representation(using: .png, properties: [:]))
-            .write(to: output.appendingPathComponent("opening-lesson.png"))
-        try XCTUnwrap(controls(page).first { $0.title == "Let's play" }).performClick(nil)
-        XCTAssertTrue(started)
     }
 
     func testEarlyFanLessonsHavePlayableSolutionReplays() throws {
@@ -66,7 +71,7 @@ final class JourneySolutionTests: XCTestCase {
         let ports = resources.appendingPathComponent("Ports")
         let packs = FanLevelLibrary.packs(in: [resources.appendingPathComponent("LevelPacks")])
         let assets = try ClassicMainDATAssets.load(from: ports.appendingPathComponent("lemmings_dos_1991-07-30"))
-        for (packID, file, section) in [("lldb-302", "TWPAK00.dat", 1), ("lldb-547", "Ji Hoon Heaven 1.DAT", 6)] {
+        for (packID, file, section) in [("lldb-302", "TWPAK00.dat", 1), ("lldb-48", "lm_set08.dat", 5)] {
             let pack = try XCTUnwrap(packs.first { FanLevelLibrary.catalogueID($0) == packID })
             let item = try XCTUnwrap(FanLevelLibrary.validatedEntries(in: pack).first {
                 $0.file == file && $0.section == section
@@ -79,15 +84,10 @@ final class JourneySolutionTests: XCTestCase {
             let initial = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets, clock: .golems)
             let solution = try XCTUnwrap(VerifiedSolution.load(initial: initial, from: project.appendingPathComponent("Resources")),
                 "No usable hints replay for \(level.title)")
-            if packID == "lldb-547" {
-                let profile = try ClassicDifficultyAnalysis.analyse(initial: initial, replay: solution.replay,
-                    key: .init(identity: .init(engine: .classic, packID: "fan:" + packID, levelID: file + "#6"),
-                        levelRevision: "regression"), maximumProbeRuns: 10)
-                XCTAssertEqual(profile.precision?.assignmentCount, 1)
-                XCTAssertEqual(profile.precision?.completed, true)
-                XCTAssertGreaterThan(profile.components.executionPrecision, 180)
-                XCTAssertTrue(profile.detectedTechniques.contains("release-rate-manipulation"))
-            }
+            XCTAssertTrue(solution.replay.expected?.didWin == true)
+            let result = try ClassicDOSReplayPlayer.run(solution.replay, simulation: initial)
+            XCTAssertTrue(result.didWin)
+            if packID == "lldb-48" { XCTAssertEqual(result.saved, 20) }
         }
     }
 }

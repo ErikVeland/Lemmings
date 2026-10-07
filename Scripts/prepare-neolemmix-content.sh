@@ -1,5 +1,5 @@
 #!/bin/zsh
-# Extract the NeoLemmix CE levels and DMA styles that the app bundles.
+# Extract the NeoLemmix CE levels, DMA styles and stock gadget samples.
 #
 # Usage: prepare-neolemmix-content.sh [CE_CHECKOUT]
 #
@@ -10,8 +10,8 @@
 # NeoLemmix. The script copies only the styles that License.txt assigns to DMA.
 # The app already ships DMA's original assets with the owner's approval.
 # Levels that need other styles stay unavailable until the player adds a
-# NeoLemmix styles folder. Executables, sound, music and CE interface graphics
-# stay out of the app.
+# NeoLemmix styles folder. Executables, music and CE interface graphics
+# stay out of the app. The nine stock gadget WAV files retain CE notices.
 set -euo pipefail
 
 project_dir="${0:A:h:h}"
@@ -42,7 +42,7 @@ rsync -a --exclude=.DS_Store "$external/levels/" "$staging/levels/"
 cp "$checkout/License.txt" "$staging/License.txt"
 
 python3 - "$checkout" "$staging" "$commit" <<'PREPARE'
-import json, pathlib, re, shutil, sys
+import hashlib, json, pathlib, re, shutil, sys
 checkout, staging, commit = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2]), sys.argv[3]
 owners, owner = {}, None
 for line in (checkout / 'License.txt').read_text(errors='replace').splitlines():
@@ -64,6 +64,18 @@ for style in dma:
     shutil.copytree(source / style, staging / 'styles' / style,
                     ignore=shutil.ignore_patterns('.DS_Store'))
 
+# Stock samples used by the bundled DMA gadgets. Community samples stay supplied by players.
+stock_sounds = ['chain', 'electric', 'fire', 'slurp', 'teleporter', 'tenton', 'thud', 'thunk', 'weedgulp']
+sound_target = staging / 'sound'
+sound_target.mkdir()
+sound_hashes = {}
+for name in stock_sounds:
+    sample = checkout / 'data/external/sound' / (name + '.wav')
+    if not sample.is_file():
+        sys.exit(f'FAILED: stock gadget sample {sample.name} is missing.')
+    shutil.copy2(sample, sound_target / sample.name)
+    sound_hashes[sample.name] = hashlib.sha256(sample.read_bytes()).hexdigest()
+
 levels = staging / 'levels'
 packs, available = [], 0
 for pack in sorted(p for p in levels.iterdir() if p.is_dir()):
@@ -79,6 +91,7 @@ manifest = {
     'repository': 'https://github.com/Willicious/NeoLemmixCommunityEdition',
     'commit': commit,
     'styles': dma,
+    'soundSHA256': sound_hashes,
     'packs': packs,
     'levels': sum(p['levels'] for p in packs),
     'dmaStyleLevels': available,

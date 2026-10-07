@@ -57518,5 +57518,40 @@
     },
     "sourceRevision" : "9e1ebdd82d576bc770faff2e4cb37c5abf43c3ced24c94165087a891b3f9e801",
     "timeLimitTicks" : 6120
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "lm_set08.dat#5",
+      "packID" : "fan:lldb-48"
+    },
+    "interactiveVisibility" : [
+      {
+        "effect" : 1,
+        "slot" : 0,
+        "visibleFraction" : 0.7775175644028103
+      },
+      {
+        "effect" : 1,
+        "slot" : 2,
+        "visibleFraction" : 0.7775175644028103
+      }
+    ],
+    "levelDigest" : "346e779584316f4db93bbc339762c5934043eacb4ca29e94c1030f4fa3817261",
+    "population" : 20,
+    "releaseRate" : 1,
+    "required" : 20,
+    "skills" : {
+      "basher" : 0,
+      "blocker" : 0,
+      "bomber" : 0,
+      "builder" : 10,
+      "climber" : 10,
+      "digger" : 0,
+      "floater" : 10,
+      "miner" : 0
+    },
+    "sourceRevision" : "95b37b388bb5652ba263eb615c158b2c08513f9c7f877d8d43c2b9816e5beb2a",
+    "timeLimitTicks" : 4080
   }
 ]

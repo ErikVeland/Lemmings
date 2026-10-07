@@ -3,6 +3,27 @@ import Testing
 @testable import NxlvKit
 
 struct LearningJourneyTests {
+    @Test func learning13MigrationIncludesBoth182AdditionsWithoutChangingHistory() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let journey = try JSONDecoder().decode(LearningJourney.self,
+            from: Data(contentsOf: root.appendingPathComponent("Resources/Progression/learning.json"))).validated()
+        let additions = Set(["lm_set08.dat#5", "50:Tricky:21:0:5"])
+        let previous = journey.lessons.map(\.entry).filter { !additions.contains($0.identity.levelID) }
+        #expect(previous.count == 292)
+        let old = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+            pool: .init(id: "learning-13", summary: "Previous journey"), entries: previous, currentIndex: 20)
+        let migrated = try #require(try journey.migrating(old))
+        #expect(migrated.pool.id == "learning-14")
+        #expect(migrated.id == old.id)
+        #expect(migrated.currentIndex == old.currentIndex)
+        #expect(migrated.currentEntry == old.currentEntry)
+        #expect(Array(migrated.entries.prefix(20)) == Array(previous.prefix(20)))
+        #expect(migrated.entries.count == 294)
+        #expect(Set(migrated.entries.dropFirst(20).map { $0.identity.levelID }).isSuperset(of: additions))
+        #expect(try journey.migrating(migrated) == migrated)
+    }
+
     func candidate(_ index: Int, score: Double, concepts: [String] = ["builder"], confidence: DifficultyConfidence = .medium) throws -> ProgressionCandidate {
         let identity = LevelCatalogueIdentity(engine: .classic, packID: "test", levelID: "\(index)")
         let key = DifficultyCacheKey(identity: identity, levelRevision: "v1")

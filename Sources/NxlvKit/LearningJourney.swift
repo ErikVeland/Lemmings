@@ -3,7 +3,7 @@ import Foundation
 /// A teaching order, independent of retail ranks. Estimates never certify human insight.
 public struct LearningJourney: Codable, Equatable, Sendable {
     public static let title = "Oh My! All Lemmings!"
-    public static let version = "learning-13"
+    public static let version = "learning-14"
     public static let communityPlacementPolicy = "redux-calibrated-2"
     public static let playlistID = UUID(uuidString: "80368144-659B-4697-B2D0-76894BF20B18")!
     public static let maximumScoreStep = 65.0
@@ -87,14 +87,14 @@ public struct LearningJourney: Codable, Equatable, Sendable {
             guard placementPolicy == Self.communityPlacementPolicy,
                   lessons.allSatisfy({ lesson in
                       guard let p = lesson.placement else { return false }
-                      return ["reduxClassicCounterpart", "reviewedFan", "solutionEstimate"].contains(p.basis)
+                      return ["reduxClassicCounterpart", "reduxPortCounterpart", "reviewedFan", "solutionEstimate"].contains(p.basis)
                           && !p.reference.isEmpty && p.sourceURL.hasPrefix("https://")
                           && p.position.isFinite && p.lower.isFinite && p.upper.isFinite
                           && 0 <= p.lower && p.lower <= p.position && p.position <= p.upper
                           && p.upper <= 1000 && p.upper - p.lower <= (p.basis == "solutionEstimate" ? 1000 : 20)
                           && lesson.demand == p.position && p.sourceRevision == lesson.entry.sourceRevision
                           && !p.replayRevision.isEmpty
-                          && (!lesson.entry.identity.packID.hasPrefix("fan:") || ["reviewedFan", "solutionEstimate"].contains(p.basis))
+                          && (!lesson.entry.identity.packID.hasPrefix("fan:") || ["reduxPortCounterpart", "reviewedFan", "solutionEstimate"].contains(p.basis))
                   }),
                   zip(lessons, lessons.dropFirst()).allSatisfy({
                       (0...Self.maximumScoreStep).contains($1.demand - $0.demand)

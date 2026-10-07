@@ -2,7 +2,7 @@
   "checks": [
     "Exact source revisions and native winning replay identities required",
     "Redux file hashes and community order pinned",
-    "Full 292-level size; solution estimates are distinguished from human reviews",
+    "Full 294-level size; solution estimates are distinguished from human reviews",
     "No fabricated precision, rank floors, cumulative clamps or application-pattern deduplication",
     "Adjacent reference gaps are checked without changing any placement score"
   ],

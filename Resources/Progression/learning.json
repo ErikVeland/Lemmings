@@ -2028,6 +2028,45 @@
     },
     {
       "concepts": [
+        "builder",
+        "climber",
+        "floater"
+      ],
+      "demand": 160.0,
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "9E0A9E46-1041-9E65-1C4E-EE6A7A720B1E",
+        "identity": {
+          "engine": "classic",
+          "levelID": "lm_set08.dat#5",
+          "packID": "fan:lldb-48"
+        },
+        "levelNameSnapshot": "Going their separate ways",
+        "levelNumberSnapshot": 6,
+        "packNameSnapshot": "lm set08",
+        "sourceRevision": "95b37b388bb5652ba263eb615c158b2c08513f9c7f877d8d43c2b9816e5beb2a"
+      },
+      "focus": "Practise: Builder + Climber",
+      "intrinsicDemand": 396.8685223825976,
+      "introduced": [],
+      "needsSupport": true,
+      "objective": "community:Gentle/Going_Their_Separate_Ways.nxlv",
+      "placement": {
+        "basis": "reduxPortCounterpart",
+        "lower": 150.0,
+        "position": 160.0,
+        "reference": "Gentle/Going_Their_Separate_Ways.nxlv",
+        "replayRevision": "6b3721b8a476d012594d70f588ee548a1454aac9481bbc88688e71b6f9797342",
+        "sourceRevision": "95b37b388bb5652ba263eb615c158b2c08513f9c7f877d8d43c2b9816e5beb2a",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 170.0
+      },
+      "preparationGaps": [],
+      "score": 396.8685223825976,
+      "stage": "Fun"
+    },
+    {
+      "concepts": [
         "basher",
         "builder",
         "miner"
@@ -4537,6 +4576,46 @@
       },
       "preparationGaps": [],
       "score": 543.9179997423345,
+      "stage": "Intermediate"
+    },
+    {
+      "concepts": [
+        "basher",
+        "blocker",
+        "builder",
+        "miner"
+      ],
+      "demand": 345.0,
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "7ABEEF99-3BD1-EF36-EA1E-9B2928EED986",
+        "identity": {
+          "engine": "classic",
+          "levelID": "50:Tricky:21:0:5",
+          "packID": "lemmings-LEVEL-120"
+        },
+        "levelNameSnapshot": "All the 6`s ........",
+        "levelNumberSnapshot": 51,
+        "packNameSnapshot": "Lemmings",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
+      },
+      "focus": "Practise: Basher + Blocker",
+      "intrinsicDemand": 374.3849403700874,
+      "introduced": [],
+      "needsSupport": true,
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"50:Tricky:21:0:5\", \"packID\": \"lemmings-LEVEL-120\"}",
+      "placement": {
+        "basis": "solutionEstimate",
+        "lower": 55.0,
+        "position": 345.0,
+        "reference": "Gentle/A_Beast_of_a_level.nxlv",
+        "replayRevision": "113252336b6facd4dbff7520dea59dd324dae59e18d5d00e7c5a1086991532ba",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 810.0
+      },
+      "preparationGaps": [],
+      "score": 374.3849403700874,
       "stage": "Intermediate"
     },
     {
@@ -11465,5 +11544,5 @@
     }
   ],
   "placementPolicy": "redux-calibrated-2",
-  "version": "learning-13"
+  "version": "learning-14"
 }

@@ -1,18 +1,18 @@
 {
-  "candidatePool": 1720,
-  "estimatedPlacements": 198,
-  "fan": 192,
+  "candidatePool": 1721,
+  "estimatedPlacements": 199,
+  "fan": 193,
   "largestReferenceGap": 5.0,
-  "levels": 292,
+  "levels": 294,
   "limits": "Redux ordinal positions are not equal human-difficulty units. Classic counterparts differ from Redux. A replay proves a route, not novice discovery. Solution comparisons are estimated grades, not claims of human review.",
-  "official": 100,
-  "pendingReview": 1626,
+  "official": 101,
+  "pendingReview": 1627,
   "placementPolicy": "redux-calibrated-2",
   "stages": {
     "Difficult": 94,
     "Expert": 77,
-    "Fun": 57,
-    "Intermediate": 64
+    "Fun": 58,
+    "Intermediate": 65
   },
-  "version": "learning-13"
+  "version": "learning-14"
 }

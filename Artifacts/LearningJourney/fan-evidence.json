@@ -259043,5 +259043,136 @@
       "prerequisiteConcepts": [],
       "sourceRank": "fan:lldb-136"
     }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "9E0A9E46-1041-9E65-1C4E-EE6A7A720B1E",
+      "identity": {
+        "engine": "classic",
+        "levelID": "lm_set08.dat#5",
+        "packID": "fan:lldb-48"
+      },
+      "levelNameSnapshot": "Going their separate ways",
+      "levelNumberSnapshot": 6,
+      "packNameSnapshot": "lm set08",
+      "sourceRevision": "95b37b388bb5652ba263eb615c158b2c08513f9c7f877d8d43c2b9816e5beb2a"
+    },
+    "initialHash": "721a3ab6899bc0f3509753e47818cb086b4486727acc8580ae8b64f2ade794d9",
+    "official": false,
+    "order": 826,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 670,
+        "constraintPressure": 767.4179323860852,
+        "deductionComplexityProxy": 165,
+        "executionPrecision": 0,
+        "solutionComplexity": 458.88268714730225,
+        "techniqueBurden": 390
+      },
+      "confidence": "medium",
+      "criticalActions": [],
+      "detectedTechniques": [
+        "builder",
+        "climber",
+        "floater",
+        "multiple-worker-coordination"
+      ],
+      "explanation": [
+        "3 used skill types; 20 assigned workers; 3 same-worker skill changes.",
+        "Maximum concurrent worker regions: 2.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-48."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-3",
+        "assetsRevision": "721a3ab6899bc0f3509753e47818cb086b4486727acc8580ae8b64f2ade794d9:probes-10",
+        "identity": {
+          "engine": "classic",
+          "levelID": "lm_set08.dat#5",
+          "packID": "fan:lldb-48"
+        },
+        "levelRevision": "95b37b388bb5652ba263eb615c158b2c08513f9c7f877d8d43c2b9816e5beb2a",
+        "replayRevision": "6b3721b8a476d012594d70f588ee548a1454aac9481bbc88688e71b6f9797342",
+        "simulationVersion": "neolemmix-ce-2026-09-27"
+      },
+      "overallScore": 396.8685223825976,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 0
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 1
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 2
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 3
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 4
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 5
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 6
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 7
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 8
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 9
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 29,
+        "completed": false,
+        "orderingOutcomes": [],
+        "runCount": 10,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "fan:lldb-48"
+    },
+    "rescueRequirementRatio": 1,
+    "startingReleaseRate": 1
   }
 ]

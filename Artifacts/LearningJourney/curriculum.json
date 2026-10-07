@@ -5195,6 +5195,92 @@
     {
       "comparisons": [],
       "context": {
+        "allowedLosses": 0,
+        "assignments": 29,
+        "completionSeconds": 95.41176470588235,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [
+          "floater",
+          "climber"
+        ],
+        "initialHatchIntervalSeconds": 3.1176470588235294,
+        "jobChanges": 3,
+        "narrowActions": 0,
+        "peakAssignmentsInTwoSeconds": 2,
+        "population": 20,
+        "probedAssignments": 10,
+        "remainingSeconds": 144.58823529411765,
+        "replayRevision": "6b3721b8a476d012594d70f588ee548a1454aac9481bbc88688e71b6f9797342",
+        "required": 20,
+        "rescueFraction": 1.0,
+        "savedAboveRequirement": 0,
+        "spareUsedSkills": {
+          "builder": 1,
+          "climber": 0,
+          "floater": 0
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 1,
+        "timingProbeComplete": false,
+        "usedSkills": {
+          "builder": 9,
+          "climber": 10,
+          "floater": 10
+        },
+        "workers": 20
+      },
+      "identity": {
+        "engine": "classic",
+        "levelID": "lm_set08.dat#5",
+        "packID": "fan:lldb-48"
+      },
+      "lesson": "Practise: Builder + Climber",
+      "level": "Going their separate ways",
+      "objective": "community:Gentle/Going_Their_Separate_Ways.nxlv",
+      "placement": {
+        "basis": "reduxPortCounterpart",
+        "lower": 150.0,
+        "position": 160.0,
+        "reference": "Gentle/Going_Their_Separate_Ways.nxlv",
+        "replayRevision": "6b3721b8a476d012594d70f588ee548a1454aac9481bbc88688e71b6f9797342",
+        "sourceRevision": "95b37b388bb5652ba263eb615c158b2c08513f9c7f877d8d43c2b9816e5beb2a",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 170.0
+      },
+      "purpose": "Community-ordered practice with an exact native winning witness",
+      "reference": {
+        "author": "Macintosh Lemmings",
+        "number": 32,
+        "ordinal": 32,
+        "population": 20,
+        "rank": "Gentle",
+        "rankIndex": 0,
+        "reference": "Gentle/Going_Their_Separate_Ways.nxlv",
+        "required": 20,
+        "sha256": "6808758c1a5a9fc9a8f9723bb5589cf44dd48a666432bd081b92f2f34fd62c9a",
+        "skills": {
+          "builder": 10,
+          "climber": 10,
+          "floater": 10
+        },
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "spawnInterval": 53,
+        "timeLimitSeconds": null,
+        "title": "Going Their Separate Ways"
+      },
+      "risks": [
+        "incomplete timing probes",
+        "spatial tolerance unmeasured",
+        "witness exhausts at least one used skill"
+      ],
+      "variantDifferences": [
+        "Bundled Classic conversion of the Macintosh exclusive, rather than the original Macintosh engine.",
+        "Classic conversion retains a four-minute time limit; Redux has no time limit."
+      ]
+    },
+    {
+      "comparisons": [],
+      "context": {
         "allowedLosses": 7,
         "assignments": 7,
         "completionSeconds": 91.94117647058823,
@@ -11909,6 +11995,118 @@
         "spatial tolerance unmeasured",
         "witness exhausts at least one used skill",
         "four or more assignments within two seconds"
+      ],
+      "variantDifferences": []
+    },
+    {
+      "comparisons": [
+        {
+          "distance": 2.7186,
+          "position": 80.0,
+          "reference": "Gentle/A_Beast_of_a_level.nxlv"
+        },
+        {
+          "distance": 2.7189,
+          "position": 310.0,
+          "reference": "Quirky/Izzie_Wizzie_lemmings_get_busy.nxlv"
+        },
+        {
+          "distance": 2.9533,
+          "position": 345.0,
+          "reference": "Zany/Watch_out,_there's_traps_about.nxlv"
+        },
+        {
+          "distance": 3.2448,
+          "position": 785.0,
+          "reference": "Lunatic/Save_Me.nxlv"
+        },
+        {
+          "distance": 3.418,
+          "position": 320.0,
+          "reference": "Quirky/And_then_there_were_four....nxlv"
+        }
+      ],
+      "context": {
+        "allowedLosses": 22,
+        "assignments": 28,
+        "completionSeconds": 229.35294117647058,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [],
+        "initialHatchIntervalSeconds": 1.1764705882352942,
+        "jobChanges": 19,
+        "narrowActions": 0,
+        "peakAssignmentsInTwoSeconds": 2,
+        "population": 66,
+        "probedAssignments": 10,
+        "remainingSeconds": 130.64705882352942,
+        "replayRevision": "113252336b6facd4dbff7520dea59dd324dae59e18d5d00e7c5a1086991532ba",
+        "required": 44,
+        "rescueFraction": 0.6666666666666666,
+        "savedAboveRequirement": 22,
+        "spareUsedSkills": {
+          "basher": 51,
+          "blocker": 65,
+          "builder": 55,
+          "miner": 65
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 66,
+        "timingProbeComplete": false,
+        "usedSkills": {
+          "basher": 15,
+          "blocker": 1,
+          "builder": 11,
+          "miner": 1
+        },
+        "workers": 3
+      },
+      "identity": {
+        "engine": "classic",
+        "levelID": "50:Tricky:21:0:5",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "lesson": "Practise: Basher + Blocker",
+      "level": "All the 6`s ........",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"50:Tricky:21:0:5\", \"packID\": \"lemmings-LEVEL-120\"}",
+      "placement": {
+        "basis": "solutionEstimate",
+        "lower": 55.0,
+        "position": 345.0,
+        "reference": "Gentle/A_Beast_of_a_level.nxlv",
+        "replayRevision": "113252336b6facd4dbff7520dea59dd324dae59e18d5d00e7c5a1086991532ba",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 810.0
+      },
+      "purpose": "Community-ordered practice with an exact native winning witness",
+      "reference": {
+        "author": "Genesis Lemmings",
+        "number": 16,
+        "ordinal": 16,
+        "population": 50,
+        "rank": "Gentle",
+        "rankIndex": 0,
+        "reference": "Gentle/A_Beast_of_a_level.nxlv",
+        "required": 50,
+        "sha256": "2364495d020f44b6e3417da778a29df46e4b7d3120e00b5574158136b45cd3de",
+        "skills": {
+          "basher": 10,
+          "blocker": 10,
+          "bomber": 10,
+          "builder": 10,
+          "climber": 10,
+          "digger": 10,
+          "floater": 10,
+          "miner": 10
+        },
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "spawnInterval": 28,
+        "timeLimitSeconds": null,
+        "title": "A Beast of a level"
+      },
+      "risks": [
+        "incomplete timing probes",
+        "spatial tolerance unmeasured"
       ],
       "variantDifferences": []
     },
@@ -30446,8 +30644,8 @@
     }
   ],
   "limits": "Redux ordinal positions are not equal human-difficulty units. Classic counterparts differ from Redux. A replay proves a route, not novice discovery. Solution comparisons are estimated grades, not claims of human review.",
-  "poolSize": 1720,
-  "selectionPolicy": "292 levels: Redux reference spine plus resource-aware solution comparisons, repeated practice and pack diversity. Estimated grades retain uncertainty. No score clamping.",
-  "targetSize": 292,
-  "version": "curriculum-7"
+  "poolSize": 1721,
+  "selectionPolicy": "294 levels: existing 292-level selection plus the required Macintosh and DOS additions. Redux reference spine plus resource-aware solution comparisons, repeated practice and pack diversity. Estimated grades retain uncertainty. No score clamping.",
+  "targetSize": 294,
+  "version": "curriculum-8"
 }

@@ -83,7 +83,12 @@ On 28 September 2026 the owner decided to bundle the CE levels, as the app
 bundles fan level packs. The app also bundles the 26 styles that CE
 `License.txt` assigns to DMA. These are conversions of the original assets
 that the owner approved for distribution on 15 September. The app does not
-bundle community styles, CE interface graphics, music or sound. Levels that
+bundle community styles, CE interface graphics or music. The NeoLemmix SFX
+work requested on 7 October adds nine stock gadget WAV samples from the pinned
+CE sound directory: chain, electric, fire, slurp, teleporter, tenton, thud,
+thunk and weedgulp. They retain their upstream copyright notices and are used
+for NeoLemmix content. Preparation records each sample hash in the manifest.
+Other community samples remain player-supplied. Levels that
 need community styles stay unavailable until the player adds a NeoLemmix folder
 with those styles. The bundle carries CE `License.txt` next to the levels.
 `Scripts/prepare-neolemmix-content.sh` records the source commit and the style

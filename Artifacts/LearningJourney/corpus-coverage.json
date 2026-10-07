@@ -4,7 +4,7 @@
       "confirmedScored": 120,
       "corpusLevels": 120,
       "pack": "Lemmings",
-      "selected": 42
+      "selected": 43
     },
     {
       "confirmedScored": 100,
@@ -37,7 +37,7 @@
       "selected": 7
     }
   ],
-  "eligiblePool": 1720,
+  "eligiblePool": 1721,
   "scope": "Classic mechanics only, per user direction. L2/L3 evidence remains outside this journey.",
   "selectionPolicy": "Community reference and exact-variant review; campaign size is not a quota.",
   "sizeReference": 292

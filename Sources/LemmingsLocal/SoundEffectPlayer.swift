@@ -25,6 +25,7 @@ final class SoundEffectPlayer: @unchecked Sendable {
   // Guarded by `lock`.
   private var library: [ClassicSoundEffect: [Float]] = [:]
   private var rates: [ClassicSoundEffect: Double] = [:]
+  private var namedSounds: [String: (samples: [Float], rate: Double)] = [:]
   private var voices: [Voice]
   private var isMuted = false
   private var outputSuspended = false
@@ -225,7 +226,8 @@ final class SoundEffectPlayer: @unchecked Sendable {
 
   /// Decodes a sound file to mono samples at its own rate.
   private static func monoSamples(_ url: URL) -> (samples: [Float], rate: Double)? {
-    guard let file = try? AVAudioFile(forReading: url), file.length > 0,
+    guard let size = try? url.resourceValues(forKeys: [.fileSizeKey]).fileSize, size <= 16 * 1024 * 1024,
+          let file = try? AVAudioFile(forReading: url), file.length > 0, file.length <= 4_000_000,
           let buffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: AVAudioFrameCount(file.length)),
           (try? file.read(into: buffer)) != nil, let channels = buffer.floatChannelData else { return nil }
     let count = Int(buffer.frameLength), channelCount = Int(buffer.format.channelCount)
@@ -290,6 +292,38 @@ final class SoundEffectPlayer: @unchecked Sendable {
       }
     }
     return byName
+  }
+
+  /// Load only the current level's named samples. No file IO occurs during a tick.
+  /// Player-supplied samples override the original Amiga trap bank.
+  func loadNeoLemmixSounds(names: Set<String>, soundDirectory: URL, amigaDirectory: URL?, fallbackSoundDirectory: URL? = nil) {
+    var clips: [String: (samples: [Float], rate: Double)] = [:]
+    let original = amigaDirectory.flatMap { try? Self.amigaSounds(in: $0) } ?? [:]
+    let root = soundDirectory.resolvingSymlinksInPath().standardizedFileURL
+    for name in names {
+      let key = name.lowercased()
+      if let sound = original[key == "tenton" ? "tentonn" : key] { clips[key] = (sound.samples, sound.sampleRate) }
+      // NeoLemmix names may contain subdirectories. Reject traversal and symlink escapes.
+      guard !name.hasPrefix("/"), !name.contains("\\"),
+            !name.split(separator: "/").contains("..") else { continue }
+      if let fallbackSoundDirectory {
+        for ext in ["ogg", "wav", "aiff", "aif", "mp3", "m4a"] {
+          let url = fallbackSoundDirectory.appendingPathComponent(name).appendingPathExtension(ext)
+            .resolvingSymlinksInPath().standardizedFileURL
+          let fallbackRoot = fallbackSoundDirectory.resolvingSymlinksInPath().standardizedFileURL
+          guard url.path.hasPrefix(fallbackRoot.path + "/") else { continue }
+          if let decoded = Self.monoSamples(url) { clips[key] = decoded; break }
+        }
+      }
+      for ext in ["ogg", "wav", "aiff", "aif", "mp3", "m4a"] {
+        let url = root.appendingPathComponent(name).appendingPathExtension(ext)
+          .resolvingSymlinksInPath().standardizedFileURL
+        guard url.path.hasPrefix(root.path + "/") else { continue }
+        if let decoded = Self.monoSamples(url) { clips[key] = decoded; break }
+      }
+    }
+    lock.lock(); defer { lock.unlock() }
+    namedSounds = clips
   }
 
   // MARK: - Playing
@@ -432,7 +466,16 @@ final class SoundEffectPlayer: @unchecked Sendable {
     var seen = Set<String>()
     for cue in cues {
       let region = cue.point.map { "\(Int(floor($0.x / 32))),\(Int(floor($0.y / 32)))" } ?? "interface"
-      if seen.insert(cue.effect.rawValue + region).inserted { play(cue.effect, at: cue.point) }
+      let key = cue.sampleName?.lowercased() ?? cue.effect.rawValue
+      guard seen.insert(key + region).inserted else { continue }
+      if let name = cue.sampleName {
+        lock.lock()
+        let clip = namedSounds[name.lowercased()]
+        if let clip { playLocked(samples: clip.samples, rate: clip.rate, gain: 0.6, pan: 0, at: cue.point) }
+        lock.unlock()
+        if clip != nil || !cue.allowsFallback { continue }
+      }
+      play(cue.effect, at: cue.point)
     }
   }
 

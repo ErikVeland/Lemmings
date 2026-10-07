@@ -429,7 +429,10 @@ final class NeoLemmixSession: GameSession {
   let levelHeight: Int
   private let skillOrder: [NeoLemmixSkill]
 
-  init(simulation: NeoLemmixSimulation, width: Int, height: Int) {
+  private let gadgetSounds: [Int: String]
+
+  init(simulation: NeoLemmixSimulation, width: Int, height: Int, gadgetSounds: [Int: String] = [:]) {
+    self.gadgetSounds = gadgetSounds
     self.simulation = simulation
     initialSimulation = simulation
     levelWidth = width
@@ -559,7 +562,8 @@ final class NeoLemmixSession: GameSession {
   private func updateSoundCues() {
     lastPositionedCues = NeoLemmixSoundCue.positionedCues(
       for: simulation.lastTickEvents, lemmings: simulation.lemmings,
-      entrances: simulation.configuration.entrances)
+      entrances: simulation.configuration.entrances,
+      zones: simulation.configuration.zones, gadgetSounds: gadgetSounds)
   }
 
   var supportsRewind: Bool { false }

@@ -5995,9 +5995,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
       currentNeoCatalogueIdentity = catalogueIdentity
       currentNeoPackName = packName
       setSequencePlayingIdentity(sequenceIdentity)
+      let gadgetSounds = NeoLemmixSoundCue.gadgetSounds(for: rendered.gadgets, resolution: resolution)
+      effects.loadNeoLemmixSounds(names: Set(gadgetSounds.values),
+        soundDirectory: stylesDirectory.deletingLastPathComponent().appendingPathComponent("sound"),
+        amigaDirectory: Bundle.main.resourceURL?.appendingPathComponent("Ports/amiga_extracted/lemmings"),
+        fallbackSoundDirectory: Bundle.main.resourceURL?.appendingPathComponent("NeoLemmix/sound"))
       adopt(
         NeoLemmixSession(
-          simulation: simulation, width: rendered.width, height: rendered.height))
+          simulation: simulation, width: rendered.width, height: rendered.height,
+          gadgetSounds: gadgetSounds))
       phase = .playing; playfield.phase = .playing
       if !restoringCheckpoint, let arcadeLevel {
         AnonymousTelemetry.shared.start(arcadeLevel, hotSeat: arcadeHotSeatID != nil,

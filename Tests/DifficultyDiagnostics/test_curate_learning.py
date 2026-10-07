@@ -111,15 +111,34 @@ class CommunityJourneyTests(unittest.TestCase):
         self.assertTrue(any('ten percentage points' in r for r in block['risks']))
 
     def test_full_journey_and_estimates_remain_explicit(self):
-        self.assertEqual(len(self.manifest['lessons']), 292)
+        self.assertEqual(len(self.manifest['lessons']), 294)
         fans = [l for l in self.manifest['lessons'] if l['entry']['identity']['packID'].startswith('fan:')]
         self.assertGreater(len(fans), 100)
         for lesson in fans:
-            self.assertIn(lesson['placement']['basis'], ['solutionEstimate', 'reviewedFan'])
+            self.assertIn(lesson['placement']['basis'], ['solutionEstimate', 'reviewedFan', 'reduxPortCounterpart'])
             if lesson['placement']['basis'] == 'solutionEstimate':
                 self.assertTrue(lesson['needsSupport'])
                 self.assertGreater(lesson['placement']['upper'] - lesson['placement']['lower'], 20)
-        self.assertEqual(self.plan['targetSize'], 292)
+        self.assertEqual(self.plan['targetSize'], 294)
+
+    def test_promised_182_additions_have_natural_positions_and_native_routes(self):
+        lessons = {journey.key(l): l for l in self.manifest['lessons']}
+        required = journey.read(journey.OUT / 'required-additions.json')
+        self.assertEqual(len(required), 2)
+        mac = lessons[journey.key(required[0])]
+        six = lessons[journey.key(required[1])]
+        self.assertEqual((mac['stage'], mac['demand']), ('Fun', 160))
+        self.assertEqual(mac['placement']['basis'], 'reduxPortCounterpart')
+        self.assertEqual((six['stage'], six['demand']), ('Intermediate', 345))
+        self.assertEqual(six['placement']['basis'], 'solutionEstimate')
+        self.assertTrue(mac['needsSupport'])
+        pool = {journey.key(r): r for r in self.pool}
+        witnesses = copy.deepcopy(self.witnesses)
+        row = pool[journey.key(required[0])]
+        witnesses.pop(row['initialHash'], None)
+        witnesses.pop(row['profile']['key']['replayRevision'], None)
+        with self.assertRaisesRegex(AssertionError, 'Missing exact evidence'):
+            journey.build(self.pool, witnesses, self.resources, self.reference, [])
 
     def test_failed_native_proofs_and_duplicate_titles_do_not_fill_slots(self):
         titles = [journey.normalized(l['entry']['levelNameSnapshot']) for l in self.manifest['lessons']]
@@ -180,7 +199,7 @@ class CommunityJourneyTests(unittest.TestCase):
         expected = {(journey.key(r['entry']), r['entry']['sourceRevision'], r['placement']['replayRevision'])
                     for r in self.manifest['lessons']}
         actual = {(journey.key(r), r['sourceRevision'], r['replayRevision']) for r in proofs if r['passed']}
-        self.assertEqual(len(proofs), 292)
+        self.assertEqual(len(proofs), 294)
         self.assertTrue(all(r['passed'] for r in proofs))
         self.assertEqual(actual, expected)
 

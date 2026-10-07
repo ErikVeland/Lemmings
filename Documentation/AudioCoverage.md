@@ -86,13 +86,44 @@ Death sounds play at the start of their animation, without repeating when the
 lemming is removed. Immediate trap deaths and falls out of the level retain
 the lemming's position. The existing bottom-fall preference still applies.
 
-This is shared-bank playback, not complete NeoLemmix audio parity. Custom
-gadget samples, constructive-skill warnings and steel-contact cues are not
-yet routed by this adapter. The simulation and saved-state format are unchanged.
+The 7 October development source adds the remaining three documented SFX paths:
 
-Four muted regression tests cover hatch and assignment delivery, queued nuke
-and undo, a full nuke run with unchanged simulation state, and positioned
-death and rescue mappings. No audible playback test was run.
+- Builder and Platformer warnings play on frame 10 of the final three bricks.
+  Stacker warnings play after decrementing the final three brick counts.
+- Digger, Basher, Fencer and Miner steel contacts request the selected bank's
+  steel effect. One-way terrain does not request a steel sound. Lookahead
+  probes cannot play effects.
+- Trap, teleporter, button and triggered-animation events use their resolved
+  object `SOUND` name. A custom trap sound replaces the generic death cue.
+  Disarming a trap does not play its killing sound.
+
+Preparation includes the nine stock WAV samples named by the bundled DMA
+objects. The manifest records their pinned CE source hashes. Packaging rejects
+missing or changed stock samples. All nine prepared WAV files pass decoding
+without audio output. NeoLemmix replay regression tests also pass. Other samples
+remain player-supplied in `sound/`, beside the imported `styles/` directory.
+The loader accepts Ogg, WAV, AIFF, AIF, MP3 and M4A when AVFoundation can decode
+them. Player files override stock samples. It rejects paths outside the sound
+folder and bounds compressed size and decoded frame count. Samples load when
+a level opens, then use the existing spatial voices, mute, volume and movie
+capture paths. Loading another level replaces the named sample cache.
+
+This closes those three adapter omissions. It does not establish complete CE
+audio parity. Pickup, exit-unlock, swimming, disarmer-work, portal, state-change
+and other CE-specific feedback remain separate coverage work. Imported codec
+support on older macOS versions and an audible listening check remain unverified.
+Gameplay rules remain unchanged. The event stream adds warning and steel-contact
+cases and sound-bearing animation triggers. Those events round-trip through
+existing simulation recovery encoding.
+
+Twelve muted audio regression tests pass, including all constructive warnings,
+all four destructive steel contacts, one-way silence, named sample playback,
+trap replacement, disarm silence, metadata identity, mute, cache replacement
+and recovery continuation. The 29-group NeoLemmix simulation suite passes.
+The full package run passes 76 core and 13 mobile tests. Its 38 app tests have
+one failure outside audio: the learning journey has no usable hint replay for
+`Mienrs <--- lol, typo`. All 12 audio tests pass in that full run.
+No audible playback test was run.
 
 ## Music after a nuke
 
