@@ -52,6 +52,16 @@ final class SoundEffectPlayer: @unchecked Sendable {
     rates[.builderWarning] = 44100
   }
 
+  /// Replays share the selected samples and settings, but own their voices and output.
+  func replayPlayer() -> SoundEffectPlayer {
+    let copy = SoundEffectPlayer()
+    lock.lock(); defer { lock.unlock() }
+    copy.library = library; copy.rates = rates; copy.namedSounds = namedSounds
+    copy.loadedEffects = loadedEffects
+    copy.isMuted = isMuted; copy.level = level; copy.bottomFallSounds = bottomFallSounds
+    return copy
+  }
+
   // MARK: - Engine
 
   func start() throws {

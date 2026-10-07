@@ -625,6 +625,15 @@ struct ReticleFeedback {
     return nil
   }
 
+  var edgeScrollVector: CGPoint? {
+    guard let point = cursorViewPoint, bounds.width > 0, bounds.height > 0,
+      bounds.contains(point) else { return nil }
+    let margin = min(48.0, bounds.height / 2)
+    let vertical = point.y < margin ? -(margin - point.y) / margin * 8
+      : point.y > bounds.height - margin ? (point.y - bounds.height + margin) / margin * 8 : 0
+    return CGPoint(x: edgeScrollDelta ?? 0, y: vertical)
+  }
+
   override func mouseDown(with event: NSEvent) {
     handleClick(at: convert(event.locationInWindow, from: nil))
   }

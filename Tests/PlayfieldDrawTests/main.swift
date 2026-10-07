@@ -356,6 +356,10 @@ private func require(
   view.phase = .briefing
   view.phase = .playing
   try require(view.edgeScrollDelta == nil, "menu cursor scrolled the new level")
+  view.handleMove(to: CGPoint(x: view.bounds.midX, y: 24))
+  try require((view.edgeScrollVector?.y ?? 0) < 0, "top margin did not scroll upward before reaching the menu bar")
+  view.handleMove(to: CGPoint(x: view.bounds.midX, y: view.bounds.height - 24))
+  try require((view.edgeScrollVector?.y ?? 0) > 0, "bottom margin did not scroll downward")
 }
 
 @MainActor private func testClassicPanelLabels() throws {
@@ -619,10 +623,15 @@ private func require(
   panel.handlePointerUp(); try require(!held, "Speed hold did not release")
   panel.levelSize = CGSize(width: 100, height: 100)
   var position = -1.0
+  var mapPosition = CGPoint.zero
+  panel.onMinimapPosition = { mapPosition = $0 }
   panel.onMinimapScroll = { position = $0 }
   let map = panel.minimapBounds
   panel.handlePointerDown(at: CGPoint(x: map.midX + map.height / 4, y: map.midY)); panel.handlePointerUp()
   try require(abs(position - 75) < 0.001, "Minimap input does not follow the letterboxed level")
+  panel.levelSize = CGSize(width: 100, height: 1000)
+  panel.handlePointerDown(at: CGPoint(x: map.midX, y: map.minY + map.height * 0.25)); panel.handlePointerUp()
+  try require(abs(mapPosition.y - 250) < 0.001, "Tall minimap input lost its vertical position")
   var timelineAction: TimelinePanelControls.Action?
   panel.timeline.enabled = { $0 == .forward }
   panel.timeline.perform = { timelineAction = $0 }

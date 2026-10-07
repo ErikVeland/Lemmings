@@ -11,6 +11,7 @@ import NxlvKit
 
     func show(_ deck: LevelHintDeck, image: CGImage? = nil, owner: NSWindow,
               solutionSession: ClassicSession? = nil, solutionSource: PlayfieldView? = nil,
+              solutionEffects: SoundEffectPlayer? = nil,
               onDismiss: @escaping () -> Void = {}) {
         guard page == nil, !deck.stages.isEmpty else { return }
         let page = GameMenuPage(title: "Level hints", subtitle: deck.title)
@@ -56,7 +57,7 @@ import NxlvKit
                     guard let self, let warning else { return }
                     GameScreen.shared.dismiss(warning)
                     let replay = SolutionReplayWindow(solution: solution, source: solutionSource,
-                        width: solutionSession.levelWidth, height: solutionSession.levelHeight)
+                        width: solutionSession.levelWidth, height: solutionSession.levelHeight, effects: solutionEffects)
                     self.solutionWindow = replay
                     replay.show(owner: owner)
                 }

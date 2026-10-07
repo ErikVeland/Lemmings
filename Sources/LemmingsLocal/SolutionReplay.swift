@@ -96,6 +96,8 @@ struct VerifiedSolution: Sendable {
     private(set) var playback: SolutionPlayback
     let field = PlayfieldView(frame: .zero)
     let speedControl = GameSpeedControl()
+    let effects: SoundEffectPlayer?
+    var onSoundCues: (([PositionedSoundCue]) -> Void)?
     private let marker = SolutionMarker(frame: .zero)
     private let status = HintBitmapText()
     private var timer: Timer?
@@ -115,7 +117,8 @@ struct VerifiedSolution: Sendable {
     private weak var trackingButton: NSButton?
     private weak var zoomButton: NSButton?
 
-    init(solution: VerifiedSolution, source: PlayfieldView, width: Int, height: Int) {
+    init(solution: VerifiedSolution, source: PlayfieldView, width: Int, height: Int, effects: SoundEffectPlayer? = nil) {
+        self.effects = effects?.replayPlayer()
         playback = SolutionPlayback(solution, width: width, height: height)
         field.classicScene = source.classicScene; field.macScene = source.macScene
         field.macArtwork = source.macArtwork; field.assets = source.assets; field.palette = source.palette
@@ -195,6 +198,7 @@ struct VerifiedSolution: Sendable {
 
     func show(owner: NSWindow) {
         guard GameScreen.shared.present(page, owner: owner, focus: page, onDismiss: { [weak self] in self?.stop() }) else { return }
+        try? effects?.start()
         centre(entrance: true); automaticTracking = true; refresh()
         monitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .keyUp, .flagsChanged]) { [weak self, weak owner] event in
             guard let self, event.window === owner, owner?.isKeyWindow == true,
@@ -207,6 +211,7 @@ struct VerifiedSolution: Sendable {
     }
 
     func stop() {
+        effects?.stop()
         timer?.invalidate(); timer = nil
         if let monitor { NSEvent.removeMonitor(monitor) }; monitor = nil
         speedControl.cancelInput(); pressedF = false
@@ -219,10 +224,13 @@ struct VerifiedSolution: Sendable {
             assignmentUntil = 0; paused = false; tickCredit = 0
             centre(entrance: true); automaticTracking = true
         } else { paused.toggle() }
+        if paused { effects?.silence() }
         refresh()
     }
     private func seek(_ delta: Int) {
         paused = true; tickCredit = 0
+        effects?.silence()
+        let previousTick = playback.session.currentTick
         playback.seek(by: delta)
         assignmentFocus = AssignmentFocus(); lastAssignedID = nil
         for event in playback.solution.replay.events where event.tick <= playback.session.currentTick {
@@ -234,12 +242,22 @@ struct VerifiedSolution: Sendable {
         marker.point = nil; assignmentUntil = 0
         if automaticTracking { followedID = lastAssignedID }
         updateTracking(); refresh()
+        if delta == 1, playback.session.currentTick == previousTick + 1 { playTickSounds() }
+    }
+    private func playTickSounds() {
+        let cues = playback.session.lastPositionedCues
+        effects?.setViewport(field.soundViewport)
+        effects?.play(cues)
+        onSoundCues?(cues)
     }
     func advance() {
         let visible = !page.isHiddenOrHasHiddenAncestor && (page.window == nil || GameScreen.shared.controllerPage(in: page.window!) === page)
         if page.window?.isKeyWindow == false { speedControl.cancelInput(); pressedF = false }
         speedControl.update(at: ProcessInfo.processInfo.systemUptime, active: visible)
-        guard visible, !paused, !playback.session.isComplete else { return }
+        guard visible, !paused, !playback.session.isComplete else {
+            if !visible { effects?.silence() }
+            return
+        }
         tickCredit += speedControl.multiplier
         while tickCredit >= 1, !playback.session.isComplete {
             tickCredit -= 1; playback.tick()
@@ -252,6 +270,7 @@ struct VerifiedSolution: Sendable {
                 status.stringValue = "Tick \(playback.session.currentTick): \(assignment.skill.rawValue)"
                 assignmentUntil = ProcessInfo.processInfo.systemUptime + 1.5
             }
+            updateTracking(); playTickSounds()
         }
         updateTracking(); refresh()
     }
@@ -323,6 +342,7 @@ struct VerifiedSolution: Sendable {
         return false
     }
     private func refresh() {
+        effects?.setViewport(field.soundViewport)
         field.session = playback.session
         if playback.session.isComplete {
             status.stringValue = "\(playback.session.simulation.savedCount) rescued"; marker.point = nil

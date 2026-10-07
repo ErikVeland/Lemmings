@@ -1857,11 +1857,16 @@ extension AppDelegate {
       "Escape did not return directly to the library")
     try check(try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID)?.runID == run,
       "Escape discarded the active run")
-    try check(menuRecovery?.runID == run && playfield.overlayLines.first?.hasPrefix("RESUME - ") == true && launchChoice == 0,
-      "Main screen did not prioritise the saved run")
+    try check(menuRecovery?.runID == run, "Main screen lost the saved standalone attempt")
+    guard let resumeIndex = homeMenuItems().firstIndex(where: {
+      if case .resume = $0.action { return true }; return false
+    }) else { throw IntegrationFailure(message: "Main screen omitted standalone Resume") }
+    try check(playfield.overlayLines[resumeIndex].hasPrefix("RESUME") && launchChoice == 0,
+      "Main screen lost its Resume action or default selection")
     let image = ReplayFrameCapture.image(size: playfield.bounds.size) { ReplayFrameCapture.draw(playfield, in: playfield.bounds) }
     let output = URL(fileURLWithPath: ".build/resume-main-screen.png")
     try NSBitmapImageRep(cgImage: image!).representation(using: .png, properties: [:])!.write(to: output)
+    launchChoice = resumeIndex
     advancePhase()
     try check(arcadeRunID == run && session?.currentTick == 120 && phase == .playing && launchMode == .quest && isPaused && !GameScreen.shared.isPresented,
       "Main screen resume did not restore the exact paused attempt in one action")
@@ -1998,6 +2003,53 @@ extension AppDelegate {
     catch RunRecoveryError.invalid {}
     try recoveryStore.clear(checkpoint.runID)
     print("PASS disk checkpoint, rewind/undo journal, exact paused restoration, continuation, backups, corruption, version and stale-writer rejection")
+  }
+
+  fileprivate func testSolutionReplaySounds() throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll(); settings.music = .silent; loadContent()
+    gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
+    selectDataSet(); loadLevel(at: 0)
+    let live = session as! ClassicSession
+    guard let proof = VerifiedSolution.load(initial: live.initialSimulation, from: Bundle.main.resourceURL) else {
+      throw IntegrationFailure(message: "Missing Fun 1 sound replay fixture")
+    }
+    loadSoundEffects(for: .amigaVoices)
+    let bank = effects.replayPlayer(); bank.setMuted(true); bank.setVolume(0.37)
+    let ghost = SolutionReplayWindow(solution: proof, source: playfield,
+      width: live.levelWidth, height: live.levelHeight, effects: bank)
+    defer { ghost.stop() }
+    try check(ghost.effects !== bank && ghost.effects?.muted == true && ghost.effects?.volume == 0.37,
+      "Solution audio did not isolate voices or inherit sound settings")
+    try check(ghost.effects?.loadedEffects == bank.loadedEffects && bank.loadedEffects.contains(.exitLevel),
+      "Solution audio lost the selected sample bank")
+    var cues: [ClassicSoundEffect] = []
+    var dispatches = 0
+    ghost.onSoundCues = { sounds in dispatches += 1; cues += sounds.map(\.effect) }
+    for _ in 0..<proof.replay.expected!.ticks { ghost.advance() }
+    try check(cues.contains(.doorOpen) && cues.contains(.assignSkill) && cues.contains(.exitLevel),
+      "Solution replay omitted entrance, assignment or exit sounds")
+    try check(ghost.playback.session.simulation.didWin && live.currentTick == 0,
+      "Solution audio changed the live run or the winning outcome")
+    let fast = SolutionReplayWindow(solution: proof, source: playfield,
+      width: live.levelWidth, height: live.levelHeight, effects: bank)
+    defer { fast.stop() }
+    var fastCues: [ClassicSoundEffect] = []
+    fast.onSoundCues = { fastCues += $0.map(\.effect) }
+    fast.speedControl.tap()
+    for _ in 0..<proof.replay.expected!.ticks where !fast.playback.session.isComplete { fast.advance() }
+    try check(fastCues == cues, "Fast solution replay dropped or duplicated sound events")
+    let beforeSeek = dispatches
+    let back = ghost.page.subviews.compactMap { $0 as? NSButton }.first { $0.title == "Back 1s" }!
+    back.performClick(nil)
+    try check(dispatches == beforeSeek, "Rewind replayed historical sounds")
+    ghost.advance()
+    try check(dispatches == beforeSeek, "Paused replay emitted sounds")
+    ghost.page.subviews.compactMap { $0 as? NSButton }.first { $0.title == "Step +1" }!.performClick(nil)
+    try check(dispatches == beforeSeek + 1, "Single-step omitted its sound cues")
+    try check(!bank.isRunning && !ghost.effects!.isRunning && bank.muted,
+      "Mechanical audio regression started audible output")
+    print("PASS solution replay sounds, muted settings, isolated voices, silent rewind/pause and single-step")
   }
 
   fileprivate func testLevelHints() async throws {
@@ -3558,6 +3610,64 @@ extension AppDelegate {
     print("PASS changed and removed level routes fail visibly")
   }
 
+  fileprivate func testJourneyCompletionLoadsUnopenedFanPack() async throws {
+    if window == nil { buildInterface() }
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent("journey-transition-\(UUID().uuidString)")
+    let oldArcade = ArcadeStore.shared, oldCache = playlistStoreCache, oldSequenceStore = sequencePlaylistStore
+    let defaultsName = "journey-transition-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: defaultsName)!
+    let arcade = ArcadeStore(file: directory.appendingPathComponent("records.json"), bundledProofs: nil, defaults: defaults)
+    ArcadeStore.shared = arcade
+    defer {
+      returnToLibrary(); ArcadeStore.shared = oldArcade
+      playlistStoreCache = oldCache; sequencePlaylistStore = oldSequenceStore
+      GameScreen.shared.dismissAll(); defaults.removePersistentDomain(forName: defaultsName)
+      try? FileManager.default.removeItem(at: directory)
+    }
+    settings.music = .silent; loadContent()
+    guard let journey = LearningJourneyLibrary.journey,
+          let index = journey.lessons.firstIndex(where: { $0.entry.levelNameSnapshot == "Snuggle up to a Lemming" }) else {
+      throw IntegrationFailure(message: "The completion regression lesson is missing")
+    }
+    let entries = Array(journey.lessons[index...index + 1].map(\.entry))
+    try check(entries[1].identity.packID == "fan:lldb-547", "The completion fixture no longer crosses into the unopened fan pack")
+    _ = arcade.addProfile(initials: "PAL", portrait: 2, select: false)
+    for hotSeat in [false, true] {
+      if hotSeat {
+        arcade.prepareHotSeat()
+        try check(arcade.startNewHotSeat(), "The transition Hot Seat could not start")
+      }
+      guard let discovery = await makeLevelBrowserDiscoveryTask().value else { throw IntegrationFailure(message: "The cold catalogue could not load") }
+      rebuildLevelCatalogue(discovery)
+      try check(levelBrowserRoutes[entries[1].identity] == nil, "The fan fixture was already resolved")
+      let store = try LevelPlaylistStore(file: directory.appendingPathComponent("playlist-\(hotSeat).json"))
+      let playlist = try LevelPlaylist(id: LearningJourney.playlistID, name: LearningJourney.title, entries: entries)
+      try store.add(playlist)
+      let run = try LevelSequenceRun.playlist(playlist, pool: .init(id: LearningJourney.version, summary: LearningJourney.title))
+      try store.startRun(run, hotSeatID: arcade.hotSeatID)
+      playlistStoreCache = (arcade.records.activeProfileID, store); sequencePlaylistStore = store
+      try check(homeMenuItems().contains { if case .resumeSequence = $0.action { return true }; return false },
+        "Home did not expose the saved journey independently of checkpoints")
+      if !hotSeat {
+        renderScreen()
+        let image = ReplayFrameCapture.image(size: playfield.bounds.size) { ReplayFrameCapture.draw(playfield, in: playfield.bounds) }
+        try NSBitmapImageRep(cgImage: image!).representation(using: .png, properties: [:])!.write(
+          to: URL(fileURLWithPath: ".build/journey-resume-menu.png"))
+      }
+      if hotSeat { startActiveSequence() } else { resumeHomeSequence() }
+      for _ in 0..<3000 where levelBrowserLoadTask != nil || playlistFanLoadTask != nil || levelBrowserLaunchTask != nil { try await Task.sleep(nanoseconds: 10_000_000) }
+      try check(sequencePlayingIdentity == entries[0].identity, "The completed official lesson did not start")
+      try check(continueActiveSequence(completed: entries[0].identity, runID: run.id), "The completion action was rejected")
+      for _ in 0..<3000 where playlistFanLoadTask != nil || levelBrowserLaunchTask != nil { try await Task.sleep(nanoseconds: 10_000_000) }
+      try check(sequencePlayingIdentity == entries[1].identity && fanPlaying && artworkLevel?.title == entries[1].levelNameSnapshot,
+        "Completion did not load the unopened next fan lesson (Hot Seat: \(hotSeat))")
+      try check(store.activeRun?.id == run.id && store.activeRunHotSeatID == arcade.hotSeatID && store.learningProgress.completed.contains(entries[0].identity),
+        "Completion lost run ownership or the official lesson win")
+      returnToLibrary(); GameScreen.shared.dismissAll()
+    }
+    print("PASS Snuggle completion loads the unopened next fan pack in Solo and Hot Seat")
+  }
+
   /// Every journey lesson must resolve against the live catalogue, or no
   /// journey session can start.
   fileprivate func testLearningJourneyEntriesResolve() async throws {
@@ -3575,6 +3685,15 @@ extension AppDelegate {
       ensureFanPacksResolved(for: journey.lessons.map(\.entry), title: "Journey test") { continuation.resume(returning: $0) }
     }
     try check(failures.isEmpty, "Journey fan packs did not resolve: \(failures.sorted().prefix(5))")
+    let bundledPacks = Bundle.main.resourceURL!.appendingPathComponent("LevelPacks").resolvingSymlinksInPath().path + "/"
+    for lesson in journey.lessons where lesson.entry.identity.packID.hasPrefix("fan:") {
+      guard case let .fan(archive, _, _)? = levelBrowserRoutes[lesson.entry.identity] else {
+        throw IntegrationFailure(message: "Journey fan lesson has no local archive")
+      }
+      try check(archive.resolvingSymlinksInPath().path.hasPrefix(bundledPacks),
+        "Journey depends on a fan archive outside the app: " + archive.path)
+    }
+
     let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
       pool: .init(id: LearningJourney.version, summary: LearningJourney.title),
       entries: journey.lessons.map(\.entry))
@@ -3861,6 +3980,23 @@ extension AppDelegate {
     print("PASS bundled NeoLemmix packs: no folder prompt, 788 levels, 75 need community styles, restore by stable IDs")
   }
 
+  fileprivate func testFanPackContinuation() async throws {
+    guard let pack = levelCatalogue.packs.first(where: { $0.id == "fan:lldb-547" }), pack.levels.count > 2 else {
+      throw IntegrationFailure(message: "Fan continuation fixture is unavailable")
+    }
+    let index = pack.levels.count / 2
+    startBrowserLevel(pack.levels[index].identity)
+    for _ in 0..<3000 where levelBrowserLaunchTask != nil { try await Task.sleep(nanoseconds: 10_000_000) }
+    try check(fanPlaying && fanQueue.count == pack.levels.count - index,
+      "Selecting a middle fan level lost the rest of the pack")
+    phase = .results
+    advancePhase()
+    try check(fanPlaying && fanQueueIndex == 1 && phase == .briefing,
+      "Fan result did not continue from the selected middle level")
+    returnToLibrary()
+    print("PASS Classic fan packs continue from a middle selection")
+  }
+
   fileprivate func testNeoLemmixPackBrowser() async throws {
     if window == nil { buildInterface() }
     GameScreen.shared.dismissAll()
@@ -3868,10 +4004,7 @@ extension AppDelegate {
       .appendingPathComponent("NeoPackBrowser-\(UUID())")
     let rank = root.appendingPathComponent("First", isDirectory: true)
     try FileManager.default.createDirectory(at: rank, withIntermediateDirectories: true)
-    let theme = root.appendingPathComponent("fixture", isDirectory: true)
-    try FileManager.default.createDirectory(at: theme, withIntermediateDirectories: true)
-    try "LEMMINGS fixture\n".write(
-      to: theme.appendingPathComponent("theme.nxtm"), atomically: true, encoding: .utf8)
+    let bundledStyles = try BundledGameResources.neoLemmix().stylesRoot!
     defer { try? FileManager.default.removeItem(at: root); GameScreen.shared.dismissAll() }
     try "TITLE Browser Pack\nAUTHOR Test\n".write(
       to: root.appendingPathComponent("info.nxmi"), atomically: true, encoding: .utf8)
@@ -3880,7 +4013,7 @@ extension AppDelegate {
     try "LEVEL one.nxlv\nLEVEL two.nxlv\n".write(
       to: rank.appendingPathComponent("levels.nxmi"), atomically: true, encoding: .utf8)
     func source(_ title: String, _ id: String) -> String {
-      "TITLE \(title)\nID \(id)\nTHEME fixture\nWIDTH 320\nHEIGHT 160\nLEMMINGS 1\nSAVE_REQUIREMENT 1\n"
+      "TITLE \(title)\nID \(id)\nTHEME orig_dirt\nWIDTH 320\nHEIGHT 160\nLEMMINGS 1\nSAVE_REQUIREMENT 1\n$LEMMING\n X 20\n Y 20\n$END\n"
     }
     let firstURL = rank.appendingPathComponent("one.nxlv")
     try source("One", "x1").write(to: firstURL, atomically: true, encoding: .utf8)
@@ -3889,12 +4022,12 @@ extension AppDelegate {
     let packs = try NeoLemmixPackLibrary.discover(in: root)
     let discovery = LevelBrowserDiscovery(
       classic: [], neoLemmixRoot: root,
-      neoLemmix: NeoLemmixLibrary.discover([.init(levelsRoot: root, stylesRoot: root)]),
+      neoLemmix: NeoLemmixLibrary.discover([.init(levelsRoot: root, stylesRoot: bundledStyles)]),
       lemmings2Root: nil, lemmings2: [], lemmings3Root: nil, lemmings3: [])
     let oldStyles = stylesDirectory
     let oldRoot = neoLevelsDirectory
     defer { stylesDirectory = oldStyles; neoLevelsDirectory = oldRoot }
-    stylesDirectory = root
+    stylesDirectory = bundledStyles
     neoLevelsDirectory = root
     rebuildLevelCatalogue(discovery)
     guard let pack = levelCatalogue.packs.first(where: { $0.engine == .neolemmix }) else {
@@ -3959,6 +4092,29 @@ extension AppDelegate {
       "NeoLemmix browser did not show the completion mark for its stable identity: "
         + (completionCarousel.selectedItem?.detail ?? "no selected item"))
     GameScreen.shared.dismissAll()
+    func key(_ code: UInt16, _ text: String) -> NSEvent {
+      NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+        windowNumber: window.windowNumber, context: nil, characters: text, charactersIgnoringModifiers: text,
+        isARepeat: false, keyCode: code)!
+    }
+    for (code, text) in [(UInt16(36), "\r"), (UInt16(49), " ")] {
+      startBrowserLevel(pack.levels[0].identity)
+      try check(currentNeoCatalogueIdentity == pack.levels[0].identity, "Neo pack start failed: " + panel.statusText)
+      phase = .results
+      _ = handleClassicKeyboardEvent(key(code, text))
+      try check(currentNeoCatalogueIdentity == pack.levels[1].identity && phase == .playing,
+        "Neo result key did not advance to the next manifest entry")
+      phase = .results
+      playfield.onAdvancePhase?()
+      try check(currentNxlvURL == nil && flow?.screen == .title && panel.isMenuMode,
+        "Last Neo result did not return to the library")
+    }
+    startBrowserLevel(pack.levels[1].identity)
+    installKeyboardShortcuts()
+    gameplayKeyboard?.mainMenu?()
+    try check(currentNxlvURL == nil && flow?.screen == .title && panel.isMenuMode,
+      "Escape from a Neo level did not leave gameplay")
+    print("PASS Neo pack Return/Space continuation, last-level return and Escape to library")
     let previousSession = session
     try source("Changed", "x1").write(to: firstURL, atomically: true, encoding: .utf8)
     do {
@@ -5749,7 +5905,7 @@ Task { @MainActor in
     subject.prepareArcadeTests()
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
-    #if !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
+    #if !SOLUTION_AUDIO_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -5760,7 +5916,19 @@ Task { @MainActor in
     try testPointerAssignment()
     #endif
     #endif
-    #if CONSOLIDATION_TESTS
+    #if SOLUTION_AUDIO_TESTS
+    try subject.testSolutionReplaySounds()
+    #elseif PACK_NAVIGATION_TESTS
+    try subject.testSoloHotSeatRoundTrips()
+    try subject.testNeoRunRecovery()
+    try await subject.testPlaylistSessions()
+    try await subject.testJourneyCompletionLoadsUnopenedFanPack()
+    try await subject.testLearningJourneyEntriesResolve()
+    try await subject.testFanPackContinuation()
+    try await subject.testNeoLemmixPackBrowser()
+    try subject.testEscapeToMainMenu()
+    print("Pack navigation integration tests passed.")
+    #elseif CONSOLIDATION_TESTS
     try subject.testSoloHotSeatRoundTrips()
     try subject.testReportedRecovery()
     try subject.testProfileSessionActions()
@@ -5771,6 +5939,7 @@ Task { @MainActor in
     try subject.testNeoRunRecovery()
     try await subject.testPlaylistSessions()
     try subject.testSequenceNavigationGuards()
+    try await subject.testJourneyCompletionLoadsUnopenedFanPack()
     try await subject.testLearningJourneyEntriesResolve()
     try await subject.testLearningJourneySessionsStart()
     try subject.testJourneyLoadingFeedback()
@@ -5796,6 +5965,7 @@ Task { @MainActor in
     try subject.testNeoRunRecovery()
     print("NeoLemmix recovery integration tests passed.")
     #elseif LEARNING_TESTS
+    try await subject.testJourneyCompletionLoadsUnopenedFanPack()
     try await subject.testLearningJourneyEntriesResolve()
     try await subject.testLearningJourneySessionsStart()
     print("Learning journey integration tests passed.")
@@ -5900,6 +6070,7 @@ Task { @MainActor in
     try subject.testRunRecovery()
     try subject.testFanRunRecovery()
     try subject.testNeoRunRecovery()
+    try await subject.testJourneyCompletionLoadsUnopenedFanPack()
     try await subject.testLearningJourneyEntriesResolve()
     try await subject.testLearningJourneySessionsStart()
     try await subject.testPlaylistSessions()
@@ -5952,6 +6123,7 @@ Task { @MainActor in
     try subject.testSequenceNavigationGuards()
     try subject.testClassicLevelPickerUnlockGate()
     try await testContentBrowser()
+    try await subject.testJourneyCompletionLoadsUnopenedFanPack()
     try await subject.testLearningJourneyEntriesResolve()
     try await subject.testLearningJourneySessionsStart()
     try await subject.testPlaylistSessions()

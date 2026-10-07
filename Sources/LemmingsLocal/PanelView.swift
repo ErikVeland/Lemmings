@@ -65,6 +65,7 @@ enum PanelButton: Equatable {
   var isCRTSource = false
   var onButton: ((PanelButton) -> Void)?
   var onMinimapScroll: ((Double) -> Void)?
+  var onMinimapPosition: ((CGPoint) -> Void)?
 
   var speedControlBounds: CGRect { buttonFrames.first(where: { $0.0 == .fastForward })?.1 ?? .zero }
   let timeline = TimelinePanelControls()
@@ -346,9 +347,11 @@ enum PanelButton: Equatable {
 
   private func scrollFromMinimap(_ point: CGPoint) {
     let map = minimapContentFrame
-    guard map.width > 0, levelSize.width > 0 else { return }
+    guard map.width > 0, map.height > 0, levelSize.width > 0 else { return }
     let fraction = max(0, min(1, (point.x - map.minX) / map.width))
     onMinimapScroll?(Double(fraction) * levelSize.width)
+    let vertical = max(0, min(1, (point.y - map.minY) / map.height))
+    onMinimapPosition?(CGPoint(x: fraction * levelSize.width, y: vertical * levelSize.height))
   }
 
   // MARK: - Drawing
