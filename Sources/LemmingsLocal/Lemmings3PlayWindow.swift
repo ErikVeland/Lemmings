@@ -463,6 +463,22 @@ import NxlvKit
     #if APP_INTEGRATION_TESTS
     static func testHasEarnedEnding(root: URL) -> Bool { hasEarnedEnding(root: root) }
 
+    func testRecoveryAdvance(ticks: Int) {
+        timer?.invalidate(); timer = nil; canvas.startCountdown.cancel()
+        for _ in 0..<ticks where !game.isComplete { advanceTick() }
+    }
+
+    func testRecoveryAssignBlocker(to id: Int) -> Bool {
+        selected = 1
+        let count = recoveryInputs.count
+        applyAction(to: id, direction: .right)
+        return recoveryInputs.count == count + 1
+    }
+
+    var testRecoverySnapshot: (game: Lemmings3Runtime, runID: UUID, paused: Bool, inputs: Int, selected: Int) {
+        (game, arcadeRunID, paused, recoveryInputs.count, selected)
+    }
+
     func testOpenIntroduction(automatic: Bool) {
         playOriginalMovie(.introduction, returnsToGameWhenFinished: automatic)
     }

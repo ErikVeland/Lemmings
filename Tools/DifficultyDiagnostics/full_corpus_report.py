@@ -102,6 +102,11 @@ NATIVE_OBSTRUCTIONS = {
         "initialHash": "fa4ec99ff512e3db8742144aa0255ebe96ec7b37e1cc7918b32860ea84581e10",
         "issue": "Only hatch is at y=170 and only exit starts at y=220 below the maximum playable y=163",
     },
+    ("fan:lldb-415", "levels/Blizzlem/313.ini#-1"): {
+        "sourceRevision": "a1107ad848d4c68d1b127efe8ca3989906414b7acc5d79be4cbb52bf61a7d7ec",
+        "initialHash": "3c4c5abecc91d55aaddbb5e2c14605d89d3c8e86aba4292373c679a4c032ca9e",
+        "issue": "Only exit trigger x=3012–3015 and y=208–211 is outside exact native playable bounds x≤1647 and y≤163",
+    },
     ("fan:lldb-208", "Gronklems 7/8) Industrial Park.ini#-1"): {
         "sourceRevision": "653a50ccce0eac0c98c88c590d3de2b462ac3b990e26d01636d9085c22325ca8",
         "initialHash": "ef58792caad2084636d546eb4e73815060def8cb640f70adc1a6c1cdf4a31103",

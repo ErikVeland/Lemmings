@@ -17,6 +17,13 @@ do {
     try require(Lemmings3Runtime.Tool(sourceIdentifier: 5002) == .spade &&
                 Lemmings3Runtime.Tool.spade.initialQuantity == 8,
                 "L3 source object 5002 is an eight-use Spade")
+    try require(Lemmings3Runtime.Tool(sourceIdentifier: 5007) == .clock &&
+                Lemmings3Runtime.Tool.clock.sourceIdentifier == 5007,
+                "L3 source object 5007 is a time clock")
+    try require(Lemmings3Runtime.Tool(sourceIdentifier: 5009) == .grenade &&
+                Lemmings3Runtime.Tool.grenade.sourceIdentifier == 5009 &&
+                Lemmings3Runtime.Tool.grenade.initialQuantity == 4,
+                "L3 source object 5009 is a four-grenade box")
     let record = Data([7, 0, 32, 0, 0, 0, 2, 0, 1, 1, 1, 0, 0, 0, 0])
     let sequential = try Lemmings3StyleBank(objects: record, frames: Data([0, 0, 1, 1, 0, 0, 16]), blocks: Data())
     try require(try sequential.attributes(object: 7) == [0x1000], "L3 sequential native attribute words")
@@ -703,6 +710,26 @@ do {
                 try require(after?.x == 160 && after?.y == 360 && after?.direction == 1,
                     "L3 Classic 28 climbs the supplied stair without a tool")
             }
+            if number == 23 {
+                while !run.isComplete && run.tick < 179 { run.step() }
+                try require(run.tick == 179, "L3 Classic 23 stays active until the first short stair")
+                let firstBefore = run.lemmings.first { $0.id == 3 }
+                try require(firstBefore?.x == 159 && firstBefore?.y == 280 && firstBefore?.direction == 1,
+                    "L3 Classic 23 reaches the first original short stair")
+                run.step()
+                let firstAfter = run.lemmings.first { $0.id == 3 }
+                try require(firstAfter?.x == 160 && firstAfter?.y == 272 && firstAfter?.direction == 1,
+                    "L3 Classic 23 climbs the first original short stair")
+                while !run.isComplete && run.tick < 392 { run.step() }
+                try require(run.tick == 392, "L3 Classic 23 stays active until the second short stair")
+                let secondBefore = run.lemmings.first { $0.id == 3 }
+                try require(secondBefore?.x == 327 && secondBefore?.y == 360 && secondBefore?.direction == 1,
+                    "L3 Classic 23 reaches the second original short stair")
+                run.step()
+                let secondAfter = run.lemmings.first { $0.id == 3 }
+                try require(secondAfter?.x == 328 && secondAfter?.y == 352 && secondAfter?.direction == 1,
+                    "L3 Classic 23 climbs the second original short stair")
+            }
             if number == 5 {
                 try require(run.creatures.count == 1 && run.creatures[0].kind == .fatale, "L3 Classic 5 decodes native Fatale placement")
                 var badHeader = candidate.rawData; badHeader[28] = 0; badHeader[29] = 0
@@ -738,6 +765,29 @@ do {
                 print("PASS L3 Classic 2 tool replay: 12 rescued, 10 in reserve, \(run.tick) experimental ticks")
             }
         }
+        let egypt27 = try Lemmings3Level(data: Data(contentsOf: root.appendingPathComponent("LEVELS/LEVEL227.DAT")))
+        let egyptStyle = try Lemmings3Style(directory: root.appendingPathComponent("STYLES"), number: egypt27.style)
+        let egyptPerm = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent("LEVELS/PERM227.OBS")))
+        let egyptTemp = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent("LEVELS/TEMP227.OBS")))
+        var egyptStairs = try Lemmings3Runtime(level: egypt27, style: egyptStyle, permanent: egyptPerm, temporary: egyptTemp)
+        for _ in 0..<130 { egyptStairs.step() }
+        try require(egyptStairs.lemmings.first(where: { $0.id == 1 })?.x == 111 &&
+                    egyptStairs.lemmings.first(where: { $0.id == 1 })?.y == 152,
+            "L3 Egyptian 27 reaches the original yellow stair contact")
+        egyptStairs.step()
+        try require(egyptStairs.lemmings.first(where: { $0.id == 1 })?.x == 112 &&
+                    egyptStairs.lemmings.first(where: { $0.id == 1 })?.y == 144,
+            "L3 Egyptian 27 climbs the connected source stairs")
+        print("PASS L3 Egyptian 27 connected source stairs")
+        let egypt25 = try Lemmings3Level(data: Data(contentsOf: root.appendingPathComponent("LEVELS/LEVEL225.DAT")))
+        let egypt25Perm = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent("LEVELS/PERM225.OBS")))
+        let egypt25Temp = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent("LEVELS/TEMP225.OBS")))
+        let egypt25Run = try Lemmings3Runtime(level: egypt25, style: egyptStyle,
+            permanent: egypt25Perm, temporary: egypt25Temp)
+        try require(egypt25Run.pickups.count == 66 && egypt25Run.pickups.allSatisfy {
+            $0.tool == .grenade && $0.quantity == 4
+        }, "L3 Egyptian 25 imports all 66 four-grenade boxes")
+        print("PASS L3 Egyptian 25 grenade boxes")
         let expectedCycles = [200: 28, 202: 33, 203: 26, 994: 28, 995: 14, 996: 26, 102: 13, 103: 28, 104: 24]
         var checkedTraps: Set<Int> = []
         for tribe in Lemmings3ClassicCampaign.Tribe.allCases {

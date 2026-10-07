@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-06",
+  "purpose": "Reconcile text Lemmini INI source-height bounds against the difficulty ledger.",
+  "inputs": {
+    "ledger": {
+      "path": "levels.csv",
+      "sha256": "0e1cd82d19dfe353f5ae39c41c6ad5a81917d25fad7bf81ac4c959fcf9edf1eb"
+    },
+    "boundsAudit": {
+      "path": "lemmini-classic-bounds.json",
+      "sha256": "aff9e7c6d3061a3078c0d6cb18a1f35b43ece4dfe3e5bcd1df2d611f5f3df7f7"
+    },
+    "sourceFamilies": {
+      "path": "source-engine-families.json",
+      "sha256": "32544dba82f6d1b431e0e0854a4dce976bb717129d55ad4de9a438cb22b47227"
+    }
+  },
+  "scope": {
+    "auditedTextINILevels": 272,
+    "sourcePacksInAudit": 19,
+    "flaggedPlacements": 162,
+    "allExitPlacementsBelowClassicMaximumY": 147,
+    "allEntrancePlacementsBelowClassicMaximumY": 27,
+    "bothFlags": 12,
+    "packsWithFlags": 18,
+    "binaryClassicRecordsExcluded": 20
+  },
+  "ledgerReconciliation": {
+    "matchedExactPackAndLevelRows": 162,
+    "auditFindingsMissingFromLedger": 0,
+    "rowStatuses": [
+      {
+        "sourceEngine": "Lemmini",
+        "completion": "no verified win",
+        "hasScore": false,
+        "count": 162
+      }
+    ],
+    "flaggedRowsByPack": {
+      "fan:lldb-200": 7,
+      "fan:lldb-201": 6,
+      "fan:lldb-203": 10,
+      "fan:lldb-204": 12,
+      "fan:lldb-206": 5,
+      "fan:lldb-208": 6,
+      "fan:lldb-209": 4,
+      "fan:lldb-211": 8,
+      "fan:lldb-215": 7,
+      "fan:lldb-369": 9,
+      "fan:lldb-396": 10,
+      "fan:lldb-397": 9,
+      "fan:lldb-402": 3,
+      "fan:lldb-406": 7,
+      "fan:lldb-408": 7,
+      "fan:lldb-415": 38,
+      "fan:lldb-466": 8,
+      "fan:lldb-469": 6
+    }
+  },
+  "interpretation": "The audit excludes binary Classic records held in Lemmini-tagged packs. All geometry flags map to exact ledger rows tagged Lemmini, with no strict win or score. This is a source-coordinate versus Classic-height import-geometry signal for those rows; it is not proof that an exit trigger is unreachable under source-engine geometry, not a solvability result, and not independent physics-parity evidence. The source-correct import/runtime lane remains unresolved."
+}

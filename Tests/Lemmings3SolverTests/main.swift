@@ -1,6 +1,10 @@
 import Foundation
 import NxlvKit
 
+func mark(_ section: String) {
+    FileHandle.standardError.write(Data("L3 solver test: \(section)\n".utf8))
+}
+
 func assertOfferedToolDirections(_ game: Lemmings3Runtime, lemming id: Int,
                                  tool: Lemmings3Runtime.Tool, label: String) {
     guard let lemming = game.lemmings.first(where: { $0.id == id }), lemming.tool == tool else {
@@ -21,6 +25,7 @@ func assertOfferedToolDirections(_ game: Lemmings3Runtime, lemming id: Int,
 }
 
 let root = URL(fileURLWithPath: "Sources/Ports/LEM3CD")
+mark("Shadow 08")
 let campaign = try Lemmings3ClassicCampaign(root: root, tribe: .shadow)
 let level = campaign.levels[7]
 let style = try Lemmings3Style(directory: root.appendingPathComponent("STYLES"), number: 2)
@@ -39,7 +44,7 @@ var cursor = 0
 var detector = L3Detector()
 _ = detector.update(game)
 var offeredAtTurn: [Int] = []
-while game.tick < 560 {
+while !game.isComplete && game.tick < 560 {
     while cursor < fixture.inputs.count && fixture.inputs[cursor].tick == game.tick {
         guard L3Replay.apply(fixture.inputs[cursor], to: &game) else { fatalError("Shadow 08 prefix failed") }
         cursor += 1
@@ -62,6 +67,7 @@ guard let after = game.lemmings.first(where: { $0.id == 8 }),
     fatalError("Two-Walker branch did not stop and turn the builder")
 }
 let egyptian = try Lemmings3ClassicCampaign(root: root, tribe: .egyptian)
+mark("Egyptian 01")
 let egyptianLevel = egyptian.levels[0]
 let egyptianStyle = try Lemmings3Style(directory: root.appendingPathComponent("STYLES"), number: 3)
 let egyptianPermanent = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(
@@ -76,10 +82,11 @@ guard egyptianFixture.levelSHA256 == L3Replay.digest(egyptianLevel.rawData),
       egyptianFixture.initialStateHash == L3Replay.stateHash(egyptianGame) else {
     fatalError("Egyptian 01 fixture does not match the exact source level")
 }
-while egyptianGame.tick < 241 { egyptianGame.step() }
+while !egyptianGame.isComplete && egyptianGame.tick < 241 { egyptianGame.step() }
 assertOfferedToolDirections(egyptianGame, lemming: 0, tool: .spade, label: "Egyptian 01 Spade holder")
 
 let classic = try Lemmings3ClassicCampaign(root: root, tribe: .classic)
+mark("Classic 03")
 let classicLevel = classic.levels[2]
 let classicStyle = try Lemmings3Style(directory: root.appendingPathComponent("STYLES"), number: 1)
 let classicPermanent = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(
@@ -96,19 +103,28 @@ guard classicFixture.levelSHA256 == L3Replay.digest(classicLevel.rawData),
 }
 var classicDetector = L3Detector(toolSiteCell: 64)
 _ = classicDetector.update(classicGame)
-var offeredAtDig: [Int] = []
+var classicCursor = 0
+var offeredSpadeSite = false
 var fallbackCoveredNoTool = false
-while classicGame.tick < 227 {
+while !classicGame.isComplete && classicGame.tick < 198 {
+    while classicCursor < classicFixture.inputs.count && classicFixture.inputs[classicCursor].tick == classicGame.tick {
+        guard L3Replay.apply(classicFixture.inputs[classicCursor], to: &classicGame) else {
+            fatalError("Classic 03 fixture prefix failed")
+        }
+        classicCursor += 1
+    }
     classicGame.step()
     let offered = classicDetector.update(classicGame)
+    if (offered ?? []).contains(1), classicGame.lemmings.first(where: { $0.id == 1 })?.tool == .spade {
+        offeredSpadeSite = true
+    }
     if classicGame.tick == 150 {
         fallbackCoveredNoTool = (offered ?? []).contains { id in
             classicGame.lemmings.contains { $0.id == id && $0.state == .walking && $0.tool == nil }
         }
     }
-    if classicGame.tick == 227 { offeredAtDig = offered ?? [] }
 }
-guard offeredAtDig.contains(1),
+guard offeredSpadeSite, classicCursor == 1,
       l3Actions(classicGame, lemming: 1).contains(where: { choice in
           choice.count == 1 && choice[0].action == "use" && choice[0].direction == "down"
       }) else {
@@ -117,22 +133,24 @@ guard offeredAtDig.contains(1),
 guard fallbackCoveredNoTool else {
     fatalError("Tool-site decisions suppressed the other walking actors")
 }
-let dig = L3Replay.Input(tick: classicGame.tick, action: "use", lemming: 1, direction: "down")
+let dig = classicFixture.inputs[classicCursor]
 guard L3Replay.apply(dig, to: &classicGame) else { fatalError("Classic 03 Spade action was rejected") }
 while !classicGame.isComplete && classicGame.tick < 30_000 { classicGame.step() }
-guard classicGame.isComplete, classicGame.saved == 10,
-      classicGame.lost == 1, classicGame.reserve == 9, classicGame.tick == 640 else {
-    fatalError("Classic 03 offered Spade route did not retain its ten-save outcome")
+guard classicGame.isComplete, L3Replay.Outcome(classicGame) == classicFixture.expected else {
+    fatalError("Classic 03 offered Spade route differs from its retained fixture")
 }
 let classic06Level = classic.levels[5]
+mark("Classic 06")
 let classic06Permanent = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(
     String(format: "LEVELS/PERM%03d.OBS", classic06Level.permanentObjectsReference))))
 let classic06Temporary = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(
     String(format: "LEVELS/TEMP%03d.OBS", classic06Level.temporaryObjectsReference))))
 let classic06Base = try Lemmings3Runtime(level: classic06Level, style: classicStyle,
                                          permanent: classic06Permanent, temporary: classic06Temporary, total: 13)
-let classic06Seed = try JSONDecoder().decode(L3Seed.self, from: Data(contentsOf: URL(fileURLWithPath:
-    "Tests/Lemmings3CampaignTests/Fixtures/006-13.json")))
+let classic06Data = try Data(contentsOf: URL(fileURLWithPath:
+    "Tests/Lemmings3CampaignTests/Fixtures/006-13.json"))
+let classic06Seed = try JSONDecoder().decode(L3Seed.self, from: classic06Data)
+let classic06Replay = try JSONDecoder().decode(L3Replay.self, from: classic06Data)
 var seedLimits = L3Limits()
 seedLimits.toolSiteCell = 64
 let classic06Prefix = try l3SeedCandidate(from: classic06Base, levelNumber: 6,
@@ -182,10 +200,20 @@ do {
 } catch {}
 var classic06Continuation = try l3SeedCandidate(from: classic06Base, levelNumber: 6,
     levelData: classic06Level.rawData, seed: classic06Seed, throughTick: 1191, limits: seedLimits)
-while l3Advance(&classic06Continuation, limits: seedLimits) {}
-guard classic06Continuation.game.isComplete, classic06Continuation.game.saved == 2,
-      classic06Continuation.game.lost == 8, classic06Continuation.game.reserve == 3 else {
-    fatalError("Classic 06 seed did not retain its two-save continuation")
+var continuationCursor = classic06Continuation.inputs.count
+while !classic06Continuation.game.isComplete && classic06Continuation.game.tick <= classic06Replay.expected.ticks {
+    while continuationCursor < classic06Seed.inputs.count &&
+          classic06Seed.inputs[continuationCursor].tick == classic06Continuation.game.tick {
+        guard L3Replay.apply(classic06Seed.inputs[continuationCursor], to: &classic06Continuation.game) else {
+            fatalError("Classic 06 seeded continuation rejected a retained input")
+        }
+        continuationCursor += 1
+    }
+    if !classic06Continuation.game.isComplete { classic06Continuation.game.step() }
+}
+guard continuationCursor == classic06Seed.inputs.count, classic06Continuation.game.isComplete,
+      L3Replay.Outcome(classic06Continuation.game) == classic06Replay.expected else {
+    fatalError("Classic 06 seed did not retain its lossless continuation")
 }
 var abortLimits = seedLimits
 abortLimits.maxTicks = 1200
@@ -204,6 +232,7 @@ let abortReplay = L3Replay(level: 6, levelSHA256: L3Replay.digest(classic06Level
     inputs: abortWinner.inputs, expected: .init(abortWinner.game))
 _ = try abortReplay.replay(from: classic06Base, levelData: classic06Level.rawData)
 var endRunTags = [UInt16](repeating: 0x1000, count: 128 * 64)
+mark("End Run")
 for y in 40..<64 { for x in 0..<128 { endRunTags[y * 128 + x] = 0x20 } }
 var endRunBase = try Lemmings3Runtime(configuration: .init(width: 128, height: 64, attributes: endRunTags,
     entrance: .init(x: 96, y: 40), exits: [.init(x: 20, y: 39)], total: 2,
@@ -211,7 +240,8 @@ var endRunBase = try Lemmings3Runtime(configuration: .init(width: 128, height: 6
     extras: [.init(x: 20, y: 40, direction: 1), .init(x: 96, y: 40, direction: 1)]))
 endRunBase.step()
 guard endRunBase.assign(.blocker, to: 1) else { fatalError("L3 End Run test could not set its live blocker") }
-while (endRunBase.lemmings[0].state != .exiting || endRunBase.lemmings[0].age < 8) && endRunBase.tick < 30 {
+while !endRunBase.isComplete &&
+      (endRunBase.lemmings[0].state != .exiting || endRunBase.lemmings[0].age < 8) && endRunBase.tick < 30 {
     endRunBase.step()
 }
 guard endRunBase.saved == 0, endRunBase.lemmings[0].state == .exiting,
@@ -260,57 +290,98 @@ guard firstEndRun.saved == 1, firstEndRun.lost == 1,
     fatalError("Unseeded End Run did not replay to the same result twice")
 }
 guard !L3Limits().pairedActors else { fatalError("Paired actors must remain opt-in") }
-let shadow02Level = campaign.levels[1]
-let shadow02Permanent = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(
-    String(format: "LEVELS/PERM%03d.OBS", shadow02Level.permanentObjectsReference))))
-let shadow02Temporary = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(
-    String(format: "LEVELS/TEMP%03d.OBS", shadow02Level.temporaryObjectsReference))))
-var shadow02Game = try Lemmings3Runtime(level: shadow02Level, style: style, permanent: shadow02Permanent,
-                                        temporary: shadow02Temporary, total: 20)
-let shadow02Fixture = try JSONDecoder().decode(L3Replay.self, from: Data(contentsOf: URL(fileURLWithPath:
-    "Tests/Lemmings3CompletionTests/Fixtures/102.json")))
-guard shadow02Fixture.levelSHA256 == L3Replay.digest(shadow02Level.rawData),
-      shadow02Fixture.initialStateHash == L3Replay.stateHash(shadow02Game) else {
-    fatalError("Shadow 02 fixture does not match the exact source level")
+mark("Egyptian 18 pair")
+let egyptian18Level = egyptian.levels[17]
+let egyptian18Permanent = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(
+    String(format: "LEVELS/PERM%03d.OBS", egyptian18Level.permanentObjectsReference))))
+let egyptian18Temporary = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(
+    String(format: "LEVELS/TEMP%03d.OBS", egyptian18Level.temporaryObjectsReference))))
+var egyptian18Game = try Lemmings3Runtime(level: egyptian18Level, style: egyptianStyle,
+                                          permanent: egyptian18Permanent, temporary: egyptian18Temporary, total: 20)
+let egyptian18Fixture = try JSONDecoder().decode(L3Replay.self, from: Data(contentsOf: URL(fileURLWithPath:
+    "Tests/Lemmings3CompletionTests/Fixtures/218.json")))
+guard egyptian18Fixture.levelSHA256 == L3Replay.digest(egyptian18Level.rawData),
+      egyptian18Fixture.initialStateHash == L3Replay.stateHash(egyptian18Game) else {
+    fatalError("Egyptian 18 fixture does not match the exact source level")
 }
-var shadow02Cursor = 0
-var shadow02Detector = L3Detector()
-_ = shadow02Detector.update(shadow02Game)
-var shadow02Offered: [Int] = []
-while shadow02Game.tick < 1594 {
-    while shadow02Cursor < shadow02Fixture.inputs.count && shadow02Fixture.inputs[shadow02Cursor].tick == shadow02Game.tick {
-        guard L3Replay.apply(shadow02Fixture.inputs[shadow02Cursor], to: &shadow02Game) else {
-            fatalError("Shadow 02 prefix failed")
+var egyptian18Cursor = 0
+while !egyptian18Game.isComplete && egyptian18Game.tick < 30 {
+    while egyptian18Cursor < egyptian18Fixture.inputs.count &&
+          egyptian18Fixture.inputs[egyptian18Cursor].tick == egyptian18Game.tick {
+        guard L3Replay.apply(egyptian18Fixture.inputs[egyptian18Cursor], to: &egyptian18Game) else {
+            fatalError("Egyptian 18 prefix failed")
         }
-        shadow02Cursor += 1
+        egyptian18Cursor += 1
     }
-    shadow02Game.step()
-    shadow02Offered = shadow02Detector.update(shadow02Game) ?? []
+    egyptian18Game.step()
 }
-guard shadow02Offered.contains(2), shadow02Offered.contains(4) else {
-    fatalError("Shadow 02 did not offer both actors at tick 1594")
+let egyptian18Choices = [0, 5].map { l3Actions(egyptian18Game, lemming: $0) }
+let egyptian18Pair = l3PairedActions(egyptian18Game, actorChoices: egyptian18Choices).first { inputs in
+    inputs.count == 2 && inputs.contains { $0.lemming == 0 && $0.action == "jumper" } &&
+    inputs.contains { $0.lemming == 5 && $0.action == "walker" }
 }
-let shadow02Choices = shadow02Offered.map { l3Actions(shadow02Game, lemming: $0) }
-let shadow02Pair = l3PairedActions(shadow02Game, actorChoices: shadow02Choices).first { inputs in
-    inputs.count == 2 && inputs.contains { $0.lemming == 2 && $0.action == "jumper" } &&
-    inputs.contains { $0.lemming == 4 && $0.action == "walker" }
+guard let egyptian18Pair else { fatalError("Solver omitted the Egyptian 18 same-tick two-actor pair") }
+var expectedPairState = egyptian18Game
+for input in egyptian18Fixture.inputs where input.tick == 30 {
+    guard L3Replay.apply(input, to: &expectedPairState) else { fatalError("Egyptian 18 fixture pair failed") }
 }
-guard let shadow02Pair else { fatalError("Solver omitted the Shadow 02 same-tick two-actor pair") }
-var expectedPairState = shadow02Game
-for input in shadow02Fixture.inputs where input.tick == 1594 {
-    guard L3Replay.apply(input, to: &expectedPairState) else { fatalError("Shadow 02 fixture pair failed") }
+for input in egyptian18Pair {
+    guard L3Replay.apply(input, to: &egyptian18Game) else { fatalError("Egyptian 18 solver pair failed") }
 }
-for input in shadow02Pair {
-    guard L3Replay.apply(input, to: &shadow02Game) else { fatalError("Shadow 02 solver pair failed") }
+guard L3Replay.stateHash(egyptian18Game) == L3Replay.stateHash(expectedPairState) else {
+    fatalError("Egyptian 18 solver pair changed the retained state")
 }
-guard L3Replay.stateHash(shadow02Game) == L3Replay.stateHash(expectedPairState) else {
-    fatalError("Shadow 02 solver pair changed the retained state")
+let multiHatchTags = [UInt16](repeating: 0x1000, count: 128 * 64)
+mark("multiple hatches")
+var multiHatchGame = try Lemmings3Runtime(configuration: .init(width: 128, height: 64,
+    attributes: multiHatchTags, entrance: .init(x: 20, y: 20), exits: [.init(x: 20, y: 20)],
+    total: 5, releaseInterval: 100, releaseDelay: 1, timeLimit: 60,
+    additionalEntrances: [.init(x: 100, y: 20)]))
+let multiHatchField = L3DistanceField(multiHatchGame)
+let firstHatchDistance = multiHatchField.distance(x: 20, y: 20)
+let secondHatchDistance = multiHatchField.distance(x: 100, y: 20)
+let initialHatchScore = L3Score(L3Candidate(game: multiHatchGame, detector: L3Detector()),
+    field: multiHatchField)
+guard secondHatchDistance != firstHatchDistance,
+      initialHatchScore.distance == 3 * firstHatchDistance + 2 * secondHatchDistance else {
+    fatalError("Solver scored every unreleased actor from the first hatch")
+}
+multiHatchGame.step()
+let activeDistance = multiHatchGame.lemmings.filter(\.active).reduce(0) {
+    $0 + multiHatchField.distance(x: $1.x, y: $1.y)
+}
+let nextHatchScore = L3Score(L3Candidate(game: multiHatchGame, detector: L3Detector()),
+    field: multiHatchField)
+guard multiHatchGame.released == 1,
+      nextHatchScore.distance == activeDistance + 2 * firstHatchDistance + 2 * secondHatchDistance else {
+    fatalError("Solver lost the release-order offset after the first actor")
+}
+var quotaGame = try Lemmings3Runtime(configuration: .init(width: 128, height: 64,
+    attributes: multiHatchTags, entrance: .init(x: 20, y: 20), exits: [.init(x: 20, y: 20)],
+    total: 20, releaseInterval: 100, releaseDelay: 1, timeLimit: 60,
+    additionalEntrances: [.init(x: 100, y: 20)]))
+let quotaField = L3DistanceField(quotaGame)
+let quotaScore = L3Score(L3Candidate(game: quotaGame, detector: L3Detector()), field: quotaField)
+guard quotaGame.reserve == 20, quotaGame.pendingReleases == 10,
+      quotaScore.distance == 5 * firstHatchDistance + 5 * secondHatchDistance else {
+    fatalError("Solver treated protected reserve actors as pending hatch releases")
+}
+quotaGame.step()
+let quotaActiveDistance = quotaGame.lemmings.filter(\.active).reduce(0) {
+    $0 + quotaField.distance(x: $1.x, y: $1.y)
+}
+let nextQuotaScore = L3Score(L3Candidate(game: quotaGame, detector: L3Detector()), field: quotaField)
+guard quotaGame.reserve == 19, quotaGame.pendingReleases == 9,
+      nextQuotaScore.distance == quotaActiveDistance + 4 * firstHatchDistance + 5 * secondHatchDistance else {
+    fatalError("Solver scored unreleased reserve actors beyond the current release quota")
 }
 print("PASS L3 solver offers accepted Brick and Spade directions from retained routes")
 print("PASS L3 solver offers a useful tool site on Classic 03")
 print("PASS L3 solver offers the retained Shadow 08 same-tick builder turn")
-print("PASS L3 solver offers the retained Shadow 02 same-tick two-actor pair")
+print("PASS L3 solver offers the retained Egyptian 18 same-tick two-actor pair")
 print("PASS L3 solver validates and continues the Classic 06 exact-state seed")
 print("PASS L3 solver replay-verifies a seeded abort completion")
 print("PASS L3 solver replay-verifies an unseeded End Run after a rescue")
 print("PASS L3 solver retains releasable blockers in its survivor score")
+print("PASS L3 solver scores unreleased actors from their release-order hatches")
+print("PASS L3 solver excludes protected reserve actors from hatch distance")

@@ -13,14 +13,26 @@ ROOT = Path(__file__).resolve().parents[2]
 LEVELS = ROOT / "Artifacts/DifficultyEvaluation/levels.csv"
 PACKS = ROOT / "Content/LevelPacks"
 OUTPUT = ROOT / "Artifacts/DifficultyEvaluation/lemmini-classic-bounds.json"
+SOURCE_FAMILIES = ROOT / "Artifacts/DifficultyEvaluation/source-engine-families.json"
 CLASSIC_MAXIMUM_Y = 163
 OBJECT = re.compile(r"^object_\d+\s*=\s*(\d+)\s*,\s*(-?\d+)\s*,\s*(-?\d+)", re.M)
 
 
 def main() -> None:
+    source_families = json.loads(SOURCE_FAMILIES.read_text())
+    exceptions = source_families["classicRecordExceptionsInLemminiTaggedPacks"]
+    binary_pack_ids = {f"fan:lldb-{pack_id}" for pack_id in exceptions["binaryIniPackIDs"]}
+    binary_level_ids = {
+        (pack_id, level_id)
+        for pack_id, level_ids in exceptions["binaryLvlMembers"].items()
+        for level_id in level_ids
+    }
     with LEVELS.open(newline="") as source:
         rows = [row for row in csv.DictReader(source)
-                if row["source_engine"] == "Lemmini" and row["level"].lower().endswith(".ini#-1")]
+                if row["source_engine"] == "Lemmini"
+                and row["level"].lower().endswith(".ini#-1")
+                and row["pack"] not in binary_pack_ids
+                and (row["pack"], row["level"]) not in binary_level_ids]
 
     pack_paths = {}
     findings = []
@@ -63,9 +75,10 @@ def main() -> None:
         counts["verifiedWins"] += finding["verifiedWin"]
 
     result = {
-        "method": "Exact bundled INI object placement Y; object IDs 0 and 1 are the Classic exit and entrance slots. This flags a geometry mismatch, not an impossibility proof or source parity check.",
+        "method": "Exact bundled text INI object placement Y; binary Classic records in Lemmini-tagged packs are excluded. Object IDs 0 and 1 are the Classic exit and entrance slots. This flags a geometry mismatch, not an impossibility proof or source parity check.",
         "classicMaximumY": CLASSIC_MAXIMUM_Y,
         "lemminiINILevels": len(rows),
+        "sourceFamiliesSHA256": hashlib.sha256(SOURCE_FAMILIES.read_bytes()).hexdigest(),
         "bundledArchives": {
             pack: {"file": path.name, "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
             for pack, path in sorted(pack_paths.items())

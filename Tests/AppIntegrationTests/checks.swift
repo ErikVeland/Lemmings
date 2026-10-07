@@ -5818,6 +5818,9 @@ Task { @MainActor in
     #elseif L3_STORY_TESTS
     try testL3OpeningStory()
     print("Lemmings 3 opening story tests passed.")
+    #elseif L3_RECOVERY_TESTS
+    try testL3BundledRecovery()
+    print("Lemmings 3 bundled recovery tests passed.")
     #elseif TRANSPORT_TESTS
     try subject.testTimelineToolbar()
     try subject.testPrecisionZoomWallet()
@@ -6122,6 +6125,76 @@ extension AppDelegate {
   }
 }
 
+@MainActor private func testL3BundledRecovery() throws {
+  let root = try BundledGameResources.lemmings3()
+  let fresh = try Lemmings3PlayWindow(root: root,
+    selection: .init(tribe: .classic, level: 0), recordsCampaignProgress: true)
+  var freshClosed = false
+  defer { if !freshClosed { fresh.stop(); fresh.close() } }
+  fresh.testRecoveryAdvance(ticks: 120)
+  try check(fresh.testRecoveryAssignBlocker(to: 0), "L3 recovery fixture did not accept the blocker")
+  fresh.testRecoveryAdvance(ticks: 30)
+  let before = fresh.testRecoverySnapshot
+  try check(before.game.tick == 150 && !before.game.isComplete && before.inputs == 1,
+    "L3 recovery fixture did not reach the expected live attempt")
+  fresh.saveCheckpoint(immediately: true)
+  fresh.stop(); fresh.close(); freshClosed = true
+
+  let store = RunRecoveryStore()
+  guard let checkpoint = try store.latest(profileID: ArcadeStore.shared.playingProfileID,
+    hotSeatID: ArcadeStore.shared.hotSeatID) else {
+    throw IntegrationFailure(message: "Bundled L3 run did not save a disk checkpoint")
+  }
+  let stateHash = L3RunRecovery.stateHash(before.game)
+  try check(checkpoint.dataSetID == "lemmings3" && checkpoint.engine == RunRecovery.bundledEngine
+    && !checkpoint.engine.isEmpty && checkpoint.sourcePath == root.path
+    && checkpoint.runID == before.runID && checkpoint.tick == 150
+    && checkpoint.stateHash == stateHash && checkpoint.selectedSkill == 1
+    && checkpoint.l3?.inputs.count == 1,
+    "Bundled L3 checkpoint lost its source, input, selected action or run identity")
+  let checkpointURL = store.directory.appendingPathComponent(checkpoint.runID.uuidString + ".json")
+  let originalBytes = try Data(contentsOf: checkpointURL)
+  let encoded = try JSONEncoder().encode(checkpoint)
+  func changed(_ field: String, to value: String) throws -> RunRecovery {
+    var object = try JSONSerialization.jsonObject(with: encoded) as! [String: Any]
+    object[field] = value
+    return try JSONDecoder().decode(RunRecovery.self, from: JSONSerialization.data(withJSONObject: object))
+  }
+  do {
+    _ = try Lemmings3PlayWindow(root: root, recovery: changed("levelFingerprint", to: "different-level"))
+    throw IntegrationFailure(message: "L3 recovery accepted different level data")
+  } catch RunRecoveryError.differentGame {}
+  do {
+    _ = try Lemmings3PlayWindow(root: root, recovery: changed("stateHash", to: "different-state"))
+    throw IntegrationFailure(message: "L3 recovery accepted a different replay state")
+  } catch RunRecoveryError.invalid {}
+  try check(try Data(contentsOf: checkpointURL) == originalBytes,
+    "Rejected L3 recovery changed the saved checkpoint bytes")
+
+  var expected = before.game
+  for _ in 0..<40 { expected.step() }
+  let restored = try Lemmings3PlayWindow(root: root, recovery: checkpoint,
+    recordsCampaignProgress: true)
+  defer { restored.stop(); restored.close() }
+  let resumed = restored.testRecoverySnapshot
+  try check(resumed.paused && resumed.runID == before.runID && resumed.inputs == 1
+    && resumed.selected == 1 && resumed.game.tick == 150
+    && L3RunRecovery.stateHash(resumed.game) == stateHash,
+    "Bundled L3 recovery did not restore the exact paused attempt")
+  restored.testRecoveryAdvance(ticks: 40)
+  let continued = restored.testRecoverySnapshot
+  try check(continued.game.tick == 190
+    && L3RunRecovery.stateHash(continued.game) == L3RunRecovery.stateHash(expected),
+    "Bundled L3 run diverged after recovery")
+  restored.saveCheckpoint(immediately: true)
+  let continuedCheckpoint = try store.latest(profileID: ArcadeStore.shared.playingProfileID,
+    hotSeatID: ArcadeStore.shared.hotSeatID)
+  try check(continuedCheckpoint?.runID == before.runID && continuedCheckpoint?.tick == 190
+    && continuedCheckpoint?.stateHash == L3RunRecovery.stateHash(expected),
+    "Continued L3 run did not retain its checkpoint identity")
+  print("PASS bundled L3 disk checkpoint, source guard, paused input replay and 40-tick continuation")
+}
+
 @MainActor private final class OriginalMovieAudioProbe: OriginalMovieAudio {
   var playCount = 0
   var pauseCount = 0
@@ -6160,7 +6233,8 @@ extension AppDelegate {
   host.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 1120, height: 720))
   let priorWindow = GameScreen.shared.gameWindow
   defer { GameScreen.shared.dismissAll(); GameScreen.shared.gameWindow = priorWindow }
-  let url = URL(fileURLWithPath: "Sources/Ports/LEM3CD/MOVIE/INTRO.FLI")
+  let source = try BundledGameResources.lemmings3()
+  let url = source.appendingPathComponent("MOVIE/INTRO.FLI")
   let audio = OriginalMovieAudioProbe()
   let opening = try OriginalMoviePlayer(url: url, soundtrack: audio, returnsToGameWhenFinished: true)
   var handovers = 0
@@ -6194,7 +6268,6 @@ extension AppDelegate {
   try check(skips == 1 && !GameScreen.shared.isPresented && skipAudio.stopCount > 0,
     "Skipped L3 introduction did not return to the game")
 
-  let source = URL(fileURLWithPath: "Sources/Ports/LEM3CD")
   let isolated = output.appendingPathComponent("missing-media-root")
   try? FileManager.default.removeItem(at: isolated)
   try FileManager.default.createDirectory(at: isolated, withIntermediateDirectories: true)
