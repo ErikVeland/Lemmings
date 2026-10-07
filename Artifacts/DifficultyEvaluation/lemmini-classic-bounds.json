@@ -1,7 +1,8 @@
 {
-  "method": "Exact bundled INI object placement Y; object IDs 0 and 1 are the Classic exit and entrance slots. This flags a geometry mismatch, not an impossibility proof or source parity check.",
+  "method": "Exact bundled text INI object placement Y; binary Classic records in Lemmini-tagged packs are excluded. Object IDs 0 and 1 are the Classic exit and entrance slots. This flags a geometry mismatch, not an impossibility proof or source parity check.",
   "classicMaximumY": 163,
-  "lemminiINILevels": 292,
+  "lemminiINILevels": 272,
+  "sourceFamiliesSHA256": "32544dba82f6d1b431e0e0854a4dce976bb717129d55ad4de9a438cb22b47227",
   "bundledArchives": {
     "fan:lldb-200": {
       "file": "0200-Gronklems-4.zip",
@@ -70,10 +71,6 @@
     "fan:lldb-415": {
       "file": "0415-Blizzard-of-Lemm.zip",
       "sha256": "a1107ad848d4c68d1b127efe8ca3989906414b7acc5d79be4cbb52bf61a7d7ec"
-    },
-    "fan:lldb-416": {
-      "file": "0416-grams88.zip",
-      "sha256": "b33f3e29a9f703ed3959e189f2146cf378922649a790e30316f4b82969c794e6"
     },
     "fan:lldb-466": {
       "file": "0466-GrentLems.zip",

@@ -3149,7 +3149,7 @@ Classic fan,fan:lldb-415,levels/Blizzlem/309.ini#-1,309.ini,,low,,no verified wi
 Classic fan,fan:lldb-415,levels/Blizzlem/310.ini#-1,310.ini,,low,,no verified win,not independently checked,bounded search or metadata only,,Lemmini
 Classic fan,fan:lldb-415,levels/Blizzlem/311.ini#-1,311.ini,,low,,no verified win,not independently checked,bounded search or metadata only,,Lemmini
 Classic fan,fan:lldb-415,levels/Blizzlem/312.ini#-1,312.ini,,low,,no verified win,not independently checked,bounded search or metadata only,,Lemmini
-Classic fan,fan:lldb-415,levels/Blizzlem/313.ini#-1,313.ini,,low,,no verified win,not independently checked,bounded search or metadata only,,Lemmini
+Classic fan,fan:lldb-415,levels/Blizzlem/313.ini#-1,313.ini,,low,,no verified win,not independently checked,native obstruction traced,Only exit trigger x=3012–3015 and y=208–211 is outside exact native playable bounds x≤1647 and y≤163,Lemmini
 Classic fan,fan:lldb-415,levels/Blizzlem/314.ini#-1,314.ini,,low,,no verified win,not independently checked,bounded search or metadata only,,Lemmini
 Classic fan,fan:lldb-415,levels/Blizzlem/315.ini#-1,315.ini,,low,,no verified win,not independently checked,bounded search or metadata only,,Lemmini
 Classic fan,fan:lldb-415,levels/Blizzlem/316.ini#-1,316.ini,,low,,no verified win,not independently checked,bounded search or metadata only,,Lemmini
