@@ -1,0 +1,104 @@
+{
+  "expected" : {
+    "lost" : 2,
+    "reserves" : 0,
+    "saved" : 1,
+    "stateHash" : "f24cacdcf73765dd0902b6f6ff3f5356eb012a2457e6770f4fe5d8287b31531e",
+    "ticks" : 6210
+  },
+  "initialStateHash" : "6b0d0f181ef7a3e95c634a74adaf75b16c9f5984e91812083a38143184d50450",
+  "inputs" : [
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 2,
+      "tick" : 3049
+    },
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 2,
+      "tick" : 3050
+    },
+    {
+      "action" : "use",
+      "direction" : "left",
+      "lemming" : 2,
+      "tick" : 3051
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 2,
+      "tick" : 3052
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 2,
+      "tick" : 3064
+    },
+    {
+      "action" : "use",
+      "direction" : "upLeft",
+      "lemming" : 2,
+      "tick" : 3076
+    },
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 2,
+      "tick" : 3077
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 2,
+      "tick" : 3078
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 2,
+      "tick" : 3083
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 0,
+      "tick" : 3089
+    },
+    {
+      "action" : "use",
+      "direction" : "upLeft",
+      "lemming" : 2,
+      "tick" : 3095
+    },
+    {
+      "action" : "use",
+      "direction" : "upLeft",
+      "lemming" : 2,
+      "tick" : 3096
+    },
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 2,
+      "tick" : 3097
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 2,
+      "tick" : 3098
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 0,
+      "tick" : 3106
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 0,
+      "tick" : 3123
+    }
+  ],
+  "level" : 223,
+  "levelSHA256" : "ab758a872d7344ad21ca4a76a619dfe4dfbe231b7024a020926d18dd2f0bfdc0",
+  "population" : 1,
+  "version" : 1
+}

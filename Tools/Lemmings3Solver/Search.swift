@@ -3,7 +3,7 @@ import NxlvKit
 
 /// Set once by `--fewer-inputs-first`, before any search starts: rank routes with fewer inputs
 /// before shorter crowd distance. This keeps a one-action line, such as a single dig, in the beam
-/// until its effect shows. It found every Lemmings 3 route in the first full run.
+/// until its effect shows.
 nonisolated(unsafe) var fewerInputsFirst = false
 
 /// A solver candidate: a runtime snapshot and the recorded input that produced it.
@@ -253,11 +253,18 @@ struct L3Score: Comparable, Sendable {
     init(_ candidate: L3Candidate, field: L3DistanceField) {
         let game = candidate.game
         let active = game.lemmings.filter(\.active).reduce(0) { $0 + field.distance(x: $1.x, y: $1.y) }
-        let entrance = field.distance(x: game.configuration.entrance.x, y: game.configuration.entrance.y)
+        let entrances = [game.configuration.entrance] + game.configuration.additionalEntrances
+        let hatchDistances = entrances.map { field.distance(x: $0.x, y: $0.y) }
+        let pending = game.pendingReleases
+        let completeCycles = pending / hatchDistances.count
+        let firstHatch = game.released % hatchDistances.count
+        let remainingHatches = (0..<(pending % hatchDistances.count)).reduce(0) { sum, index in
+            sum + hatchDistances[(firstHatch + index) % hatchDistances.count]
+        }
         saved = game.saved
         // Walker can release a blocker, so it still has a chance to reach an exit.
         remaining = game.configuration.total - game.lost
-        distance = active + game.reserve * entrance
+        distance = active + completeCycles * hatchDistances.reduce(0, +) + remainingHatches
         inputs = candidate.inputs.count
         fingerprint = candidate.fingerprint
     }

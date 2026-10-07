@@ -14,13 +14,21 @@ public struct Lemmings3Runtime: Sendable {
             switch sourceIdentifier {
             case 5003: self = .hadoken
             case 5006: self = .shimmy
+            case 5007: self = .clock
+            case 5009: self = .grenade
             default:
                 guard let tool = Self(rawValue: sourceIdentifier) else { return nil }
                 self = tool
             }
         }
         public var sourceIdentifier: Int {
-            switch self { case .hadoken: 5003; case .shimmy: 5006; default: rawValue }
+            switch self {
+            case .hadoken: 5003
+            case .shimmy: 5006
+            case .grenade: 5009
+            case .clock: 5007
+            default: rawValue
+            }
         }
         public var initialQuantity: Int { self == .bricks || self == .spade || self == .shimmy || self == .sucker ? 8 : (self == .grenade ? 4 : 1) }
         public var label: String { switch self { case .bricks: "B"; case .bomb: "BO"; case .spade: "D"; case .shimmy: "SH"; case .sucker: "CL"; case .umbrella: "U"; case .hadoken: "H"; case .grenade: "G"; case .swimmer: "S"; case .clock: "C" } }
@@ -157,6 +165,7 @@ public struct Lemmings3Runtime: Sendable {
         return trap.startFrame + max(0, tick - start - trap.cyclePause) / (trap.frameDelay + 1)
     }
     public var reserve: Int { configuration.total - released }
+    public var pendingReleases: Int { max(0, releaseTarget - released) }
     public var survivors: Int { saved + reserve }
     private var releaseTarget: Int {
         min(configuration.total, 10 + lemmings.filter { $0.id >= configuration.extras.count && $0.state == .dead }.count)
@@ -669,8 +678,14 @@ public struct Lemmings3Runtime: Sendable {
                         let px = nx + lem.direction * 8, py = lem.y - 14 + 2 * offset
                         return inBounds(px, py) && attributes[py * configuration.width + px] & 0x0040 != 0
                     }.count
+                    let shortStairRise = lem.direction > 0 && projectedClassCount == 1 &&
+                        inBounds(nx + 40, lem.y + 8) && inBounds(nx + 40, lem.y - 8) &&
+                        isSolid(nx - 16, lem.y + 8) && !isSolid(nx - 16, lem.y + 7) &&
+                        isSolid(nx - 8, lem.y) && !isSolid(nx - 8, lem.y - 1) &&
+                        isSolid(nx + 32, lem.y - 8) && !isSolid(nx + 40, lem.y + 8) &&
+                        configuration.attributes[(lem.y - 8) * configuration.width + nx + 40] & 0x0020 == 0
                     let classRise = (nx & 7) == (lem.direction > 0 ? 0 : 7) && contactTag == 0x0060 &&
-                        projectedClassCount >= (lem.direction > 0 ? 4 : 1)
+                        (projectedClassCount >= (lem.direction > 0 ? 4 : 1) || shortStairRise)
                     let sourceBrickRise = lem.direction < 0 && (nx & 7) == 7 &&
                         contactTag == 0x0060 &&
                         inBounds(nx - 8, lem.y - 8) &&
@@ -681,10 +696,15 @@ public struct Lemmings3Runtime: Sendable {
                     let continuousEightRise = lem.direction > 0 && (nx & 7) == 0 && contactTag == 0x0020 &&
                         isSolid(nx + 7, lem.y - 8) && !isSolid(nx + 7, lem.y - 9) &&
                         (8..<16).allSatisfy { isSolid(nx + $0, lem.y) && isSolid(nx + $0, lem.y - 1) }
+                    // Egyptian 27's original hatch route climbs adjacent eight-pixel source stairs.
+                    let followingEightRise = configuration.sourceLevelReference == 227 &&
+                        configuration.width == 496 && configuration.height == 160 && continuousEightRise &&
+                        isSolid(nx + 8, lem.y - 16) && !isSolid(nx + 8, lem.y - 17) &&
+                        isSolid(nx + 15, lem.y - 16) && !isSolid(nx + 15, lem.y - 17)
                     let maxRise = (nx & 7) == contactPhase || classRise || alignedBlockRise || continuousEightRise || builtBrickRise || sourceBrickRise ? 8 : 4
                     if let rise = (1...maxRise).first(where: { rise in
                         isSolid(nx, lem.y - rise) && !isSolid(nx, lem.y - rise - 1) &&
-                        (rise <= 4 || classRise || sourceBrickRise || (0..<((continuousEightRise || builtBrickRise) && rise == 8 ? 3 : 4)).allSatisfy { offset in
+                        (rise <= 4 || classRise || sourceBrickRise || (followingEightRise && rise == 8) || (0..<((continuousEightRise || builtBrickRise) && rise == 8 ? 3 : 4)).allSatisfy { offset in
                             let px = nx + lem.direction * 8, py = lem.y - 14 + 2 * offset
                             if !isSolid(px, py) { return true }
                             let projected = py * configuration.width + px

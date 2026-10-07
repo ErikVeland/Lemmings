@@ -8,7 +8,9 @@ and a winning outcome pass two strict replays on the corrected source.
 
 - `010.json`: first rejected input 42, Walker at tick 251.
 - `021.json`: first rejected input 1, Jumper at tick 1021.
-- `029.json`: first rejected input 14, Brick up-left at tick 239.
+- `029.json`: first rejected input 14, Brick up-left at tick 239. A separate,
+  lower-retention standalone fallback now passes strict replay in `Fixtures`;
+  this older route remains a seed for improving survivor retention.
 - `107.json`: first rejected input 1, Brick up-left at tick 1867.
 
 The Egyptian 214 and 217 winning fixtures were replaced by lower-retention
