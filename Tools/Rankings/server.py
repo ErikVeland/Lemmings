@@ -20,7 +20,7 @@ BOARDS = {
     "mostSaved": ("saved DESC, skills ASC, milliseconds ASC", "1"),
     "leastSkills": ("skills ASC, saved DESC, milliseconds ASC", "won=1"),
     "fastestClear": ("milliseconds ASC, saved DESC, skills ASC", "won=1 AND milliseconds>0"),
-    "fastestAllSaved": ("milliseconds ASC, skills ASC", "won=1 AND saved=population AND milliseconds>0"),
+    "fastestAllSaved": ("milliseconds ASC, saved DESC, skills ASC", "won=1 AND saved=population AND milliseconds>0"),
 }
 CAREER = {"stars": "SUM(best)", "clears": "COUNT(*)", "perfect": "SUM(best=3)"}
 
@@ -91,6 +91,11 @@ class Store:
               CREATE INDEX IF NOT EXISTS board_lookup ON runs(board_key,assisted,player);
               CREATE INDEX IF NOT EXISTS player_runs ON runs(player);
             """)
+            # A new shipped solution can change the rescue target without changing a run.
+            for key, target in self.targets.items():
+                db.execute("""UPDATE runs SET stars=CASE WHEN won=0 THEN 0 WHEN saved>=? THEN 3
+                           WHEN saved>=MIN(json_extract(conditions,'$.rescueRequirement')+1,?) THEN 2 ELSE 1 END
+                           WHERE board_key=?""", (target, target, key))
         os.chmod(self.root / "rankings.sqlite3", 0o600)
 
     def db(self):

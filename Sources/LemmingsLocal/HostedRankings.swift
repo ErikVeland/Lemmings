@@ -102,13 +102,26 @@ enum HostedCategory: String, CaseIterable {
         var winners: [UUID: ArcadeRun] = [:]
         for group in Dictionary(grouping: own, by: \.comparisonID).values {
             for category: TrolleyBoard in [.mostSaved, .leastSkills, .fastestClear, .fastestAllSaved] {
-                if let best = group.filter({ TrolleyLeaderboards.eligible($0, board: category, maximum: $0.maximum) })
-                    .sorted(by: { TrolleyLeaderboards.precedes($0, $1, board: category) }).first {
+                let eligible = group.filter { TrolleyLeaderboards.eligible($0, board: category, maximum: $0.maximum) }
+                if let best = eligible.sorted(by: { hostedPrecedes($0.run, $1.run, category: category) }).first {
                     winners[best.id] = best.run
                 }
             }
+            // Career stars need the best successful rescue even if a failed run saved more.
+            if let best = group.filter({ $0.run.qualifies }).sorted(by: {
+                hostedPrecedes($0.run, $1.run, category: .mostSaved)
+            }).first { winners[best.id] = best.run }
         }
         return winners.values.sorted { $0.date < $1.date }
+    }
+    private static func hostedPrecedes(_ a: ArcadeRun, _ b: ArcadeRun, category: TrolleyBoard) -> Bool {
+        if [.fastestClear, .fastestAllSaved].contains(category), a.seconds != b.seconds { return a.seconds < b.seconds }
+        if category == .leastSkills, a.skillCount != b.skillCount { return a.skillCount < b.skillCount }
+        if a.saved != b.saved { return a.saved > b.saved }
+        if a.skillCount != b.skillCount { return a.skillCount < b.skillCount }
+        if a.seconds != b.seconds { return a.seconds < b.seconds }
+        if a.date != b.date { return a.date < b.date }
+        return a.id.uuidString < b.id.uuidString
     }
     private func credential(_ profile: String) throws -> String {
         if let credentials { return try credentials(profile) }
