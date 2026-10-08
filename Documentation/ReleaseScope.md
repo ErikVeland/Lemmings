@@ -1,12 +1,12 @@
 # Release scope
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-The current public macOS release is 1.8 build 64. The
-[distribution record](ReleaseReadiness/1.8Build64Distribution.md) records the
-notarised downloads, signed feed and validation limits. This release polishes
-pixel rendering and audio and corrects L3 Brick pickups. L2/L3 remain Preview,
-with completion planned for 1.9. NeoLemmix remains Beta.
-Updated 5 October 2026.
+The current public macOS release is 1.8.3 build 72. The
+[distribution record](ReleaseReadiness/1.8.3Build72Distribution.md) records the
+notarised downloads, signed feed and validation limits. This release adds optional
+hosted worldwide records, replay sharing, a refined 294-level journey and checked
+rescue targets. L2/L3 remain Preview, with completion planned for 1.9.
+NeoLemmix remains Beta. Updated 8 October 2026.
 Automated checks support the recorded routes;
 remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)
 and the current [Classic validation](ReleaseReadiness/ClassicValidation-current.md).

@@ -1,0 +1,67 @@
+/Users/veland/Lemmings/Sources/LemmingsLocal/ReleaseWelcome.swift:47:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+45 |         scroll.hasHorizontalScroller = false
+46 |         scroll.drawsBackground = false
+47 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+48 |         scroll.scrollerStyle = .overlay
+49 |         scroll.setAccessibilityLabel("Release notes")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+/Users/veland/Lemmings/.build/release-1.8.3/integration/main.swift:5839:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 5837 |       openPanel.canChooseFiles = true
+ 5838 |       openPanel.canChooseDirectories = false
+ 5839 |       openPanel.allowedFileTypes = ["nxlv"]
+      |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 5840 |       openPanel.message = "Choose a NeoLemmix level file."
+ 5841 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/.build/release-1.8.3/integration/main.swift:7066:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 7064 |       openPanel.canChooseFiles = true
+ 7065 |       openPanel.canChooseDirectories = false
+ 7066 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+      |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 7067 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+ 7068 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/.build/release-1.8.3/integration/main.swift:7534:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+ 7532 |     keyboard.controllerRewindHeld = { [weak self] held in
+ 7533 |       guard let self else { return }
+ 7534 |       if held { self.beginContinuousRewind() }
+      |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+ 7535 |       else if self.rewindHeld { self.endContinuousRewind() }
+ 7536 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+UI test windows: offscreen; audio: muted
+PASS repeated Solo/Hot Seat mode, campaign, save namespace and library round trips
+PASS mouse Start new Hot Seat, saved session retention and confirmed profile switch
+PASS frozen Classic turn identity, confirmed player changes, cleared result actions and direct profile solo transition
+PASS green handover identity, mouse retry of the previous level as UVA, rightmost begin action, shared progress and solo boundaries
+PASS disk checkpoint, rewind/undo journal, exact paused restoration, continuation, backups, corruption, version and stale-writer rejection
+PASS legacy text steel checkpoint, retry upgrade and exact current checkpoint restoration
+PASS legacy graphics checkpoint, retry upgrade and exact current checkpoint restoration
+PASS legacy Holiday graphics checkpoint, retry upgrade and exact current checkpoint restoration
+PASS pruned fan queue retains paused state and ownership and saves only surviving entries
+PASS Classic fan checkpoint, shuffled queue, exact paused restore, identity, continuation and missing-pack rejection
+PASS Neo checkpoint round trip, assignment, queued rate/nuke, undo, counters, continuation, changed-content rejection and transactional rejection
+PASS saved Solo/Hot Seat choices, checkpoint, history, targets and Ready across Classic, L2 and L3
+PASS active sequences guard navigation and pending starts can be cancelled
+PASS Snuggle completion loads the unopened next fan pack in Solo and Hot Seat
+PASS all 294 journey lessons resolve and can start
+PASS community placement validation and saved Solo/Hot Seat migration
+PASS new solo and Hot Seat journeys start at the first curated lesson despite prior player progress; handover remains paused
+PASS Floating Down! uses Holiday snow artwork, retains collision through graphics changes; the current second lesson shows JOURNEY 2
+PASS journey hub has no fan-pack scan; loading status renders, preserves input and ignores stale completions (hub 13 ms)
+PASS completed player route persistence, exact live timing, deduplication and rejection of invalid wins
+PASS timeline controls: active, unavailable, hit regions and gap capture
+PASS checked hints, confirmed winning ghosts, exact before/after-tick playback, unchanged live runs, flat/CRT and fallback coaching
+PASS L3 opening and ending policies, controls, handovers and optional-media failure paths
+PASS super speed controls: flat/CRT, pause, resume, 1x, menus, results and independent explosion settings
+PASS release notes stay clipped and scrollable at three sizes; Continue remains visible and usable
+PASS solution replay sounds, muted settings, isolated voices, silent rewind/pause and single-step
+PASS Classic fan packs continue from a middle selection
+PASS Neo pack Return/Space continuation, last-level return and Escape to library
+PASS NeoLemmix packs keep manifest order, rank groups, stable IDs and source validation
+PASS Escape returns directly to the main menu and saves the active run
+1.8.x consolidation integration tests passed.

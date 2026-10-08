@@ -3,6 +3,32 @@
     <channel>
         <title>Ultimate Lemmings</title>
         <item>
+            <title>1.8.3</title>
+            <pubDate>Thu, 08 Oct 2026 18:46:43 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>72</sparkle:version>
+            <sparkle:shortVersionString>1.8.3</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>Changes since the public 1.8.1 release, including the local 1.8.2 test builds.</p>
+<h3>Worldwide and local records</h3>
+<p>Worldwide speed, rescue and career leaderboards now work without Game Center. Sharing is optional for each local player, under their initials. Game Center remains a separate option in supported builds. Watch available recorded runs from the hosted boards, or remove your shared records and movies.</p>
+<p>Fastest clear and Fastest 100% have separate leaderboards. Rewind-assisted runs are kept separate. The result screen shows your best clear time, and local record movies are retained for playback. Hosted scores are community submissions, not independently verified solutions. Movie uploads have storage and size limits.</p>
+<h3>A better learning journey</h3>
+<p>The 294-level journey includes the Macintosh level Going their separate ways and All the 6s in their intended positions. Cellbash moves earlier. Covox and Something wrong are replaced with more suitable lessons. Fan levels in the default journey are bundled for offline play. Existing journey history and player ownership carry over.</p>
+<p>Continuation into unopened fan packs, saved-run resume, pack-to-pack navigation, tall NeoLemmix level scrolling and Escape behaviour have been corrected.</p>
+<h3>Rescue goals and anonymous totals</h3>
+<p>Checked completion solutions provide best-known rescue targets for three-star awards and philosophy assessments. Levels with a checked winning solution no longer leave the final star unknown. Best-known records remain distinct from proven maximum rescues.</p>
+<p>Optional anonymous rescue totals use the hosted aggregate counter. These totals remain separate from player identities, public scores and rescue proofs.</p>
+<h3>Sound and presentation</h3>
+<p>Solution replays include sound effects. Rewind effects play backwards with a limited mix to prevent repeated rewinds becoming excessively loud. Beast of a level has a better-balanced Modern mix. Hot Seat handovers and level changes avoid brief unwanted tracks and use smoother music transitions.</p>
+<p>The Macintosh snowman artwork now matches its collision shape. What's New stays within a scrollable window. Additional L3 level-specific creature corrections are included.</p>
+<h3>Compatibility</h3>
+<p>Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. NeoLemmix remains Beta. Lemmings 2 and Lemmings 3 remain Preview. The slim download includes essential music and offers optional soundtrack libraries. Automatic updates retain the full soundtrack bundle.</p>
+<p class="meta">Build: 72<br>Release commit: 0e49151f13fee037aa4cbc8050086a758cdbbb40<br>Release base: v1.8.1</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.3/UltimateLemmings-1.8.3-build72.zip" length="1944623460" type="application/octet-stream" sparkle:edSignature="G89mKt64zpK9v+RZ0R2dsbIYDHf49pO4d07u7dahTg5tLWd6b4tHXCH7iGwe0ZCsWQtrtVbOJ8qgLkNvGernBw=="/>
+        </item>
+        <item>
             <title>1.8.1</title>
             <pubDate>Tue, 06 Oct 2026 14:52:32 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
