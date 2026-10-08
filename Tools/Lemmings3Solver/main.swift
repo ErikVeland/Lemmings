@@ -104,20 +104,21 @@ for tribe in Lemmings3ClassicCampaign.Tribe.allCases {
         }
         // The depth follows the level: decision points on a run without input, plus 40. A search that
         // ends before its budget runs again with a wider beam, as the Lemmings 2 solver does.
+        let started = Date()
+        let deadline = started.addingTimeInterval(limits.budgetSeconds)
         var passive = seeded ?? L3Candidate(game: base, detector: L3Detector(cell: limits.cell, refire: limits.refire,
                                                                            toolSiteCell: limits.toolSiteCell))
         var points = 0
-        while l3Advance(&passive, limits: limits) { points += 1 }
+        while l3Advance(&passive, limits: limits, deadline: deadline) { points += 1 }
         var run = limits
         if option("--depth") == nil { run.maxDepth = points + 40 }
-        let started = Date()
         var report = L3Report()
         var rounds = 0
-        while true {
+        while Date() < deadline {
             rounds += 1
-            run.budgetSeconds = limits.budgetSeconds - Date().timeIntervalSince(started)
+            run.budgetSeconds = deadline.timeIntervalSinceNow
             guard run.budgetSeconds > 0 else { break }
-            let attempt = l3Search(from: base, limits: run, seed: seeded)
+            let attempt = l3Search(from: base, limits: run, seed: seeded, deadline: deadline)
             report.expanded += attempt.expanded
             if let found = attempt.best, report.best.map({ $0.game.saved < found.game.saved || ($0.game.saved == found.game.saved && $0.game.survivors < found.game.survivors) }) ?? true { report.best = found }
             if report.bestPartial == nil || (attempt.bestPartial?.game.saved ?? 0) > (report.bestPartial?.game.saved ?? 0) { report.bestPartial = attempt.bestPartial }

@@ -110,6 +110,7 @@ import NxlvKit
     private var menuLevel = 0
     private var pendingTool: Int?
     private var selected = 0
+    private var manualCarrierID: Int?
     private var paused = true
     private var userPausedMusic = false
     private var assignmentFocus = AssignmentFocus()
@@ -283,6 +284,7 @@ import NxlvKit
         try canvas.load(scene: scene, style: style, permanent: permanent, temporary: temporary, sprites: sprites, root: dataRoot, terrainStyle: level.style)
         canvas.resetCamera(level)
         canvas.onClick = { [weak self] x, y in self?.assign(x: x, y: y) }
+        canvas.onCarrierClick = { [weak self] x, y in self?.selectCarrier(x: x, y: y) }
         canvas.onKey = { [weak self] key in
             guard let self else { return }
             if self.game.isComplete, key.lowercased() == "v" { self.runMovie.review(); return }
@@ -935,7 +937,7 @@ import NxlvKit
     @objc private func restart() {
         saveCheckpoint(immediately: true, waitForDisk: false)
         speedControl.newLevel()
-        canvas.menuRows = nil; pendingTool = nil; canvas.directionPoint = nil; initial = freshInitial; game = initial; beginReplay(); recorded = false; playsEndingAfterThisResult = false; canvas.startCountdown.arm(); paused = true; accumulator = 0; canvas.resetCamera(campaign.levels[campaign.index]); message = "Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera."; refresh() }
+        canvas.menuRows = nil; pendingTool = nil; manualCarrierID = nil; canvas.directionPoint = nil; initial = freshInitial; game = initial; beginReplay(); recorded = false; playsEndingAfterThisResult = false; canvas.startCountdown.arm(); paused = true; accumulator = 0; canvas.resetCamera(campaign.levels[campaign.index]); message = "Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera."; refresh() }
     private func save() {
         guard recordsCampaignProgress else { return }
         if let data = try? JSONEncoder().encode(campaign.progress) {
@@ -1004,7 +1006,8 @@ import NxlvKit
     private func assign(x: Int, y: Int) {
         guard let picked = game.target(x: x, y: y, selected: selected,
             favorApproaching: audioSettings.favorApproachingLemmings,
-            favorBombBlockers: audioSettings.favorBombBlockers, favorBuilders: audioSettings.favorBuilders) else { return }
+            favorBombBlockers: audioSettings.favorBombBlockers, favorBuilders: audioSettings.favorBuilders,
+            manualCarrierID: manualCarrierID) else { return }
         if selected == 3 && (picked.tool == .bricks || picked.tool == .spade) {
             pendingTool = picked.id
             canvas.directionPoint = CGPoint(x: picked.x, y: picked.y)
@@ -1012,6 +1015,11 @@ import NxlvKit
             return
         }
         applyAction(to: picked.id, direction: .right)
+    }
+    private func selectCarrier(x: Int, y: Int) {
+        manualCarrierID = game.carrier(x: x, y: y, after: manualCarrierID)?.id
+        canvas.manualCarrierID = manualCarrierID
+        refresh()
     }
     private func applyAction(to id: Int, direction: Lemmings3Runtime.Direction) {
         guard let lem = game.lemmings.first(where: { $0.id == id && $0.active }) else { return }
@@ -1346,6 +1354,10 @@ import NxlvKit
         })
     }
     private func refresh() {
+        if let manualCarrierID,
+           !game.lemmings.contains(where: { $0.id == manualCarrierID && $0.active && $0.tool != nil }) {
+            self.manualCarrierID = nil
+        }
         let impossible = game.isComplete ? game.saved == 0 : canvas.menuRows == nil && FailureMoodDecision.isUnrecoverable(
             saved: game.saved, active: game.lemmings.filter(\.active).count,
             unreleased: game.reserve, required: 1)
@@ -1378,7 +1390,7 @@ import NxlvKit
         canAdvance = recordsCampaignProgress && game.isComplete && game.saved > 0
             && (playsEndingAfterThisResult
             || (availability.indices.contains(campaign.index + 1) && availability[campaign.index + 1] == nil))
-        canvas.selectedAction = selected; canvas.paused = paused; canvas.fast = fast
+        canvas.selectedAction = selected; canvas.manualCarrierID = manualCarrierID; canvas.paused = paused; canvas.fast = fast
         canvas.updateSkillBadge()
         let transport = rewindOriginState.map { "Rewind active, \($0.tick - game.tick) ticks back. Hold full stop scrubs forward. Escape cancels." } ?? ""
         canvas.rewindOriginTick = rewindOriginState?.tick
@@ -1481,6 +1493,7 @@ import NxlvKit
     var rewindOriginTick: Int?
     var rewindCurrentTick = 0
     var onClick: ((Int, Int) -> Void)?
+    var onCarrierClick: ((Int, Int) -> Void)?
     var onKey: ((String) -> Void)?
     private let accessibleElements = GameAccessibleElements()
     override func isAccessibilityElement() -> Bool { true }
@@ -1523,6 +1536,7 @@ import NxlvKit
     var onDirection: ((Lemmings3Runtime.Direction) -> Void)?
     var onCancelDirection: (() -> Void)?
     var selectedAction = 0
+    var manualCarrierID: Int?
     let startCountdown = FreshLevelCountdown()
     var gameplayCursorStyle: GameplayCursorStyle = .modern { didSet { needsDisplay = true } }
     var showReticleCount = false
@@ -1601,7 +1615,8 @@ import NxlvKit
         let x = (source.x - origin.x) / zoom + cameraX, y = (source.y - origin.y) / zoom + cameraY
         return game.target(x: Int(x), y: Int(y), selected: selectedAction,
             favorApproaching: favorApproachingLemmings,
-            favorBombBlockers: favorBombBlockers, favorBuilders: favorBuilders)?.id
+            favorBombBlockers: favorBombBlockers, favorBuilders: favorBuilders,
+            manualCarrierID: manualCarrierID)?.id
     }
     private var hoveredLemming: Int?
     private var tracking: NSTrackingArea?
@@ -1797,6 +1812,13 @@ import NxlvKit
         defer { if menuRows == nil { startCountdown.draw(in: playfieldRect) } }
         defer {
             assignmentHighlight.drawNotice()
+            if !GameCursor.gameplaySuppressed, menuRows == nil,
+               let id = manualCarrierID,
+               let lem = game?.lemmings.first(where: { $0.id == id && $0.active && $0.tool != nil }) {
+                let centre = precisionLens.display(CGPoint(x: origin.x + (CGFloat(lem.x) - cameraX) * zoom,
+                    y: origin.y + (CGFloat(lem.y - 6) - cameraY) * zoom))
+                LemmingSelectionGlow.draw(at: centre, scale: zoom, tint: .systemRed, animated: false)
+            }
             if lemmingSelectionStyle == .obvious, !GameCursor.gameplaySuppressed, menuRows == nil,
                let id = assignmentHighlight.target ?? pointerTarget,
                let lem = game?.lemmings.first(where: { $0.id == id && $0.active }) {
@@ -1828,7 +1850,7 @@ import NxlvKit
     }
     private func drawLemmings(_ game: Lemmings3Runtime, ghostsOnly: Bool) {
         let selectedID = !ghostsOnly && !GameCursor.gameplaySuppressed && menuRows == nil
-            ? assignmentHighlight.target ?? pointerTarget : nil
+            ? manualCarrierID ?? assignmentHighlight.target ?? pointerTarget : nil
         var selectedSprite: (pixels: CGImage, rect: CGRect)?
         for lem in game.lemmings where lem.active {
             // Animation IDs and anchors remain provisional. The bytes are native.
@@ -2001,6 +2023,15 @@ import NxlvKit
         let source = precisionLens.source(point)
         onClick?(Int((source.x - screenOrigin.x) / zoom + cameraX),
                  Int((source.y - screenOrigin.y) / zoom - 12 + cameraY))
+    }
+    override func rightMouseDown(with event: NSEvent) {
+        window?.makeFirstResponder(self)
+        guard menuRows == nil, directionPoint == nil else { return }
+        let point = convert(event.locationInWindow, from: nil)
+        guard playfieldRect.contains(point) else { return }
+        let source = precisionLens.source(point)
+        onCarrierClick?(Int((source.x - screenOrigin.x) / zoom + cameraX),
+                        Int((source.y - screenOrigin.y) / zoom - 12 + cameraY))
     }
     override func mouseUp(with event: NSEvent) { onSpeedRelease?(event.timestamp) }
     override func keyDown(with event: NSEvent) {

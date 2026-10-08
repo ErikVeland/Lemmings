@@ -388,9 +388,10 @@ struct L3Report: Sendable {
     var seconds = 0.0
 }
 
-/// Runs a candidate until its next decision point or the end of the level.
-func l3Advance(_ candidate: inout L3Candidate, limits: L3Limits) -> Bool {
+/// Runs a candidate until its next decision point, the end of the level or the search deadline.
+func l3Advance(_ candidate: inout L3Candidate, limits: L3Limits, deadline: Date? = nil) -> Bool {
     while !candidate.game.isComplete && candidate.game.tick < limits.maxTicks {
+        if let deadline, Date() >= deadline { return false }
         candidate.game.step()
         if let offered = candidate.detector.update(candidate.game) {
             candidate.decision = offered
@@ -400,9 +401,13 @@ func l3Advance(_ candidate: inout L3Candidate, limits: L3Limits) -> Bool {
     return false
 }
 
-/// A beam search over decision points. A finished winning candidate keeps its inputs as the route.
-func l3Search(from start: Lemmings3Runtime, limits: L3Limits, seed: L3Candidate? = nil) -> L3Report {
+/**
+ * Searches decision points and keeps the inputs for a finished winning candidate.
+ */
+func l3Search(from start: Lemmings3Runtime, limits: L3Limits, seed: L3Candidate? = nil,
+              deadline: Date? = nil) -> L3Report {
     let started = Date()
+    let searchDeadline = deadline ?? started.addingTimeInterval(limits.budgetSeconds)
     let field = L3DistanceField(start)
     var report = L3Report()
     func consider(_ candidate: L3Candidate) {
@@ -415,17 +420,17 @@ func l3Search(from start: Lemmings3Runtime, limits: L3Limits, seed: L3Candidate?
     }
     func finish(_ candidate: L3Candidate) -> L3Candidate {
         var tail = candidate
-        while l3Advance(&tail, limits: limits) {}
+        while Date() < searchDeadline && l3Advance(&tail, limits: limits, deadline: searchDeadline) {}
         return tail
     }
     var root = seed ?? L3Candidate(game: start, detector: L3Detector(cell: limits.cell, refire: limits.refire,
                                                                    toolSiteCell: limits.toolSiteCell))
-    if seed == nil { _ = l3Advance(&root, limits: limits) }
+    if seed == nil { _ = l3Advance(&root, limits: limits, deadline: searchDeadline) }
     root.fingerprint = l3Fingerprint(root.game)
     consider(root)
     let prefixInputCount = root.inputs.count
     var beam = root.game.isComplete ? [] : [root]
-    while !beam.isEmpty && Date().timeIntervalSince(started) < limits.budgetSeconds {
+    while !beam.isEmpty && Date() < searchDeadline {
         var next: [UInt64: L3Candidate] = [:]
         for node in beam {
             if node.depth >= limits.maxDepth { consider(finish(node)); continue }
@@ -442,7 +447,7 @@ func l3Search(from start: Lemmings3Runtime, limits: L3Limits, seed: L3Candidate?
                 child.inputs += inputs
                 child.depth += 1
                 report.expanded += 1
-                _ = l3Advance(&child, limits: limits)
+                _ = l3Advance(&child, limits: limits, deadline: searchDeadline)
                 child.fingerprint = l3Fingerprint(child.game)
                 consider(child)
                 guard !child.game.isComplete, child.game.tick < limits.maxTicks else { continue }
@@ -450,7 +455,7 @@ func l3Search(from start: Lemmings3Runtime, limits: L3Limits, seed: L3Candidate?
                    !(L3Score(existing, field: field) < L3Score(child, field: field)) { continue }
                 next[child.fingerprint] = child
             }
-            if Date().timeIntervalSince(started) >= limits.budgetSeconds { break }
+            if Date() >= searchDeadline { break }
         }
         beam = next.values.sorted { L3Score($1, field: field) < L3Score($0, field: field) }.prefix(limits.beamWidth).map { $0 }
         // Keep the line that has only waited. A useful action often scores no better than a harmful

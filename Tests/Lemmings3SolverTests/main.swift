@@ -271,6 +271,16 @@ guard stoppedAtSave,
       saveDecision.game.lemmings[1].state == .blocking else {
     fatalError("Solver did not stop at the save with a live blocker")
 }
+var expiredAdvance = L3Candidate(game: endRunBase, detector: L3Detector())
+let expiredDeadline = Date(timeIntervalSinceNow: -0.001)
+guard !l3Advance(&expiredAdvance, limits: unseededLimits, deadline: expiredDeadline),
+      expiredAdvance.game.tick == endRunBase.tick else {
+    fatalError("Solver advanced a candidate after its deadline")
+}
+let expiredSearch = l3Search(from: endRunBase, limits: unseededLimits, deadline: expiredDeadline)
+guard expiredSearch.expanded == 0 else {
+    fatalError("Solver expanded a search after its deadline")
+}
 let unseededReport = l3Search(from: endRunBase, limits: unseededLimits)
 guard let unseededWinner = unseededReport.best,
       unseededWinner.inputs.count == 1,

@@ -24,13 +24,18 @@ struct Lemmings3TargetCandidate {
 enum Lemmings3Targeting {
   static func nearest(
     among candidates: [Lemmings3TargetCandidate], x: Int, y: Int,
-    selected: Int, favorApproaching: Bool, favorBombBlockers: Bool = false, favorBuilders: Bool = false
+    selected: Int, favorApproaching: Bool, favorBombBlockers: Bool = false, favorBuilders: Bool = false,
+    manualCarrierID: Int? = nil
   ) -> Lemmings3TargetCandidate? {
-    let nearby = candidates.filter { $0.active && abs($0.x - x) <= 9 && abs($0.y - 8 - y) <= 12 }
+    let nearby = nearbyCandidates(among: candidates, x: x, y: y)
     func distance(_ c: Lemmings3TargetCandidate) -> Int { abs(c.x - x) + abs(c.y - 8 - y) }
     func nearer(_ a: Lemmings3TargetCandidate, _ b: Lemmings3TargetCandidate) -> Bool {
       let da = distance(a), db = distance(b)
       return da == db ? a.id < b.id : da < db
+    }
+    if let manualCarrierID,
+       let carrier = nearby.first(where: { $0.id == manualCarrierID && $0.tool != nil && $0.canAssignSelected }) {
+      return carrier
     }
     // L3 uses carried tools through Use, rather than separate Bomb and Build buttons.
     if selected == 3 {
@@ -66,6 +71,35 @@ enum Lemmings3Targeting {
     return approaching ?? nearest
   }
 
+  /// Selects a tool carrier for the original right-click interaction.
+  ///
+  /// A right click on a carrier selects that carrier. A right click away from
+  /// any carrier cycles active carriers by their stable actor identifier.
+  static func carrier(
+    among candidates: [Lemmings3TargetCandidate], x: Int, y: Int, after currentID: Int?
+  ) -> Lemmings3TargetCandidate? {
+    let nearby = nearbyCandidates(among: candidates, x: x, y: y).filter { $0.tool != nil }
+    if let nearest = nearby.min(by: { distance($0, x: x, y: y) < distance($1, x: x, y: y) }) {
+      return nearest
+    }
+    let carriers = candidates.filter { $0.active && $0.tool != nil }.sorted { $0.id < $1.id }
+    guard !carriers.isEmpty else { return nil }
+    guard let currentID, let index = carriers.firstIndex(where: { $0.id == currentID }) else {
+      return carriers.first
+    }
+    return carriers[(index + 1) % carriers.count]
+  }
+
+  private static func nearbyCandidates(
+    among candidates: [Lemmings3TargetCandidate], x: Int, y: Int
+  ) -> [Lemmings3TargetCandidate] {
+    candidates.filter { $0.active && abs($0.x - x) <= 9 && abs($0.y - 8 - y) <= 12 }
+  }
+
+  private static func distance(_ candidate: Lemmings3TargetCandidate, x: Int, y: Int) -> Int {
+    abs(candidate.x - x) + abs(candidate.y - 8 - y)
+  }
+
   private static func isApproaching(_ lemming: Lemmings3TargetCandidate, clickX: Int) -> Bool {
     (clickX - lemming.x) * lemming.direction >= 0
   }
@@ -78,7 +112,8 @@ enum Lemmings3Targeting {
 
 extension Lemmings3Runtime {
     func target(x: Int, y: Int, selected: Int, favorApproaching: Bool,
-                favorBombBlockers: Bool, favorBuilders: Bool) -> Lemmings3TargetCandidate? {
+                favorBombBlockers: Bool, favorBuilders: Bool,
+                manualCarrierID: Int? = nil) -> Lemmings3TargetCandidate? {
         guard Action.allCases.indices.contains(selected) else { return nil }
         let candidates = lemmings.map {
             Lemmings3TargetCandidate(id: $0.id, x: $0.x, y: $0.y, direction: $0.direction, tool: $0.tool,
@@ -86,7 +121,16 @@ extension Lemmings3Runtime {
                 canAssignSelected: canAssign(Action.allCases[selected], to: $0.id))
         }
         return Lemmings3Targeting.nearest(among: candidates, x: x, y: y, selected: selected,
-            favorApproaching: favorApproaching, favorBombBlockers: favorBombBlockers, favorBuilders: favorBuilders)
+            favorApproaching: favorApproaching, favorBombBlockers: favorBombBlockers, favorBuilders: favorBuilders,
+            manualCarrierID: manualCarrierID)
+    }
+
+    func carrier(x: Int, y: Int, after currentID: Int?) -> Lemmings3TargetCandidate? {
+        let candidates = lemmings.map {
+            Lemmings3TargetCandidate(id: $0.id, x: $0.x, y: $0.y, direction: $0.direction, tool: $0.tool,
+                isBuilding: $0.state == .building, active: $0.active)
+        }
+        return Lemmings3Targeting.carrier(among: candidates, x: x, y: y, after: currentID)
     }
 
     func canAssign(_ action: Action, to id: Int) -> Bool {
