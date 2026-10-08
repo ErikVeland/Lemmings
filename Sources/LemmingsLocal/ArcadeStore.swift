@@ -12,6 +12,8 @@ import NxlvKit
     private(set) var storageNotice: String?
     private var canWrite = true
     private var pendingReplayIDs: Set<UUID> = []
+    private var pendingSolutionTargets = Set<String>()
+    private var solutionTargets: [String: Task<Void, Never>] = [:]
     private let bundledProofs: TrolleyBundledProofs?
     private let playlistDataRemover: (String) throws -> Void
     var profilesAreWritable: Bool { canWrite }
@@ -333,7 +335,7 @@ import NxlvKit
         let result = records.record(run)
         if result != nil {
             save()
-            if storageError == nil { GameCenterScores.shared.completed(profileID: run.profileID, history: records.trolley) }
+            if storageError == nil { GameCenterScores.shared.completed(profileID: run.profileID, history: records.trolley); HostedRankings.shared.completed(profileID: run.profileID) }
         }
         return result
     }
@@ -343,6 +345,32 @@ import NxlvKit
     func previewReport(for run: ArcadeRun) -> ArcadeReport? {
         var preview = records
         return preview.record(run)
+    }
+    /// Validate bundled inputs on a separate simulation before using their rescue count.
+    @discardableResult
+    func prepareSolutionTarget(initial: ClassicDOSSimulation, conditions: TrolleyConditions,
+                               resources: URL?, buildVersion: String) -> Task<Void, Never> {
+        let key = conditions.fingerprint
+        if let task = solutionTargets[key] { return task }
+        pendingSolutionTargets.insert(key)
+        let task = Task { [weak self] in
+            defer { self?.pendingSolutionTargets.remove(key) }
+            let target = await Task.detached(priority: .utility) {
+                VerifiedSolution.load(initial: initial, from: resources)?.rescueTarget(buildVersion: buildVersion)
+            }.value
+            guard let self, let target else { return }
+            for assisted in [false, true] {
+                let current = self.records.trolley.maximum(conditions: conditions, assisted: assisted)
+                guard (target.value ?? 0) > (current.value ?? -1)
+                    || ((target.value == current.value) && !current.isRescueTarget) else { continue }
+                try? self.acceptMaximum(target, conditions: conditions, assisted: assisted)
+            }
+        }
+        solutionTargets[key] = task
+        return task
+    }
+    func solutionTargetIsPending(for conditions: TrolleyConditions) -> Bool {
+        pendingSolutionTargets.contains(conditions.fingerprint)
     }
     func beginAttempt(id: UUID, profileID: String, level: ArcadeLevel, previousID: UUID?) {
         guard let conditions = level.conditions else { return }
@@ -360,9 +388,19 @@ import NxlvKit
     }
     private func acceptBundledProof(for conditions: TrolleyConditions) {
         guard let proof = bundledProofs?.maximum(for: conditions) else { return }
-        for assisted in [false, true] where records.trolley.maximum(conditions: conditions, assisted: assisted) != proof {
+        for assisted in [false, true] {
+            let current = records.trolley.maximum(conditions: conditions, assisted: assisted)
+            guard current != proof,
+                  !current.isRescueTarget || (proof.value ?? 0) > (current.value ?? -1)
+                    || (proof.value == current.value && proof.status == .verified && current.status != .verified) else { continue }
             try? records.acceptTrolleyMaximum(proof, conditions: conditions, assisted: assisted)
         }
+    }
+    func replayURL(attemptID: UUID) -> URL? {
+        guard let reference = records.trolley.replays.first(where: { $0.attemptID == attemptID }),
+              reference.relativePath == "Replays/\(attemptID.uuidString).mp4" else { return nil }
+        let url = file.deletingLastPathComponent().appendingPathComponent(reference.relativePath)
+        return FileManager.default.isReadableFile(atPath: url.path) ? url : nil
     }
     /// Retain the open file before the recorder can discard its temporary path.
     /// Copying and checksumming a movie must not block a result or next level.
@@ -404,6 +442,7 @@ import NxlvKit
                   records.trolley.attempts.contains(where: { $0.id == attemptID }) else { return }
             records.attachTrolleyReplay(.init(attemptID: attemptID, relativePath: relative, sha256: digest))
             save()
+            if storageError == nil, let run = records.trolley.attempts.first(where: { $0.id == attemptID })?.run { HostedRankings.shared.completed(profileID: run.profileID) }
         }
     }
     @discardableResult func saveProfile(id: String?, initials: String, portrait: Int, select: Bool) -> ArcadeProfile? {

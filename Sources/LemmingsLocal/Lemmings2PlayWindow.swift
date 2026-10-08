@@ -68,6 +68,7 @@ import NxlvKit
     private let failureMusic = FailureMusicTransition()
     private let nukeMood = NukeMusicSweep()
     private var audioSettings = ClassicSettings()
+    private var audioConfigured = false
     private var globallyMuted = false
     private let sounds: Lemmings2SoundPlayer
     private var campaign: Lemmings2Campaign
@@ -414,10 +415,8 @@ import NxlvKit
             .appendingPathComponent("Music/lemmings_2_music_mod_tsyu")
         music.loadLibrary(at: musicRoot)
         music.setMuted(UserDefaults.standard.bool(forKey: progressKey + ".musicMuted"))
-        try? music.start()
         sounds.setMuted(UserDefaults.standard.bool(forKey: progressKey + ".soundsMuted"))
         try sounds.start()
-        playMusic("Maintune")
         NotificationCenter.default.addObserver(self,selector:#selector(windowLostFocus(_:)),
             name:NSWindow.didResignKeyNotification,object:nil)
         window.center()
@@ -457,6 +456,21 @@ import NxlvKit
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     #if APP_INTEGRATION_TESTS
+    func testInitialMusicRouting() throws {
+        timer?.invalidate()
+        try validateMusicRouting(!music.isRunning && !dj.isPlaying, "L2 played music before audio configuration")
+        var settings = ClassicSettings()
+        settings.music = .adaptiveDJ; settings.musicVolume = 0; settings.soundVolume = 0
+        setAudioSettings(settings, muted: true)
+        try validateMusicRouting(dj.isPlaying && dj.currentURL != nil &&
+            dj.currentURL?.lastPathComponent.lowercased().contains("maintune") == false,
+            "L2 selected menu music during a level handover")
+        let track = dj.currentURL
+        playTribeMusic()
+        try validateMusicRouting(dj.currentURL == track && !dj.isCrossfading,
+            "L2 repeated a handover track selection")
+    }
+
     func testPauseKeyboard() throws {
         timer?.invalidate()
         prepareBriefing(); startLevel(); canvas.startCountdown.cancel(); paused = false
@@ -554,7 +568,8 @@ import NxlvKit
         }
     }
     func setAudioSettings(_ settings: ClassicSettings, muted: Bool) {
-        let musicChanged = audioSettings.music != settings.music
+        let musicChanged = !audioConfigured || audioSettings.music != settings.music
+        audioConfigured = true
         audioSettings = settings
         speedControl.variableEnabled = settings.modernControlsEnabled && settings.variableSpeedEnabled
         canvas.reduceMotion = settings.reduceMotion
@@ -583,7 +598,10 @@ import NxlvKit
             music.setEnhancements(settings.musicStyle == .modern ? .modern : .faithful)
         }
         sounds.setMuted(muted || settings.sound == .silent || UserDefaults.standard.bool(forKey: progressKey + ".soundsMuted"))
-        if musicChanged { if screen == .playing { playTribeMusic() } else { playMusic("Maintune") } }
+        if musicChanged {
+            if screen == .playing || screen == .briefing || screen == .results { playTribeMusic() }
+            else { playMusic("Maintune") }
+        }
         if userPausedMusic && paused { updateUserMusicPause() }
     }
     static func savedCompletion(root: URL) -> Int {
@@ -675,6 +693,7 @@ import NxlvKit
         return try JSONEncoder().encode(campaign.progress)
     }
     private func playMusic(_ name: String) {
+        guard audioConfigured else { return }
         if audioSettings.music == .adaptiveDJ,
            let url = music.library.first(where: { $0.deletingPathExtension().lastPathComponent.lowercased() == name.lowercased() }) {
             let musicRoot = root.deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("Music")
@@ -1457,6 +1476,7 @@ import NxlvKit
         if recordsCampaignProgress { runMovie.preserveRecord(arcadeReport) }
         ArcadeWindow.shared.showResult(arcadeReport, owner: window, retry: { [weak self] in self?.retryLevel() },
             next: { [weak self] in self?.continueResult() }, replay: { [weak self] save in self?.runMovie.review(save: save) },
+            storedReplay: { [weak self] url, title in self?.runMovie.reviewStored(url, title: title) },
             continueTitle: resultContinueTitle, background: arcadeBackdrop,
             rewardVolume: sounds.muted ? 0 : audioSettings.soundVolume,
             continueHandlesHandover: onSequenceContinue != nil,

@@ -47409,12 +47409,22 @@
       "packID": "fan:lldb-327"
     },
     "pack": "JM01",
+    "placement": {
+      "basis": "solutionEstimate",
+      "lower": 0,
+      "position": 70.0,
+      "reference": "Gentle/Get_a_little_extra_help.nxlv",
+      "replayRevision": "SHA256 digest: fba3349cc4add7e0f3a69b5d09f0cfcd322c73eeb40a262f9d1d1d3de183cdc1",
+      "sourceRevision": "4ed40d2dad89484a0565b4fc472ba6db8a18a36f97c174cb4ea392eac14073c2",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 395.0
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
     "sourceRevision": "4ed40d2dad89484a0565b4fc472ba6db8a18a36f97c174cb4ea392eac14073c2",
-    "status": "needs human discovery/variant review",
+    "status": "included with an estimated grade; human review still needed",
     "title": "Come back!"
   },
   {
@@ -51393,14 +51403,15 @@
     },
     "pack": "Ji Hoons Lemmings Remake Heaven",
     "placement": {
+      "adjustment": "User playtest 2026-10-07: single-basher practice after the seven skill introductions.",
       "basis": "solutionEstimate",
-      "lower": 0,
-      "position": 70.0,
-      "reference": "Gentle/Get_a_little_extra_help.nxlv",
+      "lower": 35.0,
+      "position": 37.5,
+      "reference": "Gentle/Builders_will_help_you_here.nxlv",
       "replayRevision": "SHA256 digest: 51ba9acbd5b076cf36b722c6ffd922fb511c0383e32c3b56ac73760c9ca59d29",
       "sourceRevision": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 215.0
+      "upper": 40.0
     },
     "risks": [
       "incomplete timing probes",
@@ -53047,12 +53058,22 @@
       "packID": "fan:lldb-505"
     },
     "pack": "KillerMasters Lemmings 1 Tame",
+    "placement": {
+      "basis": "solutionEstimate",
+      "lower": 0,
+      "position": 70.0,
+      "reference": "Gentle/Tailor-made_for_blockers.nxlv",
+      "replayRevision": "SHA256 digest: dc34315bcb536e8e8908a08c0d52a32bcbe7f6d0ff3d92f0a5799e78e6a520ba",
+      "sourceRevision": "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 395.0
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
     "sourceRevision": "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9",
-    "status": "needs human discovery/variant review",
+    "status": "included with an estimated grade; human review still needed",
     "title": "Guard!"
   },
   {
@@ -57397,22 +57418,12 @@
       "packID": "fan:lldb-584"
     },
     "pack": "Save the Lemmings",
-    "placement": {
-      "basis": "solutionEstimate",
-      "lower": 0,
-      "position": 70.0,
-      "reference": "Gentle/Get_a_little_extra_help.nxlv",
-      "replayRevision": "SHA256 digest: 87814a06a4c6e042c469bac4e8afadf2652ffc2a1fa1b483fbf01fa0a19f1880",
-      "sourceRevision": "8266ec3e50eced182f0e60729f0654bdfabf71fa405f7af8aaa96cf147e51b31",
-      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 215.0
-    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
     "sourceRevision": "8266ec3e50eced182f0e60729f0654bdfabf71fa405f7af8aaa96cf147e51b31",
-    "status": "included with an estimated grade; human review still needed",
+    "status": "needs human discovery/variant review",
     "title": "The COVOX Level"
   },
   {
@@ -113647,22 +113658,12 @@
       "packID": "fan:lldb-512"
     },
     "pack": "ssam1221s Lemmings Tame",
-    "placement": {
-      "basis": "solutionEstimate",
-      "lower": 0,
-      "position": 70.0,
-      "reference": "Gentle/Get_a_little_extra_help.nxlv",
-      "replayRevision": "SHA256 digest: 8e0f4863f9399ee6debbac6db116e76517bce88475f1f9d272b4686e3a1d22ca",
-      "sourceRevision": "1962aedf16c3708f1269c3e8fcd7099d81f6e237a93b2544c5c343c18dd08a11",
-      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 215.0
-    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
     "sourceRevision": "1962aedf16c3708f1269c3e8fcd7099d81f6e237a93b2544c5c343c18dd08a11",
-    "status": "included with an estimated grade; human review still needed",
+    "status": "needs human discovery/variant review",
     "title": "Something Wrong...."
   },
   {

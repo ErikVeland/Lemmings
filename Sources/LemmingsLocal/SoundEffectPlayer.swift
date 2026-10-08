@@ -13,6 +13,7 @@ final class SoundEffectPlayer: @unchecked Sendable {
     var worldPoint: GameplaySoundPoint?
     var gain: Float = 0.6
     var distanceGain: Float = 1
+    var rewindSequence: UInt64?
   }
 
   var onPlay: (@Sendable ([Float], Double, Float) -> Void)?
@@ -35,6 +36,7 @@ final class SoundEffectPlayer: @unchecked Sendable {
   private var recentSamples: [Float]
   private var recentSamplePositions: [Int64]
   private var latestRecentSample: Int64?
+  private var rewindSequence: UInt64 = 0
 
   private let sampleRate = 44100.0
   private(set) var isRunning = false
@@ -142,6 +144,10 @@ final class SoundEffectPlayer: @unchecked Sendable {
     lock.lock()
     defer { lock.unlock() }
     var voice = voices[index]
+    // Scrub slices may contain the same effects. Share one mix budget across
+    // their voices instead of adding their full levels together.
+    let rewindCount = voices.reduce(0) { $0 + ($1.isActive && $1.rewindSequence != nil ? 1 : 0) }
+    let rewindGain: Float = voice.rewindSequence == nil ? 1 : 1 / Float(max(1, rewindCount))
     let start = sampleTime.isFinite && sampleTime >= 0
       ? Int64(sampleTime.rounded())
       : (latestRecentSample.map { $0 + 1 } ?? 0)
@@ -153,7 +159,7 @@ final class SoundEffectPlayer: @unchecked Sendable {
         if position < voice.samples.count {
           let next = min(position + 1, voice.samples.count - 1)
           sourceSample = voice.samples[position] + (voice.samples[next] - voice.samples[position]) * Float(voice.position - Double(position))
-          sample = sourceSample * Float(level) * voice.gain * voice.distanceGain
+          sample = sourceSample * Float(level) * voice.gain * voice.distanceGain * rewindGain
           voice.position += voice.increment
         } else {
           voice.isActive = false
@@ -161,6 +167,8 @@ final class SoundEffectPlayer: @unchecked Sendable {
       }
       for buffer in buffers { buffer.mData?.assumingMemoryBound(to: Float.self)[frame] = sample }
 
+      // Rewind output must never feed the history it will reverse next.
+      guard voice.rewindSequence == nil else { continue }
       let position = start + Int64(frame)
       let slot = Int((position % Int64(recentSampleLimit) + Int64(recentSampleLimit)) % Int64(recentSampleLimit))
       if recentSamplePositions[slot] != position {
@@ -369,11 +377,16 @@ final class SoundEffectPlayer: @unchecked Sendable {
       let position = latest - Int64(offset)
       let slot = Int((position % Int64(recentSampleLimit) + Int64(recentSampleLimit)) % Int64(recentSampleLimit))
       guard recentSamplePositions[slot] == position else { break }
-      samples.append(recentSamples[slot])
+      samples.append(max(-1, min(1, recentSamples[slot])))
     }
     guard !samples.isEmpty else { return }
-    let index = voices.firstIndex { !$0.isActive } ?? voices.startIndex
-    voices[index] = Voice(samples: samples, position: 0, increment: 1, isActive: true)
+    let scrubs = voices.indices.filter { voices[$0].isActive && voices[$0].rewindSequence != nil }
+    let oldest = scrubs.min { voices[$0].rewindSequence! < voices[$1].rewindSequence! }
+    let index = scrubs.count >= 4 ? oldest! :
+      (voices.firstIndex { !$0.isActive } ?? oldest ?? voices.startIndex)
+    rewindSequence &+= 1
+    voices[index] = Voice(samples: samples, position: 0, increment: 1, isActive: true,
+      rewindSequence: rewindSequence)
     if spatialMixers.indices.contains(index) { spatialMixers[index].position = AVAudio3DPoint(x: 0, y: 0, z: -1) }
   }
 

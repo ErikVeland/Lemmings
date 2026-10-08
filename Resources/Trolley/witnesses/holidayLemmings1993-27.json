@@ -1,0 +1,46 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 63
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 366
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 387
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 70,
+    "saved" : 78,
+    "stateHash" : "071a81b9dfe5180d7f650c2275f1c39f78d340e7464a6ea3169d73f18ee36b9b",
+    "ticks" : 5225
+  },
+  "initialStateHash" : "7bf2765d5352fc9dec6b5ead2f44546bb3e5b8a0b692543ac0cb6ff036adbe95",
+  "number" : 12,
+  "rank" : "Blizzard",
+  "title" : "The Voyage Home..."
+}

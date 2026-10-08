@@ -19,7 +19,7 @@ import NxlvKit
         GameScreen.shared.present(arcadeView, owner: owner)
     }
     func showResult(_ report: ArcadeReport, owner: NSWindow? = nil, retry: @escaping () -> Void,
-                    next: @escaping () -> Void, replay: @escaping (Bool) -> Void, continueTitle: String = "Next level", background: CGImage? = nil, rewardVolume: Double = 0,
+                    next: @escaping () -> Void, replay: @escaping (Bool) -> Void, storedReplay: ((URL, String) -> Void)? = nil, continueTitle: String = "Next level", background: CGImage? = nil, rewardVolume: Double = 0,
                     continueHandlesHandover: Bool = false, skip: (() -> Void)? = nil,
                     later: (() -> Void)? = nil, hints: (() -> Void)? = nil,
                     status: String? = nil) {
@@ -36,6 +36,7 @@ import NxlvKit
         arcadeView.onLater = later.map { action in { [weak self] in self?.close(); action() } }
         arcadeView.onHints = hints.map { action in { [weak self] in self?.close(); action() } }
         arcadeView.onReplay = replay
+        arcadeView.onStoredReplay = storedReplay
         present(owner: owner)
         arcadeView.startCelebration()
         GameCenterScores.shared.onChange = { [weak self] in self?.arcadeView.needsDisplay = true }
@@ -46,7 +47,7 @@ import NxlvKit
         arcadeView.level = level ?? ArcadeStore.shared.records.runs.last?.level
         arcadeView.assisted = false; arcadeView.board = .rescue
         arcadeView.boardScope = .level
-        arcadeView.onLater = nil; arcadeView.onHints = nil
+        arcadeView.onLater = nil; arcadeView.onHints = nil; arcadeView.onStoredReplay = nil
         arcadeView.onRetry = nil; arcadeView.onContinue = nil; arcadeView.onSkip = nil; arcadeView.onReplay = nil
         present(owner: owner)
     }
@@ -58,7 +59,7 @@ import NxlvKit
     private func presentSession(owner: NSWindow?) {
         let owner = prepareSession?() ?? owner
         arcadeView.sessionReturnMode = nil
-        arcadeView.report = nil; arcadeView.onLater = nil; arcadeView.onHints = nil
+        arcadeView.report = nil; arcadeView.onLater = nil; arcadeView.onHints = nil; arcadeView.onStoredReplay = nil
         arcadeView.onRetry = nil; arcadeView.onContinue = nil; arcadeView.onSkip = nil
         ArcadeStore.shared.prepareHotSeat()
         arcadeView.mode = .hotSeat
@@ -125,6 +126,9 @@ import NxlvKit
     var featuredAwardIndex = 0
     var careerPage = 0
     var boardScope = BoardScope.level
+    var usesGameCenter = false
+    var hostedCategory = HostedCategory.fastestClear
+    var hostedPage = 0
     var level: ArcadeLevel?
     var assisted = false
     var board = ArcadeBoard.rescue
@@ -160,6 +164,7 @@ import NxlvKit
     var onLater: (() -> Void)?
     var onHints: (() -> Void)?
     var onReplay: ((Bool) -> Void)?
+    var onStoredReplay: ((URL, String) -> Void)?
     var onClose: (() -> Void)?
     var continueTitle = "Next level"
     var resultStatus: String?
@@ -395,10 +400,10 @@ import NxlvKit
     func rewindFilter(y: CGFloat = 212) {
         text("Rewinds", 786, y - 21, 270, alignment: .center, alpha: 0.7)
         button("Unused", CGRect(x: 786, y: y, width: 135, height: 44), selected: !assisted) { [weak self] in
-            self?.assisted = false; self?.needsDisplay = true
+            self?.assisted = false; self?.hostedPage = 0; self?.refreshHostedBoard(); self?.needsDisplay = true
         }
         button("Used", CGRect(x: 921, y: y, width: 135, height: 44), selected: assisted) { [weak self] in
-            self?.assisted = true; self?.needsDisplay = true
+            self?.assisted = true; self?.hostedPage = 0; self?.refreshHostedBoard(); self?.needsDisplay = true
         }
     }
     func affinityLink(_ id: String, in rect: CGRect, forRun: Bool = true, alignment: NSTextAlignment = .center) {
@@ -799,9 +804,13 @@ import NxlvKit
             text("Play a level to set a record.", 64, 346, 992)
             pageFooter(); return
         }
-        for (index, category) in ArcadeBoard.allCases.enumerated() {
-            let names = ["Most saved", "Fewest skills", "100% club"]
-            button(names[index], CGRect(x: 64 + index * 226, y: 213, width: 210, height: 43), selected: board == category) { [weak self] in self?.board = category; self?.needsDisplay = true }
+        let categories = ArcadeBoard.allCases, index = categories.firstIndex(of: board) ?? 0
+        button("‹", CGRect(x: 64, y: 212, width: 66, height: 44)) { [weak self] in
+            self?.board = categories[(index + categories.count - 1) % categories.count]; self?.needsDisplay = true
+        }
+        text(board.title, 153, 218, 520)
+        button("›", CGRect(x: 687, y: 212, width: 66, height: 44)) { [weak self] in
+            self?.board = categories[(index + 1) % categories.count]; self?.needsDisplay = true
         }
         rewindFilter()
         text("PLAYER", 113, 276, 295)
@@ -968,11 +977,11 @@ import NxlvKit
             if mode == .result { performDefaultResultAction() } else if report != nil { page(.result) }
             return
         }
-        if let number = Int(key), (1...TrolleyBoard.allCases.count).contains(number), level?.conditions != nil {
+        if let number = Int(key), (1...TrolleyBoard.allCases.count).contains(number), level?.conditions != nil, boardScope == .level {
             trolleyBoard = TrolleyBoard.allCases[number - 1]; needsDisplay = true; return
         }
         switch key {
-        case "W": if mode == .records { assisted.toggle() }
+        case "W": if mode == .records { assisted.toggle(); hostedPage = 0; refreshHostedBoard() }
         case "N": if mode == .result { retryAsNextProfile() }
         case "P": if mode == .result { openSession() }
         case "R": onRetry?()

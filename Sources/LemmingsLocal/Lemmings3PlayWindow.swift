@@ -97,6 +97,7 @@ import NxlvKit
     private var musicGain: Float = 0.8
     private var movieMusicMuted = false
     private var audioSettings = ClassicSettings()
+    private var audioConfigured = false
     private let runMovie = RunMovie()
     private var originalMovie: OriginalMoviePlayer?
     private var playsOpeningStory = false
@@ -431,7 +432,6 @@ import NxlvKit
         timelineTransport = makeTimelineTransport(for: window)
         music.loadLibrary(at: dataRoot.deletingLastPathComponent().deletingLastPathComponent()
             .appendingPathComponent("Music/lemmings_3_music_mod_tsyu"))
-        try? music.start()
         window.center()
         if let recovery, let saved = recovery.l3 {
             arcadeRunID = recovery.runID; arcadeProfileID = recovery.profileID; arcadeHotSeatID = recovery.hotSeatID
@@ -461,6 +461,19 @@ import NxlvKit
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     #if APP_INTEGRATION_TESTS
+    func testInitialMusicRouting() throws {
+        timer?.invalidate()
+        try validateMusicRouting(!music.isRunning && !dj.isPlaying, "L3 played music before audio configuration")
+        var settings = ClassicSettings()
+        settings.music = .adaptiveDJ; settings.musicVolume = 0; settings.soundVolume = 0
+        setAudioSettings(settings, muted: true)
+        try validateMusicRouting(dj.isPlaying && dj.currentURL != nil, "L3 did not select its level music")
+        let track = dj.currentURL
+        playLevelMusic()
+        try validateMusicRouting(dj.currentURL == track && !dj.isCrossfading,
+            "L3 repeated a handover track selection")
+    }
+
     static func testHasEarnedEnding(root: URL) -> Bool { hasEarnedEnding(root: root) }
 
     func testRecoveryAdvance(ticks: Int) {
@@ -648,7 +661,8 @@ import NxlvKit
         }
     }
     func setAudioSettings(_ settings: ClassicSettings, muted: Bool) {
-        let sourceChanged = audioSettings.music != settings.music
+        let sourceChanged = !audioConfigured || audioSettings.music != settings.music
+        audioConfigured = true
         audioSettings = settings
         movieMusicMuted = muted
         if let root = Bundle.main.resourceURL?.appendingPathComponent("Music") {
@@ -685,6 +699,7 @@ import NxlvKit
     }
 
     private func playLevelMusic() {
+        guard audioConfigured else { return }
         let prefix: String
         switch campaign.tribe {
         case .classic: prefix = "CLASSIC"
@@ -1243,7 +1258,8 @@ import NxlvKit
         if recordsCampaignProgress { runMovie.preserveRecord(arcadeReport) }
         ArcadeWindow.shared.showResult(arcadeReport, owner: window, retry: { [weak self] in self?.retryLevel() },
             next: { [weak self] in self?.continueArcadeResult() },
-            replay: { [weak self] save in self?.runMovie.review(save: save) }, continueTitle: resultContinueTitle, background: arcadeBackdrop, rewardVolume: warningSound.muted ? 0 : warningSound.volume,
+            replay: { [weak self] save in self?.runMovie.review(save: save) },
+            storedReplay: { [weak self] url, title in self?.runMovie.reviewStored(url, title: title) }, continueTitle: resultContinueTitle, background: arcadeBackdrop, rewardVolume: warningSound.muted ? 0 : warningSound.volume,
             continueHandlesHandover: onSequenceContinue != nil,
             skip: canSkipLevel ? { [weak self] in self?.skipLevel() } : nil,
             status: needsTribeSurvivors ? "Need 50 survivors to complete this tribe." : nil)

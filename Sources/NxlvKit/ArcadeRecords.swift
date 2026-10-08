@@ -33,12 +33,14 @@ public struct ArcadeLevel: Codable, Equatable, Sendable {
 }
 
 public enum ArcadeBoard: String, Codable, CaseIterable, Sendable {
-    case rescue, efficiency, allSaved
+    case rescue, efficiency, allSaved, fastestClear, fastestAllSaved
     public var title: String {
         switch self {
         case .rescue: "MOST SAVED"
         case .efficiency: "FEWEST SKILLS"
         case .allSaved: "100% CLUB"
+        case .fastestClear: "FASTEST CLEAR"
+        case .fastestAllSaved: "FASTEST 100%"
         }
     }
 }
@@ -228,12 +230,22 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
     }
     public func leaderboard(level: ArcadeLevel, board: ArcadeBoard, assisted: Bool) -> [ArcadeRun] {
         let eligible = runs.filter { $0.level.boardID == level.boardID && $0.assisted == assisted
-            && (board == .rescue || (board == .efficiency ? $0.qualifies : $0.savedAll)) }
+            && {
+                switch board {
+                case .rescue: return true
+                case .efficiency: return $0.qualifies
+                case .allSaved: return $0.savedAll
+                case .fastestClear, .fastestAllSaved:
+                    return $0.qualifies && $0.seconds.isFinite && $0.seconds > 0
+                        && (board != .fastestAllSaved || $0.savedAll)
+                }
+            }($0) }
         let grouped = Dictionary(grouping: eligible, by: \.profileID)
         return grouped.values.compactMap { $0.sorted { Self.precedes($0, $1, board: board) }.first }
             .sorted { Self.precedes($0, $1, board: board) }
     }
     public static func precedes(_ a: ArcadeRun, _ b: ArcadeRun, board: ArcadeBoard) -> Bool {
+        if [.fastestClear, .fastestAllSaved].contains(board), a.seconds != b.seconds { return a.seconds < b.seconds }
         if board == .rescue, a.saved != b.saved { return a.saved > b.saved }
         if a.skillCount != b.skillCount { return a.skillCount < b.skillCount }
         if a.saved != b.saved { return a.saved > b.saved }

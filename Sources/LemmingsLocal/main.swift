@@ -1257,7 +1257,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     openNativeL2()
   }
 
-  private func suspendCurrentEngine(savesProgress: Bool = true) {
+  private func suspendCurrentEngine(savesProgress: Bool = true, preservingMusic: Bool = false) {
     panel.handlePointerUp()
     playfield.clearPointer()
     if savesProgress { saveProgress() }
@@ -1266,10 +1266,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     nativeL3Window?.stop()
     nativeL2Window = nil
     nativeL3Window = nil
-    music.stop()
-    soundtrack.stop()
-    dj.stop()
-    startedMusicIdentity = nil
+    if !preservingMusic {
+      music.stop()
+      soundtrack.stop()
+      dj.stop()
+      startedMusicIdentity = nil
+    }
     effects.stop()
     accumulator = 0
   }
@@ -1429,6 +1431,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   @objc private func returnToLibrary() {
+    prepareLibrary(preservingMusic: false)
+  }
+
+  private func prepareLibrary(preservingMusic: Bool) {
     launchChoice = 0
     handoverRetry = nil
     let wasSequenceActive = sequenceIsActive
@@ -1439,7 +1445,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     fanScreen = .off
     fanPlaying = false
     fanQueue = []
-    suspendCurrentEngine(savesProgress: !wasSequenceActive)
+    suspendCurrentEngine(savesProgress: !wasSequenceActive, preservingMusic: preservingMusic)
     activeTitle = nil
     currentNxlvURL = nil
     currentNeoStylesRoot = nil
@@ -1466,7 +1472,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     // monitor last time comes back to a flat picture.
     applyDisplayMode()
     renderScreen()
-    playMusicForCurrentLevel()
+    if !preservingMusic { playMusicForCurrentLevel() }
     window.makeKeyAndOrderFront(nil)
   }
 
@@ -5260,7 +5266,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       && GameAssetCache<String>.bundledKey(dataSetDirectory) != nil
       && loadedArtworkDirectory?.standardizedFileURL == dataSetDirectory.standardizedFileURL
     saveRunCheckpoint(immediately: true, waitForDisk: false)
-    if sequelIsActive || fanPlaying || fanScreen != .off { returnToLibrary() }
+    if sequelIsActive || fanPlaying || fanScreen != .off { prepareLibrary(preservingMusic: true) }
     else { GameScreen.shared.dismissAll() }
     if sequenceRunID == nil {
       setSequencePlayingIdentity(nil)
@@ -5319,7 +5325,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard sequenceLaunchCanCommit(runID: sequenceRunID, identity: identity) else { return }
     saveRunCheckpoint(immediately: true)
     let previousLaunchMode = launchMode
-    returnToLibrary()
+    prepareLibrary(preservingMusic: true)
     if sequenceRunID == nil {
       setSequencePlayingIdentity(nil)
       sequencePlaylistStore = nil
@@ -6114,6 +6120,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let conditions = TrolleyConditions(gameID: gameID, packID: packID, levelID: stableID, levelFingerprint: fingerprint,
         rulesetVersion: rules, physicsMode: rules, population: new.total, rescueRequirement: new.required,
         startingSkills: TrolleyCapture.skills(new.skills), timeLimitSeconds: new.remainingSeconds.map(Double.init))
+    if let classic = new as? ClassicSession {
+      ArcadeStore.shared.prepareSolutionTarget(initial: classic.initialSimulation, conditions: conditions,
+          resources: Bundle.main.resourceURL, buildVersion: TrolleyCapture.buildVersion)
+    }
     arcadeLevel = ArcadeLevel(id: gameID + ":" + stableID,
         title: currentNxlvURL?.deletingPathExtension().lastPathComponent ?? artworkLevel?.title ?? "Lemmings",
         game: currentNxlvURL != nil ? (currentNeoPackName ?? "NeoLemmix")
@@ -6788,6 +6798,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func finishSessionIfNeeded() {
     guard phase == .playing, let session, session.isComplete else { return }
+    if let conditions = arcadeLevel?.conditions,
+       ArcadeStore.shared.solutionTargetIsPending(for: conditions) { return }
     if let arcadeLevel {
       AnonymousTelemetry.shared.finish(arcadeLevel, hotSeat: arcadeHotSeatID != nil,
                                        attemptID: arcadeRunID, won: session.didWin, saved: session.saved)
@@ -7342,6 +7354,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         retry: { [weak self] in self?.retry() },
         next: { [weak self] in self?.advancePhase() },
         replay: { [weak self] save in self?.runMovie.review(save: save) },
+            storedReplay: { [weak self] url, title in self?.runMovie.reviewStored(url, title: title) },
         continueTitle: title,
         background: playfield.levelImage,
         rewardVolume: effects.muted ? 0 : effects.volume,
@@ -7354,6 +7367,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       : flow.map { $0.currentNumber < ($0.currentRank?.levelIndices.count ?? 0) } ?? false
     ArcadeWindow.shared.showResult(arcadeReport, owner: window, retry: { [weak self] in self?.retry() },
       next: { [weak self] in self?.advancePhase() }, replay: { [weak self] save in self?.runMovie.review(save: save) },
+            storedReplay: { [weak self] url, title in self?.runMovie.reviewStored(url, title: title) },
       continueTitle: hasNext ? "Next level" : currentNxlvURL != nil ? "Library" : fanPlaying ? "Level select" : "Continue", background: playfield.levelImage, rewardVolume: effects.muted ? 0 : effects.volume,
       skip: canSkipClassicLevel ? { [weak self] in self?.skipClassicLevel() } : nil)
   }

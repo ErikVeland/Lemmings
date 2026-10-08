@@ -8,7 +8,7 @@ import AppKit
     static let notesVersion = "1.8.1"
     static let subtitle = "The full journey, sharper pixels and steadier effects"
     static let sections = [
-        ("The full journey", "Oh My! All Lemmings! returns to 292 curated levels, official and fan, in a Redux-anchored order. Your history and progress carry over."),
+        ("The full journey", "Oh My! All Lemmings! returns to 294 curated levels, official and fan, in a Redux-anchored order. Your history and progress carry over."),
         ("Explosions stay on the terrain", "Pan, zoom, resize or use CRT curvature and each blast stays where it happened, in Classic, NeoLemmix, Lemmings 2 and Lemmings 3."),
         ("Sharper pixel artwork", "Game artwork, controls, previews and original movies keep crisp pixels when scaled."),
         ("The music comes back", "After the last nuke explosion, the funeral dirge spins back up to normal speed, even on a failed result."),
@@ -39,16 +39,39 @@ import AppKit
     func show(in window: NSWindow, completion: @escaping () -> Void = {}) {
         if let page, GameScreen.shared.contains(page) { GameScreen.shared.present(page, owner: window); return }
         let page = GameMenuPage(title: "What's new in \(version)", subtitle: Self.subtitle)
-        let sections = Self.sections
-        for (index, section) in sections.enumerated() {
-            let y = CGFloat(344 - index * 108)
+        let scroll = NSScrollView(frame: page.body.bounds)
+        scroll.autoresizingMask = [.width, .height]
+        scroll.hasVerticalScroller = true
+        scroll.hasHorizontalScroller = false
+        scroll.drawsBackground = false
+        scroll.contentView.copiesOnScroll = false
+        scroll.scrollerStyle = .overlay
+        scroll.setAccessibilityLabel("Release notes")
+        let document = NSView()
+        let width = page.body.bounds.width - 32
+        var rows: [(GameLabel, GameLabel, CGFloat)] = []
+        for section in Self.sections {
             let heading = GameLabel(labelWithString: section.0)
-            heading.role = .heading; heading.frame = CGRect(x: 0, y: y + 62, width: 992, height: 28)
+            heading.role = .heading
             let body = GameLabel(labelWithString: section.1)
-            body.cell?.wraps = true; body.frame = CGRect(x: 0, y: y, width: 992, height: 58)
-            // The body uses AppKit's unflipped coordinates.
-            page.body.addSubview(heading); page.body.addSubview(body)
+            body.cell?.wraps = true
+            body.frame = CGRect(x: 0, y: 0, width: width, height: 58)
+            let height = max(58, body.intrinsicContentSize.height)
+            rows.append((heading, body, height))
         }
+        let height = max(page.body.bounds.height, rows.reduce(CGFloat(16)) { $0 + $1.2 + 58 })
+        document.frame = CGRect(x: 0, y: 0, width: page.body.bounds.width, height: height)
+        var top = height - 8
+        for (heading, body, height) in rows {
+            heading.frame = CGRect(x: 16, y: top - 28, width: width, height: 28)
+            body.frame = CGRect(x: 16, y: top - 34 - height, width: width, height: height)
+            document.addSubview(heading); document.addSubview(body)
+            top -= height + 58
+        }
+        scroll.documentView = document
+        page.body.addSubview(scroll)
+        scroll.contentView.scroll(to: CGPoint(x: 0, y: max(0, height - scroll.contentSize.height)))
+        scroll.reflectScrolledClipView(scroll.contentView)
         let close = { [weak self, weak page] in
             guard let self, let page else { return }
             GameScreen.shared.dismiss(page); self.page = nil; completion()

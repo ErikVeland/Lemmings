@@ -117,3 +117,34 @@ for width in [160.0, 320, 960] {
   precondition(invalid.x == 0 && invalid.y == 0 && invalid.z == -1)
 }
 print("PASS camera geometry at zoomed, standard and wide aspect ratios, elevation and invalid-coordinate fallback")
+
+extension SoundEffectPlayer {
+  func checkRewindFeedbackAndPolyphony() {
+    latestRecentSample = 3
+    for index in 0..<4 {
+      recentSamplePositions[index] = Int64(index)
+      recentSamples[index] = Float(index + 1) / 10
+    }
+    let original = recentSamples
+    playRewindScrub()
+    precondition(voices.first(where: { $0.isActive })!.samples == [0.4, 0.3, 0.2, 0.1],
+      "Rewind did not reverse the original effect samples")
+    let buffer = AVAudioPCMBuffer(pcmFormat: AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 1)!, frameCapacity: 4)!
+    buffer.frameLength = 4
+    for _ in 0..<100 {
+      for _ in 0..<12 { playRewindScrub() }
+      let active = voices.indices.filter { voices[$0].isActive }
+      precondition(active.count <= 4, "Rewind exceeded four voices")
+      var sum = [Float](repeating: 0, count: 4)
+      for index in active {
+        fillVoice(index, buffers: UnsafeMutableAudioBufferListPointer(buffer.mutableAudioBufferList), frames: 4, sampleTime: 0)
+        for i in 0..<4 { sum[i] += buffer.floatChannelData![0][i] }
+      }
+      precondition(sum.allSatisfy { abs($0) <= 0.241 }, "Rewind overlaps gained volume")
+      precondition(recentSamples == original && latestRecentSample == 3,
+        "Rewind audio fed back into its own history")
+    }
+    print("PASS reversed rewind samples, four-voice cap, normalized overlaps and no feedback after 1200 requests")
+  }
+}
+SoundEffectPlayer().checkRewindFeedbackAndPolyphony()

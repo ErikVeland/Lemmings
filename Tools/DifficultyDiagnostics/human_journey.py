@@ -20,7 +20,7 @@ SOURCE = 'https://www.lemmingsforums.net/index.php?topic=4374.0'
 RANKS = ['Gentle', 'Quirky', 'Zany', 'Manic', 'Lunatic']
 BASIC = {'climber', 'floater', 'bomber', 'blocker', 'builder', 'basher', 'miner', 'digger'}
 POLICY = 'redux-calibrated-2'
-VERSION = 'learning-14'
+VERSION = 'learning-15'
 BASE_TARGET = 292
 TARGET = 294
 # An explicit counterpart with a changed title, not a fuzzy fan-level match.
@@ -238,7 +238,10 @@ def build(pool, witnesses, resources, reference, reviews):
     required = {key(r) for r in additions}
     required_candidates = {}
     resource_by_id = {key(r): r for r in resources}
-    excluded = {key(r) for r in read(ROOT / 'Resources/Progression/exclusions.json')}
+    exclusions = read(ROOT / 'Resources/Progression/exclusions.json')
+    excluded = {key(r) for r in exclusions}
+    replacements = {key(r): r['replaceAtPosition'] for r in exclusions if 'replaceAtPosition' in r}
+    nuke_free = {key(r) for r in exclusions if r.get('requiresNukeFreeSolution')}
     references = {r['reference']: r for r in reference}
     rejected = {(key(r), r['sourceRevision'], r['replayRevision']) for r in read(OUT / 'replay-rejections.json')}
     by_title = collections.defaultdict(list)
@@ -251,7 +254,7 @@ def build(pool, witnesses, resources, reference, reviews):
             pending.append({'identity': row['entry']['identity'], 'title': row['entry']['levelNameSnapshot'],
                             'status': 'exact native replay failed; retained in replay-rejections.json'})
             continue
-        if ident in excluded or not source or source['sourceRevision'] != row['entry']['sourceRevision'] or not valid_witness(row, witness):
+        if (ident in excluded and ident not in replacements) or not source or source['sourceRevision'] != row['entry']['sourceRevision'] or not valid_witness(row, witness):
             pending.append({'identity': row['entry']['identity'], 'title': row['entry']['levelNameSnapshot'],
                             'status': 'excluded or missing exact source/winning replay evidence'})
             continue
@@ -360,6 +363,34 @@ def build(pool, witnesses, resources, reference, reviews):
         chosen = min(options, key=selection_cost)
         extras.remove(chosen); selected.append(chosen)
         pack_counts[chosen['row']['entry']['identity']['packID']] += 1
+    # Retain each retired slot during selection so removing one level cannot
+    # reshuffle the rest of the journey. Replace it before producing any output.
+    for retired, position in replacements.items():
+        slot = next(i for i, item in enumerate(selected) if key(item['row']) == retired)
+        assert selected[slot]['placement']['position'] == position
+        used_titles = {normalized(item['row']['entry']['levelNameSnapshot']) for item in selected}
+        def conventional_route(item):
+            if retired not in nuke_free: return True
+            row = item['row']
+            replay = witnesses.get(row['profile']['key']['replayRevision']) or witnesses[row['initialHash']]
+            return not any('nuke' in event['action'] for event in replay['events'])
+        options = [item for item in extras if key(item['row']) not in excluded
+                   and conventional_route(item)
+                   and normalized(item['row']['entry']['levelNameSnapshot']) not in used_titles
+                   and abs(item['placement']['position'] - position) <= 10
+                   and pack_counts[item['row']['entry']['identity']['packID']] < 4]
+        assert options, 'No verified replacement at the retired level difficulty'
+        chosen = min(options, key=lambda item: (
+            abs(item['placement']['position'] - position),
+            item['placement']['upper'] - item['placement']['lower'],
+            len(item['context']['usedSkills']), len(risks(item['context'])),
+            -item['context']['savedAboveRequirement'],
+            item['context']['assignments'], key(item['row'])))
+        extras.remove(chosen)
+        pack_counts[selected[slot]['row']['entry']['identity']['packID']] -= 1
+        pack_counts[chosen['row']['entry']['identity']['packID']] += 1
+        selected[slot] = chosen
+    assert not any(key(item['row']) in excluded for item in selected)
     # Preserve the existing selection, then insert the two promised additions.
     # Required entries still need exact source resources and winning native routes.
     assert len(required) == TARGET - BASE_TARGET
@@ -407,6 +438,20 @@ def build(pool, witnesses, resources, reference, reviews):
     for anchor in anchor_rows:
         predicted, _, _, _ = estimate(anchor['context'], [a for a in anchor_rows if a is not anchor])
         calibration.append(abs(predicted - anchor['placement']['position']))
+    # User playtest, 2026-10-07: Cellbash needs only one basher. Put it directly
+    # after the seven teaching levels. This is a placement correction, not a
+    # claim that the full human discovery-review checklist has been completed.
+    cellbash = next(item for item in selected
+                    if item['row']['entry']['identity'] == {
+                        'engine': 'classic', 'packID': 'fan:lldb-547',
+                        'levelID': 'Ji Hoon Heaven 1.DAT#5'})
+    assert cellbash['row']['entry']['sourceRevision'] == '8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971'
+    assert set(cellbash['context']['usedSkills']) == {'basher'}
+    after = references['Gentle/Builders_will_help_you_here.nxlv']
+    cellbash['reference'] = after
+    cellbash['placement'].update(position=37.5, lower=35.0, upper=40.0,
+        reference=after['reference'],
+        adjustment='User playtest 2026-10-07: single-basher practice after the seven skill introductions.')
     selected.sort(key=lambda r: (r['placement']['position'], key(r['row'])))
     assert selected and selected[0]['reference']['ordinal'] == 1, 'The tutorial opening must not silently disappear'
     lessons, curriculum, transitions = [], [], []

@@ -278,6 +278,44 @@
     },
     {
       "concepts": [
+        "basher"
+      ],
+      "demand": 37.5,
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "4BE0B4DA-2611-ADB9-9AE1-DA0207D453C0",
+        "identity": {
+          "engine": "classic",
+          "levelID": "Ji Hoon Heaven 1.DAT#5",
+          "packID": "fan:lldb-547"
+        },
+        "levelNameSnapshot": "Cellbash",
+        "levelNumberSnapshot": 6,
+        "packNameSnapshot": "Ji Hoons Lemmings Remake Heaven",
+        "sourceRevision": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971"
+      },
+      "focus": "Practise: Basher",
+      "intrinsicDemand": 48.60780870246962,
+      "introduced": [],
+      "needsSupport": true,
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"Ji Hoon Heaven 1.DAT#5\", \"packID\": \"fan:lldb-547\"}",
+      "placement": {
+        "adjustment": "User playtest 2026-10-07: single-basher practice after the seven skill introductions.",
+        "basis": "solutionEstimate",
+        "lower": 35.0,
+        "position": 37.5,
+        "reference": "Gentle/Builders_will_help_you_here.nxlv",
+        "replayRevision": "SHA256 digest: 51ba9acbd5b076cf36b722c6ffd922fb511c0383e32c3b56ac73760c9ca59d29",
+        "sourceRevision": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 40.0
+      },
+      "preparationGaps": [],
+      "score": 48.60780870246962,
+      "stage": "Fun"
+    },
+    {
+      "concepts": [
         "basher",
         "blocker",
         "bomber",
@@ -731,39 +769,76 @@
     },
     {
       "concepts": [
-        "basher"
+        "bomber"
       ],
       "demand": 70.0,
       "entry": {
         "catalogueRevision": "1.2-runtime-v2",
-        "id": "4BE0B4DA-2611-ADB9-9AE1-DA0207D453C0",
+        "id": "7250D884-17B0-D54D-B002-1C70485A7518",
         "identity": {
           "engine": "classic",
-          "levelID": "Ji Hoon Heaven 1.DAT#5",
-          "packID": "fan:lldb-547"
+          "levelID": "JM01.DAT#7",
+          "packID": "fan:lldb-327"
         },
-        "levelNameSnapshot": "Cellbash",
-        "levelNumberSnapshot": 6,
-        "packNameSnapshot": "Ji Hoons Lemmings Remake Heaven",
-        "sourceRevision": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971"
+        "levelNameSnapshot": "Come back!",
+        "levelNumberSnapshot": 8,
+        "packNameSnapshot": "JM01",
+        "sourceRevision": "4ed40d2dad89484a0565b4fc472ba6db8a18a36f97c174cb4ea392eac14073c2"
       },
-      "focus": "Practise: Basher",
-      "intrinsicDemand": 48.60780870246962,
+      "focus": "Practise: Bomber",
+      "intrinsicDemand": 150.3992291768957,
       "introduced": [],
       "needsSupport": true,
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"Ji Hoon Heaven 1.DAT#5\", \"packID\": \"fan:lldb-547\"}",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"JM01.DAT#7\", \"packID\": \"fan:lldb-327\"}",
       "placement": {
         "basis": "solutionEstimate",
         "lower": 0,
         "position": 70.0,
         "reference": "Gentle/Get_a_little_extra_help.nxlv",
-        "replayRevision": "SHA256 digest: 51ba9acbd5b076cf36b722c6ffd922fb511c0383e32c3b56ac73760c9ca59d29",
-        "sourceRevision": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971",
+        "replayRevision": "SHA256 digest: fba3349cc4add7e0f3a69b5d09f0cfcd322c73eeb40a262f9d1d1d3de183cdc1",
+        "sourceRevision": "4ed40d2dad89484a0565b4fc472ba6db8a18a36f97c174cb4ea392eac14073c2",
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 215.0
+        "upper": 395.0
       },
       "preparationGaps": [],
-      "score": 48.60780870246962,
+      "score": 150.3992291768957,
+      "stage": "Fun"
+    },
+    {
+      "concepts": [
+        "blocker"
+      ],
+      "demand": 70.0,
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "F40B8B72-F7A9-7F09-5BE4-E1D8A1961E95",
+        "identity": {
+          "engine": "classic",
+          "levelID": "KillerMaster 1 Tame 1.dat#3",
+          "packID": "fan:lldb-505"
+        },
+        "levelNameSnapshot": "Guard!",
+        "levelNumberSnapshot": 4,
+        "packNameSnapshot": "KillerMasters Lemmings 1 Tame",
+        "sourceRevision": "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9"
+      },
+      "focus": "Practise: Blocker",
+      "intrinsicDemand": 95.26357056939372,
+      "introduced": [],
+      "needsSupport": true,
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"KillerMaster 1 Tame 1.dat#3\", \"packID\": \"fan:lldb-505\"}",
+      "placement": {
+        "basis": "solutionEstimate",
+        "lower": 0,
+        "position": 70.0,
+        "reference": "Gentle/Tailor-made_for_blockers.nxlv",
+        "replayRevision": "SHA256 digest: dc34315bcb536e8e8908a08c0d52a32bcbe7f6d0ff3d92f0a5799e78e6a520ba",
+        "sourceRevision": "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 395.0
+      },
+      "preparationGaps": [],
+      "score": 95.26357056939372,
       "stage": "Fun"
     },
     {
@@ -839,43 +914,6 @@
       },
       "preparationGaps": [],
       "score": 80.24930100190386,
-      "stage": "Fun"
-    },
-    {
-      "concepts": [
-        "basher"
-      ],
-      "demand": 70.0,
-      "entry": {
-        "catalogueRevision": "1.2-runtime-v2",
-        "id": "0CB134D7-ED3D-9B2B-94F8-3EB4D009DE34",
-        "identity": {
-          "engine": "classic",
-          "levelID": "LEVEL000.DAT#0",
-          "packID": "fan:lldb-584"
-        },
-        "levelNameSnapshot": "The COVOX Level",
-        "levelNumberSnapshot": 1,
-        "packNameSnapshot": "Save the Lemmings",
-        "sourceRevision": "8266ec3e50eced182f0e60729f0654bdfabf71fa405f7af8aaa96cf147e51b31"
-      },
-      "focus": "Practise: Basher",
-      "intrinsicDemand": 95.46063114592887,
-      "introduced": [],
-      "needsSupport": true,
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"LEVEL000.DAT#0\", \"packID\": \"fan:lldb-584\"}",
-      "placement": {
-        "basis": "solutionEstimate",
-        "lower": 0,
-        "position": 70.0,
-        "reference": "Gentle/Get_a_little_extra_help.nxlv",
-        "replayRevision": "SHA256 digest: 87814a06a4c6e042c469bac4e8afadf2652ffc2a1fa1b483fbf01fa0a19f1880",
-        "sourceRevision": "8266ec3e50eced182f0e60729f0654bdfabf71fa405f7af8aaa96cf147e51b31",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 215.0
-      },
-      "preparationGaps": [],
-      "score": 95.46063114592887,
       "stage": "Fun"
     },
     {
@@ -1062,43 +1100,6 @@
       },
       "preparationGaps": [],
       "score": 93.5236136155756,
-      "stage": "Fun"
-    },
-    {
-      "concepts": [
-        "builder"
-      ],
-      "demand": 70.0,
-      "entry": {
-        "catalogueRevision": "1.2-runtime-v2",
-        "id": "AD843F9F-3853-7DFC-2050-42067F39CEB6",
-        "identity": {
-          "engine": "classic",
-          "levelID": "ssam1221 Tame 1.dat#9",
-          "packID": "fan:lldb-512"
-        },
-        "levelNameSnapshot": "Something Wrong....",
-        "levelNumberSnapshot": 10,
-        "packNameSnapshot": "ssam1221s Lemmings Tame",
-        "sourceRevision": "1962aedf16c3708f1269c3e8fcd7099d81f6e237a93b2544c5c343c18dd08a11"
-      },
-      "focus": "Practise: Builder",
-      "intrinsicDemand": 74.22998219820809,
-      "introduced": [],
-      "needsSupport": true,
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"ssam1221 Tame 1.dat#9\", \"packID\": \"fan:lldb-512\"}",
-      "placement": {
-        "basis": "solutionEstimate",
-        "lower": 0,
-        "position": 70.0,
-        "reference": "Gentle/Get_a_little_extra_help.nxlv",
-        "replayRevision": "SHA256 digest: 8e0f4863f9399ee6debbac6db116e76517bce88475f1f9d272b4686e3a1d22ca",
-        "sourceRevision": "1962aedf16c3708f1269c3e8fcd7099d81f6e237a93b2544c5c343c18dd08a11",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 215.0
-      },
-      "preparationGaps": [],
-      "score": 74.22998219820809,
       "stage": "Fun"
     },
     {
@@ -11544,5 +11545,5 @@
     }
   ],
   "placementPolicy": "redux-calibrated-2",
-  "version": "learning-14"
+  "version": "learning-15"
 }

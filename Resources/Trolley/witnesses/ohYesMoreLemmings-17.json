@@ -1,0 +1,66 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 48,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1445
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 48,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1637
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 48,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1829
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 48,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1877
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 48,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2069
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 26,
+    "saved" : 26,
+    "stateHash" : "82a57e7bd5eb8b0593e1140ec5937b2a0571b592b6df386a8cc0f67730f9741f",
+    "ticks" : 2381
+  },
+  "initialStateHash" : "7d018cc0e39a1bc65a64d8169eaddc3b1e21827225e00ae377a5eb3cbcfa4dd0",
+  "number" : 18,
+  "rank" : "Lemmings Versus",
+  "title" : "The Rope Bridge"
+}

@@ -16,5 +16,26 @@
     },
     "title": "Lost something?",
     "reason": "Hidden exit requires prior knowledge."
+  },
+  {
+    "identity": {
+      "engine": "classic",
+      "levelID": "LEVEL000.DAT#0",
+      "packID": "fan:lldb-584"
+    },
+    "title": "The COVOX Level",
+    "reason": "User playtest: gimmick level unsuitable for the learning journey; replace with comparable skill practice.",
+    "replaceAtPosition": 70.0
+  },
+  {
+    "identity": {
+      "engine": "classic",
+      "levelID": "ssam1221 Tame 1.dat#9",
+      "packID": "fan:lldb-512"
+    },
+    "title": "Something Wrong....",
+    "reason": "User playtest: nuke-dependent exit glitch is unsuitable for the learning journey.",
+    "replaceAtPosition": 70.0,
+    "requiresNukeFreeSolution": true
   }
 ]

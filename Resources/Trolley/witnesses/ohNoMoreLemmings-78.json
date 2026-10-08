@@ -1,0 +1,105 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 302
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 445
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 678
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 938
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 36,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1039
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 38,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1116
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 16,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1257
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1343
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 41,
+    "saved" : 46,
+    "stateHash" : "2104891249afd4cc7e313cc36389ba43faffcf527963e9acf6862f9df09815f3",
+    "ticks" : 1538
+  },
+  "initialStateHash" : "d15ed999bb5f3a41073db5c55b57fd0f565a059df4bdd03ae4f102d7ac23cc44",
+  "number" : 19,
+  "rank" : "Wicked",
+  "title" : "Up, Down or Round and Round"
+}

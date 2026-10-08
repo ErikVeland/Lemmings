@@ -298,6 +298,7 @@ public struct ProTrackerEnhancedPlayer: Sendable {
         })
         percussionSamples = enhancements == .modern
             ? namedPercussion.union(ProTrackerHolidayMix.percussionSamples(for: module))
+                .union(ProTrackerBeastMix.percussionSamples(for: module))
             : namedPercussion
 
         // Which samples are drums depends on the module, so the tuning is
@@ -312,6 +313,7 @@ public struct ProTrackerEnhancedPlayer: Sendable {
         if enhancements == .modern {
             resolved.voiceTuning = ProTrackerHolidayMix.tuning(
                 for: module, existing: resolved.voiceTuning)
+            resolved.voiceTuning = ProTrackerBeastMix.tuning(for: module, existing: resolved.voiceTuning)
         }
         self.enhancements = resolved
         outputs = [ProTrackerVoiceOutput](

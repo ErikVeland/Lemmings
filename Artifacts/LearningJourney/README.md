@@ -33,28 +33,28 @@ Regenerate with `zsh Scripts/generate-learning-journey.sh BUNDLED_RESOURCES`. Ch
 | 5 | Gentle 5 | You need bashers this time | Fun | reduxClassicCounterpart |
 | 6 | Gentle 6 | A task for blockers and bombers | Fun | reduxClassicCounterpart |
 | 7 | Gentle 7 | Builders will help you here | Fun | reduxClassicCounterpart |
-| 8 | Gentle 8 | Snuggle up to a Lemming | Fun | reduxClassicCounterpart |
-| 9 | Gentle 1 | Diggin' to a better world | Fun | solutionEstimate |
-| 10 | Gentle 1 | Wombat Hollow | Fun | solutionEstimate |
-| 11 | Gentle 9 | Get a little extra help | Fun | reduxClassicCounterpart |
-| 12 | Gentle 2 | Stop, Block and Blow | Fun | solutionEstimate |
-| 13 | Gentle 10 | Downwardly Mobile Lemmings | Fun | reduxClassicCounterpart |
-| 14 | Gentle 11 | Keep your hair on Mr. Lemming | Fun | reduxClassicCounterpart |
-| 15 | Gentle 3 | Bomb and Block | Fun | solutionEstimate |
-| 16 | Gentle 10 | Jingle Lemming | Fun | solutionEstimate |
-| 17 | Gentle 10 | Holiday Mining | Fun | solutionEstimate |
-| 18 | Gentle 10 | Through the Crystal Caverns | Fun | solutionEstimate |
-| 19 | Gentle 3 | Blockers can block others | Fun | solutionEstimate |
-| 20 | Gentle 9 | Cellbash | Fun | solutionEstimate |
-| 21 | Gentle 9 | Create & Remove Collection | Fun | solutionEstimate |
-| 22 | Gentle 3 | Tailor-made for blockers (rm) | Fun | solutionEstimate |
-| 23 | Gentle 9 | The COVOX Level | Fun | solutionEstimate |
-| 24 | Gentle 9 | Making Snowlemmings | Fun | solutionEstimate |
-| 25 | Gentle 9 | Float Or Die | Fun | solutionEstimate |
-| 26 | Gentle 9 | Bomberman | Fun | solutionEstimate |
-| 27 | Gentle 9 | Bomb and Bash | Fun | solutionEstimate |
-| 28 | Gentle 9 | Walking Bombers | Fun | solutionEstimate |
-| 29 | Gentle 9 | Something Wrong.... | Fun | solutionEstimate |
+| 8 | Gentle 7 | Cellbash | Fun | solutionEstimate |
+| 9 | Gentle 8 | Snuggle up to a Lemming | Fun | reduxClassicCounterpart |
+| 10 | Gentle 1 | Diggin' to a better world | Fun | solutionEstimate |
+| 11 | Gentle 1 | Wombat Hollow | Fun | solutionEstimate |
+| 12 | Gentle 9 | Get a little extra help | Fun | reduxClassicCounterpart |
+| 13 | Gentle 2 | Stop, Block and Blow | Fun | solutionEstimate |
+| 14 | Gentle 10 | Downwardly Mobile Lemmings | Fun | reduxClassicCounterpart |
+| 15 | Gentle 11 | Keep your hair on Mr. Lemming | Fun | reduxClassicCounterpart |
+| 16 | Gentle 3 | Bomb and Block | Fun | solutionEstimate |
+| 17 | Gentle 10 | Jingle Lemming | Fun | solutionEstimate |
+| 18 | Gentle 10 | Holiday Mining | Fun | solutionEstimate |
+| 19 | Gentle 10 | Through the Crystal Caverns | Fun | solutionEstimate |
+| 20 | Gentle 3 | Blockers can block others | Fun | solutionEstimate |
+| 21 | Gentle 9 | Come back! | Fun | solutionEstimate |
+| 22 | Gentle 3 | Guard! | Fun | solutionEstimate |
+| 23 | Gentle 9 | Create & Remove Collection | Fun | solutionEstimate |
+| 24 | Gentle 3 | Tailor-made for blockers (rm) | Fun | solutionEstimate |
+| 25 | Gentle 9 | Making Snowlemmings | Fun | solutionEstimate |
+| 26 | Gentle 9 | Float Or Die | Fun | solutionEstimate |
+| 27 | Gentle 9 | Bomberman | Fun | solutionEstimate |
+| 28 | Gentle 9 | Bomb and Bash | Fun | solutionEstimate |
+| 29 | Gentle 9 | Walking Bombers | Fun | solutionEstimate |
 | 30 | Gentle 16 | A Beast of a level | Fun | reduxClassicCounterpart |
 | 31 | Gentle 17 | You Live and Lem | Fun | reduxClassicCounterpart |
 | 32 | Gentle 20 | Patience | Fun | reduxClassicCounterpart |

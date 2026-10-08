@@ -83,6 +83,9 @@ import UniformTypeIdentifiers
     }
     if let ready { show(ready) } else { waiting.append(show); finish() }
   }
+  func reviewStored(_ url: URL, title: String) {
+    ReplayMovieWindow.shared.open(url, title: title, onOpen: onWillReview, onClose: onDidReview)
+  }
   func discard() {
     if recordCompletions[generation] == nil { recorder?.discard() }
     generation += 1; recorder = nil

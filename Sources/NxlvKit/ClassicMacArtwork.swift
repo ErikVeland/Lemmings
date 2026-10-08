@@ -212,7 +212,15 @@ public struct ClassicMacScene: Sendable {
         var terrainFrames: [Int: ClassicMacArtwork.Frame] = [:]
         for tile in source.terrain where source.specialStyle == 0 {
             let frame: ClassicMacArtwork.Frame
-            if match?.terrain.contains(tile.id) ?? true, let mac = artwork.frame(1500 + style, tile.id) { frame = mac }
+            // The Macintosh snowman leans left; the DOS collision piece leans right.
+            // Reconstruct its source geometry so its head cannot become invisible ground.
+            // Version 3 contains Amiga artwork and keeps its native piece.
+            let sourceSnowman = style == 2 && tile.id == 12
+                && ["holiday", "xmas"].contains(artwork.family)
+                && artwork.version <= 2
+                && groundSet?.terrain[tile.id] != nil
+            if !sourceSnowman, match?.terrain.contains(tile.id) ?? true,
+                let mac = artwork.frame(1500 + style, tile.id) { frame = mac }
             else if let groundSet, let dos = groundSet.terrain[tile.id] {
                 if terrainFrames[tile.id] == nil {
                     if reconstructUnmatched {

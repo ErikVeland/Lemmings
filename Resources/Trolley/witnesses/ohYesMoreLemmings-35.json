@@ -1,0 +1,196 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 90
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 90
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 110
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 110
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 194
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 194
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 202
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 202
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 222
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 222
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 307
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 307
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 9,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 342
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 9,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 342
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 10,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 425
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 10,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 425
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 460
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 460
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 60,
+    "required" : 48,
+    "saved" : 51,
+    "stateHash" : "a655bd3b3a73748adcad27a4476e94d530f162fb2a8828a93451b4463b2d067f",
+    "ticks" : 2107
+  },
+  "initialStateHash" : "9f6b065477614e286145e97e71eccfabfa63699799edf5bb125584cd86745405",
+  "number" : 6,
+  "rank" : "Mega Drive Sunsoft",
+  "title" : "Libra"
+}

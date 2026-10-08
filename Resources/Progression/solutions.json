@@ -334719,6 +334719,60 @@
     "rank": "fan:lldb-465",
     "title": "Tailor-made for blockers (rm)"
   },
+  "cf1897bbc491e55ec3f89ae50851175fda68154e757f7870c750139ecd2ccbd5": {
+    "events": [
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 50
+          }
+        },
+        "afterTick": true,
+        "tick": 58
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 58
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 90
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        },
+        "afterTick": true,
+        "tick": 92
+      }
+    ],
+    "expected": {
+      "didWin": true,
+      "released": 60,
+      "required": 50,
+      "saved": 58,
+      "stateHash": "423025db137e179de1f90271ad6475755cfe08db2ffe9f6f396dc1001424915a",
+      "ticks": 555
+    },
+    "initialStateHash": "cf1897bbc491e55ec3f89ae50851175fda68154e757f7870c750139ecd2ccbd5",
+    "number": 8,
+    "rank": "fan:lldb-327",
+    "title": "Come back!"
+  },
   "cf63c9ce40f978399b7c5ee5d2d00a0861f90f7f25c0098fbbe8bceca9a0e2a2": {
     "events": [
       {

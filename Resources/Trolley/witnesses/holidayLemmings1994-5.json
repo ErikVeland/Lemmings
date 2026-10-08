@@ -1,0 +1,85 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 295
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 316
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 318
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 657
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1014
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1553
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1554
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 70,
+    "required" : 69,
+    "saved" : 69,
+    "stateHash" : "20c25821918d93b74af2f2d27982522f4e6adc3d5abe58fda941573bbe0b8a04",
+    "ticks" : 2979
+  },
+  "initialStateHash" : "397d585b8acaa042b787f343fed1f107e5815558d20e13c6895199fe8805a4ef",
+  "number" : 6,
+  "rank" : "Frost",
+  "title" : "The Land of the Bizarre"
+}

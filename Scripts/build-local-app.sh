@@ -86,7 +86,7 @@ else
 fi
 cp "$project_dir/Resources/Info.plist" "$contents_dir/Info.plist"
 if [[ -n "${LEMMINGS_TELEMETRY_URL:-}" ]]; then
-  /usr/libexec/PlistBuddy -c "Add :AnonymousTelemetryURL string $LEMMINGS_TELEMETRY_URL" "$contents_dir/Info.plist"
+  /usr/libexec/PlistBuddy -c "Set :AnonymousTelemetryURL $LEMMINGS_TELEMETRY_URL" "$contents_dir/Info.plist"
 fi
 rsync -a --delete "$sparkle_framework" "$contents_dir/Frameworks/"
 zsh "$project_dir/Scripts/build-app-icon.sh" "$contents_dir/Resources/AppIcon.icns"

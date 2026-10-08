@@ -3,6 +3,79 @@ import Testing
 @testable import NxlvKit
 
 struct LearningJourneyTests {
+    @Test func somethingWrongIsReplacedByANukeFreeRoute() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let journey = try JSONDecoder().decode(LearningJourney.self,
+            from: Data(contentsOf: root.appendingPathComponent("Resources/Progression/learning.json"))).validated()
+        #expect(journey.lessons.count == 294)
+        #expect(!journey.lessons.contains { $0.entry.identity.packID == "fan:lldb-512"
+            && $0.entry.identity.levelID == "ssam1221 Tame 1.dat#9" })
+        let replacement = try #require(journey.lessons.first { $0.entry.identity.packID == "fan:lldb-327"
+            && $0.entry.identity.levelID == "JM01.DAT#7" })
+        #expect(replacement.demand == 70)
+        #expect(replacement.stage == .fun)
+        let replays = try JSONDecoder().decode([String: ClassicDOSReplay].self,
+            from: Data(contentsOf: root.appendingPathComponent("Resources/Progression/solutions.json")))
+        let replay = try #require(replays["cf1897bbc491e55ec3f89ae50851175fda68154e757f7870c750139ecd2ccbd5"])
+        #expect(!replay.events.contains { if case .nuke = $0.action { return true }; return false })
+        #expect(replay.events.filter { if case .assign = $0.action { return true }; return false }.count == 2)
+    }
+
+    @Test func covoxIsReplacedAtTheSameDifficultyAndRetiredRunsRecover() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let journey = try JSONDecoder().decode(LearningJourney.self,
+            from: Data(contentsOf: root.appendingPathComponent("Resources/Progression/learning.json"))).validated()
+        #expect(journey.lessons.count == 294)
+        #expect(!journey.lessons.contains { $0.entry.identity.packID == "fan:lldb-584"
+            && $0.entry.identity.levelID == "LEVEL000.DAT#0" })
+        let replacement = try #require(journey.lessons.first { $0.entry.levelNameSnapshot == "Guard!" })
+        #expect(replacement.demand == 70)
+        #expect(replacement.stage == .fun)
+        var previous = journey.lessons.map(\.entry).filter { $0.identity != replacement.entry.identity }
+        let retired = try LevelPlaylistEntry(identity: .init(engine: .classic,
+            packID: "fan:lldb-584", levelID: "LEVEL000.DAT#0"), catalogueRevision: "1.2-runtime-v2",
+            sourceRevision: "8266ec3e50eced182f0e60729f0654bdfabf71fa405f7af8aaa96cf147e51b31",
+            packNameSnapshot: "Save the Lemmings", levelNameSnapshot: "The COVOX Level", levelNumberSnapshot: 1)
+        previous.insert(retired, at: 22)
+        let old = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+            pool: .init(id: "learning-14", summary: "Previous journey"), entries: previous, currentIndex: 22)
+        let migrated = try #require(try journey.migrating(old))
+        #expect(migrated.id == old.id)
+        #expect(migrated.currentIndex == old.currentIndex)
+        #expect(Array(migrated.entries.prefix(22)) == Array(previous.prefix(22)))
+        #expect(migrated.currentEntry.identity == replacement.entry.identity)
+        #expect(migrated.entries.count == 294)
+    }
+
+    @Test func cellbashMovesAfterTutorialsAndMigratesExistingRuns() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let journey = try JSONDecoder().decode(LearningJourney.self,
+            from: Data(contentsOf: root.appendingPathComponent("Resources/Progression/learning.json"))).validated()
+        #expect(journey.lessons.count == 294)
+        #expect(journey.lessons[6].entry.levelNameSnapshot == "Builders will help you here")
+        #expect(journey.lessons[7].entry.levelNameSnapshot == "Cellbash")
+        #expect(journey.lessons[8].entry.levelNameSnapshot == "Snuggle up to a Lemming")
+        var previous = journey.lessons.map(\.entry)
+        let cellbash = previous.remove(at: 7)
+        previous.insert(cellbash, at: 19)
+        for index in [0, 7, 19, 20] {
+            let old = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+                pool: .init(id: "learning-14", summary: "Previous journey"),
+                entries: previous, currentIndex: index)
+            let migrated = try #require(try journey.migrating(old))
+            #expect(migrated.pool.id == "learning-15")
+            #expect(migrated.id == old.id)
+            #expect(migrated.currentEntry == old.currentEntry)
+            #expect(migrated.currentIndex == index)
+            #expect(Array(migrated.entries.prefix(index)) == Array(previous.prefix(index)))
+            #expect(Set(migrated.entries.map(\.identity)).count == migrated.entries.count)
+            #expect(try journey.migrating(migrated) == migrated)
+        }
+    }
+
     @Test func learning13MigrationIncludesBoth182AdditionsWithoutChangingHistory() throws {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
             .deletingLastPathComponent().deletingLastPathComponent()
@@ -14,7 +87,7 @@ struct LearningJourneyTests {
         let old = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
             pool: .init(id: "learning-13", summary: "Previous journey"), entries: previous, currentIndex: 20)
         let migrated = try #require(try journey.migrating(old))
-        #expect(migrated.pool.id == "learning-14")
+        #expect(migrated.pool.id == "learning-15")
         #expect(migrated.id == old.id)
         #expect(migrated.currentIndex == old.currentIndex)
         #expect(migrated.currentEntry == old.currentEntry)

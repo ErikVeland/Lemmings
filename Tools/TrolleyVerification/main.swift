@@ -391,6 +391,7 @@ typealias L2Replay = Lemmings2ReplayWitness
 
 @MainActor func auditL3() throws {
     let root = ports.appendingPathComponent("LEM3CD")
+    let content = try assetHash(root)
     for tribe in Lemmings3ClassicCampaign.Tribe.allCases {
         let campaign = try Lemmings3ClassicCampaign(root: root, tribe: tribe)
         let style = try Lemmings3Style(directory: root.appendingPathComponent("STYLES"), number: tribe.rawValue)
@@ -400,9 +401,16 @@ typealias L2Replay = Lemmings2ReplayWitness
                 let perm = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/PERM%03d.OBS", level.permanentObjectsReference))))
                 let temp = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/TEMP%03d.OBS", level.temporaryObjectsReference))))
                 let base = try Lemmings3Runtime(level: level, style: style, permanent: perm, temporary: temp, total: 20)
+                let c = base.configuration
+                let number = tribe.firstLevel + index
+                row.conditions = TrolleyConditions(gameID: "lemmings3", packID: "chronicles", levelID: String(number),
+                    levelFingerprint: try fileHash(root.appendingPathComponent(String(format: "LEVELS/LEVEL%03d.DAT", number))) + ":" + content,
+                    rulesetVersion: "l3-native-preview-v1", physicsMode: "l3-native-preview-v1",
+                    population: c.total + c.extras.count, rescueRequirement: 1, startingSkills: [:], timeLimitSeconds: Double(c.timeLimit),
+                    modifiers: ["releaseInterval": String(c.releaseInterval), "releaseDelay": String(c.releaseDelay),
+                                "reserves": String(c.total), "extras": String(c.extras.count)])
                 var trial = base
                 row.testedCandidates = 1
-                let number = tribe.firstLevel + index
                 let fixture = project.appendingPathComponent(String(format: "Tests/Lemmings3CompletionTests/Fixtures/%03d.json", number))
                 let witness: Witness
                 if FileManager.default.fileExists(atPath: fixture.path) {

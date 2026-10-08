@@ -1,0 +1,193 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 20
+        }
+      },
+      "afterTick" : true,
+      "tick" : 15
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 134
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 144
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 153
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 195
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 75
+        }
+      },
+      "afterTick" : true,
+      "tick" : 322
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 361
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 563
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 755
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1053
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1245
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1437
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1629
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1830
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1960
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1968
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1973
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2289
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 48,
+    "saved" : 49,
+    "stateHash" : "ba9748a225b158c77ab029165da67460ab96293a03d57a2db9a702ea2a93117a",
+    "ticks" : 4080
+  },
+  "initialStateHash" : "ff1a1887da8c96654e93259ec47bde517b69de86f5acc6788d04e6a2b2391825",
+  "number" : 10,
+  "rank" : "Wicked",
+  "title" : "Temple of Love"
+}

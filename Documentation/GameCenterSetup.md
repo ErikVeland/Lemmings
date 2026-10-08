@@ -9,15 +9,18 @@ The local result and career screens work without Game Center.
 ## Prepared configuration
 
 `Resources/GameCenter/leaderboards.json` contains 178 exact ranked configurations
-from the bundled rescue catalogue. Each configuration has a Most Saved board.
+from the bundled rescue catalogue. Each configuration has Most Saved and Fastest clear boards.
 Three additional boards rank career stars, distinct clears and three-star levels.
 The file freezes the star thresholds for this board version. Use new board IDs if
 the rules or thresholds change.
 
-`Resources/GameCenter/app-store-connect-boards.json` lists all 181 configured Apple
-board IDs, names, score units, ranges, and two leaderboard sets. It is a setup
+`Resources/GameCenter/app-store-connect-boards.json` lists all 359 prepared Apple
+board IDs, names, score units, ranges, and four leaderboard sets. It is a setup
 manifest, not an Apple API import file. Each set contains at most 100 boards.
-All boards sort from highest to lowest and retain the best score. Level scores
+Rescue and career boards sort from highest to lowest. Speed boards sort from
+lowest to highest, retain the best score, and store positive simulation milliseconds.
+Fastest 100% requires the whole run population, including clones, to be rescued.
+Failed runs and rewind-assisted runs cannot submit speed scores. Rescue level scores
 are rescued counts. Equal rescue counts use Apple's tie handling. Local boards
 also use skills and time, so tied worldwide positions can differ.
 
@@ -31,7 +34,7 @@ Game Center by adding this file alone.
 1. The owner enabled Game Center and Spatial Audio Profile for
    `academy.glasscode.lemmings`. Create or confirm the matching macOS app in
    App Store Connect and enable Game Center for its version.
-2. Create the two leaderboard sets and 181 classic leaderboards from the manifest.
+2. Create the four leaderboard sets and 359 classic leaderboards from the manifest.
    Add the required localisations and score formats. Assign the boards to the sets.
 3. Generate a macOS development provisioning profile with both capabilities.
    Include this Mac and the installed Apple Development certificate. Download it
@@ -53,7 +56,10 @@ Game Center by adding this file alone.
    reconnect, and confirm the improved scores. Also test account changes and
    a different local player. Submit the Game Center components for release.
 
-Recreate the disabled setup files with `python3 Scripts/prepare-game-center.py`.
+The generator `python3 Scripts/prepare-game-center.py` prepares boards from the
+current rescue catalogue and refuses output above Apple’s 500-board limit.
+The checked-in 178-configuration release catalogue is deliberately retained;
+expanding it needs a board allocation or a hosted service.
 Set `ENABLE_APPLE_CAPABILITIES=0` to force an ad-hoc build with worldwide scores
 disabled. The default `auto` mode uses a valid matching profile when available. The code uses APIs available on macOS 13.
 
@@ -70,7 +76,25 @@ network failure or an app restart. A successful sync suppresses duplicate score
 submissions for that session. Scores outside the ranked catalogue, changed level
 conditions, failed runs and rewind runs are excluded.
 
+Apple allows at most 500 boards per app. Both speed categories across the
+existing catalogue would require 537, so only Fastest clear IDs are prepared for
+Game Center. Fastest 100% is available locally; full worldwide categories need
+a hosted service. The client supports optional ascending Fastest 100% IDs, but
+the release configuration does not assign them. See [Apple’s board limits](https://developer.apple.com/help/app-store-connect/configure-game-center/manage-leaderboard-sets).
+
+The new speed IDs are prepared locally; they still require registration in App
+Store Connect. This change does not enable live service or claim those boards
+are deployed. The current ranked catalogue stays at 178 configurations.
+
+Local speed records retain movies through the existing replay store and expose
+playback on their leaderboard rows. Older times remain ranked when a movie was
+never retained; those rows show playback as unavailable. Playback suspends the
+active engine audio when opened from results.
+
 The app does not upload movie files, attempt histories, or local initials.
+Worldwide replay playback remains unimplemented: it needs a hosted replay store
+and a mapping from each Game Center score to its recorded run. Local movie
+references are not public URLs and must not be advertised as worldwide replays.
 Game Center provides the displayed player name. Scores are client submissions;
 Game Center authentication does not make them server-verified solutions.
 
@@ -162,3 +186,46 @@ Local records remain available. Provisioned development builds still use the cap
 Apple lists Game Center as an App Store service that is unavailable for Developer ID distribution:
 [macOS distribution comparison](https://developer.apple.com/macos/distribution/).
 The installed matching profile uses Apple Development signing. It is not a Developer ID distribution profile.
+
+## Shared backend: anonymous rescue totals
+
+The hosted leaderboard/replay service must also support the existing anonymous
+telemetry protocol in Tools/Telemetry/server.py and AnonymousTelemetry.swift.
+Opted-in clients send fixed aggregate events to POST /v1/event. GET /v1/saved
+returns the lifetime global saved count. Individual profile names, replay IDs
+and player account identifiers do not belong in this counter.
+
+Keep these aggregates separate from authenticated leaderboard submissions and
+replay evidence. Anonymous client counts cannot certify a per-level maximum.
+A stronger rescue target needs a completion replay checked against the matching
+level data, engine and starting conditions. Winning replays with losses establish
+best-known targets; only a supported upper-bound proof establishes optimality.
+
+The current telemetry service suppresses its own client-address logs. Deployment
+must also configure proxy logs and provider retention consistently with the
+privacy notice. The anonymous counter is deployed at
+https://glasscode.academy/lemmings-api. The public total is GET /v1/saved.
+The independent systemd service is lemmings-telemetry on loopback port 8796.
+Source is installed under /opt/lemmings-telemetry. Aggregate state is under
+/var/lib/lemmings-telemetry, managed by systemd. The root-only admin credential
+is /etc/lemmings-telemetry.env; never bundle that credential with the game.
+
+Deployment files are in Tools/Telemetry/deployment. Stage that directory with
+its parent server.py, then run deployment/install.py as root. It keeps a dated
+copy of the existing website configuration under /var/backups/lemmings-telemetry,
+validates Nginx before reloading, and restores the website configuration if
+activation fails. Changes are confined to the new route and service.
+
+The service and its Nginx route do not log request addresses. Nginx strips
+forwarded identity headers and cookies. Cloudflare still terminates public
+traffic; provider-level processing is distinct from the identifier-free stored
+aggregates. The database is capped at 16,384 pages (64 MiB with its default
+4 KiB pages), and the service has memory, CPU and task limits. This uses the
+existing server plan and certificate, with no new paid subscription.
+
+Resources/Info.plist configures future builds to use this endpoint. Sharing stays
+opt-in. LEMMINGS_TELEMETRY_URL can override the endpoint at build time.
+The installed Session Test 18 application is unchanged.
+
+Authenticated worldwide speed rankings, replay uploads and replay-based target
+submissions are separate work. They are not exposed by this aggregate counter.

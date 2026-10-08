@@ -2052,6 +2052,42 @@ extension AppDelegate {
     print("PASS solution replay sounds, muted settings, isolated voices, silent rewind/pause and single-step")
   }
 
+  fileprivate func testCompletionRescueTargets() async throws {
+    settings.music = .silent
+    loadContent()
+    guard let index = dataSets.firstIndex(where: { $0.set.title == .lemmings }) else {
+      throw IntegrationFailure(message: "Missing Classic target fixture")
+    }
+    gamePicker.selectItem(at: index); selectDataSet(); loadLevel(at: 0)
+    guard let classic = session as? ClassicSession, let level = arcadeLevel,
+          let conditions = level.conditions else { throw IntegrationFailure(message: "Missing target conditions") }
+    let initial = classic.initialSimulation
+    guard let proof = VerifiedSolution.load(initial: initial, from: Bundle.main.resourceURL) else {
+      throw IntegrationFailure(message: "Missing working solution")
+    }
+    let file = URL(fileURLWithPath: ".build/hints/target-\(UUID().uuidString).json")
+    let targetStore = ArcadeStore(file: file)
+    defer { try? FileManager.default.removeItem(at: file) }
+    let pending = targetStore.prepareSolutionTarget(initial: initial, conditions: conditions,
+      resources: Bundle.main.resourceURL, buildVersion: "target-test")
+    try check(targetStore.solutionTargetIsPending(for: conditions), "Result was not gated on target validation")
+    await pending.value
+    try check(!targetStore.solutionTargetIsPending(for: conditions), "Target validation did not release the result")
+    for assisted in [false, true] {
+      let target = targetStore.records.trolley.maximum(conditions: conditions, assisted: assisted)
+      try check(target.isRescueTarget && target.value == proof.replay.expected?.saved,
+        "Winning bundled solution did not establish both rescue targets")
+      let run = ArcadeRun(profileID: targetStore.records.activeProfileID, level: level,
+        saved: target.value!, didWin: true, skills: [:], seconds: 60, assisted: assisted)
+      try check(TrolleyRescueGoals(run: run, maximum: target).stars == 3,
+        "Matching a completion solution left the third star unknown")
+    }
+    var changed = initial; _ = changed.tick()
+    try check(VerifiedSolution.validate(proof.replay, initial: changed) == nil,
+      "Changed simulation accepted stale target evidence")
+    print("PASS bundled completion targets, result gating, assisted parity, stale replay rejection and three-star scoring")
+  }
+
   fileprivate func testLevelHints() async throws {
     GameScreen.shared.dismissAll()
     settings.music = .silent
@@ -4605,6 +4641,49 @@ extension AppDelegate {
     print("PASS legacy Classic level pop-up enforces progress and reflects the unlock override")
   }
 
+  fileprivate func testScrollableReleaseNotes() throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll()
+    let welcome = ReleaseWelcome(build: 70, version: "1.8.2")
+    var continued = false
+    welcome.show(in: window) { continued = true }
+    guard let page = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
+      let scroll = page.body.subviews.first as? NSScrollView,
+      let document = scroll.documentView else {
+      throw IntegrationFailure(message: "Release notes have no scrollable body")
+    }
+    let oldSize = page.frame.size
+    defer { page.frame.size = oldSize; GameScreen.shared.dismissAll() }
+    let folder = URL(fileURLWithPath: ".build/release-notes-layout")
+    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    for size in [CGSize(width: 900, height: 620), CGSize(width: 1120, height: 720), CGSize(width: 1600, height: 1000)] {
+      page.frame.size = size; page.needsLayout = true; page.layoutSubtreeIfNeeded()
+      try check(document.bounds.height > scroll.contentSize.height && scroll.hasVerticalScroller,
+        "Long notes did not remain scrollable")
+      let action = page.controllerInitialControl
+      let actionRect = action.convert(action.bounds, to: page)
+      let bodyRect = scroll.convert(scroll.bounds, to: page)
+      try check(page.bounds.contains(actionRect) && !bodyRect.intersects(actionRect),
+        "Release notes overlap Continue or leave the page")
+      for (name, y) in [("top", max(0, document.bounds.height - scroll.contentSize.height)), ("bottom", CGFloat(0))] {
+        scroll.contentView.scroll(to: CGPoint(x: 0, y: y)); scroll.reflectScrolledClipView(scroll.contentView)
+        try check(abs(scroll.contentView.bounds.minY - y) < 1, "Release notes cannot reach " + name)
+        let bitmap = page.bitmapImageRepForCachingDisplay(in: page.bounds)!
+        page.cacheDisplay(in: page.bounds, to: bitmap)
+        try bitmap.representation(using: .png, properties: [:])!.write(
+          to: folder.appendingPathComponent("\(Int(size.width))-\(name).png"))
+        let hit = page.hitTest(CGPoint(x: actionRect.midX, y: actionRect.midY))
+        try check(hit === action || hit?.isDescendant(of: action) == true, "Scroll content blocked Continue")
+      }
+    }
+    let key = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 0,
+      windowNumber: window.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r",
+      isARepeat: false, keyCode: 36)!
+    try check(GameScreen.shared.handleDialogKey(key) && continued && !GameScreen.shared.isPresented,
+      "Scrollable notes lost keyboard Continue")
+    print("PASS release notes stay clipped and scrollable at three sizes; Continue remains visible and usable")
+  }
+
   fileprivate func testGamePages() throws {
     playfield.startCountdown.cancel()
     let running = FinalTickSession(win: false, finalTick: 1000)
@@ -4743,6 +4822,43 @@ extension AppDelegate {
     levelMusic = nil
     suspendCurrentEngine()
     print("PASS \(sources.count * sources.count) available music source transitions and settings applied during shuffled playback")
+  }
+
+  fileprivate func testHandoverMusicRouting() throws {
+    loadContent()
+    let oldSettings = settings
+    defer { settings = oldSettings; dj.onTrackChange = nil; suspendCurrentEngine() }
+    settings.music = .adaptiveDJ
+    settings.musicVolume = 0
+    settings.soundVolume = 0
+    loadSoundtracks()
+    guard let christmas = dataSets.firstIndex(where: { $0.set.title == .holidayLemmings1994 }) else {
+      throw IntegrationFailure(message: "Missing seasonal handover fixture")
+    }
+    gamePicker.selectItem(at: christmas)
+    fanPlaying = false; currentNxlvURL = nil
+    arcadeRunID = UUID(); startedMusicIdentity = nil
+    applyAudioSettings()
+    playMusicForCurrentLevel()
+    let outgoing = dj.currentURL
+    try check(outgoing != nil && dj.isPlaying, "Missing outgoing handover music")
+    var announced: [String] = []
+    dj.onTrackChange = { announced.append($0) }
+    prepareLibrary(preservingMusic: true)
+    try check(dj.isPlaying && dj.currentURL == outgoing && announced.isEmpty,
+      "Internal library cleanup stopped or replaced the outgoing track")
+    // The destination fan session owns the next selection, despite the stale
+    // seasonal campaign picker underneath the library.
+    fanPlaying = true
+    arcadeRunID = UUID()
+    playMusicForCurrentLevel()
+    try check(!seasonalMusic && dj.isCrossfading && dj.isPlaying,
+      "Fan handover did not retain the outgoing deck for its transition")
+    let identity = startedMusicIdentity
+    playMusicForCurrentLevel()
+    try check(startedMusicIdentity == identity && dj.isCrossfading,
+      "Handover refresh restarted level music")
+    print("PASS seasonal-to-fan handover retains music and starts one destination crossfade")
   }
 
   fileprivate func testSeasonalMusic() throws {
@@ -5905,7 +6021,7 @@ Task { @MainActor in
     subject.prepareArcadeTests()
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
-    #if !SOLUTION_AUDIO_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
+    #if !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -5916,7 +6032,9 @@ Task { @MainActor in
     try testPointerAssignment()
     #endif
     #endif
-    #if SOLUTION_AUDIO_TESTS
+    #if RELEASE_NOTES_TESTS
+    try subject.testScrollableReleaseNotes()
+    #elseif SOLUTION_AUDIO_TESTS
     try subject.testSolutionReplaySounds()
     #elseif PACK_NAVIGATION_TESTS
     try subject.testSoloHotSeatRoundTrips()
@@ -6028,10 +6146,14 @@ Task { @MainActor in
     try subject.testEscapeToMainMenu()
     print("Release blocker integration tests passed.")
     #elseif HINT_TESTS
+    if ProcessInfo.processInfo.environment["RESCUE_TARGET_ONLY"] == "1" {
+      try await subject.testCompletionRescueTargets()
+    } else {
     try await testGameTypography()
     try await subject.testLevelHints()
     try await subject.testHintsFromControlsHelp()
     print("Level hints integration tests passed.")
+    }
     #elseif CONTENT_BROWSER_TESTS
     try await subject.testClassicRatingBrowser()
     try await subject.testNeoLemmixPackBrowser()
@@ -6043,6 +6165,13 @@ Task { @MainActor in
     print("Content browser integration tests passed.")
     #elseif MUSIC_TESTS
     try subject.testMusicTransitions()
+    try subject.testHandoverMusicRouting()
+    let musicL2 = try Lemmings2PlayWindow(root: BundledGameResources.lemmings2(),
+      selection: .init(tribe: 0, level: 0), recordsCampaignProgress: false)
+    try musicL2.testInitialMusicRouting(); musicL2.stop(); musicL2.close()
+    let musicL3 = try Lemmings3PlayWindow(root: BundledGameResources.lemmings3(),
+      selection: .init(tribe: .classic, level: 0), recordsCampaignProgress: false)
+    try musicL3.testInitialMusicRouting(); musicL3.stop(); musicL3.close()
     try subject.testSavedAudioAndBanks()
     try subject.testGlobalMuteAndStop()
     try await subject.testMusicPauseModes()
@@ -6689,4 +6818,8 @@ extension AppDelegate {
     phase = .briefing; updateFailureMood()
     print("PASS Classic silence/beat pause, setting changes, interruption silence, resume and funeral result")
   }
+}
+
+func validateMusicRouting(_ condition: Bool, _ message: String) throws {
+    try check(condition, message)
 }

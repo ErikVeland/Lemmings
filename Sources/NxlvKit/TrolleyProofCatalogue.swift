@@ -1,7 +1,7 @@
 import Foundation
 
 /// Bundled certificates only promote a replay that reaches the finite population upper bound.
-/// A completed solution with losses remains an observation, even if it is a record.
+/// Other winning replays establish attainable targets without proving optimality.
 public struct TrolleyProofCatalogue: Codable, Sendable {
     public static let recordPrefix = "Native rescue record "
     public static let sourcePrefix = "Population-bound replay "
@@ -49,7 +49,9 @@ public struct TrolleyProofCatalogue: Codable, Sendable {
         guard matches.count == 1, let entry = matches.first, entry.status == "REPLAY_RECORD",
               entry.population == conditions.population, entry.maximumSaveable == nil, entry.minimumSacrifices == nil,
               let w = entry.witness, w.completed, w.didWin, w.saved >= conditions.rescueRequirement,
-              w.saved < bound, w.released == bound, w.lost >= 0, w.saved + w.lost <= bound, w.retainedReserves == 0,
+              w.saved < bound, w.released >= w.saved, w.released <= bound,
+              w.lost >= 0, w.saved + w.lost <= w.released,
+              w.retainedReserves >= 0, w.retainedReserves <= bound - w.released,
               Self.isDigest(w.sha256) else { return nil }
         return TrolleyMaximum(value: w.saved, status: .record, source: Self.recordPrefix + w.sha256,
                               date: generatedAt, buildVersion: engineFingerprint)

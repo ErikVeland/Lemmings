@@ -34,6 +34,35 @@ func verifiedRecords(_ c: TrolleyConditions = conditions(), maximum: Int = 58) t
     return records
 }
 
+@MainActor func testSpeedBoards() throws {
+    for game in ["lemmings", "neolemmix", "lemmings2", "lemmings3"] {
+        let c = conditions(game: game)
+        var records = ArcadeRecords()
+        let slow = run(60, c: c, used: [:], seconds: 130)
+        let fast = run(40, c: c, used: ["builder": 10], seconds: 61.125)
+        for attempt in [slow, fast, run(40, c: c, win: false, seconds: 1),
+                        run(40, c: c, seconds: 0), run(60, c: c, rewinds: 1, seconds: 2)] {
+            _ = records.record(attempt)
+        }
+        try require(records.trolley.leaderboard(conditions: c, assisted: false, board: .fastestClear).first?.id == fast.id,
+                    "Speed board favoured rescue or skills over time: " + game)
+        try require(records.trolley.leaderboard(conditions: c, assisted: false, board: .fastestAllSaved).first?.id == slow.id,
+                    "100% speed board admitted a partial rescue: " + game)
+        try require(records.trolley.leaderboard(conditions: c, assisted: true, board: .fastestClear).first?.run.seconds == 2,
+                    "Assisted timing was not separate")
+        let config = TrolleyOnlineConfiguration(enabled: true, starsID: "stars", clearsID: "clears", perfectID: "perfect",
+            levels: [.init(conditions: c, maximum: evidence(60), leaderboardID: "saved",
+                           fastestClearID: "speed", fastestAllSavedID: "all-speed")])
+        let scores = config.scores(attempts: records.trolley.attempts, profileID: slow.profileID)
+        try require(config.isValid && scores["speed"] == 61125 && scores["all-speed"] == 130000,
+                    "Online speed scores must use lowest positive milliseconds without rewinds")
+        let restored = try JSONDecoder().decode(ArcadeRecords.self, from: JSONEncoder().encode(records))
+        try require(restored.trolley.leaderboard(conditions: c, assisted: false, board: .fastestClear).first?.id == fast.id,
+                    "Fastest clear disappeared after reload")
+    }
+    print("PASS speed rankings across all engines, 100%, rewind separation, persistence and online milliseconds")
+}
+
 @MainActor func testBundledMaximumProofs() throws {
     let c = conditions(), engine = String(repeating: "a", count: 64)
     let conditionJSON = try JSONSerialization.jsonObject(with: JSONEncoder().encode(c))
@@ -46,6 +75,28 @@ func verifiedRecords(_ c: TrolleyConditions = conditions(), maximum: Int = 58) t
             "generatedAt": "2026-09-09T00:00:00Z", "engineSourceFingerprint": engine, "levels": rows])
         let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
         return try decoder.decode(TrolleyProofCatalogue.self, from: data)
+    }
+    var partial = row
+    partial["status"] = "REPLAY_RECORD"
+    partial.removeValue(forKey: "maximumSaveable"); partial.removeValue(forKey: "minimumSacrifices")
+    var partialWitness = witness
+    partialWitness["saved"] = 45; partialWitness["released"] = 50
+    partialWitness["lost"] = 5; partialWitness["retainedReserves"] = 10
+    partial["witness"] = partialWitness
+    let partialCatalogue = try decode([partial])
+    let attainable = partialCatalogue.rescueTarget(for: c, engineFingerprint: engine)
+    try require(attainable?.value == 45 && attainable?.status == .record,
+                "A completed rescue with reserves lost its attainable target")
+    try require(partialCatalogue.maximum(for: c, engineFingerprint: engine) == nil,
+                "Completion with losses claimed a proven maximum")
+    if let attainable {
+        let attempt = run(45)
+        let goals = TrolleyRescueGoals(run: attempt, maximum: attainable)
+        let metrics = TrolleyMetrics(run: attempt, telemetry: attempt.telemetry!, maximum: attainable)
+        try require(goals.stars == 3 && goals.fullRescueBasis == .bestKnownRecord,
+                    "Matching the completion solution did not earn three stars")
+        try require(metrics.unavoidableLosses == nil && metrics.avoidableLosses == nil,
+                    "Record target invented unavoidable sacrifices")
     }
     let catalogue = try decode([row])
     let proof = catalogue.maximum(for: c, engineFingerprint: engine)!
@@ -331,6 +382,23 @@ func testEngineFamilies() throws {
     print("PASS classic, Oh No, Xmas/Holiday, sequel and custom family identities; cloned population accounting")
 }
 
+@MainActor final class TestHostedTransport: HostedRankingsTransport {
+    var entries: [HostedBoard.Entry] = []
+    var requests: [URLRequest] = []
+    func data(for request: URLRequest) async throws -> (Data, URLResponse) {
+        requests.append(request)
+        let page = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)?.queryItems?.first(where: { $0.name == "page" })?.value.flatMap(Int.init) ?? 0
+        return (try JSONEncoder().encode(HostedBoard(entries: entries, page: page, hasMore: page == 0, verification: "community")),
+                HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!)
+    }
+    func upload(for request: URLRequest, fromFile file: URL) async throws -> (Data, URLResponse) { try await data(for: request) }
+    func download(for request: URLRequest) async throws -> (URL, URLResponse) {
+        let file = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".mp4")
+        try Data([0,0,0,24,102,116,121,112,105,115,111,109,0,0,0,0]).write(to: file)
+        return (file, HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: ["Content-Type": "video/mp4"])!)
+    }
+}
+
 @MainActor func testStoreAndVisuals() async throws {
     let root = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent(".build/trolley")
     try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
@@ -341,7 +409,7 @@ func testEngineFamilies() throws {
     try store.acceptMaximum(evidence(58), conditions: c, assisted: false)
     let first = UUID()
     store.beginAttempt(id: first, profileID: ArcadeProfile.legacyID, level: level(c), previousID: nil)
-    let report = store.record(run(57, id: first))!
+    let report = store.record(run(57, seconds: 119, id: first))!
     let retry = UUID()
     store.beginAttempt(id: retry, profileID: ArcadeProfile.legacyID, level: level(c), previousID: first)
     try require(store.records.trolley.starts.last?.kind == .retryAfterSuccess, "Store retry path")
@@ -494,6 +562,11 @@ func testEngineFamilies() throws {
     try require(view.accessibilityLabel()?.contains("Still in hatch: 40") == true,
                 "An ended partial run lost its hatch count")
     view.report = savedReport
+    view.mode = .records; view.boardScope = .level
+    key("8"); try shot("fastest-clear")
+    try require(view.trolleyBoard == .fastestClear, "Fastest clear keyboard target")
+    key("9"); try shot("fastest-all")
+    try require(view.trolleyBoard == .fastestAllSaved, "Fastest 100% keyboard target")
     let beforeBack = continues
     key("\r", code: 36)
     try require(continues == beforeBack && view.mode == .result, "Records navigation advanced the game")
@@ -513,8 +586,46 @@ func testEngineFamilies() throws {
     try require(view.careerPage == 1 && continues == actionsBeforeGoals, "Career paging advanced the campaign")
     key("\r", code: 36)
     view.mode = .records; view.boardScope = .career; try shot("reward-career-board")
-    view.openWorldwideBoard(); try shot("reward-worldwide-unavailable")
-    try require(view.accessibilityLabel()?.contains("not enabled") == true, "Unavailable worldwide service was not explained")
+    let hostedDefaultsName = "Hosted.UI." + UUID().uuidString
+    let hostedDefaults = UserDefaults(suiteName: hostedDefaultsName)!
+    let originalHosted = HostedRankings.shared
+    defer { HostedRankings.shared = originalHosted; hostedDefaults.removePersistentDomain(forName: hostedDefaultsName) }
+    let hostedTransport = TestHostedTransport()
+    let hosted = HostedRankings(endpoint: URL(string: "https://example.invalid/rankings"), transport: hostedTransport,
+                                defaults: hostedDefaults, credentials: { _ in String(repeating: "a", count: 64) })
+    HostedRankings.shared = hosted
+    func settleHosted() async throws {
+        for _ in 0..<500 where hosted.busy || hosted.syncing { try await Task.sleep(nanoseconds: 1_000_000) }
+        try require(!hosted.busy && !hosted.syncing, "Hosted board request did not settle")
+    }
+    view.openWorldwideBoard(); try await settleHosted(); try shot("reward-worldwide-unavailable")
+    try require(view.accessibilityLabel()?.contains("Offline") == true, "Unavailable hosted service was not explained")
+    hosted.networkEnabled = true
+    view.refreshHostedBoard(); try await settleHosted(); try shot("hosted-empty")
+    try require(!hosted.sharing(view.player.id), "Browsing shared scores without consent")
+    hostedTransport.entries = (1...5).map { .init(rank: $0, name: $0 == 1 ? "UVA" : "EKV", score: $0 * 12345, runID: UUID(), replay: $0 == 1) }
+    view.refreshHostedBoard(); try await settleHosted(); try shot("hosted-populated")
+    let hostedControls = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.filter { $0.accessibilityRole() == .button }
+    for (i, a) in hostedControls.enumerated() {
+        for b in hostedControls.dropFirst(i + 1) {
+            try require(!a.accessibilityFrame().intersects(b.accessibilityFrame()), "Hosted controls overlap: \(a.accessibilityLabel() ?? "") / \(b.accessibilityLabel() ?? "")")
+        }
+    }
+    var hostedPlayed = false
+    view.onStoredReplay = { url, _ in hostedPlayed = FileManager.default.isReadableFile(atPath: url.path) }
+    try clickButton("Play replay >"); try await settleHosted()
+    try require(hostedPlayed, "Hosted replay did not reach the shared playback route")
+    view.onStoredReplay = nil
+    try clickButton("Used"); try await settleHosted(); try shot("hosted-assisted")
+    try require(hostedTransport.requests.last?.url?.query?.contains("assisted=1") == true, "Rewind filter did not reload the hosted board")
+    key("w"); try await settleHosted(); try shot("hosted-unassisted")
+    try clickButton("Share as \(view.player.initials)"); try await settleHosted(); try shot("hosted-sharing")
+    try require(hosted.sharing(view.player.id), "Share action did not enable this player")
+    try clickButton("Remove shared records"); try await settleHosted(); try shot("hosted-removed")
+    try require(!hosted.sharing(view.player.id), "Removal did not disable this player's sharing")
+    try clickButton("Game Center >"); try shot("gamecenter-optional")
+    try require(view.usesGameCenter && view.accessibilityLabel()?.contains("Game Center") == true, "Optional Game Center route missing")
+    view.openWorldwideBoard(); try await settleHosted()
     for (mode, scope) in [(ArcadeView.Mode.goals, ArcadeView.BoardScope.level), (.career, .level), (.records, .career), (.records, .worldwide)] {
         view.mode = mode; view.boardScope = scope
         try shot("reward-\(mode)-\(scope)-640", size: CGSize(width: 640, height: 400))
@@ -548,6 +659,15 @@ func testEngineFamilies() throws {
     for _ in 0..<100 where store.records.trolley.replays.isEmpty { try await Task.sleep(nanoseconds: 100_000_000) }
     try require(store.records.trolley.replays.first?.attemptID == first, "Record movie lost on immediate retry")
     try require(store.records.trolley.replays.first?.verification == .local, "Movie claimed verified replay")
+    try require(store.replayURL(attemptID: first) != nil, "Retained movie was not available for playback")
+    view.mode = .records; view.boardScope = .level; view.trolleyBoard = .fastestClear
+    view.assisted = false
+    var openedStored = false
+    view.onStoredReplay = { url, _ in openedStored = url == store.replayURL(attemptID: first) }
+    try shot("speed-replay-available")
+    try clickButton("Play replay >")
+    try require(openedStored, "Recorded speed run playback target did not open its movie")
+    view.onStoredReplay = nil
     try store.acceptMaximum(.init(value: 58, status: .record, source: "Native test record", date: Date(), buildVersion: "test-1"), conditions: c, assisted: false)
     view.report = store.record(run(58))!; view.mode = .result
     try shot("best-known-result")
@@ -668,7 +788,7 @@ func testAchievementCollections() throws {
         try require(award != nil && philosopher.achievementHooks.contains(award!), "Philosopher is disconnected from achievements")
     }
     for board in TrolleyBoard.allCases {
-        try require(TrolleyAchievement.forBoard(board).group == .rivalries, "Board is disconnected from its trophy")
+        try require(TrolleyAchievement.forBoard(board)?.group == .rivalries || [.fastestClear, .fastestAllSaved].contains(board), "Board is disconnected from its trophy")
     }
     var empty = try verifiedRecords()
     let first = empty.record(run(58))!.trolley!.attempt
@@ -920,6 +1040,7 @@ Task { @MainActor in
         try testBundledMaximumProofs(); try testBestKnownTargets(); try testFalsifierAward(); try testAchievementCollections()
         try testMetricsAndClassification(); try testRescueGoals(); try testEvidenceAndHistory(); try testBoardsProfilesAndMigration(); try testEngineFamilies()
         try testCelebrationProgress(); try testLevelSkips(); try await testGameCenterSync()
+        try testSpeedBoards()
         try await testStoreAndVisuals()
         print("PASS THE TROLLEY"); exit(0)
     } catch { print("FAIL: \(error)"); exit(1) }

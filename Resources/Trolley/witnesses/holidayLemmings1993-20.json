@@ -1,0 +1,154 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "afterTick" : true,
+      "tick" : 60
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 60
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 132
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 324
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 516
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 580
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 761
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 16,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 927
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 953
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1201
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1287
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 12,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1315
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 12,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1348
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1367
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 75,
+    "saved" : 77,
+    "stateHash" : "c50e73a01246e657b570f7af69c96c1680428c4c2ce1a49d4bf001b70fb271cb",
+    "ticks" : 5100
+  },
+  "initialStateHash" : "354fff763a3eba272a160e91a7d72cebac2c70ad37eb559d7573498b1a775176",
+  "number" : 5,
+  "rank" : "Blizzard",
+  "title" : "It Came Upon a Lemnight Clear"
+}

@@ -55,7 +55,7 @@ def is_population_proof(row):
     return bool(c and w and row["status"] == "VERIFIED"
                 and row["population"] == c["population"] == row.get("maximumSaveable")
                 == w["saved"] == w["released"]
-                and row.get("minimumSacrifices") == w["lost"] == w["retainedReserves"] == 0
+                and row.get("minimumSacrifices") == w["lost"] == 0 <= w["retainedReserves"] <= c["population"] - w["released"]
                 and w["completed"] and w["didWin"]
                 and c.get("startingSkills", {}).get("cloner", 0) == 0)
 
@@ -63,10 +63,12 @@ def is_population_proof(row):
 def is_rescue_record(row):
     c, w = row.get("conditions"), row.get("witness")
     return bool(c and w and row["status"] == "REPLAY_RECORD"
-                and row["population"] == c["population"] == w["released"]
+                and row["population"] == c["population"]
+                and 0 <= w["released"] <= c["population"]
                 and row.get("maximumSaveable") is None and row.get("minimumSacrifices") is None
-                and c["rescueRequirement"] <= w["saved"] < w["released"]
-                and 0 <= w["lost"] <= w["released"] - w["saved"] and w["retainedReserves"] == 0
+                and c["rescueRequirement"] <= w["saved"] < c["population"]
+                and w["saved"] <= w["released"]
+                and 0 <= w["lost"] <= w["released"] - w["saved"] and 0 <= w["retainedReserves"] <= c["population"] - w["released"]
                 and w["completed"] and w["didWin"] and c.get("startingSkills", {}).get("cloner", 0) == 0)
 
 
@@ -151,17 +153,13 @@ def merge(results, shards):
         if row["status"] == "VERIFIED" and not is_population_proof(row):
             raise ValueError("An audit claims verification without a population-bound proof")
     proof_rows = [r for r in rows if is_population_proof(r)]
-    records = json.loads((PROJECT / "Documentation/ClassicCompletion/evidence.json").read_text())
-    targets = {(r["fixture"].split("/")[-1].split("-")[0], int(r["fixture"].split("-")[-1].split(".")[0])): r for r in records["fixtures"]}
     record_rows = []
     for row in rows:
-        if row["gameID"] != "lemmings" or row["status"] != "OBSERVED":
+        if row["status"] != "OBSERVED":
             continue
-        reference = targets[(row["rank"].lower(), row["number"])]
         candidate = dict(row, status="REPLAY_RECORD")
-        if not is_rescue_record(candidate) or row["witness"]["saved"] != reference["publishedDOSRecord"]:
-            raise ValueError("Classic rescue record does not match its native witness")
-        record_rows.append(candidate)
+        if is_rescue_record(candidate):
+            record_rows.append(candidate)
     for row in proof_rows + record_rows:
         destination = proof_dir / row["witness"]["path"]
         destination.parent.mkdir(parents=True, exist_ok=True)

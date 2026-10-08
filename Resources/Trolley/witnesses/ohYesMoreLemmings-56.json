@@ -1,0 +1,96 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 54
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 68
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 107
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 143
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 160
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 205
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 213
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 213
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 4,
+    "required" : 1,
+    "saved" : 1,
+    "stateHash" : "b670eb54860ed2906070ad59622253285794c6704d4a2429716713187d926f43",
+    "ticks" : 486
+  },
+  "initialStateHash" : "a37a3ccce449855ee97574f5899462a61cdec650a3c1b2884cc9d83a29551a63",
+  "number" : 27,
+  "rank" : "Mega Drive Sunsoft",
+  "title" : "Two heads are better..."
+}

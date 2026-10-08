@@ -149,18 +149,32 @@
     ]
   },
   {
+    "demand": 37.5,
+    "level": "Cellbash",
+    "newSkills": [],
+    "rawReplayScore": 48.60780870246962,
+    "rawReplayScoreChange": -107.37525535058597,
+    "referenceStep": 0.5,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured"
+    ],
+    "step": 8,
+    "variantDifferences": []
+  },
+  {
     "demand": 40.0,
     "level": "Snuggle up to a Lemming",
     "newSkills": [],
     "rawReplayScore": 480.10781678054445,
-    "rawReplayScoreChange": 324.12475272748884,
-    "referenceStep": 1.0,
+    "rawReplayScoreChange": 431.5000080780748,
+    "referenceStep": 0.5,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "four or more assignments within two seconds"
     ],
-    "step": 8,
+    "step": 9,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -179,7 +193,7 @@
     "risks": [
       "spatial tolerance unmeasured"
     ],
-    "step": 9,
+    "step": 10,
     "variantDifferences": []
   },
   {
@@ -192,7 +206,7 @@
     "risks": [
       "spatial tolerance unmeasured"
     ],
-    "step": 10,
+    "step": 11,
     "variantDifferences": []
   },
   {
@@ -207,7 +221,7 @@
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness"
     ],
-    "step": 11,
+    "step": 12,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -227,7 +241,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 12,
+    "step": 13,
     "variantDifferences": []
   },
   {
@@ -240,7 +254,7 @@
     "risks": [
       "spatial tolerance unmeasured"
     ],
-    "step": 13,
+    "step": 14,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -260,7 +274,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 14,
+    "step": 15,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -281,7 +295,7 @@
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness"
     ],
-    "step": 15,
+    "step": 16,
     "variantDifferences": []
   },
   {
@@ -294,7 +308,7 @@
     "risks": [
       "spatial tolerance unmeasured"
     ],
-    "step": 16,
+    "step": 17,
     "variantDifferences": []
   },
   {
@@ -307,7 +321,7 @@
     "risks": [
       "spatial tolerance unmeasured"
     ],
-    "step": 17,
+    "step": 18,
     "variantDifferences": []
   },
   {
@@ -320,7 +334,7 @@
     "risks": [
       "spatial tolerance unmeasured"
     ],
-    "step": 18,
+    "step": 19,
     "variantDifferences": []
   },
   {
@@ -335,21 +349,35 @@
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness"
     ],
-    "step": 19,
+    "step": 20,
     "variantDifferences": []
   },
   {
     "demand": 70.0,
-    "level": "Cellbash",
+    "level": "Come back!",
     "newSkills": [],
-    "rawReplayScore": 48.60780870246962,
-    "rawReplayScoreChange": -67.47219129753037,
+    "rawReplayScore": 150.3992291768957,
+    "rawReplayScoreChange": 34.31922917689569,
     "referenceStep": 0.0,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 20,
+    "step": 21,
+    "variantDifferences": []
+  },
+  {
+    "demand": 70.0,
+    "level": "Guard!",
+    "newSkills": [],
+    "rawReplayScore": 95.26357056939372,
+    "rawReplayScoreChange": -55.135658607501966,
+    "referenceStep": 0.0,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured"
+    ],
+    "step": 22,
     "variantDifferences": []
   },
   {
@@ -357,13 +385,13 @@
     "level": "Create & Remove Collection",
     "newSkills": [],
     "rawReplayScore": 124.88644191820201,
-    "rawReplayScoreChange": 76.27863321573238,
+    "rawReplayScoreChange": 29.62287134880829,
     "referenceStep": 0.0,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 21,
+    "step": 23,
     "variantDifferences": []
   },
   {
@@ -378,21 +406,7 @@
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness"
     ],
-    "step": 22,
-    "variantDifferences": []
-  },
-  {
-    "demand": 70.0,
-    "level": "The COVOX Level",
-    "newSkills": [],
-    "rawReplayScore": 95.46063114592887,
-    "rawReplayScoreChange": 15.211330144025013,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured"
-    ],
-    "step": 23,
+    "step": 24,
     "variantDifferences": []
   },
   {
@@ -400,13 +414,13 @@
     "level": "Making Snowlemmings",
     "newSkills": [],
     "rawReplayScore": 105.22379774999858,
-    "rawReplayScoreChange": 9.76316660406971,
+    "rawReplayScoreChange": 24.974496748094722,
     "referenceStep": 0.0,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 24,
+    "step": 25,
     "variantDifferences": []
   },
   {
@@ -420,7 +434,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 25,
+    "step": 26,
     "variantDifferences": []
   },
   {
@@ -434,7 +448,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 26,
+    "step": 27,
     "variantDifferences": []
   },
   {
@@ -448,7 +462,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 27,
+    "step": 28,
     "variantDifferences": []
   },
   {
@@ -462,20 +476,6 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 28,
-    "variantDifferences": []
-  },
-  {
-    "demand": 70.0,
-    "level": "Something Wrong....",
-    "newSkills": [],
-    "rawReplayScore": 74.22998219820809,
-    "rawReplayScoreChange": -19.293631417367507,
-    "referenceStep": 0.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured"
-    ],
     "step": 29,
     "variantDifferences": []
   },
@@ -484,7 +484,7 @@
     "level": "A Beast of a level",
     "newSkills": [],
     "rawReplayScore": 325.3197163105611,
-    "rawReplayScoreChange": 251.089734112353,
+    "rawReplayScoreChange": 231.7961026949855,
     "referenceStep": 2.0,
     "risks": [
       "incomplete timing probes",

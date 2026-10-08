@@ -246,3 +246,47 @@ do {
     }
     print("PASS fan pieces: Mac artwork and reconstructed terrain, objects and special pictures")
 }
+
+// The festive Macintosh snowman has a different silhouette from DOS terrain 12.
+// Every displayed source cell must agree with collision, including flipped pieces.
+do {
+    let directory = root.appendingPathComponent("Sources/Ports/xmas_dos_XmasLemmingsV1.9a1")
+    let ground = try ClassicGroundSet.load(style: 2, from: directory)
+    var record = Data(repeating: 0, count: ClassicLevel.recordSize)
+    record[0x1B] = 2
+    for family in ["xmas", "holiday"] {
+        let art = try ClassicMacArtwork(directory: exported.appendingPathComponent(family))
+        for flipped in [false, true] {
+            for erase in [false, true] {
+                let plain = ClassicDrawProperties(isUpsideDown: flipped, noOverwrite: false,
+                    onlyOverwrite: false, isErase: false)
+                var terrain = [ClassicTerrainPlacement(x: 100, y: 40, id: 12, draw: plain)]
+                if erase {
+                    terrain.append(ClassicTerrainPlacement(x: 108, y: 45, id: 12,
+                        draw: ClassicDrawProperties(isUpsideDown: flipped, noOverwrite: false,
+                            onlyOverwrite: false, isErase: true)))
+                }
+                let level = try ClassicLevel(data: record, terrainOverride: terrain, objectsOverride: [])
+                let rendered = try ClassicLevelRenderer.render(level, groundSet: ground)
+                let scene = try ClassicMacScene(level: level, rendered: rendered,
+                    artwork: art, groundSet: ground)
+                let amiga = try ClassicMacArtwork(directory: root.appendingPathComponent(
+                    ".build/local/Ultimate Lemmings.app/Contents/Resources/AmigaArtwork/\(family)"))
+                let nativeAmiga = try ClassicMacScene(level: level, rendered: rendered, artwork: amiga)
+                let amigaWithGround = try ClassicMacScene(level: level, rendered: rendered,
+                    artwork: amiga, groundSet: ground)
+                try require(nativeAmiga.terrainRGBA == amigaWithGround.terrainRGBA,
+                    "Snowman correction changed native Amiga artwork")
+                for y in 38..<84 { for x in 98..<144 {
+                    let solid = rendered.solidMask[y * rendered.width + x] != 0
+                    for dy in 0..<2 { for dx in 0..<2 {
+                        let p = ((y * 2 + dy) * scene.width + x * 2 + dx) * 4 + 3
+                        try require((scene.terrainRGBA[p] != 0) == solid,
+                            "Snowman artwork differs from collision: \(family), flipped=\(flipped), erase=\(erase), \(x),\(y)")
+                    } }
+                } }
+            }
+        }
+    }
+    print("PASS festive snowman pixels match collision: upright, flipped and erased")
+}

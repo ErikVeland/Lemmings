@@ -1,0 +1,116 @@
+{
+  "expected" : {
+    "lost" : 0,
+    "reserves" : 10,
+    "saved" : 10,
+    "stateHash" : "4d851c225f36e915a1bfd7fc07ce2bb554e9a0d70a66551ecac97488cfd6d0ee",
+    "ticks" : 447
+  },
+  "initialStateHash" : "1d681d350c74b52a4712faf301b09b36949ef400415e3df07e8f93149455ac74",
+  "inputs" : [
+    {
+      "action" : "jumper",
+      "lemming" : 0,
+      "tick" : 115
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 1,
+      "tick" : 138
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 2,
+      "tick" : 161
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 0,
+      "tick" : 184
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 3,
+      "tick" : 184
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 1,
+      "tick" : 207
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 4,
+      "tick" : 207
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 2,
+      "tick" : 230
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 5,
+      "tick" : 230
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 3,
+      "tick" : 253
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 6,
+      "tick" : 253
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 4,
+      "tick" : 276
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 7,
+      "tick" : 276
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 5,
+      "tick" : 299
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 8,
+      "tick" : 299
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 6,
+      "tick" : 322
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 9,
+      "tick" : 322
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 7,
+      "tick" : 345
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 8,
+      "tick" : 368
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 9,
+      "tick" : 391
+    }
+  ],
+  "level" : 204,
+  "levelSHA256" : "2a2f531833cffe50181499387a1d6d7100dd03f47141bea0c4bc19d445bc22a6",
+  "population" : 20,
+  "version" : 1
+}

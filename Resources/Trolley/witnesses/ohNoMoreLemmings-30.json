@@ -1,0 +1,66 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 56
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 127
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 135
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 167
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 179
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 19,
+    "required" : 8,
+    "saved" : 8,
+    "stateHash" : "3ad9e8d91794d9694a49463cb43de01ac766f5748cf7438d3cbdd10577cbcc67",
+    "ticks" : 1020
+  },
+  "initialStateHash" : "94528fc44a01525bc247b3a94d9012e70452e5c4a90bb8183b9a8c8120060198",
+  "number" : 11,
+  "rank" : "Crazy",
+  "title" : "No Problemming!"
+}

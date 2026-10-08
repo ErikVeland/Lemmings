@@ -1,0 +1,156 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 95
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 119
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 206
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 10,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1287
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1295
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1319
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 13,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1327
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 16,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1655
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 17,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1663
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 22,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1671
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 21,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 3663
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 21,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 3665
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 3666
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 3745
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 25,
+    "saved" : 49,
+    "stateHash" : "3f3556669bc70f7739678f7975912ee12f927bf11bc12159cb2d49cb1d332f51",
+    "ticks" : 3813
+  },
+  "initialStateHash" : "498c10152526fa37d6f6641f1a370cdf3e14073eb407b57729a859f72875b956",
+  "number" : 15,
+  "rank" : "Tame",
+  "title" : "Not just a pretty Lemming"
+}

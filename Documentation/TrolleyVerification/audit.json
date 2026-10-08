@@ -1,7 +1,7 @@
 {
-  "engineSourceFingerprint": "4d755a9f5167eae81dd4c91d9c3c6185beca34e078a6ebbe31ff838ae5128ed9",
+  "engineSourceFingerprint": "3a7044fe322828ce2bdfc02f5d178d3e51eddfda79da6bfc7d87f1c43a40639b",
   "exhaustive": false,
-  "generatedAt": "2026-10-06T03:23:02Z",
+  "generatedAt": "2026-10-07T22:08:20Z",
   "levels": [
     {
       "bestSaved": 10,
@@ -128,15 +128,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 0,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 3,
       "population": 50,
       "rank": "Fun",
       "required": 5,
       "status": "OBSERVED",
-      "testedCandidates": 75,
+      "testedCandidates": 4,
       "title": "Tailor-made for blockers",
       "witness": {
         "completed": true,
@@ -275,15 +273,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 6,
       "population": 50,
       "rank": "Fun",
       "required": 10,
       "status": "OBSERVED",
-      "testedCandidates": 146,
+      "testedCandidates": 4,
       "title": "A task for blockers and bombers",
       "witness": {
         "completed": true,
@@ -863,15 +859,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 5,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 18,
       "population": 70,
       "rank": "Fun",
       "required": 50,
       "status": "OBSERVED",
-      "testedCandidates": 146,
+      "testedCandidates": 4,
       "title": "Let's block and blow",
       "witness": {
         "completed": true,
@@ -1696,15 +1690,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 5,
       "population": 80,
       "rank": "Mayhem",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 501,
+      "testedCandidates": 4,
       "title": "Down, along, up. In that order",
       "witness": {
         "completed": true,
@@ -1941,15 +1933,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 10,
       "population": 75,
       "rank": "Mayhem",
       "required": 50,
       "status": "OBSERVED",
-      "testedCandidates": 501,
+      "testedCandidates": 4,
       "title": "Pillars of Hercules",
       "witness": {
         "completed": true,
@@ -2382,15 +2372,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 19,
       "population": 50,
       "rank": "Mayhem",
       "required": 46,
       "status": "OBSERVED",
-      "testedCandidates": 217,
+      "testedCandidates": 4,
       "title": "Time to get up!",
       "witness": {
         "completed": true,
@@ -2725,15 +2713,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 3,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 26,
       "population": 80,
       "rank": "Mayhem",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 217,
+      "testedCandidates": 4,
       "title": "The Steel Mines of Kessel",
       "witness": {
         "completed": true,
@@ -2872,15 +2858,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 0,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 29,
       "population": 80,
       "rank": "Mayhem",
       "required": 64,
       "status": "OBSERVED",
-      "testedCandidates": 288,
+      "testedCandidates": 4,
       "title": "Save Me",
       "witness": {
         "completed": true,
@@ -3264,15 +3248,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 7,
       "population": 80,
       "rank": "Taxing",
       "required": 78,
       "status": "OBSERVED",
-      "testedCandidates": 359,
+      "testedCandidates": 4,
       "title": "Every Lemming for himself!!!",
       "witness": {
         "completed": true,
@@ -3852,15 +3834,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 5,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 19,
       "population": 70,
       "rank": "Taxing",
       "required": 64,
       "status": "OBSERVED",
-      "testedCandidates": 75,
+      "testedCandidates": 4,
       "title": "Bomboozal",
       "witness": {
         "completed": true,
@@ -4244,15 +4224,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 3,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 27,
       "population": 80,
       "rank": "Taxing",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 217,
+      "testedCandidates": 4,
       "title": "Call in the bomb squad",
       "witness": {
         "completed": true,
@@ -4293,15 +4271,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 10,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 28,
       "population": 80,
       "rank": "Taxing",
       "required": 56,
       "status": "OBSERVED",
-      "testedCandidates": 501,
+      "testedCandidates": 4,
       "title": "POOR WEE CREATURES!",
       "witness": {
         "completed": true,
@@ -5126,15 +5102,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 3,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 15,
       "population": 10,
       "rank": "Tricky",
       "required": 6,
       "status": "OBSERVED",
-      "testedCandidates": 75,
+      "testedCandidates": 4,
       "title": "Ozone friendly Lemmings",
       "witness": {
         "completed": true,
@@ -5175,15 +5149,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 16,
       "population": 50,
       "rank": "Tricky",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 217,
+      "testedCandidates": 4,
       "title": "Luvly Jubly",
       "witness": {
         "completed": true,
@@ -5224,15 +5196,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 17,
       "population": 50,
       "rank": "Tricky",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 75,
+      "testedCandidates": 4,
       "title": "Diet Lemmingaid",
       "witness": {
         "completed": true,
@@ -5273,15 +5243,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 18,
       "population": 10,
       "rank": "Tricky",
       "required": 9,
       "status": "OBSERVED",
-      "testedCandidates": 288,
+      "testedCandidates": 4,
       "title": "It's Lemmingentry Watson",
       "witness": {
         "completed": true,
@@ -5518,15 +5486,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 23,
       "population": 80,
       "rank": "Tricky",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 430,
+      "testedCandidates": 4,
       "title": "From The Boundary Line",
       "witness": {
         "completed": true,
@@ -6008,15 +5974,13 @@
       },
       "gameID": "xmasLemmings1991",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 3,
       "population": 50,
       "rank": "Xmas",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 3,
       "title": "Time waits for no Lemming",
       "witness": {
         "completed": true,
@@ -6106,15 +6070,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 1,
       "population": 50,
       "rank": "Crazy",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 3,
       "title": "Quote: \"That`s a good level\"",
       "witness": {
         "completed": true,
@@ -6204,15 +6166,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 3,
       "population": 50,
       "rank": "Crazy",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 145,
+      "testedCandidates": 3,
       "title": "Many Lemmings make level work",
       "witness": {
         "completed": true,
@@ -6449,15 +6409,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 8,
       "population": 80,
       "rank": "Crazy",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 3,
       "title": "KEEP ON TRUCKING",
       "witness": {
         "completed": true,
@@ -6547,15 +6505,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 10,
       "population": 80,
       "rank": "Crazy",
       "required": 79,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 3,
       "title": "ROCKY VI",
       "witness": {
         "completed": true,
@@ -6596,15 +6552,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 9,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 11,
       "population": 80,
       "rank": "Crazy",
       "required": 8,
       "status": "OBSERVED",
-      "testedCandidates": 145,
+      "testedCandidates": 3,
       "title": "No Problemming!",
       "witness": {
         "completed": true,
@@ -6694,15 +6648,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 9,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 13,
       "population": 20,
       "rank": "Crazy",
       "required": 10,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 3,
       "title": "It`s a trade off",
       "witness": {
         "completed": true,
@@ -6743,15 +6695,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 14,
       "population": 50,
       "rank": "Crazy",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 3,
       "title": "Time waits for no Lemming",
       "witness": {
         "completed": true,
@@ -6792,15 +6742,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 15,
       "population": 50,
       "rank": "Crazy",
       "required": 44,
       "status": "OBSERVED",
-      "testedCandidates": 287,
+      "testedCandidates": 3,
       "title": "Worra load of old blocks!",
       "witness": {
         "completed": true,
@@ -6890,15 +6838,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 17,
       "population": 50,
       "rank": "Crazy",
       "required": 49,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 3,
       "title": "DIGGING FOR VICTORY",
       "witness": {
         "completed": true,
@@ -6939,15 +6885,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 18,
       "population": 50,
       "rank": "Crazy",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 3,
       "title": "NO PROBLEM",
       "witness": {
         "completed": true,
@@ -6988,15 +6932,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 19,
       "population": 50,
       "rank": "Crazy",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 500,
+      "testedCandidates": 3,
       "title": "DON`T PANIC",
       "witness": {
         "completed": true,
@@ -7037,15 +6979,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 0,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 20,
       "population": 20,
       "rank": "Crazy",
       "required": 10,
       "status": "OBSERVED",
-      "testedCandidates": 287,
+      "testedCandidates": 3,
       "title": "Ice Ice Lemming",
       "witness": {
         "completed": true,
@@ -7086,15 +7026,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 1,
       "population": 80,
       "rank": "Havoc",
       "required": 76,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 3,
       "title": "Tubular Lemmings",
       "witness": {
         "completed": true,
@@ -7135,15 +7073,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 0,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 2,
       "population": 30,
       "rank": "Havoc",
       "required": 29,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 3,
       "title": "Be more than just a number",
       "witness": {
         "completed": true,
@@ -7380,15 +7316,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 7,
       "population": 20,
       "rank": "Havoc",
       "required": 15,
       "status": "OBSERVED",
-      "testedCandidates": 571,
+      "testedCandidates": 3,
       "title": "Creature Discomforts",
       "witness": {
         "completed": true,
@@ -7527,15 +7461,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 16,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 10,
       "population": 21,
       "rank": "Havoc",
       "required": 3,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 3,
       "title": "Flow Control",
       "witness": {
         "completed": true,
@@ -7674,15 +7606,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 13,
       "population": 80,
       "rank": "Havoc",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 3,
       "title": "HIGHLAND FLING",
       "witness": {
         "completed": true,
@@ -7821,15 +7751,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 0,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 16,
       "population": 50,
       "rank": "Havoc",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 287,
+      "testedCandidates": 3,
       "title": "Scaling the Heights",
       "witness": {
         "completed": true,
@@ -7870,15 +7798,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 17,
       "population": 80,
       "rank": "Havoc",
       "required": 78,
       "status": "OBSERVED",
-      "testedCandidates": 500,
+      "testedCandidates": 3,
       "title": "Where Lemmings Dare",
       "witness": {
         "completed": true,
@@ -7919,15 +7845,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 18,
       "population": 70,
       "rank": "Havoc",
       "required": 68,
       "status": "OBSERVED",
-      "testedCandidates": 500,
+      "testedCandidates": 3,
       "title": "Lemmings in a situation",
       "witness": {
         "completed": true,
@@ -8017,15 +7941,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 10,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 20,
       "population": 60,
       "rank": "Havoc",
       "required": 50,
       "status": "OBSERVED",
-      "testedCandidates": 287,
+      "testedCandidates": 3,
       "title": "LOoK BeFoRe YoU LeAp!",
       "witness": {
         "completed": true,
@@ -8115,15 +8037,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 2,
       "population": 50,
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 571,
+      "testedCandidates": 3,
       "title": "Rent-a-Lemming",
       "witness": {
         "completed": true,
@@ -8262,15 +8182,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 5,
       "population": 50,
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 571,
+      "testedCandidates": 3,
       "title": "Snuggle up to a Lemming",
       "witness": {
         "completed": true,
@@ -8360,15 +8278,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 7,
       "population": 50,
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 571,
+      "testedCandidates": 3,
       "title": "Who`s That Lemming",
       "witness": {
         "completed": true,
@@ -8409,15 +8325,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 8,
       "population": 50,
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 571,
+      "testedCandidates": 3,
       "title": "Dangerzone",
       "witness": {
         "completed": true,
@@ -8458,15 +8372,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 9,
       "population": 50,
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 571,
+      "testedCandidates": 3,
       "title": "And now this...",
       "witness": {
         "completed": true,
@@ -8703,15 +8615,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 0,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 14,
       "population": 50,
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 571,
+      "testedCandidates": 3,
       "title": "Get a little extra help",
       "witness": {
         "completed": true,
@@ -8752,15 +8662,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 15,
       "population": 50,
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 571,
+      "testedCandidates": 3,
       "title": "Not just a pretty Lemming",
       "witness": {
         "completed": true,
@@ -8948,15 +8856,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 19,
       "population": 50,
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 571,
+      "testedCandidates": 3,
       "title": "Lemming Productions Present...",
       "witness": {
         "completed": true,
@@ -9046,15 +8952,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 1,
       "population": 60,
       "rank": "Wicked",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 3,
       "title": "LeMming ToMato KetchUp fAcilitY",
       "witness": {
         "completed": true,
@@ -9193,15 +9097,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 9,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 4,
       "population": 50,
       "rank": "Wicked",
       "required": 30,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 3,
       "title": "Oh No! It`s the 4TH DIMENSION!",
       "witness": {
         "completed": true,
@@ -9291,15 +9193,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 0,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 6,
       "population": 80,
       "rank": "Wicked",
       "required": 30,
       "status": "OBSERVED",
-      "testedCandidates": 287,
+      "testedCandidates": 3,
       "title": "PoP TiL YoU DrOp!",
       "witness": {
         "completed": true,
@@ -9340,15 +9240,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 5,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 7,
       "population": 80,
       "rank": "Wicked",
       "required": 72,
       "status": "OBSERVED",
-      "testedCandidates": 145,
+      "testedCandidates": 3,
       "title": "Last Lemming To Lemmingcentral",
       "witness": {
         "completed": true,
@@ -9389,15 +9287,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 8,
       "population": 50,
       "rank": "Wicked",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 3,
       "title": "A TOWERING PROBLEM",
       "witness": {
         "completed": true,
@@ -9438,15 +9334,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 3,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 9,
       "population": 50,
       "rank": "Wicked",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 216,
+      "testedCandidates": 3,
       "title": "How on Earth?",
       "witness": {
         "completed": true,
@@ -9487,15 +9381,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 0,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 10,
       "population": 50,
       "rank": "Wicked",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 3,
       "title": "Temple of Love",
       "witness": {
         "completed": true,
@@ -9536,15 +9428,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 6,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 11,
       "population": 50,
       "rank": "Wicked",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 3,
       "title": "ROCKY ROAD",
       "witness": {
         "completed": true,
@@ -9585,15 +9475,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 12,
       "population": 80,
       "rank": "Wicked",
       "required": 78,
       "status": "OBSERVED",
-      "testedCandidates": 287,
+      "testedCandidates": 3,
       "title": "Suicidal Tendencies",
       "witness": {
         "completed": true,
@@ -9634,15 +9522,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 7,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 13,
       "population": 80,
       "rank": "Wicked",
       "required": 70,
       "status": "OBSERVED",
-      "testedCandidates": 500,
+      "testedCandidates": 3,
       "title": "Almost Nearly Virtual Reality",
       "witness": {
         "completed": true,
@@ -9732,15 +9618,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 7,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 15,
       "population": 50,
       "rank": "Wicked",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 500,
+      "testedCandidates": 3,
       "title": "SPAM,SPAM,SPAM,EGG AND LEMMING",
       "witness": {
         "completed": true,
@@ -9781,15 +9665,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 16,
       "population": 6,
       "rank": "Wicked",
       "required": 5,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 3,
       "title": "Five Alive",
       "witness": {
         "completed": true,
@@ -9830,15 +9712,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 17,
       "population": 30,
       "rank": "Wicked",
       "required": 29,
       "status": "OBSERVED",
-      "testedCandidates": 287,
+      "testedCandidates": 3,
       "title": "Down the tube",
       "witness": {
         "completed": true,
@@ -9928,15 +9808,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 19,
       "population": 50,
       "rank": "Wicked",
       "required": 41,
       "status": "OBSERVED",
-      "testedCandidates": 145,
+      "testedCandidates": 3,
       "title": "Up, Down or Round and Round",
       "witness": {
         "completed": true,
@@ -9977,15 +9855,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 20,
       "population": 70,
       "rank": "Wicked",
       "required": 68,
       "status": "OBSERVED",
-      "testedCandidates": 287,
+      "testedCandidates": 3,
       "title": "The Lemming Funhouse",
       "witness": {
         "completed": true,
@@ -10075,15 +9951,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 20,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 2,
       "population": 80,
       "rank": "Wild",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 571,
+      "testedCandidates": 3,
       "title": "Lemming Hotel",
       "witness": {
         "completed": true,
@@ -10124,15 +9998,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 11,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 3,
       "population": 80,
       "rank": "Wild",
       "required": 65,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 3,
       "title": "Lemming Rhythms",
       "witness": {
         "completed": true,
@@ -10222,15 +10094,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 5,
       "population": 80,
       "rank": "Wild",
       "required": 68,
       "status": "OBSERVED",
-      "testedCandidates": 216,
+      "testedCandidates": 3,
       "title": "Lemming Head",
       "witness": {
         "completed": true,
@@ -10467,15 +10337,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 8,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 10,
       "population": 80,
       "rank": "Wild",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 216,
+      "testedCandidates": 3,
       "title": "Higgledy Piggledy",
       "witness": {
         "completed": true,
@@ -10516,15 +10384,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 11,
       "population": 50,
       "rank": "Wild",
       "required": 49,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 3,
       "title": "Mutiny On The Bounty",
       "witness": {
         "completed": true,
@@ -10565,15 +10431,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 8,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 12,
       "population": 50,
       "rank": "Wild",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 3,
       "title": "SNOW JOKE",
       "witness": {
         "completed": true,
@@ -10614,15 +10478,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 13,
       "population": 80,
       "rank": "Wild",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 3,
       "title": "ONWARD AND UPWARD",
       "witness": {
         "completed": true,
@@ -10712,15 +10574,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 9,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 15,
       "population": 50,
       "rank": "Wild",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 3,
       "title": "THE SILENCE OF THE LEMMINGS",
       "witness": {
         "completed": true,
@@ -10859,15 +10719,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 9,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 18,
       "population": 80,
       "rank": "Wild",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 145,
+      "testedCandidates": 3,
       "title": "Dr Lemminggood",
       "witness": {
         "completed": true,
@@ -10908,15 +10766,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 15,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 19,
       "population": 80,
       "rank": "Wild",
       "required": 65,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 3,
       "title": "Lemmingdelica",
       "witness": {
         "completed": true,
@@ -10957,15 +10813,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 20,
       "population": 30,
       "rank": "Wild",
       "required": 29,
       "status": "OBSERVED",
-      "testedCandidates": 287,
+      "testedCandidates": 3,
       "title": "Got anything....Lemmingy???",
       "witness": {
         "completed": true,
@@ -17663,15 +17517,13 @@
       },
       "gameID": "holidayLemmings1993",
       "lossesInBestSolution": 3,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 1,
       "population": 25,
       "rank": "Blizzard",
       "required": 22,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 3,
       "title": "Oogilemming!",
       "witness": {
         "completed": true,
@@ -17859,15 +17711,13 @@
       },
       "gameID": "holidayLemmings1993",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 5,
       "population": 80,
       "rank": "Blizzard",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 571,
+      "testedCandidates": 3,
       "title": "It Came Upon a Lemnight Clear",
       "witness": {
         "completed": true,
@@ -18202,15 +18052,13 @@
       },
       "gameID": "holidayLemmings1993",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 12,
       "population": 80,
       "rank": "Blizzard",
       "required": 70,
       "status": "OBSERVED",
-      "testedCandidates": 145,
+      "testedCandidates": 3,
       "title": "The Voyage Home...",
       "witness": {
         "completed": true,
@@ -18251,15 +18099,13 @@
       },
       "gameID": "holidayLemmings1993",
       "lossesInBestSolution": 5,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 13,
       "population": 70,
       "rank": "Blizzard",
       "required": 65,
       "status": "OBSERVED",
-      "testedCandidates": 571,
+      "testedCandidates": 3,
       "title": "The Final Frontier",
       "witness": {
         "completed": true,
@@ -18349,15 +18195,13 @@
       },
       "gameID": "holidayLemmings1993",
       "lossesInBestSolution": 5,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 15,
       "population": 15,
       "rank": "Blizzard",
       "required": 8,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 3,
       "title": "The Needs of the Many...",
       "witness": {
         "completed": true,
@@ -18398,15 +18242,13 @@
       },
       "gameID": "holidayLemmings1993",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 16,
       "population": 50,
       "rank": "Blizzard",
       "required": 47,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 3,
       "title": "The Next Lemeration",
       "witness": {
         "completed": true,
@@ -18790,15 +18632,13 @@
       },
       "gameID": "holidayLemmings1993",
       "lossesInBestSolution": 0,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 8,
       "population": 80,
       "rank": "Flurry",
       "required": 70,
       "status": "OBSERVED",
-      "testedCandidates": 571,
+      "testedCandidates": 3,
       "title": "Clouds of Lemmings",
       "witness": {
         "completed": true,
@@ -19182,15 +19022,13 @@
       },
       "gameID": "holidayLemmings1993",
       "lossesInBestSolution": 0,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 16,
       "population": 50,
       "rank": "Flurry",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 3,
       "title": "The Long Way Around",
       "witness": {
         "completed": true,
@@ -22104,6 +21942,25 @@
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "7f4e6fd9b04f6fbcfa4fe3fa6a563458d928ea3ce08f1664a2d633767b5e8c96:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "1",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -22130,6 +21987,25 @@
     },
     {
       "bestSaved": 12,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "bc269a77ebb2d145ee18b0cf2a6b03d6019043c35094dfd57f879e1da0bf92f2:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "2",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "40",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 300
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -22156,6 +22032,25 @@
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "a8c0df1b5a2754a8ec452652dae5ceb63d75e53f1b2dc57af3b3af2a5d7f12fa:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "3",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 300
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -22182,6 +22077,25 @@
     },
     {
       "bestSaved": 12,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "ab8f2a2df7b601243cf044f2601cb599c12c973635daedbba1c6cbb915500697:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "4",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "20",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -22208,6 +22122,25 @@
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "2248e31f97d606cb06a4fb80cccbd798dc6a4218188e83838f37a05f60959910:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "5",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -22234,6 +22167,25 @@
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "27d87321945e9411aac1aa42f426b161f5f25fc421c397f9b8486f77bc3541d7:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "6",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 300
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -22260,6 +22212,25 @@
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "3c83595c83e16da008bfddf657f3a430eba529e96c391d7542fac18a6a0a4fc9:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "7",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 240
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -22286,6 +22257,25 @@
     },
     {
       "bestSaved": 11,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "299b6570fc6986018909afa8f4843f5cd71a5c0857a8a726be762a90b3d4c626:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "8",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 1,
       "notes": [
@@ -22312,6 +22302,25 @@
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "9eae010e2e31ded33d67c4eb8909944a0bb9234b22d601698798d880cbf78c2d:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "9",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 1,
       "notes": [
@@ -22338,6 +22347,25 @@
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "638ad85e6f9a638cc1d651d08b48358e01bef5d3da2a9378ae02d983929347df:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "10",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 2,
       "notes": [
@@ -22364,6 +22392,25 @@
     },
     {
       "bestSaved": 11,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "5cec53ba8649308f1f8ab1217c341f593ea9c0e67b76b7ccf76b812dbf289f56:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "11",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -22384,12 +22431,31 @@
         "released": 11,
         "retainedReserves": 10,
         "saved": 11,
-        "sha256": "776eac0d9362db4391ce3e604f5a9b119ea757769c68cc42d04fcc8fe6fc0f8f",
+        "sha256": "5e61c97177ac0f04a44d978d5e9998e0ed66a2491b2279dd5163538d4aa1e2e0",
         "ticks": 3523
       }
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "ec7d6f8ecb4eee8bdf11385ed485dddf6117661e09a2a86b9f72e3d1bb5c9b42:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "12",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -22416,6 +22482,25 @@
     },
     {
       "bestSaved": 12,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "2368ada523785d26485004d20fd10211f0db443832d8bfda168cd1205fdf1a35:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "13",
+        "modifiers": {
+          "extras": "3",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 23,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 240
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 1,
       "notes": [
@@ -22442,6 +22527,25 @@
     },
     {
       "bestSaved": 11,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "8ce6022913930b3116916491f6ad27151bd50e6162ffcd0a1e94d7de06032ffc:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "14",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 150
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 1,
       "notes": [
@@ -22468,6 +22572,25 @@
     },
     {
       "bestSaved": 13,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "12fa2fee4174b01fd2de08aa19126cca5a85a0fbc0ebda216ba7dc5f99262e79:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "15",
+        "modifiers": {
+          "extras": "3",
+          "releaseDelay": "46",
+          "releaseInterval": "55",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 23,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 240
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -22494,6 +22617,25 @@
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "f99209de3b44fc8d9e79bced9e4bfc1a1a26226c9d90f08485c498a7eadffd43:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "16",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "51",
+          "releaseInterval": "44",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 240
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 2,
       "notes": [
@@ -22520,6 +22662,25 @@
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "05ecdda3b536779fbbb429be2c81ca3fa81b9637bf07ec37153956e70b08b32e:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "17",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 300
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -22540,12 +22701,31 @@
         "released": 10,
         "retainedReserves": 10,
         "saved": 10,
-        "sha256": "62578df6ff8ad75a34a4b4f45eba5ccc731c330b3d3712b6670fcb0ff35f7281",
+        "sha256": "391e808c842c6844f1cecb6738db7f03c1a76aeb13d84c962413b3aabfc6609d",
         "ticks": 3823
       }
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "465f589300a10f38f58eb99ba9728b634080038a50290eab12164652b00d7bb7:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "18",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -22572,6 +22752,25 @@
     },
     {
       "bestSaved": 12,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "28d72636b7f2843727830869056abcf4a47142234c751f37483dfaea5e402868:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "19",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 240
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -22597,9 +22796,28 @@
       }
     },
     {
-      "bestSaved": 8,
+      "bestSaved": 12,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "f420be5c1f5e2b62926060dc16d1249a1f7c511c9af9b8efeac06fc5aef76b5d:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "20",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "40",
+          "releaseInterval": "103",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 240
+      },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 8,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -22613,17 +22831,36 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 8,
+        "lost": 0,
         "path": "witnesses/lemmings3-20.json",
-        "released": 16,
-        "retainedReserves": 6,
-        "saved": 8,
-        "sha256": "08f9bdc651f4ec79388f0f519c6e8cf8e3e3cedca14bd20f300c6e598040d4ac",
-        "ticks": 5520
+        "released": 12,
+        "retainedReserves": 10,
+        "saved": 12,
+        "sha256": "08b28ff9cff88618d17793969eb16d530fbbe98aee447eb1dfe4e38e0cae0c7a",
+        "ticks": 2343
       }
     },
     {
       "bestSaved": 2,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "0e0b469082bab6c38cc86b72631ce39efefcd48ec7227a657c819bd5013718ff:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "21",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "40",
+          "releaseInterval": "103",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 270
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 8,
       "notes": [
@@ -22649,7 +22886,28 @@
       }
     },
     {
+      "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "848b31aa05f055d93bdc553644e4806a1681e8441275af0baa951ea8ea3f3c00:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "22",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 200
+      },
       "gameID": "lemmings3",
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -22657,12 +22915,44 @@
       "population": 20,
       "rank": "Classic",
       "required": 1,
-      "status": "UNKNOWN",
+      "status": "OBSERVED",
       "testedCandidates": 1,
-      "title": "Classic 22"
+      "title": "Classic 22",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings3-22.json",
+        "released": 10,
+        "retainedReserves": 10,
+        "saved": 10,
+        "sha256": "2f777269583e3c8aca34a75e1b3be59d4be5db1e96379469040a5b2798a797cf",
+        "ticks": 2040
+      }
     },
     {
+      "bestSaved": 12,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "6db9cc41fd9ea5e6349b66b57475b5e7c983abb784660a7440b39bce9b50039f:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "23",
+        "modifiers": {
+          "extras": "3",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 23,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 210
+      },
       "gameID": "lemmings3",
+      "lossesInBestSolution": 1,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -22670,12 +22960,44 @@
       "population": 23,
       "rank": "Classic",
       "required": 1,
-      "status": "UNKNOWN",
+      "status": "OBSERVED",
       "testedCandidates": 1,
-      "title": "Classic 23"
+      "title": "Classic 23",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 1,
+        "path": "witnesses/lemmings3-23.json",
+        "released": 13,
+        "retainedReserves": 10,
+        "saved": 12,
+        "sha256": "7c1ff2b529b2fb65c2419cfb82973931aaef60433734714f7f80b2798fb63ac3",
+        "ticks": 1710
+      }
     },
     {
+      "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "ee41ebb53aa3f2d8d22f06b2f51145770dd6c7e4599c9d11495c191b315e96a3:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "24",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "50",
+          "releaseInterval": "5",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 360
+      },
       "gameID": "lemmings3",
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -22683,12 +23005,44 @@
       "population": 20,
       "rank": "Classic",
       "required": 1,
-      "status": "UNKNOWN",
+      "status": "OBSERVED",
       "testedCandidates": 1,
-      "title": "Classic 24"
+      "title": "Classic 24",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings3-24.json",
+        "released": 10,
+        "retainedReserves": 10,
+        "saved": 10,
+        "sha256": "455f5541a1d06deba1684f19b922ae09fefca0cfb0fa105a3ada9fd8f79db854",
+        "ticks": 2328
+      }
     },
     {
+      "bestSaved": 12,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "a53e158f168e2c1f89b85868f15b81062a7e1bc148a76cbda1554eebe0b3fda4:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "25",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -22696,11 +23050,41 @@
       "population": 22,
       "rank": "Classic",
       "required": 1,
-      "status": "UNKNOWN",
+      "status": "OBSERVED",
       "testedCandidates": 1,
-      "title": "Classic 25"
+      "title": "Classic 25",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings3-25.json",
+        "released": 12,
+        "retainedReserves": 10,
+        "saved": 12,
+        "sha256": "f0817dfaf675d17cf37e2691f54fbb113642cb35d163ceb096c0a20160c6b859",
+        "ticks": 5786
+      }
     },
     {
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "17ab2b1c30ba7b11d7b307c398b3e443956a5aa65b45dd9abfebdc589080da22:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "26",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
@@ -22714,6 +23098,25 @@
       "title": "Classic 26"
     },
     {
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "839fa256eec5d8f9a59c48b40731578cc29d5fab99ff97115c350a02f2d4c780:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "27",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "40",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 340
+      },
       "gameID": "lemmings3",
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
@@ -22727,6 +23130,25 @@
       "title": "Classic 27"
     },
     {
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "5befc0d948229f6a5c27ef8d42eec7cc626d24fe39649a08e376912b7588749f:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "28",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
@@ -22740,7 +23162,28 @@
       "title": "Classic 28"
     },
     {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "464e03a68980d741d0406cb405e51709e47cda90d4a91380a9ca5eb667bed96f:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "29",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "40",
+          "releaseInterval": "10",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
+      "lossesInBestSolution": 11,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -22748,11 +23191,41 @@
       "population": 22,
       "rank": "Classic",
       "required": 1,
-      "status": "UNKNOWN",
+      "status": "OBSERVED",
       "testedCandidates": 1,
-      "title": "Classic 29"
+      "title": "Classic 29",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 11,
+        "path": "witnesses/lemmings3-29.json",
+        "released": 12,
+        "retainedReserves": 10,
+        "saved": 1,
+        "sha256": "c3873a4f64b8a2f74cf014e7baa54dabb645b25911e0773490bb507beb3c6fd4",
+        "ticks": 288
+      }
     },
     {
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "83838e25bb2516094fd4791988c396b16362888cd7350eb34c24966207b243e0:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "30",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
@@ -22767,6 +23240,25 @@
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "8be4d280d4abff5f9d6d8088637b7a61bded5a7e0eca8bc91fd12d7e562e8bd5:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "201",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -22793,6 +23285,25 @@
     },
     {
       "bestSaved": 12,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "a8143b5347f000b1d98e86cb5b6769f53f8ab777886be2df41d7cec803743e08:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "202",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 300
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -22819,6 +23330,25 @@
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "a56e2bc84b40edbee0fff946bdbbc54202e2fffdf062cd5b2d40971ea8951e99:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "203",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -22845,6 +23375,25 @@
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "2a2f531833cffe50181499387a1d6d7100dd03f47141bea0c4bc19d445bc22a6:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "204",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 300
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -22871,6 +23420,25 @@
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "0d0c4aa3bf865a9562c11045e6eca553def8040f5b62dd42639192c2033ce423:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "205",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 150
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 1,
       "notes": [
@@ -22897,6 +23465,25 @@
     },
     {
       "bestSaved": 11,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "b4b60edccc38a649d0a5f3a7e6a7f5ab8da57c77402b7eb8cf94302e718fa7ad:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "206",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -22923,6 +23510,25 @@
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "c99876085889931a134b6996e508b96dafa18eefe04ad63981e074d90f7c7046:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "207",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 360
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -22949,6 +23555,25 @@
     },
     {
       "bestSaved": 5,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "c8db0af68c96eaecc07652b71118d971d94a5850ce1b98fa0c786e14fb10d0bc:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "208",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "40",
+          "releaseInterval": "103",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 210
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 5,
       "notes": [
@@ -22975,6 +23600,25 @@
     },
     {
       "bestSaved": 12,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "d9666c37a797c6ed376a5b3b23593de8e890353902783e9503030d26ae91bdbd:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "209",
+        "modifiers": {
+          "extras": "4",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 24,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 300
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 2,
       "notes": [
@@ -23001,6 +23645,25 @@
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "6f0095e9e3ecd050eee7608d255bb8f8d41c41bfd359a3969fd3f2b931c483a4:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "210",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "40",
+          "releaseInterval": "20",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 300
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 1,
       "notes": [
@@ -23027,6 +23690,25 @@
     },
     {
       "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "8ac64f06259b503328eae6ae573e7e459ba7a025cce77f657041591a2927e363:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "211",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "40",
+          "releaseInterval": "20",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 300
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 19,
       "notes": [
@@ -23053,6 +23735,25 @@
     },
     {
       "bestSaved": 11,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "e73898f46e76b3b00815584cbd8c44e8ed65726d27ebf8b7c80c720fe6d29889:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "212",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "40",
+          "releaseInterval": "20",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -23073,12 +23774,31 @@
         "released": 11,
         "retainedReserves": 10,
         "saved": 11,
-        "sha256": "f14aeb1ce68cd6e4d6a0bc213e6dce2a2735d01c3c9cd5709c92f972f015ffc3",
+        "sha256": "507add1d95a4f1e11275f4a53594ac2f16628340f95850283e81e5735244178f",
         "ticks": 2468
       }
     },
     {
       "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "68932677dea3deace2a41af328d3003d6c4baf19db411cdf8177eed048d0f78d:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "213",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "51",
+          "releaseInterval": "44",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 180
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 20,
       "notes": [
@@ -23104,9 +23824,28 @@
       }
     },
     {
-      "bestSaved": 1,
+      "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "798190f8988f139a35735e6795ae264b306d614ad883b95b2fdd3289a5e0795b:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "214",
+        "modifiers": {
+          "extras": "3",
+          "releaseDelay": "46",
+          "releaseInterval": "60",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 23,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 303
+      },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 22,
+      "lossesInBestSolution": 3,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -23120,17 +23859,36 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 22,
+        "lost": 3,
         "path": "witnesses/lemmings3-214.json",
-        "released": 23,
-        "retainedReserves": 0,
-        "saved": 1,
-        "sha256": "c950b4e84f726aef15b66cee722e722f9729797c870e1992a7055b916dbc0494",
+        "released": 13,
+        "retainedReserves": 10,
+        "saved": 10,
+        "sha256": "08acd2fc758ca613ee4fb232a5d9141bbea91cf875a76b9668717c19191d076d",
         "ticks": 6969
       }
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "c8e9f30f2174e49d48b058b56a81442fda63d24c0b44e3d7691e4de365543eb1:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "215",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 210
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 3,
       "notes": [
@@ -23157,6 +23915,25 @@
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "2d974b60f3a0f01317311bd301dd3e33631b3259cbc0d937abf9e7c7af6b60b5:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "216",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 120
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -23183,6 +23960,25 @@
     },
     {
       "bestSaved": 4,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "9ee72008901c237e7d067e1bde2090b67252e3d1b3b63b6a893447499268fc0b:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "217",
+        "modifiers": {
+          "extras": "4",
+          "releaseDelay": "50",
+          "releaseInterval": "50",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 24,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 240
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 14,
       "notes": [
@@ -23203,12 +23999,31 @@
         "released": 18,
         "retainedReserves": 6,
         "saved": 4,
-        "sha256": "6d9149e37022be7356af317fbdd0183c4d42f2bd21fb2d726e752a34aedb3fac",
-        "ticks": 8280
+        "sha256": "636962e3729875027543c8b7beac83f40cc10d60eb0f6b52a4bd1f80c2cdbbf2",
+        "ticks": 5520
       }
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "2af74da2487c368d5febb3177374c0cfac4dc19766b2cffba9cae434ceb433ff:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "218",
+        "modifiers": {
+          "extras": "8",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 28,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 8,
       "notes": [
@@ -23235,6 +24050,25 @@
     },
     {
       "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "d96ebf3c8233c33d90954801ff9081983f3bca250e167f84abbc07eb0787ef29:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "219",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 180
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 9,
       "notes": [
@@ -23261,6 +24095,25 @@
     },
     {
       "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "482ab01a8cc7ee40a3daba2ad5331c4246e9c80ee9dd478a64e265bf983a932a:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "220",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "40",
+          "releaseInterval": "20",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 11,
       "notes": [
@@ -23286,7 +24139,28 @@
       }
     },
     {
+      "bestSaved": 2,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "5e7081c21619fefb724657afc6811862c51df7f72f24b26b6e6082fa516f3f84:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "221",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
+      "lossesInBestSolution": 19,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -23294,12 +24168,42 @@
       "population": 21,
       "rank": "Egyptian",
       "required": 1,
-      "status": "UNKNOWN",
+      "status": "OBSERVED",
       "testedCandidates": 1,
-      "title": "Egyptian 21"
+      "title": "Egyptian 21",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 19,
+        "path": "witnesses/lemmings3-221.json",
+        "released": 21,
+        "retainedReserves": 0,
+        "saved": 2,
+        "sha256": "f967b82181f96fd3581fbaeba3eca5ee74507550283a65c1c8f909841e50f6a1",
+        "ticks": 901
+      }
     },
     {
       "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "af0b13c1862dd2f9fc6427addd5c828016db970e07ff4c2aaff0060ccdc2bc4d:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "222",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 300
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 10,
       "notes": [
@@ -23326,6 +24230,25 @@
     },
     {
       "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "ab758a872d7344ad21ca4a76a619dfe4dfbe231b7024a020926d18dd2f0bfdc0:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "223",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "40",
+          "releaseInterval": "103",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 270
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 11,
       "notes": [
@@ -23351,6 +24274,25 @@
       }
     },
     {
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "4c6459be8889e1ed67f05b21614e9c47a4fd8289ccf8244ab08af5c624595cc1:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "224",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 360
+      },
       "gameID": "lemmings3",
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
@@ -23364,6 +24306,25 @@
       "title": "Egyptian 24"
     },
     {
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "e9446df4909532bd028ed70294e594ecdc1f78fd9abcab5159124051a27ad1af:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "225",
+        "modifiers": {
+          "extras": "3",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 23,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
@@ -23378,6 +24339,25 @@
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "f81b27c79f425a143c7316e1d45fbe4436cacd23f1aedf378e1454cb757636ba:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "226",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 120
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -23403,6 +24383,25 @@
       }
     },
     {
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "aa08964aa0a91c3f6b8c61eef9e5afaa50d18470a2397492e896d162deb762d4:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "227",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "40",
+          "releaseInterval": "103",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 180
+      },
       "gameID": "lemmings3",
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
@@ -23417,6 +24416,25 @@
     },
     {
       "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "17254344123e0f4767171020a0d2a8df4ca9b0f1490d4657e181ffedd0ab8e89:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "228",
+        "modifiers": {
+          "extras": "4",
+          "releaseDelay": "40",
+          "releaseInterval": "103",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 24,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 180
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 23,
       "notes": [
@@ -23437,11 +24455,30 @@
         "released": 24,
         "retainedReserves": 0,
         "saved": 1,
-        "sha256": "e497bff2f28e8946855cfc5c8eb1fb80206c7475e4b93052c6eb92a8dc5509e8",
+        "sha256": "480f680c20e2214ebaa45fc0060138fdb3949495236c36cd53b38cd750fdf741",
         "ticks": 4140
       }
     },
     {
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "9ac56b12beeb8e5bb8ee10f375b53d49a80b4c79300c1c1130a54a805f484505:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "229",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
@@ -23456,6 +24493,25 @@
     },
     {
       "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "e6c23ce6d8170a7504cb9498cc41e26479d403df6d94f43b29c9f0a21cda7703:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "230",
+        "modifiers": {
+          "extras": "6",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 26,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 300
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 15,
       "notes": [
@@ -23482,6 +24538,25 @@
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "ee624776ad7ba103a00ff1f47e555c688c12a1301ed16c7c4ab0c747ab9919b1:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "101",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 300
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -23508,6 +24583,25 @@
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "aa69e2c79f864b9201008719812b537e8c4fc91a01c7f17988cf203b943114bd:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "102",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 300
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -23534,6 +24628,25 @@
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "b4efa078a983583c5c7a799a25048cc867b7051ab7d0f6c3a5b981518e7f5df1:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "103",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 300
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -23560,6 +24673,25 @@
     },
     {
       "bestSaved": 11,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "948577d46b436beba4fd73275a7d10ef2f9533a9c64c04eeb5e04bad73c9655a:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "104",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 300
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 1,
       "notes": [
@@ -23586,6 +24718,25 @@
     },
     {
       "bestSaved": 11,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "30f77a279c2306e0336d0b7450c9f5681d594c7890feee0f1453832d3e4a792a:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "105",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -23612,6 +24763,25 @@
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "9a16a9e94700b0e827b297411f6bdffe994abe1d6c3c96a810a3ab83f44bea42:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "106",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 0,
       "notes": [
@@ -23632,12 +24802,31 @@
         "released": 10,
         "retainedReserves": 10,
         "saved": 10,
-        "sha256": "cd6c94227cad68b3cd8f35fb5ceb72e1c6fd77674b7f1f0455a55c9e30649c5e",
+        "sha256": "0c4d057b0b52e9a2eb34c14c85a56d5db43dd41b33943e7bfb2a36595fd08ac4",
         "ticks": 1462
       }
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "e6ee864c342e7cf63e65047b7d1a03fcbd350d86b294ad67ecb1181a1d3badd3:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "107",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 1,
       "notes": [
@@ -23664,6 +24853,25 @@
     },
     {
       "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "0ce2317ff01990c6072fc502fdc1ff0f89f46b6eefab68941b8fe9aa3e987496:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "108",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 19,
       "notes": [
@@ -23690,6 +24898,25 @@
     },
     {
       "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "ba2d44e965e07fb8e023cb8ed90dff0b5fbeec11901f6f2a7379c57cdd51d873:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "109",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 180
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 11,
       "notes": [
@@ -23715,9 +24942,28 @@
       }
     },
     {
-      "bestSaved": 2,
+      "bestSaved": 11,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "47a3a560590d7d939d1c8ba86b4e2c1ca6c19e6c9ce695ea5213299897dc09d1:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "110",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 240
+      },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 19,
+      "lossesInBestSolution": 3,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -23731,19 +24977,38 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 19,
+        "lost": 3,
         "path": "witnesses/lemmings3-110.json",
-        "released": 21,
-        "retainedReserves": 0,
-        "saved": 2,
-        "sha256": "9251dd641edd944a5f7f7c1c4b53d5c1f83a1d2af4e757ec9eec2911b42598f3",
-        "ticks": 837
+        "released": 14,
+        "retainedReserves": 7,
+        "saved": 11,
+        "sha256": "4362f43a4df1eb8ce2017df877d6347bb938f1ca5b46d63a4e3bbdd2b39d835b",
+        "ticks": 1492
       }
     },
     {
-      "bestSaved": 1,
+      "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "eb1d97afcd4ab222b69fa9507c180e6b1170d6ba463aee5a28eb4560aa29bb96:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "111",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "40",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 200
+      },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 10,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -23757,19 +25022,38 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 10,
+        "lost": 0,
         "path": "witnesses/lemmings3-111.json",
-        "released": 11,
-        "retainedReserves": 9,
-        "saved": 1,
-        "sha256": "a883218c9013cd36e4f5b3c468e2bbdc599d1e7c90ef62ae02525c84b4e4be58",
-        "ticks": 4600
+        "released": 10,
+        "retainedReserves": 10,
+        "saved": 10,
+        "sha256": "e96ff05d9d5fdd932172285e70f6279e1c7de577ea780c435f4cf7a9aa5ca416",
+        "ticks": 661
       }
     },
     {
-      "bestSaved": 1,
+      "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "65ce26cd152e4b40535c68a938965e16548ef00299c34af29fa6fac06d3ea5fd:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "112",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 19,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -23783,19 +25067,38 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 19,
+        "lost": 0,
         "path": "witnesses/lemmings3-112.json",
-        "released": 20,
-        "retainedReserves": 0,
-        "saved": 1,
-        "sha256": "4bced6cff0bb6ad6e2913e71a235feaae0138a6e61836fe3dc433d222995832d",
-        "ticks": 2115
+        "released": 10,
+        "retainedReserves": 10,
+        "saved": 10,
+        "sha256": "84e79acab282deb5602758a04752ba616ab6e30e2b472d399ee572642a83af55",
+        "ticks": 4657
       }
     },
     {
-      "bestSaved": 6,
+      "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "1f2ba6845895842bb9f36326d89637995a185a92e433ebd8a675965d1cd4cb00:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "113",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "36",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 7,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -23809,19 +25112,38 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 7,
+        "lost": 0,
         "path": "witnesses/lemmings3-113.json",
-        "released": 13,
-        "retainedReserves": 7,
-        "saved": 6,
-        "sha256": "a0056de9f172b214889258370bb9725e24bd09b392f0245fe9a60c68a85d9d95",
-        "ticks": 8000
+        "released": 10,
+        "retainedReserves": 10,
+        "saved": 10,
+        "sha256": "8604ef0b6f667f3f10dad521a1d7538f4aacf397a6132f9214e14c25b1078547",
+        "ticks": 443
       }
     },
     {
-      "bestSaved": 1,
+      "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "9fa040dfeb0855506ea0ddaa22ead354b52fb68c66a057154bd21f5bdd899452:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "114",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 150
+      },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 11,
+      "lossesInBestSolution": 1,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -23835,17 +25157,36 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 11,
+        "lost": 1,
         "path": "witnesses/lemmings3-114.json",
-        "released": 12,
-        "retainedReserves": 9,
-        "saved": 1,
-        "sha256": "06e0f416f92d288bb6325417b44791e0d577374b37b7daea8fe32a95a85d51c6",
-        "ticks": 3450
+        "released": 11,
+        "retainedReserves": 10,
+        "saved": 10,
+        "sha256": "fab3e05fdb124df7da1ac060b524c0e9659998b548cf27106e97475eae299df5",
+        "ticks": 873
       }
     },
     {
       "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "973fb4edd55977ce4fa330f0c0bbbeb801e36dc4c27510c6211d699590ce5058:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "115",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 140
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 11,
       "notes": [
@@ -23872,6 +25213,25 @@
     },
     {
       "bestSaved": 8,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "e4640f75cff369a7e5126efcbc5add9e486ce7a2558448e173c5ec0043d15594:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "116",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 180
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 14,
       "notes": [
@@ -23898,6 +25258,25 @@
     },
     {
       "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "1977f1a9ddb5c5bb051d621f6dc3482f013cb04f9d4c9168a0e77726ca07b597:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "117",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 280
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 19,
       "notes": [
@@ -23924,6 +25303,25 @@
     },
     {
       "bestSaved": 2,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "ff9300c43df94afddd88ade8128aa0724e282ed3c8c65e98ff96074ba765536f:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "118",
+        "modifiers": {
+          "extras": "8",
+          "releaseDelay": "46",
+          "releaseInterval": "40",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 28,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 150
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 16,
       "notes": [
@@ -23944,12 +25342,31 @@
         "released": 18,
         "retainedReserves": 10,
         "saved": 2,
-        "sha256": "019aa7a0c61c71e958ca798d87fb8dce7f4c979dbf3c8859672ffff6f842d280",
-        "ticks": 8970
+        "sha256": "65525ef3485a9fd739b6ed7cc5f9f8b6651ebff6d456c66bff9ffff142faebdd",
+        "ticks": 3450
       }
     },
     {
       "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "865a628a60295bc9f98ae884ff1412bee299d91e199114f46fe62f1a959e7d85:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "119",
+        "modifiers": {
+          "extras": "4",
+          "releaseDelay": "51",
+          "releaseInterval": "63",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 24,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 360
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 4,
       "notes": [
@@ -23976,6 +25393,25 @@
     },
     {
       "bestSaved": 3,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "90eb410079211deb6585acb76c10294b54c3b333fd4a0e9bed8e110ba05562e3:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "120",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 240
+      },
       "gameID": "lemmings3",
       "lossesInBestSolution": 18,
       "notes": [
@@ -24001,6 +25437,25 @@
       }
     },
     {
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "9a652da9d3805bcdc5e1c60496a47760bbe5ae3034791a7d35a21465e2f87b49:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "121",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "40",
+          "releaseInterval": "20",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 360
+      },
       "gameID": "lemmings3",
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
@@ -24014,6 +25469,25 @@
       "title": "Shadow 21"
     },
     {
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "978f568995447b283a6dcc0a189c1136beb63de37426bcd66c178b2cac82cad9:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "122",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "40",
+          "releaseInterval": "20",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 60
+      },
       "gameID": "lemmings3",
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
@@ -24027,6 +25501,25 @@
       "title": "Shadow 22"
     },
     {
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "fe46b40480d3efb87c4c178269323258a6db5022e1a617f9babd8f3600e7ccce:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "123",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "40",
+          "releaseInterval": "20",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 360
+      },
       "gameID": "lemmings3",
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
@@ -24040,6 +25533,25 @@
       "title": "Shadow 23"
     },
     {
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "021f76f59fb445cd171ec7a345359f4526b1dc0f0fbc53c4a0fb11b557a0afa6:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "124",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 240
+      },
       "gameID": "lemmings3",
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
@@ -24053,6 +25565,25 @@
       "title": "Shadow 24"
     },
     {
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "5c11bc7c2d2f1cb8196a80203fbed1c3ce0a3443fcbb435148be66af57e6d5bb:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "125",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 240
+      },
       "gameID": "lemmings3",
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
@@ -24066,6 +25597,25 @@
       "title": "Shadow 25"
     },
     {
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "125566a9579b208db9ab94f8a8c052d52c478776af2ff57417f42dba9db30f01:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "126",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
@@ -24079,6 +25629,25 @@
       "title": "Shadow 26"
     },
     {
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "f3be69f7b14f00b5e281cb9711019be134140de9ee22f95d306742ea47ac371e:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "127",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
       "gameID": "lemmings3",
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
@@ -24092,6 +25661,25 @@
       "title": "Shadow 27"
     },
     {
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "c1ac1e180d3b70139ea7924b547d5518bfc736b55d81271aae3c1f64468b95b5:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "128",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 240
+      },
       "gameID": "lemmings3",
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
@@ -24105,6 +25693,25 @@
       "title": "Shadow 28"
     },
     {
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "84085a4f5ed4ca98ce6139b957b38216ddfb64b01b952f0082f1c65b98d2867a:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "129",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "51",
+          "releaseInterval": "44",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 300
+      },
       "gameID": "lemmings3",
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
@@ -24118,6 +25725,25 @@
       "title": "Shadow 29"
     },
     {
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "d3b95e192c8491769d3a49ba85c9227b3a43eeda335cbf32d186872af91866c8:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "130",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 360
+      },
       "gameID": "lemmings3",
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
@@ -24402,15 +26028,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 6,
       "population": 70,
       "rank": "Frost",
       "required": 69,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 3,
       "title": "The Land of the Bizarre",
       "witness": {
         "completed": true,
@@ -24451,15 +26075,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 17,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 7,
       "population": 50,
       "rank": "Frost",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 3,
       "title": "Happy New Year!",
       "witness": {
         "completed": true,
@@ -24794,15 +26416,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 10,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 14,
       "population": 50,
       "rank": "Frost",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 145,
+      "testedCandidates": 3,
       "title": "Happy New Year II!",
       "witness": {
         "completed": true,
@@ -24843,15 +26463,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 15,
       "population": 50,
       "rank": "Frost",
       "required": 49,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 3,
       "title": "Plethora of Presents",
       "witness": {
         "completed": true,
@@ -24892,15 +26510,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 16,
       "population": 80,
       "rank": "Frost",
       "required": 79,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 3,
       "title": "Up on the Rooftops",
       "witness": {
         "completed": true,
@@ -24990,15 +26606,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 3,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 2,
       "population": 80,
       "rank": "Hail",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 3,
       "title": "Break On Through",
       "witness": {
         "completed": true,
@@ -25039,15 +26653,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 15,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 3,
       "population": 50,
       "rank": "Hail",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 571,
+      "testedCandidates": 3,
       "title": "And a Happy New Year!",
       "witness": {
         "completed": true,
@@ -25088,15 +26700,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 4,
       "population": 80,
       "rank": "Hail",
       "required": 78,
       "status": "OBSERVED",
-      "testedCandidates": 500,
+      "testedCandidates": 3,
       "title": "Lemmintaschen?",
       "witness": {
         "completed": true,
@@ -25137,15 +26747,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 9,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 5,
       "population": 80,
       "rank": "Hail",
       "required": 68,
       "status": "OBSERVED",
-      "testedCandidates": 287,
+      "testedCandidates": 3,
       "title": "Get the Point?",
       "witness": {
         "completed": true,
@@ -25186,15 +26794,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 38,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 6,
       "population": 80,
       "rank": "Hail",
       "required": 27,
       "status": "OBSERVED",
-      "testedCandidates": 74,
+      "testedCandidates": 3,
       "title": "Surprise Package?",
       "witness": {
         "completed": true,

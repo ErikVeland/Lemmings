@@ -177,3 +177,30 @@ enum ProTrackerHolidayMix {
         return tuning
     }
 }
+
+
+/// The supplied Beast I bank abbreviates its bass drum as `b1bsdr`.
+/// Keep this correction local to that bank and the Modern preset.
+enum ProTrackerBeastMix {
+    private static func matches(_ module: ProTrackerModule) -> Bool {
+        module.title.lowercased() == "beasti" && module.samples.count > 8
+            && module.samples[0].name.lowercased() == "b1bass"
+            && module.samples[1].name.lowercased() == "b1bsdr"
+            && module.samples[5].name.lowercased() == "b1snare"
+            && module.samples[8].name.lowercased() == "b1tom2"
+    }
+    static func percussionSamples(for module: ProTrackerModule) -> Set<Int> {
+        matches(module) ? [1, 5, 8] : []
+    }
+    static func tuning(for module: ProTrackerModule,
+        existing: [Int: ProTrackerVoiceTuning]) -> [Int: ProTrackerVoiceTuning] {
+        guard matches(module) else { return existing }
+        var result = existing
+        for index in [0, 1, 5, 8] {
+            var voice = result[index] ?? ProTrackerVoiceTuning()
+            voice.centering = 1
+            result[index] = voice
+        }
+        return result
+    }
+}

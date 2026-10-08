@@ -1,0 +1,75 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 130
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 257
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 318
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 334
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 516
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 607
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 72,
+    "saved" : 74,
+    "stateHash" : "fb8acdeee533533b0433922f57413fe42dbcbeb4fa3d1c8e2d6154a7927ab23e",
+    "ticks" : 2040
+  },
+  "initialStateHash" : "87bd38d79e71b2b2588157ade99213b642a6bc8bbe0a75005362b288f47f6ced",
+  "number" : 7,
+  "rank" : "Wicked",
+  "title" : "Last Lemming To Lemmingcentral"
+}

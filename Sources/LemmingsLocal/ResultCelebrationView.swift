@@ -60,10 +60,20 @@ import NxlvKit
         if let resultStatus { text(resultStatus, 80, 253, 960, alignment: .center) }
         drawResultLevelCard(c)
         drawResultCareerCard(c)
+        let history = ArcadeStore.shared.records.trolley
+        let best = run.level.conditions.flatMap { conditions in
+            history.leaderboard(conditions: conditions, assisted: run.assisted, board: .fastestClear)
+                .first { $0.run.profileID == run.profileID }?.run.seconds
+        } ?? ArcadeStore.shared.records.leaderboard(level: run.level, board: .fastestClear, assisted: run.assisted)
+            .first { $0.profileID == run.profileID }?.seconds
+        link("Time " + Self.time(run.seconds) + "   Best " + (best.map(Self.time) ?? "--") + "  >",
+             CGRect(x: 80, y: 409, width: 960, height: 34), alignment: .left) { [weak self] in
+            self?.trolleyBoard = .fastestClear; self?.board = .fastestClear; self?.boardScope = .level; self?.page(.records)
+        }
         resultActions(y: 453)
         let maximum = run.level.conditions.map { ArcadeStore.shared.records.trolley.maximum(conditions: $0, assisted: run.assisted) } ?? TrolleyMaximum()
         let awardText = c.newAwards.map { "New career award: \($0.award.title). \($0.award.detail)" }.joined(separator: " ")
-        setAccessibilityLabel("\(player.initials)'s attempt. \(outcome). \(run.level.title). \(rescueSummary(run, maximum: maximum)) \(resultStatus.map { $0 + " " } ?? "")\(c.goals.stars) of 3 stars this run. Level best: \(c.bestStars) stars. \(c.nextGoal) \(c.recordMessage). New level awards: \(c.levelAwards.map(\.title).joined(separator: ", ")). \(awardText) Career: \(c.career.stars) stars, plus \(c.addedStars). \(c.nextCareerGoal.map { $0.award.title + ": " + $0.status + ". " + $0.next } ?? "") Local Most Saved: \(c.ranks.first?.label ?? "No record"). Enter: \(primaryResultTitle). R retries. N retries as the next session player. P opens session players. V opens replay. B opens records. A opens achievements. G opens level goals. C opens career progress. D opens details. Escape returns."
+        setAccessibilityLabel("\(player.initials)'s attempt. \(outcome). \(run.level.title). \(rescueSummary(run, maximum: maximum)) \(resultStatus.map { $0 + " " } ?? "")\(c.goals.stars) of 3 stars this run. Time: \(Self.time(run.seconds)). Fastest clear: \(best.map(Self.time) ?? "No record"). Level best: \(c.bestStars) stars. \(c.nextGoal) \(c.recordMessage). New level awards: \(c.levelAwards.map(\.title).joined(separator: ", ")). \(awardText) Career: \(c.career.stars) stars, plus \(c.addedStars). \(c.nextCareerGoal.map { $0.award.title + ": " + $0.status + ". " + $0.next } ?? "") Local Most Saved: \(c.ranks.first?.label ?? "No record"). Enter: \(primaryResultTitle). R retries. N retries as the next session player. P opens session players. V opens replay. B opens records. A opens achievements. G opens level goals. C opens career progress. D opens details. Escape returns."
             + (report.earnedLevelSkip ? " Earned a level skip." : "")
             + (availableSkips > 0 ? " \(skipTitle). K skips this level." : ""))
     }
@@ -206,7 +216,7 @@ import NxlvKit
             rowText("\(score.stars)", x: 524, width: 140, row: row); rowText("\(score.clearedLevels)", x: 724, width: 160, row: row); rowText("\(score.threeStarLevels)", x: 924, width: 120, row: row)
         }
         if rows.isEmpty { text("No completed attempts in this category yet.", 80, 340, 960) }
-        text("Local players on this Mac. Worldwide uses Game Center.", 80, 578, 960)
+        text("Local players on this Mac.", 80, 578, 960)
         pageFooter()
         setAccessibilityLabel("Local career leaderboard. Rewinds \(assisted ? "used" : "unused"). Best stars per distinct level. " + rows.enumerated().map { "Rank \($0.offset + 1), \(ArcadeStore.shared.records.profile($0.element.profileID)?.initials ?? "LEM"), \($0.element.stars) stars." }.joined(separator: " "))
     }

@@ -1,0 +1,76 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 138
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 165
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 257
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 571
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 753
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 815
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 49,
+    "saved" : 49,
+    "stateHash" : "46f24e635f3aa8fc51485de82788ee14301028ea87246a72c183d496c4736a26",
+    "ticks" : 2337
+  },
+  "initialStateHash" : "f536e971eabaa3417059fcac80cd92dd3870fcec8f51fee2ddb37d4adb494444",
+  "number" : 15,
+  "rank" : "Frost",
+  "title" : "Plethora of Presents"
+}

@@ -102,6 +102,7 @@ class CountStore:
     def connect(self) -> sqlite3.Connection:
         db = sqlite3.connect(self.path, timeout=5)
         db.execute("PRAGMA busy_timeout=5000")
+        db.execute("PRAGMA max_page_count=16384")  # At most 64 MiB at the default 4 KiB page size.
         return db
 
     def add(self, event: tuple[str, str, str, str, int]) -> None:

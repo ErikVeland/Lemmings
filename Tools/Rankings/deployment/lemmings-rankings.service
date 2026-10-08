@@ -1,0 +1,34 @@
+[Unit]
+Description=Ultimate Lemmings community leaderboards
+After=network.target
+
+[Service]
+Type=simple
+DynamicUser=yes
+StateDirectory=lemmings-rankings
+StateDirectoryMode=0700
+WorkingDirectory=/opt/lemmings-rankings
+ExecStart=/usr/bin/python3 -B /opt/lemmings-rankings/server.py --data /var/lib/lemmings-rankings --catalogue /opt/lemmings-rankings/verified-maxima.json --port 8797
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+RestrictAddressFamilies=AF_INET AF_UNIX
+IPAddressDeny=any
+IPAddressAllow=localhost
+MemoryMax=128M
+CPUQuota=25%
+TasksMax=40
+LimitNOFILE=128
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target
