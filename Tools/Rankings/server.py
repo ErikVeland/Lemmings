@@ -127,6 +127,8 @@ class Store:
     def submit(self, player, payload):
         if set(payload) != {"id", "conditionsJSON", "assisted", "saved", "population", "skills", "milliseconds", "won"}:
             raise ValueError("Invalid run fields")
+        if not isinstance(payload["id"], str):
+            raise ValueError("Invalid run ID")
         rid = str(uuid.UUID(payload["id"])).lower()
         c, key = checked_conditions(payload["conditionsJSON"])
         saved = integer(payload["saved"])

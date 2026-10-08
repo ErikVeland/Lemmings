@@ -245,6 +245,7 @@ import NxlvKit
         guard let replays = records.removeProfile(id) else { return false }
         save()
         guard storageError == nil else { records = previous; return false }
+        HostedRankings.shared.profileDeleted(id)
         if sessionProfileIDs.contains(id) {
             if hotSeatHostID == id || sessionProfileIDs.count <= 2 { endHotSeat() }
             else {

@@ -77,6 +77,42 @@ final class HostedRankingsTests: XCTestCase {
         try await wait(service)
         XCTAssertNil(service.board); XCTAssertTrue(service.status.contains("Offline"))
     }
+    @MainActor func testCareerCandidateSurvivesBetterFailedRescue() {
+        let c = conditions()
+        let level = ArcadeLevel(id: "test", title: "Test", game: "lemmings", rules: "v1", total: 10, required: 5, conditions: c)
+        var records = ArcadeRecords()
+        let attempts = [(10, false, 1, 5.0), (5, true, 1, 10.0), (9, true, 3, 20.0)].map { saved, won, skills, seconds in
+            ArcadeRun(profileID: ArcadeProfile.legacyID, level: level, saved: saved, didWin: won, skills: ["builder": skills], seconds: seconds,
+                      telemetry: .init(released: 10))
+        }
+        for run in attempts { _ = records.record(run) }
+        let candidates = HostedRankings.candidates(records.trolley.attempts, profile: ArcadeProfile.legacyID)
+        XCTAssertTrue(candidates.contains { $0.id == attempts[2].id })
+        XCTAssertTrue(candidates.contains { $0.id == attempts[0].id })
+        XCTAssertTrue(candidates.contains { $0.id == attempts[1].id })
+        XCTAssertTrue(HostedRankings.candidates(records.trolley.attempts, profile: "other").isEmpty)
+    }
+    @MainActor func testRemovalRetriesAfterRestartWithoutLocalProfile() async throws {
+        let suite = UUID().uuidString; let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        defaults.set(true, forKey: "HostedRankings.hasShared.deleted-player")
+        let transport = FakeHostedTransport(); transport.responseCode = 503
+        let service = HostedRankings(endpoint: URL(string: "https://example.invalid/rankings"), transport: transport, defaults: defaults,
+                                     credentials: { _ in String(repeating: "a", count: 64) })
+        service.networkEnabled = true
+        service.profileDeleted("deleted-player")
+        try await wait(service)
+        XCTAssertEqual(defaults.stringArray(forKey: "HostedRankings.pendingRemoval"), ["deleted-player"])
+        XCTAssertTrue(service.hasShared("deleted-player"))
+        let restarted = HostedRankings(endpoint: URL(string: "https://example.invalid/rankings"), transport: transport, defaults: defaults,
+                                       credentials: { _ in String(repeating: "a", count: 64) })
+        restarted.networkEnabled = true; transport.responseCode = 204
+        restarted.completed(profileID: "not-sharing")
+        try await wait(restarted)
+        XCTAssertEqual(defaults.stringArray(forKey: "HostedRankings.pendingRemoval"), [])
+        XCTAssertFalse(restarted.hasShared("deleted-player"))
+        XCTAssertEqual(transport.requests.last?.httpMethod, "DELETE")
+    }
     @MainActor func testSyncUsesLocalPlayerCredentialAndRemovalStopsSharing() async throws {
         let suite = UUID().uuidString; let defaults = UserDefaults(suiteName: suite)!
         let file = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".json")

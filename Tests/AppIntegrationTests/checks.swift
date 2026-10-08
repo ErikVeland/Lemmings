@@ -4644,7 +4644,7 @@ extension AppDelegate {
   fileprivate func testScrollableReleaseNotes() throws {
     if window == nil { buildInterface() }
     GameScreen.shared.dismissAll()
-    let welcome = ReleaseWelcome(build: 70, version: "1.8.2")
+    let welcome = ReleaseWelcome(build: 72, version: ReleaseWelcome.notesVersion)
     var continued = false
     welcome.show(in: window) { continued = true }
     guard let page = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
@@ -6064,6 +6064,13 @@ Task { @MainActor in
     try await subject.testLevelHints()
     try testL3OpeningStory()
     try subject.testSuperSpeedPresentation()
+    if ProcessInfo.processInfo.environment["LEMMINGS_RELEASE_CANDIDATE"] == "1" {
+      try subject.testScrollableReleaseNotes()
+      try subject.testSolutionReplaySounds()
+      try await subject.testFanPackContinuation()
+      try await subject.testNeoLemmixPackBrowser()
+      try subject.testEscapeToMainMenu()
+    }
     print("1.8.x consolidation integration tests passed.")
     #elseif PROFILE_SESSION_TESTS
     try subject.testSoloHotSeatRoundTrips()

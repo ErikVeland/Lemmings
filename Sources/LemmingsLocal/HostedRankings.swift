@@ -68,6 +68,11 @@ enum HostedCategory: String, CaseIterable {
     private var movies: Set<UUID> = []
     private var pending: Set<String> = []
     private var stopped: Set<String> = []
+    private var deleting = false
+    private var removals: Set<String> {
+        get { Set(defaults.stringArray(forKey: "HostedRankings.pendingRemoval") ?? []) }
+        set { defaults.set(Array(newValue), forKey: "HostedRankings.pendingRemoval") }
+    }
     var networkEnabled: Bool
     init(endpoint: URL? = nil, transport: (any HostedRankingsTransport)? = nil, defaults: UserDefaults = .standard,
          credentials: ((String) throws -> String)? = nil) {
@@ -79,6 +84,7 @@ enum HostedCategory: String, CaseIterable {
     func hasShared(_ profile: String) -> Bool { defaults.bool(forKey: "HostedRankings.hasShared." + profile) }
     func sharing(_ profile: String) -> Bool { defaults.bool(forKey: "HostedRankings.share." + profile) }
     func setSharing(_ enabled: Bool, profile: String) {
+        guard !enabled || !removals.contains(profile) else { retryRemovals(); return }
         defaults.set(enabled, forKey: "HostedRankings.share." + profile)
         if enabled { stopped.remove(profile); completed(profileID: profile) }
         else { stopped.insert(profile) }
@@ -156,6 +162,7 @@ enum HostedCategory: String, CaseIterable {
     func refresh(conditions: TrolleyConditions?, category: HostedCategory, assisted: Bool, page: Int = 0) {
         requestID = UUID(); let ticket = requestID
         board = nil; busy = true; status = "Loading..."; onChange?()
+        retryRemovals()
         guard category.career || conditions != nil else { busy = false; status = "Select a level first."; onChange?(); return }
         Task { [weak self] in
             guard let self else { return }
@@ -174,13 +181,14 @@ enum HostedCategory: String, CaseIterable {
         }
     }
     func completed(profileID: String) {
+        retryRemovals()
         guard networkEnabled, endpoint != nil, sharing(profileID) else { return }
         pending.insert(profileID)
-        guard !syncing else { return }
+        guard !syncing, !deleting else { return }
         syncing = true
         Task { [weak self] in
             guard let self else { return }
-            defer { syncing = false; onSyncComplete?(); onChange?() }
+            defer { syncing = false; retryRemovals(); onSyncComplete?(); onChange?() }
             while let profile = pending.first {
                 pending.remove(profile)
                 guard sharing(profile), let player = ArcadeStore.shared.records.profile(profile) else { continue }
@@ -216,19 +224,32 @@ enum HostedCategory: String, CaseIterable {
             }
         }
     }
+    func profileDeleted(_ profile: String) {
+        if sharing(profile) || hasShared(profile) { remove(profile: profile) }
+    }
     func remove(profile: String) {
-        guard !syncing, !busy else { return }
         setSharing(false, profile: profile); pending.remove(profile)
-        busy = true
+        removals.insert(profile)
+        retryRemovals()
+    }
+    private func retryRemovals() {
+        guard networkEnabled, endpoint != nil, !syncing, !deleting, !removals.isEmpty else { return }
+        deleting = true; busy = true; requestID = UUID(); board = nil
         Task {
-            defer { busy = false; onChange?() }
-            do {
-                let deletion = try request("/v1/player", method: "DELETE", token: credential(profile))
-                let (_, response) = try await transport.data(for: deletion)
-                if (response as? HTTPURLResponse)?.statusCode != 401 { try checked(response) }
-                defaults.set(false, forKey: "HostedRankings.hasShared." + profile)
-                submitted = []; movies = []; board = nil; status = "Shared records removed"
-            } catch { status = "Removal failed. Retry when connected." }
+            defer {
+                deleting = false; busy = false; onChange?()
+                if removals.isEmpty, let profile = pending.first { completed(profileID: profile) }
+            }
+            for profile in removals {
+                do {
+                    let deletion = try request("/v1/player", method: "DELETE", token: credential(profile))
+                    let (_, response) = try await transport.data(for: deletion)
+                    if (response as? HTTPURLResponse)?.statusCode != 401 { try checked(response) }
+                    defaults.set(false, forKey: "HostedRankings.hasShared." + profile)
+                    removals.remove(profile)
+                    submitted = []; movies = []; board = nil; status = "Shared records removed"
+                } catch { status = "Removal queued. Retry when connected." }
+            }
         }
     }
     func playback(_ entry: HostedBoard.Entry, opened: @escaping (URL, String) -> Void) {

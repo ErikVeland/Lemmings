@@ -1,9 +1,11 @@
 # Apple Game Center and spatial audio setup
 
-The app includes a GameKit integration and a ranked board catalogue.
-The capability build enables worldwide scores after validating its profile.
+Worldwide community rankings are hosted on GlassCode and work without Game Center.
+See [Hosted rankings](HostedRankings.md) for deployment, replay storage and consent.
+The app also includes an optional GameKit integration and a ranked board catalogue.
+The capability build enables Apple scores after validating its profile.
 The build uses an installed matching profile automatically.
-Without that profile, the ad-hoc build keeps worldwide scores disabled.
+Without that profile, the ad-hoc build keeps only Game Center disabled.
 The local result and career screens work without Game Center.
 
 ## Prepared configuration
@@ -60,8 +62,8 @@ The generator `python3 Scripts/prepare-game-center.py` prepares boards from the
 current rescue catalogue and refuses output above Apple’s 500-board limit.
 The checked-in 178-configuration release catalogue is deliberately retained;
 expanding it needs a board allocation or a hosted service.
-Set `ENABLE_APPLE_CAPABILITIES=0` to force an ad-hoc build with worldwide scores
-disabled. The default `auto` mode uses a valid matching profile when available. The code uses APIs available on macOS 13.
+Set `ENABLE_APPLE_CAPABILITIES=0` to force an ad-hoc build with Game Center
+disabled. Hosted rankings remain available. The default `auto` mode uses a valid matching profile when available. The code uses APIs available on macOS 13.
 
 ## Player identity and retries
 
@@ -78,8 +80,7 @@ conditions, failed runs and rewind runs are excluded.
 
 Apple allows at most 500 boards per app. Both speed categories across the
 existing catalogue would require 537, so only Fastest clear IDs are prepared for
-Game Center. Fastest 100% is available locally; full worldwide categories need
-a hosted service. The client supports optional ascending Fastest 100% IDs, but
+Game Center. Fastest 100% is available locally and on the hosted community boards. The client supports optional ascending Fastest 100% IDs, but
 the release configuration does not assign them. See [Apple’s board limits](https://developer.apple.com/help/app-store-connect/configure-game-center/manage-leaderboard-sets).
 
 The new speed IDs are prepared locally; they still require registration in App
@@ -91,10 +92,9 @@ playback on their leaderboard rows. Older times remain ranked when a movie was
 never retained; those rows show playback as unavailable. Playback suspends the
 active engine audio when opened from results.
 
-The app does not upload movie files, attempt histories, or local initials.
-Worldwide replay playback remains unimplemented: it needs a hosted replay store
-and a mapping from each Game Center score to its recorded run. Local movie
-references are not public URLs and must not be advertised as worldwide replays.
+The Game Center integration does not upload movies, attempt histories or local initials.
+The separate, opt-in GlassCode service uploads selected records and available movies.
+Hosted board rows link to those movies. Game Center rows do not have replay links.
 Game Center provides the displayed player name. Scores are client submissions;
 Game Center authentication does not make them server-verified solutions.
 
@@ -189,7 +189,7 @@ The installed matching profile uses Apple Development signing. It is not a Devel
 
 ## Shared backend: anonymous rescue totals
 
-The hosted leaderboard/replay service must also support the existing anonymous
+The same host also runs the separate anonymous
 telemetry protocol in Tools/Telemetry/server.py and AnonymousTelemetry.swift.
 Opted-in clients send fixed aggregate events to POST /v1/event. GET /v1/saved
 returns the lifetime global saved count. Individual profile names, replay IDs
@@ -227,5 +227,6 @@ Resources/Info.plist configures future builds to use this endpoint. Sharing stay
 opt-in. LEMMINGS_TELEMETRY_URL can override the endpoint at build time.
 The installed Session Test 18 application is unchanged.
 
-Authenticated worldwide speed rankings, replay uploads and replay-based target
-submissions are separate work. They are not exposed by this aggregate counter.
+Authenticated worldwide rankings and replay uploads are deployed separately under
+/lemmings-api/rankings. They do not feed this aggregate counter. Uploaded movies
+are community playback records, not independently verified rescue targets.

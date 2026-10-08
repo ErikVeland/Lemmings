@@ -5,15 +5,15 @@ import AppKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "1.8.1"
-    static let subtitle = "The full journey, sharper pixels and steadier effects"
+    static let notesVersion = "1.8.3"
+    static let subtitle = "Worldwide records, better journeys and clearer rescue goals"
     static let sections = [
-        ("The full journey", "Oh My! All Lemmings! returns to 294 curated levels, official and fan, in a Redux-anchored order. Your history and progress carry over."),
-        ("Explosions stay on the terrain", "Pan, zoom, resize or use CRT curvature and each blast stays where it happened, in Classic, NeoLemmix, Lemmings 2 and Lemmings 3."),
-        ("Sharper pixel artwork", "Game artwork, controls, previews and original movies keep crisp pixels when scaled."),
-        ("The music comes back", "After the last nuke explosion, the funeral dirge spins back up to normal speed, even on a failed result."),
-        ("NeoLemmix sound and controls", "Hatches, assignments, rescues, deaths and nukes play sound effects. The - and + keys match the on-screen buttons, and each level opens on the first hatch. NeoLemmix remains Beta."),
-        ("Closer Lemmings 3", "Hatch order, Bricks, Shimmy wear and Mole wall patrols follow the original more closely. Lemmings 2 and 3 remain Preview.")
+        ("Worldwide records", "Compare speedruns, rescues and career records without Game Center. Share under your initials and watch available record replays. Rewind-assisted runs have separate boards. Sharing is optional."),
+        ("Your fastest clears", "Results and local boards track fastest clears and fastest 100% rescues. Record movies stay available for playback."),
+        ("A better learning journey", "The 294-level journey includes Going their separate ways and All the 6s. Cellbash appears earlier, and two gimmick levels have been replaced. Fan lessons are bundled for offline play."),
+        ("Clearer rescue goals", "Checked completion solutions set best-known rescue targets for stars and philosophy assessments. A known winning solution no longer leaves the last star unknown."),
+        ("Smoother play and sound", "Pack progression, saved-run resume, tall-level scrolling and Escape navigation are corrected. Solution replays have effects, rewind sounds are reversed and limited, and music transitions are smoother."),
+        ("Artwork and compatibility", "The Macintosh snowman now matches its collision shape. Release notes scroll within the window. NeoLemmix remains Beta; Lemmings 2 and 3 remain Preview.")
     ]
     private let defaults: UserDefaults
     private let build: Int

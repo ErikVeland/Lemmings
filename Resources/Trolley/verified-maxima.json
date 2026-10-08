@@ -1,7 +1,7 @@
 {
-  "engineSourceFingerprint": "3a7044fe322828ce2bdfc02f5d178d3e51eddfda79da6bfc7d87f1c43a40639b",
+  "engineSourceFingerprint": "bf91c62a2a67e20288a4f732bad45e4a9ba986dcba063effd7ba1bf4b8510f28",
   "exhaustive": false,
-  "generatedAt": "2026-10-07T22:08:20Z",
+  "generatedAt": "2026-10-08T08:12:57Z",
   "levels": [
     {
       "bestSaved": 10,
@@ -13178,7 +13178,7 @@
       "rank": "Xmas",
       "required": 45,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Time waits for no Lemming",
       "witness": {
         "completed": true,
@@ -13225,7 +13225,7 @@
       "rank": "Crazy",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Quote: \"That`s a good level\"",
       "witness": {
         "completed": true,
@@ -13272,7 +13272,7 @@
       "rank": "Crazy",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Many Lemmings make level work",
       "witness": {
         "completed": true,
@@ -13319,7 +13319,7 @@
       "rank": "Crazy",
       "required": 75,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "KEEP ON TRUCKING",
       "witness": {
         "completed": true,
@@ -13366,7 +13366,7 @@
       "rank": "Crazy",
       "required": 79,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "ROCKY VI",
       "witness": {
         "completed": true,
@@ -13413,7 +13413,7 @@
       "rank": "Crazy",
       "required": 8,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "No Problemming!",
       "witness": {
         "completed": true,
@@ -13460,7 +13460,7 @@
       "rank": "Crazy",
       "required": 10,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "It`s a trade off",
       "witness": {
         "completed": true,
@@ -13507,7 +13507,7 @@
       "rank": "Crazy",
       "required": 45,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Time waits for no Lemming",
       "witness": {
         "completed": true,
@@ -13554,7 +13554,7 @@
       "rank": "Crazy",
       "required": 44,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Worra load of old blocks!",
       "witness": {
         "completed": true,
@@ -13601,7 +13601,7 @@
       "rank": "Crazy",
       "required": 49,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "DIGGING FOR VICTORY",
       "witness": {
         "completed": true,
@@ -13648,7 +13648,7 @@
       "rank": "Crazy",
       "required": 45,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "NO PROBLEM",
       "witness": {
         "completed": true,
@@ -13695,7 +13695,7 @@
       "rank": "Crazy",
       "required": 45,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "DON`T PANIC",
       "witness": {
         "completed": true,
@@ -13742,7 +13742,7 @@
       "rank": "Crazy",
       "required": 10,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Ice Ice Lemming",
       "witness": {
         "completed": true,
@@ -13789,7 +13789,7 @@
       "rank": "Havoc",
       "required": 76,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Tubular Lemmings",
       "witness": {
         "completed": true,
@@ -13836,7 +13836,7 @@
       "rank": "Havoc",
       "required": 29,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Be more than just a number",
       "witness": {
         "completed": true,
@@ -13883,7 +13883,7 @@
       "rank": "Havoc",
       "required": 15,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Creature Discomforts",
       "witness": {
         "completed": true,
@@ -13930,7 +13930,7 @@
       "rank": "Havoc",
       "required": 3,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Flow Control",
       "witness": {
         "completed": true,
@@ -13977,7 +13977,7 @@
       "rank": "Havoc",
       "required": 75,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "HIGHLAND FLING",
       "witness": {
         "completed": true,
@@ -14024,7 +14024,7 @@
       "rank": "Havoc",
       "required": 45,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Scaling the Heights",
       "witness": {
         "completed": true,
@@ -14071,7 +14071,7 @@
       "rank": "Havoc",
       "required": 78,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Where Lemmings Dare",
       "witness": {
         "completed": true,
@@ -14118,7 +14118,7 @@
       "rank": "Havoc",
       "required": 68,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Lemmings in a situation",
       "witness": {
         "completed": true,
@@ -14165,7 +14165,7 @@
       "rank": "Havoc",
       "required": 50,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "LOoK BeFoRe YoU LeAp!",
       "witness": {
         "completed": true,
@@ -14212,7 +14212,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Rent-a-Lemming",
       "witness": {
         "completed": true,
@@ -14259,7 +14259,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Snuggle up to a Lemming",
       "witness": {
         "completed": true,
@@ -14306,7 +14306,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Who`s That Lemming",
       "witness": {
         "completed": true,
@@ -14353,7 +14353,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Dangerzone",
       "witness": {
         "completed": true,
@@ -14400,7 +14400,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "And now this...",
       "witness": {
         "completed": true,
@@ -14447,7 +14447,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Get a little extra help",
       "witness": {
         "completed": true,
@@ -14494,7 +14494,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Not just a pretty Lemming",
       "witness": {
         "completed": true,
@@ -14541,7 +14541,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Lemming Productions Present...",
       "witness": {
         "completed": true,
@@ -14588,7 +14588,7 @@
       "rank": "Wicked",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "LeMming ToMato KetchUp fAcilitY",
       "witness": {
         "completed": true,
@@ -14635,7 +14635,7 @@
       "rank": "Wicked",
       "required": 30,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Oh No! It`s the 4TH DIMENSION!",
       "witness": {
         "completed": true,
@@ -14682,7 +14682,7 @@
       "rank": "Wicked",
       "required": 30,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "PoP TiL YoU DrOp!",
       "witness": {
         "completed": true,
@@ -14729,7 +14729,7 @@
       "rank": "Wicked",
       "required": 72,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Last Lemming To Lemmingcentral",
       "witness": {
         "completed": true,
@@ -14776,7 +14776,7 @@
       "rank": "Wicked",
       "required": 45,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "A TOWERING PROBLEM",
       "witness": {
         "completed": true,
@@ -14823,7 +14823,7 @@
       "rank": "Wicked",
       "required": 45,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "How on Earth?",
       "witness": {
         "completed": true,
@@ -14870,7 +14870,7 @@
       "rank": "Wicked",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Temple of Love",
       "witness": {
         "completed": true,
@@ -14917,7 +14917,7 @@
       "rank": "Wicked",
       "required": 40,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "ROCKY ROAD",
       "witness": {
         "completed": true,
@@ -14964,7 +14964,7 @@
       "rank": "Wicked",
       "required": 78,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Suicidal Tendencies",
       "witness": {
         "completed": true,
@@ -15011,7 +15011,7 @@
       "rank": "Wicked",
       "required": 70,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Almost Nearly Virtual Reality",
       "witness": {
         "completed": true,
@@ -15058,7 +15058,7 @@
       "rank": "Wicked",
       "required": 40,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "SPAM,SPAM,SPAM,EGG AND LEMMING",
       "witness": {
         "completed": true,
@@ -15105,7 +15105,7 @@
       "rank": "Wicked",
       "required": 5,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Five Alive",
       "witness": {
         "completed": true,
@@ -15152,7 +15152,7 @@
       "rank": "Wicked",
       "required": 29,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Down the tube",
       "witness": {
         "completed": true,
@@ -15199,7 +15199,7 @@
       "rank": "Wicked",
       "required": 41,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Up, Down or Round and Round",
       "witness": {
         "completed": true,
@@ -15246,7 +15246,7 @@
       "rank": "Wicked",
       "required": 68,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "The Lemming Funhouse",
       "witness": {
         "completed": true,
@@ -15293,7 +15293,7 @@
       "rank": "Wild",
       "required": 60,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Lemming Hotel",
       "witness": {
         "completed": true,
@@ -15340,7 +15340,7 @@
       "rank": "Wild",
       "required": 65,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Lemming Rhythms",
       "witness": {
         "completed": true,
@@ -15387,7 +15387,7 @@
       "rank": "Wild",
       "required": 68,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Lemming Head",
       "witness": {
         "completed": true,
@@ -15434,7 +15434,7 @@
       "rank": "Wild",
       "required": 60,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Higgledy Piggledy",
       "witness": {
         "completed": true,
@@ -15481,7 +15481,7 @@
       "rank": "Wild",
       "required": 49,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Mutiny On The Bounty",
       "witness": {
         "completed": true,
@@ -15528,7 +15528,7 @@
       "rank": "Wild",
       "required": 40,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "SNOW JOKE",
       "witness": {
         "completed": true,
@@ -15575,7 +15575,7 @@
       "rank": "Wild",
       "required": 75,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "ONWARD AND UPWARD",
       "witness": {
         "completed": true,
@@ -15622,7 +15622,7 @@
       "rank": "Wild",
       "required": 40,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "THE SILENCE OF THE LEMMINGS",
       "witness": {
         "completed": true,
@@ -15669,7 +15669,7 @@
       "rank": "Wild",
       "required": 60,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Dr Lemminggood",
       "witness": {
         "completed": true,
@@ -15716,7 +15716,7 @@
       "rank": "Wild",
       "required": 65,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Lemmingdelica",
       "witness": {
         "completed": true,
@@ -15763,7 +15763,7 @@
       "rank": "Wild",
       "required": 29,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Got anything....Lemmingy???",
       "witness": {
         "completed": true,
@@ -19791,7 +19791,7 @@
       "rank": "Blizzard",
       "required": 22,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Oogilemming!",
       "witness": {
         "completed": true,
@@ -19838,7 +19838,7 @@
       "rank": "Blizzard",
       "required": 75,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "It Came Upon a Lemnight Clear",
       "witness": {
         "completed": true,
@@ -19885,7 +19885,7 @@
       "rank": "Blizzard",
       "required": 70,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "The Voyage Home...",
       "witness": {
         "completed": true,
@@ -19932,7 +19932,7 @@
       "rank": "Blizzard",
       "required": 65,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "The Final Frontier",
       "witness": {
         "completed": true,
@@ -19979,7 +19979,7 @@
       "rank": "Blizzard",
       "required": 8,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "The Needs of the Many...",
       "witness": {
         "completed": true,
@@ -20026,7 +20026,7 @@
       "rank": "Blizzard",
       "required": 47,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "The Next Lemeration",
       "witness": {
         "completed": true,
@@ -20073,7 +20073,7 @@
       "rank": "Flurry",
       "required": 70,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Clouds of Lemmings",
       "witness": {
         "completed": true,
@@ -20120,7 +20120,7 @@
       "rank": "Flurry",
       "required": 45,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "The Long Way Around",
       "witness": {
         "completed": true,
@@ -20167,7 +20167,7 @@
       "rank": "Lemmings Versus",
       "required": 65,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "There can be only one",
       "witness": {
         "completed": true,
@@ -20214,7 +20214,7 @@
       "rank": "Lemmings Versus",
       "required": 65,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "We`re in this one together",
       "witness": {
         "completed": true,
@@ -20261,7 +20261,7 @@
       "rank": "Lemmings Versus",
       "required": 65,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Good game! Good game!",
       "witness": {
         "completed": true,
@@ -20308,7 +20308,7 @@
       "rank": "Lemmings Versus",
       "required": 90,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "The Hammock...",
       "witness": {
         "completed": true,
@@ -20355,7 +20355,7 @@
       "rank": "Lemmings Versus",
       "required": 90,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Graffiti",
       "witness": {
         "completed": true,
@@ -20402,7 +20402,7 @@
       "rank": "Lemmings Versus",
       "required": 26,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "The Rope Bridge",
       "witness": {
         "completed": true,
@@ -20449,7 +20449,7 @@
       "rank": "Lemmings Versus",
       "required": 26,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Islands in the Sky",
       "witness": {
         "completed": true,
@@ -20496,7 +20496,7 @@
       "rank": "Lemmings Versus",
       "required": 20,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Cross-over Point",
       "witness": {
         "completed": true,
@@ -20543,7 +20543,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 49,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Watch your step",
       "witness": {
         "completed": true,
@@ -20590,7 +20590,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Libra",
       "witness": {
         "completed": true,
@@ -20637,7 +20637,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 98,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Spiral staircase",
       "witness": {
         "completed": true,
@@ -20684,7 +20684,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 49,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Water processing plant",
       "witness": {
         "completed": true,
@@ -20731,7 +20731,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 45,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Doomsday",
       "witness": {
         "completed": true,
@@ -20778,7 +20778,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 40,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Here is Mr.Lemming's house",
       "witness": {
         "completed": true,
@@ -20825,7 +20825,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "SUNSOFT Special",
       "witness": {
         "completed": true,
@@ -20872,7 +20872,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 59,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Haunted botanical garden",
       "witness": {
         "completed": true,
@@ -20919,7 +20919,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 46,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Watch right or left (Part two)",
       "witness": {
         "completed": true,
@@ -20966,7 +20966,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 49,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Out, away from the tune",
       "witness": {
         "completed": true,
@@ -21013,7 +21013,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 80,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Stray sheep",
       "witness": {
         "completed": true,
@@ -21060,7 +21060,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 1,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Two heads are better...",
       "witness": {
         "completed": true,
@@ -21107,7 +21107,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 80,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "I am A.T.",
       "witness": {
         "completed": true,
@@ -23327,6 +23327,51 @@
       }
     },
     {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "e9446df4909532bd028ed70294e594ecdc1f78fd9abcab5159124051a27ad1af:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "225",
+        "modifiers": {
+          "extras": "3",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 23,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
+      "gameID": "lemmings3",
+      "lossesInBestSolution": 12,
+      "notes": [
+        "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
+      ],
+      "number": 25,
+      "population": 23,
+      "rank": "Egyptian",
+      "required": 1,
+      "status": "REPLAY_RECORD",
+      "testedCandidates": 1,
+      "title": "Egyptian 25",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 12,
+        "path": "witnesses/lemmings3-225.json",
+        "released": 13,
+        "retainedReserves": 10,
+        "saved": 1,
+        "sha256": "1ccf22151a36088dee38efd4ee9431ccb78252b9267bda0293d3096c373e4e4c",
+        "ticks": 9660
+      }
+    },
+    {
       "bestSaved": 10,
       "conditions": {
         "gameID": "lemmings3",
@@ -23414,6 +23459,51 @@
         "saved": 1,
         "sha256": "480f680c20e2214ebaa45fc0060138fdb3949495236c36cd53b38cd750fdf741",
         "ticks": 4140
+      }
+    },
+    {
+      "bestSaved": 2,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "9ac56b12beeb8e5bb8ee10f375b53d49a80b4c79300c1c1130a54a805f484505:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "229",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
+      "gameID": "lemmings3",
+      "lossesInBestSolution": 10,
+      "notes": [
+        "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
+      ],
+      "number": 29,
+      "population": 22,
+      "rank": "Egyptian",
+      "required": 1,
+      "status": "REPLAY_RECORD",
+      "testedCandidates": 1,
+      "title": "Egyptian 29",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 10,
+        "path": "witnesses/lemmings3-229.json",
+        "released": 12,
+        "retainedReserves": 10,
+        "saved": 2,
+        "sha256": "a653adc9372b6c3d7581cab3a6f94e00b574bc69a130c0177bf910e51a4d264e",
+        "ticks": 9660
       }
     },
     {
@@ -24394,7 +24484,7 @@
       "rank": "Frost",
       "required": 69,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "The Land of the Bizarre",
       "witness": {
         "completed": true,
@@ -24441,7 +24531,7 @@
       "rank": "Frost",
       "required": 25,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Happy New Year!",
       "witness": {
         "completed": true,
@@ -24488,7 +24578,7 @@
       "rank": "Frost",
       "required": 40,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Happy New Year II!",
       "witness": {
         "completed": true,
@@ -24535,7 +24625,7 @@
       "rank": "Frost",
       "required": 49,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Plethora of Presents",
       "witness": {
         "completed": true,
@@ -24582,7 +24672,7 @@
       "rank": "Frost",
       "required": 79,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Up on the Rooftops",
       "witness": {
         "completed": true,
@@ -24629,7 +24719,7 @@
       "rank": "Hail",
       "required": 75,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Break On Through",
       "witness": {
         "completed": true,
@@ -24676,7 +24766,7 @@
       "rank": "Hail",
       "required": 25,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "And a Happy New Year!",
       "witness": {
         "completed": true,
@@ -24723,7 +24813,7 @@
       "rank": "Hail",
       "required": 78,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Lemmintaschen?",
       "witness": {
         "completed": true,
@@ -24770,7 +24860,7 @@
       "rank": "Hail",
       "required": 68,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Get the Point?",
       "witness": {
         "completed": true,
@@ -24817,7 +24907,7 @@
       "rank": "Hail",
       "required": 27,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Surprise Package?",
       "witness": {
         "completed": true,

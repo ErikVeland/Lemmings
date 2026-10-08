@@ -7,6 +7,7 @@ import unittest
 import urllib.request
 import urllib.error
 import uuid
+from unittest.mock import patch
 from server import Store, Server, Handler, canonical, checked_conditions
 
 CONDITIONS = dict(gameID='lemmings', packID='pack', levelID='1', levelFingerprint='abc', rulesetVersion='v1', physicsMode='classic', population=10, rescueRequirement=5, startingSkills={'builder':10}, modifiers={}, rewindPolicy='separate-assisted-v1', timeLimitSeconds=300)
@@ -86,6 +87,20 @@ class RankingsTests(unittest.TestCase):
         self.store.delete_player(self.a)
         self.assertEqual(list(self.store.movies.iterdir()),[])
         self.assertEqual(self.entries('mostSaved'),[])
+    def test_movie_quota_preserves_score(self):
+        rid = self.add()['id']
+        with patch('server.MAX_STORAGE', len(MOVIE)-1):
+            with self.assertRaises(OverflowError): self.store.upload(self.a,rid,io.BytesIO(MOVIE),len(MOVIE))
+        self.assertEqual(len(self.entries('mostSaved')),1)
+        self.assertFalse(self.entries('mostSaved')[0]['replay'])
+        self.assertEqual(list(self.store.movies.iterdir()),[])
+    def test_catalogue_restart_reassesses_stars(self):
+        self.add(saved=8)
+        self.assertEqual(self.entries('stars')[0]['score'],2)
+        catalogue = Path(self.temp.name) / 'catalogue.json'
+        catalogue.write_text(canonical(dict(levels=[dict(conditions=CONDITIONS,witness=dict(completed=True,didWin=True,saved=8))])))
+        self.store = Store(self.temp.name,catalogue)
+        self.assertEqual(self.entries('stars')[0]['score'],3)
     def test_http_contract(self):
         server = Server(('127.0.0.1',0), Handler); server.store=self.store
         thread = threading.Thread(target=server.serve_forever,daemon=True); thread.start()
@@ -94,7 +109,7 @@ class RankingsTests(unittest.TestCase):
             with urllib.request.urlopen(base+'/v1/health') as response: self.assertEqual(response.status,200)
             request=urllib.request.Request(base+'/v1/runs',data=canonical(self.run_payload()).encode(), headers={'Content-Type':'application/json'})
             with self.assertRaises(urllib.error.HTTPError) as error: urllib.request.urlopen(request)
-            self.assertEqual(error.exception.code,401)
+            self.assertEqual(error.exception.code,401); error.exception.close()
             request.add_header('Authorization','Bearer '+'a'*64)
             with urllib.request.urlopen(request) as response: self.assertEqual(response.status,200)
         finally: server.shutdown();server.server_close();thread.join()

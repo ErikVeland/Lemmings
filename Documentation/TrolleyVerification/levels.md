@@ -549,11 +549,11 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Egyptian 22: Egyptian 22 | 21 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-222.json) |
 | Egyptian 23: Egyptian 23 | 22 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-223.json) |
 | Egyptian 24: Egyptian 24 | 20 | 1 | — | — | — | No witness collected |
-| Egyptian 25: Egyptian 25 | 23 | 1 | — | — | — | No witness collected |
+| Egyptian 25: Egyptian 25 | 23 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-225.json) |
 | Egyptian 26: Egyptian 26 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-226.json) |
 | Egyptian 27: Egyptian 27 | 21 | 1 | — | — | — | No witness collected |
 | Egyptian 28: Egyptian 28 | 24 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-228.json) |
-| Egyptian 29: Egyptian 29 | 22 | 1 | — | — | — | No witness collected |
+| Egyptian 29: Egyptian 29 | 22 | 1 | 2 | — | — | [Observed](witnesses/lemmings3-229.json) |
 | Egyptian 30: Egyptian 30 | 26 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-230.json) |
 | Shadow 1: Shadow 1 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-101.json) |
 | Shadow 2: Shadow 2 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-102.json) |
