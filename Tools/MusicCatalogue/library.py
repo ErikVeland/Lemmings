@@ -176,10 +176,12 @@ def preserved_recording_profiles(target, payloads, selected, libraries):
         raise ValueError('Incomplete recording profiles in the previous music bundle')
     old_scope = json.loads((target / 'bundle.json').read_text())['scope']
     if old_scope not in ('full', 'main'): raise ValueError('Invalid previous music scope')
+    recording_paths = {'Music/' + row['path'] for row in expected.values()}
     pinned = {}
     for pack in json.loads(libraries.read_text())['packs']:
         for file in pack['files']:
             path, sha = file['path'], file['sha256']
+            if path not in recording_paths: continue
             if path in pinned and pinned[path] != sha:
                 raise ValueError(f'Conflicting library file hash: {path}')
             pinned[path] = sha

@@ -39,8 +39,11 @@ with tempfile.TemporaryDirectory() as scratch:
     canonical = dict(schemaVersion=1, variants=[profile(identity, path) for identity, path in
         [('main', 'main.m4a'), ('legacy', 'legacy.m4a'), ('unchanged', 'unchanged.mp3')]])
     (resources/'recording-playback.json').write_bytes(library.encoded(canonical))
-    index = dict(packs=[dict(files=[dict(path='Music/'+path, sha256=digest(full_bytes[path]))
-        for path in ['legacy.m4a', 'unchanged.mp3']])])
+    index = dict(packs=[
+        dict(files=[dict(path='Music/legacy.m4a', sha256=digest(full_bytes['legacy.m4a'])),
+                    dict(path='Music/catalogue.json', sha256='a'*64)]),
+        dict(files=[dict(path='Music/unchanged.mp3', sha256=digest(full_bytes['unchanged.mp3'])),
+                    dict(path='Music/catalogue.json', sha256='b'*64)])])
     libraries.write_bytes(library.encoded(index))
     def install_full():
         target.mkdir(exist_ok=True)
@@ -70,12 +73,16 @@ with tempfile.TemporaryDirectory() as scratch:
         first = (target/'recording-playback.json').read_bytes()
         library.bundle(source, catalogue, timing, target, 'main', 'all', libraries, preserve_recording_profiles=True)
         assert (target/'recording-playback.json').read_bytes() == first
-        for mutation in ['file', 'source', 'gain', 'loop', 'library', 'duplicate']:
+        for mutation in ['file', 'source', 'gain', 'loop', 'library', 'duplicate', 'conflicting-recording']:
             install_full(); libraries.write_bytes(library.encoded(index))
             previous = json.loads((target/'recording-playback.json').read_text())
             if mutation == 'file': (target/'legacy.m4a').write_bytes(b'changed')
             elif mutation == 'library':
                 wrong = deepcopy(index); wrong['packs'][0]['files'][0]['sha256'] = 'b'*64
+                libraries.write_bytes(library.encoded(wrong))
+            elif mutation == 'conflicting-recording':
+                wrong = deepcopy(index)
+                wrong['packs'][1]['files'].append(dict(path='Music/legacy.m4a', sha256='b'*64))
                 libraries.write_bytes(library.encoded(wrong))
             elif mutation == 'duplicate': previous['variants'].append(deepcopy(previous['variants'][1]))
             elif mutation == 'loop': previous['variants'][1]['loop']['startFrame'] += 1
@@ -89,7 +96,7 @@ with tempfile.TemporaryDirectory() as scratch:
             assert (target/'recording-playback.json').read_bytes() == before
             assert (target/'bundle.json').read_text().find('full') >= 0
     finally: library.ROOT = old_root
-print('PASS slim old-AAC library binding, original main sources, unchanged MP3, repeated stripping and six fail-before-delete guards')
+print('PASS slim old-AAC library binding, original main sources, unchanged MP3, repeated stripping, distinct library metadata and seven fail-before-delete guards')
 
 canonical = {r['variantID']: r for r in json.loads((ROOT/'Resources/Music/recording-playback.json').read_text())['variants']}
 index = json.loads((ROOT/'Resources/Music/libraries.json').read_text())
