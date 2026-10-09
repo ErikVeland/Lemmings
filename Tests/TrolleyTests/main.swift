@@ -523,7 +523,7 @@ func testEngineFamilies() throws {
     try shot("reward-sequence-before")
     view.startCelebration(reduceMotion: false)
     try require(view.revealedStars == 0, "Reward sequence did not start with empty stars")
-    for _ in 0..<150 where view.revealedStars == 0 { try await Task.sleep(for: .milliseconds(10)) }
+    for _ in 0..<150 where view.revealedStars == 0 { try await Task.sleep(nanoseconds: 10_000_000) }
     try require(view.revealedStars == 1, "First star was not revealed separately: stars=\(view.revealedStars), hidden=\(view.isHidden), window=\(view.window != nil), mode=\(view.mode)")
     try shot("reward-first-star")
     view.page(.goals)
@@ -531,7 +531,7 @@ func testEngineFamilies() throws {
     view.mode = .result; view.startCelebration(reduceMotion: true)
     try require(view.revealedStars == 3 && view.celebrationTask == nil, "Reduced Motion still animated rewards")
     view.startCelebration(reduceMotion: false)
-    for _ in 0..<200 where view.celebrationTask != nil { try await Task.sleep(for: .milliseconds(10)) }
+    for _ in 0..<200 where view.celebrationTask != nil { try await Task.sleep(nanoseconds: 10_000_000) }
     try require(view.revealedStars == 3 && view.celebrationTask == nil, "Reward sequence did not finish")
     let windows = NSApp.windows.count
     let backdrop = ArcadeWindow.captureScene(view)
@@ -545,7 +545,7 @@ func testEngineFamilies() throws {
     for _ in 0..<8 { movie.capture(image) }
     movie.finish(); movie.preserveRecord(report)
     movie.begin(ticksPerSecond: 17, title: "Immediate retry")
-    for _ in 0..<100 where store.records.trolley.replays.isEmpty { try await Task.sleep(for: .milliseconds(100)) }
+    for _ in 0..<100 where store.records.trolley.replays.isEmpty { try await Task.sleep(nanoseconds: 100_000_000) }
     try require(store.records.trolley.replays.first?.attemptID == first, "Record movie lost on immediate retry")
     try require(store.records.trolley.replays.first?.verification == .local, "Movie claimed verified replay")
     try store.acceptMaximum(.init(value: 58, status: .record, source: "Native test record", date: Date(), buildVersion: "test-1"), conditions: c, assisted: false)
@@ -809,7 +809,7 @@ func testCelebrationProgress() throws {
     var records = try verifiedRecords(); _ = records.record(run(58))
     let service = GameCenterScores(configuration: config, transport: transport, defaults: defaults)
     func settle() async throws {
-        for _ in 0..<100 where service.busy { try await Task.sleep(for: .milliseconds(10)) }
+        for _ in 0..<100 where service.busy { try await Task.sleep(nanoseconds: 10_000_000) }
         try require(!service.busy, "Game Center operation failed to settle")
     }
     service.connect(profileID: ArcadeProfile.legacyID, window: nil, boardID: "stars", history: records.trolley)
@@ -834,7 +834,7 @@ func testCelebrationProgress() throws {
     transport.account = .init(id: "apple-player", name: "Test Player")
     transport.holdLoads = true
     service.refresh(profileID: ArcadeProfile.legacyID, boardID: "stars", history: records.trolley)
-    for _ in 0..<100 where transport.pendingLoads.isEmpty { try await Task.sleep(for: .milliseconds(10)) }
+    for _ in 0..<100 where transport.pendingLoads.isEmpty { try await Task.sleep(nanoseconds: 10_000_000) }
     try require(transport.pendingLoads.count == 1 && service.busy, "Delayed account request did not start")
     transport.account = nil
     service.refresh(profileID: ArcadeProfile.legacyID, boardID: "stars", history: records.trolley)

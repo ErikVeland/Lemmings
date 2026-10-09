@@ -333,14 +333,25 @@ struct L3RunRecovery: Codable, Sendable {
     func restore(initial: Lemmings3Runtime, checkpoint: RunRecovery) throws -> Lemmings3Runtime {
         _ = try checkpoint.validated()
         guard Self.stateHash(initial) == checkpoint.initialStateHash else { throw RunRecoveryError.differentGame }
+        let game = try Self.replay(initial: initial, inputs: inputs, through: checkpoint.tick)
+        guard game.tick == checkpoint.tick, !game.isComplete,
+              Self.stateHash(game) == checkpoint.stateHash else { throw RunRecoveryError.invalid }
+        return game
+    }
+    /// Reconstructs the deterministic L3 state at a recorded tick.
+    static func replay(initial: Lemmings3Runtime, inputs: [Input], through tick: Int) throws -> Lemmings3Runtime {
+        guard (0...120_000).contains(tick), inputs.count <= 100_000,
+              inputs.allSatisfy({ (0...tick).contains($0.tick) }),
+              zip(inputs, inputs.dropFirst()).allSatisfy({ $0.tick <= $1.tick }) else {
+            throw RunRecoveryError.invalid
+        }
         var game = initial
         for input in inputs {
             while game.tick < input.tick && !game.isComplete { game.step() }
             guard Self.apply(input, to: &game) else { throw RunRecoveryError.invalid }
         }
-        while game.tick < checkpoint.tick && !game.isComplete { game.step() }
-        guard game.tick == checkpoint.tick, !game.isComplete,
-              Self.stateHash(game) == checkpoint.stateHash else { throw RunRecoveryError.invalid }
+        while game.tick < tick && !game.isComplete { game.step() }
+        guard game.tick == tick, !game.isComplete else { throw RunRecoveryError.invalid }
         return game
     }
     static func stateHash(_ game: Lemmings3Runtime) -> String {
@@ -503,17 +514,39 @@ struct L2RunRecovery: Codable, Sendable {
     func restore(initial: Lemmings2Runtime, checkpoint: RunRecovery) throws -> (Lemmings2Runtime, Lemmings2Runtime?, Int) {
         _ = try checkpoint.validated()
         guard try Self.stateHash(initial, includeConfiguration: true) == checkpoint.initialStateHash else { throw RunRecoveryError.differentGame }
-        var game = initial, beforeNuke: Lemmings2Runtime?, beforeNukeCount = 0
-        for (index, input) in inputs.enumerated() {
-            while game.tick < input.tick && !game.isComplete { game.step(); _ = game.drainSoundEvents() }
-            if case .nuke = input.action { beforeNuke = game; beforeNukeCount = index }
-            try Self.apply(input, to: &game)
-            _ = game.drainSoundEvents()
+        var game = try Self.replay(initial: initial, inputs: inputs, through: checkpoint.tick)
+        var beforeNuke: Lemmings2Runtime?, beforeNukeCount = 0
+        for (index, input) in inputs.enumerated() where input.tick <= checkpoint.tick {
+            if case .nuke = input.action {
+                beforeNuke = try Self.replay(initial: initial, inputs: Array(inputs.prefix(index)), through: input.tick)
+                beforeNukeCount = index
+            }
         }
-        while game.tick < checkpoint.tick && !game.isComplete { game.step(); _ = game.drainSoundEvents() }
         guard game.tick == checkpoint.tick, !game.isComplete,
             try Self.stateHash(game) == checkpoint.stateHash else { throw RunRecoveryError.invalid }
         _ = game.drainSoundEvents()
         return (game, beforeNuke, beforeNukeCount)
+    }
+    /// Reconstructs the deterministic L2 state at a recorded tick.
+    static func replay(initial: Lemmings2Runtime, inputs: [Input], through tick: Int) throws -> Lemmings2Runtime {
+        guard (0...120_000).contains(tick), inputs.count <= 100_000,
+              inputs.allSatisfy({ (0...tick).contains($0.tick) }),
+              zip(inputs, inputs.dropFirst()).allSatisfy({ $0.tick <= $1.tick }) else {
+            throw RunRecoveryError.invalid
+        }
+        var game = initial
+        for input in inputs {
+            while game.tick < input.tick && !game.isComplete {
+                game.step(); _ = game.drainSoundEvents()
+            }
+            try Self.apply(input, to: &game)
+            _ = game.drainSoundEvents()
+        }
+        while game.tick < tick && !game.isComplete {
+            game.step(); _ = game.drainSoundEvents()
+        }
+        guard game.tick == tick, !game.isComplete else { throw RunRecoveryError.invalid }
+        _ = game.drainSoundEvents()
+        return game
     }
 }

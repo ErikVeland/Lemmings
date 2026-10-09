@@ -1,6 +1,7 @@
 import AppKit
 import AVFoundation
 import NxlvKit
+import Sparkle
 
 let displayInterval = 1.0 / 60.0
 let contentPathKey = "ClassicDataDirectory"
@@ -15,6 +16,11 @@ let settingsKey = "ClassicSettings"
 let achievementProgressKey = "ClassicAchievementProgress"
 
 @MainActor final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
+  private static let allLemmingsMenuTitle = "Oh My! ALL Lemmings!"
+  private lazy var updaterController = SPUStandardUpdaterController(
+    startingUpdater: true,
+    updaterDelegate: nil,
+    userDriverDelegate: nil)
   private var window: NSWindow!
   private let playfield = PlayfieldView()
   private let panel = PanelView()
@@ -32,6 +38,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var portArtworkFamily: String?
   /// Every imported game, in the order they were added.
   private var dataSets: [(set: ClassicDataSet, directory: URL)] = []
+  private var dataSetIdentityCache: [String: String] = [:]
   private let gamePicker = GamePopUpButton()
   private var assets: ClassicMainDATAssets?
   private var macArtworkCache: [String: ClassicMacArtwork] = [:]
@@ -40,6 +47,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private var session: (any GameSession)?
   private var timer: Timer?
+  private var rewindTimer: Timer?
+  private var rewindHeld = false
+  private var backwardKeyTimer: Timer?
+  private var backwardKeyHeld = false
+  private var rewindOriginTick: Int?
+  private var rewindAudioDucked = false
+  private var forwardTimer: Timer?
+  private var forwardHeld = false
+  private var forwardKeyTimer: Timer?
+  private var forwardKeyHeld = false
   private var accumulator = 0.0
   private var lastStepTime: TimeInterval?
   private var isPaused = false
@@ -60,9 +77,76 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
   /// The whole game, from title to end.
   private var flow: ClassicGameFlow?
+  private var classicSelectionRecordsCampaignProgress = true
   private var launchChoice = 0
   private var launchMode: UnifiedGameLibrary.Mode = .quest
   private var library = UnifiedGameLibrary(entries: [])
+  /// The player-facing families on the home screen. These group releases for
+  /// browsing only. Saved progress and quest order keep their ClassicTitle
+  /// identities.
+  private enum HomeContentFamily: CaseIterable, Equatable {
+    case classic
+    case ohNo
+    case holiday
+    case ohYes
+    case fan
+    case lemmings2
+    case lemmings3
+
+    var displayName: String {
+      switch self {
+      case .classic: return "Classic Lemmings"
+      case .ohNo: return "Oh No! More Lemmings"
+      case .holiday: return "Holiday Lemmings"
+      case .ohYes: return "Oh Yes! More Lemmings"
+      case .fan: return "Fan Lemmings"
+      case .lemmings2: return "Lemmings 2"
+      case .lemmings3: return "Lemmings 3"
+      }
+    }
+
+    var titles: [ClassicTitle] {
+      switch self {
+      case .classic: return [.lemmings]
+      case .ohNo: return [.ohNoMoreLemmings]
+      case .holiday:
+        return [.xmasLemmings1991, .xmasLemmings1992,
+          .holidayLemmings1993, .holidayLemmings1994]
+      case .ohYes: return [.ohYesMoreLemmings]
+      case .fan: return []
+      case .lemmings2: return [.lemmings2TheTribes]
+      case .lemmings3: return [.lemmings3TheChronicles]
+      }
+    }
+
+    static func family(
+      for title: ClassicTitle?,
+      kind: ClassicDataSet.Kind? = nil
+    ) -> HomeContentFamily {
+      if title == .ohYesMoreLemmings { return .ohYes }
+      if let kind, case .scanned = kind { return .fan }
+      guard let title else { return .fan }
+      switch title {
+      case .lemmings: return .classic
+      case .ohNoMoreLemmings: return .ohNo
+      case .xmasLemmings1991, .xmasLemmings1992,
+           .holidayLemmings1993, .holidayLemmings1994:
+        return .holiday
+      case .ohYesMoreLemmings: return .ohYes
+      case .lemmings2TheTribes: return .lemmings2
+      case .lemmings3TheChronicles: return .lemmings3
+      }
+    }
+  }
+  private enum HomeMenuAction {
+    case resume
+    case fullQuest
+    case browse(HomeContentFamily)
+  }
+  private struct HomeMenuItem {
+    let title: String
+    let action: HomeMenuAction
+  }
   private var activeTitle: ClassicTitle?
   private var sequelIsActive: Bool { nativeL2Window != nil || nativeL3Window != nil }
   private var classicContent: NSView?
@@ -85,6 +169,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var arcadeReport: ArcadeReport?
   private var arcadeAutoPresent = true
   private let music = ModuleMusicPlayer()
+  private let failureMood = FailureMoodTransition()
   /// Plays recordings the player supplied, as an alternative to the modules.
   private let soundtrack = SoundtrackPlayer()
   /// Mixes across the supplied soundtracks, moving on what the game does.
@@ -123,8 +208,120 @@ let achievementProgressKey = "ClassicAchievementProgress"
   /// Levels still to play, when a whole pack was started at once.
   private var fanQueue: [FanLevelLibrary.Entry] = []
   private var fanQueueIndex = 0
+  private enum LevelBrowserRoute {
+    case classic(
+      dataSetDirectory: URL,
+      dataSet: ClassicDataSet,
+      levelIndex: Int,
+      sourceFingerprint: String?,
+      sourceRevision: String)
+    case fan(pack: URL, entry: FanLevelLibrary.Entry, archiveFingerprint: String)
+    case lemmings2(
+      root: URL,
+      selection: Lemmings2PlayWindow.LevelSelection,
+      expectedLevelID: String,
+      sourceRevision: String)
+    case lemmings3(
+      root: URL,
+      selection: Lemmings3PlayWindow.LevelSelection,
+      expectedLevelID: String,
+      sourceRevision: String)
+  }
+  private struct LevelBrowserClassicSource: Sendable {
+    let dataSet: ClassicDataSet
+    let directory: URL
+    let sourceFingerprint: String?
+    let sourceRevision: String?
+    let isVerified: Bool
+  }
+  private struct LevelBrowserDiscovery: Sendable {
+    let classic: [LevelBrowserClassicSource]
+    let lemmings2Root: URL?
+    let lemmings2: [Lemmings2PlayWindow.BrowserLevel]
+    let lemmings3Root: URL?
+    let lemmings3: [Lemmings3PlayWindow.BrowserLevel]
+  }
+  private struct LevelBrowserFanDiscovery: Sendable {
+    let fingerprint: String
+    let entries: [FanLevelLibrary.Entry]
+  }
+  private struct LevelBrowserFanPackDiscovery: Sendable {
+    let packID: String
+    let fingerprint: String
+    let entries: [FanLevelLibrary.Entry]
+  }
+  private struct PreparedClassicArtwork: Sendable {
+    let grounds: [Int: ClassicGroundSet]
+    let specials: [Int: ClassicSpecialGraphic]
+    let assets: ClassicMainDATAssets
+    let directory: URL
+    let portArtworkFamily: String?
+  }
+  private enum LevelBrowserClassicPreparation: Sendable {
+    case ready(PreparedClassicArtwork)
+    case failed(String)
+  }
+  private struct PreparedFanLevel: Sendable {
+    let level: ClassicLevel
+    let ground: ClassicGroundSet
+    let special: ClassicSpecialGraphic?
+    let assets: ClassicMainDATAssets
+  }
+  private enum LevelBrowserFanPreparation: Sendable {
+    case ready(PreparedFanLevel)
+    case failed(String)
+  }
+  private enum PlaylistEntryResolution {
+    case available(LevelCatalogueEntry)
+    case locked(LevelCatalogueEntry)
+    case unavailable(LevelCatalogueEntry)
+    case changed
+    case missing
+
+    var canStart: Bool {
+      if case .available = self { return true }
+      return false
+    }
+  }
+  private static let levelCatalogueRevision = "1.2-runtime-v2"
+  private var levelCatalogue = LevelCatalogue(revision: "1.2-runtime-v2", packs: [])
+  private var levelBrowserRoutes: [LevelCatalogueIdentity: LevelBrowserRoute] = [:]
+  private var levelPreviewRequests: [LevelCatalogueIdentity: LevelPreviewRequest] = [:]
+  private var levelBrowserPackFamilies: [String: HomeContentFamily] = [:]
+  private var levelBrowserFanPacks: [String: URL] = [:]
+  private var levelBrowserFanEntries: [String: [FanLevelLibrary.Entry]] = [:]
+  private var levelBrowserInvalidFanPacks: Set<String> = []
+  private var levelBrowserInvalidFanPackRevisions: [String: String] = [:]
+  private var levelBrowserPackSelection: String?
+  private var levelBrowserLevelSelections: [String: String] = [:]
+  private var levelBrowserLoadTask: Task<Void, Never>?
+  private var levelBrowserDiscoveryTask: Task<LevelBrowserDiscovery?, Never>?
+  private var levelBrowserFanLoadTask: Task<Void, Never>?
+  private var levelBrowserFanDiscoveryTask: Task<LevelBrowserFanDiscovery?, Never>?
+  private var levelBrowserLaunchTask: Task<Void, Never>?
+  private var levelBrowserLaunchID: UUID?
+  private weak var levelBrowserLoadingPage: GameMenuPage?
+  private weak var levelBrowserFanLoadingPage: GameMenuPage?
+  private weak var levelBrowserLaunchPage: GameMenuPage?
+  private weak var levelBrowserCurrentLevelPage: GameMenuPage?
+  private weak var levelBrowserPackPage: GameMenuPage?
+  private weak var levelBrowserPackCarousel: LevelCoverFlowView?
+  private var levelBrowserVisiblePackKeys: Set<String> = []
+  private var playlistFanLoadTask: Task<Void, Never>?
+  private var playlistFanDiscoveryTask: Task<([LevelBrowserFanPackDiscovery], Set<String>), Never>?
+  private weak var playlistFanLoadingPage: GameMenuPage?
+  private weak var playlistLibraryPage: GameMenuPage?
+  private weak var playlistEditorPage: GameMenuPage?
+  private var playlistEditorID: UUID?
+  private var playlistLibrarySelection: String?
+  private var playlistStoreCache: (profileID: String, store: LevelPlaylistStore)?
+  private var playlistEntrySelections: [UUID: UUID] = [:]
+  private var sequencePlaylistStore: LevelPlaylistStore?
+  private var sequenceLaunchRunID: UUID?
+  private var sequencePlayingIdentity: LevelCatalogueIdentity?
   private var muteItem: NSMenuItem?
   private var presetItem: NSMenuItem?
+  private var resumeSavedRunItem: NSMenuItem?
   private var gamesMenu: NSMenu?
   private var levelsMenu: NSMenu?
   /// Set while an unofficial level is loaded, so retry reloads that file.
@@ -149,6 +346,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var recoveryEngine: String { RunRecovery.bundledEngine }
 
   private func saveRunCheckpoint(immediately: Bool = false) {
+    guard !sequenceIsActive else { return }
     if let nativeL2Window { nativeL2Window.saveCheckpoint(immediately: immediately); return }
     if let nativeL3Window { nativeL3Window.saveCheckpoint(immediately: immediately); return }
     let atBriefing: Bool
@@ -196,6 +394,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var menuRecovery: RunRecovery?
 
   @objc private func resumeSavedRun() {
+    guard allowNavigationAwayFromSequence() else { return }
     saveRunCheckpoint(immediately: true)
     do {
       guard let checkpoint = try recoveryStore.latest(profileID: ArcadeStore.shared.playingProfileID, hotSeatID: ArcadeStore.shared.hotSeatID) else {
@@ -241,9 +440,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
         openNativeL3(recovered: next)
         return
       }
-      let classicIndex = dataSets.firstIndex { $0.set.identifierKey == checkpoint.dataSetID }
+      let classicIndex = dataSetIndex(matching: checkpoint.dataSetID)
       if let fan = checkpoint.fan {
-        if let base = fan.baseDataSetID, !dataSets.contains(where: { $0.set.identifierKey == base }) {
+        if let base = fan.baseDataSetID, dataSetIndex(matching: base) == nil {
           throw RunRecoveryError.differentGame
         }
         guard let path = checkpoint.sourcePath, FileManager.default.fileExists(atPath: path) else {
@@ -261,10 +460,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
       saveRunCheckpoint(immediately: true)
       restoringCheckpoint = true
-      defer { restoringCheckpoint = false }
+      defer {
+        restoringCheckpoint = false
+        refreshClassicLevelPickerAvailability()
+      }
       returnToLibrary()
       if let fan = checkpoint.fan, let path = checkpoint.sourcePath {
-        if let base = fan.baseDataSetID, let index = dataSets.firstIndex(where: { $0.set.identifierKey == base }) {
+        if let base = fan.baseDataSetID, let index = dataSetIndex(matching: base) {
           gamePicker.selectItem(at: index); selectDataSet()
         }
         fanPack = URL(fileURLWithPath: path)
@@ -281,6 +483,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
         fanHolidayStyles = checkpoint.fanHolidayStyles ?? false
         loadCurrentFanLevel()
         guard fanPlaying, phase == .briefing, let classic = session as? ClassicSession else { throw RunRecoveryError.differentGame }
+        guard arcadeLevel?.conditions?.levelFingerprint == checkpoint.levelFingerprint
+        else { throw RunRecoveryError.differentGame }
         _ = advanceFanPlay()
         try classic.restore(checkpoint)
       } else if checkpoint.neo != nil, let path = checkpoint.sourcePath {
@@ -291,6 +495,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
         launchMode = .singleTitle; activeTitle = dataSets[index].set.title
         gamePicker.selectItem(at: index); selectDataSet()
         picker.selectItem(at: checkpoint.levelIndex); levelChanged()
+        guard arcadeLevel?.conditions?.levelFingerprint == checkpoint.levelFingerprint
+        else { throw RunRecoveryError.differentGame }
         if phase == .briefing { advancePhase() }
         guard let classic = session as? ClassicSession else { throw RunRecoveryError.differentGame }
         try classic.restore(checkpoint)
@@ -326,6 +532,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
   func applicationWillTerminate(_ notification: Notification) { saveRunCheckpoint(immediately: true); ClassicRouteRecorder.flush() }
 
   func applicationDidFinishLaunching(_ notification: Notification) {
+    // Start scheduled update checks without waiting for the menu action.
+    _ = updaterController
     migrateStandaloneSaves()
     buildMenu()
     buildInterface()
@@ -420,6 +628,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
     aboutItem.target = self
     appMenu.addItem(aboutItem)
     appMenu.addItem(.separator())
+    let updatesItem = NSMenuItem(
+      title: "Check for Updates…",
+      action: #selector(checkForUpdates),
+      keyEquivalent: "")
+    updatesItem.target = self
+    appMenu.addItem(updatesItem)
+    appMenu.addItem(.separator())
     let achievementsItem = NSMenuItem(
       title: "Achievements…", action: #selector(showAchievements), keyEquivalent: "a")
     achievementsItem.keyEquivalentModifierMask = [.command, .shift]
@@ -478,10 +693,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
 
     let fileMenu = addMenu("File")
-    _ = add(fileMenu, "Resume Saved Run…", #selector(resumeSavedRun), "r", modifiers: [.command, .shift])
+    resumeSavedRunItem = add(
+      fileMenu,
+      "Resume Saved Run…",
+      #selector(resumeSavedRun),
+      "r",
+      modifiers: [.command, .shift])
     _ = add(fileMenu, "Game Library", #selector(returnToLibrary), "l", modifiers: [.command, .shift])
     fileMenu.addItem(.separator())
     _ = add(fileMenu, "Add Game…", #selector(chooseContent), "o")
+    _ = add(fileMenu, "Level Select…", #selector(showLevelBrowser), "")
     // Not Shift-Command-L: that already returns to the game library, and the
     // two chords are the same once AppKit has folded the shift in.
     _ = add(fileMenu, "Fan Levels…", #selector(showFanLevels), "f",
@@ -500,6 +721,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     levelsItem.submenu = levels
     fileMenu.addItem(levelsItem)
     levelsMenu = levels
+    fileMenu.autoenablesItems = false
 
     let viewMenu = addMenu("View")
     _ = add(viewMenu, "Zoom In", #selector(zoomIn), "+")
@@ -518,6 +740,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     NSApplication.shared.helpMenu = helpMenu
 
     NSApplication.shared.mainMenu = mainMenu
+  }
+
+  @objc private func checkForUpdates(_ sender: Any?) {
+    updaterController.checkForUpdates(sender)
   }
 
   // MARK: - Display path
@@ -568,6 +794,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     // brightness one.
     let wantsTube = settings.display != .flat && crtView.isAvailable
       && phase == .playing && playfield.phase == .playing && !panel.isMenuMode
+    crtView.gameplayCursorRect = wantsTube
+      ? CGRect(x: 0, y: 0, width: 640, height: 320)
+      : nil
     guard wantsTube != tubeIsActive else {
       if wantsTube { crtView.settings = tubeSettings() }
       return
@@ -640,6 +869,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
     tube.maskStrength *= strength
     tube.bloomAmount *= strength
     tube.curvature = tube.curvature / max(0.15, strength)
+    tube.curvatureY = tube.curvatureY / max(0.15, strength)
+    tube.cornerRadius *= strength
+    tube.cornerSoftness *= strength
+    tube.convergence *= strength
+    tube.convergenceY *= strength
+    tube.vignette *= strength
+    tube.saturation = 1 + (tube.saturation - 1) * strength
+    tube.brightBoostDark = 1 + (tube.brightBoostDark - 1) * strength
+    tube.brightBoostBright = 1 + (tube.brightBoostBright - 1) * strength
     tube.pixelAspect = Float(settings.pixelAspect)
     tube.colorLevels = Float(settings.colorDepth.levels)
     return tube
@@ -720,6 +958,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let artworkChanged = settings.graphics != updated.graphics
     let musicChanged = settings.music != updated.music || settings.shuffleMusic != updated.shuffleMusic
     let djPoolChanged = settings.djIncludesOtherSoundtracks != updated.djIncludesOtherSoundtracks
+    let classicUnlockChanged = settings.unlockAllClassicLevels != updated.unlockAllClassicLevels
+    let reduceMotionChanged = settings.reduceMotion != updated.reduceMotion
     let previousSound = settings.sound
     settings = updated
     GameAccessibility.interfaceSize = settings.interfaceSize
@@ -729,6 +969,18 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
 
     if djPoolChanged { reloadDJLibrary() }
+    if classicUnlockChanged {
+      refreshClassicCatalogueAvailability()
+      refreshClassicLevelPickerAvailability()
+      rebuildNavigationMenus()
+      let availabilityPages = [levelBrowserCurrentLevelPage, playlistLibraryPage].compactMap { $0 }
+      levelBrowserCurrentLevelPage = nil
+      playlistLibraryPage = nil
+      for page in availabilityPages where GameScreen.shared.contains(page) {
+        GameScreen.shared.dismiss(page)
+      }
+    }
+    if reduceMotionChanged { updateLevelSelectionReducedMotion() }
     speedControl.variableEnabled = settings.modernControlsEnabled && settings.variableSpeedEnabled
     panel.modernControlsEnabled = settings.modernControlsEnabled
     playfield.reduceMotion = settings.reduceMotion
@@ -816,14 +1068,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   @objc private func chooseNativeL2() {
+    guard allowNavigationAwayFromSequence() else { return }
     launchMode = .singleTitle
     openNativeL2()
   }
 
-  private func suspendCurrentEngine() {
+  private func suspendCurrentEngine(savesProgress: Bool = true) {
     panel.handlePointerUp()
     playfield.clearPointer()
-    saveProgress()
+    if savesProgress { saveProgress() }
     runMovie.discard()
     nativeL2Window?.stop()
     nativeL3Window?.stop()
@@ -836,10 +1089,21 @@ let achievementProgressKey = "ClassicAchievementProgress"
     accumulator = 0
   }
 
-  private func openNativeL2(_ root: URL? = nil, recovered: Lemmings2PlayWindow? = nil) {
+  @discardableResult
+  private func openNativeL2(_ root: URL? = nil, recovered: Lemmings2PlayWindow? = nil,
+                            selection: Lemmings2PlayWindow.LevelSelection? = nil,
+                            expectedLevelID: String? = nil,
+                            expectedSourceRevision: String? = nil,
+                            sequenceRunID: UUID? = nil,
+                            sequenceIdentity: LevelCatalogueIdentity? = nil) -> Bool {
     GameScreen.shared.dismissAll()
     do {
-      let next = try recovered ?? Lemmings2PlayWindow(root: root ?? BundledGameResources.lemmings2())
+      let next = try recovered ?? Lemmings2PlayWindow(
+        root: root ?? BundledGameResources.lemmings2(),
+        selection: selection,
+        expectedLevelID: expectedLevelID,
+        expectedSourceRevision: expectedSourceRevision,
+        recordsCampaignProgress: sequenceRunID == nil)
       if !sequelIsActive { classicContent = window.contentView }
       suspendCurrentEngine()
       nativeL2Window = next
@@ -848,6 +1112,20 @@ let achievementProgressKey = "ClassicAchievementProgress"
       next.onProgressChanged = { [weak self] in self?.refreshSequelProgress() }
       next.onCampaignCompleted = { [weak self] in self?.finishNativeTitle() }
       next.onShowSettings = { [weak self] in self?.showSettings() }
+      if let sequenceRunID, let sequenceIdentity {
+        next.recordsCampaignProgress = false
+        if let run = sequencePlaylistStore?.activeRun, run.id == sequenceRunID {
+          next.sequenceContinueTitle = run.currentIndex + 1 < run.entries.count
+            ? "Next level" : "Finish run"
+        }
+        next.onSequenceContinue = { [weak self] didWin in
+          guard didWin else { return false }
+          return self?.continueActiveSequence(
+            completed: sequenceIdentity,
+            runID: sequenceRunID) ?? true
+        }
+        setSequencePlayingIdentity(sequenceIdentity)
+      }
       next.attach(to: window)
       next.setAudioSettings(settings, muted: audioMuted)
       window.title = "Lemmings 2 — The Tribes"
@@ -855,15 +1133,34 @@ let achievementProgressKey = "ClassicAchievementProgress"
       window.minSize = NSSize(width: 640, height: 502)
       next.present()
       rebuildNavigationMenus()
-    } catch { showLaunchError("Cannot open Lemmings 2", error) }
+      return true
+    } catch {
+      showLaunchError("Cannot open Lemmings 2", error)
+      return false
+    }
   }
 
-  @objc private func chooseNativeL3() { launchMode = .singleTitle; openNativeL3() }
+  @objc private func chooseNativeL3() {
+    guard allowNavigationAwayFromSequence() else { return }
+    launchMode = .singleTitle
+    openNativeL3()
+  }
 
-  private func openNativeL3(_ root: URL? = nil, recovered: Lemmings3PlayWindow? = nil) {
+  @discardableResult
+  private func openNativeL3(_ root: URL? = nil, recovered: Lemmings3PlayWindow? = nil,
+                            selection: Lemmings3PlayWindow.LevelSelection? = nil,
+                            expectedLevelID: String? = nil,
+                            expectedSourceRevision: String? = nil,
+                            sequenceRunID: UUID? = nil,
+                            sequenceIdentity: LevelCatalogueIdentity? = nil) -> Bool {
     GameScreen.shared.dismissAll()
     do {
-      let next = try recovered ?? Lemmings3PlayWindow(root: root ?? BundledGameResources.lemmings3())
+      let next = try recovered ?? Lemmings3PlayWindow(
+        root: root ?? BundledGameResources.lemmings3(),
+        selection: selection,
+        expectedLevelID: expectedLevelID,
+        expectedSourceRevision: expectedSourceRevision,
+        recordsCampaignProgress: sequenceRunID == nil)
       if !sequelIsActive { classicContent = window.contentView }
       suspendCurrentEngine()
       nativeL3Window = next
@@ -872,6 +1169,20 @@ let achievementProgressKey = "ClassicAchievementProgress"
       next.onProgressChanged = { [weak self] in self?.refreshSequelProgress() }
       next.onCampaignCompleted = { [weak self] in self?.finishNativeTitle() }
       next.onShowSettings = { [weak self] in self?.showSettings() }
+      if let sequenceRunID, let sequenceIdentity {
+        next.recordsCampaignProgress = false
+        if let run = sequencePlaylistStore?.activeRun, run.id == sequenceRunID {
+          next.sequenceContinueTitle = run.currentIndex + 1 < run.entries.count
+            ? "Next level" : "Finish run"
+        }
+        next.onSequenceContinue = { [weak self] didWin in
+          guard didWin else { return false }
+          return self?.continueActiveSequence(
+            completed: sequenceIdentity,
+            runID: sequenceRunID) ?? true
+        }
+        setSequencePlayingIdentity(sequenceIdentity)
+      }
       next.attach(to: window)
       next.setAudioSettings(settings, muted: audioMuted)
       window.title = "Lemmings 3 — The Chronicles"
@@ -879,22 +1190,69 @@ let achievementProgressKey = "ClassicAchievementProgress"
       window.minSize = NSSize(width: 1050, height: 680)
       next.present()
       rebuildNavigationMenus()
-    } catch { showLaunchError("Cannot open Lemmings 3", error) }
+      return true
+    } catch {
+      showLaunchError("Cannot open Lemmings 3", error)
+      return false
+    }
   }
 
   private func showLaunchError(_ title: String, _ error: Error) {
     GameScreen.shared.message(title, detail: String(describing: error))
   }
 
+  private func setSequencePlayingIdentity(_ identity: LevelCatalogueIdentity?) {
+    sequencePlayingIdentity = identity
+    refreshSequenceNavigationAvailability()
+  }
+
+  private func refreshSequenceNavigationAvailability() {
+    let allowsLevelNavigation = !sequenceIsActive
+    gamePicker.isEnabled = allowsLevelNavigation
+    picker.isEnabled = allowsLevelNavigation
+    resumeSavedRunItem?.isEnabled = allowsLevelNavigation
+    refreshClassicLevelPickerAvailability()
+    rebuildNavigationMenus()
+  }
+
+  private func clearSequenceLaunch(_ runID: UUID?) {
+    guard let runID, sequenceLaunchRunID == runID else { return }
+    sequenceLaunchRunID = nil
+    refreshSequenceNavigationAvailability()
+  }
+
+  private var sequenceIsActive: Bool {
+    sequenceLaunchRunID != nil || sequencePlayingIdentity != nil
+  }
+
+  private func allowNavigationAwayFromSequence() -> Bool {
+    guard sequenceIsActive else {
+      cancelLevelSelectionLoading()
+      return true
+    }
+    if sequenceLaunchRunID != nil {
+      setStatus("A playlist level is loading. Cancel it before choosing another game or level.")
+      NSSound.beep()
+      return false
+    }
+    GameScreen.shared.message(
+      "Run in progress",
+      detail: "Return to the game library before choosing another game, level, saved run or Hot Seat session.")
+    return false
+  }
+
   @objc private func returnToLibrary() {
     launchChoice = 0
     handoverRetry = nil
-    saveRunCheckpoint(immediately: true)
+    let wasSequenceActive = sequenceIsActive
+    if !wasSequenceActive { saveRunCheckpoint(immediately: true) }
+    sequenceLaunchRunID = nil
+    setSequencePlayingIdentity(nil)
     GameScreen.shared.dismissAll()
     fanScreen = .off
     fanPlaying = false
     fanQueue = []
-    suspendCurrentEngine()
+    suspendCurrentEngine(savesProgress: !wasSequenceActive)
     activeTitle = nil
     currentNxlvURL = nil
     window.contentView = classicContent ?? plainRoot
@@ -929,10 +1287,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func rebuildLibrary() {
     library = UnifiedGameLibrary(entries: ClassicTitle.allCases.map { title in
-      if let entry = dataSets.first(where: { $0.set.title == title }) {
+      if let index = nonFanQuestDataSetIndex(for: title) {
+        let entry = dataSets[index]
         var savedFlow = ClassicGameFlow(campaign: entry.set.campaign)
-        if let data = UserDefaults.standard.data(forKey: ArcadeStore.shared.progressKey("\(flowProgressKey).\(entry.set.identifierKey)"))
-            ?? UserDefaults.standard.data(forKey: ArcadeStore.shared.progressKey("\(flowProgressKey).\(entry.set.legacyIdentifierKey)")),
+        if let data = savedClassicProgressData(for: entry),
            let saved = try? JSONDecoder().decode(ClassicGameFlow.Progress.self, from: data) { savedFlow.restore(entry.set.migrateProgress(saved)) }
         let count = savedFlow.ranks.reduce(0) { $0 + savedFlow.passedCount(inRank: $1.name) }
         return .init(title: title, total: entry.set.campaign.levels.count, passed: count)
@@ -941,7 +1299,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         : title == .lemmings3TheChronicles ? (try? BundledGameResources.lemmings3()) != nil : false
       // The menu is set in the game's own fixed-width font, so a row holds
       // only a short note. One word says as much as a sentence here.
-      let detail = title == .lemmings2TheTribes ? "BETA"
+      let detail = title == .lemmings2TheTribes ? "PREVIEW"
         : title == .lemmings3TheChronicles ? "PREVIEW" : "NO DATA"
       return .init(title: title, total: title.expectedLevelCount ?? 0,
         passed: sequelCompletion[title] ?? 0, available: available, detail: detail)
@@ -956,8 +1314,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
     case .lemmings3TheChronicles: openNativeL3()
     default:
       if sequelIsActive { returnToLibrary() }
+      do { try openChapter(title) }
+      catch {
+        setStatus("Cannot open \(title.displayName): \(error.localizedDescription)")
+        return
+      }
       activeTitle = title
-      openChapter(title)
+      rebuildNavigationMenus()
       flow?.startGame()
       if launchMode == .quest { flow?.resumeCampaign() }
       renderScreen()
@@ -972,6 +1335,18 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if case let .title(next) = destination { launchTitle(next) }
   }
 
+  private func refreshClassicLevelPickerAvailability() {
+    guard let campaign, let flow else { return }
+    // A data-set switch saves progress before it fills the picker, so the
+    // picker can hold fewer rows than the campaign. NSMenu asserts on an
+    // index past its end.
+    for index in 0..<min(campaign.levels.count, picker.numberOfItems) {
+      picker.item(at: index)?.isEnabled = settings.unlockAllClassicLevels
+        || sequenceIsActive
+        || flow.isLevelUnlocked(index)
+    }
+  }
+
   private func rebuildNavigationMenus() {
     gamesMenu?.removeAllItems()
     for entry in library.entries {
@@ -979,7 +1354,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         action: #selector(selectGameFromMenu(_:)), keyEquivalent: "")
       item.target = self
       item.representedObject = entry.title.rawValue
-      item.isEnabled = entry.available
+      item.isEnabled = entry.available && !sequenceIsActive
       item.state = activeTitle == entry.title ? .on : .off
       gamesMenu?.addItem(item)
     }
@@ -993,6 +1368,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
           action: #selector(selectLevelFromMenu(_:)), keyEquivalent: "")
         item.target = self
         item.tag = index
+        item.isEnabled = !sequenceIsActive
+          && (settings.unlockAllClassicLevels || flow?.isLevelUnlocked(index) == true)
         submenu.addItem(item)
       }
       let item = NSMenuItem(title: rank, action: nil, keyEquivalent: "")
@@ -1002,6 +1379,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   @objc private func selectGameFromMenu(_ sender: NSMenuItem) {
+    guard allowNavigationAwayFromSequence() else { return }
     guard let value = sender.representedObject as? String, let title = ClassicTitle(rawValue: value) else { return }
     launchMode = .singleTitle
     saveProgress()
@@ -1009,7 +1387,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   @objc private func selectLevelFromMenu(_ sender: NSMenuItem) {
+    guard allowNavigationAwayFromSequence() else { return }
     guard !sequelIsActive else { return }
+    guard settings.unlockAllClassicLevels || flow?.isLevelUnlocked(sender.tag) == true else {
+      GameScreen.shared.message(
+        "Level locked",
+        detail: "Complete the preceding level, or enable Unlock all Classic levels in Settings.")
+      return
+    }
     launchMode = .singleTitle
     activeTitle = dataSets.indices.contains(gamePicker.indexOfSelectedItem) ? dataSets[gamePicker.indexOfSelectedItem].set.title : nil
     picker.selectItem(at: sender.tag)
@@ -1036,6 +1421,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.onRetry = { [weak self] in self?.retry() }
     playfield.onProfiles = { [weak self] in self?.showProfiles() }
     playfield.onRecords = { [weak self] in self?.showLevelRecords() }
+    playfield.onSettings = { [weak self] in self?.showSettings() }
     playfield.onSelectOverlayLine = { [weak self] index in
       guard let self else { return }
       if self.fanScreen != .off {
@@ -1060,10 +1446,20 @@ let achievementProgressKey = "ClassicAchievementProgress"
       contentRect: NSRect(x: 0, y: 0, width: 1000, height: 620),
       styleMask: [.titled, .closable, .resizable, .miniaturizable],
       backing: .buffered, defer: false)
+    failureMood.onChange = { [weak self] amount in
+      guard let self else { return }
+      self.playfield.failureMoodAmount = amount
+      let tempo = 1 - 0.28 * Double(amount)
+      self.music.setTempoScale(tempo)
+      self.soundtrack.setPlaybackRate(tempo)
+      self.dj.setPlaybackRate(tempo)
+      self.playfield.needsDisplay = true
+    }
     window.isReleasedWhenClosed = false
     window.delegate = self
     GameScreen.shared.gameWindow = window
     GameScreen.shared.onPresent = { [weak self] in
+      self?.cancelCoveredLevelSelectionLoading()
       self?.pointerCapture.reset()
       self?.panel.handlePointerUp(); self?.playfield.clearPointer()
       self?.nativeL2Window?.releasePointerForMenu()
@@ -1162,6 +1558,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   // MARK: - Content
 
   @objc private func chooseContent() {
+    guard allowNavigationAwayFromSequence() else { return }
     Task { @MainActor in
       guard let url = await pickDirectory("Choose the directory holding LEVEL000.DAT and MAIN.DAT.")
       else { return }
@@ -1200,6 +1597,124 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
+  private func dataSetDirectoryKey(_ directory: URL) -> String {
+    directory.resolvingSymlinksInPath().standardizedFileURL.path
+  }
+
+  /// Bundled releases retain their historic save keys. Imported sources add
+  /// source and content identities so separate or replaced packs cannot share
+  /// progress or recovery state.
+  private func dataSetID(_ entry: (set: ClassicDataSet, directory: URL)) -> String {
+    let directory = entry.directory.resolvingSymlinksInPath().standardizedFileURL
+    if let resources = Bundle.main.resourceURL?
+        .resolvingSymlinksInPath().standardizedFileURL,
+       directory == resources || directory.path.hasPrefix(resources.path + "/") {
+      return entry.set.identifierKey
+    }
+    if let cached = dataSetIdentityCache[directory.path] { return cached }
+    let source = ArcadeStore.fingerprint(Data(directory.path.utf8))
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = [.sortedKeys]
+    let revision = (try? encoder.encode(entry.set.campaign))
+      .map(ArcadeStore.fingerprint) ?? "unavailable"
+    let identity = entry.set.identifierKey
+      + ":source-" + source
+      + ":revision-" + revision
+    dataSetIdentityCache[directory.path] = identity
+    return identity
+  }
+
+  private func dataSetIndex(matching identity: String) -> Int? {
+    if let exact = dataSets.firstIndex(where: { dataSetID($0) == identity }) {
+      return exact
+    }
+    let legacyMatches = dataSets.indices.filter {
+      dataSets[$0].set.identifierKey == identity
+        || dataSets[$0].set.legacyIdentifierKey == identity
+    }
+    return legacyMatches.count == 1 ? legacyMatches[0] : nil
+  }
+
+  private func dataSetClaimCount(for legacyIdentity: String) -> Int {
+    dataSets.count {
+      $0.set.identifierKey == legacyIdentity
+        || $0.set.legacyIdentifierKey == legacyIdentity
+    }
+  }
+
+  private func savedClassicProgressData(
+    for entry: (set: ClassicDataSet, directory: URL)
+  ) -> Data? {
+    let store = UserDefaults.standard
+    let scoped = ArcadeStore.shared.progressKey(
+      "\(flowProgressKey).\(dataSetID(entry))")
+    if let data = store.data(forKey: scoped) { return data }
+    let identifierKey = ArcadeStore.shared.progressKey(
+      "\(flowProgressKey).\(entry.set.identifierKey)")
+    if dataSetClaimCount(for: entry.set.identifierKey) == 1,
+       let data = store.data(forKey: identifierKey) {
+      store.set(data, forKey: scoped)
+      store.removeObject(forKey: identifierKey)
+      return data
+    }
+    guard dataSetClaimCount(for: entry.set.legacyIdentifierKey) == 1 else { return nil }
+    let legacyKey = ArcadeStore.shared.progressKey(
+      "\(flowProgressKey).\(entry.set.legacyIdentifierKey)")
+    guard let data = store.data(forKey: legacyKey) else { return nil }
+    store.set(data, forKey: scoped)
+    store.removeObject(forKey: legacyKey)
+    return data
+  }
+
+  private func showLibraryWithoutClassicData(_ status: String) {
+    dataSets = []
+    dataSetIdentityCache = [:]
+    campaign = nil
+    session = nil
+    gamePicker.removeAllItems()
+    picker.removeAllItems()
+    flow = ClassicGameFlow(ranks: [])
+    rebuildLibrary()
+    renderScreen()
+    setStatus(status)
+  }
+
+  /**
+   * Returns true for a repeated official release, but never for a scanned pack.
+   */
+  private static func shouldSkipDetectedDataSet(
+    kind: ClassicDataSet.Kind,
+    title: ClassicTitle?,
+    identifierKey: String,
+    loadedOfficialKeys: Set<String>
+  ) -> Bool {
+    kind != .scanned && title != nil
+      && loadedOfficialKeys.contains(identifierKey)
+  }
+
+  /**
+   * Finds the non-fan data set for one release in candidate order.
+   */
+  private static func nonFanQuestDataSetIndex(
+    for requestedTitle: ClassicTitle,
+    in candidates: [(title: ClassicTitle?, kind: ClassicDataSet.Kind)]
+  ) -> Int? {
+    candidates.firstIndex { candidate in
+      candidate.title == requestedTitle
+        && (candidate.kind != .scanned
+          || requestedTitle == .ohYesMoreLemmings)
+    }
+  }
+
+  /**
+   * Finds the installed data set used by the all-level run.
+   */
+  private func nonFanQuestDataSetIndex(for title: ClassicTitle) -> Int? {
+    Self.nonFanQuestDataSetIndex(
+      for: title,
+      in: dataSets.map { (title: $0.set.title, kind: $0.set.kind) })
+  }
+
   private func loadContent() {
     // Accept the older single-directory preference so nothing is lost.
     var directories = gameDirectories
@@ -1210,21 +1725,34 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let bundled = BundledGameResources.classicDirectories()
     directories = bundled + directories.filter { !bundled.contains($0) }
     guard !directories.isEmpty else {
-      setStatus("Add a game folder, or open a .nxlv level.")
+      showLibraryWithoutClassicData(
+        "Add a game folder, or open a .nxlv level.")
       return
     }
 
     // A folder is identified rather than assumed, so any title in this
     // format loads without a hand-written order table.
     dataSets = []
+    dataSetIdentityCache = [:]
     var problems: [String] = []
     var loaded: [(offset: Int, set: ClassicDataSet, directory: URL)] = []
+    var loadedOfficialKeys: Set<String> = []
     for (offset, directory) in directories.enumerated() {
       do {
         let set = try ClassicDataSet.detect(directory: directory)
-        // Prefer the embedded copy of an official release over an old import.
-        if set.title != nil, loaded.contains(where: { $0.set.identifierKey == set.identifierKey }) { continue }
+        // Prefer the embedded copy when the same official release appears
+        // twice. A scanned fan campaign can resemble an official release by
+        // level count, so it must keep its own Fan Lemmings entry.
+        if Self.shouldSkipDetectedDataSet(
+          kind: set.kind,
+          title: set.title,
+          identifierKey: set.identifierKey,
+          loadedOfficialKeys: loadedOfficialKeys
+        ) { continue }
         loaded.append((offset, set, directory))
+        if set.kind != .scanned, set.title != nil {
+          loadedOfficialKeys.insert(set.identifierKey)
+        }
       } catch {
         problems.append("\(directory.lastPathComponent): \(error)")
       }
@@ -1256,7 +1784,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
         withTitle: "\(entry.set.name) (\(entry.set.campaign.levels.count))")
     }
     guard !dataSets.isEmpty else {
-      setStatus("No Lemmings data found. \(problems.first ?? "")")
+      showLibraryWithoutClassicData(
+        "No Lemmings data found. \(problems.first ?? "")")
       return
     }
     gamePicker.selectItem(at: 0)
@@ -1265,12 +1794,23 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   /// Points the app at the release a launch choice refers to.
-  private func openChapter(_ title: ClassicTitle) {
-    guard let index = dataSets.firstIndex(where: { entry in
-      entry.set.title == title
-    }) else { return }
+  private func openChapter(_ title: ClassicTitle) throws {
+    guard let index = nonFanQuestDataSetIndex(for: title) else {
+      throw NSError(
+        domain: "UnifiedGameLibrary",
+        code: 1,
+        userInfo: [NSLocalizedDescriptionKey: "The selected release is not available."])
+    }
+    let previousIndex = gamePicker.indexOfSelectedItem
     gamePicker.selectItem(at: index)
-    selectDataSet()
+    do { try applyDataSetSelection(at: index) }
+    catch {
+      if dataSets.indices.contains(previousIndex) {
+        gamePicker.selectItem(at: previousIndex)
+        configureFrontEndArtwork()
+      }
+      throw error
+    }
   }
 
   /// The Macintosh artwork folder a release uses.
@@ -1316,52 +1856,75 @@ let achievementProgressKey = "ClassicAchievementProgress"
   @objc private func selectDataSet() {
     let index = max(0, min(gamePicker.indexOfSelectedItem, dataSets.count - 1))
     guard index < dataSets.count else { return }
-    defer { configureFrontEndArtwork() }
-    let entry = dataSets[index]
-    currentNxlvURL = nil
-    do {
-      loadedArtworkDirectory = nil
-      portArtworkFamily = nil
-      if entry.set.title == .ohYesMoreLemmings, let first = entry.set.campaign.levels.first {
-        try preparePortArtwork(first, dataSet: entry.set, portsRoot: entry.directory)
-      } else {
-        try loadClassicArtwork(directory: entry.directory, styles: entry.set.groundStyles,
-          specialIndices: entry.set.specialIndices)
-      }
-      if UserDefaults.standard.string(forKey: musicPathKey) == nil {
-        let folder: String
-        switch entry.set.title {
-        case .ohNoMoreLemmings: folder = "oh_no_more_lemmings_music_mod"
-        case .xmasLemmings1991, .xmasLemmings1992, .holidayLemmings1993, .holidayLemmings1994:
-          folder = "holiday_lemmings_music_mod"
-        default: folder = "lemmings_music_mod"
-        }
-        if let bundled = BundledGameResources.music(folder) { music.loadLibrary(at: bundled) }
-      }
+    do { try applyDataSetSelection(at: index) }
+    catch { setStatus("\(dataSets[index].set.name): \(error)") }
+  }
 
-      campaign = entry.set.campaign
-      var built = ClassicGameFlow(campaign: entry.set.campaign)
-      let savedData = UserDefaults.standard.data(
-        forKey: ArcadeStore.shared.progressKey("\(flowProgressKey).\(entry.set.identifierKey)"))
-        ?? UserDefaults.standard.data(
-          forKey: ArcadeStore.shared.progressKey("\(flowProgressKey).\(entry.set.legacyIdentifierKey)"))
-      if let data = savedData,
-        let saved = try? JSONDecoder().decode(ClassicGameFlow.Progress.self, from: data) {
-        built.restore(entry.set.migrateProgress(saved))
-      }
-      flow = built
-      saveProgress()
-      rankChoice = 0
-      picker.removeAllItems()
-      for (offset, level) in entry.set.campaign.levels.enumerated() {
-        picker.addItem(withTitle: "\(offset + 1). \(level.rank) — \(level.level.title)")
-      }
-      picker.selectItem(at: 0)
-      showTitle()
-      rebuildLibrary()
-    } catch {
-      setStatus("\(entry.set.name): \(error)")
+  private func applyDataSetSelection(
+    at index: Int,
+    using replacement: (set: ClassicDataSet, directory: URL)? = nil,
+    preparedArtwork: PreparedClassicArtwork? = nil
+  ) throws {
+    guard dataSets.indices.contains(index) else {
+      throw NSError(domain: "LevelBrowser", code: 1,
+        userInfo: [NSLocalizedDescriptionKey: "The selected game data is no longer available."])
     }
+    defer { configureFrontEndArtwork() }
+    let entry = replacement ?? dataSets[index]
+    if replacement != nil {
+      dataSetIdentityCache.removeValue(
+        forKey: dataSetDirectoryKey(entry.directory))
+    }
+    let prepared: PreparedClassicArtwork
+    if let preparedArtwork {
+      prepared = preparedArtwork
+    } else if entry.set.title == .ohYesMoreLemmings,
+              let first = entry.set.campaign.levels.first {
+      prepared = try Self.readPortArtwork(
+        first, dataSet: entry.set, portsRoot: entry.directory)
+    } else {
+      prepared = try Self.readClassicArtwork(
+        directory: entry.directory,
+        styles: entry.set.groundStyles,
+        specialIndices: entry.set.specialIndices)
+    }
+    installClassicArtwork(prepared)
+    currentNxlvURL = nil
+    if replacement != nil {
+      dataSets[index] = entry
+      gamePicker.item(at: index)?.title =
+        "\(entry.set.name) (\(entry.set.campaign.levels.count))"
+    }
+    if UserDefaults.standard.string(forKey: musicPathKey) == nil {
+      let folder: String
+      switch entry.set.title {
+      case .ohNoMoreLemmings: folder = "oh_no_more_lemmings_music_mod"
+      case .xmasLemmings1991, .xmasLemmings1992, .holidayLemmings1993, .holidayLemmings1994:
+        folder = "holiday_lemmings_music_mod"
+      default: folder = "lemmings_music_mod"
+      }
+      if let bundled = BundledGameResources.music(folder) { music.loadLibrary(at: bundled) }
+    }
+
+    campaign = entry.set.campaign
+    classicSelectionRecordsCampaignProgress = true
+    var built = ClassicGameFlow(campaign: entry.set.campaign)
+    let savedData = savedClassicProgressData(for: entry)
+    if let data = savedData,
+      let saved = try? JSONDecoder().decode(ClassicGameFlow.Progress.self, from: data) {
+      built.restore(entry.set.migrateProgress(saved))
+    }
+    flow = built
+    saveProgress()
+    rankChoice = 0
+    picker.removeAllItems()
+    for (offset, level) in entry.set.campaign.levels.enumerated() {
+      picker.addItem(withTitle: "\(offset + 1). \(level.rank) — \(level.level.title)")
+    }
+    refreshClassicLevelPickerAvailability()
+    picker.selectItem(at: 0)
+    showTitle()
+    rebuildLibrary()
   }
 
   // MARK: - Official levels
@@ -1413,9 +1976,30 @@ let achievementProgressKey = "ClassicAchievementProgress"
       picker.indexOfSelectedItem < campaign.levels.count else { return }
     // Choosing from the list jumps there, keeping the run intact.
     let target = picker.indexOfSelectedItem
+    let isUnlocked = current.isLevelUnlocked(target)
+    let continuesAuthorisedAttempt: Bool
+    switch current.screen {
+    case .briefing, .playing, .results:
+      continuesAuthorisedAttempt = !classicSelectionRecordsCampaignProgress
+        && current.currentLevelIndex == target
+    default:
+      continuesAuthorisedAttempt = false
+    }
+    guard settings.unlockAllClassicLevels || sequenceIsActive
+            || restoringCheckpoint || continuesAuthorisedAttempt || isUnlocked else {
+      picker.selectItem(at: current.currentLevelIndex ?? 0)
+      setStatus("Level locked. Complete the preceding level or change the Classic unlock setting.")
+      NSSound.beep()
+      return
+    }
+    let recordsCampaignProgress = sequencePlayingIdentity == nil && isUnlocked
+    classicSelectionRecordsCampaignProgress = recordsCampaignProgress
     for (rankIndex, rank) in current.ranks.enumerated() {
       if let position = rank.levelIndices.firstIndex(of: target) {
-        current.selectLevel(rank: rankIndex, position: position)
+        current.selectLevel(
+          rank: rankIndex,
+          position: position,
+          recordsCampaignProgress: recordsCampaignProgress)
         flow = current
         renderScreen()
         return
@@ -1425,29 +2009,66 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private var artworkLevel: ClassicLevel?
 
-  private func loadClassicArtwork(directory: URL, styles: [Int], specialIndices: [Int], fallbackDirectory: URL? = nil) throws {
+  nonisolated private static func readClassicArtwork(
+    directory: URL,
+    styles: [Int],
+    specialIndices: [Int],
+    fallbackDirectory: URL? = nil,
+    portArtworkFamily: String? = nil
+  ) throws -> PreparedClassicArtwork {
     var newGrounds: [Int: ClassicGroundSet] = [:]
     var newSpecials: [Int: ClassicSpecialGraphic] = [:]
     for style in styles { newGrounds[style] = try ClassicGroundSet.load(style: style, from: directory, fallbackDirectory: fallbackDirectory) }
     for index in specialIndices { newSpecials[index + 1] = try ClassicSpecialGraphic.load(index: index, from: directory, fallbackDirectory: fallbackDirectory) }
     let newAssets = try ClassicMainDATAssets.load(from: fallbackDirectory ?? directory)
-    grounds = newGrounds; specials = newSpecials; assets = newAssets
-    loadedArtworkDirectory = directory
-    playfield.assets = newAssets
+    return PreparedClassicArtwork(
+      grounds: newGrounds,
+      specials: newSpecials,
+      assets: newAssets,
+      directory: directory,
+      portArtworkFamily: portArtworkFamily)
+  }
+
+  private func installClassicArtwork(_ prepared: PreparedClassicArtwork) {
+    grounds = prepared.grounds
+    specials = prepared.specials
+    assets = prepared.assets
+    loadedArtworkDirectory = prepared.directory
+    portArtworkFamily = prepared.portArtworkFamily
+    playfield.assets = prepared.assets
     playfield.invalidateSprites()
+  }
+
+  private func loadClassicArtwork(directory: URL, styles: [Int], specialIndices: [Int], fallbackDirectory: URL? = nil) throws {
+    installClassicArtwork(try Self.readClassicArtwork(
+      directory: directory,
+      styles: styles,
+      specialIndices: specialIndices,
+      fallbackDirectory: fallbackDirectory))
+  }
+
+  nonisolated private static func readPortArtwork(
+    _ entry: ClassicCampaignLevel,
+    dataSet: ClassicDataSet,
+    portsRoot: URL
+  ) throws -> PreparedClassicArtwork {
+    let directory = PortExclusivePack.artworkDirectory(for: entry, portsRoot: portsRoot)
+    let levels = dataSet.campaign.levels.filter {
+      PortExclusivePack.artworkDirectory(for: $0, portsRoot: portsRoot) == directory
+    }
+    return try readClassicArtwork(
+      directory: directory,
+      styles: Set(levels.map { $0.level.groundStyle }).sorted(),
+      specialIndices: Set(levels.map { $0.level.specialStyle - 1 }).filter { $0 >= 0 }.sorted(),
+      fallbackDirectory: PortExclusivePack.fallbackArtworkDirectory(for: entry, portsRoot: portsRoot),
+      portArtworkFamily: entry.rank == "Oh No! More Lemmings Versus" ? "ohno" : "lemmings")
   }
 
   private func preparePortArtwork(_ entry: ClassicCampaignLevel, dataSet: ClassicDataSet, portsRoot: URL) throws {
     let directory = PortExclusivePack.artworkDirectory(for: entry, portsRoot: portsRoot)
     guard directory != loadedArtworkDirectory else { return }
-    let levels = dataSet.campaign.levels.filter {
-      PortExclusivePack.artworkDirectory(for: $0, portsRoot: portsRoot) == directory
-    }
-    try loadClassicArtwork(directory: directory,
-      styles: Set(levels.map { $0.level.groundStyle }).sorted(),
-      specialIndices: Set(levels.map { $0.level.specialStyle - 1 }).filter { $0 >= 0 }.sorted(),
-      fallbackDirectory: PortExclusivePack.fallbackArtworkDirectory(for: entry, portsRoot: portsRoot))
-    portArtworkFamily = entry.rank == "Oh No! More Lemmings Versus" ? "ohno" : "lemmings"
+    installClassicArtwork(try Self.readPortArtwork(
+      entry, dataSet: dataSet, portsRoot: portsRoot))
   }
 
   /// Builds and starts a level.
@@ -1562,21 +2183,2444 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
+  // MARK: - Level browser
+
+  private func cancelCoveredLevelSelectionLoading() {
+    guard let topPage = GameScreen.shared.controllerPage(in: window) else { return }
+    let loadingPages = [
+      levelBrowserLoadingPage,
+      levelBrowserFanLoadingPage,
+      levelBrowserLaunchPage,
+      playlistFanLoadingPage,
+    ].compactMap { $0 }
+    guard loadingPages.contains(where: { $0 === topPage }) else { return }
+    cancelLevelSelectionLoading()
+  }
+
+  private func cancelLevelSelectionLoading() {
+    let pendingSequenceRunID = sequenceLaunchRunID
+    let pages = [
+      levelBrowserLoadingPage,
+      levelBrowserFanLoadingPage,
+      levelBrowserLaunchPage,
+    ].compactMap { $0 }
+    levelBrowserLoadTask?.cancel()
+    levelBrowserDiscoveryTask?.cancel()
+    levelBrowserFanLoadTask?.cancel()
+    levelBrowserFanDiscoveryTask?.cancel()
+    levelBrowserLaunchTask?.cancel()
+    levelBrowserLoadTask = nil
+    levelBrowserDiscoveryTask = nil
+    levelBrowserFanLoadTask = nil
+    levelBrowserFanDiscoveryTask = nil
+    levelBrowserLaunchTask = nil
+    levelBrowserLoadingPage = nil
+    levelBrowserFanLoadingPage = nil
+    levelBrowserLaunchPage = nil
+    levelBrowserLaunchID = nil
+    for page in pages where GameScreen.shared.contains(page) {
+      GameScreen.shared.dismiss(page)
+    }
+    cancelPlaylistFanLoading()
+    clearSequenceLaunch(pendingSequenceRunID)
+  }
+
+  @objc private func showLevelBrowser() {
+    openLevelBrowser(family: nil)
+  }
+
+  private func openLevelBrowser(family: HomeContentFamily?) {
+    guard allowNavigationAwayFromSequence() else { return }
+    // Keep one pack browser root so live catalogue refreshes always update the
+    // page the player can return to.
+    if let page = levelBrowserPackPage, GameScreen.shared.contains(page) {
+      GameScreen.shared.dismiss(page)
+    }
+    let browserTitle = family?.displayName ?? "Level Select"
+    let loadingPage = GameMenuPage(title: browserTitle)
+    levelBrowserLoadingPage = loadingPage
+    loadingPage.setDetail("Loading the level catalogue.")
+    loadingPage.backTitle = "Cancel"
+    loadingPage.onBack = { [weak self, weak loadingPage] in
+      guard let self, let loadingPage,
+            self.levelBrowserLoadingPage === loadingPage else { return }
+      self.levelBrowserLoadTask?.cancel()
+      self.levelBrowserDiscoveryTask?.cancel()
+      self.levelBrowserLoadTask = nil
+      self.levelBrowserDiscoveryTask = nil
+      self.levelBrowserLoadingPage = nil
+      GameScreen.shared.dismiss(loadingPage)
+    }
+    GameScreen.shared.present(loadingPage, owner: window, onDismiss: { [weak self, weak loadingPage] in
+      guard let self, let loadingPage,
+            self.levelBrowserLoadingPage === loadingPage else { return }
+      self.levelBrowserLoadTask?.cancel()
+      self.levelBrowserDiscoveryTask?.cancel()
+      self.levelBrowserLoadTask = nil
+      self.levelBrowserDiscoveryTask = nil
+      self.levelBrowserLoadingPage = nil
+    })
+
+    let bundledClassic = Set(BundledGameResources.classicDirectories().map {
+      $0.resolvingSymlinksInPath().standardizedFileURL
+    })
+    let bundledPorts = Bundle.main.resourceURL?
+      .appendingPathComponent("Ports", isDirectory: true)
+      .resolvingSymlinksInPath().standardizedFileURL
+    let classic = dataSets.map {
+      let directory = $0.directory.resolvingSymlinksInPath().standardizedFileURL
+      let verified = bundledClassic.contains(directory)
+        || ($0.set.title == .ohYesMoreLemmings && directory == bundledPorts)
+      return LevelBrowserClassicSource(dataSet: $0.set, directory: $0.directory,
+        sourceFingerprint: nil, sourceRevision: nil, isVerified: verified)
+    }
+    let lemmings2Root = try? BundledGameResources.lemmings2()
+    let lemmings2Progress = lemmings2Root.flatMap {
+      Lemmings2PlayWindow.browserProgressData(root: $0)
+    }
+    let lemmings3Root = try? BundledGameResources.lemmings3()
+    let lemmings3Progress = lemmings3Root.map {
+      Lemmings3PlayWindow.browserProgressData(root: $0)
+    } ?? [:]
+
+    let discoveryTask = Task.detached(priority: .userInitiated) {
+      () -> LevelBrowserDiscovery? in
+        guard !Task.isCancelled else { return nil }
+        let refreshedClassic = classic.compactMap { source -> LevelBrowserClassicSource? in
+          guard !Task.isCancelled else { return nil }
+          guard let before = FanLevelLibrary.directoryFingerprint(source.directory) else {
+            return nil
+          }
+          if source.isVerified {
+            return LevelBrowserClassicSource(
+              dataSet: source.dataSet,
+              directory: source.directory,
+              sourceFingerprint: nil,
+              sourceRevision: before,
+              isVerified: true)
+          }
+          guard
+                let dataSet = try? ClassicDataSet.detect(directory: source.directory),
+                let fingerprint = FanLevelLibrary.directoryFingerprint(source.directory),
+                fingerprint == before
+          else { return nil }
+          return LevelBrowserClassicSource(
+            dataSet: dataSet,
+            directory: source.directory,
+            sourceFingerprint: fingerprint,
+            sourceRevision: fingerprint,
+            isVerified: false)
+        }
+        guard !Task.isCancelled else { return nil }
+        let lemmings2 = lemmings2Root.flatMap {
+          try? Lemmings2PlayWindow.browserLevels(
+            root: $0, progressData: lemmings2Progress)
+        } ?? []
+        guard !Task.isCancelled else { return nil }
+        let lemmings3 = lemmings3Root.flatMap {
+          try? Lemmings3PlayWindow.browserLevels(
+            root: $0, progressData: lemmings3Progress)
+        } ?? []
+        guard !Task.isCancelled else { return nil }
+        return LevelBrowserDiscovery(
+          classic: refreshedClassic,
+          lemmings2Root: lemmings2Root,
+          lemmings2: lemmings2,
+          lemmings3Root: lemmings3Root,
+          lemmings3: lemmings3)
+    }
+    levelBrowserDiscoveryTask = discoveryTask
+    levelBrowserLoadTask = Task { [weak self, weak loadingPage] in
+      guard let discovery = await discoveryTask.value,
+            !Task.isCancelled, let self, let loadingPage,
+            self.levelBrowserLoadingPage === loadingPage,
+            GameScreen.shared.controllerPage(in: self.window) === loadingPage,
+            self.window.attachedSheet == nil else { return }
+      levelBrowserLoadTask = nil
+      levelBrowserDiscoveryTask = nil
+      rebuildLevelCatalogue(discovery)
+      levelBrowserLoadingPage = nil
+      GameScreen.shared.dismiss(loadingPage)
+      let packs = levelBrowserPacks(for: family)
+      guard !packs.isEmpty else {
+        GameScreen.shared.message(browserTitle,
+          detail: "No \(browserTitle) level packs are available in this build.")
+        return
+      }
+      if packs.count == 1, let pack = packs.first {
+        presentLevelBrowser(for: pack)
+      } else {
+        presentLevelPackBrowser(packs: packs, title: browserTitle)
+      }
+    }
+  }
+
+  private func rebuildLevelCatalogue(_ discovery: LevelBrowserDiscovery) {
+    levelBrowserRoutes = [:]
+    levelPreviewRequests = [:]
+    levelBrowserPackFamilies = [:]
+    levelBrowserFanPacks = [:]
+    levelBrowserFanEntries = [:]
+    var packs: [LevelCataloguePack] = []
+
+    for source in discovery.classic {
+      let dataSet = source.dataSet
+      let sourceFingerprint = source.sourceFingerprint
+      guard let sourceRevision = source.sourceRevision else { continue }
+      let sourceID = ArcadeStore.fingerprint(
+        Data(source.directory.standardizedFileURL.path.utf8))
+      let packID = sourceFingerprint.map { "imported:" + $0 + ":" + sourceID }
+        ?? dataSet.identifierKey
+      let status: LevelContentStatus = source.isVerified ? .complete : .unverified
+      var browserFlow = ClassicGameFlow(campaign: dataSet.campaign)
+      if let data = savedClassicProgressData(for: (set: dataSet, directory: source.directory)),
+         let saved = try? JSONDecoder().decode(ClassicGameFlow.Progress.self, from: data) {
+        browserFlow.restore(dataSet.migrateProgress(saved))
+      }
+      let levels = dataSet.campaign.levels.enumerated().map { index, level in
+        let identity = LevelCatalogueIdentity(
+          engine: .classic,
+          packID: packID,
+          levelID: "\(index):\(level.rank):\(level.number):\(level.archiveFile):\(level.archiveSection)")
+        levelBrowserRoutes[identity] = .classic(
+          dataSetDirectory: source.directory,
+          dataSet: dataSet,
+          levelIndex: index,
+          sourceFingerprint: sourceFingerprint,
+          sourceRevision: sourceRevision)
+        registerLevelPreview(
+          identity: identity,
+          source: .classic(
+            dataSet: dataSet,
+            root: source.directory,
+            levelIndex: index,
+            sourceFingerprint: sourceRevision))
+        return LevelCatalogueEntry(
+          identity: identity,
+          packName: dataSet.name,
+          levelName: level.level.title.isEmpty ? "Level \(index + 1)" : level.level.title,
+          number: index + 1,
+          status: status,
+          availability: settings.unlockAllClassicLevels || browserFlow.isLevelUnlocked(index)
+            ? .available : .locked)
+      }
+      let pack = LevelCataloguePack(
+        engine: .classic, id: packID, name: dataSet.name,
+        status: status, levels: levels)
+      packs.append(pack)
+      levelBrowserPackFamilies[browserPackKey(pack)] =
+        HomeContentFamily.family(for: dataSet.title, kind: dataSet.kind)
+    }
+
+    if let root = discovery.lemmings2Root, !discovery.lemmings2.isEmpty {
+      for tribe in Lemmings2Campaign.tribeNames.indices {
+        let packID = "tribes-\(tribe)"
+        let tribeLevels = discovery.lemmings2.filter { $0.selection.tribe == tribe }.map { level in
+          let identity = LevelCatalogueIdentity(
+            engine: .lemmings2, packID: packID,
+            levelID: "\(level.selection.level):\(level.levelID)")
+          levelBrowserRoutes[identity] = .lemmings2(
+            root: root,
+            selection: level.selection,
+            expectedLevelID: level.levelID,
+            sourceRevision: level.sourceRevision)
+          registerLevelPreview(
+            identity: identity,
+            source: .lemmings2(
+              root: root,
+              selection: level.selection,
+              expectedLevelID: level.levelID))
+          return LevelCatalogueEntry(
+            identity: identity,
+            packName: "The Tribes - \(Lemmings2Campaign.tribeNames[tribe])",
+            levelName: level.title.isEmpty ? "Level \(level.selection.level + 1)" : level.title,
+            number: level.selection.level + 1,
+            status: .preview,
+            isAvailable: level.isAvailable)
+        }
+        let pack = LevelCataloguePack(
+          engine: .lemmings2,
+          id: packID,
+          name: "The Tribes - \(Lemmings2Campaign.tribeNames[tribe])",
+          status: .preview,
+          levels: tribeLevels)
+        packs.append(pack)
+        levelBrowserPackFamilies[browserPackKey(pack)] = .lemmings2
+      }
+    }
+
+    if let root = discovery.lemmings3Root, !discovery.lemmings3.isEmpty {
+      for tribe in Lemmings3ClassicCampaign.Tribe.allCases {
+        let packID = "chronicles-\(tribe.rawValue)"
+        let tribeLevels = discovery.lemmings3.filter { $0.selection.tribe == tribe }.map { level in
+          let identity = LevelCatalogueIdentity(
+            engine: .lemmings3, packID: packID,
+            levelID: "\(level.selection.level):\(level.levelID)")
+          levelBrowserRoutes[identity] = .lemmings3(
+            root: root,
+            selection: level.selection,
+            expectedLevelID: level.levelID,
+            sourceRevision: level.sourceRevision)
+          registerLevelPreview(
+            identity: identity,
+            source: .lemmings3(
+              root: root,
+              selection: level.selection,
+              expectedLevelID: level.levelID))
+          return LevelCatalogueEntry(
+            identity: identity,
+            packName: "The Chronicles - \(tribe.title)",
+            levelName: "\(tribe.title) \(level.selection.level + 1)",
+            number: level.selection.level + 1,
+            status: .preview,
+            isAvailable: level.isAvailable)
+        }
+        let pack = LevelCataloguePack(
+          engine: .lemmings3,
+          id: packID,
+          name: "The Chronicles - \(tribe.title)",
+          status: .preview,
+          levels: tribeLevels)
+        packs.append(pack)
+        levelBrowserPackFamilies[browserPackKey(pack)] = .lemmings3
+      }
+    }
+
+    for url in FanLevelLibrary.packs() {
+      let packID = "fan:" + FanLevelLibrary.catalogueID(url)
+      if let failedRevision = levelBrowserInvalidFanPackRevisions[packID],
+         failedRevision != Self.fanPackFileRevision(url) {
+        levelBrowserInvalidFanPacks.remove(packID)
+        levelBrowserInvalidFanPackRevisions[packID] = nil
+      }
+      let status = FanLevelLibrary.catalogueStatus(url)
+      levelBrowserFanPacks[packID] = url
+      let pack = LevelCataloguePack(
+        engine: .classic,
+        id: packID,
+        name: FanLevelLibrary.displayName(of: url),
+        status: status,
+        levels: [])
+      packs.append(pack)
+      levelBrowserPackFamilies[browserPackKey(pack)] = .fan
+    }
+    let installedFanPackIDs = Set(levelBrowserFanPacks.keys)
+    levelBrowserInvalidFanPacks.formIntersection(installedFanPackIDs)
+    levelBrowserInvalidFanPackRevisions = levelBrowserInvalidFanPackRevisions.filter {
+      installedFanPackIDs.contains($0.key)
+    }
+    levelCatalogue = LevelCatalogue(revision: Self.levelCatalogueRevision, packs: packs)
+  }
+
+  private static func fanPackFileRevision(_ url: URL) -> String {
+    guard let values = try? url.resourceValues(
+      forKeys: [.fileSizeKey, .contentModificationDateKey]) else {
+      return "missing"
+    }
+    return "\(values.fileSize ?? -1):\(values.contentModificationDate?.timeIntervalSince1970 ?? -1)"
+  }
+
+  private func registerLevelPreview(
+    identity: LevelCatalogueIdentity,
+    source: LevelPreviewSource
+  ) {
+    levelPreviewRequests[identity] = LevelPreviewRequest(
+      identity: identity,
+      catalogueRevision: Self.levelCatalogueRevision,
+      source: source)
+  }
+
+  private func configureLevelPreviewLoader(_ carousel: LevelCoverFlowView) {
+    let requests = Dictionary(
+      levelPreviewRequests.values.map { ($0.artworkKey, $0) },
+      uniquingKeysWith: { first, _ in first })
+    carousel.artworkLoader = { key in
+      guard let request = requests[key] else { return nil }
+      return try? await LevelPreviewStore.shared.bitmap(for: request)
+    }
+  }
+
+  private func browserPackKey(_ pack: LevelCataloguePack) -> String {
+    pack.engine.rawValue + ":" + pack.id
+  }
+
+  private func levelBrowserPacks(
+    for family: HomeContentFamily?
+  ) -> [LevelCataloguePack] {
+    guard let family else { return levelCatalogue.packs }
+    return levelCatalogue.packs.filter {
+      levelBrowserPackFamilies[browserPackKey($0)] == family
+    }
+  }
+
+  private func levelPackItems(
+    for packs: [LevelCataloguePack]
+  ) -> [LevelCoverFlowItem] {
+    let total = packs.count
+    return packs.enumerated().map { index, pack in
+      let fanURL = levelBrowserFanPacks[pack.id]
+      let invalidFanPack = levelBrowserInvalidFanPacks.contains(pack.id)
+      let knownFanCount = invalidFanPack
+        ? nil : fanURL.flatMap { FanLevelLibrary.knownLevelCount(in: $0) }
+      let count = invalidFanPack ? 0 : knownFanCount ?? pack.levels.count
+      let levels = invalidFanPack ? "Unavailable"
+        : knownFanCount == nil && fanURL != nil
+          ? "Levels" : count == 1 ? "1 level" : "\(count) levels"
+      let artworkKey = pack.levels.lazy.compactMap {
+        self.levelPreviewRequests[$0.identity]?.artworkKey
+      }.first
+      return LevelCoverFlowItem(
+        id: browserPackKey(pack),
+        title: pack.name,
+        subtitle: pack.engine.displayName + " / " + pack.status.displayName,
+        detail: "\(levels)  \(index + 1)/\(total)",
+        isAvailable: !invalidFanPack && (fanURL != nil || count > 0),
+        artworkKey: artworkKey)
+    }
+  }
+
+  private func refreshOpenLevelPackBrowser() {
+    guard let page = levelBrowserPackPage,
+          let carousel = levelBrowserPackCarousel,
+          GameScreen.shared.contains(page) else { return }
+    let packs = levelCatalogue.packs.filter {
+      levelBrowserVisiblePackKeys.contains(browserPackKey($0))
+    }
+    configureLevelPreviewLoader(carousel)
+    carousel.configure(
+      items: levelPackItems(for: packs),
+      selectedID: levelBrowserPackSelection,
+      reduceMotion: settings.reduceMotion
+        || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
+  }
+
+  private func presentLevelPackBrowser(
+    packs: [LevelCataloguePack],
+    title: String
+  ) {
+    let page = GameMenuPage(title: title, subtitle: "Packs")
+    let carousel = LevelCoverFlowView(frame: page.body.bounds)
+    carousel.autoresizingMask = [.width, .height]
+    page.body.addSubview(carousel)
+
+    let permittedPackKeys = Set(packs.map(browserPackKey))
+    let primary = page.addPrimaryAction("Browse levels") { [weak self, weak carousel] in
+      guard let self, let id = carousel?.selectedItem?.id,
+            permittedPackKeys.contains(id),
+            let pack = self.levelCatalogue.packs.first(where: {
+              self.browserPackKey($0) == id
+            }) else { return }
+      self.presentLevelBrowser(for: pack)
+    }
+    primary.keyEquivalent = "\r"
+    primary.keyEquivalentModifierMask = []
+    page.preferControllerControl(primary)
+    page.addSecondaryAction("Playlists") { [weak self] in
+      self?.presentPlaylistLibrary()
+    }
+    page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
+    carousel.onSelectionChanged = { [weak self, weak primary] item in
+      self?.levelBrowserPackSelection = item.id
+      primary?.isEnabled = item.isAvailable
+      primary?.needsDisplay = true
+    }
+    carousel.onStart = { [weak primary] _ in primary?.performClick(nil) }
+
+    configureLevelPreviewLoader(carousel)
+    carousel.configure(
+      items: levelPackItems(for: packs),
+      selectedID: levelBrowserPackSelection,
+      reduceMotion: settings.reduceMotion || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
+    levelBrowserPackPage = page
+    levelBrowserPackCarousel = carousel
+    levelBrowserVisiblePackKeys = permittedPackKeys
+    GameScreen.shared.present(
+      page,
+      owner: window,
+      focus: carousel,
+      onDismiss: { [weak self, weak page] in
+        guard let self, let page, self.levelBrowserPackPage === page else { return }
+        self.levelBrowserPackPage = nil
+        self.levelBrowserPackCarousel = nil
+        self.levelBrowserVisiblePackKeys = []
+      })
+  }
+
+  private func presentLevelBrowser(for unresolvedPack: LevelCataloguePack) {
+    guard unresolvedPack.levels.isEmpty,
+          let url = levelBrowserFanPacks[unresolvedPack.id] else {
+      presentResolvedLevelBrowser(unresolvedPack)
+      return
+    }
+    levelBrowserFanLoadTask?.cancel()
+    levelBrowserFanDiscoveryTask?.cancel()
+    levelBrowserFanLoadTask = nil
+    levelBrowserFanDiscoveryTask = nil
+    if let oldPage = levelBrowserFanLoadingPage {
+      levelBrowserFanLoadingPage = nil
+      GameScreen.shared.dismiss(oldPage)
+    }
+
+    let loadingPage = GameMenuPage(title: unresolvedPack.name, subtitle: "Levels")
+    levelBrowserFanLoadingPage = loadingPage
+    loadingPage.setDetail("Loading the level list.")
+    loadingPage.backTitle = "Cancel"
+    loadingPage.onBack = { [weak self, weak loadingPage] in
+      guard let self, let loadingPage,
+            self.levelBrowserFanLoadingPage === loadingPage else { return }
+      self.levelBrowserFanLoadTask?.cancel()
+      self.levelBrowserFanDiscoveryTask?.cancel()
+      self.levelBrowserFanLoadTask = nil
+      self.levelBrowserFanDiscoveryTask = nil
+      self.levelBrowserFanLoadingPage = nil
+      GameScreen.shared.dismiss(loadingPage)
+    }
+    GameScreen.shared.present(loadingPage, owner: window, onDismiss: { [weak self, weak loadingPage] in
+      guard let self, let loadingPage,
+            self.levelBrowserFanLoadingPage === loadingPage else { return }
+      self.levelBrowserFanLoadTask?.cancel()
+      self.levelBrowserFanDiscoveryTask?.cancel()
+      self.levelBrowserFanLoadTask = nil
+      self.levelBrowserFanDiscoveryTask = nil
+      self.levelBrowserFanLoadingPage = nil
+    })
+
+    let discoveryTask = Task.detached(priority: .userInitiated) {
+      () -> LevelBrowserFanDiscovery? in
+      guard !Task.isCancelled,
+            let before = FanLevelLibrary.archiveFingerprint(url) else { return nil }
+      guard let entries = try? FanLevelLibrary.validatedEntries(in: url) else {
+        return nil
+      }
+      guard !Task.isCancelled,
+            let after = FanLevelLibrary.archiveFingerprint(url),
+            before == after else { return nil }
+      return LevelBrowserFanDiscovery(fingerprint: before, entries: entries)
+    }
+    levelBrowserFanDiscoveryTask = discoveryTask
+    levelBrowserFanLoadTask = Task { [weak self, weak loadingPage] in
+      let discovery = await discoveryTask.value
+      guard !Task.isCancelled, let self, let loadingPage,
+            self.levelBrowserFanLoadingPage === loadingPage,
+            GameScreen.shared.controllerPage(in: self.window) === loadingPage,
+            self.window.attachedSheet == nil else { return }
+      levelBrowserFanLoadTask = nil
+      levelBrowserFanDiscoveryTask = nil
+      levelBrowserFanLoadingPage = nil
+      GameScreen.shared.dismiss(loadingPage)
+      guard let discovery else {
+        self.invalidateResolvedFanPack(id: unresolvedPack.id)
+        GameScreen.shared.message(unresolvedPack.name,
+          detail: "The archive changed or could not be read. Repair or replace it, then open Level Select and try again.")
+        return
+      }
+      FanLevelLibrary.Progress.setCount(discovery.entries.count, for: url)
+      presentResolvedLevelBrowser(resolveBrowserPack(unresolvedPack, discovery: discovery))
+    }
+  }
+
+  private func presentResolvedLevelBrowser(_ pack: LevelCataloguePack) {
+    guard !pack.levels.isEmpty else {
+      GameScreen.shared.message(pack.name, detail: "This pack has no playable levels.")
+      return
+    }
+    let page = GameMenuPage(
+      title: pack.name,
+      subtitle: pack.engine.displayName + " / " + pack.status.displayName)
+    let carousel = LevelCoverFlowView(frame: page.body.bounds)
+    carousel.autoresizingMask = [.width, .height]
+    page.body.addSubview(carousel)
+
+    let identities = Dictionary(pack.levels.map { ($0.identity.levelID, $0.identity) },
+      uniquingKeysWith: { first, _ in first })
+    let primary = page.addPrimaryAction("Start") { [weak self, weak carousel] in
+      guard let item = carousel?.selectedItem,
+            let identity = identities[item.id] else { return }
+      self?.startBrowserLevel(identity)
+    }
+    primary.keyEquivalent = "\r"
+    primary.keyEquivalentModifierMask = []
+    page.preferControllerControl(primary)
+    let add = page.addSecondaryAction("Add") { [weak self, weak carousel] in
+      guard let item = carousel?.selectedItem,
+            let identity = identities[item.id] else { return }
+      self?.addToSelectedPlaylist(identity)
+    }
+    page.addSecondaryAction("Playlists", at: 1) { [weak self] in
+      self?.presentPlaylistLibrary()
+    }
+    page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
+    carousel.onSelectionChanged = { [weak self, weak primary, weak add] item in
+      self?.levelBrowserLevelSelections[pack.id] = item.id
+      primary?.isEnabled = item.isAvailable
+      primary?.needsDisplay = true
+      add?.isEnabled = item.isAvailable
+      add?.needsDisplay = true
+    }
+    carousel.onStart = { [weak primary] _ in primary?.performClick(nil) }
+
+    let total = pack.levels.count
+    let items = pack.levels.enumerated().map { index, entry in
+      LevelCoverFlowItem(
+        id: entry.identity.levelID,
+        title: entry.levelName,
+        subtitle: entry.packName + " / " + entry.identity.engine.displayName,
+        detail: "Level \(entry.number)  \(entry.status.displayName)  \(index + 1)/\(total)",
+        isAvailable: entry.isAvailable,
+        artworkKey: levelPreviewRequests[entry.identity]?.artworkKey,
+        availability: entry.availability)
+    }
+    configureLevelPreviewLoader(carousel)
+    carousel.configure(
+      items: items,
+      selectedID: levelBrowserLevelSelections[pack.id],
+      reduceMotion: settings.reduceMotion || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
+    add.isEnabled = carousel.selectedItem?.isAvailable == true
+    levelBrowserCurrentLevelPage = page
+    GameScreen.shared.present(
+      page,
+      owner: window,
+      focus: carousel,
+      onDismiss: { [weak self, weak page] in
+        guard let self, let page, self.levelBrowserCurrentLevelPage === page else { return }
+        self.levelBrowserCurrentLevelPage = nil
+      })
+  }
+
+  private func resolveBrowserPack(
+    _ pack: LevelCataloguePack,
+    discovery: LevelBrowserFanDiscovery
+  ) -> LevelCataloguePack {
+    guard let url = levelBrowserFanPacks[pack.id] else { return pack }
+    levelBrowserInvalidFanPacks.remove(pack.id)
+    levelBrowserInvalidFanPackRevisions[pack.id] = nil
+    for identity in pack.levels.map(\.identity) {
+      levelBrowserRoutes[identity] = nil
+      levelPreviewRequests[identity] = nil
+    }
+    levelBrowserFanEntries[pack.id] = discovery.entries
+    let portsRoot = Bundle.main.resourceURL?.appendingPathComponent("Ports")
+    let levels = discovery.entries.enumerated().map { index, entry in
+      let identity = LevelCatalogueIdentity(
+        engine: .classic,
+        packID: pack.id,
+        levelID: entry.file + "#\(entry.section ?? -1)")
+      levelBrowserRoutes[identity] = .fan(
+        pack: url, entry: entry, archiveFingerprint: discovery.fingerprint)
+      if let portsRoot {
+        registerLevelPreview(
+          identity: identity,
+          source: .fanClassic(
+            pack: url,
+            entry: entry,
+            archiveFingerprint: discovery.fingerprint,
+            portsRoot: portsRoot))
+      }
+      return LevelCatalogueEntry(
+        identity: identity,
+        packName: pack.name,
+        levelName: entry.label,
+        number: index + 1,
+        status: pack.status)
+    }
+    let resolved = LevelCataloguePack(
+      engine: pack.engine, id: pack.id, name: pack.name,
+      status: pack.status, levels: levels)
+    var packs = levelCatalogue.packs
+    if let index = packs.firstIndex(where: { $0.engine == pack.engine && $0.id == pack.id }) {
+      packs[index] = resolved
+      levelCatalogue = LevelCatalogue(revision: levelCatalogue.revision, packs: packs)
+      refreshOpenLevelPackBrowser()
+    }
+    return resolved
+  }
+
+  // MARK: - Player playlists and shuffled runs
+
+  private func playlistStore() throws -> LevelPlaylistStore {
+    let profileID = ArcadeStore.shared.records.activeProfileID
+    if let cached = playlistStoreCache, cached.profileID == profileID {
+      return cached.store
+    }
+    let store = try LevelPlaylistStore(profileID: profileID)
+    playlistStoreCache = (profileID, store)
+    return store
+  }
+
+  private func playlistSourceRevision(
+    for identity: LevelCatalogueIdentity
+  ) -> String? {
+    guard let route = levelBrowserRoutes[identity] else { return nil }
+    switch route {
+    case let .classic(_, _, _, _, sourceRevision):
+      return sourceRevision
+    case let .fan(_, _, archiveFingerprint):
+      return archiveFingerprint
+    case let .lemmings2(_, _, _, sourceRevision):
+      return sourceRevision
+    case let .lemmings3(_, _, _, sourceRevision):
+      return sourceRevision
+    }
+  }
+
+  private func playlistEntry(
+    for identity: LevelCatalogueIdentity
+  ) throws -> LevelPlaylistEntry {
+    guard let entry = levelCatalogue.resolve(identity),
+          liveLevelAvailability(entry) == .available,
+          let sourceRevision = playlistSourceRevision(for: identity) else {
+      throw LevelPlaylistError.invalidEntry
+    }
+    return try LevelPlaylistEntry(
+      identity: identity,
+      catalogueRevision: levelCatalogue.revision,
+      sourceRevision: sourceRevision,
+      packNameSnapshot: entry.packName,
+      levelNameSnapshot: entry.levelName,
+      levelNumberSnapshot: entry.number)
+  }
+
+  private func playlistResolution(
+    for saved: LevelPlaylistEntry
+  ) -> PlaylistEntryResolution {
+    guard let current = levelCatalogue.resolve(saved.identity),
+          levelBrowserRoutes[saved.identity] != nil else { return .missing }
+    guard saved.catalogueRevision == levelCatalogue.revision,
+          saved.sourceRevision == playlistSourceRevision(for: saved.identity) else {
+      return .changed
+    }
+    switch liveLevelAvailability(current) {
+    case .available: return .available(current)
+    case .locked: return .locked(current)
+    case .unavailable: return .unavailable(current)
+    }
+  }
+
+  private func liveLevelAvailability(_ entry: LevelCatalogueEntry) -> LevelAvailability {
+    guard case let .classic(dataSetDirectory, dataSet, levelIndex, _, _)? =
+            levelBrowserRoutes[entry.identity] else {
+      return entry.availability
+    }
+    return settings.unlockAllClassicLevels
+      || classicBrowserLevelIsUnlocked(
+        dataSet: dataSet,
+        directory: dataSetDirectory,
+        levelIndex: levelIndex)
+      ? .available : .locked
+  }
+
+  private func refreshClassicCatalogueAvailability() {
+    guard !levelCatalogue.packs.isEmpty else { return }
+    let packs = levelCatalogue.packs.map { pack in
+      let levels = pack.levels.map { entry in
+        guard case .classic? = levelBrowserRoutes[entry.identity] else { return entry }
+        return LevelCatalogueEntry(
+          identity: entry.identity,
+          packName: entry.packName,
+          levelName: entry.levelName,
+          number: entry.number,
+          status: entry.status,
+          availability: liveLevelAvailability(entry))
+      }
+      return LevelCataloguePack(
+        engine: pack.engine,
+        id: pack.id,
+        name: pack.name,
+        status: pack.status,
+        levels: levels)
+    }
+    levelCatalogue = LevelCatalogue(revision: levelCatalogue.revision, packs: packs)
+  }
+
+  private func updateLevelSelectionReducedMotion() {
+    let enabled = settings.reduceMotion
+      || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
+    func update(_ view: NSView) {
+      (view as? LevelCoverFlowView)?.setReducedMotion(enabled)
+      view.subviews.forEach(update)
+    }
+    if let contentView = window.contentView { update(contentView) }
+  }
+
+  private func playlistMutationDate(_ playlist: LevelPlaylist) -> Date {
+    Date(timeIntervalSinceReferenceDate: max(
+      Date().timeIntervalSinceReferenceDate,
+      playlist.updatedAt.timeIntervalSinceReferenceDate + 0.001))
+  }
+
+  private func nextPlaylistName(prefix: String, store: LevelPlaylistStore) -> String {
+    let existing = Set(store.playlists.map { $0.name.lowercased() })
+    var index = 1
+    while existing.contains("\(prefix) \(index)".lowercased()) { index += 1 }
+    return "\(prefix) \(index)"
+  }
+
+  private func addToSelectedPlaylist(
+    _ identity: LevelCatalogueIdentity,
+    validatesFanSource: Bool = true
+  ) {
+    if validatesFanSource, levelBrowserFanPacks[identity.packID] != nil {
+      ensureFanPacksResolved(
+        forPackIDs: [identity.packID],
+        title: "Add to playlist",
+        reloadResolved: true
+      ) { [weak self] failures in
+        guard let self else { return }
+        guard !failures.contains(identity.packID) else {
+          GameScreen.shared.message(
+            "Level not added",
+            detail: "The fan level pack changed or could not be read.")
+          return
+        }
+        self.addToSelectedPlaylist(identity, validatesFanSource: false)
+      }
+      return
+    }
+    do {
+      let store = try playlistStore()
+      var playlist: LevelPlaylist
+      if let selected = store.selectedPlaylist() {
+        playlist = selected
+      } else {
+        playlist = try LevelPlaylist(name: nextPlaylistName(prefix: "Playlist", store: store))
+        try store.add(playlist)
+      }
+      let entry = try playlistEntry(for: identity)
+      try playlist.add(entry, updatedAt: playlistMutationDate(playlist))
+      try store.update(playlist)
+      GameScreen.shared.message("Added to \(playlist.name)", detail: entry.levelNameSnapshot)
+    } catch LevelPlaylistError.duplicateEntry {
+      GameScreen.shared.message("Already in playlist", detail: "Choose another level or open Playlists to change the order.")
+    } catch {
+      GameScreen.shared.message("Playlist not saved", detail: error.localizedDescription)
+    }
+  }
+
+  private func presentPlaylistLibrary() {
+    if let previous = playlistLibraryPage, GameScreen.shared.contains(previous) {
+      GameScreen.shared.dismiss(previous)
+    }
+    let store: LevelPlaylistStore
+    do {
+      store = try playlistStore()
+    } catch {
+      GameScreen.shared.message("Playlists unavailable", detail: error.localizedDescription)
+      return
+    }
+    let page = GameMenuPage(title: "Playlists", subtitle: "Saved level sequences")
+    let carousel = LevelCoverFlowView(frame: page.body.bounds)
+    carousel.autoresizingMask = [.width, .height]
+    page.body.addSubview(carousel)
+
+    let primary = page.addPrimaryAction("Open") { [weak self, weak carousel] in
+      guard let id = carousel?.selectedItem?.id else { return }
+      self?.activatePlaylistLibraryItem(id)
+    }
+    primary.keyEquivalent = "\r"
+    primary.keyEquivalentModifierMask = []
+    page.preferControllerControl(primary)
+    page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
+    carousel.onSelectionChanged = { [weak self, weak primary] item in
+      self?.playlistLibrarySelection = item.id
+      primary?.title = item.id == "playlist:new" ? "Create"
+        : item.id == "playlist:random" ? "Choose pool"
+        : item.id == "playlist:shuffle-all" ? "Shuffle"
+        : item.id == "playlist:resume" ? "Resume" : "Open"
+      primary?.isEnabled = item.isAvailable
+      primary?.needsDisplay = true
+    }
+    carousel.onStart = { [weak primary] _ in primary?.performClick(nil) }
+
+    var items: [LevelCoverFlowItem] = []
+    if let run = store.activeRun {
+      items.append(LevelCoverFlowItem(
+        id: "playlist:resume",
+        title: "Resume run",
+        subtitle: run.pool.summary,
+        detail: "Level \(run.currentIndex + 1) of \(run.entries.count)",
+        artworkKey: levelPreviewRequests[run.currentEntry.identity]?.artworkKey))
+    }
+    items.append(LevelCoverFlowItem(
+      id: "playlist:new",
+      title: "New playlist",
+      subtitle: "Choose and order levels",
+      detail: "Manual"))
+    items.append(LevelCoverFlowItem(
+      id: "playlist:random",
+      title: "Random 10",
+      subtitle: "Choose one level pack",
+      detail: "Saved and editable",
+      isAvailable: !levelCatalogue.packs.isEmpty))
+    items.append(LevelCoverFlowItem(
+      id: "playlist:shuffle-all",
+      title: "Shuffle all",
+      subtitle: "Eligible fan levels",
+      detail: "No repeats",
+      isAvailable: !levelBrowserFanPacks.isEmpty))
+    items += store.playlists.map { playlist in
+      LevelCoverFlowItem(
+        id: "playlist:saved:\(playlist.id.uuidString)",
+        title: playlist.name,
+        subtitle: playlist.entries.count == 1 ? "1 level" : "\(playlist.entries.count) levels",
+        detail: "Manual order",
+        artworkKey: playlist.entries.first.flatMap {
+          levelPreviewRequests[$0.identity]?.artworkKey
+        })
+    }
+    configureLevelPreviewLoader(carousel)
+    carousel.configure(
+      items: items,
+      selectedID: playlistLibrarySelection,
+      reduceMotion: settings.reduceMotion || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
+    primary.isEnabled = carousel.selectedItem?.isAvailable == true
+    playlistLibraryPage = page
+    GameScreen.shared.present(
+      page,
+      owner: window,
+      focus: carousel,
+      onDismiss: { [weak self, weak page] in
+        guard let self, let page, self.playlistLibraryPage === page else { return }
+        self.playlistLibraryPage = nil
+      })
+  }
+
+  private func activatePlaylistLibraryItem(_ id: String) {
+    switch id {
+    case "playlist:new":
+      do {
+        let store = try playlistStore()
+        let playlist = try LevelPlaylist(
+          name: nextPlaylistName(prefix: "Playlist", store: store))
+        try store.add(playlist)
+        playlistLibrarySelection = "playlist:saved:\(playlist.id.uuidString)"
+        presentPlaylistEditor(id: playlist.id)
+      } catch {
+        GameScreen.shared.message("Playlist not created", detail: error.localizedDescription)
+      }
+    case "playlist:random":
+      presentRandomPlaylistPool()
+    case "playlist:shuffle-all":
+      prepareShuffleAllFanLevels()
+    case "playlist:resume":
+      guard let run = try? playlistStore().activeRun else { return }
+      ensureFanPacksResolved(for: run.entries, title: "Resume run") { [weak self] _ in
+        self?.startActiveSequence()
+      }
+    default:
+      let prefix = "playlist:saved:"
+      guard id.hasPrefix(prefix),
+            let playlistID = UUID(uuidString: String(id.dropFirst(prefix.count))) else { return }
+      do {
+        let store = try playlistStore()
+        guard let playlist = store.playlist(id: playlistID) else { return }
+        try store.selectPlaylist(id: playlistID)
+        ensureFanPacksResolved(for: playlist.entries, title: playlist.name) { [weak self] _ in
+          self?.presentPlaylistEditor(id: playlistID)
+        }
+      } catch {
+        GameScreen.shared.message("Playlist not opened", detail: error.localizedDescription)
+      }
+    }
+  }
+
+  private func playlistCoverItem(
+    _ saved: LevelPlaylistEntry,
+    position: Int,
+    total: Int
+  ) -> LevelCoverFlowItem {
+    let suffix = "\(position + 1)/\(total)"
+    switch playlistResolution(for: saved) {
+    case let .available(current):
+      return LevelCoverFlowItem(
+        id: saved.id.uuidString,
+        title: current.levelName,
+        subtitle: current.packName + " / " + current.identity.engine.displayName,
+        detail: "Level \(current.number)  \(suffix)",
+        artworkKey: levelPreviewRequests[current.identity]?.artworkKey)
+    case let .locked(current):
+      return LevelCoverFlowItem(
+        id: saved.id.uuidString,
+        title: current.levelName,
+        subtitle: current.packName + " / " + current.identity.engine.displayName,
+        detail: "Locked  \(suffix)",
+        artworkKey: levelPreviewRequests[current.identity]?.artworkKey,
+        availability: .locked)
+    case let .unavailable(current):
+      return LevelCoverFlowItem(
+        id: saved.id.uuidString,
+        title: current.levelName,
+        subtitle: current.packName + " / " + current.identity.engine.displayName,
+        detail: "Unavailable  \(suffix)",
+        artworkKey: levelPreviewRequests[current.identity]?.artworkKey,
+        availability: .unavailable)
+    case .changed:
+      return LevelCoverFlowItem(
+        id: saved.id.uuidString,
+        title: saved.levelNameSnapshot,
+        subtitle: saved.packNameSnapshot + " / " + saved.identity.engine.displayName,
+        detail: "Changed - replace or remove  \(suffix)",
+        availability: .unavailable)
+    case .missing:
+      return LevelCoverFlowItem(
+        id: saved.id.uuidString,
+        title: saved.levelNameSnapshot,
+        subtitle: saved.packNameSnapshot + " / " + saved.identity.engine.displayName,
+        detail: "Missing - replace or remove  \(suffix)",
+        availability: .unavailable)
+    }
+  }
+
+  private func presentPlaylistEditor(id: UUID) {
+    guard let store = try? playlistStore(), let playlist = store.playlist(id: id) else {
+      GameScreen.shared.message("Playlist unavailable", detail: "The selected playlist is no longer available.")
+      return
+    }
+    let page = GameMenuPage(
+      title: playlist.name,
+      subtitle: playlist.entries.count == 1 ? "1 level" : "\(playlist.entries.count) levels")
+    let carousel = LevelCoverFlowView(frame: CGRect(x: 0, y: 0, width: page.body.bounds.width, height: 360))
+    carousel.autoresizingMask = [.width]
+    page.body.addSubview(carousel)
+
+    func editorButton(_ title: String, x: CGFloat, action: @escaping () -> Void) -> GameActionButton {
+      let button = GameActionButton(title: title, primary: false, onPress: action)
+      button.frame = CGRect(x: x, y: 380, width: 182, height: 44)
+      page.body.addSubview(button)
+      return button
+    }
+
+    var selectedEntryID: UUID? = playlistEntrySelections[id]
+    let earlier = editorButton("Earlier", x: 10) { [weak self, weak page, weak carousel] in
+      guard let self, let page, let selected = carousel?.selectedItem,
+            let entryID = UUID(uuidString: selected.id),
+            var current = try? self.playlistStore().playlist(id: id),
+            let source = current.entries.firstIndex(where: { $0.id == entryID }), source > 0 else { return }
+      do {
+        _ = try current.move(
+          id: entryID, to: source - 1, updatedAt: self.playlistMutationDate(current))
+        try self.playlistStore().update(current)
+        self.playlistEntrySelections[id] = entryID
+        GameScreen.shared.dismiss(page)
+        self.presentPlaylistEditor(id: id)
+      } catch {
+        GameScreen.shared.message("Playlist not changed", detail: error.localizedDescription)
+      }
+    }
+    let later = editorButton("Later", x: 208) { [weak self, weak page, weak carousel] in
+      guard let self, let page, let selected = carousel?.selectedItem,
+            let entryID = UUID(uuidString: selected.id),
+            var current = try? self.playlistStore().playlist(id: id),
+            let source = current.entries.firstIndex(where: { $0.id == entryID }),
+            source + 1 < current.entries.count else { return }
+      do {
+        _ = try current.move(
+          id: entryID, to: source + 1, updatedAt: self.playlistMutationDate(current))
+        try self.playlistStore().update(current)
+        self.playlistEntrySelections[id] = entryID
+        GameScreen.shared.dismiss(page)
+        self.presentPlaylistEditor(id: id)
+      } catch {
+        GameScreen.shared.message("Playlist not changed", detail: error.localizedDescription)
+      }
+    }
+    let remove = editorButton("Remove", x: 406) { [weak self, weak page, weak carousel] in
+      guard let self, let page, let selected = carousel?.selectedItem,
+            let entryID = UUID(uuidString: selected.id) else { return }
+      GameScreen.shared.confirm(
+        "Remove level",
+        detail: "Remove \(selected.title) from this playlist?",
+        actionTitle: "Remove") { [weak self, weak page] in
+          guard let self, let page,
+                var current = try? self.playlistStore().playlist(id: id) else { return }
+          do {
+            _ = try current.remove(
+              id: entryID, updatedAt: self.playlistMutationDate(current))
+            try self.playlistStore().update(current)
+            self.playlistEntrySelections[id] = nil
+            GameScreen.shared.dismiss(page)
+            self.presentPlaylistEditor(id: id)
+          } catch {
+            GameScreen.shared.message("Level not removed", detail: error.localizedDescription)
+          }
+        }
+    }
+    let replace = editorButton("Replace", x: 604) { [weak self, weak page, weak carousel] in
+      guard let self, let page, let selected = carousel?.selectedItem,
+            let entryID = UUID(uuidString: selected.id) else { return }
+      self.presentPlaylistLevelPicker(
+        playlistID: id,
+        replacing: entryID,
+        editorPage: page)
+    }
+    let rename = editorButton("Rename", x: 802) { [weak self, weak page] in
+      guard let self, let page else { return }
+      self.presentPlaylistRename(id: id, editorPage: page)
+    }
+
+    let play = page.addPrimaryAction("Play") { [weak self] in
+      self?.startPlaylist(id: id, shuffled: false)
+    }
+    play.keyEquivalent = "\r"
+    play.keyEquivalentModifierMask = []
+    let add = page.addSecondaryAction("Add level") { [weak self, weak page] in
+      guard let self, let page else { return }
+      self.presentPlaylistLevelPicker(
+        playlistID: id,
+        replacing: nil,
+        editorPage: page)
+    }
+    let shuffle = page.addSecondaryAction("Shuffle", at: 1) { [weak self] in
+      self?.startPlaylist(id: id, shuffled: true)
+    }
+    page.preferControllerControl(playlist.entries.isEmpty ? add : play)
+    page.onBack = { [weak self, weak page] in
+      guard let self, let page else { return }
+      GameScreen.shared.dismiss(page)
+      self.presentPlaylistLibrary()
+    }
+
+    let items = playlist.entries.enumerated().map {
+      playlistCoverItem($0.element, position: $0.offset, total: playlist.entries.count)
+    }
+    let allPlayable = !playlist.entries.isEmpty
+      && playlist.entries.allSatisfy { playlistResolution(for: $0).canStart }
+    func updateButtons(_ item: LevelCoverFlowItem?) {
+      selectedEntryID = item.flatMap { UUID(uuidString: $0.id) }
+      if let selectedEntryID { playlistEntrySelections[id] = selectedEntryID }
+      let index = selectedEntryID.flatMap { selectedID in
+        playlist.entries.firstIndex(where: { $0.id == selectedID })
+      }
+      earlier.isEnabled = (index ?? 0) > 0
+      later.isEnabled = index.map { $0 + 1 < playlist.entries.count } ?? false
+      remove.isEnabled = selectedEntryID != nil
+      replace.isEnabled = selectedEntryID != nil
+      rename.isEnabled = true
+      [earlier, later, remove, replace, rename].forEach { $0.needsDisplay = true }
+    }
+    carousel.onSelectionChanged = { item in updateButtons(item) }
+    carousel.onStart = { [weak play] _ in play?.performClick(nil) }
+    configureLevelPreviewLoader(carousel)
+    carousel.configure(
+      items: items,
+      selectedID: selectedEntryID?.uuidString,
+      reduceMotion: settings.reduceMotion || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
+    updateButtons(carousel.selectedItem)
+    play.isEnabled = allPlayable
+    shuffle.isEnabled = allPlayable
+    play.needsDisplay = true
+    shuffle.needsDisplay = true
+    if playlist.entries.isEmpty {
+      let empty = GameLabel(labelWithString: "No levels yet")
+      empty.alignment = .center
+      empty.role = .heading
+      empty.frame = carousel.frame
+      empty.autoresizingMask = [.width]
+      page.body.addSubview(empty, positioned: .above, relativeTo: carousel)
+    }
+    let initialFocus: NSResponder = playlist.entries.isEmpty ? add : carousel
+    playlistEditorPage = page
+    playlistEditorID = id
+    GameScreen.shared.present(
+      page,
+      owner: window,
+      focus: initialFocus,
+      onDismiss: { [weak self, weak page] in
+        guard let self, let page, self.playlistEditorPage === page else { return }
+        self.playlistEditorPage = nil
+        self.playlistEditorID = nil
+      })
+  }
+
+  private func refreshOpenPlaylistEditor(id: UUID) {
+    guard playlistEditorID == id,
+          let page = playlistEditorPage,
+          GameScreen.shared.contains(page) else { return }
+    GameScreen.shared.dismiss(page)
+    presentPlaylistEditor(id: id)
+  }
+
+  private func presentPlaylistRename(id: UUID, editorPage: GameMenuPage) {
+    guard let playlist = try? playlistStore().playlist(id: id) else { return }
+    let page = GameMenuPage(title: "Rename playlist")
+    let label = GameLabel(labelWithString: "Playlist name")
+    label.role = .heading
+    label.frame = CGRect(x: 156, y: 120, width: 680, height: 32)
+    page.body.addSubview(label)
+    let field = GameSearchField(frame: CGRect(x: 156, y: 166, width: 680, height: 48))
+    field.placeholderString = "Playlist name"
+    field.stringValue = playlist.name
+    page.body.addSubview(field)
+    let save = page.addPrimaryAction("Save") { [weak self, weak page, weak editorPage, weak field] in
+      guard let self, let page, let editorPage, let field,
+            var current = try? self.playlistStore().playlist(id: id) else { return }
+      do {
+        _ = try current.rename(
+          field.stringValue, updatedAt: self.playlistMutationDate(current))
+        try self.playlistStore().update(current)
+        GameScreen.shared.dismiss(editorPage)
+        self.presentPlaylistEditor(id: id)
+      } catch {
+        GameScreen.shared.message("Playlist not renamed", detail: error.localizedDescription)
+      }
+      if GameScreen.shared.contains(page) { GameScreen.shared.dismiss(page) }
+    }
+    save.keyEquivalent = "\r"
+    save.keyEquivalentModifierMask = []
+    page.addSecondaryAction("Delete playlist") { [weak self, weak page, weak editorPage] in
+      guard let self, let page, let editorPage,
+            let store = try? self.playlistStore(),
+            let current = store.playlist(id: id) else { return }
+      let deletesActiveRun: Bool
+      if case let .playlist(activeID)? = store.activeRun?.source {
+        deletesActiveRun = activeID == id
+      } else {
+        deletesActiveRun = false
+      }
+      let detail = deletesActiveRun
+        ? "Delete \(current.name) and discard its saved run?"
+        : "Delete \(current.name)?"
+      GameScreen.shared.confirm(
+        "Delete playlist",
+        detail: detail,
+        actionTitle: "Delete",
+        owner: self.window) { [weak self, weak page, weak editorPage] in
+          guard let self, let page, let editorPage else { return }
+          do {
+            try store.removePlaylist(id: id)
+            self.playlistEntrySelections[id] = nil
+            self.playlistLibrarySelection = "playlist:new"
+            if deletesActiveRun && self.sequencePlayingIdentity != nil {
+              self.returnToLibrary()
+            } else {
+              GameScreen.shared.dismiss(page)
+              GameScreen.shared.dismiss(editorPage)
+            }
+            self.presentPlaylistLibrary()
+          } catch {
+            GameScreen.shared.message("Playlist not deleted", detail: error.localizedDescription)
+          }
+        }
+    }
+    page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
+    GameScreen.shared.present(page, owner: window, focus: field)
+  }
+
+  private func startPlaylist(id: UUID, shuffled: Bool) {
+    do {
+      guard let playlist = try playlistStore().playlist(id: id),
+            !playlist.entries.isEmpty else {
+        throw LevelPlaylistError.emptyPool
+      }
+      ensureFanPacksResolved(
+        for: playlist.entries,
+        title: "Start \(playlist.name)"
+      ) { [weak self] failures in
+        guard let self else { return }
+        guard failures.isEmpty else {
+          self.refreshOpenPlaylistEditor(id: id)
+          GameScreen.shared.message(
+            "Playlist not started",
+            detail: "A fan level pack changed or could not be read.")
+          return
+        }
+        self.startResolvedPlaylist(id: id, shuffled: shuffled)
+      }
+    } catch {
+      GameScreen.shared.message("Playlist not started", detail: error.localizedDescription)
+    }
+  }
+
+  private func startResolvedPlaylist(id: UUID, shuffled: Bool) {
+    do {
+      let store = try playlistStore()
+      guard let playlist = store.playlist(id: id), !playlist.entries.isEmpty else {
+        throw LevelPlaylistError.emptyPool
+      }
+      guard playlist.entries.allSatisfy({ playlistResolution(for: $0).canStart }) else {
+        refreshOpenPlaylistEditor(id: id)
+        GameScreen.shared.message(
+          playlist.name,
+          detail: "Replace or remove each locked, missing or changed level before starting.")
+        return
+      }
+      let pool = try LevelPool(
+        id: "playlist:\(playlist.id.uuidString):\(playlist.updatedAt.timeIntervalSinceReferenceDate)",
+        summary: "\(playlist.name) - \(playlist.entries.count) levels")
+      let run = try LevelSequenceRun.playlist(
+        playlist,
+        pool: pool,
+        seed: shuffled ? UInt64.random(in: UInt64.min...UInt64.max) : nil)
+      installActiveSequence(run, in: store)
+    } catch {
+      GameScreen.shared.message("Playlist not started", detail: error.localizedDescription)
+    }
+  }
+
+  private func installActiveSequence(
+    _ run: LevelSequenceRun,
+    in store: LevelPlaylistStore
+  ) {
+    guard !ArcadeStore.shared.hotSeatIsActive else {
+      GameScreen.shared.message(
+        "Playlist unavailable",
+        detail: "End Hot Seat before starting a playlist or shuffle.")
+      return
+    }
+    let ownerProfileID = ArcadeStore.shared.records.activeProfileID
+    let begin = { [weak self] in
+      guard let self else { return }
+      guard !ArcadeStore.shared.hotSeatIsActive,
+            ArcadeStore.shared.records.activeProfileID == ownerProfileID,
+            self.playlistStoreCache?.profileID == ownerProfileID,
+            self.playlistStoreCache?.store === store else {
+        GameScreen.shared.message(
+          "Run not started",
+          detail: "The player or Hot Seat session changed while the run was being prepared.")
+        return
+      }
+      do {
+        self.returnToLibrary()
+        try store.setActiveRun(run)
+        self.sequencePlaylistStore = store
+        self.startActiveSequence()
+      } catch {
+        GameScreen.shared.message("Run not started", detail: error.localizedDescription)
+      }
+    }
+    guard let active = store.activeRun else {
+      begin()
+      return
+    }
+    GameScreen.shared.confirm(
+      "Replace current run?",
+      detail: "The saved position at level \(active.currentIndex + 1) of \(active.entries.count) will be discarded.",
+      actionTitle: "Replace run",
+      owner: window) { [weak self] in
+        guard let self else { return }
+        self.ensureFanPacksResolved(
+          for: run.entries,
+          title: "Replace run"
+        ) { [weak self] failures in
+          guard let self else { return }
+          guard failures.isEmpty,
+                run.entries.allSatisfy({
+                  self.playlistResolution(for: $0).canStart
+                }) else {
+            if case let .playlist(id) = run.source {
+              self.refreshOpenPlaylistEditor(id: id)
+            }
+            GameScreen.shared.message(
+              "Run not started",
+              detail: "A level was locked, removed or changed while the confirmation was open.")
+            return
+          }
+          begin()
+        }
+      }
+  }
+
+  private func sequenceRunMatches(
+    _ runID: UUID,
+    identity: LevelCatalogueIdentity
+  ) -> Bool {
+    guard !ArcadeStore.shared.hotSeatIsActive,
+          playlistStoreCache?.profileID == ArcadeStore.shared.records.activeProfileID,
+          let store = sequencePlaylistStore,
+          playlistStoreCache?.store === store,
+          let run = store.activeRun else { return false }
+    return run.id == runID && run.currentEntry.identity == identity
+  }
+
+  private func beginSequenceLaunch(
+    runID: UUID?,
+    identity: LevelCatalogueIdentity
+  ) -> Bool {
+    guard let runID else { return true }
+    guard sequenceRunMatches(runID, identity: identity) else {
+      GameScreen.shared.message(
+        "Run not started",
+        detail: "The player, Hot Seat session or saved run changed before the level loaded.")
+      return false
+    }
+    sequenceLaunchRunID = runID
+    refreshSequenceNavigationAvailability()
+    return true
+  }
+
+  private func sequenceLaunchCanCommit(
+    runID: UUID?,
+    identity: LevelCatalogueIdentity
+  ) -> Bool {
+    guard let runID else { return true }
+    guard sequenceLaunchRunID == runID,
+          sequenceRunMatches(runID, identity: identity) else {
+      clearSequenceLaunch(runID)
+      GameScreen.shared.message(
+        "Run not started",
+        detail: "The player, Hot Seat session or saved run changed while the level was loading.")
+      return false
+    }
+    return true
+  }
+
+  private func presentPlaylistLevelPicker(
+    playlistID: UUID,
+    replacing entryID: UUID?,
+    editorPage: GameMenuPage
+  ) {
+    let page = GameMenuPage(
+      title: entryID == nil ? "Add level" : "Replace level",
+      subtitle: "Choose a pack")
+    let carousel = LevelCoverFlowView(frame: page.body.bounds)
+    carousel.autoresizingMask = [.width, .height]
+    page.body.addSubview(carousel)
+    let primary = page.addPrimaryAction("Browse levels") { [weak self, weak carousel, weak editorPage] in
+      guard let self, let editorPage, let selected = carousel?.selectedItem,
+            let pack = self.levelCatalogue.packs.first(where: {
+              self.browserPackKey($0) == selected.id
+            }) else { return }
+      self.ensureFanPacksResolved(
+        forPackIDs: [pack.id],
+        title: pack.name,
+        reloadResolved: self.levelBrowserFanPacks[pack.id] != nil
+      ) { [weak self, weak editorPage] _ in
+        guard let self, let editorPage,
+              let resolved = self.levelCatalogue.packs.first(where: {
+                $0.engine == pack.engine && $0.id == pack.id
+              }) else { return }
+        self.presentPlaylistLevelChoice(
+          pack: resolved,
+          playlistID: playlistID,
+          replacing: entryID,
+          editorPage: editorPage)
+      }
+    }
+    primary.keyEquivalent = "\r"
+    primary.keyEquivalentModifierMask = []
+    page.preferControllerControl(primary)
+    page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
+    carousel.onSelectionChanged = { [weak primary] item in
+      primary?.isEnabled = item.isAvailable
+      primary?.needsDisplay = true
+    }
+    carousel.onStart = { [weak primary] _ in primary?.performClick(nil) }
+    let items = levelCatalogue.packs.enumerated().map { index, pack in
+      let fanURL = levelBrowserFanPacks[pack.id]
+      let count = fanURL.flatMap { FanLevelLibrary.knownLevelCount(in: $0) }
+        ?? pack.levels.count
+      return LevelCoverFlowItem(
+        id: browserPackKey(pack),
+        title: pack.name,
+        subtitle: pack.engine.displayName + " / " + pack.status.displayName,
+        detail: fanURL != nil && count == 0 ? "Levels  \(index + 1)/\(levelCatalogue.packs.count)"
+          : "\(count) levels  \(index + 1)/\(levelCatalogue.packs.count)",
+        isAvailable: fanURL != nil || pack.levels.contains(where: \.isAvailable),
+        artworkKey: pack.levels.lazy.compactMap {
+          self.levelPreviewRequests[$0.identity]?.artworkKey
+        }.first)
+    }
+    configureLevelPreviewLoader(carousel)
+    carousel.configure(
+      items: items,
+      reduceMotion: settings.reduceMotion || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
+    GameScreen.shared.present(page, owner: window, focus: carousel)
+  }
+
+  private func presentPlaylistLevelChoice(
+    pack: LevelCataloguePack,
+    playlistID: UUID,
+    replacing entryID: UUID?,
+    editorPage: GameMenuPage
+  ) {
+    guard !pack.levels.isEmpty else {
+      GameScreen.shared.message(pack.name, detail: "This pack has no playable levels.")
+      return
+    }
+    let page = GameMenuPage(
+      title: pack.name,
+      subtitle: entryID == nil ? "Add to playlist" : "Choose replacement")
+    let carousel = LevelCoverFlowView(frame: page.body.bounds)
+    carousel.autoresizingMask = [.width, .height]
+    page.body.addSubview(carousel)
+    let primary = page.addPrimaryAction(entryID == nil ? "Add" : "Replace") {
+      [weak self, weak carousel, weak editorPage] in
+      guard let self, let editorPage, let selected = carousel?.selectedItem,
+            let identity = pack.levels.first(where: {
+              $0.identity.levelID == selected.id
+            })?.identity else { return }
+      self.updatePlaylist(
+        playlistID,
+        replacing: entryID,
+        with: identity,
+        editorPage: editorPage)
+    }
+    primary.keyEquivalent = "\r"
+    primary.keyEquivalentModifierMask = []
+    page.preferControllerControl(primary)
+    page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
+    carousel.onSelectionChanged = { [weak primary] item in
+      primary?.isEnabled = item.isAvailable
+      primary?.needsDisplay = true
+    }
+    carousel.onStart = { [weak primary] _ in primary?.performClick(nil) }
+    let items = pack.levels.enumerated().map { index, entry in
+      LevelCoverFlowItem(
+        id: entry.identity.levelID,
+        title: entry.levelName,
+        subtitle: entry.packName + " / " + entry.identity.engine.displayName,
+        detail: "Level \(entry.number)  \(index + 1)/\(pack.levels.count)",
+        artworkKey: levelPreviewRequests[entry.identity]?.artworkKey,
+        availability: entry.availability)
+    }
+    configureLevelPreviewLoader(carousel)
+    carousel.configure(
+      items: items,
+      reduceMotion: settings.reduceMotion || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
+    primary.isEnabled = carousel.selectedItem?.isAvailable == true
+    GameScreen.shared.present(page, owner: window, focus: carousel)
+  }
+
+  private func updatePlaylist(
+    _ playlistID: UUID,
+    replacing entryID: UUID?,
+    with identity: LevelCatalogueIdentity,
+    editorPage: GameMenuPage,
+    validatesFanSource: Bool = true
+  ) {
+    if validatesFanSource, levelBrowserFanPacks[identity.packID] != nil {
+      ensureFanPacksResolved(
+        forPackIDs: [identity.packID],
+        title: "Save playlist",
+        reloadResolved: true
+      ) { [weak self, weak editorPage] failures in
+        guard let self, let editorPage else { return }
+        guard !failures.contains(identity.packID) else {
+          GameScreen.shared.message(
+            "Playlist not changed",
+            detail: "The fan level pack changed or could not be read.")
+          return
+        }
+        self.updatePlaylist(
+          playlistID,
+          replacing: entryID,
+          with: identity,
+          editorPage: editorPage,
+          validatesFanSource: false)
+      }
+      return
+    }
+    do {
+      let store = try playlistStore()
+      guard var playlist = store.playlist(id: playlistID) else {
+        throw LevelPlaylistStore.Failure.missingPlaylist
+      }
+      let replacement = try playlistEntry(for: identity)
+      if let entryID {
+        guard let index = playlist.entries.firstIndex(where: { $0.id == entryID }) else {
+          throw LevelPlaylistStore.Failure.missingPlaylist
+        }
+        _ = try playlist.remove(
+          id: entryID, updatedAt: playlistMutationDate(playlist))
+        try playlist.add(
+          replacement, at: index, updatedAt: playlistMutationDate(playlist))
+        playlistEntrySelections[playlistID] = replacement.id
+      } else {
+        try playlist.add(replacement, updatedAt: playlistMutationDate(playlist))
+        playlistEntrySelections[playlistID] = replacement.id
+      }
+      try store.update(playlist)
+      GameScreen.shared.dismiss(editorPage)
+      presentPlaylistEditor(id: playlistID)
+    } catch LevelPlaylistError.duplicateEntry {
+      GameScreen.shared.message("Already in playlist", detail: "Choose a different level.")
+    } catch {
+      GameScreen.shared.message("Playlist not changed", detail: error.localizedDescription)
+    }
+  }
+
+  private func presentRandomPlaylistPool() {
+    let page = GameMenuPage(title: "Random 10", subtitle: "Choose one level pack")
+    let carousel = LevelCoverFlowView(frame: page.body.bounds)
+    carousel.autoresizingMask = [.width, .height]
+    page.body.addSubview(carousel)
+    let primary = page.addPrimaryAction("Create") { [weak self, weak carousel, weak page] in
+      guard let self, let page, let selected = carousel?.selectedItem,
+            let pack = self.levelCatalogue.packs.first(where: {
+              self.browserPackKey($0) == selected.id
+            }) else { return }
+      self.ensureFanPacksResolved(
+        forPackIDs: [pack.id],
+        title: pack.name,
+        reloadResolved: self.levelBrowserFanPacks[pack.id] != nil
+      ) { [weak self, weak page] _ in
+        guard let self, let page,
+              let resolved = self.levelCatalogue.packs.first(where: {
+                $0.engine == pack.engine && $0.id == pack.id
+              }) else { return }
+        self.createRandomPlaylist(from: resolved, poolPage: page)
+      }
+    }
+    primary.keyEquivalent = "\r"
+    primary.keyEquivalentModifierMask = []
+    page.preferControllerControl(primary)
+    page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
+    carousel.onSelectionChanged = { [weak primary] item in
+      primary?.isEnabled = item.isAvailable
+      primary?.needsDisplay = true
+    }
+    carousel.onStart = { [weak primary] _ in primary?.performClick(nil) }
+    let items = levelCatalogue.packs.enumerated().map { index, pack in
+      let fanURL = levelBrowserFanPacks[pack.id]
+      let count = fanURL.flatMap { FanLevelLibrary.knownLevelCount(in: $0) }
+        ?? pack.availableLevelCount
+      return LevelCoverFlowItem(
+        id: browserPackKey(pack),
+        title: pack.name,
+        subtitle: pack.engine.displayName + " / " + pack.status.displayName,
+        detail: "\(count == 0 && fanURL != nil ? "Levels" : "\(count) eligible")  \(index + 1)/\(levelCatalogue.packs.count)",
+        isAvailable: fanURL != nil || count > 0,
+        artworkKey: pack.levels.lazy.compactMap {
+          self.levelPreviewRequests[$0.identity]?.artworkKey
+        }.first)
+    }
+    configureLevelPreviewLoader(carousel)
+    carousel.configure(
+      items: items,
+      reduceMotion: settings.reduceMotion || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
+    GameScreen.shared.present(page, owner: window, focus: carousel)
+  }
+
+  private func createRandomPlaylist(
+    from pack: LevelCataloguePack,
+    poolPage: GameMenuPage
+  ) {
+    do {
+      let store = try playlistStore()
+      let candidates = try pack.levels.filter(\.isAvailable).map {
+        try playlistEntry(for: $0.identity)
+      }
+      guard !candidates.isEmpty else { throw LevelPlaylistError.emptyPool }
+      let playlist = try LevelPlaylist.randomTen(
+        name: nextPlaylistName(prefix: "Random 10", store: store),
+        candidates: candidates,
+        seed: UInt64.random(in: UInt64.min...UInt64.max))
+      try store.add(playlist)
+      playlistLibrarySelection = "playlist:saved:\(playlist.id.uuidString)"
+      GameScreen.shared.dismiss(poolPage)
+      presentPlaylistEditor(id: playlist.id)
+    } catch {
+      GameScreen.shared.message("Random playlist not created", detail: error.localizedDescription)
+    }
+  }
+
+  private func ensureFanPacksResolved(
+    for entries: [LevelPlaylistEntry],
+    title: String,
+    completion: @escaping @MainActor (Set<String>) -> Void
+  ) {
+    let packIDs = Set(entries.map(\.identity.packID).filter {
+      levelBrowserFanPacks[$0] != nil
+    })
+    ensureFanPacksResolved(
+      forPackIDs: packIDs,
+      title: title,
+      reloadResolved: true,
+      completion: completion)
+  }
+
+  private func invalidateResolvedFanPack(id: String) {
+    guard let packIndex = levelCatalogue.packs.firstIndex(where: { $0.id == id }) else {
+      return
+    }
+    let pack = levelCatalogue.packs[packIndex]
+    for identity in pack.levels.map(\.identity) {
+      levelBrowserRoutes[identity] = nil
+      levelPreviewRequests[identity] = nil
+    }
+    levelBrowserFanEntries[id] = nil
+    levelBrowserInvalidFanPacks.insert(id)
+    if let url = levelBrowserFanPacks[id] {
+      levelBrowserInvalidFanPackRevisions[id] = Self.fanPackFileRevision(url)
+      FanLevelLibrary.Progress.removeCount(for: url)
+    }
+    var packs = levelCatalogue.packs
+    packs[packIndex] = LevelCataloguePack(
+      engine: pack.engine,
+      id: pack.id,
+      name: pack.name,
+      status: pack.status,
+      levels: [])
+    levelCatalogue = LevelCatalogue(revision: levelCatalogue.revision, packs: packs)
+    refreshOpenLevelPackBrowser()
+  }
+
+  private func cancelPlaylistFanLoading() {
+    playlistFanLoadTask?.cancel()
+    playlistFanDiscoveryTask?.cancel()
+    playlistFanLoadTask = nil
+    playlistFanDiscoveryTask = nil
+    if let page = playlistFanLoadingPage {
+      playlistFanLoadingPage = nil
+      if GameScreen.shared.contains(page) { GameScreen.shared.dismiss(page) }
+    }
+  }
+
+  private func ensureFanPacksResolved(
+    forPackIDs packIDs: Set<String>,
+    title: String,
+    reloadResolved: Bool = false,
+    completion: @escaping @MainActor (Set<String>) -> Void
+  ) {
+    let requests = packIDs.sorted().compactMap { packID -> (String, URL)? in
+      guard (reloadResolved
+              || levelCatalogue.packs.first(where: { $0.id == packID })?.levels.isEmpty == true),
+            let url = levelBrowserFanPacks[packID] else { return nil }
+      return (packID, url)
+    }
+    guard !requests.isEmpty else {
+      completion([])
+      return
+    }
+
+    playlistFanLoadTask?.cancel()
+    playlistFanDiscoveryTask?.cancel()
+    if let oldPage = playlistFanLoadingPage {
+      playlistFanLoadingPage = nil
+      GameScreen.shared.dismiss(oldPage)
+    }
+    let page = GameMenuPage(title: title, subtitle: "Loading fan levels")
+    page.setDetail("Reading \(requests.count) fan \(requests.count == 1 ? "pack" : "packs").")
+    page.backTitle = "Cancel"
+    playlistFanLoadingPage = page
+    page.onBack = { [weak self, weak page] in
+      guard let self, let page, self.playlistFanLoadingPage === page else { return }
+      self.playlistFanLoadTask?.cancel()
+      self.playlistFanDiscoveryTask?.cancel()
+      self.playlistFanLoadTask = nil
+      self.playlistFanDiscoveryTask = nil
+      self.playlistFanLoadingPage = nil
+      GameScreen.shared.dismiss(page)
+    }
+    GameScreen.shared.present(page, owner: window, onDismiss: { [weak self, weak page] in
+      guard let self, let page, self.playlistFanLoadingPage === page else { return }
+      self.playlistFanLoadTask?.cancel()
+      self.playlistFanDiscoveryTask?.cancel()
+      self.playlistFanLoadTask = nil
+      self.playlistFanDiscoveryTask = nil
+      self.playlistFanLoadingPage = nil
+    })
+    let discoveryTask = Task.detached(priority: .userInitiated) {
+      () -> ([LevelBrowserFanPackDiscovery], Set<String>) in
+      var discoveries: [LevelBrowserFanPackDiscovery] = []
+      var failures: Set<String> = []
+      discoveries.reserveCapacity(requests.count)
+      for (packID, url) in requests {
+        guard !Task.isCancelled else { return (discoveries, failures) }
+        guard let before = FanLevelLibrary.archiveFingerprint(url) else {
+          failures.insert(packID)
+          continue
+        }
+        let entries: [FanLevelLibrary.Entry]
+        do {
+          entries = try FanLevelLibrary.validatedEntries(in: url)
+        } catch {
+          failures.insert(packID)
+          continue
+        }
+        guard !Task.isCancelled,
+              let after = FanLevelLibrary.archiveFingerprint(url),
+              before == after else {
+          failures.insert(packID)
+          continue
+        }
+        discoveries.append(LevelBrowserFanPackDiscovery(
+          packID: packID,
+          fingerprint: before,
+          entries: entries))
+      }
+      return (discoveries, failures)
+    }
+    playlistFanDiscoveryTask = discoveryTask
+    playlistFanLoadTask = Task { [weak self, weak page] in
+      let (discoveries, failures) = await discoveryTask.value
+      guard !Task.isCancelled, let self, let page,
+            self.playlistFanLoadingPage === page,
+            GameScreen.shared.controllerPage(in: self.window) === page,
+            self.window.attachedSheet == nil else { return }
+      self.playlistFanLoadTask = nil
+      self.playlistFanDiscoveryTask = nil
+      self.playlistFanLoadingPage = nil
+      GameScreen.shared.dismiss(page)
+      for packID in failures {
+        self.invalidateResolvedFanPack(id: packID)
+      }
+      for discovery in discoveries {
+        guard let pack = self.levelCatalogue.packs.first(where: {
+          $0.id == discovery.packID
+        }), let url = self.levelBrowserFanPacks[discovery.packID] else { continue }
+        FanLevelLibrary.Progress.setCount(discovery.entries.count, for: url)
+        _ = self.resolveBrowserPack(
+          pack,
+          discovery: LevelBrowserFanDiscovery(
+            fingerprint: discovery.fingerprint,
+            entries: discovery.entries))
+      }
+      completion(failures)
+    }
+  }
+
+  private func prepareShuffleAllFanLevels() {
+    let packIDs = Set(levelBrowserFanPacks.keys)
+    guard !packIDs.isEmpty else {
+      GameScreen.shared.message("Shuffle all", detail: "No fan level packs are available.")
+      return
+    }
+    ensureFanPacksResolved(
+      forPackIDs: packIDs,
+      title: "Shuffle all",
+      reloadResolved: true
+    ) { [weak self] failures in
+      guard let self else { return }
+      guard failures.isEmpty else {
+        let names = failures.compactMap { id in
+          self.levelCatalogue.packs.first(where: { $0.id == id })?.name
+        }.sorted().joined(separator: ", ")
+        GameScreen.shared.message(
+          "Shuffle not started",
+          detail: "Could not read every installed fan pack. Check \(names.isEmpty ? "the unavailable packs" : names) and try again.")
+        return
+      }
+      self.confirmShuffleAllFanLevels()
+    }
+  }
+
+  private func confirmShuffleAllFanLevels() {
+    do {
+      let input = try shuffleAllRunInput()
+      GameScreen.shared.confirm(
+        "Shuffle all",
+        detail: input.summary + ". Each level appears once before the run ends.",
+        actionTitle: "Start shuffle") { [weak self] in
+          self?.startConfirmedShuffleAllFanLevels(
+            expectedPoolID: input.pool.id)
+        }
+    } catch {
+      GameScreen.shared.message("Shuffle not started", detail: error.localizedDescription)
+    }
+  }
+
+  private func shuffleAllRunInput() throws -> (
+    candidates: [LevelPlaylistEntry],
+    pool: LevelPool,
+    summary: String
+  ) {
+    var candidates: [LevelPlaylistEntry] = []
+    for pack in levelCatalogue.packs where levelBrowserFanPacks[pack.id] != nil {
+      for entry in pack.levels where entry.isAvailable {
+        candidates.append(try playlistEntry(for: entry.identity))
+      }
+    }
+    guard !candidates.isEmpty else { throw LevelPlaylistError.emptyPool }
+    let signature = candidates.sorted {
+      $0.identity.packID + "\u{0}" + $0.identity.levelID
+        < $1.identity.packID + "\u{0}" + $1.identity.levelID
+    }.map {
+      $0.identity.packID + "\u{0}" + $0.identity.levelID + "\u{0}" + $0.sourceRevision
+    }.joined(separator: "\u{1f}")
+    let poolID = "fan-all:" + ArcadeStore.fingerprint(Data(signature.utf8))
+    let packCount = Set(candidates.map(\.identity.packID)).count
+    let summary = "All eligible fan levels - \(candidates.count) levels from \(packCount) packs"
+    return (candidates, try LevelPool(id: poolID, summary: summary), summary)
+  }
+
+  private func startConfirmedShuffleAllFanLevels(expectedPoolID: String) {
+    let packIDs = Set(levelBrowserFanPacks.keys)
+    guard !packIDs.isEmpty else {
+      GameScreen.shared.message("Shuffle not started", detail: "No fan level packs are available.")
+      return
+    }
+    ensureFanPacksResolved(
+      forPackIDs: packIDs,
+      title: "Shuffle all",
+      reloadResolved: true
+    ) { [weak self] failures in
+      guard let self else { return }
+      guard failures.isEmpty else {
+        GameScreen.shared.message(
+          "Shuffle not started",
+          detail: "A fan level pack changed or could not be read.")
+        return
+      }
+      do {
+        let input = try self.shuffleAllRunInput()
+        guard input.pool.id == expectedPoolID else {
+          self.confirmShuffleAllFanLevels()
+          return
+        }
+        let run = try LevelSequenceRun.fullShuffle(
+          from: input.candidates,
+          pool: input.pool,
+          seed: UInt64.random(in: UInt64.min...UInt64.max))
+        self.installActiveSequence(run, in: try self.playlistStore())
+      } catch {
+        GameScreen.shared.message("Shuffle not started", detail: error.localizedDescription)
+      }
+    }
+  }
+
+  private func startActiveSequence() {
+    guard !ArcadeStore.shared.hotSeatIsActive else {
+      GameScreen.shared.message(
+        "Playlist unavailable",
+        detail: "End Hot Seat before starting or resuming this run.")
+      return
+    }
+    do {
+      let store = try playlistStore()
+      guard let run = store.activeRun else { return }
+      switch playlistResolution(for: run.currentEntry) {
+      case .available:
+        sequencePlaylistStore = store
+        startBrowserLevel(run.currentEntry.identity, sequenceRunID: run.id)
+      case .locked:
+        GameScreen.shared.message(
+          "Run paused",
+          detail: "\(run.currentEntry.levelNameSnapshot) is locked for this player.")
+      case .unavailable:
+        presentInvalidSequenceEntry(run, reason: "is not available")
+      case .changed:
+        presentInvalidSequenceEntry(run, reason: "changed after this run was created")
+      case .missing:
+        presentInvalidSequenceEntry(run, reason: "is missing")
+      }
+    } catch {
+      GameScreen.shared.message("Run unavailable", detail: error.localizedDescription)
+    }
+  }
+
+  private func presentInvalidSequenceEntry(_ run: LevelSequenceRun, reason: String) {
+    GameScreen.shared.confirm(
+      "Run paused",
+      detail: "\(run.currentEntry.levelNameSnapshot) \(reason). No replacement was chosen.",
+      actionTitle: "Discard run") { [weak self] in
+        guard let self else { return }
+        do {
+          try self.playlistStore().setActiveRun(nil)
+          self.setSequencePlayingIdentity(nil)
+          self.presentPlaylistLibrary()
+        } catch {
+          GameScreen.shared.message("Run not discarded", detail: error.localizedDescription)
+        }
+      }
+  }
+
+  @discardableResult
+  private func continueActiveSequence(
+    completed identity: LevelCatalogueIdentity,
+    runID: UUID
+  ) -> Bool {
+    do {
+      let store = try sequencePlaylistStore ?? playlistStore()
+      guard let run = store.activeRun,
+            run.id == runID,
+            run.currentEntry.identity == identity else { return false }
+      if try store.advanceActiveRun(), let next = store.activeRun {
+        returnToLibrary()
+        sequencePlaylistStore = store
+        startBrowserLevel(next.currentEntry.identity, sequenceRunID: runID)
+      } else {
+        try store.setActiveRun(nil)
+        returnToLibrary()
+        presentPlaylistLibrary()
+        GameScreen.shared.message(
+          "Run complete",
+          detail: "Finished \(run.entries.count) \(run.entries.count == 1 ? "level" : "levels") from \(run.pool.summary).")
+      }
+      return true
+    } catch {
+      GameScreen.shared.message("Run could not continue", detail: error.localizedDescription)
+      return true
+    }
+  }
+
+  private func continuePlayingSequenceIfNeeded() -> Bool {
+    guard let identity = sequencePlayingIdentity,
+          let run = sequencePlaylistStore?.activeRun,
+          session?.didWin == true else { return false }
+    return continueActiveSequence(completed: identity, runID: run.id)
+  }
+
+  nonisolated private static func prepareClassicBrowserLevel(
+    directory: URL,
+    dataSet: ClassicDataSet,
+    levelIndex: Int,
+    expectedFingerprint: String?
+  ) -> LevelBrowserClassicPreparation {
+    do {
+      try Task.checkCancellation()
+      if let expectedFingerprint,
+         FanLevelLibrary.directoryFingerprint(directory) != expectedFingerprint {
+        return .failed("The imported game data changed. Open Level Select and choose the level again.")
+      }
+      guard dataSet.campaign.levels.indices.contains(levelIndex) else {
+        return .failed("The selected level is no longer available.")
+      }
+      let campaignLevel = dataSet.campaign.levels[levelIndex]
+      let prepared: PreparedClassicArtwork
+      if dataSet.title == .ohYesMoreLemmings {
+        prepared = try readPortArtwork(
+          campaignLevel, dataSet: dataSet, portsRoot: directory)
+      } else {
+        prepared = try readClassicArtwork(
+          directory: directory,
+          styles: dataSet.groundStyles,
+          specialIndices: dataSet.specialIndices)
+      }
+      try Task.checkCancellation()
+      guard let ground = prepared.grounds[campaignLevel.level.groundStyle] else {
+        return .failed("The selected level's graphics style is missing.")
+      }
+      let rendered = try ClassicLevelRenderer.render(
+        campaignLevel.level,
+        groundSet: ground,
+        specialGraphic: prepared.specials[campaignLevel.level.specialStyle])
+      _ = try ClassicDOSSimulation(
+        level: campaignLevel.level,
+        renderedLevel: rendered,
+        mainDATAssets: prepared.assets,
+        mechanics: ClassicDOSMechanics(title: dataSet.title, rank: campaignLevel.rank))
+      try Task.checkCancellation()
+      if let expectedFingerprint,
+         FanLevelLibrary.directoryFingerprint(directory) != expectedFingerprint {
+        return .failed("The imported game data changed. Open Level Select and choose the level again.")
+      }
+      return .ready(prepared)
+    } catch is CancellationError {
+      return .failed("The level load was cancelled.")
+    } catch {
+      return .failed("The selected game data could not load: \(error)")
+    }
+  }
+
+  nonisolated private static func prepareFanBrowserLevel(
+    pack: URL,
+    entry: FanLevelLibrary.Entry,
+    packName: String,
+    expectedFingerprint: String,
+    portsRoot: URL
+  ) -> LevelBrowserFanPreparation {
+    do {
+      try Task.checkCancellation()
+      guard FanLevelLibrary.archiveMatches(pack, fingerprint: expectedFingerprint) else {
+        return .failed("The selected archive changed. Open Level Select and choose the level again.")
+      }
+      let (level, styleName) = try FanLevelLibrary.level(entry, in: pack)
+      let ground = try FanLevelLibrary.groundSet(
+        for: level,
+        styleName: styleName,
+        portsRoot: portsRoot,
+        pack: pack,
+        entry: entry)
+      let special = try FanLevelLibrary.specialGraphic(
+        for: level, entry: entry, pack: pack, portsRoot: portsRoot)
+      let assets = try ClassicMainDATAssets.load(
+        from: portsRoot.appendingPathComponent("lemmings_dos_1991-07-30"))
+      let rendered = try ClassicLevelRenderer.render(
+        level, groundSet: ground, specialGraphic: special)
+      _ = try ClassicDOSSimulation(
+        level: level,
+        renderedLevel: rendered,
+        mainDATAssets: assets,
+        mechanics: ClassicDOSMechanics(title: nil, rank: packName))
+      try Task.checkCancellation()
+      guard FanLevelLibrary.archiveMatches(pack, fingerprint: expectedFingerprint) else {
+        return .failed("The selected archive changed. Open Level Select and choose the level again.")
+      }
+      return .ready(PreparedFanLevel(
+        level: level, ground: ground, special: special, assets: assets))
+    } catch is CancellationError {
+      return .failed("The level load was cancelled.")
+    } catch {
+      return .failed("The selected fan level could not load: \(error)")
+    }
+  }
+
+  private func levelBrowserLaunchLoadingPage(
+    title: String,
+    sequenceRunID: UUID?
+  ) -> (GameMenuPage, UUID) {
+    levelBrowserLaunchTask?.cancel()
+    levelBrowserLaunchTask = nil
+    levelBrowserLaunchID = nil
+    if let oldPage = levelBrowserLaunchPage {
+      levelBrowserLaunchPage = nil
+      GameScreen.shared.dismiss(oldPage)
+    }
+    let page = GameMenuPage(title: title)
+    page.setDetail("Loading the selected level.")
+    page.backTitle = "Cancel"
+    let launchID = UUID()
+    levelBrowserLaunchPage = page
+    levelBrowserLaunchID = launchID
+    page.onBack = { [weak self, weak page] in
+      guard let self, let page, self.levelBrowserLaunchID == launchID,
+            self.levelBrowserLaunchPage === page else { return }
+      self.levelBrowserLaunchTask?.cancel()
+      self.levelBrowserLaunchTask = nil
+      self.levelBrowserLaunchPage = nil
+      self.levelBrowserLaunchID = nil
+      self.clearSequenceLaunch(sequenceRunID)
+      GameScreen.shared.dismiss(page)
+    }
+    GameScreen.shared.present(page, owner: window, onDismiss: { [weak self, weak page] in
+      guard let self, let page, self.levelBrowserLaunchID == launchID,
+            self.levelBrowserLaunchPage === page else { return }
+      self.levelBrowserLaunchTask?.cancel()
+      self.levelBrowserLaunchTask = nil
+      self.levelBrowserLaunchPage = nil
+      self.levelBrowserLaunchID = nil
+      self.clearSequenceLaunch(sequenceRunID)
+    })
+    return (page, launchID)
+  }
+
+  private func startBrowserLevel(
+    _ identity: LevelCatalogueIdentity,
+    sequenceRunID: UUID? = nil
+  ) {
+    if let sequenceRunID {
+      let sequenceStore = sequencePlaylistStore ?? (try? playlistStore())
+      guard let run = sequenceStore?.activeRun,
+            run.id == sequenceRunID,
+            run.currentEntry.identity == identity else {
+        GameScreen.shared.message(
+          "Run unavailable",
+          detail: "The saved sequence changed before this level started.")
+        return
+      }
+    }
+    guard let entry = levelCatalogue.resolve(identity),
+          let route = levelBrowserRoutes[identity] else {
+      GameScreen.shared.message("Level unavailable", detail: "The selected catalogue entry changed. Open Level Select and choose it again.")
+      return
+    }
+    let canStart = entry.isAvailable || {
+      guard settings.unlockAllClassicLevels,
+            case .classic = route else { return false }
+      return true
+    }()
+    guard canStart else {
+      GameScreen.shared.message(entry.levelName, detail: "Complete the preceding level or choose an available level.")
+      return
+    }
+    switch route {
+    case let .classic(
+      dataSetDirectory, browserDataSet, levelIndex, _, sourceRevision):
+      guard settings.unlockAllClassicLevels
+              || classicBrowserLevelIsUnlocked(
+                dataSet: browserDataSet,
+                directory: dataSetDirectory,
+                levelIndex: levelIndex) else {
+        GameScreen.shared.message(entry.levelName,
+          detail: "Complete the preceding level, or enable Unlock all Classic levels in Settings.")
+        return
+      }
+      guard let dataSetIndex = dataSets.firstIndex(where: {
+              $0.directory.standardizedFileURL == dataSetDirectory.standardizedFileURL
+            }),
+            browserDataSet.campaign.levels.indices.contains(levelIndex) else {
+        GameScreen.shared.message(entry.levelName, detail: "The selected game data is no longer available.")
+        return
+      }
+      guard beginSequenceLaunch(runID: sequenceRunID, identity: identity) else { return }
+      let (_, launchID) = levelBrowserLaunchLoadingPage(
+        title: entry.levelName,
+        sequenceRunID: sequenceRunID)
+      levelBrowserLaunchTask = Task.detached(priority: .userInitiated) { [weak self] in
+        let preparation = Self.prepareClassicBrowserLevel(
+          directory: dataSetDirectory,
+          dataSet: browserDataSet,
+          levelIndex: levelIndex,
+          expectedFingerprint: sourceRevision)
+        guard !Task.isCancelled else { return }
+        await MainActor.run {
+          guard let self, self.levelBrowserLaunchID == launchID,
+                let loadingPage = self.levelBrowserLaunchPage,
+                GameScreen.shared.controllerPage(in: self.window) === loadingPage,
+                self.window.attachedSheet == nil else { return }
+          self.levelBrowserLaunchTask = nil
+          self.levelBrowserLaunchID = nil
+          self.levelBrowserLaunchPage = nil
+          GameScreen.shared.dismiss(loadingPage)
+          switch preparation {
+          case let .failed(message):
+            self.clearSequenceLaunch(sequenceRunID)
+            GameScreen.shared.message(entry.levelName, detail: message)
+          case let .ready(prepared):
+            self.commitClassicBrowserLevel(
+              identity: identity,
+              entry: entry,
+              dataSetDirectory: dataSetDirectory,
+              browserDataSet: browserDataSet,
+              dataSetIndex: dataSetIndex,
+              levelIndex: levelIndex,
+              preparedArtwork: prepared,
+              sequenceRunID: sequenceRunID)
+          }
+        }
+      }
+    case let .fan(pack, fanEntry, archiveFingerprint):
+      guard let portsRoot = Bundle.main.resourceURL?.appendingPathComponent("Ports") else {
+        GameScreen.shared.message(entry.levelName,
+          detail: "The Classic graphics library is not available.")
+        return
+      }
+      guard beginSequenceLaunch(runID: sequenceRunID, identity: identity) else { return }
+      let (_, launchID) = levelBrowserLaunchLoadingPage(
+        title: entry.levelName,
+        sequenceRunID: sequenceRunID)
+      levelBrowserLaunchTask = Task.detached(priority: .userInitiated) { [weak self] in
+        let preparation = Self.prepareFanBrowserLevel(
+          pack: pack,
+          entry: fanEntry,
+          packName: entry.packName,
+          expectedFingerprint: archiveFingerprint,
+          portsRoot: portsRoot)
+        guard !Task.isCancelled else { return }
+        await MainActor.run {
+          guard let self, self.levelBrowserLaunchID == launchID,
+                let loadingPage = self.levelBrowserLaunchPage,
+                GameScreen.shared.controllerPage(in: self.window) === loadingPage,
+                self.window.attachedSheet == nil else { return }
+          self.levelBrowserLaunchTask = nil
+          self.levelBrowserLaunchID = nil
+          self.levelBrowserLaunchPage = nil
+          GameScreen.shared.dismiss(loadingPage)
+          switch preparation {
+          case let .failed(message):
+            self.clearSequenceLaunch(sequenceRunID)
+            GameScreen.shared.message(entry.levelName, detail: message)
+          case let .ready(prepared):
+            self.commitFanBrowserLevel(
+              identity: identity,
+              entry: entry,
+              pack: pack,
+              fanEntry: fanEntry,
+              archiveFingerprint: archiveFingerprint,
+              prepared: prepared,
+              sequenceRunID: sequenceRunID)
+          }
+        }
+      }
+    case let .lemmings2(root, selection, expectedLevelID, sourceRevision):
+      guard beginSequenceLaunch(runID: sequenceRunID, identity: identity) else { return }
+      saveRunCheckpoint(immediately: true)
+      if openNativeL2(
+        root,
+        selection: selection,
+        expectedLevelID: expectedLevelID,
+        expectedSourceRevision: sourceRevision,
+        sequenceRunID: sequenceRunID,
+        sequenceIdentity: sequenceRunID == nil ? nil : identity) {
+        if sequenceRunID == nil {
+          setSequencePlayingIdentity(nil)
+          sequencePlaylistStore = nil
+        } else { clearSequenceLaunch(sequenceRunID) }
+        launchMode = .singleTitle
+      } else { clearSequenceLaunch(sequenceRunID) }
+    case let .lemmings3(root, selection, expectedLevelID, sourceRevision):
+      guard beginSequenceLaunch(runID: sequenceRunID, identity: identity) else { return }
+      saveRunCheckpoint(immediately: true)
+      if openNativeL3(
+        root,
+        selection: selection,
+        expectedLevelID: expectedLevelID,
+        expectedSourceRevision: sourceRevision,
+        sequenceRunID: sequenceRunID,
+        sequenceIdentity: sequenceRunID == nil ? nil : identity) {
+        if sequenceRunID == nil {
+          setSequencePlayingIdentity(nil)
+          sequencePlaylistStore = nil
+        } else { clearSequenceLaunch(sequenceRunID) }
+        launchMode = .singleTitle
+      } else { clearSequenceLaunch(sequenceRunID) }
+    }
+  }
+
+  private func classicBrowserLevelIsUnlocked(
+    dataSet: ClassicDataSet,
+    directory: URL,
+    levelIndex: Int
+  ) -> Bool {
+    var browserFlow = ClassicGameFlow(campaign: dataSet.campaign)
+    if let data = savedClassicProgressData(for: (set: dataSet, directory: directory)),
+       let saved = try? JSONDecoder().decode(ClassicGameFlow.Progress.self, from: data) {
+      browserFlow.restore(dataSet.migrateProgress(saved))
+    }
+    return browserFlow.isLevelUnlocked(levelIndex)
+  }
+
+  private func commitClassicBrowserLevel(
+    identity: LevelCatalogueIdentity,
+    entry: LevelCatalogueEntry,
+    dataSetDirectory: URL,
+    browserDataSet: ClassicDataSet,
+    dataSetIndex: Int,
+    levelIndex: Int,
+    preparedArtwork: PreparedClassicArtwork,
+    sequenceRunID: UUID?
+  ) {
+    guard levelCatalogue.resolve(identity) == entry,
+          dataSets.indices.contains(dataSetIndex),
+          dataSets[dataSetIndex].directory.standardizedFileURL
+            == dataSetDirectory.standardizedFileURL,
+          browserDataSet.campaign.levels.indices.contains(levelIndex) else {
+      clearSequenceLaunch(sequenceRunID)
+      GameScreen.shared.message(entry.levelName,
+        detail: "The selected game data is no longer available.")
+      return
+    }
+    guard sequenceLaunchCanCommit(runID: sequenceRunID, identity: identity) else { return }
+    saveRunCheckpoint(immediately: true)
+    if sequelIsActive || fanPlaying || fanScreen != .off { returnToLibrary() }
+    else { GameScreen.shared.dismissAll() }
+    if sequenceRunID == nil {
+      setSequencePlayingIdentity(nil)
+      sequencePlaylistStore = nil
+    }
+    gamePicker.selectItem(at: dataSetIndex)
+    do {
+      try applyDataSetSelection(
+        at: dataSetIndex,
+        using: (set: browserDataSet, directory: dataSetDirectory),
+        preparedArtwork: preparedArtwork)
+    } catch {
+      clearSequenceLaunch(sequenceRunID)
+      GameScreen.shared.message(entry.levelName,
+        detail: "The selected game data could not load: \(error)")
+      return
+    }
+    activeTitle = browserDataSet.title
+    launchMode = .singleTitle
+    picker.selectItem(at: levelIndex)
+    if let sequenceRunID {
+      setSequencePlayingIdentity(identity)
+      clearSequenceLaunch(sequenceRunID)
+    }
+    levelChanged()
+  }
+
+  private func commitFanBrowserLevel(
+    identity: LevelCatalogueIdentity,
+    entry: LevelCatalogueEntry,
+    pack: URL,
+    fanEntry: FanLevelLibrary.Entry,
+    archiveFingerprint: String,
+    prepared: PreparedFanLevel,
+    sequenceRunID: UUID?
+  ) {
+    guard levelCatalogue.resolve(identity) == entry,
+          case let .fan(currentPack, currentEntry, currentFingerprint)? = levelBrowserRoutes[identity],
+          currentPack.standardizedFileURL == pack.standardizedFileURL,
+          currentEntry.file == fanEntry.file,
+          currentEntry.section == fanEntry.section,
+          currentFingerprint == archiveFingerprint else {
+      clearSequenceLaunch(sequenceRunID)
+      GameScreen.shared.message(entry.levelName,
+        detail: "The selected catalogue entry changed. Open Level Select and choose it again.")
+      return
+    }
+    guard sequenceLaunchCanCommit(runID: sequenceRunID, identity: identity) else { return }
+    saveRunCheckpoint(immediately: true)
+    let previousLaunchMode = launchMode
+    returnToLibrary()
+    if sequenceRunID == nil {
+      setSequencePlayingIdentity(nil)
+      sequencePlaylistStore = nil
+    }
+    fanPack = pack
+    fanEntries = levelBrowserFanEntries[identity.packID] ?? [fanEntry]
+    fanChoice = (fanEntries.firstIndex {
+      $0.file == fanEntry.file && $0.section == fanEntry.section
+    } ?? 0) + 2
+    fanScreen = .levels
+    launchMode = .singleTitle
+    if let sequenceRunID {
+      setSequencePlayingIdentity(identity)
+      clearSequenceLaunch(sequenceRunID)
+    }
+    startFanRun([fanEntry], prepared: prepared)
+    if !fanPlaying {
+      setSequencePlayingIdentity(nil)
+      launchMode = previousLaunchMode
+    }
+  }
+
   // MARK: - Unofficial levels
 
-  /// The front screen's fan level row.
+  /// The home screen's fan content row.
   ///
   /// The total counts only the packs measured so far, because measuring means
   /// opening every archive. While that is still running the row says so rather
   /// than showing a total that keeps changing under the player.
-  private func fanLibraryRow() -> String {
+  private func fanHomeRow() -> String {
     let packs = fanPacks.isEmpty ? FanLevelLibrary.packs() : fanPacks
-    guard !packs.isEmpty else { return "FAN LEVELS  — NO PACKS" }
-    let passed = FanLevelLibrary.Progress.passedTotal
-    if FanLevelLibrary.Progress.isComplete(for: packs) {
-      return "FAN LEVELS  \(passed)/\(FanLevelLibrary.Progress.total(for: packs))"
+    let imported = dataSets.filter {
+      $0.set.kind == .scanned && $0.set.title != .ohYesMoreLemmings
+    }.reduce(
+      into: (passed: 0, total: 0)
+    ) { result, entry in
+      var savedFlow = ClassicGameFlow(campaign: entry.set.campaign)
+      if let data = savedClassicProgressData(for: entry),
+         let saved = try? JSONDecoder().decode(
+          ClassicGameFlow.Progress.self, from: data) {
+        savedFlow.restore(entry.set.migrateProgress(saved))
+      }
+      result.total += entry.set.campaign.levels.count
+      result.passed += savedFlow.ranks.reduce(0) {
+        $0 + savedFlow.passedCount(inRank: $1.name)
+      }
     }
-    return "FAN LEVELS  \(passed)/\(FanLevelLibrary.Progress.total(for: packs))  — COUNTING"
+    guard !packs.isEmpty || imported.total > 0 else {
+      return "FAN LEMMINGS  — NO PACKS"
+    }
+    let passed = FanLevelLibrary.Progress.passedCount(for: packs) + imported.passed
+    let total = FanLevelLibrary.Progress.total(for: packs) + imported.total
+    if FanLevelLibrary.Progress.isComplete(for: packs) {
+      return "FAN LEMMINGS  \(passed)/\(total)"
+    }
+    return "FAN LEMMINGS  \(passed)/\(total)  — COUNTING"
+  }
+
+  private func homeContentRow(_ family: HomeContentFamily) -> String {
+    if family == .fan { return fanHomeRow() }
+    let installed = library.entries.filter {
+      family.titles.contains($0.title) && $0.available
+    }
+    guard !installed.isEmpty else {
+      return family.displayName.uppercased() + "  — NO DATA"
+    }
+    let passed = installed.reduce(0) { $0 + $1.passed }
+    let total = installed.reduce(0) { $0 + $1.total }
+    let preview = family == .lemmings2 || family == .lemmings3 ? "  — PREVIEW" : ""
+    return "\(family.displayName.uppercased())  \(passed)/\(total)\(preview)"
+  }
+
+  private func homeMenuItems() -> [HomeMenuItem] {
+    var items: [HomeMenuItem] = []
+    if menuRecovery != nil {
+      let initials = menuRecovery.flatMap {
+        ArcadeStore.shared.records.profile($0.profileID)?.initials
+      } ?? "LEM"
+      items.append(HomeMenuItem(title: "RESUME - " + initials, action: .resume))
+    }
+    items.append(HomeMenuItem(
+      title: "\(Self.allLemmingsMenuTitle)  \(library.passed)/\(library.total)",
+      action: .fullQuest))
+    items += HomeContentFamily.allCases.map {
+      HomeMenuItem(title: homeContentRow($0), action: .browse($0))
+    }
+    return items
   }
 
   /// Measures any unmeasured packs, refreshing the front screen as it goes.
@@ -1614,6 +4658,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   /// Shows the fan level packs as a menu screen.
   @objc private func showFanLevels() {
+    guard allowNavigationAwayFromSequence() else { return }
     fanPacks = FanLevelLibrary.packs()
     fanChoice = 0
     fanScreen = .packs
@@ -1622,6 +4667,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   /// Adds an optional local folder alongside the automatic collection.
   @objc private func chooseFanFolder() {
+    guard allowNavigationAwayFromSequence() else { return }
     Task { @MainActor in
       let panel = NSOpenPanel()
       panel.canChooseFiles = false
@@ -1635,6 +4681,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   /// Draws whichever fan screen is showing.
   private func renderFanScreen() {
+    playfield.overlayShowsSettingsButton = false
     phase = .briefing
     playfield.phase = .briefing
     playfield.overlayShowsLemmings = true
@@ -1722,16 +4769,19 @@ let achievementProgressKey = "ClassicAchievementProgress"
   /// Starts a run of one or more fan levels.
   ///
   /// Checkpoints retain the chosen order. Completed levels keep their pack progress.
-  private func startFanRun(_ entries: [FanLevelLibrary.Entry]) {
+  private func startFanRun(
+    _ entries: [FanLevelLibrary.Entry],
+    prepared: PreparedFanLevel? = nil
+  ) {
     guard !entries.isEmpty else { return }
     fanQueue = entries
     fanQueueIndex = 0
     fanScreen = .off
-    loadCurrentFanLevel()
+    loadCurrentFanLevel(prepared: prepared)
   }
 
   /// Builds the level the run is up to and shows its briefing.
-  private func loadCurrentFanLevel() {
+  private func loadCurrentFanLevel(prepared: PreparedFanLevel? = nil) {
     guard let pack = fanPack, fanQueue.indices.contains(fanQueueIndex) else {
       endFanRun()
       return
@@ -1739,17 +4789,38 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let entry = fanQueue[fanQueueIndex]
     do {
       if !restoringCheckpoint { fanPackGraphics = true; fanTextSteel = true; fanLocalStyles = true; fanHolidayStyles = true }
-      let (level, styleName) = try FanLevelLibrary.level(entry, in: pack, includeTextSteel: fanTextSteel)
-      guard let ports = Bundle.main.resourceURL?.appendingPathComponent("Ports") else { return }
-      let ground = try FanLevelLibrary.groundSet(for: level, styleName: styleName, portsRoot: ports, pack: fanPackGraphics ? pack : nil, entry: entry, useLocalStyles: fanLocalStyles, useHolidayStyles: fanHolidayStyles)
-      let directory = ports.appendingPathComponent("lemmings_dos_1991-07-30")
+      let level: ClassicLevel
+      let ground: ClassicGroundSet
       let special: ClassicSpecialGraphic?
-      if fanPackGraphics {
-        special = try FanLevelLibrary.specialGraphic(for: level, entry: entry, pack: pack, portsRoot: ports)
+      let fanAssets: ClassicMainDATAssets
+      if let prepared {
+        level = prepared.level
+        ground = prepared.ground
+        special = prepared.special
+        fanAssets = prepared.assets
       } else {
-        special = level.specialStyle == 0 ? nil : try ClassicSpecialGraphic.load(index: level.specialStyle - 1, from: directory)
+        let loaded = try FanLevelLibrary.level(
+          entry, in: pack, includeTextSteel: fanTextSteel)
+        level = loaded.0
+        guard let ports = Bundle.main.resourceURL?.appendingPathComponent("Ports") else { return }
+        ground = try FanLevelLibrary.groundSet(
+          for: level,
+          styleName: loaded.1,
+          portsRoot: ports,
+          pack: fanPackGraphics ? pack : nil,
+          entry: entry,
+          useLocalStyles: fanLocalStyles,
+          useHolidayStyles: fanHolidayStyles)
+        let directory = ports.appendingPathComponent("lemmings_dos_1991-07-30")
+        if fanPackGraphics {
+          special = try FanLevelLibrary.specialGraphic(
+            for: level, entry: entry, pack: pack, portsRoot: ports)
+        } else {
+          special = level.specialStyle == 0 ? nil : try ClassicSpecialGraphic.load(
+            index: level.specialStyle - 1, from: directory)
+        }
+        fanAssets = try ClassicMainDATAssets.load(from: directory)
       }
-      let fanAssets = try ClassicMainDATAssets.load(from: directory)
       let packName = FanLevelLibrary.displayName(of: pack)
       fanPlaying = true
       guard buildLevel(
@@ -1773,6 +4844,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   /// because that reads the level's position in a run that does not exist.
   private func showFanBriefing(title: String, pack: String) {
     guard let session else { return }
+    playfield.overlayShowsSettingsButton = false
     phase = .briefing
     playfield.phase = .briefing
     playfield.overlayShowsLemmings = false
@@ -1803,16 +4875,22 @@ let achievementProgressKey = "ClassicAchievementProgress"
   /// Shows how a fan level ended, and what happens next.
   private func showFanResults() {
     guard let session else { return }
+    playfield.overlayShowsSettingsButton = false
     panel.isMenuMode = false
     let passed = session.saved >= session.required
-    if passed, let pack = fanPack, fanQueue.indices.contains(fanQueueIndex) {
+    if passed, sequencePlayingIdentity == nil,
+       let pack = fanPack, fanQueue.indices.contains(fanQueueIndex) {
       FanLevelLibrary.Progress.record(pack: pack, label: fanQueue[fanQueueIndex].label)
     }
     phase = .results
     playfield.phase = .results
     var lines = ["SAVED \(session.saved) OF \(session.required)"]
     let more = fanQueueIndex + 1 < fanQueue.count
-    lines.append(more ? "ENTER FOR THE NEXT LEVEL" : "ENTER TO GO BACK")
+    if sequencePlayingIdentity != nil, !passed {
+      lines.append("ENTER TO RETRY LEVEL")
+    } else {
+      lines.append(more ? "ENTER FOR THE NEXT LEVEL" : "ENTER TO GO BACK")
+    }
     playfield.overlayTitle = passed ? "LEVEL COMPLETE" : "NOT THIS TIME"
     playfield.overlayLines = lines
     playfield.overlayHighlight = nil
@@ -1840,6 +4918,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
       playfield.needsDisplay = true
       panel.needsDisplay = true
     case .results:
+      if sequencePlayingIdentity != nil, session?.didWin != true {
+        retry()
+        return true
+      }
+      if continuePlayingSequenceIfNeeded() { return true }
       if fanQueueIndex + 1 < fanQueue.count {
         fanQueueIndex += 1
         loadCurrentFanLevel()
@@ -1854,6 +4937,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   /// Leaves a fan run and returns to the pack's level list.
   private func endFanRun() {
+    if sequencePlayingIdentity != nil {
+      returnToLibrary()
+      return
+    }
     saveRunCheckpoint(immediately: true)
     fanPlaying = false
     panel.isMenuMode = true
@@ -1885,6 +4972,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   @objc private func chooseNxlvLevel() {
+    guard allowNavigationAwayFromSequence() else { return }
     Task { @MainActor in
       let openPanel = NSOpenPanel()
       openPanel.canChooseFiles = true
@@ -1972,11 +5060,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
     checkpointFan = fanPlaying && new is ClassicSession && fanQueue.indices.contains(fanQueueIndex)
       ? FanRunRecovery(queue: fanQueue.map { .init(file: $0.file, section: $0.section, label: $0.label) }, index: fanQueueIndex,
           baseDataSetID: dataSets.indices.contains(gamePicker.indexOfSelectedItem)
-            ? dataSets[gamePicker.indexOfSelectedItem].set.identifierKey : nil) : nil
+            ? dataSetID(dataSets[gamePicker.indexOfSelectedItem]) : nil) : nil
     checkpointSourceURL = checkpointFan != nil ? fanPack : new is NeoLemmixSession ? currentNxlvURL : nil
     checkpointLocation = checkpointFan != nil ? ("fan-classic", fanQueueIndex)
       : !fanPlaying && currentNxlvURL == nil && dataSets.indices.contains(gamePicker.indexOfSelectedItem)
-        ? (dataSets[gamePicker.indexOfSelectedItem].set.identifierKey, picker.indexOfSelectedItem) : nil
+        ? (dataSetID(dataSets[gamePicker.indexOfSelectedItem]), picker.indexOfSelectedItem) : nil
     hintMap = playfield.levelImage
     let previousAttemptID = arcadeRunID
     arcadeRunID = UUID(); arcadeProfileID = ArcadeStore.shared.playingProfileID; arcadeHotSeatID = ArcadeStore.shared.hotSeatID; arcadeReport = nil
@@ -1985,7 +5073,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let gameID = fanPlaying || currentNxlvURL != nil ? "fan" : activeTitle?.rawValue ?? "lemmings"
     let packID = fanPlaying ? (fanPack?.lastPathComponent ?? "fan")
       : (dataSets.indices.contains(gamePicker.indexOfSelectedItem)
-        ? dataSets[gamePicker.indexOfSelectedItem].set.identifierKey : gameID)
+        ? dataSetID(dataSets[gamePicker.indexOfSelectedItem]) : gameID)
     let stableID: String
     if fanPlaying, fanQueue.indices.contains(fanQueueIndex) {
       let entry = fanQueue[fanQueueIndex]
@@ -2000,7 +5088,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
         game: fanPlaying || currentNxlvURL != nil ? "Fan levels" : activeTitle?.displayName ?? campaign?.name ?? "Lemmings",
         rules: rules, total: new.total, required: new.required, conditions: conditions)
     if !restoringCheckpoint {
-      ArcadeStore.shared.beginAttempt(id: arcadeRunID, profileID: arcadeProfileID, level: arcadeLevel!, previousID: previousAttemptID)
+      if sequencePlayingIdentity == nil {
+        ArcadeStore.shared.beginAttempt(
+          id: arcadeRunID,
+          profileID: arcadeProfileID,
+          level: arcadeLevel!,
+          previousID: previousAttemptID)
+      }
       runMovie.begin(ticksPerSecond: Double(new.ticksPerSecond), title: artworkLevel?.title ?? "Lemmings")
     }
     runMovie.onWillReview = { [weak self] in
@@ -2044,11 +5138,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   /// Saves progress for the game currently loaded.
   private func saveProgress() {
+    guard !sequenceIsActive else { return }
     guard let flow, dataSets.indices.contains(gamePicker.indexOfSelectedItem) else { return }
-    let key = ArcadeStore.shared.progressKey("\(flowProgressKey).\(dataSets[gamePicker.indexOfSelectedItem].set.identifierKey)")
+    let key = ArcadeStore.shared.progressKey(
+      "\(flowProgressKey).\(dataSetID(dataSets[gamePicker.indexOfSelectedItem]))")
     if let data = try? JSONEncoder().encode(flow.progress) {
       UserDefaults.standard.set(data, forKey: key)
     }
+    refreshClassicLevelPickerAvailability()
     rebuildLibrary()
   }
 
@@ -2056,6 +5153,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func renderScreen() {
     defer { applyDisplayMode() }
     guard let flow else { return }
+    playfield.overlayShowsSettingsButton = false
     if !sequelIsActive {
       window.title = flow.screen == .title ? "Ultimate Lemmings"
         : activeTitle?.displayName ?? campaign?.name ?? "Lemmings"
@@ -2077,23 +5175,17 @@ let achievementProgressKey = "ClassicAchievementProgress"
         renderFanScreen()
         return
       }
+      playfield.overlayShowsSettingsButton = true
       setStatus("")
       phase = .briefing
       playfield.phase = .briefing
       playfield.overlayShowsLemmings = true
       playfield.overlayTitle = "LEMMINGS"
-      playfield.overlayLines = ["FULL QUEST  \(library.passed)/\(library.total)"] + library.entries.map { entry in
-        let progress = entry.available ? "  \(entry.passed)/\(entry.total)" : ""
-        let detail = entry.detail.isEmpty ? "" : "  — \(entry.detail)"
-        return entry.title.displayName + progress + detail
-      }
-      playfield.overlayLines.append(fanLibraryRow())
       menuRecovery = try? recoveryStore.latest(profileID: ArcadeStore.shared.playingProfileID, hotSeatID: ArcadeStore.shared.hotSeatID)
-      if let checkpoint = menuRecovery {
-        let initials = ArcadeStore.shared.records.profile(checkpoint.profileID)?.initials ?? "LEM"
-        playfield.overlayLines.insert("RESUME - " + initials, at: 0)
-      }
-      playfield.overlayHighlight = min(launchChoice, playfield.overlayLines.count - 1)
+      let homeItems = homeMenuItems()
+      playfield.overlayLines = homeItems.map(\.title)
+      launchChoice = max(0, min(launchChoice, homeItems.count - 1))
+      playfield.overlayHighlight = launchChoice
       playfield.overlayFooter = nil
       // A hot seat names everyone in turn order, so the menu shows who is playing
       // rather than only whose campaign it is.
@@ -2196,7 +5288,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func retryPreviousHandoverLevel() {
     guard phase == .briefing, let retry = availableHandoverRetry,
-      let dataSet = dataSets.firstIndex(where: { $0.set.identifierKey == retry.dataSetID }),
+      let dataSet = dataSetIndex(matching: retry.dataSetID),
       dataSets[dataSet].set.campaign.levels.indices.contains(retry.levelIndex) else { return }
     handoverRetry = nil
     if gamePicker.indexOfSelectedItem != dataSet {
@@ -2253,29 +5345,25 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard var current = flow else { return }
     switch current.screen {
     case .title:
-      if let checkpoint = menuRecovery, launchChoice == 0 {
-        restoreRun(checkpoint)
+      if sequenceIsActive {
+        returnToLibrary()
         return
       }
-      let choice = launchChoice - (menuRecovery == nil ? 0 : 1)
-      if choice == library.entries.count + 1 {
-        showFanLevels()
-        return
-      }
-      if choice == 0 {
+      let homeItems = homeMenuItems()
+      guard homeItems.indices.contains(launchChoice) else { return }
+      switch homeItems[launchChoice].action {
+      case .resume:
+        if let checkpoint = menuRecovery { restoreRun(checkpoint) }
+      case .fullQuest:
         launchMode = .quest
         if let title = library.questStart { launchTitle(title) }
-      } else if library.entries.indices.contains(choice - 1) {
-        let entry = library.entries[choice - 1]
-        guard entry.available else {
-          GameScreen.shared.message(entry.title.displayName, detail: "This release is archived in the bundle but has no playable data import yet.")
-          return
-        }
-        launchMode = .singleTitle
-        launchTitle(entry.title)
+      case let .browse(family):
+        openLevelBrowser(family: family)
       }
       return
-    case .rankSelect: current.selectRank(rankChoice)
+    case .rankSelect:
+      classicSelectionRecordsCampaignProgress = true
+      current.selectRank(rankChoice)
     case .briefing:
       handoverRetry = nil
       current.beginPlaying()
@@ -2284,15 +5372,23 @@ let achievementProgressKey = "ClassicAchievementProgress"
       effects.play(.levelStart)
       return
     case let .results(_, saved, required, _):
+      if sequencePlayingIdentity != nil, saved < required {
+        retry()
+        return
+      }
+      if continuePlayingSequenceIfNeeded() { return }
       handoverRetry = nil
       if saved >= required, let hotSeatID = ArcadeStore.shared.hotSeatID, ArcadeStore.shared.hotSeatIsActive,
         let levelIndex = current.currentLevelIndex,
         dataSets.indices.contains(gamePicker.indexOfSelectedItem) {
         handoverRetry = HandoverRetry(hotSeatID: hotSeatID, profileID: ArcadeStore.shared.playingProfileID,
-          dataSetID: dataSets[gamePicker.indexOfSelectedItem].set.identifierKey, levelIndex: levelIndex)
+          dataSetID: dataSetID(dataSets[gamePicker.indexOfSelectedItem]), levelIndex: levelIndex)
       }
-      current.acknowledgeResults()
-    case .rankComplete: current.acknowledgeRankComplete()
+      current.acknowledgeResults(
+        recordsCampaignProgress: classicSelectionRecordsCampaignProgress)
+    case .rankComplete:
+      current.acknowledgeRankComplete(
+        recordsCampaignProgress: classicSelectionRecordsCampaignProgress)
     case .gameComplete:
       if advanceToNextTitle() { return }
       returnToLibrary()
@@ -2323,8 +5419,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if fanPlaying { return }
     if moveFanChoice(delta) { return }
     if let flow, flow.screen == .title {
-      // One row for Full Quest, one per release, and one for the fan packs.
-      let count = library.entries.count + 2 + (menuRecovery == nil ? 0 : 1)
+      let count = homeMenuItems().count
       guard count > 0 else { return }
       launchChoice = (launchChoice + delta + count) % count
       renderScreen()
@@ -2423,6 +5518,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func step(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
+    updateFailureMood()
     refreshTurnDisplay()
     refreshProgressText()
     // Limit catch-up after sleep or a long modal interaction.
@@ -2485,6 +5581,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let previousExplosions = settings.cinematicExplosionsEnabled
         ? Set(session.lemmings.filter { $0.pose == .explosion }.map(\.id)) : []
       session.tick()
+      updateFailureMood()
       playfield.updateSpeedTrails()
       countdownWarning.reset(seconds: before)
       if countdownWarning.update(seconds: session.remainingSeconds) { effects.play(.builderWarning) }
@@ -2569,10 +5666,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func finishSessionIfNeeded() {
     guard phase == .playing, let session, session.isComplete else { return }
+    let recordsPlayerArtifacts = sequencePlayingIdentity == nil
     runMovie.finish()
     do { try recoveryStore.clear(arcadeRunID) } catch { setStatus("Could not clear completed checkpoint: " + error.localizedDescription) }
     if let arcadeLevel {
-      if let classic = session as? ClassicSession, classic.didWin {
+      if recordsPlayerArtifacts,
+         let classic = session as? ClassicSession, classic.didWin {
         let index = picker.indexOfSelectedItem
         let entry = !fanPlaying && currentNxlvURL == nil && campaign?.levels.indices.contains(index) == true
           ? campaign?.levels[index] : nil
@@ -2581,11 +5680,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
             self?.setStatus("Could not save the input route: " + error)
           }
       }
-      arcadeReport = ArcadeStore.shared.record(ArcadeRun(id: arcadeRunID, profileID: arcadeProfileID,
+      let run = ArcadeRun(id: arcadeRunID, profileID: arcadeProfileID,
         level: arcadeLevel, saved: session.saved, didWin: session.didWin, skills: session.skillAssignments,
         seconds: Double(session.currentTick) / Double(session.ticksPerSecond), assisted: session.usedRewind,
-        telemetry: TrolleyCapture.telemetry(session)))
-      if let report = arcadeReport { runMovie.preserveRecord(report) }
+        telemetry: TrolleyCapture.telemetry(session))
+      arcadeReport = recordsPlayerArtifacts
+        ? ArcadeStore.shared.record(run)
+        : ArcadeStore.shared.previewReport(for: run)
+      if recordsPlayerArtifacts, let report = arcadeReport {
+        runMovie.preserveRecord(report)
+      }
     }
     defer { presentArcadeResult() }
     if fanPlaying {
@@ -2596,25 +5700,37 @@ let achievementProgressKey = "ClassicAchievementProgress"
       showFanResults()
       return
     }
-    recordCompletion(session)
+    let recordsCampaignProgress = recordsPlayerArtifacts
+      && classicSelectionRecordsCampaignProgress
+    if recordsCampaignProgress { recordCompletion(session) }
     if var current = flow {
       current.finishLevel(
-        saved: session.saved, required: session.required, total: session.total)
+        saved: session.saved,
+        required: session.required,
+        total: session.total,
+        recordsCampaignProgress: recordsCampaignProgress)
       flow = current
-      saveProgress()
+      if recordsCampaignProgress { saveProgress() }
       renderScreen()
     }
   }
 
   private func updatePointerCapture() {
     guard let root = window.contentView else { pointerCapture.reset(); return }
-    let active = settings.confinePointer && !playfield.usesControllerPointer && phase == .playing && !isPaused && session?.isComplete == false
+    let active = settings.confinePointer && !playfield.usesControllerPointer && phase == .playing && !isPaused
+      && session?.isComplete == false && !GameScreen.shared.isPresented
     guard let point = pointerCapture.update(in: root, active: active) else { return }
     if tubeIsActive {
-      if let source = crtView.sourcePoint(from: crtView.convert(point, from: root), clampingToImage: true) {
+      let viewPoint = crtView.convert(point, from: root)
+      crtView.updateSystemCursor(at: viewPoint)
+      if let source = crtView.sourcePoint(from: viewPoint, clampingToImage: true) {
         tubeMove(source)
       }
     } else {
+      let gameplayRect = playfield.phase == .playing
+        ? root.convert(playfield.bounds, from: playfield)
+        : nil
+      GameCursor.update(at: point, hidingInside: gameplayRect)
       let local = playfield.convert(point, from: root)
       if playfield.bounds.contains(local) { playfield.handleMove(to: local) }
       else { playfield.clearPointer() }
@@ -2680,6 +5796,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     case .rateUp: session.adjustRate(by: 1)
     case let .skill(index):
       panel.selectedSkillIndex = index
+      // The gameplay reticle owns the selected-skill artwork. Redraw it as
+      // soon as the panel selection changes, including while the run is paused.
+      playfield.needsDisplay = true
       panel.needsDisplay = true
     case .pause: togglePause()
     case .fastForward: toggleFastForward()
@@ -2726,6 +5845,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       dj.suspendOutput()
       effects.suspendOutput()
     } else {
+      rewindOriginTick = nil
+      playfield.endRewindCue()
       do {
         try music.resumeOutput()
         soundtrack.resumeOutput()
@@ -2759,6 +5880,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   // MARK: - Music
 
   @objc private func chooseMusic() {
+    cancelLevelSelectionLoading()
     Task { @MainActor in
       guard let url = await pickDirectory("Choose a folder of ProTracker .mod files.") else { return }
       UserDefaults.standard.set(url.path, forKey: musicPathKey)
@@ -2772,6 +5894,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   @objc private func chooseSounds() {
+    cancelLevelSelectionLoading()
     Task { @MainActor in
       let openPanel = NSOpenPanel()
       openPanel.canChooseFiles = true
@@ -2958,6 +6081,22 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func presentArcadeResult() {
     guard arcadeAutoPresent, let arcadeReport else { return }
+    if sequencePlayingIdentity != nil,
+       let run = sequencePlaylistStore?.activeRun {
+      let title = session?.didWin == true
+        ? (run.currentIndex + 1 < run.entries.count ? "Next level" : "Finish run")
+        : "Retry level"
+      ArcadeWindow.shared.showResult(
+        arcadeReport,
+        owner: window,
+        retry: { [weak self] in self?.retry() },
+        next: { [weak self] in self?.advancePhase() },
+        replay: { [weak self] save in self?.runMovie.review(save: save) },
+        continueTitle: title,
+        background: playfield.levelImage,
+        rewardVolume: effects.muted ? 0 : effects.volume)
+      return
+    }
     let hasNext = fanPlaying ? fanQueueIndex + 1 < fanQueue.count
       : flow.map { $0.currentNumber < ($0.currentRank?.levelIndices.count ?? 0) } ?? false
     ArcadeWindow.shared.showResult(arcadeReport, owner: window, retry: { [weak self] in self?.retry() },
@@ -2972,11 +6111,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   @objc private func showHotSeat() {
+    guard allowNavigationAwayFromSequence() else { return }
     ArcadeWindow.shared.showSession(owner: window)
   }
 
   @objc private func showProfiles() {
-    let canSwitch = !ArcadeStore.shared.hotSeatIsActive && (nativeL2Window?.canSwitchProfile ?? nativeL3Window?.canSwitchProfile
+    let canSwitch = !sequenceIsActive && !ArcadeStore.shared.hotSeatIsActive && (nativeL2Window?.canSwitchProfile ?? nativeL3Window?.canSwitchProfile
       ?? (phase != .playing || session == nil || session?.isComplete == true))
     ArcadeWindow.shared.showProfiles(canSwitch: canSwitch, owner: window, beforeSwitch: { [weak self] in
         ReplayMovieWindow.shared.close(); self?.returnToLibrary()
@@ -2995,6 +6135,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func nextLevel() {
+    guard allowNavigationAwayFromSequence() else { return }
     guard currentNxlvURL == nil, let campaign else { return }
     let next = picker.indexOfSelectedItem + 1
     guard next < campaign.levels.count else {
@@ -3043,6 +6184,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func installKeyboardShortcuts() {
     ArcadeWindow.shared.confirmSessionChange = { [weak self] proceed in
       guard let self else { return }
+      guard self.allowNavigationAwayFromSequence() else { return }
       let playing = !(self.nativeL2Window?.canSwitchProfile ?? self.nativeL3Window?.canSwitchProfile
         ?? (self.phase != .playing || self.session == nil || self.session?.isComplete == true))
       let sharedRun = ArcadeStore.shared.hotSeatIsActive && (self.session != nil || self.sequelIsActive)
@@ -3078,6 +6220,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
     keyboard.ownsController = { [weak self] in self?.sequelIsActive == false }
     keyboard.retry = { [weak self] in self?.retry() }
     keyboard.rewind = { [weak self] in self?.rewind(seconds: 2) }
+    keyboard.controllerRewindHeld = { [weak self] held in
+      guard let self else { return }
+      if held { self.beginContinuousRewind() }
+      else if self.rewindHeld { self.endContinuousRewind() }
+    }
     keyboard.step = { [weak self] direction in
       if direction < 0 { self?.stepBackward() } else { self?.stepForward() }
     }
@@ -3184,7 +6331,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     keyboard.help = { [weak self] in
       let names = self?.session?.skills.map(\.name) ?? []
-      return SkillShortcuts(names: names).hint(names: names, modern: self?.settings.modernControlsEnabled ?? true) + "\n\nSpace / P: pause\nR: retry\nZ: rewind\n, / .: step backward / forward\nX: nuke"
+      return SkillShortcuts(names: names).hint(names: names, modern: self?.settings.modernControlsEnabled ?? true) + "\n\nSpace / P: play or pause\nHold , / <: scrub backward\nHold . / >: scrub forward\nTap , / .: step one tick\nZ: rewind 2 seconds\nX: nuke"
     }
     keyboard.pauseForHelp = { [weak self] in
       guard let self else { return {} }
@@ -3199,6 +6346,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     keyboard.mainMenu = { [weak self] in self?.returnToLibrary() }
     keyboard.escape = { [weak self, weak keyboard] in
       guard let self else { return }
+      if self.cancelRewindToOrigin() { return }
       let resume = keyboard?.pauseForHelp() ?? {}
       let alert = NSAlert(); alert.messageText = "Paused"
       alert.addButton(withTitle: "Resume"); alert.addButton(withTitle: "Retry level")
@@ -3209,9 +6357,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
       alert.beginSheetModal(for: self.window) { [weak self] response in
         if response == .alertSecondButtonReturn { self?.retry() }
         else if response == quitResponse {
-          // Leave the run rather than resume it. The checkpoint stays on disk,
-          // so File > Resume Saved Run can still pick it up.
-          self?.showTitle()
+          // Leave the run rather than resume it. Its normal checkpoint or
+          // saved sequence position remains available.
+          guard let self else { return }
+          if self.sequenceIsActive { self.returnToLibrary() }
+          else { self.showTitle() }
         }
         else {
           resume()
@@ -3222,11 +6372,31 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
     }
 
-    NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+    NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .keyUp]) { [weak self] event in
       guard let self else { return event }
       guard !GameScreen.shared.isPresented, !self.sequelIsActive, event.window === self.window, self.window?.attachedSheet == nil,
         event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { return event }
       if self.window?.firstResponder is NSTextView { return event }
+
+      if event.type == .keyUp, event.keyCode == 6 {
+        guard self.rewindHeld else { return event }
+        self.endContinuousRewind()
+        return nil
+      }
+      if event.type == .keyUp, event.charactersIgnoringModifiers == "," {
+        self.backwardKeyHeld = false
+        self.backwardKeyTimer?.invalidate()
+        self.backwardKeyTimer = nil
+        if self.rewindHeld { self.endContinuousRewind() }
+        return nil
+      }
+      if event.type == .keyUp, event.charactersIgnoringModifiers == "." {
+        self.forwardKeyHeld = false
+        self.forwardKeyTimer?.invalidate()
+        self.forwardKeyTimer = nil
+        if self.forwardHeld { self.endContinuousStepForward() }
+        return nil
+      }
 
       if event.keyCode == 122 || event.charactersIgnoringModifiers?.lowercased() == "i" {
         if !event.isARepeat { self.showLevelHints() }
@@ -3235,8 +6405,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
       let scrollStep = 24.0
       switch event.keyCode {
-      case 123: self.scrollBy(-scrollStep); return nil
-      case 124: self.scrollBy(scrollStep); return nil
+      case 123:
+        if event.modifierFlags.contains(.shift) { self.stepBackward() }
+        else { self.scrollBy(-scrollStep) }
+        return nil
+      case 124:
+        if event.modifierFlags.contains(.shift) { self.stepForward() }
+        else { self.scrollBy(scrollStep) }
+        return nil
       default: break
       }
 
@@ -3268,9 +6444,38 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
 
       switch characters {
-      case "z": self.rewind(seconds: 2)
-      case ",": self.stepBackward()
-      case ".": self.stepForward()
+      case "z":
+        if !event.isARepeat { self.beginContinuousRewind() }
+      case ",":
+        if !event.isARepeat {
+          self.backwardKeyHeld = true
+          guard self.stepBackward() else {
+            self.backwardKeyHeld = false
+            return nil
+          }
+          self.backwardKeyTimer?.invalidate()
+          self.backwardKeyTimer = Timer.scheduledTimer(withTimeInterval: 0.18, repeats: false) { [weak self] _ in
+            MainActor.assumeIsolated {
+              guard let self, self.backwardKeyHeld else { return }
+              _ = self.beginContinuousRewind(preservingOrigin: true, advanceImmediately: false)
+            }
+          }
+        }
+      case ".":
+        if !event.isARepeat {
+          self.forwardKeyHeld = true
+          guard self.stepForward() else {
+            self.forwardKeyHeld = false
+            return nil
+          }
+          self.forwardKeyTimer?.invalidate()
+          self.forwardKeyTimer = Timer.scheduledTimer(withTimeInterval: 0.18, repeats: false) { [weak self] _ in
+            MainActor.assumeIsolated {
+              guard let self, self.forwardKeyHeld else { return }
+              self.beginContinuousStepForward(advanceImmediately: false)
+            }
+          }
+        }
       case "\r":
         if self.phase == .playing { return event }
         self.advancePhase()
@@ -3295,32 +6500,138 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   // MARK: - Rewind
 
+  private func beginContinuousRewind(preservingOrigin: Bool = false, advanceImmediately: Bool = true) -> Bool {
+    guard let session, session.supportsRewind else {
+      setStatus("This ruleset cannot rewind yet.")
+      return false
+    }
+    guard !rewindHeld else { return false }
+    if !preservingOrigin { rewindOriginTick = session.currentTick }
+    rewindHeld = true
+    rewindTimer?.invalidate()
+    setRewindAudioDucked(true)
+    playfield.beginRewindCue(at: session.currentTick)
+    rewindTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 15.0, repeats: true) { [weak self] _ in
+      MainActor.assumeIsolated { _ = self?.performRewind(seconds: 0.20) }
+    }
+    guard advanceImmediately else { return true }
+    return performRewind(seconds: 0.20)
+  }
+
+  private func endContinuousRewind() {
+    rewindHeld = false
+    rewindTimer?.invalidate()
+    rewindTimer = nil
+    effects.silence()
+    setRewindAudioDucked(false)
+    playfield.endRewindCue()
+  }
+
+  /// Restores the point where the current transport gesture started.
+  private func cancelRewindToOrigin() -> Bool {
+    guard let origin = rewindOriginTick, let session, session.currentTick != origin else { return false }
+    if rewindHeld { endContinuousRewind() }
+    while session.currentTick < origin, session.stepForward() {}
+    while session.currentTick > origin, session.stepBackward() {}
+    guard session.currentTick == origin else { return false }
+    rewindOriginTick = nil
+    isPaused = true; panel.isPaused = true; accumulator = 0
+    effects.silence(); setRewindAudioDucked(false); refreshAfterSeek()
+    return true
+  }
+
+  private func setRewindAudioDucked(_ active: Bool) {
+    guard rewindAudioDucked != active else { return }
+    rewindAudioDucked = active
+    if active {
+      let level = settings.musicVolume * 0.18
+      music.setVolume(level); soundtrack.setVolume(level); dj.setVolume(level)
+    } else {
+      music.setVolume(settings.musicVolume)
+      soundtrack.setVolume(settings.musicVolume)
+      dj.setVolume(settings.musicVolume)
+    }
+  }
+
+  private func beginContinuousStepForward(advanceImmediately: Bool = true) {
+    guard phase == .playing, session?.supportsRewind == true else { return }
+    guard !forwardHeld else { return }
+    forwardHeld = true
+    forwardTimer?.invalidate()
+    forwardTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 15.0, repeats: true) { [weak self] _ in
+      MainActor.assumeIsolated {
+        guard let self, self.stepForward() else { self?.endContinuousStepForward(); return }
+      }
+    }
+    guard !advanceImmediately || stepForward() else {
+      endContinuousStepForward()
+      return
+    }
+  }
+
+  private func endContinuousStepForward() {
+    forwardHeld = false
+    forwardTimer?.invalidate()
+    forwardTimer = nil
+  }
+
+  @discardableResult
+  private func performRewind(seconds: Double) -> Bool {
+    guard let session, session.supportsRewind, session.rewind(seconds: seconds) else {
+      if rewindHeld { endContinuousRewind() }
+      return false
+    }
+    effects.playRewindScrub()
+    isPaused = true
+    panel.isPaused = true
+    refreshAfterSeek()
+    return true
+  }
+
   private func rewind(seconds: Double) {
     guard let session, session.supportsRewind else {
       setStatus("This ruleset cannot rewind yet.")
       return
     }
-    guard session.rewind(seconds: seconds) else {
+    rewindOriginTick = rewindOriginTick ?? session.currentTick
+    setRewindAudioDucked(true)
+    playfield.beginRewindCue(at: session.currentTick)
+    guard performRewind(seconds: seconds) else {
+      setRewindAudioDucked(false)
+      playfield.endRewindCue()
       setStatus("Already at the start of the history.")
       return
+    }
+    setRewindAudioDucked(false)
+    playfield.endRewindCue()
+  }
+
+  @discardableResult
+  private func stepBackward() -> Bool {
+    guard let session, session.supportsRewind else { return false }
+    rewindOriginTick = rewindOriginTick ?? session.currentTick
+    setRewindAudioDucked(true)
+    playfield.beginRewindCue(at: session.currentTick)
+    guard session.stepBackward() else {
+      setRewindAudioDucked(false)
+      playfield.endRewindCue()
+      return false
     }
     isPaused = true
     panel.isPaused = true
     refreshAfterSeek()
+    effects.playRewindScrub()
+    setRewindAudioDucked(false)
+    playfield.endRewindCue()
+    return true
   }
 
-  private func stepBackward() {
-    guard let session, session.supportsRewind, session.stepBackward() else { return }
-    isPaused = true
-    panel.isPaused = true
-    refreshAfterSeek()
-  }
-
-  private func stepForward() {
-    guard phase == .playing, let session else { return }
+  @discardableResult
+  private func stepForward() -> Bool {
+    guard phase == .playing, let session else { return false }
     let previousExplosions = Set(session.lemmings.filter { $0.pose == .explosion }.map(\.id))
     countdownWarning.reset(seconds: session.remainingSeconds)
-    guard session.stepForward() else { return }
+    guard session.stepForward() else { return false }
     if countdownWarning.update(seconds: session.remainingSeconds) { effects.play(.builderWarning) }
     effects.play(session.lastCues)
     dj.updateTelemetry(djTelemetry(session))
@@ -3330,17 +6641,28 @@ let achievementProgressKey = "ClassicAchievementProgress"
     refreshAfterSeek()
     flashExplosions(previous: previousExplosions)
     finishSessionIfNeeded()
+    return true
   }
 
   /// Redraws after moving through history, without playing sounds again.
   private func refreshAfterSeek() {
+    updateFailureMood()
     if let session { assignmentFocus.rewind(to: session.currentTick) }
+    if let session { playfield.updateRewindCue(at: session.currentTick) }
     playfield.assignmentHighlight.clear()
     screenFlash.clear()
     accumulator = 0
     playfield.needsDisplay = true
     panel.needsDisplay = true
     updateStatus()
+  }
+
+  private func updateFailureMood() {
+    guard phase == .playing, let session else {
+      failureMood.set(active: false)
+      return
+    }
+    failureMood.set(active: !session.isComplete && !session.canStillReachRequirement)
   }
 
   private func focusLemming(_ id: Int) {

@@ -21,11 +21,11 @@ import NxlvKit
                 }
             }
             for star in 1...celebration.goals.stars {
-                do { try await Task.sleep(for: .milliseconds(180)) } catch { return }
+                do { try await Task.sleep(nanoseconds: 180_000_000) } catch { return }
                 guard let self, self.mode == .result, !self.isHidden, self.window != nil else { return }
                 self.revealedStars = star; self.stampedStar = star; self.needsDisplay = true
                 self.rewardChimes.play(star: star, volume: self.rewardVolume)
-                do { try await Task.sleep(for: .milliseconds(90)) } catch { return }
+                do { try await Task.sleep(nanoseconds: 90_000_000) } catch { return }
                 self.stampedStar = nil; self.needsDisplay = true
             }
             self?.celebrationTask = nil

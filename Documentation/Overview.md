@@ -107,23 +107,44 @@ what lets the release notes above be trusted rather than taken on faith.
 ## Where the project stands right now
 
 The official Classic campaign closed at 352/352 on 22 September 2026. The 1.0
-RC1 baseline was build 36. Its release records are archived locally because
-the active branch is now 1.1. The first 1.1 beta will have its own readiness
-record and release notes. Current targeting work covers Classic, Lemmings 2 and
-Lemmings 3; see the [targeting plan](../docs/superpowers/plans/2026-09-23-approaching-lemming-targeting.md).
+RC1 baseline was build 36. The current source candidate carries version 1.2
+build 39. It includes the shared browser, playlists, background fan-pack checks
+and automatic application updates. It is not a release claim yet. A fresh
+package, release audit, physical-device checks, VoiceOver journeys and hardware
+evidence remain open.
 
 ## Roadmap
 
-**Now: develop 1.1 on macOS.** The first 1.1 QoL focus is reliable misclick
-targeting across all three engines. The prioritised QoL roadmap defines the
-target-select visual contract and the following rewind milestone. Release
-validation will restart with the first 1.1 beta package rather than reuse the
-1.0 RC1 record. See the [QoL roadmap](../docs/superpowers/plans/2026-09-23-qol-roadmap.md).
+**Now: close 1.2 on macOS.** The source-level content discovery and update work
+is implemented. The next work is candidate validation and release evidence.
+The missing sequel routes remain a separate data-dependent gate. See the
+[QoL roadmap](../docs/superpowers/plans/2026-09-23-qol-roadmap.md).
 
-**Next: bring Lemmings 2 and 3 to the same standard.** Both already run their
-full campaigns with original assets. Closing the gap means recording the
-remaining 96 routes and comparing their rules against the original engines
-level by level, the same evidence standard already applied to Classic.
+**1.2 content discovery and sequel completion.** The shared CoverFlow-style
+level browser is implemented in source with shipped pixel artwork and one clear
+primary action. Automated tests cover its typed selection, simulated input and
+reduced-motion layout. Classic cards now follow the active player's progress in
+each rating unless the player enables the Settings override.
+
+The source also includes profile-owned manual playlists and editable
+`Random 10` playlists. Random creation asks for one pack, while `Shuffle all`
+uses an explicit fan-level pool. Seeded playlist shuffle and `Shuffle all` keep
+a fixed, non-repeating order and a persistent resume position. Missing or
+changed entries stay visible for removal or replacement. Playlist runs do not
+advance campaign progress or enter Hot Seat, recovery, route, replay or verified
+record storage.
+
+Targeted model, storage, settings and game-flow tests cover these contracts.
+Physical controller, complete VoiceOver and packaged three-engine journeys
+remain open. This work belongs beside the 1.2 [content atlas and import
+boundary](ContentUniverseRoadmap.md#12--content-atlas-and-import-boundary).
+The fan-pack and application update paths now have source and targeted test
+coverage. The release Mac must verify the signed package and the live update.
+
+Make Lemmings 2 and Lemmings 3 completion verification a 1.2 exit gate. The
+remaining 96 winning routes must close, and both games need engine-fidelity,
+campaign-progression, media and recovery evidence. Until that gate passes, both
+games remain Preview.
 
 **After that: iPhone and iPad.** The simulation library already builds for
 iOS and has no dependency on the Mac's window system. It still needs a touch

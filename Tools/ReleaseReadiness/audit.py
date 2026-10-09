@@ -97,7 +97,7 @@ def main():
     for source in ROOT.glob("Sources/NxlvKit/*.swift"):
         shutil.copy2(source, frozen / source.name)
     checks = []
-    compiler_target = f"{platform.machine()}-apple-macos13.0"
+    compiler_target = f"{platform.machine()}-apple-macos12.3"
 
     def run(name, commands, env=None):
         env = dict(env or os.environ, LEMMINGS_TEST_APP=str(app),
@@ -197,6 +197,7 @@ def main():
     for name, command in [
         ("audit-integrity", [sys.executable, "Tests/ReleaseReadinessTests/test_audit.py"]),
         ("package-closure", [sys.executable, "Tests/ReleaseReadinessTests/test_package_scope.py"]),
+        ("automatic-updates", [sys.executable, "Tests/ReleaseReadinessTests/test_automatic_updates.py"]),
         ("classic-panel-art", [sys.executable, "Tools/ClassicPanelArt/check.py"]),
         ("fan-pruning", [sys.executable, "Tools/FanLevelCatalog/test_prune.py"]),
         ("retained-rescue-targets", [sys.executable, "Tools/TrolleyVerification/test_retained_targets.py"]),

@@ -161,11 +161,21 @@ The release path is deliberately separate from the local build:
    with Gatekeeper tooling.
 6. It writes all three timestamped ZIP files to the configured Downloads
    directory.
+7. It writes a separate Sparkle update ZIP containing only the notarised
+   standard app and regenerates the signed `appcast.xml`.
+8. When `PUBLISH_GITHUB_RELEASE=1`, it uploads that ZIP, creates or updates
+   the tagged GitHub Release, and publishes the appcast to `main`.
 
 The Game Center archive is intentionally not submitted to Apple notarisation:
 Apple's Developer ID distribution rules reject that entitlement. Its separate
 development-signed status must remain visible in release notes and beta
 instructions.
+
+The app embeds Sparkle 2.7.3 in `Contents/Frameworks`. Sparkle uses the HTTPS
+appcast in the app's `Contents/Info.plist` and verifies update archives with the
+public Ed25519 key in that file. The private key stays in the release operator's
+login Keychain. A release archive with a missing or unsigned appcast entry is
+not an update candidate.
 
 The packaged app uses only resources inside its bundle at runtime. A copied
 bundle must not depend on the source checkout, the current working directory,

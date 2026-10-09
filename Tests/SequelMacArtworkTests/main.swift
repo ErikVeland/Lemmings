@@ -35,7 +35,12 @@ func frame(_ f: SequelIndexedImage, transparent: UInt8? = nil) throws -> SequelM
     var changed = false
     for y in 0..<result.height { for x in 0..<result.width {
         let s = ((y/2)*source.width+x/2)*4, d = (y*result.width+x)*4
-        try require(result.rgba[d+3] == source.rgba[s+3],"Opacity changed: \(name)")
+        if result.rgba[d+3] != source.rgba[s+3] {
+            let sourceX = x / 2, sourceY = y / 2
+            let liquidTail = category == .liquid && source.rgba[s+3] == 0
+                && (0..<sourceY).contains { source.rgba[($0 * source.width + sourceX) * 4 + 3] == 255 }
+            try require(liquidTail && result.rgba[d+3] == 255,"Opacity changed: \(name)")
+        }
         if result.rgba[d+3] == 0 {
             try require(result.rgba[d] == 0 && result.rgba[d+1] == 0 && result.rgba[d+2] == 0,"Transparent colour halo: \(name)")
         } else if result.rgba[d..<d+3] != source.rgba[s..<s+3] { changed = true }
@@ -61,6 +66,17 @@ let small = try SequelMacFrame(width:3,height:1,x:-7,y:3,
     rgba:[0,0,0,255, 255,0,255,0, 200,180,160,255])
 let doubled = try check("synthetic-registration",small,.organic)
 try require(doubled.width == 6 && doubled.height == 2 && doubled.x == -14 && doubled.y == 6,"Odd frame registration")
+let liquidSource = try SequelMacFrame(width: 3, height: 4, rgba: [
+    0,0,0,0, 0,0,0,0, 0,0,0,0,
+    0,0,0,0, 24,112,184,255, 0,0,0,0,
+    0,0,0,0, 0,0,0,0, 0,0,0,0,
+    0,0,0,0, 0,0,0,0, 0,0,0,0
+])
+let liquid = try SequelMacArtwork.reconstruct(liquidSource, category: .liquid)
+try require(liquid.rgba[(4 * liquid.width + 2) * 4 + 3] == 255,
+            "Liquid body did not fill below an existing column")
+try require(liquid.rgba[(4 * liquid.width + 0) * 4 + 3] == 0,
+            "Liquid body filled an empty column")
 try rejects { _ = try SequelMacFrame(width:1,height:1,rgba:[0,0,0,127]) }
 try rejects { _ = try SequelMacFrame(width:1,height:1,x:Int.min,rgba:[0,0,0,255]) }
 try rejects { _ = try SequelMacArtwork.reconstruct(small,category:.organic,edits:[.init(x:2,y:0,red:1,green:2,blue:3)]) }

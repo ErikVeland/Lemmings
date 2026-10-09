@@ -1,8 +1,153 @@
 import AppKit
+import Darwin
 import NxlvKit
 
 func require(_ condition: @autoclosure () -> Bool, _ message: String) throws {
     if !condition() { throw SequelDataError.invalid(message) }
+}
+
+@MainActor func testLevelPlaylistStore() throws {
+    let directory = FileManager.default.temporaryDirectory
+        .appendingPathComponent("playlist-store-\(UUID().uuidString)", isDirectory: true)
+    defer { try? FileManager.default.removeItem(at: directory) }
+    let file = directory.appendingPathComponent("playlists.json")
+    let date = Date(timeIntervalSince1970: 1_700_000_000)
+    func entry(_ number: Int) throws -> LevelPlaylistEntry {
+        try LevelPlaylistEntry(
+            id: UUID(uuidString: String(format: "00000000-0000-0000-0000-%012d", number))!,
+            identity: .init(engine: .classic, packID: "classic", levelID: "level-\(number)"),
+            catalogueRevision: "catalogue-1",
+            sourceRevision: "source-\(number)",
+            packNameSnapshot: "Classic",
+            levelNameSnapshot: "Level \(number)",
+            levelNumberSnapshot: number)
+    }
+    let first = try LevelPlaylist(
+        id: UUID(uuidString: "10000000-0000-0000-0000-000000000001")!,
+        name: "First", entries: [try entry(1)], createdAt: date)
+    let second = try LevelPlaylist(
+        id: UUID(uuidString: "10000000-0000-0000-0000-000000000002")!,
+        name: "Second", entries: [try entry(2)], createdAt: date)
+    let pool = try LevelPool(id: "playlist:first", summary: "First playlist")
+    let firstRun = try LevelSequenceRun.playlist(first, pool: pool, createdAt: date)
+
+    let writer = try LevelPlaylistStore(file: file)
+    try require(writer.playlists.isEmpty && writer.selectedPlaylistID == nil,
+        "A new playlist store was not empty")
+    try writer.add(first)
+    try require(writer.selectedPlaylist() == first, "Adding a playlist did not select it")
+    try writer.setActiveRun(firstRun)
+    let stale = try LevelPlaylistStore(file: file)
+    try writer.add(second)
+    do {
+        try stale.selectPlaylist(id: first.id)
+        throw SequelDataError.invalid("A stale playlist store overwrote a newer save")
+    } catch LevelPlaylistStore.Failure.changedOnDisk {
+        // Expected: the newer file stays authoritative.
+    }
+
+    let restored = try LevelPlaylistStore(file: file)
+    try require(restored.playlists == [first, second]
+        && restored.selectedPlaylistID == second.id
+        && restored.activeRun == firstRun,
+        "Playlists, selection or active sequence did not round-trip")
+    try restored.removePlaylist(id: second.id)
+    try require(restored.selectedPlaylistID == first.id && restored.activeRun == firstRun,
+        "Removing another playlist changed the active sequence")
+    try restored.removePlaylist(id: first.id)
+    try require(restored.playlists.isEmpty && restored.selectedPlaylistID == nil
+        && restored.activeRun == nil,
+        "Removing an active playlist left its selection or sequence")
+
+    do {
+        try restored.add(first)
+        try restored.add(first)
+        throw SequelDataError.invalid("A duplicate playlist identity was accepted")
+    } catch LevelPlaylistStore.Failure.duplicatePlaylist {
+        // Expected.
+    }
+    do {
+        try restored.setActiveRun(try LevelSequenceRun.playlist(
+            second,
+            pool: try LevelPool(id: "playlist:missing", summary: "Missing playlist"),
+            createdAt: date))
+        throw SequelDataError.invalid("A sequence for a missing playlist was accepted")
+    } catch LevelPlaylistStore.Failure.missingPlaylist {
+        // Expected.
+    }
+
+    let expectedBackup = try Data(contentsOf: file.appendingPathExtension("backup"))
+    try Data("broken".utf8).write(to: file, options: .atomic)
+    let recovered = try LevelPlaylistStore(file: file)
+    let recoveredData = try Data(contentsOf: file)
+    try require(recovered.recovered && recoveredData == expectedBackup,
+        "A damaged playlist file was not restored from its last good backup")
+    let preserved = try FileManager.default.contentsOfDirectory(
+        at: directory, includingPropertiesForKeys: nil)
+        .filter { $0.lastPathComponent.hasPrefix("playlists.json.unreadable-") }
+    let preservedData = try preserved.first.map { try Data(contentsOf: $0) }
+    try require(preserved.count == 1 && preservedData == Data("broken".utf8),
+        "Playlist recovery did not preserve the unreadable primary")
+    let heldLock = open(
+        file.appendingPathExtension("lock").path,
+        O_CREAT | O_RDWR,
+        S_IRUSR | S_IWUSR)
+    try require(heldLock >= 0 && flock(heldLock, LOCK_EX | LOCK_NB) == 0,
+        "Playlist deletion lock fixture could not start")
+    DispatchQueue.global().asyncAfter(deadline: .now() + 0.05) {
+        flock(heldLock, LOCK_UN)
+        close(heldLock)
+    }
+    let deletionStarted = ProcessInfo.processInfo.systemUptime
+    LevelPlaylistStore.removeData(at: file)
+    try require(ProcessInfo.processInfo.systemUptime - deletionStarted >= 0.03,
+        "Playlist deletion did not wait for an active writer lock")
+    let playlistRemainders = try FileManager.default.contentsOfDirectory(
+        at: directory, includingPropertiesForKeys: nil).filter {
+            $0.lastPathComponent == file.lastPathComponent
+                || $0.lastPathComponent == file.appendingPathExtension("backup").lastPathComponent
+                || $0.lastPathComponent.hasPrefix(file.lastPathComponent + ".unreadable-")
+        }
+    try require(playlistRemainders.isEmpty,
+        "Deleting playlist data left a recovered unreadable sibling")
+    try require(FileManager.default.fileExists(
+        atPath: file.appendingPathExtension("lock").path),
+        "Deleting playlist data removed the cross-process lock inode")
+
+    let unsupportedFile = directory.appendingPathComponent("unsupported.json")
+    let unsupportedStore = try LevelPlaylistStore(file: unsupportedFile)
+    try unsupportedStore.add(first)
+    var object = try JSONSerialization.jsonObject(with: Data(contentsOf: unsupportedFile)) as! [String: Any]
+    object["version"] = 2
+    object.removeValue(forKey: "playlists")
+    try JSONSerialization.data(withJSONObject: object).write(to: unsupportedFile, options: .atomic)
+    do {
+        _ = try LevelPlaylistStore(file: unsupportedFile)
+        throw SequelDataError.invalid("A future playlist format was replaced from backup")
+    } catch LevelPlaylistStore.Failure.unsupportedVersion {
+        // Expected: preserve a future format for a newer app.
+    }
+
+    var removedProfiles: [String] = []
+    let recordsFile = directory.appendingPathComponent("records.json")
+    let arcade = ArcadeStore(
+        file: recordsFile,
+        bundledProofs: nil,
+        playlistDataRemover: { removedProfiles.append($0) })
+    let previewLevel = ArcadeLevel(
+        id: "playlist-preview", title: "Playlist preview", game: "Lemmings",
+        rules: "classic-dos-v1", total: 10, required: 5)
+    let previewRun = ArcadeRun(
+        profileID: arcade.records.activeProfileID, level: previewLevel,
+        saved: 5, didWin: true, skills: ["builder": 1], seconds: 20)
+    let beforePreview = arcade.records
+    try require(arcade.previewReport(for: previewRun) != nil
+        && arcade.records == beforePreview,
+        "A transient playlist result changed player records")
+    let guest = arcade.addProfile(initials: "PLY", portrait: 1)!
+    try require(arcade.deleteProfile(guest.id) && removedProfiles == [guest.id],
+        "Deleting a player did not remove that player's playlist data")
+    print("PASS profile-owned playlist persistence, conflict detection, recovery and deletion cleanup")
 }
 
 func testRecords() throws -> (ArcadeRecords, ArcadeReport) {
@@ -183,10 +328,10 @@ func testSkillAccounting() throws {
     key("\r", code: 36)
     window.makeKeyAndOrderFront(nil)
     NSApplication.shared.activate(ignoringOtherApps: true)
-    try await Task.sleep(for: .milliseconds(200))
+        try await Task.sleep(nanoseconds: 200_000_000)
     let windowCount = NSApplication.shared.windows.count
     ArcadeWindow.shared.showResult(result, owner: window, retry: { retried += 1 }, next: {}, replay: { _ in })
-    try await Task.sleep(for: .milliseconds(100))
+        try await Task.sleep(nanoseconds: 100_000_000)
     try require(ArcadeWindow.shared.arcadeView.window === window && NSApplication.shared.windows.count == windowCount,
                 "Results created a separate window")
     let nested = GameMenuPage(title: "Nested screen")
@@ -202,7 +347,7 @@ func testSkillAccounting() throws {
     try require(!ArcadeWindow.shared.arcadeView.isHidden && window.firstResponder === ArcadeWindow.shared.arcadeView,
                 "Back did not restore the results page")
     ArcadeWindow.shared.arcadeView.onRetry?()
-    try await Task.sleep(for: .milliseconds(100))
+        try await Task.sleep(nanoseconds: 100_000_000)
     try require(window.isKeyWindow && retried == 2, "Retry did not restore keyboard focus to the game window (active: \(NSApplication.shared.isActive), visible: \(window.isVisible), retried: \(retried), key: \(NSApplication.shared.keyWindow?.title ?? "none"))")
     window.orderOut(nil)
     print("PASS atomic save/reload, corrupt-file preservation, legacy progress namespace, sprite profiles, in-game pages, nested Back and successful retry controls")
@@ -481,6 +626,7 @@ let app = NSApplication.shared
 app.setActivationPolicy(.accessory)
 Task { @MainActor in
     do {
+        try testLevelPlaylistStore()
         try testSharedSession()
         try testProfileJourneys()
         let sample = try testRecords()

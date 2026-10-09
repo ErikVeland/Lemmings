@@ -15,6 +15,8 @@ This requirement is also recorded in `AGENTS.md`.
 | Explicit retry/continue result choices | Shared result page | Shared result page | Shared result page |
 | Shared progress separate from solo progress | Yes | Yes | Yes |
 | Saved attempts and paused recovery from the main library | Yes | Yes | Yes |
+| Shared typed level browser | Complete and Playable packs | Preview, preserves unlocks | Preview, available levels only |
+| Playlist and shuffled-run campaign isolation | Yes | Yes | Yes |
 | Guarded Players/solo transitions through shared library UI | Yes | Yes | Yes |
 | Paused Hot Seat retry | Yes | Yes | Yes |
 | New-level handover | Briefing | Briefing | Paused play |
@@ -37,6 +39,18 @@ This requirement is also recorded in `AGENTS.md`.
   Held fan and aim input is released before stepping.
 - L3's in-game Resume action now resumes the same attempt in one action.
   Main-library checkpoint recovery still restores paused, as in the other games.
+- The shared level browser resolves engine, pack and level identity before it
+  starts Classic, L2 or L3. Imported archives remain labelled Unverified. A
+  changed archive is rejected before launch.
+- Classic direct selection now follows the active player's progress in each
+  rating. The Settings override unlocks all Classic cards without granting
+  campaign progress.
+- Profile-owned manual and random playlists can start all three engines through
+  the shared typed route. Their stored active run keeps a fixed order and resume
+  position without changing campaign, Hot Seat, recovery, route, replay or
+  verified record state.
+- Seeded playlist shuffle and fan-level `Shuffle all` do not repeat entries.
+  Missing, changed and newly locked entries stop visibly.
 
 ## Remaining limits
 
@@ -51,6 +65,12 @@ controls. Engine fidelity and winning-route coverage are separate from UI parity
 
 Automated controller tests use simulated input. No physical controller was
 available. Physical-device and complete VoiceOver listening journeys remain open.
+
+The browser checks presentation and typed routing with fixtures. Packaged
+Classic, fan, L2 and L3 launch journeys remain open because commercial game data
+is not present in this checkout. Playlist evidence currently covers the source,
+model tests, storage tests, Settings tests and Classic game-flow tests. The full
+1.2 content atlas remains separate work and is not complete.
 
 Validation evidence for this pass: `.build/parity/qol.log`,
 `.build/parity/focused-final.log` and `.build/parity/classic.log`.

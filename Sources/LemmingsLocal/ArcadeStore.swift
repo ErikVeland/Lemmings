@@ -12,6 +12,7 @@ import NxlvKit
     private(set) var storageNotice: String?
     private var canWrite = true
     private let bundledProofs: TrolleyBundledProofs?
+    private let playlistDataRemover: (String) -> Void
     var profilesAreWritable: Bool { canWrite }
 
     /// The house rule and shared campaign survive app restarts.
@@ -123,9 +124,11 @@ import NxlvKit
 
 
     init(file: URL? = nil, bundledProofs: TrolleyBundledProofs? = .load(), defaults: UserDefaults = .standard,
-         checkpoints: RunRecoveryStore? = nil) {
+         checkpoints: RunRecoveryStore? = nil,
+         playlistDataRemover: @escaping (String) -> Void = { LevelPlaylistStore.removeData(profileID: $0) }) {
         self.bundledProofs = bundledProofs
         self.defaults = defaults
+        self.playlistDataRemover = playlistDataRemover
         recoveryStore = checkpoints ?? RunRecoveryStore()
         let support = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         let preview = Bundle.main.bundleIdentifier?.contains("preview") == true ? "Arcade Preview" : "Arcade"
@@ -211,6 +214,7 @@ import NxlvKit
         for replay in replays { try? FileManager.default.removeItem(at: folder.appendingPathComponent(replay.relativePath)) }
         try? recoveryStore.discard(profileID: id)
         removeSavedProgress(of: id)
+        playlistDataRemover(id)
         return true
     }
     private func removeSavedProgress(of id: String) {
@@ -258,6 +262,13 @@ import NxlvKit
             if storageError == nil { GameCenterScores.shared.completed(profileID: run.profileID, history: records.trolley) }
         }
         return result
+    }
+    /**
+     * Builds a result report without changing player records or verified evidence.
+     */
+    func previewReport(for run: ArcadeRun) -> ArcadeReport? {
+        var preview = records
+        return preview.record(run)
     }
     func beginAttempt(id: UUID, profileID: String, level: ArcadeLevel, previousID: UUID?) {
         guard let conditions = level.conditions else { return }

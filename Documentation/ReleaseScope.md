@@ -77,6 +77,11 @@ Both play through their campaigns with original artwork, music and interfaces.
 Lemmings 3 keeps provisional rules in several areas, and its environmental
 effects, movie soundtracks and story transitions are incomplete.
 
+The 1.2 roadmap makes completion verification the exit gate for both sequels.
+They remain Preview until all advertised levels have winning-route evidence,
+engine-fidelity comparisons, continuous progression, recovery checks, media
+closure and verified endings.
+
 ## Not in this release
 
 iPhone, iPad and consoles. The repository has no working app target for them. A
@@ -84,8 +89,8 @@ Mac release does not imply them.
 
 ## Open before 1.0
 
-- Full Quest across the sequel previews remains outside the completed 352-level
-  Classic campaign gate.
+- The `Oh My! ALL Lemmings!` run across the sequel previews remains outside the
+  completed 352-level Classic campaign gate.
 - L2 and L3 retain preview status; their 96 missing routes are tracked separately
   from the Classic 1.0 milestone.
 - Physical Intel, minimum macOS, HDR, multiple displays and high refresh rates

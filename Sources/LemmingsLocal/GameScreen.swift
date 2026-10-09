@@ -150,6 +150,8 @@ import NxlvKit
     private let canvas: GameMenuCanvas
     private let back = GameActionButton(title: "Back", primary: false)
     var controllerBackButton: NSButton { back }
+    private weak var preferredControllerControl: NSControl?
+    var controllerInitialControl: NSControl { preferredControllerControl ?? back }
     private var background: CGImage?
     override var isFlipped: Bool { true }
     override var acceptsFirstResponder: Bool { true }
@@ -203,6 +205,20 @@ import NxlvKit
         } else { button.frame = CGRect(x: 688, y: 634, width: 368, height: 48) }
         canvas.addSubview(button)
         return button
+    }
+    @discardableResult func addSecondaryAction(
+        _ title: String,
+        at slot: Int = 0,
+        action: @escaping () -> Void
+    ) -> NSButton {
+        let button = GameActionButton(title: title, primary: false, onPress: action)
+        let index = min(1, max(0, slot))
+        button.frame = CGRect(x: index == 0 ? 316 : 502, y: 634, width: 174, height: 48)
+        canvas.addSubview(button)
+        return button
+    }
+    func preferControllerControl(_ control: NSControl) {
+        preferredControllerControl = control
     }
     func addListAction(_ title: String, at index: Int, action: @escaping () -> Void) {
         let button = GameActionButton(title: title, primary: false, onPress: action)
@@ -277,4 +293,3 @@ import NxlvKit
     }
     @objc private func invoke() { onPress?() }
 }
-

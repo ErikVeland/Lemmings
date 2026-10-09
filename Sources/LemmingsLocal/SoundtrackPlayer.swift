@@ -1,4 +1,3 @@
-import AVFoundation
 import AppKit
 import NxlvKit
 
@@ -12,15 +11,16 @@ import NxlvKit
 /// The player supplies the files. Nothing here ships with the app.
 @MainActor final class SoundtrackPlayer {
   /// Extensions the system decoder reads without extra work.
-  static let audioExtensions: Set<String> = ["wav", "aif", "aiff", "mp3", "m4a", "caf", "flac"]
+  static let audioExtensions: Set<String> = ["wav", "aif", "aiff", "aifc", "mp3", "m4a", "caf", "flac"]
 
-  private var player: AVAudioPlayer?
+  private var player: MusicFileDeck?
   private(set) var currentURL: URL?
   private var resumeAfterSleep = false
   private var outputSuspended = false
   private(set) var tracks: [URL] = []
   private(set) var volume: Float = 0.8
   private(set) var muted = false
+  private(set) var playbackRate: Float = 1
 
   /// The soundtracks found under a root, one per folder.
   ///
@@ -93,23 +93,14 @@ import NxlvKit
   func play(index: Int) -> String? {
     guard !tracks.isEmpty else { return nil }
     let url = tracks[((index % tracks.count) + tracks.count) % tracks.count]
-    do {
-      let made = try AVAudioPlayer(contentsOf: url)
-      // A level outlasts a track, so the track repeats, as the module did.
-      made.numberOfLoops = -1
-      made.volume = muted ? 0 : volume
-      made.prepareToPlay()
-      // Stop the old player explicitly before releasing it. AVAudioPlayer does
-      // not drain its output buffer synchronously on deallocation, so simply
-      // replacing `player` can leave both tracks audible at the same time.
-      player?.stop()
-      player = made
-      player?.play()
-      currentURL = url
-      return url.deletingPathExtension().lastPathComponent
-    } catch {
-      return nil
-    }
+    guard let made = MusicFileDeck(url: url) else { return nil }
+    made.volume = muted ? 0 : volume
+    made.playbackRate = playbackRate
+    player?.stop()
+    player = made
+    made.play()
+    currentURL = url
+    return url.deletingPathExtension().lastPathComponent
   }
 
   func stop() {
@@ -123,19 +114,24 @@ import NxlvKit
     guard !outputSuspended else { return }
     outputSuspended = true
     resumeAfterSleep = isPlaying
-    player?.pause()
+    player?.suspendOutput()
   }
 
   func resumeOutput() {
     guard outputSuspended else { return }
     outputSuspended = false
-    if resumeAfterSleep { player?.play() }
+    if resumeAfterSleep { player?.resumeOutput() }
     resumeAfterSleep = false
   }
 
   func setVolume(_ value: Double) {
     volume = Float(min(1, max(0, value)))
     player?.volume = muted ? 0 : volume
+  }
+
+  func setPlaybackRate(_ value: Double) {
+    playbackRate = Float(min(1, max(0.5, value)))
+    player?.playbackRate = playbackRate
   }
 
   func setMuted(_ value: Bool) {

@@ -19,8 +19,9 @@ private func require(
 /// Lines the front end actually draws. A character missing from the set would
 /// leave a hole in one of these.
 private let menuText = [
-    "FULL QUEST", "LEMMINGS", "OH NO! MORE LEMMINGS", "XMAS LEMMINGS 1991",
-    "HOLIDAY LEMMINGS 1994", "LEMMINGS 2: THE TRIBES",
+    "OH MY! ALL LEMMINGS!", "CLASSIC LEMMINGS", "OH NO! MORE LEMMINGS",
+    "HOLIDAY LEMMINGS", "OH YES! MORE LEMMINGS", "FAN LEMMINGS",
+    "LEMMINGS 2", "LEMMINGS 3",
     "UP AND DOWN TO CHOOSE * ENTER TO BEGIN * Q TO QUIT",
     "0/502  (100%)", "Just dig!", "Release rate 50", "Time 5:00",
 ]

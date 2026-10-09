@@ -125,7 +125,7 @@ private func render(
         playfield.overlayFrame = 24
         playfield.overlayTitle = "LEMMINGS"
         playfield.overlayLines = [
-            "FULL QUEST  8/502",
+            "OH MY! ALL LEMMINGS!  8/502",
             "LEMMINGS  8/120",
             "XMAS LEMMINGS 1991  0/4",
             "OH NO! MORE LEMMINGS  0/100",

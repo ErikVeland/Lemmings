@@ -1,8 +1,8 @@
 # Beta testing
 
-No 1.1 beta candidate has been declared yet. Use this checklist when the first
-1.1 package is cut. The 1.0 RC1 build 36 records are in the local archive and
-do not certify a 1.1 package.
+The 1.1 CR2 source candidate is commit `e1a2cbb`. This checklist still needs a
+fresh package and validation record for that candidate. The 1.0 RC1 build 36
+records are in the local archive and do not certify 1.1 CR2.
 
 ## Local build and notarisation
 
@@ -12,6 +12,16 @@ tri-archive release script:
 ```sh
 NOTARY_PROFILE=lemmings-beta zsh Scripts/build-and-notarise.sh
 ```
+
+If the profile is stored outside the default keychain, set
+`NOTARY_KEYCHAIN=/path/to/keychain-db`. The script validates the named profile
+before it starts a build. `--notary-profile` and `--notary-keychain` provide
+the same values without environment variables.
+
+The profile name is optional. On a Mac with no shared profile name, use
+`APPLE_ID` and `APPLE_TEAM_ID`; `notarytool` prompts securely for the
+app-specific password. App Store Connect API-key authentication is also
+available through `ASC_KEY_PATH`, `ASC_KEY_ID` and `ASC_ISSUER_ID`.
 
 Before it builds, the script checks for source changes after the previous
 release, checks the current release notes, creates notes from recent source
@@ -25,6 +35,16 @@ Center entitlements. The script finds the first installed Developer ID
 Application identity unless `SIGNING_IDENTITY` is set. It uses a keychain
 profile created by `xcrun notarytool store-credentials`, so Apple credentials
 are not stored in the repository or passed on the command line.
+
+For the fastest local progress check, use the snapshot path instead:
+
+```sh
+zsh Scripts/build-game-center-snapshot.sh
+```
+
+It builds the current Mac architecture, signs the Game Center entitlement and
+writes a ZIP to Downloads. It does not notarise or run release gates. The
+provisioning profile must include every Mac that will run the snapshot.
 
 Use `--dry-run` to run the gates and check the selected paths without building,
 signing or uploading anything. Set `RELEASE_BASE` when the automatic previous
@@ -91,21 +111,21 @@ variant you distribute.
 
 ## Package the macOS 12 (Monterey) archive
 
-The Monterey build lives on the `macos12-support` branch, kept as a worktree at
-`.claude/worktrees/macos12`. It merges each release's gameplay and doc changes
-from the working branch, then builds with the 12.3 deployment target from
-inside that worktree:
+The Monterey worktree must use the exact CR2 commit. Create it as a detached
+worktree after the candidate commit is ready:
 
 ```sh
-cd .claude/worktrees/macos12
-git merge <working-branch>
-BETA_NOTARY_PROFILE=lemmings-beta zsh Scripts/package-beta.sh
+git worktree add --detach .claude/worktrees/macos12 <cr2-commit>
+MONTEREY_WORKTREE="$PWD/.claude/worktrees/macos12" \
+RELEASE_BASE=957a813 \
+NOTARY_PROFILE=lemmings-beta \
+zsh Scripts/build-and-notarise.sh
 ```
 
-Merge every commit from the working branch first, including saved-run and
-recovery fixes — an out-of-date Monterey merge can reintroduce a bug the
-working branch already fixed. Check with
-`git log <monterey-branch>..<working-branch> --oneline` before packaging.
+The shared build script checks that this worktree contains the current release
+commit before it builds the Monterey archive. Set `MONTEREY_WORKTREE` when the
+worktree uses another path. It creates the standard, Monterey and Game Center
+archives together.
 
 ## Package with worldwide rankings
 

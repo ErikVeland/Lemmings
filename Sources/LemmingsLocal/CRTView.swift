@@ -26,16 +26,26 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
 /// Display settings for the picture tube stage.
 struct CRTSettings {
   var curvature: Float
+  var curvatureY: Float
+  var cornerRadius: Float
+  var cornerSoftness: Float
   var scanlineDepth: Float
   var beamWidth: Float
   var beamBloom: Float
   var maskStrength: Float
   /// 0 is an aperture grille, 1 is a shadow mask.
   var maskType: Float
+  var maskSize: Float
+  var maskDark: Float
+  var maskLight: Float
   var bloomAmount: Float
   var gamma: Float
   var brightness: Float
+  var brightBoostDark: Float
+  var brightBoostBright: Float
+  var saturation: Float
   var convergence: Float
+  var convergenceY: Float
   var vignette: Float
   var pixelAspect: Float
   /// 0 keeps full depth. 16 matches the Amiga OCS and ECS palette, which
@@ -47,15 +57,25 @@ struct CRTSettings {
   /// A fine shadow mask, mild curvature, and aligned colour channels.
   static let amiga1084 = CRTSettings(
     curvature: 24.0,
+    curvatureY: 24.0,
+    cornerRadius: 0.012,
+    cornerSoftness: 0.006,
     scanlineDepth: 0.16,
     beamWidth: 0.30,
     beamBloom: 0.10,
     maskStrength: 0.10,
     maskType: 1,
+    maskSize: 1.0,
+    maskDark: 0.76,
+    maskLight: 1.12,
     bloomAmount: 0.025,
     gamma: 2.2,
     brightness: 1.02,
+    brightBoostDark: 1.08,
+    brightBoostBright: 1.03,
+    saturation: 1.02,
     convergence: 0,
+    convergenceY: 0,
     vignette: 0.025,
     pixelAspect: 1.0,
     colorLevels: 16)
@@ -63,15 +83,25 @@ struct CRTSettings {
   /// A softer television with restrained glow and a fine aperture grille.
   static let television = CRTSettings(
     curvature: 18.0,
+    curvatureY: 24.0,
+    cornerRadius: 0.022,
+    cornerSoftness: 0.009,
     scanlineDepth: 0.22,
     beamWidth: 0.34,
     beamBloom: 0.16,
     maskStrength: 0.13,
     maskType: 0,
+    maskSize: 1.0,
+    maskDark: 0.70,
+    maskLight: 1.18,
     bloomAmount: 0.045,
     gamma: 2.2,
     brightness: 1.03,
+    brightBoostDark: 1.10,
+    brightBoostBright: 1.05,
+    saturation: 1.04,
     convergence: 0.10,
+    convergenceY: 0.03,
     vignette: 0.04,
     pixelAspect: 1.15,
     colorLevels: 16)
@@ -81,15 +111,25 @@ struct CRTUniforms {
   var sourceSize: SIMD2<Float> = .zero
   var outputSize: SIMD2<Float> = .zero
   var curvature: Float = 0
+  var curvatureY: Float = 0
+  var cornerRadius: Float = 0
+  var cornerSoftness: Float = 0
   var scanlineDepth: Float = 0
   var beamWidth: Float = 0.4
   var beamBloom: Float = 0
   var maskStrength: Float = 0
   var maskType: Float = 0
+  var maskSize: Float = 1
+  var maskDark: Float = 0.76
+  var maskLight: Float = 1.12
   var bloomAmount: Float = 0
   var gamma: Float = 2.4
   var brightness: Float = 1
+  var brightBoostDark: Float = 1
+  var brightBoostBright: Float = 1
+  var saturation: Float = 1
   var convergence: Float = 0
+  var convergenceY: Float = 0
   var vignette: Float = 0
   var pixelAspect: Float = 1
   var colorLevels: Float = 0
@@ -133,6 +173,12 @@ struct CRTUniforms {
   var onMouseExited: (() -> Void)?
   var onMouseMoved: ((CGPoint) -> Void)?
   var onScroll: ((CGFloat, CGFloat) -> Void)?
+  /// Source-space area that draws its own pointer. Controls outside it keep the system arrow.
+  var gameplayCursorRect: CGRect? {
+    didSet {
+      if oldValue != gameplayCursorRect { window?.invalidateCursorRects(for: self) }
+    }
+  }
   private var trackingArea: NSTrackingArea?
   private(set) var failureReason: String?
   var isAvailable: Bool { compositePipeline != nil }
@@ -197,30 +243,61 @@ struct CRTUniforms {
     if let trackingArea { removeTrackingArea(trackingArea) }
     let area = NSTrackingArea(
       rect: bounds,
-      options: [.activeInKeyWindow, .mouseMoved, .mouseEnteredAndExited, .inVisibleRect],
+      options: [.activeInKeyWindow, .mouseMoved, .mouseEnteredAndExited, .cursorUpdate, .inVisibleRect],
       owner: self)
     addTrackingArea(area)
     trackingArea = area
+  }
+
+  override func resetCursorRects() {
+    addCursorRect(bounds, cursor: NSCursor.arrow)
+  }
+
+  override func cursorUpdate(with event: NSEvent) {
+    updateSystemCursor(at: convert(event.locationInWindow, from: nil))
+  }
+
+  /**
+   * Applies the cursor policy after mouse events and pointer-capture warps.
+   */
+  func updateSystemCursor(at viewPoint: CGPoint) {
+    GameCursor.update(
+      at: sourcePoint(from: viewPoint),
+      hidingInside: gameplayCursorRect)
   }
 
   override var acceptsFirstResponder: Bool { true }
 
   /// Matches the shader's display-to-source sampling coordinates.
   private func sourceUV(_ uv: CGPoint) -> CGPoint {
-    let amount = CGFloat(settings.curvature)
-    guard amount > 0 else { return uv }
+    let amountX = CGFloat(settings.curvature)
+    let amountY = CGFloat(settings.curvatureY)
+    guard amountX > 0 || amountY > 0 else { return uv }
 
     func bend(_ point: CGPoint) -> CGPoint {
       var x = point.x * 2 - 1
       var y = point.y * 2 - 1
-      let offsetX = abs(y) / amount
-      let offsetY = abs(x) / amount
+      let originalX = x
+      let originalY = y
+      let offsetX = abs(originalY) / max(amountX, 0.0001)
+      let offsetY = abs(originalX) / max(amountY, 0.0001)
       x += x * offsetX * offsetX
       y += y * offsetY * offsetY
       return CGPoint(x: x * 0.5 + 0.5, y: y * 0.5 + 0.5)
     }
 
     return bend(uv)
+  }
+
+  /// Returns false for the rounded glass corners that the shader leaves dark.
+  private func isInsideGlass(_ uv: CGPoint) -> Bool {
+    let radius = CGFloat(settings.cornerRadius)
+    guard radius > 0 else { return true }
+    let edgeX = min(uv.x, 1 - uv.x)
+    let edgeY = min(uv.y, 1 - uv.y)
+    let outsideX = max(radius - edgeX, 0)
+    let outsideY = max(radius - edgeY, 0)
+    return hypot(outsideX, outsideY) < radius
   }
 
   /// Converts a point in this view to a pixel in the game image.
@@ -237,7 +314,8 @@ struct CRTUniforms {
       straightened.y = min(1 - 0.001 / sourceSize.height, max(0, straightened.y))
     }
     guard straightened.x >= 0, straightened.x <= 1,
-      straightened.y >= 0, straightened.y <= 1
+      straightened.y >= 0, straightened.y <= 1,
+      clampingToImage || isInsideGlass(straightened)
     else { return nil }
     return CGPoint(
       x: straightened.x * sourceSize.width,
@@ -255,6 +333,7 @@ struct CRTUniforms {
       uv.x += (target.x-projected.x)*0.75
       uv.y += (target.y-projected.y)*0.75
     }
+    guard isInsideGlass(target) else { return nil }
     return CGPoint(x:uv.x*bounds.width,y:(1-uv.y)*bounds.height)
   }
 
@@ -265,7 +344,9 @@ struct CRTUniforms {
   }
 
   override func mouseMoved(with event: NSEvent) {
-    guard let point = sourcePoint(from: convert(event.locationInWindow, from: nil))
+    let viewPoint = convert(event.locationInWindow, from: nil)
+    updateSystemCursor(at: viewPoint)
+    guard let point = sourcePoint(from: viewPoint)
     else { onMouseExited?(); return }
     onMouseMoved?(point)
   }
@@ -281,7 +362,10 @@ struct CRTUniforms {
     onMouseDragged?(point)
   }
 
-  override func mouseExited(with event: NSEvent) { onMouseExited?() }
+  override func mouseExited(with event: NSEvent) {
+    NSCursor.arrow.set()
+    onMouseExited?()
+  }
 
   override func scrollWheel(with event: NSEvent) {
     onScroll?(event.scrollingDeltaX, event.scrollingDeltaY)
@@ -368,15 +452,25 @@ struct CRTUniforms {
     uniforms.outputSize = SIMD2(
       Float(layer.drawableSize.width), Float(layer.drawableSize.height))
     uniforms.curvature = settings.curvature
+    uniforms.curvatureY = settings.curvatureY
+    uniforms.cornerRadius = settings.cornerRadius
+    uniforms.cornerSoftness = settings.cornerSoftness
     uniforms.scanlineDepth = settings.scanlineDepth
     uniforms.beamWidth = settings.beamWidth
     uniforms.beamBloom = settings.beamBloom
     uniforms.maskStrength = settings.maskStrength
     uniforms.maskType = settings.maskType
+    uniforms.maskSize = settings.maskSize
+    uniforms.maskDark = settings.maskDark
+    uniforms.maskLight = settings.maskLight
     uniforms.bloomAmount = settings.bloomAmount
     uniforms.gamma = settings.gamma
     uniforms.brightness = settings.brightness
+    uniforms.brightBoostDark = settings.brightBoostDark
+    uniforms.brightBoostBright = settings.brightBoostBright
+    uniforms.saturation = settings.saturation
     uniforms.convergence = settings.convergence
+    uniforms.convergenceY = settings.convergenceY
     uniforms.vignette = settings.vignette
     uniforms.pixelAspect = settings.pixelAspect
     uniforms.colorLevels = settings.colorLevels

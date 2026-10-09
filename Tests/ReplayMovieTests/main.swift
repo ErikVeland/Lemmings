@@ -238,7 +238,7 @@ extension ReplayMovieWindow {
     open(url, title: "Test replay", onOpen: { opened += 1 }, onClose: { closed += 1 })
     for _ in 0..<50 {
       if player.currentItem?.status == .readyToPlay { break }
-      try await Task.sleep(for: .milliseconds(100))
+      try await Task.sleep(nanoseconds: 100_000_000)
     }
     try require(player.currentItem?.status == .readyToPlay && duration > 0, "Saved movie did not become playable")
     try require(opened == 1, "Replay did not suspend the game audio")

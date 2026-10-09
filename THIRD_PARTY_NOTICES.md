@@ -142,3 +142,10 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+## Sparkle
+
+The macOS app bundles Sparkle 2.7.3 for signed automatic updates. Sparkle is
+available from <https://github.com/sparkle-project/Sparkle>. Its MIT licence and
+the licences for its bundled third-party components are included in the Sparkle
+distribution used to build the app.
