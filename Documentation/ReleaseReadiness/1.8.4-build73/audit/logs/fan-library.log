@@ -1,0 +1,932 @@
+PASS same-named catalogue packs keep separate level progress identities
+PASS home progress excludes passes from removed fan packs
+PASS home progress excludes every pass when no fan packs are installed
+PASS legacy fan progress migrates to a stable pack identity
+PASS different catalogue packs with the same display name keep separate counts
+PASS the exact source-checked Level Design Game pack uses Golems mechanics
+PASS the exact source-checked JUANJO1N pack uses Golems mechanics
+PASS replacement and other fan archives retain original mechanics
+PASS source-replayed Mobius levels and exact duplicate members use Golems mechanics only on the pinned archive
+PASS the pinned Timpack source replay selects Golems mechanics for one level
+PASS the pinned Akseli source replays select Golems mechanics for four levels
+PASS the pinned MATTPCK1 source replays select Golems mechanics only for four members
+PASS the pinned Akseli puzzle copy in 0207-LF-level-design-contest-1.zip selects Golems mechanics only for its exact member
+PASS the pinned Akseli puzzle copy in 0214-LF-Level-Jam-1.zip selects Golems mechanics only for its exact member
+PASS the pinned official puzzle copy in 0264-Conway-Challenges-2.zip selects later hatch rules only for its exact member
+PASS the pinned official puzzle copy in 0301-Pacpack2.zip selects later hatch rules only for its exact member
+PASS pinned source replays select Golems mechanics for the exact geoo and 1tseug members
+PASS pinned source replays select Golems mechanics for the exact geoo and 1tseug members
+PASS pinned source replays select Golems mechanics for the exact geoo and 1tseug members
+PASS pinned source replays select Golems mechanics for the exact geoo and 1tseug members
+PASS pinned source replays select Golems mechanics for the exact geoo and 1tseug members
+PASS pinned source replays select Golems mechanics for the exact geoo and 1tseug members
+PASS pinned source replays select Golems mechanics for the exact geoo and 1tseug members
+PASS the pinned official conversion 0478-DOS-Amiga-Crazy.zip retains later hatch mechanics
+PASS the pinned official conversion 0479-DOS-Amiga-Wild.zip retains later hatch mechanics
+PASS the pinned official conversion 0480-DOS-Amiga-Wicked.zip retains later hatch mechanics
+PASS the pinned official conversion 0481-DOS-Amiga-Havoc.zip retains later hatch mechanics
+PASS the pinned official conversion 0482-DOS-Frost.zip retains later hatch mechanics
+PASS the pinned official conversion 0483-DOS-Hail.zip retains later hatch mechanics
+PASS the pinned official conversion 0487-DOS-Xmas-1992.zip retains later hatch mechanics
+PASS the pinned official conversion 0583-Amiga-Oh-No-More-Lemmings-Two-Player.zip retains later hatch mechanics
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS source-checked bundled level uses Golems rules
+PASS mixed-evidence packs retain original rules for unselected levels
+PASS embedded packs open without a chosen folder and duplicate IDs are excluded
+PASS embedded pack exposes decoded levels
+PASS verified archive exposes the complete decoded level list
+PASS corrupt fan archives fail verified playlist discovery
+PASS binary levels named .ini remain playable
+PASS HTML, truncated and invalid downloads cannot be installed
+PASS new compatible pack downloads automatically, validates and supplies its count
+PASS installed packs are not downloaded and catch-up stops at a known page
+PASS downloaded additions merge with the offline library
+PASS next launch performs one index check without duplicate downloads
+PASS offline launch preserves the entire installed collection
+PASS remote names cannot escape the pack directory
+PASS failed downloads leave no visible partial pack
+PASS custom graphics slot 0 uses its own release assets
+PASS alternate artwork for slot 0 follows its resolved release
+PASS custom graphics slot 1 uses its own release assets
+PASS alternate artwork for slot 1 follows its resolved release
+PASS custom graphics slot 2 uses its own release assets
+PASS alternate artwork for slot 2 follows its resolved release
+PASS custom graphics slot 3 uses its own release assets
+PASS alternate artwork for slot 3 follows its resolved release
+PASS custom graphics slot 4 uses its own release assets
+PASS alternate artwork for slot 4 follows its resolved release
+PASS custom graphics slot 5 uses its own release assets
+PASS alternate artwork for slot 5 follows its resolved release
+PASS custom graphics slot 6 uses its own release assets
+PASS alternate artwork for slot 6 follows its resolved release
+PASS custom graphics slot 7 uses its own release assets
+PASS alternate artwork for slot 7 follows its resolved release
+PASS custom graphics slot 8 uses its own release assets
+PASS alternate artwork for slot 8 follows its resolved release
+PASS custom graphics slot 9 uses its own release assets
+PASS alternate artwork for slot 9 follows its resolved release
+PASS named graphics take precedence over the numeric slot
+PASS named Snow does not use the numeric slot's original artwork
+PASS custom pack artwork is not replaced by an unrelated stock bank
+PASS an unchanged ground set matches every piece of its own release
+PASS a recoloured ground set keeps its source pixels for reconstruction
+PASS a redrawn piece uses reconstruction while the rest keep release artwork
+PASS a level whose visible pieces are mostly redrawn still gets reconstruction
+PASS xmas resolves Holiday graphics
+PASS christmas resolves Holiday graphics
+PASS unknown named styles fail instead of silently changing level geometry
+PASS read fixture asset vgaspec6.dat
+PASS fan special picture comes from its own archive
+PASS Apple Computer fan level renders and starts with its bundled picture
+PASS read fixture asset GROUND1O.DAT
+PASS Genesis fan pack uses its own terrain definitions for Let's get together.
+PASS read fixture asset GROUND1O.DAT
+PASS Genesis fan pack uses its own terrain definitions for The Boiler Room
+PASS read fixture asset GROUND2O.DAT
+PASS Genesis fan pack uses its own terrain definitions for It's hero time
+PASS read fixture asset GROUND4O.DAT
+PASS Genesis fan pack uses its own terrain definitions for The Crossroads
+PASS read fixture asset GROUND1O.DAT
+PASS Genesis fan pack uses its own terrain definitions for Down,along,up,in that order
+PASS read fixture asset GROUND0O.DAT
+PASS Genesis fan pack uses its own terrain definitions for Over the wall
+PASS read fixture asset GROUND2O.DAT
+PASS Genesis fan pack uses its own terrain definitions for Poles apart
+PASS read fixture asset GROUND1O.DAT
+PASS Genesis fan pack uses its own terrain definitions for Last one out is a rotten egg!
+PASS read fixture asset GROUND2O.DAT
+PASS Genesis fan pack uses its own terrain definitions for Twins
+PASS read fixture asset GROUND1O.DAT
+PASS Genesis fan pack uses its own terrain definitions for Dangerous balcony
+PASS read fixture asset GROUND1O.DAT
+PASS Genesis fan pack uses its own terrain definitions for We all fall down
+PASS read fixture asset GROUND0O.DAT
+PASS Genesis fan pack uses its own terrain definitions for The Other Side.
+PASS read fixture asset GROUND3O.DAT
+PASS Genesis fan pack uses its own terrain definitions for The Great Lemming Caper
+PASS read fixture asset GROUND2O.DAT
+PASS Genesis fan pack uses its own terrain definitions for Climb and fall. Fall and climb.
+PASS read fixture asset GROUND0O.DAT
+PASS Genesis fan pack uses its own terrain definitions for Two ponds
+PASS read fixture asset GROUND2O.DAT
+PASS Genesis fan pack uses its own terrain definitions for Just a Minute...
+PASS read fixture asset GROUND2O.DAT
+PASS Genesis fan pack uses its own terrain definitions for Stepping Stones
+PASS read fixture asset GROUND0O.DAT
+PASS Genesis fan pack uses its own terrain definitions for Two different worlds
+PASS read fixture asset GROUND2O.DAT
+PASS Genesis fan pack uses its own terrain definitions for Time to get up!
+PASS read fixture asset GROUND2O.DAT
+PASS Genesis fan pack uses its own terrain definitions for No added colors or Lemmings
+PASS read fixture asset GROUND2O.DAT
+PASS Genesis fan pack uses its own terrain definitions for With a twist of Lemming please
+PASS read fixture asset GROUND0O.DAT
+PASS Genesis fan pack uses its own terrain definitions for A BeastII of a level
+PASS read fixture asset GROUND2O.DAT
+PASS Genesis fan pack uses its own terrain definitions for A group of entrances
+PASS read fixture asset GROUND1O.DAT
+PASS Genesis fan pack uses its own terrain definitions for All or Nothing
+PASS read fixture asset GROUND3O.DAT
+PASS Genesis fan pack uses its own terrain definitions for Have a nice day!
+PASS read fixture asset GROUND3O.DAT
+PASS Genesis fan pack uses its own terrain definitions for Lemming eater
+PASS read fixture asset GROUND2O.DAT
+PASS Genesis fan pack uses its own terrain definitions for Just a Minute (Part Two)
+PASS read fixture asset GROUND2O.DAT
+PASS Genesis fan pack uses its own terrain definitions for Leftovers are not always a waste
+PASS read fixture asset GROUND4O.DAT
+PASS Genesis fan pack uses its own terrain definitions for No hurry, Relax.
+PASS read fixture asset GROUND2O.DAT
+PASS Genesis fan pack uses its own terrain definitions for Lemmings' Ark
+PASS packs without custom graphics retain stock terrain
+PASS read fixture asset vgaspecS.dat
+PASS letter-coded special graphic for Supaplex Tricks...
+PASS letter-coded pack fixture renders and starts: 0002-geooPk1.zip
+PASS read fixture asset vgaspecm.dat
+PASS letter-coded special graphic for The Mon0lith
+PASS letter-coded pack fixture renders and starts: 0399-Mon0lith.zip
+PASS exact text steel clips to the playfield without rounding or scanning offscreen pixels
+PASS simulation terrain protects the exact text steel boundary
+PASS extreme steel rectangles render in bounded work without overflow
+PASS verified release identity: 0477-DOS-Amiga-Tame.zip
+PASS release-local graphics: Down And Out Lemmings
+PASS release-local graphics: Rent-a-Lemming
+PASS release-local graphics: Undercover Lemming
+PASS release-local graphics: Downwardly Mobile Lemmings
+PASS release-local graphics: Snuggle up to a Lemming
+PASS release-local graphics: Intsy-Wintsy...Lemming?
+PASS release-local graphics: Who`s That Lemming
+PASS release-local graphics: Dangerzone
+PASS release-local graphics: And now this...
+PASS release-local graphics: New Lemmings On The Block
+PASS release-local graphics: With Compliments
+PASS release-local graphics: Citizen Lemming
+PASS release-local graphics: Thunder-Lemmings are go!
+PASS release-local graphics: Get a little extra help
+PASS release-local graphics: Not just a pretty Lemming
+PASS release-local graphics: Gone With The Lemming
+PASS release-local graphics: Honey, I Saved The Lemmings
+PASS release-local graphics: Lemmings For Presidents!
+PASS release-local graphics: Lemming Productions Present...
+PASS release-local graphics: Custom built for Lemmings
+PASS verified release identity: 0478-DOS-Amiga-Crazy.zip
+PASS release-local graphics: Quote: "That`s a good level"
+PASS release-local graphics: Dolly Dimple
+PASS release-local graphics: Many Lemmings make level work
+PASS release-local graphics: Lemming Express
+PASS release-local graphics: 24 hour Lemathon
+PASS release-local graphics: The Stack
+PASS release-local graphics: And now, the end is near...
+PASS release-local graphics: KEEP ON TRUCKING
+PASS release-local graphics: On the Antarctic Coast
+PASS release-local graphics: ROCKY VI
+PASS release-local graphics: No Problemming!
+PASS release-local graphics: Lemming Friendly
+PASS release-local graphics: It`s a trade off
+PASS release-local graphics: Time waits for no Lemming
+PASS release-local graphics: Worra load of old blocks!
+PASS release-local graphics: Across The Gap
+PASS release-local graphics: DIGGING FOR VICTORY
+PASS release-local graphics: NO PROBLEM
+PASS release-local graphics: DON`T PANIC
+PASS release-local graphics: Ice Ice Lemming
+PASS verified release identity: 0479-DOS-Amiga-Wild.zip
+PASS release-local graphics: PoP YoR ToP!!!
+PASS release-local graphics: Lemming Hotel
+PASS release-local graphics: Lemming Rhythms
+PASS release-local graphics: Meeting Adjourned
+PASS release-local graphics: Lemming Head
+PASS release-local graphics: Just A Quicky
+PASS release-local graphics: You Take the High Road
+PASS release-local graphics: It`s a tight fit!
+PASS release-local graphics: Ice Station Lemming
+PASS release-local graphics: Higgledy Piggledy
+PASS release-local graphics: Mutiny On The Bounty
+PASS release-local graphics: SNOW JOKE
+PASS release-local graphics: ONWARD AND UPWARD
+PASS release-local graphics: ICE SPY
+PASS release-local graphics: THE SILENCE OF THE LEMMINGS
+PASS release-local graphics: Take care, Sweetie
+PASS release-local graphics: The Chain with no name
+PASS release-local graphics: Dr Lemminggood
+PASS release-local graphics: Lemmingdelica
+PASS release-local graphics: Got anything....Lemmingy???
+PASS verified release identity: 0480-DOS-Amiga-Wicked.zip
+PASS release-local graphics: LeMming ToMato KetchUp fAcilitY
+PASS release-local graphics: Inroducing SUPERLEMMING
+PASS release-local graphics: This Corrosion
+PASS release-local graphics: Oh No! It`s the 4TH DIMENSION!
+PASS release-local graphics: Chill out!
+PASS release-local graphics: PoP TiL YoU DrOp!
+PASS release-local graphics: Last Lemming To Lemmingcentral
+PASS release-local graphics: A TOWERING PROBLEM
+PASS release-local graphics: How on Earth?
+PASS release-local graphics: Temple of Love
+PASS release-local graphics: ROCKY ROAD
+PASS release-local graphics: Suicidal Tendencies
+PASS release-local graphics: Almost Nearly Virtual Reality
+PASS release-local graphics: The Lemming Learning Curve
+PASS release-local graphics: SPAM,SPAM,SPAM,EGG AND LEMMING
+PASS release-local graphics: Five Alive
+PASS release-local graphics: Down the tube
+PASS release-local graphics: LoTs moRe wHeRe TheY caMe fRom
+PASS release-local graphics: Up, Down or Round and Round
+PASS release-local graphics: The Lemming Funhouse
+PASS verified release identity: 0481-DOS-Amiga-Havoc.zip
+PASS release-local graphics: Tubular Lemmings
+PASS release-local graphics: Be more than just a number
+PASS release-local graphics: It`s the price you have to pay
+PASS release-local graphics: The race against cliches
+PASS release-local graphics: There`s madness in the method
+PASS release-local graphics: Now get out of that!
+PASS release-local graphics: Creature Discomforts
+PASS release-local graphics: Lemming about town
+PASS release-local graphics: AAAAAARRRRRRGGGGGGHHHHHH!!!!!!
+PASS release-local graphics: Flow Control
+PASS release-local graphics: Welcome to the party, pal!
+PASS release-local graphics: It`s all a matter of timing
+PASS release-local graphics: HIGHLAND FLING
+PASS release-local graphics: Synchronised Lemming
+PASS release-local graphics: Have an ice day
+PASS release-local graphics: Scaling the Heights
+PASS release-local graphics: Where Lemmings Dare
+PASS release-local graphics: Lemmings in a situation
+PASS release-local graphics: Looks a Bit Nippy Out There
+PASS release-local graphics: LOoK BeFoRe YoU LeAp!
+PASS verified release identity: 0486-DOS-Xmas-1991.zip
+PASS release-local graphics: Merry Christmas Mr Lemming
+PASS release-local graphics: Christmas Bonus
+PASS release-local graphics: Time waits for no Lemming
+PASS release-local graphics: This Corrosion
+PASS verified release identity: 0487-DOS-Xmas-1992.zip
+PASS release-local graphics: Jingle Lemming
+PASS release-local graphics: Happy Holidays Mr Lemming!
+PASS release-local graphics: A Lemming Holiday
+PASS release-local graphics: The North Poles
+PASS verified release identity: 0530-Oh-No-More-cLemmings-Tame.zip
+PASS release-local graphics: Just Dig!
+PASS release-local graphics: Now Use Miners and Climbers
+PASS release-local graphics: Only Floaters Can Survive This
+PASS release-local graphics: You Need Bashers This Time
+PASS release-local graphics: Tailor Made for Blockers
+PASS release-local graphics: Let's Block and Blow!
+PASS release-local graphics: Builders Will Help You Here
+PASS release-local graphics: Making Snowlemmings
+PASS release-local graphics: Be RiGhT bAcK!
+PASS release-local graphics: It'll be Comin' Round the Mtn.
+PASS release-local graphics: Lemmings in the Tub
+PASS release-local graphics: Frostlemm
+PASS release-local graphics: Just a Bit of Lemmings
+PASS release-local graphics: The Mountain Peaks
+PASS release-local graphics: Lemmings of the West
+PASS release-local graphics: Free Lemmings
+PASS release-local graphics: Bubbles in the Lemms
+PASS release-local graphics: Snowflakes, snowflakes, . . .
+PASS release-local graphics: The Great Lemming Road
+PASS release-local graphics: Lemming's Night
+PASS verified release identity: 0531-Oh-No-More-cLemmings-Crazy.zip
+PASS release-local graphics: The Mad Freezer
+PASS release-local graphics: LEMMINGS IS KILLING
+PASS release-local graphics: Hard to Swallow
+PASS release-local graphics: Time, Time, Time!
+PASS release-local graphics: Lemming Language
+PASS release-local graphics: The Peaks
+PASS release-local graphics: Proffesional Preferences
+PASS release-local graphics: Lemming Bubbles
+PASS release-local graphics:
+PASS release-local graphics: The Digfest
+PASS release-local graphics: If Not For the Lemmings . . .
+PASS release-local graphics: Cloudy Skies
+PASS release-local graphics: Mortar and Blocks
+PASS release-local graphics: Lack of Solidity
+PASS release-local graphics: Jump the Crack
+PASS release-local graphics: Lemmings at the Wall
+PASS release-local graphics: Prepare to be Mindblown
+PASS release-local graphics: Lemmings On The Spot
+PASS release-local graphics: Goldlemming!
+PASS release-local graphics: Lemmy Balboa
+PASS verified release identity: 0532-Oh-No-More-cLemmings-Wild.zip
+PASS release-local graphics: Wild Lemmings
+PASS release-local graphics: Lemprints in the Snow
+PASS release-local graphics: Valley of the Kings
+PASS release-local graphics: That Isn't Right!
+PASS release-local graphics: No Thank You
+PASS release-local graphics: Tragic Occurrences
+PASS release-local graphics: A Nicer Take on Timing
+PASS release-local graphics: To That and a Little to Lemmings
+PASS release-local graphics: Buried in the Snow . . .
+PASS release-local graphics: Lemgnosis
+PASS release-local graphics: GoNe WiTh ThE wInD
+PASS release-local graphics: Fear, Uncertainty, and Doubt
+PASS release-local graphics: The Cold Room
+PASS release-local graphics: Written in Pascal . . .
+PASS release-local graphics: To Da Loo . . .
+PASS release-local graphics: Wild Thing . . .
+PASS release-local graphics: Puzzled? I Think So . . .
+PASS release-local graphics: Timing Indeed . . .
+PASS release-local graphics: Creativity Beyond Lemmings . . .
+PASS release-local graphics: Snowcaps
+PASS verified release identity: 0533-Oh-No-More-cLemmings-Wicked.zip
+PASS release-local graphics: Wicked Cool!
+PASS release-local graphics: The Classic Turnaround Level
+PASS release-local graphics: Easy Going Lemmings
+PASS release-local graphics: I'll  Give You Some Leeway
+PASS release-local graphics: The Advantageous Masterpiece
+PASS release-local graphics: I'm Sorry Yggdrasil
+PASS release-local graphics: The Cave of Despair . . .
+PASS release-local graphics: The c Means Custom
+PASS release-local graphics: One of Many Illusions
+PASS release-local graphics: Do the Lemwalk
+PASS release-local graphics: Snowlemmings
+PASS release-local graphics: The Final Barrier
+PASS release-local graphics: Unnecessary Lemmings
+PASS release-local graphics: What's Better Than Bubbles?
+PASS release-local graphics: A Fistful of Lemmings
+PASS release-local graphics: . . . And a Few Lemmings More
+PASS release-local graphics: That isn't a Lemming . . .
+PASS release-local graphics: Only the Tip of the Iceberg
+PASS release-local graphics: Lemmings, The Astronomical!
+PASS release-local graphics: On to Greener Pastures
+PASS verified release identity: 0534-Oh-No-More-cLemmings-Havoc.zip
+PASS release-local graphics: My Kingdom for a Lemming!
+PASS release-local graphics: Tracking the Snowy Vastness. . .
+PASS release-local graphics: Of The Lemmings Not
+PASS release-local graphics: Superlemming Vendetta
+PASS release-local graphics: Oh Dear, Not Again
+PASS release-local graphics: What is it Now?
+PASS release-local graphics: Lemming Ablation
+PASS release-local graphics: The Chameleon of DMA
+PASS release-local graphics: The Chain Gang
+PASS release-local graphics: Sliding on Thin Ice
+PASS release-local graphics: The Corners of the Map
+PASS release-local graphics: Beware the Devil Lemming
+PASS release-local graphics: With a Bitter Aftertaste
+PASS release-local graphics: Snowed In
+PASS release-local graphics: The Great Lemming Excursion
+PASS release-local graphics: Bricky
+PASS release-local graphics: Just a Spoonful of Sugar
+PASS release-local graphics: Take a Chill Pill
+PASS release-local graphics: Scale the Heights
+PASS release-local graphics: The Space-Lemming Conundrum
+PASS verified release identity: 0583-Amiga-Oh-No-More-Lemmings-Two-Player.zip
+PASS release-local graphics: The Duel
+PASS release-local graphics: Match Of The Day
+PASS release-local graphics: Confrontation
+PASS release-local graphics: The Only Way Out
+PASS release-local graphics: Showdown!
+PASS release-local graphics: Test Of Skill
+PASS release-local graphics: Give And Take
+PASS release-local graphics: Co-operation
+PASS release-local graphics: One On One
+PASS release-local graphics: I Want It All
+PASS renamed verified archive retains its convention
+PASS same-sized changed archive cannot inherit verified metadata
+PASS unknown packs retain combined-editor numbering
+PASS legacy attempt preserves combined-editor graphics
+PASS explicit named style overrides release metadata
+PASS official record confirms release slot: Down And Out Lemmings
+PASS official record confirms release slot: Rent-a-Lemming
+PASS official record confirms release slot: Undercover Lemming
+PASS official record confirms release slot: Downwardly Mobile Lemmings
+PASS official record confirms release slot: Snuggle up to a Lemming
+PASS official record confirms release slot: Intsy-Wintsy...Lemming?
+PASS official record confirms release slot: Who`s That Lemming
+PASS official record confirms release slot: Dangerzone
+PASS official record confirms release slot: And now this...
+PASS official record confirms release slot: New Lemmings On The Block
+PASS official record confirms release slot: With Compliments
+PASS official record confirms release slot: Citizen Lemming
+PASS official record confirms release slot: Thunder-Lemmings are go!
+PASS official record confirms release slot: Get a little extra help
+PASS official record confirms release slot: Not just a pretty Lemming
+PASS official record confirms release slot: Gone With The Lemming
+PASS official record confirms release slot: Honey, I Saved The Lemmings
+PASS official record confirms release slot: Lemmings For Presidents!
+PASS official record confirms release slot: Lemming Productions Present...
+PASS official record confirms release slot: Custom built for Lemmings
+PASS official record confirms release slot: Quote: "That`s a good level"
+PASS official record confirms release slot: Dolly Dimple
+PASS official record confirms release slot: Many Lemmings make level work
+PASS official record confirms release slot: Lemming Express
+PASS official record confirms release slot: 24 hour Lemathon
+PASS official record confirms release slot: The Stack
+PASS official record confirms release slot: And now, the end is near...
+PASS official record confirms release slot: KEEP ON TRUCKING
+PASS official record confirms release slot: On the Antarctic Coast
+PASS official record confirms release slot: ROCKY VI
+PASS official record confirms release slot: No Problemming!
+PASS official record confirms release slot: Lemming Friendly
+PASS official record confirms release slot: It`s a trade off
+PASS official record confirms release slot: Time waits for no Lemming
+PASS official record confirms release slot: Worra load of old blocks!
+PASS official record confirms release slot: Across The Gap
+PASS official record confirms release slot: DIGGING FOR VICTORY
+PASS official record confirms release slot: NO PROBLEM
+PASS official record confirms release slot: DON`T PANIC
+PASS official record confirms release slot: Ice Ice Lemming
+PASS official record confirms release slot: PoP YoR ToP!!!
+PASS official record confirms release slot: Lemming Hotel
+PASS official record confirms release slot: Lemming Rhythms
+PASS official record confirms release slot: Meeting Adjourned
+PASS official record confirms release slot: Lemming Head
+PASS official record confirms release slot: Just A Quicky
+PASS official record confirms release slot: You Take the High Road
+PASS official record confirms release slot: It`s a tight fit!
+PASS official record confirms release slot: Ice Station Lemming
+PASS official record confirms release slot: Higgledy Piggledy
+PASS official record confirms release slot: Mutiny On The Bounty
+PASS official record confirms release slot: SNOW JOKE
+PASS official record confirms release slot: ONWARD AND UPWARD
+PASS official record confirms release slot: ICE SPY
+PASS official record confirms release slot: THE SILENCE OF THE LEMMINGS
+PASS official record confirms release slot: Take care, Sweetie
+PASS official record confirms release slot: The Chain with no name
+PASS official record confirms release slot: Dr Lemminggood
+PASS official record confirms release slot: Lemmingdelica
+PASS official record confirms release slot: Got anything....Lemmingy???
+PASS official record confirms release slot: LeMming ToMato KetchUp fAcilitY
+PASS official record confirms release slot: Inroducing SUPERLEMMING
+PASS official record confirms release slot: This Corrosion
+PASS official record confirms release slot: Oh No! It`s the 4TH DIMENSION!
+PASS official record confirms release slot: Chill out!
+PASS official record confirms release slot: PoP TiL YoU DrOp!
+PASS official record confirms release slot: Last Lemming To Lemmingcentral
+PASS official record confirms release slot: A TOWERING PROBLEM
+PASS official record confirms release slot: How on Earth?
+PASS official record confirms release slot: Temple of Love
+PASS official record confirms release slot: ROCKY ROAD
+PASS official record confirms release slot: Suicidal Tendencies
+PASS official record confirms release slot: Almost Nearly Virtual Reality
+PASS official record confirms release slot: The Lemming Learning Curve
+PASS official record confirms release slot: SPAM,SPAM,SPAM,EGG AND LEMMING
+PASS official record confirms release slot: Five Alive
+PASS official record confirms release slot: Down the tube
+PASS official record confirms release slot: LoTs moRe wHeRe TheY caMe fRom
+PASS official record confirms release slot: Up, Down or Round and Round
+PASS official record confirms release slot: The Lemming Funhouse
+PASS official record confirms release slot: Tubular Lemmings
+PASS official record confirms release slot: Be more than just a number
+PASS official record confirms release slot: It`s the price you have to pay
+PASS official record confirms release slot: The race against cliches
+PASS official record confirms release slot: There`s madness in the method
+PASS official record confirms release slot: Now get out of that!
+PASS official record confirms release slot: Creature Discomforts
+PASS official record confirms release slot: Lemming about town
+PASS official record confirms release slot: AAAAAARRRRRRGGGGGGHHHHHH!!!!!!
+PASS official record confirms release slot: Flow Control
+PASS official record confirms release slot: Welcome to the party, pal!
+PASS official record confirms release slot: It`s all a matter of timing
+PASS official record confirms release slot: HIGHLAND FLING
+PASS official record confirms release slot: Synchronised Lemming
+PASS official record confirms release slot: Have an ice day
+PASS official record confirms release slot: Scaling the Heights
+PASS official record confirms release slot: Where Lemmings Dare
+PASS official record confirms release slot: Lemmings in a situation
+PASS official record confirms release slot: Looks a Bit Nippy Out There
+PASS official record confirms release slot: LOoK BeFoRe YoU LeAp!
+PASS official record confirms release slot: Merry Christmas Mr Lemming
+PASS official record confirms release slot: Christmas Bonus
+PASS official record confirms release slot: Time waits for no Lemming
+PASS official record confirms release slot: This Corrosion
+PASS official record confirms release slot: Jingle Lemming
+PASS official record confirms release slot: Happy Holidays Mr Lemming!
+PASS official record confirms release slot: A Lemming Holiday
+PASS official record confirms release slot: The North Poles
+PASS at least 100 canonical records confirm release-local numbering
+PASS previous graphics revision retains legacy Holiday assets
+PASS verified Holiday identity: 0482-DOS-Frost.zip
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Chains of Command
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Ski Jump!
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: CindyLand
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Separate Ways
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Lemming Reunification
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: The Land of the Bizarre
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Happy New Year!
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Division Bell
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Quest for Kieran
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Four Play
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Maybe not such a doddle
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: It's Boxing Day!
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: 2 Minutes before midnight
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Happy New Year II!
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Plethora of Presents
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Up on the Rooftops
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS previous graphics revision retains legacy Holiday assets
+PASS verified Holiday identity: 0483-DOS-Hail.zip
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Go Thataway!
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Break On Through
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: And a Happy New Year!
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Lemmintaschen?
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Get the Point?
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Surprise Package?
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Steel Ice Span
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Sir Edmund Hilemming
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Up, up, and away!
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Lemmy in the cold, cold ground
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Emmings!  (No L)
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Merry Christmaze
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Polar Expedition
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Rendezvous II
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Steel Block Party
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Peak of Performance
+PASS older Holiday attempt retains marble
+PASS official Holiday record confirms slot
+PASS previous graphics revision retains legacy Holiday assets
+PASS verified Holiday identity: 0535-Holiday-cLemmings-Frost.zip
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Floating Down!
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Digging Tasks
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Building Past Death
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Climbing Will Help, Now
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: My Pretty Little Lemmings
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: The Ice Box
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Lemmings Like Ike, Too
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Fosty The Lemman
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Snow Fortress
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: A Pun on Puns
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Snow The Lemmings Went Ahead
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Whiteout
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: That, Though, Is a Lemming
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: -Teen Ninety-Four
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: To Life, and Lots of Presents
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: The Snowy Ages
+PASS older Holiday attempt retains marble
+PASS previous graphics revision retains legacy Holiday assets
+PASS verified Holiday identity: 0536-Holiday-cLemmings-Hail.zip
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Leeemmy! You Know What You Are?!
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Through The Snow They Go
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: The Presents Are Pouring In!
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Lights In The Cold, Winter Night
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Let it Snow, Let it Snow, . . .
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Ice Skewer
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Ho Ho Ho!
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: The Great Antarctic Voyage
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Is That Better?
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Lemmmigns!
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: A Free-For-All!
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: The Lem Lax Land
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Say Whaaaaa?
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: No Rendezvous For You!
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Up, Up, And Away!!!
+PASS older Holiday attempt retains marble
+PASS verified Holiday archive contains only slot 2
+PASS Holiday snow assets: Ice Party at Steel's House!
+PASS older Holiday attempt retains marble
+PASS Holiday inventory and original-record matches
+PASS verified Holiday Flurry and Blitz archives select Holiday graphics
+PASS Holiday Flurry and Blitz keep the exact style for Climbing to the Top!
+PASS Holiday Flurry and Blitz keep the exact style for Floating Lemming Flurry
+PASS Holiday Flurry and Blitz keep the exact style for Holiday Mining
+PASS Holiday Flurry and Blitz keep the exact style for Lemming Tracks in the Snow!
+PASS Holiday Flurry and Blitz keep the exact style for Christmas South of the Equator
+PASS Holiday Flurry and Blitz keep the exact style for Lemming Snowfall
+PASS Holiday Flurry and Blitz keep the exact style for Lemming Snowjourn
+PASS Holiday Flurry and Blitz keep the exact style for Vacation in Gemland
+PASS Holiday Flurry and Blitz keep the exact style for A Block from Home
+PASS Holiday Flurry and Blitz keep the exact style for 32 Lemmings Below Zero
+PASS Holiday Flurry and Blitz keep the exact style for At Home in a Cave
+PASS Holiday Flurry and Blitz keep the exact style for Presents of Mind
+PASS Holiday Flurry and Blitz keep the exact style for Yo-yo Lem-lem
+PASS Holiday Flurry and Blitz keep the exact style for Marshmallow Land
+PASS Holiday Flurry and Blitz keep the exact style for Head for the Hills!
+PASS Holiday Flurry and Blitz keep the exact style for The Long Way Around
+PASS verified Holiday Flurry and Blitz archives select Holiday graphics
+PASS Holiday Flurry and Blitz keep the exact style for Oogilemming!
+PASS Holiday Flurry and Blitz keep the exact style for Lemmings Up High
+PASS Holiday Flurry and Blitz keep the exact style for Check Your Hints!
+PASS Holiday Flurry and Blitz keep the exact style for Santus Lemmingus
+PASS Holiday Flurry and Blitz keep the exact style for It Came Upon a Lemnight Clear
+PASS Holiday Flurry and Blitz keep the exact style for A Single Lemming...
+PASS Holiday Flurry and Blitz keep the exact style for Break on through...
+PASS Holiday Flurry and Blitz keep the exact style for Presents of Mind II
+PASS Holiday Flurry and Blitz keep the exact style for Lemmings...The Motion Picture
+PASS Holiday Flurry and Blitz keep the exact style for The Wrath of Lem
+PASS Holiday Flurry and Blitz keep the exact style for The Search for Lem
+PASS Holiday Flurry and Blitz keep the exact style for The Voyage Home...
+PASS Holiday Flurry and Blitz keep the exact style for The Final Frontier
+PASS Holiday Flurry and Blitz keep the exact style for The Undiscovered Country
+PASS Holiday Flurry and Blitz keep the exact style for The Needs of the Many...
+PASS Holiday Flurry and Blitz keep the exact style for The Next Lemeration
+PASS verified Holiday Flurry and Blitz archives select Holiday graphics
+PASS Holiday Flurry and Blitz keep the exact style for Ice Lemm
+PASS Holiday Flurry and Blitz keep the exact style for No Entry, No Exit
+PASS Holiday Flurry and Blitz keep the exact style for One Lone Lemm In The Snow
+PASS Holiday Flurry and Blitz keep the exact style for The Snows of Time
+PASS Holiday Flurry and Blitz keep the exact style for They Killed Lemmy!
+PASS Holiday Flurry and Blitz keep the exact style for No Lemmings For You!
+PASS Holiday Flurry and Blitz keep the exact style for Lemming Business
+PASS Holiday Flurry and Blitz keep the exact style for Biglemm Was Here
+PASS Holiday Flurry and Blitz keep the exact style for Snow Removal Team
+PASS Holiday Flurry and Blitz keep the exact style for Snow Me, Lemmings!
+PASS Holiday Flurry and Blitz keep the exact style for The Second Splatathon
+PASS Holiday Flurry and Blitz keep the exact style for Lemmings of the Rising Sun
+PASS Holiday Flurry and Blitz keep the exact style for The Blizzard
+PASS Holiday Flurry and Blitz keep the exact style for Bringing in the Presents
+PASS Holiday Flurry and Blitz keep the exact style for Vacation Gone Wrong
+PASS Holiday Flurry and Blitz keep the exact style for Lemmings Insurance
+PASS verified Holiday Flurry and Blitz archives select Holiday graphics
+PASS Holiday Flurry and Blitz keep the exact style for The Snow is Melting
+PASS Holiday Flurry and Blitz keep the exact style for Microsoft Holidays in 1994
+PASS Holiday Flurry and Blitz keep the exact style for The Lemmings Expertise Lemming
+PASS Holiday Flurry and Blitz keep the exact style for The Great Snowy Lemmousine
+PASS Holiday Flurry and Blitz keep the exact style for Snow in the Lems
+PASS Holiday Flurry and Blitz keep the exact style for Christmas in Upsidedown World
+PASS Holiday Flurry and Blitz keep the exact style for The Snow Shack
+PASS Holiday Flurry and Blitz keep the exact style for Saintly Lemmings
+PASS Holiday Flurry and Blitz keep the exact style for The Snowish March
+PASS Holiday Flurry and Blitz keep the exact style for Christmas on the snow
+PASS Holiday Flurry and Blitz keep the exact style for Snowy Days, Snowy Days . . .
+PASS Holiday Flurry and Blitz keep the exact style for The Snow is Coming
+PASS Holiday Flurry and Blitz keep the exact style for Iced Lemmings
+PASS Holiday Flurry and Blitz keep the exact style for Snowy Trails . . .
+PASS Holiday Flurry and Blitz keep the exact style for The Christmas Classic
+PASS Holiday Flurry and Blitz keep the exact style for Happy New Year!
+PASS all literal member names remain independently selectable
+PASS exact archive member: level[1].ini
+PASS exact archive member: level1.ini
+PASS exact archive member: star*.ini
+PASS exact archive member: starX.ini
+PASS exact archive member: q?.ini
+PASS exact archive member: qa.ini
+PASS exact archive member: back\slash.ini
+PASS exact archive member: nested[1]/level.ini
+PASS exact archive member: nested1/level.ini
+PASS exact archive member: -x.ini
+PASS ambiguous duplicate members cannot merge into one level
+PASS direct or saved selection of duplicate member is rejected
+PASS read fixture asset geooPk0.dat
+PASS slot migration fixture has three records
+PASS create mapped archive valid-slots
+PASS pruning keeps original DAT slot identities
+PASS saved slot 0 still resolves to its original level
+PASS saved slot 2 still resolves to its original level
+PASS saved queue removes deleted entries and preserves current ownership and position
+PASS deleted slots never select another level
+PASS deleted current attempt fails without changing its identity
+PASS create mapped archive invalid-slots-0
+PASS invalid slot mapping cannot enter catalogue
+PASS invalid saved slot mapping is rejected
+PASS create mapped archive invalid-slots-1
+PASS invalid slot mapping cannot enter catalogue
+PASS invalid saved slot mapping is rejected
+PASS create mapped archive invalid-slots-2
+PASS invalid slot mapping cannot enter catalogue
+PASS invalid saved slot mapping is rejected
+PASS create mapped archive invalid-slots-3
+PASS invalid slot mapping cannot enter catalogue
+PASS invalid saved slot mapping is rejected
+PASS folder fingerprint keys files by their path inside the folder
+PASS a folder under /private keeps its fingerprint
+PASS fan level with only a later exit selects all 32 object slots
+PASS bundled fan level has a functional exit
+PASS level with an ordinary exit retains DOS object slots
+PASS 218 release-local levels render and start
+PASS 108 canonical terrain/object records match the original release
+PASS 64 Holiday levels render/start; 31 original records match

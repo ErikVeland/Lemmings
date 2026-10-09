@@ -1,0 +1,156 @@
+Command: LEMMINGS_TEST_AUDIO=muted PYTHONDONTWRITEBYTECODE=1 CLANG_MODULE_CACHE_PATH=$PWD/.build/audio-joy-module-cache SWIFTPM_MODULECACHE_OVERRIDE=$PWD/.build/audio-joy-module-cache swift test --disable-sandbox -j 4 --disable-automatic-resolution --filter HostedRankingsTests
+warning: /Users/veland/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'lemmings': failed storing manifest for 'lemmings' in cache: attempt to write a readonly database
+warning: 'sparkle': failed storing manifest for 'sparkle' in cache: attempt to write a readonly database
+Building for debugging...
+[Constructing description]
+[Planning 1 / 358]
+[Planning deferred tasks]
+[6 / 30] LemmingsMobileCoreTests-product
+[8 / 26] LemmingsMobileCoreTests-product
+[12 / 46] LemmingsLocal-product
+[13 / 61] LemmingsLocal
+[14 / 61] NxlvKitTests-product
+[16 / 61] NxlvKitTests-product
+[18 / 61] NxlvKitTests-product
+[19 / 63] NxlvKitTests-product
+[21 / 63] NxlvKitTests-product
+[25 / 63] NxlvKitTests-product
+[28 / 63] NxlvKitTests-product
+[30 / 63] NxlvKitTests-product
+[31 / 63] NxlvKitTests-product
+[32 / 63] NxlvKitTests-product
+/Users/veland/Lemmings/Sources/LemmingsLocal/ReleaseWelcome.swift:47:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+45 |         scroll.hasHorizontalScroller = false
+46 |         scroll.drawsBackground = false
+47 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+48 |         scroll.scrollerStyle = .overlay
+49 |         scroll.setAccessibilityLabel("Release notes")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[34 / 65] LemmingsLocal-product
+[36 / 66] NxlvKitTests-product
+[38 / 69] LemmingsMobileCoreTests-product
+[43 / 69] NxlvKitTests-product
+[44 / 69] LemmingsMobileCoreTests-product
+[46 / 73] LemmingsLocal
+[48 / 73] LemmingsLocal
+[48 / 73] NxlvKitTests-product
+[50 / 73] LemmingsLocal
+[51 / 73] LemmingsLocal
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:5845:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5843 |       openPanel.canChooseFiles = true
+5844 |       openPanel.canChooseDirectories = false
+5845 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5846 |       openPanel.message = "Choose a NeoLemmix level file."
+5847 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:7080:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7078 |       openPanel.canChooseFiles = true
+7079 |       openPanel.canChooseDirectories = false
+7080 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7081 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+7082 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:7550:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7548 |     keyboard.controllerRewindHeld = { [weak self] held in
+7549 |       guard let self else { return }
+7550 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7551 |       else if self.rewindHeld { self.endContinuousRewind() }
+7552 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[51 / 73] LemmingsLocal-product
+[52 / 75] LemmingsLocal
+[54 / 77] LemmingsLocal
+[56 / 77] LemmingsLocal
+[56 / 77] LemmingsLocal-product
+[58 / 77] LemmingsLocal
+[59 / 77] LemmingsLocal
+[60 / 77] LemmingsLocal
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:5845:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5843 |       openPanel.canChooseFiles = true
+5844 |       openPanel.canChooseDirectories = false
+5845 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5846 |       openPanel.message = "Choose a NeoLemmix level file."
+5847 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:7080:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7078 |       openPanel.canChooseFiles = true
+7079 |       openPanel.canChooseDirectories = false
+7080 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7081 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+7082 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:7550:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7548 |     keyboard.controllerRewindHeld = { [weak self] held in
+7549 |       guard let self else { return }
+7550 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7551 |       else if self.rewindHeld { self.endContinuousRewind() }
+7552 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[60 / 77]
+[65 / 77] LemmingsLocal-product
+[66 / 75] LemmingsLocal
+/Users/veland/Lemmings/Sources/LemmingsLocal/ReleaseWelcome.swift:47:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+45 |         scroll.hasHorizontalScroller = false
+46 |         scroll.drawsBackground = false
+47 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+48 |         scroll.scrollerStyle = .overlay
+49 |         scroll.setAccessibilityLabel("Release notes")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[70 / 75] LemmingsLocalTests-product
+[75 / 84] LemmingsLocalTests-product
+[77 / 84] LemmingsLocalTests-product
+[81 / 84] LemmingsLocalTests-product
+[83 / 87] LemmingsLocalTests-product
+Build complete! (16.14 sec.)
+Test Suite 'Selected tests' started at 2026-10-09 11:56:00.610.
+Test Suite 'NxlvKitTests.xctest' started at 2026-10-09 11:56:00.613.
+Test Suite 'NxlvKitTests.xctest' passed at 2026-10-09 11:56:00.613.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-10-09 11:56:00.613.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.003) seconds
+Test Suite 'Selected tests' started at 2026-10-09 11:56:00.714.
+Test Suite 'LemmingsMobileCoreTests.xctest' started at 2026-10-09 11:56:00.715.
+Test Suite 'LemmingsMobileCoreTests.xctest' passed at 2026-10-09 11:56:00.715.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-10-09 11:56:00.715.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+Test Suite 'Selected tests' started at 2026-10-09 11:56:00.794.
+Test Suite 'LemmingsLocalTests.xctest' started at 2026-10-09 11:56:00.795.
+Test Suite 'HostedRankingsTests' started at 2026-10-09 11:56:00.795.
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testBrowseNeedsNoAccountAndDoesNotShare]' started.
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testBrowseNeedsNoAccountAndDoesNotShare]' passed (0.004 seconds).
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testCareerCandidateSurvivesBetterFailedRescue]' started.
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testCareerCandidateSurvivesBetterFailedRescue]' passed (0.006 seconds).
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testRemovalRetriesAfterRestartWithoutLocalProfile]' started.
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testRemovalRetriesAfterRestartWithoutLocalProfile]' passed (0.006 seconds).
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testStaleResponseCannotReplaceSelectedBoard]' started.
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testStaleResponseCannotReplaceSelectedBoard]' passed (0.094 seconds).
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testSyncUsesLocalPlayerCredentialAndRemovalStopsSharing]' started.
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testSyncUsesLocalPlayerCredentialAndRemovalStopsSharing]' passed (0.139 seconds).
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testWireIdentityAcrossAllEngines]' started.
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testWireIdentityAcrossAllEngines]' passed (0.335 seconds).
+Test Suite 'HostedRankingsTests' passed at 2026-10-09 11:56:01.381.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.585 (0.586) seconds
+Test Suite 'LemmingsLocalTests.xctest' passed at 2026-10-09 11:56:01.381.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.585 (0.586) seconds
+Test Suite 'Selected tests' passed at 2026-10-09 11:56:01.381.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.585 (0.587) seconds
+
+Exit code: 0

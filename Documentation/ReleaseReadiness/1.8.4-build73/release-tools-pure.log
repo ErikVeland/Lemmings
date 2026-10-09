@@ -1,0 +1,45 @@
+Command: PYTHONDONTWRITEBYTECODE=1 RELEASE_APPROVED=0 LEMMINGS_TEST_AUDIO=muted python3 -m unittest discover -s Tests/ReleaseReadinessTests -p test_*.py -v
+test_assets_and_replay_evidence_are_hashed (test_audit.AuditTests.test_assets_and_replay_evidence_are_hashed) ... ok
+test_classic_campaign_requires_missing_routes (test_audit.AuditTests.test_classic_campaign_requires_missing_routes) ... ok
+test_classic_scope_keeps_shared_and_unknown_gates (test_audit.AuditTests.test_classic_scope_keeps_shared_and_unknown_gates) ... ok
+test_closure_requires_all_checks_and_gates (test_audit.AuditTests.test_closure_requires_all_checks_and_gates) ... ok
+test_current_repository_inputs_are_valid (test_automatic_updates.AutomaticUpdateTests.test_current_repository_inputs_are_valid) ... ok
+test_empty_feed_is_not_valid_for_a_release (test_automatic_updates.AutomaticUpdateTests.test_empty_feed_is_not_valid_for_a_release) ... ok
+test_info_plist_rejects_an_invalid_public_key (test_automatic_updates.AutomaticUpdateTests.test_info_plist_rejects_an_invalid_public_key) ... ok
+test_polish_release_versions (test_automatic_updates.AutomaticUpdateTests.test_polish_release_versions) ... ok
+test_release_feed_requires_signed_https_enclosures (test_automatic_updates.AutomaticUpdateTests.test_release_feed_requires_signed_https_enclosures) ... ok
+test_release_match_uses_highest_build_with_enclosure_attributes (test_automatic_updates.AutomaticUpdateTests.test_release_match_uses_highest_build_with_enclosure_attributes) ... ok
+test_signed_https_feed_is_accepted (test_automatic_updates.AutomaticUpdateTests.test_signed_https_feed_is_accepted) ... ok
+test_image_hints_do_not_box_swift_enums (test_image_interpolation.ImageInterpolationTests.test_image_hints_do_not_box_swift_enums) ... ok
+test_library_payloads_follow_shipped_hashes (test_music_playback.MusicPlaybackHashTests.test_library_payloads_follow_shipped_hashes) ... ok
+test_playback_hashes_follow_reencoded_files_only (test_music_playback.MusicPlaybackHashTests.test_playback_hashes_follow_reencoded_files_only) ... ok
+test_current_beta_can_ship_with_explicit_gaps (test_package_scope.PackageScopeTests.test_current_beta_can_ship_with_explicit_gaps) ... ok
+test_fresh_audit_failure_blocks_archive_after_resource_changes (test_package_scope.PackageScopeTests.test_fresh_audit_failure_blocks_archive_after_resource_changes) ... ok
+test_invalid_version_or_missing_gates_fails_closed (test_package_scope.PackageScopeTests.test_invalid_version_or_missing_gates_fails_closed) ... ok
+test_one_zero_and_later_require_closed_classic_gates (test_package_scope.PackageScopeTests.test_one_zero_and_later_require_closed_classic_gates) ... ok
+test_real_packager_stops_before_build_or_signing (test_package_scope.PackageScopeTests.test_real_packager_stops_before_build_or_signing) ... ok
+test_sequel_fidelity_is_separate_but_unclassified_gates_are_required (test_package_scope.PackageScopeTests.test_sequel_fidelity_is_separate_but_unclassified_gates_are_required) ... ok
+test_rejects_a_stale_build_or_base (test_release_notes.ReleaseNotesTests.test_rejects_a_stale_build_or_base) ... ok
+test_rejects_a_stale_or_duplicate_release_commit (test_release_notes.ReleaseNotesTests.test_rejects_a_stale_or_duplicate_release_commit) ... ok
+test_rejects_an_abbreviated_commit (test_release_notes.ReleaseNotesTests.test_rejects_an_abbreviated_commit) ... ok
+test_stamps_commit_without_changing_reviewed_text (test_release_notes.ReleaseNotesTests.test_stamps_commit_without_changing_reviewed_text) ... ok
+test_check_accepts_a_matching_slim_download (test_release_publication.ReleasePublicationTests.test_check_accepts_a_matching_slim_download) ... ok
+test_check_accepts_matching_inputs_without_publication (test_release_publication.ReleasePublicationTests.test_check_accepts_matching_inputs_without_publication) ... ok
+test_check_allows_notes_that_name_the_slim_download (test_release_publication.ReleasePublicationTests.test_check_allows_notes_that_name_the_slim_download) ... ok
+test_check_rejects_a_misnamed_slim_download (test_release_publication.ReleasePublicationTests.test_check_rejects_a_misnamed_slim_download) ... ok
+test_check_rejects_a_missing_slim_download (test_release_publication.ReleasePublicationTests.test_check_rejects_a_missing_slim_download) ... ok
+test_check_rejects_an_appcast_that_offers_the_slim_download (test_release_publication.ReleasePublicationTests.test_check_rejects_an_appcast_that_offers_the_slim_download) ... ok
+test_check_rejects_wrong_archive_length (test_release_publication.ReleasePublicationTests.test_check_rejects_wrong_archive_length) ... ok
+test_check_rejects_wrong_feed_commit (test_release_publication.ReleasePublicationTests.test_check_rejects_wrong_feed_commit) ... ok
+test_check_requires_a_slim_download (test_release_publication.ReleasePublicationTests.test_check_requires_a_slim_download) ... ok
+test_publication_requires_approval (test_release_publication.ReleasePublicationTests.test_publication_requires_approval) ... ok
+test_keeps_the_release_commit_for_the_publication_check (test_update_notes.UpdateNotesTests.test_keeps_the_release_commit_for_the_publication_check) ... ok
+test_renders_player_facing_html (test_update_notes.UpdateNotesTests.test_renders_player_facing_html) ... ok
+
+----------------------------------------------------------------------
+Ran 36 tests in 1.379s
+
+OK
+playback: 2 re-encoded entries
+
+Exit code: 0

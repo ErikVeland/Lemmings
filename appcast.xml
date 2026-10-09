@@ -3,6 +3,32 @@
     <channel>
         <title>Ultimate Lemmings</title>
         <item>
+            <title>1.8.4</title>
+            <pubDate>Fri, 09 Oct 2026 12:26:24 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>73</sparkle:version>
+            <sparkle:shortVersionString>1.8.4</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>More rescue cheers, playful feedback and music that carries the celebration.</p>
+<h3>Keep the winning tune</h3>
+<p>Meeting the rescue target can lift the current theme to an available, documented composer recording or remix of the same tune. The Adaptive DJ keeps that theme looping through the result screen. It keeps an existing remix, and leaves the current version playing when no suitable upgrade is installed or alternate soundtracks are disabled. Wins reached while paused resume the selected music.</p>
+<p>Recorded soundtracks have measured volume trims that preserve their dynamics. Versions with verified source loops play the intro once, then repeat the loop without the recording's extra repeated pass or ending fade.</p>
+<h3>Let the whole crowd cheer</h3>
+<p>Every rescue keeps its own voice, including simultaneous arrivals and crowded exits. The chorus stays at full strength while useful assignment and warning sounds remain clear. Player volume, mute and distance still apply.</p>
+<p>Lemmings 2 adds rescue cheers, trampoline bounces and trap feedback. Lemmings 3 adds short sounds for tool and clock pickups, projectile launches, explosions, brickwork, steel, water, drowning and traps. Sounds follow the actual event, and a trap or explosion does not add a second generic death voice afterward.</p>
+<h3>Little rewards and useful cues</h3>
+<p>An established rescue, skill or fastest-time personal best, or a newly earned rare award, adds a small flourish to the final result note. Fastest clear and Fastest 100% both qualify. The flourish adds no extra note or longer fanfare.</p>
+<p>Result sounds follow live effects volume and mute, stop when the result loses focus, and remain available with Reduced Motion. Reduced Motion reveals the stars immediately.</p>
+<p>Fresh starts and retries play Ready when the countdown finishes. Hot Seat handovers wait for the next player's Ready action. Timer warnings now sound different from builder warnings. Rejected actions on a lemming get a short, positioned cue, and locked Classic levels use the game's sound preference.</p>
+<h3>A cartoon speed pedal</h3>
+<p>Holding fast-forward winds the soundtrack's pitch up smoothly between speed tiers. It settles on musical intervals, with a perfect fourth at the top. The soundtrack's tempo and the existing simulation speed tiers stay as before. Releasing the hold restores the previous cruising speed.</p>
+<h3>Compatibility</h3>
+<p>Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. NeoLemmix remains Beta. Lemmings 2 and Lemmings 3 remain Preview. The slim download includes essential music and offers optional soundtrack libraries. Automatic updates retain the full soundtrack bundle.</p>
+<p class="meta">Build: 73<br>Release commit: aff210c0d1aa1a67c281e1e9240d3c2516db1003<br>Release base: v1.8.3</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.4/UltimateLemmings-1.8.4-build73.zip" length="1944808624" type="application/octet-stream" sparkle:edSignature="SRZwmFpSDD9qi1jvTla2m6D0j3E1bnC7pvjlT9E0c+ferFPfKHX4oRjxRRUK7ZYA7gCdj0aI9ySaKlKU7ZoNCQ=="/>
+        </item>
+        <item>
             <title>1.8.3</title>
             <pubDate>Thu, 08 Oct 2026 18:46:43 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -55,7 +81,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.1/Ultimate%20Lemmings65-39.delta" sparkle:deltaFrom="39" length="1519960290" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="fPMdTZ4ISfhY+8GosNTa5GoDPFUtciqB8FWdeQHxDVy+9rOaNPGJyxW53aSdduAiMSH/a8iE0ai0He0AreszCw=="/>
             </sparkle:deltas>
         </item>
-        <item>
+    <item>
             <title>1.8</title>
             <pubDate>Mon, 05 Oct 2026 18:24:15 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -75,7 +101,7 @@
 ]]></description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8/UltimateLemmings-1.8-build64.zip" length="1943417851" type="application/octet-stream" sparkle:edSignature="XkdmcLjgvsVge6iwVVlPbHpszlike+ANhP3+63WjMmJPgTxszl06Id+IgmsdJ0SDRLIp2StSklVJSxM77OB4Cg=="/>
         </item>
-        <item>
+<item>
             <title>1.7.9</title>
             <pubDate>Sun, 04 Oct 2026 22:47:54 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>

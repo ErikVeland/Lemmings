@@ -1,0 +1,5 @@
+PASS both Amiga banks decode to 21 sounds with sane rates and levels
+PASS every bound name exists in a bank, including the voices
+PASS effects with no named sample are declared rather than guessed
+PASS a file that is not a sound bank is reported rather than decoded
+Amiga sound tests passed.

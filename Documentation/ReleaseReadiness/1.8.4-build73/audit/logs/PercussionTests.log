@@ -1,0 +1,10 @@
+PASS drum names are recognised
+PASS melodic instruments are not mistaken for drums
+PASS shape is only consulted when the name says nothing
+PASS held, looping and long samples are not hits
+PASS centring adds to existing tuning rather than replacing it
+PASS asking for no centring leaves every sample alone
+PASS modern centres the beat and faithful leaves it where it was
+PASS Holiday modern mix centres the breakbeat and lead; faithful panning stays original
+PASS native rhythm keeps exact drum samples and clock, with no melodic voice
+Percussion tests passed.
