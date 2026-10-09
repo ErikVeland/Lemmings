@@ -667,9 +667,21 @@ func testInteractiveObjects() throws {
     trap.step()
     check(trap.lemmings[0].state == .trapped && trap.objectFrames[7] == 1,
           "Trap did not capture and animate")
+    let trapCue = trap.drainSoundEvents().filter { $0.supplementalEffect == .trapTrigger }
+    check(trapCue.count == 1 && trapCue[0].point != nil, "Trap activation lost its one-shot sound")
     check(!trap.assign(slot:0,to:0), "Trapped lemming accepted a skill")
     for _ in 0..<5 { trap.step() }
     check(trap.lost == 2 && trap.lemmings[1].active, "Trap busy exclusion or rearming is incorrect")
+    var timedTrap = try make(.init(id: 9, kind: .timedTrap,
+        triggers: [.init(x: 20, y: 60, width: 12, height: 1)], frameCount: 6,
+        minimumFrame: 2, maximumFrame: 3), total: 1)
+    timedTrap.step()
+    check(timedTrap.drainSoundEvents().allSatisfy { $0.supplementalEffect != .trapTrigger },
+          "Dormant timed trap played a killing sound")
+    var timedTrapCues: [Lemmings2SoundRequest] = []
+    for _ in 0..<30 { timedTrap.step(); timedTrapCues += timedTrap.drainSoundEvents() }
+    check(timedTrap.lost == 1 && timedTrapCues.filter { $0.supplementalEffect == .trapTrigger }.count == 1,
+          "Timed trap must sound once on lethal contact, without repeating on final death")
     var launcher = try make(.init(id:8,kind:.launcher,triggers:[trigger],frameCount:8,
         velocityX:-10,velocityY:-5,flags:3),total:1)
     launcher.step()
@@ -1017,6 +1029,8 @@ func testTrampolines() throws {
         check(game.lemmings[0].state == .jumping, "Trampoline did not convert a falling lemming")
         check(game.lemmings[0].air?.velocityY == Int16(-strengths[segment]), "Trampoline segment strength differs from original table")
         check(game.lemmings[0].air?.velocityX == (strengths[segment] == 4 ? 3 : 4), "Trampoline horizontal impulse differs")
+        let bounce = game.drainSoundEvents().filter { $0.supplementalEffect == .trampolineBounce }
+        check(bounce.count == 1 && bounce[0].point != nil, "Trampoline launch lost its one-shot sound")
     }
     print("PASS all sixteen native trampoline launch segments")
 }
@@ -1351,6 +1365,21 @@ func testNativeTerrainPhases(_ masks: Lemmings2TerrainMasks) throws {
 }
 
 func testControlsAndSoundEvents() throws {
+    let rescueBase = try fixture().configuration
+    var rescuing = try Lemmings2Runtime(configuration: .init(width: rescueBase.width,
+        height: rescueBase.height, pixels: rescueBase.pixels, solid: rescueBase.solid,
+        palette: rescueBase.palette, entrance: .init(x: 20, y: 60, width: 1, height: 1),
+        exits: [.init(x: 0, y: 59, width: 120, height: 2)], skills: [.jumper], supplies: [0],
+        total: 300, timeLimit: 120, releaseInterval: 1, terrainMasks: rescueBase.terrainMasks,
+        firstReleaseTick: 1, exitFrameCount: 1))
+    for _ in 0..<400 where !rescuing.isComplete { rescuing.step() }
+    let rescues = rescuing.drainSoundEvents().filter { $0.supplementalEffect == .yippee }
+    check(rescuing.saved == 300 && rescues.count == 300 && rescues.allSatisfy { $0.point != nil },
+          "Every L2 rescue must retain its voice, even beyond the general event cap")
+    rescuing.step()
+    check(rescuing.drainSoundEvents().isEmpty, "Completed L2 run repeated rescue sounds")
+    check(Lemmings2SoundRequest(supplemental: .trampolineBounce).sample == -1,
+          "Supplemental effects must not guess an original bank index")
     var falling = try Lemmings2Runtime(configuration: .init(width: 120, height: 80,
         pixels: [UInt8](repeating: 0, count: 9600), solid: [Bool](repeating: false, count: 9600),
         palette: [UInt8](repeating: 255, count: 1024), entrance: .init(x: 20, y: 45, width: 1, height: 1),

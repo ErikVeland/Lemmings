@@ -20,10 +20,12 @@ import NxlvKit
     }
     func showResult(_ report: ArcadeReport, owner: NSWindow? = nil, retry: @escaping () -> Void,
                     next: @escaping () -> Void, replay: @escaping (Bool) -> Void, storedReplay: ((URL, String) -> Void)? = nil, continueTitle: String = "Next level", background: CGImage? = nil, rewardVolume: Double = 0,
+                    rewardVolumeProvider: (() -> Double)? = nil,
                     continueHandlesHandover: Bool = false, skip: (() -> Void)? = nil,
                     later: (() -> Void)? = nil, hints: (() -> Void)? = nil,
                     status: String? = nil) {
         arcadeView.rewardVolume = rewardVolume
+        arcadeView.rewardVolumeProvider = rewardVolumeProvider
         arcadeView.mode = .result; arcadeView.report = report; arcadeView.level = report.run.level
         arcadeView.assisted = report.run.assisted; arcadeView.board = .rescue; arcadeView.trolleyBoard = .mostSaved
         arcadeView.boardScope = .level
@@ -121,6 +123,9 @@ import NxlvKit
     var celebrationGeneration = UUID()
     let rewardChimes = ResultChimes()
     var rewardVolume: Double = 0
+    var rewardVolumeProvider: (() -> Double)?
+    var celebrationFocusObservers: [NSObjectProtocol] = []
+    var onReadySound: (() -> Void)?
     var revealedStars = 3
     var stampedStar: Int?
     var featuredAwardIndex = 0
@@ -186,8 +191,10 @@ import NxlvKit
         let page = GameMenuPage(title: "\(next.initials)'s turn", subtitle: "PASS THE CONTROLS")
         page.controllerBackButton.isHidden = true
         page.setDetail("The game will wait. Give the controls to \(next.initials), then choose Ready.")
-        page.addPrimaryAction("Ready, \(next.initials)") { [weak page] in
-            if let page { GameScreen.shared.dismiss(page) }
+        page.addPrimaryAction("Ready, \(next.initials)") { [weak self, weak page] in
+            guard let page, GameScreen.shared.contains(page) else { return }
+            GameScreen.shared.dismiss(page)
+            self?.onReadySound?()
         }
         GameScreen.shared.present(page, owner: owner)
     }

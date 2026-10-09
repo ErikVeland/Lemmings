@@ -1,8 +1,19 @@
 # Audio coverage
 
-The level owns its assigned track. The Adaptive DJ keeps it for active play and
-uses the catalogue for deterministic versions of that tune and completed result cues. It does not rotate on
-a timer or react to rescue quota, danger, release rate or nuke.
+Sound modifications serve comedic effect as much as useful feedback. Use
+Looney Tunes-style timing: expressive wind-ups, glides and landings that make
+the player's action audible and keep the game's humour. Musical settling must
+preserve the joke. Mechanical checks stay muted; listening needs a separate
+explicit request.
+
+The level owns its assigned composition. The Adaptive DJ selects its version
+from the campaign position. Reaching the rescue target permits one lift to a
+documented remix or composer recording of that same tune. It keeps looping
+through the result screen. A completed win does not trigger another change.
+With alternate soundtracks disabled or no suitable version installed, the
+current theme continues. Danger, release rate, nuking and elapsed time do not
+replace it. See [Soundtrack journey](SoundtrackJourney.md) for the selection and
+recording rules.
 
 See [Music inventory](MusicInventory.md) for every included track, platform
 gaps and remix candidates. Module transitions use tracker beat timing and EQ.
@@ -73,6 +84,60 @@ External projects can help identify formats and guide future decoder work, but
 they do not automatically grant redistribution rights. A future import tool
 can render raw formats into the supported lossless formats after the required
 permissions and source-engine fidelity have been confirmed.
+
+## Shared feedback and rescue voices
+
+The 8 October development source preserves every rescue voice across Classic,
+NeoLemmix, Lemmings 2 and Lemmings 3, including simultaneous arrivals. Rescue
+voices have no repetition gate, crowd-dependent gain reduction or voice cap.
+When the fixed spatial pool fills, overflow layers keep independent playheads
+and normal gain inside the nearest spatial source. Player volume, mute and
+distance attenuation still apply. Useful assignment and warning cues retain
+priority, without cutting off the rescue chorus. Brief gates apply to repeated
+death, contact and rejected-action effects in the same region.
+
+Fresh level starts and retries play a short Ready cue when the shared countdown
+actually completes. Hot Seat plays it only after the next player chooses Ready.
+Arrival at the handover stays quiet and paused. A rejected skill action on a
+real target gets a short, positioned refusal cue. Locked Classic level selection
+uses the same sound preference instead of the system alert beep. Global Ready
+and final-seconds warning cues stay centred. Timer warnings have a distinct
+sound from the builder's final-brick warnings.
+
+Results keep their short rising star notes. An established rescue, skill or
+fastest-clear personal best, or a newly earned gold or legendary award, adds a
+small pitch ornament inside the final existing note. It adds no note, duration
+or gain. Routine first clears, repeated clears and failed runs do not get that
+ornament.
+Speed records require a previous eligible clear by the same player under the
+same level conditions and rewind category; both clear and all-saved records
+qualify. Later attempts cannot change an older result's ornament. Reduced
+Motion reveals all stars immediately and retains the audio schedule.
+Each note follows the current effects volume, mute and suspension state,
+including changes during its tail. Leaving the result or losing application or
+owning-window focus cancels the remaining sounds.
+
+L2 adds a rescue Yippee, trampoline bounce and trap trigger beside its verified
+original bank. L3 adds tool and clock pickups, projectile launch, explosive
+detonation, brick placement, steel contact, builder warnings, water entry,
+drowning and trap triggers at their causal events. These short supplements
+fill presentation gaps without guessing anonymous original sample indices.
+See [L2 sound evidence](Lemmings2PhysicsEvidence.md#presentation-sound-supplements)
+and [L3 original media](Lemmings3OriginalMedia.md).
+
+Muted checks cover rescue overflow and capture, priority, repetition gates,
+causal sequel events, distinct warnings, live result volume, Reduced Motion,
+focus cancellation and Ready activation. The full Trolley suite passes through
+the default offscreen, muted runner outside the restricted filesystem sandbox.
+Its native replay export failed inside that sandbox. No foreground or audible
+fallback was used. Listening, speaker balance and maximum rescue-crowd listening
+remain unverified.
+
+Paused-win music resume paths in the native L2 and L3 windows are source-reviewed
+and compiled. Runtime completion-music assertions cover Classic and fan-pack
+flows; core sequel cue tests pass. The focused audio scope passes completion,
+Ready and replay checks. The broader Hot Seat preflight stops at an existing
+all-level journey label assertion, so full Hot Seat flow validation remains open.
 
 ## NeoLemmix gameplay effects
 

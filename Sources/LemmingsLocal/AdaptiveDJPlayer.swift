@@ -25,7 +25,8 @@ import NxlvKit
   func matchTempo(_ ratio: Float, base: Float) { matchRatio = ratio; setBaseRate(base) }
   func setSpeedPitch(_ cents: Double) { recording?.setSpeedPitch(cents); module?.setSpeedPitch(cents) }
 
-  init?(_ url: URL, repeats: Bool = true, timing: MusicTimingCatalogue.Entry? = nil, rhythmURL: URL? = nil, enhancements: ProTrackerEnhancements = .modern) {
+  init?(_ url: URL, repeats: Bool = true, timing: MusicTimingCatalogue.Entry? = nil, rhythmURL: URL? = nil,
+        enhancements: ProTrackerEnhancements = .modern, profile: MusicPlaybackCatalogue.Entry? = nil) {
     self.url = url
     self.timing = timing
     if url.pathExtension.lowercased() == "mod" {
@@ -35,7 +36,7 @@ import NxlvKit
       guard player.play(url: url) != nil else { return nil }
       module = player
     } else {
-      guard let player = MusicFileDeck(url: url, repeats: repeats, rhythmURL: rhythmURL) else { return nil }
+      guard let player = MusicFileDeck(url: url, repeats: repeats, rhythmURL: rhythmURL, profile: profile) else { return nil }
       player.volume = 0
       recording = player
     }
@@ -62,7 +63,7 @@ import NxlvKit
   func stop() { recording?.stop(); module?.stop() }
 }
 
-/// Mixes level tracks and rescue-target cues.
+/// Mixes versions of the level theme, including a lift at the rescue target.
 @MainActor final class AdaptiveDJPlayer {
   /// How long each kind of change takes.
   private enum Fade {
@@ -303,7 +304,9 @@ import NxlvKit
       }
       if hash != candidate.expectedSHA256 { timing = nil }
     }
-    let deck = DJDeck(url, repeats: repeats, timing: timing, rhythmURL: MusicLibrary.rhythmURL(for: url, musicRoot: catalogueRoot), enhancements: enhancements)
+    let deck = DJDeck(url, repeats: repeats, timing: timing,
+      rhythmURL: MusicLibrary.rhythmURL(for: url, musicRoot: catalogueRoot), enhancements: enhancements,
+      profile: SoundtrackPlayer.playbackProfile(for: url, musicRoot: catalogueRoot))
     deck?.playbackRate = playbackRate
     deck?.setSpeedPitch(speedPitch)
     deck?.setNukeAmount(nukeAmount)
@@ -337,10 +340,10 @@ import NxlvKit
     let variant: SoundtrackCatalogue.Variant?
     if victory || failure {
       guard let currentURL, let path = relativePath(currentURL) else { return nil }
-      variant = catalogue.result(won: victory, currentPath: path, availablePaths: availablePaths)
-        ?? (victory && allowCelebrationAlternates ? catalogue.entry(path: path).flatMap {
-          catalogue.select(trackID: $0.track.id, cycle: journeyCycle + 1, availablePaths: availablePaths)
-        } : nil)
+      variant = victory
+        ? catalogue.celebration(currentPath: path, cycle: journeyCycle,
+            availablePaths: availablePaths, includeAlternates: allowCelebrationAlternates)
+        : catalogue.result(won: false, currentPath: path, availablePaths: availablePaths)
     } else {
       variant = catalogue.select(trackID: "classic.cancan", cycle: 0, availablePaths: availablePaths)
     }

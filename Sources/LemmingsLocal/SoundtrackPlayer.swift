@@ -131,6 +131,27 @@ import NxlvKit
     return nil
   }
 
+  /// Installed libraries carry their own playback hashes after AAC encoding.
+  static func playbackProfile(for url: URL,
+      musicRoot: URL? = Bundle.main.resourceURL?.appendingPathComponent("Music")) -> MusicPlaybackCatalogue.Entry? {
+    var roots = [musicRoot].compactMap { $0 } + MusicLibrary.installedRoots()
+    var parent = url.deletingLastPathComponent()
+    for _ in 0..<8 {
+      if FileManager.default.fileExists(atPath: parent.appendingPathComponent("recording-playback.json").path) {
+        roots.append(parent); break
+      }
+      let next = parent.deletingLastPathComponent()
+      if next == parent { break }; parent = next
+    }
+    for root in roots {
+      guard let path = cataloguePath(url, root: root),
+            let entry = MusicPlaybackCatalogue.load(at: root)?.entry(path: path),
+            (try? MusicLibrary.hash(url)) == entry.expectedSHA256 else { continue }
+      return entry
+    }
+    return nil
+  }
+
   func load(_ urls: [URL]) {
     // A braking or resting record keeps its place for the next attempt.
     if !vinylStopping && !vinylHeld { stop() }
@@ -147,7 +168,8 @@ import NxlvKit
       vinylPendingIndex = index
       return url.deletingPathExtension().lastPathComponent
     }
-    guard let made = MusicFileDeck(url: url, rhythmURL: MusicLibrary.rhythmURL(for: url)) else { return nil }
+    guard let made = MusicFileDeck(url: url, rhythmURL: MusicLibrary.rhythmURL(for: url),
+      profile: Self.playbackProfile(for: url)) else { return nil }
     made.volume = muted ? 0 : volume
     made.playbackRate = playbackRate
     made.setSpeedPitch(speedPitch)

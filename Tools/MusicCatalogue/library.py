@@ -63,6 +63,15 @@ def metadata(catalogue, timing):
     if rhythm_path.exists():
         rhythm = json.loads(rhythm_path.read_text())
         result['Music/rhythm.json'] = encoded(dict(rhythm, variants=[r for r in rhythm['variants'] if r['variantID'] in identities]))
+    profile_path = ROOT / 'Resources/Music/recording-playback.json'
+    if profile_path.exists():
+        profiles = json.loads(profile_path.read_text())
+        expected = {row['variantID']: row['sourceSHA256'] for row in timing['variants']}
+        for row in profiles['variants']:
+            if row['variantID'] in identities and expected.get(row['variantID']) != row['sourceSHA256']:
+                raise ValueError(f'Stale recording playback profile: {row["path"]}')
+        result['Music/recording-playback.json'] = encoded(dict(profiles,
+            variants=[r for r in profiles['variants'] if r['variantID'] in identities]))
     return result
 
 
@@ -83,7 +92,7 @@ def aac_copy(source_file, sha):
 
 def with_playback(payloads, played):
     """Point timing and rhythm entries at the hashes of the files that ship."""
-    for name in ('Music/timing.json', 'Music/rhythm.json'):
+    for name in ('Music/timing.json', 'Music/rhythm.json', 'Music/recording-playback.json'):
         if name not in payloads: continue
         index = json.loads(payloads[name])
         for row in index['variants']:
@@ -183,7 +192,7 @@ def bundle(source, catalogue, timing, target, scope, game, libraries):
 def playback(target):
     """Record the hash of each re-encoded bundled file, so timing and rhythm still match it."""
     changed = 0
-    for name in ('timing.json', 'rhythm.json'):
+    for name in ('timing.json', 'rhythm.json', 'recording-playback.json'):
         path = target / name
         if not path.exists(): continue
         index = json.loads(path.read_text())

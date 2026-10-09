@@ -281,6 +281,8 @@ import NxlvKit
             if self.performRecoveryInput(.assign(slot: self.selected, lemming: id)) {
                 self.assignmentFocus.record(id: id, skill: self.selected, tick: self.game?.tick ?? 0)
                 self.canvas.didAssign(to: id)
+            } else {
+                self.playAssignmentRejection(id)
             }
             self.sounds.play(self.game?.drainSoundEvents() ?? []); self.refreshGame()
         }
@@ -311,6 +313,8 @@ import NxlvKit
             if self.performRecoveryInput(.assign(slot: skill, lemming: id)) {
                 self.assignmentFocus.record(id: id, skill: skill, tick: self.game?.tick ?? 0)
                 self.canvas.didAssign(to: id)
+            } else {
+                self.playAssignmentRejection(id)
             }
             self.sounds.play(self.game?.drainSoundEvents() ?? []); self.refreshGame()
         }
@@ -568,6 +572,7 @@ import NxlvKit
         }
     }
     func setAudioSettings(_ settings: ClassicSettings, muted: Bool) {
+        ArcadeWindow.shared.arcadeView.onReadySound = { [weak self] in self?.playReadySound() }
         let musicChanged = !audioConfigured || audioSettings.music != settings.music
         audioConfigured = true
         audioSettings = settings
@@ -737,7 +742,9 @@ import NxlvKit
         if screen != .playing {
             if screen != .results { nukeMood.reset() }
             sounds.setNukeActive(false)
-            sounds.silence(); releasePointerInput()
+            if screen == .results { sounds.silencePreservingRescues() }
+            else { sounds.silence() }
+            releasePointerInput()
         }
         self.screen = screen; frontTicks = 0
         let incoming = screen == .briefing && ArcadeStore.shared.hotSeatIsActive
@@ -1019,18 +1026,25 @@ import NxlvKit
 
     private func assign(_ x: Int, _ y: Int) {
         nukeGesture.reset()
-        if !fanSelected, performRecoveryInput(.machine(x:x,y:y)) { refreshGame(); return }
-        if !fanSelected, performRecoveryInput(.chain(x:x,y:y)) { refreshGame(); return }
+        if !fanSelected, performRecoveryInput(.machine(x:x,y:y)) { sounds.play(game?.drainSoundEvents() ?? []); refreshGame(); return }
+        if !fanSelected, performRecoveryInput(.chain(x:x,y:y)) { sounds.play(game?.drainSoundEvents() ?? []); refreshGame(); return }
         if !fanSelected, let lem = game?.target(slot: selected, x: x, y: y, preferApproaching: audioSettings.favorApproachingLemmings,
             preferBombBlockers: audioSettings.favorBombBlockers, preferBuilders: audioSettings.favorBuilders) {
             if performRecoveryInput(.assign(slot: selected, lemming: lem.id)) {
                 assignmentFocus.record(id: lem.id, skill: selected, tick: game?.tick ?? 0)
                 canvas.didAssign(to: lem.id)
+            } else {
+                playAssignmentRejection(lem.id)
             }
         }
         sounds.play(game?.drainSoundEvents() ?? [])
         refreshGame()
     }
+    private func playAssignmentRejection(_ id: Int) {
+        guard let lem = game?.lemmings.first(where: { $0.id == id && $0.active }) else { return }
+        sounds.play([Lemmings2SoundRequest(supplemental: .actionRejected).positioned(x: lem.x, y: lem.y)])
+    }
+    func playReadySound() { sounds.playInterface(.ready) }
     private func refreshGame() {
         let nuking = (screen == .playing || screen == .results) && game?.isNuking == true && canvas.hdEffectsEnabled
         let allPopped = game.map { game in
@@ -1148,7 +1162,7 @@ import NxlvKit
             return
         }
         if canvas.startCountdown.isActive {
-            if canvas.startCountdown.advance(seconds: elapsed, visible: window?.isKeyWindow == true) { paused = false }
+            if canvas.startCountdown.advance(seconds: elapsed, visible: window?.isKeyWindow == true) { paused = false; playReadySound() }
             accumulator = 0; refreshGame(); return
         }
         guard !paused, var game, !game.isComplete else {
@@ -1163,7 +1177,7 @@ import NxlvKit
             accumulator -= 1 / Lemmings2Runtime.ticksPerSecond
             countdownWarning.reset(seconds: game.remainingSeconds)
             game.step()
-            if countdownWarning.update(seconds: game.remainingSeconds) { sounds.play([.init(.builderWarning)]) }
+            if countdownWarning.update(seconds: game.remainingSeconds) { sounds.play([.init(supplemental: .timerWarning)]) }
             sounds.play(game.drainSoundEvents())
             canvas.flashExplosions(game)
             self.game = game; refreshGame(); captureReplayFrame()
@@ -1180,6 +1194,10 @@ import NxlvKit
     }
     private func finishIfComplete(_ game: Lemmings2Runtime) {
         if game.isComplete {
+            if game.didWin && paused {
+                userPausedMusic = false
+                try? music.resumeOutput(); dj.resumeOutput()
+            }
             if let arcadeLevel {
                 AnonymousTelemetry.shared.finish(arcadeLevel, hotSeat: arcadeHotSeatID != nil,
                                                  attemptID: arcadeRunID, won: game.didWin, saved: game.saved)
@@ -1219,7 +1237,7 @@ import NxlvKit
         game = self.game!
         countdownWarning.reset(seconds: game.remainingSeconds)
         game.step()
-        if countdownWarning.update(seconds: game.remainingSeconds) { sounds.play([.init(.builderWarning)]) }
+        if countdownWarning.update(seconds: game.remainingSeconds) { sounds.play([.init(supplemental: .timerWarning)]) }
         sounds.play(game.drainSoundEvents()); canvas.flashExplosions(game)
         self.game = game; refreshGame(); captureReplayFrame(); saveCheckpoint(immediately: true)
         finishIfComplete(game)
@@ -1479,6 +1497,7 @@ import NxlvKit
             storedReplay: { [weak self] url, title in self?.runMovie.reviewStored(url, title: title) },
             continueTitle: resultContinueTitle, background: arcadeBackdrop,
             rewardVolume: sounds.muted ? 0 : audioSettings.soundVolume,
+            rewardVolumeProvider: { [weak self] in self?.sounds.effectiveVolume ?? 0 },
             continueHandlesHandover: onSequenceContinue != nil,
             skip: canSkipLevel ? { [weak self] in self?.skipLevel() } : nil)
     }

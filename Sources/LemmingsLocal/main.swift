@@ -1230,6 +1230,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     nativeL2Window?.setAudioSettings(settings, muted: audioMuted)
     nativeL3Window?.setAudioSettings(settings, muted: audioMuted)
+    ArcadeWindow.shared.arcadeView.onReadySound = { [weak self] in
+      guard let self else { return }
+      if let sequel = self.nativeL2Window { sequel.playReadySound() }
+      else if let sequel = self.nativeL3Window { sequel.playReadySound() }
+      else { self.effects.play(.ready) }
+    }
     if userPausedMusic && isPaused { applyUserMusicPause() }
   }
 
@@ -2238,7 +2244,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
             || restoringCheckpoint || continuesAuthorisedAttempt || isUnlocked else {
       picker.selectItem(at: current.currentLevelIndex ?? 0)
       setStatus("Level locked. Complete the preceding level or change the Classic unlock setting.")
-      NSSound.beep()
+      effects.play(.actionRejected)
       return
     }
     let recordsCampaignProgress = sequencePlayingIdentity == nil && isUnlocked
@@ -6627,6 +6633,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard phase == .playing, playfield.startCountdown.isActive else { return false }
     if playfield.startCountdown.advance(seconds: seconds, visible: visible) {
       isPaused = false; panel.isPaused = false; panel.needsDisplay = true
+      effects.play(.ready)
     }
     playfield.needsDisplay = true
     accumulator = 0
@@ -6715,7 +6722,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       updateFailureMood()
       playfield.updateSpeedTrails()
       countdownWarning.reset(seconds: before)
-      if countdownWarning.update(seconds: session.remainingSeconds) { effects.play(.builderWarning) }
+      if countdownWarning.update(seconds: session.remainingSeconds) { effects.play(.timerWarning) }
       flashExplosions(previous: previousExplosions)
       dj.updateTelemetry(djTelemetry(session))
       effects.play(session.lastPositionedCues)
@@ -6800,6 +6807,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard phase == .playing, let session, session.isComplete else { return }
     if let conditions = arcadeLevel?.conditions,
        ArcadeStore.shared.solutionTargetIsPending(for: conditions) { return }
+    if session.didWin && isPaused {
+      userPausedMusic = false
+      try? music.resumeOutput(); soundtrack.resumeOutput(); dj.resumeOutput()
+    }
     if let arcadeLevel {
       AnonymousTelemetry.shared.finish(arcadeLevel, hotSeat: arcadeHotSeatID != nil,
                                        attemptID: arcadeRunID, won: session.didWin, saved: session.saved)
@@ -7030,6 +7041,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     panel.needsDisplay = true
     if let rejection {
       setStatus("Cannot assign: \(rejection)")
+      if let lemming = session.lemmings.first(where: { $0.id == id }) {
+        effects.play(.actionRejected, at: GameplaySoundPoint(x: Double(lemming.x), y: Double(lemming.y)))
+      }
     } else {
       playfield.didAssign(to: id)
       assignmentFocus.record(id: id, skill: panel.selectedSkillIndex, tick: session.currentTick)
@@ -7358,6 +7372,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         continueTitle: title,
         background: playfield.levelImage,
         rewardVolume: effects.muted ? 0 : effects.volume,
+        rewardVolumeProvider: { [weak self] in self?.effects.effectiveVolume ?? 0 },
         continueHandlesHandover: true,
         later: isLearningJourneyActive ? { [weak self] in self?.deferLearningLevel(runID: run.id, level: run.currentEntry.identity) } : nil,
         hints: isLearningJourneyActive ? { [weak self] in self?.showLearningHints() } : nil)
@@ -7369,6 +7384,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       next: { [weak self] in self?.advancePhase() }, replay: { [weak self] save in self?.runMovie.review(save: save) },
             storedReplay: { [weak self] url, title in self?.runMovie.reviewStored(url, title: title) },
       continueTitle: hasNext ? "Next level" : currentNxlvURL != nil ? "Library" : fanPlaying ? "Level select" : "Continue", background: playfield.levelImage, rewardVolume: effects.muted ? 0 : effects.volume,
+      rewardVolumeProvider: { [weak self] in self?.effects.effectiveVolume ?? 0 },
       skip: canSkipClassicLevel ? { [weak self] in self?.skipClassicLevel() } : nil)
   }
 
@@ -7968,7 +7984,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     countdownWarning.reset(seconds: session.remainingSeconds)
     guard session.stepForward() else { return false }
     playfield.startCountdown.cancel()
-    if countdownWarning.update(seconds: session.remainingSeconds) { effects.play(.builderWarning) }
+    if countdownWarning.update(seconds: session.remainingSeconds) { effects.play(.timerWarning) }
     effects.play(session.lastPositionedCues)
     dj.updateTelemetry(djTelemetry(session))
     captureReplayFrame()

@@ -639,8 +639,34 @@ func testEngineFamilies() throws {
     try shot("reward-first-star")
     view.page(.goals)
     try require(view.celebrationTask == nil && view.revealedStars == 3, "Leaving results did not cancel the sequence")
+    var rewardNotes: [(Int, Bool, Double)] = []
+    var rewardGain = 0.45
+    view.rewardVolumeProvider = { rewardGain }
+    view.rewardChimes.onPlay = { rewardNotes.append(($0, $1, $2)) }
     view.mode = .result; view.startCelebration(reduceMotion: true)
-    try require(view.revealedStars == 3 && view.celebrationTask == nil, "Reduced Motion still animated rewards")
+    try require(view.revealedStars == 3 && view.stampedStar == nil, "Reduced Motion still animated rewards")
+    for _ in 0..<100 where view.celebrationTask != nil {
+        try await Task.sleep(nanoseconds: 10_000_000)
+        try require(view.revealedStars == 3 && view.stampedStar == nil, "Audio changed Reduced Motion star states")
+    }
+    try require(rewardNotes.map(\.0) == Array(1...view.celebration!.goals.stars), "Reduced Motion removed result audio")
+    view.rewardChimes.stop(); rewardNotes = []
+    view.startCelebration(reduceMotion: true)
+    for _ in 0..<100 where rewardNotes.isEmpty { try await Task.sleep(nanoseconds: 10_000_000) }
+    rewardGain = 0
+    for _ in 0..<20 where view.rewardChimes.currentVolume != 0 { try await Task.sleep(nanoseconds: 10_000_000) }
+    try require(view.rewardChimes.currentVolume == 0, "Live mute did not stop the active result note")
+    for _ in 0..<100 where view.celebrationTask != nil { try await Task.sleep(nanoseconds: 10_000_000) }
+    try require(rewardNotes.count == 1, "Muted result continued to play notes")
+    rewardGain = 0.45; rewardNotes = []
+    view.startCelebration(reduceMotion: true)
+    for _ in 0..<100 where rewardNotes.isEmpty { try await Task.sleep(nanoseconds: 10_000_000) }
+    NotificationCenter.default.post(name: NSWindow.didResignKeyNotification, object: window)
+    try require(view.celebrationTask == nil && view.rewardChimes.currentVolume == 0 && view.revealedStars == 3,
+                "Loss of focus did not cancel result audio and finish stars")
+    try await Task.sleep(nanoseconds: 300_000_000)
+    try require(rewardNotes.count == 1, "A cancelled result played another note")
+    view.rewardVolumeProvider = nil; view.rewardChimes.onPlay = nil
     view.startCelebration(reduceMotion: false)
     for _ in 0..<200 where view.celebrationTask != nil { try await Task.sleep(nanoseconds: 10_000_000) }
     try require(view.revealedStars == 3 && view.celebrationTask == nil, "Reward sequence did not finish")
@@ -650,6 +676,17 @@ func testEngineFamilies() throws {
     try require(ArcadeWindow.shared.arcadeView.window === window && NSApp.windows.count == windows, "Trolley opened another window")
     try require(backdrop != nil && ArcadeWindow.shared.arcadeView.background === backdrop, "Result lost its game backdrop")
     ArcadeWindow.shared.close()
+    var readySounds = 0
+    view.onReadySound = { readySounds += 1 }
+    view.showHandover(store.records.activeProfile, owner: window)
+    try require(readySounds == 0, "Handover played audio before Ready")
+    let readyPage = GameScreen.shared.controllerPage(in: window) as! GameMenuPage
+    let readyButton = readyPage.controllerInitialControl as! NSButton
+    readyButton.performClick(nil)
+    try require(readySounds == 1 && !GameScreen.shared.isPresented, "Ready did not dismiss before its sound")
+    readyButton.performClick(nil)
+    try require(readySounds == 1, "Dismissed Ready action repeated its sound")
+    view.onReadySound = nil
     // Preserve evidence through an immediate retry while the asynchronous encoder finishes.
     let movie = RunMovie(); movie.begin(ticksPerSecond: 17, title: "Trolley test")
     let image = ReplayFrameCapture.image(size: CGSize(width: 64, height: 48)) { NSColor.blue.setFill(); NSBezierPath(rect: CGRect(x: 0, y: 0, width: 64, height: 48)).fill() }!
@@ -942,6 +979,78 @@ func testCelebrationProgress() throws {
     print("PASS reward deltas, near misses, persistent bests, local rank changes, career deduplication and exact online conditions")
 }
 
+@MainActor func testResultAudio() async throws {
+    for star in 1...3 {
+        let normal = ResultChimes.samples(star: star)
+        let ornament = ResultChimes.samples(star: star, ornament: true)
+        try require(normal.count == 5292 && ornament.count == normal.count, "Record ornament lengthened the result note")
+        try require(normal != ornament && normal.prefix(1200) == ornament.prefix(1200), "Ornament replaced the original note attack")
+        try require(ornament.allSatisfy { abs(Int($0)) <= 9000 }, "Ornament added a louder fanfare")
+    }
+    var records = try verifiedRecords()
+    let first = records.record(run(40))!
+    try require(!ArcadeView.ornamentsResult(first, celebration: .init(report: first, history: records.trolley), history: records.trolley),
+                "Ordinary first clear received a record ornament")
+    let improved = records.record(run(57))!
+    try require(ArcadeView.ornamentsResult(improved, celebration: .init(report: improved, history: records.trolley), history: records.trolley),
+                "New personal best lost its final-note ornament")
+    let repeated = records.record(run(57))!
+    try require(!ArcadeView.ornamentsResult(repeated, celebration: .init(report: repeated, history: records.trolley), history: records.trolley),
+                "Repeated clear received a new-award ornament")
+    let failed = records.record(run(58, win: false))!
+    try require(!ArcadeView.ornamentsResult(failed, celebration: .init(report: failed, history: records.trolley), history: records.trolley),
+                "Failed result received a positive ornament")
+    var rareReport: ArcadeReport?
+    for index in 0..<10 {
+        let c = conditions(level: "rare-\(index)")
+        try records.acceptTrolleyMaximum(evidence(58), conditions: c, assisted: false)
+        let result = records.record(run(58, c: c))!
+        let earned = TrolleyCelebration(report: result, history: records.trolley).newAwards
+        if earned.contains(where: { $0.award.tier == .gold || $0.award.tier == .legendary }) { rareReport = result }
+    }
+    try require(rareReport != nil, "Rare-award fixture earned no gold or legendary award")
+    let rare = rareReport!, celebration = TrolleyCelebration(report: rare, history: records.trolley)
+    try require(rare.previousBest == nil && celebration.newAwards.contains { $0.award.tier == .gold || $0.award.tier == .legendary }
+                && ArcadeView.ornamentsResult(rare, celebration: celebration, history: records.trolley), "Rare earned award lost its ornament")
+    for game in ["lemmings", "neolemmix", "lemmings2", "lemmings3"] {
+        let c = conditions(game: game, level: "audio-speed")
+        var speedRecords = try verifiedRecords(c, maximum: 60)
+        func ornament(_ result: ArcadeReport) -> Bool {
+            ArcadeView.ornamentsResult(result, celebration: .init(report: result, history: speedRecords.trolley),
+                                        history: speedRecords.trolley)
+        }
+        let initial = speedRecords.record(run(40, c: c, seconds: 100))!
+        try require(!ornament(initial), "First timed clear received a speed ornament: " + game)
+        let faster = speedRecords.record(run(40, c: c, seconds: 90))!
+        try require(!faster.newRescueBest && !faster.newSkillBest && ornament(faster),
+                    "Established fastest clear lost its ornament: " + game)
+        for attempt in [run(40, c: c, seconds: 95), run(40, c: c, seconds: 90),
+                        run(40, c: c, seconds: 0), run(40, c: c, win: false, seconds: 1),
+                        run(40, c: c, rewinds: 1, seconds: 2),
+                        run(40, c: conditions(game: game, level: "audio-speed", fingerprint: "changed"), seconds: 2)] {
+            try require(!ornament(speedRecords.record(attempt)!), "Ineligible or separate timing received an ornament: " + game)
+        }
+        try require(!ornament(initial), "Later attempts changed an old result's speed ornament: " + game)
+        _ = speedRecords.record(run(40, c: c, seconds: 60))!
+        _ = speedRecords.record(run(60, c: c, seconds: 130))!
+        let allSaved = speedRecords.record(run(60, c: c, seconds: 120))!
+        try require(!allSaved.newRescueBest && !allSaved.newSkillBest && ornament(allSaved),
+                    "Established fastest all-saved clear lost its ornament: " + game)
+    }
+    let chimes = ResultChimes()
+    var gain = 0.4
+    chimes.play(star: 3, ornament: true) { gain }
+    try require(chimes.currentVolume == gain, "Chime did not use current effects volume")
+    gain = 0.1
+    try await Task.sleep(nanoseconds: 40_000_000)
+    try require(chimes.currentVolume == gain, "Result note ignored a live volume change")
+    gain = 0
+    try await Task.sleep(nanoseconds: 40_000_000)
+    try require(chimes.currentVolume == 0, "Result note ignored live mute or suspension")
+    chimes.stop()
+    print("PASS restrained result ornament, rescue/skill/speed records and rare awards, live volume and mute")
+}
+
 @MainActor final class TestGameCenterTransport: GameCenterTransport {
     var account: GameCenterAccount? = .init(id: "apple-player", name: "Test Player")
     var submissions: [(String, Int)] = []
@@ -1041,6 +1150,7 @@ Task { @MainActor in
         try testMetricsAndClassification(); try testRescueGoals(); try testEvidenceAndHistory(); try testBoardsProfilesAndMigration(); try testEngineFamilies()
         try testCelebrationProgress(); try testLevelSkips(); try await testGameCenterSync()
         try testSpeedBoards()
+        try await testResultAudio()
         try await testStoreAndVisuals()
         print("PASS THE TROLLEY"); exit(0)
     } catch { print("FAIL: \(error)"); exit(1) }

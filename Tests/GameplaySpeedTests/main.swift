@@ -102,3 +102,28 @@ check(pitch.cents == 0, "Returning to normal retained raised pitch")
 check(GameplayMusicPitch.ratio(for: 100) <= 1.5 && GameplayMusicPitch.ratio(for: 0) == 1,
       "Out-of-range speed escaped the pitch limits")
 print("PASS per-tier music pitch, 120 ms glides, reversals and pitch cap")
+
+for (tier, semitones) in zip(GameplaySpeed.steps, [0.0, 1, 2, 3, 5]) {
+    check(abs(1200 * log2(GameplayMusicPitch.ratio(for: tier)) - semitones * 100) < 0.000001,
+          "Cruising pitch must settle on a musical interval")
+}
+for input in [GameplaySpeed.Hold.key, .shift, .controller, .mouse] {
+    var pedal = GameplaySpeed()
+    pedal.press(input, at: 300)
+    var last = 0.0
+    for frame in 0...180 {
+        let now = 300 + Double(frame) / 60
+        pedal.update(at: now)
+        let cents = 1200 * log2(GameplayMusicPitch.ratio(for: pedal.musicPitchSpeed(at: now)))
+        check(cents >= last - 0.000001 && cents - last < 10,
+              "Held pedal pitch must rise continuously without tier jumps")
+        last = cents
+    }
+    check(abs(last - 500) < 0.000001, "Held pedal must settle at a perfect fourth")
+    pedal.release(input, at: 303)
+    check(pedal.musicPitchSpeed(at: 303) == pedal.target,
+          "Release must follow the existing cruising-speed contract")
+    pedal.cancelInput(at: 304)
+    check(pedal.musicPitchSpeed(at: 304) == 1, "Cancelled pedal retained raised pitch")
+}
+print("PASS musical cruising intervals and continuous keyboard/controller/mouse pedal pitch")

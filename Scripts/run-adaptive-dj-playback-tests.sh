@@ -24,4 +24,5 @@ swiftc -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos12.3
   -Xlinker -rpath -Xlinker "$build_dir" \
   -o "$build_dir/AdaptiveDJPlaybackTests" \
   "$build_dir/main.swift"
-"$build_dir/AdaptiveDJPlaybackTests" "${1:-$project_dir/.build/local/Ultimate Lemmings.app/Contents/Resources/Music}"
+LEMMINGS_TEST_AUDIO=muted python3 "$project_dir/Tools/UITestRunner/run.py" \
+  "$build_dir/AdaptiveDJPlaybackTests" "${1:-$project_dir/.build/local/Ultimate Lemmings.app/Contents/Resources/Music}"

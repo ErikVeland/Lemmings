@@ -32,7 +32,8 @@ import NxlvKit
     func update(at now: TimeInterval, active: Bool) {
         if active { state.update(at: now) } else { state.suspend(at: now) }
         let previous = musicPitch.cents
-        musicPitch.update(speed: active && variableEnabled && !bulletTimeActive ? target : 1, at: now)
+        musicPitch.update(speed: active && variableEnabled && !bulletTimeActive
+            ? state.musicPitchSpeed(at: now) : 1, at: now)
         if musicPitch.cents != previous { onMusicPitchChange(musicPitch.cents) }
     }
     func tap(at now: TimeInterval = ProcessInfo.processInfo.systemUptime, clickCount: Int = 1) {

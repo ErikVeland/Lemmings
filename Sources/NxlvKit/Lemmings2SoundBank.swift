@@ -15,8 +15,11 @@ public struct Lemmings2SoundRequest: Sendable, Hashable {
     public let isBottomFall: Bool
     public let sample: Int
     public let timeConstant: UInt8?
-    public init(_ cue: Lemmings2SoundCue, isBottomFall: Bool = false) { sample = cue.rawValue; timeConstant = nil; self.isBottomFall = isBottomFall }
-    private init(sample: Int, timeConstant: UInt8) { self.sample = sample; self.timeConstant = timeConstant; isBottomFall = false }
+    /// Modern feedback stays separate from the verified original bank indices.
+    public let supplementalEffect: ClassicSoundEffect?
+    public init(_ cue: Lemmings2SoundCue, isBottomFall: Bool = false) { sample = cue.rawValue; timeConstant = nil; self.isBottomFall = isBottomFall; supplementalEffect = nil }
+    public init(supplemental effect: ClassicSoundEffect) { sample = -1; timeConstant = nil; isBottomFall = false; supplementalEffect = effect }
+    private init(sample: Int, timeConstant: UInt8) { self.sample = sample; self.timeConstant = timeConstant; isBottomFall = false; supplementalEffect = nil }
     public static func assignment(skill: Lemmings2Runtime.Skill, tribe: Int) -> Self {
         let sample: Int
         switch skill {
@@ -31,7 +34,7 @@ public struct Lemmings2SoundRequest: Sendable, Hashable {
     public static func introduction(sample: Int) -> Self? {
         (0..<79).contains(sample) ? Self(sample:sample) : nil
     }
-    private init(sample: Int) { self.sample = sample; timeConstant = nil; isBottomFall = false }
+    private init(sample: Int) { self.sample = sample; timeConstant = nil; isBottomFall = false; supplementalEffect = nil }
     public static func panel(slot: Int) -> Self? {
         // Native panel clicks transpose one sample for each of the twelve slots.
         let pitches: [UInt8] = [136,142,149,155,160,166,171,176,180,184,188,192]
@@ -122,6 +125,7 @@ public struct Lemmings2SoundMixer: Sendable {
         let samples: [Float]
         var position: Double
         let increment: Double
+        let gain: Float
         var remaining: Double { (Double(samples.count) - position) / increment }
     }
     public let bank: Lemmings2SoundBank
@@ -131,23 +135,39 @@ public struct Lemmings2SoundMixer: Sendable {
     public mutating func silence() { for i in voices.indices { voices[i] = nil } }
     public mutating func setMuted(_ muted: Bool) { self.muted = muted; if muted { silence() } }
     public mutating func play(_ request: Lemmings2SoundRequest) {
-        guard !muted, bank.clips.indices.contains(request.sample) else { return }
-        let clip = bank.clips[request.sample]
-        let rate = request.timeConstant.map { 1_000_000 / Double(256 - Int($0)) } ?? clip.sampleRate
-        let index = voices.firstIndex(where: { $0 == nil }) ?? voices.indices.min(by: {
-            voices[$0]!.remaining < voices[$1]!.remaining
-        })!
-        voices[index] = Voice(samples: clip.samples, position: 0, increment: rate / 44100)
+        guard !muted else { return }
+        let samples: [Float], rate: Double, gain: Float
+        if let effect = request.supplementalEffect {
+            guard let clip = GameplaySupplementSounds.clip(for: effect) else { return }
+            samples = clip.samples; rate = clip.sampleRate; gain = clip.gain
+        } else {
+            guard bank.clips.indices.contains(request.sample) else { return }
+            let clip = bank.clips[request.sample]
+            samples = clip.samples
+            rate = request.timeConstant.map { 1_000_000 / Double(256 - Int($0)) } ?? clip.sampleRate
+            gain = 0.5
+        }
+        let voice = Voice(samples: samples, position: 0, increment: rate / 44100, gain: gain)
+        if request.supplementalEffect?.isRescue == true {
+            // The chorus keeps independent voices without occupying the native effect pool.
+            if let index = voices.indices.dropFirst(8).first(where: { voices[$0] == nil }) {
+                voices[index] = voice
+            } else { voices.append(voice) }
+        } else {
+            let index = voices.indices.prefix(8).first(where: { voices[$0] == nil }) ??
+                voices.indices.prefix(8).min(by: { voices[$0]!.remaining < voices[$1]!.remaining })!
+            voices[index] = voice
+        }
     }
     public mutating func nextSample() -> Float {
         var sum: Float = 0
         for i in voices.indices {
             guard let voice = voices[i] else { continue }
             let a = Int(voice.position), b = min(a + 1, voice.samples.count - 1)
-            sum += voice.samples[a] + (voice.samples[b] - voice.samples[a]) * Float(voice.position - Double(a))
+            sum += (voice.samples[a] + (voice.samples[b] - voice.samples[a]) * Float(voice.position - Double(a))) * voice.gain
             voices[i]!.position += voice.increment
             if voices[i]!.position >= Double(voice.samples.count) { voices[i] = nil }
         }
-        return max(-1, min(1, sum * 0.5))
+        return max(-1, min(1, sum))
     }
 }

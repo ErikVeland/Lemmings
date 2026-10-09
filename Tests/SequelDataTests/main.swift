@@ -406,6 +406,25 @@ do {
             try require((0..<5000).contains { _ in abs(mixer.nextSample()) > 0.01 }, "Unmuting did not restore panel sound")
             mixer.silence()
             try require(mixer.nextSample() == 0, "Level reset retained old sounds")
+            mixer.play(.init(supplemental: .trampolineBounce))
+            try require((0..<12_000).contains { _ in abs(mixer.nextSample()) > 0.01 },
+                        "Supplemental trampoline sound did not render in the core mixer")
+            var eightRescues = Lemmings2SoundMixer(bank: sounds)
+            var nineRescues = Lemmings2SoundMixer(bank: sounds)
+            for _ in 0..<8 { eightRescues.play(.init(supplemental: .yippee)) }
+            for _ in 0..<9 { nineRescues.play(.init(supplemental: .yippee)) }
+            var heardExtraRescue = false
+            for _ in 0..<100 {
+                let eight = eightRescues.nextSample(), nine = nineRescues.nextSample()
+                if abs(eight) > 0.00001 && abs(eight) < 0.5 {
+                    try require(abs(nine - eight * 9 / 8) < 0.00001,
+                                "A ninth rescue stole an earlier voice")
+                    heardExtraRescue = true
+                }
+            }
+            try require(heardExtraRescue, "Rescue chorus fixture rendered no measurable samples")
+            nineRescues.setMuted(true)
+            try require(nineRescues.nextSample() == 0, "Muting did not clear overflow rescue voices")
             for slot in 0..<12 { try require(Lemmings2SoundRequest.panel(slot: slot)?.sample == 49, "Native panel sound mapping") }
             try require(Lemmings2SoundRequest.panel(slot: 12) == nil, "Invalid panel sound index")
             var corrupt = soundData

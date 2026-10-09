@@ -8,13 +8,13 @@ The hierarchy is **game → role → track → port → source quality → origi
 
 ## Default DJ journey
 
-- The first occurrence of each tune uses its Amiga module, when installed. DJ modules use faithful playback. The existing shared mix and crossfade processing still applies; this is not a claim of bit-perfect hardware output.
+- The first occurrence of each tune uses its Amiga module, when installed. The shared Modern/Faithful setting applies to DJ modules and direct playback. This is not a claim of bit-perfect hardware output.
 - Later occurrences introduce another original port, a composer recording and a remix when available, then visit the remaining versions. This lets remixes appear within a campaign instead of waiting behind every hardware port. Each chapter uses the fixed port and source-fidelity order; unavailable chapters are skipped.
 - Classic counts previous occurrences of the assigned tune in the campaign score, including special-level overrides. A first special level therefore uses its original even when it occurs late in the campaign.
 - Lemmings 2 advances the tribe's version with its level index. Lemmings 3 advances each tribe tune after its local tune rotation repeats. These are score cycles within a campaign, not a counter of completed playthroughs.
 - Selection depends on the campaign position and installed catalogue. Retries, direct level selection, saved-level reopening and Hot Seat handovers choose the same version. Attempts and wall-clock time do not advance the journey. Adding or removing versions can change future selections.
 - Turning off other soundtracks retains the first version of the assigned tune in all three engines. Missing variants fall back within the same identity; missing catalogue data uses the assigned module.
-- Ordinary gameplay, danger and nuking do not replace a tune. Meeting the rescue target permits one transition to a matching win cue or another version of the same composition. Paused handovers keep pending selections silent until playback resumes.
+- Ordinary gameplay, danger and nuking do not replace a tune. Meeting the rescue target permits one lift to an available version of the same composition. That theme keeps looping through results. Paused handovers keep pending selections silent until playback resumes.
 
 The existing Amiga composition rotation remains the Classic score policy. Artwork selection does not imply a new platform's historical tune order. Exact native port sequencing remains a separate audit.
 
@@ -22,7 +22,18 @@ The existing Amiga composition rotation remains the Classic score policy. Artwor
 
 Special-level themes retain separate identities. Beast I cannot become Beast II, and neither enters the ordinary rotation. Seasonal and prototype/demo material remain separate from released ordinary music. Menus, start cues, medals, milestones, endings, bonus remixes and unknown tracks have their own roles.
 
-Reaching the rescue target can use an explicitly classified generic win cue from the current game and port. Otherwise the DJ selects the next available version of the current composition when alternate soundtracks are enabled. With neither available, the tune continues. A completed loss keeps the current track in funeral mood. Generic wins never select a medal, ending or finale from another game. Medals and campaign endings require their own event routing.
+Reaching the rescue target selects from the current composition only. The lift
+prefers a documented remix, then a composer recording. An original version can
+move to either. A composer recording can move only to a remix. An existing remix
+keeps playing. Port or file format alone does not establish a musical lift.
+Selection remains deterministic for the score cycle.
+With alternates disabled or no eligible version installed, the current theme
+continues. Completing the win does not repeat the transition. A win reached
+while gameplay is paused resumes the selected music on the result; the
+completed simulation stays paused, and player mute still applies. Generic
+victory, medal, ending and finale assets require explicit event routing and cannot
+replace active level music. A completed loss keeps its current track in funeral
+mood, subject to the shared post-nuke tempo recovery.
 
 ## Source fidelity and uncertain identities
 
@@ -51,7 +62,43 @@ The shared DJ uses the [per-version timing audit](MusicTiming.md) for stable bea
 
 Validation on 25 September 2026: catalogue and packaging checks passed for all 495 versions. Director checks and real audio playback checks passed, including both sequel journeys, retries and paused crossfades. The full desktop app passed Swift type-checking; existing unrelated deprecation/unused-result warnings remain. No release app was rebuilt or installed.
 
-Converted VGZ recordings still contain two loops and a fade. The recording deck repeats the whole file, including the intro and fade. Seamless native loop points, loudness matching and listening checks against original hardware remain unverified. No new visual controls were added.
+## Recorded playback profiles
+
+`Resources/Music/recording-playback.json` now covers 422 recorded versions.
+FFmpeg's `ebur128` measurements supply a constant gain trim towards -20 LUFS,
+with a -6 dBTP measured peak ceiling and a maximum boost of 6 dB. Quiet, dynamic
+tracks can remain below the target. Verified VGM measurements cover the first
+traversal, excluding the renderer's repeated pass and fade. Other recordings
+use the complete file. The player does not compress the recording
+or rewrite its samples. Runtime playback verifies the file hash before applying
+the trim or loop metadata.
+
+Of those profiles, 296 have verified VGM source loops. The conversion report pins
+the original and rendered file hashes. The source header supplies exact total
+and loop sample counts at 44.1 kHz. Playback plays the intro once, then repeats
+only the verified loop region. The renderer's extra repeated pass and final
+fade stay outside that region. Beat timing follows the source position across
+loop boundaries.
+
+Another 96 recordings have no verified source-loop metadata, and 30 VGM sources
+declare no loop. Those recordings retain complete-file playback. This preserves
+the source evidence without inventing loop boundaries. Audible joins, perceived
+loudness across all versions, artistic rankings and original-hardware listening
+remain unverified. No visual controls were added.
+
+Regenerate profiles with `python3 Tools/MusicCatalogue/recording_profiles.py`.
+`Scripts/run-music-playback-tests.sh` checks the schema, gain bounds, exact loop
+segments, asset hashes, provenance and packaging, with native signal checks
+through the muted offscreen runner. Packaging and optional-library tooling
+carry game-specific profiles and update hashes for encoded playback copies.
+Full and slim all-game metadata cover all 422 recordings; L2 has 51 profiles
+and L3 has nine.
+
+Existing immutable optional-library downloads may lack the new profiles. An
+updated full bundle can supply metadata when the installed playback file hash
+matches. Other older packages need rebuilt metadata in a new library revision.
+Mismatched files keep their ordinary playback, without an unverified trim or
+loop.
 
 The four MandelSoft special remixes participate only in their matching special-theme journeys. Five numbered Paintball remixes are catalogued and packaged as separate bonus material, with no inferred Classic level or result assignment.
 
@@ -61,7 +108,12 @@ The 21 Archimedes recordings, 29 SNES recordings, 22 Master System renders and n
 
 Professor Mariarti stays a special identity. Its named level can select the recording without requiring an Amiga module, including when alternate soundtracks are disabled. The four MandelSoft special remixes belong only to their matching special themes. Five Paintball remixes remain separate bonus identities with their numbered names preserved.
 
-SNES and SMS win/loss cues retain game-and-port routing. The decoded deck plays result cues once. Staff Roll, Intermission, Trapdoor and the SMS voice clips remain outside ordinary music selection. A cue recording may already contain repetitions in its source render; one-shot playback prevents the app from restarting the whole file.
+SNES and SMS win/loss cues retain their game-and-port identities in the
+catalogue. Ordinary quota transitions use the looping same-tune lift above,
+so a short result jingle cannot end the music during an active run. Staff Roll,
+Intermission, Trapdoor and the SMS voice clips remain outside ordinary music
+selection. Explicit one-shot cue playback does not restart a recording when it
+ends, although a source render can contain repetitions within the file.
 
 All 81 newly selected audio files passed complete Apple audio decoding. One SNES MP3, `13 As Long As You Try Your Best`, raised an end-of-file error in Core Audio. Its verified M4A replacement preserves the decoded samples and lossy provenance. The MP3 is archived through `sourcePath`, and both library scanners exclude it from playback. This does not recover any missing source audio.
 

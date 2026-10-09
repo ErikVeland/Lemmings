@@ -58,6 +58,20 @@ private func testDuplicatesCollapse() throws {
     print("PASS twelve lemmings entering the same state play one sound")
 }
 
+private func testRescuesRemainIndividual() throws {
+    let cues = ClassicSoundCue.cues(for: [
+        .saved(lemmingID: 1),
+        .actionChanged(lemmingID: 3, from: .falling, to: .splatting),
+        .actionChanged(lemmingID: 4, from: .falling, to: .splatting),
+        .fellOut(lemmingID: 5),
+        .fellOut(lemmingID: 6),
+        .saved(lemmingID: 2),
+    ])
+    try require(cues == [.exitLevel, .yippee, .splat, .fallOut, .exitLevel, .yippee],
+        "Same-tick rescues lost a celebration or ordinary hazards repeated: \(cues)")
+    print("PASS each same-tick rescue celebrates while ordinary hazards share one cue")
+}
+
 private func testQuietEventsStaySilent() throws {
     let events: [ClassicDOSEvent] = [
         .directionChanged(lemmingID: 1, direction: .left),
@@ -135,6 +149,7 @@ do {
     try testCoreEventsMap()
     try testHazardsMap()
     try testDuplicatesCollapse()
+    try testRescuesRemainIndividual()
     try testQuietEventsStaySilent()
     try testMappingReportsGaps()
     try testPitchRatio()

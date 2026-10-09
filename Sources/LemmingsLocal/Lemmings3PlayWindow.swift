@@ -663,6 +663,7 @@ import NxlvKit
         }
     }
     func setAudioSettings(_ settings: ClassicSettings, muted: Bool) {
+        ArcadeWindow.shared.arcadeView.onReadySound = { [weak self] in self?.playReadySound() }
         let sourceChanged = !audioConfigured || audioSettings.music != settings.music
         audioConfigured = true
         audioSettings = settings
@@ -1024,6 +1025,7 @@ import NxlvKit
     private func applyAction(to id: Int, direction: Lemmings3Runtime.Direction) {
         guard let lem = game.lemmings.first(where: { $0.id == id && $0.active }) else { return }
         let action = Lemmings3Runtime.Action.allCases[selected]
+        let previousSoundState = Lemmings3SoundCue.Snapshot(game)
         let accepted = action == .use ? game.useTool(to: id, direction: direction) : game.assign(action, to: id)
         if accepted {
             if rewindOriginState != nil { discardRewindOrigin() }
@@ -1032,12 +1034,16 @@ import NxlvKit
             assignmentFocus.record(id: id, skill: selected, tick: game.tick)
             canvas.didAssign(to: id)
             warningSound.play(action == .use && lem.tool == .bomb ? .ohNo : .assignSkill, at: GameplaySoundPoint(x: Double(lem.x), y: Double(lem.y)))
+            warningSound.play(Lemmings3SoundCue.positionedCues(before: previousSoundState, after: .init(game)))
             skillAssignments[action.rawValue, default: 0] += 1
             if action == .use, let tool = lem.tool { toolUses[String(describing: tool), default: 0] += 1 }
+        } else {
+            warningSound.play(.actionRejected, at: GameplaySoundPoint(x: Double(lem.x), y: Double(lem.y)))
         }
         message = accepted ? "\(action.rawValue.capitalized) assigned to lemming \(id + 1)." : "That lemming cannot use this action now."
         refresh()
     }
+    func playReadySound() { warningSound.play(.ready) }
     private func showGameMenu() {
         pendingTool = nil; canvas.directionPoint = nil
         if canvas.menuRows != nil { canvas.menuRows = nil; canvas.needsDisplay = true; return }
@@ -1156,7 +1162,7 @@ import NxlvKit
         guard !GameScreen.shared.isPresented, canvas.menuRows == nil, pendingTool == nil else { accumulator = 0; return }
         canvas.panAtPointer(seconds: elapsed)
         if canvas.startCountdown.isActive {
-            if canvas.startCountdown.advance(seconds: elapsed, visible: window?.isKeyWindow == true) { paused = false }
+            if canvas.startCountdown.advance(seconds: elapsed, visible: window?.isKeyWindow == true) { paused = false; playReadySound() }
             accumulator = 0; refresh(); return
         }
         guard !paused, !game.isComplete else { return }
@@ -1268,6 +1274,7 @@ import NxlvKit
             next: { [weak self] in self?.continueArcadeResult() },
             replay: { [weak self] save in self?.runMovie.review(save: save) },
             storedReplay: { [weak self] url, title in self?.runMovie.reviewStored(url, title: title) }, continueTitle: resultContinueTitle, background: arcadeBackdrop, rewardVolume: warningSound.muted ? 0 : warningSound.volume,
+            rewardVolumeProvider: { [weak self] in self?.warningSound.effectiveVolume ?? 0 },
             continueHandlesHandover: onSequenceContinue != nil,
             skip: canSkipLevel ? { [weak self] in self?.skipLevel() } : nil,
             status: needsTribeSurvivors ? "Need 50 survivors to complete this tribe." : nil)
@@ -1345,7 +1352,7 @@ import NxlvKit
         game.step()
         saveCheckpoint()
         warningSound.play(Lemmings3SoundCue.positionedCues(before: previousSoundState, after: .init(game)))
-        if countdownWarning.update(seconds: game.remainingSeconds) { warningSound.play(.builderWarning) }
+        if countdownWarning.update(seconds: game.remainingSeconds) { warningSound.play(.timerWarning) }
         canvas.flashExplosions(game)
         canvas.game = game
         runMovie.recorder?.setMusic(url: dj.isPlaying ? dj.currentURL : music.currentURL, gain: music.muted ? 0 : musicGain)
@@ -1371,6 +1378,10 @@ import NxlvKit
         let justCompleted = game.isComplete && !recorded
         if justCompleted { dj.updateTelemetry(.init(didWin: game.saved > 0, isComplete: true)) }
         if justCompleted {
+            if game.saved > 0 && paused {
+                userPausedMusic = false
+                try? music.resumeOutput(); dj.resumeOutput()
+            }
             if recordsCampaignProgress {
                 do { try recoveryStore.clear(arcadeRunID) } catch { message = error.localizedDescription }
             }

@@ -5,13 +5,25 @@ import NxlvKit
     func finishCelebration() {
         celebrationGeneration = UUID()
         celebrationTask?.cancel(); celebrationTask = nil; rewardChimes.stop()
+        celebrationFocusObservers.forEach { NotificationCenter.default.removeObserver($0) }
+        celebrationFocusObservers = []
         revealedStars = 3; stampedStar = nil
     }
     func startCelebration(reduceMotion: Bool? = nil) {
         finishCelebration()
-        guard let celebration, celebration.goals.stars > 0,
-              !(reduceMotion ?? NSWorkspace.shared.accessibilityDisplayShouldReduceMotion) else { return }
-        revealedStars = 0
+        guard let celebration, celebration.goals.stars > 0 else { return }
+        let animate = !(reduceMotion ?? NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
+        if animate { revealedStars = 0 }
+        for name in [NSApplication.didResignActiveNotification, NSWindow.didResignKeyNotification] {
+            celebrationFocusObservers.append(NotificationCenter.default.addObserver(forName: name, object: nil, queue: .main) { [weak self] notification in
+                let resignedWindowID = (notification.object as? NSWindow).map(ObjectIdentifier.init)
+                MainActor.assumeIsolated {
+                    guard let self, name == NSApplication.didResignActiveNotification || resignedWindowID == self.window.map(ObjectIdentifier.init) else { return }
+                    self.finishCelebration(); self.needsDisplay = true
+                }
+            })
+        }
+        let ornament = report.map { Self.ornamentsResult($0, celebration: celebration) } ?? false
         let generation = celebrationGeneration
         celebrationTask = Task { @MainActor [weak self] in
             defer {
@@ -23,12 +35,34 @@ import NxlvKit
             for star in 1...celebration.goals.stars {
                 do { try await Task.sleep(nanoseconds: 180_000_000) } catch { return }
                 guard let self, self.mode == .result, !self.isHidden, self.window != nil else { return }
-                self.revealedStars = star; self.stampedStar = star; self.needsDisplay = true
-                self.rewardChimes.play(star: star, volume: self.rewardVolume)
+                if animate { self.revealedStars = star; self.stampedStar = star; self.needsDisplay = true }
+                self.rewardChimes.play(star: star, ornament: ornament && star == celebration.goals.stars) { [weak self] in
+                    guard let self, self.mode == .result, !self.isHidden, self.window != nil else { return 0 }
+                    return self.rewardVolumeProvider?() ?? self.rewardVolume
+                }
                 do { try await Task.sleep(nanoseconds: 90_000_000) } catch { return }
-                self.stampedStar = nil; self.needsDisplay = true
+                if animate { self.stampedStar = nil; self.needsDisplay = true }
             }
             self?.celebrationTask = nil
+        }
+    }
+    static func ornamentsResult(_ report: ArcadeReport, celebration: TrolleyCelebration,
+                                history suppliedHistory: TrolleyHistory? = nil) -> Bool {
+        guard report.run.qualifies else { return false }
+        let improved = report.previousBest != nil && (report.newRescueBest || report.newSkillBest)
+        let rareAward = celebration.newAwards.contains { $0.award.tier == .gold || $0.award.tier == .legendary }
+        if improved || rareAward { return true }
+        let history = suppliedHistory ?? ArcadeStore.shared.records.trolley
+        guard let attempt = report.trolley?.attempt, let conditions = attempt.run.level.conditions,
+              let index = history.attempts.firstIndex(where: { $0.id == attempt.id }) else { return false }
+        let before = Array(history.attempts.prefix(index))
+        let maximum = history.maximum(conditions: conditions, assisted: attempt.run.assisted)
+        return [TrolleyBoard.fastestClear, .fastestAllSaved].contains { board in
+            guard TrolleyLeaderboards.eligible(attempt, board: board, maximum: maximum),
+                  let previous = TrolleyLeaderboards.rank(before, comparisonID: attempt.comparisonID,
+                                                         board: board, maximum: maximum)
+                    .first(where: { $0.run.profileID == attempt.run.profileID }) else { return false }
+            return attempt.run.seconds < previous.run.seconds
         }
     }
     func paragraph(_ value: String, _ rect: CGRect) {

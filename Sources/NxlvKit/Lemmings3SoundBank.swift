@@ -47,15 +47,21 @@ public enum Lemmings3SoundCue {
         let bottomDeaths: Set<Int>
         let lemmings: [Int: Lemmings3Runtime.Lemming]
         let entrance: GameplaySoundPoint?
+        let soundSequence: UInt64
+        let soundEvents: [Lemmings3Runtime.SoundEvent]
+        let acknowledgedDeathSounds: Set<Int>
         public init(_ game: Lemmings3Runtime) {
             lemmings = Dictionary(uniqueKeysWithValues: game.lemmings.map { ($0.id, $0) })
             entrance = GameplaySoundPoint(x: Double(game.configuration.entrance.x), y: Double(game.configuration.entrance.y))
             released = game.released; saved = game.saved; lost = game.lost
             bottomDeaths = Set(game.lemmings.filter { $0.state == .dead && $0.y >= game.configuration.height }.map(\.id))
+            soundSequence = game.soundSequence
+            soundEvents = game.soundEvents
+            acknowledgedDeathSounds = game.acknowledgedDeathSounds
         }
     }
     public static func positionedCues(before: Snapshot, after: Snapshot) -> [PositionedSoundCue] {
-        var result: [PositionedSoundCue] = []
+        var result = after.soundEvents.filter { $0.sequence > before.soundSequence }.map(\.cue)
         if before.released == 0 && after.released > 0 {
             result += [.init(.doorOpen, at: after.entrance), .init(.letsGo, at: after.entrance)]
         }
@@ -63,24 +69,15 @@ public enum Lemmings3SoundCue {
             let previous = before.lemmings[lem.id]
             let point = GameplaySoundPoint(x: Double(lem.x), y: Double(lem.y))
             if lem.state == .saved && previous?.state != .saved { result.append(.init(.exitLevel, at: point)) }
-            if lem.state == .dead && previous?.state != .dead {
+            if lem.state == .dead && previous?.state != .dead && !after.acknowledgedDeathSounds.contains(lem.id) {
                 result.append(.init(after.bottomDeaths.contains(lem.id) ? .fallOut : .splat, at: point))
-            }
-            if let previous, previous.state == .building, lem.quantity < previous.quantity {
-                result.append(.init(.builderWarning, at: point))
             }
         }
         return result
     }
 
-    /// Collapse simultaneous arrivals and losses to one voice per event kind.
+    /// Every rescue keeps its own voice, including simultaneous arrivals.
     public static func cues(before: Snapshot, after: Snapshot) -> [ClassicSoundEffect] {
-        var result: [ClassicSoundEffect] = []
-        if before.released == 0 && after.released > 0 { result += [.doorOpen, .letsGo] }
-        if after.saved > before.saved { result.append(.exitLevel) }
-        let bottomLosses = after.bottomDeaths.subtracting(before.bottomDeaths).count
-        if bottomLosses > 0 { result.append(.fallOut) }
-        if after.lost - before.lost > bottomLosses { result.append(.splat) }
-        return result
+        positionedCues(before: before, after: after).map(\.effect)
     }
 }

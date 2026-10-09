@@ -11,7 +11,8 @@ public struct GameplayMusicPitch: Sendable {
     public init() {}
 
     public static func ratio(for speed: Double) -> Double {
-        let ratios = [1.0, 1.04, 1.09, 1.18, 1.35]
+        // Settled tiers transpose the whole track by musical intervals.
+        let ratios = [0.0, 1, 2, 3, 5].map { pow(2, $0 / 12) }
         let speed = min(10, max(1, speed))
         for index in 1..<GameplaySpeed.steps.count where speed <= GameplaySpeed.steps[index] {
             let lower = GameplaySpeed.steps[index - 1], upper = GameplaySpeed.steps[index]
@@ -54,6 +55,15 @@ public struct GameplaySpeed: Sendable {
     public init(legacyMultiplier: Double = 3) { self.legacyMultiplier = legacyMultiplier }
     public var isFast: Bool { target > 1 }
     public var isHeld: Bool { !held.isEmpty }
+    /// The held pedal winds pitch up continuously while physics keeps its discrete tiers.
+    public func musicPitchSpeed(at now: TimeInterval) -> Double {
+        guard variableEnabled, !held.isEmpty, let start = holdStartedAt else { return target }
+        let base = Self.steps.firstIndex(of: selected) ?? 0
+        let position = min(Double(Self.steps.count - 1), Double(base)
+            + max(0, now - start - Self.holdDelay) / Self.holdStepDuration)
+        let lower = Int(position), upper = min(Self.steps.count - 1, lower + 1)
+        return Self.steps[lower] + (Self.steps[upper] - Self.steps[lower]) * (position - Double(lower))
+    }
     public var label: String { "\(Int(target))×" }
 
     public mutating func update(at now: TimeInterval) {

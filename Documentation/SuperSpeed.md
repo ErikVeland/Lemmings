@@ -51,7 +51,12 @@ four at 5× and five at 10×. Distant echoes get fainter and blurrier as speed
 increases. Neighbouring profiles blend during acceleration. Solid artwork stays sharp.
 
 Variable speed also raises music pitch without changing its tempo. The 2×, 3×,
-5× and 10× tiers use pitch ratios of 1.04, 1.09, 1.18 and 1.35 respectively.
+5× and 10× tiers settle at 1, 2, 3 and 5 semitones above normal respectively.
+Holding the speed pedal winds pitch continuously between those intervals,
+then settles at a perfect fourth at the top. The simulation retains its existing
+speed tiers. Releasing follows each control's existing cruising-speed behaviour.
+Audio changes serve both comic timing and useful feedback: the rising wind-up
+should feel like a cartoon acceleration, with a stable musical landing.
 Pitch glides take 120 ms in either direction and cannot exceed 1.50×.
 This applies to native modules, recorded soundtracks and both DJ decks in all
 three games. Returning to normal speed or leaving active gameplay restores

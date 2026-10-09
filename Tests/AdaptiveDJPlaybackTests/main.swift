@@ -157,18 +157,24 @@ extension ModuleMusicPlayer {
 }
 extension MusicFileDeck {
   fileprivate var rhythmIsPlayingForTest: Bool { rhythmBuffer != nil && rhythmPlayer.isPlaying }
+  fileprivate var repeatsForTest: Bool { repeats }
   fileprivate func checkSpeedPitch(_ cents: Double) throws {
     try require(speedPitch.pitch == Float(cents), "Recording missed the speed pitch")
   }
 }
 extension DJDeck {
   fileprivate var moduleForMixTest: ModuleMusicPlayer? { module }
+  fileprivate var recordingRepeatsForTest: Bool? { recording?.repeatsForTest }
   fileprivate func checkSpeedPitch(_ cents: Double) throws {
     try recording?.checkSpeedPitch(cents)
     try module?.checkSpeedPitch(cents)
   }
 }
 extension AdaptiveDJPlayer {
+  fileprivate func checkWinningThemeIsLooped() throws {
+    try require(activeDeck?.recordingRepeatsForTest == true,
+      "The winning arrangement must keep looping through continued play and results")
+  }
   fileprivate func checkTimingRouting(root: URL) throws {
     guard let grid = timingCatalogue?.variants.first(where: { $0.supportsBarMixing && !$0.path.hasSuffix(".mod") }) else {
       throw Failure(description: "No analysed recording grid loaded")
@@ -384,6 +390,11 @@ extension AdaptiveDJPlayer {
   player.updateTelemetry(rescued)
   try require(player.currentURL != assigned, "Quota did not start the next version")
   let celebration = player.currentURL
+  let catalogue = SoundtrackCatalogue.load(at: root)!
+  let celebrationPath = SoundtrackPlayer.cataloguePath(celebration!, root: root)!
+  try require(catalogue.entry(path: celebrationPath)?.track.id == "classic.cancan",
+    "Quota replaced the winning composition with a result jingle")
+  try player.checkWinningThemeIsLooped()
   rescued.didWin = true; rescued.isComplete = true
   player.updateTelemetry(rescued)
   try require(player.currentURL == celebration, "Completed win repeated the quota transition")

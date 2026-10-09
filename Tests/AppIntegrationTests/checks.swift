@@ -5149,6 +5149,15 @@ extension AppDelegate {
   }
 
   fileprivate func testSteppedCompletion() throws {
+    let previousSettings = settings
+    settings.music = .amigaModules; settings.musicStyle = .faithful
+    settings.musicVolume = 0; settings.pauseMusicBeatOnly = false
+    music.setMuted(true); music.setVolume(0); music.setEnhancements(.faithful)
+    let selectedTrack = Bundle.main.resourceURL!.appendingPathComponent("Music/lemmings_music_mod/cancan.mod")
+    defer {
+      music.stop(); settings = previousSettings; userPausedMusic = false
+      music.setEnhancements(previousSettings.musicStyle == .modern ? .modern : .faithful)
+    }
     buildInterface()
     autoreleasepool { window.close() }
     window.title = "Window ownership check"
@@ -5175,8 +5184,17 @@ extension AppDelegate {
         fanPlaying = fan
         fanPack = URL(fileURLWithPath: "/test-pack.zip")
         fanQueue = [FanLevelLibrary.Entry(file: "test.lvl", section: nil, label: label)]
+        music.stop(); _ = music.play(url: selectedTrack); try music.start()
+        isPaused = true; applyUserMusicPause()
+        try check(!music.isOutputRunning, "Paused final-tick fixture did not suspend selected music")
         stepForward()
         try check(phase == .results, "single-step did not show results (fan=\(fan), win=\(win))")
+        try check(isPaused && session?.isComplete == true,
+          "Completed single-step resumed gameplay")
+        try check(music.isOutputRunning == win,
+          "Final single-step did not preserve win music or paused failure (fan=\(fan), win=\(win))")
+        try check(music.currentURL == selectedTrack && music.muted,
+          "Completion replaced the selected tune or cleared mute")
         try check(arcadeReport?.run.saved == (win ? 1 : 0), "Completion did not record the actual rescue result")
         try check(arcadeReport?.trolley?.attempt.run.didWin == win,
           "Trolley did not preserve the original pass/fail outcome")
@@ -6021,7 +6039,7 @@ Task { @MainActor in
     subject.prepareArcadeTests()
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
-    #if !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
+    #if !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -6036,6 +6054,12 @@ Task { @MainActor in
     try subject.testScrollableReleaseNotes()
     #elseif SOLUTION_AUDIO_TESTS
     try subject.testSolutionReplaySounds()
+    #elseif AUDIO_JOY_TESTS
+    try subject.testSteppedCompletion()
+    try subject.testHotSeatBoundaries()
+    try subject.testHandoverPreviousLevel()
+    try subject.testSolutionReplaySounds()
+    print("Audio joy integration tests passed.")
     #elseif PACK_NAVIGATION_TESTS
     try subject.testSoloHotSeatRoundTrips()
     try subject.testNeoRunRecovery()

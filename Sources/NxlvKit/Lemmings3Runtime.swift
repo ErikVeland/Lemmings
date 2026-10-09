@@ -71,6 +71,11 @@ public struct Lemmings3Runtime: Sendable {
     public struct Fireball: Equatable, Sendable {
         public var x: Int, y: Int, direction: Int, age = 0
     }
+    /// Presentation events do not participate in gameplay or saved-run identity.
+    public struct SoundEvent: Sendable {
+        public let sequence: UInt64
+        public let cue: PositionedSoundCue
+    }
     public struct Creature: Equatable, Sendable {
         public enum Kind: Int, Sendable { case fatale = 10010, mole = 10012, buzzard = 10014, potato = 10016 }
         public let id: Int, kind: Kind
@@ -154,10 +159,23 @@ public struct Lemmings3Runtime: Sendable {
     public private(set) var blasts: [Blast] = []
     public private(set) var fireballs: [Fireball] = []
     public private(set) var creatures: [Creature] = []
+    public private(set) var soundEvents: [SoundEvent] = []
+    public private(set) var soundSequence: UInt64 = 0
+    public private(set) var acknowledgedDeathSounds: Set<Int> = []
     private var nextExplosiveID = 0
     private var nextPickupID: Int
     private var gravityPickupIDs: Set<Int> = []
     private var trapStarted: [Int: Int] = [:]
+    private mutating func sound(_ effect: ClassicSoundEffect, x: Int, y: Int) {
+        soundSequence &+= 1
+        soundEvents.append(.init(sequence: soundSequence,
+            cue: .init(effect, at: .init(x: Double(x), y: Double(y)))))
+    }
+    private mutating func sound(_ effect: ClassicSoundEffect, at lemming: Lemming,
+                               acknowledgesDeath: Bool = false) {
+        sound(effect, x: lemming.x, y: lemming.y)
+        if acknowledgesDeath { acknowledgedDeathSounds.insert(lemming.id) }
+    }
     /// Native OBJ timing includes a delay counter and a pause at the cycle boundary.
     public func trapFrame(id: Int) -> Int {
         guard let trap = configuration.traps.first(where: { $0.id == id }) else { return 0 }
@@ -366,6 +384,7 @@ public struct Lemmings3Runtime: Sendable {
             distract(index)
             let lem = lemmings[index]
             fireballs.append(.init(x: lem.x, y: lem.y - 8, direction: lem.direction))
+            sound(.projectileLaunch, at: lem)
             lemmings[index].quantity -= 1
             if lemmings[index].quantity == 0 { lemmings[index].tool = nil }
             lemmings[index].state = .walking; lemmings[index].age = 0
@@ -376,6 +395,7 @@ public struct Lemmings3Runtime: Sendable {
             let lem = lemmings[index]
             explosives.append(.init(id: nextExplosiveID, tool: tool, x: lem.x, y: lem.y - 1,
                 velocityX: tool == .grenade ? lem.direction * 4 : 0, velocityY: tool == .grenade ? -4 : 0))
+            sound(.projectileLaunch, at: lem)
             nextExplosiveID += 1; lemmings[index].quantity -= 1
             if lemmings[index].quantity == 0 { lemmings[index].tool = nil }
             lemmings[index].state = .walking; lemmings[index].age = 0
@@ -417,8 +437,11 @@ public struct Lemmings3Runtime: Sendable {
         let top = tool == .bricks ? ny : (dy > 0 ? lem.y : ny - 16)
         let height = tool == .bricks ? step : (dy > 0 ? 8 : 16)
         let cells = (top..<(top + height)).flatMap { y in (left..<(left + 8)).map { (x: $0, y: y) } }
-        guard inBounds(nx, ny), cells.allSatisfy({ inBounds($0.x, $0.y) }),
-              !cells.contains(where: { configuration.backgroundAttributes[$0.y * configuration.width + $0.x] & 0x20 != 0 }) else {
+        guard inBounds(nx, ny), cells.allSatisfy({ inBounds($0.x, $0.y) }) else {
+            lem.state = .walking; return
+        }
+        if cells.contains(where: { configuration.backgroundAttributes[$0.y * configuration.width + $0.x] & 0x20 != 0 }) {
+            sound(.hitSteel, at: lem)
             lem.state = .walking; return
         }
         if tool == .spade && !cells.contains(where: { isSolid($0.x, $0.y) }) { lem.state = .walking; return }
@@ -444,6 +467,9 @@ public struct Lemmings3Runtime: Sendable {
             terrainEdits[index] = tool == .bricks
         }
         lem.x = nx; lem.y = ny; lem.quantity -= 1
+        if tool == .bricks {
+            sound(lem.quantity > 0 && lem.quantity <= 3 ? .builderWarning : .brickPlace, at: lem)
+        }
         if lem.quantity == 0 { lem.tool = nil; lem.state = .walking }
         if !isSolid(lem.x, lem.y) { lem.state = .falling; lem.fall = 0; lem.age = 0 }
     }
@@ -475,6 +501,7 @@ public struct Lemmings3Runtime: Sendable {
             explosives[index] = item
             if item.age == item.fuseTicks && inBounds(item.x, item.y) {
                 blasts.append(.init(x: item.x, y: item.y, tick: tick))
+                sound(.explode, x: item.x, y: item.y)
                 for y in max(0, item.y - 20)...max(0, min(configuration.height - 1, item.y + 20)) {
                     for x in max(0, item.x - 20)...max(0, min(configuration.width - 1, item.x + 20)) {
                         let offset = y * configuration.width + x
@@ -488,6 +515,7 @@ public struct Lemmings3Runtime: Sendable {
                     let lem = lemmings[lemIndex]
                     if (lem.x - item.x) * (lem.x - item.x) + (lem.y - 8 - item.y) * (lem.y - 8 - item.y) <= 24 * 24 {
                         lemmings[lemIndex].state = .dead
+                        acknowledgedDeathSounds.insert(lem.id)
                     }
                 }
                 for creatureIndex in creatures.indices where creatures[creatureIndex].alive {
@@ -619,6 +647,7 @@ public struct Lemmings3Runtime: Sendable {
     }
     public mutating func step() {
         guard !isComplete else { return }
+        soundEvents.removeAll(keepingCapacity: true)
         tick += 1
         for pickupIndex in pickups.indices where gravityPickupIDs.contains(pickups[pickupIndex].id) && pickups[pickupIndex].quantity > 0 {
             let x = pickups[pickupIndex].x
@@ -655,10 +684,13 @@ public struct Lemmings3Runtime: Sendable {
                         continue
                     }
                     if overlaps && box.tool == .clock {
-                        bonusSeconds += 60 * box.quantity; pickups[pickupIndex].quantity = 0; continue
+                        bonusSeconds += 60 * box.quantity; pickups[pickupIndex].quantity = 0
+                        sound(.clockPickup, at: lem)
+                        continue
                     }
                     if overlaps && (lem.tool == nil || lem.tool == box.tool) {
                         lem.tool = box.tool; lem.quantity += box.quantity; pickups[pickupIndex].quantity = 0
+                        sound(.toolPickup, at: lem)
                     }
                 }
             }
@@ -668,12 +700,15 @@ public struct Lemmings3Runtime: Sendable {
                     if let start = trapStarted[trap.id], tick - start < trap.cycleTicks { continue }
                     if trap.cells.contains(where: { lem.x >= $0.x && lem.x < $0.x + 8 && lem.y - 1 >= $0.y && lem.y - 1 < $0.y + 2 }) {
                         trapStarted[trap.id] = tick; lem.state = .trapped; lem.age = 0
+                        sound(.trapTrigger, at: lem, acknowledgesDeath: true)
                         lem.trapTicks = trap.cycleTicks; break
                     }
                 }
             }
             if ![.saved, .dead, .exiting, .drowning, .swimming, .trapped].contains(lem.state), isWater(lem.x, lem.y) {
                 lem.state = lem.tool == .swimmer ? .swimming : .drowning; lem.age = 0
+                sound(lem.state == .swimming ? .waterEntry : .drown, at: lem,
+                      acknowledgesDeath: lem.state == .drowning)
                 if lem.state == .swimming { lem.swimTicks = 5 * Int(Self.ticksPerSecond) }
             }
             if lem.state == .falling && lem.tool == .umbrella && lem.fall >= 16 {
@@ -752,7 +787,10 @@ public struct Lemmings3Runtime: Sendable {
                 if lem.swimTicks <= 0 {
                     consumeTool(&lem)
                     if lem.tool == .swimmer { lem.swimTicks = 5 * Int(Self.ticksPerSecond) }
-                    else { lem.state = .drowning; lem.age = 0 }
+                    else {
+                        lem.state = .drowning; lem.age = 0
+                        sound(.drown, at: lem, acknowledgesDeath: true)
+                    }
                 }
                 if lem.state == .swimming {
                     let nx = lem.x + lem.direction

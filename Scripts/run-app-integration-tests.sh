@@ -40,6 +40,7 @@ ln -sfn "$resource_app/Contents/Resources" "$test_app/Contents/Resources"
 test_flags=()
 if [[ "${TEST_SCOPE:-all}" == release-notes ]]; then test_flags+=(-D RELEASE_NOTES_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == solution-audio ]]; then test_flags+=(-D SOLUTION_AUDIO_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == audio-joy ]]; then test_flags+=(-D AUDIO_JOY_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == pack-navigation ]]; then test_flags+=(-D PACK_NAVIGATION_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == consolidation ]]; then test_flags+=(-D CONSOLIDATION_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == profile-sessions ]]; then test_flags+=(-D PROFILE_SESSION_TESTS); fi

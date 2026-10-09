@@ -49,6 +49,24 @@ def package(catalogue, source, target, game):
         (target/'timing.json').write_text(json.dumps(timing,ensure_ascii=False,separators=(',', ':'))+'\n')
     elif (target/'timing.json').exists():
         (target/'timing.json').unlink()
+    profile_path = catalogue.with_name('recording-playback.json')
+    if profile_path.exists():
+        profiles = json.loads(profile_path.read_text())
+        installed = {v.get('id', v['path']): v['path'] for t in payload['tracks'] for v in t['variants']}
+        rows = []
+        for row in profiles['variants']:
+            identity = row['variantID']
+            if identity not in installed: continue
+            original = source/source_paths[identity]
+            if hashlib.sha256(original.read_bytes()).hexdigest() != row['sourceSHA256']:
+                raise ValueError(f'Stale recording playback profile: {original}')
+            row['path'] = installed[identity]
+            row['playbackSHA256'] = hashlib.sha256((target/row['path']).read_bytes()).hexdigest()
+            rows.append(row)
+        profiles['variants'] = rows
+        (target/'recording-playback.json').write_text(json.dumps(profiles,ensure_ascii=False,separators=(',', ':'))+'\n')
+    elif (target/'recording-playback.json').exists():
+        (target/'recording-playback.json').unlink()
 
 
 if __name__=='__main__':

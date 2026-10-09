@@ -90,6 +90,26 @@ public struct SoundtrackCatalogue: Codable, Sendable {
             .sorted { $0.id < $1.id }.first
     }
 
+    /// Lift the arrangement after the rescue target while keeping the composition.
+    /// A result jingle cannot replace the theme while lemmings are still playing.
+    public func celebration(currentPath: String, cycle: Int, availablePaths: Set<String>,
+                            includeAlternates: Bool = true) -> Variant? {
+        guard includeAlternates, let current = entry(path: currentPath),
+              ["level", "special", "seasonal"].contains(current.track.role) else { return nil }
+        func lift(_ variant: Variant) -> Int {
+            if variant.remix != "original" { return 0 }
+            if variant.quality == "composer-recording" { return 1 }
+            return 2
+        }
+        let candidates = current.track.variants.filter {
+            $0.path != currentPath && $0.confidence == "documented" && availablePaths.contains($0.path)
+                && lift($0) < lift(current.variant)
+        }
+        guard let tier = candidates.map(lift).min() else { return nil }
+        let versions = candidates.filter { lift($0) == tier }.sorted { $0.id < $1.id }
+        return versions[max(0, cycle) % versions.count]
+    }
+
     private func rank(_ variant: Variant, preferredPort: String) -> String {
         let ports = [preferredPort, "amiga", "dos-opl2", "tandy", "x68000", "fm-towns", "pc-98", "lynx", "archimedes", "nes", "snes", "master-system", "game-boy", "spectrum", "arcade", "mega-drive", "dos-opl3"]
         let port = ports.firstIndex(of: variant.port) ?? ports.count

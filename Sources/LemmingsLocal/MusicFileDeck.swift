@@ -1,4 +1,5 @@
 import AVFoundation
+import NxlvKit
 
 /// Keep the countdown audible while progressively removing treble.
 enum NukeMusicFilter {
@@ -44,6 +45,7 @@ final class MusicFileDeck {
   private let outputMixer = AVAudioMixerNode()
   private let file: AVAudioFile
   private let repeats: Bool
+  private let profile: MusicPlaybackCatalogue.Entry?
   private var playbackGeneration = 0
   private(set) var completedLoops = 0
   private var fadeTask: Task<Void, Never>?
@@ -85,7 +87,10 @@ final class MusicFileDeck {
   var sourceSeconds: Double {
     guard let renderTime = player.lastRenderTime,
       let time = player.playerTime(forNodeTime: renderTime), time.sampleRate > 0 else { return 0 }
-    return Double(time.sampleTime) / time.sampleRate
+    let elapsed = Double(time.sampleTime) / time.sampleRate
+    let sourceLoopApplies = profile?.sampleRate == file.processingFormat.sampleRate
+      && (profile?.loop?.endFrame ?? 0) <= file.length
+    return profile?.position(at: elapsed, repeats: repeats && sourceLoopApplies) ?? elapsed
   }
 
   /// Turntable speed and level for a vinyl stop or start. Varispeed cannot
@@ -101,10 +106,12 @@ final class MusicFileDeck {
 
   var isPlaying: Bool { started && !outputSuspended && player.isPlaying }
 
-  init?(url: URL, repeats: Bool = true, rhythmURL: URL? = nil) {
+  init?(url: URL, repeats: Bool = true, rhythmURL: URL? = nil,
+        profile: MusicPlaybackCatalogue.Entry? = nil) {
     guard let file = try? AVAudioFile(forReading: url), file.length > 0 else { return nil }
     self.file = file
     self.repeats = repeats
+    self.profile = profile
     if let rhythmURL, let drumFile = try? AVAudioFile(forReading: rhythmURL),
       drumFile.length > 0, Double(drumFile.length) / drumFile.processingFormat.sampleRate <= 13,
       drumFile.processingFormat.sampleRate == file.processingFormat.sampleRate,
@@ -123,7 +130,8 @@ final class MusicFileDeck {
     bands[2].filterType = .highShelf
     bands[2].frequency = 7_500
     bands[2].gain = 1.5
-    equaliser.globalGain = -1.0
+    // A constant measured trim preserves attacks and the recording's dynamics.
+    equaliser.globalGain = -1.0 + Float(profile?.gainDB ?? 0)
 
     reverb.loadFactoryPreset(.mediumRoom)
     reverb.wetDryMix = Turntable.restingWet
@@ -201,7 +209,7 @@ final class MusicFileDeck {
     if !started {
       started = true
       playbackGeneration += 1
-      scheduleLoop(generation: playbackGeneration)
+      scheduleLoop(generation: playbackGeneration, first: true)
       if repeats { scheduleLoop(generation: playbackGeneration) }
     }
     if !player.isPlaying { player.play() }
@@ -217,8 +225,14 @@ final class MusicFileDeck {
     }
   }
 
-  private func scheduleLoop(generation: Int) {
-    player.scheduleFile(file, at: nil, completionCallbackType: .dataPlayedBack) { [weak self] _ in
+  private func scheduleLoop(generation: Int, first: Bool = false) {
+    let segment = profile?.segment(first: first, repeats: repeats,
+      fileFrames: file.length, fileRate: file.processingFormat.sampleRate) ?? (start: 0, count: file.length)
+    guard segment.count > 0, segment.count <= Int64(UInt32.max) else { return }
+    // Playback completion requires an audio device; offline rendering has none.
+    let callback: AVAudioPlayerNodeCompletionCallbackType = engine.isInManualRenderingMode ? .dataRendered : .dataPlayedBack
+    player.scheduleSegment(file, startingFrame: segment.start, frameCount: AVAudioFrameCount(segment.count),
+      at: nil, completionCallbackType: callback) { [weak self] _ in
       Task { @MainActor [weak self] in
         guard let self, self.started, self.playbackGeneration == generation else { return }
         self.completedLoops += 1

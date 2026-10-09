@@ -8,6 +8,10 @@ static BOOL MuteTestAudio(void) {
     return mode && strcmp(mode, "muted") == 0;
 }
 
+static BOOL OfflineTestRender(AVAudioEngine *engine) {
+    return engine.isInManualRenderingMode && engine.manualRenderingMode == AVAudioEngineManualRenderingModeOffline;
+}
+
 static void SwapAudio(Class cls, SEL original, SEL replacement) {
     method_exchangeImplementations(class_getInstanceMethod(cls, original),
                                    class_getInstanceMethod(cls, replacement));
@@ -20,7 +24,8 @@ static void SwapAudio(Class cls, SEL original, SEL replacement) {
     if (MuteTestAudio()) SwapAudio(self, @selector(startAndReturnError:), @selector(lemmingsTest_startAndReturnError:));
 }
 - (BOOL)lemmingsTest_startAndReturnError:(NSError **)error {
-    self.mainMixerNode.outputVolume = 0;
+    // Offline buffers have no device output and must retain measurable samples.
+    if (!OfflineTestRender(self)) self.mainMixerNode.outputVolume = 0;
     return [self lemmingsTest_startAndReturnError:error];
 }
 @end
@@ -33,7 +38,7 @@ static void SwapAudio(Class cls, SEL original, SEL replacement) {
 }
 - (void)lemmingsTest_setOutputVolume:(float)volume {
     // Keep internal mix levels and playback clocks available to mechanical tests.
-    [self lemmingsTest_setOutputVolume:self.engine.mainMixerNode == self ? 0 : volume];
+    [self lemmingsTest_setOutputVolume:self.engine.mainMixerNode == self && !OfflineTestRender(self.engine) ? 0 : volume];
 }
 @end
 

@@ -238,7 +238,7 @@ public struct Lemmings2Runtime: Sendable {
     }
     private mutating func sound(_ request: Lemmings2SoundRequest, at lemming: Lemming? = nil) {
         // Headless runs need not consume audio. Bound their pending queue.
-        if soundEvents.count < 256 {
+        if soundEvents.count < 256 || request.supplementalEffect == .yippee {
             soundEvents.append(lemming.map { request.positioned(x: $0.x, y: $0.y) } ?? request)
         }
     }
@@ -1726,7 +1726,10 @@ public struct Lemmings2Runtime: Sendable {
             case .blocking:
                 if !isSolid(lem.x, lem.y) { change(&lem, .falling); lem.fallDistance = 0 }
             case .exiting:
-                if lem.age + 1 >= configuration.exitFrameCount { lem.state = .saved }
+                if lem.age + 1 >= configuration.exitFrameCount {
+                    lem.state = .saved
+                    sound(.init(supplemental: .yippee), at: lem)
+                }
             case .saved, .dead: break
             }
             if lem.state == .falling || ([.jumping,.shimmyJump].contains(lem.state) && lem.fallDistance <= 39) {
@@ -1770,6 +1773,7 @@ public struct Lemmings2Runtime: Sendable {
                 for object in configuration.interactiveObjects where object.triggers.contains(where: { $0.contains(lem.x, lem.y) }) {
                     if object.kind == .timedTrap {
                         if timedTraps[object.id]?.touch() == true {
+                            sound(.init(supplemental: .trapTrigger), at: lem)
                             change(&lem,.trapDying); lem.deathSprite = object.deathSprite; lem.air = nil; break
                         }
                         continue
@@ -1798,11 +1802,13 @@ public struct Lemmings2Runtime: Sendable {
                             velocityX:Int16(vx),velocityY:Int16(-strength),
                             horizontalCountdown:7,verticalCountdown:strength == 4 ? 1 : 2)
                         lem.fallDistance = 0
+                        sound(.init(supplemental: .trampolineBounce), at: lem)
                         break
                     }
                     if object.kind == .trap {
                         guard !activeObjects.contains(object.id) else { continue }
                         activeObjects.insert(object.id); objectFrames[object.id] = 1 % object.frameCount
+                        sound(.init(supplemental: .trapTrigger), at: lem)
                         change(&lem, .trapped); break
                     }
                     if object.flags & 2 != 0 {
