@@ -446,6 +446,7 @@ import NxlvKit
             selected = recovery.selectedSkill; paused = true
             canvas.restoreCamera(x: CGFloat(recovery.scrollX), y: CGFloat(recovery.scrollY))
             arcadeLevelSnapshot = arcadeLevel
+            recordCollectionVisit()
             message = "Saved run restored. Press Space when you are ready."
         } else {
             beginReplay()
@@ -463,6 +464,17 @@ import NxlvKit
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     #if APP_INTEGRATION_TESTS
+    func testCollectionVisitAndRetry() throws {
+        timer?.invalidate()
+        guard let entry = LevelCollections.entry(attemptID: arcadeRunID), entry.identity.engine == .lemmings3,
+              paused else { throw SequelDataError.invalid("L3 did not record its paused start") }
+        restart()
+        guard LevelCollections.entry(attemptID: arcadeRunID)?.identity == entry.identity,
+              paused, speedControl.multiplier == 1 else {
+            throw SequelDataError.invalid("L3 retry lost its collection identity or pause")
+        }
+        print("PASS native L3 visit and paused retry")
+    }
     func testInitialMusicRouting() throws {
         timer?.invalidate()
         try validateMusicRouting(!music.isRunning && !dj.isPlaying, "L3 played music before audio configuration")
@@ -1174,6 +1186,21 @@ import NxlvKit
         }
         refresh()
     }
+    private func recordCollectionVisit() {
+        do {
+            let selection = LevelSelection(tribe: campaign.tribe, level: campaign.index)
+            let levelID = SHA256.hash(data: campaign.levels[campaign.index].rawData).map { String(format: "%02x", $0) }.joined()
+            let source = LevelPreviewSource.lemmings3(root: dataRoot, selection: selection, expectedLevelID: levelID)
+            if let revision = try? source.sourceRevision(),
+               let entry = try? LevelPlaylistEntry(identity: .init(engine: .lemmings3,
+                 packID: "chronicles-\(campaign.tribe.rawValue)", levelID: "\(campaign.index):\(levelID)"),
+                 catalogueRevision: LevelCollections.catalogueRevision, sourceRevision: revision,
+                 packNameSnapshot: "The Chronicles - \(campaign.tribe.title)",
+                 levelNameSnapshot: "\(campaign.tribe.title) \(campaign.index + 1)", levelNumberSnapshot: campaign.index + 1) {
+                LevelCollections.record(entry, profileID: arcadeProfileID, attemptID: arcadeRunID)
+            }
+        }
+    }
     private func beginReplay() {
         recoveryInputs = []; recoveryProgress = campaign.progress
         recoveryInitialHash = L3RunRecovery.stateHash(initial); lastCheckpointTime = 0
@@ -1186,6 +1213,7 @@ import NxlvKit
         syncPrecisionZoom()
         arcadeReport = nil; skillAssignments = [:]; toolUses = [:]
         arcadeLevelSnapshot = arcadeLevel
+        recordCollectionVisit()
         AnonymousTelemetry.shared.start(arcadeLevel, hotSeat: arcadeHotSeatID != nil, attemptID: arcadeRunID)
         if recordsCampaignProgress {
             ArcadeStore.shared.beginAttempt(id: arcadeRunID, profileID: arcadeProfileID,

@@ -446,6 +446,7 @@ import NxlvKit
             arcadeRunID = recovery.runID; arcadeProfileID = recovery.profileID; arcadeHotSeatID = recovery.hotSeatID
             PrecisionZoomController.shared.start(attemptID: arcadeRunID, profileID: arcadeProfileID)
             syncPrecisionZoom()
+            recordCollectionVisit()
             usedRewind = recovery.usedRewind; nukeCount = recovery.nukeCount; undoCount = recovery.undoCount
             canvas.startCountdown.cancel()
             selected = recovery.selectedSkill; paused = true; fanSelected = false
@@ -460,6 +461,18 @@ import NxlvKit
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     #if APP_INTEGRATION_TESTS
+    func testCollectionVisitAndRetry() throws {
+        timer?.invalidate()
+        startLevel()
+        guard let entry = LevelCollections.entry(attemptID: arcadeRunID), entry.identity.engine == .lemmings2,
+              paused else { throw SequelDataError.invalid("L2 did not record its paused start") }
+        restart()
+        guard LevelCollections.entry(attemptID: arcadeRunID)?.identity == entry.identity,
+              paused, speedControl.multiplier == 1 else {
+            throw SequelDataError.invalid("L2 retry lost its collection identity or pause")
+        }
+        print("PASS native L2 visit and paused retry")
+    }
     func testInitialMusicRouting() throws {
         timer?.invalidate()
         try validateMusicRouting(!music.isRunning && !dj.isPlaying, "L2 played music before audio configuration")
@@ -822,6 +835,20 @@ import NxlvKit
         playTribeMusic()
         refreshGame()
     }
+    private func recordCollectionVisit() {
+        if practiceLevel == nil {
+            let selection = LevelSelection(tribe: campaign.tribe, level: campaign.level)
+            let source = LevelPreviewSource.lemmings2(root: root, selection: selection, expectedLevelID: level.fingerprint)
+            if let revision = try? source.sourceRevision(),
+               let entry = try? LevelPlaylistEntry(identity: .init(engine: .lemmings2,
+                 packID: "tribes-\(campaign.tribe)", levelID: "\(campaign.level):\(level.fingerprint)"),
+                 catalogueRevision: LevelCollections.catalogueRevision, sourceRevision: revision,
+                 packNameSnapshot: "The Tribes - \(Lemmings2Campaign.tribeNames[campaign.tribe])",
+                 levelNameSnapshot: level.title, levelNumberSnapshot: campaign.level + 1) {
+                LevelCollections.record(entry, profileID: arcadeProfileID, attemptID: arcadeRunID)
+            }
+        }
+    }
     private func beginReplay() {
         if restoringRun { return }
         lastFanInput = nil; lastAimInput = nil
@@ -837,6 +864,7 @@ import NxlvKit
         syncPrecisionZoom()
         arcadeReport = nil; usedRewind = false; nukeCount = 0; undoCount = 0
         arcadeLevelSnapshot = arcadeLevel
+        recordCollectionVisit()
         if let arcadeLevel { AnonymousTelemetry.shared.start(arcadeLevel, hotSeat: arcadeHotSeatID != nil, attemptID: arcadeRunID) }
         if recordsCampaignProgress, let arcadeLevel { ArcadeStore.shared.beginAttempt(id: arcadeRunID, profileID: arcadeProfileID,
             level: arcadeLevel, previousID: previousAttemptID) }

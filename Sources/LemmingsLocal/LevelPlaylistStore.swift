@@ -50,6 +50,8 @@ import NxlvKit
         var activeRunL2Progress: [String: Data]?
         var savedRuns: [SavedRun]?
         var learningProgress: LearningJourneyProgress?
+        var favourites: [LevelPlaylistEntry]?
+        var recentlyPlayed: [LevelPlaylistEntry]?
 
         init(
             playlists: [LevelPlaylist] = [],
@@ -79,6 +81,14 @@ import NxlvKit
                 throw Failure.missingPlaylist
             }
             let saved = savedRuns ?? []
+            guard (recentlyPlayed?.count ?? 0) <= 50 else { throw Failure.invalidDocument }
+            for entries in [favourites ?? [], recentlyPlayed ?? []] {
+                guard entries.count <= LevelPlaylist.maximumEntries,
+                      Set(entries.map(\.identity)).count == entries.count,
+                      Set(entries.map(\.id)).count == entries.count else {
+                    throw Failure.invalidDocument
+                }
+            }
             let ids = saved.map { $0.run.id } + (activeRun.map { [$0.id] } ?? [])
             guard Set(ids).count == ids.count,
                   activeRun != nil || activeRunHotSeatID == nil,
@@ -111,6 +121,27 @@ import NxlvKit
     var activeRunL2Progress: [String: Data] { document.activeRunL2Progress ?? [:] }
     var savedRuns: [SavedRun] { document.savedRuns ?? [] }
     var learningProgress: LearningJourneyProgress { document.learningProgress ?? .init() }
+    var favourites: [LevelPlaylistEntry] { document.favourites ?? [] }
+    var recentlyPlayed: [LevelPlaylistEntry] { document.recentlyPlayed ?? [] }
+
+    func toggleFavourite(_ entry: LevelPlaylistEntry) throws {
+        let previous = document
+        var entries = favourites
+        if entries.contains(where: { $0.identity == entry.identity }) {
+            entries.removeAll { $0.identity == entry.identity }
+        } else {
+            guard entries.count < LevelPlaylist.maximumEntries else { throw Failure.invalidDocument }
+            entries.insert(entry, at: 0)
+        }
+        document.favourites = entries
+        do { try save() } catch { document = previous; throw error }
+    }
+
+    func recordVisit(_ entry: LevelPlaylistEntry) throws {
+        let previous = document
+        document.recentlyPlayed = [entry] + recentlyPlayed.filter { $0.identity != entry.identity }.prefix(49)
+        do { try save() } catch { document = previous; throw error }
+    }
 
     /// Save the visit and next position together. A deferred level is never a win.
     @discardableResult func advanceLearningJourney(runID: UUID, won: Bool) throws -> Bool {

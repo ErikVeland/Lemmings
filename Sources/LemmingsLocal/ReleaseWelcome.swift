@@ -5,14 +5,12 @@ import AppKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "1.8.4"
-    static let subtitle = "Bigger rescue cheers, musical victories and playful feedback"
+    static let notesVersion = "1.8.5"
+    static let subtitle = "Your favourite levels, close at hand"
     static let sections = [
-        ("A winning soundtrack", "Meeting the rescue target can lift your current tune to an available composer recording or remix. The same theme keeps playing through results, including wins reached while paused. Alternate soundtracks must be enabled."),
-        ("The whole rescue chorus", "Every rescue gets its cheer, even at crowded exits. Useful action and warning sounds stay clear alongside the chorus."),
-        ("Playful sequel feedback", "Lemmings 2 adds rescue cheers, trampoline bounces and trap sounds. Lemmings 3 adds feedback for pickups, brickwork, steel, water, traps and explosions."),
-        ("Small rewards, clear cues", "Personal bests and rare awards give the final result note a little twist. Ready sounds mark actual starts and Hot Seat readiness. Timer warnings differ from builder warnings. Result sounds follow live volume and mute, and still play with Reduced Motion."),
-        ("Smoother playback and speed", "Recorded soundtracks have measured volume trims. Verified loops avoid repeated intros and ending fades. Holding fast-forward winds pitch up smoothly, then settles on musical intervals while the beat stays steady."),
+        ("Keep your favourites", "Bookmark levels in Level Select or on the result screen. An outlined star becomes filled when saved. Open Collections from the home screen or pack browser to find them again."),
+        ("Recently Played", "Collections keeps your last 50 distinct levels, newest first. Playing a level again moves it to the front. Start opens a fresh attempt. Resume still restores your saved attempt."),
+        ("Your own collection", "Each player keeps separate favourites and history, including Hot Seat turns. Classic, fan levels, NeoLemmix, Lemmings 2 and Lemmings 3 share the same collection controls. Locked, missing or changed content stays unavailable."),
         ("Compatibility", "Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. NeoLemmix remains Beta; Lemmings 2 and 3 remain Preview.")
     ]
     private let defaults: UserDefaults

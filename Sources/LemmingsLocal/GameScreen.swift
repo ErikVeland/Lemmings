@@ -375,6 +375,12 @@ import NxlvKit
     func preferControllerControl(_ control: NSControl) {
         preferredControllerControl = control
     }
+    func addFavouriteAction(at slot: Int = 0) -> GameFavouriteButton {
+        let button = GameFavouriteButton()
+        button.frame = CGRect(x: slot == 0 ? 316 : 502, y: 634, width: 174, height: 48)
+        canvas.addSubview(button)
+        return button
+    }
     @discardableResult func addListAction(
         _ title: String,
         at index: Int,

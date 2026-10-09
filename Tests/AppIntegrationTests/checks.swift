@@ -3065,7 +3065,9 @@ extension AppDelegate {
     try ArcadeRecordFile(url: url).save(records)
     return url
   }
-  private func failFirstClassicLevel(position: Int = 0) throws {
+  private func failFirstClassicLevel(position: Int = 0) async throws {
+    returnToLibrary()
+    launchMode = .singleTitle; activeTitle = .lemmings
     settings.music = .silent
     loadContent()
     guard let index = dataSets.firstIndex(where: { $0.set.title == .lemmings }) else {
@@ -3076,6 +3078,10 @@ extension AppDelegate {
     for _ in 0..<110 { session?.tick() }
     session?.nuke()
     for _ in 0..<2000 where session?.isComplete == false { session?.tick() }
+    if let classic = session as? ClassicSession, let conditions = arcadeLevel?.conditions {
+      await ArcadeStore.shared.prepareSolutionTarget(initial: classic.initialSimulation, conditions: conditions,
+        resources: Bundle.main.resourceURL, buildVersion: TrolleyCapture.buildVersion).value
+    }
     finishSessionIfNeeded()
     try check(phase == .results && session?.didWin == false, "The skip test did not fail its level")
     arcadeAutoPresent = true; presentArcadeResult(); arcadeAutoPresent = false
@@ -3092,7 +3098,7 @@ extension AppDelegate {
     try bitmap.representation(using: .png, properties: [:])?.write(to: folder.appendingPathComponent(name + ".png"))
     return view.accessibilityLabel() ?? ""
   }
-  fileprivate func testHotSeatJourneyRetry() throws {
+  fileprivate func testHotSeatJourneyRetry() async throws {
     GameScreen.shared.dismissAll()
     let previous = ArcadeStore.shared
     let store = ArcadeStore(file: try recordsWithSkips(0), bundledProofs: nil)
@@ -3105,7 +3111,7 @@ extension AppDelegate {
     let host = store.records.activeProfileID
     let guest = store.addProfile(initials: "PAL", portrait: 2)!
     store.selectProfile(host); store.toggleSessionProfile(guest.id)
-    try failFirstClassicLevel()
+    try await failFirstClassicLevel()
     view.onLater = {}; view.onHints = {}
     try captureResult("hot-seat-journey-retry")
     let controls = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
@@ -3125,13 +3131,13 @@ extension AppDelegate {
     print("PASS Hot Seat journey names both retries; same-player retry restarts paused with the attempt owner")
   }
 
-  fileprivate func testLevelSkipResult() throws {
+  fileprivate func testLevelSkipResult() async throws {
     let previousStore = ArcadeStore.shared
     defer { ArcadeStore.shared = previousStore; arcadeAutoPresent = false }
     let view = ArcadeWindow.shared.arcadeView
 
     ArcadeStore.shared = ArcadeStore(file: try recordsWithSkips(0), bundledProofs: nil)
-    try failFirstClassicLevel()
+    try await failFirstClassicLevel()
     try check(view.availableSkips == 0 && !(try captureResult("solo-no-skips")).contains("K skips"),
       "A player without skips was offered one")
     let unmoved = flow?.screen
@@ -3141,10 +3147,10 @@ extension AppDelegate {
     ArcadeStore.shared = ArcadeStore(file: try recordsWithSkips(1), bundledProofs: nil)
     let modern = settings
     var oldSchool = settings; oldSchool.applyExperiencePreset(modern: false); apply(oldSchool)
-    try failFirstClassicLevel()
+    try await failFirstClassicLevel()
     try check(view.availableSkips == 0, "Old school offered a level skip")
     apply(modern)
-    try failFirstClassicLevel()
+    try await failFirstClassicLevel()
     let owner = ArcadeStore.shared.records.activeProfileID
     try check(view.availableSkips == 1 && view.skipTitle == "Skip level (1)"
       && (try captureResult("solo-one-skip")).contains("K skips this level"), "An earned skip was not offered")
@@ -3170,7 +3176,7 @@ extension AppDelegate {
     let store = ArcadeStore.shared, host = store.records.activeProfileID
     let guest = store.addProfile(initials: "PAL", portrait: 2)!
     store.selectProfile(host); store.toggleSessionProfile(guest.id)
-    try failFirstClassicLevel()
+    try await failFirstClassicLevel()
     try check(view.skipTitle.hasPrefix("Skip as \(store.records.profile(host)!.initials)"), "Hot Seat Skip did not name its payer")
     try captureResult("hot-seat-one-skip")
     let ownerRetry = "Retry as \(store.records.profile(host)!.initials)"
@@ -6025,6 +6031,152 @@ extension AppDelegate {
   }
 }
 
+extension AppDelegate {
+  fileprivate func testLevelCollections() async throws {
+    if window == nil { buildInterface() }
+    settings.music = .silent
+    loadContent()
+    let profile = ArcadeStore.shared.playingProfileID
+    let store = try LevelCollections.store(profileID: profile)
+    let guest = ArcadeStore.shared.addProfile(initials: "PAL", portrait: 2, select: false)!
+    let guestStore = try LevelCollections.store(profileID: guest.id)
+    guard let discovery = await makeLevelBrowserDiscoveryTask().value else {
+      throw IntegrationFailure(message: "Collections could not discover the bundled library")
+    }
+    rebuildLevelCatalogue(discovery)
+    var examples: [LevelPlaylistEntry] = []
+    for engine in LevelSourceEngine.allCases {
+      guard let level = levelCatalogue.packs.filter({ $0.engine == engine }).flatMap(\.levels).first(where: \.isAvailable) else {
+        throw IntegrationFailure(message: "Collections lack bundled \(engine.displayName) input")
+      }
+      let entry = try collectionEntry(for: level.identity)
+      examples.append(entry)
+      try store.toggleFavourite(entry)
+      try store.recordVisit(entry)
+      try check(playlistResolution(for: entry).canStart, "A \(engine.displayName) collection reference does not resolve")
+    }
+    try check(guestStore.favourites.isEmpty && guestStore.recentlyPlayed.isEmpty, "Collections crossed profiles")
+    try store.recordVisit(examples[0])
+    try check(store.recentlyPlayed.count == 4 && store.recentlyPlayed.first?.identity == examples[0].identity,
+      "Replaying a level duplicated its history or failed to move it to the front")
+    let reloaded = try LevelPlaylistStore(file: store.file)
+    try check(reloaded.favourites == store.favourites && reloaded.recentlyPlayed == store.recentlyPlayed,
+      "Collections did not survive relaunch")
+    try reloaded.toggleFavourite(examples[0])
+    do { try store.toggleFavourite(examples[0]); throw IntegrationFailure(message: "A stale collections writer overwrote another app") }
+    catch LevelPlaylistStore.Failure.changedOnDisk {}
+    try check(store.favourites.count == 4, "A failed collection save changed the in-memory favourites")
+    // Continue UI checks with the current writer.
+    try reloaded.toggleFavourite(examples[0])
+    try LevelCollections.reload(profileID: profile)
+    // Use a separate temporary file for retention and backup recovery.
+    let file = FileManager.default.temporaryDirectory.appendingPathComponent("collections-retention-\(UUID().uuidString).json")
+    let history = try LevelPlaylistStore(file: file)
+    for index in 0..<55 {
+      let entry = try LevelPlaylistEntry(identity: .init(engine: .classic, packID: "history", levelID: "\(index)"),
+        catalogueRevision: Self.levelCatalogueRevision, sourceRevision: "test", packNameSnapshot: "History",
+        levelNameSnapshot: "Level \(index)", levelNumberSnapshot: index + 1)
+      try history.recordVisit(entry)
+    }
+    try check(history.recentlyPlayed.count == 50 && history.recentlyPlayed.first?.identity.levelID == "54"
+      && history.recentlyPlayed.last?.identity.levelID == "5", "Recently Played did not retain the latest 50 distinct levels")
+    try Data("broken".utf8).write(to: file)
+    let recovered = try LevelPlaylistStore(file: file)
+    try check(recovered.recovered && recovered.recentlyPlayed.count == 50, "Collections did not recover their validated backup")
+    LevelPlaylistStore.removeData(at: file)
+
+    func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap(descendants) }
+    let folder = URL(fileURLWithPath: ".build/collections-ui")
+    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    func capture(_ name: String) throws {
+      window.contentView?.layoutSubtreeIfNeeded()
+      let view = window.contentView!
+      let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+      view.cacheDisplay(in: view.bounds, to: bitmap)
+      try bitmap.representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent(name + ".png"))
+      guard let page = GameScreen.shared.controllerPage(in: window) else { return }
+      let controls = descendants(page).compactMap { $0 as? NSButton }.filter { ($0 is GameActionButton || $0 is GameFavouriteButton) && $0.isEnabled && !$0.isHidden }
+      for control in controls {
+        let point = control.convert(CGPoint(x: control.bounds.midX, y: control.bounds.midY), to: page)
+        try check(page.hitTest(point) === control, "A collections button lost its input target: \(control.title)")
+      }
+    }
+    for (width, height) in [(900, 620), (1120, 720), (1600, 1000)] {
+      window.setContentSize(CGSize(width: width, height: height))
+      GameScreen.shared.dismissAll()
+      presentLevelCollections()
+      try capture("\(width)-hub")
+      presentLevelCollection(examples, recent: true, profile: profile)
+      try await Task.sleep(nanoseconds: 400_000_000)
+      try capture("\(width)-recent")
+      guard let page = GameScreen.shared.controllerPage(in: window),
+            let favourite = descendants(page).compactMap({ $0 as? GameFavouriteButton }).first else {
+        throw IntegrationFailure(message: "The collection bookmark is missing")
+      }
+      favourite.performClick(nil)
+      try check(favourite.state == .off && !LevelCollections.isFavourite(examples[0], profileID: profile), "The favourite input did not remove its saved state")
+      try capture("\(width)-unsaved")
+      favourite.performClick(nil)
+      try check(favourite.state == .on && LevelCollections.isFavourite(examples[0], profileID: profile), "The favourite input did not save its state")
+      try capture("\(width)-saved")
+      presentLevelCollection([], recent: false, profile: profile)
+      try capture("\(width)-empty")
+    }
+    GameScreen.shared.dismissAll()
+    // Launch from a real Classic reference and verify that the actual attempt records its visit.
+    startBrowserLevel(examples[0].identity)
+    for _ in 0..<500 where levelBrowserLaunchTask != nil { try await Task.sleep(nanoseconds: 10_000_000) }
+    try check(LevelCollections.entry(attemptID: arcadeRunID)?.identity == examples[0].identity,
+      "Classic did not record its actual launch")
+    let l2 = try Lemmings2PlayWindow(root: BundledGameResources.lemmings2(), selection: .init(tribe: 0, level: 0), recordsCampaignProgress: false)
+    try l2.testCollectionVisitAndRetry(); l2.stop(); l2.close()
+    let l3 = try Lemmings3PlayWindow(root: BundledGameResources.lemmings3(), selection: .init(tribe: .classic, level: 0), recordsCampaignProgress: false)
+    try l3.testCollectionVisitAndRetry(); l3.stop(); l3.close()
+    let resultRun = ArcadeRun(id: arcadeRunID, profileID: profile, level: arcadeLevel!,
+      saved: 0, didWin: false, skills: [:], seconds: 120)
+    let report = ArcadeStore.shared.previewReport(for: resultRun)!
+    ArcadeStore.shared.toggleSessionProfile(guest.id)
+    _ = ArcadeStore.shared.passSessionTurn(after: profile)
+    ArcadeWindow.shared.showResult(report, owner: window, retry: {}, next: {}, replay: { _ in })
+    let result = ArcadeWindow.shared.arcadeView
+    result.finishCelebration()
+    let bitmap = result.bitmapImageRepForCachingDisplay(in: result.bounds)!
+    result.cacheDisplay(in: result.bounds, to: bitmap)
+    try bitmap.representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent("result-saved.png"))
+    let resultControls = result.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement } ?? []
+    guard let bookmark = resultControls.first(where: { $0.accessibilityLabel() == "Unfavourite" }) else {
+      throw IntegrationFailure(message: "The result omitted its saved bookmark")
+    }
+    try check(bookmark.accessibilityPerformPress() && !LevelCollections.isFavourite(examples[0], profileID: profile)
+      && guestStore.favourites.isEmpty, "A result bookmark changed the queued player's collection")
+    result.cacheDisplay(in: result.bounds, to: bitmap)
+    try bitmap.representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent("result-unsaved.png"))
+    ArcadeStore.shared.endHotSeat(); ArcadeStore.shared.selectProfile(profile)
+    GameScreen.shared.dismissAll()
+    // Missing and changed content stays visible and cannot launch through a shortcut.
+    let missing = try LevelPlaylistEntry(identity: .init(engine: .classic, packID: "missing", levelID: "missing"),
+      catalogueRevision: Self.levelCatalogueRevision, sourceRevision: "missing", packNameSnapshot: "Missing pack",
+      levelNameSnapshot: "Missing level", levelNumberSnapshot: 1)
+    let changed = try LevelPlaylistEntry(identity: examples[3].identity, catalogueRevision: Self.levelCatalogueRevision,
+      sourceRevision: "changed", packNameSnapshot: examples[3].packNameSnapshot, levelNameSnapshot: examples[3].levelNameSnapshot,
+      levelNumberSnapshot: 1)
+    try check(!playlistResolution(for: missing).canStart && !playlistResolution(for: changed).canStart,
+      "Collections admitted missing or changed content")
+    presentLevelCollection([missing, changed], recent: true, profile: profile)
+    try capture("unavailable")
+    if let locked = levelCatalogue.packs.flatMap(\.levels).first(where: { $0.availability == .locked }) {
+      let entry = try collectionEntry(for: locked.identity)
+      try check(!playlistResolution(for: entry).canStart, "A collection shortcut unlocked its level")
+      presentLevelCollection([entry], recent: false, profile: profile)
+      try capture("locked")
+    }
+    GameScreen.shared.dismissAll()
+    try check(homeMenuItems().contains { if case .collections = $0.action { return true }; return false },
+      "Home omitted Collections")
+    print("PASS four-engine collection identities, personal storage, recent order/limit, stale-writer protection, backup recovery, scaled renders and input targets")
+  }
+}
+
 let testApp = NSApplication.shared
 guard let testDomain = Bundle.main.bundleIdentifier,
   testDomain.hasPrefix("academy.glasscode.lemmings.integration-tests") else { exit(2) }
@@ -6039,7 +6191,7 @@ Task { @MainActor in
     subject.prepareArcadeTests()
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
-    #if !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
+    #if !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -6050,7 +6202,18 @@ Task { @MainActor in
     try testPointerAssignment()
     #endif
     #endif
-    #if RELEASE_NOTES_TESTS
+    #if COLLECTION_TESTS
+    try await subject.testLevelCollections()
+    try subject.testScrollableReleaseNotes()
+    try subject.testHotSeatBoundaries()
+    try subject.testHandoverPreviousLevel()
+    try await subject.testHotSeatJourneyRetry()
+    try await subject.testPlaylistSessions()
+    try subject.testRunRecovery()
+    try subject.testFanRunRecovery()
+    try subject.testNeoRunRecovery()
+    print("Collections integration tests passed.")
+    #elseif RELEASE_NOTES_TESTS
     try subject.testScrollableReleaseNotes()
     #elseif SOLUTION_AUDIO_TESTS
     try subject.testSolutionReplaySounds()
@@ -6151,7 +6314,7 @@ Task { @MainActor in
     try subject.testPageKeyboardContinuation()
     try subject.testHotSeatBoundaries()
     try subject.testHandoverPreviousLevel()
-    try subject.testHotSeatJourneyRetry()
+    try await subject.testHotSeatJourneyRetry()
     try subject.testRunRecovery()
     try subject.testFanRunRecovery()
     try subject.testEscapeToMainMenu()
@@ -6207,7 +6370,7 @@ Task { @MainActor in
     try subject.testGlobalMuteAndStop()
     try await subject.testMusicPauseModes()
     try subject.testHandoverPreviousLevel()
-    try subject.testHotSeatJourneyRetry()
+    try await subject.testHotSeatJourneyRetry()
     print("Music integration tests passed.")
     #elseif VARIABLE_SPEED_TESTS
     try subject.testVariableSpeedInput()
@@ -6257,7 +6420,7 @@ Task { @MainActor in
     try await testGameTypography()
     try subject.testGamePages()
     try subject.testRestartSelection()
-    try subject.testLevelSkipResult()
+    try await subject.testLevelSkipResult()
     try subject.testBundledRescueTarget()
     try subject.testPortArtworkSwitching()
     try subject.testSuperSpeedPresentation()
@@ -6276,7 +6439,7 @@ Task { @MainActor in
     try subject.testInterruptionPolicy()
     try subject.testHotSeatBoundaries()
     try subject.testHandoverPreviousLevel()
-    try subject.testHotSeatJourneyRetry()
+    try await subject.testHotSeatJourneyRetry()
     try subject.testSeasonalMusic()
     try await subject.testLevelBrowserRouteIntegrity()
     try await subject.testPlaylistStartRevalidatesFanSources()

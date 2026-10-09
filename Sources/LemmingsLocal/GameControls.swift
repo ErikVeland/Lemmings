@@ -99,6 +99,32 @@ import AppKit
     }
 }
 
+@MainActor final class GameFavouriteButton: GameButton {
+    var onPress: (() -> Void)?
+    init(onPress: (() -> Void)? = nil) {
+        self.onPress = onPress
+        super.init(frame: .zero)
+        title = "Favourite"; target = self; action = #selector(invoke)
+        setButtonType(.momentaryPushIn)
+        setAccessibilityLabel("Favourite")
+    }
+    required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
+    @objc private func invoke() { onPress?() }
+    override func draw(_ dirtyRect: NSRect) {
+        GameStoneButton.draw(bounds, selected: isHighlighted, pixel: 1)
+        GameStar.draw(at: CGPoint(x: 10, y: bounds.midY - 11), earned: state == .on, size: 2)
+        GameControlText.draw(title, in: CGRect(x: 40, y: 0, width: bounds.width - 46, height: bounds.height),
+                             enabled: isEnabled, role: state == .on ? .heading : .body)
+        GameControlText.focus(self)
+    }
+    func showSaved(_ saved: Bool) {
+        state = saved ? .on : .off
+        setAccessibilityLabel(saved ? "Remove favourite" : "Add favourite")
+        setAccessibilityValue(saved ? 1 : 0)
+        needsDisplay = true
+    }
+}
+
 @MainActor final class GameReadOnlyText: NSTextView {
     override func draw(_ dirtyRect: NSRect) {
         if let renderer = GameMenuArtwork.renderer() {

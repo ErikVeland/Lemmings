@@ -9,6 +9,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
     let detail: String
     let availability: LevelAvailability
     let artworkKey: String?
+    let availabilityLabel: String?
 
     var isAvailable: Bool { availability.canStart }
 
@@ -19,7 +20,8 @@ struct LevelCoverFlowItem: Equatable, Sendable {
         detail: String,
         isAvailable: Bool = true,
         artworkKey: String? = nil,
-        availability: LevelAvailability? = nil
+        availability: LevelAvailability? = nil,
+        availabilityLabel: String? = nil
     ) {
         self.id = id
         self.title = title
@@ -27,10 +29,11 @@ struct LevelCoverFlowItem: Equatable, Sendable {
         self.detail = detail
         self.availability = availability ?? (isAvailable ? .available : .unavailable)
         self.artworkKey = artworkKey
+        self.availabilityLabel = availabilityLabel
     }
 
     var accessibilityName: String {
-        [title, subtitle, detail, isAvailable ? nil : availability.displayName]
+        [title, subtitle, detail, isAvailable ? nil : (availabilityLabel ?? availability.displayName)]
             .compactMap { $0 }
             .joined(separator: ". ")
     }
@@ -1142,7 +1145,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
     }
 
     private var statusDetail: String {
-        item.detail + (item.isAvailable ? "" : "  " + item.availability.displayName.uppercased())
+        item.detail + (item.isAvailable ? "" : "  " + (item.availabilityLabel ?? item.availability.displayName).uppercased())
     }
 
     private func drawAvailabilityMark(in content: CGRect) {

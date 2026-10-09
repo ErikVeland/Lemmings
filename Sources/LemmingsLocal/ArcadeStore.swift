@@ -18,6 +18,11 @@ import NxlvKit
     private let playlistDataRemover: (String) throws -> Void
     var profilesAreWritable: Bool { canWrite }
 
+    func collectionsFile(profileID: String) -> URL {
+        file.deletingLastPathComponent().appendingPathComponent("Level Collections", isDirectory: true)
+            .appendingPathComponent(Self.fingerprint(Data((file.path + profileID).utf8)) + ".json")
+    }
+
     /// The house rule and shared campaign survive app restarts.
     enum TurnPolicy: String, CaseIterable, Codable, Sendable {
         case everyLevel = "Every level", atFirstFail = "At first fail"
@@ -277,6 +282,8 @@ import NxlvKit
         removeSavedProgress(of: id)
         do { try playlistDataRemover(id) }
         catch { storageNotice = "Player deleted. Some playlists could not be removed: " + error.localizedDescription }
+        do { try LevelPlaylistStore.removeDataChecked(at: collectionsFile(profileID: id)) }
+        catch { storageNotice = "Player deleted. Some collections could not be removed: " + error.localizedDescription }
         return true
     }
     private func removeSavedProgress(of id: String) {

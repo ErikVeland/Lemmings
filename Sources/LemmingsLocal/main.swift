@@ -168,6 +168,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     case resume
     case resumeSequence
     case fullQuest
+    case collections
     case browse(HomeContentFamily)
   }
   private struct HomeMenuItem {
@@ -342,6 +343,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
     var canStart: Bool {
       if case .available = self { return true }
       return false
+    }
+    var stateLabel: String {
+      switch self {
+      case .available: "Available"
+      case .locked: "Locked"
+      case .unavailable: "Unavailable"
+      case .changed: "Changed"
+      case .missing: "Missing"
+      }
     }
   }
   private static let levelCatalogueRevision = "1.2-runtime-v2"
@@ -588,6 +598,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       arcadeRunID = checkpoint.runID; arcadeProfileID = checkpoint.profileID; arcadeHotSeatID = checkpoint.hotSeatID
       PrecisionZoomController.shared.start(attemptID: arcadeRunID, profileID: arcadeProfileID)
       syncPrecisionZoom()
+      LevelCollections.record(currentCollectionEntry(), profileID: arcadeProfileID, attemptID: arcadeRunID)
       panel.selectedSkillIndex = checkpoint.selectedSkill
       playfield.viewport.scrollX = max(0, min(checkpoint.scrollX, Double(restored.levelWidth)))
       playfield.viewport.scrollY = max(0, min(checkpoint.scrollY, Double(restored.levelHeight)))
@@ -2973,6 +2984,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     page.addSecondaryAction("Playlists") { [weak self] in
       self?.presentPlaylistLibrary()
     }
+    page.addSecondaryAction("Collections", at: 1) { [weak self] in self?.presentLevelCollections() }
     page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
     carousel.onSelectionChanged = { [weak self, weak primary] item in
       self?.cancelPendingLevelPreparation()
@@ -3163,11 +3175,17 @@ let achievementProgressKey = "ClassicAchievementProgress"
             let identity = identities[item.id] else { return }
       self?.addToSelectedPlaylist(identity)
     }
-    page.addSecondaryAction("Playlists", at: 1) { [weak self] in
-      self?.presentPlaylistLibrary()
+    let favourite = page.addFavouriteAction(at: 1)
+    let collectionOwner = ArcadeStore.shared.playingProfileID
+    favourite.onPress = { [weak self, weak carousel, weak favourite] in
+      guard let self, let item = carousel?.selectedItem, let identity = identities[item.id],
+            let entry = try? self.collectionEntry(for: identity),
+            ArcadeStore.shared.playingProfileID == collectionOwner else { return }
+      LevelCollections.toggle(entry, profileID: collectionOwner, owner: self.window)
+      favourite?.showSaved(LevelCollections.isFavourite(entry, profileID: collectionOwner))
     }
     page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
-    carousel.onSelectionChanged = { [weak self, weak primary, weak add] item in
+    carousel.onSelectionChanged = { [weak self, weak primary, weak add, weak favourite] item in
       self?.cancelPendingLevelPreparation()
       self?.levelBrowserLevelSelections[
         rating.map { pack.id + "#" + $0 } ?? pack.id
@@ -3176,6 +3194,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
       primary?.needsDisplay = true
       add?.isEnabled = item.isAvailable
       add?.needsDisplay = true
+      if let self, let identity = identities[item.id], let entry = try? self.collectionEntry(for: identity) {
+        favourite?.showSaved(LevelCollections.isFavourite(entry, profileID: collectionOwner))
+      }
     }
     carousel.onStart = { [weak primary] _ in primary?.performClick(nil) }
 
@@ -3210,6 +3231,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
       ],
       reduceMotion: settings.reduceMotion || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
     add.isEnabled = carousel.selectedItem?.isAvailable == true
+    if let item = carousel.selectedItem, let identity = identities[item.id], let entry = try? collectionEntry(for: identity) {
+      favourite.showSaved(LevelCollections.isFavourite(entry, profileID: collectionOwner))
+    }
     levelBrowserCurrentLevelPage = page
     GameScreen.shared.present(
       page,
@@ -3270,6 +3294,120 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   // MARK: - Player playlists and shuffled runs
+
+  private func collectionEntry(for identity: LevelCatalogueIdentity) throws -> LevelPlaylistEntry {
+    guard let entry = levelCatalogue.resolve(identity), let revision = playlistSourceRevision(for: identity) else {
+      throw LevelPlaylistError.invalidEntry
+    }
+    return try LevelPlaylistEntry(identity: identity, catalogueRevision: Self.levelCatalogueRevision,
+      sourceRevision: revision, packNameSnapshot: entry.packName, levelNameSnapshot: entry.levelName,
+      levelNumberSnapshot: entry.number)
+  }
+
+  private func presentLevelCollections() {
+    let page = GameMenuPage(title: "Collections", subtitle: ArcadeStore.shared.playingProfile?.initials ?? "")
+    let favourite = page.addListAction("Favourites", at: 0) { [weak self] in self?.openLevelCollection(recent: false) }
+    page.addListAction("Recently Played", at: 1) { [weak self] in self?.openLevelCollection(recent: true) }
+    page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
+    GameScreen.shared.present(page, owner: window, focus: favourite)
+  }
+
+  private func openLevelCollection(recent: Bool) {
+    let profile = ArcadeStore.shared.playingProfileID
+    guard let store = try? LevelCollections.store(profileID: profile) else {
+      GameScreen.shared.message("Collections unavailable", detail: "The saved collections could not be read."); return
+    }
+    let entries = recent ? store.recentlyPlayed : store.favourites
+    let task = makeLevelBrowserDiscoveryTask()
+    levelBrowserDiscoveryTask = task
+    let loading = GameScreen.shared.beginLoading(owner: window)
+    levelBrowserLoadTask = Task { [weak self] in
+      defer { GameScreen.shared.endLoading(loading) }
+      guard let discovery = await task.value, !Task.isCancelled, let self,
+            ArcadeStore.shared.playingProfileID == profile else { return }
+      self.levelBrowserLoadTask = nil; self.levelBrowserDiscoveryTask = nil
+      self.rebuildLevelCatalogue(discovery)
+      self.ensureFanPacksResolved(for: entries, title: recent ? "Recently Played" : "Favourites") { [weak self] _ in
+        guard let self, ArcadeStore.shared.playingProfileID == profile else { return }
+        self.presentLevelCollection(entries, recent: recent, profile: profile)
+      }
+    }
+  }
+
+  private func presentLevelCollection(_ entries: [LevelPlaylistEntry], recent: Bool, profile: String) {
+    let page = GameMenuPage(title: recent ? "Recently Played" : "Favourites",
+      subtitle: ArcadeStore.shared.records.profile(profile)?.initials ?? "")
+    let carousel = LevelCoverFlowView(frame: page.body.bounds)
+    carousel.autoresizingMask = [.width, .height]; page.body.addSubview(carousel)
+    let byID = Dictionary(uniqueKeysWithValues: entries.map { ($0.id.uuidString, $0) })
+    let start = page.addPrimaryAction("Start") { [weak self, weak carousel] in
+      guard let self, let id = carousel?.selectedItem?.id, let entry = byID[id],
+            ArcadeStore.shared.playingProfileID == profile,
+            self.playlistResolution(for: entry).canStart else { return }
+      self.startBrowserLevel(entry.identity)
+    }
+    start.keyEquivalent = "\r"; start.keyEquivalentModifierMask = []
+    let favourite = page.addFavouriteAction()
+    favourite.onPress = { [weak self, weak carousel, weak favourite, weak page] in
+      guard let self, let page, let id = carousel?.selectedItem?.id, let entry = byID[id],
+            ArcadeStore.shared.playingProfileID == profile else { return }
+      LevelCollections.toggle(entry, profileID: profile, owner: self.window)
+      favourite?.showSaved(LevelCollections.isFavourite(entry, profileID: profile))
+      if !recent { GameScreen.shared.dismiss(page); self.presentLevelCollection((try? LevelCollections.store(profileID: profile).favourites) ?? [], recent: false, profile: profile) }
+    }
+    page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
+    carousel.onSelectionChanged = { [weak self, weak start, weak favourite] item in
+      self?.cancelPendingLevelPreparation(); start?.isEnabled = item.isAvailable
+      if let entry = byID[item.id] { favourite?.showSaved(LevelCollections.isFavourite(entry, profileID: profile)) }
+    }
+    carousel.onStart = { [weak start] _ in start?.performClick(nil) }
+    configureLevelPreviewLoader(carousel)
+    carousel.configure(items: entries.map { entry in
+      let resolution = playlistResolution(for: entry)
+      return LevelCoverFlowItem(id: entry.id.uuidString, title: entry.levelNameSnapshot,
+        subtitle: entry.packNameSnapshot + " / " + entry.identity.engine.displayName,
+        detail: "Level \(entry.levelNumberSnapshot)",
+        isAvailable: resolution.canStart, artworkKey: levelPreviewRequests[entry.identity]?.artworkKey,
+        availability: resolution.canStart ? .available : resolution.stateLabel == "Locked" ? .locked : .unavailable,
+        availabilityLabel: resolution.stateLabel)
+    }, selectedID: nil, reduceMotion: settings.reduceMotion || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
+    start.isEnabled = carousel.selectedItem?.isAvailable == true
+    favourite.isEnabled = carousel.selectedItem != nil
+    if let id = carousel.selectedItem?.id, let entry = byID[id] { favourite.showSaved(LevelCollections.isFavourite(entry, profileID: profile)) }
+    if entries.isEmpty {
+      let label = GameLabel(labelWithString: recent ? "No levels played yet" : "No favourites yet")
+      label.alignment = .center; label.frame = page.body.bounds; label.autoresizingMask = [.width, .height]
+      page.body.addSubview(label)
+    }
+    GameScreen.shared.present(page, owner: window, focus: entries.isEmpty ? page.controllerBackButton : carousel)
+  }
+
+  private func currentCollectionEntry() -> LevelPlaylistEntry? {
+    if let identity = currentNeoCatalogueIdentity {
+      if let entry = try? collectionEntry(for: identity) { return entry }
+      if let store = try? LevelCollections.store(profileID: arcadeProfileID),
+         let entry = (store.recentlyPlayed + store.favourites).first(where: { $0.identity == identity }) { return entry }
+    }
+    if fanPlaying, let pack = fanPack, fanQueue.indices.contains(fanQueueIndex),
+       let revision = FanLevelLibrary.archiveFingerprint(pack) {
+      let entry = fanQueue[fanQueueIndex]
+      return try? LevelPlaylistEntry(identity: .init(engine: .classic, packID: "fan:" + FanLevelLibrary.catalogueID(pack), levelID: entry.file + "#\(entry.section ?? -1)"),
+        catalogueRevision: Self.levelCatalogueRevision, sourceRevision: revision, packNameSnapshot: FanLevelLibrary.displayName(of: pack),
+        levelNameSnapshot: artworkLevel?.title ?? entry.label,
+        levelNumberSnapshot: (fanEntries.firstIndex(where: { $0.file == entry.file && $0.section == entry.section }) ?? fanQueueIndex) + 1)
+    }
+    let index = gamePicker.indexOfSelectedItem, levelIndex = picker.indexOfSelectedItem
+    guard currentNxlvURL == nil, dataSets.indices.contains(index), dataSets[index].set.campaign.levels.indices.contains(levelIndex) else { return nil }
+    let source = dataSets[index], level = source.set.campaign.levels[levelIndex]
+    guard let revision = FanLevelLibrary.classicSourceRevision(for: source.set.title, root: source.directory) else { return nil }
+    let bundled = BundledGameResources.classicDirectories().contains { $0.resolvingSymlinksInPath() == source.directory.resolvingSymlinksInPath() }
+      || (source.set.title == .ohYesMoreLemmings && source.directory.lastPathComponent == "Ports")
+    let packID = bundled ? source.set.identifierKey : "imported:" + revision + ":" + ArcadeStore.fingerprint(Data(source.directory.standardizedFileURL.path.utf8))
+    return try? LevelPlaylistEntry(identity: .init(engine: .classic, packID: packID,
+      levelID: "\(levelIndex):\(level.rank):\(level.number):\(level.archiveFile):\(level.archiveSection)"),
+      catalogueRevision: Self.levelCatalogueRevision, sourceRevision: revision, packNameSnapshot: source.set.name,
+      levelNameSnapshot: level.level.title.isEmpty ? "Level \(levelIndex + 1)" : level.level.title, levelNumberSnapshot: levelIndex + 1)
+  }
 
   private func playlistStore() throws -> LevelPlaylistStore {
     let profileID = ArcadeStore.shared.records.activeProfileID
@@ -5439,6 +5577,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     items += HomeContentFamily.allCases.map {
       HomeMenuItem(title: homeContentRow($0), action: .browse($0))
     }
+    items.append(HomeMenuItem(title: "COLLECTIONS", action: .collections))
     return items
   }
 
@@ -6136,6 +6275,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
           : fanPlaying ? "Fan levels" : activeTitle?.displayName ?? campaign?.name ?? "Lemmings",
         rules: rules, total: new.total, required: new.required, conditions: conditions)
     if !restoringCheckpoint {
+      LevelCollections.record(currentCollectionEntry(), profileID: arcadeProfileID, attemptID: arcadeRunID)
       if sequencePlayingIdentity == nil {
         ArcadeStore.shared.beginAttempt(
           id: arcadeRunID,
@@ -6452,6 +6592,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
         if let checkpoint = menuRecovery { restoreRun(checkpoint) }
       case .fullQuest:
         openLevelBrowser(family: nil, showsJourney: true)
+      case .collections:
+        presentLevelCollections()
       case let .browse(family):
         if family == .neolemmix, neoLemmixSources.isEmpty {
           chooseNeoLemmixPacks()

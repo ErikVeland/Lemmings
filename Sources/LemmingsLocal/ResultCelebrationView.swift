@@ -101,8 +101,16 @@ import NxlvKit
         } ?? ArcadeStore.shared.records.leaderboard(level: run.level, board: .fastestClear, assisted: run.assisted)
             .first { $0.profileID == run.profileID }?.seconds
         link("Time " + Self.time(run.seconds) + "   Best " + (best.map(Self.time) ?? "--") + "  >",
-             CGRect(x: 80, y: 409, width: 960, height: 34), alignment: .left) { [weak self] in
+             CGRect(x: 80, y: 409, width: 720, height: 34), alignment: .left) { [weak self] in
             self?.trolleyBoard = .fastestClear; self?.board = .fastestClear; self?.boardScope = .level; self?.page(.records)
+        }
+        if let entry = LevelCollections.entry(attemptID: run.id) {
+            let saved = LevelCollections.isFavourite(entry, profileID: run.profileID)
+            button(saved ? "Unfavourite" : "Favourite", CGRect(x: 808, y: 409, width: 232, height: 34), selected: saved) { [weak self] in
+                LevelCollections.toggle(entry, profileID: run.profileID, owner: self?.window)
+                self?.needsDisplay = true
+            }
+            GameStar.draw(at: CGPoint(x: 820, y: 417), earned: saved, size: 2)
         }
         resultActions(y: 453)
         let maximum = run.level.conditions.map { ArcadeStore.shared.records.trolley.maximum(conditions: $0, assisted: run.assisted) } ?? TrolleyMaximum()
