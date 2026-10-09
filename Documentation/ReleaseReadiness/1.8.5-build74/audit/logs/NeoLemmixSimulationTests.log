@@ -1,0 +1,30 @@
+PASS rules and spawn timing
+PASS multiple entrance order
+PASS CE lemming render order
+PASS preplaced traits and core movement
+PASS permanent skills
+PASS walker, jumper, and shimmier
+PASS blocker and constructive skills
+PASS destructive skills and materials
+PASS bomber and stoner
+PASS swimming and hazards
+PASS NXLV adapter
+PASS gadget lemming caps
+PASS disarmer
+PASS cloner
+PASS fencer
+PASS laserer
+PASS unsupported skill diagnostics
+PASS replay order and inventory
+PASS splat pad landing
+PASS skill pickup
+PASS triggered animations and secondaries
+PASS locked exits and buttons
+PASS force fields and splitter
+PASS teleporter
+PASS updraft and zombie infection
+PASS state changers
+PASS portals
+PASS Codable continuation
+PASS nuke and completion
+NeoLemmix simulation tests passed: 29 groups, 21 implemented skills, 0 explicit unsupported skills.

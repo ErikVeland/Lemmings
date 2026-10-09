@@ -1,0 +1,2 @@
+UI test windows: offscreen; audio: muted
+FAIL: Failure(message: "Metal is unavailable")

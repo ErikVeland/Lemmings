@@ -14,10 +14,14 @@ before distributing a build.
 
 ## Download
 
-Download [1.8 build 64](https://github.com/ErikVeland/Lemmings/releases/tag/v1.8),
+Download [1.8.5 build 74](https://github.com/ErikVeland/Lemmings/releases/tag/v1.8.5),
 the current public release. Installed copies update automatically. Read the
-[1.8 release notes](Documentation/ReleaseNotes-1.8-build64.md) and the
+[1.8.5 release notes](Documentation/ReleaseNotes-1.8.5-build74.md) and the
 [tester guide](Documentation/BetaTesting.md).
+
+[Collections](Documentation/LevelCollections.md) keeps each player's favourite
+levels and the last 50 distinct levels played. Bookmark levels from Level Select
+or their result screens across Classic, fan packs, NeoLemmix, Lemmings 2 and 3.
 
 ## Start here
 

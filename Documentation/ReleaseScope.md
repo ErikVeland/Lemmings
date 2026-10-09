@@ -1,11 +1,12 @@
 # Release scope
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-The current public macOS release is 1.8.4 build 73. The
-[distribution record](ReleaseReadiness/1.8.4Build73Distribution.md) records the
-notarised downloads, signed feed and validation limits. This release adds the full rescue chorus, same-tune victory music, clearer
-action cues, playful sequel feedback and verified recording playback profiles. L2/L3 remain Preview, with completion planned for 1.9.
-NeoLemmix remains Beta. Updated 9 October 2026.
+The current public macOS release is 1.8.5 build 74. The
+[distribution record](ReleaseReadiness/1.8.5Build74Distribution.md) records the
+notarised downloads, signed feed and validation limits. This release adds personal
+Favourites and Recently Played across the catalogue, with result bookmarks that
+retain the attempt owner's identity during Hot Seat. L2/L3 remain Preview, with
+completion planned for 1.9. NeoLemmix remains Beta. Updated 10 October 2026.
 Automated checks support the recorded routes;
 remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)
 and the current [Classic validation](ReleaseReadiness/ClassicValidation-current.md).
