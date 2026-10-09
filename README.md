@@ -12,10 +12,13 @@ before distributing a build.
 
 ## Download
 
-[Download Ultimate Lemmings 1.2](https://github.com/ErikVeland/Lemmings/releases/latest)
-for Intel and Apple silicon Macs running macOS 12.3 or later. The public app and
-its bundled Sparkle components are Developer ID signed and notarised.
-See the [release notes](Documentation/ReleaseNotes-1.2-build40.md) for known limits.
+Download [1.8.5 build 74](https://github.com/ErikVeland/Lemmings/releases/tag/v1.8.5),
+the current public macOS release. Installed copies receive automatic updates.
+Read the [release notes](https://github.com/ErikVeland/Lemmings/blob/v1.8.5/Documentation/ReleaseNotes-1.8.5-build74.md).
+
+[Collections](https://github.com/ErikVeland/Lemmings/blob/v1.8.5/Documentation/LevelCollections.md)
+keeps each player's favourite levels and last 50 distinct levels played across
+Classic, fan packs, NeoLemmix, Lemmings 2 and Lemmings 3.
 
 ## Start here
 
@@ -31,7 +34,7 @@ See the [release notes](Documentation/ReleaseNotes-1.2-build40.md) for known lim
 - [Automatic updates](#automatic-updates) — Sparkle feed and release requirements.
 - [Automatic update evidence](Documentation/AutomaticUpdates.md) — release checks and records.
 
-The current milestone is 1.2 on macOS. Classic content is the completed
+This development branch contains the 1.2 macOS milestone. Classic content is the completed
 reference engine. Lemmings 2 and Lemmings 3 are labelled Preview. The bundled
 corpus contains 6,020 Classic-format fan levels in 535 packs; this is not a
 claim of NeoLemmix fan-pack compatibility. NeoLemmix `.nxlv` support has
