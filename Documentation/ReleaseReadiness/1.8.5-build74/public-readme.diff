@@ -3,7 +3,7 @@
 @@ -10,6 +10,16 @@
  Interactive Entertainment. Read [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)
  before distributing a build.
- 
+
 +## Download
 +
 +Download [1.8.5 build 74](https://github.com/ErikVeland/Lemmings/releases/tag/v1.8.5),
@@ -15,12 +15,12 @@
 +Classic, fan packs, NeoLemmix, Lemmings 2 and Lemmings 3.
 +
  ## Start here
- 
+
  - [Architecture](ARCHITECTURE.md) — module boundaries, runtime flow and release packaging.
 @@ -20,7 +30,7 @@
  - [Beta testing](Documentation/BetaTesting.md) — local package and validation procedure.
  - [Release evidence](Documentation/ReleaseReadiness/) — current gate records and manifests.
- 
+
 -The current milestone is 1.1 on macOS. Classic content is the completed
 +This development branch contains the 1.1 macOS milestone. Classic content is the completed
  reference engine. Lemmings 2 and Lemmings 3 are labelled Preview. The bundled

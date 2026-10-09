@@ -86,8 +86,8 @@
       "sha256": "e2498c954455b380ee666ec834fc06bfc43fe7ac9b69b3669dec2c7e8587128f"
     },
     "public-readme.diff": {
-      "bytes": 1438,
-      "sha256": "244f9783f38116524a253fa748d64badb6c37761181b3a68d1c3abba01e2dc0a"
+      "bytes": 1435,
+      "sha256": "c21052fc0a56be4b4ce0a3cf0c1d7d320c90c710fda2e2bc0bb79b7c0f5e10ca"
     },
     "package.log": {
       "bytes": 2490,
@@ -150,8 +150,8 @@
       "sha256": "186caf4769f0d5632fd6425e70c957b8b9aafffd307f13970286c00cf63f6332"
     },
     "audit/report.md": {
-      "bytes": 3859,
-      "sha256": "1433ad0c97cfec7b34c76848773d1394eb7ac7f2c70c7dfce5992915b450ca64"
+      "bytes": 3858,
+      "sha256": "b9e1124d1bf119078b207b464e124c428a627a0fb8690df2adc6d3473ef0648c"
     },
     "audit/results.json": {
       "bytes": 27324,

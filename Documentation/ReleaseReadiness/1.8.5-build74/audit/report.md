@@ -63,4 +63,3 @@ Fresh local regression evidence. Does not certify hardware, stores, complete cam
 Source drift: 0 files.
 
 ## Open gates
-
