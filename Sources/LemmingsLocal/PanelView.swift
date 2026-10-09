@@ -17,8 +17,7 @@ enum PanelButton: Equatable {
   var session: (any GameSession)? {
     didSet {
       if oldValue !== session { nukeGesture.reset() }
-      let names = session?.skills.map(\.name) ?? []
-      toolTip = SkillShortcuts(names: names).hint(names: names, modern: modernControlsEnabled) + "\n" + SpeedPanelControls.help
+      toolTip = nil
     }
   }
   private var nukeGesture = NukeClickGesture()
@@ -57,7 +56,9 @@ enum PanelButton: Equatable {
   var panelImage: CGImage?
   var terrainImage: CGImage?
   /// The skill bar belongs to a level in progress, not to a menu.
-  var isMenuMode = false
+  var isMenuMode = false {
+    didSet { if oldValue != isMenuMode { window?.invalidateCursorRects(for: self) } }
+  }
   /// The CRT source reserves exactly 80 pixels for the controls.
   var isCRTSource = false
   var onButton: ((PanelButton) -> Void)?
@@ -115,6 +116,15 @@ enum PanelButton: Equatable {
   }
 
   override var isFlipped: Bool { true }
+
+  override func resetCursorRects() {
+    guard !isMenuMode else { return }
+    addCursorRect(bounds, cursor: GameCursor.invisible)
+  }
+
+  override func cursorUpdate(with event: NSEvent) {
+    if isMenuMode { NSCursor.arrow.set() } else { GameCursor.invisible.set() }
+  }
 
   private let buttonHeight = 34.0
   private let inset = 8.0

@@ -12,6 +12,11 @@ final class Lemmings2SoundPlayer: @unchecked Sendable {
     private let lock = NSLock()
     private var mixer: Lemmings2SoundMixer
     private var volume: Float = 1
+    private var recentSamples = [Float](repeating: 0, count: 44_100)
+    private var recentPositions = [Int64](repeating: Int64.min, count: 44_100)
+    private var recentPosition: Int64 = 0
+    private var rewindSamples: [Float] = []
+    private var rewindIndex = 0
     init(root: URL) throws {
         mixer = Lemmings2SoundMixer(bank: try Lemmings2SoundBank(data:
             Data(contentsOf: root.appendingPathComponent("MUSIC/SBLAST.VOC"))))
@@ -19,7 +24,7 @@ final class Lemmings2SoundPlayer: @unchecked Sendable {
     func start() throws {
         guard source == nil else { return }
         let format = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 1)!
-        let node = AVAudioSourceNode(format: format) { [weak self] _, _, frames, buffers in
+        let node = AVAudioSourceNode(format: format) { [weak self] _, timestamp, frames, buffers in
             let list = UnsafeMutableAudioBufferListPointer(buffers)
             guard let self else {
                 for buffer in list { memset(buffer.mData, 0, Int(buffer.mDataByteSize)) }
@@ -27,9 +32,22 @@ final class Lemmings2SoundPlayer: @unchecked Sendable {
             }
             self.lock.lock()
             defer { self.lock.unlock() }
+            let startingPosition = timestamp.pointee.mSampleTime.isFinite
+                ? Int64(timestamp.pointee.mSampleTime) : self.recentPosition
             for i in 0..<Int(frames) {
-                let value = self.mixer.nextSample() * self.volume
-                for buffer in list { buffer.mData?.assumingMemoryBound(to: Float.self)[i] = value }
+                let value: Float
+                if self.rewindIndex < self.rewindSamples.count {
+                    value = self.rewindSamples[self.rewindIndex] * self.volume
+                    self.rewindIndex += 1
+                } else {
+                    value = self.mixer.nextSample()
+                    let position = startingPosition + Int64(i)
+                    self.recentSamples[Int(position % Int64(self.recentSamples.count) + Int64(self.recentSamples.count)) % self.recentSamples.count] = value
+                    self.recentPositions[Int(position % Int64(self.recentPositions.count) + Int64(self.recentPositions.count)) % self.recentPositions.count] = position
+                    self.recentPosition = position + 1
+                }
+                let output = value * self.volume
+                for buffer in list { buffer.mData?.assumingMemoryBound(to: Float.self)[i] = output }
             }
             return noErr
         }
@@ -61,7 +79,23 @@ final class Lemmings2SoundPlayer: @unchecked Sendable {
         engine.detach(environment)
         self.source = nil
     }
-    func silence() { lock.lock(); defer { lock.unlock() }; mixer.silence() }
+    func silence() {
+        lock.lock(); defer { lock.unlock() }
+        mixer.silence(); rewindSamples = []; rewindIndex = 0
+    }
+    func playRewindScrub() {
+        lock.lock(); defer { lock.unlock() }
+        let count = min(15_435, recentSamples.count)
+        var samples: [Float] = []; samples.reserveCapacity(count)
+        for offset in 0..<count {
+            let position = recentPosition - 1 - Int64(offset)
+            let index = Int(position % Int64(recentSamples.count) + Int64(recentSamples.count)) % recentSamples.count
+            guard recentPositions[index] == position else { break }
+            samples.append(recentSamples[index])
+        }
+        rewindSamples = samples
+        rewindIndex = 0
+    }
     func suspendOutput() { if source != nil { engine.pause() } }
     func resumeOutput() throws { if source != nil && !engine.isRunning { try engine.start() } }
     private var bottomFallSounds = true

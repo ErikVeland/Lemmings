@@ -14,8 +14,8 @@
     "area": "Fan and conversion completion",
     "priority": "P0",
     "status": "closed",
-    "exitCriteria": "Fan levels must load and start; they need no winning route (owner decision, 22 September 2026). Require winning routes and progression for all 60 Oh Yes! conversions. Sequel progression is tracked in the sequel gate.",
-    "progress": "22 September: all 6,020 retained fan levels load, render and start. All 60 conversions pass strict replay verification twice, with complete 20/10/30 rank inventories. The combined 352-level Classic quest passes 1,056 run restores, 352 progress resumes, six release transitions and the final result. Missing fixtures, altered outcomes and late inputs fail without replacing successful evidence. All 352 identities have bundled solution replays and verified hints. See ClassicConversionQuest.json, ClassicValidation-current.md and CampaignClosure-2026-09-22.md. L2/L3 remain previews under their separate gate.",
+    "exitCriteria": "Fan levels must load and start; they need no winning route (owner decision, 22 September 2026). Require winning routes and progression for all 60 Oh Yes! conversions. Sequel progression is tracked in the 1.2 sequel completion gate.",
+    "progress": "22 September: all 6,020 retained fan levels load, render and start. All 60 conversions pass strict replay verification twice, with complete 20/10/30 rank inventories. The combined 352-level Classic quest passes 1,056 run restores, 352 progress resumes, six release transitions and the final result. Missing fixtures, altered outcomes and late inputs fail without replacing successful evidence. All 352 identities have bundled solution replays and verified hints. See ClassicConversionQuest.json, ClassicValidation-current.md and CampaignClosure-2026-09-22.md. L2/L3 remain Preview under the open 1.2 sequel completion gate.",
     "scopes": [
       "all",
       "classic-1.0"
@@ -25,11 +25,11 @@
     "area": "Sequel fidelity",
     "priority": "P0",
     "status": "open",
-    "exitCriteria": "Resolve provisional L3 tool, movement and trap semantics against original-engine evidence. Complete environmental effects, original movie audio and story transitions. Extend L2 original-engine comparisons. Record every L2/L3 winning route and verify continuous campaign progression, L2 survivor carry-over and endings.",
+    "exitCriteria": "1.2 completion gate: resolve provisional L3 tool, movement and trap semantics against original-engine evidence. Complete environmental effects, original movie audio and story transitions. Extend L2 original-engine comparisons. Record every L2/L3 winning route and verify continuous campaign progression, L2 survivor carry-over, endings, saved-run recovery, replay identity and result records.",
     "scopes": [
       "all"
     ],
-    "progress": "15 September: Claude’s committed work preserves 73/120 L2 standalone routes and 41/90 L3 routes. Cavelems has a complete ten-level carry-over chain. L2 and L3 remain previews outside Classic 1.0 completion. Current known-route and runtime regression suites passed in the baseline audit."
+    "progress": "15 September: Claude’s committed work preserves 73/120 L2 standalone routes and 41/90 L3 routes. Cavelems has a complete ten-level carry-over chain. L2 and L3 remain Preview, with 96 routes and the 1.2 completion evidence still open. Current known-route and runtime regression suites passed in the baseline audit."
   },
   {
     "area": "Save and interruption recovery",

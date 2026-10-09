@@ -90,6 +90,7 @@ import NxlvKit
     var settings: (() -> Void)?
     var retry: (() -> Void)?
     var rewind: (() -> Void)?
+    var controllerRewindHeld: (Bool) -> Void = { _ in }
     var step: ((Int) -> Void)?
     var endRun: (() -> Void)?
     var pauseForHelp: () -> (() -> Void) = { {} }
@@ -253,7 +254,7 @@ import NxlvKit
         case .hints: hints?()
         case .settings: settings?()
         case .retry: retry?()
-        case .rewind: rewind?()
+        case .rewind: controllerRewindHeld(true)
         case let .step(direction): step?(direction)
         case .endRun: endRun?()
         case .focusLast: focusLast()

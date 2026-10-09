@@ -212,7 +212,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         fullScreenHDRFlashes: Bool = true,
         djIncludesOtherSoundtracks: Bool = true,
         music: ClassicMusicSource = .amigaModules,
-        musicStyle: ClassicMusicStyle = .faithful,
+        musicStyle: ClassicMusicStyle = .modern,
         musicVolume: Double = 0.8,
         sound: ClassicSoundSource = .macintoshResources,
         soundVolume: Double = 0.9,
@@ -334,7 +334,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         djIncludesOtherSoundtracks = modern
         shuffleGraphics = false
         shuffleMusic = false
-        musicStyle = .faithful
+        musicStyle = modern ? .modern : .faithful
         if !modern, music == .adaptiveDJ { music = .amigaModules }
     }
 

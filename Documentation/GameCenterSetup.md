@@ -36,7 +36,9 @@ Game Center by adding this file alone.
 3. Generate a macOS development provisioning profile with both capabilities.
    Include this Mac and the installed Apple Development certificate. Download it
    into Xcode's provisioning profile directory, or supply its path below.
-4. Build with `ENABLE_APPLE_CAPABILITIES=1 zsh Scripts/build-local-app.sh`.
+4. For the fast local test loop, run `zsh Scripts/build-game-center-snapshot.sh`.
+   It builds only the current Mac architecture and writes a ZIP to Downloads.
+   The full universal build remains `ENABLE_APPLE_CAPABILITIES=1 zsh Scripts/build-local-app.sh`.
    Set `APPLE_PROVISIONING_PROFILE=/absolute/path/profile.provisionprofile` to
    select a profile explicitly. The script enables the bundled catalogue, embeds
    the matching profile, signs the library and app, and verifies both entitlements.
