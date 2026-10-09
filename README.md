@@ -10,6 +10,16 @@ The project is not affiliated with, endorsed by or licensed by Sony
 Interactive Entertainment. Read [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)
 before distributing a build.
 
+## Download
+
+Download [1.8.5 build 74](https://github.com/ErikVeland/Lemmings/releases/tag/v1.8.5),
+the current public macOS release. Installed copies receive automatic updates.
+Read the [release notes](https://github.com/ErikVeland/Lemmings/blob/v1.8.5/Documentation/ReleaseNotes-1.8.5-build74.md).
+
+[Collections](https://github.com/ErikVeland/Lemmings/blob/v1.8.5/Documentation/LevelCollections.md)
+keeps each player's favourite levels and last 50 distinct levels played across
+Classic, fan packs, NeoLemmix, Lemmings 2 and Lemmings 3.
+
 ## Start here
 
 - [Architecture](ARCHITECTURE.md) — module boundaries, runtime flow and release packaging.
@@ -20,7 +30,7 @@ before distributing a build.
 - [Beta testing](Documentation/BetaTesting.md) — local package and validation procedure.
 - [Release evidence](Documentation/ReleaseReadiness/) — current gate records and manifests.
 
-The current milestone is 1.1 on macOS. Classic content is the completed
+This development branch contains the 1.1 macOS milestone. Classic content is the completed
 reference engine. Lemmings 2 and Lemmings 3 are labelled Preview. The bundled
 corpus contains 6,020 Classic-format fan levels in 535 packs; this is not a
 claim of NeoLemmix fan-pack compatibility. NeoLemmix `.nxlv` support has
