@@ -8,4 +8,5 @@ game=all
 if [[ -f "$music_dir/bundle.json" ]]; then
   game="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["game"])' "$music_dir/bundle.json")"
 fi
-python3 "$project_dir/Tools/MusicCatalogue/library.py" bundle --output "$music_dir" --scope main --game "$game"
+python3 "$project_dir/Tools/MusicCatalogue/library.py" bundle --output "$music_dir" --scope main --game "$game" \
+  --preserve-recording-profiles

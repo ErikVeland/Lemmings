@@ -16,4 +16,5 @@ music = Path(sys.argv[1])
 bundle = json.loads((music / 'bundle.json').read_text())
 assert bundle['scope'] == 'main' and bundle['trackCount'] == 54, bundle
 CHECK
+PYTHONDONTWRITEBYTECODE=1 python3 "$project_dir/Tests/MusicPlaybackTests/check-slim-profiles.py"
 echo 'PASS slim packaging rebuilds the main soundtrack set and drops other recordings'

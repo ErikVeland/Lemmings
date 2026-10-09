@@ -5,15 +5,15 @@ import AppKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "1.8.3"
-    static let subtitle = "Worldwide records, better journeys and clearer rescue goals"
+    static let notesVersion = "1.8.4"
+    static let subtitle = "Bigger rescue cheers, musical victories and playful feedback"
     static let sections = [
-        ("Worldwide records", "Compare speedruns, rescues and career records without Game Center. Share under your initials and watch available record replays. Rewind-assisted runs have separate boards. Sharing is optional."),
-        ("Your fastest clears", "Results and local boards track fastest clears and fastest 100% rescues. Record movies stay available for playback."),
-        ("A better learning journey", "The 294-level journey includes Going their separate ways and All the 6s. Cellbash appears earlier, and two gimmick levels have been replaced. Fan lessons are bundled for offline play."),
-        ("Clearer rescue goals", "Checked completion solutions set best-known rescue targets for stars and philosophy assessments. A known winning solution no longer leaves the last star unknown."),
-        ("Smoother play and sound", "Pack progression, saved-run resume, tall-level scrolling and Escape navigation are corrected. Solution replays have effects, rewind sounds are reversed and limited, and music transitions are smoother."),
-        ("Artwork and compatibility", "The Macintosh snowman now matches its collision shape. Release notes scroll within the window. NeoLemmix remains Beta; Lemmings 2 and 3 remain Preview.")
+        ("A winning soundtrack", "Meeting the rescue target can lift your current tune to an available composer recording or remix. The same theme keeps playing through results, including wins reached while paused. Alternate soundtracks must be enabled."),
+        ("The whole rescue chorus", "Every rescue gets its cheer, even at crowded exits. Useful action and warning sounds stay clear alongside the chorus."),
+        ("Playful sequel feedback", "Lemmings 2 adds rescue cheers, trampoline bounces and trap sounds. Lemmings 3 adds feedback for pickups, brickwork, steel, water, traps and explosions."),
+        ("Small rewards, clear cues", "Personal bests and rare awards give the final result note a little twist. Ready sounds mark actual starts and Hot Seat readiness. Timer warnings differ from builder warnings. Result sounds follow live volume and mute, and still play with Reduced Motion."),
+        ("Smoother playback and speed", "Recorded soundtracks have measured volume trims. Verified loops avoid repeated intros and ending fades. Holding fast-forward winds pitch up smoothly, then settles on musical intervals while the beat stays steady."),
+        ("Compatibility", "Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. NeoLemmix remains Beta; Lemmings 2 and 3 remain Preview.")
     ]
     private let defaults: UserDefaults
     private let build: Int

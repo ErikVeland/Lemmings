@@ -95,8 +95,10 @@ Full and slim all-game metadata cover all 422 recordings; L2 has 51 profiles
 and L3 has nine.
 
 Existing immutable optional-library downloads may lack the new profiles. An
-updated full bundle can supply metadata when the installed playback file hash
-matches. Other older packages need rebuilt metadata in a new library revision.
+updated full bundle, or the slim download stripped from it, can supply metadata
+when the installed playback file hash matches. Slim packaging validates the full
+profiles against their source metadata and the pinned published-library hashes.
+Other older packages need rebuilt metadata in a new library revision.
 Mismatched files keep their ordinary playback, without an unverified trim or
 loop.
 

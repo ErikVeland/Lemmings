@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "evidenceKind": "development-audio-validation",
+  "capturedAtUTC": "2026-10-09T01:51:25.030940+00:00",
+  "candidateVersion": "1.8.4",
+  "candidateBuild": 73,
+  "implementationRevision": "1bb3c6a693e1b7b0e2f3b4b738c6e6c164ecc337",
+  "soundChangeRevision": "295c01d4a4d99cdc958b3e6f9f2618e5332069ab",
+  "releaseBaseTag": "v1.8.3",
+  "releaseBaseRevision": "0e49151f13fee037aa4cbc8050086a758cdbbb40",
+  "plannedReleaseTag": "v1.8.4",
+  "releaseSourceFrozen": false,
+  "nativeWindowMode": "offscreen",
+  "nativeTestAudio": "muted",
+  "logs": [
+    {
+      "path": "audio-joy-spatial-final.log",
+      "sourcePath": ".build/audio-joy-spatial-final.log",
+      "bytes": 759,
+      "sha256": "37664b92a15ad913edea4392b260ea189abb4bcb1d590fea6f382ca70db73f45",
+      "outcome": "pass"
+    },
+    {
+      "path": "audio-joy-trolley-final.log",
+      "sourcePath": ".build/audio-joy-trolley-final.log",
+      "bytes": 1910,
+      "sha256": "6fa889cd0fb77741ea446547dd27da9896e2fff0fae81eeb41a8b6a514f81859",
+      "outcome": "pass"
+    },
+    {
+      "path": "audio-joy-dj-final.log",
+      "sourcePath": ".build/audio-joy-dj-final.log",
+      "bytes": 1187,
+      "sha256": "d856b24dc40e16d5b7a7f91627afcbe1c7eb92597ecf4713d9453b14859f8eaf",
+      "outcome": "pass"
+    },
+    {
+      "path": "audio-joy-offline-music.log",
+      "sourcePath": ".build/audio-joy-offline-music.log",
+      "bytes": 385,
+      "sha256": "d695dfd63ebcca9694fc306f4009f7027946ad54f5da2be24966bd6b42c32e99",
+      "outcome": "pass"
+    },
+    {
+      "path": "audio-joy-integration.log",
+      "sourcePath": ".build/audio-joy-integration.log",
+      "bytes": 575,
+      "sha256": "42a119a30f5a0242f147440a2867240972d83d0471ea56f6e37d1cc49e89c8ca",
+      "outcome": "pass"
+    },
+    {
+      "path": "audio-joy-hot-seat.log",
+      "sourcePath": ".build/audio-joy-hot-seat.log",
+      "bytes": 458,
+      "sha256": "301a5da0abd8bccf1f67582e6ddd6cb948e2b8fbba3567306d58ede53daeef8f",
+      "outcome": "failed-all-level-journey-name"
+    },
+    {
+      "path": "audio-joy-build.log",
+      "sourcePath": ".build/audio-joy-build.log",
+      "bytes": 826,
+      "sha256": "4d15bbcf6f32606e9557ee5c4c7d40eb30144b2ce82ca0bdf1df95d6e427b374",
+      "outcome": "pass"
+    }
+  ]
+}

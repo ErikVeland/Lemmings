@@ -46,6 +46,12 @@ script now rebuilds the main set so it retains the essential recording and its
 metadata. Signing, notarisation, proof/hint checks and release publication remain
 separate release steps.
 
+Stripping a profile-aware full app retains the optional recordings' playback
+hashes. The helper checks the source, gain and loop metadata, existing full files,
+and pinned published-library hashes before replacing the Music folder. Main files
+retain their source hashes. This lets older immutable libraries use the app's
+profiles even when their ZIPs do not contain recording profiles.
+
 Sparkle replaces the whole app, so every update must carry the full soundtrack.
 `Scripts/build-and-notarise.sh` builds the update, Monterey and Game Center targets
 with `MUSIC_BUNDLE=full`. Only the fresh-install `-slim.zip` download uses `main`.

@@ -162,11 +162,55 @@ def build_packs(source, catalogue, timing, output, base_url):
     return index
 
 
-def bundle(source, catalogue, timing, target, scope, game, libraries):
+def preserved_recording_profiles(target, payloads, selected, libraries):
+    """Keep verified library-file hashes while rebuilding a full bundle as main."""
+    name = 'Music/recording-playback.json'
+    previous_path = target / 'recording-playback.json'
+    if name not in payloads or not previous_path.is_file(): return None
+    canonical = json.loads(payloads[name])
+    previous = json.loads(previous_path.read_text())
+    expected = {r['variantID']: r for r in canonical['variants']}
+    retained = {r['variantID']: r for r in previous['variants']}
+    if (previous['schemaVersion'] != canonical['schemaVersion'] or set(retained) != set(expected)
+            or len(retained) != len(previous['variants'])):
+        raise ValueError('Incomplete recording profiles in the previous music bundle')
+    old_scope = json.loads((target / 'bundle.json').read_text())['scope']
+    if old_scope not in ('full', 'main'): raise ValueError('Invalid previous music scope')
+    pinned = {}
+    for pack in json.loads(libraries.read_text())['packs']:
+        for file in pack['files']:
+            path, sha = file['path'], file['sha256']
+            if path in pinned and pinned[path] != sha:
+                raise ValueError(f'Conflicting library file hash: {path}')
+            pinned[path] = sha
+    main = {v['id'] for t in selected['tracks'] for v in t['variants']}
+    for identity, row in expected.items():
+        old = retained[identity]
+        if {k: v for k, v in old.items() if k != 'playbackSHA256'} != row:
+            raise ValueError(f'Stale recording profile: {row["path"]}')
+        old_sha = old.get('playbackSHA256', old['sourceSHA256'])
+        original = target / row['path']
+        if old_scope == 'full' or original.is_file():
+            if not original.is_file() or digest(original) != old_sha:
+                raise ValueError(f'Changed bundled recording: {row["path"]}')
+        if identity in main: continue  # Main files are copied from the canonical source again.
+        library_sha = pinned.get('Music/' + row['path'])
+        if old_sha != library_sha:
+            raise ValueError(f'Recording profile does not match its published library: {row["path"]}')
+        if old_sha != row['sourceSHA256']: row['playbackSHA256'] = old_sha
+    return encoded(canonical)
+
+
+def bundle(source, catalogue, timing, target, scope, game, libraries, preserve_recording_profiles=False):
     if target.name != 'Music' or target.is_symlink() or target.resolve() == source.resolve():
         raise ValueError('The output must be a generated Music directory, separate from the source')
     available = select(catalogue, lambda t, v: game == 'all' or t['game'] == game)
     selected = select(available, lambda t, v: scope == 'full' or is_main(t, v))
+    payloads = metadata(available, timing)
+    if preserve_recording_profiles:
+        if scope != 'main': raise ValueError('Preserving recording profiles requires main scope')
+        profiles = preserved_recording_profiles(target, payloads, selected, libraries)
+        if profiles is not None: payloads['Music/recording-playback.json'] = profiles
     # This directory belongs to the generated app bundle. Clear old optional files on a main rebuild.
     if target.exists(): shutil.rmtree(target)
     target.mkdir(parents=True)
@@ -183,7 +227,7 @@ def bundle(source, catalogue, timing, target, scope, game, libraries):
         original = source / rhythm['loopPath']; destination = target / rhythm['loopPath']
         if digest(original) != rhythm['sha256']: raise ValueError(f'Stale drum loop: {original}')
         destination.parent.mkdir(parents=True, exist_ok=True); shutil.copy2(original, destination)
-    for path, data in metadata(available, timing).items(): (target / Path(path).name).write_bytes(data)
+    for path, data in payloads.items(): (target / Path(path).name).write_bytes(data)
     shutil.copy2(libraries, target / 'libraries.json')
     (target / 'bundle.json').write_bytes(encoded(dict(version=VERSION, scope=scope, game=game, trackCount=count, bytes=size)))
     print(f'{scope}: {count} versions, {size / 1_000_000:.1f} MB')
@@ -215,12 +259,14 @@ def main():
     parser.add_argument('--scope', choices=['main', 'full'], default='main')
     parser.add_argument('--game', choices=['all', 'lemmings2', 'lemmings3'], default='all')
     parser.add_argument('--libraries', type=Path, default=ROOT / 'Resources/Music/libraries.json')
+    parser.add_argument('--preserve-recording-profiles', action='store_true')
     args = parser.parse_args()
     catalogue = json.loads((ROOT / 'Resources/Music/catalogue.json').read_text())
     timing = json.loads((ROOT / 'Resources/Music/timing.json').read_text())
     if args.command == 'playback': return playback(args.output)
     if args.command == 'packs': build_packs(args.source, catalogue, timing, args.output, args.base_url)
-    else: bundle(args.source, catalogue, timing, args.output, args.scope, args.game, args.libraries)
+    else: bundle(args.source, catalogue, timing, args.output, args.scope, args.game, args.libraries,
+                 preserve_recording_profiles=args.preserve_recording_profiles)
 
 
 if __name__ == '__main__': main()

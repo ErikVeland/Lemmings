@@ -1,0 +1,6 @@
+UI test windows: offscreen; audio: muted
+PASS unrecoverable-run failure mood decision
+PASS closing the main window preserves ownership for delayed screen refreshes
+PASS final single-step handles wins, losses, campaign and fan progress
+PASS first-launch HD/old-school choices, default action, live application, persistence and one-time presentation
+FAIL IntegrationFailure(message: "The all-level run did not use its player-facing name and journey progress")
