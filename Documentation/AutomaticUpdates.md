@@ -20,17 +20,23 @@ commit the key or pass the key value as a command argument.
 
 ## Current releases
 
-Public 1.9 build 75 is the current release. The
-[1.9 distribution record](ReleaseReadiness/1.9Build75Distribution.md) covers
+Public 1.9.1 build 76 is the current release. The
+[1.9.1 distribution record](ReleaseReadiness/1.9.1Build76Distribution.md) covers
 the notarised archives, signed live feed and validation limits. Publish an
 appcast only with its matching signed and notarised archive.
 
 Public releases require a slim fresh-install download. It includes the
 54 essential music versions and offers missing optional libraries on first
 launch. Libraries already downloaded to Application Support are retained.
-The full archive remains the Sparkle update because older apps also store
+The full archive remains the Sparkle fallback because older apps also store
 optional music inside the app bundle. Moving those updates to slim packages
 requires a migration that preserves that music before Sparkle replaces the app.
+
+Signed delta updates reuse unchanged files in the installed full bundle, including
+the soundtrack. Sparkle downloads a full archive only when no matching delta is
+available or its application fails. A delta made from the full bundle cannot patch
+a slim bundle with a different file tree. See Sparkle's
+[delta update contract](https://sparkle-project.org/documentation/delta-updates/).
 
 ## Player experience
 
@@ -62,13 +68,21 @@ soundtrack downloads at any time.
 
 1. Freeze the source and assets.
 2. Run `Scripts/build-and-notarise.sh` without publication.
+   Keep the previous shipped full ZIP available. `generate-appcast.sh` finds it
+   in the update directory or `.build/release-*/updates`. For another location,
+   set `PREVIOUS_UPDATE_ZIP` to that ZIP. Generation stops if the previous published
+   build is unavailable. Sparkle generates and signs the delta beside the full ZIP.
 3. Check the printed ZIPs, stamped notes, signed appcast and release gates.
 4. Set `RELEASE_TAG`, `RELEASE_VERSION`, `RELEASE_COMMIT`, `RELEASE_NOTES_PATH`
    and `DOWNLOAD_ZIP` from the package run. `DOWNLOAD_ZIP` is the notarised slim
    archive. It is required, even when the full update archive is ready first.
 5. Run `Scripts/publish-github-release.sh --check` with the printed update ZIP path.
 6. For public tests, create a GitHub prerelease with the exact tag and frozen commit.
-7. Publish the verified ZIP and attachments. Update `main/appcast.xml` with the signed feed.
+7. Publish both ZIPs and every delta referenced by the new item before updating
+   `main/appcast.xml`. The publication script checks the delta files and sizes,
+   requires a delta from the previous published build, and uploads those assets.
+   Generation preserves earlier feed entries, download URLs, signatures and notes.
+   Delta filenames use ASCII letters, digits and hyphens so GitHub retains them.
 
 8. Install public 1.2 build 41.
 9. Run the update and check its relaunch.
@@ -111,6 +125,7 @@ Record these results for each release:
 | Appcast URL | HTTPS and publicly reachable |
 | Archive URL | HTTPS and matches the uploaded asset |
 | Ed25519 signature | Present and accepted by Sparkle |
+| Delta | Signed; patches the shipped base to the new signed app; publicly reachable |
 | Apple signature | Developer ID signature verifies |
 | Notarisation | Gatekeeper accepts the unpacked archive |
 | Installation | The app relaunches at the new build number |

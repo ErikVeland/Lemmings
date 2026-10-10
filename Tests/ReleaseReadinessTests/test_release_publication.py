@@ -115,6 +115,30 @@ class ReleasePublicationTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("RELEASE_APPROVED=1", result.stderr)
 
+    def test_publication_uploads_delta_with_spaces_in_name(self):
+        patch = self.archive.with_name("Ultimate Lemmings45-44.delta")
+        patch.write_bytes(b"patch")
+        tree = ElementTree.parse(self.appcast)
+        channel = tree.find("channel")
+        item = channel.find("item")
+        deltas = ElementTree.SubElement(item, f"{{{SPARKLE}}}deltas")
+        ElementTree.SubElement(deltas, "enclosure", {
+            "url": "https://example.invalid/Ultimate%20Lemmings45-44.delta",
+            "length": "5", f"{{{SPARKLE}}}deltaFrom": "44",
+            f"{{{SPARKLE}}}edSignature": "signed"})
+        tree.write(self.appcast)
+        binary = self.archive.parent / "bin"
+        binary.mkdir()
+        log = self.archive.parent / "gh.log"
+        gh = binary / "gh"
+        gh.write_text('#!/bin/zsh\nprint -rl -- "$@" >> "$GH_TEST_LOG"\n'
+                      'if [[ "$1" == api && "$2" == repos/* ]]; then print fake-sha; fi\n')
+        gh.chmod(0o755)
+        result = self.run_publication(RELEASE_APPROVED="1", GH_TEST_LOG=str(log),
+                                      PATH=f"{binary}:{os.environ['PATH']}")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn(str(patch.resolve()), log.read_text().splitlines())
+
 
 if __name__ == "__main__":
     unittest.main()

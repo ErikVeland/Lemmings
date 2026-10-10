@@ -23,6 +23,13 @@ appcast_path="${APPCAST_PATH:-$project_dir/appcast.xml}"
   exit 1
 }
 
+base_args=("$project_dir" "$updates_dir" "$appcast_path")
+[[ -n "${PREVIOUS_UPDATE_ZIP:-}" ]] && base_args+=(--previous "$PREVIOUS_UPDATE_ZIP")
+python3 "$project_dir/Tools/ReleaseReadiness/delta_updates.py" prepare "${base_args[@]}"
+previous_feed="$(mktemp "$updates_dir/.previous-appcast.XXXXXX")"
+trap 'rm -f "$previous_feed"' EXIT
+[[ -f "$appcast_path" ]] && cp "$appcast_path" "$previous_feed"
+
 if [[ "$appcast_path" != "$updates_dir/appcast.xml" && -f "$appcast_path" ]]; then
   cp "$appcast_path" "$updates_dir/appcast.xml"
 fi
@@ -38,6 +45,8 @@ generator="$distribution_root/bin/generate_appcast"
 }
 
 args=(
+  --maximum-versions 0
+  --maximum-deltas 5
   --download-url-prefix "$download_url_prefix"
   --release-notes-url-prefix "$download_url_prefix"
   --link "https://github.com/ErikVeland/Lemmings/releases"
@@ -53,6 +62,13 @@ if [[ -n "${SPARKLE_PRIVATE_KEY_FILE:-}" ]]; then
 fi
 
 "$generator" "${args[@]}" "$updates_dir"
+build_number="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$project_dir/Resources/Info.plist")"
+python3 "$project_dir/Tools/ReleaseReadiness/delta_updates.py" preserve \
+  "$previous_feed" "$appcast_path" "$build_number"
+python3 "$project_dir/Tools/ReleaseReadiness/delta_updates.py" normalize \
+  "$appcast_path" "$build_number" "$updates_dir"
+python3 "$project_dir/Tools/ReleaseReadiness/delta_updates.py" assets \
+  "$appcast_path" "$build_number" "$updates_dir"
 python3 - "$appcast_path" <<'PYAPPCAST'
 import sys
 from xml.etree import ElementTree

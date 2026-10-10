@@ -91,6 +91,11 @@ if f"Release commit: {commit}" not in (item.findtext("description") or ""):
     raise SystemExit("FAILED: the appcast notes do not match the frozen commit.")
 CHECK_APPCAST
   fail "The signed appcast does not match the release archive."
+delta_output="$(python3 "$project_dir/Tools/ReleaseReadiness/delta_updates.py" assets \
+  "$appcast_path" "$build_number" "${update_zip:A:h}")" ||
+  fail "The signed delta assets are not ready for publication."
+delta_files=()
+[[ -n "$delta_output" ]] && delta_files=("${(@f)delta_output}")
 if (( check_only )); then
   print "PASS publication inputs for $version build $build_number at $source_revision"
   exit 0
@@ -100,10 +105,10 @@ gh auth status >/dev/null 2>&1 || fail "Authenticate the GitHub CLI before publi
 
 if gh release view "$release_tag" --repo "$repository" >/dev/null 2>&1; then
   print "==> Updating GitHub release $release_tag"
-  gh release upload "$release_tag" "$update_zip" "$download_zip" --repo "$repository" --clobber
+  gh release upload "$release_tag" "$update_zip" "$download_zip" "${delta_files[@]}" --repo "$repository" --clobber
 else
   print "==> Creating GitHub release $release_tag"
-  gh release create "$release_tag" "$update_zip" "$download_zip" \
+  gh release create "$release_tag" "$update_zip" "$download_zip" "${delta_files[@]}" \
     --repo "$repository" \
     --target "$source_revision" \
     --title "Ultimate Lemmings $version" \

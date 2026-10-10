@@ -23,6 +23,9 @@
 <p class="meta">Build: 76<br>Release commit: 9ba3fc25c42a57cd89394680d46e5aee79ba3d44<br>Release base: v1.9</p></body></html>
 ]]></description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.1/UltimateLemmings-1.9.1-build76.zip" length="2043810178" type="application/octet-stream" sparkle:edSignature="jpDZhxpMNFmgzNUg/HpDTdqGKWmnH1GhKlZyhTiPfmkWHTgl/QB66pUFDkGqksxDc5qCMPLIMfgvva5YU/tRAw=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.1/UltimateLemmings-build76-from75.delta" sparkle:deltaFrom="75" length="1250526" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="GoBMIwM8HfR9sYgOsj81jlivniGR3tA569YK9va39kM+chjOV+cX7d3SyxS3Lvhkzb8yyED1WnO+HuatDI8uBA=="/>
+            </sparkle:deltas>
         </item>
         <item>
             <title>1.9</title>
@@ -69,7 +72,7 @@
 </description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.5/UltimateLemmings-1.8.5-build74.zip" length="1944858923" type="application/octet-stream" sparkle:edSignature="DJIC4eyCco3tq5/TAT5r/0VHYT7RjLqeKuVaBarH4efmOhJzYpoe0XzBYyhNLV/K1dMtOy3946iPs5iYy4RABg=="/>
         </item>
-    <item>
+        <item>
             <title>1.8.4</title>
             <pubDate>Fri, 09 Oct 2026 12:26:24 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -95,7 +98,7 @@
 </description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.4/UltimateLemmings-1.8.4-build73.zip" length="1944808624" type="application/octet-stream" sparkle:edSignature="SRZwmFpSDD9qi1jvTla2m6D0j3E1bnC7pvjlT9E0c+ferFPfKHX4oRjxRRUK7ZYA7gCdj0aI9ySaKlKU7ZoNCQ=="/>
         </item>
-<item>
+        <item>
             <title>1.8.3</title>
             <pubDate>Thu, 08 Oct 2026 18:46:43 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -121,7 +124,7 @@
 </description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.3/UltimateLemmings-1.8.3-build72.zip" length="1944623460" type="application/octet-stream" sparkle:edSignature="G89mKt64zpK9v+RZ0R2dsbIYDHf49pO4d07u7dahTg5tLWd6b4tHXCH7iGwe0ZCsWQtrtVbOJ8qgLkNvGernBw==" />
         </item>
-<item>
+        <item>
             <title>1.8.1</title>
             <pubDate>Tue, 06 Oct 2026 14:52:32 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -148,7 +151,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.1/Ultimate%20Lemmings65-39.delta" sparkle:deltaFrom="39" length="1519960290" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="fPMdTZ4ISfhY+8GosNTa5GoDPFUtciqB8FWdeQHxDVy+9rOaNPGJyxW53aSdduAiMSH/a8iE0ai0He0AreszCw==" />
             </sparkle:deltas>
         </item>
-<item>
+        <item>
             <title>1.8</title>
             <pubDate>Mon, 05 Oct 2026 18:24:15 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -168,7 +171,7 @@
 </description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8/UltimateLemmings-1.8-build64.zip" length="1943417851" type="application/octet-stream" sparkle:edSignature="XkdmcLjgvsVge6iwVVlPbHpszlike+ANhP3+63WjMmJPgTxszl06Id+IgmsdJ0SDRLIp2StSklVJSxM77OB4Cg==" />
         </item>
-<item>
+        <item>
             <title>1.7.9</title>
             <pubDate>Sun, 04 Oct 2026 22:47:54 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>

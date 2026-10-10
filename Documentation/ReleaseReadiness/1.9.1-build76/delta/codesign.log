@@ -1,0 +1,14 @@
+--prepared:/Users/veland/Lemmings/.build/delta-1.9.1/patched/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/.
+--prepared:/Users/veland/Lemmings/.build/delta-1.9.1/patched/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Autoupdate
+--prepared:/Users/veland/Lemmings/.build/delta-1.9.1/patched/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Updater.app
+--validated:/Users/veland/Lemmings/.build/delta-1.9.1/patched/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Autoupdate
+--prepared:/Users/veland/Lemmings/.build/delta-1.9.1/patched/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Downloader.xpc
+--validated:/Users/veland/Lemmings/.build/delta-1.9.1/patched/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Downloader.xpc
+--prepared:/Users/veland/Lemmings/.build/delta-1.9.1/patched/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Installer.xpc
+--validated:/Users/veland/Lemmings/.build/delta-1.9.1/patched/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Installer.xpc
+--validated:/Users/veland/Lemmings/.build/delta-1.9.1/patched/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Updater.app
+--validated:/Users/veland/Lemmings/.build/delta-1.9.1/patched/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/.
+--prepared:/Users/veland/Lemmings/.build/delta-1.9.1/patched/Ultimate Lemmings.app/Contents/Frameworks/libNxlvKit.dylib
+--validated:/Users/veland/Lemmings/.build/delta-1.9.1/patched/Ultimate Lemmings.app/Contents/Frameworks/libNxlvKit.dylib
+.build/delta-1.9.1/patched/Ultimate Lemmings.app: valid on disk
+.build/delta-1.9.1/patched/Ultimate Lemmings.app: satisfies its Designated Requirement

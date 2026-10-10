@@ -82,6 +82,22 @@ def validate_appcast(path, allow_empty=False, expected_release=None, allow_stale
             tag = f"{{{SPARKLE_NAMESPACE}}}{attribute}"
             if item.find(tag) is None and not enclosure.get(tag):
                 raise ValueError(f"Every appcast item needs sparkle:{attribute}.")
+        delta_bases = set()
+        for delta in item.findall(f"{{{SPARKLE_NAMESPACE}}}deltas/enclosure"):
+            _https_url(delta.get("url"), "delta enclosure URL")
+            if not delta.get(f"{{{SPARKLE_NAMESPACE}}}edSignature"):
+                raise ValueError("Every delta enclosure needs sparkle:edSignature.")
+            base = delta.get(f"{{{SPARKLE_NAMESPACE}}}deltaFrom", "")
+            target = item.findtext(f"{{{SPARKLE_NAMESPACE}}}version") or enclosure.get(
+                f"{{{SPARKLE_NAMESPACE}}}version", "")
+            if not base.isdigit() or not target.isdigit() or int(base) >= int(target):
+                raise ValueError("Delta base must be an older numeric build.")
+            if base in delta_bases:
+                raise ValueError("Duplicate delta base in appcast item.")
+            delta_bases.add(base)
+            length = delta.get("length", "")
+            if not length.isdigit() or int(length) <= 0:
+                raise ValueError("Delta enclosure needs a positive length.")
     if expected_release is not None:
         releases = []
         for item in items:
