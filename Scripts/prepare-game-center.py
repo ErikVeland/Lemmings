@@ -34,9 +34,15 @@ for row in source['levels']:
         continue
     levels.append({'conditions': c, 'maximum': {'value': maximum, 'status': row['status'],
                    'source': 'Ranked release catalogue v1', 'date': evidence_date,
-                   'buildVersion': source['engineSourceFingerprint']}, 'leaderboardID': board})
+                   'buildVersion': source['engineSourceFingerprint']}, 'leaderboardID': board,
+                   'fastestClearID': 'ul.v1.speed.clear.' + digest})
     apple.append({'id': board, 'name': reference_names.get(board, row.get('title', c['levelID']) + ' - Most Saved'),
                   'unit': 'rescued', 'minimum': 0, 'maximum': c['population'], 'sort': 'descending', 'submission': 'best-score'})
+    for category, title in [('clear', 'Fastest clear')]:
+        apple.append({'id': 'ul.v1.speed.' + category + '.' + digest,
+                      'name': reference_names.get(board, row.get('title', c['levelID']) + ' - Most Saved').removesuffix(' - Most Saved') + ' - ' + title,
+                      'unit': 'milliseconds', 'minimum': 1, 'maximum': 2147483647,
+                      'sort': 'ascending', 'submission': 'best-score'})
 config = {'enabled': args.enable, 'starsID': 'ul.v1.career.stars', 'clearsID': 'ul.v1.career.cleared',
           'perfectID': 'ul.v1.career.three_star', 'levels': levels}
 for key, name, unit, factor in [('starsID', 'Ranked Career Stars', 'stars', 3), ('clearsID', 'Ranked Levels Cleared', 'levels', 1), ('perfectID', 'Ranked Three-Star Levels', 'levels', 1)]:
@@ -44,6 +50,8 @@ for key, name, unit, factor in [('starsID', 'Ranked Career Stars', 'stars', 3), 
                      'sort': 'descending', 'submission': 'best-score'})
 for index, row in enumerate(apple):
     row['set'] = 'ul.v1.set.' + str(index // 100 + 1)
+if len(apple) > 500:
+    parser.error(f'{len(apple)} boards exceed Apple’s 500-board limit. Keep the released catalogue or use a hosted leaderboard service.')
 args.output.mkdir(parents=True, exist_ok=True)
 (args.output / 'leaderboards.json').write_text(json.dumps(config, indent=2, sort_keys=True) + '\n')
 (args.output / 'app-store-connect-boards.json').write_text(json.dumps({'bundleID': 'academy.glasscode.lemmings', 'leaderboards': apple}, indent=2) + '\n')

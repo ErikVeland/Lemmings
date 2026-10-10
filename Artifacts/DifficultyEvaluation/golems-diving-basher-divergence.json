@@ -1,0 +1,131 @@
+{
+  "level": "fan:lldb-393/pieuw01.dat#9",
+  "archiveSHA256": "6b599e67d0656e6a27f33f99916b9dafd21b04a1e7c88f8eda24e3083a087bc4",
+  "sourceReplaySHA256": "b0104e7676a965bf5d59582013ec706cc0202a637cb23815284bc43c6e38e8ac",
+  "sourceOutcome": "4/4 at cycle 1417",
+  "status": "Historical pre-hatch-correction trace. The corrected native trace matches the sampled source positions; see classic-golems-diving-reconciliation.json.",
+  "nativeTraceSHA256": "c30baab480f0bd9bde9ef412d19854a368c546e3a9b9fb2635192194f8443853",
+  "method": "Source headless screenshots crop 1365x480+0+42, point resize to 455x160, select rightmost green sprite cluster at y24-37 with G>125, G>1.5R, G>1.2B, add viewport offset 569. Sprite pixels approximate foot X by several pixels. Native route is unchanged translated source actions on exact archive.",
+  "samples": [
+    {
+      "cycle": 90,
+      "sourceScreenshotSHA256": "f88a82809b2b0ee61faceddba8d137e93302664352c6d09ced352210cf23f9ac",
+      "sourceSpriteGreenXRange": [
+        31,
+        34
+      ],
+      "sourceWorldXApprox": [
+        600,
+        603
+      ],
+      "nativeAction": "walking",
+      "nativeFoot": [
+        598,
+        36
+      ]
+    },
+    {
+      "cycle": 120,
+      "sourceScreenshotSHA256": "b1f65951db01369a880534f8a21c74a75101319cc73c24dabf1b1791e9266c9a",
+      "sourceSpriteGreenXRange": [
+        41,
+        43
+      ],
+      "sourceWorldXApprox": [
+        610,
+        612
+      ],
+      "nativeAction": "bashing",
+      "nativeFoot": [
+        607,
+        36
+      ]
+    },
+    {
+      "cycle": 130,
+      "sourceScreenshotSHA256": "5f72ea956451fd5fe2beb1bd499d0138b809f8200b97809cf8ce7304a4709771",
+      "sourceSpriteGreenXRange": [
+        44,
+        46
+      ],
+      "sourceWorldXApprox": [
+        613,
+        615
+      ],
+      "nativeAction": "bashing",
+      "nativeFoot": [
+        608,
+        36
+      ]
+    },
+    {
+      "cycle": 145,
+      "sourceScreenshotSHA256": "b4c7425ea7b9350b1f29dcf893eeb62192c4cc4dc4c1fca47901af4f13abbb40",
+      "sourceSpriteGreenXRange": [
+        59,
+        62
+      ],
+      "sourceWorldXApprox": [
+        628,
+        631
+      ],
+      "nativeAction": "bashing",
+      "nativeFoot": [
+        613,
+        36
+      ]
+    },
+    {
+      "cycle": 150,
+      "sourceScreenshotSHA256": "027a3a27ca743817cf403cee7a0b839bb48394b55a93bd093f381e655ee792da",
+      "sourceSpriteGreenXRange": [
+        64,
+        66
+      ],
+      "sourceWorldXApprox": [
+        633,
+        635
+      ],
+      "nativeAction": "bashing",
+      "nativeFoot": [
+        615,
+        36
+      ]
+    },
+    {
+      "cycle": 180,
+      "sourceScreenshotSHA256": "5335618dd92c794a4100ef88b118635c4fe1758e1e1305b31efdf2e0adc4cbd5",
+      "sourceSpriteGreenXRange": [
+        94,
+        97
+      ],
+      "sourceWorldXApprox": [
+        663,
+        666
+      ],
+      "nativeAction": "walking",
+      "nativeFoot": [
+        639,
+        36
+      ]
+    },
+    {
+      "cycle": 195,
+      "sourceScreenshotSHA256": "f8ac9f0592b48a3de2b9bf0cf8aec86a29d591a76fa50e9d07906a5ff6f86ba1",
+      "sourceSpriteGreenXRange": [
+        109,
+        112
+      ],
+      "sourceWorldXApprox": [
+        678,
+        681
+      ],
+      "nativeAction": "walking",
+      "nativeFoot": [
+        654,
+        36
+      ]
+    }
+  ],
+  "conclusion": "Source lemming zero advances at walking speed to about x630 by cycle 145 while native remains bashing at x613. The source action enum was not read directly. The route diverges before the Digger command at cycle 197; this does not isolate the precise bashing rule or establish parity."
+}

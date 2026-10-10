@@ -1,0 +1,90 @@
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite DifficultyTests started.
+􀟈  Suite LearningJourneyTests started.
+􀟈  Suite SkillShortcutsTests started.
+􀟈  Test deterministicGenerationAndStableTies() started.
+􀟈  Test timingProbesUseRealSimulationOutcomes() started.
+􀟈  Test classicTimingBudgetOnlyMeasuresSuccessfulInputs() started.
+􀟈  Test originalPlusBridgesDoNotOvershootOrExtendPastTheCampaign() started.
+􀟈  Test incompleteProbesAreUnknownRatherThanFailures() started.
+􀟈  Test classicReplayObservationPreservesTheVerifiedOutcome() started.
+􀟈  Test noReplayLevelsStayInCandidatePoolAndConfidenceBreaksNearTies() started.
+􀟈  Test mechanicalOrderingAndResources() started.
+􀟈  Test originalPlusPreservesOfficialOrderAndBridgesGaps() started.
+􀟈  Test routineCrowdAssignmentsAreNotIndependentWorkers() started.
+􀟈  Test curriculumDoesNotExhaustIdenticalMetadataPriors() started.
+􀟈  Test unknownTechniquesAreNotInvented() started.
+􀟈  Test cacheVersionsAndRoundTrip() started.
+􀟈  Test corpusInferenceRequiresRepeatedAsymmetricEvidence() started.
+􀟈  Test gradeBoundaries() started.
+􀟈  Test DifficultyOrderAndParkingDoesNotAwardAWin() started.
+􀟈  Test classicDifficultyAnalysesAWinAtTheSourceClockLimit() started.
+􀟈  Test inconclusiveProbesRetainUnknownEvidence() started.
+􀟈  Test officialPreferenceCannotBuyLargeJump() started.
+􀟈  Test isolatedPracticePrecedesCombinationsAndPassiveLevelsDoNotOpen() started.
+􀟈  Test unsupportedGapsAreFlaggedAndPriorsRejected() started.
+􀟈  Test conceptIntroductionAndLowPrecision() started.
+􀟈  Test cancellationPropagatesWithoutReturningPartialSuccess() started.
+􀟈  Test keepsTheWholeCampaignAndFillsTheRetailJump() started.
+􀟈  Test multiplayerSourcesCannotEnterTheLearningPath() started.
+􀟈  Test officialLevelsLeadComparablePortLevelsWithoutOverridingDifficulty() started.
+􀟈  Test rawReplayScoreKeepsAComparableDemandBandSmooth() started.
+􀟈  Test complexRoutesWaitForSecondBasicSkillPractice() started.
+􀟈  Test forgivingAndNarrowWindows() started.
+􀟈  Test cameraKeysReserveHAndGExceptGlider() started.
+􀟈  Test aLowAverageCannotHideExpertTiming() started.
+􀟈  Test initialsBeforeFallbacksAndLevelChanges() started.
+􀟈  Test nearEqualRepetitionsAreSpacedAndOriginDoesNotChooseTheOpening() started.
+􀟈  Test authoredObjectivesSeparateIntroductionsFromCombinations() started.
+􀟈  Test originalPlusKeepsSuitableOfficialTutorialSteps() started.
+􀟈  Test classicBindings() started.
+􀟈  Test cycleSkipsEmptySkillsAndWraps() started.
+􀟈  Test reservedKeysNeverReachASkill() started.
+􀟈  Test sharedInitialsCycleAndNumbersStayAbsolute() started.
+􀟈  Test completeOriginalPlusRetainsEveryAnchorBeyondOneHundred() started.
+􁁛  Test unknownTechniquesAreNotInvented() passed after 0.006 seconds.
+􁁛  Test gradeBoundaries() passed after 0.006 seconds.
+􁁛  Test incompleteProbesAreUnknownRatherThanFailures() passed after 0.006 seconds.
+􁁛  Test routineCrowdAssignmentsAreNotIndependentWorkers() passed after 0.006 seconds.
+􁁛  Test mechanicalOrderingAndResources() passed after 0.006 seconds.
+􁁛  Test noReplayLevelsStayInCandidatePoolAndConfidenceBreaksNearTies() passed after 0.006 seconds.
+􁁛  Test originalPlusBridgesDoNotOvershootOrExtendPastTheCampaign() passed after 0.006 seconds.
+􁁛  Test officialPreferenceCannotBuyLargeJump() passed after 0.006 seconds.
+􁁛  Test originalPlusPreservesOfficialOrderAndBridgesGaps() passed after 0.006 seconds.
+􁁛  Test corpusInferenceRequiresRepeatedAsymmetricEvidence() passed after 0.006 seconds.
+􁁛  Test inconclusiveProbesRetainUnknownEvidence() passed after 0.006 seconds.
+􁁛  Test conceptIntroductionAndLowPrecision() passed after 0.006 seconds.
+􁁛  Test deterministicGenerationAndStableTies() passed after 0.006 seconds.
+􁁛  Test rawReplayScoreKeepsAComparableDemandBandSmooth() passed after 0.006 seconds.
+􁁛  Test DifficultyOrderAndParkingDoesNotAwardAWin() passed after 0.006 seconds.
+􁁛  Test officialLevelsLeadComparablePortLevelsWithoutOverridingDifficulty() passed after 0.006 seconds.
+􁁛  Test forgivingAndNarrowWindows() passed after 0.006 seconds.
+􁁛  Test aLowAverageCannotHideExpertTiming() passed after 0.006 seconds.
+􁁛  Test cacheVersionsAndRoundTrip() passed after 0.006 seconds.
+􁁛  Test cameraKeysReserveHAndGExceptGlider() passed after 0.006 seconds.
+􁁛  Test unsupportedGapsAreFlaggedAndPriorsRejected() passed after 0.006 seconds.
+􁁛  Test classicBindings() passed after 0.006 seconds.
+􁁛  Test nearEqualRepetitionsAreSpacedAndOriginDoesNotChooseTheOpening() passed after 0.006 seconds.
+􁁛  Test initialsBeforeFallbacksAndLevelChanges() passed after 0.006 seconds.
+􁁛  Test reservedKeysNeverReachASkill() passed after 0.006 seconds.
+􁁛  Test sharedInitialsCycleAndNumbersStayAbsolute() passed after 0.006 seconds.
+􁁛  Test cycleSkipsEmptySkillsAndWraps() passed after 0.006 seconds.
+􁁛  Test multiplayerSourcesCannotEnterTheLearningPath() passed after 0.006 seconds.
+􁁛  Test complexRoutesWaitForSecondBasicSkillPractice() passed after 0.006 seconds.
+􁁛  Test isolatedPracticePrecedesCombinationsAndPassiveLevelsDoNotOpen() passed after 0.006 seconds.
+􁁛  Test originalPlusKeepsSuitableOfficialTutorialSteps() passed after 0.006 seconds.
+􁁛  Test cancellationPropagatesWithoutReturningPartialSuccess() passed after 0.006 seconds.
+􁁛  Suite SkillShortcutsTests passed after 0.007 seconds.
+􁁛  Test authoredObjectivesSeparateIntroductionsFromCombinations() passed after 0.007 seconds.
+􁁛  Test classicReplayObservationPreservesTheVerifiedOutcome() passed after 0.008 seconds.
+􁁛  Test curriculumDoesNotExhaustIdenticalMetadataPriors() passed after 0.008 seconds.
+􁁛  Test classicTimingBudgetOnlyMeasuresSuccessfulInputs() passed after 0.019 seconds.
+􁁛  Test classicDifficultyAnalysesAWinAtTheSourceClockLimit() passed after 0.106 seconds.
+􁁛  Test timingProbesUseRealSimulationOutcomes() passed after 1.153 seconds.
+􁁛  Test keepsTheWholeCampaignAndFillsTheRetailJump() passed after 2.924 seconds.
+􁁛  Suite LearningJourneyTests passed after 2.925 seconds.
+􁁛  Test completeOriginalPlusRetainsEveryAnchorBeyondOneHundred() passed after 5.946 seconds.
+􁁛  Suite DifficultyTests passed after 5.947 seconds.
+􁁛  Test run with 40 tests in 3 suites passed after 5.948 seconds.

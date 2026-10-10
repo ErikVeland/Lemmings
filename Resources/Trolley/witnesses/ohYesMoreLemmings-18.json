@@ -1,0 +1,26 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 81
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 40,
+    "required" : 26,
+    "saved" : 39,
+    "stateHash" : "be79a8a2edb302c590ffe1cff63cde4cf849ba050df873e997932955ba32280d",
+    "ticks" : 9180
+  },
+  "initialStateHash" : "bbb6a8ebfb90dad50dc160135000af7f5809dcb904af582cbd57ca7518ac4130",
+  "number" : 19,
+  "rank" : "Lemmings Versus",
+  "title" : "Islands in the Sky"
+}

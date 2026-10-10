@@ -1,0 +1,3935 @@
+[
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "TimpackC.dat#7",
+      "packID": "fan:lldb-101"
+    },
+    "initialStateHash": "e20d08d4bad4602fd9ec853674ff41b45937996c846c7264d94a01d241bf2ccd",
+    "levelSourceRevision": "dd237695fa7379ba97af970fe24a3d12d2e03c216b25dd550f0dd54c2ef8b957",
+    "nativeCompletionTicks": 5487,
+    "nativeReplaySHA256": "fa51b0282249e582908a197370cdac53e34414bc24c13e60d0783d8eac2019cc",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "d8dc945e8c63d7d0e4b940748e38dfab770614db165e9724e94bc39f553c0593",
+    "publishedReplayURL": "https://lldb.camanis.net/level/101/8",
+    "replayScore": 555.488251633987,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 5482,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Epic giga01.dat#0",
+      "packID": "fan:lldb-139"
+    },
+    "initialStateHash": "c4fe9829c8cdccab0b5e1c11d317059a8dd528eb280795a998171221995935b9",
+    "levelSourceRevision": "27206fd1c9e5890deccf6c360f26a94c6fb044694bf1654ef9d31a010e30c573",
+    "nativeCompletionTicks": 3714,
+    "nativeReplaySHA256": "acef79460509b4a41f39ad873bc9ad71fd1eaf5bf6d55ea22b9dbe971a341a8f",
+    "nativeSaved": 98,
+    "publishedReplaySHA256": "f343786e44feca10a4295c9150feaaa0c906b22e48405c3a2e61d41c6ec7f913",
+    "publishedReplayURL": "https://lldb.camanis.net/level/139/1",
+    "replayScore": 426.15857551170774,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 3713,
+    "sourceSaved": 98
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Epic Giga rating pack 01.dat#0",
+      "packID": "fan:lldb-142"
+    },
+    "initialStateHash": "c4fe9829c8cdccab0b5e1c11d317059a8dd528eb280795a998171221995935b9",
+    "levelSourceRevision": "419f97ff0b0a11463b7121e4ced998c5ef8300193ff4a78b8f452c64c70b0717",
+    "nativeCompletionTicks": 3714,
+    "nativeReplaySHA256": "1ea8279aaabe91ad471ef1b89c81acecd99aad961a4612caec0b902bd21f0556",
+    "nativeSaved": 98,
+    "publishedReplaySHA256": "f343786e44feca10a4295c9150feaaa0c906b22e48405c3a2e61d41c6ec7f913",
+    "publishedReplayURL": "https://lldb.camanis.net/level/142/1",
+    "replayScore": 426.15857551170774,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 3713,
+    "sourceSaved": 98
+  },
+  {
+    "globalTickShift": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Snow remakes 01.dat#9",
+      "packID": "fan:lldb-144"
+    },
+    "initialStateHash": "f4f5b83c68a64249441ccdef72df347b60d8dec3adab2d3dd5ca839d8c2e5def",
+    "levelSourceRevision": "f5f94876092d5aa2f35e3180fd4819edc59d61d61e5ca8e795e574d20e36ed0b",
+    "nativeCompletionTicks": 2348,
+    "nativeReplaySHA256": "bd79bed770be59e5653ea69f4b6879ccc319b232d486cb5be57da6716c3c0fe4",
+    "nativeSaved": 48,
+    "publishedReplaySHA256": "7a167d0af1ef3bd7516205383f439de538e29f67bbfc2a7168c461a3ab8202d0",
+    "publishedReplayURL": "https://lldb.camanis.net/level/144/10",
+    "replayScore": 516.5921804637355,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2338,
+    "sourceSaved": 48
+  },
+  {
+    "globalTickShift": 5,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Giga pack 04.dat#6",
+      "packID": "fan:lldb-165"
+    },
+    "initialStateHash": "fa4c0b87920def721dc872a1e7ecf1196440def018255b9b4c8614eaacd28c15",
+    "levelSourceRevision": "167151878e40f998db814e208287dacc4f2ffc5885317bedb0af505a9d8fb0ce",
+    "nativeCompletionTicks": 2763,
+    "nativeReplaySHA256": "7f686981794a3e4a8f39c79275dfef5f6d7d72fb116034118fe5b641287162f1",
+    "nativeSaved": 26,
+    "publishedReplaySHA256": "8fd2f5f06413b992fa10b55817af1a3040b4c86ca272e9b56eb3591dddfcab33",
+    "publishedReplayURL": "https://lldb.camanis.net/level/165/7",
+    "replayScore": 561.0320588235294,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2758,
+    "sourceSaved": 26
+  },
+  {
+    "globalTickShift": 6,
+    "identity": {
+      "engine": "classic",
+      "levelID": "QBeez05.dat#6",
+      "packID": "fan:lldb-166"
+    },
+    "initialStateHash": "dd4393abb97eb4ac5d40a9b92eea3c93534ae8fc3499f94e7635f9e8229206ad",
+    "levelSourceRevision": "3b6e66d61a734d1e9c46918f0b14c6bf03e14b2ec96c7e0a07f3f5b3847bf7dd",
+    "nativeCompletionTicks": 959,
+    "nativeReplaySHA256": "774dcf42052d5c50ad7f4a45871920252cb2c1086643e7f836c0e28911e4f7b0",
+    "nativeSaved": 50,
+    "publishedReplaySHA256": "fff10000f35af75977b8fc7dcb0f2e2107b23f44c6eee12b47bbd5afc2b3c7a4",
+    "publishedReplayURL": "https://lldb.camanis.net/level/166/7",
+    "replayScore": 345.97634760413274,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 955,
+    "sourceSaved": 50
+  },
+  {
+    "globalTickShift": 5,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Giga pack 07.dat#0",
+      "packID": "fan:lldb-169"
+    },
+    "initialStateHash": "7bbdd47afa3a680b40bf168cd314f16f0be93f3a5fa8f272f865caf5c9877b4e",
+    "levelSourceRevision": "3bbaa683fdaf140c4dd75deaf60bb755265cab56731c413e0b302596093ef461",
+    "nativeCompletionTicks": 596,
+    "nativeReplaySHA256": "b0ecc87b22bd317c3945a33670c42b4386d699051c3deb73b0e3c04cb80d2958",
+    "nativeSaved": 20,
+    "publishedReplaySHA256": "d847fe4991356c76e410e2090c1d36b2aac60372f290441d1e44f86f8545f139",
+    "publishedReplayURL": "https://lldb.camanis.net/level/169/1",
+    "replayScore": 341.25592679815367,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 590,
+    "sourceSaved": 20
+  },
+  {
+    "globalTickShift": 5,
+    "identity": {
+      "engine": "classic",
+      "levelID": "The lemming google pack.dat#1",
+      "packID": "fan:lldb-179"
+    },
+    "initialStateHash": "779f44d6d1c5c009c4da0ebc0983db0f97b0f9a1985bdb0a699ed194de228fa9",
+    "levelSourceRevision": "4545eeb5effc99790773b4862e7c0e427ac112d5f09e484cc42d6de81362e089",
+    "nativeCompletionTicks": 3009,
+    "nativeReplaySHA256": "64385279d620f164752bcc0f368856d01f777cc70856a61fd0d00698b38eb555",
+    "nativeSaved": 18,
+    "publishedReplaySHA256": "494a1073be4427ea1f255e0634c9474e13ebb7132ae178d01a738bcba29b5e66",
+    "publishedReplayURL": "https://lldb.camanis.net/level/179/2",
+    "replayScore": 293.0878619688244,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 3004,
+    "sourceSaved": 18
+  },
+  {
+    "globalTickShift": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "The lemming google pack.dat#4",
+      "packID": "fan:lldb-179"
+    },
+    "initialStateHash": "c57d3f8742a659d4ad8d13ae880e894e62b1f7b4a3425c74ce1db9ea6f111ee2",
+    "levelSourceRevision": "4545eeb5effc99790773b4862e7c0e427ac112d5f09e484cc42d6de81362e089",
+    "nativeCompletionTicks": 2844,
+    "nativeReplaySHA256": "be449f6f9c497bc0b1ba481d9a55783b6e36349b0b10102c0a82bf9ab3a0e002",
+    "nativeSaved": 40,
+    "publishedReplaySHA256": "e757d6f805c93401c4a5225e86ad46ba49daee6cdad50893440c24e344719a2d",
+    "publishedReplayURL": "https://lldb.camanis.net/level/179/5",
+    "replayScore": 168.55047840579675,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2841,
+    "sourceSaved": 40
+  },
+  {
+    "globalTickShift": 5,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmings platinum Fragle part 2.dat#6",
+      "packID": "fan:lldb-181"
+    },
+    "initialStateHash": "779f44d6d1c5c009c4da0ebc0983db0f97b0f9a1985bdb0a699ed194de228fa9",
+    "levelSourceRevision": "9b666aa29ad430e1c1e2655f910ebdac52b6dcac4690eb0cb9eb9a0aa8e8e27d",
+    "nativeCompletionTicks": 3009,
+    "nativeReplaySHA256": "092d0d59101317ebbb636427a656de4a0309369e0518ac28cd39e85f69cab68b",
+    "nativeSaved": 18,
+    "publishedReplaySHA256": "494a1073be4427ea1f255e0634c9474e13ebb7132ae178d01a738bcba29b5e66",
+    "publishedReplayURL": "https://lldb.camanis.net/level/181/7",
+    "replayScore": 293.0878619688244,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 3004,
+    "sourceSaved": 18
+  },
+  {
+    "globalTickShift": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmings platinum Fragle part 2.dat#9",
+      "packID": "fan:lldb-181"
+    },
+    "initialStateHash": "c57d3f8742a659d4ad8d13ae880e894e62b1f7b4a3425c74ce1db9ea6f111ee2",
+    "levelSourceRevision": "9b666aa29ad430e1c1e2655f910ebdac52b6dcac4690eb0cb9eb9a0aa8e8e27d",
+    "nativeCompletionTicks": 2844,
+    "nativeReplaySHA256": "21ec84a82e99800ecfcf3f7ca731851587ee9768a57a373ac96c4e104a8175e8",
+    "nativeSaved": 40,
+    "publishedReplaySHA256": "e757d6f805c93401c4a5225e86ad46ba49daee6cdad50893440c24e344719a2d",
+    "publishedReplayURL": "https://lldb.camanis.net/level/181/10",
+    "replayScore": 168.55047840579675,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2841,
+    "sourceSaved": 40
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "hubbart7.dat#6",
+      "packID": "fan:lldb-182"
+    },
+    "initialStateHash": "b3098e54f7e38497a1fcd23e432ec7446e9fd1f8d83e6d12837bbd2b61c2d781",
+    "levelSourceRevision": "63d7fb17c746d9b0d987c706cde6ed3557a6329ab6ef5aa4b568f9a1a6ab77ed",
+    "nativeCompletionTicks": 925,
+    "nativeReplaySHA256": "2b36c34b1dbdb3b8d8ed3d854e04abce1188485d6dcbcfd002026eea82937e7d",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "08cd08a30aa9e82ddef09e8446900d7949dad953b56aa086305ffd587f4ae815",
+    "publishedReplayURL": "https://lldb.camanis.net/level/182/7",
+    "replayScore": 244.67038758246736,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 922,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": 6,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmings platinum Careful Part 1.dat#2",
+      "packID": "fan:lldb-188"
+    },
+    "initialStateHash": "6ebfca371d8c75418842dc581b23d39736412aeaafaa3115f0b25168ca4468a6",
+    "levelSourceRevision": "b193b220e77b2847f328114b0956e0f6a46e135b5d9f7017c08c0eabaa3cad1c",
+    "nativeCompletionTicks": 2041,
+    "nativeReplaySHA256": "bfc660a0998745f6fbfe59b100c6cb7b54469b347b4295303eaa92480cf0c44b",
+    "nativeSaved": 79,
+    "publishedReplaySHA256": "227fc5ef68dd1319b5169f20d665d91539d2c9446a70b395d67fe1869e420ac2",
+    "publishedReplayURL": "https://lldb.camanis.net/level/188/3",
+    "replayScore": 291.98351307189546,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1972,
+    "sourceSaved": 79
+  },
+  {
+    "globalTickShift": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmings platinum Dangerous Part 2.dat#9",
+      "packID": "fan:lldb-191"
+    },
+    "initialStateHash": "c85479af7a9b29b0b84d69ad96963f09f7bf17b2718e94f95f47e826b2f9454d",
+    "levelSourceRevision": "a8a9340f2052f6dc167e9135979311ce6ab2db60adf526fdc5f6a9cd26260c43",
+    "nativeCompletionTicks": 1307,
+    "nativeReplaySHA256": "929125bd239c23ff588ac8e0295ae6f6784ee817ad200283f6d854406e946f5e",
+    "nativeSaved": 18,
+    "publishedReplaySHA256": "c44225e7814e6b050882b3e7e9a48c221ecd51ac788c8b02d32bc0a097094aaa",
+    "publishedReplayURL": "https://lldb.camanis.net/level/191/10",
+    "replayScore": 433.4372294547881,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1303,
+    "sourceSaved": 18
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "ISteve01.DAT#1",
+      "packID": "fan:lldb-20"
+    },
+    "initialStateHash": "d2168001f3976b33829430bd4376161013473e138a6cbf1f7f3fc1c799d0c864",
+    "levelSourceRevision": "d3e3cb52b86ba3528e3ed85ce4abbd14a9b7606a3a8a92c675f7f3d060ef881c",
+    "nativeCompletionTicks": 1146,
+    "nativeReplaySHA256": "fd38d870ced08cba3f3960ba39fa30370c138145626bfd3e05aa1162fca30d5f",
+    "nativeSaved": 44,
+    "publishedReplaySHA256": "1e71f91b471bfea46ede87cfc7c39fa8945c4d35607bd659081bbea5ec320973",
+    "publishedReplayURL": "https://lldb.camanis.net/level/20/2",
+    "replayScore": 369.11895329025356,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1147,
+    "sourceSaved": 44
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "mobius2.dat#1",
+      "packID": "fan:lldb-205"
+    },
+    "initialStateHash": "e03d9bb2957f3284dabc28cd904f4e8b8645c58dda31436f7f25e28b8d47a066",
+    "levelSourceRevision": "15d58d6f7986d974b92c29b827c1a0722e978d3b0f3a0745c4a335bf8a6fe2c9",
+    "nativeCompletionTicks": 2569,
+    "nativeReplaySHA256": "8f7d7d28f503ab08c5ddbceac8bfb04aa75f62147518ac03d64403eb2fb54d66",
+    "nativeSaved": 50,
+    "publishedReplaySHA256": "eec16b70a25b969fbd4b44973140cdc2aad957be5127b66cd43f888e25e1ea16",
+    "publishedReplayURL": "https://lldb.camanis.net/level/205/2",
+    "replayScore": 458.69520074696544,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2566,
+    "sourceSaved": 50
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "ISteve03.dat#1",
+      "packID": "fan:lldb-21"
+    },
+    "initialStateHash": "4ea8b12733f872a3707c0e1e5eb3289c5bff63f070c8156b31bcfca7bbbb624a",
+    "levelSourceRevision": "ec3be1133f3bb7d3ff9459eae24ce7140a5ef347d07f324608aa128927846c31",
+    "nativeCompletionTicks": 587,
+    "nativeReplaySHA256": "ef49d797ddea618d51b1f70affb56d644333fa7153687e81af86af787d3a5e31",
+    "nativeSaved": 19,
+    "publishedReplaySHA256": "3c835a0517340e53d5979f34cbb727122ff6a826c567adda214452b26a5f3be5",
+    "publishedReplayURL": "https://lldb.camanis.net/level/21/2",
+    "replayScore": 354.5502758038848,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 585,
+    "sourceSaved": 19
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "LEVELPAK.DAT#4",
+      "packID": "fan:lldb-216"
+    },
+    "initialStateHash": "b65f7bffe8a9994bf9e58483172a66f7e3786904f317faa4e36bc8d20d6060ee",
+    "levelSourceRevision": "a5836d5864bf2847e640d2bb852f991ccb3b68643f6b4eaa8a1252067aa02ad1",
+    "nativeCompletionTicks": 1758,
+    "nativeReplaySHA256": "24c78dbcfb4ec50d2d8a940e10d203f7a2195428a57adbd407f2b368b8382eaa",
+    "nativeSaved": 10,
+    "publishedReplaySHA256": "09811be136eb0f56469a657c7c0187d449adb5ae429bd8803cae9053105b61b2",
+    "publishedReplayURL": "https://lldb.camanis.net/level/216/5",
+    "replayScore": 153.06192845288425,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1758,
+    "sourceSaved": 10
+  },
+  {
+    "globalTickShift": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "LEVELPAK.DAT#5",
+      "packID": "fan:lldb-216"
+    },
+    "initialStateHash": "b5a3f1cb40b7a901a3e93a68042a37430dbc07ab6eeb660d737c045f2e345340",
+    "levelSourceRevision": "a5836d5864bf2847e640d2bb852f991ccb3b68643f6b4eaa8a1252067aa02ad1",
+    "nativeCompletionTicks": 2008,
+    "nativeReplaySHA256": "6b3313c3f3c5900bae2b0e55c9f48c4d329022da6b0f334cf1441b685fcae844",
+    "nativeSaved": 10,
+    "publishedReplaySHA256": "be21428114e90c8401c0a134374ada8253d145f4cd301e848704b56806a33e93",
+    "publishedReplayURL": "https://lldb.camanis.net/level/216/6",
+    "replayScore": 147.07600408313635,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2000,
+    "sourceSaved": 10
+  },
+  {
+    "globalTickShift": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "LEVELPAK.DAT#8",
+      "packID": "fan:lldb-216"
+    },
+    "initialStateHash": "91d87fdccfecb6482e7b53ca117c52d92b6ef1b323b101c208c59d27d502d21b",
+    "levelSourceRevision": "a5836d5864bf2847e640d2bb852f991ccb3b68643f6b4eaa8a1252067aa02ad1",
+    "nativeCompletionTicks": 2885,
+    "nativeReplaySHA256": "afaf1ea3116a2fc1c468658f585676511ac46a59dc76058755a623f041f6174c",
+    "nativeSaved": 10,
+    "publishedReplaySHA256": "e08f40b59368c1e91e07d747a51b093a919e75fc39652d5ab7e69d369de788cb",
+    "publishedReplayURL": "https://lldb.camanis.net/level/216/9",
+    "replayScore": 435.75282913165273,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2882,
+    "sourceSaved": 10
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "LEVELPAK.DAT#9",
+      "packID": "fan:lldb-216"
+    },
+    "initialStateHash": "6361d7680c36dc1adb988d979982bdcf8b0c9c47fa299165063fdc2fc65b3c74",
+    "levelSourceRevision": "a5836d5864bf2847e640d2bb852f991ccb3b68643f6b4eaa8a1252067aa02ad1",
+    "nativeCompletionTicks": 2394,
+    "nativeReplaySHA256": "0caefa1ddf3de04e04bed501631fbe7ffe43da01b5c262cbe85712c5f5cc3b38",
+    "nativeSaved": 17,
+    "publishedReplaySHA256": "44ffdcea08c1a3b51ada83892bc7349bde1c06746121200023219725a200b7cf",
+    "publishedReplayURL": "https://lldb.camanis.net/level/216/10",
+    "replayScore": 408.09506664109085,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2392,
+    "sourceSaved": 17
+  },
+  {
+    "globalTickShift": 7,
+    "identity": {
+      "engine": "classic",
+      "levelID": "PSP Special.dat#10",
+      "packID": "fan:lldb-217"
+    },
+    "initialStateHash": "1d14af9fff3e5d2666e96ec32a0f1e5351b3137549470b278669ecc521c5c811",
+    "levelSourceRevision": "d033b19716f2dec396de130dde008e128db03feedbcb4bb7ce7d9778eabff2ba",
+    "nativeCompletionTicks": 2258,
+    "nativeReplaySHA256": "d3ebfa53cd56c28cb7783bde8dd10a016657fe5f9a1b7e7572e9c8e91158583f",
+    "nativeSaved": 10,
+    "publishedReplaySHA256": "c69bcda3b9e20e63783499a2153127158002a0c541ec1fe530ffc3fb85fa24b2",
+    "publishedReplayURL": "https://lldb.camanis.net/level/217/11",
+    "replayScore": 407.26392679815365,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2243,
+    "sourceSaved": 10
+  },
+  {
+    "globalTickShift": 7,
+    "identity": {
+      "engine": "classic",
+      "levelID": "PSP Special.dat#11",
+      "packID": "fan:lldb-217"
+    },
+    "initialStateHash": "f81b91efb3b95ae93cf1536c45630aae12d7db6fd26d5284cb6ac2d98e66ffa2",
+    "levelSourceRevision": "d033b19716f2dec396de130dde008e128db03feedbcb4bb7ce7d9778eabff2ba",
+    "nativeCompletionTicks": 3385,
+    "nativeReplaySHA256": "809dad97f0823e88e24b1e331c902259bd15ec5935bad2d6e2b23fd549fbe997",
+    "nativeSaved": 10,
+    "publishedReplaySHA256": "5dbfb332721c092e2fd6654d58817c967030f9e53e129e7e23afd2ecf652d523",
+    "publishedReplayURL": "https://lldb.camanis.net/level/217/12",
+    "replayScore": 279.08800356506237,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 3377,
+    "sourceSaved": 10
+  },
+  {
+    "globalTickShift": 7,
+    "identity": {
+      "engine": "classic",
+      "levelID": "PSP Special.dat#13",
+      "packID": "fan:lldb-217"
+    },
+    "initialStateHash": "6699f3c25d061f6f222e7dd762745f9f17f1377433b509242d17a2cd8d30ef76",
+    "levelSourceRevision": "d033b19716f2dec396de130dde008e128db03feedbcb4bb7ce7d9778eabff2ba",
+    "nativeCompletionTicks": 2002,
+    "nativeReplaySHA256": "a7c1d002efa3ff85a547dc77507d68229e4e6b8113907edf59c98fd2e4ddfa44",
+    "nativeSaved": 2,
+    "publishedReplaySHA256": "371ecf7bcfb92af99c6423ccc4c086b66990075cb3e6692aa8889509b6a055ae",
+    "publishedReplayURL": "https://lldb.camanis.net/level/217/14",
+    "replayScore": 359.86118767507,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1993,
+    "sourceSaved": 2
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "PSP Special.dat#2",
+      "packID": "fan:lldb-217"
+    },
+    "initialStateHash": "3164e5015cc34c084d9062e3b1205dd63873fee0deb9287ef384c132972fd804",
+    "levelSourceRevision": "d033b19716f2dec396de130dde008e128db03feedbcb4bb7ce7d9778eabff2ba",
+    "nativeCompletionTicks": 1259,
+    "nativeReplaySHA256": "3806315c245c5b61dd82b7065ae309fbbcd54aea3199f308de23ced51e9e6f6e",
+    "nativeSaved": 20,
+    "publishedReplaySHA256": "9a866d045c6f2fe69cee533841c33384745763b29fa91815c522909dc3277bfb",
+    "publishedReplayURL": "https://lldb.camanis.net/level/217/3",
+    "replayScore": 103.77457551170778,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1253,
+    "sourceSaved": 20
+  },
+  {
+    "globalTickShift": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "PSP Special.dat#6",
+      "packID": "fan:lldb-217"
+    },
+    "initialStateHash": "666d8f9302358f4c7f87a1856d0ca632728dd0343b3a2c6da90bc3ac7b1a92fe",
+    "levelSourceRevision": "d033b19716f2dec396de130dde008e128db03feedbcb4bb7ce7d9778eabff2ba",
+    "nativeCompletionTicks": 978,
+    "nativeReplaySHA256": "0caa094d0f2fbcc784a3fede35c80b737de9e2c24c055e28154e416fd02455b3",
+    "nativeSaved": 8,
+    "publishedReplaySHA256": "16100a4c359864d0f345026f26062af62bed9655e95a60c7eba2026d786d9400",
+    "publishedReplayURL": "https://lldb.camanis.net/level/217/7",
+    "replayScore": 367.4625934648203,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 976,
+    "sourceSaved": 8
+  },
+  {
+    "globalTickShift": 6,
+    "identity": {
+      "engine": "classic",
+      "levelID": "PSP Special.dat#7",
+      "packID": "fan:lldb-217"
+    },
+    "initialStateHash": "dbe96d012f9e7deea4141907ffc40c561666a24b689b5ad0323479e062b45c61",
+    "levelSourceRevision": "d033b19716f2dec396de130dde008e128db03feedbcb4bb7ce7d9778eabff2ba",
+    "nativeCompletionTicks": 2619,
+    "nativeReplaySHA256": "1f660a7b25f600aba28b90bd48c6ce50202b05d6735ecf9824f8d4faf8f62d02",
+    "nativeSaved": 2,
+    "publishedReplaySHA256": "909d692f2809fdd7e03bf3f130900271a7a9dd49bf2847fd63fc913cc1c2b8fb",
+    "publishedReplayURL": "https://lldb.camanis.net/level/217/8",
+    "replayScore": 280.80554318027833,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2616,
+    "sourceSaved": 2
+  },
+  {
+    "globalTickShift": 5,
+    "identity": {
+      "engine": "classic",
+      "levelID": "PSP Special.dat#8",
+      "packID": "fan:lldb-217"
+    },
+    "initialStateHash": "8e163af1dd26591a6ac05fed8606a98d123719b6064c80346d2928e715beab60",
+    "levelSourceRevision": "d033b19716f2dec396de130dde008e128db03feedbcb4bb7ce7d9778eabff2ba",
+    "nativeCompletionTicks": 2568,
+    "nativeReplaySHA256": "48f8b9a058fc8ee89493d251c453a152b195e947608dbb1d460fdb321c11b62c",
+    "nativeSaved": 10,
+    "publishedReplaySHA256": "9a2dbf620441aa4aae189eb3ffe50f158088774a3ee8e9c0345ea5c2807f5f77",
+    "publishedReplayURL": "https://lldb.camanis.net/level/217/9",
+    "replayScore": 407.7794180631628,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2558,
+    "sourceSaved": 10
+  },
+  {
+    "globalTickShift": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "PSP Special2.dat#0",
+      "packID": "fan:lldb-218"
+    },
+    "initialStateHash": "85d8c41bf7a59aa38d54537ce9d8640ba37aac88b314f29299c152491da1cd48",
+    "levelSourceRevision": "ff0843de66881e067975462288b74fefcbf0f28e63b1e47e026cd8232ebfcf53",
+    "nativeCompletionTicks": 3069,
+    "nativeReplaySHA256": "4b93332202f80deef0534ecb30dc11cf0f97c6c492522ce9abf155dfb079dbbf",
+    "nativeSaved": 18,
+    "publishedReplaySHA256": "5a8e72d23d60cf1248747cbb48a7598cc9b500c2b1108fe1d1d60cd6f959e8e2",
+    "publishedReplayURL": "https://lldb.camanis.net/level/218/1",
+    "replayScore": 334.0296314441278,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 3073,
+    "sourceSaved": 18
+  },
+  {
+    "globalTickShift": 6,
+    "identity": {
+      "engine": "classic",
+      "levelID": "PSP Special2.dat#5",
+      "packID": "fan:lldb-218"
+    },
+    "initialStateHash": "cdadf288acc8444d0a71fb5d54e7dfc9b6b2de9d43320b7f7a772a95a02ab5d6",
+    "levelSourceRevision": "ff0843de66881e067975462288b74fefcbf0f28e63b1e47e026cd8232ebfcf53",
+    "nativeCompletionTicks": 3343,
+    "nativeReplaySHA256": "b4c8be0365d2553163890c277ab616616f9e04fee772f62563b8f1ddf0b11e70",
+    "nativeSaved": 25,
+    "publishedReplaySHA256": "db8d02138a4922e9c03888391a7ca12cd2b21ebd8de43b4dcc2bb645f5f6b26f",
+    "publishedReplayURL": "https://lldb.camanis.net/level/218/6",
+    "replayScore": 196.5182968588841,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 3332,
+    "sourceSaved": 25
+  },
+  {
+    "globalTickShift": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "PSP Special2.dat#8",
+      "packID": "fan:lldb-218"
+    },
+    "initialStateHash": "c9fcd46be5262f2d066b912aac5e29d43e78fcb9d660333543d45a9e9ceea9c0",
+    "levelSourceRevision": "ff0843de66881e067975462288b74fefcbf0f28e63b1e47e026cd8232ebfcf53",
+    "nativeCompletionTicks": 1721,
+    "nativeReplaySHA256": "9d7cf1feefacf073e03318372e9f05a68a6753325ef673b323027c5267e1ae4c",
+    "nativeSaved": 20,
+    "publishedReplaySHA256": "3de55d56f032b94c18d0854aeae353c498c854ac082151efc7124c8e210e1c3a",
+    "publishedReplayURL": "https://lldb.camanis.net/level/218/9",
+    "replayScore": 258.0919362745098,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1708,
+    "sourceSaved": 20
+  },
+  {
+    "globalTickShift": 5,
+    "identity": {
+      "engine": "classic",
+      "levelID": "PSP Special2.dat#9",
+      "packID": "fan:lldb-218"
+    },
+    "initialStateHash": "e32e7a5e6c4d53165f144a90b594565cac116c1acdc3fbe95f1a1082efdec005",
+    "levelSourceRevision": "ff0843de66881e067975462288b74fefcbf0f28e63b1e47e026cd8232ebfcf53",
+    "nativeCompletionTicks": 888,
+    "nativeReplaySHA256": "6547a6801c8f72a571eb89972dbc4d5eb40f6a7a6258dba702489bc992547f6d",
+    "nativeSaved": 19,
+    "publishedReplaySHA256": "9183f92477593167ab8113fcb87df3544c1efae447d2d2c5a25723c5d4ebd001",
+    "publishedReplayURL": "https://lldb.camanis.net/level/218/10",
+    "replayScore": 328.43459605285557,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 885,
+    "sourceSaved": 19
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "ANTHPCK1.DAT#8",
+      "packID": "fan:lldb-221"
+    },
+    "initialStateHash": "8190d75f743c2ec39c9f17816cb9fe474b58f29e4cd78853b01b33653e0c7c58",
+    "levelSourceRevision": "bc279d343623526a42bfcb359467cf3e65e8e52da06996a76f7c18e0fb7dfe0c",
+    "nativeCompletionTicks": 2243,
+    "nativeReplaySHA256": "2a1f13f7c290f34eb736b96759a82b617ed7d56717e1e38a1f707dbf41e90e42",
+    "nativeSaved": 67,
+    "publishedReplaySHA256": "e8e411b68f3a523bb8da66cd194dd627d4c0047cca4aabbdaf110fde7aaf94a4",
+    "publishedReplayURL": "https://lldb.camanis.net/level/221/9",
+    "replayScore": 405.15475579322634,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2242,
+    "sourceSaved": 67
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "ANTHPCK3.DAT#8",
+      "packID": "fan:lldb-223"
+    },
+    "initialStateHash": "515281bb970e7bc34e49edc6f0d71d34658282047d75e8db83dffded0a480366",
+    "levelSourceRevision": "338c8cfbb37a5eaf6cb103e85aa2d5e40b90300abfb06dcbb503131b5e8095e1",
+    "nativeCompletionTicks": 4570,
+    "nativeReplaySHA256": "6fbfe1b3d37745d7b2e1a00942e6cc359255957dd990aa468302f1288ed01d20",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "14127cc1b7c9b9d3cc8072da8b81de696b442dbfaa4f9a3221d7be54424baab5",
+    "publishedReplayURL": "https://lldb.camanis.net/level/223/9",
+    "replayScore": 375.46784313725493,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 4569,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "ANTHPCK4.DAT#2",
+      "packID": "fan:lldb-224"
+    },
+    "initialStateHash": "8f9f1605d38180b78d249dabb990f694d505ce775077c8054853cf77634876ac",
+    "levelSourceRevision": "b2818e41664bbcc98870c9a7c5e6f20258004495061503f5c373fa255188223d",
+    "nativeCompletionTicks": 3182,
+    "nativeReplaySHA256": "59ca491091bbb197432acebda8c7f6eeb45f8390f5dc717c639965174b2b5eeb",
+    "nativeSaved": 36,
+    "publishedReplaySHA256": "7dc6b6ccb80c75c67735bf95270ac50028105dfa85283a2a230393e262d54adb",
+    "publishedReplayURL": "https://lldb.camanis.net/level/224/3",
+    "replayScore": 297.7437230026142,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 3183,
+    "sourceSaved": 36
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "jannpck3.dat#6",
+      "packID": "fan:lldb-233"
+    },
+    "initialStateHash": "ce0912fb46560e335c4638b11288c42861f8f8473dda06113a0026f81a69c9ae",
+    "levelSourceRevision": "9e1ebdd82d576bc770faff2e4cb37c5abf43c3ced24c94165087a891b3f9e801",
+    "nativeCompletionTicks": 3505,
+    "nativeReplaySHA256": "135e16b933cf2c6f1e07238fd3c169af69f36f18cb93eac6954cb6a90561e49a",
+    "nativeSaved": 48,
+    "publishedReplaySHA256": "f954ca07fe805a72a31513bcd1227cad7bc611c5924e029d351b2979f9d2d3af",
+    "publishedReplayURL": "https://lldb.camanis.net/level/233/7",
+    "replayScore": 501.3294901960784,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 3502,
+    "sourceSaved": 48
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Martin Zurlinden 01.dat#1",
+      "packID": "fan:lldb-244"
+    },
+    "initialStateHash": "083761b7d09d9cd7ca7209f3c4d24ea98e24fdd60c4a36b64522d0d50b087711",
+    "levelSourceRevision": "b3b44850317ea16a3318fc64eda54fbe68451909010971d070fe3745113a1aa4",
+    "nativeCompletionTicks": 1668,
+    "nativeReplaySHA256": "de5c925cdd8610ab6662d615c3efd719a54b7f712d6b9de0963628824ad2fe3f",
+    "nativeSaved": 60,
+    "publishedReplaySHA256": "051e3d24f91160249a4e50c755604fb633494ae129b1a2be8db372ec5a0c54a1",
+    "publishedReplayURL": "https://lldb.camanis.net/level/244/2",
+    "replayScore": 423.4173529411765,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1666,
+    "sourceSaved": 60
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Martin Zurlinden 01.dat#7",
+      "packID": "fan:lldb-244"
+    },
+    "initialStateHash": "6b91a79ab8f88636cc11199b43f3506d4e185d47bd1afe159b983ce8c099f914",
+    "levelSourceRevision": "b3b44850317ea16a3318fc64eda54fbe68451909010971d070fe3745113a1aa4",
+    "nativeCompletionTicks": 1441,
+    "nativeReplaySHA256": "6eecb2d96e0335e35d53d6bab83cf544eeca97ad03ac54c4c38a369538289ff3",
+    "nativeSaved": 57,
+    "publishedReplaySHA256": "de35503cc413120818ab68c3c9e537b3ad4cd5d2712ca39a84011adf5164b095",
+    "publishedReplayURL": "https://lldb.camanis.net/level/244/8",
+    "replayScore": 392.59292026220584,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1440,
+    "sourceSaved": 57
+  },
+  {
+    "globalTickShift": 6,
+    "identity": {
+      "engine": "classic",
+      "levelID": "CRISFN02.dat#3",
+      "packID": "fan:lldb-266"
+    },
+    "initialStateHash": "dfcb3ec17fd815eeea4214057996449876eadda7a274532754d4317f113c32d9",
+    "levelSourceRevision": "ca8350f116a45b7c71d03cc3e236ad90a91dd5f176e930f038835793c1ca2969",
+    "nativeCompletionTicks": 2614,
+    "nativeReplaySHA256": "0b647a41fed72622d3ae2cea664e4d9035be9b50910c6b04dc8a40f2f828aff0",
+    "nativeSaved": 38,
+    "publishedReplaySHA256": "8ce73c7efabcce7edc0091ea3e4b51ee121b33edd49804f00484bb6956c0d9a7",
+    "publishedReplayURL": "https://lldb.camanis.net/level/266/4",
+    "replayScore": 390.39781862338685,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2608,
+    "sourceSaved": 38
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "CRISFN07.dat#6",
+      "packID": "fan:lldb-271"
+    },
+    "initialStateHash": "441c5be5d4ecd9f9bb9352c946f5f572bebd383c71450772ebccc655d1df8a01",
+    "levelSourceRevision": "a7199f77fa81457620998433d8675733495749cf2622a5220858c3428bfad2f3",
+    "nativeCompletionTicks": 2565,
+    "nativeReplaySHA256": "a0d5d8f2a5abbbf02c4942e5e3756bf493763ca6df79ca49410ef625ee7edaf5",
+    "nativeSaved": 56,
+    "publishedReplaySHA256": "021ddeea442e3bd630a920dc39fa28850184c07702920d622cf8fc26d9924f73",
+    "publishedReplayURL": "https://lldb.camanis.net/level/271/7",
+    "replayScore": 469.1800186900409,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2559,
+    "sourceSaved": 56
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "CRISFN12.dat#2",
+      "packID": "fan:lldb-276"
+    },
+    "initialStateHash": "480987d785a043616e6f3a86bd7e7126ce1f2fc693f1df414a10349dfc35e69b",
+    "levelSourceRevision": "b82aa3da097fe2e1b23d8434e865d238dd9cef2f0321bac89a82b53ae79b387f",
+    "nativeCompletionTicks": 1475,
+    "nativeReplaySHA256": "54e2e9e9620b671d9c24f4c785acda916d637ec75606ab29fc173017fcc145f8",
+    "nativeSaved": 75,
+    "publishedReplaySHA256": "8e8f46e7ae6b2e684ab4c8f8d1417661577cd39c158385aeeb44f9bb493803ea",
+    "publishedReplayURL": "https://lldb.camanis.net/level/276/3",
+    "replayScore": 383.1349299719888,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1472,
+    "sourceSaved": 75
+  },
+  {
+    "globalTickShift": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "CRISFN15.dat#2",
+      "packID": "fan:lldb-279"
+    },
+    "initialStateHash": "8f46db348e5f7c7bb05755107b988f5012580f32e55fc8aa8c12f616d2baaa1f",
+    "levelSourceRevision": "c0936a5e906fffb5eeb40bff59998f50f6db86dd3dff67782d18d907a3c41fd7",
+    "nativeCompletionTicks": 2002,
+    "nativeReplaySHA256": "ebe0c6a7dde2281d097316a13d5a984f830d3cf83695a6566de90a7007064a77",
+    "nativeSaved": 10,
+    "publishedReplaySHA256": "520325710929dcb4eba845b45dcb0c38ada8416c563a70b954a61d8c648f8072",
+    "publishedReplayURL": "https://lldb.camanis.net/level/279/3",
+    "replayScore": 344.3301052717816,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1997,
+    "sourceSaved": 10
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "TWPAK02.dat#5",
+      "packID": "fan:lldb-304"
+    },
+    "initialStateHash": "eea0b09f2bd61a44dd500e1719b945c5bbeeb81a807c505409873ace2909467a",
+    "levelSourceRevision": "6c68eaadda259536e63c51ae8a2a5d12d476a21b211c6034ebeb62c3e242da77",
+    "nativeCompletionTicks": 756,
+    "nativeReplaySHA256": "e04535dee307135cedd957ad2f81820ca3bdbba22dc30f43f3da62c4af6d6854",
+    "nativeSaved": 40,
+    "publishedReplaySHA256": "888a7f5a3ea5d6688442be972794621397b1793241e26e6134e3c6a238fdde69",
+    "publishedReplayURL": "https://lldb.camanis.net/level/304/6",
+    "replayScore": 303.68860293711236,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 757,
+    "sourceSaved": 40
+  },
+  {
+    "globalTickShift": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "TWPAK09.dat#2",
+      "packID": "fan:lldb-311"
+    },
+    "initialStateHash": "8783c9a5874905ec406b9de8930ae3f0a85d3010a84cb6746088f91e02b8a4bf",
+    "levelSourceRevision": "b0957944940532097d1a537290e7da30be2d72b5464d15554ca9b1a61e961355",
+    "nativeCompletionTicks": 989,
+    "nativeReplaySHA256": "3cbfa7dfb695413ee83e9ca83270732c0f66c18cc83f08e0a905438d4c174970",
+    "nativeSaved": 77,
+    "publishedReplaySHA256": "93c1f35e407c3c9cba6b842cb8dc15faae0e1ee9b754216e2d58e5c0048b5c52",
+    "publishedReplayURL": "https://lldb.camanis.net/level/311/3",
+    "replayScore": 299.8928863460886,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 987,
+    "sourceSaved": 77
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "TWPAK09.dat#7",
+      "packID": "fan:lldb-311"
+    },
+    "initialStateHash": "8c9e410df00b2ffb75627be21a55a0c5057bb8aa5a5a24f6d70462805132bdad",
+    "levelSourceRevision": "b0957944940532097d1a537290e7da30be2d72b5464d15554ca9b1a61e961355",
+    "nativeCompletionTicks": 1078,
+    "nativeReplaySHA256": "4562ee2e76d591dbdc8576ca60c28ff88edd84de7fa070462f409d0fe9352897",
+    "nativeSaved": 67,
+    "publishedReplaySHA256": "e505c82a85b67954daa4ac3b85bd5c1e81edfd003bc638cdda133476c6e4e168",
+    "publishedReplayURL": "https://lldb.camanis.net/level/311/8",
+    "replayScore": 339.82732842730843,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1079,
+    "sourceSaved": 67
+  },
+  {
+    "globalTickShift": -2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "t3tesla.dat#9",
+      "packID": "fan:lldb-325"
+    },
+    "initialStateHash": "b254d052799401d964c3faef94ccca68cc57b4b644e6328c2fc4e413512478d2",
+    "levelSourceRevision": "7003ec2cb3cc038e9bb1764bc7855def66e10f8aecabfde334b1a6459c6afe64",
+    "nativeCompletionTicks": 1017,
+    "nativeReplaySHA256": "2b7f59a5d9a077a9cd0a3926ece4cebe80b5f560748f6b98ed3ad3b512c11e63",
+    "nativeSaved": 78,
+    "publishedReplaySHA256": "860c6694182a87bad4e834575d32be2a608bc794b711a9dea7cc6144564f3856",
+    "publishedReplayURL": "https://lldb.camanis.net/level/325/10",
+    "replayScore": 567.9532262705881,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1017,
+    "sourceSaved": 78
+  },
+  {
+    "globalTickShift": 5,
+    "identity": {
+      "engine": "classic",
+      "levelID": "E3Levelpack_F.dat#3",
+      "packID": "fan:lldb-372"
+    },
+    "initialStateHash": "5f7b8ae2f85fed5f2423a950351483f2c2d54e7b23169b96e7145d303c817d8b",
+    "levelSourceRevision": "39f22d37e8eaf184591c7d526e02da075d302d9e7c7ad1fef3dadcc5e8f047fd",
+    "nativeCompletionTicks": 2289,
+    "nativeReplaySHA256": "42c9282aca05d1d0bfdf7fdc38f3513462da3e4d6dc7092a5965c83d3e17f0d6",
+    "nativeSaved": 2,
+    "publishedReplaySHA256": "818f6b43ae7b0f1a8150a4da5f66b1e69df01ef40c7bed0da1c67e41bfd28352",
+    "publishedReplayURL": "https://lldb.camanis.net/level/372/4",
+    "replayScore": 425.76460203236303,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2279,
+    "sourceSaved": 2
+  },
+  {
+    "globalTickShift": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Insulfrog+LVL+PK+1.DAT#3",
+      "packID": "fan:lldb-373"
+    },
+    "initialStateHash": "9799959604040b0d5220bf60bfe9d14e19ad6e77b94fbd699e73941a822c9f4e",
+    "levelSourceRevision": "e35bad34d4579222753f3cd2580c0629a92904876f9d603b20ae6010e733c05b",
+    "nativeCompletionTicks": 8368,
+    "nativeReplaySHA256": "c74c7c2124014cea714793b848fa7d84cf4d40f9cc7158bc7eb5c89a840ad0a8",
+    "nativeSaved": 100,
+    "publishedReplaySHA256": "ff49687edffece1eaf7c96599113318f4c8a29e2ba2c323ead6426716026eb0e",
+    "publishedReplayURL": "https://lldb.camanis.net/level/373/4",
+    "replayScore": 478.385253231117,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 8364,
+    "sourceSaved": 100
+  },
+  {
+    "globalTickShift": 7,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Insulfrog+LVL+PK+1.DAT#4",
+      "packID": "fan:lldb-373"
+    },
+    "initialStateHash": "6703da23d4c6cb9cc2aa9f74cac6501940494413861bb2db10ab2fbd89bb5ab2",
+    "levelSourceRevision": "e35bad34d4579222753f3cd2580c0629a92904876f9d603b20ae6010e733c05b",
+    "nativeCompletionTicks": 2576,
+    "nativeReplaySHA256": "6fb42de07e8f9674bcec474f2ddedf8daa7fb44deff111c0cf29d90c040cd9c6",
+    "nativeSaved": 100,
+    "publishedReplaySHA256": "5d060b48b0482811717bcd964a521f93424067a2885522f7955e9e9068cea511",
+    "publishedReplayURL": "https://lldb.camanis.net/level/373/5",
+    "replayScore": 430.5816314441278,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2564,
+    "sourceSaved": 100
+  },
+  {
+    "globalTickShift": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "pieuw01.dat#0",
+      "packID": "fan:lldb-393"
+    },
+    "initialStateHash": "454b0747bb391adbf68597ba0a1f85dea9e253fba47dd91980c27a8f0cb9a9dc",
+    "levelSourceRevision": "6b599e67d0656e6a27f33f99916b9dafd21b04a1e7c88f8eda24e3083a087bc4",
+    "nativeCompletionTicks": 2346,
+    "nativeReplaySHA256": "3ffd47d70c85f63ce42c8d0d9fab4b53d3e6d63624783eb741b9d029b7d884bb",
+    "nativeSaved": 10,
+    "publishedReplaySHA256": "a13e54c8c43e7ed5ceab46d4625f6a9905e2fdd01d684658c8c2877f0c1cd56e",
+    "publishedReplayURL": "https://lldb.camanis.net/level/393/1",
+    "replayScore": 211.87697254978764,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2341,
+    "sourceSaved": 10
+  },
+  {
+    "globalTickShift": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "pieuw01.dat#1",
+      "packID": "fan:lldb-393"
+    },
+    "initialStateHash": "7c8e3119ce1cba545afa5417f65f37f2da2da87c0967908d06193ed06d40804f",
+    "levelSourceRevision": "6b599e67d0656e6a27f33f99916b9dafd21b04a1e7c88f8eda24e3083a087bc4",
+    "nativeCompletionTicks": 2577,
+    "nativeReplaySHA256": "639f81238bc009108b3149cd916ffc94f1ba25b39985fa9034e920858a556620",
+    "nativeSaved": 2,
+    "publishedReplaySHA256": "7851a9d535795411120a6239eeb9284ec8fb37235906b6c2cac3d69888235f42",
+    "publishedReplayURL": "https://lldb.camanis.net/level/393/2",
+    "replayScore": 381.60557644501245,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2571,
+    "sourceSaved": 2
+  },
+  {
+    "globalTickShift": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "pieuw01.dat#2",
+      "packID": "fan:lldb-393"
+    },
+    "initialStateHash": "6433e4182789c4b6f62388db41a12d7d5b35bb340a3a46f42c351795c7b54113",
+    "levelSourceRevision": "6b599e67d0656e6a27f33f99916b9dafd21b04a1e7c88f8eda24e3083a087bc4",
+    "nativeCompletionTicks": 1880,
+    "nativeReplaySHA256": "94428aa23e25b72c6d10f7fd215a3767a5aee466162531e25472888247b701f0",
+    "nativeSaved": 30,
+    "publishedReplaySHA256": "4266a7d0cea3cb88ba6a772f7ab7d73c62ea9b9968398627f99f753096903bf1",
+    "publishedReplayURL": "https://lldb.camanis.net/level/393/3",
+    "replayScore": 304.09114845938376,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1870,
+    "sourceSaved": 30
+  },
+  {
+    "globalTickShift": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "pieuw01.dat#6",
+      "packID": "fan:lldb-393"
+    },
+    "initialStateHash": "792261adb8fc2905bdeea25da53401541c006e83f9d0a6edece4719f6504ad5b",
+    "levelSourceRevision": "6b599e67d0656e6a27f33f99916b9dafd21b04a1e7c88f8eda24e3083a087bc4",
+    "nativeCompletionTicks": 2379,
+    "nativeReplaySHA256": "203e563e841ea428898782b85f8dd1a48bca644f64a19b9066907252bf16f4c2",
+    "nativeSaved": 20,
+    "publishedReplaySHA256": "1e5c3a8d75ad1bb679236ff6df7161ffcc82ca125f60bc5971b2b24b316e34ef",
+    "publishedReplayURL": "https://lldb.camanis.net/level/393/7",
+    "replayScore": 279.45509803921567,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2372,
+    "sourceSaved": 20
+  },
+  {
+    "globalTickShift": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "pieuw02.dat#1",
+      "packID": "fan:lldb-394"
+    },
+    "initialStateHash": "e792cb1ef53a3276a18a2c4521abe3ab4cd953acaa66e933b5d836abdffaa35a",
+    "levelSourceRevision": "012f8d6fde059a9781d2293d00e4426595c281d7c7a8963caaa4ff4d5c1e123c",
+    "nativeCompletionTicks": 2558,
+    "nativeReplaySHA256": "1467333a022b4fe9c05f978137d2560d57fc605d443354709d455d8aff4f6c67",
+    "nativeSaved": 50,
+    "publishedReplaySHA256": "95909ed24e52218a2262733fd8efd2dcc7c4edf0c48f7e6e793e8ea50def0922",
+    "publishedReplayURL": "https://lldb.camanis.net/level/394/2",
+    "replayScore": 331.4473569343239,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2549,
+    "sourceSaved": 50
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis 2P 2.dat#9",
+      "packID": "fan:lldb-405"
+    },
+    "initialStateHash": "0440ac8cbd4da6c8181d244062ef2aa4ac56c5281bc3cdacddf7530db5aa7156",
+    "levelSourceRevision": "9af050546e82475ff3209ef5af9c8764c6a3b6edaabd43f8314ef7c1057e3a3c",
+    "nativeCompletionTicks": 1905,
+    "nativeReplaySHA256": "5c097cc75c427356426142c131fc202d28a59d3cb46f1ffd5863626dc653f0a0",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "cbee8cf23c5e630750a45c0a556ade1f75002521aef5c6abc0ddd716b99f5263",
+    "publishedReplayURL": "https://lldb.camanis.net/level/405/10",
+    "replayScore": 387.89177081997286,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1902,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "QBeez06.dat#6",
+      "packID": "fan:lldb-414"
+    },
+    "initialStateHash": "f8be72e3d19b2d6bb43c172b07763b16818d659339bb7b5b77745552d232db90",
+    "levelSourceRevision": "765e8fc1c78826eebf02a390bc46be04fd2b994418d4ac57389332b14fbfa7d1",
+    "nativeCompletionTicks": 1924,
+    "nativeReplaySHA256": "ffb515872b15f21eb2585683eb676a133553d7a0dd04e7d4eaabf63fc6b42767",
+    "nativeSaved": 20,
+    "publishedReplaySHA256": "08db550a3c447eccbce56a0e4a2ea3b49cdde8e9e5e1c1ebcc8ba8993b4c6e83",
+    "publishedReplayURL": "https://lldb.camanis.net/level/414/7",
+    "replayScore": 281.84827973933017,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1912,
+    "sourceSaved": 20
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "lm_set04.dat#2",
+      "packID": "fan:lldb-44"
+    },
+    "initialStateHash": "8524262056aaf1aba298672028d4bea78430bbae13f23dea9f606fac5e31c397",
+    "levelSourceRevision": "d476e4c37bbd4303e9f0d3baa217c9973d1770d068d4bee8f530332110e49c87",
+    "nativeCompletionTicks": 3481,
+    "nativeReplaySHA256": "6930aaa4a9915f9cf00a4f9a24fbfb54c7148944b8cb45030ddc7d2c3fffd428",
+    "nativeSaved": 78,
+    "publishedReplaySHA256": "2a3b409a969726e69cd937adca3f6c05c821dfc066bf405576be4b182b8c7d71",
+    "publishedReplayURL": "https://lldb.camanis.net/level/44/3",
+    "replayScore": 480.82472945478816,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 3482,
+    "sourceSaved": 78
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Wicked.DAT#10",
+      "packID": "fan:lldb-480"
+    },
+    "initialStateHash": "7ed901df72dde21cb5096008ad24e0dd71975cc5b966c53635c1f8c91c062edb",
+    "levelSourceRevision": "63ab956e498283467aba9a3dd87680abe43f00fd07ae16279a6bfd950c54a0a2",
+    "nativeCompletionTicks": 2951,
+    "nativeReplaySHA256": "c31b0d269083cf3837264bfd3fbc77bb09b5d8641eead0a55fd66ef700f3c766",
+    "nativeSaved": 48,
+    "publishedReplaySHA256": "c2dc222c74a3456fff700f23185c3af5c6c5decd858c4810fe0017a8fa7e7add",
+    "publishedReplayURL": "https://lldb.camanis.net/level/480/11",
+    "replayScore": 416.9201225449556,
+    "sourceGameMode": 1,
+    "sourceHeaderTicks": 2950,
+    "sourceSaved": 48
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Havoc.DAT#13",
+      "packID": "fan:lldb-481"
+    },
+    "initialStateHash": "3e1bbbb2ef6ec84300c2d2374d99a14073f7591608576c7a3b39a0fbc4b1c1e8",
+    "levelSourceRevision": "575f71040f97db65494e2fd5ab5b3a4351fa43073677480e9af4a9881b02d997",
+    "nativeCompletionTicks": 927,
+    "nativeReplaySHA256": "9d22b9f62d59653d1918ecc26324c97e610021575e049f52ab0e9de606eb4890",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "6eb1bd7bdeeaf476702a7dd36d104ed1774b21077878ee56bcf19dd1ca7e5bb9",
+    "publishedReplayURL": "https://lldb.camanis.net/level/481/14",
+    "replayScore": 545.161513797069,
+    "sourceGameMode": 1,
+    "sourceHeaderTicks": 923,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Hail.DAT#11",
+      "packID": "fan:lldb-483"
+    },
+    "initialStateHash": "1c290d8e1744d372141215a381984263d05a94435cbb3dfbe7f433437dc2b992",
+    "levelSourceRevision": "0543b9c913b9999d82112c55561fc37b9e765a299c6dc4ee7dbea6c1db569d9e",
+    "nativeCompletionTicks": 1598,
+    "nativeReplaySHA256": "c4b0c42ab18c320e0ca9742e79793bac84858bf32f92eec54b39a3005b9ef81e",
+    "nativeSaved": 25,
+    "publishedReplaySHA256": "ad13b3bc6e93fc070b018291f4ea3a136970528faffce89946584c7c067b5676",
+    "publishedReplayURL": "https://lldb.camanis.net/level/483/12",
+    "replayScore": 208.8756343352372,
+    "sourceGameMode": 2,
+    "sourceHeaderTicks": 1593,
+    "sourceSaved": 25
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Hail.DAT#8",
+      "packID": "fan:lldb-483"
+    },
+    "initialStateHash": "bef3bf3ece663f8c3b10e2e9a83f828f362b4c160acb31ff032e75758da090f0",
+    "levelSourceRevision": "0543b9c913b9999d82112c55561fc37b9e765a299c6dc4ee7dbea6c1db569d9e",
+    "nativeCompletionTicks": 2649,
+    "nativeReplaySHA256": "a9d06c5a71d75a537b41d8b9b95ad119026094eedccecdfe14a26c456073d4a6",
+    "nativeSaved": 50,
+    "publishedReplaySHA256": "255b4e3062c7b8b629c76336cb5e18af2f9b9304155449584de5324a5fc48203",
+    "publishedReplayURL": "https://lldb.camanis.net/level/483/9",
+    "replayScore": 352.205819323667,
+    "sourceGameMode": 2,
+    "sourceHeaderTicks": 2648,
+    "sourceSaved": 50
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Fun.dat#28",
+      "packID": "fan:lldb-488"
+    },
+    "initialStateHash": "6f7f7f8be8c1d47a273132ff947205c907d48adb36326d5ad25a1f48a14ab3aa",
+    "levelSourceRevision": "75d0248a498644374f409fccfe3171e8c50da5def04cff10924e0639942ce515",
+    "nativeCompletionTicks": 1106,
+    "nativeReplaySHA256": "8d7f31638886cd343c16c39492370eb0094e3f6425bd2e9c96c838fb5e00b3a7",
+    "nativeSaved": 100,
+    "publishedReplaySHA256": "e724dffcc17054139b88b43fc3a0577e420e84c2559ce3f2375454d60fd18f28",
+    "publishedReplayURL": "https://lldb.camanis.net/level/488/29",
+    "replayScore": 376.6853581707026,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1100,
+    "sourceSaved": 100
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Tricky.dat#13",
+      "packID": "fan:lldb-489"
+    },
+    "initialStateHash": "8fdb983804eec9abf49aa7ba5f4c75335ea7052639b8d6d934708a98895fba60",
+    "levelSourceRevision": "d3a60e754dd580f50f3c846b76a977903ccb3ca4997613cd7cde7879d632b080",
+    "nativeCompletionTicks": 2026,
+    "nativeReplaySHA256": "2a887d0dabd63b8c84539d389c3155fb04e41c33d84c119400030d76ead949ec",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "1225c360ff50fdc8d9a40a1841440ba0b9ee27088c58417bbfded0ad3f72796d",
+    "publishedReplayURL": "https://lldb.camanis.net/level/489/14",
+    "replayScore": 331.2499673202615,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2025,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": 5,
+    "identity": {
+      "engine": "classic",
+      "levelID": "QBeez04.dat#6",
+      "packID": "fan:lldb-49"
+    },
+    "initialStateHash": "7ad2b022d0a9c0e784770446f5757c02b61dbdc1f2789b6399733a2257961e34",
+    "levelSourceRevision": "1f701e96560f567e7d5168d8dabcd30198a13e03fbeeeba3d758009cca23b291",
+    "nativeCompletionTicks": 711,
+    "nativeReplaySHA256": "c56ba7e8e9734117e9efac49163dcb24b69519bff24f678681cad93822ee6401",
+    "nativeSaved": 100,
+    "publishedReplaySHA256": "23338e8f645c9ff8cd5f9724c23acb95293fd39a4f7520f2fd796818de8824a9",
+    "publishedReplayURL": "https://lldb.camanis.net/level/49/7",
+    "replayScore": 274.01577252344384,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 703,
+    "sourceSaved": 100
+  },
+  {
+    "globalTickShift": -2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Mayhem.dat#14",
+      "packID": "fan:lldb-491"
+    },
+    "initialStateHash": "3288ded4baa9c74749fe8c344d3de5af5bc00d36131efe89d22b5506838a3ebc",
+    "levelSourceRevision": "f648151520692b675936d0e254663d177e91370029534658305470bb740f89b6",
+    "nativeCompletionTicks": 1741,
+    "nativeReplaySHA256": "b8a11a5082373e0da2a9df9e287a8b5c507cfd5e6ff1a7fa8d9be5ea01b054fc",
+    "nativeSaved": 60,
+    "publishedReplaySHA256": "1c42dd686a56015813950388b56c5baf44b479e876bb478fc71e9e3d0c8226ea",
+    "publishedReplayURL": "https://lldb.camanis.net/level/491/15",
+    "replayScore": 307.65520660752645,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1738,
+    "sourceSaved": 60
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Mayhem.dat#5",
+      "packID": "fan:lldb-491"
+    },
+    "initialStateHash": "8346a603644b57cee47f0aa350fb1a70f673c861b8ea2b99329df30e8babb402",
+    "levelSourceRevision": "f648151520692b675936d0e254663d177e91370029534658305470bb740f89b6",
+    "nativeCompletionTicks": 991,
+    "nativeReplaySHA256": "5426457ccb83eed3e15a62bd1be72a55e60142e1e2f083c86a45df79041d0f7f",
+    "nativeSaved": 50,
+    "publishedReplaySHA256": "7a7c5fab6b068ab09a54a59a4739208c1d499a1158a1ca44b376fda81ecfd0e6",
+    "publishedReplayURL": "https://lldb.camanis.net/level/491/6",
+    "replayScore": 312.7233725490196,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 987,
+    "sourceSaved": 50
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Present.dat#23",
+      "packID": "fan:lldb-492"
+    },
+    "initialStateHash": "e724a2073a0d96c9d0b2db29e5b2c393b20541f20fd6a03159b4d9868cb6e15c",
+    "levelSourceRevision": "52c417ec72a99555caa15c1fb308a618759532d2059baefca16c67417d0a5c2c",
+    "nativeCompletionTicks": 1327,
+    "nativeReplaySHA256": "bc396315cb50f468c57b2eea51e70789905824c19f16c610083e042152e8f5ab",
+    "nativeSaved": 3,
+    "publishedReplaySHA256": "e1ee0e8cb0d93541a99d55ea3ad17bf25dda01ffb43aad3c3a5f20853c44156e",
+    "publishedReplayURL": "https://lldb.camanis.net/level/492/24",
+    "replayScore": 392.62128174236983,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1325,
+    "sourceSaved": 3
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Present.dat#24",
+      "packID": "fan:lldb-492"
+    },
+    "initialStateHash": "20a6a99a52b6bc0ea7c9a71e3bf16ed3e1e6da4facc3f7b20ea0ac834b935953",
+    "levelSourceRevision": "52c417ec72a99555caa15c1fb308a618759532d2059baefca16c67417d0a5c2c",
+    "nativeCompletionTicks": 1974,
+    "nativeReplaySHA256": "3f52b591ba45cecc9fbb900797e6d265ff6496dec23ff6a3e8165fd1e46b9d53",
+    "nativeSaved": 60,
+    "publishedReplaySHA256": "6736f7c921a5792b400a09f1e652b006051bc93b79cf3914c212fe0fb38ca6a3",
+    "publishedReplayURL": "https://lldb.camanis.net/level/492/25",
+    "replayScore": 358.7827033947711,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2062,
+    "sourceSaved": 60
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "JANNPCK3.DAT#6",
+      "packID": "fan:lldb-494"
+    },
+    "initialStateHash": "ce0912fb46560e335c4638b11288c42861f8f8473dda06113a0026f81a69c9ae",
+    "levelSourceRevision": "fa2398637b4d298aaa26f2ba5d2a6a0445e3f4109126ed0aee32b35b2100a38d",
+    "nativeCompletionTicks": 3505,
+    "nativeReplaySHA256": "ea1c44dbab52643ddebbf3ac5deb647d18d035c63ed27b9443854e2d420162b2",
+    "nativeSaved": 48,
+    "publishedReplaySHA256": "f954ca07fe805a72a31513bcd1227cad7bc611c5924e029d351b2979f9d2d3af",
+    "publishedReplayURL": "https://lldb.camanis.net/level/494/7",
+    "replayScore": 501.3294901960784,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 3502,
+    "sourceSaved": 48
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "MARTPCK1.DAT#1",
+      "packID": "fan:lldb-495"
+    },
+    "initialStateHash": "083761b7d09d9cd7ca7209f3c4d24ea98e24fdd60c4a36b64522d0d50b087711",
+    "levelSourceRevision": "02dde42ce00cffb0a126928f96abb6df8d29b45465bb761cc0a88632828ef832",
+    "nativeCompletionTicks": 1668,
+    "nativeReplaySHA256": "c06572e714a79740bf5b71418c6c05330ff3e247109a19e7ac52ad35c6ef98b2",
+    "nativeSaved": 60,
+    "publishedReplaySHA256": "051e3d24f91160249a4e50c755604fb633494ae129b1a2be8db372ec5a0c54a1",
+    "publishedReplayURL": "https://lldb.camanis.net/level/495/2",
+    "replayScore": 423.4173529411765,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1666,
+    "sourceSaved": 60
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "MARTPCK1.DAT#7",
+      "packID": "fan:lldb-495"
+    },
+    "initialStateHash": "6b91a79ab8f88636cc11199b43f3506d4e185d47bd1afe159b983ce8c099f914",
+    "levelSourceRevision": "02dde42ce00cffb0a126928f96abb6df8d29b45465bb761cc0a88632828ef832",
+    "nativeCompletionTicks": 1441,
+    "nativeReplaySHA256": "e34b98548e283b0b3234233c25615d22600ca183463b6c66ff83e1df617242b4",
+    "nativeSaved": 57,
+    "publishedReplaySHA256": "de35503cc413120818ab68c3c9e537b3ad4cd5d2712ca39a84011adf5164b095",
+    "publishedReplayURL": "https://lldb.camanis.net/level/495/8",
+    "replayScore": 392.59292026220584,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1440,
+    "sourceSaved": 57
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "KillerMaster 1 Tame 2.dat#7",
+      "packID": "fan:lldb-505"
+    },
+    "initialStateHash": "db02ae728971583db209ed898e76d1a80a2a376d2cf60dc66e89049760a0d91e",
+    "levelSourceRevision": "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9",
+    "nativeCompletionTicks": 1829,
+    "nativeReplaySHA256": "5df5cfc6ee4c42f45d3750068c5145fdd50407ead91cf8c5a4fac2de4f026d01",
+    "nativeSaved": 40,
+    "publishedReplaySHA256": "7f7c722db4277545e6008d8def74243e60e38db47447109640c8ac7b88ce9160",
+    "publishedReplayURL": "https://lldb.camanis.net/level/505/18",
+    "replayScore": 230.15496674692866,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1829,
+    "sourceSaved": 40
+  },
+  {
+    "globalTickShift": 7,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Deceit Fun.dat#3",
+      "packID": "fan:lldb-522"
+    },
+    "initialStateHash": "4a141cd1948c47b8fc77a64480fc60ea53a2598bdce514412dea7b482994ad99",
+    "levelSourceRevision": "0e07b84b0edaeb479f1d11be3213130d5211dcc82fc7fcfbe7143cc85a564ace",
+    "nativeCompletionTicks": 1450,
+    "nativeReplaySHA256": "d71a77891b91bcba63f3132cf6cdb5d74a42cff4428e36a81f71eaf5714fcbd2",
+    "nativeSaved": 2,
+    "publishedReplaySHA256": "de9ad3fd3e93d243c29a4b3ca2adb93b7752f49458c4aafd109ec123d060acc1",
+    "publishedReplayURL": "https://lldb.camanis.net/level/522/4",
+    "replayScore": 359.2485014005602,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1442,
+    "sourceSaved": 2
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Deceit Taxing 1.dat#8",
+      "packID": "fan:lldb-524"
+    },
+    "initialStateHash": "44a53709bc650e489a518c9e7d7b1507624d149e0d8c241198714e1cec27d7ed",
+    "levelSourceRevision": "811c8e6328d3529e5c217eeda04f44d25862d90b585f59a20033bf6a0de24239",
+    "nativeCompletionTicks": 953,
+    "nativeReplaySHA256": "346b95b80e46973ec6d94f481875238856b23b7b02ae148c7d269405368cbdc4",
+    "nativeSaved": 12,
+    "publishedReplaySHA256": "7f35d4cbe8d40d48fa3e3b86e00a26418b82a2c20cffc28bff34af7807633bec",
+    "publishedReplayURL": "https://lldb.camanis.net/level/524/9",
+    "replayScore": 256.6313725490196,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 950,
+    "sourceSaved": 12
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Fun 2.DAT#0",
+      "packID": "fan:lldb-526"
+    },
+    "initialStateHash": "6c05c412e53853ef16763f48adf6eae4ebb0c1db7b8c0f05174bbdc568663b18",
+    "levelSourceRevision": "9edfafc47a1495e5e8db4bba4f9c80690fa95482242f09e9955f013da9af6b7c",
+    "nativeCompletionTicks": 1765,
+    "nativeReplaySHA256": "a94c349dea267fd247aa433d51784700343fa85431f2870db39467c17db59127",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "14ba62dc3398ac4b9e688c39d0a03cefc68a13ff5aa64eb2b944c889f62e4739",
+    "publishedReplayURL": "https://lldb.camanis.net/level/526/4",
+    "replayScore": 282.7397757181061,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1766,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Fun 3.DAT#0",
+      "packID": "fan:lldb-526"
+    },
+    "initialStateHash": "12994fa644b828455002d70a9d1636aca018a68242245f03181622c53fd807a6",
+    "levelSourceRevision": "9edfafc47a1495e5e8db4bba4f9c80690fa95482242f09e9955f013da9af6b7c",
+    "nativeCompletionTicks": 1231,
+    "nativeReplaySHA256": "efc3f2e8bf91e58b3d132f61b115f424f0dfa4d7eaaaf0072a66f618d217591c",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "0e3ce09af9d4c22882bb3286351ab644d539bd240178908e34ecdee6f815dd3a",
+    "publishedReplayURL": "https://lldb.camanis.net/level/526/14",
+    "replayScore": 346.6325559038646,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1230,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Fun 3.DAT#5",
+      "packID": "fan:lldb-526"
+    },
+    "initialStateHash": "8bf921cb60bad3f4fa72f54a7ef5f183ec55d6cd520bcc6ace223aa8f4ad7fce",
+    "levelSourceRevision": "9edfafc47a1495e5e8db4bba4f9c80690fa95482242f09e9955f013da9af6b7c",
+    "nativeCompletionTicks": 3213,
+    "nativeReplaySHA256": "13a87a93389b33824314b898065decfc0c8e84f0e02312434091ca8c24944f56",
+    "nativeSaved": 78,
+    "publishedReplaySHA256": "564c6ec1a5b1ab842d61d4546cc237a8bc4945161b143a7b44b2e2f421f6963f",
+    "publishedReplayURL": "https://lldb.camanis.net/level/526/19",
+    "replayScore": 526.3070549535604,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 3214,
+    "sourceSaved": 78
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Fun 3.DAT#7",
+      "packID": "fan:lldb-526"
+    },
+    "initialStateHash": "e569cf6f8325fa097b584314ee858f49876b7dda89453cc6559189b6f2509f70",
+    "levelSourceRevision": "9edfafc47a1495e5e8db4bba4f9c80690fa95482242f09e9955f013da9af6b7c",
+    "nativeCompletionTicks": 586,
+    "nativeReplaySHA256": "097633c3acb553ecf8bc27da4816b2a90192912c3dd2c88d50d52388310aabba",
+    "nativeSaved": 10,
+    "publishedReplaySHA256": "d972d974d96ca15eda8544a59d0340281dd44ae99c0a3d50a91c02f801c17eab",
+    "publishedReplayURL": "https://lldb.camanis.net/level/526/21",
+    "replayScore": 330.22716566452755,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 585,
+    "sourceSaved": 10
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Fun 3.DAT#9",
+      "packID": "fan:lldb-526"
+    },
+    "initialStateHash": "8c8b687f0c895a409f4ef7c003f73947697720a46f06a92afd7c44c118e0475e",
+    "levelSourceRevision": "9edfafc47a1495e5e8db4bba4f9c80690fa95482242f09e9955f013da9af6b7c",
+    "nativeCompletionTicks": 1195,
+    "nativeReplaySHA256": "4ee7bb19f24e21aaa1b6ba6163b81f13ae8bf753af972cb9892044b8d77955a9",
+    "nativeSaved": 20,
+    "publishedReplaySHA256": "4e6cf9cbaaed62b5c1588f4d68340a5e91240dc8c670d50e3065ab0dd0212cc3",
+    "publishedReplayURL": "https://lldb.camanis.net/level/526/23",
+    "replayScore": 263.75230847115625,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1194,
+    "sourceSaved": 20
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Tricky 1.DAT#0",
+      "packID": "fan:lldb-527"
+    },
+    "initialStateHash": "aebc0f13243418ec3e3c5b86e744870dc86b9f4350a8c20108f213861e3d54e0",
+    "levelSourceRevision": "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3",
+    "nativeCompletionTicks": 913,
+    "nativeReplaySHA256": "ec68414468c108d3159a4130f897db46b0d46ac289c34f2491e39ad66b72fab9",
+    "nativeSaved": 78,
+    "publishedReplaySHA256": "a233f0cdbaea84e02ba6b445e8d33f0d83008173a977830fbcebc319077dcef3",
+    "publishedReplayURL": "https://lldb.camanis.net/level/527/1",
+    "replayScore": 317.640934988832,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 914,
+    "sourceSaved": 78
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Tricky 1.DAT#2",
+      "packID": "fan:lldb-527"
+    },
+    "initialStateHash": "ab426f8114b74a6565da30cdb27f5a603ffa7770d64bfd9a534edbd9345a737a",
+    "levelSourceRevision": "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3",
+    "nativeCompletionTicks": 2658,
+    "nativeReplaySHA256": "506a8291fcd82d5d9574fc95e1d1eba368dd8d44f0a244886fcb4012f37b4d3e",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "3eeeeea2fbda905b65d905bc81c246b465a661a5c62c4b8f34537d0f7836ca68",
+    "publishedReplayURL": "https://lldb.camanis.net/level/527/3",
+    "replayScore": 323.5194152620424,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2657,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Tricky 1.DAT#6",
+      "packID": "fan:lldb-527"
+    },
+    "initialStateHash": "ca2c67c4bafeeaec983a3aec7a464e7a47128c8b49e3c4af96922a30bdb02b7a",
+    "levelSourceRevision": "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3",
+    "nativeCompletionTicks": 1388,
+    "nativeReplaySHA256": "643d4a1d87856944ee3808169137c38f9b05607b6c00d4bc61831a23f3311fc3",
+    "nativeSaved": 79,
+    "publishedReplaySHA256": "74bfc41438b9014ec15bc9b3636e611df3ad2322318c4ae8c336c0486fa5c5cd",
+    "publishedReplayURL": "https://lldb.camanis.net/level/527/7",
+    "replayScore": 240.54107644501244,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1389,
+    "sourceSaved": 79
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Tricky 1.DAT#8",
+      "packID": "fan:lldb-527"
+    },
+    "initialStateHash": "347407097a2daad597cb37c15cc165c6406035d3010c2a6b78b2358135602ec5",
+    "levelSourceRevision": "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3",
+    "nativeCompletionTicks": 1674,
+    "nativeReplaySHA256": "ab4d4c3a5c663d40923dbeaa68b53f0618daffe5f1af9d7e35fa217f7e54635a",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "766768c6c332baa68ec244e5f65a3414404675922b2b936a7acb8dceaf22e148",
+    "publishedReplayURL": "https://lldb.camanis.net/level/527/9",
+    "replayScore": 404.3781462031422,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1673,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Tricky 2.DAT#0",
+      "packID": "fan:lldb-527"
+    },
+    "initialStateHash": "242638e534794f825352977870c96f67406e783b20e4c60edcbb14cd6e59b6bb",
+    "levelSourceRevision": "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3",
+    "nativeCompletionTicks": 1946,
+    "nativeReplaySHA256": "4595b97f8ae376912334789dbe02a13ee908f363b6108d0310a2c7f5beba4625",
+    "nativeSaved": 37,
+    "publishedReplaySHA256": "ca9dcb2cabae4b2b58988446f493548d685fed42ab3892011ffe5d632f3a521d",
+    "publishedReplayURL": "https://lldb.camanis.net/level/527/11",
+    "replayScore": 326.4144059539317,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1947,
+    "sourceSaved": 37
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Tricky 2.DAT#1",
+      "packID": "fan:lldb-527"
+    },
+    "initialStateHash": "98e37bb74b48d460d6d30ca53fac0a525e840d90f16450a8225d83adb317bcc0",
+    "levelSourceRevision": "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3",
+    "nativeCompletionTicks": 728,
+    "nativeReplaySHA256": "5b3e77fd9a304118d03cfbb1629178c2df318c12cb367560432d688f69e58324",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "af6b52ff7bb896886969ef978a9d480ab45722929e9efdb327dadcd21a4dc12c",
+    "publishedReplayURL": "https://lldb.camanis.net/level/527/12",
+    "replayScore": 173.5151447404611,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 727,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Tricky 2.DAT#4",
+      "packID": "fan:lldb-527"
+    },
+    "initialStateHash": "6ae6b64b1afa70c7e3aecff047ac402eff2f46db5193ed1049f5373e1692795f",
+    "levelSourceRevision": "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3",
+    "nativeCompletionTicks": 2757,
+    "nativeReplaySHA256": "a15b1a85cba0c466344540e8055f3bdecbb8080fb9a2485b875ccaaf0128754d",
+    "nativeSaved": 78,
+    "publishedReplaySHA256": "114892464df0b314314853350163237faf777ad27bbae5e258c912456a6b34a6",
+    "publishedReplayURL": "https://lldb.camanis.net/level/527/15",
+    "replayScore": 306.29512161165087,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2757,
+    "sourceSaved": 78
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Tricky 2.DAT#6",
+      "packID": "fan:lldb-527"
+    },
+    "initialStateHash": "80e4ac66c5e1557d8f1e7ff0f213b5a490f8a46b0851c2f1a7a69f1cfb8ac0a8",
+    "levelSourceRevision": "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3",
+    "nativeCompletionTicks": 836,
+    "nativeReplaySHA256": "46e47b38c33cd3c401c3d8af3779e9b487de57cfb0f0a78e29ff999ad127bfb0",
+    "nativeSaved": 73,
+    "publishedReplaySHA256": "ca72ddfaba2a66f7d79ee5e1b83058028da6008b640cadf73b4ac886c8a0cf8a",
+    "publishedReplayURL": "https://lldb.camanis.net/level/527/17",
+    "replayScore": 262.4845588235294,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 836,
+    "sourceSaved": 73
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Tricky 2.DAT#7",
+      "packID": "fan:lldb-527"
+    },
+    "initialStateHash": "5d08acff5015cee102731fec85ea4e0befe94d8f35cf4fb76def4d312e475356",
+    "levelSourceRevision": "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3",
+    "nativeCompletionTicks": 1518,
+    "nativeReplaySHA256": "93cd30d29b2e0d2e8fd48f8c5ae1b6b9e0292e8416961257e4b0bb80ccccba4d",
+    "nativeSaved": 59,
+    "publishedReplaySHA256": "1261b56473ee297792d13f15ab9b9f40b65cbbf38d46e7a33f99baaccf8beac1",
+    "publishedReplayURL": "https://lldb.camanis.net/level/527/18",
+    "replayScore": 483.0897490911866,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1517,
+    "sourceSaved": 59
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Tricky 2.DAT#8",
+      "packID": "fan:lldb-527"
+    },
+    "initialStateHash": "5cdc040cef8ca7ad16acf5ac0441dc6ce82251d00cc548573b07b603685b38af",
+    "levelSourceRevision": "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3",
+    "nativeCompletionTicks": 889,
+    "nativeReplaySHA256": "103ae4c8bb315941dbd17c1199a822188678dd65497c6c76827c691c9debf25c",
+    "nativeSaved": 20,
+    "publishedReplaySHA256": "a65f9450799e1d97070936b77b1d9798af93f403ca3dbe1df3fadd8d188b382d",
+    "publishedReplayURL": "https://lldb.camanis.net/level/527/19",
+    "replayScore": 506.2926175810286,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 890,
+    "sourceSaved": 20
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Tricky 2.DAT#9",
+      "packID": "fan:lldb-527"
+    },
+    "initialStateHash": "85863d230c27fe08d53ea380d60b22e9b9d1863ba6cae0b7284554e5fa91e37f",
+    "levelSourceRevision": "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3",
+    "nativeCompletionTicks": 2325,
+    "nativeReplaySHA256": "7c11f057305b70a214dc88645d43c6eb5e1b43e4e7f41d25c9d3cd04c1a182ff",
+    "nativeSaved": 79,
+    "publishedReplaySHA256": "928e18ba9e8fc286f486f78464b5aab3ec313e3cfa98f4e79800ca79903223be",
+    "publishedReplayURL": "https://lldb.camanis.net/level/527/20",
+    "replayScore": 545.7761347673202,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2326,
+    "sourceSaved": 79
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Tricky 3.DAT#1",
+      "packID": "fan:lldb-527"
+    },
+    "initialStateHash": "0cdfec28f8f9b8cffafc59e56c0ea61362c8f595f304faec25ef7d7cd517c589",
+    "levelSourceRevision": "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3",
+    "nativeCompletionTicks": 1480,
+    "nativeReplaySHA256": "b348b957cbdaf8fcad93b095ed5b13b562434105d797d93ec40f85c5ce88e399",
+    "nativeSaved": 10,
+    "publishedReplaySHA256": "e4a0f61cf1ccbf20e7269608694c001a12fb2d0c579d3951e44bdd489f8d4258",
+    "publishedReplayURL": "https://lldb.camanis.net/level/527/22",
+    "replayScore": 438.532679738562,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1480,
+    "sourceSaved": 10
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Tricky 3.DAT#2",
+      "packID": "fan:lldb-527"
+    },
+    "initialStateHash": "ec93a8a0561716f65130fb77fb283c7e68532d31a34101f40bed50d9ee9a3762",
+    "levelSourceRevision": "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3",
+    "nativeCompletionTicks": 3829,
+    "nativeReplaySHA256": "74b3024ccb9f55062d430829865b73ef48f6a15d3bb5a46a255584808254c4db",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "0e2838fb0da96a2baa7e011348a3a813f765ab10733c596ac8ed0de00586bf68",
+    "publishedReplayURL": "https://lldb.camanis.net/level/527/23",
+    "replayScore": 385.4473215430516,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 3828,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Tricky 3.DAT#3",
+      "packID": "fan:lldb-527"
+    },
+    "initialStateHash": "d6cb928346392bb1770afc4c635a6538e29313b93f07a6ca2bc3274abcec53a4",
+    "levelSourceRevision": "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3",
+    "nativeCompletionTicks": 2387,
+    "nativeReplaySHA256": "1ef0eb667d91a7d39f0e8f70dd3d40661bbe6c13457e6a41f287feb4ce70594e",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "e62230eef4fedb94e025912e843f2b64ba0c0e6e1c81aedee9351cfece173ff2",
+    "publishedReplayURL": "https://lldb.camanis.net/level/527/24",
+    "replayScore": 470.13381895501635,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2388,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Tricky 3.DAT#4",
+      "packID": "fan:lldb-527"
+    },
+    "initialStateHash": "d5345d87d9e9109f9bcfbf26b6592434efff5878f2db1585fca4d6ee46f7833b",
+    "levelSourceRevision": "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3",
+    "nativeCompletionTicks": 1326,
+    "nativeReplaySHA256": "766da324df96e2277887d659dd1f10d409c60cb5e6383443df84ea71564bf60d",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "5cbfb753ed03bd690f8f31affecd077cca9f86839d25ac4deeb0c4bb4b955111",
+    "publishedReplayURL": "https://lldb.camanis.net/level/527/25",
+    "replayScore": 297.49931628952197,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1325,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Tricky 3.DAT#5",
+      "packID": "fan:lldb-527"
+    },
+    "initialStateHash": "cc6c1adb9fffa296cd0ab6b7bb6de1e9b7304c50c170a9e5f98f867388d78f8d",
+    "levelSourceRevision": "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3",
+    "nativeCompletionTicks": 3259,
+    "nativeReplaySHA256": "2028f9ec19d2b0714c51496b9c8447ce121368f69fa86165892dbd7bcc5b541a",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "b8ae656e4c899f6575a94e28924b6b1576df26ea3eb8a6d2808e146276bcbc4b",
+    "publishedReplayURL": "https://lldb.camanis.net/level/527/26",
+    "replayScore": 582.4996183473389,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 3260,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Tricky 3.DAT#7",
+      "packID": "fan:lldb-527"
+    },
+    "initialStateHash": "1a849ce3786889f735c9cc2d91ea2a45cf8e2827ec5200c041ea539292719084",
+    "levelSourceRevision": "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3",
+    "nativeCompletionTicks": 2572,
+    "nativeReplaySHA256": "b169ce1649a9fee7fc073771ca0316942e9d1f004f558ea5628f8b85ef28be72",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "ddf32f688912b6404e4ca7d7d147d6f0980a9368615174a6a041cd2ac659e68d",
+    "publishedReplayURL": "https://lldb.camanis.net/level/527/28",
+    "replayScore": 428.9542156862745,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2572,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Tricky 3.DAT#8",
+      "packID": "fan:lldb-527"
+    },
+    "initialStateHash": "2c864e126d46709551951342ad583d6b2805d6511c8d4045638642fefb9be5b1",
+    "levelSourceRevision": "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3",
+    "nativeCompletionTicks": 5435,
+    "nativeReplaySHA256": "cc64eac2d5902b2a1227ade71e90be146f7b8f6a21d9243c24decff5fd5be8f2",
+    "nativeSaved": 78,
+    "publishedReplaySHA256": "064f475147239cbb2d4454e742832b18655a9fca64659b0c66fee92d483162e7",
+    "publishedReplayURL": "https://lldb.camanis.net/level/527/29",
+    "replayScore": 319.5246403220014,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 5436,
+    "sourceSaved": 78
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Tricky 3.DAT#9",
+      "packID": "fan:lldb-527"
+    },
+    "initialStateHash": "b0a1dec7f7873b0d7115228e34fe1114045adb3cabfcc18bb662264086279702",
+    "levelSourceRevision": "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3",
+    "nativeCompletionTicks": 638,
+    "nativeReplaySHA256": "f633aa4c5e740fad98f086e62daa1e00c65f23eb86c71e16135e0a0e8923cc0e",
+    "nativeSaved": 40,
+    "publishedReplaySHA256": "8db8fcf4e3c3a248a663a079bdb456c07a4bbea86a936ecf4540d1156da15cb1",
+    "publishedReplayURL": "https://lldb.camanis.net/level/527/30",
+    "replayScore": 298.54070339477107,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 637,
+    "sourceSaved": 40
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Taxing 1.DAT#1",
+      "packID": "fan:lldb-528"
+    },
+    "initialStateHash": "fe80c53729d933fd81b04209589a1c88a1b67c319f5717635bdc18ea49aae58a",
+    "levelSourceRevision": "b035220390c20b24f0b7316f316673206cda494fda5b8c4f1359321bf0d71e1d",
+    "nativeCompletionTicks": 2704,
+    "nativeReplaySHA256": "c587f4037e878e65d317ab61d3ab311fb468150fa63c08503417ea1c52a303ab",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "f7264ecbc1692360288af93b0195d37d52faf967517538689cbb735d54238f6e",
+    "publishedReplayURL": "https://lldb.camanis.net/level/528/2",
+    "replayScore": 487.68567709487473,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2703,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Taxing 1.DAT#2",
+      "packID": "fan:lldb-528"
+    },
+    "initialStateHash": "f591b95f1527055fbce0e5597695ea294eac6c5cc64e1d15cedde6a744920da3",
+    "levelSourceRevision": "b035220390c20b24f0b7316f316673206cda494fda5b8c4f1359321bf0d71e1d",
+    "nativeCompletionTicks": 1297,
+    "nativeReplaySHA256": "76d10966b9c6f19a4aa23905362f5d4d91201d98f0bed6bd4385eae5785df3e9",
+    "nativeSaved": 78,
+    "publishedReplaySHA256": "91b4ada949bfd2bbbe77f2d589ab340c17c3d50b334945560f92c8ef7a2433bb",
+    "publishedReplayURL": "https://lldb.camanis.net/level/528/3",
+    "replayScore": 307.7810166881784,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1298,
+    "sourceSaved": 78
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Taxing 1.DAT#3",
+      "packID": "fan:lldb-528"
+    },
+    "initialStateHash": "452d20dd2b581deadbc4e0ea4d3c30c0ad188a354afd73b63b926b1c1275cab9",
+    "levelSourceRevision": "b035220390c20b24f0b7316f316673206cda494fda5b8c4f1359321bf0d71e1d",
+    "nativeCompletionTicks": 2006,
+    "nativeReplaySHA256": "0d0052ff185cbb6f34085a5607287be3c2c35eb61bb0d5d21831556ccd99e394",
+    "nativeSaved": 20,
+    "publishedReplaySHA256": "70a4386602ee0ac3b57231465feee5f93f91e1605326b584a8af5b5557e96a21",
+    "publishedReplayURL": "https://lldb.camanis.net/level/528/4",
+    "replayScore": 390.53054644825215,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2005,
+    "sourceSaved": 20
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Taxing 1.DAT#5",
+      "packID": "fan:lldb-528"
+    },
+    "initialStateHash": "af29063b685196158edc7ea5594449901e1c8909188c0084c6830fef57b2f4e8",
+    "levelSourceRevision": "b035220390c20b24f0b7316f316673206cda494fda5b8c4f1359321bf0d71e1d",
+    "nativeCompletionTicks": 2745,
+    "nativeReplaySHA256": "1fc7f34ecabfb27cdfcd0faeb74d5b42d197d0e41e9d20994b901155ed0c7cf0",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "d4249a0c1743bb4db407fffbe24e775e7d371e202fdd0716095ec76db4f43c49",
+    "publishedReplayURL": "https://lldb.camanis.net/level/528/6",
+    "replayScore": 377.3525840336134,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2744,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Taxing 1.DAT#6",
+      "packID": "fan:lldb-528"
+    },
+    "initialStateHash": "19a9aa0a58323aa25f9261eed55d77d0c0d9b4be2640b5bcc7309cabf098109d",
+    "levelSourceRevision": "b035220390c20b24f0b7316f316673206cda494fda5b8c4f1359321bf0d71e1d",
+    "nativeCompletionTicks": 1626,
+    "nativeReplaySHA256": "d8e9d51e2b211974a153a117a3da9a83b55dcb93629bcb5ddb8edfd0f682ef82",
+    "nativeSaved": 70,
+    "publishedReplaySHA256": "9c9379fc0ca65bcc2492c2e7e7adb3b8c29e3fa7fcc34fa99d0dca2de56f1468",
+    "publishedReplayURL": "https://lldb.camanis.net/level/528/7",
+    "replayScore": 297.77829481386306,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1627,
+    "sourceSaved": 70
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Taxing 1.DAT#7",
+      "packID": "fan:lldb-528"
+    },
+    "initialStateHash": "9bd72d9c1891be26b02ea95e5a61e22639478a39f8bb48c2320e8fa36fcec53e",
+    "levelSourceRevision": "b035220390c20b24f0b7316f316673206cda494fda5b8c4f1359321bf0d71e1d",
+    "nativeCompletionTicks": 2985,
+    "nativeReplaySHA256": "08797fbd4e81699da712315edd5f32c6ec49facd5d22fe25ec420d3f16be533f",
+    "nativeSaved": 40,
+    "publishedReplaySHA256": "377d020958e82a2ec6634af0e846183a5e87bc02f6700636ab4a02654c5cde6d",
+    "publishedReplayURL": "https://lldb.camanis.net/level/528/8",
+    "replayScore": 460.8723112379084,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2985,
+    "sourceSaved": 40
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Taxing 1.DAT#9",
+      "packID": "fan:lldb-528"
+    },
+    "initialStateHash": "fb856a65d5213f06bbca8492529114e0c6636017bcfa9a5a98d3244dc6879502",
+    "levelSourceRevision": "b035220390c20b24f0b7316f316673206cda494fda5b8c4f1359321bf0d71e1d",
+    "nativeCompletionTicks": 3888,
+    "nativeReplaySHA256": "2ec0c83f31a6eca4a9c76cc956aa814259cccabf5a9140f37677448238c120ad",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "83bf314220b1773ccc303ac8fe35083db088f6389e6f9f5d070137005ef0ed71",
+    "publishedReplayURL": "https://lldb.camanis.net/level/528/10",
+    "replayScore": 455.19106185361034,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 3887,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Taxing 2.DAT#1",
+      "packID": "fan:lldb-528"
+    },
+    "initialStateHash": "7f1262e62aafc5d34ff08c1e64e0aaf6ea560fde78a07c5704c4b32baa46c8a8",
+    "levelSourceRevision": "b035220390c20b24f0b7316f316673206cda494fda5b8c4f1359321bf0d71e1d",
+    "nativeCompletionTicks": 1710,
+    "nativeReplaySHA256": "e727349bd6f62bb8bf8463ef382cb930a2b93c3ad3ddff22bd85da28bd50e417",
+    "nativeSaved": 74,
+    "publishedReplaySHA256": "2600de85244b4480f97c761d1dfa5d7d06682928b34d9cfee8b510200d15567d",
+    "publishedReplayURL": "https://lldb.camanis.net/level/528/12",
+    "replayScore": 363.06042803854496,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1709,
+    "sourceSaved": 74
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Taxing 2.DAT#5",
+      "packID": "fan:lldb-528"
+    },
+    "initialStateHash": "464195c9c1cf4e96988728172f5ebef8466f08ee93d17ed25c37a6dc5bac775e",
+    "levelSourceRevision": "b035220390c20b24f0b7316f316673206cda494fda5b8c4f1359321bf0d71e1d",
+    "nativeCompletionTicks": 1555,
+    "nativeReplaySHA256": "d52130a99053742622dc064d87bc9d3621eeb865ca6b8565ba4ffe67208d9bde",
+    "nativeSaved": 78,
+    "publishedReplaySHA256": "6bbf9a2a6269a24950b6221281ce51c5628701b0750f0e331313ca7ef9d5bd7b",
+    "publishedReplayURL": "https://lldb.camanis.net/level/528/16",
+    "replayScore": 379.18384710184694,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1556,
+    "sourceSaved": 78
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Taxing 2.DAT#6",
+      "packID": "fan:lldb-528"
+    },
+    "initialStateHash": "6ac688f7f2dc385ec20283f0ec22595d5932f01239471a311fa7c142de6f5488",
+    "levelSourceRevision": "b035220390c20b24f0b7316f316673206cda494fda5b8c4f1359321bf0d71e1d",
+    "nativeCompletionTicks": 2631,
+    "nativeReplaySHA256": "0fd8d2c451dba3c24d54962e3b811cb6e45ab0a548bd2e1e6e0691e4cd494ab8",
+    "nativeSaved": 75,
+    "publishedReplaySHA256": "efeb943853e70dc97ea776d2d61ff277438fe69ae564acd4e8bfead6d06b9747",
+    "publishedReplayURL": "https://lldb.camanis.net/level/528/17",
+    "replayScore": 417.42438725083787,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2631,
+    "sourceSaved": 75
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Taxing 2.DAT#7",
+      "packID": "fan:lldb-528"
+    },
+    "initialStateHash": "3c66cf61557939700e085f931ede234e58a106c8c862c8ffb6a4a40283599042",
+    "levelSourceRevision": "b035220390c20b24f0b7316f316673206cda494fda5b8c4f1359321bf0d71e1d",
+    "nativeCompletionTicks": 1412,
+    "nativeReplaySHA256": "3245035ef4e8ec89a8caa887ab8c3d163139cd2e73ee1b51900b0b5a9ce69f2e",
+    "nativeSaved": 68,
+    "publishedReplaySHA256": "1395fbc059ff4130a9176db3f5ce3f803e5f1f47789f8a110dab97234e4fee37",
+    "publishedReplayURL": "https://lldb.camanis.net/level/528/18",
+    "replayScore": 420.9289098972922,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1411,
+    "sourceSaved": 68
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Taxing 2.DAT#9",
+      "packID": "fan:lldb-528"
+    },
+    "initialStateHash": "2789b90856285080552dee0627949ee2c342227db5ae46fb980ff262dde265b7",
+    "levelSourceRevision": "b035220390c20b24f0b7316f316673206cda494fda5b8c4f1359321bf0d71e1d",
+    "nativeCompletionTicks": 1009,
+    "nativeReplaySHA256": "73fd44c5793ad6e9f44aa445c3ac3cfa06e13f65f2e048d0843bb7facadf851b",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "b82be6fdd4b96042ca85fbd198cad60a50109c6988a05bf2dcfc68597fe3cf18",
+    "publishedReplayURL": "https://lldb.camanis.net/level/528/20",
+    "replayScore": 450.9753476868425,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1009,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Taxing 3.DAT#0",
+      "packID": "fan:lldb-528"
+    },
+    "initialStateHash": "c02e9fb87499f265d9c54751b6af6d4784205e715fad7d939da76343ae879489",
+    "levelSourceRevision": "b035220390c20b24f0b7316f316673206cda494fda5b8c4f1359321bf0d71e1d",
+    "nativeCompletionTicks": 1032,
+    "nativeReplaySHA256": "e499c87d44ca86e55ba8f17a00412925e11dacc56d74cd4e5c53af094414b8ce",
+    "nativeSaved": 9,
+    "publishedReplaySHA256": "62c53ab05b597a7b10b87310a58547777ada0bfa609a1fb4f2716d29a638c936",
+    "publishedReplayURL": "https://lldb.camanis.net/level/528/21",
+    "replayScore": 453.5463920969794,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1027,
+    "sourceSaved": 9
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Taxing 3.DAT#1",
+      "packID": "fan:lldb-528"
+    },
+    "initialStateHash": "199c3d93fffe61c0e1071d13a924c6e0ed83a27bec715c6a9d39ea1a52912046",
+    "levelSourceRevision": "b035220390c20b24f0b7316f316673206cda494fda5b8c4f1359321bf0d71e1d",
+    "nativeCompletionTicks": 3267,
+    "nativeReplaySHA256": "4071a83d297a08139611cf61a65cc677baf0bc9b9758772f2426bc87846ef8ad",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "094e5a0602d4950c98fd6fe791206e3097f268fa74390fd7cd805bdee109a728",
+    "publishedReplayURL": "https://lldb.camanis.net/level/528/22",
+    "replayScore": 548.3673529411765,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 3266,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Taxing 3.DAT#4",
+      "packID": "fan:lldb-528"
+    },
+    "initialStateHash": "19a2a15bd702d28c1b229e4c208165455a2e585feb23644843b33906434466a7",
+    "levelSourceRevision": "b035220390c20b24f0b7316f316673206cda494fda5b8c4f1359321bf0d71e1d",
+    "nativeCompletionTicks": 3019,
+    "nativeReplaySHA256": "489bfcdc12ee0cff97da9e45015fc8b5e67f317d6a6630cef8ffa845eded8a51",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "ccf7e9dfc0d352239282c96700e63a42282ae42051e55325770f544db5955221",
+    "publishedReplayURL": "https://lldb.camanis.net/level/528/25",
+    "replayScore": 441.5712000430234,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 3019,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Taxing 3.DAT#5",
+      "packID": "fan:lldb-528"
+    },
+    "initialStateHash": "34b7b1fa3f0fffe653fb05ec0ed475780af22c907ffb8eaf4f497b1928f14be4",
+    "levelSourceRevision": "b035220390c20b24f0b7316f316673206cda494fda5b8c4f1359321bf0d71e1d",
+    "nativeCompletionTicks": 1567,
+    "nativeReplaySHA256": "64423856f072214b8d58932127071cf8c9d41398e36343a80b610722d9ee1f34",
+    "nativeSaved": 20,
+    "publishedReplaySHA256": "b986ecef081d2fb0186345f7ef8a24e5e7ac581a59fd3901a90d8853333c68f6",
+    "publishedReplayURL": "https://lldb.camanis.net/level/528/26",
+    "replayScore": 519.7687254901961,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1568,
+    "sourceSaved": 20
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Taxing 3.DAT#6",
+      "packID": "fan:lldb-528"
+    },
+    "initialStateHash": "76f2a4f673d56cd6b28c837d85415d4e848f1130b78442f3d159fcfaa3538025",
+    "levelSourceRevision": "b035220390c20b24f0b7316f316673206cda494fda5b8c4f1359321bf0d71e1d",
+    "nativeCompletionTicks": 1381,
+    "nativeReplaySHA256": "07e0491dc7abd2f61da148b9f37fca5da75bb67daf49b4786055ec8e4602c16b",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "5f772a79473a84ee97211bae39c60c55f5ff40cc599b13d033824ae50e587199",
+    "publishedReplayURL": "https://lldb.camanis.net/level/528/27",
+    "replayScore": 352.2920460999431,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1381,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Taxing 3.DAT#7",
+      "packID": "fan:lldb-528"
+    },
+    "initialStateHash": "eef7533326e882cf102b36d5ab59f08b21c8d27c492c9f2caf4b85be36a9300a",
+    "levelSourceRevision": "b035220390c20b24f0b7316f316673206cda494fda5b8c4f1359321bf0d71e1d",
+    "nativeCompletionTicks": 2669,
+    "nativeReplaySHA256": "675087ba07b3b0a5745cbd1ebd3709a79dddc6499ef3da435145f41333d9277a",
+    "nativeSaved": 70,
+    "publishedReplaySHA256": "d294b3a37c7182ff5b9edd6d9cd515526f4341b2dbfbf949e1c07ca9b1c11079",
+    "publishedReplayURL": "https://lldb.camanis.net/level/528/28",
+    "replayScore": 515.7814971389961,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2668,
+    "sourceSaved": 70
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Taxing 3.DAT#8",
+      "packID": "fan:lldb-528"
+    },
+    "initialStateHash": "c0e5fd51a5bc0302059831c6f0e2afa025bf50f4efeca95e7b28957a43149cdf",
+    "levelSourceRevision": "b035220390c20b24f0b7316f316673206cda494fda5b8c4f1359321bf0d71e1d",
+    "nativeCompletionTicks": 629,
+    "nativeReplaySHA256": "87523eb1c7e95bbae2a09096b27db68afd59a3c640b9882bba9a3b268945bd2e",
+    "nativeSaved": 20,
+    "publishedReplaySHA256": "06b40e2f6a026df57c4f421f5a8fc5b29e5542ce4a41a9c37625f51b08a42a41",
+    "publishedReplayURL": "https://lldb.camanis.net/level/528/29",
+    "replayScore": 433.60096766857055,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 629,
+    "sourceSaved": 20
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Mayhem 1.DAT#2",
+      "packID": "fan:lldb-529"
+    },
+    "initialStateHash": "ac997508a62539839cde01e211c8cccde7551c6a811f15afdeff1ef3aca96cce",
+    "levelSourceRevision": "cb71db8f3eb64348376183891674ce2146c640c29ec7bf053b29a7bf5292c233",
+    "nativeCompletionTicks": 3060,
+    "nativeReplaySHA256": "a24b2ef785746ad06328acf85775c50f74e6df5aabe002f81916f3c4532593da",
+    "nativeSaved": 78,
+    "publishedReplaySHA256": "89487daf50878b1c73d18e4d9b162981e5362fb60f881b2d905b62ad347ede0a",
+    "publishedReplayURL": "https://lldb.camanis.net/level/529/3",
+    "replayScore": 310.72489017050265,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 3062,
+    "sourceSaved": 78
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Mayhem 1.DAT#3",
+      "packID": "fan:lldb-529"
+    },
+    "initialStateHash": "065ff72da907568de34ab2c95ea5478951613df426769cafb1f1474c35404951",
+    "levelSourceRevision": "cb71db8f3eb64348376183891674ce2146c640c29ec7bf053b29a7bf5292c233",
+    "nativeCompletionTicks": 2378,
+    "nativeReplaySHA256": "7c43a8d9833564d2935b5713512ae13adf6824b618384f5a036e178f439a44cf",
+    "nativeSaved": 78,
+    "publishedReplaySHA256": "7e5b1f681ac530ca1c7f0464e7717febec1dbc878a1fd96f11688cd026fd59d2",
+    "publishedReplayURL": "https://lldb.camanis.net/level/529/4",
+    "replayScore": 266.42550196155236,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2379,
+    "sourceSaved": 78
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Mayhem 1.DAT#6",
+      "packID": "fan:lldb-529"
+    },
+    "initialStateHash": "c4dbf1189f24e228e313bce11af9b2671034c2d012b2438c6da568ac78aa7caa",
+    "levelSourceRevision": "cb71db8f3eb64348376183891674ce2146c640c29ec7bf053b29a7bf5292c233",
+    "nativeCompletionTicks": 2860,
+    "nativeReplaySHA256": "69bb8f3408cefcc2f670992ac5cafafacb351aed1170fc799e1fadfcc639a03a",
+    "nativeSaved": 75,
+    "publishedReplaySHA256": "389c6425e077c87fa79ed950df37f3f9917d06e165ad4c0350feaf696ff05649",
+    "publishedReplayURL": "https://lldb.camanis.net/level/529/7",
+    "replayScore": 313.67332154305166,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2861,
+    "sourceSaved": 75
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Mayhem 1.DAT#8",
+      "packID": "fan:lldb-529"
+    },
+    "initialStateHash": "1fea56f39cbe5ce29845e4fb1f26aace8da6aeea62254f0ccfd3d905ef71a04c",
+    "levelSourceRevision": "cb71db8f3eb64348376183891674ce2146c640c29ec7bf053b29a7bf5292c233",
+    "nativeCompletionTicks": 1822,
+    "nativeReplaySHA256": "8a33d3c179de234bb1b218bff75339028d78dc57a53ebd3e263f185b04949b35",
+    "nativeSaved": 39,
+    "publishedReplaySHA256": "2e0d26bbf1f23353b2f753288810efb24f69b6eefd45d16ef8b6476715a08dc1",
+    "publishedReplayURL": "https://lldb.camanis.net/level/529/9",
+    "replayScore": 354.1470188315695,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1823,
+    "sourceSaved": 39
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Mayhem 1.DAT#9",
+      "packID": "fan:lldb-529"
+    },
+    "initialStateHash": "85dbccb444d4ce9bff599ae8439ce937089653e62e40116e54f1878ed68f5377",
+    "levelSourceRevision": "cb71db8f3eb64348376183891674ce2146c640c29ec7bf053b29a7bf5292c233",
+    "nativeCompletionTicks": 1186,
+    "nativeReplaySHA256": "593864830d867d63f8ba0f07f889a7d83d84298f4b2804264bd6aa95d39d7d5c",
+    "nativeSaved": 20,
+    "publishedReplaySHA256": "540a0482e962d52aab6b5569facc9573679903407705ef49b9140046df5257ff",
+    "publishedReplayURL": "https://lldb.camanis.net/level/529/10",
+    "replayScore": 452.28091823462336,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1186,
+    "sourceSaved": 20
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Mayhem 2.DAT#1",
+      "packID": "fan:lldb-529"
+    },
+    "initialStateHash": "562749129e61457675621c7d3f5d470182997277602525d2cf29534a6c98ecb8",
+    "levelSourceRevision": "cb71db8f3eb64348376183891674ce2146c640c29ec7bf053b29a7bf5292c233",
+    "nativeCompletionTicks": 2968,
+    "nativeReplaySHA256": "b1a8e606cc700a45721d8a387e4d99f42ad2715cd3d5c7c4c3ce5f0d50fff1a6",
+    "nativeSaved": 20,
+    "publishedReplaySHA256": "07f7ae5d2ec1c946f10cc7a9551af58f36429acb0ccd3d9bcb4deddd525ae558",
+    "publishedReplayURL": "https://lldb.camanis.net/level/529/12",
+    "replayScore": 418.060967260378,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2967,
+    "sourceSaved": 20
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Mayhem 2.DAT#4",
+      "packID": "fan:lldb-529"
+    },
+    "initialStateHash": "f618e289b1720d750de85671ad5357b8f71cfe14b575afd639fc2d45bc9fed6d",
+    "levelSourceRevision": "cb71db8f3eb64348376183891674ce2146c640c29ec7bf053b29a7bf5292c233",
+    "nativeCompletionTicks": 1745,
+    "nativeReplaySHA256": "812ed1ee29a2524007e21acc29eb0a3ae0fd69261a6e010ba409baa7d0da71f4",
+    "nativeSaved": 38,
+    "publishedReplaySHA256": "d51f206c59c8c0d746f735801bce7ac8dff7a08e028b6a50b741ea975e08362a",
+    "publishedReplayURL": "https://lldb.camanis.net/level/529/15",
+    "replayScore": 326.11825172812564,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1746,
+    "sourceSaved": 38
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Mayhem 2.DAT#5",
+      "packID": "fan:lldb-529"
+    },
+    "initialStateHash": "66ac04cb72aa953b134ce93093886e09ba94bfc9b0f1c7f2d3f38dde7cd26b02",
+    "levelSourceRevision": "cb71db8f3eb64348376183891674ce2146c640c29ec7bf053b29a7bf5292c233",
+    "nativeCompletionTicks": 2482,
+    "nativeReplaySHA256": "f23db2a0d8099eb4c88571c5d7d8a966a510edb41b420f4920eb67b39c5e8d48",
+    "nativeSaved": 79,
+    "publishedReplaySHA256": "776cac18286814667894e063937b5e3ce91b1c1b03cc1b5d0112bbcee581b3d3",
+    "publishedReplayURL": "https://lldb.camanis.net/level/529/16",
+    "replayScore": 348.9806111111111,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2483,
+    "sourceSaved": 79
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Mayhem 2.DAT#7",
+      "packID": "fan:lldb-529"
+    },
+    "initialStateHash": "544fcd3e2a7438653f5d996cbc0adb869cfe3b405959805e810b2c726ae9c184",
+    "levelSourceRevision": "cb71db8f3eb64348376183891674ce2146c640c29ec7bf053b29a7bf5292c233",
+    "nativeCompletionTicks": 1979,
+    "nativeReplaySHA256": "f8e97f337860525624436bdd2e79d1277ea9c35619f8d5c465dc43dcb86808e0",
+    "nativeSaved": 88,
+    "publishedReplaySHA256": "c65917d7a05fa586e5aaf0df089c2079317c3e67bc63cda9675526fe6bac82ac",
+    "publishedReplayURL": "https://lldb.camanis.net/level/529/18",
+    "replayScore": 244.8756617606418,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1979,
+    "sourceSaved": 88
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Mayhem 3.DAT#2",
+      "packID": "fan:lldb-529"
+    },
+    "initialStateHash": "dd61a1a6206bcd5e08328cec231ebd5325d318b8fa2e311257808b986b9df3d8",
+    "levelSourceRevision": "cb71db8f3eb64348376183891674ce2146c640c29ec7bf053b29a7bf5292c233",
+    "nativeCompletionTicks": 3201,
+    "nativeReplaySHA256": "c34c628b1b51d3a1657be536bf6cab0a251889ef5b54323d4cfc37a0d62fe8ba",
+    "nativeSaved": 62,
+    "publishedReplaySHA256": "c593043aaf908a1e01a69a96ff9c2554d75d27a0c959b7cb056dd70eb495b6b8",
+    "publishedReplayURL": "https://lldb.camanis.net/level/529/23",
+    "replayScore": 301.2809488035583,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 3201,
+    "sourceSaved": 62
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Mayhem 3.DAT#3",
+      "packID": "fan:lldb-529"
+    },
+    "initialStateHash": "08aed64ed39119a49d12b0eaf56624123ad4839fce1e54b3a0753d1c35e24090",
+    "levelSourceRevision": "cb71db8f3eb64348376183891674ce2146c640c29ec7bf053b29a7bf5292c233",
+    "nativeCompletionTicks": 5812,
+    "nativeReplaySHA256": "a0434c428d55ef3b104178a1c9465c5c4f024d9aa5a773967f10290de90c6044",
+    "nativeSaved": 39,
+    "publishedReplaySHA256": "88ecca467c7e88e37514d691354888cbddfc03a93916ed19d9a7ed19d66340c2",
+    "publishedReplayURL": "https://lldb.camanis.net/level/529/24",
+    "replayScore": 332.72368985553464,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 5811,
+    "sourceSaved": 39
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Mayhem 3.DAT#5",
+      "packID": "fan:lldb-529"
+    },
+    "initialStateHash": "7ad4c4103e8a79996f2559caca9229adf214ab614ddaa3fa2121146bea510938",
+    "levelSourceRevision": "cb71db8f3eb64348376183891674ce2146c640c29ec7bf053b29a7bf5292c233",
+    "nativeCompletionTicks": 4057,
+    "nativeReplaySHA256": "885cf988e27dfcb70ab54c9ed74c350dce49d05357476ba44699ce0e0ba8fb97",
+    "nativeSaved": 76,
+    "publishedReplaySHA256": "69ef250bbee1487246f01d5ec97f768ed9ef4e4753fc12a23a4a058deda3ccca",
+    "publishedReplayURL": "https://lldb.camanis.net/level/529/26",
+    "replayScore": 502.6460897500439,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 4056,
+    "sourceSaved": 76
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Mayhem 3.DAT#8",
+      "packID": "fan:lldb-529"
+    },
+    "initialStateHash": "5c34485e3894b57009f1142234457ed79e8fbae57e7add9d339b0dc9154eb621",
+    "levelSourceRevision": "cb71db8f3eb64348376183891674ce2146c640c29ec7bf053b29a7bf5292c233",
+    "nativeCompletionTicks": 4268,
+    "nativeReplaySHA256": "783866cb4dabfba6f379c6b7423503808a53b53dd6f2fcc2b1fce939de79fcda",
+    "nativeSaved": 3,
+    "publishedReplaySHA256": "8bd62c527ff1b63e952262c33f522b557beb9e437a3bde8ea7d19bdd3e740205",
+    "publishedReplayURL": "https://lldb.camanis.net/level/529/29",
+    "replayScore": 489.99049488051713,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 4267,
+    "sourceSaved": 3
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "OhNoMorecLemmings Tame 1.DAT#9",
+      "packID": "fan:lldb-530"
+    },
+    "initialStateHash": "3ac1864ce2a715250e80ae639859c187129c09cd3a00a80ef9796759b998edca",
+    "levelSourceRevision": "b4cce71d3c06d23b8211c86de6f76ff300331d8adc0c121d3f0924ce4a23037a",
+    "nativeCompletionTicks": 1910,
+    "nativeReplaySHA256": "f182d43a67a203d1418826e104988c5b41c8fb07d2f9d82f6bc562334abe98bc",
+    "nativeSaved": 50,
+    "publishedReplaySHA256": "7068d79e133971a7cdb7d682f15135dc4d2c3d63c9c88afab69ffb9c2cc0e5c2",
+    "publishedReplayURL": "https://lldb.camanis.net/level/530/10",
+    "replayScore": 135.11573071972228,
+    "sourceGameMode": 1,
+    "sourceHeaderTicks": 1909,
+    "sourceSaved": 50
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "OhNoMorecLemmings Tame 2.DAT#1",
+      "packID": "fan:lldb-530"
+    },
+    "initialStateHash": "a6c6af64334a2905081a349d251edb86a6948cb1e5cd0fd7562a759cbde48b34",
+    "levelSourceRevision": "b4cce71d3c06d23b8211c86de6f76ff300331d8adc0c121d3f0924ce4a23037a",
+    "nativeCompletionTicks": 1645,
+    "nativeReplaySHA256": "674208d66fdbd7f878caae193bd86013f162eacb4d08817045fa924bbd359f42",
+    "nativeSaved": 50,
+    "publishedReplaySHA256": "3a3b45641d5bfc9b0ccfd91273849dc804d1febbf03d1f59ec122d014c5908c9",
+    "publishedReplayURL": "https://lldb.camanis.net/level/530/12",
+    "replayScore": 442.77146067146333,
+    "sourceGameMode": 1,
+    "sourceHeaderTicks": 1645,
+    "sourceSaved": 50
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "OhNoMorecLemmings Crazy 2.DAT#8",
+      "packID": "fan:lldb-531"
+    },
+    "initialStateHash": "c05f917e47e81ba51cce62bb52e923e14c6ab4022b150b211029e0a46a77d0ba",
+    "levelSourceRevision": "e7eb1cb2ed4152fe7d0b78cfcfca504b5e526cb53dc1287672410afce8f08585",
+    "nativeCompletionTicks": 1401,
+    "nativeReplaySHA256": "766160cfbce76e29ae1811063b55e936cbeadaeee2e56bf43d811244f376031b",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "1d10f5bd337a53457731e733b5e4eaa4990721261183f5807a762e06a85ed44f",
+    "publishedReplayURL": "https://lldb.camanis.net/level/531/19",
+    "replayScore": 276.2129388581082,
+    "sourceGameMode": 1,
+    "sourceHeaderTicks": 1397,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Holiday cLemmings Frost 2.DAT#5",
+      "packID": "fan:lldb-535"
+    },
+    "initialStateHash": "d58eafe9d835af242324e540f4317585933d10a5c297fb0c1ffdd9d8bfb8434f",
+    "levelSourceRevision": "e0b4def872bc847330ee71afc5a6e602c97aaefe65f5b0f86d28af0145245339",
+    "nativeCompletionTicks": 2352,
+    "nativeReplaySHA256": "51ac8677a29d867ae820aaff86ae173fff01e8301d393f18884382de6e981054",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "eff7cc20e802b6f364c6e808c97c82635d71f092b42c8a0f0dc3a015c0727f17",
+    "publishedReplayURL": "https://lldb.camanis.net/level/535/16",
+    "replayScore": 403.3732337750131,
+    "sourceGameMode": 2,
+    "sourceHeaderTicks": 2349,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Peace 1.DAT#5",
+      "packID": "fan:lldb-542"
+    },
+    "initialStateHash": "3fc0ffdeaecb785c2f0cc977ea6b2f556f87d8ffbd9d78e36dfbb5a84957f1e2",
+    "levelSourceRevision": "f1ecfbe225c1039af701815227b4af13bcf5f45ac22c7e672357b5ff485e659e",
+    "nativeCompletionTicks": 1235,
+    "nativeReplaySHA256": "1cf15e8f21c9f5d77bf3656b015ff6560f31305050d2ad1db14f3338c6f64fd6",
+    "nativeSaved": 20,
+    "publishedReplaySHA256": "84c53a39224f8790421db0bc18c62464bc26f454c094c360609c7d7a3bd7fe07",
+    "publishedReplayURL": "https://lldb.camanis.net/level/542/6",
+    "replayScore": 156.3316784321406,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1228,
+    "sourceSaved": 20
+  },
+  {
+    "globalTickShift": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Peace 1.DAT#6",
+      "packID": "fan:lldb-542"
+    },
+    "initialStateHash": "fe1c2cea5085511213af7e5c23dc6b8af02c8220db3e9d968a264d2757a11858",
+    "levelSourceRevision": "f1ecfbe225c1039af701815227b4af13bcf5f45ac22c7e672357b5ff485e659e",
+    "nativeCompletionTicks": 979,
+    "nativeReplaySHA256": "09ab64a3933caa9c1fcdbc24681ec80e60d51a43bd4d4571c1d911f86d73da64",
+    "nativeSaved": 30,
+    "publishedReplaySHA256": "737e35f784b2fee0f25f0735907a20463d06320c94b3cb259d4323ff19432f76",
+    "publishedReplayURL": "https://lldb.camanis.net/level/542/7",
+    "replayScore": 299.52583342747204,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 973,
+    "sourceSaved": 30
+  },
+  {
+    "globalTickShift": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Peace 2.DAT#1",
+      "packID": "fan:lldb-542"
+    },
+    "initialStateHash": "6e866f6f3b54a46a2ed390ceebd7de26f0f67fa1b02a829a8b60915719291ba7",
+    "levelSourceRevision": "f1ecfbe225c1039af701815227b4af13bcf5f45ac22c7e672357b5ff485e659e",
+    "nativeCompletionTicks": 1440,
+    "nativeReplaySHA256": "57cc7aac2c97277326a93e2b7249d82ecb4457083f8f79643a9a4b9ec679ef64",
+    "nativeSaved": 15,
+    "publishedReplaySHA256": "6ad27d18efef92e65f1f247a4207bd49bc3ae1aec44a107b5b6f1e7d93c7ab73",
+    "publishedReplayURL": "https://lldb.camanis.net/level/542/12",
+    "replayScore": 294.0387136999144,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1422,
+    "sourceSaved": 15
+  },
+  {
+    "globalTickShift": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Peace 2.DAT#4",
+      "packID": "fan:lldb-542"
+    },
+    "initialStateHash": "bbda549fc2afb6fcc2f4df45f3c4a48e2f0b5e53bb6f49135333df9b2fb36736",
+    "levelSourceRevision": "f1ecfbe225c1039af701815227b4af13bcf5f45ac22c7e672357b5ff485e659e",
+    "nativeCompletionTicks": 1671,
+    "nativeReplaySHA256": "ff76d3880039b21627515bce8527ec3b225f48ae1d52f76a859b4b02cfb9b800",
+    "nativeSaved": 30,
+    "publishedReplaySHA256": "fc9385ef2c30cabd2078333a625a3365e0b8f2476d59bffb71a7fb4743410de0",
+    "publishedReplayURL": "https://lldb.camanis.net/level/542/15",
+    "replayScore": 283.0128182750778,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1665,
+    "sourceSaved": 30
+  },
+  {
+    "globalTickShift": 7,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Peace 2.DAT#5",
+      "packID": "fan:lldb-542"
+    },
+    "initialStateHash": "8feabfd1c317ff263285d7543dd51edec402c8b33eba8ea61b26416eb457aba5",
+    "levelSourceRevision": "f1ecfbe225c1039af701815227b4af13bcf5f45ac22c7e672357b5ff485e659e",
+    "nativeCompletionTicks": 1282,
+    "nativeReplaySHA256": "6e6441719affb0fe6e9c3669ba377c7b9c54780f9058ea3643aca955f3803574",
+    "nativeSaved": 30,
+    "publishedReplaySHA256": "c2c40654e206d518c53ad727e6d41775d8c170a9a48aa2f9cd6fcae136bbafa9",
+    "publishedReplayURL": "https://lldb.camanis.net/level/542/16",
+    "replayScore": 416.0275362960215,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1273,
+    "sourceSaved": 30
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Peace 2.DAT#6",
+      "packID": "fan:lldb-542"
+    },
+    "initialStateHash": "e0639529d074bd7db6107247eb96268a4aa7f1156cd03ea087efaee01745e549",
+    "levelSourceRevision": "f1ecfbe225c1039af701815227b4af13bcf5f45ac22c7e672357b5ff485e659e",
+    "nativeCompletionTicks": 2278,
+    "nativeReplaySHA256": "8968b2dde1c0b403792f4e0665d9c47e544657ca822095cd053471cce2124ce3",
+    "nativeSaved": 30,
+    "publishedReplaySHA256": "41cbf16132de7bbdd4df12744bbbdc4b1a5e3160acb48fa74ed470b5050d964f",
+    "publishedReplayURL": "https://lldb.camanis.net/level/542/17",
+    "replayScore": 318.5094169942321,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2275,
+    "sourceSaved": 30
+  },
+  {
+    "globalTickShift": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Peace 2.DAT#7",
+      "packID": "fan:lldb-542"
+    },
+    "initialStateHash": "4c8766629e6d4a89a9e0507578e7d79669291acce0b68b86d5fa1c292e6e7809",
+    "levelSourceRevision": "f1ecfbe225c1039af701815227b4af13bcf5f45ac22c7e672357b5ff485e659e",
+    "nativeCompletionTicks": 1961,
+    "nativeReplaySHA256": "f4edf5dda96bacf39f30e4b6b05f3095e889b23ded69397ee7485b83be5d1bfd",
+    "nativeSaved": 50,
+    "publishedReplaySHA256": "fa2911d1a8b408016a80ebf328fc87cd9d119b90fde0010fede7b1234a7b3a4f",
+    "publishedReplayURL": "https://lldb.camanis.net/level/542/18",
+    "replayScore": 394.64187056265956,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1959,
+    "sourceSaved": 50
+  },
+  {
+    "globalTickShift": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Awkward 1.DAT#1",
+      "packID": "fan:lldb-543"
+    },
+    "initialStateHash": "454b0747bb391adbf68597ba0a1f85dea9e253fba47dd91980c27a8f0cb9a9dc",
+    "levelSourceRevision": "dd8cb81a28c705620de06c72a7b8c3166dcf84d6862df40974d8c6b6246d7ea8",
+    "nativeCompletionTicks": 2346,
+    "nativeReplaySHA256": "f73931345a752e30ff2ff0df42e3c525b8b1d6aef8e8bde5c8e8f8d32763a74d",
+    "nativeSaved": 10,
+    "publishedReplaySHA256": "a13e54c8c43e7ed5ceab46d4625f6a9905e2fdd01d684658c8c2877f0c1cd56e",
+    "publishedReplayURL": "https://lldb.camanis.net/level/543/2",
+    "replayScore": 211.87697254978764,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2341,
+    "sourceSaved": 10
+  },
+  {
+    "globalTickShift": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Awkward 1.DAT#6",
+      "packID": "fan:lldb-543"
+    },
+    "initialStateHash": "ee193193e8ecb4f27900bba90792791bbea109fa0cc7e0ee83ec87684b2b9121",
+    "levelSourceRevision": "dd8cb81a28c705620de06c72a7b8c3166dcf84d6862df40974d8c6b6246d7ea8",
+    "nativeCompletionTicks": 2604,
+    "nativeReplaySHA256": "ee832217562fce41ad8063c67c6f55beec5b7500a4e44a29673dfcd6641aecaf",
+    "nativeSaved": 50,
+    "publishedReplaySHA256": "1f59e044a13df04385e15e5ec9ef0c1ec02a4957c2ba89f16a483159ebeb946c",
+    "publishedReplayURL": "https://lldb.camanis.net/level/543/7",
+    "replayScore": 363.16798438530424,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2595,
+    "sourceSaved": 50
+  },
+  {
+    "globalTickShift": 5,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Awkward 1.DAT#7",
+      "packID": "fan:lldb-543"
+    },
+    "initialStateHash": "fe276bc2b17211fd2e07138169d3709a31c28e40a63b186266200725e1b8e8f7",
+    "levelSourceRevision": "dd8cb81a28c705620de06c72a7b8c3166dcf84d6862df40974d8c6b6246d7ea8",
+    "nativeCompletionTicks": 2301,
+    "nativeReplaySHA256": "3f5ce9608a1c754bb805df8da3aab98394f2b5c5998c8dc01e941c1baee1ac11",
+    "nativeSaved": 50,
+    "publishedReplaySHA256": "1de7134917e935a1a4fdceda4344f3c9d972c47631878769e5ba64192a0a943d",
+    "publishedReplayURL": "https://lldb.camanis.net/level/543/8",
+    "replayScore": 401.43923928726497,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2295,
+    "sourceSaved": 50
+  },
+  {
+    "globalTickShift": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Awkward 1.DAT#9",
+      "packID": "fan:lldb-543"
+    },
+    "initialStateHash": "64e1857ca4ef14836098c54f5aab0e7a0461a8326a5b4ace087bfa6e4758e819",
+    "levelSourceRevision": "dd8cb81a28c705620de06c72a7b8c3166dcf84d6862df40974d8c6b6246d7ea8",
+    "nativeCompletionTicks": 2676,
+    "nativeReplaySHA256": "34db8d2db4b5e0d004560e84b5b7a59866f12a0ac63d6ca57f40d34acfe6004b",
+    "nativeSaved": 2,
+    "publishedReplaySHA256": "c7cf4ca78e00dbc4942606d5d4a61125578d426968a85228dd94af114a138bd2",
+    "publishedReplayURL": "https://lldb.camanis.net/level/543/10",
+    "replayScore": 374.7308705626595,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2669,
+    "sourceSaved": 2
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Awkward 2.DAT#0",
+      "packID": "fan:lldb-543"
+    },
+    "initialStateHash": "e46b205420935964bf17a1d985e842c203572d27db0f11dc57f00e0221a7393d",
+    "levelSourceRevision": "dd8cb81a28c705620de06c72a7b8c3166dcf84d6862df40974d8c6b6246d7ea8",
+    "nativeCompletionTicks": 953,
+    "nativeReplaySHA256": "9b40b8734d170532d338fb0f4a02e58b29f0bb9cf7b7c9be61e2ee8fa3b58007",
+    "nativeSaved": 28,
+    "publishedReplaySHA256": "4b583935cd3b8d4c81c9ff53639a5ea450ff00ddac97e3862ad18ec284285c64",
+    "publishedReplayURL": "https://lldb.camanis.net/level/543/11",
+    "replayScore": 277.0950426547186,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 953,
+    "sourceSaved": 28
+  },
+  {
+    "globalTickShift": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Awkward 2.DAT#1",
+      "packID": "fan:lldb-543"
+    },
+    "initialStateHash": "9b11df581c33c5cfbac9eb6c6b8cbec363ccd1b7ee93ba92df43bbbb9fb17bf3",
+    "levelSourceRevision": "dd8cb81a28c705620de06c72a7b8c3166dcf84d6862df40974d8c6b6246d7ea8",
+    "nativeCompletionTicks": 602,
+    "nativeReplaySHA256": "b8be28dc78a410ac1be5139476315f9d8878fcd3902f49f0a28d059997b50b3b",
+    "nativeSaved": 15,
+    "publishedReplaySHA256": "89f482dff24137787797135d58789543489cdf1902d455428dc1a5e604a15241",
+    "publishedReplayURL": "https://lldb.camanis.net/level/543/12",
+    "replayScore": 226.72980392156862,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 597,
+    "sourceSaved": 15
+  },
+  {
+    "globalTickShift": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Awkward 2.DAT#3",
+      "packID": "fan:lldb-543"
+    },
+    "initialStateHash": "85b9e5d317fa4a4511280f2d46f482c3f4d60cc9040394be28980832050a6237",
+    "levelSourceRevision": "dd8cb81a28c705620de06c72a7b8c3166dcf84d6862df40974d8c6b6246d7ea8",
+    "nativeCompletionTicks": 1808,
+    "nativeReplaySHA256": "1995ac9f27d58d1b8fbddc5f1b524916aed8588c170cb25aa2d612bcd3cda065",
+    "nativeSaved": 7,
+    "publishedReplaySHA256": "1dd9c2ce7b266fa1598503476bee74451398f65b3cd77a001bdc1d539feb07d6",
+    "publishedReplayURL": "https://lldb.camanis.net/level/543/14",
+    "replayScore": 222.47802649209996,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1806,
+    "sourceSaved": 7
+  },
+  {
+    "globalTickShift": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Awkward 2.DAT#4",
+      "packID": "fan:lldb-543"
+    },
+    "initialStateHash": "9ea6f2ba1b853415d4a034adc2ce4071c9d6631010fe231e22690d719786ec67",
+    "levelSourceRevision": "dd8cb81a28c705620de06c72a7b8c3166dcf84d6862df40974d8c6b6246d7ea8",
+    "nativeCompletionTicks": 881,
+    "nativeReplaySHA256": "bb4286ab32e75849c15fe4dc8840806b06c6b676e032a27e93c94edd2cbc1520",
+    "nativeSaved": 30,
+    "publishedReplaySHA256": "44cccbffc39736344f171a7122fc18f8aae4bd03dfdacb6465c86eee4aa0abbf",
+    "publishedReplayURL": "https://lldb.camanis.net/level/543/15",
+    "replayScore": 364.12084967320266,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 841,
+    "sourceSaved": 30
+  },
+  {
+    "globalTickShift": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Artful 1.DAT#1",
+      "packID": "fan:lldb-544"
+    },
+    "initialStateHash": "6433e4182789c4b6f62388db41a12d7d5b35bb340a3a46f42c351795c7b54113",
+    "levelSourceRevision": "fc9991e07984a0eecfcd19be9ec2be19e8647a93b3282aa0eef563ceb5091446",
+    "nativeCompletionTicks": 1880,
+    "nativeReplaySHA256": "7792dfd8d070034067666928a7e9820c31d87f6455a5caeaec9ce95ca22ddf3d",
+    "nativeSaved": 30,
+    "publishedReplaySHA256": "4266a7d0cea3cb88ba6a772f7ab7d73c62ea9b9968398627f99f753096903bf1",
+    "publishedReplayURL": "https://lldb.camanis.net/level/544/2",
+    "replayScore": 304.09114845938376,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1870,
+    "sourceSaved": 30
+  },
+  {
+    "globalTickShift": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Artful 1.DAT#4",
+      "packID": "fan:lldb-544"
+    },
+    "initialStateHash": "23357a7c391afd01ff947cbe6086f32a247daae14122cdd2e16d9be591fd3418",
+    "levelSourceRevision": "fc9991e07984a0eecfcd19be9ec2be19e8647a93b3282aa0eef563ceb5091446",
+    "nativeCompletionTicks": 6103,
+    "nativeReplaySHA256": "45173d1524b68899417563a7e5bc7322f5b2e74149a2579a3af8c1480259aff4",
+    "nativeSaved": 79,
+    "publishedReplaySHA256": "c3c95af1f0e1d04faca01c982dcde001de0ac945e721a2b1943e618388a94c51",
+    "publishedReplayURL": "https://lldb.camanis.net/level/544/5",
+    "replayScore": 340.6805555555556,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 6097,
+    "sourceSaved": 79
+  },
+  {
+    "globalTickShift": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Artful 1.DAT#9",
+      "packID": "fan:lldb-544"
+    },
+    "initialStateHash": "8fbbdb1c4ab828b15ecb474b75ac1d9d5018d1899acf3d0d4147a9ed873b36a9",
+    "levelSourceRevision": "fc9991e07984a0eecfcd19be9ec2be19e8647a93b3282aa0eef563ceb5091446",
+    "nativeCompletionTicks": 1209,
+    "nativeReplaySHA256": "0363100d3020eaf1ae4cdf51aaa1c6d0fd2f9b104dae250575b942a98d9e9aeb",
+    "nativeSaved": 16,
+    "publishedReplaySHA256": "a897d2691a0719f2cdee425bfa5344e8a9f059d14a84aa971d59e0db481ee88e",
+    "publishedReplayURL": "https://lldb.camanis.net/level/544/10",
+    "replayScore": 258.21830788616063,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1201,
+    "sourceSaved": 16
+  },
+  {
+    "globalTickShift": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Insane 1.DAT#5",
+      "packID": "fan:lldb-545"
+    },
+    "initialStateHash": "ff6ab98d0c76de8562e23c9607183ea44ee38b86918744d400ce3e4841f7b65b",
+    "levelSourceRevision": "0b5e4bfede58cb4d8acee4ff5fb4d28ef912a472c1a5405271dc61453d7292f5",
+    "nativeCompletionTicks": 1123,
+    "nativeReplaySHA256": "adb719240aca545cc184b4f7f27d8e658349bfc67dd737f216e0a5acbf99391b",
+    "nativeSaved": 48,
+    "publishedReplaySHA256": "d5fcd7f327be68d1e4dde552f38d7eb6002e6f850b0d8db6ee02fe6a1636a45b",
+    "publishedReplayURL": "https://lldb.camanis.net/level/545/6",
+    "replayScore": 360.9158457129496,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1065,
+    "sourceSaved": 48
+  },
+  {
+    "globalTickShift": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Insane 1.DAT#8",
+      "packID": "fan:lldb-545"
+    },
+    "initialStateHash": "bfa88b7275b99fbdc6a1c87bbb9bc2692ca02740120245ec4c43edf47e0d2fa7",
+    "levelSourceRevision": "0b5e4bfede58cb4d8acee4ff5fb4d28ef912a472c1a5405271dc61453d7292f5",
+    "nativeCompletionTicks": 1646,
+    "nativeReplaySHA256": "188ed4c3df096b720f0802b5ec59250015a7babc2259770b3d1def38b47f24d1",
+    "nativeSaved": 41,
+    "publishedReplaySHA256": "d53f6618d5e67a890d8012fc8972e9be243f229d477244ff696990d7fb9e8f84",
+    "publishedReplayURL": "https://lldb.camanis.net/level/545/9",
+    "replayScore": 277.9284687208216,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1635,
+    "sourceSaved": 41
+  },
+  {
+    "globalTickShift": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Insane 1.DAT#9",
+      "packID": "fan:lldb-545"
+    },
+    "initialStateHash": "1889e0bb3e798d02c6078bcd9fba9992df959958189cc8bc77eb884b22fab220",
+    "levelSourceRevision": "0b5e4bfede58cb4d8acee4ff5fb4d28ef912a472c1a5405271dc61453d7292f5",
+    "nativeCompletionTicks": 596,
+    "nativeReplaySHA256": "0ec0d7e0d2b62f97a383470a9d1e94872a09ba767d71c4f7c03409dbf838ece4",
+    "nativeSaved": 2,
+    "publishedReplaySHA256": "f169b9abc97768ca35834cb8fe4f2ac1fa45d8cbbb9a24db9d2d1c8ddc834379",
+    "publishedReplayURL": "https://lldb.camanis.net/level/545/10",
+    "replayScore": 250.69567355092346,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 592,
+    "sourceSaved": 2
+  },
+  {
+    "globalTickShift": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Insane 2.DAT#2",
+      "packID": "fan:lldb-545"
+    },
+    "initialStateHash": "5b35f4817280594b2792fe57b8dc745529a3610c02aef9d2791aa1a213ef1f03",
+    "levelSourceRevision": "0b5e4bfede58cb4d8acee4ff5fb4d28ef912a472c1a5405271dc61453d7292f5",
+    "nativeCompletionTicks": 2284,
+    "nativeReplaySHA256": "5cb4318091784726782fcbf8c0209cc7cb65419fd6ce0df73d1f0f771ce0466f",
+    "nativeSaved": 46,
+    "publishedReplaySHA256": "716f3f5d9a9cd1c68c848ebc67168d6481506ac55398325157d62ccdbefd7074",
+    "publishedReplayURL": "https://lldb.camanis.net/level/545/13",
+    "replayScore": 582.6251895424837,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2279,
+    "sourceSaved": 46
+  },
+  {
+    "globalTickShift": 5,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Insane 2.DAT#3",
+      "packID": "fan:lldb-545"
+    },
+    "initialStateHash": "a344f34bd32f878ece591adecf000fcdd77576ca7107225523d5354bd41a113f",
+    "levelSourceRevision": "0b5e4bfede58cb4d8acee4ff5fb4d28ef912a472c1a5405271dc61453d7292f5",
+    "nativeCompletionTicks": 3496,
+    "nativeReplaySHA256": "5c9b9627414db4d045d78c993ac5e71bd32ea21f7d4447700d93061e18148178",
+    "nativeSaved": 50,
+    "publishedReplaySHA256": "374c9999e4f94c51362deb3e55874d58a1bdcc199a2b087b43ceb8bd7d78dc44",
+    "publishedReplayURL": "https://lldb.camanis.net/level/545/14",
+    "replayScore": 576.6754353656963,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 3486,
+    "sourceSaved": 50
+  },
+  {
+    "globalTickShift": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Insane 2.DAT#9",
+      "packID": "fan:lldb-545"
+    },
+    "initialStateHash": "792261adb8fc2905bdeea25da53401541c006e83f9d0a6edece4719f6504ad5b",
+    "levelSourceRevision": "0b5e4bfede58cb4d8acee4ff5fb4d28ef912a472c1a5405271dc61453d7292f5",
+    "nativeCompletionTicks": 2379,
+    "nativeReplaySHA256": "c4fe48618681e31e9cbb357e926d7d6c262e3384031b1baa285afc079e2fdda7",
+    "nativeSaved": 20,
+    "publishedReplaySHA256": "1e5c3a8d75ad1bb679236ff6df7161ffcc82ca125f60bc5971b2b24b316e34ef",
+    "publishedReplayURL": "https://lldb.camanis.net/level/545/20",
+    "replayScore": 279.45509803921567,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2372,
+    "sourceSaved": 20
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmings Plus DOS Project - 03 - Mild (Part 3).dat#8",
+      "packID": "fan:lldb-551"
+    },
+    "initialStateHash": "bbba5681651d99d7c4d944f6b4bedd439901ca7e4ab9b36eaef05679d4b5c088",
+    "levelSourceRevision": "587fa1a85d2ce0c3d0c8b50d9fa6c23a5d224c5b100e7c364088fde33e35798e",
+    "nativeCompletionTicks": 2153,
+    "nativeReplaySHA256": "f91c5df3266e112d8dc0c0dc29dfe13a31e7e971ea77f204b9fa9cadad9cadea",
+    "nativeSaved": 30,
+    "publishedReplaySHA256": "9ad606cbef25d47c5842050794331c7e43f885159d2e27e1e5bf8da5ace606ee",
+    "publishedReplayURL": "https://lldb.camanis.net/level/551/29",
+    "replayScore": 384.4759582549971,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2153,
+    "sourceSaved": 30
+  },
+  {
+    "globalTickShift": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmings Plus DOS Project - 05 - Wimpy (Part 2).dat#7",
+      "packID": "fan:lldb-552"
+    },
+    "initialStateHash": "146c920a888a3b1e855bfd7c543fb368950c0ba8602ca38f40e129542ff294bd",
+    "levelSourceRevision": "8187c19df391ea59e594bf9e4779b7ec81fb0034bc4a899ae09aee7396b3c042",
+    "nativeCompletionTicks": 990,
+    "nativeReplaySHA256": "d6a6255530c4ccb7cdc4b141a789c78ab842c2f8d4ff884efe7de8085f2ce6a4",
+    "nativeSaved": 50,
+    "publishedReplaySHA256": "cbff49dcb886e269ad674fb536abe25d29c44ebe1cbe1d6ba6d20e95ac9af85c",
+    "publishedReplayURL": "https://lldb.camanis.net/level/552/18",
+    "replayScore": 156.3443962848297,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 977,
+    "sourceSaved": 50
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmings Plus DOS Project - 06 - Wimpy (Part 3).dat#5",
+      "packID": "fan:lldb-552"
+    },
+    "initialStateHash": "b6b4bf2bc8841f1576c73f5dc8c36bc6aed33c2826de8f80aab6c464d7329313",
+    "levelSourceRevision": "8187c19df391ea59e594bf9e4779b7ec81fb0034bc4a899ae09aee7396b3c042",
+    "nativeCompletionTicks": 1347,
+    "nativeReplaySHA256": "9cb0cf8c8b5adae6f800f784783228b33a014231beb5767d19436bc347a6e762",
+    "nativeSaved": 77,
+    "publishedReplaySHA256": "553995ab9d1c377bc04c00f8cf80d5c56a8eb9cc8dd726392764cc14486a031e",
+    "publishedReplayURL": "https://lldb.camanis.net/level/552/26",
+    "replayScore": 387.4647323744528,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1348,
+    "sourceSaved": 77
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmings Plus DOS Project - 09 - Medi (Part 3).dat#6",
+      "packID": "fan:lldb-553"
+    },
+    "initialStateHash": "5d8df233f3517a59d57d4d1e1cc41d042f69b47e31175b8dc5a1d4b2a40ecda0",
+    "levelSourceRevision": "b9b763a725cf6c717f0c0c4ce65619cddbc0deadb2aef9acb55f1dd87b9483ec",
+    "nativeCompletionTicks": 1399,
+    "nativeReplaySHA256": "b869a964e87901d06b4ca0e05b526ed32f7db48ce32981df0b33a12766f73473",
+    "nativeSaved": 48,
+    "publishedReplaySHA256": "f549b5f5251a46668eb19fcfc14ddd5af51daa214df830d0ad847c63a059e3c2",
+    "publishedReplayURL": "https://lldb.camanis.net/level/553/27",
+    "replayScore": 374.45822291884036,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1398,
+    "sourceSaved": 48
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmings Plus DOS Project - 10 - Danger (Part 1).dat#1",
+      "packID": "fan:lldb-554"
+    },
+    "initialStateHash": "32892f252a8f1517dbd9c5ea0b70e309bc7cb3b93580c8d82c8edf7af52fb72a",
+    "levelSourceRevision": "bc6910d89e3d4625677d173dd9289ac64e19378a58c5ae9c2f2285875fdfeede",
+    "nativeCompletionTicks": 3002,
+    "nativeReplaySHA256": "bf426bba8cbb94220f0da3321797471d0c67def8b2cb46eaeb0102682f124026",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "f197d668f9dd1d869eb0e9aeb53ae87d19fab2563109ec976ac204361af9f7da",
+    "publishedReplayURL": "https://lldb.camanis.net/level/554/2",
+    "replayScore": 338.3488103976329,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 3001,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmings Plus DOS Project - 12 - Danger (Part 3).dat#8",
+      "packID": "fan:lldb-554"
+    },
+    "initialStateHash": "ec53cb4ffd8450aec282761e205577021d0110af378bcfbe85c83eb2ad880e1b",
+    "levelSourceRevision": "bc6910d89e3d4625677d173dd9289ac64e19378a58c5ae9c2f2285875fdfeede",
+    "nativeCompletionTicks": 2003,
+    "nativeReplaySHA256": "1f8becc7fb0ceeabd34f8a19093d95554108f19cd720545b96b641116fc95692",
+    "nativeSaved": 27,
+    "publishedReplaySHA256": "ec0571bfa3e3ae6c2869cbee98d06f016fa882cd3d9387cba7cbfdf02d647053",
+    "publishedReplayURL": "https://lldb.camanis.net/level/554/29",
+    "replayScore": 469.0598459383753,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2002,
+    "sourceSaved": 27
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "New Year Lemmings 1991_92.DAT#1",
+      "packID": "fan:lldb-557"
+    },
+    "initialStateHash": "7d54548b6b19cc1ec19c780df0a516bcff6b0de39f0072d34b386ab4a7e687f0",
+    "levelSourceRevision": "4660e8b2e006658d3fcd82da912195ff3ea0e0a685da68e97848ab7d9298f700",
+    "nativeCompletionTicks": 2785,
+    "nativeReplaySHA256": "30e1d04e040215791f46c5e0128be829f1197682df51d115424cc57857f2b07d",
+    "nativeSaved": 50,
+    "publishedReplaySHA256": "dcdc1b03041b944ce8b6ed142018ee818cd5456c5e5c127a19f80916571db4e9",
+    "publishedReplayURL": "https://lldb.camanis.net/level/557/2",
+    "replayScore": 380.507054249134,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2788,
+    "sourceSaved": 50
+  },
+  {
+    "globalTickShift": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "New Year Lemmings 1991_92.DAT#3",
+      "packID": "fan:lldb-557"
+    },
+    "initialStateHash": "333739d952872f8f85bde03ee05e8d6acdc8cae4760976b817d52382bc34b3b5",
+    "levelSourceRevision": "4660e8b2e006658d3fcd82da912195ff3ea0e0a685da68e97848ab7d9298f700",
+    "nativeCompletionTicks": 2601,
+    "nativeReplaySHA256": "e4e2ba11ebc2e3def541d1896a4457786c20416470cfc2984a6770905a46eadd",
+    "nativeSaved": 74,
+    "publishedReplaySHA256": "b10ba34645708f47ad5765f6248024eb42be7324f3af5a0606fd69bdac4d8fcb",
+    "publishedReplayURL": "https://lldb.camanis.net/level/557/4",
+    "replayScore": 252.82006613986914,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2594,
+    "sourceSaved": 74
+  },
+  {
+    "globalTickShift": 5,
+    "identity": {
+      "engine": "classic",
+      "levelID": "New Year Lemmings 1991_92.DAT#4",
+      "packID": "fan:lldb-557"
+    },
+    "initialStateHash": "779faf30f4107f2af04a25b722637c656d9c7e612f1f7c4a27b7f90ba9bbf74b",
+    "levelSourceRevision": "4660e8b2e006658d3fcd82da912195ff3ea0e0a685da68e97848ab7d9298f700",
+    "nativeCompletionTicks": 6528,
+    "nativeReplaySHA256": "a19af44031edd1872432987b59e4ed5665b19a6ab23ab86aa8c55c7ad333e870",
+    "nativeSaved": 10,
+    "publishedReplaySHA256": "6cc274784a90b580bce117485f883606a9bf3fbf6b2f388c584fa11b8e4c77a1",
+    "publishedReplayURL": "https://lldb.camanis.net/level/557/5",
+    "replayScore": 377.0449782528841,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 6525,
+    "sourceSaved": 10
+  },
+  {
+    "globalTickShift": 12,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLUE Simple 1.DAT#6",
+      "packID": "fan:lldb-564"
+    },
+    "initialStateHash": "74d36e208e09dadd4a74df4d3f7fc57dd9f30b75f73f1952fcbdd58ad1f6019a",
+    "levelSourceRevision": "bb624809e152996ec7c1be6acea60bcb80f629d74fd26d584987a97dcb9d22c1",
+    "nativeCompletionTicks": 1040,
+    "nativeReplaySHA256": "6fbba8b4ce5d80908afeb609ddc8d731efb71c885af6ee153ce1e755bbf444d2",
+    "nativeSaved": 59,
+    "publishedReplaySHA256": "32fd3580bca82ac611e35d9bde9cd294d5ba8c50a3239e692acdbd32155c362e",
+    "publishedReplayURL": "https://lldb.camanis.net/level/564/7",
+    "replayScore": 383.3646931587666,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1028,
+    "sourceSaved": 59
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Tricky 05.lvl#-1",
+      "packID": "fan:lldb-569"
+    },
+    "initialStateHash": "413cf3ddcb4168970ad0ca1df6b2f5ab3b15c8d49910b3f881a0fe8dbd05fdff",
+    "levelSourceRevision": "748e72be2c512797b4c716ec8bbf01f5c8a33259c5b48637ffe189b296a00cae",
+    "nativeCompletionTicks": 1830,
+    "nativeReplaySHA256": "a967ce18733fd1bc678a8e6fcb73b044089a8872d85cd018306810b6353af264",
+    "nativeSaved": 94,
+    "publishedReplaySHA256": "14325be3df439bbaceb420d3acf1a1bbf1ad3a1aa616e7793a8f009071bc12d2",
+    "publishedReplayURL": "https://lldb.camanis.net/level/569/5",
+    "replayScore": 442.3794358749911,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1829,
+    "sourceSaved": 94
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Tricky 13.lvl#-1",
+      "packID": "fan:lldb-569"
+    },
+    "initialStateHash": "ebcf039ee91bb140345eae14cc924f07be906109ee37cbe3e5a208140a3c3de0",
+    "levelSourceRevision": "748e72be2c512797b4c716ec8bbf01f5c8a33259c5b48637ffe189b296a00cae",
+    "nativeCompletionTicks": 2573,
+    "nativeReplaySHA256": "1036d8d0f5e07dee7ad8c2957fde07763ad619a27bbab2c92bd64a1dc534eb97",
+    "nativeSaved": 100,
+    "publishedReplaySHA256": "4ce270b664b670ad534cb19ff6bb352fbc5ccf946d528410a4a9e423b80148ab",
+    "publishedReplayURL": "https://lldb.camanis.net/level/569/13",
+    "replayScore": 378.1400672775779,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2572,
+    "sourceSaved": 100
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Taxing 08.lvl#-1",
+      "packID": "fan:lldb-570"
+    },
+    "initialStateHash": "ff069dcece003ab35efe4554cd696f2e9d7c3436490b27114c37ede30b2aefad",
+    "levelSourceRevision": "62d71882dc1aa9bb450d97e01f43c69dac1052548c962b3cd791e138ff337378",
+    "nativeCompletionTicks": 2486,
+    "nativeReplaySHA256": "30fb6c11220443a657cb76c691b658f1fd335e7937da2257cfd892505fe517e9",
+    "nativeSaved": 100,
+    "publishedReplaySHA256": "f3e6dcfa2c9c3e54a5c5c63d42fdab261558bec745214052bc7d1e6abe48022a",
+    "publishedReplayURL": "https://lldb.camanis.net/level/570/8",
+    "replayScore": 316.8406735509235,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2485,
+    "sourceSaved": 100
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Taxing 14.lvl#-1",
+      "packID": "fan:lldb-570"
+    },
+    "initialStateHash": "0e8d96bbbbaf0616698f69bad157d7cff1379f6a6057fefcaea6660cee0a6480",
+    "levelSourceRevision": "62d71882dc1aa9bb450d97e01f43c69dac1052548c962b3cd791e138ff337378",
+    "nativeCompletionTicks": 5896,
+    "nativeReplaySHA256": "9b9175f96908e2ae179e6dbdf97a9fdcd949e231931c78b9effb067dd55a482f",
+    "nativeSaved": 100,
+    "publishedReplaySHA256": "2401141f3ec6204c3061e4247c7a93b846ea769ba50a74a126c91987422d7223",
+    "publishedReplayURL": "https://lldb.camanis.net/level/570/14",
+    "replayScore": 453.46997178792105,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 5895,
+    "sourceSaved": 100
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Mayhem 01.lvl#-1",
+      "packID": "fan:lldb-571"
+    },
+    "initialStateHash": "cfa6f2e1573e80bf13ad3798285a06ad9d45facfedc2200a039d2907718af773",
+    "levelSourceRevision": "1ecad72b46b34fb0c31eda83ac848daf3fbc4dae784b149cc8e0885163e3c4e7",
+    "nativeCompletionTicks": 4903,
+    "nativeReplaySHA256": "a1627bc8f0aad7b860fd00ee275467378796372c3f1dcd96c46b3897c07e933e",
+    "nativeSaved": 98,
+    "publishedReplaySHA256": "d2b5961b4d01ad1d5e615824e7c30770e82e1ae9d16fc974d8f4488c30e9a2c0",
+    "publishedReplayURL": "https://lldb.camanis.net/level/571/1",
+    "replayScore": 449.52244907454616,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 4904,
+    "sourceSaved": 98
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Mayhem 02.lvl#-1",
+      "packID": "fan:lldb-571"
+    },
+    "initialStateHash": "5618bd21a64404025754c6164545b665a855b8dd3c9203a740b9fb88eb85d0ff",
+    "levelSourceRevision": "1ecad72b46b34fb0c31eda83ac848daf3fbc4dae784b149cc8e0885163e3c4e7",
+    "nativeCompletionTicks": 2784,
+    "nativeReplaySHA256": "5abb4f7c22bbf2bbd2ad6dcd6111c51d0d47163e50a37bed37d42fd27cd9f189",
+    "nativeSaved": 98,
+    "publishedReplaySHA256": "0de78241b27a9d96d457e772031c90fe5eb62029a68303d9c52ebe10a2c3cff7",
+    "publishedReplayURL": "https://lldb.camanis.net/level/571/2",
+    "replayScore": 220.5510203044613,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2784,
+    "sourceSaved": 98
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Mayhem 15.lvl#-1",
+      "packID": "fan:lldb-571"
+    },
+    "initialStateHash": "132779af7b4baa3a1921a9bb2d0cc95b823aef4ed8bf3807b2a5b05fb368ff42",
+    "levelSourceRevision": "1ecad72b46b34fb0c31eda83ac848daf3fbc4dae784b149cc8e0885163e3c4e7",
+    "nativeCompletionTicks": 1397,
+    "nativeReplaySHA256": "f5734cdeca4fa10d7a0dc977b73548eb9ee653beb89e24581c5a9b2073fe467b",
+    "nativeSaved": 96,
+    "publishedReplaySHA256": "7ec61bd5ab8eb207d704c7d708a171114acc19061e5c4e6721d7ee69ad3f735b",
+    "publishedReplayURL": "https://lldb.camanis.net/level/571/15",
+    "replayScore": 433.68263094831684,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1398,
+    "sourceSaved": 96
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Mayhem 25.lvl#-1",
+      "packID": "fan:lldb-571"
+    },
+    "initialStateHash": "5aec4673779c80eeb01c4213c4966afa6c9694a5a33932f00c40aa84eb166313",
+    "levelSourceRevision": "1ecad72b46b34fb0c31eda83ac848daf3fbc4dae784b149cc8e0885163e3c4e7",
+    "nativeCompletionTicks": 2396,
+    "nativeReplaySHA256": "0a0064da944e3d63995aea943ab0ab173671bccf9239a5c6aa4bbdb7364e8aa4",
+    "nativeSaved": 99,
+    "publishedReplaySHA256": "577f570ff3ad6dabe8bf83be2882af9d8d5c15359cc80d8e31c81486806b3dc8",
+    "publishedReplayURL": "https://lldb.camanis.net/level/571/25",
+    "replayScore": 405.03558332926923,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2397,
+    "sourceSaved": 99
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Mayhem 26.lvl#-1",
+      "packID": "fan:lldb-571"
+    },
+    "initialStateHash": "65e6ccc9a5476fdf6398ee247d9f1b417dfb5ddab18cb9c6ec86ba9d2d085456",
+    "levelSourceRevision": "1ecad72b46b34fb0c31eda83ac848daf3fbc4dae784b149cc8e0885163e3c4e7",
+    "nativeCompletionTicks": 3502,
+    "nativeReplaySHA256": "b3d4d00f526751d63513e7a1eec0d87d18121d7905df6e63d7bfbfee9be9c4c1",
+    "nativeSaved": 90,
+    "publishedReplaySHA256": "40e2af0ca495f6c12418a7058f5df34de2c3490fd2f09a170a08e2f7fe9e9acf",
+    "publishedReplayURL": "https://lldb.camanis.net/level/571/26",
+    "replayScore": 401.5422503275654,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 3501,
+    "sourceSaved": 90
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Mayhem 29.lvl#-1",
+      "packID": "fan:lldb-571"
+    },
+    "initialStateHash": "2acf69e4f7264f29c045a7e351054c54410bcf8761e68c92de6c0db450fb631b",
+    "levelSourceRevision": "1ecad72b46b34fb0c31eda83ac848daf3fbc4dae784b149cc8e0885163e3c4e7",
+    "nativeCompletionTicks": 3879,
+    "nativeReplaySHA256": "a9a651ee48740b4fb224730fbb9d788e3a2ae19f66d49b9bab49006f53ea935a",
+    "nativeSaved": 95,
+    "publishedReplaySHA256": "9afb97a2e4d5bb723d74bcf77bae6a801176a8b4327dcda386bdeabcec415c28",
+    "publishedReplayURL": "https://lldb.camanis.net/level/571/29",
+    "replayScore": 590.5728235294118,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 3880,
+    "sourceSaved": 95
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Tricky 05.lvl#-1",
+      "packID": "fan:lldb-574"
+    },
+    "initialStateHash": "413cf3ddcb4168970ad0ca1df6b2f5ab3b15c8d49910b3f881a0fe8dbd05fdff",
+    "levelSourceRevision": "dfffbdb7f147b641a271175e27fa8c4d643b40144019813b64cb6497dbbbf5bd",
+    "nativeCompletionTicks": 1830,
+    "nativeReplaySHA256": "c27c7794f5d46f358a9d76040d19898232a0f3cc20bb9a9ff9c523cffb2ae685",
+    "nativeSaved": 94,
+    "publishedReplaySHA256": "14325be3df439bbaceb420d3acf1a1bbf1ad3a1aa616e7793a8f009071bc12d2",
+    "publishedReplayURL": "https://lldb.camanis.net/level/574/5",
+    "replayScore": 442.3794358749911,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1829,
+    "sourceSaved": 94
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Tricky 13.lvl#-1",
+      "packID": "fan:lldb-574"
+    },
+    "initialStateHash": "ebcf039ee91bb140345eae14cc924f07be906109ee37cbe3e5a208140a3c3de0",
+    "levelSourceRevision": "dfffbdb7f147b641a271175e27fa8c4d643b40144019813b64cb6497dbbbf5bd",
+    "nativeCompletionTicks": 2573,
+    "nativeReplaySHA256": "6ede647d42d207cea0ef94c5822f4ed93babdec1fd85a8805e28c727c114bbe8",
+    "nativeSaved": 100,
+    "publishedReplaySHA256": "4ce270b664b670ad534cb19ff6bb352fbc5ccf946d528410a4a9e423b80148ab",
+    "publishedReplayURL": "https://lldb.camanis.net/level/574/13",
+    "replayScore": 378.1400672775779,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2572,
+    "sourceSaved": 100
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Tricky 14.lvl#-1",
+      "packID": "fan:lldb-574"
+    },
+    "initialStateHash": "94682e6146bba69c1bcc64ad27d873a540abe4b64fb8d3f33cb188366d392b8a",
+    "levelSourceRevision": "dfffbdb7f147b641a271175e27fa8c4d643b40144019813b64cb6497dbbbf5bd",
+    "nativeCompletionTicks": 2387,
+    "nativeReplaySHA256": "d55d98168fb063c78d2312cac5c86f14501e1e8a03fd83b28f3dc357763deb7b",
+    "nativeSaved": 45,
+    "publishedReplaySHA256": "e975578ae37494cdd88100f469aeaab327fc1da8a25a637283127b0f3265aee0",
+    "publishedReplayURL": "https://lldb.camanis.net/level/574/14",
+    "replayScore": 448.9853948980998,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2388,
+    "sourceSaved": 45
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Taxing 08.lvl#-1",
+      "packID": "fan:lldb-575"
+    },
+    "initialStateHash": "ff069dcece003ab35efe4554cd696f2e9d7c3436490b27114c37ede30b2aefad",
+    "levelSourceRevision": "205401b04012f53d6c9e777ec95d765d08a1381bc3efc88be3ea3f9945bccbbd",
+    "nativeCompletionTicks": 2486,
+    "nativeReplaySHA256": "a186837dedddb285913ab4b05664722bc8e84890d11ba8c032c3cfdf798731c4",
+    "nativeSaved": 100,
+    "publishedReplaySHA256": "f3e6dcfa2c9c3e54a5c5c63d42fdab261558bec745214052bc7d1e6abe48022a",
+    "publishedReplayURL": "https://lldb.camanis.net/level/575/8",
+    "replayScore": 316.8406735509235,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2485,
+    "sourceSaved": 100
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Taxing 14.lvl#-1",
+      "packID": "fan:lldb-575"
+    },
+    "initialStateHash": "0e8d96bbbbaf0616698f69bad157d7cff1379f6a6057fefcaea6660cee0a6480",
+    "levelSourceRevision": "205401b04012f53d6c9e777ec95d765d08a1381bc3efc88be3ea3f9945bccbbd",
+    "nativeCompletionTicks": 5896,
+    "nativeReplaySHA256": "76018acfc6ab8ea97d1713aa3864620ed808304f95e289a783b657e7f2496a87",
+    "nativeSaved": 100,
+    "publishedReplaySHA256": "2401141f3ec6204c3061e4247c7a93b846ea769ba50a74a126c91987422d7223",
+    "publishedReplayURL": "https://lldb.camanis.net/level/575/14",
+    "replayScore": 453.46997178792105,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 5895,
+    "sourceSaved": 100
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Taxing 15.lvl#-1",
+      "packID": "fan:lldb-575"
+    },
+    "initialStateHash": "ae9a571c54863abab3ed82b41fbeefca9e24c40fa589433ba78c89b4331f39c4",
+    "levelSourceRevision": "205401b04012f53d6c9e777ec95d765d08a1381bc3efc88be3ea3f9945bccbbd",
+    "nativeCompletionTicks": 1439,
+    "nativeReplaySHA256": "5a890640b3566448bf2349910b06c8fb8b108b120f094657f19407cd4e242a43",
+    "nativeSaved": 50,
+    "publishedReplaySHA256": "e485cada4c36aa017e38926fa8975086eba585b00d61e34fba69b57ca472d821",
+    "publishedReplayURL": "https://lldb.camanis.net/level/575/15",
+    "replayScore": 416.2183405658992,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1438,
+    "sourceSaved": 50
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Mayhem 01.lvl#-1",
+      "packID": "fan:lldb-576"
+    },
+    "initialStateHash": "cfa6f2e1573e80bf13ad3798285a06ad9d45facfedc2200a039d2907718af773",
+    "levelSourceRevision": "55af4315388395916c69c0da486f343005736a8c561b6ffbc8251ef65740f533",
+    "nativeCompletionTicks": 4903,
+    "nativeReplaySHA256": "6afdba30ed6d94ff64a7bc0a29f8d1b0ce965ff98dad2d2c9b8687fa2f36cc23",
+    "nativeSaved": 98,
+    "publishedReplaySHA256": "d2b5961b4d01ad1d5e615824e7c30770e82e1ae9d16fc974d8f4488c30e9a2c0",
+    "publishedReplayURL": "https://lldb.camanis.net/level/576/1",
+    "replayScore": 449.52244907454616,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 4904,
+    "sourceSaved": 98
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Mayhem 02.lvl#-1",
+      "packID": "fan:lldb-576"
+    },
+    "initialStateHash": "5618bd21a64404025754c6164545b665a855b8dd3c9203a740b9fb88eb85d0ff",
+    "levelSourceRevision": "55af4315388395916c69c0da486f343005736a8c561b6ffbc8251ef65740f533",
+    "nativeCompletionTicks": 2784,
+    "nativeReplaySHA256": "a4344c1def953f42377b1718aeacdf7fde5d52af501639f62d3e9dd52dcd4dc8",
+    "nativeSaved": 98,
+    "publishedReplaySHA256": "0de78241b27a9d96d457e772031c90fe5eb62029a68303d9c52ebe10a2c3cff7",
+    "publishedReplayURL": "https://lldb.camanis.net/level/576/2",
+    "replayScore": 220.5510203044613,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2784,
+    "sourceSaved": 98
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Mayhem 15.lvl#-1",
+      "packID": "fan:lldb-576"
+    },
+    "initialStateHash": "132779af7b4baa3a1921a9bb2d0cc95b823aef4ed8bf3807b2a5b05fb368ff42",
+    "levelSourceRevision": "55af4315388395916c69c0da486f343005736a8c561b6ffbc8251ef65740f533",
+    "nativeCompletionTicks": 1397,
+    "nativeReplaySHA256": "dd811047ca8b98d825ca66c2485c6f6b70dcfd4632a831e6125bde8a984c2620",
+    "nativeSaved": 96,
+    "publishedReplaySHA256": "7ec61bd5ab8eb207d704c7d708a171114acc19061e5c4e6721d7ee69ad3f735b",
+    "publishedReplayURL": "https://lldb.camanis.net/level/576/15",
+    "replayScore": 433.68263094831684,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1398,
+    "sourceSaved": 96
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Mayhem 25.lvl#-1",
+      "packID": "fan:lldb-576"
+    },
+    "initialStateHash": "5aec4673779c80eeb01c4213c4966afa6c9694a5a33932f00c40aa84eb166313",
+    "levelSourceRevision": "55af4315388395916c69c0da486f343005736a8c561b6ffbc8251ef65740f533",
+    "nativeCompletionTicks": 2396,
+    "nativeReplaySHA256": "b2c2e3451825cda8438a7c87f6344e1ef0777223323bbafd4aa1d653f3bb6800",
+    "nativeSaved": 99,
+    "publishedReplaySHA256": "577f570ff3ad6dabe8bf83be2882af9d8d5c15359cc80d8e31c81486806b3dc8",
+    "publishedReplayURL": "https://lldb.camanis.net/level/576/25",
+    "replayScore": 405.03558332926923,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2397,
+    "sourceSaved": 99
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Mayhem 26.lvl#-1",
+      "packID": "fan:lldb-576"
+    },
+    "initialStateHash": "65e6ccc9a5476fdf6398ee247d9f1b417dfb5ddab18cb9c6ec86ba9d2d085456",
+    "levelSourceRevision": "55af4315388395916c69c0da486f343005736a8c561b6ffbc8251ef65740f533",
+    "nativeCompletionTicks": 3502,
+    "nativeReplaySHA256": "3abfda894b1f1909ac98db85fde5eed6ccd08577a363ea9aca3f2a3469c57dcf",
+    "nativeSaved": 90,
+    "publishedReplaySHA256": "40e2af0ca495f6c12418a7058f5df34de2c3490fd2f09a170a08e2f7fe9e9acf",
+    "publishedReplayURL": "https://lldb.camanis.net/level/576/26",
+    "replayScore": 401.5422503275654,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 3501,
+    "sourceSaved": 90
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Mayhem 29.lvl#-1",
+      "packID": "fan:lldb-576"
+    },
+    "initialStateHash": "2acf69e4f7264f29c045a7e351054c54410bcf8761e68c92de6c0db450fb631b",
+    "levelSourceRevision": "55af4315388395916c69c0da486f343005736a8c561b6ffbc8251ef65740f533",
+    "nativeCompletionTicks": 3879,
+    "nativeReplaySHA256": "405e4b0c1c792ad7c2c1406fabbed6ee525bae49a4561781bb69e4ac731569f0",
+    "nativeSaved": 95,
+    "publishedReplaySHA256": "9afb97a2e4d5bb723d74bcf77bae6a801176a8b4327dcda386bdeabcec415c28",
+    "publishedReplayURL": "https://lldb.camanis.net/level/576/29",
+    "replayScore": 590.5728235294118,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 3880,
+    "sourceSaved": 95
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Tricky 05.lvl#-1",
+      "packID": "fan:lldb-577"
+    },
+    "initialStateHash": "413cf3ddcb4168970ad0ca1df6b2f5ab3b15c8d49910b3f881a0fe8dbd05fdff",
+    "levelSourceRevision": "9bb6c23996c52b4bf065275267be383b5b3c643c9ddee4a40963b6f276971742",
+    "nativeCompletionTicks": 1830,
+    "nativeReplaySHA256": "4830706b64433fd0d4737f3f218a37e6e1dc057aa28d3dc6ad310761c864a4d5",
+    "nativeSaved": 94,
+    "publishedReplaySHA256": "14325be3df439bbaceb420d3acf1a1bbf1ad3a1aa616e7793a8f009071bc12d2",
+    "publishedReplayURL": "https://lldb.camanis.net/level/577/5",
+    "replayScore": 442.3794358749911,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1829,
+    "sourceSaved": 94
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Tricky 13.lvl#-1",
+      "packID": "fan:lldb-577"
+    },
+    "initialStateHash": "ebcf039ee91bb140345eae14cc924f07be906109ee37cbe3e5a208140a3c3de0",
+    "levelSourceRevision": "9bb6c23996c52b4bf065275267be383b5b3c643c9ddee4a40963b6f276971742",
+    "nativeCompletionTicks": 2573,
+    "nativeReplaySHA256": "06d6d730e9b3184bd3c29f98306506c27c26797046bc65c72442c3f67aafc751",
+    "nativeSaved": 100,
+    "publishedReplaySHA256": "4ce270b664b670ad534cb19ff6bb352fbc5ccf946d528410a4a9e423b80148ab",
+    "publishedReplayURL": "https://lldb.camanis.net/level/577/13",
+    "replayScore": 378.1400672775779,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2572,
+    "sourceSaved": 100
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Tricky 21.lvl#-1",
+      "packID": "fan:lldb-577"
+    },
+    "initialStateHash": "25952f9e6a2c02a2033411bcc0508b735c63584d0754a58d36a2de499711505a",
+    "levelSourceRevision": "9bb6c23996c52b4bf065275267be383b5b3c643c9ddee4a40963b6f276971742",
+    "nativeCompletionTicks": 3487,
+    "nativeReplaySHA256": "a28973282e2e744d2913ca863c893effecf3da51ae7bdf6b61131e9502d0b7fb",
+    "nativeSaved": 98,
+    "publishedReplaySHA256": "2a8934f125428d7e66e1ce53c0c32243553647c8b6a7207de095491ae542e48f",
+    "publishedReplayURL": "https://lldb.camanis.net/level/577/21",
+    "replayScore": 268.95529920011904,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 3488,
+    "sourceSaved": 98
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Taxing 08.lvl#-1",
+      "packID": "fan:lldb-578"
+    },
+    "initialStateHash": "ff069dcece003ab35efe4554cd696f2e9d7c3436490b27114c37ede30b2aefad",
+    "levelSourceRevision": "b330cecedeb96b82a5fb772950a917a8befd4cc6909df62f90be62b51ac8a869",
+    "nativeCompletionTicks": 2486,
+    "nativeReplaySHA256": "db645dfd18ed9ef5d4d4b4d8d9356a8dc288aa99651d3ae34e21e1e34fdc8571",
+    "nativeSaved": 100,
+    "publishedReplaySHA256": "f3e6dcfa2c9c3e54a5c5c63d42fdab261558bec745214052bc7d1e6abe48022a",
+    "publishedReplayURL": "https://lldb.camanis.net/level/578/8",
+    "replayScore": 316.8406735509235,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2485,
+    "sourceSaved": 100
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Taxing 14.lvl#-1",
+      "packID": "fan:lldb-578"
+    },
+    "initialStateHash": "0e8d96bbbbaf0616698f69bad157d7cff1379f6a6057fefcaea6660cee0a6480",
+    "levelSourceRevision": "b330cecedeb96b82a5fb772950a917a8befd4cc6909df62f90be62b51ac8a869",
+    "nativeCompletionTicks": 5896,
+    "nativeReplaySHA256": "634317eb555b85217cfc1ce09c9a31c79d204552e6f2b50361e040d01f77d8ef",
+    "nativeSaved": 100,
+    "publishedReplaySHA256": "2401141f3ec6204c3061e4247c7a93b846ea769ba50a74a126c91987422d7223",
+    "publishedReplayURL": "https://lldb.camanis.net/level/578/14",
+    "replayScore": 453.46997178792105,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 5895,
+    "sourceSaved": 100
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Taxing 20.lvl#-1",
+      "packID": "fan:lldb-578"
+    },
+    "initialStateHash": "2e99a208b407832099c2556decad89c03775c93585c6d20d904763dbd2a8ff8c",
+    "levelSourceRevision": "b330cecedeb96b82a5fb772950a917a8befd4cc6909df62f90be62b51ac8a869",
+    "nativeCompletionTicks": 1912,
+    "nativeReplaySHA256": "60e688ad571ca7e62375e9f9f559b68aed7051b1f36baff92d2acd7d226187e4",
+    "nativeSaved": 100,
+    "publishedReplaySHA256": "df14abbc463745695b63f8b3b578f457ce1783a60a09854e7d042196b78f60b1",
+    "publishedReplayURL": "https://lldb.camanis.net/level/578/20",
+    "replayScore": 347.09037943327644,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1912,
+    "sourceSaved": 100
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Tricky 3.DAT#0",
+      "packID": "fan:lldb-579"
+    },
+    "initialStateHash": "164c85b4dd65527a90d82c070c51182af86ec588fc7677f3fda940301abeaa69",
+    "levelSourceRevision": "f05b08724643c333b6e7d2201f116cdf89cb73f3e5f88b36c556a31eb7ba70ea",
+    "nativeCompletionTicks": 7450,
+    "nativeReplaySHA256": "4eb151e7b6a26de4e3033d9de60d9692d636b0e56c90eb64398dd7c3600ea69a",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "0128421f923eac33ab4ae7a3059a15497b8577a477cda85f2306c2f671caa09f",
+    "publishedReplayURL": "https://lldb.camanis.net/level/579/21",
+    "replayScore": 382.1216566456482,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 7450,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Taxing 2.DAT#9",
+      "packID": "fan:lldb-580"
+    },
+    "initialStateHash": "12ef603b5fcdc945c9ece3982d13757a556613968d1829037a585b3f56d04f8a",
+    "levelSourceRevision": "634c8373e63179934d15196671e68f7eac9fa702ebb1039225a029393744e778",
+    "nativeCompletionTicks": 1925,
+    "nativeReplaySHA256": "b6878b26aec3267dc892fb148601e1cdb52276ec25df8b32b60d5adbb7ed00c9",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "fe1e287b7f9f5243df140e7d3cef6405b297da6fe8f6bbb319bbb9c8d1d917b9",
+    "publishedReplayURL": "https://lldb.camanis.net/level/580/20",
+    "replayScore": 292.3481735509235,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1925,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Level 01.lvl#-1",
+      "packID": "fan:lldb-581"
+    },
+    "initialStateHash": "c3bc7798f4c950c09104517b594ca10d421148178d62b739616eebbcd439804b",
+    "levelSourceRevision": "a27ec16ca20a6f90ef35c45a7ab3ba2c57c9128ed78b7f500973aca3e5348437",
+    "nativeCompletionTicks": 1307,
+    "nativeReplaySHA256": "e6b10bd63aedf84a4b0e012b8785219491c5d20b3c71a493ff4cb80e3325d24b",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "25a26584890a5a2836718a13fce9885e290a1ee68947c98335d6ccc2b35ab08f",
+    "publishedReplayURL": "https://lldb.camanis.net/level/581/1",
+    "replayScore": 213.86111472739404,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1306,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Level 03.lvl#-1",
+      "packID": "fan:lldb-581"
+    },
+    "initialStateHash": "2ef1a4f475dd3af6c53ba775f6d14c0f9a6e449f3301c729593e3545a1b3f730",
+    "levelSourceRevision": "a27ec16ca20a6f90ef35c45a7ab3ba2c57c9128ed78b7f500973aca3e5348437",
+    "nativeCompletionTicks": 1538,
+    "nativeReplaySHA256": "a07d21ddf96d4bde41d9c493965b59350ba278595e8a5c953834f72769c43085",
+    "nativeSaved": 120,
+    "publishedReplaySHA256": "0532c7b89a7881eabaa37e9303bd053ed3b64c26c03e04c0ccd159d44b8c98f9",
+    "publishedReplayURL": "https://lldb.camanis.net/level/581/3",
+    "replayScore": 538.0044997914666,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 1538,
+    "sourceSaved": 120
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Level 05.lvl#-1",
+      "packID": "fan:lldb-581"
+    },
+    "initialStateHash": "a8a8621be3d6cb0a53dab649cd890c3dad70d8cd58c70537e74eb172a8110e03",
+    "levelSourceRevision": "a27ec16ca20a6f90ef35c45a7ab3ba2c57c9128ed78b7f500973aca3e5348437",
+    "nativeCompletionTicks": 2833,
+    "nativeReplaySHA256": "084fba0c4dd4ea0282a902fbf75720253288c2e66d9297a0cc515f6304d9197e",
+    "nativeSaved": 100,
+    "publishedReplaySHA256": "7691299d1b0414eee5078d8567927261a20fa6e3d5e005971d4adebe169af58f",
+    "publishedReplayURL": "https://lldb.camanis.net/level/581/5",
+    "replayScore": 415.1439353656964,
+    "sourceGameMode": 0,
+    "sourceHeaderTicks": 2832,
+    "sourceSaved": 100
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "LEVEL000.DAT#4",
+      "packID": "fan:lldb-584"
+    },
+    "initialStateHash": "e0ab2f41ad2ed9ffa3dfe126c5be7640f50be7cbea4c836663d8a0da8aa51685",
+    "levelSourceRevision": "8266ec3e50eced182f0e60729f0654bdfabf71fa405f7af8aaa96cf147e51b31",
+    "nativeCompletionTicks": 2996,
+    "nativeReplaySHA256": "650e982d802ca5722b6277a68668253d6f51f5fc9fd7357610fc7f97a329753f",
+    "nativeSaved": 50,
+    "publishedReplaySHA256": "fb4ab70036edcd2f6fd0ec235eefd9fd737dd1ee8dbb1a90c9377fe30292db37",
+    "publishedReplayURL": "https://lldb.camanis.net/level/584/5",
+    "replayScore": 386.856122876585,
+    "sourceGameMode": 2,
+    "sourceHeaderTicks": 2997,
+    "sourceSaved": 50
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Mikes Lemmix Pack.dat#2",
+      "packID": "fan:lldb-591"
+    },
+    "initialStateHash": "b20b18b078b8ebca7de2a7349e768f26b9e3f2d984d451b17bbecb27694818b6",
+    "levelSourceRevision": "a9371c3768ccd9c4ea65701e0cd8ff156a5e33e3445d9bc217dfa7f89c260d0f",
+    "nativeCompletionTicks": 4659,
+    "nativeReplaySHA256": "a9722f9cae26f88fe4872d7614f7755f8be4f9ed17ff558c7ceb9573d78a8e57",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "6118dbfced8b1cc37b0ee1d4af6cafeaff95d51fab4012ba63456ceab9d76bf0",
+    "publishedReplayURL": "https://lldb.camanis.net/level/591/3",
+    "replayScore": 349.87126169622866,
+    "sourceGameMode": 2,
+    "sourceHeaderTicks": 4653,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Mikes Lemmix Pack.dat#5",
+      "packID": "fan:lldb-591"
+    },
+    "initialStateHash": "a88dda78bb809d6e2e4dad17d57a7e55683997ca05fb0b227d623bfd54e2a2fc",
+    "levelSourceRevision": "a9371c3768ccd9c4ea65701e0cd8ff156a5e33e3445d9bc217dfa7f89c260d0f",
+    "nativeCompletionTicks": 1917,
+    "nativeReplaySHA256": "dc96eabc033e6b63adbe12be118d053ea1dac0bed4618a7a0739923e295c1f00",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "9932fc97aed5e7d9d76e4e1ae285774f5db8881014d97ea45c01d208320b966a",
+    "publishedReplayURL": "https://lldb.camanis.net/level/591/6",
+    "replayScore": 339.0156971233586,
+    "sourceGameMode": 2,
+    "sourceHeaderTicks": 1916,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmy556 More levels.dat#8",
+      "packID": "fan:lldb-68"
+    },
+    "initialStateHash": "6e374b92feff10eebf3475a6c922da38caae58870efc40df96f5c8a465afd023",
+    "levelSourceRevision": "a1883fb43a9148fb8feeb3cf88b817663bd9bb9b5e23ae179ffe5c6166686b81",
+    "nativeCompletionTicks": 1033,
+    "nativeReplaySHA256": "60b5f4bb6fcf3b2bcdd71b2d165b5c715e988d76b1ba7068495102755d133f12",
+    "nativeSaved": 20,
+    "publishedReplaySHA256": "f758417ab365d6f7844875d0ff792cbe69e8dd7f29efaeed2dc1ad746198099c",
+    "publishedReplayURL": "https://lldb.camanis.net/level/68/9",
+    "replayScore": 289.5563209572517,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1025,
+    "sourceSaved": 20
+  },
+  {
+    "globalTickShift": 6,
+    "identity": {
+      "engine": "classic",
+      "levelID": "fishthekiller99.dat#1",
+      "packID": "fan:lldb-71"
+    },
+    "initialStateHash": "8cc8b070018501e403bc0aa136bc634371e115e24a466b7ba263b192e1ea6e80",
+    "levelSourceRevision": "931ba84bef252ac007a761d2e38d0a47d68286ea5aa2d0bf4960f2b2f78cb766",
+    "nativeCompletionTicks": 8125,
+    "nativeReplaySHA256": "ba1d18e2fb42293b0f7f61e81de60bdf9e6b23b2f74ef92fcaed72cb331d6897",
+    "nativeSaved": 80,
+    "publishedReplaySHA256": "3dc4eb6ec6d78d01cf8a1552de28625a09acce3487bf0ddcf71fd822c7b7e5b3",
+    "publishedReplayURL": "https://lldb.camanis.net/level/71/2",
+    "replayScore": 398.040571636416,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 8092,
+    "sourceSaved": 80
+  },
+  {
+    "globalTickShift": -1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Master System Remakes.dat#3",
+      "packID": "fan:lldb-80"
+    },
+    "initialStateHash": "47665aa7171a935b523c94bfd36cedf820f60a5feef15af876e580aa9e451352",
+    "levelSourceRevision": "bae8cb65d910af0259378eab5ac9ed089135b7d3728d8a0d3897cad72232b515",
+    "nativeCompletionTicks": 2661,
+    "nativeReplaySHA256": "2e4c1b447153d8cba0cfab1ea56c554a50c42acad87399672701d0b37ed18e6f",
+    "nativeSaved": 20,
+    "publishedReplaySHA256": "bd456e7cbcc9414aea8cfcae3a919e9326caa262b1aada3f07e1f729fcda9c16",
+    "publishedReplayURL": "https://lldb.camanis.net/level/80/4",
+    "replayScore": 462.74284055321147,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2664,
+    "sourceSaved": 20
+  }
+]

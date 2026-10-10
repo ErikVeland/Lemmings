@@ -196,6 +196,36 @@ award a verified original-engine achievement.
   overlap selection, staged nuking, one-shot sound delivery, all eighty clips,
   mixed audio output, mute/reset, palette cycling and malformed data.
 
+## Presentation sound supplements
+
+The 8 October development source adds a Yippee when each exit animation
+actually completes, a trampoline bounce when the actor launches, and a trap
+trigger when an ordinary or timed trap captures it. The rescue uses the bundled
+Yippee recording when available, with a generated fallback for previews.
+Trampoline and trap effects are short generated supplements. They stay
+separate from the verified `SBLAST.VOC` indices. Original sample identities for
+these added events still need evidence; no numbered clip is assigned by guess.
+
+Every rescue keeps its own voice, including simultaneous exit completions.
+Rescue layers retain normal gain and independent playheads when the spatial
+pool fills. They have no crowd-dependent attenuation or repetition gate.
+Player volume, mute and distance attenuation still apply. Assignment and
+warning cues retain priority alongside the chorus. The original panel pitches,
+construction warning and verified native sample bindings remain in use.
+
+The final-seconds warning uses a distinct shared timer effect. Rejected skill
+actions on a real target get the shared refusal cue. Fresh starts and retries
+play Ready only when the visible countdown completes; Hot Seat waits for the
+next player's Ready action. These cues use the current sound volume, mute,
+suspension and replay capture paths.
+
+Muted runtime, bank and spatial checks cover the new causal events, concurrent
+rescues, overflow, capture, priority and repetition rules. These presentation
+checks do not establish original-engine audio parity or validate additional
+campaign solutions. Original sample mapping and audible listening remain
+separate work. The existing talisman animation retains its own verified
+fanfare callback.
+
 ## Ceiling transfers, effects and nuke corrections
 
 - PROCESS `7401` probes the starting pixel and then decrements its counter.

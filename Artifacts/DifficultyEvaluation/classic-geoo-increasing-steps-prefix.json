@@ -1,0 +1,44 @@
+[
+  {
+    "tick": 79,
+    "id": 0,
+    "skill": "bomber"
+  },
+  {
+    "tick": 143,
+    "id": 1,
+    "skill": "climber"
+  },
+  {
+    "tick": 351,
+    "id": 1,
+    "skill": "digger"
+  },
+  {
+    "tick": 360,
+    "id": 1,
+    "skill": "basher"
+  },
+  {
+    "tick": 375,
+    "id": 2,
+    "skill": "builder"
+  },
+  {
+    "tick": 451,
+    "id": 3,
+    "skill": "blocker"
+  },
+  {
+    "tick": 90,
+    "rate": 77
+  },
+  {
+    "tick": 110,
+    "rate": 41
+  },
+  {
+    "tick": 203,
+    "rate": 99
+  }
+]

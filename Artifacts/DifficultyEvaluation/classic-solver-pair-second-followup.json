@@ -1,0 +1,96 @@
+{
+  "attempts": [
+    {
+      "archiveSha256": "173c146193fa36cf4c3be83f13bd59149e1a6012d1e4cfa9b5523ed81f67639c",
+      "bestSaved": "0/2",
+      "completedContinuations": 123252,
+      "deadlineReached": false,
+      "firstAssignments": 419,
+      "firstTickWindow": [
+        1,
+        300
+      ],
+      "initialStateHash": "202716077e306ce7100b3eb8adcb8814faa05a4b2f26b6bfa124596f78f6c068",
+      "level": "fan:lldb-19/Mikepak14.dat#9",
+      "secondAssignments": 123252,
+      "secondGapWindow": [
+        1,
+        150
+      ],
+      "skills": "basher,builder",
+      "timeLimitSeconds": 30,
+      "title": "Oh no! Level 20 more difficult!",
+      "waitingRouteTick": 300
+    },
+    {
+      "archiveSha256": "0a3abaedb6028f6082c310f7f40f44678b1af6af282db08336b34fc8848088b3",
+      "bestSaved": "0/1",
+      "completedContinuations": 10719,
+      "deadlineReached": false,
+      "firstAssignments": 137,
+      "firstTickWindow": [
+        1,
+        300
+      ],
+      "initialStateHash": "e695153fa878c7f75c973f5250c44bb70a6cdd61554eed43e4ecebef4fd64987",
+      "level": "fan:lldb-434/LDChallenge05.dat#0",
+      "secondAssignments": 10719,
+      "secondGapWindow": [
+        1,
+        150
+      ],
+      "skills": "basher,blocker",
+      "timeLimitSeconds": 30,
+      "title": "General wooden contraption no.73",
+      "waitingRouteTick": 209
+    },
+    {
+      "archiveSha256": "ebd0f5401693ba0038f81ce31381bca4471314ad26e16ec9bdddaeb591907405",
+      "bestSaved": "13/50",
+      "completedContinuations": 13605,
+      "deadlineReached": true,
+      "firstAssignments": 6,
+      "firstTickWindow": [
+        1,
+        300
+      ],
+      "initialStateHash": "bb8d9156e9ad9fb9fca0ee0949537bf5cadb167fa22d354ccc29bd9920b1e9b5",
+      "level": "fan:lldb-317/joem1.dat#4",
+      "secondAssignments": 13606,
+      "secondGapWindow": [
+        1,
+        150
+      ],
+      "skills": "basher,digger",
+      "timeLimitSeconds": 30,
+      "title": "Think Fast!",
+      "waitingRouteTick": 71
+    },
+    {
+      "archiveSha256": "1a8387086f8d991ed73ebc916319db9960f6ca154bb257e75adad8306877dc88",
+      "bestSaved": "0/2",
+      "completedContinuations": 557,
+      "deadlineReached": false,
+      "firstAssignments": 48,
+      "firstTickWindow": [
+        1,
+        400
+      ],
+      "initialStateHash": "2004161d65aad5da570e4af13055d58b2a86d35e32b7c4fa57b1abe2a7b80c70",
+      "level": "fan:lldb-65/Lemmy556 My little levels.dat#0",
+      "secondAssignments": 557,
+      "secondGapWindow": [
+        1,
+        200
+      ],
+      "skills": "builder,builder",
+      "timeLimitSeconds": 30,
+      "title": "2 lemmings",
+      "waitingRouteTick": 115
+    }
+  ],
+  "date": "2026-10-04",
+  "limits": "Each bounded attempt covers only its named skill order, rate and timing windows. No failure proves impossibility or source physics parity.",
+  "nativeLibrarySha256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "solverSha256": "d7c1717faa942ffeb08802b7a1883ea82333c8a5a26da1efba24bbba00b23792"
+}

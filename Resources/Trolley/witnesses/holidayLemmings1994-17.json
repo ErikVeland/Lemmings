@@ -1,0 +1,95 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 11
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 187
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 439
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 566
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 567
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 78,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 697
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 77,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 705
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 76,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 820
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 75,
+    "saved" : 75,
+    "stateHash" : "665b96908d58960277edfc06c09a04e27a4c8f08c1dfd94073d39ef91dae19d0",
+    "ticks" : 2040
+  },
+  "initialStateHash" : "8eff953e88d2bf4adad425897d2d5eab6121fe4180a31783c13c94d421633cc7",
+  "number" : 2,
+  "rank" : "Hail",
+  "title" : "Break On Through"
+}

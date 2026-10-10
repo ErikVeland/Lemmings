@@ -208,7 +208,7 @@ struct GameCenterAccount: Equatable, Sendable {
 }
 
 @MainActor extension ArcadeView {
-    func openWorldwideBoard() {
+    func openGameCenterBoard() {
         boardScope = .worldwide; page(.records)
         let service = GameCenterScores.shared
         service.onChange = { [weak self] in self?.needsDisplay = true }
@@ -216,27 +216,30 @@ struct GameCenterAccount: Equatable, Sendable {
             service.refresh(profileID: player.id, boardID: service.boardID ?? config.starsID, history: ArcadeStore.shared.records.trolley)
         }
     }
-    func drawWorldwideBoard() {
+    func drawGameCenterBoard() {
         header("Worldwide leaderboard"); tabs(); boardScopeLinks()
         let service = GameCenterScores.shared, config = service.configuration
         let selected = service.boardID ?? config?.starsID
-        let levelID = config?.levels.first { $0.conditions == level?.conditions }?.leaderboardID
-        let choices = [("Career stars", config?.starsID), ("Cleared", config?.clearsID), ("Three-star", config?.perfectID), ("This level", levelID)]
+        let rankedLevel = config?.levels.first { $0.conditions == level?.conditions }
+        let levelID = rankedLevel?.leaderboardID
+        let choices = [("Career stars", config?.starsID), ("Cleared", config?.clearsID), ("Three-star", config?.perfectID), ("This level", levelID), ("Fastest clear", rankedLevel?.fastestClearID), ("Fastest 100%", rankedLevel?.fastestAllSavedID)]
         for (index, item) in choices.enumerated() {
-            button(item.0, CGRect(x: 80 + index * 244, y: 213, width: 226, height: 40), selected: item.1 == selected, enabled: item.1 != nil && service.available && !service.busy) { [weak self] in
+            button(item.0, CGRect(x: 80 + (index % 3) * 326, y: 201 + (index / 3) * 46, width: 308, height: 40), selected: item.1 == selected, enabled: item.1 != nil && service.available && !service.busy) { [weak self] in
                 guard let self, let id = item.1 else { return }
                 if service.account == nil { service.connect(profileID: self.player.id, window: self.window, boardID: id, history: ArcadeStore.shared.records.trolley) }
                 else { service.refresh(profileID: self.player.id, boardID: id, history: ArcadeStore.shared.records.trolley) }
             }
         }
+        let speedBoard = selected != nil && (selected == rankedLevel?.fastestClearID || selected == rankedLevel?.fastestAllSavedID)
+        func scoreLabel(_ score: Int) -> String { speedBoard ? Self.time(Double(score) / 1000) : "\(score)" }
         if let board = service.board {
             for (index, entry) in board.entries.enumerated() {
                 let y = CGFloat(298 + index * 43)
                 text("#\(entry.rank)", 80, y, 100); text(entry.name, 216, y, 594)
-                text("\(entry.score)", 856, y, 184, alignment: .right)
+                text(scoreLabel(entry.score), 856, y, 184, alignment: .right)
             }
             if board.entries.isEmpty { text("Be the first to set a score.", 80, 308, 960) }
-            let personal = board.personal.map { "Your rank: #\($0.rank) of \(board.players) - \($0.score)" } ?? "No worldwide score yet."
+            let personal = board.personal.map { "Your rank: #\($0.rank) of \(board.players) - \(scoreLabel($0.score))" } ?? "No worldwide score yet."
             text(personal, 80, 521, 960, palette: .green)
         } else {
             paragraph(service.status, CGRect(x: 80, y: 310, width: 960, height: 72))

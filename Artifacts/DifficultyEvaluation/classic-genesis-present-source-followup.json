@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-04",
+  "identity": {
+    "engine": "classic",
+    "packID": "fan:lldb-492",
+    "levelID": "Genesis Present.dat#1"
+  },
+  "title": "Don't leave my Lemmings.",
+  "sourceURL": "https://lldb.camanis.net/level/492/2",
+  "sourcePageSHA256": "11927a1ea29f0ec00777624d19badbcf8bb7acefd0dfd7d8e89f160b05ce6303",
+  "sourceGoal": "40 of 50 within 3 minutes.",
+  "exactBundledArchiveSHA256": "52c417ec72a99555caa15c1fb308a618759532d2059baefca16c67417d0a5c2c",
+  "rawSourceReplaySHA256": "aef3defae2ea71a46e59f944d8fc67982ff888d96f1301601b094d56aad3f41e",
+  "sourceHeader": {
+    "saved": 42,
+    "ticks": 1526
+  },
+  "scope": "Seven uniform input phases minus three through plus three, under Original and Golems mechanics and DOS and 32-slot object interpretations.",
+  "outcomes": "All 28 routes rejected a source assignment. At source phase zero under Original mechanics, the third Builder for lemming 0 was refused at tick 596; under Golems mechanics, the first Floater was refused at tick 218.",
+  "sourceBuiltProbeSHA256": "8d2864201e97fed57caf282cc349ebe625b7752076f7682c2012eaf4a96c85b0",
+  "sourceBuiltNxlvKitSHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "conclusion": "No native winning replay or score. The source page title matches the bundled member; goal and skill stock still require a field-by-field check. This bounded failure separates source-action divergence from a solver search result; full physics parity remains unverified."
+}

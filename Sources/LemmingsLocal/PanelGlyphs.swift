@@ -8,6 +8,8 @@ enum PanelGlyph: String {
   case pause
   case undo
   case fastForward
+  case rewind, stepBackward, stepForward
+  case settings, download
   /// Shown on the pause button while the level is held, so the button says
   /// what it will do rather than what it did.
   case play
@@ -47,6 +49,37 @@ enum PanelGlyph: String {
       return [".....####...", "...########.", "..###....###", "..##......##", "#.##........", "####........", "###.........", "####........", "#####.......", "...........#", "...#########", ".....#####.."]
     case .fastForward:
       return ["#.....#.....", "##....##....", "###...###...", "####..####..", "#####.#####.", "############", "#####.#####.", "####..####..", "###...###...", "##....##....", "#.....#.....", "............"]
+    case .rewind:
+      return PanelGlyph.fastForward.rows.map { String($0.reversed()) }
+    case .stepForward:
+      return ["#.......##", "##......##", "###.....##", "####....##", "#####...##", "######..##", "#####...##", "####....##", "###.....##", "##......##", "#.......##"]
+    case .stepBackward:
+      return PanelGlyph.stepForward.rows.map { String($0.reversed()) }
+    case .settings:
+      return [
+        "......###......",
+        "..##..###..##..",
+        ".####.###.####.",
+        ".#############.",
+        "..####...####..",
+        "...##.....##...",
+        "####.......####",
+        "#####.....#####",
+        "####.......####",
+        "...##.....##...",
+        "..####...####..",
+        ".#############.",
+        ".####.###.####.",
+        "..##..###..##..",
+        "......###......",
+      ]
+    case .download:
+      return [
+        ".....###.....", ".....###.....", ".....###.....", ".....###.....",
+        "..#..###..#..", "..#########..", "...#######...", "....#####....",
+        ".....###.....", "......#......", ".............", "##.........##",
+        "#############", "#############",
+      ]
     case .pause:
       return [
         "aaa99aa9aabbaa99999a90aaab90",
@@ -121,7 +154,7 @@ enum PanelGlyph: String {
       return Dictionary(uniqueKeysWithValues: Self.classicPalette.enumerated().map { index, colour in
         (Character(String(index, radix: 16)), (colour.red, colour.green, colour.blue))
       })
-    case .play, .fastForward, .undo:
+    case .play, .fastForward, .undo, .settings, .download, .rewind, .stepBackward, .stepForward:
       return ["#": (194, 224, 158)]
     }
   }
@@ -172,6 +205,81 @@ enum PanelGlyph: String {
   }
 
   @MainActor private static var cache: [String: NSImage] = [:]
+
+  /**
+   * Recreates the panel art at Macintosh scale without changing its logical size.
+   */
+  @MainActor func macImage(fitting box: CGSize) -> NSImage? {
+    let size = pixelSize
+    guard size.width > 0, size.height > 0 else { return nil }
+    let steps = min(Int(box.width) / size.width, Int(box.height) / size.height)
+    guard steps >= 1 else { return nil }
+    let key = "mac-\(rawValue)-\(steps)-\(SequelMacArtwork.revision)"
+    if let hit = Self.cache[key] { return hit }
+    guard let first = rows.first else { return nil }
+    let width = first.count, height = rows.count
+    var source = [UInt8](repeating: 0, count: width * height * 4)
+    for (y, row) in rows.enumerated() {
+      for (x, symbol) in row.enumerated() {
+        guard let colour = palette[symbol] else { continue }
+        let offset = (y * width + x) * 4
+        source[offset..<offset + 4] = [colour.0, colour.1, colour.2, 255]
+      }
+    }
+    let highWidth = size.width * 2, highHeight = size.height * 2
+    var high = [UInt8](repeating: 0, count: highWidth * highHeight * 4)
+    if isOriginalTile {
+      guard let frame = try? SequelMacFrame(width: width, height: height, rgba: source),
+            let recreated = try? SequelMacArtwork.reconstruct(frame,
+              category: .architectural) else { return image(scale: steps) }
+      for y in 0..<highHeight { for x in 0..<highWidth {
+        let from = (y * recreated.width + x * 2) * 4
+        let to = (y * highWidth + x) * 4
+        high[to..<to + 4] = recreated.rgba[from..<from + 4]
+      } }
+    } else {
+      // Small control symbols have one flat source colour. Edge light and shade
+      // supply detail within their existing opaque cells.
+      for y in 0..<height { for x in 0..<width {
+        let sourceIndex = (y * width + x) * 4
+        guard source[sourceIndex + 3] == 255 else { continue }
+        let top = y == 0 || source[((y - 1) * width + x) * 4 + 3] == 0
+        let left = x == 0 || source[(y * width + x - 1) * 4 + 3] == 0
+        let bottom = y == height - 1 || source[((y + 1) * width + x) * 4 + 3] == 0
+        let right = x == width - 1 || source[(y * width + x + 1) * 4 + 3] == 0
+        for dy in 0..<2 { for dx in 0..<2 {
+          let output = ((y * 2 + dy) * highWidth + x * 2 + dx) * 4
+          let lighten = (top && dy == 0) || (left && dx == 0)
+          let darken = !lighten && ((bottom && dy == 1) || (right && dx == 1))
+          for channel in 0..<3 {
+            let colour = Int(source[sourceIndex + channel])
+            high[output + channel] = UInt8(lighten
+              ? min(255, colour + max(12, (255 - colour) / 5))
+              : darken ? max(0, colour - max(12, colour / 4)) : colour)
+          }
+          high[output + 3] = 255
+        } }
+      } }
+    }
+    let bitmapWidth = highWidth * steps, bitmapHeight = highHeight * steps
+    var pixels = [UInt8](repeating: 0, count: bitmapWidth * bitmapHeight * 4)
+    for y in 0..<bitmapHeight { for x in 0..<bitmapWidth {
+      let from = ((y / steps) * highWidth + x / steps) * 4
+      let to = (y * bitmapWidth + x) * 4
+      pixels[to..<to + 4] = high[from..<from + 4]
+    } }
+    guard let provider = CGDataProvider(data: Data(pixels) as CFData),
+          let bitmap = CGImage(width: bitmapWidth, height: bitmapHeight,
+            bitsPerComponent: 8, bitsPerPixel: 32, bytesPerRow: bitmapWidth * 4,
+            space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
+            provider: provider, decode: nil, shouldInterpolate: false,
+            intent: .defaultIntent) else { return nil }
+    let result = NSImage(cgImage: bitmap,
+      size: CGSize(width: size.width * steps, height: size.height * steps))
+    Self.cache[key] = result
+    return result
+  }
 
   /// Renders the glyph at a whole-number scale.
   ///
@@ -232,7 +340,7 @@ enum PanelGlyph: String {
 
 /// Shared speed control geometry for flat, CRT and sequel panels.
 @MainActor enum SpeedPanelControls {
-    static let help = "Click speed to toggle. Hold to boost; release to return. Arrows apply 2×, 3×, 5× or 10× immediately."
+    static let help = "Click speed to toggle. Hold to boost; release to return. Arrows apply 1×, 2×, 3×, 5× or 10× immediately."
     static func part(at point: CGPoint, in rect: CGRect) -> Int? {
         guard rect.contains(point) else { return nil }
         if point.x < rect.minX + rect.width * 0.22 { return -1 }

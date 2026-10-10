@@ -1,0 +1,67 @@
+{
+  "scope": "Exact bundled members in packs tagged Lemmini by source catalogue",
+  "sourceTaggedRows": 299,
+  "textIniRowsRequiringSourceGeometry": 272,
+  "binaryClassicRecordRows": 27,
+  "binaryRecordBreakdown": {
+    "fan:lldb-397": 7,
+    "fan:lldb-416": 20
+  },
+  "binaryRecordArchiveDigestsVerified": true,
+  "binaryRecordPayloadsVerifiedAs2048Bytes": 27,
+  "binaryRecordRowsWithStrictNativeWins": 2,
+  "binaryRecordRowsWithoutStrictNativeWins": 25,
+  "existingWinRechecks": [
+    {
+      "identity": "fan:lldb-416/Above The Pepsi Max.ini#-1",
+      "ledgerReplaySHA256": "93ea2c4d7ee605597034eb2d3724d96e84e644abc572654574fc922db747dacd",
+      "strictResult": "2/2 at tick 2258"
+    },
+    {
+      "identity": "fan:lldb-416/Puzzle Time.ini#-1",
+      "ledgerReplaySHA256": "449f8fb338f6f70178cfa095587b3abd5777ac908dce7b46087ec2f84612bfeb",
+      "strictResult": "50/46 at tick 1517"
+    }
+  ],
+  "newTargetedAttempt": {
+    "identity": "fan:lldb-397/2010 CONTEST/11Ellischant.lvl#-1",
+    "archiveSHA256": "7cb5a7b687cccdbe290028ae7648bb15809b3248a3cf9330d418ce16240d63f2",
+    "population": 10,
+    "required": 9,
+    "policy": "current-source balanced ranking, width 128, fallback and refire 20 ticks, 45-second bound",
+    "expanded": 111976,
+    "bestSaved": 0,
+    "winningReplay": false
+  },
+  "limits": "Binary Classic encoding permits the existing parser. The two listed ledger replays passed current-source strict playback on the exact bundled archive; that does not establish source physics parity. The targeted bounded search found no new win and adds no score.",
+  "whichWayTargetedAttempt": {
+    "identity": "fan:lldb-416/Which Way Should we Go.ini#-1",
+    "exactBundledArchiveSHA256": "b33f3e29a9f703ed3959e189f2146cf378922649a790e30316f4b82969c794e6",
+    "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+    "sourceBuiltSolverSHA256": "8a612649e45bb5edb81940660531c4503396ef0b0ab5304b1a0a202d4fbc7424",
+    "levelHeader": {
+      "lemmings": 3,
+      "required": 1,
+      "releaseRate": 70,
+      "timeLimitMinutes": 5
+    },
+    "singleSkill": {
+      "policy": "rollout-single, width 12, 15-second bound, fallback/refire 8 ticks",
+      "waitingRouteTick": 5102,
+      "continuations": 2178,
+      "expanded": 20883,
+      "bestSaved": 0,
+      "required": 1
+    },
+    "guidedMultiskill": {
+      "policy": "prefer-progress, width 128, 30-second bound, fallback/refire 12 ticks",
+      "expanded": 94356,
+      "bestSaved": 0,
+      "required": 1
+    },
+    "winningReplay": false,
+    "difficultyScore": null,
+    "sourcePhysicsParity": "not independently checked",
+    "interpretation": "One-skill timing coverage was broad; a higher exit and the available Builders require a multi-skill route. The bounded guided search found none. Source-family art and physics remain unverified."
+  }
+}

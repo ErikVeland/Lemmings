@@ -1,0 +1,141 @@
+{
+  "date": "2026-10-04",
+  "description": "Three exact bundled Classic fan source-route recoveries. Each native replay was separately verified; source physics parity remains unverified.",
+  "sourceSearch": "Five source records for four distinct unscored members were checked across 11 uniform phases, Original and Golems mechanics, and two object interpretations. Four records completed 44 cases each; the second Frost.DAT#4 record logged 30 cases before the probe stopped at a duplicate mapping. The Van Clan member was then checked by exact level identity and transferred from its matching native initial state.",
+  "records": [
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Frost.DAT#12",
+        "packID": "fan:lldb-482"
+      },
+      "title": "2 Minutes before midnight",
+      "sourceURL": "https://lldb.camanis.net/level/482/13",
+      "exactBundledArchive": "Content/LevelPacks/0482-DOS-Frost.zip",
+      "exactBundledArchiveSHA256": "9f0b55e9f63bc1d3b5f931af6cd9881f439aba28aa939e4dd79e74c8e4b847a0",
+      "cachedSourcePageSHA256": "a8378ffdaa92a9f9db8930936ce3c1de9b36b2d9f26c0cb2933e1050e8b759ca",
+      "rawSourceReplaySHA256": "a8f97c0c969b4b245467265d975bef61e657addea76742e637223cc02a4e40a9",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 80,
+        "ticks": 1391
+      },
+      "selectedNativeMechanics": "Golems",
+      "inputTranslation": "Uniform source input phase minus one native tick; retain the early release-rate change.",
+      "nativeInitialStateHash": "011d02639abcebff402e1f550634a510206dd9406a8d9b05dabfcfc6c0301053",
+      "selectedReplaySHA256": "6443a6968e82233f1e565d63e67583e104a87cef3a251226f2a1122af888f3e3",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 80,
+        "required": 80,
+        "saved": 80,
+        "stateHash": "c3a62c6b95c9f686b3f75e117c25d1da40029a000ba44e23ba84f4a61a53f00d",
+        "ticks": 1480
+      },
+      "difficultyScore": 316.2585875260364,
+      "difficultyProbeRuns": 10,
+      "strictExactLevelChecks": [
+        "before promotion: 1/1",
+        "after promotion: 1/1"
+      ],
+      "diagnosis": "Original rejected the source Basher; removing the release-rate change under Golems saved 31/80.",
+      "sourcePhysicsParity": "unverified: source and native completion ticks differ; no source state trace comparison was available"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Holiday cLemmings Flurry 1.DAT#0",
+        "packID": "fan:lldb-537"
+      },
+      "title": "Ice Lemm",
+      "sourceURL": "https://lldb.camanis.net/level/537/1",
+      "exactBundledArchive": "Content/LevelPacks/0537-Holiday-cLemmings-Flurry.zip",
+      "exactBundledArchiveSHA256": "d4a17f5380fd0315dd62fc6947535c459088a28d620a6fa3d0ff27c34e50e540",
+      "cachedSourcePageSHA256": "db97349a1b514e21f770d52cf57f9d13bf70c3550860085969a703acd0d604ba",
+      "rawSourceReplaySHA256": "b3cff8bc8b9738a2f52ecbcd1235964f7aeb9e319c077efc6692116b09f8fab7",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 37,
+        "ticks": 598
+      },
+      "selectedNativeMechanics": "Original",
+      "inputTranslation": "Uniform source input phase plus two native ticks; retain the early release-rate change.",
+      "nativeInitialStateHash": "5527f001c16140022524f168b4084fd241e75822c9e174076d11cbfdab8c957c",
+      "selectedReplaySHA256": "e6d921b2e56c118ee7437c220000656a971e4cb96a9a484590ddee4fceae6b53",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 40,
+        "required": 37,
+        "saved": 37,
+        "stateHash": "bc193cbf8be5269fc847bc648188fc8c9357997f5470bbc7dc4444d5a178b21d",
+        "ticks": 603
+      },
+      "difficultyScore": 182.54955968688844,
+      "difficultyProbeRuns": 10,
+      "strictExactLevelChecks": [
+        "before promotion: 1/1",
+        "after promotion: 1/1"
+      ],
+      "diagnosis": "Removing the release-rate change saved 21/37. Golems plus five matched the source finish tick, without independent state parity.",
+      "sourcePhysicsParity": "unverified: source and native completion ticks differ; no source state trace comparison was available"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Van Clan Wild 1.dat#5",
+        "packID": "fan:lldb-519"
+      },
+      "title": "The Thin Blue Line",
+      "sourceURL": "https://lldb.camanis.net/level/519/6",
+      "exactBundledArchive": "Content/LevelPacks/0519-Van-Clan-Wild.zip",
+      "exactBundledArchiveSHA256": "477aa6f5a911af6069384bcaaa85f86d531d14c8093cdc57dd7a7e29d6738973",
+      "cachedSourcePageSHA256": "5e9a69267d8a5827ac3ea4bed0e19a80958651460a4e1066d892922336f97b32",
+      "rawSourceReplaySHA256": "d25266b34eec550801b93154a8b6905017d71beb2524a5695f3b36802331db52",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 77,
+        "ticks": 692
+      },
+      "selectedNativeMechanics": "Golems",
+      "inputTranslation": "Transfer the already verified six-event Timpack3 route to the exact bundled duplicate, including native nuke for source abandon.",
+      "nativeInitialStateHash": "42da300537ee7ba0d258ab6cf87662233fa5d09d2bc88cb6d402b45a9420042d",
+      "selectedReplaySHA256": "f1e646ee0c4c3064d35a8b50399e03fc9816b53e42acd9f5b58bf1d3028e79e4",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 80,
+        "required": 77,
+        "saved": 77,
+        "stateHash": "665d64564abb2cdda8bc4ca7603e064b0dd5fda382608b26982e67cc02aabc42",
+        "ticks": 839
+      },
+      "difficultyScore": 205.10563602508822,
+      "difficultyProbeRuns": 10,
+      "strictExactLevelChecks": [
+        "before promotion: 1/1",
+        "after promotion: 1/1"
+      ],
+      "diagnosis": "The two bundled members have the same native initial-state hash under Golems. The four-event route without terminal nuke finished much later. The source replay record is shared with Timpack3, not independently derived for this archive.",
+      "sourcePhysicsParity": "unverified: source and native completion ticks differ; no source state trace comparison was available"
+    }
+  ],
+  "duplicateInitialState": {
+    "first": "fan:lldb-90/Timpack3.dat#6",
+    "second": "fan:lldb-519/Van Clan Wild 1.dat#5",
+    "hash": "42da300537ee7ba0d258ab6cf87662233fa5d09d2bc88cb6d402b45a9420042d",
+    "learningPath": "The second member is excluded as a duplicate objective."
+  },
+  "sourceBuiltNxlvKitSHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "sourceBuiltEvidenceToolSHA256": "bdffb23a891a88d75c94a1baed0fad681d8bfce5b324b71593cab20f52193ae8",
+  "sourceBuiltPhaseProbeSHA256": "600062078d5fbeea9f768eba00aec0e9e0f647dbebbf315c7658c91cd470ecf1",
+  "sourceBuiltDuplicateProbeSHA256": "ba90670f1d03fa132c3300014ae9d56378648c92f7d2b470400c7d5e21ccf93e",
+  "phaseProbeLogSHA256": "3c39965cbee86e89a58d99a5379df2ff61b0bc0a74af1fd05fd468e3df9ddc72",
+  "duplicateProbeLogSHA256": "037f85c79bc508512b971447c68b620605129c8f551e5c7cbf8397e98e814917",
+  "headlessMutedFanLibraryTests": "passed",
+  "strictPersistedReplayChecks": "3/3 after learning-path regeneration",
+  "ledger": {
+    "verifiedClassicFanWins": 2355,
+    "verifiedNeoLemmixWins": 322,
+    "nonOfficialWithoutVerifiedReplayAndScore": 3668
+  },
+  "independentSourcePhysicsParityVerified": 0
+}

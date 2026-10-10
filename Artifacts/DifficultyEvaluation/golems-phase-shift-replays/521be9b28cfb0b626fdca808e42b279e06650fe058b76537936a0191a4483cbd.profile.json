@@ -1,0 +1,105 @@
+{
+  "components" : {
+    "concurrencyBurden" : 500,
+    "constraintPressure" : 193.9501720458208,
+    "deductionComplexityProxy" : 165,
+    "executionPrecision" : 373.8181637871317,
+    "solutionComplexity" : 306,
+    "techniqueBurden" : 605
+  },
+  "confidence" : "medium",
+  "criticalActions" : [
+    1,
+    2
+  ],
+  "detectedTechniques" : [
+    "builder",
+    "digger",
+    "miner",
+    "multiple-worker-coordination",
+    "release-rate-manipulation"
+  ],
+  "explanation" : [
+    "3 used skill types; 6 assigned workers; 1 same-worker skill changes.",
+    "Maximum concurrent worker regions: 3.",
+    "Timing probes: 10. Untested alternatives remain unknown.",
+    "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+    "Source rank: fan:lldb-551."
+  ],
+  "key" : {
+    "analyserVersion" : "difficulty-3",
+    "assetsRevision" : "c29a3c29fa0d5156fb1d1abe7a537466f2df2e4341e1907e90b5aa18c9d97fc4:probes-10",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Lemmings Plus DOS Project - 03 - Mild (Part 3).dat#2",
+      "packID" : "fan:lldb-551"
+    },
+    "levelRevision" : "587fa1a85d2ce0c3d0c8b50d9fa6c23a5d224c5b100e7c364088fde33e35798e",
+    "replayRevision" : "521be9b28cfb0b626fdca808e42b279e06650fe058b76537936a0191a4483cbd",
+    "simulationVersion" : "neolemmix-ce-2026-09-27:golems-phase-minus-one-targeted:exit-contact"
+  },
+  "overallScore" : 395.09715512338306,
+  "precision" : {
+    "actions" : [
+      {
+        "outcomes" : {
+          "-1" : false,
+          "1" : false
+        },
+        "sequence" : 1
+      },
+      {
+        "outcomes" : {
+          "-1" : false,
+          "1" : false
+        },
+        "sequence" : 2
+      },
+      {
+        "outcomes" : {
+          "-1" : true,
+          "1" : true
+        },
+        "sequence" : 3
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 4
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 5
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 6
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 56
+      }
+    ],
+    "alternativeRunCount" : 0,
+    "assignmentCount" : 7,
+    "completed" : false,
+    "orderingOutcomes" : [
+
+    ],
+    "runCount" : 10,
+    "selectionOutcomes" : [
+
+    ]
+  },
+  "prerequisiteConcepts" : [
+
+  ],
+  "sourceRank" : "fan:lldb-551"
+}

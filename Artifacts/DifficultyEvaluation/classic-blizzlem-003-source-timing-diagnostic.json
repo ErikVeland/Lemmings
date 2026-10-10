@@ -1,0 +1,161 @@
+{
+  "date": "2026-10-05",
+  "target": {
+    "packID": "fan:lldb-415",
+    "level": "levels/Blizzlem/003.ini#-1",
+    "title": "003.ini",
+    "initialStateSHA256": "28bfa1f5b999935250f0935f26cd4cc67086a7ac3f3d29d1e2d1f23ce53293b5",
+    "archiveSHA256": "a1107ad848d4c68d1b127efe8ca3989906414b7acc5d79be4cbb52bf61a7d7ec",
+    "population": 5,
+    "required": 5,
+    "releaseRate": 30,
+    "entrances": 2,
+    "sourceCandidate": ".build/full-difficulty-evaluation/blizzard-of-lemm-replays/candidates/28bfa1f5b999935250f0935f26cd4cc67086a7ac3f3d29d1e2d1f23ce53293b5-4e61263179148989.json",
+    "sourceCandidateSHA256": "84945df0bdda8717fd12ffb7c2aee3ef7b0757b3c3b3fcb6f2e238f738170fad",
+    "sourceReplaySHA256": "4e6126317914898978124681103b56fa2c146f41d7216e0648e2ed7466e3e048",
+    "sourceEngineContext": "The matching public route is a NeoLemmix replay for a later conversion; the pack author's forum post says the original collection was made for SuperLemmini. It is not a strict replay for this bundled Lemmini-origin target.",
+    "sourceReference": "https://www.lemmingsforums.net/index.php?topic=6294.0",
+    "originalLevelMember": {
+      "path": "levels/Blizzlem/003.ini",
+      "sha256": "540cc3d83b582f58b748de7bb3801f511aaefb842e218403aca2e456eac20a9f",
+      "bytes": 2561,
+      "zipTimestamp": "2015-03-26T15:33:42",
+      "archiveSHA256": "a1107ad848d4c68d1b127efe8ca3989906414b7acc5d79be4cbb52bf61a7d7ec",
+      "interpretation": "The exact bundled archive contains the original text-format level member. This pins level data provenance, but no original SuperLemmini winning replay or corresponding converted NeoLemmix level bytes are available locally for a source-state comparison."
+    }
+  },
+  "currentSource": {
+    "solverPath": ".build/heartbeat-20261005-1105/ClassicSolver",
+    "solverSHA256": "5820ffc7659a3a8b6b50424f71924b4e6630439aa3d26edb60858af226ea0b5d",
+    "simulationLibrarySHA256": "4fcadccdd642b63220692316d58419a6d25661f4d64242ae543fdc2d71db0595",
+    "releaseIntervalAt30": 38,
+    "firstReleaseTick": "approximately tick 54 from open tick 35 plus initial countdown 20; checked against ClassicDOSRules",
+    "sourceSHA256": "55b522fbbd3c400908ba4b18403f40656709d93ab7fc0dbad08cc5e1e8163bdd"
+  },
+  "attempts": [
+    {
+      "prefix": [
+        {
+          "tick": 137,
+          "id": 1,
+          "skill": "builder"
+        },
+        {
+          "tick": 139,
+          "id": 0,
+          "skill": "basher"
+        },
+        {
+          "tick": 273,
+          "rate": 99
+        }
+      ],
+      "fallbackTicks": 12,
+      "result": "UNSOLVED; best 0/5; 10 expansions; waiting tick 112; 0 continuations"
+    },
+    {
+      "prefix": [
+        {
+          "tick": 107,
+          "id": 1,
+          "skill": "builder"
+        },
+        {
+          "tick": 109,
+          "id": 0,
+          "skill": "basher"
+        },
+        {
+          "tick": 243,
+          "rate": 99
+        }
+      ],
+      "fallbackTicks": 12,
+      "result": "UNSOLVED; best 0/5; 10 expansions; waiting tick 104; 0 continuations"
+    },
+    {
+      "prefix": [
+        {
+          "tick": 102,
+          "id": 1,
+          "skill": "builder"
+        },
+        {
+          "tick": 104,
+          "id": 0,
+          "skill": "basher"
+        },
+        {
+          "tick": 238,
+          "rate": 99
+        }
+      ],
+      "fallbackTicks": 12,
+      "result": "UNSOLVED; best 0/5; 9 expansions; waiting tick 92; 0 continuations"
+    }
+  ],
+  "pairWindowTrace": {
+    "solverSHA256": "5820ffc7659a3a8b6b50424f71924b4e6630439aa3d26edb60858af226ea0b5d",
+    "mode": "sweep-pair builder,basher; fixed rate 30; first ticks 54...110; second gap 1...8",
+    "result": "UNSOLVED; 0 first-skill assignments, 0 second-skill assignments, 0 continuations; waiting route tick 110; 2 active, 0 lost",
+    "activeAtTerminal": [
+      {"id": 0, "x": 1464, "y": 144, "direction": "right", "action": "splatting"},
+      {"id": 1, "x": 1064, "y": 139, "direction": "right", "action": "falling"}
+    ],
+    "reverseOrderCheck": "The same bounded window with first skill Basher and second skill Builder also had 0 first-skill assignments and 0 continuations.",
+    "interpretation": "The initial no-input route had no assignable walker in the tested first-skill window; at the terminal state the lead lemming is already splatting and the other is still falling. This explains the zero-coverage pair sweep for this window, not a full-level impossibility result."
+  },
+  "allAvailableSingleSkillsSweep": {
+    "solverSHA256": "5820ffc7659a3a8b6b50424f71924b4e6630439aa3d26edb60858af226ea0b5d",
+    "mode": "sweep-single; fixed rate 30; every stocked Classic skill on each active lemming; 30-second limit",
+    "result": "UNSOLVED; waiting route ended at tick 112; 0 single-skill assignments; 0 completed continuations; no timeout",
+    "interpretation": "The exact target's passive route reached its fatal state without ever offering a legal assignment from its stocked Builder, Basher and Miner skills. This is a route/level-physics mismatch before search branching, not evidence of a search-budget limit. It does not establish that a different route or imported source replay is impossible."
+  },
+  "sourceCoordinateVariant": {
+    "mode": "same sweep-single settings with --source-canvas --source-terrain-coordinates --source-object-coordinates",
+    "result": "UNSOLVED; waiting route ended at tick 112; 0 single-skill assignments; 0 completed continuations; no timeout",
+    "interpretation": "Preserving the text placements and source canvas did not change the passive-route assignment coverage. This rules out coordinate clipping alone as the explanation for this immediate no-input route failure; it is not a source-physics parity test."
+  },
+  "sourceFrameScaleRecheck": {
+    "sourceTimingBasis": "SuperLemminiToo Lemming.java defines TIME_SCALE=2 and comments that Lemmini runs at 33.33fps instead of 16.67fps; convert source replay frame numbers to Classic ticks at approximately half rate.",
+    "prefixes": [
+      {
+        "mapping": "floor(sourceFrame/2): Builder 68, Basher 70, RR99 136",
+        "fallbackTicks": 12,
+        "result": "UNSOLVED; waiting route tick 66; 6 expansions; 0 single-skill rollouts"
+      },
+      {
+        "mapping": "ceil(sourceFrame/2): Builder 69, Basher 70, RR99 137",
+        "fallbackTicks": 12,
+        "result": "UNSOLVED; waiting route tick 66; 6 expansions; 0 single-skill rollouts"
+      }
+    ],
+    "interpretation": "Both correctly scaled timing variants stop before the first source action. On the exact Classic target at rate 30, lemming 1 is the second hatch in the A-B-B-A sequence and does not hatch until approximately tick 92; the imported Builder for ID 1 at tick 68/69 is therefore impossible to apply. The original unscaled transfer is not a valid frame comparison, and half-frame conversion alone does not preserve the source release schedule. This is a source-replay/target-state mismatch, not physics parity evidence or an impossibility proof.",
+    "targetSpawnCheck": {
+      "releaseRate": 30,
+      "firstHatchTick": 54,
+      "classicReleaseIntervalTicks": 38,
+      "twoHatchOrder": "A-B-B-A",
+      "lemming1HatchTick": 92,
+      "sourceBuilderTicksAfterHalfFrameScale": [68, 69],
+      "result": "The source-timed Builder for lemming 1 precedes that lemming's first hatch in the exact Classic target. The forced-prefix runs reject the command before tick 68/69 and start 0 continuations."
+    },
+    "initialRate99Sensitivity": {
+      "purpose": "Check whether an earlier release-rate increase alone makes the half-frame source prefix reachable; this deliberately changes the exact target's initial state.",
+      "forcedPrefixRollout": {
+        "initialRate": 99,
+        "prefix": "floor(sourceFrame/2): Builder 68, Basher 70, RR99 136",
+        "fallbackTicks": 12,
+        "result": "UNSOLVED; waiting route tick 58; 6 expansions; 0 single-skill rollouts"
+      },
+      "fixedRateSingleSweep": {
+        "initialRate": 99,
+        "mode": "sweep-single; 15-second limit; fallback 12",
+        "result": "UNSOLVED; waiting route tick 98; 0 assignments; 0 completed continuations; deadline false"
+      },
+      "interpretation": "Changing the initial release rate to 99 did not make the imported prefix succeed; the prefix run ended before the first command, and the fixed-rate sweep exposed no legal skill assignments. This sensitivity check is not the bundled level state, not a win and not a physics-parity test."
+    },
+    "sourceCode": "https://github.com/Blazingstix/SuperLemminiToo/blob/main/src/lemmini/game/Lemming.java#L2481-L2482"
+  },
+  "assessment": "The source replay seed and two 30/35-tick early shifts all stop before their first forced action on the exact bundled target. This rules out those particular replay transfers and localises the immediate failure to a target route/state problem before the first command; it does not separate level-revision differences from source/native physics and does not establish impossibility or multi-skill coverage. No replay was emitted or strictly verified. Keep the level unscored."
+}

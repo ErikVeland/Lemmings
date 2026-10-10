@@ -1,0 +1,6 @@
+{
+  "originalBlobSHA": "7200f1fd064cef3f94fd139e65bc44ebf8cb9dde",
+  "originalSHA256": "c80269753c0910b3dc1226fbd251254a180b9c98460b3e11eb5a6bc9a4d3b914",
+  "correctedSHA256": "edf349ad35075f152556eab9e2a3dc91529479a9d32ef840fbad67b1a93d21b0",
+  "change": "1.7.7 release description only; all enclosures and signatures retained"
+}

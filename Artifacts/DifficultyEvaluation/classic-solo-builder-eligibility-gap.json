@@ -1,0 +1,52 @@
+{
+  "date": "2026-10-04",
+  "interpretation": "The selected native Solo 2 rules offer no legal Builder assignment before the sole worker splats. This explains why the one-tick solver performed zero continuations. It is an exact-bundle rules or geometry diagnostic, not proof that the source level is impossible or that native physics differs. A source-engine state trace is still required before changing gameplay physics.",
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "records": [
+    {
+      "builderStock": 15,
+      "directSearchPartialSHA256": "92cd948f85c0df2021140e39afec7a140a7ba9933eb216d88693203957a41675",
+      "directSearchResult": "no native win",
+      "identity": "fan:lldb-15/Mikepak10.dat#9",
+      "population": 1,
+      "required": 1,
+      "targetArchiveSHA256": "12190548cbd30b6adde34254a2934f99037d427d6a1046e3413665f30cad640d",
+      "targetInitialHash": "bea5b762eb697356b033f20cb9d37b601eea7f389439b0260a87f5f4a46b51b6"
+    },
+    {
+      "builderStock": 99,
+      "directSearchPartialSHA256": "81cfafdd1c6655ed6b532e43faa69fd42c2f3bb3296b9aacd9fb2e926596aea0",
+      "directSearchResult": "no native win",
+      "identity": "fan:lldb-358/oldbutgo.dat#9",
+      "population": 1,
+      "required": 1,
+      "targetArchiveSHA256": "7f95c3c5a2ab5f8705e8af8c8e8284781785d58c85008a28e0bc5eed73d319ab",
+      "targetInitialHash": "c49d2c7c783a75bea3ad041850b69cb5d5ee5fa7385594e4dfa010e180fef478"
+    }
+  ],
+  "scope": "Targeted one-lemming Builder-only no-win checks under the direct exit-distance solver policy",
+  "solo2Timeline": {
+    "alternativeGolemsMechanicsTraceSHA256": "2a72fad082beaafebcbc664c1b21ce0dfee6504f8048dc2270e93544c97a38ee",
+    "builderAssignmentResult": "invalidAction on every active tick in both mechanics traces",
+    "entrance": "x 64 or 65, y 68",
+    "exit": "x 784\u2013788, y 20\u201328",
+    "firstFootY": 71,
+    "hatchTick": 54,
+    "lastActiveTick": 93,
+    "oneTickFallback": 1,
+    "oneTickPartialReplaySHA256": "81cfafdd1c6655ed6b532e43faa69fd42c2f3bb3296b9aacd9fb2e926596aea0",
+    "oneTickRefire": 1,
+    "selectedOriginalMechanicsTraceSHA256": "2ffb646b970537e0d8bbf611fb69bf4f9bd73a0fced72bf28c5a43cf71225dd7",
+    "singleSkillContinuations": 0,
+    "splatTick": 78,
+    "waitingRouteTick": 94
+  },
+  "sourceBuiltSolverSHA256": "3e2e3ebe5c5505d715d60a37dfee4087fee401ddd177f2cf8be43fb0a6f85c1c",
+  "sourceDatabaseStatus": {
+    "cachedPage": "https://lldb.camanis.net/level/358/10/Solo-2-Is-that-The-pyrimid",
+    "cachedPageDate": "2026-09-29",
+    "cachedPageSHA256": "665e70ca59ae6e5582c692004f3c79ba1d080c8424a1af0992713fa2d34f7c78",
+    "interpretation": "The cached source page supplies no winning replay or source-engine state trace. This cannot establish parity or source impossibility.",
+    "publishedRecords": "Fewest Skills and Shortest Time both state Not solved yet"
+  }
+}

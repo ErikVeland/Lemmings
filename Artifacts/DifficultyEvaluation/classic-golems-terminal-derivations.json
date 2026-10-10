@@ -1,0 +1,59 @@
+[
+  {
+    "identity": {
+      "engine": "classic",
+      "levelID": "brickpk1.dat#2",
+      "packID": "fan:lldb-558"
+    },
+    "initialStateHash": "b1863ce345711dbaa8f9863140ca0b5fd4d917dcd71ee6b44873421d524d8687",
+    "levelSourceRevision": "f117ea9ccfc582e2704c654b2e11b16a8c7cb79e99600a180e356f0cac2ab53f",
+    "nativeCompletionTicks": 635,
+    "nativeReplaySHA256": "7ef1eeee2abdf6e97fb3dd9ab63f5cfbe1b80f1c52c97fdd8fff4929b5ad62b9",
+    "nativeSaved": 9,
+    "publishedReplaySHA256": "386e0eda0c3c1c8ad7ff4b24cbf03d426bf3a39c960d376ded3b318b55e0dbc6",
+    "publishedReplayURL": "https://lldb.camanis.net/level/558/3",
+    "replayScore": 183.4492683221653,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 488,
+    "sourceSaved": 9,
+    "translation": "terminal abandon to native nuke"
+  },
+  {
+    "identity": {
+      "engine": "classic",
+      "levelID": "brickpk2.dat#1",
+      "packID": "fan:lldb-559"
+    },
+    "initialStateHash": "8e8c03bdbc18d907112ac3eb8a256835df07222a6c3b5608d6604f8d6971fbae",
+    "levelSourceRevision": "8d0c1f847913a4f82cfc2f0151384aa5147b5a6b30a414f60cfeeb61802d4253",
+    "nativeCompletionTicks": 745,
+    "nativeReplaySHA256": "6031b8e00e10873ef57211ca1749875228de6127d044ef438c67e34601a38fc9",
+    "nativeSaved": 46,
+    "publishedReplaySHA256": "7718ab2fdc2bcb520975cd2b7c393f6ed3375ed21a6defd6b237f577cb7401a2",
+    "publishedReplayURL": "https://lldb.camanis.net/level/559/2",
+    "replayScore": 116.75376306823348,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 595,
+    "sourceSaved": 46,
+    "translation": "terminal abandon to native nuke"
+  },
+  {
+    "identity": {
+      "engine": "classic",
+      "levelID": "LEVELPAK.DAT#0",
+      "packID": "fan:lldb-592"
+    },
+    "initialStateHash": "a097d67e810a3fcd59291cd3471d69c465e26b4effd88cd97d226d57239c31da",
+    "levelSourceRevision": "c8a9891b1a18e26e7ec27896c4ca0b61ec38abd2795d2ebd6ba81d83cb4b022b",
+    "nativeCompletionTicks": 2371,
+    "nativeReplaySHA256": "81779ea761f411e66860397f5b7f41d6e20f4bd2a755560587ffc1580ceb77d6",
+    "nativeSaved": 28,
+    "publishedReplaySHA256": "77e4fe2bf7c405248dadff58c9d992586d87d8333b0e719ea3e89ef4186dd26a",
+    "publishedReplayURL": "https://lldb.camanis.net/level/592/1",
+    "replayScore": 262.9694876532781,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 2224,
+    "sourceSaved": 28,
+    "translation": "terminal abandon to native nuke"
+  }
+]

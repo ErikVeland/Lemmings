@@ -27,8 +27,11 @@ public struct Lemmings2Campaign: Sendable {
         public let tribe: Int
         public let level: Int
         public let results: [Int: Result]
-        public init(version: Int = 1, tribe: Int, level: Int, results: [Int: Result]) {
+        /// Skipped levels and the population they passed on. Older saves have none.
+        public let skipped: [Int: Int]?
+        public init(version: Int = 1, tribe: Int, level: Int, results: [Int: Result], skipped: [Int: Int]? = nil) {
             self.version = version; self.tribe = tribe; self.level = level; self.results = results
+            self.skipped = skipped?.isEmpty == true ? nil : skipped
         }
     }
     public let levels: [Lemmings2Level]
@@ -36,9 +39,31 @@ public struct Lemmings2Campaign: Sendable {
     public private(set) var tribe = 1
     public private(set) var level = 0
     public private(set) var results: [Int: Result] = [:]
+    /// Levels passed over with a level skip, and the population each carried on.
+    public private(set) var skipped: [Int: Int] = [:]
     public var current: Lemmings2Level { levels[tribe * 10 + level] }
-    public var population: Int { level == 0 ? 60 : results[tribe * 10 + level - 1]?.saved ?? 0 }
-    public var progress: Progress { .init(tribe: tribe, level: level, results: results) }
+    public var population: Int { Self.population(entering: tribe * 10 + level, results: results, skipped: skipped) }
+
+    /// A tribe starts with 60. Later levels take the previous level's survivors,
+    /// or the whole tribe when the previous level was skipped.
+    private static func population(entering key: Int, results: [Int: Result], skipped: [Int: Int]) -> Int {
+        key % 10 == 0 ? 60 : results[key - 1]?.saved ?? skipped[key - 1] ?? 0
+    }
+
+    /// A skip passes over an unbeaten level that is not the tribe's last.
+    public var canSkipLevel: Bool {
+        let key = tribe * 10 + level
+        return level < 9 && results[key] == nil && skipped[key] == nil && population > 0
+    }
+
+    /// Moves to the next level with the same population. The caller spends the skip.
+    @discardableResult public mutating func skipLevel() -> Bool {
+        guard canSkipLevel else { return false }
+        skipped[tribe * 10 + level] = population
+        level += 1
+        return true
+    }
+    public var progress: Progress { .init(tribe: tribe, level: level, results: results, skipped: skipped) }
     public var isComplete: Bool { (0..<12).allSatisfy { tribeMedal($0) != .none } }
     public var hasGoldenTalisman: Bool { (0..<12).allSatisfy { tribeMedal($0) == .gold } }
 
@@ -58,7 +83,7 @@ public struct Lemmings2Campaign: Sendable {
     }
     public func unlockedLevel(in tribe: Int) -> Int {
         guard (0..<12).contains(tribe) else { return 0 }
-        return (0..<9).first { results[tribe * 10 + $0] == nil } ?? 9
+        return (0..<9).first { results[tribe * 10 + $0] == nil && skipped[tribe * 10 + $0] == nil } ?? 9
     }
     public func tribeMedal(_ tribe: Int) -> Medal {
         guard (0..<12).contains(tribe) else { return .none }
@@ -100,17 +125,25 @@ public struct Lemmings2Campaign: Sendable {
         guard progress.version == 1, (0..<12).contains(progress.tribe), (0..<10).contains(progress.level) else {
             throw SequelDataError.invalid("Invalid L2 campaign save version or selection.")
         }
+        let skipped = progress.skipped ?? [:]
         for (key, result) in progress.results {
             guard levels.indices.contains(key), (1...60).contains(result.startingPopulation),
                   (1...result.startingPopulation).contains(result.saved), result.levelFingerprint == levels[key].fingerprint,
                   result.medal == Self.medal(saved: result.saved, total: result.startingPopulation,
                                              allowedLosses: levels[key].allowedLossesForGold),
-                  result.startingPopulation <= (key % 10 == 0 ? 60 : progress.results[key - 1]?.saved ?? 0) else {
+                  result.startingPopulation <= Self.population(entering: key, results: progress.results, skipped: skipped) else {
                 throw SequelDataError.invalid("Invalid or mismatched L2 campaign result.")
+            }
+        }
+        for (key, carried) in skipped {
+            guard levels.indices.contains(key), key % 10 != 9, (1...60).contains(carried),
+                  carried <= Self.population(entering: key, results: progress.results, skipped: skipped) else {
+                throw SequelDataError.invalid("Invalid L2 skipped level.")
             }
         }
         var proposed = self
         proposed.results = progress.results
+        proposed.skipped = skipped
         try proposed.select(tribe: progress.tribe, level: progress.level)
         self = proposed
     }

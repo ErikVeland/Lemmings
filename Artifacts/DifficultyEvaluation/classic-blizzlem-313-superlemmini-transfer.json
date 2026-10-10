@@ -1,0 +1,75 @@
+{
+  "date": "2026-10-06",
+  "target": {
+    "identity": "fan:lldb-415/levels/Blizzlem/313.ini#-1",
+    "archive": "Content/LevelPacks/0415-Blizzard-of-Lemm.zip",
+    "archiveSHA256": "a1107ad848d4c68d1b127efe8ca3989906414b7acc5d79be4cbb52bf61a7d7ec",
+    "member": "levels/Blizzlem/313.ini",
+    "memberSHA256": "206443d643d92a2a522deea18aa5c48e92427ec698adc621db86805f8a37e1a8",
+    "stock": "80 lemmings, save 75, 50 builders, 10 diggers, 10-minute limit"
+  },
+  "sourceReplay": {
+    "forumPost": "https://www.lemmingsforums.net/index.php?topic=6294.msg101337#msg101337",
+    "attachment": "The Snow Palace.rpl",
+    "attachmentID": 22096,
+    "engine": "SuperLemmini revision 0.104",
+    "completionFrame": 20000,
+    "file": "Artifacts/DifficultyEvaluation/classic-blizzlem-313-superlemmini-public.rpl",
+    "sha256": "0bc14bdc835a557047a5ffa62b3d69817c70e2872f4abcc25f6d0b81b3c55d77",
+    "skillAssignments": 60,
+    "skillCounts": {
+      "builder": 50,
+      "digger": 10
+    },
+    "releaseRateChanges": [
+      {
+        "frame": 73,
+        "rate": 56
+      },
+      {
+        "frame": 2367,
+        "rate": 57
+      },
+      {
+        "frame": 2372,
+        "rate": 99
+      }
+    ]
+  },
+  "build": {
+    "solver": "ClassicSolver source-built 2026-10-05",
+    "solverSHA256": "ba7372f65381267355110303e658f785056ba000f305daf7bfcf0cd8719585e3",
+    "nxlvKitSHA256": "6dbbb2ead99717fc3838472eed768a2fe4cc386bef4f8b09fb6b61447645aa49",
+    "solverSourceSHA256": "e9efacd6a90ebd84e2c1d20548f6ba0156f0b764fc2cbe30e7822e96def8c71a",
+    "simulationSourceSHA256": "55b522fbbd3c400908ba4b18403f40656709d93ab7fc0dbad08cc5e1e8163bdd"
+  },
+  "transferTrials": [
+    {
+      "tickMapping": "rounded source replay frame / 2; timing heuristic only",
+      "prefixEvents": 60,
+      "prefixSHA256": "8ab662684eb3242cbd8f7b468cd89447413aa5c18da5318913eb4f9ffe2eff1f",
+      "geometry": [
+        "--source-canvas",
+        "--source-terrain-coordinates",
+        "--source-object-coordinates"
+      ],
+      "width": 32,
+      "seconds": 20,
+      "expandedStates": 1611,
+      "bestSaved": "0/75",
+      "result": "UNSOLVED; no candidate replay emitted"
+    },
+    {
+      "tickMapping": "same rounded source replay frame / 2 prefix",
+      "prefixEvents": 60,
+      "prefixSHA256": "8ab662684eb3242cbd8f7b468cd89447413aa5c18da5318913eb4f9ffe2eff1f",
+      "geometry": "exact bundled fan member default canvas and coordinate conversion",
+      "width": 32,
+      "seconds": 20,
+      "expandedStates": 1004,
+      "bestSaved": "0/75",
+      "result": "UNSOLVED; no candidate replay emitted"
+    }
+  ],
+  "assessment": "A public SuperLemmini winning replay is now locally available. Its level identity and exact revision are not encoded in the replay, so its correspondence to the bundled member is still based on pack/title/skill-stock reports, not byte identity. One heuristic frame-to-tick transfer did not win on either source-sized Classic geometry or default exact member geometry. These runs do not test SuperLemmini physics, do not establish app runtime parity, and produce no score. Keep the ledger row unscored."
+}

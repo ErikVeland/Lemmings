@@ -1,0 +1,116 @@
+{
+  "components" : {
+    "concurrencyBurden" : 250,
+    "constraintPressure" : 836.4037708129285,
+    "deductionComplexityProxy" : 145,
+    "executionPrecision" : 0,
+    "solutionComplexity" : 434.86313713864837,
+    "techniqueBurden" : 735
+  },
+  "confidence" : "medium",
+  "criticalActions" : [
+
+  ],
+  "detectedTechniques" : [
+    "basher",
+    "blocker",
+    "builder",
+    "digger",
+    "miner",
+    "multiple-worker-coordination",
+    "release-rate-manipulation"
+  ],
+  "explanation" : [
+    "5 used skill types; 7 assigned workers; 1 same-worker skill changes.",
+    "Maximum concurrent worker regions: 2.",
+    "Timing probes: 10. Untested alternatives remain unknown.",
+    "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+    "Source rank: fan:lldb-232."
+  ],
+  "key" : {
+    "analyserVersion" : "difficulty-3",
+    "assetsRevision" : "2037c3686b13a25667ef0bf7c1118218802c9786cd2b6ba21e97d6f33273d5da:probes-10",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "JANNPCK2.DAT#7",
+      "packID" : "fan:lldb-232"
+    },
+    "levelRevision" : "e62085da6e3e1c103fc6d01686a7a8f97ce81ab2062384b5de5fd836345e0fc6",
+    "replayRevision" : "SHA256 digest: c967b74e13c5e57f3b4274adc083d03b3607550b86d61c18672a09196a66ecdc",
+    "simulationVersion" : "neolemmix-ce-2026-09-27"
+  },
+  "overallScore" : 430.80238037618335,
+  "precision" : {
+    "actions" : [
+      {
+        "outcomes" : {
+          "-1" : true,
+          "1" : false
+        },
+        "sequence" : 1
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 2
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 3
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 4
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 5
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 6
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 7
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 8
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 9
+      }
+    ],
+    "alternativeRunCount" : 0,
+    "assignmentCount" : 9,
+    "completed" : false,
+    "orderingOutcomes" : [
+
+    ],
+    "runCount" : 10,
+    "selectionOutcomes" : [
+
+    ]
+  },
+  "prerequisiteConcepts" : [
+
+  ],
+  "sourceRank" : "fan:lldb-232"
+}

@@ -13,6 +13,14 @@ public enum BundledGameResources {
         try directory("Ports/LEM3CD", requiring: ["LEVELS/LEVEL001.DAT", "STYLES", "GRAPHICS"], in: bundle)
     }
 
+    /// The bundled NeoLemmix CE packs and the DMA styles that they can use.
+    public static func neoLemmix(in bundle: Bundle = .main) throws -> NeoLemmixLibrary.Source {
+        let root = try directory("NeoLemmix", requiring: ["levels", "styles/default", "manifest.json"], in: bundle)
+        return NeoLemmixLibrary.Source(
+            levelsRoot: root.appendingPathComponent("levels", isDirectory: true),
+            stylesRoot: root.appendingPathComponent("styles", isDirectory: true))
+    }
+
     public static func music(_ name: String, in bundle: Bundle = .main) -> URL? {
         guard !name.contains("/"), name != ".", name != ".." else { return nil }
         return try? directory("Music/" + name, requiring: [], in: bundle)

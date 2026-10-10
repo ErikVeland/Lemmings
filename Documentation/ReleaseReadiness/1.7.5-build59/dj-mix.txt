@@ -1,0 +1,3 @@
+PASS DJ nuke EQ propagation, replacement deck and restoration
+PASS DJ Modern/Faithful routing, drum signal, EQ/reverb and uninterrupted tracker clock
+Adaptive DJ mix tests passed.

@@ -31,14 +31,14 @@ import NxlvKit
         button("‹", CGRect(x: 64, y: 212, width: 66, height: 44)) { [weak self] in
             self?.trolleyBoard = categories[(index + categories.count - 1) % categories.count]; self?.needsDisplay = true
         }
-        text(boardTitle, 153, 218, 620)
+        text(boardTitle, 153, 218, 520)
         button("›", CGRect(x: 687, y: 212, width: 66, height: 44)) { [weak self] in
             self?.trolleyBoard = categories[(index + 1) % categories.count]; self?.needsDisplay = true
         }
         rewindFilter()
         let entries = ArcadeStore.shared.records.trolley.leaderboard(conditions: conditions, assisted: assisted, board: trolleyBoard)
         text("PLAYER", 181, 272, 96)
-        text("PLAY STYLE", 280, 272, 304)
+        text([.fastestClear, .fastestAllSaved].contains(trolleyBoard) ? "REPLAY" : "PLAY STYLE", 280, 272, 304)
         text("RESULT", 589, 272, 220)
         text("SKILLS", 821, 272, 86, alignment: .right)
         text("TIME", 925, 272, 119, alignment: .right)
@@ -50,7 +50,16 @@ import NxlvKit
             let profile = ArcadeStore.shared.records.profile(run.profileID)
             drawPortrait(profile?.portrait ?? 0, in: CGRect(x: 130, y: y + 4, width: 33, height: 38))
             rowText(profile?.initials ?? "LEM", x: 181, width: 72, row: row)
-            affinityLink(attempt.philosophy.primaryID, in: CGRect(x: 280, y: y + 3, width: 304, height: 44), alignment: .left)
+            if [.fastestClear, .fastestAllSaved].contains(trolleyBoard) {
+                if let url = ArcadeStore.shared.replayURL(attemptID: attempt.id) {
+                    link("Play replay >", CGRect(x: 280, y: y + 3, width: 304, height: 44), alignment: .left) { [weak self] in
+                        if let review = self?.onStoredReplay { review(url, run.level.title) }
+                        else { ReplayMovieWindow.shared.open(url, title: run.level.title, save: false) }
+                    }
+                } else { rowText("Unavailable", x: 280, width: 304, row: row) }
+            } else {
+                affinityLink(attempt.philosophy.primaryID, in: CGRect(x: 280, y: y + 3, width: 304, height: 44), alignment: .left)
+            }
             let score: String
             switch trolleyBoard {
             case .rescuePotential: score = String(format: "%.1f%%", (attempt.metrics.rescuePotential ?? 0) * 100)
@@ -65,13 +74,14 @@ import NxlvKit
         if entries.isEmpty {
             text("No records", 64, 337, 992, alignment: .center)
         }
-        let trophy = TrolleyAchievement.forBoard(trolleyBoard)
-        let progress = trophy.progress(attempts: ArcadeStore.shared.records.trolley.attempts, profileID: player.id)
-        link("Award: \(trophy.title) - \(progress.label)  >", CGRect(x: 64, y: 549, width: 992, height: 36)) { [weak self] in
-            self?.showAchievement(trophy)
+        if let trophy = TrolleyAchievement.forBoard(trolleyBoard) {
+            let progress = trophy.progress(attempts: ArcadeStore.shared.records.trolley.attempts, profileID: player.id)
+            link("Award: \(trophy.title) - \(progress.label)  >", CGRect(x: 64, y: 549, width: 992, height: 36)) { [weak self] in
+                self?.showAchievement(trophy)
+            }
         }
         pageFooter()
-        setAccessibilityLabel("\(boardTitle). Rewinds: \(assisted ? "used" : "unused"). W switches the rewind filter. \(entries.count) local records. \(ordering) Related achievement: \(trophy.title). \(trophy.detail) \(progress.label). Press 1 to 7 to choose a board. Escape returns.")
+        setAccessibilityLabel("\(boardTitle). Rewinds: \(assisted ? "used" : "unused"). W switches the rewind filter. \(entries.count) local records. \(ordering) Press 1 to 9 to choose a board. Escape returns.")
     }
 
     private func achievementPriority(_ award: TrolleyAchievement) -> Int {

@@ -1,0 +1,2 @@
+UI test windows: offscreen; audio: muted
+PASS pointer capture: sustained edges, four display positions, release, reacquisition, moved windows, off-screen windows and Quartz coordinates

@@ -1,0 +1,120 @@
+{
+  "components" : {
+    "concurrencyBurden" : 390,
+    "constraintPressure" : 517.2752203721841,
+    "deductionComplexityProxy" : 290,
+    "executionPrecision" : 0,
+    "solutionComplexity" : 666.5131794236476,
+    "techniqueBurden" : 520
+  },
+  "confidence" : "medium",
+  "criticalActions" : [
+
+  ],
+  "detectedTechniques" : [
+    "basher",
+    "blocker",
+    "builder",
+    "digger",
+    "miner",
+    "multiple-worker-coordination"
+  ],
+  "explanation" : [
+    "5 used skill types; 5 assigned workers; 4 same-worker skill changes.",
+    "Maximum concurrent worker regions: 2.",
+    "Timing probes: 10. Untested alternatives remain unknown.",
+    "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+    "Source rank: fan:lldb-20."
+  ],
+  "key" : {
+    "analyserVersion" : "difficulty-3",
+    "assetsRevision" : "d67575fce689b6e9dfb11d0c833e44de336e294b0cd2c43d35f664e9777d0ca6:probes-10",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "ISteve01.DAT#3",
+      "packID" : "fan:lldb-20"
+    },
+    "levelRevision" : "d3e3cb52b86ba3528e3ed85ce4abbd14a9b7606a3a8a92c675f7f3d060ef881c",
+    "replayRevision" : "SHA256 digest: 0270960eface78d316220a098ec1cd42c612d8b556c720675dbd0c5cfa92cac5",
+    "simulationVersion" : "neolemmix-ce-2026-09-27"
+  },
+  "overallScore" : 414.87867812158635,
+  "precision" : {
+    "actions" : [
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 1
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 2
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 3
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 4
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 5
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 6
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 7
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 8
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 9
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 10
+      }
+    ],
+    "alternativeRunCount" : 0,
+    "assignmentCount" : 10,
+    "completed" : false,
+    "orderingOutcomes" : [
+
+    ],
+    "runCount" : 10,
+    "selectionOutcomes" : [
+
+    ]
+  },
+  "prerequisiteConcepts" : [
+
+  ],
+  "sourceRank" : "fan:lldb-20"
+}

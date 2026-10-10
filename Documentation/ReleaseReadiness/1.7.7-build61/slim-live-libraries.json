@@ -1,0 +1,128 @@
+[
+  {
+    "id": "composer",
+    "size": 399675869,
+    "sha256": "67300ccae2d8ecf6ce8683080ac8d7dcda37c8378471c68522a4074977e6049c",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/composer.zip",
+    "publicDownload": "ZIP header reachable"
+  },
+  {
+    "id": "demos",
+    "size": 416623,
+    "sha256": "7cbbe78bda98d7b8bab9864fa1c63e970347158ba0267bf44048ba2086afc82c",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/demos.zip",
+    "publicDownload": "ZIP header reachable"
+  },
+  {
+    "id": "port-arcade",
+    "size": 72860967,
+    "sha256": "1cc89db999f4b6afe9a05de79ac647de8d0efeb987af2680a5fdded72e4eeac7",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-arcade.zip",
+    "publicDownload": "ZIP header reachable"
+  },
+  {
+    "id": "port-archimedes",
+    "size": 64230208,
+    "sha256": "026c8423f494af8116f8ed09af6dd8690390268ce07a985073b136c51c4264f5",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-archimedes.zip",
+    "publicDownload": "ZIP header reachable"
+  },
+  {
+    "id": "port-dos-opl2",
+    "size": 249930426,
+    "sha256": "f0ef29bdbfc944d938b2cce73741a4b5217c5c91ed151eefbfa4a902f237edcf",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-dos-opl2.zip",
+    "publicDownload": "ZIP header reachable"
+  },
+  {
+    "id": "port-dos-opl3",
+    "size": 140422737,
+    "sha256": "5d90aea8e13c7726bb8bad6316cb90d257088e1f98f53b468cb8e411919b1341",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-dos-opl3.zip",
+    "publicDownload": "ZIP header reachable"
+  },
+  {
+    "id": "port-fm-towns",
+    "size": 89918448,
+    "sha256": "59b65cb86134f01cf16128de579cf931ef67825eed7d0273f98730a8a26c56b2",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-fm-towns.zip",
+    "publicDownload": "ZIP header reachable"
+  },
+  {
+    "id": "port-game-boy",
+    "size": 81982905,
+    "sha256": "3a53d6551b2476249b297cda73ac8dd807731c387779c282cb29c11e3c58731f",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-game-boy.zip",
+    "publicDownload": "ZIP header reachable"
+  },
+  {
+    "id": "port-lynx",
+    "size": 58597482,
+    "sha256": "9033173c4048cecb47a6d46412259808447cc00879fabfcb8fc108b86c329e71",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-lynx.zip",
+    "publicDownload": "ZIP header reachable"
+  },
+  {
+    "id": "port-master-system",
+    "size": 27970801,
+    "sha256": "cb13b21c76f2af211ba3a4d593e4ff651ee44cb28051ea95568f4ddc9f7cbe38",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-master-system.zip",
+    "publicDownload": "ZIP header reachable"
+  },
+  {
+    "id": "port-mega-drive",
+    "size": 135482111,
+    "sha256": "d933a26f2c1cd1c37eb1bcd79badac8aba5fb70a2fc8e13317df9321c30b7de7",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-mega-drive.zip",
+    "publicDownload": "ZIP header reachable"
+  },
+  {
+    "id": "port-nes",
+    "size": 22515933,
+    "sha256": "681aad43db3af32552cacc4d8210e1b6dc883f583c71045efadb6c0f59d490e7",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-nes.zip",
+    "publicDownload": "ZIP header reachable"
+  },
+  {
+    "id": "port-pc-98",
+    "size": 64624455,
+    "sha256": "a026d0fd245e84c009ecca24e9e175816660063ed7a427e0d6de4e91851824e4",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-pc-98.zip",
+    "publicDownload": "ZIP header reachable"
+  },
+  {
+    "id": "port-snes",
+    "size": 143254550,
+    "sha256": "8c1553a595337f0edf2fe382a58fc5acb3ba533267480eeae84564df436852dd",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-snes.zip",
+    "publicDownload": "ZIP header reachable"
+  },
+  {
+    "id": "port-spectrum",
+    "size": 4459769,
+    "sha256": "31b03bb5c1a2f749dfd91b884c901c8a1b22f7602d7dc42ab65ffb2352520821",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-spectrum.zip",
+    "publicDownload": "ZIP header reachable"
+  },
+  {
+    "id": "port-tandy",
+    "size": 88876615,
+    "sha256": "05ae2c701851731e12b07ac8081717273f2d7ea25d3c42601f3d74a2b06ec4fd",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-tandy.zip",
+    "publicDownload": "ZIP header reachable"
+  },
+  {
+    "id": "port-x68000",
+    "size": 63567596,
+    "sha256": "9959a86be712a7b6e2f66dc8e4bfd2e277d26b17bc8c1f82ed63d82616cdcc86",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-x68000.zip",
+    "publicDownload": "ZIP header reachable"
+  },
+  {
+    "id": "remixes",
+    "size": 97318456,
+    "sha256": "9e925f9ee75db9cd484018d4b4795347023f46c5aa1d928ebe76ab1ba8e2abca",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/remixes.zip",
+    "publicDownload": "ZIP header reachable"
+  }
+]

@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-03",
+  "solverSha256": "1a0a15153eb3b225c7202d0ae91869c796f94c07b3a1a82a174533e88e889876",
+  "nativeLibrarySha256": "3c5f3af7276aace14b84ba0a39abf499fcdd30758dd6e2d09a0da33a0020d331",
+  "twoSkillControl": {
+    "level": "fan:lldb-103/TimpackE.dat#5",
+    "title": "Under The Bridge",
+    "archiveSha256": "a8859472c6989601744b0e1711e3d19e315acd21e724fd1c647908b91d3d7607",
+    "initialStateHash": "7263c32ac027f6636b6c2395e1405ebe53e95d3c60783bb1cfd2f51775c4be20",
+    "search": "width 64, 15 seconds, fallback and refire 5 ticks",
+    "expansions": 46407,
+    "replayEvents": "Miner to lemming 2 after tick 208; Miner to lemming 0 after tick 225",
+    "strictNativeResult": "78/40 saved at tick 2427",
+    "replaySha256": "9bab0884b86087dd1602b1524720abf5939cc924e8b502a368a28eb18b006030",
+    "strictVerifierSha256": "d5ea5327a836041d8c9a35e6f7d474442d32a1b168a63b7f12b690639d66b1fb",
+    "alreadyScored": true
+  },
+  "unscoredProbes": [
+    {
+      "level": "fan:lldb-432/LDChallenge03.dat#4",
+      "title": "A toe Take 2",
+      "archiveSha256": "44e3df78b0ec0e9a20c8be79429ce55de175f2020d9c91677ed1819445df8cee",
+      "initialStateHash": "9660e269d6ae4a6086cc7693bf7112d5b21dfb10bdac8cba7da663c419b5c5f4",
+      "oneSkillSweep": "No win; no-input route through tick 101; 94/94 continuations completed; best 0/10",
+      "focusedMultiSkillSearch": "No win; width 64, 20-second limit, one-tick fallback and refire, progress-first ranking; 374 expansions; best 0/10"
+    },
+    {
+      "level": "fan:lldb-62/ClamSpam02.dat#4",
+      "title": "Get Out of the Pool!",
+      "archiveSha256": "ea5c212dd530e2c8ea2c8b033aa2ad8e7882c455134d530ff83dac0d15100241",
+      "initialStateHash": "9e91ded2d579c94cad6c707c6c3028553245230d30c89865b0de094ba8d38556",
+      "oneSkillSweep": "No win; no-input route through tick 1022; 9348/9348 continuations completed; best 0/17",
+      "focusedMultiSkillSearch": "No win; width 64, 20-second limit, five-tick fallback and refire, progress-first ranking; 60591 expansions; best 0/17"
+    }
+  ],
+  "interpretation": "The optimised solver can recover and strictly replay a two-skill known win. These two bounded no-win checks do not prove engine or level impossibility, and do not establish source physics parity. No new score was assigned."
+}

@@ -10,24 +10,18 @@ extension NeoLemmixRules {
         for gadget in renderedLevel.gadgets {
             switch gadget.effect {
             case .none, .background, .entrance, .exit, .trap, .trapOnce, .fire, .water,
-                 .oneWayLeft, .oneWayRight, .oneWayUp, .oneWayDown:
+                 .oneWayLeft, .oneWayRight, .oneWayUp, .oneWayDown, .animation,
+                 .animationOnce, .splatPad, .antiSplatPad, .pickupSkill,
+                 .lockedExit, .unlockButton, .paint:
                 break
-            case .lockedExit: features.insert("locked exits")
-            case .unlockButton: features.insert("exit buttons")
-            case .pickupSkill: features.insert("skill pickups")
-            case .teleporter, .receiver: features.insert("teleporters")
-            case .updraft: features.insert("updrafts")
-            case .splatPad, .antiSplatPad: features.insert("splat pads")
-            case .splitter: features.insert("splitters")
-            case .forceLeft, .forceRight: features.insert("force fields")
+            case .teleporter, .receiver: break
+            case .updraft: break
+            case .splitter, .forceLeft, .forceRight: break
+            case .neutralizer, .deneutralizer, .addSkill, .removeSkills: break
+            case .portal: break
             case let .unknown(name): features.insert("object effect \(name)")
             }
         }
-        if level.preplacedLemmings.contains(where: { $0.traits.contains(.zombie) })
-            || level.gadgets.contains(where: { $0.lemmingTraits.contains(.zombie) }) {
-            features.insert("zombie infection")
-        }
-        if level.document.hasLine("superlemming") { features.insert("Superlemming") }
         return features.sorted()
     }
 }

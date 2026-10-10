@@ -1,0 +1,29 @@
+{
+  "sourceCommit": "0e49151f13fee037aa4cbc8050086a758cdbbb40",
+  "auditPassed": 48,
+  "auditSourceDrift": 0,
+  "separateChecks": [
+    "packaged-resource consolidation integration",
+    "replay movies",
+    "hosted client: 6 tests",
+    "hosted backend: 11 tests",
+    "release tools: 36 tests",
+    "live backend smoke",
+    "native rescue evidence: 562 levels, 574 configurations",
+    "350 hint routes",
+    "L3 completion witnesses: 74 distinct wins"
+  ],
+  "uiMode": "offscreen",
+  "audioMode": "muted",
+  "notRun": [
+    "foreground shipping-app launch",
+    "audible listening",
+    "physical Intel/minimum macOS",
+    "installed Sparkle upgrade",
+    "sustained performance benchmark",
+    "complete sequel campaigns",
+    "broad app audit group",
+    "sequel-view audit group",
+    "arcade audit group"
+  ]
+}

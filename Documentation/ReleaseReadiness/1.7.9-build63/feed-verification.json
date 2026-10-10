@@ -1,0 +1,12 @@
+{
+  "version": "1.7.9",
+  "build": 63,
+  "sourceCommit": "4d8cda805cd938df919776498193cdd10ff48714",
+  "archive": "UltimateLemmings-1.7.9-build63.zip",
+  "archiveBytes": 1943413088,
+  "archiveSHA256": "c95a9bd45e13e375ff0cf5213482b59c937ca86f74675c1b5c32c9d67b88223f",
+  "appcastSHA256": "91be11ffecef223033b9b64325e850d8c3b1e044871a07aac39a6b2cb7ccc5c5",
+  "priorEnclosuresPreserved": 4,
+  "sparkleSignatureVerified": true,
+  "slimExcludedFromEnclosures": true
+}

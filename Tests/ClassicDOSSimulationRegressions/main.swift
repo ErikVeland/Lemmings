@@ -35,6 +35,43 @@ private func floorTerrain(width: Int = 192, height: Int = 96, floorY: Int = 40) 
     )
 }
 
+private func testGolemsClimberPassesRearPixel() throws {
+    let width = 192, height = 96
+    var solid = Data(repeating: 0, count: width * height)
+    for x in 0..<width { solid[80 * width + x] = 1 }
+    for y in 30..<80 { solid[y * width + 100] = 1 }
+    solid[55 * width + 99] = 1
+    let terrain = try ClassicDOSTerrain(width: width, height: height, solidMask: solid,
+        steelMask: Data(repeating: 0, count: width * height))
+
+    func worker(at tick: Int, mechanics: ClassicDOSMechanics) throws -> ClassicDOSLemming {
+        let config = ClassicDOSConfiguration(totalLemmings: 1, requiredToSave: 0,
+            timeLimitTicks: nil, initialReleaseRate: 50,
+            entrances: [ClassicDOSPoint(x: 40, y: 40)], initialSkills: [.climber: 1],
+            maximumX: width - 1, maximumY: height - 1, mechanics: mechanics)
+        var simulation = try ClassicDOSSimulation(terrain: terrain, configuration: config)
+        var assigned = false
+        while simulation.tickCount < tick {
+            _ = simulation.tick()
+            if !assigned, let lemming = simulation.lemmings.first, lemming.action == .walking {
+                assigned = simulation.assign(.climber, to: lemming.id) == .assigned
+            }
+        }
+        try require(assigned, "climber was not assigned")
+        guard let lemming = simulation.lemmings.first else {
+            throw RegressionFailure(description: "climber did not hatch")
+        }
+        return lemming
+    }
+
+    let original = try worker(at: 170, mechanics: .original)
+    let golems = try worker(at: 170, mechanics: .golems)
+    try require(original.action == .walking && original.direction == .left,
+        "original climber should turn at the rear pixel")
+    try require(golems.action == .climbing && golems.foot == ClassicDOSPoint(x: 100, y: 60),
+        "Golems climber should pass the rear pixel")
+}
+
 private func configuration(
     totalLemmings: Int,
     releaseRate: Int,
@@ -42,7 +79,8 @@ private func configuration(
     triggers: [ClassicDOSTrigger] = [],
     skills: [ClassicSkill: Int] = [:],
     maximumX: Int = 63,
-    maximumY: Int = 511
+    maximumY: Int = 511,
+    mechanics: ClassicDOSMechanics = .original
 ) -> ClassicDOSConfiguration {
     ClassicDOSConfiguration(
         totalLemmings: totalLemmings,
@@ -53,7 +91,8 @@ private func configuration(
         triggers: triggers,
         initialSkills: skills,
         maximumX: maximumX,
-        maximumY: maximumY
+        maximumY: maximumY,
+        mechanics: mechanics
     )
 }
 
@@ -243,6 +282,103 @@ private func testMaximumSafeFallDistance() throws {
     fatal.tick()
     try require(safe.lemmings.first?.action == .walking, "a 60-pixel fall splatted")
     try require(fatal.lemmings.first?.action == .splatting, "a 61-pixel fall did not splat")
+
+    var golemsSeed = try ClassicDOSSimulation(
+        terrain: floorTerrain(floorY: 40),
+        configuration: configuration(
+            totalLemmings: 1,
+            releaseRate: 99,
+            entrances: [ClassicDOSPoint(x: 40, y: 39)],
+            maximumX: 191,
+            maximumY: 95,
+            mechanics: .golems
+        )
+    )
+    while golemsSeed.tickCount < 54 { golemsSeed.tick() }
+    var golemsSafe = try simulationWithFallDistance(66, basedOn: golemsSeed)
+    var golemsFatal = try simulationWithFallDistance(67, basedOn: golemsSeed)
+    golemsSafe.tick()
+    golemsFatal.tick()
+    try require(golemsSafe.lemmings.first?.action == .walking, "a Golems 63-pixel fall splatted")
+    try require(golemsFatal.lemmings.first?.action == .splatting, "a Golems fall above 63 pixels survived")
+}
+
+private func testGolemsOneWayMining() throws {
+    func readyMiner(_ mechanics: ClassicDOSMechanics) throws -> ClassicDOSSimulation {
+        var simulation = try ClassicDOSSimulation(
+            terrain: floorTerrain(),
+            configuration: configuration(
+                totalLemmings: 1,
+                releaseRate: 99,
+                entrances: [ClassicDOSPoint(x: 40, y: 30)],
+                skills: [.miner: 1],
+                maximumX: 191,
+                maximumY: 95,
+                mechanics: mechanics
+            ),
+            destructionMasks: destructionMaskSet()
+        )
+        while simulation.tickCount < 100 && simulation.lemmings.first?.action != .walking {
+            simulation.tick()
+        }
+        try require(simulation.lemmings.first?.action == .walking, "miner did not reach the floor")
+        return try modifiedSimulation(simulation) { root in
+            try modifyLemmings(in: &root) { lemmings in
+                lemmings[0]["direction"] = ClassicDOSDirection.right.rawValue
+                lemmings[0]["objectInFront"] = ClassicDOSObjectEffect.oneWayLeft.rawValue
+                lemmings[0]["objectBelow"] = ClassicDOSObjectEffect.none.rawValue
+            }
+        }
+    }
+
+    var original = try readyMiner(.original)
+    var golems = try readyMiner(.golems)
+    try require(original.assign(.miner, to: 0) == .wrongOneWayDirection,
+        "original miner crossed a one-way wall")
+    try require(golems.assign(.miner, to: 0) == .assigned,
+        "Golems miner was blocked by the original one-way rule")
+
+    let rightArrow = ClassicDOSTrigger(
+        id: 1,
+        effect: .oneWayRight,
+        bounds: ClassicDOSRect(x1: 0, y1: 40, x2: 192, y2: 41)
+    )
+    for direction in [ClassicDOSDirection.left, .right] {
+        for mechanics in [ClassicDOSMechanics.original, .golems] {
+            var miner = try ClassicDOSSimulation(
+                terrain: floorTerrain(),
+                configuration: configuration(
+                    totalLemmings: 1,
+                    releaseRate: 99,
+                    entrances: [ClassicDOSPoint(x: 40, y: 30)],
+                    triggers: [rightArrow],
+                    maximumX: 191,
+                    maximumY: 95,
+                    mechanics: mechanics
+                ),
+                destructionMasks: destructionMaskSet()
+            )
+            while miner.tickCount < 100 && miner.lemmings.first?.action != .walking {
+                miner.tick()
+            }
+            try require(miner.lemmings.first?.action == .walking, "miner did not reach the arrow")
+            miner = try modifiedSimulation(miner) { root in
+                try modifyLemmings(in: &root) { lemmings in
+                    lemmings[0]["foot"] = ["x": 50, "y": 39]
+                    lemmings[0]["action"] = ClassicDOSAction.mining.rawValue
+                    lemmings[0]["animationFrame"] = 2
+                    lemmings[0]["direction"] = direction.rawValue
+                }
+            }
+            miner.tick()
+            let shouldTurn = mechanics == .original || direction == .left
+            try require(miner.lemmings[0].direction == (shouldTurn ?
+                (direction == .left ? .right : .left) : .right),
+                "\(mechanics) miner took the wrong direction on a right-facing arrow")
+            try require(miner.lemmings[0].action == (shouldTurn ? .walking : .mining),
+                "\(mechanics) miner used the wrong action on a right-facing arrow")
+        }
+    }
 }
 
 private func filledMask(
@@ -688,7 +824,13 @@ private func testReleaseRateZeroCanBeRestored() throws {
 /// walked.
 private func testExitTakesTheLemmingAtTheMiddle() throws {
     /// Walks a lemming in from one side and reports where it vanished.
-    func entryPoint(zone: ClassicDOSRect, from startX: Int, facing: ClassicDOSDirection, slope: Bool = false) throws -> Int? {
+    func entryPoint(
+        zone: ClassicDOSRect,
+        from startX: Int,
+        facing: ClassicDOSDirection,
+        slope: Bool = false,
+        mechanics: ClassicDOSMechanics = .original
+    ) throws -> Int? {
         let exitTrigger = ClassicDOSTrigger(id: 1, effect: .exit, bounds: zone)
         var terrain = try floorTerrain(floorY: 40)
         if slope {
@@ -705,7 +847,8 @@ private func testExitTakesTheLemmingAtTheMiddle() throws {
             configuration: configuration(
                 totalLemmings: 1, releaseRate: 99,
                 entrances: [ClassicDOSPoint(x: 32, y: 39)],
-                triggers: [exitTrigger], maximumX: 191, maximumY: 95))
+                triggers: [exitTrigger], maximumX: 191, maximumY: 95,
+                mechanics: mechanics))
         while simulation.tickCount < 58 { simulation.tick() }
         simulation = try modifiedSimulation(simulation) { root in
             try modifyLemmings(in: &root) { lemmings in
@@ -760,7 +903,50 @@ private func testExitTakesTheLemmingAtTheMiddle() throws {
     let narrowEntry = try entryPoint(zone: narrow, from: 17, facing: .right)
     try require(
         narrowEntry != nil, "a one pixel exit rejected a lemming walking into it")
-    print("PASS exits centre flat-ground arrivals and accept sloped approaches from either direction")
+    let golemsZone = ClassicDOSRect(x1: 20, y1: 40, x2: 28, y2: 44)
+    let golemsFromLeft = try entryPoint(
+        zone: golemsZone, from: 14, facing: .right, mechanics: .golems)
+    let golemsFromRight = try entryPoint(
+        zone: golemsZone, from: 33, facing: .left, mechanics: .golems)
+    try require(golemsFromLeft == 20 && golemsFromRight == 27,
+        "Golems did not enter the exit at first trigger contact")
+    print("PASS original exits centre arrivals; Golems exits accept first contact")
+}
+
+private func testDirectDropRequiresSplat() throws {
+    let midairExit = ClassicDOSTrigger(
+        id: 1, effect: .exit,
+        bounds: ClassicDOSRect(x1: 20, y1: 30, x2: 24, y2: 36)
+    )
+    var falling = try ClassicDOSSimulation(
+        terrain: emptyTerrain(),
+        configuration: configuration(
+            totalLemmings: 1, releaseRate: 99,
+            entrances: [ClassicDOSPoint(x: 20, y: 0)],
+            triggers: [midairExit], maximumX: 63, maximumY: 95
+        )
+    )
+    while !falling.isComplete && falling.tickCount < 150 {
+        falling.tick()
+    }
+    try require(falling.savedCount == 0, "ordinary faller entered an exit in midair")
+
+    let groundExit = ClassicDOSTrigger(
+        id: 2, effect: .exit,
+        bounds: ClassicDOSRect(x1: 20, y1: 68, x2: 24, y2: 80)
+    )
+    var splatting = try ClassicDOSSimulation(
+        terrain: floorTerrain(width: 64, height: 96, floorY: 76),
+        configuration: configuration(
+            totalLemmings: 1, releaseRate: 99,
+            entrances: [ClassicDOSPoint(x: 20, y: 0)],
+            triggers: [groundExit], maximumX: 63, maximumY: 95
+        )
+    )
+    while !splatting.isComplete && splatting.tickCount < 150 {
+        splatting.tick()
+    }
+    try require(splatting.savedCount == 1, "splatting lemming did not enter the exit")
 }
 
 private func testCoolingTrapEmitsOneActivation() throws {
@@ -1006,6 +1192,8 @@ private func testOhNoMoreMechanics(dataDirectory: URL) throws {
 
     try require(ClassicDOSRules.hatchOrder(entranceCount: 2, mechanics: .ohNoMore) == [0, 1, 0, 1]
         && ClassicDOSRules.hatchOrder(entranceCount: 3, mechanics: .ohNoMore) == [0, 1, 2, 1], "later hatch tables")
+    try require(ClassicDOSRules.hatchOrder(entranceCount: 2, mechanics: .golems) == [0, 1, 0, 1],
+        "Golems two-hatch release sequence")
     var config = configuration(totalLemmings: 8, releaseRate: 99, entrances: [ClassicDOSPoint(x: 10, y: 0), ClassicDOSPoint(x: 20, y: 0)])
     config = ClassicDOSConfiguration(totalLemmings: config.totalLemmings, requiredToSave: 0, timeLimitTicks: nil,
         initialReleaseRate: 99, entrances: config.entrances, maximumX: 63, maximumY: 511, mechanics: .ohNoMore)
@@ -1020,10 +1208,20 @@ private func testOhNoMoreMechanics(dataDirectory: URL) throws {
     let rendered = try ClassicLevelRenderer.render(level, groundSet: ClassicGroundSet.load(style: level.groundStyle, from: dataDirectory))
     let original = try ClassicDOSSimulation(level: level, renderedLevel: rendered)
     let later = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mechanics: .ohNoMore)
+    let golems = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mechanics: .golems)
+    let golemsClock = try ClassicDOSSimulation(level: level, renderedLevel: rendered, clock: .golems)
+    try require(golemsClock.configuration.timeLimitTicks == original.configuration.timeLimitTicks.map { $0 + 2 },
+        "Golems timer should allow two final ticks")
+    try require(ClassicDOSReplayRecorder.stateHash(of: original) != ClassicDOSReplayRecorder.stateHash(of: golemsClock),
+        "a changed clock must change the replay identity")
     try require(zip(original.configuration.entrances, later.configuration.entrances).allSatisfy { $0.x + 1 == $1.x && $0.y == $1.y },
         "later hatch offset should be x+25")
+    try require(golems.configuration.entrances == later.configuration.entrances,
+        "Golems hatch offset should be x+25")
     try require(ClassicDOSReplayRecorder.stateHash(of: original) != ClassicDOSReplayRecorder.stateHash(of: later),
         "rule sets must not share a replay identity")
+    try require(ClassicDOSReplayRecorder.stateHash(of: golems) != ClassicDOSReplayRecorder.stateHash(of: later),
+        "Golems must have its own replay identity")
 
     // Only the original game ends a builder's shrug when it gets a climber.
     func shrugAfterClimber(_ mechanics: ClassicDOSMechanics) throws -> ClassicDOSAction {
@@ -1044,8 +1242,10 @@ private func testOhNoMoreMechanics(dataDirectory: URL) throws {
         throw RegressionFailure(description: "builder never shrugged")
     }
     let originalShrug = try shrugAfterClimber(.original), laterShrug = try shrugAfterClimber(.ohNoMore)
+    let golemsShrug = try shrugAfterClimber(.golems)
     try require(originalShrug == .walking, "original climber should end the shrug")
     try require(laterShrug == .shrugging, "later climber should keep the shrug")
+    try require(golemsShrug == .shrugging, "Golems climber should keep the shrug")
 
     // Checkpoints written before rule sets existed restore the original rules.
     var object = try JSONSerialization.jsonObject(with: JSONEncoder().encode(later.configuration)) as! [String: Any]
@@ -1066,6 +1266,8 @@ private func run() throws {
     try testNoOpCommandsClearEvents()
     try testHalfOpenTriggerBounds()
     try testMaximumSafeFallDistance()
+    try testGolemsOneWayMining()
+    try testGolemsClimberPassesRearPixel()
     try testImmutableSteelAndDestructionMasks()
     try testDiggerMaskCanOverlapSteel()
     try testBombedBlockerOnSteelSuppressesExplosion()
@@ -1076,6 +1278,7 @@ private func run() throws {
     try testReleaseRateZeroCanBeRestored()
     try testCoolingTrapEmitsOneActivation()
     try testExitTakesTheLemmingAtTheMiddle()
+    try testDirectDropRequiresSplat()
     try testSplatterWaterUsesZeroHorizontalVelocity()
     try testDeterministicCodableContinuation()
     try testReplayInsertionOrdering()

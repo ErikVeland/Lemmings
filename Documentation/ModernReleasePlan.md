@@ -1,6 +1,11 @@
 # Modern Lemmings release plan
 
-Updated 11 September 2026. This is the current engineering plan, not an announcement of an official release.
+Updated 5 October 2026. This is the current engineering plan, not an announcement of an official release.
+
+The next planned release milestones are 1.8 Mac polish, 1.9
+Lemmings 2 and Lemmings 3 completion, and 2.0 iPhone and iPad. The existing
+1.3 mobile and 1.5 NeoLemmix source work is development evidence for those
+later gates. See the [project overview](Overview.md) for current release status.
 
 The objective is an official-quality edition that preserves the original puzzles and makes them comfortable to play on modern devices. The strongest route is to finish and prove the Mac reference build, bring the same rules and replay fixtures to iPhone and iPad, then reach Windows and Linux. Consoles are not a current target; see the platform plan below.
 
@@ -36,7 +41,7 @@ Campaign counts come from the committed [campaign evidence](CampaignCompletion/e
 The next Mac milestone is a reproducible evaluation build with these requirements:
 
 1. All current regression checks pass against a recorded source and fixture manifest.
-2. Every campaign advertised as complete has a winning route for every level and verified progression. Continue to label incomplete sequel support accurately.
+2. Preserve winning routes and their solvability and difficulty evidence for every campaign advertised as complete. Use the [release replay policy](ReleaseScope.md#release-replay-policy) to choose between the minor audit and full campaign replay gates. Continue to label incomplete sequel support accurately.
 3. Novice players can start, select skills, pause, request a nudge, retry and finish using each supported input device.
 4. Focus loss, disconnected controllers, audio interruptions, sleep, failed saves and restored sessions cannot silently lose a run.
 5. Run an extended hardware matrix: physical Intel, the minimum macOS version, current Apple Silicon, multiple screens, SDR/HDR, 60/120 Hz, Bluetooth/USB controllers and repeated engine switching.
@@ -51,24 +56,35 @@ Additional product work includes input remapping, left-handed touch layouts, loc
 | Platform | Starting point | Next demonstrable result |
 | --- | --- | --- |
 | macOS | Running AppKit/Metal app, universal arm64/x86_64 binaries targeting macOS 13 | Signed reference candidate with hardware and novice-play evidence. |
-| iPhone/iPad | `NxlvKit` declares iOS 16 support and has no AppKit imports. It still uses Apple graphics, image and hashing frameworks. There is no iOS app target. | Compile the library with the iOS SDK, then a playable UIKit/Metal shell that runs the same replay fixtures. Validate direct touch, precise crowd selection, zoom/pan, safe areas and app suspension on devices. |
+| iPhone/iPad | A version 1.3 UIKit/Metal source target imports player-owned Classic DOS data. Shared mobile contracts cover direct targeting, pan/zoom, safe areas, interruption checkpoints and thermal budgets. Synthetic checkpoint tests cover all three native engines; only Classic is player-facing on mobile. | For 2.0, validate touch, audio routes, background termination, thermal behaviour, accessibility, signing and complete journeys on physical devices. Add player-facing L2/L3 import and renderers only under their Preview wording. |
 | Windows/Linux | `Package.swift` declares only macOS and iOS. `NxlvKit` imports CoreGraphics, ImageIO and CryptoKit, all Apple-only. There is no Windows or Linux target. | Replace the Apple-only graphics, image and hashing dependencies with portable equivalents, then build a non-AppKit interface that runs the same replay fixtures. |
 
 Consoles (Switch, PlayStation, Xbox) are not a current target. This repository has no console target, no approved SDK integration and no relationship with a console platform owner. Revisit this only after a decision to pursue it.
 
 Do not rewrite the simulation before proving a need. Keep simulation ticks, replay commands, deterministic outcomes and data formats as the reference contract. Extract rendering, input, audio, files, clocks and account services behind platform adapters when implementing each shell. A portable data model does not imply that this Swift executable runs on every platform.
 
-The current workstation has Command Line Tools but no usable iOS SDK. No iOS compilation or device result is claimed. Install and select a full Xcode toolchain before the first iOS build. Apple documents [virtual controls for controller-based iOS games](https://developer.apple.com/documentation/gamecontroller/adding-virtual-controls-to-games-that-support-game-controllers-in-ios); touch precision for this game still needs its own design and tests.
+The current workstation has Xcode 26.6 and the iOS 26.5 SDK. The Swift app and
+package modules compile for both Simulator architectures. No iOS Simulator
+runtime or physical iPhone/iPad is installed, so launch, asset-catalogue and
+device results are not claimed. Apple documents [virtual controls for controller-based iOS games](https://developer.apple.com/documentation/gamecontroller/adding-virtual-controls-to-games-that-support-game-controllers-in-ios); the committed 1.3 design uses direct touch and still needs physical-device validation.
 
 ## Repeatable verification
 
-Run from the repository:
+Run the routine minor-release audit from the repository:
 
 ```sh
 python3 Tools/ReleaseReadiness/audit.py --app
 ```
 
-The audit creates a new directory under `.build/release-audit`, compiles the shared library from copied sources, runs 28 engine/data suites, verifies original, additional classic-family and L3 campaign routes, and checks controller, variable-speed, pointer and HDR behaviour. `--app` also runs the full app and sequel view suites. Runs preserve logs, source, fixture and asset hashes, JSON results and a readable report. Hashes include the resource bundle used by app tests. Source changes during a run are reported as drift and cause failure. Failed checks never become passes through a cached result.
+This checks preserved solution fixture hashes and runs focused engine
+regressions. It does not replay every campaign route. Run the full replay audit
+after a change listed in the [release replay policy](ReleaseScope.md#release-replay-policy):
+
+```sh
+python3 Tools/ReleaseReadiness/audit.py --app --scope all
+```
+
+The audit creates a new directory under `.build/release-audit`, compiles the shared library from copied sources, runs engine and data suites, and checks controller, variable-speed, pointer and HDR behaviour. The default `minor` scope checks preserved route manifests without replaying every campaign route. The `all` scope also verifies every campaign route. `--app` runs the full app and sequel view suites. Runs preserve logs, source, fixture and asset hashes, JSON results and a readable report. Hashes include the resource bundle used by app tests. Source changes during a run are reported as drift and cause failure. Failed checks never become passes through a cached result.
 
 Without `--app`, the app suites are explicitly **not run**. This is useful during engine work but is not a complete application check. `--require-closure` also fails because hardware, publishing and other platform gates remain open. The tool deliberately does not issue a release-ready certificate.
 

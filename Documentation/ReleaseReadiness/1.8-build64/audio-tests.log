@@ -1,0 +1,135 @@
+UI test windows: offscreen; audio: muted
+Building for debugging...
+[Computing dependencies]
+[Pre-planning 1 / 358]
+[Planning deferred tasks]
+[7 / 26]
+[8 / 27] NxlvKit
+[11 / 30] NxlvKit
+[20 / 36] NxlvKit
+[20 / 38] LemmingsLocal
+[34 / 68] LemmingsLocal
+[36 / 68] LemmingsLocal-product
+[38 / 68] LemmingsLocal-product
+[39 / 68] LemmingsLocal-product
+[42 / 68] LemmingsLocal-product
+[44 / 68] LemmingsLocal-product
+[45 / 68] LemmingsLocal-product
+[47 / 68] LemmingsLocal-product
+[48 / 68] LemmingsLocal-product
+[49 / 68] LemmingsLocal-product
+[56 / 71] LemmingsLocal-product
+[56 / 71] LemmingsLocal
+[56 / 71] LemmingsLocal-product
+[56 / 71] LemmingsLocal
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/Sources/LemmingsLocal/main.swift:5746:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5744 |       openPanel.canChooseFiles = true
+5745 |       openPanel.canChooseDirectories = false
+5746 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5747 |       openPanel.message = "Choose a NeoLemmix level file."
+5748 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/Sources/LemmingsLocal/main.swift:6860:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6858 |       openPanel.canChooseFiles = true
+6859 |       openPanel.canChooseDirectories = false
+6860 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6861 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+6862 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/Sources/LemmingsLocal/main.swift:7320:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7318 |     keyboard.controllerRewindHeld = { [weak self] held in
+7319 |       guard let self else { return }
+7320 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7321 |       else if self.rewindHeld { self.endContinuousRewind() }
+7322 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[58 / 71] LemmingsLocal
+[58 / 71] LemmingsLocal-product
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/Sources/LemmingsLocal/main.swift:5746:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5744 |       openPanel.canChooseFiles = true
+5745 |       openPanel.canChooseDirectories = false
+5746 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5747 |       openPanel.message = "Choose a NeoLemmix level file."
+5748 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/Sources/LemmingsLocal/main.swift:6860:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6858 |       openPanel.canChooseFiles = true
+6859 |       openPanel.canChooseDirectories = false
+6860 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6861 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+6862 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/Sources/LemmingsLocal/main.swift:7320:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7318 |     keyboard.controllerRewindHeld = { [weak self] held in
+7319 |       guard let self else { return }
+7320 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7321 |       else if self.rewindHeld { self.endContinuousRewind() }
+7322 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[60 / 72] LemmingsLocal-product
+[62 / 73] LemmingsLocal-product
+[64 / 73] LemmingsLocalTests-product
+[72 / 81] LemmingsLocalTests-product
+[76 / 80] LemmingsLocalTests-product
+[78 / 80] LemmingsLocalTests-product
+[80 / 80] LemmingsLocalTests-product
+[81 / 85] LemmingsMobileCore
+[82 / 86] LemmingsMobileCore
+[96 / 100] LemmingsMobileCore
+[99 / 101] LemmingsMobileCoreTests-product
+[102 / 104] LemmingsMobileCoreTests-product
+[106 / 107] LemmingsMobileCoreTests-product
+[110 / 112] NxlvKitTests-product
+[125 / 127] NxlvKitTests-product
+[129 / 130] NxlvKitTests-product
+[132 / 132] LemmingsMobileCore-product
+[135 / 139] LemmingsDataTool-product
+[137 / 141] LemmingsDataTool-product
+[140 / 141] LemmingsDataTool-product
+Build complete! (25.66 sec.)
+Test Suite 'Selected tests' started at 2026-10-05 17:31:35.064.
+Test Suite 'NxlvKitTests.xctest' started at 2026-10-05 17:31:35.076.
+Test Suite 'NxlvKitTests.xctest' passed at 2026-10-05 17:31:35.076.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-10-05 17:31:35.076.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.012) seconds
+Test Suite 'Selected tests' started at 2026-10-05 17:31:35.241.
+Test Suite 'LemmingsMobileCoreTests.xctest' started at 2026-10-05 17:31:35.243.
+Test Suite 'LemmingsMobileCoreTests.xctest' passed at 2026-10-05 17:31:35.243.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-10-05 17:31:35.243.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.002) seconds
+Test Suite 'Selected tests' started at 2026-10-05 17:31:35.411.
+Test Suite 'LemmingsLocalTests.xctest' started at 2026-10-05 17:31:35.412.
+Test Suite 'FailureMusicTests' started at 2026-10-05 17:31:35.412.
+Test Case '-[LemmingsLocalTests.FailureMusicTests testFinalPopRestoresTempoWhileFailureVisualsRemain]' started.
+Test Case '-[LemmingsLocalTests.FailureMusicTests testFinalPopRestoresTempoWhileFailureVisualsRemain]' passed (1.054 seconds).
+Test Case '-[LemmingsLocalTests.FailureMusicTests testOrdinaryLossAndWinningNukeKeepTheirMusicPolicy]' started.
+Test Case '-[LemmingsLocalTests.FailureMusicTests testOrdinaryLossAndWinningNukeKeepTheirMusicPolicy]' passed (0.308 seconds).
+Test Suite 'FailureMusicTests' passed at 2026-10-05 17:31:36.775.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 1.362 (1.363) seconds
+Test Suite 'NeoLemmixSoundTests' started at 2026-10-05 17:31:36.775.
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testDeathsAndRescuesKeepTheirPositionsWithoutDuplicateDeathSounds]' started.
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testDeathsAndRescuesKeepTheirPositionsWithoutDuplicateDeathSounds]' passed (0.000 seconds).
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testHatchAndAssignmentReachSessionSoundOutput]' started.
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testHatchAndAssignmentReachSessionSoundOutput]' passed (0.004 seconds).
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testNukeExplosionSoundsOnceWithoutChangingSimulation]' started.
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testNukeExplosionSoundsOnceWithoutChangingSimulation]' passed (0.006 seconds).
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testQueuedNukeAndUndoDoNotReplayOldCues]' started.
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testQueuedNukeAndUndoDoNotReplayOldCues]' passed (0.003 seconds).
+Test Suite 'NeoLemmixSoundTests' passed at 2026-10-05 17:31:36.789.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.014 (0.014) seconds
+Test Suite 'LemmingsLocalTests.xctest' passed at 2026-10-05 17:31:36.789.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 1.376 (1.377) seconds
+Test Suite 'Selected tests' passed at 2026-10-05 17:31:36.789.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 1.376 (1.379) seconds

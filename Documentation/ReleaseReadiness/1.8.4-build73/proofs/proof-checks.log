@@ -1,0 +1,25 @@
+Recorded stdout from completed commands; no checks rerun for this receipt.
+
+verify-trolley-maxima.sh:
+Audited 562 levels (574 configurations): {'VERIFIED': 242, 'OBSERVED': 258, 'UNKNOWN': 62}
+Packaged 251 exact-condition certificates and 261 best-known rescue targets.
+
+catalogue.py check:
+PASS 251 proofs, 261 rescue records, and replay hashes
+
+Baseline comparison with v1.8.3:
+PASS all512 published exact-condition targets retained;251maxima/261records; witness bytes unchanged 512 /512
+Current engine a23fc195617af7cd2d6b162d5244b44a0f45ad12be10ac9f013d4ad9e794fe86
+
+test_event_routes.py:
+PASS version 2 route retained its events and exact winning outcome
+PASS refused L2 event cannot become a winning certificate
+PASS unused late L2 event cannot become a winning certificate
+
+test_refresh.py:
+PASS explicit refresh reproduces a current outcome; default audit rejects stale outcomes
+PASS explicit refresh cannot lower a published rescue target
+
+Policy unittest discovery:
+Ran 3 tests in 0.004s
+OK

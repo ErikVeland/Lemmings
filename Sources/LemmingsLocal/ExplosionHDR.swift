@@ -21,21 +21,22 @@ struct NuclearExplosionTimeline {
     let centre: SIMD2<Float>
     let bornAt: TimeInterval
     let exposure: Bool
+    let worldAnchored: Bool
   }
   private(set) var bursts: [Burst] = []
   private var lastExposure: TimeInterval = -.infinity
 
-  mutating func trigger(centres: [SIMD2<Float>], now: TimeInterval) {
+  mutating func trigger(centres: [SIMD2<Float>], now: TimeInterval, worldAnchored: Bool = false) {
     expire(now: now)
     for centre in centres where centre.x.isFinite && centre.y.isFinite
-      && (0...1).contains(centre.x) && (0...1).contains(centre.y) {
+      && (worldAnchored || ((0...1).contains(centre.x) && (0...1).contains(centre.y))) {
       let exposure = now - lastExposure >= 0.9
       if exposure { lastExposure = now }
       // Keep the main exposure alive when many lemmings detonate together.
       if bursts.count == Self.maximumBursts {
         bursts.remove(at: bursts.firstIndex(where: { !$0.exposure }) ?? 0)
       }
-      bursts.append(Burst(centre: centre, bornAt: now, exposure: exposure))
+      bursts.append(Burst(centre: centre, bornAt: now, exposure: exposure, worldAnchored: worldAnchored))
     }
   }
 
@@ -45,9 +46,10 @@ struct NuclearExplosionTimeline {
 
   mutating func clear() { bursts.removeAll(); lastExposure = -.infinity }
 
-  func samples(now: TimeInterval) -> [SIMD4<Float>] {
-    bursts.filter { now >= $0.bornAt && now - $0.bornAt < Self.duration }.map {
-      SIMD4($0.centre.x, $0.centre.y, Float(now - $0.bornAt), $0.exposure ? 1 : 0)
+  func samples(now: TimeInterval, project: (SIMD2<Float>) -> SIMD2<Float>? = { $0 }) -> [SIMD4<Float>] {
+    bursts.filter { now >= $0.bornAt && now - $0.bornAt < Self.duration }.compactMap {
+      guard let centre = $0.worldAnchored ? project($0.centre) : $0.centre else { return nil }
+      return SIMD4(centre.x, centre.y, Float(now - $0.bornAt), $0.exposure ? 1 : 0)
     }
   }
 }
@@ -141,7 +143,12 @@ enum ExplosionHDR {
   static func textureMask(width: Int, height: Int, flashes: [ExplosionFlash], now: TimeInterval = ProcessInfo.processInfo.systemUptime) -> [UInt8] {
     let warm = mask(width: width, height: height, flashes: flashes, now: now)
     let green = mask(width: width, height: height, flashes: flashes, now: now, tint: .green)
-    return zip(warm, green).flatMap { [$0, $1] }
+    var bytes = [UInt8](repeating: 0, count: warm.count * 2)
+    for index in warm.indices {
+      bytes[index * 2] = warm[index]
+      bytes[index * 2 + 1] = green[index]
+    }
+    return bytes
   }
 
   static let shader = """
@@ -311,6 +318,22 @@ enum ExplosionHDR {
   private var surface: CAMetalLayer?
   private var texture: MTLTexture?
   private var flashes: [ExplosionFlash] = []
+  private var worldFlashes: [ExplosionFlash] = []
+  private var worldProjection: ((CGRect) -> CGRect?)?
+  private var renderedFlashes: [ExplosionFlash] {
+    flashes + worldFlashes.compactMap { flash in
+      guard let rect = worldProjection?(flash.rect) else { return nil }
+      return .init(rect: rect, strength: flash.strength, expiresAt: flash.expiresAt, tint: flash.tint)
+    }
+  }
+  func explosionSamples(now: TimeInterval) -> [SIMD4<Float>] {
+    timeline.samples(now: now) { centre in
+      guard self.bounds.width > 0, self.bounds.height > 0,
+            let rect = self.worldProjection?(CGRect(x: CGFloat(centre.x), y: CGFloat(centre.y), width: 0, height: 0)) else { return nil }
+      return SIMD2(Float((rect.midX - self.bounds.minX) / self.bounds.width),
+                   Float((rect.midY - self.bounds.minY) / self.bounds.height))
+    }
+  }
   private var expiration: Task<Void,Never>?
   private var timeline = NuclearExplosionTimeline()
   private var speed = SuperSpeedTimeline()
@@ -319,17 +342,23 @@ enum ExplosionHDR {
   private var speedField = CGRect.zero
   private var maskIsDirty = true
   var isSuperSpeedActive: Bool { speed.enabled }
+  var hasAllocatedFlashMask: Bool { texture != nil }
 
   /// Each blast has a local fireball. A nuke shares the wider exposure bloom.
-  func pulse(cores: [CGRect] = [], fullScreen: Bool) {
+  func pulse(cores: [CGRect] = [], fullScreen: Bool, project: ((CGRect) -> CGRect?)? = nil) {
     let now = ProcessInfo.processInfo.systemUptime
-    let visible = cores.filter { $0.intersects(bounds) }
+    if let project { worldProjection = project }
+    let visible = cores.filter { (project?($0) ?? (project == nil ? $0 : .null)).intersects(bounds) }
     if fullScreen, bounds.width > 0, bounds.height > 0 {
-      let centres = visible.map { SIMD2(Float($0.midX/bounds.width),Float($0.midY/bounds.height)) }
-      timeline.trigger(centres: cores.isEmpty ? [SIMD2(0.5,0.45)] : centres, now: now)
+      let centres = visible.map { project == nil
+        ? SIMD2(Float($0.midX/bounds.width),Float($0.midY/bounds.height))
+        : SIMD2(Float($0.midX),Float($0.midY)) }
+      timeline.trigger(centres: cores.isEmpty && project == nil ? [SIMD2(0.5,0.45)] : centres,
+        now: now, worldAnchored: project != nil)
     } else {
       for core in visible {
-        flashes.append(.init(rect: core, strength: 1, expiresAt: now + 0.10))
+        let flash = ExplosionFlash(rect: core, strength: 1, expiresAt: now + 0.10)
+        if project == nil { flashes.append(flash) } else { worldFlashes.append(flash) }
       }
       maskIsDirty = true
     }
@@ -339,7 +368,7 @@ enum ExplosionHDR {
 
   func clearExplosions() {
     timeline.clear()
-    flashes.removeAll()
+    flashes.removeAll(); worldFlashes.removeAll(); worldProjection = nil
     maskIsDirty = true
     render()
     scheduleExpiration()
@@ -432,11 +461,12 @@ enum ExplosionHDR {
     expiration?.cancel()
     let now = ProcessInfo.processInfo.systemUptime
     let end: TimeInterval
-    if !timeline.bursts.isEmpty || speed.isAnimating(now: now) { end = now + 1.0/60 }
-    else if let expiry = flashes.map(\.expiresAt).filter({$0.isFinite && $0 > now}).min() { end = expiry }
+    if !timeline.bursts.isEmpty || !worldFlashes.isEmpty || speed.isAnimating(now: now) { end = now + 1.0/60 }
+    else if let expiry = (flashes + worldFlashes).map(\.expiresAt).filter({$0.isFinite && $0 > now}).min() { end = expiry }
     else { return }
     expiration = Task { @MainActor [weak self] in
-      do { try await Task.sleep(for:.seconds(end-now)) } catch { return }
+      // Nanoseconds keep this available on macOS 12.3. Duration-based sleep needs macOS 13.
+      do { try await Task.sleep(nanoseconds: UInt64(max(0, end - now) * 1_000_000_000)) } catch { return }
       self?.render()
       self?.scheduleExpiration()
     }
@@ -453,9 +483,25 @@ enum ExplosionHDR {
     let now = ProcessInfo.processInfo.systemUptime
     advanceSpeedMotion(at: now)
     timeline.expire(now: now)
+    let hadWorldFlashes = !worldFlashes.isEmpty
+    worldFlashes.removeAll { $0.expiresAt <= now }
+    if hadWorldFlashes { maskIsDirty = true }
     let previousCount = flashes.count
     flashes.removeAll { $0.expiresAt <= now }
     if flashes.count != previousCount { maskIsDirty = true }
+    // An idle overlay has no pixels to present. Hide the previous frame without
+    // allocating a full-window mask or waiting for a Metal drawable.
+    let currentFlashes = renderedFlashes
+    let active = !currentFlashes.isEmpty || !timeline.bursts.isEmpty || speed.isAnimating(now: now)
+    // AppKit can restore a backing layer's visibility during display. Hide the
+    // view too, so idle effects stay out of window composition.
+    isHidden = !active
+    surface?.isHidden = !active
+    guard active else {
+      texture = nil
+      if surface == nil { needsDisplay = true }
+      return
+    }
     guard surface != nil else { needsDisplay = true; return }
     guard let gpu, let queue, let pipeline, let surface, let screen = window?.screen,
           bounds.width > 0, bounds.height > 0, !isHidden else { return }
@@ -466,19 +512,20 @@ enum ExplosionHDR {
     surface.drawableSize = CGSize(width:bounds.width*scale,height:bounds.height*scale)
     let width = Int(ceil(bounds.width)), height = Int(ceil(bounds.height))
     // Reuse an unchanged mask. Submitted masks remain immutable on the GPU.
-    if maskIsDirty || texture == nil {
+    if !currentFlashes.isEmpty && (maskIsDirty || texture == nil) {
       let descriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat:.rg8Unorm,width:width,height:height,mipmapped:false)
       descriptor.usage = .shaderRead
       texture = gpu.makeTexture(descriptor:descriptor)
       if let texture {
-        let mask = ExplosionHDR.textureMask(width:width,height:height,flashes:flashes,now:now)
+        let mask = ExplosionHDR.textureMask(width:width,height:height,flashes:currentFlashes,now:now)
         mask.withUnsafeBytes { bytes in
           texture.replace(region:MTLRegionMake2D(0,0,width,height),mipmapLevel:0,withBytes:bytes.baseAddress!,bytesPerRow:width*2)
         }
         maskIsDirty = false
       }
     }
-    guard let texture, let drawable = surface.nextDrawable(), let command = queue.makeCommandBuffer() else { return }
+    if currentFlashes.isEmpty { texture = nil }
+    guard let drawable = surface.nextDrawable(), let command = queue.makeCommandBuffer() else { return }
     let pass = MTLRenderPassDescriptor()
     pass.colorAttachments[0].texture = drawable.texture
     pass.colorAttachments[0].loadAction = .clear
@@ -486,10 +533,12 @@ enum ExplosionHDR {
     pass.colorAttachments[0].clearColor = MTLClearColorMake(0,0,0,0)
     guard let encoder = command.makeRenderCommandEncoder(descriptor:pass) else { return }
     var headroom = ExplosionHDR.headroom(screen.maximumExtendedDynamicRangeColorComponentValue)
-    encoder.setRenderPipelineState(pipeline)
-    encoder.setFragmentTexture(texture,index:0)
-    encoder.setFragmentBytes(&headroom,length:MemoryLayout<Float>.size,index:0)
-    encoder.drawPrimitives(type:.triangleStrip,vertexStart:0,vertexCount:4)
+    if let texture {
+      encoder.setRenderPipelineState(pipeline)
+      encoder.setFragmentTexture(texture,index:0)
+      encoder.setFragmentBytes(&headroom,length:MemoryLayout<Float>.size,index:0)
+      encoder.drawPrimitives(type:.triangleStrip,vertexStart:0,vertexCount:4)
+    }
     if let speedPipeline, speed.isAnimating(now: now) {
       var uniforms = SuperSpeedUniforms(
         field: SIMD4(Float(speedField.minX),Float(speedField.minY),Float(speedField.width),Float(speedField.height)),
@@ -499,7 +548,7 @@ enum ExplosionHDR {
       encoder.setFragmentBytes(&uniforms,length:MemoryLayout<SuperSpeedUniforms>.stride,index:0)
       encoder.drawPrimitives(type:.triangleStrip,vertexStart:0,vertexCount:4)
     }
-    let samples = timeline.samples(now: now)
+    let samples = explosionSamples(now: now)
     if let nuclearPipeline, !samples.isEmpty {
       var uniforms = NuclearExplosionUniforms(size: SIMD2(Float(bounds.width),Float(bounds.height)),
         headroom: headroom, count: UInt32(samples.count))
@@ -518,7 +567,7 @@ enum ExplosionHDR {
 
   override func draw(_ dirtyRect: NSRect) {
     guard surface == nil else { return }
-    let samples = timeline.samples(now: ProcessInfo.processInfo.systemUptime)
+    let samples = explosionSamples(now: ProcessInfo.processInfo.systemUptime)
     NSGraphicsContext.saveGraphicsState()
     defer { NSGraphicsContext.restoreGraphicsState() }
     bounds.clip()

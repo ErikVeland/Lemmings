@@ -1,0 +1,90 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>Ultimate Lemmings</title>
+        <item>
+            <title>1.7.7</title>
+            <pubDate>Fri, 02 Oct 2026 15:09:04 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>61</sparkle:version>
+            <sparkle:shortVersionString>1.7.7</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><h3>Original cursors and clearer selection</h3>
+<p>Gameplay settings now offer Original and Modern cursors across Classic, Lemmings 2 and Lemmings 3. Original uses the supplied Amiga pixels and colours: a dotted cross over terrain and a square reticule over a lemming. The Original preset selects this cursor. Modern retains the current reticule. Manual choices are saved as Custom.</p>
+<p>Both 1× and 2× selected-skill icons are three times their previous size. The optional lemming counter is half its previous size.</p>
+<h3>Optional Classic skill backpacks</h3>
+<p>Assigned Climbers wear brown backpacks, Floaters wear orange backpacks, and lemmings with both skills wear purple backpacks. The markers follow the PC and Mac sprite artwork. Enable or disable Show skill backpacks in Gameplay settings. Modern enables them by default; Original disables them.</p>
+<h3>A deeper nuke countdown</h3>
+<p>With HD Effects enabled, the music gradually loses high frequencies and gains bass from the start to the end of a nuke countdown. The mix stays more audible instead of becoming quiet immediately. The sweep follows simulation time, including pause and speed changes, and restores correctly on undo or recovery. The original comic explosion and restrained bass impact remain.</p>
+<p>This applies to Classic, imported NeoLemmix levels and Lemmings 2. Lemmings 3 has no mass-nuke countdown.</p>
+<h3>Fan levels and verification</h3>
+<p>An exact bundled Golems challenge pack now selects its matching native mechanics in gameplay and previews. Pass Interference has a recorded winning route using ordinary player assignments. The evidence catalogue now records 2,154 Classic fan wins and 322 NeoLemmix wins. Additional source-rule and sequel investigations are retained separately from winning routes.</p>
+<p>Lemmings 2 and Lemmings 3 remain Preview. NeoLemmix remains Beta. Recorded native wins do not establish complete source-engine physics parity. Some Golems evidence replays still differ in final state or completion timing.</p>
+<h3>Update</h3>
+<p>For a fresh installation, choose <code>UltimateLemmings-1.7.7-build61-slim.zip</code>. It includes the original soundtracks and offers the extra libraries on first launch. Previously downloaded libraries are detected and retained.</p>
+<p>Existing players can use Check for Updates. Its full archive preserves music bundled inside older apps. Both downloads contain the same universal macOS app and support macOS 12.3 or later.</p>
+<p class="meta">Build: 61<br>Release commit: 17498ea029200507d6064ce897d6711f45938079<br>Release base: v1.7.6</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.7.7/UltimateLemmings-1.7.7-build61.zip" length="1943260816" type="application/octet-stream" sparkle:edSignature="anOj2bxCnEfbPj0xySrpVwwaXEYlpL/JrBCzkUowmI8M4B3rT+bHeTj8eSgmBQEAOaNFNdJgXll125aaSWm/BQ=="/>
+        </item>
+        <item>
+            <title>1.7.6</title>
+            <pubDate>Fri, 02 Oct 2026 11:00:01 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>60</sparkle:version>
+            <sparkle:shortVersionString>1.7.6</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><h3>Fan levels and learning</h3>
+<p>The evidence catalogue now contains 2,153 Classic fan wins and 322 NeoLemmix wins. The learning journey has 292 lessons, including 136 fan levels from 80 packs. Difficulty scores use winning replay evidence. Unverified levels remain unscored.</p>
+<p>The expanded diagnostics distinguish source-engine compatibility gaps from levels that simply lack a recorded win. Native wins do not establish full physics parity with the original source engine.</p>
+<h3>Lemmings 2 and Lemmings 3</h3>
+<p>Preserved coverage now includes 75 of 120 Lemmings 2 routes, with 27 carry-over variants, and 41 of 90 Lemmings 3 routes. Further bounded searches and source comparisons are recorded separately from winning routes. Both games remain Preview: the full campaign and source-physics gates are still open.</p>
+<p>The Lemmings 3 intro movie gallery now plays its verified DOS OPL2 Intro recording. Movie pause, resume and close control the music. Music volume, mute and Silent settings apply. Other movies have no assigned soundtrack yet.</p>
+<h3>Included since the last public release</h3>
+<p>This update also includes the unpublished 1.7.4 and 1.7.5 improvements below.</p>
+<h3>Music and spatial sound</h3>
+<p>Modern music now reaches Adaptive DJ's MOD decks, restoring centred percussion, a gentler stereo spread, subtle reverb and EQ. Switching Modern and Faithful preserves the track position. Music remains stereo.</p>
+<p>Gameplay effects follow their position relative to the camera and zoom across Classic, Lemmings 2 and Lemmings 3. Offscreen effects become quieter. Lemmings 2 uses independent spatial voices, and Lemmings 3 adds builder warning sounds. This is camera-relative sound, without head tracking. Lemmings 2 has no mapped exit cheer, and recorded replay audio remains mono.</p>
+<p>With HD Effects enabled, Classic and Lemmings 2 nuke countdowns briefly sweep the music into a hollow midrange. Restrained bass supports the original comic explosions, with a limit to prevent buildup. Undo restores the mix. Lemmings 3 has no mass-nuke countdown.</p>
+<h3>Home, Goal and help</h3>
+<p>With Modern controls, H centres the entrance and G centres the exit. In Lemmings 2, G first selects Hang Glider when available; pressing it again with Glider selected centres the exit. Home and End remain available. Use / for hints and ? for controls. Controller stick clicks already provide the same camera actions: L3 for the entrance and R3 for the exit.</p>
+<h3>Fresh sessions and clearer selection</h3>
+<p>New solo and Hot Seat sessions start at the beginning of the chosen campaign or playlist. Previous sessions, profile achievements and scores remain saved. Continue retains its saved position. Hot Seat handovers stay paused until Ready, and failed runs offer separate retry and next-player actions.</p>
+<p>Fan levels use artwork that matches their terrain. Floating Down! now shows its snow landscape. The HUD follows the active journey position. Journey selection and level preparation include fixes since 1.7.3.</p>
+<p>Gameplay settings offer None, Obvious and Modern selection effects across all three games. Modern adds a crisp white outline and green halo. Pausing holds the halo, and reduced-motion and reduced-flash settings keep it steady.</p>
+<h3>Update</h3>
+<p>Existing players can use Check for Updates after publication. The full soundtrack is included in <code>UltimateLemmings-1.7.6-build60.zip</code>, which also supports a fresh installation. Lemmings 2 and Lemmings 3 remain Preview. NeoLemmix remains Beta.</p>
+<p class="meta">Build: 60<br>Release commit: 52266e506802eea9c145126e58dd2594935e4b31<br>Release base: v1.7.3</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.7.6/UltimateLemmings-1.7.6-build60.zip" length="1943220872" type="application/octet-stream" sparkle:edSignature="oRPZX1b1vbmnKIMlujtzkPY2pZKOkBiYCIbaRrOlFc9U+lKGJH4nz/GCBDXQokUquRiBGHbxMfG4bBO9uZRNDA=="/>
+        </item>
+        <item>
+            <title>1.7.3</title>
+            <pubDate>Wed, 30 Sep 2026 17:14:53 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>56</sparkle:version>
+            <sparkle:shortVersionString>1.7.3</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>These notes cover the changes since the public 1.7.1 release.</p>
+<h3>New since 1.7.1</h3>
+<ul><li>Double-tap − or + to set the release rate to the minimum or the maximum. A single press still changes the rate by one step.</li><li>Press N to nuke. Press N again to undo the nuke while undo is still possible. Outside play, N in Classic still opens the next level.</li><li>Oh My! All Lemmings! now selects 292 lessons: eight skill introductions, 160 intermediate applications, 90 difficult lessons and 34 expert challenges. Official levels take priority within comparable difficulty bands. The corpus includes all 120 Classic, 100 Oh No! and 72 seasonal levels. Repeated tutorials, duplicate observed applications and port copies are excluded. One transition remains flagged for playtesting. L2/L3 mechanics stay outside this journey.</li><li>30 more Classic fan levels can be completed. The DOS rules ignored the exits on these levels. The exits now work, as they do in the fan editors.</li><li>2,136 Classic fan levels now have a verified win.</li><li>A lemming that falls too far and lands in an exit is now saved, as in DOS.</li><li>NeoLemmix: A Disarmer disables a trap when it starts work, so the lemmings that follow can walk past. Builders, Platformers and Stackers continue their work correctly after a teleporter. Stackers start at the correct height.</li><li>Lemmings 2 and Lemmings 3 stay in Preview. This update adds more checks of both games against the original releases.</li></ul>
+<h3>Controls</h3>
+<ul><li>The selected lemming has a brighter halo and a small solid marker above its head. Reduced motion keeps the highlight steady.</li><li>The controls help (?) shows every gameplay key, including the new keys.</li><li>The skill panel returns to full height after you start a level from a menu.</li></ul>
+<h3>Oh My! All Lemmings!</h3>
+<ul><li>The recommended Classic path is a learning journey from Fun to Expert. It shows the next lesson, its stage and focus, and your solved count.</li><li>The journey is for one player. It leaves out two-player levels, and a puzzle that several ports repeat appears once.</li><li>Pause a lesson to get hints, keep a level for later, or leave. Choose <b>Revisit</b> to play the levels that you kept for later.</li><li>If a session cannot start, the message names the level and pack that stopped it.</li></ul>
+<h3>NeoLemmix</h3>
+<ul><li>The game includes 788 levels from NeoLemmix Community Edition 1.2.0: Lemmings Redux, the NeoLemmix Introduction Pack and Original Lemmings. Open them from <b>NeoLemmix</b> on the home screen. No download or folder is needed.</li><li>713 levels are ready to play. The other 75 levels use community styles that the game does not include. They show as unavailable until you add a NeoLemmix folder that contains those styles.</li><li>Add your own NeoLemmix packs from Level Select. Your packs appear beside the included packs.</li><li>Records, previews, playlists and saved runs keep stable pack and level IDs. Completed levels show a completion mark.</li><li>Lemmings use the sprite style of the level theme, in the NeoLemmix draw order.</li><li>Pickup skills, teleporters, secondary gadget layers and moving backgrounds follow the NeoLemmix Community Edition timing rules.</li><li>NeoLemmix support stays in Beta. Some levels can still behave differently from NeoLemmix itself.</li></ul>
+<h3>Sound</h3>
+<ul><li>The Amiga sound sets use Macintosh samples for effects that the Amiga bank does not have.</li><li>Pause stops all sound effects, not only the music.</li></ul>
+<h3>Fixes</h3>
+<ul><li>Solo and Hot Seat journey sessions start correctly when macOS opens the app from a temporary location.</li><li>Bundled campaigns, imported level packs, saved runs and playlists keep their identity after an update or when you move the app.</li><li>NeoLemmix lemmings are no longer drawn upside down.</li><li>The game no longer traps the pointer in a window that is not on screen.</li></ul>
+<h3>Downloads</h3>
+<ul><li>New players: download <code>UltimateLemmings-1.7.2-build55-slim.zip</code>.</li><li>Existing players receive the full update automatically. The full archive, <code>UltimateLemmings-1.7.2-build55.zip</code>, is also available for a manual upgrade.</li></ul>
+<h3>Credits</h3>
+<p>The NeoLemmix levels and styles come from NeoLemmix Community Edition (https://github.com/Willicious/NeoLemmixCommunityEdition). The styles included are the DMA styles. The NeoLemmix licence is in the app.</p>
+<p class="meta">Build: 56<br>Release commit: 4ca5f499ac1d56c01d6be7c5ae3e3fa91072fbaa<br>Release base: v1.7.1</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.7.3/UltimateLemmings-1.7.3-build56.zip" length="1943120085" type="application/octet-stream" sparkle:edSignature="NgXmusN7cMXnopwvHSdzAmMg+5G5Jm/y2W5JkrL5O9mqoOmdb3qoTr5LpuPFGtonI18D/jTI44HSotCdWGIRBg=="/>
+        </item>
+    </channel>
+</rss>

@@ -1,0 +1,29 @@
+{
+  "description": "A forced release-rate command at tick zero was skipped by the standalone Classic solver. The corrected prefix has the same initial replay input as --rate.",
+  "level": "fan:lldb-62/ClamSpam02.dat#5",
+  "archiveSHA256": "ea5c212dd530e2c8ea2c8b033aa2ad8e7882c455134d530ff83dac0d15100241",
+  "auditedInitialStateHash": "d82a8e5d7a200e2028125f8b977bbabc10b5f10d7fe75202e4f2a2746cefb261",
+  "nativeLibrarySHA256": "346051fba5ab8199c39d536d48a12bbf30e0da49f78f1d4b20291ad6f60c2dbe",
+  "solverBeforeSHA256": "fa126b49b21fc0880d9974143dfea05e945bfd9302ed588996106839765bcc89",
+  "solverAfterSHA256": "a67cd00136c1b113a622d0cfcaf245cd8d61517cb3905aa28dbe974bb4b75e6e",
+  "prefixSHA256": "e2ec924cd6d6cb63a734354cd726a582138d05d43c13aaee0eac2d2a9298ce0b",
+  "control": {
+    "prefix": "after-tick release rate 99 at tick zero",
+    "comparison": "--rate 99 without a prefix",
+    "prefixPartialReplaySHA256": "951870d7353c802af3393bd51a3b5df1c7215ae81844fdf5a3cf8a1352d2dd89",
+    "rateOptionPartialReplaySHA256": "951870d7353c802af3393bd51a3b5df1c7215ae81844fdf5a3cf8a1352d2dd89",
+    "bothRecord": "release-rate 99 after tick 0 on the audited initial state"
+  },
+  "targetedSearch": {
+    "settings": "width 128, 60 seconds, five-tick fallback and refire, one additional skill rollout",
+    "before": {
+      "result": "UNSOLVED; best 6/23; waiting tick 446; 305 single-skill rollouts",
+      "partialReplaySHA256": "7ba5b2141fab65d710d2963d60e8b8b07e01a5042057b9b1b2ba9aef904a5907"
+    },
+    "after": {
+      "result": "UNSOLVED; best 8/23; waiting tick 185; zero single-skill rollouts",
+      "partialReplaySHA256": "f0abc417bab1b83dba6571255611b8bb5b3a37208beb0fb9a9edc26c0e20efc2"
+    }
+  },
+  "interpretation": "The earlier Go Fetch! prefix search did not run its stated rate-99 setup. With that setup applied, its first forced skill at tick 224 is later than the viable waiting route at tick 185. This prefix cannot test a winning rate-99 continuation. Neither bounded search found a win or established source physics parity."
+}

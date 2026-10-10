@@ -218,6 +218,9 @@ private func testLaunchEntries() throws {
     try require(
         entries.count == 3, "expected the quest plus two titles, got \(entries.count)")
     try require(entries[0].mode == .fullQuest, "the quest should be offered first")
+    try require(
+        entries[0].title == "Oh My! ALL Lemmings!",
+        "the quest did not use its player-facing name")
     try require(entries[0].total == 6, "the quest should span every level")
     try require(entries.allSatisfy { !$0.isStarted }, "a fresh saga shows nothing started")
 

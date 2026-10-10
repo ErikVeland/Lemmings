@@ -1,0 +1,21 @@
+{
+  "identity": "fan:lldb-494/JANNPCK3.DAT#5",
+  "title": "Do it the hard way!",
+  "archiveSHA256": "fa2398637b4d298aaa26f2ba5d2a6a0445e3f4109126ed0aee32b35b2100a38d",
+  "sourceReplaySHA256": "307ae4a355313dffaa6e43c32df8fb3bfe48e038f5ce50424bad077a96e34819",
+  "sourceHeaderSaved": 79,
+  "sourceHeaderTicks": 4778,
+  "convertedNativeInputSHA256": "ee499b21c9826b6fb8b6f94975cfdcd022fa7122b92430797a927cfdbb7a50ac",
+  "mechanics": "experimental Golems on exact bundled level",
+  "retimedInput": "Builder for lemming 2 at native tick 3655",
+  "shiftRange": [-60, 60],
+  "trialCount": 121,
+  "completedReplays": 48,
+  "maximumSaved": 1,
+  "required": 79,
+  "farthestAssignmentRejection": "Basher for lemming 2 at native tick 3815; lemming 2 falling at (554,137)",
+  "probeSourceSHA256": "a13bf383f11d0a2abd4bf0e547da67cc072f20b8b4cad1c5aff2028856967401",
+  "probeBinarySHA256": "5021f43130b3643a27726f342d90e166a95eced251c159fe278b446a657e7c0e",
+  "logSHA256": "a693dcd0d35e32dfd096f046957e5f34a667bf23c34ab5d61855e23ce65eebe7",
+  "conclusion": "Moving the late Builder can make the published input sequence legal, but none of the tested variants wins. Source physics parity and a replay-based score remain open."
+}

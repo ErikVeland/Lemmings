@@ -1,0 +1,31 @@
+PASS slim notarisation accepted e1c5c7bf-b0b7-4971-9741-ab7f139266f3
+Successfully downloaded submission log
+  id: e1c5c7bf-b0b7-4971-9741-ab7f139266f3
+  location: /Users/veland/Lemmings/.build/release-1.7.7/slim-notary-log.json
+PASS Apple accepted the exact slim submission with no issues
+Processing: /Users/veland/Lemmings/.build/release-1.7.7/slim/Ultimate Lemmings.app
+Processing: /Users/veland/Lemmings/.build/release-1.7.7/slim/Ultimate Lemmings.app
+The staple and validate action worked!
+Processing: /Users/veland/Lemmings/.build/release-1.7.7/slim/Ultimate Lemmings.app
+The validate action worked!
+/Users/veland/Lemmings/.build/release-1.7.7/slim/Ultimate Lemmings.app: valid on disk
+/Users/veland/Lemmings/.build/release-1.7.7/slim/Ultimate Lemmings.app: satisfies its Designated Requirement
+PASS slim ZIP integrity, unique entries, app-only contents and size: 159204620
+/Users/veland/Lemmings/.build/release-1.7.7/slim-gatekeeper/Ultimate Lemmings.app: accepted
+source=Notarized Developer ID
+origin=Developer ID Application: Erik Veland (54WU29TRTY)
+Processing: /Users/veland/Lemmings/.build/release-1.7.7/slim-gatekeeper/Ultimate Lemmings.app
+The validate action worked!
+/Users/veland/Lemmings/.build/release-1.7.7/slim-gatekeeper/Ultimate Lemmings.app: valid on disk
+/Users/veland/Lemmings/.build/release-1.7.7/slim-gatekeeper/Ultimate Lemmings.app: satisfies its Designated Requirement
+{
+  "sourceCommit": "17498ea029200507d6064ce897d6711f45938079",
+  "archive": "UltimateLemmings-1.7.7-build61-slim.zip",
+  "size": 159204620,
+  "sha256": "2972b8f6235e86564339a5e116857aa49a8535a031e66b7aa9e9ebee6f644cb3",
+  "musicScope": "main",
+  "musicVersions": 54,
+  "optionalLibraries": 18,
+  "notarySubmission": "e1c5c7bf-b0b7-4971-9741-ab7f139266f3"
+}
+PASS slim package, Apple ticket, Gatekeeper, version and soundtrack scope

@@ -1,0 +1,115 @@
+{
+  "cachedSourcePageRecords": "Most Saved, Fewest Skills and Shortest Time list no winner",
+  "correctedInvalidTimingChecks": [
+    {
+      "expansions": 11,
+      "forcedBuilderTick": 58,
+      "result": "UNSOLVED; waiting tick 54; zero single-skill continuations; no partial replay"
+    },
+    {
+      "expansions": 11,
+      "forcedBuilderTick": 59,
+      "result": "UNSOLVED; waiting tick 54; zero single-skill continuations; no partial replay"
+    },
+    {
+      "expansions": 12,
+      "forcedBuilderTick": 60,
+      "result": "UNSOLVED; waiting tick 59; zero single-skill continuations; no partial replay"
+    }
+  ],
+  "correctedSolverSHA256": "de5456a5d41b421ee631fa161f46aa40303dd09fa09901b10031b36bc2230ff5",
+  "date": "2026-10-04",
+  "exactArchiveSHA256": "7003ec2cb3cc038e9bb1764bc7855def66e10f8aecabfde334b1a6459c6afe64",
+  "firstLegalBuilderTickForLemming0": 61,
+  "historicalChecks": [
+    {
+      "forcedInputInHistoricalPartial": false,
+      "historicalPartialSHA256": "762309d00cd847d1ce5483f944a14a7572cc3c83da5eb4dc5dd3d3d3da4ff3d6",
+      "prefixSHA256": "0914afff3a8f6fa5c88d33d1542572a25241e09b5eafca170ba01c34980ce26d",
+      "tick": 58
+    },
+    {
+      "forcedInputInHistoricalPartial": false,
+      "historicalPartialSHA256": "762309d00cd847d1ce5483f944a14a7572cc3c83da5eb4dc5dd3d3d3da4ff3d6",
+      "prefixSHA256": "ced92b163788175ca5d2a3b083cf0019b3368f6701960a519540288dd423ecd0",
+      "tick": 59
+    },
+    {
+      "forcedInputInHistoricalPartial": false,
+      "historicalPartialSHA256": "762309d00cd847d1ce5483f944a14a7572cc3c83da5eb4dc5dd3d3d3da4ff3d6",
+      "prefixSHA256": "f54ee9d5343cc23442cd2a755491d87284b01ecc166f7e8c4b5ed24ee90746f7",
+      "tick": 60
+    },
+    {
+      "forcedInputInHistoricalPartial": true,
+      "historicalPartialSHA256": "bf4f5357eb8dad8aade6d35ca0cb3498b1a2e5658b2fa7258e30f18747d052ee",
+      "prefixSHA256": "804785d62e800acaa4c3af2cd640f9cee3b91cf3fcf5b204ed301fde2bed9ee4",
+      "tick": 61
+    },
+    {
+      "forcedInputInHistoricalPartial": true,
+      "historicalPartialSHA256": "05498c75b6f06a9ee54cf4dac1f26058ccc5587970e2fd27c57279832ee3e584",
+      "prefixSHA256": "a7efb39e259e4a690f9b613e8810aff11de8980228f77a5ef283456ee090ec77",
+      "tick": 62
+    },
+    {
+      "forcedInputInHistoricalPartial": true,
+      "historicalPartialSHA256": "7c5c3f0c606687069ea1713d3ad2f3c518c2b74d9f0353e10913752c179340d4",
+      "prefixSHA256": "93b2eed417be50dfc4f88b94a3deb1cf1e1f97c3424927be2904b5f6eb27bbc4",
+      "tick": 63
+    },
+    {
+      "forcedInputInHistoricalPartial": true,
+      "historicalPartialSHA256": "289ee02b44939930414ac015378ad51524d4edecda08bf49925f462e7116ddae",
+      "prefixSHA256": "87d69db63fc2b7b0364abc00ab70bb0df914776e42929666911e172429fd5516",
+      "tick": 64
+    },
+    {
+      "forcedInputInHistoricalPartial": true,
+      "historicalPartialSHA256": "466e67830e7b02623c6e150f7e40b8ca80756b98db6af9b29e2d5071ed3d7ede",
+      "prefixSHA256": "60d40a7a512dfef13b1533b24c344a853d8ce820971c75062eeceac126b43747",
+      "tick": 66
+    },
+    {
+      "forcedInputInHistoricalPartial": true,
+      "historicalPartialSHA256": "d6ce2c804a85bd25b58b527f13c27df5b5946f28b302747a48ba113b19ebe790",
+      "prefixSHA256": "8514d096434f2dbf5842b05c91d5dad86a8de4f58c4fa0d4f2a30476f1cb44d6",
+      "tick": 67
+    },
+    {
+      "forcedInputInHistoricalPartial": true,
+      "historicalPartialSHA256": "cdfbf202c1beb8d214bb3a2941adc64a1f19c444bbc9e31b12483434eccae297",
+      "prefixSHA256": "968203f1ade3e46f21547ec7cc3024fa79b6407d7c1f55c0372bb071fa1ca764",
+      "tick": 68
+    },
+    {
+      "forcedInputInHistoricalPartial": true,
+      "historicalPartialSHA256": "26afdda01de9cc526d14adf103ebf0018d909b16f815428e1e3e757e447a9b6e",
+      "prefixSHA256": "dd94899226c1915c53d3e94a4ffde012a1732895b29c21590913deecbaf653a1",
+      "tick": 69
+    },
+    {
+      "forcedInputInHistoricalPartial": true,
+      "historicalPartialSHA256": "c60149f60a70275e7b2e82c4e18a6a0a4092e4bf6fd3f0e7e42b5453cac3e76f",
+      "prefixSHA256": "2e5be950614758532f8f33cf022b61c0186fd8877a87dba34f993d27281538b0",
+      "tick": 70
+    },
+    {
+      "forcedInputInHistoricalPartial": true,
+      "historicalPartialSHA256": "af38c7ba03dcb7707dd080f430042591c3c20964e0edcf157b59ade9f09a93e1",
+      "prefixSHA256": "cffd9495aa13fd6344fbaec565370ec07c9d20189e5f4f8288b4c193d06c3bca",
+      "tick": 71
+    },
+    {
+      "forcedInputInHistoricalPartial": true,
+      "historicalPartialSHA256": "881b378f72221115244d9e986c425f2c4f144ed839d125e4adad9529cb75b841",
+      "prefixSHA256": "40448da25ed1d530dcdfd3203061ea2f686ee0c4d6f507f22a7d02cad9fa465e",
+      "tick": 72
+    }
+  ],
+  "identity": "fan:lldb-325/t3tesla.dat#8",
+  "interpretation": "The three early Builder inputs are illegal while lemming 0 is falling under the selected native rules. Earlier partials omitted those forced inputs. The remaining eleven recorded partials contain their forced Builder. No source-engine trace or winning source record supports a physics change.",
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "nativeTraceSHA256": "23dc5663f42fd96488fe1f3f418700639934a94dad282b8c4365fc03cf7bca6b",
+  "sourcePageSHA256": "e906b4b2d34bd4d62fb06207061d00ae31f5203585b1e4643163992dbf7cccec"
+}

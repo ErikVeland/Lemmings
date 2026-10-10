@@ -1,0 +1,13 @@
+warning: /Users/veland/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'lemmings': failed storing manifest for 'lemmings' in cache: attempt to write a readonly database
+warning: 'sparkle': failed storing manifest for 'sparkle' in cache: attempt to write a readonly database
+Building for debugging...
+[Using on-disk description]
+[2 / 16] NxlvKit
+[5 / 19] NxlvKit
+[11 / 18] NxlvKit
+[16 / 17] LemmingsDataTool-product
+[18 / 18] LemmingsLocal-product
+Build complete! (3.42 sec.)

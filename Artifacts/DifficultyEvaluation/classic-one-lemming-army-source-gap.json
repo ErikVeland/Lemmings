@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-04",
+  "identity": "fan:lldb-303/TWPAK01.dat#1",
+  "title": "The One-Lemming-Army",
+  "archiveSHA256": "697a9fc2adb8c4a7e2b49b2741eee766cf7d944fe40b66640827db12163f0b99",
+  "sourcePageCachedSHA256": "ff95d823cc704e9eaff9e2a03726144114ce45b95f634afbd5ed993234b970de",
+  "sourceURL": "https://lldb.camanis.net/level/303/2",
+  "rawSourceReplaySHA256": "9de5102ae2c667fc94ddd537ec2cc192561b814049caec44fe8594189e66de24",
+  "sourceHeader": {
+    "saved": 1,
+    "ticks": 3025,
+    "gameMode": 3
+  },
+  "candidateSource": "Previously decoded six-command candidate from combined source manifest, tested at uniform tick offsets -3 through 3",
+  "originalMechanics": "Offsets -3 and -2 completed with 0/1; offsets -1 through 3 rejected the first Floater",
+  "golemsMechanics": "Offset -1 accepted all six commands but saved 0/1 by tick 3062. The lemming was at x=723, y=120 at source completion tick 3025; native exit trigger is x=900..904, y=100..108. Offsets 0 through 3 rejected the first Floater.",
+  "sourcePhysicsParity": "unresolved: the accepted native route diverges materially from the published success",
+  "limits": "No winning replay or score. The exact source asset revision has not been independently compared with the bundled archive."
+}

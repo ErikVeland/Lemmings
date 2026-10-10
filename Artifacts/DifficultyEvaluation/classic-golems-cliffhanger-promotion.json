@@ -1,0 +1,30 @@
+{
+  "description": "Cliffhanger is selected with exact bundled Golems mechanics and ordinary player assignments. Native replay success is not full source physics parity.",
+  "identity": {
+    "engine": "classic",
+    "levelID": "MARTPCK2.DAT#6",
+    "packID": "fan:lldb-496"
+  },
+  "archive": "Content/LevelPacks/0496-MARTPCK2.zip",
+  "archiveSHA256": "fbf2f7723f9042ccda838524e4a366e035f49c34d2d1422a7eca9017a9cb01cb",
+  "replay": "Artifacts/DifficultyEvaluation/golems-profile-replays/cliffhanger.json",
+  "replaySHA256": "af138e29b4c774059a4824c9d60f395dd60372493f7596c43b2b02e7d0baab56",
+  "initialStateHash": "69fdf860149bfce9fc4f225afc9acf90a869cc1866e12954b78456d85f103c83",
+  "nativeOutcome": {
+    "didWin": true,
+    "released": 30,
+    "required": 30,
+    "saved": 30,
+    "stateHash": "fc56606d4e85ef25a901e0b3dfb4141652aa269280e23b0ccc2175a71eaa2cdd",
+    "ticks": 1599
+  },
+  "difficultyScore": 269.7084737644241,
+  "probeRuns": 10,
+  "profile": "Artifacts/DifficultyEvaluation/golems-profile-replays/cliffhanger-selected.profile.json",
+  "profileSHA256": "b304c4d9444ebfbdc88e9755a2faaaf25355d0bd762f5bfebd5c33773444bb92",
+  "sourceReplayHeader": {
+    "saved": 30,
+    "completionCycle": 1603
+  },
+  "sourcePhysicsParity": "unverified"
+}

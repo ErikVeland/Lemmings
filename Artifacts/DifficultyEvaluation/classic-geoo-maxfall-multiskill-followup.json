@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-05",
+  "target": {
+    "packID": "fan:lldb-1",
+    "level": "geooPk0.dat#8",
+    "title": "Mission at max-fall 60",
+    "initialStateSHA256": "a2082643643cea09fd3ef13239045c53d0e1232c3dc7f57881ca69fd900a0e10",
+    "archiveSHA256": "66ff4c33c44970e945dffee82cfe84a4787329f60ee702613f3f2cb233865bec"
+  },
+  "solver": {
+    "binary": ".build/heartbeat-20261005-0331/ClassicSolver",
+    "binarySHA256": "dc45dadab700e2792f98fe30451ac371b0b6bc36f3a25e086cabf05514fab01b",
+    "simulationLibrarySHA256": "0021228840f26fba8d92831e931a0175e1c2eb8837880f57968cc67625a13d5d"
+  },
+  "search": {
+    "mode": "multi-skill beam",
+    "releaseRate": 1,
+    "beamWidth": 256,
+    "wallClockLimitSeconds": 25,
+    "ranking": ["preferProgress", "directExitDistance"],
+    "result": "UNSOLVED, best saved 0/1, 34,957 expansions in 11 seconds, terminal tick 410, 1 released, 0 lost, 1 active, incomplete",
+    "partialReplay": "classic-geoo-maxfall-multiskill-partial.json",
+    "partialReplaySHA256": "dcf4baee008030e08dedc849790b5f5c287cdcdf951b0697409113545696a0eb"
+  },
+  "assessment": "This exact-bundle beam expanded a multi-skill route and did not win. It supplements the earlier no-input and single-skill bounds, but does not exhaust multi-skill timing or prove impossibility or source physics parity. No replay-based score was assigned."
+}

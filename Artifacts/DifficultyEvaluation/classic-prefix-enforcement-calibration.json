@@ -1,0 +1,62 @@
+{
+  "assumption": "A forced prefix names required after-tick inputs; a route that omits or rejects one is not a valid continuation of that prefix.",
+  "date": "2026-10-04",
+  "forcedInput": {
+    "id": 0,
+    "skill": "builder",
+    "tick": 78
+  },
+  "knownStrictWinControl": {
+    "identity": "fan:lldb-505/KillerMaster 1 Tame 1.dat#1",
+    "matchesPriorDigest": true,
+    "replaySHA256": "968d366c6c60b1f15c6485ea6549a8546887b6222006eae204b4d8ef99a6add3",
+    "required": 1,
+    "saved": 1
+  },
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "newFocusedPartial": {
+    "reportedTick": 100,
+    "sha256": "672e60b95be269b6b7b04f77c5feeed705b5a44f054a520b2fe4c7b67344bfdd",
+    "skillInputs": 1
+  },
+  "newForcedSearchPartial": {
+    "expansions": 947,
+    "firstBuilderTick": 78,
+    "forcedTick78Present": true,
+    "sha256": "fd5071aab0ce8a1b126dc7bcb4a0e050730184644aa3c3be18d6d5faa5df9d31"
+  },
+  "newSolverSHA256": "de5456a5d41b421ee631fa161f46aa40303dd09fa09901b10031b36bc2230ff5",
+  "oldFocusedPartial": {
+    "reportedTick": 36,
+    "sha256": "4565bf069eb0b8ed62eea93e9c2a418d3872c91282abe8bcf403b0c79cc9cca6",
+    "skillInputs": 0
+  },
+  "oldForcedSearchPartial": {
+    "binaryRevision": "Intermediate build after partial selection, before forced-prefix enforcement; binary digest was not retained",
+    "expansions": 1889,
+    "firstBuilderTick": 76,
+    "forcedTick78Present": false,
+    "sha256": "83aaeee46cb2d58c06dfbe4befb894d13601dd98e4b22ef843b3af93fd23686e"
+  },
+  "oldSolverSHA256": "3e2e3ebe5c5505d715d60a37dfee4087fee401ddd177f2cf8be43fb0a6f85c1c",
+  "result": "No new strict win or score. The new partial carries a legal Builder input and the forced continuation retains the required tick-78 assignment.",
+  "scope": "ClassicSolver forced-prefix enforcement and partial-route selection",
+  "target": "fan:lldb-68/Lemmy556 More levels.dat#0",
+  "targetArchiveSHA256": "a1883fb43a9148fb8feeb3cf88b817663bd9bb9b5e23ae179ffe5c6166686b81",
+  "unreachableFuturePrefixControl": {
+    "commands": [
+      "Floater at tick 54",
+      "rate 99 at tick 1000"
+    ],
+    "identity": "fan:lldb-505/KillerMaster 1 Tame 1.dat#1",
+    "result": "UNSOLVED; no win or partial file emitted"
+  },
+  "validForcedWinControl": {
+    "forcedFloaterTick": 54,
+    "identity": "fan:lldb-505/KillerMaster 1 Tame 1.dat#1",
+    "matchesPriorDigest": true,
+    "replaySHA256": "968d366c6c60b1f15c6485ea6549a8546887b6222006eae204b4d8ef99a6add3",
+    "required": 1,
+    "saved": 1
+  }
+}

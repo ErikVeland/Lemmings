@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-05",
+  "target": {
+    "packID": "fan:lldb-1",
+    "level": "geooPk0.dat#8",
+    "title": "Mission at max-fall 60",
+    "initialStateSHA256": "a2082643643cea09fd3ef13239045c53d0e1232c3dc7f57881ca69fd900a0e10",
+    "archiveSHA256": "66ff4c33c44970e945dffee82cfe84a4787329f60ee702613f3f2cb233865bec",
+    "configuration": "1 lemming, 1 required, release rate 1; one each of climber, floater, bomber, blocker, builder, basher, miner and digger"
+  },
+  "solver": {
+    "binarySHA256": "dc45dadab700e2792f98fe30451ac371b0b6bc36f3a25e086cabf05514fab01b",
+    "sourceSHA256": "e9efacd6a90ebd84e2c1d20548f6ba0156f0b764fc2cbe30e7822e96def8c71a",
+    "simulationLibrarySHA256": "0021228840f26fba8d92831e931a0175e1c2eb8837880f57968cc67625a13d5d"
+  },
+  "search": {
+    "mode": "--rollout-single",
+    "fallbackTicks": 12,
+    "wallClockLimitSeconds": 45,
+    "outcome": "UNSOLVED, best saved 0/1, 17,603 expansions in 5 seconds",
+    "waitingRouteTick": 1022,
+    "singleSkillRollouts": 763,
+    "bestPartialTick": 263,
+    "bestPartialSHA256": "3695200b93a5824324c6999abf5d5a7646b82aea075d41244bf847f57fb425f8"
+  },
+  "assessment": "The moderate-fallback rollout covered the full no-input route to tick 1,022 and 763 one-skill continuations, but it did not find a win. It does not test multi-skill routes exhaustively, prove target impossibility, or establish source physics parity. The row remains unscored."
+}

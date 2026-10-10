@@ -1,0 +1,82 @@
+PASS 306 campaign fixture hashes and coverage manifest
+PASS 1 saved 10 lost 0 reserve 10
+PASS 2 saved 12 lost 0 reserve 10
+PASS 3 saved 10 lost 0 reserve 10
+PASS 4 saved 12 lost 0 reserve 10
+PASS 5 saved 10 lost 0 reserve 10
+PASS 6 saved 10 lost 0 reserve 10
+PASS 7 saved 10 lost 0 reserve 10
+PASS 8 saved 11 lost 1 reserve 10
+PASS 9 saved 10 lost 1 reserve 10
+PASS 10 saved 10 lost 2 reserve 10
+PASS 11 saved 11 lost 0 reserve 10
+PASS 12 saved 10 lost 0 reserve 10
+PASS 13 saved 12 lost 1 reserve 10
+PASS 14 saved 11 lost 1 reserve 10
+PASS 15 saved 13 lost 0 reserve 10
+PASS 16 saved 10 lost 2 reserve 10
+PASS 17 saved 10 lost 0 reserve 10
+PASS 18 saved 10 lost 0 reserve 10
+PASS 19 saved 12 lost 0 reserve 10
+PASS 20 saved 12 lost 0 reserve 10
+PASS 21 saved 2 lost 8 reserve 10
+PASS 22 saved 10 lost 0 reserve 10
+PASS 23 saved 12 lost 1 reserve 10
+PASS 24 saved 10 lost 0 reserve 10
+PASS 25 saved 12 lost 0 reserve 10
+PASS 29 saved 1 lost 11 reserve 10
+PASS 101 saved 10 lost 0 reserve 10
+PASS 102 saved 10 lost 0 reserve 10
+PASS 103 saved 10 lost 0 reserve 10
+PASS 104 saved 11 lost 1 reserve 10
+PASS 105 saved 11 lost 0 reserve 10
+PASS 106 saved 10 lost 0 reserve 10
+PASS 107 saved 10 lost 1 reserve 10
+PASS 108 saved 1 lost 19 reserve 0
+PASS 109 saved 1 lost 11 reserve 10
+PASS 110 saved 11 lost 3 reserve 7
+PASS 111 saved 10 lost 0 reserve 10
+PASS 112 saved 10 lost 0 reserve 10
+PASS 113 saved 10 lost 0 reserve 10
+PASS 114 saved 10 lost 1 reserve 10
+PASS 115 saved 1 lost 11 reserve 10
+PASS 116 saved 8 lost 14 reserve 0
+PASS 117 saved 1 lost 19 reserve 0
+PASS 118 saved 2 lost 16 reserve 10
+PASS 119 saved 10 lost 4 reserve 10
+PASS 120 saved 3 lost 18 reserve 0
+PASS 201 saved 10 lost 0 reserve 10
+PASS 202 saved 12 lost 0 reserve 10
+PASS 203 saved 10 lost 0 reserve 10
+PASS 204 saved 10 lost 0 reserve 10
+PASS 205 saved 10 lost 1 reserve 10
+PASS 206 saved 11 lost 0 reserve 10
+PASS 207 saved 10 lost 0 reserve 10
+PASS 208 saved 5 lost 5 reserve 10
+PASS 209 saved 12 lost 2 reserve 10
+PASS 210 saved 10 lost 1 reserve 10
+PASS 211 saved 1 lost 19 reserve 0
+PASS 212 saved 11 lost 0 reserve 10
+PASS 213 saved 1 lost 20 reserve 0
+PASS 214 saved 10 lost 3 reserve 10
+PASS 215 saved 10 lost 3 reserve 8
+PASS 216 saved 10 lost 0 reserve 10
+PASS 217 saved 4 lost 14 reserve 6
+PASS 218 saved 10 lost 8 reserve 10
+PASS 219 saved 1 lost 9 reserve 10
+PASS 220 saved 1 lost 11 reserve 10
+PASS 221 saved 2 lost 19 reserve 0
+PASS 222 saved 1 lost 10 reserve 10
+PASS 223 saved 1 lost 11 reserve 10
+PASS 225 saved 1 lost 12 reserve 10
+PASS 226 saved 10 lost 0 reserve 10
+PASS 228 saved 1 lost 23 reserve 0
+PASS 229 saved 2 lost 10 reserve 10
+PASS 230 saved 1 lost 15 reserve 10
+Verified 74 distinct L3 levels. No fixture for 16: [26, 27, 28, 30, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 224, 227]
+PASS L3 missing fixture, population, level hash, level number, outcome, rejected input, ordering and strict-scope gates
+PASS L3 campaign prefixes: 68 carried results, 3 open chains
+PASS 155 carried-population fixtures double-replayed
+GAP Classic 26: 40 lemmings
+GAP Shadow 121: 1 lemming
+GAP Egyptian 224: 1 lemming

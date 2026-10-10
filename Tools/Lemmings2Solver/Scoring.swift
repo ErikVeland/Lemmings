@@ -54,7 +54,7 @@ extension Score {
                 let vertical = abs(y - (exit.y + exit.height / 2))
                 return min(best, horizontal + vertical)
             }
-            return field.distance(x: x, y: y, fallback: straight)
+            return field.distance(x: x, y: y, fallback: exits.isEmpty ? 0 : straight)
         }
         let entrance = game.configuration.entrance
         // Lemmings not yet released count from the entrance, so releasing fewer gains no rank.

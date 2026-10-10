@@ -1,0 +1,70 @@
+{
+  "bundledArchiveSHA256": "dba9b23e61ec73dc0a22e49385a9dacbb45eb5db64bf064a794d8376617f5c1c",
+  "bundledDAT_SHA256": "297020b12a880f15df5bd98abfca33392f927e0e8d7d31792542b828076bba43",
+  "identity": {
+    "levelID": "ANTHPCK5.DAT#3",
+    "packID": "fan:lldb-225"
+  },
+  "nativeFirstRejection": {
+    "lemmingID": 6,
+    "nativeAction": "falling",
+    "skill": "basher",
+    "tick": 687
+  },
+  "nativeProfile": "opt-in Golems mechanics and clock, with falling Builder source replay assignment and all published commands one tick earlier",
+  "note": "The earlier Basher rejection, trap loss and no-op failure used unshifted source cycles. Those diagnostics are superseded for this replay by the strict shifted win. The bundled DAT and source DAT are byte-identical.",
+  "physicsParity": "Source and native save 69/70 after a one-tick input conversion; completion times differ by one tick. Intermediate terrain-route mask nearly matches at sampled cycles, but complete physics parity remains unverified.",
+  "scratchFallingBasherNextRejection": {
+    "lemmingID": 8,
+    "nativeLemmingAlreadyLostAtTick": 618,
+    "nativeLossCause": "triggeredTrap",
+    "nativeLossFoot": {
+      "x": 655,
+      "y": 147
+    },
+    "skill": "basher",
+    "tick": 740
+  },
+  "scratchNoOpRejectedAssignments": {
+    "nativeCompletionTick": 2771,
+    "nativeRequired": 68,
+    "nativeSaved": 0
+  },
+  "sourceBrowser": "151.0.2",
+  "sourceDAT_SHA256": "297020b12a880f15df5bd98abfca33392f927e0e8d7d31792542b828076bba43",
+  "sourceEngine": "Golems.Core.dll",
+  "sourceEngineSHA256": "38cb69f18f5055821a496336a948fc30596e56c607c3ddddfb4675be78a5873e",
+  "sourceMainJSSHA256": "c467eab99315555391542d7c79a2976b28c1c674dadd01ccf261d7792eabeace",
+  "sourceReplayCompressedSHA256": "71553c9097b7fbee1376285ddfea85b8b84088357d3a9374ea537506940de21d",
+  "sourceReplayDecodedSHA256": "b07103902216924de69fb50d91366b541b9718f3fe3f56f9222a3fc767be4685",
+  "sourceResult": {
+    "hasTimeRemaining": true,
+    "requiredCount": 68,
+    "savedCount": 69,
+    "totalCount": 70,
+    "totalCycles": 2624
+  },
+  "sourceURL": "https://lldb.camanis.net/level/225/4/Scaffolding",
+  "nativeStrictWin": {
+    "saved": 69,
+    "required": 68,
+    "completionTick": 2623,
+    "difficultyScore": 590.109135577798,
+    "probeRuns": 10,
+    "replaySHA256": "f47879a36cdc3d9ac189a53724ded591ca8dec9b7a540fea01092d99b79a53d9",
+    "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/fan-lldb-225-4.json"
+  },
+  "sourceCycleConversion": {
+    "nativeTickOffset": -1,
+    "publishedInputActionsMatched": true,
+    "unshiftedNativeSaved": 0,
+    "unshiftedNativeCompletionTick": 2771,
+    "shiftedNativeSaved": 69,
+    "shiftedNativeCompletionTick": 2623,
+    "renderedSolidColourMaskOverlapAtCycle539": {
+      "unshifted": 0.9228064437,
+      "shifted": 0.95837,
+      "note": "Approximate screenshot colour mask includes sprites; this is a terrain-route diagnostic, not exact state parity."
+    }
+  }
+}

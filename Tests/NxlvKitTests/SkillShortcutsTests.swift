@@ -10,6 +10,14 @@ struct SkillShortcutsTests {
         #expect(SkillShortcuts.cycle(from: 0, direction: 1, available: []) == nil)
     }
 
+    @Test func cameraKeysReserveHAndGExceptGlider() {
+        let bindings = SkillShortcuts(names: ["Hopper", "Hang Glider", "Glue Pourer", "Grenader"])
+        #expect(bindings.index(for: "g", current: 0) == 1)
+        #expect(!bindings.letters.contains("h"))
+        #expect(bindings.letters.filter { $0 == "g" }.count == 1)
+        #expect(SkillShortcuts(names: ["Glue Pourer", "Grenader"]).index(for: "g") == nil)
+    }
+
     @Test func classicBindings() {
         let bindings = SkillShortcuts(names: ["Climber", "Floater", "Bomber", "Blocker", "Builder", "Basher", "Miner", "Digger"])
         // Floater takes u for umbrella, because f is the fast-forward key, and

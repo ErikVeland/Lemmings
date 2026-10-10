@@ -1,0 +1,76 @@
+{
+  "date": "2026-10-04",
+  "scope": "Targeted small-population and Builder-title checks after the lead-worker ranking improvement",
+  "sourceBuiltSolverSHA256": "db5ab2cb9a136c73181091a4c88a4f34ece2127da26fd82051d8b9abdfa9276a",
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "calibration": "Same current source-built solver previously recovered a strict 1/1 one-Floater control and a strict 20/10 nine-Builder route.",
+  "records": [
+    {
+      "identity": "fan:lldb-68/Lemmy556 More levels.dat#0",
+      "archiveSHA256": "a1883fb43a9148fb8feeb3cf88b817663bd9bb9b5e23ae179ffe5c6166686b81",
+      "archiveLevelNumber": 1,
+      "policy": "--focus-workers 1 --prefer-progress --fallback 12 --refire 60 --width 48 --seconds 30",
+      "expansions": 47,
+      "bestSavedRequired": "0/4",
+      "partialReplaySHA256": "4565bf069eb0b8ed62eea93e9c2a418d3872c91282abe8bcf403b0c79cc9cca6",
+      "waitingRouteTick": null,
+      "oneSkillContinuations": null
+    },
+    {
+      "identity": "fan:lldb-68/Lemmy556 More levels.dat#0",
+      "archiveSHA256": "a1883fb43a9148fb8feeb3cf88b817663bd9bb9b5e23ae179ffe5c6166686b81",
+      "archiveLevelNumber": 1,
+      "policy": "--focus-workers 1 --rollout-single --fallback 12 --refire 60 --width 48 --seconds 15",
+      "expansions": 47,
+      "bestSavedRequired": "0/4",
+      "partialReplaySHA256": "4565bf069eb0b8ed62eea93e9c2a418d3872c91282abe8bcf403b0c79cc9cca6",
+      "waitingRouteTick": 111,
+      "oneSkillContinuations": 3
+    },
+    {
+      "identity": "fan:lldb-7/Mikepak02.dat#5",
+      "archiveSHA256": "7fad1d57c5fd9bfc37d99089ecd8a852aca86c0a94f62e4b7f4e40ad12a9e879",
+      "archiveLevelNumber": 6,
+      "policy": "--focus-workers 1 --prefer-progress --fallback 12 --refire 60 --width 48 --seconds 30",
+      "expansions": 4210,
+      "bestSavedRequired": "0/5",
+      "partialReplaySHA256": "69814467a192ec8a1e7037329e3171fa04a3753b209dd145016002cf8f9ab99d",
+      "waitingRouteTick": null,
+      "oneSkillContinuations": null
+    },
+    {
+      "identity": "fan:lldb-7/Mikepak02.dat#5",
+      "archiveSHA256": "7fad1d57c5fd9bfc37d99089ecd8a852aca86c0a94f62e4b7f4e40ad12a9e879",
+      "archiveLevelNumber": 6,
+      "policy": "--focus-workers 2 --balanced-ranking --fallback 12 --refire 60 --width 96 --seconds 30",
+      "expansions": 6958,
+      "bestSavedRequired": "0/5",
+      "partialReplaySHA256": "623da245b12223130b59ee58e4cf37fb2aa8a48e37af7399c5a59a6e3b18dc4f",
+      "waitingRouteTick": null,
+      "oneSkillContinuations": null
+    },
+    {
+      "identity": "fan:lldb-61/lm_set15.dat#6",
+      "archiveSHA256": "4fb22ca4ef883e331f68c551bd0d3039bc42d306a8852533e9edc0b544e29525",
+      "archiveLevelNumber": 7,
+      "policy": "--focus-workers 1 --prefer-progress --rescue-quota-distance --fallback 12 --refire 60 --width 48 --seconds 30",
+      "expansions": 48309,
+      "bestSavedRequired": "0/11",
+      "partialReplaySHA256": "76c9c720ecce73c7bcf3857a81a35fd23577f61dc585c3d01a8af4e307439e68",
+      "waitingRouteTick": null,
+      "oneSkillContinuations": null
+    },
+    {
+      "identity": "fan:lldb-99/TimpackA.dat#4",
+      "archiveSHA256": "fd6bd0346a28539876b3f74535f2cbc7faf30b3422642d44aa90752ac6b4f92d",
+      "archiveLevelNumber": 5,
+      "policy": "--rate 99 --focus-workers 1 --prefer-progress --rescue-quota-distance --fallback 12 --refire 60 --width 48 --seconds 30",
+      "expansions": 21911,
+      "bestSavedRequired": "0/20",
+      "partialReplaySHA256": "9415a952b61452bd391635921e55a8150402434eb2d472c407bc76946ac0baae",
+      "waitingRouteTick": null,
+      "oneSkillContinuations": null
+    }
+  ],
+  "interpretation": "These bounded no-win results do not establish impossibility, source physics parity or a native engine defect. No replay-based score was assigned."
+}

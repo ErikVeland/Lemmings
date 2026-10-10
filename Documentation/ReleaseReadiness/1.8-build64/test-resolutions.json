@@ -1,0 +1,48 @@
+{
+  "releaseTools": {
+    "initial": "release-tools.log",
+    "cause": "Version validator accepted only the 1.7 series.",
+    "resolution": "Explicitly accept 1.8 and patch versions; add positive and negative version tests. All 36 tests pass.",
+    "rerun": "release-tools-rerun.log"
+  },
+  "replayScope": "Minor regression audit plus all 352 Classic/conversion routes and all 41 retained L3 routes. L3 Brick quantity is the only engine-rule change since 1.7.9. No Classic physics or replay rules changed.",
+  "limits": [
+    "No audible or foreground tests.",
+    "Physical Intel, minimum macOS and installed Sparkle upgrade untested.",
+    "L2/L3 remain Preview; NeoLemmix remains Beta.",
+    "Full app integration could not complete headlessly: a help-screen check requests desktop activation.",
+    "The offscreen performance benchmark failed to advance simulation; performance remains unverified."
+  ],
+  "trolleyRefresh": "Regenerated witnesses from the current retained L3 fixtures, including the Brick-quantity route adjustments already present in the merged source. All 41 current fixtures pass strict replay verification. These are not claimed to be unchanged from 1.7.9.",
+  "extendedAudit": {
+    "replay-movies": {
+      "initial": "audit/logs/replay-movies.log",
+      "cause": "Legacy runner omitted the Sparkle compiler/linker search path.",
+      "rerun": "replay-movies-rerun.log",
+      "status": "passed",
+      "runner": "run-replay-movie-tests.zsh"
+    },
+    "mac-app-integration": {
+      "initial": "audit/logs/mac-app-integration.log",
+      "cause": "CRT fixture used old fixed coordinates for an adaptive empty-skill panel.",
+      "rerun": "app-regression-rerun.log",
+      "status": "partial; remaining scope unverified",
+      "resolution": "Current control bounds pass CRT input and subsequent audio, retry, controller, variable speed and hint checks. The offscreen runner then exits 2 at help-screen desktop activation. No foreground retry authorised or run. Separate release-ui-candidate.log passed all its checks.",
+      "testSource": "app-checks.swift"
+    },
+    "local-performance-measurement": {
+      "status": "unverified",
+      "log": "audit/logs/local-performance-measurement.log",
+      "reason": "Offscreen benchmark remained at zero simulation ticks. No performance acceptance claim. Regular simulation clock tests pass."
+    },
+    "arcade-records": {
+      "initial": "audit/logs/arcade-records.log",
+      "cause": "Legacy runner omitted Sparkle compiler/linker search paths.",
+      "rerun": "arcade-records-rerun.log",
+      "runner": "run-arcade-records-tests.zsh",
+      "status": "passed with dependency and schema fixture corrections",
+      "schemaRerun": "arcade-records-current-schema.log",
+      "schemaCause": "Legacy fixture expected schema 2 and treated 3 as future. Production already writes schema 3; updated assertions require 3 and reject future 4. Production save code unchanged."
+    }
+  }
+}

@@ -1810,6 +1810,1786 @@
       "sort": "descending",
       "submission": "best-score",
       "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.speed.clear.11ee56bd6273ca7db123",
+      "name": "Just dig! - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.speed.clear.6df09116da653ddc1463",
+      "name": "Only floaters can survive this - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.speed.clear.ed34674a10c271423f03",
+      "name": "Now use miners and climbers - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.speed.clear.201778fbd41a2e943c9c",
+      "name": "You need bashers this time - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.speed.clear.074ceecc8b543fcf7842",
+      "name": "Builders will help you here - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.speed.clear.dae658275c59a545cca4",
+      "name": "Not as complicated as it looks - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.speed.clear.59249b70d8242ec00f39",
+      "name": "As long as you try your best - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.speed.clear.247ce9cfaa79893bed8f",
+      "name": "Smile if you love lemmings - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.speed.clear.debc9d9202f850bed96e",
+      "name": "Keep your hair on Mr. Lemming - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.speed.clear.d39706ac9ae2b1e09a9a",
+      "name": "Patience - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.speed.clear.f6d34b16e5a4c2c3330c",
+      "name": "We all fall down - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.speed.clear.e866424a26d6aea11569",
+      "name": "Origins and Lemmings - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.speed.clear.2ba1eed5dc35013fdfe8",
+      "name": "Don't let your eyes deceive you - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.speed.clear.625fbb5e141bbfda4c0a",
+      "name": "Don't do anything too hasty - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.speed.clear.868f6413bb2e7db6e2d8",
+      "name": "Easy when you know how - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.speed.clear.59bb2246985dd5032118",
+      "name": "Take good care of my Lemmings - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.speed.clear.8f2a4187380c5babef72",
+      "name": "We are now at LEMCON ONE - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.speed.clear.9bb3c5e3ddb29f834ed9",
+      "name": "You Live and Lem - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.speed.clear.da0b0462af69bdb8209d",
+      "name": "A Beast of a level - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.speed.clear.149981273545a0b0f639",
+      "name": "I've lost that Lemming feeling - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.7fc91fd4afa45f476cac",
+      "name": "Konbanwa Lemming san - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.895c580c04418fcc5fc2",
+      "name": "Lemmings Lemmings everywhere - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.64ef7502e60445b7b02a",
+      "name": "Nightmare on Lem street - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.45e41bcc9de6d73e4b13",
+      "name": "Let's be careful out there - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.91d5ca4d14efa2ce5942",
+      "name": "If only they could fly - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.a6b78599fc92749cc368",
+      "name": "worra lorra lemmings - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.3db765c3f7fcdb6d7349",
+      "name": "Lock up your Lemmings - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.2b533b33fc174d79a927",
+      "name": "Steel Works - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.8ee8c2d558ba06e4a99c",
+      "name": "The Boiler Room - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.c8cc599d598bcb070fd8",
+      "name": "It`s hero time! - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.0a4f79122d5fdacd3a75",
+      "name": "The Crossroads - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.0a9b81bc64f8439b95de",
+      "name": "One way or another - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.00ed39521f78e1a69d56",
+      "name": "Poles Apart - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.e1ce023e351a8a30ebd6",
+      "name": "Last one out is a rotten egg! - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.c819d7b559b6704a9307",
+      "name": "Curse of the Pharaohs - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.f81ce4044366425f5062",
+      "name": "We all fall down (80) - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.a5aa84085f1dac2a97c1",
+      "name": "The Far Side - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.4d10ef8d7ebd01a62715",
+      "name": "The Great Lemming Caper - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.e613fdf974944c4d98ad",
+      "name": "Pea Soup - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.a1ae304f2df1817d7282",
+      "name": "The Fast Food Kitchen... - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.17ec076b0dbcdbef7130",
+      "name": "Just a Minute... - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.77cdc5be6558ab70600d",
+      "name": "Stepping Stones - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.8fa585380461ecd7d587",
+      "name": "And then there were four.... - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.f0566e3fca2c56537f50",
+      "name": "No added colours or Lemmings - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.c7d189fecb1016106681",
+      "name": "With a twist of lemming please - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.d01a9fd0e28a3b559cd6",
+      "name": "A BeastII of a level - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.6a80a5ba8bbcf8bbc5ec",
+      "name": "Going up....... - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.8453ceaedabeaa514a86",
+      "name": "All or Nothing - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.7c8ae4132758d44ab188",
+      "name": "Have a nice day! - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.5d6e64405897fcea7e56",
+      "name": "Just a Minute (Part Two) - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.a40edd953846775a9a71",
+      "name": "Mind the step..... - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.b92a98e63ff3ee26e127",
+      "name": "Rendezvous at the Mountain - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.fb27c39cf269da52b8d9",
+      "name": "If at first you don`t succeed.. - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.4a37e593fd829e391419",
+      "name": "Watch out, there`s traps about - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.805872b6cfd5c589218b",
+      "name": "Heaven can wait (we hope!!!!) - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.cd6526d8c80b1d3cf1a3",
+      "name": "Lend a helping hand.... - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.54e0b2a7c1b1cd4d37c2",
+      "name": "The Prison! - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.7c06e23f08f5d0fe3993",
+      "name": "Compression Method 1 - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.7559e5573dae426476bd",
+      "name": "The Art Gallery - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.d576961c582b3c66fd70",
+      "name": "Perseverance - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.bfa82a3f193b3f8c05a9",
+      "name": "Izzie Wizzie lemmings get busy - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.3286e31c243fcbde9ed4",
+      "name": "The ascending pillar scenario - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.4dba3e89b6b1311d1841",
+      "name": "Livin` On The Edge - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.ac332133d5da7fdfe787",
+      "name": "Upsidedown World - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.1683b8f402db223b313c",
+      "name": "Hunt the Nessy.... - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.21401739460589b01cac",
+      "name": "What an AWESOME level - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.6db94a16dd1059f2b664",
+      "name": "Mary Poppins` land - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.e92a22bc26d2ab627d7f",
+      "name": "X marks the spot - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.380deb858df2d5a97c9d",
+      "name": "Tribute to M.C.Escher - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.43b4feefcd4d21b06203",
+      "name": "Walk the web rope - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.774053957af4701d0b11",
+      "name": "Feel the heat! - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.0e0a385d34e321073d35",
+      "name": "Come on over to my place - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.82482cd1b15ee76be3f0",
+      "name": "King of the castle - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.c234770756c27abba617",
+      "name": "Take a running jump..... - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.d5cbc7a3c75573abfc68",
+      "name": "Follow the leader... - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.bafae50fb3800a57b0b3",
+      "name": "Triple Trouble - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.ea244952e48f8d4e6f9d",
+      "name": "How do I dig up the way? - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.01bc4487b197741dfbf7",
+      "name": "We all fall down (60) - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.e4ae4e01e7e981e84d4a",
+      "name": "This should be a doddle! - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.1fc47f14184a0f2a27dd",
+      "name": "We all fall down (40) - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.ee2aa952f0853ce13907",
+      "name": "A ladder would be handy - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.6cb5ef7c3d11a4d99ccc",
+      "name": "Here's one I prepared earlier - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.adf4684428e363e31e3c",
+      "name": "Careless clicking costs lives - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.6cad4a49bccbaa4b2bd6",
+      "name": "Lemmingology - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.9e6b791cca4465b654a4",
+      "name": "Been there, seen it, done it - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.9270430580e3d2e76c15",
+      "name": "Lemming sanctuary in sight - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.043270f1947e0eb1a985",
+      "name": "They just keep on coming - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.11a0b3cb924108413461",
+      "name": "There's a lot of them about - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.44260ce0ad9ec9a2307d",
+      "name": "Lemmings in the attic - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.cc35579e75dfd5d66bdd",
+      "name": "Bitter Lemming - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.a889423165279fbc44f9",
+      "name": "Lemming Drops - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.38c98757e0a4a28e5e05",
+      "name": "MENACING !! - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.9a0a69ac1098a4473c69",
+      "name": "Postcard from Lemmingland - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.d1eb7063efec1ac8192c",
+      "name": "One way digging to freedom - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.b96e8eba00e15980d501",
+      "name": "All the 6`s ........ - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.e3a5598e35f4011bb3dc",
+      "name": "Turn around young lemmings! - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.610a618b51d166b182b1",
+      "name": "Tightrope City - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.416d24a84a8ba7ec4ec8",
+      "name": "Cascade - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.80f981bbe599707bdd23",
+      "name": "I have a cunning plan - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.2a9178d25f53b63914d5",
+      "name": "The Island of the Wicker people - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.ae14805d1ad3f2b980c6",
+      "name": "Lost something? - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.74bc93b5a74cfd1e060e",
+      "name": "Rainbow Island - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.302b6d5d1113c80b8032",
+      "name": "The Crankshaft - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.ce03d3e800d764c4ad9c",
+      "name": "Merry Christmas Mr Lemming - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.545841f9087abcf900fe",
+      "name": "Christmas Bonus - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.07faaa0ca36fba0e1112",
+      "name": "This Corrosion - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.f3d048bb7565c995f82e",
+      "name": "24 hour Lemathon - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.a22949a5490302b68ec3",
+      "name": "On the Antarctic Coast - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.4de920470a85ffadb727",
+      "name": "Lemming Friendly - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.882e1608759b98d67c10",
+      "name": "Across The Gap - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.a6d2d7e2a513a01179d1",
+      "name": "It`s the price you have to pay - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.52f74d2ca1d894fd2821",
+      "name": "The race against cliches - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.5f1a8b0a4969281b3871",
+      "name": "Now get out of that! - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.6e2280a9996ac2585015",
+      "name": "Lemming about town - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.ddce138741687fecbc56",
+      "name": "Welcome to the party, pal! - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.83cb05c9999c7d58438a",
+      "name": "It`s all a matter of timing - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.823d2b7cea512158ce70",
+      "name": "Have an ice day - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.5f18f58c335c5dd2cd8d",
+      "name": "Looks a Bit Nippy Out There - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.1dade31356e3cc69d70b",
+      "name": "Downwardly Mobile Lemmings - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.3"
+    },
+    {
+      "id": "ul.v1.speed.clear.46a118ba6a65dfd6e468",
+      "name": "Intsy-Wintsy...Lemming? - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.001b48f9e6016a2fb930",
+      "name": "New Lemmings On The Block - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.2c41799eb35a1104e6c1",
+      "name": "Get a little extra help - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.993c75c281c331a37da6",
+      "name": "Honey, I Saved The Lemmings - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.893bc90ebcb6229f2c4d",
+      "name": "This Corrosion (Oh No) - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.e0c50024e5042f562286",
+      "name": "The Lemming Learning Curve - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.fd7c0c9d68dcbe11d9fd",
+      "name": "LoTs moRe wHeRe TheY caMe fRom - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.0cb49e3e7d38536d87db",
+      "name": "PoP YoR ToP!!! - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.858fa4265ab25070846b",
+      "name": "Meeting Adjourned - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.b768b0192e429da233d1",
+      "name": "Just A Quicky - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.382a5f4ef551ca3b7b7d",
+      "name": "ICE SPY - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.87a2215baba6b685c6ef",
+      "name": "The Chain with no name - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.539876a00e255c6dd10e",
+      "name": "Jingle Lemming - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.eee82298f93200bd52a3",
+      "name": "A Lemming Holiday - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.6f20d8dc78e65222ca68",
+      "name": "The North Poles - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.b406b77365b98170565d",
+      "name": "Successive division - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.7bd530e01392d57e4f96",
+      "name": "Mortal men doomed to die - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.ff38ae24ef52a42fb57f",
+      "name": "Lemmings In The Family - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.2b58ddeb1e47476bfcca",
+      "name": "Do You Remember? - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.85c1a6c562bb9764b591",
+      "name": "CREAM OF LEMMING SOUP - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.446de6a80a5714ea38b7",
+      "name": "Lemmings Up High - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.4010661a14fe2f8824cd",
+      "name": "A Single Lemming... - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.c4cb963f311de34eee35",
+      "name": "Break on through... - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.37d40935cd926e5e8f0f",
+      "name": "Lemmings...The Motion Picture - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.0c9b7975405a49244b47",
+      "name": "Climbing to the Top! - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.f2506710f836fe87e27b",
+      "name": "Holiday Mining - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.f94b8d9e50a171cedf87",
+      "name": "Christmas South of the Equator - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.8c3a24367e3fba7f05a7",
+      "name": "32 Lemmings Below Zero - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.779d849d73b66189e5e6",
+      "name": "Marshmallow Land - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.6b775a7fa8788a812193",
+      "name": "The Pipe Room... - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.94845fe1effefe4533f9",
+      "name": "Test Of Skill - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.3a11387bc4738d14644e",
+      "name": "Give And Take - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.a1fd6d42c2e0c6588e29",
+      "name": "Chains of Command - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.dece2def0ce245f5e355",
+      "name": "CindyLand - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.0908e70ca41a97d44ff1",
+      "name": "Four Play - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.46a545984eb5a1a9e498",
+      "name": "Maybe not such a doddle - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.f5597e29ffd0513aca26",
+      "name": "Steel Ice Span - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.0b85f6855b4130e93db6",
+      "name": "Sir Edmund Hilemming - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.f2955755377b7622193d",
+      "name": "Up, up, and away! - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.84060f2bcd72437a2b38",
+      "name": "Lemmy in the cold, cold ground - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.3c9195c624520d29b724",
+      "name": "Rendezvous II - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.d7fb90b42f44c1d0ff6f",
+      "name": "Steel Block Party - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.7d54d6c15799461aeb4d",
+      "name": "Tailor-made for blockers - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.4412459efe9cca602f27",
+      "name": "A task for blockers and bombers - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.38b700698a6bf781dfcd",
+      "name": "Let's block and blow - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.50c3a76915bc21669c39",
+      "name": "Down, along, up. In that order - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.2e87e54c0ba737998573",
+      "name": "Pillars of Hercules - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.5eb3411512c35be26274",
+      "name": "Time to get up! - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.d5df4cfb0619b7e7461a",
+      "name": "The Steel Mines of Kessel - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.b82338ffd92812602286",
+      "name": "Save Me - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.81ea8b30c1d2d2b9fd2f",
+      "name": "Every Lemming for himself!!! - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.3af20feff31233ae8fee",
+      "name": "Bomboozal - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.144b726f2e7c35951579",
+      "name": "Call in the bomb squad - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.0d39cac901d56ff4c3da",
+      "name": "POOR WEE CREATURES! - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.45d9179ecdcf6203fd3a",
+      "name": "Ozone friendly Lemmings - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.18a58ad811ad54383f68",
+      "name": "Luvly Jubly - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.e5eedbf9249ed5b96326",
+      "name": "Diet Lemmingaid - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.50c5ed975a5869fd0469",
+      "name": "It's Lemmingentry Watson - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
+    },
+    {
+      "id": "ul.v1.speed.clear.b54ae9b62d4ab6fead4c",
+      "name": "From The Boundary Line - Fastest clear",
+      "unit": "milliseconds",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "sort": "ascending",
+      "submission": "best-score",
+      "set": "ul.v1.set.4"
     }
   ]
 }

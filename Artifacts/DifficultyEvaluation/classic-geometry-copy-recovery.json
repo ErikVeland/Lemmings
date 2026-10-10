@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-04",
+  "initialFailedTransfer": {
+    "attemptedInitialRateCommand": 25,
+    "donorIdentity": "fan:lldb-549/Ji Hoon Earth 2.DAT#1",
+    "donorInitialReleaseRate": 25,
+    "laterRecovery": "classic-heaven-rate-retiming-recovery.json",
+    "reason": "The target begins at release rate 50. ClassicDOSSimulation.setReleaseRate clamps commands to at least the level initial rate, so an attempted tick-zero rate 25 remains 50 and cannot reproduce the donor timeline. The unchanged replay and the rate-normalised replay both failed on the target.",
+    "result": "No native win under selected target rules.",
+    "targetIdentity": "fan:lldb-547/Ji Hoon Heaven 2.DAT#8",
+    "targetMinimumReleaseRate": 50
+  },
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "newWins": [
+    {
+      "archiveSHA256": "0a3abaedb6028f6082c310f7f40f44678b1af6af282db08336b34fc8848088b3",
+      "difficultyProbeCount": 10,
+      "difficultyScore": 257.3291066249591,
+      "donorIdentity": "fan:lldb-434/LDChallenge05.dat#3",
+      "eventCount": 5,
+      "matchingRenderedGeometryHash": "SHA256 digest: 1f38b74dca01e4623294576730ef293a6074367ab31916dde715b651e877e5ac",
+      "nativeInitialStateHash": "e695153fa878c7f75c973f5250c44bb70a6cdd61554eed43e4ecebef4fd64987",
+      "replaySHA256": "529064f42d5837ded39a6a2cde95d8c1dbde03bfc3076cba341a1d5cd2fdd86e",
+      "strictExactLevelOutcome": {
+        "didWin": true,
+        "released": 2,
+        "required": 1,
+        "saved": 2,
+        "stateHash": "913ab586240c4e9368e87beb7d3efb19c791a1e27ad58aa33f848ba159cbba19",
+        "ticks": 1228
+      },
+      "targetIdentity": "fan:lldb-434/LDChallenge05.dat#0",
+      "targetTitle": "General wooden contraption no.73"
+    },
+    {
+      "archiveSHA256": "be7597710bb1f6b1421623c630bb9528ac16c8968a833980f6f8441c93cfd196",
+      "difficultyProbeCount": 10,
+      "difficultyScore": 418.6824204932924,
+      "donorIdentity": "fan:lldb-550/Ji Hoon Hell 1.DAT#7",
+      "eventCount": 68,
+      "matchingRenderedGeometryHash": "SHA256 digest: 29f6bf841aee56a2e4d17707bc3ac57e97e1697ff3543c895527b2957991bb04",
+      "nativeInitialStateHash": "76dc9b420b15c1f975983c22fdda952b2c2f1cc67853dd7729142a7b0e1f8d17",
+      "replaySHA256": "38c61462cff7eb70d0e8a5ff97f6aadda8fcc3c178347949c2654eef3599290b",
+      "strictExactLevelOutcome": {
+        "didWin": true,
+        "released": 80,
+        "required": 64,
+        "saved": 78,
+        "stateHash": "10f0aeaa0f641b2a80408989f59e1e07ea3a89d24e7d2c1271cceea4881d8257",
+        "ticks": 4325
+      },
+      "targetIdentity": "fan:lldb-548/Ji Hoon Sky 2.DAT#4",
+      "targetTitle": "Playing With Fire"
+    },
+    {
+      "archiveSHA256": "bc6910d89e3d4625677d173dd9289ac64e19378a58c5ae9c2f2285875fdfeede",
+      "difficultyProbeCount": 10,
+      "difficultyScore": 281.0945032948905,
+      "donorIdentity": "fan:lldb-555/Lemmings Plus DOS Project - 15 - PSYCHO (Part 3).dat#6",
+      "eventCount": 4,
+      "matchingRenderedGeometryHash": "SHA256 digest: e7acb12a7ced0df6ff17635d0f75cc5b4945eb4297c9a8f25b4c9b4c887c9694",
+      "nativeInitialStateHash": "eb71a50a6953e4c57f605d75f6149108bf14e9d4c2444a344bef17164d5030bc",
+      "replaySHA256": "213ba6df43818a5a5763e177c6ee3692ab5e2f82ca49e1eb98327a790ced4523",
+      "strictExactLevelOutcome": {
+        "didWin": true,
+        "released": 5,
+        "required": 4,
+        "saved": 5,
+        "stateHash": "d1312f96cd29af8631cbe01a673a1a4a23fc721a64f240a732af6f1dc5ef5d75",
+        "ticks": 785
+      },
+      "targetIdentity": "fan:lldb-554/Lemmings Plus DOS Project - 11 - Danger (Part 2).dat#6",
+      "targetTitle": "Livin' A Lie"
+    }
+  ],
+  "scope": "Exact matching rendered geometry and objects between scored donors and three previously unscored bundled fan targets",
+  "sourceBuiltScorerSHA256": "486955df10abe70221be410377dfa0eafc1b67fe930954e97324f16e9ec35314",
+  "sourcePhysicsParity": "unverified; strict native wins do not establish source-state parity",
+  "strictPostPromotionVerification": "3/3 selected target replays passed on their exact bundled levels"
+}

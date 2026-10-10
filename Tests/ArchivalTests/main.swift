@@ -23,7 +23,7 @@ private func testArchivalCatalogRegistry() throws {
 private func testArchivalAudioRegistry() throws {
     let soundtracks = ArchivalAudioRegistry.soundtracks
     let soundBanks = ArchivalAudioRegistry.soundBanks
-    try require(soundtracks.count == 8, "Expected 8 archival soundtracks, got \(soundtracks.count)")
+    try require(soundtracks.count == 9, "Expected 9 archival soundtracks, got \(soundtracks.count)")
     try require(soundBanks.count == 5, "Expected 5 sound banks, got \(soundBanks.count)")
     print("PASS ArchivalAudioRegistry tracks and sound banks verified")
 }

@@ -1,0 +1,3 @@
+PASS offline spatial output follows camera movement, offscreen distance and separate event positions
+Spatial audio: finite output, positioning, restart, mute and pause backlog passed (12.25669029557231, 0.10713188032574855) (0.10713179461829708, 12.256691690947502)
+PASS camera geometry at zoomed, standard and wide aspect ratios, elevation and invalid-coordinate fallback

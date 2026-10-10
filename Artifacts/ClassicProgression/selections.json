@@ -1,0 +1,5035 @@
+[
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "0:Fun:1:9:1",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+      "digger"
+    ],
+    "reason" : "Official level retained.",
+    "score" : 44.74239215686274,
+    "transitionCost" : 20.016263236926182
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "1:Fun:2:9:5",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+      "floater"
+    ],
+    "reason" : "Official level retained.",
+    "score" : 121.11564457124167,
+    "transitionCost" : 341.74055401362637
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "2:Fun:3:9:6",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+      "blocker"
+    ],
+    "reason" : "Official level retained.",
+    "score" : 188.59672799552158,
+    "transitionCost" : 371.40378935981994
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "3:Fun:4:9:2",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+      "climber",
+      "miner"
+    ],
+    "reason" : "Official level retained.",
+    "score" : 194.61555590386465,
+    "transitionCost" : 329.71621771544346
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "4:Fun:5:9:3",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+      "basher"
+    ],
+    "reason" : "Official level retained.",
+    "score" : 67.67042888496717,
+    "transitionCost" : 70.3890254037795
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "5:Fun:6:9:4",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+      "bomber"
+    ],
+    "reason" : "Official level retained.",
+    "score" : 129.81518428814968,
+    "transitionCost" : 122.0796009612506
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "6:Fun:7:9:7",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+      "builder",
+      "multiple-worker-coordination"
+    ],
+    "reason" : "Official level retained.",
+    "score" : 155.98306405305559,
+    "transitionCost" : 131.16642404701884
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "7:Fun:8:0:6",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 149.9693177186376,
+    "transitionCost" : 39.585370836631014
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Nepster01_V6.DAT#1",
+      "packID" : "fan:lldb-219"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 228.6222431116791,
+    "transitionCost" : 239.95866754800787
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "8:Fun:9:1:2",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 296.532700628019,
+    "transitionCost" : 131.81509455818275
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "9:Fun:10:3:2",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 234.36130306588734,
+    "transitionCost" : 45.43427951242633
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Nepster01_V6.DAT#8",
+      "packID" : "fan:lldb-219"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 375.1087794077006,
+    "transitionCost" : 505.3566016149997
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "10:Fun:11:4:2",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 427.4696470588235,
+    "transitionCost" : 566.8946003390764
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "11:Fun:12:0:7",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 421.9826262841691,
+    "transitionCost" : 173.08740415493088
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "12:Fun:13:1:6",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 157.62996636214902,
+    "transitionCost" : 334.81137099740386
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Nepster01_V6.DAT#5",
+      "packID" : "fan:lldb-219"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 297.7911755332195,
+    "transitionCost" : 357.53147167289194
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Nepster01_V6.DAT#7",
+      "packID" : "fan:lldb-219"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 371.03003991230446,
+    "transitionCost" : 73.6176438020901
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Nepster01_V6.DAT#2",
+      "packID" : "fan:lldb-219"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 406.41568378692796,
+    "transitionCost" : 29.096796584677076
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "13:Fun:14:1:7",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 501.5518055514915,
+    "transitionCost" : 256.7411971878398
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "14:Fun:15:2:2",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 488.65657765737876,
+    "transitionCost" : 39.20904557882255
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "15:Fun:16:2:4",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 442.34913632119515,
+    "transitionCost" : 169.01148826723673
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "16:Fun:17:2:7",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 256.8568602427421,
+    "transitionCost" : 70.09845521569062
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "17:Fun:18:4:3",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 67.41452789266016,
+    "transitionCost" : 70.8884664700164
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Giga pack 01.dat#4",
+      "packID" : "fan:lldb-160"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 102,
+    "transitionCost" : 45.16290557853203
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "18:Fun:19:5:1",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 190.0787843137255,
+    "transitionCost" : 85.92182698525374
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "19:Fun:20:6:3",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 273.1174852900536,
+    "transitionCost" : 109.99417889418773
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "20:Fun:21:8:4",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 202.83379901960782,
+    "transitionCost" : 73.46007058742248
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "21:Fun:22:1:3",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 325.3197163105611,
+    "transitionCost" : 348.9241051227869
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "22:Fun:23:4:1",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 356.1177450980392,
+    "transitionCost" : 211.28601186806407
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "23:Fun:24:5:7",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 271.56434021759014,
+    "transitionCost" : 63.41068097608982
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "24:Fun:25:6:0",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 71.78914189744489,
+    "transitionCost" : 72.95503966402904
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "PSP Special2.dat#3",
+      "packID" : "fan:lldb-218"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 106.94999999999999,
+    "transitionCost" : 44.032462717964044
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Conway12.DAT#0",
+      "packID" : "fan:lldb-261"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 121.5,
+    "transitionCost" : 58.12
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Gronklems -1.dat#1",
+      "packID" : "fan:lldb-386"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 131.025,
+    "transitionCost" : 69.3625
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "25:Fun:26:7:1",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 365.9808809456797,
+    "transitionCost" : 1417.5826623427179
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "26:Fun:27:4:6",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 288.6567609305363,
+    "transitionCost" : 76.30482400302868
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "27:Fun:28:6:1",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 198.33916417908483,
+    "transitionCost" : 51.06351935029029
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "28:Fun:29:6:5",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 240.61610079278677,
+    "transitionCost" : 36.29643737831104
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "29:Fun:30:8:2",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 283.85185434173667,
+    "transitionCost" : 35.00837488593531
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "30:Tricky:1:0:0",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 299.57876993540856,
+    "transitionCost" : 30.565525342626636
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "31:Tricky:2:1:6",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 170.08537520068845,
+    "transitionCost" : 421.635589378829
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Nepster01_V6.DAT#0",
+      "packID" : "fan:lldb-219"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 367.7194644005966,
+    "transitionCost" : 542.3958379505971
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "32:Tricky:3:2:1",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 394.920903345397,
+    "transitionCost" : 63.32851951284026
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "33:Tricky:4:3:0",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 426.9110259103642,
+    "transitionCost" : 146.784883232774
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "34:Tricky:5:3:1",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 190.58245497353954,
+    "transitionCost" : 80.26571418736492
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "35:Tricky:6:3:3",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 381.73836635706914,
+    "transitionCost" : 1033.4297609328323
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Nepster01_V6.DAT#6",
+      "packID" : "fan:lldb-219"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 454.46239285348094,
+    "transitionCost" : 420.52578516607076
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "36:Tricky:7:3:4",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 536.6207786377709,
+    "transitionCost" : 174.99272777292492
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "37:Tricky:8:4:7",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 146.54303921568626,
+    "transitionCost" : 111.01554788441693
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "38:Tricky:9:6:2",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 361.8276013071895,
+    "transitionCost" : 1379.4905843168544
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "39:Tricky:10:7:3",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 446.37346802119146,
+    "transitionCost" : 609.7655935627688
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "40:Tricky:11:7:7",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 309.7101141014938,
+    "transitionCost" : 60.332670783939534
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "41:Tricky:12:8:0",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 239.78717913676914,
+    "transitionCost" : 50.02917504922743
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "42:Tricky:13:8:3",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 418.7695813406663,
+    "transitionCost" : 539.6945741361167
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Nepster01_V6.DAT#3",
+      "packID" : "fan:lldb-219"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 429.32382752255916,
+    "transitionCost" : 322.94994509535206
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Nepster01_V6.DAT#9",
+      "packID" : "fan:lldb-219"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 533.391294117647,
+    "transitionCost" : 186.51393156003644
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "43:Tricky:14:0:2",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 565.1040077243018,
+    "transitionCost" : 349.407457278669
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "44:Tricky:15:9:1",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 194.92094368179607,
+    "transitionCost" : 364.65955388651344
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "45:Tricky:16:9:3",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 205.58978113989033,
+    "transitionCost" : 105.77242367724217
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "46:Tricky:17:9:4",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 144.49798727641365,
+    "transitionCost" : 45.98474988443415
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "47:Tricky:18:9:5",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 216.69816468030655,
+    "transitionCost" : 51.99121917266143
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "48:Tricky:19:9:7",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 346.73726013148695,
+    "transitionCost" : 249.7380502748648
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "49:Tricky:20:0:3",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 368.4217529156007,
+    "transitionCost" : 36.983447607576046
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "50:Tricky:21:0:5",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 374.3849403700874,
+    "transitionCost" : 103.41858971922223
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "51:Tricky:22:0:6",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 180.2493177186376,
+    "transitionCost" : 104.17871746177578
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "52:Tricky:23:0:7",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 518.0898431372549,
+    "transitionCost" : 1707.1042857526397
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "53:Tricky:24:1:0",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 264.39453081232494,
+    "transitionCost" : 86.01722573029211
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "54:Tricky:25:1:1",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 407.7986813684849,
+    "transitionCost" : 293.53293178074205
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "55:Tricky:26:1:2",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 416.6628091510948,
+    "transitionCost" : 44.31277146106107
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "56:Tricky:27:1:4",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 413.2641176470588,
+    "transitionCost" : 33.679738300807195
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "57:Tricky:28:1:5",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 148.88073984370524,
+    "transitionCost" : 85.87667556067072
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "58:Tricky:29:2:0",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 301.04710203236306,
+    "transitionCost" : 309.9541600492171
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "59:Tricky:30:1:7",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 537.2543697478992,
+    "transitionCost" : 949.0374244270508
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "60:Taxing:1:2:2",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 238.73469409207127,
+    "transitionCost" : 118.77178633046884
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "61:Taxing:2:2:3",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 537.8098655462185,
+    "transitionCost" : 1464.1490130454165
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "62:Taxing:3:2:4",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 281.8183917929274,
+    "transitionCost" : 147.6782947506582
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "63:Taxing:4:2:5",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 353.522985621683,
+    "transitionCost" : 129.03579675137345
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "64:Taxing:5:2:6",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 349.1967884394126,
+    "transitionCost" : 128.0377882079432
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "65:Taxing:6:2:7",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 318.2067336685338,
+    "transitionCost" : 453.96453807788373
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "66:Taxing:7:3:0",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 360.25247186984905,
+    "transitionCost" : 111.65351277306344
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "67:Taxing:8:3:1",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 226.889945169618,
+    "transitionCost" : 59.672505340046214
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "68:Taxing:9:3:2",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 320.7689088450411,
+    "transitionCost" : 144.960924629659
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "69:Taxing:10:3:3",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 434.66895238095236,
+    "transitionCost" : 481.7783010638558
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "70:Taxing:11:3:4",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 506.1465196078431,
+    "transitionCost" : 76.1049086917919
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "71:Taxing:12:3:5",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 318.9432668026586,
+    "transitionCost" : 70.4406505610369
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "72:Taxing:13:3:6",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 423.23938270125024,
+    "transitionCost" : 194.51723238659247
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "73:Taxing:14:3:7",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 410.5740881754107,
+    "transitionCost" : 123.01305890516792
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "74:Taxing:15:0:1",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 184.84410451528,
+    "transitionCost" : 78.14599673202613
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "75:Taxing:16:4:0",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 338.27778139406075,
+    "transitionCost" : 324.1497958682604
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "76:Taxing:17:4:1",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 443.60130636705605,
+    "transitionCost" : 208.43569907294585
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "77:Taxing:18:4:2",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 320.7880236009906,
+    "transitionCost" : 57.562656553213095
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "78:Taxing:19:4:3",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 83.78684874827513,
+    "transitionCost" : 80.4002349705431
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Yawg03.dat#7",
+      "packID" : "fan:lldb-107"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 95.75,
+    "transitionCost" : 49.35736974965503
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Epic Fernito 1.dat#6",
+      "packID" : "fan:lldb-112"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 118.7,
+    "transitionCost" : 56.68
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "79:Taxing:20:4:4",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 350.036030771404,
+    "transitionCost" : 773.5369819806015
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "80:Taxing:21:4:5",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 346.03731123790834,
+    "transitionCost" : 146.74314479803195
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "81:Taxing:22:4:6",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 380.13330788616065,
+    "transitionCost" : 53.31149015733308
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "82:Taxing:23:4:7",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 170.33219607843137,
+    "transitionCost" : 79.28022236154587
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "83:Taxing:24:5:0",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 244.55514741905077,
+    "transitionCost" : 122.95772836697361
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "84:Taxing:25:5:1",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 215.15348039215684,
+    "transitionCost" : 45.88468019480857
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "85:Taxing:26:5:2",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 341.86466085589245,
+    "transitionCost" : 226.6506725132336
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "86:Taxing:27:5:3",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 288.4429333341014,
+    "transitionCost" : 43.68434550435822
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "87:Taxing:28:5:4",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 460.79947899159663,
+    "transitionCost" : 625.9960974934504
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "88:Taxing:29:2:1",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 419.1972294547881,
+    "transitionCost" : 47.12732490736171
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "89:Taxing:30:6:7",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 159.44825768227713,
+    "transitionCost" : 244.23061270641816
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "90:Mayhem:1:5:5",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 333.1508088194653,
+    "transitionCost" : 500.3032488028306
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "91:Mayhem:2:5:6",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 230.65036318754585,
+    "transitionCost" : 53.500089126383884
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "92:Mayhem:3:5:7",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 373.0244970803352,
+    "transitionCost" : 513.7868005635565
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "93:Mayhem:4:6:0",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 180.35926522484777,
+    "transitionCost" : 108.99004314451562
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "94:Mayhem:5:6:1",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 331.74055424913405,
+    "transitionCost" : 433.0326584954155
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "95:Mayhem:6:6:2",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 397.0893627450981,
+    "transitionCost" : 199.61252510688115
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "96:Mayhem:7:6:3",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 349.1453284273085,
+    "transitionCost" : 54.52454574360405
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "97:Mayhem:8:6:4",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 398.2226078431372,
+    "transitionCost" : 266.87173983703144
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "98:Mayhem:9:6:5",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 314.49124892700513,
+    "transitionCost" : 59.49491133589453
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "99:Mayhem:10:6:6",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 554.1723137254902,
+    "transitionCost" : 858.5590588205386
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "100:Mayhem:11:6:7",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 162.95838047820365,
+    "transitionCost" : 117.31673661946884
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "101:Mayhem:12:7:0",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 417.09171568627454,
+    "transitionCost" : 1475.9498844402465
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "102:Mayhem:13:7:1",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 342.90082875893796,
+    "transitionCost" : 52.278177385467316
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "103:Mayhem:14:7:2",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 98.33647175170688,
+    "transitionCost" : 81.91287140144621
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "QBeez05.dat#6",
+      "packID" : "fan:lldb-166"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 108.25,
+    "transitionCost" : 49.28729435034138
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "andi.DAT#3",
+      "packID" : "fan:lldb-370"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 121.5,
+    "transitionCost" : 58.38
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "104:Mayhem:15:7:3",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 562.6583886888088,
+    "transitionCost" : 3210.323637403281
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "105:Mayhem:16:7:4",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 312.0091058567772,
+    "transitionCost" : 166.08812408574434
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "106:Mayhem:17:7:5",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 457.2159640522876,
+    "transitionCost" : 273.6743978412096
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "107:Mayhem:18:7:6",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 569.3221655174585,
+    "transitionCost" : 955.1466112173939
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "108:Mayhem:19:7:7",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 319.7414484928103,
+    "transitionCost" : 82.91614340492964
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "109:Mayhem:20:9:2",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 364.198756302521,
+    "transitionCost" : 70.40922728863518
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "110:Mayhem:21:8:0",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 304.53435904915966,
+    "transitionCost" : 44.932879450672274
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "111:Mayhem:22:0:4",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 450.3695294117647,
+    "transitionCost" : 1009.1220347730153
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "112:Mayhem:23:8:1",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 292.1967889207805,
+    "transitionCost" : 68.95454809819685
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "113:Mayhem:24:8:2",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 265.22251230924707,
+    "transitionCost" : 421.9814939910182
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "114:Mayhem:25:8:3",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 449.582648008435,
+    "transitionCost" : 890.7952297223078
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "115:Mayhem:26:8:4",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 212.48383316564656,
+    "transitionCost" : 80.41976296855769
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "116:Mayhem:27:8:5",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 212.30078431372547,
+    "transitionCost" : 59.43994310371754
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "117:Mayhem:28:8:6",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 199.1795518207283,
+    "transitionCost" : 35.62424649859943
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "118:Mayhem:29:8:7",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 393.2678994732025,
+    "transitionCost" : 794.7434496044542
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "119:Mayhem:30:9:0",
+      "packID" : "lemmings-LEVEL-120"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 536.1505174291939,
+    "transitionCost" : 689.8614402328803
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "0:Xmas:1:0:0",
+      "packID" : "xmasLemmings1991-LEVEL-4"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 385.79943137254907,
+    "transitionCost" : 61.070217211328966
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "1:Xmas:2:0:1",
+      "packID" : "xmasLemmings1991-LEVEL-4"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 364.92480392156864,
+    "transitionCost" : 37.17492549019609
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "2:Xmas:3:0:2",
+      "packID" : "xmasLemmings1991-LEVEL-4"
+    },
+    "introducedConcepts" : [
+      "release-rate-manipulation"
+    ],
+    "reason" : "Official level retained.",
+    "score" : 397.44998820971836,
+    "transitionCost" : 393.5692150454842
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "3:Xmas:4:0:3",
+      "packID" : "xmasLemmings1991-LEVEL-4"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 342.8443010019039,
+    "transitionCost" : 50.67113744156289
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "0:Tame:1:10:0",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 215.08268575851392,
+    "transitionCost" : 68.69810070545216
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "1:Tame:2:10:1",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 319.2599745528273,
+    "transitionCost" : 117.19230221434584
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "2:Tame:3:10:2",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 252.68078724632576,
+    "transitionCost" : 46.34583746130031
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "3:Tame:4:10:3",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 160.5063725490196,
+    "transitionCost" : 139.10238293946122
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "4:Tame:5:10:4",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 480.10781678054445,
+    "transitionCost" : 2077.346586106624
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "5:Tame:6:10:5",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 132.74,
+    "transitionCost" : 116.3035633561089
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "6:Tame:7:10:6",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 373.3382089374072,
+    "transitionCost" : 1198.749902798715
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "7:Tame:8:10:7",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 240.4304856216831,
+    "transitionCost" : 59.581544663144825
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "8:Tame:9:11:0",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 396.83771874132884,
+    "transitionCost" : 333.1654879432291
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "9:Tame:10:11:1",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 161.1582843137255,
+    "transitionCost" : 167.80338688552067
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "10:Tame:11:11:2",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 231.34225783456102,
+    "transitionCost" : 227.8471979130245
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "11:Tame:12:11:3",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 80.85539215686275,
+    "transitionCost" : 63.09737313553966
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "12:Tame:13:11:4",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 151.61641699423208,
+    "transitionCost" : 51.39261089677035
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "13:Tame:14:11:5",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 120.08263157894737,
+    "transitionCost" : 45.306757083056944
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "14:Tame:15:11:6",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 468.8510948286058,
+    "transitionCost" : 1955.9999377215945
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "15:Tame:16:11:7",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 216.32949948400412,
+    "transitionCost" : 83.50431906892034
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "16:Tame:17:12:0",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 132.06004901960785,
+    "transitionCost" : 63.68389009287926
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "17:Tame:18:12:1",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 114.93400781756145,
+    "transitionCost" : 33.425208240409276
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "18:Tame:19:12:2",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 424.8960093574932,
+    "transitionCost" : 1473.2048661892504
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "19:Tame:20:12:3",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 166.54490823035815,
+    "transitionCost" : 97.27772022542702
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "20:Crazy:1:0:1",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 271.7390853156293,
+    "transitionCost" : 225.35991817167243
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "21:Crazy:2:1:0",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 312.58981123790835,
+    "transitionCost" : 47.181023855653635
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "22:Crazy:3:1:4",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 149.28972350383594,
+    "transitionCost" : 65.66001754681449
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "23:Crazy:4:2:0",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 182.04356739794923,
+    "transitionCost" : 103.7576235431028
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "24:Crazy:5:2:1",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 328.40726221830056,
+    "transitionCost" : 460.3546315447734
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "25:Crazy:6:3:0",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 429.63093592213664,
+    "transitionCost" : 200.84941248994812
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "26:Crazy:7:3:1",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 320.71448179271715,
+    "transitionCost" : 57.061454091190015
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "27:Crazy:8:3:5",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 434.90202863549104,
+    "transitionCost" : 267.9325195870405
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "28:Crazy:9:5:1",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 362.7503476868425,
+    "transitionCost" : 48.24848433787786
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "29:Crazy:10:5:4",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 310.7856935908495,
+    "transitionCost" : 121.32501725408451
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "30:Crazy:11:5:7",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 260.1643010019038,
+    "transitionCost" : 97.87427851778914
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "31:Crazy:12:6:7",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 253.65851774042955,
+    "transitionCost" : 62.80083377968178
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "32:Crazy:13:0:4",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 272.0327659874961,
+    "transitionCost" : 29.4803967974661
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "33:Crazy:14:1:5",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 397.44998820971836,
+    "transitionCost" : 206.9531481516205
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "34:Crazy:15:1:6",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 363.15600781756143,
+    "transitionCost" : 55.13694422657953
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "35:Crazy:16:2:6",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 555.3545751633986,
+    "transitionCost" : 858.7763369953974
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "36:Crazy:17:3:4",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 396.33545132870125,
+    "transitionCost" : 84.52747406946384
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "37:Crazy:18:3:7",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 388.4762490626312,
+    "transitionCost" : 35.96871545321401
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "38:Crazy:19:4:3",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 325.4752661064426,
+    "transitionCost" : 45.60019659123773
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "39:Crazy:20:6:4",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 262.47423523423424,
+    "transitionCost" : 49.92020617444167
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "40:Wild:1:9:2",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 329.6606092436975,
+    "transitionCost" : 116.0777070606342
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "41:Wild:2:7:0",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 242.86046474890577,
+    "transitionCost" : 50.36002889895835
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "42:Wild:3:7:1",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 394.9645052295262,
+    "transitionCost" : 380.5530253591395
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "43:Wild:4:7:2",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 269.1182916300652,
+    "transitionCost" : 62.489242719892204
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "44:Wild:5:7:3",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 297.541416994232,
+    "transitionCost" : 34.83780681056537
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "45:Wild:6:7:5",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 439.0263598254332,
+    "transitionCost" : 297.158552789834
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "46:Wild:7:8:6",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 383.34749418922576,
+    "transitionCost" : 48.455773127241486
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "47:Wild:8:0:7",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 442.8715269241829,
+    "transitionCost" : 133.99874284671088
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "48:Wild:9:2:2",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 243.0209992237264,
+    "transitionCost" : 72.97010554009131
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "49:Wild:10:2:5",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 316.87131039148613,
+    "transitionCost" : 116.55590144948722
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "50:Wild:11:3:3",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 329.91400069661813,
+    "transitionCost" : 95.4614619389736
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "51:Wild:12:3:6",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 266.4068210418299,
+    "transitionCost" : 49.6743637686039
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "52:Wild:13:4:0",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 507.9719888896569,
+    "transitionCost" : 811.3443812436942
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "53:Wild:14:4:2",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 398.2619480607274,
+    "transitionCost" : 54.94200816578591
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "54:Wild:15:4:4",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 481.37289947320244,
+    "transitionCost" : 126.73215629789729
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "55:Wild:16:5:0",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 338.9190866097103,
+    "transitionCost" : 471.5568150443175
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "56:Wild:17:6:3",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 315.67824582321276,
+    "transitionCost" : 209.15816815729949
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "57:Wild:18:6:5",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 252.8701093874712,
+    "transitionCost" : 45.56162728714831
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "58:Wild:19:6:6",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 267.4830368973238,
+    "transitionCost" : 30.163898615267904
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "59:Wild:20:4:7",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 322.9611646803065,
+    "transitionCost" : 47.897331954553
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "60:Wicked:1:9:6",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 326.419554249134,
+    "transitionCost" : 74.95479471225225
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "61:Wicked:2:4:6",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 366.7278921568627,
+    "transitionCost" : 54.13147033650963
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "62:Wicked:3:9:0",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 342.8443010019039,
+    "transitionCost" : 59.67671823099177
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "63:Wicked:4:9:1",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 332.17644514106263,
+    "transitionCost" : 44.85357117216825
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "64:Wicked:5:0:5",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 558.373137254902,
+    "transitionCost" : 1192.3942646725059
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "65:Wicked:6:9:4",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 233.05489017050266,
+    "transitionCost" : 110.67114941687987
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "66:Wicked:7:6:1",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 190.08430100190384,
+    "transitionCost" : 41.594117833719764
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "67:Wicked:8:0:6",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 304.89242553321947,
+    "transitionCost" : 162.31358194756538
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "68:Wicked:9:1:2",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 327.66141699423207,
+    "transitionCost" : 59.56679098115388
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "69:Wicked:10:8:7",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 408.9240000000001,
+    "transitionCost" : 164.2849956904525
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "70:Wicked:11:4:1",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 413.28622091580075,
+    "transitionCost" : 33.59755581683987
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "71:Wicked:12:5:5",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 318.34789947320246,
+    "transitionCost" : 51.98766428851966
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "72:Wicked:13:6:0",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 305.6043301594982,
+    "transitionCost" : 46.37871386274085
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "73:Wicked:14:6:2",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 325.11423202614384,
+    "transitionCost" : 56.490782225108966
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "74:Wicked:15:7:7",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 414.4760534160524,
+    "transitionCost" : 126.37999040825638
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "75:Wicked:16:8:1",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 330.160828758938,
+    "transitionCost" : 53.75968099955942
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "76:Wicked:17:9:7",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 327.0568418308334,
+    "transitionCost" : 64.73079738562092
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "77:Wicked:18:9:3",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 423.8975923184305,
+    "transitionCost" : 220.21220136607872
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "78:Wicked:19:8:0",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 242.66875886655282,
+    "transitionCost" : 92.55138684799157
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "79:Wicked:20:7:6",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 448.1128294920268,
+    "transitionCost" : 726.3686428122169
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "80:Havoc:1:7:4",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 481.5880627881214,
+    "transitionCost" : 492.72848855940555
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "81:Havoc:2:5:3",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 435.17999999999995,
+    "transitionCost" : 42.2816125576243
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "82:Havoc:3:3:2",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 452.11096860187513,
+    "transitionCost" : 29.613806279624963
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "83:Havoc:4:2:7",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 433.1251450849306,
+    "transitionCost" : 791.6278939346872
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "84:Havoc:5:2:4",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 391.1248092280146,
+    "transitionCost" : 65.74684384702078
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "85:Havoc:6:2:3",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 293.68643593460376,
+    "transitionCost" : 275.1439167842698
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "86:Havoc:7:5:2",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 517.8743315771402,
+    "transitionCost" : 1429.9996446712767
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "87:Havoc:8:1:7",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 321.74172300261426,
+    "transitionCost" : 72.22652171490519
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "88:Havoc:9:1:1",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 477.1742855134113,
+    "transitionCost" : 967.126536272476
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "89:Havoc:10:0:3",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 249.06266106442575,
+    "transitionCost" : 166.2898248897971
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "90:Havoc:11:0:2",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 366.9626715645634,
+    "transitionCost" : 381.90188464121366
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "91:Havoc:12:0:0",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 299.52237383063334,
+    "transitionCost" : 248.208059546786
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "92:Havoc:13:4:5",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 400.7200543260538,
+    "transitionCost" : 265.4934205518954
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "93:Havoc:14:8:5",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 565.099945169618,
+    "transitionCost" : 1131.00622611431
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "94:Havoc:15:1:3",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 284.077700628019,
+    "transitionCost" : 89.20444890831979
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "95:Havoc:16:8:2",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 372.1743010019038,
+    "transitionCost" : 88.73587100149726
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "96:Havoc:17:8:3",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 497.35711239272484,
+    "transitionCost" : 167.07027946777686
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "97:Havoc:18:5:6",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 457.2926912909508,
+    "transitionCost" : 122.19168422035479
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "98:Havoc:19:8:4",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 271.13546928181376,
+    "transitionCost" : 70.23144440182742
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "99:Havoc:20:9:5",
+      "packID" : "ohNoMoreLemmings-DLVEL-100"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 296.6790497610032,
+    "transitionCost" : 29.463327853234865
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "0:Xmas:1:0:0",
+      "packID" : "xmasLemmings1992-LEVEL-4"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 109.70498039215684,
+    "transitionCost" : 82.22481387376928
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "1:Xmas:2:0:1",
+      "packID" : "xmasLemmings1992-LEVEL-4"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 179.6038108058254,
+    "transitionCost" : 349.84693399360475
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "2:Xmas:3:0:2",
+      "packID" : "xmasLemmings1992-LEVEL-4"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 426.1464853719266,
+    "transitionCost" : 1620.9966758558453
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "3:Xmas:4:0:3",
+      "packID" : "xmasLemmings1992-LEVEL-4"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 292.82530228351766,
+    "transitionCost" : 164.446494890933
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "0:Flurry:1:4:0",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 240.38384038824643,
+    "transitionCost" : 207.25933266199286
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "1:Flurry:2:4:1",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 146.74437006143773,
+    "transitionCost" : 52.20789406536174
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "2:Flurry:3:4:2",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 71.37382352941177,
+    "transitionCost" : 33.07410930640519
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Mikepak06.dat#3",
+      "packID" : "fan:lldb-11"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 106.375,
+    "transitionCost" : 41.000235309688584
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Xmas 1992.DAT#2",
+      "packID" : "fan:lldb-487"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 122.9,
+    "transitionCost" : 57.695
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "3:Flurry:4:4:3",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 239.12351909184727,
+    "transitionCost" : 185.5162794220858
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "4:Flurry:5:4:4",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 124.08454901960785,
+    "transitionCost" : 69.83779401444788
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "5:Flurry:6:4:5",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 141.83925559857894,
+    "transitionCost" : 34.32986156214403
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "6:Flurry:7:4:6",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 189.3074382568058,
+    "transitionCost" : 99.3625117931331
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "7:Flurry:8:4:7",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 209.58000482596725,
+    "transitionCost" : 91.5782193501125
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "8:Flurry:9:5:0",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 348.4027319601136,
+    "transitionCost" : 260.86576954983565
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "9:Flurry:10:5:1",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 181.8826228625582,
+    "transitionCost" : 66.30402181951109
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "10:Flurry:11:5:2",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 142.14289215686276,
+    "transitionCost" : 40.94794614113909
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "11:Flurry:12:5:3",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 337.93822350383596,
+    "transitionCost" : 531.6768753279524
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "12:Flurry:13:5:4",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 246.93838235294118,
+    "transitionCost" : 63.38538486801057
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "13:Flurry:14:5:5",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 346.795735813083,
+    "transitionCost" : 262.8953693258219
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "14:Flurry:15:5:6",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 270.77179518626184,
+    "transitionCost" : 161.54169200854446
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "15:Flurry:16:5:7",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 305.14526867047437,
+    "transitionCost" : 161.6161527428579
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "16:Blizzard:1:6:0",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 497.1982427022931,
+    "transitionCost" : 548.6636554134822
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "17:Blizzard:2:6:1",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 236.12182752255916,
+    "transitionCost" : 86.3546980739806
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "18:Blizzard:3:6:2",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 297.2817973856209,
+    "transitionCost" : 301.13133298402073
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "19:Blizzard:4:6:3",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 345.948214379853,
+    "transitionCost" : 199.61451004589964
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "20:Blizzard:5:6:4",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 557.7923751416067,
+    "transitionCost" : 661.228239383686
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "21:Blizzard:6:6:5",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 296.67802649209995,
+    "transitionCost" : 154.34286972990137
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "22:Blizzard:7:6:6",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 297.6806080817235,
+    "transitionCost" : 53.16817764652373
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "23:Blizzard:8:6:7",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 321.69920389599287,
+    "transitionCost" : 236.4477158931701
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "24:Blizzard:9:7:0",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 398.8749354186119,
+    "transitionCost" : 772.1406843289036
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "25:Blizzard:10:7:1",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 260.08308782095486,
+    "transitionCost" : 211.08071477437517
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "26:Blizzard:11:7:2",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 443.09847458138273,
+    "transitionCost" : 641.0377110612546
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "27:Blizzard:12:7:3",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 257.2009383753502,
+    "transitionCost" : 96.58284057453984
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "28:Blizzard:13:7:4",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 275.781751982296,
+    "transitionCost" : 38.62910221816809
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "29:Blizzard:14:7:5",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 159.70795023937663,
+    "transitionCost" : 73.67522909858387
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "30:Blizzard:15:7:6",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 479.8,
+    "transitionCost" : 1923.1592575449486
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "31:Blizzard:16:7:7",
+      "packID" : "holidayLemmings1993-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 339.35449708033525,
+    "transitionCost" : 67.95910058393295
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "0:Lemmings Versus:1:0:0",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 135.1288137254902,
+    "transitionCost" : 57.32513667096901
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "1:Lemmings Versus:2:0:1",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 500.4510714285714,
+    "transitionCost" : 2392.271443492666
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "2:Lemmings Versus:3:0:2",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 71.69127450980393,
+    "transitionCost" : 118.7519593837535
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Giga pack 02.dat#2",
+      "packID" : "fan:lldb-162"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 106.625,
+    "transitionCost" : 44.013254901960785
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "geooPk1.dat#6",
+      "packID" : "fan:lldb-2"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 120.10000000000001,
+    "transitionCost" : 58.305
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Nepster01_V6.DAT#4",
+      "packID" : "fan:lldb-219"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 575.0920490196079,
+    "transitionCost" : 3313.3560894470747
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "3:Lemmings Versus:4:0:3",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 626.6844335705574,
+    "transitionCost" : 193.28568319241404
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "4:Lemmings Versus:5:0:4",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 132.212383259197,
+    "transitionCost" : 131.89441006227207
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "5:Lemmings Versus:6:0:5",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 79.17844581094064,
+    "transitionCost" : 43.60678748965127
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Crystal Remakes.dat#8",
+      "packID" : "fan:lldb-130"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 114.17500000000001,
+    "transitionCost" : 44.000689162188124
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "6:Lemmings Versus:7:0:6",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 278.9489284528842,
+    "transitionCost" : 311.96082136602126
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "7:Lemmings Versus:8:0:7",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 314.24533259619636,
+    "transitionCost" : 26.06026920209437
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "8:Lemmings Versus:9:0:8",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 283.6901623464417,
+    "transitionCost" : 515.3910340499509
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "9:Lemmings Versus:10:0:9",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 202.02464058495377,
+    "transitionCost" : 84.85004667401586
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "10:Lemmings Versus:11:0:10",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 172.52854895972442,
+    "transitionCost" : 271.2192183250459
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "11:Lemmings Versus:12:0:11",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 277.3975,
+    "transitionCost" : 238.69860282679014
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "12:Lemmings Versus:13:0:12",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 343.44088432254944,
+    "transitionCost" : 46.50374109935093
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "13:Lemmings Versus:14:0:13",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 44.05105392156863,
+    "transitionCost" : 77.87796608019617
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "ssam1221 Wild 2.dat#8",
+      "packID" : "fan:lldb-514"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 79.0625,
+    "transitionCost" : 47.002290689579276
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Mikepak06.dat#6",
+      "packID" : "fan:lldb-11"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 114.09375,
+    "transitionCost" : 54.00626098632812
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "ssam1221 Wild 1.dat#9",
+      "packID" : "fan:lldb-514"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 122.9,
+    "transitionCost" : 59.238749999999996
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "14:Lemmings Versus:15:0:14",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 342.1355798445406,
+    "transitionCost" : 708.9851069609911
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "15:Lemmings Versus:16:0:15",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 158.17858965029455,
+    "transitionCost" : 69.79139803884921
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "16:Lemmings Versus:17:0:16",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 342.0234117048225,
+    "transitionCost" : 418.9722645339006
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "17:Lemmings Versus:18:0:17",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 264.8494506488924,
+    "transitionCost" : 961.5897584490983
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "18:Lemmings Versus:19:0:18",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 94.4,
+    "transitionCost" : 65.61456227814278
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Epic giga02.dat#8",
+      "packID" : "fan:lldb-140"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 117.30000000000001,
+    "transitionCost" : 43.42
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "19:Lemmings Versus:20:0:19",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 330.94555528112573,
+    "transitionCost" : 577.3068383047607
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "20:Oh No! More Lemmings Versus:1:0:20",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 142.42976993540853,
+    "transitionCost" : 73.9648250022397
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "21:Oh No! More Lemmings Versus:2:0:21",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 83.56850533626918,
+    "transitionCost" : 44.77225291982787
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "22:Oh No! More Lemmings Versus:3:0:22",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 164.20117647058825,
+    "transitionCost" : 152.22036681895912
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "23:Oh No! More Lemmings Versus:4:0:23",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 181.5676119711042,
+    "transitionCost" : 26.531512899896807
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "24:Oh No! More Lemmings Versus:5:0:24",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 319.7737908560714,
+    "transitionCost" : 296.5953215980611
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "25:Oh No! More Lemmings Versus:6:0:25",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 48.517686274509806,
+    "transitionCost" : 72.25122091631232
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "26:Oh No! More Lemmings Versus:7:0:26",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 47.90643137254902,
+    "transitionCost" : 21.122250980392156
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "oldbutgo.dat#5",
+      "packID" : "fan:lldb-358"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 82.93125,
+    "transitionCost" : 47.004970655088215
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "jannpck3.dat#9",
+      "packID" : "fan:lldb-233"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 117.8875,
+    "transitionCost" : 54.00875
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "27:Oh No! More Lemmings Versus:8:0:27",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 306.55800265760274,
+    "transitionCost" : 645.9116984436321
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "28:Oh No! More Lemmings Versus:9:0:28",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 275.37817690332344,
+    "transitionCost" : 212.63596515085587
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "29:Oh No! More Lemmings Versus:10:0:29",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 121.00904609994306,
+    "transitionCost" : 63.873826160676074
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "30:Mega Drive Sunsoft:1:0:30",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 208.04780143398676,
+    "transitionCost" : 313.6272651350881
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "31:Mega Drive Sunsoft:2:0:31",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 330.5882352941176,
+    "transitionCost" : 158.62157262582542
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "32:Mega Drive Sunsoft:3:0:32",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 261.73358239596456,
+    "transitionCost" : 46.770930579630615
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "33:Mega Drive Sunsoft:4:0:33",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 269.7555823959646,
+    "transitionCost" : 31.40039999999999
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "34:Mega Drive Sunsoft:5:0:34",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 308.2317164114481,
+    "transitionCost" : 33.66178996373981
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "35:Mega Drive Sunsoft:6:0:35",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 287.44311126854427,
+    "transitionCost" : 105.18885508760702
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "36:Mega Drive Sunsoft:7:0:36",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 86.76850044244777,
+    "transitionCost" : 73.13492216521931
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Yawg06.dat#0",
+      "packID" : "fan:lldb-161"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 102,
+    "transitionCost" : 48.43370008848956
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Giga pack 01.dat#5",
+      "packID" : "fan:lldb-160"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 118.7,
+    "transitionCost" : 57.66
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "37:Mega Drive Sunsoft:8:0:37",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 239.53257267581685,
+    "transitionCost" : 557.9951853549483
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "38:Mega Drive Sunsoft:9:0:38",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 331.0599166626026,
+    "transitionCost" : 124.55057830261529
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "39:Mega Drive Sunsoft:10:0:39",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 278.6826980399837,
+    "transitionCost" : 43.475443724523785
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "40:Mega Drive Sunsoft:11:0:40",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 218.49972583850519,
+    "transitionCost" : 114.1565944402957
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "41:Mega Drive Sunsoft:12:0:41",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 431.97839250517177,
+    "transitionCost" : 777.3756562866663
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "42:Mega Drive Sunsoft:13:0:42",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 321.3428716402062,
+    "transitionCost" : 90.30035024516107
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "43:Mega Drive Sunsoft:14:0:43",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 382.46980915109475,
+    "transitionCost" : 60.14843997108558
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "44:Mega Drive Sunsoft:15:0:44",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 378.91549793093014,
+    "transitionCost" : 46.594156402153324
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "45:Mega Drive Sunsoft:16:0:45",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 311.5230955516338,
+    "transitionCost" : 70.95722992650992
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "46:Mega Drive Sunsoft:17:0:46",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 355.21398438530423,
+    "transitionCost" : 234.91043033803754
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "47:Mega Drive Sunsoft:18:0:47",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 388.999667358973,
+    "transitionCost" : 36.442251778755065
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "48:Mega Drive Sunsoft:19:0:48",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 211.40329703324772,
+    "transitionCost" : 80.64114747453512
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "49:Mega Drive Sunsoft:20:0:49",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 343.0108369496163,
+    "transitionCost" : 248.77479189570892
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "50:Mega Drive Sunsoft:21:0:50",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 302.66269150403605,
+    "transitionCost" : 93.23074114044144
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "51:Mega Drive Sunsoft:22:0:51",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 357.490324929972,
+    "transitionCost" : 36.78645923231787
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "52:Mega Drive Sunsoft:23:0:52",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 421.14236347027156,
+    "transitionCost" : 90.14028018331156
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "53:Mega Drive Sunsoft:24:0:53",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 340.1254745813827,
+    "transitionCost" : 49.203377777777774
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "54:Mega Drive Sunsoft:25:0:54",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 352.11919020001955,
+    "transitionCost" : 37.351256876272636
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "55:Mega Drive Sunsoft:26:0:55",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 446.9525490196079,
+    "transitionCost" : 341.7066016426066
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "56:Mega Drive Sunsoft:27:0:56",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 265.2956608273371,
+    "transitionCost" : 69.33137763845417
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "57:Mega Drive Sunsoft:28:0:57",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 425.62096477746104,
+    "transitionCost" : 292.7509054801974
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "58:Mega Drive Sunsoft:29:0:58",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 232.6196514554985,
+    "transitionCost" : 71.60026266439252
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "59:Mega Drive Sunsoft:30:0:59",
+      "packID" : "ohYesMoreLemmings-OHYES-60"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 513.7639660138399,
+    "transitionCost" : 1159.7784028310987
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "0:Frost:1:0:0",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 160.98086962935483,
+    "transitionCost" : 108.30661927689701
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "1:Frost:2:0:1",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 170.08909832764135,
+    "transitionCost" : 73.30469996789105
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "2:Frost:3:0:2",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 298.856054249134,
+    "transitionCost" : 299.2161139406089
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "3:Frost:4:0:3",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 182.16288923719796,
+    "transitionCost" : 58.1666788166894
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "4:Frost:5:0:4",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 289.3430299307301,
+    "transitionCost" : 275.8892614151986
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "5:Frost:6:0:5",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 271.79860186818166,
+    "transitionCost" : 268.49682284189566
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "6:Frost:7:0:6",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 415.1391911724065,
+    "transitionCost" : 348.3076191274928
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "7:Frost:8:0:7",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 96.02730392156863,
+    "transitionCost" : 81.82237745016758
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Fernito pack 1.dat#7",
+      "packID" : "fan:lldb-111"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 115.9,
+    "transitionCost" : 44.14546078431373
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "8:Frost:9:1:0",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 288.4997549019608,
+    "transitionCost" : 495.05557280921096
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "9:Frost:10:1:1",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 550.1517663482723,
+    "transitionCost" : 1082.0999600163514
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "10:Frost:11:1:2",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 289.294204244704,
+    "transitionCost" : 85.17151242071367
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "11:Frost:12:1:3",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 357.29687047994975,
+    "transitionCost" : 229.4770886396044
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "12:Frost:13:1:4",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 202.2486274509804,
+    "transitionCost" : 64.00964860579387
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "13:Frost:14:1:5",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 441.86206481484857,
+    "transitionCost" : 1455.397564646584
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "14:Frost:15:1:6",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 236.9489464059968,
+    "transitionCost" : 85.73668123706963
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "15:Frost:16:1:7",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 412.84211960861114,
+    "transitionCost" : 402.55443834375245
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "16:Hail:1:2:0",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 441.67160294957955,
+    "transitionCost" : 226.89594495539873
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "17:Hail:2:2:1",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 292.72113275742635,
+    "transitionCost" : 62.790094038430645
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "18:Hail:3:2:2",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 382.5409692904275,
+    "transitionCost" : 557.4518301785312
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "19:Hail:4:2:3",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 474.6492347494891,
+    "transitionCost" : 1128.3040875875379
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "20:Hail:5:2:4",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 553.2028994732024,
+    "transitionCost" : 744.5106525190303
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "21:Hail:6:2:5",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 32.93161764705883,
+    "transitionCost" : 122.05425636522871
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Pacpack1.dat#0",
+      "packID" : "fan:lldb-300"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 67.91666666666667,
+    "transitionCost" : 47.00299019607843
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Giga pack 02.dat#3",
+      "packID" : "fan:lldb-162"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 102,
+    "transitionCost" : 54.18333333333334
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Gronklems 6 v2\/10) Bring it Together!.ini#-1",
+      "packID" : "fan:lldb-203"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Community bridge before the next official level.",
+    "score" : 118.7,
+    "transitionCost" : 57.66
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "22:Hail:7:2:6",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 308.87352450573985,
+    "transitionCost" : 574.0083872563627
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "23:Hail:8:2:7",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 423.18971404822355,
+    "transitionCost" : 145.40243954831277
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "24:Hail:9:3:0",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 305.4834631986927,
+    "transitionCost" : 56.54125016990618
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "25:Hail:10:3:1",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 359.0283869025288,
+    "transitionCost" : 50.567648266940004
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "26:Hail:11:3:2",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 479.41550072517356,
+    "transitionCost" : 198.96558455507076
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "27:Hail:12:3:3",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 286.1449215562869,
+    "transitionCost" : 408.1869705885579
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "28:Hail:13:3:4",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 467.56803921568627,
+    "transitionCost" : 815.380016352849
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "29:Hail:14:3:5",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 410.0961325334524,
+    "transitionCost" : 75.21438133644678
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "30:Hail:15:3:6",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 204.01073237445286,
+    "transitionCost" : 74.21708003179992
+  },
+  {
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "31:Hail:16:3:7",
+      "packID" : "holidayLemmings1994-MACLEVL-32"
+    },
+    "introducedConcepts" : [
+
+    ],
+    "reason" : "Official level retained.",
+    "score" : 262.66288758246736,
+    "transitionCost" : 43.71445539343717
+  }
+]

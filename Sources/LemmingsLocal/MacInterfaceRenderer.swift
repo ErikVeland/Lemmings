@@ -11,7 +11,7 @@ import NxlvKit
 
   static func annotation(_ text: String, at point: CGPoint, palette: MacInterfaceRenderer.Palette = .green) {
     let text = MacInterfaceRenderer.menuText(text)
-    if let renderer = GameMenuArtwork.renderer() {
+    if let renderer = GameMenuArtwork.renderer(), renderer.font(.small)?.covers(text) == true {
       renderer.draw(text, face: .small, at: CGPoint(x: point.x.rounded(), y: point.y.rounded()), scale: 1, palette: palette)
     } else {
       GamePixelText.draw(text, in: CGRect(x: point.x, y: point.y, width: CGFloat(text.count * 6), height: 7), maxScale: 1, palette: palette)
@@ -73,7 +73,7 @@ import NxlvKit
       image.draw(in: CGRect(x: origin.x + bounds.minX * CGFloat(scale),
         y: origin.y + bounds.minY * CGFloat(scale), width: bounds.width * CGFloat(scale),
         height: bounds.height * CGFloat(scale)), from: .zero, operation: .sourceOver,
-        fraction: alpha, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+        fraction: alpha, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
       return
     }
     var pen = origin.x
@@ -88,7 +88,7 @@ import NxlvKit
         width: CGFloat(glyph.width * scale), height: CGFloat(glyph.height * scale))
       image.draw(
         in: rect, from: .zero, operation: .sourceOver, fraction: alpha,
-        respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+        respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
     }
   }
 
@@ -119,7 +119,7 @@ import NxlvKit
         let image = image(for: glyph, key: "\(face.rawValue)-\(character)", palette: palette) else { continue }
       image.draw(in: CGRect(x: index * font.cellWidth + glyph.x, y: glyph.y,
         width: glyph.width, height: glyph.height), from: .zero, operation: .sourceOver,
-        fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+        fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
     }
     NSGraphicsContext.restoreGraphicsState()
     guard let image = context.makeImage() else { return nil }
@@ -156,7 +156,7 @@ import NxlvKit
     image.draw(
       in: CGRect(x: centerX - size.width / 2, y: top, width: size.width, height: size.height),
       from: .zero, operation: .sourceOver, fraction: 1,
-      respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+      respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
     return size.height
   }
 
@@ -174,7 +174,7 @@ import NxlvKit
       .replacingOccurrences(of: "→", with: "->").replacingOccurrences(of: "←", with: "<-")
       .replacingOccurrences(of: "×", with: "X").replacingOccurrences(of: "↵", with: "ENTER")
       .replacingOccurrences(of: "‹", with: "<").replacingOccurrences(of: "›", with: ">")
-    return String(plain.map { $0.isASCII ? $0 : "?" })
+    return String(plain.map { $0.isASCII || $0 == "💀" ? $0 : "?" })
   }
 
   /// Uses the original glyphs at a fixed size, with the same cell spacing on every page.

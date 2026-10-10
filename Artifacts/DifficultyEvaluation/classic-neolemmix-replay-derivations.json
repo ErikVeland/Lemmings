@@ -1,0 +1,147 @@
+{
+  "conversion": "NeoLemmix FRAME and LEM_INDEX become Classic tick and lemming ID; spawn interval N becomes release rate 107 - 2*N; inputs are applied after the recorded tick.",
+  "records": [
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 04 - Wimpy (Part 1).dat#7",
+        "packID": "fan:lldb-552"
+      },
+      "initialStateHash": "7a2530df0707adb5a5e134c469d2b0af7b9a2c6e7fa27bf756bbabfd5997be51",
+      "levelSourceRevision": "8187c19df391ea59e594bf9e4779b7ec81fb0034bc4a899ae09aee7396b3c042",
+      "nativeCompletionTicks": 1350,
+      "nativeReplaySHA256": "6610c9b8679ea91158ba6573ae222159f5bce0628b3204e4d68cfceb76715c35",
+      "nativeSaved": 20,
+      "replayBasedScore": 297.94650942985317,
+      "requiredToSave": 16,
+      "sourceReplayName": "(Also_they_are_ninjas.).lvl_Solution.nxrp",
+      "sourceReplaySHA256": "3c92453a29267ddd0aa3a2710dd4055233ed2c404e51d09f05083956d0650a6b"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 05 - Wimpy (Part 2).dat#3",
+        "packID": "fan:lldb-552"
+      },
+      "initialStateHash": "3f5e6c5f059882c2f71b509e108e0d4d7773f7be0de2db9bdba2bcf4a311c95b",
+      "levelSourceRevision": "8187c19df391ea59e594bf9e4779b7ec81fb0034bc4a899ae09aee7396b3c042",
+      "nativeCompletionTicks": 2340,
+      "nativeReplaySHA256": "40802d68731ad176e4cdc542cabb277bdeba441363f97d53c095540e33411084",
+      "nativeSaved": 78,
+      "replayBasedScore": 317.52935108694476,
+      "requiredToSave": 64,
+      "sourceReplayName": "Head_East_or_West_.lvl_Solution.nxrp",
+      "sourceReplaySHA256": "04cf320636f2e691e1f2eec0eea5d569656751586d7992c252eb0169418729b5"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 06 - Wimpy (Part 3).dat#2",
+        "packID": "fan:lldb-552"
+      },
+      "initialStateHash": "63d9ef85e722c7fd823bf96d829b23de9ae42f327455282fa12c9f0e07b99f61",
+      "levelSourceRevision": "8187c19df391ea59e594bf9e4779b7ec81fb0034bc4a899ae09aee7396b3c042",
+      "nativeCompletionTicks": 2009,
+      "nativeReplaySHA256": "c35d8716d817d1ea869bb1bc5e7f52d1c1febbb4bc79e885ba9ef73505c30671",
+      "nativeSaved": 19,
+      "replayBasedScore": 346.62075801622757,
+      "requiredToSave": 15,
+      "sourceReplayName": "It's_a_strange_land!.lvl_Solution.nxrp",
+      "sourceReplaySHA256": "c7d4f8777c2f8086eb25a4bcb9b555de53d3b7143d4e155cf879056aa16a2e17"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 11 - Danger (Part 2).dat#7",
+        "packID": "fan:lldb-554"
+      },
+      "initialStateHash": "d3b6aead3ac5f87790c7bbab191e41e3c52948ea427d1d5c7b56942901f1db0a",
+      "levelSourceRevision": "bc6910d89e3d4625677d173dd9289ac64e19378a58c5ae9c2f2285875fdfeede",
+      "nativeCompletionTicks": 810,
+      "nativeReplaySHA256": "5a8dc9efd2cdc2574fc34d39ba5791acdecc86f7fbfd1822bd02980ecb64708d",
+      "nativeSaved": 13,
+      "replayBasedScore": 197.22647983827997,
+      "requiredToSave": 13,
+      "sourceReplayName": "The_Buildo_Station.lvl_Solution.nxrp",
+      "sourceReplaySHA256": "2eb49bebb16be3531c22c5e8f2f4e031bfa9719f8f4930cc12e440a02d6cea3b"
+    },
+    {
+      "adjustedEventIndex": 2,
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 12 - Danger (Part 3).dat#1",
+        "packID": "fan:lldb-554"
+      },
+      "initialStateHash": "203b4b200810808521e34f5230a00efb21fb8085c50e620df60a5e3e23987aac",
+      "levelSourceRevision": "bc6910d89e3d4625677d173dd9289ac64e19378a58c5ae9c2f2285875fdfeede",
+      "nativeCompletionTicks": 2651,
+      "nativeReplaySHA256": "759a659069fe461472b1156957691e17295f50d47f3ae1167e310406cdeb835c",
+      "nativeSaved": 20,
+      "nativeTick": 405,
+      "replayBasedScore": 249.6311365120836,
+      "requiredToSave": 20,
+      "sourceReplayName": "Die_the_Death_of_the_Damned.lvl_Solution.nxrp",
+      "sourceReplaySHA256": "dc6cf42b48382bdc0e707207aa8dda71212bf15a32cf5d3d40ff5c328c630f14",
+      "sourceTick": 407
+    },
+    {
+      "adjustedEventIndex": 7,
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 15 - PSYCHO (Part 3).dat#8",
+        "packID": "fan:lldb-555"
+      },
+      "initialStateHash": "6ee484a143d9a8a0acb55e3b4faed40bb7df18f26d91fe5e0abb124ccfb2ecb5",
+      "levelSourceRevision": "f0f2d7fb836a800589844b2c64b57c6eb83af930cd80b596df96c4d295dddb13",
+      "nativeCompletionTicks": 727,
+      "nativeReplaySHA256": "c50c662a1635dd7632a37c6484494cdb9df6160510c7367ee4490d024e525733",
+      "nativeSaved": 9,
+      "nativeTick": 449,
+      "replayBasedScore": 365.3946489705396,
+      "requiredToSave": 9,
+      "sourceReplayName": "No_Salvation_V.lvl_Solution.nxrp",
+      "sourceReplaySHA256": "45541389947112512aa0452006315f1434f2d84d6e2ef51f83788a9533e9b169",
+      "sourceTick": 443
+    },
+    {
+      "adjustedEventIndex": 3,
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 04 - Wimpy (Part 1).dat#5",
+        "packID": "fan:lldb-552"
+      },
+      "initialStateHash": "acafc4078199af8cfd9fa19cced3b5f2de212f6e91577a249de378475171a08d",
+      "levelSourceRevision": "8187c19df391ea59e594bf9e4779b7ec81fb0034bc4a899ae09aee7396b3c042",
+      "nativeCompletionTicks": 953,
+      "nativeReplaySHA256": "012363e776803e29e0b8ed9e3009fcb71e779ce405a5ad1a271fea598d13aa7b",
+      "nativeSaved": 66,
+      "nativeTick": 329,
+      "replayBasedScore": 299.6564081564285,
+      "requiredToSave": 64,
+      "sourceReplayName": "Talismans/Two_Pathways.lvl_Talisman.nxrp",
+      "sourceReplaySHA256": "60b1c135fdd8c93f716af81a9b951b443f5f8675a24a0697a99ec2bbb132a0be",
+      "sourceTick": 354
+    },
+    {
+      "adjustedEventIndex": 3,
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 14 - PSYCHO (Part 2).dat#6",
+        "packID": "fan:lldb-555"
+      },
+      "initialStateHash": "d7428c7cb3ed07b3d052e6dcf1292b90fbd330af966a744479535d2df15c7d82",
+      "levelSourceRevision": "f0f2d7fb836a800589844b2c64b57c6eb83af930cd80b596df96c4d295dddb13",
+      "nativeCompletionTicks": 910,
+      "nativeReplaySHA256": "386e2a2675e7eab57a108444c2591eee51c4cafef1e26236eac464f2f2444b55",
+      "nativeSaved": 16,
+      "nativeTick": 177,
+      "replayBasedScore": 344.6638370855563,
+      "requiredToSave": 16,
+      "sourceReplayName": "Meeting_Spot.lvl_Solution.nxrp",
+      "sourceReplaySHA256": "b863695d400c78edb10c0eb01a8214694892e32713681c08459734a8435382f7",
+      "sourceTick": 137
+    }
+  ],
+  "sourceArchiveSHA256": "3a5521737243cfa2f1f9565e6d9517a3cbb64be32e01d5407d11ddfa41d091ee",
+  "sourceArchiveURL": "https://www.neolemmix.com/replay/LemmingsPlusI_Replays_V12.10-A.zip"
+}

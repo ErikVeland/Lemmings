@@ -23,6 +23,7 @@ public struct AdaptiveDJEngine: Sendable {
         public var dangerCount: Int
         public var remainingSeconds: Int?
         public var isNuking: Bool
+        public var isComplete: Bool
         public var didWin: Bool
 
         public init(
@@ -34,7 +35,8 @@ public struct AdaptiveDJEngine: Sendable {
             dangerCount: Int = 0,
             remainingSeconds: Int? = 300,
             isNuking: Bool = false,
-            didWin: Bool = false
+            didWin: Bool = false,
+            isComplete: Bool = false
         ) {
             self.releasedCount = releasedCount
             self.totalCount = totalCount
@@ -45,6 +47,7 @@ public struct AdaptiveDJEngine: Sendable {
             self.remainingSeconds = remainingSeconds
             self.isNuking = isNuking
             self.didWin = didWin
+            self.isComplete = isComplete
         }
     }
 

@@ -1,0 +1,498 @@
+{
+  "date": "2026-10-04",
+  "cause": "Exact Flurry and Blitz archives used the original marble terrain slot for their snow levels. The same level data with Holiday 1994 slot 2 restored source-route terrain and 16 native wins. Style 1 retains its original graphics.",
+  "sourcePhysicsParity": "unverified: source saved counts and finish ticks sometimes differ from native outcomes; no source state traces were compared",
+  "sourceBuiltNxlvKitSHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "sourceBuiltProbeSHA256": "0fddb6fda52213f2da28f0319f7cfbac34afbf70efd5f35b1dd74c7c20f9687e",
+  "sourceBuiltEvidenceToolSHA256": "c6e1490e1cf216c488e499abe70d804db2b018630ad8dba9fdb0860542df9e2c",
+  "strictExactLevelChecks": [
+    "before promotion: 16/16",
+    "after promotion: 16/16"
+  ],
+  "levels": [
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Flurry.DAT#0",
+        "packID": "fan:lldb-484"
+      },
+      "title": "Climbing to the Top!",
+      "exactBundledArchiveSHA256": "a88766fb7218b24c824b4de0400c2ef124b85667d6e759bd4ee0384a46b32ae9",
+      "sourceURL": "https://lldb.camanis.net/level/484/1",
+      "cachedSourcePageSHA256": "68feeffa272d1ea46b7553c66dbe81aed7342c88011fcb225436e04b51924cb3",
+      "rawSourceReplaySHA256": "5e64f2fc0cf5faa06a371a097dcd0c3d693610854c6dbc2359c04faba7378c43",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 10,
+        "ticks": 521
+      },
+      "selectedNativeMechanics": "original",
+      "nativeInitialStateHash": "5c120b9f79411784251c4c68a091bbffb984c3293ee8b54876db537770716a8b",
+      "selectedReplaySHA256": "f89de90d2640eaf10988561725b97e24161e4fcd557739b46a64a3cb284e3deb",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 10,
+        "required": 10,
+        "saved": 10,
+        "stateHash": "f45783d2ab9f4b90d0a0ccd0c47bddd09a58dcc4c6de7639b7887bbc1dc6b333",
+        "ticks": 523
+      },
+      "difficultyScore": 112.6170950717888,
+      "difficultyProbeRuns": 10
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Flurry.DAT#1",
+        "packID": "fan:lldb-484"
+      },
+      "title": "Floating Lemming Flurry",
+      "exactBundledArchiveSHA256": "a88766fb7218b24c824b4de0400c2ef124b85667d6e759bd4ee0384a46b32ae9",
+      "sourceURL": "https://lldb.camanis.net/level/484/2",
+      "cachedSourcePageSHA256": "5b892498be7862a3a06b6d6e84b1c0512f3908bca82c3d49e8e47173a1da6244",
+      "rawSourceReplaySHA256": "c3044bd38f78ca0f6bfdafd32b093947fbf7dfeb5c71d4241116c01d1429d8e5",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 20,
+        "ticks": 907
+      },
+      "selectedNativeMechanics": "original",
+      "nativeInitialStateHash": "9ddef20683d1827de0149014c36fd3e720902701fb5d80334b22c678c2dc154d",
+      "selectedReplaySHA256": "7e043498cdad4bd562280c6b80969be6bc673145574a122b07c5113f01cf9f67",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 20,
+        "required": 15,
+        "saved": 20,
+        "stateHash": "6a255751a4f8fba3db9547f75fa4ad1f3d4d5aa364ad776a51d5a048cf0cb573",
+        "ticks": 907
+      },
+      "difficultyScore": 148.94316711590295,
+      "difficultyProbeRuns": 10
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Flurry.DAT#2",
+        "packID": "fan:lldb-484"
+      },
+      "title": "Holiday Mining",
+      "exactBundledArchiveSHA256": "a88766fb7218b24c824b4de0400c2ef124b85667d6e759bd4ee0384a46b32ae9",
+      "sourceURL": "https://lldb.camanis.net/level/484/3",
+      "cachedSourcePageSHA256": "8d62b724ec15766cc283c9c8f697efb58cadee7823a12732571020e816b2dcbb",
+      "rawSourceReplaySHA256": "38811bd8a6b90ff4cfb47964b16e91784ea26592ce573863cac21825a408426c",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 80,
+        "ticks": 1139
+      },
+      "selectedNativeMechanics": "original",
+      "nativeInitialStateHash": "1d5cdb49f643f6b904a8def43919746788b34c497dfba5f5ae8b2e4cf25e4e7a",
+      "selectedReplaySHA256": "5a91f858d2846e22aa9d4c2e0cb1e1196e3ad5addb2faa6681a3eb9de1c3d6da",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 80,
+        "required": 50,
+        "saved": 80,
+        "stateHash": "a6b40fcbc078f5a4b264cba263897064cce4b3c0f382b51b0a19f58de5734704",
+        "ticks": 1137
+      },
+      "difficultyScore": 216.7270505456422,
+      "difficultyProbeRuns": 10
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Flurry.DAT#3",
+        "packID": "fan:lldb-484"
+      },
+      "title": "Lemming Tracks in the Snow!",
+      "exactBundledArchiveSHA256": "a88766fb7218b24c824b4de0400c2ef124b85667d6e759bd4ee0384a46b32ae9",
+      "sourceURL": "https://lldb.camanis.net/level/484/4",
+      "cachedSourcePageSHA256": "4e983c4e126bd4a5a5821b9a8cc22202d85e6924e263ab4a8f1e0b47b3a569da",
+      "rawSourceReplaySHA256": "e0dfcded8fe513c31964c4bd265cc98b7f58d39ad80c22f8d203c81ee3abfb10",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 50,
+        "ticks": 1299
+      },
+      "selectedNativeMechanics": "golems",
+      "nativeInitialStateHash": "bf0e5f29b84611ab8a197c00236af54ce2f69798a122d95a53b76458877e1c14",
+      "selectedReplaySHA256": "af3c3a8879a1d2de8e59db3a9a1e2a51a7db78d4413a4eab7f314d314ddb7bf2",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 50,
+        "required": 45,
+        "saved": 50,
+        "stateHash": "c4b6e03af238ec929c94c38704271d679b781e3f523efb47fac707eaeeb7b78c",
+        "ticks": 1298
+      },
+      "difficultyScore": 210.20813634982937,
+      "difficultyProbeRuns": 10
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Flurry.DAT#4",
+        "packID": "fan:lldb-484"
+      },
+      "title": "Christmas South of the Equator",
+      "exactBundledArchiveSHA256": "a88766fb7218b24c824b4de0400c2ef124b85667d6e759bd4ee0384a46b32ae9",
+      "sourceURL": "https://lldb.camanis.net/level/484/5",
+      "cachedSourcePageSHA256": "f116283b845cc9bfd0d21355ed528a6d2a50ab4d0d776b989958dc3bf94d43e1",
+      "rawSourceReplaySHA256": "a58b8beca0300656514d20ed82e6b4482d22d8b8d1c33802d27ee1729592e031",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 75,
+        "ticks": 661
+      },
+      "selectedNativeMechanics": "original",
+      "nativeInitialStateHash": "2917462958d813ac70012c5c22f849c7d75b431b504d4a2f972e3c7c227cdc31",
+      "selectedReplaySHA256": "07df13c31b48d7ee70a98441f8bc4ae7144fd3a6e8a1c08e8e06d3221dfde839",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 75,
+        "required": 25,
+        "saved": 75,
+        "stateHash": "841ab9b93951f38fb34ecf09cba0ebe921b4c665af6c23eb8e461eb8247527b7",
+        "ticks": 663
+      },
+      "difficultyScore": 131.6508435342441,
+      "difficultyProbeRuns": 10
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Flurry.DAT#5",
+        "packID": "fan:lldb-484"
+      },
+      "title": "Lemming Snowfall",
+      "exactBundledArchiveSHA256": "a88766fb7218b24c824b4de0400c2ef124b85667d6e759bd4ee0384a46b32ae9",
+      "sourceURL": "https://lldb.camanis.net/level/484/6",
+      "cachedSourcePageSHA256": "29318436cb0cf0cbc87b765a013d701172e17fe902a5068f8e911a0291c7f00e",
+      "rawSourceReplaySHA256": "22ae4f902f89f4d175c757f3151c5e0a63587fa0ed4b208e03a1c6724f2fa4d1",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 80,
+        "ticks": 2670
+      },
+      "selectedNativeMechanics": "original",
+      "nativeInitialStateHash": "5e45f0ccf80b5ab49a8cba1173147492a0367da966237fc1e8707ceca4638d74",
+      "selectedReplaySHA256": "58e1c8a91aa035064e7b663d574a09b6c73fe7bdc431b5a86afb5e9033def9cc",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 80,
+        "required": 40,
+        "saved": 80,
+        "stateHash": "d84bc42e000d49fe712fe785e1c0fe0a5f7566b83aac36e6cc3762da61aec7e0",
+        "ticks": 2819
+      },
+      "difficultyScore": 158.9839257968489,
+      "difficultyProbeRuns": 10
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Flurry.DAT#8",
+        "packID": "fan:lldb-484"
+      },
+      "title": "A Block from Home",
+      "exactBundledArchiveSHA256": "a88766fb7218b24c824b4de0400c2ef124b85667d6e759bd4ee0384a46b32ae9",
+      "sourceURL": "https://lldb.camanis.net/level/484/9",
+      "cachedSourcePageSHA256": "a7472c4c02bb4da6725f8f631ab55c6f807a46841f8abcc112055bc2139ea69b",
+      "rawSourceReplaySHA256": "c793e56c1d10c6a77d0d39a2714c3bc4f1d1a166c0e688a77bd893583ae6b527",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 80,
+        "ticks": 1288
+      },
+      "selectedNativeMechanics": "original",
+      "nativeInitialStateHash": "eca86bdc4cef251591d9b78e50529ee2c87ab1a1e93606826131840cdea593fd",
+      "selectedReplaySHA256": "356c5d0216692c30c9dcb411f1575e77bdccb7610ddba88dc1d6d437504a4033",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 80,
+        "required": 75,
+        "saved": 80,
+        "stateHash": "6960cf5f06172db3691bc9965559d940ba348bd352483dc93f77afd89625f756",
+        "ticks": 1292
+      },
+      "difficultyScore": 341.98069696793357,
+      "difficultyProbeRuns": 10
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Flurry.DAT#10",
+        "packID": "fan:lldb-484"
+      },
+      "title": "At Home in a Cave",
+      "exactBundledArchiveSHA256": "a88766fb7218b24c824b4de0400c2ef124b85667d6e759bd4ee0384a46b32ae9",
+      "sourceURL": "https://lldb.camanis.net/level/484/11",
+      "cachedSourcePageSHA256": "326db8580537f4b78ed094c5d2ca098dd4edfa850a38c88585b1272c1a2e9786",
+      "rawSourceReplaySHA256": "8acc45023ea6efde095914745a82cf85fbf773352265ac286ecf677740e0b9d7",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 80,
+        "ticks": 1619
+      },
+      "selectedNativeMechanics": "original",
+      "nativeInitialStateHash": "141ed768a89be94c39d526ea8e8454fb837018e63c2ea6c6eb86cab5889461a1",
+      "selectedReplaySHA256": "b121bf4b297714872be0684072a42f45a32745aca3534a4739510cc90573a6bb",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 80,
+        "required": 78,
+        "saved": 80,
+        "stateHash": "b7582543abc680c95f9e1eb09b0da06bae00a90bb7b592c64f46ac71194701a5",
+        "ticks": 1646
+      },
+      "difficultyScore": 249.7024840764331,
+      "difficultyProbeRuns": 10
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Flurry.DAT#11",
+        "packID": "fan:lldb-484"
+      },
+      "title": "Presents of Mind",
+      "exactBundledArchiveSHA256": "a88766fb7218b24c824b4de0400c2ef124b85667d6e759bd4ee0384a46b32ae9",
+      "sourceURL": "https://lldb.camanis.net/level/484/12",
+      "cachedSourcePageSHA256": "7c2ff0b6133014641ab58a61fc3fdcc007108a6b8fbf1213c954476f08a59230",
+      "rawSourceReplaySHA256": "5614910a8a82193629b08e54ca4690bb0310e7d8e590cba302dd21ed27a03213",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 80,
+        "ticks": 1485
+      },
+      "selectedNativeMechanics": "original",
+      "nativeInitialStateHash": "a27385b20f0b7abda7a1fb94f3c1ce31c51e1afe969750f95e4818e11432de1d",
+      "selectedReplaySHA256": "83448978ec8b722d65e6c638ea938dfe72003d32c3bf3b749cdb9878242d72dc",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 80,
+        "required": 77,
+        "saved": 79,
+        "stateHash": "fcacb5350d40f369b8875f8c2ec9f082b65bb2dd15ca3bb94c05bcba16ec0971",
+        "ticks": 1490
+      },
+      "difficultyScore": 265.74199044585987,
+      "difficultyProbeRuns": 10
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Flurry.DAT#14",
+        "packID": "fan:lldb-484"
+      },
+      "title": "Head for the Hills!",
+      "exactBundledArchiveSHA256": "a88766fb7218b24c824b4de0400c2ef124b85667d6e759bd4ee0384a46b32ae9",
+      "sourceURL": "https://lldb.camanis.net/level/484/15",
+      "cachedSourcePageSHA256": "7345961d308c6c6dd1b0e5e6d72840df1d6a8f05c75734fed093e51608889288",
+      "rawSourceReplaySHA256": "92ad4c586b738cc5993971b33d668e1134c903a628eb470cec7fd61b30204bb5",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 10,
+        "ticks": 393
+      },
+      "selectedNativeMechanics": "golems",
+      "nativeInitialStateHash": "a389665594edd6af67b3d97801b7257ae125b33da1a3f6bcc7230cb40cda846c",
+      "selectedReplaySHA256": "484af1936ca1aedf319e959e4ccf7ce019eaeec1fcf21035cd02623646ac0bda",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 10,
+        "required": 10,
+        "saved": 10,
+        "stateHash": "245a13fce75cb9804f02f2f367544223614fc748ce003b610a61105ad0d9c4ba",
+        "ticks": 392
+      },
+      "difficultyScore": 230.85139777922925,
+      "difficultyProbeRuns": 10
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Blitz.DAT#2",
+        "packID": "fan:lldb-485"
+      },
+      "title": "Check Your Hints!",
+      "exactBundledArchiveSHA256": "48a861bf42e574cdd99346fb2d9971df01db66a7bd49cbfc036c2a074c1becc0",
+      "sourceURL": "https://lldb.camanis.net/level/485/3",
+      "cachedSourcePageSHA256": "2322ec31309c755397b4b2f19c36dd2b45b77b70f22924ff44490905f5c7025b",
+      "rawSourceReplaySHA256": "3bd9654d007ff3ea9d8bf948b18d791c79fc10f7486b5f7822d54c945862b92c",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 80,
+        "ticks": 1396
+      },
+      "selectedNativeMechanics": "original",
+      "nativeInitialStateHash": "cce67604468ff1bc7edef4d3ccee007a95eac54608658305745354f45732285d",
+      "selectedReplaySHA256": "d095cffb56fe398c051f7a6af677d5e60930e132fe244d6533a65a5febeee2d5",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 80,
+        "required": 80,
+        "saved": 80,
+        "stateHash": "ad78afd56b1423c29ac31504823da3b6084e0501be571ceb0b9b86c737a07c2b",
+        "ticks": 1348
+      },
+      "difficultyScore": 259.18741914407053,
+      "difficultyProbeRuns": 10
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Blitz.DAT#3",
+        "packID": "fan:lldb-485"
+      },
+      "title": "Santus Lemmingus",
+      "exactBundledArchiveSHA256": "48a861bf42e574cdd99346fb2d9971df01db66a7bd49cbfc036c2a074c1becc0",
+      "sourceURL": "https://lldb.camanis.net/level/485/4",
+      "cachedSourcePageSHA256": "f84200b2d8f69392c0dd56e18d97a476199333c75cca3402f289dd06758d2b47",
+      "rawSourceReplaySHA256": "e280d20c79b8483632b795ecb63830fa751bc9f94075387c723f4fd7cbb98921",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 80,
+        "ticks": 3022
+      },
+      "selectedNativeMechanics": "golems",
+      "nativeInitialStateHash": "2110f5183ba57d0430df820283e88de0c9dba9d1c28fb207a3c4baff59d642d0",
+      "selectedReplaySHA256": "971182a0837c3b0791d584300b3a7b5498a510045f385dbacf7dc216fad1b471",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 80,
+        "required": 80,
+        "saved": 80,
+        "stateHash": "6ffac30c0ae95228a133ad027c3063036e1ac31cb48b30a3891ac10df4932360",
+        "ticks": 3021
+      },
+      "difficultyScore": 313.6097996297506,
+      "difficultyProbeRuns": 10
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Blitz.DAT#4",
+        "packID": "fan:lldb-485"
+      },
+      "title": "It Came Upon a Lemnight Clear",
+      "exactBundledArchiveSHA256": "48a861bf42e574cdd99346fb2d9971df01db66a7bd49cbfc036c2a074c1becc0",
+      "sourceURL": "https://lldb.camanis.net/level/485/5",
+      "cachedSourcePageSHA256": "5097c31e46268dd54e2e4648ea9213c35a5a86df730fd6bbca0291f632390411",
+      "rawSourceReplaySHA256": "c461394001413fc6209e2ffa1f5404a964528517161b68f6ed08deb607c83940",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 80,
+        "ticks": 1679
+      },
+      "selectedNativeMechanics": "golems",
+      "nativeInitialStateHash": "193b536f204280e08ad0b36b831ee93202deea55946ef03504c841925f9caabf",
+      "selectedReplaySHA256": "f7a7f1c37dad83fdfaf39bba440f88a6dcd034df118e6538c10d7a2e98b0b0b6",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 80,
+        "required": 75,
+        "saved": 80,
+        "stateHash": "2a877d5fb72732e230c43b64a8fae0cc833e8fc615861937472ea0ea20ed2658",
+        "ticks": 1678
+      },
+      "difficultyScore": 370.013662220679,
+      "difficultyProbeRuns": 10
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Blitz.DAT#5",
+        "packID": "fan:lldb-485"
+      },
+      "title": "A Single Lemming...",
+      "exactBundledArchiveSHA256": "48a861bf42e574cdd99346fb2d9971df01db66a7bd49cbfc036c2a074c1becc0",
+      "sourceURL": "https://lldb.camanis.net/level/485/6",
+      "cachedSourcePageSHA256": "abee32bf5cf7995519f407a55f8c779a6bdc5101a69a69a6bbcf220b16fdb37c",
+      "rawSourceReplaySHA256": "a4a88f236d2b080907c07627a6290ae9d6fdeecd87393c137478a6c3e477789f",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 80,
+        "ticks": 1892
+      },
+      "selectedNativeMechanics": "original",
+      "nativeInitialStateHash": "20511367d5c3e03fdac4fdfe7a03c3f4f48204aed4d56180cdf89d22c483d04c",
+      "selectedReplaySHA256": "6bf4fa505b0653d4b5ce1b6545fd4e7d8f42a317f4b12e5bad3d3dbec0380222",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 80,
+        "required": 80,
+        "saved": 80,
+        "stateHash": "4b2ea50d1bab190df483bf92fc70d1f5941643ab0ea869c875373051de957c58",
+        "ticks": 1893
+      },
+      "difficultyScore": 238.65305732484074,
+      "difficultyProbeRuns": 10
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Blitz.DAT#11",
+        "packID": "fan:lldb-485"
+      },
+      "title": "The Voyage Home...",
+      "exactBundledArchiveSHA256": "48a861bf42e574cdd99346fb2d9971df01db66a7bd49cbfc036c2a074c1becc0",
+      "sourceURL": "https://lldb.camanis.net/level/485/12",
+      "cachedSourcePageSHA256": "0a21f623f5d7d665ea84e1648fc0573ddf8f8ab3a5595f01afab2da2d64e92f0",
+      "rawSourceReplaySHA256": "9d3eae2ad67f3e4cf09a31cee53fcdc69e2d5b0eca39cbb13dddb3f4be9cb02e",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 79,
+        "ticks": 5146
+      },
+      "selectedNativeMechanics": "original",
+      "nativeInitialStateHash": "8b7943b1d61a2218126f1b55ef2b55916960e26bd341539b30bf57ff3145fa89",
+      "selectedReplaySHA256": "17edcbcb8df2be271f98c42d89bf9cce024af3380f68ea4b489f03a075942f86",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 80,
+        "required": 70,
+        "saved": 79,
+        "stateHash": "8f7c465b4e03577f52fba2e764ce631743cb986e8b0a6b84f3949bddb9591f48",
+        "ticks": 5143
+      },
+      "difficultyScore": 207.4043444071125,
+      "difficultyProbeRuns": 10
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Blitz.DAT#13",
+        "packID": "fan:lldb-485"
+      },
+      "title": "The Undiscovered Country",
+      "exactBundledArchiveSHA256": "48a861bf42e574cdd99346fb2d9971df01db66a7bd49cbfc036c2a074c1becc0",
+      "sourceURL": "https://lldb.camanis.net/level/485/14",
+      "cachedSourcePageSHA256": "14be0a3d6f0d5f76746f16ff5845682414249fd036599c3ce5297de482868308",
+      "rawSourceReplaySHA256": "dfffc8aa84370a5babfdd6d82744c6c531dab757e8d0cd4cb4106ccb51641a9d",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 80,
+        "ticks": 1156
+      },
+      "selectedNativeMechanics": "golems",
+      "nativeInitialStateHash": "284d52d5161a689b1d8a275474a44734fe2b35a8ece99b119daed2fc85eeab32",
+      "selectedReplaySHA256": "5286b2db70e85c944006891fb0f37c746d269feedc60564405ed3fdfdda3faf2",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 80,
+        "required": 80,
+        "saved": 80,
+        "stateHash": "d628b7a203269ba6432fb899352ab8683e4cdb7d41c576b4d071aca3a1f1b25a",
+        "ticks": 1151
+      },
+      "difficultyScore": 144.01942406877382,
+      "difficultyProbeRuns": 10
+    }
+  ],
+  "cachedSourceTitlesAndGoalsMatchBundledLevels": true,
+  "sourceBuiltSolverSHA256": "72e52adc87111a28d2fa13045cfc9dc4495e75ce7ce0f2326a6d19403dd8cac5",
+  "solverControlReplaySHA256": "cc99da7a65776f1c620c3bd16d1870f03bfe12199d1ad8cc63beb7414f956f04",
+  "headlessMutedFanLibraryTests": "passed"
+}

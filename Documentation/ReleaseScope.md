@@ -1,7 +1,12 @@
 # Release scope
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-L2 and L3 remain previews. Updated 10 October 2026 after L2 route completion.
+The current public macOS release is 1.8.5 build 74. The
+[distribution record](ReleaseReadiness/1.8.5Build74Distribution.md) records the
+notarised downloads, signed feed and validation limits. This release adds personal
+Favourites and Recently Played across the catalogue, with result bookmarks that
+retain the attempt owner's identity during Hot Seat. L2/L3 remain Preview, with
+completion planned for 1.9. NeoLemmix remains Beta. Updated 10 October 2026.
 Automated checks support the recorded routes;
 remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)
 and the current [Classic validation](ReleaseReadiness/ClassicValidation-current.md).
@@ -19,6 +24,38 @@ a level nobody has recorded a win for yet.
 
 **Preview.** The game runs and is enjoyable, and its rules are not yet proven
 against the original engine. Expect differences.
+
+## Release replay policy
+
+Winning replays and their solvability and difficulty evidence are durable
+release evidence. A routine minor release keeps this evidence and does not
+replay every level again. It checks the stored fixture manifests and runs the
+focused engine regression suites.
+
+Run the full campaign replay gates when a change can alter outcomes across a
+campaign. This includes changes to simulation ticks, movement or collision,
+terrain or skill rules, replay decoding or execution, level data, or a broad
+engine rewrite. Re-run affected routes for local engine changes that do not
+meet this threshold. Do not replace a winning route or recalculate a difficulty
+score unless the route no longer wins or a full campaign change requires a new
+baseline.
+
+The minor audit proves that preserved fixture files match their recorded
+hashes. It does not prove that every route still wins on the new engine. The
+full audit provides that proof. Record the chosen scope and any affected-route
+checks with the release evidence.
+
+## macOS 1.5 public scope
+
+The 1.5 release targets Intel and Apple silicon Macs running macOS 12.3 or
+later. The completed 352-level Classic campaign is the primary release claim.
+Lemmings 2 and Lemmings 3 remain Preview. NeoLemmix import remains Beta or
+Preview until the real-pack, runnable, replay and behaviour gates pass.
+
+The 1.5 crash, startup, input and gameplay-cursor fixes are release changes.
+See the [1.5 distribution record](ReleaseReadiness/1.5Build50Distribution.md).
+The 1.6 candidate needs signing, notarisation, Gatekeeper and live-update
+evidence for its final commit. See the [1.6 validation record](ReleaseReadiness/1.6LocalValidation.md).
 
 ## Classic
 
@@ -71,29 +108,57 @@ See [the current campaign closure evidence](ReleaseReadiness/CampaignClosure-202
 | Release | Levels | Proven routes | Claim |
 | --- | ---: | ---: | --- |
 | Lemmings 2: The Tribes | 120 | 120 | **Preview** |
-| Lemmings 3: The Chronicles | 90 | 41 | **Preview** |
+| Lemmings 3: The Chronicles | 90 | 74 | **Preview** |
 
 The strict native L2 gate passes all 120 standalone routes, 70 carry-over variants
 and twelve continuous tribe chains. Every witness reproduces its win twice with
 matching saved counts, ticks and state hashes. These chains finish with one
-lemming. The ark ending needs 30 and remains unproved.
+lemming. The ark ending requires a golden talisman and at least 30 survivors
+from each tribe, and remains unproved.
 See [L2 completion evidence](Lemmings2Completion/README.md).
+
+The current L3 evidence records 74 of 90 standalone wins, 155 carried fixtures
+replayed twice and 68 linked campaign results. Sixteen standalone routes remain
+missing. The three continuous campaigns with at least 50 survivors, original
+DOS parity and verified endings remain open. See the
+[sequel verification record](ReleaseReadiness/1.8SequelVerification.md).
 
 Both play through their campaigns with original artwork, music and interfaces.
 Lemmings 3 keeps provisional rules in several areas, and its environmental
 effects, movie soundtracks and story transitions are incomplete.
 
+The 1.9 roadmap makes completion verification the exit gate for both sequels.
+They remain Preview until all advertised levels have winning-route evidence,
+engine-fidelity comparisons, continuous progression, recovery checks, media
+closure and verified endings.
+
+## iPhone and iPad 2.0
+
+The repository contains an iOS 16 UIKit/Metal application target. Its first
+player-facing slice imports a player-owned Classic DOS folder. It uses the same
+deterministic Classic simulation as the Mac application and adds direct touch,
+pan, zoom, safe-area controls, interruption recovery and thermal presentation
+budgets.
+
+The 1.3 source milestone is development evidence, not a tested iPhone/iPad release.
+Lemmings 2 and Lemmings 3 have shared mobile session and checkpoint adapters,
+but no player-facing mobile import or renderer. Recorded Simulator checks pass
+for the 1.3 source commit. Physical-device, accessibility, signing and
+distribution gates remain open. See the
+[2.0 roadmap](2.0Roadmap.md).
+
 ## Not in this release
 
-iPhone, iPad and consoles. The repository has no working app target for them. A
-Mac release does not imply them.
+The macOS 1.5 release does not include iPhone, iPad or consoles. Mobile 2.0 is a
+separate release gate. Consoles have no application target. A Mac
+release does not imply support for either platform group.
 
 ## Open before 1.0
 
-- Full Quest across the sequel previews remains outside the completed 352-level
-  Classic campaign gate.
+- The `Oh My! ALL Lemmings!` run across the sequel previews remains outside the
+  completed 352-level Classic campaign gate.
 - L2 and L3 retain preview status. L2 has no missing level routes. L3 retains
-  49 missing routes, tracked separately from the Classic 1.0 milestone.
+  16 missing routes, tracked separately from the Classic 1.0 milestone.
 - Physical Intel, minimum macOS, HDR, multiple displays and high refresh rates
   are untested. Sustained 10x play is not established.
 - Scalable menus and VoiceOver navigation are implemented. Full VoiceOver

@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-06",
+  "target": {
+    "identity": "fan:lldb-415/levels/Blizzlem/313.ini#-1",
+    "archive": "Content/LevelPacks/0415-Blizzard-of-Lemm.zip",
+    "archiveSHA256": "a1107ad848d4c68d1b127efe8ca3989906414b7acc5d79be4cbb52bf61a7d7ec",
+    "member": "levels/Blizzlem/313.ini",
+    "memberSHA256": "206443d643d92a2a522deea18aa5c48e92427ec698adc621db86805f8a37e1a8",
+    "levelTitle": "The snow palace.ini",
+    "sourceExitPlacement": [
+      2992,
+      176
+    ]
+  },
+  "nativeLoad": {
+    "renderedCanvas": [
+      1600,
+      160
+    ],
+    "initialStateHash": "3c4c5abecc91d55aaddbb5e2c14605d89d3c8e86aba4292373c679a4c032ca9e",
+    "maximumPlayableX": 1647,
+    "maximumPlayableY": 163,
+    "exitTriggerCount": 1,
+    "exitTriggerBounds": {
+      "x1": 3012,
+      "y1": 208,
+      "x2": 3016,
+      "y2": 212,
+      "edges": "half-open"
+    },
+    "gapFromMaximum": {
+      "xPixels": 1365,
+      "yPixels": 45
+    },
+    "assessment": "The sole exit trigger is outside the exact default native Classic playable bounds. This is an exact-target data/import geometry obstruction, not a search-coverage result or a source-physics parity result."
+  },
+  "packBoundsAudit": {
+    "artifact": "lemmini-classic-bounds.json",
+    "artifactSHA256": "245271838aa5ca6020e46c45f1d0b6b8f8237e59b5baa4c1153323b5e1a35408",
+    "packIdentity": "fan:lldb-415",
+    "bundledLevelRows": 65,
+    "textLevelRowsWithExitOrEntrancePlacementBelowClassicMaximumY": 38,
+    "allExitPlacementsBelow": 36,
+    "allEntrancePlacementsBelow": 6,
+    "both": 4,
+    "interpretation": "This is a geometry/import mismatch cluster in the Lemmini-tagged pack, not proof that the levels are unsolvable under their source engine."
+  },
+  "currentSourceBuild": {
+    "sourceBuilt": true,
+    "nxlvKitSourceSHA256": "55b522fbbd3c400908ba4b18403f40656709d93ab7fc0dbad08cc5e1e8163bdd",
+    "classicGraphicsSourceSHA256": "556739a6a569ea17ebd1736d4e104f6bb580724fd3b83687adabfe8a8e499cfe",
+    "classicSolverSourceSHA256": "00b739240a0b7a9ab22c26be00686fcc4eb30ecf1c82568db8e3eefdf8c622d6",
+    "classicSolverBinarySHA256": "752a330dc3aa9b87d0bbf85078e945a434561a3355d0301d310aa101c06d14c5",
+    "nxlvKitLibrarySHA256": "9b2f3b802be38942cf29a418684908cad84ddd0cfd23ed0c4449e256ef094e21",
+    "knownWinControl": {
+      "identity": "fan:lldb-505/KillerMaster 1 Tame 1.dat#1",
+      "archiveSHA256": "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9",
+      "replaySHA256": "4424ecdc93b2be7a7bd2712d15d5f6cf231f2a9292a970614d103faeebb037ae",
+      "search": "rate 50; Floater assigned to lemming 0 after tick 54; width 48; 27 expansions",
+      "currentBuildStrictReplay": "PASS; 1/1 saved at tick 375; outcome hash 6e22f334a7eb6061f786b7245b8ddff0ccb07f4a96a73ea0dacc591b7c4163e0"
+    }
+  },
+  "score": "",
+  "physicsParity": "not independently checked",
+  "nextDecision": "A source-correct level-height/import lane or a content disposition is required before this exact bundled row can receive a native win and score."
+}

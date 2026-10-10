@@ -1,0 +1,17 @@
+UI test windows: offscreen; audio: muted
+PASS native L2 visit and paused retry
+PASS native L3 visit and paused retry
+PASS four-engine collection identities, personal storage, recent order/limit, stale-writer protection, backup recovery, scaled renders and input targets
+PASS release notes stay clipped and scrollable at three sizes; Continue remains visible and usable
+PASS frozen Classic turn identity, confirmed player changes, cleared result actions and direct profile solo transition
+PASS green handover identity, mouse retry of the previous level as UVA, rightmost begin action, shared progress and solo boundaries
+PASS Hot Seat journey names both retries; same-player retry restarts paused with the attempt owner
+PASS saved Solo/Hot Seat choices, checkpoint, history, targets and Ready across Classic, L2 and L3
+PASS disk checkpoint, rewind/undo journal, exact paused restoration, continuation, backups, corruption, version and stale-writer rejection
+PASS legacy text steel checkpoint, retry upgrade and exact current checkpoint restoration
+PASS legacy graphics checkpoint, retry upgrade and exact current checkpoint restoration
+PASS legacy Holiday graphics checkpoint, retry upgrade and exact current checkpoint restoration
+PASS pruned fan queue retains paused state and ownership and saves only surviving entries
+PASS Classic fan checkpoint, shuffled queue, exact paused restore, identity, continuation and missing-pack rejection
+PASS Neo checkpoint round trip, assignment, queued rate/nuke, undo, counters, continuation, changed-content rejection and transactional rejection
+Collections integration tests passed.

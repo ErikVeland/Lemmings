@@ -1,0 +1,15 @@
+UI test windows: offscreen; audio: muted
+PASS DJ nuke EQ propagation, replacement deck and restoration
+PASS DJ Modern/Faithful routing, drum signal, EQ/reverb and uninterrupted tracker clock
+2026-10-08 21:04:34.588 AdaptiveDJPlaybackTests[38213:8753754] Audio files cannot be non-interleaved. Ignoring setting AVLinearPCMIsNonInterleaved YES.
+2026-10-08 21:04:34.596 AdaptiveDJPlaybackTests[38213:8753754] Audio files cannot be non-interleaved. Ignoring setting AVLinearPCMIsNonInterleaved YES.
+PASS isolated recording rhythm, vinyl rate/gain ramp, silence and rapid resume
+PASS rendered music pitch at every tier, unchanged tempo and hard pitch cap
+PASS recording source position at slow, normal and matched playback rates
+2026-10-08 21:04:37.622 AdaptiveDJPlaybackTests[38213:8753754] Audio files cannot be non-interleaved. Ignoring setting AVLinearPCMIsNonInterleaved YES.
+PASS one-shot rhythm stops with its cue
+  soundtracks: 30, tracks: 488
+PASS recording grid routing, actual tempo matching and stale-grid rejection
+  opened on: cancan
+PASS assigned tracks, score journeys in all engines, protected cues, retry stability and suspended crossfade
+Adaptive DJ playback tests passed.

@@ -1,0 +1,74 @@
+{
+  "description": "Current source-built ordinary-input recheck of two Stalkers copies. Earlier one-tick trials saved 53/54; current exact bundled replay saves 54/54 at tick 1022. The change responsible for this difference was not isolated. This is not full source physics parity.",
+  "sourceEngineSHA256": "38cb69f18f5055821a496336a948fc30596e56c607c3ddddfb4675be78a5873e",
+  "records": [
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 03.dat#2",
+        "packID": "fan:lldb-246"
+      },
+      "title": "Stalkers",
+      "bundledArchiveSHA256": "d1e2c06fd14cc00c157cc220651bbbcbb9bf401851cce5d23de76fc54085f0bf",
+      "initialStateHash": "5bd9d9cf8fa68dea42edf4ff2f73e98c3d1d03b10c0a0ac0c88241d17fad6e83",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "6470465152a268a629626ee9eed862327d1ad7f24c2fe10a55d62b6726f81286",
+      "nativeSaved": 54,
+      "required": 54,
+      "nativeCompletionTick": 1022,
+      "difficultyScore": 484.4411953021577,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/6470465152a268a629626ee9eed862327d1ad7f24c2fe10a55d62b6726f81286.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/6470465152a268a629626ee9eed862327d1ad7f24c2fe10a55d62b6726f81286.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 03.dat#2",
+        "packID": "fan:lldb-246"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/246/3",
+      "sourceReplaySHA256": "8c53c89a2a6e6943637443b2da192cfdaa83f61b3a264015280c71020a8ab0f8",
+      "sourceHeaderSaved": 54,
+      "sourceHeaderTicks": 1022,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "MARTPCK3.DAT#2",
+        "packID": "fan:lldb-497"
+      },
+      "title": "Stalkers",
+      "bundledArchiveSHA256": "eee114bbaf98654790d24c531e3a4757acaefef0002acee0dd93c4d9a3eba088",
+      "initialStateHash": "5bd9d9cf8fa68dea42edf4ff2f73e98c3d1d03b10c0a0ac0c88241d17fad6e83",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "536df708e6c08460bd562de84456efa6124bef6f8c5a64b8252024ce83b08fb7",
+      "nativeSaved": 54,
+      "required": 54,
+      "nativeCompletionTick": 1022,
+      "difficultyScore": 484.4411953021577,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/536df708e6c08460bd562de84456efa6124bef6f8c5a64b8252024ce83b08fb7.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/536df708e6c08460bd562de84456efa6124bef6f8c5a64b8252024ce83b08fb7.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "MARTPCK3.DAT#2",
+        "packID": "fan:lldb-497"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/497/3",
+      "sourceReplaySHA256": "8c53c89a2a6e6943637443b2da192cfdaa83f61b3a264015280c71020a8ab0f8",
+      "sourceHeaderSaved": 54,
+      "sourceHeaderTicks": 1022,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    }
+  ]
+}

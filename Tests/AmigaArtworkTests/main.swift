@@ -22,8 +22,8 @@ let folders = [
     ("ohno", "Sources/Ports/oh_no_more_lemmings_dos-1991-11-14_2232"),
     ("xmas", "Sources/Ports/xmas_dos_XmasLemmingsV1.9"),
     ("xmas", "Sources/Ports/xmas_dos_XmasLemmingsV1.9a1"),
-    ("holiday", ".build/local/Lemmings Local.app/Contents/Resources/Ports/holiday_native_1993"),
-    ("holiday", ".build/local/Lemmings Local.app/Contents/Resources/Ports/holiday_native_1994")]
+    ("holiday", ".build/local/Ultimate Lemmings.app/Contents/Resources/Ports/holiday_native_1993"),
+    ("holiday", ".build/local/Ultimate Lemmings.app/Contents/Resources/Ports/holiday_native_1994")]
 var checked = 0
 for (family, path) in folders {
     let art = try ClassicMacArtwork(directory: exported.appendingPathComponent(family))

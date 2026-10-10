@@ -1,0 +1,13 @@
+PASS title to rank to briefing to playing
+PASS passing a level advances to the next
+PASS failing a level returns to it
+PASS a skip opens the next level without passing the skipped one
+PASS ranks complete in order and the game ends
+PASS a rank resumes where it was left
+PASS direct selection follows the player's restored campaign progress
+PASS playlist results stay separate from Classic campaign progress
+PASS the Classic unlock override does not persist skipped campaign reach
+PASS progress survives saving and restoring
+PASS quitting asks before leaving
+PASS built from the real campaign — Fun, Tricky, Taxing, Mayhem
+Classic game flow tests passed.

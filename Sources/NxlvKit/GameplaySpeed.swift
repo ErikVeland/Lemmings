@@ -1,5 +1,35 @@
 import Foundation
 
+/// A short glide in musical pitch, separate from simulation and music tempo.
+public struct GameplayMusicPitch: Sendable {
+    public static let transitionDuration = 0.12
+    public private(set) var cents: Double = 0
+    private var target: Double = 0
+    private var from: Double = 0
+    private var changedAt: TimeInterval = 0
+
+    public init() {}
+
+    public static func ratio(for speed: Double) -> Double {
+        // Settled tiers transpose the whole track by musical intervals.
+        let ratios = [0.0, 1, 2, 3, 5].map { pow(2, $0 / 12) }
+        let speed = min(10, max(1, speed))
+        for index in 1..<GameplaySpeed.steps.count where speed <= GameplaySpeed.steps[index] {
+            let lower = GameplaySpeed.steps[index - 1], upper = GameplaySpeed.steps[index]
+            let blend = (speed - lower) / (upper - lower)
+            return ratios[index - 1] * pow(ratios[index] / ratios[index - 1], blend)
+        }
+        return ratios.last!
+    }
+
+    public mutating func update(speed: Double, at now: TimeInterval) {
+        let t = min(1, max(0, (now - changedAt) / Self.transitionDuration))
+        cents = from + (target - from) * t * t * (3 - 2 * t)
+        let next = 1200 * log2(Self.ratio(for: speed))
+        if next != target { from = cents; target = next; changedAt = now }
+    }
+}
+
 /// Speed changes the clock, never the size of a physics tick.
 public struct GameplaySpeed: Sendable {
     public enum Hold: Hashable, Sendable { case key, shift, controller, mouse }
@@ -25,6 +55,15 @@ public struct GameplaySpeed: Sendable {
     public init(legacyMultiplier: Double = 3) { self.legacyMultiplier = legacyMultiplier }
     public var isFast: Bool { target > 1 }
     public var isHeld: Bool { !held.isEmpty }
+    /// The held pedal winds pitch up continuously while physics keeps its discrete tiers.
+    public func musicPitchSpeed(at now: TimeInterval) -> Double {
+        guard variableEnabled, !held.isEmpty, let start = holdStartedAt else { return target }
+        let base = Self.steps.firstIndex(of: selected) ?? 0
+        let position = min(Double(Self.steps.count - 1), Double(base)
+            + max(0, now - start - Self.holdDelay) / Self.holdStepDuration)
+        let lower = Int(position), upper = min(Self.steps.count - 1, lower + 1)
+        return Self.steps[lower] + (Self.steps[upper] - Self.steps[lower]) * (position - Double(lower))
+    }
     public var label: String { "\(Int(target))×" }
 
     public mutating func update(at now: TimeInterval) {
@@ -37,8 +76,8 @@ public struct GameplaySpeed: Sendable {
     }
 
     /// A tap toggles immediately. Extra clicks cannot restart a stopped burst.
-    public mutating func tap(at now: TimeInterval, clickCount: Int = 1, immediate: Bool = true) {
-        if variableEnabled, !isFast,
+    public mutating func tap(at now: TimeInterval, clickCount: Int = 1, immediate: Bool = true, absorbRapidClicks: Bool = true) {
+        if absorbRapidClicks, variableEnabled, !isFast,
            clickCount > 1 || stoppedAt.map({ now >= $0 && now - $0 <= Self.rapidInterval }) == true {
             stoppedAt = now
             return
@@ -53,9 +92,9 @@ public struct GameplaySpeed: Sendable {
     public mutating func step(_ direction: Int, at now: TimeInterval) {
         guard variableEnabled else { return }
         cancelHolds()
-        let index = Self.steps.firstIndex(of: cruise) ?? 1
-        cruise = Self.steps[min(Self.steps.count - 1, max(1, index + (direction < 0 ? -1 : 1)))]
-        selected = cruise
+        let index = Self.steps.firstIndex(of: target) ?? 0
+        selected = Self.steps[min(Self.steps.count - 1, max(0, index + (direction < 0 ? -1 : 1)))]
+        if selected > 1 { cruise = selected }
         changeTarget(selected, at: now)
     }
 
@@ -79,7 +118,7 @@ public struct GameplaySpeed: Sendable {
         guard held.remove(input) != nil, held.isEmpty else { return }
         let wasTap = allowTap && canTap && now - (holdStartedAt ?? now) < Self.holdDelay
         holdStartedAt = nil
-        if wasTap && variableEnabled { tap(at: now) }
+        if wasTap && variableEnabled { tap(at: now, absorbRapidClicks: input != .mouse) }
         else { changeTarget(selected, at: now, immediate: true) }
     }
 

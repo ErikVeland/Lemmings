@@ -141,3 +141,66 @@ public enum ProTrackerPercussion {
         return tuning
     }
 }
+
+/// Jingle Bells uses generic sample names, so the normal drum-name classifier
+/// cannot identify its breakbeat.
+enum ProTrackerHolidayMix {
+    private static func isJingleBells(_ module: ProTrackerModule) -> Bool {
+        module.title.lowercased() == "jb"
+            && module.samples[0].name.lowercased() == "in12"
+            && module.samples[2].name.lowercased() == "in3"
+            && module.samples[6].name.lowercased() == "in7"
+            && module.samples[10].name.lowercased() == "in14"
+    }
+
+    private static func isRudolph(_ module: ProTrackerModule) -> Bool {
+        module.title.lowercased() == "rudi"
+            && module.samples[12].name.lowercased() == "drum"
+            && module.samples[13].name.lowercased() == "asnare"
+    }
+
+    static func percussionSamples(for module: ProTrackerModule) -> Set<Int> {
+        isJingleBells(module) ? Set(2...6) : []
+    }
+
+    static func tuning(
+        for module: ProTrackerModule, existing: [Int: ProTrackerVoiceTuning]
+    ) -> [Int: ProTrackerVoiceTuning] {
+        guard isJingleBells(module) || isRudolph(module) else { return existing }
+        var tuning = ProTrackerPercussion.centering(for: module, amount: 1, existing: existing)
+        let extra = isJingleBells(module) ? [0, 2, 3, 4, 5, 6, 10] : []
+        for index in extra {
+            var entry = tuning[index] ?? ProTrackerVoiceTuning()
+            entry.centering = 1
+            tuning[index] = entry
+        }
+        return tuning
+    }
+}
+
+
+/// The supplied Beast I bank abbreviates its bass drum as `b1bsdr`.
+/// Keep this correction local to that bank and the Modern preset.
+enum ProTrackerBeastMix {
+    private static func matches(_ module: ProTrackerModule) -> Bool {
+        module.title.lowercased() == "beasti" && module.samples.count > 8
+            && module.samples[0].name.lowercased() == "b1bass"
+            && module.samples[1].name.lowercased() == "b1bsdr"
+            && module.samples[5].name.lowercased() == "b1snare"
+            && module.samples[8].name.lowercased() == "b1tom2"
+    }
+    static func percussionSamples(for module: ProTrackerModule) -> Set<Int> {
+        matches(module) ? [1, 5, 8] : []
+    }
+    static func tuning(for module: ProTrackerModule,
+        existing: [Int: ProTrackerVoiceTuning]) -> [Int: ProTrackerVoiceTuning] {
+        guard matches(module) else { return existing }
+        var result = existing
+        for index in [0, 1, 5, 8] {
+            var voice = result[index] ?? ProTrackerVoiceTuning()
+            voice.centering = 1
+            result[index] = voice
+        }
+        return result
+    }
+}

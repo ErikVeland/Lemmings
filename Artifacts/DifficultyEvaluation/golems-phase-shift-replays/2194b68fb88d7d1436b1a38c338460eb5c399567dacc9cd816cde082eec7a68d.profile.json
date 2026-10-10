@@ -1,0 +1,81 @@
+{
+  "components" : {
+    "concurrencyBurden" : 0,
+    "constraintPressure" : 856.1704211557296,
+    "deductionComplexityProxy" : 30,
+    "executionPrecision" : 256.875,
+    "solutionComplexity" : 69,
+    "techniqueBurden" : 195
+  },
+  "confidence" : "medium",
+  "criticalActions" : [
+    1
+  ],
+  "detectedTechniques" : [
+    "miner",
+    "release-rate-manipulation"
+  ],
+  "explanation" : [
+    "1 used skill types; 1 assigned workers; 0 same-worker skill changes.",
+    "Maximum concurrent worker regions: 1.",
+    "Timing probes: 10. Untested alternatives remain unknown.",
+    "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+    "Source rank: fan:lldb-489."
+  ],
+  "key" : {
+    "analyserVersion" : "difficulty-3",
+    "assetsRevision" : "dc97620c164e3a731f34f82fcd8c81f4f7b2c2f0f07980555bf1b85c9ffcc806:probes-10",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Genesis Tricky.dat#29",
+      "packID" : "fan:lldb-489"
+    },
+    "levelRevision" : "d3a60e754dd580f50f3c846b76a977903ccb3ca4997613cd7cde7879d632b080",
+    "replayRevision" : "2194b68fb88d7d1436b1a38c338460eb5c399567dacc9cd816cde082eec7a68d",
+    "simulationVersion" : "neolemmix-ce-2026-09-27:golems-phase-minus-one-targeted:exit-contact"
+  },
+  "overallScore" : 228.70715475024485,
+  "precision" : {
+    "actions" : [
+      {
+        "outcomes" : {
+          "-1" : false,
+          "-2" : false,
+          "1" : true,
+          "2" : false
+        },
+        "sequence" : 1
+      },
+      {
+        "outcomes" : {
+          "-1" : false,
+          "-2" : false,
+          "1" : true
+        },
+        "sequence" : 2
+      },
+      {
+        "outcomes" : {
+          "-1" : true,
+          "-2" : true,
+          "1" : true
+        },
+        "sequence" : 3
+      }
+    ],
+    "alternativeRunCount" : 0,
+    "assignmentCount" : 3,
+    "completed" : false,
+    "orderingOutcomes" : [
+
+    ],
+    "runCount" : 10,
+    "selectionOutcomes" : [
+
+    ]
+  },
+  "prerequisiteConcepts" : [
+
+  ],
+  "sourceRank" : "fan:lldb-489"
+}

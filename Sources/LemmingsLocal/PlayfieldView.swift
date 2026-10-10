@@ -101,25 +101,49 @@ struct ReticleFeedback {
       needsDisplay = true
     }
   }
-  var reduceMotion = false { didSet { if reduceMotion { speedTrails.reset() }; needsDisplay = true } }
+  var reduceMotion = false {
+    didSet {
+      if reduceMotion { speedTrails.reset() }
+      needsDisplay = true
+    }
+  }
   var reduceFlashes = false {
     didSet {
       if reduceFlashes { hdrBirths.removeAll(); hdrFlashes.removeAll(); hdrOverlay?.clear() }
       needsDisplay = true
     }
   }
-  var favorApproachingLemmings = true
+  let startCountdown = FreshLevelCountdown()
+  var gameplayCursorStyle: GameplayCursorStyle = .modern { didSet { needsDisplay = true } }
+  var showClassicSkillBackpacks = true { didSet { needsDisplay = true } }
+  var showReticleCount = false
+  var lemmingSelectionStyle: LemmingSelectionStyle = .modern { didSet { needsDisplay = true } }
+    var skillCursorIconSize: SkillCursorIconSize = .one
+    var favorApproachingLemmings = true
+    var favorBombBlockers = true
+    var favorBuilders = true
   var speedMultiplier: Double = 3 { didSet { speedTrails.multiplier = speedMultiplier } }
   var isFastForward = false
   private let speedTrails = SpeedTrails()
+  private var rewindGhost: CGImage?
+  private var rewindCueStartedAt: TimeInterval?
+  private var rewindCueUntil: TimeInterval = 0
+  private var rewindOriginTick = 0
+  private var rewindCurrentTick = 0
+  private var rewindCueTask: Task<Void, Never>?
   private var hdrOverlay: ExplosionHDRView?
+  private(set) var selectionEffect: LemmingSelectionEffect?
   private(set) var hdrFlashes: [ExplosionFlash] = []
+  private var displayedHDRFlashes: [ExplosionFlash] {
+    hdrFlashes.map { .init(rect: precisionLens.display($0.rect), strength: $0.strength,
+      expiresAt: $0.expiresAt, tint: $0.tint) }
+  }
   private var hdrBirths: [Int:(tick:Int,expires:TimeInterval)] = [:]
   private var hdrLastTick = 0
   var presentsHDR = true {
     didSet {
       hdrOverlay?.isHidden = !presentsHDR
-      hdrOverlay?.update(presentsHDR ? hdrFlashes : [],force:true)
+      hdrOverlay?.update(presentsHDR ? displayedHDRFlashes : [],force:true)
     }
   }
   override func viewDidMoveToWindow() {
@@ -131,7 +155,7 @@ struct ReticleFeedback {
       addSubview(overlay)
       hdrOverlay = overlay
     }
-    hdrOverlay?.update(presentsHDR ? hdrFlashes : [],force:true)
+    hdrOverlay?.update(presentsHDR ? displayedHDRFlashes : [],force:true)
   }
   /// Lines drawn over the level before it starts or after it ends.
   private let accessibleElements = GameAccessibleElements()
@@ -141,10 +165,21 @@ struct ReticleFeedback {
   func accessibleControls(owner: NSView, transform: (CGRect) -> CGRect = { $0 }) -> [Any] {
     guard phase != .playing else {
       let text = "Game playfield" + (turnInitials.map { ". \($0)'s turn" } ?? "")
+        + (precisionStatus.accessibility.isEmpty ? "" : ". " + precisionStatus.accessibility)
+        + (deathCountdownAccessibilityText.isEmpty ? "" : ". " + deathCountdownAccessibilityText)
       return [accessibleElements.element(id: "status", owner: owner, label: text, frame: transform(bounds))]
     }
     var items: [Any] = []
     if let overlayTitle { items.append(accessibleElements.element(id: "title", owner: owner, label: overlayTitle, frame: transform(bounds))) }
+    if let rect = overlaySettingsButtonFrame() {
+      items.append(accessibleElements.element(
+        id: "settings", owner: owner, label: "Settings", frame: transform(rect)
+      ) { [weak self] in self?.onSettings?() })
+    }
+    if let rect = overlayUpdateButtonFrame(), let label = overlayAvailableUpdate {
+      items.append(accessibleElements.element(id: "update", owner: owner,
+        label: label + ". Show update and release notes", frame: transform(rect)) { [weak self] in self?.onUpdate?() })
+    }
     for (index, line) in overlayLines.enumerated() {
       let rect = overlayLineRects.indices.contains(index) ? overlayLineRects[index] : bounds
       let actionable = overlayHighlight != nil || overlayRetryLine == index || overlayReplayLine == index
@@ -156,6 +191,10 @@ struct ReticleFeedback {
       } : nil
       items.append(accessibleElements.element(id: "line-\(index)", owner: owner, label: line, frame: transform(rect), press: action))
     }
+    if let overlaySavedCounts {
+      items.append(accessibleElements.element(id: "saved-counts", owner: owner,
+        label: overlaySavedCounts, frame: transform(overlaySavedCountsFrame(overlayLayout()))))
+    }
     if overlayHighlight == nil {
       let rect = handoverButtons.count == 2 && overlayHandoverRetryTitle != nil ? handoverButtons[1] : bounds
       items.append(accessibleElements.element(id: "continue", owner: owner, label: overlayHandoverRetryTitle == nil ? "Continue" : "Begin level", frame: transform(rect)) { [weak self] in self?.onAdvancePhase?() })
@@ -164,8 +203,8 @@ struct ReticleFeedback {
       items.append(accessibleElements.element(id: "handover-retry", owner: owner, label: title, frame: transform(rect)) { [weak self] in self?.onHandoverRetry?() })
     }
     for (index, rect) in overlayFooterButtons.enumerated() {
-      items.append(accessibleElements.element(id: "footer-\(index)", owner: owner, label: index == 0 ? "Player profiles" : "Records", frame: transform(rect)) { [weak self] in
-        if index == 0 { self?.onProfiles?() } else { self?.onRecords?() }
+      items.append(accessibleElements.element(id: "footer-\(index)", owner: owner, label: ["Player profiles", "Records", "Playlists"][index], frame: transform(rect)) { [weak self] in
+        self?.activateFooterButton(index)
       })
     }
     return items
@@ -178,11 +217,25 @@ struct ReticleFeedback {
   var onHandoverRetry: (() -> Void)?
   private var handoverButtons: [CGRect] = []
   var overlayLines: [String] = []
+  var overlaySavedCounts: String?
   var overlayFooter: String? { didSet { overlayProfileInitials = nil } }
   var overlayProfileInitials: String?
   var onProfiles: (() -> Void)?
   var onRecords: (() -> Void)?
+  var onPlaylists: (() -> Void)?
+  var overlayShowsSettingsButton = false
+  var onSettings: (() -> Void)?
+  var overlayAvailableUpdate: String?
+  var onUpdate: (() -> Void)?
   private var overlayFooterButtons: [CGRect] = []
+  private func activateFooterButton(_ index: Int) {
+    switch index {
+    case 0: onProfiles?()
+    case 1: onRecords?()
+    case 2: onPlaylists?()
+    default: break
+    }
+  }
   /// Which overlay line is currently chosen, when the screen offers a choice.
   var overlayHighlight: Int?
   /// Marches real lemmings along the foot of the screen.
@@ -201,6 +254,7 @@ struct ReticleFeedback {
   var phase: GamePhase = .playing {
     didSet {
       if phase != oldValue { reticleFeedback = ReticleFeedback(); assignedTarget = nil; displayedTarget = nil; cursorViewPoint = nil; overlayReplayLine = nil; overlayRetryLine = nil }
+      if phase != oldValue { window?.invalidateCursorRects(for: self) }
     }
   }
   var levelImage: CGImage?
@@ -221,6 +275,10 @@ struct ReticleFeedback {
   private var macInterface: MacInterfaceRenderer? = GameMenuArtwork.renderer()
   var macScene: ClassicMacScene? { didSet { sceneTick = nil } }
   var classicScene: ClassicRenderedLevel? {
+    didSet { sceneTick = nil }
+  }
+  var neoMacArtworkEnabled = false { didSet { sceneTick = nil; invalidateSprites() } }
+  var neoScene: NxlvRenderedLevel? {
     didSet { sceneTick = nil }
   }
   private var sceneTick: Int?
@@ -248,14 +306,92 @@ struct ReticleFeedback {
     levelImage = image
     sceneTick = session.currentTick
   }
+
+  private func refreshNeoScene() {
+    guard let neoScene, let session = session as? NeoLemmixSession,
+          sceneTick != session.currentTick else { return }
+    let stoner = neoSprites?.stonerTerrainPixels()
+    let rgba = NeoLemmixSceneFrame.rgba(
+      neoScene,
+      terrain: session.simulation.terrain,
+      stonerRGBA: stoner?.rgba ?? [],
+      stonerWidth: stoner?.width ?? 16,
+      stonerHeight: stoner?.height ?? 11,
+      zones: session.simulation.configuration.zones,
+      disabledZoneIDs: session.simulation.disabledZoneIDs,
+      gadgetAnimationFrames: session.simulation.gadgetAnimationFrames,
+      secondaryAnimationStates: session.simulation.secondaryAnimationStates,
+      tickCount: session.simulation.tickCount,
+      entranceOpenTick: session.simulation.configuration.entranceOpenTick,
+      splitterDirections: session.simulation.splitterDirections,
+      useMacArtwork: neoMacArtworkEnabled
+    )
+    guard let provider = CGDataProvider(data: Data(rgba) as CFData),
+          let image = CGImage(
+            width: neoScene.width * (neoMacArtworkEnabled ? 2 : 1),
+            height: neoScene.height * (neoMacArtworkEnabled ? 2 : 1),
+            bitsPerComponent: 8,
+            bitsPerPixel: 32,
+            bytesPerRow: neoScene.width * 4 * (neoMacArtworkEnabled ? 2 : 1),
+            space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
+            provider: provider,
+            decode: nil,
+            shouldInterpolate: false,
+            intent: .defaultIntent
+          ) else { return }
+    imageScale = neoMacArtworkEnabled ? 2 : 1
+    levelImage = image
+    sceneTick = session.currentTick
+  }
   var session: (any GameSession)? {
     didSet { if oldValue !== session { reticleFeedback = ReticleFeedback(); assignedTarget = nil; displayedTarget = nil; hdrBirths.removeAll(); hdrLastTick = 0; speedTrails.reset() } }
   }
+  var failureMoodAmount: CGFloat = 0
   var assets: ClassicMainDATAssets?
+  var neoSprites: NeoLemmixSpriteSet? { didSet { invalidateSprites() } }
   var palette: [ClassicRGBColor] = []
   var viewport = Viewport()
+  private var precisionLens = AnimatedPrecisionZoomLens()
+  private var precisionScroll = PrecisionZoomScrollGesture()
+  private let precisionZoomAnimation = PrecisionZoomAnimation()
+  var precisionStatus = PrecisionZoomStatus() { didSet { needsDisplay = true } }
+  var deathCountdownText = "" { didSet { if oldValue != deathCountdownText { needsDisplay = true } } }
+  var deathCountdownAccessibilityText = ""
+  var showsDeathCountdownOverlay = false { didSet { needsDisplay = true } }
+  var soundViewport: GameplaySoundViewport {
+    let topLeft = viewport.levelPoint(from: precisionLens.source(bounds.origin))
+    let bottomRight = viewport.levelPoint(from: precisionLens.source(CGPoint(x: bounds.maxX, y: bounds.maxY)))
+    return GameplaySoundViewport(x: topLeft.x, y: topLeft.y,
+      width: bottomRight.x - topLeft.x, height: bottomRight.y - topLeft.y)
+  }
+  var precisionVisibleLevelRect: CGRect {
+    let topLeft = viewport.levelPoint(from: precisionLens.source(bounds.origin))
+    let bottomRight = viewport.levelPoint(from: precisionLens.source(CGPoint(x: bounds.maxX, y: bounds.maxY)))
+    return CGRect(x: topLeft.x, y: topLeft.y,
+      width: bottomRight.x - topLeft.x, height: bottomRight.y - topLeft.y)
+      .intersection(CGRect(origin: .zero, size: viewport.levelSize))
+  }
+  var precisionAnchor: CGPoint {
+    let centre = CGPoint(x: bounds.midX, y: bounds.midY)
+    let point = cursorViewPoint ?? window.map { convert($0.mouseLocationOutsideOfEventStream, from: nil) } ?? centre
+    return bounds.contains(point) ? point : centre
+  }
+  func setPrecisionZoom(_ enabled: Bool, at cursor: CGPoint? = nil) {
+    let point = cursor.flatMap { bounds.contains($0) ? $0 : nil } ?? precisionAnchor
+    precisionZoomAnimation.start(from: precisionLens.magnification, to: enabled ? 2 : 1,
+      reduceMotion: reduceMotion) { [weak self] magnification in
+        guard let self else { return }
+        let delta = self.precisionLens.transition(toMagnification: magnification, at: point,
+          scaleX: self.viewport.zoom, scaleY: self.viewport.zoom)
+        self.viewport.scroll(dx: delta.x, dy: delta.y)
+        self.onViewportChanged?()
+        self.needsDisplay = true
+      }
+  }
   var onAssign: ((Int) -> Void)?
   var onViewportChanged: (() -> Void)?
+  var onPrecisionScroll: ((PrecisionZoomScrollAction, CGPoint) -> Void)?
   /// Called when a click should dismiss a briefing or a result.
   var onAdvancePhase: (() -> Void)?
   var onSelectOverlayLine: ((Int) -> Void)?
@@ -267,6 +403,9 @@ struct ReticleFeedback {
 
   private var spriteCache: [String: NSImage] = [:]
   private var spritePixels: [String: CGImage] = [:]
+  private var selectionTargetID: Int?
+  private var selectedSprite: (pixels: CGImage, rect: CGRect)?
+  private var skillBadgeCache: [Int: NSImage] = [:]
   var usesControllerPointer: Bool { controllerPointer != nil }
   private var controllerPointer: CGPoint?
   func moveControllerPointer(_ dx: Double, _ dy: Double) {
@@ -276,6 +415,7 @@ struct ReticleFeedback {
     handleMove(to: next); controllerPointer = next
   }
   let assignmentHighlight = LemmingFocusHighlight()
+  private let assignmentPulse = LemmingAssignmentPulse()
   var selectedSkill: () -> Int = { 0 }
   private var reticleFeedback = ReticleFeedback()
   private var reticleRedraw: Task<Void, Never>?
@@ -283,6 +423,7 @@ struct ReticleFeedback {
 
   func didAssign(to id: Int) {
     assignedTarget = id
+    assignmentPulse.show(id)
     if !reduceFlashes { reticleFeedback.assigned(now: ProcessInfo.processInfo.systemUptime) }
     needsDisplay = true
     scheduleReticleRedraw()
@@ -290,17 +431,28 @@ struct ReticleFeedback {
 
   private func scheduleReticleRedraw() {
     let remaining = reticleFeedback.nextChange - ProcessInfo.processInfo.systemUptime
-    guard remaining > 0 else { return }
+    let assignmentRemaining = assignmentPulse.remaining
+    let skill = session.flatMap { session in
+      session.skills.indices.contains(selectedSkill()) ? session.skills[selectedSkill()] : nil
+    }
+    let fadingBadge = skillCursorIconSize != .none && skill?.isInfinite == false && skill?.count == 1
+    let animatedPointer = cursorViewPoint != nil && !reduceMotion && !reduceFlashes && session != nil
+      && (lemmingSelectionStyle == .obvious || fadingBadge)
+    let delay = max(remaining, assignmentRemaining, animatedPointer ? 1.0 / 30.0 : 0)
     reticleRedraw?.cancel()
+    reticleRedraw = nil
+    guard delay > 0 else { return }
     reticleRedraw = Task { [weak self] in
-      try? await Task.sleep(for: .seconds(remaining + 0.005))
+      try? await Task.sleep(nanoseconds: UInt64((delay + 0.005) * 1_000_000_000))
       guard !Task.isCancelled else { return }
       self?.needsDisplay = true
+      self?.scheduleReticleRedraw()
     }
   }
 
   func reticleState(at point: CGPoint, now: TimeInterval) -> ReticleState {
-    let eligible = lemming(at: point) != nil
+    let target = clickTarget(at: point)
+    let eligible = target.map { session?.canAssign(skillIndex: selectedSkill(), to: $0.id) == true } ?? false
     if eligible { return reticleFeedback.state(eligible: true, duplicate: nil, now: now) }
     let skill = selectedSkill()
     let duplicate = session?.lemmings.filter { contains($0, point) }.sorted {
@@ -309,9 +461,50 @@ struct ReticleFeedback {
     return reticleFeedback.state(eligible: eligible, duplicate: duplicate.map { "\($0.id):\(skill)" }, now: now)
   }
   private var displayedTarget: (id: Int, point: CGPoint, time: TimeInterval)?
-  var pointerLemmingID: Int? { cursorViewPoint.flatMap { clickTarget(at: viewport.levelPoint(from: $0))?.id } }
+  var pointerLemmingID: Int? { cursorViewPoint.flatMap { clickTarget(at: viewport.levelPoint(from: precisionLens.source($0)))?.id } }
   private var cursorViewPoint: CGPoint?
   private var trackingArea: NSTrackingArea?
+
+  /// Captures the visible state before a rewind starts.
+  func beginRewindCue(at tick: Int) {
+    rewindGhost = nil
+    if let bitmap = bitmapImageRepForCachingDisplay(in: bounds) {
+      cacheDisplay(in: bounds, to: bitmap)
+      rewindGhost = bitmap.cgImage
+    }
+    rewindOriginTick = tick
+    rewindCurrentTick = tick
+    rewindCueStartedAt = ProcessInfo.processInfo.systemUptime
+    rewindCueUntil = .infinity
+    needsDisplay = true
+    scheduleRewindCueRedraw()
+  }
+
+  /// Updates the transport cue after a deterministic history seek.
+  func updateRewindCue(at tick: Int) {
+    rewindCurrentTick = tick
+    needsDisplay = true
+  }
+
+  /// Leaves the origin ghost on screen briefly, then fades it away.
+  func endRewindCue() {
+    guard rewindCueStartedAt != nil else { return }
+    rewindCueStartedAt = nil
+    rewindCueUntil = ProcessInfo.processInfo.systemUptime + 0.35
+    needsDisplay = true
+    scheduleRewindCueRedraw()
+  }
+
+  private func scheduleRewindCueRedraw() {
+    rewindCueTask?.cancel()
+    guard rewindCueStartedAt != nil || ProcessInfo.processInfo.systemUptime < rewindCueUntil else { return }
+    rewindCueTask = Task { [weak self] in
+      try? await Task.sleep(nanoseconds: 33_000_000)
+      guard !Task.isCancelled else { return }
+      self?.needsDisplay = true
+      self?.scheduleRewindCueRedraw()
+    }
+  }
 
   override var isFlipped: Bool { true }
   override var acceptsFirstResponder: Bool { true }
@@ -332,10 +525,19 @@ struct ReticleFeedback {
     if let trackingArea { removeTrackingArea(trackingArea) }
     let area = NSTrackingArea(
       rect: bounds,
-      options: [.activeInKeyWindow, .mouseMoved, .mouseEnteredAndExited, .inVisibleRect],
+      options: [.activeInKeyWindow, .mouseMoved, .mouseEnteredAndExited, .cursorUpdate, .inVisibleRect],
       owner: self)
     addTrackingArea(area)
     trackingArea = area
+  }
+
+  override func resetCursorRects() {
+    guard phase == .playing else { return }
+    addCursorRect(bounds, cursor: GameCursor.gameplayCursor)
+  }
+
+  override func cursorUpdate(with event: NSEvent) {
+    if phase == .playing { GameCursor.gameplayCursor.set() } else { NSCursor.arrow.set() }
   }
 
   /// Takes a cursor position directly.
@@ -352,13 +554,21 @@ struct ReticleFeedback {
   /// Takes a click position directly.
   func handleClick(at point: CGPoint) {
     guard phase == .playing else {
+      if let rect = overlayUpdateButtonFrame(), rect.contains(point) {
+        onUpdate?()
+        return
+      }
+      if let rect = overlaySettingsButtonFrame(), rect.contains(point) {
+        onSettings?()
+        return
+      }
       if overlayHandoverRetryTitle != nil, let index = handoverButtons.firstIndex(where: { $0.contains(point) }) {
         if index == 0 { onHandoverRetry?() } else { onAdvancePhase?() }
         return
       }
       if overlayProfileInitials != nil,
         let index = overlayFooterButtons.firstIndex(where: { $0.contains(point) }) {
-        if index == 0 { onProfiles?() } else { onRecords?() }
+        activateFooterButton(index)
         return
       }
       if let line = overlayRetryLine, overlayLineRects.indices.contains(line), overlayLineRects[line].contains(point) {
@@ -374,7 +584,7 @@ struct ReticleFeedback {
     }
     assignmentHighlight.clear()
     cursorViewPoint = point
-    let levelPoint = viewport.levelPoint(from: point)
+    let levelPoint = viewport.levelPoint(from: precisionLens.source(point))
     let target = clickTarget(at: levelPoint)
     displayedTarget = nil
     if let target { onAssign?(target.id) }
@@ -415,13 +625,33 @@ struct ReticleFeedback {
     return nil
   }
 
+  var edgeScrollVector: CGPoint? {
+    guard let point = cursorViewPoint, bounds.width > 0, bounds.height > 0,
+      bounds.contains(point) else { return nil }
+    let margin = min(48.0, bounds.height / 2)
+    let vertical = point.y < margin ? -(margin - point.y) / margin * 8
+      : point.y > bounds.height - margin ? (point.y - bounds.height + margin) / margin * 8 : 0
+    return CGPoint(x: edgeScrollDelta ?? 0, y: vertical)
+  }
+
   override func mouseDown(with event: NSEvent) {
     handleClick(at: convert(event.locationInWindow, from: nil))
   }
 
   override func scrollWheel(with event: NSEvent) {
-    // A trackpad swipe scrolls the level sideways, as the classic game does.
-    viewport.scroll(dx: -Double(event.scrollingDeltaX), dy: -Double(event.scrollingDeltaY))
+    handleScroll(event, at: convert(event.locationInWindow, from: nil))
+  }
+
+  func handleScroll(_ event: NSEvent, at point: CGPoint?, pansVertically: Bool = true) {
+    if phase == .playing, session?.isComplete == false, let point, bounds.contains(point) {
+      switch precisionScroll.handle(event) {
+      case .zoom(let action): onPrecisionScroll?(action, point); return
+      case .consumed: return
+      case .pan: break
+      }
+    }
+    viewport.scroll(dx: -Double(event.scrollingDeltaX),
+      dy: pansVertically ? -Double(event.scrollingDeltaY) : 0)
     onViewportChanged?()
     needsDisplay = true
   }
@@ -429,8 +659,8 @@ struct ReticleFeedback {
   /// A small allowance covers sprite edges without reaching across the crowd.
   private static let pickBox = (halfWidth: CGFloat(6), top: CGFloat(14), bottom: CGFloat(5))
 
-  /// Both the green reticle and a fresh click use the nearest eligible
-  /// lemming, with an approaching follower preferred over a bridge builder.
+  /// Hover and input share skill priorities. A current builder takes priority
+  /// only while it can accept Build, so lemmings behind it stay selectable.
   func lemming(at point: CGPoint) -> SessionLemming? {
     guard let session else { return nil }
     let skill = selectedSkill()
@@ -438,11 +668,29 @@ struct ReticleFeedback {
       let a = distanceSquared($0, point), b = distanceSquared($1, point)
       return a == b ? $0.id > $1.id : a < b
     }
+    let name = session.skills.indices.contains(skill) ? session.skills[skill].name.lowercased() : ""
+    if favorBuilders, name == "builder", !session.isComplete, !session.isNuking,
+       session.skills[skill].isInfinite || session.skills[skill].count > 0,
+       let builder = candidates.first(where: {
+         [.building, .shrugging].contains($0.pose) && session.canAssign(skillIndex: skill, to: $0.id)
+       }) {
+      return builder
+    }
     let eligible = candidates.filter { session.canAssign(skillIndex: skill, to: $0.id) }
+    if favorBombBlockers, name == "bomber", let blocker = eligible.first(where: { $0.pose == .blocking }) {
+      return blocker
+    }
     guard let nearest = eligible.first else { return nil }
-    if favorApproachingLemmings, nearest.pose == .building,
-       let follower = eligible.first(where: { isApproaching($0, point: point) && isBehind($0, builder: nearest) }) {
-      return follower
+    if favorApproachingLemmings, nearest.pose == .building {
+      // A follower behind the builder can sit outside the click's own pick
+      // box, so look for one near the builder instead of near the click.
+      let builderPoint = CGPoint(x: CGFloat(nearest.x), y: CGFloat(nearest.y))
+      let nearbyFollowers = session.lemmings
+        .filter { $0.id != nearest.id && contains($0, builderPoint) && session.canAssign(skillIndex: skill, to: $0.id) }
+        .sorted { distanceSquared($0, point) < distanceSquared($1, point) }
+      if let follower = nearbyFollowers.first(where: { isApproaching($0, point: point) && isBehind($0, builder: nearest) }) {
+        return follower
+      }
     }
     if favorApproachingLemmings, !isApproaching(nearest, point: point),
        let approaching = eligible.first(where: { isApproaching($0, point: point) && $0.facingLeft != nearest.facingLeft }) {
@@ -465,6 +713,12 @@ struct ReticleFeedback {
 
   /// Honour the green target briefly while it walks between display and input.
   func clickTarget(at point: CGPoint) -> SessionLemming? {
+    if let session, session.skills.indices.contains(selectedSkill()) {
+      let name = session.skills[selectedSkill()].name.lowercased()
+      if (favorBuilders && name == "builder") || (favorBombBlockers && name == "bomber") {
+        return lemming(at: point)
+      }
+    }
     if let displayedTarget, ProcessInfo.processInfo.systemUptime - displayedTarget.time <= 0.12,
        hypot(point.x - displayedTarget.point.x, point.y - displayedTarget.point.y) <= 2,
        let session, let target = session.lemmings.first(where: { $0.id == displayedTarget.id }),
@@ -480,6 +734,10 @@ struct ReticleFeedback {
     return dx * dx + dy * dy
   }
 
+  func hasLemming(at point: CGPoint) -> Bool {
+    session?.lemmings.contains { contains($0, point) } == true
+  }
+
   private func contains(_ lemming: SessionLemming, _ point: CGPoint) -> Bool {
     let box = Self.pickBox
     let x = CGFloat(lemming.x), y = CGFloat(lemming.y)
@@ -492,10 +750,16 @@ struct ReticleFeedback {
   // MARK: - Drawing
 
   override func draw(_ dirtyRect: NSRect) {
+    selectionEffect = nil
     defer {
-      ControllerPointer.draw(controllerPointer)
-      if let id = assignmentHighlight.target, let lem = session?.lemmings.first(where: { $0.id == id }) {
-        assignmentHighlight.draw(at: viewport.viewPoint(fromLevel: CGPoint(x: lem.x, y: lem.y - 6)), scale: viewport.zoom)
+      if phase == .playing { startCountdown.draw(in: bounds) }
+      if lemmingSelectionStyle == .obvious, phase == .playing, !GameCursor.gameplaySuppressed,
+         let id = assignmentHighlight.target, let lem = session?.lemmings.first(where: { $0.id == id }) {
+        LemmingSelectionGlow.draw(at: precisionLens.display(viewport.viewPoint(fromLevel: CGPoint(x: lem.x, y: lem.y - 6))),
+          scale: viewport.zoom, tint: .systemYellow, animated: !reduceMotion && !reduceFlashes)
+      }
+      if presentsHDR, let selectionEffect {
+        LemmingSelectionRenderer.draw(selectionEffect)
       }
     }
     updateSpeedTrails()
@@ -503,8 +767,9 @@ struct ReticleFeedback {
     let tick = session?.currentTick ?? 0
     if tick < hdrLastTick { hdrBirths.removeAll() }
     hdrLastTick = tick
-    defer { hdrOverlay?.update(presentsHDR ? hdrFlashes : []) }
+    defer { hdrOverlay?.update(presentsHDR ? displayedHDRFlashes : []) }
     refreshClassicScene()
+    refreshNeoScene()
     // Fill the view's own area, not the dirty rectangle. AppKit passes a
     // rectangle that can cover the whole window, because these views share one
     // backing layer.
@@ -534,10 +799,24 @@ struct ReticleFeedback {
             operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
         }
       } else {
+        NSGraphicsContext.saveGraphicsState()
+        NSBezierPath(rect: bounds).addClip()
+        precisionLens.applyToCurrentGraphicsContext()
         drawLevel(levelImage)
         speedTrails.draw(enabled: hdEffectsEnabled && !reduceMotion && isFastForward && phase == .playing, in: bounds) { drawLemmings() }
+        NSGraphicsContext.restoreGraphicsState()
       }
-      if phase == .playing { drawTurnBadge(); drawCursor() }
+      FailureMoodOverlay.draw(in: bounds, amount: failureMoodAmount)
+      drawRewindCue()
+      if phase == .playing {
+        drawTurnBadge(); drawCursor()
+        let zoomBadgeSize = precisionStatus.draw(at: CGPoint(x: 12, y: 12),
+          scale: bounds.width >= 960 ? 2 : 1)
+        if showsDeathCountdownOverlay && !deathCountdownText.isEmpty {
+          GameTypography.annotation(deathCountdownText,
+            at: CGPoint(x: 12, y: 12 + zoomBadgeSize.height + 4), palette: .blue)
+        }
+      }
     }
     if phase != .playing { drawOverlay() }
   }
@@ -562,6 +841,62 @@ struct ReticleFeedback {
       alpha: 1)
   }
 
+  private struct OverlayLayout {
+    let scale: CGFloat
+    let rowHeight: CGFloat
+    let headerHeight: CGFloat
+    let board: CGRect
+  }
+
+  private func overlayLayout() -> OverlayLayout {
+    let showsLogo = overlayTitle == "LEMMINGS" && macInterface?.interface.logo != nil
+    let headerUnits: CGFloat = showsLogo ? 116 : 62
+    let marchHeight: CGFloat = overlayShowsLemmings ? 64 : 0
+    let savedCountUnits: CGFloat = overlaySavedCounts == nil ? 0 : 40
+    let scale = min(2.5, bounds.width / 1100,
+      max(1, bounds.height - marchHeight - 24)
+        / (headerUnits + 106 + CGFloat(overlayLines.count) * 42 + savedCountUnits))
+    let width = min(bounds.width - 28 * scale, 900 * scale)
+    let headerHeight = headerUnits * scale
+    let height = (106 + CGFloat(overlayLines.count) * 42 + savedCountUnits) * scale + headerHeight
+    let board = CGRect(
+      x: (bounds.width - width) / 2,
+      y: max(12, (bounds.height - marchHeight - height) / 2),
+      width: width,
+      height: height)
+    return OverlayLayout(
+      scale: scale,
+      rowHeight: 42 * scale,
+      headerHeight: headerHeight,
+      board: board)
+  }
+
+  private func overlaySavedCountsFrame(_ layout: OverlayLayout) -> CGRect {
+    CGRect(x: layout.board.minX + 20 * layout.scale,
+      y: layout.board.minY + 23 * layout.scale + layout.headerHeight
+        + CGFloat(overlayLines.count) * layout.rowHeight,
+      width: layout.board.width - 40 * layout.scale, height: 32 * layout.scale)
+  }
+
+  private func overlaySettingsButtonFrame(_ layout: OverlayLayout? = nil) -> CGRect? {
+    guard overlayShowsSettingsButton else { return nil }
+    let layout = layout ?? overlayLayout()
+    let side = max(44, 48 * layout.scale)
+    return CGRect(
+      x: layout.board.maxX - 18 * layout.scale - side,
+      y: layout.board.minY + 18 * layout.scale,
+      width: side,
+      height: side)
+  }
+
+  private func overlayUpdateButtonFrame(_ layout: OverlayLayout? = nil) -> CGRect? {
+    guard overlayAvailableUpdate != nil, overlayShowsSettingsButton else { return nil }
+    let layout = layout ?? overlayLayout()
+    let side = max(44, 48 * layout.scale)
+    return CGRect(x: layout.board.minX + 18 * layout.scale, y: layout.board.minY + 18 * layout.scale,
+      width: side, height: side)
+  }
+
   private func drawOverlay() {
     overlayLineRects = []
     overlayFooterButtons = []
@@ -569,17 +904,12 @@ struct ReticleFeedback {
     NSColor.black.withAlphaComponent(0.42).setFill()
     bounds.fill()
     let showsLogo = overlayTitle == "LEMMINGS" && macInterface?.interface.logo != nil
-    let headerUnits: CGFloat = showsLogo ? 116 : 62
-    // Reserve separate space for the footer and the marching sprites.
-    let marchHeight: CGFloat = overlayShowsLemmings ? 64 : 0
-    let scale = min(2.5, bounds.width / 1100,
-      max(1, bounds.height - marchHeight - 24) / (headerUnits + 106 + CGFloat(overlayLines.count) * 42))
-    let rowHeight = 42 * scale
-    let width = min(bounds.width - 28 * scale, 900 * scale)
-    let headerHeight = headerUnits * scale
-    let height = (106 + CGFloat(overlayLines.count) * 42) * scale + headerHeight
-    let board = CGRect(x: (bounds.width - width) / 2,
-      y: max(12, (bounds.height - marchHeight - height) / 2), width: width, height: height)
+    let layout = overlayLayout()
+    let scale = layout.scale
+    let rowHeight = layout.rowHeight
+    let headerHeight = layout.headerHeight
+    let board = layout.board
+    let settingsButton = overlaySettingsButtonFrame(layout)
 
     // Chunky stone edging and a moss cap echo the level terrain.
     (macInterface == nil ? NSColor(calibratedRed: 0.09, green: 0.12, blue: 0.16, alpha: 0.97)
@@ -589,7 +919,7 @@ struct ReticleFeedback {
 
     // Use one face and scale for every row, fitted to the longest label.
     let longest = overlayLines.map { MacInterfaceRenderer.menuText($0).count }.max() ?? 1
-    let rowTextWidth = width - 64 * scale
+    let rowTextWidth = board.width - 64 * scale
     let rowTextHeight = rowHeight - 12 * scale
     var menuFace = ClassicMacUserInterface.Face.small
     var menuScale = 1
@@ -607,9 +937,17 @@ struct ReticleFeedback {
 
     var y = board.minY + 19 * scale
     if showsLogo, let macInterface {
+      let maximumWidth: CGFloat
+      if let settings = settingsButton {
+        maximumWidth = max(1, min(
+          board.width - 40 * scale,
+          2 * (settings.minX - board.midX - 10 * scale)))
+      } else {
+        maximumWidth = board.width - 40 * scale
+      }
       _ = macInterface.drawLogo(
         centerX: bounds.midX, top: y - 4 * scale,
-        maximumWidth: board.width - 40 * scale, maximumHeight: headerHeight - 26 * scale)
+        maximumWidth: maximumWidth, maximumHeight: headerHeight - 26 * scale)
     } else if let overlayTitle {
       let heading = CGRect(x: board.minX + 18 * scale, y: y,
         width: board.width - 36 * scale, height: headerHeight - 18 * scale)
@@ -617,11 +955,47 @@ struct ReticleFeedback {
         GamePixelText.draw(overlayTitle, in: heading)
       }
     }
+    if let settings = settingsButton {
+      let hovered = cursorViewPoint.map(settings.contains) ?? false
+      let pixel = max(1, floor(scale))
+      GameStoneButton.draw(
+        settings,
+        selected: hovered,
+        pixel: pixel,
+        backdrop: PanelGlyph.rock.image(fitting: settings.size))
+      let well = GameStoneButton.well(settings, pixel: pixel).insetBy(dx: 2 * pixel, dy: 2 * pixel)
+      if let image = PanelGlyph.settings.image(fitting: well.size) {
+        image.draw(
+          in: CGRect(
+            x: floor(well.midX - image.size.width / 2),
+            y: floor(well.midY - image.size.height / 2),
+            width: image.size.width,
+            height: image.size.height),
+          from: .zero,
+          operation: .sourceOver,
+          fraction: 1,
+          respectFlipped: true,
+          hints: [.interpolation: NSImageInterpolation.none.rawValue])
+      }
+    }
+    if let update = overlayUpdateButtonFrame(layout) {
+      let pixel = max(1, floor(scale))
+      GameStoneButton.draw(update, selected: cursorViewPoint.map(update.contains) ?? false, pixel: pixel,
+        backdrop: PanelGlyph.rock.image(fitting: update.size))
+      let well = GameStoneButton.well(update, pixel: pixel).insetBy(dx: 2 * pixel, dy: 2 * pixel)
+      if let image = PanelGlyph.download.image(fitting: well.size) {
+        image.draw(in: CGRect(x: floor(well.midX - image.size.width / 2), y: floor(well.midY - image.size.height / 2),
+          width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
+          fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
+      }
+    }
     y += headerHeight
     for (index, line) in overlayLines.enumerated() {
       let row = CGRect(x: board.minX + 18 * scale, y: y,
         width: board.width - 36 * scale, height: rowHeight - 5 * scale)
-      overlayLineRects.append(row)
+      // Include the row spacing in selectable targets when the home menu is compact.
+      overlayLineRects.append(overlayHighlight == nil ? row : CGRect(
+        x: row.minX, y: row.minY, width: row.width, height: rowHeight))
       let chosen = index == overlayHighlight
       if overlayHighlight != nil {
         (chosen
@@ -650,6 +1024,11 @@ struct ReticleFeedback {
       if index == 0, turnInitials != nil { drawTurnPortrait(in: row, scale: scale) }
       y += rowHeight
     }
+    if let overlaySavedCounts {
+      drawMenuGameText(overlaySavedCounts, in: overlaySavedCountsFrame(layout),
+        face: .small, scale: max(1, Int(scale)), palette: .green)
+      y += 40 * scale
+    }
     if let retryTitle = overlayHandoverRetryTitle {
       let footer = CGRect(x: board.minX + 20 * scale, y: y + 12 * scale,
         width: board.width - 40 * scale, height: max(36, 48 * scale))
@@ -668,18 +1047,19 @@ struct ReticleFeedback {
         width: board.width - 40 * scale, height: max(36, 48 * scale))
       let footerScale = max(1, Int(scale.rounded()))
       let gap: CGFloat = 12 * scale
-      // The badge carries a hot seat roster like EKV V UVA, so it grows with the
-      // text instead of holding one fixed set of initials. The two buttons keep
-      // a workable width, and menuLine shortens the roster if it still runs out.
+      let labels = ["PROFILES", "RECORDS", "PLAYLISTS"]
+      let count = CGFloat(labels.count)
+      // Let the roster grow while keeping each footer action readable.
       let cell = CGFloat((macInterface?.font(.small)?.cellWidth ?? 8) * footerScale)
       let natural = CGFloat(MacInterfaceRenderer.menuText(initials).count) * cell + 12 * scale
-      let widest = max(64 * scale, footer.width - 2 * (110 * scale) - gap * 2)
+      let minimumButtonWidth = max(110 * scale, 9 * cell + 16 * scale)
+      let widest = max(64 * scale, footer.width - count * (minimumButtonWidth + gap))
       let initialsWidth = max(64 * scale, min(natural, widest))
-      let buttonWidth = min(180 * scale, max(0, (footer.width - initialsWidth - gap * 2) / 2))
-      let start = floor(footer.midX - (initialsWidth + 2 * buttonWidth + 2 * gap) / 2)
+      let buttonWidth = min(180 * scale, max(0, (footer.width - initialsWidth - gap * count) / count))
+      let start = floor(footer.midX - (initialsWidth + count * (buttonWidth + gap)) / 2)
       drawMenuGameText(initials, in: CGRect(x: start, y: footer.minY,
         width: initialsWidth, height: footer.height), face: .small, scale: footerScale, palette: .green)
-      for (index, label) in ["PROFILES", "RECORDS"].enumerated() {
+      for (index, label) in labels.enumerated() {
         let rect = CGRect(x: start + initialsWidth + gap + CGFloat(index) * (buttonWidth + gap),
           y: footer.minY, width: buttonWidth, height: footer.height)
         overlayFooterButtons.append(rect)
@@ -814,11 +1194,22 @@ struct ReticleFeedback {
   private func drawLemmings() {
     guard let session else { return }
     let lemmings = session.lemmings
+    selectionTargetID = phase == .playing && !GameCursor.gameplaySuppressed
+      ? assignmentHighlight.target ?? pointerLemmingID : nil
+    selectedSprite = nil
     if hdEffectsEnabled && !reduceMotion && isFastForward && phase == .playing {
       for lemming in lemmings { draw(lemming, ghostsOnly: true) }
     }
     // Every solid lemming and its labels cover every ghost, including neighbours.
-    for lemming in lemmings { draw(lemming) }
+    let solidLemmings = session.lemmingsForRendering(
+      selectedID: assignmentHighlight.target,
+      highlightedID: pointerLemmingID)
+    for lemming in solidLemmings { draw(lemming) }
+    if lemmingSelectionStyle == .modern, let selectedSprite {
+      selectionEffect = LemmingSelectionEffect(sprite: selectedSprite.pixels,
+        rect: precisionLens.display(selectedSprite.rect), clipRect: bounds,
+        time: reduceMotion || reduceFlashes ? nil : Double(session.currentTick) / Double(session.ticksPerSecond))
+    }
   }
 
   func updateSpeedTrails() {
@@ -862,9 +1253,46 @@ struct ReticleFeedback {
   private func draw(_ lemming: SessionLemming, ghostsOnly: Bool = false) {
     let motion = ghostsOnly ? speedTrails.motion(actor: lemming.id) : .zero
     if ghostsOnly && motion == .zero { return }
+    if let action = lemming.neoAction, let neoSprites,
+       let frame = neoSprites.frame(
+         action: action,
+         direction: lemming.facingLeft ? .left : .right,
+         animationFrame: lemming.animationFrame,
+         traits: lemming.neoTraits
+       ) {
+      let key = "neo-\(frame.cacheKey)"
+      let origin = viewport.viewPoint(fromLevel: CGPoint(
+        x: Double(lemming.x) - Double(frame.footX) / Double(frame.pixelScale),
+        y: Double(lemming.y) - Double(frame.footY) / Double(frame.pixelScale)
+      ))
+      var rect = CGRect(
+        x: origin.x,
+        y: origin.y,
+        width: frame.image.size.width * viewport.zoom,
+        height: frame.image.size.height * viewport.zoom
+      )
+      var fraction: CGFloat = 1
+      if action == .exploding { (rect, fraction) = bombPop(rect, tick: lemming.animationFrame) }
+      guard rect.intersects(bounds), fraction > 0.01 else { return }
+      if ghostsOnly {
+        speedTrails.drawBehind(actor: lemming.id, sprite: frame.image, in: rect, motion: motion,
+          pixelSize: CGSize(width: viewport.zoom, height: viewport.zoom))
+        return
+      }
+      drawSprite(frame.image, key: key, in: rect, alpha: fraction)
+      captureSelectionSprite(for: lemming.id, key: key, sprite: frame.image, in: rect)
+      drawAssignmentPulse(for: lemming.id, key: key, sprite: frame.image, in: rect)
+      if action == .exploding { drawBombCore(in: rect, tick: lemming.animationFrame, actor: lemming.id) }
+      if let countdown = lemming.countdown { drawCountdown(countdown, above: rect) }
+      return
+    }
+
     guard let assets, !palette.isEmpty else { return }
     let direction: ClassicSpriteDirection = lemming.facingLeft ? .left : .right
     let pose = lemming.pose
+    let backpack = showClassicSkillBackpacks ? ClassicSkillBackpack.kind(for: lemming) : nil
+    let backpackKey = backpack.map { "-pack-\($0.rawValue)" } ?? ""
+    let backpackPadding = backpack == nil ? 0.0 : 2.0
     guard
       let animation = assets.animation(for: pose, direction: direction)
         ?? assets.animation(for: pose, direction: .none),
@@ -872,15 +1300,17 @@ struct ReticleFeedback {
     else { return }
 
     if let frame = macArtwork?.lemming(pose: pose, left: lemming.facingLeft, tick: lemming.animationFrame) {
-      let key = "mac-\(pose.rawValue)-\(direction.rawValue)-\(lemming.animationFrame)"
-      let sprite = spriteCache[key] ?? frame.makeNSImage()
+      let key = "mac-\(pose.rawValue)-\(direction.rawValue)-\(lemming.animationFrame)\(backpackKey)"
+      let sprite = spriteCache[key] ?? (backpack == nil ? frame.makeNSImage() :
+        ClassicSkillBackpack.image(rgba: frame.rgba, width: frame.width, height: frame.height,
+          pixelScale: 2, pose: pose, left: lemming.facingLeft, kind: backpack))
       if let sprite {
         if spriteCache.count < 1500 { spriteCache[key] = sprite }
         let origin = viewport.viewPoint(fromLevel: CGPoint(
-          x: Double(lemming.x + animation.offsetX) + Double(frame.x) / 2,
+          x: Double(lemming.x + animation.offsetX) + Double(frame.x) / 2 - backpackPadding,
           y: Double(lemming.y + animation.offsetY) + Double(frame.y) / 2))
         var rect = CGRect(x: origin.x, y: origin.y,
-          width: Double(frame.width) * viewport.zoom / 2, height: Double(frame.height) * viewport.zoom / 2)
+          width: sprite.size.width * viewport.zoom / 2, height: sprite.size.height * viewport.zoom / 2)
         var fraction: CGFloat = 1
         if pose == .explosion { (rect, fraction) = bombPop(rect, tick: lemming.animationFrame) }
         guard rect.intersects(bounds), fraction > 0.01 else { return }
@@ -890,6 +1320,8 @@ struct ReticleFeedback {
           return
         }
         drawSprite(sprite, key: key, in: rect, alpha: fraction)
+        captureSelectionSprite(for: lemming.id, key: key, sprite: sprite, in: rect)
+        drawAssignmentPulse(for: lemming.id, key: key, sprite: sprite, in: rect)
         if pose == .explosion { drawBombCore(in: rect, tick: lemming.animationFrame, actor:lemming.id) }
         if let countdown = lemming.countdown { drawCountdown(countdown, above: rect) }
         return
@@ -897,18 +1329,18 @@ struct ReticleFeedback {
     }
 
     let index = abs(lemming.animationFrame) % animation.frames.count
-    let key = "\(pose.rawValue)-\(direction.rawValue)-\(index)"
+    let key = "\(pose.rawValue)-\(direction.rawValue)-\(index)\(backpackKey)"
     let sprite: NSImage
     if let cached = spriteCache[key] {
       sprite = cached
     } else {
-      guard let made = image(from: animation.frames[index]) else { return }
-      spriteCache[key] = made
+      guard let made = image(from: animation.frames[index], backpack: backpack, pose: pose, left: lemming.facingLeft) else { return }
+      if spriteCache.count < 1500 { spriteCache[key] = made }
       sprite = made
     }
 
     let levelOrigin = CGPoint(
-      x: CGFloat(lemming.x + animation.offsetX),
+      x: CGFloat(lemming.x + animation.offsetX) - backpackPadding,
       y: CGFloat(lemming.y + animation.offsetY))
     let origin = viewport.viewPoint(fromLevel: levelOrigin)
     var rect = CGRect(
@@ -923,11 +1355,28 @@ struct ReticleFeedback {
       return
     }
     drawSprite(sprite, key: key, in: rect, alpha: fraction)
+    captureSelectionSprite(for: lemming.id, key: key, sprite: sprite, in: rect)
+    drawAssignmentPulse(for: lemming.id, key: key, sprite: sprite, in: rect)
     if pose == .explosion { drawBombCore(in: rect, tick: lemming.animationFrame, actor:lemming.id) }
 
     if let countdown = lemming.countdown {
       drawCountdown(countdown, above: rect)
     }
+  }
+
+  private func drawAssignmentPulse(for id: Int, key: String, sprite: NSImage, in rect: CGRect) {
+    guard assignmentPulse.target == id,
+          let pixels = spritePixels[key] ?? sprite.cgImage(forProposedRect: nil, context: nil, hints: nil)
+    else { return }
+    assignmentPulse.draw(sprite: pixels, in: rect, scale: viewport.zoom,
+      reduceMotion: reduceMotion, reduceFlashes: reduceFlashes)
+  }
+
+  private func captureSelectionSprite(for id: Int, key: String, sprite: NSImage, in rect: CGRect) {
+    guard selectionTargetID == id,
+          let pixels = spritePixels[key] ?? sprite.cgImage(forProposedRect: nil, context: nil, hints: nil)
+    else { return }
+    selectedSprite = (pixels, rect)
   }
 
   private func drawCountdown(_ countdown: Int, above rect: CGRect) {
@@ -944,49 +1393,114 @@ struct ReticleFeedback {
   }
 
   private func drawCursor() {
-    guard let cursorViewPoint else { return }
-    let point = viewport.levelPoint(from: cursorViewPoint)
-    let target = lemming(at: point)
+    guard !GameCursor.gameplaySuppressed, let cursorViewPoint else { return }
+    let point = viewport.levelPoint(from: precisionLens.source(cursorViewPoint))
+    let target = clickTarget(at: point)
     let now = ProcessInfo.processInfo.systemUptime
     let state = reticleState(at: point, now: now)
     let pulseTarget = state == .assigned ? session?.lemmings.first(where: { $0.id == assignedTarget }) : nil
     scheduleReticleRedraw()
     displayedTarget = target.map { ($0.id, point, ProcessInfo.processInfo.systemUptime) }
-    let center = viewport.viewPoint(
-      fromLevel: (pulseTarget ?? target).map { CGPoint(x: CGFloat($0.x), y: CGFloat($0.y) - 5) } ?? point)
-    let side = 14 * viewport.zoom
-    let box = CGRect(
-      x: center.x - side / 2, y: center.y - side / 2, width: side, height: side)
-
-    let path = NSBezierPath()
-    let arm = side / 3
-    let thickness = max(1, viewport.zoom / 2)
-    // Corner brackets read clearly over busy terrain.
-    for (dx, dy) in [(0.0, 0.0), (1.0, 0.0), (0.0, 1.0), (1.0, 1.0)] {
-      let cx = box.minX + box.width * dx
-      let cy = box.minY + box.height * dy
-      let sx: CGFloat = dx == 0 ? 1 : -1
-      let sy: CGFloat = dy == 0 ? 1 : -1
-      path.move(to: CGPoint(x: cx + arm * sx, y: cy))
-      path.line(to: CGPoint(x: cx, y: cy))
-      path.line(to: CGPoint(x: cx, y: cy + arm * sy))
-      if state == .assigned, hdEffectsEnabled, !reduceFlashes {
-        hdrFlashes.append(.init(rect: CGRect(x: min(cx, cx + arm * sx), y: cy - thickness / 2,
-          width: arm, height: thickness), strength: 1, expiresAt: reticleFeedback.successUntil, tint: .green))
-        hdrFlashes.append(.init(rect: CGRect(x: cx - thickness / 2, y: min(cy, cy + arm * sy),
-          width: thickness, height: arm), strength: 1, expiresAt: reticleFeedback.successUntil, tint: .green))
-      }
-    }
-    path.lineWidth = thickness
+    let targetPoint = precisionLens.display(viewport.viewPoint(
+      fromLevel: (pulseTarget ?? target).map { CGPoint(x: CGFloat($0.x), y: CGFloat($0.y) - 5) } ?? point))
     let color: NSColor
     switch state {
-    case .unavailable: color = NSColor(calibratedWhite: 0.6, alpha: 0.9)
+    case .unavailable: color = target == nil ? NSColor(calibratedWhite: 0.6, alpha: 0.9) : .systemYellow
     case .eligible: color = NSColor(calibratedRed: 0.3, green: 0.85, blue: 0.2, alpha: 1)
     case .assigned: color = NSColor(calibratedRed: 0.65, green: 1, blue: 0.45, alpha: 1)
     case .alreadyAssigned: color = NSColor(calibratedRed: 1, green: 0.62, blue: 0.08, alpha: 1)
     }
-    color.setStroke()
-    path.stroke()
+
+    if state == .assigned, hdEffectsEnabled, !reduceFlashes,
+       (target != nil || pulseTarget != nil) {
+      let pixel = max(1, floor(viewport.zoom))
+      let expires = reticleFeedback.successUntil
+      hdrFlashes.append(.init(
+        rect: CGRect(x: targetPoint.x - pixel, y: targetPoint.y - pixel,
+          width: 2 * pixel, height: 2 * pixel).intersection(bounds),
+        strength: 0.45, expiresAt: expires, tint: .green))
+    }
+
+    if lemmingSelectionStyle == .obvious, target != nil, assignmentHighlight.target == nil {
+      LemmingSelectionGlow.draw(at: targetPoint, scale: viewport.zoom,
+        tint: color, animated: !reduceMotion && !reduceFlashes)
+    }
+
+    // The reticle stays at the input position. Selection effects follow the target.
+    let occupied = hasLemming(at: point)
+    GameCursor.drawPlayfieldPointer(at: cursorViewPoint, scale: viewport.zoom,
+      tint: GameCursor.targetTint(eligible: target.map { session?.canAssign(skillIndex: selectedSkill(), to: $0.id) == true } == true,
+        occupied: occupied), original: gameplayCursorStyle == .original, occupied: occupied)
+
+    if showReticleCount {
+      let centres = (session?.lemmings ?? []).map {
+        precisionLens.display(viewport.viewPoint(fromLevel: CGPoint(x: CGFloat($0.x), y: CGFloat($0.y) - 5)))
+      }
+      let count = SkillCursorBadge.count(centres: centres, at: cursorViewPoint, scale: viewport.zoom)
+      SkillCursorBadge.drawCount(count, at: cursorViewPoint, scale: viewport.zoom,
+        size: skillCursorIconSize, icon: skillCursorIconSize == .none ? nil : skillBadge(for: selectedSkill()), in: bounds)
+    }
+    let skillIndex = selectedSkill()
+    let remaining = session.flatMap { session -> Int? in
+      guard session.skills.indices.contains(skillIndex) else { return nil }
+      let skill = session.skills[skillIndex]
+      return skill.isInfinite ? nil : skill.count
+    }
+    SkillCursorBadge.draw(icon: skillBadge(for: skillIndex), index: skillIndex,
+      at: cursorViewPoint, scale: viewport.zoom, tint: color,
+      size: skillCursorIconSize, reduceMotion: reduceMotion || reduceFlashes, remaining: remaining, in: bounds)
+  }
+
+  func skillBadge(for index: Int) -> NSImage? {
+    if session is NeoLemmixSession {
+      guard let skill = session?.skills[safe: index] else { return nil }
+      return neoSprites?.skillIcon(named: skill.name)
+    }
+    guard (0..<8).contains(index), let assets else { return nil }
+    if let cached = skillBadgeCache[index] { return cached }
+    let poses: [ClassicLemmingPose] = [.climbing, .floating, .ohNo, .blocking,
+      .building, .bashing, .mining, .digging]
+    let animation = assets.animation(for: poses[index], direction: .right)
+      ?? assets.animation(for: poses[index], direction: .none)
+    guard let frame = animation?.frames.first,
+          let image = image(from: frame) else { return nil }
+    skillBadgeCache[index] = image
+    return image
+  }
+
+  private func drawRewindCue() {
+    let now = ProcessInfo.processInfo.systemUptime
+    guard let ghost = rewindGhost,
+          rewindCueStartedAt != nil || now < rewindCueUntil else {
+      if rewindCueStartedAt == nil { rewindGhost = nil }
+      return
+    }
+    let fading = rewindCueStartedAt == nil
+    let fade = fading ? CGFloat(max(0, rewindCueUntil - now) / 0.35) : 1
+    let elapsed = CGFloat(now - (rewindCueStartedAt ?? now))
+    let sweep = reduceMotion ? 0 : floor((elapsed * 18).truncatingRemainder(dividingBy: 8))
+    let context = NSGraphicsContext.current?.cgContext
+    context?.saveGState()
+    if let context {
+      context.clip(to: CGRect(origin: viewport.contentOffset, size: viewport.visibleSize))
+      context.setAlpha(0.10 * fade)
+      context.interpolationQuality = .none
+      context.draw(ghost, in: bounds.offsetBy(dx: -sweep, dy: 0))
+      if !reduceMotion {
+        context.setAlpha(0.07 * fade)
+        context.setFillColor(NSColor.systemBlue.cgColor)
+        context.fill(CGRect(x: viewport.contentOffset.x + sweep,
+          y: viewport.contentOffset.y, width: max(1, viewport.zoom), height: viewport.visibleSize.height))
+      }
+    }
+    context?.restoreGState()
+    let badgeScale: CGFloat = bounds.width >= 960 ? 2 : 1
+    let badgeOffset = precisionStatus.isEmpty ? 0 : precisionStatus.size(scale: badgeScale).height + 4
+    RewindTransportCue.draw(
+      origin: CGPoint(x: 12, y: 12 + badgeOffset),
+      currentTick: rewindCurrentTick,
+      originTick: rewindOriginTick
+    )
   }
 
   /// Walks a row of real lemmings across the foot of a menu.
@@ -1013,7 +1527,7 @@ struct ReticleFeedback {
     image.draw(in: CGRect(x: row.minX + 8 * scale, y: row.midY - size.height / 2,
         width: size.width, height: size.height),
       from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
-      hints: [.interpolation: NSImageInterpolation.none])
+      hints: [.interpolation: NSImageInterpolation.none.rawValue])
   }
 
   /// A quiet reminder during play. It must not compete with the level.
@@ -1035,7 +1549,7 @@ struct ReticleFeedback {
     if let image {
       image.draw(in: CGRect(x: badge.minX + 5 * scale, y: badge.minY, width: spriteWidth, height: height),
         from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
-        hints: [.interpolation: NSImageInterpolation.none])
+        hints: [.interpolation: NSImageInterpolation.none.rawValue])
     }
     drawMenuGameText(initials, in: CGRect(x: badge.minX + spriteWidth + 9 * scale,
       y: badge.minY, width: textWidth, height: height), face: .small, scale: Int(scale))
@@ -1095,7 +1609,13 @@ struct ReticleFeedback {
     }
   }
 
-  private func image(from frame: ClassicIndexedBitmap) -> NSImage? {
+  private func image(from frame: ClassicIndexedBitmap,
+                     backpack: ClassicSkillBackpack.Kind? = nil,
+                     pose: ClassicLemmingPose = .walking, left: Bool = false) -> NSImage? {
+    if let backpack, let rgba = try? frame.rgba(using: palette) {
+      return ClassicSkillBackpack.image(rgba: rgba, width: frame.width, height: frame.height,
+        pixelScale: 1, pose: pose, left: left, kind: backpack)
+    }
     guard
       let rgba = try? frame.rgba(using: palette),
       let provider = CGDataProvider(data: rgba as CFData),

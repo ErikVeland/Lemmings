@@ -1,0 +1,16 @@
+{
+  "url": "https://github.com/ErikVeland/Lemmings/releases/tag/v1.7.7",
+  "tag": "v1.7.7",
+  "publishedAt": "2026-10-02T05:18:29Z",
+  "sourceCommit": "17498ea029200507d6064ce897d6711f45938079",
+  "latest": true,
+  "archive": {
+    "name": "UltimateLemmings-1.7.7-build61.zip",
+    "size": 1943260816,
+    "sha256": "da19c35b0ab5da7a2815261f1e31214eb3a670337d6fd7b0586f367d257f68b1",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/v1.7.7/UltimateLemmings-1.7.7-build61.zip",
+    "downloadHTTPStatus": 206
+  },
+  "appcastSHA256": "c80269753c0910b3dc1226fbd251254a180b9c98460b3e11eb5a6bc9a4d3b914",
+  "feedURL": "https://raw.githubusercontent.com/ErikVeland/Lemmings/main/appcast.xml"
+}

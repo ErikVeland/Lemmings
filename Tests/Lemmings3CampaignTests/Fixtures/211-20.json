@@ -1,0 +1,131 @@
+{
+  "expected" : {
+    "lost" : 0,
+    "reserves" : 10,
+    "saved" : 10,
+    "stateHash" : "1a7f96fa9c706be945bdc5d0430c4d3fb4b1538c1a1da2221e1f6b749ed9e443",
+    "ticks" : 1705
+  },
+  "initialStateHash" : "b202a8479cda9741989c4a1b3b46fc8e2bc138e12d584262ceeeb3aa5d1e2532",
+  "inputs" : [
+    {
+      "action" : "blocker",
+      "lemming" : 0,
+      "tick" : 130
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 2,
+      "tick" : 155
+    },
+    {
+      "action" : "blocker",
+      "lemming" : 1,
+      "tick" : 210
+    },
+    {
+      "action" : "drop",
+      "lemming" : 2,
+      "tick" : 355
+    },
+    {
+      "action" : "use",
+      "direction" : "left",
+      "lemming" : 2,
+      "tick" : 450
+    },
+    {
+      "action" : "drop",
+      "lemming" : 2,
+      "tick" : 535
+    },
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 2,
+      "tick" : 749
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 2,
+      "tick" : 758
+    },
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 2,
+      "tick" : 768
+    },
+    {
+      "action" : "use",
+      "direction" : "left",
+      "lemming" : 2,
+      "tick" : 784
+    },
+    {
+      "action" : "walker",
+      "lemming" : 0,
+      "tick" : 900
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 0,
+      "tick" : 1110
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 3,
+      "tick" : 1120
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 9,
+      "tick" : 1120
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 4,
+      "tick" : 1140
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 5,
+      "tick" : 1160
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 6,
+      "tick" : 1180
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 7,
+      "tick" : 1200
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 8,
+      "tick" : 1220
+    },
+    {
+      "action" : "walker",
+      "lemming" : 1,
+      "tick" : 1300
+    },
+    {
+      "action" : "walker",
+      "lemming" : 1,
+      "tick" : 1301
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 1,
+      "tick" : 1589
+    }
+  ],
+  "level" : 211,
+  "levelSHA256" : "8ac64f06259b503328eae6ae573e7e459ba7a025cce77f657041591a2927e363",
+  "population" : 20,
+  "version" : 1
+}

@@ -1,0 +1,3 @@
+.build/release-1.7.6/gatekeeper/Ultimate Lemmings.app: accepted
+source=Notarized Developer ID
+origin=Developer ID Application: Erik Veland (54WU29TRTY)

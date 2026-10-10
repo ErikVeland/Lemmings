@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-05",
+  "target": {
+    "packID": "fan:lldb-1",
+    "levelID": "geooPk0.dat#5",
+    "title": "Increasing step heights",
+    "classicPopulationAndSave": "20/17",
+    "classicInitialReleaseRate": 1,
+    "classicArchiveSHA256": "66ff4c33c44970e945dffee82cfe84a4787329f60ee702613f3f2cb233865bec",
+    "classicAttemptPrefixPath": "classic-geoo-increasing-steps-prefix.json",
+    "classicAttemptPrefixSHA256": "85f45e96f2e71b6ffad068c665b96152ddc39b8603c494ae502293015054cb42"
+  },
+  "sourceCandidate": {
+    "source": "Revenge of the Lemmings v4.0 / Armageddon 25",
+    "levelPath": "Revenge Of The Lemmings/06 Armageddon/Increasing_Step.nxlv",
+    "levelID": "xB53A92E6B53A92E6",
+    "version": 13,
+    "populationAndSave": "20/17",
+    "levelSHA256": "bf7a98f8787ae53cb9f277faaca04ecf91b9ca76c977e5e1251a2dc8ed5cd11f",
+    "replayPath": "Armageddon_25__2022-12-31_12-16-36.nxrp",
+    "replaySHA256": "6ec0fec3523e7b4cdaa8b8143aaeadbe6107033ed79a305c9715118b4acce82f",
+    "assignmentCount": 6,
+    "spawnIntervalChanges": 3,
+    "completionCommand": "nuke at frame 752"
+  },
+  "nativePlayback": {
+    "checker": ".build/nxrp-paired-corpus-diagnostics/NxrpPairedCorpusDiagnostics",
+    "checkerSHA256": "a318537194bb759dfd31dde953e83be977f5ace03946836b0b1a9d1ff64360fe",
+    "simulationLibrarySHA256": "338b907a08e4bdfe3e087880519e161087c4d7ae64570da8f503152c5fea5904",
+    "stylesPath": "Content/NeoLemmix/styles",
+    "result": "Replay commands were accepted with zero assignment rejections and zero state divergences, but the local NeoLemmix simulation did not meet 17/20 by tick 854: saved 1, lost 19, active 0. The level/replay pair was exact ID and version."
+  },
+  "pairedControl": {
+    "sourceLevel": "Revenge Of The Lemmings/06 Armageddon/crossing_stairs.nxlv",
+    "sourceLevelID": "x8BB49AC88BB49AC8",
+    "sourceVersion": 18,
+    "sourceLevelSHA256": "8428b84f0588dab93f8d7416894db76f6920a9766ce8ab77e400c870bcd7b24a",
+    "sourceReplaySHA256": "4cf036a9c3ce16c041838d7c304b233491a024199a0ac2e5b70b38833a141bfe",
+    "sameCheckerResult": "1/1 exact-version native completion with no replay-check failure"
+  },
+  "classicTransfer": {
+    "solver": ".build/heartbeat-20261005-0331/ClassicSolver",
+    "solverSHA256": "dc45dadab700e2792f98fe30451ac371b0b6bc36f3a25e086cabf05514fab01b",
+    "simulationLibrarySHA256": "0021228840f26fba8d92831e931a0175e1c2eb8837880f57968cc67625a13d5d",
+    "result": "UNSOLVED, best saved 0/17, 11,209 expansions in 3 seconds after mapping the published assignments and spawn intervals to Classic ticks and rates"
+  },
+  "assessment": "The published route is an exact source-pack candidate by ID/version, population and save requirement, but it did not pass the local source-native replay gate. Applying its timeline and commands to the distinct bundled Classic DAT also failed. These results identify source/replay or engine-behaviour coverage to investigate; they do not establish which engine is wrong, target impossibility, or a verified Classic solution. No replay-based score was assigned.",
+  "references": [
+    "https://www.lemmingsforums.net/index.php?topic=5963.15",
+    "https://www.lemmingsforums.net/index.php?action=dlattach;attach=20991",
+    "https://www.mediafire.com/file/gp5qb3deh0ui5su/Revenge+Of+The+Lemmings2022v3.zip/file"
+  ]
+}

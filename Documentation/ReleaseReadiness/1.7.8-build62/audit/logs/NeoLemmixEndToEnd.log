@@ -1,0 +1,10 @@
+PASS parse — 'End to end' 200x100
+PASS resolve — 3 assets
+PASS render — 200x100, 1600 solid pixels, 2 gadgets
+PASS all current skills configure; unsupported gadgets are rejected before gameplay
+PASS configure — 1 entrance(s), 1 exit zone(s)
+     entrance at 24,52
+     exit zone x 152..164 y 70..76
+     sample lemmings: #0 at 152,70 removed active=false | #1 at 152,70 removed active=false | #2 at 152,70 removed active=false
+PASS simulate — released 10, saved 10, tick 673
+NeoLemmix end-to-end tests passed.

@@ -1,0 +1,128 @@
+{
+  "date": "2026-10-04",
+  "exactBundledArchive": "Content/LevelPacks/0220-AkseliPack01.zip",
+  "exactBundledArchiveSHA256": "91d3fe47ec7780e3aaa34c45fcb0f77d14e445adc7132ab4e1a1c842fa50f198",
+  "inputTranslation": "Decode all source actions with a uniform minus-one native tick offset.",
+  "sourceActionDerivationVerified": true,
+  "sourceBuiltNxlvKitSHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "sourceBuiltProbeSHA256": "d1bd22612cc3a103d3596846d3e3a7050a0f17cc098bca4ef01c927b34b73af9",
+  "sourceBuiltEvidenceToolSHA256": "7f2ebff5a9bdfe0a8e71511ed8565e30893991e5b86871c69db782e9785aa272",
+  "levels": [
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "AkseliPack01.dat#3",
+        "packID": "fan:lldb-220"
+      },
+      "title": "Winter Solstice",
+      "sourceURL": "https://lldb.camanis.net/level/220/4",
+      "cachedSourcePageSHA256": "574ab1f1a39e589a6acfc7e1e095d7f26ebaa3706b7fc69cf56e45c34cda5410",
+      "rawSourceReplaySHA256": "29767d01ded9f1198f7d891e65c799f4fa5223a79251a9ae0957062991b8ad57",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 9,
+        "ticks": 2597
+      },
+      "originalMechanicsResult": "0/9 at tick 5102",
+      "selectedNativeMechanics": "Golems on this exact member and archive revision",
+      "nativeInitialStateHash": "03a2b85158ccea26ec271576a3e46060ec04f2508e66ab09db34afccb12aa661",
+      "candidateInputPath": ".build/heartbeat-20261003-2310/golems-candidates/03a2b85158ccea26ec271576a3e46060ec04f2508e66ab09db34afccb12aa661-29767d01ded9.json",
+      "candidateInputSHA256": "074c3290474ddbf1079f734d8399f5b4fd8f46459109b8757dc68aea1198c944",
+      "selectedReplaySHA256": "25785d13756a2f7258dc8575431c4f73a5f1905d320e4d4461c6e1436cbdb0e8",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 10,
+        "required": 9,
+        "saved": 9,
+        "stateHash": "3f0dba5264346eae52b3e00860888369a32d8bef2f33cecde575385eda4df25b",
+        "ticks": 2596
+      },
+      "difficultyScore": 416.126555019936,
+      "difficultyProbeRuns": 10,
+      "strictExactLevelChecks": [
+        "before promotion: 3/3",
+        "after promotion: 3/3",
+        "all four selected Akseli members: 4/4"
+      ],
+      "sourcePhysicsParity": "unverified: source saved count matches and native completion is one tick before source header after minus-one input offset; full source state traces are absent"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "AkseliPack01.dat#6",
+        "packID": "fan:lldb-220"
+      },
+      "title": "In the Core",
+      "sourceURL": "https://lldb.camanis.net/level/220/7",
+      "cachedSourcePageSHA256": "1fbf9a48763e0eae0dcc1657dd0ba80e288c302ba96567b7cbbf07547f56db8e",
+      "rawSourceReplaySHA256": "5c07e8d6f5fa49a55425237c40143ae2bacb135bba12a1484eab9d79d3a59fc7",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 7,
+        "ticks": 3311
+      },
+      "originalMechanicsResult": "Source record 1 rejects Blocker for lemming 2 at tick 212; selected source record 2 rejects Builder for lemming 8 at tick 580.",
+      "selectedNativeMechanics": "Golems on this exact member and archive revision",
+      "nativeInitialStateHash": "9b09d9df561cc3d72bc31d5333417867ec2bdf70f5785e3fae893b81badce0de",
+      "candidateInputPath": ".build/heartbeat-20261003-2310/golems-candidates/9b09d9df561cc3d72bc31d5333417867ec2bdf70f5785e3fae893b81badce0de-5c07e8d6f5fa.json",
+      "candidateInputSHA256": "f0791cc9e717cf8be71f8e6210f24dc1f50522a8fd0dab5c6e8883a9ff971513",
+      "selectedReplaySHA256": "e0ff97bcdf0b89e9e98bd74d160f2edf560332776de585752858176c57520e51",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 12,
+        "required": 7,
+        "saved": 7,
+        "stateHash": "145c20a8c9336cbe9812f5a6d2cf63c84a01af42304c42b1a70ba92817feef9a",
+        "ticks": 3310
+      },
+      "difficultyScore": 428.81328644128325,
+      "difficultyProbeRuns": 10,
+      "strictExactLevelChecks": [
+        "before promotion: 3/3",
+        "after promotion: 3/3",
+        "all four selected Akseli members: 4/4"
+      ],
+      "sourcePhysicsParity": "unverified: source saved count matches and native completion is one tick before source header after minus-one input offset; full source state traces are absent"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "AkseliPack01.dat#8",
+        "packID": "fan:lldb-220"
+      },
+      "title": "Crysilis",
+      "sourceURL": "https://lldb.camanis.net/level/220/9",
+      "cachedSourcePageSHA256": "3229cce433c136cbf228ad487b4a42eace0a63c95cf6b66376db9587f762499c",
+      "rawSourceReplaySHA256": "a29ee0069bdf355749c0894e43f69b7e620a917485634e09da9856a140750820",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 40,
+        "ticks": 1400
+      },
+      "originalMechanicsResult": "10/40 at tick 7142",
+      "selectedNativeMechanics": "Golems on this exact member and archive revision",
+      "nativeInitialStateHash": "746b7ba65d6eb8b676bca27cf0daa01bd733a02351fd8306fed36b2985819f28",
+      "candidateInputPath": ".build/heartbeat-20261003-2310/golems-candidates/746b7ba65d6eb8b676bca27cf0daa01bd733a02351fd8306fed36b2985819f28-a29ee0069bdf.json",
+      "candidateInputSHA256": "38b48e368905a8423b7e2ce9ed9f8bcc155f2364e24d628587552f3d1de651f5",
+      "selectedReplaySHA256": "c0cea5f26ccc4d6cffecc571460df2290659851a711b17b003939a1475c5db2d",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 40,
+        "required": 40,
+        "saved": 40,
+        "stateHash": "928fd98a03f42a497337d23c02a14a41822c00cde9ed1e2c01ea9328f10f63b7",
+        "ticks": 1399
+      },
+      "difficultyScore": 573.4022682721927,
+      "difficultyProbeRuns": 10,
+      "strictExactLevelChecks": [
+        "before promotion: 3/3",
+        "after promotion: 3/3",
+        "all four selected Akseli members: 4/4"
+      ],
+      "sourcePhysicsParity": "unverified: source saved count matches and native completion is one tick before source header after minus-one input offset; full source state traces are absent"
+    }
+  ],
+  "sourceBuiltClassicSolverSHA256": "93f6d0c29445b565a3a207e61d5ed470c5c29365572c31812650132cc9833967",
+  "solverControlReplaySHA256": "cc99da7a65776f1c620c3bd16d1870f03bfe12199d1ad8cc63beb7414f956f04"
+}

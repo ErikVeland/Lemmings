@@ -1,0 +1,125 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "afterTick" : true,
+      "tick" : 317
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 317
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 412
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 613
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 22,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 848
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 28,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1021
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 12,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1146
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 26,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1247
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 29,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1319
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 27,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1409
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 23,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1475
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 30,
+    "required" : 25,
+    "saved" : 26,
+    "stateHash" : "86becd3b5d7c1d5bb800de81704da79d782bba355ca4e0045d5db200581535db",
+    "ticks" : 1705
+  },
+  "initialStateHash" : "daf2243722176d85d53874abe638372115738d36aab855f09184a3510468df24",
+  "number" : 8,
+  "rank" : "fan:lldb-181",
+  "title" : "Another \"o\" to serch"
+}

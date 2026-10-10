@@ -1,0 +1,72 @@
+{
+  "description": "The pinned Golems source replay assigns Digger directly, bypassing the interactive activity and steel guard. The exact bundled input shifted one tick earlier strictly wins 49/49 in the native source-replay route. All ten native actions map to the archived source bytes. Source and native headers differ by one tick; full physics parity remains unverified.",
+  "sourceDirectDiggerMethodSHA256": "f97540acadfc8d1374f125ec9fc8568c239700fc4703bf1694fca68a0df5ff1b",
+  "sourceInteractiveDiggerSelectorSHA256": "79e2a46d48525d0af5d2fe30999058d4ae3bed662509bf370f956ae6f84547de",
+  "globalShiftResults": [
+    {
+      "shift": -4,
+      "result": "Builder rejected at native tick 300"
+    },
+    {
+      "shift": -3,
+      "result": "Builder rejected at native tick 301"
+    },
+    {
+      "shift": -2,
+      "result": "completed with 1/49 saved at tick 1022"
+    },
+    {
+      "shift": -1,
+      "result": "strict win 49/49 at tick 740",
+      "nativeReplaySHA256": "a0b89acf72377817f67ed65b396c18d7b176aaf316666f844b72c93619dc9c1f"
+    },
+    {
+      "shift": 1,
+      "result": "completed with 1/49 saved at tick 1022"
+    },
+    {
+      "shift": 2,
+      "result": "Builder rejected at native tick 306"
+    },
+    {
+      "shift": 3,
+      "result": "Builder rejected at native tick 307"
+    },
+    {
+      "shift": 4,
+      "result": "Builder rejected at native tick 308"
+    }
+  ],
+  "records": [
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-193",
+        "levelID": "Gronklems #1.dat#9"
+      },
+      "title": "In the lemming factory",
+      "bundledArchiveSHA256": "f8b9a3fb9d13756772fa9ce75bd6fb9afc80ad2149c58171849e53789c18cbd9",
+      "initialStateHash": "6e7968a1b59ce22647c8e2e6501d2c6eeb1cea128657bf781dccda9603d06234",
+      "sourceReplaySHA256": "89283a9e0c9ecaeb44130cbbbac858c4d09a80c7b80b0f213ac7bbded91f31ae",
+      "sourceURL": "https://lldb.camanis.net/level/193/10",
+      "sourceHeaderSaved": 49,
+      "sourceHeaderTicks": 741,
+      "nativeReplaySHA256": "a0b89acf72377817f67ed65b396c18d7b176aaf316666f844b72c93619dc9c1f",
+      "nativeSaved": 49,
+      "required": 49,
+      "nativeCompletionTick": 740,
+      "difficultyScore": 485.9103050433011,
+      "probeRuns": 10,
+      "mechanics": "golems",
+      "clock": "golems",
+      "sourceRules": "golemsFallingBuilder",
+      "ordinaryPlayerAssignments": false,
+      "sourceActionDerivationVerified": true,
+      "nativeTickOffsetFromSource": -1,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/a0b89acf72377817f67ed65b396c18d7b176aaf316666f844b72c93619dc9c1f.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/a0b89acf72377817f67ed65b396c18d7b176aaf316666f844b72c93619dc9c1f.profile.json",
+      "sourceEngineSHA256": "38cb69f18f5055821a496336a948fc30596e56c607c3ddddfb4675be78a5873e",
+      "sourcePhysicsParity": "saved-count and one-tick completion-header agreement only; independent full-state parity unverified"
+    }
+  ]
+}

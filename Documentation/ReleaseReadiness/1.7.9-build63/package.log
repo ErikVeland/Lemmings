@@ -1,0 +1,9 @@
+PASS frozen source, packaged version, hints, rescue proofs, learning resources and full soundtrack: 495 versions
+PASS universal app and core library
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/.build/release-1.7.9/standard/Ultimate Lemmings.app: replacing existing signature
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/.build/release-1.7.9/standard/Ultimate Lemmings.app: valid on disk
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/.build/release-1.7.9/standard/Ultimate Lemmings.app: satisfies its Designated Requirement
+PASS shipping app and nested code share one signing team
+Error: No Keychain password item found for profile: lemmings-beta
+
+Run 'notarytool store-credentials' to create another credential profile.

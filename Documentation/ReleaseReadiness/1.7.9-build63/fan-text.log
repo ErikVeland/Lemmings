@@ -1,0 +1,129 @@
+Building for debugging...
+[Computing dependencies]
+[Pre-planning 1 / 358]
+[Planning 1 / 358]
+[Planning deferred tasks]
+[Starting]
+[41 / 151]
+[61 / 147] LemmingsDataTool-product
+[75 / 152] LemmingsDataTool-product
+[88 / 184] LemmingsMobileCore
+[88 / 184] LemmingsLocal-product
+[93 / 254]
+[99 / 254]
+[114 / 254]
+[122 / 255]
+[131 / 263] NxlvKitTests-product
+[138 / 263] LemmingsMobileUI
+[147 / 263] LemmingsDataTool-product
+[150 / 263] NxlvKitTests-product
+[152 / 263] NxlvKitTests-product
+[153 / 263] NxlvKitTests-product
+[156 / 263]
+[166 / 263]
+[178 / 264] LemmingsMobileCoreTests-product
+[179 / 264] NxlvKitTests-product
+[180 / 264] NxlvKitTests-product
+[184 / 267] LemmingsMobileCoreTests-product
+[184 / 267]
+[193 / 267]
+[195 / 267]
+[196 / 267]
+[197 / 267]
+[208 / 267] LemmingsLocal-product
+[209 / 267] LemmingsLocal-product
+[209 / 267] LemmingsMobileCoreTests-product
+[211 / 267] LemmingsLocal-product
+[218 / 267] LemmingsLocal
+[224 / 267] LemmingsLocal-product
+[225 / 267] LemmingsLocal
+[226 / 267] LemmingsLocal
+[228 / 267] LemmingsLocal
+[228 / 267] NxlvKitTests-product
+[230 / 267] LemmingsLocal
+[232 / 267] LemmingsLocalTests-product
+[233 / 267] LemmingsLocal
+[236 / 267] LemmingsLocal
+[237 / 267] LemmingsLocal
+[238 / 267] LemmingsLocal
+[238 / 267]
+[241 / 267] LemmingsLocalTests-product
+[245 / 267] LemmingsMobileCoreTests-product
+[248 / 267] LemmingsLocal-product
+[248 / 267] LemmingsLocal
+[248 / 267] LemmingsLocal-product
+[248 / 267] LemmingsLocal
+[248 / 267] LemmingsLocal-product
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/Sources/LemmingsLocal/main.swift:5744:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5742 |       openPanel.canChooseFiles = true
+5743 |       openPanel.canChooseDirectories = false
+5744 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5745 |       openPanel.message = "Choose a NeoLemmix level file."
+5746 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/Sources/LemmingsLocal/main.swift:6858:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6856 |       openPanel.canChooseFiles = true
+6857 |       openPanel.canChooseDirectories = false
+6858 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6859 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+6860 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/Sources/LemmingsLocal/main.swift:7318:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7316 |     keyboard.controllerRewindHeld = { [weak self] held in
+7317 |       guard let self else { return }
+7318 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7319 |       else if self.rewindHeld { self.endContinuousRewind() }
+7320 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[250 / 267] LemmingsLocal-product
+[252 / 267] LemmingsLocal-product
+[252 / 267] LemmingsLocal
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/Sources/LemmingsLocal/main.swift:5744:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5742 |       openPanel.canChooseFiles = true
+5743 |       openPanel.canChooseDirectories = false
+5744 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5745 |       openPanel.message = "Choose a NeoLemmix level file."
+5746 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/Sources/LemmingsLocal/main.swift:6858:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6856 |       openPanel.canChooseFiles = true
+6857 |       openPanel.canChooseDirectories = false
+6858 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6859 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+6860 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/Sources/LemmingsLocal/main.swift:7318:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7316 |     keyboard.controllerRewindHeld = { [weak self] held in
+7317 |       guard let self else { return }
+7318 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7319 |       else if self.rewindHeld { self.endContinuousRewind() }
+7320 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[254 / 267] LemmingsLocal
+[257 / 268] LemmingsLocalTests-product
+[258 / 278]
+[260 / 278]
+[261 / 278]
+[267 / 278] LemmingsLocalTests-product
+[272 / 278] LemmingsLocalTests-product
+[274 / 278] LemmingsLocalTests-product
+[276 / 278] LemmingsLocalTests-product
+Build complete! (43.78 sec.)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite FanTextTerrainTests started.
+􀟈  Test "Source placements survive DOS terrain range and object alignment" started.
+􁁛  Test "Source placements survive DOS terrain range and object alignment" passed after 0.002 seconds.
+􁁛  Suite FanTextTerrainTests passed after 0.002 seconds.
+􁁛  Test run with 1 test in 1 suite passed after 0.002 seconds.

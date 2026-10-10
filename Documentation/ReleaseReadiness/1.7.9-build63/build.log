@@ -1,0 +1,69 @@
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/Sources/LemmingsLocal/main.swift:5744:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5742 |       openPanel.canChooseFiles = true
+5743 |       openPanel.canChooseDirectories = false
+5744 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5745 |       openPanel.message = "Choose a NeoLemmix level file."
+5746 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/Sources/LemmingsLocal/main.swift:6858:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6856 |       openPanel.canChooseFiles = true
+6857 |       openPanel.canChooseDirectories = false
+6858 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6859 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+6860 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/Sources/LemmingsLocal/main.swift:7318:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7316 |     keyboard.controllerRewindHeld = { [weak self] held in
+7317 |       guard let self else { return }
+7318 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7319 |       else if self.rewindHeld { self.endContinuousRewind() }
+7320 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/Sources/LemmingsLocal/main.swift:5744:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5742 |       openPanel.canChooseFiles = true
+5743 |       openPanel.canChooseDirectories = false
+5744 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5745 |       openPanel.message = "Choose a NeoLemmix level file."
+5746 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/Sources/LemmingsLocal/main.swift:6858:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6856 |       openPanel.canChooseFiles = true
+6857 |       openPanel.canChooseDirectories = false
+6858 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6859 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+6860 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/Sources/LemmingsLocal/main.swift:7318:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7316 |     keyboard.controllerRewindHeld = { [weak self] held in
+7317 |       guard let self else { return }
+7318 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7319 |       else if self.rewindHeld { self.endContinuousRewind() }
+7320 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+PASS 10 pruned fan archives; 0 updated
+Indexed 6020 readable levels in 535 packs
+PASS 10 pruned fan archives; 0 updated
+Mac artwork: lemmings, 1574 frames
+Mac artwork: ohno, 1306 frames
+Mac artwork: holiday, 784 frames
+Mac artwork: xmas, 948 frames
+Amiga lemmings: 1200 frame slots
+Amiga ohno: 954 frame slots
+Amiga xmas: 614 frame slots
+Amiga holiday: 450 frame slots
+Embedded 24 Macintosh resource forks as data files.
+full: 495 versions, 4235.6 MB
+Compacted bundled music: 4078 MB -> 1754 MB (AAC 192 kbps)
+playback: 483 re-encoded entries
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/.build/release-1.7.9/standard/Ultimate Lemmings.app: replacing existing signature
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/.build/release-1.7.9/standard/Ultimate Lemmings.app

@@ -54,10 +54,11 @@ but ambiguous shapes must retain the source block. They must not receive random
 texture. Repeated animations must use the same rule without a time or frame seed.
 
 For the sequels, source transparency takes precedence over reference silhouette
-changes. Every transparent source pixel remains four transparent pixels. Every
-opaque source pixel remains four opaque pixels. Reconstruction changes colour
-within those masks. The pipeline must not copy the Mac water height, cropped
-origins, altered proportions or frame timing into a sequel.
+changes. Every transparent source pixel remains four transparent pixels, except
+for a liquid frame tail below an existing liquid column. Every opaque source
+pixel remains four opaque pixels. Reconstruction changes colour within those
+masks. The pipeline must not copy the Mac water height, cropped origins, altered
+proportions or frame timing into a sequel.
 
 All generated images and comparison sheets remain under `.build/`, alongside
 the supplied commercial data. The repository holds the generation code and
@@ -98,11 +99,11 @@ Four curated treatments supplement the tables:
    Only textured, saturated regions use this fallback. Flat fills, architectural
    surfaces and transparent pixels do not receive it. Marks use neighbouring
    palette tones. They do not copy the source terrain shape or invent colours.
-3. Liquids narrow an existing bright surface glint to one visual pixel,
-   using the liquid colour directly below it. This preserves PC surface height
-   and opacity. L3 generic liquid/fire hazards share this conservative treatment.
-   Isolated glints become one pixel; connected crests retain a horizontal pair.
-   Their collision tags are not changed by rendering.
+3. Liquids fill the transparent tail below existing liquid columns, then narrow
+   an existing bright surface glint to one visual pixel. Empty columns remain
+   transparent. This removes black gaps without changing the liquid footprint
+   at the sides or its collision tags. Isolated glints become one pixel;
+   connected crests retain a horizontal pair.
 4. Small neutral metal highlights receive faceted corners, as seen in the Mac
    exit's studs and dark joints. Only connected highlight patches no larger
    than 3×3 source pixels qualify. Corner marks use an existing darker neutral
@@ -128,6 +129,16 @@ contour pass refines matching diagonal colour edges in illustrations and letteri
 at 2× resolution. It can refine binary silhouettes in front-end assets, which
 have no collision masks. It never runs on gameplay terrain or actors. This is
 discrete reconstruction, not hand-drawn Macintosh sequel artwork.
+
+L2 rope, pole and fill particles use 2× pixel marks inside their original
+one-pixel positions. L3 blast rings and fireballs use fixed pixel art inside
+their original 40×40 and 6×4 bounds. These effects keep their source timing and
+positions. They use inferred colours and shapes because no matching Macintosh
+sequel frames exist. L3's contextual tool picker uses the eight green directional
+frames in the original `TRIBE` sprite bank. Its pickup and carried-tool icons use
+decoded `PERM` object frames. Thrown bombs and grenades still use pickup art
+because their native effect animation and anchor mapping is unverified. The red
+direction frames exist in the source bank, but their state mapping is unverified.
 
 ## Using the artwork
 
@@ -204,6 +215,10 @@ Visual hashes in `Tests/SequelMacArtworkTests/goldens.json` cover materials,
 characters, skills, objects, creatures and UI. After inspecting a deliberate
 artwork change, `--record-goldens` records a new baseline. Do not use it to hide
 an unexplained regression.
+
+`zsh Scripts/run-sequel-effect-artwork-tests.sh` checks the recreated effect
+footprints, binary alpha, palette detail and logical image size. It writes an
+offscreen proof image to `.build/sequel-effect-artwork/proof.png`.
 
 ## Visual assessment
 

@@ -1,0 +1,2 @@
+Audited 562 levels (574 configurations): {'VERIFIED': 242, 'OBSERVED': 225, 'UNKNOWN': 95}
+Packaged 251 exact-condition certificates and 17 best-known rescue targets.

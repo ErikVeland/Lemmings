@@ -70,12 +70,30 @@ NeoLemmix Community Edition source:
 - <https://github.com/Willicious/NeoLemmixCommunityEdition>
 
 NeoLemmix Community Edition is published under a Creative Commons
-Attribution-NonCommercial licence. This project does not include its source,
-styles, levels, or other assets.
+Attribution-NonCommercial 4.0 licence. The reviewed 1.2.0 oracle is commit
+`38d0449f87501798e78ac668a9494848f4aa9649`. Its source credits Eric
+Langedijk for Lemmix, Stephan Neupert and Namida Verasche. This project does
+not include its source code.
 
-No third-party game-data files or NeoLemmix content should be added to a
-redistributable build without the relevant rights. The application should ask
-players to import data they lawfully possess.
+The CE repository states that bundled images, music and sound retain their
+creators' copyright and restricts their use to running NeoLemmix. The public CI
+gate therefore does not download or render that corpus.
+
+On 28 September 2026 the owner decided to bundle the CE levels, as the app
+bundles fan level packs. The app also bundles the 26 styles that CE
+`License.txt` assigns to DMA. These are conversions of the original assets
+that the owner approved for distribution on 15 September. The app does not
+bundle community styles, CE interface graphics or music. The NeoLemmix SFX
+work requested on 7 October adds nine stock gadget WAV samples from the pinned
+CE sound directory: chain, electric, fire, slurp, teleporter, tenton, thud,
+thunk and weedgulp. They retain their upstream copyright notices and are used
+for NeoLemmix content. Preparation records each sample hash in the manifest.
+Other community samples remain player-supplied. Levels that
+need community styles stay unavailable until the player adds a NeoLemmix folder
+with those styles. The bundle carries CE `License.txt` next to the levels.
+`Scripts/prepare-neolemmix-content.sh` records the source commit and the style
+list. CC BY-NC 4.0 does not permit commercial use. A paid release needs
+separate permission from the CE authors.
 
 ## resource_dasm format reference
 
@@ -142,3 +160,10 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+## Sparkle
+
+The macOS app bundles Sparkle 2.7.3 for signed automatic updates. Sparkle is
+available from <https://github.com/sparkle-project/Sparkle>. Its MIT licence and
+the licences for its bundled third-party components are included in the Sparkle
+distribution used to build the app.

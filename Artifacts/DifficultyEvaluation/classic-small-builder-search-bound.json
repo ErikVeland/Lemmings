@@ -1,0 +1,81 @@
+{
+  "date": "2026-10-04",
+  "interpretation": "Both native traces have legal Builder ticks, unlike Solo 2. The one-tick single-skill checks completed 23 and 10 continuations but found no win. These checks do not cover multi-Builder routes and cannot establish source physics parity.",
+  "multiEntranceFollowup": {
+    "builders": 4,
+    "entrances": 4,
+    "exactArchiveSHA256": "a1883fb43a9148fb8feeb3cf88b817663bd9bb9b5e23ae179ffe5c6166686b81",
+    "focusWorkerOneDirectSearch": {
+      "bestSaved": 0,
+      "expanded": 47,
+      "partialSHA256": "4565bf069eb0b8ed62eea93e9c2a418d3872c91282abe8bcf403b0c79cc9cca6"
+    },
+    "focusWorkerOneOneTickSearch": {
+      "bestSaved": 0,
+      "expanded": 475,
+      "partialSHA256": "4565bf069eb0b8ed62eea93e9c2a418d3872c91282abe8bcf403b0c79cc9cca6",
+      "singleSkillContinuations": 10,
+      "waitingRouteTick": 111
+    },
+    "fourWorkerBuilderBroadcast": {
+      "assignmentsExpanded": 108,
+      "bestSaved": 0,
+      "delaysCompleted": 101,
+      "partialSHA256": "4565bf069eb0b8ed62eea93e9c2a418d3872c91282abe8bcf403b0c79cc9cca6"
+    },
+    "identity": "fan:lldb-68/Lemmy556 More levels.dat#0",
+    "interpretation": "The one-worker search cannot assign Builders to the other three hatch workers, so that search policy cannot cover this four-worker puzzle. Removing the focus limit and testing 101 uniform per-hatch delays also found no win. No source-engine trace is available from the cached page.",
+    "lemmings": 4,
+    "requiredToSave": 4,
+    "sourcePageDate": "2026-09-29",
+    "sourcePageRecords": "No published winner in cached page",
+    "sourcePageSHA256": "df9cdf479c22e8b5e9f758333dcfe07bf769ee553900d34ab08f1b5cdc740461",
+    "title": "Pillars and builders",
+    "unrestrictedMultiWorkerSearch": {
+      "bestSaved": 0,
+      "expanded": 671,
+      "partialSHA256": "fd5071aab0ce8a1b126dc7bcb4a0e050730184644aa3c3be18d6d5faa5df9d31"
+    }
+  },
+  "records": [
+    {
+      "directRankingPartialSHA256": "80635a61bfa5d95c61883082f94034de368adc3281493d45b5b709a20a4b2837",
+      "exactArchiveSHA256": "1a8387086f8d991ed73ebc916319db9960f6ca154bb257e75adad8306877dc88",
+      "firstLegalBuilderTickForWorker0": 60,
+      "identity": "fan:lldb-65/Lemmy556 My little levels.dat#0",
+      "member": "Lemmy556 My little levels.dat",
+      "nativeTraceSHA256": "f146081d7ea44ffddbf734ee3a511c6a5f5204d889d50358c87a95c812f4b5a1",
+      "oneSkillContinuations": 23,
+      "oneTickExpansions": 1195,
+      "oneTickPartialSHA256": "80635a61bfa5d95c61883082f94034de368adc3281493d45b5b709a20a4b2837",
+      "oneTickWaitingRouteTick": 115,
+      "result": "no strict native win",
+      "section": 0,
+      "sourcePageDate": "2026-09-29",
+      "sourcePageRecords": "No published winner in cached page",
+      "sourcePageSHA256": "604fb829b87aaf7273e6c9ebd99fdc908544aa6fe97ce66c0e8651867e99e4a3",
+      "title": "2 lemmings"
+    },
+    {
+      "directRankingPartialSHA256": "7e2b7a819f6b46514e935368eab1753ea8566b823f2b734b686e421335863404",
+      "exactArchiveSHA256": "102ffe175287b115424dbbc74fd4e409dc4ac2676dd530700418c85b76614747",
+      "firstLegalBuilderTickForWorker0": 59,
+      "identity": "fan:lldb-549/Ji Hoon Earth 1.DAT#8",
+      "member": "Ji Hoon Earth 1.DAT",
+      "nativeTraceSHA256": "169ff8aab72f68e5bd8def25ff6c03cfe9358ea24905b4b09d6617e713246b7b",
+      "oneSkillContinuations": 10,
+      "oneTickExpansions": 227,
+      "oneTickPartialSHA256": "7e2b7a819f6b46514e935368eab1753ea8566b823f2b734b686e421335863404",
+      "oneTickWaitingRouteTick": 79,
+      "result": "no strict native win",
+      "section": 8,
+      "sourcePageDate": "2026-09-29",
+      "sourcePageRecords": "No published winner in cached page",
+      "sourcePageSHA256": "367971cad881b405830ae240081a6beb21b4c8397d2fa4f4aa1431fea71d0fa6",
+      "title": "King Lem XLII"
+    }
+  ],
+  "scope": "Two further low-population Builder-only fan puzzles under the current direct exit-distance solver policy",
+  "solverSHA256": "3e2e3ebe5c5505d715d60a37dfee4087fee401ddd177f2cf8be43fb0a6f85c1c",
+  "traceToolSHA256": "824c297e5f5feed5481bdbd96a7998581a82bc07e727bf98ff14458ef725545c"
+}

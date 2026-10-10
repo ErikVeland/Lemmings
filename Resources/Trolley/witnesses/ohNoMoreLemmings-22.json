@@ -1,0 +1,56 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 80
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 107
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 133
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 287
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 48,
+    "saved" : 48,
+    "stateHash" : "1a036eb24da36a38e05add68fb056e53dffd316bf6f36a4195155e1985da42c2",
+    "ticks" : 1105
+  },
+  "initialStateHash" : "8cabbe4ebf142e3d87829c03d9e89a5b183444d281f61b859e34fefa24afdeb6",
+  "number" : 3,
+  "rank" : "Crazy",
+  "title" : "Many Lemmings make level work"
+}

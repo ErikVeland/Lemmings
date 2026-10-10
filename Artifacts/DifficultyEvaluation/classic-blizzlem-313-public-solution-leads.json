@@ -1,0 +1,91 @@
+{
+  "dateChecked": "2026-10-05",
+  "target": {
+    "identity": "fan:lldb-415/levels/Blizzlem/313.ini#-1",
+    "member": "The snow palace.ini",
+    "requiredSkills": "50 builders, 10 diggers",
+    "timeLimit": "10 minutes",
+    "archiveSHA256": "a1107ad848d4c68d1b127efe8ca3989906414b7acc5d79be4cbb52bf61a7d7ec",
+    "memberSHA256": "206443d643d92a2a522deea18aa5c48e92427ec698adc621db86805f8a37e1a8",
+    "memberBytes": 6084
+  },
+  "classicGeometryCheck": {
+    "classicMaximumPlayableY": 163,
+    "entrance": {
+      "objectType": 1,
+      "x": 0,
+      "y": 0
+    },
+    "exit": {
+      "objectType": 0,
+      "x": 2992,
+      "y": 176
+    },
+    "finding": "The exact bundled Lemmini exit is 13 pixels below the Classic playable-height limit. This is an exact-target geometry mismatch to investigate separately from solver coverage; it is not an impossibility proof or source-physics parity result."
+  },
+  "leads": [
+    {
+      "engine": "SuperLemmini",
+      "post": "https://www.lemmingsforums.net/index.php?topic=6294.msg101337#msg101337",
+      "attachment": "The Snow Palace.rpl",
+      "attachmentID": 22096,
+      "reportedSize": "6.05 KB",
+      "reportedRoute": "The author says the route solves the original 50-builder, 10-digger, 10-minute level. It does not work in NeoLemmix because it needs another Digger at the second-to-last obstacle; the author identifies different Digger and Builder behaviour.",
+      "targetMatch": "Reported original skillset and timer match the bundled text level; strict byte and level-revision correspondence remains unverified."
+    },
+    {
+      "engine": "Lemmix/DOS and SuperLemmini",
+      "post": "https://www.lemmingsforums.net/index.php?topic=6294.15",
+      "attachment": "The Snow Palace.rpl",
+      "attachmentID": 22096,
+      "reportedRoute": "In an April 2026 reply, Kaywhyn says the original 50-builder, 10-digger solution works on the DOS version and SuperLemmini, but fails on NeoLemmix. The same post explains that the later NeoLemmix version changed the skillset and level geometry.",
+      "targetMatch": "Strengthens the source-route match for the bundled 50-builder, 10-digger original; it still does not prove strict playback on this exact bundled member."
+    },
+    {
+      "engine": "NeoLemmix",
+      "post": "https://www.lemmingsforums.net/index.php?topic=6294.msg108560#msg108560",
+      "attachment": "Whiteout_13__2025-01-13_00-58-14.nxrp",
+      "attachmentID": 24836,
+      "reportedSize": "8.13 KB",
+      "reportedRoute": "Kaywhyn reports a winning route for the later 51-builder, 11-digger version. The post says the ordinary build-over route misses the 10-minute time limit."
+    },
+    {
+      "engine": "NeoLemmix",
+      "post": "https://www.lemmingsforums.net/index.php?topic=6294.msg108578#msg108578",
+      "attachments": [
+        {
+          "name": "The_Snow_Palace_Guigui.nxrp",
+          "attachmentID": 24854,
+          "reportedSize": "8.3 KB"
+        },
+        {
+          "name": "The_Snow_Palace_Save_All_kaywhyn_Guigui.nxrp",
+          "attachmentID": 24858,
+          "reportedSize": "8.29 KB"
+        }
+      ],
+      "reportedRoute": "The posts describe a save-all route that uses four required Diggers, then seven remaining Diggers to make a 28-pixel horizontal cut through a narrow, high pillar. Digging while facing away from the wall avoids a turn and saves time.",
+      "targetMatch": "These are NeoLemmix routes for the later pack revision, not the bundled SuperLemmini text level. Do not treat them as exact-target replays."
+    }
+  ],
+  "retrieval": {
+    "result": "SuperLemmini source replay 22096 retrieved and retained; a later NeoLemmix solution replay was also retrieved",
+    "retrievedFiles": [
+      {
+        "attachmentID": 22096,
+        "file": "Artifacts/DifficultyEvaluation/classic-blizzlem-313-superlemmini-public.rpl",
+        "sha256": "0bc14bdc835a557047a5ffa62b3d69817c70e2872f4abcc25f6d0b81b3c55d77"
+      },
+      {
+        "attachmentID": 24858,
+        "file": "/Users/erikveland/Downloads/The_Snow_Palace_Save_All_kaywhyn_Guigui.nxrp",
+        "engine": "NeoLemmix later revision; not target-compatible"
+      }
+    ],
+    "stillUnavailable": [
+      "attachment 24854; not required for the source-revision test"
+    ],
+    "replayTest": "The SuperLemmini replay was used as a route source in two bounded ClassicSolver transfer trials; neither emitted a candidate replay."
+  },
+  "assessment": "The 2024 public SuperLemmini replay was recovered. It reports the original 50-builder, 10-digger stock, and a 2026 forum post separately confirms the route on DOS and SuperLemmini. Its exact level revision is not embedded, and a heuristic transfer to the exact bundled member did not win. The retrieved later NeoLemmix replay targets a changed 51-builder, 11-digger revision. No strict native win, source-physics parity result, or difficulty score has been produced."
+}

@@ -1,0 +1,233 @@
+{
+  "expected" : {
+    "lost" : 3,
+    "reserves" : 3,
+    "saved" : 10,
+    "stateHash" : "da7ca0b3d21c602eeaa73ec6da24e132d4d44215f2a8b16a7a6a2f29ea7e8864",
+    "ticks" : 6969
+  },
+  "initialStateHash" : "eb527d65b8ca916df506d8c39625825aa11741fe08bd806215273516f7dc0729",
+  "inputs" : [
+    {
+      "action" : "blocker",
+      "lemming" : 3,
+      "tick" : 100
+    },
+    {
+      "action" : "walker",
+      "lemming" : 4,
+      "tick" : 150
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 4,
+      "tick" : 210
+    },
+    {
+      "action" : "walker",
+      "lemming" : 4,
+      "tick" : 350
+    },
+    {
+      "action" : "walker",
+      "lemming" : 4,
+      "tick" : 620
+    },
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 4,
+      "tick" : 640
+    },
+    {
+      "action" : "walker",
+      "lemming" : 4,
+      "tick" : 660
+    },
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 4,
+      "tick" : 820
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 5,
+      "tick" : 900
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 5,
+      "tick" : 1075
+    },
+    {
+      "action" : "walker",
+      "lemming" : 5,
+      "tick" : 1140
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 6,
+      "tick" : 1200
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 6,
+      "tick" : 1375
+    },
+    {
+      "action" : "walker",
+      "lemming" : 6,
+      "tick" : 1440
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 7,
+      "tick" : 1500
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 6,
+      "tick" : 1600
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 7,
+      "tick" : 1675
+    },
+    {
+      "action" : "walker",
+      "lemming" : 7,
+      "tick" : 1740
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 8,
+      "tick" : 1800
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 7,
+      "tick" : 1900
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 8,
+      "tick" : 1975
+    },
+    {
+      "action" : "walker",
+      "lemming" : 8,
+      "tick" : 2040
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 9,
+      "tick" : 2100
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 8,
+      "tick" : 2200
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 9,
+      "tick" : 2275
+    },
+    {
+      "action" : "walker",
+      "lemming" : 9,
+      "tick" : 2340
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 10,
+      "tick" : 2400
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 9,
+      "tick" : 2500
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 10,
+      "tick" : 2575
+    },
+    {
+      "action" : "walker",
+      "lemming" : 10,
+      "tick" : 2640
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 11,
+      "tick" : 2700
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 10,
+      "tick" : 2800
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 11,
+      "tick" : 2875
+    },
+    {
+      "action" : "walker",
+      "lemming" : 11,
+      "tick" : 2940
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 12,
+      "tick" : 3000
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 11,
+      "tick" : 3100
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 12,
+      "tick" : 3175
+    },
+    {
+      "action" : "walker",
+      "lemming" : 12,
+      "tick" : 3240
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 12,
+      "tick" : 3400
+    },
+    {
+      "action" : "walker",
+      "lemming" : 3,
+      "tick" : 3500
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 3,
+      "tick" : 3710
+    },
+    {
+      "action" : "walker",
+      "lemming" : 3,
+      "tick" : 3770
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 3,
+      "tick" : 3920
+    }
+  ],
+  "level" : 214,
+  "levelSHA256" : "798190f8988f139a35735e6795ae264b306d614ad883b95b2fdd3289a5e0795b",
+  "population" : 13,
+  "version" : 1
+}

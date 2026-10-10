@@ -237,6 +237,28 @@ func testFollowerBehindBuilderIsTargeted() throws {
         "A follower approaching a bridge builder should receive the selected skill")
     check(game.target(slot: skillSlot, x: clickX, y: activeBuilder.y - 5)?.id == activeBuilder.id,
         "Turning the setting off should keep the nearest bridge builder")
+    check(game.target(slot: builderSlot, x: clickX, y: activeBuilder.y - 5,
+        preferApproaching: true, preferBuilders: true)?.id == follower.id,
+        "A builder that cannot take Build yet must not block the eligible follower")
+    check(game.target(slot: builderSlot, x: clickX, y: activeBuilder.y - 5,
+        preferApproaching: true, preferBuilders: false)?.id == follower.id,
+        "Builder preference opt-out must select the eligible follower")
+    let supply = game.supplies[builderSlot]
+    check(!game.assign(slot: builderSlot, to: activeBuilder.id) && game.supplies[builderSlot] == supply,
+        "An early Build must not consume supply or restart the builder")
+    let blockerSlot = game.configuration.skills.firstIndex(of: .blocker)!
+    check(game.assign(slot: blockerSlot, to: activeBuilder.id), "Could not prepare the bomb blocker")
+    let bomberSlot = game.configuration.skills.firstIndex(of: .bomber)!
+    check(game.target(slot: bomberSlot, x: follower.x, y: follower.y - 5,
+        preferApproaching: true, preferBombBlockers: true)?.id == activeBuilder.id,
+        "Bomb must prefer the blocker over the nearer follower")
+    check(game.target(slot: bomberSlot, x: follower.x, y: follower.y - 5,
+        preferApproaching: false, preferBombBlockers: false)?.id == follower.id,
+        "Bomb preference opt-out must preserve ordinary targeting")
+    check(game.assign(slot: bomberSlot, to: activeBuilder.id), "Could not bomb the blocker")
+    check(game.target(slot: bomberSlot, x: follower.x, y: follower.y - 5,
+        preferApproaching: true, preferBombBlockers: true)?.id == follower.id,
+        "An already bombed blocker must not receive a second bomb")
     print("PASS Lemmings 2 targeting favours a follower behind a builder")
 }
 
@@ -582,7 +604,7 @@ func testTribeNuke() throws {
     game.step()
     check(game.isComplete && game.lost == 1 && game.blastFlashes.count == 1,
           "Non-Classic nuke used the Classic explosion delay")
-    check(game.drainSoundEvents().filter{$0 == .init(.explode)}.count == 1, "Tribe nuke missed its explosion cue")
+    check(game.drainSoundEvents().filter{$0.sample == Lemmings2SoundCue.explode.rawValue}.count == 1, "Tribe nuke missed its explosion cue")
     check(Lemmings2SoundRequest.assignment(skill:.jumper,tribe:0).sample == 15, "Jumper cue differs")
     check(Lemmings2SoundRequest.assignment(skill:.superlem,tribe:1).sample == 30, "Superlem cue differs")
     check(Lemmings2SoundRequest.assignment(skill:.surfer,tribe:1).sample == 36, "Surfer cue differs")
@@ -756,9 +778,21 @@ func testInteractiveObjects() throws {
     trap.step()
     check(trap.lemmings[0].state == .trapped && trap.objectFrames[7] == 1,
           "Trap did not capture and animate")
+    let trapCue = trap.drainSoundEvents().filter { $0.supplementalEffect == .trapTrigger }
+    check(trapCue.count == 1 && trapCue[0].point != nil, "Trap activation lost its one-shot sound")
     check(!trap.assign(slot:0,to:0), "Trapped lemming accepted a skill")
     for _ in 0..<5 { trap.step() }
     check(trap.lost == 2 && trap.lemmings[1].active, "Trap busy exclusion or rearming is incorrect")
+    var timedTrap = try make(.init(id: 9, kind: .timedTrap,
+        triggers: [.init(x: 20, y: 60, width: 12, height: 1)], frameCount: 6,
+        minimumFrame: 2, maximumFrame: 3), total: 1)
+    timedTrap.step()
+    check(timedTrap.drainSoundEvents().allSatisfy { $0.supplementalEffect != .trapTrigger },
+          "Dormant timed trap played a killing sound")
+    var timedTrapCues: [Lemmings2SoundRequest] = []
+    for _ in 0..<30 { timedTrap.step(); timedTrapCues += timedTrap.drainSoundEvents() }
+    check(timedTrap.lost == 1 && timedTrapCues.filter { $0.supplementalEffect == .trapTrigger }.count == 1,
+          "Timed trap must sound once on lethal contact, without repeating on final death")
     var launcher = try make(.init(id:8,kind:.launcher,triggers:[trigger],frameCount:8,
         velocityX:-10,velocityY:-5,flags:3),total:1)
     launcher.step()
@@ -1147,6 +1181,8 @@ func testTrampolines() throws {
         check(game.lemmings[0].state == .jumping, "Trampoline did not convert a falling lemming")
         check(game.lemmings[0].air?.velocityY == Int16(-strengths[segment]), "Trampoline segment strength differs from original table")
         check(game.lemmings[0].air?.velocityX == (strengths[segment] == 4 ? 3 : 4), "Trampoline horizontal impulse differs")
+        let bounce = game.drainSoundEvents().filter { $0.supplementalEffect == .trampolineBounce }
+        check(bounce.count == 1 && bounce[0].point != nil, "Trampoline launch lost its one-shot sound")
     }
     print("PASS all sixteen native trampoline launch segments")
 }
@@ -1520,6 +1556,21 @@ func testNativeTerrainPhases(_ masks: Lemmings2TerrainMasks) throws {
 }
 
 func testControlsAndSoundEvents() throws {
+    let rescueBase = try fixture().configuration
+    var rescuing = try Lemmings2Runtime(configuration: .init(width: rescueBase.width,
+        height: rescueBase.height, pixels: rescueBase.pixels, solid: rescueBase.solid,
+        palette: rescueBase.palette, entrance: .init(x: 20, y: 60, width: 1, height: 1),
+        exits: [.init(x: 0, y: 59, width: 120, height: 2)], skills: [.jumper], supplies: [0],
+        total: 300, timeLimit: 120, releaseInterval: 1, terrainMasks: rescueBase.terrainMasks,
+        firstReleaseTick: 1, exitFrameCount: 1))
+    for _ in 0..<400 where !rescuing.isComplete { rescuing.step() }
+    let rescues = rescuing.drainSoundEvents().filter { $0.supplementalEffect == .yippee }
+    check(rescuing.saved == 300 && rescues.count == 300 && rescues.allSatisfy { $0.point != nil },
+          "Every L2 rescue must retain its voice, even beyond the general event cap")
+    rescuing.step()
+    check(rescuing.drainSoundEvents().isEmpty, "Completed L2 run repeated rescue sounds")
+    check(Lemmings2SoundRequest(supplemental: .trampolineBounce).sample == -1,
+          "Supplemental effects must not guess an original bank index")
     var falling = try Lemmings2Runtime(configuration: .init(width: 120, height: 80,
         pixels: [UInt8](repeating: 0, count: 9600), solid: [Bool](repeating: false, count: 9600),
         palette: [UInt8](repeating: 255, count: 1024), entrance: .init(x: 20, y: 45, width: 1, height: 1),
@@ -1528,6 +1579,7 @@ func testControlsAndSoundEvents() throws {
     var falls: [Lemmings2SoundRequest] = []
     for _ in 0..<200 { falling.step(); falls += falling.drainSoundEvents() }
     check(falls.filter { $0.isBottomFall }.count == 1 && falling.lost == 1, "L2 must identify bottom deaths once")
+    check(falls.first(where: { $0.isBottomFall })?.point != nil, "Bottom death lost its world position")
     check(!Lemmings2SoundRequest(.fallOut).isBottomFall, "Other boundary deaths must retain their sound")
     check(Lemmings2Control.slot(x: 304, y: 170) == Lemmings2Control.nuke.rawValue, "Mushroom cloud must be nuke, not fan")
     check(Lemmings2Control.slot(x: 272, y: 190) == Lemmings2Control.fan.rawValue, "Lower-left control must be fan")
@@ -1562,7 +1614,10 @@ func testControlsAndSoundEvents() throws {
     let slot = c.skills.firstIndex(of: .climber)!, lem = run.lemmings[0]
     check(run.target(slot: slot, x: lem.x, y: lem.y - 5)?.id == 0, "Closest eligible hover target")
     check(run.assign(slot: slot, to: 0), "Selection assignment")
-    check(run.drainSoundEvents() == [.init(.assignSkill)], "Successful assignment has no native cue")
+    let assignedSounds = run.drainSoundEvents()
+    check(assignedSounds.count == 1 && assignedSounds[0].sample == Lemmings2SoundCue.assignSkill.rawValue,
+          "Successful assignment has no native cue")
+    check(assignedSounds[0].point == GameplaySoundPoint(x: Double(lem.x), y: Double(lem.y)), "Assignment lost its world position")
     check(!run.assign(slot: slot, to: 0) && run.drainSoundEvents().isEmpty, "Failed assignment played sound")
     check(run.target(slot: slot, x: lem.x, y: lem.y - 5)?.id == 1, "Ineligible overlapping lemming stole selection")
     let supplies = run.supplies
@@ -1581,7 +1636,7 @@ func testControlsAndSoundEvents() throws {
     var explosions = 0
     for _ in 0..<180 {
         run.step()
-        explosions += run.drainSoundEvents().filter { $0 == .init(.explode) }.count
+        explosions += run.drainSoundEvents().filter { $0.sample == Lemmings2SoundCue.explode.rawValue }.count
     }
     check(run.isComplete && run.lost == 3 && run.saved == 0 && explosions == 3, "Nuke did not explode all three lemmings with sound")
     check(run.drainSoundEvents().isEmpty, "Sound events replayed after drain")
@@ -1930,6 +1985,20 @@ do {
         check(nativeRestored.progress == nativeProgress, "Failed native save restore changed state")
         try tribes.select(tribe: 1)
         check(tribes.level == 0 && tribes.population == 60 && tribes.results[0]?.saved == 60, "Tribe progress not independent")
+        check(tribes.canSkipLevel && tribes.skipLevel() && tribes.level == 1 && tribes.population == 60
+            && tribes.results[10] == nil && tribes.unlockedLevel(in: 1) == 1,
+              "A skip must open the next level with the same population and no result")
+        check(!tribes.progress.skipped!.isEmpty && tribes.tribeMedal(1) == .none, "A skipped level earned a tribe medal")
+        var skipRestored = try Lemmings2Campaign(root: root)
+        try skipRestored.restore(JSONDecoder().decode(Lemmings2Campaign.Progress.self, from: JSONEncoder().encode(tribes.progress)))
+        check(skipRestored.progress == tribes.progress && skipRestored.population == 60, "Skipped levels did not survive saving")
+        do { try skipRestored.restore(.init(tribe: 1, level: 1, results: tribes.results, skipped: [10: 61]))
+            check(false, "Save accepted an impossible skipped population") } catch {}
+        let olderSave = try JSONSerialization.jsonObject(with: JSONEncoder().encode(nativeProgress)) as! [String: Any]
+        check(olderSave["skipped"] == nil, "A save without skips wrote an empty skip list")
+        try tribes.select(tribe: 1, level: 0)
+        check(!tribes.canSkipLevel && !tribes.skipLevel() && tribes.level == 0, "A skipped level took a second skip")
+        try tribes.select(tribe: 1)
         check(Lemmings2Campaign.medal(saved: 60, total: 60, allowedLosses: 0) == .gold, "Gold threshold")
         check(Lemmings2Campaign.medal(saved: 59, total: 60, allowedLosses: 1) == .gold, "Allowed gold loss")
         check(Lemmings2Campaign.medal(saved: 30, total: 60, allowedLosses: 0) == .silver, "Silver threshold")

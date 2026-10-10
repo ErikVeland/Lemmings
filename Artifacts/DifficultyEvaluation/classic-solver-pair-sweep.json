@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-04",
+  "finding": "An unforced, bounded two-skill timing sweep recovered two already-scored controls missed by the ordinary beam and found one first native win with a replay-based score. This isolates a solver coverage gap; it does not establish source physics parity.",
+  "solverSha256": "d7c1717faa942ffeb08802b7a1883ea82333c8a5a26da1efba24bbba00b23792",
+  "nativeLibrarySha256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "controls": [
+    {
+      "level": "fan:lldb-268/CRISFN04.dat#2",
+      "title": "Blow two lemmings",
+      "archiveSha256": "ae52a960fb1cadef87b6dd14cb8b2f63de4e838551c265ef0a68ef8f5513257b",
+      "initialStateHash": "ab97f5270488b8658594b7fbed5f3d26ae322bed551931f3c4ff3bd52baa46fc",
+      "settings": "bomber,bomber; first ticks 50-80; second gap 35-80; 45-second bound",
+      "waitingRouteTick": 56,
+      "firstAssignments": 3,
+      "secondAssignments": 411,
+      "completedContinuations": 411,
+      "win": "2/2 at tick 282, with skills after ticks 56 and 135",
+      "replaySha256": "1feb25520eaf892c6c17c2a4e313b59ab66c4d63441aac68acd06da7d4878030"
+    },
+    {
+      "level": "fan:lldb-477/Tame.DAT#1",
+      "title": "Rent-a-Lemming",
+      "archiveSha256": "4657df879d7b2e81e52d0f5e5f2d2d15d8d31176be4628dcfa67366c9c1450bc",
+      "initialStateHash": "4ce89087bb20c89edc62829c7c289329cb72a42da31994a18638c377fd8809af",
+      "settings": "basher,basher; first ticks 210-250; second gap 40-80; 45-second bound",
+      "waitingRouteTick": 210,
+      "firstAssignments": 1,
+      "secondAssignments": 99,
+      "completedContinuations": 99,
+      "win": "50/25 at tick 2924, with skills after ticks 210 and 276",
+      "replaySha256": "a55dbb665d544a6ccbedd759c352f5b224e1185d0ddc6ad6f8a2d0156bd957d0"
+    }
+  ],
+  "unscoredProbe": {
+    "level": "fan:lldb-268/CRISFN04.dat#0",
+    "title": "Walking on chains",
+    "archiveSha256": "ae52a960fb1cadef87b6dd14cb8b2f63de4e838551c265ef0a68ef8f5513257b",
+    "initialStateHash": "f6beb94d53c3a18e2b91b2d570064640316a0fdc9b498faf0a450eb15ae07b31",
+    "settings": "builder,digger; first ticks 1-150; second gap 1-100; 20-second bound",
+    "waitingRouteTick": 150,
+    "firstAssignments": 100,
+    "secondAssignments": 13546,
+    "completedContinuations": 13546,
+    "best": "0/10; no win"
+  },
+  "newWin": {
+    "level": "fan:lldb-318/joem2.dat#6",
+    "title": "Know your enemy...",
+    "archiveSha256": "948af2df52d08350013856fe760f866d2ffdfae2692d648030d67137ab1950ca",
+    "initialStateHash": "7b5e66edbdac6278b129858fdd5913ada5513c4b37d1260533a26857cf55be74",
+    "settings": "bomber,digger; first ticks 1-300; second gap 1-150; 30-second bound",
+    "waitingRouteTick": 161,
+    "firstAssignments": 231,
+    "secondAssignments": 109393,
+    "completedContinuations": 109393,
+    "outcome": "8/8 saved at tick 636, with skills after ticks 161 and 174",
+    "replaySha256": "06b639e96588989eb599fd73f55ea16811a0f2198d9b1ef50277216546981fff",
+    "difficultyScore": 261.8523440547414,
+    "scoreProbes": 10,
+    "evidenceCollectorSha256": "27dadbe80919469e921d44255e672e7c0ae5a3b5d75bc6b62402595d61b66fa7",
+    "strictChecks": "1/1 before and 1/1 after promotion into candidate-solutions.json",
+    "sourcePhysicsParity": "not independently checked"
+  },
+  "verification": "The source-built solver strictly replayed each winning proposal on its exact bundled level before writing the replay and reporting SOLVED. Both control initial-state hashes match earlier independently checked exact-archive controls. The new win passed separate strict verification before and after promotion. The negative probe is bounded and proves neither impossibility nor physics mismatch."
+}

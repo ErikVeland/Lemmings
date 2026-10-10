@@ -29,13 +29,16 @@ public struct ClassicObjectPlacement: Codable, Equatable, Sendable {
     /// Original zero-based slot in the 32-entry LVL object table.
     public let slot: Int
     public let x: Int
+    /// Object X before DOS display alignment. Golems uses this for hatch release.
+    public let sourceX: Int?
     public let y: Int
     public let id: Int
     public let draw: ClassicDrawProperties
 
-    public init(slot: Int = 0, x: Int, y: Int, id: Int, draw: ClassicDrawProperties) {
+    public init(slot: Int = 0, x: Int, sourceX: Int? = nil, y: Int, id: Int, draw: ClassicDrawProperties) {
         self.slot = slot
         self.x = x
+        self.sourceX = sourceX
         self.y = y
         self.id = id
         self.draw = draw
@@ -130,7 +133,9 @@ public struct ClassicLevel: Codable, Equatable, Sendable {
     public let steel: [ClassicSteelArea]
 
     public init(data: Data, propertiesOverride: ClassicLevelProperties? = nil,
-                steelOverride: [ClassicSteelArea]? = nil) throws {
+                steelOverride: [ClassicSteelArea]? = nil,
+                terrainOverride: [ClassicTerrainPlacement]? = nil,
+                objectsOverride: [ClassicObjectPlacement]? = nil) throws {
         let bytes = [UInt8](data)
         guard bytes.count >= Self.recordSize else {
             throw ClassicLevelError.invalidSize(actual: bytes.count, minimum: Self.recordSize)
@@ -176,6 +181,7 @@ public struct ClassicLevel: Codable, Equatable, Sendable {
             parsedObjects.append(ClassicObjectPlacement(
                 slot: index,
                 x: (storedX & ~7) - 16,
+                sourceX: storedX - 16,
                 y: Self.signedWord(bytes, at: offset + 2),
                 id: Int(bytes[offset + 5] & 0x0F),
                 draw: ClassicDrawProperties(
@@ -186,7 +192,7 @@ public struct ClassicLevel: Codable, Equatable, Sendable {
                 )
             ))
         }
-        objects = parsedObjects
+        objects = objectsOverride ?? parsedObjects
 
         var parsedTerrain: [ClassicTerrainPlacement] = []
         for index in 0..<400 {
@@ -208,7 +214,7 @@ public struct ClassicLevel: Codable, Equatable, Sendable {
                 )
             ))
         }
-        terrain = parsedTerrain
+        terrain = terrainOverride ?? parsedTerrain
 
         var parsedSteel: [ClassicSteelArea] = []
         for index in 0..<32 {

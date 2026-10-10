@@ -1,0 +1,332 @@
+{
+  "date": "2026-10-04",
+  "scope": "Genuinely unscored exact-bundled Hail and Havoc members with published Watch records. Each raw record was replayed at native input phase minus one, zero and plus one under Original and Golems mechanics and DOS and 32-slot object rules.",
+  "metadataVerification": "All eight distinct members matched their cached source page on title, rescue goal, lemming count, time limit, initial release rate and all eight skill stocks. This is level-header agreement, not terrain or physics parity.",
+  "packs": [
+    {
+      "packID": "fan:lldb-483",
+      "archiveSHA256": "0543b9c913b9999d82112c55561fc37b9e765a299c6dc4ee7dbea6c1db569d9e",
+      "records": 5,
+      "checks": 60
+    },
+    {
+      "packID": "fan:lldb-481",
+      "archiveSHA256": "575f71040f97db65494e2fd5ab5b3a4351fa43073677480e9af4a9881b02d997",
+      "records": 4,
+      "checks": 48
+    }
+  ],
+  "records": [
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-483",
+        "levelID": "Hail.DAT#6"
+      },
+      "title": "Steel Ice Span",
+      "sourceURL": "https://lldb.camanis.net/level/483/7",
+      "cachedPageSHA256": "b88b79665c2eec427bb9d860ded48305f211feed84be229a3647c7b55226ad42",
+      "headerMetadataMatched": true,
+      "goal": {
+        "required": 80,
+        "total": 80,
+        "minutes": 5
+      },
+      "releaseRate": 1,
+      "skills": {
+        "climb": 1,
+        "float": 0,
+        "bomb": 0,
+        "block": 0,
+        "build": 25,
+        "bash": 0,
+        "mine": 0,
+        "dig": 0
+      },
+      "rawSourceReplaySHA256": "b25c4b36a696c777760b5bdf29bb5e24515abe144c17982b9bf4c6bf87ec85d6",
+      "sourceHeaderSaved": 80,
+      "sourceHeaderTicks": 3084,
+      "phaseZeroOriginalFailure": "engine refused to queue builder for lemming 0 at tick 290",
+      "boundedResults": "12/12 tested interpretations and input phases rejected an assignment"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-483",
+        "levelID": "Hail.DAT#4"
+      },
+      "title": "Get the Point?",
+      "sourceURL": "https://lldb.camanis.net/level/483/5",
+      "cachedPageSHA256": "11d3ea5d0722481734ff8b908ccf014c97fe9bdc5b00d316a42df8367246d8bc",
+      "headerMetadataMatched": true,
+      "goal": {
+        "required": 79,
+        "total": 80,
+        "minutes": 3
+      },
+      "releaseRate": 20,
+      "skills": {
+        "climb": 0,
+        "float": 31,
+        "bomb": 0,
+        "block": 1,
+        "build": 10,
+        "bash": 0,
+        "mine": 0,
+        "dig": 1
+      },
+      "rawSourceReplaySHA256": "b5af6360b01c7d994b29e11095292afc95ac7f090d3ea4900544b6c0c527374c",
+      "sourceHeaderSaved": 79,
+      "sourceHeaderTicks": 1343,
+      "phaseZeroOriginalFailure": "engine refused to queue builder for lemming 0 at tick 79",
+      "boundedResults": "12/12 tested interpretations and input phases rejected an assignment"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-481",
+        "levelID": "Havoc.DAT#19"
+      },
+      "title": "LOoK BeFoRe YoU LeAp!",
+      "sourceURL": "https://lldb.camanis.net/level/481/20",
+      "cachedPageSHA256": "423965377a0da385709040b2d6d37ea47288d4b29e0009927e074f32b4066d3a",
+      "headerMetadataMatched": true,
+      "goal": {
+        "required": 50,
+        "total": 60,
+        "minutes": 7
+      },
+      "releaseRate": 1,
+      "skills": {
+        "climb": 1,
+        "float": 1,
+        "bomb": 40,
+        "block": 0,
+        "build": 0,
+        "bash": 0,
+        "mine": 2,
+        "dig": 0
+      },
+      "rawSourceReplaySHA256": "26f6ef24c788b3e9cbd2772b870e4bcbc597a6ced13c338fb4f876a82c97c23e",
+      "sourceHeaderSaved": 52,
+      "sourceHeaderTicks": 2697,
+      "phaseZeroOriginalFailure": "engine refused to queue bomber for lemming 0 at tick 93",
+      "boundedResults": "12/12 tested interpretations and input phases rejected an assignment"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-481",
+        "levelID": "Havoc.DAT#6"
+      },
+      "title": "Creature Discomforts",
+      "sourceURL": "https://lldb.camanis.net/level/481/7",
+      "cachedPageSHA256": "d0cf59e81168233b22d61ae48682a5a05f8cd7c45c4240f197c6b7ad9217abde",
+      "headerMetadataMatched": true,
+      "goal": {
+        "required": 15,
+        "total": 20,
+        "minutes": 3
+      },
+      "releaseRate": 50,
+      "skills": {
+        "climb": 10,
+        "float": 10,
+        "bomb": 5,
+        "block": 2,
+        "build": 10,
+        "bash": 2,
+        "mine": 2,
+        "dig": 2
+      },
+      "rawSourceReplaySHA256": "f0b1f11eaacb987ca1cedb8a53773875194cd349ff3375b527ad5a96e3605d90",
+      "sourceHeaderSaved": 19,
+      "sourceHeaderTicks": 1866,
+      "phaseZeroOriginalFailure": "engine refused to queue builder for lemming 1 at tick 408",
+      "boundedResults": "12/12 tested interpretations and input phases rejected an assignment"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-481",
+        "levelID": "Havoc.DAT#18"
+      },
+      "title": "Looks a Bit Nippy Out There",
+      "sourceURL": "https://lldb.camanis.net/level/481/19",
+      "cachedPageSHA256": "eaecb2a1f53b4d001c05dfb886c7f949e6ecb01f0a080393a621e9038922b21a",
+      "headerMetadataMatched": true,
+      "goal": {
+        "required": 80,
+        "total": 80,
+        "minutes": 3
+      },
+      "releaseRate": 30,
+      "skills": {
+        "climb": 1,
+        "float": 0,
+        "bomb": 0,
+        "block": 0,
+        "build": 9,
+        "bash": 4,
+        "mine": 3,
+        "dig": 3
+      },
+      "rawSourceReplaySHA256": "c0cad884cc398dcdb92c154e081c0ec42ac3e55bcb9e47592330979f81299e04",
+      "sourceHeaderSaved": 80,
+      "sourceHeaderTicks": 1329,
+      "phaseZeroOriginalFailure": "engine refused to queue builder for lemming 0 at tick 66",
+      "boundedResults": "12/12 tested interpretations and input phases rejected an assignment"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-483",
+        "levelID": "Hail.DAT#13"
+      },
+      "title": "Rendezvous II",
+      "sourceURL": "https://lldb.camanis.net/level/483/14",
+      "cachedPageSHA256": "d2e8f5a22f30c717f6f42968eccc1369b5934dfde72e2a252fbdc1d54e5ee354",
+      "headerMetadataMatched": true,
+      "goal": {
+        "required": 65,
+        "total": 65,
+        "minutes": 9
+      },
+      "releaseRate": 50,
+      "skills": {
+        "climb": 5,
+        "float": 5,
+        "bomb": 0,
+        "block": 2,
+        "build": 20,
+        "bash": 5,
+        "mine": 3,
+        "dig": 3
+      },
+      "rawSourceReplaySHA256": "fb65f3c705f0f4afe03c23271f9dc7363452824b05504925c22cefbbdee25b08",
+      "sourceHeaderSaved": 65,
+      "sourceHeaderTicks": 2857,
+      "phaseZeroOriginalFailure": "engine refused to queue digger for lemming 2 at tick 326",
+      "boundedResults": "12/12 tested interpretations and input phases rejected an assignment"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-483",
+        "levelID": "Hail.DAT#10"
+      },
+      "title": "Emmings!  (No L)",
+      "sourceURL": "https://lldb.camanis.net/level/483/11",
+      "cachedPageSHA256": "93b1e402a0f84701a9a4caf9a4439a337c58d963f2582978a8fd9a1012369f16",
+      "headerMetadataMatched": true,
+      "goal": {
+        "required": 70,
+        "total": 70,
+        "minutes": 6
+      },
+      "releaseRate": 50,
+      "skills": {
+        "climb": 2,
+        "float": 2,
+        "bomb": 2,
+        "block": 2,
+        "build": 6,
+        "bash": 0,
+        "mine": 2,
+        "dig": 2
+      },
+      "rawSourceReplaySHA256": "5ec0f54bb352815b256a1f11125ff1c2f08a59518869070e8189826e7ca0f506",
+      "sourceHeaderSaved": 70,
+      "sourceHeaderTicks": 2704,
+      "phaseZeroOriginalFailure": "engine refused to queue builder for lemming 4 at tick 751",
+      "boundedResults": "12/12 tested interpretations and input phases rejected an assignment"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-483",
+        "levelID": "Hail.DAT#10"
+      },
+      "title": "Emmings!  (No L)",
+      "sourceURL": "https://lldb.camanis.net/level/483/11",
+      "cachedPageSHA256": "93b1e402a0f84701a9a4caf9a4439a337c58d963f2582978a8fd9a1012369f16",
+      "headerMetadataMatched": true,
+      "goal": {
+        "required": 70,
+        "total": 70,
+        "minutes": 6
+      },
+      "releaseRate": 50,
+      "skills": {
+        "climb": 2,
+        "float": 2,
+        "bomb": 2,
+        "block": 2,
+        "build": 6,
+        "bash": 0,
+        "mine": 2,
+        "dig": 2
+      },
+      "rawSourceReplaySHA256": "1d53e0a3bfd88a36684ae6659a3dfc6eca652f5e79044d0f9d5cdf54d14ed9a1",
+      "sourceHeaderSaved": 70,
+      "sourceHeaderTicks": 2350,
+      "phaseZeroOriginalFailure": "engine refused to queue builder for lemming 3 at tick 1297",
+      "boundedResults": "12/12 tested interpretations and input phases rejected an assignment"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-481",
+        "levelID": "Havoc.DAT#10"
+      },
+      "title": "Welcome to the party, pal!",
+      "sourceURL": "https://lldb.camanis.net/level/481/11",
+      "cachedPageSHA256": "430a3f2635f940b91ab4d167060daae76a771368ab836ebdb61b77ca336dbee9",
+      "headerMetadataMatched": true,
+      "goal": {
+        "required": 80,
+        "total": 80,
+        "minutes": 4
+      },
+      "releaseRate": 1,
+      "skills": {
+        "climb": 0,
+        "float": 0,
+        "bomb": 0,
+        "block": 0,
+        "build": 20,
+        "bash": 5,
+        "mine": 5,
+        "dig": 5
+      },
+      "rawSourceReplaySHA256": "86098127453e5f7ec9c7e59e2dd7241f96fab7f35e1f5c20a085110e5c67b45a",
+      "sourceHeaderSaved": 80,
+      "sourceHeaderTicks": 3879,
+      "phaseZeroOriginalFailure": "engine refused to queue builder for lemming 0 at tick 505",
+      "boundedResults": "12/12 tested interpretations and input phases rejected an assignment"
+    }
+  ],
+  "focusedBuilderCheck": {
+    "identity": "fan:lldb-483/Hail.DAT#4",
+    "sourceReplaySHA256": "b5af6360b01c7d994b29e11095292afc95ac7f090d3ea4900544b6c0c527374c",
+    "shiftRangeInclusive": [
+      -3,
+      12
+    ],
+    "checks": 64,
+    "outcome": "No win. Under Original mechanics, moving the second Builder to native tick 83, 84 or 85 made it assignable, but the next Floater assignment to lemming 1 was rejected at tick 96.",
+    "probeSHA256": "4c6816f170d748abd0d09d08db9f2749d7d84bca450fbea6de705774addb49fe",
+    "logSHA256": "4cd10dea1898d3134ec4e4293cfdc7ae6cd877d82c1b153960b92ef4003a0f07"
+  },
+  "sourceBuiltProbes": {
+    "Hail": "a42e8c05053b73eea6a85a1d7ccb25cd2770483edbbd895bc7b75caed2e74a27",
+    "Havoc": "ea811b7868f6802ce972ddc9f9b6391018a5c697c8aeb4b912cd63fd06209a05",
+    "dataInspection": "80fdc5cecb767e64d2b67d6e29db358f6e71c9bbf65db04e335d00ec33fa90be"
+  },
+  "logsSHA256": {
+    "Hail": "260b970b1203b10ec6104ba49c4315ca9da11fd00224323a9d651cad214cd4fc",
+    "Havoc": "6acfe4fbfc771aa660c4c3359652fb753774ac669e97bf75d2613b0eba9f9295"
+  },
+  "sourceBuiltNxlvKitSHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "conclusion": "No new strict native win or score. Source actions diverge despite matching level headers. Terrain and source physics parity remain unverified; the bounded failures do not justify a speculative engine change."
+}

@@ -1,0 +1,10 @@
+UI test windows: offscreen; audio: muted
+PASS idle HDR overlay skips masks and clears the last effect
+PASS world-anchored explosions across camera pan, zoom, resize and offscreen travel
+Selection raster benchmark: 0.129 ms/frame (includes bitmap allocation and readback)
+PASS cached flat/CRT outlines, visible breathing halo, Retina, fractional zoom, mirror, clipping and idle HDR
+Display Studio Display: current EDR 1.0, potential 2.0
+Display Mi Monitor: current EDR 1.0, potential 1.0
+PASS actual FP16 GPU output: 8x HDR core, warm second tick, unchanged SDR/background, bounded headroom and expiry
+PASS cinematic nuclear blast: visible SDR exposure, HDR peak, animated fireball, pressure ring, origin, expiry and nuke limits
+PASS superheroic speed: animated SDR/HDR streaks, engagement, clear centre and controls, pause and resume

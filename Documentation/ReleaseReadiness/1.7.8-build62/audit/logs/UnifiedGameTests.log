@@ -1,0 +1,8 @@
+PASS shared navigation, all eight releases, partial sequels, and skipped levels
+PASS Holiday Lemmings 1993: 32 levels render, decode triggers, and release lemmings
+PASS Holiday Lemmings 1994: 32 levels render, decode triggers, and release lemmings
+PASS Lemmings: 120 levels render, decode triggers, and release lemmings
+PASS Oh No! More Lemmings: 100 levels render, decode triggers, and release lemmings
+PASS Xmas Lemmings 1991: 4 levels render, decode triggers, and release lemmings
+PASS Xmas Lemmings 1992: 4 levels render, decode triggers, and release lemmings
+Unified game tests passed.

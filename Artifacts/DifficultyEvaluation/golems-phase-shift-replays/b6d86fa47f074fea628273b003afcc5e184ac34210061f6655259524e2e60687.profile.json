@@ -1,0 +1,120 @@
+{
+  "components" : {
+    "concurrencyBurden" : 180,
+    "constraintPressure" : 852.8227228207639,
+    "deductionComplexityProxy" : 300,
+    "executionPrecision" : 0,
+    "solutionComplexity" : 718.0195500086538,
+    "techniqueBurden" : 670
+  },
+  "confidence" : "medium",
+  "criticalActions" : [
+
+  ],
+  "detectedTechniques" : [
+    "basher",
+    "builder",
+    "climber",
+    "floater",
+    "multiple-worker-coordination",
+    "release-rate-manipulation"
+  ],
+  "explanation" : [
+    "4 used skill types; 4 assigned workers; 6 same-worker skill changes.",
+    "Maximum concurrent worker regions: 2.",
+    "Timing probes: 10. Untested alternatives remain unknown.",
+    "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+    "Source rank: fan:lldb-1."
+  ],
+  "key" : {
+    "analyserVersion" : "difficulty-3",
+    "assetsRevision" : "114b46885ed3c717cdad50bde6dc9d33191e7a10cee9ad6db563410cd00dcb27:probes-10",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "geooPk0.dat#9",
+      "packID" : "fan:lldb-1"
+    },
+    "levelRevision" : "66ff4c33c44970e945dffee82cfe84a4787329f60ee702613f3f2cb233865bec",
+    "replayRevision" : "b6d86fa47f074fea628273b003afcc5e184ac34210061f6655259524e2e60687",
+    "simulationVersion" : "neolemmix-ce-2026-09-27:golems-phase-minus-one-targeted:exit-contact"
+  },
+  "overallScore" : 480.73125496860314,
+  "precision" : {
+    "actions" : [
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 1
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 3
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 4
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 5
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 6
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 7
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 8
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 9
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 10
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 11
+      }
+    ],
+    "alternativeRunCount" : 0,
+    "assignmentCount" : 11,
+    "completed" : false,
+    "orderingOutcomes" : [
+
+    ],
+    "runCount" : 10,
+    "selectionOutcomes" : [
+
+    ]
+  },
+  "prerequisiteConcepts" : [
+
+  ],
+  "sourceRank" : "fan:lldb-1"
+}

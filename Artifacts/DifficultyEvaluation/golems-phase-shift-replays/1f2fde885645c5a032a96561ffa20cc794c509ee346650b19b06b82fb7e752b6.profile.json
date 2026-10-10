@@ -1,0 +1,110 @@
+{
+  "components" : {
+    "concurrencyBurden" : 180,
+    "constraintPressure" : 706.5676028739387,
+    "deductionComplexityProxy" : 150,
+    "executionPrecision" : 153.75,
+    "solutionComplexity" : 453.03910001730776,
+    "techniqueBurden" : 670
+  },
+  "confidence" : "medium",
+  "criticalActions" : [
+    1
+  ],
+  "detectedTechniques" : [
+    "basher",
+    "blocker",
+    "bomber",
+    "builder",
+    "multiple-worker-coordination",
+    "release-rate-manipulation"
+  ],
+  "explanation" : [
+    "4 used skill types; 4 assigned workers; 2 same-worker skill changes.",
+    "Maximum concurrent worker regions: 2.",
+    "Timing probes: 10. Untested alternatives remain unknown.",
+    "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+    "Source rank: fan:lldb-246."
+  ],
+  "key" : {
+    "analyserVersion" : "difficulty-3",
+    "assetsRevision" : "a762b7686c1e4ae04c805467f68b2a34a0c25969513b5c9df7492be4b262b746:probes-10",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Martin Zurlinden 03.dat#3",
+      "packID" : "fan:lldb-246"
+    },
+    "levelRevision" : "d1e2c06fd14cc00c157cc220651bbbcbb9bf401851cce5d23de76fc54085f0bf",
+    "replayRevision" : "1f2fde885645c5a032a96561ffa20cc794c509ee346650b19b06b82fb7e752b6",
+    "simulationVersion" : "neolemmix-ce-2026-09-27:golems-phase-minus-one-targeted:exit-contact"
+  },
+  "overallScore" : 423.6723903774197,
+  "precision" : {
+    "actions" : [
+      {
+        "outcomes" : {
+          "-1" : false,
+          "1" : false
+        },
+        "sequence" : 1
+      },
+      {
+        "outcomes" : {
+          "-1" : false,
+          "1" : true
+        },
+        "sequence" : 2
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 3
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 4
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 27
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 28
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 29
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 30
+      }
+    ],
+    "alternativeRunCount" : 0,
+    "assignmentCount" : 8,
+    "completed" : false,
+    "orderingOutcomes" : [
+
+    ],
+    "runCount" : 10,
+    "selectionOutcomes" : [
+
+    ]
+  },
+  "prerequisiteConcepts" : [
+
+  ],
+  "sourceRank" : "fan:lldb-246"
+}

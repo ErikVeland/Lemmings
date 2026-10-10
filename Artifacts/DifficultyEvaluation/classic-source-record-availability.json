@@ -1,0 +1,87 @@
+{
+  "checkedAtUTC": "2026-10-03T13:40:34Z",
+  "scope": "Eight already-checked exact bundled fan levels from the low-rescue no-win solver sample. This is a public source-site record-availability check, not a source-physics or solvability check.",
+  "records": [
+    {
+      "identity": "fan:lldb-533/OhNoMorecLemmings Wicked 2.DAT#3",
+      "title": "What's Better Than Bubbles?",
+      "publicLevelURL": "https://lldb.camanis.net/level/533/14",
+      "bundledArchiveSHA256": "8473c39f4bf9a6cc9b19dd6d27633e8fa7ccb8e70c52210758f6211bde8f22ba",
+      "publicHTMLSHA256": "f2cc5cc291fe9d4a7c3630a263ab8e14f70ec41cbc0609ef926b08449ccb9584",
+      "mostSavedRecord": "none",
+      "fewestSkillsRecord": "none",
+      "shortestTimeRecord": "none"
+    },
+    {
+      "identity": "fan:lldb-418/bigqthree.dat#0",
+      "title": "Escape from the Watergate Hotel",
+      "publicLevelURL": "https://lldb.camanis.net/level/418/1",
+      "bundledArchiveSHA256": "a49648752b2e3dd51c22605ea48fedf375ad7448ce9ca04c8f9d4959d0673fb8",
+      "publicHTMLSHA256": "df25b462bd00a237c6b8a1b36ae8b80395f03bee4f4e48dfbba591180a907641",
+      "mostSavedRecord": "none",
+      "fewestSkillsRecord": "none",
+      "shortestTimeRecord": "none"
+    },
+    {
+      "identity": "fan:lldb-549/Ji Hoon Earth 1.DAT#1",
+      "title": "Find your own way home",
+      "publicLevelURL": "https://lldb.camanis.net/level/549/2",
+      "bundledArchiveSHA256": "102ffe175287b115424dbbc74fd4e409dc4ac2676dd530700418c85b76614747",
+      "publicHTMLSHA256": "7b6398ae9e7be3520142ca8818693347fc87dff70448d9b2fa587becf78960d7",
+      "mostSavedRecord": "none",
+      "fewestSkillsRecord": "none",
+      "shortestTimeRecord": "none"
+    },
+    {
+      "identity": "fan:lldb-312/TWPAK10.dat#6",
+      "title": "Hello, I Can't Think Of A Title!",
+      "publicLevelURL": "https://lldb.camanis.net/level/312/7",
+      "bundledArchiveSHA256": "0a836e9df23084c3d30a968c613ee4c92976108db41e070f0b2fafde3d39fe2b",
+      "publicHTMLSHA256": "8de23f86f1f09ede88d6341b9e786f83154576eeecbc196c5d83d54a572df328",
+      "mostSavedRecord": "none",
+      "fewestSkillsRecord": "none",
+      "shortestTimeRecord": "none"
+    },
+    {
+      "identity": "fan:lldb-310/TWPAK08.dat#2",
+      "title": "Blocked Bridge",
+      "publicLevelURL": "https://lldb.camanis.net/level/310/3",
+      "bundledArchiveSHA256": "f94f553269e5905504794d67259eea0f78bbf8a85c9ac19135df60c47855dc39",
+      "publicHTMLSHA256": "e0b09c7a0e7942422320bbd5dca8e669003047f9f73dd997f324f95fc926a9d5",
+      "mostSavedRecord": "none",
+      "fewestSkillsRecord": "none",
+      "shortestTimeRecord": "none"
+    },
+    {
+      "identity": "fan:lldb-347/MARSHY03.DAT#3",
+      "title": "Don't leave any lemmings",
+      "publicLevelURL": "https://lldb.camanis.net/level/347/4",
+      "bundledArchiveSHA256": "dc63b72f64113f3aebb08bd16fbe1c59bae2c3dc04b0146a2954089ce46fedfa",
+      "publicHTMLSHA256": "9b92bea123d4290944d5ebd42dbac4ed8b930876b464e196e3abb61dc9ac0683",
+      "mostSavedRecord": "none",
+      "fewestSkillsRecord": "none",
+      "shortestTimeRecord": "none"
+    },
+    {
+      "identity": "fan:lldb-586/LEVELPAK.DAT#7",
+      "title": "Pipe Organ",
+      "publicLevelURL": "https://lldb.camanis.net/level/586/8",
+      "bundledArchiveSHA256": "83cd001de10e9400b78e9d79f356a1095ff5a1dd9fb5374d4ad06e2f46c87b14",
+      "publicHTMLSHA256": "0891ffe1c4aba0d65db9d1e1e213129fd8eb72aac42172afbbae6fe924822a56",
+      "mostSavedRecord": "none",
+      "fewestSkillsRecord": "none",
+      "shortestTimeRecord": "none"
+    },
+    {
+      "identity": "fan:lldb-34/levelpack1.dat#0",
+      "title": "blokers are for sissies",
+      "publicLevelURL": "https://lldb.camanis.net/level/34/1",
+      "bundledArchiveSHA256": "c3a84b9ff6fd9d9537feec02eca7f47416a55b90eabe1bac8abfe79ce0baee3e",
+      "publicHTMLSHA256": "d3e83031fd64431cea31ad2f3207892f95942d851308af21988f2b93a52ebdae",
+      "mostSavedRecord": "none",
+      "fewestSkillsRecord": "none",
+      "shortestTimeRecord": "none"
+    }
+  ],
+  "interpretation": "Every checked public page currently says Not solved yet in all three record categories and offers no Watch replay. Source-guided replay derivation is unavailable from these pages at this snapshot; this does not prove the levels impossible or rule out solutions elsewhere."
+}

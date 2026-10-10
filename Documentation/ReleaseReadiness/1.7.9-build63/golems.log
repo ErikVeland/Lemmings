@@ -1,0 +1,94 @@
+PASS fan:lldb-105 epic02.dat#3 80 1727
+PASS fan:lldb-140 Epic giga02.dat#0 8 1472
+PASS fan:lldb-14 Mikepak09.dat#1 60 3660
+PASS fan:lldb-160 Giga pack 01.dat#9 80 4442
+PASS fan:lldb-165 Giga pack 04.dat#5 20 1729
+PASS fan:lldb-171 Giga pack 09.dat#6 80 3736
+PASS fan:lldb-179 The lemming google pack.dat#2 26 1705
+PASS fan:lldb-179 The lemming google pack.dat#5 47 3336
+PASS fan:lldb-181 Lemmings platinum Fragle part 2.dat#10 47 3336
+PASS fan:lldb-181 Lemmings platinum Fragle part 2.dat#7 26 1705
+PASS fan:lldb-191 Lemmings platinum Dangerous Part 2.dat#14 50 3209
+PASS fan:lldb-193 Gronklems #1.dat#2 2 393
+PASS fan:lldb-193 Gronklems #1.dat#9 49 740
+PASS fan:lldb-196 nortpack1.dat#8 79 1800
+PASS fan:lldb-1 geooPk0.dat#1 79 7142
+PASS fan:lldb-1 geooPk0.dat#9 37 843
+PASS fan:lldb-202 LemmingsInArms.lvl#-1 9 3272
+PASS fan:lldb-202 LemmingsInMotion.lvl#-1 19 1586
+PASS fan:lldb-202 PlanB.lvl#-1 19 984
+PASS fan:lldb-202 Roundabout.lvl#-1 50 3192
+PASS fan:lldb-202 hard to port!.lvl#-1 48 1127
+PASS fan:lldb-202 mobius1.dat#0 50 3192
+PASS fan:lldb-202 mobius1.dat#1 9 3272
+PASS fan:lldb-202 mobius1.dat#2 48 1127
+PASS fan:lldb-202 mobius1.dat#3 19 984
+PASS fan:lldb-202 mobius1.dat#4 19 1586
+PASS fan:lldb-207 contest1.dat#3 48 991
+PASS fan:lldb-20 ISteve01.DAT#3 10 1664
+PASS fan:lldb-20 ISteve01.DAT#9 80 814
+PASS fan:lldb-214 LF Level Jam #1.dat#6 40 1399
+PASS fan:lldb-217 PSP Special.dat#3 8 2133
+PASS fan:lldb-218 PSP Special2.dat#2 10 1786
+PASS fan:lldb-218 PSP Special2.dat#3 25 1968
+PASS fan:lldb-220 AkseliPack01.dat#3 9 2596
+PASS fan:lldb-220 AkseliPack01.dat#4 48 991
+PASS fan:lldb-220 AkseliPack01.dat#6 7 3310
+PASS fan:lldb-220 AkseliPack01.dat#8 40 1399
+PASS fan:lldb-222 ANTHPCK2.DAT#2 74 2531
+PASS fan:lldb-222 ANTHPCK2.DAT#3 68 2428
+PASS fan:lldb-222 ANTHPCK2.DAT#4 80 3828
+PASS fan:lldb-223 ANTHPCK3.DAT#9 78 4611
+PASS fan:lldb-224 ANTHPCK4.DAT#7 77 4039
+PASS fan:lldb-225 ANTHPCK5.DAT#1 80 1941
+PASS fan:lldb-225 ANTHPCK5.DAT#3 69 2623
+PASS fan:lldb-22 ISteve08.dat#6 80 1734
+PASS fan:lldb-232 JANNPCK2.DAT#7 79 1700
+PASS fan:lldb-232 JANNPCK2.DAT#9 43 1969
+PASS fan:lldb-233 jannpck3.dat#4 40 1469
+PASS fan:lldb-233 jannpck3.dat#9 78 4857
+PASS fan:lldb-234 JANNPCK4.DAT#0 59 2930
+PASS fan:lldb-234 JANNPCK4.DAT#3 60 2558
+PASS fan:lldb-237 JEFFPCK3.DAT#5 50 646
+PASS fan:lldb-244 Martin Zurlinden 01.dat#0 48 1545
+PASS fan:lldb-244 Martin Zurlinden 01.dat#8 18 2675
+PASS fan:lldb-245 Martin Zurlinden 02.dat#4 60 2115
+PASS fan:lldb-245 Martin Zurlinden 02.dat#5 40 1937
+PASS fan:lldb-245 Martin Zurlinden 02.dat#6 60 742
+PASS fan:lldb-245 Martin Zurlinden 02.dat#7 61 4212
+PASS fan:lldb-245 Martin Zurlinden 02.dat#8 30 1602
+PASS fan:lldb-246 Martin Zurlinden 03.dat#0 40 3006
+PASS fan:lldb-246 Martin Zurlinden 03.dat#2 54 1022
+PASS fan:lldb-246 Martin Zurlinden 03.dat#3 39 1692
+PASS fan:lldb-246 Martin Zurlinden 03.dat#4 30 878
+PASS fan:lldb-246 Martin Zurlinden 03.dat#5 38 1465
+PASS fan:lldb-24 ISteve04.dat#9 8 2827
+PASS fan:lldb-252 Conway03.DAT#9 73 1470
+PASS fan:lldb-265 CRISFN01.dat#3 65 2472
+PASS fan:lldb-265 CRISFN01.dat#5 39 1705
+PASS fan:lldb-266 CRISFN02.dat#6 54 1105
+PASS fan:lldb-268 CRISFN04.dat#1 19 1069
+PASS fan:lldb-268 CRISFN04.dat#7 8 691
+PASS fan:lldb-270 CRISFN06.dat#0 33 902
+PASS fan:lldb-270 CRISFN06.dat#3 61 2748
+PASS fan:lldb-270 CRISFN06.dat#6 39 1524
+PASS fan:lldb-271 CRISFN07.dat#5 43 1234
+PASS fan:lldb-272 CRISFN08.dat#0 20 3545
+PASS fan:lldb-272 CRISFN08.dat#7 28 902
+PASS fan:lldb-274 CRISFN10.dat#0 78 4389
+PASS fan:lldb-275 CRISFN11.dat#1 70 1273
+PASS fan:lldb-277 CRISFN13.dat#6 59 572
+PASS fan:lldb-278 CRISFN14.dat#6 65 2415
+PASS fan:lldb-278 CRISFN14.dat#8 80 6956
+PASS fan:lldb-290 JUANJO1N.DAT#9 80 929
+PASS fan:lldb-2 geooPk1.dat#7 4 2042
+PASS fan:lldb-302 TWPAK00.dat#9 10 2533
+PASS fan:lldb-303 TWPAK01.dat#3 80 875
+PASS fan:lldb-303 TWPAK01.dat#6 76 788
+PASS fan:lldb-304 TWPAK02.dat#6 75 2469
+PASS fan:lldb-306 TWPAK04.dat#3 32 516
+PASS fan:lldb-312 TWPAK10.dat#7 5 3075
+PASS fan:lldb-315 TWPAK13.dat#0 30 1348
+PASS fan:lldb-315 TWPAK13.dat#1 20 644
+PASS fan:lldb-317 joem1.dat#8 80 1720
+PASS fan:lldb-327 JM01.DAT#7

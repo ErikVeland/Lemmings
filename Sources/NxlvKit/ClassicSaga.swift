@@ -273,7 +273,7 @@ extension ClassicSaga {
         let overall = completion
         var entries = [ClassicLaunchEntry(
             mode: .fullQuest,
-            title: "Full Quest",
+            title: "Oh My! ALL Lemmings!",
             passed: overall.passed,
             total: overall.total)]
 

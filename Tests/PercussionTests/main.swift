@@ -128,6 +128,75 @@ private func testModernCentresPercussionAndFaithfulDoesNot() throws {
     print("PASS modern centres the beat and faithful leaves it where it was")
 }
 
+private func testHolidayModernMix() throws {
+    let root = URL(fileURLWithPath: "Sources/Music/holiday_lemmings_music_mod", isDirectory: true)
+    let jingleBells = try ProTrackerModule(data: Data(contentsOf: root.appendingPathComponent("jb.mod")))
+    let rudolph = try ProTrackerModule(data: Data(contentsOf: root.appendingPathComponent("rudi.mod")))
+
+    let modernJingleBells = ProTrackerEnhancedPlayer(module: jingleBells, enhancements: .modern)
+    let faithfulJingleBells = ProTrackerEnhancedPlayer(module: jingleBells, enhancements: .faithful)
+    try require(modernJingleBells.hasRhythm, "Jingle Bells breakbeat was not identified")
+    for index in [0, 2, 3, 4, 5, 6, 10] {
+        try require(modernJingleBells.enhancements.voiceTuning[index]?.centering == 1,
+                    "Jingle Bells sample \(index) was not centred")
+        try require(faithfulJingleBells.enhancements.voiceTuning[index] == nil,
+                    "faithful Jingle Bells changed sample \(index)")
+    }
+    var renderedJingleBells = modernJingleBells
+    var renderedFaithful = faithfulJingleBells
+    var middleEnergy = 0.0
+    var sideEnergy = 0.0
+    var faithfulMiddleEnergy = 0.0
+    var faithfulSideEnergy = 0.0
+    for _ in 0..<44_100 {
+        let frame = renderedJingleBells.nextFrame()
+        let faithfulFrame = renderedFaithful.nextFrame()
+        middleEnergy += abs(Double(frame.left) + Double(frame.right))
+        sideEnergy += abs(Double(frame.left) - Double(frame.right))
+        faithfulMiddleEnergy += abs(Double(faithfulFrame.left) + Double(faithfulFrame.right))
+        faithfulSideEnergy += abs(Double(faithfulFrame.left) - Double(faithfulFrame.right))
+    }
+    try require(middleEnergy > 0, "Jingle Bells rendered silence")
+    try require(faithfulMiddleEnergy > 0, "faithful Jingle Bells rendered silence")
+    try require(sideEnergy / middleEnergy < faithfulSideEnergy / faithfulMiddleEnergy * 0.2,
+                "Jingle Bells beat and lead were not centred in the rendered audio")
+
+    let modernRudolph = ProTrackerEnhancedPlayer(module: rudolph, enhancements: .modern)
+    for index in [12, 13] {
+        try require(modernRudolph.enhancements.voiceTuning[index]?.centering == 1,
+                    "Rudolph drum \(index) was not centred")
+    }
+    print("PASS Holiday modern mix centres the breakbeat and lead; faithful panning stays original")
+}
+
+private func testRhythmStemKeepsTheClockAndRejectsMelody() throws {
+    var bytes = [UInt8](repeating: 0, count: 1084 + 1024 + 128)
+    bytes[950] = 1
+    for (index, value) in "M.K.".utf8.enumerated() { bytes[1080 + index] = value }
+    for (sample, name) in ["kick", "organ"].enumerated() {
+        let header = 20 + sample * 30
+        for (index, value) in name.utf8.enumerated() { bytes[header + index] = value }
+        bytes[header + 23] = 32; bytes[header + 25] = 64; bytes[header + 29] = 32
+        let period = sample == 0 ? 428 : 214
+        let note = 1084 + sample * 4
+        bytes[note] = UInt8(period >> 8); bytes[note + 1] = UInt8(period & 255)
+        bytes[note + 2] = UInt8((sample + 1) << 4)
+        for frame in 0..<64 { bytes[2108 + sample * 64 + frame] = UInt8(bitPattern: frame < 32 ? 100 : -100) }
+    }
+    let module = try ProTrackerModule(data: Data(bytes))
+    var full = ProTrackerEnhancedPlayer(module: module), rhythm = ProTrackerEnhancedPlayer(module: module)
+    var melodyEnergy: Float = 0, drumEnergy: Float = 0
+    for _ in 0..<4410 {
+        let mixed = full.nextFrame(), drums = rhythm.nextFrame(rhythmAmount: 1)
+        try require(drums.right == 0, "Melody leaked into the native rhythm channel")
+        try require(abs(mixed.left - drums.left) < 0.000001, "Rhythm isolation altered the drum samples")
+        melodyEnergy += abs(mixed.right); drumEnergy += abs(drums.left)
+    }
+    try require(drumEnergy > 1 && melodyEnergy > 1, "Rhythm fixture did not render both instruments")
+    try require(full.player.secondsUntilNextBeat == rhythm.player.secondsUntilNextBeat, "Rhythm isolation moved the tracker clock")
+    print("PASS native rhythm keeps exact drum samples and clock, with no melodic voice")
+}
+
 do {
     try testDrumNamesAreRecognised()
     try testInstrumentsAreNotMistakenForDrums()
@@ -136,6 +205,8 @@ do {
     try testCentringKeepsExistingTuning()
     try testAskingForNoCentringChangesNothing()
     try testModernCentresPercussionAndFaithfulDoesNot()
+    try testHolidayModernMix()
+    try testRhythmStemKeepsTheClockAndRejectsMelody()
     print("Percussion tests passed.")
 } catch {
     FileHandle.standardError.write(Data("Percussion tests failed: \(error)\n".utf8))

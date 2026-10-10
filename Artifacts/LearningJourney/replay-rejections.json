@@ -1,0 +1,182 @@
+[
+  {
+    "detail": "replay saved mismatch: expected 19, got 0",
+    "identity": {
+      "engine": "classic",
+      "levelID": "1tseug.dat#2",
+      "packID": "fan:lldb-35"
+    },
+    "passed": false,
+    "replayRevision": "SHA256 digest: bd22f92fba7a4620f5f2093610454bd6274f24efb6f21045bdf494863a189c9b",
+    "sourceRevision": "c4b362a6a83f5a4dc03b24849adcfd28b00c6391570eed7a84b433c8a2aa2340",
+    "title": "Ups and Downs"
+  },
+  {
+    "detail": "engine refused to queue builder for lemming 38 at tick 3597",
+    "identity": {
+      "engine": "classic",
+      "levelID": "ANTHPCK3.DAT#9",
+      "packID": "fan:lldb-223"
+    },
+    "passed": false,
+    "replayRevision": "SHA256 digest: eec1a31a14b655bb223a0c6078f4381a43e894c71cd65e4e51ce8b2c98b4172a",
+    "sourceRevision": "338c8cfbb37a5eaf6cb103e85aa2d5e40b90300abfb06dcbb503131b5e8095e1",
+    "title": "Spiders from Stars"
+  },
+  {
+    "detail": "replay saved mismatch: expected 9, got 0",
+    "identity": {
+      "engine": "classic",
+      "levelID": "AkseliPack01.dat#3",
+      "packID": "fan:lldb-220"
+    },
+    "passed": false,
+    "replayRevision": "SHA256 digest: 25785d13756a2f7258dc8575431c4f73a5f1905d320e4d4461c6e1436cbdb0e8",
+    "sourceRevision": "91d3fe47ec7780e3aaa34c45fcb0f77d14e445adc7132ab4e1a1c842fa50f198",
+    "title": "Winter Solstice"
+  },
+  {
+    "detail": "engine refused to queue builder for lemming 0 at tick 1482",
+    "identity": {
+      "engine": "classic",
+      "levelID": "AkseliPack01.dat#6",
+      "packID": "fan:lldb-220"
+    },
+    "passed": false,
+    "replayRevision": "SHA256 digest: e0ff97bcdf0b89e9e98bd74d160f2edf560332776de585752858176c57520e51",
+    "sourceRevision": "91d3fe47ec7780e3aaa34c45fcb0f77d14e445adc7132ab4e1a1c842fa50f198",
+    "title": "In the Core"
+  },
+  {
+    "detail": "engine refused to queue builder for lemming 5 at tick 4457",
+    "identity": {
+      "engine": "classic",
+      "levelID": "CRISFN14.dat#8",
+      "packID": "fan:lldb-278"
+    },
+    "passed": false,
+    "replayRevision": "SHA256 digest: d9c84fff772bc496f8d19b87cfda4617183bfaa106798a116a306d4c341b97f8",
+    "sourceRevision": "d4799509e28cf7d168f15f512a98642af7a107ce573d45659442ead54d6ab8a3",
+    "title": "Forest of steel"
+  },
+  {
+    "detail": "invalidEntry",
+    "identity": {
+      "engine": "classic",
+      "levelID": "Giga pack 04.dat#5",
+      "packID": "fan:lldb-165"
+    },
+    "passed": false,
+    "replayRevision": "SHA256 digest: a4db66ef18f70717166fd102bf5f78619ca84671c670bb91ca545edf99bad880",
+    "sourceRevision": "167151878e40f998db814e208287dacc4f2ffc5885317bedb0af505a9d8fb0ce",
+    "title": "Hey john wheres my lemmings?"
+  },
+  {
+    "detail": "invalidEntry",
+    "identity": {
+      "engine": "classic",
+      "levelID": "Gronklems #1.dat#2",
+      "packID": "fan:lldb-193"
+    },
+    "passed": false,
+    "replayRevision": "SHA256 digest: e6faada227d405c39d66b448d3e819f58fb131b59f6f50a87bea3c6ca1e332e9",
+    "sourceRevision": "f8b9a3fb9d13756772fa9ce75bd6fb9afc80ad2149c58171849e53789c18cbd9",
+    "title": "The single pillar incedent"
+  },
+  {
+    "detail": "invalidEntry",
+    "identity": {
+      "engine": "classic",
+      "levelID": "Gronklems #1.dat#9",
+      "packID": "fan:lldb-193"
+    },
+    "passed": false,
+    "replayRevision": "SHA256 digest: a0b89acf72377817f67ed65b396c18d7b176aaf316666f844b72c93619dc9c1f",
+    "sourceRevision": "f8b9a3fb9d13756772fa9ce75bd6fb9afc80ad2149c58171849e53789c18cbd9",
+    "title": "In the lemming factory"
+  },
+  {
+    "detail": "engine refused to queue builder for lemming 0 at tick 943",
+    "identity": {
+      "engine": "classic",
+      "levelID": "ISteve04.dat#9",
+      "packID": "fan:lldb-24"
+    },
+    "passed": false,
+    "replayRevision": "SHA256 digest: c93347c5b5da0edcc0c4251eb8016fcc75123b66b674f76eca6c35735fa3bbf4",
+    "sourceRevision": "4d59f847602022ca5bfd404856df7c1b6d0c90213fed6c6a59c4ee73550205c1",
+    "title": "I Challenge You to a Dual!"
+  },
+  {
+    "detail": "replay did not complete within 10200 ticks",
+    "identity": {
+      "engine": "classic",
+      "levelID": "Insulfrog+LVL+PK+1.DAT#2",
+      "packID": "fan:lldb-373"
+    },
+    "passed": false,
+    "replayRevision": "SHA256 digest: e165efca94f6e98e4ab048d16538133844936bc64e9528cc8f5c193b70d5f7c0",
+    "sourceRevision": "e35bad34d4579222753f3cd2580c0629a92904876f9d603b20ae6010e733c05b",
+    "title": "4 times the fun"
+  },
+  {
+    "detail": "replay saved mismatch: expected 80, got 79",
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmings Plus DOS Project - 05 - Wimpy (Part 2).dat#6",
+      "packID": "fan:lldb-552"
+    },
+    "passed": false,
+    "replayRevision": "SHA256 digest: c22f7ffb24527d68810e1abf7acc0a54e917c807373383c2215d443a04b6f0e3",
+    "sourceRevision": "8187c19df391ea59e594bf9e4779b7ec81fb0034bc4a899ae09aee7396b3c042",
+    "title": "No Need To Worry!"
+  },
+  {
+    "detail": "engine refused to queue builder for lemming 22 at tick 953",
+    "identity": {
+      "engine": "classic",
+      "levelID": "MARTPCK2.DAT#4",
+      "packID": "fan:lldb-496"
+    },
+    "passed": false,
+    "replayRevision": "SHA256 digest: 5de912673ede3a12fdfbd1b19aac9eb821a4029ca47821d6e09e9634d33daee7",
+    "sourceRevision": "fbf2f7723f9042ccda838524e4a366e035f49c34d2d1422a7eca9017a9cb01cb",
+    "title": "It's a Magical World"
+  },
+  {
+    "detail": "engine refused to queue builder for lemming 22 at tick 953",
+    "identity": {
+      "engine": "classic",
+      "levelID": "Martin Zurlinden 02.dat#5",
+      "packID": "fan:lldb-245"
+    },
+    "passed": false,
+    "replayRevision": "SHA256 digest: 21486623acb1fe7f2c673f162df151f21f6eb9108ef07d82c2e72c89f1023c8f",
+    "sourceRevision": "ab231d4cf7985f416429c859113385b7bebccd4686d8e6acc72026b5bd89d2de",
+    "title": "It's a Magical World"
+  },
+  {
+    "detail": "replay stateHash mismatch: expected f976619e984a9fec58ed607c6c0fb3944edd2a5992822a380763c4a92c9aa56e, got c5782ead9fdcb40985ea0683099313a55ab745780e8e660b617865de8b600eab",
+    "identity": {
+      "engine": "classic",
+      "levelID": "Martin Zurlinden 03.dat#5",
+      "packID": "fan:lldb-246"
+    },
+    "passed": false,
+    "replayRevision": "SHA256 digest: 593e2f5b21534c6ef23c06b28433a6c3b15db4ee4efacb38013bfe5673103c31",
+    "sourceRevision": "d1e2c06fd14cc00c157cc220651bbbcbb9bf401851cce5d23de76fc54085f0bf",
+    "title": "Deep Deep Down"
+  },
+  {
+    "detail": "replay did not complete within 10200 ticks",
+    "identity": {
+      "engine": "classic",
+      "levelID": "Mikepak10.dat#1",
+      "packID": "fan:lldb-15"
+    },
+    "passed": false,
+    "replayRevision": "SHA256 digest: aab62c2b027900e070054b7a1c25e095e4462a48ea38f20e0bb2554ec1e349da",
+    "sourceRevision": "12190548cbd30b6adde34254a2934f99037d427d6a1046e3413665f30cad640d",
+    "title": "The snow palace"
+  }
+]

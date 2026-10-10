@@ -1,3 +1,4 @@
+import CryptoKit
 import Foundation
 import NxlvKit
 
@@ -20,11 +21,225 @@ actor Server {
   }
 }
 let root = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+if CommandLine.arguments.contains("--audit-artwork") {
+  try runArtworkAudit(root: root)
+  exit(0)
+}
+let passedKey = ArcadeStore.shared.progressKey("FanLevelsPassed")
+let installedPack = URL(fileURLWithPath: "0384-Gronklems-1.zip")
+let removedPack = URL(fileURLWithPath: "0386-Gronklems-1.zip")
+let previousPasses = UserDefaults.standard.object(forKey: passedKey)
+defer {
+  if let previousPasses {
+    UserDefaults.standard.set(previousPasses, forKey: passedKey)
+  } else {
+    UserDefaults.standard.removeObject(forKey: passedKey)
+  }
+}
+UserDefaults.standard.set([
+  FanLevelLibrary.Progress.identifier(pack: installedPack, label: "Shared"),
+  FanLevelLibrary.Progress.identifier(pack: removedPack, label: "Shared"),
+], forKey: passedKey)
+check(FanLevelLibrary.Progress.identifier(pack: installedPack, label: "Shared")
+  != FanLevelLibrary.Progress.identifier(pack: removedPack, label: "Shared"),
+  "same-named catalogue packs keep separate level progress identities")
+check(FanLevelLibrary.Progress.passedCount(for: [installedPack]) == 1,
+  "home progress excludes passes from removed fan packs")
+check(FanLevelLibrary.Progress.passedCount(for: []) == 0,
+  "home progress excludes every pass when no fan packs are installed")
+let legacyPass = FanLevelLibrary.Progress.legacyIdentifier(
+  pack: installedPack, label: "Legacy")
+UserDefaults.standard.set([legacyPass], forKey: passedKey)
+check(FanLevelLibrary.Progress.hasPassed(pack: installedPack, label: "Legacy")
+  && FanLevelLibrary.Progress.passed.contains(
+    FanLevelLibrary.Progress.identifier(pack: installedPack, label: "Legacy"))
+  && !FanLevelLibrary.Progress.passed.contains(legacyPass),
+  "legacy fan progress migrates to a stable pack identity")
+check(FanLevelLibrary.Progress.countKey(URL(fileURLWithPath: "0384-Gronklems-1.zip"))
+  != FanLevelLibrary.Progress.countKey(URL(fileURLWithPath: "0386-Gronklems-1.zip")),
+  "different catalogue packs with the same display name keep separate counts")
 let source = root.appendingPathComponent("Content/LevelPacks/0001-geooPk0.zip")
 let archive = try Data(contentsOf: source)
 let temporary = FileManager.default.temporaryDirectory.appendingPathComponent("FanLibraryTests-\(UUID().uuidString)")
 try FileManager.default.createDirectory(at: temporary, withIntermediateDirectories: true)
 defer { try? FileManager.default.removeItem(at: temporary) }
+let golemsPack = root.appendingPathComponent("Content/LevelPacks/0433-Level-Design-Game-04.zip")
+check(FanLevelLibrary.mechanics(for: golemsPack) == .golems,
+  "the exact source-checked Level Design Game pack uses Golems mechanics")
+let juanjoPack = root.appendingPathComponent("Content/LevelPacks/0290-JUANJO1N.zip")
+check(FanLevelLibrary.mechanics(for: juanjoPack) == .golems,
+  "the exact source-checked JUANJO1N pack uses Golems mechanics")
+let changedGolemsPack = temporary.appendingPathComponent("0433-replaced.zip")
+try archive.write(to: changedGolemsPack)
+let changedJuanjoPack = temporary.appendingPathComponent("0290-replaced.zip")
+try archive.write(to: changedJuanjoPack)
+check(FanLevelLibrary.mechanics(for: changedGolemsPack) == .original
+  && FanLevelLibrary.mechanics(for: changedJuanjoPack) == .original
+  && FanLevelLibrary.mechanics(for: source) == .original,
+  "replacement and other fan archives retain original mechanics")
+let mobiusPack = root.appendingPathComponent("Content/LevelPacks/0202-mobius1.zip")
+let mobiusEntries = try FanLevelLibrary.validatedEntries(in: mobiusPack)
+let sourceReplayedMobiusLevels: Set<String> = ["mobius1.dat#0", "mobius1.dat#1",
+  "mobius1.dat#2", "mobius1.dat#3", "mobius1.dat#4", "Roundabout.lvl#-1",
+  "LemmingsInArms.lvl#-1", "hard to port!.lvl#-1", "PlanB.lvl#-1",
+  "LemmingsInMotion.lvl#-1"]
+check(mobiusEntries.filter { sourceReplayedMobiusLevels.contains($0.file + "#\($0.section ?? -1)") }
+    .allSatisfy { FanLevelLibrary.mechanics(for: mobiusPack, entry: $0) == .golems }
+  && FanLevelLibrary.mechanics(for: mobiusPack) == .original
+  && mobiusEntries.filter { !sourceReplayedMobiusLevels.contains($0.file + "#\($0.section ?? -1)") }
+    .allSatisfy { FanLevelLibrary.mechanics(for: mobiusPack, entry: $0) == .original },
+  "source-replayed Mobius levels and exact duplicate members use Golems mechanics only on the pinned archive")
+let timpack = root.appendingPathComponent("Content/LevelPacks/0090-Timpack3.zip")
+let timpackEntries = try FanLevelLibrary.validatedEntries(in: timpack)
+check(timpackEntries.filter { $0.file + "#\($0.section ?? -1)" == "Timpack3.dat#6" }.count == 1
+  && timpackEntries.filter { $0.file + "#\($0.section ?? -1)" == "Timpack3.dat#6" }
+    .allSatisfy { FanLevelLibrary.mechanics(for: timpack, entry: $0) == .golems }
+  && timpackEntries.filter { $0.file + "#\($0.section ?? -1)" != "Timpack3.dat#6" }
+    .allSatisfy { FanLevelLibrary.mechanics(for: timpack, entry: $0) == .original },
+  "the pinned Timpack source replay selects Golems mechanics for one level")
+let akseliPack = root.appendingPathComponent("Content/LevelPacks/0220-AkseliPack01.zip")
+let akseliEntries = try FanLevelLibrary.validatedEntries(in: akseliPack)
+let akseliGolemsMembers: Set<String> = [
+  "AkseliPack01.dat#3", "AkseliPack01.dat#4", "AkseliPack01.dat#6", "AkseliPack01.dat#8",
+]
+check(akseliEntries.filter { akseliGolemsMembers.contains($0.file + "#\($0.section ?? -1)") }.count == 4
+  && akseliEntries.filter { akseliGolemsMembers.contains($0.file + "#\($0.section ?? -1)") }
+    .allSatisfy { FanLevelLibrary.mechanics(for: akseliPack, entry: $0) == .golems }
+  && akseliEntries.filter { !akseliGolemsMembers.contains($0.file + "#\($0.section ?? -1)") }
+    .allSatisfy { FanLevelLibrary.mechanics(for: akseliPack, entry: $0) == .original },
+  "the pinned Akseli source replays select Golems mechanics for four levels")
+let mattPack = root.appendingPathComponent("Content/LevelPacks/0248-MATTPCK1.zip")
+let mattEntries = try FanLevelLibrary.validatedEntries(in: mattPack)
+let mattGolemsMembers: Set<String> = [
+  "MATTPCK1.DAT#3", "MATTPCK1.DAT#5", "MATTPCK1.DAT#6", "MATTPCK1.DAT#8",
+]
+check(mattEntries.filter { mattGolemsMembers.contains($0.file + "#\($0.section ?? -1)") }.count == 4
+  && mattEntries.allSatisfy { entry in
+    FanLevelLibrary.mechanics(for: mattPack, entry: entry)
+      == (mattGolemsMembers.contains(entry.file + "#\(entry.section ?? -1)") ? .golems : .original)
+  }, "the pinned MATTPCK1 source replays select Golems mechanics only for four members")
+for (name, selectedMember) in [
+  ("0207-LF-level-design-contest-1.zip", "contest1.dat#3"),
+  ("0214-LF-Level-Jam-1.zip", "LF Level Jam #1.dat#6"),
+] {
+  let pack = root.appendingPathComponent("Content/LevelPacks/" + name)
+  let entries = try FanLevelLibrary.validatedEntries(in: pack)
+  check(entries.filter { $0.file + "#\($0.section ?? -1)" == selectedMember }.count == 1
+    && entries.allSatisfy { entry in
+      FanLevelLibrary.mechanics(for: pack, entry: entry)
+        == (entry.file + "#\(entry.section ?? -1)" == selectedMember ? .golems : .original)
+    }, "the pinned Akseli puzzle copy in \(name) selects Golems mechanics only for its exact member")
+}
+for (name, selectedMember) in [
+  ("0264-Conway-Challenges-2.zip", "ConwayChallenges 2.DAT#6"),
+  ("0301-Pacpack2.zip", "Pacpack2.dat#1"),
+] {
+  let pack = root.appendingPathComponent("Content/LevelPacks/" + name)
+  let entries = try FanLevelLibrary.validatedEntries(in: pack)
+  check(entries.filter { $0.file + "#\($0.section ?? -1)" == selectedMember }.count == 1
+    && entries.allSatisfy { entry in
+      FanLevelLibrary.mechanics(for: pack, entry: entry)
+        == (entry.file + "#\(entry.section ?? -1)" == selectedMember ? .ohNoMore : .original)
+    }, "the pinned official puzzle copy in \(name) selects later hatch rules only for its exact member")
+}
+for (name, selectedMembers) in [
+  ("0002-geooPk1.zip", Set(["geooPk1.dat#7"])),
+  ("0035-1tseug.zip", Set(["1tseug.dat#2", "1tseug.dat#9"])),
+  ("0472-CPs-Level-Pack.zip", Set(["LEMPACK.DAT#3", "LEMPACK.DAT#4", "levels/04.LVL#-1", "levels/05.LVL#-1"])),
+  ("0482-DOS-Frost.zip", Set(["Frost.DAT#12"])),
+  ("0484-DOS-Flurry.zip", Set(["Flurry.DAT#3", "Flurry.DAT#14"])),
+  ("0485-DOS-Blitz.zip", Set(["Blitz.DAT#3", "Blitz.DAT#4", "Blitz.DAT#7", "Blitz.DAT#9", "Blitz.DAT#13"])),
+  ("0519-Van-Clan-Wild.zip", Set(["Van Clan Wild 1.dat#5"])),
+] {
+  let pack = root.appendingPathComponent("Content/LevelPacks/" + name)
+  let entries = try FanLevelLibrary.validatedEntries(in: pack)
+  let holidayLaterMembers: Set<String> = name == "0484-DOS-Flurry.zip" ? ["Flurry.DAT#13"]
+    : name == "0485-DOS-Blitz.zip" ? [
+      "Blitz.DAT#0", "Blitz.DAT#1", "Blitz.DAT#6", "Blitz.DAT#8",
+      "Blitz.DAT#10", "Blitz.DAT#12", "Blitz.DAT#15",
+    ] : []
+  check(entries.filter { selectedMembers.contains($0.file + "#\($0.section ?? -1)") }.count == selectedMembers.count
+    && entries.filter { holidayLaterMembers.contains($0.file + "#\($0.section ?? -1)") }.count == holidayLaterMembers.count
+    && entries.allSatisfy { entry in
+      let selected = selectedMembers.contains(entry.file + "#\(entry.section ?? -1)")
+      let levelID = entry.file + "#\(entry.section ?? -1)"
+      let fallback: ClassicDOSMechanics = (name == "0482-DOS-Frost.zip" && levelID != "Frost.DAT#3")
+        || holidayLaterMembers.contains(levelID) ? .ohNoMore : .original
+      return FanLevelLibrary.mechanics(for: pack, entry: entry) == (selected ? .golems : fallback)
+    }, "pinned source replays select Golems mechanics for the exact geoo and 1tseug members")
+}
+for name in ["0478-DOS-Amiga-Crazy.zip", "0479-DOS-Amiga-Wild.zip", "0480-DOS-Amiga-Wicked.zip",
+             "0481-DOS-Amiga-Havoc.zip", "0482-DOS-Frost.zip", "0483-DOS-Hail.zip",
+             "0487-DOS-Xmas-1992.zip", "0583-Amiga-Oh-No-More-Lemmings-Two-Player.zip"] {
+  let pack = root.appendingPathComponent("Content/LevelPacks/" + name)
+  check(FanLevelLibrary.mechanics(for: pack) == .ohNoMore,
+    "the pinned official conversion \(name) retains later hatch mechanics")
+}
+let sourceCheckedLevels: [(Int, String)] = [
+  (523, "Deceit Tricky 1.dat#5"),
+  (542, "Pieuw 2007 Peace 2.DAT#8"),
+  (277, "CRISFN13.dat#6"),
+  (552, "Lemmings Plus DOS Project - 06 - Wimpy (Part 3).dat#8"),
+  (552, "Lemmings Plus DOS Project - 05 - Wimpy (Part 2).dat#6"),
+  (268, "CRISFN04.dat#1"),
+  (268, "CRISFN04.dat#7"),
+  (327, "JM01.DAT#7"),
+  (494, "JANNPCK3.DAT#4"),
+  (232, "JANNPCK2.DAT#9"),
+  (237, "JEFFPCK3.DAT#5"),
+  (265, "CRISFN01.dat#3"),
+  (82, "Yawg01.dat#1"),
+  (179, "The lemming google pack.dat#5"),
+  (181, "Lemmings platinum Fragle part 2.dat#10"),
+  (246, "Martin Zurlinden 03.dat#2"),
+  (497, "MARTPCK3.DAT#2"),
+  (22, "ISteve08.dat#6"),
+  (223, "ANTHPCK3.DAT#9"),
+  (224, "ANTHPCK4.DAT#7"),
+  (315, "TWPAK13.dat#1"),
+  (306, "TWPAK04.dat#3"),
+  (366, "LEVIPAK2.DAT#0"),
+  (388, "geooPk2_preview2.dat#0"),
+  (388, "geooPk2_preview2.dat#1"),
+  (393, "pieuw01.dat#9"),
+  (405, "Genesis 2P 2.dat#5"),
+  (592, "LEVELPAK.DAT#1"),
+  (33, "QBeez03.dat#9"),
+  (78, "doggycharly random lvls.dat#0"),
+  (140, "Epic giga02.dat#0"),
+  (160, "Giga pack 01.dat#9"),
+  (165, "Giga pack 04.dat#5"),
+  (171, "Giga pack 09.dat#6"),
+  (191, "Lemmings platinum Dangerous Part 2.dat#14"),
+  (193, "Gronklems #1.dat#2"),
+  (193, "Gronklems #1.dat#9"),
+  (217, "PSP Special.dat#3"),
+  (218, "PSP Special2.dat#2"),
+  (218, "PSP Special2.dat#3"),
+  (394, "pieuw02.dat#0"),
+  (394, "pieuw02.dat#2"),
+  (411, "mobius05.dat#1"),
+  (496, "MARTPCK2.DAT#6"),
+  (543, "Pieuw 2007 Awkward 2.DAT#6"),
+  (544, "Pieuw 2007 Artful 1.DAT#0"),
+  (544, "Pieuw 2007 Artful 1.DAT#3"),
+  (544, "Pieuw 2007 Artful 1.DAT#7"),
+  (545, "Pieuw 2007 Insane 2.DAT#4"),
+]
+let bundledPacks = FanLevelLibrary.packs(in: [root.appendingPathComponent("Content/LevelPacks")])
+for (number, levelID) in sourceCheckedLevels {
+  guard let pack = bundledPacks.first(where: { FanLevelLibrary.catalogueID($0) == "lldb-\(number)" })
+  else { fatalError("Missing bundled source-checked pack \(number)") }
+  let entries = try FanLevelLibrary.validatedEntries(in: pack)
+  guard let selected = entries.first(where: { $0.file + "#\($0.section ?? -1)" == levelID })
+  else { fatalError("Missing bundled source-checked level \(levelID)") }
+  check(FanLevelLibrary.mechanics(for: pack, entry: selected) == .golems,
+    "source-checked bundled level uses Golems rules")
+  check(FanLevelLibrary.mechanics(for: pack) == .original
+    && entries.filter { $0.file + "#\($0.section ?? -1)" != levelID }
+      .contains { FanLevelLibrary.mechanics(for: pack, entry: $0) == .original },
+    "mixed-evidence packs retain original rules for unselected levels")
+}
 let embedded = temporary.appendingPathComponent("embedded"), cache = temporary.appendingPathComponent("cache")
 try FileManager.default.createDirectory(at: embedded, withIntermediateDirectories: true)
 try FileManager.default.createDirectory(at: cache, withIntermediateDirectories: true)
@@ -32,12 +247,19 @@ try archive.write(to: embedded.appendingPathComponent(source.lastPathComponent))
 try archive.write(to: cache.appendingPathComponent("0001-renamed.zip"))
 let merged = FanLevelLibrary.packs(in: [embedded, cache, temporary.appendingPathComponent("missing")])
 check(merged.count == 1 && merged[0].deletingLastPathComponent().resolvingSymlinksInPath().path == embedded.resolvingSymlinksInPath().path, "embedded packs open without a chosen folder and duplicate IDs are excluded")
-check(FanLevelLibrary.Progress.countKey(URL(fileURLWithPath: "0384-Gronklems-1.zip"))
-  != FanLevelLibrary.Progress.countKey(URL(fileURLWithPath: "0386-Gronklems-1.zip")),
-  "different catalogue packs with the same display name keep separate counts")
 let readable = FanLevelLibrary.entries(in: source)
 check(!readable.isEmpty, "embedded pack exposes decoded levels")
 _ = try FanLevelLibrary.level(readable[0], in: source)
+let verifiedReadable = try FanLevelLibrary.validatedEntries(in: source)
+check(verifiedReadable.count == readable.count, "verified archive exposes the complete decoded level list")
+let corruptArchive = temporary.appendingPathComponent("corrupt.zip")
+try Data("not a zip archive".utf8).write(to: corruptArchive)
+do {
+  _ = try FanLevelLibrary.validatedEntries(in: corruptArchive)
+  preconditionFailure("corrupt fan archive accepted")
+} catch {
+  check(true, "corrupt fan archives fail verified playlist discovery")
+}
 let misnamed = root.appendingPathComponent("Content/LevelPacks/0416-grams88.zip")
 let misnamedEntries = FanLevelLibrary.entries(in: misnamed)
 check(misnamedEntries.count >= 20, "binary levels named .ini remain playable")
@@ -98,10 +320,57 @@ for slot in 0..<10 {
   let expected = try ClassicGroundSet.load(style: slot < 5 ? slot : (slot < 9 ? slot - 5 : 2),
     from: slot < 5 ? originalStyles : (slot < 9 ? extraStyles : ports.appendingPathComponent("holiday_native_1994")))
   check(resolved == expected, "custom graphics slot \(slot) uses its own release assets")
+  check(FanLevelLibrary.artworkFamily(for: resolved, portsRoot: ports)
+    == (slot < 5 ? "lemmings" : slot < 9 ? "ohno" : "holiday"),
+    "alternate artwork for slot \(slot) follows its resolved release")
 }
 let emptyLevel = try ClassicLevel(data: Data(repeating: 0, count: ClassicLevel.recordSize))
 let namedSnow = try FanLevelLibrary.groundSet(for: emptyLevel, styleName: " Snow ", portsRoot: ports)
 check(namedSnow == (try ClassicGroundSet.load(style: 2, from: extraStyles)), "named graphics take precedence over the numeric slot")
+check(FanLevelLibrary.artworkFamily(for: namedSnow, portsRoot: ports) == "ohno",
+  "named Snow does not use the numeric slot's original artwork")
+var customGround = try JSONSerialization.jsonObject(with: JSONEncoder().encode(namedSnow)) as! [String: Any]
+var customPalette = customGround["terrainPalette"] as! [[String: Any]]
+customPalette[0]["red"] = 123
+customGround["terrainPalette"] = customPalette
+let recoloured = try JSONDecoder().decode(ClassicGroundSet.self, from: JSONSerialization.data(withJSONObject: customGround))
+check(FanLevelLibrary.artworkFamily(for: recoloured, portsRoot: ports) == nil,
+  "custom pack artwork is not replaced by an unrelated stock bank")
+let stockMatch = FanLevelLibrary.artworkMatch(for: emptyLevel, ground: namedSnow, special: nil, portsRoot: ports)
+check(stockMatch?.family == "ohno" && stockMatch?.pieces.terrain.count == namedSnow.terrain.count,
+  "an unchanged ground set matches every piece of its own release")
+let recolouredMatch = FanLevelLibrary.artworkMatch(for: emptyLevel,
+  ground: recoloured, special: nil, portsRoot: ports)
+check(recolouredMatch?.family == "ohno" && recolouredMatch?.pieces.terrain.isEmpty == true
+  && recolouredMatch?.pieces.objects.isEmpty == true,
+  "a recoloured ground set keeps its source pixels for reconstruction")
+var oneRedrawn = try JSONSerialization.jsonObject(with: JSONEncoder().encode(namedSnow)) as! [String: Any]
+var redrawnTerrain = oneRedrawn["terrain"] as! [String: Any]
+var firstPiece = redrawnTerrain["1"] as! [String: Any]
+var pixels = [UInt8](Data(base64Encoded: firstPiece["indexedPixels"] as! String)!)
+let opaque = pixels.firstIndex { $0 & 0x80 == 0 }!
+pixels[opaque] = (pixels[opaque] & 0xF0) | ((pixels[opaque] + 1) & 0x0F)
+firstPiece["indexedPixels"] = Data(pixels).base64EncodedString()
+redrawnTerrain["1"] = firstPiece
+oneRedrawn["terrain"] = redrawnTerrain
+var zeroed = redrawnTerrain
+var zeroPiece = zeroed["0"] as! [String: Any]
+var zeroPixels = [UInt8](Data(base64Encoded: zeroPiece["indexedPixels"] as! String)!)
+let zeroOpaque = zeroPixels.firstIndex { $0 & 0x80 == 0 }!
+zeroPixels[zeroOpaque] = (zeroPixels[zeroOpaque] & 0xF0) | ((zeroPixels[zeroOpaque] + 1) & 0x0F)
+zeroPiece["indexedPixels"] = Data(zeroPixels).base64EncodedString()
+zeroed["0"] = zeroPiece
+var zeroGround = oneRedrawn; zeroGround["terrain"] = zeroed
+let redrawnZero = try JSONDecoder().decode(ClassicGroundSet.self, from: JSONSerialization.data(withJSONObject: zeroGround))
+let partlyRedrawn = try JSONDecoder().decode(ClassicGroundSet.self, from: JSONSerialization.data(withJSONObject: oneRedrawn))
+// The blank record draws terrain piece 0 only, so piece 1 stays outside the share.
+let partlyMatch = FanLevelLibrary.artworkMatch(for: emptyLevel, ground: partlyRedrawn, special: nil, portsRoot: ports)
+check(partlyMatch?.family == "ohno" && partlyMatch?.pieces.terrain.contains(1) == false
+  && partlyMatch?.pieces.terrain.count == namedSnow.terrain.count - 1,
+  "a redrawn piece uses reconstruction while the rest keep release artwork")
+let mostlyRedrawn = FanLevelLibrary.artworkMatch(for: emptyLevel, ground: redrawnZero, special: nil, portsRoot: ports)
+check(mostlyRedrawn?.family == "ohno" && mostlyRedrawn?.pieces.terrain.contains(0) == false,
+  "a level whose visible pieces are mostly redrawn still gets reconstruction")
 for name in ["xmas", "christmas"] {
   let ground = try FanLevelLibrary.groundSet(for: emptyLevel, styleName: name, portsRoot: ports)
   check(ground == (try ClassicGroundSet.load(style: 2, from: ports.appendingPathComponent("holiday_native_1994"))), "\(name) resolves Holiday graphics")
@@ -282,6 +551,19 @@ for name in holidayFixtures {
 }
 check(holidayCount == 64 && holidayMatches >= 30, "Holiday inventory and original-record matches")
 print("PASS \(holidayCount) Holiday levels render/start; \(holidayMatches) original records match")
+for name in ["0484-DOS-Flurry.zip", "0485-DOS-Blitz.zip",
+             "0537-Holiday-cLemmings-Flurry.zip", "0538-Holiday-cLemmings-Blitz.zip"] {
+  let pack = root.appendingPathComponent("Content/LevelPacks/" + name)
+  check(FanLevelLibrary.localStyleDirectory(in: pack, includeHoliday: true) == "holiday_native_1994",
+    "verified Holiday Flurry and Blitz archives select Holiday graphics")
+  for entry in try FanLevelLibrary.validatedEntries(in: pack) {
+    let level = try FanLevelLibrary.level(entry, in: pack).0
+    let ground = try FanLevelLibrary.groundSet(for: level, styleName: nil, portsRoot: ports, pack: pack, entry: entry)
+    let expectedRoot = level.groundStyle == 2 ? ports.appendingPathComponent("holiday_native_1994") : originalStyles
+    check(ground == (try ClassicGroundSet.load(style: level.groundStyle, from: expectedRoot)),
+      "Holiday Flurry and Blitz keep the exact style for " + level.title)
+  }
+}
 
 let literalPack = root.appendingPathComponent("Tests/FanLevelLibraryTests/Fixtures/literal-members.zip")
 let literalNames = ["level[1].ini", "level1.ini", "star*.ini", "starX.ini", "q?.ini",
@@ -355,3 +637,44 @@ for (index, slots) in [[0, 0], [-1, 2], [0], [0, 10000]].enumerated() {
     preconditionFailure("invalid mapping selected directly")
   } catch { check(true, "invalid saved slot mapping is rejected") }
 }
+
+// A root under /private (App Translocation, /tmp) must give the same folder
+// fingerprint, with the same "/relative" keys, as the unprefixed path.
+let fingerprintRoot = FileManager.default.temporaryDirectory.appendingPathComponent("fingerprint-\(UUID())")
+try FileManager.default.createDirectory(at: fingerprintRoot.appendingPathComponent("LEVELS"), withIntermediateDirectories: true)
+try Data("main".utf8).write(to: fingerprintRoot.appendingPathComponent("MAIN.DAT"))
+try Data("level".utf8).write(to: fingerprintRoot.appendingPathComponent("LEVELS/LEVEL000.DAT"))
+try Data("hidden".utf8).write(to: fingerprintRoot.appendingPathComponent(".hidden"))
+try Data("music".utf8).write(to: fingerprintRoot.appendingPathComponent("LEVELS/song.mod"))
+defer { try? FileManager.default.removeItem(at: fingerprintRoot) }
+let plainPath = fingerprintRoot.resolvingSymlinksInPath().path
+let privatePath = plainPath.hasPrefix("/private/") ? plainPath : "/private" + plainPath
+let expectedEntries = [
+  "/LEVELS/LEVEL000.DAT": FanLevelLibrary.archiveFingerprint(fingerprintRoot.appendingPathComponent("LEVELS/LEVEL000.DAT"))!,
+  "/MAIN.DAT": FanLevelLibrary.archiveFingerprint(fingerprintRoot.appendingPathComponent("MAIN.DAT"))!,
+]
+let fingerprintEncoder = JSONEncoder(); fingerprintEncoder.outputFormatting = [.sortedKeys]
+let expectedFingerprint = SHA256.hash(data: try fingerprintEncoder.encode(expectedEntries))
+  .map { String(format: "%02x", $0) }.joined()
+check(FanLevelLibrary.directoryFingerprint(URL(fileURLWithPath: plainPath)) == expectedFingerprint,
+      "folder fingerprint keys files by their path inside the folder")
+check(FanLevelLibrary.directoryFingerprint(URL(fileURLWithPath: privatePath)) == expectedFingerprint,
+      "a folder under /private keeps its fingerprint")
+
+let lateExitPack = root.appendingPathComponent("Content/LevelPacks/0308-TWPAK06.zip")
+let lateExitEntry = try FanLevelLibrary.validatedEntries(in: lateExitPack).first {
+  $0.file == "TWPAK06.dat" && $0.section == 9
+}!
+let (lateExitLevel, lateExitStyle) = try FanLevelLibrary.level(lateExitEntry, in: lateExitPack)
+let lateExitGround = try FanLevelLibrary.groundSet(for: lateExitLevel, styleName: lateExitStyle,
+  portsRoot: ports, pack: lateExitPack, entry: lateExitEntry)
+check(ClassicObjectSemantics.forFanLevel(lateExitLevel, groundSet: lateExitGround) == .golems,
+      "fan level with only a later exit selects all 32 object slots")
+let lateExitScene = try ClassicLevelRenderer.render(lateExitLevel, groundSet: lateExitGround,
+  objectSemantics: .forFanLevel(lateExitLevel, groundSet: lateExitGround))
+check(lateExitScene.triggers.contains { $0.effect == 1 },
+      "bundled fan level has a functional exit")
+let officialFirst = try ClassicDataSet.detect(directory: originalStyles).campaign.levels[0].level
+let officialGround = try ClassicGroundSet.load(style: officialFirst.groundStyle, from: originalStyles)
+check(ClassicObjectSemantics.forFanLevel(officialFirst, groundSet: officialGround) == .dos,
+      "level with an ordinary exit retains DOS object slots")

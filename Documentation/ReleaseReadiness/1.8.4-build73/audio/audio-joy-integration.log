@@ -1,0 +1,7 @@
+UI test windows: offscreen; audio: muted
+PASS closing the main window preserves ownership for delayed screen refreshes
+PASS final single-step handles wins, losses, campaign and fan progress
+PASS frozen Classic turn identity, confirmed player changes, cleared result actions and direct profile solo transition
+PASS green handover identity, mouse retry of the previous level as UVA, rightmost begin action, shared progress and solo boundaries
+PASS solution replay sounds, muted settings, isolated voices, silent rewind/pause and single-step
+Audio joy integration tests passed.

@@ -1,0 +1,21 @@
+UI test windows: offscreen; audio: muted
+PASS remapped speed/assignment, held-input reset, standard menu escape, settings swap/reset and persistence
+PASS Neo checkpoint round trip, assignment, queued rate/nuke, undo, counters, continuation, changed-content rejection and transactional rejection
+PASS disk checkpoint, rewind/undo journal, exact paused restoration, continuation, backups, corruption, version and stale-writer rejection
+PASS legacy text steel checkpoint, retry upgrade and exact current checkpoint restoration
+PASS legacy graphics checkpoint, retry upgrade and exact current checkpoint restoration
+PASS legacy Holiday graphics checkpoint, retry upgrade and exact current checkpoint restoration
+PASS pruned fan queue retains paused state and ownership and saves only surviving entries
+PASS Classic fan checkpoint, shuffled queue, exact paused restore, identity, continuation and missing-pack rejection
+PASS Escape returns directly to the main menu and saves the active run
+PASS checkbox box, label, release cancellation, disabled state, accessibility and menu input isolation
+PASS Original/Modern/Custom presets, checkbox targets, keyboard selection, persistence and rendered states
+PASS Space and P pause once per press, ignore repeat and remain paused on release
+PASS Classic shared Space/P pause, focused control, repeat/release, modifiers, text and menu routing
+PASS Classic and fan Space pause independently of campaign menu state
+PASS a nuke before the drop ends the level from the panel and the frame loop
+PASS Classic focus loss, manual resume, interrupted hints/help and automatic pause opt-out
+PASS frozen Classic turn identity, confirmed player changes, cleared result actions and direct profile solo transition
+PASS green handover identity, mouse retry of the previous level as UVA, rightmost begin action, shared progress and solo boundaries
+PASS Hot Seat journey names both retries; same-player retry restarts paused with the attempt owner
+Swift/ContiguousArrayBuffer.swift:695: Fatal error: Index out of range

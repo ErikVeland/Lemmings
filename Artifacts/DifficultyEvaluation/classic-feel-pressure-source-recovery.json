@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-04",
+  "identity": {
+    "engine": "classic",
+    "levelID": "AkseliPack01.dat#4",
+    "packID": "fan:lldb-220"
+  },
+  "title": "Feel the Pressure",
+  "exactBundledArchive": "Content/LevelPacks/0220-AkseliPack01.zip",
+  "exactBundledArchiveSHA256": "91d3fe47ec7780e3aaa34c45fcb0f77d14e445adc7132ab4e1a1c842fa50f198",
+  "publicSourceURL": "https://lldb.camanis.net/level/220/5",
+  "cachedSourcePageSHA256": "fb27b478132f389f0dbbd298839344f1a191f6853cc6bfafac3dc31e5f4d2a45",
+  "rawSourceReplaySHA256": "d586888f4e100256be07b2ae4221165197a96edd6b3c1088e7bbb0e1c51aa04e",
+  "sourceReplayHeader": {
+    "gameMode": 2,
+    "saved": 48,
+    "ticks": 992
+  },
+  "inputTranslation": "Decode all source actions with a uniform minus-one native tick offset.",
+  "sourceActionDerivationVerified": true,
+  "originalMechanicsResult": "Native Original rejected the final Builder for lemming 2 at tick 801.",
+  "selectedNativeMechanics": "Golems on this exact member and archive revision",
+  "nativeInitialStateHash": "4320f3f6eb76dbfa00834c556e89d832be408d841d6a16054dc564936f3763bc",
+  "candidateInputPath": ".build/heartbeat-20261003-2255-new/candidate-220-golems/4320f3f6eb76dbfa00834c556e89d832be408d841d6a16054dc564936f3763bc.json",
+  "candidateInputSHA256": "7374f384c61bfde5a9142a816f3a543212555e7a9b2b532c13ec8a74f330b0c8",
+  "selectedReplaySHA256": "8ebd52e8a09a8023165f9701a2820063a6588fa5c9aa1f49b1ebd2e2e78dfb91",
+  "nativeOutcome": {
+    "didWin": true,
+    "released": 50,
+    "required": 48,
+    "saved": 48,
+    "stateHash": "cf327ccf36828ad7bb243e8545a4dbe5399b33a87e29c2bdfa07edac4d0431aa",
+    "ticks": 991
+  },
+  "difficultyScore": 435.955847653655,
+  "difficultyProbeRuns": 10,
+  "sourceBuiltNxlvKitSHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "sourceBuiltEvidenceToolSHA256": "69d8298b74438bea3f4de64d389a1dd19deb695516e68d221f9d0f9fedf52e68",
+  "strictExactLevelChecks": [
+    "before promotion: 1/1",
+    "after promotion: 1/1"
+  ],
+  "sourcePhysicsParity": "unverified: source header and native saved counts match; native completion tick 991 is one tick earlier than source tick 992 after the source-input offset.",
+  "sourceBuiltClassicSolverSHA256": "ebee0f2089783de35b5722b45a1e4e04d1330aaa5f95cb301354d0d98e1d6dbc",
+  "solverControlReplaySHA256": "cc99da7a65776f1c620c3bd16d1870f03bfe12199d1ad8cc63beb7414f956f04"
+}

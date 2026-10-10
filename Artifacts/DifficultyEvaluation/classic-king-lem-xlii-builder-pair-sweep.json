@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-05",
+  "identity": "fan:lldb-549/Ji Hoon Earth 1.DAT#8",
+  "title": "King Lem XLII",
+  "target": {
+    "archive": "Content/LevelPacks/0549-Ji-Hoons-Lemmings-Remake-Earth.zip",
+    "archiveSHA256": "102ffe175287b115424dbbc74fd4e409dc4ac2676dd530700418c85b76614747",
+    "member": "Ji Hoon Earth 1.DAT#8",
+    "sequentialLevel": 9,
+    "initialStateSHA256": "d60d3dfa8b5f3ee6c17c3c3a72e51d5777f9859b03fa8503271a224a41991d49",
+    "sourcePageDate": "2026-09-29",
+    "sourcePageSHA256": "367971cad881b405830ae240081a6beb21b4c8397d2fa4f4aa1431fea71d0fa6"
+  },
+  "solver": {
+    "path": ".build/heartbeat-20261005-1721/ClassicSolver",
+    "sourceSHA256": "e9efacd6a90ebd84e2c1d20548f6ba0156f0b764fc2cbe30e7822e96def8c71a",
+    "binarySHA256": "ba7372f65381267355110303e658f785056ba000f305daf7bfcf0cd8719585e3",
+    "simulationSourceSHA256": "55b522fbbd3c400908ba4b18403f40656709d93ab7fc0dbad08cc5e1e8163bdd",
+    "simulationLibrarySHA256": "6dbbb2ead99717fc3838472eed768a2fe4cc386bef4f8b09fb6b61447645aa49",
+    "fanLibrarySourceSHA256": "517fd6a59f1cd497971e78cb3fe1aa1f4bcbe4580cb0f95ce6f243f9f5b5ac71",
+    "gameAssetCacheSourceSHA256": "9a6bee64ca439283a1e8c8f70845af387f6ca0ebcd14b5f9b8e165d571dbac85"
+  },
+  "search": {
+    "mode": "sweep-pair",
+    "skills": ["builder", "builder"],
+    "releaseRate": 99,
+    "firstTickRange": [59, 79],
+    "secondSkillGapRange": [1, 160],
+    "fallbackTicks": 12,
+    "ranking": "direct exit distance",
+    "timeLimitSeconds": 30,
+    "waitingRouteTick": 79,
+    "firstSkillAssignments": 30,
+    "secondSkillAssignments": 274,
+    "completedContinuations": 274,
+    "deadlineExpired": false,
+    "bestSaved": 0,
+    "requiredToSave": 3,
+    "result": "UNSOLVED"
+  },
+  "partialReplay": {
+    "path": ".build/heartbeat-20261005-1721/king-lem-pair/candidate.json.partial.json",
+    "sha256": "74bbaf9d9fd1d613dc2eed716b7590ee5845e9c4146ba1883e20096ff8792f9d",
+    "containsOnly": "initial release-rate setup; no skill commands"
+  },
+  "interpretation": "A bounded two-Builder timing pass covered 274 completed continuations after the previously recorded one-skill checks. It found no strict native win and emitted no candidate. This narrows search coverage for this timing window; it does not exclude routes with different skill sequences, release rates or timing, and it establishes no source-physics parity.",
+  "ledgerChange": "none; no winning replay passed strict exact-level verification"
+}

@@ -1,0 +1,18 @@
+/Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/music-ui-tests/main.swift:6077:20: warning: 'init(dictionary:)' is deprecated: Properties that depend on the system or application version are not supported when used with this initializer. The designated initializer is available in SUAppcastItem+Private.h. Please first explore other APIs or contact us to describe your use case. [#DeprecatedDeclaration]
+6075 |     @MainActor fileprivate func checkReminder() throws {
+6076 |         var changed = 0; onChange = { changed += 1 }
+6077 |         let item = SUAppcastItem(dictionary: ["enclosure": ["url": "https://example.invalid/update.zip",
+     |                    `- warning: 'init(dictionary:)' is deprecated: Properties that depend on the system or application version are not supported when used with this initializer. The designated initializer is available in SUAppcastItem+Private.h. Please first explore other APIs or contact us to describe your use case. [#DeprecatedDeclaration]
+6078 |             "sparkle:version": "52", "sparkle:shortVersionString": "1.6.1"]])!
+6079 |         setAvailable(item, downloaded: false)
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+UI test windows: offscreen; audio: muted
+PASS rendered Audio settings, pause toggle, accessibility and all input targets
+PASS available, downloaded and cleared update reminder states
+PASS upgrade notes persist only after acknowledgement, repeat for later builds and do not block a fresh install
+PASS first-launch soundtrack checklist, selection, skip persistence, progress, retry, installed states and Settings reopen
+PASS L2 frame-step, rhythm pause, interruption and paused retry
+PASS L2 waits for three audible nuke pops in Classic and non-Classic tribes, then restores through tails and results
+PASS L3 frame-step, rhythm pause, interruption, resume and paused retry
+Music UI and sequel pause tests passed.

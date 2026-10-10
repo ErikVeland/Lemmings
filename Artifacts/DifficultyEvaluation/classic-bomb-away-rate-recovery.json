@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-04",
+  "level": "fan:lldb-300/Pacpack1.dat#0",
+  "title": "Just a bomb away !!",
+  "archiveSha256": "bf56ce993f34fd605f172268c84df8946afc0907b00d6cd4297e5020f742fead",
+  "initialStateHash": "1c633e54204da3cbf129890aa04a8c3113c94daa13737bf0a991cc22321755d1",
+  "solverSha256": "5a6b02892b8fa5d18c980c83920556fee9126613b180a04f476e7e9ce07c96b6",
+  "nativeLibrarySha256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "evidenceCollectorSha256": "27dadbe80919469e921d44255e672e7c0ae5a3b5d75bc6b62402595d61b66fa7",
+  "diagnosis": {
+    "fixedRoute": "Rate 50 at tick 0, Climber to lemming 0 after tick 54, Bomber to lemming 0 after tick 71",
+    "nativeOutcome": "28/29 at tick 1022: 30 released, one lost, one active and already exiting at x=916, y=63",
+    "cause": "The last lemming remained in its exit action at the level's time limit. This is a route-timing shortfall, not a missing exit or a proved physics defect.",
+    "singleRateCheck": "With the same two skill timings, tested rates 1, 25 and 45 saved 25/29; rates 46-47 saved 26/29; rates 48-49 saved 27/29; rates 50-51 saved 28/29. Rates 52-54 lost at least two lemmings before the route could win.",
+    "pairSearch": "At initial rate 50, 31,828 completed Climber/Bomber continuations over first ticks 40-120 and gaps 1-80 found no win."
+  },
+  "winningReplay": {
+    "commands": "Rate 50 after tick 0; Climber to lemming 0 after tick 54; rate 99 after tick 67; Bomber to lemming 0 after tick 71",
+    "nativeOutcome": "29/29 saved at tick 358",
+    "replaySha256": "d295a28da8e5ca95e3c7e70a8f8698c0c70291e0f1fd106e3ae5223d640ca83e",
+    "difficultyScore": 290.47269630523067,
+    "scoreProbes": 10,
+    "strictChecks": "1/1 before and 1/1 after promotion into candidate-solutions.json"
+  },
+  "sourcePhysicsParity": "not independently checked"
+}

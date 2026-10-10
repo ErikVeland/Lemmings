@@ -1,0 +1,93 @@
+{
+  "level": "fan:lldb-393/pieuw01.dat#9",
+  "archiveSHA256": "6b599e67d0656e6a27f33f99916b9dafd21b04a1e7c88f8eda24e3083a087bc4",
+  "sourceReplaySHA256": "b0104e7676a965bf5d59582013ec706cc0202a637cb23815284bc43c6e38e8ac",
+  "sourceOutcome": "4/4 at cycle 1417",
+  "status": "Historical pre-hatch-correction comparison. The corrected native mask matches these sampled pixels; see classic-golems-diving-reconciliation.json.",
+  "nativeInitialStateHash": "702036c9d395ad0c9eaeca798e29cf4f72e6551cada7b63c89ac5a2897f9ce5f",
+  "nativeOutcome": "2/4 at tick 1324",
+  "sourceScreenshot130SHA256": "5f72ea956451fd5fe2beb1bd499d0138b809f8200b97809cf8ce7304a4709771",
+  "nativeTerrain130SHA256": "91710b15de61050300dc2722ed58d6ad6719de3ea5691fd4a13667dc402b3c11",
+  "nativeModuleSHA256": "8179fab26522db06f26aabc823db4d65489126c1b4369fbe249e88c271c0fcb9",
+  "method": "Source screenshot at cycle 130, crop 1365x480+0+42 and point resize to 455x160; level x = cropped x + 569. Compare RGB at level x617-618 with native PGM terrain occupancy at the same x,y. Current-source NxlvKit was rebuilt against local macOS 15.4 SDK after the installed 26.5 Swift interface rejected the current compiler. The exact archive and initial state match the earlier native trace.",
+  "terrainSamples": [
+    {
+      "y": 28,
+      "sourceRGBAt617": [
+        0,
+        0,
+        0
+      ],
+      "sourceRGBAt618": [
+        0,
+        0,
+        0
+      ],
+      "nativeSolidAt617": true,
+      "nativeSolidAt618": true
+    },
+    {
+      "y": 30,
+      "sourceRGBAt617": [
+        0,
+        0,
+        0
+      ],
+      "sourceRGBAt618": [
+        0,
+        0,
+        0
+      ],
+      "nativeSolidAt617": true,
+      "nativeSolidAt618": true
+    },
+    {
+      "y": 32,
+      "sourceRGBAt617": [
+        0,
+        0,
+        0
+      ],
+      "sourceRGBAt618": [
+        0,
+        0,
+        0
+      ],
+      "nativeSolidAt617": true,
+      "nativeSolidAt618": true
+    },
+    {
+      "y": 34,
+      "sourceRGBAt617": [
+        0,
+        0,
+        0
+      ],
+      "sourceRGBAt618": [
+        0,
+        0,
+        0
+      ],
+      "nativeSolidAt617": true,
+      "nativeSolidAt618": true
+    }
+  ],
+  "scratchMaskOffsetPixels": {
+    "global": {
+      "0": "2/4",
+      "1": "3/4",
+      "2": "3/4",
+      "3": "1/4",
+      "4": "0/4"
+    },
+    "lemmingZeroOnly": {
+      "0": "2/4",
+      "1": "2/4",
+      "2": "2/4",
+      "3": "3/4",
+      "4": "2/4"
+    },
+    "offset3LemmingZeroDiggerRetiming": "ticks 190-202 each 3/4; tick 203 rejected"
+  },
+  "conclusion": "The source player has cleared x617-618 at cycle 130 while current native terrain remains solid. A uniform horizontal Bash mask shift does not reproduce the 4/4 source win and alters other workers. This comparison narrows the mismatch but does not identify a safe production rule or establish source parity."
+}

@@ -1,0 +1,122 @@
+{
+  "components" : {
+    "concurrencyBurden" : 500,
+    "constraintPressure" : 598.8778256892722,
+    "deductionComplexityProxy" : 290,
+    "executionPrecision" : 0,
+    "solutionComplexity" : 844.4052766176931,
+    "techniqueBurden" : 800
+  },
+  "confidence" : "medium",
+  "criticalActions" : [
+
+  ],
+  "detectedTechniques" : [
+    "basher",
+    "blocker",
+    "bomber",
+    "builder",
+    "digger",
+    "floater",
+    "multiple-worker-coordination",
+    "release-rate-manipulation"
+  ],
+  "explanation" : [
+    "6 used skill types; 5 assigned workers; 6 same-worker skill changes.",
+    "Maximum concurrent worker regions: 3.",
+    "Timing probes: 10. Untested alternatives remain unknown.",
+    "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+    "Source rank: fan:lldb-554."
+  ],
+  "key" : {
+    "analyserVersion" : "difficulty-3",
+    "assetsRevision" : "ab3f253ea0fc8a3732481e5fb752b34d6737b0b434be5b715e07fd6a10ccc77a:probes-10",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Lemmings Plus DOS Project - 12 - Danger (Part 3).dat#9",
+      "packID" : "fan:lldb-554"
+    },
+    "levelRevision" : "bc6910d89e3d4625677d173dd9289ac64e19378a58c5ae9c2f2285875fdfeede",
+    "replayRevision" : "SHA256 digest: bb6b0e288d55f707bb696f23be950890f5a02856711f6d76d7f2c283e22df136",
+    "simulationVersion" : "neolemmix-ce-2026-09-27"
+  },
+  "overallScore" : 548.9232781954978,
+  "precision" : {
+    "actions" : [
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 19
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 20
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 29
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 30
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 31
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 32
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 33
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 34
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 35
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 36
+      }
+    ],
+    "alternativeRunCount" : 0,
+    "assignmentCount" : 12,
+    "completed" : false,
+    "orderingOutcomes" : [
+
+    ],
+    "runCount" : 10,
+    "selectionOutcomes" : [
+
+    ]
+  },
+  "prerequisiteConcepts" : [
+
+  ],
+  "sourceRank" : "fan:lldb-554"
+}

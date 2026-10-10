@@ -1,15 +1,16 @@
 # Unified game library
 
-The macOS app uses one window for the classic, Lemmings 2 and Lemmings 3
-engines. The game library lists all eight releases in canon order. Click a
-release or select it with the arrow keys and Enter. Command-Shift-L returns
-to the library. File → Game and File → Level provide direct navigation.
+The macOS app uses one window for the Classic, Lemmings 2 and Lemmings 3
+engines. The home screen groups the catalogue into seven content families.
+The four seasonal releases share the Holiday Lemmings family. Each family
+opens its filtered CoverFlow catalogue. Command-Shift-L returns to the home
+screen. File → Game and File → Level provide direct release navigation.
 
-Full Quest resumes at the first unfinished installed release. Classic
-campaigns resume at their first unpassed level, including gaps left by direct
-level selection. A completed release continues into the next engine. Single
-game mode returns to the library. Finishing only the final level does not
-complete an entire campaign.
+`Oh My! ALL Lemmings!` resumes at the first unfinished installed non-fan
+release. Classic campaigns resume at their first unpassed level, including
+gaps left by direct level selection. A completed release continues into the
+next engine. Single game mode returns to the library. Finishing only the final
+level does not complete an entire campaign.
 
 Each engine retains its own campaign rules and save format. On first use,
 the combined app imports bundled-game saves from the standalone L2/L3 apps
@@ -49,8 +50,9 @@ Oh Yes! More Lemmings is a conversion of levels that already appear above, so th
 climb does not count them twice. Lemmings 2 and Lemmings 3 are separate, and the
 climb does not include them.
 
-`ClassicTitle.classicQuest` holds this order. `ClassicTitle.canonOrder` still
-holds plain release order, which the library uses to list the titles.
+`ClassicTitle.classicQuest` holds this order. `ClassicTitle.canonOrder` keeps
+the release order for progress and direct release navigation. The home screen
+groups these releases without changing their saved identities.
 
 ## Classic campaigns
 

@@ -1,0 +1,60 @@
+{
+  "expectedSaved" : 1,
+  "expectedTicks" : 3600,
+  "inputs" : [
+    {
+      "lemming" : 0,
+      "skill" : 45,
+      "tick" : 83
+    },
+    {
+      "lemming" : 0,
+      "skill" : 26,
+      "tick" : 174
+    },
+    {
+      "lemming" : 0,
+      "skill" : 45,
+      "tick" : 236
+    },
+    {
+      "lemming" : 0,
+      "skill" : 45,
+      "tick" : 307
+    },
+    {
+      "lemming" : 0,
+      "skill" : 29,
+      "tick" : 509
+    }
+  ],
+  "levelSHA256" : "5c68136fd4f41661e7239dbbae4d5bba9eb5442d67f4bc4503ff006d306f49db",
+  "pointers" : [
+    {
+      "fan" : false,
+      "fanX" : 173,
+      "fanY" : 48,
+      "tick" : 83,
+      "x" : 173,
+      "y" : 48
+    },
+    {
+      "fan" : false,
+      "fanX" : 239,
+      "fanY" : 148,
+      "tick" : 236,
+      "x" : 239,
+      "y" : 148
+    },
+    {
+      "fan" : false,
+      "fanX" : 286,
+      "fanY" : 88,
+      "tick" : 307,
+      "x" : 286,
+      "y" : 88
+    }
+  ],
+  "population" : 60,
+  "version" : 1
+}

@@ -1,0 +1,1 @@
+Verified 317 current native witnesses in the Golems object-slot report: 11 changed outcomes, 11 lost wins, 7 rejected or failed replays.
