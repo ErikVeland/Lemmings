@@ -11,6 +11,10 @@ Automated checks support the recorded routes;
 remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)
 and the current [Classic validation](ReleaseReadiness/ClassicValidation-current.md).
 
+The 1.9 development source adds original Macintosh music, release-rate pitch
+feedback and optional Macintosh skill counters. See
+[Macintosh fidelity](MacintoshFidelity.md) for scope and validation limits.
+
 ## Wording
 
 Three words carry the claims, and they mean different things.

@@ -141,7 +141,7 @@ The audit below is historical. Its missing-platform and uninstalled-remix statem
 | Demo / prototype | 20 modules | Historical completeness unverified; separate from the released soundtrack |
 | CoLD SToRAGE album | 12 recordings | CanCan, Lemming1/2/3, Doggie, TenLems, Mountain, BeastI, Menace and intro |
 | DOS | 21 named tunes in source archive; OPL2 synthesis code | No playable AdLib soundtrack in the music library |
-| Macintosh | 21 MIDI tunes and 77 sampled instruments in disk image | No playable native Mac soundtrack in the music library |
+| Macintosh | 1.9 prepares 21 Classic, six Oh No! and four Xmas arrangements from supplied resources | Hardware voice stealing and historical edition ordering remain unverified; see [Macintosh fidelity](MacintoshFidelity.md) |
 | NES, SNES, Master System, Game Gear, Mega Drive | No soundtrack recordings | Native renditions and any platform-exclusive tunes |
 | Windows, PlayStation, 3DO, CD-i | No identified soundtrack folders | MIDI/rendered arrangements listed by the reference |
 | Atari ST, C64, ZX Spectrum, Amstrad, Acorn, Lynx, Game Boy, PC Engine, Japanese computer and CD ports | No identified music folders | Inventory and comparison still required; absence here does not establish how many tunes each port has |

@@ -64,12 +64,13 @@ now have converted recordings in the local library:
 | Sega Master System | VGM / VGZ | No SN76489 or VGM player | Supply a rendered WAV, AIFF, M4A or FLAC |
 | Genesis / Mega Drive | VGM / GYM | No YM2612 or VGM player | Supply a rendered WAV, AIFF, M4A or FLAC |
 | DOS | `ADLIB.DAT` / OPL2 sequence | OPL2 synthesis exists, but the Lemmings sequence driver is not decoded | Supply a rendered WAV, AIFF, M4A or FLAC |
-| Macintosh | MIDI and Sound Manager resources | Resources can be audited, but there is no MIDI or Sound Manager music player | Supply a rendered WAV, AIFF, M4A or FLAC |
 
 This checkout now includes NES, SNES, Master System, Genesis/Mega Drive, DOS
-and Archimedes recordings, among other ports. Macintosh recordings remain
-unavailable. See the current source audit for coverage and provenance. The
-catalogue offers 495 playable versions and preserves special, seasonal and
+and Archimedes recordings, among other ports. The 1.9 source also prepares 31
+Macintosh arrangements from the supplied resources for the **Macintosh (original)**
+Audio setting. See [Macintosh fidelity](MacintoshFidelity.md) for preparation,
+selection and validation limits. See the current source audit for provenance. The
+DJ catalogue offers 495 playable versions and preserves special, seasonal and
 port-specific identities. Conversion does not provide native raw-format playback.
 
 Do not add downloaded game rips or user-sequenced arrangements to the

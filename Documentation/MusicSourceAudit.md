@@ -62,9 +62,9 @@ The earlier 73 Amiga modules and 12 CoLD SToRAGE WAV recordings remain. Demo/pro
 
 ## Remaining gaps and validation boundaries
 
-- Native Macintosh, Atari ST, C64, Game Gear, PC Engine, Windows MIDI/CD, PlayStation, 3DO and CD-i collections are not present as identified source folders. MT-32 music is also absent. These are collection gaps, not counts of missing unique compositions.
+- The 1.9 source prepares 31 Macintosh arrangements from the supplied Classic, Oh No! and Xmas resources. They are a separate selectable bank, outside the DJ catalogue; see [Macintosh fidelity](MacintoshFidelity.md). Atari ST, C64, Game Gear, PC Engine, Windows MIDI/CD, PlayStation, 3DO and CD-i collections are not present as identified source folders. MT-32 music is also absent. These are collection gaps, not counts of missing unique compositions.
 - [VengefulChip recovery](VengefulChipRecovery.md) recovered external download links only. No audio from those links has been added or confirmed available.
-- Native Mac Holiday Frosty the Snowman and Archimedes Oh No!/Lemmings 2 collections remain unverified/unavailable here. Archimedes Classic Professor Mariarti is now present as an MP3. DOS seasonal music and Oh No! arrangements are now present, so the old DOS absence claims no longer apply.
+- The Mac Xmas bank includes a resource named Frosto. Historical Holiday edition ordering and an audible composition comparison remain unverified. Archimedes Oh No!/Lemmings 2 collections remain unavailable here. Archimedes Classic Professor Mariarti is now present as an MP3. DOS seasonal music and Oh No! arrangements are now present, so the old DOS absence claims no longer apply.
 - Explicit result cues now exist in the source library. Their presence does not prove that the game routes the correct cue for every engine and state. The old “no failure track” statement applies only to the earlier library.
 - Conversion verifies file integrity and decoder compatibility, not original-hardware fidelity, seamless loops, volume matching, beat grids or exact level assignments. The source readmes generally call their ordering approximate.
 - Imported assets and a generated catalogue do not establish what shipped in Build 44 or 45. Check a built app's resources before claiming release inclusion. Standalone sequel packaging has separate rules.

@@ -45,7 +45,7 @@ public enum ClassicMusicSource: Equatable, Codable, Sendable {
         switch self {
         case .adaptiveDJ: return "Adaptive DJ Mix (The True Choice) 🎧"
         case .amigaModules: return "Amiga Modules"
-        case .macintoshMIDI: return "Macintosh MIDI"
+        case .macintoshMIDI: return "Macintosh (original)"
         case .dosAdlib: return "DOS Ad-Lib (OPL2)"
         case .snesSPC: return "SNES SPC Synth"
         case .genesisFM: return "Sega Genesis FM"
@@ -173,10 +173,16 @@ public enum LemmingSelectionStyle: String, CaseIterable, Codable, Sendable {
     public var title: String { rawValue.capitalized }
 }
 
+public enum ClassicCounterStyle: String, CaseIterable, Codable, Sendable {
+    case game, macintosh
+    public var title: String { self == .macintosh ? "Original Macintosh" : "Game lettering" }
+}
+
 public struct ClassicSettings: Equatable, Codable, Sendable {
     // Graphics
     public var graphics: ClassicGraphicsSource
     public var colorDepth: ClassicColorDepth
+    public var counterStyle: ClassicCounterStyle
 
     // Video
     public var display: ClassicDisplayMode
@@ -235,6 +241,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public init(
         graphics: ClassicGraphicsSource = .macintosh,
         colorDepth: ClassicColorDepth = .full,
+        counterStyle: ClassicCounterStyle = .game,
         display: ClassicDisplayMode = .flat,
         displayIntensity: Double = 0.8,
         pixelAspect: Double = 1.0,
@@ -275,6 +282,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     ) {
         self.graphics = graphics
         self.colorDepth = colorDepth
+        self.counterStyle = counterStyle
         self.display = display
         self.displayIntensity = displayIntensity
         self.pixelAspect = pixelAspect
@@ -340,6 +348,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         }
 
         graphics = source(.graphics, fallback.graphics)
+        counterStyle = source(.counterStyle, fallback.counterStyle)
         colorDepth = try values.decodeIfPresent(
             ClassicColorDepth.self, forKey: .colorDepth) ?? fallback.colorDepth
         display = try values.decodeIfPresent(
@@ -486,7 +495,7 @@ public struct ClassicSettingsOptions: Sendable {
     /// control that changes nothing is worse than a control that is missing,
     /// because the player cannot tell which of their choices took effect.
     /// Adding a decoder means adding its source here.
-    public static let playableMusic: [ClassicMusicSource] = [.amigaModules, .adaptiveDJ, .silent]
+    public static let playableMusic: [ClassicMusicSource] = [.amigaModules, .macintoshMIDI, .adaptiveDJ, .silent]
     public static let playableSound: [ClassicSoundSource] = [
         .macintoshResources, .amigaVoices, .silent,
     ]
@@ -503,7 +512,8 @@ public struct ClassicSettingsOptions: Sendable {
         moduleCount: Int,
         remixFolders: [String] = [],
         customGraphics: [String] = [],
-        hasSoundtracks: Bool = false
+        hasSoundtracks: Bool = false,
+        hasMacintoshMusic: Bool = false
     ) -> ClassicSettingsOptions {
         var graphics: [ClassicGraphicsSource] = []
         if hasMacintoshDisk { graphics.append(.macintosh) }
@@ -516,7 +526,7 @@ public struct ClassicSettingsOptions: Sendable {
         // the conditions below name the data that is present.
         var music: [ClassicMusicSource] = []
         if moduleCount > 0 { music.append(.amigaModules) }
-        if hasMacintoshDisk { music.append(.macintoshMIDI) }
+        if hasMacintoshMusic { music.append(.macintoshMIDI) }
         // The mix moves between the soundtracks the player supplied, so it
         // needs at least one of them to have anything to play.
         if hasSoundtracks { music.append(.adaptiveDJ) }

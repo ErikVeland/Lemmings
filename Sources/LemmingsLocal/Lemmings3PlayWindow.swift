@@ -464,6 +464,19 @@ import NxlvKit
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     #if APP_INTEGRATION_TESTS
+    func testExitAndSequenceResult(won: Bool) throws {
+        timer?.invalidate(); paused = true; canvas.startCountdown.cancel()
+        try validateExitControl(gameplayKeyboard!, owner: window!, name: "lemmings3")
+        var attributes = [UInt16](repeating: 0, count: 128 * 96)
+        for y in 48..<96 { for x in 0..<128 { attributes[y * 128 + x] = 0x20 } }
+        let configuration = Lemmings3Runtime.Configuration(width: 128, height: 96, attributes: attributes,
+            entrance: .init(x: 32, y: 32), exits: [.init(x: won ? 32 : 100, y: 47)],
+            total: 1, releaseInterval: 1, releaseDelay: 0, timeLimit: won ? 20 : 1)
+        var fixture = try Lemmings3Runtime(configuration: configuration)
+        for _ in 0..<1000 where !fixture.isComplete { fixture.step() }
+        try validateMusicRouting(fixture.isComplete && (fixture.saved > 0) == won, "L3 completion fixture failed")
+        game = fixture; recorded = false; refresh()
+    }
     func testCollectionVisitAndRetry() throws {
         timer?.invalidate()
         guard let entry = LevelCollections.entry(attemptID: arcadeRunID), entry.identity.engine == .lemmings3,
@@ -644,6 +657,7 @@ import NxlvKit
     }
     func windowWillClose(_ notification: Notification) { stop() }
     func stop() {
+        gameplayKeyboard?.removeNavigationControl()
         saveCheckpoint(immediately: true)
         canvas.capturePointer(active: false)
         NotificationCenter.default.removeObserver(self, name: SequelArtworkPreference.changed, object: nil)
@@ -1159,6 +1173,8 @@ import NxlvKit
         }
     }
     private func update() {
+        gameplayKeyboard?.refreshNavigationControl()
+        canvas.navigationFrame = gameplayKeyboard?.navigationFrame(in: canvas)
         let now = ProcessInfo.processInfo.systemUptime
         let elapsed = min(0.1, now - lastTime); lastTime = now
         let playing = !paused && !game.isComplete && !GameScreen.shared.isPresented && canvas.menuRows == nil && pendingTool == nil
@@ -1305,7 +1321,8 @@ import NxlvKit
             rewardVolumeProvider: { [weak self] in self?.warningSound.effectiveVolume ?? 0 },
             continueHandlesHandover: onSequenceContinue != nil,
             skip: canSkipLevel ? { [weak self] in self?.skipLevel() } : nil,
-            status: needsTribeSurvivors ? "Need 50 survivors to complete this tribe." : nil)
+            status: needsTribeSurvivors ? "Need 50 survivors to complete this tribe." : nil,
+            menu: { [weak self] in self?.gameplayKeyboard?.mainMenu?() })
     }
     /// Level skips apply to a failed campaign level, not playlists.
     /// Old school turns them off with the other modern controls.
@@ -1388,6 +1405,7 @@ import NxlvKit
             ReplayFrameCapture.draw(canvas, in: CGRect(x: 0, y: 0, width: 1280, height: 640))
         })
     }
+    var onSequenceResult: ((Bool) -> Void)?
     private func refresh() {
         if let manualCarrierID,
            !game.lemmings.contains(where: { $0.id == manualCarrierID && $0.active && $0.tool != nil }) {
@@ -1406,6 +1424,7 @@ import NxlvKit
         let justCompleted = game.isComplete && !recorded
         if justCompleted { dj.updateTelemetry(.init(didWin: game.saved > 0, isComplete: true)) }
         if justCompleted {
+            onSequenceResult?(game.saved > 0)
             if game.saved > 0 && paused {
                 userPausedMusic = false
                 try? music.resumeOutput(); dj.resumeOutput()
@@ -1454,11 +1473,13 @@ import NxlvKit
         timeline.frame = CGRect(x: (bounds.width - width) / 2, y: bounds.height - 34, width: width, height: 30)
     }
 
+    var navigationFrame: CGRect?
     var confinePointer = true
     private let pointerCapture = GamePointerCapture()
     func capturePointer(active: Bool) {
         layoutTimeline()
-        let frame = CGRect(origin: screenOrigin, size: CGSize(width: 320 * zoom, height: 212 * zoom)).union(timeline.frame)
+        var frame = CGRect(origin: screenOrigin, size: CGSize(width: 320 * zoom, height: 212 * zoom)).union(timeline.frame)
+        if let navigationFrame { frame = frame.union(navigationFrame) }
         if let point = pointerCapture.update(in: self, rect: frame, active: active && confinePointer && controllerPointer == nil) {
             updateSystemCursor(at: point)
             trackPointer(at: point)
@@ -2138,12 +2159,12 @@ import NxlvKit
     private func updateSystemCursor(at point: CGPoint) {
         GameCursor.update(
             at: point,
-            hidingInside: menuRows == nil ? playfieldRect : nil)
+            hidingInside: menuRows == nil && navigationFrame?.contains(point) != true ? playfieldRect : nil)
     }
     private func trackPointer(at p: CGPoint) {
         controllerPointer = nil
         assignmentHighlight.clear()
-        pointerPosition = p
+        pointerPosition = navigationFrame?.contains(p) == true ? nil : p
         hoveredLemming = pointerTarget
         toolTip = nil
         needsDisplay = true

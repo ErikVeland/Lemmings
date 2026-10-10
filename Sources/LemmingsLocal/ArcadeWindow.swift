@@ -23,7 +23,7 @@ import NxlvKit
                     rewardVolumeProvider: (() -> Double)? = nil,
                     continueHandlesHandover: Bool = false, skip: (() -> Void)? = nil,
                     later: (() -> Void)? = nil, hints: (() -> Void)? = nil,
-                    status: String? = nil) {
+                    status: String? = nil, menu: (() -> Void)? = nil) {
         arcadeView.rewardVolume = rewardVolume
         arcadeView.rewardVolumeProvider = rewardVolumeProvider
         arcadeView.mode = .result; arcadeView.report = report; arcadeView.level = report.run.level
@@ -37,6 +37,7 @@ import NxlvKit
         arcadeView.onSkip = skip.map { skip in { [weak self] in self?.close(); skip() } }
         arcadeView.onLater = later.map { action in { [weak self] in self?.close(); action() } }
         arcadeView.onHints = hints.map { action in { [weak self] in self?.close(); action() } }
+        arcadeView.onMenu = menu.map { action in { [weak self] in self?.close(); action() } }
         arcadeView.onReplay = replay
         arcadeView.onStoredReplay = storedReplay
         present(owner: owner)
@@ -171,6 +172,7 @@ import NxlvKit
     var onReplay: ((Bool) -> Void)?
     var onStoredReplay: ((URL, String) -> Void)?
     var onClose: (() -> Void)?
+    var onMenu: (() -> Void)?
     var continueTitle = "Next level"
     var resultStatus: String?
     var continueHandlesHandover = false
@@ -502,6 +504,7 @@ import NxlvKit
     }
     func page(_ next: Mode) { finishCelebration(); affinityPopover?.close(); mode = next; hover = nil; needsDisplay = true }
     private func back() {
+        if mode == .result, let onMenu { onMenu(); return }
         if mode == .hotSeat { closeSession(); return }
         if mode == .profiles { closeProfiles(); return }
         if mode != .result && mode != .profiles && report != nil { page(.result) }
@@ -525,6 +528,7 @@ import NxlvKit
     private func drawResult() {
         guard let report else { page(.records); return }
         drawGameResult(report)
+        if let onMenu { button("Menu", CGRect(x: 940, y: 38, width: 116, height: 44), action: onMenu) }
     }
     func portraitImage(_ index: Int) -> NSImage? {
         if let cached = portraits[index] { return cached }
@@ -915,6 +919,10 @@ import NxlvKit
     override func mouseExited(with event: NSEvent) { hover = nil; needsDisplay = true; NSCursor.arrow.set() }
     override func keyDown(with event: NSEvent) {
         guard event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { super.keyDown(with: event); return }
+        if mode == .result, event.charactersIgnoringModifiers?.lowercased() == "q", let onMenu {
+            if !event.isARepeat { onMenu() }
+            return
+        }
         // Pages with their own arrow navigation keep it; Tab still moves button focus.
         let horizontal = [123, 124].contains(event.keyCode), vertical = [125, 126].contains(event.keyCode)
         let pageOwnsArrow = ([.awards, .career, .profiles].contains(mode) && horizontal)
@@ -935,7 +943,7 @@ import NxlvKit
 
         if event.keyCode == 53, affinityPopover?.isShown == true { affinityPopover?.close(); return }
         guard event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { super.keyDown(with: event); return }
-        if event.isARepeat && [36, 76, 49].contains(event.keyCode) { return }
+        if event.isARepeat && [36, 76, 49, 53].contains(event.keyCode) { return }
         if event.keyCode == 53 { back(); return }
         let key = event.charactersIgnoringModifiers?.uppercased() ?? ""
         if mode == .hotSeat {

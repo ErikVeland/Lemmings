@@ -46,6 +46,9 @@ Locked spawn intervals disable both rate buttons. Minimap input follows the
 visible map inside its frame. Offscreen checks cover 0, 1, 8, 10 and 21 skills,
 resizing, CRT source rendering, selection, pause, undo and unavailable controls.
 Lemmings 2 and 3 retain their separate panels and the same shared transport controls.
+The 1.9 **Original Macintosh** counter option uses the supplied panel digits and
+recessed socket at whole-pixel scales. It shares the existing Classic/NeoLemmix
+targets and accessible counts. See [Macintosh fidelity](MacintoshFidelity.md).
 
 Assignment feedback follows the engine's actual eligibility rules. The Modern cursor is grey when no lemming is under the pointer. Yellow means the lemming cannot
 accept the selected skill; green means the nearest target can accept the selected skill.
@@ -174,6 +177,13 @@ Hot Seat handovers still wait for the player to indicate readiness.
 Space and P toggle pause once per press during gameplay in all three engines,
 including imported fan levels. Key repeat and key release do not toggle pause.
 Text entry and menu/handover actions retain their own Space handling.
+
+Gameplay and results offer a visible Menu action. Q and Escape use the same
+return-to-library path, keeping the saved run and its owner. Command-Q retains
+the app's quit action. Dialogs and text entry keep their own input handling.
+Journey wins save at completion; Next level advances the queue and turn.
+Hot Seat Resume actions name every participating profile in turn order, using
+the same roster lettering as the library badge. Solo Resume keeps its owner.
 
 Handover pages accept Space, Return and keypad Enter for their primary Ready action.
 Held keys must not repeat that action. Pointer confinement also applies to paused

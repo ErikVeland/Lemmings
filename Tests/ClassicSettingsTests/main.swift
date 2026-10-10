@@ -110,10 +110,22 @@ private func testOptionsFollowInstalledData() throws {
         try require(full.correcting(restored).graphics == choice, "A saved artwork choice was replaced")
     }
     try require(full.music.contains(.amigaModules), "modules should be offered")
-    // Macintosh MIDI is deliberately absent. The release carries the data but
-    // nothing plays it yet, and the rule below is that an unplayable source is
-    // never offered.
-    try require(!full.music.contains(.macintoshMIDI), "Macintosh music has no player yet")
+    try require(!full.music.contains(.macintoshMIDI), "Macintosh music was offered without its prepared bank")
+    let macMusic = ClassicSettingsOptions.available(hasDOSData: true, hasAmigaDisk: true,
+        hasMacintoshDisk: true, moduleCount: 22, hasMacintoshMusic: true)
+    try require(macMusic.music.contains(.macintoshMIDI), "Prepared Macintosh music was not offered")
+    var native = ClassicSettings()
+    native.music = .macintoshMIDI
+    native.counterStyle = .macintosh
+    try require(macMusic.correcting(native) == native, "Available Macintosh choices were replaced")
+    let restored = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(native))
+    try require(restored == native, "Macintosh choices did not persist")
+    let migrated = try JSONDecoder().decode(ClassicSettings.self,
+        from: Data(#"{"counterStyle":"future","music":"amigaModules","soundVolume":0.3}"#.utf8))
+    try require(migrated.counterStyle == .game && migrated.soundVolume == 0.3,
+        "Unknown counter style discarded unrelated preferences")
+    native.applyExperiencePreset(modern: false)
+    try require(native.counterStyle == .macintosh, "Gameplay preset replaced the counter choice")
     try require(full.sound.contains(.macintoshResources), "Macintosh sound should be offered")
     print("PASS the options offered follow the data installed")
 }

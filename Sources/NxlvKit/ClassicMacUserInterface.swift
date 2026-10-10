@@ -84,6 +84,9 @@ public struct ClassicMacUserInterface: Sendable {
     public let publisher: ClassicMacArtwork.Frame?
     /// The status bar artwork, including the skill buttons.
     public let icons: [ClassicMacArtwork.Frame?]
+    /// The original black panel digits, followed by the blank counter cell.
+    public let counterGlyphs: [ClassicMacArtwork.Frame?]
+    public let counterPanel: ClassicMacArtwork.Frame?
 
     /// Reads the front-end banks out of a release's artwork.
     ///
@@ -108,6 +111,9 @@ public struct ClassicMacUserInterface: Sendable {
         publisher = artwork.bank(named: "Psygnosis2").flatMap { artwork.frame($0) }
             ?? artwork.bank(named: "Psygnosis1").flatMap { artwork.frame($0) }
         icons = artwork.bank(named: "Icons").flatMap { artwork.banks[$0] } ?? []
+        let counterBank = artwork.bank(named: "Charset2") ?? artwork.bank(named: "Charset1")
+        counterGlyphs = (96...106).map { index in counterBank.flatMap { artwork.frame($0, index) } }
+        counterPanel = counterBank.flatMap { artwork.frame($0, 107) }
     }
 
     public func font(_ face: Face) -> Font? { fonts[face] }

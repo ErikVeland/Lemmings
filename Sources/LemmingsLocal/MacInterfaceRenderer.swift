@@ -29,7 +29,49 @@ import NxlvKit
   enum Palette: String { case blue, green }
 
   let interface: ClassicMacUserInterface
+  private var counterSocket: NSImage?
+  private var counterImages: [Int: NSImage] = [:]
   private var cache: [String: NSImage] = [:]
+
+  /// The panel font lives after the printable menu alphabet, at frames 96–106.
+  func drawCounter(_ text: String, in box: CGRect, panelScale: CGFloat) -> Bool {
+    guard interface.counterGlyphs.count == 11,
+      interface.counterGlyphs.prefix(10).allSatisfy({ $0 != nil }),
+      CGFloat(text.count * 6) <= box.width else { return false }
+    if counterSocket == nil, let source = interface.counterPanel?.makeNSImage(),
+      let bitmap = source.cgImage(forProposedRect: nil, context: nil, hints: nil), bitmap.width == 640,
+      let crop = bitmap.cropping(to: CGRect(x: 38, y: 2, width: 24, height: 18)) {
+      counterSocket = NSImage(cgImage: crop, size: CGSize(width: 24, height: 18))
+    }
+    let scale = max(1, floor(min(panelScale / 2, box.width / CGFloat(max(1, text.count * 6 + 4)), box.height / 9)))
+    let width = min(box.width, max(24 * scale, CGFloat(text.count * 6 + 4) * scale))
+    let socket = CGRect(x: floor(box.midX - width / 2), y: floor(box.minY), width: width, height: box.height)
+    // Retain the authored socket colours when the adaptive panel needs a wider count.
+    if let counterSocket {
+      counterSocket.draw(in: socket, from: .zero, operation: .sourceOver, fraction: 1,
+        respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
+    } else {
+      NSColor(calibratedRed: 1, green: 221.0 / 255, blue: 221.0 / 255, alpha: 1).setFill()
+      socket.fill()
+    }
+    if text == "∞" {
+      GamePixelText.draw(text, in: socket.insetBy(dx: scale, dy: 0), maxScale: scale, color: .black)
+      return true
+    }
+    let left = floor(box.midX - CGFloat(text.count * 6) * scale / 2)
+    for (offset, character) in text.enumerated() {
+      guard let digit = character.wholeNumberValue, (0..<10).contains(digit),
+        let glyph = interface.counterGlyphs[digit] else { return false }
+      let image = counterImages[digit] ?? glyph.makeNSImage()
+      guard let image else { return false }
+      counterImages[digit] = image
+      image.draw(in: CGRect(x: left + CGFloat(offset * 6) * scale,
+        y: floor(box.midY - 4.5 * scale), width: 6 * scale, height: 9 * scale),
+        from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
+        hints: [.interpolation: NSImageInterpolation.none.rawValue])
+    }
+    return true
+  }
   private var lines: [String: (NSImage, CGRect, Int)] = [:]
   private var lineOrder: [String] = []
   private var lineBytes = 0

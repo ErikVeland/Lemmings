@@ -1,6 +1,6 @@
 # Save recovery and upgrade migration
 
-Updated 11 September 2026.
+Updated 10 October 2026.
 
 ## Arcade records
 
@@ -13,6 +13,25 @@ An unsupported version is not replaced with an older backup. If both files are i
 Every write validates the records first. A file lock prevents overlapping writes by apps that use this store. A held lock causes a save error instead of waiting for the other app. A stale store also refuses to overwrite primary data that changed after it was loaded. Backup failures leave the primary unchanged.
 
 A temporary save failure offers **Retry save** on arcade pages. Failed profile edits and player creation roll back their in-memory changes. The profile editor stays open, and Retry save retries the pending edit. The app changes profiles and closes the editor only after a successful save. A conflict with another app requires closing and reopening the app to load the newer records.
+
+## Journey completion
+
+The bundled Journey currently contains Classic lessons. All three engines have
+the same completion callback. Journey wins are written at the result, before the
+player selects Next level. The write keeps the active level, run ID and Hot Seat
+owner in place. Repeated completion is idempotent. A failed attempt is recorded
+as Try Later only when the player chooses that action. Leaving through Menu,
+Q or Escape retains the saved sequence position.
+
+`TEST_SCOPE=exit-progress Scripts/run-app-integration-tests.sh` covers immediate
+completion writes and return-to-library input. These changes are pending release.
+The offscreen, muted checks exercise winning and failed completion callbacks in
+all three engines, reload progress before Next, reject stale results and roll back
+failed writes. Sequel completion uses test sequence entries because the bundled
+Journey has no sequel lessons. Menu renders and input targets are checked at
+each engine's minimum window size, 900 × 620 and 1600 × 1000. Saved standalone
+attempts resume paused. Composited CRT and physical controller checks remain
+outside this scope.
 
 ## Upgrade migration
 

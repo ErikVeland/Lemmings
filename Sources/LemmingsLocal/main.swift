@@ -1092,7 +1092,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       hasMacintoshDisk: hasMac,
       moduleCount: music.library.count,
       remixFolders: soundtrackLibrary.keys.sorted(),
-      hasSoundtracks: dj.hasTracks)
+      hasSoundtracks: dj.hasTracks,
+      hasMacintoshMusic: macintoshMusic != nil)
   }
 
   @objc private func showSettings() {
@@ -1145,6 +1146,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if reduceMotionChanged { updateLevelSelectionReducedMotion() }
     speedControl.variableEnabled = settings.modernControlsEnabled && settings.variableSpeedEnabled
     panel.modernControlsEnabled = settings.modernControlsEnabled
+    panel.counterStyle = settings.counterStyle
     playfield.reduceMotion = settings.reduceMotion
     playfield.reduceFlashes = settings.reduceFlashes
     playfield.hdEffectsEnabled = settings.hdEffectsEnabled
@@ -1165,6 +1167,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if musicChanged, !sequelIsActive {
       levelMusic = nil
       playMusicForCurrentLevel()
+      if isPaused {
+        let rhythmOnly = userPausedMusic && settings.pauseMusicBeatOnly
+        music.suspendOutput(rhythmOnly: rhythmOnly)
+        soundtrack.suspendOutput(rhythmOnly: rhythmOnly)
+        dj.suspendOutput(rhythmOnly: rhythmOnly)
+      }
     }
 
     applyDisplayMode()
@@ -1321,6 +1329,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
       next.onShowSettings = { [weak self] in self?.showSettings() }
       if let sequenceRunID, let sequenceIdentity {
         next.recordsCampaignProgress = false
+        next.onSequenceResult = { [weak self] won in
+          self?.recordSequenceWin(completed: sequenceIdentity, runID: sequenceRunID, won: won)
+        }
         if let run = sequencePlaylistStore?.activeRun, run.id == sequenceRunID {
           next.sequenceContinueTitle = run.currentIndex + 1 < run.entries.count
             ? "Next level" : "Finish run"
@@ -1378,6 +1389,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
       next.onShowSettings = { [weak self] in self?.showSettings() }
       if let sequenceRunID, let sequenceIdentity {
         next.recordsCampaignProgress = false
+        next.onSequenceResult = { [weak self] won in
+          self?.recordSequenceWin(completed: sequenceIdentity, runID: sequenceRunID, won: won)
+        }
         if let run = sequencePlaylistStore?.activeRun, run.id == sequenceRunID {
           next.sequenceContinueTitle = run.currentIndex + 1 < run.entries.count
             ? "Next level" : "Finish run"
@@ -2231,9 +2245,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
     return dataSets[gamePicker.indexOfSelectedItem].set.title
   }
   private var seasonalMusic: Bool { SoundtrackPlayer.isSeasonal(musicTitle) }
+  private lazy var macintoshMusic: ClassicMacMusicLibrary? = Bundle.main.resourceURL
+    .flatMap { ClassicMacMusicLibrary(root: $0.appendingPathComponent("MacMusic")) }
   private var activeMusic: ClassicMusicSource {
     let source = levelMusic ?? settings.music
-    if seasonalMusic, source != .silent, source != .adaptiveDJ { return .amigaModules }
+    if seasonalMusic, source != .silent, source != .adaptiveDJ, source != .macintoshMIDI { return .amigaModules }
     return source
   }
 
@@ -5013,6 +5029,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
   }
 
+  private func recordSequenceWin(completed identity: LevelCatalogueIdentity, runID: UUID, won: Bool) {
+    guard won, let store = sequencePlaylistStore,
+      store.activeRun?.source == .playlist(LearningJourney.playlistID) else { return }
+    do { try store.recordLearningWin(runID: runID, level: identity) }
+    catch { setStatus("Could not save completed lesson: " + error.localizedDescription) }
+  }
+
   @discardableResult
   private func continueActiveSequence(
     completed identity: LevelCatalogueIdentity,
@@ -5555,6 +5578,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
     return "\(family.displayName.uppercased())  \(passed)/\(total)\(preview)"
   }
 
+  private func homeResumePlayers(hotSeatID: String?, profileID: String) -> String {
+    let store = ArcadeStore.shared
+    if store.hotSeatIsActive, hotSeatID == store.hotSeatID {
+      return store.sessionProfiles.map(\.initials).joined(separator: " v ")
+    }
+    return store.records.profile(profileID)?.initials ?? "LEM"
+  }
+
   private func homeMenuItems() -> [HomeMenuItem] {
     var items: [HomeMenuItem] = []
     let savedSequence = (try? playlistStore()).flatMap { store in
@@ -5562,12 +5593,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     if let savedSequence {
       let name = savedSequence.source == .playlist(LearningJourney.playlistID) ? "JOURNEY" : "SESSION"
-      items.append(HomeMenuItem(title: "RESUME " + name + " - " + ArcadeStore.shared.records.activeProfile.initials,
+      let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
+        profileID: ArcadeStore.shared.records.activeProfileID)
+      items.append(HomeMenuItem(title: "RESUME " + name + " - " + players,
         action: .resumeSequence))
     }
     if menuRecovery != nil {
-      let initials = menuRecovery.flatMap {
-        ArcadeStore.shared.records.profile($0.profileID)?.initials
+      let initials = menuRecovery.map {
+        homeResumePlayers(hotSeatID: $0.hotSeatID, profileID: $0.profileID)
       } ?? "LEM"
       items.append(HomeMenuItem(title: (savedSequence == nil ? "RESUME - " : "RESUME LEVEL - ") + initials, action: .resume))
     }
@@ -6307,6 +6340,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     panel.isFastForward = false
     lastStepTime = nil
     panel.session = new
+    panel.counterStyle = settings.counterStyle
+    pendingRateFeedback = false
     panel.selectedSkillIndex = new.skills.firstIndex { $0.count > 0 || $0.isInfinite } ?? 0
     panel.levelSize = CGSize(width: new.levelWidth, height: new.levelHeight)
     playfield.session = new
@@ -6783,6 +6818,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func step(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
+    gameplayKeyboard?.refreshNavigationControl()
     updateFailureMood(at: now)
     refreshTurnDisplay()
     refreshProgressText()
@@ -6860,7 +6896,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let before = session.remainingSeconds
       let previousExplosions = settings.cinematicExplosionsEnabled
         ? Set(session.lemmings.filter { $0.pose == .explosion }.map(\.id)) : []
+      let previousRate = session.rate
       session.tick()
+      completeRateFeedback(from: previousRate, session: session)
       updateFailureMood()
       playfield.updateSpeedTrails()
       countdownWarning.reset(seconds: before)
@@ -6947,6 +6985,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func finishSessionIfNeeded() {
     guard phase == .playing, let session, session.isComplete else { return }
+    if let identity = sequencePlayingIdentity, let runID = sequencePlaylistStore?.activeRun?.id {
+      recordSequenceWin(completed: identity, runID: runID, won: session.didWin)
+    }
     if let conditions = arcadeLevel?.conditions,
        ArcadeStore.shared.solutionTargetIsPending(for: conditions) { return }
     if session.didWin && isPaused {
@@ -7014,6 +7055,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let active = settings.confinePointer && !playfield.usesControllerPointer && phase == .playing && !isPaused
       && session?.isComplete == false && !GameScreen.shared.isPresented
     guard let point = pointerCapture.update(in: root, active: active) else { return }
+    if gameplayKeyboard?.navigationFrame(in: root)?.contains(point) == true {
+      NSCursor.arrow.set(); playfield.clearPointer(); return
+    }
     if tubeIsActive {
       let viewPoint = crtView.convert(point, from: root)
       crtView.updateSystemCursor(at: viewPoint)
@@ -7093,8 +7137,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func handle(_ button: PanelButton) {
     guard let session else { return }
     switch button {
-    case .rateDown: session.adjustRate(by: -1)
-    case .rateUp: session.adjustRate(by: 1)
+    case .rateDown, .rateUp:
+      let oldRate = session.rate
+      session.adjustRate(by: button == .rateDown ? -1 : 1)
+      rateFeedback(from: oldRate, session: session)
     case let .skill(index):
       panel.selectedSkillIndex = index
       // The gameplay reticle owns the selected-skill artwork. Redraw it as
@@ -7119,6 +7165,21 @@ let achievementProgressKey = "ClassicAchievementProgress"
       panel.needsDisplay = true
     }
     updateStatus()
+  }
+
+  private var pendingRateFeedback = false
+  private func rateFeedback(from oldRate: Int, session: any GameSession) {
+    if session is NeoLemmixSession { pendingRateFeedback = true }
+    else if session.rate != oldRate { effects.playReleaseRate(session.rate) }
+    panel.needsDisplay = true
+  }
+
+  private func completeRateFeedback(from oldRate: Int, session: any GameSession) {
+    guard pendingRateFeedback else { return }
+    pendingRateFeedback = false
+    if session.rate != oldRate {
+      effects.playReleaseRate(99 - (session.rate - NeoLemmixRules.minimumSpawnInterval))
+    }
   }
 
   private func toggleFastForward() {
@@ -7354,6 +7415,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     dj.stop()
 
+    if activeMusic == .macintoshMIDI, let track = macintoshMusic?.track(
+        index: currentNxlvURL == nil ? max(0, picker.indexOfSelectedItem) : 0,
+        levelTitle: currentNxlvURL == nil ? artworkLevel?.title ?? "" : "", title: musicTitle) {
+      music.stop()
+      soundtrack.load([track], originalMix: true)
+      if let name = soundtrack.play(index: 0) { setStatus("♪ \(name)"); return }
+    }
+
     // A recording must match the assigned tune. An incomplete album falls
     // back to the module instead of substituting an unrelated song.
     let trackGame = seasonalMusic ? "holiday" : musicTitle == .ohNoMoreLemmings ? "ohno" : "classic"
@@ -7517,7 +7586,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
         rewardVolumeProvider: { [weak self] in self?.effects.effectiveVolume ?? 0 },
         continueHandlesHandover: true,
         later: isLearningJourneyActive ? { [weak self] in self?.deferLearningLevel(runID: run.id, level: run.currentEntry.identity) } : nil,
-        hints: isLearningJourneyActive ? { [weak self] in self?.showLearningHints() } : nil)
+        hints: isLearningJourneyActive ? { [weak self] in self?.showLearningHints() } : nil,
+        menu: { [weak self] in self?.returnToLibrary() })
       return
     }
     let hasNext = currentNxlvURL != nil ? nextNeoPackIdentity != nil : fanPlaying ? fanQueueIndex + 1 < fanQueue.count
@@ -7527,7 +7597,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
             storedReplay: { [weak self] url, title in self?.runMovie.reviewStored(url, title: title) },
       continueTitle: hasNext ? "Next level" : currentNxlvURL != nil ? "Library" : fanPlaying ? "Level select" : "Continue", background: playfield.levelImage, rewardVolume: effects.muted ? 0 : effects.volume,
       rewardVolumeProvider: { [weak self] in self?.effects.effectiveVolume ?? 0 },
-      skip: canSkipClassicLevel ? { [weak self] in self?.skipClassicLevel() } : nil)
+      skip: canSkipClassicLevel ? { [weak self] in self?.skipClassicLevel() } : nil,
+      menu: { [weak self] in self?.returnToLibrary() })
   }
 
   /// Level skips apply to campaign ranks, not fan packs, playlists or practice.
@@ -7674,6 +7745,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       self.refreshSequelProgress(); self.rebuildLibrary()
       self.renderScreen()
     }
+    gameplayKeyboard?.removeNavigationControl()
     let keyboard = GameplayKeyboard(window: window)
     gameplayKeyboard = keyboard
     keyboard.hints = { [weak self] in self?.showLevelHints() }
@@ -7784,7 +7856,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     keyboard.rateLimit = { [weak self] direction in
       guard let self, let session = self.session else { return }
       // The panel shows a spawn interval in NeoLemmix, so its "+" is the slowest rate.
+      let oldRate = session.rate
       session.setRateLimit(maximum: session.rateLabel == "Interval" ? direction < 0 : direction > 0)
+      self.rateFeedback(from: oldRate, session: session)
       self.playfield.needsDisplay = true; self.panel.needsDisplay = true
       self.updateStatus()
     }
@@ -7807,7 +7881,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     keyboard.contextCommands = {
       [KeyboardCommand(keys: "← / →", action: "Pan the level", group: "Camera"),
        KeyboardCommand(keys: "N", action: "Next level", group: "Gameplay"),
-       KeyboardCommand(keys: "Q", action: "Abandon level", group: "Gameplay"),
+       KeyboardCommand(keys: "Q / Escape", action: "Save run and return to library", group: "Gameplay"),
        KeyboardCommand(keys: "↑ / ↓", action: "Choose rank", group: "Menus & results"),
        KeyboardCommand(keys: "Return / Space", action: "Continue or start level", group: "Menus & results"),
        KeyboardCommand(keys: "V / S", action: "Review / save replay after a result", group: "Menus & results")]
@@ -7827,6 +7901,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
     }
     keyboard.mainMenu = { [weak self] in self?.returnToLibrary() }
+    keyboard.navigationAvailable = { [weak self] in
+      guard let self else { return false }
+      return self.phase == .playing || self.phase == .results
+        || (self.flow.map { $0.screen != .title } ?? false) || self.fanPlaying || self.currentNxlvURL != nil
+    }
     keyboard.escape = { [weak self, weak keyboard] in
       guard let self else { return }
       if self.cancelRewindToOrigin() { return }
@@ -7884,6 +7963,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
 
     guard event.type == .keyDown else { return event }
+    if event.keyCode == 53 || event.charactersIgnoringModifiers?.lowercased() == "q",
+       phase == .playing || phase == .results || fanPlaying || currentNxlvURL != nil {
+      if !event.isARepeat { returnToLibrary() }
+      return nil
+    }
     if event.isARepeat, [" ", "p"].contains(event.charactersIgnoringModifiers ?? "") { return nil }
 
     // A directly launched or restored game can outlive the campaign menu state.
@@ -7935,7 +8019,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       default: break
       }
       if characters == " " { self.advancePhase(); return nil }
-      if characters == "q" { self.requestQuit(); return nil }
+      if characters == "q" {
+        if !event.isARepeat { self.requestQuit() }
+        return nil
+      }
     }
 
     switch characters {
@@ -8124,7 +8211,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard phase == .playing, let session else { return false }
     let previousExplosions = Set(session.lemmings.filter { $0.pose == .explosion }.map(\.id))
     countdownWarning.reset(seconds: session.remainingSeconds)
+    let previousRate = session.rate
     guard session.stepForward() else { return false }
+    completeRateFeedback(from: previousRate, session: session)
     playfield.startCountdown.cancel()
     if countdownWarning.update(seconds: session.remainingSeconds) { effects.play(.timerWarning) }
     effects.play(session.lastPositionedCues)

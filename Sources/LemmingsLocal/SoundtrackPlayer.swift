@@ -23,6 +23,7 @@ import NxlvKit
   private(set) var muted = false
   private(set) var playbackRate: Float = 1
   private var speedPitch: Double = 0
+  private(set) var originalMix = false
 
   /// The soundtracks found under a root, one per folder.
   ///
@@ -152,10 +153,11 @@ import NxlvKit
     return nil
   }
 
-  func load(_ urls: [URL]) {
+  func load(_ urls: [URL], originalMix: Bool = false) {
     // A braking or resting record keeps its place for the next attempt.
     if !vinylStopping && !vinylHeld { stop() }
     tracks = urls
+    self.originalMix = originalMix
   }
 
   /// Plays a track, wrapping around, and returns its name for the status line.
@@ -169,7 +171,7 @@ import NxlvKit
       return url.deletingPathExtension().lastPathComponent
     }
     guard let made = MusicFileDeck(url: url, rhythmURL: MusicLibrary.rhythmURL(for: url),
-      profile: Self.playbackProfile(for: url)) else { return nil }
+      profile: Self.playbackProfile(for: url), originalMix: originalMix) else { return nil }
     made.volume = muted ? 0 : volume
     made.playbackRate = playbackRate
     made.setSpeedPitch(speedPitch)

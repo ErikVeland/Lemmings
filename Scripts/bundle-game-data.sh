@@ -74,6 +74,8 @@ NEOSOUNDS
       "$project_dir/Sources/Ports/" "$resources_dir/Ports/"
     zsh "$project_dir/Scripts/prepare-holiday-data.sh" "$resources_dir"
     python3 "$project_dir/Tools/MacArtwork/prepare.py" "$resources_dir/MacArtwork"
+    mac_music_tools="$(zsh "$project_dir/Scripts/ensure-mac-music-tools.sh")"
+    python3 "$project_dir/Tools/MacMusic/prepare.py" --output "$resources_dir/MacMusic" --tools "$mac_music_tools"
     python3 "$project_dir/Tools/AmigaArtwork/prepare.py" "$resources_dir/AmigaArtwork"
     mkdir -p "$project_dir/.build/asset-packager"
     swiftc -swift-version 6 -warnings-as-errors "$project_dir/Tools/BundleGameAssets/main.swift" \

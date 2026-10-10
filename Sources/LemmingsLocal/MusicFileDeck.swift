@@ -45,6 +45,8 @@ final class MusicFileDeck {
   private let outputMixer = AVAudioMixerNode()
   private let file: AVAudioFile
   private let repeats: Bool
+  private let originalMix: Bool
+  private var restingWet: Float { originalMix ? 0 : Turntable.restingWet }
   private let profile: MusicPlaybackCatalogue.Entry?
   private var playbackGeneration = 0
   private(set) var completedLoops = 0
@@ -107,10 +109,11 @@ final class MusicFileDeck {
   var isPlaying: Bool { started && !outputSuspended && player.isPlaying }
 
   init?(url: URL, repeats: Bool = true, rhythmURL: URL? = nil,
-        profile: MusicPlaybackCatalogue.Entry? = nil) {
+        profile: MusicPlaybackCatalogue.Entry? = nil, originalMix: Bool = false) {
     guard let file = try? AVAudioFile(forReading: url), file.length > 0 else { return nil }
     self.file = file
     self.repeats = repeats
+    self.originalMix = originalMix
     self.profile = profile
     if let rhythmURL, let drumFile = try? AVAudioFile(forReading: rhythmURL),
       drumFile.length > 0, Double(drumFile.length) / drumFile.processingFormat.sampleRate <= 13,
@@ -131,10 +134,11 @@ final class MusicFileDeck {
     bands[2].frequency = 7_500
     bands[2].gain = 1.5
     // A constant measured trim preserves attacks and the recording's dynamics.
-    equaliser.globalGain = -1.0 + Float(profile?.gainDB ?? 0)
+    if originalMix { bands.forEach { $0.gain = 0 } }
+    equaliser.globalGain = (originalMix ? 0 : -1.0) + Float(profile?.gainDB ?? 0)
 
     reverb.loadFactoryPreset(.mediumRoom)
-    reverb.wetDryMix = Turntable.restingWet
+    reverb.wetDryMix = restingWet
 
     engine.attach(player)
     engine.attach(musicLayer)
@@ -180,7 +184,7 @@ final class MusicFileDeck {
     NukeMusicFilter.apply(nukeFilterAmount, to: nukeEQ)
   }
 
-  func setMixBass(_ gain: Float) { equaliser.bands[0].gain = 1.5 + gain; equaliser.bands[0].bypass = false }
+  func setMixBass(_ gain: Float) { equaliser.bands[0].gain = (originalMix ? 0 : 1.5) + gain; equaliser.bands[0].bypass = false }
 
   func setSpeedPitch(_ cents: Double) {
     gameplayPitch = min(1200 * log2(1.5), max(0, cents))
@@ -274,7 +278,7 @@ final class MusicFileDeck {
         // Varispeed stops at a quarter speed, so the level carries the end of the brake.
         self.varispeed.rate = max(0.25, self.requestedRate * self.vinyl.rate * remaining * remaining)
         self.sourceMixer.outputVolume = start * remaining.squareRoot()
-        self.reverb.wetDryMix = Turntable.restingWet + (Turntable.tailWet - Turntable.restingWet) * (1 - remaining)
+        self.reverb.wetDryMix = self.restingWet + (Turntable.tailWet - self.restingWet) * (1 - remaining)
         if remaining == 0 { break }
       }
       guard !Task.isCancelled, self.outputSuspended else { return }
@@ -282,7 +286,7 @@ final class MusicFileDeck {
       do { try await Task.sleep(nanoseconds: UInt64(Turntable.tailSeconds * 1_000_000_000)) } catch { return }
       guard !Task.isCancelled, self.outputSuspended else { return }
       self.engine.pause()
-      self.reverb.wetDryMix = Turntable.restingWet
+      self.reverb.wetDryMix = self.restingWet
       self.varispeed.rate = max(0.25, self.requestedRate * self.vinyl.rate)
     }
   }
@@ -293,7 +297,7 @@ final class MusicFileDeck {
     fadeTask?.cancel()
     fadeTask = nil
     outputSuspended = false
-    reverb.wetDryMix = Turntable.restingWet
+    reverb.wetDryMix = restingWet
     varispeed.rate = max(0.25, requestedRate * vinyl.rate * Turntable.spinUpFloor)
     sourceMixer.outputVolume = Turntable.spinUpFloor
     do { if !engine.isRunning { try engine.start() } }

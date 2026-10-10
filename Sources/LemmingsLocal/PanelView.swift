@@ -44,6 +44,7 @@ enum PanelButton: Equatable {
   /// The original status bar, when the imported data provides it.
   var macArtwork: ClassicMacArtwork?
   var usesMacStyleControls = false { didSet { needsDisplay = true } }
+  var counterStyle: ClassicCounterStyle = .game { didSet { needsDisplay = true } }
   /// The release's own character set, used for every label on the bar. It
   /// outlives a level, because the bar shows status on the menus too.
   var interfaceArtwork: ClassicMacArtwork? {
@@ -558,6 +559,8 @@ enum PanelButton: Equatable {
         width: frame.width, height: 9 * panelScale)
       NSColor.black.setFill()
       box.fill()
+      if counterStyle == .macintosh,
+        (macInterface ?? GameMenuArtwork.renderer())?.drawCounter(value, in: box, panelScale: panelScale) == true { continue }
       if drawMacLabel(value, centeredIn: box) { continue }
       GamePixelText.draw(value, in: box)
     }

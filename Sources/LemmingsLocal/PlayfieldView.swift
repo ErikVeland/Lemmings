@@ -844,6 +844,7 @@ struct ReticleFeedback {
   private struct OverlayLayout {
     let scale: CGFloat
     let rowHeight: CGFloat
+    let rowHeights: [CGFloat]
     let headerHeight: CGFloat
     let board: CGRect
   }
@@ -853,12 +854,29 @@ struct ReticleFeedback {
     let headerUnits: CGFloat = showsLogo ? 116 : 62
     let marchHeight: CGFloat = overlayShowsLemmings ? 64 : 0
     let savedCountUnits: CGFloat = overlaySavedCounts == nil ? 0 : 40
-    let scale = min(2.5, bounds.width / 1100,
+    var scale = min(2.5, bounds.width / 1100,
       max(1, bounds.height - marchHeight - 24)
         / (headerUnits + 106 + CGFloat(overlayLines.count) * 42 + savedCountUnits))
+    let font = macInterface?.font(.small)
+    func heights(at scale: CGFloat, width: CGFloat) -> [CGFloat] {
+      let columns = max(1, Int(width - 64 * scale) / (font?.cellWidth ?? 6))
+      return overlayLines.map { line in
+        let rows = overlayProfileInitials != nil && line.hasPrefix("RESUME")
+          ? MacInterfaceRenderer.menuLines(line, columns: columns).count : 1
+        return rows > 1 ? max(42 * scale, CGFloat(rows * (font?.cellHeight ?? 7)) + 12 * scale) : 42 * scale
+      }
+    }
+    let availableHeight = max(1, bounds.height - marchHeight - 24)
+    for _ in 0..<8 {
+      let width = min(bounds.width - 28 * scale, 900 * scale)
+      let height = (headerUnits + 106 + savedCountUnits) * scale + heights(at: scale, width: width).reduce(0, +)
+      guard height > availableHeight else { break }
+      scale *= availableHeight / height
+    }
     let width = min(bounds.width - 28 * scale, 900 * scale)
     let headerHeight = headerUnits * scale
-    let height = (106 + CGFloat(overlayLines.count) * 42 + savedCountUnits) * scale + headerHeight
+    let rowHeights = heights(at: scale, width: width)
+    let height = (106 + savedCountUnits) * scale + rowHeights.reduce(0, +) + headerHeight
     let board = CGRect(
       x: (bounds.width - width) / 2,
       y: max(12, (bounds.height - marchHeight - height) / 2),
@@ -867,6 +885,7 @@ struct ReticleFeedback {
     return OverlayLayout(
       scale: scale,
       rowHeight: 42 * scale,
+      rowHeights: rowHeights,
       headerHeight: headerHeight,
       board: board)
   }
@@ -874,7 +893,7 @@ struct ReticleFeedback {
   private func overlaySavedCountsFrame(_ layout: OverlayLayout) -> CGRect {
     CGRect(x: layout.board.minX + 20 * layout.scale,
       y: layout.board.minY + 23 * layout.scale + layout.headerHeight
-        + CGFloat(overlayLines.count) * layout.rowHeight,
+        + layout.rowHeights.reduce(0, +),
       width: layout.board.width - 40 * layout.scale, height: 32 * layout.scale)
   }
 
@@ -991,11 +1010,12 @@ struct ReticleFeedback {
     }
     y += headerHeight
     for (index, line) in overlayLines.enumerated() {
+      let lineHeight = layout.rowHeights[index]
       let row = CGRect(x: board.minX + 18 * scale, y: y,
-        width: board.width - 36 * scale, height: rowHeight - 5 * scale)
+        width: board.width - 36 * scale, height: lineHeight - 5 * scale)
       // Include the row spacing in selectable targets when the home menu is compact.
       overlayLineRects.append(overlayHighlight == nil ? row : CGRect(
-        x: row.minX, y: row.minY, width: row.width, height: rowHeight))
+        x: row.minX, y: row.minY, width: row.width, height: lineHeight))
       let chosen = index == overlayHighlight
       if overlayHighlight != nil {
         (chosen
@@ -1010,7 +1030,7 @@ struct ReticleFeedback {
         outline.stroke()
       }
       drawMenuGameText(line, in: row.insetBy(dx: 14 * scale, dy: 0),
-        face: menuFace, scale: menuScale)
+        face: menuFace, scale: menuScale, wrap: lineHeight > rowHeight)
       if index == 0, let initials = overlayTurnInitials, let macInterface,
         let font = macInterface.font(menuFace) {
         let value = MacInterfaceRenderer.menuText(line)
@@ -1022,7 +1042,7 @@ struct ReticleFeedback {
           scale: menuScale, palette: .green)
       }
       if index == 0, turnInitials != nil { drawTurnPortrait(in: row, scale: scale) }
-      y += rowHeight
+      y += lineHeight
     }
     if let overlaySavedCounts {
       drawMenuGameText(overlaySavedCounts, in: overlaySavedCountsFrame(layout),

@@ -14,6 +14,7 @@ import NxlvKit
   private var presetPopUp: NSPopUpButton?
   private var experiencePopUp: NSPopUpButton?
   private var graphicsPopUp: NSPopUpButton?
+  private var counterStylePopUp: NSPopUpButton?
   private var depthPopUp: NSPopUpButton?
   private var displayPopUp: NSPopUpButton?
   private var intensitySlider: NSSlider?
@@ -374,18 +375,28 @@ import NxlvKit
     graphicsPopUp = graphics
     depthPopUp = depth
     graphicsShuffleCheck = shuffle
+    let counters = popUp(#selector(counterStyleChanged))
+    for style in ClassicCounterStyle.allCases { counters.addItem(withTitle: style.title) }
+    counters.setAccessibilityLabel("Classic skill counters")
+    counterStylePopUp = counters
     let sequel = GameCheckButton(title: "Macintosh-style 2× artwork", target: self,
                           action: #selector(sequelArtworkChanged))
     sequelArtworkCheck = sequel
     sequel.state = SequelArtworkPreference.enabled ? .on : .off
     return pane([
       ("Machine", preset), ("Artwork", graphics), ("Colour Depth", depth), ("Shuffle", shuffle),
-      ("Lemmings 2 + 3", sequel),
+      ("Counters", counters), ("Lemmings 2 + 3", sequel),
     ])
   }
 
   @objc private func sequelArtworkChanged(_ sender: NSButton) {
     SequelArtworkPreference.setEnabled(sender.state == .on)
+    changed()
+  }
+
+  @objc private func counterStyleChanged(_ sender: NSPopUpButton) {
+    guard ClassicCounterStyle.allCases.indices.contains(sender.indexOfSelectedItem) else { return }
+    settings.counterStyle = ClassicCounterStyle.allCases[sender.indexOfSelectedItem]
     changed()
   }
 
@@ -553,6 +564,7 @@ import NxlvKit
   private func rebuildSources() {
     experiencePopUp?.selectItem(at: ClassicExperiencePreset.allCases.firstIndex(of: settings.experiencePreset) ?? 2)
     graphicsPopUp?.removeAllItems()
+    counterStylePopUp?.selectItem(at: ClassicCounterStyle.allCases.firstIndex(of: settings.counterStyle) ?? 0)
     for option in options.graphics { graphicsPopUp?.addItem(withTitle: option.displayName) }
     if let index = options.graphics.firstIndex(of: settings.graphics) {
       graphicsPopUp?.selectItem(at: index)
@@ -644,6 +656,7 @@ import NxlvKit
     applied.shuffleGraphics = settings.shuffleGraphics
     applied.shuffleMusic = settings.shuffleMusic
     applied.modernControlsEnabled = settings.modernControlsEnabled
+    applied.counterStyle = settings.counterStyle
     applied.variableSpeedEnabled = settings.variableSpeedEnabled
     applied.gameplayCursorStyle = settings.gameplayCursorStyle
     applied.showClassicSkillBackpacks = settings.showClassicSkillBackpacks

@@ -95,6 +95,34 @@ import NxlvKit
     var repeatAssignment: () -> Void = {}
     var escape: () -> Void = {}
     var mainMenu: (() -> Void)?
+    var navigationAvailable: () -> Bool = { true }
+    private lazy var navigationButton: GameButton = {
+        let button = GameButton(frame: .zero)
+        button.title = "Menu"; button.target = self; button.action = #selector(openMainMenu)
+        button.setAccessibilityLabel("Save run and return to library")
+        button.toolTip = "Return to library (Esc or Q)"
+        return button
+    }()
+    @objc private func openMainMenu() { mainMenu?() }
+    func removeNavigationControl() { navigationButton.removeFromSuperview() }
+    func navigationFrame(in view: NSView) -> CGRect? {
+        guard !navigationButton.isHidden, let root = navigationButton.superview,
+              view.window === root.window else { return nil }
+        return view.convert(navigationButton.frame, from: root)
+    }
+    func refreshNavigationControl() {
+        guard let root = window?.contentView else { return }
+        let visible = mainMenu != nil && ownsController() && navigationAvailable()
+            && window?.attachedSheet == nil && !GameScreen.shared.isPresented
+        guard visible else { navigationButton.isHidden = true; return }
+        if navigationButton.superview !== root {
+            navigationButton.removeFromSuperview()
+            root.addSubview(navigationButton)
+        }
+        navigationButton.frame = CGRect(x: max(0, root.bounds.maxX - 100),
+            y: root.isFlipped ? 36 : max(0, root.bounds.maxY - 80), width: 88, height: 44)
+        navigationButton.isHidden = false
+    }
     var help: () -> String = { "" }
     var skillNames: () -> [String] = { [] }
     var cyclesSharedSkillLetters = true
@@ -153,8 +181,16 @@ import NxlvKit
             pressedF = false; speedControl?.cancelInput()
         }
         guard let window, event.window === window, window.isKeyWindow,
-              window.attachedSheet == nil, !GameScreen.shared.isPresented, active(), !(window.firstResponder is NSTextView),
+              window.attachedSheet == nil, !GameScreen.shared.isPresented, !(window.firstResponder is NSTextView),
               event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { return event }
+        if event.type == .keyDown, ownsController(), navigationAvailable(),
+           event.keyCode == 53 || event.charactersIgnoringModifiers?.lowercased() == "q", let mainMenu {
+            if !event.isARepeat {
+                pressedF = false; speedControl?.reset(at: now); mainMenu()
+            }
+            return nil
+        }
+        guard active() else { return event }
         if event.type == .flagsChanged {
             if modern(), event.modifierFlags.contains(.shift) { speedControl?.press(.shift, at: now) }
             return event
@@ -220,7 +256,7 @@ import NxlvKit
             default: break
             }
         }
-        if event.keyCode == 53 {
+        if event.keyCode == 53 || event.charactersIgnoringModifiers?.lowercased() == "q" {
             if !event.isARepeat {
                 pressedF = false
                 speedControl?.reset(at: now)
@@ -318,7 +354,7 @@ import NxlvKit
             let goal = selectGliderBeforeGoal == nil ? "G / End: centre goal" : "G: Glider, then goal\nEnd: centre goal"
             sections.append("Tab / Shift-Tab: next / previous available skill\nH / Home: centre entrance\n" + goal + "\n[ / ]: previous / next unassigned lemming\n\\: focus last assignment\nReturn: repeat last skill")
         } else { sections.append("Modern keyboard shortcuts are off. Number keys select skills.") }
-        sections.append("Escape: save run and return to main menu\n?: controls help")
+        sections.append("Escape / Q: save run and return to library\n?: controls help")
         if hints != nil { sections.append("Slash / I / F1: level goals and tiered hints") }
         if rate != nil {
             sections.append("− / +: release rate"

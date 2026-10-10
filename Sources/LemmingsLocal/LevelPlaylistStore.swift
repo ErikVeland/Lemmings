@@ -143,6 +143,19 @@ import NxlvKit
         do { try save() } catch { document = previous; throw error }
     }
 
+    /// Save a win before the player leaves the result. Keep the current turn in place.
+    func recordLearningWin(runID: UUID, level: LevelCatalogueIdentity) throws {
+        guard let run = document.activeRun, run.id == runID,
+              run.source == .playlist(LearningJourney.playlistID),
+              run.currentEntry.identity == level else { throw Failure.invalidDocument }
+        guard !learningProgress.completed.contains(level) else { return }
+        let previous = document
+        var progress = learningProgress
+        progress.record(level, won: true)
+        document.learningProgress = progress
+        do { try save() } catch { document = previous; throw error }
+    }
+
     /// Save the visit and next position together. A deferred level is never a win.
     @discardableResult func advanceLearningJourney(runID: UUID, won: Bool) throws -> Bool {
         guard var run = document.activeRun, run.id == runID,

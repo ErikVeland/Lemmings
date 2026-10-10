@@ -461,6 +461,20 @@ import NxlvKit
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     #if APP_INTEGRATION_TESTS
+    func testExitAndSequenceResult(won: Bool) throws {
+        timer?.invalidate(); startLevel(); paused = true; canvas.startCountdown.cancel()
+        try validateExitControl(gameplayKeyboard!, owner: window!, name: "lemmings2")
+        let configuration = Lemmings2Runtime.Configuration(width: 128, height: 96,
+            pixels: Array(repeating: 0, count: 128 * 96), solid: Array(repeating: false, count: 128 * 96),
+            palette: Array(repeating: 0, count: 1024), entrance: .init(x: 32, y: 32, width: 1, height: 1),
+            exits: [.init(x: won ? 0 : 100, y: won ? 0 : 80, width: won ? 128 : 8, height: won ? 96 : 8)],
+            skills: game!.configuration.skills, supplies: game!.configuration.supplies,
+            total: 1, timeLimit: 1, releaseInterval: 1, terrainMasks: masks, firstReleaseTick: 1)
+        var fixture = try Lemmings2Runtime(configuration: configuration)
+        for _ in 0..<100 where !fixture.isComplete { fixture.step() }
+        try validateMusicRouting(fixture.isComplete && fixture.didWin == won, "L2 completion fixture failed")
+        game = fixture; finishIfComplete(fixture)
+    }
     func testCollectionVisitAndRetry() throws {
         timer?.invalidate()
         startLevel()
@@ -559,6 +573,7 @@ import NxlvKit
         front.needsDisplay = true
     }
     func stop() {
+        gameplayKeyboard?.removeNavigationControl()
         saveCheckpoint(immediately: true)
         canvas.capturePointer(active: false)
         NotificationCenter.default.removeObserver(self, name: SequelArtworkPreference.changed, object: nil)
@@ -1130,6 +1145,8 @@ import NxlvKit
         canvas.setAccessibilityLabel("Lemmings 2. \(game.configuration.skills[selected].name) selected. \(label). \(paused ? "Paused." : "Running.") \(game.isNuking ? "Nuke active." : "") \(game.released) released, \(game.saved) saved. \(deathCounterAccessibility). \(canvas.precisionStatus.accessibility). \(transport)")
     }
     private func update() {
+        gameplayKeyboard?.refreshNavigationControl()
+        canvas.navigationFrame = gameplayKeyboard?.navigationFrame(in: canvas)
         let now = ProcessInfo.processInfo.systemUptime
         nukeMood.advanceReturn(at: now)
         let elapsed = min(0.25, now - lastTime); lastTime = now
@@ -1220,8 +1237,10 @@ import NxlvKit
         self.game = game; refreshGame(); saveCheckpoint()
         finishIfComplete(game)
     }
+    var onSequenceResult: ((Bool) -> Void)?
     private func finishIfComplete(_ game: Lemmings2Runtime) {
         if game.isComplete {
+            onSequenceResult?(game.didWin)
             if game.didWin && paused {
                 userPausedMusic = false
                 try? music.resumeOutput(); dj.resumeOutput()
@@ -1527,7 +1546,8 @@ import NxlvKit
             rewardVolume: sounds.muted ? 0 : audioSettings.soundVolume,
             rewardVolumeProvider: { [weak self] in self?.sounds.effectiveVolume ?? 0 },
             continueHandlesHandover: onSequenceContinue != nil,
-            skip: canSkipLevel ? { [weak self] in self?.skipLevel() } : nil)
+            skip: canSkipLevel ? { [weak self] in self?.skipLevel() } : nil,
+            menu: { [weak self] in self?.gameplayKeyboard?.mainMenu?() })
     }
     /// Level skips apply to a failed campaign level, not practice or playlists.
     /// Old school turns them off with the other modern controls.
@@ -1955,6 +1975,7 @@ import NxlvKit
         timeline.frame = CGRect(x: (bounds.width - width) / 2, y: bounds.height - 34, width: width, height: 30)
     }
 
+    var navigationFrame: CGRect?
     private let pointerCapture = GamePointerCapture()
     private var capturedPointer: CGPoint?
     func capturePointer(active: Bool) {
@@ -2081,7 +2102,8 @@ import NxlvKit
         onRelease?(); onHover?(); NSCursor.arrow.set()
     }
     override func cursorUpdate(with event: NSEvent) {
-        GameCursor.update(at: convert(event.locationInWindow, from: nil), hidingInside: gameplayRect)
+        let point = convert(event.locationInWindow, from: nil)
+        GameCursor.update(at: point, hidingInside: navigationFrame?.contains(point) == true ? nil : gameplayRect)
     }
     override func resetCursorRects() {
         addCursorRect(bounds, cursor: NSCursor.arrow)
@@ -2176,7 +2198,7 @@ import NxlvKit
                 }
             }
             if window.isKeyWindow, bounds.contains(point) {
-                GameCursor.update(at: point, hidingInside: gameplayRect)
+                GameCursor.update(at: point, hidingInside: navigationFrame?.contains(point) == true ? nil : gameplayRect)
             }
         }
         return label
@@ -2847,6 +2869,7 @@ import NxlvKit
         trackPointer(at:convert(event.locationInWindow,from:nil),held:held)
     }
     private func trackPointer(at p: NSPoint, held: Bool) {
+        if navigationFrame?.contains(p) == true { NSCursor.arrow.set(); onRelease?(); return }
         guard gameplayRect.contains(p) else { onRelease?(); return }
         let source = precisionLens.source(p)
         let x = (source.x-origin.x)/zoom, y = (source.y-origin.y)/(zoom*1.2)
@@ -2910,7 +2933,8 @@ import NxlvKit
     }
     private func cursorPoint() -> CGPoint? {
         guard let window else { return nil }
-        return controllerPointer ?? capturedPointer ?? convert(window.mouseLocationOutsideOfEventStream, from: nil)
+        let point = controllerPointer ?? capturedPointer ?? convert(window.mouseLocationOutsideOfEventStream, from: nil)
+        return navigationFrame?.contains(point) == true ? nil : point
     }
     func focusLemming(_ id: Int) {
         guard let lem = game?.lemmings.first(where: { $0.id == id && $0.active }) else { return }

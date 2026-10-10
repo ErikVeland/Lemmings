@@ -24,6 +24,7 @@ final class SoundEffectPlayer: @unchecked Sendable {
     var rewindSequence: UInt64?
     var priority: Int = 1
     var isRescue = false
+    var isReleaseRate = false
     var rescueLayers: [RescueLayer] = []
   }
 
@@ -41,6 +42,8 @@ final class SoundEffectPlayer: @unchecked Sendable {
   private var supplementalEffects = Set<ClassicSoundEffect>()
   private var recentEffectTimes: [String: Double] = [:]
   private var namedSounds: [String: (samples: [Float], rate: Double)] = [:]
+  private var releaseRateSound: (samples: [Float], rate: Double)?
+  private var lastReleaseRateTime = -Double.infinity
   private var voices: [Voice]
   private var isMuted = false
   private var outputSuspended = false
@@ -74,6 +77,7 @@ final class SoundEffectPlayer: @unchecked Sendable {
     lock.lock(); defer { lock.unlock() }
     copy.library = library; copy.rates = rates; copy.gains = gains
     copy.supplementalEffects = supplementalEffects; copy.namedSounds = namedSounds
+    copy.releaseRateSound = releaseRateSound
     copy.loadedEffects = loadedEffects
     copy.isMuted = isMuted; copy.level = level; copy.bottomFallSounds = bottomFallSounds
     return copy
@@ -241,6 +245,7 @@ final class SoundEffectPlayer: @unchecked Sendable {
     library = [:]
     rates = [:]
     gains = [:]; supplementalEffects = []
+    releaseRateSound = byName["MousePress"].map { ($0.floatSamples(), $0.sampleRate) }
     for (effect, name) in ClassicSoundMapping.macintoshNames {
       guard let sound = byName[name] else { continue }
       library[effect] = sound.floatSamples()
@@ -336,6 +341,7 @@ final class SoundEffectPlayer: @unchecked Sendable {
     library = [:]
     rates = [:]
     gains = [:]; supplementalEffects = []
+    releaseRateSound = macintosh["MousePress"].map { ($0.floatSamples(), $0.sampleRate) }
     for (effect, name) in ClassicSoundMapping.amigaVoiceNames {
       guard let sound = byName[name.lowercased()] else { continue }
       library[effect] = sound.samples
@@ -546,6 +552,16 @@ final class SoundEffectPlayer: @unchecked Sendable {
     if effect == .explode || effect == .pop { playNukeImpactLocked(at: point) }
   }
 
+  /// Held rate controls keep one centred cue, without filling the spatial voice pool.
+  func playReleaseRate(_ rate: Int, time: Double = ProcessInfo.processInfo.systemUptime) {
+    lock.lock(); defer { lock.unlock() }
+    guard !isMuted, !outputSuspended, time - lastReleaseRateTime >= 0.02,
+      let clip = releaseRateSound else { return }
+    lastReleaseRateTime = time
+    playLocked(samples: clip.samples, rate: clip.rate * ClassicMacReleaseRate.playbackRatio(rate: rate),
+      gain: 0.6, pan: 0, at: nil, priority: 3, releaseRate: true)
+  }
+
   /// Shared spatial voices also play L2's original bank and sample pitches.
   func play(samples: [Float], rate: Double, gain: Float = 0.5, at point: GameplaySoundPoint? = nil,
             semanticEffect: ClassicSoundEffect? = nil) {
@@ -574,9 +590,10 @@ final class SoundEffectPlayer: @unchecked Sendable {
   }
 
   private func playLocked(samples: [Float], rate: Double, gain: Float, pan: Float, at point: GameplaySoundPoint?,
-                          priority: Int = 1, rescue: Bool = false) {
+                          priority: Int = 1, rescue: Bool = false, releaseRate: Bool = false) {
     guard !isMuted, !outputSuspended, !samples.isEmpty, rate.isFinite, rate > 0 else { return }
-    let available = voices.firstIndex { !$0.isActive }
+    let available = (releaseRate ? voices.firstIndex { $0.isReleaseRate } : nil)
+      ?? voices.firstIndex { !$0.isActive }
     if rescue, available == nil {
       // A full spatial pool must never cut off the rescue chorus. Extra voices
       // retain their own playheads and gain within the nearest spatial source.
@@ -608,6 +625,7 @@ final class SoundEffectPlayer: @unchecked Sendable {
     }
     voices[index] = Voice(samples: samples, position: 0, increment: rate / sampleRate,
                           isActive: true, worldPoint: point, gain: gain, priority: priority, isRescue: rescue,
+                          isReleaseRate: releaseRate,
                           rescueLayers: retainedRescues)
     if spatialMixers.indices.contains(index) {
       let angle = (pan.isFinite ? max(-1, min(1, pan)) : 0) * Float.pi / 3
