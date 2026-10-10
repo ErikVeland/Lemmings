@@ -1,0 +1,18 @@
+PASS final audit, focused UI checks and both notarised packages
+Wrote 1 new update, updated 0 existing updates, and removed 5 old updates in appcast.xml
+Wrote signed appcast: /Users/veland/Lemmings/appcast.xml
+PASS all 7 previous feed entries and enclosure attributes retained
+PASS Ed25519 archive signature against the shipping app's public key
+PASS local signatures, archive digests and preserved update entries
+PASS 1.9.1 update inputs: version 1.9.1, build 76, appcast items 8
+PASS data-independent 1.9.1 release checks
+PASS publication inputs for 1.9.1 build 76 at 9ba3fc25c42a57cd89394680d46e5aee79ba3d44
+From https://github.com/ErikVeland/Lemmings
+ * branch              main       -> FETCH_HEAD
+To https://github.com/ErikVeland/Lemmings.git
+   0fe798f5..9ba3fc25  9ba3fc25c42a57cd89394680d46e5aee79ba3d44 -> main
+==> Creating GitHub release v1.9.1
+https://github.com/ErikVeland/Lemmings/releases/tag/v1.9.1
+==> Publishing appcast.xml to the main branch
+{"content":{"name":"appcast.xml","path":"appcast.xml","sha":"b3d2da273d065fdc43e8f1097a2a036866770e78","size":27826,"url":"https://api.github.com/repos/ErikVeland/Lemmings/contents/appcast.xml?ref=main","html_url":"https://github.com/ErikVeland/Lemmings/blob/main/appcast.xml","git_url":"https://api.github.com/repos/ErikVeland/Lemmings/git/blobs/b3d2da273d065fdc43e8f1097a2a036866770e78","download_url":"https://raw.githubusercontent.com/ErikVeland/Lemmings/main/appcast.xml","type":"file","_links":{"self":"https://api.github.com/repos/ErikVeland/Lemmings/contents/appcast.xml?ref=main","git":"https://api.github.com/repos/ErikVeland/Lemmings/git/blobs/b3d2da273d065fdc43e8f1097a2a036866770e78","html":"https://github.com/ErikVeland/Lemmings/blob/main/appcast.xml"}},"commit":{"sha":"6ce2b8c1264060686a3146986937f31e935614ab","node_id":"C_kwDOUm6QmtoAKDZjZTJiOGMxMjY0MDYwNjg2YTMxNDY5ODY5MzdmMzFlOTM1NjE0YWI","url":"https://api.github.com/repos/ErikVeland/Lemmings/git/commits/6ce2b8c1264060686a3146986937f31e935614ab","html_url":"https://github.com/ErikVeland/Lemmings/commit/6ce2b8c1264060686a3146986937f31e935614ab","author":{"name":"Erik Veland","email":"erikveland@gmail.com","date":"2026-10-10T07:16:31Z"},"committer":{"name":"Erik Veland","email":"erikveland@gmail.com","date":"2026-10-10T07:16:31Z"},"tree":{"sha":"b6d714b9535e50d63c6b453f4b75a15538932e48","url":"https://api.github.com/repos/ErikVeland/Lemmings/git/trees/b6d714b9535e50d63c6b453f4b75a15538932e48"},"message":"Publish 1.9.1 update feed","parents":[{"sha":"9ba3fc25c42a57cd89394680d46e5aee79ba3d44","url":"https://api.github.com/repos/ErikVeland/Lemmings/git/commits/9ba3fc25c42a57cd89394680d46e5aee79ba3d44","html_url":"https://github.com/ErikVeland/Lemmings/commit/9ba3fc25c42a57cd89394680d46e5aee79ba3d44"}],"verification":{"verified":false,"reason":"unsigned","signature":null,"payload":null,"verified_at":null}}}Published v1.9.1 and appcast.xml to ErikVeland/Lemmings
+PASS public release tag, both remote SHA256 digests/sizes/ZIP responses, and live main and raw Sparkle update feeds

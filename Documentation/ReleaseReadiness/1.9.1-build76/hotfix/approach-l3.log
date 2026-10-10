@@ -1,0 +1,8 @@
+PASS Lemmings 3 bomb and builder priorities, eligibility and independent opt-outs
+PASS Lemmings 3 targeting prefers the lemming still walking toward the click
+PASS mirrored L3 crowded walls, tool eligibility, opt-out and manual carrier priority
+PASS same-direction Lemmings 3 candidates keep the plain nearest pick
+PASS tool-holding tier still beats an approaching toolless candidate
+PASS Lemmings 3 manual carrier selection and cycling
+PASS Lemmings 3 targeting favours a follower behind a builder
+Lemmings 3 targeting tests passed.

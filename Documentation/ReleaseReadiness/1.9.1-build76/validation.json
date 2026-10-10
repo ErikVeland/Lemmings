@@ -1,0 +1,22 @@
+{
+  "sourceCommit": "9ba3fc25c42a57cd89394680d46e5aee79ba3d44",
+  "minorAuditPassed": 48,
+  "sourceDrift": 0,
+  "releaseToolTests": 36,
+  "proofLevels": 562,
+  "proofConfigurations": 615,
+  "exactConditionCertificates": 294,
+  "bestKnownRescueRecords": 303,
+  "nativeWindows": "offscreen",
+  "testAudio": "muted",
+  "broadAuditGroupsNotRun": [
+    "replay-movies",
+    "mac-app-integration",
+    "local-performance-measurement",
+    "sequel-views",
+    "arcade-records"
+  ],
+  "signedShippingAppForegroundLaunch": "not-run; requires a new explicit request",
+  "offscreenCaptureLimit": "later scrolled captures can contain AppKit dirty-region artefacts; first-page renders and scroll geometry/input checks retained",
+  "physicalHardwareAndListening": "unverified"
+}

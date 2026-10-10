@@ -1,0 +1,11 @@
+UI test windows: offscreen; audio: muted
+PASS checkbox box, label, release cancellation, disabled state, accessibility and menu input isolation
+PASS grouped targeting, Original/Modern/Custom presets, Flat/tube availability, mouse/keyboard targets, persistence and rendered states
+PASS Space and P pause once per press, ignore repeat and remain paused on release
+PASS Classic shared Space/P pause, focused control, repeat/release, modifiers, text and menu routing
+PASS Classic and fan Space pause independently of campaign menu state
+PASS Lemmings 2 shared Space/P pause, focused control, repeat/release, modifiers, text and menu routing
+PASS Lemmings 2 Original/Modern/Custom cursor wiring
+PASS Lemmings 3 shared Space/P pause, focused control, repeat/release, modifiers, text and menu routing
+PASS Lemmings 3 Original/Modern/Custom cursor wiring
+Cursor input integration tests passed.

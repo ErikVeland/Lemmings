@@ -1,0 +1,5 @@
+UI test windows: offscreen; audio: muted
+PASS a nuke before the drop ends the level from the panel and the frame loop
+PASS Classic 2-to-1 nuke slowdown, separate saturation and final-pop recovery with HD on and off
+PASS Neo 2-to-1 nuke slowdown, separate saturation and result recovery with HD on and off
+Nuke music integration tests passed.
