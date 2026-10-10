@@ -522,15 +522,20 @@ public struct Lemmings2Runtime: Sendable {
                 }) {
             return follower
         }
-        guard preferApproaching, canAssign(slot: slot, to: nearest.id),
-            (x - nearest.x) * nearest.direction < 0 else { return nearest }
-        let approaching = candidates.filter {
-            canAssign(slot: slot, to: $0.id) && isApproaching($0, clickX: x) && $0.direction != nearest.direction
+        guard preferApproaching, canAssign(slot: slot, to: nearest.id) else { return nearest }
+        let wallDirection = LemmingApproachTargeting.wallDirection(x: nearest.x, footY: nearest.y, isSolid: isSolid)
+        func approaching(_ lemming: Lemming) -> Bool {
+            LemmingApproachTargeting.isApproaching(x: lemming.x, direction: lemming.direction,
+                clickX: Double(x), wallDirection: wallDirection)
+        }
+        guard !approaching(nearest) else { return nearest }
+        let preferred = candidates.filter {
+            canAssign(slot: slot, to: $0.id) && approaching($0) && $0.direction != nearest.direction
         }.min { a, b in
             let da = distance(a), db = distance(b)
             return da == db ? a.id < b.id : da < db
         }
-        return approaching ?? nearest
+        return preferred ?? nearest
     }
 
     private func isApproaching(_ lemming: Lemming, clickX: Int) -> Bool {

@@ -133,11 +133,36 @@ import AppKit
     }
 }
 
+/// A stone frame groups related options without adding another input target.
+@MainActor final class GameControlGroup: NSStackView {
+    init(controls: [NSView], label: String) {
+        super.init(frame: .zero)
+        orientation = .vertical
+        alignment = .leading
+        spacing = 0
+        edgeInsets = NSEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        controls.forEach { addArrangedSubview($0) }
+        setAccessibilityElement(true)
+        setAccessibilityRole(.group)
+        setAccessibilityLabel(label)
+    }
+    required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
+    override func draw(_ dirtyRect: NSRect) {
+        GameStoneButton.draw(bounds, selected: false, pixel: 1)
+    }
+}
+
 @MainActor final class GameSliderCell: NSSliderCell {
     override func drawBar(inside rect: NSRect, flipped: Bool) {
+        NSGraphicsContext.saveGraphicsState()
+        defer { NSGraphicsContext.restoreGraphicsState() }
+        if !isEnabled { NSGraphicsContext.current?.cgContext.setAlpha(0.45) }
         GameStoneButton.draw(CGRect(x: rect.minX, y: rect.midY - 3, width: rect.width, height: 6), selected: true, pixel: 1)
     }
     override func drawKnob(_ knobRect: NSRect) {
+        NSGraphicsContext.saveGraphicsState()
+        defer { NSGraphicsContext.restoreGraphicsState() }
+        if !isEnabled { NSGraphicsContext.current?.cgContext.setAlpha(0.45) }
         GameStoneButton.draw(knobRect, selected: isHighlighted, pixel: 1)
     }
 }

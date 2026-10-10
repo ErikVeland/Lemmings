@@ -61,6 +61,7 @@ protocol GameSession: AnyObject {
   var ticksPerSecond: Int { get }
 
   var lemmings: [SessionLemming] { get }
+  func terrainIsSolid(x: Int, y: Int) -> Bool
   func lemmingsForRendering(selectedID: Int?, highlightedID: Int?) -> [SessionLemming]
   var entranceX: Int? { get }
   var exitX: Int? { get }
@@ -112,6 +113,7 @@ protocol GameSession: AnyObject {
 }
 
 extension GameSession {
+  func terrainIsSolid(x: Int, y: Int) -> Bool { false }
   var lastPositionedCues: [PositionedSoundCue] { lastCues.map { PositionedSoundCue($0) } }
   func lemmingsForRendering(selectedID: Int?, highlightedID: Int?) -> [SessionLemming] {
     lemmings
@@ -146,6 +148,7 @@ extension GameSession {
 // MARK: - Classic DOS
 
 final class ClassicSession: GameSession {
+  func terrainIsSolid(x: Int, y: Int) -> Bool { simulation.terrain.isSolid(x: x, y: y) }
   /// Wraps the engine so any earlier tick can be reached exactly.
   private(set) var initialStateHash: String
   private(set) var initialSimulation: ClassicDOSSimulation
@@ -414,6 +417,7 @@ func spritePose(for action: NeoLemmixAction) -> ClassicLemmingPose {
 }
 
 final class NeoLemmixSession: GameSession {
+  func terrainIsSolid(x: Int, y: Int) -> Bool { simulation.terrain.isSolid(x: x, y: y) }
   private(set) var simulation: NeoLemmixSimulation
   private var beforeNuke: NeoLemmixSimulation?
   private let initialSimulation: NeoLemmixSimulation

@@ -144,6 +144,8 @@ need a full visual sweep.
 
 Gameplay settings offer Original, Modern and Custom presets. Modern enables
 approaching-lemming targeting, blockers for bombs and current builders for Build.
+Keep these three targeting options in one stone group, with its label aligned
+to the first option. The shared Settings page serves all three games.
 Original disables these aids. Individual changes select Custom, which persists
 even if the player restores the previous values. Only selecting a preset resets
 its choices. Machine artwork presets preserve targeting preferences.
@@ -152,6 +154,21 @@ Use favours bomb-equipped blockers, then active brick builders. These preference
 do not grant tools, change skill rules or queue builds.
 L2's Exploder can be assigned to blockers; its blast Bomber cannot. The preference
 only applies when the native skill rules permit the assignment.
+
+Approaching targeting uses a nearby wall's direction when only one side has
+upper-body terrain. It favours an eligible lemming facing that wall even when
+the pointer sits inside the returning crowd. Floors, shallow steps and walls
+on both sides retain cursor-relative selection. A centred click alone does
+not count as approach. Keep the normal pick regions, same-direction nearest
+selection, skill eligibility, bomb/builder priorities and L3 manual carriers.
+Classic's brief hover cache must yield when a target turns away and an eligible
+lemming still faces the wall. Classic/NeoLemmix, L2 and L3 use the same direction
+cue. L3 applies it to its native actions and carried tools; it has no Basher slot.
+
+Flat Panel disables and dims Tube Strength and Pixel Width, including their
+labels. Monitor and Television restore these controls without resetting their
+values. Whole pixels only remains available in Flat Panel. The Classic renderer
+uses these tube settings; L2 and L3 retain their existing bitmap renderers.
 
 Level Select uses a dropdown with Player Unlocked (default) and All. It keeps the
 existing Classic progress override and saved choice. L2 and L3 retain their native
@@ -230,6 +247,8 @@ This visual extension does not change water collision or level data.
 
 Avoid abrupt visual and audio transitions. Ease from the current value when a
 transition changes direction, and do not restart a fade on repeated updates.
+Nuke music starts its slowdown when the countdown changes from 2 to 1.
+Desaturation starts only when the rescue target becomes impossible.
 After the final nuke explosion, restore music tempo and filter over 2.4 seconds
 with smooth easing. Keep this recovery running on the result screen.
 

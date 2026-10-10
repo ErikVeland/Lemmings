@@ -194,12 +194,15 @@ No audible playback test was run.
 ## Music after a nuke
 
 The development build separates funeral tempo from the failed-run visual
-transition. Classic, NeoLemmix and Lemmings 2 restore normal music speed over
-0.9 seconds after their final pop, including when the run ends in failure.
-The return continues without simulation ticks on the result screen. The nuke
-filter keeps its existing shorter return. A normal loss still keeps the dirge,
-and rewinding into an unfinished nuke can restore it. This tempo recovery also
-works with HD Effects disabled.
+transition. Classic, NeoLemmix and Lemmings 2 start the funeral slowdown when
+the first nuke countdown changes from 2 to 1, even while the rescue target is
+still reachable or already met. Saturation changes only when rescue becomes
+impossible. They restore normal music speed and the nuke filter over 2.4
+seconds after their final pop, including when the run ends in failure.
+The return continues without simulation ticks on the result screen.
+A normal loss still keeps the dirge, and rewinding into an unfinished nuke
+can restore it. Rewinding before the 2-to-1 transition clears the nuke slowdown.
+This tempo recovery also works with HD Effects disabled.
 
 Lemmings 3 has no mass nuke. Its ordinary funeral transition is unchanged.
 Regression checks for tempo recovery run with audio muted; audible playback

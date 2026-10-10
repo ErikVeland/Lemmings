@@ -151,14 +151,21 @@ func testFavorApproachingLemming() throws {
     }
     check(approaching.x < turned.x, "The trailing lemming should not yet have reached the wall")
     let slot = c.skills.firstIndex(of: .climber)!
-    // Click just past the turned lemming (inside the wall it bounced off), not on top of it: at that exact
-    // x, "(click - x) * direction" is zero for the turned lemming and reads as ambiguously "approaching" too,
-    // masking the preference this test exists to prove.
     let clickX = turned.x + 2
     check(game.target(slot: slot, x: clickX, y: turned.y - 5, preferApproaching: true)?.id == approaching.id,
         "favorApproachingLemmings should target the lemming still walking toward the wall")
     check(game.target(slot: slot, x: clickX, y: turned.y - 5)?.id == turned.id,
         "Plain nearest-distance targeting should keep choosing the closer, already-turned lemming")
+    for clickX in [turned.x, turned.x - 1] {
+        check(game.target(slot: slot, x: clickX, y: turned.y - 5, preferApproaching: true)?.id == approaching.id,
+            "A centred or crowd-side click must still favour the wall-facing L2 lemming")
+    }
+    let bash = c.skills.firstIndex(of: .basher)!
+    let target = game.target(slot: bash, x: turned.x - 1, y: turned.y - 5, preferApproaching: true)
+    check(target?.id == approaching.id, "L2 Basher targeting picked the returning lemming")
+    let supply = game.supplies[bash]
+    check(game.assign(slot: bash, to: target!.id) && game.supplies[bash] == supply - 1,
+        "L2 wall click did not assign exactly one Basher to the incoming lemming")
     print("PASS favorApproachingLemmings prefers the lemming still walking toward the wall")
 }
 

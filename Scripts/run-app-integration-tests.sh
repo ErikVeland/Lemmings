@@ -38,6 +38,7 @@ rsync -a --delete "$sparkle_framework" "$test_app/Contents/Frameworks/"
 resource_app="${LEMMINGS_TEST_APP:-$project_dir/.build/local/Ultimate Lemmings.app}"
 ln -sfn "$resource_app/Contents/Resources" "$test_app/Contents/Resources"
 test_flags=()
+if [[ "${TEST_SCOPE:-all}" == nuke ]]; then test_flags+=(-D NUKE_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == mac-fidelity ]]; then test_flags+=(-D MAC_FIDELITY_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == exit-progress ]]; then test_flags+=(-D EXIT_PROGRESS_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == updates ]]; then test_flags+=(-D UPDATE_TESTS); fi

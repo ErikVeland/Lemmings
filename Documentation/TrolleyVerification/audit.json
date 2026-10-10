@@ -1,7 +1,7 @@
 {
-  "engineSourceFingerprint": "cb8ce27d37f9f7603dd422661bf0030c6327a2d5b93bb2a6834c337a23dc9e3f",
+  "engineSourceFingerprint": "da5273b0b7135e3ae89be1976713a77a0872bbde5036790d1f79392ec25b1c11",
   "exhaustive": false,
-  "generatedAt": "2026-10-10T04:21:47Z",
+  "generatedAt": "2026-10-10T06:42:26Z",
   "levels": [
     {
       "bestSaved": 10,
@@ -11062,7 +11062,6 @@
       "gameID": "lemmings2",
       "lossesInBestSolution": 18,
       "notes": [
-        "Existing completion fixture changed: expected 29 at 8100, got 42 at 8100.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 1,
@@ -11123,7 +11122,7 @@
       "rank": "Beach",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The Barley Mow....",
       "witness": {
         "completed": true,
@@ -11177,7 +11176,7 @@
       "rank": "Beach",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Cannonball",
       "witness": {
         "completed": true,
@@ -11231,7 +11230,7 @@
       "rank": "Beach",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Cannonball",
       "witness": {
         "completed": true,
@@ -11283,7 +11282,7 @@
       "rank": "Beach",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Coastal Suction Function",
       "witness": {
         "completed": true,
@@ -11335,7 +11334,7 @@
       "rank": "Beach",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Coastal Suction Function",
       "witness": {
         "completed": true,
@@ -11496,7 +11495,7 @@
       "rank": "Beach",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "SAND IN YER SARNIES",
       "witness": {
         "completed": true,
@@ -11550,7 +11549,7 @@
       "rank": "Beach",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "SAND IN YER SARNIES",
       "witness": {
         "completed": true,
@@ -11658,7 +11657,7 @@
       "rank": "Beach",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Sand Blaster",
       "witness": {
         "completed": true,
@@ -11712,7 +11711,7 @@
       "rank": "Beach",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Sand Blaster",
       "witness": {
         "completed": true,
@@ -11809,7 +11808,6 @@
       "gameID": "lemmings2",
       "lossesInBestSolution": 8,
       "notes": [
-        "Existing completion fixture changed: expected 47 at 1752, got 52 at 1752.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 1,
@@ -12113,7 +12111,6 @@
       "gameID": "lemmings2",
       "lossesInBestSolution": 3,
       "notes": [
-        "Existing completion fixture changed: expected 2 at 1361, got 57 at 1529.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 5,
@@ -12422,7 +12419,6 @@
       "gameID": "lemmings2",
       "lossesInBestSolution": 59,
       "notes": [
-        "Existing completion fixture changed: expected 1 at 2059, got 1 at 7200.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 8,
@@ -12690,7 +12686,6 @@
       "gameID": "lemmings2",
       "lossesInBestSolution": 58,
       "notes": [
-        "Existing completion fixture changed: expected 2 at 8100, got 1 at 8100.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 1,
@@ -12966,7 +12961,7 @@
       "rank": "Circus",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "`Round the Blox!",
       "witness": {
         "completed": true,
@@ -13020,7 +13015,7 @@
       "rank": "Circus",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "`Round the Blox!",
       "witness": {
         "completed": true,
@@ -13064,7 +13059,6 @@
       "gameID": "lemmings2",
       "lossesInBestSolution": 59,
       "notes": [
-        "Existing completion fixture changed: expected 1 at 1595, got 1 at 1834.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 5,
@@ -13282,7 +13276,7 @@
       "rank": "Circus",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The Carpet Capers....",
       "witness": {
         "completed": true,
@@ -13335,7 +13329,7 @@
       "rank": "Circus",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The Carpet Capers....",
       "witness": {
         "completed": true,
@@ -13437,9 +13431,7 @@
       "lossesInBestSolution": 0,
       "maximumSaveable": 60,
       "minimumSacrifices": 0,
-      "notes": [
-        "Existing completion fixture changed: expected 60 at 3074, got 2 at 4500."
-      ],
+      "notes": [],
       "number": 1,
       "population": 60,
       "rank": "Classic",
@@ -13715,7 +13707,7 @@
       "rank": "Classic",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The Starry Threshold",
       "witness": {
         "completed": true,
@@ -13769,7 +13761,7 @@
       "rank": "Classic",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "So close but so far away",
       "witness": {
         "completed": true,
@@ -13877,7 +13869,7 @@
       "rank": "Classic",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Flying The Mad Pursuit",
       "witness": {
         "completed": true,
@@ -13931,7 +13923,7 @@
       "rank": "Classic",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Flying The Mad Pursuit",
       "witness": {
         "completed": true,
@@ -14353,7 +14345,6 @@
       "gameID": "lemmings2",
       "lossesInBestSolution": 57,
       "notes": [
-        "Existing completion fixture changed: expected 1 at 8100, got 3 at 8100.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 7,
@@ -14468,7 +14459,7 @@
       "rank": "Egyptian",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Wave Pathway",
       "witness": {
         "completed": true,
@@ -14521,7 +14512,7 @@
       "rank": "Egyptian",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Wave Pathway",
       "witness": {
         "completed": true,
@@ -14575,7 +14566,7 @@
       "rank": "Egyptian",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Pyramid of Despair!",
       "witness": {
         "completed": true,
@@ -14629,7 +14620,7 @@
       "rank": "Egyptian",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Pyramid of Despair!",
       "witness": {
         "completed": true,
@@ -14736,7 +14727,7 @@
       "rank": "Highland",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "WEE BEASTIES !!!",
       "witness": {
         "completed": true,
@@ -14790,7 +14781,7 @@
       "rank": "Highland",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "WEE BEASTIES !!!",
       "witness": {
         "completed": true,
@@ -14840,7 +14831,7 @@
       "rank": "Highland",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Stop your ticklin` Jock!",
       "witness": {
         "completed": true,
@@ -14890,7 +14881,7 @@
       "rank": "Highland",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Stop your ticklin` Jock!",
       "witness": {
         "completed": true,
@@ -14942,7 +14933,7 @@
       "rank": "Highland",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "A mere stone`s throw",
       "witness": {
         "completed": true,
@@ -14994,7 +14985,7 @@
       "rank": "Highland",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "A mere stone`s throw",
       "witness": {
         "completed": true,
@@ -15046,7 +15037,7 @@
       "rank": "Highland",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "DONALD WHARS YER LEMMING",
       "witness": {
         "completed": true,
@@ -15098,7 +15089,7 @@
       "rank": "Highland",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "DONALD WHARS YER LEMMING",
       "witness": {
         "completed": true,
@@ -15201,7 +15192,7 @@
       "rank": "Highland",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "In memory of McAngus",
       "witness": {
         "completed": true,
@@ -15253,7 +15244,7 @@
       "rank": "Highland",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The White Heather Club",
       "witness": {
         "completed": true,
@@ -15305,7 +15296,7 @@
       "rank": "Highland",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The White Heather Club",
       "witness": {
         "completed": true,
@@ -15352,7 +15343,6 @@
       "gameID": "lemmings2",
       "lossesInBestSolution": 58,
       "notes": [
-        "Replay ended before all inputs were used",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 9,
@@ -15456,7 +15446,7 @@
       "rank": "Highland",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "EAT MY SHRAPNEL !!",
       "witness": {
         "completed": true,
@@ -15564,7 +15554,7 @@
       "rank": "Medieval",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "SIR! I KID YE NOT",
       "witness": {
         "completed": true,
@@ -15618,7 +15608,7 @@
       "rank": "Medieval",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "SIR! I KID YE NOT",
       "witness": {
         "completed": true,
@@ -15671,7 +15661,7 @@
       "rank": "Medieval",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "ALL IN A KNIGHTS WORK!!",
       "witness": {
         "completed": true,
@@ -15724,7 +15714,7 @@
       "rank": "Medieval",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "ALL IN A KNIGHTS WORK!!",
       "witness": {
         "completed": true,
@@ -15776,7 +15766,7 @@
       "rank": "Medieval",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "WATCH THAT LAST STEP!",
       "witness": {
         "completed": true,
@@ -15828,7 +15818,7 @@
       "rank": "Medieval",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "WATCH THAT LAST STEP!",
       "witness": {
         "completed": true,
@@ -15933,7 +15923,7 @@
       "rank": "Medieval",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Let`s play twister!",
       "witness": {
         "completed": true,
@@ -15986,7 +15976,7 @@
       "rank": "Medieval",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Let`s play twister!",
       "witness": {
         "completed": true,
@@ -16033,7 +16023,6 @@
       "gameID": "lemmings2",
       "lossesInBestSolution": 59,
       "notes": [
-        "Existing completion fixture changed: expected 1 at 3600, got 0 at 3600.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 7,
@@ -16095,7 +16084,7 @@
       "rank": "Medieval",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "What shall we do now?",
       "witness": {
         "completed": true,
@@ -16149,7 +16138,7 @@
       "rank": "Medieval",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "What shall we do now?",
       "witness": {
         "completed": true,
@@ -16257,7 +16246,7 @@
       "rank": "Medieval",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "JUST JOUSTING AROUND",
       "witness": {
         "completed": true,
@@ -16311,7 +16300,7 @@
       "rank": "Medieval",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "JUST JOUSTING AROUND",
       "witness": {
         "completed": true,
@@ -16358,7 +16347,6 @@
       "gameID": "lemmings2",
       "lossesInBestSolution": 1,
       "notes": [
-        "Replay ended before all inputs were used",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 1,
@@ -16411,7 +16399,6 @@
       "gameID": "lemmings2",
       "lossesInBestSolution": 43,
       "notes": [
-        "Existing completion fixture changed: expected 2 at 5400, got 17 at 5400.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 2,
@@ -16570,7 +16557,6 @@
       "gameID": "lemmings2",
       "lossesInBestSolution": 59,
       "notes": [
-        "rejectedInput(13)",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 5,
@@ -16740,7 +16726,7 @@
       "rank": "Outdoor",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The Laws of Tradition",
       "witness": {
         "completed": true,
@@ -16794,7 +16780,7 @@
       "rank": "Outdoor",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The Laws of Tradition",
       "witness": {
         "completed": true,
@@ -16848,7 +16834,7 @@
       "rank": "Outdoor",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "22934",
       "witness": {
         "completed": true,
@@ -16902,7 +16888,7 @@
       "rank": "Outdoor",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "22934",
       "witness": {
         "completed": true,
@@ -17002,9 +16988,7 @@
       "lossesInBestSolution": 0,
       "maximumSaveable": 60,
       "minimumSacrifices": 0,
-      "notes": [
-        "rejectedInput(17)"
-      ],
+      "notes": [],
       "number": 1,
       "population": 60,
       "rank": "Polar",
@@ -17226,7 +17210,7 @@
       "rank": "Polar",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Take Your Best Shot !",
       "witness": {
         "completed": true,
@@ -17280,7 +17264,7 @@
       "rank": "Polar",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Take Your Best Shot !",
       "witness": {
         "completed": true,
@@ -17388,7 +17372,7 @@
       "rank": "Polar",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "SLIPPIN & SLIDING",
       "witness": {
         "completed": true,
@@ -17442,7 +17426,7 @@
       "rank": "Polar",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "SLIPPIN & SLIDING",
       "witness": {
         "completed": true,
@@ -17549,7 +17533,7 @@
       "rank": "Polar",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Its all up hill !",
       "witness": {
         "completed": true,
@@ -17603,7 +17587,7 @@
       "rank": "Polar",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Its all up hill !",
       "witness": {
         "completed": true,
@@ -17657,7 +17641,7 @@
       "rank": "Polar",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Stay Frosty",
       "witness": {
         "completed": true,
@@ -17711,7 +17695,7 @@
       "rank": "Polar",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Stay Frosty",
       "witness": {
         "completed": true,
@@ -17915,7 +17899,7 @@
       "rank": "Shadow",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The Pancake Factory.",
       "witness": {
         "completed": true,
@@ -17965,7 +17949,7 @@
       "rank": "Shadow",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The Pancake Factory.",
       "witness": {
         "completed": true,
@@ -18017,7 +18001,7 @@
       "rank": "Shadow",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Swingadingding",
       "witness": {
         "completed": true,
@@ -18069,7 +18053,7 @@
       "rank": "Shadow",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Swingadingding",
       "witness": {
         "completed": true,
@@ -18116,7 +18100,6 @@
       "gameID": "lemmings2",
       "lossesInBestSolution": 59,
       "notes": [
-        "Existing completion fixture changed: expected 1 at 1432, got 1 at 8100.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 6,
@@ -18177,7 +18160,7 @@
       "rank": "Shadow",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Fritbatter Frolics!",
       "witness": {
         "completed": true,
@@ -18230,7 +18213,7 @@
       "rank": "Shadow",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Fritbatter Frolics!",
       "witness": {
         "completed": true,
@@ -18284,7 +18267,7 @@
       "rank": "Shadow",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Goossen`s Inferno!",
       "witness": {
         "completed": true,
@@ -18338,7 +18321,7 @@
       "rank": "Shadow",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Goossen`s Inferno!",
       "witness": {
         "completed": true,
@@ -18389,7 +18372,7 @@
       "rank": "Shadow",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "SPINNY THANG....",
       "witness": {
         "completed": true,
@@ -18440,7 +18423,7 @@
       "rank": "Shadow",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "SPINNY THANG....",
       "witness": {
         "completed": true,
@@ -18494,7 +18477,7 @@
       "rank": "Shadow",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Moonswings",
       "witness": {
         "completed": true,
@@ -18548,7 +18531,7 @@
       "rank": "Shadow",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Moonswings",
       "witness": {
         "completed": true,
@@ -18760,7 +18743,7 @@
       "rank": "Space",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "THE LEMMINGS HAVE LANDED",
       "witness": {
         "completed": true,
@@ -18814,7 +18797,7 @@
       "rank": "Space",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "THE LEMMINGS HAVE LANDED",
       "witness": {
         "completed": true,
@@ -18868,7 +18851,7 @@
       "rank": "Space",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The Vortex",
       "witness": {
         "completed": true,
@@ -18922,7 +18905,7 @@
       "rank": "Space",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The Vortex",
       "witness": {
         "completed": true,
@@ -19138,7 +19121,7 @@
       "rank": "Space",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Odyssey",
       "witness": {
         "completed": true,
@@ -19192,7 +19175,7 @@
       "rank": "Space",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Odyssey",
       "witness": {
         "completed": true,
@@ -19245,7 +19228,7 @@
       "rank": "Space",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Inside The Steel Box",
       "witness": {
         "completed": true,
@@ -19298,7 +19281,7 @@
       "rank": "Space",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Inside The Steel Box",
       "witness": {
         "completed": true,
@@ -19351,7 +19334,7 @@
       "rank": "Space",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Frontier of surreality",
       "witness": {
         "completed": true,
@@ -19404,7 +19387,7 @@
       "rank": "Space",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Frontier of surreality",
       "witness": {
         "completed": true,
@@ -19935,7 +19918,7 @@
       "rank": "Sports",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Run the Risk",
       "witness": {
         "completed": true,
@@ -19989,7 +19972,7 @@
       "rank": "Sports",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Run the Risk",
       "witness": {
         "completed": true,
@@ -20043,7 +20026,7 @@
       "rank": "Sports",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The Nervous Network!",
       "witness": {
         "completed": true,
@@ -20097,7 +20080,7 @@
       "rank": "Sports",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The Nervous Network!",
       "witness": {
         "completed": true,
@@ -20151,7 +20134,7 @@
       "rank": "Sports",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Take up Archery",
       "witness": {
         "completed": true,
@@ -20205,7 +20188,7 @@
       "rank": "Sports",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Take up Archery",
       "witness": {
         "completed": true,

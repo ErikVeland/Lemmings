@@ -19,6 +19,9 @@ private func testApproachingLemmingPreferred() throws {
         among: [turned, approaching], x: 52, y: 40, selected: 0, favorApproaching: true)
     try require(favored?.id == approaching.id,
         "favorApproaching should pick the lemming still walking toward the click")
+    try require(Lemmings3Targeting.nearest(among: [turned, approaching], x: 50, y: 32,
+        selected: 0, favorApproaching: true)?.id == approaching.id,
+        "A centred click must not hide the approaching alternative")
 
     let plain = Lemmings3Targeting.nearest(
         among: [turned, approaching], x: 52, y: 40, selected: 0, favorApproaching: false)
@@ -31,6 +34,35 @@ private func testApproachingLemmingPreferred() throws {
         "With no approaching candidate, targeting should fall back to the nearest one")
 
     print("PASS Lemmings 3 targeting prefers the lemming still walking toward the click")
+}
+
+private func testCrowdedWallTargets() throws {
+    for direction in [-1, 1] {
+        let returning = (0..<6).map {
+            Lemmings3TargetCandidate(id: $0, x: 50 + ($0 % 3) * direction, y: 40,
+                direction: -direction, tool: .spade, isBuilding: false, active: true)
+        }
+        let incoming = Lemmings3TargetCandidate(id: 6, x: 50 - 3 * direction, y: 40,
+            direction: direction, tool: .spade, isBuilding: false, active: true)
+        let wall: (Int, Int) -> Bool = { x, y in (x - 50) * direction >= 5 && y < 40 }
+        for selected in [0, 3] {
+            try require(Lemmings3Targeting.nearest(among: returning + [incoming], x: 50, y: 32,
+                selected: selected, favorApproaching: true, terrainIsSolid: wall)?.id == incoming.id,
+                "A returning crowd must not hide the single wall-facing lemming")
+            try require(Lemmings3Targeting.nearest(among: returning + [incoming], x: 50, y: 32,
+                selected: selected, favorApproaching: false, terrainIsSolid: wall)?.id != incoming.id,
+                "Wall targeting opt-out must restore nearest selection")
+        }
+        var unavailable = incoming
+        unavailable.canAssignSelected = false
+        try require(Lemmings3Targeting.nearest(among: returning + [unavailable], x: 50, y: 32,
+            selected: 3, favorApproaching: true, terrainIsSolid: wall)?.id != incoming.id,
+            "Wall preference must not bypass tool eligibility")
+        try require(Lemmings3Targeting.nearest(among: returning + [incoming], x: 50, y: 32,
+            selected: 3, favorApproaching: true, manualCarrierID: returning[0].id, terrainIsSolid: wall)?.id == returning[0].id,
+            "Wall preference must preserve manual carrier selection")
+    }
+    print("PASS mirrored L3 crowded walls, tool eligibility, opt-out and manual carrier priority")
 }
 
 /// Two candidates facing the SAME direction must not be reordered by the
@@ -119,6 +151,7 @@ do {
         favorApproaching: true, favorBombBlockers: true)?.id == walker.id, "Bomb preference must respect tool eligibility")
     print("PASS Lemmings 3 bomb and builder priorities, eligibility and independent opt-outs")
     try testApproachingLemmingPreferred()
+    try testCrowdedWallTargets()
     try testSameDirectionCandidatesKeepNearestPick()
     try testToolHolderBeatsApproachingCandidate()
     try testManualCarrierSelection()

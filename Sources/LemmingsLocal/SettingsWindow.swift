@@ -19,6 +19,7 @@ import NxlvKit
   private var displayPopUp: NSPopUpButton?
   private var intensitySlider: NSSlider?
   private var aspectSlider: NSSlider?
+  private var tubeCaptions: [GameLabel] = []
   private var integerCheck: NSButton?
   private var musicPopUp: NSPopUpButton?
   private var stylePopUp: NSPopUpButton?
@@ -58,7 +59,7 @@ import NxlvKit
   private var telemetryCheck: NSButton?
 
   /// Whether the tube simulation is in the live drawing path.
-  var videoIsConnected = true
+  var videoIsConnected = true { didSet { refreshVideoControls() } }
 
   init(settings: ClassicSettings, options: ClassicSettingsOptions,
        telemetry: AnonymousTelemetry = .shared) {
@@ -123,6 +124,7 @@ import NxlvKit
     var previous: NSView?
     for (label, control) in rows {
       let caption = GameLabel(labelWithString: label)
+      if control === intensitySlider || control === aspectSlider { tubeCaptions.append(caption) }
       if control.accessibilityLabel() == nil {
         control.setAccessibilityLabel((control as? NSButton).map { label + ": " + $0.title } ?? label)
       }
@@ -135,7 +137,7 @@ import NxlvKit
       NSLayoutConstraint.activate([
         caption.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 18),
         caption.widthAnchor.constraint(equalToConstant: 180),
-        caption.centerYAnchor.constraint(equalTo: control.centerYAnchor),
+        caption.centerYAnchor.constraint(equalTo: (control as? GameControlGroup)?.arrangedSubviews.first?.centerYAnchor ?? control.centerYAnchor),
         control.leadingAnchor.constraint(equalTo: caption.trailingAnchor, constant: 12),
         control.trailingAnchor.constraint(
           equalTo: container.trailingAnchor, constant: -18),
@@ -205,8 +207,7 @@ import NxlvKit
     let builders = GameCheckButton(title: "Favor current builders for Build", target: self, action: #selector(favorBuildersChanged))
     builders.state = settings.favorBuilders ? .on : .off
     favorBuildersCheck = builders
-    let targeting = NSStackView(views: [favorApproaching, bombBlockers, builders])
-    targeting.orientation = .vertical; targeting.alignment = .leading; targeting.spacing = 8
+    let targeting = GameControlGroup(controls: [favorApproaching, bombBlockers, builders], label: "Targeting")
     let levelSelection = popUp(#selector(levelSelectionChanged))
     levelSelection.addItems(withTitles: ["Player Unlocked", "All"])
     levelSelection.setAccessibilityLabel("Level selection")
@@ -407,9 +408,12 @@ import NxlvKit
   private func videoPane() -> NSView {
     let display = popUp(#selector(displayChanged))
     for option in ClassicDisplayMode.allCases { display.addItem(withTitle: option.displayName) }
+    display.setAccessibilityLabel("Screen")
     let intensity = slider(#selector(intensityChanged), value: settings.displayIntensity)
+    intensity.setAccessibilityLabel("Tube Strength")
     let aspect = slider(
       #selector(aspectChanged), value: settings.pixelAspect, min: 0.8, max: 1.5)
+    aspect.setAccessibilityLabel("Pixel Width")
     let integer = GameCheckButton(
       title: "Whole pixels only", target: self,
       action: #selector(integerChanged))
@@ -420,9 +424,6 @@ import NxlvKit
     aspectSlider = aspect
     integerCheck = integer
 
-    for control in [display, intensity, aspect, integer] as [NSControl] {
-      control.isEnabled = videoIsConnected
-    }
     let note = GameLabel(
       labelWithString: videoIsConnected
         ? "" : "The tube simulation is not in the drawing path yet.")
@@ -440,7 +441,8 @@ import NxlvKit
     pointer.toolTip = "Hold Option or pause to release the pointer. Menus also release it."
     pointer.state = settings.confinePointer ? .on : .off
     pointerCaptureCheck = pointer
-    return pane([
+    tubeCaptions.removeAll()
+    let content = pane([
       ("Effects", hdEffects),
       ("Screen", display),
       ("Tube Strength", intensity),
@@ -450,6 +452,22 @@ import NxlvKit
       ("Pointer", pointer),
       ("", note),
     ])
+    refreshVideoControls()
+    return content
+  }
+
+  private func refreshVideoControls() {
+    displayPopUp?.isEnabled = videoIsConnected
+    integerCheck?.isEnabled = videoIsConnected
+    let tubeEnabled = videoIsConnected && settings.display != .flat
+    for control in [intensitySlider, aspectSlider].compactMap({ $0 }) {
+      control.isEnabled = tubeEnabled
+      control.needsDisplay = true
+    }
+    for caption in tubeCaptions {
+      caption.isEnabled = tubeEnabled
+      caption.needsDisplay = true
+    }
   }
 
   private func accessibilityPane() -> NSView {
@@ -586,6 +604,9 @@ import NxlvKit
       at: ClassicColorDepth.allCases.firstIndex(of: settings.colorDepth) ?? 0)
     displayPopUp?.selectItem(
       at: ClassicDisplayMode.allCases.firstIndex(of: settings.display) ?? 0)
+    intensitySlider?.doubleValue = settings.displayIntensity
+    aspectSlider?.doubleValue = settings.pixelAspect
+    refreshVideoControls()
     stylePopUp?.selectItem(
       at: ClassicMusicStyle.allCases.firstIndex(of: settings.musicStyle) ?? 0)
     graphicsShuffleCheck?.state = settings.shuffleGraphics ? .on : .off
@@ -708,6 +729,7 @@ import NxlvKit
     let all = ClassicDisplayMode.allCases
     guard all.indices.contains(sender.indexOfSelectedItem) else { return }
     settings.display = all[sender.indexOfSelectedItem]
+    refreshVideoControls()
     markCustom()
     changed()
   }

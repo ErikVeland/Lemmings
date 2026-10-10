@@ -1088,7 +1088,7 @@ import NxlvKit
         sounds.play([Lemmings2SoundRequest(supplemental: .actionRejected).positioned(x: lem.x, y: lem.y)])
     }
     func playReadySound() { sounds.playInterface(.ready) }
-    private func refreshGame() {
+    private func refreshGame(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
         let nuking = (screen == .playing || screen == .results) && game?.isNuking == true && canvas.hdEffectsEnabled
         let allPopped = game.map { game in
             game.isComplete || game.lemmings.filter(\.active).allSatisfy {
@@ -1097,14 +1097,17 @@ import NxlvKit
             }
         } ?? false
         nukeMood.update(active: nuking, tick: game?.tick ?? 0, durationTicks: 75,
-            remainingTicks: game?.lemmings.compactMap(\.bombTicks).min(), allPopped: allPopped)
+            remainingTicks: game?.lemmings.compactMap(\.bombTicks).min(), allPopped: allPopped, now: now)
         sounds.setNukeActive(nuking && game?.isComplete == false)
         guard let game else { return }
         let impossible = (screen == .playing || screen == .results) && (game.isComplete ? !game.didWin : FailureMoodDecision.isUnrecoverable(
             saved: game.saved, active: game.lemmings.filter(\.active).count,
             unreleased: game.configuration.total - game.released, required: 1))
-        failureMood.set(active: impossible)
-        failureMusic.update(failed: impossible, isNuking: game.isNuking, allPopped: allPopped)
+        failureMood.set(active: impossible, now: now)
+        failureMusic.update(failed: impossible,
+            isNuking: (screen == .playing || screen == .results) && game.isNuking,
+            allPopped: allPopped, remainingTicks: game.lemmings.filter(\.active).compactMap(\.bombTicks).min(),
+            oneCountTicks: 15, tick: game.tick, now: now)
         let turn = ArcadeStore.shared.hotSeatIsActive ? ArcadeStore.shared.records.profile(arcadeProfileID) : nil
         canvas.turnBadge.show(initials: turn?.initials, portrait: turn.flatMap { ArcadeWindow.shared.arcadeView.portraitImage($0.portrait) })
         canvas.speedMultiplier = speedControl.multiplier

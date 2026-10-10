@@ -692,9 +692,17 @@ struct ReticleFeedback {
         return follower
       }
     }
-    if favorApproachingLemmings, !isApproaching(nearest, point: point),
-       let approaching = eligible.first(where: { isApproaching($0, point: point) && $0.facingLeft != nearest.facingLeft }) {
-      return approaching
+    if favorApproachingLemmings {
+      let wallDirection = LemmingApproachTargeting.wallDirection(x: nearest.x, footY: nearest.y) {
+        session.terrainIsSolid(x: $0, y: $1)
+      }
+      func approaching(_ lemming: SessionLemming) -> Bool {
+        LemmingApproachTargeting.isApproaching(x: lemming.x, direction: lemming.facingLeft ? -1 : 1,
+          clickX: Double(point.x), wallDirection: wallDirection)
+      }
+      if !approaching(nearest), let preferred = eligible.first(where: {
+        $0.facingLeft != nearest.facingLeft && approaching($0)
+      }) { return preferred }
     }
     return nearest
   }
@@ -713,20 +721,22 @@ struct ReticleFeedback {
 
   /// Honour the green target briefly while it walks between display and input.
   func clickTarget(at point: CGPoint) -> SessionLemming? {
+    let currentTarget = lemming(at: point)
     if let session, session.skills.indices.contains(selectedSkill()) {
       let name = session.skills[selectedSkill()].name.lowercased()
       if (favorBuilders && name == "builder") || (favorBombBlockers && name == "bomber") {
-        return lemming(at: point)
+        return currentTarget
       }
     }
     if let displayedTarget, ProcessInfo.processInfo.systemUptime - displayedTarget.time <= 0.12,
        hypot(point.x - displayedTarget.point.x, point.y - displayedTarget.point.y) <= 2,
        let session, let target = session.lemmings.first(where: { $0.id == displayedTarget.id }),
        distanceSquared(target, point) <= 16 * 16,
-       session.canAssign(skillIndex: selectedSkill(), to: target.id) {
+       session.canAssign(skillIndex: selectedSkill(), to: target.id),
+       !(favorApproachingLemmings && currentTarget.map { $0.facingLeft != target.facingLeft } == true) {
       return target
     }
-    return lemming(at: point)
+    return currentTarget
   }
 
   private func distanceSquared(_ lemming: SessionLemming, _ point: CGPoint) -> CGFloat {

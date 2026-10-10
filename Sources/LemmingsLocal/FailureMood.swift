@@ -73,6 +73,8 @@ enum FailureMoodDecision {
 /// Restore the track after a nuke without clearing the failed-run visuals.
 @MainActor final class FailureMusicTransition {
   private let transition: FailureMoodTransition
+  private var nukeSlowdownStarted = false
+  private var lastNukeTick: Int?
   private(set) var rate: Double = 1
   var onChange: ((Double) -> Void)?
 
@@ -85,9 +87,22 @@ enum FailureMoodDecision {
     }
   }
 
-  func update(failed: Bool, isNuking: Bool, allPopped: Bool) {
-    transition.set(active: failed && !(isNuking && allPopped))
+  func update(failed: Bool, isNuking: Bool, allPopped: Bool,
+              remainingTicks: Int? = nil, oneCountTicks: Int = 17, tick: Int = 0,
+              now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
+    if !isNuking {
+      nukeSlowdownStarted = false
+      lastNukeTick = nil
+    } else {
+      if let lastNukeTick, tick < lastNukeTick { nukeSlowdownStarted = false }
+      if let remainingTicks, remainingTicks <= max(1, oneCountTicks) { nukeSlowdownStarted = true }
+      lastNukeTick = tick
+    }
+    // Hold after the first countdown reaches one until the final audible pop.
+    transition.set(active: (failed || nukeSlowdownStarted) && !(isNuking && allPopped), now: now)
   }
+
+  func advance(at now: TimeInterval) { transition.advance(at: now) }
 }
 
 @MainActor enum FailureMoodOverlay {

@@ -8504,13 +8504,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
       remainingTicks: session?.lemmings.compactMap(\.countdown).min(), allPopped: allPopped, now: now)
     effects.setNukeActive(nuking && session?.isComplete == false)
     guard phase == .playing || phase == .results, let session else {
-      failureMood.set(active: false)
-      failureMusic.update(failed: false, isNuking: false, allPopped: false)
+      failureMood.set(active: false, now: now)
+      failureMusic.update(failed: false, isNuking: false, allPopped: false, now: now)
       return
     }
     let failed = session.isComplete ? !session.didWin : !session.canStillReachRequirement
-    failureMood.set(active: failed)
-    failureMusic.update(failed: failed, isNuking: session.isNuking, allPopped: allPopped)
+    failureMood.set(active: failed, now: now)
+    failureMusic.update(failed: failed, isNuking: session.isNuking, allPopped: allPopped,
+      remainingTicks: session.lemmings.compactMap(\.countdown).min(),
+      oneCountTicks: ClassicDOSRules.ticksPerSecond, tick: session.currentTick, now: now)
   }
 
   private func focusLemming(_ id: Int) {

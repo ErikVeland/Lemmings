@@ -2,19 +2,20 @@ import XCTest
 @testable import LemmingsLocal
 
 final class FailureMusicTests: XCTestCase {
-    @MainActor func testFinalPopRestoresTempoWhileFailureVisualsRemain() async throws {
+    @MainActor func testNukeSlowsBeforeFailureAndFinalPopRestoresTempo() async throws {
         let music = FailureMusicTransition(duration: 0.12, recoveryDuration: 0.12)
         let visual = FailureMoodTransition(duration: 0.12)
         var rates: [Double] = []
         music.onChange = { rates.append($0) }
-        visual.set(active: true)
-        music.update(failed: true, isNuking: true, allPopped: false)
+        music.update(failed: false, isNuking: true, allPopped: false, remainingTicks: 17)
         try await Task.sleep(nanoseconds: 250_000_000)
         XCTAssertEqual(music.rate, 0.72, accuracy: 0.0001)
+        XCTAssertEqual(visual.amount, 0)
         // Repeated updates before the last explosion must keep the dirge.
-        music.update(failed: true, isNuking: true, allPopped: false)
+        music.update(failed: false, isNuking: true, allPopped: false, remainingTicks: 17)
         XCTAssertEqual(music.rate, 0.72, accuracy: 0.0001)
         rates = []
+        visual.set(active: true)
         music.update(failed: true, isNuking: true, allPopped: true)
         // No simulation ticks are needed once the result screen opens.
         try await Task.sleep(nanoseconds: 250_000_000)

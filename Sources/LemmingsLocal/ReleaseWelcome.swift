@@ -5,14 +5,14 @@ import AppKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "1.9"
-    static let subtitle = "The Tribes complete, Macintosh restored"
+    static let notesVersion = "1.9.1"
+    static let subtitle = "Targeting, display and nuke hotfixes"
     static let sections = [
-        ("The Tribes is complete", "Lemmings 2 leaves beta with winning routes for all 120 levels and continuous runs through all twelve tribes. Lemmings 3: Chronicles moves to Beta. Its remaining level, fidelity and ending checks continue."),
-        ("Original Macintosh sound and music", "Choose Macintosh (original) in Audio for 31 arrangements using the game's sampled instruments. Release-rate changes use the original Mac sound and pitch changes. Graphics offers Original Macintosh counters, independent of your artwork and music choices."),
-        ("Hot Seat and saved progress", "Resume names every player in turn order. Long rosters wrap to stay visible. Journey wins save when the level finishes. Menu, Q and Escape return to the library with your saved run."),
-        ("Reliable audio and updates", "Music-source changes preserve pause. Music continuity improves during journeys and shuffle playback. The download icon and Check for Updates share a recoverable update flow, without requiring an app restart."),
-        ("Compatibility", "Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. NeoLemmix remains Beta. The slim download includes original Mac music and essential soundtracks; automatic updates include the full music library.")
+        ("Wall-facing targeting", "Favor lemmings still approaching now uses nearby walls to choose the lemming facing into the work. It handles crowded staircases and refreshes the target when a lemming turns. Classic, NeoLemmix and both sequels share the correction."),
+        ("Grouped targeting controls", "The three targeting preferences share one outlined group in Gameplay settings. Favor approaching lemmings, blockers for bombs and current builders are clearly part of the same group. Their existing keyboard and controller controls remain available."),
+        ("Flat Panel controls", "Flat Panel greys out Tube Strength and Pixel Width because those controls apply to tube screens. Monitor and Television enable them again. Your saved values stay ready when you change screens."),
+        ("Nuke music countdown", "The funeral music slowdown starts when the first active countdown changes from 2 to 1. The screen keeps its colour until rescue becomes impossible. Music returns to normal after the final explosion, with the same recovery in Classic, NeoLemmix and The Tribes."),
+        ("Compatibility", "Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. The Tribes remains Complete. Chronicles and NeoLemmix remain Beta. The slim download includes original Mac music and essential soundtracks. Automatic updates include the full music library.")
     ]
     private let defaults: UserDefaults
     private let build: Int

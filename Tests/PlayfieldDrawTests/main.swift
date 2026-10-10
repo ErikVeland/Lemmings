@@ -42,6 +42,8 @@ private final class BombPreviewSession: GameSession {
 
 private final class TargetingSession: GameSession {
   var actors: [SessionLemming] = []
+  var solid: (Int, Int) -> Bool = { _, _ in false }
+  func terrainIsSolid(x: Int, y: Int) -> Bool { solid(x, y) }
   let levelWidth = 320, levelHeight = 160, ticksPerSecond = 17
   var lemmings: [SessionLemming] { actors }
   let entranceX: Int? = nil
@@ -85,6 +87,8 @@ private final class TargetingSession: GameSession {
   view.favorApproachingLemmings = true
   try require(view.lemming(at: CGPoint(x: 100, y: 80))?.id == 1,
     "The approaching lemming should win over a closer one that already turned away")
+  try require(view.lemming(at: CGPoint(x: 99, y: 80))?.id == 1,
+    "Clicking directly over the turned lemming must not hide the approaching alternative")
   view.favorApproachingLemmings = false
   try require(view.lemming(at: CGPoint(x: 100, y: 80))?.id == 0,
     "Turning the setting off should restore plain nearest-distance picking")
@@ -95,6 +99,84 @@ private final class TargetingSession: GameSession {
   try require(view.lemming(at: CGPoint(x: 100, y: 80))?.id == 0,
     "With no approaching candidate, targeting must fall back to the nearest eligible one")
   print("PASS approaching-lemming targeting prefers the one still walking toward the click")
+}
+
+@MainActor private func testCrowdedWallBasherTarget() throws {
+  let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+  let assets = try ClassicMainDATAssets.load(from: root.appendingPathComponent("Content/lemming1.pc"))
+  let view = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 640, height: 320))
+  let session = TargetingSession()
+  session.skills = [.init(name: "Basher", count: 5, isInfinite: false)]
+  view.session = session; view.phase = .playing; view.assets = assets
+  view.viewport.zoom = 2; view.favorApproachingLemmings = true
+  view.levelImage = CGContext(data: nil, width: 320, height: 160, bitsPerComponent: 8, bytesPerRow: 1280,
+    space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!.makeImage()
+  for direction in [-1, 1] {
+    session.solid = { x, y in (x - 100) * direction >= 5 && y < 80 }
+    session.actors = (0..<6).map {
+      .init(id: $0, x: 100 + ($0 % 3) * direction, y: 80, pose: .walking,
+        facingLeft: direction > 0, animationFrame: 0, countdown: nil)
+    } + [.init(id: 6, x: 100 - 3 * direction, y: 80, pose: .walking,
+      facingLeft: direction < 0, animationFrame: 0, countdown: nil)]
+    let point = CGPoint(x: 100, y: 75)
+    try require(view.lemming(at: point)?.id == 6 && view.clickTarget(at: point)?.id == 6,
+      "Basher must favour the single wall-facing lemming even when the returning crowd approaches the pointer")
+    view.favorApproachingLemmings = false
+    try require(view.lemming(at: point)?.id != 6, "Wall targeting opt-out must restore the nearest returning lemming")
+    view.favorApproachingLemmings = true
+    view.clearPointer()
+    // Cache a displayed target that is still facing the wall, then turn it
+    // before the click. The hover grace period must not retain that target.
+    session.actors = [
+      .init(id: 0, x: 100, y: 80, pose: .walking, facingLeft: direction < 0, animationFrame: 0, countdown: nil),
+      session.actors[6],
+    ]
+    let viewPoint = view.viewport.viewPoint(fromLevel: point)
+    view.handleMove(to: viewPoint)
+    let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+    view.cacheDisplay(in: view.bounds, to: bitmap)
+    try require(view.pointerLemmingID == 0, "Hover fixture did not display its nearer wall-facing lemming")
+    session.actors[0] = .init(id: 0, x: 100, y: 80, pose: .walking,
+      facingLeft: direction > 0, animationFrame: 0, countdown: nil)
+    var assigned: Int?
+    view.onAssign = { assigned = $0 }
+    view.handleClick(at: viewPoint)
+    try require(assigned == 6, "Click retained a cached lemming after it turned away from the wall")
+  }
+  try require(LemmingApproachTargeting.wallDirection(x: 100, footY: 80, isSolid: { _, y in y >= 76 }) == nil,
+    "A shallow step must not impose a wall direction")
+  try require(LemmingApproachTargeting.wallDirection(x: 100, footY: 80, isSolid: { x, _ in abs(x - 100) >= 5 }) == nil,
+    "Walls on both sides must not impose an arbitrary direction")
+
+  let width = 256, height = 96
+  var solid = Data(repeating: 0, count: width * height)
+  for y in 80..<height { for x in 0..<width { solid[y * width + x] = 1 } }
+  for y in 20..<80 { for x in 150..<165 { solid[y * width + x] = 1 } }
+  let terrain = try ClassicDOSTerrain(width: width, height: height, solidMask: solid,
+    steelMask: Data(repeating: 0, count: solid.count))
+  let configuration = ClassicDOSConfiguration(totalLemmings: 2, requiredToSave: 1,
+    timeLimitTicks: 1_000, initialReleaseRate: 99, entrances: [.init(x: 130, y: 60)],
+    initialSkills: [.basher: 5], maximumX: width - 1, maximumY: height - 1)
+  let live = ClassicSession(simulation: try ClassicDOSSimulation(terrain: terrain, configuration: configuration,
+    destructionMasks: ClassicDOSDestructionMaskSet(mainDATMasks: assets.destructionMasks)), width: width, height: height)
+  for _ in 0..<100 where !live.lemmings.contains(where: { $0.facingLeft && $0.pose == .walking }) { live.tick() }
+  guard let turned = live.lemmings.first(where: { $0.facingLeft }),
+    let incoming = live.lemmings.first(where: { !$0.facingLeft && $0.pose == .walking }) else {
+    throw Failure(description: "Native Basher fixture did not produce a mixed crowd at its wall")
+  }
+  let basher = ClassicSkill.allCases.firstIndex(of: .basher)!
+  view.session = live; view.selectedSkill = { basher }; view.clearPointer()
+  let point = CGPoint(x: Double(turned.x) - 0.5, y: Double(turned.y) - 5)
+  try require(view.lemming(at: point)?.id == incoming.id, "Native Classic wall targeting chose the returning lemming")
+  view.onAssign = { id in _ = live.assign(skillIndex: basher, to: id) }
+  view.handleClick(at: view.viewport.viewPoint(fromLevel: point))
+  try require(live.simulation.remainingSkillCount(.basher) == 4
+    && live.lemmings.first(where: { $0.id == incoming.id })?.pose == .bashing,
+    "The native click did not spend exactly one Basher on the incoming lemming")
+  for _ in 0..<8 { live.tick() }
+  try require(live.simulation.terrain != terrain && live.simulation.remainingSkillCount(.basher) == 4,
+    "The selected Basher did not cut the wall with one assignment")
+  print("PASS mirrored crowded walls, centred clicks, hover-turn invalidation and one native Basher cutting terrain")
 }
 
 /// Two lemmings walking the SAME direction must not get reordered: the
@@ -1507,6 +1589,7 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     try testSpeedAfterimages()
     try testBombFlashFrames()
     try testApproachingLemmingPreferred()
+    try testCrowdedWallBasherTarget()
     try testSameDirectionPackKeepsNearestPick()
     try testFollowerBehindBuilderIsTargeted()
     try testSkillTargetPriorities()

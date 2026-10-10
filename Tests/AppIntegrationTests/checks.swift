@@ -939,6 +939,8 @@ extension AppDelegate {
     gamePicker.selectItem(at: dataSets.firstIndex(where: { $0.set.title == .lemmings })!)
     func enterFreshLevel() throws {
       selectDataSet(); loadLevel(at: 0); phase = .playing
+      // Nuke timing does not depend on asynchronous campaign solution proofs.
+      arcadeLevel = nil
       flow?.selectLevel(rank: 0, position: 0, recordsCampaignProgress: false)
       flow?.beginPlaying()
       GameScreen.shared.dismissAll()
@@ -965,32 +967,118 @@ extension AppDelegate {
 
     let previousHD = settings.hdEffectsEnabled
     defer { settings.hdEffectsEnabled = previousHD }
-    settings.hdEffectsEnabled = true
-    try enterFreshLevel()
-    playfield.startCountdown.cancel()
-    for _ in 0..<500 where (session?.released ?? 0) < 3 { session?.tick() }
-    try check(session?.lemmings.count == 3, "Nuke return fixture needs three live lemmings")
-    session?.nuke()
-    updateFailureMood(at: 0)
-    var pops = 0, lastPopTime = 0.0
-    for index in 1...300 {
-      session?.tick()
-      if session?.lastCues.contains(.explode) == true { pops += 1 }
-      let now = Double(index) / 17
-      updateFailureMood(at: now)
-      if pops == 3 { lastPopTime = now; break }
-      if index >= 79 {
-        nukeMood.advanceReturn(at: now + 0.14)
-        try check(nukeMood.amount == 1, "Classic opened its nuke filter before the final pop")
+    for hd in [true, false] {
+      settings.hdEffectsEnabled = hd
+      failureMusic.update(failed: false, isNuking: false, allPopped: false, now: -5)
+      failureMusic.advance(at: -1)
+      failureMood.set(active: false, now: -5)
+      failureMood.advance(at: -1)
+      try enterFreshLevel()
+      playfield.startCountdown.cancel()
+      for _ in 0..<500 where (session?.released ?? 0) < 3 { session?.tick() }
+      try check(session?.lemmings.count == 3, "Nuke return fixture needs three live lemmings")
+      session?.nuke()
+      try check(session?.canStillReachRequirement == true, "Nuke music fixture must start with a reachable rescue target")
+      updateFailureMood(at: 0)
+      failureMusic.advance(at: 0.9)
+      try check(failureMusic.rate == 1, "Classic nuke slowed music before countdown one")
+      var pops = 0, lastPopTime = 0.0, reachedOne = false
+      for index in 1...300 {
+        session?.tick()
+        if session?.lastCues.contains(.explode) == true { pops += 1 }
+        let now = Double(index) / 17
+        failureMusic.advance(at: now)
+        updateFailureMood(at: now)
+        if !reachedOne, let ticks = session?.lemmings.compactMap(\.countdown).min() {
+          if ticks > ClassicDOSRules.ticksPerSecond {
+            try check(failureMusic.rate == 1, "Classic slowed music while the countdown still showed two or more")
+          } else {
+            reachedOne = true
+            try check(failureMusic.rate == 1, "Classic countdown one jumped to funeral speed")
+            failureMusic.advance(at: now + 0.03)
+            try check(failureMusic.rate < 1, "Classic 2-to-1 countdown did not start the slowdown")
+            failureMood.advance(at: now + 0.9)
+            try check(session?.canStillReachRequirement == true && failureMood.amount == 0,
+              "Classic nuke slowdown desaturated a recoverable run")
+          }
+        }
+        if pops == 3 { lastPopTime = now; break }
+        if hd && index >= 79 {
+          nukeMood.advanceReturn(at: now + 0.14)
+          try check(nukeMood.amount == 1, "Classic opened its nuke filter before the final pop")
+        }
       }
+      try check(reachedOne && pops == 3 && session?.isComplete == false, "Classic did not retain its explosion tails after three pops")
+      updateFailureMood(at: lastPopTime + NukeMusicSweep.returnDuration / 2)
+      failureMusic.advance(at: lastPopTime + NukeMusicSweep.returnDuration / 2)
+      try check(abs(failureMusic.rate - 0.86) < 0.0001, "Classic did not spin up after the last pop")
+      try check(abs(nukeMood.amount - (hd ? 0.5 : 0)) < 0.0001, "Classic did not open its filter on the last audible pop")
+      phase = .results
+      updateFailureMood(at: lastPopTime + NukeMusicSweep.returnDuration + 0.02)
+      failureMusic.advance(at: lastPopTime + NukeMusicSweep.returnDuration + 0.02)
+      try check(abs(failureMusic.rate - 1) < 0.0001, "Classic results interrupted the tempo return")
+      try check(nukeMood.amount == 0, "Classic results interrupted the filter return")
     }
-    try check(pops == 3 && session?.isComplete == false, "Classic did not retain its explosion tails after three pops")
-    updateFailureMood(at: lastPopTime + NukeMusicSweep.returnDuration / 2)
-    try check(abs(nukeMood.amount - 0.5) < 0.0001, "Classic did not open its filter on the last audible pop")
-    phase = .results
-    updateFailureMood(at: lastPopTime + NukeMusicSweep.returnDuration + 0.02)
-    try check(nukeMood.amount == 0, "Classic results interrupted the filter return")
-    print("PASS Classic waits for all three audible nuke pops, then restores the filter through tails and results")
+    print("PASS Classic 2-to-1 nuke slowdown, separate saturation and final-pop recovery with HD on and off")
+  }
+
+  fileprivate func testNeoNukeMusic() throws {
+    var terrain = try NeoLemmixTerrain(width: 320, height: 96)
+    for x in 0..<320 { terrain.setSolid(true, x: x, y: 64) }
+    let config = try NeoLemmixConfiguration(totalLemmings: 1, requiredToSave: 1,
+      spawnInterval: 50, entrances: [.init(id: 0, position: .init(x: 40, y: 20))], skills: [:])
+    let previousHD = settings.hdEffectsEnabled
+    defer { settings.hdEffectsEnabled = previousHD }
+    for hd in [true, false] {
+      settings.hdEffectsEnabled = hd
+      failureMusic.update(failed: false, isNuking: false, allPopped: false, now: -5)
+      failureMusic.advance(at: -1)
+      failureMood.set(active: false, now: -5)
+      failureMood.advance(at: -1)
+      let fixture = NeoLemmixSession(simulation: try NeoLemmixSimulation(terrain: terrain, configuration: config),
+        width: 320, height: 96)
+      for _ in 0..<100 where fixture.lemmings.isEmpty { fixture.tick() }
+      try check(fixture.lemmings.count == 1, "Neo nuke fixture did not hatch")
+      session = fixture; phase = .playing
+      fixture.nuke()
+      fixture.tick() // Neo applies queued input on the next logic tick.
+      try check(fixture.isNuking, "Neo nuke input did not start its countdown")
+      try check(fixture.canStillReachRequirement, "Neo fixture must start with a reachable target")
+      updateFailureMood(at: 0)
+      failureMusic.advance(at: 0.9)
+      try check(failureMusic.rate == 1, "Neo nuke slowed music before countdown one")
+      var lastPopTime = 0.0, reachedOne = false
+      for index in 1...200 {
+        fixture.tick()
+        let now = Double(index) / 17
+        failureMusic.advance(at: now)
+        updateFailureMood(at: now)
+        if !reachedOne, let ticks = fixture.lemmings.compactMap(\.countdown).min() {
+          if ticks > ClassicDOSRules.ticksPerSecond {
+            try check(failureMusic.rate == 1, "Neo slowed music before countdown one")
+          } else {
+            reachedOne = true
+            try check(failureMusic.rate == 1, "Neo countdown one jumped to funeral speed")
+            failureMusic.advance(at: now + 0.03)
+            try check(failureMusic.rate < 1, "Neo 2-to-1 countdown did not start the slowdown")
+            failureMood.advance(at: now + 0.9)
+            try check(fixture.canStillReachRequirement && failureMood.amount == 0,
+              "Neo nuke slowdown desaturated a recoverable run")
+          }
+        }
+        if fixture.isComplete { lastPopTime = now; break }
+      }
+      try check(reachedOne && fixture.isComplete && !fixture.didWin, "Neo nuke did not complete its failed run")
+      phase = .results
+      updateFailureMood(at: lastPopTime + NukeMusicSweep.returnDuration / 2)
+      failureMusic.advance(at: lastPopTime + NukeMusicSweep.returnDuration / 2)
+      try check(abs(failureMusic.rate - 0.86) < 0.0001, "Neo results lost the spin-up")
+      updateFailureMood(at: lastPopTime + NukeMusicSweep.returnDuration)
+      failureMusic.advance(at: lastPopTime + NukeMusicSweep.returnDuration)
+      try check(abs(failureMusic.rate - 1) < 0.0001 && nukeMood.amount == 0,
+        "Neo results did not restore normal music")
+    }
+    print("PASS Neo 2-to-1 nuke slowdown, separate saturation and result recovery with HD on and off")
   }
 
   fileprivate func testPauseKeyRelease() throws {
@@ -1047,6 +1135,17 @@ extension AppDelegate {
       "Modern must show backpacks by default")
     root.layoutSubtreeIfNeeded()
     try check(backpacks.visibleRect.contains(backpacks.bounds.insetBy(dx: 1, dy: 1)), "Backpack toggle is clipped")
+    let targeting = descendants(root).compactMap { $0 as? GameControlGroup }.first { $0.accessibilityLabel() == "Targeting" }!
+    let targetingCaption = descendants(root).compactMap { $0 as? GameLabel }.first { $0.stringValue == "Targeting" }!
+    let firstTarget = targeting.arrangedSubviews.first!
+    try check(abs(targetingCaption.convert(targetingCaption.bounds, to: root).midY
+      - firstTarget.convert(firstTarget.bounds, to: root).midY) < 1, "Targeting label must align with the start of its group")
+    for control in targeting.arrangedSubviews {
+      try check(targeting.bounds.insetBy(dx: 4, dy: 4).contains(control.convert(control.bounds, to: targeting)),
+        "Targeting group clips an option")
+    }
+    try check(root.hitTest(targeting.convert(CGPoint(x: targeting.bounds.maxX - 3, y: targeting.bounds.midY), to: root)) !== playfield,
+      "Targeting group background leaked input to gameplay")
     try check(root.hitTest(backpacks.convert(CGPoint(x: backpacks.bounds.midX, y: backpacks.bounds.midY), to: root)) === backpacks,
       "Backpack toggle has the wrong input target")
     func click(_ point: CGPoint, in view: NSView, releaseAt: CGPoint? = nil) {
@@ -1205,8 +1304,50 @@ extension AppDelegate {
     let reopenedBackpacks = descendants(root).compactMap { $0 as? NSButton }.first { $0.title == "Show skill backpacks" }
     try check(reopenedBackpacks?.state == .off && !reopened.current.showClassicSkillBackpacks,
       "Backpack opt-out did not survive save and reopen")
+    let videoTab = descendants(root).compactMap { $0 as? GameTabButton }.first { $0.title == "Video" }!
+    videoTab.performClick(nil)
+    root.layoutSubtreeIfNeeded()
+    guard let screen = descendants(root).compactMap({ $0 as? GamePopUpButton }).first(where: { $0.accessibilityLabel() == "Screen" }) else {
+      throw IntegrationFailure(message: "Screen setting lacks its accessible name")
+    }
+    let tubeControls = descendants(root).compactMap { $0 as? GameSlider }.filter {
+      ["Tube Strength", "Pixel Width"].contains($0.accessibilityLabel() ?? "")
+    }
+    let tubeLabels = descendants(root).compactMap { $0 as? GameLabel }.filter {
+      ["Tube Strength", "Pixel Width"].contains($0.stringValue)
+    }
+    try check(tubeControls.count == 2 && tubeLabels.count == 2, "Tube options are missing")
+    let tubeValues = tubeControls.map(\.doubleValue)
+    for mode: ClassicDisplayMode in [.flat, .monitor, .television, .flat] {
+      try check(screen.accessibilityPerformPress(), "Screen choices did not open")
+      root.layoutSubtreeIfNeeded()
+      let choice = descendants(root).compactMap { $0 as? GameActionButton }.first { $0.title == mode.displayName }!
+      window.makeFirstResponder(choice)
+      let enter = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+        windowNumber: window.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r",
+        isARepeat: false, keyCode: 36)!
+      try check(GameScreen.shared.handleDialogKey(enter), "Screen choice ignored Return")
+      root.layoutSubtreeIfNeeded()
+      try check(reopened.current.display == mode && tubeControls.allSatisfy { $0.isEnabled == (mode != .flat) }
+        && tubeLabels.allSatisfy { $0.isEnabled == (mode != .flat) }, "Tube availability did not follow Screen")
+      try check(tubeControls.map(\.doubleValue) == tubeValues, "Switching Screen reset tube values")
+      for slider in tubeControls {
+        try check(slider.acceptsFirstResponder == (mode != .flat), "Disabled tube slider remains keyboard focusable")
+        try check(root.hitTest(slider.convert(CGPoint(x: slider.bounds.midX, y: slider.bounds.midY), to: root)) === slider,
+          "Tube slider has the wrong input target")
+        if mode == .flat {
+          click(CGPoint(x: slider.bounds.width * 0.2, y: slider.bounds.midY), in: slider)
+          try check(tubeControls.map(\.doubleValue) == tubeValues, "Disabled tube slider accepted a click")
+        }
+      }
+      try capturePreset("video-" + String(describing: mode))
+    }
+    reopened.videoIsConnected = false
+    try check(!screen.isEnabled && tubeControls.allSatisfy { !$0.isEnabled }, "Disconnected video left controls available")
+    reopened.videoIsConnected = true
+    try check(screen.isEnabled && tubeControls.allSatisfy { !$0.isEnabled }, "Reconnecting Flat Panel enabled tube controls")
     GameScreen.shared.dismissAll()
-    print("PASS Original/Modern/Custom presets, checkbox targets, keyboard selection, persistence and rendered states")
+    print("PASS grouped targeting, Original/Modern/Custom presets, Flat/tube availability, mouse/keyboard targets, persistence and rendered states")
     window.makeFirstResponder(playfield)
     for (key, code) in [(" ", UInt16(49)), ("p", UInt16(35))] {
       func send(_ type: NSEvent.EventType, repeatKey: Bool = false) {
@@ -4856,7 +4997,9 @@ extension AppDelegate {
         scroll.contentView.scroll(to: CGPoint(x: 0, y: y)); scroll.reflectScrolledClipView(scroll.contentView)
         try check(abs(scroll.contentView.bounds.minY - y) < 1, "Release notes cannot reach " + name)
         let bitmap = page.bitmapImageRepForCachingDisplay(in: page.bounds)!
-        page.cacheDisplay(in: page.bounds, to: bitmap)
+        func invalidate(_ view: NSView) { view.needsDisplay = true; view.subviews.forEach(invalidate) }
+        invalidate(page)
+        page.displayIgnoringOpacity(page.bounds, in: NSGraphicsContext(bitmapImageRep: bitmap)!)
         try bitmap.representation(using: .png, properties: [:])!.write(
           to: folder.appendingPathComponent("\(Int(size.width))-\(name).png"))
         let hit = page.hitTest(CGPoint(x: actionRect.midX, y: actionRect.midY))
@@ -6370,7 +6513,7 @@ Task { @MainActor in
     subject.prepareArcadeTests()
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
-    #if !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
+    #if !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -6549,6 +6692,10 @@ Task { @MainActor in
     try subject.testClassicLevelPickerUnlockGate()
     try await testContentBrowser()
     print("Content browser integration tests passed.")
+    #elseif NUKE_TESTS
+    try subject.testEarlyNukeEndsLevel()
+    try subject.testNeoNukeMusic()
+    print("Nuke music integration tests passed.")
     #elseif MUSIC_TESTS
     try subject.testMusicTransitions()
     try subject.testHandoverMusicRouting()

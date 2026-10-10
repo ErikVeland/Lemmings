@@ -155,46 +155,74 @@ extension Lemmings2PlayWindow {
         defer { stop() }
         timer?.invalidate(); timer = nil
         audioSettings.music = .silent
-        canvas.hdEffectsEnabled = true
         prepareBriefing()
         for tribe in [0, 1] {
-            let width = 512, height = 160
-            let solid = (0..<(width * height)).map { $0 / width >= 80 }
-            var fixture = try Lemmings2Runtime(configuration: .init(
-                width: width, height: height, pixels: solid.map { $0 ? 1 : 0 }, solid: solid,
-                palette: [UInt8](repeating: 0, count: 1024),
-                entrance: .init(x: 100, y: 40, width: 1, height: 1),
-                exits: [.init(x: 500, y: 60, width: 5, height: 20)],
-                skills: [.digger, .climber, .builder, .basher, .miner, .floater, .bomber, .blocker],
-                supplies: [Int](repeating: 10, count: 8), total: 3, timeLimit: 300,
-                releaseInterval: 2, terrainMasks: masks, firstReleaseTick: 1, tribe: tribe))
-            for _ in 0..<20 { fixture.step() }
-            try checkUI(fixture.lemmings.filter(\.active).count == 3, "L2 nuke fixture needs three live lemmings")
-            _ = fixture.drainSoundEvents()
-            fixture.nuke(); game = fixture; screen = .playing; nukeMood.reset(); refreshGame()
-            var pops = 0
-            for index in 1...200 {
-                fixture.step()
-                pops += fixture.drainSoundEvents().filter { $0.sample == Lemmings2SoundCue.explode.rawValue }.count
-                game = fixture; refreshGame()
-                if pops == 3 { break }
-                if index >= 75 {
-                    nukeMood.advanceReturn(at: ProcessInfo.processInfo.systemUptime + 0.14)
-                    try checkUI(nukeMood.amount == 1, "L2 opened its filter before the final audible pop in tribe \(tribe)")
+            for hd in [true, false] {
+                canvas.hdEffectsEnabled = hd
+                failureMusic.update(failed: false, isNuking: false, allPopped: false, now: -5)
+                failureMusic.advance(at: -1)
+                failureMood.set(active: false, now: -5)
+                failureMood.advance(at: -1)
+                let width = 512, height = 160
+                let solid = (0..<(width * height)).map { $0 / width >= 80 }
+                var fixture = try Lemmings2Runtime(configuration: .init(
+                    width: width, height: height, pixels: solid.map { $0 ? 1 : 0 }, solid: solid,
+                    palette: [UInt8](repeating: 0, count: 1024),
+                    entrance: .init(x: 100, y: 40, width: 1, height: 1),
+                    exits: [.init(x: 500, y: 60, width: 5, height: 20)],
+                    skills: [.digger, .climber, .builder, .basher, .miner, .floater, .bomber, .blocker],
+                    supplies: [Int](repeating: 10, count: 8), total: 3, timeLimit: 300,
+                    releaseInterval: 2, terrainMasks: masks, firstReleaseTick: 1, tribe: tribe))
+                for _ in 0..<20 { fixture.step() }
+                try checkUI(fixture.lemmings.filter(\.active).count == 3, "L2 nuke fixture needs three live lemmings")
+                _ = fixture.drainSoundEvents()
+                fixture.nuke(); game = fixture; screen = .playing; nukeMood.reset(); refreshGame(at: 0)
+                failureMusic.advance(at: 0.9)
+                try checkUI(failureMusic.rate == 1, "L2 nuke slowed music before countdown one")
+                var pops = 0, lastPopTime = 0.0, reachedOne = false
+                for index in 1...200 {
+                    fixture.step()
+                    pops += fixture.drainSoundEvents().filter { $0.sample == Lemmings2SoundCue.explode.rawValue }.count
+                    let now = Double(index) / 17
+                    failureMusic.advance(at: now)
+                    game = fixture; refreshGame(at: now)
+                    if !reachedOne, let ticks = fixture.lemmings.compactMap(\.bombTicks).min() {
+                        if ticks > 15 {
+                            try checkUI(failureMusic.rate == 1, "L2 slowed music before countdown one")
+                        } else {
+                            reachedOne = true
+                            try checkUI(failureMusic.rate == 1, "L2 countdown one jumped to funeral speed")
+                            failureMusic.advance(at: now + 0.03)
+                            try checkUI(failureMusic.rate < 1, "L2 2-to-1 countdown did not start the slowdown")
+                            failureMood.advance(at: now + 0.9)
+                            try checkUI(failureMood.amount == 0, "L2 nuke slowdown desaturated a recoverable run")
+                        }
+                    }
+                    if pops == 3 { lastPopTime = now; break }
+                    if hd && index >= 75 {
+                        nukeMood.advanceReturn(at: now + 0.14)
+                        try checkUI(nukeMood.amount == 1, "L2 opened its filter before the final audible pop in tribe \(tribe)")
+                    }
                 }
+                try checkUI(reachedOne && pops == 3, "L2 nuke fixture did not produce three pops in tribe \(tribe)")
+                if tribe == 0 {
+                    try checkUI(!fixture.isComplete, "L2 discarded its explosion tails")
+                }
+                let returnRate = failureMusic.rate
+                nukeMood.advanceReturn(at: lastPopTime + NukeMusicSweep.returnDuration / 2)
+                failureMusic.advance(at: lastPopTime + NukeMusicSweep.returnDuration / 2)
+                try checkUI(returnRate < 1 && abs(failureMusic.rate - (1 + returnRate) / 2) < 0.0001,
+                    "L2 did not spin up after the final pop")
+                try checkUI(abs(nukeMood.amount - (hd ? 0.5 : 0)) < 0.0001, "L2 did not open its filter after the last pop")
+                show(.results)
+                try checkUI(!hd || nukeMood.amount > 0, "L2 results cut the return sweep short")
+                refreshGame(at: lastPopTime + NukeMusicSweep.returnDuration)
+                failureMusic.advance(at: lastPopTime + NukeMusicSweep.returnDuration)
+                try checkUI(abs(failureMusic.rate - 1) < 0.0001, "L2 results stalled the tempo return")
+                try checkUI(nukeMood.amount == 0, "L2 return sweep stalled after simulation stopped")
             }
-            try checkUI(pops == 3, "L2 nuke fixture did not produce three pops in tribe \(tribe)")
-            if tribe == 0 {
-                try checkUI(!fixture.isComplete, "L2 discarded its explosion tails")
-            }
-            nukeMood.advanceReturn(at: ProcessInfo.processInfo.systemUptime + 0.14)
-            try checkUI((0.4...0.6).contains(nukeMood.amount), "L2 did not open its filter after the last pop")
-            show(.results)
-            try checkUI(nukeMood.amount > 0, "L2 results cut the return sweep short")
-            nukeMood.advanceReturn(at: ProcessInfo.processInfo.systemUptime + 0.3)
-            try checkUI(nukeMood.amount == 0, "L2 return sweep stalled after simulation stopped")
         }
-        print("PASS L2 waits for three audible nuke pops in Classic and non-Classic tribes, then restores through tails and results")
+        print("PASS L2 2-to-1 nuke slowdown, separate saturation and final-pop recovery in Classic and non-Classic tribes, HD on and off")
     }
 
     @MainActor fileprivate func checkMusicPause() throws {

@@ -25,7 +25,7 @@ enum Lemmings3Targeting {
   static func nearest(
     among candidates: [Lemmings3TargetCandidate], x: Int, y: Int,
     selected: Int, favorApproaching: Bool, favorBombBlockers: Bool = false, favorBuilders: Bool = false,
-    manualCarrierID: Int? = nil
+    manualCarrierID: Int? = nil, terrainIsSolid: ((Int, Int) -> Bool)? = nil
   ) -> Lemmings3TargetCandidate? {
     let nearby = nearbyCandidates(among: candidates, x: x, y: y)
     func distance(_ c: Lemmings3TargetCandidate) -> Int { abs(c.x - x) + abs(c.y - 8 - y) }
@@ -59,16 +59,24 @@ enum Lemmings3Targeting {
        }) {
       return follower
     }
-    guard favorApproaching, (x - nearest.x) * nearest.direction < 0 else { return nearest }
-    let approaching = nearby.filter {
-      (x - $0.x) * $0.direction >= 0 && $0.direction != nearest.direction
+    guard favorApproaching else { return nearest }
+    let wallDirection = terrainIsSolid.flatMap {
+      LemmingApproachTargeting.wallDirection(x: nearest.x, footY: nearest.y, isSolid: $0)
+    }
+    func approaching(_ lemming: Lemmings3TargetCandidate) -> Bool {
+      LemmingApproachTargeting.isApproaching(x: lemming.x, direction: lemming.direction,
+        clickX: Double(x), wallDirection: wallDirection)
+    }
+    guard !approaching(nearest) else { return nearest }
+    let preferred = nearby.filter {
+      approaching($0) && $0.direction != nearest.direction
         && $0.canAssignSelected == nearest.canAssignSelected
         && (selected < 3 || ($0.tool == nil) == (nearest.tool == nil))
     }.min { a, b in
       let da = distance(a), db = distance(b)
       return da == db ? a.id < b.id : da < db
     }
-    return approaching ?? nearest
+    return preferred ?? nearest
   }
 
   /// Selects a tool carrier for the original right-click interaction.
@@ -122,7 +130,7 @@ extension Lemmings3Runtime {
         }
         return Lemmings3Targeting.nearest(among: candidates, x: x, y: y, selected: selected,
             favorApproaching: favorApproaching, favorBombBlockers: favorBombBlockers, favorBuilders: favorBuilders,
-            manualCarrierID: manualCarrierID)
+            manualCarrierID: manualCarrierID, terrainIsSolid: isSolid)
     }
 
     func carrier(x: Int, y: Int, after currentID: Int?) -> Lemmings3TargetCandidate? {
