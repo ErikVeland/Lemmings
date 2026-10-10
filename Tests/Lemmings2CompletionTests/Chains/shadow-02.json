@@ -1,0 +1,473 @@
+{
+  "events" : [
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 0
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 46
+        }
+      },
+      "tick" : 98
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 61,
+          "y" : 43
+        }
+      },
+      "tick" : 99
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 62,
+          "y" : 43
+        }
+      },
+      "tick" : 100
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 63,
+          "y" : 43
+        }
+      },
+      "tick" : 101
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 65,
+          "y" : 43
+        }
+      },
+      "tick" : 102
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 67,
+          "y" : 43
+        }
+      },
+      "tick" : 103
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 85,
+          "y" : 28
+        }
+      },
+      "tick" : 104
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 87,
+          "y" : 28
+        }
+      },
+      "tick" : 105
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 29
+        }
+      },
+      "tick" : 106
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 91,
+          "y" : 31
+        }
+      },
+      "tick" : 107
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 91,
+          "y" : 33
+        }
+      },
+      "tick" : 108
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 91,
+          "y" : 35
+        }
+      },
+      "tick" : 109
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 92,
+          "y" : 38
+        }
+      },
+      "tick" : 110
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 92,
+          "y" : 41
+        }
+      },
+      "tick" : 111
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 44
+        }
+      },
+      "tick" : 112
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 89,
+          "y" : 47
+        }
+      },
+      "tick" : 113
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 88,
+          "y" : 50
+        }
+      },
+      "tick" : 114
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 86,
+          "y" : 53
+        }
+      },
+      "tick" : 115
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 86,
+          "y" : 56
+        }
+      },
+      "tick" : 116
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 86,
+          "y" : 59
+        }
+      },
+      "tick" : 117
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 86,
+          "y" : 62
+        }
+      },
+      "tick" : 118
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 86,
+          "y" : 65
+        }
+      },
+      "tick" : 119
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 86,
+          "y" : 68
+        }
+      },
+      "tick" : 120
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 86,
+          "y" : 71
+        }
+      },
+      "tick" : 121
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 102,
+          "y" : 88
+        }
+      },
+      "tick" : 122
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 102,
+          "y" : 91
+        }
+      },
+      "tick" : 123
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 101,
+          "y" : 94
+        }
+      },
+      "tick" : 124
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 99,
+          "y" : 96
+        }
+      },
+      "tick" : 125
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 97,
+          "y" : 98
+        }
+      },
+      "tick" : 126
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 93,
+          "y" : 99
+        }
+      },
+      "tick" : 127
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 100
+        }
+      },
+      "tick" : 128
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 87,
+          "y" : 101
+        }
+      },
+      "tick" : 129
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 82,
+          "y" : 103
+        }
+      },
+      "tick" : 130
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 69,
+          "y" : 79
+        }
+      },
+      "tick" : 131
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 64,
+          "y" : 79
+        }
+      },
+      "tick" : 132
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 61,
+          "y" : 80
+        }
+      },
+      "tick" : 133
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 59,
+          "y" : 81
+        }
+      },
+      "tick" : 134
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 59,
+          "y" : 83
+        }
+      },
+      "tick" : 135
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 59,
+          "y" : 85
+        }
+      },
+      "tick" : 136
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 59,
+          "y" : 87
+        }
+      },
+      "tick" : 137
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 59,
+          "y" : 90
+        }
+      },
+      "tick" : 138
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 17
+        }
+      },
+      "tick" : 150
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 7
+        }
+      },
+      "tick" : 220
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 29
+        }
+      },
+      "tick" : 288
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 20
+        }
+      },
+      "tick" : 382
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 28
+        }
+      },
+      "tick" : 822
+    }
+  ],
+  "expectedSaved" : 1,
+  "expectedTicks" : 1283,
+  "levelSHA256" : "12e6e9496d1e6e37f11d49e7cac47251527d54fd7e47d75ed67abf6747544455",
+  "population" : 1,
+  "version" : 2
+}

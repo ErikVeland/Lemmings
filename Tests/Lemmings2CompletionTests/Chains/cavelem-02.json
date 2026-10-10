@@ -114,9 +114,9 @@
       "tick" : 1559
     }
   ],
-  "expectedSaved" : 30,
+  "expectedSaved" : 32,
   "expectedTicks" : 2199,
   "levelSHA256" : "1c6a1bfc6981e4e1d8cfcd2f4f5314a74cf34710a15ffce5fb32a71d7bc9bcfb",
-  "population" : 47,
+  "population" : 52,
   "version" : 2
 }

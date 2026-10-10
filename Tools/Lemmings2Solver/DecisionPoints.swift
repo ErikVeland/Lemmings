@@ -2,15 +2,17 @@ import NxlvKit
 
 /// Why the solver may branch at the current tick.
 enum DecisionTrigger: String, Sendable, Equatable {
-    case wallAhead, edgeAhead, fallStart, turn, fallback
+    case chainRiding, wallAhead, edgeAhead, fallStart, turn, fanControl, fallback
 
     /// Lower values come first when several lemmings fire on one tick.
     var priority: Int {
         switch self {
+        case .chainRiding: return 0
         case .wallAhead: return 0
         case .edgeAhead: return 1
         case .fallStart: return 2
         case .turn: return 3
+        case .fanControl: return 3
         case .fallback: return 4
         }
     }
@@ -77,6 +79,16 @@ struct DecisionDetector: Sendable {
     private var lastFired: [String: Int] = [:]
     private var lastDecisionTick = 0
 
+    private func acceptsFan(_ state: Lemmings2Runtime.State) -> Bool {
+        switch state {
+        case .carpetFlying, .surfing, .twisting, .jetPacking, .flyingIcarus,
+             .hangGliding, .ballooning, .parachuting:
+            return true
+        default:
+            return false
+        }
+    }
+
     init(cell: Int = 8, refire: Int = 150, fallback: Int = 150) {
         self.cell = cell
         self.refire = refire
@@ -98,6 +110,13 @@ struct DecisionDetector: Sendable {
             let previousState = lastState[lemming.id]
             lastDirection[lemming.id] = lemming.direction
             lastState[lemming.id] = lemming.state
+            if lemming.state == .chainRiding,
+               claim(.chainRiding, lemming, tick: observation.tick) {
+                fired.append((.chainRiding, lemming.id))
+            }
+            if acceptsFan(lemming.state), claim(.fanControl, lemming, tick: observation.tick) {
+                fired.append((.fanControl, lemming.id))
+            }
             if previousState == .walking && lemming.state == .falling,
                claim(.fallStart, lemming, tick: observation.tick) {
                 fired.append((.fallStart, lemming.id))

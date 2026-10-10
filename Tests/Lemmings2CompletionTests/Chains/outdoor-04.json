@@ -1,0 +1,18 @@
+{
+  "events" : [
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 11
+        }
+      },
+      "tick" : 104
+    }
+  ],
+  "expectedSaved" : 1,
+  "expectedTicks" : 255,
+  "levelSHA256" : "ef251a14bb922a1bf105c47637a5a8e6e532050a40d2a8254e0851409f388b5c",
+  "population" : 1,
+  "version" : 2
+}

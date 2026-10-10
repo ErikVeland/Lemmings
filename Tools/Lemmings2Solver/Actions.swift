@@ -9,6 +9,8 @@ enum SolverAction: Sendable, Hashable {
     case retime(index: Int, tick: Int)
     case retarget(index: Int, lemming: Int)
     case drop(index: Int)
+    case fan(x: Int, y: Int, active: Bool)
+    case releaseChain(x: Int, y: Int)
 }
 
 /// Pointer limits that the replay witness accepts.
@@ -62,6 +64,38 @@ func actions(in game: Lemmings2Runtime, candidates: [Int], bounds: AimBounds,
             }
         }
     }
+    let lastFan = events[..<min(next, events.count)].last {
+        if case .fan = $0.event { return true }
+        return false
+    }
+    let heldFan: (x: Int, y: Int)?
+    if let lastFan, case let .fan(x, y, true) = lastFan.event { heldFan = (x, y) }
+    else { heldFan = nil }
+    if heldFan != nil { add(.fan(x: 0, y: 0, active: false)) }
+    let fanOffsets = [(-64, 0), (64, 0), (0, -64), (0, 64)]
+    for id in candidates {
+        guard let lemming = game.lemmings.first(where: { $0.id == id }),
+              [.carpetFlying, .surfing, .twisting, .jetPacking, .flyingIcarus,
+               .hangGliding, .ballooning, .parachuting].contains(lemming.state) else { continue }
+        for (dx, dy) in fanOffsets {
+            let point = bounds.clamp(x: lemming.x + dx, y: lemming.y + dy)
+            if heldFan?.x != point.x || heldFan?.y != point.y {
+                add(.fan(x: point.x, y: point.y, active: true))
+            }
+        }
+    }
+    for chain in game.chains {
+        let point = bounds.clamp(x: chain.x + 1, y: chain.y - 38)
+        if heldFan?.x != point.x || heldFan?.y != point.y {
+            add(.fan(x: point.x, y: point.y, active: true))
+        }
+        guard game.lemmings.contains(where: { $0.active && $0.state == .chainRiding && $0.chainID == chain.id }) else { continue }
+        for control in chain.controls {
+            let x = control.x + control.width / 2
+            let y = control.y + control.height / 2
+            add(.releaseChain(x: x, y: y))
+        }
+    }
     let pendingAssign = events.indices.dropFirst(next).first { index in
         if case .assign = events[index].event { return true }
         return false
@@ -86,6 +120,10 @@ func events(for action: SolverAction, tick: Int, skills: [Lemmings2Runtime.Skill
         return [.init(tick: tick, event: .aim(x: x, y: y, held: true)),
                 .init(tick: tick, event: .fan(x: x, y: y, active: false)),
                 .init(tick: tick, event: .assign(skill: skills[slot].rawValue, lemming: lemming))]
+    case let .fan(x, y, active):
+        return [.init(tick: tick, event: .fan(x: x, y: y, active: active))]
+    case let .releaseChain(x, y):
+        return [.init(tick: tick, event: .chain(x: x, y: y))]
     case .wait, .retime, .retarget, .drop:
         return []
     }
@@ -115,5 +153,8 @@ func apply(_ action: SolverAction, to candidate: inout Candidate) {
         }
     case let .drop(index):
         candidate.events.remove(at: index)
+    case .fan, .releaseChain:
+        candidate.events.insert(contentsOf: events(for: action, tick: candidate.game.tick,
+                                                   skills: candidate.game.configuration.skills), at: next)
     }
 }

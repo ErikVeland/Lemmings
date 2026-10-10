@@ -111,8 +111,21 @@ See [the current campaign closure evidence](ReleaseReadiness/CampaignClosure-202
 
 | Release | Levels | Proven routes | Claim |
 | --- | ---: | ---: | --- |
-| Lemmings 2: The Tribes | 120 | 75 | **Preview** |
-| Lemmings 3: The Chronicles | 90 | 43 | **Preview** |
+| Lemmings 2: The Tribes | 120 | 120 | **Preview** |
+| Lemmings 3: The Chronicles | 90 | 74 | **Preview** |
+
+The strict native L2 gate passes all 120 standalone routes, 70 carry-over variants
+and twelve continuous tribe chains. Every witness reproduces its win twice with
+matching saved counts, ticks and state hashes. These chains finish with one
+lemming. The ark ending requires a golden talisman and at least 30 survivors
+from each tribe, and remains unproved.
+See [L2 completion evidence](Lemmings2Completion/README.md).
+
+The current L3 evidence records 74 of 90 standalone wins, 155 carried fixtures
+replayed twice and 68 linked campaign results. Sixteen standalone routes remain
+missing. The three continuous campaigns with at least 50 survivors, original
+DOS parity and verified endings remain open. See the
+[sequel verification record](ReleaseReadiness/1.8SequelVerification.md).
 
 Both play through their campaigns with original artwork, music and interfaces.
 Lemmings 3 keeps provisional rules in several areas, and its environmental
@@ -148,8 +161,8 @@ release does not imply support for either platform group.
 
 - The `Oh My! ALL Lemmings!` run across the sequel previews remains outside the
   completed 352-level Classic campaign gate.
-- L2 and L3 retain preview status; their 92 missing routes are tracked separately
-  from the Classic 1.0 milestone.
+- L2 and L3 retain preview status. L2 has no missing level routes. L3 retains
+  16 missing routes, tracked separately from the Classic 1.0 milestone.
 - Physical Intel, minimum macOS, HDR, multiple displays and high refresh rates
   are untested. Sustained 10x play is not established.
 - Scalable menus and VoiceOver navigation are implemented. Full VoiceOver

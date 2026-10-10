@@ -2,6 +2,16 @@
 public enum Lemmings2Climbing {
     public enum Contact: Equatable { case climbing, hoisting, falling, hanging }
 
+    /// PROCESS 85d4–85f5 rejects entry when the rear body column is occupied.
+    public static func beginRock(x: inout Int, y: Int, direction: inout Int,
+                                 solid: (Int,Int) -> Bool) -> Bool {
+        guard !(1...7).contains(where:{solid(x-direction,y-$0)}) else {
+            x -= direction; direction = -direction
+            return false
+        }
+        return true
+    }
+
     public static func classic(x: inout Int, y: inout Int, direction: inout Int,
                                phase: Int, solid: (Int,Int) -> Bool) -> Contact {
         let frame = (phase+1)&7

@@ -175,13 +175,26 @@ extension AdaptiveDJPlayer {
     try require(activeDeck?.recordingRepeatsForTest == true,
       "The winning arrangement must keep looping through continued play and results")
   }
+  fileprivate var activeDeckForTest: DJDeck? { activeDeck }
+  fileprivate var openingHoldForTest: Double? { levelOpeningHoldEndSourceSeconds }
+  fileprivate var rescueCueFiredForTest: Bool { !director.fired.isEmpty }
+  fileprivate var resultSuppressedForTest: Bool { suppressResultCue }
+  fileprivate var incomingPlayingForTest: Bool { fadingIn?.isPlaying == true }
+  fileprivate func expireOpeningHoldForTest() {
+    levelOpeningHoldEndSourceSeconds = (activeDeck?.sourceSeconds ?? 0) - 0.01
+  }
   fileprivate func checkTimingRouting(root: URL) throws {
-    guard let grid = timingCatalogue?.variants.first(where: { $0.supportsBarMixing && !$0.path.hasSuffix(".mod") }) else {
+    guard let grid = timingCatalogue?.variants.first(where: {
+      $0.supportsBarMixing && $0.downbeats.count > 16 && !$0.path.hasSuffix(".mod")
+    }) else {
       throw Failure(description: "No analysed recording grid loaded")
     }
     guard let deck = makeDeck(root.appendingPathComponent(grid.path)) else {
       throw Failure(description: "Analysed recording did not load")
     }
+    let openingEnd = openingHoldEnd(for: deck)
+    try require(openingEnd >= 30 && openingEnd >= grid.downbeats[16],
+      "A stable measured bar grid did not protect the opening 16 bars")
     try require(deck.timing?.variantID == grid.variantID && deck.beatInfo != nil, "Recording beat grid did not reach the DJ deck")
     deck.playbackRate = 1.04
     try require(abs((deck.beatInfo?.bpm ?? 0) - grid.baseBPM! * 1.04) < 0.001, "Tempo match lost the analysed base BPM")
@@ -198,6 +211,14 @@ extension AdaptiveDJPlayer {
     try require(stale != nil && stale?.timing == nil, "A changed audio file kept its stale beat grid")
     print("PASS recording grid routing, actual tempo matching and stale-grid rejection")
   }
+  fileprivate func checkModuleEnhancements(url: URL) throws {
+    setEnhancements(.modern)
+    guard let modern = makeDeck(url) else { throw Failure(description: "Modern module did not load") }
+    try require(modern.usesModernModulePresetForTest, "Modern module enhancements did not reach the DJ deck")
+    setEnhancements(.faithful)
+    guard let faithful = makeDeck(url) else { throw Failure(description: "Faithful module did not load") }
+    try require(!faithful.usesModernModulePresetForTest, "Faithful style did not reach the new DJ deck")
+  }
   fileprivate func checkSpeedPitchRouting(recordingURL: URL) throws {
     let cents = 1200 * log2(GameplayMusicPitch.ratio(for: 10))
     let bpm = deckA?.beatInfo?.bpm
@@ -212,6 +233,7 @@ extension AdaptiveDJPlayer {
   }
 }
 extension DJDeck {
+  fileprivate var usesModernModulePresetForTest: Bool { module?.usesModernPreset == true }
   fileprivate func checkMatchedRate() throws {
     try require(abs((recording?.playbackRate ?? 0) - 1.04) < 0.001, "The recording unit clamped an upward tempo match")
   }
@@ -350,6 +372,7 @@ extension AdaptiveDJPlayer {
 
   player.setVolume(0)  // The test makes no noise.
   let assigned = root.appendingPathComponent("lemmings_music_mod/cancan.mod")
+  try player.checkModuleEnhancements(url: assigned)
   let module = try ProTrackerModule(data: Data(contentsOf: assigned))
   var clock = ProTrackerPlayer(module: module)
   try require(clock.secondsUntilNextBeat == 0, "Fresh module did not start on the beat")
@@ -358,16 +381,36 @@ extension AdaptiveDJPlayer {
   for _ in 0..<2205 { _ = clock.nextSample() }
   try require(abs((before - clock.secondsUntilNextBeat) - 0.05) < 0.001,
     "Beat clock did not follow rendered audio time")
-  player.startLevel(url: assigned, identity: "level-one")
+  try require(player.startLevel(url: assigned, identity: "level-one"), "Assigned module did not start")
   try require(player.currentURL == assigned, "Assigned opening track ignored")
   try require(player.isPlaying, "the mix did not start")
+  try require((player.openingHoldForTest ?? 0) - (player.activeDeckForTest?.sourceSeconds ?? 0) >= 29.9,
+    "The selected track did not receive its 30 source-second opening")
   try player.checkSpeedPitchRouting(recordingURL: loopURL)
   let opening = player.currentTrackName
   try require(!opening.isEmpty, "the mix started without naming a track")
   print("  opened on: \(opening)")
 
-  player.startLevel(url: root.appendingPathComponent("lemmings_music_mod/doggie.mod"), identity: "level-one")
+  let initialDeck = player.activeDeckForTest
+  RunLoop.current.run(until: Date().addingTimeInterval(0.12))
+  let initialSource = initialDeck?.sourceSeconds ?? 0
+  let initialHold = player.openingHoldForTest
+  try require(player.startLevel(url: assigned, identity: "same-song-next-level"), "Same tune was rejected")
+  try require(player.activeDeckForTest === initialDeck && !player.isCrossfading
+      && (player.activeDeckForTest?.sourceSeconds ?? 0) >= initialSource
+      && player.openingHoldForTest == initialHold,
+    "A new level restarted its already selected tune or renewed the opening hold")
+  player.startLevel(url: root.appendingPathComponent("lemmings_music_mod/doggie.mod"), identity: "same-song-next-level")
   try require(player.currentURL == assigned, "Repeated level entry replaced the track")
+  let symlinkAlias = FileManager.default.temporaryDirectory.appendingPathComponent("dj-alias-\(UUID().uuidString).mod")
+  try FileManager.default.createSymbolicLink(at: symlinkAlias, withDestinationURL: assigned)
+  defer { try? FileManager.default.removeItem(at: symlinkAlias) }
+  let sourceBeforeAlias = player.activeDeckForTest?.sourceSeconds ?? 0
+  try require(player.startLevel(url: symlinkAlias, identity: "same-song-symlink"), "Symlinked tune was rejected")
+  try require(player.activeDeckForTest === initialDeck && !player.isCrossfading
+      && (player.activeDeckForTest?.sourceSeconds ?? 0) >= sourceBeforeAlias
+      && player.openingHoldForTest == initialHold,
+    "A symlink alias restarted its already playing tune or renewed the opening hold")
 
   // A quiet level must not move the music.
   let quiet = Telemetry(
@@ -384,11 +427,15 @@ extension AdaptiveDJPlayer {
   player.load(soundtracks: soundtracks, catalogueRoot: root)
   try require(player.currentTrackName == opening, "Danger or library refresh changed level music")
 
-  // The rescue target allows one transition. Completion must not repeat it.
+  // The rescue target waits for the selected opening; completion remains one-shot.
   var rescued = quiet
   rescued.savedCount = 5
   player.updateTelemetry(rescued)
-  try require(player.currentURL != assigned, "Quota did not start the next version")
+  try require(player.currentURL == assigned && !player.rescueCueFiredForTest,
+    "A quick rescue cut off the selected tune")
+  player.expireOpeningHoldForTest()
+  player.updateTelemetry(rescued)
+  try require(player.currentURL != assigned, "Quota did not move after the opening hold")
   let celebration = player.currentURL
   let catalogue = SoundtrackCatalogue.load(at: root)!
   let celebrationPath = SoundtrackPlayer.cataloguePath(celebration!, root: root)!
@@ -399,9 +446,75 @@ extension AdaptiveDJPlayer {
   player.updateTelemetry(rescued)
   try require(player.currentURL == celebration, "Completed win repeated the quota transition")
   let nextLevel = root.appendingPathComponent("lemmings_music_mod/doggie.mod")
-  player.startLevel(url: nextLevel, identity: "level-two")
-  RunLoop.current.run(until: Date().addingTimeInterval(1.2))
-  try require(player.currentURL == nextLevel, "Next level did not crossfade to its assigned tune")
+  try require(player.startLevel(url: nextLevel, identity: "level-two"), "Next level module did not load")
+  try require(player.currentURL == nextLevel && player.incomingPlayingForTest && player.isCrossfading,
+    "The next selected tune waited for a beat or bar before starting")
+
+  // Keep this player's fade at level entry while the separate rapid-mix
+  // fixture runs; its assertions below still inspect a live transition.
+  player.suspendOutput()
+  let rapid = AdaptiveDJPlayer()
+  rapid.load(soundtracks: soundtracks, catalogueRoot: root)
+  rapid.setVolume(0)
+  try require(rapid.startLevel(url: assigned, identity: "rapid-one"), "Rapid mix could not start")
+  let originalDeck = rapid.activeDeckForTest
+  let originalHold = rapid.openingHoldForTest
+  try require(rapid.startLevel(url: nextLevel, identity: "rapid-two"), "Rapid mix could not change tune")
+  let arrivingDeck = rapid.activeDeckForTest
+  try require(rapid.startLevel(url: nextLevel, identity: "rapid-three"), "Arriving tune was rejected")
+  try require(rapid.activeDeckForTest === arrivingDeck && rapid.playingDeckCount == 2
+      && rapid.isCrossfading, "Selecting the arriving tune cut off its current mix")
+  try require(rapid.startLevel(url: assigned, identity: "rapid-four"), "Outgoing tune was rejected")
+  try require(rapid.activeDeckForTest === originalDeck && rapid.playingDeckCount == 2
+      && rapid.isCrossfading && rapid.openingHoldForTest == originalHold,
+    "Selecting the outgoing tune restarted it, cut the mix or renewed its opening hold")
+  RunLoop.current.run(until: Date().addingTimeInterval(2.9))
+  try require(rapid.currentURL == assigned && rapid.playingDeckCount == 1,
+    "Reversed mix did not settle on the already playing tune")
+  rapid.stop()
+
+  let triple = AdaptiveDJPlayer()
+  triple.load(soundtracks: soundtracks, catalogueRoot: root)
+  triple.setVolume(0)
+  let thirdLevel = root.appendingPathComponent("lemmings_music_mod/lemming1.mod")
+  try require(triple.startLevel(url: assigned, identity: "triple-one"), "Three-way mix could not start")
+  let firstDeck = triple.activeDeckForTest
+  try require(triple.startLevel(url: nextLevel, identity: "triple-two"), "Three-way mix could not start its second tune")
+  let secondDeck = triple.activeDeckForTest
+  RunLoop.current.run(until: Date().addingTimeInterval(0.4))
+  let firstGain = firstDeck?.mixGain ?? 0
+  let secondGain = secondDeck?.mixGain ?? 0
+  try require(firstGain > 0.1 && secondGain > 0.1, "The initial mix lacked two audible tracks")
+  try require(triple.startLevel(url: thirdLevel, identity: "triple-three"), "Third tune was rejected")
+  try require(triple.currentURL == thirdLevel && triple.playingDeckCount == 3
+      && firstDeck?.isPlaying == true && secondDeck?.isPlaying == true
+      && (firstDeck?.mixGain ?? 0) > 0 && (secondDeck?.mixGain ?? 0) > 0,
+    "A third level cut one of the two audible outgoing tracks")
+  let invalidThird = FileManager.default.temporaryDirectory.appendingPathComponent("invalid-third-\(UUID().uuidString).mod")
+  try Data("Not a module".utf8).write(to: invalidThird)
+  defer { try? FileManager.default.removeItem(at: invalidThird) }
+  try require(!triple.startLevel(url: invalidThird, identity: "triple-invalid")
+      && triple.currentURL == thirdLevel && triple.playingDeckCount == 3,
+    "A failed incoming decoder disturbed the audible composite mix")
+  triple.suspendOutput()
+  try require(triple.playingDeckCount == 0, "Three-way mix left a deck audible while suspended")
+  RunLoop.current.run(until: Date().addingTimeInterval(0.4))
+  triple.resumeOutput()
+  try require(triple.playingDeckCount == 3, "Three-way mix did not resume every deck")
+  RunLoop.current.run(until: Date().addingTimeInterval(0.4))
+  let fourthLevel = root.appendingPathComponent("lemmings_music_mod/lemming2.mod")
+  try require(triple.startLevel(url: fourthLevel, identity: "triple-four"), "Fourth tune was rejected")
+  try require(triple.playingDeckCount == 4, "A rapid fourth selection cut an audible outgoing deck")
+  RunLoop.current.run(until: Date().addingTimeInterval(2.0))
+  try require(firstDeck?.isPlaying == false && triple.isCrossfading,
+    "A later selection renewed the first outgoing deck beyond its own fade deadline")
+  RunLoop.current.run(until: Date().addingTimeInterval(0.9))
+  try require(triple.currentURL == fourthLevel && triple.playingDeckCount == 1
+      && firstDeck?.isPlaying == false && secondDeck?.isPlaying == false,
+    "The composite mix did not retire its outgoing tracks")
+  triple.stop()
+  try require(triple.playingDeckCount == 0, "Stop left a three-way mix deck playing")
+  player.resumeOutput()
 
   // And it moves once, not on every frame that follows.
   let afterCue = player.currentTrackName
@@ -414,12 +527,12 @@ extension AdaptiveDJPlayer {
     player.currentTrackName == afterCue,
     "the mix kept moving after the cue, ending on \(player.currentTrackName)")
 
-  // Both decks run during a crossfade, and the old one is retired after it.
+  // Every audible outgoing deck stays in the mix until the fade retires it.
   try require(player.isPlaying, "the mix stopped during the crossfade")
-  try require(player.playingDeckCount == 2, "both decks were not audible mid-crossfade")
+  try require(player.playingDeckCount >= 2, "the outgoing mix was cut at level entry")
   let crossfadingTrack = player.currentTrackName
 
-  // Suspending silences both decks. Resume replans against the current bar grid.
+  // Suspending silences both decks. The level-entry fade resumes without a beat wait.
   player.suspendOutput()
   try require(player.playingDeckCount == 0, "suspending output did not pause both fading decks")
 
@@ -434,7 +547,7 @@ extension AdaptiveDJPlayer {
 
   player.resumeOutput()
   try require(
-    player.isCrossfading && (1...2).contains(player.playingDeckCount) && player.currentTrackName == crossfadingTrack,
+    player.isCrossfading && (1...3).contains(player.playingDeckCount) && player.currentTrackName == crossfadingTrack,
     "resuming did not continue the original crossfade cleanly - a stray start() call left "
       + "\(player.playingDeckCount) deck(s) playing on \"\(player.currentTrackName)\" instead")
 
@@ -442,12 +555,29 @@ extension AdaptiveDJPlayer {
   player.startLevel(url: assigned, identity: "retry")
   try require(player.playingDeckCount == 0, "New level bypassed suspension")
   player.resumeOutput()
-  RunLoop.current.run(until: Date().addingTimeInterval(4.5))
+  RunLoop.current.run(until: Date().addingTimeInterval(2.9))
   try require(player.currentURL == assigned && player.playingDeckCount == 1, "Retry did not finish on the assigned single deck")
   player.updateTelemetry(.init(didWin: false, isComplete: true))
   try require(player.currentURL == assigned, "No failure theme should substitute an arbitrary tune")
+  player.updateTelemetry(.init(savedCount: 5, requiredCount: 5, didWin: true, isComplete: true))
+  try require(player.currentURL == assigned && player.resultSuppressedForTest,
+    "An early completed level cut off its selected track")
+  player.expireOpeningHoldForTest()
+  player.updateTelemetry(.init(savedCount: 5, requiredCount: 5, didWin: true, isComplete: true))
+  try require(player.currentURL == assigned, "Results triggered a delayed rescue cue")
+  try require(player.startLevel(url: assigned, identity: "same-song-after-result"), "Same tune was rejected after results")
+  try require(!player.resultSuppressedForTest, "A new level kept the previous result suppression")
+  player.expireOpeningHoldForTest()
+  player.updateTelemetry(rescued)
+  try require(player.currentURL != assigned, "New level did not restore its one-shot rescue cue")
   player.stop()
   try require(!player.isPlaying, "the mix kept playing after stop")
+  let invalid = FileManager.default.temporaryDirectory.appendingPathComponent("invalid-dj-\(UUID().uuidString).mod")
+  try Data("Not a module".utf8).write(to: invalid)
+  defer { try? FileManager.default.removeItem(at: invalid) }
+  try require(!player.startJourney(trackID: "missing", cycle: 0, identity: "invalid-module", fallback: invalid)
+      && player.currentURL == nil,
+    "A readable corrupt module suppressed the caller's fallback")
   for (trackID, modulePath) in [
     ("lemmings2.medieval", "lemmings_2_music_mod_tsyu/medieval.mod"),
     ("lemmings3.classic1", "lemmings_3_music_mod_tsyu/CLASSIC1.mod")

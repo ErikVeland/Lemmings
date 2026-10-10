@@ -25,7 +25,7 @@
     {
       "lemming" : 0,
       "skill" : 51,
-      "tick" : 337
+      "tick" : 336
     },
     {
       "lemming" : 1,
@@ -65,12 +65,12 @@
     {
       "lemming" : 12,
       "skill" : 21,
-      "tick" : 1277
+      "tick" : 1271
     },
     {
       "lemming" : 12,
       "skill" : 19,
-      "tick" : 1279
+      "tick" : 1273
     },
     {
       "lemming" : 9,
@@ -85,7 +85,7 @@
     {
       "lemming" : 12,
       "skill" : 20,
-      "tick" : 1391
+      "tick" : 1401
     },
     {
       "lemming" : 9,

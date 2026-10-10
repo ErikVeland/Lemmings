@@ -39298,73 +39298,10 @@
         }
       },
       "tick" : 1956
-    },
-    {
-      "event" : {
-        "assign" : {
-          "lemming" : 43,
-          "skill" : 31
-        }
-      },
-      "tick" : 4117
-    },
-    {
-      "event" : {
-        "assign" : {
-          "lemming" : 43,
-          "skill" : 31
-        }
-      },
-      "tick" : 4134
-    },
-    {
-      "event" : {
-        "assign" : {
-          "lemming" : 43,
-          "skill" : 31
-        }
-      },
-      "tick" : 4154
-    },
-    {
-      "event" : {
-        "assign" : {
-          "lemming" : 43,
-          "skill" : 31
-        }
-      },
-      "tick" : 4170
-    },
-    {
-      "event" : {
-        "assign" : {
-          "lemming" : 43,
-          "skill" : 31
-        }
-      },
-      "tick" : 4186
-    },
-    {
-      "event" : {
-        "assign" : {
-          "lemming" : 43,
-          "skill" : 49
-        }
-      },
-      "tick" : 4203
-    },
-    {
-      "event" : {
-        "assign" : {
-          "lemming" : 43,
-          "skill" : 31
-        }
-      },
-      "tick" : 4356
     }
   ],
   "expectedSaved" : 59,
-  "expectedTicks" : 4491,
+  "expectedTicks" : 2033,
   "levelSHA256" : "72332f8e6f2a920a1648b541483901c04df60328614a560286758a37c7a79646",
   "population" : 60,
   "version" : 2

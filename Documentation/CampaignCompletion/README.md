@@ -1,6 +1,6 @@
 # Additional campaign completion evidence
 
-The manifest holds 275 fixed-input winning replays. These supplement the original
+The manifest holds 306 fixed-input winning replays. These supplement the original
 [120-level DOS gate](../ClassicCompletion/README.md) and the existing L2 tests.
 
 | Campaign | Winning replays | Levels without a fixture |
@@ -11,7 +11,7 @@ The manifest holds 275 fixed-input winning replays. These supplement the origina
 | Holiday 1993 | 32/32 | 0 |
 | Holiday 1994 | 32/32 | 0 |
 | Oh Yes! conversions | 60/60 | 0 |
-| Lemmings 3 | 43/90 | 47 |
+| Lemmings 3 | 74/90 | 16 |
 
 These counts come from the committed [fixture manifest](evidence.json).
 To confirm them, run `python3 Tools/CampaignCompletion/report.py --check`.

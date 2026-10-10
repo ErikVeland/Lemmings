@@ -1,0 +1,164 @@
+{
+  "events" : [
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 173,
+          "y" : 48
+        }
+      },
+      "tick" : 83
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 173,
+          "y" : 48
+        }
+      },
+      "tick" : 83
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 83
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 45
+        }
+      },
+      "tick" : 83
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 174
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 26
+        }
+      },
+      "tick" : 174
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 239,
+          "y" : 148
+        }
+      },
+      "tick" : 236
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 239,
+          "y" : 148
+        }
+      },
+      "tick" : 236
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 236
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 45
+        }
+      },
+      "tick" : 236
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 286,
+          "y" : 88
+        }
+      },
+      "tick" : 307
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 286,
+          "y" : 88
+        }
+      },
+      "tick" : 307
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 307
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 45
+        }
+      },
+      "tick" : 307
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 509
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 29
+        }
+      },
+      "tick" : 509
+    }
+  ],
+  "expectedSaved" : 1,
+  "expectedTicks" : 599,
+  "levelSHA256" : "5c68136fd4f41661e7239dbbae4d5bba9eb5442d67f4bc4503ff006d306f49db",
+  "population" : 1,
+  "version" : 2
+}

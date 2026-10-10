@@ -64,6 +64,7 @@ public struct Lemmings2Runtime: Sendable {
         case skating, slipping, iceRecovering, twisting
         case trapped, hopping, hopPreparing, blastBombing, swimming, leavingWater, parachuting, attracting, dancing, jetPacking, rolling, rollingAir, shimmyJump, shimming, diving, drowning, kayaking, kayakPacking, flyingIcarus, hangGliding, roping, firingBazooka, firingMortar, rockClimbing, hoisting, planting, ballooning, filling, sandPouring, gluePouring
         case jumping, tumbling, stunned, running, scooping, fencing, clubBashing, lasering, flaming
+        case terrainRising
     }
     public struct Lemming: Equatable, Sendable {
         public let id: Int
@@ -668,17 +669,28 @@ public struct Lemmings2Runtime: Sendable {
     }
     private func advanceWalker(_ lem: inout Lemming) {
                 let nx = lem.x + lem.direction
-                if lemmings.contains(where: { $0.id != lem.id && $0.state == .blocking &&
+                if configuration.tribe != 0 && lemmings.contains(where: { $0.id != lem.id && $0.state == .blocking &&
                     abs($0.y - lem.y) <= 4 && abs($0.x - nx) <= 6 && ($0.x - lem.x) * lem.direction > 0 }) {
                     lem.direction = -lem.direction
                 } else if isSolid(nx, lem.y - 1) {
                     if let rise = (1...4).first(where: { !isSolid(nx, lem.y - $0 - 1) && isSolid(nx, lem.y - $0) }) {
-                        lem.x = nx; lem.y -= rise
-                    } else if lem.rockClimber { lem.x = nx; lem.pose = 0; change(&lem, .rockClimbing) }
+                        lem.x = nx; lem.y -= rise; lem.work = 0
+                    } else if lem.rockClimber {
+                        lem.x = nx
+                        if Lemmings2Climbing.beginRock(x:&lem.x,y:lem.y,direction:&lem.direction,solid:isSolid) {
+                            lem.pose = 0; change(&lem, .rockClimbing)
+                        }
+                    }
                     else if lem.climber { lem.x = nx; change(&lem, .climbing) }
-                    else { lem.direction = -lem.direction }
+                    else if lem.state == .walking && lem.work != 0 {
+                        lem.x = nx + lem.direction
+                        change(&lem, .terrainRising)
+                    } else {
+                        lem.direction = -lem.direction
+                        if lem.state == .walking { lem.work = 1 }
+                    }
                 } else {
-                    lem.x = nx
+                    lem.x = nx; lem.work = 0
                     if let drop = (0...3).first(where: { isSolid(nx, lem.y + $0) }) { lem.y += drop }
                     else if lem.slider { change(&lem, .sliding) }
                     else if lem.runner {
@@ -690,6 +702,22 @@ public struct Lemmings2Runtime: Sendable {
                             horizontalCountdown: 7, verticalCountdown: 0)
                     } else { lem.y += 3; change(&lem, .falling); lem.fallDistance = 0 }
                 }
+    }
+
+    /**
+     * PROCESS 0997–09f8 paints three columns in a 4-pixel grid. Its shared
+     * 0710–0749 tail sets direction after every skill update without changing state.
+     */
+    private func applyClassicBlockerField(_ lem: inout Lemming) {
+        guard configuration.tribe == 0, lem.active else { return }
+        for blocker in lemmings where blocker.id != lem.id && blocker.state == .blocking {
+            let column = (lem.x >> 2) - ((blocker.x - 4) >> 2)
+            let row = (lem.y >> 2) - ((blocker.y - 6) >> 2)
+            guard (0..<3).contains(column), (0..<3).contains(row) else { continue }
+            if column == 0 { lem.direction = -1 }
+            else if column == 2 { lem.direction = 1 }
+            return
+        }
     }
 
     private mutating func advanceAirborne(_ lem: inout Lemming) {
@@ -739,6 +767,28 @@ public struct Lemmings2Runtime: Sendable {
                 else if !jumping || lem.fallDistance > 64 { change(&lem, .stunned) }
                 else { change(&lem, .walking) }
             } else {
+                /**
+                 * PROCESS 4fe4/548b catches Jumper, Shimmier jump and Hopper body hits
+                 * before reflection, in Rock Climber, Climber, Slider order.
+                 */
+                if jumping && (lem.rockClimber || lem.climber || lem.slider) {
+                    if lem.rockClimber && (1...7).contains(where: { isSolid(lem.x - lem.direction, lem.y - $0) }) {
+                        lem.x -= lem.direction
+                        lem.direction = -lem.direction
+                        air.resolve(x: lem.x, y: lem.y, fallDistance: lem.fallDistance)
+                        lem.air = air
+                        return
+                    }
+                    let sliding = !lem.rockClimber && !lem.climber
+                    if sliding && !hopping {
+                        lem.x -= lem.direction
+                        lem.direction = -lem.direction
+                    }
+                    lem.pose = sliding && !hopping ? 9 : 0
+                    change(&lem, lem.rockClimber ? .rockClimbing : lem.climber ? .climbing : .sliding)
+                    lem.air = nil
+                    return
+                }
                 lem.x -= lem.direction
                 lem.direction = -lem.direction
                 if diving { change(&lem, .tumbling) }
@@ -810,10 +860,12 @@ public struct Lemmings2Runtime: Sendable {
             shot.step()
             guard shot.x >= -8, shot.x < configuration.width+8, shot.y < configuration.height+8 else { continue }
             if isWater(shot.x,shot.y) { continue }
-            let hit = Lemmings2AirCollision.sweep(x:x,y:y,toX:shot.tip.x,toY:shot.tip.y,height:0,solid:{ px,py in
-                if shot.kind == .stone { return (-2...2).contains { dy in (-2...2).contains { dx in self.isSolid(px+dx,py+dy) } } }
-                return self.isSolid(px,py)
-            })
+            let hit: Lemmings2AirCollision.Result
+            if shot.kind == .stone {
+                hit = Lemmings2StoneCollision.sweep(x:x,y:y,toX:shot.x,toY:shot.y,solid:isSolid)
+            } else {
+                hit = Lemmings2AirCollision.sweep(x:x,y:y,toX:shot.tip.x,toY:shot.tip.y,height:0,solid:isSolid)
+            }
             if hit.contact != .clear {
                 if shot.kind == .stone {
                     apply(configuration.terrainMasks.stone[shot.frame],x:hit.previousX,y:hit.previousY,adding:true)
@@ -1212,7 +1264,11 @@ public struct Lemmings2Runtime: Sendable {
                 if !isSolid(lem.x,lem.y-9) { change(&lem, .falling); lem.fallDistance = 0 }
                 else if lem.age + 1 >= 5 {
                     lem.direction = -lem.direction
-                    if lem.rockClimber { lem.pose = 0; change(&lem, .rockClimbing) }
+                    if lem.rockClimber {
+                        if Lemmings2Climbing.beginRock(x:&lem.x,y:lem.y,direction:&lem.direction,solid:isSolid) {
+                            lem.pose = 0; change(&lem, .rockClimbing)
+                        }
+                    }
                     else { lem.y -= 1; change(&lem, .climbing) }
                 }
             case .skating, .slipping:
@@ -1313,9 +1369,13 @@ public struct Lemmings2Runtime: Sendable {
                     for _ in 0..<2 {
                         lem.x += lem.direction
                         let probeX = lem.x + (lem.direction > 0 ? 4 : -5)
-                        let blocked = isSolid(probeX,lem.y-1)
-                        if !isWater(probeX,lem.y) || blocked {
-                            change(&lem, .kayakPacking); lem.work = blocked ? 1 : 0; break
+                        /**
+                         * PROCESS 4c94–4cbf selects the dry shore before testing solid terrain.
+                         */
+                        if !isWater(probeX,lem.y) {
+                            change(&lem, .kayakPacking); lem.work = 0; break
+                        } else if isSolid(probeX,lem.y-1) {
+                            change(&lem, .kayakPacking); lem.work = 1; break
                         }
                     }
                 }
@@ -1472,11 +1532,20 @@ public struct Lemmings2Runtime: Sendable {
                 if distance < 0 { lem.y += distance }
                 for _ in 0..<max(0, distance) {
                     if isSolid(lem.x, lem.y) {
-                        if lem.fallDistance > 64 && lem.state != .floating { sound(.splat, at: lem) }
-                        change(&lem, lem.fallDistance > 64 && lem.state != .floating ? .dead : .walking)
+                        // PROCESS 3754/7572 stuns falls of 65–99 pixels and kills longer falls.
+                        let landing: State = lem.state == .floating ? .walking
+                            : lem.fallDistance > 99 ? .dead : lem.fallDistance > 64 ? .stunned : .walking
+                        if landing == .dead { sound(.splat, at: lem) }
+                        change(&lem, landing)
                         lem.fallDistance = 0; break
                     }
                     lem.y += 1; lem.fallDistance += 1
+                }
+            case .terrainRising:
+                lem.y -= 1
+                if !isSolid(lem.x, lem.y) {
+                    lem.y += 1
+                    change(&lem, .walking)
                 }
             case .walking, .running:
                 let strides = lem.state == .running ? 2 : 1
@@ -1824,6 +1893,7 @@ public struct Lemmings2Runtime: Sendable {
                     break
                 }
             }
+            applyClassicBlockerField(&lem)
             lemmings[index] = lem
             if let blast { applyBlast(x: blast.x, y: blast.y) }
         }

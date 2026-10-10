@@ -65,6 +65,12 @@ func testLocationKeys() {
     check(otherWall == Decision(trigger: .wallAhead, lemmings: [2]), "A wall at another location did not fire")
     check(laterSameWall == Decision(trigger: .wallAhead, lemmings: [3]), "The same wall did not fire again after the re-fire window")
 
+    var chainRider = DecisionDetector()
+    let riding = LemmingObservation(id: 7, x: 232, y: 80, direction: 1, state: .chainRiding,
+                                    wallAhead: false, edgeAhead: false)
+    check(chainRider.update(TickObservation(tick: 20, lemmings: [riding], nearestToExit: nil)) ==
+          Decision(trigger: .chainRiding, lemmings: [7]), "A chain rider did not create a release decision")
+
     var quiet = DecisionDetector()
     var fallback: (tick: Int, decision: Decision)?
     for tick in 1...200 where fallback == nil {
@@ -108,7 +114,21 @@ func testActions() throws {
                                      .assign(skill: Lemmings2Runtime.Skill.roper.rawValue, lemming: 0)]
           && recorded.allSatisfy { $0.tick == 62 }, "An aimed assignment did not record a held aim and the assignment")
     check(events(for: .wait, tick: 62, skills: game.configuration.skills).isEmpty, "Wait recorded events")
-    print("PASS actions: wait first, basher at the wall, bounded roper aim, no repeats")
+    check(events(for: .fan(x: 232, y: 24, active: true), tick: 63, skills: game.configuration.skills).map(\.event) ==
+          [.fan(x: 232, y: 24, active: true)], "A fan action did not record its control point")
+    check(events(for: .releaseChain(x: 224, y: 32), tick: 64, skills: game.configuration.skills).map(\.event) ==
+          [.chain(x: 224, y: 32)], "A chain release action did not record its control point")
+    let chain = Lemmings2Chain(id: 0, x: 80, y: 10, count: 3,
+                               controls: [.init(x: 96, y: 16, width: 8, height: 8)])
+    let chainGame = try fixture(chains: [chain])
+    let chainBounds = AimBounds(x: 0...119, y: 0...79)
+    let fanActions = actions(in: chainGame, candidates: [], bounds: chainBounds)
+    check(fanActions.contains(.fan(x: 81, y: 0, active: true)), "A chain did not offer its fan control point")
+    let stoppedFan = [Lemmings2TimedEvent(tick: 5, event: .fan(x: 81, y: 0, active: true)),
+                      Lemmings2TimedEvent(tick: 10, event: .fan(x: 0, y: 0, active: false))]
+    let restartFanActions = actions(in: chainGame, candidates: [], bounds: chainBounds, pending: stoppedFan, from: 2)
+    check(restartFanActions.contains(.fan(x: 81, y: 0, active: true)), "A stopped fan was not available for restart")
+    print("PASS actions: skills, fan and chain inputs; chain release decisions")
 }
 try testActions()
 
