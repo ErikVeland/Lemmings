@@ -6,37 +6,40 @@ It uses the same replay code as the runtime suite, so the two cannot drift apart
 
 ## Coverage
 
-73 of the 120 campaign levels have a recorded winning route. 47 do not.
+All 120 campaign levels have a recorded winning route.
+The strict native gate passed on 10 October 2026: 120 routes, 70 carry-over
+variants and all twelve continuous tribe chains. Every witness passed two fresh
+replays with matching saved counts, ticks and state hashes.
 
 | Tribe | Recorded routes | Levels that chain |
 | --- | ---: | ---: |
-| Classic | 7 | 5 |
-| Beach | 5 | 1 |
+| Classic | 10 | 10 |
+| Beach | 10 | 10 |
 | Cavelems | 10 | 10 |
-| Circus | 8 | 3 |
-| Egyptian | 8 | 8 |
-| Highland | 3 | 1 |
-| Medieval | 4 | 1 |
-| Outdoor | 7 | 3 |
-| Polar | 6 | 4 |
-| Shadow | 3 | 1 |
-| Space | 5 | 2 |
-| Sports | 7 | 7 |
+| Circus | 10 | 10 |
+| Egyptian | 10 | 10 |
+| Highland | 10 | 10 |
+| Medieval | 10 | 10 |
+| Outdoor | 10 | 10 |
+| Polar | 10 | 10 |
+| Shadow | 10 | 10 |
+| Space | 10 | 10 |
+| Sports | 10 | 10 |
 
 A missing route does not prove a level is broken. It shows that nobody recorded
 a win. Loading and rendering are separate checks. They do not prove a solution.
 
 ## Route quality
 
-The recorded routes earn 11 gold, 13 silver and 49 bronze medals.
+The recorded routes earn 52 gold, 15 silver and 53 bronze medals.
 
 Every winning route earns at least bronze, so a medal alone does not show how
-well a route plays. 43 routes save one lemming from a larger crowd. Most of them start with sixty. They count as bronze or silver.
+well a route plays. 44 routes save one lemming from a larger crowd. Most start
+with sixty. They count as bronze or silver.
 
-12 standalone routes start with fewer than 60 lemmings. A tribe run found them
-with the population that the level before passes on. The manifest records the
-starting population of every route. A complete rescue earns gold, even for one
-lemming of one.
+53 standalone routes start with fewer than 60 lemmings. These routes establish
+individual wins. The manifest records their starting populations. A complete
+rescue earns gold, even for one lemming of one.
 
 Medal quality does not gate the evidence. The gate reports it so that progress
 stays visible.
@@ -51,17 +54,24 @@ A tribe chains through a level when that route starts with exactly the number th
 previous route saved. The table counts how many levels chain from the start of
 each tribe, without a break.
 
-Cavelems chains through all ten levels. Its level 10 route saves one lemming, so
-the run does not yet reach the ark ending, which needs 30. Egyptian chains through
-eight levels and Sports through seven.
-27 separate carry-over witnesses preserve the correct starting populations.
-The 64 standalone routes include improved seeded-search results. The gate verifies every
-variant twice before it uses that route in a chain.
+All twelve tribes chain through all ten levels. These chains finish with one
+lemming. The ark ending requires a golden talisman and at least 30 survivors
+from each tribe, so it remains unproved.
+70 separate carry-over witnesses preserve the correct starting populations.
+The gate verifies every route and carry-over variant twice before it uses that
+route in a chain.
 
 A continuous tribe run needs routes that chain. Independent routes for every
 level do not provide one.
 
 ## Running the gate
+
+The final check used the current native sources. The standard optimised build
+hits a Swift compiler failure in `ClassicDOSSimulation.handleJumping`. The
+validation helper disabled optimisation only for that function in a temporary
+source copy. Lemmings 2 sources were unchanged. The input replay checks and the
+synthetic runtime regression checks also passed. Release build and
+original-engine equivalence remain separate checks.
 
 ```sh
 zsh Scripts/verify-lemmings2-completion.sh

@@ -29,7 +29,7 @@
     "scopes": [
       "all"
     ],
-    "progress": "15 September: Claude’s committed work preserves 73/120 L2 standalone routes and 41/90 L3 routes. Cavelems has a complete ten-level carry-over chain. L2 and L3 remain previews outside Classic 1.0 completion. Current known-route and runtime regression suites passed in the baseline audit."
+    "progress": "10 October: the strict native L2 gate passes 120/120 standalone routes, 70 carry-over variants and all twelve continuous ten-level tribe chains. Every witness reproduces its win twice with matching saved counts, ticks and state hashes. These chains finish with one lemming. The ark ending needs 30 and remains unproved. L3 retains 41/90 recorded routes and 49 missing routes. L2 and L3 remain previews outside Classic 1.0 completion. The known-route and runtime regression suites passed in the 15 September baseline audit. See Documentation/Lemmings2Completion/README.md."
   },
   {
     "area": "Save and interruption recovery",

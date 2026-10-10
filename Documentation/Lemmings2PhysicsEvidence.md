@@ -1,11 +1,13 @@
 # Lemmings 2 native interpreter: evidence and remaining work
 
-Status checked on 7 September 2026. All twelve tribes, 51 skills, 15 object types
-and four practice maps are enabled. The full runtime suite checks all 120
-campaign starts, practice setup, skill and object mechanics, survivor carry-over
-and 64 recorded completions across all twelve tribes. The
-[coverage table](Lemmings2Coverage.md) lists the exact levels. **Full campaign
-solution coverage and original-engine equivalence are not yet verified.**
+Status checked on 10 October 2026. All twelve tribes, 51 skills, 15 object types
+and four practice maps are enabled. The strict completion gate verified all 120
+winning routes and 70 carry-over variants twice, with continuous ten-level
+chains for all twelve tribes. The focused runtime check passed 52 synthetic
+regression checks; this does not claim a fresh pass of the full data runtime suite.
+See the [completion evidence](Lemmings2Completion/README.md) for the current
+route proof and validation limits. **Original-engine equivalence and release
+validation remain separate work.**
 
 ## Expansion corrections
 
@@ -40,16 +42,17 @@ offsets at PROCESS 65cf without moving the collision position.
 Synthetic and native-mask tests cover both directions, first and repeated
 cuts, unchanged terrain before frame 7, steel, floor breakthrough, rejected
 midair/repeated assignments and switching to another terrain skill. The existing
-Classic 1 replay still rescues 60 in 2,878 ticks. Full original-engine traces,
-assignment-rule parity and non-Classic level solutions remain required.
-No additional tribe is enabled by this milestone.
+Classic 1 replay at this milestone rescued 60 in 2,878 ticks. Full original-engine
+traces and assignment-rule comparisons remain required. Later work recorded
+winning routes for every non-Classic level. No additional tribe was enabled by
+this milestone.
 
 [Campaign requirements](Lemmings2Coverage.md) lists missing stocked skills and
 object types across all 120 levels. Regenerate it with the development tool
 `Tools/Lemmings2Reference/coverage.swift`, linked against the current NxlvKit.
-Next: Jumper and airborne collision, then the additional mechanics required by
-an early non-Classic level. Keep the tribe gate until complete solution replays
-and its object behaviour are verified.
+Jumper, airborne collision and the additional tribe mechanics received later
+corrections. All twelve tribes now have complete solution chains; see the
+[current completion evidence](Lemmings2Completion/README.md).
 
 ## What changed
 
@@ -97,8 +100,14 @@ Offsets below are relative to the overlay code segment, before relocation.
 | PROCESS, `5cb1–5dbb` | Basher has a 32-frame cycle. Cutting occurs on frames 2–5 and 18–21; movement occurs on 11–15 and 27–31. MASKS animation 5 contains separate directional masks. |
 | PROCESS, `5dbc–5e68` | Miner cuts with MASKS animation 2 on frames 1 and 2. It moves on frames 3 and 15 and descends again on frame 0 of a 24-frame cycle. |
 | PROCESS, `824a–8291`, `5fcc–6033` | Classic exploder has a 75-tick countdown, followed by an animation. Frame 15 applies MASKS animation 8; the lemming is removed after the particle interval. |
-| PROCESS, `7419–7487`, `3754–3762` | Ordinary falls move three pixels per tick. Falls greater than 64 pixels are fatal. |
+| PROCESS, `7419–7487`, `3754–3762`, `7572–7581` | Ordinary falls move three pixels per tick. Falls of up to 64 pixels resume walking; falls of 65–99 pixels stun; longer falls are fatal. |
+| PROCESS, `4fe4–4fef`, `548b–5496`, `721c`, `3736–3753`, `37c7–37d5`, `8552–8605` | Jumper, Hopper and Shimmier jump body collisions check Rock Climber, Climber, then Slider before reflection. Rock Climber requires seven clear pixels behind the head. A Slider catching from Jumper or Shimmier jump steps back and turns; Hopper keeps its direction. |
+| PROCESS, `85be–8605`, `7401–7418`, `4e31–4e69`, `3cdf–3d0b` | Assigning Rock Climber sets flag `0200` without changing state. Entry from Walking or climbing transfer scans the rear column at `x − direction`, from foot minus one through foot minus seven. A solid pixel causes one backward step and a turn, retaining the previous state and phase. Clear entry selects state `2a` and clears byte `22`. |
 | PROCESS, `4e7f–4f10` | Walking can step up four pixels, not six. |
+| PROCESS, `4e0a–4e50`, `88dc–88e7`, `3b67–3b87` | Walking uses byte `22` as a turn marker. A second blocked step enters state `107` after two pixels in the current direction: the step at `4e7f` stored by `4e12`, then the step at `4e48`. Its initializer changes state and sprite without moving. State `107` rises one pixel per tick until the foot is clear, restores one pixel, then resumes walking. Successful walking clears the marker; Runner keeps its separate turn routine. |
+| PROCESS, `0997–09f8`, `0710–0749` | Classic blockers paint a three-column field in four-pixel cells. The shared update tail changes direction after each skill update and preserves the active skill. |
+| PROCESS, `4c94–4cbf` | Kayaking checks for a dry shore before solid contact. A dry solid bank uses the nine-pixel exit step; a solid contact inside water uses the one-pixel step. |
+| PROCESS, `aa68–aab8`, `b08d–b2f1` | Thrown stones sweep along the major axis and test offsets `(2,0)`, `(4,2)`, `(2,4)` and `(0,2)` from each new origin. Collision stamps INTERN animation 7 at the returned origin. The first three vertical-path probes share the horizontal reverse-step branch at `b1c5`; the fourth uses `b2da`. Focused checks preserve these branches and the zero-distance case. |
 | PROCESS, `5e69–5ef5` | The floater has an opening sequence with an upward tug, then descends two pixels per tick. |
 | L2, `14eb–14f6`; PROCESS, `00ed–0200`, `023b` | Release interval is `21 - setting`. Classic waits 20 ticks, plays ten entrance frames, then counts down to its first release. With setting zero, release ticks are 51, 72, 93, and so on. |
 | L2, `034b`, `0480`, `04a0`, `04b8`, `0694–069c` | Initialize the countdown to 15 and decrement once per simulation tick, including each extra fast-forward step. One displayed second is fifteen ticks. |
@@ -126,7 +135,7 @@ level with 60 lemmings and its original skill supply. It only calls normal
 skill assignment and simulation ticks: no teleports, terrain patches,
 population changes, forced wins or nuke.
 
-Expected result: **60 saved, 0 lost, 2,878 ticks**, with all twenty inputs
+Expected result: **60 saved, 0 lost, 3,074 ticks**, with all twenty inputs
 accepted. It also checks the exact remaining skill inventory and survivor
 carry-forward to Classic 2. A result from Classic 1 must be rejected when
 Classic 2 is selected.
@@ -136,9 +145,9 @@ nine-pixel cut, action-frame timing, miner movement phases, exploder timing,
 steel preservation, and entrance timing. Synthetic tests need no game assets.
 
 This is a regression replay for our native interpreter, **not yet a matching
-DOS replay**. In particular, its climber and blocker interactions still depend
-on provisional collision behaviour. Passing it must not award a verified
-original-engine achievement.
+DOS replay**. The source-backed climber and blocker corrections listed above
+do not establish complete original-engine equivalence. Passing it must not
+award a verified original-engine achievement.
 
 ## Further native corrections
 
@@ -156,8 +165,8 @@ original-engine achievement.
 
 ## Further verification
 
-1. Verify complete solutions for the campaign levels without durable replays. Loading, stability runs and isolated exit checks
-   provide different evidence from complete solutions.
+1. Verify routes to the ark ending, which requires a golden talisman and at least
+   30 survivors from each tribe. The recorded chains finish with one survivor.
 2. Broaden roof-edge transfers and complete movement-path comparisons against
    the original engine.
 3. Verify remaining visual effects. The original intro, award and ending scripts
@@ -204,7 +213,7 @@ original-engine achievement.
 - PROCESS `ba79–ba91`: assignment-specific effects override the generic cue.
   Jumper, Superlem, Surfer and tribe Attractors now select their native samples.
   Balloon contact plays its pop, and an Archer shot plays its firing cue.
-- The Outdoor 7 replay now completes at tick 3990 after rejecting its former
+- The Outdoor 7 replay now completes at tick 4051 after rejecting its former
   low-ceiling Shimmier assignment. Beach 1 and Highland 9 add durable full-level
   completions with exact pointer and skill inputs.
 
@@ -220,8 +229,9 @@ The support position and direction now survive that transition. Tests cover
 both directions, straight walls, top transfers and ceiling collisions.
 
 The Classic 1 replay retains all 60 survivors. Its final three assignments to
-lemming 9 move 136 ticks later to match the corrected route. Completion now
-occurs at tick 3074. Other recorded level inputs remain valid.
+lemming 9 moved 136 ticks later to match the corrected route. Completion occurs
+at tick 3074. Later corrections required other route changes; the
+[completion evidence](Lemmings2Completion/README.md) records the current set.
 
 ## Original introduction and ending
 
@@ -248,21 +258,25 @@ new piece, including its original fanfare callback. Empty, complete and new-piec
 states were rendered and inspected. Register-selected frames and palettes retain
 the original medal colours.
 
-Circus 1 completes from 60 entrants with one rescue at tick 8100 using five
-recorded assignments. Its survivor completes Circus 2 at tick 721 using three
-assignments. Sports 1 completes from 60 entrants with two rescues at tick 8100
+Circus 1 completes from 60 entrants with two rescues at tick 8100 using fourteen
+recorded assignments. Its carry-over route completes Circus 2 with both
+survivors at tick 1218 using eight assignments. Sports 1 completes from 60
+entrants with two rescues at tick 8100
 using four assignments. These fixtures supplement the existing gameplay checks.
 
-Polar 1 rescues one from 60 at tick 4500. Medieval 1 rescues one from 60 at
-tick 5400 with a recorded fan-assisted Icarus route. Shadow 1 rescues one from
+Polar 1 rescues all 60 at tick 1829. Medieval 1 rescues two from 60 at
+tick 5400 with recorded fan-assisted Icarus routes. Shadow 1 rescues one from
 60 at tick 2149, crossing the upper corridor and returning to the lower exit.
-The fixture collection now covers 64 levels across all twelve tribes.
+The fixture collection covers all 120 levels across all twelve tribes, with
+70 separate carry-over variants. All twelve ten-level chains pass the strict
+[completion gate](Lemmings2Completion/README.md).
 
 ## Replay input validation
 
 Recorded solution inputs now obey the app's single-pointer controls and camera
 bounds. Changing skills releases the fan and restarts its hold time. Five
-fixtures needed new timings or routes under these rules; all 64 now pass.
+fixtures originally needed new timings or routes under these rules. The current
+strict completion gate passes all 120 routes and 70 carry-over variants twice.
 Highland 1 saves all 60 at tick 1941. Classic 2 and 5 have recorded routes,
 and the full input suite checks fixture names against the source fingerprints.
 The save-slot list validates progress before looking up tribe names, so damaged

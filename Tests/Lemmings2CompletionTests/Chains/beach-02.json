@@ -1,0 +1,373 @@
+{
+  "events" : [
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 43
+        }
+      },
+      "tick" : 80
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 100,
+          "y" : 73
+        }
+      },
+      "tick" : 80
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 100,
+          "y" : 56
+        }
+      },
+      "tick" : 85
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 100,
+          "y" : 61
+        }
+      },
+      "tick" : 90
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 100,
+          "y" : 61
+        }
+      },
+      "tick" : 95
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 100,
+          "y" : 62
+        }
+      },
+      "tick" : 100
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 100,
+          "y" : 61
+        }
+      },
+      "tick" : 105
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 100,
+          "y" : 61
+        }
+      },
+      "tick" : 110
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 100,
+          "y" : 61
+        }
+      },
+      "tick" : 115
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 100,
+          "y" : 61
+        }
+      },
+      "tick" : 120
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 100,
+          "y" : 61
+        }
+      },
+      "tick" : 125
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 98,
+          "y" : 61
+        }
+      },
+      "tick" : 130
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 93,
+          "y" : 61
+        }
+      },
+      "tick" : 135
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 88,
+          "y" : 58
+        }
+      },
+      "tick" : 140
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 83,
+          "y" : 53
+        }
+      },
+      "tick" : 145
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 76,
+          "y" : 43
+        }
+      },
+      "tick" : 150
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 76,
+          "y" : 14
+        }
+      },
+      "tick" : 155
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 61,
+          "y" : 20
+        }
+      },
+      "tick" : 160
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 49,
+          "y" : 21
+        }
+      },
+      "tick" : 165
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 170
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 175
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 180
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 185
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 190
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 195
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 200
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 205
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 210
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 215
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 220
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 225
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 20
+        }
+      },
+      "tick" : 342
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 47
+        }
+      },
+      "tick" : 430
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 435,
+          "y" : 183
+        }
+      },
+      "tick" : 650
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 45
+        }
+      },
+      "tick" : 650
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 20
+        }
+      },
+      "tick" : 884
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 11,
+          "skill" : 20
+        }
+      },
+      "tick" : 884
+    }
+  ],
+  "expectedSaved" : 42,
+  "expectedTicks" : 1688,
+  "levelSHA256" : "11835510902dfa77b7dd30d8e7b15622a5c61c212957adbd5007bb82d7303fcb",
+  "population" : 42,
+  "version" : 2
+}

@@ -1,0 +1,706 @@
+{
+  "events" : [
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 220,
+          "y" : 150
+        }
+      },
+      "tick" : 0
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 266,
+          "y" : 62
+        }
+      },
+      "tick" : 135
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 46
+        }
+      },
+      "tick" : 135
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 261,
+          "y" : 59
+        }
+      },
+      "tick" : 136
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 255,
+          "y" : 56
+        }
+      },
+      "tick" : 137
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 250,
+          "y" : 52
+        }
+      },
+      "tick" : 138
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 243,
+          "y" : 54
+        }
+      },
+      "tick" : 139
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 235,
+          "y" : 58
+        }
+      },
+      "tick" : 140
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 220,
+          "y" : 65
+        }
+      },
+      "tick" : 141
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 214,
+          "y" : 66
+        }
+      },
+      "tick" : 142
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 211,
+          "y" : 74
+        }
+      },
+      "tick" : 143
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 218,
+          "y" : 81
+        }
+      },
+      "tick" : 144
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 215,
+          "y" : 101
+        }
+      },
+      "tick" : 145
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 212,
+          "y" : 108
+        }
+      },
+      "tick" : 146
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 217,
+          "y" : 109
+        }
+      },
+      "tick" : 147
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 224,
+          "y" : 99
+        }
+      },
+      "tick" : 148
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 232,
+          "y" : 96
+        }
+      },
+      "tick" : 149
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 237,
+          "y" : 100
+        }
+      },
+      "tick" : 150
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 245,
+          "y" : 100
+        }
+      },
+      "tick" : 151
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 250,
+          "y" : 99
+        }
+      },
+      "tick" : 152
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 262,
+          "y" : 100
+        }
+      },
+      "tick" : 153
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 273,
+          "y" : 101
+        }
+      },
+      "tick" : 154
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 286,
+          "y" : 94
+        }
+      },
+      "tick" : 155
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 287,
+          "y" : 99
+        }
+      },
+      "tick" : 156
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 288,
+          "y" : 100
+        }
+      },
+      "tick" : 157
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 283,
+          "y" : 108
+        }
+      },
+      "tick" : 158
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 271,
+          "y" : 110
+        }
+      },
+      "tick" : 159
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 273,
+          "y" : 119
+        }
+      },
+      "tick" : 160
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 274,
+          "y" : 123
+        }
+      },
+      "tick" : 161
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 282,
+          "y" : 134
+        }
+      },
+      "tick" : 162
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 275,
+          "y" : 151
+        }
+      },
+      "tick" : 163
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 278,
+          "y" : 149
+        }
+      },
+      "tick" : 164
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 279,
+          "y" : 166
+        }
+      },
+      "tick" : 165
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 274,
+          "y" : 164
+        }
+      },
+      "tick" : 166
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 266,
+          "y" : 163
+        }
+      },
+      "tick" : 167
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 259,
+          "y" : 164
+        }
+      },
+      "tick" : 168
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 246,
+          "y" : 164
+        }
+      },
+      "tick" : 169
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 241,
+          "y" : 158
+        }
+      },
+      "tick" : 170
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 228,
+          "y" : 159
+        }
+      },
+      "tick" : 171
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 221,
+          "y" : 162
+        }
+      },
+      "tick" : 172
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 212,
+          "y" : 168
+        }
+      },
+      "tick" : 173
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 201,
+          "y" : 173
+        }
+      },
+      "tick" : 174
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 191,
+          "y" : 192
+        }
+      },
+      "tick" : 175
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 181,
+          "y" : 194
+        }
+      },
+      "tick" : 176
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 172,
+          "y" : 192
+        }
+      },
+      "tick" : 177
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 158,
+          "y" : 185
+        }
+      },
+      "tick" : 178
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 152,
+          "y" : 187
+        }
+      },
+      "tick" : 179
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 139,
+          "y" : 182
+        }
+      },
+      "tick" : 180
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 124,
+          "y" : 179
+        }
+      },
+      "tick" : 181
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 126,
+          "y" : 173
+        }
+      },
+      "tick" : 182
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 121,
+          "y" : 165
+        }
+      },
+      "tick" : 183
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 116,
+          "y" : 156
+        }
+      },
+      "tick" : 184
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 107,
+          "y" : 130
+        }
+      },
+      "tick" : 185
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 104,
+          "y" : 130
+        }
+      },
+      "tick" : 186
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 104,
+          "y" : 135
+        }
+      },
+      "tick" : 187
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 105,
+          "y" : 133
+        }
+      },
+      "tick" : 188
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 105,
+          "y" : 140
+        }
+      },
+      "tick" : 189
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 115,
+          "y" : 134
+        }
+      },
+      "tick" : 190
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 117,
+          "y" : 120
+        }
+      },
+      "tick" : 191
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 122,
+          "y" : 132
+        }
+      },
+      "tick" : 192
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 128,
+          "y" : 137
+        }
+      },
+      "tick" : 192
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 134,
+          "y" : 135
+        }
+      },
+      "tick" : 193
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 139,
+          "y" : 131
+        }
+      },
+      "tick" : 194
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 169,
+          "y" : 70
+        }
+      },
+      "tick" : 362
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 46
+        }
+      },
+      "tick" : 362
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 163,
+          "y" : 66
+        }
+      },
+      "tick" : 363
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 163,
+          "y" : 58
+        }
+      },
+      "tick" : 364
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 146,
+          "y" : 52
+        }
+      },
+      "tick" : 365
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 151,
+          "y" : 64
+        }
+      },
+      "tick" : 365
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 20
+        }
+      },
+      "tick" : 426
+    }
+  ],
+  "expectedSaved" : 1,
+  "expectedTicks" : 8100,
+  "levelSHA256" : "16c346f5d76d8622b65ad6850458ac52ee19e65c1ff9b512f96468daed481f4b",
+  "population" : 2,
+  "version" : 2
+}

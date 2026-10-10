@@ -22,6 +22,117 @@ func fixture(wall: Bool = false) throws -> Lemmings2Runtime {
     return try Lemmings2Runtime(configuration: config)
 }
 
+/**
+ * Verifies the original plain-fall landing thresholds and recovery state.
+ */
+func testPlainFallLanding() throws {
+    let width = 80, height = 144, floor = 124
+    var solid = [Bool](repeating: false, count: width * height)
+    for y in floor..<height { for x in 0..<width { solid[y * width + x] = true } }
+    for (distance, state) in [(64, Lemmings2Runtime.State.walking), (65, .stunned), (99, .stunned), (100, .dead)] {
+        var game = try Lemmings2Runtime(configuration: .init(width: width, height: height,
+            pixels: solid.map { $0 ? 6 : 0 }, solid: solid,
+            palette: [UInt8](repeating: 255, count: 1024),
+            entrance: .init(x: 20, y: floor-distance, width: 1, height: 1),
+            exits: [.init(x: 70, y: 120, width: 8, height: 16)],
+            skills: [.climber], supplies: [1], total: 1, timeLimit: 120,
+            releaseInterval: 20, terrainMasks: try syntheticMasks(), firstReleaseTick: 1))
+        for _ in 0..<100 {
+            game.step()
+            if game.lemmings.first?.state != .falling { break }
+        }
+        check(game.lemmings[0].y == floor && game.lemmings[0].state == state
+            && game.lemmings[0].fallDistance == 0 && game.lost == (state == .dead ? 1 : 0),
+            "Plain fall landing differs at \(distance) pixels")
+        let splats = game.drainSoundEvents().filter { $0.sample == Lemmings2SoundCue.splat.rawValue }
+        check(splats.count == (state == .dead ? 1 : 0),
+            "Plain fall sound differs at \(distance) pixels")
+        if state == .stunned {
+            for _ in 0..<35 { game.step() }
+            check(game.lemmings[0].state == .walking && game.lost == 0,
+                "A stunned plain fall did not recover at \(distance) pixels")
+        }
+    }
+    print("PASS plain fall 64/65/99/100-pixel landing boundaries and stunned recovery")
+}
+
+/**
+ * Verifies the Classic blocker field against the original grid and skill ordering.
+ */
+func testClassicBlockerField() throws {
+    func pair(x: Int, y: Int = 60, wall: Int? = nil) throws -> Lemmings2Runtime {
+        let width = 120, height = 80
+        var solid = [Bool](repeating: false, count: width * height)
+        for px in 0..<width {
+            let floor = px == x ? y : 60
+            for py in floor..<height { solid[py * width + px] = true }
+        }
+        if let wall { for py in 40..<60 { solid[py * width + wall] = true } }
+        let entrances: [Lemmings2Runtime.Rect] = [
+            .init(x: 40, y: 60, width: 1, height: 1),
+            .init(x: x, y: y, width: 1, height: 1)
+        ]
+        var game = try Lemmings2Runtime(configuration: .init(width: width, height: height,
+            pixels: solid.map { $0 ? 6 : 0 }, solid: solid,
+            palette: [UInt8](repeating: 255, count: 1024), entrance: entrances[0],
+            exits: [.init(x: 110, y: 50, width: 8, height: 16)],
+            skills: [.blocker, .builder], supplies: [1, 1], total: 2,
+            timeLimit: 120, releaseInterval: 5, terrainMasks: try syntheticMasks(),
+            firstReleaseTick: 1, entrances: entrances))
+        game.step()
+        check(game.assign(slot: 0, to: 0), "Classic field fixture could not place its blocker")
+        for _ in 0..<5 { game.step() }
+        return game
+    }
+
+    for (x, direction) in [(35, 1), (36, -1), (39, -1), (40, 1), (43, 1), (44, 1), (47, 1), (48, 1)] {
+        let game = try pair(x: x)
+        check(game.lemmings[1].direction == direction,
+            "Classic blocker grid column differs at x=\(x)")
+    }
+    for (y, direction) in [(51, 1), (52, -1), (63, -1), (64, 1)] {
+        let game = try pair(x: 36, y: y)
+        check(game.lemmings[1].direction == direction,
+            "Classic blocker grid row differs at y=\(y)")
+    }
+    var walker = try pair(x: 35)
+    walker.step()
+    check(walker.lemmings[1].x == 36 && walker.lemmings[1].direction == -1
+        && walker.lemmings[1].state == .walking,
+        "Classic walker must reflect after entering the blocker field")
+
+    var centre = try pair(x: 42, wall: 43)
+    centre.step()
+    check(centre.lemmings[1].x == 42 && centre.lemmings[1].direction == -1,
+        "Classic blocker centre must preserve a leftward wall reflection")
+    for (x, wall, direction) in [(47, 48, 1), (48, 49, -1)] {
+        var game = try pair(x: x, wall: wall)
+        game.step()
+        check(game.lemmings[1].direction == direction,
+            "Classic blocker right boundary differs at x=\(x)")
+    }
+
+    var builder = try pair(x: 49, wall: 54)
+    for _ in 0..<20 {
+        if builder.lemmings[1].x == 49 && builder.lemmings[1].direction == -1 { break }
+        builder.step()
+    }
+    check(builder.lemmings[1].x == 49 && builder.lemmings[1].direction == -1,
+        "Classic builder fixture did not turn at its wall")
+    check(builder.assign(slot: 1, to: 1), "Classic field fixture could not start its builder")
+    for _ in 0..<16 { builder.step() }
+    check(builder.lemmings[1].x == 47 && builder.lemmings[1].y == 59
+        && builder.lemmings[1].direction == 1 && builder.lemmings[1].state == .building
+        && builder.lemmings[1].work == 1 && builder.lemmings[1].age == 16,
+        "A reflected Classic builder must retain its skill, plank count and phase")
+    for _ in 0..<16 { builder.step() }
+    check(builder.lemmings[1].x == 49 && builder.lemmings[1].y == 58
+        && builder.lemmings[1].state == .building && builder.lemmings[1].work == 2
+        && builder.supplies == [0, 0],
+        "Classic builder did not continue its assigned staircase after reflection")
+    print("PASS Classic blocker grid, walker ordering and continuous builder reflection")
+}
+
 func testFavorApproachingLemming() throws {
     let width = 120, height = 80
     var pixels = [UInt8](repeating: 0, count: width * height)
@@ -689,6 +800,47 @@ func testFlightAndKayak() throws {
     print("PASS distinct Icarus and Hang Glider motion; Kayaker rescue, deployment, shore and exit")
 }
 
+/**
+ * Verifies that a dry solid bank uses the native nine-pixel kayak exit.
+ */
+func testKayakBankExit() throws {
+    let base = try fixture().configuration
+    for (wetBank, direction) in [(false, 1), (false, -1), (true, 1), (true, -1)] {
+        var solid = base.solid
+        let bankTop = wetBank ? 47 : 40
+        for y in bankTop..<base.height {
+            for x in 0..<base.width where x < 32 || x >= 96 { solid[y * base.width + x] = true }
+        }
+        if direction < 0 { for y in 20..<bankTop { solid[y * base.width + 101] = true } }
+        let water = Lemmings2Runtime.Rect(x:wetBank ? 16 : 32,y:48,width:wetBank ? 96 : 64,height:16)
+        var game = try Lemmings2Runtime(configuration:.init(width:base.width,height:base.height,
+            pixels:solid.map { $0 ? 6 : 0 },solid:solid,palette:base.palette,
+            entrance:.init(x:direction > 0 ? 40 : 100,y:direction > 0 ? 40 : bankTop,width:1,height:1),
+            exits:[.init(x:4,y:10,width:1,height:1)],
+            skills:[.kayaker],supplies:[1],total:1,timeLimit:120,releaseInterval:2,
+            terrainMasks:base.terrainMasks,firstReleaseTick:1,hazards:[water]))
+        for _ in 0..<30 where game.lemmings.first?.state != .drowning { game.step() }
+        check(game.assign(slot:0,to:0), "Bank fixture could not deploy its kayak (wet=\(wetBank), direction=\(direction))")
+        check(game.lemmings[0].direction == direction, "Bank fixture did not set its kayak direction")
+        for _ in 0..<100 where game.lemmings[0].state != .kayakPacking { game.step() }
+        check(game.lemmings[0].state == .kayakPacking && game.lemmings[0].x == (direction > 0 ? 92 : 36)
+            && game.lemmings[0].work == (wetBank ? 1 : 0),
+            "Kayak did not select the native dry or wet bank exit")
+        for _ in 0..<24 { game.step() }
+        let exitX = direction > 0 ? 96 : (wetBank ? 32 : 31)
+        check(game.lemmings[0].state == .leavingWater && game.lemmings[0].x == exitX
+            && game.lemmings[0].y == (wetBank ? 47 : 39),
+            "Kayak bank exit used the wrong position or rise")
+        let duration = wetBank ? 3 : 13
+        for _ in 0..<duration { game.step() }
+        check(game.lemmings[0].state == .walking, "Kayak bank exit used the wrong animation duration")
+        for _ in 0..<20 { game.step() }
+        check(game.lost == 0 && game.lemmings[0].y == bankTop,
+            "Kayaker failed to walk across its bank")
+    }
+    print("PASS dry eight-pixel kayak bank exit and wet solid-bank exit")
+}
+
 func testNativeScooperContinuation(_ masks: Lemmings2TerrainMasks) throws {
     let base = try fixture().configuration
     for direction in [-1,1] {
@@ -1093,6 +1245,45 @@ func testRunner() throws {
     print("PASS Runner speed, inventory, stronger jump and persistent ability")
 }
 
+/**
+ * Verifies native persistent catches before a jump's body collision reflects it.
+ */
+func testJumpPersistentCatch() throws {
+    let width = 80, height = 120, floor = 104
+    var pixels = [UInt8](repeating: 0, count: width * height)
+    for y in floor..<height { for x in 0..<width { pixels[y * width + x] = 6 } }
+    for y in 60..<floor { for x in 30..<36 { pixels[y * width + x] = 6 } }
+    for airSkill in [Lemmings2Runtime.Skill.jumper, .hopper, .shimmier] {
+        for (flags, expected) in [
+            ([Lemmings2Runtime.Skill.rockClimber], Lemmings2Runtime.State.rockClimbing),
+            ([.climber], .climbing), ([.slider], .sliding),
+            ([.slider, .climber, .rockClimber], .rockClimbing),
+            ([.slider, .climber], .climbing)
+        ] {
+            let skills = [airSkill] + flags
+            var game = try Lemmings2Runtime(configuration: .init(width: width, height: height,
+                pixels: pixels, solid: pixels.map { $0 != 0 }, palette: [UInt8](repeating: 255, count: 1024),
+                entrance: .init(x: 20, y: 90, width: 1, height: 1),
+                exits: [.init(x: 70, y: 100, width: 1, height: 1)],
+                skills: skills, supplies: [Int](repeating: 1, count: skills.count), total: 1,
+                timeLimit: 120, releaseInterval: 20, terrainMasks: try syntheticMasks(), firstReleaseTick: 1))
+            while game.lemmings.first?.state != .walking { game.step() }
+            for slot in 1..<skills.count { check(game.assign(slot: slot, to: 0), "Persistent catch setup failed") }
+            check(game.assign(slot: 0, to: 0), "Persistent catch jump failed")
+            for _ in 0..<20 {
+                game.step()
+                if game.lemmings[0].state == expected { break }
+            }
+            let lem = game.lemmings[0]
+            let slidesBack = expected == .sliding && airSkill != .hopper
+            check(lem.state == expected && lem.direction == (slidesBack ? -1 : 1)
+                && lem.x == (slidesBack ? 29 : 30) && lem.air == nil,
+                "Persistent catch reflected or lost its collision position for \(airSkill)")
+        }
+    }
+    print("PASS Jumper, Hopper and Shimmier persistent catches and native priority")
+}
+
 func testJumper() throws {
     let wall = Lemmings2AirCollision.sweep(x: 0, y: 10, toX: 8, toY: 10) { x, _ in x == 3 }
     check(wall.x == 3 && wall.previousX == 2 && wall.contact == .body, "Air sweep crossed a thin wall")
@@ -1398,6 +1589,9 @@ func testControlsAndSoundEvents() throws {
 }
 
 do {
+    try testPlainFallLanding()
+    try testTerrainRecovery()
+    try testClassicBlockerField()
     try testControlsAndSoundEvents()
     try testTribeConstruction(syntheticMasks())
     check(Lemmings2Objects.trigger(flags: 0x1150, interaction: 0, x: 256, y: 96) == .init(x: 266, y: 96, width: 1, height: 1), "Native point trigger decoding")
@@ -1507,6 +1701,7 @@ do {
     try testAuthoredBounds()
     try testWitnessRejectsOutOfOrderInputs()
     testMagnoBooter()
+    testStoneCollision()
     try testThrownTerrain(syntheticMasks())
     try testIceAndSlider()
     testClimbingPaths()
@@ -1525,14 +1720,17 @@ do {
     try testBallooner()
     try testPlanter(syntheticMasks())
     try testRockClimber()
+    try testNativeRockEntry()
     try testRoper()
     try testFlightAndKayak()
+    try testKayakBankExit()
     try testProjectiles(syntheticMasks())
     try testFanAndParachuter()
     try testBlastBomber(syntheticMasks())
     try testBeamSkills(syntheticMasks())
     try testTribeDigging(syntheticMasks())
     try testRunner()
+    try testJumpPersistentCatch()
     try testJumper()
     try testStomper(syntheticMasks())
     try testFavorApproachingLemming()
@@ -1774,4 +1972,130 @@ do {
 } catch {
     FileHandle.standardError.write(Data("Native L2 runtime tests failed: \(error)\n".utf8))
     exit(1)
+}
+
+/**
+ * Verifies native state 107 after two blocked walking steps.
+ */
+func testTerrainRecovery() throws {
+    func corridor(bothWalls: Bool) throws -> Lemmings2Runtime {
+        let width = 64, height = 80
+        var solid = [Bool](repeating: false, count: width * height)
+        for y in 60..<height { for x in 0..<width { solid[y * width + x] = true } }
+        for y in 40..<60 {
+            for x in 21...25 { solid[y * width + x] = true }
+            if bothWalls { for x in 15...19 { solid[y * width + x] = true } }
+        }
+        return try .init(configuration: .init(width: width, height: height,
+            pixels: solid.map { $0 ? 6 : 0 }, solid: solid,
+            palette: [UInt8](repeating: 255, count: 1024),
+            entrance: .init(x: 20, y: 45, width: 1, height: 1),
+            exits: [.init(x: 50, y: 55, width: 1, height: 1)],
+            skills: [.runner], supplies: [1], total: 1, timeLimit: 120,
+            releaseInterval: 21, terrainMasks: try syntheticMasks(), firstReleaseTick: 1, tribe: 5))
+    }
+    func land(_ game: inout Lemmings2Runtime) {
+        for _ in 0..<30 {
+            if game.lemmings.first?.state == .walking { return }
+            game.step()
+        }
+        check(false, "Terrain recovery fixture did not land")
+    }
+    var embedded = try corridor(bothWalls: true)
+    land(&embedded)
+    embedded.step()
+    check(embedded.lemmings[0].x == 20 && embedded.lemmings[0].y == 60
+        && embedded.lemmings[0].direction == -1 && embedded.lemmings[0].state == .walking,
+        "First obstruction changed normal reflection")
+    embedded.step()
+    check(embedded.lemmings[0].x == 18 && embedded.lemmings[0].y == 60
+        && embedded.lemmings[0].state == .terrainRising,
+        "Second obstruction did not enter state 107 two pixels forward")
+    embedded.step()
+    check(embedded.lemmings[0].x == 18 && embedded.lemmings[0].y == 59,
+        "State 107 did not rise one pixel per tick")
+    for _ in 0..<20 { embedded.step() }
+    check(embedded.lemmings[0].x == 18 && embedded.lemmings[0].y == 40
+        && embedded.lemmings[0].state == .walking,
+        "State 107 did not restore one pixel at the first clear row")
+    var open = try corridor(bothWalls: false)
+    land(&open)
+    open.step(); open.step()
+    check(open.lemmings[0].x == 19 && open.lemmings[0].y == 60 && open.lemmings[0].state == .walking,
+        "Single-wall reflection changed normal walking")
+    var runner = try corridor(bothWalls: true)
+    land(&runner)
+    check(runner.assign(slot: 0, to: 0), "Terrain recovery Runner assignment failed")
+    for _ in 0..<20 {
+        runner.step()
+        check(runner.lemmings[0].state != .terrainRising, "Runner entered walking state 107")
+    }
+    print("PASS native state 107 entry, displacement, rise, exit, single-wall walking and Runner isolation")
+}
+
+/**
+ * Verifies native Stone probes and the returned terrain origin.
+ */
+func testStoneCollision() {
+    func hit(_ x: Int, _ y: Int, _ targetX: Int, _ targetY: Int,
+             _ solidX: Int, _ solidY: Int) -> Lemmings2AirCollision.Result {
+        Lemmings2StoneCollision.sweep(x: x, y: y, toX: targetX, toY: targetY,
+            solid: { $0 == solidX && $1 == solidY })
+    }
+    let top = hit(0, 0, 6, 3, 5, 1)
+    check(top.contact == .body && top.previousX == 2 && top.previousY == 1,
+        "Stone top probe changed its major-axis path or terrain origin")
+    let right = hit(0, 0, 6, 3, 5, 2)
+    check(right.contact == .body && right.previousX == 0 && right.previousY == 0,
+        "Stone right probe changed its terrain origin")
+    check(hit(0, 0, 1, 0, -1, -2).contact == .clear,
+        "Stone incorrectly tested the upper-left corner")
+    let verticalFirst = hit(0, 0, 3, 6, 2, 1)
+    check(verticalFirst.previousX == -1 && verticalFirst.previousY == 0,
+        "Stone changed the shared reverse step for the first vertical probe")
+    let verticalFourth = hit(0, 0, 3, 6, 0, 3)
+    check(verticalFourth.previousX == 0 && verticalFourth.previousY == 0,
+        "Stone fourth vertical probe changed its reverse step")
+    check(hit(4, 5, 4, 5, 6, 5).contact == .clear,
+        "Stationary Stone tested terrain before movement")
+    print("PASS native Stone diamond, major-axis path and impact origins")
+}
+
+/**
+ * Verifies native Rock Climber entry probes and rejected Walker transitions.
+ */
+func testNativeRockEntry() throws {
+    for direction in [-1,1] {
+        for depth in [1,7,8] {
+            var x=40, d=direction
+            let began=Lemmings2Climbing.beginRock(x:&x,y:30,direction:&d,solid:{px,py in px == 40-direction && py == 30-depth})
+            check(began == (depth == 8),"rear depth")
+            check(x == (depth == 8 ? 40 : 40-direction),"rear shift")
+            check(d == (depth == 8 ? direction : -direction),"rear reflection")
+        }
+        var x=40, d=direction
+        check(Lemmings2Climbing.beginRock(x:&x,y:30,direction:&d,solid:{_,_ in false}),"clear entry")
+        check(x == 40 && d == direction,"clear pose")
+    }
+    let masks=try syntheticMasks()
+    for depth in [1,7,8] {
+        let width=80, height=80
+        var solid=[Bool](repeating:false,count:width*height)
+        for y in 60..<height { for x in 0..<width { solid[y*width+x]=true } }
+        for y in 40..<60 { solid[y*width+41]=true }
+        solid[(60-depth)*width+40]=true
+        var game=try Lemmings2Runtime(configuration:.init(width:width,height:height,
+            pixels:solid.map{$0 ? 6:0},solid:solid,palette:[UInt8](repeating:255,count:1024),
+            entrance:.init(x:40,y:60,width:1,height:1),exits:[.init(x:70,y:50,width:8,height:16)],
+            skills:[.rockClimber],supplies:[1],total:1,timeLimit:120,releaseInterval:20,terrainMasks:masks,firstReleaseTick:1))
+        game.step()
+        check(game.assign(slot:0,to:0),"native Rock permanent assignment")
+        let before=game.lemmings[0]
+        game.step()
+        let actor=game.lemmings[0]
+        check(actor.x == (depth == 8 ? 41:40) && actor.direction == (depth == 8 ? 1:-1),"native Rock walker entry position")
+        check(actor.state == (depth == 8 ? Lemmings2Runtime.State.rockClimbing:.walking) && actor.rockClimber,"native Rock walker state and permanent")
+        check(depth == 8 || actor.age == before.age+1,"failed entry changed walker age")
+    }
+    print("PASS native Rock entry rear column depths 1/7, clear depth8, both directions and Walker entry")
 }

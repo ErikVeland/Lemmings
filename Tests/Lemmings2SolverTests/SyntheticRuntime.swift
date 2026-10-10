@@ -4,7 +4,7 @@ import NxlvKit
 // Copied from Tests/Lemmings2RuntimeTests/main.swift. The release audit compiles each
 // suite from its main.swift alone, so the runtime suite keeps its own copy.
 
-func fixture(wall: Bool = false) throws -> Lemmings2Runtime {
+func fixture(wall: Bool = false, chains: [Lemmings2Chain] = []) throws -> Lemmings2Runtime {
     let width = 120, height = 80
     var pixels = [UInt8](repeating: 0, count: width * height)
     var solid = [Bool](repeating: false, count: width * height)
@@ -15,7 +15,7 @@ func fixture(wall: Bool = false) throws -> Lemmings2Runtime {
         entrance: .init(x: 20, y: 45, width: 1, height: 1), exits: [.init(x: 90, y: 50, width: 16, height: 16)],
         skills: Lemmings2Runtime.Skill.allCases.filter { $0 != .unused },
         supplies: [Int](repeating: 10, count: Lemmings2Runtime.Skill.allCases.count - 1), total: 3,
-        timeLimit: 120, releaseInterval: 20, terrainMasks: try syntheticMasks())
+        timeLimit: 120, releaseInterval: 20, terrainMasks: try syntheticMasks(), chains: chains)
     return try Lemmings2Runtime(configuration: config)
 }
 

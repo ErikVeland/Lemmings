@@ -49,31 +49,47 @@ extension Score {
         let exits = game.configuration.exits
         let field = DistanceFields.shared.field(for: game.configuration)
         func toExit(_ x: Int, _ y: Int) -> Int {
-            let straight = exits.map { abs(x - ($0.x + $0.width / 2)) + abs(y - ($0.y + $0.height / 2)) }.min() ?? 0
+            let straight = exits.reduce(Int.max) { best, exit in
+                let horizontal = abs(x - (exit.x + exit.width / 2))
+                let vertical = abs(y - (exit.y + exit.height / 2))
+                return min(best, horizontal + vertical)
+            }
             return field.distance(x: x, y: y, fallback: straight)
         }
         let entrance = game.configuration.entrance
         // Lemmings not yet released count from the entrance, so releasing fewer gains no rank.
         let waiting = max(0, game.configuration.total - game.released)
         let active = game.lemmings.filter(\.active).reduce(0) { $0 + toExit($1.x, $1.y) }
+        let chainPreparation = game.chains.reduce(0) { $0 + (67 - $1.amplitude) * 8 }
         self.init(saved: game.saved, remaining: game.configuration.total - game.lost,
-                  distance: active + waiting * toExit(entrance.x + entrance.width / 2, entrance.y + entrance.height / 2),
+                  distance: active + waiting * toExit(entrance.x + entrance.width / 2, entrance.y + entrance.height / 2) + chainPreparation,
                   inputs: candidate.cursor.next, fingerprint: candidate.fingerprint)
     }
 }
 
-/// The state fingerprint omits the held pointer, which can move machines later, so the merge
-/// key adds the last pointer event. It also adds the pending events, because two equal states
-/// with different seed events still to come can end differently.
+/// The runtime fingerprint omits control state, so the merge key keeps the applied control
+/// history. It also adds pending events, because two equal states with different seed events
+/// still to come can end differently.
 private func mergeKey(_ candidate: Candidate) -> String {
     let next = candidate.cursor.next
     var hash = StableHash()
-    if let pointer = candidate.events[..<next].last(where: {
-        switch $0.event {
-        case .aim, .fan, .releasePointer: return true
-        default: return false
+    var fan: (x: Int, y: Int)?
+    for control in candidate.events[..<next] {
+        switch control.event {
+        case .aim, .releasePointer, .machine, .chain:
+            hash.add(control)
+        case let .fan(x, y, active):
+            if active {
+                if fan?.x != x || fan?.y != y { hash.add(control) }
+                fan = (x, y)
+            } else if fan != nil {
+                hash.add(control)
+                fan = nil
+            }
+        case .assign, .nuke:
+            break
         }
-    }) { hash.add(pointer) }
+    }
     hash.add(candidate.events.count - next)
     for event in candidate.events[next...] { hash.add(event) }
     return candidate.fingerprint + "|" + String(hash.value, radix: 16)

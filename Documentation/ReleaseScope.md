@@ -1,7 +1,7 @@
 # Release scope
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-L2 and L3 remain previews. Updated 22 September 2026 after the later DOS rules correction.
+L2 and L3 remain previews. Updated 10 October 2026 after L2 route completion.
 Automated checks support the recorded routes;
 remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)
 and the current [Classic validation](ReleaseReadiness/ClassicValidation-current.md).
@@ -70,8 +70,14 @@ See [the current campaign closure evidence](ReleaseReadiness/CampaignClosure-202
 
 | Release | Levels | Proven routes | Claim |
 | --- | ---: | ---: | --- |
-| Lemmings 2: The Tribes | 120 | 73 | **Preview** |
+| Lemmings 2: The Tribes | 120 | 120 | **Preview** |
 | Lemmings 3: The Chronicles | 90 | 41 | **Preview** |
+
+The strict native L2 gate passes all 120 standalone routes, 70 carry-over variants
+and twelve continuous tribe chains. Every witness reproduces its win twice with
+matching saved counts, ticks and state hashes. These chains finish with one
+lemming. The ark ending needs 30 and remains unproved.
+See [L2 completion evidence](Lemmings2Completion/README.md).
 
 Both play through their campaigns with original artwork, music and interfaces.
 Lemmings 3 keeps provisional rules in several areas, and its environmental
@@ -86,8 +92,8 @@ Mac release does not imply them.
 
 - Full Quest across the sequel previews remains outside the completed 352-level
   Classic campaign gate.
-- L2 and L3 retain preview status; their 96 missing routes are tracked separately
-  from the Classic 1.0 milestone.
+- L2 and L3 retain preview status. L2 has no missing level routes. L3 retains
+  49 missing routes, tracked separately from the Classic 1.0 milestone.
 - Physical Intel, minimum macOS, HDR, multiple displays and high refresh rates
   are untested. Sustained 10x play is not established.
 - Scalable menus and VoiceOver navigation are implemented. Full VoiceOver
