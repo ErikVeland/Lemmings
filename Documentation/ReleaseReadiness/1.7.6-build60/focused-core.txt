@@ -1,0 +1,163 @@
+Building for debugging...
+[Computing dependencies]
+[Pre-planning 1 / 358]
+[Planning 1 / 358]
+[Planning deferred tasks]
+[1 / 1]
+[1 / 14] LemmingsLocal-product
+[7 / 15] LemmingsLocal
+[15 / 23] LemmingsLocal-product
+[17 / 25] LemmingsLocal-product
+[17 / 25] LemmingsLocal
+[22 / 32] LemmingsLocal
+[26 / 36] LemmingsLocal
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:5723:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5721 |       openPanel.canChooseFiles = true
+5722 |       openPanel.canChooseDirectories = false
+5723 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5724 |       openPanel.message = "Choose a NeoLemmix level file."
+5725 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6832:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6830 |       openPanel.canChooseFiles = true
+6831 |       openPanel.canChooseDirectories = false
+6832 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6833 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+6834 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:7292:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7290 |     keyboard.controllerRewindHeld = { [weak self] held in
+7291 |       guard let self else { return }
+7292 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7293 |       else if self.rewindHeld { self.endContinuousRewind() }
+7294 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:5723:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5721 |       openPanel.canChooseFiles = true
+5722 |       openPanel.canChooseDirectories = false
+5723 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5724 |       openPanel.message = "Choose a NeoLemmix level file."
+5725 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6832:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6830 |       openPanel.canChooseFiles = true
+6831 |       openPanel.canChooseDirectories = false
+6832 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6833 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+6834 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:7292:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7290 |     keyboard.controllerRewindHeld = { [weak self] held in
+7291 |       guard let self else { return }
+7292 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7293 |       else if self.rewindHeld { self.endContinuousRewind() }
+7294 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[26 / 36] LemmingsLocal-product
+[30 / 38] LemmingsLocal
+[30 / 39] LemmingsLocal-product
+[34 / 40] LemmingsLocalTests-product
+[40 / 46] LemmingsLocalTests-product
+[42 / 46] LemmingsLocalTests-product
+[44 / 46] LemmingsLocalTests-product
+Build complete! (14.41 sec.)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite LearningJourneyTests started.
+􀟈  Suite DifficultyTests started.
+􀟈  Suite SkillShortcutsTests started.
+􀟈  Test authoredObjectivesSeparateIntroductionsFromCombinations() started.
+􀟈  Test keepsTheWholeCampaignAndFillsTheRetailJump() started.
+􀟈  Test nearEqualRepetitionsAreSpacedAndOriginDoesNotChooseTheOpening() started.
+􀟈  Test conceptIntroductionAndLowPrecision() started.
+􀟈  Test originalPlusBridgesDoNotOvershootOrExtendPastTheCampaign() started.
+􀟈  Test complexRoutesWaitForSecondBasicSkillPractice() started.
+􀟈  Test classicTimingBudgetOnlyMeasuresSuccessfulInputs() started.
+􀟈  Test isolatedPracticePrecedesCombinationsAndPassiveLevelsDoNotOpen() started.
+􀟈  Test cacheVersionsAndRoundTrip() started.
+􀟈  Test inconclusiveProbesRetainUnknownEvidence() started.
+􀟈  Test corpusInferenceRequiresRepeatedAsymmetricEvidence() started.
+􀟈  Test reservedKeysNeverReachASkill() started.
+􀟈  Test rawReplayScoreKeepsAComparableDemandBandSmooth() started.
+􀟈  Test aLowAverageCannotHideExpertTiming() started.
+􀟈  Test routineCrowdAssignmentsAreNotIndependentWorkers() started.
+􀟈  Test forgivingAndNarrowWindows() started.
+􀟈  Test officialLevelsLeadComparablePortLevelsWithoutOverridingDifficulty() started.
+􀟈  Test timingProbesUseRealSimulationOutcomes() started.
+􀟈  Test cameraKeysReserveHAndGExceptGlider() started.
+􀟈  Test gradeBoundaries() started.
+􀟈  Test unsupportedGapsAreFlaggedAndPriorsRejected() started.
+􀟈  Test cycleSkipsEmptySkillsAndWraps() started.
+􀟈  Test classicReplayObservationPreservesTheVerifiedOutcome() started.
+􀟈  Test deterministicGenerationAndStableTies() started.
+􀟈  Test classicDifficultyAnalysesAWinAtTheSourceClockLimit() started.
+􀟈  Test curriculumDoesNotExhaustIdenticalMetadataPriors() started.
+􀟈  Test completeOriginalPlusRetainsEveryAnchorBeyondOneHundred() started.
+􀟈  Test classicBindings() started.
+􀟈  Test sharedInitialsCycleAndNumbersStayAbsolute() started.
+􀟈  Test mechanicalOrderingAndResources() started.
+􀟈  Test unknownTechniquesAreNotInvented() started.
+􀟈  Test officialPreferenceCannotBuyLargeJump() started.
+􀟈  Test initialsBeforeFallbacksAndLevelChanges() started.
+􀟈  Test originalPlusPreservesOfficialOrderAndBridgesGaps() started.
+􀟈  Test originalPlusKeepsSuitableOfficialTutorialSteps() started.
+􀟈  Test multiplayerSourcesCannotEnterTheLearningPath() started.
+􀟈  Test DifficultyOrderAndParkingDoesNotAwardAWin() started.
+􀟈  Test incompleteProbesAreUnknownRatherThanFailures() started.
+􀟈  Test noReplayLevelsStayInCandidatePoolAndConfidenceBreaksNearTies() started.
+􀟈  Test cancellationPropagatesWithoutReturningPartialSuccess() started.
+􁁛  Test reservedKeysNeverReachASkill() passed after 0.006 seconds.
+􁁛  Test inconclusiveProbesRetainUnknownEvidence() passed after 0.006 seconds.
+􁁛  Test routineCrowdAssignmentsAreNotIndependentWorkers() passed after 0.006 seconds.
+􁁛  Test forgivingAndNarrowWindows() passed after 0.006 seconds.
+􁁛  Test corpusInferenceRequiresRepeatedAsymmetricEvidence() passed after 0.006 seconds.
+􁁛  Test gradeBoundaries() passed after 0.006 seconds.
+􁁛  Test conceptIntroductionAndLowPrecision() passed after 0.006 seconds.
+􁁛  Test originalPlusBridgesDoNotOvershootOrExtendPastTheCampaign() passed after 0.006 seconds.
+􁁛  Test cycleSkipsEmptySkillsAndWraps() passed after 0.006 seconds.
+􁁛  Test unsupportedGapsAreFlaggedAndPriorsRejected() passed after 0.006 seconds.
+􁁛  Test rawReplayScoreKeepsAComparableDemandBandSmooth() passed after 0.006 seconds.
+􁁛  Test officialLevelsLeadComparablePortLevelsWithoutOverridingDifficulty() passed after 0.006 seconds.
+􁁛  Test deterministicGenerationAndStableTies() passed after 0.006 seconds.
+􁁛  Test classicBindings() passed after 0.006 seconds.
+􁁛  Test sharedInitialsCycleAndNumbersStayAbsolute() passed after 0.006 seconds.
+􁁛  Test authoredObjectivesSeparateIntroductionsFromCombinations() passed after 0.006 seconds.
+􁁛  Test unknownTechniquesAreNotInvented() passed after 0.006 seconds.
+􁁛  Test mechanicalOrderingAndResources() passed after 0.006 seconds.
+􁁛  Test officialPreferenceCannotBuyLargeJump() passed after 0.006 seconds.
+􁁛  Test initialsBeforeFallbacksAndLevelChanges() passed after 0.006 seconds.
+􁁛  Test originalPlusKeepsSuitableOfficialTutorialSteps() passed after 0.006 seconds.
+􁁛  Test nearEqualRepetitionsAreSpacedAndOriginDoesNotChooseTheOpening() passed after 0.007 seconds.
+􁁛  Test originalPlusPreservesOfficialOrderAndBridgesGaps() passed after 0.006 seconds.
+􁁛  Test multiplayerSourcesCannotEnterTheLearningPath() passed after 0.006 seconds.
+􁁛  Test incompleteProbesAreUnknownRatherThanFailures() passed after 0.006 seconds.
+􁁛  Test noReplayLevelsStayInCandidatePoolAndConfidenceBreaksNearTies() passed after 0.006 seconds.
+􁁛  Test cameraKeysReserveHAndGExceptGlider() passed after 0.006 seconds.
+􁁛  Test cancellationPropagatesWithoutReturningPartialSuccess() passed after 0.006 seconds.
+􁁛  Suite SkillShortcutsTests passed after 0.007 seconds.
+􁁛  Test complexRoutesWaitForSecondBasicSkillPractice() passed after 0.007 seconds.
+􁁛  Test DifficultyOrderAndParkingDoesNotAwardAWin() passed after 0.007 seconds.
+􁁛  Test cacheVersionsAndRoundTrip() passed after 0.008 seconds.
+􁁛  Test aLowAverageCannotHideExpertTiming() passed after 0.008 seconds.
+􁁛  Test isolatedPracticePrecedesCombinationsAndPassiveLevelsDoNotOpen() passed after 0.009 seconds.
+􁁛  Test classicReplayObservationPreservesTheVerifiedOutcome() passed after 0.012 seconds.
+􁁛  Test curriculumDoesNotExhaustIdenticalMetadataPriors() passed after 0.015 seconds.
+􁁛  Test classicTimingBudgetOnlyMeasuresSuccessfulInputs() passed after 0.023 seconds.
+􁁛  Test classicDifficultyAnalysesAWinAtTheSourceClockLimit() passed after 0.134 seconds.
+􁁛  Test timingProbesUseRealSimulationOutcomes() passed after 1.399 seconds.
+􁁛  Test keepsTheWholeCampaignAndFillsTheRetailJump() passed after 4.038 seconds.
+􁁛  Suite LearningJourneyTests passed after 4.039 seconds.
+􁁛  Test completeOriginalPlusRetainsEveryAnchorBeyondOneHundred() passed after 8.411 seconds.
+􁁛  Suite DifficultyTests passed after 8.411 seconds.
+􁁛  Test run with 40 tests in 3 suites passed after 8.412 seconds.

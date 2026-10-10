@@ -1,0 +1,66 @@
+{
+  "archiveSHA256": "357a48d29036fe4b5e51d4dd461da9b7a3d99d5fec1ceca65a3be9f4829c610f",
+  "date": "2026-10-04",
+  "descriptorDifferences": {
+    "requiredToSave": {
+      "donor": 42,
+      "target": 35
+    },
+    "saveRequirement": {
+      "donor": 42,
+      "target": 35
+    },
+    "skills": {
+      "donor": {
+        "basher": 6,
+        "blocker": 2,
+        "bomber": 4,
+        "builder": 18,
+        "climber": 5,
+        "digger": 7,
+        "floater": 0,
+        "miner": 2
+      },
+      "target": {
+        "basher": 8,
+        "blocker": 4,
+        "bomber": 7,
+        "builder": 20,
+        "climber": 5,
+        "digger": 7,
+        "floater": 4,
+        "miner": 2
+      }
+    },
+    "title": {
+      "donor": "Mission Lempossible II",
+      "target": "Mission Lempossible"
+    }
+  },
+  "difficultyProbeRuns": 10,
+  "difficultyScore": 493.0799999999999,
+  "donorIdentity": "fan:lldb-131/joe04.dat#4",
+  "donorReplaySHA256": "5fc496c6daa85c21da0c728ab61e6e8fd6543ae4bde5c341ad352c3a0254ee3c",
+  "eventCount": 24,
+  "limits": "A native win on matching rendered geometry is not independent source physics parity.",
+  "matchingObjectsTerrainAndSteel": true,
+  "matchingRenderedGeometryHash": "SHA256 digest: 6dd347d99a74a1cc0e688a1b4820fec64520e18a73113d5e0a43c677af869c30",
+  "nativeInitialStateHash": "f20e8f7ceed6ce80ba7f6d0cbce5d4f3d129fe7bd90984fad48be1fab3a82403",
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "scope": "Targeted replay transfer from a scored easier-goal copy within one exact bundled Classic fan pack",
+  "selectedMechanics": "original",
+  "selectedNativeReplaySHA256": "e209996efe9cf92774e054ce343e9b21451beb030d9d21f61f65890f348c4c1e",
+  "sourceBuiltScorerSHA256": "9ec406dc7f1550272283bb307d57fe776fab3e9b0958774ab7d07d6148fdeb9b",
+  "sourceBuiltSolverSHA256": "deaf7c936671f24ce7b2e29662e07bd32e0a3fcfb9c48946546456ea8a2ecc70",
+  "strictNativeOutcome": {
+    "didWin": true,
+    "released": 50,
+    "required": 35,
+    "saved": 45,
+    "stateHash": "fe5338c60b5bf998c3a1cc34cc580cdeb2246603ae82bf0ad09bbbe4b3ed3ee5",
+    "ticks": 5102
+  },
+  "strictPackVerification": "4/4 currently scored members of fan:lldb-131 passed exact bundled level replay after promotion",
+  "targetIdentity": "fan:lldb-131/joe04.dat#2",
+  "targetTitle": "Mission Lempossible"
+}

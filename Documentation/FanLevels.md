@@ -34,6 +34,25 @@ cannot hide the embedded packs. Duplicate catalogue IDs appear once.
 The updater covers compatible releases in this database. It does not search forum
 attachments or install engines and graphics dependencies for unsupported formats.
 
+## Alternate artwork
+
+Macintosh and Amiga modes use release artwork for pieces that match the stock
+ground set. Macintosh mode reconstructs changed terrain and object frames at
+the native 2× artwork scale. It uses measured Macintosh colour-boundary rules
+and material details from the source colours. Each source cell keeps its
+opacity, and objects keep their frame order and timing.
+
+Macintosh reconstruction also covers changed palettes, mostly custom ground
+sets and changed special pictures. A stock special picture keeps its original
+Macintosh art. When no release matches a custom ground set, the source style
+slot selects the Macintosh sprite family and every piece uses reconstruction.
+Amiga mode keeps its existing 50% match rule and doubled source-pixel fallback.
+
+Artwork does not change collision, triggers or replays. Run
+`zsh Scripts/run-mac-artwork-tests.sh` for matched and changed-piece checks.
+Run `zsh Scripts/run-classic-mac-artwork-audit.sh` to check every bundled fan
+level and distinct changed asset without gameplay ticks.
+
 ## Checks
 
 `Scripts/run-fan-library-tests.sh` exercises first-run discovery, duplicate IDs,

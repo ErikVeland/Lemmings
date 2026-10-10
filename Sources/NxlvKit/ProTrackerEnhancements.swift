@@ -280,6 +280,8 @@ public struct ProTrackerEnhancedPlayer: Sendable {
     private var leftReverb: Reverb
     private var rightReverb: Reverb
     private let usesEqualizer: Bool
+    private let percussionSamples: Set<Int>
+    public var hasRhythm: Bool { !percussionSamples.isEmpty }
 
     public var hasFinished: Bool { player.hasFinished }
 
@@ -291,6 +293,13 @@ public struct ProTrackerEnhancedPlayer: Sendable {
         var player = ProTrackerPlayer(module: module, sampleRate: sampleRate)
         player.interpolation = enhancements.interpolation
         self.player = player
+        let namedPercussion = Set(module.samples.indices.filter {
+            ProTrackerPercussion.evidence(for: module.samples[$0]) != nil
+        })
+        percussionSamples = enhancements == .modern
+            ? namedPercussion.union(ProTrackerHolidayMix.percussionSamples(for: module))
+                .union(ProTrackerBeastMix.percussionSamples(for: module))
+            : namedPercussion
 
         // Which samples are drums depends on the module, so the tuning is
         // worked out here rather than living in a shared preset.
@@ -300,6 +309,11 @@ public struct ProTrackerEnhancedPlayer: Sendable {
                 for: module,
                 amount: enhancements.percussionCentering,
                 existing: enhancements.voiceTuning)
+        }
+        if enhancements == .modern {
+            resolved.voiceTuning = ProTrackerHolidayMix.tuning(
+                for: module, existing: resolved.voiceTuning)
+            resolved.voiceTuning = ProTrackerBeastMix.tuning(for: module, existing: resolved.voiceTuning)
         }
         self.enhancements = resolved
         outputs = [ProTrackerVoiceOutput](
@@ -326,13 +340,21 @@ public struct ProTrackerEnhancedPlayer: Sendable {
             || enhancements.highGainDB != 0
     }
 
+    /// Replace mix processing without moving the tracker clock or sample cursors.
+    public func replacingEnhancements(_ value: ProTrackerEnhancements) -> Self {
+        var replacement = Self(module: player.module, sampleRate: player.sampleRate, enhancements: value)
+        replacement.player = player
+        replacement.player.interpolation = value.interpolation
+        return replacement
+    }
+
     /// The Amiga panned its four voices left, right, right, left.
     private static func isLeftChannel(_ index: Int) -> Bool {
         let position = index % 4
         return position == 0 || position == 3
     }
 
-    public mutating func nextFrame() -> (left: Float, right: Float) {
+    public mutating func nextFrame(rhythmAmount: Double = 0) -> (left: Float, right: Float) {
         var buffer = outputs
         outputs = []
         player.nextVoiceOutputs(into: &buffer)
@@ -344,7 +366,8 @@ public struct ProTrackerEnhancedPlayer: Sendable {
         let separation = min(1, max(0, enhancements.stereoSeparation))
         for (index, output) in buffer.enumerated() where output.isActive {
             let tuning = enhancements.voiceTuning[output.sampleIndex]
-            let value = output.value * (tuning?.gain ?? 1)
+            let rhythmGain = percussionSamples.contains(output.sampleIndex) ? 1 : 1 - min(1, max(0, rhythmAmount))
+            let value = output.value * (tuning?.gain ?? 1) * rhythmGain
 
             // -1 is hard left, 1 is hard right.
             var pan = Self.isLeftChannel(index) ? -separation : separation

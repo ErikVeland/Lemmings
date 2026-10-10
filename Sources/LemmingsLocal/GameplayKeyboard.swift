@@ -3,6 +3,9 @@ import NxlvKit
 
 @MainActor final class GameSpeedControl {
     private(set) var state: GameplaySpeed
+    private var musicPitch = GameplayMusicPitch()
+    var bulletTimeActive = false { didSet { if oldValue != bulletTimeActive { onChange() } } }
+    var onMusicPitchChange: (Double) -> Void = { _ in }
     var onChange: () -> Void = {}
     init(legacyMultiplier: Double = 3) { state = GameplaySpeed(legacyMultiplier: legacyMultiplier) }
     var variableEnabled: Bool {
@@ -13,21 +16,25 @@ import NxlvKit
             state.variableEnabled = newValue; onChange()
         }
     }
-    var isFast: Bool { state.isFast }
-    var multiplier: Double { state.multiplier }
-    var label: String { state.label }
+    var isFast: Bool { !bulletTimeActive && state.isFast }
+    var multiplier: Double {
+        PrecisionZoomLedger.effectiveSpeed(normal: state.multiplier,
+            active: bulletTimeActive ? .superzoom : nil)
+    }
+    var label: String { bulletTimeActive ? "0.5×" : state.label }
     var target: Double { state.target }
-    var panelLabel: String { state.label }
+    var panelLabel: String { label }
     var choiceLabel: String { "\(Int(state.cruise))×" }
     func pointerDown(at now: TimeInterval, clickCount: Int) {
-        if clickCount > 1 {
-            state.reset(at: now)
-            state.press(.mouse, at: now, tapEnabled: false)
-        } else { state.press(.mouse, at: now) }
+        state.press(.mouse, at: now)
         onChange()
     }
     func update(at now: TimeInterval, active: Bool) {
         if active { state.update(at: now) } else { state.suspend(at: now) }
+        let previous = musicPitch.cents
+        musicPitch.update(speed: active && variableEnabled && !bulletTimeActive
+            ? state.musicPitchSpeed(at: now) : 1, at: now)
+        if musicPitch.cents != previous { onMusicPitchChange(musicPitch.cents) }
     }
     func tap(at now: TimeInterval = ProcessInfo.processInfo.systemUptime, clickCount: Int = 1) {
         state.tap(at: now, clickCount: clickCount); onChange()
@@ -41,16 +48,16 @@ import NxlvKit
     func setFast(_ enabled: Bool) { state.setFast(enabled, at: ProcessInfo.processInfo.systemUptime); onChange() }
     var help: String {
         variableEnabled
-            ? "F / Speed: toggle fast-forward\nHold F: ramp up to 10×; release: keep speed\nHold Shift, Speed or RT: temporary boost; release: previous speed\nSpeed arrows or Shift+[ / Shift+]: apply 2×, 3×, 5× or 10×\nF or controller B: immediately return to 1×"
+            ? "F / Speed: toggle fast-forward\nHold F: ramp up to 10×; release: keep speed\nHold Shift, Speed or RT: temporary boost; release: previous speed\nSpeed arrows or Shift+[ / Shift+]: apply 1×, 2×, 3×, 5× or 10×\nF or controller B: immediately return to 1×"
             : "F / Speed: toggle fast-forward"
     }
 }
 
 /// Shared gameplay keys follow the active window, including an attached sequel.
 @MainActor final class GameplayKeyboard {
-    private var monitor: Any?
-    private var focusObserver: NSObjectProtocol?
-    private var appFocusObserver: NSObjectProtocol?
+    nonisolated(unsafe) private var monitor: Any?
+    nonisolated(unsafe) private var focusObserver: NSObjectProtocol?
+    nonisolated(unsafe) private var appFocusObserver: NSObjectProtocol?
     private weak var window: NSWindow?
     private var controller: GameplayController?
     private var pressedF = false
@@ -75,12 +82,47 @@ import NxlvKit
     var menuKey: (String) -> Void = { _ in }
     var cycle: (Int) -> Void = { _ in }
     var centre: (Bool) -> Void = { _ in }
+    /// L2 gives Glider the first G press. Return false to centre the goal.
+    var selectGliderBeforeGoal: (() -> Bool)?
     var rate: ((Int) -> Void)?
+    /// A double tap of + or - moves the release rate to its maximum or minimum.
+    var rateLimit: ((Int) -> Void)?
+    /// N nukes, or undoes the nuke while that is still possible.
+    var nukeToggle: (() -> Void)?
+    private var rateTap = DoubleTap()
     var focusUnassigned: (Int) -> Void = { _ in }
     var focusLast: () -> Void = {}
     var repeatAssignment: () -> Void = {}
     var escape: () -> Void = {}
     var mainMenu: (() -> Void)?
+    var navigationAvailable: () -> Bool = { true }
+    private lazy var navigationButton: GameButton = {
+        let button = GameButton(frame: .zero)
+        button.title = "Menu"; button.target = self; button.action = #selector(openMainMenu)
+        button.setAccessibilityLabel("Save run and return to library")
+        button.toolTip = "Return to library (Esc or Q)"
+        return button
+    }()
+    @objc private func openMainMenu() { mainMenu?() }
+    func removeNavigationControl() { navigationButton.removeFromSuperview() }
+    func navigationFrame(in view: NSView) -> CGRect? {
+        guard !navigationButton.isHidden, let root = navigationButton.superview,
+              view.window === root.window else { return nil }
+        return view.convert(navigationButton.frame, from: root)
+    }
+    func refreshNavigationControl() {
+        guard let root = window?.contentView else { return }
+        let visible = mainMenu != nil && ownsController() && navigationAvailable()
+            && window?.attachedSheet == nil && !GameScreen.shared.isPresented
+        guard visible else { navigationButton.isHidden = true; return }
+        if navigationButton.superview !== root {
+            navigationButton.removeFromSuperview()
+            root.addSubview(navigationButton)
+        }
+        navigationButton.frame = CGRect(x: max(0, root.bounds.maxX - 100),
+            y: root.isFlipped ? 36 : max(0, root.bounds.maxY - 80), width: 88, height: 44)
+        navigationButton.isHidden = false
+    }
     var help: () -> String = { "" }
     var skillNames: () -> [String] = { [] }
     var cyclesSharedSkillLetters = true
@@ -89,6 +131,7 @@ import NxlvKit
     var hints: (() -> Void)?
     var settings: (() -> Void)?
     var retry: (() -> Void)?
+    var precisionZoom: ((PrecisionZoomKind) -> Void)?
     var rewind: (() -> Void)?
     var controllerRewindHeld: (Bool) -> Void = { _ in }
     var step: ((Int) -> Void)?
@@ -138,18 +181,42 @@ import NxlvKit
             pressedF = false; speedControl?.cancelInput()
         }
         guard let window, event.window === window, window.isKeyWindow,
-              window.attachedSheet == nil, !GameScreen.shared.isPresented, active(), !(window.firstResponder is NSTextView),
+              window.attachedSheet == nil, !GameScreen.shared.isPresented, !(window.firstResponder is NSTextView),
               event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { return event }
+        if event.type == .keyDown, ownsController(), navigationAvailable(),
+           event.keyCode == 53 || event.charactersIgnoringModifiers?.lowercased() == "q", let mainMenu {
+            if !event.isARepeat {
+                pressedF = false; speedControl?.reset(at: now); mainMenu()
+            }
+            return nil
+        }
+        guard active() else { return event }
         if event.type == .flagsChanged {
             if modern(), event.modifierFlags.contains(.shift) { speedControl?.press(.shift, at: now) }
             return event
         }
         guard event.type == .keyDown else { return event }
-        // F1 or i. The function key is easy to miss, and i is where a player
-        // reaches for information.
-        if event.keyCode == 122 || event.charactersIgnoringModifiers?.lowercased() == "i",
+        // Handle pause before AppKit sends Space to the focused control or canvas.
+        if event.keyCode == 49 || event.charactersIgnoringModifiers?.lowercased() == "p" {
+            if !event.isARepeat { togglePause() }
+            return nil
+        }
+        if event.charactersIgnoringModifiers?.lowercased() == "z", let precisionZoom {
+            if event.modifierFlags.contains(.shift) { speedControl?.release(.shift, at: now, allowTap: false) }
+            if !event.isARepeat { precisionZoom(event.modifierFlags.contains(.shift) ? .superzoom : .zoom) }
+            return nil
+        }
+        // Slash opens hints. Question mark keeps the controls guide.
+        if event.keyCode == 122 || event.characters == "/" || event.charactersIgnoringModifiers?.lowercased() == "i",
            let hints {
             if !event.isARepeat { hints() }
+            return nil
+        }
+        if modern(), let letter = event.charactersIgnoringModifiers?.lowercased(), ["h", "g"].contains(letter) {
+            if !event.isARepeat {
+                if letter == "h" { centre(true) }
+                else if selectGliderBeforeGoal?() != true { centre(false) }
+            }
             return nil
         }
         let key = event.characters ?? ""
@@ -189,7 +256,7 @@ import NxlvKit
             default: break
             }
         }
-        if event.keyCode == 53 {
+        if event.keyCode == 53 || event.charactersIgnoringModifiers?.lowercased() == "q" {
             if !event.isARepeat {
                 pressedF = false
                 speedControl?.reset(at: now)
@@ -202,7 +269,20 @@ import NxlvKit
             showHelp()
             return nil
         }
-        if ["-", "−", "+", "="].contains(key), let rate { rate(key == "-" || key == "−" ? -1 : 1); return nil }
+        if ["-", "−", "+", "="].contains(key), let rate {
+            let direction = key == "-" || key == "−" ? -1 : 1
+            if rateTap.press(direction < 0 ? "-" : "+", at: now, interval: NSEvent.doubleClickInterval,
+                             isRepeat: event.isARepeat), let rateLimit {
+                rateLimit(direction)
+            } else {
+                rate(direction)
+            }
+            return nil
+        }
+        if event.charactersIgnoringModifiers?.lowercased() == "n", let nukeToggle {
+            if !event.isARepeat { nukeToggle() }
+            return nil
+        }
         return event
     }
     var controllerAvailable: Bool {
@@ -271,11 +351,16 @@ import NxlvKit
         let speedHelp = (speedControl?.help ?? "").replacingOccurrences(of: " or RT", with: "").replacingOccurrences(of: "F or controller B", with: "F")
         var sections = [help(), speedHelp]
         if modern() {
-            sections.append("Tab / Shift-Tab: next / previous available skill\nHome / End: entrance / exit\n[ / ]: previous / next unassigned lemming\n\\: focus last assignment\nReturn: repeat last skill")
+            let goal = selectGliderBeforeGoal == nil ? "G / End: centre goal" : "G: Glider, then goal\nEnd: centre goal"
+            sections.append("Tab / Shift-Tab: next / previous available skill\nH / Home: centre entrance\n" + goal + "\n[ / ]: previous / next unassigned lemming\n\\: focus last assignment\nReturn: repeat last skill")
         } else { sections.append("Modern keyboard shortcuts are off. Number keys select skills.") }
-        sections.append("Escape: save run and return to main menu\n?: controls help")
-        if hints != nil { sections.append("F1 or i: level goals and tiered hints") }
-        if rate != nil { sections.append("− / +: release rate") }
+        sections.append("Escape / Q: save run and return to library\n?: controls help")
+        if hints != nil { sections.append("Slash / I / F1: level goals and tiered hints") }
+        if rate != nil {
+            sections.append("− / +: release rate"
+                + (rateLimit != nil ? "\nDouble-tap − / +: minimum / maximum release rate" : ""))
+        }
+        if nukeToggle != nil { sections.append("N: nuke; press again to undo the nuke") }
         if controllerEnabled() {
             sections.append(ControllerDevicePresentation.help(mapping: controllerMappings(),
                 variableSpeed: speedControl?.variableEnabled == true, tapSpeed: controllerTapSpeed(),
@@ -307,9 +392,10 @@ import NxlvKit
             let action = String(line[line.index(after: colon)...]).trimmingCharacters(in: .whitespaces)
             let lower = line.lowercased()
             let group = controllerSection ? "Controller"
+                : lower.contains("zoom") ? "Camera"
                 : ["speed", "fast-forward", "ramp", "1×"].contains(where: lower.contains) ? "Speed"
                 : ["skill", "assignment", "unassigned"].contains(where: lower.contains) ? "Skills"
-                : lower.contains("entrance") ? "Camera" : "Gameplay"
+                : ["entrance", "centre goal", "Glider, then goal".lowercased()].contains(where: lower.contains) ? "Camera" : "Gameplay"
             rows.append(KeyboardCommand(keys: keys, action: action, group: group))
         }
         if speedControl?.variableEnabled == true {
@@ -385,7 +471,7 @@ import NxlvKit
             }
         }
     }
-    isolated deinit {
+    deinit {
         if let monitor { NSEvent.removeMonitor(monitor) }
         if let focusObserver { NotificationCenter.default.removeObserver(focusObserver) }
         if let appFocusObserver { NotificationCenter.default.removeObserver(appFocusObserver) }

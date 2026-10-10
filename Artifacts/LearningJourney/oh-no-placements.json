@@ -1,0 +1,162 @@
+[
+  {
+    "level": "Snuggle up to a Lemming",
+    "objective": "community:Gentle/Snuggle_up_to_a_Lemming.nxlv",
+    "step": 9
+  },
+  {
+    "level": "Get a little extra help",
+    "objective": "community:Gentle/Get_a_little_extra_help.nxlv",
+    "step": 12
+  },
+  {
+    "level": "Downwardly Mobile Lemmings",
+    "objective": "community:Gentle/Downwardly_Mobile_Lemmings.nxlv",
+    "step": 14
+  },
+  {
+    "level": "PoP YoR ToP!!!",
+    "objective": "community:Quirky/PoP_YoR_ToP!!!.nxlv",
+    "step": 55
+  },
+  {
+    "level": "Just A Quicky",
+    "objective": "community:Quirky/Just_a_Quicky.nxlv",
+    "step": 59
+  },
+  {
+    "level": "DON`T PANIC",
+    "objective": "community:Quirky/DON'T_PANIC.nxlv",
+    "step": 73
+  },
+  {
+    "level": "Meeting Adjourned",
+    "objective": "community:Quirky/Meeting_Adjourned.nxlv",
+    "step": 74
+  },
+  {
+    "level": "Take care, Sweetie",
+    "objective": "community:Quirky/Take_care,_Sweetie.nxlv",
+    "step": 97
+  },
+  {
+    "level": "Flow Control",
+    "objective": "community:Zany/Flow_Control.nxlv",
+    "step": 125
+  },
+  {
+    "level": "KEEP ON TRUCKING",
+    "objective": "community:Zany/KEEP_ON_TRUCKING.nxlv",
+    "step": 142
+  },
+  {
+    "level": "Dolly Dimple",
+    "objective": "community:Zany/Dolly_Dimple.nxlv",
+    "step": 144
+  },
+  {
+    "level": "Mutiny On The Bounty",
+    "objective": "community:Zany/Mutiny_on_the_Bounty.nxlv",
+    "step": 145
+  },
+  {
+    "level": "SNOW JOKE",
+    "objective": "community:Zany/SNOW_JOKE.nxlv",
+    "step": 146
+  },
+  {
+    "level": "ONWARD AND UPWARD",
+    "objective": "community:Zany/ONWARD_AND_UPWARD.nxlv",
+    "step": 147
+  },
+  {
+    "level": "Across The Gap",
+    "objective": "community:Zany/Across_the_Gap.nxlv",
+    "step": 155
+  },
+  {
+    "level": "Got anything....Lemmingy???",
+    "objective": "community:Zany/Got_anything..._Lemmingy___.nxlv",
+    "step": 165
+  },
+  {
+    "level": "The Lemming Funhouse",
+    "objective": "community:Manic/The_Lemming_Funhouse.nxlv",
+    "step": 167
+  },
+  {
+    "level": "Synchronised Lemming",
+    "objective": "community:Manic/Synchronised_Lemming.nxlv",
+    "step": 177
+  },
+  {
+    "level": "Chill out!",
+    "objective": "community:Manic/Chill_out!.nxlv",
+    "step": 180
+  },
+  {
+    "level": "Down the tube",
+    "objective": "community:Manic/Down_the_tube.nxlv",
+    "step": 181
+  },
+  {
+    "level": "AAAAAARRRRRRGGGGGGHHHHHH!!!!!!",
+    "objective": "community:Manic/AAAAAARRRRRRGGGGGGHHHHHH!!!!!!.nxlv",
+    "step": 184
+  },
+  {
+    "level": "ROCKY VI",
+    "objective": "community:Manic/ROCKY_VI.nxlv",
+    "step": 187
+  },
+  {
+    "level": "THE SILENCE OF THE LEMMINGS",
+    "objective": "community:Manic/THE_SILENCE_OF_THE_LEMMINGS.nxlv",
+    "step": 201
+  },
+  {
+    "level": "The race against cliches",
+    "objective": "community:Manic/The_race_against_cliches.nxlv",
+    "step": 218
+  },
+  {
+    "level": "Temple of Love",
+    "objective": "community:Manic/Temple_of_Love.nxlv",
+    "step": 232
+  },
+  {
+    "level": "There`s madness in the method",
+    "objective": "community:Lunatic/There's_madness_in_the_method.nxlv",
+    "step": 239
+  },
+  {
+    "level": "Lemming about town",
+    "objective": "community:Lunatic/Lemming_about_town.nxlv",
+    "step": 247
+  },
+  {
+    "level": "Be more than just a number",
+    "objective": "community:Lunatic/Be_more_than_just_a_number.nxlv",
+    "step": 251
+  },
+  {
+    "level": "This Corrosion",
+    "objective": "community:Lunatic/This_Corrosion.nxlv",
+    "step": 255
+  },
+  {
+    "level": "Creature Discomforts",
+    "objective": "community:Lunatic/Creature_Discomforts.nxlv",
+    "step": 263
+  },
+  {
+    "level": "Scaling the Heights",
+    "objective": "community:Lunatic/Scaling_the_Heights.nxlv",
+    "step": 270
+  },
+  {
+    "level": "Lemmings in a situation",
+    "objective": "community:Lunatic/Lemmings_in_a_situation.nxlv",
+    "step": 281
+  }
+]

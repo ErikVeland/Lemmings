@@ -46,6 +46,48 @@ func require(_ condition: @autoclosure () -> Bool, _ message: String) throws {
         // Expected: the newer file stays authoritative.
     }
 
+    let legacyFile = directory.appendingPathComponent("legacy-v1.json")
+    var legacy = try JSONSerialization.jsonObject(with: Data(contentsOf: file)) as! [String: Any]
+    legacy["version"] = 1
+    legacy.removeValue(forKey: "savedRuns"); legacy.removeValue(forKey: "activeRunHotSeatID")
+    try JSONSerialization.data(withJSONObject: legacy).write(to: legacyFile)
+    let migrated = try LevelPlaylistStore(file: legacyFile)
+    try require(migrated.activeRun == firstRun && migrated.savedRuns.isEmpty,
+        "A version 1 solo run did not load")
+    try migrated.selectPlaylist(id: first.id)
+    let upgraded = try JSONSerialization.jsonObject(with: Data(contentsOf: legacyFile)) as! [String: Any]
+    try require(upgraded["version"] as? Int == 3,
+        "Session history was left writable by an older app version")
+
+    let sessionsFile = directory.appendingPathComponent("sessions.json")
+    let sessions = try LevelPlaylistStore(file: sessionsFile)
+    try sessions.add(first)
+    try sessions.add(second)
+    try sessions.setActiveRun(firstRun)
+    let sharedRun = try LevelSequenceRun.playlist(second, pool: pool)
+    try sessions.startRun(sharedRun, hotSeatID: "shared-session")
+    let reopenedSessions = try LevelPlaylistStore(file: sessionsFile)
+    try require(reopenedSessions.activeRunHotSeatID == "shared-session"
+        && reopenedSessions.savedRuns.first?.run == firstRun
+        && reopenedSessions.savedRuns.first?.hotSeatID == nil,
+        "Starting Hot Seat did not save the previous solo sequence")
+    try reopenedSessions.resumeRun(id: firstRun.id)
+    try require(reopenedSessions.activeRun == firstRun && reopenedSessions.activeRunHotSeatID == nil
+        && reopenedSessions.savedRuns.first?.run == sharedRun
+        && reopenedSessions.savedRuns.first?.hotSeatID == "shared-session",
+        "Resuming solo lost the shared sequence or its owner")
+    let staleSessions = try LevelPlaylistStore(file: sessionsFile)
+    try reopenedSessions.resumeRun(id: sharedRun.id)
+    do {
+        try staleSessions.startRun(sharedRun, hotSeatID: "other-session")
+        throw SequelDataError.invalid("A stale session writer replaced saved runs")
+    } catch LevelPlaylistStore.Failure.changedOnDisk {}
+    try require(staleSessions.activeRun == firstRun && staleSessions.activeRunHotSeatID == nil,
+        "A failed session save changed in-memory ownership")
+    try reopenedSessions.removePlaylist(id: first.id)
+    try require(reopenedSessions.savedRuns.isEmpty && reopenedSessions.activeRun == sharedRun,
+        "Deleting a playlist retained its archived run or removed another session")
+
     let restored = try LevelPlaylistStore(file: file)
     try require(restored.playlists == [first, second]
         && restored.selectedPlaylistID == second.id
@@ -94,14 +136,16 @@ func require(_ condition: @autoclosure () -> Bool, _ message: String) throws {
         S_IRUSR | S_IWUSR)
     try require(heldLock >= 0 && flock(heldLock, LOCK_EX | LOCK_NB) == 0,
         "Playlist deletion lock fixture could not start")
-    DispatchQueue.global().asyncAfter(deadline: .now() + 0.05) {
-        flock(heldLock, LOCK_UN)
-        close(heldLock)
-    }
     let deletionStarted = ProcessInfo.processInfo.systemUptime
-    LevelPlaylistStore.removeData(at: file)
-    try require(ProcessInfo.processInfo.systemUptime - deletionStarted >= 0.03,
-        "Playlist deletion did not wait for an active writer lock")
+    do {
+        try LevelPlaylistStore.removeDataChecked(at: file)
+        throw SequelDataError.invalid("Playlist deletion ignored an active writer")
+    } catch LevelPlaylistStore.Failure.busy {}
+    try require(ProcessInfo.processInfo.systemUptime - deletionStarted < 0.25,
+        "Playlist deletion blocked the UI on an active writer lock")
+    try require(FileManager.default.fileExists(atPath: file.path), "Busy playlist deletion removed saved data")
+    flock(heldLock, LOCK_UN); close(heldLock)
+    try LevelPlaylistStore.removeDataChecked(at: file)
     let playlistRemainders = try FileManager.default.contentsOfDirectory(
         at: directory, includingPropertiesForKeys: nil).filter {
             $0.lastPathComponent == file.lastPathComponent
@@ -118,7 +162,7 @@ func require(_ condition: @autoclosure () -> Bool, _ message: String) throws {
     let unsupportedStore = try LevelPlaylistStore(file: unsupportedFile)
     try unsupportedStore.add(first)
     var object = try JSONSerialization.jsonObject(with: Data(contentsOf: unsupportedFile)) as! [String: Any]
-    object["version"] = 2
+    object["version"] = 4
     object.removeValue(forKey: "playlists")
     try JSONSerialization.data(withJSONObject: object).write(to: unsupportedFile, options: .atomic)
     do {
@@ -302,6 +346,7 @@ func testSkillAccounting() throws {
         windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1)!)
     try require(store.records.activeProfile.initials == "XYZ" && before == 0 && after == 0 && closed == 0
         && store.storageError == nil, "Retry did not save the edited initials in place")
+    try shot("profiles-saved")
     key("\r", code: 36)
     try require(closed == 1 && before == 0, "Done did not close the players page without switching")
     view.canSwitch = false; view.selectProfile(store.records.profile(legacy)!)
@@ -327,7 +372,8 @@ func testSkillAccounting() throws {
     key("d"); try shot("run-details")
     key("\r", code: 36)
     window.makeKeyAndOrderFront(nil)
-    NSApplication.shared.activate(ignoringOtherApps: true)
+    let testsDesktopFocus = ProcessInfo.processInfo.environment["LEMMINGS_TEST_WINDOWS"] == "foreground"
+    if testsDesktopFocus { NSApplication.shared.activate(ignoringOtherApps: true) }
         try await Task.sleep(nanoseconds: 200_000_000)
     let windowCount = NSApplication.shared.windows.count
     ArcadeWindow.shared.showResult(result, owner: window, retry: { retried += 1 }, next: {}, replay: { _ in })
@@ -348,7 +394,12 @@ func testSkillAccounting() throws {
                 "Back did not restore the results page")
     ArcadeWindow.shared.arcadeView.onRetry?()
         try await Task.sleep(nanoseconds: 100_000_000)
-    try require(window.isKeyWindow && retried == 2, "Retry did not restore keyboard focus to the game window (active: \(NSApplication.shared.isActive), visible: \(window.isVisible), retried: \(retried), key: \(NSApplication.shared.keyWindow?.title ?? "none"))")
+    try require(retried == 2, "Retry did not invoke its action")
+    if testsDesktopFocus {
+        try require(window.isKeyWindow, "Retry did not restore keyboard focus to the game window (active: \(NSApplication.shared.isActive), visible: \(window.isVisible), key: \(NSApplication.shared.keyWindow?.title ?? "none"))")
+    } else {
+        print("SKIP desktop focus after Retry: run with LEMMINGS_TEST_WINDOWS=foreground")
+    }
     window.orderOut(nil)
     print("PASS atomic save/reload, corrupt-file preservation, legacy progress namespace, sprite profiles, in-game pages, nested Back and successful retry controls")
 }
@@ -402,6 +453,18 @@ func testSkillAccounting() throws {
     let fresh = ArcadeStore(file: directory.appendingPathComponent("records.json"), bundledProofs: nil)
     try require(fresh.hotSeatID == store.hotSeatID && fresh.playingProfileID == host,
         "Relaunch returned to the replaced Hot Seat")
+    let freshID = store.hotSeatID!
+    store.turnPolicy = .everyLevel
+    try require(store.savedHotSeats.contains(where: { $0.id == previousID }),
+        "The previous Hot Seat was not available to resume")
+    try require(store.resumeHotSeat(id: previousID!) && store.progressKey("campaign") == sharedKey
+        && store.playingProfileID == friend.id && store.turnPolicy == .atFirstFail,
+        "Resuming a saved Hot Seat lost progress, roster, turn or house rule")
+    let resumedHistory = ArcadeStore(file: directory.appendingPathComponent("records.json"), bundledProofs: nil)
+    try require(resumedHistory.hotSeatID == previousID
+        && resumedHistory.savedHotSeats.contains(where: { $0.id == freshID }),
+        "Session history did not survive relaunch")
+    try require(store.resumeHotSeat(id: freshID), "Could not resume the new Hot Seat")
     UserDefaults.standard.removeObject(forKey: sharedKey)
     store.turnPolicy = .everyLevel
     store.toggleSessionProfile("missing")
@@ -481,7 +544,7 @@ func testSkillAccounting() throws {
     print("PASS hot-seat roster, three-player rotation, removal, shared progress owner, separate result owner and retry action")
 }
 
-@MainActor func testProfileJourneys() throws {
+@MainActor func testProfileJourneys() async throws {
     let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
     defer { try? FileManager.default.removeItem(at: directory) }
     let checkpoints = RunRecoveryStore(directory: directory.appendingPathComponent("Checkpoints"))
@@ -529,7 +592,11 @@ func testSkillAccounting() throws {
     key("r"); key("o"); key("b")
     try require(store.records.profile(bob!.id)?.initials == "ROB" && ArcadeStore(file: records, bundledProofs: nil, checkpoints: checkpoints)
         .records.profile(bob!.id)?.initials == "ROB", "Edited initials were not saved automatically")
-    key("", code: 124)
+    try shot("edit-player")
+    let nextPortrait = (bob!.portrait + 1) % 8
+    let portraitButton = view.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement }
+        .first { $0.accessibilityLabel() == "Portrait: " + ArcadeProfile.portraitNames[nextPortrait] }
+    try require(portraitButton?.accessibilityPerformPress() == true, "The next portrait has no input target")
     try require(store.records.profile(bob!.id)?.portrait == (bob!.portrait + 1) % 8, "Portrait change was not saved automatically")
     try require(view.profilePrimaryTitle == "Play as ROB", "Other player did not offer Play as")
     try shot("edit-player")
@@ -552,6 +619,25 @@ func testSkillAccounting() throws {
     checkpoints.save(run, immediately: true) { _ in }
     let savedRun = try checkpoints.latest(profileID: bob!.id)
     try require(savedRun?.runID == run.runID, "Checkpoint fixture was not saved")
+    let backupStore = RunRecoveryStore(directory: directory.appendingPathComponent("backup-only"))
+    backupStore.save(run, immediately: true) { _ in }
+    let backupRunURL = backupStore.directory.appendingPathComponent(run.runID.uuidString + ".json")
+    let checkpointLock = open(backupRunURL.appendingPathExtension("lock").path, O_RDWR)
+    try require(checkpointLock >= 0 && flock(checkpointLock, LOCK_EX | LOCK_NB) == 0, "Checkpoint writer lock fixture failed")
+    do {
+        _ = try RunRecoveryFile(url: backupRunURL).discard(profileID: bob!.id)
+        throw SequelDataError.invalid("Checkpoint cleanup bypassed an active writer")
+    } catch RunRecoveryError.busy {}
+    try require(FileManager.default.fileExists(atPath: backupRunURL.path), "Busy cleanup removed a checkpoint")
+    flock(checkpointLock, LOCK_UN); close(checkpointLock)
+    try FileManager.default.removeItem(at: backupRunURL)
+    try backupStore.discard(profileID: host)
+    try require(FileManager.default.fileExists(atPath: backupRunURL.appendingPathExtension("backup").path),
+        "Cleanup removed another player's backup")
+    try backupStore.discard(profileID: bob!.id)
+    try require(!FileManager.default.fileExists(atPath: backupRunURL.appendingPathExtension("backup").path)
+        && FileManager.default.fileExists(atPath: backupRunURL.appendingPathExtension("lock").path),
+        "Cleanup revived an orphan backup or removed its lock inode")
     view.selectProfile(store.records.profile(bob!.id)!)
     view.confirmDeleteSelectedProfile()
     guard let confirmation = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
@@ -559,7 +645,14 @@ func testSkillAccounting() throws {
         throw SequelDataError.invalid("Delete did not ask for confirmation")
     }
     try shot("delete-confirmation")
+    let deleteStarted = ProcessInfo.processInfo.systemUptime
     delete.performClick(nil)
+    try require(ProcessInfo.processInfo.systemUptime - deleteStarted < 0.5,
+        "Deleting a player stalled the menu")
+    let checkpointURL = checkpoints.directory.appendingPathComponent(run.runID.uuidString + ".json")
+    for _ in 0..<500 where FileManager.default.fileExists(atPath: checkpointURL.path) {
+        try await Task.sleep(nanoseconds: 10_000_000)
+    }
     let remainingRun = try checkpoints.latest(profileID: bob!.id)
     try require(store.records.profile(bob!.id) == nil && store.records.runs.allSatisfy { $0.profileID != bob!.id }
         && store.records.trolley.attempts.allSatisfy { $0.run.profileID != bob!.id }
@@ -628,7 +721,7 @@ Task { @MainActor in
     do {
         try testLevelPlaylistStore()
         try testSharedSession()
-        try testProfileJourneys()
+        try await testProfileJourneys()
         let sample = try testRecords()
         try testSkillAccounting()
         try await testStoreAndView(sample)

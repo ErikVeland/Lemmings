@@ -1,0 +1,74 @@
+{
+  "attempts": [
+    {
+      "archiveSHA256": "8653f2b11c3c6115ac3798348bbf330c7fc7e77955ff08a4bb6d0b12f3766ff3",
+      "bestSaved": "5/11",
+      "completedDelays": 41,
+      "identity": "fan:lldb-76/ClamSpam04.dat#0",
+      "initialRate": 1,
+      "mode": "Floater broadcast delay 0..40",
+      "partialReplaySHA256": "96c6e95e945cfc0b97e4fb4f2f5ba014dec760c3512313dca9a339bc7c675512"
+    },
+    {
+      "archiveSHA256": "8653f2b11c3c6115ac3798348bbf330c7fc7e77955ff08a4bb6d0b12f3766ff3",
+      "bestSaved": "5/11",
+      "completedDelays": 41,
+      "identity": "fan:lldb-76/ClamSpam04.dat#0",
+      "initialRate": 25,
+      "mode": "Floater broadcast delay 0..40",
+      "partialReplaySHA256": "a26163e3fad35652bd3a85ea9929675d69ad7f6d3a28af52e63db156af12131a"
+    },
+    {
+      "archiveSHA256": "8653f2b11c3c6115ac3798348bbf330c7fc7e77955ff08a4bb6d0b12f3766ff3",
+      "bestSaved": "5/11",
+      "completedDelays": 41,
+      "identity": "fan:lldb-76/ClamSpam04.dat#0",
+      "initialRate": 50,
+      "mode": "Floater broadcast delay 0..40",
+      "partialReplaySHA256": "10c4b005029b4f467b2d8489fd54e5fab677613b1d583ae98510623076a35fc9"
+    },
+    {
+      "archiveSHA256": "8653f2b11c3c6115ac3798348bbf330c7fc7e77955ff08a4bb6d0b12f3766ff3",
+      "bestSaved": "5/11",
+      "completedDelays": 41,
+      "identity": "fan:lldb-76/ClamSpam04.dat#0",
+      "initialRate": 75,
+      "mode": "Floater broadcast delay 0..40",
+      "partialReplaySHA256": "aa2b286463f5da9f9bbc1d2a2538b4aa0b87d9099776cfed7339e7fc6b29dfc1"
+    },
+    {
+      "archiveSHA256": "0cef5ab32815cf0e8766366d9715dd62e8a2a23afcf4349aebacf0abd06edb13",
+      "bestSaved": "0/10",
+      "completedOneSkillRollouts": 45,
+      "expanded": 7779,
+      "forcedPrefixSHA256": "1e53a0efa9a10cf56946a8f240b73c3f06221bb7e34d00a2f6103fe92fd5df4c",
+      "identity": "fan:lldb-134/weirdy02 (version 2).dat#3",
+      "mode": "one further skill after ten Climber commands, fallback/refire 20, width64",
+      "partialReplaySHA256": "becf8b4121b3882a91869784bd9542d8ecf5488e91e8751e167b2cf7a1fffd9b",
+      "waitingRouteTick": 309
+    },
+    {
+      "archiveSHA256": "0cef5ab32815cf0e8766366d9715dd62e8a2a23afcf4349aebacf0abd06edb13",
+      "bestSaved": "0/10",
+      "completedOneSkillRollouts": null,
+      "expanded": 7779,
+      "forcedPrefixSHA256": "1e53a0efa9a10cf56946a8f240b73c3f06221bb7e34d00a2f6103fe92fd5df4c",
+      "identity": "fan:lldb-134/weirdy02 (version 2).dat#3",
+      "mode": "balanced width64 after ten Climber commands, fallback/refire 20",
+      "partialReplaySHA256": "becf8b4121b3882a91869784bd9542d8ecf5488e91e8751e167b2cf7a1fffd9b",
+      "waitingRouteTick": null
+    }
+  ],
+  "date": "2026-10-04",
+  "limits": "The ClamSpam route may need more than early Floater assignment and a fixed release rate. The weirdy02 route may need a different Climber timing or multiple later skills. These bounded failures are not impossibility or source-physics parity evidence.",
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "sourceRecordCheck": {
+    "identity": "fan:lldb-76/ClamSpam04.dat#0",
+    "publicLevelURL": "https://lldb.camanis.net/level/76/1/Flotilla",
+    "cachedHTMLSHA256": "35ac465c753f7334f3c49259dd8f84d4c7ed5512c40b7c5bb6982524ab265b02",
+    "cachedAtUTC": "2026-09-29T12:39:21Z",
+    "publishedMostSavedRecord": "none in the cached page",
+    "note": "The cached page lists the same 11-of-16 goal, one-minute limit, rate 99 and 16 Floaters as the bundled level. It reports no published source win at that snapshot. This does not prove the level impossible or establish source physics parity."
+  },
+  "solverSHA256": "5d9cc73d9e26b0bd1afed7599486af20d64dc0ed0f73697d578f7028b0c20b6d"
+}

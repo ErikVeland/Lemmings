@@ -144,6 +144,30 @@ private func testInitialHashGuard(content: Content) throws {
     print("PASS initial state hash rejects mismatched data")
 }
 
+private func testSpeculativeEarlyStop(content: Content) throws {
+    let (simulation, entry) = try content.simulation(at: 2)
+    let replay = ClassicDOSReplay(
+        rank: entry.rank,
+        number: entry.number,
+        title: entry.level.title.trimmingCharacters(in: .whitespaces),
+        initialStateHash: ClassicDOSReplayRecorder.stateHash(of: simulation),
+        events: []
+    )
+    let short = try ClassicDOSReplayPlayer.run(
+        replay, simulation: simulation, tickLimit: searchTickLimit,
+        verify: false, stopWhenUnwinnable: true)
+    try require(!short.didWin, "speculative replay reported a win after losing too many lemmings")
+    do {
+        let full = try ClassicDOSReplayPlayer.run(
+            replay, simulation: simulation, tickLimit: searchTickLimit, verify: false)
+        try require(short.ticks < full.ticks,
+            "speculative replay did not stop before the full loss: \(short.ticks), \(full.ticks)")
+    } catch ClassicDOSReplayError.tickLimitReached(_) {
+        try require(short.ticks < searchTickLimit, "speculative replay reached the full tick limit")
+    }
+    print("PASS speculative loss stops before full replay completion")
+}
+
 private func testRoundTrip(_ replay: ClassicDOSReplay) throws {
     let encoder = JSONEncoder()
     encoder.outputFormatting = [.sortedKeys, .prettyPrinted]
@@ -151,6 +175,160 @@ private func testRoundTrip(_ replay: ClassicDOSReplay) throws {
     let decoded = try JSONDecoder().decode(ClassicDOSReplay.self, from: data)
     try require(decoded == replay, "replay changed across a JSON round trip")
     print("PASS replay JSON round trip (\(data.count) bytes)")
+}
+
+private func testGolemsSourceAssignment() throws {
+    let terrain = try ClassicDOSTerrain(
+        width: 192, height: 96,
+        solidMask: Data(repeating: 0, count: 192 * 96),
+        steelMask: Data(repeating: 0, count: 192 * 96)
+    )
+    func simulation(_ mechanics: ClassicDOSMechanics) throws -> ClassicDOSSimulation {
+        try ClassicDOSSimulation(
+            terrain: terrain,
+            configuration: ClassicDOSConfiguration(
+                totalLemmings: 1, requiredToSave: 1, timeLimitTicks: 300,
+                initialReleaseRate: 99,
+                entrances: [ClassicDOSPoint(x: 40, y: 0)],
+                initialSkills: [.builder: 1],
+                maximumX: 191, maximumY: 95,
+                mechanics: mechanics
+            )
+        )
+    }
+    let initial = try simulation(.golems)
+    let events = [ClassicDOSReplayEvent(
+        tick: 58, action: .assign(lemmingID: 0, skill: .builder), afterTick: true)]
+    let source = ClassicDOSReplay(
+        rank: "Fan", number: 1, title: "Falling Builder",
+        initialStateHash: ClassicDOSReplayRecorder.stateHash(of: initial),
+        events: events, sourceRules: .golemsFallingBuilder
+    )
+    let ordinary = ClassicDOSReplay(
+        rank: source.rank, number: source.number, title: source.title,
+        initialStateHash: source.initialStateHash, events: events
+    )
+    do {
+        _ = try ClassicDOSReplayPlayer.run(ordinary, simulation: initial)
+        throw ReplayFailure(description: "ordinary replay accepted a falling Builder")
+    } catch ClassicDOSReplayError.commandRejected(tick: 58, lemmingID: 0, skill: .builder) {}
+
+    let outcome = try ClassicDOSReplayPlayer.run(source, simulation: initial)
+    let stored = ClassicDOSReplay(
+        rank: source.rank, number: source.number, title: source.title,
+        initialStateHash: source.initialStateHash, events: events,
+        sourceRules: .golemsFallingBuilder, expected: outcome
+    )
+    let encoded = try JSONEncoder().encode(stored)
+    let decoded = try JSONDecoder().decode(ClassicDOSReplay.self, from: encoded)
+    try require(decoded == stored, "source assignment rule changed across JSON")
+    let verified = try ClassicDOSReplayPlayer.run(decoded, simulation: initial)
+    try require(verified == outcome,
+        "saved source replay failed strict verification")
+    let ordinaryObject = try JSONSerialization.jsonObject(with: JSONEncoder().encode(ordinary)) as! [String: Any]
+    try require(ordinaryObject["sourceRules"] == nil, "ordinary replay acquired source rules")
+    do {
+        _ = try ClassicDOSReplayPlayer.run(source, simulation: simulation(.original))
+        throw ReplayFailure(description: "Golems source input ran under original mechanics")
+    } catch ClassicDOSReplayError.outcomeMismatch(field: "sourceRules", expected: _, actual: _) {}
+
+    func emptyMask(width: Int, height: Int) throws -> ClassicDOSMask {
+        try ClassicDOSMask(width: width, height: height,
+            pixels: Data(repeating: 0, count: width * height))
+    }
+    let masks = try ClassicDOSDestructionMaskSet(
+        explosion: emptyMask(width: 16, height: 22),
+        bashRight: (0..<4).map { _ in try emptyMask(width: 16, height: 10) },
+        bashLeft: (0..<4).map { _ in try emptyMask(width: 16, height: 10) },
+        mineRight: (0..<2).map { _ in try emptyMask(width: 16, height: 13) },
+        mineLeft: (0..<2).map { _ in try emptyMask(width: 16, height: 13) }
+    )
+    var floating = try ClassicDOSSimulation(
+        terrain: terrain,
+        configuration: ClassicDOSConfiguration(
+            totalLemmings: 1, requiredToSave: 1, timeLimitTicks: 300,
+            initialReleaseRate: 99,
+            entrances: [ClassicDOSPoint(x: 40, y: 0)],
+            initialSkills: [.floater: 1, .builder: 1, .basher: 1, .miner: 1, .digger: 1],
+            maximumX: 191, maximumY: 95,
+            mechanics: .golems
+        ),
+        destructionMasks: masks
+    )
+    for _ in 0..<80 {
+        if floating.lemmings.first?.action == .falling { break }
+        _ = floating.tick()
+    }
+    try require(floating.lemmings.first?.action == .falling,
+        "test worker did not enter a fall")
+    try require(floating.assign(.floater, to: 0) == .assigned,
+        "test worker did not receive Floater")
+    for _ in 0..<20 {
+        if floating.lemmings.first?.action == .floating { break }
+        _ = floating.tick()
+    }
+    try require(floating.lemmings.first?.action == .floating,
+        "test worker did not start floating")
+    var ordinaryMiner = floating
+    try require(ordinaryMiner.assign(.miner, to: 0) == .invalidAction,
+        "ordinary Miner accepted a floating worker")
+    var ordinaryBuilder = floating
+    try require(ordinaryBuilder.assign(.builder, to: 0) == .invalidAction,
+        "ordinary Builder accepted a floating worker")
+    var sourceMiner = floating
+    try require(sourceMiner.assignGolemsReplay(.miner, to: 0) == .assigned,
+        "source replay Miner rejected a floating worker")
+    try require(sourceMiner.lemmings.first?.action == .mining,
+        "source replay Miner did not enter mining")
+    var sourceBuilder = floating
+    try require(sourceBuilder.assignGolemsReplay(.builder, to: 0) == .assigned,
+        "source replay Builder rejected a floating worker")
+    try require(sourceBuilder.lemmings.first?.action == .building,
+        "source replay Builder did not enter building")
+    var ordinaryBasher = floating
+    try require(ordinaryBasher.assign(.basher, to: 0) == .invalidAction,
+        "ordinary Basher accepted a floating worker")
+    var sourceBasher = floating
+    try require(sourceBasher.assignGolemsReplay(.basher, to: 0) == .assigned,
+        "source replay Basher rejected a floating worker")
+    try require(sourceBasher.lemmings.first?.action == .bashing,
+        "source replay Basher did not enter bashing")
+    var ordinaryDigger = floating
+    try require(ordinaryDigger.assign(.digger, to: 0) == .invalidAction,
+        "ordinary Digger accepted a floating worker")
+    var sourceDigger = floating
+    try require(sourceDigger.assignGolemsReplay(.digger, to: 0) == .assigned,
+        "source replay Digger rejected a floating worker")
+    try require(sourceDigger.lemmings.first?.action == .digging,
+        "source replay Digger did not enter digging")
+
+    let steelTerrain = try ClassicDOSTerrain(
+        width: 192, height: 96,
+        solidMask: Data(repeating: 0, count: 192 * 96),
+        steelMask: Data(repeating: 1, count: 192 * 96)
+    )
+    var steelDigger = try ClassicDOSSimulation(
+        terrain: steelTerrain,
+        configuration: ClassicDOSConfiguration(
+            totalLemmings: 1, requiredToSave: 1, timeLimitTicks: 300,
+            initialReleaseRate: 99,
+            entrances: [ClassicDOSPoint(x: 40, y: 0)],
+            initialSkills: [.digger: 1],
+            maximumX: 191, maximumY: 95,
+            mechanics: .golems
+        )
+    )
+    for _ in 0..<80 {
+        _ = steelDigger.tick()
+        if steelDigger.lemmings.first?.objectBelow == .steel { break }
+    }
+    try require(steelDigger.lemmings.first?.objectBelow == .steel,
+        "steel test worker never observed steel")
+    var ordinarySteel = steelDigger
+    try require(ordinarySteel.assign(.digger, to: 0) == .steel,
+        "ordinary Digger ignored steel")
+    try require(steelDigger.assignGolemsReplay(.digger, to: 0) == .assigned,
+        "source replay Digger rejected the source direct assignment on steel")
 }
 
 // MARK: - Entry point
@@ -164,6 +342,7 @@ do {
     let content = try Content(directory: directory)
     try testDeterminism(content: content)
     try testInitialHashGuard(content: content)
+    try testSpeculativeEarlyStop(content: content)
 
     // Fun 1 is the canonical one-assignment level.
     let solved = try findSingleAssignmentWin(
@@ -188,9 +367,14 @@ do {
     let verified = try ClassicDOSReplayPlayer.run(
         solved, simulation: content.simulation(at: 0).0, tickLimit: searchTickLimit, verify: true)
     try require(verified == expected, "verified replay did not match its recorded outcome")
+    let speculativeWin = try ClassicDOSReplayPlayer.run(
+        solved, simulation: content.simulation(at: 0).0, tickLimit: searchTickLimit,
+        verify: false, stopWhenUnwinnable: true)
+    try require(speculativeWin == verified, "speculative check changed a winning replay")
     print("PASS recorded replay verifies against a fresh simulation")
 
     try testRoundTrip(solved)
+    try testGolemsSourceAssignment()
     print("Classic DOS replay tests passed.")
 } catch {
     FileHandle.standardError.write(Data("Replay tests failed: \(error)\n".utf8))

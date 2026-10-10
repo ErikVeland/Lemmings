@@ -1,0 +1,76 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 54
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 70
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 153
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 266
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 267
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 268
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 6,
+    "required" : 5,
+    "saved" : 5,
+    "stateHash" : "9099c3b040140149e85c4bee6d86f037005c7fe65e5f1ab8beee34fd9338a41b",
+    "ticks" : 614
+  },
+  "initialStateHash" : "e3eaf255272bf1b4a10487527cc808bbaec524333203a31de0024c6d380461fe",
+  "number" : 16,
+  "rank" : "Wicked",
+  "title" : "Five Alive"
+}

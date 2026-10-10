@@ -10,9 +10,8 @@ public struct SkillShortcuts {
     /// floater takes U for umbrella.
     public static let preferredLetters: [String: String] = ["floater": "u"]
 
-    /// `i` is reserved because it opens the level hints. Without it a skill can be
-    /// handed `i` as a fallback and its shortcut silently stops working.
-    public init(names: [String], reserved: String = "zqnrpfxi") {
+    /// Reserve camera and help keys. Glider retains the first G press in L2.
+    public init(names: [String], reserved: String = "zqnrpfxihg") {
         var used = Set(reserved.map(String.init))
         var result = [String?](repeating: nil, count: names.count)
         let candidates = names.map { $0.lowercased().filter { $0.isASCII && $0.isLetter }.map(String.init) }
@@ -28,8 +27,9 @@ public struct SkillShortcuts {
                 used.insert(letter)
             }
         }
+        if let glider = names.firstIndex(where: { ["glider", "hang glider"].contains($0.lowercased()) }) { result[glider] = "g" }
         letters = result
-        initials = candidates.map { $0.first }
+        initials = candidates.map { row in row.first.flatMap { reserved.contains($0) ? nil : $0 } }
     }
 
     /// Resolves a key press, cycling when several skills share an initial.

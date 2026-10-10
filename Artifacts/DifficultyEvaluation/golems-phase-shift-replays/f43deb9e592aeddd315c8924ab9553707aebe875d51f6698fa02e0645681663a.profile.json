@@ -1,0 +1,117 @@
+{
+  "components" : {
+    "concurrencyBurden" : 0,
+    "constraintPressure" : 660.073047971137,
+    "deductionComplexityProxy" : 190,
+    "executionPrecision" : 0,
+    "solutionComplexity" : 246.51317942364756,
+    "techniqueBurden" : 195
+  },
+  "confidence" : "medium",
+  "criticalActions" : [
+
+  ],
+  "detectedTechniques" : [
+    "basher",
+    "builder",
+    "miner"
+  ],
+  "explanation" : [
+    "3 used skill types; 9 assigned workers; 0 same-worker skill changes.",
+    "Maximum concurrent worker regions: 1.",
+    "Timing probes: 10. Untested alternatives remain unknown.",
+    "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+    "Source rank: fan:lldb-179."
+  ],
+  "key" : {
+    "analyserVersion" : "difficulty-3",
+    "assetsRevision" : "daf2243722176d85d53874abe638372115738d36aab855f09184a3510468df24:probes-10",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "The lemming google pack.dat#2",
+      "packID" : "fan:lldb-179"
+    },
+    "levelRevision" : "4545eeb5effc99790773b4862e7c0e427ac112d5f09e484cc42d6de81362e089",
+    "replayRevision" : "SHA256 digest: f43deb9e592aeddd315c8924ab9553707aebe875d51f6698fa02e0645681663a",
+    "simulationVersion" : "neolemmix-ce-2026-09-27"
+  },
+  "overallScore" : 202.0923957094503,
+  "precision" : {
+    "actions" : [
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 1
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 2
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 3
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 4
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 5
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 6
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 7
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 8
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 9
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 10
+      }
+    ],
+    "alternativeRunCount" : 0,
+    "assignmentCount" : 10,
+    "completed" : false,
+    "orderingOutcomes" : [
+
+    ],
+    "runCount" : 10,
+    "selectionOutcomes" : [
+
+    ]
+  },
+  "prerequisiteConcepts" : [
+
+  ],
+  "sourceRank" : "fan:lldb-179"
+}

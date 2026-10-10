@@ -1,0 +1,6 @@
+main: 2 versions, 0.0 MB
+main: 2 versions, 0.0 MB
+PASS slim old-AAC library binding, original main sources, unchanged MP3, repeated stripping, distinct library metadata and seven fail-before-delete guards
+PASS 421 older-library recording source/identity/playback bindings across all 18 immutable archives
+main: 54 versions, 5.6 MB
+PASS actual release slim:54canonicalmainfiles,422unchangedgain/loopprofiles and421validatedpublishedlibraryplaybackhashes

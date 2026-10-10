@@ -1,0 +1,58 @@
+{
+  "archive": "Content/LevelPacks/0591-Mikes-Lemmix-Pack.zip",
+  "archiveSHA256": "a9371c3768ccd9c4ea65701e0cd8ff156a5e33e3445d9bc217dfa7f89c260d0f",
+  "scope": "Three unscored members with cached public Golems Watch records; exact bundled native replay checks only",
+  "sourceRecords": [
+    {
+      "levelID": "Mikes Lemmix Pack.dat#6",
+      "sourceReplaySHA256": "667d051641a32a38b3cea995b814d6cd2deac829cf687dc98d98b386afb97220",
+      "sourceSaved": 100,
+      "sourceTicks": 16795,
+      "nativeResult": "Original and Golems mechanics reject Builder for lemming 99 at native tick 1015, 1016 or 1017 with global source offsets -1, 0 or +1"
+    },
+    {
+      "levelID": "Mikes Lemmix Pack.dat#7",
+      "sourceReplaySHA256": "3ec3a5f4bf5fc53e8a7127e77a836cdf27a4a52f1bd7744677128c84dabfafb5",
+      "sourceSaved": 50,
+      "sourceTicks": 6334,
+      "nativeResult": "Original and Golems mechanics reject Builder for lemming 3 at native tick 1233, 1234 or 1235 with global source offsets -1, 0 or +1"
+    },
+    {
+      "levelID": "Mikes Lemmix Pack.dat#9",
+      "sourceReplaySHA256": "172ff89a0da90663089ac41c428b19528074f9fdd5278d1573b3089bb1da372e",
+      "cachedDecodedReplaySHA256": "85b989f46ada2b68ffe0d2330036a395267a7acc4cc4b8098a51a78ef4537df8",
+      "sourceSaved": 24,
+      "sourceTicks": 2248,
+      "nativeResult": "At offset zero, Original and Golems mechanics reject Blocker for lemming 1 at tick 622 while that worker is falling at (914,39) and (913,39) respectively. At offset -1 both reject Digger for lemming 2 at tick 69; at offset +1 Original rejects the Blocker at tick 623 and Golems rejects Digger for lemming 1 at tick 598.",
+      "targetedOrdinarySweep": {
+        "event": "Digger for lemming 1, source tick 597",
+        "shiftRange": [-60, 60],
+        "trialCount": 121,
+        "variantsPassingTick622": 112,
+        "farthestRejection": "Basher for lemming 0 at tick 1546; lemming 0 remains blocking at (733,146)"
+      },
+      "targetedDirectSourceAssignmentCheck": {
+        "diggerShift": -60,
+        "event": "Blocker for lemming 24, source tick 2081",
+        "shiftRange": [-120, 120],
+        "trialCount": 241,
+        "completedNativeReplays": 112,
+        "completedNativeSavedMaximum": 0,
+        "otherReplaysRejected": 129,
+        "note": "The research-only Golems direct source-assignment path passed an ordinary Basher-on-Blocker rejection but did not reproduce the source win. These are not playable native wins or physics parity evidence."
+      }
+    }
+  ],
+  "probe": {
+    "source": ".build/heartbeat-20261005-0243/ProbeMikes.swift",
+    "sourceSHA256": "2b746f0c4ea7d04dc5df89180dcaa13be850d6f7d9cdf65247a517c0f6e30b56",
+    "binarySHA256": "1c3ca81123d5b1c93afa20f1f8cb446341be1f7b188406b701dc42575ae195e0",
+    "linkedNxlvKitSHA256": "bb2e421d2c9c078d61c20a89030772156f8ad88dc5fde7bcc5e366cf2cbc19e2",
+    "logs": {
+      "globalOffsetCheckSHA256": "8364362b536ff688a9f02f2d7a355fabae34e3288e67785447b18beaf2c01399",
+      "ordinaryDiggerSweepSHA256": "25616d0a6576cfcc4b33933b6de90e767edc8ba34039cc1b1fd1bcbed6552823",
+      "directSourceFinalBlockerSweepSHA256": "0f12bcdc1a6dbf4b312127bd0a9f8f5e9188037f42d981e572ff4704acfa927a"
+    }
+  },
+  "conclusion": "The cached source winning input sequences do not win under the exact bundled native engine. Retiming two selected actions in member #9 removes individual assignment rejections but leaves a separate source-physics or route difference. No score or selected engine rule changed."
+}

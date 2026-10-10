@@ -1,0 +1,225 @@
+{
+  "expected" : {
+    "lost" : 0,
+    "reserves" : 10,
+    "saved" : 10,
+    "stateHash" : "479f8387e21d2cd2669b71cd2f425952e9df24124e6f386b8fa48d4c4d37ae9a",
+    "ticks" : 1719
+  },
+  "initialStateHash" : "35866f5d42706dc5ab7e2882f10c7efe4154b69cfbfb92b236453214f26e23a8",
+  "inputs" : [
+    {
+      "action" : "use",
+      "direction" : "left",
+      "lemming" : 0,
+      "tick" : 245
+    },
+    {
+      "action" : "blocker",
+      "lemming" : 1,
+      "tick" : 245
+    },
+    {
+      "action" : "walker",
+      "lemming" : 0,
+      "tick" : 283
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 0,
+      "tick" : 330
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 0,
+      "tick" : 361
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 0,
+      "tick" : 378
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 0,
+      "tick" : 395
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 0,
+      "tick" : 412
+    },
+    {
+      "action" : "drop",
+      "lemming" : 0,
+      "tick" : 431
+    },
+    {
+      "action" : "use",
+      "direction" : "left",
+      "lemming" : 0,
+      "tick" : 489
+    },
+    {
+      "action" : "drop",
+      "lemming" : 0,
+      "tick" : 590
+    },
+    {
+      "action" : "walker",
+      "lemming" : 0,
+      "tick" : 600
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 0,
+      "tick" : 740
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 0,
+      "tick" : 773
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 0,
+      "tick" : 806
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 0,
+      "tick" : 839
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 0,
+      "tick" : 888
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 0,
+      "tick" : 953
+    },
+    {
+      "action" : "walker",
+      "lemming" : 1,
+      "tick" : 1005
+    },
+    {
+      "action" : "use",
+      "direction" : "upLeft",
+      "lemming" : 0,
+      "tick" : 1307
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 0,
+      "tick" : 1316
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 1,
+      "tick" : 1332
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 3,
+      "tick" : 1362
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 4,
+      "tick" : 1385
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 5,
+      "tick" : 1408
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 0,
+      "tick" : 1415
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 1,
+      "tick" : 1431
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 6,
+      "tick" : 1431
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 7,
+      "tick" : 1454
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 3,
+      "tick" : 1461
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 8,
+      "tick" : 1477
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 4,
+      "tick" : 1484
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 9,
+      "tick" : 1500
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 5,
+      "tick" : 1507
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 2,
+      "tick" : 1525
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 6,
+      "tick" : 1530
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 7,
+      "tick" : 1553
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 8,
+      "tick" : 1576
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 9,
+      "tick" : 1599
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 2,
+      "tick" : 1624
+    }
+  ],
+  "level" : 7,
+  "levelSHA256" : "3c83595c83e16da008bfddf657f3a430eba529e96c391d7542fac18a6a0a4fc9",
+  "population" : 20,
+  "version" : 1
+}

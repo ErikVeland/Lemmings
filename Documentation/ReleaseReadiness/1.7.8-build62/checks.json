@@ -1,0 +1,44 @@
+{
+  "version": "1.7.8",
+  "build": 62,
+  "sourceCommit": "dbc3d25bfeee920d0941398603d87aec94c80a7f",
+  "passed": [
+    "34 release-tool tests",
+    "350 stored solution fixtures",
+    "offline nuke audio and 280 ms return",
+    "native cursor and playfield rendering",
+    "18 complete soundtrack libraries and all member hashes",
+    "18 public soundtrack asset sizes, hashes and live ZIP responses",
+    "251 rescue certificates and 17 rescue targets",
+    "352 Classic/conversion routes, 1056 saved-run recoveries and final quest",
+    "41 retained L3 routes and negative input/evidence checks",
+    "152 selected Golems wins with exact archive, replay digest, initial state and final outcome",
+    "48 audit checks: 47 passed directly; PercussionTests passed unchanged against the original asset directory",
+    "release UI: cursor settings, Classic nuke timing, dialogs, 292 learning entries and cross-game saved sessions",
+    "full soundtrack UI, missing-library prompt, installed recognition and L2/L3 paused retry",
+    "L2 last-pop timing in Classic and non-Classic tribes",
+    "finished full and slim package resources match tested resources byte for byte",
+    "both universal archives signed with Developer ID, strict code signature and ZIP integrity checks",
+    "Apple accepted both existing submissions; logs match the submitted ZIP hashes with no issues",
+    "both tickets stapled and validated; strict signatures and final ZIP integrity passed",
+    "fresh quarantined extractions of both final ZIPs accepted by Gatekeeper as Notarized Developer ID",
+    "Sparkle Ed25519 signature verified against the shipping app public key",
+    "all three prior feed enclosures preserved; only the full archive offered as the new update",
+    "both public asset sizes and SHA-256 digests match the final ZIPs; both public URLs return ZIP data",
+    "public tag matches frozen source, latest release is 1.7.8, and raw main feed matches the signed local feed"
+  ],
+  "pending": [],
+  "knownLimits": [
+    "The audit and UI tests compiled the frozen source against prepared asset bundles. Finished full and slim package resources match those bundles byte for byte.",
+    "The audit recorded one percussion fixture failure because Foundation did not enumerate the Sources/Music symlink. The same binary passed from the original source asset directory; raw failure and rerun logs are retained.",
+    "The optional replay movie, performance, standalone sequel-view and arcade-record audit scopes were not run. The recorded release UI scope covers the final source.",
+    "No foreground shipping-app launch, audible balance, physical Intel/minimum-macOS test or installed Sparkle upgrade.",
+    "L2/L3 remain Preview and NeoLemmix remains Beta. Native winning replays do not establish complete source-engine physics parity."
+  ],
+  "status": "published-and-verified",
+  "publication": "https://github.com/ErikVeland/Lemmings/releases/tag/v1.7.8",
+  "resolvedNotarisationBlocker": {
+    "originalFailure": "The lemmings-beta profile authenticated successfully at preflight, then notarytool reported no matching Keychain password item at submission. The login Keychain reports unlocked/readable/writable. Explicit login-keychain and alternate installed notarytool checks also failed. No credential was replaced.",
+    "resolution": "Keychain access recovered at 2026-10-03T08:48Z without credential changes. Both saved submissions were accepted."
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "date": "2026-10-04",
+  "description": "Two previously near-winning Holiday 1994 source records recovered by targeted input timing checks on exact bundled members. Native wins and source physics parity are separate claims.",
+  "records": [
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Flurry.DAT#12",
+        "packID": "fan:lldb-484"
+      },
+      "title": "Yo-yo Lem-lem",
+      "sourceURL": "https://lldb.camanis.net/level/484/13",
+      "exactBundledArchiveSHA256": "a88766fb7218b24c824b4de0400c2ef124b85667d6e759bd4ee0384a46b32ae9",
+      "cachedSourcePageSHA256": "20d1afcc9079c60b4f5940da96748fb1843a728f5806144ab4af4de0ff72e9c4",
+      "rawSourceReplaySHA256": "2029409eadbb62e8ab57f82897835122df7a4377a5af6d6300f9136e3797038a",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 80,
+        "ticks": 1856
+      },
+      "phaseSearch": "17 uniform shifts, minus 8 through plus 8, under Original and Golems mechanics and both object semantics",
+      "selectedInputTranslation": "uniform minus one native tick from cached source candidate",
+      "nativeInitialStateHash": "14d653f054f1d0ed82d302686e6229d44f021ce2c4f367086e3dbfb073f81663",
+      "selectedNativeMechanics": "Original",
+      "selectedReplaySHA256": "b2963e2feb6f3675faf572393a26518b9e0fb8096d05fc2ece5c0ce40c7c1c0c",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 80,
+        "required": 80,
+        "saved": 80,
+        "stateHash": "5d617ac1e7e1899a2ec8eeac82cb89d231dd5fbeb3a8672697897ff4e9251c85",
+        "ticks": 1858
+      },
+      "difficultyScore": 181.88105789874044,
+      "difficultyProbeRuns": 10,
+      "strictExactLevelChecks": [
+        "before promotion: 1/1",
+        "after promotion: 1/1"
+      ],
+      "sourcePhysicsParity": "unverified; source and native saved counts agree, but completion ticks differ by 2 and source state traces are absent",
+      "sourceBuiltProbeSHA256": "e1debcdbd5e2df800e67fb1744f81da8d21a929a5b70cf49e81dcd750e253dbb"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Blitz.DAT#9",
+        "packID": "fan:lldb-485"
+      },
+      "title": "The Wrath of Lem",
+      "sourceURL": "https://lldb.camanis.net/level/485/10",
+      "exactBundledArchiveSHA256": "48a861bf42e574cdd99346fb2d9971df01db66a7bd49cbfc036c2a074c1becc0",
+      "cachedSourcePageSHA256": "6618694c264d4f8e817fb6cc3de3ea6ec7fda3a9f4c5fd16352479f11ece2ffb",
+      "rawSourceReplaySHA256": "cbc27b04199a9b3f56f36919296afc8b8231de5e3ded586cbab99dd7683e1a86",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 80,
+        "ticks": 1380
+      },
+      "phaseSearch": "17 uniform shifts, minus 8 through plus 8, then each of six actions shifted independently by minus 2, minus 1, plus 1 and plus 2, under Original and Golems mechanics and both object semantics",
+      "selectedInputTranslation": "uniform minus one native tick from cached source candidate; second assignment one further tick earlier",
+      "nativeInitialStateHash": "f9148dc965a207ee6b7ed27330f5fd43276353ece0da3583c0f96a12f77d6fe9",
+      "selectedNativeMechanics": "Golems",
+      "selectedReplaySHA256": "c62fe20364387248e62175ea2a0cf72cfc089af9ed3376a75e5a3ffeb489ed9e",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 80,
+        "required": 80,
+        "saved": 80,
+        "stateHash": "eb755bacb3fbd92d007e4b0df0d4e78d928d6c60f86742e2ddc6fbf78b06a5ed",
+        "ticks": 1378
+      },
+      "difficultyScore": 368.1763473399047,
+      "difficultyProbeRuns": 10,
+      "strictExactLevelChecks": [
+        "before promotion: 1/1",
+        "after promotion: 1/1"
+      ],
+      "sourcePhysicsParity": "unverified; source and native saved counts agree, but completion ticks differ by -2 and source state traces are absent",
+      "sourceBuiltProbeSHA256": "897b740de06273bd2e13959aed7981b9d5994a108fa46129537dd015399d1c1c"
+    }
+  ],
+  "otherChecks": {
+    "The Wrath of Lem": "With the cached minus-one source phase, Golems saved 79/80 at tick 1379; Original saved 1/80 at tick 1363. One-action perturbation found three 80/80 Golems routes.",
+    "Yo-yo Lem-lem": "With the cached source phase, Original saved 79/80 at tick 4082; a uniform minus-one further tick saved 80/80 at tick 1858. Golems on the same winning inputs saved 80/80 at tick 1856, matching the source header tick, but this alone is not parity proof."
+  },
+  "sourceBuiltEvidenceToolSHA256": "8446e4a80561a9ad63e653d7d509084f210a5c6c483bf7238afadb4ee5a12ded",
+  "sourceBuiltSolverSHA256": "2113064cae36e07d5ce2f5042d6a8db348ed592811f2ecd3412d39685f3adf9e",
+  "solverControlReplaySHA256": "cc99da7a65776f1c620c3bd16d1870f03bfe12199d1ad8cc63beb7414f956f04",
+  "sourceBuiltNxlvKitSHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "headlessMutedFanLibraryTests": "passed",
+  "remainingNonOfficialWithoutVerifiedReplayAndScore": 3672,
+  "combinedStrictExactLevelCheck": "2/2 after current source selection"
+}

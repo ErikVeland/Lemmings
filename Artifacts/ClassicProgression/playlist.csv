@@ -1,0 +1,388 @@
+position,pack,level,official,score,grade,confidence,playable,concepts,issue,pack_id,level_id
+1,Lemmings,Just dig!,True,44.74,Beginner,high,True,digger,,lemmings-LEVEL-120,0:Fun:1:9:1
+2,Lemmings,Only floaters can survive this,True,121.12,Easy,medium,True,floater,,lemmings-LEVEL-120,1:Fun:2:9:5
+3,Lemmings,Tailor-made for blockers,True,188.6,Easy,medium,True,blocker,,lemmings-LEVEL-120,2:Fun:3:9:6
+4,Lemmings,Now use miners and climbers,True,194.62,Easy,medium,True,climber;miner,,lemmings-LEVEL-120,3:Fun:4:9:2
+5,Lemmings,You need bashers this time,True,67.67,Beginner,medium,True,basher,,lemmings-LEVEL-120,4:Fun:5:9:3
+6,Lemmings,A task for blockers and bombers,True,129.82,Easy,medium,True,blocker;bomber,,lemmings-LEVEL-120,5:Fun:6:9:4
+7,Lemmings,Builders will help you here,True,155.98,Easy,medium,True,builder;multiple-worker-coordination,,lemmings-LEVEL-120,6:Fun:7:9:7
+8,Lemmings,Not as complicated as it looks,True,149.97,Easy,medium,True,basher;builder,,lemmings-LEVEL-120,7:Fun:8:0:6
+9,Nepster01,Dying Dream,False,228.62,Moderate,medium,True,blocker;bomber;builder,,fan:lldb-219,Nepster01_V6.DAT#1
+10,Lemmings,As long as you try your best,True,296.53,Moderate,medium,True,basher;builder;digger;miner,,lemmings-LEVEL-120,8:Fun:9:1:2
+11,Lemmings,Smile if you love lemmings,True,234.36,Moderate,medium,True,basher;builder;floater;miner,,lemmings-LEVEL-120,9:Fun:10:3:2
+12,Nepster01,Bashing & Building,False,375.11,Tricky,medium,True,basher;builder;climber;multiple-worker-coordination,,fan:lldb-219,Nepster01_V6.DAT#8
+13,Lemmings,Keep your hair on Mr. Lemming,True,427.47,Challenging,medium,True,builder;digger,,lemmings-LEVEL-120,10:Fun:11:4:2
+14,Lemmings,Patience,True,421.98,Challenging,medium,True,blocker;builder;climber;digger;floater;miner;multiple-worker-coordination,,lemmings-LEVEL-120,11:Fun:12:0:7
+15,Lemmings,We all fall down,True,157.63,Easy,medium,True,digger,,lemmings-LEVEL-120,12:Fun:13:1:6
+16,Nepster01,Dirt Runner,False,297.79,Moderate,medium,True,basher;builder,,fan:lldb-219,Nepster01_V6.DAT#5
+17,Nepster01,Broken Symmetry,False,371.03,Tricky,medium,True,blocker;bomber;builder;digger;floater;miner,,fan:lldb-219,Nepster01_V6.DAT#7
+18,Nepster01,Lemming Playground,False,406.42,Challenging,medium,True,basher;blocker;builder;climber;digger;miner,,fan:lldb-219,Nepster01_V6.DAT#2
+19,Lemmings,Origins and Lemmings,True,501.55,Hard,medium,True,basher;blocker;builder;climber;digger;floater;multiple-worker-coordination,,lemmings-LEVEL-120,13:Fun:14:1:7
+20,Lemmings,Don't let your eyes deceive you,True,488.66,Challenging,medium,True,blocker;builder;climber;digger;floater;miner;multiple-worker-coordination,,lemmings-LEVEL-120,14:Fun:15:2:2
+21,Lemmings,Don't do anything too hasty,True,442.35,Challenging,medium,True,basher;blocker;builder;climber;digger;miner,,lemmings-LEVEL-120,15:Fun:16:2:4
+22,Lemmings,Easy when you know how,True,256.86,Moderate,medium,True,basher;builder;digger;multiple-worker-coordination,,lemmings-LEVEL-120,16:Fun:17:2:7
+23,Lemmings,Let's block and blow,True,67.41,Beginner,medium,True,bomber,,lemmings-LEVEL-120,17:Fun:18:4:3
+24,Giga pack 01,AIIIIIYYYEEEEEEEE!!!!!!!,False,102,Easy,low,True,,,fan:lldb-160,Giga pack 01.dat#4
+25,Lemmings,Take good care of my Lemmings,True,190.08,Easy,medium,True,basher;builder;multiple-worker-coordination,,lemmings-LEVEL-120,18:Fun:19:5:1
+26,Lemmings,We are now at LEMCON ONE,True,273.12,Moderate,medium,True,basher;builder;digger;multiple-worker-coordination,,lemmings-LEVEL-120,19:Fun:20:6:3
+27,Lemmings,You Live and Lem,True,202.83,Moderate,medium,True,basher;builder;miner,,lemmings-LEVEL-120,20:Fun:21:8:4
+28,Lemmings,A Beast of a level,True,325.32,Tricky,medium,True,basher;blocker;builder;digger;miner,,lemmings-LEVEL-120,21:Fun:22:1:3
+29,Lemmings,I've lost that Lemming feeling,True,356.12,Tricky,medium,True,basher;digger,,lemmings-LEVEL-120,22:Fun:23:4:1
+30,Lemmings,Konbanwa Lemming san,True,271.56,Moderate,medium,True,blocker;builder;digger;floater;miner,,lemmings-LEVEL-120,23:Fun:24:5:7
+31,Lemmings,Lemmings Lemmings everywhere,True,71.79,Beginner,medium,True,basher,,lemmings-LEVEL-120,24:Fun:25:6:0
+32,PSP Special 27 36,The stairs are not floored,False,106.95,Easy,low,True,,,fan:lldb-218,PSP Special2.dat#3
+33,Conway12,Let's play Lemmings!!!,False,121.5,Easy,low,True,,,fan:lldb-261,Conway12.DAT#0
+34,Gronklems 1,gronklems -1.dat 2,False,131.03,Easy,low,True,,,fan:lldb-386,Gronklems -1.dat#1
+35,Lemmings,Nightmare on Lem street,True,365.98,Tricky,medium,True,basher;builder;digger,,lemmings-LEVEL-120,25:Fun:26:7:1
+36,Lemmings,Let's be careful out there,True,288.66,Moderate,medium,True,builder;digger;floater;miner;multiple-worker-coordination,,lemmings-LEVEL-120,26:Fun:27:4:6
+37,Lemmings,If only they could fly,True,198.34,Easy,medium,True,builder;climber;digger;floater,,lemmings-LEVEL-120,27:Fun:28:6:1
+38,Lemmings,worra lorra lemmings,True,240.62,Moderate,medium,True,basher;blocker;builder;miner,,lemmings-LEVEL-120,28:Fun:29:6:5
+39,Lemmings,Lock up your Lemmings,True,283.85,Moderate,medium,True,builder;digger;multiple-worker-coordination,,lemmings-LEVEL-120,29:Fun:30:8:2
+40,Lemmings,This should be a doddle!,True,299.58,Moderate,medium,True,basher;blocker;builder;miner;multiple-worker-coordination,,lemmings-LEVEL-120,30:Tricky:1:0:0
+41,Lemmings,We all fall down,True,170.09,Easy,medium,True,digger,,lemmings-LEVEL-120,31:Tricky:2:1:6
+42,Nepster01,Dunes,False,367.72,Tricky,medium,True,basher;blocker;builder;climber;miner;multiple-worker-coordination,,fan:lldb-219,Nepster01_V6.DAT#0
+43,Lemmings,A ladder would be handy,True,394.92,Tricky,medium,True,basher;builder;climber;digger;floater;miner;multiple-worker-coordination,,lemmings-LEVEL-120,32:Tricky:3:2:1
+44,Lemmings,Here's one I prepared earlier,True,426.91,Challenging,medium,True,builder;climber;digger;floater;multiple-worker-coordination,,lemmings-LEVEL-120,33:Tricky:4:3:0
+45,Lemmings,Careless clicking costs lives,True,190.58,Easy,medium,True,basher;builder;multiple-worker-coordination,,lemmings-LEVEL-120,34:Tricky:5:3:1
+46,Lemmings,Lemmingology,True,381.74,Tricky,medium,True,basher;blocker;builder;digger;miner,,lemmings-LEVEL-120,35:Tricky:6:3:3
+47,Nepster01,Just a random heap of junk!,False,454.46,Challenging,medium,True,basher;blocker;builder;miner;multiple-worker-coordination,,fan:lldb-219,Nepster01_V6.DAT#6
+48,Lemmings,"Been there, seen it, done it",True,536.62,Hard,medium,True,basher;blocker;builder;climber;digger;floater;multiple-worker-coordination,,lemmings-LEVEL-120,36:Tricky:7:3:4
+49,Lemmings,Lemming sanctuary in sight,True,146.54,Easy,medium,True,builder;multiple-worker-coordination,,lemmings-LEVEL-120,37:Tricky:8:4:7
+50,Lemmings,They just keep on coming,True,361.83,Tricky,medium,True,builder;digger;miner,,lemmings-LEVEL-120,38:Tricky:9:6:2
+51,Lemmings,There's a lot of them about,True,446.37,Challenging,medium,True,blocker;builder;climber;miner;multiple-worker-coordination,,lemmings-LEVEL-120,39:Tricky:10:7:3
+52,Lemmings,Lemmings in the attic,True,309.71,Tricky,medium,True,basher;builder;climber;miner;multiple-worker-coordination,,lemmings-LEVEL-120,40:Tricky:11:7:7
+53,Lemmings,Bitter Lemming,True,239.79,Moderate,medium,True,basher;builder;digger;floater,,lemmings-LEVEL-120,41:Tricky:12:8:0
+54,Lemmings,Lemming Drops,True,418.77,Challenging,medium,True,basher;blocker;builder;climber;digger;floater,,lemmings-LEVEL-120,42:Tricky:13:8:3
+55,Nepster01,Time Gate,False,429.32,Challenging,medium,True,basher;blocker;builder;digger;multiple-worker-coordination,,fan:lldb-219,Nepster01_V6.DAT#3
+56,Nepster01,Devil's Right Hand,False,533.39,Hard,medium,True,basher;blocker;bomber;builder;climber;floater;multiple-worker-coordination,,fan:lldb-219,Nepster01_V6.DAT#9
+57,Lemmings,MENACING !!,True,565.1,Hard,medium,True,basher;blocker;builder;climber;digger;miner;multiple-worker-coordination,,lemmings-LEVEL-120,43:Tricky:14:0:2
+58,Lemmings,Ozone friendly Lemmings,True,194.92,Easy,medium,True,bomber,,lemmings-LEVEL-120,44:Tricky:15:9:1
+59,Lemmings,Luvly Jubly,True,205.59,Moderate,medium,True,basher;bomber;miner,,lemmings-LEVEL-120,45:Tricky:16:9:3
+60,Lemmings,Diet Lemmingaid,True,144.5,Easy,medium,True,bomber,,lemmings-LEVEL-120,46:Tricky:17:9:4
+61,Lemmings,It's Lemmingentry Watson,True,216.7,Moderate,medium,True,builder;digger;floater,,lemmings-LEVEL-120,47:Tricky:18:9:5
+62,Lemmings,Postcard from Lemmingland,True,346.74,Tricky,medium,True,basher;builder;climber;digger;floater;miner,,lemmings-LEVEL-120,48:Tricky:19:9:7
+63,Lemmings,One way digging to freedom,True,368.42,Tricky,medium,True,basher;builder;climber;digger;floater,,lemmings-LEVEL-120,49:Tricky:20:0:3
+64,Lemmings,All the 6`s ........,True,374.38,Tricky,medium,True,basher;blocker;builder;miner,,lemmings-LEVEL-120,50:Tricky:21:0:5
+65,Lemmings,Turn around young lemmings!,True,180.25,Easy,medium,True,basher;builder,,lemmings-LEVEL-120,51:Tricky:22:0:6
+66,Lemmings,From The Boundary Line,True,518.09,Hard,medium,True,basher;builder;climber;digger;floater;miner;multiple-worker-coordination,,lemmings-LEVEL-120,52:Tricky:23:0:7
+67,Lemmings,Tightrope City,True,264.39,Moderate,medium,True,basher;blocker;builder;digger,,lemmings-LEVEL-120,53:Tricky:24:1:0
+68,Lemmings,Cascade,True,407.8,Challenging,medium,True,basher;builder;digger;floater;miner;multiple-worker-coordination,,lemmings-LEVEL-120,54:Tricky:25:1:1
+69,Lemmings,I have a cunning plan,True,416.66,Challenging,medium,True,basher;blocker;builder;digger;miner,,lemmings-LEVEL-120,55:Tricky:26:1:2
+70,Lemmings,The Island of the Wicker people,True,413.26,Challenging,medium,True,basher;builder;climber;digger;miner,,lemmings-LEVEL-120,56:Tricky:27:1:4
+71,Lemmings,Lost something?,True,148.88,Easy,medium,True,basher;builder;miner,,lemmings-LEVEL-120,57:Tricky:28:1:5
+72,Lemmings,Rainbow Island,True,301.05,Tricky,medium,True,basher;blocker;builder;multiple-worker-coordination,,lemmings-LEVEL-120,58:Tricky:29:2:0
+73,Lemmings,The Crankshaft,True,537.25,Hard,medium,True,blocker;builder;climber;digger;floater;miner;multiple-worker-coordination,,lemmings-LEVEL-120,59:Tricky:30:1:7
+74,Lemmings,If at first you don`t succeed..,True,238.73,Moderate,medium,True,basher;builder;digger,,lemmings-LEVEL-120,60:Taxing:1:2:2
+75,Lemmings,"Watch out, there`s traps about",True,537.81,Hard,medium,True,basher;blocker;builder;digger;miner;multiple-worker-coordination,,lemmings-LEVEL-120,61:Taxing:2:2:3
+76,Lemmings,Heaven can wait (we hope!!!!),True,281.82,Moderate,medium,True,builder;multiple-worker-coordination,,lemmings-LEVEL-120,62:Taxing:3:2:4
+77,Lemmings,Lend a helping hand....,True,353.52,Tricky,medium,True,basher;blocker;builder;digger;miner;multiple-worker-coordination,,lemmings-LEVEL-120,63:Taxing:4:2:5
+78,Lemmings,The Prison!,True,349.2,Tricky,medium,True,basher;blocker;builder;digger,,lemmings-LEVEL-120,64:Taxing:5:2:6
+79,Lemmings,Compression Method 1,True,318.21,Tricky,medium,True,basher;digger,,lemmings-LEVEL-120,65:Taxing:6:2:7
+80,Lemmings,Every Lemming for himself!!!,True,360.25,Tricky,medium,True,basher;bomber;builder;climber;multiple-worker-coordination,,lemmings-LEVEL-120,66:Taxing:7:3:0
+81,Lemmings,The Art Gallery,True,226.89,Moderate,medium,True,basher;builder;multiple-worker-coordination,,lemmings-LEVEL-120,67:Taxing:8:3:1
+82,Lemmings,Perseverance,True,320.77,Tricky,medium,True,basher;builder;floater;miner,,lemmings-LEVEL-120,68:Taxing:9:3:2
+83,Lemmings,Izzie Wizzie lemmings get busy,True,434.67,Challenging,medium,True,basher;blocker;builder;digger;miner,,lemmings-LEVEL-120,69:Taxing:10:3:3
+84,Lemmings,The ascending pillar scenario,True,506.15,Hard,medium,True,basher;builder;climber;digger;floater;miner;multiple-worker-coordination,,lemmings-LEVEL-120,70:Taxing:11:3:4
+85,Lemmings,Livin` On The Edge,True,318.94,Tricky,medium,True,basher;builder;multiple-worker-coordination,,lemmings-LEVEL-120,71:Taxing:12:3:5
+86,Lemmings,Upsidedown World,True,423.24,Challenging,medium,True,basher;blocker;builder;climber;digger;miner,,lemmings-LEVEL-120,72:Taxing:13:3:6
+87,Lemmings,Hunt the Nessy....,True,410.57,Challenging,medium,True,basher;builder;digger;miner;multiple-worker-coordination,,lemmings-LEVEL-120,73:Taxing:14:3:7
+88,Lemmings,What an AWESOME level,True,184.84,Easy,medium,True,builder;multiple-worker-coordination,,lemmings-LEVEL-120,74:Taxing:15:0:1
+89,Lemmings,Mary Poppins` land,True,338.28,Tricky,medium,True,builder;floater;multiple-worker-coordination,,lemmings-LEVEL-120,75:Taxing:16:4:0
+90,Lemmings,X marks the spot,True,443.6,Challenging,medium,True,builder;climber;miner;multiple-worker-coordination,,lemmings-LEVEL-120,76:Taxing:17:4:1
+91,Lemmings,Tribute to M.C.Escher,True,320.79,Tricky,medium,True,basher;builder;floater;multiple-worker-coordination,,lemmings-LEVEL-120,77:Taxing:18:4:2
+92,Lemmings,Bomboozal,True,83.79,Beginner,medium,True,bomber,,lemmings-LEVEL-120,78:Taxing:19:4:3
+93,Yawg03,Everything Counts,False,95.75,Beginner,low,True,,,fan:lldb-107,Yawg03.dat#7
+94,Epic Fernito 1,Wish it was 13...,False,118.7,Easy,low,True,,,fan:lldb-112,Epic Fernito 1.dat#6
+95,Lemmings,Walk the web rope,True,350.04,Tricky,medium,True,basher;builder;climber;digger;multiple-worker-coordination,,lemmings-LEVEL-120,79:Taxing:20:4:4
+96,Lemmings,Feel the heat!,True,346.04,Tricky,medium,True,basher;blocker;builder;digger;miner;multiple-worker-coordination,,lemmings-LEVEL-120,80:Taxing:21:4:5
+97,Lemmings,Come on over to my place,True,380.13,Tricky,medium,True,basher;blocker;builder;digger;floater;miner,,lemmings-LEVEL-120,81:Taxing:22:4:6
+98,Lemmings,King of the castle,True,170.33,Easy,medium,True,builder;multiple-worker-coordination,,lemmings-LEVEL-120,82:Taxing:23:4:7
+99,Lemmings,Take a running jump.....,True,244.56,Moderate,medium,True,builder;multiple-worker-coordination,,lemmings-LEVEL-120,83:Taxing:24:5:0
+100,Lemmings,Follow the leader...,True,215.15,Moderate,medium,True,basher;builder;multiple-worker-coordination,,lemmings-LEVEL-120,84:Taxing:25:5:1
+101,Lemmings,Triple Trouble,True,341.86,Tricky,medium,True,basher;builder;climber;digger;multiple-worker-coordination,,lemmings-LEVEL-120,85:Taxing:26:5:2
+102,Lemmings,Call in the bomb squad,True,288.44,Moderate,medium,True,blocker;bomber;builder;multiple-worker-coordination,,lemmings-LEVEL-120,86:Taxing:27:5:3
+103,Lemmings,POOR WEE CREATURES!,True,460.8,Challenging,medium,True,basher;blocker;bomber;builder;climber;floater;miner,,lemmings-LEVEL-120,87:Taxing:28:5:4
+104,Lemmings,How do I dig up the way?,True,419.2,Challenging,medium,True,basher;builder;climber;digger;floater;miner;multiple-worker-coordination,,lemmings-LEVEL-120,88:Taxing:29:2:1
+105,Lemmings,We all fall down,True,159.45,Easy,medium,True,digger,,lemmings-LEVEL-120,89:Taxing:30:6:7
+106,Lemmings,Steel Works,True,333.15,Tricky,medium,True,blocker;builder;digger;floater;multiple-worker-coordination,,lemmings-LEVEL-120,90:Mayhem:1:5:5
+107,Lemmings,The Boiler Room,True,230.65,Moderate,medium,True,builder;climber;floater,,lemmings-LEVEL-120,91:Mayhem:2:5:6
+108,Lemmings,It`s hero time!,True,373.02,Tricky,medium,True,blocker;builder;digger;floater;miner,,lemmings-LEVEL-120,92:Mayhem:3:5:7
+109,Lemmings,The Crossroads,True,180.36,Easy,medium,True,basher,,lemmings-LEVEL-120,93:Mayhem:4:6:0
+110,Lemmings,"Down, along, up. In that order",True,331.74,Tricky,medium,True,blocker;builder;digger;multiple-worker-coordination,,lemmings-LEVEL-120,94:Mayhem:5:6:1
+111,Lemmings,One way or another,True,397.09,Tricky,medium,True,builder;digger;miner,,lemmings-LEVEL-120,95:Mayhem:6:6:2
+112,Lemmings,Poles Apart,True,349.15,Tricky,medium,True,basher;builder;digger;multiple-worker-coordination,,lemmings-LEVEL-120,96:Mayhem:7:6:3
+113,Lemmings,Last one out is a rotten egg!,True,398.22,Tricky,medium,True,builder;climber;digger;miner,,lemmings-LEVEL-120,97:Mayhem:8:6:4
+114,Lemmings,Curse of the Pharaohs,True,314.49,Tricky,medium,True,basher;blocker;builder;digger,,lemmings-LEVEL-120,98:Mayhem:9:6:5
+115,Lemmings,Pillars of Hercules,True,554.17,Hard,medium,True,basher;blocker;builder;climber;digger;floater;multiple-worker-coordination,,lemmings-LEVEL-120,99:Mayhem:10:6:6
+116,Lemmings,We all fall down,True,162.96,Easy,medium,True,digger,,lemmings-LEVEL-120,100:Mayhem:11:6:7
+117,Lemmings,The Far Side,True,417.09,Challenging,medium,True,basher;builder;climber;digger;miner,,lemmings-LEVEL-120,101:Mayhem:12:7:0
+118,Lemmings,The Great Lemming Caper,True,342.9,Tricky,medium,True,basher;builder;climber;floater;multiple-worker-coordination,,lemmings-LEVEL-120,102:Mayhem:13:7:1
+119,Lemmings,Pea Soup,True,98.34,Beginner,medium,True,builder,,lemmings-LEVEL-120,103:Mayhem:14:7:2
+120,QBeez05,Take a break!,False,108.25,Easy,low,True,,,fan:lldb-166,QBeez05.dat#6
+121,Andi,LEMMINGS FOR EVER ! ! !,False,121.5,Easy,low,True,,,fan:lldb-370,andi.DAT#3
+122,Lemmings,The Fast Food Kitchen...,True,562.66,Hard,medium,True,basher;blocker;builder;climber;digger;floater;miner;multiple-worker-coordination,,lemmings-LEVEL-120,104:Mayhem:15:7:3
+123,Lemmings,Just a Minute...,True,312.01,Tricky,medium,True,basher;digger,,lemmings-LEVEL-120,105:Mayhem:16:7:4
+124,Lemmings,Stepping Stones,True,457.22,Challenging,medium,True,basher;blocker;builder;climber;digger;miner,,lemmings-LEVEL-120,106:Mayhem:17:7:5
+125,Lemmings,And then there were four....,True,569.32,Hard,medium,True,basher;blocker;builder;climber;miner;multiple-worker-coordination,,lemmings-LEVEL-120,107:Mayhem:18:7:6
+126,Lemmings,Time to get up!,True,319.74,Tricky,medium,True,bomber;builder;climber;multiple-worker-coordination,,lemmings-LEVEL-120,108:Mayhem:19:7:7
+127,Lemmings,No added colours or Lemmings,True,364.2,Tricky,medium,True,basher;blocker;builder;climber;miner,,lemmings-LEVEL-120,109:Mayhem:20:9:2
+128,Lemmings,With a twist of lemming please,True,304.53,Tricky,medium,True,basher;builder;digger;floater,,lemmings-LEVEL-120,110:Mayhem:21:8:0
+129,Lemmings,A BeastII of a level,True,450.37,Challenging,medium,True,basher;builder;climber;digger;miner,,lemmings-LEVEL-120,111:Mayhem:22:0:4
+130,Lemmings,Going up.......,True,292.2,Moderate,medium,True,basher;builder;multiple-worker-coordination,,lemmings-LEVEL-120,112:Mayhem:23:8:1
+131,Lemmings,All or Nothing,True,265.22,Moderate,medium,True,basher,,lemmings-LEVEL-120,113:Mayhem:24:8:2
+132,Lemmings,Have a nice day!,True,449.58,Challenging,medium,True,basher;blocker;builder;digger;floater;miner;multiple-worker-coordination,,lemmings-LEVEL-120,114:Mayhem:25:8:3
+133,Lemmings,The Steel Mines of Kessel,True,212.48,Moderate,medium,True,blocker;bomber;builder,,lemmings-LEVEL-120,115:Mayhem:26:8:4
+134,Lemmings,Just a Minute (Part Two),True,212.3,Moderate,medium,True,basher;digger,,lemmings-LEVEL-120,116:Mayhem:27:8:5
+135,Lemmings,Mind the step.....,True,199.18,Easy,medium,True,basher;builder;digger,,lemmings-LEVEL-120,117:Mayhem:28:8:6
+136,Lemmings,Save Me,True,393.27,Tricky,medium,True,basher;blocker;builder;digger,,lemmings-LEVEL-120,118:Mayhem:29:8:7
+137,Lemmings,Rendezvous at the Mountain,True,536.15,Hard,medium,True,builder;climber;digger;miner;multiple-worker-coordination,,lemmings-LEVEL-120,119:Mayhem:30:9:0
+138,Xmas Lemmings 1991,Merry Christmas Mr Lemming,True,385.8,Tricky,medium,True,basher;builder;climber;digger;miner,,xmasLemmings1991-LEVEL-4,0:Xmas:1:0:0
+139,Xmas Lemmings 1991,Christmas Bonus,True,364.92,Tricky,medium,True,basher;builder;climber;digger,,xmasLemmings1991-LEVEL-4,1:Xmas:2:0:1
+140,Xmas Lemmings 1991,Time waits for no Lemming,True,397.45,Tricky,medium,True,basher;blocker;builder;digger;multiple-worker-coordination;release-rate-manipulation,,xmasLemmings1991-LEVEL-4,2:Xmas:3:0:2
+141,Xmas Lemmings 1991,This Corrosion,True,342.84,Tricky,medium,True,builder;digger;multiple-worker-coordination;release-rate-manipulation,,xmasLemmings1991-LEVEL-4,3:Xmas:4:0:3
+142,Oh No! More Lemmings,Down And Out Lemmings,True,215.08,Moderate,medium,True,blocker;digger;miner,,ohNoMoreLemmings-DLVEL-100,0:Tame:1:10:0
+143,Oh No! More Lemmings,Rent-a-Lemming,True,319.26,Tricky,medium,True,basher;builder;digger;miner;multiple-worker-coordination,,ohNoMoreLemmings-DLVEL-100,1:Tame:2:10:1
+144,Oh No! More Lemmings,Undercover Lemming,True,252.68,Moderate,medium,True,basher;digger;miner,,ohNoMoreLemmings-DLVEL-100,2:Tame:3:10:2
+145,Oh No! More Lemmings,Downwardly Mobile Lemmings,True,160.51,Easy,high,True,basher,,ohNoMoreLemmings-DLVEL-100,3:Tame:4:10:3
+146,Oh No! More Lemmings,Snuggle up to a Lemming,True,480.11,Challenging,medium,True,basher;blocker;bomber;climber;digger;floater;miner;multiple-worker-coordination,,ohNoMoreLemmings-DLVEL-100,4:Tame:5:10:4
+147,Oh No! More Lemmings,Intsy-Wintsy...Lemming?,True,132.74,Easy,high,True,basher,,ohNoMoreLemmings-DLVEL-100,5:Tame:6:10:5
+148,Oh No! More Lemmings,Who`s That Lemming,True,373.34,Tricky,medium,True,basher;blocker;bomber;builder;climber;floater;miner,,ohNoMoreLemmings-DLVEL-100,6:Tame:7:10:6
+149,Oh No! More Lemmings,Dangerzone,True,240.43,Moderate,medium,True,basher;bomber;digger;miner,,ohNoMoreLemmings-DLVEL-100,7:Tame:8:10:7
+150,Oh No! More Lemmings,And now this...,True,396.84,Tricky,medium,True,basher;blocker;bomber;builder;climber;digger;floater,,ohNoMoreLemmings-DLVEL-100,8:Tame:9:11:0
+151,Oh No! More Lemmings,New Lemmings On The Block,True,161.16,Easy,high,True,basher,,ohNoMoreLemmings-DLVEL-100,9:Tame:10:11:1
+152,Oh No! More Lemmings,With Compliments,True,231.34,Moderate,medium,True,basher;digger;miner,,ohNoMoreLemmings-DLVEL-100,10:Tame:11:11:2
+153,Oh No! More Lemmings,Citizen Lemming,True,80.86,Beginner,medium,True,basher,,ohNoMoreLemmings-DLVEL-100,11:Tame:12:11:3
+154,Oh No! More Lemmings,Thunder-Lemmings are go!,True,151.62,Easy,medium,True,basher;builder,,ohNoMoreLemmings-DLVEL-100,12:Tame:13:11:4
+155,Oh No! More Lemmings,Get a little extra help,True,120.08,Easy,medium,True,basher;builder,,ohNoMoreLemmings-DLVEL-100,13:Tame:14:11:5
+156,Oh No! More Lemmings,Not just a pretty Lemming,True,468.85,Challenging,medium,True,basher;blocker;bomber;builder;climber;floater;miner;multiple-worker-coordination,,ohNoMoreLemmings-DLVEL-100,14:Tame:15:11:6
+157,Oh No! More Lemmings,Gone With The Lemming,True,216.33,Moderate,medium,True,basher;digger;miner,,ohNoMoreLemmings-DLVEL-100,15:Tame:16:11:7
+158,Oh No! More Lemmings,"Honey, I Saved The Lemmings",True,132.06,Easy,high,True,miner,,ohNoMoreLemmings-DLVEL-100,16:Tame:17:12:0
+159,Oh No! More Lemmings,Lemmings For Presidents!,True,114.93,Easy,medium,True,basher;miner,,ohNoMoreLemmings-DLVEL-100,17:Tame:18:12:1
+160,Oh No! More Lemmings,Lemming Productions Present...,True,424.9,Challenging,medium,True,basher;blocker;bomber;builder;climber;miner;multiple-worker-coordination,,ohNoMoreLemmings-DLVEL-100,18:Tame:19:12:2
+161,Oh No! More Lemmings,Custom built for Lemmings,True,166.54,Easy,medium,True,basher;builder,,ohNoMoreLemmings-DLVEL-100,19:Tame:20:12:3
+162,Oh No! More Lemmings,"Quote: ""That`s a good level""",True,271.74,Moderate,medium,True,blocker;bomber;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,20:Crazy:1:0:1
+163,Oh No! More Lemmings,Dolly Dimple,True,312.59,Tricky,medium,True,builder;climber;digger;multiple-worker-coordination,,ohNoMoreLemmings-DLVEL-100,21:Crazy:2:1:0
+164,Oh No! More Lemmings,Many Lemmings make level work,True,149.29,Easy,medium,True,bomber;builder,,ohNoMoreLemmings-DLVEL-100,22:Crazy:3:1:4
+165,Oh No! More Lemmings,Lemming Express,True,182.04,Easy,medium,True,builder,,ohNoMoreLemmings-DLVEL-100,23:Crazy:4:2:0
+166,Oh No! More Lemmings,24 hour Lemathon,True,328.41,Tricky,medium,True,builder;digger;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,24:Crazy:5:2:1
+167,Oh No! More Lemmings,The Stack,True,429.63,Challenging,medium,True,builder;climber;digger;multiple-worker-coordination,,ohNoMoreLemmings-DLVEL-100,25:Crazy:6:3:0
+168,Oh No! More Lemmings,"And now, the end is near...",True,320.71,Tricky,medium,True,basher;builder;climber;floater,,ohNoMoreLemmings-DLVEL-100,26:Crazy:7:3:1
+169,Oh No! More Lemmings,KEEP ON TRUCKING,True,434.9,Challenging,medium,True,basher;blocker;builder;digger;miner;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,27:Crazy:8:3:5
+170,Oh No! More Lemmings,On the Antarctic Coast,True,362.75,Tricky,medium,True,basher;builder;miner;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,28:Crazy:9:5:1
+171,Oh No! More Lemmings,ROCKY VI,True,310.79,Tricky,medium,True,basher;bomber;builder;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,29:Crazy:10:5:4
+172,Oh No! More Lemmings,No Problemming!,True,260.16,Moderate,medium,True,builder;floater;multiple-worker-coordination,,ohNoMoreLemmings-DLVEL-100,30:Crazy:11:5:7
+173,Oh No! More Lemmings,Lemming Friendly,True,253.66,Moderate,medium,True,basher;builder;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,31:Crazy:12:6:7
+174,Oh No! More Lemmings,It`s a trade off,True,272.03,Moderate,medium,True,builder;digger;miner;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,32:Crazy:13:0:4
+175,Oh No! More Lemmings,Time waits for no Lemming,True,397.45,Tricky,medium,True,basher;blocker;builder;digger;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,33:Crazy:14:1:5
+176,Oh No! More Lemmings,Worra load of old blocks!,True,363.16,Tricky,medium,True,builder;climber;digger;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,34:Crazy:15:1:6
+177,Oh No! More Lemmings,Across The Gap,True,555.35,Hard,medium,True,basher;blocker;builder;climber;digger;miner;multiple-worker-coordination,,ohNoMoreLemmings-DLVEL-100,35:Crazy:16:2:6
+178,Oh No! More Lemmings,DIGGING FOR VICTORY,True,396.34,Tricky,medium,True,basher;blocker;bomber;builder;digger;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,36:Crazy:17:3:4
+179,Oh No! More Lemmings,NO PROBLEM,True,388.48,Tricky,medium,True,basher;builder;miner;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,37:Crazy:18:3:7
+180,Oh No! More Lemmings,DON`T PANIC,True,325.48,Tricky,medium,True,basher;builder;digger;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,38:Crazy:19:4:3
+181,Oh No! More Lemmings,Ice Ice Lemming,True,262.47,Moderate,medium,True,basher;builder;multiple-worker-coordination,,ohNoMoreLemmings-DLVEL-100,39:Crazy:20:6:4
+182,Oh No! More Lemmings,PoP YoR ToP!!!,True,329.66,Tricky,medium,True,basher;builder;miner;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,40:Wild:1:9:2
+183,Oh No! More Lemmings,Lemming Hotel,True,242.86,Moderate,medium,True,bomber;builder;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,41:Wild:2:7:0
+184,Oh No! More Lemmings,Lemming Rhythms,True,394.96,Tricky,medium,True,basher;builder;miner;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,42:Wild:3:7:1
+185,Oh No! More Lemmings,Meeting Adjourned,True,269.12,Moderate,medium,True,basher;builder;digger;multiple-worker-coordination,,ohNoMoreLemmings-DLVEL-100,43:Wild:4:7:2
+186,Oh No! More Lemmings,Lemming Head,True,297.54,Moderate,medium,True,blocker;bomber;builder;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,44:Wild:5:7:3
+187,Oh No! More Lemmings,Just A Quicky,True,439.03,Challenging,medium,True,basher;builder;digger;miner;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,45:Wild:6:7:5
+188,Oh No! More Lemmings,You Take the High Road,True,383.35,Tricky,medium,True,basher;builder;climber;digger;multiple-worker-coordination,,ohNoMoreLemmings-DLVEL-100,46:Wild:7:8:6
+189,Oh No! More Lemmings,It`s a tight fit!,True,442.87,Challenging,medium,True,builder;climber;floater;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,47:Wild:8:0:7
+190,Oh No! More Lemmings,Ice Station Lemming,True,243.02,Moderate,medium,True,basher;builder;digger,,ohNoMoreLemmings-DLVEL-100,48:Wild:9:2:2
+191,Oh No! More Lemmings,Higgledy Piggledy,True,316.87,Tricky,medium,True,basher;builder;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,49:Wild:10:2:5
+192,Oh No! More Lemmings,Mutiny On The Bounty,True,329.91,Tricky,medium,True,basher;builder;miner;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,50:Wild:11:3:3
+193,Oh No! More Lemmings,SNOW JOKE,True,266.41,Moderate,medium,True,basher;builder;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,51:Wild:12:3:6
+194,Oh No! More Lemmings,ONWARD AND UPWARD,True,507.97,Hard,medium,True,basher;blocker;bomber;builder;climber;miner;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,52:Wild:13:4:0
+195,Oh No! More Lemmings,ICE SPY,True,398.26,Tricky,medium,True,basher;builder;digger;miner;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,53:Wild:14:4:2
+196,Oh No! More Lemmings,THE SILENCE OF THE LEMMINGS,True,481.37,Challenging,medium,True,basher;blocker;bomber;builder;digger;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,54:Wild:15:4:4
+197,Oh No! More Lemmings,"Take care, Sweetie",True,338.92,Tricky,medium,True,builder;climber,,ohNoMoreLemmings-DLVEL-100,55:Wild:16:5:0
+198,Oh No! More Lemmings,The Chain with no name,True,315.68,Tricky,medium,True,basher;builder;miner;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,56:Wild:17:6:3
+199,Oh No! More Lemmings,Dr Lemminggood,True,252.87,Moderate,medium,True,bomber;builder;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,57:Wild:18:6:5
+200,Oh No! More Lemmings,Lemmingdelica,True,267.48,Moderate,medium,True,basher;builder;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,58:Wild:19:6:6
+201,Oh No! More Lemmings,Got anything....Lemmingy???,True,322.96,Tricky,medium,True,builder;digger;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,59:Wild:20:4:7
+202,Oh No! More Lemmings,LeMming ToMato KetchUp fAcilitY,True,326.42,Tricky,medium,True,basher;bomber;climber;digger;miner;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,60:Wicked:1:9:6
+203,Oh No! More Lemmings,Inroducing SUPERLEMMING,True,366.73,Tricky,medium,True,basher;builder;climber;digger;miner,,ohNoMoreLemmings-DLVEL-100,61:Wicked:2:4:6
+204,Oh No! More Lemmings,This Corrosion,True,342.84,Tricky,medium,True,builder;digger;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,62:Wicked:3:9:0
+205,Oh No! More Lemmings,Oh No! It`s the 4TH DIMENSION!,True,332.18,Tricky,medium,True,basher;bomber;builder;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,63:Wicked:4:9:1
+206,Oh No! More Lemmings,Chill out!,True,558.37,Hard,medium,True,basher;builder;climber;digger;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,64:Wicked:5:0:5
+207,Oh No! More Lemmings,PoP TiL YoU DrOp!,True,233.05,Moderate,medium,True,miner;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,65:Wicked:6:9:4
+208,Oh No! More Lemmings,Last Lemming To Lemmingcentral,True,190.08,Easy,medium,True,blocker;bomber;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,66:Wicked:7:6:1
+209,Oh No! More Lemmings,A TOWERING PROBLEM,True,304.89,Tricky,medium,True,bomber;builder;climber;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,67:Wicked:8:0:6
+210,Oh No! More Lemmings,How on Earth?,True,327.66,Tricky,medium,True,blocker;builder;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,68:Wicked:9:1:2
+211,Oh No! More Lemmings,Temple of Love,True,408.92,Challenging,medium,True,blocker;builder;climber;digger;floater;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,69:Wicked:10:8:7
+212,Oh No! More Lemmings,ROCKY ROAD,True,413.29,Challenging,medium,True,basher;builder;digger;miner;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,70:Wicked:11:4:1
+213,Oh No! More Lemmings,Suicidal Tendencies,True,318.35,Tricky,medium,True,blocker;bomber;builder;miner;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,71:Wicked:12:5:5
+214,Oh No! More Lemmings,Almost Nearly Virtual Reality,True,305.6,Tricky,medium,True,basher;builder;digger;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,72:Wicked:13:6:0
+215,Oh No! More Lemmings,The Lemming Learning Curve,True,325.11,Tricky,medium,True,basher;builder;climber;miner;multiple-worker-coordination,,ohNoMoreLemmings-DLVEL-100,73:Wicked:14:6:2
+216,Oh No! More Lemmings,"SPAM,SPAM,SPAM,EGG AND LEMMING",True,414.48,Challenging,medium,True,basher;blocker;bomber;builder;floater;miner;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,74:Wicked:15:7:7
+217,Oh No! More Lemmings,Five Alive,True,330.16,Tricky,medium,True,bomber;builder;climber;floater;miner,,ohNoMoreLemmings-DLVEL-100,75:Wicked:16:8:1
+218,Oh No! More Lemmings,Down the tube,True,327.06,Tricky,medium,True,bomber;builder;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,76:Wicked:17:9:7
+219,Oh No! More Lemmings,LoTs moRe wHeRe TheY caMe fRom,True,423.9,Challenging,medium,True,builder;climber;miner;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,77:Wicked:18:9:3
+220,Oh No! More Lemmings,"Up, Down or Round and Round",True,242.67,Moderate,medium,True,basher;builder;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,78:Wicked:19:8:0
+221,Oh No! More Lemmings,The Lemming Funhouse,True,448.11,Challenging,medium,True,builder;digger;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,79:Wicked:20:7:6
+222,Oh No! More Lemmings,Tubular Lemmings,True,481.59,Challenging,medium,True,builder;digger;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,80:Havoc:1:7:4
+223,Oh No! More Lemmings,Be more than just a number,True,435.18,Challenging,medium,True,blocker;builder;digger;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,81:Havoc:2:5:3
+224,Oh No! More Lemmings,It`s the price you have to pay,True,452.11,Challenging,medium,True,basher;builder;digger;miner;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,82:Havoc:3:3:2
+225,Oh No! More Lemmings,The race against cliches,True,433.13,Challenging,medium,True,basher;builder;digger;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,83:Havoc:4:2:7
+226,Oh No! More Lemmings,There`s madness in the method,True,391.12,Tricky,medium,True,basher;builder;climber;miner,,ohNoMoreLemmings-DLVEL-100,84:Havoc:5:2:4
+227,Oh No! More Lemmings,Now get out of that!,True,293.69,Moderate,medium,True,miner;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,85:Havoc:6:2:3
+228,Oh No! More Lemmings,Creature Discomforts,True,517.87,Hard,medium,True,basher;blocker;bomber;builder;climber;digger;miner;multiple-worker-coordination,,ohNoMoreLemmings-DLVEL-100,86:Havoc:7:5:2
+229,Oh No! More Lemmings,Lemming about town,True,321.74,Tricky,medium,True,builder;climber;digger;miner,,ohNoMoreLemmings-DLVEL-100,87:Havoc:8:1:7
+230,Oh No! More Lemmings,AAAAAARRRRRRGGGGGGHHHHHH!!!!!!,True,477.17,Challenging,medium,True,builder;climber;miner;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,88:Havoc:9:1:1
+231,Oh No! More Lemmings,Flow Control,True,249.06,Moderate,high,True,builder;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,89:Havoc:10:0:3
+232,Oh No! More Lemmings,"Welcome to the party, pal!",True,366.96,Tricky,medium,True,basher;builder;miner;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,90:Havoc:11:0:2
+233,Oh No! More Lemmings,It`s all a matter of timing,True,299.52,Moderate,medium,True,builder;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,91:Havoc:12:0:0
+234,Oh No! More Lemmings,HIGHLAND FLING,True,400.72,Challenging,medium,True,basher;blocker;bomber;builder;miner;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,92:Havoc:13:4:5
+235,Oh No! More Lemmings,Synchronised Lemming,True,565.1,Hard,medium,True,basher;builder;climber;digger;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,93:Havoc:14:8:5
+236,Oh No! More Lemmings,Have an ice day,True,284.08,Moderate,medium,True,basher;builder;digger;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,94:Havoc:15:1:3
+237,Oh No! More Lemmings,Scaling the Heights,True,372.17,Tricky,medium,True,blocker;builder;climber;miner;multiple-worker-coordination,,ohNoMoreLemmings-DLVEL-100,95:Havoc:16:8:2
+238,Oh No! More Lemmings,Where Lemmings Dare,True,497.36,Challenging,medium,True,basher;blocker;builder;digger;miner;multiple-worker-coordination;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,96:Havoc:17:8:3
+239,Oh No! More Lemmings,Lemmings in a situation,True,457.29,Challenging,medium,True,basher;bomber;builder;climber;digger;floater,,ohNoMoreLemmings-DLVEL-100,97:Havoc:18:5:6
+240,Oh No! More Lemmings,Looks a Bit Nippy Out There,True,271.14,Moderate,medium,True,basher;builder;release-rate-manipulation,,ohNoMoreLemmings-DLVEL-100,98:Havoc:19:8:4
+241,Oh No! More Lemmings,LOoK BeFoRe YoU LeAp!,True,296.68,Moderate,medium,True,bomber;climber;floater;miner,,ohNoMoreLemmings-DLVEL-100,99:Havoc:20:9:5
+242,Xmas Lemmings 1992,Jingle Lemming,True,109.7,Easy,high,True,basher,,xmasLemmings1992-LEVEL-4,0:Xmas:1:0:0
+243,Xmas Lemmings 1992,Happy Holidays Mr Lemming!,True,179.6,Easy,medium,True,builder;digger,,xmasLemmings1992-LEVEL-4,1:Xmas:2:0:1
+244,Xmas Lemmings 1992,A Lemming Holiday,True,426.15,Challenging,medium,True,basher;builder;climber;digger;floater;miner,,xmasLemmings1992-LEVEL-4,2:Xmas:3:0:2
+245,Xmas Lemmings 1992,The North Poles,True,292.83,Moderate,medium,True,builder;climber;digger,,xmasLemmings1992-LEVEL-4,3:Xmas:4:0:3
+246,Holiday Lemmings 1993,Climbing to the Top!,True,240.38,Moderate,medium,True,basher;builder;release-rate-manipulation,,holidayLemmings1993-MACLEVL-32,0:Flurry:1:4:0
+247,Holiday Lemmings 1993,Floating Lemming Flurry,True,146.74,Easy,medium,True,basher;floater,,holidayLemmings1993-MACLEVL-32,1:Flurry:2:4:1
+248,Holiday Lemmings 1993,Holiday Mining,True,71.37,Beginner,high,True,basher,,holidayLemmings1993-MACLEVL-32,2:Flurry:3:4:2
+249,Mikepak06,Double clambering !,False,106.38,Easy,low,True,,,fan:lldb-11,Mikepak06.dat#3
+250,DOS Xmas 1992,A Lemming Holiday,False,122.9,Easy,low,True,,,fan:lldb-487,Xmas 1992.DAT#2
+251,Holiday Lemmings 1993,Lemming Tracks in the Snow!,True,239.12,Moderate,medium,True,basher;blocker;miner;multiple-worker-coordination,,holidayLemmings1993-MACLEVL-32,3:Flurry:4:4:3
+252,Holiday Lemmings 1993,Christmas South of the Equator,True,124.08,Easy,high,True,miner,,holidayLemmings1993-MACLEVL-32,4:Flurry:5:4:4
+253,Holiday Lemmings 1993,Lemming Snowfall,True,141.84,Easy,medium,True,basher;builder,,holidayLemmings1993-MACLEVL-32,5:Flurry:6:4:5
+254,Holiday Lemmings 1993,Lemming Snowjourn,True,189.31,Easy,medium,True,basher;digger,,holidayLemmings1993-MACLEVL-32,6:Flurry:7:4:6
+255,Holiday Lemmings 1993,Clouds of Lemmings,True,209.58,Moderate,medium,True,basher;blocker;builder,,holidayLemmings1993-MACLEVL-32,7:Flurry:8:4:7
+256,Holiday Lemmings 1993,A Block from Home,True,348.4,Tricky,medium,True,basher;builder;digger;multiple-worker-coordination,,holidayLemmings1993-MACLEVL-32,8:Flurry:9:5:0
+257,Holiday Lemmings 1993,32 Lemmings Below Zero,True,181.88,Easy,medium,True,builder;digger;miner,,holidayLemmings1993-MACLEVL-32,9:Flurry:10:5:1
+258,Holiday Lemmings 1993,At Home in a Cave,True,142.14,Easy,medium,True,basher;digger,,holidayLemmings1993-MACLEVL-32,10:Flurry:11:5:2
+259,Holiday Lemmings 1993,Presents of Mind,True,337.94,Tricky,medium,True,basher;builder;multiple-worker-coordination;release-rate-manipulation,,holidayLemmings1993-MACLEVL-32,11:Flurry:12:5:3
+260,Holiday Lemmings 1993,Yo-yo Lem-lem,True,246.94,Moderate,medium,True,builder;climber;multiple-worker-coordination,,holidayLemmings1993-MACLEVL-32,12:Flurry:13:5:4
+261,Holiday Lemmings 1993,Marshmallow Land,True,346.8,Tricky,medium,True,basher;builder;multiple-worker-coordination;release-rate-manipulation,,holidayLemmings1993-MACLEVL-32,13:Flurry:14:5:5
+262,Holiday Lemmings 1993,Head for the Hills!,True,270.77,Moderate,medium,True,builder,,holidayLemmings1993-MACLEVL-32,14:Flurry:15:5:6
+263,Holiday Lemmings 1993,The Long Way Around,True,305.15,Tricky,medium,True,basher;blocker;builder;release-rate-manipulation,,holidayLemmings1993-MACLEVL-32,15:Flurry:16:5:7
+264,Holiday Lemmings 1993,Oogilemming!,True,497.2,Challenging,medium,True,basher;blocker;builder;climber;digger;floater;multiple-worker-coordination;release-rate-manipulation,,holidayLemmings1993-MACLEVL-32,16:Blizzard:1:6:0
+265,Holiday Lemmings 1993,Lemmings Up High,True,236.12,Moderate,medium,True,basher;builder;release-rate-manipulation,,holidayLemmings1993-MACLEVL-32,17:Blizzard:2:6:1
+266,Holiday Lemmings 1993,Check Your Hints!,True,297.28,Moderate,high,True,digger;release-rate-manipulation,,holidayLemmings1993-MACLEVL-32,18:Blizzard:3:6:2
+267,Holiday Lemmings 1993,Santus Lemmingus,True,345.95,Tricky,medium,True,basher;builder;climber;digger;floater,,holidayLemmings1993-MACLEVL-32,19:Blizzard:4:6:3
+268,Holiday Lemmings 1993,It Came Upon a Lemnight Clear,True,557.79,Hard,medium,True,basher;blocker;bomber;builder;climber;digger;miner;multiple-worker-coordination;release-rate-manipulation,,holidayLemmings1993-MACLEVL-32,20:Blizzard:5:6:4
+269,Holiday Lemmings 1993,A Single Lemming...,True,296.68,Moderate,medium,True,builder;digger;release-rate-manipulation,,holidayLemmings1993-MACLEVL-32,21:Blizzard:6:6:5
+270,Holiday Lemmings 1993,Break on through...,True,297.68,Moderate,medium,True,basher;builder;release-rate-manipulation,,holidayLemmings1993-MACLEVL-32,22:Blizzard:7:6:6
+271,Holiday Lemmings 1993,Presents of Mind II,True,321.7,Tricky,medium,True,basher;builder;multiple-worker-coordination,,holidayLemmings1993-MACLEVL-32,23:Blizzard:8:6:7
+272,Holiday Lemmings 1993,Lemmings...The Motion Picture,True,398.87,Tricky,medium,True,basher;blocker;builder;digger;release-rate-manipulation,,holidayLemmings1993-MACLEVL-32,24:Blizzard:9:7:0
+273,Holiday Lemmings 1993,The Wrath of Lem,True,260.08,Moderate,medium,True,basher;builder,,holidayLemmings1993-MACLEVL-32,25:Blizzard:10:7:1
+274,Holiday Lemmings 1993,The Search for Lem,True,443.1,Challenging,medium,True,basher;builder;climber;digger;miner;multiple-worker-coordination;release-rate-manipulation,,holidayLemmings1993-MACLEVL-32,26:Blizzard:11:7:2
+275,Holiday Lemmings 1993,The Voyage Home...,True,257.2,Moderate,medium,True,bomber;digger,,holidayLemmings1993-MACLEVL-32,27:Blizzard:12:7:3
+276,Holiday Lemmings 1993,The Final Frontier,True,275.78,Moderate,medium,True,blocker;bomber;builder;release-rate-manipulation,,holidayLemmings1993-MACLEVL-32,28:Blizzard:13:7:4
+277,Holiday Lemmings 1993,The Undiscovered Country,True,159.71,Easy,medium,True,digger;miner,,holidayLemmings1993-MACLEVL-32,29:Blizzard:14:7:5
+278,Holiday Lemmings 1993,The Needs of the Many...,True,479.8,Challenging,medium,True,basher;bomber;builder;climber;floater,,holidayLemmings1993-MACLEVL-32,30:Blizzard:15:7:6
+279,Holiday Lemmings 1993,The Next Lemeration,True,339.35,Tricky,medium,True,basher;blocker;bomber;builder;miner;release-rate-manipulation,,holidayLemmings1993-MACLEVL-32,31:Blizzard:16:7:7
+280,Oh Yes! More Lemmings!,There can be only one,True,135.13,Easy,high,True,builder,,ohYesMoreLemmings-OHYES-60,0:Lemmings Versus:1:0:0
+281,Oh Yes! More Lemmings!,We`re in this one together,True,500.45,Hard,medium,True,basher;blocker;builder;digger;miner;multiple-worker-coordination,,ohYesMoreLemmings-OHYES-60,1:Lemmings Versus:2:0:1
+282,Oh Yes! More Lemmings!,Still everything to play for,True,71.69,Beginner,medium,True,basher,,ohYesMoreLemmings-OHYES-60,2:Lemmings Versus:3:0:2
+283,Giga pack 02,Insert name here,False,106.62,Easy,low,True,,,fan:lldb-162,Giga pack 02.dat#2
+284,geooPk1,Palace o/t once-hacked Lemmings,False,120.1,Easy,low,True,,,fan:lldb-2,geooPk1.dat#6
+285,Nepster01,Travelling Lemmings,False,575.09,Hard,medium,True,basher;blocker;bomber;builder;climber;digger;multiple-worker-coordination,,fan:lldb-219,Nepster01_V6.DAT#4
+286,Oh Yes! More Lemmings!,May the craftiest player win,True,626.68,Very Hard,medium,True,basher;blocker;builder;climber;digger;floater;miner;multiple-worker-coordination,,ohYesMoreLemmings-OHYES-60,3:Lemmings Versus:4:0:3
+287,Oh Yes! More Lemmings!,and the winner is.....,True,132.21,Easy,medium,True,basher;builder,,ohYesMoreLemmings-OHYES-60,4:Lemmings Versus:5:0:4
+288,Oh Yes! More Lemmings!,In the thick of the fray,True,79.18,Beginner,medium,True,builder,,ohYesMoreLemmings-OHYES-60,5:Lemmings Versus:6:0:5
+289,Crystal Remakes,Triple Trouble,False,114.18,Easy,low,True,,,fan:lldb-130,Crystal Remakes.dat#8
+290,Oh Yes! More Lemmings!,Just for fun or to the death?,True,278.95,Moderate,medium,True,basher;builder;digger;multiple-worker-coordination,,ohYesMoreLemmings-OHYES-60,6:Lemmings Versus:7:0:6
+291,Oh Yes! More Lemmings!,Game on!  Choose your tactics.,True,314.25,Tricky,medium,True,basher;builder;digger;miner;multiple-worker-coordination,,ohYesMoreLemmings-OHYES-60,7:Lemmings Versus:8:0:7
+292,Oh Yes! More Lemmings!,The Passing Place,True,283.69,Moderate,medium,True,builder;multiple-worker-coordination,,ohYesMoreLemmings-OHYES-60,8:Lemmings Versus:9:0:8
+293,Oh Yes! More Lemmings!,"Take what you can, when you can",True,202.02,Moderate,medium,True,basher;builder;digger,,ohYesMoreLemmings-OHYES-60,9:Lemmings Versus:10:0:9
+294,Oh Yes! More Lemmings!,Any chance of a truce?,True,172.53,Easy,medium,True,miner,,ohYesMoreLemmings-OHYES-60,10:Lemmings Versus:11:0:10
+295,Oh Yes! More Lemmings!,Good game! Good game!,True,277.4,Moderate,medium,True,basher;blocker;bomber;builder;release-rate-manipulation,,ohYesMoreLemmings-OHYES-60,11:Lemmings Versus:12:0:11
+296,Oh Yes! More Lemmings!,The Hammock...,True,343.44,Tricky,medium,True,basher;blocker;bomber;builder;digger,,ohYesMoreLemmings-OHYES-60,12:Lemmings Versus:13:0:12
+297,Oh Yes! More Lemmings!,The Pipe Room...,True,44.05,Beginner,high,True,,,ohYesMoreLemmings-OHYES-60,13:Lemmings Versus:14:0:13
+298,ssam1221s Lemmings Wild,You need bashers this time,False,79.06,Beginner,low,True,,,fan:lldb-514,ssam1221 Wild 2.dat#8
+299,Mikepak06,Lemmings on the boat 2,False,114.09,Easy,low,True,,,fan:lldb-11,Mikepak06.dat#6
+300,ssam1221s Lemmings Wild,It's Lemmy Day,False,122.9,Easy,low,True,,,fan:lldb-514,ssam1221 Wild 1.dat#9
+301,Oh Yes! More Lemmings!,Graffiti,True,342.14,Tricky,medium,True,basher;blocker;bomber;builder;miner;release-rate-manipulation,,ohYesMoreLemmings-OHYES-60,14:Lemmings Versus:15:0:14
+302,Oh Yes! More Lemmings!,The Rubbish Dump,True,158.18,Easy,medium,True,basher;digger,,ohYesMoreLemmings-OHYES-60,15:Lemmings Versus:16:0:15
+303,Oh Yes! More Lemmings!,The Crystal Cavern Mark II,True,342.02,Tricky,medium,True,basher;builder;multiple-worker-coordination,,ohYesMoreLemmings-OHYES-60,16:Lemmings Versus:17:0:16
+304,Oh Yes! More Lemmings!,The Rope Bridge,True,264.85,Moderate,medium,True,builder,,ohYesMoreLemmings-OHYES-60,17:Lemmings Versus:18:0:17
+305,Oh Yes! More Lemmings!,Islands in the Sky,True,94.4,Beginner,high,True,blocker,,ohYesMoreLemmings-OHYES-60,18:Lemmings Versus:19:0:18
+306,Epic giga02,Winter Solstice,False,117.3,Easy,low,True,,,fan:lldb-140,Epic giga02.dat#8
+307,Oh Yes! More Lemmings!,Cross-over Point,True,330.95,Tricky,medium,True,basher;builder;digger;floater;multiple-worker-coordination,,ohYesMoreLemmings-OHYES-60,19:Lemmings Versus:20:0:19
+308,Oh Yes! More Lemmings!,The Duel,True,142.43,Easy,medium,True,basher;builder,,ohYesMoreLemmings-OHYES-60,20:Oh No! More Lemmings Versus:1:0:20
+309,Oh Yes! More Lemmings!,Match Of The Day,True,83.57,Beginner,medium,True,basher,,ohYesMoreLemmings-OHYES-60,21:Oh No! More Lemmings Versus:2:0:21
+310,Oh Yes! More Lemmings!,Confrontation,True,164.2,Easy,high,True,basher,,ohYesMoreLemmings-OHYES-60,22:Oh No! More Lemmings Versus:3:0:22
+311,Oh Yes! More Lemmings!,The Only Way Out,True,181.57,Easy,medium,True,basher;builder,,ohYesMoreLemmings-OHYES-60,23:Oh No! More Lemmings Versus:4:0:23
+312,Oh Yes! More Lemmings!,Showdown!,True,319.77,Tricky,medium,True,blocker;builder;climber;miner;multiple-worker-coordination,,ohYesMoreLemmings-OHYES-60,24:Oh No! More Lemmings Versus:5:0:24
+313,Oh Yes! More Lemmings!,Test Of Skill,True,48.52,Beginner,high,True,,,ohYesMoreLemmings-OHYES-60,25:Oh No! More Lemmings Versus:6:0:25
+314,Oh Yes! More Lemmings!,Give And Take,True,47.91,Beginner,high,True,,,ohYesMoreLemmings-OHYES-60,26:Oh No! More Lemmings Versus:7:0:26
+315,oldbutgo,Agh! More 1 pixel gaps!,False,82.93,Beginner,low,True,,,fan:lldb-358,oldbutgo.dat#5
+316,JannPck3,Z'Ha'Dum,False,117.89,Easy,low,True,,,fan:lldb-233,jannpck3.dat#9
+317,Oh Yes! More Lemmings!,Co-operation,True,306.56,Tricky,medium,True,basher;blocker;builder,,ohYesMoreLemmings-OHYES-60,27:Oh No! More Lemmings Versus:8:0:27
+318,Oh Yes! More Lemmings!,One On One,True,275.38,Moderate,medium,True,builder;digger;multiple-worker-coordination,,ohYesMoreLemmings-OHYES-60,28:Oh No! More Lemmings Versus:9:0:28
+319,Oh Yes! More Lemmings!,I Want It All,True,121.01,Easy,medium,True,builder;miner,,ohYesMoreLemmings-OHYES-60,29:Oh No! More Lemmings Versus:10:0:29
+320,Oh Yes! More Lemmings!,Rules to fall,True,208.05,Moderate,medium,True,digger;floater,,ohYesMoreLemmings-OHYES-60,30:Mega Drive Sunsoft:1:0:30
+321,Oh Yes! More Lemmings!,Inside the bone,True,330.59,Tricky,medium,True,basher;builder;multiple-worker-coordination,,ohYesMoreLemmings-OHYES-60,31:Mega Drive Sunsoft:2:0:31
+322,Oh Yes! More Lemmings!,Anxiety,True,261.73,Moderate,medium,True,builder;miner;release-rate-manipulation,,ohYesMoreLemmings-OHYES-60,32:Mega Drive Sunsoft:3:0:32
+323,Oh Yes! More Lemmings!,Train your body,True,269.76,Moderate,medium,True,basher;builder;digger,,ohYesMoreLemmings-OHYES-60,33:Mega Drive Sunsoft:4:0:33
+324,Oh Yes! More Lemmings!,Watch your step,True,308.23,Tricky,medium,True,basher;blocker;bomber;builder;release-rate-manipulation,,ohYesMoreLemmings-OHYES-60,34:Mega Drive Sunsoft:5:0:34
+325,Oh Yes! More Lemmings!,Libra,True,287.44,Moderate,medium,True,blocker;bomber,,ohYesMoreLemmings-OHYES-60,35:Mega Drive Sunsoft:6:0:35
+326,Oh Yes! More Lemmings!,Everyone turn left (Part two),True,86.77,Beginner,medium,True,miner,,ohYesMoreLemmings-OHYES-60,36:Mega Drive Sunsoft:7:0:36
+327,Yawg06,Just Dig! Again!,False,102,Easy,low,True,,,fan:lldb-161,Yawg06.dat#0
+328,Giga pack 01,The pole onslaught of a lemming,False,118.7,Easy,low,True,,,fan:lldb-160,Giga pack 01.dat#5
+329,Oh Yes! More Lemmings!,Is this a circus?,True,239.53,Moderate,medium,True,basher;builder,,ohYesMoreLemmings-OHYES-60,37:Mega Drive Sunsoft:8:0:37
+330,Oh Yes! More Lemmings!,Evacuating a coal mine,True,331.06,Tricky,medium,True,basher;builder;climber;miner,,ohYesMoreLemmings-OHYES-60,38:Mega Drive Sunsoft:9:0:38
+331,Oh Yes! More Lemmings!,Spiral staircase,True,278.68,Moderate,medium,True,blocker;bomber;builder;digger,,ohYesMoreLemmings-OHYES-60,39:Mega Drive Sunsoft:10:0:39
+332,Oh Yes! More Lemmings!,Turn around and look.,True,218.5,Moderate,medium,True,builder;miner,,ohYesMoreLemmings-OHYES-60,40:Mega Drive Sunsoft:11:0:40
+333,Oh Yes! More Lemmings!,Water processing plant,True,431.98,Challenging,medium,True,basher;builder;floater;miner;multiple-worker-coordination;release-rate-manipulation,,ohYesMoreLemmings-OHYES-60,41:Mega Drive Sunsoft:12:0:41
+334,Oh Yes! More Lemmings!,Doomsday,True,321.34,Tricky,medium,True,blocker;bomber;builder;climber,,ohYesMoreLemmings-OHYES-60,42:Mega Drive Sunsoft:13:0:42
+335,Oh Yes! More Lemmings!,No world without you,True,382.47,Tricky,medium,True,basher;builder;climber;digger;multiple-worker-coordination,,ohYesMoreLemmings-OHYES-60,43:Mega Drive Sunsoft:14:0:43
+336,Oh Yes! More Lemmings!,Exodus!,True,378.92,Tricky,medium,True,basher;builder;climber;floater;release-rate-manipulation,,ohYesMoreLemmings-OHYES-60,44:Mega Drive Sunsoft:15:0:44
+337,Oh Yes! More Lemmings!,Here is Mr.Lemming's house,True,311.52,Tricky,medium,True,basher;blocker;bomber;builder;digger;miner,,ohYesMoreLemmings-OHYES-60,45:Mega Drive Sunsoft:16:0:45
+338,Oh Yes! More Lemmings!,Cave quest,True,355.21,Tricky,medium,True,basher;blocker;builder;digger,,ohYesMoreLemmings-OHYES-60,46:Mega Drive Sunsoft:17:0:46
+339,Oh Yes! More Lemmings!,SUNSOFT Special,True,389.0,Tricky,medium,True,basher;blocker;bomber;builder;digger;release-rate-manipulation,,ohYesMoreLemmings-OHYES-60,47:Mega Drive Sunsoft:18:0:47
+340,Oh Yes! More Lemmings!,Let's go camping.,True,211.4,Moderate,medium,True,builder;digger,,ohYesMoreLemmings-OHYES-60,48:Mega Drive Sunsoft:19:0:48
+341,Oh Yes! More Lemmings!,Haunted botanical garden,True,343.01,Tricky,medium,True,builder;digger;miner;multiple-worker-coordination,,ohYesMoreLemmings-OHYES-60,49:Mega Drive Sunsoft:20:0:49
+342,Oh Yes! More Lemmings!,Be sure to be a builder.,True,302.66,Tricky,medium,True,basher;blocker;builder;miner,,ohYesMoreLemmings-OHYES-60,50:Mega Drive Sunsoft:21:0:50
+343,Oh Yes! More Lemmings!,Watch right or left (Part two),True,357.49,Tricky,medium,True,basher;bomber;builder;digger;release-rate-manipulation,,ohYesMoreLemmings-OHYES-60,51:Mega Drive Sunsoft:22:0:51
+344,Oh Yes! More Lemmings!,Move on in two separate groups.,True,421.14,Challenging,medium,True,basher;blocker;builder;multiple-worker-coordination,,ohYesMoreLemmings-OHYES-60,52:Mega Drive Sunsoft:23:0:52
+345,Oh Yes! More Lemmings!,"Out, away from the tune",True,340.13,Tricky,medium,True,basher;blocker;bomber;builder,,ohYesMoreLemmings-OHYES-60,53:Mega Drive Sunsoft:24:0:53
+346,Oh Yes! More Lemmings!,Stray sheep,True,352.12,Tricky,medium,True,basher;blocker;builder;digger;miner;release-rate-manipulation,,ohYesMoreLemmings-OHYES-60,54:Mega Drive Sunsoft:25:0:54
+347,Oh Yes! More Lemmings!,Just a minute (Part Three),True,446.95,Challenging,medium,True,basher;climber;digger;miner;multiple-worker-coordination;release-rate-manipulation,,ohYesMoreLemmings-OHYES-60,55:Mega Drive Sunsoft:26:0:55
+348,Oh Yes! More Lemmings!,Two heads are better...,True,265.3,Moderate,medium,True,bomber;climber;floater,,ohYesMoreLemmings-OHYES-60,56:Mega Drive Sunsoft:27:0:56
+349,Oh Yes! More Lemmings!,The gate trap Lemmings.,True,425.62,Challenging,medium,True,basher;blocker;builder;digger;multiple-worker-coordination,,ohYesMoreLemmings-OHYES-60,57:Mega Drive Sunsoft:28:0:57
+350,Oh Yes! More Lemmings!,I am A.T.,True,232.62,Moderate,medium,True,builder;digger;release-rate-manipulation,,ohYesMoreLemmings-OHYES-60,58:Mega Drive Sunsoft:29:0:58
+351,Oh Yes! More Lemmings!,Fall and no life (Part Two),True,513.76,Hard,medium,True,basher;builder;floater;miner;multiple-worker-coordination,,ohYesMoreLemmings-OHYES-60,59:Mega Drive Sunsoft:30:0:59
+352,Holiday Lemmings 1994,Chains of Command,True,160.98,Easy,medium,True,basher,,holidayLemmings1994-MACLEVL-32,0:Frost:1:0:0
+353,Holiday Lemmings 1994,Ski Jump!,True,170.09,Easy,medium,True,floater,,holidayLemmings1994-MACLEVL-32,1:Frost:2:0:1
+354,Holiday Lemmings 1994,CindyLand,True,298.86,Moderate,medium,True,basher;blocker;multiple-worker-coordination;release-rate-manipulation,,holidayLemmings1994-MACLEVL-32,2:Frost:3:0:2
+355,Holiday Lemmings 1994,Separate Ways,True,182.16,Easy,medium,True,basher;builder,,holidayLemmings1994-MACLEVL-32,3:Frost:4:0:3
+356,Holiday Lemmings 1994,Lemming Reunification,True,289.34,Moderate,medium,True,basher;miner;multiple-worker-coordination,,holidayLemmings1994-MACLEVL-32,4:Frost:5:0:4
+357,Holiday Lemmings 1994,The Land of the Bizarre,True,271.8,Moderate,medium,True,blocker;bomber;builder;release-rate-manipulation,,holidayLemmings1994-MACLEVL-32,5:Frost:6:0:5
+358,Holiday Lemmings 1994,Happy New Year!,True,415.14,Challenging,medium,True,basher;blocker;bomber;builder;multiple-worker-coordination,,holidayLemmings1994-MACLEVL-32,6:Frost:7:0:6
+359,Holiday Lemmings 1994,Division Bell,True,96.03,Beginner,high,True,digger,,holidayLemmings1994-MACLEVL-32,7:Frost:8:0:7
+360,Fernito pack 1,Dilemma,False,115.9,Easy,low,True,,,fan:lldb-111,Fernito pack 1.dat#7
+361,Holiday Lemmings 1994,Quest for Kieran,True,288.5,Moderate,medium,True,builder;miner;multiple-worker-coordination;release-rate-manipulation,,holidayLemmings1994-MACLEVL-32,8:Frost:9:1:0
+362,Holiday Lemmings 1994,Four Play,True,550.15,Hard,medium,True,basher;builder;digger;multiple-worker-coordination;release-rate-manipulation,,holidayLemmings1994-MACLEVL-32,9:Frost:10:1:1
+363,Holiday Lemmings 1994,Maybe not such a doddle,True,289.29,Moderate,medium,True,blocker;builder;digger;miner;multiple-worker-coordination,,holidayLemmings1994-MACLEVL-32,10:Frost:11:1:2
+364,Holiday Lemmings 1994,It's Boxing Day!,True,357.3,Tricky,medium,True,basher;builder;digger;release-rate-manipulation,,holidayLemmings1994-MACLEVL-32,11:Frost:12:1:3
+365,Holiday Lemmings 1994,2 Minutes before midnight,True,202.25,Moderate,medium,True,basher;builder;release-rate-manipulation,,holidayLemmings1994-MACLEVL-32,12:Frost:13:1:4
+366,Holiday Lemmings 1994,Happy New Year II!,True,441.86,Challenging,medium,True,basher;builder;multiple-worker-coordination,,holidayLemmings1994-MACLEVL-32,13:Frost:14:1:5
+367,Holiday Lemmings 1994,Plethora of Presents,True,236.95,Moderate,medium,True,basher;builder;miner,,holidayLemmings1994-MACLEVL-32,14:Frost:15:1:6
+368,Holiday Lemmings 1994,Up on the Rooftops,True,412.84,Challenging,medium,True,builder;climber;floater;multiple-worker-coordination;release-rate-manipulation,,holidayLemmings1994-MACLEVL-32,15:Frost:16:1:7
+369,Holiday Lemmings 1994,Go Thataway!,True,441.67,Challenging,medium,True,basher;builder;climber;floater;release-rate-manipulation,,holidayLemmings1994-MACLEVL-32,16:Hail:1:2:0
+370,Holiday Lemmings 1994,Break On Through,True,292.72,Moderate,medium,True,blocker;bomber,,holidayLemmings1994-MACLEVL-32,17:Hail:2:2:1
+371,Holiday Lemmings 1994,And a Happy New Year!,True,382.54,Tricky,medium,True,basher;builder;miner;release-rate-manipulation,,holidayLemmings1994-MACLEVL-32,18:Hail:3:2:2
+372,Holiday Lemmings 1994,Lemmintaschen?,True,474.65,Challenging,medium,True,basher;blocker;bomber;miner,,holidayLemmings1994-MACLEVL-32,19:Hail:4:2:3
+373,Holiday Lemmings 1994,Get the Point?,True,553.2,Hard,medium,True,blocker;builder;digger;floater;multiple-worker-coordination;release-rate-manipulation,,holidayLemmings1994-MACLEVL-32,20:Hail:5:2:4
+374,Holiday Lemmings 1994,Surprise Package?,True,32.93,Beginner,high,True,,,holidayLemmings1994-MACLEVL-32,21:Hail:6:2:5
+375,Pacpack1,Just a bomb away !!,False,67.92,Beginner,low,True,,,fan:lldb-300,Pacpack1.dat#0
+376,Giga pack 02,The minroah the merryer,False,102,Easy,low,True,,,fan:lldb-162,Giga pack 02.dat#3
+377,Gronklems 6,10) Bring it Together!.ini,False,118.7,Easy,low,True,,,fan:lldb-203,Gronklems 6 v2/10) Bring it Together!.ini#-1
+378,Holiday Lemmings 1994,Steel Ice Span,True,308.87,Tricky,medium,True,builder;climber;multiple-worker-coordination;release-rate-manipulation,,holidayLemmings1994-MACLEVL-32,22:Hail:7:2:6
+379,Holiday Lemmings 1994,Sir Edmund Hilemming,True,423.19,Challenging,medium,True,builder;digger;miner;multiple-worker-coordination;release-rate-manipulation,,holidayLemmings1994-MACLEVL-32,23:Hail:8:2:7
+380,Holiday Lemmings 1994,"Up, up, and away!",True,305.48,Tricky,medium,True,basher;builder;multiple-worker-coordination;release-rate-manipulation,,holidayLemmings1994-MACLEVL-32,24:Hail:9:3:0
+381,Holiday Lemmings 1994,"Lemmy in the cold, cold ground",True,359.03,Tricky,medium,True,basher;builder;multiple-worker-coordination,,holidayLemmings1994-MACLEVL-32,25:Hail:10:3:1
+382,Holiday Lemmings 1994,Emmings!  (No L),True,479.42,Challenging,medium,True,builder;climber;digger;miner;multiple-worker-coordination;release-rate-manipulation,,holidayLemmings1994-MACLEVL-32,26:Hail:11:3:2
+383,Holiday Lemmings 1994,Merry Christmaze,True,286.14,Moderate,medium,True,builder;multiple-worker-coordination,,holidayLemmings1994-MACLEVL-32,27:Hail:12:3:3
+384,Holiday Lemmings 1994,Polar Expedition,True,467.57,Challenging,medium,True,basher;builder;climber;digger;floater;multiple-worker-coordination;release-rate-manipulation,,holidayLemmings1994-MACLEVL-32,28:Hail:13:3:4
+385,Holiday Lemmings 1994,Rendezvous II,True,410.1,Challenging,medium,True,basher;builder;multiple-worker-coordination,,holidayLemmings1994-MACLEVL-32,29:Hail:14:3:5
+386,Holiday Lemmings 1994,Steel Block Party,True,204.01,Moderate,medium,True,basher;builder;digger,,holidayLemmings1994-MACLEVL-32,30:Hail:15:3:6
+387,Holiday Lemmings 1994,Peak of Performance,True,262.66,Moderate,medium,True,basher;blocker;builder;floater,,holidayLemmings1994-MACLEVL-32,31:Hail:16:3:7

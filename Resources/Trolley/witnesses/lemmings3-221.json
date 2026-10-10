@@ -1,0 +1,154 @@
+{
+  "expected" : {
+    "lost" : 19,
+    "reserves" : 0,
+    "saved" : 2,
+    "stateHash" : "2a828c109f98301128dd9f1a4427c99ff5445fd2bff8e5af77e3705c707b6479",
+    "ticks" : 901
+  },
+  "initialStateHash" : "f6094a704d82b01a5c691d6b1ad8121204f2d15f2498016475517051496efb66",
+  "inputs" : [
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 1,
+      "tick" : 453
+    },
+    {
+      "action" : "use",
+      "direction" : "upLeft",
+      "lemming" : 1,
+      "tick" : 685
+    },
+    {
+      "action" : "blocker",
+      "lemming" : 1,
+      "tick" : 760
+    },
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 2,
+      "tick" : 780
+    },
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 1,
+      "tick" : 782
+    },
+    {
+      "action" : "use",
+      "direction" : "downRight",
+      "lemming" : 1,
+      "tick" : 784
+    },
+    {
+      "action" : "use",
+      "direction" : "upLeft",
+      "lemming" : 1,
+      "tick" : 800
+    },
+    {
+      "action" : "walker",
+      "lemming" : 2,
+      "tick" : 800
+    },
+    {
+      "action" : "walker",
+      "lemming" : 1,
+      "tick" : 802
+    },
+    {
+      "action" : "blocker",
+      "lemming" : 1,
+      "tick" : 810
+    },
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 2,
+      "tick" : 814
+    },
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 1,
+      "tick" : 816
+    },
+    {
+      "action" : "blocker",
+      "lemming" : 1,
+      "tick" : 817
+    },
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 2,
+      "tick" : 817
+    },
+    {
+      "action" : "use",
+      "direction" : "up",
+      "lemming" : 2,
+      "tick" : 820
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 2,
+      "tick" : 827
+    },
+    {
+      "action" : "use",
+      "direction" : "up",
+      "lemming" : 2,
+      "tick" : 829
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 2,
+      "tick" : 836
+    },
+    {
+      "action" : "use",
+      "direction" : "up",
+      "lemming" : 2,
+      "tick" : 854
+    },
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 1,
+      "tick" : 856
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 1,
+      "tick" : 858
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 2,
+      "tick" : 861
+    },
+    {
+      "action" : "use",
+      "direction" : "up",
+      "lemming" : 2,
+      "tick" : 862
+    },
+    {
+      "action" : "walker",
+      "lemming" : 2,
+      "tick" : 884
+    }
+  ],
+  "level" : 221,
+  "levelSHA256" : "5e7081c21619fefb724657afc6811862c51df7f72f24b26b6e6082fa516f3f84",
+  "population" : 20,
+  "version" : 1
+}

@@ -37,6 +37,15 @@ public enum ClassicDOSRules {
     }
 }
 
+/// The source clock used for a Classic-format level. Golems advances two
+/// further cycles before ending a timed level.
+public enum ClassicDOSClock: String, Codable, Sendable {
+    case dos
+    case golems
+
+    public var finalTickAllowance: Int { self == .golems ? 2 : 0 }
+}
+
 /// The DOS rule set a level runs under.
 ///
 /// Oh No! More Lemmings changed three behaviours, and the Xmas and Holiday
@@ -47,9 +56,11 @@ public enum ClassicDOSRules {
 public enum ClassicDOSMechanics: String, Codable, Sendable {
     case original
     case ohNoMore
+    case golems
 
     /// The rule set for a level from a release, and a rank for the Oh Yes!
-    /// pack, which gathers levels from several releases.
+    /// pack, which gathers levels from several releases. Golems uses the later
+    /// hatch rules and permits falls of 63 source pixels.
     public init(title: ClassicTitle?, rank: String) {
         switch title {
         case .ohNoMoreLemmings, .xmasLemmings1991, .xmasLemmings1992,
@@ -64,6 +75,9 @@ public enum ClassicDOSMechanics: String, Codable, Sendable {
 
     /// Horizontal distance from a hatch object to its new lemmings' feet.
     var hatchOffsetX: Int { self == .original ? 24 : 25 }
+
+    // The native counter starts at three for a newly falling lemming.
+    var maximumSafeFallDistance: Int { self == .golems ? 66 : ClassicDOSRules.maximumSafeFallDistance }
 }
 
 public struct ClassicDOSPoint: Codable, Equatable, Hashable, Sendable {
@@ -570,6 +584,7 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
     private var destructionMasks: ClassicDOSDestructionMaskSet?
     private var nukeCursor: Int
     private let hatchTable: [Int]
+    private var hatchSourceDeltaX: [Int]?
     private var commandSequence: Int
     private var queuedCommands: [ClassicDOSQueuedCommand]
 
@@ -614,6 +629,7 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         nukeCursor = 0
         hatchTable = ClassicDOSRules.hatchOrder(
             entranceCount: configuration.entrances.count, mechanics: configuration.mechanics)
+        hatchSourceDeltaX = nil
         commandSequence = 0
         queuedCommands = []
     }
@@ -622,10 +638,12 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         level: ClassicLevel,
         renderedLevel: ClassicRenderedLevel,
         destructionMasks: ClassicDOSDestructionMaskSet? = nil,
-        mechanics: ClassicDOSMechanics = .original
+        mechanics: ClassicDOSMechanics = .original,
+        clock: ClassicDOSClock = .dos
     ) throws {
         let interactiveObjects = renderedLevel.objects.filter {
-            $0.placement.slot < 16 && $0.graphic.triggerEffect != 0
+            $0.placement.slot < renderedLevel.interactiveObjectSlotLimit
+                && $0.graphic.triggerEffect != 0
         }
         let triggers = renderedLevel.triggers.enumerated().map { index, zone in
             let object = interactiveObjects.indices.contains(index) ? interactiveObjects[index] : nil
@@ -644,12 +662,14 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
             .prefix(4)
             .map {
                 ClassicDOSPoint(
-                    x: $0.placement.x + mechanics.hatchOffsetX,
+                    x: (mechanics == .golems
+                        ? $0.placement.sourceX ?? $0.placement.x
+                        : $0.placement.x) + mechanics.hatchOffsetX,
                     y: $0.placement.y + 14
                 )
         }
         let timeLimit = level.timeLimitMinutes > 0
-            ? level.timeLimitMinutes * 60 * ClassicDOSRules.ticksPerSecond
+            ? level.timeLimitMinutes * 60 * ClassicDOSRules.ticksPerSecond + clock.finalTickAllowance
             : nil
         let configuration = ClassicDOSConfiguration(
             totalLemmings: level.lemmingCount,
@@ -672,13 +692,18 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
             configuration: configuration,
             destructionMasks: destructionMasks
         )
+        hatchSourceDeltaX = renderedLevel.objects
+            .filter { $0.placement.id == 1 }
+            .prefix(4)
+            .map { ($0.placement.sourceX ?? $0.placement.x) - $0.placement.x }
     }
 
     public init(
         level: ClassicLevel,
         renderedLevel: ClassicRenderedLevel,
         mainDATAssets: ClassicMainDATAssets,
-        mechanics: ClassicDOSMechanics = .original
+        mechanics: ClassicDOSMechanics = .original,
+        clock: ClassicDOSClock = .dos
     ) throws {
         try self.init(
             level: level,
@@ -686,7 +711,8 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
             destructionMasks: ClassicDOSDestructionMaskSet(
                 mainDATMasks: mainDATAssets.destructionMasks
             ),
-            mechanics: mechanics
+            mechanics: mechanics,
+            clock: clock
         )
     }
 
@@ -697,14 +723,23 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         guard tickCount == 0, lemmings.isEmpty else { return nil }
         if mechanics == configuration.mechanics { return self }
         let shift = mechanics.hatchOffsetX - configuration.mechanics.hatchOffsetX
+        let sourceDelta = hatchSourceDeltaX ?? []
         let c = configuration
         let moved = ClassicDOSConfiguration(
             totalLemmings: c.totalLemmings, requiredToSave: c.requiredToSave, timeLimitTicks: c.timeLimitTicks,
             initialReleaseRate: c.initialReleaseRate,
-            entrances: c.entrances.map { ClassicDOSPoint(x: $0.x + shift, y: $0.y) },
+            entrances: c.entrances.enumerated().map { index, entrance in
+                let delta = sourceDelta.indices.contains(index) ? sourceDelta[index] : 0
+                let sourceShift = (mechanics == .golems ? delta : 0)
+                    - (c.mechanics == .golems ? delta : 0)
+                return ClassicDOSPoint(x: entrance.x + shift + sourceShift, y: entrance.y)
+            },
             triggers: c.triggers, initialSkills: c.initialSkills,
             maximumX: c.maximumX, maximumY: c.maximumY, mechanics: mechanics)
-        return try? ClassicDOSSimulation(terrain: terrain, configuration: moved, destructionMasks: destructionMasks)
+        var simulation = try? ClassicDOSSimulation(
+            terrain: terrain, configuration: moved, destructionMasks: destructionMasks)
+        simulation?.hatchSourceDeltaX = hatchSourceDeltaX
+        return simulation
     }
 
     public func remainingSkillCount(_ skill: ClassicSkill) -> Int {
@@ -750,6 +785,16 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
     public mutating func assign(_ skill: ClassicSkill, to lemmingID: Int) -> ClassicDOSAssignmentResult {
         var events: [ClassicDOSEvent] = []
         let result = performAssignment(skill, to: lemmingID, events: &events)
+        lastTickEvents = events
+        return result
+    }
+
+    /// Applies Golems source replay assignments without the interactive
+    /// Builder, Basher, Miner and Digger selectors.
+    public mutating func assignGolemsReplay(_ skill: ClassicSkill, to lemmingID: Int) -> ClassicDOSAssignmentResult {
+        guard configuration.mechanics == .golems else { return .invalidAction }
+        var events: [ClassicDOSEvent] = []
+        let result = performAssignment(skill, to: lemmingID, events: &events, sourceReplay: true)
         lastTickEvents = events
         return result
     }
@@ -831,14 +876,15 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
     private mutating func performAssignment(
         _ skill: ClassicSkill,
         to lemmingID: Int,
-        events: inout [ClassicDOSEvent]
+        events: inout [ClassicDOSEvent],
+        sourceReplay: Bool = false
     ) -> ClassicDOSAssignmentResult {
         guard let index = lemmings.firstIndex(where: { $0.id == lemmingID }) else {
             return .noSuchLemming
         }
         guard lemmings[index].isActive else { return .inactiveLemming }
         guard remainingSkillCount(skill) > 0 else { return .noSkillRemaining }
-        let result = assign(skill, toLemmingAt: index, events: &events)
+        let result = assign(skill, toLemmingAt: index, events: &events, sourceReplay: sourceReplay)
         if result == .assigned {
             skills[skill, default: 0] -= 1
             events.append(.skillAssigned(lemmingID: lemmingID, skill: skill))
@@ -882,7 +928,8 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
     private mutating func assign(
         _ skill: ClassicSkill,
         toLemmingAt index: Int,
-        events: inout [ClassicDOSEvent]
+        events: inout [ClassicDOSEvent],
+        sourceReplay: Bool
     ) -> ClassicDOSAssignmentResult {
         var lemming = lemmings[index]
         switch skill {
@@ -921,7 +968,9 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
 
         case .builder:
             let allowed: [ClassicDOSAction] = [.walking, .shrugging, .bashing, .mining, .digging]
-            guard allowed.contains(lemming.action), lemming.foot.y + frameTop(for: lemming.action) >= -5 else {
+            let directSourceReplay = sourceReplay && configuration.mechanics == .golems
+            guard allowed.contains(lemming.action) || directSourceReplay,
+                  lemming.foot.y + frameTop(for: lemming.action) >= -5 else {
                 return .invalidAction
             }
             transition(&lemming, to: .building, events: &events)
@@ -929,9 +978,11 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         case .basher:
             guard destructionMasks != nil else { return .destructionMasksUnavailable }
             let allowed: [ClassicDOSAction] = [.walking, .shrugging, .building, .mining, .digging]
-            guard allowed.contains(lemming.action) else { return .invalidAction }
-            if lemming.objectInFront == .steel { return .steel }
-            if blocksDirection(lemming.objectInFront, direction: lemming.direction) {
+            let directSourceReplay = sourceReplay && configuration.mechanics == .golems
+            guard allowed.contains(lemming.action) || directSourceReplay else { return .invalidAction }
+            if lemming.objectInFront == .steel && !directSourceReplay { return .steel }
+            if blocksDirection(lemming.objectInFront, direction: lemming.direction)
+                && !directSourceReplay {
                 return .wrongOneWayDirection
             }
             transition(&lemming, to: .bashing, events: &events)
@@ -939,17 +990,20 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         case .miner:
             guard destructionMasks != nil else { return .destructionMasksUnavailable }
             let allowed: [ClassicDOSAction] = [.walking, .shrugging, .building, .bashing, .digging]
-            guard allowed.contains(lemming.action) else { return .invalidAction }
+            let directSourceReplay = sourceReplay && configuration.mechanics == .golems
+            guard allowed.contains(lemming.action) || directSourceReplay else { return .invalidAction }
             if lemming.objectInFront == .steel || lemming.objectBelow == .steel { return .steel }
-            if blocksDirection(lemming.objectInFront, direction: lemming.direction) {
+            if configuration.mechanics != .golems,
+               blocksDirection(lemming.objectInFront, direction: lemming.direction) {
                 return .wrongOneWayDirection
             }
             transition(&lemming, to: .mining, events: &events)
 
         case .digger:
-            guard lemming.objectBelow != .steel else { return .steel }
+            let directSourceReplay = sourceReplay && configuration.mechanics == .golems
+            guard lemming.objectBelow != .steel || directSourceReplay else { return .steel }
             let allowed: [ClassicDOSAction] = [.walking, .shrugging, .building, .bashing, .mining]
-            guard allowed.contains(lemming.action) else { return .invalidAction }
+            guard allowed.contains(lemming.action) || directSourceReplay else { return .invalidAction }
             transition(&lemming, to: .digging, events: &events)
         }
         lemmings[index] = lemming
@@ -1120,7 +1174,7 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         }
         if distance == 3 {
             lemming.fallDistance += 3
-        } else if lemming.fallDistance > ClassicDOSRules.maximumSafeFallDistance {
+        } else if lemming.fallDistance > configuration.mechanics.maximumSafeFallDistance {
             transition(&lemming, to: .splatting, events: &events)
         } else {
             transition(&lemming, to: .walking, events: &events)
@@ -1134,15 +1188,22 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         _ lemming: inout ClassicDOSLemming,
         events: inout [ClassicDOSEvent]
     ) -> Bool {
-        var distance = 0
-        while distance < 2,
-              hasPixelClipped(x: lemming.foot.x, y: lemming.foot.y - 1, minimumY: -distance - 1) {
-            distance += 1
-            lemming.foot.y -= 1
-        }
+        let distance = jumpRise(from: lemming.foot)
+        lemming.foot.y -= distance
         if distance < 2 { transition(&lemming, to: .walking, events: &events) }
         checkLevelTop(&lemming, events: &events)
         return true
+    }
+
+    private func jumpRise(from foot: ClassicDOSPoint) -> Int {
+        var distance = 0
+        var y = foot.y
+        while distance < 2,
+              hasPixelClipped(x: foot.x, y: y - 1, minimumY: -distance - 1) {
+            distance += 1
+            y -= 1
+        }
+        return distance
     }
 
     private mutating func handleClimbing(
@@ -1163,7 +1224,8 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
             lemming.foot.y -= 1
             if lemming.foot.y + frameTop(for: .climbing) < -5 ||
                 hasPixelClipped(
-                    x: lemming.foot.x - lemming.direction.delta,
+                    x: lemming.foot.x - lemming.direction.delta
+                        * (configuration.mechanics == .golems ? 2 : 1),
                     y: lemming.foot.y - 8,
                     minimumY: -8
                 ) {
@@ -1396,7 +1458,8 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
             // Original DOS has a missing direction check for right-facing arrows.
             let blocked = below == .steel ||
                 (below == .oneWayLeft && lemming.direction != .left) ||
-                below == .oneWayRight
+                (below == .oneWayRight &&
+                    (configuration.mechanics == .original || lemming.direction != .right))
             if blocked {
                 transition(&lemming, to: .walking, turnAround: true, events: &events)
             }
@@ -1495,7 +1558,9 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         ))
         switch trigger.effect {
         case .exit:
-            if lemming.action != .falling, hasWalkedIntoExit(lemming, zone: trigger.bounds) {
+            if lemming.action == .splatting ||
+                (lemming.action != .falling &&
+                    (configuration.mechanics == .golems || hasWalkedIntoExit(lemming, zone: trigger.bounds))) {
                 transition(&lemming, to: .exiting, events: &events)
             }
         case .forceLeft:

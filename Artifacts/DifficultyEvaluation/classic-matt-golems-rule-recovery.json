@@ -1,0 +1,137 @@
+{
+  "date": "2026-10-05",
+  "source": "Public Lemmings Level Database Watch records on exact bundled MATTPCK1 members",
+  "sourcePackURL": "https://lldb.camanis.net/levelpack/248/MATTPCK1",
+  "bundledArchiveSHA256": "bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854",
+  "mechanicsSelectorSourceSHA256": "9af32677720acd463fb401d3591b56271f2a12bc8721c066518c5f8984cc74ed",
+  "sourceBuiltScorerSHA256": "47521811fe1a1f82f231c737089f5e5e168186b16c817902002ffa98b620976d",
+  "strictExactPackVerification": "9/9 selected scored MATTPCK1 members after promotion",
+  "records": [
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "MATTPCK1.DAT#3",
+        "packID": "fan:lldb-248"
+      },
+      "title": "Exodus",
+      "sourcePage": "https://lldb.camanis.net/level/248/4",
+      "sourceReplaySHA256": "f44a4944535783c6e7f8aac120c7e802cc3d5d184bf95216b422fa97593eedcb",
+      "sourceReplayHeader": {
+        "gameMode": 3,
+        "saved": 57,
+        "completionCycle": 1748
+      },
+      "previousSelectedMechanics": "original",
+      "previousFirstRejectedSourceAssignmentAtOffsetMinusOne": "Blocker for lemming 1 at tick 133",
+      "selectedMechanics": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeInitialHash": "d1573ea966750b5476543daf592cbf68341121c880c879cc603b2ba65028d441",
+      "nativeReplaySHA256": "7a62f84eb83e306b9160ffb46fb8c5d30baba2bae2b19394c4aaedef8928e1b0",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 60,
+        "required": 57,
+        "saved": 57,
+        "stateHash": "3dcb441c4f1c7cf6b648561291501b81d3d1577a15a55ca82deb0d31d4a73bdc",
+        "ticks": 1747
+      },
+      "difficultyScore": 447.3736193343207,
+      "difficultyProbeRuns": 10
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "MATTPCK1.DAT#5",
+        "packID": "fan:lldb-248"
+      },
+      "title": "Oh No! Fewer Lemmings",
+      "sourcePage": "https://lldb.camanis.net/level/248/6",
+      "sourceReplaySHA256": "6d3ead4b7f6e3f1ddffa0bbade92e8365f4ca070372706cb8d92c1c1b8221414",
+      "sourceReplayHeader": {
+        "gameMode": 3,
+        "saved": 40,
+        "completionCycle": 1759
+      },
+      "previousSelectedMechanics": "original",
+      "previousFirstRejectedSourceAssignmentAtOffsetMinusOne": "Digger for lemming 3 at tick 195",
+      "selectedMechanics": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeInitialHash": "d150d2caa492acf796ffd6cf3ab886ac5100551ab12c05cb038dd11f0905c10b",
+      "nativeReplaySHA256": "369752d994d7b3d9d991f7d9ff67c7cf52b5f3059111f06f7c85bb3a13b2e8ab",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 50,
+        "required": 40,
+        "saved": 40,
+        "stateHash": "cab34adfef97397acc6feae3502d0c2884799b442c4f7071dbd39ff4e757db31",
+        "ticks": 1758
+      },
+      "difficultyScore": 567.2002482037884,
+      "difficultyProbeRuns": 10
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "MATTPCK1.DAT#6",
+        "packID": "fan:lldb-248"
+      },
+      "title": "Lemming sanctuary inside",
+      "sourcePage": "https://lldb.camanis.net/level/248/7",
+      "sourceReplaySHA256": "79c8f5f70a7033e3aa991353ba62a31771fac25f395539c8712923293a555272",
+      "sourceReplayHeader": {
+        "gameMode": 3,
+        "saved": 60,
+        "completionCycle": 1644
+      },
+      "previousSelectedMechanics": "original",
+      "previousFirstRejectedSourceAssignmentAtOffsetMinusOne": "Builder for lemming 3 at tick 749",
+      "selectedMechanics": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeInitialHash": "96b1d3a5772f4247d552895135a5885dc475a763b96286183bd074d9eb7eac19",
+      "nativeReplaySHA256": "de4ea1579c72bc79c2a9229d3a5681f29aab18ef9f4fffc67834018b64976470",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 60,
+        "required": 60,
+        "saved": 60,
+        "stateHash": "a5507097f69e050c03a17e76a23742273d689ac224b0b39c17e18f3c5cd1dc93",
+        "ticks": 1643
+      },
+      "difficultyScore": 459.1290131244108,
+      "difficultyProbeRuns": 10
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "MATTPCK1.DAT#8",
+        "packID": "fan:lldb-248"
+      },
+      "title": "Toy Lemmings",
+      "sourcePage": "https://lldb.camanis.net/level/248/9",
+      "sourceReplaySHA256": "bd39238f6a6f5633a89a65ba35f40c8b2865e380f64693668dc9c87745ba4269",
+      "sourceReplayHeader": {
+        "gameMode": 3,
+        "saved": 4,
+        "completionCycle": 2514
+      },
+      "previousSelectedMechanics": "original",
+      "previousFirstRejectedSourceAssignmentAtOffsetMinusOne": "Builder for lemming 3 at tick 228",
+      "selectedMechanics": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeInitialHash": "644edf1cffe56d3b15b739809ab815cc26b39f0d495229cbb7dd987a2c09c8e8",
+      "nativeReplaySHA256": "e11293d0e0f20c7b1a80af922cdabf8f167dd7d6af6a896816e1c08d67c3ec30",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 4,
+        "required": 4,
+        "saved": 4,
+        "stateHash": "5f80e402592d1d2d480bb960f49f91ce75d48f609d15be4ffe0d8f07477ceb0b",
+        "ticks": 2513
+      },
+      "difficultyScore": 468.3735920432197,
+      "difficultyProbeRuns": 10
+    }
+  ],
+  "stillUnverified": "Forever Friends: published source replay remains without a strict native win at the tested offsets and selected Original rules.",
+  "sourcePhysicsParity": "Not independently verified. Published saved counts and completion cycles align with these Golems-rule native outcomes up to the one-cycle source-to-native offset; intermediate source and native states were not compared."
+}

@@ -3,13 +3,21 @@
 set -euo pipefail
 
 project_dir="${0:A:h:h}"
-update_zip="${1:?Usage: publish-github-release.sh UPDATE_ZIP}"
+check_only=0
+if [[ "${1:-}" == --check ]]; then
+  check_only=1
+  shift
+fi
+update_zip="${1:?Usage: publish-github-release.sh [--check] UPDATE_ZIP}"
 appcast_path="${APPCAST_PATH:-$project_dir/appcast.xml}"
 release_notes="${RELEASE_NOTES_PATH:?Set RELEASE_NOTES_PATH to the release notes file.}"
 release_tag="${RELEASE_TAG:?Set RELEASE_TAG to the GitHub release tag.}"
 repository="${GITHUB_REPOSITORY:-ErikVeland/Lemmings}"
 version="${RELEASE_VERSION:?Set RELEASE_VERSION to the application version.}"
 source_revision="${RELEASE_COMMIT:-$(git -C "$project_dir" rev-parse HEAD)}"
+approval="${RELEASE_APPROVED:-0}"
+# Required slim fresh-install archive. The appcast keeps the full update.
+download_zip="${DOWNLOAD_ZIP:-}"
 
 fail() {
   print -u2 "FAILED: $*"
@@ -20,15 +28,82 @@ fail() {
 [[ -f "$appcast_path" ]] || fail "Appcast does not exist: $appcast_path"
 [[ -f "$release_notes" ]] || fail "Release notes do not exist: $release_notes"
 [[ "$repository" == */* ]] || fail "GITHUB_REPOSITORY must be OWNER/REPOSITORY."
+if (( ! check_only )); then
+  [[ "$approval" == 1 ]] || fail "Set RELEASE_APPROVED=1 only after the release checks are recorded."
+fi
+git -C "$project_dir" rev-parse --verify "$source_revision^{commit}" >/dev/null 2>&1 ||
+  fail "RELEASE_COMMIT does not resolve to a local commit."
+grep -Fqx "Release commit: $source_revision" "$release_notes" ||
+  fail "The stamped release notes do not match RELEASE_COMMIT."
+build_number="$(sed -n 's/^Build: //p' "$release_notes")"
+[[ "$build_number" == <-> ]] || fail "The release notes need one numeric build number."
+[[ "${update_zip:t}" == "UltimateLemmings-$version-build$build_number.zip" ]] ||
+  fail "The update archive name does not match the release notes."
+[[ -n "$download_zip" ]] || fail "Set DOWNLOAD_ZIP to the required slim fresh-install archive."
+[[ -f "$download_zip" ]] || fail "The download archive does not exist: $download_zip"
+[[ "${download_zip:t}" == "UltimateLemmings-$version-build$build_number-slim.zip" ]] ||
+  fail "The download archive name does not match the release notes."
+# The notes may name the slim archive. No enclosure may offer it.
+python3 - "$appcast_path" "${download_zip:t}" <<'CHECK_SLIM' ||
+import sys
+from pathlib import Path
+from urllib.parse import urlparse
+from xml.etree import ElementTree
+feed, name = sys.argv[1:]
+urls = [e.get("url", "") for e in ElementTree.parse(feed).getroot().iter("enclosure")]
+sys.exit(any(Path(urlparse(u).path).name == name for u in urls))
+CHECK_SLIM
+  fail "The appcast must not offer the slim download."
+python3 - "$project_dir" "$appcast_path" "$version" "$build_number" \
+  "$update_zip" "$source_revision" <<'CHECK_APPCAST' ||
+import sys
+from pathlib import Path
+from urllib.parse import urlparse
+from xml.etree import ElementTree
+
+root, appcast, version, build, archive_path, commit = sys.argv[1:]
+archive = Path(archive_path)
+sys.path.insert(0, str(Path(root) / "Tools/ReleaseReadiness"))
+from automatic_updates import SPARKLE_NAMESPACE, validate_appcast
+
+validate_appcast(appcast, expected_release=(version, build))
+items = ElementTree.parse(appcast).getroot().findall("./channel/item")
+matching = []
+for item in items:
+    enclosure = item.find("enclosure")
+    release_version = item.findtext(f"{{{SPARKLE_NAMESPACE}}}shortVersionString") or enclosure.get(
+        f"{{{SPARKLE_NAMESPACE}}}shortVersionString"
+    )
+    release_build = item.findtext(f"{{{SPARKLE_NAMESPACE}}}version") or enclosure.get(
+        f"{{{SPARKLE_NAMESPACE}}}version"
+    )
+    if (release_version, release_build) == (version, build):
+        matching.append(item)
+if len(matching) != 1:
+    raise SystemExit("FAILED: the appcast needs exactly one entry for this build.")
+item = matching[0]
+enclosure = item.find("enclosure")
+if Path(urlparse(enclosure.get("url")).path).name != archive.name:
+    raise SystemExit("FAILED: the appcast does not point to this update archive.")
+if enclosure.get("length") != str(archive.stat().st_size):
+    raise SystemExit("FAILED: the appcast archive length does not match this update archive.")
+if f"Release commit: {commit}" not in (item.findtext("description") or ""):
+    raise SystemExit("FAILED: the appcast notes do not match the frozen commit.")
+CHECK_APPCAST
+  fail "The signed appcast does not match the release archive."
+if (( check_only )); then
+  print "PASS publication inputs for $version build $build_number at $source_revision"
+  exit 0
+fi
 command -v gh >/dev/null 2>&1 || fail "The GitHub CLI is required for publishing."
 gh auth status >/dev/null 2>&1 || fail "Authenticate the GitHub CLI before publishing."
 
 if gh release view "$release_tag" --repo "$repository" >/dev/null 2>&1; then
   print "==> Updating GitHub release $release_tag"
-  gh release upload "$release_tag" "$update_zip" --repo "$repository" --clobber
+  gh release upload "$release_tag" "$update_zip" "$download_zip" --repo "$repository" --clobber
 else
   print "==> Creating GitHub release $release_tag"
-  gh release create "$release_tag" "$update_zip" \
+  gh release create "$release_tag" "$update_zip" "$download_zip" \
     --repo "$repository" \
     --target "$source_revision" \
     --title "Ultimate Lemmings $version" \

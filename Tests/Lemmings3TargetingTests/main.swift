@@ -68,6 +68,25 @@ private func testToolHolderBeatsApproachingCandidate() throws {
     print("PASS tool-holding tier still beats an approaching toolless candidate")
 }
 
+private func testManualCarrierSelection() throws {
+    let carrier = Lemmings3TargetCandidate(id: 4, x: 45, y: 40, direction: 1, tool: .bricks, isBuilding: false, active: true)
+    let nearer = Lemmings3TargetCandidate(id: 5, x: 50, y: 40, direction: 1, tool: .spade, isBuilding: false, active: true)
+    let selected = Lemmings3Targeting.nearest(among: [carrier, nearer], x: 51, y: 40, selected: 3,
+        favorApproaching: true, manualCarrierID: carrier.id)
+    try require(selected?.id == carrier.id,
+        "A manually highlighted carrier in the clicked group must take precedence")
+
+    let first = Lemmings3Targeting.carrier(among: [carrier, nearer], x: 10, y: 10, after: nil)
+    let next = Lemmings3Targeting.carrier(among: [carrier, nearer], x: 10, y: 10, after: first?.id)
+    try require(first?.id == carrier.id && next?.id == nearer.id,
+        "A mid-air right click must cycle active tool carriers in actor order")
+
+    let direct = Lemmings3Targeting.carrier(among: [carrier, nearer], x: 50, y: 40, after: carrier.id)
+    try require(direct?.id == nearer.id,
+        "A right click on a carrier must select that nearby carrier before cycling")
+    print("PASS Lemmings 3 manual carrier selection and cycling")
+}
+
 private func testFollowerBeatsBuilder() throws {
     let builder = Lemmings3TargetCandidate(id: 0, x: 50, y: 40, direction: 1, tool: .bricks, isBuilding: true, active: true)
     let follower = Lemmings3TargetCandidate(id: 1, x: 46, y: 40, direction: 1, tool: nil, isBuilding: false, active: true)
@@ -83,9 +102,26 @@ private func testFollowerBeatsBuilder() throws {
 }
 
 do {
+    let builder = Lemmings3TargetCandidate(id: 0, x: 46, y: 40, direction: 1, tool: .bricks, isBuilding: true, active: true)
+    let walker = Lemmings3TargetCandidate(id: 1, x: 51, y: 40, direction: 1, tool: .bricks, isBuilding: false, active: true)
+    try require(Lemmings3Targeting.nearest(among: [builder, walker], x: 52, y: 32, selected: 3,
+        favorApproaching: true, favorBuilders: true)?.id == builder.id, "Use must prefer an active brick builder")
+    try require(Lemmings3Targeting.nearest(among: [builder, walker], x: 52, y: 32, selected: 3,
+        favorApproaching: true, favorBuilders: false)?.id == walker.id, "Builder opt-out must restore the nearest tool holder")
+    var blocker = Lemmings3TargetCandidate(id: 2, x: 48, y: 40, direction: -1, tool: .bomb,
+        isBuilding: false, active: true, isBlocking: true)
+    try require(Lemmings3Targeting.nearest(among: [blocker, walker], x: 52, y: 32, selected: 3,
+        favorApproaching: true, favorBombBlockers: true)?.id == blocker.id, "Use must prefer a bomb-equipped blocker")
+    try require(Lemmings3Targeting.nearest(among: [blocker, walker], x: 52, y: 32, selected: 3,
+        favorApproaching: true, favorBombBlockers: false)?.id == walker.id, "Bomb opt-out must restore the nearer tool holder")
+    blocker.canAssignSelected = false
+    try require(Lemmings3Targeting.nearest(among: [blocker, walker], x: 52, y: 32, selected: 3,
+        favorApproaching: true, favorBombBlockers: true)?.id == walker.id, "Bomb preference must respect tool eligibility")
+    print("PASS Lemmings 3 bomb and builder priorities, eligibility and independent opt-outs")
     try testApproachingLemmingPreferred()
     try testSameDirectionCandidatesKeepNearestPick()
     try testToolHolderBeatsApproachingCandidate()
+    try testManualCarrierSelection()
     try testFollowerBeatsBuilder()
     print("Lemmings 3 targeting tests passed.")
 } catch {

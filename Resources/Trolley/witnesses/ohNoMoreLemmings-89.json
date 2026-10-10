@@ -1,0 +1,53 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "afterTick" : true,
+      "tick" : 70
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 186
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 187
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 21,
+    "required" : 3,
+    "saved" : 5,
+    "stateHash" : "11b8ce3f8137fbe704852fe3789178a93fbe8b0a73e25bb55ee8b830cbe3dca5",
+    "ticks" : 454
+  },
+  "initialStateHash" : "e0afd29a8fc8f826bfedca232fd74b4398864938f04fbe734d28d47194e52843",
+  "number" : 10,
+  "rank" : "Havoc",
+  "title" : "Flow Control"
+}

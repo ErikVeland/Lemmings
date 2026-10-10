@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-05",
+  "target": {
+    "packID": "fan:lldb-1",
+    "levelID": "geooPk0.dat#2",
+    "title": "crossing stairs"
+  },
+  "publishedCandidate": {
+    "game": "Revenge of the Lemmings v4.0 (NeoLemmix New Formats port)",
+    "rank": "Armageddon",
+    "levelNumber": 4,
+    "levelTitle": "Crossing Stairs",
+    "author": "geoo",
+    "source": "https://www.lemmingsforums.net/index.php?topic=5963.15",
+    "levelPack": "https://www.mediafire.com/file/gp5qb3deh0ui5su/Revenge+Of+The+Lemmings2022v3.zip/file",
+    "levelPackSHA256": "7a3cde7999bc1fc09387bd8b31bc129ec3331a13cf63f0c23c6d989a9d903b44",
+    "levelPath": "Revenge Of The Lemmings/06 Armageddon/crossing_stairs.nxlv",
+    "levelSHA256": "8428b84f0588dab93f8d7416894db76f6920a9766ce8ab77e400c870bcd7b24a",
+    "replayArchive": "https://www.lemmingsforums.net/index.php?action=dlattach;attach=20991",
+    "replayArchiveSHA256": "3d729bddd5bd8c34c799d22a156911dabd422c4335a0b264c7027112abf8e9ce",
+    "replayPath": "Armageddon_04__2022-12-29_12-13-36.nxrp",
+    "replaySHA256": "4cf036a9c3ce16c041838d7c304b233491a024199a0ac2e5b70b38833a141bfe",
+    "levelID": "x8BB49AC88BB49AC8",
+    "version": 18,
+    "replayAssignmentCount": 20,
+    "replaySpawnIntervalChanges": 5,
+    "highestAssignedIndex": 56,
+    "forumSolutionNotes": "The player describes this version as builderless and notes that the main challenge is making turnaround points, timing a climber and preserving the lower path."
+  },
+  "comparison": {
+    "publishedLevelPopulationAndRequirement": "60/60",
+    "bundledClassicPopulationAndRequirement": "40/40",
+    "bundledClassicInitialReleaseRate": 1,
+    "publishedReplayUsesLemmingsBeyondBundledPopulation": true,
+    "assessment": "A useful source-solution lead, but its event sequence cannot be copied unchanged to the exact bundled Classic target: it references worker indices 51, 52 and 56, and the source port has 60 lemmings versus 40 in the bundled level. No candidate has been replayed or scored on the bundled target."
+  },
+  "status": "source candidate located; exact Classic transfer remains unverified",
+  "nextCheck": "Compare the two terrain/object maps and derive a target-population timing transfer before strict playback on geooPk0.dat#2."
+}

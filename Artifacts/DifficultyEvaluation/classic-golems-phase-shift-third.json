@@ -1,0 +1,1557 @@
+{
+  "description": "Third directed -1 native tick trial on 30 archived published Golems inputs, exact bundled levels and opt-in Golems mechanics. Twenty-six distinct levels had strict native winning replays and ten-probe scores. Attempt failures remain recorded. These alternatives do not change the default-mechanics ledger, and native wins do not prove full source physics parity.",
+  "sourceEngineSHA256": "38cb69f18f5055821a496336a948fc30596e56c607c3ddddfb4675be78a5873e",
+  "directAttempts": 30,
+  "directWinningInputs": 26,
+  "directUniqueWinningLevels": 26,
+  "records": [
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "geooPk0.dat#9",
+        "packID": "fan:lldb-1"
+      },
+      "title": "High-tech or Low-tech",
+      "bundledArchiveSHA256": "66ff4c33c44970e945dffee82cfe84a4787329f60ee702613f3f2cb233865bec",
+      "initialStateHash": "114b46885ed3c717cdad50bde6dc9d33191e7a10cee9ad6db563410cd00dcb27",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "b6d86fa47f074fea628273b003afcc5e184ac34210061f6655259524e2e60687",
+      "nativeSaved": 37,
+      "required": 36,
+      "nativeCompletionTick": 843,
+      "difficultyScore": 480.73125496860314,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/b6d86fa47f074fea628273b003afcc5e184ac34210061f6655259524e2e60687.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/b6d86fa47f074fea628273b003afcc5e184ac34210061f6655259524e2e60687.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "geooPk0.dat#9",
+        "packID": "fan:lldb-1"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/1/10",
+      "sourceReplaySHA256": "bf815d45190f56b012091454ed339631f471f39f365a66ebd7e16c181873fa24",
+      "sourceHeaderSaved": 37,
+      "sourceHeaderTicks": 844,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": false,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Deceit Tricky 1.dat#5",
+        "packID": "fan:lldb-523"
+      },
+      "title": "Excavation Area",
+      "bundledArchiveSHA256": "d0a5a5fd593a5d0014a255e631a302f6ce35165c11ad36c685a3bdae074bd13e",
+      "initialStateHash": "525680bb073e4e3f6ccbcd81a47d99b85c36a07147011b52bd51586100e7cc0a",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "8bc05bf81d937c40f4faebf6f6c1751fd5cf5bc7933c6f7319e7d2ea4913caba",
+      "nativeSaved": 20,
+      "required": 16,
+      "nativeCompletionTick": 1031,
+      "difficultyScore": 384.54441983535867,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/8bc05bf81d937c40f4faebf6f6c1751fd5cf5bc7933c6f7319e7d2ea4913caba.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/8bc05bf81d937c40f4faebf6f6c1751fd5cf5bc7933c6f7319e7d2ea4913caba.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Deceit Tricky 1.dat#5",
+        "packID": "fan:lldb-523"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/523/6",
+      "sourceReplaySHA256": "01e344eac372d474c24ae6f89511603ea037741a7f99363d95e6ef6394a2b38d",
+      "sourceHeaderSaved": 20,
+      "sourceHeaderTicks": 1032,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "JEFFPCK3.DAT#5",
+        "packID": "fan:lldb-237"
+      },
+      "title": "Timing's the Lem",
+      "bundledArchiveSHA256": "f4661115b7742bc24ceda38b5141163faf6114aac5df92316770008eada593fd",
+      "initialStateHash": "471ff10dea38a19aac8c7f62d88df396cadc7aab6b395c07805ee2fce6fdbf13",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "1dfeb56bd45f9852bc0f6d391fab8b7bbcaf38418f8737b7adcadbc268dda6da",
+      "nativeSaved": 50,
+      "required": 42,
+      "nativeCompletionTick": 646,
+      "difficultyScore": 326.6866957513612,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/1dfeb56bd45f9852bc0f6d391fab8b7bbcaf38418f8737b7adcadbc268dda6da.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/1dfeb56bd45f9852bc0f6d391fab8b7bbcaf38418f8737b7adcadbc268dda6da.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "JEFFPCK3.DAT#5",
+        "packID": "fan:lldb-237"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/237/6",
+      "sourceReplaySHA256": "473d49fe314922e8ec00fbfa6252620e4ef84784e27761327b33ddddb5991a84",
+      "sourceHeaderSaved": 50,
+      "sourceHeaderTicks": 647,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "CRISFN11.dat#1",
+        "packID": "fan:lldb-275"
+      },
+      "title": "Little, but difficult!",
+      "bundledArchiveSHA256": "57f9871dc77797e9de33684616a66ab82022fe70197a838fc2dea3a241595757",
+      "initialStateHash": "69e7b1625d38524b4e3312e9c21b2b2ce97a8898493e7e126df1d26140ed0cfc",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "8ba102cc1066e30ff35a5d618d573193e5428441de56e2cb35d6474d3f67e3be",
+      "nativeSaved": 70,
+      "required": 65,
+      "nativeCompletionTick": 1273,
+      "difficultyScore": 389.1211653235209,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/8ba102cc1066e30ff35a5d618d573193e5428441de56e2cb35d6474d3f67e3be.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/8ba102cc1066e30ff35a5d618d573193e5428441de56e2cb35d6474d3f67e3be.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "CRISFN11.dat#1",
+        "packID": "fan:lldb-275"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/275/2",
+      "sourceReplaySHA256": "b27a3cc13ae20bb29e6f7cb1f5ddb6c6ee517e8de4a95f1bda2627b18a8c8d0e",
+      "sourceHeaderSaved": 70,
+      "sourceHeaderTicks": 1274,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Pieuw 2007 Peace 2.DAT#8",
+        "packID": "fan:lldb-542"
+      },
+      "title": "It's a Pipe-World",
+      "bundledArchiveSHA256": "f1ecfbe225c1039af701815227b4af13bcf5f45ac22c7e672357b5ff485e659e",
+      "initialStateHash": "eb3b8642bed08a6b551559684495a335bf4a5df31f1411eec2b6fa08c5bf381c",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "60acb41e1cfaa92de9f13f5eb8f2904a9bbbeba7e335a4ec849c36681e15e602",
+      "nativeSaved": 58,
+      "required": 35,
+      "nativeCompletionTick": 875,
+      "difficultyScore": 187.59413401152375,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/60acb41e1cfaa92de9f13f5eb8f2904a9bbbeba7e335a4ec849c36681e15e602.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/60acb41e1cfaa92de9f13f5eb8f2904a9bbbeba7e335a4ec849c36681e15e602.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Pieuw 2007 Peace 2.DAT#8",
+        "packID": "fan:lldb-542"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/542/19",
+      "sourceReplaySHA256": "d2cb8956becfca4d9fd4543e03987828337816198a7ff0e56ecbdf4dd25357f2",
+      "sourceHeaderSaved": 58,
+      "sourceHeaderTicks": 876,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "LEVIPAK2.DAT#0",
+        "packID": "fan:lldb-366"
+      },
+      "title": "Umbrellas sold out!",
+      "bundledArchiveSHA256": "2058cbedd0f5a9ed82a0c5f06016b0514a17f321f93d624415f7270e8fe8b322",
+      "initialStateHash": "d063b2aeca9e87c084072b621fd98fbf6526b396726d295d321124f5b8f6d65f",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "7fd2c99d6ea4cc3557ea7f49b695e49e5bcf217cd541062f181f9f9453d2f6e9",
+      "nativeSaved": 41,
+      "required": 41,
+      "nativeCompletionTick": 499,
+      "difficultyScore": 362.1884888688314,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/7fd2c99d6ea4cc3557ea7f49b695e49e5bcf217cd541062f181f9f9453d2f6e9.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/7fd2c99d6ea4cc3557ea7f49b695e49e5bcf217cd541062f181f9f9453d2f6e9.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "LEVIPAK2.DAT#0",
+        "packID": "fan:lldb-366"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/366/1",
+      "sourceReplaySHA256": "b6b7f439c3467c0a87c034727b36eaaaf2675e7a2176097c3da9df884f365c40",
+      "sourceHeaderSaved": 41,
+      "sourceHeaderTicks": 500,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "CRISFN06.dat#0",
+        "packID": "fan:lldb-270"
+      },
+      "title": "Crystalization",
+      "bundledArchiveSHA256": "07cd52fc4c02914a9e8d59eae729c31b9138cf9c8849d84fc3c1e04ffb781d83",
+      "initialStateHash": "56914cac234aae3f1554920ec002b3065eb9671d53971fd363254b54d368b2bb",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "a2d7d31a8982ffe8c40cf0ca8560a739c2b222db3cd471393cefdf74717c8a99",
+      "nativeSaved": 33,
+      "required": 33,
+      "nativeCompletionTick": 902,
+      "difficultyScore": 280.9075748226916,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/a2d7d31a8982ffe8c40cf0ca8560a739c2b222db3cd471393cefdf74717c8a99.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/a2d7d31a8982ffe8c40cf0ca8560a739c2b222db3cd471393cefdf74717c8a99.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "CRISFN06.dat#0",
+        "packID": "fan:lldb-270"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/270/1",
+      "sourceReplaySHA256": "ed4001221f3852539cd2816e7218ef2ffa904767f1cc0c769c66a9df0a8b3830",
+      "sourceHeaderSaved": 33,
+      "sourceHeaderTicks": 903,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 03 - Mild (Part 3).dat#2",
+        "packID": "fan:lldb-551"
+      },
+      "title": "Step Softly...",
+      "bundledArchiveSHA256": "587fa1a85d2ce0c3d0c8b50d9fa6c23a5d224c5b100e7c364088fde33e35798e",
+      "initialStateHash": "c29a3c29fa0d5156fb1d1abe7a537466f2df2e4341e1907e90b5aa18c9d97fc4",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "521be9b28cfb0b626fdca808e42b279e06650fe058b76537936a0191a4483cbd",
+      "nativeSaved": 80,
+      "required": 48,
+      "nativeCompletionTick": 1246,
+      "difficultyScore": 395.09715512338306,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/521be9b28cfb0b626fdca808e42b279e06650fe058b76537936a0191a4483cbd.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/521be9b28cfb0b626fdca808e42b279e06650fe058b76537936a0191a4483cbd.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 03 - Mild (Part 3).dat#2",
+        "packID": "fan:lldb-551"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/551/23",
+      "sourceReplaySHA256": "507f1587b22688eb14578c97e40048e3dc99173da4826cb8568beea5eec18f14",
+      "sourceHeaderSaved": 80,
+      "sourceHeaderTicks": 1247,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "ISteve01.DAT#9",
+        "packID": "fan:lldb-20"
+      },
+      "title": "Why can't they just run?",
+      "bundledArchiveSHA256": "d3e3cb52b86ba3528e3ed85ce4abbd14a9b7606a3a8a92c675f7f3d060ef881c",
+      "initialStateHash": "3af30635e8ceab0bf1e5263604086d25207be437f6bec8e3b48bd217a2cbac90",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "ca6c84cac5320aa40b675899962c13871c2fb7bc39b72c52a77822b995899059",
+      "nativeSaved": 80,
+      "required": 80,
+      "nativeCompletionTick": 814,
+      "difficultyScore": 416.4080707098551,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/ca6c84cac5320aa40b675899962c13871c2fb7bc39b72c52a77822b995899059.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/ca6c84cac5320aa40b675899962c13871c2fb7bc39b72c52a77822b995899059.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "ISteve01.DAT#9",
+        "packID": "fan:lldb-20"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/20/10",
+      "sourceReplaySHA256": "98fc6fe10c54ceabe5d35fd09c2720011784b34303b83b374e71c0ec1909a72a",
+      "sourceHeaderSaved": 80,
+      "sourceHeaderTicks": 815,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "CRISFN02.dat#6",
+        "packID": "fan:lldb-266"
+      },
+      "title": "Groups in danger",
+      "bundledArchiveSHA256": "ca8350f116a45b7c71d03cc3e236ad90a91dd5f176e930f038835793c1ca2969",
+      "initialStateHash": "e08dc5f340d0de0ee3b930dfa632c984c2e0c7a471219f9c61676cc996fe8b89",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "7edfa84078b7d9213f18d385820aa3765f0f9433ef99d8b4d83e685cb02aee84",
+      "nativeSaved": 54,
+      "required": 40,
+      "nativeCompletionTick": 1105,
+      "difficultyScore": 345.425922175728,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/7edfa84078b7d9213f18d385820aa3765f0f9433ef99d8b4d83e685cb02aee84.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/7edfa84078b7d9213f18d385820aa3765f0f9433ef99d8b4d83e685cb02aee84.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "CRISFN02.dat#6",
+        "packID": "fan:lldb-266"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/266/7",
+      "sourceReplaySHA256": "99f57793022898f8a3aff5e894b8490e03c37951f0659be57a241fe8af854328",
+      "sourceHeaderSaved": 54,
+      "sourceHeaderTicks": 1106,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "CRISFN13.dat#6",
+        "packID": "fan:lldb-277"
+      },
+      "title": "The Blocking chain",
+      "bundledArchiveSHA256": "1d52c584e24ffcbb1e76f5fd14d54b337c44fccef3bed898733c579d5627fb9b",
+      "initialStateHash": "7c9457f2282225495958f40f7dc1fc6b5577a2e915157320241ee47e21be8392",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "a2c2c411882fd5a4bf212f5d862166e9dafc99950c849e24119713c3fa665d53",
+      "nativeSaved": 59,
+      "required": 54,
+      "nativeCompletionTick": 572,
+      "difficultyScore": 209.07195286343227,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/a2c2c411882fd5a4bf212f5d862166e9dafc99950c849e24119713c3fa665d53.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/a2c2c411882fd5a4bf212f5d862166e9dafc99950c849e24119713c3fa665d53.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "CRISFN13.dat#6",
+        "packID": "fan:lldb-277"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/277/7",
+      "sourceReplaySHA256": "0ef241722df3125ed42e341b6c9c76740ffbe488b92755c3c7744c7521eb09fa",
+      "sourceHeaderSaved": 59,
+      "sourceHeaderTicks": 573,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": false,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "LDChallenge01.dat#2",
+        "packID": "fan:lldb-430"
+      },
+      "title": "Pinpoint Accuracy",
+      "bundledArchiveSHA256": "bdbf943f510410b7e4c304ff57a31b83134d51b32a6aeed2432eaa6f2804d835",
+      "initialStateHash": "3ce9042abfa73a0292819735840c775b0444970517c327d79e669c6a445b053e",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "08cdd712cc234a3e4df852a1a23148f09dd611903e902670f1a28c8660bce74a",
+      "nativeSaved": 4,
+      "required": 4,
+      "nativeCompletionTick": 361,
+      "difficultyScore": 226.7023483365949,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/08cdd712cc234a3e4df852a1a23148f09dd611903e902670f1a28c8660bce74a.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/08cdd712cc234a3e4df852a1a23148f09dd611903e902670f1a28c8660bce74a.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "LDChallenge01.dat#2",
+        "packID": "fan:lldb-430"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/430/3",
+      "sourceReplaySHA256": "042a6744b089fe315a2d7c4c05e91356a154d6f34b2d5b1fc4f94bd7ce2239ad",
+      "sourceHeaderSaved": 4,
+      "sourceHeaderTicks": 362,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "ssam1221 Wild 2.dat#2",
+        "packID": "fan:lldb-514"
+      },
+      "title": "No Problemming!",
+      "bundledArchiveSHA256": "acb58ceaf0ecb6266e4eab3d8f9bdd75029bf512858bc2dfb9ee9901c5e68cc0",
+      "initialStateHash": "5a62d63a37b1fa100a4d3f2194ce19f6a3f642389586fe71ca067b0e6b196058",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "16438198b50ce74c8f22b63a8fc30ab21af8dc846e881c7b86211829ad535437",
+      "nativeSaved": 8,
+      "required": 8,
+      "nativeCompletionTick": 542,
+      "difficultyScore": 153.04304572925358,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/16438198b50ce74c8f22b63a8fc30ab21af8dc846e881c7b86211829ad535437.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/16438198b50ce74c8f22b63a8fc30ab21af8dc846e881c7b86211829ad535437.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "ssam1221 Wild 2.dat#2",
+        "packID": "fan:lldb-514"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/514/13",
+      "sourceReplaySHA256": "8181773c1ab3c5e564dc5f76ee775f8ecd7d7724ad38d3412e40010417f899c6",
+      "sourceHeaderSaved": 8,
+      "sourceHeaderTicks": 543,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "CRISFN08.dat#7",
+        "packID": "fan:lldb-272"
+      },
+      "title": "It's a snowinable world",
+      "bundledArchiveSHA256": "3699a1435d39ff4358c894cf55ed94b9c916751d754cb49d07491e2ea5ce687b",
+      "initialStateHash": "9c8d529be69304e3f98da4ae547d5bfed6ce488243be09b73b6e12736926fb6e",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "829b233c15d46804819b90d5ff97e4faa0c2fb93dea992178a6442861790f6af",
+      "nativeSaved": 28,
+      "required": 28,
+      "nativeCompletionTick": 902,
+      "difficultyScore": 375.49925201431404,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/829b233c15d46804819b90d5ff97e4faa0c2fb93dea992178a6442861790f6af.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/829b233c15d46804819b90d5ff97e4faa0c2fb93dea992178a6442861790f6af.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "CRISFN08.dat#7",
+        "packID": "fan:lldb-272"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/272/8",
+      "sourceReplaySHA256": "528a2fbff86d9409630c2db6670ace9eb1366133654c4c2dc9e9693c64e7a1d9",
+      "sourceHeaderSaved": 28,
+      "sourceHeaderTicks": 903,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 06 - Wimpy (Part 3).dat#8",
+        "packID": "fan:lldb-552"
+      },
+      "title": "Only One Place To Go",
+      "bundledArchiveSHA256": "8187c19df391ea59e594bf9e4779b7ec81fb0034bc4a899ae09aee7396b3c042",
+      "initialStateHash": "b59b1913e4b475e3858d15d90a8cf122aae59f69fce935103c93a1c47c20e588",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "ed72fd231d2db7ee512bdf5f2cbce29cdb8ff78007bb1af922c4c511a4b70304",
+      "nativeSaved": 50,
+      "required": 49,
+      "nativeCompletionTick": 1007,
+      "difficultyScore": 289.69855102574155,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/ed72fd231d2db7ee512bdf5f2cbce29cdb8ff78007bb1af922c4c511a4b70304.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/ed72fd231d2db7ee512bdf5f2cbce29cdb8ff78007bb1af922c4c511a4b70304.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 06 - Wimpy (Part 3).dat#8",
+        "packID": "fan:lldb-552"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/552/29",
+      "sourceReplaySHA256": "0c5ea165f469b962e0c3e4668cbc692ea841d2c99a34071b70625f7c83427874",
+      "sourceHeaderSaved": 50,
+      "sourceHeaderTicks": 1008,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "LDChallenge04.dat#0",
+        "packID": "fan:lldb-433"
+      },
+      "title": "Pass Interference",
+      "bundledArchiveSHA256": "65c251590f612944e636a2e6755b6104a9cacf65ab86b351eb0d3578371adebe",
+      "initialStateHash": "9e39430488759fbea36f11633be80658f5adca67e574bd8fc589bd2c6a872854",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "717d57c2b6ba653406d78daf503ef0037a494d5ea195e72dd10dd2ac1b2010bf",
+      "nativeSaved": 30,
+      "required": 30,
+      "nativeCompletionTick": 1020,
+      "difficultyScore": 287.8340313111546,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/717d57c2b6ba653406d78daf503ef0037a494d5ea195e72dd10dd2ac1b2010bf.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/717d57c2b6ba653406d78daf503ef0037a494d5ea195e72dd10dd2ac1b2010bf.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "LDChallenge04.dat#0",
+        "packID": "fan:lldb-433"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/433/1",
+      "sourceReplaySHA256": "eea7dacd2ce5bd2fd954d8473e454d074389660d4c70a67bab362ce462b893fc",
+      "sourceHeaderSaved": 30,
+      "sourceHeaderTicks": 1021,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "JUANJO1N.DAT#9",
+        "packID": "fan:lldb-290"
+      },
+      "title": "Puzzle atractivo",
+      "bundledArchiveSHA256": "14a4717cc58d0d4e922f5faa75c4a6976fd56c37b1818a9191b04bf025aeecdb",
+      "initialStateHash": "c2ea80fd8f49acb51174e730b22f9feafc99e1d55ee2a89301652fb867bd1ae3",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "ee590ff781aaa645330992e542d1e67d1609a0ba12642686bd4f53036464f4ee",
+      "nativeSaved": 80,
+      "required": 80,
+      "nativeCompletionTick": 929,
+      "difficultyScore": 276.51852220286975,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/ee590ff781aaa645330992e542d1e67d1609a0ba12642686bd4f53036464f4ee.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/ee590ff781aaa645330992e542d1e67d1609a0ba12642686bd4f53036464f4ee.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "JUANJO1N.DAT#9",
+        "packID": "fan:lldb-290"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/290/10",
+      "sourceReplaySHA256": "d4003b396e53012c15b31d52a29a94f6126bd1ea0f3efcf6f85992e3cb954cbb",
+      "sourceHeaderSaved": 80,
+      "sourceHeaderTicks": 930,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "CRISFN04.dat#1",
+        "packID": "fan:lldb-268"
+      },
+      "title": "Two different groups",
+      "bundledArchiveSHA256": "ae52a960fb1cadef87b6dd14cb8b2f63de4e838551c265ef0a68ef8f5513257b",
+      "initialStateHash": "d5f166650ccd75334b5524d5b34850bdd80dbc917ced2896bfc26333ba80b851",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "9131c17b016ee4ece6372b09c867096783257bdd8bfc96ed94c14b8ec3ce1db8",
+      "nativeSaved": 19,
+      "required": 19,
+      "nativeCompletionTick": 1069,
+      "difficultyScore": 320.1265830782995,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/9131c17b016ee4ece6372b09c867096783257bdd8bfc96ed94c14b8ec3ce1db8.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/9131c17b016ee4ece6372b09c867096783257bdd8bfc96ed94c14b8ec3ce1db8.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "CRISFN04.dat#1",
+        "packID": "fan:lldb-268"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/268/2",
+      "sourceReplaySHA256": "1d3f84acbc88fc63937e910d1198b1fe6ece04fca2fa727b06bdf8054e8d2509",
+      "sourceHeaderSaved": 19,
+      "sourceHeaderTicks": 1070,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "JM01.DAT#7",
+        "packID": "fan:lldb-327"
+      },
+      "title": "Come back!",
+      "bundledArchiveSHA256": "4ed40d2dad89484a0565b4fc472ba6db8a18a36f97c174cb4ea392eac14073c2",
+      "initialStateHash": "cf1897bbc491e55ec3f89ae50851175fda68154e757f7870c750139ecd2ccbd5",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "f5008f1819ddef32b5012a307c8f7aefe6966d40a10f0cb548e9b0210a38a7b8",
+      "nativeSaved": 58,
+      "required": 50,
+      "nativeCompletionTick": 555,
+      "difficultyScore": 150.3992291768957,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/f5008f1819ddef32b5012a307c8f7aefe6966d40a10f0cb548e9b0210a38a7b8.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/f5008f1819ddef32b5012a307c8f7aefe6966d40a10f0cb548e9b0210a38a7b8.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "JM01.DAT#7",
+        "packID": "fan:lldb-327"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/327/8",
+      "sourceReplaySHA256": "7380ffacbf005cd6482327a3d9e6496802cce57b32ca9fed747653df38ccefea",
+      "sourceHeaderSaved": 58,
+      "sourceHeaderTicks": 556,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "CRISFN07.dat#5",
+        "packID": "fan:lldb-271"
+      },
+      "title": "Really in need for help!!",
+      "bundledArchiveSHA256": "a7199f77fa81457620998433d8675733495749cf2622a5220858c3428bfad2f3",
+      "initialStateHash": "aee658f9b71d8533f65ba7eedec3ee8b77dddcf4ef16039a1420bf84fb10e328",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "82d0f9ccbdbfc58d16949a2b23db8ffa00e96ec1fb458715100346a82eb289a2",
+      "nativeSaved": 43,
+      "required": 38,
+      "nativeCompletionTick": 1234,
+      "difficultyScore": 438.1087593458139,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/82d0f9ccbdbfc58d16949a2b23db8ffa00e96ec1fb458715100346a82eb289a2.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/82d0f9ccbdbfc58d16949a2b23db8ffa00e96ec1fb458715100346a82eb289a2.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "CRISFN07.dat#5",
+        "packID": "fan:lldb-271"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/271/6",
+      "sourceReplaySHA256": "563711684649b20f64a8a7378c73d1f55b94ad2f9c2d0ddc7659a0004f1f167d",
+      "sourceHeaderSaved": 43,
+      "sourceHeaderTicks": 1235,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Genesis Tricky.dat#29",
+        "packID": "fan:lldb-489"
+      },
+      "title": "Don't follow me.",
+      "bundledArchiveSHA256": "d3a60e754dd580f50f3c846b76a977903ccb3ca4997613cd7cde7879d632b080",
+      "initialStateHash": "dc97620c164e3a731f34f82fcd8c81f4f7b2c2f0f07980555bf1b85c9ffcc806",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "2194b68fb88d7d1436b1a38c338460eb5c399567dacc9cd816cde082eec7a68d",
+      "nativeSaved": 10,
+      "required": 10,
+      "nativeCompletionTick": 707,
+      "difficultyScore": 228.70715475024485,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/2194b68fb88d7d1436b1a38c338460eb5c399567dacc9cd816cde082eec7a68d.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/2194b68fb88d7d1436b1a38c338460eb5c399567dacc9cd816cde082eec7a68d.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Genesis Tricky.dat#29",
+        "packID": "fan:lldb-489"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/489/30",
+      "sourceReplaySHA256": "6a38ddd07f6d9fe1c0293c353fd88cc94888d0b1bdf3a118105aebcdb3c815ab",
+      "sourceHeaderSaved": 10,
+      "sourceHeaderTicks": 708,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Genesis 2P 2.dat#5",
+        "packID": "fan:lldb-405"
+      },
+      "title": "The Hammock...",
+      "bundledArchiveSHA256": "9af050546e82475ff3209ef5af9c8764c6a3b6edaabd43f8314ef7c1057e3a3c",
+      "initialStateHash": "22dc79b1a0516fb878c560af2bf47651bb9ccab5603d2f737b101c543a272ab6",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "820b88ea89fdb2fc5f7ef1b3bb796e1c96eed9f67f003d87fe4436c91cb0d0f3",
+      "nativeSaved": 98,
+      "required": 90,
+      "nativeCompletionTick": 905,
+      "difficultyScore": 307.7274095867725,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/820b88ea89fdb2fc5f7ef1b3bb796e1c96eed9f67f003d87fe4436c91cb0d0f3.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/820b88ea89fdb2fc5f7ef1b3bb796e1c96eed9f67f003d87fe4436c91cb0d0f3.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Genesis 2P 2.dat#5",
+        "packID": "fan:lldb-405"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/405/6",
+      "sourceReplaySHA256": "29c8e3ce7e35043072bc018970900233788f65e74ffb70173567cf2066b4f131",
+      "sourceHeaderSaved": 98,
+      "sourceHeaderTicks": 906,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "TWPAK04.dat#3",
+        "packID": "fan:lldb-306"
+      },
+      "title": "Compression Method 3",
+      "bundledArchiveSHA256": "f601908d736e005e8c5cf4c3591b012a80227855a13d3a70274f2edcbad45c09",
+      "initialStateHash": "d45e99e6ed024d001db5b2147873bcf34ab387aa31285d3d11929120e380f1d3",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "9a8b1c12e4ea8831a358d2b21dc6d49a81f491d0abbaab9f7870f714da18a956",
+      "nativeSaved": 32,
+      "required": 24,
+      "nativeCompletionTick": 516,
+      "difficultyScore": 95.01785123769463,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/9a8b1c12e4ea8831a358d2b21dc6d49a81f491d0abbaab9f7870f714da18a956.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/9a8b1c12e4ea8831a358d2b21dc6d49a81f491d0abbaab9f7870f714da18a956.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "TWPAK04.dat#3",
+        "packID": "fan:lldb-306"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/306/4",
+      "sourceReplaySHA256": "c517867c02fe6837eb3fded6183e362988c85777f2299442784a80a05d288cc2",
+      "sourceHeaderSaved": 32,
+      "sourceHeaderTicks": 517,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Ji Hoon Sky 2.DAT#2",
+        "packID": "fan:lldb-548"
+      },
+      "title": "Nuclear Lemmings",
+      "bundledArchiveSHA256": "be7597710bb1f6b1421623c630bb9528ac16c8968a833980f6f8441c93cfd196",
+      "initialStateHash": "02a252d6d10225ca95d3d91d095df47858202ec882a48a96109b1b74aad1d568",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "f9fb59905efa6848f41b1f79d6bccbae80fb93f618c55bfd9596b085aacf53ff",
+      "nativeSaved": 51,
+      "required": 50,
+      "nativeCompletionTick": 862,
+      "difficultyScore": 134.90206585652686,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/f9fb59905efa6848f41b1f79d6bccbae80fb93f618c55bfd9596b085aacf53ff.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/f9fb59905efa6848f41b1f79d6bccbae80fb93f618c55bfd9596b085aacf53ff.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Ji Hoon Sky 2.DAT#2",
+        "packID": "fan:lldb-548"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/548/13",
+      "sourceReplaySHA256": "a8c110cf0941eb0f50227c6e907d309685565dd73d60cd6063e865222cb22589",
+      "sourceHeaderSaved": 51,
+      "sourceHeaderTicks": 863,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "LEVELPAK.DAT#1",
+        "packID": "fan:lldb-592"
+      },
+      "title": "the fitness grand lem pacer test",
+      "bundledArchiveSHA256": "c8a9891b1a18e26e7ec27896c4ca0b61ec38abd2795d2ebd6ba81d83cb4b022b",
+      "initialStateHash": "e5ccaaccd8d43ee92a742217d0442556d676e7b0c2a87f62e9a7c50ca81d742c",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "6e2bd2161d822be391133c18b4bb3cce4be19b9abbe2e1d176c111519919f616",
+      "nativeSaved": 73,
+      "required": 70,
+      "nativeCompletionTick": 1159,
+      "difficultyScore": 632.9289796584865,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/6e2bd2161d822be391133c18b4bb3cce4be19b9abbe2e1d176c111519919f616.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/6e2bd2161d822be391133c18b4bb3cce4be19b9abbe2e1d176c111519919f616.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "LEVELPAK.DAT#1",
+        "packID": "fan:lldb-592"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/592/2",
+      "sourceReplaySHA256": "5a9a29df64f01aad490b7ddd8e9b5286e913a75ba9a0a7eb6d64b8fd267dd743",
+      "sourceHeaderSaved": 73,
+      "sourceHeaderTicks": 1161,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "TWPAK13.dat#1",
+        "packID": "fan:lldb-315"
+      },
+      "title": "Columns See 'Em",
+      "bundledArchiveSHA256": "86a8a54b434348048c63f9b2792cddce345a2ee5f2aa445c1d0b278671c79f15",
+      "initialStateHash": "b9990418fcf1a2ab00e3c8fa3dc78f6285d81c5fabd341113972ff658ffe52e8",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "c8f63ba599811c7e6b16780b14e8b9630ec19c96ee115bc4eac9aa298472e63d",
+      "nativeSaved": 20,
+      "required": 19,
+      "nativeCompletionTick": 644,
+      "difficultyScore": 386.1557245834224,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/c8f63ba599811c7e6b16780b14e8b9630ec19c96ee115bc4eac9aa298472e63d.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/c8f63ba599811c7e6b16780b14e8b9630ec19c96ee115bc4eac9aa298472e63d.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "TWPAK13.dat#1",
+        "packID": "fan:lldb-315"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/315/2",
+      "sourceReplaySHA256": "6cbe7f79e2916e25d6331a5a44048ad32cf807240ac1eb0cde004c9cd2c46050",
+      "sourceHeaderSaved": 20,
+      "sourceHeaderTicks": 645,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    }
+  ],
+  "attempts": [
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "LDChallenge07.dat#0",
+        "packID": "fan:lldb-436"
+      },
+      "sourceReplaySHA256": "8ec1de62897da34ec961f015004d7a17d518a0e87ccd51d9bf7173cef1ebff16",
+      "nativeSaved": 10,
+      "required": 20,
+      "nativeCompletionTick": 200,
+      "didWin": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "LDChallenge01.dat#2",
+        "packID": "fan:lldb-430"
+      },
+      "sourceReplaySHA256": "042a6744b089fe315a2d7c4c05e91356a154d6f34b2d5b1fc4f94bd7ce2239ad",
+      "nativeSaved": 4,
+      "required": 4,
+      "nativeCompletionTick": 363,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Gronklems #1.dat#2",
+        "packID": "fan:lldb-193"
+      },
+      "sourceReplaySHA256": "03b3c96de3580c40ebc90b80715032ddc599fded10c60c42dc17670163664aca",
+      "error": "Gronklems #1.dat#2 engine refused to queue miner for lemming 0 at tick 61"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "LEVIPAK2.DAT#0",
+        "packID": "fan:lldb-366"
+      },
+      "sourceReplaySHA256": "b6b7f439c3467c0a87c034727b36eaaaf2675e7a2176097c3da9df884f365c40",
+      "nativeSaved": 41,
+      "required": 41,
+      "nativeCompletionTick": 499,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "TWPAK04.dat#3",
+        "packID": "fan:lldb-306"
+      },
+      "sourceReplaySHA256": "c517867c02fe6837eb3fded6183e362988c85777f2299442784a80a05d288cc2",
+      "nativeSaved": 32,
+      "required": 24,
+      "nativeCompletionTick": 517,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "ssam1221 Wild 2.dat#2",
+        "packID": "fan:lldb-514"
+      },
+      "sourceReplaySHA256": "8181773c1ab3c5e564dc5f76ee775f8ecd7d7724ad38d3412e40010417f899c6",
+      "nativeSaved": 8,
+      "required": 8,
+      "nativeCompletionTick": 542,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "JM01.DAT#7",
+        "packID": "fan:lldb-327"
+      },
+      "sourceReplaySHA256": "7380ffacbf005cd6482327a3d9e6496802cce57b32ca9fed747653df38ccefea",
+      "nativeSaved": 58,
+      "required": 50,
+      "nativeCompletionTick": 556,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "CRISFN13.dat#6",
+        "packID": "fan:lldb-277"
+      },
+      "sourceReplaySHA256": "0ef241722df3125ed42e341b6c9c76740ffbe488b92755c3c7744c7521eb09fa",
+      "nativeSaved": 59,
+      "required": 54,
+      "nativeCompletionTick": 576,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "TWPAK13.dat#1",
+        "packID": "fan:lldb-315"
+      },
+      "sourceReplaySHA256": "6cbe7f79e2916e25d6331a5a44048ad32cf807240ac1eb0cde004c9cd2c46050",
+      "nativeSaved": 20,
+      "required": 19,
+      "nativeCompletionTick": 645,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "JEFFPCK3.DAT#5",
+        "packID": "fan:lldb-237"
+      },
+      "sourceReplaySHA256": "473d49fe314922e8ec00fbfa6252620e4ef84784e27761327b33ddddb5991a84",
+      "nativeSaved": 50,
+      "required": 42,
+      "nativeCompletionTick": 648,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Genesis Tricky.dat#29",
+        "packID": "fan:lldb-489"
+      },
+      "sourceReplaySHA256": "6a38ddd07f6d9fe1c0293c353fd88cc94888d0b1bdf3a118105aebcdb3c815ab",
+      "nativeSaved": 10,
+      "required": 10,
+      "nativeCompletionTick": 709,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Gronklems #1.dat#9",
+        "packID": "fan:lldb-193"
+      },
+      "sourceReplaySHA256": "89283a9e0c9ecaeb44130cbbbac858c4d09a80c7b80b0f213ac7bbded91f31ae",
+      "error": "Gronklems #1.dat#9 engine refused to queue digger for lemming 0 at tick 132"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "ISteve01.DAT#9",
+        "packID": "fan:lldb-20"
+      },
+      "sourceReplaySHA256": "98fc6fe10c54ceabe5d35fd09c2720011784b34303b83b374e71c0ec1909a72a",
+      "nativeSaved": 80,
+      "required": 80,
+      "nativeCompletionTick": 816,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "geooPk0.dat#9",
+        "packID": "fan:lldb-1"
+      },
+      "sourceReplaySHA256": "bf815d45190f56b012091454ed339631f471f39f365a66ebd7e16c181873fa24",
+      "nativeSaved": 37,
+      "required": 36,
+      "nativeCompletionTick": 847,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Ji Hoon Sky 2.DAT#2",
+        "packID": "fan:lldb-548"
+      },
+      "sourceReplaySHA256": "a8c110cf0941eb0f50227c6e907d309685565dd73d60cd6063e865222cb22589",
+      "nativeSaved": 51,
+      "required": 50,
+      "nativeCompletionTick": 863,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Pieuw 2007 Peace 2.DAT#8",
+        "packID": "fan:lldb-542"
+      },
+      "sourceReplaySHA256": "d2cb8956becfca4d9fd4543e03987828337816198a7ff0e56ecbdf4dd25357f2",
+      "nativeSaved": 58,
+      "required": 35,
+      "nativeCompletionTick": 876,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "CRISFN06.dat#0",
+        "packID": "fan:lldb-270"
+      },
+      "sourceReplaySHA256": "ed4001221f3852539cd2816e7218ef2ffa904767f1cc0c769c66a9df0a8b3830",
+      "nativeSaved": 33,
+      "required": 33,
+      "nativeCompletionTick": 902,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "CRISFN08.dat#7",
+        "packID": "fan:lldb-272"
+      },
+      "sourceReplaySHA256": "528a2fbff86d9409630c2db6670ace9eb1366133654c4c2dc9e9693c64e7a1d9",
+      "nativeSaved": 28,
+      "required": 28,
+      "nativeCompletionTick": 902,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Genesis 2P 2.dat#5",
+        "packID": "fan:lldb-405"
+      },
+      "sourceReplaySHA256": "29c8e3ce7e35043072bc018970900233788f65e74ffb70173567cf2066b4f131",
+      "nativeSaved": 98,
+      "required": 90,
+      "nativeCompletionTick": 905,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "JUANJO1N.DAT#9",
+        "packID": "fan:lldb-290"
+      },
+      "sourceReplaySHA256": "d4003b396e53012c15b31d52a29a94f6126bd1ea0f3efcf6f85992e3cb954cbb",
+      "nativeSaved": 80,
+      "required": 80,
+      "nativeCompletionTick": 932,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 06 - Wimpy (Part 3).dat#8",
+        "packID": "fan:lldb-552"
+      },
+      "sourceReplaySHA256": "0c5ea165f469b962e0c3e4668cbc692ea841d2c99a34071b70625f7c83427874",
+      "nativeSaved": 50,
+      "required": 49,
+      "nativeCompletionTick": 1008,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "LDChallenge04.dat#0",
+        "packID": "fan:lldb-433"
+      },
+      "sourceReplaySHA256": "eea7dacd2ce5bd2fd954d8473e454d074389660d4c70a67bab362ce462b893fc",
+      "nativeSaved": 30,
+      "required": 30,
+      "nativeCompletionTick": 1021,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "LDChallenge04.dat#1",
+        "packID": "fan:lldb-433"
+      },
+      "sourceReplaySHA256": "3d06b20af71f42f5d0bcdef3a7708c2879df42e36ff9299fb75d0c75bdade65a",
+      "nativeSaved": 0,
+      "required": 1,
+      "nativeCompletionTick": 1022,
+      "didWin": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Deceit Tricky 1.dat#5",
+        "packID": "fan:lldb-523"
+      },
+      "sourceReplaySHA256": "01e344eac372d474c24ae6f89511603ea037741a7f99363d95e6ef6394a2b38d",
+      "nativeSaved": 20,
+      "required": 16,
+      "nativeCompletionTick": 1032,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "CRISFN04.dat#1",
+        "packID": "fan:lldb-268"
+      },
+      "sourceReplaySHA256": "1d3f84acbc88fc63937e910d1198b1fe6ece04fca2fa727b06bdf8054e8d2509",
+      "nativeSaved": 19,
+      "required": 19,
+      "nativeCompletionTick": 1071,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "CRISFN02.dat#6",
+        "packID": "fan:lldb-266"
+      },
+      "sourceReplaySHA256": "99f57793022898f8a3aff5e894b8490e03c37951f0659be57a241fe8af854328",
+      "nativeSaved": 54,
+      "required": 40,
+      "nativeCompletionTick": 1106,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "LEVELPAK.DAT#1",
+        "packID": "fan:lldb-592"
+      },
+      "sourceReplaySHA256": "5a9a29df64f01aad490b7ddd8e9b5286e913a75ba9a0a7eb6d64b8fd267dd743",
+      "nativeSaved": 73,
+      "required": 70,
+      "nativeCompletionTick": 1160,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "CRISFN07.dat#5",
+        "packID": "fan:lldb-271"
+      },
+      "sourceReplaySHA256": "563711684649b20f64a8a7378c73d1f55b94ad2f9c2d0ddc7659a0004f1f167d",
+      "nativeSaved": 43,
+      "required": 38,
+      "nativeCompletionTick": 1234,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 03 - Mild (Part 3).dat#2",
+        "packID": "fan:lldb-551"
+      },
+      "sourceReplaySHA256": "507f1587b22688eb14578c97e40048e3dc99173da4826cb8568beea5eec18f14",
+      "nativeSaved": 80,
+      "required": 48,
+      "nativeCompletionTick": 1247,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "CRISFN11.dat#1",
+        "packID": "fan:lldb-275"
+      },
+      "sourceReplaySHA256": "b27a3cc13ae20bb29e6f7cb1f5ddb6c6ee517e8de4a95f1bda2627b18a8c8d0e",
+      "nativeSaved": 70,
+      "required": 65,
+      "nativeCompletionTick": 1274,
+      "didWin": true
+    }
+  ],
+  "defaultMechanicsControl": {
+    "mechanics": "original",
+    "clock": "golems",
+    "sourceRules": null,
+    "attempts": [
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "LDChallenge07.dat#0",
+          "packID": "fan:lldb-436"
+        },
+        "sourceReplaySHA256": "8ec1de62897da34ec961f015004d7a17d518a0e87ccd51d9bf7173cef1ebff16",
+        "error": "LDChallenge07.dat#0 engine refused to queue digger for lemming 0 at tick 102"
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "LDChallenge01.dat#2",
+          "packID": "fan:lldb-430"
+        },
+        "sourceReplaySHA256": "042a6744b089fe315a2d7c4c05e91356a154d6f34b2d5b1fc4f94bd7ce2239ad",
+        "error": "LDChallenge01.dat#2 engine refused to queue builder for lemming 0 at tick 57"
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "Gronklems #1.dat#2",
+          "packID": "fan:lldb-193"
+        },
+        "sourceReplaySHA256": "03b3c96de3580c40ebc90b80715032ddc599fded10c60c42dc17670163664aca",
+        "error": "Gronklems #1.dat#2 engine refused to queue miner for lemming 0 at tick 61"
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "LEVIPAK2.DAT#0",
+          "packID": "fan:lldb-366"
+        },
+        "sourceReplaySHA256": "b6b7f439c3467c0a87c034727b36eaaaf2675e7a2176097c3da9df884f365c40",
+        "error": "LEVIPAK2.DAT#0 engine refused to queue builder for lemming 2 at tick 183"
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "TWPAK04.dat#3",
+          "packID": "fan:lldb-306"
+        },
+        "sourceReplaySHA256": "c517867c02fe6837eb3fded6183e362988c85777f2299442784a80a05d288cc2",
+        "error": "TWPAK04.dat#3 engine refused to queue basher for lemming 1 at tick 167"
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "ssam1221 Wild 2.dat#2",
+          "packID": "fan:lldb-514"
+        },
+        "sourceReplaySHA256": "8181773c1ab3c5e564dc5f76ee775f8ecd7d7724ad38d3412e40010417f899c6",
+        "nativeSaved": 5,
+        "required": 8,
+        "nativeCompletionTick": 542,
+        "didWin": false
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "JM01.DAT#7",
+          "packID": "fan:lldb-327"
+        },
+        "sourceReplaySHA256": "7380ffacbf005cd6482327a3d9e6496802cce57b32ca9fed747653df38ccefea",
+        "nativeSaved": 0,
+        "required": 50,
+        "nativeCompletionTick": 374,
+        "didWin": false
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "CRISFN13.dat#6",
+          "packID": "fan:lldb-277"
+        },
+        "sourceReplaySHA256": "0ef241722df3125ed42e341b6c9c76740ffbe488b92755c3c7744c7521eb09fa",
+        "error": "CRISFN13.dat#6 engine refused to queue miner for lemming 0 at tick 97"
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "TWPAK13.dat#1",
+          "packID": "fan:lldb-315"
+        },
+        "sourceReplaySHA256": "6cbe7f79e2916e25d6331a5a44048ad32cf807240ac1eb0cde004c9cd2c46050",
+        "nativeSaved": 10,
+        "required": 19,
+        "nativeCompletionTick": 410,
+        "didWin": false
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "JEFFPCK3.DAT#5",
+          "packID": "fan:lldb-237"
+        },
+        "sourceReplaySHA256": "473d49fe314922e8ec00fbfa6252620e4ef84784e27761327b33ddddb5991a84",
+        "error": "JEFFPCK3.DAT#5 engine refused to queue digger for lemming 0 at tick 247"
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "Genesis Tricky.dat#29",
+          "packID": "fan:lldb-489"
+        },
+        "sourceReplaySHA256": "6a38ddd07f6d9fe1c0293c353fd88cc94888d0b1bdf3a118105aebcdb3c815ab",
+        "nativeSaved": 0,
+        "required": 10,
+        "nativeCompletionTick": 550,
+        "didWin": false
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "Gronklems #1.dat#9",
+          "packID": "fan:lldb-193"
+        },
+        "sourceReplaySHA256": "89283a9e0c9ecaeb44130cbbbac858c4d09a80c7b80b0f213ac7bbded91f31ae",
+        "error": "Gronklems #1.dat#9 engine refused to queue digger for lemming 0 at tick 132"
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "ISteve01.DAT#9",
+          "packID": "fan:lldb-20"
+        },
+        "sourceReplaySHA256": "98fc6fe10c54ceabe5d35fd09c2720011784b34303b83b374e71c0ec1909a72a",
+        "error": "ISteve01.DAT#9 engine refused to queue builder for lemming 0 at tick 107"
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "geooPk0.dat#9",
+          "packID": "fan:lldb-1"
+        },
+        "sourceReplaySHA256": "bf815d45190f56b012091454ed339631f471f39f365a66ebd7e16c181873fa24",
+        "error": "geooPk0.dat#9 engine refused to queue basher for lemming 6 at tick 366"
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "Ji Hoon Sky 2.DAT#2",
+          "packID": "fan:lldb-548"
+        },
+        "sourceReplaySHA256": "a8c110cf0941eb0f50227c6e907d309685565dd73d60cd6063e865222cb22589",
+        "nativeSaved": 0,
+        "required": 50,
+        "nativeCompletionTick": 917,
+        "didWin": false
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "Pieuw 2007 Peace 2.DAT#8",
+          "packID": "fan:lldb-542"
+        },
+        "sourceReplaySHA256": "d2cb8956becfca4d9fd4543e03987828337816198a7ff0e56ecbdf4dd25357f2",
+        "error": "Pieuw 2007 Peace 2.DAT#8 engine refused to queue basher for lemming 4 at tick 421"
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "CRISFN06.dat#0",
+          "packID": "fan:lldb-270"
+        },
+        "sourceReplaySHA256": "ed4001221f3852539cd2816e7218ef2ffa904767f1cc0c769c66a9df0a8b3830",
+        "error": "CRISFN06.dat#0 engine refused to queue blocker for lemming 3 at tick 85"
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "CRISFN08.dat#7",
+          "packID": "fan:lldb-272"
+        },
+        "sourceReplaySHA256": "528a2fbff86d9409630c2db6670ace9eb1366133654c4c2dc9e9693c64e7a1d9",
+        "error": "CRISFN08.dat#7 engine refused to queue basher for lemming 26 at tick 552"
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "Genesis 2P 2.dat#5",
+          "packID": "fan:lldb-405"
+        },
+        "sourceReplaySHA256": "29c8e3ce7e35043072bc018970900233788f65e74ffb70173567cf2066b4f131",
+        "error": "Genesis 2P 2.dat#5 engine refused to queue basher for lemming 0 at tick 269"
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "JUANJO1N.DAT#9",
+          "packID": "fan:lldb-290"
+        },
+        "sourceReplaySHA256": "d4003b396e53012c15b31d52a29a94f6126bd1ea0f3efcf6f85992e3cb954cbb",
+        "error": "JUANJO1N.DAT#9 engine refused to queue digger for lemming 0 at tick 340"
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "Lemmings Plus DOS Project - 06 - Wimpy (Part 3).dat#8",
+          "packID": "fan:lldb-552"
+        },
+        "sourceReplaySHA256": "0c5ea165f469b962e0c3e4668cbc692ea841d2c99a34071b70625f7c83427874",
+        "nativeSaved": 25,
+        "required": 49,
+        "nativeCompletionTick": 5102,
+        "didWin": false
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "LDChallenge04.dat#0",
+          "packID": "fan:lldb-433"
+        },
+        "sourceReplaySHA256": "eea7dacd2ce5bd2fd954d8473e454d074389660d4c70a67bab362ce462b893fc",
+        "nativeSaved": 0,
+        "required": 30,
+        "nativeCompletionTick": 1022,
+        "didWin": false
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "LDChallenge04.dat#1",
+          "packID": "fan:lldb-433"
+        },
+        "sourceReplaySHA256": "3d06b20af71f42f5d0bcdef3a7708c2879df42e36ff9299fb75d0c75bdade65a",
+        "nativeSaved": 0,
+        "required": 1,
+        "nativeCompletionTick": 1022,
+        "didWin": false
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "Deceit Tricky 1.dat#5",
+          "packID": "fan:lldb-523"
+        },
+        "sourceReplaySHA256": "01e344eac372d474c24ae6f89511603ea037741a7f99363d95e6ef6394a2b38d",
+        "error": "Deceit Tricky 1.dat#5 engine refused to queue builder for lemming 3 at tick 338"
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "CRISFN04.dat#1",
+          "packID": "fan:lldb-268"
+        },
+        "sourceReplaySHA256": "1d3f84acbc88fc63937e910d1198b1fe6ece04fca2fa727b06bdf8054e8d2509",
+        "nativeSaved": 0,
+        "required": 19,
+        "nativeCompletionTick": 2042,
+        "didWin": false
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "CRISFN02.dat#6",
+          "packID": "fan:lldb-266"
+        },
+        "sourceReplaySHA256": "99f57793022898f8a3aff5e894b8490e03c37951f0659be57a241fe8af854328",
+        "error": "CRISFN02.dat#6 engine refused to queue builder for lemming 2 at tick 227"
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "LEVELPAK.DAT#1",
+          "packID": "fan:lldb-592"
+        },
+        "sourceReplaySHA256": "5a9a29df64f01aad490b7ddd8e9b5286e913a75ba9a0a7eb6d64b8fd267dd743",
+        "error": "LEVELPAK.DAT#1 engine refused to queue builder for lemming 17 at tick 363"
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "CRISFN07.dat#5",
+          "packID": "fan:lldb-271"
+        },
+        "sourceReplaySHA256": "563711684649b20f64a8a7378c73d1f55b94ad2f9c2d0ddc7659a0004f1f167d",
+        "error": "CRISFN07.dat#5 engine refused to queue builder for lemming 40 at tick 670"
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "Lemmings Plus DOS Project - 03 - Mild (Part 3).dat#2",
+          "packID": "fan:lldb-551"
+        },
+        "sourceReplaySHA256": "507f1587b22688eb14578c97e40048e3dc99173da4826cb8568beea5eec18f14",
+        "error": "Lemmings Plus DOS Project - 03 - Mild (Part 3).dat#2 engine refused to queue miner for lemming 2 at tick 218"
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "CRISFN11.dat#1",
+          "packID": "fan:lldb-275"
+        },
+        "sourceReplaySHA256": "b27a3cc13ae20bb29e6f7cb1f5ddb6c6ee517e8de4a95f1bda2627b18a8c8d0e",
+        "nativeSaved": 0,
+        "required": 65,
+        "nativeCompletionTick": 7142,
+        "didWin": false
+      }
+    ],
+    "strictWins": 0
+  }
+}

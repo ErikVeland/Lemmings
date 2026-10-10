@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-09T01:55:02.290418+00:00",
+  "release": "1.8.4",
+  "baselineTag": "v1.8.3",
+  "engineSourceFingerprint": "a23fc195617af7cd2d6b162d5244b44a0f45ad12be10ac9f013d4ad9e794fe86",
+  "mechanicalAudio": "muted",
+  "nativeUIRun": false,
+  "sandboxEscalations": 0,
+  "proofs": {
+    "levelIdentitiesAudited": 562,
+    "populationConfigurationsAudited": 574,
+    "maximumCertificates": 251,
+    "knownRescueRecords": 261,
+    "publishedTargetsRetained": 512,
+    "unchangedWitnessHashes": 512,
+    "unknownLevelIdentities": 62,
+    "searchEnabled": false,
+    "classicShards": 4
+  },
+  "hints": {
+    "decksRegenerated": 350,
+    "unchangedDeckBodies": 350,
+    "releaseRateContextsChecked": 196,
+    "eventOrdering": "passed",
+    "spoilerBoundaries": "passed"
+  },
+  "checks": [
+    {
+      "command": "TROLLEY_AUDIT_JOBS=4 TROLLEY_AUDIT_SEARCH=0 LEMMINGS_TEST_AUDIO=muted zsh Scripts/verify-trolley-maxima.sh",
+      "exitCode": 0
+    },
+    {
+      "command": "python3 Tools/TrolleyVerification/catalogue.py check",
+      "exitCode": 0
+    },
+    {
+      "command": "Compare all exact conditions, saved targets, maxima status and witness SHA256 values with v1.8.3 via git show",
+      "exitCode": 0
+    },
+    {
+      "command": "python3 -m unittest discover -s Tools/TrolleyVerification -p 'test_*.py'",
+      "exitCode": 0,
+      "tests": 3
+    },
+    {
+      "command": "LEMMINGS_TEST_AUDIO=muted python3 Tools/TrolleyVerification/test_event_routes.py .build/trolley-verification/audit '.build/local/Ultimate Lemmings.app/Contents/Resources'",
+      "exitCode": 0
+    },
+    {
+      "command": "LEMMINGS_TEST_AUDIO=muted python3 Tools/TrolleyVerification/test_refresh.py .build/trolley-verification/audit '.build/local/Ultimate Lemmings.app/Contents/Resources'",
+      "exitCode": 0
+    },
+    {
+      "command": "LEMMINGS_TEST_AUDIO=muted zsh Scripts/generate-level-hints.sh",
+      "exitCode": 0
+    },
+    {
+      "command": "LEMMINGS_TEST_AUDIO=muted zsh Scripts/test-level-hint-catalogue.sh",
+      "exitCode": 0
+    },
+    {
+      "command": "Compare all 350 hint deck bodies with v1.8.3 and check current engine fingerprint",
+      "exitCode": 0
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  ],
+  "workspaceModuleCaches": [
+    ".build/trolley-verification/module-cache",
+    ".build/hint-export/module-cache"
+  ],
+  "generatedFilesChanged": [
+    "Documentation/TrolleyVerification/audit.json",
+    "Resources/Trolley/engine-fingerprint.txt",
+    "Resources/Trolley/verified-maxima.json",
+    "Resources/Hints/classic.json"
+  ],
+  "note": "This receipt records completed checks. No tests were repeated to create it. Source-selection policy and witness outcomes were unchanged; fresh replay audits produced the new fingerprint."
+}

@@ -1,10 +1,14 @@
 import AppKit
+import CryptoKit
 import NxlvKit
 
 /// One deck can play either a recording or a native ProTracker module.
 @MainActor private final class DJDeck {
   private var recording: MusicFileDeck?
   private var module: ModuleMusicPlayer?
+  let url: URL
+  let timing: MusicTimingCatalogue.Entry?
+  private var matchRatio: Float = 1
   var volume: Float = 0 { didSet { recording?.volume = volume; module?.setVolume(Double(volume)) } }
   var playbackRate: Float = 1 {
     didSet {
@@ -13,38 +17,58 @@ import NxlvKit
     }
   }
   var isPlaying: Bool { recording?.isPlaying == true || module?.isOutputRunning == true }
+  func setBaseRate(_ rate: Float) {
+    playbackRate = min(1.08, max(0.5, rate * matchRatio))
+    let compensation = Double(playbackRate / rate)
+    recording?.setMixTempoRatio(compensation); module?.setMixTempoRatio(compensation)
+  }
+  func matchTempo(_ ratio: Float, base: Float) { matchRatio = ratio; setBaseRate(base) }
+  func setSpeedPitch(_ cents: Double) { recording?.setSpeedPitch(cents); module?.setSpeedPitch(cents) }
 
-  init?(_ url: URL) {
+  init?(_ url: URL, repeats: Bool = true, timing: MusicTimingCatalogue.Entry? = nil, rhythmURL: URL? = nil,
+        enhancements: ProTrackerEnhancements = .modern, profile: MusicPlaybackCatalogue.Entry? = nil) {
+    self.url = url
+    self.timing = timing
     if url.pathExtension.lowercased() == "mod" {
       let player = ModuleMusicPlayer()
-      player.setEnhancements(.modern)
+      player.setEnhancements(enhancements)
       player.setVolume(0)
       guard player.play(url: url) != nil else { return nil }
       module = player
     } else {
-      guard let player = MusicFileDeck(url: url) else { return nil }
+      guard let player = MusicFileDeck(url: url, repeats: repeats, rhythmURL: rhythmURL, profile: profile) else { return nil }
       player.volume = 0
       recording = player
     }
   }
+  var sourceSeconds: Double { recording?.sourceSeconds ?? module?.sourceSeconds ?? 0 }
+  var beatInfo: (bpm: Double, delay: Double)? {
+    if let timing { return timing.nextBeat(at: sourceSeconds, rate: Double(playbackRate)) }
+    return module?.beatInfo
+  }
+  func setEnhancements(_ value: ProTrackerEnhancements) { module?.setEnhancements(value) }
+  func setNukeAmount(_ amount: Float) { recording?.setNukeAmount(amount); module?.setNukeAmount(amount) }
+  func setMixBass(_ gain: Float) { recording?.setMixBass(gain); module?.setMixBass(gain) }
   func play() {
     recording?.play()
     if let module {
       if module.isRunning { try? module.resumeOutput() } else { try? module.start() }
     }
   }
-  func pause() { recording?.suspendOutput(); module?.suspendOutput() }
+  func setVinyl(rate: Double, gain: Double) {
+    recording?.setVinyl(rate: rate, gain: gain)
+    module?.applyVinyl(rate: rate, gain: gain)
+  }
+  func pause(rhythmOnly: Bool = false) { recording?.suspendOutput(rhythmOnly: rhythmOnly); module?.suspendOutput(rhythmOnly: rhythmOnly) }
   func stop() { recording?.stop(); module?.stop() }
 }
 
-/// Mixes recordings and modules. Gameplay energy shapes each phrase change.
+/// Mixes versions of the level theme, including a lift at the rescue target.
 @MainActor final class AdaptiveDJPlayer {
   /// How long each kind of change takes.
   private enum Fade {
     /// Long enough to read as a mix rather than a cut.
     static let phrase = 2.6
-    /// The nuke still moves quickly, but leaves room for the outgoing phrase.
-    static let immediate = 1.1
     static let step = 1.0 / 30.0
   }
 
@@ -52,30 +76,31 @@ import NxlvKit
   private var deckB: DJDeck?
   private var activeIsA = true
   private var director = AdaptiveDJDirector()
-  private var energyEngine = AdaptiveDJEngine()
-  private var currentEnergy: AdaptiveDJEngine.DJEnergyLevel = .chill
-  private var lastEnergyChangeAt = -Double.infinity
   private var fadeTask: Task<Void, Never>?
-  private var rotationTask: Task<Void, Never>?
   private var fadeGeneration = 0
   private var fadePosition = 0.0
-  private var fadeSuspendedAt: TimeInterval?
-  private var fadeSuspendedDuration: TimeInterval = 0
   private var outputSuspended = false
+  private var pauseUsesRhythm = false
   private var resumeDeckA = false
   private var resumeDeckB = false
   private var fadingIn: DJDeck?
   private var fadingOut: DJDeck?
   private var playbackRate: Float = 1
+  private var speedPitch: Double = 0
+  private var enhancements: ProTrackerEnhancements = .modern
+  private var journeyCycle = 0
+  private var allowCelebrationAlternates = true
 
-  /// Keep the megamix moving even when the level has no state cue.
-  private let rotationInterval: TimeInterval = 64
 
   /// Soundtracks the player supplied, keyed by folder name.
   private var pools: [String: [URL]] = [:]
   private var currentPool: String?
   private(set) var currentURL: URL?
-  private var playedTracks: Set<String> = []
+  private var catalogue: SoundtrackCatalogue?
+  private var timingCatalogue: MusicTimingCatalogue?
+  private var catalogueRoot: URL?
+  private var availablePaths: Set<String> = []
+  private var availableURLs: [String: URL] = [:]
 
   private(set) var masterVolume: Float = 0.8
   private(set) var isMuted = false
@@ -86,7 +111,7 @@ import NxlvKit
 
   init() {}
 
-  var isPlaying: Bool { activeDeck?.isPlaying == true }
+  var isPlaying: Bool { playingDeckCount > 0 }
   var isCrossfading: Bool { fadeTask != nil }
   var playingDeckCount: Int { [deckA, deckB].compactMap { $0 }.filter(\.isPlaying).count }
   /// The mix needs somewhere to travel between.
@@ -95,20 +120,43 @@ import NxlvKit
   private var activeDeck: DJDeck? { activeIsA ? deckA : deckB }
   private var idleDeck: DJDeck? { activeIsA ? deckB : deckA }
 
-  func load(soundtracks: [String: [URL]]) {
-    let next = soundtracks.filter { !$0.value.isEmpty }
-    let changed = Set(pools.values.flatMap { $0.map(\.path) })
-      != Set(next.values.flatMap { $0.map(\.path) })
-    pools = next
-    // A seasonal pool can replace the regular pool while a level is already
-    // audible. Crossfade into it so a Holiday level starts with Holiday music.
-    if changed, isPlaying, !outputSuspended { crossfade(seconds: Fade.phrase) }
+  func load(soundtracks: [String: [URL]], catalogueRoot: URL? = nil) {
+    pools = soundtracks.filter { !$0.value.isEmpty }
+    self.catalogueRoot = catalogueRoot
+    catalogue = catalogueRoot.flatMap { SoundtrackCatalogue.load(at: $0) }
+    timingCatalogue = catalogueRoot.flatMap { MusicTimingCatalogue.load(at: $0) }
+    availableURLs = [:]
+    for url in pools.values.flatMap({ $0 }).sorted(by: { $0.path < $1.path }) {
+      if let path = relativePath(url), availableURLs[path] == nil { availableURLs[path] = url }
+    }
+    availablePaths = Set(availableURLs.keys)
+  }
+
+  private func relativePath(_ url: URL) -> String? {
+    catalogueRoot.flatMap { SoundtrackPlayer.cataloguePath(url, root: $0) }
+  }
+
+  /// Resolve a composition once per level. The caller's score position, never
+  /// elapsed time or a random seed, owns progression through its versions.
+  @discardableResult
+  func startJourney(trackID: String, cycle: Int, identity: String, fallback: URL? = nil,
+                    includeAlternates: Bool = true) -> Bool {
+    journeyCycle = cycle
+    allowCelebrationAlternates = includeAlternates
+    let selected = catalogue?.select(trackID: trackID, cycle: cycle,
+      availablePaths: availablePaths, includeAlternates: includeAlternates)
+    guard let url = selected.flatMap({ availableURLs[$0.path] }) ?? fallback,
+          FileManager.default.isReadableFile(atPath: url.path) else { return false }
+    startLevel(url: url, identity: identity)
+    return true
   }
 
   /// Starts the mix, or leaves it alone when it is already running.
   func start() {
     // A suspended or crossfading deck may not report isPlaying yet (the engine
     // starts asynchronously), so treat those states as already running too.
+    guard !vinylStopping else { return }
+    if vinylHeld { vinylRelease(); return }
     guard !pools.isEmpty, !outputSuspended, fadeTask == nil,
           activeDeck == nil || activeDeck?.isPlaying != true else { return }
     guard let first = pickTrack(avoiding: nil) else { return }
@@ -129,106 +177,219 @@ import NxlvKit
     deckA?.volume = isMuted ? 0 : masterVolume
     deckA?.play()
     announce(first.url)
-    armRotation()
+  }
+
+  /// Level entry owns track selection. Repeated UI refreshes leave it playing.
+  func startLevel(url: URL, identity: String) {
+    if outputSuspended { pendingLevel = (url, identity); return }
+    guard identity != levelIdentity else { return }
+    guard FileManager.default.isReadableFile(atPath: url.path) else { return }
+    levelIdentity = identity
+    resetLevel()
+    if vinylStopping {
+      // The braking record finishes first. Its release starts this track.
+      vinylPending = (url, identity)
+      return
+    }
+    if vinylHeld, let deck = makeDeck(url) {
+      vinylHeld = false
+      deckA?.stop(); deckB?.stop()
+      deckA = deck; deckB = nil; activeIsA = true; currentURL = url
+      currentPool = url.deletingLastPathComponent().lastPathComponent
+      deck.volume = isMuted ? 0 : masterVolume
+      vinylRamp.run(.start, apply: { deck.setVinyl(rate: $0, gain: $1) }) { deck.setVinyl(rate: 1, gain: 1) }
+      deck.play(); announce(url)
+      return
+    }
+    if activeDeck != nil {
+      crossfade(seconds: Fade.phrase, destination: url)
+    } else {
+      guard let deck = makeDeck(url) else { return }
+      deckA = deck; activeIsA = true; currentURL = url
+      currentPool = url.deletingLastPathComponent().lastPathComponent
+      deck.volume = isMuted ? 0 : masterVolume
+      deck.play(); announce(url)
+    }
+  }
+  private var levelIdentity: String?
+  private var pendingLevel: (url: URL, identity: String)?
+
+  // MARK: - Vinyl
+
+  private let vinylRamp = VinylRamp()
+  private var vinylStopping = false
+  private var vinylHeld = false
+  private var vinylPending: (url: URL, identity: String)?
+  private var vinylReleaseRequested = false
+  private var vinylIdentity: String?
+
+  /// Brakes the level track like a record stopped by hand.
+  ///
+  /// A retry calls this. `vinylRelease()` lets the track run on from the
+  /// finger hold. A `startLevel` releases its own track instead, even when
+  /// the attempt keeps the same identity.
+  func vinylStop() {
+    guard !outputSuspended, !vinylStopping, !vinylHeld else { return }
+    fadeTask?.cancel()
+    fadeGeneration += 1
+    finishFade()
+    guard let deck = activeDeck, deck.isPlaying else { return }
+    idleDeck?.stop()
+    if activeIsA { deckB = nil } else { deckA = nil }
+    vinylIdentity = levelIdentity
+    levelIdentity = nil
+    vinylStopping = true
+    vinylRamp.run(.stop, apply: { deck.setVinyl(rate: $0, gain: $1) }) { [weak self] in
+      guard let self else { return }
+      self.vinylStopping = false
+      let release = self.vinylReleaseRequested
+      self.vinylReleaseRequested = false
+      // A resting record keeps turning silently at the slowest speed.
+      self.vinylHeld = true
+      if let pending = self.vinylPending {
+        self.vinylPending = nil
+        self.levelIdentity = nil
+        self.startLevel(url: pending.url, identity: pending.identity)
+      } else if release {
+        self.vinylRelease()
+      }
+    }
+  }
+
+  /// Lets a braked track run on from the finger hold.
+  func vinylRelease() {
+    if vinylStopping { vinylReleaseRequested = true; return }
+    guard vinylHeld, let deck = activeDeck else { return }
+    vinylHeld = false
+    if levelIdentity == nil { levelIdentity = vinylIdentity }
+    vinylRamp.run(.start, apply: { deck.setVinyl(rate: $0, gain: $1) }) { deck.setVinyl(rate: 1, gain: 1) }
+  }
+
+  private func resetVinyl() {
+    vinylRamp.cancel()
+    vinylStopping = false
+    vinylHeld = false
+    vinylPending = nil
+    vinylReleaseRequested = false
   }
 
   /// A new level, so every cue may happen again.
   func resetLevel() {
     director.reset()
-    energyEngine = AdaptiveDJEngine()
-    currentEnergy = .chill
-    lastEnergyChangeAt = -Double.infinity
   }
 
-  /// Offers the game state to the director and moves the mix when its energy changes.
+  /// Reaching the rescue target allows one musical transition.
   func updateTelemetry(_ telemetry: AdaptiveDJEngine.Telemetry) {
-    guard isPlaying else { return }
-    let energy = energyEngine.evaluate(telemetry: telemetry)
-    let cue = director.cue(for: telemetry)
-    let now = ProcessInfo.processInfo.systemUptime
-    let urgent = cue != nil || energy == .nukeDrop || energy == .victory
-    let energyChanged = energy != currentEnergy
-        && (urgent || now - lastEnergyChangeAt >= 3.0)
-    guard energyChanged || cue != nil else { return }
-    if energyChanged {
-      currentEnergy = energy
-      lastEnergyChangeAt = now
-    }
-    let isVictory = energy == .victory || cue?.reason == .won
-    let duration = cue?.timing == .immediate ? Fade.immediate : Fade.phrase
-    crossfade(seconds: duration, victory: isVictory)
+    guard isPlaying, let cue = director.cue(for: telemetry) else { return }
+    crossfade(seconds: Fade.phrase, victory: cue.reason == .won, failure: cue.reason == .lost)
   }
 
   // MARK: - Decks
 
+  private var nukeAmount: Float = 0
+  func setNukeAmount(_ amount: Float) {
+    nukeAmount = amount
+    deckA?.setNukeAmount(amount)
+    deckB?.setNukeAmount(amount)
+  }
+
   private func makeDeck(_ url: URL) -> DJDeck? {
-    let deck = DJDeck(url)
+    let role = relativePath(url).flatMap { catalogue?.entry(path: $0)?.track.role }
+    let repeats = !["victory", "failure", "cue", "medal", "milestone"].contains(role ?? "")
+    // A replacement file must not inherit the previous recording's beat grid.
+    var timing = relativePath(url).flatMap { timingCatalogue?.entry(path: $0) }
+    if let candidate = timing {
+      let hash = (try? Data(contentsOf: url, options: .mappedIfSafe)).map {
+        SHA256.hash(data: $0).map { String(format: "%02x", $0) }.joined()
+      }
+      if hash != candidate.expectedSHA256 { timing = nil }
+    }
+    let deck = DJDeck(url, repeats: repeats, timing: timing,
+      rhythmURL: MusicLibrary.rhythmURL(for: url, musicRoot: catalogueRoot), enhancements: enhancements,
+      profile: SoundtrackPlayer.playbackProfile(for: url, musicRoot: catalogueRoot))
     deck?.playbackRate = playbackRate
+    deck?.setSpeedPitch(speedPitch)
+    deck?.setNukeAmount(nukeAmount)
     return deck
+  }
+
+  /// Apply the shared MOD mix to both decks and all later tracks.
+  func setEnhancements(_ value: ProTrackerEnhancements) {
+    guard enhancements != value else { return }
+    enhancements = value
+    deckA?.setEnhancements(value)
+    deckB?.setEnhancements(value)
   }
 
   func setPlaybackRate(_ value: Double) {
     playbackRate = Float(min(1, max(0.5, value)))
-    deckA?.playbackRate = playbackRate
-    deckB?.playbackRate = playbackRate
-    fadingIn?.playbackRate = playbackRate
-    fadingOut?.playbackRate = playbackRate
+    deckA?.setBaseRate(playbackRate)
+    deckB?.setBaseRate(playbackRate)
   }
 
-  /// Favour victory themes, then a different source and an unplayed track.
-  static func victoryPreference(_ url: URL) -> Int {
-    let name = url.deletingPathExtension().lastPathComponent.lowercased()
-    if ["endtune", "victory", "triumph", "fanfare", "ending", "success", "win"].contains(where: name.contains) { return 3 }
-    if ["cancan", "awesome", "turkish march", "rainbow", "sports", "highland", "classic3", "smile"].contains(where: name.contains) { return 2 }
-    if ["shadow", "cave", "intro", "frontend", "maintune", "game over"].contains(where: name.contains) { return 0 }
-    return 1
+  func setSpeedPitch(_ cents: Double) {
+    speedPitch = cents
+    deckA?.setSpeedPitch(cents)
+    deckB?.setSpeedPitch(cents)
+    fadingIn?.setSpeedPitch(cents)
+    fadingOut?.setSpeedPitch(cents)
   }
 
-  private func pickTrack(avoiding pool: String?, victory: Bool = false) -> (pool: String, url: URL)? {
-    var candidates = pools.flatMap { name, urls in urls.map { (pool: name, url: $0) } }
-    let different = candidates.filter { $0.url != currentURL }
-    if !different.isEmpty { candidates = different }
-    guard !candidates.isEmpty else { return nil }
-    if victory {
-      let best = candidates.map { Self.victoryPreference($0.url) }.max() ?? 0
-      candidates = candidates.filter { Self.victoryPreference($0.url) == best }
+  private func pickTrack(avoiding pool: String?, victory: Bool = false, failure: Bool = false) -> (pool: String, url: URL)? {
+    guard let catalogue, let root = catalogueRoot else { return nil }
+    let variant: SoundtrackCatalogue.Variant?
+    if victory || failure {
+      guard let currentURL, let path = relativePath(currentURL) else { return nil }
+      variant = victory
+        ? catalogue.celebration(currentPath: path, cycle: journeyCycle,
+            availablePaths: availablePaths, includeAlternates: allowCelebrationAlternates)
+        : catalogue.result(won: false, currentPath: path, availablePaths: availablePaths)
+    } else {
+      variant = catalogue.select(trackID: "classic.cancan", cycle: 0, availablePaths: availablePaths)
     }
-    let fresh = candidates.filter { !playedTracks.contains($0.url.path) }
-    if !fresh.isEmpty { candidates = fresh }
-    else { playedTracks.removeAll() }
-    let otherPools = candidates.filter { $0.pool != pool }
-    if !otherPools.isEmpty { candidates = otherPools }
-    // Skip unreadable tracks without taking down the running deck.
-    while let choice = candidates.randomElement() {
-      if makeDeck(choice.url) != nil {
-        playedTracks.insert(choice.url.path)
-        return choice
-      }
-      candidates.removeAll { $0.url == choice.url }
-    }
-    return nil
+    guard let variant, !victory || variant.path != currentURL.flatMap({ relativePath($0) }) else { return nil }
+    let url = availableURLs[variant.path] ?? root.appendingPathComponent(variant.path)
+    guard FileManager.default.isReadableFile(atPath: url.path) else { return nil }
+    return (url.deletingLastPathComponent().lastPathComponent, url)
   }
 
   /// Brings the next track up as the current one goes down.
   ///
   /// The two curves are equal power rather than linear, so the middle of the
   /// change does not sag. A linear pair sounds like a dip.
-  private func crossfade(seconds: Double, victory: Bool = false) {
-    guard let next = pickTrack(avoiding: currentPool, victory: victory), let incoming = makeDeck(next.url) else {
+  private func crossfade(seconds: Double, victory: Bool = false, failure: Bool = false, destination: URL? = nil) {
+    guard let next = destination.map({ (pool: $0.deletingLastPathComponent().lastPathComponent, url: $0) }) ?? pickTrack(avoiding: currentPool, victory: victory, failure: failure), let incoming = makeDeck(next.url) else {
       return
     }
-    rotationTask?.cancel()
-    rotationTask = nil
     fadeTask?.cancel()
     fadeGeneration += 1
     let generation = fadeGeneration
-    finishFade()
+    settleInterruptedFade()
 
     fadingOut = activeDeck
     fadingIn = incoming
     fadePosition = 0
     incoming.volume = 0
-    incoming.play()
+    let outgoingBeat = activeDeck?.beatInfo
+    let incomingBeat = incoming.beatInfo
+    var beatDelay = min(1, outgoingBeat?.delay ?? 0)
+    var matchedRate = playbackRate
+    if let outgoingBeat, let incomingBeat {
+      let ratio = outgoingBeat.bpm / incomingBeat.bpm
+      if (0.92...1.08).contains(ratio) { matchedRate *= Float(ratio) }
+    }
+    matchedRate = min(1.08, max(0.5, matchedRate))
+    incoming.matchTempo(matchedRate / playbackRate, base: playbackRate)
+    incoming.setMixBass(-18)
+    var duration = seconds
+    var preRoll = 0.0
+    if let outgoing = activeDeck, let grid = outgoing.timing, let incomingGrid = incoming.timing,
+       let plan = grid.barTransition(to: incomingGrid, at: outgoing.sourceSeconds,
+         outgoingRate: Double(outgoing.playbackRate), incomingRate: Double(matchedRate), minimumDuration: seconds) {
+      beatDelay = plan.delay
+      preRoll = plan.preRoll
+      duration = plan.duration
+    }
     if activeIsA { deckB = incoming } else { deckA = incoming }
     activeIsA.toggle()
     currentPool = next.pool
@@ -237,32 +398,46 @@ import NxlvKit
 
     // The fade runs on the main actor, because a deck is not safe to touch
     // from anywhere else.
-    let startedAt = ProcessInfo.processInfo.systemUptime
-    fadeSuspendedAt = nil
-    fadeSuspendedDuration = 0
     fadeTask = Task { @MainActor [weak self] in
+      var delay = beatDelay
+      var delayTime = ProcessInfo.processInfo.systemUptime
+      while delay > 0, !Task.isCancelled {
+        do { try await Task.sleep(nanoseconds: UInt64(Fade.step * 1_000_000_000)) } catch { return }
+        let now = ProcessInfo.processInfo.systemUptime
+        if self?.outputSuspended != true { delay -= now - delayTime }
+        delayTime = now
+      }
+      guard !Task.isCancelled, self?.fadeGeneration == generation else { return }
+      while self?.outputSuspended == true {
+        do { try await Task.sleep(nanoseconds: UInt64(Fade.step * 1_000_000_000)) } catch { return }
+      }
+      incoming.play()
+      // Let a short pickup play silently so the fade starts on both downbeats.
+      var pickup = preRoll
+      var pickupTime = ProcessInfo.processInfo.systemUptime
+      while pickup > 0, !Task.isCancelled {
+        do { try await Task.sleep(nanoseconds: UInt64(Fade.step * 1_000_000_000)) } catch { return }
+        guard self?.fadeGeneration == generation else { return }
+        let now = ProcessInfo.processInfo.systemUptime
+        if self?.outputSuspended != true { pickup -= now - pickupTime }
+        pickupTime = now
+      }
+      // Measure the clock, not the callbacks. A delayed main actor must not
+      // stretch the fade, and suspended time must not advance it.
       var elapsed = 0.0
-      while elapsed < seconds, !Task.isCancelled {
+      var last = ProcessInfo.processInfo.systemUptime
+      while elapsed < duration, !Task.isCancelled {
         do { try await Task.sleep(nanoseconds: UInt64(Fade.step * 1_000_000_000)) }
         catch { return }
         guard !Task.isCancelled, self?.fadeGeneration == generation else { return }
+        let now = ProcessInfo.processInfo.systemUptime
+        defer { last = now }
         if self?.outputSuspended == true { continue }
-        elapsed = ProcessInfo.processInfo.systemUptime - startedAt - (self?.fadeSuspendedDuration ?? 0)
-        self?.applyFade(position: min(1, elapsed / seconds))
+        elapsed += now - last
+        self?.applyFade(position: min(1, elapsed / duration))
       }
       guard !Task.isCancelled, self?.fadeGeneration == generation else { return }
       self?.finishFade()
-      self?.armRotation()
-    }
-  }
-
-  private func armRotation() {
-    rotationTask?.cancel()
-    rotationTask = Task { @MainActor [weak self] in
-      do { try await Task.sleep(nanoseconds: UInt64(self?.rotationInterval ?? 64) * 1_000_000_000) }
-      catch { return }
-      guard let self, !self.outputSuspended, self.isPlaying, self.fadeTask == nil else { return }
-      self.crossfade(seconds: Fade.phrase)
     }
   }
 
@@ -271,6 +446,8 @@ import NxlvKit
   private func applyFade(position: Double) {
     fadePosition = position
     let target = isMuted ? 0 : masterVolume
+    fadingIn?.setMixBass(-18 * Float(max(0, 1 - position * 2)))
+    fadingOut?.setMixBass(-18 * Float(min(1, position * 2)))
     fadingIn?.volume = target * sin(Float(position) * .pi / 2)
     fadingOut?.volume = target * cos(Float(position) * .pi / 2)
   }
@@ -279,12 +456,25 @@ import NxlvKit
     let outgoing = fadingOut
     outgoing?.stop()
     if deckA === outgoing { deckA = nil } else if deckB === outgoing { deckB = nil }
+    fadingIn?.setMixBass(0)
+    fadingIn?.matchTempo(1, base: playbackRate)
     fadingIn?.volume = isMuted ? 0 : masterVolume
     fadingIn = nil
     fadingOut = nil
     fadeTask = nil
-    fadeSuspendedAt = nil
-    fadeSuspendedDuration = 0
+  }
+
+  private func settleInterruptedFade() {
+    guard let outgoing = fadingOut, let incoming = fadingIn else { return }
+    let keep = incoming.isPlaying && fadePosition >= 0.5 ? incoming : outgoing
+    let discard = keep === incoming ? outgoing : incoming
+    discard.stop()
+    if deckA === discard { deckA = nil } else if deckB === discard { deckB = nil }
+    activeIsA = deckA === keep
+    keep.setMixBass(0); keep.matchTempo(1, base: playbackRate)
+    keep.volume = isMuted ? 0 : masterVolume
+    currentURL = keep.url
+    fadingIn = nil; fadingOut = nil; fadeTask = nil
   }
 
   private func announce(_ url: URL) {
@@ -307,16 +497,13 @@ import NxlvKit
   }
 
   func stop() {
+    resetVinyl()
     outputSuspended = false
     resumeDeckA = false
     resumeDeckB = false
     fadeTask?.cancel()
-    rotationTask?.cancel()
-    rotationTask = nil
     fadeGeneration += 1
     fadeTask = nil
-    fadeSuspendedAt = nil
-    fadeSuspendedDuration = 0
     fadingIn = nil
     fadingOut = nil
     deckA?.stop()
@@ -325,30 +512,42 @@ import NxlvKit
     deckB = nil
     currentPool = nil
     currentURL = nil
+    levelIdentity = nil
+    pendingLevel = nil
     director.reset()
   }
 
-  func suspendOutput() {
-    guard !outputSuspended else { return }
+  func suspendOutput(rhythmOnly: Bool = false) {
+    guard !outputSuspended || rhythmOnly != pauseUsesRhythm else { return }
+    if !outputSuspended {
+      resumeDeckA = deckA?.isPlaying == true
+      resumeDeckB = deckB?.isPlaying == true
+    }
     outputSuspended = true
-    if fadeTask != nil { fadeSuspendedAt = ProcessInfo.processInfo.systemUptime }
-    resumeDeckA = deckA?.isPlaying == true
-    resumeDeckB = deckB?.isPlaying == true
-    deckA?.pause()
-    deckB?.pause()
+    pauseUsesRhythm = rhythmOnly
+    if resumeDeckA { deckA?.pause(rhythmOnly: rhythmOnly) }
+    if resumeDeckB { deckB?.pause(rhythmOnly: rhythmOnly) }
   }
 
   func resumeOutput() {
     guard outputSuspended else { return }
+    let interruptedDestination = fadingIn?.url
     outputSuspended = false
-    if let suspendedAt = fadeSuspendedAt {
-      fadeSuspendedDuration += ProcessInfo.processInfo.systemUptime - suspendedAt
-      fadeSuspendedAt = nil
-    }
+    pauseUsesRhythm = false
     if resumeDeckA { deckA?.play() }
     if resumeDeckB { deckB?.play() }
-    armRotation()
     resumeDeckA = false
     resumeDeckB = false
+    if let pending = pendingLevel {
+      pendingLevel = nil
+      startLevel(url: pending.url, identity: pending.identity)
+    } else if let destination = interruptedDestination {
+      // Rhythm playback and vinyl stops advance the decks differently. Plan
+      // again from the audible deck's current grid when play resumes.
+      fadeTask?.cancel()
+      fadeGeneration += 1
+      settleInterruptedFade()
+      if currentURL != destination { crossfade(seconds: Fade.phrase, destination: destination) }
+    }
   }
 }

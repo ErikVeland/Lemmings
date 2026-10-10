@@ -9,6 +9,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
     let detail: String
     let availability: LevelAvailability
     let artworkKey: String?
+    let availabilityLabel: String?
 
     var isAvailable: Bool { availability.canStart }
 
@@ -19,7 +20,8 @@ struct LevelCoverFlowItem: Equatable, Sendable {
         detail: String,
         isAvailable: Bool = true,
         artworkKey: String? = nil,
-        availability: LevelAvailability? = nil
+        availability: LevelAvailability? = nil,
+        availabilityLabel: String? = nil
     ) {
         self.id = id
         self.title = title
@@ -27,10 +29,11 @@ struct LevelCoverFlowItem: Equatable, Sendable {
         self.detail = detail
         self.availability = availability ?? (isAvailable ? .available : .unavailable)
         self.artworkKey = artworkKey
+        self.availabilityLabel = availabilityLabel
     }
 
     var accessibilityName: String {
-        [title, subtitle, detail, isAvailable ? nil : availability.displayName]
+        [title, subtitle, detail, isAvailable ? nil : (availabilityLabel ?? availability.displayName)]
             .compactMap { $0 }
             .joined(separator: ". ")
     }
@@ -894,6 +897,21 @@ struct LevelCoverFlowItem: Equatable, Sendable {
         return windingSign != nil
     }
 
+    // NSButton tracks the release against the raw frame, but the carousel
+    // hit-tests the projected cover. A click on the visible edge of a side
+    // card fell outside the raw frame and did nothing.
+    override func mouseDown(with event: NSEvent) {
+        guard let window, let stage = superview else { return super.mouseDown(with: event) }
+        while let next = window.nextEvent(matching: [.leftMouseUp, .leftMouseDragged]) {
+            guard next.type == .leftMouseUp else { continue }
+            let point = stage.convert(next.locationInWindow, from: nil)
+            if frame.contains(point) || containsInteractivePoint(point, in: stage.layer ?? CALayer()) {
+                onPress?()
+            }
+            return
+        }
+    }
+
     override func keyDown(with event: NSEvent) {
         switch event.keyCode {
         case 123, 126: onMove?(-1)
@@ -1077,7 +1095,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
                 height: ceil(size.height))
             artwork.draw(in: destination, from: .zero, operation: .sourceOver,
                 fraction: alpha, respectFlipped: true,
-                hints: [.interpolation: NSImageInterpolation.none])
+                hints: [.interpolation: NSImageInterpolation.none.rawValue])
         } else if artworkFailed {
             GamePixelText.draw("PREVIEW UNAVAILABLE", in: frame.insetBy(dx: 8, dy: 8), maxScale: 1)
         }
@@ -1127,7 +1145,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
     }
 
     private var statusDetail: String {
-        item.detail + (item.isAvailable ? "" : "  " + item.availability.displayName.uppercased())
+        item.detail + (item.isAvailable ? "" : "  " + (item.availabilityLabel ?? item.availability.displayName).uppercased())
     }
 
     private func drawAvailabilityMark(in content: CGRect) {

@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-04",
+  "scope": "Targeted solver-policy diagnosis on exact bundled Classic fan levels; one already scored level was rediscovered",
+  "solverRevisionSHA256": "db5ab2cb9a136c73181091a4c88a4f34ece2127da26fd82051d8b9abdfa9276a",
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "searchChange": "--focus-workers N limits beam-search skill offers and distance ranking to the first N released workers while the full population and rescue goal remain in the simulation",
+  "calibration": {
+    "identity": "fan:lldb-505/KillerMaster 1 Tame 1.dat#1",
+    "archiveSHA256": "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9",
+    "policy": "--rollout-single --fallback 12 --focus-workers 1",
+    "result": "strict solver win, 1/1 saved, one Floater, waiting route tick 59, one continuation",
+    "replaySHA256": "968d366c6c60b1f15c6485ea6549a8546887b6222006eae204b4d8ef99a6add3"
+  },
+  "targets": [
+    {
+      "identity": "fan:lldb-58/lm_set12.dat#5",
+      "title": "The Rock Peaks",
+      "archiveSHA256": "5e409f1393abcb6304cfdc23c607fe2c688ee534405cc28c6f3ab2cd8d14d26d",
+      "initialStateHash": "63f9592f5916889de7508f22101dcc74f9e94bd55351b0d22a92e567dffe454f",
+      "bundledData": "80 total, 80 required, three-minute limit, initial release rate 1, fifteen Builders and no other skills",
+      "nativePassiveRate1": "57/80 released by terminal tick 3062; a win requires raising the rate",
+      "nativePassiveRate99": "80/80 released by terminal tick 3062; zero saved without skills",
+      "focusedPolicy": "--rate 99 --focus-workers 1 --prefer-progress --fallback 12 --refire 60 --width 48 --seconds 30",
+      "focusedResult": "no win; 26767 expanded, best partial 0/80 saved at tick 1016, 80 released, zero lost and 80 active",
+      "partialReplaySHA256": "b8fd38382708d6af1d8fd4faf8c943de16cf33668d9da01b26a306a09418f0ca",
+      "manualRoute": {
+        "inputs": "Builder to worker 0 after ticks 73, 265, 510, 744 and 936; release rate 99 after tick 940",
+        "strictExactLevelOutcome": "67/80 saved at tick 1445; not a win",
+        "partialReplaySHA256": "56d9936aa856052e01d4dafad3ae431e31612c9b6202d22fe72e55bdb2c68094",
+        "lossDiagnosis": "The first four lost workers die by tick 363 near x 609–631, before the bridge reaches the exit; nine later workers fall through the remaining gap by tick 969",
+        "followUp": "One additional Builder on worker 1 across accepted ticks 90–175 saved at most 67/80"
+      },
+      "interpretation": "The default rate cannot release the rescue quota before the limit. A five-Builder route opens the exit for later workers, but early workers need a separate rescue. The focused solver has not found that route."
+    },
+    {
+      "identity": "fan:lldb-584/LEVEL000.DAT#1",
+      "title": "Bridge Away!",
+      "archiveSHA256": "8266ec3e50eced182f0e60729f0654bdfabf71fa405f7af8aaa96cf147e51b31",
+      "focusedPolicy": "--focus-workers 1 --fallback 12 --refire 60 --width 32 --seconds 12",
+      "focusedResult": "known scored level rediscovered: 80/40 saved with 14 inputs after 35430 expansions, using the lead-worker distance ranking",
+      "winningReplaySHA256": "d836811835415939e97c7f8dfbb3b4139670b9039e6ec15a43d67b85cee6ca71",
+      "ledgerEffect": "Already had a strictly verified winning replay and difficulty score; no new row promoted"
+    }
+  ],
+  "additionalFocusedChecks": [
+    {
+      "identity": "fan:lldb-586/LEVELPAK.DAT#6",
+      "archiveSHA256": "83cd001de10e9400b78e9d79f356a1095ff5a1dd9fb5374d4ad06e2f46c87b14",
+      "policy": "--focus-workers 1 --prefer-progress --fallback 12 --width 48 --seconds 25",
+      "result": "no win; 0/10 saved, 2268 expanded, waiting branch stopped at tick 120 after one loss",
+      "partialReplaySHA256": "26eed27e173f6d6272a07b4cef3fb827d8b41b46ac64a4722ea83cd7975836ee"
+    },
+    {
+      "identity": "fan:lldb-586/LEVELPAK.DAT#9",
+      "archiveSHA256": "83cd001de10e9400b78e9d79f356a1095ff5a1dd9fb5374d4ad06e2f46c87b14",
+      "policy": "--focus-workers 1 --prefer-progress --fallback 12 --width 48 --seconds 25",
+      "result": "no win; 0/22 saved, 54895 expanded, best partial tick 525",
+      "partialReplaySHA256": "36f413745f77a53e59889570d9c96fc366520d800fae5124a340823cc2c7edee"
+    },
+    {
+      "identity": "fan:lldb-58/lm_set12.dat#1",
+      "archiveSHA256": "5e409f1393abcb6304cfdc23c607fe2c688ee534405cc28c6f3ab2cd8d14d26d",
+      "policy": "--rate 99 --focus-workers 1 --prefer-progress --fallback 12 --width 48 --seconds 25",
+      "result": "no win; 0/79 saved, 6115 expanded, best partial tick 320",
+      "partialReplaySHA256": "ef0b8c6220f75c92763a4bf98a38e43efcfc90cf5c11e540dd7213e27bee8e68"
+    }
+  ],
+  "limits": "This is bounded search evidence. No first native win, difficulty score, independent source-state comparison or source physics parity claim was added."
+}

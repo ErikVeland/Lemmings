@@ -1,0 +1,36 @@
+{
+  "version": "1.7.9",
+  "build": 63,
+  "sourceCommit": "4d8cda805cd938df919776498193cdd10ff48714",
+  "status": "published-and-verified",
+  "publication": "https://github.com/ErikVeland/Lemmings/releases/tag/v1.7.9",
+  "passed": [
+    "34 release-tool tests and 350 stored solution fixtures",
+    "352 Classic/conversion quest wins, 1056 recoveries, 352 progress resumes, six transitions and final result; negative evidence checks",
+    "251 exact-condition rescue certificates and 17 rescue targets after 562-level/574-configuration audit",
+    "352 verified hint routes and 292 generated learning lessons",
+    "41 retained L3 wins and negative input/evidence checks",
+    "PASS 187 selected Golems wins, exact archive, replay digest, starting state and final outcome",
+    "160 Redux levels: 149 Mac terrain scenes and 393 Mac gadgets; original pixels, masks and simulation configuration unchanged",
+    "Native playfield rendering, Mac switching, cursor badges, 0/1/8/10/21-skill panels, four widths, CRT source and input targets",
+    "Fan text terrain source-coordinate regression",
+    "48 regression audit checks, zero source drift",
+    "Release UI: welcome render and Continue, cross-game pause, dialogs, nuke, saved-run recovery, all 292 lessons, Solo and Hot Seat sessions",
+    "All 18 soundtrack library ZIPs and member hashes; all 495 versions covered once; public sizes, digests and ZIP responses match",
+    "Finished full package resources match prepared test resources; slim and full executable code matches",
+    "Universal arm64/x86_64 binaries; macOS 12.3 minimum; Developer ID signatures and same nested signing team",
+    "Both Apple submissions Accepted; logs match exact submitted ZIPs; tickets stapled; strict signatures, final ZIP integrity and quarantined Gatekeeper checks",
+    "Sparkle Ed25519 signature verifies; all 4 previous feed enclosures and signatures preserved; slim excluded from Sparkle",
+    "Public tag, latest release, both asset hashes and sizes, live ZIP URLs and raw signed feed verified"
+  ],
+  "pending": [],
+  "knownLimits": [
+    "Lemmings 2 and 3 remain Preview. NeoLemmix remains Beta. Native winning replays do not prove complete source-engine physics parity.",
+    "No foreground shipping-app launch, audible test, physical Intel/minimum-macOS test or installed Sparkle upgrade was run.",
+    "The regression audit compiled the frozen source against prepared resources. Finished package resources match those resources byte for byte. Focused artwork tests used unchanged primary-checkout artwork assets, verified against the finished package.",
+    "Five optional audit scopes were not run: replay-movies, mac-app-integration, local-performance-measurement, sequel-views, arcade-records. Separate release UI and playfield checks cover the current source.",
+    "The all-campaign closure gate remains open for sequels. This is a minor release with full Classic and retained L3 replay checks.",
+    "The release publishes full and slim universal macOS archives. Separate Monterey and Game Center archives are not published."
+  ],
+  "testResolutions": "test-resolutions.json"
+}

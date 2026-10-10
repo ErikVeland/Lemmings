@@ -4,10 +4,10 @@ import AppKit
 @MainActor final class TimelineKeyTransport {
   private enum Direction { case backward, forward }
 
-  private var monitor: Any?
+  nonisolated(unsafe) private var monitor: Any?
   private var held: Direction?
   private var continuous = false
-  private var startTimer: Timer?
+  nonisolated(unsafe) private var startTimer: Timer?
 
   private let canStartBackward: () -> Bool
   private let stepBackward: () -> Bool
@@ -76,7 +76,7 @@ import AppKit
     }
   }
 
-  isolated deinit {
+  deinit {
     startTimer?.invalidate()
     if let monitor { NSEvent.removeMonitor(monitor) }
   }

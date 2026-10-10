@@ -1,0 +1,2 @@
+PASS Ed25519 archive signature against the shipping app's public key
+PASS local signatures, archive digests and preserved update entries

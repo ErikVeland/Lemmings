@@ -1,11 +1,16 @@
 # Automatic updates
 
-Ultimate Lemmings 1.2 uses Sparkle 2.7.3 for macOS updates.
+Ultimate Lemmings uses Sparkle 2.7.3 for macOS updates.
 
 ## Runtime contract
 
 - The app checks the HTTPS appcast once per day.
-- Sparkle downloads and installs signed updates in the background.
+- Compatible updates add a download icon to the home screen. Selecting it opens
+  Sparkle's release notes and update controls.
+- Automatic updates are supported and enabled by default in 1.6. Sparkle respects
+  the player's saved update preferences. Automatic downloads bring the release
+  notes forward, and bundled notes appear after an upgrade.
+- Earlier builds retain their own update preferences until the upgrade finishes.
 - The app verifies the Ed25519 archive signature before extraction.
 - The app shows `Check for Updates…` in the application menu.
 - The feed URL and public key are in the app bundle `Info.plist`.
@@ -13,33 +18,87 @@ Ultimate Lemmings 1.2 uses Sparkle 2.7.3 for macOS updates.
 The private Ed25519 key stays in the release operator's login Keychain. Never
 commit the key or pass the key value as a command argument.
 
+## Current releases
+
+Public 1.8.5 build 74 is the current release. The
+[1.8.5 distribution record](ReleaseReadiness/1.8.5Build74Distribution.md) covers
+the notarised archives, signed live feed and validation limits. Publish an
+appcast only with its matching signed and notarised archive.
+
+Public releases require a slim fresh-install download. It includes the
+54 essential music versions and offers missing optional libraries on first
+launch. Libraries already downloaded to Application Support are retained.
+The full archive remains the Sparkle update because older apps also store
+optional music inside the app bundle. Moving those updates to slim packages
+requires a migration that preserves that music before Sparkle replaces the app.
+
+## Player experience
+
+Compatible updates ready for Sparkle to present add a pixel download icon to the shared
+home screen. Scheduled checks use a quiet reminder. Selecting the icon or
+**Check for Updates** opens Sparkle's release notes and update controls. Skipping
+a version, dismissing the alert or ending a failed session clears its reminder.
+A failed network check does not invent availability.
+
+The next source revision retains a single manual request while Sparkle is busy
+checking the feed or downloading automatically. Both entry points use that request;
+it runs when Sparkle's `canCheckForUpdates` becomes true. Further clicks can bring
+existing update controls forward. This fix is not included in the published 1.8.5
+archives. It follows Sparkle's [gentle reminder lifecycle](https://sparkle-project.org/documentation/gentle-reminders/).
+
+Run `TEST_SCOPE=updates zsh Scripts/run-app-integration-tests.sh` for the muted,
+offscreen regression checks. They exercise busy checks, repeated clicks, automatic
+notes, session cleanup and home icon input targets without downloading or installing
+an update. A public archive installation and relaunch remain separate release checks.
+
+Automatic downloads and installation remain supported. Bundled **What's New**
+notes appear once after each upgrade, even if installation did not show an alert.
+The build is acknowledged only when the player continues. Notes also remain in Help.
+On first launch, the play-style choice precedes the optional soundtrack chooser.
+For returning players, upgrade notes precede that chooser. Audio settings can reopen
+soundtrack downloads at any time.
+
 ## Release procedure
 
-1. Build and notarise the standard Developer ID app with
-   `Scripts/build-and-notarise.sh`.
-2. Keep the generated update ZIP in the persistent `UPDATES_DIR`.
-3. Set `PUBLISH_GITHUB_RELEASE=1` to upload the update ZIP, create or update
-   the tagged GitHub Release, and publish `appcast.xml` to `main`.
-4. Install the previous release and run the update check.
-5. Record the source revision, archive checksum, appcast checksum and result.
+1. Freeze the source and assets.
+2. Run `Scripts/build-and-notarise.sh` without publication.
+3. Check the printed ZIPs, stamped notes, signed appcast and release gates.
+4. Set `RELEASE_TAG`, `RELEASE_VERSION`, `RELEASE_COMMIT`, `RELEASE_NOTES_PATH`
+   and `DOWNLOAD_ZIP` from the package run. `DOWNLOAD_ZIP` is the notarised slim
+   archive. It is required, even when the full update archive is ready first.
+5. Run `Scripts/publish-github-release.sh --check` with the printed update ZIP path.
+6. For public tests, create a GitHub prerelease with the exact tag and frozen commit.
+7. Publish the verified ZIP and attachments. Update `main/appcast.xml` with the signed feed.
+
+8. Install public 1.2 build 41.
+9. Run the update and check its relaunch.
+10. Record the source revision, archive checksum, appcast checksum and result.
+
+`publish-github-release.sh` creates a normal release by default. For a public
+test, create the prerelease first, then set `RELEASE_APPROVED=1` and run the
+script to upload its ZIP and feed. The release owner must have authorised publication.
 
 The update ZIP must contain only the notarised app. The Game Center archive is
 not an update candidate.
 
-Publishing requires an authenticated GitHub CLI and a clean worktree. The
-default tag for version 1.2 is `v1.2.0`. Set `RELEASE_TAG` when another tag is
-required.
+Release packaging requires a clean worktree. Publication is a separate step
+and needs an authenticated GitHub CLI. The package script uses `v1.6.0` for
+the feed URL by default. The tag must match the approved release version.
+The publication script requires the tag and stamped notes. Its read-only
+`--check` mode checks that the notes, archive name and signed appcast describe
+the same build. Only the publication run needs `RELEASE_APPROVED=1`.
 
 ## Validation evidence
 
-[Build 40 verification](ReleaseReadiness/1.2Build40Distribution.md) records the public
-Sparkle download, installation and relaunch from build 39.
+[Build 41 verification](ReleaseReadiness/1.2Build41Distribution.md) records the last
+public 1.2 Sparkle download, installation and relaunch. The
+[1.5 record](ReleaseReadiness/1.5PublicRelease.md) tracks the new check.
 
 Run the data-independent checks before a release. The empty-feed option is
 only for development before the first public update exists.
 
 ```sh
-zsh Scripts/check-1.2-release-inputs.sh --allow-empty-appcast
+zsh Scripts/check-release-inputs.sh --allow-empty-appcast
 ```
 
 The release script runs the strict form after it generates the signed feed.

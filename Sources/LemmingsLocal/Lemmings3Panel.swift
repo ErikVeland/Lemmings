@@ -5,6 +5,7 @@ import NxlvKit
 @MainActor struct Lemmings3Panel {
     static let edges = [0, 35, 70, 105, 140, 175, 214, 249, 284, 320]
     static let names = ["Walker", "Blocker", "Jumper", "Use tool", "Drop tool", "Time remaining", "Fast forward", "Pause", "End run"]
+    static let directionAnimation = 91
     let normal: NSImage
     let pressed: NSImage
     let glyphs: [NSImage]
@@ -58,14 +59,35 @@ import NxlvKit
     }
     func text(_ value: String, x: CGFloat, y: CGFloat, scale: CGFloat = 1) {
         for (position, scalar) in value.uppercased().unicodeScalars.enumerated() {
+            let rect = CGRect(x: x + CGFloat(position) * 8 * scale, y: y, width: 8 * scale, height: 8 * scale)
+            if scalar == "💀" {
+                GamePixelText.draw("💀", in: rect, maxScale: scale, palette: .green)
+                continue
+            }
             let code = Int(scalar.value)
             let index = (48...57).contains(code) ? code - 48 : (65...90).contains(code) ? code - 65 + 10 : 36
-            glyphs[index].draw(in: CGRect(x: x + CGFloat(position) * 8 * scale, y: y, width: 8 * scale, height: 8 * scale),
-                from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+            glyphs[index].draw(in: rect,
+                from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
         }
     }
     static func slot(at x: CGFloat) -> Int? {
         guard x >= 0 && x < 320 else { return nil }
         return (0..<9).first { x < CGFloat(edges[$0 + 1]) }
+    }
+
+    /**
+     * Maps a tool direction to its frame in the original green arrow bank.
+     */
+    static func directionFrame(_ direction: Lemmings3Runtime.Direction) -> Int {
+        switch direction {
+        case .up: 0
+        case .upRight: 1
+        case .right: 2
+        case .downRight: 3
+        case .down: 4
+        case .downLeft: 5
+        case .left: 6
+        case .upLeft: 7
+        }
     }
 }

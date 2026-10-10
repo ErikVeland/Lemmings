@@ -1,0 +1,16 @@
+{
+  "sourceCommit": "ecafd64c09ca0f87e3ad45d842683ab9b2a4b11d",
+  "minorAuditPassed": 47,
+  "minorAuditSandboxFailure": "Metal is unavailable",
+  "hdrOffscreenRerun": "passed",
+  "nativeCollectionsAndFlows": "passed",
+  "releaseToolTests": 36,
+  "sourceDrift": 0,
+  "broadAuditGroupsNotRun": [
+    "replay-movies",
+    "mac-app-integration",
+    "local-performance-measurement",
+    "sequel-views",
+    "arcade-records"
+  ]
+}

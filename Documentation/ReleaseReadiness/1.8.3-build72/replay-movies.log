@@ -1,0 +1,15 @@
+Sources/LemmingsLocal/ReleaseWelcome.swift:47:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+45 |         scroll.hasHorizontalScroller = false
+46 |         scroll.drawsBackground = false
+47 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+48 |         scroll.scrollerStyle = .overlay
+49 |         scroll.setAccessibilityLabel("Release notes")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+UI test windows: offscreen; audio: muted
+PASS stalled encoding preserves input responsiveness, rejects partial movies and stops unused capture work
+PASS 51 exact video ticks, upright frames, non-silent module/SFX audio, half/double-speed exports; 0.56s
+PASS exact 17.5 Hz L2 and 23 Hz L3 movie clocks
+PASS encoded directional ghosts: all 41 frames, slopes, reversal, fall, climb, camera shifts and unequal live/replay render cadence
+PASS game-font replay controls, 0.25x through 8x speeds, pause and source-audio lifecycle

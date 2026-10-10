@@ -1,12 +1,12 @@
 {
   "expected" : {
-    "lost" : 10,
-    "reserves" : 9,
-    "saved" : 1,
-    "stateHash" : "99cca2d5d4cf434eab6181361265f9911b27c274dd4528700c62ccdea62ddb18",
-    "ticks" : 9660
+    "lost" : 0,
+    "reserves" : 10,
+    "saved" : 10,
+    "stateHash" : "c863ebcbd7ff009313d5b4516957f683c897db077b0b38527aa4675163dff083",
+    "ticks" : 1948
   },
-  "initialStateHash" : "dd5f1c9d32ec477af24a4c01b1a6574e76ad8e631909d7982cd3fcea70bf280b",
+  "initialStateHash" : "7436ee1ae3406129d612fa6356cd512f49ff7139b389f1060c764cec55adebea",
   "inputs" : [
     {
       "action" : "jumper",
@@ -14,14 +14,14 @@
       "tick" : 211
     },
     {
-      "action" : "walker",
-      "lemming" : 7,
-      "tick" : 222
-    },
-    {
       "action" : "jumper",
       "lemming" : 1,
       "tick" : 248
+    },
+    {
+      "action" : "blocker",
+      "lemming" : 2,
+      "tick" : 250
     },
     {
       "action" : "use",
@@ -30,25 +30,24 @@
       "tick" : 267
     },
     {
-      "action" : "jumper",
-      "lemming" : 0,
-      "tick" : 268
-    },
-    {
-      "action" : "use",
-      "direction" : "upLeft",
-      "lemming" : 0,
-      "tick" : 291
-    },
-    {
-      "action" : "jumper",
+      "action" : "walker",
       "lemming" : 1,
-      "tick" : 296
+      "tick" : 282
     },
     {
       "action" : "jumper",
-      "lemming" : 4,
-      "tick" : 309
+      "lemming" : 0,
+      "tick" : 338
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 0,
+      "tick" : 358
+    },
+    {
+      "action" : "walker",
+      "lemming" : 1,
+      "tick" : 470
     },
     {
       "action" : "jumper",
@@ -60,6 +59,104 @@
       "direction" : "down",
       "lemming" : 1,
       "tick" : 567
+    },
+    {
+      "action" : "drop",
+      "lemming" : 1,
+      "tick" : 635
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 1,
+      "tick" : 650
+    },
+    {
+      "action" : "use",
+      "direction" : "left",
+      "lemming" : 1,
+      "tick" : 672
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 1,
+      "tick" : 729
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 1,
+      "tick" : 746
+    },
+    {
+      "action" : "use",
+      "direction" : "down",
+      "lemming" : 0,
+      "tick" : 1066
+    },
+    {
+      "action" : "walker",
+      "lemming" : 0,
+      "tick" : 1120
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 0,
+      "tick" : 1442
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 0,
+      "tick" : 1470
+    },
+    {
+      "action" : "walker",
+      "lemming" : 2,
+      "tick" : 1500
+    },
+    {
+      "action" : "walker",
+      "lemming" : 2,
+      "tick" : 1501
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 4,
+      "tick" : 1640
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 5,
+      "tick" : 1642
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 7,
+      "tick" : 1642
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 3,
+      "tick" : 1645
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 6,
+      "tick" : 1645
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 8,
+      "tick" : 1645
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 9,
+      "tick" : 1645
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 2,
+      "tick" : 1846
     }
   ],
   "level" : 18,

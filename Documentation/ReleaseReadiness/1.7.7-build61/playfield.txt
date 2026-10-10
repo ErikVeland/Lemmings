@@ -1,0 +1,29 @@
+UI test windows: offscreen; audio: muted
+PASS tick-based direction: stable slopes, immediate turns, falls, climbs and repeated capture
+PASS fixed-screen 6×/12× skill icons, offset and clamping at every edge
+PASS Classic session checkpoints and resumed play exclude future assignments
+PASS backpacks visible through 660 PC/Mac animation frames
+PASS Classic backpack colours, both directions, available artwork, cache isolation and input targets
+PASS one-use fade, reduced motion and empty-skill red X
+PASS fresh-level countdown, hidden time, one-shot start and explicit cancellation
+PASS cursor policy keeps the system arrow over controls and menus
+PASS CRT death counter and accessible playfield status
+PASS death counter between rate and time in the status strip
+PASS compact lowercase/uppercase Zoom badges, active state and accessibility
+PASS Classic selection sprite, reduced motion and dialog suppression
+PASS Mac artwork level crop always lands on whole level pixels, at every zoom
+PASS every solid sprite stays above neighbouring additive ghosts
+PASS speed afterimages: sharp sprites, direct draw, direction, pause, rewind, clipping and bounded crowd cost
+PASS real PC/Mac explosion frames: opaque pop followed by an empty frame
+PASS approaching-lemming targeting prefers the one still walking toward the click
+PASS same-direction lemming pack keeps the plain nearest-pixel pick
+PASS Classic targeting favours a follower behind a builder
+PASS bomb blockers, eligible builders, eligibility and independent opt-outs
+PASS nuke gesture boundaries, queued undo and abrupt four-tick bomb pop
+PASS real panel double-click activation, double-click undo and exact restored history
+PASS Xmas panel labels at multiple sizes with speed control
+PASS camera survives resizing and clears menu edge scrolling
+PASS a menu survives the panel drawn over it
+PASS the home screen has a square, accessible gear button for Settings
+PASS the panel still draws its own area
+Playfield drawing tests passed.

@@ -1,0 +1,28 @@
+Command: PYTHONDONTWRITEBYTECODE=1 LEMMINGS_TEST_AUDIO=muted python3 -c
+import sys,unittest
+sys.path.insert(0,"Tools/Rankings")
+from test_server import RankingsTests
+names=unittest.defaultTestLoader.getTestCaseNames(RankingsTests)
+suite=unittest.TestSuite(RankingsTests(name) for name in names if name!="test_http_contract")
+print("Excluded network case: RankingsTests.test_http_contract",flush=True)
+result=unittest.TextTestRunner(verbosity=2).run(suite)
+raise SystemExit(not result.wasSuccessful())
+
+Excluded network case: RankingsTests.test_http_contract
+test_auth_identity_and_rename (test_server.RankingsTests.test_auth_identity_and_rename) ... ok
+test_catalogue_restart_reassesses_stars (test_server.RankingsTests.test_catalogue_restart_reassesses_stars) ... ok
+test_catalogue_target_and_cloner_ceiling (test_server.RankingsTests.test_catalogue_target_and_cloner_ceiling) ... ok
+test_immutable_id_and_catalogue_changes (test_server.RankingsTests.test_immutable_id_and_catalogue_changes) ... ok
+test_movie_quota_preserves_score (test_server.RankingsTests.test_movie_quota_preserves_score) ... ok
+test_pagination_has_no_empty_extra_page (test_server.RankingsTests.test_pagination_has_no_empty_extra_page) ... ok
+test_reject_invalid_counts_and_condition_extensions (test_server.RankingsTests.test_reject_invalid_counts_and_condition_extensions) ... ok
+test_replay_ownership_validation_and_delete (test_server.RankingsTests.test_replay_ownership_validation_and_delete) ... ok
+test_rescue_efficiency_and_career_dedup (test_server.RankingsTests.test_rescue_efficiency_and_career_dedup) ... ok
+test_speed_categories_and_assistance (test_server.RankingsTests.test_speed_categories_and_assistance) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.052s
+
+OK
+
+Exit code: 0

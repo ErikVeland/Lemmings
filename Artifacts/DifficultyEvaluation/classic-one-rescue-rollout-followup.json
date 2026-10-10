@@ -1,0 +1,154 @@
+{
+  "calibration": {
+    "completedSingleSkillContinuations": 1,
+    "identity": "fan:lldb-505/KillerMaster 1 Tame 1.dat#1",
+    "knownWin": "1/1 with a single Floater",
+    "waitingRouteTick": 59
+  },
+  "date": "2026-10-04",
+  "interpretation": "Seven strongest partial routes have 2\u201319 skill assignments, outside this calibrated one-skill rollout policy. The eighth produced no eligible one-skill continuation on its waiting route. This isolates search coverage; it does not show an engine defect or establish solvability.",
+  "limits": "The single-skill rollout does not test two or more assignments. An UNSOLVED result is bounded search evidence, not proof of impossible level or physics parity.",
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "results": [
+    {
+      "archiveSHA256": "12190548cbd30b6adde34254a2934f99037d427d6a1046e3413665f30cad640d",
+      "bestPartialAssignmentCount": 15,
+      "bestSaved": "0/1",
+      "completedSingleSkillContinuations": 21,
+      "expandedStates": 28018,
+      "identity": {
+        "levelID": "Mikepak10.dat#9",
+        "packID": "fan:lldb-15"
+      },
+      "initialStateHash": "bea5b762eb697356b033f20cb9d37b601eea7f389439b0260a87f5f4a46b51b6",
+      "partialReplaySHA256": "81ef4e2359cb9f699e45703e7347ca3944a2ccc6233f8507d0de95169fe3195f",
+      "policy": "--rollout-single --fallback 12 --seconds 30 --partial-out",
+      "result": "UNSOLVED; no winning replay or score",
+      "title": "Let's play with stairs !",
+      "waitingRouteTick": 282
+    },
+    {
+      "archiveSHA256": "7f95c3c5a2ab5f8705e8af8c8e8284781785d58c85008a28e0bc5eed73d319ab",
+      "bestPartialAssignmentCount": 0,
+      "bestSaved": "0/1",
+      "completedSingleSkillContinuations": 0,
+      "expandedStates": 8,
+      "identity": {
+        "levelID": "oldbutgo.dat#9",
+        "packID": "fan:lldb-358"
+      },
+      "initialStateHash": "c49d2c7c783a75bea3ad041850b69cb5d5ee5fa7385594e4dfa010e180fef478",
+      "partialReplaySHA256": "81cfafdd1c6655ed6b532e43faa69fd42c2f3bb3296b9aacd9fb2e926596aea0",
+      "policy": "--rollout-single --fallback 12 --seconds 30 --partial-out",
+      "result": "UNSOLVED; no winning replay or score",
+      "title": "Solo 2: Is that... The pyrimid?",
+      "waitingRouteTick": 94
+    },
+    {
+      "archiveSHA256": "e2f7796fe41470257faf24d6519a0149be727942d334c681c29878ad2ae3562e",
+      "bestPartialAssignmentCount": 3,
+      "bestSaved": "0/1",
+      "completedSingleSkillContinuations": 6,
+      "expandedStates": 9934,
+      "identity": {
+        "levelID": "Mikepak09.dat#6",
+        "packID": "fan:lldb-14"
+      },
+      "initialStateHash": "5d9348acefaae4789eeee87fcda2e9de3be15c5d327f1a843b7328a4f896f938",
+      "partialReplaySHA256": "ac60e6739127e10a4351f2f77d2109dae66b7fda60ef2e349c73f5c213f014f0",
+      "policy": "--rollout-single --fallback 12 --seconds 30 --partial-out",
+      "result": "UNSOLVED; no winning replay or score",
+      "title": "On the green diamonds",
+      "waitingRouteTick": 110
+    },
+    {
+      "archiveSHA256": "e50e89126006ed093f2303d476497a7cf6ede4c391a9471a10c271860bf19851",
+      "bestPartialAssignmentCount": 13,
+      "bestSaved": "0/1",
+      "completedSingleSkillContinuations": 14,
+      "expandedStates": 27277,
+      "identity": {
+        "levelID": "weirdy03 (version 2).dat#6",
+        "packID": "fan:lldb-135"
+      },
+      "initialStateHash": "eb4630a593e52b9f94151d4f3a24fb292d22e61e4941e40af42d3c5773fc4e7b",
+      "partialReplaySHA256": "47d4bbbf51e6819ebb7a636e61ac06fb114b623ebcc4c656daeef23317196ced",
+      "policy": "--rollout-single --fallback 12 --seconds 30 --partial-out",
+      "result": "UNSOLVED; no winning replay or score",
+      "title": "Thou Shalt Not",
+      "waitingRouteTick": 111
+    },
+    {
+      "archiveSHA256": "06cce8c9cb1e34d7db43521d077d58e51377dc58d67345c7d764a9203fecdf41",
+      "bestPartialAssignmentCount": 2,
+      "bestSaved": "0/1",
+      "completedSingleSkillContinuations": 10,
+      "expandedStates": 35384,
+      "identity": {
+        "levelID": "weirdy05 (version 2).dat#6",
+        "packID": "fan:lldb-137"
+      },
+      "initialStateHash": "422477a326906b7e4f8967039c7c1e3b6df6e2ce06066c79e72e5ae3ed82d422",
+      "partialReplaySHA256": "b7fedf5815a8fc140643d1178006a163554c64bc11831409dffeff4742a880ee",
+      "policy": "--rollout-single --fallback 12 --seconds 30 --partial-out",
+      "result": "UNSOLVED; no winning replay or score",
+      "title": "Bless the Lem",
+      "waitingRouteTick": 127
+    },
+    {
+      "archiveSHA256": "b1a21281cacb7902eafeb83aa0a411c819e4dd2dfac568279e1ab69362ec08c7",
+      "bestPartialAssignmentCount": 19,
+      "bestSaved": "0/1",
+      "completedSingleSkillContinuations": 6,
+      "expandedStates": 46720,
+      "identity": {
+        "levelID": "finpak01.DAT#3",
+        "packID": "fan:lldb-195"
+      },
+      "initialStateHash": "0ae5db1eafb2c99bdea064ed7b4e4cb7c28dc14ad484385fa9b6b00e4f679bc9",
+      "partialReplaySHA256": "71531419374e98f98ccbe86660e4824a236cddd17835363cee751e0b6765ca5d",
+      "policy": "--rollout-single --fallback 12 --seconds 30 --partial-out",
+      "result": "UNSOLVED; no winning replay or score",
+      "title": "The Lazy Lemming",
+      "waitingRouteTick": 98
+    },
+    {
+      "archiveSHA256": "2c6852a64160919f0afcbbcdf244877bd3bfd0fd134d745931faca723e2977a2",
+      "bestPartialAssignmentCount": 10,
+      "bestSaved": "0/1",
+      "completedSingleSkillContinuations": 24,
+      "expandedStates": 12588,
+      "identity": {
+        "levelID": "GARJEN02.dat#3",
+        "packID": "fan:lldb-282"
+      },
+      "initialStateHash": "bb9be54ef302d7732ce4eebaf5474f76333805646266117d678e01c82b0754bb",
+      "partialReplaySHA256": "66d9e4cc1da37fd3368691da53bcc7b2a0996ade42e29eec122a700add4480c1",
+      "policy": "--rollout-single --fallback 12 --seconds 30 --partial-out",
+      "result": "UNSOLVED; no winning replay or score",
+      "title": "Crazy Paving",
+      "waitingRouteTick": 167
+    },
+    {
+      "archiveSHA256": "f104f08fbfa72116358d7c29ca3fe8d98f6f51d377ed24a3450c7ffcaee233ad",
+      "bestPartialAssignmentCount": 11,
+      "bestSaved": "0/1",
+      "completedSingleSkillContinuations": 6,
+      "expandedStates": 4388,
+      "identity": {
+        "levelID": "MARSHY08.DAT#7",
+        "packID": "fan:lldb-352"
+      },
+      "initialStateHash": "e45e83997f07e300567cda591e17d2749665ab62f1d2bb1b195ccfd87f248db5",
+      "partialReplaySHA256": "7da0b493e4ae9f9ad6cb14690a0a0d7ccf5536e809b748546fcf91138369dc03",
+      "policy": "--rollout-single --fallback 12 --seconds 30 --partial-out",
+      "result": "UNSOLVED; no winning replay or score",
+      "title": "Across the river",
+      "waitingRouteTick": 160
+    }
+  ],
+  "scope": "Eight unscored one-rescue Classic fan levels with one to three workers and at most two stocked skill types. Each candidate used the exact bundled archive and the current selected fan rules.",
+  "scoresAssigned": 0,
+  "solverSHA256": "c9311474ec27c0a730b4b6bdf95959a838f2bea1dc4222d2caee9f321d6d7714",
+  "strictWins": 0
+}

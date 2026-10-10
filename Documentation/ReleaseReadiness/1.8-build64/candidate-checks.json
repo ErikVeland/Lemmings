@@ -1,0 +1,22 @@
+{
+  "sourceCommit": "0a4075fc0d293ef81b2cf1026c6f2b709ff6c4e7",
+  "mandatoryChecksPassed": 48,
+  "originalAuditFailures": [
+    "arcade-records",
+    "local-performance-measurement",
+    "mac-app-integration",
+    "replay-movies"
+  ],
+  "resolved": {
+    "replay-movies": "Corrected dependency runner passes.",
+    "mac-app-integration CRT input": "Updated test target coordinates pass; remaining suite blocked by desktop activation."
+  },
+  "unverified": [
+    "Complete broad app integration suite",
+    "Performance benchmark"
+  ],
+  "releaseUI": "passed against final candidate resources",
+  "testAudio": "muted",
+  "testWindows": "offscreen",
+  "releaseDecision": "Proceed with the minor-release gate and focused regression checks; retain extended-suite limitations."
+}

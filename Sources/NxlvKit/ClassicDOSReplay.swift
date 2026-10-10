@@ -48,6 +48,10 @@ public struct ClassicDOSReplayOutcome: Codable, Equatable, Sendable {
     }
 }
 
+public enum ClassicDOSReplaySourceRules: String, Codable, Sendable {
+    case golemsFallingBuilder
+}
+
 public struct ClassicDOSReplay: Codable, Equatable, Sendable {
     /// Campaign rank, such as `Fun` or `Mayhem`.
     public let rank: String
@@ -57,6 +61,8 @@ public struct ClassicDOSReplay: Codable, Equatable, Sendable {
     /// State hash of the simulation before the first tick.
     public let initialStateHash: String
     public let events: [ClassicDOSReplayEvent]
+    /// Present only when imported source input uses a different assignment path.
+    public let sourceRules: ClassicDOSReplaySourceRules?
     /// The result a correct engine must reproduce.
     public let expected: ClassicDOSReplayOutcome?
 
@@ -66,6 +72,7 @@ public struct ClassicDOSReplay: Codable, Equatable, Sendable {
         title: String,
         initialStateHash: String,
         events: [ClassicDOSReplayEvent],
+        sourceRules: ClassicDOSReplaySourceRules? = nil,
         expected: ClassicDOSReplayOutcome? = nil
     ) {
         self.rank = rank
@@ -73,6 +80,7 @@ public struct ClassicDOSReplay: Codable, Equatable, Sendable {
         self.title = title
         self.initialStateHash = initialStateHash
         self.events = events
+        self.sourceRules = sourceRules
         self.expected = expected
     }
 }
@@ -181,15 +189,31 @@ public enum ClassicDOSReplayPlayer {
     ///
     /// Skill assignments go through `schedule`, so the engine applies them in
     /// its own DOS order. Release-rate and nuke changes apply before the tick
-    /// they are recorded against.
+    /// they are recorded against. Speculative searches can stop once too many
+    /// lemmings have been lost; verified replays always run to completion.
     @discardableResult
     public static func run(
         _ replay: ClassicDOSReplay,
         simulation: ClassicDOSSimulation,
         tickLimit: Int = defaultTickLimit,
-        verify: Bool = true
+        verify: Bool = true,
+        stopWhenUnwinnable: Bool = false,
+        observe: ((ClassicDOSSimulation) throws -> Void)? = nil
     ) throws -> ClassicDOSReplayOutcome {
         var simulation = simulation
+
+        if replay.sourceRules == .golemsFallingBuilder && simulation.configuration.mechanics != .golems {
+            throw ClassicDOSReplayError.outcomeMismatch(
+                field: "sourceRules", expected: "golems mechanics", actual: simulation.configuration.mechanics.rawValue)
+        }
+        if replay.sourceRules == .golemsFallingBuilder,
+           replay.events.contains(where: { event in
+               if case .assign = event.action { return event.afterTick != true }
+               return false
+           }) {
+            throw ClassicDOSReplayError.outcomeMismatch(
+                field: "sourceRules", expected: "after-tick assignments", actual: "scheduled assignment")
+        }
 
         if verify {
             let actual = ClassicDOSReplayRecorder.stateHash(of: simulation)
@@ -223,12 +247,16 @@ public enum ClassicDOSReplayPlayer {
             for action in afterTick[tick] ?? [] {
                 switch action {
                 case let .assign(lemmingID, skill):
-                    guard simulation.assign(skill, to: lemmingID) == .assigned else {
+                    let result = replay.sourceRules == .golemsFallingBuilder
+                        ? simulation.assignGolemsReplay(skill, to: lemmingID)
+                        : simulation.assign(skill, to: lemmingID)
+                    guard result == .assigned else {
                         throw ClassicDOSReplayError.commandRejected(tick: tick, lemmingID: lemmingID, skill: skill)
                     }
                 case let .releaseRate(value): simulation.setReleaseRate(value)
                 case .nuke: simulation.beginNuke()
                 }
+                try observe?(simulation)
             }
         }
         try applyLiveCommands(at: simulation.tickCount, to: &simulation)
@@ -244,8 +272,13 @@ public enum ClassicDOSReplayPlayer {
                 }
             }
             _ = simulation.tick()
+            try observe?(simulation)
             try applyLiveCommands(at: simulation.tickCount, to: &simulation)
             ticks += 1
+            if !verify && stopWhenUnwinnable &&
+                simulation.lostCount > simulation.configuration.totalLemmings - simulation.configuration.requiredToSave {
+                break
+            }
         }
 
         let outcome = ClassicDOSReplayOutcome(

@@ -3,12 +3,14 @@ import Foundation
 /// The engine that owns a level's rules and saved state.
 public enum LevelSourceEngine: String, Codable, CaseIterable, Sendable {
     case classic
+    case neolemmix
     case lemmings2
     case lemmings3
 
     public var displayName: String {
         switch self {
         case .classic: "Classic"
+        case .neolemmix: "NeoLemmix"
         case .lemmings2: "Lemmings 2"
         case .lemmings3: "Lemmings 3"
         }

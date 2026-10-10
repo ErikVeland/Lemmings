@@ -1,0 +1,69 @@
+{
+  "description": "Current-source ClassicSolver clock correction and targeted one-skill timeline checks. No new win or score.",
+  "solverSHA256": "c443bdb155d216c906c090f47eea9e17619e7636258a38106c2d57dc737c50ff",
+  "nativeLibrarySHA256": "346051fba5ab8199c39d536d48a12bbf30e0da49f78f1d4b20291ad6f60c2dbe",
+  "clockCorrection": "Bundled fan levels now use the app Golems clock by default. --dos-clock selects DOS for a diagnostic comparison. The old default produced a different initial-state hash.",
+  "towering": {
+    "identity": "fan:lldb-325/t3tesla.dat#8",
+    "archiveSHA256": "7003ec2cb3cc038e9bb1764bc7855def66e10f8aecabfde334b1a6459c6afe64",
+    "auditedInitialStateHash": "5ba813e550e67835e075a222efae1e30c8b85ad1d59a212a0f4c862f9e43afa5",
+    "oldDOSClockInitialStateHash": "868234e672f09aaa1e66de539b2f9d0031833a8b9713d3f158a32c0e004dd329",
+    "runs": [
+      {
+        "rate": "level default",
+        "result": "UNSOLVED fan:lldb-325 9 best saved 4/9 expanded 630 in 2s waiting tick 1022 single-skill assignments 630 completed 630 deadline false",
+        "outputPath": ".build/heartbeat-20261003-1204/towering-golems-default.log"
+      },
+      {
+        "rate": 99,
+        "result": "UNSOLVED fan:lldb-325 9 best saved 8/9 expanded 1412 in 19s waiting tick 250 single-skill assignments 1412 completed 1412 deadline false",
+        "outputPath": ".build/heartbeat-20261003-1204/towering-golems-rate99.log"
+      }
+    ],
+    "interpretation": "The default, rate-50, rate-60, rate-75, rate-90 and rate-99 fixed-rate one-skill sweeps completed their viable waiting routes without a win. Each of the four additional rates saved at most 8/9. Other rates and multi-skill routes remain open.",
+    "explicitDOSClockRecheck": {
+      "initialStateHash": "868234e672f09aaa1e66de539b2f9d0031833a8b9713d3f158a32c0e004dd329",
+      "result": "bounded two-second check, 97 completed continuations through waiting tick 87; no win",
+      "outputPath": ".build/heartbeat-20261003-1204/towering-explicit-dos.log"
+    },
+    "additionalRateSweeps": [
+      {
+        "rate": 50,
+        "result": "UNSOLVED fan:lldb-325 9 best saved 8/9 expanded 1200 in 12s waiting tick 1022 single-skill assignments 1200 completed 1200 deadline false",
+        "logSHA256": "03e54b123eba78380669defb649b2725e2146ea35acad404796d5bd9cc31f8e2",
+        "partialReplaySHA256": "42441a6799c8eb9100a26dd2a5de7122b1b1ff1cbfc845fcc7370c7cc1197a08",
+        "partialAssignments": 0
+      },
+      {
+        "rate": 60,
+        "result": "UNSOLVED fan:lldb-325 9 best saved 8/9 expanded 1220 in 13s waiting tick 873 single-skill assignments 1220 completed 1220 deadline false",
+        "logSHA256": "6223cf6716aa1af22a4ad8a1a276e1211e684d05b6b4dc7491a38d0d6a1eafa0",
+        "partialReplaySHA256": "9c651b31607a5e41adce324b73426b4d76580b5d0d3fb87ef2449da3b0d14bfe",
+        "partialAssignments": 0
+      },
+      {
+        "rate": 75,
+        "result": "UNSOLVED fan:lldb-325 9 best saved 8/9 expanded 1220 in 13s waiting tick 635 single-skill assignments 1220 completed 1220 deadline false",
+        "logSHA256": "ea65aa5899aa04a95c7cacafb6e728eab5f85301bdf4da0c971c73fe56e126bd",
+        "partialReplaySHA256": "405db5a608d614ceab7fc3eedad34c3a74b6b856ca86e74e92a49190f44222a2",
+        "partialAssignments": 0
+      },
+      {
+        "rate": 90,
+        "result": "UNSOLVED fan:lldb-325 9 best saved 8/9 expanded 1218 in 13s waiting tick 363 single-skill assignments 1218 completed 1218 deadline false",
+        "logSHA256": "d7ec17c3f2ed7419d3613f4cca400e7c597314a755b376f6c9806533878aed9d",
+        "partialReplaySHA256": "f18c76f57ac69756c8ce5b88589e06bd874495fb5ba13ab63507603770f15a95",
+        "partialAssignments": 1
+      }
+    ]
+  },
+  "calibration": {
+    "identity": "fan:lldb-505/KillerMaster 1 Tame 1.dat#1",
+    "archiveSHA256": "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9",
+    "solverResult": "SOLVED fan:lldb-505 2 saved 1/1 inputs 1 expanded 1 in 0s",
+    "strictNativeResult": "1/1 at tick 375 on the exact bundled level",
+    "initialStateHash": "30815afa0ba1713d2bb5819043801f6bdf7d949d3d213597c7c0452c8650de0f",
+    "replaySHA256": "968d366c6c60b1f15c6485ea6549a8546887b6222006eae204b4d8ef99a6add3",
+    "previouslyScored": true
+  }
+}

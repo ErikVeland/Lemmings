@@ -1,0 +1,120 @@
+{
+  "components" : {
+    "concurrencyBurden" : 180,
+    "constraintPressure" : 263.7446291135574,
+    "deductionComplexityProxy" : 450,
+    "executionPrecision" : 0,
+    "solutionComplexity" : 815.6882590646912,
+    "techniqueBurden" : 670
+  },
+  "confidence" : "medium",
+  "criticalActions" : [
+
+  ],
+  "detectedTechniques" : [
+    "basher",
+    "builder",
+    "climber",
+    "digger",
+    "multiple-worker-coordination",
+    "release-rate-manipulation"
+  ],
+  "explanation" : [
+    "4 used skill types; 3 assigned workers; 8 same-worker skill changes.",
+    "Maximum concurrent worker regions: 2.",
+    "Timing probes: 10. Untested alternatives remain unknown.",
+    "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+    "Source rank: fan:lldb-552."
+  ],
+  "key" : {
+    "analyserVersion" : "difficulty-3",
+    "assetsRevision" : "d29325609f5592ac3fcdeb0396df5fe8ce2c30efcda162d2ccf084e251030a55:probes-10",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Lemmings Plus DOS Project - 05 - Wimpy (Part 2).dat#6",
+      "packID" : "fan:lldb-552"
+    },
+    "levelRevision" : "8187c19df391ea59e594bf9e4779b7ec81fb0034bc4a899ae09aee7396b3c042",
+    "replayRevision" : "SHA256 digest: c22f7ffb24527d68810e1abf7acc0a54e917c807373383c2215d443a04b6f0e3",
+    "simulationVersion" : "neolemmix-ce-2026-09-27"
+  },
+  "overallScore" : 436.13821877899454,
+  "precision" : {
+    "actions" : [
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 1
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 2
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 3
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 4
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 103
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 104
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 105
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 106
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 107
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 108
+      }
+    ],
+    "alternativeRunCount" : 0,
+    "assignmentCount" : 13,
+    "completed" : false,
+    "orderingOutcomes" : [
+
+    ],
+    "runCount" : 10,
+    "selectionOutcomes" : [
+
+    ]
+  },
+  "prerequisiteConcepts" : [
+
+  ],
+  "sourceRank" : "fan:lldb-552"
+}

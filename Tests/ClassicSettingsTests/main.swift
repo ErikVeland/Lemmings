@@ -20,6 +20,70 @@ private func testOptionsFollowInstalledData() throws {
     try require(upgraded.bottomFallSounds && ClassicSettings().bottomFallSounds, "Bottom falls must default on for new and existing players")
     try require(!upgraded.unlockAllClassicLevels && !ClassicSettings().unlockAllClassicLevels,
         "Classic levels must follow campaign progress by default")
+    try require(upgraded.skillCursorIconSize == .one && upgraded.skillCursorIconSize.multiplier == 2,
+        "Existing players must default to real 2× artwork labelled 1×")
+    try require(upgraded.gameplayCursorStyle == .modern && ClassicSettings().gameplayCursorStyle == .modern,
+        "Modern cursor must be the default")
+    for style in GameplayCursorStyle.allCases {
+        var saved = ClassicSettings()
+        saved.gameplayCursorStyle = style
+        saved.experiencePreset = .custom
+        let restored = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(saved))
+        try require(restored == saved, "Custom cursor choice must persist")
+    }
+    for (json, expected) in [
+        (#"{"experiencePreset":"original"}"#, GameplayCursorStyle.original),
+        (#"{"modernControlsEnabled":false}"#, .original),
+        (#"{"experiencePreset":"modern","modernControlsEnabled":false}"#, .modern),
+        (#"{"experiencePreset":"original","gameplayCursorStyle":"modern"}"#, .modern),
+        (#"{"experiencePreset":"modern","gameplayCursorStyle":"original"}"#, .original),
+        (#"{"experiencePreset":"original","gameplayCursorStyle":"unknown"}"#, .original)
+    ] {
+        let restored = try JSONDecoder().decode(ClassicSettings.self, from: Data(json.utf8))
+        try require(restored.gameplayCursorStyle == expected, "Cursor migration lost the saved choice or preset default")
+    }
+    try require(upgraded.lemmingSelectionStyle == .modern, "Selection must default to Modern")
+    try require(upgraded.showClassicSkillBackpacks && ClassicSettings().showClassicSkillBackpacks,
+        "Modern must show skill backpacks by default")
+    for value in [false, true] {
+        var saved = ClassicSettings()
+        saved.showClassicSkillBackpacks = value
+        saved.experiencePreset = .custom
+        let restored = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(saved))
+        try require(restored == saved, "An individual backpack choice must persist")
+    }
+    for (json, expected) in [
+        (#"{"experiencePreset":"original"}"#, false),
+        (#"{"modernControlsEnabled":false}"#, false),
+        (#"{"experiencePreset":"modern","modernControlsEnabled":false}"#, true),
+        (#"{"experiencePreset":"original","showClassicSkillBackpacks":true}"#, true),
+        (#"{"experiencePreset":"modern","showClassicSkillBackpacks":false}"#, false),
+        (#"{"experiencePreset":"original","showClassicSkillBackpacks":"invalid"}"#, false)
+    ] {
+        let restored = try JSONDecoder().decode(ClassicSettings.self, from: Data(json.utf8))
+        try require(restored.showClassicSkillBackpacks == expected, "Backpack migration changed an existing preference")
+    }
+    for style in LemmingSelectionStyle.allCases {
+        var settings = upgraded
+        settings.lemmingSelectionStyle = style
+        let restored = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(settings))
+        try require(restored.lemmingSelectionStyle == style, "Selection style must persist")
+    }
+    let unknownSelection = try JSONDecoder().decode(ClassicSettings.self,
+        from: Data("{\"lemmingSelectionStyle\":\"unknown\",\"musicVolume\":0.25}".utf8))
+    try require(unknownSelection.lemmingSelectionStyle == .modern && unknownSelection.musicVolume == 0.25,
+        "An unknown selection style must preserve other settings")
+    for size in SkillCursorIconSize.allCases {
+        var settings = upgraded
+        settings.skillCursorIconSize = size
+        let restored = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(settings))
+        try require(restored.skillCursorIconSize == size, "Skill icon size must persist")
+    }
+    try require(!upgraded.showReticleCount && !ClassicSettings().showReticleCount, "Reticule count must default off")
+    var countSettings = upgraded
+    countSettings.showReticleCount = true
+    let restoredCount = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(countSettings))
+    try require(restoredCount.showReticleCount, "Reticule count must persist")
     var quiet = upgraded
     quiet.bottomFallSounds = false
     let restoredQuiet = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(quiet))
@@ -46,12 +110,62 @@ private func testOptionsFollowInstalledData() throws {
         try require(full.correcting(restored).graphics == choice, "A saved artwork choice was replaced")
     }
     try require(full.music.contains(.amigaModules), "modules should be offered")
-    // Macintosh MIDI is deliberately absent. The release carries the data but
-    // nothing plays it yet, and the rule below is that an unplayable source is
-    // never offered.
-    try require(!full.music.contains(.macintoshMIDI), "Macintosh music has no player yet")
+    try require(!full.music.contains(.macintoshMIDI), "Macintosh music was offered without its prepared bank")
+    let macMusic = ClassicSettingsOptions.available(hasDOSData: true, hasAmigaDisk: true,
+        hasMacintoshDisk: true, moduleCount: 22, hasMacintoshMusic: true)
+    try require(macMusic.music.contains(.macintoshMIDI), "Prepared Macintosh music was not offered")
+    var native = ClassicSettings()
+    native.music = .macintoshMIDI
+    native.counterStyle = .macintosh
+    try require(macMusic.correcting(native) == native, "Available Macintosh choices were replaced")
+    let restored = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(native))
+    try require(restored == native, "Macintosh choices did not persist")
+    let migrated = try JSONDecoder().decode(ClassicSettings.self,
+        from: Data(#"{"counterStyle":"future","music":"amigaModules","soundVolume":0.3}"#.utf8))
+    try require(migrated.counterStyle == .game && migrated.soundVolume == 0.3,
+        "Unknown counter style discarded unrelated preferences")
+    native.applyExperiencePreset(modern: false)
+    try require(native.counterStyle == .macintosh, "Gameplay preset replaced the counter choice")
     try require(full.sound.contains(.macintoshResources), "Macintosh sound should be offered")
     print("PASS the options offered follow the data installed")
+}
+
+private func testTargetingPresetsAndIconMigration() throws {
+    var settings = ClassicSettings()
+    try require(settings.experiencePreset == .modern && settings.favorApproachingLemmings
+        && settings.favorBombBlockers && settings.favorBuilders, "Modern targeting must default on")
+    try require(SkillCursorIconSize.one.title == "1×" && SkillCursorIconSize.one.multiplier == 2
+        && SkillCursorIconSize.two.title == "2×" && SkillCursorIconSize.two.multiplier == 4,
+        "Visible sizes must map to actual 2× and 4×")
+    for old in ["one", "two"] {
+        let restored = try JSONDecoder().decode(ClassicSettings.self,
+            from: Data("{\"skillCursorIconSize\":\"\(old)\"}".utf8))
+        try require(restored.skillCursorIconSize == .one, "Old icon sizes must migrate to the readable baseline")
+    }
+    let originalSave = try JSONDecoder().decode(ClassicSettings.self,
+        from: Data("{\"modernControlsEnabled\":false,\"skillCursorIconSize\":\"none\"}".utf8))
+    try require(!originalSave.favorBombBlockers && !originalSave.favorBuilders
+        && originalSave.skillCursorIconSize == .none && originalSave.lemmingSelectionStyle == .none,
+        "Migration must respect Original choices")
+    settings.applyExperiencePreset(modern: false)
+    try require(settings.experiencePreset == .original && !settings.favorApproachingLemmings
+        && !settings.favorBombBlockers && !settings.favorBuilders && settings.skillCursorIconSize == .none
+        && settings.lemmingSelectionStyle == .none && !settings.showClassicSkillBackpacks
+        && settings.gameplayCursorStyle == .original,
+        "Original must disable targeting aids and the icon")
+    settings.applyExperiencePreset(modern: true)
+    try require(settings.experiencePreset == .modern && settings.favorApproachingLemmings
+        && settings.favorBombBlockers && settings.favorBuilders && settings.skillCursorIconSize == .one
+        && settings.lemmingSelectionStyle == .modern && settings.showClassicSkillBackpacks
+        && settings.gameplayCursorStyle == .modern,
+        "Modern must restore all targeting aids and the baseline icon")
+    settings.experiencePreset = .custom
+    settings.favorBombBlockers = false
+    settings.favorBuilders = false
+    settings.skillCursorIconSize = .two
+    let restored = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(settings))
+    try require(restored == settings, "Custom preset, opt-outs and actual 4× must persist")
+    print("PASS targeting presets, saved Custom state and readable icon migration")
 }
 
 private func testUndecodedSourcesAreNotOffered() throws {
@@ -289,6 +403,7 @@ private func testReducedEffects() throws {
 }
 
 do {
+    try testTargetingPresetsAndIconMigration()
     for size in ClassicInterfaceSize.allCases {
         var settings = ClassicSettings()
         settings.interfaceSize = size

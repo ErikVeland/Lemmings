@@ -10,6 +10,36 @@ struct SessionLemming {
   let facingLeft: Bool
   let animationFrame: Int
   let countdown: Int?
+  let hasClimber: Bool
+  let hasFloater: Bool
+  let neoAction: NeoLemmixAction?
+  let neoTraits: Set<NeoLemmixTrait>
+
+  init(
+    id: Int,
+    x: Int,
+    y: Int,
+    pose: ClassicLemmingPose,
+    facingLeft: Bool,
+    animationFrame: Int,
+    countdown: Int?,
+    hasClimber: Bool = false,
+    hasFloater: Bool = false,
+    neoAction: NeoLemmixAction? = nil,
+    neoTraits: Set<NeoLemmixTrait> = []
+  ) {
+    self.id = id
+    self.x = x
+    self.y = y
+    self.pose = pose
+    self.facingLeft = facingLeft
+    self.animationFrame = animationFrame
+    self.countdown = countdown
+    self.hasClimber = hasClimber
+    self.hasFloater = hasFloater
+    self.neoAction = neoAction
+    self.neoTraits = neoTraits
+  }
 }
 
 struct SessionSkill {
@@ -31,6 +61,7 @@ protocol GameSession: AnyObject {
   var ticksPerSecond: Int { get }
 
   var lemmings: [SessionLemming] { get }
+  func lemmingsForRendering(selectedID: Int?, highlightedID: Int?) -> [SessionLemming]
   var entranceX: Int? { get }
   var exitX: Int? { get }
   var entranceY: Int? { get }
@@ -59,10 +90,13 @@ protocol GameSession: AnyObject {
   func tick()
   /// Sounds the last tick asked for. Empty when nothing happened.
   var lastCues: [ClassicSoundEffect] { get }
+  var lastPositionedCues: [PositionedSoundCue] { get }
   /// Returns nil when the assignment lands, or a reason when it does not.
   func assign(skillIndex: Int, to lemmingID: Int) -> String?
   func assignmentState(skillIndex: Int, to lemmingID: Int) -> AssignmentState
   func adjustRate(by delta: Int)
+  /// Moves the release rate to its maximum or minimum in one step.
+  func setRateLimit(maximum: Bool)
   func nuke()
   var canUndoNuke: Bool { get }
   func undoNuke()
@@ -73,9 +107,16 @@ protocol GameSession: AnyObject {
   @discardableResult func rewind(seconds: Double) -> Bool
   @discardableResult func stepBackward() -> Bool
   @discardableResult func stepForward() -> Bool
+  /// Commits the current point before live play, without changing forward scrubbing.
+  func resumeFromRewind()
 }
 
 extension GameSession {
+  var lastPositionedCues: [PositionedSoundCue] { lastCues.map { PositionedSoundCue($0) } }
+  func lemmingsForRendering(selectedID: Int?, highlightedID: Int?) -> [SessionLemming] {
+    lemmings
+  }
+
   var canStillReachRequirement: Bool {
     !FailureMoodDecision.isUnrecoverable(saved: saved, active: lemmings.count,
       unreleased: total - released, required: required)
@@ -87,7 +128,8 @@ extension GameSession {
     guard let lemming = lemmings.first(where: { $0.id == lemmingID }) else { return false }
     if skill == "bomber" { return lemming.countdown != nil }
     let poses: [String: ClassicLemmingPose] = ["blocker": .blocking, "builder": .building,
-      "basher": .bashing, "miner": .mining, "digger": .digging]
+      "basher": .bashing, "fencer": .bashing, "laserer": .bashing,
+      "miner": .mining, "digger": .digging]
     return poses[skill] == lemming.pose
   }
   var exitX: Int? { nil }
@@ -98,6 +140,7 @@ extension GameSession {
   var nukeCount: Int { 0 }
   var rewindCount: Int { 0 }
   var undoCount: Int { 0 }
+  func resumeFromRewind() {}
 }
 
 // MARK: - Classic DOS
@@ -133,7 +176,7 @@ final class ClassicSession: GameSession {
   }
 
   var recoveryEvents: [ClassicDOSReplayEvent] {
-    history.commands.map { ClassicDOSReplayEvent(tick: $0.tick, action: $0.action, afterTick: true) }
+    history.appliedCommands.map { ClassicDOSReplayEvent(tick: $0.tick, action: $0.action, afterTick: true) }
   }
 
   /// Continue a saved run. A build must never strand a saved run, so this
@@ -219,6 +262,8 @@ final class ClassicSession: GameSession {
     return true
   }
 
+  func resumeFromRewind() { history.resumeFromCurrentTick() }
+
   var ticksPerSecond: Int { ClassicDOSRules.ticksPerSecond }
 
   var lemmings: [SessionLemming] {
@@ -228,7 +273,8 @@ final class ClassicSession: GameSession {
         pose: spritePose(for: $0.action),
         facingLeft: $0.direction == .left,
         animationFrame: $0.animationFrame,
-        countdown: $0.bomberCountdown)
+        countdown: $0.bomberCountdown,
+        hasClimber: $0.hasClimber, hasFloater: $0.hasFloater)
     }
   }
 
@@ -261,6 +307,12 @@ final class ClassicSession: GameSession {
   }
 
   private(set) var lastCues: [ClassicSoundEffect] = []
+  var lastPositionedCues: [PositionedSoundCue] {
+    guard !lastCues.isEmpty else { return [] }
+    return ClassicSoundCue.positionedCues(for: simulation.lastTickEvents,
+      lemmings: simulation.lemmings, entrances: simulation.configuration.entrances)
+  }
+
 
   func tick() { lastCues = ClassicSoundCue.cues(for: history.tick()) }
 
@@ -288,6 +340,8 @@ final class ClassicSession: GameSession {
   }
 
   func adjustRate(by delta: Int) { history.setReleaseRate(simulation.releaseRate + delta) }
+  // The simulation clamps to the level's own rate and 99.
+  func setRateLimit(maximum: Bool) { history.setReleaseRate(maximum ? 99 : 0) }
   var canUndoNuke: Bool { beforeNuke != nil }
   func nuke() {
     guard !simulation.isComplete, !simulation.isNuking, beforeNuke == nil else { return }
@@ -337,7 +391,7 @@ func spritePose(for action: ClassicDOSAction) -> ClassicLemmingPose {
 
 func spritePose(for action: NeoLemmixAction) -> ClassicLemmingPose {
   switch action {
-  case .walking, .reaching, .shimmying, .sliding, .disarming: return .walking
+  case .walking, .reaching, .shimmying, .sliding, .disarming, .teleporting: return .walking
   case .ascending, .jumping: return .jumping
   case .falling: return .falling
   case .climbing: return .climbing
@@ -346,7 +400,7 @@ func spritePose(for action: NeoLemmixAction) -> ClassicLemmingPose {
   case .swimming, .drowning: return .drowning
   case .blocking: return .blocking
   case .building, .platforming, .stacking: return .building
-  case .bashing: return .bashing
+  case .bashing, .fencing, .lasering: return .bashing
   case .mining: return .mining
   case .digging: return .digging
   case .shrugging: return .shrugging
@@ -375,7 +429,10 @@ final class NeoLemmixSession: GameSession {
   let levelHeight: Int
   private let skillOrder: [NeoLemmixSkill]
 
-  init(simulation: NeoLemmixSimulation, width: Int, height: Int) {
+  private let gadgetSounds: [Int: String]
+
+  init(simulation: NeoLemmixSimulation, width: Int, height: Int, gadgetSounds: [Int: String] = [:]) {
+    self.gadgetSounds = gadgetSounds
     self.simulation = simulation
     initialSimulation = simulation
     levelWidth = width
@@ -391,8 +448,13 @@ final class NeoLemmixSession: GameSession {
   /// Continue a saved run: replay its inputs, or continue from its saved
   /// state when this build no longer replays them to the same result.
   func restore(_ checkpoint: RunRecovery) throws {
+    lastPositionedCues = []
     _ = try checkpoint.validated()
     guard let saved = checkpoint.neo, currentTick == 0 else { throw RunRecoveryError.differentGame }
+    guard saved.initialState.configuration == initialSimulation.configuration,
+      saved.initialState.terrain == initialSimulation.terrain else {
+      throw RunRecoveryError.differentGame
+    }
     if saved.initialState == initialSimulation, (try? replay(checkpoint, saved)) != nil { return }
     guard saved.state.tickCount == checkpoint.tick else { throw RunRecoveryError.differentGame }
     simulation = saved.state; recoveryInputs = saved.inputs
@@ -434,14 +496,28 @@ final class NeoLemmixSession: GameSession {
   var ticksPerSecond: Int { NeoLemmixRules.ticksPerSecond }
 
   var lemmings: [SessionLemming] {
-    simulation.lemmings.filter(\.isActive).map {
-      SessionLemming(
-        id: $0.id, x: $0.position.x, y: $0.position.y,
-        pose: spritePose(for: $0.action),
-        facingLeft: $0.direction == .left,
-        animationFrame: $0.animationFrame,
-        countdown: $0.bomberCountdown)
-    }
+    simulation.lemmings.filter { $0.isActive && $0.action != .teleporting }.map(sessionLemming)
+  }
+
+  func lemmingsForRendering(selectedID: Int?, highlightedID: Int?) -> [SessionLemming] {
+    // CE sorts removed and teleporting entries too, then skips them while
+    // drawing. Their positions in the unstable sort affect overlapping actors.
+    NeoLemmixRenderOrder.sorted(
+      simulation.lemmings,
+      selectedID: selectedID,
+      highlightedID: highlightedID
+    ).filter { $0.isActive && $0.action != .teleporting }.map(sessionLemming)
+  }
+
+  private func sessionLemming(_ lemming: NeoLemmixLemming) -> SessionLemming {
+    SessionLemming(
+      id: lemming.id, x: lemming.position.x, y: lemming.position.y,
+      pose: spritePose(for: lemming.action),
+      facingLeft: lemming.direction == .left,
+      animationFrame: lemming.animationFrame,
+      countdown: lemming.bomberCountdown,
+      neoAction: lemming.action,
+      neoTraits: lemming.traits)
   }
 
   var entranceX: Int? { simulation.configuration.entrances.first?.position.x }
@@ -480,8 +556,15 @@ final class NeoLemmixSession: GameSession {
     }
   }
 
-  /// NeoLemmix events are not mapped to sounds yet.
-  let lastCues: [ClassicSoundEffect] = []
+  private(set) var lastPositionedCues: [PositionedSoundCue] = []
+  var lastCues: [ClassicSoundEffect] { lastPositionedCues.map(\.effect) }
+
+  private func updateSoundCues() {
+    lastPositionedCues = NeoLemmixSoundCue.positionedCues(
+      for: simulation.lastTickEvents, lemmings: simulation.lemmings,
+      entrances: simulation.configuration.entrances,
+      zones: simulation.configuration.zones, gadgetSounds: gadgetSounds)
+  }
 
   var supportsRewind: Bool { false }
   var currentTick: Int { simulation.tickCount }
@@ -493,7 +576,10 @@ final class NeoLemmixSession: GameSession {
     return true
   }
 
-  func tick() { _ = simulation.tick() }
+  func tick() {
+    _ = simulation.tick()
+    updateSoundCues()
+  }
 
   func assignmentState(skillIndex: Int, to lemmingID: Int) -> AssignmentState {
     guard skillOrder.indices.contains(skillIndex) else { return .unavailable }
@@ -509,8 +595,10 @@ final class NeoLemmixSession: GameSession {
   }
 
   func assign(skillIndex: Int, to lemmingID: Int) -> String? {
+    lastPositionedCues = []
     guard skillOrder.indices.contains(skillIndex) else { return "no such skill" }
     let result = simulation.assign(skill: skillOrder[skillIndex], to: lemmingID)
+    updateSoundCues()
     if case let .rejected(_, _, reason) = result { return "\(reason)" }
     recoveryInputs.append(.init(tick: currentTick, action: .assign(skill: skillIndex, lemming: lemmingID)))
     skillAssignments[skillOrder[skillIndex].rawValue, default: 0] += 1
@@ -524,8 +612,18 @@ final class NeoLemmixSession: GameSession {
     _ = simulation.enqueue(.setSpawnInterval(simulation.spawnInterval + delta))
   }
 
+  /// The highest release rate is the shortest spawn interval. Record the exact
+  /// step, so the input log replays the same change.
+  func setRateLimit(maximum: Bool) {
+    guard !simulation.configuration.spawnIntervalLocked else { return }
+    let target = maximum ? NeoLemmixRules.minimumSpawnInterval : simulation.configuration.spawnInterval
+    let delta = target - simulation.spawnInterval
+    if delta != 0 { adjustRate(by: delta) }
+  }
+
   var canUndoNuke: Bool { beforeNuke != nil }
   func nuke() {
+    lastPositionedCues = []
     guard !simulation.isComplete, !simulation.isNuking, beforeNuke == nil else { return }
     nukeCount += 1
     beforeNukeInputCount = recoveryInputs.count
@@ -535,6 +633,7 @@ final class NeoLemmixSession: GameSession {
     _ = simulation.enqueue(.nuke)
   }
   func undoNuke() {
+    lastPositionedCues = []
     guard let beforeNuke else { return }
     recoveryInputs = Array(recoveryInputs.prefix(beforeNukeInputCount))
     simulation = beforeNuke

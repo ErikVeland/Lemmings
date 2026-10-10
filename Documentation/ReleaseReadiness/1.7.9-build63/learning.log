@@ -1,0 +1,51 @@
+Fetching https://github.com/sparkle-project/Sparkle.git from cache
+Fetched https://github.com/sparkle-project/Sparkle.git from cache (0.93s)
+Computing version for https://github.com/sparkle-project/Sparkle.git
+Computed https://github.com/sparkle-project/Sparkle.git at 2.7.3 (1.88s)
+Creating working copy for https://github.com/sparkle-project/Sparkle.git
+Working copy of https://github.com/sparkle-project/Sparkle.git resolved at 2.7.3
+Fetching binary artifact https://github.com/sparkle-project/Sparkle/releases/download/2.7.3/Sparkle-for-Swift-Package-Manager.zip from cache
+Fetched https://github.com/sparkle-project/Sparkle/releases/download/2.7.3/Sparkle-for-Swift-Package-Manager.zip from cache (0.48s)
+Building for debugging...
+[Planning deferred tasks]
+[18 / 26]
+[19 / 27] NxlvKit
+[29 / 86]
+[31 / 86]
+[37 / 86]
+[39 / 86]
+[43 / 86]
+[45 / 86]
+[48 / 86]
+[52 / 86]
+[55 / 86]
+[56 / 86]
+[57 / 86]
+[62 / 86]
+[63 / 86]
+[78 / 86] NxlvKit
+[84 / 86] NxlvKit
+[86 / 86] NxlvKit
+Build complete! (16.04 sec.)
+Selected 292 distinct teaching objectives from 1710 candidates.
+292 lessons; 156 official; 136 fan. Largest curriculum demand step: 48.0. Support flags: 3.
+44: Just dig! — Discover: Digger
+43: Only Float is Survive — Discover: Floater
+67: You need bashers this time — Discover: Basher
+65: Up Up UP They Go — Discover: Climber
+67: Let's block and blow — Discover: Bomber
+69: The Broken Stair — Discover: Builder
+151: Thunder-Lemmings are go! — Split jobs: Basher + Builder
+46: Mienrs <--- lol, typo — Discover: Miner
+71: Nuclear War on the dance floor — Discover: Blocker
+114: Lemmings For Presidents! — Split jobs: Basher + Miner
+113: PRACTICE: CLIMBER — Climber with crowd spacing
+116: Block and Dig — Split jobs: Blocker + Digger
+124: Build a Bridge — Split jobs: Blocker + Builder
+116: Blockers can block others — Control crowd spacing
+129: A task for blockers and bombers — Blocker then Bomber
+141: Lemming Snowfall — Basher then Builder
+142: At Home in a Cave — Digger then Basher
+135: It'll be Comin' Round the Mtn. — Miner then Builder
+148: Lost something? — Share: Basher + Builder + Miner
+146: Floating Lemming Flurry — Floater then Basher

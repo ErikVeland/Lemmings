@@ -5,6 +5,7 @@ import NxlvKit
     static let shared = ArcadeWindow()
     let arcadeView = ArcadeView()
     var confirmSessionChange: ((@escaping () -> Void) -> Void)?
+    var requestReturnToSolo: (() -> Void)?
     var prepareSession: (() -> NSWindow?)?
     var finishSession: (() -> Void)?
     private init() { arcadeView.onClose = { [weak self] in self?.close() } }
@@ -18,15 +19,27 @@ import NxlvKit
         GameScreen.shared.present(arcadeView, owner: owner)
     }
     func showResult(_ report: ArcadeReport, owner: NSWindow? = nil, retry: @escaping () -> Void,
-                    next: @escaping () -> Void, replay: @escaping (Bool) -> Void, continueTitle: String = "Next level", background: CGImage? = nil, rewardVolume: Double = 0) {
+                    next: @escaping () -> Void, replay: @escaping (Bool) -> Void, storedReplay: ((URL, String) -> Void)? = nil, continueTitle: String = "Next level", background: CGImage? = nil, rewardVolume: Double = 0,
+                    rewardVolumeProvider: (() -> Double)? = nil,
+                    continueHandlesHandover: Bool = false, skip: (() -> Void)? = nil,
+                    later: (() -> Void)? = nil, hints: (() -> Void)? = nil,
+                    status: String? = nil, menu: (() -> Void)? = nil) {
         arcadeView.rewardVolume = rewardVolume
+        arcadeView.rewardVolumeProvider = rewardVolumeProvider
         arcadeView.mode = .result; arcadeView.report = report; arcadeView.level = report.run.level
         arcadeView.assisted = report.run.assisted; arcadeView.board = .rescue; arcadeView.trolleyBoard = .mostSaved
         arcadeView.boardScope = .level
         arcadeView.continueTitle = continueTitle; arcadeView.background = background
+        arcadeView.resultStatus = status
+        arcadeView.continueHandlesHandover = continueHandlesHandover
         arcadeView.onRetry = { [weak self] in self?.close(); retry() }
         arcadeView.onContinue = { [weak self] in self?.close(); next() }
+        arcadeView.onSkip = skip.map { skip in { [weak self] in self?.close(); skip() } }
+        arcadeView.onLater = later.map { action in { [weak self] in self?.close(); action() } }
+        arcadeView.onHints = hints.map { action in { [weak self] in self?.close(); action() } }
+        arcadeView.onMenu = menu.map { action in { [weak self] in self?.close(); action() } }
         arcadeView.onReplay = replay
+        arcadeView.onStoredReplay = storedReplay
         present(owner: owner)
         arcadeView.startCelebration()
         GameCenterScores.shared.onChange = { [weak self] in self?.arcadeView.needsDisplay = true }
@@ -37,7 +50,8 @@ import NxlvKit
         arcadeView.level = level ?? ArcadeStore.shared.records.runs.last?.level
         arcadeView.assisted = false; arcadeView.board = .rescue
         arcadeView.boardScope = .level
-        arcadeView.onRetry = nil; arcadeView.onContinue = nil; arcadeView.onReplay = nil
+        arcadeView.onLater = nil; arcadeView.onHints = nil; arcadeView.onStoredReplay = nil
+        arcadeView.onRetry = nil; arcadeView.onContinue = nil; arcadeView.onSkip = nil; arcadeView.onReplay = nil
         present(owner: owner)
     }
     func showSession(owner: NSWindow? = nil) {
@@ -48,12 +62,40 @@ import NxlvKit
     private func presentSession(owner: NSWindow?) {
         let owner = prepareSession?() ?? owner
         arcadeView.sessionReturnMode = nil
-        arcadeView.report = nil; arcadeView.onRetry = nil; arcadeView.onContinue = nil
+        arcadeView.report = nil; arcadeView.onLater = nil; arcadeView.onHints = nil; arcadeView.onStoredReplay = nil
+        arcadeView.onRetry = nil; arcadeView.onContinue = nil; arcadeView.onSkip = nil
         ArcadeStore.shared.prepareHotSeat()
         arcadeView.mode = .hotSeat
         present(owner: owner)
     }
-    func showProfiles(canSwitch: Bool, owner: NSWindow? = nil, beforeSwitch: @escaping () -> Void, afterSwitch: @escaping () -> Void, background: CGImage? = nil) {
+    func showSavedSessions(owner: NSWindow?) {
+        let store = ArcadeStore.shared
+        let sessions = store.savedHotSeats
+        let page = GameMenuPage(title: "Saved Hot Seats")
+        let carousel = LevelCoverFlowView(frame: page.body.bounds)
+        carousel.autoresizingMask = [.width, .height]
+        page.body.addSubview(carousel)
+        let resume = page.addPrimaryAction("Resume") { [weak self, weak page, weak carousel] in
+            guard let self, let page, let id = carousel?.selectedItem?.id else { return }
+            guard store === ArcadeStore.shared, store.resumeHotSeat(id: id) else {
+                GameScreen.shared.message("Session not resumed", detail: store.storageError ?? "This session is no longer available.")
+                return
+            }
+            GameScreen.shared.dismiss(page)
+            self.finishSession?()
+            self.arcadeView.needsDisplay = true
+        }
+        resume.isEnabled = !sessions.isEmpty
+        carousel.configure(items: sessions.map { saved in
+            LevelCoverFlowItem(id: saved.id, title: saved.players.compactMap { store.records.profile($0)?.initials }.joined(separator: " + "),
+                subtitle: "Next turn: " + (store.records.profile(saved.turn ?? saved.host)?.initials ?? "LEM"),
+                detail: saved.savedAt.map { $0.formatted(date: .abbreviated, time: .shortened) } ?? "Shared campaign")
+        }, reduceMotion: NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
+        carousel.onStart = { [weak resume] _ in resume?.performClick(nil) }
+        page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
+        GameScreen.shared.present(page, owner: owner, focus: carousel)
+    }
+    func showProfiles(canSwitch: Bool, owner: NSWindow? = nil, beforeSwitch: @escaping () throws -> Void, afterSwitch: @escaping () -> Void, background: CGImage? = nil) {
         arcadeView.background = background
         arcadeView.highlightedAwards = []; arcadeView.focusedNewAward = nil
         arcadeView.mode = .profiles; arcadeView.canSwitch = canSwitch; arcadeView.profilesReturnToHotSeat = false
@@ -64,7 +106,7 @@ import NxlvKit
 }
 
 /// Results lead with the rescue. Records and details are separate game pages.
-@MainActor final class ArcadeView: NSView {
+@MainActor final class ArcadeView: NSView, GameDialogCustomNavigation {
     enum Mode { case result, profiles, records, awards, details, goals, career, hotSeat }
     enum BoardScope { case level, career, worldwide }
     var mode = Mode.records { didSet { if mode != oldValue { keyboardButton = nil } } }
@@ -72,6 +114,8 @@ import NxlvKit
         didSet {
             finishCelebration()
             highlightedAwards = []; focusedNewAward = nil; featuredAwardIndex = 0; careerPage = 0
+            // Focus is an index into buttons rebuilt per layout; a new result starts on its primary action.
+            keyboardButton = nil
             celebration = report.map { TrolleyCelebration(report: $0, history: ArcadeStore.shared.records.trolley) }
         }
     }
@@ -80,11 +124,17 @@ import NxlvKit
     var celebrationGeneration = UUID()
     let rewardChimes = ResultChimes()
     var rewardVolume: Double = 0
+    var rewardVolumeProvider: (() -> Double)?
+    var celebrationFocusObservers: [NSObjectProtocol] = []
+    var onReadySound: (() -> Void)?
     var revealedStars = 3
     var stampedStar: Int?
     var featuredAwardIndex = 0
     var careerPage = 0
     var boardScope = BoardScope.level
+    var usesGameCenter = false
+    var hostedCategory = HostedCategory.fastestClear
+    var hostedPage = 0
     var level: ArcadeLevel?
     var assisted = false
     var board = ArcadeBoard.rescue
@@ -111,13 +161,21 @@ import NxlvKit
     }
     var sessionReturnMode: Mode?
     var canSwitch = true
-    var beforeSwitch: (() -> Void)?
+    var beforeSwitch: (() throws -> Void)?
     var afterSwitch: (() -> Void)?
     var onRetry: (() -> Void)?
     var onContinue: (() -> Void)?
+    /// Set by a campaign when this failed level can take a skip.
+    var onSkip: (() -> Void)?
+    var onLater: (() -> Void)?
+    var onHints: (() -> Void)?
     var onReplay: ((Bool) -> Void)?
+    var onStoredReplay: ((URL, String) -> Void)?
     var onClose: (() -> Void)?
+    var onMenu: (() -> Void)?
     var continueTitle = "Next level"
+    var resultStatus: String?
+    var continueHandlesHandover = false
     var cleared: Bool { report?.run.qualifies == true }
     var nextSessionPlayer: ArcadeProfile? { ArcadeStore.shared.nextSessionProfile(after: player.id) }
     /// Every level hands over after a clear too. At first fail keeps the winner in.
@@ -130,13 +188,15 @@ import NxlvKit
         if cleared { return handsOverAfterClear.map { "\(continueTitle): \($0.initials)" } ?? continueTitle }
         return nextSessionPlayer.map { "Retry as \($0.initials)" } ?? "Try again"
     }
-    private func showHandover(_ next: ArcadeProfile, owner: NSWindow?) {
+    func showHandover(_ next: ArcadeProfile, owner: NSWindow?) {
         guard let owner else { return }
         let page = GameMenuPage(title: "\(next.initials)'s turn", subtitle: "PASS THE CONTROLS")
         page.controllerBackButton.isHidden = true
         page.setDetail("The game will wait. Give the controls to \(next.initials), then choose Ready.")
-        page.addPrimaryAction("Ready, \(next.initials)") { [weak page] in
-            if let page { GameScreen.shared.dismiss(page) }
+        page.addPrimaryAction("Ready, \(next.initials)") { [weak self, weak page] in
+            guard let page, GameScreen.shared.contains(page) else { return }
+            GameScreen.shared.dismiss(page)
+            self?.onReadySound?()
         }
         GameScreen.shared.present(page, owner: owner)
     }
@@ -149,8 +209,25 @@ import NxlvKit
     }
     func continueAsNextProfile() {
         let next = handsOverAfterClear, owner = window
+        let handlesHandover = continueHandlesHandover
         if next != nil, !ArcadeStore.shared.passSessionTurn(after: player.id) { needsDisplay = true; return }
         onContinue?()
+        if let next, !handlesHandover { showHandover(next, owner: owner) }
+    }
+    /// The attempt owner's skips, when this failed campaign level can take one.
+    var availableSkips: Int {
+        guard !cleared, onSkip != nil else { return 0 }
+        return ArcadeStore.shared.records.levelSkips(profileID: player.id).available
+    }
+    var skipTitle: String { nextSessionPlayer.map { _ in "Skip as \(player.initials) (\(availableSkips))" } ?? "Skip level (\(availableSkips))" }
+    /// The owner pays. In Hot Seat a skip passes the turn, as a loss does.
+    func skipLevel() {
+        guard availableSkips > 0, let level = report?.run.level else { return }
+        let next = nextSessionPlayer, owner = window
+        if next != nil, !(ArcadeStore.shared.profilesAreWritable && ArcadeStore.shared.storageError == nil) { needsDisplay = true; return }
+        guard ArcadeStore.shared.spendLevelSkip(on: level, profileID: player.id) else { needsDisplay = true; return }
+        if next != nil { _ = ArcadeStore.shared.passSessionTurn(after: player.id) }
+        onSkip?()
         if let next { showHandover(next, owner: owner) }
     }
     func performDefaultResultAction() { if cleared { continueAsNextProfile() } else if nextSessionPlayer != nil { retryAsNextProfile() } else { onRetry?() } }
@@ -165,6 +242,7 @@ import NxlvKit
     private var buttons: [(String, CGRect, () -> Void)] = []
     private let accessibleElements = GameAccessibleElements()
     private var accessibleText: [(String, CGRect)] = []
+    private var primaryButtonIndex: Int?
     private var keyboardButton: Int?
     override func isAccessibilityElement() -> Bool { true }
     override func accessibilityRole() -> NSAccessibility.Role? { .group }
@@ -177,7 +255,9 @@ import NxlvKit
             var name = item.0
             if name.hasPrefix("player-"), !name.hasPrefix("player-new"), let profile = ArcadeStore.shared.records.profile(String(name.dropFirst(7))) { name = "Select player " + profile.initials }
             if name.hasPrefix("portrait-"), let index = Int(name.dropFirst(9)), ArcadeProfile.portraitNames.indices.contains(index) { name = "Portrait: " + ArcadeProfile.portraitNames[index] }
-            return accessibleElements.element(id: "button-\(index)", owner: self, label: name, frame: mapped(item.1), press: item.2)
+            let element = accessibleElements.element(id: "button-\(index)", owner: self, label: name, frame: mapped(item.1), press: item.2)
+            element.onFocus = { [weak self] in self?.keyboardButton = index; self?.needsDisplay = true }
+            return element
         }
         if mode == .profiles {
             let field = accessibleElements.element(id: "initials", owner: self, label: "Player initials", frame: mapped(CGRect(x: 564, y: 204, width: 430, height: 60)))
@@ -214,13 +294,13 @@ import NxlvKit
     private var scale: CGFloat { GamePageLayout.scale(in: bounds.size) }
     private var offset: CGPoint { CGPoint(x: (bounds.width - 1120 * scale) / 2, y: (bounds.height - (mode == .result ? 604 : 720) * scale) / 2) }
     override func draw(_ dirtyRect: NSRect) {
-        NSColor.black.setFill(); bounds.fill(); buttons = []; accessibleText = []
+        NSColor.black.setFill(); bounds.fill(); buttons = []; primaryButtonIndex = nil; accessibleText = []
         if let background {
             let image = NSImage(cgImage: background, size: CGSize(width: background.width, height: background.height))
             let fit = max(bounds.width / image.size.width, bounds.height / image.size.height)
             let size = CGSize(width: image.size.width * fit, height: image.size.height * fit)
             image.draw(in: CGRect(x: bounds.midX - size.width / 2, y: bounds.midY - size.height / 2, width: size.width, height: size.height),
-                from: .zero, operation: .sourceOver, fraction: 0.6, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+                from: .zero, operation: .sourceOver, fraction: 0.6, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
         }
         NSGraphicsContext.saveGraphicsState()
         let transform = NSAffineTransform(); transform.translateX(by: offset.x, yBy: offset.y)
@@ -255,6 +335,9 @@ import NxlvKit
             text(notice, 64, mode == .result ? 583 : 695, 980, height: 20)
         }
         setAccessibilityHelp(ArcadeStore.shared.storageError ?? ArcadeStore.shared.storageNotice)
+        if keyboardButton == nil || !buttons.indices.contains(keyboardButton!) {
+            keyboardButton = primaryButtonIndex ?? buttons.firstIndex(where: { $0.0.hasPrefix("Back") || $0.0 == "Close" }) ?? (buttons.isEmpty ? nil : 0)
+        }
         if let keyboardButton, buttons.indices.contains(keyboardButton) {
             NSColor.systemYellow.setStroke()
             let outline = NSBezierPath(rect: buttons[keyboardButton].1.insetBy(dx: -2, dy: -2))
@@ -310,7 +393,10 @@ import NxlvKit
         if let font {
             font.menuLine(label, in: caption, face: .small, alpha: enabled ? 1 : 0.45, palette: chosen ? .green : .blue)
         } else { GamePixelText.draw(label, in: caption) }
-        if enabled { buttons.append((label, rect, action)) }
+        if enabled {
+            if primary { primaryButtonIndex = buttons.count }
+            buttons.append((label, rect, action))
+        }
     }
     func link(_ label: String, _ rect: CGRect, alpha: CGFloat = 1, alignment: NSTextAlignment = .center, palette: MacInterfaceRenderer.Palette = .blue, action: @escaping () -> Void) {
         text(label, rect.minX, rect.midY - 9, rect.width, alignment: alignment, alpha: hover == label ? 1 : alpha, palette: hover == label ? .green : palette)
@@ -323,10 +409,10 @@ import NxlvKit
     func rewindFilter(y: CGFloat = 212) {
         text("Rewinds", 786, y - 21, 270, alignment: .center, alpha: 0.7)
         button("Unused", CGRect(x: 786, y: y, width: 135, height: 44), selected: !assisted) { [weak self] in
-            self?.assisted = false; self?.needsDisplay = true
+            self?.assisted = false; self?.hostedPage = 0; self?.refreshHostedBoard(); self?.needsDisplay = true
         }
         button("Used", CGRect(x: 921, y: y, width: 135, height: 44), selected: assisted) { [weak self] in
-            self?.assisted = true; self?.needsDisplay = true
+            self?.assisted = true; self?.hostedPage = 0; self?.refreshHostedBoard(); self?.needsDisplay = true
         }
     }
     func affinityLink(_ id: String, in rect: CGRect, forRun: Bool = true, alignment: NSTextAlignment = .center) {
@@ -352,14 +438,39 @@ import NxlvKit
         popover.show(relativeTo: anchor, of: self, preferredEdge: .maxY)
     }
     func resultActions(y: CGFloat = 573) {
+        if !cleared, onLater != nil {
+            if nextSessionPlayer != nil {
+                button("Retry as \(player.initials)", CGRect(x: 64, y: y, width: 250, height: 48)) { [weak self] in self?.onRetry?() }
+                button(primaryResultTitle, CGRect(x: 332, y: y, width: 290, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
+                button("Hints", CGRect(x: 640, y: y, width: 168, height: 48)) { [weak self] in self?.onHints?() }
+                button("Try later", CGRect(x: 826, y: y, width: 230, height: 48)) { [weak self] in self?.onLater?() }
+            } else {
+                button(primaryResultTitle, CGRect(x: 64, y: y, width: 290, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
+                button("Hints", CGRect(x: 372, y: y, width: 208, height: 48)) { [weak self] in self?.onHints?() }
+                button("Try later", CGRect(x: 598, y: y, width: 248, height: 48)) { [weak self] in self?.onLater?() }
+                button("Back", CGRect(x: 864, y: y, width: 192, height: 48)) { [weak self] in self?.onClose?() }
+            }
+            return
+        }
         if let next = nextSessionPlayer {
             let canHandOver = ArcadeStore.shared.profilesAreWritable && ArcadeStore.shared.storageError == nil
-            button("Retry as \(player.initials)", CGRect(x: 64, y: y, width: 330, height: 48)) { [weak self] in self?.onRetry?() }
+            // The four-button loss row narrows this button, so each row draws its own.
+            if cleared || availableSkips == 0 {
+                button("Retry as \(player.initials)", CGRect(x: 64, y: y, width: 330, height: 48)) { [weak self] in self?.onRetry?() }
+            }
             if cleared {
                 let owner = handsOverAfterClear ?? player
                 button("Retry as \(next.initials)", CGRect(x: 412, y: y, width: 296, height: 48), enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
                 button("\(continueTitle): \(owner.initials)", CGRect(x: 726, y: y, width: 330, height: 48), primary: true,
                        enabled: handsOverAfterClear == nil || canHandOver) { [weak self] in self?.continueAsNextProfile() }
+            } else if availableSkips > 0 {
+                button("Retry as \(player.initials)", CGRect(x: 64, y: y, width: 220, height: 48)) { [weak self] in self?.onRetry?() }
+                button("Retry as \(next.initials)", CGRect(x: 298, y: y, width: 250, height: 48), primary: true,
+                       enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
+                button(skipTitle, CGRect(x: 562, y: y, width: 240, height: 48), enabled: canHandOver) { [weak self] in self?.skipLevel() }
+                button("Back to library", CGRect(x: 816, y: y, width: 240, height: 48)) { [weak self] in
+                    if let prepare = ArcadeWindow.shared.prepareSession { _ = prepare() } else { self?.onClose?() }
+                }
             } else {
                 button("Retry as \(next.initials)", CGRect(x: 412, y: y, width: 330, height: 48), primary: true,
                        enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
@@ -367,6 +478,10 @@ import NxlvKit
                     if let prepare = ArcadeWindow.shared.prepareSession { _ = prepare() } else { self?.onClose?() }
                 }
             }
+        } else if availableSkips > 0 {
+            button(primaryResultTitle, CGRect(x: 128, y: y, width: 330, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
+            button(skipTitle, CGRect(x: 478, y: y, width: 290, height: 48)) { [weak self] in self?.skipLevel() }
+            button("Back", CGRect(x: 788, y: y, width: 204, height: 48)) { [weak self] in self?.onClose?() }
         } else {
         button(primaryResultTitle, CGRect(x: cleared ? 592 : 248, y: y, width: 360, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
         button(cleared ? "Retry" : "Back", CGRect(x: cleared ? 168 : 688, y: y, width: 256, height: 48)) { [weak self] in
@@ -389,6 +504,7 @@ import NxlvKit
     }
     func page(_ next: Mode) { finishCelebration(); affinityPopover?.close(); mode = next; hover = nil; needsDisplay = true }
     private func back() {
+        if mode == .result, let onMenu { onMenu(); return }
         if mode == .hotSeat { closeSession(); return }
         if mode == .profiles { closeProfiles(); return }
         if mode != .result && mode != .profiles && report != nil { page(.result) }
@@ -412,6 +528,7 @@ import NxlvKit
     private func drawResult() {
         guard let report else { page(.records); return }
         drawGameResult(report)
+        if let onMenu { button("Menu", CGRect(x: 940, y: 38, width: 116, height: 44), action: onMenu) }
     }
     func portraitImage(_ index: Int) -> NSImage? {
         if let cached = portraits[index] { return cached }
@@ -433,7 +550,7 @@ import NxlvKit
         let size = NSSize(width: image.size.width * scale, height: image.size.height * scale)
         image.draw(in: CGRect(x: rect.midX - size.width / 2, y: rect.midY - size.height / 2, width: size.width, height: size.height),
                    from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
-                   hints: [.interpolation: NSImageInterpolation.none])
+                   hints: [.interpolation: NSImageInterpolation.none.rawValue])
     }
     var profilesReturnToHotSeat = false
     var isNewProfile: Bool { selectedProfileID == nil }
@@ -459,9 +576,24 @@ import NxlvKit
     func playAsSelected() {
         let store = ArcadeStore.shared
         guard canSwitch, let id = selectedProfileID, id != store.records.activeProfileID else { return }
-        beforeSwitch?()
+        if store.hotSeatIsActive {
+            let sessionID = store.hotSeatID
+            GameScreen.shared.confirm("Switch player?", detail: "Your Hot Seat stays saved. Continue with this player's solo progress.",
+                actionTitle: "Play as \(initials)", owner: window) { [weak self] in
+                    guard let self, store === ArcadeStore.shared, store.hotSeatID == sessionID,
+                          self.selectedProfileID == id else { return }
+                    self.switchToSelectedProfile(id, store: store)
+                }
+        } else { switchToSelectedProfile(id, store: store) }
+    }
+    private func switchToSelectedProfile(_ id: String, store: ArcadeStore) {
+        do { try beforeSwitch?() }
+        catch { GameScreen.shared.message("Cannot switch player", detail: error.localizedDescription); return }
         guard store.saveProfile(id: id, initials: initials.isEmpty ? store.records.profile(id)?.initials ?? "LEM" : initials,
-                                portrait: portrait, select: true) != nil else { needsDisplay = true; return }
+                                portrait: portrait, select: true) != nil else {
+            GameScreen.shared.message("Cannot switch player", detail: store.storageError ?? "The player is no longer available.")
+            return
+        }
         afterSwitch?()
         onClose?()
     }
@@ -498,9 +630,12 @@ import NxlvKit
         let store = ArcadeStore.shared
         guard store.canDeleteProfile(id, runInProgress: runInProgress) else { return }
         let switching = id == store.records.activeProfileID
-        if switching { beforeSwitch?() }
-        let deleted = store.deleteProfile(id)
-        if switching { afterSwitch?() }
+        if switching {
+            do { try beforeSwitch?() }
+            catch { GameScreen.shared.message("Cannot delete player", detail: error.localizedDescription); return }
+        }
+        let deleted = store.deleteProfile(id, backgroundCleanup: true)
+        if switching && deleted { afterSwitch?() }
         if deleted { selectProfile(store.records.activeProfile) }
         needsDisplay = true
     }
@@ -563,11 +698,16 @@ import NxlvKit
                 text("Choose a second player", 64, y, 992, palette: .green)
             }
         }
-        button("Return to solo", CGRect(x: 64, y: 634, width: 270, height: 48)) { [weak self] in self?.confirmReturnToSolo() }
+        button("Return to solo", CGRect(x: 64, y: 634, width: 220, height: 48)) { [weak self] in self?.confirmReturnToSolo() }
         if store.hotSeatIsActive {
-            button("New Hot Seat", CGRect(x: 350, y: 634, width: 360, height: 48)) { [weak self] in self?.confirmNewHotSeat() }
+            button("New Hot Seat", CGRect(x: 300, y: 634, width: 236, height: 48)) { [weak self] in self?.confirmNewHotSeat() }
         }
-        button("Choose a game", CGRect(x: 736, y: 634, width: 320, height: 48), primary: !needsPlayer,
+        if !store.savedHotSeats.isEmpty {
+            button("Saved Hot Seats", CGRect(x: 552, y: 634, width: 240, height: 48)) { [weak self] in
+                ArcadeWindow.shared.showSavedSessions(owner: self?.window)
+            }
+        }
+        button("Choose a game", CGRect(x: 808, y: 634, width: 248, height: 48), primary: !needsPlayer,
                enabled: store.hotSeatIsActive) { [weak self] in self?.closeSession() }
         setAccessibilityLabel("Hot seat. " + store.sessionProfiles.map(\.initials).joined(separator: ", ")
             + ". Pass the turn \(store.turnPolicy.title). \(store.turnPolicy.detail)"
@@ -584,6 +724,10 @@ import NxlvKit
         needsDisplay = true
     }
     func confirmReturnToSolo() {
+        if let requestReturnToSolo = ArcadeWindow.shared.requestReturnToSolo {
+            requestReturnToSolo()
+            return
+        }
         GameScreen.shared.confirm("Leave Hot Seat?", detail: "Your shared campaign stays saved for later.",
             actionTitle: "Return to solo", owner: window) { [weak self] in
                 ArcadeStore.shared.endHotSeat()
@@ -591,15 +735,18 @@ import NxlvKit
             }
     }
     func confirmNewHotSeat() {
+        let store = ArcadeStore.shared
+        let previousSession = store.hotSeatID
         GameScreen.shared.confirm("Start a new Hot Seat?",
-            detail: "Start every shared campaign from the beginning with these players. This replaces the Hot Seat you can resume. Solo progress, scores and records stay saved.",
+            detail: "Start with these players. Your current Hot Seat will stay saved.",
             actionTitle: "Start new Hot Seat", owner: window) { [weak self] in
-                guard ArcadeStore.shared.startNewHotSeat() else {
-                    GameScreen.shared.message("Cannot start Hot Seat", detail: ArcadeStore.shared.storageError
+                guard store === ArcadeStore.shared, store.hotSeatID == previousSession,
+                      store.startNewHotSeat() else {
+                    GameScreen.shared.message("Cannot start Hot Seat", detail: store.storageError
                         ?? "Choose at least two players, then try again.")
                     return
                 }
-                self?.needsDisplay = true
+                self?.closeSession()
             }
     }
     private func drawProfiles() {
@@ -649,8 +796,12 @@ import NxlvKit
         button(profilePrimaryTitle, CGRect(x: 496, y: 627, width: 320, height: 55), primary: true,
                enabled: store.profilesAreWritable) { [weak self] in self?.performProfilePrimaryAction() }
         if !profilesReturnToHotSeat {
-            button("Hot Seat", CGRect(x: 832, y: 627, width: 224, height: 55),
-                   enabled: canSwitch || store.hotSeatIsActive) { [weak self] in self?.openSession() }
+            let sessionTitle = store.hotSeatIsActive ? "Return to solo" : "Hot Seat"
+            button(sessionTitle, CGRect(x: 832, y: 627, width: 224, height: 55),
+                   enabled: canSwitch || store.hotSeatIsActive) { [weak self] in
+                if store.hotSeatIsActive { self?.confirmReturnToSolo() }
+                else { self?.openSession() }
+            }
         }
         setAccessibilityLabel("Players. \(records.profiles.map(\.initials).joined(separator: ", ")). Type initials. Arrow keys choose a portrait. Changes save automatically. Enter: \(profilePrimaryTitle). Escape goes back.")
     }
@@ -664,9 +815,13 @@ import NxlvKit
             text("Play a level to set a record.", 64, 346, 992)
             pageFooter(); return
         }
-        for (index, category) in ArcadeBoard.allCases.enumerated() {
-            let names = ["Most saved", "Fewest skills", "100% club"]
-            button(names[index], CGRect(x: 64 + index * 226, y: 213, width: 210, height: 43), selected: board == category) { [weak self] in self?.board = category; self?.needsDisplay = true }
+        let categories = ArcadeBoard.allCases, index = categories.firstIndex(of: board) ?? 0
+        button("‹", CGRect(x: 64, y: 212, width: 66, height: 44)) { [weak self] in
+            self?.board = categories[(index + categories.count - 1) % categories.count]; self?.needsDisplay = true
+        }
+        text(board.title, 153, 218, 520)
+        button("›", CGRect(x: 687, y: 212, width: 66, height: 44)) { [weak self] in
+            self?.board = categories[(index + 1) % categories.count]; self?.needsDisplay = true
         }
         rewindFilter()
         text("PLAYER", 113, 276, 295)
@@ -763,11 +918,23 @@ import NxlvKit
     }
     override func mouseExited(with event: NSEvent) { hover = nil; needsDisplay = true; NSCursor.arrow.set() }
     override func keyDown(with event: NSEvent) {
-        if event.keyCode == 48, !buttons.isEmpty {
-            let direction = event.modifierFlags.contains(.shift) ? -1 : 1
+        guard event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { super.keyDown(with: event); return }
+        if mode == .result, event.charactersIgnoringModifiers?.lowercased() == "q", let onMenu {
+            if !event.isARepeat { onMenu() }
+            return
+        }
+        // Pages with their own arrow navigation keep it; Tab still moves button focus.
+        let horizontal = [123, 124].contains(event.keyCode), vertical = [125, 126].contains(event.keyCode)
+        let pageOwnsArrow = ([.awards, .career, .profiles].contains(mode) && horizontal)
+            || (mode == .awards && level?.conditions != nil && vertical)
+        if [48, 123, 124, 125, 126].contains(event.keyCode), !pageOwnsArrow, !buttons.isEmpty {
+            let direction = event.keyCode == 48 ? (event.modifierFlags.contains(.shift) ? -1 : 1) : ([123, 126].contains(event.keyCode) ? -1 : 1)
             keyboardButton = ((keyboardButton ?? (direction > 0 ? -1 : 0)) + direction + buttons.count) % buttons.count
             let item = buttons[keyboardButton!]
             scrollToVisible(CGRect(x: offset.x + item.1.minX * scale, y: offset.y + item.1.minY * scale, width: item.1.width * scale, height: item.1.height * scale))
+            if let element = accessibilityChildren()?.compactMap({ $0 as? GameAccessibleElement }).first(where: { $0.localFrame == CGRect(x: offset.x + item.1.minX * scale, y: offset.y + item.1.minY * scale, width: item.1.width * scale, height: item.1.height * scale) }) {
+                NSAccessibility.post(element: element, notification: .focusedUIElementChanged)
+            }
             needsDisplay = true; return
         }
         if [36, 76, 49].contains(event.keyCode), !event.isARepeat, let keyboardButton, buttons.indices.contains(keyboardButton) {
@@ -776,7 +943,7 @@ import NxlvKit
 
         if event.keyCode == 53, affinityPopover?.isShown == true { affinityPopover?.close(); return }
         guard event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { super.keyDown(with: event); return }
-        if event.isARepeat && [36, 76, 49].contains(event.keyCode) { return }
+        if event.isARepeat && [36, 76, 49, 53].contains(event.keyCode) { return }
         if event.keyCode == 53 { back(); return }
         let key = event.charactersIgnoringModifiers?.uppercased() ?? ""
         if mode == .hotSeat {
@@ -825,14 +992,15 @@ import NxlvKit
             if mode == .result { performDefaultResultAction() } else if report != nil { page(.result) }
             return
         }
-        if let number = Int(key), (1...TrolleyBoard.allCases.count).contains(number), level?.conditions != nil {
+        if let number = Int(key), (1...TrolleyBoard.allCases.count).contains(number), level?.conditions != nil, boardScope == .level {
             trolleyBoard = TrolleyBoard.allCases[number - 1]; needsDisplay = true; return
         }
         switch key {
-        case "W": if mode == .records { assisted.toggle() }
+        case "W": if mode == .records { assisted.toggle(); hostedPage = 0; refreshHostedBoard() }
         case "N": if mode == .result { retryAsNextProfile() }
         case "P": if mode == .result { openSession() }
         case "R": onRetry?()
+        case "K": if mode == .result { skipLevel() }
         case "V": onReplay?(false)
         case "S": onReplay?(true)
         case "B": page(.records)

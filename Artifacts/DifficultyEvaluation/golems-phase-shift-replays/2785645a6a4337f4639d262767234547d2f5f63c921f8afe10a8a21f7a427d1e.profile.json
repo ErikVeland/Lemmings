@@ -1,0 +1,120 @@
+{
+  "components" : {
+    "concurrencyBurden" : 390,
+    "constraintPressure" : 420.37318698549586,
+    "deductionComplexityProxy" : 370,
+    "executionPrecision" : 0,
+    "solutionComplexity" : 974.2827434726842,
+    "techniqueBurden" : 520
+  },
+  "confidence" : "medium",
+  "criticalActions" : [
+
+  ],
+  "detectedTechniques" : [
+    "basher",
+    "blocker",
+    "builder",
+    "digger",
+    "miner",
+    "multiple-worker-coordination"
+  ],
+  "explanation" : [
+    "5 used skill types; 6 assigned workers; 8 same-worker skill changes.",
+    "Maximum concurrent worker regions: 2.",
+    "Timing probes: 10. Untested alternatives remain unknown.",
+    "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+    "Source rank: fan:lldb-191."
+  ],
+  "key" : {
+    "analyserVersion" : "difficulty-3",
+    "assetsRevision" : "e8540884f79de20c8b9889657e888fe567c067babd85c6aab237f80cc16b4ef3:probes-10",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Lemmings platinum Dangerous Part 2.dat#14",
+      "packID" : "fan:lldb-191"
+    },
+    "levelRevision" : "a8a9340f2052f6dc167e9135979311ce6ab2db60adf526fdc5f6a9cd26260c43",
+    "replayRevision" : "SHA256 digest: 2785645a6a4337f4639d262767234547d2f5f63c921f8afe10a8a21f7a427d1e",
+    "simulationVersion" : "neolemmix-ce-2026-09-27:golems-clock-2-limit-from-clock-1"
+  },
+  "overallScore" : 475.59071787210496,
+  "precision" : {
+    "actions" : [
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 1
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 2
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 3
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 4
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 5
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 6
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 7
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 8
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 9
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 10
+      }
+    ],
+    "alternativeRunCount" : 0,
+    "assignmentCount" : 22,
+    "completed" : false,
+    "orderingOutcomes" : [
+
+    ],
+    "runCount" : 10,
+    "selectionOutcomes" : [
+
+    ]
+  },
+  "prerequisiteConcepts" : [
+
+  ],
+  "sourceRank" : "fan:lldb-191"
+}

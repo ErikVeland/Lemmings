@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-03",
+  "finding": "An unoptimised native library sharply reduced one-skill search throughput; a source-built optimised library completed a previously truncated default-rate sweep.",
+  "solver": {
+    "path": ".build/heartbeat-20261003-1432/ClassicSolver",
+    "sha256": "1a0a15153eb3b225c7202d0ae91869c796f94c07b3a1a82a174533e88e889876",
+    "compilerOptions": ["-O", "-swift-version", "6"]
+  },
+  "nativeLibrary": {
+    "path": ".build/fan-library-tests/libNxlvKit.dylib",
+    "sha256": "3c5f3af7276aace14b84ba0a39abf499fcdd30758dd6e2d09a0da33a0020d331",
+    "compilerOptions": ["-O", "-swift-version", "6"]
+  },
+  "knownStrictWinControl": {
+    "level": "fan:lldb-505/KillerMaster 1 Tame 1.dat#1",
+    "outcome": "1/1 at tick 375",
+    "replaySha256": "b9ca8ab40c9f47693ff9a200fee04996454471c8cd184eaa382ab8247d4616fa",
+    "matchesEarlierVerifiedReplay": true
+  },
+  "sweeps": [
+    {
+      "level": "fan:lldb-310/TWPAK08.dat#2",
+      "title": "Blocked Bridge",
+      "archiveSha256": "f94f553269e5905504794d67259eea0f78bbf8a85c9ac19135df60c47855dc39",
+      "initialStateHash": "1d232d882da40e38e1d872c5c2af67aec3fa34df695dfd2262a6e5ca6908d452",
+      "releaseRate": "level default",
+      "timeLimitSeconds": 30,
+      "elapsedSeconds": 27,
+      "waitingRouteTick": 912,
+      "assignments": 28228,
+      "completedContinuations": 28228,
+      "deadlineExpired": false,
+      "bestSaved": "0/20",
+      "partialReplay": ".build/heartbeat-20261003-1432/blocked-bridge.json.partial.json"
+    },
+    {
+      "level": "fan:lldb-310/TWPAK08.dat#2",
+      "title": "Blocked Bridge",
+      "archiveSha256": "f94f553269e5905504794d67259eea0f78bbf8a85c9ac19135df60c47855dc39",
+      "initialStateHash": "1d232d882da40e38e1d872c5c2af67aec3fa34df695dfd2262a6e5ca6908d452",
+      "releaseRate": 99,
+      "timeLimitSeconds": 30,
+      "waitingRouteTick": 221,
+      "assignments": 13399,
+      "completedContinuations": 13398,
+      "deadlineExpired": true,
+      "bestSaved": "0/20",
+      "partialReplay": ".build/heartbeat-20261003-1432/blocked-bridge-rate99.json.partial.json"
+    },
+    {
+      "level": "fan:lldb-347/MARSHY03.DAT#3",
+      "title": "Don't leave any lemmings",
+      "archiveSha256": "dc63b72f64113f3aebb08bd16fbe1c59bae2c3dc04b0146a2954089ce46fedfa",
+      "timeLimitSeconds": 30,
+      "waitingRouteTick": 360,
+      "completedContinuations": 2426,
+      "deadlineExpired": true,
+      "bestSaved": "0/25",
+      "partialReplay": ".build/heartbeat-20261003-1432/marshy.json.partial.json"
+    }
+  ],
+  "limits": "The complete default-rate sweep covers after-tick one-skill assignments on its viable no-input timeline only. Other release rates, multiple skills, exact source behaviour and physics parity remain open. No new winning replay or difficulty score was found."
+}

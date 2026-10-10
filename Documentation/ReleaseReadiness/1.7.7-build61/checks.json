@@ -1,0 +1,31 @@
+{
+  "version": "1.7.7",
+  "build": 61,
+  "sourceCommit": "17498ea029200507d6064ce897d6711f45938079",
+  "passed": [
+    "32 release-tool tests",
+    "14 difficulty-tool tests",
+    "offline nuke audio",
+    "offline Adaptive DJ mix",
+    "native playfield drawing",
+    "251 rescue proofs and 17 rescue records",
+    "350 bundled solution fixtures and 352 hint routes",
+    "352 Classic/conversion routes and 1056 saved-run recoveries",
+    "48-check minor audit, zero failures and no source drift (five optional checks not run)",
+    "release UI across Classic, L2 and L3, including cursor choices, backpacks, dialog targets, nuke, recovery, journey and saved sessions",
+    "Apple notarisation accepted exact archive",
+    "ticket stapled and validated",
+    "strict signature verification after stapling",
+    "quarantined final archive accepted by Gatekeeper",
+    "ZIP integrity, app-only contents and size",
+    "Ed25519 signature against shipping app public key",
+    "public download, asset SHA-256 and size, frozen tag, latest release and live signed appcast"
+  ],
+  "knownLimits": [
+    "Strict diagnostic Golems alternatives do not match preserved final state or timing on the current build. Bridge Doom still saves 74/75 at tick 2531 but has a different final-state hash. Seems simple enough...but saves 68 at tick 2428, expected 2430. The selected Pass Interference route saves 30/30 at tick 1020, expected 1021. These are not exact replay passes.",
+    "Source-action derivation verifier lacks ignored lldb-all-records/manifest.json and was not verified.",
+    "Foreground shipping-app launch, audible playback, physical Intel/minimum-macOS and installed Sparkle upgrade have not been run for 1.7.7. All automated UI checks must stay offscreen and muted."
+  ],
+  "auditSourceCommit": "01a6879ded37beaa7ae21d76c3144f1a0075c62b",
+  "changesAfterAudit": "Only welcome text and release-note prose. Engine, assets, UI behaviour and tests unchanged."
+}

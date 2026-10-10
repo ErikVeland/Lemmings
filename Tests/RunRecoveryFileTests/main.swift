@@ -111,6 +111,42 @@ for invalid in [FanRunRecovery(queue: [], index: 0), .init(queue: [validEntry], 
 }
 print("PASS fan checkpoint queue bounds and archive-member validation")
 
+// The store picks the newest run from headers and rereads a header only when its file changes.
+let storeDirectory = root.appendingPathComponent("store")
+let store = RunRecoveryStore(directory: storeDirectory)
+func run(tick: Int, savedAt: TimeInterval, profileID: String = "player", id: UUID = UUID()) -> RunRecovery {
+    var value = RunRecovery(engine: "test", profileID: profileID, runID: id, dataSetID: "lemmings",
+        levelIndex: 0, levelFingerprint: "level", initialStateHash: "initial", tick: tick, events: [],
+        stateHash: "state-\(tick)", usedRewind: false, nukeCount: 0, rewindCount: 0, undoCount: 0,
+        selectedSkill: 0, scrollX: 0, scrollY: 0)
+    value.savedAt = Date(timeIntervalSinceReferenceDate: savedAt)
+    return value
+}
+let olderRun = run(tick: 1, savedAt: 100), newerRun = run(tick: 2, savedAt: 200)
+store.save(olderRun, immediately: true) { fatalError($0) }
+store.save(newerRun, immediately: true) { fatalError($0) }
+store.save(run(tick: 3, savedAt: 300, profileID: "other"), immediately: true) { fatalError($0) }
+try check(try store.latest(profileID: "player")?.runID == newerRun.runID, "Store did not choose the newest run")
+try check(try store.latest(profileID: "player")?.runID == newerRun.runID, "Cached scan changed the newest run")
+
+// Another process advances the olderRun run. The cached header must not hide it.
+let otherWriter = RunRecoveryFile(url: storeDirectory.appendingPathComponent(olderRun.runID.uuidString + ".json"))
+_ = try otherWriter.load()
+try otherWriter.save(run(tick: 4, savedAt: 400, id: olderRun.runID))
+let advanced = try store.latest(profileID: "player")
+try check(advanced?.runID == olderRun.runID && advanced?.tick == 4, "Store kept a stale header after another writer")
+
+// A damaged primary goes through the full load, which restores its backup (the earlier save).
+let olderURL = storeDirectory.appendingPathComponent(olderRun.runID.uuidString + ".json")
+try Data("damaged".utf8).write(to: olderURL)
+try check(try store.latest(profileID: "player")?.runID == newerRun.runID, "Damaged primary blocked the scan")
+try check(try RunRecoveryFile(url: olderURL).header()?.savedAt == olderRun.savedAt, "Damaged primary was not restored from backup")
+
+// A cleared run leaves Resume.
+try store.clear(olderRun.runID)
+try check(try store.latest(profileID: "player")?.runID == newerRun.runID, "Cleared run stayed in Resume")
+print("PASS store chooses the newest run from cached headers and follows outside writes")
+
 for trial in 0..<10 {
     let directory = root.appendingPathComponent("process-\(trial)")
     let process = Process()

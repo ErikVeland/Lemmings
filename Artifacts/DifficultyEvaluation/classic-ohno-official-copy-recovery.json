@@ -1,0 +1,76 @@
+{
+  "date": "2026-10-04",
+  "exactMemberSolverCheck": "2/2 selected rules wins with --member and no mechanics override",
+  "existingWinsRechecked": [
+    "fan:lldb-264/ConwayChallenges 2.DAT#4",
+    "fan:lldb-264/ConwayChallenges 2.DAT#8"
+  ],
+  "learningPath": "292 lessons: 156 official, 136 fan, zero duplicate objectives, zero two-player levels and zero preparation gaps",
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "newWins": [
+    {
+      "archiveSHA256": "73f28c4f559b796ea5d8566bd2a34905ae6465ab0d30ab8845ab981332af09bd",
+      "difficultyProbeCount": 10,
+      "difficultyScore": 465.72532601771127,
+      "eventCount": 11,
+      "exactMemberSolverOutcome": {
+        "didWin": true,
+        "released": 50,
+        "required": 50,
+        "saved": 50,
+        "stateHash": "0c4cc97379607e728accd64d9d47ed7567f089160ba7f8b5a183f73abb2e4834",
+        "ticks": 1946
+      },
+      "exactMemberSolverReplaySHA256": "996ca636efd285956306ba9df45765ea309bfd97e8724bfdb55f0f86dc4c8814",
+      "nativeInitialStateHash": "000fc642cd448a2425f43ac044bd738148086d28dac761adfc435cd43e57fa2c",
+      "officialDonorIdentity": "ohNoMoreLemmings-DLVEL-100/82:Havoc:3:3:2",
+      "replaySHA256": "a287e654b9749485a37a24fe17312b4ad0fbbbf7bab2e81da774fb8c9b5aa8ec",
+      "selectedMechanics": "ohNoMore",
+      "strictExactLevelOutcome": {
+        "didWin": true,
+        "released": 50,
+        "required": 50,
+        "saved": 50,
+        "stateHash": "0c4cc97379607e728accd64d9d47ed7567f089160ba7f8b5a183f73abb2e4834",
+        "ticks": 1946
+      },
+      "targetIdentity": "fan:lldb-264/ConwayChallenges 2.DAT#6",
+      "targetTitle": "No time to waste"
+    },
+    {
+      "archiveSHA256": "9e526440f087a13921d8863a91fcfd5d33eaad4b3a2e44bdcd12c9ffea52c9ab",
+      "difficultyProbeCount": 10,
+      "difficultyScore": 430.30667815102004,
+      "eventCount": 18,
+      "exactMemberSolverOutcome": {
+        "didWin": true,
+        "released": 20,
+        "required": 20,
+        "saved": 20,
+        "stateHash": "345e2bed60676024ea88765d2bde0dda23ff1273e52dac80a88ff375fe6db88e",
+        "ticks": 3025
+      },
+      "exactMemberSolverReplaySHA256": "821c0254e601c553d981885d5a0a37f512d2a23577dc726eb2df5593d81b3523",
+      "nativeInitialStateHash": "4ce3eda0a44fadc18cb359dca1b7462e8be044fb340ef4d5ad750c4ae3ed08ab",
+      "officialDonorIdentity": "ohNoMoreLemmings-DLVEL-100/83:Havoc:4:2:7",
+      "replaySHA256": "c955021dc71ceddf8060097aa39302a9699a42da9821b19f97f60addb6f22f2c",
+      "selectedMechanics": "ohNoMore",
+      "strictExactLevelOutcome": {
+        "didWin": true,
+        "released": 20,
+        "required": 20,
+        "saved": 20,
+        "stateHash": "345e2bed60676024ea88765d2bde0dda23ff1273e52dac80a88ff375fe6db88e",
+        "ticks": 3025
+      },
+      "targetIdentity": "fan:lldb-301/Pacpack2.dat#1",
+      "targetTitle": "The race against cliches II"
+    }
+  ],
+  "scope": "Two exact bundled Classic fan copies of official Oh No! levels gained native winning replays after their selected hatch rules were corrected.",
+  "sourceBuiltExactMemberSolverSHA256": "67e95b8e9e82b1a7777e1ec2e91a15b892e459e433b3ef68c55efb30375b8c2c",
+  "sourceBuiltScorerSHA256": "486955df10abe70221be410377dfa0eafc1b67fe930954e97324f16e9ec35314",
+  "sourceBuiltSolverSHA256": "eec774e9a955a2a7bb24882486aa2bc65d698cc458fb71071d2317a016a0610d",
+  "sourcePhysicsParity": "unverified; native wins do not establish independent source-state parity",
+  "strictPackVerification": "4/4 selected scored members across packs 264 and 301 passed strict exact-level replay after promotion"
+}

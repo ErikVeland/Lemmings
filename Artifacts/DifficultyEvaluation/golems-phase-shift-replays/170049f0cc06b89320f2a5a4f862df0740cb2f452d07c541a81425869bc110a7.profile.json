@@ -1,0 +1,120 @@
+{
+  "components" : {
+    "concurrencyBurden" : 320,
+    "constraintPressure" : 431.265974127793,
+    "deductionComplexityProxy" : 405,
+    "executionPrecision" : 0,
+    "solutionComplexity" : 751.8826871473022,
+    "techniqueBurden" : 670
+  },
+  "confidence" : "medium",
+  "criticalActions" : [
+
+  ],
+  "detectedTechniques" : [
+    "builder",
+    "climber",
+    "digger",
+    "miner",
+    "multiple-worker-coordination",
+    "release-rate-manipulation"
+  ],
+  "explanation" : [
+    "4 used skill types; 3 assigned workers; 7 same-worker skill changes.",
+    "Maximum concurrent worker regions: 2.",
+    "Timing probes: 10. Untested alternatives remain unknown.",
+    "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+    "Source rank: fan:lldb-491."
+  ],
+  "key" : {
+    "analyserVersion" : "difficulty-3",
+    "assetsRevision" : "11f95529df3afc9df1b03b8aa39270ff30f71fc8533b2b83fc215cfbb3f20cb8:probes-10",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Genesis Mayhem.dat#7",
+      "packID" : "fan:lldb-491"
+    },
+    "levelRevision" : "f648151520692b675936d0e254663d177e91370029534658305470bb740f89b6",
+    "replayRevision" : "SHA256 digest: 170049f0cc06b89320f2a5a4f862df0740cb2f452d07c541a81425869bc110a7",
+    "simulationVersion" : "neolemmix-ce-2026-09-27"
+  },
+  "overallScore" : 458.92876780901963,
+  "precision" : {
+    "actions" : [
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 1
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 2
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 3
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 48
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 49
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 50
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 51
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 52
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 53
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 54
+      }
+    ],
+    "alternativeRunCount" : 0,
+    "assignmentCount" : 14,
+    "completed" : false,
+    "orderingOutcomes" : [
+
+    ],
+    "runCount" : 10,
+    "selectionOutcomes" : [
+
+    ]
+  },
+  "prerequisiteConcepts" : [
+
+  ],
+  "sourceRank" : "fan:lldb-491"
+}

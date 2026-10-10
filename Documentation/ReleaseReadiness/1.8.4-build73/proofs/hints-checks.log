@@ -1,0 +1,12 @@
+Recorded output from completed commands; no checks rerun for this receipt.
+
+generate-level-hints.sh prerequisite stdout:
+PASS 350 bundled winning replays match the fixtures
+
+Exporter: exited 0 after 350 per-deck PASS lines; full stdout is in the task transcript.
+
+test-level-hint-catalogue.sh stdout:
+PASS: 350 hint decks; 196 release-rate contexts; event ordering and spoiler boundaries
+
+Baseline comparison stdout:
+PASS all350 regenerated hint decks retained byte-equivalent data; current engine a23fc195617af7cd2d6b162d5244b44a0f45ad12be10ac9f013d4ad9e794fe86

@@ -5,7 +5,7 @@ import NxlvKit
 /// Polls connected extended gamepads without taking over input in other apps.
 @MainActor final class GameplayController {
     private weak var keyboard: GameplayKeyboard?
-    private var timer: Timer?
+    nonisolated(unsafe) private var timer: Timer?
     private var bindings = ControllerBindings()
     private var previousMapping: [String: String] = [:]
     private var device: ObjectIdentifier?
@@ -118,5 +118,5 @@ import NxlvKit
             if context != keyboard.controllerContext || !keyboard.active() { stopBoost(at: now); break }
         }
     }
-    isolated deinit { timer?.invalidate() }
+    deinit { timer?.invalidate() }
 }

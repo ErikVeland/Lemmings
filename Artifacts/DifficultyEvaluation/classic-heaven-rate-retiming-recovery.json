@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-04",
+  "difficultyProbeRuns": 10,
+  "difficultyScore": 86.00035257282727,
+  "donorArchiveSHA256": "102ffe175287b115424dbbc74fd4e409dc4ac2676dd530700418c85b76614747",
+  "donorIdentity": "fan:lldb-549/Ji Hoon Earth 2.DAT#1",
+  "donorReplaySHA256": "9a7ca01c6c420fd8563e377a24f12932724a9678a552d84de7a701e9b51dff34",
+  "eventCount": 11,
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "retiming": "Removed the donor\u2019s ineffective rate-25 command, shifted each Bomber assignment earlier by 12 ticks per worker and then by 4 ticks. The donor\u2019s rate-99 command stayed at tick 586.",
+  "retimingCandidatesTested": 70,
+  "selectedNativeReplaySHA256": "216776a08372254298e2a13b0af3040a116c2c1987dc005a781163bb9149eefb",
+  "sourceBuiltScorerSHA256": "486955df10abe70221be410377dfa0eafc1b67fe930954e97324f16e9ec35314",
+  "sourcePhysicsParity": "unverified; native win does not establish independent source-state parity",
+  "strictNativeOutcome": {
+    "didWin": true,
+    "released": 80,
+    "required": 16,
+    "saved": 70,
+    "stateHash": "67a33d9990b2f842c7e5e560efd519ae85ef99138aae7d1ce2f40b155ad13f56",
+    "ticks": 1128
+  },
+  "strictPackVerification": "11/11 selected scored levels in fan:lldb-547 passed exact bundled replay after promotion",
+  "targetArchiveSHA256": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971",
+  "targetIdentity": "fan:lldb-547/Ji Hoon Heaven 2.DAT#8",
+  "targetInitialStateHash": "2e7dd40653ffbf92af8065252cdeec48c5682da37bbb4d8b7ee87413cb634258",
+  "targetTitle": "Stop, Block and Blow",
+  "winningCandidateFileSHA256": "6edb0829d9f75f59133b92afd099f21f8ecfc712976683205b893561cb8e12ad"
+}

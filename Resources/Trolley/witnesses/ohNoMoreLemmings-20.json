@@ -1,0 +1,81 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "afterTick" : true,
+      "tick" : 16
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 65
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 19
+        }
+      },
+      "afterTick" : true,
+      "tick" : 66
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 53
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2142
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2205
+    },
+    {
+      "action" : {
+        "nuke" : {
+
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2360
+    },
+    {
+      "action" : {
+        "nuke" : {
+
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2362
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 48,
+    "saved" : 48,
+    "stateHash" : "1f0da0ad406253606af070b2648ab6fc49d433a82d0a9897793fff68e05195b3",
+    "ticks" : 2508
+  },
+  "initialStateHash" : "e3a89358fb3a7f947d5a141ba3d853ea15db87342cc557d6da3b601929a03ff0",
+  "number" : 1,
+  "rank" : "Crazy",
+  "title" : "Quote: \"That`s a good level\""
+}

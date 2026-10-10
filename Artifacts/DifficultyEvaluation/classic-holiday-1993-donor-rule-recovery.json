@@ -1,0 +1,336 @@
+{
+  "date": "2026-10-04",
+  "method": "Apply official Holiday 1993 winning event sequences to the exact bundled Flurry and Blitz fan members under current selected mechanics. Nine fan level descriptions match their official counterparts, including rendered geometry; The Next Lemeration raises the rescue goal from 47 to 48 but the donor still saves 48. Every candidate was strictly replayed on its exact fan member before score promotion and in the 30/30 selected two-pack check.",
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "newlyVerifiedWins": 10,
+  "probeBinarySHA256": "c2f6534c283e10a1b2864097a2c7df504800614f9ddd8c4384ce8468efcc56c8",
+  "records": [
+    {
+      "difficultyProbeRuns": 10,
+      "difficultyScore": 214.3783233740706,
+      "exactBundledArchiveSHA256": "a88766fb7218b24c824b4de0400c2ef124b85667d6e759bd4ee0384a46b32ae9",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Flurry.DAT#9",
+        "packID": "fan:lldb-484"
+      },
+      "levelDataDifferences": {},
+      "nativeInitialStateHash": "d9f5cf028f49b938a478167eb1b66e598cc0e5c070ea4a8b86cc2dd9a8a9af32",
+      "officialDonorIdentity": {
+        "engine": "classic",
+        "levelID": "9:Flurry:10:5:1",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "officialDonorInitialStateHash": "aaf0b817d3d9b0a018aaeaf2436d3d1f8180be21e8568e7b9ad4c5c8e2fd60bb",
+      "originalRulesComparison": "RESULT fan:lldb-484 Flurry.DAT#9 native original 32 25 3833 true",
+      "renderedGeometryEqual": true,
+      "selectedMechanics": "original",
+      "selectedNativeReplaySHA256": "7e06cae7a14ad4c94f8cbdfda935e92890de868b5228df032ac488ec1df8c914",
+      "strictNativeOutcome": {
+        "didWin": true,
+        "released": 32,
+        "required": 25,
+        "saved": 32,
+        "stateHash": "a60b96b8735d8ed33ee425c54bcab639f8ceba33bd9dd2c066ad4390e100e8b3",
+        "ticks": 3833
+      },
+      "title": "32 Lemmings Below Zero"
+    },
+    {
+      "difficultyProbeRuns": 10,
+      "difficultyScore": 346.7882795248352,
+      "exactBundledArchiveSHA256": "a88766fb7218b24c824b4de0400c2ef124b85667d6e759bd4ee0384a46b32ae9",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Flurry.DAT#13",
+        "packID": "fan:lldb-484"
+      },
+      "levelDataDifferences": {},
+      "nativeInitialStateHash": "7974f9d24c1ed72159a6ac2ae922eb53e052542254ce513a28df196a18c92578",
+      "officialDonorIdentity": {
+        "engine": "classic",
+        "levelID": "13:Flurry:14:5:5",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "officialDonorInitialStateHash": "68cdb7cc9134d9cd54777032aca48ed4435899e3c6dc6e7ca5d7c5b255831d90",
+      "originalRulesComparison": "RESULT fan:lldb-484 Flurry.DAT#13 native original 0 75 1046 false",
+      "renderedGeometryEqual": true,
+      "selectedMechanics": "ohNoMore",
+      "selectedNativeReplaySHA256": "9ca4266af5a1f818bd16e503b27a2b79451a2832f13eae6dbf62be0b24358d24",
+      "strictNativeOutcome": {
+        "didWin": true,
+        "released": 80,
+        "required": 75,
+        "saved": 80,
+        "stateHash": "2186df1907dd091c9402f22222693885a030f527461322369e1c7aca45509781",
+        "ticks": 2171
+      },
+      "title": "Marshmallow Land"
+    },
+    {
+      "difficultyProbeRuns": 10,
+      "difficultyScore": 497.19404757580475,
+      "exactBundledArchiveSHA256": "48a861bf42e574cdd99346fb2d9971df01db66a7bd49cbfc036c2a074c1becc0",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Blitz.DAT#0",
+        "packID": "fan:lldb-485"
+      },
+      "levelDataDifferences": {},
+      "nativeInitialStateHash": "595792985b28ba039eaedf5c03fde7441f22906e94bcc5005f63b3a3d76642a4",
+      "officialDonorIdentity": {
+        "engine": "classic",
+        "levelID": "16:Blizzard:1:6:0",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "officialDonorInitialStateHash": "20a8d1aef6ca4c28b340f76ab092baed64c9ccef35b91aec52ee150f07477a88",
+      "originalRulesComparison": "ERROR fan:lldb-485 Blitz.DAT#0 native original engine refused to queue builder for lemming 23 at tick 4801",
+      "renderedGeometryEqual": true,
+      "selectedMechanics": "ohNoMore",
+      "selectedNativeReplaySHA256": "93cbd595d012452ba697095ded1b1ae3c197070e329781b2d38879f901bcc0cc",
+      "strictNativeOutcome": {
+        "didWin": true,
+        "released": 25,
+        "required": 22,
+        "saved": 22,
+        "stateHash": "a12b48f5fa8fbe3753a82ffc6bac6980dfec235ff441be1df430813b50e6e210",
+        "ticks": 6182
+      },
+      "title": "Oogilemming!"
+    },
+    {
+      "difficultyProbeRuns": 10,
+      "difficultyScore": 236.11704403895794,
+      "exactBundledArchiveSHA256": "48a861bf42e574cdd99346fb2d9971df01db66a7bd49cbfc036c2a074c1becc0",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Blitz.DAT#1",
+        "packID": "fan:lldb-485"
+      },
+      "levelDataDifferences": {},
+      "nativeInitialStateHash": "c959f59c71fa492694e4133eab2520fa94a77769689b195d3658698286e083a3",
+      "officialDonorIdentity": {
+        "engine": "classic",
+        "levelID": "17:Blizzard:2:6:1",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "officialDonorInitialStateHash": "e83abe35429e6d14137d47ee58cfedf1ea660473417d9b7ed9bad38e4d33bb53",
+      "originalRulesComparison": "RESULT fan:lldb-485 Blitz.DAT#1 native original 0 80 2157 false",
+      "renderedGeometryEqual": true,
+      "selectedMechanics": "ohNoMore",
+      "selectedNativeReplaySHA256": "f980ab5b4cf743fd24246a21aa77acfb4edbed566af2e470ae9df191762e7b24",
+      "strictNativeOutcome": {
+        "didWin": true,
+        "released": 80,
+        "required": 80,
+        "saved": 80,
+        "stateHash": "015bcc769822a36c8b15c81fedab561c9417a5af03dda6368e3d20bb15899d8e",
+        "ticks": 2176
+      },
+      "title": "Lemmings Up High"
+    },
+    {
+      "difficultyProbeRuns": 10,
+      "difficultyScore": 297.67013287253155,
+      "exactBundledArchiveSHA256": "48a861bf42e574cdd99346fb2d9971df01db66a7bd49cbfc036c2a074c1becc0",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Blitz.DAT#6",
+        "packID": "fan:lldb-485"
+      },
+      "levelDataDifferences": {},
+      "nativeInitialStateHash": "28d5f893e3d39c4705470733e6736a288333048448fc2c1cd653c21c3fbc0f47",
+      "officialDonorIdentity": {
+        "engine": "classic",
+        "levelID": "22:Blizzard:7:6:6",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "officialDonorInitialStateHash": "3962025c48216a813cde7d4f10331e31747cac2a6786fbc853147eff0150b6f1",
+      "originalRulesComparison": "ERROR fan:lldb-485 Blitz.DAT#6 native original engine refused to queue builder for lemming 0 at tick 845",
+      "renderedGeometryEqual": true,
+      "selectedMechanics": "ohNoMore",
+      "selectedNativeReplaySHA256": "d8eecf54ff70bdee3a64c4f429fa2ec7a4c3046001f921f6a3e77e9d9700c9b1",
+      "strictNativeOutcome": {
+        "didWin": true,
+        "released": 60,
+        "required": 55,
+        "saved": 60,
+        "stateHash": "7083fa70ca92e480b9904c824b6b582242ebdb5e0f64aab6cdd42cfdec6441a8",
+        "ticks": 3050
+      },
+      "title": "Break on through..."
+    },
+    {
+      "difficultyProbeRuns": 10,
+      "difficultyScore": 398.8712757102405,
+      "exactBundledArchiveSHA256": "48a861bf42e574cdd99346fb2d9971df01db66a7bd49cbfc036c2a074c1becc0",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Blitz.DAT#8",
+        "packID": "fan:lldb-485"
+      },
+      "levelDataDifferences": {},
+      "nativeInitialStateHash": "a48c97ecba32eb132893f57839f91efe439d7e8f59997674b511b5b523c3a19b",
+      "officialDonorIdentity": {
+        "engine": "classic",
+        "levelID": "24:Blizzard:9:7:0",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "officialDonorInitialStateHash": "9641e6289b532badf20e54dda983401a52cbbd9a24407d009a578d68b66d7a4d",
+      "originalRulesComparison": "ERROR fan:lldb-485 Blitz.DAT#8 native original engine refused to queue digger for lemming 0 at tick 2050",
+      "renderedGeometryEqual": true,
+      "selectedMechanics": "ohNoMore",
+      "selectedNativeReplaySHA256": "c2987eaaf60090232981703cabfcd71754c792acd4aa28844ca1ee597d5027dc",
+      "strictNativeOutcome": {
+        "didWin": true,
+        "released": 80,
+        "required": 75,
+        "saved": 80,
+        "stateHash": "f1528e4bcf7ec16d1f8cab91af7cc54626e536055778f199df3d25ecac713b99",
+        "ticks": 5393
+      },
+      "title": "Lemmings...The Motion Picture"
+    },
+    {
+      "difficultyProbeRuns": 10,
+      "difficultyScore": 443.0944303756573,
+      "exactBundledArchiveSHA256": "48a861bf42e574cdd99346fb2d9971df01db66a7bd49cbfc036c2a074c1becc0",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Blitz.DAT#10",
+        "packID": "fan:lldb-485"
+      },
+      "levelDataDifferences": {},
+      "nativeInitialStateHash": "38a2722491c9a5451beda8b8486e4bfc1eedac18c91aae4e9297ed05b5b01582",
+      "officialDonorIdentity": {
+        "engine": "classic",
+        "levelID": "26:Blizzard:11:7:2",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "officialDonorInitialStateHash": "c53686b616e5af9bcb7bbdfbcb98a22b9350831bebf962f90ebbcf117c1fc928",
+      "originalRulesComparison": "ERROR fan:lldb-485 Blitz.DAT#10 native original engine refused to queue builder for lemming 1 at tick 519",
+      "renderedGeometryEqual": true,
+      "selectedMechanics": "ohNoMore",
+      "selectedNativeReplaySHA256": "a532e1c7de521f75998db7c42663df0a6158fdca2857fef277cebdf9d33f5c44",
+      "strictNativeOutcome": {
+        "didWin": true,
+        "released": 80,
+        "required": 80,
+        "saved": 80,
+        "stateHash": "12fa44471a1103b7161754ca58f97b5886a2db0146db978a441fe8aabbc395d5",
+        "ticks": 2649
+      },
+      "title": "The Search for Lem"
+    },
+    {
+      "difficultyProbeRuns": 10,
+      "difficultyScore": 275.77877273851226,
+      "exactBundledArchiveSHA256": "48a861bf42e574cdd99346fb2d9971df01db66a7bd49cbfc036c2a074c1becc0",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Blitz.DAT#12",
+        "packID": "fan:lldb-485"
+      },
+      "levelDataDifferences": {},
+      "nativeInitialStateHash": "d4b0d40092c218a789c6c605d8e795423b19fc0b3877dd93350e7d3b84612887",
+      "officialDonorIdentity": {
+        "engine": "classic",
+        "levelID": "28:Blizzard:13:7:4",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "officialDonorInitialStateHash": "6e1e38b3b8fe4892c69b1b45e3070280997332923d674209ca5e1a723e1ca214",
+      "originalRulesComparison": "ERROR fan:lldb-485 Blitz.DAT#12 native original engine refused to queue blocker for lemming 4 at tick 267",
+      "renderedGeometryEqual": true,
+      "selectedMechanics": "ohNoMore",
+      "selectedNativeReplaySHA256": "7f60976fb0dcef7ebae39677d89de3704aa8dcab30235c3e9af945a0efdbb90b",
+      "strictNativeOutcome": {
+        "didWin": true,
+        "released": 70,
+        "required": 65,
+        "saved": 65,
+        "stateHash": "21f57e2108c1abe56dd49567719c425b9ccfbce8f7dc1001c6aafd6be35e5a08",
+        "ticks": 2656
+      },
+      "title": "The Final Frontier"
+    },
+    {
+      "difficultyProbeRuns": 10,
+      "difficultyScore": 512.3,
+      "exactBundledArchiveSHA256": "48a861bf42e574cdd99346fb2d9971df01db66a7bd49cbfc036c2a074c1becc0",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Blitz.DAT#14",
+        "packID": "fan:lldb-485"
+      },
+      "levelDataDifferences": {},
+      "nativeInitialStateHash": "6d9108fe74460a1c534f9833c987cc164dab9b3c49b8bfec1a6fc36bca65f699",
+      "officialDonorIdentity": {
+        "engine": "classic",
+        "levelID": "30:Blizzard:15:7:6",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "officialDonorInitialStateHash": "173cce94169a877e21dd16c4d88de8e7f7357fa275beeb60f83ccaa1a4d0fb15",
+      "originalRulesComparison": "RESULT fan:lldb-485 Blitz.DAT#14 native original 8 8 8162 true",
+      "renderedGeometryEqual": true,
+      "selectedMechanics": "original",
+      "selectedNativeReplaySHA256": "868a213fc0454affcb8379fb371ca5665b7da0d39ba43f501b8bfe989b860484",
+      "strictNativeOutcome": {
+        "didWin": true,
+        "released": 15,
+        "required": 8,
+        "saved": 8,
+        "stateHash": "c08bb14b6e274575fa084cea1a00b44ac9a800f372720296e929e7df613bd53b",
+        "ticks": 8162
+      },
+      "title": "The Needs of the Many..."
+    },
+    {
+      "difficultyProbeRuns": 10,
+      "difficultyScore": 388.1536916133931,
+      "exactBundledArchiveSHA256": "48a861bf42e574cdd99346fb2d9971df01db66a7bd49cbfc036c2a074c1becc0",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Blitz.DAT#15",
+        "packID": "fan:lldb-485"
+      },
+      "levelDataDifferences": {
+        "requiredToSave": [
+          48,
+          47
+        ],
+        "saveRequirement": [
+          48,
+          47
+        ]
+      },
+      "nativeInitialStateHash": "61358469a6691b4c6f4693092a1539c0b89fdc4fc87575bb4910e469fe2a5cc6",
+      "officialDonorIdentity": {
+        "engine": "classic",
+        "levelID": "31:Blizzard:16:7:7",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "officialDonorInitialStateHash": "307348004e9b63be6e335df2a404a55603a7373266f430dd9ae2e3070b85c0e7",
+      "originalRulesComparison": "ERROR fan:lldb-485 Blitz.DAT#15 native original engine refused to queue bomber for lemming 6 at tick 861",
+      "renderedGeometryEqual": true,
+      "selectedMechanics": "ohNoMore",
+      "selectedNativeReplaySHA256": "a91d6cf24bca5ab4a986a096447e37f4c3fc79b8b82565adfe4a6964f9a00882",
+      "strictNativeOutcome": {
+        "didWin": true,
+        "released": 50,
+        "required": 48,
+        "saved": 48,
+        "stateHash": "54de832f798461fa6469e50cac0d65fec5267220287e692242099e683aab8db8",
+        "ticks": 1759
+      },
+      "title": "The Next Lemeration"
+    }
+  ],
+  "scorerBinarySHA256": "e5798bb8ca6b302e42ebf39da50f4c7830e9bc072b65715a641abd94a658e168",
+  "sourceOfficialSolutionsSHA256": "00ece9ff3fb543746c3b2ca5aa39459e2b8c88562c49166fa84d3ba81cede7bb",
+  "sourcePhysicsParity": "unverified; native wins and matching level geometry do not establish frame-by-frame source behaviour",
+  "stillUnscoredInTwoPacks": [
+    "fan:lldb-484/Flurry.DAT#7",
+    "fan:lldb-484/Flurry.DAT#15"
+  ],
+  "strictPostPromotionChecks": "30/30 selected Flurry and Blitz members"
+}

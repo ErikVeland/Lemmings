@@ -1,0 +1,106 @@
+{
+  "boundedNoWins": [
+    {
+      "archiveSHA256": "a1883fb43a9148fb8feeb3cf88b817663bd9bb9b5e23ae179ffe5c6166686b81",
+      "assignments": 58,
+      "bestSaved": "0/4",
+      "completedContinuations": 1024,
+      "deadlineReached": false,
+      "firstTickWindow": "1..300",
+      "identity": "fan:lldb-68/Lemmy556 More levels.dat#0",
+      "initialRate": 99,
+      "partialSHA256": "6ee6a939a457ba7f094b79213cebe62dbb27a464212d321e520b3d3e50105e9c",
+      "secondGapWindow": "1..150",
+      "skills": "builder,builder",
+      "waitingRouteTick": 111
+    },
+    {
+      "archiveSHA256": "0a3abaedb6028f6082c310f7f40f44678b1af6af282db08336b34fc8848088b3",
+      "assignments": 5427,
+      "bestSaved": "0/1",
+      "completedContinuations": 5427,
+      "deadlineReached": false,
+      "firstTickWindow": "1..1013",
+      "identity": "fan:lldb-434/LDChallenge05.dat#2",
+      "initialRate": 99,
+      "partialSHA256": "949857fc8287ee9ca7ed03221a128ea65f92fc796480cd414f4237693a922798",
+      "secondGapWindow": null,
+      "skills": "blocker",
+      "waitingRouteTick": 1013
+    },
+    {
+      "archiveSHA256": "0a3abaedb6028f6082c310f7f40f44678b1af6af282db08336b34fc8848088b3",
+      "assignments": 15954,
+      "bestSaved": "0/1",
+      "completedContinuations": 15954,
+      "deadlineReached": false,
+      "firstTickWindow": "1..2042",
+      "identity": "fan:lldb-434/LDChallenge05.dat#4",
+      "initialRate": 99,
+      "partialSHA256": "4b0bf35e40d74e21e0150441d04100fb9dc2901d1fa680079c48c9c99406c563",
+      "secondGapWindow": null,
+      "skills": "blocker",
+      "waitingRouteTick": 2042
+    },
+    {
+      "archiveSHA256": "0a836e9df23084c3d30a968c613ee4c92976108db41e070f0b2fafde3d39fe2b",
+      "assignments": 9348,
+      "bestSaved": "1/40",
+      "completedContinuations": 9348,
+      "deadlineReached": false,
+      "firstTickWindow": "1..1022",
+      "identity": "fan:lldb-312/TWPAK10.dat#3",
+      "initialRate": 1,
+      "partialSHA256": "62f9f0b1004fb5759e15f2a3691f1a7a28e108988d9656c2439f7e2b592fa708",
+      "secondGapWindow": null,
+      "skills": "climber",
+      "waitingRouteTick": 1022
+    },
+    {
+      "archiveSHA256": "0a836e9df23084c3d30a968c613ee4c92976108db41e070f0b2fafde3d39fe2b",
+      "assignments": 11526,
+      "bestSaved": "1/40",
+      "completedContinuations": 11525,
+      "deadlineReached": true,
+      "firstTickWindow": "1..420",
+      "identity": "fan:lldb-312/TWPAK10.dat#3",
+      "initialRate": 99,
+      "partialSHA256": "b7b1f6a2996a6e59cd1a398e860dddd37221721059eba9e755cb69e84f2cd750",
+      "secondGapWindow": null,
+      "skills": "climber",
+      "waitingRouteTick": 420
+    }
+  ],
+  "date": "2026-10-04",
+  "limits": "A native win does not establish independent source physics parity. Bounded no-win searches do not prove impossibility.",
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "newWin": {
+    "archiveSHA256": "0a57113b4cfe3a62a46af248dc2766bf5b957c07c8f1166487c7395ceb3a9ee9",
+    "events": [
+      {
+        "releaseRate": 99,
+        "tick": 0
+      },
+      {
+        "lemmingID": 0,
+        "skill": "basher",
+        "tick": 170
+      }
+    ],
+    "identity": "fan:lldb-18/Mikepak13.dat#1",
+    "initialStateHash": "022197aec44546222ae1ee6f199d7c0fe9ef0ff3d92954ac110c79c9bdf575fe",
+    "outcome": {
+      "required": 50,
+      "saved": 50,
+      "ticks": 990
+    },
+    "replay": ".build/full-difficulty-evaluation/heartbeat-20261004-mikepak13.json",
+    "replaySHA256": "9757959c40acce8b6140a8449ee943bd5c151654b707b610e095c109ff17e5ce",
+    "score": 319.49450097847364,
+    "scoreConfidence": "high",
+    "stagedArchiveSHA256": "0a57113b4cfe3a62a46af248dc2766bf5b957c07c8f1166487c7395ceb3a9ee9",
+    "strictExactLevelChecks": "1/1 before and after promotion"
+  },
+  "solverSHA256": "5a6b02892b8fa5d18c980c83920556fee9126613b180a04f476e7e9ce07c96b6",
+  "strictVerifierSHA256": "27dadbe80919469e921d44255e672e7c0ae5a3b5d75bc6b62402595d61b66fa7"
+}

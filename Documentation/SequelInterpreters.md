@@ -82,7 +82,8 @@ Carriers show a tool label and remaining quantity. Clocks add one minute
 without replacing a held tool. Umbrellas open during falls; swimming aids
 activate in water. Turning a swimmer needs a second aid. Use and Drop prefer
 a carrier when lemmings overlap. Use activates suckers or starts a shimmy
-jump. Active climbing equipment shows its remaining time. Walker releases
+jump. Active Shimmy gear shows its remaining time. Sucker stock shows its
+remaining charges. Walker releases
 a wall or ceiling grip. Bombs stay at the lemming's feet. Grenades launch
 at 45 degrees, bounce, and have four charges per box.
 Walker interrupts work, releases a blocker, or turns a walking lemming.
@@ -132,18 +133,25 @@ later arrival after rearming. Synthetic tests also cover covering and jumps.
 The earlier foot-cell probe and victim death timing remain provisional.
 See [native trap evidence](Lemmings3TrapEvidence.md) for offsets and limitations.
 
-Work geometry, six-use work-tool boxes, action timing, drowning delay, fall limits,
+Work geometry, action timing, drowning delay, fall limits,
 sprite anchors, and animation IDs remain provisional. The construction tile
 comes from each style's native temporary object: 298 for Classic, 439 for
 Shadow, and 1152 for Egyptian, with provisional placement rules.
 Umbrella deployment and descent, swimming movement, and the five-second aid
 lifetime are also provisional. The automatic-tool tests check long-fall
 survival, consumption, water crossing, turns, and one-time clock collection.
-Suckers and shimmy devices use a provisional five-second active lifetime.
+Suckers have a provisional five-second activation window before wall contact.
+Once attached, they climb until their stock runs out or they reach a ledge.
+Each pickup supplies eight charges. The climb uses one charge per ten ticks
+and steps onto a ledge when the actor's head clears its top. Shimmy devices
+still use a provisional five-second active lifetime.
 Tests cover activation, wall-top transitions, flat ceilings, uneven ceilings,
-manual release, and exhaustion. Bombs use the manual's five-second fuse.
+manual release, and exhaustion. An exact-source DOS Shadow 103 capture shows
+eight Spade charges after a pickup; the native Spade stock matches that
+display. Its excavation width and collision timing still need direct
+original-engine comparison. Bombs use the manual's five-second fuse.
 Grenades use its eight-second fuse. Blast radii, trajectories, damping,
-and tool charge counts other than grenades remain provisional. Tests check
+and charge counts without original DOS checks remain provisional. Tests check
 fuses, inventory, terrain damage, permanent-terrain protection, and tool-box
 survival. Hadokens defeat creatures without damaging lemmings or terrain. Effect
 rendering uses tool icons, blast rings, and simple fireballs as preview art.

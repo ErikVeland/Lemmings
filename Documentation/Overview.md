@@ -6,8 +6,9 @@ the engineering documents. For gate-by-gate detail, see
 and the [partner evaluation brief](PartnerEvaluation.md). See the [content
 universe roadmap](ContentUniverseRoadmap.md) for the long-term 2D content scope.
 
-Ultimate Lemmings is an unofficial native macOS port of the original Lemmings
-games. It is not affiliated with, endorsed by, or licensed by Sony Interactive
+Ultimate Lemmings is an unofficial native port of the original Lemmings games.
+The release baseline is macOS. Version 1.3 added an iPhone/iPad development
+target, and 2.0 is the planned mobile release. It is not affiliated with, endorsed by, or licensed by Sony Interactive
 Entertainment, which holds the Lemmings rights today. See
 [README.md](../README.md) and `THIRD_PARTY_NOTICES.md` for the full notice.
 This document is a status summary, not a product announcement.
@@ -38,8 +39,8 @@ Both paths run the same simulation and produce the same win.
 | **Official Classic total** | **292** | **292** | **Complete** |
 | Oh Yes! More Lemmings (conversions) | 60 | 60 | Complete |
 | **Classic release total** | **352** | **352** | **Complete** |
-| Lemmings 2: The Tribes | 120 | 73 | Preview |
-| Lemmings 3: The Chronicles | 90 | 41 | Preview |
+| Lemmings 2: The Tribes | 120 | 75 | Preview |
+| Lemmings 3: The Chronicles | 90 | 43 | Preview |
 
 "Complete" means every level has a winning route, recorded once and
 reproduced by the current engine on every check. "Preview" means the game
@@ -52,7 +53,7 @@ Beyond these eight official releases, the app also loads 6,020 Classic-format
 fan levels in 535 retained packs. The full corpus has load and render evidence;
 344 levels also have current winning witnesses. This corpus is separate from
 NeoLemmix `.nxlv` compatibility. Real NeoLemmix fan-pack coverage remains a
-1.5 gate and is not presented as completed content.
+1.7 gate and is not presented as completed content.
 
 ## What "modern" means here
 
@@ -106,21 +107,51 @@ what lets the release notes above be trusted rather than taken on faith.
 
 ## Where the project stands right now
 
-The official Classic campaign closed at 352/352 on 22 September 2026. The 1.0
-RC1 baseline was build 36. The current source candidate carries version 1.2
-build 39. It includes the shared browser, playlists, background fan-pack checks
-and automatic application updates. It is not a release claim yet. A fresh
-package, release audit, physical-device checks, VoiceOver journeys and hardware
-evidence remain open.
+The official Classic campaign closed at 352/352 on 22 September 2026. The
+current public release is 1.7.1 build 54. The
+[1.7 distribution record](ReleaseReadiness/1.7Build53Distribution.md) covers the
+1.7.0 package, its gates and the live update feed. The 1.3 development milestone added
+an iPhone and iPad target. Its source and recorded Simulator gates pass.
+Physical-device, VoiceOver, thermal, signing and distribution evidence remain
+open before the planned 2.0 mobile release.
 
 ## Roadmap
 
-**Now: close 1.2 on macOS.** The source-level content discovery and update work
-is implemented. The next work is candidate validation and release evidence.
-The missing sequel routes remain a separate data-dependent gate. See the
-[QoL roadmap](../docs/superpowers/plans/2026-09-23-qol-roadmap.md).
+**1.6 and 1.7: shipped.** 1.6.0 added adaptive music, optional soundtrack
+libraries, level skips and saved sessions. 1.7.0 added the bundled NeoLemmix
+packs and the Oh My! All Lemmings! learning journey. 1.7.1 fixed journey sessions.
 
-**1.2 content discovery and sequel completion.** The shared CoverFlow-style
+**1.7: close NeoLemmix compatibility.** The source recognises NeoLemmix
+levels, styles and the current section-based replay format. The development
+gate uses a pinned Community Edition checkout and separates import/render
+failures from known unsupported mechanics. Fencer, Laserer, interactive
+gadgets, zombie infection, Superlemming and native reference-replay comparison
+remain open. See the [1.7 roadmap](1.7Roadmap.md).
+
+**1.8: Mac polish.** Sharper pixel rendering, NeoLemmix sound effects and
+reliable music recovery after a nuke. L2/L3 remain Preview and NeoLemmix Beta.
+The patch branch combines the current work. See the
+[1.8.x consolidation evidence](ReleaseReadiness/1.8xConsolidation.md).
+
+**1.9: complete Lemmings 2 and Lemmings 3.** The remaining 83 winning routes
+need proof. Both games also need engine-fidelity, campaign-progression, media
+and recovery evidence. Until the 1.9 gate passes, both games remain Preview.
+
+**2.0: complete physical iPhone and iPad acceptance, including launch support
+for iPhone Duo.** The repository has a UIKit/Metal app target, player-owned
+Classic data import, direct crowd selection, pan and zoom, safe-area controls,
+interruption checkpoints and presentation-only thermal budgets. The shared
+session and checkpoint boundary covers Classic, Lemmings 2 and Lemmings 3, but
+only Classic is player-facing mobile content. Duo must adapt the same session
+across its closed, open and partially folded poses. See the
+[2.0 mobile roadmap](2.0Roadmap.md) for the requirements and release gates.
+
+The GitHub iPhone and iPad Simulator matrix passes. The remaining gates are
+physical touch, audio, background, thermal, accessibility, signing and
+distribution checks. This Mac has the iOS SDK but no Simulator runtime or
+connected device, so it cannot supply that evidence.
+
+**Content discovery from 1.2.** The shared CoverFlow-style
 level browser is implemented in source with shipped pixel artwork and one clear
 primary action. Automated tests cover its typed selection, simulated input and
 reduced-motion layout. Classic cards now follow the active player's progress in
@@ -140,16 +171,6 @@ remain open. This work belongs beside the 1.2 [content atlas and import
 boundary](ContentUniverseRoadmap.md#12--content-atlas-and-import-boundary).
 The fan-pack and application update paths now have source and targeted test
 coverage. The release Mac must verify the signed package and the live update.
-
-Make Lemmings 2 and Lemmings 3 completion verification a 1.2 exit gate. The
-remaining 96 winning routes must close, and both games need engine-fidelity,
-campaign-progression, media and recovery evidence. Until that gate passes, both
-games remain Preview.
-
-**After that: iPhone and iPad.** The simulation library already builds for
-iOS and has no dependency on the Mac's window system. It still needs a touch
-interface: direct crowd selection, safe-area layout, and app suspension
-handling. No one has produced or tested an iOS build yet.
 
 **Longer term: Windows and Linux.** The simulation core is Swift, but it
 currently depends on Apple-only frameworks for graphics, image decoding and

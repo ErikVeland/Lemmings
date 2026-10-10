@@ -1,0 +1,164 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 10
+        }
+      },
+      "afterTick" : true,
+      "tick" : 89
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 89
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 308
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 313
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 474
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 666
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 686
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 798
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 60,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1193
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 60,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1395
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 60,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1587
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 60,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1779
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 60,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1933
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 60,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2203
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 70,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2383
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 75,
+    "required" : 65,
+    "saved" : 75,
+    "stateHash" : "fd65b00d46a1904677f6069d1a5c59721d1210e0db42e238cbece0d20d8eb9a6",
+    "ticks" : 2469
+  },
+  "initialStateHash" : "8235efba50c90ee7b8958c0c1aeddd174fa0b9abad94f7c5de9a0e38ea394d3e",
+  "number" : 7,
+  "rank" : "fan:lldb-304",
+  "title" : "Escape From Lemmtraz"
+}

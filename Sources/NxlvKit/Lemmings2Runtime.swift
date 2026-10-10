@@ -233,10 +233,14 @@ public struct Lemmings2Runtime: Sendable {
     public mutating func drainSoundEvents() -> [Lemmings2SoundRequest] {
         let events = soundEvents; soundEvents.removeAll(keepingCapacity: true); return events
     }
-    private mutating func sound(_ cue: Lemmings2SoundCue) { sound(Lemmings2SoundRequest(cue)) }
-    private mutating func sound(_ request: Lemmings2SoundRequest) {
+    private mutating func sound(_ cue: Lemmings2SoundCue, at lemming: Lemming? = nil) {
+        sound(Lemmings2SoundRequest(cue), at: lemming)
+    }
+    private mutating func sound(_ request: Lemmings2SoundRequest, at lemming: Lemming? = nil) {
         // Headless runs need not consume audio. Bound their pending queue.
-        if soundEvents.count < 256 { soundEvents.append(request) }
+        if soundEvents.count < 256 || request.supplementalEffect == .yippee {
+            soundEvents.append(lemming.map { request.positioned(x: $0.x, y: $0.y) } ?? request)
+        }
     }
     public var saved: Int { lemmings.filter { $0.state == .saved }.count }
     public var lost: Int { lemmings.filter { $0.state == .dead }.count }
@@ -404,7 +408,7 @@ public struct Lemmings2Runtime: Sendable {
             return false
         }
         if isWater(lem.x,lem.y) {
-            if lem.state != .drowning { change(&lem, .drowning); lem.y &= ~7; sound(.drown) }
+            if lem.state != .drowning { change(&lem, .drowning); lem.y &= ~7; sound(.drown, at: lem) }
             return false
         }
         change(&lem, .dead)
@@ -482,13 +486,27 @@ public struct Lemmings2Runtime: Sendable {
         default: return true
         }
     }
-    /// Hover, click and keyboard/gamepad assignment all use this same,
-    /// stable, eligible-first target selection. A follower approaching a
-    /// bridge builder is preferred when the setting is on.
-    public func target(slot: Int, x: Int, y: Int, preferApproaching: Bool = false) -> Lemming? {
+    /// Hover and input share skill priorities without changing assignment rules.
+    public func target(slot: Int, x: Int, y: Int, preferApproaching: Bool = false,
+                       preferBombBlockers: Bool = false, preferBuilders: Bool = false) -> Lemming? {
         let candidates = lemmings.filter { $0.active && $0.state != .exiting && $0.state != .exploding &&
             abs($0.x - x) <= 9 && abs($0.y - 5 - y) <= 12 }
         func distance(_ lem: Lemming) -> Int { abs(lem.x - x) + abs(lem.y - 5 - y) }
+        func nearer(_ a: Lemming, _ b: Lemming) -> Bool {
+            let da = distance(a), db = distance(b)
+            return da == db ? a.id < b.id : da < db
+        }
+        if configuration.skills.indices.contains(slot) {
+            let skill = configuration.skills[slot]
+            if preferBombBlockers, [.bomber, .blastBomber].contains(skill),
+               let blocker = candidates.filter({ $0.state == .blocking && canAssign(slot: slot, to: $0.id) }).min(by: nearer) {
+                return blocker
+            }
+            if preferBuilders, skill == .builder, !isComplete, !isNuking, supplies[slot] > 0,
+               let builder = candidates.filter({ [.building, .shrugging].contains($0.state) && canAssign(slot: slot, to: $0.id) }).min(by: nearer) {
+                return builder
+            }
+        }
         guard let nearest = candidates.min(by: { a, b in
             let eligibleA = canAssign(slot: slot, to: a.id), eligibleB = canAssign(slot: slot, to: b.id)
             if eligibleA != eligibleB { return eligibleA }
@@ -562,7 +580,7 @@ public struct Lemmings2Runtime: Sendable {
             let shimmier = configuration.skills[slot] == .shimmier
             if shimmier && lem.state == .hanging {
                 lem.direction = -lem.direction; change(&lem,.shimming); lem.age = 15; lem.air = nil
-                supplies[slot] -= 1; lemmings[index] = lem; sound(.assignSkill); return true
+                supplies[slot] -= 1; lemmings[index] = lem; sound(.assignSkill, at: lem); return true
             }
             let stacked = lem.state == .stacking
             change(&lem, shimmier ? .shimmyJump : .jumping)
@@ -645,7 +663,7 @@ public struct Lemmings2Runtime: Sendable {
             fillStreams.append(.init(owner:lem.id,kind:lem.state == .filling ? .filler : lem.state == .sandPouring ? .sand : .glue))
         }
         supplies[slot] -= 1; lemmings[index] = lem
-        sound(.assignment(skill:configuration.skills[slot],tribe:configuration.tribe))
+        sound(.assignment(skill:configuration.skills[slot],tribe:configuration.tribe), at: lem)
         return true
     }
     private func advanceWalker(_ lem: inout Lemming) {
@@ -714,7 +732,7 @@ public struct Lemmings2Runtime: Sendable {
                 lem.x -= lem.direction; landed = true
             }
             if landed {
-                if lem.fallDistance > 99 { sound(.splat); change(&lem, .dead) }
+                if lem.fallDistance > 99 { sound(.splat, at: lem); change(&lem, .dead) }
                 else if hopping { change(&lem, .hopPreparing) }
                 else if skiing { change(&lem, .skiing); lem.ski = .init(direction:lem.direction,landingVelocity:Int(air.velocityX)*16) }
                 else if rolling { change(&lem, .rolling); lem.ski = .init(direction:lem.direction,landingVelocity:Int(air.velocityX)*16,mode:.roller) }
@@ -805,7 +823,7 @@ public struct Lemmings2Runtime: Sendable {
                     apply(bank[shot.frame],x:hit.x-offsetX-7,y:hit.y-offsetY-7,adding:true)
                 } else {
                     if let mask = configuration.terrainMasks.blast { apply(mask,x:hit.x-11,y:hit.y-13) }
-                    applyBlast(x:hit.x,y:hit.y); sound(.explode)
+                    applyBlast(x:hit.x,y:hit.y); sound(Lemmings2SoundRequest(.explode).positioned(x: hit.x, y: hit.y))
                 }
             } else { remaining.append(shot) }
         }
@@ -907,7 +925,7 @@ public struct Lemmings2Runtime: Sendable {
             }
         }
         if tick == 6 { sound(.levelStart) }
-        if tick == 21 { sound(.doorOpen) }
+        if tick == 21 { for entrance in configuration.entrances.isEmpty ? [configuration.entrance] : configuration.entrances { sound(Lemmings2SoundRequest(.doorOpen).positioned(x: entrance.x + entrance.width / 2, y: entrance.y + entrance.height / 2)) } }
         if !isNuking && released < configuration.total && tick >= configuration.firstReleaseTick &&
             (tick - configuration.firstReleaseTick) % configuration.releaseInterval == 0 {
             let entrance = configuration.entrances[released % configuration.entrances.count]
@@ -925,14 +943,14 @@ public struct Lemmings2Runtime: Sendable {
                             apply(mask,x:lem.x-11,y:lem.y-15)
                         }
                         change(&lem,.dead); lemmings[index] = lem
-                        applyBlast(x:lem.x,y:lem.y); sound(.explode)
+                        applyBlast(x:lem.x,y:lem.y); sound(.explode, at: lem)
                         continue
                     }
-                    sound(.countdown); change(&lem, .exploding)
+                    sound(.countdown, at: lem); change(&lem, .exploding)
                 }
             }
             if enterHazard(&lem) {
-                sound(configuration.fireHazards.contains(where: { $0.contains(lem.x, lem.y) }) ? .fire : .drown)
+                sound(configuration.fireHazards.contains(where: { $0.contains(lem.x, lem.y) }) ? .fire : .drown, at: lem)
                 lemmings[index] = lem; continue
             }
             var leavingIce = false
@@ -963,7 +981,7 @@ public struct Lemmings2Runtime: Sendable {
                 if lem.work == 0 {
                     lem.pose += 1
                     if lem.pose >= 27, let destination = configuration.interactiveObjects.first(where:{$0.id == lem.interactionID}) {
-                        lem.x = destination.destinationX; lem.y = destination.destinationY; lem.work = 1; sound(.teleporter)
+                        lem.x = destination.destinationX; lem.y = destination.destinationY; lem.work = 1; sound(.teleporter, at: lem)
                     }
                 } else {
                     lem.pose -= 1
@@ -982,14 +1000,14 @@ public struct Lemmings2Runtime: Sendable {
                 if cannon && lem.pose == 44 && machine.frame == 5 {
                     lem.x += 2; lem.y -= 11; change(&lem,.cannonFlying); lem.pose = 45
                     lem.air = try? .init(x:Int16(lem.x),y:Int16(lem.y),velocityX:8,velocityY:-6,horizontalCountdown:7,verticalCountdown:7)
-                    lem.machineID = nil; sound(.launched)
+                    lem.machineID = nil; sound(.launched, at: lem)
                 } else {
                     lem.pose = min(cannon ? 44 : 57,lem.pose+1)
                     let point = machine.riderPosition(phase:lem.pose); lem.x = point.x; lem.y = point.y
                     if !cannon && lem.pose == 57 {
                         change(&lem,.tumbling)
                         lem.air = try? .init(x:Int16(lem.x),y:Int16(lem.y),velocityX:-8,velocityY:-6,horizontalCountdown:7,verticalCountdown:7)
-                        lem.machineID = nil; sound(.launched)
+                        lem.machineID = nil; sound(.launched, at: lem)
                     }
                 }
             case .cannonFlying:
@@ -1030,7 +1048,7 @@ public struct Lemmings2Runtime: Sendable {
                         if lem.work == 0 { change(&lem, .walking) }
                         else if projectiles.count < 10, let shot = try? Lemmings2Projectile.aimedArrow(
                             x:lem.x,y:lem.y-8,targetX:aimPoint.x,targetY:aimPoint.y) {
-                            projectiles.append(shot); lem.driftX = 1; sound(.rope)
+                            projectiles.append(shot); lem.driftX = 1; sound(.rope, at: lem)
                         }
                     }
                 } else if lem.pose < 58 { lem.pose += 13 }
@@ -1334,7 +1352,7 @@ public struct Lemmings2Runtime: Sendable {
                 else if lem.pose == 0 && lem.age >= 19 { lem.pose = 1 }
                 else if lem.pose == 1 && aimPoint.held {
                     if let launched = try? Lemmings2Rope(owner:lem.id,x:lem.x,y:lem.y-1,targetX:aimPoint.x,targetY:aimPoint.y) {
-                        rope = launched; lem.pose = 2; lem.age = 0; sound(.rope)
+                        rope = launched; lem.pose = 2; lem.age = 0; sound(.rope, at: lem)
                     } else {
                         lem.work -= 1
                         if lem.work <= 0 { lem.x -= lem.direction; change(&lem, .walking) }
@@ -1382,7 +1400,7 @@ public struct Lemmings2Runtime: Sendable {
                     lem.y = hit.contact == .clear ? hit.y : hit.previousY
                     let probes = [(0,-30),(0,-25),(0,-19),(0,-14),(-5,-21),(-4,-28),(7,-21),(6,-28)]
                     if probes.contains(where:{isSolid(lem.x+$0.0,lem.y+$0.1)}) {
-                        sound(.balloonPop); change(&lem, .falling); lem.fallDistance = 0
+                        sound(.balloonPop, at: lem); change(&lem, .falling); lem.fallDistance = 0
                     }
                     if lem.y < 0 { change(&lem, .dead) }
                 }
@@ -1421,7 +1439,7 @@ public struct Lemmings2Runtime: Sendable {
                         apply(mask, x: lem.x - 11, y: lem.y - 15)
                     }
                     blast = (lem.x, lem.y)
-                    sound(.explode)
+                    sound(.explode, at: lem)
                 }
             case .trapped:
                 change(&lem, .dead)
@@ -1454,7 +1472,7 @@ public struct Lemmings2Runtime: Sendable {
                 if distance < 0 { lem.y += distance }
                 for _ in 0..<max(0, distance) {
                     if isSolid(lem.x, lem.y) {
-                        if lem.fallDistance > 64 && lem.state != .floating { sound(.splat) }
+                        if lem.fallDistance > 64 && lem.state != .floating { sound(.splat, at: lem) }
                         change(&lem, lem.fallDistance > 64 && lem.state != .floating ? .dead : .walking)
                         lem.fallDistance = 0; break
                     }
@@ -1467,7 +1485,7 @@ public struct Lemmings2Runtime: Sendable {
                     advanceWalker(&lem)
                     if lem.state != .walking && lem.state != .running { break }
                     if strides == 2 && enterHazard(&lem) {
-                        sound(configuration.fireHazards.contains(where: { $0.contains(lem.x, lem.y) }) ? .fire : .drown)
+                        sound(configuration.fireHazards.contains(where: { $0.contains(lem.x, lem.y) }) ? .fire : .drown, at: lem)
                         change(&lem, .dead); break
                     }
                     if strides == 2 && configuration.exits.contains(where: { $0.contains(lem.x, lem.y) }) {
@@ -1486,7 +1504,7 @@ public struct Lemmings2Runtime: Sendable {
                 }
             case .building:
                 let phase = (lem.age + 1) % 16
-                if phase == 10 && lem.work >= 9 { sound(.builderWarning) }
+                if phase == 10 && lem.work >= 9 { sound(.builderWarning, at: lem) }
                 if phase == 9 {
                     apply(configuration.terrainMasks.brick, x: lem.x - 8 - (lem.direction < 0 ? 4 : 0),
                           y: lem.y - 1, adding: true)
@@ -1505,7 +1523,7 @@ public struct Lemmings2Runtime: Sendable {
             case .stacking:
                 let phase = (lem.age + 1) % 32
                 if phase == 7 || phase == 23 {
-                    if lem.work <= 3 { sound(.builderWarning) }
+                    if lem.work <= 3 { sound(.builderWarning, at: lem) }
                     apply(configuration.terrainMasks.stacker[phase == 7 ? 0 : 1],
                           x: lem.x - 7 - (lem.direction < 0 ? 1 : 0), y: lem.y - 6, adding: true)
                 } else if phase == 11 || phase == 27 {
@@ -1532,7 +1550,7 @@ public struct Lemmings2Runtime: Sendable {
                 // frames 22–37, not the complete animation.
                 lem.age = phase - 1
                 if phase == 10 || phase == 28 {
-                    if phase == 28 && lem.work <= 3 { sound(.builderWarning) }
+                    if phase == 28 && lem.work <= 3 { sound(.builderWarning, at: lem) }
                     let first = phase == 10
                     let x = lem.x + lem.direction - (first ? 5 : 6) - (lem.direction < 0 ? (first ? 4 : 2) : 0)
                     apply(configuration.terrainMasks.platformer, x: x, y: lem.y - (first ? 8 : 6), adding: true)
@@ -1589,14 +1607,14 @@ public struct Lemmings2Runtime: Sendable {
                     apply(configuration.terrainMasks.scooper[frame],
                           x: lem.x + (lem.direction > 0 ? -6 : -9), y: lem.y - 12)
                     if steelProbe(lem, [(1, 2), (7, 0), (7, -7)]) {
-                        sound(.hitSteel); change(&lem, .walking)
+                        sound(.hitSteel, at: lem); change(&lem, .walking)
                     }
                 }
             case .fencing:
                 let phase = (lem.age + 1) % 16
                 if phase == 8 {
                     if steelProbe(lem, [(12, -3), (6, -10)]) {
-                        sound(.hitSteel); change(&lem, .walking)
+                        sound(.hitSteel, at: lem); change(&lem, .walking)
                     } else {
                         apply(configuration.terrainMasks.fencer[lem.direction > 0 ? 0 : 1],
                               x: lem.x - (lem.direction > 0 ? 3 : 12), y: lem.y - 16)
@@ -1626,7 +1644,7 @@ public struct Lemmings2Runtime: Sendable {
                 if (3...9).contains(phase) {
                     let probes = [[(-10,-3),(-1,-3)],[(-10,-3),(-4,-3)],[(-10,-5),(-5,-8)],
                                   [(-9,-9),(-4,-9)],[(-6,-17),(-3,-17)],[(3,-17),(7,-13)],[(10,-7),(10,-3)]]
-                    if steelProbe(lem, probes[phase - 3]) { sound(.hitSteel); change(&lem, .walking); break }
+                    if steelProbe(lem, probes[phase - 3]) { sound(.hitSteel, at: lem); change(&lem, .walking); break }
                     let offsets = [(-3,8),(-3,6),(-4,5),(-3,3),(5,1),(9,6),(9,8)]
                     let delta = offsets[phase - 3]
                     apply(configuration.terrainMasks.clubBasher[phase - 3 + (lem.direction < 0 ? 7 : 0)],
@@ -1649,7 +1667,7 @@ public struct Lemmings2Runtime: Sendable {
                 // PROCESS 6579–65c6: cut on frame 7, then descend two pixels.
                 if (lem.age + 1) % 8 == 7 {
                     if steelProbe(lem, [(-3, 0), (3, 0)]) {
-                        sound(.hitSteel); change(&lem, .walking)
+                        sound(.hitSteel, at: lem); change(&lem, .walking)
                     } else if let mask = configuration.terrainMasks.stomper {
                         apply(mask, x: lem.x - 8, y: lem.y - 6)
                         lem.y += 2
@@ -1659,7 +1677,7 @@ public struct Lemmings2Runtime: Sendable {
             case .digging:
                 if (lem.age + 1) % 8 == 0 {
                     apply(configuration.terrainMasks.digger, x: lem.x - 8, y: lem.y - 2)
-                    if steelProbe(lem, [(0, 0), (-4, 0), (4, 0)]) { sound(.hitSteel); change(&lem, .walking) }
+                    if steelProbe(lem, [(0, 0), (-4, 0), (4, 0)]) { sound(.hitSteel, at: lem); change(&lem, .walking) }
                     else {
                         lem.y += 1
                         if !(0...4).contains(where: { isSolid(lem.x + $0, lem.y) }) { change(&lem, .falling) }
@@ -1671,7 +1689,7 @@ public struct Lemmings2Runtime: Sendable {
                     let frame = phase % 16 - 2 + (lem.direction < 0 ? 4 : 0)
                     apply(configuration.terrainMasks.basher[frame], x: lem.x - 7 + lem.direction, y: lem.y - 16)
                     let steel = steelProbe(lem, [(0, -1), (7, -6), (0, -9)])
-                    if steel { sound(.hitSteel) }
+                    if steel { sound(.hitSteel, at: lem) }
                     if steel ||
                         (phase == 5 && !(8...10).contains(where: { isSolid(lem.x + $0 * lem.direction, lem.y - 6) })) {
                         change(&lem, .walking)
@@ -1687,7 +1705,7 @@ public struct Lemmings2Runtime: Sendable {
                     let frame = phase - 1 + (lem.direction < 0 ? 2 : 0)
                     apply(configuration.terrainMasks.miner[frame],
                           x: lem.x - 7 + (phase == 2 ? lem.direction : 0), y: lem.y - 16 + (phase == 2 ? 1 : 0))
-                    if steelProbe(lem, [(0, -1), (6, -6), (6, -1)]) { sound(.hitSteel); change(&lem, .walking) }
+                    if steelProbe(lem, [(0, -1), (6, -6), (6, -1)]) { sound(.hitSteel, at: lem); change(&lem, .walking) }
                 } else if phase == 0 { lem.y += 1 }
                 else if phase == 3 || phase == 15 {
                     if phase == 3 { lem.y += 1 }
@@ -1702,13 +1720,16 @@ public struct Lemmings2Runtime: Sendable {
                 if lem.age < 15 {
                     for _ in 0..<3 where !isSolid(lem.x, lem.y) { lem.y += 1 }
                 } else if lem.age == 15 {
-                    sound(.explode)
+                    sound(.explode, at: lem)
                     apply(configuration.terrainMasks.exploder, x: lem.x - 8, y: lem.y - 14)
                 } else if lem.age >= 68 { lem.state = .dead }
             case .blocking:
                 if !isSolid(lem.x, lem.y) { change(&lem, .falling); lem.fallDistance = 0 }
             case .exiting:
-                if lem.age + 1 >= configuration.exitFrameCount { lem.state = .saved }
+                if lem.age + 1 >= configuration.exitFrameCount {
+                    lem.state = .saved
+                    sound(.init(supplemental: .yippee), at: lem)
+                }
             case .saved, .dead: break
             }
             if lem.state == .falling || ([.jumping,.shimmyJump].contains(lem.state) && lem.fallDistance <= 39) {
@@ -1720,7 +1741,7 @@ public struct Lemmings2Runtime: Sendable {
                 }
             }
             if !configuration.playBounds.contains(lem.x,lem.y) {
-                if lem.active { sound(Lemmings2SoundRequest(.fallOut, isBottomFall: lem.y >= configuration.playBounds.y + configuration.playBounds.height)) }; lem.state = .dead
+                if lem.active { sound(Lemmings2SoundRequest(.fallOut, isBottomFall: lem.y >= configuration.playBounds.y + configuration.playBounds.height), at: lem) }; lem.state = .dead
             }
             if lem.state == stateAtStart { lem.age += 1 }
             // PROCESS 03ef/0752 dispatches exit contact after the skill update.
@@ -1752,6 +1773,7 @@ public struct Lemmings2Runtime: Sendable {
                 for object in configuration.interactiveObjects where object.triggers.contains(where: { $0.contains(lem.x, lem.y) }) {
                     if object.kind == .timedTrap {
                         if timedTraps[object.id]?.touch() == true {
+                            sound(.init(supplemental: .trapTrigger), at: lem)
                             change(&lem,.trapDying); lem.deathSprite = object.deathSprite; lem.air = nil; break
                         }
                         continue
@@ -1761,12 +1783,12 @@ public struct Lemmings2Runtime: Sendable {
                         busyValves.insert(object.id)
                         if activeObjects.contains(target.id) { activeObjects.remove(target.id); objectFrames[target.id] = target.inactiveFrame }
                         else { activeObjects.insert(target.id); objectFrames[target.id] = target.activeFrame }
-                        sound(.valve); change(&lem,.switchingValve); lem.interactionID = object.id; lem.air = nil; break
+                        sound(.valve, at: lem); change(&lem,.switchingValve); lem.interactionID = object.id; lem.air = nil; break
                     }
                     if object.kind == .teleporter {
                         guard let destination = object.linkedID else { continue }
                         lem.restoreMagno = lem.state == .magnoBooting
-                        sound(.teleporter); change(&lem,.teleporting); lem.interactionID = destination; lem.pose = 0; lem.air = nil; break
+                        sound(.teleporter, at: lem); change(&lem,.teleporting); lem.interactionID = destination; lem.pose = 0; lem.air = nil; break
                     }
                     if object.kind == .trampoline {
                         guard !activeObjects.contains(object.id), [.falling, .jumping, .tumbling, .hopping].contains(lem.state) else { continue }
@@ -1780,11 +1802,13 @@ public struct Lemmings2Runtime: Sendable {
                             velocityX:Int16(vx),velocityY:Int16(-strength),
                             horizontalCountdown:7,verticalCountdown:strength == 4 ? 1 : 2)
                         lem.fallDistance = 0
+                        sound(.init(supplemental: .trampolineBounce), at: lem)
                         break
                     }
                     if object.kind == .trap {
                         guard !activeObjects.contains(object.id) else { continue }
                         activeObjects.insert(object.id); objectFrames[object.id] = 1 % object.frameCount
+                        sound(.init(supplemental: .trapTrigger), at: lem)
                         change(&lem, .trapped); break
                     }
                     if object.flags & 2 != 0 {

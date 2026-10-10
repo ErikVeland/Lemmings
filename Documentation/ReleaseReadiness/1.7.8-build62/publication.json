@@ -1,0 +1,26 @@
+{
+  "url": "https://github.com/ErikVeland/Lemmings/releases/tag/v1.7.8",
+  "tag": "v1.7.8",
+  "publishedAt": "2026-10-03T09:22:26Z",
+  "sourceCommit": "dbc3d25bfeee920d0941398603d87aec94c80a7f",
+  "latest": true,
+  "archives": [
+    {
+      "name": "UltimateLemmings-1.7.8-build62-slim.zip",
+      "size": 159238943,
+      "sha256": "23b75a8fc909b8627d2c854d2cb33c4cd43d2653720c19c87ec62be98ffa2b78",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v1.7.8/UltimateLemmings-1.7.8-build62-slim.zip",
+      "downloadHTTPStatus": 206
+    },
+    {
+      "name": "UltimateLemmings-1.7.8-build62.zip",
+      "size": 1943295087,
+      "sha256": "7efcc2b39d219b025da8055d9514365af3b6a77988f8334548b8ad1176164c89",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v1.7.8/UltimateLemmings-1.7.8-build62.zip",
+      "downloadHTTPStatus": 206
+    }
+  ],
+  "appcastSHA256": "1c99140a7d37e2faf24177598989ac37aa9f899aa5602e1cafbfb02eebe90f44",
+  "feedURL": "https://raw.githubusercontent.com/ErikVeland/Lemmings/main/appcast.xml",
+  "sparkleSignatureVerified": true
+}

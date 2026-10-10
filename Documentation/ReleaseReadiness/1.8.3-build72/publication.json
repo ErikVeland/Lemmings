@@ -1,0 +1,39 @@
+{
+  "version": "1.8.3",
+  "build": 72,
+  "sourceCommit": "0e49151f13fee037aa4cbc8050086a758cdbbb40",
+  "oldFeedEntriesPreserved": 3,
+  "assets": [
+    {
+      "name": "UltimateLemmings-1.8.3-build72.zip",
+      "size": 1944623460,
+      "sha256": "956afc7d6ae75135fc84e6fed4514504bf697ba34caa38893c9261c066e46694",
+      "notary": {
+        "status": "Accepted",
+        "id": "6a7afbff-ac13-44ba-9b8c-ebaa39f563e4",
+        "message": "Processing complete"
+      },
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v1.8.3/UltimateLemmings-1.8.3-build72.zip",
+      "remoteDigestVerified": true,
+      "zipResponseVerified": true
+    },
+    {
+      "name": "UltimateLemmings-1.8.3-build72-slim.zip",
+      "size": 160567267,
+      "sha256": "4a0b06e3105975d669ed558e020b101f1eac03c8a5ba61787b3af947e98d637f",
+      "notary": {
+        "id": "2d8bc066-beb2-4778-a1d7-a4209c3042a4",
+        "status": "Accepted",
+        "message": "Processing complete"
+      },
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v1.8.3/UltimateLemmings-1.8.3-build72-slim.zip",
+      "remoteDigestVerified": true,
+      "zipResponseVerified": true
+    }
+  ],
+  "releaseURL": "https://github.com/ErikVeland/Lemmings/releases/tag/v1.8.3",
+  "publishedAt": "2026-10-08T08:57:10Z",
+  "remoteTagVerified": true,
+  "mainFeedVerified": true,
+  "publicRawFeedVerified": true
+}

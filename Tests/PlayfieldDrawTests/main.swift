@@ -32,6 +32,7 @@ private final class BombPreviewSession: GameSession {
   func assign(skillIndex: Int, to lemmingID: Int) -> String? { nil }
   func assignmentState(skillIndex: Int, to lemmingID: Int) -> AssignmentState { .unavailable }
   func adjustRate(by delta: Int) {}
+  func setRateLimit(maximum: Bool) {}
   func nuke() {}
   func undoNuke() {}
   func rewind(seconds: Double) -> Bool { false }
@@ -48,12 +49,20 @@ private final class TargetingSession: GameSession {
   let rateLabel = "Rate"
   let remainingSeconds: Int? = nil
   let isComplete = false, didWin = false, isNuking = false, canUndoNuke = false, supportsRewind = false
-  let skills: [SessionSkill] = [], lastCues: [ClassicSoundEffect] = []
+  var skills: [SessionSkill] = ["Climber", "Bomber", "Builder"].map { .init(name: $0, count: 10, isInfinite: false) }
+  let lastCues: [ClassicSoundEffect] = []
   var currentTick = 0
   func tick() {}
   func assign(skillIndex: Int, to lemmingID: Int) -> String? { nil }
-  func assignmentState(skillIndex: Int, to lemmingID: Int) -> AssignmentState { .eligible }
+  func assignmentState(skillIndex: Int, to lemmingID: Int) -> AssignmentState {
+    guard skills.indices.contains(skillIndex), skills[skillIndex].count > 0,
+      let lem = actors.first(where: { $0.id == lemmingID }) else { return .unavailable }
+    if skillIndex == 2 && lem.pose == .building { return .alreadyAssigned }
+    if skillIndex == 1 && lem.countdown != nil { return .alreadyAssigned }
+    return .eligible
+  }
   func adjustRate(by delta: Int) {}
+  func setRateLimit(maximum: Bool) {}
   func nuke() {}
   func undoNuke() {}
   func rewind(seconds: Double) -> Bool { false }
@@ -177,6 +186,36 @@ private final class TargetingSession: GameSession {
   let composedMask = ExplosionHDR.mask(width:640,height:400,flashes:view.hdrFlashes)
   try require(composedMask[(320*640)...].allSatisfy {$0 == 0}, "an edge explosion put HDR pixels into the CRT panel")
   print("PASS real PC/Mac explosion frames: opaque pop followed by an empty frame")
+}
+
+@MainActor private func testSkillTargetPriorities() throws {
+  let view = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 640, height: 320))
+  let session = TargetingSession()
+  view.session = session
+  let walker = SessionLemming(id: 0, x: 99, y: 80, pose: .walking, facingLeft: false, animationFrame: 0, countdown: nil)
+  let point = CGPoint(x: 100, y: 75)
+  session.actors = [walker, .init(id: 1, x: 97, y: 80, pose: .blocking, facingLeft: true, animationFrame: 0, countdown: nil)]
+  view.selectedSkill = { 1 }
+  try require(view.lemming(at: point)?.id == 1 && view.clickTarget(at: point)?.id == 1,
+    "Bomb targeting must prefer the blocker over a closer approaching walker")
+  view.favorBombBlockers = false
+  try require(view.lemming(at: point)?.id == 0, "Bomb preference opt-out must restore the walker")
+  view.favorBombBlockers = true
+  session.actors[1] = .init(id: 1, x: 97, y: 80, pose: .blocking, facingLeft: true, animationFrame: 0, countdown: 10)
+  try require(view.lemming(at: point)?.id == 0, "An already bombed blocker must not take another bomb")
+  session.actors[1] = .init(id: 1, x: 97, y: 80, pose: .building, facingLeft: false, animationFrame: 0, countdown: nil)
+  view.selectedSkill = { 2 }
+  try require(view.lemming(at: point)?.id == 0 && view.clickTarget(at: point)?.id == 0,
+    "A builder that cannot take Build yet must not block the walker behind it")
+  view.favorBuilders = false
+  try require(view.lemming(at: point)?.id == 0, "Builder preference opt-out must allow the eligible walker")
+  view.favorBuilders = true
+  session.actors[1] = .init(id: 1, x: 97, y: 80, pose: .shrugging, facingLeft: false, animationFrame: 0, countdown: nil)
+  try require(view.lemming(at: point)?.id == 1 && view.reticleState(at: point, now: 2) == .eligible,
+    "The finished builder must stay selected when it can accept Build")
+  session.skills[2] = .init(name: "Builder", count: 0, isInfinite: false)
+  try require(view.lemming(at: point) == nil, "An empty Build supply must not retain a target")
+  print("PASS bomb blockers, eligible builders, eligibility and independent opt-outs")
 }
 
 private func require(
@@ -317,6 +356,10 @@ private func require(
   view.phase = .briefing
   view.phase = .playing
   try require(view.edgeScrollDelta == nil, "menu cursor scrolled the new level")
+  view.handleMove(to: CGPoint(x: view.bounds.midX, y: 24))
+  try require((view.edgeScrollVector?.y ?? 0) < 0, "top margin did not scroll upward before reaching the menu bar")
+  view.handleMove(to: CGPoint(x: view.bounds.midX, y: view.bounds.height - 24))
+  try require((view.edgeScrollVector?.y ?? 0) > 0, "bottom margin did not scroll downward")
 }
 
 @MainActor private func testClassicPanelLabels() throws {
@@ -341,6 +384,7 @@ private func require(
   let artworkRoot = testApp.appendingPathComponent("Contents/Resources/MacArtwork/lemmings")
   panel.interfaceArtwork = try ClassicMacArtwork(directory: artworkRoot)
   panel.macArtwork = panel.interfaceArtwork
+  panel.usesMacStyleControls = true
   let labelOutput = root.appendingPathComponent(".build/panel-label-regression")
   try FileManager.default.createDirectory(at: labelOutput, withIntermediateDirectories: true)
   for width in [640.0, 960.0, 1280.0, 1484.0, 1920.0] {
@@ -441,6 +485,225 @@ private func require(
   print("PASS real panel double-click activation, double-click undo and exact restored history")
 }
 
+@MainActor private func testNeoLemmixPanel() throws {
+  let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+  let app = ProcessInfo.processInfo.environment["LEMMINGS_TEST_APP"].map { URL(fileURLWithPath: $0) }
+    ?? root.appendingPathComponent(".build/local/Ultimate Lemmings.app")
+  let resources = app.appendingPathComponent("Contents/Resources")
+  let styles = resources.appendingPathComponent("NeoLemmix/styles")
+  let sprites = try NeoLemmixSpriteSet(stylesRootURL: styles, themeStyle: "orig_dirt")
+  let art = try ClassicMacArtwork(directory: resources.appendingPathComponent("MacArtwork/lemmings"))
+  let output = root.appendingPathComponent(".build/neolemmix-panel-regression")
+  try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+  let panel = PanelView()
+  panel.neoSprites = sprites; panel.interfaceArtwork = art
+  panel.levelSize = CGSize(width: 640, height: 160)
+  panel.visibleLevelRect = CGRect(x: 100, y: 0, width: 320, height: 160)
+  panel.statusText = "OUT 10/10   HOME 5/1   INTERVAL 28   SAFE"
+  panel.progressText = "SAVED 5/1"
+  func session(_ skills: [NeoLemmixSkill], locked: Bool = false) throws -> NeoLemmixSession {
+    let supplies = Dictionary(uniqueKeysWithValues: skills.enumerated().map { index, skill in
+      (skill, index == 1 ? NeoLemmixSkillSupply.infinite : .finite(index == 2 ? 0 : 9))
+    })
+    let config = try NeoLemmixConfiguration(totalLemmings: 10, requiredToSave: 1, spawnInterval: 28,
+      spawnIntervalLocked: locked, entrances: [.init(id: 0, position: .init(x: 40, y: 20))], skills: supplies)
+    return NeoLemmixSession(simulation: try NeoLemmixSimulation(terrain: NeoLemmixTerrain(width: 640, height: 160),
+      configuration: config), width: 640, height: 160)
+  }
+  func capture(_ name: String) throws -> Data {
+    let bitmap = panel.bitmapImageRepForCachingDisplay(in: panel.bounds)!
+    panel.cacheDisplay(in: panel.bounds, to: bitmap)
+    let data = bitmap.representation(using: .png, properties: [:])!
+    try data.write(to: output.appendingPathComponent(name + ".png"))
+    return data
+  }
+  for skill in NeoLemmixSkill.allCases {
+    try require(sprites.skillIcon(named: skill.rawValue) != nil, "Missing NeoLemmix icon: \(skill)")
+  }
+  let walker = NSBitmapImageRep(cgImage: sprites.skillIcon(named: "walker")!
+    .cgImage(forProposedRect: nil, context: nil, hints: nil)!)
+  var hairRows: [Int] = [], clothesRows: [Int] = []
+  for y in 0..<walker.pixelsHigh { for x in 0..<walker.pixelsWide {
+    let color = walker.colorAt(x: x, y: y)!.usingColorSpace(.deviceRGB)!
+    guard color.alphaComponent > 0 else { continue }
+    if color.greenComponent > 1.5 * max(color.redComponent, color.blueComponent) { hairRows.append(y) }
+    if color.blueComponent > 1.5 * max(color.redComponent, color.greenComponent) { clothesRows.append(y) }
+  } }
+  try require(!hairRows.isEmpty && !clothesRows.isEmpty
+    && Double(hairRows.reduce(0, +)) / Double(hairRows.count) < Double(clothesRows.reduce(0, +)) / Double(clothesRows.count),
+    "NeoLemmix icon is upside down: hair must be above the clothes")
+  try require(sprites.skillIcon(named: "walker")!.size != sprites.skillIcon(named: "cloner")!.size,
+    "Cloner must retain its two-lemming artwork")
+  let groups: [[NeoLemmixSkill]] = [[], [.digger],
+    [.walker, .jumper, .shimmier, .slider, .swimmer, .glider, .stoner, .cloner],
+    Array(NeoLemmixSkill.allCases.prefix(10)), NeoLemmixSkill.allCases]
+  var chosen: PanelButton?
+  panel.onButton = { chosen = $0 }
+  for group in groups {
+    let neo = try session(group)
+    panel.session = neo
+    let playfield = PlayfieldView()
+    playfield.session = neo; playfield.neoSprites = sprites
+    for (index, skill) in neo.skills.enumerated() {
+      try require(playfield.skillBadge(for: index) === sprites.skillIcon(named: skill.name),
+        "Cursor icon used the DOS slot instead of \(skill.name)")
+    }
+    for width in [640.0, 960.0, 1280.0, 2559.0] {
+      panel.setFrameSize(CGSize(width: width, height: panel.height(for: width, maximumScale: floor(width / 320))))
+      let elements = panel.accessibleControls(owner: panel).compactMap { $0 as? GameAccessibleElement }
+      let skillElements = elements.filter { $0.accessibilityLabel()?.contains("remaining") == true }
+      try require(skillElements.count == group.count, "NeoLemmix skill count changed during layout")
+      for (index, element) in skillElements.enumerated() {
+        let frame = element.localFrame
+        try require(panel.bounds.contains(frame) && frame.height >= 24 && frame.width < frame.height,
+          "NeoLemmix skill socket is clipped or stretched: \(frame)")
+        chosen = nil
+        panel.handlePointerDown(at: CGPoint(x: frame.midX, y: frame.midY))
+        panel.handlePointerUp()
+        try require(chosen == .skill(index), "NeoLemmix skill hit target missed \(index)")
+      }
+      try require(panel.bounds.contains(panel.minimapBounds) && panel.bounds.contains(panel.timeline.frame),
+        "Minimap or timeline escaped the panel")
+      try require(!panel.minimapBounds.intersects(panel.timeline.frame), "Timeline covers the minimap")
+      if width == 1280 || group.count == 1 || group.count == 21 {
+        _ = try capture("neo-\(group.count)-\(Int(width))")
+      }
+    }
+  }
+  // A retained Classic panel image must not change NeoLemmix skill identities.
+  for group in [groups[1], groups[2]] {
+    panel.session = try session(group)
+    panel.panelImage = nil
+    panel.setFrameSize(CGSize(width: 960, height: panel.height(for: 960, maximumScale: 3)))
+    let before = try capture("neo-\(group.count)-without-classic-image")
+    panel.panelImage = NSBitmapImageRep(data: before)!.cgImage
+    let retained = try capture("neo-\(group.count)-with-retained-classic-image")
+    try require(retained == before, "NeoLemmix reused a baked Classic panel for \(group.count) skills")
+  }
+  panel.session = try session([.digger])
+  panel.setFrameSize(CGSize(width: 960, height: 142))
+  _ = try capture("neo-one-skill")
+  panel.setFrameSize(CGSize(width: 1280, height: 182))
+  chosen = nil
+  panel.handlePointerDown(at: CGPoint(x: 168, y: 112)); panel.handlePointerUp()
+  try require(chosen == .skill(0), "Resize used stale button targets before the next draw")
+  panel.isCRTSource = true
+  panel.setFrameSize(CGSize(width: 640, height: 80))
+  _ = try capture("neo-crt-source")
+  panel.isCRTSource = false
+  panel.setFrameSize(CGSize(width: 1280, height: 182))
+  panel.isPaused = true; panel.isFastForward = true; panel.speedLabel = "5×"
+  _ = try capture("neo-paused-fast")
+  let neo = panel.session as! NeoLemmixSession
+  neo.nuke()
+  _ = try capture("neo-undo")
+  try require(panel.accessibleControls(owner: panel).compactMap { ($0 as? GameAccessibleElement)?.accessibilityLabel() }
+    .contains("Undo end run"), "Undo state has the wrong accessible action")
+  panel.isPaused = false; panel.isFastForward = false; panel.speedLabel = "1×"
+  panel.session = try session(Array(NeoLemmixSkill.allCases.prefix(10)), locked: true)
+  _ = try capture("neo-locked-empty-infinite")
+  let rates = panel.accessibleControls(owner: panel).compactMap { $0 as? GameAccessibleElement }
+    .filter { $0.accessibilityLabel()?.contains("spawn interval") == true }
+  try require(rates.count == 2 && rates.allSatisfy { !$0.isAccessibilityEnabled() }, "Locked interval is not disabled")
+  for rate in rates {
+    chosen = nil
+    panel.handlePointerDown(at: CGPoint(x: rate.localFrame.midX, y: rate.localFrame.midY)); panel.handlePointerUp()
+    try require(chosen == nil, "Locked interval consumed a rate command")
+  }
+  var direction = 0; var held = false
+  panel.onSpeedStep = { value, _ in direction = value }
+  panel.onSpeedPress = { _, _ in held = true }; panel.onSpeedRelease = { _ in held = false }
+  let speed = panel.speedControlBounds
+  for (fraction, expected) in [(0.1, -1), (0.9, 1)] {
+    panel.handlePointerDown(at: CGPoint(x: speed.minX + speed.width * fraction, y: speed.midY)); panel.handlePointerUp()
+    try require(direction == expected, "Speed arrow target changed")
+  }
+  panel.handlePointerDown(at: CGPoint(x: speed.midX, y: speed.midY))
+  try require(held, "Speed hold target missed")
+  panel.handlePointerUp(); try require(!held, "Speed hold did not release")
+  panel.levelSize = CGSize(width: 100, height: 100)
+  var position = -1.0
+  var mapPosition = CGPoint.zero
+  panel.onMinimapPosition = { mapPosition = $0 }
+  panel.onMinimapScroll = { position = $0 }
+  let map = panel.minimapBounds
+  panel.handlePointerDown(at: CGPoint(x: map.midX + map.height / 4, y: map.midY)); panel.handlePointerUp()
+  try require(abs(position - 75) < 0.001, "Minimap input does not follow the letterboxed level")
+  panel.levelSize = CGSize(width: 100, height: 1000)
+  panel.handlePointerDown(at: CGPoint(x: map.midX, y: map.minY + map.height * 0.25)); panel.handlePointerUp()
+  try require(abs(mapPosition.y - 250) < 0.001, "Tall minimap input lost its vertical position")
+  var timelineAction: TimelinePanelControls.Action?
+  panel.timeline.enabled = { $0 == .forward }
+  panel.timeline.perform = { timelineAction = $0 }
+  for action in TimelinePanelControls.Action.allCases {
+    timelineAction = nil; chosen = nil
+    let frame = panel.timeline.rect(for: action)
+    panel.handlePointerDown(at: CGPoint(x: frame.midX, y: frame.midY)); panel.handlePointerUp()
+    try require(timelineAction == (action == .forward ? .forward : nil) && chosen == nil,
+      "Disabled timeline action or timeline input reached another control")
+  }
+  panel.isMenuMode = true; chosen = nil
+  panel.handlePointerDown(at: CGPoint(x: rates[0].localFrame.midX, y: rates[0].localFrame.midY)); panel.handlePointerUp()
+  try require(chosen == nil && panel.accessibleControls(owner: panel).isEmpty, "Menu exposed hidden game controls")
+
+  // Capture the same one-skill level as the reported layout, using the real views.
+  let levelURL = resources.appendingPathComponent("NeoLemmix/levels/Lemmings_Redux/Gentle/Just_dig!.nxlv")
+  let level = NxlvLevel(text: try String(contentsOf: levelURL, encoding: .utf8))!
+  let resolution = NxlvStyleResolver(stylesRootURL: styles).resolve(level: level)
+  let scene = NxlvRenderer(retainsVisualLayers: true).render(level: level, resolution: resolution).renderedLevel!
+  let live = NeoLemmixSession(simulation: try NeoLemmixSimulation(level: level, renderedLevel: scene),
+    width: scene.width, height: scene.height)
+  for _ in 0..<300 { live.tick() }
+  let provider = CGDataProvider(data: Data(scene.rgba) as CFData)!
+  let terrain = CGImage(width: scene.width, height: scene.height, bitsPerComponent: 8, bitsPerPixel: 32,
+    bytesPerRow: scene.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+    bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider,
+    decode: nil, shouldInterpolate: false, intent: .defaultIntent)!
+  let (window, playfield, previewPanel) = makeWindow()
+  defer { window.close() }
+  playfield.session = live; playfield.neoSprites = sprites; playfield.neoScene = scene
+  playfield.levelImage = terrain; playfield.phase = .playing
+  playfield.viewport.levelSize = CGSize(width: scene.width, height: scene.height)
+  playfield.viewport.viewSize = playfield.bounds.size; playfield.viewport.zoom = 3
+  playfield.viewport.center(on: Double(live.entranceX ?? 0))
+  previewPanel.session = live; previewPanel.neoSprites = sprites; previewPanel.interfaceArtwork = art
+  previewPanel.levelSize = playfield.viewport.levelSize; previewPanel.visibleLevelRect = playfield.viewport.visibleLevelRect
+  previewPanel.terrainImage = terrain; previewPanel.statusText = "OUT \(live.released)/10   HOME 0/1   INTERVAL 28"
+  previewPanel.timeline.enabled = { $0 == .forward }
+  let content = window.contentView!
+  let bitmap = content.bitmapImageRepForCachingDisplay(in: content.bounds)!
+  content.cacheDisplay(in: content.bounds, to: bitmap)
+  try bitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent("neo-just-dig.png"))
+  let mac = NeoLemmixMacArtwork(resources: resources)
+  let macSprites = try NeoLemmixSpriteSet(stylesRootURL: styles, themeStyle: "orig_dirt", macArtwork: mac.lemmings,
+    classicAssets: try ClassicMainDATAssets.load(from: resources.appendingPathComponent("Ports/lemmings_dos_1991-07-30")))
+  let originalIcon = macSprites.skillIcon(named: "walker")!
+  macSprites.usesMacArtwork = true
+  try require(macSprites.frame(action: .walking, direction: .right, animationFrame: 0, traits: [])?.pixelScale == 2,
+    "Equivalent Mac walker was not selected")
+  try require(macSprites.frame(action: .swimming, direction: .right, animationFrame: 0, traits: [])?.pixelScale == 2,
+    "NeoLemmix-only animation was not recreated at Macintosh scale")
+  try require(macSprites.frame(action: .walking, direction: .right, animationFrame: 0, traits: [.neutral])?.pixelScale == 2,
+    "Neutral-lemming artwork was not recreated at Macintosh scale")
+  try require(macSprites.skillIcon(named: "walker")! !== originalIcon, "Artwork switch kept a stale cursor icon")
+  let macScene = NxlvRenderer(retainsVisualLayers: true, macArtwork: mac).render(level: level, resolution: resolution).renderedLevel!
+  playfield.neoScene = macScene; playfield.neoSprites = macSprites; playfield.neoMacArtworkEnabled = true
+  previewPanel.usesMacStyleControls = true
+  previewPanel.neoSprites = macSprites
+  let macBitmap = content.bitmapImageRepForCachingDisplay(in: content.bounds)!
+  content.cacheDisplay(in: content.bounds, to: macBitmap)
+  try macBitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent("neo-just-dig-mac.png"))
+  try require(playfield.imageScale == 2, "Mac terrain was displayed at the wrong logical scale")
+  macSprites.usesMacArtwork = false; playfield.neoMacArtworkEnabled = false
+  previewPanel.usesMacStyleControls = false
+  let restored = content.bitmapImageRepForCachingDisplay(in: content.bounds)!
+  content.cacheDisplay(in: content.bounds, to: restored)
+  try require(restored.representation(using: .png, properties: [:]) == bitmap.representation(using: .png, properties: [:]),
+    "Switching Mac artwork off changed the original scene or simulation")
+  print("PASS NeoLemmix Mac artwork: native detail, recreated actions and traits, cursor refresh and live switching")
+  print("PASS NeoLemmix stone panel: 0/1/8/10/21 skills, four widths, CRT, all icons, cursor mapping and input states")
+}
+
 @MainActor private func testNukeGesturesAndQueuedUndo() throws {
   var gesture = NukeClickGesture()
   try require(gesture.click(canUndo:false,time:1,interval:0.5) == .none, "first click activated")
@@ -536,6 +799,28 @@ private func require(
     "super speed lost its trailing afterimages")
   let repeated = try render(tick: 4, enabled: true)
   try require(repeated == fast, "redrawing one tick changed the afterimages")
+  var previousLength = 0
+  var previousTailPeak = 256
+  for tier in [2.0, 3, 5, 10] {
+    trails.multiplier = tier
+    let pixels = try render(tick: 4, enabled: true)
+    var leftmost = Int(sprite.minX)
+    for y in 0..<360 { for x in 0..<Int(sprite.minX) where pixels[(y * 640 + x) * 4 + 3] > 2 {
+      leftmost = min(leftmost, x)
+    } }
+    let length = Int(sprite.minX) - leftmost
+    var tailPeak = 0
+    for y in 0..<360 { for x in leftmost..<(leftmost + 8) {
+      tailPeak = max(tailPeak, Int(pixels[(y * 640 + x) * 4 + 3]))
+    } }
+    try require(length > previousLength, "The \(tier)× trail did not get longer")
+    try require(tailPeak < previousTailPeak, "The \(tier)× far tail did not get fainter")
+    previousLength = length; previousTailPeak = tailPeak
+    for index in stride(from: 0, to: normal.count, by: 4) where normal[index + 3] != 0 {
+      try require(normal[index..<index + 4] == pixels[index..<index + 4], "A speed tier blurred the solid sprite")
+    }
+  }
+  trails.multiplier = 3
   let left = try render(tick: 4, enabled: true, left: true)
   try require(left != fast, "afterimages did not follow direction")
   bitmap.clear(bounds)
@@ -734,6 +1019,12 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     } else if updated.brightnessComponent > 0 { ghostPixels += 1 }
   } }
   try require(spritePixels > 0 && ghostPixels > 0, "the overlap test did not draw both sprites and ghosts")
+  for tier in [2.0, 3, 5, 10] {
+    view.speedMultiplier = tier
+    let preview = render(fast: true)
+    try preview.representation(using: .png, properties: [:])!.write(to:
+      root.appendingPathComponent(".build/playfield-draw-tests/speed-\(Int(tier))x.png"))
+  }
   view.hdEffectsEnabled = false
   let oldSchool = render(fast: true)
   try require(oldSchool.representation(using: .png, properties: [:]) == normal.representation(using: .png, properties: [:]),
@@ -743,34 +1034,449 @@ private func testMacArtworkCropStaysPixelAligned() throws {
 
 @MainActor private func testSkillCursorBadgeGeometry() throws {
   let point = CGPoint(x: 60, y: 40)
-  let bounds = CGRect(x: 0, y: 0, width: 120, height: 80)
+  let bounds = CGRect(x: 0, y: 0, width: 300, height: 240)
+  let padded = NSImage(size: NSSize(width: 20, height: 20), flipped: true) { _ in
+    NSColor.white.setFill()
+    CGRect(x: 3, y: 6, width: 4, height: 7).fill()
+    return true
+  }
+  let trimmed = SkillCursorBadge.frame(at: point, scale: 1, size: .one, icon: padded, in: bounds)
+  try require(trimmed.width == 8 && trimmed.height == 14,
+    "Transparent sprite padding must not make the visible icon smaller than the counter")
   for scale in [1.0, 2.0, 3.0] {
-    let pixel = floor(scale)
-    let frame = SkillCursorBadge.frame(at: point, scale: scale, in: bounds)
-    try require(frame.width == 8 * pixel && frame.height == frame.width,
-      "the selected-skill reminder is not tiny at \(scale)x")
+    let frame = SkillCursorBadge.frame(at: point, scale: scale, size: .one, in: bounds)
+    try require(frame.width == 14 && frame.height == frame.width,
+      "The baseline icon must remain 14 screen points at \(scale)x playfield zoom")
+    let doubled = SkillCursorBadge.frame(at: point, scale: scale, size: .two, in: bounds)
+    try require(doubled.width == frame.width * 2, "2× icon frame must double 1×")
     let reticle = GameCursor.playfieldPointerFrame(at: point, scale: scale)
-    try require(reticle.contains(frame),
-      "the selected-skill reminder is not inside the reticle at \(scale)x")
-    try require(frame.maxX < reticle.maxX && frame.maxY < reticle.maxY,
-      "the selected-skill reminder is not inset from the reticle corner at \(scale)x")
-    try require(frame.minX.truncatingRemainder(dividingBy: pixel) == 0
-      && frame.minY.truncatingRemainder(dividingBy: pixel) == 0,
-      "the selected-skill reminder is not pixel-aligned at \(scale)x")
+    try require(!reticle.intersects(frame),
+      "the selected-skill reminder overlaps the reticle at \(scale)x")
+    try require(frame.minX > reticle.maxX && frame.minY > reticle.maxY,
+      "the selected-skill reminder is not diagonally below the reticle corner at \(scale)x")
+    try require(frame.minX - reticle.maxX == 10 && frame.minY - reticle.maxY == 10,
+      "Cursor companions must remain ten pixels from the corners at every zoom")
     for edge in [
       CGPoint(x: bounds.minX, y: bounds.minY),
       CGPoint(x: bounds.maxX, y: bounds.minY),
       CGPoint(x: bounds.minX, y: bounds.maxY),
       CGPoint(x: bounds.maxX, y: bounds.maxY),
     ] {
-      try require(bounds.contains(SkillCursorBadge.frame(at: edge, scale: scale, in: bounds)),
-        "the selected-skill reminder leaves the playfield at \(scale)x")
+      for size: SkillCursorIconSize in [.one, .two] {
+        try require(bounds.contains(SkillCursorBadge.frame(at: edge, scale: scale, size: size, in: bounds)),
+          "the selected-skill reminder leaves the playfield at \(scale)x")
+      }
     }
   }
-  print("PASS selected-skill reminder stays tiny, offset and visible at every edge")
+  let centres = [point, CGPoint(x: point.x + 2, y: point.y), CGPoint(x: 290, y: 230)]
+  try require(SkillCursorBadge.count(centres: centres, at: point, scale: 2) == 2,
+    "Reticule count must count every centre inside its bounds")
+  try require(SkillCursorBadge.count(centres: [], at: point, scale: 2) == 0,
+    "Empty reticule must show zero")
+  for size in SkillCursorIconSize.allCases {
+    let count = SkillCursorBadge.countFrame(count: 12, at: point, scale: 2, size: size, in: bounds)
+    let effective: SkillCursorIconSize = size == .none ? .one : size
+    try require(count.width == CGFloat(12 * effective.multiplier) && count.height == CGFloat(7 * effective.multiplier),
+      "Count and icon must share one height, including with the icon hidden")
+    let icon = SkillCursorBadge.frame(at: point, scale: 2, size: effective, in: bounds)
+    try require(count.maxX < point.x && count.minY == icon.minY,
+      "Count must sit opposite the icon at the same height")
+  }
+  print("PASS matching 14/28-point icons and counts, offset and clamping at every edge")
+}
+
+@MainActor private func testClassicSessionRewindBranch() throws {
+  let width = 256, height = 96
+  var solid = Data(repeating: 0, count: width * height)
+  for x in 0..<width { solid[48 * width + x] = 1 }
+  let terrain = try ClassicDOSTerrain(width: width, height: height, solidMask: solid,
+    steelMask: Data(repeating: 0, count: solid.count))
+  let configuration = ClassicDOSConfiguration(totalLemmings: 2, requiredToSave: 1,
+    timeLimitTicks: 1_000, initialReleaseRate: 99,
+    entrances: [.init(x: 100, y: 30)], initialSkills: [.climber: 1, .floater: 1],
+    maximumX: width - 1, maximumY: height - 1)
+  let session = ClassicSession(simulation: try ClassicDOSSimulation(terrain: terrain,
+    configuration: configuration), width: width, height: height)
+  for _ in 0..<80 { session.tick() }
+  guard let id = session.lemmings.first?.id,
+    let climber = ClassicSkill.allCases.firstIndex(of: .climber) else {
+    throw Failure(description: "The synthetic Classic session has no lemming or climber skill")
+  }
+  try require(session.assign(skillIndex: climber, to: id) == nil && session.recoveryEvents.count == 1,
+    "The test skill was not recorded")
+  try require(session.lemmings.first?.hasClimber == true && session.lemmings.first?.hasFloater == false,
+    "The renderer did not receive the assigned climber flag")
+  let floater = ClassicSkill.allCases.firstIndex(of: .floater)!
+  try require(session.assign(skillIndex: floater, to: id) == nil && session.lemmings.first?.hasFloater == true,
+    "The renderer did not receive both permanent skills")
+  for _ in 0..<10 { session.tick() }
+  try require(session.rewind(seconds: 2) && session.recoveryEvents.isEmpty,
+    "A checkpoint at the rewind point still includes the future assignment")
+  try require(session.lemmings.allSatisfy { !$0.hasClimber && !$0.hasFloater },
+    "Rewind left a permanent-skill backpack on an unassigned lemming")
+  let live: any GameSession = session
+  live.resumeFromRewind()
+  for _ in 0..<40 { live.tick() }
+  try require(session.simulation.remainingSkillCount(.climber) == 1 && session.recoveryEvents.isEmpty,
+    "The resumed Classic session replayed the abandoned assignment")
+  print("PASS Classic session checkpoints and resumed play exclude future assignments")
+}
+
+
+@MainActor private func testClassicSkillBackpacks() throws {
+  let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+  let assets = try ClassicMainDATAssets.load(from: root.appendingPathComponent("Content/lemming1.pc"))
+  let app = ProcessInfo.processInfo.environment["LEMMINGS_TEST_APP"].map { URL(fileURLWithPath: $0) }
+    ?? root.appendingPathComponent(".build/local/Ultimate Lemmings.app")
+  let macRoot = app.appendingPathComponent("Contents/Resources/MacArtwork/lemmings")
+  let mac = FileManager.default.fileExists(atPath: macRoot.appendingPathComponent("manifest.json").path)
+    ? try ClassicMacArtwork(directory: macRoot) : nil
+  if mac == nil { print("SKIP Mac backpack artwork: no extracted Mac assets") }
+  let view = PlayfieldView(frame: NSRect(x: 0, y: 0, width: 640, height: 320))
+  let session = TargetingSession()
+  view.session = session; view.phase = .playing; view.viewport.zoom = 4
+  view.assets = assets; view.palette = ClassicLemmingPalette.panelVGA
+  view.levelImage = CGContext(data: nil, width: 320, height: 160, bitsPerComponent: 8, bytesPerRow: 1280,
+    space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!.makeImage()
+  func actor(_ climber: Bool, _ floater: Bool, left: Bool = false,
+             pose: ClassicLemmingPose = .walking) -> SessionLemming {
+    .init(id: 0, x: 60, y: 40, pose: pose, facingLeft: left, animationFrame: 0,
+      countdown: nil, hasClimber: climber, hasFloater: floater)
+  }
+  func capture() -> NSBitmapImageRep {
+    let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+    view.cacheDisplay(in: view.bounds, to: bitmap)
+    return bitmap
+  }
+  for isMac in [false, true] where !isMac || mac != nil {
+    view.macArtwork = isMac ? mac : nil
+    for left in [false, true] {
+      session.actors = [actor(false, false, left: left)]
+      let original = capture().representation(using: .png, properties: [:])!
+      for (climber, floater, kind) in [(true, false, ClassicSkillBackpack.Kind.climber),
+        (false, true, .floater), (true, true, .both)] {
+        session.actors = [actor(climber, floater, left: left)]
+        let bitmap = capture()
+        let colours = kind.colours
+        var packPixels = 0
+        for y in 0..<bitmap.pixelsHigh { for x in 0..<bitmap.pixelsWide {
+          guard let colour = bitmap.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB) else { continue }
+          let rgb = [colour.redComponent, colour.greenComponent, colour.blueComponent].map { Int(($0 * 255).rounded()) }
+          if colours.contains(where: { zip($0, rgb).allSatisfy { abs(Int($0.0) - $0.1) <= 2 } }) { packPixels += 1 }
+        } }
+        try require(packPixels > 0, "Missing \(kind) backpack in \(isMac ? "Mac" : "PC") artwork, left=\(left)")
+        view.showClassicSkillBackpacks = false
+        try require(capture().representation(using: .png, properties: [:])! == original,
+          "Disabling backpacks must restore the original artwork for assigned lemmings")
+        view.showClassicSkillBackpacks = true
+        try require(view.lemming(at: CGPoint(x: 60, y: 40))?.id == 0,
+          "A backpack changed the lemming's input target")
+        try bitmap.representation(using: .png, properties: [:])!.write(to:
+          root.appendingPathComponent(".build/playfield-draw-tests/backpack-\(isMac ? "mac" : "pc")-\(kind.rawValue)-\(left ? "left" : "right").png"))
+      }
+      session.actors = [actor(false, false, left: left)]
+      try require(capture().representation(using: .png, properties: [:])! == original,
+        "The sprite cache leaked an assigned backpack onto an unassigned lemming")
+    }
+  }
+  let seasonal = try ["xmas", "holiday"].map { family in
+    try ClassicMacArtwork(directory: app.appendingPathComponent("Contents/Resources/MacArtwork/" + family))
+  }
+  var checkedFrames = 0
+  for pose in ClassicLemmingPose.allCases where ClassicSkillBackpack.kind(for: actor(true, true, pose: pose)) != nil {
+    for left in [false, true] {
+      let animation = assets.animation(for: pose, direction: left ? .left : .right)
+        ?? assets.animation(for: pose, direction: .none)!
+      for tick in animation.frames.indices {
+        let pc = animation.frames[tick]
+        var artwork = [(try pc.rgba(using: view.palette), pc.width, pc.height, 1)]
+        if let mf = mac?.lemming(pose: pose, left: left, tick: tick) {
+          artwork.append((mf.rgba, mf.width, mf.height, 2))
+        }
+        for seasonalArtwork in seasonal {
+          if let frame = seasonalArtwork.lemming(pose: pose, left: left, tick: tick) {
+            artwork.append((frame.rgba, frame.width, frame.height, 2))
+          }
+        }
+        for (rgba, width, height, scale) in artwork {
+          let image = ClassicSkillBackpack.image(rgba: rgba, width: width, height: height,
+            pixelScale: scale, pose: pose, left: left, kind: .both)!
+          let cg = image.cgImage(forProposedRect: nil, context: nil, hints: nil)!
+          let data = cg.dataProvider!.data! as Data
+          var visible = false
+          for i in stride(from: 0, to: data.count, by: 4) where data[i + 3] > 0 {
+            for colour in ClassicSkillBackpack.Kind.both.colours {
+              if colour[0] == data[i] && colour[1] == data[i + 1] && colour[2] == data[i + 2] { visible = true }
+            }
+          }
+          try require(visible, "Backpack disappeared: \(pose), frame \(tick), left=\(left), artwork scale=\(scale)")
+          checkedFrames += 1
+        }
+      }
+    }
+  }
+  print("PASS backpacks visible through \(checkedFrames) PC/Mac animation frames")
+  for pose: ClassicLemmingPose in [.drowning, .splatting, .frying, .explosion, .exiting] {
+    try require(ClassicSkillBackpack.kind(for: actor(true, true, pose: pose)) == nil,
+      "A backpack remained after the lemming stopped being an active skill target")
+  }
+  let neo = SessionLemming(id: 0, x: 0, y: 0, pose: .walking, facingLeft: false,
+    animationFrame: 0, countdown: nil, hasClimber: true, neoAction: .walking)
+  try require(ClassicSkillBackpack.kind(for: neo) == nil, "Classic backpacks changed NeoLemmix artwork")
+  print("PASS Classic backpack colours, both directions, available artwork, cache isolation and input targets")
+}
+
+@MainActor private final class SkillBadgePreview: NSView {
+  var iconSize: SkillCursorIconSize = .one
+  override var isFlipped: Bool { true }
+  override func draw(_ dirtyRect: NSRect) {
+    NSColor.black.setFill()
+    bounds.fill()
+    let icon = NSImage(size: NSSize(width: 6, height: 6), flipped: true) { _ in
+      NSColor.white.setFill()
+      CGRect(x: 1, y: 0, width: 4, height: 6).fill()
+      return true
+    }
+    for (index, remaining) in [3, 1, 0, nil].enumerated() {
+      let point = CGPoint(x: 40 + index * 120, y: 25)
+      GameCursor.drawPlayfieldPointer(at: point, scale: 1, tint: .white)
+      SkillCursorBadge.drawCount([0, 1, 12, 99][index], at: point, scale: 1,
+        size: iconSize, icon: icon, in: bounds)
+      SkillCursorBadge.draw(icon: icon, index: 0, at: point, scale: 1,
+        tint: .white, size: iconSize, reduceMotion: false,
+        remaining: remaining, now: 1.2, in: bounds)
+    }
+  }
+}
+
+@MainActor private final class HighZoomEmptySkillPreview: NSView {
+  override var isFlipped: Bool { true }
+  override func draw(_ dirtyRect: NSRect) {
+    NSColor.black.setFill()
+    bounds.fill()
+    let point = CGPoint(x: 100, y: 100)
+    GameCursor.drawPlayfieldPointer(at: point, scale: 10, tint: .white)
+    SkillCursorBadge.draw(icon: nil, index: 0, at: point, scale: 10,
+      tint: .white, size: .one, reduceMotion: true, remaining: 0, in: bounds)
+  }
+}
+
+@MainActor private func testSkillCursorBadgeAvailability() throws {
+  let opacity = SkillCursorBadge.opacity
+  try require(opacity(1, 0, false) == 1 &&
+    abs(opacity(1, 1.2, false) - 0.75) < 0.001 &&
+    abs(opacity(1, 2.4, false) - 1) < 0.001,
+    "The last use must fade slowly between 75% and full opacity")
+  for remaining in [nil, 0, 2, 10] {
+    try require(opacity(remaining, 1.2, false) == 1,
+      "Only one finite use may animate")
+  }
+  try require(opacity(1, 1.2, true) == 1,
+    "Reduced motion must keep the last-use badge steady")
+
+  let preview = SkillBadgePreview(frame: CGRect(x: 0, y: 0, width: 480, height: 100))
+  guard let bitmap = preview.bitmapImageRepForCachingDisplay(in: preview.bounds) else {
+    throw Failure(description: "The badge preview could not render")
+  }
+  preview.cacheDisplay(in: preview.bounds, to: bitmap)
+  let pixelScale = CGFloat(bitmap.pixelsWide) / preview.bounds.width
+  func redPixels(in cell: Int) -> Int {
+    let first = Int(CGFloat(cell * 120) * pixelScale)
+    let last = Int(CGFloat((cell + 1) * 120) * pixelScale)
+    var count = 0
+    for y in 0..<bitmap.pixelsHigh {
+      for x in first..<last {
+        guard let colour = bitmap.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB) else { continue }
+        if colour.redComponent > 0.5 && colour.redComponent > colour.greenComponent * 2 &&
+          colour.redComponent > colour.blueComponent * 2 { count += 1 }
+      }
+    }
+    return count
+  }
+  try require(redPixels(in: 2) > 0 && redPixels(in: 0) == 0 && redPixels(in: 1) == 0 && redPixels(in: 3) == 0,
+    "Only an empty skill may draw the red X")
+  let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+  try bitmap.representation(using: .png, properties: [:])!.write(to:
+    root.appendingPathComponent(".build/playfield-draw-tests/skill-badge-availability.png"))
+
+  let large = SkillBadgePreview(frame: CGRect(x: 0, y: 0, width: 520, height: 140))
+  large.iconSize = .two
+  let largeBitmap = large.bitmapImageRepForCachingDisplay(in: large.bounds)!
+  large.cacheDisplay(in: large.bounds, to: largeBitmap)
+  try largeBitmap.representation(using: .png, properties: [:])!.write(to:
+    root.appendingPathComponent(".build/playfield-draw-tests/skill-badge-2x.png"))
+
+  let highZoom = HighZoomEmptySkillPreview(frame: CGRect(x: 0, y: 0, width: 320, height: 240))
+  let highZoomBitmap = highZoom.bitmapImageRepForCachingDisplay(in: highZoom.bounds)!
+  highZoom.cacheDisplay(in: highZoom.bounds, to: highZoomBitmap)
+  let redCoordinates = (0..<highZoomBitmap.pixelsHigh).flatMap { y in
+    (0..<highZoomBitmap.pixelsWide).compactMap { x -> CGPoint? in
+      guard let colour = highZoomBitmap.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB),
+        colour.redComponent > 0.5 && colour.redComponent > colour.greenComponent * 2 else { return nil }
+      return CGPoint(x: x, y: y)
+    }
+  }
+  let highZoomScale = CGFloat(highZoomBitmap.pixelsWide) / highZoom.bounds.width
+  let redWidth = (redCoordinates.map(\.x).max() ?? 0) - (redCoordinates.map(\.x).min() ?? 0) + 1
+  try require(!redCoordinates.isEmpty && redWidth / highZoomScale <= 14,
+    "The empty-skill X grew with the playfield zoom")
+  try highZoomBitmap.representation(using: .png, properties: [:])!.write(to:
+    root.appendingPathComponent(".build/playfield-draw-tests/high-zoom-empty-skill.png"))
+  for size: SkillCursorIconSize in [.one, .two] {
+    for backing in [1, 2] {
+      let width = 220, height = 160
+      let bitmap = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: width * backing,
+        pixelsHigh: height * backing, bitsPerSample: 8, samplesPerPixel: 4,
+        hasAlpha: true, isPlanar: false, colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0)!
+      let context = NSGraphicsContext(bitmapImageRep: bitmap)!
+      NSGraphicsContext.saveGraphicsState(); NSGraphicsContext.current = context
+      context.cgContext.scaleBy(x: CGFloat(backing), y: CGFloat(backing))
+      let bounds = CGRect(x: 0, y: 0, width: width, height: height)
+      NSColor.black.setFill(); bounds.fill()
+      let point = CGPoint(x: 110, y: 50)
+      SkillCursorBadge.drawCount(12, at: point, scale: 3, size: size, in: bounds)
+      SkillCursorBadge.draw(icon: nil, index: 0, at: point, scale: 3,
+        tint: .white, size: size, reduceMotion: true, remaining: 0, in: bounds)
+      NSGraphicsContext.restoreGraphicsState()
+      var redRows = Set<Int>(), blueRows = Set<Int>()
+      for y in 0..<bitmap.pixelsHigh { for x in 0..<bitmap.pixelsWide {
+        let c = bitmap.colorAt(x: x, y: y)!
+        if c.redComponent > 0.7 && c.greenComponent < 0.3 { redRows.insert(y) }
+        if c.blueComponent > 0.8 && c.redComponent < 0.4 { blueRows.insert(y) }
+      } }
+      try require(redRows.count == 7 * size.multiplier * backing && redRows == blueRows,
+        "The X and counter have different visible heights or alignment at \(size.title), \(backing)× backing")
+    }
+  }
+  print("PASS one-use fade, reduced motion and empty-skill red X")
+}
+
+@MainActor private func renderSelectionPreview() throws {
+  let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+  let view = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 640, height: 320))
+  let session = TargetingSession()
+  session.actors = [.init(id: 0, x: 160, y: 80, pose: .walking, facingLeft: false, animationFrame: 0, countdown: nil)]
+  view.session = session; view.phase = .playing; view.viewport.zoom = 2
+  view.assets = try ClassicMainDATAssets.load(from: root.appendingPathComponent("Content/lemming1.pc"))
+  view.palette = ClassicLemmingPalette.panelVGA
+  view.levelImage = CGContext(data: nil, width: 320, height: 160, bitsPerComponent: 8,
+    bytesPerRow: 1280, space: CGColorSpaceCreateDeviceRGB(),
+    bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!.makeImage()
+  view.handleMove(to: CGPoint(x: 320, y: 160))
+  for size in SkillCursorIconSize.allCases {
+    view.showReticleCount = true
+    let name = size.rawValue
+    view.startCountdown.cancel()
+    view.skillCursorIconSize = size
+    view.reduceMotion = true
+    view.needsDisplay = true
+    let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+    view.cacheDisplay(in: view.bounds, to: bitmap)
+    try require(view.selectionEffect != nil,
+      "Classic did not publish its selected sprite or reduced-motion state")
+    try require(view.selectionEffect?.rect.contains(CGPoint(x: 320, y: 150)) == true,
+      "Classic's selection mask does not follow the displayed sprite")
+    try bitmap.representation(using: .png, properties: [:])!.write(
+      to: root.appendingPathComponent(".build/selection-" + name + ".png"))
+  }
+  GameCursor.gameplaySuppressed = true
+  let covered = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+  view.cacheDisplay(in: view.bounds, to: covered)
+  GameCursor.gameplaySuppressed = false
+  try require(view.selectionEffect == nil, "Covered gameplay retained its selection effect")
+  print("PASS Classic selection sprite, reduced motion and dialog suppression")
+}
+
+@MainActor private func testDeathCountdownInCRT() throws {
+  let view = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 640, height: 320))
+  view.session = TargetingSession()
+  view.phase = .playing
+  view.deathCountdownText = "1/1 💀"
+  view.deathCountdownAccessibilityText = "1 of 1 deaths remain before failure"
+  view.levelImage = CGContext(data: nil, width: 320, height: 160, bitsPerComponent: 8,
+    bytesPerRow: 1280, space: CGColorSpaceCreateDeviceRGB(),
+    bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!.makeImage()
+  func image() -> Data {
+    let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+    view.cacheDisplay(in: view.bounds, to: bitmap)
+    return bitmap.representation(using: .png, properties: [:])!
+  }
+  let flat = image()
+  view.showsDeathCountdownOverlay = true
+  try require(image() != flat, "The CRT display hid the death counter")
+  let status = view.accessibleControls(owner: view).first as? GameAccessibleElement
+  try require(status?.accessibilityLabel()?.contains("1 of 1 deaths remain before failure") == true,
+    "The death counter was not available to screen readers")
+  print("PASS CRT death counter and accessible playfield status")
+}
+
+@MainActor private func testDeathCountdownStatusStrip() throws {
+  let view = PanelView(frame: CGRect(x: 0, y: 0, width: 640, height: 80))
+  view.isMenuMode = true
+  view.statusText = "OUT 75/100   HOME 0/90   RATE 99   11/11 💀   TIME 3:00"
+  view.progressText = "SAVED 0/90"
+  let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+  view.cacheDisplay(in: view.bounds, to: bitmap)
+  let output = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+    .deletingLastPathComponent().deletingLastPathComponent()
+    .appendingPathComponent(".build/death-counter-status.png")
+  try bitmap.representation(using: .png, properties: [:])!.write(to: output)
+  print("PASS death counter between rate and time in the status strip")
+}
+
+@MainActor private func testPrecisionZoomBadges() throws {
+  var lens = AnimatedPrecisionZoomLens()
+  let anchor = CGPoint(x: 80, y: 60)
+  try require(lens.transition(toMagnification: 1.5, at: anchor, scaleX: 3, scaleY: 3) == .zero,
+    "An animated Zoom step moved its cursor target")
+  try require(lens.display(CGPoint(x: 90, y: 65)) == CGPoint(x: 95, y: 67.5),
+    "The intermediate Zoom scale was not smooth")
+  let natural = PrecisionZoomScrollGesture.normalizedDeltas(horizontal: 0, vertical: -8,
+    directionInvertedFromDevice: true)
+  try require(natural.vertical == 8, "Natural scrolling reversed the physical Zoom direction")
+  let status = PrecisionZoomStatus(zoom: 3, superzoom: 12, active: .zoom, isEmpty: false)
+  try require(status.accessibility ==
+    "Zoom, 3 remaining. Superzoom, 12 remaining. Zoom active",
+    "The compact Zoom badges lost their accessible description")
+  let image = NSImage(size: CGSize(width: 180, height: 90))
+  image.lockFocus()
+  NSColor.white.setFill()
+  CGRect(x: 0, y: 0, width: 180, height: 90).fill()
+  let size = status.draw(at: CGPoint(x: 8, y: 8), scale: 2)
+  image.unlockFocus()
+  try require(size.height == 48 && size.width > 0, "The two Zoom badge rows were not laid out")
+  let output = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+    .deletingLastPathComponent().deletingLastPathComponent()
+    .appendingPathComponent(".build/precision-zoom-badges.png")
+  try image.tiffRepresentation.flatMap(NSBitmapImageRep.init)?.representation(using: .png, properties: [:])?
+    .write(to: output)
+  print("PASS compact lowercase/uppercase Zoom badges, active state and accessibility")
+}
+
+@MainActor private func testFreshLevelCountdown() throws {
+  let countdown = FreshLevelCountdown()
+  countdown.arm()
+  try require(countdown.number == 3, "Fresh countdown must begin at three")
+  try require(!countdown.advance(seconds: 20, visible: false) && countdown.number == 3,
+    "Menus or inactive windows must not consume the countdown")
+  try require(!countdown.advance(seconds: 1, visible: true) && countdown.number == 2, "Countdown missed two")
+  try require(!countdown.advance(seconds: 1, visible: true) && countdown.number == 1, "Countdown missed one")
+  try require(countdown.advance(seconds: 1, visible: true) && !countdown.isActive, "Countdown must start the level")
+  try require(!countdown.advance(seconds: 1, visible: true), "Countdown must start only once")
+  countdown.arm(); countdown.cancel()
+  try require(!countdown.advance(seconds: 10, visible: true), "Explicit pause must cancel automatic start")
+  print("PASS fresh-level countdown, hidden time, one-shot start and explicit cancellation")
 }
 
 @MainActor private func testGameCursorRegions() throws {
+  let view = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 320, height: 160))
+  let session = TargetingSession()
+  session.actors = [.init(id: 0, x: 50, y: 60, pose: .walking, facingLeft: false, animationFrame: 0, countdown: nil)]
+  session.skills = []
+  view.session = session
+  try require(view.hasLemming(at: CGPoint(x: 50, y: 55)) && view.lemming(at: CGPoint(x: 50, y: 55)) == nil,
+    "Original cursor hover must recognise a lemming even when no skill can be assigned")
+  try require(!view.hasLemming(at: CGPoint(x: 100, y: 55)), "Empty terrain retained a hover target")
   let playfield = CGRect(x: 0, y: 0, width: 320, height: 160)
   try require(GameCursor.hidesSystemCursor(at: CGPoint(x: 160, y: 80), inside: playfield),
     "the gameplay cursor is not hidden behind the drawn pointer")
@@ -787,7 +1493,15 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   do {
     try testTickDirectionContinuity()
     try testSkillCursorBadgeGeometry()
+    try testClassicSessionRewindBranch()
+    try testClassicSkillBackpacks()
+    try testSkillCursorBadgeAvailability()
+    try testFreshLevelCountdown()
     try testGameCursorRegions()
+    try testDeathCountdownInCRT()
+    try testDeathCountdownStatusStrip()
+    try testPrecisionZoomBadges()
+    try renderSelectionPreview()
     try testMacArtworkCropStaysPixelAligned()
     try testSpeedSpritesStayOnTop()
     try testSpeedAfterimages()
@@ -795,7 +1509,9 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     try testApproachingLemmingPreferred()
     try testSameDirectionPackKeepsNearestPick()
     try testFollowerBehindBuilderIsTargeted()
+    try testSkillTargetPriorities()
     try testNukeGesturesAndQueuedUndo()
+    try testNeoLemmixPanel()
     try testClassicPanelLabels()
     print("PASS Xmas panel labels at multiple sizes with speed control")
     try testCameraResize()

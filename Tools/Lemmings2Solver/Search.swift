@@ -124,6 +124,11 @@ func search(from start: Lemmings2Runtime, seed: [Lemmings2TimedEvent] = [], boun
             beam.append(line)
         }
     }
+    if let partial = report.bestPartial, !partial.game.isComplete {
+        var tail = finish(partial)
+        settle(&tail, nil)
+        consider(tail)
+    }
     report.winners = winners.keys.sorted(by: >).compactMap { winners[$0] }
     report.seconds = elapsed()
     return report

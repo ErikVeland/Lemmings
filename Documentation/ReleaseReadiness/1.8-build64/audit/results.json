@@ -1,0 +1,482 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-05T08:01:55.753372+00:00",
+  "host": "macOS-27.2-arm64-arm-64bit-Mach-O",
+  "compilerTarget": "arm64-apple-macos12.3",
+  "inputManifest": "inputs.json",
+  "sourceDrift": [],
+  "checks": [
+    {
+      "name": "shared-library",
+      "status": "passed",
+      "seconds": 129.6,
+      "log": "logs/shared-library.log"
+    },
+    {
+      "name": "ClassicGameFlowTests",
+      "status": "passed",
+      "seconds": 1.3,
+      "log": "logs/ClassicGameFlowTests.log"
+    },
+    {
+      "name": "ClassicSettingsTests",
+      "status": "passed",
+      "seconds": 1.4,
+      "log": "logs/ClassicSettingsTests.log"
+    },
+    {
+      "name": "ClassicSoundCueTests",
+      "status": "passed",
+      "seconds": 1.3,
+      "log": "logs/ClassicSoundCueTests.log"
+    },
+    {
+      "name": "AudioMatrixTests",
+      "status": "passed",
+      "seconds": 1.3,
+      "log": "logs/AudioMatrixTests.log"
+    },
+    {
+      "name": "NeoLemmixSimulationTests",
+      "status": "passed",
+      "seconds": 3.4,
+      "log": "logs/NeoLemmixSimulationTests.log"
+    },
+    {
+      "name": "NxlvRendererTests",
+      "status": "passed",
+      "seconds": 2.1,
+      "log": "logs/NxlvRendererTests.log"
+    },
+    {
+      "name": "NxlvStyleResolverTests",
+      "status": "passed",
+      "seconds": 1.2,
+      "log": "logs/NxlvStyleResolverTests.log"
+    },
+    {
+      "name": "ClassicDOSSimulationRegressions",
+      "status": "passed",
+      "seconds": 5.8,
+      "log": "logs/ClassicDOSSimulationRegressions.log"
+    },
+    {
+      "name": "ClassicDOSRewindTests",
+      "status": "passed",
+      "seconds": 1.2,
+      "log": "logs/ClassicDOSRewindTests.log"
+    },
+    {
+      "name": "ClassicDOSReplayTests",
+      "status": "passed",
+      "seconds": 1.4,
+      "log": "logs/ClassicDOSReplayTests.log"
+    },
+    {
+      "name": "ProTrackerTests",
+      "status": "passed",
+      "seconds": 1.4,
+      "log": "logs/ProTrackerTests.log"
+    },
+    {
+      "name": "PercussionTests",
+      "status": "passed",
+      "seconds": 1.1,
+      "log": "logs/PercussionTests.log"
+    },
+    {
+      "name": "AdaptiveDJDirectorTests",
+      "status": "passed",
+      "seconds": 0.9,
+      "log": "logs/AdaptiveDJDirectorTests.log"
+    },
+    {
+      "name": "FLICTests",
+      "status": "passed",
+      "seconds": 2.9,
+      "log": "logs/FLICTests.log"
+    },
+    {
+      "name": "Lemmings2RuntimeTests",
+      "status": "passed",
+      "seconds": 50.2,
+      "log": "logs/Lemmings2RuntimeTests.log"
+    },
+    {
+      "name": "Lemmings2IntroTests",
+      "status": "passed",
+      "seconds": 2.1,
+      "log": "logs/Lemmings2IntroTests.log"
+    },
+    {
+      "name": "Lemmings3RuntimeTests",
+      "status": "passed",
+      "seconds": 5.3,
+      "log": "logs/Lemmings3RuntimeTests.log"
+    },
+    {
+      "name": "Lemmings3SoundTests",
+      "status": "passed",
+      "seconds": 1.1,
+      "log": "logs/Lemmings3SoundTests.log"
+    },
+    {
+      "name": "UnifiedGameTests",
+      "status": "passed",
+      "seconds": 2.3,
+      "log": "logs/UnifiedGameTests.log"
+    },
+    {
+      "name": "ClassicSagaTests",
+      "status": "passed",
+      "seconds": 1.3,
+      "log": "logs/ClassicSagaTests.log"
+    },
+    {
+      "name": "PlatformProfileTests",
+      "status": "passed",
+      "seconds": 1.2,
+      "log": "logs/PlatformProfileTests.log"
+    },
+    {
+      "name": "AmigaSoundTests",
+      "status": "passed",
+      "seconds": 1.0,
+      "log": "logs/AmigaSoundTests.log"
+    },
+    {
+      "name": "AmigaVersusTests",
+      "status": "passed",
+      "seconds": 1.7,
+      "log": "logs/AmigaVersusTests.log"
+    },
+    {
+      "name": "BundledGameResourcesTests",
+      "status": "passed",
+      "seconds": 29.1,
+      "log": "logs/BundledGameResourcesTests.log"
+    },
+    {
+      "name": "PlatformExclusiveTests",
+      "status": "passed",
+      "seconds": 1.2,
+      "log": "logs/PlatformExclusiveTests.log"
+    },
+    {
+      "name": "NeoLemmixEndToEnd",
+      "status": "passed",
+      "seconds": 1.2,
+      "log": "logs/NeoLemmixEndToEnd.log"
+    },
+    {
+      "name": "PortableTests",
+      "status": "passed",
+      "seconds": 2.7,
+      "log": "logs/PortableTests.log"
+    },
+    {
+      "name": "ModernEngineTests",
+      "status": "passed",
+      "seconds": 0.7,
+      "log": "logs/ModernEngineTests.log"
+    },
+    {
+      "name": "SequelDataTests",
+      "status": "passed",
+      "seconds": 3.6,
+      "log": "logs/SequelDataTests.log"
+    },
+    {
+      "name": "save-recovery",
+      "status": "passed",
+      "seconds": 3.1,
+      "log": "logs/save-recovery.log"
+    },
+    {
+      "name": "run-recovery-files",
+      "status": "passed",
+      "seconds": 5.6,
+      "log": "logs/run-recovery-files.log"
+    },
+    {
+      "name": "cross-build-recovery",
+      "status": "passed",
+      "seconds": 7.4,
+      "log": "logs/cross-build-recovery.log"
+    },
+    {
+      "name": "fan-library",
+      "status": "passed",
+      "seconds": 38.2,
+      "log": "logs/fan-library.log"
+    },
+    {
+      "name": "preserved-solution-manifests",
+      "status": "passed",
+      "seconds": 0.3,
+      "log": "logs/preserved-solution-manifests.log"
+    },
+    {
+      "name": "audit-integrity",
+      "status": "passed",
+      "seconds": 0.1,
+      "log": "logs/audit-integrity.log"
+    },
+    {
+      "name": "package-closure",
+      "status": "passed",
+      "seconds": 0.7,
+      "log": "logs/package-closure.log"
+    },
+    {
+      "name": "automatic-updates",
+      "status": "passed",
+      "seconds": 0.1,
+      "log": "logs/automatic-updates.log"
+    },
+    {
+      "name": "classic-panel-art",
+      "status": "passed",
+      "seconds": 0.0,
+      "log": "logs/classic-panel-art.log"
+    },
+    {
+      "name": "fan-pruning",
+      "status": "passed",
+      "seconds": 0.1,
+      "log": "logs/fan-pruning.log"
+    },
+    {
+      "name": "retained-rescue-targets",
+      "status": "passed",
+      "seconds": 0.1,
+      "log": "logs/retained-rescue-targets.log"
+    },
+    {
+      "name": "hint-catalogue",
+      "status": "passed",
+      "seconds": 2.3,
+      "log": "logs/hint-catalogue.log"
+    },
+    {
+      "name": "controller",
+      "status": "passed",
+      "seconds": 1.1,
+      "log": "logs/controller.log"
+    },
+    {
+      "name": "variable-speed",
+      "status": "passed",
+      "seconds": 0.9,
+      "log": "logs/variable-speed.log"
+    },
+    {
+      "name": "pointer-capture",
+      "status": "passed",
+      "seconds": 1.4,
+      "log": "logs/pointer-capture.log"
+    },
+    {
+      "name": "dialog-cursor",
+      "status": "passed",
+      "seconds": 2.2,
+      "log": "logs/dialog-cursor.log"
+    },
+    {
+      "name": "hdr-gpu",
+      "status": "passed",
+      "seconds": 7.0,
+      "log": "logs/hdr-gpu.log"
+    },
+    {
+      "name": "rescue-certificates",
+      "status": "passed",
+      "seconds": 0.2,
+      "log": "logs/rescue-certificates.log"
+    },
+    {
+      "name": "replay-movies",
+      "status": "failed",
+      "seconds": 2.0,
+      "log": "logs/replay-movies.log"
+    },
+    {
+      "name": "mac-app-integration",
+      "status": "failed",
+      "seconds": 105.6,
+      "log": "logs/mac-app-integration.log"
+    },
+    {
+      "name": "local-performance-measurement",
+      "status": "failed",
+      "seconds": 252.8,
+      "log": "logs/local-performance-measurement.log"
+    },
+    {
+      "name": "sequel-views",
+      "status": "passed",
+      "seconds": 278.8,
+      "log": "logs/sequel-views.log"
+    },
+    {
+      "name": "arcade-records",
+      "status": "failed",
+      "seconds": 129.0,
+      "log": "logs/arcade-records.log"
+    }
+  ],
+  "gates": [],
+  "releaseScope": "minor",
+  "deferredGates": [
+    {
+      "area": "Official Classic campaign completion",
+      "priority": "P0",
+      "status": "closed",
+      "exitCriteria": "Require winning replays for all 292 official Classic levels. Verify their session recovery, continuous official-only progression, saved progress, release transitions and final results.",
+      "progress": "22 September: all 292 official routes pass strict replay verification under the corrected DOS rules. The real app session and recovery code passes 876 saved-run restores and 292 progress resumes, with all five official release transitions and the final quest result. Missing fixtures, altered outcomes and late inputs fail. The gate uses the six-release official-only library; full installed-library progression and physical UI/hardware journeys retain their separate gates. Reproduce with Scripts/verify-official-classic.sh. See OfficialClassicQuest.json and CampaignClosure-2026-09-22.md.",
+      "scopes": [
+        "all",
+        "classic-1.0"
+      ]
+    },
+    {
+      "area": "Fan and conversion completion",
+      "priority": "P0",
+      "status": "closed",
+      "exitCriteria": "Fan levels must load and start; they need no winning route (owner decision, 22 September 2026). Require winning routes and progression for all 60 Oh Yes! conversions. Sequel progression is tracked in the 1.9 sequel completion gate.",
+      "progress": "22 September: all 6,020 retained fan levels load, render and start. All 60 conversions pass strict replay verification twice, with complete 20/10/30 rank inventories. The combined 352-level Classic quest passes 1,056 run restores, 352 progress resumes, six release transitions and the final result. Missing fixtures, altered outcomes and late inputs fail without replacing successful evidence. All 352 identities have bundled solution replays and verified hints. See ClassicConversionQuest.json, ClassicValidation-current.md and CampaignClosure-2026-09-22.md. L2/L3 remain Preview under the open 1.9 sequel completion gate.",
+      "scopes": [
+        "all",
+        "classic-1.0"
+      ]
+    },
+    {
+      "area": "Sequel fidelity",
+      "priority": "P0",
+      "status": "open",
+      "exitCriteria": "1.9 completion gate: resolve provisional L3 tool, movement and trap semantics against original-engine evidence. Complete environmental effects, original movie audio and story transitions. Extend L2 original-engine comparisons. Record every L2/L3 winning route and verify continuous campaign progression, L2 survivor carry-over, endings, saved-run recovery, replay identity and result records.",
+      "scopes": [
+        "all"
+      ],
+      "progress": "1 October: strict source-tree replay checks verify 75/120 L2 routes, 27 carry-over variants and 41/90 L3 routes. Cavelems is the only complete ten-level L2 chain. Current source-level runtime suites pass all 120 L2 load-and-advance checks, all 90 L3 level inventory checks, selected campaign carry-over, save validation and ending eligibility; these do not prove full played campaigns or packaged-app recovery. DOSBox Staging now confirms the zero-saved passive result on one bundled level in each original game (L2 Beach 01 and L3 Shadow 01); movement timing and skill actions have not been matched. A fresh ad-hoc arm64 package at 7352629 passes signature, empty-home launch, bundled-resource checks and both runtime suites against its copied sequel data. The sessions integration target passes cross-game saved-run and playlist identity checks using that package's resources. The 45 missing L2 routes, 49 missing L3 routes, eleven incomplete L2 chains, original-engine fidelity, L3 media and story work, packaged player journeys and hardware checks keep this gate open. Both games remain Preview. See 1.8SequelVerification.md for the exact revision, toolchain and check limits."
+    },
+    {
+      "area": "NeoLemmix compatibility",
+      "priority": "P0",
+      "status": "closed",
+      "exitCriteria": "1.7 gate: run every advertised level with no unsupported mechanics. Compare real reference replays, rescue frames, final state, destructive masks, gadget effects, animation states and recovery against the pinned CE oracle. Verify pack progress, changed-content rejection and lawful distribution inputs in the native app.",
+      "scopes": [
+        "all"
+      ],
+      "progress": "28 September: the NeoLemmix 12.14 and CE 1.2.0 compatibility gate is closed. The strict pinned corpus passes 794 levels and 250,996 deterministic ticks with 42 benign content diagnostics, zero unsupported levels, and zero import or render failures. All 21 current skills pass focused tests. The March 2025 Redux corpus completes all 160 native and recovered runs; all 158 exact-version routes retain stable pack, level, source-revision and progress identity, while two version mismatches remain classified separately. An independent live-memory export from the pinned CE executable matches all 160 native terminal states, including scalar, lemming, gadget, inventory and live-terrain fields. The live CE visual matrix covers all 21 skills, 68 selected frames, seven style families, live terrain, triggered and secondary gadget animation, athlete recoloring, overlap ordering and NO_OVERWRITE; every frame has zero mutually visible RGB differences. Native recovery and pack integration pass, changed content is rejected, and bundled inputs are limited to the owner-approved CE levels and 26 DMA styles; community styles remain player-supplied. See 1.7Roadmap.md, NeoLemmixFinalStateOracle.md, NeoLemmixReplayCaptureOracle.md and ReleaseReadiness/1.7NeoLemmixPreparation.md."
+    },
+    {
+      "area": "Save and interruption recovery",
+      "priority": "P0",
+      "status": "partial",
+      "exitCriteria": "Verify app and controller interruption on real hardware. Add versioned in-progress checkpoints and crash recovery before mobile suspend/termination support. Verify save migrations and rollback with real prior releases.",
+      "progress": "15 September: all existing checkpoint, corruption, stale-writer and recovery tests pass. Ten new trials kill an isolated writer process during checkpoint updates, then validate the recovered checkpoint with a fresh reader. These pass. Classic wins now preserve validated input routes separately from recovery checkpoints. Physical interruption, installed prior-release migration and power-loss coverage remain distinct from these process tests. See CampaignClosure-2026-09-22.md.",
+      "scopes": [
+        "all",
+        "classic-1.0"
+      ]
+    },
+    {
+      "area": "Input and accessibility",
+      "priority": "P0",
+      "status": "partial",
+      "exitCriteria": "Test the complete first-launch-to-results flow with physical Xbox, PlayStation and Switch-layout controllers. Add remapping and device glyphs, touch targeting, readable UI scaling, reduced motion/flash controls and VoiceOver navigation without forcing OG gameplay.",
+      "progress": "Earlier beta testing passed complete software-driven journeys on Apple silicon and Intel/Rosetta. F retains the reached speed after release; mouse and keyboard speed arrows apply immediately from 1x. Green handover initials and the previous-level retry button were rendered and tested with real mouse events. Existing keyboard/controller routing, targeting, fonts, scalable menus, hints and interruption tests passed. Physical controllers and full VoiceOver remain unverified.",
+      "scopes": [
+        "all",
+        "classic-1.0"
+      ]
+    },
+    {
+      "area": "Performance and hardware",
+      "priority": "P0",
+      "status": "partial",
+      "exitCriteria": "Measure complete frame times, memory growth and audio under sustained 10x play, nukes, replays and repeated engine switches. Test physical Intel, minimum supported macOS, SDR/HDR, multiple displays and high refresh rates.",
+      "progress": "15 September: a repeated 20-scenario run exposed utility-priority replay encoder stalls under concurrent heavy work. User-initiated encoder priority completed all 20 scenarios with all 8,013 movie frames and no GPU errors. Queue size and the 500 ms input-blocking bound remain unchanged. Resident memory did not grow across five passes. Observed fast-forward was only 1.14\u20131.45\u00d7 under contention, so sustained 10\u00d7, audible audio and the physical hardware matrix remain open. See PerformanceMeasurementClosure.md.",
+      "scopes": [
+        "all",
+        "classic-1.0"
+      ]
+    },
+    {
+      "area": "Release package",
+      "priority": "P0",
+      "status": "partial",
+      "exitCriteria": "Freeze the final source and assets. Build both Mac architectures, sign, notarise and verify the downloaded archive. Earlier beta notarisation is not evidence for later local builds.",
+      "progress": "26 September: the 1.5 build 50 distribution record confirms a notarised public package and a successful update from 1.2 build 41. The 1.6 build 51 candidate has local validation, but its final source freeze, public music-library download, reviewed package, Developer ID signing, notarisation, Gatekeeper validation, hardware checks and live update remain open. See 1.5Build50Distribution.md and 1.6LocalValidation.md.",
+      "scopes": [
+        "all",
+        "classic-1.0"
+      ]
+    },
+    {
+      "area": "Publishing agreement and assets",
+      "priority": "P0",
+      "status": "closed",
+      "exitCriteria": "Agree the proposed official product scope, brand use and asset distribution with the rights holder. Record code and asset provenance, third-party dependencies and approved distribution inputs. Obtain the required platform publishing access.",
+      "scopes": [
+        "all",
+        "classic-1.0"
+      ],
+      "progress": "15 September: Erik Veland explicitly confirmed approval to distribute the original assets in this task. The existing THIRD_PARTY_NOTICES.md records code and asset provenance. This records the owner\u2019s approval, without extending it to unrequested platforms or claiming independent legal verification."
+    },
+    {
+      "area": "Novice experience",
+      "priority": "P1",
+      "status": "partial",
+      "exitCriteria": "Validate first-play onboarding with novice players. Extend verified tiered hints beyond the original 120 levels and show supported mechanics clearly in imported packs.",
+      "scopes": [
+        "all",
+        "classic-1.0"
+      ],
+      "progress": "22 September: verified hints cover all 352 official Classic and conversion levels in 350 unique decks. Fresh exports reproduce and reject changed official or conversion outcomes without replacing the catalogue. Hint tests check all conversion ranks and reject off-canvas markers. The owner previously reported regular personal and external tester play, no issues in Classic or early L2, and positive feedback. A separate first-time-player study remains unverified. See CampaignClosure-2026-09-22.md."
+    },
+    {
+      "area": "iPhone and iPad",
+      "priority": "P1",
+      "status": "partial",
+      "exitCriteria": "2.0 release gate: build and test the shared library with the iOS SDK. Implement a UIKit/Metal app shell, precise touch selection, safe-area layouts, audio/session interruptions, checkpoints, thermal budgets and device tests. A Package.swift deployment declaration is not an iOS app.",
+      "scopes": [
+        "all"
+      ],
+      "progress": "25 September: the repository now has a version 1.3 UIKit application target for iPhone and iPad, shared mobile-core and UI modules, nearest-neighbour Metal output, direct targeting, pan and anchored zoom, safe-area controls, explicit-resume audio and application lifecycle handling, atomic versioned checkpoints, thermal budgets, privacy metadata, an app icon and an iPhone/iPad CI matrix. All 42 package tests pass, including 13 focused mobile tests for staged import safety, stale-writer rejection, a Classic jumping regression and exact Classic, L2 and L3 checkpoint restoration. Xcode 26.6 compiled Debug and optimised Release Swift builds for both Simulator architectures and an unsigned optimised arm64 device build with the iOS 26.5 SDK. GitHub Actions run 36027222792 passed the source gate for commit 929cc3b6ed69e620471acc1180c7bcf44008d957 with Xcode 16.4, then passed two UI tests with no failures on iPhone 16 Pro and iPad Pro 11-inch (M4) Simulators running iOS 18.5. The Simulator launch-and-rotation gate is closed for that commit. Physical touch, interruption, audio, thermal, VoiceOver, signing, TestFlight and App Store evidence remain open. The player-facing mobile slice imports Classic DOS data only; L2 and L3 mobile import and renderers are not claimed. See 2.0Roadmap.md and 1.3MobileHandoff.md."
+    },
+    {
+      "area": "Switch and consoles",
+      "priority": "P1",
+      "status": "not-implemented",
+      "exitCriteria": "Use approved SDKs and hardware to establish the supported runtime and engine boundary. Implement native rendering, input, save/user services and suspend/resume adapters. Pass each platform's current requirements. Mac controller support is not a console port.",
+      "scopes": [
+        "all"
+      ]
+    },
+    {
+      "area": "Online services and localisation",
+      "priority": "P1",
+      "status": "partial",
+      "exitCriteria": "Validate Game Center on provisioned builds, network loss and offline records. Externalise product strings and verify layouts with translated text. Define platform account and cloud-save conflict handling.",
+      "scopes": [
+        "all",
+        "classic-1.0"
+      ],
+      "progress": "15 September: the owner confirms live Game Center integration works. Account-change regression tests now cover sign-out during a pending load, obsolete authentication callbacks, stale personal ranks and account-specific score submission. Local tests pass. Translation layout coverage and cloud-save conflict policy remain open."
+    },
+    {
+      "area": "Partner evaluation build",
+      "priority": "P1",
+      "status": "open",
+      "exitCriteria": "Deliver an approved, reproducible demonstration build with a short feature tour, current evidence matrix, known limits, asset provenance and a platform delivery plan. Keep demonstration claims within verified scope.",
+      "scopes": [
+        "all"
+      ]
+    }
+  ],
+  "iosSimulatorSDK": "/Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk",
+  "releaseReady": false,
+  "scope": "Fresh local regression evidence. Does not certify hardware, stores, complete campaigns or other platforms."
+}

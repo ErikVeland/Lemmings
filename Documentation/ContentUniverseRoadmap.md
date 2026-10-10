@@ -101,27 +101,7 @@ The content atlas still needs the complete supported-pack catalogue. A signed
 package, physical controller use and a complete VoiceOver journey still need
 validation on the release Mac.
 
-### L2 and L3 completion verification
-
-Make sequel completion verification a 1.2 exit gate. Keep the current Preview
-labels until every condition passes:
-
-- preserve and replay a winning route for all 120 Lemmings 2 levels and all 90
-  Lemmings 3 levels;
-- compare Lemmings 2 rules with the original engine and resolve the provisional
-  Lemmings 3 tool, movement and trap semantics;
-- verify continuous campaign progression, Lemmings 2 survivor carry-over and
-  both games' endings;
-- complete Lemmings 3 environmental effects, original movie audio and story
-  transitions, and close the remaining Lemmings 2 media and fidelity gaps;
-- verify app-session completion, saved-run recovery, replay identity and result
-  records against the current engine and content revisions.
-
-The current baseline is 73/120 Lemmings 2 routes and 41/90 Lemmings 3 routes.
-The missing 96 routes are an open verification gap, not evidence that those
-levels are broken. A passing load or smoke check does not close this gate.
-
-### 1.5 — NeoLemmix compatibility
+### 1.7 — NeoLemmix compatibility
 
 Target NeoLemmix 12.14 data and replay compatibility, plus the current
 NeoLemmix Community Edition contract.
@@ -132,6 +112,50 @@ gadgets, special effects, zombies, Superlemming, pack progress and recovery.
 
 Until this gate passes, NeoLemmix support remains Beta or Preview and stays out
 of the completed main library.
+
+The executable development plan is in the [1.7 NeoLemmix roadmap](1.7Roadmap.md).
+The source gate uses NeoLemmix Community Edition 1.2.0 at a pinned commit. It
+separates level import and rendering from runnable mechanics, and it has a
+strict mode that fails while any required mechanic remains unsupported. The
+current-format replay decoder is covered by synthetic tests. Real reference
+replays and native result comparison remain mandatory external evidence.
+
+### 1.8 — Mac polish
+
+Ship clearer pixel rendering, NeoLemmix gameplay sound effects and reliable
+music recovery after a nuke. Include the verified L3 Brick pickup correction.
+Keep L2 and L3 labelled Preview and NeoLemmix labelled Beta. Validate the frozen
+candidate with muted offscreen app checks, retained replay checks, signing,
+notarisation and public download and update-feed verification. Full sequel
+completion is the separate 1.9 gate.
+
+### 1.9 — Lemmings 2 and Lemmings 3 completion
+
+Make sequel completion verification the 1.9 exit gate. Keep the current Preview
+labels until every condition passes:
+
+- preserve and replay a winning route for all 120 Lemmings 2 levels and all 90
+  Lemmings 3 levels;
+- compare Lemmings 2 rules with the original engine and resolve the provisional
+  Lemmings 3 tool, movement and trap semantics;
+- verify continuous campaign progression, Lemmings 2 survivor carry-over,
+  at least 50 surviving lemmings at the end of each Lemmings 3 tribe, and both
+  games' endings;
+- complete Lemmings 3 environmental effects, original movie audio and story
+  transitions, and close the remaining Lemmings 2 media and fidelity gaps;
+- verify app-session completion, saved-run recovery, replay identity and result
+  records against the current engine and content revisions.
+
+The current baseline is 75/120 Lemmings 2 routes and 52/90 Lemmings 3 routes.
+The missing 83 routes are an open verification gap, not evidence that those
+levels are broken. A passing load or smoke check does not close this gate.
+
+### 2.0 — iPhone and iPad release
+
+Complete the physical-device, accessibility, performance, signing and
+distribution gates for the player-facing Classic mobile app. The 1.3 source
+milestone and Simulator checks are development evidence, not 2.0 acceptance.
+See the [2.0 iPhone and iPad roadmap](2.0Roadmap.md).
 
 ### Later — wider 2D content
 

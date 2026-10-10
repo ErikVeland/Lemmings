@@ -1,0 +1,65 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 134
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 260
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1591
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 22,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2360
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2361
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 30,
+    "saved" : 40,
+    "stateHash" : "120b60e74fa2c14153eb672f3f169efb1339b77f7b2ea6cde2a95020fe3715b9",
+    "ticks" : 8160
+  },
+  "initialStateHash" : "3e2ac4e545a9ebae58af9a522dcc3257e53601081bb3ea89594b28f8ca9a85ee",
+  "number" : 6,
+  "rank" : "Wicked",
+  "title" : "PoP TiL YoU DrOp!"
+}

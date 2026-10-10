@@ -1,0 +1,25 @@
+[
+  {
+    "basis": "reduxPortCounterpart",
+    "identity": {
+      "engine": "classic",
+      "levelID": "lm_set08.dat#5",
+      "packID": "fan:lldb-48"
+    },
+    "reason": "Restore the Macintosh exclusive promised for 1.8.2 at its Redux reference position.",
+    "reference": "Gentle/Going_Their_Separate_Ways.nxlv",
+    "variantDifferences": [
+      "Bundled Classic conversion of the Macintosh exclusive, rather than the original Macintosh engine.",
+      "Classic conversion retains a four-minute time limit; Redux has no time limit."
+    ]
+  },
+  {
+    "basis": "solutionEstimate",
+    "identity": {
+      "engine": "classic",
+      "levelID": "50:Tricky:21:0:5",
+      "packID": "lemmings-LEVEL-120"
+    },
+    "reason": "Restore the DOS Tricky 21 level promised for 1.8.2 using the native route comparisons."
+  }
+]

@@ -1,0 +1,7 @@
+PASS determinism — identical hash across runs
+PASS initial state hash rejects mismatched data
+PASS speculative loss stops before full replay completion
+PASS solved Fun 1 'Just dig!' — saved 10/1 in 662 ticks
+PASS recorded replay verifies against a fresh simulation
+PASS replay JSON round trip (523 bytes)
+Classic DOS replay tests passed.

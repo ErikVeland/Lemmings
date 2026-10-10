@@ -1,0 +1,3 @@
+.build/release-1.7.6/standard/Ultimate Lemmings.app: replacing existing signature
+.build/release-1.7.6/standard/Ultimate Lemmings.app: valid on disk
+.build/release-1.7.6/standard/Ultimate Lemmings.app: satisfies its Designated Requirement

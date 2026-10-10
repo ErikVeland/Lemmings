@@ -1,0 +1,45 @@
+{
+  "cachedSourcePageSHA256": "822d0eca0a75be9bd680110dd2d91514caf568b45614da10d25b487285d3827d",
+  "date": "2026-10-04",
+  "difficultyProbeRuns": 10,
+  "difficultyScore": 185.733962899199,
+  "exactBundledArchiveSHA256": "a88766fb7218b24c824b4de0400c2ef124b85667d6e759bd4ee0384a46b32ae9",
+  "identity": {
+    "engine": "classic",
+    "levelID": "Flurry.DAT#6",
+    "packID": "fan:lldb-484"
+  },
+  "nativeInitialStateHash": "e27bd8538ba3565729216a1a644aae7fe5f6928438976118b9a69ad032729517",
+  "nativeOutcome": {
+    "didWin": true,
+    "released": 50,
+    "required": 25,
+    "saved": 50,
+    "stateHash": "0e180967d851c50eb44c8f22a31f803cf4cfaabe901cb2585d31bc2c69177509",
+    "ticks": 3182
+  },
+  "phaseProbeLogSHA256": "7a751e2519093382fbe3a6e1858e7308430e867e6c94f67722072a0ce6eb3581",
+  "rawSourceReplaySHA256": "f9cbc994f94d7b16bbeeb85d91ca374637c438a6f9b50227cf691a3031c2f397",
+  "searchBounds": "15 uniform input phase shifts, minus seven through plus seven native ticks, under Original and Golems mechanics and native and 32-slot object semantics (60 exact-level checks); eight further checks removed all 59 late release-rate commands or replaced them with one rate-99 command",
+  "selectedInputTranslation": "First Digger and Basher moved two ticks earlier than source; 59 release-rate changes at source tick 1474 omitted because they did not change the native completion",
+  "selectedNativeMechanics": "Original",
+  "selectedNativeObjectSemantics": "default fan runtime",
+  "selectedReplaySHA256": "a86fd58c56aedcb2804280886ade5a674511cdf05d90bb62b4a13d08d2746cad",
+  "simplificationProbeLogSHA256": "1dcaaa8b4926e863f78af50e33e4fd2f73680c7d760cbe8e1c832f70cd477449",
+  "sourceBuiltEvidenceToolSHA256": "8446e4a80561a9ad63e653d7d509084f210a5c6c483bf7238afadb4ee5a12ded",
+  "sourceBuiltNxlvKitSHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "sourceBuiltProbeSHA256": "d2c812632026599c2463dfd257ab72c3affe6bd61a3e6040db8365f2959d4e17",
+  "sourcePhysicsParity": "unverified; source and native saved counts agree and completion ticks differ by one, but no source state trace was compared",
+  "sourceReplayHeader": {
+    "gameMode": 2,
+    "saved": 50,
+    "ticks": 3183
+  },
+  "sourceURL": "https://lldb.camanis.net/level/484/7",
+  "strictExactLevelChecks": [
+    "before promotion: 1/1",
+    "after promotion: 1/1",
+    "selected Flurry pack: 12/12"
+  ],
+  "title": "Lemming Snowjourn"
+}

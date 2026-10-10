@@ -1,0 +1,35 @@
+PASS 251 proofs, 261 rescue records, and replay hashes
+PASS universal macOS 12.3 package, hosted endpoint, current proofs/hints/journey, full music and optional Game Center
+PASS 495 music versions, 422 gain/loop profiles, playback hashes, rescue MP3, sequel assets and unchanged build sources
+main: 54 versions, 5.6 MB
+Processing: /Users/veland/Lemmings/.build/release-1.8.5/standard/Ultimate Lemmings.app
+Processing: /Users/veland/Lemmings/.build/release-1.8.5/standard/Ultimate Lemmings.app
+The staple and validate action worked!
+Processing: /Users/veland/Lemmings/.build/release-1.8.5/standard/Ultimate Lemmings.app
+The validate action worked!
+/Users/veland/Lemmings/.build/release-1.8.5/verify-standard/Ultimate Lemmings.app: valid on disk
+/Users/veland/Lemmings/.build/release-1.8.5/verify-standard/Ultimate Lemmings.app: satisfies its Designated Requirement
+Processing: /Users/veland/Lemmings/.build/release-1.8.5/verify-standard/Ultimate Lemmings.app
+The validate action worked!
+/Users/veland/Lemmings/.build/release-1.8.5/verify-standard/Ultimate Lemmings.app: accepted
+source=Notarized Developer ID
+origin=Developer ID Application: Erik Veland (54WU29TRTY)
+PASS archive integrity and size: UltimateLemmings-1.8.5-build74.zip 1944858923
+Processing: /Users/veland/Lemmings/.build/release-1.8.5/slim/Ultimate Lemmings.app
+Processing: /Users/veland/Lemmings/.build/release-1.8.5/slim/Ultimate Lemmings.app
+The staple and validate action worked!
+Processing: /Users/veland/Lemmings/.build/release-1.8.5/slim/Ultimate Lemmings.app
+The validate action worked!
+/Users/veland/Lemmings/.build/release-1.8.5/verify-slim/Ultimate Lemmings.app: valid on disk
+/Users/veland/Lemmings/.build/release-1.8.5/verify-slim/Ultimate Lemmings.app: satisfies its Designated Requirement
+Processing: /Users/veland/Lemmings/.build/release-1.8.5/verify-slim/Ultimate Lemmings.app
+The validate action worked!
+/Users/veland/Lemmings/.build/release-1.8.5/verify-slim/Ultimate Lemmings.app: accepted
+source=Notarized Developer ID
+origin=Developer ID Application: Erik Veland (54WU29TRTY)
+PASS archive integrity and size: UltimateLemmings-1.8.5-build74-slim.zip 160802652
+Wrote 1 new update, updated 0 existing updates, and removed 3 old updates in appcast.xml
+Wrote signed appcast: /Users/veland/Lemmings/appcast.xml
+PASS 1.8.5 update inputs: version 1.8.5, build 74, appcast items 3
+PASS data-independent 1.8.5 release checks
+PASS publication inputs for 1.8.5 build 74 at ecafd64c09ca0f87e3ad45d842683ab9b2a4b11d

@@ -1,0 +1,911 @@
+[
+  {
+    "from": "Lemmings / Not as complicated as it looks",
+    "to": "Lemmings / As long as you try your best",
+    "direct_increase": 146.56,
+    "largest_playlist_increase": 78.65,
+    "bridges": [
+      "Nepster01 / Dying Dream"
+    ],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": false
+  },
+  {
+    "from": "Lemmings / Smile if you love lemmings",
+    "to": "Lemmings / Keep your hair on Mr. Lemming",
+    "direct_increase": 193.11,
+    "largest_playlist_increase": 140.75,
+    "bridges": [
+      "Nepster01 / Bashing & Building"
+    ],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / We all fall down",
+    "to": "Lemmings / Origins and Lemmings",
+    "direct_increase": 343.92,
+    "largest_playlist_increase": 140.16,
+    "bridges": [
+      "Nepster01 / Dirt Runner",
+      "Nepster01 / Broken Symmetry",
+      "Nepster01 / Lemming Playground"
+    ],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / Let's block and blow",
+    "to": "Lemmings / Take good care of my Lemmings",
+    "direct_increase": 122.66,
+    "largest_playlist_increase": 88.08,
+    "bridges": [
+      "Giga pack 01 / AIIIIIYYYEEEEEEEE!!!!!!!"
+    ],
+    "estimated_bridges": 1,
+    "unresolved_numeric_gap": false
+  },
+  {
+    "from": "Lemmings / You Live and Lem",
+    "to": "Lemmings / A Beast of a level",
+    "direct_increase": 122.49,
+    "largest_playlist_increase": 122.49,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / Lemmings Lemmings everywhere",
+    "to": "Lemmings / Nightmare on Lem street",
+    "direct_increase": 294.19,
+    "largest_playlist_increase": 234.96,
+    "bridges": [
+      "PSP Special 27 36 / The stairs are not floored",
+      "Conway12 / Let's play Lemmings!!!",
+      "Gronklems 1 / gronklems -1.dat 2"
+    ],
+    "estimated_bridges": 3,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / We all fall down",
+    "to": "Lemmings / A ladder would be handy",
+    "direct_increase": 224.84,
+    "largest_playlist_increase": 197.63,
+    "bridges": [
+      "Nepster01 / Dunes"
+    ],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / Careless clicking costs lives",
+    "to": "Lemmings / Lemmingology",
+    "direct_increase": 191.16,
+    "largest_playlist_increase": 191.16,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / Lemmingology",
+    "to": "Lemmings / Been there, seen it, done it",
+    "direct_increase": 154.88,
+    "largest_playlist_increase": 82.16,
+    "bridges": [
+      "Nepster01 / Just a random heap of junk!"
+    ],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": false
+  },
+  {
+    "from": "Lemmings / Lemming sanctuary in sight",
+    "to": "Lemmings / They just keep on coming",
+    "direct_increase": 215.28,
+    "largest_playlist_increase": 215.28,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / Bitter Lemming",
+    "to": "Lemmings / Lemming Drops",
+    "direct_increase": 178.98,
+    "largest_playlist_increase": 178.98,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / Lemming Drops",
+    "to": "Lemmings / MENACING !!",
+    "direct_increase": 146.33,
+    "largest_playlist_increase": 104.07,
+    "bridges": [
+      "Nepster01 / Time Gate",
+      "Nepster01 / Devil's Right Hand"
+    ],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / It's Lemmingentry Watson",
+    "to": "Lemmings / Postcard from Lemmingland",
+    "direct_increase": 130.04,
+    "largest_playlist_increase": 130.04,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / Turn around young lemmings!",
+    "to": "Lemmings / From The Boundary Line",
+    "direct_increase": 337.84,
+    "largest_playlist_increase": 337.84,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / Tightrope City",
+    "to": "Lemmings / Cascade",
+    "direct_increase": 143.4,
+    "largest_playlist_increase": 143.4,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / Lost something?",
+    "to": "Lemmings / Rainbow Island",
+    "direct_increase": 152.17,
+    "largest_playlist_increase": 152.17,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / Rainbow Island",
+    "to": "Lemmings / The Crankshaft",
+    "direct_increase": 236.21,
+    "largest_playlist_increase": 236.21,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / If at first you don`t succeed..",
+    "to": "Lemmings / Watch out, there`s traps about",
+    "direct_increase": 299.08,
+    "largest_playlist_increase": 299.08,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / Perseverance",
+    "to": "Lemmings / Izzie Wizzie lemmings get busy",
+    "direct_increase": 113.9,
+    "largest_playlist_increase": 113.9,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / Livin` On The Edge",
+    "to": "Lemmings / Upsidedown World",
+    "direct_increase": 104.3,
+    "largest_playlist_increase": 104.3,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / What an AWESOME level",
+    "to": "Lemmings / Mary Poppins` land",
+    "direct_increase": 153.43,
+    "largest_playlist_increase": 153.43,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / Mary Poppins` land",
+    "to": "Lemmings / X marks the spot",
+    "direct_increase": 105.32,
+    "largest_playlist_increase": 105.32,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / Bomboozal",
+    "to": "Lemmings / Walk the web rope",
+    "direct_increase": 266.25,
+    "largest_playlist_increase": 231.34,
+    "bridges": [
+      "Yawg03 / Everything Counts",
+      "Epic Fernito 1 / Wish it was 13..."
+    ],
+    "estimated_bridges": 2,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / Follow the leader...",
+    "to": "Lemmings / Triple Trouble",
+    "direct_increase": 126.71,
+    "largest_playlist_increase": 126.71,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / Call in the bomb squad",
+    "to": "Lemmings / POOR WEE CREATURES!",
+    "direct_increase": 172.36,
+    "largest_playlist_increase": 172.36,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / We all fall down",
+    "to": "Lemmings / Steel Works",
+    "direct_increase": 173.7,
+    "largest_playlist_increase": 173.7,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / The Boiler Room",
+    "to": "Lemmings / It`s hero time!",
+    "direct_increase": 142.37,
+    "largest_playlist_increase": 142.37,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / The Crossroads",
+    "to": "Lemmings / Down, along, up. In that order",
+    "direct_increase": 151.38,
+    "largest_playlist_increase": 151.38,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / Curse of the Pharaohs",
+    "to": "Lemmings / Pillars of Hercules",
+    "direct_increase": 239.68,
+    "largest_playlist_increase": 239.68,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / We all fall down",
+    "to": "Lemmings / The Far Side",
+    "direct_increase": 254.13,
+    "largest_playlist_increase": 254.13,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / Pea Soup",
+    "to": "Lemmings / The Fast Food Kitchen...",
+    "direct_increase": 464.32,
+    "largest_playlist_increase": 441.16,
+    "bridges": [
+      "QBeez05 / Take a break!",
+      "Andi / LEMMINGS FOR EVER ! ! !"
+    ],
+    "estimated_bridges": 2,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / Just a Minute...",
+    "to": "Lemmings / Stepping Stones",
+    "direct_increase": 145.21,
+    "largest_playlist_increase": 145.21,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / Stepping Stones",
+    "to": "Lemmings / And then there were four....",
+    "direct_increase": 112.11,
+    "largest_playlist_increase": 112.11,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / With a twist of lemming please",
+    "to": "Lemmings / A BeastII of a level",
+    "direct_increase": 145.84,
+    "largest_playlist_increase": 145.84,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / All or Nothing",
+    "to": "Lemmings / Have a nice day!",
+    "direct_increase": 184.36,
+    "largest_playlist_increase": 184.36,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / Mind the step.....",
+    "to": "Lemmings / Save Me",
+    "direct_increase": 194.09,
+    "largest_playlist_increase": 194.09,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Lemmings / Save Me",
+    "to": "Lemmings / Rendezvous at the Mountain",
+    "direct_increase": 142.88,
+    "largest_playlist_increase": 142.88,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / Down And Out Lemmings",
+    "to": "Oh No! More Lemmings / Rent-a-Lemming",
+    "direct_increase": 104.18,
+    "largest_playlist_increase": 104.18,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / Downwardly Mobile Lemmings",
+    "to": "Oh No! More Lemmings / Snuggle up to a Lemming",
+    "direct_increase": 319.6,
+    "largest_playlist_increase": 319.6,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / Intsy-Wintsy...Lemming?",
+    "to": "Oh No! More Lemmings / Who`s That Lemming",
+    "direct_increase": 240.6,
+    "largest_playlist_increase": 240.6,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / Dangerzone",
+    "to": "Oh No! More Lemmings / And now this...",
+    "direct_increase": 156.41,
+    "largest_playlist_increase": 156.41,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / Get a little extra help",
+    "to": "Oh No! More Lemmings / Not just a pretty Lemming",
+    "direct_increase": 348.77,
+    "largest_playlist_increase": 348.77,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / Lemmings For Presidents!",
+    "to": "Oh No! More Lemmings / Lemming Productions Present...",
+    "direct_increase": 309.96,
+    "largest_playlist_increase": 309.96,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / Custom built for Lemmings",
+    "to": "Oh No! More Lemmings / Quote: \"That`s a good level\"",
+    "direct_increase": 105.19,
+    "largest_playlist_increase": 105.19,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / Lemming Express",
+    "to": "Oh No! More Lemmings / 24 hour Lemathon",
+    "direct_increase": 146.36,
+    "largest_playlist_increase": 146.36,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / 24 hour Lemathon",
+    "to": "Oh No! More Lemmings / The Stack",
+    "direct_increase": 101.22,
+    "largest_playlist_increase": 101.22,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / And now, the end is near...",
+    "to": "Oh No! More Lemmings / KEEP ON TRUCKING",
+    "direct_increase": 114.19,
+    "largest_playlist_increase": 114.19,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / It`s a trade off",
+    "to": "Oh No! More Lemmings / Time waits for no Lemming",
+    "direct_increase": 125.42,
+    "largest_playlist_increase": 125.42,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / Worra load of old blocks!",
+    "to": "Oh No! More Lemmings / Across The Gap",
+    "direct_increase": 192.2,
+    "largest_playlist_increase": 192.2,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / Lemming Hotel",
+    "to": "Oh No! More Lemmings / Lemming Rhythms",
+    "direct_increase": 152.1,
+    "largest_playlist_increase": 152.1,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / Lemming Head",
+    "to": "Oh No! More Lemmings / Just A Quicky",
+    "direct_increase": 141.48,
+    "largest_playlist_increase": 141.48,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / SNOW JOKE",
+    "to": "Oh No! More Lemmings / ONWARD AND UPWARD",
+    "direct_increase": 241.57,
+    "largest_playlist_increase": 241.57,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / Oh No! It`s the 4TH DIMENSION!",
+    "to": "Oh No! More Lemmings / Chill out!",
+    "direct_increase": 226.2,
+    "largest_playlist_increase": 226.2,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / Last Lemming To Lemmingcentral",
+    "to": "Oh No! More Lemmings / A TOWERING PROBLEM",
+    "direct_increase": 114.81,
+    "largest_playlist_increase": 114.81,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / Up, Down or Round and Round",
+    "to": "Oh No! More Lemmings / The Lemming Funhouse",
+    "direct_increase": 205.44,
+    "largest_playlist_increase": 205.44,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / Now get out of that!",
+    "to": "Oh No! More Lemmings / Creature Discomforts",
+    "direct_increase": 224.19,
+    "largest_playlist_increase": 224.19,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / Lemming about town",
+    "to": "Oh No! More Lemmings / AAAAAARRRRRRGGGGGGHHHHHH!!!!!!",
+    "direct_increase": 155.43,
+    "largest_playlist_increase": 155.43,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / Flow Control",
+    "to": "Oh No! More Lemmings / Welcome to the party, pal!",
+    "direct_increase": 117.9,
+    "largest_playlist_increase": 117.9,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / It`s all a matter of timing",
+    "to": "Oh No! More Lemmings / HIGHLAND FLING",
+    "direct_increase": 101.2,
+    "largest_playlist_increase": 101.2,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / HIGHLAND FLING",
+    "to": "Oh No! More Lemmings / Synchronised Lemming",
+    "direct_increase": 164.38,
+    "largest_playlist_increase": 164.38,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh No! More Lemmings / Scaling the Heights",
+    "to": "Oh No! More Lemmings / Where Lemmings Dare",
+    "direct_increase": 125.18,
+    "largest_playlist_increase": 125.18,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Xmas Lemmings 1992 / Happy Holidays Mr Lemming!",
+    "to": "Xmas Lemmings 1992 / A Lemming Holiday",
+    "direct_increase": 246.54,
+    "largest_playlist_increase": 246.54,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Holiday Lemmings 1993 / Holiday Mining",
+    "to": "Holiday Lemmings 1993 / Lemming Tracks in the Snow!",
+    "direct_increase": 167.75,
+    "largest_playlist_increase": 116.22,
+    "bridges": [
+      "Mikepak06 / Double clambering !",
+      "DOS Xmas 1992 / A Lemming Holiday"
+    ],
+    "estimated_bridges": 2,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Holiday Lemmings 1993 / Clouds of Lemmings",
+    "to": "Holiday Lemmings 1993 / A Block from Home",
+    "direct_increase": 138.82,
+    "largest_playlist_increase": 138.82,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Holiday Lemmings 1993 / At Home in a Cave",
+    "to": "Holiday Lemmings 1993 / Presents of Mind",
+    "direct_increase": 195.8,
+    "largest_playlist_increase": 195.8,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Holiday Lemmings 1993 / The Long Way Around",
+    "to": "Holiday Lemmings 1993 / Oogilemming!",
+    "direct_increase": 192.05,
+    "largest_playlist_increase": 192.05,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Holiday Lemmings 1993 / Santus Lemmingus",
+    "to": "Holiday Lemmings 1993 / It Came Upon a Lemnight Clear",
+    "direct_increase": 211.84,
+    "largest_playlist_increase": 211.84,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Holiday Lemmings 1993 / The Wrath of Lem",
+    "to": "Holiday Lemmings 1993 / The Search for Lem",
+    "direct_increase": 183.02,
+    "largest_playlist_increase": 183.02,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Holiday Lemmings 1993 / The Undiscovered Country",
+    "to": "Holiday Lemmings 1993 / The Needs of the Many...",
+    "direct_increase": 320.09,
+    "largest_playlist_increase": 320.09,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh Yes! More Lemmings! / There can be only one",
+    "to": "Oh Yes! More Lemmings! / We`re in this one together",
+    "direct_increase": 365.32,
+    "largest_playlist_increase": 365.32,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh Yes! More Lemmings! / Still everything to play for",
+    "to": "Oh Yes! More Lemmings! / May the craftiest player win",
+    "direct_increase": 554.99,
+    "largest_playlist_increase": 454.99,
+    "bridges": [
+      "Giga pack 02 / Insert name here",
+      "geooPk1 / Palace o/t once-hacked Lemmings",
+      "Nepster01 / Travelling Lemmings"
+    ],
+    "estimated_bridges": 2,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh Yes! More Lemmings! / In the thick of the fray",
+    "to": "Oh Yes! More Lemmings! / Just for fun or to the death?",
+    "direct_increase": 199.77,
+    "largest_playlist_increase": 164.77,
+    "bridges": [
+      "Crystal Remakes / Triple Trouble"
+    ],
+    "estimated_bridges": 1,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh Yes! More Lemmings! / Any chance of a truce?",
+    "to": "Oh Yes! More Lemmings! / Good game! Good game!",
+    "direct_increase": 104.87,
+    "largest_playlist_increase": 104.87,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh Yes! More Lemmings! / The Pipe Room...",
+    "to": "Oh Yes! More Lemmings! / Graffiti",
+    "direct_increase": 298.08,
+    "largest_playlist_increase": 219.24,
+    "bridges": [
+      "ssam1221s Lemmings Wild / You need bashers this time",
+      "Mikepak06 / Lemmings on the boat 2",
+      "ssam1221s Lemmings Wild / It's Lemmy Day"
+    ],
+    "estimated_bridges": 3,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh Yes! More Lemmings! / The Rubbish Dump",
+    "to": "Oh Yes! More Lemmings! / The Crystal Cavern Mark II",
+    "direct_increase": 183.84,
+    "largest_playlist_increase": 183.84,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh Yes! More Lemmings! / Islands in the Sky",
+    "to": "Oh Yes! More Lemmings! / Cross-over Point",
+    "direct_increase": 236.55,
+    "largest_playlist_increase": 213.65,
+    "bridges": [
+      "Epic giga02 / Winter Solstice"
+    ],
+    "estimated_bridges": 1,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh Yes! More Lemmings! / The Only Way Out",
+    "to": "Oh Yes! More Lemmings! / Showdown!",
+    "direct_increase": 138.21,
+    "largest_playlist_increase": 138.21,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh Yes! More Lemmings! / Give And Take",
+    "to": "Oh Yes! More Lemmings! / Co-operation",
+    "direct_increase": 258.65,
+    "largest_playlist_increase": 188.67,
+    "bridges": [
+      "oldbutgo / Agh! More 1 pixel gaps!",
+      "JannPck3 / Z'Ha'Dum"
+    ],
+    "estimated_bridges": 2,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh Yes! More Lemmings! / Rules to fall",
+    "to": "Oh Yes! More Lemmings! / Inside the bone",
+    "direct_increase": 122.54,
+    "largest_playlist_increase": 122.54,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh Yes! More Lemmings! / Everyone turn left (Part two)",
+    "to": "Oh Yes! More Lemmings! / Is this a circus?",
+    "direct_increase": 152.76,
+    "largest_playlist_increase": 120.83,
+    "bridges": [
+      "Yawg06 / Just Dig! Again!",
+      "Giga pack 01 / The pole onslaught of a lemming"
+    ],
+    "estimated_bridges": 2,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh Yes! More Lemmings! / Turn around and look.",
+    "to": "Oh Yes! More Lemmings! / Water processing plant",
+    "direct_increase": 213.48,
+    "largest_playlist_increase": 213.48,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh Yes! More Lemmings! / Let's go camping.",
+    "to": "Oh Yes! More Lemmings! / Haunted botanical garden",
+    "direct_increase": 131.61,
+    "largest_playlist_increase": 131.61,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh Yes! More Lemmings! / Two heads are better...",
+    "to": "Oh Yes! More Lemmings! / The gate trap Lemmings.",
+    "direct_increase": 160.33,
+    "largest_playlist_increase": 160.33,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Oh Yes! More Lemmings! / I am A.T.",
+    "to": "Oh Yes! More Lemmings! / Fall and no life (Part Two)",
+    "direct_increase": 281.14,
+    "largest_playlist_increase": 281.14,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Holiday Lemmings 1994 / Ski Jump!",
+    "to": "Holiday Lemmings 1994 / CindyLand",
+    "direct_increase": 128.77,
+    "largest_playlist_increase": 128.77,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Holiday Lemmings 1994 / Separate Ways",
+    "to": "Holiday Lemmings 1994 / Lemming Reunification",
+    "direct_increase": 107.18,
+    "largest_playlist_increase": 107.18,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Holiday Lemmings 1994 / The Land of the Bizarre",
+    "to": "Holiday Lemmings 1994 / Happy New Year!",
+    "direct_increase": 143.34,
+    "largest_playlist_increase": 143.34,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Holiday Lemmings 1994 / Division Bell",
+    "to": "Holiday Lemmings 1994 / Quest for Kieran",
+    "direct_increase": 192.47,
+    "largest_playlist_increase": 172.6,
+    "bridges": [
+      "Fernito pack 1 / Dilemma"
+    ],
+    "estimated_bridges": 1,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Holiday Lemmings 1994 / Quest for Kieran",
+    "to": "Holiday Lemmings 1994 / Four Play",
+    "direct_increase": 261.65,
+    "largest_playlist_increase": 261.65,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Holiday Lemmings 1994 / 2 Minutes before midnight",
+    "to": "Holiday Lemmings 1994 / Happy New Year II!",
+    "direct_increase": 239.61,
+    "largest_playlist_increase": 239.61,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Holiday Lemmings 1994 / Plethora of Presents",
+    "to": "Holiday Lemmings 1994 / Up on the Rooftops",
+    "direct_increase": 175.89,
+    "largest_playlist_increase": 175.89,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Holiday Lemmings 1994 / Surprise Package?",
+    "to": "Holiday Lemmings 1994 / Steel Ice Span",
+    "direct_increase": 275.94,
+    "largest_playlist_increase": 190.17,
+    "bridges": [
+      "Pacpack1 / Just a bomb away !!",
+      "Giga pack 02 / The minroah the merryer",
+      "Gronklems 6 / 10) Bring it Together!.ini"
+    ],
+    "estimated_bridges": 3,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Holiday Lemmings 1994 / Steel Ice Span",
+    "to": "Holiday Lemmings 1994 / Sir Edmund Hilemming",
+    "direct_increase": 114.32,
+    "largest_playlist_increase": 114.32,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Holiday Lemmings 1994 / Lemmy in the cold, cold ground",
+    "to": "Holiday Lemmings 1994 / Emmings!  (No L)",
+    "direct_increase": 120.39,
+    "largest_playlist_increase": 120.39,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  },
+  {
+    "from": "Holiday Lemmings 1994 / Merry Christmaze",
+    "to": "Holiday Lemmings 1994 / Polar Expedition",
+    "direct_increase": 181.42,
+    "largest_playlist_increase": 181.42,
+    "bridges": [],
+    "estimated_bridges": 0,
+    "unresolved_numeric_gap": true
+  }
+]

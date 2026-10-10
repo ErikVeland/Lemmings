@@ -1,0 +1,10 @@
+PASS all five movies report the size, length and speed the files declare
+PASS the first frame decodes to a picture with a full palette
+PASS six bit palette components widen to eight bits and runs fill their rows
+PASS delta frames change the picture, so the movie animates
+PASS palette indexes convert to opaque RGBA pixels
+PASS a file that is not a FLIC is reported rather than decoded
+PASS decoding the same movie twice gives the same frames
+PASS every frame of all five movies decodes, including the ring frame
+PASS all 3333 frames match a decoder written separately from this one
+FLIC tests passed.

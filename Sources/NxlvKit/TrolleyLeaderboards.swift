@@ -1,9 +1,11 @@
 import Foundation
 
 public enum TrolleyBoard: String, Codable, CaseIterable, Sendable {
-    case mostSaved, rescuePotential, zeroAvoidableLosses, leastSkills, mostUsedSkill, moralSurplus, cleanRescue
+    case mostSaved, rescuePotential, zeroAvoidableLosses, leastSkills, mostUsedSkill, moralSurplus, cleanRescue, fastestClear, fastestAllSaved
     public var title: String {
         switch self {
+        case .fastestClear: "Fastest clear"
+        case .fastestAllSaved: "Fastest 100%"
         case .mostSaved: "Most saved"
         case .rescuePotential: "Rescue potential"
         case .zeroAvoidableLosses: "Zero avoidable losses"
@@ -15,6 +17,8 @@ public enum TrolleyBoard: String, Codable, CaseIterable, Sendable {
     }
     public var ordering: String {
         switch self {
+        case .fastestClear: "Successful clears, fastest simulation time first."
+        case .fastestAllSaved: "Everyone rescued, fastest simulation time first."
         case .mostSaved: "Most rescued, then fewest skills and fastest time."
         case .rescuePotential: "Verified potential, then most saved, fewest skills and fastest time."
         case .zeroAvoidableLosses: "Verified perfect rescues, then most saved, fewest skills and fastest time."
@@ -29,6 +33,9 @@ public enum TrolleyBoard: String, Codable, CaseIterable, Sendable {
 public enum TrolleyLeaderboards {
     public static func eligible(_ attempt: TrolleyAttempt, board: TrolleyBoard, maximum: TrolleyMaximum) -> Bool {
         switch board {
+        case .fastestClear, .fastestAllSaved:
+            return attempt.run.qualifies && attempt.run.seconds.isFinite && attempt.run.seconds > 0
+                && (board != .fastestAllSaved || attempt.run.savedAll)
         case .leastSkills: return attempt.run.didWin
         case .rescuePotential, .zeroAvoidableLosses, .cleanRescue:
             guard maximum.isRescueTarget, maximum.value == attempt.maximum.value,
@@ -39,6 +46,8 @@ public enum TrolleyLeaderboards {
     }
     public static func precedes(_ a: TrolleyAttempt, _ b: TrolleyAttempt, board: TrolleyBoard) -> Bool {
         switch board {
+        case .fastestClear, .fastestAllSaved:
+            if a.run.seconds != b.run.seconds { return a.run.seconds < b.run.seconds }
         case .leastSkills:
             if a.run.skillCount != b.run.skillCount { return a.run.skillCount < b.run.skillCount }
         case .rescuePotential:
@@ -94,7 +103,7 @@ public struct TrolleyPersonalRecords: Codable, Equatable, Sendable {
         lowestAvoidableLosses = attempts.compactMap { $0.metrics.avoidableLosses }.min()
         bestMoralSurplus = attempts.map { $0.metrics.moralSurplus }.max()
         let clears = attempts.filter { $0.run.didWin }
-        leastSkillsSuccessful = clears.map { $0.run.skillCount }.min(); fastestSuccessful = clears.map { $0.run.seconds }.min()
+        leastSkillsSuccessful = clears.map { $0.run.skillCount }.min(); fastestSuccessful = clears.filter { $0.run.qualifies && $0.run.seconds.isFinite && $0.run.seconds > 0 }.map { $0.run.seconds }.min()
         verifiedPerfectCount = attempts.filter { $0.maximum.status == .verified && $0.metrics.avoidableLosses == 0 }.count
         let counts = Dictionary(grouping: attempts, by: { $0.philosophy.primaryID }).mapValues(\.count)
         philosopherDistribution = counts

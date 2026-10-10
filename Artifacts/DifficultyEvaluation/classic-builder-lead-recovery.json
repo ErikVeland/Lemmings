@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-04",
+  "scope": "Targeted lead-worker Builder search on exact bundled Classic fan archives",
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "sourceBuiltSolverSHA256": "db5ab2cb9a136c73181091a4c88a4f34ece2127da26fd82051d8b9abdfa9276a",
+  "sourceBuiltScorerSHA256": "e5798bb8ca6b302e42ebf39da50f4c7830e9bc072b65715a641abd94a658e168",
+  "calibration": "The known one-Floater route in fan:lldb-505 saved 1/1 with --focus-workers 1 and --rollout-single; waiting-route tick 59, one continuation",
+  "newWin": {
+    "identity": "fan:lldb-546/Deceit Extras 1.DAT#4",
+    "title": "Builders can build stairs",
+    "archiveSHA256": "164a98b095105dfa73a6bd8df695b6eff20947227f5c0c35d6c6e366f758de6a",
+    "nativeInitialStateHash": "9cecae314f94dd7637ac0bcc40fa5b091bfde6e4cf53b39db9d5e64464e3ca7b",
+    "selectedMechanics": "original",
+    "searchPolicy": "--focus-workers 1 --prefer-progress --fallback 12 --refire 60 --width 48 --seconds 30",
+    "solverExpansionCount": 25925,
+    "replaySHA256": "520db6d10358b8cbb59f9d5be293924e7b4b3efe8dedf50895dfd504726050b2",
+    "inputs": "Nine Builder assignments to one worker",
+    "strictExactLevelOutcome": {
+      "saved": 20,
+      "required": 10,
+      "released": 20,
+      "ticks": 2165,
+      "didWin": true,
+      "stateHash": "32334508149716d122f45f2738aa203a666aa176b39add716bd22cb35df40bed"
+    },
+    "difficultyScore": 67.35611126027135,
+    "difficultyProbeCount": 10
+  },
+  "strictPackVerification": "8/8 scored members of fan:lldb-546 replayed on their exact bundled levels after the new score was staged",
+  "learningPath": "292 lessons: 156 official, 136 fan, zero duplicate objectives, zero two-player levels and zero preparation gaps; eligible candidate pool grew from 1699 to 1700",
+  "limits": "A native win and replay-based score do not prove source physics parity. No independent full source-state comparison passed."
+}

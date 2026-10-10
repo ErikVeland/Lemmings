@@ -1,0 +1,3711 @@
+[
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "hubbart.dat#0",
+      "packID": "fan:lldb-173"
+    },
+    "levelSourceRevision": "ec7ef0118b1ab4baebdae02cc808fe0766d593a76a213f2dcc004a508c780203",
+    "nativeReplaySHA256": "4d4d45f1694653924391e389d63708994765997584ddc7554b02b5e35fb7127f",
+    "nativeTick": 142,
+    "publishedReplaySHA256": "77f5212381a2f55af29342bc0f8d2bf416575546b4311879e6b3e05a9a45fc28",
+    "publishedReplayURL": "https://lldb.camanis.net/level/173/1",
+    "sourceTick": 143
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "JANNPCK1.DAT#3",
+      "packID": "fan:lldb-231"
+    },
+    "levelSourceRevision": "aaa56f49a12a373893d97334fece3e11a69d3bb011c391ea30bff5de532d7772",
+    "nativeReplaySHA256": "d45595779e9cbb563335455a03eb5236c01aaa3b0be29e7f5d507f38d9949f9e",
+    "nativeTick": 275,
+    "publishedReplaySHA256": "33ecbd3dbadb867fc17a286a7c79c262c5602bef8cd55d99f0c16f01d2827f13",
+    "publishedReplayURL": "https://lldb.camanis.net/level/231/4",
+    "sourceTick": 274
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "JEFFPCK7.DAT#7",
+      "packID": "fan:lldb-241"
+    },
+    "levelSourceRevision": "a595c77f074d5334f8b0eefa8ac5e1dbc7bf3ce97cade3b66ad631bad65c7350",
+    "nativeReplaySHA256": "52958825df0446241cb96ef51f5381123244f50eb535c64e134cabe507c1d92e",
+    "nativeTick": 211,
+    "publishedReplaySHA256": "5c4f0614f23726b862b1063dc48d4887fa3c2548f8972e74d0a56f952b931c3e",
+    "publishedReplayURL": "https://lldb.camanis.net/level/241/8",
+    "sourceTick": 212
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "CRISFN05.dat#0",
+      "packID": "fan:lldb-269"
+    },
+    "levelSourceRevision": "3718e7cf4b3853ddfbf63bc1bd9138d30fe5483b796772a868bf6c9ab97d879a",
+    "nativeReplaySHA256": "fe7f982e961e5c95e2f9802cfceda8310c2a50bc8351cb55c28a5b1086f998a2",
+    "nativeTick": 85,
+    "publishedReplaySHA256": "c7b28e4ad18bd5001534e43d0fb544d798b14a16f64d4b9a2320dbf7f1204aca",
+    "publishedReplayURL": "https://lldb.camanis.net/level/269/1",
+    "sourceTick": 83
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "CRISFN09.dat#6",
+      "packID": "fan:lldb-273"
+    },
+    "levelSourceRevision": "1a9fbf73c980f059ffc642aa2a91ee39a5a8809dad8109177ff34c36b95fe292",
+    "nativeReplaySHA256": "b6b33823d4c4f746c14e40965db9f04d317ca3675e8c72507a5a4df094b1f489",
+    "nativeTick": 416,
+    "publishedReplaySHA256": "55c57ba9ff44734c205da7348d75fdad14d277c083d553d3c62fd40af087b14b",
+    "publishedReplayURL": "https://lldb.camanis.net/level/273/7",
+    "sourceTick": 415
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "CRISFN12.dat#6",
+      "packID": "fan:lldb-276"
+    },
+    "levelSourceRevision": "b82aa3da097fe2e1b23d8434e865d238dd9cef2f0321bac89a82b53ae79b387f",
+    "nativeReplaySHA256": "c5bbab7b7541cdcfed702d3ef15db4e30e4381fc43a1bdf7fa5bd75feeb3f04a",
+    "nativeTick": 502,
+    "publishedReplaySHA256": "5c5dde367ec24a2c08ca231378927fe444ff99e39894e6e0f1efbf67b5717525",
+    "publishedReplayURL": "https://lldb.camanis.net/level/276/7",
+    "sourceTick": 500
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "CRISFN12.dat#8",
+      "packID": "fan:lldb-276"
+    },
+    "levelSourceRevision": "b82aa3da097fe2e1b23d8434e865d238dd9cef2f0321bac89a82b53ae79b387f",
+    "nativeReplaySHA256": "7b2f08c965c5c3bb38e90556ab0b9b07f2912bb5eac489d970e4ebee6b62f5fe",
+    "nativeTick": 422,
+    "publishedReplaySHA256": "6005cd0a6be88716822614536556f70faf4fb44f2d00113cb34aa98ae261bc9d",
+    "publishedReplayURL": "https://lldb.camanis.net/level/276/9",
+    "sourceTick": 420
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "GARJEN01.dat#7",
+      "packID": "fan:lldb-281"
+    },
+    "levelSourceRevision": "e91f4a1eed1e06173322ea4a151bf814fd820b28aada8540709c8b657223933d",
+    "nativeReplaySHA256": "f757ffc46825624ff7d66833f500e8175d4a22520909ecb6fe714fd827342f47",
+    "nativeTick": 187,
+    "publishedReplaySHA256": "eaad58c42aec29d3767de8d994996d6d165bb0398c52914a1c8a113add3b46ee",
+    "publishedReplayURL": "https://lldb.camanis.net/level/281/8",
+    "sourceTick": 185
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "TWPAK00.dat#6",
+      "packID": "fan:lldb-302"
+    },
+    "levelSourceRevision": "742f9b1f32285477bd4f4234cccac8b6cf64dd488bbe5a2faa6940e002c7c1f2",
+    "nativeReplaySHA256": "74e1d8c4b0f251a41ca74ed0f5b71f6436890356adb8c936a6a0a7409b3fa90f",
+    "nativeTick": 83,
+    "publishedReplaySHA256": "ba61b4f023e5a1d4fb5715bf270981c634eaf4f15ddd4bb57728a52c38e11c52",
+    "publishedReplayURL": "https://lldb.camanis.net/level/302/7",
+    "sourceTick": 82
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "TWPAK02.dat#2",
+      "packID": "fan:lldb-304"
+    },
+    "levelSourceRevision": "6c68eaadda259536e63c51ae8a2a5d12d476a21b211c6034ebeb62c3e242da77",
+    "nativeReplaySHA256": "f9f4d8eca6b497e5f90aba5ae528da0d16f97f1483598003cbc91c414f14d462",
+    "nativeTick": 76,
+    "publishedReplaySHA256": "bf7643db96d4edbfee9bbfc7818cedaec2b964c143eb5c18e01600051cd0a127",
+    "publishedReplayURL": "https://lldb.camanis.net/level/304/3",
+    "sourceTick": 74
+  },
+  {
+    "adjustedEventIndex": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "JM12.DAT#7",
+      "packID": "fan:lldb-338"
+    },
+    "levelSourceRevision": "640d2169837b3353c862519b1fa77c7e05f1cc0c9594f2773815ec477b67071e",
+    "nativeReplaySHA256": "ccf8838b6891502738ccb64c94a0eb1c84ebd9622b3365f63aa1a4dee4160318",
+    "nativeTick": 185,
+    "publishedReplaySHA256": "c252fdd4d09571bf5d77177ebf1d9c8c8f8fb83e832a1c2f6a4b5dda2ce14fa0",
+    "publishedReplayURL": "https://lldb.camanis.net/level/338/8",
+    "sourceTick": 186
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Eymerich02.dat#0",
+      "packID": "fan:lldb-4"
+    },
+    "levelSourceRevision": "981566a7a5ae262b26b16a25d79e86f4d6f2363bafd24cb69b4e10465751961f",
+    "nativeReplaySHA256": "eaf92e8f6de501c0d73b29a9b7a61dbb13925a38f59d0120af87b7e292447fec",
+    "nativeTick": 338,
+    "publishedReplaySHA256": "7ae4d0f61f9e470868e3a9454d960ecca168e64d01e0727a8b486376c64c0ed1",
+    "publishedReplayURL": "https://lldb.camanis.net/level/4/1",
+    "sourceTick": 339
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis 2P 2.dat#2",
+      "packID": "fan:lldb-405"
+    },
+    "levelSourceRevision": "9af050546e82475ff3209ef5af9c8764c6a3b6edaabd43f8314ef7c1057e3a3c",
+    "nativeReplaySHA256": "feca7a59a73e2bbb69655be600cca45608703afef1d92f243efa334d2e4236b8",
+    "nativeTick": 162,
+    "publishedReplaySHA256": "667c5ab93abb0de913d4f58a291a10a63419b806bb94675993f785c9239e72d5",
+    "publishedReplayURL": "https://lldb.camanis.net/level/405/3",
+    "sourceTick": 164
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "LDChallenge05.dat#1",
+      "packID": "fan:lldb-434"
+    },
+    "levelSourceRevision": "0a3abaedb6028f6082c310f7f40f44678b1af6af282db08336b34fc8848088b3",
+    "nativeReplaySHA256": "5556de22a64de5b50d2522a2acf28f672ceaa438a84766659df131bf684003a0",
+    "nativeTick": 488,
+    "publishedReplaySHA256": "a02579f6a14b6962d78f4fcd0c5d2c8c75d803bbb9017763e0577609286127df",
+    "publishedReplayURL": "https://lldb.camanis.net/level/434/2",
+    "sourceTick": 486
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "LDChallenge06.dat#2",
+      "packID": "fan:lldb-435"
+    },
+    "levelSourceRevision": "df2cd4f724217ad3793227117bdbd88a694aedd288b2e912b35491923b49b917",
+    "nativeReplaySHA256": "046f055b6a5a47a8f3a312db6cfe00410ddb19e5a839cf6ebc49494c11bd74e3",
+    "nativeTick": 87,
+    "publishedReplaySHA256": "163bd509a7105ffa7c21b5e2a9e93c28494c777e770cf70470f9584d2aef56c4",
+    "publishedReplayURL": "https://lldb.camanis.net/level/435/3",
+    "sourceTick": 88
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Kindness.dat#0",
+      "packID": "fan:lldb-458"
+    },
+    "levelSourceRevision": "c4b3ac141c10bc91f91863d5182634819a8d42d32c181f312bff31ae72cf2f5b",
+    "nativeReplaySHA256": "76b646a17d417a952c72f68e6b98b8917bca000ad7471a2a9f7a46a56da99c93",
+    "nativeTick": 367,
+    "publishedReplaySHA256": "32ef472aff7cfb33edf9f15fb0d7e66f17f7de496d062d1521105f32a8cf1eca",
+    "publishedReplayURL": "https://lldb.camanis.net/level/458/1",
+    "sourceTick": 368
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "joem4.dat#0",
+      "packID": "fan:lldb-468"
+    },
+    "levelSourceRevision": "e4292c3d8fd808e2e376320c3ab0f64ac8dded25e802aaf64079ba8a17adaa0a",
+    "nativeReplaySHA256": "35263f82761bad00030429b833c7c7a5a2d957ad47cc4980717a3d763f14c5b9",
+    "nativeTick": 220,
+    "publishedReplaySHA256": "f51ad5813ab82df0a09a97ea70aa520799c7e0edb1ed86f72a418f013522cc38",
+    "publishedReplayURL": "https://lldb.camanis.net/level/468/1",
+    "sourceTick": 221
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Wild.DAT#9",
+      "packID": "fan:lldb-479"
+    },
+    "levelSourceRevision": "9447da45833dc536df6fb4e25fd7dff06423ae5e67a769a9c9e94c9416ba439a",
+    "nativeReplaySHA256": "44045840c8fbe77247be5631629ed600003cf11abf81e07bcd53f9678d1d7257",
+    "nativeTick": 378,
+    "publishedReplaySHA256": "638984750177cf1b1bca8955194ae3d803d11a0d01f6986ead2a494ea99e1eb5",
+    "publishedReplayURL": "https://lldb.camanis.net/level/479/10",
+    "sourceTick": 377
+  },
+  {
+    "adjustedEventIndex": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Fun.dat#2",
+      "packID": "fan:lldb-488"
+    },
+    "levelSourceRevision": "75d0248a498644374f409fccfe3171e8c50da5def04cff10924e0639942ce515",
+    "nativeReplaySHA256": "30cf6c5239b0c5cb969f8b5726306d8498c1ee394c4603953767cde47a17cd16",
+    "nativeTick": 174,
+    "publishedReplaySHA256": "83c990d8ab8b0eeae5bed045a8ef917fa5d3a9d2ad6cef00b9cabdaa59eb2b38",
+    "publishedReplayURL": "https://lldb.camanis.net/level/488/3",
+    "sourceTick": 173
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Fun.dat#4",
+      "packID": "fan:lldb-488"
+    },
+    "levelSourceRevision": "75d0248a498644374f409fccfe3171e8c50da5def04cff10924e0639942ce515",
+    "nativeReplaySHA256": "79a7895f3e94ac6f15143594b5f7f96a07cc34793f9ade767bf9fd200cecd442",
+    "nativeTick": 156,
+    "publishedReplaySHA256": "ff0b6a5d82e1da6d5793894b01021db8765061ce9901719e21b0e3f7bc018ff5",
+    "publishedReplayURL": "https://lldb.camanis.net/level/488/5",
+    "sourceTick": 154
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Tricky.dat#28",
+      "packID": "fan:lldb-489"
+    },
+    "levelSourceRevision": "d3a60e754dd580f50f3c846b76a977903ccb3ca4997613cd7cde7879d632b080",
+    "nativeReplaySHA256": "2d1dee572b8aec9a705bb466b44d48b523b4039a36548e8e1414592ecdbf9cf2",
+    "nativeTick": 514,
+    "publishedReplaySHA256": "043c19911b94b93256e8c839af7b76c7e1f062f812c869ddd9a7c9894543bd45",
+    "publishedReplayURL": "https://lldb.camanis.net/level/489/29",
+    "sourceTick": 512
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Taxing.dat#5",
+      "packID": "fan:lldb-490"
+    },
+    "levelSourceRevision": "38f13b44cfdb5722c4c1438286a633a0c3f6234d72625152cd311f2294445223",
+    "nativeReplaySHA256": "c5cfdc636e8bbdab2abb267b9aee3c52fee4c618d79ec2ddab1a32073b16331d",
+    "nativeTick": 86,
+    "publishedReplaySHA256": "8f58c7c64fea75be7fe77dfd7a369a4dd5d8fbdda6b9b4f07e47269ba6e019c0",
+    "publishedReplayURL": "https://lldb.camanis.net/level/490/6",
+    "sourceTick": 85
+  },
+  {
+    "adjustedEventIndex": 6,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Taxing.dat#6",
+      "packID": "fan:lldb-490"
+    },
+    "levelSourceRevision": "38f13b44cfdb5722c4c1438286a633a0c3f6234d72625152cd311f2294445223",
+    "nativeReplaySHA256": "ddfc03c4fb941e9432f89d3365a3749dbd7f2498dea32eaaa8528245f7d308c8",
+    "nativeTick": 1284,
+    "publishedReplaySHA256": "9dabe15cc4a6e2d1147d5b4c03e3319b9e86b4eedb4f53de02f1260a1f90bc51",
+    "publishedReplayURL": "https://lldb.camanis.net/level/490/7",
+    "sourceTick": 1282
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Mayhem.dat#23",
+      "packID": "fan:lldb-491"
+    },
+    "levelSourceRevision": "f648151520692b675936d0e254663d177e91370029534658305470bb740f89b6",
+    "nativeReplaySHA256": "a989d5f1fbd1a695dfb36f4e651df421ca407233332859214935f02f19c2c480",
+    "nativeTick": 269,
+    "publishedReplaySHA256": "eb5cef3b1d43313a273c9667e97cc20ca040f0803701631a7b1100845554c872",
+    "publishedReplayURL": "https://lldb.camanis.net/level/491/24",
+    "sourceTick": 268
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Present.dat#1",
+      "packID": "fan:lldb-492"
+    },
+    "levelSourceRevision": "52c417ec72a99555caa15c1fb308a618759532d2059baefca16c67417d0a5c2c",
+    "nativeReplaySHA256": "9665fe5b2498f81e20c5ff865fb106fd6a88e1c961b4ac4f3de3d35815cfb503",
+    "nativeTick": 404,
+    "publishedReplaySHA256": "aef3defae2ea71a46e59f944d8fc67982ff888d96f1301601b094d56aad3f41e",
+    "publishedReplayURL": "https://lldb.camanis.net/level/492/2",
+    "sourceTick": 405
+  },
+  {
+    "adjustedEventIndex": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Present.dat#13",
+      "packID": "fan:lldb-492"
+    },
+    "levelSourceRevision": "52c417ec72a99555caa15c1fb308a618759532d2059baefca16c67417d0a5c2c",
+    "nativeReplaySHA256": "5f93325e8cbef3e4c0366e3176464ee0b5ed6349ceba979ef7aeeb292790eba9",
+    "nativeTick": 593,
+    "publishedReplaySHA256": "0f7bf6ec8829b3ee38a56b5da72824139745de467451641470db66b611af9d3a",
+    "publishedReplayURL": "https://lldb.camanis.net/level/492/14",
+    "sourceTick": 591
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "KillerMaster 1 Tame 2.dat#0",
+      "packID": "fan:lldb-505"
+    },
+    "levelSourceRevision": "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9",
+    "nativeReplaySHA256": "7d107dd55c8f7593c5f9d10d1fde6cec736d5cd7cd57fa4e0021d0f32ace9318",
+    "nativeTick": 209,
+    "publishedReplaySHA256": "ff8a4fc2b533b61671ea5fc025322ccef01a1f2c005acb2a2420e5363b32d19d",
+    "publishedReplayURL": "https://lldb.camanis.net/level/505/11",
+    "sourceTick": 208
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "ssam1221 Tame 1.dat#3",
+      "packID": "fan:lldb-512"
+    },
+    "levelSourceRevision": "1962aedf16c3708f1269c3e8fcd7099d81f6e237a93b2544c5c343c18dd08a11",
+    "nativeReplaySHA256": "fc04da75bd158e665cf8680ab4d1fda92354d4dfc0c923ecc50d3ec30d77650c",
+    "nativeTick": 674,
+    "publishedReplaySHA256": "68982ad0d8f745b0c6f458785f3c223bb19d3d7a8f512b3beca4911657ed0eb7",
+    "publishedReplayURL": "https://lldb.camanis.net/level/512/4",
+    "sourceTick": 675
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "ssam1221 Tame 1.dat#9",
+      "packID": "fan:lldb-512"
+    },
+    "levelSourceRevision": "1962aedf16c3708f1269c3e8fcd7099d81f6e237a93b2544c5c343c18dd08a11",
+    "nativeReplaySHA256": "f7a997829a54c8811e3f15aeebfbe25cb591acca06667cbc5fa97e3a7c5a66a3",
+    "nativeTick": 398,
+    "publishedReplaySHA256": "ce7a952def05aa46a91ea26a13014dd51b36172fcf08372c5d82b22fd17d75f0",
+    "publishedReplayURL": "https://lldb.camanis.net/level/512/10",
+    "sourceTick": 397
+  },
+  {
+    "adjustedEventIndex": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "ssam1221 Tame 2.dat#3",
+      "packID": "fan:lldb-512"
+    },
+    "levelSourceRevision": "1962aedf16c3708f1269c3e8fcd7099d81f6e237a93b2544c5c343c18dd08a11",
+    "nativeReplaySHA256": "5a4bcb9d53b401fea1fa32b448a6768b4262b97c5bc98899e3aedca5a05d03a8",
+    "nativeTick": 248,
+    "publishedReplaySHA256": "db1845c0c0df293978c99dc3a9d2e74a44a9bdf3f2df8f00d4b50b3053e0259e",
+    "publishedReplayURL": "https://lldb.camanis.net/level/512/14",
+    "sourceTick": 247
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Fun 3.DAT#6",
+      "packID": "fan:lldb-526"
+    },
+    "levelSourceRevision": "9edfafc47a1495e5e8db4bba4f9c80690fa95482242f09e9955f013da9af6b7c",
+    "nativeReplaySHA256": "e2a830ab37c1c408482ddac64748d4fc832f366f27f005e95dbc43fc99e1dd6e",
+    "nativeTick": 338,
+    "publishedReplaySHA256": "812aeb689b54d897f10ac6829b2bfbc2d52ab6cdd6f70eaef0ebe7813d867153",
+    "publishedReplayURL": "https://lldb.camanis.net/level/526/20",
+    "sourceTick": 337
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Tricky 1.DAT#9",
+      "packID": "fan:lldb-527"
+    },
+    "levelSourceRevision": "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3",
+    "nativeReplaySHA256": "26e8a961f0404a0be9492995e14f391b23c997c4b187d0abda9b9e70e4a97a31",
+    "nativeTick": 153,
+    "publishedReplaySHA256": "df46ed1408414fc8b28d65400efbb8d2457779410e822b10e48004035f760bc1",
+    "publishedReplayURL": "https://lldb.camanis.net/level/527/10",
+    "sourceTick": 155
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "OhNoMorecLemmings Crazy 1.DAT#2",
+      "packID": "fan:lldb-531"
+    },
+    "levelSourceRevision": "e7eb1cb2ed4152fe7d0b78cfcfca504b5e526cb53dc1287672410afce8f08585",
+    "nativeReplaySHA256": "763390fe67d87540c2587e4a95358577397c53540a1f46c422ba62dcc3fedf9b",
+    "nativeTick": 90,
+    "publishedReplaySHA256": "d6e521b5a10e8c37f97d36a322ae7225d9fb61745c0983ed81529a21bf317c4d",
+    "publishedReplayURL": "https://lldb.camanis.net/level/531/3",
+    "sourceTick": 91
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Peace 1.DAT#8",
+      "packID": "fan:lldb-542"
+    },
+    "levelSourceRevision": "f1ecfbe225c1039af701815227b4af13bcf5f45ac22c7e672357b5ff485e659e",
+    "nativeReplaySHA256": "6d0562a1325c7c7d29d6c9e7a7129f9a20a8e02990f96801bc27091a6836e642",
+    "nativeTick": 129,
+    "publishedReplaySHA256": "78995227ee3a046c5970128e2f2c89d8a0dda45d99930f0ccf7b9fda58dc0316",
+    "publishedReplayURL": "https://lldb.camanis.net/level/542/9",
+    "sourceTick": 131
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Awkward 1.DAT#2",
+      "packID": "fan:lldb-543"
+    },
+    "levelSourceRevision": "dd8cb81a28c705620de06c72a7b8c3166dcf84d6862df40974d8c6b6246d7ea8",
+    "nativeReplaySHA256": "cdbcaa4d8b64b8c145d5bf2ca53b80fc0abeacf66e63f21bfbed78fad52ae9c5",
+    "nativeTick": 95,
+    "publishedReplaySHA256": "193f56901911ad365eed97cd10f1aec9d9c7c66f6b701e45c0abba78ef2cc24f",
+    "publishedReplayURL": "https://lldb.camanis.net/level/543/3",
+    "sourceTick": 93
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Awkward 1.DAT#4",
+      "packID": "fan:lldb-543"
+    },
+    "levelSourceRevision": "dd8cb81a28c705620de06c72a7b8c3166dcf84d6862df40974d8c6b6246d7ea8",
+    "nativeReplaySHA256": "02cd3e14963d02733bf323cd1c093e34a4f26149cc67449fdfcb0986ce96de2f",
+    "nativeTick": 200,
+    "publishedReplaySHA256": "3b6c8a67a14c375adf0889eb76e7da3930a2b634f98aa9534d00656980501718",
+    "publishedReplayURL": "https://lldb.camanis.net/level/543/5",
+    "sourceTick": 199
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Artful 1.DAT#5",
+      "packID": "fan:lldb-544"
+    },
+    "levelSourceRevision": "fc9991e07984a0eecfcd19be9ec2be19e8647a93b3282aa0eef563ceb5091446",
+    "nativeReplaySHA256": "87bdc8c3e83e15ab5379486ec9833983b3fe67402b295c3b859b6a0e9354bce6",
+    "nativeTick": 154,
+    "publishedReplaySHA256": "eea65d2aaf822239d7a0f5a7a7191e7b9bd8225397d33935039574d8ccf13496",
+    "publishedReplayURL": "https://lldb.camanis.net/level/544/6",
+    "sourceTick": 155
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Ji Hoon Sky 2.DAT#1",
+      "packID": "fan:lldb-548"
+    },
+    "levelSourceRevision": "be7597710bb1f6b1421623c630bb9528ac16c8968a833980f6f8441c93cfd196",
+    "nativeReplaySHA256": "9fdda6f6e59ff6ef25404426c43080bb13eba0e7d9143cee020aad5ccc2add4d",
+    "nativeTick": 153,
+    "publishedReplaySHA256": "eb53fcac55cd7e1b1166340fe6ff977e35c0ee4442e260bac7d97240e7288d67",
+    "publishedReplayURL": "https://lldb.camanis.net/level/548/12",
+    "sourceTick": 151
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmings Plus DOS Project - 03 - Mild (Part 3).dat#1",
+      "packID": "fan:lldb-551"
+    },
+    "levelSourceRevision": "587fa1a85d2ce0c3d0c8b50d9fa6c23a5d224c5b100e7c364088fde33e35798e",
+    "nativeReplaySHA256": "ac956e0d6a25010587af9a73ba99947d4e7bf1b26d30ea49a7b8d80c145d4540",
+    "nativeTick": 349,
+    "publishedReplaySHA256": "31cb2ac2d229b033f0c8ca1b04d5d4927477e5a4b9445b12bf2055f57a30fd4f",
+    "publishedReplayURL": "https://lldb.camanis.net/level/551/22",
+    "sourceTick": 348
+  },
+  {
+    "adjustedEventIndex": 10,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmings Plus DOS Project - 11 - Danger (Part 2).dat#5",
+      "packID": "fan:lldb-554"
+    },
+    "levelSourceRevision": "bc6910d89e3d4625677d173dd9289ac64e19378a58c5ae9c2f2285875fdfeede",
+    "nativeReplaySHA256": "9ec59bac6aa6c928da9ff4fa663021956558e534a1c08cb2b2171f3b9c25a2f7",
+    "nativeTick": 575,
+    "publishedReplaySHA256": "2029112f3481e152ee1871fe85dade861e05440d4a9c26287aaedda562b3198a",
+    "publishedReplayURL": "https://lldb.camanis.net/level/554/16",
+    "sourceTick": 574
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "New Year Lemmings 1991_92.DAT#2",
+      "packID": "fan:lldb-557"
+    },
+    "levelSourceRevision": "4660e8b2e006658d3fcd82da912195ff3ea0e0a685da68e97848ab7d9298f700",
+    "nativeReplaySHA256": "425ef5c981fdc60de7df43bc4cac367d99aaca9c138d5487b98f270c41c007e9",
+    "nativeTick": 72,
+    "publishedReplaySHA256": "14a8811783eeb6cbbe1f7cd1e65feb9a63eb84005198a53a9a56c00f40cf08a6",
+    "publishedReplayURL": "https://lldb.camanis.net/level/557/3",
+    "sourceTick": 73
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "brickpk1.dat#6",
+      "packID": "fan:lldb-558"
+    },
+    "levelSourceRevision": "f117ea9ccfc582e2704c654b2e11b16a8c7cb79e99600a180e356f0cac2ab53f",
+    "nativeReplaySHA256": "3e5a0c4fb308e01aae353b70cda6f3af2a0807bc6b80ff892e99c251cec74547",
+    "nativeTick": 137,
+    "publishedReplaySHA256": "054f5180d79c36cd5d9803683a14034526b04464998f113e2fa30a3ad90f231d",
+    "publishedReplayURL": "https://lldb.camanis.net/level/558/7",
+    "sourceTick": 136
+  },
+  {
+    "adjustedEventIndex": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "brickpk2.dat#2",
+      "packID": "fan:lldb-559"
+    },
+    "levelSourceRevision": "8d0c1f847913a4f82cfc2f0151384aa5147b5a6b30a414f60cfeeb61802d4253",
+    "nativeReplaySHA256": "22a9ebc88c8768719460f2d051a3cef9a96a17f22d539ca85a41f6e27bce9d71",
+    "nativeTick": 1328,
+    "publishedReplaySHA256": "b01e3208d2444ed3916f1812a2afc193c639cccc004a7fb5d7870f625c5cabfa",
+    "publishedReplayURL": "https://lldb.camanis.net/level/559/3",
+    "sourceTick": 1326
+  },
+  {
+    "adjustedEventIndex": 6,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Fun 22.lvl#-1",
+      "packID": "fan:lldb-573"
+    },
+    "levelSourceRevision": "7677f392af2992ace26b6e7bfed099c323bf4e57ecd1031576adaca837929574",
+    "nativeReplaySHA256": "eac98c961a59c099ee53e248f51fd9170ba516ca1b0a053d388868d2b67b05e4",
+    "nativeTick": 1593,
+    "publishedReplaySHA256": "84288e7589b8917861d6142bb058dc8a19f9185ccd4168d7b7c0d6397970c7f7",
+    "publishedReplayURL": "https://lldb.camanis.net/level/573/22",
+    "sourceTick": 1591
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "CSTame1.dat#0",
+      "packID": "fan:lldb-83"
+    },
+    "levelSourceRevision": "51faf188e3a7633053bf8f02596be69bb8a6e506d29eef06facb2aeaf9ca4baa",
+    "nativeReplaySHA256": "68949df383ce3606e8a60b64f7827bca90b7be0a6e35db7d7f5767896c7b3e25",
+    "nativeTick": 790,
+    "publishedReplaySHA256": "2778ba1b69787115e7b8427f820c591121a74858a75064aff0d17c6ece1fef15",
+    "publishedReplayURL": "https://lldb.camanis.net/level/83/1",
+    "sourceTick": 791
+  },
+  {
+    "adjustedEventIndex": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "CRISFN05.dat#9",
+      "packID": "fan:lldb-269"
+    },
+    "levelSourceRevision": "3718e7cf4b3853ddfbf63bc1bd9138d30fe5483b796772a868bf6c9ab97d879a",
+    "nativeReplaySHA256": "c34747f325e0b1136823e57a0b5642f9cf0c4f78fefb3928ebe90b0a4c400635",
+    "nativeTick": 403,
+    "publishedReplaySHA256": "0a4c86af2f3b05a40f2f541e83db97634b18fc67e364330705a7252849a5e9af",
+    "publishedReplayURL": "https://lldb.camanis.net/level/269/10",
+    "sourceTick": 401
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "GARJEN01.dat#5",
+      "packID": "fan:lldb-281"
+    },
+    "levelSourceRevision": "e91f4a1eed1e06173322ea4a151bf814fd820b28aada8540709c8b657223933d",
+    "nativeReplaySHA256": "832953d965755b2403f78b2716fc6231b6761c9f9f2b7a6616ce58bfbc3da2d8",
+    "nativeTick": 308,
+    "publishedReplaySHA256": "bab5be72ce0039f509d85e131c88e76136850a9e6b7860118c669162cc8b27aa",
+    "publishedReplayURL": "https://lldb.camanis.net/level/281/6",
+    "sourceTick": 309
+  },
+  {
+    "adjustedEventIndex": 10,
+    "identity": {
+      "engine": "classic",
+      "levelID": "MARSHY05.DAT#7",
+      "packID": "fan:lldb-349"
+    },
+    "levelSourceRevision": "fa5ed84bfc087075c38d7cce948b4200b123443e026044ea3a79cbdaba7a7294",
+    "nativeReplaySHA256": "e9e458508cc5dfe672d6fb291ce763cfbb14a3c6fdb89ea6f924dbea5c6eaae6",
+    "nativeTick": 196,
+    "publishedReplaySHA256": "278b2e63f61bed3a6854df8fd8598af40e0ed34226d273c586e57575fadc042c",
+    "publishedReplayURL": "https://lldb.camanis.net/level/349/8",
+    "sourceTick": 198
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "pieuw01.dat#4",
+      "packID": "fan:lldb-393"
+    },
+    "levelSourceRevision": "6b599e67d0656e6a27f33f99916b9dafd21b04a1e7c88f8eda24e3083a087bc4",
+    "nativeReplaySHA256": "16951dd5cfc42a6dd347014fbd402f074ae9d3680143876991ea6db895fb80c0",
+    "nativeTick": 377,
+    "publishedReplaySHA256": "25043e442990866a34feaaaed71b999904262d200c666e9e607ac0952c2c1ad4",
+    "publishedReplayURL": "https://lldb.camanis.net/level/393/5",
+    "sourceTick": 375
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Crazy.DAT#14",
+      "packID": "fan:lldb-478"
+    },
+    "levelSourceRevision": "8d65d85e93e941b486e9543d3b6d4435495d2e56eadb53d744bd1782eb051da6",
+    "nativeReplaySHA256": "c3ef4a952dfb64a905311818b4a615540362d80165ed4d05ada0027e8ff2e4be",
+    "nativeTick": 262,
+    "publishedReplaySHA256": "2ce0fc6528a153f6649aa966122d3b7f2dc677c85320b02eef17ea61b917a5e8",
+    "publishedReplayURL": "https://lldb.camanis.net/level/478/15",
+    "sourceTick": 261
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Wild.DAT#5",
+      "packID": "fan:lldb-479"
+    },
+    "levelSourceRevision": "9447da45833dc536df6fb4e25fd7dff06423ae5e67a769a9c9e94c9416ba439a",
+    "nativeReplaySHA256": "8c5428719497ca0d68c9694a22348cb1bc387930695d0f8065eb3e71dc2421e1",
+    "nativeTick": 247,
+    "publishedReplaySHA256": "2009039f1f3a50bb9b3bfae2595371dd15b2e0bf204f192fccccb042266c5178",
+    "publishedReplayURL": "https://lldb.camanis.net/level/479/6",
+    "sourceTick": 246
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Fun.dat#22",
+      "packID": "fan:lldb-488"
+    },
+    "levelSourceRevision": "75d0248a498644374f409fccfe3171e8c50da5def04cff10924e0639942ce515",
+    "nativeReplaySHA256": "7ed1ff13f1b3b042b9a4a9deb0770aa06ec89fcd6bc4cabcb2667fa05d769b83",
+    "nativeTick": 375,
+    "publishedReplaySHA256": "878884f426fa7539afb9f573ff6e785eb230f2d7131399b7334d20a3ffa2f16a",
+    "publishedReplayURL": "https://lldb.camanis.net/level/488/23",
+    "sourceTick": 374
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Mayhem.dat#0",
+      "packID": "fan:lldb-491"
+    },
+    "levelSourceRevision": "f648151520692b675936d0e254663d177e91370029534658305470bb740f89b6",
+    "nativeReplaySHA256": "3be806c5f846a3fa1f2e0ebbd2fefab6a8cbc73ca6b443f812d44291db4e1ec5",
+    "nativeTick": 502,
+    "publishedReplaySHA256": "b6f971a36011f75ee9c5ce4bbd269677c463c8075f78bf54559cf7fefe8c8f51",
+    "publishedReplayURL": "https://lldb.camanis.net/level/491/1",
+    "sourceTick": 501
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Present.dat#11",
+      "packID": "fan:lldb-492"
+    },
+    "levelSourceRevision": "52c417ec72a99555caa15c1fb308a618759532d2059baefca16c67417d0a5c2c",
+    "nativeReplaySHA256": "3819cfb944e9de48b9a935a4b7a302ee749960fd097236b7ffb773cd48e07ed9",
+    "nativeTick": 128,
+    "publishedReplaySHA256": "22e36bc146327416e677d4e7cb6b0d64d8b49e3f76c1bf7d8e2ac5f59c2c23a2",
+    "publishedReplayURL": "https://lldb.camanis.net/level/492/12",
+    "sourceTick": 130
+  },
+  {
+    "adjustedEventIndex": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Deceit Fun.dat#4",
+      "packID": "fan:lldb-522"
+    },
+    "levelSourceRevision": "0e07b84b0edaeb479f1d11be3213130d5211dcc82fc7fcfbe7143cc85a564ace",
+    "nativeReplaySHA256": "57a249c9f2f86fa7670237db5c9c89ec14220e3c0f017011dba5eda1c71606a4",
+    "nativeTick": 502,
+    "publishedReplaySHA256": "70c236c7f65caedf829d62f6be00cde2e6c32045546c1915cd1305f131cb44d7",
+    "publishedReplayURL": "https://lldb.camanis.net/level/522/5",
+    "sourceTick": 501
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "OhNoMorecLemmings Wicked 1.DAT#8",
+      "packID": "fan:lldb-533"
+    },
+    "levelSourceRevision": "8473c39f4bf9a6cc9b19dd6d27633e8fa7ccb8e70c52210758f6211bde8f22ba",
+    "nativeReplaySHA256": "56b0e1d3ac2a39fd52af8a9f7a1e917f6f4e606d29f99cfa69896c303e0e4003",
+    "nativeTick": 173,
+    "publishedReplaySHA256": "ddc4ba3935d417452d4270e0bb29942b622c1845a85a6f13b656432861a033ab",
+    "publishedReplayURL": "https://lldb.camanis.net/level/533/9",
+    "sourceTick": 174
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "ANTHPCK5.DAT#8",
+      "packID": "fan:lldb-225"
+    },
+    "levelSourceRevision": "dba9b23e61ec73dc0a22e49385a9dacbb45eb5db64bf064a794d8376617f5c1c",
+    "nativeReplaySHA256": "e195b05201fbc20327238aa5628559b78cfcf79baa4fbdda432886e9964d8179",
+    "nativeTick": 167,
+    "publishedReplaySHA256": "3d42c7bf3208d80132251dbde8530928e3d5b27bcab8b7baf41243599c149848",
+    "publishedReplayURL": "https://lldb.camanis.net/level/225/9",
+    "sourceTick": 166
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "ANTHPCK5.DAT#9",
+      "packID": "fan:lldb-225"
+    },
+    "levelSourceRevision": "dba9b23e61ec73dc0a22e49385a9dacbb45eb5db64bf064a794d8376617f5c1c",
+    "nativeReplaySHA256": "03c514117c4eed3ec6b3a00f62dcc4132e6372ae98d202187aeb204ed92c42bd",
+    "nativeTick": 261,
+    "publishedReplaySHA256": "bdd4b48b40c4c48e06dfa81b7004b9ef4fd2a6fc7970b1310a6cc116931acff7",
+    "publishedReplayURL": "https://lldb.camanis.net/level/225/10",
+    "sourceTick": 262
+  },
+  {
+    "adjustedEventIndex": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "JANNPCK2.DAT#4",
+      "packID": "fan:lldb-232"
+    },
+    "levelSourceRevision": "e62085da6e3e1c103fc6d01686a7a8f97ce81ab2062384b5de5fd836345e0fc6",
+    "nativeReplaySHA256": "4bbe8438f70753c1a03f37d05f78649f3590c856a8e8fc10961d3e4d565545fa",
+    "nativeTick": 399,
+    "publishedReplaySHA256": "9de001d6a7910c56a0c46ba3b6e85864d3a3404a0aa97e93a419ada2748fcaba",
+    "publishedReplayURL": "https://lldb.camanis.net/level/232/5",
+    "sourceTick": 398
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "RSRdnt01.dat#4",
+      "packID": "fan:lldb-471"
+    },
+    "levelSourceRevision": "2780e3a5c021c0a6d8bf12c751e08c0ed9d28ae47683b533691e67690d1d72bc",
+    "nativeReplaySHA256": "c6be6659fccc9fe02f049675115a24597bead4eda3129260878f19e2f076c920",
+    "nativeTick": 384,
+    "publishedReplaySHA256": "5f5118517afdb65948b6f587518f6c679ec2d960ebfe8ac9f9a4d13fc38c8384",
+    "publishedReplayURL": "https://lldb.camanis.net/level/471/5",
+    "sourceTick": 385
+  },
+  {
+    "adjustedEventIndex": 7,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Crazy.DAT#13",
+      "packID": "fan:lldb-478"
+    },
+    "levelSourceRevision": "8d65d85e93e941b486e9543d3b6d4435495d2e56eadb53d744bd1782eb051da6",
+    "nativeReplaySHA256": "91f34386ee2bd38415ee9f06370983906aa17edb05f2f0f1c7e6e3731a369416",
+    "nativeTick": 665,
+    "publishedReplaySHA256": "5dd18896d5436e415af78a5b54be2eb7d78584e9c7d65c2a6739686e64c116d7",
+    "publishedReplayURL": "https://lldb.camanis.net/level/486/3",
+    "sourceIdentity": {
+      "engine": "classic",
+      "levelID": "Xmas 1991.DAT#2",
+      "packID": "fan:lldb-486"
+    },
+    "sourceTick": 664
+  },
+  {
+    "adjustedEventIndex": 7,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Xmas 1991.DAT#2",
+      "packID": "fan:lldb-486"
+    },
+    "levelSourceRevision": "fd76e9ca94eeb1d7a54ca3ae0861efecc9541422a9972c39376d40795b7258be",
+    "nativeReplaySHA256": "0e734e874f5c2c245a14a2b7278fe07545e7b4472e218f9ef2297f1d33ff11ed",
+    "nativeTick": 665,
+    "publishedReplaySHA256": "5dd18896d5436e415af78a5b54be2eb7d78584e9c7d65c2a6739686e64c116d7",
+    "publishedReplayURL": "https://lldb.camanis.net/level/486/3",
+    "sourceTick": 664
+  },
+  {
+    "adjustedEventIndex": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Van Clan Tame 2.dat#7",
+      "packID": "fan:lldb-517"
+    },
+    "levelSourceRevision": "0f651bee046d84fb0a58085e8b61eb5a1be1bcdb8cda7bbbb7ed2a4a4ba29c45",
+    "nativeReplaySHA256": "1c60954e64cc479ad20e5166ece94fd4f17ffa32ac873eeba72771c343420bb0",
+    "nativeTick": 376,
+    "publishedReplaySHA256": "c35a7a679844ac817d5d385f6e3e31e2bc7c0482180ba80c9f150b3859a8b676",
+    "publishedReplayURL": "https://lldb.camanis.net/level/517/18",
+    "sourceTick": 375
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Taxing 3.DAT#9",
+      "packID": "fan:lldb-528"
+    },
+    "levelSourceRevision": "b035220390c20b24f0b7316f316673206cda494fda5b8c4f1359321bf0d71e1d",
+    "nativeReplaySHA256": "4146cae0ada428352f33d9d2df8c6c8383705f5b309db6efeb8db5ff53b97c90",
+    "nativeTick": 303,
+    "publishedReplaySHA256": "c4217fe32575ec847c3e617154db8852463d594783095781641cc75a08e0d53a",
+    "publishedReplayURL": "https://lldb.camanis.net/level/528/30",
+    "sourceTick": 302
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Peace 2.DAT#3",
+      "packID": "fan:lldb-542"
+    },
+    "levelSourceRevision": "f1ecfbe225c1039af701815227b4af13bcf5f45ac22c7e672357b5ff485e659e",
+    "nativeReplaySHA256": "baf34c4851c295c485c034467c95dc145ca8704b9e9d6b8bc2f390c90cfa1a93",
+    "nativeTick": 542,
+    "publishedReplaySHA256": "ea1fc3b57236f37b373c6d40941808325d6416f70a29ea9aeb9e4626771fa4bf",
+    "publishedReplayURL": "https://lldb.camanis.net/level/542/14",
+    "sourceTick": 541
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmings Plus DOS Project - 02 - Mild (Part 2).dat#0",
+      "packID": "fan:lldb-551"
+    },
+    "levelSourceRevision": "587fa1a85d2ce0c3d0c8b50d9fa6c23a5d224c5b100e7c364088fde33e35798e",
+    "nativeReplaySHA256": "f2dce233051b95f7863d74bdff9fddd9f1fd36531d4d9a35213d4843d8c852dd",
+    "nativeTick": 265,
+    "publishedReplaySHA256": "bf07ef6f791f0277d65b2f43b4afcf23ef50d448e61be1955b95078f186d15a2",
+    "publishedReplayURL": "https://lldb.camanis.net/level/551/11",
+    "sourceTick": 264
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "LEVEL000.DAT#0",
+      "packID": "fan:lldb-584"
+    },
+    "levelSourceRevision": "8266ec3e50eced182f0e60729f0654bdfabf71fa405f7af8aaa96cf147e51b31",
+    "nativeReplaySHA256": "14dd2e7a2a1b5e149351e51197283a1501ae3b0ba44ffb6d7f623621f78722c0",
+    "nativeTick": 221,
+    "publishedReplaySHA256": "0ce62371cebd5ad44a5e180b9b2a01b02d1a1f62eae3d3d5dd0a2fe15c9b88d8",
+    "publishedReplayURL": "https://lldb.camanis.net/level/584/1",
+    "sourceTick": 220
+  },
+  {
+    "adjustedEventIndex": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Timpack1.dat#9",
+      "packID": "fan:lldb-88"
+    },
+    "levelSourceRevision": "05bdb88c0f61a971f881a9e4c8dae9bfa1148a540f2a5a671a5f8bac86b37314",
+    "nativeReplaySHA256": "617c533d8e06b754453cb3711c0cf6aec644c8b2fe084a7bfe3596acda533a72",
+    "nativeTick": 376,
+    "publishedReplaySHA256": "c35a7a679844ac817d5d385f6e3e31e2bc7c0482180ba80c9f150b3859a8b676",
+    "publishedReplayURL": "https://lldb.camanis.net/level/88/10",
+    "sourceTick": 375
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "JOHNPACK.DAT#0",
+      "packID": "fan:lldb-242"
+    },
+    "levelSourceRevision": "78ad2efd75be59c66f8dea0b9f013c409c10d9b8ada2e3e259ddee3629bc3a79",
+    "nativeReplaySHA256": "bc2a732a58e63fa97fde3bb54df6e562b36513b8ea729e7331e9eba28a0abd30",
+    "nativeTick": 62,
+    "publishedReplaySHA256": "da11ee59a0d65127aa202914d2f55f79f8d28c2a28fe7edccdad983e465977c2",
+    "publishedReplayURL": "https://lldb.camanis.net/level/242/1",
+    "sourceTick": 63
+  },
+  {
+    "adjustedEventIndex": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "CRISFN02.dat#1",
+      "packID": "fan:lldb-266"
+    },
+    "levelSourceRevision": "ca8350f116a45b7c71d03cc3e236ad90a91dd5f176e930f038835793c1ca2969",
+    "nativeReplaySHA256": "3ebecfec9e9ffba9cd89051de6cc946f2155588253454b6b2b4515a99d63a25b",
+    "nativeTick": 662,
+    "publishedReplaySHA256": "4ff0765f2a26135331e25d2d2199b1a376c544411fbc4c61ab29c33985fe4124",
+    "publishedReplayURL": "https://lldb.camanis.net/level/266/2",
+    "sourceTick": 661
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "CRISFN05.dat#4",
+      "packID": "fan:lldb-269"
+    },
+    "levelSourceRevision": "3718e7cf4b3853ddfbf63bc1bd9138d30fe5483b796772a868bf6c9ab97d879a",
+    "nativeReplaySHA256": "4e0cb330e7f4cd619dfe7fd15d64e565cf7da3a8688239bc0dca28606fc734e0",
+    "nativeTick": 71,
+    "publishedReplaySHA256": "8250e35a4fc557636130f8c192c18f8ca248dc539b445c1cc4a0dc605acb0161",
+    "publishedReplayURL": "https://lldb.camanis.net/level/269/5",
+    "sourceTick": 69
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "justdigcomp.dat#4",
+      "packID": "fan:lldb-374"
+    },
+    "levelSourceRevision": "aafbe56bf545df649edde5ca3bd4e51b8f5c834e52772aaf339003420d473a26",
+    "nativeReplaySHA256": "474c971d5780588004b0fe008fb6fcb7a2da9f74a6836d2102c4dda50e3e0797",
+    "nativeTick": 873,
+    "publishedReplaySHA256": "2bda2f57e13de38592c3742bcd7ad77c8d2447661be8fc64d2957211cf1d8692",
+    "publishedReplayURL": "https://lldb.camanis.net/level/374/5",
+    "sourceTick": 872
+  },
+  {
+    "adjustedEventIndex": 5,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Havoc.DAT#4",
+      "packID": "fan:lldb-481"
+    },
+    "levelSourceRevision": "575f71040f97db65494e2fd5ab5b3a4351fa43073677480e9af4a9881b02d997",
+    "nativeReplaySHA256": "f8289dcf0e40056b6810dbdf10d16a4bb0279876a1dcea9c91dc81dfde513f1b",
+    "nativeTick": 830,
+    "publishedReplaySHA256": "9cb8cac98c39afb3b8f0cd37330b6421b86c6d8e174b16c4b8422d587aa022ac",
+    "publishedReplayURL": "https://lldb.camanis.net/level/481/5",
+    "sourceTick": 828
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Deceit Fun.dat#1",
+      "packID": "fan:lldb-522"
+    },
+    "levelSourceRevision": "0e07b84b0edaeb479f1d11be3213130d5211dcc82fc7fcfbe7143cc85a564ace",
+    "nativeReplaySHA256": "95f466608961f1f685d8a3026ebcf56cd94078e85cc021e4de7df3e917194908",
+    "nativeTick": 820,
+    "publishedReplaySHA256": "98ca743842c8044fd873f4b9aed3814892ab74c9d773f93cf12837c5a1fc7266",
+    "publishedReplayURL": "https://lldb.camanis.net/level/522/2",
+    "sourceTick": 818
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Deceit Tricky 1.dat#4",
+      "packID": "fan:lldb-523"
+    },
+    "levelSourceRevision": "d0a5a5fd593a5d0014a255e631a302f6ce35165c11ad36c685a3bdae074bd13e",
+    "nativeReplaySHA256": "3e1a987dfba86a5c45f65d99f9a7d7201a33f390f02ed5015943cf26b71ea92a",
+    "nativeTick": 408,
+    "publishedReplaySHA256": "9deae8c59ae617f224798302a986f38dfcaa49b879506cda30b1bec28cb8d788",
+    "publishedReplayURL": "https://lldb.camanis.net/level/523/5",
+    "sourceTick": 409
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "OhNoMorecLemmings Crazy 1.DAT#9",
+      "packID": "fan:lldb-531"
+    },
+    "levelSourceRevision": "e7eb1cb2ed4152fe7d0b78cfcfca504b5e526cb53dc1287672410afce8f08585",
+    "nativeReplaySHA256": "765fc2ddf30439fae6cefbda0f6110cbcf118f1447b320efeffd211eaeb4781d",
+    "nativeTick": 94,
+    "publishedReplaySHA256": "f1136b15bdd2c70d3f72db0929ee2f77764f9a519c5c378dab828f67d76a7ad8",
+    "publishedReplayURL": "https://lldb.camanis.net/level/531/10",
+    "sourceTick": 95
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmings Plus DOS Project - 01 - Mild (Part 1).dat#6",
+      "packID": "fan:lldb-551"
+    },
+    "levelSourceRevision": "587fa1a85d2ce0c3d0c8b50d9fa6c23a5d224c5b100e7c364088fde33e35798e",
+    "nativeReplaySHA256": "631935fcb51f7dce9cdb0723a5a14664a9c84a60d449312e783dc6dec48112af",
+    "nativeTick": 520,
+    "publishedReplaySHA256": "7bc654105ede9cdeed1237bd95511f163e6c7eb34e814aaeecf7e7dd5f156601",
+    "publishedReplayURL": "https://lldb.camanis.net/level/551/7",
+    "sourceTick": 519
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmings Plus DOS Project - 15 - PSYCHO (Part 3).dat#6",
+      "packID": "fan:lldb-555"
+    },
+    "levelSourceRevision": "f0f2d7fb836a800589844b2c64b57c6eb83af930cd80b596df96c4d295dddb13",
+    "nativeReplaySHA256": "aa1bb2c7564681fd406a290afcbb5e91b1f108908c64f3bd3aa8b91014688f45",
+    "nativeTick": 139,
+    "publishedReplaySHA256": "3a3b65bc705e16de04adce547fe189cdc767dcf2c66a01a7963b74fc31b0da79",
+    "publishedReplayURL": "https://lldb.camanis.net/level/555/27",
+    "sourceTick": 137
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Giga pack 04.dat#4",
+      "packID": "fan:lldb-165"
+    },
+    "levelSourceRevision": "167151878e40f998db814e208287dacc4f2ffc5885317bedb0af505a9d8fb0ce",
+    "nativeReplaySHA256": "0e667b355821229f11eaaeddee8acca2b3ac2ef731362e6971da468145bb5137",
+    "nativeTick": 265,
+    "publishedReplaySHA256": "1bb197b30e59db092f38baeacd7badd507270dc74544a638d25dd428a27cff07",
+    "publishedReplayURL": "https://lldb.camanis.net/level/165/5",
+    "sourceTick": 266
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "hubbart4.dat#6",
+      "packID": "fan:lldb-176"
+    },
+    "levelSourceRevision": "ad6ebefcd89139821c7a93969f5a69e9d9b965d19ab6322db824ecadb8d343d8",
+    "nativeReplaySHA256": "5d23570af0ec4dff464bebefec056ae84aba695731cf2e930b90dd4a245eb72c",
+    "nativeTick": 757,
+    "publishedReplaySHA256": "bbce015abc42988d72cdf41567f38178e6d1905e1605544584499f4d09526f20",
+    "publishedReplayURL": "https://lldb.camanis.net/level/176/7",
+    "sourceTick": 756
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "PSP Special.dat#9",
+      "packID": "fan:lldb-217"
+    },
+    "levelSourceRevision": "d033b19716f2dec396de130dde008e128db03feedbcb4bb7ce7d9778eabff2ba",
+    "nativeReplaySHA256": "91de6092baac2f9a36c71c271c2d60456c54668ed2f4929d536ff98fd6ce8f97",
+    "nativeTick": 82,
+    "publishedReplaySHA256": "03c3e1fa2b0249d9c40579a3e2003027039fb37a2d75a726acc6f076d86fb6e6",
+    "publishedReplayURL": "https://lldb.camanis.net/level/217/10",
+    "sourceTick": 81
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "EMPACK.DAT#1",
+      "packID": "fan:lldb-230"
+    },
+    "levelSourceRevision": "11b17987dd468fd902a7a37fc8709f67c866de48bbf92d53a80c9c6cc2264cde",
+    "nativeReplaySHA256": "9d54ff59f0cbe7e0d20d151bb04039a489d6291a44c006b42e44d79c9718ba30",
+    "nativeTick": 115,
+    "publishedReplaySHA256": "d1ec466c7f0532f87426a373929a4254a18d7b05f4df29b9b569988ec2157785",
+    "publishedReplayURL": "https://lldb.camanis.net/level/230/2",
+    "sourceTick": 114
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "JANNPCK1.DAT#7",
+      "packID": "fan:lldb-231"
+    },
+    "levelSourceRevision": "aaa56f49a12a373893d97334fece3e11a69d3bb011c391ea30bff5de532d7772",
+    "nativeReplaySHA256": "8b3f5f01c34b8cc98649d25f0e82cbefefa78c31e910e659698b399a4cf90d50",
+    "nativeTick": 118,
+    "publishedReplaySHA256": "396a1f22168bd84b1a472d614de4946c0298b62120d351b73ebba058b547439f",
+    "publishedReplayURL": "https://lldb.camanis.net/level/231/8",
+    "sourceTick": 119
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Crazy.DAT#6",
+      "packID": "fan:lldb-478"
+    },
+    "levelSourceRevision": "8d65d85e93e941b486e9543d3b6d4435495d2e56eadb53d744bd1782eb051da6",
+    "nativeReplaySHA256": "3df9c4953834a855c53d5996825182cc3e4bca761f8c1e4c2b4742371406af39",
+    "nativeTick": 510,
+    "publishedReplaySHA256": "8d0b90734eaef9da48388fe855a0c58a1d26bac476f5d5e7b42959e4292d34dd",
+    "publishedReplayURL": "https://lldb.camanis.net/level/478/7",
+    "sourceTick": 509
+  },
+  {
+    "adjustedEventIndex": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Frost.DAT#5",
+      "packID": "fan:lldb-482"
+    },
+    "levelSourceRevision": "9f0b55e9f63bc1d3b5f931af6cd9881f439aba28aa939e4dd79e74c8e4b847a0",
+    "nativeReplaySHA256": "4b47a876822f16862a103a28339859fd4427f3c0e1b50bf03cd9ad1e43725c5c",
+    "nativeTick": 1404,
+    "publishedReplaySHA256": "544cb2b5643543f1dbac8ef998cf9d5470a355d5fafdb3ced293973e8b26e40f",
+    "publishedReplayURL": "https://lldb.camanis.net/level/482/6",
+    "sourceTick": 1402
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Tricky.dat#1",
+      "packID": "fan:lldb-489"
+    },
+    "levelSourceRevision": "d3a60e754dd580f50f3c846b76a977903ccb3ca4997613cd7cde7879d632b080",
+    "nativeReplaySHA256": "5e193344a5605712efd322e3db095fa69a795091b0844e6c4a87e2cea17b9943",
+    "nativeTick": 100,
+    "publishedReplaySHA256": "0f6acb818ee5befc0896193621d75e080b5c20de1543ab1f1f1240b8b97d0006",
+    "publishedReplayURL": "https://lldb.camanis.net/level/489/2",
+    "sourceTick": 102
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Mayhem.dat#26",
+      "packID": "fan:lldb-491"
+    },
+    "levelSourceRevision": "f648151520692b675936d0e254663d177e91370029534658305470bb740f89b6",
+    "nativeReplaySHA256": "4baf8579962737b512b056b2be944dc2c78857e9555c28e138754f93e3dd3fc3",
+    "nativeTick": 145,
+    "publishedReplaySHA256": "0de79e0f06d60ca4ef9fa07b3bbdf51bb3f6ccdd285fc0cda0830de09b11a343",
+    "publishedReplayURL": "https://lldb.camanis.net/level/491/27",
+    "sourceTick": 144
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "KillerMaster 1 Tame 2.dat#2",
+      "packID": "fan:lldb-505"
+    },
+    "levelSourceRevision": "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9",
+    "nativeReplaySHA256": "37c9c97ca7426099843b31537ecc5d389bce5bd796f7b049e21ef73771fa1a93",
+    "nativeTick": 115,
+    "publishedReplaySHA256": "2cc2b5485f3151078eb618cac0d058cde8e07af280d1258bfae1e40ac026738e",
+    "publishedReplayURL": "https://lldb.camanis.net/level/505/13",
+    "sourceTick": 114
+  },
+  {
+    "adjustedEventIndex": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Deceit Fun.dat#2",
+      "packID": "fan:lldb-522"
+    },
+    "levelSourceRevision": "0e07b84b0edaeb479f1d11be3213130d5211dcc82fc7fcfbe7143cc85a564ace",
+    "nativeReplaySHA256": "3dd76d34a522731c33e3e99d35f368c6c42ff962ca1c15414e93c49715c5f7fe",
+    "nativeTick": 385,
+    "publishedReplaySHA256": "28b8c2d90444f848f25b25e73777136a5ef6adf261fe2e52a789303fe79128e8",
+    "publishedReplayURL": "https://lldb.camanis.net/level/522/3",
+    "sourceTick": 386
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Fun 3.DAT#8",
+      "packID": "fan:lldb-526"
+    },
+    "levelSourceRevision": "9edfafc47a1495e5e8db4bba4f9c80690fa95482242f09e9955f013da9af6b7c",
+    "nativeReplaySHA256": "da27397e3222f6bcd1a0033c54d1658283c15cee2243708b37f50cdac8bead23",
+    "nativeTick": 101,
+    "publishedReplaySHA256": "3db185f3c11b3b40874bb262c5e6061c9b7e3865ebf8cdccc80f4ac3bc6d04dd",
+    "publishedReplayURL": "https://lldb.camanis.net/level/526/22",
+    "sourceTick": 102
+  },
+  {
+    "adjustedEventIndex": 5,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Artful 2.DAT#2",
+      "packID": "fan:lldb-544"
+    },
+    "levelSourceRevision": "fc9991e07984a0eecfcd19be9ec2be19e8647a93b3282aa0eef563ceb5091446",
+    "nativeReplaySHA256": "8696e6670a6fa79ceb4c41c81dabba0222216e46d81b76e14d17d46e67e13492",
+    "nativeTick": 1189,
+    "publishedReplaySHA256": "41b2c76223dade6237b910cb9cb7280419568baa4d75b82b062ed8691f5f0670",
+    "publishedReplayURL": "https://lldb.camanis.net/level/544/13",
+    "sourceTick": 1190
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmy556 More levels.dat#7",
+      "packID": "fan:lldb-68"
+    },
+    "levelSourceRevision": "a1883fb43a9148fb8feeb3cf88b817663bd9bb9b5e23ae179ffe5c6166686b81",
+    "nativeReplaySHA256": "dba5e572be8dd881b9ab19f632f34e68a9e5825f18d042341aeab20716bf1c32",
+    "nativeTick": 74,
+    "publishedReplaySHA256": "73f6738e8e20af00e6e68d01c89570474be00acb654577f81809d61e550c3262",
+    "publishedReplayURL": "https://lldb.camanis.net/level/68/8",
+    "sourceTick": 73
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Snow remakes 01.dat#5",
+      "packID": "fan:lldb-144"
+    },
+    "levelSourceRevision": "f5f94876092d5aa2f35e3180fd4819edc59d61d61e5ca8e795e574d20e36ed0b",
+    "nativeReplaySHA256": "93f32e9babb1371bd49cf6a94690e0d2fad46c455538ee09fb632374f7ea4714",
+    "nativeTick": 160,
+    "publishedReplaySHA256": "512604349ecd71a516fd70cfb3b382b9a0c3354529b6bfbc3f7a6ba38a5c2e73",
+    "publishedReplayURL": "https://lldb.camanis.net/level/144/6",
+    "sourceTick": 156
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "ISteve01.DAT#4",
+      "packID": "fan:lldb-20"
+    },
+    "levelSourceRevision": "d3e3cb52b86ba3528e3ed85ce4abbd14a9b7606a3a8a92c675f7f3d060ef881c",
+    "nativeReplaySHA256": "3f1683d3c7e77be05004b87a61817e93ac2a8d1c4e49d777c6c768c5046557e6",
+    "nativeTick": 190,
+    "publishedReplaySHA256": "bd5fe08b3fd392d64ca5e660827cc5d31dddc377177eb1789929f7424e08508d",
+    "publishedReplayURL": "https://lldb.camanis.net/level/20/5",
+    "sourceTick": 187
+  },
+  {
+    "adjustedEventIndex": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Hail.DAT#1",
+      "packID": "fan:lldb-483"
+    },
+    "levelSourceRevision": "0543b9c913b9999d82112c55561fc37b9e765a299c6dc4ee7dbea6c1db569d9e",
+    "nativeReplaySHA256": "790c1a12df8d11131389b06487bb62a9cb12a7261f8bb284ef2bf10871cc4159",
+    "nativeTick": 520,
+    "publishedReplaySHA256": "238fc26a0e4b25f5e6b41aa735b60c7d2d41452acfa60c20c9cf481136977826",
+    "publishedReplayURL": "https://lldb.camanis.net/level/483/2",
+    "sourceTick": 517
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Fun.dat#26",
+      "packID": "fan:lldb-488"
+    },
+    "levelSourceRevision": "75d0248a498644374f409fccfe3171e8c50da5def04cff10924e0639942ce515",
+    "nativeReplaySHA256": "d4a557233aefcfe98d3bdca41d159793fa8cdc317b0c13c91de2ce39d69d66f5",
+    "nativeTick": 117,
+    "publishedReplaySHA256": "9530721783a8b6c2f9dc6ef59b7c70aaff3b1a55636044f9e9e38002be02af29",
+    "publishedReplayURL": "https://lldb.camanis.net/level/488/27",
+    "sourceTick": 120
+  },
+  {
+    "adjustedEventIndex": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "ANTHPCK7.DAT#0",
+      "packID": "fan:lldb-227"
+    },
+    "levelSourceRevision": "ffeb765b23fc223e55b15386350c0c49996f9cc93a9b1ce7f619886a225b568f",
+    "nativeReplaySHA256": "a37d98d08db65903ec5f150e8c428d4e4aeabccd299c1c7ff5d25b09dc8cc9e4",
+    "nativeTick": 538,
+    "publishedReplaySHA256": "7b8c304118f8a169de284545af2a3833bbac466ef741f5bad0b796ae092176ad",
+    "publishedReplayURL": "https://lldb.camanis.net/level/227/1",
+    "sourceTick": 541
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "EMPACK.DAT#2",
+      "packID": "fan:lldb-230"
+    },
+    "levelSourceRevision": "11b17987dd468fd902a7a37fc8709f67c866de48bbf92d53a80c9c6cc2264cde",
+    "nativeReplaySHA256": "82bc0e70b2e7fecfd6259b738a8c2981f41445ba1f395d99b55cd791973e5747",
+    "nativeTick": 411,
+    "publishedReplaySHA256": "d03e40765f0ebfb40b7e264c27768baca8218222bffaeff1e7183a2981b7edbe",
+    "publishedReplayURL": "https://lldb.camanis.net/level/230/3",
+    "sourceTick": 410
+  },
+  {
+    "adjustedEventIndex": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "JANNPCK1.DAT#1",
+      "packID": "fan:lldb-231"
+    },
+    "levelSourceRevision": "aaa56f49a12a373893d97334fece3e11a69d3bb011c391ea30bff5de532d7772",
+    "nativeReplaySHA256": "b8e8d75750e011147f9abdc30fe24acd34cf4a9e547478f535a2cffab106fb54",
+    "nativeTick": 232,
+    "publishedReplaySHA256": "13f7eba5a9d439dd2c4b0d447769e038463e896d62a14a5208e9f08c8843c19f",
+    "publishedReplayURL": "https://lldb.camanis.net/level/231/2",
+    "sourceTick": 229
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "CRISFN13.dat#1",
+      "packID": "fan:lldb-277"
+    },
+    "levelSourceRevision": "1d52c584e24ffcbb1e76f5fd14d54b337c44fccef3bed898733c579d5627fb9b",
+    "nativeReplaySHA256": "69ea16c43c7008b5f7dae185d33f659421529ccd834be4895ebeac4d78bb7aad",
+    "nativeTick": 193,
+    "publishedReplaySHA256": "c8b849b57afd431ec5ba3b0d33e2e60eab29907aee01957e4f64fc631aabe534",
+    "publishedReplayURL": "https://lldb.camanis.net/level/277/2",
+    "sourceTick": 194
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "JM12.DAT#6",
+      "packID": "fan:lldb-338"
+    },
+    "levelSourceRevision": "640d2169837b3353c862519b1fa77c7e05f1cc0c9594f2773815ec477b67071e",
+    "nativeReplaySHA256": "a624397893ef8a4c488da7779fb7419bdca4f7a75943498ccd7142322f44e2f2",
+    "nativeTick": 182,
+    "publishedReplaySHA256": "4d1d025a71c5f8c23fd9a6b02a1091a54853c0ce636eef8623b51cca000b4769",
+    "publishedReplayURL": "https://lldb.camanis.net/level/338/7",
+    "sourceTick": 183
+  },
+  {
+    "adjustedEventIndex": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "LEMREMAKE.dat#1",
+      "packID": "fan:lldb-465"
+    },
+    "levelSourceRevision": "a2a1b86cdc3e5d507ecf93174ec9884f6289cfe1503404a5afa3f99ba61fd06d",
+    "nativeReplaySHA256": "6789bd0e3c1a76424b90b85ae27130a508686a1ffc7446b32e453059a3348246",
+    "nativeTick": 381,
+    "publishedReplaySHA256": "1f8430fee2e61e3acec47af89da6e0b0f3e5b3eea2ffc6f65692ad6ecfc10842",
+    "publishedReplayURL": "https://lldb.camanis.net/level/465/2",
+    "sourceTick": 378
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Taxing.dat#14",
+      "packID": "fan:lldb-490"
+    },
+    "levelSourceRevision": "38f13b44cfdb5722c4c1438286a633a0c3f6234d72625152cd311f2294445223",
+    "nativeReplaySHA256": "cb7f0856aa795c86f93bedeeaf3332e69230b210671657176fe5827c7d7ac0b2",
+    "nativeTick": 331,
+    "publishedReplaySHA256": "048ba262dea1bb84d57de68389e3cec1191c0f10139df8ed928ea7d1db56e39a",
+    "publishedReplayURL": "https://lldb.camanis.net/level/490/15",
+    "sourceTick": 329
+  },
+  {
+    "adjustedEventIndex": 6,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Taxing.dat#16",
+      "packID": "fan:lldb-490"
+    },
+    "levelSourceRevision": "38f13b44cfdb5722c4c1438286a633a0c3f6234d72625152cd311f2294445223",
+    "nativeReplaySHA256": "c452f30677c5484d5dfda03ef2abe995f7b926c6556a4dd0377ce6336e7b0d79",
+    "nativeTick": 1419,
+    "publishedReplaySHA256": "a3abeb713ca34b01dbe50758bd147d4923e4cd7ecca121e843bea8ae0345d39c",
+    "publishedReplayURL": "https://lldb.camanis.net/level/490/17",
+    "sourceTick": 1416
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "KillerMaster 2 Tame 1.dat#0",
+      "packID": "fan:lldb-510"
+    },
+    "levelSourceRevision": "a90e49d4c120814af6604a6e61d794dfc64b992c57b3d0c27f378ab017e499bd",
+    "nativeReplaySHA256": "514fa39020869e21fb27019c5526716a8fa52e65d10d42e1bdd0a3c0d663e0e4",
+    "nativeTick": 157,
+    "publishedReplaySHA256": "42908b368c65bc29947447059b198b0fcebd47a939fec8b3daeb3c41ed6bf906",
+    "publishedReplayURL": "https://lldb.camanis.net/level/510/1",
+    "sourceTick": 156
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Fun 1.DAT#0",
+      "packID": "fan:lldb-526"
+    },
+    "levelSourceRevision": "9edfafc47a1495e5e8db4bba4f9c80690fa95482242f09e9955f013da9af6b7c",
+    "nativeReplaySHA256": "7370f69dc954e413e518ed2b45bd4e41a4c1b68c87bb01e589c712d30b321a17",
+    "nativeTick": 163,
+    "publishedReplaySHA256": "7ae7123087d7ba23bcb09edec495b1ac9e0dcfb1ffa576aca7af57e244831b2e",
+    "publishedReplayURL": "https://lldb.camanis.net/level/526/1",
+    "sourceTick": 164
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Fun 1.DAT#2",
+      "packID": "fan:lldb-526"
+    },
+    "levelSourceRevision": "9edfafc47a1495e5e8db4bba4f9c80690fa95482242f09e9955f013da9af6b7c",
+    "nativeReplaySHA256": "4f5b6b21131a15f923f42dcea84dca421748c79b45e90b55f7471c73035bd98e",
+    "nativeTick": 180,
+    "publishedReplaySHA256": "c88f13e610cb4a2ee216e83184e78974f2669da3108e6bf80cbf5484d331148b",
+    "publishedReplayURL": "https://lldb.camanis.net/level/526/3",
+    "sourceTick": 175
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Peace 1.DAT#4",
+      "packID": "fan:lldb-542"
+    },
+    "levelSourceRevision": "f1ecfbe225c1039af701815227b4af13bcf5f45ac22c7e672357b5ff485e659e",
+    "nativeReplaySHA256": "05abbfc1a72138413a8997ca7c58a47c325e7a529b858f1bfd34728847d1f020",
+    "nativeTick": 219,
+    "publishedReplaySHA256": "6336c159ccd826ffdaec84217995fef1afeb69107d48112464bc99256ddfaee1",
+    "publishedReplayURL": "https://lldb.camanis.net/level/542/5",
+    "sourceTick": 220
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmings Plus DOS Project - 15 - PSYCHO (Part 3).dat#2",
+      "packID": "fan:lldb-555"
+    },
+    "levelSourceRevision": "f0f2d7fb836a800589844b2c64b57c6eb83af930cd80b596df96c4d295dddb13",
+    "nativeReplaySHA256": "229f0437064b148c9963fe8023560cffce732ed000d5e9332209b5b85e31915c",
+    "nativeTick": 168,
+    "publishedReplaySHA256": "49037d22e349722e7ab6ee7a90f60989a9447c2e02ea29a008680d87cf9258a2",
+    "publishedReplayURL": "https://lldb.camanis.net/level/555/23",
+    "sourceTick": 167
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "joe04.dat#7",
+      "packID": "fan:lldb-131"
+    },
+    "levelSourceRevision": "357a48d29036fe4b5e51d4dd461da9b7a3d99d5fec1ceca65a3be9f4829c610f",
+    "nativeReplaySHA256": "2cf947a79cfe707397854de67ef6d4a362834eb84b13e6b09b8596df337e749f",
+    "nativeTick": 498,
+    "publishedReplaySHA256": "b375c9270905713c6b17c36c1e954bda73a142f52a58eb5232dd7d99a70c807c",
+    "publishedReplayURL": "https://lldb.camanis.net/level/131/8",
+    "sourceTick": 500
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "CRISFN04.dat#4",
+      "packID": "fan:lldb-268"
+    },
+    "levelSourceRevision": "ae52a960fb1cadef87b6dd14cb8b2f63de4e838551c265ef0a68ef8f5513257b",
+    "nativeReplaySHA256": "6f79b2a06ed13d9c5bc80d285f59b72caa45d7e20cf6504ac7734f3345e874c3",
+    "nativeTick": 91,
+    "publishedReplaySHA256": "8a27d3cf4e5f868e3589569e86e8c9b350f9045a5931af8b66acbc0bbd5931fd",
+    "publishedReplayURL": "https://lldb.camanis.net/level/268/5",
+    "sourceTick": 90
+  },
+  {
+    "adjustedEventIndex": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "CRISFN15.dat#8",
+      "packID": "fan:lldb-279"
+    },
+    "levelSourceRevision": "c0936a5e906fffb5eeb40bff59998f50f6db86dd3dff67782d18d907a3c41fd7",
+    "nativeReplaySHA256": "e1326ec9b9babd8fdcc4454b99dec4c12d37c71870a8095cf9421c1fb47b2ce8",
+    "nativeTick": 473,
+    "publishedReplaySHA256": "53d170cc84315be93557c0835bbdf882d493e5c4e6d851b1ee3c16429a4039a8",
+    "publishedReplayURL": "https://lldb.camanis.net/level/279/9",
+    "sourceTick": 470
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "TWPAK10.dat#8",
+      "packID": "fan:lldb-312"
+    },
+    "levelSourceRevision": "0a836e9df23084c3d30a968c613ee4c92976108db41e070f0b2fafde3d39fe2b",
+    "nativeReplaySHA256": "cfeac19b0b450c457bd65bc00cc00d664f2fb73637a7fc05c511f1daa527cdf7",
+    "nativeTick": 265,
+    "publishedReplaySHA256": "0efb4ae4ca4d7e0724efcfe57850ba79a37857f5465416de7ab8019cc6620826",
+    "publishedReplayURL": "https://lldb.camanis.net/level/312/9",
+    "sourceTick": 260
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "twbestof.dat#0",
+      "packID": "fan:lldb-316"
+    },
+    "levelSourceRevision": "88913689cc5f8e1fa2c8dbb811f4c1fa22460be8f6eeedad50c515f031f50c6b",
+    "nativeReplaySHA256": "e7bec5d3011e669e7f3e0d03abbc74b9b2017fa21b7be9fb922361f48b83df29",
+    "nativeTick": 265,
+    "publishedReplaySHA256": "0efb4ae4ca4d7e0724efcfe57850ba79a37857f5465416de7ab8019cc6620826",
+    "publishedReplayURL": "https://lldb.camanis.net/level/316/1",
+    "sourceTick": 260
+  },
+  {
+    "adjustedEventIndex": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "JM12.DAT#9",
+      "packID": "fan:lldb-338"
+    },
+    "levelSourceRevision": "640d2169837b3353c862519b1fa77c7e05f1cc0c9594f2773815ec477b67071e",
+    "nativeReplaySHA256": "a5907cc1fef24666792838b37280cb0dd83f61c0b0469549cfd22478584a2a16",
+    "nativeTick": 371,
+    "publishedReplaySHA256": "86c5d6abd1faa52cc1efd4ad9dd38cceb3c4c1dce5973d8dc3c9616650ee5698",
+    "publishedReplayURL": "https://lldb.camanis.net/level/338/10",
+    "sourceTick": 367
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "comppak.dat#0",
+      "packID": "fan:lldb-449"
+    },
+    "levelSourceRevision": "79f35140478b08a4f5d52e964fcb899886f1de4474c42559817962fe219020b1",
+    "nativeReplaySHA256": "0d7c64bfb693ccbf9ee7f865be2957ff47f149b59d61b196509bb19b119ae34b",
+    "nativeTick": 265,
+    "publishedReplaySHA256": "0efb4ae4ca4d7e0724efcfe57850ba79a37857f5465416de7ab8019cc6620826",
+    "publishedReplayURL": "https://lldb.camanis.net/level/449/1",
+    "sourceTick": 260
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Fun.dat#14",
+      "packID": "fan:lldb-488"
+    },
+    "levelSourceRevision": "75d0248a498644374f409fccfe3171e8c50da5def04cff10924e0639942ce515",
+    "nativeReplaySHA256": "2c9a65d8e21f097b55ad7ed75b8af1648c049d7edf2327e6ca44b6212d3e1380",
+    "nativeTick": 109,
+    "publishedReplaySHA256": "e49627d3eb5d384fe8db6a70b3d87d8b90e3db467d7ad178c09c62f9b354ff2c",
+    "publishedReplayURL": "https://lldb.camanis.net/level/488/15",
+    "sourceTick": 113
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Fun.dat#29",
+      "packID": "fan:lldb-488"
+    },
+    "levelSourceRevision": "75d0248a498644374f409fccfe3171e8c50da5def04cff10924e0639942ce515",
+    "nativeReplaySHA256": "71b02c01996520a5638a21d141dd00b47745b3ba3e2270206b0bb3295b69e467",
+    "nativeTick": 68,
+    "publishedReplaySHA256": "45993ce3140f54028ae92dd4b1670f16007a9791b1a6c5f1cf8f2a65fb6b6cf5",
+    "publishedReplayURL": "https://lldb.camanis.net/level/488/30",
+    "sourceTick": 64
+  },
+  {
+    "adjustedEventIndex": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Tricky.dat#23",
+      "packID": "fan:lldb-489"
+    },
+    "levelSourceRevision": "d3a60e754dd580f50f3c846b76a977903ccb3ca4997613cd7cde7879d632b080",
+    "nativeReplaySHA256": "a5eb66595ac3733804f7bcbecc1527926770250682eeb621cffbabb16ca68382",
+    "nativeTick": 383,
+    "publishedReplaySHA256": "2ab7b1a91310365602b0aceb0b159b9b32be62745ee37f3eccf4ddbf54294b62",
+    "publishedReplayURL": "https://lldb.camanis.net/level/489/24",
+    "sourceTick": 382
+  },
+  {
+    "adjustedEventIndex": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "LEVEL001.DAT#3",
+      "packID": "fan:lldb-585"
+    },
+    "levelSourceRevision": "eceef744c308d4dd051a45fe6f0e6342b16b10c063b39aa22a9acee4da6f8719",
+    "nativeReplaySHA256": "f18e87d0787f2dd821f06d3094a695b13dd7e9642abaaf6bd6c2bb88804013bf",
+    "nativeTick": 875,
+    "publishedReplaySHA256": "7d0ebd3ee05bbcefb15077207edb597a20760fa3aadb006ab7a8f6b40fbd1a58",
+    "publishedReplayURL": "https://lldb.camanis.net/level/585/12",
+    "sourceTick": 871
+  },
+  {
+    "adjustedEventIndex": 9,
+    "identity": {
+      "engine": "classic",
+      "levelID": "LEVEL001.DAT#5",
+      "packID": "fan:lldb-585"
+    },
+    "levelSourceRevision": "eceef744c308d4dd051a45fe6f0e6342b16b10c063b39aa22a9acee4da6f8719",
+    "nativeReplaySHA256": "4b87644d3eec177cee18a4101e8faa97e43616e91bcc8147438119acc43aafd7",
+    "nativeTick": 1336,
+    "publishedReplaySHA256": "93987e1f3014105f044d22a098df96a36e583abb8315e22303460fd759161981",
+    "publishedReplayURL": "https://lldb.camanis.net/level/585/14",
+    "sourceTick": 1342
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Level 01.lvl#-1",
+      "packID": "fan:lldb-594"
+    },
+    "levelSourceRevision": "4378253be6761a1c74163a75556854f94069e13ac2aa62cb8e3157c77e339fa2",
+    "nativeReplaySHA256": "744990cc887c01c341fcb18505b601de7a7e1dc773e06dc393345f21e09694cc",
+    "nativeTick": 158,
+    "publishedReplaySHA256": "b77a80dd2d350a5fc672d6a0f79907dbb164d77f2ca6b267f3b84677a0bf27c9",
+    "publishedReplayURL": "https://lldb.camanis.net/level/594/1",
+    "sourceTick": 153
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "CSTame2.dat#9",
+      "packID": "fan:lldb-84"
+    },
+    "levelSourceRevision": "41799a93a1b71aa0aa87c318262cc88503f32d0d2899b5dd56cf1f05faa116fa",
+    "nativeReplaySHA256": "7aea8842c2ef6c7c5d2c3feacb0df3297a15371a96b8d32d75c536c5b377a4f2",
+    "nativeTick": 208,
+    "publishedReplaySHA256": "87c195493377a5a52a7a49d795960bbdac4001d2a8f95360aef2cfc37e790a10",
+    "publishedReplayURL": "https://lldb.camanis.net/level/84/10",
+    "sourceTick": 210
+  },
+  {
+    "globalTickShift": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "TUT.DAT#0",
+      "packID": "fan:lldb-400"
+    },
+    "levelSourceRevision": "3c66c51705b2a234a7ab7572ef0b83912ad139c86f91dd72e943a1d3bc7143f3",
+    "nativeReplaySHA256": "b1c2cd88705889b2202dc6dd74ebc26d4056028ef542cbc72f9b0a8b734d22a0",
+    "publishedReplaySHA256": "209f7a0111a202aa91c558877d8e70a6fe5c5f83dd99e3db2128508cf1ef18c4",
+    "publishedReplayURL": "https://lldb.camanis.net/level/400/1"
+  },
+  {
+    "globalTickShift": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "RSRdnt01.dat#6",
+      "packID": "fan:lldb-471"
+    },
+    "levelSourceRevision": "2780e3a5c021c0a6d8bf12c751e08c0ed9d28ae47683b533691e67690d1d72bc",
+    "nativeReplaySHA256": "d2b0c754657cf395898cd5cf34ffa89a6802a63dd150c131520274c579e938cc",
+    "publishedReplaySHA256": "8a67371db2952c65f10969899a60a84a650a6bdaeb9257330971961339bad007",
+    "publishedReplayURL": "https://lldb.camanis.net/level/471/7"
+  },
+  {
+    "adjustedEventIndex": 5,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Conway07.DAT#1",
+      "packID": "fan:lldb-256"
+    },
+    "levelSourceRevision": "be8853c28d2dea0ab0a0d50e4bdcf566e4ef00efc7c5f6feaa9765a9fe0aab23",
+    "nativeReplaySHA256": "fd002ba9a4b15277f9dc507fe3d84ddcc0e9fd31f3c7344103dce74d742cd144",
+    "nativeTick": 662,
+    "publishedReplaySHA256": "1573de8e85d2f8ee93375306d4604cce9bff0757aa84b62263521b9a0a198e01",
+    "publishedReplayURL": "https://lldb.camanis.net/level/256/2",
+    "sourceTick": 663
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "TWPAK09.dat#3",
+      "packID": "fan:lldb-311"
+    },
+    "levelSourceRevision": "b0957944940532097d1a537290e7da30be2d72b5464d15554ca9b1a61e961355",
+    "nativeReplaySHA256": "d2bb76e8091932b371c71437b6a4f508364a55dee43c299ca46418fa01703cb9",
+    "nativeTick": 207,
+    "publishedReplaySHA256": "797589e716f5a6ea872d27600475626b81075db5ce330a616a70a0eaa64c3705",
+    "publishedReplayURL": "https://lldb.camanis.net/level/311/4",
+    "sourceTick": 206
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis 2P 1.dat#3",
+      "packID": "fan:lldb-404"
+    },
+    "levelSourceRevision": "46cb8162caadef7f3462a842f927c2ac415f0fb621dd59e2c8a3cd54bea34135",
+    "nativeReplaySHA256": "eb7f77f09893422632138acedda82b28e0b02a21bf1cfff8d5e924cb43da6027",
+    "nativeTick": 161,
+    "publishedReplaySHA256": "1cda101926a018e8dd309c12b679b78dc7910af488aaa55a3007ae0191e3116a",
+    "publishedReplayURL": "https://lldb.camanis.net/level/404/4",
+    "sourceTick": 154
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis 2P 1.dat#6",
+      "packID": "fan:lldb-404"
+    },
+    "levelSourceRevision": "46cb8162caadef7f3462a842f927c2ac415f0fb621dd59e2c8a3cd54bea34135",
+    "nativeReplaySHA256": "063e0efce1b4a2681e86029149f02dec44b7c97108f567c354d0e2d8cf157eac",
+    "nativeTick": 115,
+    "publishedReplaySHA256": "d24ed6500cd958c5abe34a3d61408800d34c6c1b881f513c3657f7f2e0a76bd2",
+    "publishedReplayURL": "https://lldb.camanis.net/level/404/7",
+    "sourceTick": 113
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "LDChallenge09.dat#0",
+      "packID": "fan:lldb-438"
+    },
+    "levelSourceRevision": "f612a4dd0ca05837e807783ed5b15a516e839c9539755f657806d0d1226919ff",
+    "nativeReplaySHA256": "e66407089cd4faaae913c11563c4e6d6d21aefab8d876d1eaf917f14866ddf07",
+    "nativeTick": 96,
+    "publishedReplaySHA256": "2c878a13c371acde88416c4fc050d8a6d14fb5c5c0d08fd433e53d2dcd7b51b9",
+    "publishedReplayURL": "https://lldb.camanis.net/level/438/1",
+    "sourceTick": 94
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "LDChallenge09.dat#1",
+      "packID": "fan:lldb-438"
+    },
+    "levelSourceRevision": "f612a4dd0ca05837e807783ed5b15a516e839c9539755f657806d0d1226919ff",
+    "nativeReplaySHA256": "2b9266fb970c084d6c235b350ad0cb3c98aca46ac20218c92fc48d43cb17b293",
+    "nativeTick": 146,
+    "publishedReplaySHA256": "6c485a1db7721a983ea78c37862149ae63ee93574cc3e14be1c59173a159e178",
+    "publishedReplayURL": "https://lldb.camanis.net/level/438/2",
+    "sourceTick": 144
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "LDChallenge09.dat#3",
+      "packID": "fan:lldb-438"
+    },
+    "levelSourceRevision": "f612a4dd0ca05837e807783ed5b15a516e839c9539755f657806d0d1226919ff",
+    "nativeReplaySHA256": "cb27de60e70dd9a9d95c9b098bbaf33672349a96d0f8c375d12fbd789cbbe0ca",
+    "nativeTick": 146,
+    "publishedReplaySHA256": "9d86c1d29c88397387ea0aa649841efbf8db1f5ceca22a3d4957f0f1a589f32a",
+    "publishedReplayURL": "https://lldb.camanis.net/level/438/4",
+    "sourceTick": 144
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "RSRdnt01.dat#1",
+      "packID": "fan:lldb-471"
+    },
+    "levelSourceRevision": "2780e3a5c021c0a6d8bf12c751e08c0ed9d28ae47683b533691e67690d1d72bc",
+    "nativeReplaySHA256": "86c67eadfc6abce7044ad7dd31ab131c1e9abd829adc1dd030b02d22fd640133",
+    "nativeTick": 382,
+    "publishedReplaySHA256": "03b113275a4d5ea65b854fead303928603e1b03d3a8c0d185b7083433f773c4d",
+    "publishedReplayURL": "https://lldb.camanis.net/level/471/2",
+    "sourceTick": 390
+  },
+  {
+    "adjustedEventIndex": 5,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Tricky.dat#19",
+      "packID": "fan:lldb-489"
+    },
+    "levelSourceRevision": "d3a60e754dd580f50f3c846b76a977903ccb3ca4997613cd7cde7879d632b080",
+    "nativeReplaySHA256": "df9cedce42d33e74d6e284bce17740e47c5c638b7eee0daa790666e408763215",
+    "nativeTick": 525,
+    "publishedReplaySHA256": "3c58c8b7a7a464d75d2d1a0a22c41220e1ebcd8eb634ac78a75a9b43b8e3b1e7",
+    "publishedReplayURL": "https://lldb.camanis.net/level/489/20",
+    "sourceTick": 524
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Tricky.dat#27",
+      "packID": "fan:lldb-489"
+    },
+    "levelSourceRevision": "d3a60e754dd580f50f3c846b76a977903ccb3ca4997613cd7cde7879d632b080",
+    "nativeReplaySHA256": "628cea639f1cf54fd4aaaf9d632eb58592bb780a59c0f20c62cfdc571d489757",
+    "nativeTick": 387,
+    "publishedReplaySHA256": "a780891aaeeb79eec492337a88e573466a549cef517062b23fc2edce744d0aea",
+    "publishedReplayURL": "https://lldb.camanis.net/level/489/28",
+    "sourceTick": 386
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Present.dat#26",
+      "packID": "fan:lldb-492"
+    },
+    "levelSourceRevision": "52c417ec72a99555caa15c1fb308a618759532d2059baefca16c67417d0a5c2c",
+    "nativeReplaySHA256": "c30b306042d0e05bcd341601d7a1f38e88ea1da626f3d7384b123399f0e1e015",
+    "nativeTick": 383,
+    "publishedReplaySHA256": "5a851b26e8866776dd2938f40f2cac6e6b22373af58e9c9900172f2684a10bc3",
+    "publishedReplayURL": "https://lldb.camanis.net/level/492/27",
+    "sourceTick": 380
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Fun 2.DAT#1",
+      "packID": "fan:lldb-526"
+    },
+    "levelSourceRevision": "9edfafc47a1495e5e8db4bba4f9c80690fa95482242f09e9955f013da9af6b7c",
+    "nativeReplaySHA256": "e0e76f4ada27015686c8821fbac3c4b0f51ff6e8c2408c0ce1f9f73e24c5b5e1",
+    "nativeTick": 69,
+    "publishedReplaySHA256": "743e6c9803adafd8ee9172910b008cddec39296a28080e57e024ef0958dd9a4a",
+    "publishedReplayURL": "https://lldb.camanis.net/level/526/5",
+    "sourceTick": 75
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Fun 2.DAT#8",
+      "packID": "fan:lldb-526"
+    },
+    "levelSourceRevision": "9edfafc47a1495e5e8db4bba4f9c80690fa95482242f09e9955f013da9af6b7c",
+    "nativeReplaySHA256": "fc75c7a9f51c2c582303457c8f1742216e27be35dbe72e39634651b81209a4b4",
+    "nativeTick": 124,
+    "publishedReplaySHA256": "a848da39de72aa8517c3ce9d69a40f17888d8a4b832726e5858732b978f8f4db",
+    "publishedReplayURL": "https://lldb.camanis.net/level/526/12",
+    "sourceTick": 131
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Fun 3.DAT#1",
+      "packID": "fan:lldb-526"
+    },
+    "levelSourceRevision": "9edfafc47a1495e5e8db4bba4f9c80690fa95482242f09e9955f013da9af6b7c",
+    "nativeReplaySHA256": "94564a987a0f12e618b8d817642ac84dd7530328e2b3a6c55d90626531599c85",
+    "nativeTick": 316,
+    "publishedReplaySHA256": "368758da21a36556a8f65ac83f49979852ab4c90a877bc13bfc5637acb03e482",
+    "publishedReplayURL": "https://lldb.camanis.net/level/526/15",
+    "sourceTick": 311
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Fun 3.DAT#4",
+      "packID": "fan:lldb-526"
+    },
+    "levelSourceRevision": "9edfafc47a1495e5e8db4bba4f9c80690fa95482242f09e9955f013da9af6b7c",
+    "nativeReplaySHA256": "219f2ecb4775ac801c700742f35bffee352230ca7f8376ff74692b87480c012d",
+    "nativeTick": 490,
+    "publishedReplaySHA256": "3d4745b755143697d4d13bf8a6ab9ad7c52f9dd96fff966f7378694b2c9d4a37",
+    "publishedReplayURL": "https://lldb.camanis.net/level/526/18",
+    "sourceTick": 489
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Holiday cLemmings Frost 2.DAT#2",
+      "packID": "fan:lldb-535"
+    },
+    "levelSourceRevision": "e0b4def872bc847330ee71afc5a6e602c97aaefe65f5b0f86d28af0145245339",
+    "nativeReplaySHA256": "41e09110c6553b4f86e0bc1234fe964816af6dbdca11f217117f6e9b21af7c59",
+    "nativeTick": 119,
+    "publishedReplaySHA256": "d601024b0a84c30339d844ba7b376504ed74b72ca8dc33c763107607b2961af7",
+    "publishedReplayURL": "https://lldb.camanis.net/level/535/13",
+    "sourceTick": 118
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmings Plus DOS Project - 03 - Mild (Part 3).dat#0",
+      "packID": "fan:lldb-551"
+    },
+    "levelSourceRevision": "587fa1a85d2ce0c3d0c8b50d9fa6c23a5d224c5b100e7c364088fde33e35798e",
+    "nativeReplaySHA256": "64e2341c28b32b32a68a5358660833ec767a9e4e141a1669798791427183471e",
+    "nativeTick": 923,
+    "publishedReplaySHA256": "c15c9e081889d89da1fae68cf0890fdd9d9241fca1bb8a97919bb86c26cbcf14",
+    "publishedReplayURL": "https://lldb.camanis.net/level/551/21",
+    "sourceTick": 930
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmings Plus DOS Project - 04 - Wimpy (Part 1).dat#1",
+      "packID": "fan:lldb-552"
+    },
+    "levelSourceRevision": "8187c19df391ea59e594bf9e4779b7ec81fb0034bc4a899ae09aee7396b3c042",
+    "nativeReplaySHA256": "5ebd3742c4968cd9c8b705b46fbc537bf0d5dbee21b7e1640468bc05b44b5cbe",
+    "nativeTick": 76,
+    "publishedReplaySHA256": "7a4938662297fa4aecf4229dc5df411aad0180342d77b4084caca16ca98ce740",
+    "publishedReplayURL": "https://lldb.camanis.net/level/552/2",
+    "sourceTick": 70
+  },
+  {
+    "adjustedEventIndex": 3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "LEVEL000.DAT#2",
+      "packID": "fan:lldb-584"
+    },
+    "levelSourceRevision": "8266ec3e50eced182f0e60729f0654bdfabf71fa405f7af8aaa96cf147e51b31",
+    "nativeReplaySHA256": "cccffded9eace720c7e9a460bdd02d1ddb315766c00b5fcf764648157e2cd4ee",
+    "nativeTick": 291,
+    "publishedReplaySHA256": "ced2fff6b2b5ced46b0715214c56a62aa9e1aa1af4932eac9892d6a972c0dbc3",
+    "publishedReplayURL": "https://lldb.camanis.net/level/584/3",
+    "sourceTick": 297
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "ISteve02.dat#1",
+      "packID": "fan:lldb-23"
+    },
+    "levelSourceRevision": "51bfc657624a0e02b3633b8f9a7e6e82fb8eec0c81cd04b4e93ecb4305d855a0",
+    "nativeReplaySHA256": "88e6d63d4b90fb642f6dda9a2af8b4082deaaadb9605dd1768315d0f67830dcc",
+    "nativeTick": 92,
+    "publishedReplaySHA256": "41e07e79f5e68a02b0065c22c75221fbe1042de0505086e6e2d954ea32289f7c",
+    "publishedReplayURL": "https://lldb.camanis.net/level/23/2",
+    "sourceTick": 93
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "CRISFN03.dat#8",
+      "packID": "fan:lldb-267"
+    },
+    "levelSourceRevision": "2ed764d3fae12252aae70b4949673ba5e248526d2c83ae1267ace9d861e91401",
+    "nativeReplaySHA256": "47bb9124f70b0a150e9a57dd5b9abd9743f08f5f6717d0a4ee6d1985c49bd90b",
+    "nativeTick": 346,
+    "publishedReplaySHA256": "3fd99e55cf782713aa739665d6237f434430ec1435f6e809f1fd5addbd44e3f9",
+    "publishedReplayURL": "https://lldb.camanis.net/level/267/9",
+    "sourceTick": 347
+  },
+  {
+    "adjustedEventIndex": 4,
+    "identity": {
+      "engine": "classic",
+      "levelID": "m91-1.dat#7",
+      "packID": "fan:lldb-362"
+    },
+    "levelSourceRevision": "0ef880b998629d223cf45a4f5cc5dbe1e0393446180d188558c09d7048ff6ed6",
+    "nativeReplaySHA256": "550bac31c23af62d2f9bd7f075888f684282f6e8aeb93b40f45e93fc8424beab",
+    "nativeTick": 650,
+    "publishedReplaySHA256": "cedf4daa88dae4201ba42c591da18e46b68a9c6ec20db6d1f924ff105afbb738",
+    "publishedReplayURL": "https://lldb.camanis.net/level/362/8",
+    "sourceTick": 649
+  },
+  {
+    "adjustedEventIndex": 0,
+    "identity": {
+      "engine": "classic",
+      "levelID": "levipak4.dat#0",
+      "packID": "fan:lldb-368"
+    },
+    "levelSourceRevision": "7499a209cd792fc43b3b35d7e389d780010014e5cb0ac5bbeac3510269b2e31a",
+    "nativeReplaySHA256": "403c280d953302a86e1e802b81760458b29d151f55e1583e7451482b8af6d2cf",
+    "nativeTick": 59,
+    "publishedReplaySHA256": "727877b9f39f82bca2da59ac02d26a6264e5d33ef0867d7803443d7701500baf",
+    "publishedReplayURL": "https://lldb.camanis.net/level/368/1",
+    "sourceTick": 60
+  },
+  {
+    "adjustedEventIndex": 1,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Mayhem.dat#2",
+      "packID": "fan:lldb-491"
+    },
+    "levelSourceRevision": "f648151520692b675936d0e254663d177e91370029534658305470bb740f89b6",
+    "nativeReplaySHA256": "d50fed5a36a68d3e441381e0acbfc79b79ce0342e18a555496745b9ef30018d0",
+    "nativeTick": 115,
+    "publishedReplaySHA256": "9cd0811bf68e4bba04795bd6079a76d490aaec5f0a42fb82d7b7eba9d0a309da",
+    "publishedReplayURL": "https://lldb.camanis.net/level/491/3",
+    "sourceTick": 114
+  },
+  {
+    "adjustedEventIndex": 2,
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Artful 2.DAT#3",
+      "packID": "fan:lldb-544"
+    },
+    "levelSourceRevision": "fc9991e07984a0eecfcd19be9ec2be19e8647a93b3282aa0eef563ceb5091446",
+    "nativeReplaySHA256": "9c18edf82c61999e54740f78e5939cc255a58596a09a389277c59470efcc7196",
+    "nativeTick": 148,
+    "publishedReplaySHA256": "76a3297ed5a3170ba6c95ee7050569e1a8fec394f3904350bd4f080d0ad08002",
+    "publishedReplayURL": "https://lldb.camanis.net/level/544/14",
+    "sourceTick": 150
+  },
+  {
+    "globalTickShift": -3,
+    "identity": {
+      "engine": "classic",
+      "levelID": "LEVEL000.DAT#5",
+      "packID": "fan:lldb-584"
+    },
+    "levelSourceRevision": "8266ec3e50eced182f0e60729f0654bdfabf71fa405f7af8aaa96cf147e51b31",
+    "nativeReplaySHA256": "e7daa62663219197f2b0796def5397d8a7ee5e540a7ca42c77b874e7e56d977a",
+    "publishedReplaySHA256": "356d87b7be80272f6c64c0545cf0ac197c34c03007655948431af47460892dec",
+    "publishedReplayURL": "https://lldb.camanis.net/level/584/6"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 166,
+        "sourceTick": 165
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 182,
+        "sourceTick": 181
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "ISteve02.dat#5",
+      "packID": "fan:lldb-23"
+    },
+    "levelSourceRevision": "51bfc657624a0e02b3633b8f9a7e6e82fb8eec0c81cd04b4e93ecb4305d855a0",
+    "nativeReplaySHA256": "016ee09559f4f77d8bebafd0881e69575fcaa6ca858c35dd6594c79c93e339fe",
+    "publishedReplaySHA256": "7511d8fec20ed25c6948c5ded5ddc4c362f0e229b5f9db161c5a0e92f9a6a879",
+    "publishedReplayURL": "https://lldb.camanis.net/level/23/6"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 192,
+        "sourceTick": 193
+      },
+      {
+        "eventIndex": 3,
+        "nativeTick": 390,
+        "sourceTick": 391
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "JANNPCK1.DAT#4",
+      "packID": "fan:lldb-231"
+    },
+    "levelSourceRevision": "aaa56f49a12a373893d97334fece3e11a69d3bb011c391ea30bff5de532d7772",
+    "nativeReplaySHA256": "f4f86e02b1eefdb8d5bd04e95b97252e62300d6cf52cd9907e88d1628fc7ca47",
+    "publishedReplaySHA256": "64b85844aa38da3884fb459ffa8507426b45ee95f6e1f945fa644ae4c4032603",
+    "publishedReplayURL": "https://lldb.camanis.net/level/231/5"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 2,
+        "nativeTick": 331,
+        "sourceTick": 330
+      },
+      {
+        "eventIndex": 3,
+        "nativeTick": 336,
+        "sourceTick": 335
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "JANNPCK2.DAT#0",
+      "packID": "fan:lldb-232"
+    },
+    "levelSourceRevision": "e62085da6e3e1c103fc6d01686a7a8f97ce81ab2062384b5de5fd836345e0fc6",
+    "nativeReplaySHA256": "b96bd161421721b9a762bd49ff4a144bfc630a12c45708fb01a3ff4f469e8d59",
+    "publishedReplaySHA256": "5747e7697718380cf1ca07dd995dc5edccb13aada62f2cb3216cbbf17a60096a",
+    "publishedReplayURL": "https://lldb.camanis.net/level/232/1"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 4,
+        "nativeTick": 1064,
+        "sourceTick": 1065
+      },
+      {
+        "eventIndex": 6,
+        "nativeTick": 1448,
+        "sourceTick": 1447
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "CRISFN01.dat#0",
+      "packID": "fan:lldb-265"
+    },
+    "levelSourceRevision": "c3b7844f28dc81810eaef140a7e6786b0b92f2edff29f7812d8b035b308e880f",
+    "nativeReplaySHA256": "06f989f2324c89d09493e212e265a7942e58971d0bbfdfe76ac06b4071b997be",
+    "publishedReplaySHA256": "5be86c3821a87c75ed6057704901cabdc277fbb5615d47902f1cf72877250355",
+    "publishedReplayURL": "https://lldb.camanis.net/level/265/1"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 0,
+        "nativeTick": 96,
+        "sourceTick": 97
+      },
+      {
+        "eventIndex": 5,
+        "nativeTick": 1183,
+        "sourceTick": 1182
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "CRISFN03.dat#4",
+      "packID": "fan:lldb-267"
+    },
+    "levelSourceRevision": "2ed764d3fae12252aae70b4949673ba5e248526d2c83ae1267ace9d861e91401",
+    "nativeReplaySHA256": "95bb7a37dfbfe612a52ffcc6c2da0f174989ab8f26ca92a2c93a3f0f2f7a3975",
+    "publishedReplaySHA256": "a9e7ce8c5390af03a48e0e338f6c3a4e017732ad1dcc037ad2418999b54291b9",
+    "publishedReplayURL": "https://lldb.camanis.net/level/267/5"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 234,
+        "sourceTick": 233
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 512,
+        "sourceTick": 511
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "pieuw01.dat#3",
+      "packID": "fan:lldb-393"
+    },
+    "levelSourceRevision": "6b599e67d0656e6a27f33f99916b9dafd21b04a1e7c88f8eda24e3083a087bc4",
+    "nativeReplaySHA256": "80b70caf86b7689fd395be1a6307a6fda34e482c9f065b64afa0fde5164a8e1d",
+    "publishedReplaySHA256": "40b3534821c9639aa1860dafa74269cae722c59defce554e2069d98d9280f151",
+    "publishedReplayURL": "https://lldb.camanis.net/level/393/4"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 842,
+        "sourceTick": 841
+      },
+      {
+        "eventIndex": 5,
+        "nativeTick": 1684,
+        "sourceTick": 1683
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Crazy.DAT#3",
+      "packID": "fan:lldb-478"
+    },
+    "levelSourceRevision": "8d65d85e93e941b486e9543d3b6d4435495d2e56eadb53d744bd1782eb051da6",
+    "nativeReplaySHA256": "01919c9c8bb93f33592de9e52895a66c6b48b8db588a91554f5d4b52d9a60132",
+    "publishedReplaySHA256": "cc9d85fa1d82ead16e6f61f073baa928f11a4e93d8b0fc8c3232ff6f985f47be",
+    "publishedReplayURL": "https://lldb.camanis.net/level/478/4"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 0,
+        "nativeTick": 70,
+        "sourceTick": 71
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 963,
+        "sourceTick": 964
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Wild.DAT#15",
+      "packID": "fan:lldb-479"
+    },
+    "levelSourceRevision": "9447da45833dc536df6fb4e25fd7dff06423ae5e67a769a9c9e94c9416ba439a",
+    "nativeReplaySHA256": "9de8058faf8a3876fd1fdc80b897b2146642f0dc3deb64eb12e16d9d04437ad5",
+    "publishedReplaySHA256": "0106c196012e9724fd627c5ed3a662583eecb0914f1e6c13c7fb702a89ad3457",
+    "publishedReplayURL": "https://lldb.camanis.net/level/479/16"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 0,
+        "nativeTick": 97,
+        "sourceTick": 96
+      },
+      {
+        "eventIndex": 1,
+        "nativeTick": 150,
+        "sourceTick": 149
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Wild.DAT#19",
+      "packID": "fan:lldb-479"
+    },
+    "levelSourceRevision": "9447da45833dc536df6fb4e25fd7dff06423ae5e67a769a9c9e94c9416ba439a",
+    "nativeReplaySHA256": "6107bd41494f7c1770346f5485dfa76daea42b4593be39fb8461e8721413fc00",
+    "publishedReplaySHA256": "e8d87bfdfb7b3aa2d5573db673f824047d80ca75ebe1e1d24bd53b4d4b3c1eae",
+    "publishedReplayURL": "https://lldb.camanis.net/level/479/20"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 430,
+        "sourceTick": 429
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 608,
+        "sourceTick": 607
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Mayhem.dat#13",
+      "packID": "fan:lldb-491"
+    },
+    "levelSourceRevision": "f648151520692b675936d0e254663d177e91370029534658305470bb740f89b6",
+    "nativeReplaySHA256": "110e6c49ec2ef6cefa84b15b81235d39fddf8c7ea40285443e9312a1f2e0f3df",
+    "publishedReplaySHA256": "fa7fff6f2ad2f89fe6862cdbcd1fb189ce80550f36b7181e02c88c54aa9ad20e",
+    "publishedReplayURL": "https://lldb.camanis.net/level/491/14"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 0,
+        "nativeTick": 163,
+        "sourceTick": 162
+      },
+      {
+        "eventIndex": 3,
+        "nativeTick": 364,
+        "sourceTick": 365
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Peace 1.DAT#2",
+      "packID": "fan:lldb-542"
+    },
+    "levelSourceRevision": "f1ecfbe225c1039af701815227b4af13bcf5f45ac22c7e672357b5ff485e659e",
+    "nativeReplaySHA256": "32add0a71d606fb0e9d970d409f10aba18e9740b7f615f8dc5e4cd8f6b05f4eb",
+    "publishedReplaySHA256": "2566632042908e0405eb85877be9dd1f331660a76cb77b6592e2628db5a975b2",
+    "publishedReplayURL": "https://lldb.camanis.net/level/542/3"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 234,
+        "sourceTick": 233
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 512,
+        "sourceTick": 511
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Artful 1.DAT#2",
+      "packID": "fan:lldb-544"
+    },
+    "levelSourceRevision": "fc9991e07984a0eecfcd19be9ec2be19e8647a93b3282aa0eef563ceb5091446",
+    "nativeReplaySHA256": "0fea5ac3abea8435e34b286a03d61a8bf68361f96b5966e43fbb0cb52b8ab83b",
+    "publishedReplaySHA256": "40b3534821c9639aa1860dafa74269cae722c59defce554e2069d98d9280f151",
+    "publishedReplayURL": "https://lldb.camanis.net/level/544/3"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 0,
+        "nativeTick": 75,
+        "sourceTick": 76
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 120,
+        "sourceTick": 119
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Artful 2.DAT#5",
+      "packID": "fan:lldb-544"
+    },
+    "levelSourceRevision": "fc9991e07984a0eecfcd19be9ec2be19e8647a93b3282aa0eef563ceb5091446",
+    "nativeReplaySHA256": "8184af3a929c3573e170e22a15bab0321cf4e8a910d73768099f1465aa172fe6",
+    "publishedReplaySHA256": "6edfd1a66d3ce93cb17c9c4ecc03f258bfd1c145a6ab6775d71b3ad3ff983374",
+    "publishedReplayURL": "https://lldb.camanis.net/level/544/16"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 0,
+        "nativeTick": 90,
+        "sourceTick": 91
+      },
+      {
+        "eventIndex": 4,
+        "nativeTick": 500,
+        "sourceTick": 499
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "ClamSpam03.dat#0",
+      "packID": "fan:lldb-73"
+    },
+    "levelSourceRevision": "304d238ac01947a85b4cee658e0539ff9aac9636b7bb7a2f62ad1aa83239fda6",
+    "nativeReplaySHA256": "aadff6e64d2555cff2955bc27e03ac24a7a18a37c3ef814c3845f8b4818751d0",
+    "publishedReplaySHA256": "44921c2971b1ee8ee5aa9c3a5a5f11fc447e862493d3e1429ba2d097e6d3d51d",
+    "publishedReplayURL": "https://lldb.camanis.net/level/73/1"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 3,
+        "nativeTick": 324,
+        "sourceTick": 325
+      },
+      {
+        "eventIndex": 5,
+        "nativeTick": 354,
+        "sourceTick": 353
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "CSTame1.dat#8",
+      "packID": "fan:lldb-83"
+    },
+    "levelSourceRevision": "51faf188e3a7633053bf8f02596be69bb8a6e506d29eef06facb2aeaf9ca4baa",
+    "nativeReplaySHA256": "863caf1879dfb7a6334570c401496d0f63f57056e7341bdd3574609a95cc9e66",
+    "publishedReplaySHA256": "dd13a25b09a96ba96a95b56e3b7578bda90f5cb0d4bbe41dfda4fc6249e104c9",
+    "publishedReplayURL": "https://lldb.camanis.net/level/83/9"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 65,
+        "sourceTick": 64
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 176,
+        "sourceTick": 175
+      },
+      {
+        "eventIndex": 3,
+        "nativeTick": 340,
+        "sourceTick": 339
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Crystal Remakes.dat#6",
+      "packID": "fan:lldb-130"
+    },
+    "levelSourceRevision": "9e6cc8eae3e6fefd3a20fc4a734c88c37cb09a2a92a189bc86533c279fcbbb55",
+    "nativeReplaySHA256": "154e31b5e3537a85efc7fd54ec5a2cba8847d6b0ea693d8dcc754d7e19e58eb5",
+    "publishedReplaySHA256": "a8bcd907d2b5c7d326f4d27ea66fda6df698e72644a34295da64822a9bc59d87",
+    "publishedReplayURL": "https://lldb.camanis.net/level/130/7"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 0,
+        "nativeTick": 190,
+        "sourceTick": 191
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 408,
+        "sourceTick": 409
+      },
+      {
+        "eventIndex": 4,
+        "nativeTick": 861,
+        "sourceTick": 860
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "ISteve02.dat#8",
+      "packID": "fan:lldb-23"
+    },
+    "levelSourceRevision": "51bfc657624a0e02b3633b8f9a7e6e82fb8eec0c81cd04b4e93ecb4305d855a0",
+    "nativeReplaySHA256": "1203743d85f4e395573bacc6d477ef6843c5245d6b446b4b1f25920265e05df2",
+    "publishedReplaySHA256": "789eec89bb25c6a7f4b01a5811c8ee65a8e12309873eb65d5864b68478604ad4",
+    "publishedReplayURL": "https://lldb.camanis.net/level/23/9"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 121,
+        "sourceTick": 120
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 188,
+        "sourceTick": 187
+      },
+      {
+        "eventIndex": 4,
+        "nativeTick": 260,
+        "sourceTick": 261
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "EMPACK.DAT#0",
+      "packID": "fan:lldb-230"
+    },
+    "levelSourceRevision": "11b17987dd468fd902a7a37fc8709f67c866de48bbf92d53a80c9c6cc2264cde",
+    "nativeReplaySHA256": "2d3b68c079a117cc0fd4b70c9a790da4ddc04615c96f7aa515bf8c495e8ac0e1",
+    "publishedReplaySHA256": "6d8359fa9494aa3b1412972fdf59184eefe841613bf422ac9dd1f2cdc035c2dc",
+    "publishedReplayURL": "https://lldb.camanis.net/level/230/1"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 293,
+        "sourceTick": 292
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 513,
+        "sourceTick": 512
+      },
+      {
+        "eventIndex": 3,
+        "nativeTick": 732,
+        "sourceTick": 731
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "CRISFN02.dat#2",
+      "packID": "fan:lldb-266"
+    },
+    "levelSourceRevision": "ca8350f116a45b7c71d03cc3e236ad90a91dd5f176e930f038835793c1ca2969",
+    "nativeReplaySHA256": "846816760ef527d5dd9c414a4ffa2f05e8f1d7b13b1b18c49abcf7a2e17fe453",
+    "publishedReplaySHA256": "6b5e7277de44b21ee605dab44afe43a5856bc6287edbb421fc4d85f727b99823",
+    "publishedReplayURL": "https://lldb.camanis.net/level/266/3"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 0,
+        "nativeTick": 100,
+        "sourceTick": 101
+      },
+      {
+        "eventIndex": 1,
+        "nativeTick": 383,
+        "sourceTick": 382
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 542,
+        "sourceTick": 541
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "GARJEN01.dat#4",
+      "packID": "fan:lldb-281"
+    },
+    "levelSourceRevision": "e91f4a1eed1e06173322ea4a151bf814fd820b28aada8540709c8b657223933d",
+    "nativeReplaySHA256": "b049c1458854c86232d0b9767cc6879b281b4e13a413ce90c857baeeb0344cd1",
+    "publishedReplaySHA256": "75c851822e41d78d48f84976bf1d75f646957d8e0d8cd5cd04d229c01d6f7ad4",
+    "publishedReplayURL": "https://lldb.camanis.net/level/281/5"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 261,
+        "sourceTick": 260
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 416,
+        "sourceTick": 417
+      },
+      {
+        "eventIndex": 3,
+        "nativeTick": 683,
+        "sourceTick": 682
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmings Plus DOS Project - 09 - Medi (Part 3).dat#3",
+      "packID": "fan:lldb-553"
+    },
+    "levelSourceRevision": "b9b763a725cf6c717f0c0c4ce65619cddbc0deadb2aef9acb55f1dd87b9483ec",
+    "nativeReplaySHA256": "2091976a29eafcc8c093290f5759edc59661aaf7954623fe943d50c6a2e58072",
+    "publishedReplaySHA256": "2e014e4b016857d090efb1fff031132bf8dd5b3b3175e72667cdaf8c3153c2f3",
+    "publishedReplayURL": "https://lldb.camanis.net/level/553/24"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 4,
+        "nativeTick": 283,
+        "sourceTick": 282
+      },
+      {
+        "eventIndex": 5,
+        "nativeTick": 335,
+        "sourceTick": 334
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Gronklems #1.dat#4",
+      "packID": "fan:lldb-193"
+    },
+    "levelSourceRevision": "f8b9a3fb9d13756772fa9ce75bd6fb9afc80ad2149c58171849e53789c18cbd9",
+    "nativeReplaySHA256": "9c273f40cbec4fbb47191db89c91fd268f131a7a77284cc4aabb4729486d421a",
+    "publishedReplaySHA256": "cd354822b3979f7149153d3f775a1bde56158d662a62ab755aa6984ca369fb91",
+    "publishedReplayURL": "https://lldb.camanis.net/level/193/5"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 2,
+        "nativeTick": 557,
+        "sourceTick": 556
+      },
+      {
+        "eventIndex": 3,
+        "nativeTick": 1072,
+        "sourceTick": 1073
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Taxing.dat#26",
+      "packID": "fan:lldb-490"
+    },
+    "levelSourceRevision": "38f13b44cfdb5722c4c1438286a633a0c3f6234d72625152cd311f2294445223",
+    "nativeReplaySHA256": "4bf8672a4a2cf84c9031993aa677cea88a329f64c8fe5ab683f5bde5c6731b59",
+    "publishedReplaySHA256": "5aaba329f3f3466f1f566dcda40b7359611241610ee523d9d80d4cfae15a871f",
+    "publishedReplayURL": "https://lldb.camanis.net/level/490/27"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 259,
+        "sourceTick": 260
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 285,
+        "sourceTick": 286
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Peace 2.DAT#9",
+      "packID": "fan:lldb-542"
+    },
+    "levelSourceRevision": "f1ecfbe225c1039af701815227b4af13bcf5f45ac22c7e672357b5ff485e659e",
+    "nativeReplaySHA256": "24c98cd2b40bd400f7c76beef0e8ec361a48b808d3bd4bfd6bc7d96083c16f01",
+    "publishedReplaySHA256": "053648240ffb925976d3d11f6bc2ad631816743b3de7130c4644edaae39aa319",
+    "publishedReplayURL": "https://lldb.camanis.net/level/542/20"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 2,
+        "nativeTick": 297,
+        "sourceTick": 296
+      },
+      {
+        "eventIndex": 3,
+        "nativeTick": 344,
+        "sourceTick": 345
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Ji Hoon Heaven 1.DAT#9",
+      "packID": "fan:lldb-547"
+    },
+    "levelSourceRevision": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971",
+    "nativeReplaySHA256": "c491e73616c1857e0a7553764b4e695dc9512f7bde1fe97e6e8abd72cb4dc762",
+    "publishedReplaySHA256": "435b19abf6b660440c2c1a1d6a6c224c2de6f24a6653553936b8b35daf87988c",
+    "publishedReplayURL": "https://lldb.camanis.net/level/547/10"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 71,
+        "sourceTick": 70
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 89,
+        "sourceTick": 87
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "geooPkG.dat#0",
+      "packID": "fan:lldb-108"
+    },
+    "levelSourceRevision": "fd57fd4e5d9eebedac039e3abc8df690d0e2893d26b7599faaa89861cd55a041",
+    "nativeReplaySHA256": "3f4d27134ef37071c6cd87f3ac6ce2e97c39619cebb569e95d677ac965c91308",
+    "publishedReplaySHA256": "c07b8126d0b301d458f899b0ff73341a8bf973e58e95cacf72487e9a65b03dfe",
+    "publishedReplayURL": "https://lldb.camanis.net/level/108/1"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 2,
+        "nativeTick": 260,
+        "sourceTick": 258
+      },
+      {
+        "eventIndex": 3,
+        "nativeTick": 482,
+        "sourceTick": 481
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Yawg06.dat#0",
+      "packID": "fan:lldb-161"
+    },
+    "levelSourceRevision": "84402d7df2793ce23a091ce5d22126a02943fe7ad2cdbd7c189e7f67ec6b7efd",
+    "nativeReplaySHA256": "72301398c7e8e5bdfc0bfb662b1ff89442a31864e037ffba4404a09f00402259",
+    "publishedReplaySHA256": "8ca946d191dc86f0a7fd60041d4b6fccc5f869b9c57a3264c1fe1b865676dabf",
+    "publishedReplayURL": "https://lldb.camanis.net/level/161/1"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 0,
+        "nativeTick": 65,
+        "sourceTick": 64
+      },
+      {
+        "eventIndex": 5,
+        "nativeTick": 872,
+        "sourceTick": 874
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "ANTHPCK3.DAT#2",
+      "packID": "fan:lldb-223"
+    },
+    "levelSourceRevision": "338c8cfbb37a5eaf6cb103e85aa2d5e40b90300abfb06dcbb503131b5e8095e1",
+    "nativeReplaySHA256": "dc974bbeae3d3bc36821335d5e3d5b3ef511acdce01987d0b6856fd5282ad61f",
+    "publishedReplaySHA256": "ea91a962131c8fd0726cdacd4c69045c4fd2f74cc5a53d6a240f9cc832a797a6",
+    "publishedReplayURL": "https://lldb.camanis.net/level/223/3"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 2,
+        "nativeTick": 122,
+        "sourceTick": 120
+      },
+      {
+        "eventIndex": 3,
+        "nativeTick": 224,
+        "sourceTick": 225
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "ANTHPCK4.DAT#1",
+      "packID": "fan:lldb-224"
+    },
+    "levelSourceRevision": "b2818e41664bbcc98870c9a7c5e6f20258004495061503f5c373fa255188223d",
+    "nativeReplaySHA256": "d1a4fbeaeab60c44a58f6cdbc5fb8e36d11658e660ebbba66ede6d429078ee73",
+    "publishedReplaySHA256": "5745cd5fdadfcb67c4614ae61bbb8190a0d42885312c596caae4b21e98589bd4",
+    "publishedReplayURL": "https://lldb.camanis.net/level/224/2"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 0,
+        "nativeTick": 122,
+        "sourceTick": 124
+      },
+      {
+        "eventIndex": 4,
+        "nativeTick": 438,
+        "sourceTick": 436
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "ANTHPCK4.DAT#4",
+      "packID": "fan:lldb-224"
+    },
+    "levelSourceRevision": "b2818e41664bbcc98870c9a7c5e6f20258004495061503f5c373fa255188223d",
+    "nativeReplaySHA256": "58042d5627e6c4634d337c0ce10f0dd7d2b9e92c2f23d9caa5c5f50a337b9222",
+    "publishedReplaySHA256": "1402fca9956cc467a9b3d5a33a424497265e7ab9c5531d6e876d401a8336d30a",
+    "publishedReplayURL": "https://lldb.camanis.net/level/224/5"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 732,
+        "sourceTick": 731
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 824,
+        "sourceTick": 822
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "CRISFN09.dat#5",
+      "packID": "fan:lldb-273"
+    },
+    "levelSourceRevision": "1a9fbf73c980f059ffc642aa2a91ee39a5a8809dad8109177ff34c36b95fe292",
+    "nativeReplaySHA256": "0dd0298c354049b8bc3f5abb52c288b1ae285ce229f40177cf84f5a717d136ba",
+    "publishedReplaySHA256": "ed5e164dfc6ed2ccb1c42dabd855975854804308c978df40994b4afc13d0e6ad",
+    "publishedReplayURL": "https://lldb.camanis.net/level/273/6"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 3,
+        "nativeTick": 494,
+        "sourceTick": 492
+      },
+      {
+        "eventIndex": 4,
+        "nativeTick": 550,
+        "sourceTick": 549
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "TWPAK13.dat#4",
+      "packID": "fan:lldb-315"
+    },
+    "levelSourceRevision": "86a8a54b434348048c63f9b2792cddce345a2ee5f2aa445c1d0b278671c79f15",
+    "nativeReplaySHA256": "92583324a6e1aa5651e68c74b5ffc7ed7d14963c088c2400e1f487c5b8dca646",
+    "publishedReplaySHA256": "86e16be38d6164e4b5ae72b837c69725dca458a384f3d3f45206a0da1ba634ec",
+    "publishedReplayURL": "https://lldb.camanis.net/level/315/5"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 4,
+        "nativeTick": 723,
+        "sourceTick": 722
+      },
+      {
+        "eventIndex": 5,
+        "nativeTick": 807,
+        "sourceTick": 805
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "pieuw01.dat#7",
+      "packID": "fan:lldb-393"
+    },
+    "levelSourceRevision": "6b599e67d0656e6a27f33f99916b9dafd21b04a1e7c88f8eda24e3083a087bc4",
+    "nativeReplaySHA256": "02f23136ba42c21ef6e999b165f4eb3a3be0b05bd3abe9eed2cee9502f2925f9",
+    "publishedReplaySHA256": "7ac50552e876d0ff9ea44d735db1986f42b668ff2ff0de286ec6b31ec3c12707",
+    "publishedReplayURL": "https://lldb.camanis.net/level/393/8"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 139,
+        "sourceTick": 137
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 325,
+        "sourceTick": 324
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "pieuw01.dat#8",
+      "packID": "fan:lldb-393"
+    },
+    "levelSourceRevision": "6b599e67d0656e6a27f33f99916b9dafd21b04a1e7c88f8eda24e3083a087bc4",
+    "nativeReplaySHA256": "f19cb655ac51550629bdee66b6d1bd25d2e6d596b2c6ceda3f947f365c2f40f5",
+    "publishedReplaySHA256": "9e15780e1d48e81806392c8ef8b588c50e7da3f400ca6ffe0f86d33943c77bd9",
+    "publishedReplayURL": "https://lldb.camanis.net/level/393/9"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 2,
+        "nativeTick": 181,
+        "sourceTick": 179
+      },
+      {
+        "eventIndex": 3,
+        "nativeTick": 386,
+        "sourceTick": 384
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Fun.dat#11",
+      "packID": "fan:lldb-488"
+    },
+    "levelSourceRevision": "75d0248a498644374f409fccfe3171e8c50da5def04cff10924e0639942ce515",
+    "nativeReplaySHA256": "5d9250662836dc3eb4382050bbe60fb4b5a7d46ac9ed7d86b22658536e31a68e",
+    "publishedReplaySHA256": "db19e79510a099dca63450bafca484a312413a9cb355fdde8b578ee3885a4d62",
+    "publishedReplayURL": "https://lldb.camanis.net/level/488/12"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 2,
+        "nativeTick": 221,
+        "sourceTick": 219
+      },
+      {
+        "eventIndex": 6,
+        "nativeTick": 424,
+        "sourceTick": 423
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Fun.dat#15",
+      "packID": "fan:lldb-488"
+    },
+    "levelSourceRevision": "75d0248a498644374f409fccfe3171e8c50da5def04cff10924e0639942ce515",
+    "nativeReplaySHA256": "8dd82555177cb15dd258702b8cc93ccb0985ccff835bff8db807d12910697782",
+    "publishedReplaySHA256": "be29d2998e80eb361e9210bf30a406df0eeacf20d13f8daf50a8110cd992bd41",
+    "publishedReplayURL": "https://lldb.camanis.net/level/488/16"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 137,
+        "sourceTick": 136
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 198,
+        "sourceTick": 196
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Tricky.dat#11",
+      "packID": "fan:lldb-489"
+    },
+    "levelSourceRevision": "d3a60e754dd580f50f3c846b76a977903ccb3ca4997613cd7cde7879d632b080",
+    "nativeReplaySHA256": "781fb748c621d8c31db4ad1b72535d2d0215c2c492be07eb404bc26af566f653",
+    "publishedReplaySHA256": "b0b23a03517ff5b81ca9ec728639f3b522e5a84265f1e95752f51b6144e5cfbc",
+    "publishedReplayURL": "https://lldb.camanis.net/level/489/12"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 5,
+        "nativeTick": 851,
+        "sourceTick": 850
+      },
+      {
+        "eventIndex": 6,
+        "nativeTick": 915,
+        "sourceTick": 913
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Present.dat#21",
+      "packID": "fan:lldb-492"
+    },
+    "levelSourceRevision": "52c417ec72a99555caa15c1fb308a618759532d2059baefca16c67417d0a5c2c",
+    "nativeReplaySHA256": "cb898e2d1d98dea90f91a3ee851a0359ffdf15b847571175119d4909c9a1baad",
+    "publishedReplaySHA256": "a04057437608a9d9e408c4d70e362ad3df38b2a853e5613b656f12d5fe71b6eb",
+    "publishedReplayURL": "https://lldb.camanis.net/level/492/22"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 86,
+        "sourceTick": 85
+      },
+      {
+        "eventIndex": 7,
+        "nativeTick": 869,
+        "sourceTick": 867
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "KillerMaster 1 Tame 2.dat#8",
+      "packID": "fan:lldb-505"
+    },
+    "levelSourceRevision": "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9",
+    "nativeReplaySHA256": "15246540f777cbefc7036ea0c6b287db8d25ea95cc2eb92522e25069271d1ac2",
+    "publishedReplaySHA256": "d4c2d61c4168fa79e370b6b7a9790c38f5f2934a4d568272dbbc6fbd53bd7691",
+    "publishedReplayURL": "https://lldb.camanis.net/level/505/19"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 0,
+        "nativeTick": 151,
+        "sourceTick": 153
+      },
+      {
+        "eventIndex": 5,
+        "nativeTick": 822,
+        "sourceTick": 820
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Fun 3.DAT#3",
+      "packID": "fan:lldb-526"
+    },
+    "levelSourceRevision": "9edfafc47a1495e5e8db4bba4f9c80690fa95482242f09e9955f013da9af6b7c",
+    "nativeReplaySHA256": "291d78bfffe13059d13fde12f1ca2f7fe56939a6911a2f25246a70c33367ec6a",
+    "publishedReplaySHA256": "398dc2cfe726eb6cb9f0d2fdba1a42e32dc053191ba024544a31105fe2184368",
+    "publishedReplayURL": "https://lldb.camanis.net/level/526/17"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 4,
+        "nativeTick": 1023,
+        "sourceTick": 1021
+      },
+      {
+        "eventIndex": 5,
+        "nativeTick": 1092,
+        "sourceTick": 1090
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "OhNoMorecLemmings Tame 2.DAT#8",
+      "packID": "fan:lldb-530"
+    },
+    "levelSourceRevision": "b4cce71d3c06d23b8211c86de6f76ff300331d8adc0c121d3f0924ce4a23037a",
+    "nativeReplaySHA256": "1042865da4ee0fcf266c427f0717a4326310b4649f1cae02a0beb1e0d372e9d7",
+    "publishedReplaySHA256": "fd9ece1b62c9f482cffc5d8191e1d5c24d0b9537cf779becce128d4798c83ade",
+    "publishedReplayURL": "https://lldb.camanis.net/level/530/19"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 335,
+        "sourceTick": 336
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 373,
+        "sourceTick": 371
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Artful 1.DAT#8",
+      "packID": "fan:lldb-544"
+    },
+    "levelSourceRevision": "fc9991e07984a0eecfcd19be9ec2be19e8647a93b3282aa0eef563ceb5091446",
+    "nativeReplaySHA256": "c154746a5edf0f0696a286a4cd2b8d3d99cf0574df125997a027c8c4cba10cbe",
+    "publishedReplaySHA256": "f6d095f950cfa1d2156d9b2fdae9a8cb6ccb8eec3202935c94303b3cda9f5e4a",
+    "publishedReplayURL": "https://lldb.camanis.net/level/544/9"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 0,
+        "nativeTick": 438,
+        "sourceTick": 439
+      },
+      {
+        "eventIndex": 6,
+        "nativeTick": 1386,
+        "sourceTick": 1384
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Artful 2.DAT#9",
+      "packID": "fan:lldb-544"
+    },
+    "levelSourceRevision": "fc9991e07984a0eecfcd19be9ec2be19e8647a93b3282aa0eef563ceb5091446",
+    "nativeReplaySHA256": "5394055b1b28f0bf9e98d520b96a63f5f5adf0b1018dd0cbdc03f1f6a6b7877c",
+    "publishedReplaySHA256": "431cdcfd7a1d818c5bf214d73cdcebe1d547eedf66e51429f2ddfedfb917fd22",
+    "publishedReplayURL": "https://lldb.camanis.net/level/544/20"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 0,
+        "nativeTick": 199,
+        "sourceTick": 201
+      },
+      {
+        "eventIndex": 1,
+        "nativeTick": 204,
+        "sourceTick": 203
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Insane 1.DAT#7",
+      "packID": "fan:lldb-545"
+    },
+    "levelSourceRevision": "0b5e4bfede58cb4d8acee4ff5fb4d28ef912a472c1a5405271dc61453d7292f5",
+    "nativeReplaySHA256": "bd1b44670eae2879d6dc3c919e84a6093d7261080eff88be82851212e8e9f225",
+    "publishedReplaySHA256": "d845cc6b82cae401f5236bcda6b12ea25f4278ea6ff660de1886e21f997427a7",
+    "publishedReplayURL": "https://lldb.camanis.net/level/545/8"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 139,
+        "sourceTick": 137
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 325,
+        "sourceTick": 324
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Pieuw 2007 Insane 2.DAT#0",
+      "packID": "fan:lldb-545"
+    },
+    "levelSourceRevision": "0b5e4bfede58cb4d8acee4ff5fb4d28ef912a472c1a5405271dc61453d7292f5",
+    "nativeReplaySHA256": "f891ce82ffeb847db51c0df4ce9e31057f8298eb2b75c4e1e4d038f1d747293d",
+    "publishedReplaySHA256": "9e15780e1d48e81806392c8ef8b588c50e7da3f400ca6ffe0f86d33943c77bd9",
+    "publishedReplayURL": "https://lldb.camanis.net/level/545/11"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 0,
+        "nativeTick": 67,
+        "sourceTick": 68
+      },
+      {
+        "eventIndex": 3,
+        "nativeTick": 178,
+        "sourceTick": 176
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#5",
+      "packID": "fan:lldb-553"
+    },
+    "levelSourceRevision": "b9b763a725cf6c717f0c0c4ce65619cddbc0deadb2aef9acb55f1dd87b9483ec",
+    "nativeReplaySHA256": "387043973a3aba64675aebc04e0490b0837b1f382042252c2477c0a1aa66840b",
+    "publishedReplaySHA256": "30e4055529766e0b29a9f3ceb13bc404758960e6b45223fc6bd5d90f5dcac3bc",
+    "publishedReplayURL": "https://lldb.camanis.net/level/553/16"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 172,
+        "sourceTick": 174
+      },
+      {
+        "eventIndex": 3,
+        "nativeTick": 226,
+        "sourceTick": 225
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "brickpk2.dat#0",
+      "packID": "fan:lldb-559"
+    },
+    "levelSourceRevision": "8d0c1f847913a4f82cfc2f0151384aa5147b5a6b30a414f60cfeeb61802d4253",
+    "nativeReplaySHA256": "6eea1a22584378dc77111b305d7bf6c5c004b2a7eed158e24826e000cf62f77b",
+    "publishedReplaySHA256": "7b1796a13e114e92f82a201654c62f2eaee3bd45d550c6b33d8ce2bed75df26d",
+    "publishedReplayURL": "https://lldb.camanis.net/level/559/1"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 112,
+        "sourceTick": 113
+      },
+      {
+        "eventIndex": 4,
+        "nativeTick": 422,
+        "sourceTick": 421
+      },
+      {
+        "eventIndex": 5,
+        "nativeTick": 690,
+        "sourceTick": 688
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "geooPk1.dat#3",
+      "packID": "fan:lldb-2"
+    },
+    "levelSourceRevision": "4b7101f984e3ae81971b18a5ae393ca4012695528c1bbd5bb89bec70f188497f",
+    "nativeReplaySHA256": "c61efe6a5d5b745295c935f834532477d2e7f89bd2318ca41dd56ea22c583766",
+    "publishedReplaySHA256": "331c4e8ebb49109e4f0b6686adbb8c6454d15b40336a45f3ec8855d4ce2cd429",
+    "publishedReplayURL": "https://lldb.camanis.net/level/2/4"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 0,
+        "nativeTick": 54,
+        "sourceTick": 56
+      },
+      {
+        "eventIndex": 3,
+        "nativeTick": 237,
+        "sourceTick": 235
+      },
+      {
+        "eventIndex": 4,
+        "nativeTick": 444,
+        "sourceTick": 442
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "AkseliPack01.dat#0",
+      "packID": "fan:lldb-220"
+    },
+    "levelSourceRevision": "91d3fe47ec7780e3aaa34c45fcb0f77d14e445adc7132ab4e1a1c842fa50f198",
+    "nativeReplaySHA256": "0b968e2f0cf80f0413c1373e6d19c0d2ad80d488027397fdc38a7324e56c5dec",
+    "publishedReplaySHA256": "0d87fee9d534986bf4f3aafa37813886e5d944568aa69de053b155bde0d3741e",
+    "publishedReplayURL": "https://lldb.camanis.net/level/220/1"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 0,
+        "nativeTick": 113,
+        "sourceTick": 111
+      },
+      {
+        "eventIndex": 1,
+        "nativeTick": 147,
+        "sourceTick": 146
+      },
+      {
+        "eventIndex": 3,
+        "nativeTick": 264,
+        "sourceTick": 263
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "LDChallenge02.dat#2",
+      "packID": "fan:lldb-431"
+    },
+    "levelSourceRevision": "859c48953f7e8237e88f7ad1382bb82854235bb6eba680c24431e2c4664bbf5a",
+    "nativeReplaySHA256": "d057d3cca0e2bad6bb9f4bccc706166f898b6fcb1715aff59fcf670ad8acdba0",
+    "publishedReplaySHA256": "5d90b13b51f7dd27900775ea199ccc3103ac740efc0ebfa3bb3fd7df244257c3",
+    "publishedReplayURL": "https://lldb.camanis.net/level/431/3"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 246,
+        "sourceTick": 245
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 358,
+        "sourceTick": 357
+      },
+      {
+        "eventIndex": 3,
+        "nativeTick": 481,
+        "sourceTick": 479
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Taxing.dat#0",
+      "packID": "fan:lldb-490"
+    },
+    "levelSourceRevision": "38f13b44cfdb5722c4c1438286a633a0c3f6234d72625152cd311f2294445223",
+    "nativeReplaySHA256": "5ed0df75d2550f439e917d786880da4941b3ebadefe5484d306933876d4964c1",
+    "publishedReplaySHA256": "098d3e3e8510eb66e9a783b04b10d48cdd433d605bd160a534a7a49b6cd33dc8",
+    "publishedReplayURL": "https://lldb.camanis.net/level/490/1"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 2,
+        "nativeTick": 462,
+        "sourceTick": 461
+      },
+      {
+        "eventIndex": 3,
+        "nativeTick": 681,
+        "sourceTick": 679
+      },
+      {
+        "eventIndex": 5,
+        "nativeTick": 1049,
+        "sourceTick": 1047
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "ssam1221 Tame 1.dat#2",
+      "packID": "fan:lldb-512"
+    },
+    "levelSourceRevision": "1962aedf16c3708f1269c3e8fcd7099d81f6e237a93b2544c5c343c18dd08a11",
+    "nativeReplaySHA256": "1fb53c4c722d923c6d91fd2db1f8bf46075ba9d37d72e7f4104d7f176998ece7",
+    "publishedReplaySHA256": "5696736457d245ef7603976b32cdb01cced19e991f01325508bfe42b2114fb11",
+    "publishedReplayURL": "https://lldb.camanis.net/level/512/3"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 2,
+        "nativeTick": 123,
+        "sourceTick": 125
+      },
+      {
+        "eventIndex": 4,
+        "nativeTick": 229,
+        "sourceTick": 231
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "PSP Special2.dat#1",
+      "packID": "fan:lldb-218"
+    },
+    "levelSourceRevision": "ff0843de66881e067975462288b74fefcbf0f28e63b1e47e026cd8232ebfcf53",
+    "nativeReplaySHA256": "aef9888525b3220db2002dbc11289f901ea177a582bbc70d74344fc7eda52a1d",
+    "publishedReplaySHA256": "4f98ba33b2741018b93c52bfa45195564f39c5f6f31f277e7edc9b68a832b621",
+    "publishedReplayURL": "https://lldb.camanis.net/level/218/2"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 0,
+        "nativeTick": 213,
+        "sourceTick": 215
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 324,
+        "sourceTick": 323
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "JANNPCK1.DAT#8",
+      "packID": "fan:lldb-231"
+    },
+    "levelSourceRevision": "aaa56f49a12a373893d97334fece3e11a69d3bb011c391ea30bff5de532d7772",
+    "nativeReplaySHA256": "d7bda8f014bb3941fc7da2b01f1236aa188a43392d1ee2c9b649cf3f83f47049",
+    "publishedReplaySHA256": "1882a7789942a3f769aae5d16bafd69df89980e32e59d2f4c92819c41ac9d70f",
+    "publishedReplayURL": "https://lldb.camanis.net/level/231/9"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 2,
+        "nativeTick": 972,
+        "sourceTick": 974
+      },
+      {
+        "eventIndex": 5,
+        "nativeTick": 1124,
+        "sourceTick": 1122
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "LARSPACK.DAT#5",
+      "packID": "fan:lldb-243"
+    },
+    "levelSourceRevision": "f08272503d1ba8802029294d01fdfac5639407f8fdc3bf1d96232847d4e4e744",
+    "nativeReplaySHA256": "67b147d012e9d373cd0b2aeecf0a280022c935de19655be8007d3d9c4eb4b388",
+    "publishedReplaySHA256": "8678c97197cc5b418ed610cc4f6bd8996019bef5a3362ecd876471d5d1ffb37f",
+    "publishedReplayURL": "https://lldb.camanis.net/level/243/6"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 214,
+        "sourceTick": 215
+      },
+      {
+        "eventIndex": 3,
+        "nativeTick": 695,
+        "sourceTick": 697
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "GARJEN09.dat#4",
+      "packID": "fan:lldb-289"
+    },
+    "levelSourceRevision": "43bed93b287d3485e1b010f3d3fd2b3e780cabbdf425b5e82f2f481c0c2f08e4",
+    "nativeReplaySHA256": "2e1c36f90f53b063f74e6e045217c2d39bac9feee42bf70b198897640de3bd57",
+    "publishedReplaySHA256": "86ac0ba8d3a341b23360d49f3cd71e237c558229eff34f64286eb8ad33b61e4c",
+    "publishedReplayURL": "https://lldb.camanis.net/level/289/5"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 7,
+        "nativeTick": 919,
+        "sourceTick": 917
+      },
+      {
+        "eventIndex": 8,
+        "nativeTick": 1111,
+        "sourceTick": 1109
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Eymerich02.dat#1",
+      "packID": "fan:lldb-4"
+    },
+    "levelSourceRevision": "981566a7a5ae262b26b16a25d79e86f4d6f2363bafd24cb69b4e10465751961f",
+    "nativeReplaySHA256": "baf4b2899038be0a17e94cab9c8f9ea22c071a52a2c3dcc8e7e57bfa26163da4",
+    "publishedReplaySHA256": "a40d3e58de70a93e0df7440dd1344077ca945ebc41e22143c29b33d0561d644f",
+    "publishedReplayURL": "https://lldb.camanis.net/level/4/2"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 0,
+        "nativeTick": 111,
+        "sourceTick": 113
+      },
+      {
+        "eventIndex": 3,
+        "nativeTick": 623,
+        "sourceTick": 621
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Crazy.DAT#17",
+      "packID": "fan:lldb-478"
+    },
+    "levelSourceRevision": "8d65d85e93e941b486e9543d3b6d4435495d2e56eadb53d744bd1782eb051da6",
+    "nativeReplaySHA256": "5236849bc4fc3fa24716aab83a9371706c8f76541ea3cec0b727afafef63509a",
+    "publishedReplaySHA256": "be24336cd31e6d418959784c6e1759c7c77159c748e6c5948df3c53107b3576d",
+    "publishedReplayURL": "https://lldb.camanis.net/level/478/18"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 3,
+        "nativeTick": 239,
+        "sourceTick": 238
+      },
+      {
+        "eventIndex": 4,
+        "nativeTick": 312,
+        "sourceTick": 310
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Wicked.DAT#16",
+      "packID": "fan:lldb-480"
+    },
+    "levelSourceRevision": "63ab956e498283467aba9a3dd87680abe43f00fd07ae16279a6bfd950c54a0a2",
+    "nativeReplaySHA256": "f4f04e0c22d2c25e33bc731820add4198a1e3f4e64d64d19e464d3c5d54ee326",
+    "publishedReplaySHA256": "39c971762d890424829dd51271407e8b626201fe4672a8fdc020a5f15c6b61ca",
+    "publishedReplayURL": "https://lldb.camanis.net/level/480/17"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 3,
+        "nativeTick": 361,
+        "sourceTick": 359
+      },
+      {
+        "eventIndex": 5,
+        "nativeTick": 889,
+        "sourceTick": 891
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Havoc.DAT#16",
+      "packID": "fan:lldb-481"
+    },
+    "levelSourceRevision": "575f71040f97db65494e2fd5ab5b3a4351fa43073677480e9af4a9881b02d997",
+    "nativeReplaySHA256": "486bb49a4899a86741c01f8ee34a13d36141713badfc98f420602680e2ca61bd",
+    "publishedReplaySHA256": "8be5b7319a2d7e79a9c0c0a65f346395907fb6566e8e18986f28094c17eddd6d",
+    "publishedReplayURL": "https://lldb.camanis.net/level/481/17"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 120,
+        "sourceTick": 122
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 341,
+        "sourceTick": 339
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Genesis Taxing.dat#7",
+      "packID": "fan:lldb-490"
+    },
+    "levelSourceRevision": "38f13b44cfdb5722c4c1438286a633a0c3f6234d72625152cd311f2294445223",
+    "nativeReplaySHA256": "89313116cf044d1b0015c42344c4e0bef4096e78e633269f0ec227f061c2c4d9",
+    "publishedReplaySHA256": "099b664066d768cdf144e2471269dc704c6ccb33220070a031b050ae0fcc77fc",
+    "publishedReplayURL": "https://lldb.camanis.net/level/490/8"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 188,
+        "sourceTick": 190
+      },
+      {
+        "eventIndex": 8,
+        "nativeTick": 402,
+        "sourceTick": 400
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Van Clan Wild 1.dat#7",
+      "packID": "fan:lldb-519"
+    },
+    "levelSourceRevision": "477aa6f5a911af6069384bcaaa85f86d531d14c8093cdc57dd7a7e29d6738973",
+    "nativeReplaySHA256": "dc9e6f2b6c98414f7e972c40ac855848938c8efa0a98bf68bd8c6e3e2d600c8f",
+    "publishedReplaySHA256": "d396e9f844581658f96d35f3c475e6148eafa8d43576dd8bc2b823e367cfe242",
+    "publishedReplayURL": "https://lldb.camanis.net/level/519/8"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 4,
+        "nativeTick": 704,
+        "sourceTick": 706
+      },
+      {
+        "eventIndex": 6,
+        "nativeTick": 1106,
+        "sourceTick": 1108
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "cLemmings Tricky 1.DAT#4",
+      "packID": "fan:lldb-527"
+    },
+    "levelSourceRevision": "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3",
+    "nativeReplaySHA256": "c119ba06e3921554ade26f879dde87e4db59889e704bf05222de3e33b70f9b83",
+    "publishedReplaySHA256": "27c2f5e9994786babf305b67e0a6a7e06065859aa383db6efe244724d7f64047",
+    "publishedReplayURL": "https://lldb.camanis.net/level/527/5"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 0,
+        "nativeTick": 134,
+        "sourceTick": 136
+      },
+      {
+        "eventIndex": 2,
+        "nativeTick": 154,
+        "sourceTick": 156
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Deceit Extras 2.DAT#4",
+      "packID": "fan:lldb-546"
+    },
+    "levelSourceRevision": "164a98b095105dfa73a6bd8df695b6eff20947227f5c0c35d6c6e366f758de6a",
+    "nativeReplaySHA256": "86188ab9cc80f457922a566a009b836df863ae98933daf7f1efb125fac9f5cf1",
+    "publishedReplaySHA256": "b2249142d8ae15debfa168263884a060b534427240c3d449c3532fb3566e15d5",
+    "publishedReplayURL": "https://lldb.camanis.net/level/546/12"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 0,
+        "nativeTick": 100,
+        "sourceTick": 102
+      },
+      {
+        "eventIndex": 6,
+        "nativeTick": 439,
+        "sourceTick": 437
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Ji Hoon Earth 2.DAT#1",
+      "packID": "fan:lldb-549"
+    },
+    "levelSourceRevision": "102ffe175287b115424dbbc74fd4e409dc4ac2676dd530700418c85b76614747",
+    "nativeReplaySHA256": "2bec8d108b8c5748efd6b91e280f13233282db381512f508034619891bdefffd",
+    "publishedReplaySHA256": "ce8628755fe8e1ee437022fd37f03782563950e238da04acf7b85a6de638b01c",
+    "publishedReplayURL": "https://lldb.camanis.net/level/549/12"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 2,
+        "nativeTick": 383,
+        "sourceTick": 381
+      },
+      {
+        "eventIndex": 9,
+        "nativeTick": 1197,
+        "sourceTick": 1196
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Master System Remakes.dat#1",
+      "packID": "fan:lldb-80"
+    },
+    "levelSourceRevision": "bae8cb65d910af0259378eab5ac9ed089135b7d3728d8a0d3897cad72232b515",
+    "nativeReplaySHA256": "173880c6cb8fa0d22986d6d69f80b1b9d1b6546a245330ec4187bfbd90723df4",
+    "publishedReplaySHA256": "4fa8ee33e716192adf54392b22a5a589e48b6690ddbb260220d507d9259b749f",
+    "publishedReplayURL": "https://lldb.camanis.net/level/80/2"
+  },
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 188,
+        "sourceTick": 190
+      },
+      {
+        "eventIndex": 8,
+        "nativeTick": 402,
+        "sourceTick": 400
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "Timpack3.dat#8",
+      "packID": "fan:lldb-90"
+    },
+    "levelSourceRevision": "3a049d43042d6380f653db4196379a320bc75aaac51c7e028c1aae286e9690d4",
+    "nativeReplaySHA256": "7c2f52d8b379ac4b863e53290c37e2667ae751ac8bcabada1e70d83b2a270e28",
+    "publishedReplaySHA256": "d396e9f844581658f96d35f3c475e6148eafa8d43576dd8bc2b823e367cfe242",
+    "publishedReplayURL": "https://lldb.camanis.net/level/90/9"
+  }
+]

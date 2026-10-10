@@ -1,0 +1,168 @@
+{
+  "attempts": [
+    {
+      "archiveSHA256": "8653f2b11c3c6115ac3798348bbf330c7fc7e77955ff08a4bb6d0b12f3766ff3",
+      "bestSaved": 5,
+      "completedDelays": 41,
+      "delayWindow": [
+        0,
+        40
+      ],
+      "identity": "fan:lldb-76/ClamSpam04.dat#0",
+      "initialRate": "original",
+      "partialReplaySHA256": "29ebd296f152e7e1d0043d59ddbf9668a3f2ee45c36e405669e0616dcd3ecba4",
+      "released": 16,
+      "required": 11,
+      "skill": "floater",
+      "terminalTick": 1015
+    },
+    {
+      "archiveSHA256": "894abdcb60f14cea2310cd99e03b87930148949d3dedb7a5e6564ee07fd76f42",
+      "bestSaved": 0,
+      "completedDelays": 41,
+      "delayWindow": [
+        0,
+        40
+      ],
+      "identity": "fan:lldb-240/JEFFPCK6.DAT#0",
+      "initialRate": "99",
+      "partialReplaySHA256": "9329c2382ef558123d09fd9dcbf97362876258079dba2a74425a1b3b801f23d6",
+      "released": 10,
+      "required": 10,
+      "skill": "climber",
+      "terminalTick": 948
+    },
+    {
+      "archiveSHA256": "894abdcb60f14cea2310cd99e03b87930148949d3dedb7a5e6564ee07fd76f42",
+      "bestSaved": 0,
+      "completedDelays": 41,
+      "delayWindow": [
+        0,
+        40
+      ],
+      "identity": "fan:lldb-240/JEFFPCK6.DAT#0",
+      "initialRate": "original",
+      "partialReplaySHA256": "bbebf844ec500f348c6291907983727e2dc9dfaa02485a7b69584967f3db0b65",
+      "released": 10,
+      "required": 10,
+      "skill": "climber",
+      "terminalTick": 1389
+    },
+    {
+      "archiveSHA256": "894abdcb60f14cea2310cd99e03b87930148949d3dedb7a5e6564ee07fd76f42",
+      "bestSaved": 0,
+      "completedDelays": 41,
+      "delayWindow": [
+        0,
+        40
+      ],
+      "identity": "fan:lldb-240/JEFFPCK6.DAT#7",
+      "initialRate": "99",
+      "partialReplaySHA256": "e470baeafed5c4feee4c2df60aa4ea5bb57d7f6b8e78ff67eba9cacdd569d6b2",
+      "released": 10,
+      "required": 10,
+      "skill": "basher",
+      "terminalTick": 3062
+    },
+    {
+      "archiveSHA256": "894abdcb60f14cea2310cd99e03b87930148949d3dedb7a5e6564ee07fd76f42",
+      "bestSaved": 0,
+      "completedDelays": 41,
+      "delayWindow": [
+        0,
+        40
+      ],
+      "identity": "fan:lldb-240/JEFFPCK6.DAT#7",
+      "initialRate": "original",
+      "partialReplaySHA256": "37a1070ca74694b684d207c46feb6cc5f885aad367754c80eb8b9aa3a2cf1e3d",
+      "released": 10,
+      "required": 10,
+      "skill": "basher",
+      "terminalTick": 3062
+    },
+    {
+      "archiveSHA256": "b533808780ac14ca46ed0b1cd9e9593df722b041867c6a9985dcde981d57feb0",
+      "bestSaved": 0,
+      "completedDelays": 41,
+      "delayWindow": [
+        0,
+        40
+      ],
+      "identity": "fan:lldb-32/ClamSpam01.dat#8",
+      "initialRate": "original",
+      "partialReplaySHA256": "16577f7e30aa97bec391d226aeef3081821a2b37066aaddbcc34b6dd9606f7ba",
+      "released": 10,
+      "required": 9,
+      "skill": "floater",
+      "terminalTick": 638
+    },
+    {
+      "archiveSHA256": "375d1ae066380a27e2323441081c5912d83f7e0e973215741712da37b0c45963",
+      "bestSaved": 0,
+      "completedDelays": 41,
+      "delayWindow": [
+        0,
+        40
+      ],
+      "identity": "fan:lldb-133/weirdy01 (version 2).dat#4",
+      "initialRate": "original",
+      "partialReplaySHA256": "ca03c890faf06ed1fa1139c89b4e762bc7712183f975c09da7406f669b1f1fdd",
+      "released": 20,
+      "required": 20,
+      "skill": "basher",
+      "terminalTick": 759
+    },
+    {
+      "archiveSHA256": "0cef5ab32815cf0e8766366d9715dd62e8a2a23afcf4349aebacf0abd06edb13",
+      "bestSaved": 0,
+      "completedDelays": 41,
+      "delayWindow": [
+        0,
+        40
+      ],
+      "identity": "fan:lldb-134/weirdy02 (version 2).dat#3",
+      "initialRate": "original",
+      "partialReplaySHA256": "43724ace365f2d1131a944ded5075b52318f96511cb495acf93a20192a008e25",
+      "released": 10,
+      "required": 10,
+      "skill": "climber",
+      "terminalTick": 426
+    },
+    {
+      "archiveSHA256": "9b10dc51932700f78b80f410ac7a2d26a39e20915f9c06564fa92762f6d056db",
+      "bestSaved": 0,
+      "completedDelays": 41,
+      "delayWindow": [
+        0,
+        40
+      ],
+      "identity": "fan:lldb-250/Conway01.DAT#0",
+      "initialRate": "original",
+      "partialReplaySHA256": "586501adcd3c94c14dc47612c75b6fdb87594aa027b2d17fe4adea52426f6b50",
+      "released": 10,
+      "required": 10,
+      "skill": "climber",
+      "terminalTick": 637
+    },
+    {
+      "archiveSHA256": "9b10dc51932700f78b80f410ac7a2d26a39e20915f9c06564fa92762f6d056db",
+      "bestSaved": 0,
+      "completedDelays": 41,
+      "delayWindow": [
+        0,
+        40
+      ],
+      "identity": "fan:lldb-250/Conway01.DAT#0",
+      "initialRate": "original",
+      "partialReplaySHA256": "f075ca99133dd5fe459959f9e6d963c84be5f6c3d6c586931909510ddfd5cd40",
+      "released": 10,
+      "required": 10,
+      "skill": "floater",
+      "terminalTick": 1022
+    }
+  ],
+  "date": "2026-10-04",
+  "limits": "Every run completed the 0..40 hatch-to-assignment delay window. A fixed blanket skill policy does not test staggered workers, different release-rate schedules, or other skills, and these no-win results are not source-physics parity evidence.",
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "solverSHA256": "961248103122369accb5901a283a2c4e02947c5f6b671c0c9b2ddf8aa105a948"
+}

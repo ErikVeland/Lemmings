@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-04",
+  "method": "Decoded public Watch records directly from cached source pages, matched title, goal, release rate and skills to the exact bundled members, then replayed under source-built native Original and experimental Golems mechanics. These are diagnostic candidates, not verified wins.",
+  "sourceBuiltProbeSHA256": "bd45919a421f7c75d470b964e6fb15f5a09a21943cba1bf16e7265e38b304d2a",
+  "sourceBuiltNxlvKitSHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "levels": [
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-108",
+        "levelID": "geooPkG.dat#2"
+      },
+      "title": "Reverse effect",
+      "exactBundledArchive": "Content/LevelPacks/0108-geooPkG.zip",
+      "exactBundledArchiveSHA256": "fd57fd4e5d9eebedac039e3abc8df690d0e2893d26b7599faaa89861cd55a041",
+      "sourcePage": ".build/learning-evidence/lldb-next2200/108-3.html",
+      "sourcePageSHA256": "dbf9467fb1c131c51500ade203fe7dc1285128abfd86a1aa6334c8b258f532e7",
+      "sourceHeaderMatchesBundledGoalAndSkills": true,
+      "nativeTickOffset": -1,
+      "terminalSourceAbandonAsNativeNuke": true,
+      "originalMechanicsFailure": "Builder to lemming 1 refused at tick 377; native Original lemming 1 was jumping at (847,72)",
+      "golemsMechanicsObservation": "At tick 377 Golems lemming 1 was walking at (847,70), then accepted Builder.",
+      "candidateOutcomes": [
+        {
+          "rawSourceReplaySHA256": "cab743d3ef37c844f2475f75850ee06224e5cdc3f157415293439910eb67235c",
+          "nativeCandidateSHA256": "fc764859cb34ad0a2c598b4a5cb0c784dbf83e7cbf25994dd628d032e8830eb3",
+          "nativeCandidatePath": ".build/heartbeat-20261003-2240/0f6510729925f9b3d08641bc990aa8b9e61e18f31b0e880dbf8d7fd5efd67cfa-cab743d3ef37.json",
+          "golemsSaved": 1,
+          "golemsTicks": 777,
+          "golemsDidWin": false
+        },
+        {
+          "rawSourceReplaySHA256": "aadf8f34cbb9fab0aed911bd257b12b4027c06c2d661971366a480c88e299fd9",
+          "nativeCandidateSHA256": "b7a1aaa7af805eeb73ee804be344982fce22552d7ab6477d471673fb7d086bda",
+          "nativeCandidatePath": ".build/heartbeat-20261003-2240/0f6510729925f9b3d08641bc990aa8b9e61e18f31b0e880dbf8d7fd5efd67cfa-aadf8f34cbb9.json",
+          "golemsSaved": 0,
+          "golemsTicks": 764,
+          "golemsDidWin": false
+        },
+        {
+          "rawSourceReplaySHA256": "1c34bdf23828c7df8f6d53d1db9f57fed18e4cad76e7d67f530140bb06d0057e",
+          "nativeCandidateSHA256": "ca8148905c23ece69e2c6eb09137b28d85e461e0b907cf5c427568aa4faba55d",
+          "nativeCandidatePath": ".build/heartbeat-20261003-2240/0f6510729925f9b3d08641bc990aa8b9e61e18f31b0e880dbf8d7fd5efd67cfa-1c34bdf23828.json",
+          "golemsSaved": 0,
+          "golemsTicks": 765,
+          "golemsDidWin": false
+        }
+      ],
+      "objectSemanticsComparison": "Activating all 32 Golems object slots did not change any replay outcome or initial-state hash in these levels.",
+      "sourcePhysicsParity": "unverified; native source-action replays did not win"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-218",
+        "levelID": "PSP Special2.dat#6"
+      },
+      "title": "Cagey business",
+      "exactBundledArchive": "Content/LevelPacks/0218-PSP-Special-27-36.zip",
+      "exactBundledArchiveSHA256": "ff0843de66881e067975462288b74fefcbf0f28e63b1e47e026cd8232ebfcf53",
+      "sourcePage": ".build/learning-evidence/lldb-next1700/218-7.html",
+      "sourcePageSHA256": "4bb54e109e4ce374a04fc4e6f2e6d45927f4ce5921fbd8026e3fcd1fc4a969c2",
+      "sourceHeaderMatchesBundledGoalAndSkills": true,
+      "nativeTickOffset": -1,
+      "terminalSourceAbandonAsNativeNuke": false,
+      "originalMechanicsFailure": "Basher to lemming 1 refused at tick 1965; native Original lemming 1 was already lost at (665,164)",
+      "golemsMechanicsObservation": "At tick 1965 Golems lemming 1 was walking at (839,76), then accepted Basher; lemming 0 was already lost.",
+      "candidateOutcomes": [
+        {
+          "rawSourceReplaySHA256": "191fa56f551298f412cd02114f743c17c1c812bc2c67c378be82e710d8ada19a",
+          "nativeCandidateSHA256": "ddfd663ceda28701525b349abe11a55f4e22312260417ad047f8d20585973a91",
+          "nativeCandidatePath": ".build/heartbeat-20261003-2240/3da17ce17e270fdaf4c21b093eaad90e64953d06865a1e5aec369be4aef961a0-191fa56f5512.json",
+          "golemsSaved": 0,
+          "golemsTicks": 2419,
+          "golemsDidWin": false
+        }
+      ],
+      "objectSemanticsComparison": "Activating all 32 Golems object slots did not change any replay outcome or initial-state hash in these levels.",
+      "sourcePhysicsParity": "unverified; native source-action replays did not win"
+    }
+  ],
+  "difficultyScoresAssigned": 0
+}

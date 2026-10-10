@@ -29,10 +29,30 @@ public enum FanLevelError: Error, Equatable, CustomStringConvertible {
 /// the original game stored it. A `.ini` file is the same level written as text
 /// by a level editor, with one line per object and per terrain piece.
 ///
-/// Both end up as a `ClassicLevel`. The text form is turned back into a 2048
-/// byte record and handed to the same parser the binary form uses, so there is
-/// one implementation of the layout rather than two that can drift apart.
+/// Both end up as a `ClassicLevel`. By default, the text form is turned back
+/// into a 2048 byte record and handed to the binary parser. Source-coordinate
+/// probes can retain text placements that the DOS record clips or aligns.
 public enum FanLevelReader {
+    public struct CanvasSize: Equatable, Sendable {
+        public let width: Int
+        public let height: Int
+
+        public init(width: Int, height: Int) {
+            self.width = width
+            self.height = height
+        }
+    }
+
+    /**
+     * Reads text canvas dimensions without passing them through the DOS record.
+     */
+    public static func canvasSize(fromINI text: String, defaultWidth: Int, defaultHeight: Int) throws -> CanvasSize {
+        let fields = parse(text)
+        return CanvasSize(
+            width: try fields.integer("width", default: defaultWidth),
+            height: try fields.integer("height", default: defaultHeight))
+    }
+
     // MARK: - Binary levels
 
     /// Reads a `.lvl` file, which is the classic record with nothing around it.
@@ -241,11 +261,43 @@ public enum FanLevelReader {
         return (name?.isEmpty ?? true) ? nil : name
     }
 
-    /// Retains exact text steel rectangles without the DOS record's grid and size limits.
-    /// Disable steel only to restore an attempt saved before text steel support.
-    public static func level(fromINI text: String, includeSteel: Bool = true) throws -> ClassicLevel {
+    /**
+     * Retains exact text steel rectangles without the DOS record's grid and size limits.
+     * Source terrain and object coordinates are opt-in until the source engine
+     * is supported end to end.
+     */
+    public static func level(
+        fromINI text: String,
+        includeSteel: Bool = true,
+        preserveTerrainCoordinates: Bool = false,
+        preserveObjectCoordinates: Bool = false
+    ) throws -> ClassicLevel {
         let record = try record(fromINI: text, encodeSteel: false)
-        let steel = includeSteel ? try steelAreas(parse(text)) : []
-        return try ClassicLevel(data: record, steelOverride: steel)
+        let fields = parse(text)
+        let steel = includeSteel ? try steelAreas(fields) : []
+        let terrain: [ClassicTerrainPlacement]? = preserveTerrainCoordinates
+            ? fields.terrain.map { values in
+                let modifier = values.count > 3 ? values[3] : 0
+                return ClassicTerrainPlacement(
+                    x: values[1], y: values[2], id: values[0],
+                    draw: ClassicDrawProperties(
+                        isUpsideDown: modifier & 4 != 0,
+                        noOverwrite: modifier & 8 != 0,
+                        onlyOverwrite: false,
+                        isErase: modifier & 2 != 0))
+            } : nil
+        let objects: [ClassicObjectPlacement]? = preserveObjectCoordinates
+            ? fields.objects.enumerated().map { index, values in
+                let mode = values.count > 3 ? values[3] : 0
+                return ClassicObjectPlacement(
+                    slot: index, x: values[1], sourceX: values[1], y: values[2], id: values[0],
+                    draw: ClassicDrawProperties(
+                        isUpsideDown: values.count > 4 && values[4] == 1,
+                        noOverwrite: mode == 4,
+                        onlyOverwrite: mode == 8,
+                        isErase: false))
+            } : nil
+        return try ClassicLevel(data: record, steelOverride: steel,
+            terrainOverride: terrain, objectsOverride: objects)
     }
 }

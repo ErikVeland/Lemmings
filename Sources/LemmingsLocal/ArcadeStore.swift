@@ -11,12 +11,20 @@ import NxlvKit
     private let recoveryStore: RunRecoveryStore
     private(set) var storageNotice: String?
     private var canWrite = true
+    private var pendingReplayIDs: Set<UUID> = []
+    private var pendingSolutionTargets = Set<String>()
+    private var solutionTargets: [String: Task<Void, Never>] = [:]
     private let bundledProofs: TrolleyBundledProofs?
-    private let playlistDataRemover: (String) -> Void
+    private let playlistDataRemover: (String) throws -> Void
     var profilesAreWritable: Bool { canWrite }
 
+    func collectionsFile(profileID: String) -> URL {
+        file.deletingLastPathComponent().appendingPathComponent("Level Collections", isDirectory: true)
+            .appendingPathComponent(Self.fingerprint(Data((file.path + profileID).utf8)) + ".json")
+    }
+
     /// The house rule and shared campaign survive app restarts.
-    enum TurnPolicy: String, CaseIterable, Sendable {
+    enum TurnPolicy: String, CaseIterable, Codable, Sendable {
         case everyLevel = "Every level", atFirstFail = "At first fail"
         var title: String { rawValue }
         var detail: String {
@@ -30,7 +38,10 @@ import NxlvKit
     private let defaults: UserDefaults
     var turnPolicy: TurnPolicy {
         get { defaults.string(forKey: Self.turnPolicyKey).flatMap(TurnPolicy.init(rawValue:)) ?? .everyLevel }
-        set { defaults.set(newValue.rawValue, forKey: Self.turnPolicyKey) }
+        set {
+            defaults.set(newValue.rawValue, forKey: Self.turnPolicyKey)
+            persistSession()
+        }
     }
 
     private(set) var sessionProfileIDs: [String] = []
@@ -53,12 +64,14 @@ import NxlvKit
         if let turn = sessionTurnID, !sessionProfileIDs.contains(turn) { sessionTurnID = nil }
         if sessionProfileIDs.count < 2 { endHotSeat() } else { startHotSeatProgress() }
     }
-    private struct SavedHotSeat: Codable {
+    struct SavedHotSeat: Codable {
         let id: String
         let host: String
         let players: [String]
         let turn: String?
         let active: Bool
+        var savedAt: Date?
+        var policy: TurnPolicy?
     }
     private(set) var hotSeatID: String?
     private var hotSeatHostID: String?
@@ -68,8 +81,36 @@ import NxlvKit
     }
     private func persistSession(active: Bool = true) {
         guard let id = hotSeatID, let host = hotSeatHostID else { return }
-        let saved = SavedHotSeat(id: id, host: host, players: sessionProfileIDs, turn: sessionTurnID, active: active)
+        let saved = SavedHotSeat(id: id, host: host, players: sessionProfileIDs, turn: sessionTurnID,
+            active: active, savedAt: Date(), policy: turnPolicy)
         if let data = try? JSONEncoder().encode(saved) { defaults.set(data, forKey: sessionKey(host: host)) }
+        var history = savedSessionHistory(host: host).filter { $0.id != id }
+        history.insert(saved, at: 0)
+        if let data = try? JSONEncoder().encode(history) {
+            defaults.set(data, forKey: sessionKey(host: host) + ".history")
+        }
+    }
+    private func savedSessionHistory(host: String) -> [SavedHotSeat] {
+        guard let data = defaults.data(forKey: sessionKey(host: host) + ".history") else { return [] }
+        return (try? JSONDecoder().decode([SavedHotSeat].self, from: data)) ?? []
+    }
+    var savedHotSeats: [SavedHotSeat] {
+        savedSessionHistory(host: records.activeProfileID).filter {
+            $0.id != hotSeatID && $0.host == records.activeProfileID
+                && $0.players.count >= 2 && Set($0.players).count == $0.players.count
+                && $0.players.contains($0.host) && $0.players.allSatisfy { records.profile($0) != nil }
+        }
+    }
+    @discardableResult func resumeHotSeat(id: String) -> Bool {
+        guard canWrite, storageError == nil else { return false }
+        if id == hotSeatID { return true }
+        guard let saved = savedHotSeats.first(where: { $0.id == id }) else { return false }
+        persistSession(active: false)
+        hotSeatID = saved.id; hotSeatHostID = saved.host; sessionProfileIDs = saved.players
+        sessionTurnID = saved.turn.flatMap { saved.players.contains($0) ? $0 : nil }
+        if let policy = saved.policy { turnPolicy = policy }
+        persistSession()
+        return true
     }
     private func restoreSession(activeOnly: Bool) -> Bool {
         let host = records.activeProfileID
@@ -80,6 +121,7 @@ import NxlvKit
         guard Set(players).count == players.count, players.count >= 2, players.contains(host) else { return false }
         hotSeatID = saved.id; hotSeatHostID = host; sessionProfileIDs = players
         sessionTurnID = saved.turn.flatMap { players.contains($0) ? $0 : nil }
+        if let policy = saved.policy { turnPolicy = policy }
         return true
     }
     func endHotSeat() {
@@ -103,6 +145,7 @@ import NxlvKit
     /// A fresh namespace starts every shared campaign at the beginning.
     @discardableResult func startNewHotSeat() -> Bool {
         guard hotSeatIsActive, canWrite, storageError == nil else { return false }
+        persistSession(active: false)
         hotSeatID = UUID().uuidString
         hotSeatHostID = records.activeProfileID
         sessionTurnID = nil
@@ -125,7 +168,9 @@ import NxlvKit
 
     init(file: URL? = nil, bundledProofs: TrolleyBundledProofs? = .load(), defaults: UserDefaults = .standard,
          checkpoints: RunRecoveryStore? = nil,
-         playlistDataRemover: @escaping (String) -> Void = { LevelPlaylistStore.removeData(profileID: $0) }) {
+         playlistDataRemover: @escaping (String) throws -> Void = {
+             try LevelPlaylistStore.removeDataChecked(at: LevelPlaylistStore.fileURL(profileID: $0))
+         }) {
         self.bundledProofs = bundledProofs
         self.defaults = defaults
         self.playlistDataRemover = playlistDataRemover
@@ -172,6 +217,7 @@ import NxlvKit
     @discardableResult func startNewRecords() -> Bool {
         let manager = FileManager.default
         let stamp = UUID().uuidString
+        let previousProfiles = records.profiles.map(\.id)
         do {
             for url in [file, recordFile.backupURL] where manager.fileExists(atPath: url.path) {
                 try manager.moveItem(at: url, to: url.deletingLastPathComponent()
@@ -186,6 +232,9 @@ import NxlvKit
         records = ArcadeRecords(); canWrite = true; storageError = nil; storageNotice = nil
         adoptBundledProofs()
         save()
+        if storageError == nil {
+            for profileID in previousProfiles { PrecisionZoomController.shared.removeProfile(profileID) }
+        }
         return storageError == nil
     }
     /// Players who can be removed now. A player in the current turn or run stays until it ends.
@@ -195,12 +244,13 @@ import NxlvKit
         return id != records.activeProfileID && id != playingProfileID && !sessionProfileIDs.contains(id)
     }
     /// Removes a player, their records, campaign progress, saved runs and replay movies.
-    @discardableResult func deleteProfile(_ id: String) -> Bool {
+    @discardableResult func deleteProfile(_ id: String, backgroundCleanup: Bool = false) -> Bool {
         guard canWrite, storageError == nil else { return false }
         let previous = records
         guard let replays = records.removeProfile(id) else { return false }
         save()
         guard storageError == nil else { records = previous; return false }
+        HostedRankings.shared.profileDeleted(id)
         if sessionProfileIDs.contains(id) {
             if hotSeatHostID == id || sessionProfileIDs.count <= 2 { endHotSeat() }
             else {
@@ -211,10 +261,29 @@ import NxlvKit
         }
         if previous.activeProfileID == id { endHotSeat() }
         let folder = file.deletingLastPathComponent()
-        for replay in replays { try? FileManager.default.removeItem(at: folder.appendingPathComponent(replay.relativePath)) }
-        try? recoveryStore.discard(profileID: id)
+        let replayURLs = replays.map { folder.appendingPathComponent($0.relativePath) }
+        let recoveryStore = recoveryStore
+        let cleanup: @Sendable () -> String? = {
+            do {
+                try recoveryStore.discard(profileID: id)
+                for url in replayURLs where FileManager.default.fileExists(atPath: url.path) {
+                    try FileManager.default.removeItem(at: url)
+                }
+                return nil
+            } catch { return "Player deleted. Some saved files could not be removed: " + error.localizedDescription }
+        }
+        if backgroundCleanup {
+            Task { [weak self] in
+                let notice = await Task.detached(priority: .utility, operation: cleanup).value
+                if let notice { self?.storageNotice = notice }
+            }
+        } else if let notice = cleanup() { storageNotice = notice }
+        PrecisionZoomController.shared.removeProfile(id)
         removeSavedProgress(of: id)
-        playlistDataRemover(id)
+        do { try playlistDataRemover(id) }
+        catch { storageNotice = "Player deleted. Some playlists could not be removed: " + error.localizedDescription }
+        do { try LevelPlaylistStore.removeDataChecked(at: collectionsFile(profileID: id)) }
+        catch { storageNotice = "Player deleted. Some collections could not be removed: " + error.localizedDescription }
         return true
     }
     private func removeSavedProgress(of id: String) {
@@ -228,11 +297,16 @@ import NxlvKit
         }
         // A shared campaign hosted by this player can no longer be resumed.
         let hosted = sessionKey(host: id)
+        var sessions = savedSessionHistory(host: id)
         if let data = defaults.data(forKey: hosted), let saved = try? JSONDecoder().decode(SavedHotSeat.self, from: data) {
+            sessions.append(saved)
+        }
+        for saved in sessions {
             let shared = "HotSeat.\(saved.id)."
             for key in defaults.dictionaryRepresentation().keys where key.hasPrefix(shared) { defaults.removeObject(forKey: key) }
         }
         defaults.removeObject(forKey: hosted)
+        defaults.removeObject(forKey: hosted + ".history")
     }
     func progressKey(_ key: String) -> String {
         // A hot seat campaign is nobody's solo campaign, so it never reads or
@@ -254,12 +328,22 @@ import NxlvKit
             if case ArcadeRecordFile.Failure.changedOnDisk = error { canWrite = false }
         }
     }
+    /// Spends one of the player's skips on a level. The skip counts only when
+    /// the records save, so a failed save never moves the campaign.
+    @discardableResult func spendLevelSkip(on level: ArcadeLevel, profileID: String) -> Bool {
+        guard canWrite, storageError == nil else { return false }
+        let previous = records
+        guard records.spendLevelSkip(on: level, profileID: profileID) else { return false }
+        save()
+        guard storageError == nil else { records = previous; return false }
+        return true
+    }
     @discardableResult func record(_ run: ArcadeRun) -> ArcadeReport? {
         if let conditions = run.level.conditions { acceptBundledProof(for: conditions) }
         let result = records.record(run)
         if result != nil {
             save()
-            if storageError == nil { GameCenterScores.shared.completed(profileID: run.profileID, history: records.trolley) }
+            if storageError == nil { GameCenterScores.shared.completed(profileID: run.profileID, history: records.trolley); HostedRankings.shared.completed(profileID: run.profileID) }
         }
         return result
     }
@@ -269,6 +353,32 @@ import NxlvKit
     func previewReport(for run: ArcadeRun) -> ArcadeReport? {
         var preview = records
         return preview.record(run)
+    }
+    /// Validate bundled inputs on a separate simulation before using their rescue count.
+    @discardableResult
+    func prepareSolutionTarget(initial: ClassicDOSSimulation, conditions: TrolleyConditions,
+                               resources: URL?, buildVersion: String) -> Task<Void, Never> {
+        let key = conditions.fingerprint
+        if let task = solutionTargets[key] { return task }
+        pendingSolutionTargets.insert(key)
+        let task = Task { [weak self] in
+            defer { self?.pendingSolutionTargets.remove(key) }
+            let target = await Task.detached(priority: .utility) {
+                VerifiedSolution.load(initial: initial, from: resources)?.rescueTarget(buildVersion: buildVersion)
+            }.value
+            guard let self, let target else { return }
+            for assisted in [false, true] {
+                let current = self.records.trolley.maximum(conditions: conditions, assisted: assisted)
+                guard (target.value ?? 0) > (current.value ?? -1)
+                    || ((target.value == current.value) && !current.isRescueTarget) else { continue }
+                try? self.acceptMaximum(target, conditions: conditions, assisted: assisted)
+            }
+        }
+        solutionTargets[key] = task
+        return task
+    }
+    func solutionTargetIsPending(for conditions: TrolleyConditions) -> Bool {
+        pendingSolutionTargets.contains(conditions.fingerprint)
     }
     func beginAttempt(id: UUID, profileID: String, level: ArcadeLevel, previousID: UUID?) {
         guard let conditions = level.conditions else { return }
@@ -286,27 +396,62 @@ import NxlvKit
     }
     private func acceptBundledProof(for conditions: TrolleyConditions) {
         guard let proof = bundledProofs?.maximum(for: conditions) else { return }
-        for assisted in [false, true] where records.trolley.maximum(conditions: conditions, assisted: assisted) != proof {
+        for assisted in [false, true] {
+            let current = records.trolley.maximum(conditions: conditions, assisted: assisted)
+            guard current != proof,
+                  !current.isRescueTarget || (proof.value ?? 0) > (current.value ?? -1)
+                    || (proof.value == current.value && proof.status == .verified && current.status != .verified) else { continue }
             try? records.acceptTrolleyMaximum(proof, conditions: conditions, assisted: assisted)
         }
     }
-    /// Called only for a completed movie. A movie hash is local evidence, not replay or server verification.
-    func preserveReplay(_ url: URL, attemptID: UUID) {
+    func replayURL(attemptID: UUID) -> URL? {
+        guard let reference = records.trolley.replays.first(where: { $0.attemptID == attemptID }),
+              reference.relativePath == "Replays/\(attemptID.uuidString).mp4" else { return nil }
+        let url = file.deletingLastPathComponent().appendingPathComponent(reference.relativePath)
+        return FileManager.default.isReadableFile(atPath: url.path) ? url : nil
+    }
+    /// Retain the open file before the recorder can discard its temporary path.
+    /// Copying and checksumming a movie must not block a result or next level.
+    @discardableResult
+    func preserveReplay(_ url: URL, attemptID: UUID) -> Task<Void, Never>? {
         guard canWrite, records.trolley.attempts.contains(where: { $0.id == attemptID }),
-              !records.trolley.replays.contains(where: { $0.attemptID == attemptID }) else { return }
-        do {
-            let relative = "Replays/\(attemptID.uuidString).mp4"
-            let destination = file.deletingLastPathComponent().appendingPathComponent(relative)
-            try FileManager.default.createDirectory(at: destination.deletingLastPathComponent(), withIntermediateDirectories: true)
-            if !FileManager.default.fileExists(atPath: destination.path) { try FileManager.default.copyItem(at: url, to: destination) }
-            let handle = try FileHandle(forReadingFrom: destination)
-            defer { try? handle.close() }
-            var hash = SHA256()
-            while let chunk = try handle.read(upToCount: 1_048_576), !chunk.isEmpty { hash.update(data: chunk) }
-            records.attachTrolleyReplay(.init(attemptID: attemptID, relativePath: relative,
-                sha256: hash.finalize().map { String(format: "%02x", $0) }.joined()))
+              !records.trolley.replays.contains(where: { $0.attemptID == attemptID }),
+              !pendingReplayIDs.contains(attemptID),
+              let source = try? FileHandle(forReadingFrom: url) else { return nil }
+        pendingReplayIDs.insert(attemptID)
+        let relative = "Replays/\(attemptID.uuidString).mp4"
+        let destination = file.deletingLastPathComponent().appendingPathComponent(relative)
+        return Task { [self] in
+            defer { pendingReplayIDs.remove(attemptID) }
+            let digest = await Task.detached(priority: .utility) { () -> String? in
+                defer { try? source.close() }
+                let manager = FileManager.default
+                let staging = destination.appendingPathExtension(UUID().uuidString + ".pending")
+                defer { try? manager.removeItem(at: staging) }
+                do {
+                    try manager.createDirectory(at: destination.deletingLastPathComponent(), withIntermediateDirectories: true)
+                    guard manager.createFile(atPath: staging.path, contents: nil) else { return nil }
+                    let output = try FileHandle(forWritingTo: staging)
+                    defer { try? output.close() }
+                    var hash = SHA256()
+                    while let chunk = try source.read(upToCount: 1_048_576), !chunk.isEmpty {
+                        try output.write(contentsOf: chunk)
+                        hash.update(data: chunk)
+                    }
+                    try output.close()
+                    if manager.fileExists(atPath: destination.path) {
+                        // A previous interrupted retention may have left a complete file.
+                        _ = try manager.replaceItemAt(destination, withItemAt: staging)
+                    } else { try manager.moveItem(at: staging, to: destination) }
+                    return hash.finalize().map { String(format: "%02x", $0) }.joined()
+                } catch { return nil }
+            }.value
+            guard let digest, canWrite,
+                  records.trolley.attempts.contains(where: { $0.id == attemptID }) else { return }
+            records.attachTrolleyReplay(.init(attemptID: attemptID, relativePath: relative, sha256: digest))
             save()
-        } catch { /* Movie retention is optional. The immutable local attempt remains valid. */ }
+            if storageError == nil, let run = records.trolley.attempts.first(where: { $0.id == attemptID })?.run { HostedRankings.shared.completed(profileID: run.profileID) }
+        }
     }
     @discardableResult func saveProfile(id: String?, initials: String, portrait: Int, select: Bool) -> ArcadeProfile? {
         guard canWrite else { return nil }

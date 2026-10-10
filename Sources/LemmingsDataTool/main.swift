@@ -18,6 +18,7 @@ private func usage() -> Never {
         usage:
           LemmingsDataTool inspect <LEVEL*.DAT> [more archives ...]
           LemmingsDataTool inspect-pack <game-data-directory>
+          LemmingsDataTool inspect-neolemmix <pack-or-levels-directory>
           LemmingsDataTool export-json <LEVEL*.DAT> <output-directory>
         """,
         code: .usage
@@ -88,6 +89,15 @@ private func inspectPack(path: String) throws {
     print("Validated the complete \(campaign.levels.count)-level official campaign.")
 }
 
+private func inspectNeoLemmix(path: String) throws {
+    let packs = try NeoLemmixPackLibrary.discover(
+        in: URL(fileURLWithPath: path, isDirectory: true))
+    for pack in packs {
+        print("\(pack.title): \(pack.levels.count) levels [\(pack.id)]")
+    }
+    print("Validated \(packs.count) NeoLemmix packs and \(packs.reduce(0) { $0 + $1.levels.count }) levels.")
+}
+
 let arguments = CommandLine.arguments
 guard arguments.count >= 2 else { usage() }
 
@@ -98,6 +108,9 @@ do {
     case "inspect-pack":
         guard arguments.count == 3 else { usage() }
         try inspectPack(path: arguments[2])
+    case "inspect-neolemmix":
+        guard arguments.count == 3 else { usage() }
+        try inspectNeoLemmix(path: arguments[2])
     case "export-json":
         guard arguments.count == 4 else { usage() }
         try exportJSON(archivePath: arguments[2], outputPath: arguments[3])

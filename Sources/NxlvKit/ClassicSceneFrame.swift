@@ -21,21 +21,12 @@ public enum ClassicSceneFrame {
         for object in level.objects {
             let graphic = object.graphic
             let placement = object.placement
-            let interactive = placement.slot < 16 && graphic.triggerEffect != 0
+            let interactive = placement.slot < level.interactiveObjectSlotLimit
+                && graphic.triggerEffect != 0
             let cooldown = interactive ? simulation.objectCooldown(at: triggerIndex) : 0
             if interactive { triggerIndex += 1 }
             guard !object.rgbaFrames.isEmpty else { continue }
-            let first = min(max(0, graphic.firstFrameIndex), object.rgbaFrames.count - 1)
-            let frame: Int
-            switch graphic.animationType {
-            case .none: frame = first
-            case .continuous: frame = (first + simulation.tickCount) % object.rgbaFrames.count
-            case .onceAtStart:
-                let elapsed = max(0, simulation.tickCount - ClassicDOSRules.entranceOpenTick)
-                frame = min(first + elapsed, object.rgbaFrames.count - 1)
-            case .triggered:
-                frame = cooldown > 0 ? min(object.rgbaFrames.count - cooldown, object.rgbaFrames.count - 1) : first
-            }
+            let frame = Self.frameIndex(of: object, cooldown: cooldown, tick: simulation.tickCount)
             let source = [UInt8](object.rgbaFrames[max(0, frame)])
             if graphic.triggerEffect == ClassicDOSObjectEffect.water.rawValue,
                !placement.draw.isUpsideDown, !placement.draw.onlyOverwrite {
@@ -64,9 +55,26 @@ public enum ClassicSceneFrame {
         }
         return Data(pixels)
     }
+
+    /// The animation frame an object shows on a tick. `cooldown` is the
+    /// remaining trigger delay for objects that react to lemmings.
+    public static func frameIndex(of object: ClassicRenderedObject, cooldown: Int, tick: Int) -> Int {
+        let count = object.rgbaFrames.count
+        guard count > 0 else { return 0 }
+        let first = min(max(0, object.graphic.firstFrameIndex), count - 1)
+        switch object.graphic.animationType {
+        case .none: return first
+        case .continuous: return (first + tick) % count
+        case .onceAtStart:
+            let elapsed = max(0, tick - ClassicDOSRules.entranceOpenTick)
+            return min(first + elapsed, count - 1)
+        case .triggered:
+            return cooldown > 0 ? min(count - cooldown, count - 1) : first
+        }
+    }
 }
 
-/// Extends the liquid body behind terrain without changing collision masks.
+/// Extends the liquid body down to terrain without changing collision masks.
 enum ClassicLiquidFill {
     static func draw(source: [UInt8], sourceWidth: Int, sourceHeight: Int,
         x: Int, y: Int, into pixels: inout [UInt8], width: Int, height: Int,
@@ -93,7 +101,7 @@ enum ClassicLiquidFill {
         for column in left..<right {
             for row in max(0, y)..<height {
                 let p = (row * width + column) * 4
-                // A pool ends at its floor, including newly built terrain.
+                // A floor separates this pool from any empty cavity beneath it.
                 if solid[(row / scale) * (width / scale) + column / scale] != 0 { break }
                 guard row >= top, pixels[p + 3] == 0 else { continue }
                 pixels[p] = UInt8((colour >> 16) & 255)

@@ -79,7 +79,7 @@ private func testAudioSettingsOptions() throws {
     try require(!options.music.contains(.dosAdlib), "DOS Ad-Lib was offered with no sequencer")
     try require(!options.music.contains(.snesSPC), "SNES SPC was offered with no SPC700 core")
     try require(!options.music.contains(.genesisFM), "Genesis FM was offered with no YM2612 core")
-    try require(!options.music.contains(.macintoshMIDI), "Macintosh MIDI was offered with no player")
+    try require(!options.music.contains(.macintoshMIDI), "Macintosh music was offered without prepared audio")
     try require(
         options.sound.contains(.macintoshResources), "Macintosh sound should be offered")
     // The Amiga banks are decoded now, so this source is offered wherever the

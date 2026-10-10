@@ -3,7 +3,7 @@ import NxlvKit
 
 /// Set once by `--fewer-inputs-first`, before any search starts: rank routes with fewer inputs
 /// before shorter crowd distance. This keeps a one-action line, such as a single dig, in the beam
-/// until its effect shows. It found every Lemmings 3 route in the first full run.
+/// until its effect shows.
 nonisolated(unsafe) var fewerInputsFirst = false
 
 /// A solver candidate: a runtime snapshot and the recorded input that produced it.
@@ -22,26 +22,84 @@ struct L3Limits: Sendable {
     var budgetSeconds = 600.0
     var cell = 8
     var refire = 150
+    /// Zero keeps the standard decision set; a positive value samples walking tool holders by location.
+    var toolSiteCell = 0
+    var pairedActors = false
     /// Lemmings 3 levels end when every lemming is out. A search stops a run after this many ticks.
     var maxTicks = 30_000
 }
 
+/// A route prefix. Complete replay files can also be read as seeds; their outcome is not used.
+struct L3Seed: Decodable {
+    let version: Int
+    let level: Int
+    let levelSHA256: String
+    let population: Int
+    let initialStateHash: String
+    let inputs: [L3Replay.Input]
+}
+
+/// Applies a checked prefix while retaining the detector's history for the continuation.
+func l3SeedCandidate(from base: Lemmings3Runtime, levelNumber: Int, levelData: Data,
+                     seed: L3Seed, throughTick: Int, limits: L3Limits) throws -> L3Candidate {
+    guard seed.version == 1, seed.level == levelNumber,
+          seed.levelSHA256 == L3Replay.digest(levelData),
+          seed.population == base.configuration.total,
+          seed.initialStateHash == L3Replay.stateHash(base) else {
+        throw SequelDataError.invalid("L3 seed source, population or initial state differs.")
+    }
+    guard (0..<limits.maxTicks).contains(throughTick), seed.inputs.count <= 100_000,
+          seed.inputs.prefix(while: { $0.tick <= throughTick }).allSatisfy({ $0.tick >= 0 }),
+          zip(seed.inputs, seed.inputs.dropFirst()).allSatisfy({ $0.tick <= $1.tick }) else {
+        throw SequelDataError.invalid("L3 seed checkpoint or input order is invalid.")
+    }
+    var candidate = L3Candidate(game: base,
+        detector: L3Detector(cell: limits.cell, refire: limits.refire, toolSiteCell: limits.toolSiteCell))
+    var cursor = 0
+    while candidate.game.tick <= throughTick {
+        while cursor < seed.inputs.count && seed.inputs[cursor].tick == candidate.game.tick {
+            let input = seed.inputs[cursor]
+            guard L3Replay.apply(input, to: &candidate.game) else {
+                throw SequelDataError.invalid("L3 seed input \(cursor) failed at tick \(candidate.game.tick).")
+            }
+            candidate.inputs.append(input)
+            cursor += 1
+        }
+        if candidate.game.tick == throughTick { break }
+        candidate.game.step()
+        candidate.decision = candidate.detector.update(candidate.game) ?? []
+        if candidate.game.isComplete {
+            throw SequelDataError.invalid("L3 seed ended before the requested checkpoint.")
+        }
+    }
+    guard !candidate.game.isComplete else {
+        throw SequelDataError.invalid("L3 seed checkpoint is already complete.")
+    }
+    return candidate
+}
+
 /// Reports decision points keyed by location, as the Lemmings 2 solver does. A crowd that meets
 /// one wall fires one decision. A lemming that stands still for the fallback period also fires.
+/// Targeted searches can sample walking Brick and Spade holders on a coarser grid.
 struct L3Detector: Sendable {
-    let cell: Int, refire: Int, fallback: Int
+    let cell: Int, refire: Int, fallback: Int, toolSiteCell: Int
     private var lastDirection: [Int: Int] = [:]
     private var lastState: [Int: Lemmings3Runtime.State] = [:]
     private var lastTool: [Int: Int] = [:]
+    private var lastQuantity: [Int: Int] = [:]
     private var lastFired: [String: Int] = [:]
+    private var lastSaved = 0
     private var lastDecisionTick = 0
+    private var lastFallbackTick = 0
 
-    init(cell: Int = 8, refire: Int = 150, fallback: Int = 150) {
-        self.cell = cell; self.refire = refire; self.fallback = fallback
+    init(cell: Int = 8, refire: Int = 150, fallback: Int = 150, toolSiteCell: Int = 0) {
+        self.cell = cell; self.refire = refire; self.fallback = fallback; self.toolSiteCell = toolSiteCell
     }
 
-    private mutating func claim(_ kind: String, _ lemming: Lemmings3Runtime.Lemming, tick: Int) -> Bool {
-        let key = "\(kind)|\(lemming.x / cell),\(lemming.y / cell),\(lemming.direction)"
+    private mutating func claim(_ kind: String, _ lemming: Lemmings3Runtime.Lemming,
+                                tick: Int, cellSize: Int? = nil) -> Bool {
+        let size = cellSize ?? cell
+        let key = "\(kind)|\(lemming.x / size),\(lemming.y / size),\(lemming.direction)"
         if let fired = lastFired[key], tick - fired < refire { return false }
         lastFired[key] = tick
         return true
@@ -54,14 +112,26 @@ struct L3Detector: Sendable {
         for lemming in game.lemmings where lemming.active {
             let previousDirection = lastDirection[lemming.id], previousState = lastState[lemming.id]
             let previousTool = lastTool[lemming.id]
+            let previousQuantity = lastQuantity[lemming.id]
             lastDirection[lemming.id] = lemming.direction
             lastState[lemming.id] = lemming.state
             lastTool[lemming.id] = lemming.tool?.rawValue ?? -1
+            lastQuantity[lemming.id] = lemming.quantity
             if let previousState, previousState != lemming.state, actionable.contains(lemming.state),
                claim("state-\(lemming.state.rawValue)", lemming, tick: game.tick) {
                 fired.append((2, lemming.id))
             }
             if let previousTool, previousTool != (lemming.tool?.rawValue ?? -1), claim("tool", lemming, tick: game.tick) {
+                fired.append((0, lemming.id))
+            }
+            if let previousQuantity, previousQuantity != lemming.quantity,
+               lemming.state == .building || lemming.state == .digging,
+               claim("work", lemming, tick: game.tick) {
+                fired.append((0, lemming.id))
+            }
+            if toolSiteCell > 0, lemming.state == .walking,
+               lemming.tool == .bricks || lemming.tool == .spade,
+               claim("tool-site-\(lemming.id)", lemming, tick: game.tick, cellSize: toolSiteCell) {
                 fired.append((0, lemming.id))
             }
             guard lemming.state == .walking else { continue }
@@ -76,19 +146,39 @@ struct L3Detector: Sendable {
                 fired.append((3, lemming.id))
             }
         }
-        if fired.isEmpty {
-            guard game.tick - lastDecisionTick >= fallback else { return nil }
+        let newSave = game.saved > lastSaved
+        lastSaved = game.saved
+        if fired.isEmpty && newSave {
             lastDecisionTick = game.tick
-            let walking = game.lemmings.filter { $0.active && $0.state == .walking }.map(\.id)
-            return Array(walking.prefix(1))
+            return []
         }
-        lastDecisionTick = game.tick
+        if toolSiteCell == 0 {
+            if fired.isEmpty {
+                guard game.tick - lastDecisionTick >= fallback else { return nil }
+                lastDecisionTick = game.tick
+                let walking = game.lemmings.filter { $0.active && $0.state == .walking }.map(\.id)
+                return Array(walking.prefix(3))
+            }
+            lastDecisionTick = game.tick
+        }
+        let fallbackDue = toolSiteCell > 0 && game.tick - lastFallbackTick >= fallback
+        guard !fired.isEmpty || fallbackDue else { return nil }
         var offered: [Int] = []
         for entry in fired.sorted(by: { ($0.priority, $0.id) < ($1.priority, $1.id) }) where !offered.contains(entry.id) {
             if offered.count == 3 { break }
             offered.append(entry.id)
         }
-        return offered
+        if fallbackDue {
+            let walking = game.lemmings.filter { $0.active && $0.state == .walking }
+            let fallbackActor = walking.first(where: { $0.tool == nil && !offered.contains($0.id) })
+                ?? walking.first(where: { !offered.contains($0.id) })
+            if let id = fallbackActor?.id {
+                if offered.count == 3 { offered.removeLast() }
+                offered.append(id)
+            }
+            if !walking.isEmpty { lastFallbackTick = game.tick }
+        }
+        return offered.isEmpty ? nil : offered
     }
 }
 
@@ -143,7 +233,7 @@ struct L3DistanceField: Sendable {
     }
 }
 
-/// Ranks candidates: saved, then lemmings neither lost nor blocking, then distance to an exit, then fewer inputs.
+/// Ranks candidates: saved, then lemmings not lost, then distance to an exit, then fewer inputs.
 struct L3Score: Comparable, Sendable {
     let saved: Int, remaining: Int, distance: Int, inputs: Int, fingerprint: UInt64
 
@@ -163,11 +253,18 @@ struct L3Score: Comparable, Sendable {
     init(_ candidate: L3Candidate, field: L3DistanceField) {
         let game = candidate.game
         let active = game.lemmings.filter(\.active).reduce(0) { $0 + field.distance(x: $1.x, y: $1.y) }
-        let entrance = field.distance(x: game.configuration.entrance.x, y: game.configuration.entrance.y)
+        let entrances = [game.configuration.entrance] + game.configuration.additionalEntrances
+        let hatchDistances = entrances.map { field.distance(x: $0.x, y: $0.y) }
+        let pending = game.pendingReleases
+        let completeCycles = pending / hatchDistances.count
+        let firstHatch = game.released % hatchDistances.count
+        let remainingHatches = (0..<(pending % hatchDistances.count)).reduce(0) { sum, index in
+            sum + hatchDistances[(firstHatch + index) % hatchDistances.count]
+        }
         saved = game.saved
-        // A blocker can never reach an exit while it blocks, so it does not count as remaining.
-        remaining = game.configuration.total - game.lost - game.lemmings.filter { $0.state == .blocking }.count
-        distance = active + game.reserve * entrance
+        // Walker can release a blocker, so it still has a chance to reach an exit.
+        remaining = game.configuration.total - game.lost
+        distance = active + completeCycles * hatchDistances.reduce(0, +) + remainingHatches
         inputs = candidate.inputs.count
         fingerprint = candidate.fingerprint
     }
@@ -180,21 +277,42 @@ func l3Fingerprint(_ game: Lemmings3Runtime) -> UInt64 {
         var bits = UInt64(bitPattern: Int64(number))
         for _ in 0..<8 { value = (value ^ (bits & 0xff)) &* 0x0000_0100_0000_01b3; bits >>= 8 }
     }
-    add(game.tick); add(game.released)
+    add(game.tick); add(game.released); add(game.bonusSeconds); add(game.isComplete ? 1 : 0)
     for lemming in game.lemmings {
-        add(lemming.id); add(lemming.x); add(lemming.y); add(lemming.direction); add(lemming.age)
-        for byte in lemming.state.rawValue.utf8 { add(Int(byte)) }; add(lemming.tool?.rawValue ?? -1); add(lemming.quantity)
-        add(lemming.mobilityTool?.rawValue ?? -1); add(lemming.mobilityTicks)
+        for byte in lemming.state.rawValue.utf8 { add(Int(byte)) }
+        for byte in lemming.workDirection.rawValue.utf8 { add(Int(byte)) }
+        for number in [lemming.id, lemming.x, lemming.y, lemming.direction, lemming.age,
+                       lemming.fall, lemming.velocityY, lemming.tool?.rawValue ?? -1,
+                       lemming.quantity, lemming.swimTicks, lemming.trapTicks,
+                       lemming.mobilityTool?.rawValue ?? -1, lemming.mobilityTicks,
+                       lemming.charmedBy ?? -1, lemming.charmTicks, lemming.charmImmunity] { add(number) }
     }
-    for pickup in game.pickups { add(pickup.id); add(pickup.x); add(pickup.y); add(pickup.quantity) }
+    for pickup in game.pickups {
+        for number in [pickup.id, pickup.tool.rawValue, pickup.x, pickup.y,
+                       pickup.quantity, pickup.ignoredBy ?? -1] { add(number) }
+    }
     for (key, solid) in game.terrainEdits.sorted(by: { $0.key < $1.key }) { add(key); add(solid ? 1 : 0) }
-    for bomb in game.explosives { add(bomb.id); add(bomb.x); add(bomb.y); add(bomb.age) }
-    for creature in game.creatures { add(creature.id); add(creature.x); add(creature.y); add(creature.alive ? 1 : 0) }
+    for bomb in game.explosives {
+        for number in [bomb.id, bomb.tool.rawValue, bomb.x, bomb.y,
+                       bomb.velocityX, bomb.velocityY, bomb.age] { add(number) }
+    }
+    for ball in game.fireballs {
+        for number in [ball.x, ball.y, ball.direction, ball.age] { add(number) }
+    }
+    for creature in game.creatures {
+        for byte in creature.digDirection.rawValue.utf8 { add(Int(byte)) }
+        for number in [creature.id, creature.kind.rawValue, creature.x, creature.y,
+                       creature.direction, creature.alive ? 1 : 0, creature.target ?? -1,
+                       creature.cooldown, creature.age] { add(number) }
+    }
+    for trap in game.configuration.traps.sorted(by: { $0.id < $1.id }) {
+        add(trap.id); add(game.trapFrame(id: trap.id))
+    }
     return value
 }
 
-/// The actions to try for one lemming at a decision point.
-func l3Actions(_ game: Lemmings3Runtime, lemming id: Int) -> [L3Replay.Input] {
+/// The input sequences to try for one lemming at a decision point.
+func l3Actions(_ game: Lemmings3Runtime, lemming id: Int) -> [[L3Replay.Input]] {
     guard let lemming = game.lemmings.first(where: { $0.id == id && $0.active }) else { return [] }
     var result: [L3Replay.Input] = []
     for action in ["walker", "blocker", "jumper"] {
@@ -204,8 +322,8 @@ func l3Actions(_ game: Lemmings3Runtime, lemming id: Int) -> [L3Replay.Input] {
         result.append(.init(tick: game.tick, action: "drop", lemming: id, direction: nil))
         let directions: [Lemmings3Runtime.Direction]
         switch tool {
-        case .spade: directions = [.left, .right, .down, .downLeft, .downRight]
-        case .bricks: directions = [.upLeft, .upRight, .left, .right]
+        case .spade: directions = Lemmings3Runtime.Direction.allCases
+        case .bricks: directions = Lemmings3Runtime.Direction.allCases.filter { $0 != .down }
         case .bomb, .grenade, .hadoken, .sucker, .shimmy: directions = [lemming.direction > 0 ? .right : .left]
         default: directions = []
         }
@@ -214,10 +332,53 @@ func l3Actions(_ game: Lemmings3Runtime, lemming id: Int) -> [L3Replay.Input] {
         }
     }
     // Keep only actions the runtime accepts now.
-    return result.filter { input in
+    var choices = result.filter { input in
         var trial = game
         return L3Replay.apply(input, to: &trial)
+    }.map { [$0] }
+    if lemming.state == .building || lemming.state == .digging {
+        let walker = L3Replay.Input(tick: game.tick, action: "walker", lemming: id, direction: nil)
+        var trial = game
+        if L3Replay.apply(walker, to: &trial), L3Replay.apply(walker, to: &trial) {
+            choices.append([walker, walker])
+        }
     }
+    return choices
+}
+
+/**
+ * Returns a bounded set of same-tick actions for two offered actors.
+ */
+func l3PairedActions(_ game: Lemmings3Runtime, actorChoices: [[[L3Replay.Input]]], limit: Int = 32) -> [[L3Replay.Input]] {
+    guard actorChoices.count > 1, limit > 0 else { return [] }
+    func priority(_ input: L3Replay.Input) -> Int {
+        switch input.action {
+        case "walker": 0
+        case "jumper": 1
+        case "use": 2
+        case "blocker": 3
+        default: 4
+        }
+    }
+    var proposals: [(priority: Int, order: Int, first: L3Replay.Input, second: L3Replay.Input)] = []
+    for firstActor in 0..<(actorChoices.count - 1) {
+        for secondActor in (firstActor + 1)..<actorChoices.count {
+            for first in actorChoices[firstActor] where first.count == 1 {
+                for second in actorChoices[secondActor] where second.count == 1 {
+                    proposals.append((priority(first[0]) + priority(second[0]), proposals.count, first[0], second[0]))
+                }
+            }
+        }
+    }
+    proposals.sort { ($0.priority, $0.order) < ($1.priority, $1.order) }
+    var result: [[L3Replay.Input]] = []
+    for proposal in proposals {
+        var trial = game
+        guard L3Replay.apply(proposal.first, to: &trial), L3Replay.apply(proposal.second, to: &trial) else { continue }
+        result.append([proposal.first, proposal.second])
+        if result.count == limit { break }
+    }
+    return result
 }
 
 struct L3Report: Sendable {
@@ -227,9 +388,10 @@ struct L3Report: Sendable {
     var seconds = 0.0
 }
 
-/// Runs a candidate until its next decision point or the end of the level.
-func l3Advance(_ candidate: inout L3Candidate, limits: L3Limits) -> Bool {
+/// Runs a candidate until its next decision point, the end of the level or the search deadline.
+func l3Advance(_ candidate: inout L3Candidate, limits: L3Limits, deadline: Date? = nil) -> Bool {
     while !candidate.game.isComplete && candidate.game.tick < limits.maxTicks {
+        if let deadline, Date() >= deadline { return false }
         candidate.game.step()
         if let offered = candidate.detector.update(candidate.game) {
             candidate.decision = offered
@@ -239,9 +401,13 @@ func l3Advance(_ candidate: inout L3Candidate, limits: L3Limits) -> Bool {
     return false
 }
 
-/// A beam search over decision points. A finished winning candidate keeps its inputs as the route.
-func l3Search(from start: Lemmings3Runtime, limits: L3Limits) -> L3Report {
+/**
+ * Searches decision points and keeps the inputs for a finished winning candidate.
+ */
+func l3Search(from start: Lemmings3Runtime, limits: L3Limits, seed: L3Candidate? = nil,
+              deadline: Date? = nil) -> L3Report {
     let started = Date()
+    let searchDeadline = deadline ?? started.addingTimeInterval(limits.budgetSeconds)
     let field = L3DistanceField(start)
     var report = L3Report()
     func consider(_ candidate: L3Candidate) {
@@ -254,27 +420,34 @@ func l3Search(from start: Lemmings3Runtime, limits: L3Limits) -> L3Report {
     }
     func finish(_ candidate: L3Candidate) -> L3Candidate {
         var tail = candidate
-        while l3Advance(&tail, limits: limits) {}
+        while Date() < searchDeadline && l3Advance(&tail, limits: limits, deadline: searchDeadline) {}
         return tail
     }
-    var root = L3Candidate(game: start, detector: L3Detector(cell: limits.cell, refire: limits.refire))
-    _ = l3Advance(&root, limits: limits)
+    var root = seed ?? L3Candidate(game: start, detector: L3Detector(cell: limits.cell, refire: limits.refire,
+                                                                   toolSiteCell: limits.toolSiteCell))
+    if seed == nil { _ = l3Advance(&root, limits: limits, deadline: searchDeadline) }
     root.fingerprint = l3Fingerprint(root.game)
     consider(root)
+    let prefixInputCount = root.inputs.count
     var beam = root.game.isComplete ? [] : [root]
-    while !beam.isEmpty && Date().timeIntervalSince(started) < limits.budgetSeconds {
+    while !beam.isEmpty && Date() < searchDeadline {
         var next: [UInt64: L3Candidate] = [:]
         for node in beam {
             if node.depth >= limits.maxDepth { consider(finish(node)); continue }
             var choices: [[L3Replay.Input]] = [[]]
-            for id in node.decision { choices += l3Actions(node.game, lemming: id).map { [$0] } }
+            let actorChoices = node.decision.map { l3Actions(node.game, lemming: $0) }
+            for actions in actorChoices { choices += actions }
+            if limits.pairedActors { choices += l3PairedActions(node.game, actorChoices: actorChoices) }
+            if node.game.saved > 0 {
+                choices.append([.init(tick: node.game.tick, action: "abort", lemming: nil, direction: nil)])
+            }
             for inputs in choices {
                 var child = node
                 for input in inputs { _ = L3Replay.apply(input, to: &child.game) }
                 child.inputs += inputs
                 child.depth += 1
                 report.expanded += 1
-                _ = l3Advance(&child, limits: limits)
+                _ = l3Advance(&child, limits: limits, deadline: searchDeadline)
                 child.fingerprint = l3Fingerprint(child.game)
                 consider(child)
                 guard !child.game.isComplete, child.game.tick < limits.maxTicks else { continue }
@@ -282,12 +455,13 @@ func l3Search(from start: Lemmings3Runtime, limits: L3Limits) -> L3Report {
                    !(L3Score(existing, field: field) < L3Score(child, field: field)) { continue }
                 next[child.fingerprint] = child
             }
-            if Date().timeIntervalSince(started) >= limits.budgetSeconds { break }
+            if Date() >= searchDeadline { break }
         }
         beam = next.values.sorted { L3Score($1, field: field) < L3Score($0, field: field) }.prefix(limits.beamWidth).map { $0 }
         // Keep the line that has only waited. A useful action often scores no better than a harmful
         // one until long after it happens, so the untouched line must stay available to branch from.
-        if !beam.contains(where: { $0.inputs.isEmpty }), let waiting = next.values.first(where: { $0.inputs.isEmpty }) {
+        if !beam.contains(where: { $0.inputs.count == prefixInputCount }),
+           let waiting = next.values.first(where: { $0.inputs.count == prefixInputCount }) {
             if beam.count == limits.beamWidth { beam.removeLast() }
             beam.append(waiting)
         }

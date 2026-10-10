@@ -1,0 +1,63 @@
+{
+  "bundledArchive": "Content/LevelPacks/0496-MARTPCK2.zip",
+  "bundledArchiveSHA256": "fbf2f7723f9042ccda838524e4a366e035f49c34d2d1422a7eca9017a9cb01cb",
+  "description": "Opt-in Golems mechanics evidence on exact bundled MARTPCK2.DAT levels. These profiles do not replace selected default-mechanics ledger rows. Native wins do not establish full source physics parity.",
+  "records": [
+    {
+      "clock": "golems",
+      "defaultMechanicsPassiveOutcome": {
+        "completionTick": 3218,
+        "didWin": false,
+        "required": 60,
+        "saved": 0
+      },
+      "difficultyScore": 55.02485299882399,
+      "identity": {
+        "levelID": "MARTPCK2.DAT#0",
+        "packID": "fan:lldb-496"
+      },
+      "initialStateHash": "e9f26295d4ed48f4750690e754821c5513e68d0fccc1a7cc525920a76578a775",
+      "mechanics": "golems",
+      "nativeCompletionTick": 3269,
+      "probeRuns": 10,
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-profile-replays/its-raining-lemmings-passive.profile.json",
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-profile-replays/its-raining-lemmings-passive.json",
+      "replaySHA256": "5d57c073b17820c57998caf86e3ac5b95734b80370f43ee333b932667796764e",
+      "required": 60,
+      "routePurpose": "simplest verified native route",
+      "saved": 60,
+      "sourceCompletionTick": 743,
+      "sourceInputRoute": {
+        "difficultyScore": 309.4590509753039,
+        "initialStateHash": "e9f26295d4ed48f4750690e754821c5513e68d0fccc1a7cc525920a76578a775",
+        "nativeCompletionTick": 745,
+        "profilePath": "Artifacts/DifficultyEvaluation/golems-profile-replays/its-raining-lemmings.profile.json",
+        "purpose": "published source input compatibility check",
+        "replayPath": "Artifacts/DifficultyEvaluation/golems-profile-replays/its-raining-lemmings.json",
+        "replaySHA256": "bb316f1d40a035afc977e9d3501b3727e6143856814067cc4ece17da8c9b6a2b"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/496/1/Its-Raining-Lemmings",
+      "title": "It's Raining Lemmings"
+    },
+    {
+      "clock": "golems",
+      "difficultyScore": 269.7084737644241,
+      "identity": {
+        "levelID": "MARTPCK2.DAT#6",
+        "packID": "fan:lldb-496"
+      },
+      "initialStateHash": "69fdf860149bfce9fc4f225afc9acf90a869cc1866e12954b78456d85f103c83",
+      "mechanics": "golems",
+      "nativeCompletionTick": 1599,
+      "probeRuns": 10,
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-profile-replays/cliffhanger.profile.json",
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-profile-replays/cliffhanger.json",
+      "replaySHA256": "af138e29b4c774059a4824c9d60f395dd60372493f7596c43b2b02e7d0baab56",
+      "required": 30,
+      "saved": 30,
+      "sourceCompletionTick": 1603,
+      "sourceURL": "https://lldb.camanis.net/level/496/7",
+      "title": "Cliffhanger"
+    }
+  ]
+}

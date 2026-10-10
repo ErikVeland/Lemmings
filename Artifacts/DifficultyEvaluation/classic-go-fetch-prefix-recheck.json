@@ -1,0 +1,35 @@
+{
+  "correctedBeam": {
+    "bestSaved": 22,
+    "containsAllForcedInputs": true,
+    "eventCount": 9,
+    "expanded": 57909,
+    "reportedTick": 1312,
+    "required": 23,
+    "sha256": "413b4aaa30242a59ac057e5f69fc12f475cb87ecc10395b44c2cad8293006325"
+  },
+  "correctedOneSkillRollout": {
+    "bestSaved": 22,
+    "containsAllForcedInputs": true,
+    "eventCount": 9,
+    "expanded": 40094,
+    "required": 23,
+    "sha256": "5bcc508b681357dcb0dac416556214ef9985292501ee294c6ec2c9e820685105",
+    "singleSkillContinuations": 27,
+    "waitingRouteTick": 2042
+  },
+  "correctedSolverSHA256": "de5456a5d41b421ee631fa161f46aa40303dd09fa09901b10031b36bc2230ff5",
+  "date": "2026-10-04",
+  "exactArchiveSHA256": "ea5c212dd530e2c8ea2c8b033aa2ad8e7882c455134d530ff83dac0d15100241",
+  "forcedCommandCount": 6,
+  "forcedPrefixSHA256": "e2ec924cd6d6cb63a734354cd726a582138d05d43c13aaee0eac2d2a9298ce0b",
+  "historicalPartial": {
+    "containsAllForcedInputs": false,
+    "eventCount": 0,
+    "interpretation": "The old no-win result did not test the requested prefix.",
+    "sha256": "aa53d09cfd86af0fc28639630b74e8422ba05c89f74dbe840a9d1a38030b07db"
+  },
+  "identity": "fan:lldb-62/ClamSpam02.dat#5",
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "result": "No strict native win or score; corrected searches did apply every forced input. Source physics parity remains unverified."
+}

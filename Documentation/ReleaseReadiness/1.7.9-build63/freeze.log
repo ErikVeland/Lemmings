@@ -1,0 +1,9 @@
+PASS 251 proofs, 17 rescue records, and replay hashes
+PASS report, 120 fixture hashes, and current engine fingerprint
+PASS 273 campaign fixture hashes and coverage manifest
+PASS 75 Lemmings 2 fixture hashes and 27 carry-over fixture hashes
+PASS source snapshot and prepared resources
+[feature/release-1.7.9 4d8cda8] Prepare 1.7.9 build 63 and refresh release proofs
+ 25 files changed, 231 insertions(+), 619 deletions(-)
+ create mode 100644 Documentation/ReleaseNotes-1.7.9-build63.md
+Wrote release notes: /Users/veland/.codex/worktrees/release-1-7-9/Lemmings/.build/release-1.7.9/ReleaseNotes-1.7.9-build63.md

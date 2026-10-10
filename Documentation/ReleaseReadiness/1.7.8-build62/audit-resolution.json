@@ -1,0 +1,13 @@
+{
+  "audit": "audit/results.json",
+  "sourceCommit": "dbc3d25bfeee920d0941398603d87aec94c80a7f",
+  "resolvedChecks": [
+    {
+      "name": "PercussionTests",
+      "reason": "Foundation enumeration did not follow the isolated Sources/Music symlink. The unchanged test binary passed against the original source asset directory.",
+      "log": "percussion-asset-rerun.log",
+      "status": "passed"
+    }
+  ],
+  "unresolvedFailures": []
+}

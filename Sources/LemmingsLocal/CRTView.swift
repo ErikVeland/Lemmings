@@ -159,6 +159,8 @@ struct CRTUniforms {
   private var scratchA: MTLTexture?
   private var scratchB: MTLTexture?
   private var sourceSize = CGSize.zero
+  private var selectionRenderer: LemmingSelectionRenderer?
+  private var selection: LemmingSelectionEffect?
 
   var settings = CRTSettings.amiga1084
 
@@ -172,7 +174,7 @@ struct CRTUniforms {
   var onMouseDragged: ((CGPoint) -> Void)?
   var onMouseExited: (() -> Void)?
   var onMouseMoved: ((CGPoint) -> Void)?
-  var onScroll: ((CGFloat, CGFloat) -> Void)?
+  var onScroll: ((NSEvent, CGPoint?) -> Void)?
   /// Source-space area that draws its own pointer. Controls outside it keep the system arrow.
   var gameplayCursorRect: CGRect? {
     didSet {
@@ -231,6 +233,7 @@ struct CRTUniforms {
       final.fragmentFunction = library.makeFunction(name: "crt_composite")
       final.colorAttachments[0].pixelFormat = .rgba16Float
       compositePipeline = try device.makeRenderPipelineState(descriptor: final)
+      selectionRenderer = try? LemmingSelectionRenderer(device: device)
     } catch {
       failureReason = "\(error)"
     }
@@ -368,13 +371,15 @@ struct CRTUniforms {
   }
 
   override func scrollWheel(with event: NSEvent) {
-    onScroll?(event.scrollingDeltaX, event.scrollingDeltaY)
+    let point = sourcePoint(from: convert(event.locationInWindow, from: nil))
+    onScroll?(event, point)
   }
 
   // MARK: - Source
 
   /// Uploads the composed game frame.
-  func setSource(_ image: CGImage, flashes: [ExplosionFlash] = []) {
+  func setSource(_ image: CGImage, flashes: [ExplosionFlash] = [], selection: LemmingSelectionEffect? = nil) {
+    self.selection = selection
     guard let device else { return }
     let width = image.width
     let height = image.height
@@ -503,6 +508,20 @@ struct CRTUniforms {
     pass(blurH, target: scratchB, textures: [scratchA])
     pass(blurV, target: scratchA, textures: [scratchB])
     pass(composite, target: drawable.texture, textures: [sourceTexture, scratchA, flashTexture])
+    // Selection is composited after the tube. Its neighbour samples are always
+    // two physical output pixels apart, even on a Retina display or curved edge.
+    if !GameCursor.gameplaySuppressed, let selection, let selectionRenderer {
+      let descriptor = MTLRenderPassDescriptor()
+      descriptor.colorAttachments[0].texture = drawable.texture
+      descriptor.colorAttachments[0].loadAction = .load
+      descriptor.colorAttachments[0].storeAction = .store
+      if let encoder = buffer.makeRenderCommandEncoder(descriptor: descriptor) {
+        selectionRenderer.encode(selection, sourceSize: sourceSize, outputSize: layer.drawableSize,
+          glass: SIMD4(settings.curvature, settings.curvatureY, settings.cornerRadius, settings.cornerSoftness),
+          into: encoder)
+        encoder.endEncoding()
+      }
+    }
 
     #if PERFORMANCE_TESTS
     let metrics = performanceMetrics

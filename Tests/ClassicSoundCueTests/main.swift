@@ -58,6 +58,20 @@ private func testDuplicatesCollapse() throws {
     print("PASS twelve lemmings entering the same state play one sound")
 }
 
+private func testRescuesRemainIndividual() throws {
+    let cues = ClassicSoundCue.cues(for: [
+        .saved(lemmingID: 1),
+        .actionChanged(lemmingID: 3, from: .falling, to: .splatting),
+        .actionChanged(lemmingID: 4, from: .falling, to: .splatting),
+        .fellOut(lemmingID: 5),
+        .fellOut(lemmingID: 6),
+        .saved(lemmingID: 2),
+    ])
+    try require(cues == [.exitLevel, .yippee, .splat, .fallOut, .exitLevel, .yippee],
+        "Same-tick rescues lost a celebration or ordinary hazards repeated: \(cues)")
+    print("PASS each same-tick rescue celebrates while ordinary hazards share one cue")
+}
+
 private func testQuietEventsStaySilent() throws {
     let events: [ClassicDOSEvent] = [
         .directionChanged(lemmingID: 1, direction: .left),
@@ -117,11 +131,25 @@ do {
     let terrain = try ClassicDOSTerrain(width: 64, height: 64, solidMask: Data(repeating: 0, count: 4096), steelMask: Data(repeating: 0, count: 4096))
     var falling = try ClassicDOSSimulation(terrain: terrain, configuration: .init(totalLemmings: 1, requiredToSave: 0, timeLimitTicks: nil, initialReleaseRate: 99, entrances: [.init(x: 20, y: 20)], maximumX: 63, maximumY: 63))
     var bottomCues: [ClassicSoundEffect] = []
-    for _ in 0..<200 { bottomCues += ClassicSoundCue.cues(for: falling.tick()) }
+    for _ in 0..<200 {
+        let events = falling.tick()
+        bottomCues += ClassicSoundCue.cues(for: events)
+        let positioned = ClassicSoundCue.positionedCues(for: events, lemmings: falling.lemmings,
+                                                       entrances: falling.configuration.entrances)
+        for cue in positioned where cue.effect == .fallOut {
+            let foot = falling.lemmings[0].foot
+            try require(cue.point == GameplaySoundPoint(x: Double(foot.x), y: Double(foot.y)), "Bottom fall lost its source position")
+        }
+    }
+    let lemming = falling.lemmings[0]
+    let spatial = ClassicSoundCue.positionedCues(for: [.saved(lemmingID: lemming.id), .builderWarning(lemmingID: lemming.id)],
+      lemmings: falling.lemmings, entrances: falling.configuration.entrances)
+    try require(spatial.count == 3 && spatial.allSatisfy { $0.point != nil }, "Exit and builder cues lost their source positions")
     try require(bottomCues.filter { $0 == .fallOut }.count == 1 && !bottomCues.contains(.splat), "A real bottom fall must emit exactly one death voice")
     try testCoreEventsMap()
     try testHazardsMap()
     try testDuplicatesCollapse()
+    try testRescuesRemainIndividual()
     try testQuietEventsStaySilent()
     try testMappingReportsGaps()
     try testPitchRatio()

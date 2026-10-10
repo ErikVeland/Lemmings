@@ -79,8 +79,8 @@ def main():
     parser.add_argument("--app", action="store_true", help="Also run the complete macOS app and sequel view checks")
     parser.add_argument("--app-bundle", type=Path, default=ROOT / ".build/local/Ultimate Lemmings.app",
                         help="Resource bundle for fresh tests. Use a candidate inside this checkout.")
-    parser.add_argument("--scope", choices=["all", "classic-1.0"], default="all",
-                        help="Classic 1.0 requires official and conversion wins, fan load/start checks, and sequel regressions.")
+    parser.add_argument("--scope", choices=["minor", "all", "classic-1.0"], default="minor",
+                        help="Minor skips full-campaign replay runs and checks preserved route manifests. All runs every campaign route.")
     parser.add_argument("--require-closure", action="store_true", help="Fail while any tracked release gate is still open")
     args = parser.parse_args()
     app = args.app_bundle.resolve()
@@ -90,7 +90,8 @@ def main():
     base = args.out.resolve()
     base.mkdir(parents=True, exist_ok=False)
     logs, library, frozen = base / "logs", base / "library", base / "source"
-    for path in [logs, library / "modules", frozen]:
+    module_cache = base / "module-cache"
+    for path in [logs, library / "modules", frozen, module_cache]:
         path.mkdir(parents=True, exist_ok=True)
     before = manifest(input_paths(app))
     (base / "inputs.json").write_text(json.dumps(before, indent=2) + "\n")
@@ -100,8 +101,13 @@ def main():
     compiler_target = f"{platform.machine()}-apple-macos12.3"
 
     def run(name, commands, env=None):
-        env = dict(env or os.environ, LEMMINGS_TEST_APP=str(app),
-                   CAMPAIGN_TEST_RESOURCES=str(app / "Contents/Resources"))
+        env = dict(env or os.environ)
+        env.update(
+            LEMMINGS_TEST_APP=str(app),
+            CAMPAIGN_TEST_RESOURCES=str(app / "Contents/Resources"),
+            CLANG_MODULE_CACHE_PATH=str(module_cache),
+            SWIFT_MODULE_CACHE_PATH=str(module_cache),
+        )
         started = time.monotonic()
         code = 0
         with (logs / (name + ".log")).open("w") as output:
@@ -121,10 +127,12 @@ def main():
         return result
 
     def compile_command(source, output, extra=()):
-        return ["swiftc", "-O", "-swift-version", "6", "-target", compiler_target, *extra, "-I", library / "modules", "-L", library,
+        return ["swiftc", "-O", "-swift-version", "6", "-target", compiler_target,
+                "-module-cache-path", module_cache, *extra, "-I", library / "modules", "-L", library,
                 "-lNxlvKit", "-Xlinker", "-rpath", "-Xlinker", library, "-o", output, source]
 
-    checks.append(run("shared-library", [["swiftc", "-O", "-swift-version", "6", "-target", compiler_target, "-parse-as-library",
+    checks.append(run("shared-library", [["swiftc", "-O", "-swift-version", "6", "-target", compiler_target,
+        "-module-cache-path", module_cache, "-parse-as-library",
         "-emit-module", "-emit-library", "-module-name", "NxlvKit", "-emit-module-path",
         library / "modules/NxlvKit.swiftmodule", "-Xlinker", "-install_name", "-Xlinker",
         "@rpath/libNxlvKit.dylib", "-o", library / "libNxlvKit.dylib", *sorted(frozen.glob("*.swift"))]]))
@@ -157,14 +165,21 @@ def main():
                           dict(os.environ, SAVE_TEST_LIBRARY_DIR=str(library), CROSS_BUILD_PORTS=str(ports))))
         checks.append(run("fan-library", [["zsh", "Scripts/run-fan-library-tests.sh"]],
                           dict(os.environ, FAN_TEST_LIBRARY_DIR=str(library))))
-        verifier = library / "ClassicCompletion"
-        data = ports / "lemmings_dos_1991-07-30"
-        checks.append(run("original-120-solutions", [compile_command(ROOT / "Tools/ClassicCompletion/main.swift", verifier),
-            [verifier, "verify", data], [sys.executable, "Tools/ClassicCompletion/report.py", "--check"],
-            [sys.executable, "Tests/ClassicDOSCompletionTests/test_gate.py", verifier, data]]))
-        environment = dict(os.environ, CAMPAIGN_TEST_LIBRARY_DIR=str(library),
-                           CAMPAIGN_TEST_RESOURCES=str(app / "Contents/Resources"))
-        checks.append(run("additional-campaign-solutions", [campaign_command(args.scope)], environment))
+        if args.scope == "minor":
+            checks.append(run("preserved-solution-manifests", [
+                [sys.executable, "Tools/ClassicCompletion/report.py", "--check-fixtures"],
+                [sys.executable, "Tools/CampaignCompletion/report.py", "--check"],
+                [sys.executable, "Tools/Lemmings2Completion/report.py", "--check"],
+            ]))
+        else:
+            verifier = library / "ClassicCompletion"
+            data = ports / "lemmings_dos_1991-07-30"
+            checks.append(run("original-120-solutions", [compile_command(ROOT / "Tools/ClassicCompletion/main.swift", verifier),
+                [verifier, "verify", data], [sys.executable, "Tools/ClassicCompletion/report.py", "--check"],
+                [sys.executable, "Tests/ClassicDOSCompletionTests/test_gate.py", verifier, data]]))
+            environment = dict(os.environ, CAMPAIGN_TEST_LIBRARY_DIR=str(library),
+                               CAMPAIGN_TEST_RESOURCES=str(app / "Contents/Resources"))
+            checks.append(run("additional-campaign-solutions", [campaign_command(args.scope)], environment))
         if args.scope == "classic-1.0":
             quest_verifier = library / "OfficialClassicQuest"
             checks.append(run("official-classic-quest", [
@@ -182,18 +197,19 @@ def main():
                                 [ROOT / "Sources/LemmingsLocal/FanLevelLibrary.swift"]),
                 [sys.executable, "Tools/ClassicValidation/parallel.py", corpus_verifier,
                  app / "Contents/Resources", corpus, ROOT, "4"]]))
-        checks.append(run("l3-solutions", [["zsh", "Scripts/verify-l3-completion.sh"]],
-                          dict(os.environ, L3_TEST_LIBRARY_DIR=str(library))))
-        l2_verifier, l2_negative = library / "L2Completion", library / "L2CompletionNegative"
-        l2_data = ROOT / "Sources/Ports/Lemm2"
-        checks.append(run("l2-solutions", [
-            [sys.executable, "Tests/Lemmings2CompletionTests/test_chains.py"],
-            [sys.executable, "Tools/Lemmings2Completion/report.py", "--check"],
-            compile_command(ROOT / "Tools/Lemmings2Completion/main.swift", l2_verifier),
-            [l2_verifier, l2_data],
-            [sys.executable, "Tests/Lemmings2CompletionTests/test_chain_gate.py", l2_verifier, l2_data],
-            compile_command(ROOT / "Tests/Lemmings2CompletionTests/negative.swift", l2_negative),
-            [l2_negative, l2_data]]))
+        if args.scope != "minor":
+            checks.append(run("l3-solutions", [["zsh", "Scripts/verify-l3-completion.sh"]],
+                              dict(os.environ, L3_TEST_LIBRARY_DIR=str(library))))
+            l2_verifier, l2_negative = library / "L2Completion", library / "L2CompletionNegative"
+            l2_data = ROOT / "Sources/Ports/Lemm2"
+            checks.append(run("l2-solutions", [
+                [sys.executable, "Tests/Lemmings2CompletionTests/test_chains.py"],
+                [sys.executable, "Tools/Lemmings2Completion/report.py", "--check"],
+                compile_command(ROOT / "Tools/Lemmings2Completion/main.swift", l2_verifier),
+                [l2_verifier, l2_data],
+                [sys.executable, "Tests/Lemmings2CompletionTests/test_chain_gate.py", l2_verifier, l2_data],
+                compile_command(ROOT / "Tests/Lemmings2CompletionTests/negative.swift", l2_negative),
+                [l2_negative, l2_data]]))
     for name, command in [
         ("audit-integrity", [sys.executable, "Tests/ReleaseReadinessTests/test_audit.py"]),
         ("package-closure", [sys.executable, "Tests/ReleaseReadinessTests/test_package_scope.py"]),
@@ -205,6 +221,7 @@ def main():
         ("controller", ["zsh", "Scripts/run-controller-qol-tests.sh"]),
         ("variable-speed", ["zsh", "Scripts/run-gameplay-speed-tests.sh"]),
         ("pointer-capture", ["zsh", "Scripts/run-pointer-capture-tests.sh"]),
+        ("dialog-cursor", ["zsh", "Scripts/run-dialog-cursor-tests.sh"]),
         ("hdr-gpu", ["zsh", "Scripts/run-explosion-hdr-tests.sh"]),
         ("rescue-certificates", [sys.executable, "Tools/TrolleyVerification/catalogue.py", "check"]),
     ]:

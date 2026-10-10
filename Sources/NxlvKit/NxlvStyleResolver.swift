@@ -166,6 +166,14 @@ public enum NxlvObjectEffect: Sendable, Equatable {
     case forceLeft
     case forceRight
     case background
+    case animation
+    case animationOnce
+    case paint
+    case neutralizer
+    case deneutralizer
+    case addSkill
+    case removeSkills
+    case portal
     case unknown(String)
 
     public init(keyword: String?) {
@@ -198,6 +206,14 @@ public enum NxlvObjectEffect: Sendable, Equatable {
         case "FORCELEFT": self = .forceLeft
         case "FORCERIGHT": self = .forceRight
         case "BACKGROUND": self = .background
+        case "NO_EFFECT", "ANIMATION": self = .animation
+        case "ANIMATIONONCE": self = .animationOnce
+        case "PAINT": self = .paint
+        case "NEUTRALIZER": self = .neutralizer
+        case "DENEUTRALIZER": self = .deneutralizer
+        case "ADDSKILL": self = .addSkill
+        case "REMOVESKILLS": self = .removeSkills
+        case "PORTAL": self = .portal
         default: self = .unknown(keyword)
         }
     }
@@ -206,6 +222,38 @@ public enum NxlvObjectEffect: Sendable, Equatable {
 public enum NxlvAnimationInitialFrame: Sendable, Equatable {
     case index(Int)
     case random
+}
+
+public enum NxlvAnimationTriggerCondition: String, Codable, Sendable, Equatable {
+    case unconditional
+    case ready
+    case busy
+    case disabled
+    case exhausted
+}
+
+public enum NxlvAnimationPlaybackState: String, Codable, Sendable, Equatable {
+    case play
+    case pause
+    case stop
+    case loopToZero
+    case matchPrimary
+}
+
+public struct NxlvObjectAnimationTriggerMetadata: Sendable, Equatable {
+    public let condition: NxlvAnimationTriggerCondition
+    public let state: NxlvAnimationPlaybackState
+    public let isVisible: Bool
+
+    public init(
+        condition: NxlvAnimationTriggerCondition,
+        state: NxlvAnimationPlaybackState,
+        isVisible: Bool
+    ) {
+        self.condition = condition
+        self.state = state
+        self.isVisible = isVisible
+    }
 }
 
 public struct NxlvObjectAnimationMetadata: Sendable, Equatable {
@@ -221,6 +269,10 @@ public struct NxlvObjectAnimationMetadata: Sendable, Equatable {
     public let startsHidden: Bool
     public let initialState: String?
     public let editorHidden: Bool
+    public let declaredWidth: Int?
+    public let declaredHeight: Int?
+    public let triggers: [NxlvObjectAnimationTriggerMetadata]
+    public var hasTriggers: Bool { !triggers.isEmpty }
 
     public init(
         isPrimary: Bool,
@@ -234,7 +286,10 @@ public struct NxlvObjectAnimationMetadata: Sendable, Equatable {
         nineSlice: NxlvNineSliceMargins,
         startsHidden: Bool,
         initialState: String?,
-        editorHidden: Bool
+        editorHidden: Bool,
+        declaredWidth: Int? = nil,
+        declaredHeight: Int? = nil,
+        triggers: [NxlvObjectAnimationTriggerMetadata] = []
     ) {
         self.isPrimary = isPrimary
         self.name = name
@@ -248,6 +303,9 @@ public struct NxlvObjectAnimationMetadata: Sendable, Equatable {
         self.startsHidden = startsHidden
         self.initialState = initialState
         self.editorHidden = editorHidden
+        self.declaredWidth = declaredWidth
+        self.declaredHeight = declaredHeight
+        self.triggers = triggers
     }
 }
 
@@ -391,12 +449,28 @@ public enum NxlvStyleMetadataDecoder {
             decodeAnimation(item.section, isPrimary: item.primary, decoder: &decoder)
         }
 
+        let decodedTriggerWidth = decoder.integer(root, key: "trigger_width")
+        let decodedTriggerHeight = decoder.integer(root, key: "trigger_height")
+        let triggerWidth: Int?
+        let triggerHeight: Int?
+        switch effect {
+        case .entrance, .receiver:
+            triggerWidth = decodedTriggerWidth ?? 1
+            triggerHeight = decodedTriggerHeight ?? 1
+        case .none, .background, .paint:
+            triggerWidth = 0
+            triggerHeight = 0
+        default:
+            triggerWidth = decodedTriggerWidth
+            triggerHeight = decodedTriggerHeight
+        }
+
         let metadata = NxlvObjectMetadata(
             effect: effect,
             triggerX: decoder.integer(root, key: "trigger_x"),
             triggerY: decoder.integer(root, key: "trigger_y"),
-            triggerWidth: decoder.integer(root, key: "trigger_width"),
-            triggerHeight: decoder.integer(root, key: "trigger_height"),
+            triggerWidth: triggerWidth,
+            triggerHeight: triggerHeight,
             sound: trimmed(root.line("sound")),
             keyFrame: decoder.integer(root, key: "key_frame"),
             resizeAxes: resizeAxes(root),
@@ -422,7 +496,9 @@ public enum NxlvStyleMetadataDecoder {
         decoder: inout MetadataValueDecoder
     ) -> NxlvObjectAnimationMetadata {
         let frames = decoder.integer(section, key: "frames")
-        if frames == nil && section.lastLineRecord("frames") == nil {
+        let name = trimmed(section.line("name"))
+        let isGenerated = name?.hasPrefix("*") == true
+        if frames == nil && section.lastLineRecord("frames") == nil && !isGenerated {
             decoder.append(
                 severity: .error,
                 code: .missingMetadataField,
@@ -451,9 +527,38 @@ public enum NxlvStyleMetadataDecoder {
             initialFrame = nil
         }
 
+        let triggers = section.allSections("trigger").map { trigger in
+            let condition: NxlvAnimationTriggerCondition
+            switch trigger.line("condition")?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
+            case "ready": condition = .ready
+            case "busy": condition = .busy
+            case "disabled": condition = .disabled
+            case "exhausted": condition = .exhausted
+            default: condition = .unconditional
+            }
+            let isVisible = !trigger.hasLine("hide")
+            let state: NxlvAnimationPlaybackState
+            if !isVisible, trigger.lastLineRecord("state") == nil {
+                state = .pause
+            } else {
+                switch trigger.line("state")?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
+                case "pause": state = .pause
+                case "stop": state = .stop
+                case "looptozero": state = .loopToZero
+                case "matchphysics": state = .matchPrimary
+                default: state = .play
+                }
+            }
+            return NxlvObjectAnimationTriggerMetadata(
+                condition: condition,
+                state: state,
+                isVisible: isVisible
+            )
+        }
+
         return NxlvObjectAnimationMetadata(
             isPrimary: isPrimary,
-            name: trimmed(section.line("name")),
+            name: name,
             frames: frames,
             usesHorizontalStrip: section.hasLine("horizontal_strip"),
             zIndex: decoder.integer(section, key: "z_index") ?? (isPrimary ? 1 : 0),
@@ -463,7 +568,10 @@ public enum NxlvStyleMetadataDecoder {
             nineSlice: decoder.nineSlice(section),
             startsHidden: section.hasLine("hide"),
             initialState: trimmed(section.line("state")),
-            editorHidden: section.hasLine("editor_hide")
+            editorHidden: section.hasLine("editor_hide"),
+            declaredWidth: decoder.integer(section, key: "width"),
+            declaredHeight: decoder.integer(section, key: "height"),
+            triggers: triggers
         )
     }
 
@@ -1548,6 +1656,7 @@ private struct ResolutionEngine {
                 ))
                 continue
             }
+            if animation.name?.hasPrefix("*") == true { continue }
             let baseName = animation.name.map { "\(piece)_\($0)" } ?? piece
             if seen.insert(normalized(baseName)).inserted {
                 animationBaseNames.append(baseName)

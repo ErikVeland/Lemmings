@@ -1,6 +1,10 @@
 #!/bin/zsh
 set -euo pipefail
 project_dir="${0:A:h:h}"
+if [[ "${TEST_SCOPE:-all}" == selection-hdr && "${TEST_COMPILE_ONLY:-0}" != 1 && "${LEMMINGS_TEST_WINDOWS:-offscreen}" == offscreen ]]; then
+  print -u2 "Selection HDR checks need composited windows. Set LEMMINGS_TEST_WINDOWS=secondary or foreground."
+  exit 2
+fi
 test_arch="${TEST_ARCH:-$(uname -m)}"
 [[ "$test_arch" == arm64 || "$test_arch" == x86_64 ]] || exit 1
 build_dir="$project_dir/.build/app-integration-tests-$test_arch"
@@ -34,6 +38,27 @@ rsync -a --delete "$sparkle_framework" "$test_app/Contents/Frameworks/"
 resource_app="${LEMMINGS_TEST_APP:-$project_dir/.build/local/Ultimate Lemmings.app}"
 ln -sfn "$resource_app/Contents/Resources" "$test_app/Contents/Resources"
 test_flags=()
+if [[ "${TEST_SCOPE:-all}" == mac-fidelity ]]; then test_flags+=(-D MAC_FIDELITY_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == exit-progress ]]; then test_flags+=(-D EXIT_PROGRESS_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == updates ]]; then test_flags+=(-D UPDATE_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == collections ]]; then test_flags+=(-D COLLECTION_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == release-notes ]]; then test_flags+=(-D RELEASE_NOTES_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == solution-audio ]]; then test_flags+=(-D SOLUTION_AUDIO_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == audio-joy ]]; then test_flags+=(-D AUDIO_JOY_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == pack-navigation ]]; then test_flags+=(-D PACK_NAVIGATION_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == consolidation ]]; then test_flags+=(-D CONSOLIDATION_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == profile-sessions ]]; then test_flags+=(-D PROFILE_SESSION_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == selection-hdr ]]; then test_flags+=(-D SELECTION_HDR_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == selection-raster ]]; then test_flags+=(-D SELECTION_HDR_TESTS -D SELECTION_RASTER_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == sessions ]]; then test_flags+=(-D SESSION_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == music ]]; then test_flags+=(-D MUSIC_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == dialogs ]]; then test_flags+=(-D DIALOG_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == l3-story ]]; then test_flags+=(-D L3_STORY_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == l3-recovery ]]; then test_flags+=(-D L3_RECOVERY_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == transport ]]; then test_flags+=(-D TRANSPORT_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == loading-latency ]]; then test_flags+=(-D LOADING_LATENCY_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == cursor-input ]]; then test_flags+=(-D CURSOR_INPUT_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == release-ui ]]; then test_flags+=(-D RELEASE_UI_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == hot-seat ]]; then test_flags+=(-D HOT_SEAT_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == hd-effects ]]; then test_flags+=(-D HD_EFFECTS_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == variable-speed ]]; then test_flags+=(-D VARIABLE_SPEED_TESTS); fi
@@ -42,6 +67,9 @@ if [[ "${TEST_SCOPE:-all}" == release-blockers ]]; then test_flags+=(-D RELEASE_
 if [[ "${TEST_SCOPE:-all}" == hints ]]; then test_flags+=(-D HINT_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == controller ]]; then test_flags+=(-D CONTROLLER_QOL_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == content-browser ]]; then test_flags+=(-D CONTENT_BROWSER_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == neo-recovery ]]; then test_flags+=(-D NEO_RECOVERY_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == neo-pack ]]; then test_flags+=(-D NEO_PACK_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == learning ]]; then test_flags+=(-D LEARNING_TESTS); fi
 swiftc -swift-version 6 "${compatibility[@]}" "${optimization_flags[@]}" -target "$test_arch-apple-macos12.3" -D APP_INTEGRATION_TESTS "${test_flags[@]}" \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
   -F "$sparkle_framework_dir" -framework Sparkle \
@@ -49,5 +77,10 @@ swiftc -swift-version 6 "${compatibility[@]}" "${optimization_flags[@]}" -target
   -Xlinker -rpath -Xlinker "$build_dir" \
   -Xlinker -rpath -Xlinker @executable_path/../Frameworks \
   -o "$test_app/Contents/MacOS/AppIntegrationTests" "${sources[@]}" "$build_dir/main.swift"
+if [[ "${TEST_COMPILE_ONLY:-0}" == 1 ]]; then
+  print "PASS app integration test compilation only ($test_arch, ${TEST_SCOPE:-all})."
+  print "The app, bundled content and input flows were not run."
+  exit 0
+fi
 cd "$project_dir"
 python3 "$project_dir/Tools/UITestRunner/run.py" arch "-$test_arch" "$test_app/Contents/MacOS/AppIntegrationTests"

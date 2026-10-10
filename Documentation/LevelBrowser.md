@@ -45,6 +45,9 @@ Lemmings 2 and Lemmings 3. It does not change engine rules or campaign progress.
 
 ## Playlists and shuffle
 
+The home footer has a `Playlists` button beside `Profiles` and `Records`. It opens
+the playlist library and creation controls, loading the level catalogue first.
+
 Playlists belong to the active player profile. The player can add an available
 level from its card, create a manual ordered playlist, or create `Random 10`.
 The manual editor can add, replace, remove and reorder levels. Rename also
@@ -68,14 +71,24 @@ source revision. The editor shows locked, missing and changed entries. These
 entries block the run until the player removes or replaces them.
 
 The playlist file also stores the active run for the player profile. The
-playlist library shows its saved position as `Resume run`. Playlist and shuffle
+playlist library shows saved positions as `Resume solo` or `Resume Hot Seat`. Playlist and shuffle
 results do not advance campaign or fan-pack progress, create saved attempts,
-preserve verified routes or enter player records. A run cannot start during Hot
-Seat, and Hot Seat cannot change while a sequence is loading or playing.
-Alternate game and level navigation stays unavailable during that time. Leaving
-to the game library pauses the run at its current level. A failed level retries
-the same entry. Starting another run requires confirmation before replacing a
-saved run.
+preserve verified routes or enter player records. Starting a new run during Hot
+Seat, or with another saved run, offers `New solo`, `New Hot Seat` and `Back`.
+The current campaign attempt is checkpointed before switching. Previous sequence
+positions remain available to resume. New Hot Seat keeps the current roster in
+a fresh session; the old roster, turn and campaign remain in `Saved Hot Seats`.
+
+Hot Seat cannot change while a sequence is loading or playing. Alternate game
+and level navigation stays unavailable during that time. Leaving to the game
+library saves the run at the start of its current level. A failed level retries
+the same entry. Shared sequences follow the house rule and wait for `Ready` after
+each level loads, including transitions between engines. Level unlocks are checked
+before a new run is accepted; a fresh session's campaign does not relock that run.
+L2 sequences retain the accepted campaign snapshot and survivor population for
+each selected tribe level. They do not write that snapshot into the new campaign.
+Version 1 playlist files migrate on the next save; older apps cannot overwrite
+the new session history.
 
 ## Level screenshots
 

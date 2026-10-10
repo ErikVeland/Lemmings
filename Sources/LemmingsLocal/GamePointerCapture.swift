@@ -26,6 +26,25 @@ struct PointerConfinement {
     }
 }
 
+/// Window and app state that must hold before the pointer may be captured.
+struct PointerCaptureGate {
+    var appActive: Bool
+    var windowKey: Bool
+    var windowOrdered: Bool
+    /// Occlusion, not ordering: a stalled full-screen transition leaves the window
+    /// key and ordered in but not drawn, and capture would trap the pointer there.
+    var onScreen: Bool
+    var miniaturized: Bool
+    var viewHidden: Bool
+    var liveResize: Bool
+    var sheetAttached: Bool
+
+    var allowsCapture: Bool {
+        appActive && windowKey && windowOrdered && onScreen
+            && !miniaturized && !viewHidden && !liveResize && !sheetAttached
+    }
+}
+
 /// Uses absolute positions so normal clicks, dragging and system shortcuts still work.
 @MainActor final class GamePointerCapture: NSObject {
     private var confinement = PointerConfinement()
@@ -59,9 +78,14 @@ struct PointerConfinement {
 
     /// Returns the current point in the view even when a warp generates no mouse event.
     func update(in view: NSView, rect: CGRect? = nil, active: Bool) -> CGPoint? {
-        guard active, NSApp.isActive, let window = view.window, window.isKeyWindow,
-              window.isVisible, !window.isMiniaturized, !view.isHiddenOrHasHiddenAncestor,
-              !view.inLiveResize, window.attachedSheet == nil,
+        guard active, let window = view.window,
+              PointerCaptureGate(appActive: NSApp.isActive, windowKey: window.isKeyWindow,
+                                 windowOrdered: window.isVisible,
+                                 onScreen: window.occlusionState.contains(.visible),
+                                 miniaturized: window.isMiniaturized,
+                                 viewHidden: view.isHiddenOrHasHiddenAncestor,
+                                 liveResize: view.inLiveResize,
+                                 sheetAttached: window.attachedSheet != nil).allowsCapture,
               let screen = window.screen, let primary = NSScreen.screens.first else {
             reset(); return nil
         }

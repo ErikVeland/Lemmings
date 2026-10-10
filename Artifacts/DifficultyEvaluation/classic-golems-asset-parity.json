@@ -1,0 +1,46 @@
+{
+  "description": "The pinned Golems preview package and installed DOS MAIN.DAT decode to identical gameplay sprite, destruction-mask and countdown sections. This is asset parity only; source worker states and terrain changes remain unverified.",
+  "sourcePackage": "Golems-v2.0-preview7.zip",
+  "sourcePackageSHA256": "1074595a18187ad087fa94aa993ca6dc4f72656af73237ddc33da774254be7ca",
+  "sourceAssemblySHA256": "38cb69f18f5055821a496336a948fc30596e56c607c3ddddfb4675be78a5873e",
+  "sourceAssetMember": "Golems-v2.0-preview7/data/GOLEMS.DAT",
+  "sourceAssetSHA256": "3a220a2bf936e89ed50c462b035f4b2e249ed0a424cf182b3ba281831cfe177a",
+  "nativeAsset": "lemmings_dos_1991-07-30/MAIN.DAT",
+  "nativeAssetSHA256": "2aec688c334e60322998811a8b6f9d5c13f8090b46ca6c2a6cb1c8db3b733545",
+  "decoder": "ClassicDATArchive.decode and ClassicMainDATAssets.init(decompressedSections:)",
+  "sections": [
+    {
+      "index": 0,
+      "bytes": 21104,
+      "same": true,
+      "sha256": "959341d6dd9e51cfa9877f510909b417c1b4266e3a051742cddc7cf85cd7ad44"
+    },
+    {
+      "index": 1,
+      "bytes": 388,
+      "same": true,
+      "sha256": "91071cc7578e3ce8f5f6e692537c230dadde7f564ce7e8d8a14f2f789ee4ab27",
+      "contains": "Basher, Miner and explosion destruction masks"
+    },
+    {
+      "index": 2,
+      "bytes": 8384,
+      "same": true,
+      "sha256": "7e1b6a0a63f88c37bb9bb6b40d2d4889862ece61aceffc2b6c19961436b9cadd"
+    },
+    {
+      "index": 3,
+      "bytes": 61968,
+      "same": false,
+      "sourceSHA256": "083a226102500b8d8c9e722c6912ab407f6282e1f8ab2d93a3542752d2cb5706",
+      "nativeSHA256": "05fa1758775e601d38b00c6120cc597ffae6c598b04caac921bb59d76a80c805"
+    }
+  ],
+  "sourceSectionCount": 4,
+  "nativeSectionCount": 7,
+  "decodedAnimationsEqual": true,
+  "decodedDestructionMasksEqual": true,
+  "decodedCountdownGlyphsEqual": true,
+  "interpretation": "The Diving Area Basher terrain divergence cannot be explained by different destruction-mask bytes between these pinned assets. Simulation timing, position, terrain-rule or source-version differences remain open.",
+  "sourcePhysicsParity": "unverified"
+}

@@ -1,0 +1,20 @@
+.build/trolley-verification/classic-0.log:
+AUDIT 73 configurations; verified 52 observed 21 unknown 0
+
+.build/trolley-verification/classic-1.log:
+AUDIT 73 configurations; verified 53 observed 20 unknown 0
+
+.build/trolley-verification/classic-2.log:
+AUDIT 73 configurations; verified 45 observed 28 unknown 0
+
+.build/trolley-verification/classic-3.log:
+AUDIT 73 configurations; verified 51 observed 22 unknown 0
+
+.build/trolley-verification/ports.log:
+AUDIT 60 configurations; verified 39 observed 21 unknown 0
+
+.build/trolley-verification/l2.log:
+AUDIT 132 configurations; verified 11 observed 75 unknown 46
+
+.build/trolley-verification/l3.log:
+AUDIT 90 configurations; verified 0 observed 74 unknown 16

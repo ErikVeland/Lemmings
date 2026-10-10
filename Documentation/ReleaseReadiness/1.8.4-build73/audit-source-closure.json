@@ -1,0 +1,16 @@
+{
+  "minorAuditPassed": 48,
+  "minorAuditSourceDrift": 0,
+  "auditedCodeFiles": 5925,
+  "postAuditCodeChanges": [
+    "Tests/MusicPlaybackTests/check-slim-profiles.py",
+    "Tools/MusicCatalogue/library.py"
+  ],
+  "freshChecks": [
+    "36 release-tool tests",
+    "old AAC/main file profiles and seven rejection guards",
+    "421 bindings across 18 immutable libraries",
+    "actual full-to-slim package closure"
+  ],
+  "compiledSwiftSourcesUnchanged": true
+}

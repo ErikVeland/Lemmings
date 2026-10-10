@@ -1,0 +1,5919 @@
+// Appended to main.swift by the runner to exercise private app wiring directly.
+import ImageIO
+private struct IntegrationFailure: Error { let message: String }
+private func check(_ value: @autoclosure () throws -> Bool, _ message: String) throws {
+  if try value() == false { throw IntegrationFailure(message: message) }
+}
+
+@MainActor private final class SpeedTestWindow: NSWindow {
+  override var isKeyWindow: Bool { true }
+}
+
+@MainActor func validateCameraKeyboard(_ keyboard: GameplayKeyboard, name: String) throws {
+  let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 1100, height: 760),
+    styleMask: [], backing: .buffered, defer: false)
+  let originalCentre = keyboard.centre, originalActive = keyboard.active, originalModern = keyboard.modern
+  defer { keyboard.centre = originalCentre; keyboard.active = originalActive; keyboard.modern = originalModern }
+  keyboard.bind(to: host); keyboard.active = { true }; keyboard.modern = { true }
+  var centres: [Bool] = []
+  keyboard.centre = { entrance in originalCentre(entrance); centres.append(entrance) }
+  func key(_ letter: String, repeatKey: Bool = false, modifiers: NSEvent.ModifierFlags = []) -> NSEvent {
+    NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: modifiers, timestamp: 1,
+      windowNumber: host.windowNumber, context: nil, characters: letter, charactersIgnoringModifiers: letter,
+      isARepeat: repeatKey, keyCode: letter == "h" ? 4 : 5)!
+  }
+  try check(keyboard.handle(key("h")) == nil && centres == [true], name + " H did not centre the entrance")
+  _ = keyboard.handle(key("h", repeatKey: true))
+  try check(centres == [true], name + " repeated H")
+  _ = keyboard.handle(key("g")); _ = keyboard.handle(key("g"))
+  try check(centres.last == false, name + " G did not reach the goal")
+  let count = centres.count
+  _ = keyboard.handle(key("g", repeatKey: true))
+  try check(centres.count == count, name + " repeated G")
+  try check(keyboard.handle(key("h", modifiers: [.command])) != nil, "Command-H was stolen")
+  let gliderHandler = keyboard.selectGliderBeforeGoal
+  var gliderSelected = false
+  keyboard.selectGliderBeforeGoal = {
+    guard !gliderSelected else { return false }; gliderSelected = true; return true
+  }
+  centres = []
+  _ = keyboard.handle(key("g"))
+  try check(gliderSelected && centres.isEmpty, "First G did not select Glider")
+  _ = keyboard.handle(key("g"))
+  try check(centres == [false], "Second G did not centre the goal")
+  keyboard.selectGliderBeforeGoal = gliderHandler
+  let text = NSTextView(frame: host.contentView!.bounds)
+  host.contentView!.addSubview(text); host.makeFirstResponder(text)
+  try check(keyboard.handle(key("h")) != nil, "Text entry was stolen")
+  host.makeFirstResponder(nil)
+  let overlay = KeyboardOverlayView(commands: keyboard.commandRows, modern: true, hints: true)
+  overlay.frame = host.contentView!.bounds; host.contentView!.addSubview(overlay); overlay.layoutSubtreeIfNeeded()
+  let buttons = overlay.subviews.compactMap { $0 as? NSButton }
+  try check(buttons.count == 3 && buttons.allSatisfy { overlay.hitTest(CGPoint(x: $0.frame.midX, y: $0.frame.midY)) === $0 },
+    "Camera help overlay lost its button targets")
+  let bitmap = overlay.bitmapImageRepForCachingDisplay(in: overlay.bounds)!
+  overlay.cacheDisplay(in: overlay.bounds, to: bitmap)
+  try FileManager.default.createDirectory(atPath: ".build/transport", withIntermediateDirectories: true)
+  try bitmap.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: ".build/transport/" + name + "-camera-help.png"))
+  print("PASS " + name + " camera keys, repeat suppression, modifier/text guards and rendered help targets")
+}
+
+@MainActor func validateCursorPresets(name: String, apply: (ClassicSettings) -> Void,
+                                      current: () -> GameplayCursorStyle) throws {
+  for modern in [false, true] {
+    var settings = ClassicSettings(); settings.applyExperiencePreset(modern: modern)
+    apply(settings)
+    try check(current() == (modern ? .modern : .original), name + " cursor did not follow its gameplay preset")
+  }
+  var custom = ClassicSettings(); custom.gameplayCursorStyle = .original; custom.experiencePreset = .custom
+  apply(custom)
+  try check(current() == .original, name + " ignored a custom cursor choice")
+  print("PASS " + name + " Original/Modern/Custom cursor wiring")
+}
+
+@MainActor func validatePauseKeyboard(_ keyboard: GameplayKeyboard, name: String, paused: () -> Bool) throws {
+  let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 400, height: 300),
+    styleMask: [], backing: .buffered, defer: false)
+  let button = NSButton(title: "Focused control", target: nil, action: nil)
+  host.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 400, height: 300))
+  host.contentView!.addSubview(button)
+  keyboard.bind(to: host)
+  try check(host.makeFirstResponder(button), "Pause fixture did not focus its control")
+  func event(_ type: NSEvent.EventType, key: String, code: UInt16, repeated: Bool = false,
+             modifiers: NSEvent.ModifierFlags = []) -> NSEvent {
+    NSEvent.keyEvent(with: type, location: .zero, modifierFlags: modifiers, timestamp: 1,
+      windowNumber: host.windowNumber, context: nil, characters: key,
+      charactersIgnoringModifiers: key, isARepeat: repeated, keyCode: code)!
+  }
+  for (key, code) in [(" ", UInt16(49)), ("p", UInt16(35))] {
+    let before = paused()
+    try check(keyboard.handle(event(.keyDown, key: key, code: code)) == nil && paused() != before,
+      name + " did not pause with a control focused")
+    _ = keyboard.handle(event(.keyDown, key: key, code: code, repeated: true))
+    _ = keyboard.handle(event(.keyUp, key: key, code: code))
+    try check(paused() != before, name + " repeated or released pause")
+    _ = keyboard.handle(event(.keyDown, key: key, code: code))
+    try check(paused() == before, name + " did not resume on the next press")
+    for flags in [NSEvent.ModifierFlags.command, .control, .option] {
+      try check(keyboard.handle(event(.keyDown, key: key, code: code, modifiers: flags)) != nil
+        && paused() == before, name + " intercepted a modified shortcut")
+    }
+  }
+  let editor = NSTextView(frame: host.contentView!.bounds)
+  host.contentView!.addSubview(editor); host.makeFirstResponder(editor)
+  let before = paused()
+  try check(keyboard.handle(event(.keyDown, key: " ", code: 49)) != nil && paused() == before,
+    name + " intercepted text entry")
+  host.makeFirstResponder(button)
+  let active = keyboard.active
+  keyboard.active = { false }
+  defer { keyboard.active = active }
+  try check(keyboard.handle(event(.keyDown, key: " ", code: 49)) != nil && paused() == before,
+    name + " intercepted a menu or handover")
+  print("PASS \(name) shared Space/P pause, focused control, repeat/release, modifiers, text and menu routing")
+}
+
+/// Capture the actual native sprite and terrain at both ends of the halo pulse.
+@MainActor private func previewSelection(_ selection: LemmingSelectionEffect, background: CGImage,
+    canvasSize: CGSize, name: String, folder: URL) throws {
+  let backing = CGFloat(background.width) / canvasSize.width
+  let dx = selection.rect.width / CGFloat(selection.sprite.width)
+  let dy = selection.rect.height / CGFloat(selection.sprite.height)
+  let region = selection.rect.insetBy(dx: -max(20, 18 * dx), dy: -max(20, 18 * dy))
+    .intersection(CGRect(origin: .zero, size: canvasSize))
+  let crop = CGRect(x: region.minX * backing, y: region.minY * backing,
+    width: region.width * backing, height: region.height * backing).integral
+  let terrain = background.cropping(to: crop)!
+  func snapshot(time: TimeInterval?, bloom: Bool = true) -> (CGImage, Double) {
+    let context = CGContext(data: nil, width: terrain.width, height: terrain.height, bitsPerComponent: 8,
+      bytesPerRow: terrain.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+      bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+    context.draw(terrain, in: CGRect(x: 0, y: 0, width: terrain.width, height: terrain.height))
+    context.translateBy(x: -crop.minX, y: CGFloat(terrain.height) + crop.minY)
+    context.scaleBy(x: backing, y: -backing)
+    var effect = selection
+    effect.time = time; effect.bloom = bloom
+    NSGraphicsContext.saveGraphicsState()
+    NSGraphicsContext.current = NSGraphicsContext(cgContext: context, flipped: true)
+    let start = ProcessInfo.processInfo.systemUptime
+    LemmingSelectionRenderer.draw(effect)
+    let elapsed = ProcessInfo.processInfo.systemUptime - start
+    NSGraphicsContext.restoreGraphicsState()
+    return (context.makeImage()!, elapsed * 1000)
+  }
+  let low = snapshot(time: 0).0, peak = snapshot(time: 1.4).0
+  let bare = NSBitmapImageRep(cgImage: snapshot(time: 0, bloom: false).0)
+  let dim = NSBitmapImageRep(cgImage: low)
+  var visible = 0
+  for y in 0..<dim.pixelsHigh { for x in 0..<dim.pixelsWide {
+    let a = dim.colorAt(x: x, y: y)!.usingColorSpace(.deviceRGB)!
+    let b = bare.colorAt(x: x, y: y)!.usingColorSpace(.deviceRGB)!
+    if a.greenComponent > b.greenComponent + 0.06 { visible += 1 }
+  } }
+  try check(visible > 40, name + " halo disappears against native terrain at its low point")
+  for (label, image) in [("low", low), ("peak", peak)] {
+    try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(
+      to: folder.appendingPathComponent(name + "-halo-" + label + ".png"))
+  }
+  let gif = CGImageDestinationCreateWithURL(folder.appendingPathComponent(name + "-halo.gif") as CFURL,
+    "com.compuserve.gif" as CFString, 28, nil)!
+  CGImageDestinationSetProperties(gif, [kCGImagePropertyGIFDictionary: [kCGImagePropertyGIFLoopCount: 0]] as CFDictionary)
+  var costs: [Double] = []
+  for frame in 0..<120 {
+    let (image, cost) = snapshot(time: Double(frame % 28) / 10)
+    costs.append(cost)
+    if frame < 28 {
+      CGImageDestinationAddImage(gif, image, [kCGImagePropertyGIFDictionary: [kCGImagePropertyGIFDelayTime: 0.1]] as CFDictionary)
+    }
+  }
+  try check(CGImageDestinationFinalize(gif), name + " halo preview could not be saved")
+  costs.sort()
+  print(String(format: "PASS %@ visible halo on native terrain; cached draw mean %.3f ms, p95 %.3f ms",
+    name, costs.reduce(0, +) / Double(costs.count), costs[Int(Double(costs.count) * 0.95)]))
+}
+
+@MainActor func validateSelectionCanvas(_ canvas: NSView, name: String,
+    effect: () -> LemmingSelectionEffect?, reduce: (Bool) -> Void, hdEffects: (Bool) -> Void,
+    style: (LemmingSelectionStyle) -> Void, refocus: () -> Void, advance: () -> Void) async throws {
+  let folder = URL(fileURLWithPath: ".build/selection-hdr")
+  try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+  @discardableResult func draw() -> NSBitmapImageRep {
+    canvas.needsDisplay = true
+    let bitmap = canvas.bitmapImageRepForCachingDisplay(in: canvas.bounds)!
+    canvas.cacheDisplay(in: canvas.bounds, to: bitmap)
+    canvas.displayIfNeeded()
+    CATransaction.flush()
+    return bitmap
+  }
+  style(.modern)
+  for (reduced, hd) in [(false, true), (true, true), (false, false), (true, false)] {
+    hdEffects(hd); reduce(reduced); refocus(); let bitmap = draw()
+    guard let selection = effect() else { throw IntegrationFailure(message: name + " did not publish its selected sprite") }
+    if !reduced {
+      try NSBitmapImageRep(cgImage: selection.sprite).representation(using: .png, properties: [:])!.write(
+        to: folder.appendingPathComponent(name + "-sprite.png"))
+    }
+    try check(selection.bloom && (selection.time == nil) == reduced,
+      name + " lost its halo with HD effects off or ignored reduced effects")
+    try check(selection.rect.intersects(selection.clipRect), name + " selected an offscreen sprite")
+    let overlay = canvas.subviews.compactMap { $0 as? ExplosionHDRView }.first
+    try check(overlay?.layer?.isHidden != false && overlay?.hasAllocatedFlashMask != true,
+      name + " selection woke the full-window HDR surface")
+    try check(overlay?.hitTest(CGPoint(x: selection.rect.midX, y: selection.rect.midY)) == nil,
+      name + " selection intercepted input")
+    try bitmap.representation(using: .png, properties: [:])!.write(to:
+      folder.appendingPathComponent(name + (reduced ? "-reduced" : "-modern") + (hd ? "" : "-hd-off") + ".png"))
+  }
+  GameCursor.gameplaySuppressed = true
+  draw()
+  GameCursor.gameplaySuppressed = false
+  try check(effect() == nil, name + " retained selection behind a dialog")
+  var plain: Data?, plainHidden: Data?
+  for choice in [LemmingSelectionStyle.none, .obvious] {
+    style(choice); reduce(true); refocus()
+    let bitmap = draw()
+    let pixels = bitmap.representation(using: .png, properties: [:])!
+    try pixels.write(to: folder.appendingPathComponent(name + "-" + choice.rawValue + ".png"))
+    try check(effect() == nil,
+      name + " kept the Modern overlay in " + choice.title)
+    if choice == .none {
+      plain = pixels
+      GameCursor.gameplaySuppressed = true
+      plainHidden = draw().representation(using: .png, properties: [:])!
+      GameCursor.gameplaySuppressed = false
+    }
+    else {
+      try check(pixels != plain, name + " did not draw the Obvious halo and marker")
+      GameCursor.gameplaySuppressed = true
+      let hidden = draw().representation(using: .png, properties: [:])!
+      GameCursor.gameplaySuppressed = false
+      try check(hidden == plainHidden, name + " retained the Obvious halo behind a dialog")
+    }
+  }
+  style(.modern); hdEffects(true); reduce(false); refocus(); draw()
+  if let selection = effect(), let plain, let background = NSBitmapImageRep(data: plain)?.cgImage {
+    try previewSelection(selection, background: background, canvasSize: canvas.bounds.size, name: name, folder: folder)
+  }
+  var poses = Set<Data>()
+  for tick in 0..<8 {
+    advance(); refocus()
+    let bitmap = draw()
+    guard let selection = effect() else { throw IntegrationFailure(message: name + " lost selection while sprites moved") }
+    poses.insert(NSBitmapImageRep(cgImage: selection.sprite).representation(using: .png, properties: [:])!)
+    let entries = LemmingSelectionRenderer.cachedFrameCount
+    let heldTime = selection.time
+    draw(); draw()
+    try check(effect()?.time == heldTime, name + " animated selection while the simulation was paused")
+    try check(LemmingSelectionRenderer.cachedFrameCount == entries, name + " rebuilt a cached sprite frame")
+    if tick == 0 || tick == 7 {
+      try bitmap.representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent(name + "-frame-" + String(tick) + ".png"))
+    }
+  }
+  try check(poses.count > 1, name + " selection did not track the sprite animation")
+  print("PASS \(name) None/Obvious/Modern, native animation frames, cache reuse, dialog suppression and click-through")
+}
+
+extension AppDelegate {
+  fileprivate func testSelectionSettings() throws {
+    let preferences = SettingsWindow(settings: ClassicSettings(), options: settingsOptions())
+    var applied: [LemmingSelectionStyle] = []
+    preferences.onChange = { applied.append($0.lemmingSelectionStyle) }
+    window.makeKeyAndOrderFront(nil)
+    preferences.show()
+    let root = window.contentView!
+    func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap { descendants($0) } }
+    func popup(_ label: String) throws -> NSPopUpButton {
+      guard let control = descendants(root).compactMap({ $0 as? NSPopUpButton }).first(where: { $0.accessibilityLabel() == label }) else {
+        throw IntegrationFailure(message: "Missing setting: " + label)
+      }
+      return control
+    }
+    func capture(_ name: String) throws {
+      root.layoutSubtreeIfNeeded()
+      let bitmap = root.bitmapImageRepForCachingDisplay(in: root.bounds)!
+      root.cacheDisplay(in: root.bounds, to: bitmap)
+      try bitmap.representation(using: .png, properties: [:])!.write(to:
+        URL(fileURLWithPath: ".build/selection-settings-" + name + ".png"))
+    }
+    let selection = try popup("Selection effect"), preset = try popup("Gameplay preset")
+    try check(selection.itemTitles == ["None", "Obvious", "Modern"] && selection.titleOfSelectedItem == "Modern",
+      "Selection choices or default are wrong")
+    for choice in LemmingSelectionStyle.allCases {
+      root.layoutSubtreeIfNeeded()
+      let centre = CGPoint(x: selection.bounds.midX, y: selection.bounds.midY)
+      try check(root.hitTest(selection.convert(centre, to: root)) === selection, "Selection control is obscured")
+      try check(selection.accessibilityPerformPress(), "Selection choices did not open")
+      guard let page = GameScreen.shared.controllerPage(in: window),
+        let button = descendants(page).compactMap({ $0 as? NSButton }).first(where: { $0.title == choice.title }) else {
+        throw IntegrationFailure(message: "Missing selection choice: " + choice.title)
+      }
+      try capture("choices")
+      let point = CGPoint(x: button.bounds.midX, y: button.bounds.midY)
+      try check(root.hitTest(button.convert(point, to: root)) === button, "Selection choice has the wrong input target")
+      if choice == .modern {
+        window.makeFirstResponder(button)
+        let event = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+          windowNumber: window.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r",
+          isARepeat: false, keyCode: 36)!
+        try check(GameScreen.shared.handleDialogKey(event), "Selection choice ignored Return")
+      } else {
+        let location = button.convert(point, to: nil)
+        let down = NSEvent.mouseEvent(with: .leftMouseDown, location: location, modifierFlags: [], timestamp: 1,
+          windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1)!
+        let up = NSEvent.mouseEvent(with: .leftMouseUp, location: location, modifierFlags: [], timestamp: 1.1,
+          windowNumber: window.windowNumber, context: nil, eventNumber: 1, clickCount: 1, pressure: 0)!
+        NSApp.postEvent(up, atStart: true); window.sendEvent(down)
+        if let release = NSApp.nextEvent(matching: .leftMouseUp, until: .distantPast, inMode: .default, dequeue: true) {
+          NSApp.sendEvent(release)
+        }
+      }
+      try check(preferences.current.lemmingSelectionStyle == choice && applied.last == choice
+        && preferences.current.experiencePreset == .custom && selection.titleOfSelectedItem == choice.title,
+        "Selection choice did not apply immediately as Custom")
+      try capture(choice.rawValue)
+    }
+    for (index, expected) in [(0, LemmingSelectionStyle.none), (1, .modern)] {
+      preset.selectItem(at: index); _ = preset.sendAction(preset.action, to: preset.target)
+      try check(preferences.current.lemmingSelectionStyle == expected && selection.titleOfSelectedItem == expected.title,
+        "Gameplay preset did not update selection effects")
+    }
+    selection.selectItem(at: 1); _ = selection.sendAction(selection.action, to: selection.target)
+    for label in ["Selection effect", "Skill icon size", "Level selection"] {
+      let control = try popup(label)
+      root.layoutSubtreeIfNeeded()
+      try check(control.visibleRect.contains(control.bounds.insetBy(dx: 1, dy: 1)), label + " is clipped")
+      try check(root.hitTest(control.convert(CGPoint(x: control.bounds.midX, y: control.bounds.midY), to: root)) === control,
+        label + " is covered by another control")
+    }
+    GameScreen.shared.dismissAll()
+    let restored = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(preferences.current))
+    let reopened = SettingsWindow(settings: restored, options: settingsOptions())
+    reopened.show()
+    try check(try popup("Selection effect").titleOfSelectedItem == "Obvious"
+      && reopened.current.experiencePreset == .custom, "Selection did not survive reopening Settings")
+    try capture("saved-obvious")
+    GameScreen.shared.dismissAll()
+    print("PASS selection Settings choices, mouse/keyboard targets, presets, persistence and layout")
+  }
+
+  fileprivate func testSelectionRendering() async throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll()
+    settings.music = .silent; settings.confinePointer = false
+    settings.display = .flat; settings.reduceMotion = false; settings.reduceFlashes = false
+    loadContent()
+    try testSelectionSettings()
+    guard let index = dataSets.firstIndex(where: { $0.set.title == .lemmings }) else {
+      throw IntegrationFailure(message: "Missing Classic content")
+    }
+    gamePicker.selectItem(at: index); selectDataSet()
+    picker.selectItem(at: 0); levelChanged(); advancePhase()
+    isPaused = true; playfield.startCountdown.cancel()
+    for _ in 0..<100 { session?.tick() }
+    applyDisplayMode(); window.makeKeyAndOrderFront(nil); window.contentView?.layoutSubtreeIfNeeded()
+    if let lemming = session?.lemmings.first {
+      focusLemming(lemming.id)
+    }
+    try await validateSelectionCanvas(playfield, name: "classic", effect: { self.playfield.selectionEffect },
+      reduce: { self.playfield.reduceMotion = $0; self.playfield.reduceFlashes = $0 },
+      hdEffects: { self.playfield.hdEffectsEnabled = $0 },
+      style: { choice in var updated = self.settings; updated.lemmingSelectionStyle = choice; self.apply(updated) },
+      refocus: { if let lemming = self.session?.lemmings.first { self.focusLemming(lemming.id) } },
+      advance: { self.session?.tick(); self.session?.tick() })
+    settings.display = .monitor
+    playfield.reduceMotion = false; playfield.reduceFlashes = false
+    step(at: 10)
+    if let lemming = session?.lemmings.first { focusLemming(lemming.id) }
+    step(at: 10.01)
+    try check(crtView.isAvailable && playfield.selectionEffect != nil && !playfield.presentsHDR,
+      "Classic did not route its selection through the final CRT pass")
+    #if !SELECTION_RASTER_TESTS
+    try await Task.sleep(nanoseconds: 100_000_000)
+    guard let crt = CGWindowListCreateImage(.null, .optionIncludingWindow,
+      CGWindowID(window.windowNumber), [.boundsIgnoreFraming, .bestResolution]) else {
+      throw IntegrationFailure(message: "Cannot capture CRT selection")
+    }
+    try NSBitmapImageRep(cgImage: crt).representation(using: .png, properties: [:])!.write(
+      to: URL(fileURLWithPath: ".build/selection-hdr/classic-crt.png"))
+    #else
+    print("SKIP composited CRT window capture in offscreen mode; covered by offscreen Metal pixel tests")
+    #endif
+    window.orderOut(nil)
+    let l2 = try Lemmings2PlayWindow(root: BundledGameResources.lemmings2(), recordsCampaignProgress: false)
+    try await l2.testSelectionRendering(); l2.window?.orderOut(nil)
+    let l3 = try Lemmings3PlayWindow(root: BundledGameResources.lemmings3(), recordsCampaignProgress: false)
+    try await l3.testSelectionRendering(); l3.window?.orderOut(nil)
+  }
+}
+
+extension AppDelegate {
+  /// Fixtures jump to later levels. The level picker refuses a locked
+  /// level and stays on the current one.
+  fileprivate func setAllClassicLevelsUnlocked(_ unlocked: Bool) {
+    var updated = settings
+    updated.unlockAllClassicLevels = unlocked
+    apply(updated)
+  }
+
+  fileprivate func testFailureMoodDecision() throws {
+    try check(!FailureMoodDecision.isUnrecoverable(saved: 0, active: 1, unreleased: 0, required: 1),
+      "Failure mood triggered while an active lemming could still meet the target")
+    try check(!FailureMoodDecision.isUnrecoverable(saved: 0, active: 0, unreleased: 1, required: 1),
+      "Failure mood triggered while an unreleased lemming could still meet the target")
+    try check(FailureMoodDecision.isUnrecoverable(saved: 0, active: 0, unreleased: 0, required: 1),
+      "Failure mood did not trigger when no rescue remained")
+    try check(!FailureMoodDecision.isUnrecoverable(saved: 1, active: 0, unreleased: 0, required: 1),
+      "Failure mood ignored an already met rescue requirement")
+    print("PASS unrecoverable-run failure mood decision")
+  }
+
+  fileprivate func testAccessibleMenusAndHelp() async throws {
+    let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 640, height: 400), styleMask: [], backing: .buffered, defer: false)
+    host.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 640, height: 400))
+    let keys = GameplayKeyboard(window: host)
+    keys.speedControl = GameSpeedControl()
+    keys.modern = { false }; keys.controllerEnabled = { false }
+    try check(!keys.helpText.contains("Tab / Shift-Tab") && !keys.helpText.contains("RT") && !keys.helpText.contains("level hints"), "Help advertised disabled controls")
+    keys.modern = { true }; keys.controllerEnabled = { true }; keys.hints = {}
+    try check(keys.helpText.contains("Tab / Shift-Tab") && keys.helpText.contains("level hints"), "Help omitted enabled controls")
+    keys.speedControl?.variableEnabled = false; keys.controllerTapSpeed = { false }
+    try check(!keys.helpText.contains("ramp up") && !keys.helpText.contains("Tap: toggle"), "Help advertised disabled speed modes")
+    let savedSize = GameAccessibility.interfaceSize
+    defer { GameAccessibility.interfaceSize = savedSize; GameScreen.shared.dismissAll() }
+    for size in ClassicInterfaceSize.allCases {
+      GameAccessibility.interfaceSize = size
+      let page = GameMenuPage(title: "Accessible settings")
+      GameScreen.shared.present(page, owner: host)
+      host.contentView?.layoutSubtreeIfNeeded()
+      guard let scroll = page.enclosingScrollView else { throw IntegrationFailure(message: "Page cannot scroll at larger sizes") }
+      try check(abs(page.frame.width - GamePageLayout.documentSize(in: scroll.contentSize).width) < 1, "Menu size was not applied")
+      GameScreen.shared.dismiss(page)
+    }
+    for size in ClassicInterfaceSize.allCases {
+      GameAccessibility.interfaceSize = size
+      let page = GameMenuPage(title: "Settings")
+      page.frame = CGRect(x: 0, y: 0, width: 2390, height: 1436)
+      page.layoutSubtreeIfNeeded()
+      let body = page.convert(page.body.bounds, from: page.body)
+      try check(abs(body.width - 992 * size.scale) < 1,
+        "A large window magnified the requested UI size")
+      try check(GamePageLayout.documentSize(in: page.bounds.size) == page.bounds.size,
+        "A large window added unnecessary scrolling")
+      let bitmap = page.bitmapImageRepForCachingDisplay(in: page.bounds)!
+      page.cacheDisplay(in: page.bounds, to: bitmap)
+      let folder = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent(".build/ui-scale-shots")
+      try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+      try bitmap.representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent("menu-\(Int(size.scale * 100)).png"))
+    }
+    let arcade = ArcadeView(frame: host.contentView!.bounds)
+    arcade.mode = .profiles
+    arcade.selectProfile(ArcadeStore.shared.records.activeProfile)
+    GameScreen.shared.present(arcade, owner: host)
+    host.contentView?.layoutSubtreeIfNeeded()
+    let bitmap = arcade.bitmapImageRepForCachingDisplay(in: arcade.bounds)!
+    arcade.cacheDisplay(in: arcade.bounds, to: bitmap)
+    let output = URL(fileURLWithPath: ".build/qol-parity/profiles-large.png")
+    try FileManager.default.createDirectory(at: output.deletingLastPathComponent(), withIntermediateDirectories: true)
+    try bitmap.representation(using: .png, properties: [:])!.write(to: output)
+    let elements = arcade.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement } ?? []
+    guard let initials = elements.first(where: { $0.accessibilityRole() == .textField }) else {
+      throw IntegrationFailure(message: "Profiles has no accessible initials field")
+    }
+    initials.setAccessibilityValue("ab12")
+    try check(initials.accessibilityValue() as? String == "AB1", "Accessible initials editing failed")
+    try check(elements.contains(where: { $0.accessibilityRole() == .button && $0.accessibilityFrame().width > 0 }), "Profiles has no accessible buttons")
+    GameScreen.shared.dismiss(arcade)
+    let owner = NSView(frame: CGRect(x: 0, y: 0, width: 640, height: 400))
+    host.contentView?.addSubview(owner)
+    var presses = 0
+    let button = GameAccessibleElement(owner: owner, label: "Retry", frame: CGRect(x: 10, y: 10, width: 80, height: 30), press: { presses += 1 })
+    try check(button.accessibilityPerformPress() && presses == 1 && button.accessibilityFrame().width == 80, "Accessible action or screen frame failed")
+    let backgroundPress = await Task.detached { button.accessibilityPerformPress() }.value
+    try check(backgroundPress && presses == 2, "Background accessibility action failed")
+    var editedValue = "Before"
+    button.readValue = { editedValue }
+    button.writeValue = { editedValue = $0 }
+    let backgroundValue = await Task.detached {
+      button.setAccessibilityValue("After")
+      button.setAccessibilityFocused(true)
+      return button.accessibilityValue() as? String
+    }.value
+    try check(backgroundValue == "After" && editedValue == "After", "Background accessibility value failed")
+    owner.isHidden = true
+    try check(!button.accessibilityPerformPress(), "Hidden accessibility control remained active")
+    owner.isHidden = false; owner.removeFromSuperview()
+    try check(!button.accessibilityPerformPress(), "Detached accessibility control remained active")
+    let badge = TurnBadgeView()
+    badge.show(initials: "ABC", portrait: nil)
+    try check(!badge.isHidden && badge.accessibilityLabel() == "ABC's turn", "Turn badge did not identify player")
+    badge.show(initials: nil, portrait: nil)
+    try check(badge.isHidden, "Solo game retained turn badge")
+    print("PASS context-aware help, scalable pages, accessible actions and turn badge")
+  }
+  fileprivate func testControllerQoL() async throws {
+    GameScreen.shared.dismissAll()
+    let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 1000, height: 620), styleMask: [], backing: .buffered, defer: false)
+    host.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 1000, height: 620))
+    host.makeKeyAndOrderFront(nil)
+    defer { host.orderOut(nil) }
+    let keyboard = GameplayKeyboard(window: host), speed = GameSpeedControl()
+    keyboard.active = { true }; keyboard.speedControl = speed
+    let driver = GameplayController(keyboard: keyboard, pollsAutomatically: false)
+    var interruptions = 0
+    keyboard.onInterruption = { interruptions += 1 }
+    driver.disconnect()
+    try check(interruptions == 0, "An unused controller paused keyboard play")
+    var assigned = 0, escaped = 0, retried = 0, rewound = 0, steps: [Int] = []
+    keyboard.assignSelected = { assigned += 1 }; keyboard.escape = { escaped += 1 }
+    keyboard.retry = { retried += 1 }; keyboard.rewind = { rewound += 1 }; keyboard.step = { steps.append($0) }
+    driver.processButtons([], at: 0, playing: true)
+    for (index, rate) in [2.0, 1, 2, 1].enumerated() {
+      let time = Double(index + 1)
+      driver.processButtons([.rightTrigger], at: time, playing: true)
+      driver.processButtons([], at: time + 0.05, playing: true)
+      try check(speed.target == rate, "RT tap did not follow the F speed sequence")
+    }
+    driver.processButtons([.rightTrigger], at: 7, playing: true)
+    for time in [7.3, 7.8, 8.3, 8.8, 9.1] { speed.update(at: time, active: true) }
+    try check(speed.target == 10, "RT did not ramp to 10x")
+    driver.processButtons([], at: 9.2, playing: true); speed.update(at: 9.5, active: true)
+    try check(speed.multiplier == 1, "RT release did not ease back to cruising speed")
+    driver.processButtons([.rightTrigger], at: 10, playing: true); driver.processButtons([], at: 10.05, playing: true)
+    driver.processButtons([.rightTrigger], at: 10.2, playing: true)
+    driver.processButtons([], at: 10.25, playing: true)
+    try check(speed.multiplier == 1, "RT tap did not exit immediately on release")
+    speed.variableEnabled = false; speed.setFast(true)
+    driver.processButtons([.rightTrigger], at: 12, playing: true)
+    driver.processButtons([.rightTrigger, .b], at: 12.5, playing: true)
+    driver.processButtons([], at: 13, playing: true)
+    try check(!speed.isFast && escaped == 0, "B's quick exit was undone on trigger release")
+    driver.processButtons([.b], at: 14, playing: true); driver.processButtons([], at: 14.1, playing: true)
+    try check(escaped == 1, "B at 1x did not open the pause menu")
+    speed.setFast(false)
+    driver.processButtons([.rightTrigger], at: 14.2, playing: true)
+    driver.processButtons([.b], at: 14.6, playing: true)
+    driver.processButtons([], at: 14.7, playing: true)
+    try check(!speed.isFast && escaped == 1, "B opened a menu when cancelling a temporary legacy boost")
+    speed.variableEnabled = true
+    keyboard.controllerTapSpeed = { false }
+    driver.processButtons([.rightTrigger], at: 15, playing: true); driver.processButtons([], at: 15.05, playing: true)
+    try check(!speed.isFast, "The hold-only preference did not suppress taps")
+    keyboard.controllerTapSpeed = { true }
+    for (index, button) in [ControllerBindings.Button.menu, .b, .leftShoulder, .rightShoulder].enumerated() {
+      driver.processButtons([.leftTrigger, button], at: 16 + Double(index), playing: true)
+      driver.processButtons([], at: 16.1 + Double(index), playing: true)
+    }
+    try check(retried == 1 && rewound == 1 && steps == [-1, 1], "Controller retry/rewind/step routing failed")
+    driver.processButtons([.rightTrigger], at: 21, playing: true)
+    driver.disconnect()
+    try check(interruptions == 1, "Disconnecting the active controller did not pause")
+    try check(!speed.isFast, "Disconnect selected a speed instead of cancelling the boost")
+    driver.processButtons([.a], at: 22, playing: true)
+    try check(assigned == 0, "Reconnect replayed a held assign button")
+    driver.processButtons([], at: 22.1, playing: true)
+    driver.processButtons([.a], at: 22.2, playing: true)
+    try check(assigned == 1, "Assignment did not return after button release")
+    driver.processButtons([], at: 22.3, playing: true)
+
+    let deck = LevelHintCatalogue.load()!.0.levels[30].deck
+    keyboard.hints = { LevelHintWindow.shared.show(deck, owner: host) }
+    driver.processButtons([.leftTrigger, .y], at: 24, playing: true)
+    try check(LevelHintWindow.shared.page != nil && keyboard.controllerIsAvailable(applicationActive: true),
+      "The hint page disabled its controller")
+    driver.processButtons([.a, .leftTrigger], at: 24.1, playing: false)
+    try check(LevelHintWindow.shared.revealedTier == 0, "A held button exposed a hint during the page transition")
+    driver.processButtons([], at: 24.2, playing: false)
+    // Controller focus starts on the page's primary action: the next hint.
+    driver.processButtons([.a], at: 24.5, playing: false)
+    driver.processButtons([.a], at: 24.6, playing: false)
+    try check(LevelHintWindow.shared.revealedTier == 1 && assigned == 1, "One controller press skipped hints or assigned behind them")
+    driver.processButtons([], at: 24.7, playing: false)
+    driver.processButtons([.leftTrigger, .b], at: 24.8, playing: false)
+    try check(LevelHintWindow.shared.page == nil, "B did not close hints while LT was still held")
+
+    keyboard.controllerAction(.help)
+    try check(keyboard.controllerMenuRoot != nil && keyboard.controllerIsAvailable(applicationActive: true), "Controller help sheet became unreachable")
+    try await Task.sleep(nanoseconds: 500_000_000)
+    keyboard.controllerMenuAction(.focusUnassigned(-1))
+    let helpSelection = (keyboard.focusedControllerControl as? NSButton)?.title ?? "none"
+    keyboard.controllerMenuAction(.assign)
+    try await Task.sleep(nanoseconds: 500_000_000)
+    try check(LevelHintWindow.shared.page != nil, "Controller could not select the hints button in controls help; selected \(helpSelection), sheet remains \(host.attachedSheet != nil)")
+    keyboard.controllerMenuAction(.cancel)
+
+    let preferences = SettingsWindow(settings: ClassicSettings(), options: settingsOptions())
+    keyboard.settings = { preferences.show() }
+    keyboard.controllerAction(.settings)
+    try check(keyboard.controllerMenuRoot != nil, "Controller settings command did not open Settings")
+    keyboard.controllerMenuAction(.cycle(1))
+    keyboard.controllerMenuAction(.rate(-1)); keyboard.controllerMenuAction(.rate(-1))
+    keyboard.controllerMenuAction(.assign)
+    try check(!preferences.current.controllerTapSpeed, "D-pad and A could not change the trigger setting")
+    keyboard.controllerMenuAction(.rate(-1)); keyboard.controllerMenuAction(.assign)
+    try check(preferences.current.controllerSwapSticks, "D-pad and A could not swap sticks")
+    if let page = keyboard.controllerMenuRoot {
+      page.layoutSubtreeIfNeeded()
+      let bitmap = page.bitmapImageRepForCachingDisplay(in: page.bounds)!
+      page.cacheDisplay(in: page.bounds, to: bitmap)
+      let output = URL(fileURLWithPath: ".build/controller-qol/settings.png")
+      try FileManager.default.createDirectory(at: output.deletingLastPathComponent(), withIntermediateDirectories: true)
+      try bitmap.representation(using: .png, properties: [:])!.write(to: output)
+    }
+    keyboard.controllerMenuAction(.cancel)
+    try check(!GameScreen.shared.isPresented, "B did not close Settings")
+    keyboard.controllerEnabled = { false }
+    try check(!keyboard.controllerIsAvailable(applicationActive: true), "Disabled controller stayed active")
+    keyboard.controllerEnabled = { true }; keyboard.ownsController = { false }
+    try check(!keyboard.controllerIsAvailable(applicationActive: true), "An inactive engine claimed controller input")
+    keyboard.ownsController = { true }
+    try check(!keyboard.controllerIsAvailable(applicationActive: false), "Controller input leaked into another app")
+    let navigation = ControllerMenuNavigator(), menu = NSView(frame: host.contentView!.bounds)
+    let choices = NSPopUpButton(frame: CGRect(x: 10, y: 10, width: 200, height: 30))
+    choices.autoenablesItems = false; choices.addItems(withTitles: ["First", "Unavailable", "Last"])
+    choices.item(at: 1)?.isEnabled = false; menu.addSubview(choices)
+    navigation.handle(.focusUnassigned(1), in: menu)
+    try check(choices.indexOfSelectedItem == 2, "Controller navigation became stuck at an unavailable setting")
+    navigation.handle(.focusUnassigned(-1), in: menu)
+    try check(choices.indexOfSelectedItem == 0, "Controller navigation did not skip unavailable settings in reverse")
+    print("PASS actual controller dispatch: RT tiers/hold/release, rapid and B exits, reconnect, hints, sheets, settings and ownership")
+  }
+
+  fileprivate func testHotSeatBoundaries() throws {
+    GameScreen.shared.dismissAll()
+    let previous = ArcadeStore.shared
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent("seat-boundaries-\(UUID().uuidString)")
+    let store = ArcadeStore(file: directory.appendingPathComponent("records.json"), bundledProofs: nil)
+    ArcadeStore.shared = store
+    defer { GameScreen.shared.dismissAll(); store.endHotSeat(); ArcadeStore.shared = previous }
+    let host = store.records.activeProfileID
+    let guest = store.addProfile(initials: "PAL", portrait: 2)!
+    store.selectProfile(host); store.toggleSessionProfile(guest.id)
+    loadContent()
+    gamePicker.selectItem(at: dataSets.firstIndex(where: { $0.set.title == .lemmings })!)
+    selectDataSet(); loadLevel(at: 30); phase = .playing
+    installKeyboardShortcuts()
+    _ = store.passSessionTurn(after: host)
+    refreshTurnDisplay()
+    try check(arcadeProfileID == host && playfield.turnInitials == store.records.profile(host)?.initials,
+      "Classic badge displayed the queued player instead of the attempt owner")
+    let sharedID = store.hotSeatID
+    let runID = arcadeRunID
+    let tick = session!.currentTick
+    let view = ArcadeWindow.shared.arcadeView
+    for screen: GamePhase in [.playing, .briefing, .results] {
+      phase = screen
+      view.mode = .details
+      view.openSession()
+      guard let confirmation = GameScreen.shared.controllerPage(in: window) as? GameMenuPage else {
+        throw IntegrationFailure(message: "Info Players link skipped Hot Seat confirmation")
+      }
+      confirmation.onBack?()
+      try check(store.hotSeatID == sharedID && arcadeRunID == runID && session?.currentTick == tick && phase == screen,
+        "Cancelling player setup changed the shared run")
+    }
+    showProfiles()
+    try check(!view.canSwitch && store.hotSeatID == sharedID && arcadeRunID == runID,
+      "Profile selection could switch an active Hot Seat to solo")
+    window.contentView?.layoutSubtreeIfNeeded()
+    view.layoutSubtreeIfNeeded()
+    let profileBitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+    view.cacheDisplay(in: view.bounds, to: profileBitmap)
+    let profileCapture = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+      .appendingPathComponent(".build/session-ui/hot-seat-profiles.png")
+    try FileManager.default.createDirectory(
+      at: profileCapture.deletingLastPathComponent(), withIntermediateDirectories: true)
+    try profileBitmap.representation(using: .png, properties: [:])!.write(to: profileCapture)
+    guard let directSolo = view.accessibilityChildren()?.compactMap({ $0 as? GameAccessibleElement })
+      .first(where: { $0.accessibilityLabel() == "Return to solo" }) else {
+      throw IntegrationFailure(message: "Players did not expose Return to solo during Hot Seat")
+    }
+    try check(directSolo.accessibilityPerformPress(), "Players Return to solo has no input target")
+    guard let directConfirmation = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
+      buttons(directConfirmation).contains(where: { $0.title == "Return to solo" }) else {
+      throw IntegrationFailure(message: "Players Return to solo bypassed confirmation")
+    }
+    directConfirmation.onBack?()
+    try check(store.hotSeatID == sharedID && arcadeRunID == runID,
+      "Cancelling Players Return to solo changed the shared run")
+    view.openSession()
+    guard let profileConfirmation = GameScreen.shared.controllerPage(in: window) as? GameMenuPage else {
+      throw IntegrationFailure(message: "Profiles Hot Seat action bypassed confirmation")
+    }
+    profileConfirmation.onBack?()
+    try check(store.hotSeatID == sharedID && arcadeRunID == runID, "Profiles Hot Seat action changed the run on cancel")
+    GameScreen.shared.dismissAll()
+    phase = .playing
+    showHotSeat()
+    try check(store.hotSeatIsActive && GameScreen.shared.controllerPage(in: window) is GameMenuPage,
+      "Changing players skipped the safe exit confirmation")
+    func buttons(_ view: NSView) -> [NSButton] { (view as? NSButton).map { [$0] } ?? view.subviews.flatMap(buttons) }
+    guard let confirm = GameScreen.shared.controllerPage(in: window),
+      let leave = buttons(confirm).first(where: { $0.title == "Save and return to library" }) else {
+      throw IntegrationFailure(message: "Safe Hot Seat exit has no action")
+    }
+    leave.performClick(nil)
+    try check(view.mode == .hotSeat && view.report == nil && view.onRetry == nil, "Player setup retained an old result action")
+    let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+    view.cacheDisplay(in: view.bounds, to: bitmap)
+    let solo = view.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement }.first { $0.accessibilityLabel() == "Return to solo" }
+    try check(solo?.accessibilityPerformPress() == true && store.hotSeatIsActive,
+      "Return to solo ended Hot Seat before confirmation")
+    (GameScreen.shared.controllerPage(in: window) as? GameMenuPage)?.onBack?()
+    view.changeSessionPlayer(guest.id)
+    try check(store.hotSeatID == sharedID, "Removing the second player ended Hot Seat before confirmation")
+    (GameScreen.shared.controllerPage(in: window) as? GameMenuPage)?.onBack?()
+    GameScreen.shared.dismissAll()
+    showProfiles()
+    guard let profileSolo = view.accessibilityChildren()?.compactMap({ $0 as? GameAccessibleElement })
+      .first(where: { $0.accessibilityLabel() == "Return to solo" }),
+      profileSolo.accessibilityPerformPress(),
+      let soloPage = GameScreen.shared.controllerPage(in: window),
+      let leaveSolo = buttons(soloPage).first(where: { $0.title == "Return to solo" }) else {
+      throw IntegrationFailure(message: "Players could not confirm Return to solo")
+    }
+    leaveSolo.performClick(nil)
+    try check(!store.hotSeatIsActive && !GameScreen.shared.isPresented,
+      "Players Return to solo failed to leave shared play safely")
+    try check((try recoveryStore.latest(profileID: host, hotSeatID: sharedID))?.runID == runID,
+      "Players Return to solo did not checkpoint the shared attempt")
+    print("PASS frozen Classic turn identity, confirmed player changes, cleared result actions and direct profile solo transition")
+  }
+
+  fileprivate func testHandoverPreviousLevel() throws {
+    GameScreen.shared.dismissAll()
+    let previousStore = ArcadeStore.shared
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent("handover-retry-\(UUID().uuidString)")
+    let store = ArcadeStore(file: directory.appendingPathComponent("records.json"), bundledProofs: nil)
+    ArcadeStore.shared = store
+    setAllClassicLevelsUnlocked(true)
+    defer {
+      handoverRetry = nil; store.endHotSeat(); ArcadeStore.shared = previousStore
+      setAllClassicLevelsUnlocked(false)
+    }
+    let host = store.records.activeProfileID
+    let guest = store.addProfile(initials: "UVA", portrait: 2)!
+    store.selectProfile(host); store.toggleSessionProfile(guest.id)
+    loadContent()
+    gamePicker.selectItem(at: dataSets.firstIndex(where: { $0.set.title == .lemmings })!)
+    selectDataSet()
+    settings.display = .flat
+    picker.selectItem(at: 2); levelChanged(); advancePhase()
+    var completed = flow!
+    completed.finishLevel(saved: 10, required: 1, total: 10)
+    flow = completed; phase = .results
+    _ = store.passSessionTurn(after: host)
+    advancePhase()
+    try check(flow?.currentLevelIndex == 3 && phase == .briefing && arcadeProfileID == guest.id,
+      "Handover did not prepare the next level for UVA")
+    try check(playfield.overlayTurnInitials == "UVA" && playfield.overlayHandoverRetryTitle == "Retry last level as UVA",
+      "Handover omitted the highlighted player or previous-level retry")
+    window.contentView?.layoutSubtreeIfNeeded()
+    let bitmap = playfield.bitmapImageRepForCachingDisplay(in: playfield.bounds)!
+    playfield.cacheDisplay(in: playfield.bounds, to: bitmap)
+    let folder = URL(fileURLWithPath: ".build/handover-retry")
+    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    try bitmap.representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent("handover.png"))
+    let controls = playfield.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement } ?? []
+    guard let retry = controls.first(where: { $0.accessibilityLabel() == "Retry last level as UVA" }),
+      let begin = controls.first(where: { $0.accessibilityLabel() == "Begin level" }) else {
+      throw IntegrationFailure(message: "Handover actions have no accessible targets")
+    }
+    try check(retry.accessibilityFrame().maxX <= begin.accessibilityFrame().minX, "Begin level is not the rightmost action")
+    let rect = retry.accessibilityFrame()
+    let point = playfield.convert(window.convertPoint(fromScreen: CGPoint(x: rect.midX, y: rect.midY)), from: nil)
+    playfield.handleClick(at: point)
+    try check(flow?.currentLevelIndex == 2 && phase == .playing && session?.currentTick == 0 && arcadeProfileID == guest.id,
+      "Retry last level did not start the previous level as UVA")
+    try check(isPaused && panel.isPaused, "Classic incoming-player retry did not wait for the player")
+    let sameOwner = arcadeProfileID
+    self.retry()
+    try check(isPaused && session?.currentTick == 0 && arcadeProfileID == sameOwner,
+      "Classic same-player Hot Seat retry started running or changed owner")
+    try check(flow?.passedCount(inRank: "Fun") == completed.passedCount(inRank: "Fun"), "Retry erased shared completion")
+    completed = flow!; completed.finishLevel(saved: 10, required: 1, total: 10)
+    flow = completed; phase = .results; advancePhase()
+    advancePhase()
+    try check(flow?.currentLevelIndex == 3 && phase == .playing && handoverRetry == nil,
+      "Beginning the next level retained the old handover retry")
+    completed = flow!; completed.finishLevel(saved: 0, required: 1, total: 10)
+    flow = completed; phase = .results; advancePhase()
+    try check(flow?.currentLevelIndex == 3 && playfield.overlayHandoverRetryTitle == nil,
+      "A failed level offered two identical retry actions")
+    advancePhase()
+    completed = flow!; completed.finishLevel(saved: 10, required: 1, total: 10)
+    flow = completed; phase = .results; advancePhase()
+    let next = flow?.currentLevelIndex
+    store.endHotSeat(); retryPreviousHandoverLevel()
+    try check(flow?.currentLevelIndex == next && phase == .briefing, "A stale shared retry crossed into solo play")
+    print("PASS green handover identity, mouse retry of the previous level as UVA, rightmost begin action, shared progress and solo boundaries")
+  }
+
+  /// Nuking before the first lemming drops is a common way to end a level.
+  /// It must reach the result screen from the panel and from the frame loop.
+  fileprivate func testEarlyNukeEndsLevel() throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll()
+    settings.music = .silent; loadContent()
+    gamePicker.selectItem(at: dataSets.firstIndex(where: { $0.set.title == .lemmings })!)
+    func enterFreshLevel() throws {
+      selectDataSet(); loadLevel(at: 0); phase = .playing
+      flow?.selectLevel(rank: 0, position: 0, recordsCampaignProgress: false)
+      flow?.beginPlaying()
+      GameScreen.shared.dismissAll()
+      try check(session?.released == 0 && flow?.screen.isPlaying == true, "Early nuke fixture did not start a fresh level")
+    }
+    try enterFreshLevel()
+    try check(playfield.startCountdown.isActive, "Fresh level did not arm its countdown")
+    handle(.nuke)
+    try check(session?.isComplete == true && !playfield.startCountdown.isActive,
+      "A nuke during the countdown did not complete the level")
+    guard case .results(_, 0, _, _)? = flow?.screen else {
+      throw IntegrationFailure(message: "A nuke before the drop did not show the result")
+    }
+    GameScreen.shared.dismissAll()
+    try enterFreshLevel()
+    playfield.startCountdown.cancel(); isPaused = true
+    session?.nuke()
+    step()
+    guard case .results? = flow?.screen else {
+      throw IntegrationFailure(message: "The frame loop left a completed early nuke on the playfield")
+    }
+    GameScreen.shared.dismissAll()
+    print("PASS a nuke before the drop ends the level from the panel and the frame loop")
+
+    let previousHD = settings.hdEffectsEnabled
+    defer { settings.hdEffectsEnabled = previousHD }
+    settings.hdEffectsEnabled = true
+    try enterFreshLevel()
+    playfield.startCountdown.cancel()
+    for _ in 0..<500 where (session?.released ?? 0) < 3 { session?.tick() }
+    try check(session?.lemmings.count == 3, "Nuke return fixture needs three live lemmings")
+    session?.nuke()
+    updateFailureMood(at: 0)
+    var pops = 0, lastPopTime = 0.0
+    for index in 1...300 {
+      session?.tick()
+      if session?.lastCues.contains(.explode) == true { pops += 1 }
+      let now = Double(index) / 17
+      updateFailureMood(at: now)
+      if pops == 3 { lastPopTime = now; break }
+      if index >= 79 {
+        nukeMood.advanceReturn(at: now + 0.14)
+        try check(nukeMood.amount == 1, "Classic opened its nuke filter before the final pop")
+      }
+    }
+    try check(pops == 3 && session?.isComplete == false, "Classic did not retain its explosion tails after three pops")
+    updateFailureMood(at: lastPopTime + 0.14)
+    try check(abs(nukeMood.amount - 0.5) < 0.0001, "Classic did not open its filter on the last audible pop")
+    phase = .results
+    updateFailureMood(at: lastPopTime + 0.3)
+    try check(nukeMood.amount == 0, "Classic results interrupted the filter return")
+    print("PASS Classic waits for all three audible nuke pops, then restores the filter through tails and results")
+  }
+
+  fileprivate func testPauseKeyRelease() throws {
+    if window == nil { buildInterface() }
+    if gameplayKeyboard == nil { installKeyboardShortcuts() }
+    GameScreen.shared.dismissAll()
+    loadContent()
+    gamePicker.selectItem(at: dataSets.firstIndex(where: { $0.set.title == .lemmings })!)
+    selectDataSet(); loadLevel(at: 0); phase = .playing; isPaused = false
+    flow?.selectLevel(rank: 0, position: 0)
+    flow?.beginPlaying()
+    GameScreen.shared.dismissAll()
+    window.makeFirstResponder(playfield)
+    try check(session != nil && flow?.screen.isPlaying == true && !sequelIsActive && window.attachedSheet == nil, "Pause fixture did not enter Classic gameplay")
+    try check(playfield.startCountdown.isActive, "Fresh Classic level did not arm its countdown")
+    let freshTick = session?.currentTick
+    advanceFreshLevelStart(seconds: 20, visible: false)
+    try check(playfield.startCountdown.number == 3, "Inactive window consumed the countdown")
+    for _ in 1...32 { advanceFreshLevelStart(seconds: 0.1, visible: true) }
+    try check(!playfield.startCountdown.isActive && !isPaused, "Fresh Classic level did not start automatically")
+    try check(session?.currentTick == freshTick, "Countdown advanced the level clock")
+    playfield.startCountdown.arm()
+    togglePause()
+    try check(isPaused && !playfield.startCountdown.isActive, "Pause during countdown must remain paused")
+    togglePause()
+    let preferences = SettingsWindow(settings: ClassicSettings(), options: settingsOptions())
+    preferences.onChange = { [weak self] in self?.apply($0) }
+    preferences.show()
+    func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap { descendants($0) } }
+    let root = window.contentView!
+    guard let iconSize = descendants(root).compactMap({ $0 as? NSPopUpButton }).first(where: { $0.accessibilityLabel() == "Skill icon size" }) else {
+      try check(false, "Skill icon size control is missing"); return
+    }
+    guard let cursorStyle = descendants(root).compactMap({ $0 as? NSPopUpButton }).first(where: { $0.accessibilityLabel() == "Cursor style" }) else {
+      throw IntegrationFailure(message: "Cursor style control is missing")
+    }
+    try check(cursorStyle.itemTitles == ["Original", "Modern"] && cursorStyle.titleOfSelectedItem == "Modern",
+      "Cursor choices or default are wrong")
+    try check(iconSize.titleOfSelectedItem == "1×" && preferences.current.skillCursorIconSize.multiplier == 2,
+      "Skill icon must default to actual 2× labelled 1×")
+    guard let experience = descendants(root).compactMap({ $0 as? NSPopUpButton }).first(where: { $0.accessibilityLabel() == "Gameplay preset" }) else {
+      try check(false, "Gameplay preset control is missing"); return
+    }
+    try check(experience.itemTitles == ["Original", "Modern", "Custom"] && experience.titleOfSelectedItem == "Modern",
+      "Gameplay must offer Original, Modern and Custom, with Modern selected")
+    guard let countControl = descendants(root).compactMap({ $0 as? NSButton }).first(where: { $0.title == "Show lemming count" }) else {
+      try check(false, "Reticule count control is missing"); return
+    }
+    try check(countControl.state == .off && !preferences.current.showReticleCount, "Reticule count must default off")
+    guard let backpacks = descendants(root).compactMap({ $0 as? NSButton }).first(where: { $0.title == "Show skill backpacks" }) else {
+      throw IntegrationFailure(message: "Classic backpack toggle is missing")
+    }
+    try check(backpacks.state == .on && preferences.current.showClassicSkillBackpacks,
+      "Modern must show backpacks by default")
+    root.layoutSubtreeIfNeeded()
+    try check(backpacks.visibleRect.contains(backpacks.bounds.insetBy(dx: 1, dy: 1)), "Backpack toggle is clipped")
+    try check(root.hitTest(backpacks.convert(CGPoint(x: backpacks.bounds.midX, y: backpacks.bounds.midY), to: root)) === backpacks,
+      "Backpack toggle has the wrong input target")
+    func click(_ point: CGPoint, in view: NSView, releaseAt: CGPoint? = nil) {
+      let location = view.convert(point, to: nil)
+      let down = NSEvent.mouseEvent(with: .leftMouseDown, location: location, modifierFlags: [], timestamp: 1,
+        windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1)!
+      let up = NSEvent.mouseEvent(with: .leftMouseUp, location: releaseAt.map { view.convert($0, to: nil) } ?? location, modifierFlags: [], timestamp: 1.1,
+        windowNumber: window.windowNumber, context: nil, eventNumber: 1, clickCount: 1, pressure: 0)!
+      NSApp.postEvent(up, atStart: true)
+      window.sendEvent(down)
+      // Native buttons can finish tracking on the next event-loop turn.
+      if let release = NSApp.nextEvent(matching: .leftMouseUp, until: .distantPast, inMode: .default, dequeue: true) {
+        NSApp.sendEvent(release)
+      }
+    }
+    func capturePreset(_ name: String) throws {
+      root.layoutSubtreeIfNeeded()
+      for view in descendants(root) { view.needsDisplay = true }
+      if GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Settings",
+         let levelSelection = descendants(root).compactMap({ $0 as? NSPopUpButton }).first(where: { $0.accessibilityLabel() == "Level selection" }),
+         let back = descendants(root).compactMap({ $0 as? NSButton }).first(where: { $0.title == "Back" }) {
+        let levelRect = levelSelection.convert(levelSelection.bounds, to: root)
+        let backRect = back.convert(back.bounds, to: root)
+        try check(!levelRect.intersects(backRect), "Gameplay options overlap the Back button")
+        try check(levelSelection.visibleRect.contains(levelSelection.bounds.insetBy(dx: 1, dy: 1)), "Level selection is clipped")
+      }
+      let bitmap = root.bitmapImageRepForCachingDisplay(in: root.bounds)!
+      root.cacheDisplay(in: root.bounds, to: bitmap)
+      try bitmap.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: ".build/gameplay-preset-\(name).png"))
+    }
+    func selectPreset(_ name: String, keyboard: Bool = false) throws {
+      try check(experience.accessibilityPerformPress(), "Preset choices could not open")
+      guard let page = GameScreen.shared.controllerPage(in: window),
+        let button = descendants(page).compactMap({ $0 as? NSButton }).first(where: { $0.title == name }) else {
+        try check(false, "Preset choice \(name) is missing"); return
+      }
+      root.layoutSubtreeIfNeeded()
+      try capturePreset("choices")
+      if keyboard {
+        window.makeFirstResponder(button)
+        let event = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+          windowNumber: window.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r",
+          isARepeat: false, keyCode: 36)!
+        try check(GameScreen.shared.handleDialogKey(event), "Preset ignored Return")
+      } else {
+        let point = CGPoint(x: button.bounds.midX, y: button.bounds.midY)
+        let hit = root.hitTest(button.convert(point, to: root))
+        try check(hit === button, "Preset click target was \(String(describing: hit)) instead of \(button.title)")
+        click(point, in: button)
+      }
+      if experience.titleOfSelectedItem != name { try capturePreset("failed-\(name.lowercased())") }
+      try check(experience.titleOfSelectedItem == name,
+        "Preset \(name) stayed \(experience.titleOfSelectedItem ?? "nil"); choice frame=\(button.frame), visible=\(button.visibleRect), page=\(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() ?? "nil")")
+    }
+    try capturePreset("modern")
+    try selectPreset("Original")
+    try check(preferences.current.experiencePreset == .original && !preferences.current.favorApproachingLemmings
+      && !preferences.current.favorBombBlockers && !preferences.current.favorBuilders
+      && preferences.current.skillCursorIconSize == .none && iconSize.titleOfSelectedItem == "None",
+      "Original did not disable all targeting aids and the icon")
+    try check(!preferences.current.showClassicSkillBackpacks && backpacks.state == .off && !playfield.showClassicSkillBackpacks,
+      "Original did not disable backpacks in Settings and the playfield")
+    try check(preferences.current.gameplayCursorStyle == .original && playfield.gameplayCursorStyle == .original
+      && cursorStyle.titleOfSelectedItem == "Original", "Original preset did not select the original cursor")
+    try capturePreset("original")
+    try selectPreset("Modern", keyboard: true)
+    try check(preferences.current.favorApproachingLemmings && preferences.current.favorBombBlockers
+      && preferences.current.favorBuilders && preferences.current.skillCursorIconSize == .one,
+      "Modern did not restore targeting aids and the baseline icon")
+    try check(preferences.current.showClassicSkillBackpacks && backpacks.state == .on && playfield.showClassicSkillBackpacks,
+      "Modern did not restore backpacks in Settings and the playfield")
+    try check(preferences.current.gameplayCursorStyle == .modern && playfield.gameplayCursorStyle == .modern
+      && cursorStyle.titleOfSelectedItem == "Modern", "Modern preset did not restore the modern cursor")
+    for title in ["Favor lemmings still approaching", "Favor blockers for bombs", "Favor current builders for Build", "Show skill backpacks"] {
+      guard let control = descendants(root).compactMap({ $0 as? NSButton }).first(where: { $0.title == title }) else {
+        try check(false, "Targeting control is missing: \(title)"); return
+      }
+      try check(control.state == .on, "Modern left a targeting checkbox off")
+      for x in [10.0, 40.0, control.bounds.width - 4] {
+        click(CGPoint(x: x, y: control.bounds.midY), in: control)
+        try check(control.state == .off && experience.titleOfSelectedItem == "Custom"
+          && preferences.current.experiencePreset == .custom, "A targeting change must select Custom")
+        click(CGPoint(x: x, y: control.bounds.midY), in: control)
+        try check(control.state == .on && experience.titleOfSelectedItem == "Custom",
+          "Reversing an individual change must remain Custom")
+      }
+    }
+    try capturePreset("custom")
+    let custom = preferences.current
+    try selectPreset("Custom")
+    try check(preferences.current == custom, "Selecting Custom changed individual settings")
+    try selectPreset("Modern", keyboard: true)
+    try check(preferences.current.experiencePreset == .modern, "Explicit Modern selection did not leave Custom")
+    for x in [10.0, 40.0, countControl.bounds.width - 4] {
+      click(CGPoint(x: x, y: countControl.bounds.midY), in: countControl)
+      try check(preferences.current.showReticleCount, "Clicking the checkbox or its text did not enable it at x=\(x), frame=\(countControl.frame)")
+      click(CGPoint(x: x, y: countControl.bounds.midY), in: countControl)
+      try check(!preferences.current.showReticleCount, "Clicking the checkbox or its text did not disable it")
+      try check(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Settings",
+        "A settings click navigated to another page")
+    }
+    click(CGPoint(x: 40, y: countControl.bounds.midY), in: countControl,
+      releaseAt: CGPoint(x: 40, y: countControl.bounds.maxY + 20))
+    try check(!preferences.current.showReticleCount, "Releasing outside the checkbox must cancel the click")
+    try check(countControl.accessibilityPerformPress(), "Checkbox accessibility action is unavailable")
+    try check(preferences.current.showReticleCount, "Accessibility press did not enable the checkbox")
+    _ = countControl.accessibilityPerformPress()
+    try check(!preferences.current.showReticleCount, "Accessibility press did not disable the checkbox")
+    countControl.isEnabled = false
+    click(CGPoint(x: 40, y: countControl.bounds.midY), in: countControl)
+    try check(!preferences.current.showReticleCount, "Disabled checkbox accepted a click")
+    countControl.isEnabled = true
+    if let page = GameScreen.shared.controllerPage(in: window) {
+      click(CGPoint(x: 10, y: 10), in: page)
+      try check(GameScreen.shared.controllerPage(in: window) === page, "Clicking menu background navigated away")
+    }
+
+    print("PASS checkbox box, label, release cancellation, disabled state, accessibility and menu input isolation")
+    countControl.performClick(nil)
+    try check(preferences.current.showReticleCount, "Reticule count control did not enable the count")
+    countControl.performClick(nil)
+    try check(!preferences.current.showReticleCount, "Reticule count control did not disable the count")
+    for (index, size) in SkillCursorIconSize.allCases.enumerated() {
+      iconSize.selectItem(at: index)
+      _ = iconSize.sendAction(iconSize.action, to: iconSize.target)
+      try check(preferences.current.skillCursorIconSize == size, "Skill icon control did not apply its selection")
+    }
+    for style: GameplayCursorStyle in [.modern, .original] {
+      root.layoutSubtreeIfNeeded()
+      let centre = CGPoint(x: cursorStyle.bounds.midX, y: cursorStyle.bounds.midY)
+      try check(root.hitTest(cursorStyle.convert(centre, to: root)) === cursorStyle, "Cursor control is obscured")
+      try check(cursorStyle.accessibilityPerformPress(), "Cursor choices did not open")
+      let page = GameScreen.shared.controllerPage(in: window)!
+      let choice = descendants(page).compactMap { $0 as? NSButton }.first { $0.title == style.title }!
+      root.layoutSubtreeIfNeeded()
+      click(CGPoint(x: choice.bounds.midX, y: choice.bounds.midY), in: choice)
+      try check(preferences.current.gameplayCursorStyle == style && playfield.gameplayCursorStyle == style
+        && preferences.current.experiencePreset == .custom, "Cursor selection did not apply immediately as Custom")
+    }
+    try check(backpacks.accessibilityPerformPress(), "Backpack toggle lacks an accessibility action")
+    try check(!preferences.current.showClassicSkillBackpacks && !playfield.showClassicSkillBackpacks,
+      "Backpack opt-out did not apply immediately")
+    root.layoutSubtreeIfNeeded()
+    let bitmap = root.bitmapImageRepForCachingDisplay(in: root.bounds)!
+    root.cacheDisplay(in: root.bounds, to: bitmap)
+    try bitmap.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: ".build/skill-icon-settings.png"))
+    GameScreen.shared.dismissAll()
+    let savedPreferences = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(preferences.current))
+    let reopened = SettingsWindow(settings: savedPreferences, options: settingsOptions())
+    reopened.show()
+    let reopenedPreset = descendants(root).compactMap { $0 as? NSPopUpButton }.first { $0.accessibilityLabel() == "Gameplay preset" }
+    try check(reopenedPreset?.titleOfSelectedItem == "Custom", "Custom preset did not survive save and reopen")
+    let reopenedCursor = descendants(root).compactMap { $0 as? NSPopUpButton }.first { $0.accessibilityLabel() == "Cursor style" }
+    try check(reopened.current.gameplayCursorStyle == .original && reopenedCursor?.titleOfSelectedItem == "Original",
+      "Custom cursor choice did not survive save and reopen")
+    let reopenedBackpacks = descendants(root).compactMap { $0 as? NSButton }.first { $0.title == "Show skill backpacks" }
+    try check(reopenedBackpacks?.state == .off && !reopened.current.showClassicSkillBackpacks,
+      "Backpack opt-out did not survive save and reopen")
+    GameScreen.shared.dismissAll()
+    print("PASS Original/Modern/Custom presets, checkbox targets, keyboard selection, persistence and rendered states")
+    window.makeFirstResponder(playfield)
+    for (key, code) in [(" ", UInt16(49)), ("p", UInt16(35))] {
+      func send(_ type: NSEvent.EventType, repeatKey: Bool = false) {
+        let event = NSEvent.keyEvent(with: type, location: .zero, modifierFlags: [], timestamp: 1,
+          windowNumber: window.windowNumber, context: nil, characters: key,
+          charactersIgnoringModifiers: key, isARepeat: repeatKey, keyCode: code)!
+        _ = handleClassicKeyboardEvent(event)
+      }
+      send(.keyDown)
+      try check(isPaused, "Pause key did not pause on press")
+      send(.keyDown, repeatKey: true)
+      try check(isPaused, "Held pause key toggled repeatedly")
+      send(.keyUp)
+      try check(isPaused, "Releasing pause immediately resumed play")
+      send(.keyDown); send(.keyUp)
+      try check(!isPaused, "Second pause press did not resume play")
+    }
+    print("PASS Space and P pause once per press, ignore repeat and remain paused on release")
+    try validatePauseKeyboard(gameplayKeyboard!, name: "Classic", paused: { self.isPaused })
+    gameplayKeyboard?.bind(to: window)
+    // Imported fan play keeps a separate phase from the original campaign.
+    let activeFlow = flow, wasFanPlaying = fanPlaying
+    defer { flow = activeFlow; fanPlaying = wasFanPlaying }
+    flow?.selectLevel(rank: 0, position: 0)
+    let space = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+      windowNumber: window.windowNumber, context: nil, characters: " ", charactersIgnoringModifiers: " ",
+      isARepeat: false, keyCode: 49)!
+    for fan in [false, true] {
+      fanPlaying = fan
+      _ = handleClassicKeyboardEvent(space)
+      try check(isPaused, "Space advanced campaign state instead of pausing gameplay (fan: \(fan))")
+      _ = handleClassicKeyboardEvent(space)
+      try check(!isPaused, "Space did not resume gameplay (fan: \(fan))")
+    }
+    print("PASS Classic and fan Space pause independently of campaign menu state")
+  }
+
+  fileprivate func testInterruptionPolicy() throws {
+    if gameplayKeyboard == nil { installKeyboardShortcuts() }
+    GameScreen.shared.dismissAll()
+    loadContent()
+    gamePicker.selectItem(at: dataSets.firstIndex(where: { $0.set.title == .lemmings })!)
+    selectDataSet(); loadLevel(at: 30); phase = .playing; isPaused = false
+    settings.pauseOnInterruption = true
+    guard let keyboard = gameplayKeyboard, let current = session else { throw IntegrationFailure(message: "No interruption test game") }
+    speedControl.setFast(true)
+    let tick = current.currentTick
+    NotificationCenter.default.post(name: NSWindow.didResignKeyNotification, object: window)
+    step(at: 1); step(at: 2)
+    try check(isPaused && !speedControl.isFast && current.currentTick == tick, "Focus loss did not pause Classic at 1x")
+    NotificationCenter.default.post(name: NSWindow.didBecomeKeyNotification, object: window)
+    try check(isPaused, "Returning to the game resumed without player input")
+    isPaused = false; showLevelHints()
+    NotificationCenter.default.post(name: NSApplication.didResignActiveNotification, object: NSApp)
+    GameScreen.shared.dismissAll()
+    try check(isPaused, "Closing hints resumed after the app was interrupted")
+    isPaused = false
+    let resume = keyboard.pauseForHelp()
+    keyboard.handleInterruption(); resume()
+    try check(isPaused, "Closing controls help resumed after an interruption")
+    settings.pauseOnInterruption = false; isPaused = false
+    NotificationCenter.default.post(name: NSWindow.didResignKeyNotification, object: window)
+    try check(!isPaused, "The automatic pause opt-out was ignored")
+    settings.pauseOnInterruption = true
+    print("PASS Classic focus loss, manual resume, interrupted hints/help and automatic pause opt-out")
+  }
+
+  #if PERFORMANCE_TESTS
+  fileprivate func testReleasePerformance() async throws {
+    GameScreen.shared.dismissAll()
+    settings.music = .silent; settings.pauseOnInterruption = false
+    loadContent()
+    launchMode = .singleTitle; activeTitle = .lemmings
+    gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
+    selectDataSet()
+    setAllClassicLevelsUnlocked(true)
+    defer { setAllClassicLevelsUnlocked(false) }
+    window.setContentSize(NSSize(width: 1280, height: 720))
+    window.makeKeyAndOrderFront(nil)
+    let passes = Int(ProcessInfo.processInfo.environment["LEMMINGS_PERFORMANCE_PASSES"] ?? "1") ?? 1
+    try check((1...20).contains(passes), "Performance passes must be between 1 and 20")
+    var rows: [[String: Any]] = []
+    func residentBytes() -> UInt64 {
+      var info = mach_task_basic_info()
+      var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size / MemoryLayout<integer_t>.size)
+      let result = withUnsafeMutablePointer(to: &info) { pointer in
+        pointer.withMemoryRebound(to: integer_t.self, capacity: Int(count)) {
+          task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
+        }
+      }
+      return result == KERN_SUCCESS ? info.resident_size : 0
+    }
+    for pass in 1...passes {
+    for (mode, rate) in [(ClassicDisplayMode.flat, 1), (.flat, 10), (.monitor, 10), (.television, 10)] {
+      settings.display = mode; settings.hdEffectsEnabled = true; settings.fullScreenHDRFlashes = true
+      settings.reduceMotion = false; settings.reduceFlashes = false
+      picker.selectItem(at: 29); levelChanged()
+      if phase == .briefing { advancePhase() }
+      isPaused = false; panel.isPaused = false; applyDisplayMode()
+      session?.adjustRate(by: 99)
+      speedControl.variableEnabled = true; speedControl.reset(at: ProcessInfo.processInfo.systemUptime)
+      if rate == 10 { for _ in 0..<4 { speedControl.step(1, at: ProcessInfo.processInfo.systemUptime) } }
+      lastStepTime = nil; accumulator = 0
+      replayCaptureSeconds = 0; playfield.sceneRenderSeconds = 0
+      crtView.performanceMetrics = CRTPerformanceMetrics()
+      print("PERFORMANCE pass \(pass)/\(passes) \(mode.rawValue) \(rate)x")
+      let initialCapturedFrames = runMovie.capturedFrames
+      var samples: [Double] = [], memories: [UInt64] = []
+      try check(session?.currentTick == 0, "Benchmark did not start a fresh level")
+      var completedTicks = 0, previousTick = 0, nuked = false
+      let began = ProcessInfo.processInfo.systemUptime
+      while ProcessInfo.processInfo.systemUptime - began < 20 {
+        let start = ProcessInfo.processInfo.systemUptime
+        if !nuked && start - began > 12 { session?.nuke(); nuked = true }
+        step(at: start)
+        window.contentView?.displayIfNeeded()
+        CATransaction.flush()
+        try check(runMovie.recorder?.recordingFailure == nil,
+          "Benchmark encoder failed in pass \(pass), \(mode.rawValue) \(rate)x: \(runMovie.recorder?.recordingFailure ?? "")")
+        let end = ProcessInfo.processInfo.systemUptime
+        samples.append((end - start) * 1000)
+        memories.append(residentBytes())
+        let tick = session?.currentTick ?? 0
+        completedTicks += max(0, tick - previousTick); previousTick = tick
+        if session?.isComplete == true { break }
+        let remaining = max(0.001, 1.0 / 60 - (end - start))
+        try await Task.sleep(nanoseconds: UInt64(remaining * 1_000_000_000))
+      }
+      let elapsed = ProcessInfo.processInfo.systemUptime - began
+      try check(completedTicks >= 100, "Benchmark did not run the simulation: ticks \(completedTicks), phase \(phase), paused \(isPaused)")
+      let capturedFrames = runMovie.capturedFrames - initialCapturedFrames
+      try check(capturedFrames == completedTicks, "Benchmark skipped replay frames in pass \(pass), \(mode.rawValue) \(rate)x: \(capturedFrames)/\(completedTicks)")
+      try check(runMovie.recorder != nil && runMovie.recorder?.recordingFailure == nil,
+        "Benchmark recorder failed: \(runMovie.recorder?.recordingFailure ?? "missing recorder")")
+      // Drain submitted GPU work after timing the normal asynchronous app loop.
+      let gpuDeadline = ProcessInfo.processInfo.systemUptime + 2
+      var gpu = crtView.performanceMetrics.snapshot
+      while gpu.frames.count < gpu.submitted && ProcessInfo.processInfo.systemUptime < gpuDeadline {
+        try await Task.sleep(nanoseconds: 10_000_000)
+        gpu = crtView.performanceMetrics.snapshot
+      }
+      try check(gpu.frames.count == gpu.submitted && gpu.failures == 0, "GPU work did not complete successfully")
+      if mode != .flat { try check(gpu.submitted > 0, "CRT benchmark submitted no GPU work") }
+      let movieURL = try await runMovie.performanceFile()
+      let movieAsset = AVURLAsset(url: movieURL)
+      guard let movieTrack = try await movieAsset.loadTracks(withMediaType: .video).first else {
+        throw IntegrationFailure(message: "Benchmark movie has no video track")
+      }
+      let reader = try AVAssetReader(asset: movieAsset)
+      let videoOutput = AVAssetReaderTrackOutput(track: movieTrack, outputSettings: nil)
+      try check(reader.canAdd(videoOutput), "Benchmark movie cannot be read")
+      reader.add(videoOutput)
+      try check(reader.startReading(), "Benchmark movie did not start reading")
+      var encodedFrames = 0
+      while let sample = videoOutput.copyNextSampleBuffer() { encodedFrames += CMSampleBufferGetNumSamples(sample) }
+      try check(reader.status == .completed && encodedFrames == runMovie.capturedFrames,
+        "Benchmark movie lost frames: \(encodedFrames)/\(runMovie.capturedFrames)")
+      func distribution(_ values: [Double]) -> [String: Double] {
+        let sorted = values.sorted()
+        guard !sorted.isEmpty else { return [:] }
+        func q(_ fraction: Double) -> Double { sorted[min(sorted.count - 1, Int(Double(sorted.count - 1) * fraction))] }
+        return ["p50": q(0.5), "p95": q(0.95), "p99": q(0.99), "max": sorted.last!]
+      }
+      let sorted = samples.sorted()
+      func quantile(_ fraction: Double) -> Double { sorted[min(sorted.count - 1, Int(Double(sorted.count - 1) * fraction))] }
+      rows.append(["pass": pass, "replayFrames": capturedFrames, "initialReplayFrames": initialCapturedFrames, "encodedReplayFrames": encodedFrames, "gpuFrames": gpu.frames.count, "gpuExecutionMS": distribution(gpu.frames.map(\.gpuMS)), "gpuCompletionMS": distribution(gpu.frames.map(\.completionMS)), "sceneRenderSeconds": playfield.sceneRenderSeconds, "replayCaptureSeconds": replayCaptureSeconds, "encoderWaitSeconds": runMovie.recorder?.admissionWaitSeconds ?? 0, "display": mode.rawValue, "requestedSpeed": rate, "seconds": elapsed, "frames": samples.count,
+        "ticks": completedTicks, "observedSimulationSpeed": Double(completedTicks) / (17 * elapsed),
+        "cpuFrameMS": ["p50": quantile(0.5), "p95": quantile(0.95), "p99": quantile(0.99), "max": sorted.last!],
+        "residentBytes": ["first": memories.first!, "last": memories.last!, "peak": memories.max()!],
+        "nukeTriggered": nuked, "windowWidth": 1280, "windowHeight": 720])
+      runMovie.discard()
+    }
+    }
+    let report: [String: Any] = ["passes": passes, "scenarios": rows,
+      "scope": "Local 1280x720 production app loop with asynchronous Metal submission and enabled replay recording. CPU work, GPU execution and submission-to-completion latency are separate measurements. GPU draining occurs outside the timed loop. Audio is silent. Repeated passes cover level restarts, display changes, nukes and replay finalisation. They do not certify uninterrupted long play or other hardware."]
+    let output = URL(fileURLWithPath: ProcessInfo.processInfo.environment["LEMMINGS_PERFORMANCE_OUTPUT"] ?? ".build/blocker-closure/performance.json")
+    try FileManager.default.createDirectory(at: output.deletingLastPathComponent(), withIntermediateDirectories: true)
+    try JSONSerialization.data(withJSONObject: report, options: [.prettyPrinted, .sortedKeys]).write(to: output)
+    window.orderOut(nil)
+    print("PASS local frame timing and resident-memory measurements: \(output.path)")
+  }
+  #endif
+
+  fileprivate func testControllerRemapping() throws {
+    GameScreen.shared.dismissAll()
+    let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 1000, height: 720), styleMask: [], backing: .buffered, defer: false)
+    host.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 1000, height: 720))
+    let keyboard = GameplayKeyboard(window: host), speed = GameSpeedControl()
+    keyboard.active = { true }; keyboard.speedControl = speed
+    var mapping = ControllerBindings.swapping([:], physical: .a, role: .rightTrigger)
+    keyboard.controllerMappings = { mapping }
+    var assignments = 0
+    keyboard.assignSelected = { assignments += 1 }
+    let driver = GameplayController(keyboard: keyboard, pollsAutomatically: false)
+    driver.processButtons([], at: 0, playing: true)
+    driver.processButtons([.a], at: 1, playing: true)
+    driver.processButtons([], at: 1.05, playing: true)
+    try check(speed.target == 2 && assignments == 0, "Remapped speed button did not use tap/release semantics")
+    driver.processButtons([.rightTrigger], at: 2, playing: true)
+    try check(assignments == 1, "Remapped assignment did not fire")
+    driver.processButtons([], at: 2.1, playing: true)
+    driver.processButtons([.a], at: 3, playing: true)
+    mapping = [:]
+    driver.processButtons([.a], at: 3.2, playing: true)
+    try check(assignments == 1, "Changing mappings replayed a held button")
+    driver.processButtons([], at: 3.3, playing: true)
+    mapping = ControllerBindings.swapping([:], physical: .a, role: .b)
+    let page = GameMenuPage(title: "Menu test")
+    page.onBack = { GameScreen.shared.dismiss(page) }
+    GameScreen.shared.present(page, owner: host)
+    driver.processButtons([], at: 4, playing: false)
+    driver.processButtons([.b], at: 4.1, playing: false)
+    try check(!GameScreen.shared.isPresented, "Gameplay remapping removed standard menu Back")
+    let preferences = SettingsWindow(settings: ClassicSettings(), options: settingsOptions())
+    GameScreen.shared.gameWindow = host
+    preferences.show()
+    func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap(descendants) }
+    descendants(host.contentView!).compactMap { $0 as? NSTabView }.first?.selectTabViewItem(at: 1)
+    let views = descendants(host.contentView!)
+    let remap = views.compactMap { $0 as? NSButton }.first { $0.title == "Remap buttons…" }!
+    remap.performClick(nil)
+    let controls = descendants(host.contentView!).compactMap { $0 as? NSPopUpButton }
+    let source = controls.first { $0.accessibilityLabel() == "Controller button" }!
+    let role = controls.first { $0.accessibilityLabel() == "Gameplay action" }!
+    source.selectItem(at: ControllerBindings.Button.allCases.firstIndex(of: .a)!)
+    _ = source.sendAction(source.action, to: source.target)
+    role.selectItem(at: ControllerBindings.Button.allCases.firstIndex(of: .rightTrigger)!)
+    _ = role.sendAction(role.action, to: role.target)
+    try check(preferences.current.controllerMappings == ControllerBindings.swapping([:], physical: .a, role: .rightTrigger),
+      "The remapping screen did not swap and save the chosen action")
+    let persisted = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(preferences.current))
+    try check(persisted.controllerMappings == preferences.current.controllerMappings, "Remapping did not persist")
+    let reset = descendants(host.contentView!).compactMap { $0 as? NSButton }.first { $0.title == "Reset button mappings" }!
+    reset.performClick(nil)
+    try check(preferences.current.controllerMappings.isEmpty, "Reset did not restore default buttons")
+    GameScreen.shared.dismissAll(); host.orderOut(nil)
+    print("PASS remapped speed/assignment, held-input reset, standard menu escape, settings swap/reset and persistence")
+  }
+
+  fileprivate func testNeoRunRecovery() throws {
+    if window == nil { buildInterface() }
+    var terrain = try NeoLemmixTerrain(width: 512, height: 96)
+    for x in 0..<512 { terrain.setSolid(true, x: x, y: 48) }
+    let config = try NeoLemmixConfiguration(totalLemmings: 1, requiredToSave: 0,
+      spawnInterval: 4, entrances: [], preplacedLemmings: [.init(position: .init(x: 20, y: 48))],
+      skills: [.walker: .infinite, .builder: .finite(5)])
+    let initial = try NeoLemmixSimulation(terrain: terrain, configuration: config)
+    func fresh() -> NeoLemmixSession { NeoLemmixSession(simulation: initial, width: 512, height: 96) }
+    let limited = fresh()
+    limited.setRateLimit(maximum: true); limited.tick()
+    try check(limited.simulation.spawnInterval == NeoLemmixRules.minimumSpawnInterval,
+      "Double-tap + did not reach the shortest NeoLemmix spawn interval")
+    limited.setRateLimit(maximum: false); limited.tick()
+    try check(limited.simulation.spawnInterval == initial.configuration.spawnInterval,
+      "Double-tap - did not return to the level's own spawn interval")
+    let original = fresh()
+    for _ in 0..<12 { original.tick() }
+    try check(original.assign(skillIndex: 1, to: 0) == nil, "Neo fixture could not assign builder")
+    for _ in 0..<12 { original.tick() }
+    original.nuke(); original.tick(); original.undoNuke()
+    original.adjustRate(by: 1)
+    original.nuke()
+    var checkpoint = RunRecovery(engine: "test", profileID: "player", runID: UUID(), dataSetID: "neolemmix",
+      levelIndex: 0, levelFingerprint: "test", initialStateHash: "state", tick: original.currentTick,
+      events: [], stateHash: "state", usedRewind: original.usedRewind, nukeCount: original.nukeCount,
+      rewindCount: original.rewindCount, undoCount: original.undoCount, selectedSkill: 1, scrollX: 0, scrollY: 0)
+    checkpoint.neo = original.recovery; checkpoint.sourcePath = "/test.nxlv"
+    checkpoint.neoPackID = "neolemmix:test-pack"
+    checkpoint.neoLevelID = "x0000000000000001"
+    checkpoint.neoPackName = "Test pack"
+    let restored = fresh()
+    let decoded = try JSONDecoder().decode(
+      RunRecovery.self, from: JSONEncoder().encode(checkpoint))
+    try check(decoded.neoPackID == checkpoint.neoPackID
+      && decoded.neoLevelID == checkpoint.neoLevelID
+      && decoded.neoPackName == checkpoint.neoPackName,
+      "Neo recovery lost its stable catalogue identity")
+    try restored.restore(decoded)
+    try check(restored.simulation == original.simulation && restored.skillAssignments == original.skillAssignments,
+      "Neo recovery changed the simulation or skill counts")
+    try check(restored.canUndoNuke && restored.undoCount == 1 && restored.nukeCount == 2,
+      "Neo recovery lost nuke undo or assistance counters")
+    restored.undoNuke(); original.undoNuke()
+    for _ in 0..<40 { restored.tick(); original.tick() }
+    try check(restored.simulation == original.simulation, "Neo recovery diverged after nuke undo and queued rate")
+    let saved = checkpoint.neo!
+    checkpoint.neo = NeoRunRecovery(initialState: initial, state: saved.state, inputs: [])
+    let rejected = fresh()
+    // A newer build may not replay the journal. The saved state then continues
+    // the run, which counts as assisted because its inputs no longer prove it.
+    let continued = fresh()
+    try continued.restore(checkpoint)
+    try check(continued.simulation == saved.state && continued.usedRewind,
+      "Neo recovery did not continue an unprovable run from its saved state as assisted")
+    checkpoint.neo = NeoRunRecovery(initialState: initial, state: initial, inputs: [])
+    do { try rejected.restore(checkpoint); throw IntegrationFailure(message: "Neo recovery accepted a state from another tick") }
+    catch RunRecoveryError.differentGame {} catch RunRecoveryError.invalid {}
+    try check(rejected.simulation == initial, "Rejected Neo recovery modified live state")
+    GameScreen.shared.dismissAll()
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent("NeoRecovery-\(UUID())")
+    try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: directory) }
+    let oldStyles = stylesDirectory
+    defer { stylesDirectory = oldStyles }
+    stylesDirectory = directory
+    let theme = directory.appendingPathComponent("fixture")
+    let lemmings = directory.appendingPathComponent("fixture_sprites/lemmings")
+    try FileManager.default.createDirectory(at: theme, withIntermediateDirectories: true)
+    try FileManager.default.createDirectory(at: lemmings, withIntermediateDirectories: true)
+    try "LEMMINGS fixture_sprites\n".write(
+      to: theme.appendingPathComponent("theme.nxtm"), atomically: true, encoding: .utf8)
+    let animationNames = [
+      "walker", "ascender", "faller", "climber", "hoister", "floater", "glider",
+      "dehoister", "slider", "swimmer", "blocker", "builder", "platformer", "stacker",
+      "basher", "fencer", "laserer", "miner", "digger", "jumper", "reacher",
+      "shimmier", "disarmer", "shrugger", "ohnoer", "stoner", "bomber", "splatter",
+      "exiter", "drowner", "burner",
+    ]
+    let pixels = [UInt8](repeating: 0xFF, count: 8 * 4 * 4)
+    guard let provider = CGDataProvider(data: Data(pixels) as CFData),
+          let image = CGImage(
+            width: 8, height: 4, bitsPerComponent: 8, bitsPerPixel: 32,
+            bytesPerRow: 32, space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
+            provider: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent),
+          let png = NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:]) else {
+      throw IntegrationFailure(message: "Could not create the Neo sprite fixture")
+    }
+    var animations = "$ANIMATIONS\n"
+    for name in animationNames {
+      animations += """
+        $\(name.uppercased())
+          FRAMES 1
+          $RIGHT
+            FOOT_X 2
+            FOOT_Y 3
+          $END
+          $LEFT
+            FOOT_X 2
+            FOOT_Y 3
+          $END
+        $END
+      """ + "\n"
+      try png.write(to: lemmings.appendingPathComponent("\(name).png"))
+    }
+    animations += "$END\n"
+    try animations.write(
+      to: lemmings.appendingPathComponent("scheme.nxmi"), atomically: true, encoding: .utf8)
+    let file = directory.appendingPathComponent("recovery.nxlv")
+    let source = """
+    TITLE Recovery test
+    THEME fixture
+    WIDTH 200
+    HEIGHT 200
+    LEMMINGS 1
+    SAVE_REQUIREMENT 1
+    SPAWN_INTERVAL 20
+    $SKILLSET
+      FLOATER 1
+    $END
+    $LEMMING
+      X 40
+      Y 20
+    $END
+    """
+    try source.write(to: file, atomically: true, encoding: .utf8)
+    loadNxlv(file)
+    guard let live = session as? NeoLemmixSession else { throw IntegrationFailure(message: "Neo file did not load") }
+    try check(phase == .playing && !panel.isMenuMode, "Opening a Neo file left the game in its menu")
+    for _ in 0..<4 { live.tick() }
+    saveRunCheckpoint(immediately: true)
+    guard let disk = try recoveryStore.latest(profileID: arcadeProfileID), disk.neo != nil else {
+      throw IntegrationFailure(message: "Neo file run was not saved")
+    }
+    let starts = ArcadeStore.shared.records.trolley.starts.count
+    restoreRun(disk)
+    try check((session as? NeoLemmixSession)?.simulation == live.simulation && phase == .playing && isPaused,
+      "Neo file restore lost its state or playing screen")
+    try check(arcadeRunID == disk.runID && ArcadeStore.shared.records.trolley.starts.count == starts,
+      "Neo file restore counted a new attempt")
+    GameScreen.shared.dismissAll()
+    try (source + "\n# changed visual content\n").write(
+      to: file, atomically: true, encoding: .utf8)
+    restoreRun(disk)
+    try check(arcadeRunID != disk.runID && GameScreen.shared.isPresented,
+      "Neo recovery accepted changed source content")
+    GameScreen.shared.dismissAll()
+    try source.write(to: file, atomically: true, encoding: .utf8)
+    try recoveryStore.clear(disk.runID)
+    print("PASS Neo checkpoint round trip, assignment, queued rate/nuke, undo, counters, continuation, changed-content rejection and transactional rejection")
+  }
+
+  fileprivate func testFanRunRecovery() throws {
+    GameScreen.shared.dismissAll()
+    returnToLibrary()
+    settings.music = .silent; loadContent()
+    gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
+    selectDataSet()
+    let folder = FileManager.default.temporaryDirectory.appendingPathComponent("fan-recovery-\(UUID())")
+    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: folder) }
+    let archive = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+      .appendingPathComponent("Content/lemming1.pc/level000.dat")
+    let sections = try ClassicDATArchive.decode(Data(contentsOf: archive))
+    for index in 0..<2 {
+      try Data(sections[index].data.prefix(ClassicLevel.recordSize))
+        .write(to: folder.appendingPathComponent("test\(index).lvl"))
+    }
+    var invalid = Data(sections[0].data.prefix(ClassicLevel.recordSize))
+    invalid[0x1B] = 200
+    try invalid.write(to: folder.appendingPathComponent("unsupported.lvl"))
+    let zip = Process()
+    zip.executableURL = URL(fileURLWithPath: "/usr/bin/zip")
+    zip.currentDirectoryURL = folder
+    zip.arguments = ["-q", "pack.zip", "test0.lvl", "test1.lvl", "unsupported.lvl"]
+    try zip.run(); zip.waitUntilExit()
+    try check(zip.terminationStatus == 0, "Could not create fan fixture")
+    let pack = folder.appendingPathComponent("pack.zip")
+    let entries = FanLevelLibrary.entries(in: pack)
+    try check(entries.count == 3, "Fan fixture has no levels")
+    fanPack = pack
+    startFanRun([entries[1], entries[0], entries[1]])
+    fanQueueIndex = 1; loadCurrentFanLevel(); _ = advanceFanPlay()
+    guard let original = session as? ClassicSession else { throw IntegrationFailure(message: "No fan recovery session") }
+    for _ in 0..<100 { original.tick() }
+    original.adjustRate(by: 5)
+    for _ in 0..<20 { original.tick() }
+    panel.selectedSkillIndex = 4
+    saveRunCheckpoint(immediately: true)
+    guard let checkpoint = try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID) else {
+      throw IntegrationFailure(message: "Fan run did not save a checkpoint")
+    }
+    try check(checkpoint.fan?.index == 1 && checkpoint.fan?.queue.count == 3 && checkpoint.sourcePath == pack.path,
+      "Fan checkpoint lost pack or queue")
+    let expectedState = ClassicDOSReplayRecorder.stateHash(of: original.simulation)
+    endFanRun()
+    if let alternate = dataSets.firstIndex(where: { $0.set.title == .ohNoMoreLemmings }) {
+      gamePicker.selectItem(at: alternate); selectDataSet()
+    }
+    let starts = ArcadeStore.shared.records.trolley.starts.count
+    restoreRun(checkpoint)
+    guard let restored = session as? ClassicSession else { throw IntegrationFailure(message: "Fan checkpoint did not restore") }
+    try check(fanPlaying && phase == .playing && isPaused && panel.selectedSkillIndex == 4
+      && fanQueueIndex == 1 && fanQueue.map(\.file) == [entries[1].file, entries[0].file, entries[1].file],
+      "Fan restoration lost pause, skill selection or shuffled queue")
+    try check(arcadeRunID == checkpoint.runID && ArcadeStore.shared.records.trolley.starts.count == starts,
+      "Fan recovery counted a new attempt")
+    try check(ClassicDOSReplayRecorder.stateHash(of: restored.simulation) == expectedState, "Fan recovery changed state")
+    for _ in 0..<25 { original.tick(); restored.tick() }
+    try check(ClassicDOSReplayRecorder.stateHash(of: restored.simulation)
+      == ClassicDOSReplayRecorder.stateHash(of: original.simulation), "Fan recovery diverged on continuation")
+    GameScreen.shared.dismissAll()
+    let hiddenPack = folder.appendingPathComponent("missing.zip")
+    try FileManager.default.moveItem(at: pack, to: hiddenPack)
+    restoreRun(checkpoint)
+    try check(session === restored, "Missing fan pack replaced live play")
+    GameScreen.shared.dismissAll()
+    try FileManager.default.moveItem(at: hiddenPack, to: pack)
+    phase = .results; _ = advanceFanPlay()
+    try check(fanQueueIndex == 2 && phase == .briefing, "Restored fan queue lost the next level")
+    returnToLibrary()
+    let previousSession = session
+    fanQueue = [entries.first { $0.file == "unsupported.lvl" }!]
+    fanQueueIndex = 0
+    loadCurrentFanLevel()
+    try check(!fanPlaying && fanScreen == .levels && session === previousSession,
+      "Unsupported fan graphics opened a stale playable briefing")
+    var invalidGeometry = Data(sections[0].data.prefix(ClassicLevel.recordSize))
+    invalidGeometry[0x1B] = 200
+    let invalidLevel = try ClassicLevel(data: invalidGeometry)
+    try check(!buildLevel(.standalone(invalidLevel, rank: "Invalid")),
+      "Missing campaign graphics reported a successful level build")
+    returnToLibrary()
+    fanPack = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+      .appendingPathComponent("Content/LevelPacks/0491-Genesis-Mayhem.zip")
+    fanQueue = [FanLevelLibrary.entries(in: fanPack!)[0]]; fanQueueIndex = 0; fanScreen = .off
+    fanPackGraphics = false; restoringCheckpoint = true
+    loadCurrentFanLevel()
+    restoringCheckpoint = false
+    guard let legacySession = session as? ClassicSession, fanPlaying else {
+      throw IntegrationFailure(message: "Legacy Genesis fixture failed to load")
+    }
+    phase = .playing
+    for _ in 0..<30 { legacySession.tick() }
+    saveRunCheckpoint(immediately: true)
+    var legacy = try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID)!
+    legacy.fanPackGraphics = nil
+    let legacyHash = ClassicDOSReplayRecorder.stateHash(of: legacySession.simulation)
+    returnToLibrary(); restoreRun(legacy)
+    try check(!fanPackGraphics && isPaused && arcadeRunID == legacy.runID && (session as? ClassicSession).map {
+      ClassicDOSReplayRecorder.stateHash(of: $0.simulation) == legacyHash
+    } == true, "Custom graphics update broke an existing fan checkpoint")
+    retry()
+    try check(fanPackGraphics && fanPlaying && session?.currentTick == 0,
+      "A new fan attempt retained legacy graphics after retry")
+    returnToLibrary()
+    let steelText = """
+    releaseRate = 1
+    numLemmings = 10
+    numToRescue = 5
+    timeLimit = 3
+    name = Steel recovery
+    object_0 = 1, 100, 20
+    object_1 = 0, 300, 80
+    terrain_0 = 1, 100, 80
+    steel_0 = 101, 70, 13, 9
+    """
+    try steelText.write(to: folder.appendingPathComponent("steel.ini"), atomically: true, encoding: .utf8)
+    let steelZip = Process()
+    steelZip.executableURL = URL(fileURLWithPath: "/usr/bin/zip")
+    steelZip.currentDirectoryURL = folder
+    steelZip.arguments = ["-q", "steel.zip", "steel.ini"]
+    try steelZip.run(); steelZip.waitUntilExit()
+    try check(steelZip.terminationStatus == 0, "Could not create steel recovery fixture")
+    fanPack = folder.appendingPathComponent("steel.zip")
+    fanQueue = FanLevelLibrary.entries(in: fanPack!); fanQueueIndex = 0
+    fanTextSteel = false; restoringCheckpoint = true
+    loadCurrentFanLevel(); restoringCheckpoint = false
+    _ = advanceFanPlay()
+    guard let oldSteelSession = session as? ClassicSession, fanPlaying else {
+      throw IntegrationFailure(message: "Legacy text fixture failed to load")
+    }
+    for _ in 0..<30 { oldSteelSession.tick() }
+    saveRunCheckpoint(immediately: true)
+    var oldSteel = try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID)!
+    oldSteel.fanTextSteel = nil
+    let oldSteelHash = ClassicDOSReplayRecorder.stateHash(of: oldSteelSession.simulation)
+    returnToLibrary(); restoreRun(oldSteel)
+    try check(!fanTextSteel && isPaused && arcadeRunID == oldSteel.runID && (session as? ClassicSession).map {
+      ClassicDOSReplayRecorder.stateHash(of: $0.simulation) == oldSteelHash
+    } == true, "Text steel update changed an older saved attempt")
+    retry()
+    try check(fanTextSteel && fanPlaying && (session as? ClassicSession)?.simulation.terrain.isSteelProtected(x: 101, y: 70) == true,
+      "Retry did not enable exact text steel")
+    phase = .playing
+    session?.tick()
+    saveRunCheckpoint(immediately: true)
+    let newSteel = try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID)!
+    try check(newSteel.fanTextSteel == true, "New steel rules were not saved")
+    returnToLibrary(); restoreRun(newSteel)
+    try check(fanTextSteel && isPaused && arcadeRunID == newSteel.runID && (session as? ClassicSession).map {
+      ClassicDOSReplayRecorder.stateHash(of: $0.simulation) == newSteel.stateHash
+    } == true, "New text steel checkpoint did not restore exactly")
+    print("PASS legacy text steel checkpoint, retry upgrade and exact current checkpoint restoration")
+
+    returnToLibrary()
+    fanPack = Bundle.main.resourceURL!.appendingPathComponent("LevelPacks/0478-DOS-Amiga-Crazy.zip")
+    fanQueue = FanLevelLibrary.entries(in: fanPack!); fanQueueIndex = 1
+    fanLocalStyles = false; restoringCheckpoint = true
+    loadCurrentFanLevel(); restoringCheckpoint = false
+    _ = advanceFanPlay()
+    guard let legacyLocalSession = session as? ClassicSession, fanPlaying else {
+      throw IntegrationFailure(message: "Legacy style fixture failed: \(fanPack?.lastPathComponent ?? "missing pack"), entries=\(fanQueue.count), status=\(panel.statusText)")
+    }
+    let legacyLocalInitialHash = ClassicDOSReplayRecorder.stateHash(of: legacyLocalSession.simulation)
+    for _ in 0..<30 { legacyLocalSession.tick() }
+    saveRunCheckpoint(immediately: true)
+    var legacyLocal = try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID)!
+    legacyLocal.fanLocalStyles = nil
+    let legacyLocalHash = ClassicDOSReplayRecorder.stateHash(of: legacyLocalSession.simulation)
+    returnToLibrary(); restoreRun(legacyLocal)
+    try check(!fanLocalStyles && isPaused && arcadeRunID == legacyLocal.runID && (session as? ClassicSession).map {
+      ClassicDOSReplayRecorder.stateHash(of: $0.simulation) == legacyLocalHash
+    } == true, "Local style update changed an older saved attempt")
+    retry()
+    try check(fanLocalStyles && fanPlaying && (session as? ClassicSession).map {
+      ClassicDOSReplayRecorder.stateHash(of: $0.simulation) != legacyLocalInitialHash
+    } == true, "Retry did not enable release-local graphics")
+    phase = .playing; session?.tick()
+    saveRunCheckpoint(immediately: true)
+    let currentLocal = try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID)!
+    try check(currentLocal.fanLocalStyles == true, "Local graphics convention was not saved")
+    returnToLibrary(); restoreRun(currentLocal)
+    try check(fanLocalStyles && isPaused && arcadeRunID == currentLocal.runID && (session as? ClassicSession).map {
+      ClassicDOSReplayRecorder.stateHash(of: $0.simulation) == currentLocal.stateHash
+    } == true, "Release-local graphics checkpoint did not restore exactly")
+    print("PASS legacy graphics checkpoint, retry upgrade and exact current checkpoint restoration")
+    returnToLibrary()
+    fanPack = Bundle.main.resourceURL!.appendingPathComponent("LevelPacks/0482-DOS-Frost.zip")
+    fanQueue = FanLevelLibrary.entries(in: fanPack!); fanQueueIndex = 0
+    fanLocalStyles = true; fanHolidayStyles = false; restoringCheckpoint = true
+    loadCurrentFanLevel(); restoringCheckpoint = false
+    _ = advanceFanPlay()
+    guard let legacyHolidaySession = session as? ClassicSession, fanPlaying else {
+      throw IntegrationFailure(message: "Legacy style fixture failed: \(fanPack?.lastPathComponent ?? "missing pack"), entries=\(fanQueue.count), status=\(panel.statusText)")
+    }
+    let legacyHolidayInitialHash = ClassicDOSReplayRecorder.stateHash(of: legacyHolidaySession.simulation)
+    for _ in 0..<30 { legacyHolidaySession.tick() }
+    saveRunCheckpoint(immediately: true)
+    var legacyHoliday = try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID)!
+    legacyHoliday.fanHolidayStyles = nil
+    let legacyHolidayHash = ClassicDOSReplayRecorder.stateHash(of: legacyHolidaySession.simulation)
+    returnToLibrary(); restoreRun(legacyHoliday)
+    try check(!fanHolidayStyles && isPaused && arcadeRunID == legacyHoliday.runID && (session as? ClassicSession).map {
+      ClassicDOSReplayRecorder.stateHash(of: $0.simulation) == legacyHolidayHash
+    } == true, "Local style update changed an older saved attempt")
+    retry()
+    try check(fanHolidayStyles && fanPlaying && (session as? ClassicSession).map {
+      ClassicDOSReplayRecorder.stateHash(of: $0.simulation) != legacyHolidayInitialHash
+    } == true, "Retry did not enable release-local Holiday graphics")
+    phase = .playing; session?.tick()
+    saveRunCheckpoint(immediately: true)
+    let currentHoliday = try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID)!
+    try check(currentHoliday.fanHolidayStyles == true, "Local Holiday graphics convention was not saved")
+    returnToLibrary(); restoreRun(currentHoliday)
+    try check(fanHolidayStyles && isPaused && arcadeRunID == currentHoliday.runID && (session as? ClassicSession).map {
+      ClassicDOSReplayRecorder.stateHash(of: $0.simulation) == currentHoliday.stateHash
+    } == true, "Release-local Holiday graphics checkpoint did not restore exactly")
+    print("PASS legacy Holiday graphics checkpoint, retry upgrade and exact current checkpoint restoration")
+    var prunedCheckpoint = checkpoint
+    let oldFan = checkpoint.fan!
+    var oldQueueWithDeletion = oldFan.queue
+    oldQueueWithDeletion[0] = .init(file: "removed.lvl", section: nil, label: "Removed level")
+    prunedCheckpoint.fan = FanRunRecovery(
+      queue: oldQueueWithDeletion, index: oldFan.index, baseDataSetID: oldFan.baseDataSetID)
+    _ = try prunedCheckpoint.validated()
+    let startsBeforePrunedRestore = ArcadeStore.shared.records.trolley.starts.count
+    returnToLibrary(); restoreRun(prunedCheckpoint)
+    try check(fanPlaying && isPaused, "Pruned fan attempt did not resume paused")
+    try check(fanQueue.count == oldFan.queue.count - 1 && fanQueueIndex == oldFan.index - 1,
+      "Pruned fan queue did not remove the deleted entry and adjust its position")
+    try check(arcadeRunID == checkpoint.runID && ArcadeStore.shared.records.trolley.starts.count == startsBeforePrunedRestore,
+      "Pruned fan restore changed attempt ownership or counted another start")
+    try check((session as? ClassicSession).map { ClassicDOSReplayRecorder.stateHash(of: $0.simulation) == checkpoint.stateHash } == true,
+      "Pruned fan restore changed simulation state")
+    saveRunCheckpoint(immediately: true)
+    let prunedSaved = try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID)!
+    try check(prunedSaved.fan?.queue.count == oldFan.queue.count - 1 && prunedSaved.fan?.index == oldFan.index - 1,
+      "Removed fan entry returned in the next checkpoint")
+    print("PASS pruned fan queue retains paused state and ownership and saves only surviving entries")
+    print("PASS Classic fan checkpoint, shuffled queue, exact paused restore, identity, continuation and missing-pack rejection")
+  }
+  fileprivate func testEscapeToMainMenu() throws {
+    GameScreen.shared.dismissAll()
+    returnToLibrary(); loadContent()
+    gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
+    selectDataSet(); loadLevel(at: 30); phase = .playing
+    for _ in 0..<120 { session?.tick() }
+    launchMode = .quest
+    let run = arcadeRunID
+    installKeyboardShortcuts()
+    guard let mainMenu = gameplayKeyboard?.mainMenu else {
+      throw IntegrationFailure(message: "Escape callback was not installed")
+    }
+    mainMenu()
+    try check(activeTitle == nil && !sequelIsActive && !fanPlaying && window.attachedSheet == nil,
+      "Escape did not return directly to the library")
+    try check(try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID)?.runID == run,
+      "Escape discarded the active run")
+    try check(menuRecovery?.runID == run && playfield.overlayLines.first?.hasPrefix("RESUME - ") == true && launchChoice == 0,
+      "Main screen did not prioritise the saved run")
+    let image = ReplayFrameCapture.image(size: playfield.bounds.size) { ReplayFrameCapture.draw(playfield, in: playfield.bounds) }
+    let output = URL(fileURLWithPath: ".build/resume-main-screen.png")
+    try NSBitmapImageRep(cgImage: image!).representation(using: .png, properties: [:])!.write(to: output)
+    advancePhase()
+    try check(arcadeRunID == run && session?.currentTick == 120 && phase == .playing && launchMode == .quest && isPaused && !GameScreen.shared.isPresented,
+      "Main screen resume did not restore the exact paused attempt in one action")
+    let previous = ArcadeStore.shared
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent("resume-seat-\(UUID().uuidString)")
+    let store = ArcadeStore(file: directory.appendingPathComponent("records.json"), bundledProofs: nil)
+    ArcadeStore.shared = store
+    defer { ArcadeStore.shared = previous }
+    let host = store.records.activeProfileID
+    let guest = store.addProfile(initials: "UVA", portrait: 2)!
+    store.selectProfile(host); store.toggleSessionProfile(guest.id)
+    _ = store.passSessionTurn(after: host)
+    loadLevel(at: 30); phase = .playing
+    let sharedRun = arcadeRunID, sharedID = store.hotSeatID
+    returnToLibrary()
+    try check(menuRecovery?.runID == sharedRun && menuRecovery?.tick == 0 && playfield.overlayLines.first == "RESUME - UVA",
+      "Fresh Hot Seat attempt was lost or resume showed the wrong player")
+    advancePhase()
+    try check(arcadeRunID == sharedRun && arcadeProfileID == guest.id && arcadeHotSeatID == sharedID && session?.currentTick == 0 && isPaused,
+      "Hot Seat resume changed the owner, shared session or fresh attempt")
+    returnToLibrary()
+    store.endHotSeat(); renderScreen()
+    try check(menuRecovery?.hotSeatID == nil && menuRecovery?.runID != sharedRun, "Solo menu offered another Hot Seat's saved attempt")
+    print("PASS Escape returns directly to the main menu and saves the active run")
+  }
+  fileprivate func testRunRecovery() throws {
+    GameScreen.shared.dismissAll()
+    settings.music = .silent; loadContent()
+    gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
+    selectDataSet(); loadLevel(at: 30); phase = .playing
+    guard let original = session as? ClassicSession else { throw IntegrationFailure(message: "No classic recovery fixture") }
+    let initialSimulation = original.simulation
+    for _ in 0..<160 { original.tick() }
+    original.adjustRate(by: 5)
+    if let worker = original.lemmings.first {
+      _ = original.assign(skillIndex: 3, to: worker.id)
+    }
+    for _ in 0..<30 { original.tick() }
+    original.nuke(); original.tick(); original.undoNuke()
+    for _ in 0..<20 { original.tick() }
+    original.adjustRate(by: 3)
+    _ = original.rewind(seconds: 3)
+    panel.selectedSkillIndex = 4
+    saveRunCheckpoint(immediately: true)
+    guard let checkpoint = try recoveryStore.latest(profileID: arcadeProfileID) else {
+      throw IntegrationFailure(message: "No disk checkpoint was saved")
+    }
+    let encoded = try JSONEncoder().encode(checkpoint)
+    // A checkpoint whose starting state this build cannot rebuild still
+    // continues from its saved engine state, and counts as assisted.
+    var unmatched = try JSONSerialization.jsonObject(with: encoded) as! [String: Any]
+    unmatched["initialStateHash"] = "a start this build never makes"
+    let fromState = ClassicSession(simulation: initialSimulation, width: original.levelWidth, height: original.levelHeight)
+    try fromState.restore(JSONDecoder().decode(RunRecovery.self, from: JSONSerialization.data(withJSONObject: unmatched)))
+    try check(ClassicDOSReplayRecorder.stateHash(of: fromState.simulation) == ClassicDOSReplayRecorder.stateHash(of: original.simulation)
+      && fromState.usedRewind, "Saved engine state did not continue the run as assisted")
+    for (key, replacement) in [("tick", -1 as Any), ("tick", 120_001),
+      ("stateHash", "wrong"), ("version", 2), ("selectedSkill", 8), ("nukeCount", -1)] {
+      var object = try JSONSerialization.jsonObject(with: encoded) as! [String: Any]
+      object[key] = replacement
+      let damaged = try JSONDecoder().decode(RunRecovery.self, from: JSONSerialization.data(withJSONObject: object))
+      let target = ClassicSession(simulation: initialSimulation, width: original.levelWidth, height: original.levelHeight)
+      let clean = ClassicDOSReplayRecorder.stateHash(of: target.simulation)
+      do {
+        try target.restore(damaged)
+        throw IntegrationFailure(message: "Damaged checkpoint accepted: \(key)")
+      } catch is RunRecoveryError {}
+      try check(target.currentTick == 0 && ClassicDOSReplayRecorder.stateHash(of: target.simulation) == clean,
+        "Rejected recovery modified the simulation")
+    }
+    let expected = ClassicDOSReplayRecorder.stateHash(of: original.simulation)
+    let startsBefore = ArcadeStore.shared.records.trolley.starts.count
+    restoreRun(checkpoint)
+    try check(ArcadeStore.shared.records.trolley.starts.count == startsBefore, "Recovery counted a new attempt")
+    guard let restored = session as? ClassicSession else { throw IntegrationFailure(message: "Recovery lost the session") }
+    try check(ClassicDOSReplayRecorder.stateHash(of: restored.simulation) == expected && isPaused,
+      "Recovery did not restore exact terrain, crowd, skills and paused tick")
+    try check(arcadeRunID == checkpoint.runID && restored.usedRewind && restored.undoCount == original.undoCount
+      && panel.selectedSkillIndex == 4, "Recovery lost run identity, assistance or selected skill")
+    // Unpausing commits the rewound point in both runs, as the app does.
+    original.resumeFromRewind(); restored.resumeFromRewind()
+    for _ in 0..<70 { original.tick(); restored.tick() }
+    try check(ClassicDOSReplayRecorder.stateHash(of: restored.simulation) == ClassicDOSReplayRecorder.stateHash(of: original.simulation),
+      "Recovered simulation diverged on continuation")
+    GameScreen.shared.dismissAll()
+
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent("CheckpointTests-\(UUID().uuidString)")
+    defer { try? FileManager.default.removeItem(at: directory) }
+    let url = directory.appendingPathComponent("run.json")
+    let file = RunRecoveryFile(url: url)
+    _ = try file.load(); try file.save(checkpoint); try file.save(checkpoint)
+    let stale = RunRecoveryFile(url: url); _ = try stale.load()
+    var next = checkpoint; next.savedAt = checkpoint.savedAt.addingTimeInterval(1)
+    try file.save(next)
+    do { try stale.save(checkpoint); throw IntegrationFailure(message: "A stale checkpoint writer overwrote newer progress") }
+    catch RunRecoveryError.changed {}
+    try Data("broken".utf8).write(to: url)
+    let backup = RunRecoveryFile(url: url)
+    try check(try backup.load()?.tick == checkpoint.tick && backup.recoveredBackup, "Checkpoint backup did not recover")
+    try check(try FileManager.default.contentsOfDirectory(atPath: directory.path).contains { $0.contains("unreadable-") },
+      "Recovery did not preserve damaged bytes")
+    try backup.save(nil)
+    try check(try RunRecoveryFile(url: url).load() == nil, "Completed checkpoint returned")
+    try Data("broken again".utf8).write(to: url)
+    try check(try RunRecoveryFile(url: url).load() == nil, "Backup revived a completed checkpoint")
+    let unknown = Data("{\"version\":2,\"checksum\":\"\"}".utf8)
+    try unknown.write(to: url)
+    do { _ = try RunRecoveryFile(url: url).load(); throw IntegrationFailure(message: "Unsupported checkpoint version was replaced") }
+    catch RunRecoveryError.version {}
+    try check(try Data(contentsOf: url) == unknown, "Unsupported checkpoint bytes changed")
+    let scoped = RunRecoveryStore(directory: directory.appendingPathComponent("scoped"))
+    var sharedCheckpoint = checkpoint
+    sharedCheckpoint.hotSeatID = "shared-campaign"
+    scoped.save(sharedCheckpoint, immediately: true) { _ in }
+    try check(try scoped.latest(profileID: checkpoint.profileID) == nil, "Solo recovery exposed a shared attempt")
+    try check(try scoped.latest(profileID: checkpoint.profileID, hotSeatID: "shared-campaign")?.runID == checkpoint.runID,
+      "Shared recovery lost its attempt")
+    let beforeScopeRestore = session
+    restoreRun(sharedCheckpoint)
+    try check(session === beforeScopeRestore, "A shared checkpoint replaced a solo game")
+    GameScreen.shared.dismissAll()
+    let mixed = RunRecoveryStore(directory: directory.appendingPathComponent("mixed"))
+    mixed.save(checkpoint, immediately: true) { _ in }
+    let bad = mixed.directory.appendingPathComponent(UUID().uuidString + ".json")
+    try Data("damaged older run".utf8).write(to: bad)
+    try check(try mixed.latest(profileID: checkpoint.profileID)?.runID == checkpoint.runID,
+      "A damaged run hid another valid checkpoint")
+    try check(try Data(contentsOf: bad) == Data("damaged older run".utf8), "Discovery changed damaged bytes")
+    let oversized = directory.appendingPathComponent("oversized.json")
+    FileManager.default.createFile(atPath: oversized.path, contents: nil)
+    let handle = try FileHandle(forWritingTo: oversized)
+    try handle.truncate(atOffset: 65 * 1024 * 1024); try handle.close()
+    do { _ = try RunRecoveryFile(url: oversized).load(); throw IntegrationFailure(message: "Oversized checkpoint was accepted") }
+    catch RunRecoveryError.invalid {}
+    try recoveryStore.clear(checkpoint.runID)
+    print("PASS disk checkpoint, rewind/undo journal, exact paused restoration, continuation, backups, corruption, version and stale-writer rejection")
+  }
+
+  fileprivate func testLevelHints() async throws {
+    GameScreen.shared.dismissAll()
+    settings.music = .silent
+    loadContent()
+    guard let gameIndex = dataSets.firstIndex(where: { $0.set.title == .lemmings }) else {
+      throw IntegrationFailure(message: "Missing original campaign at \(Bundle.main.resourceURL?.path ?? "none"); found \(dataSets.map { $0.set.name })")
+    }
+    gamePicker.selectItem(at: gameIndex); selectDataSet(); loadLevel(at: 30)
+    guard let current = session, let identity = arcadeLevel?.conditions?.levelFingerprint,
+          let (catalogue, engine) = LevelHintCatalogue.load(), let level = catalogue.level(for: identity, engine: engine) else {
+      throw IntegrationFailure(message: "Tricky 1 did not match its checked hint data")
+    }
+    try check(catalogue.levels.count == 350 && level.rank == "Tricky" && level.number == 1,
+      "Hint coverage or live level identity is wrong")
+    for row in catalogue.levels {
+      try check(catalogue.level(for: row.fingerprint, engine: engine) != nil, "Invalid hints for \(row.title)")
+      try check(row.deck.stages.count == 3 && row.deck.stages[0].moves.isEmpty && row.deck.stages[1].moves.isEmpty,
+        "A gentle hint exposed opening markers")
+    }
+    try check(catalogue.level(for: identity, engine: "changed") == nil && catalogue.level(for: "other-level", engine: engine) == nil,
+      "Stale or mismatched hints were accepted")
+    try check(GameMenuArtwork.renderer()?.font(.small) != nil && GameMenuArtwork.renderer()?.font(.large) != nil,
+      "The packaged game fonts are unavailable")
+    let renderer = GameMenuArtwork.renderer()!
+    for face in ClassicMacUserInterface.Face.allCases {
+      let font = renderer.font(face)!
+      let text = "OUT 100 HOME 10 TIME 02:45 !?<-+>"
+      for scale in [1, 2] {
+        let size = CGSize(width: font.width(of: text, scale: scale) + 20, height: font.height(scale: scale) + 20)
+        func render(cached: Bool) -> Data? {
+          ReplayFrameCapture.image(size: size) {
+            NSColor.black.setFill(); CGRect(origin: .zero, size: size).fill()
+            if cached { renderer.draw(text, face: face, at: CGPoint(x: 10, y: 10), scale: scale, alpha: 0.75) }
+            else {
+              for (index, character) in text.enumerated() {
+                guard let glyph = font.glyph(for: character), let image = glyph.makeNSImage() else { continue }
+                image.draw(in: CGRect(x: 10 + (index * font.cellWidth + glyph.x) * scale,
+                  y: 10 + glyph.y * scale, width: glyph.width * scale, height: glyph.height * scale),
+                  from: .zero, operation: .sourceOver, fraction: 0.75, respectFlipped: true,
+                  hints: [.interpolation: NSImageInterpolation.none])
+              }
+            }
+          }?.dataProvider?.data as Data?
+        }
+        try check(render(cached: true) == render(cached: false), "Cached game text changed pixels for \(face) at \(scale)x")
+      }
+    }
+    try check(MacInterfaceRenderer.menuLines("First\n\n1. Builder → Basher", columns: 80)
+      == ["FIRST", "", "1. BUILDER -> BASHER"], "Bitmap wrapping lost paragraphs or skill arrows")
+    try check(MacInterfaceRenderer.menuLines("abcdefgh ij", columns: 3) == ["ABC", "DEF", "GH", "IJ"],
+      "Bitmap wrapping dropped part of a long word")
+    func hintText(in view: NSView) -> [HintBitmapText] {
+      (view as? HintBitmapText).map { [$0] } ?? view.subviews.flatMap { hintText(in: $0) }
+    }
+    func verifyText(_ page: NSView, stage: LevelHintDeck.Stage) throws {
+      page.layoutSubtreeIfNeeded()
+      let labels = hintText(in: page)
+      guard let body = labels.first(where: { $0.stringValue == stage.body }), let scroll = body.enclosingScrollView else {
+        throw IntegrationFailure(message: "Hint prose does not use scrollable game text")
+      }
+      try check(body.frame.height >= body.requiredHeight(width: body.bounds.width), "Hint text is clipped")
+      try check(body.accessibilityValue() as? String == stage.body, "Bitmap hints lost their accessible text")
+      // AppKit rounds the clip origin to a backing pixel when the menu is scaled.
+      let topOffset = scroll.contentView.convertToBacking(CGRect(x: 0, y: 0, width: 1,
+        height: abs(scroll.contentView.bounds.minY))).height
+      try check(topOffset <= 1, "New hint tier retained scroll position \(scroll.contentView.bounds.minY) for \(stage.title): \(stage.body.prefix(40))")
+    }
+    func button(_ title: String, in view: NSView) -> NSButton? {
+      if let value = view as? NSButton, value.title == title { return value }
+      return view.subviews.compactMap { button(title, in: $0) }.first
+    }
+    func capture(_ page: NSView, name: String) throws {
+      page.layoutSubtreeIfNeeded()
+      // A fresh bitmap also needs the unchanged parts of a previously drawn page.
+      func redraw(_ view: NSView) { view.needsDisplay = true; view.subviews.forEach(redraw) }
+      redraw(page)
+      let bitmap = page.bitmapImageRepForCachingDisplay(in: page.bounds)!
+      page.cacheDisplay(in: page.bounds, to: bitmap)
+      let directory = URL(fileURLWithPath: ".build/hints")
+      try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+      try bitmap.representation(using: .png, properties: [:])!.write(to: directory.appendingPathComponent(name + ".png"))
+    }
+    for mode in [ClassicDisplayMode.flat, .monitor] {
+      settings.display = mode; phase = .playing; isPaused = false; applyDisplayMode()
+      let before = current.currentTick, skills = current.skillAssignments
+      showLevelHints()
+      guard let page = LevelHintWindow.shared.page else { throw IntegrationFailure(message: "Hints did not open") }
+      try check(isPaused && LevelHintWindow.shared.revealedTier == 0, "Hints failed to pause or started with spoilers")
+      step(at: 100); step(at: 101)
+      try check(current.currentTick == before && current.skillAssignments == skills, "Reading hints played the level")
+      try verifyText(page, stage: level.deck.stages[0])
+      try capture(page, name: "nudge-\(mode)")
+      let next = button("Reveal the approach", in: page)!
+      try check(next.keyEquivalent.isEmpty, "Return could accidentally reveal a spoiler")
+      next.performClick(nil)
+      try check(LevelHintWindow.shared.revealedTier == 1, "One click skipped a hint tier")
+      try verifyText(page, stage: level.deck.stages[1])
+      try capture(page, name: "approach-\(mode)")
+      next.performClick(nil)
+      try check(LevelHintWindow.shared.revealedTier == 2, "Opening moves were skipped")
+      for _ in 0..<600 where !next.isEnabled { try await Task.sleep(nanoseconds: 50_000_000) }
+      try check(next.isEnabled && next.title == "Show solution replay", "Verified solution was not offered after the final hint")
+      let liveRun = arcadeRunID, liveOwner = arcadeProfileID, liveShared = arcadeHotSeatID
+      let recordsEncoder = JSONEncoder(); recordsEncoder.outputFormatting = [.sortedKeys]
+      let savedRecords = try recordsEncoder.encode(ArcadeStore.shared.records)
+      let liveHash = ClassicDOSReplayRecorder.stateHash(of: (current as! ClassicSession).simulation)
+      next.performClick(nil)
+      guard let warning = GameScreen.shared.controllerPage(in: window) as? GameMenuPage else {
+        throw IntegrationFailure(message: "Missing spoiler confirmation")
+      }
+      try check(warning !== page && LevelHintWindow.shared.solutionWindow == nil, "Solution played without confirmation")
+      try check(window.firstResponder === warning.controllerBackButton, "Spoiler confirmation did not focus Keep trying")
+      let confirm = button("Show full solution", in: warning)!
+      try check(confirm.keyEquivalent.isEmpty, "Return could reveal the solution")
+      try capture(warning, name: "solution-confirm-\(mode)")
+      let spoilerController = ControllerMenuNavigator()
+      _ = spoilerController.handle(.assign, in: warning)
+      try check(GameScreen.shared.controllerPage(in: window) === page, "Cancelling solution did not return to hints")
+      next.performClick(nil)
+      let accepted = GameScreen.shared.controllerPage(in: window)!
+      button("Show full solution", in: accepted)!.performClick(nil)
+      guard let ghost = LevelHintWindow.shared.solutionWindow else { throw IntegrationFailure(message: "Confirmed solution did not open") }
+      ghost.stop()
+      try check(ghost.playback.session !== current && isPaused, "Ghost used or resumed the live attempt")
+      let expected = ghost.playback.solution.replay.expected!
+      for _ in 0..<min(338, expected.ticks) { ghost.advance() }
+      try capture(ghost.page, name: "solution-playing-\(mode)")
+      button("Pause", in: ghost.page)!.performClick(nil)
+      button("1x", in: ghost.page)!.performClick(nil)
+      try check(button("3x", in: ghost.page) != nil, "Replay speed did not increase")
+      button("3x", in: ghost.page)!.performClick(nil)
+      try check(button("10x", in: ghost.page) != nil, "Replay speed did not reach 10x")
+      button("Back 1s", in: ghost.page)!.performClick(nil)
+      try check(ghost.field.session === ghost.playback.session,
+        "Seeking solution replay left the canvas on a stale session")
+      let stoppedTick = ghost.playback.session.currentTick
+      ghost.advance()
+      try check(ghost.playback.session.currentTick == stoppedTick, "Ghost pause did not stop playback")
+      button("Play", in: ghost.page)!.performClick(nil)
+      for _ in 0..<expected.ticks where !ghost.playback.session.isComplete { ghost.advance() }
+      try check(ghost.playback.session.isComplete && ghost.playback.session.simulation.didWin,
+        "Ghost did not complete its winning solution")
+      try check(ClassicDOSReplayRecorder.stateHash(of: ghost.playback.session.simulation) == expected.stateHash,
+        "Animated solution diverged from strict replay validation")
+      try capture(ghost.page, name: "solution-complete-\(mode)")
+      try check(ClassicDOSReplayRecorder.stateHash(of: (current as! ClassicSession).simulation) == liveHash,
+        "Ghost changed the live terrain, skills or lemmings")
+      try check(arcadeRunID == liveRun && arcadeProfileID == liveOwner && arcadeHotSeatID == liveShared
+        && (try recordsEncoder.encode(ArcadeStore.shared.records)) == savedRecords,
+        "Ghost changed run ownership, saved records or shared progress")
+      ghost.page.cancelOperation(nil)
+      try check(isPaused && GameScreen.shared.controllerPage(in: window) === page, "Closing ghost lost the paused hints")
+      try verifyText(page, stage: level.deck.stages[2])
+      try capture(page, name: "opening-\(mode)")
+      page.cancelOperation(nil)
+      try check(!isPaused && !GameScreen.shared.isPresented && LevelHintWindow.shared.page == nil,
+        "Closing hints did not restore gameplay")
+      isPaused = true; showLevelHints()
+      try check(LevelHintWindow.shared.revealedTier == 0, "Reopening exposed previously revealed spoilers")
+      GameScreen.shared.dismissAll()
+      try check(isPaused, "Reading hints unpaused a game that was already paused")
+    }
+    loadLevel(at: 0)
+    let fresh = (session as! ClassicSession).initialSimulation
+    guard let proof = VerifiedSolution.load(initial: fresh, from: Bundle.main.resourceURL) else {
+      throw IntegrationFailure(message: "Missing Fun 1 solution")
+    }
+    let shifted = ClassicDOSReplay(rank: proof.replay.rank, number: proof.replay.number,
+      title: proof.replay.title, initialStateHash: proof.replay.initialStateHash,
+      events: [.init(tick: 0, action: .releaseRate(50), afterTick: true)] + proof.replay.events.map {
+        .init(tick: $0.tick, action: $0.action, afterTick: true)
+      })
+    let liveOutcome = try ClassicDOSReplayPlayer.run(shifted, simulation: fresh, verify: false)
+    let liveReplay = ClassicDOSReplay(rank: shifted.rank, number: shifted.number, title: shifted.title,
+      initialStateHash: shifted.initialStateHash, events: shifted.events, expected: liveOutcome)
+    guard let liveProof = VerifiedSolution.validate(liveReplay, initial: fresh) else {
+      throw IntegrationFailure(message: "Valid after-tick solution was rejected")
+    }
+    let livePlayback = SolutionPlayback(liveProof, width: 1600, height: 160)
+    for _ in 0..<liveOutcome.ticks { livePlayback.tick() }
+    try check(ClassicDOSReplayRecorder.stateHash(of: livePlayback.session.simulation) == liveOutcome.stateHash,
+      "Animated after-tick input timing differs from the strict replay player")
+    let seekStart = min(120, liveOutcome.ticks)
+    let seekDistance = min(ClassicDOSRules.ticksPerSecond, seekStart)
+    let seekPlayback = SolutionPlayback(liveProof, width: 1600, height: 160)
+    for _ in 0..<seekStart { seekPlayback.tick() }
+    seekPlayback.seek(by: -seekDistance)
+    let rewoundPlayback = SolutionPlayback(liveProof, width: 1600, height: 160)
+    for _ in 0..<(seekStart - seekDistance) { rewoundPlayback.tick() }
+    try check(ClassicDOSReplayRecorder.stateHash(of: seekPlayback.session.simulation)
+      == ClassicDOSReplayRecorder.stateHash(of: rewoundPlayback.session.simulation),
+      "Solution replay backward seek diverged from deterministic playback")
+    seekPlayback.seek(by: seekDistance)
+    let restoredPlayback = SolutionPlayback(liveProof, width: 1600, height: 160)
+    for _ in 0..<seekStart { restoredPlayback.tick() }
+    try check(ClassicDOSReplayRecorder.stateHash(of: seekPlayback.session.simulation)
+      == ClassicDOSReplayRecorder.stateHash(of: restoredPlayback.session.simulation),
+      "Solution replay forward seek did not restore deterministic playback")
+    let routeDirectory = URL(fileURLWithPath: ".build/hints/recorded-routes")
+    try? FileManager.default.removeItem(at: routeDirectory)
+    let recordedURL = try ClassicRouteRecorder.save(liveReplay, initial: fresh,
+      conditions: arcadeLevel?.conditions, folder: routeDirectory)
+    let recorded = try JSONDecoder().decode(ClassicDOSReplay.self, from: Data(contentsOf: recordedURL))
+    try check(recorded == liveReplay && recorded.events.allSatisfy { $0.afterTick == true },
+      "Player route changed its inputs or timing on disk")
+    try check(try ClassicRouteRecorder.save(liveReplay, initial: fresh,
+      conditions: arcadeLevel?.conditions, folder: routeDirectory) == recordedURL,
+      "Repeated player route created a duplicate")
+    let invalidRoute = ClassicDOSReplay(rank: liveReplay.rank, number: liveReplay.number,
+      title: liveReplay.title, initialStateHash: liveReplay.initialStateHash, events: [], expected: liveReplay.expected)
+    do {
+      _ = try ClassicRouteRecorder.save(invalidRoute, initial: fresh, conditions: nil, folder: routeDirectory)
+      throw IntegrationFailure(message: "Invalid played route was preserved as a win")
+    } catch is RunRecoveryError {}
+    print("PASS completed player route persistence, exact live timing, deduplication and rejection of invalid wins")
+    var changed = fresh; _ = changed.tick()
+    try check(VerifiedSolution.validate(proof.replay, initial: changed) == nil,
+      "Changed initial state accepted a solution")
+    let incomplete = ClassicDOSReplay(rank: shifted.rank, number: shifted.number, title: shifted.title,
+      initialStateHash: shifted.initialStateHash, events: shifted.events)
+    try check(VerifiedSolution.validate(incomplete, initial: fresh) == nil,
+      "Solution without a verified outcome was accepted")
+    let broken = ClassicDOSReplay(rank: shifted.rank, number: shifted.number, title: shifted.title,
+      initialStateHash: shifted.initialStateHash, events: [], expected: liveOutcome)
+    try check(VerifiedSolution.validate(broken, initial: fresh) == nil,
+      "Broken solution was accepted")
+    let hintCampaigns: [(ClassicTitle, Int)] = [(.ohNoMoreLemmings, 0), (.xmasLemmings1991, 0),
+      (.xmasLemmings1992, 0), (.holidayLemmings1993, 0), (.holidayLemmings1994, 0),
+      (.ohYesMoreLemmings, 0), (.ohYesMoreLemmings, 17), (.ohYesMoreLemmings, 20), (.ohYesMoreLemmings, 30)]
+    for (title, levelIndex) in hintCampaigns {
+      guard let index = dataSets.firstIndex(where: { $0.set.title == title }) else {
+        throw IntegrationFailure(message: "Missing hint campaign \(title)")
+      }
+      gamePicker.selectItem(at: index); selectDataSet(); loadLevel(at: levelIndex)
+      guard let fingerprint = arcadeLevel?.conditions?.levelFingerprint,
+            let checked = catalogue.level(for: fingerprint, engine: engine) else {
+        throw IntegrationFailure(message: "Live campaign did not find checked hints: \(title)")
+      }
+      phase = .playing; isPaused = false
+      let tick = session!.currentTick
+      showLevelHints()
+      guard let page = LevelHintWindow.shared.page else { throw IntegrationFailure(message: "Campaign hints did not open") }
+      try check(isPaused && LevelHintWindow.shared.revealedTier == 0, "Campaign hints skipped the paused nudge")
+      try verifyText(page, stage: checked.deck.stages[0])
+      button("Reveal the approach", in: page)!.performClick(nil)
+      button("Reveal opening moves", in: page)!.performClick(nil)
+      try verifyText(page, stage: checked.deck.stages[2])
+      try await Task.sleep(nanoseconds: 200_000_000)
+      try capture(page, name: "family-\(title.rawValue)-\(levelIndex)")
+      try check(session!.currentTick == tick, "Reading campaign hints advanced the run")
+      page.cancelOperation(nil)
+      try check(!isPaused, "Closing campaign hints failed to restore play")
+    }
+    // Exercise every shipped page plus an oversized imported-level coaching page.
+    let longDeck = LevelHintDeck(title: "Long coaching", checked: false, stages: [
+      .init(title: "A gentle nudge", body: String(repeating: "Keep a worker safe.\n", count: 100)),
+      .init(title: "Make a small plan", body: "Check the exit."),
+      .init(title: "Try one idea", body: "Try one skill.")])
+    for deck in catalogue.levels.map(\.deck) + [longDeck] {
+      LevelHintWindow.shared.show(deck, owner: window)
+      let page = LevelHintWindow.shared.page!
+      for tier in 0..<3 {
+        try verifyText(page, stage: deck.stages[tier])
+        if deck.title == longDeck.title && tier == 0 {
+          let body = hintText(in: page).first { $0.stringValue == deck.stages[tier].body }!
+          let scroll = body.enclosingScrollView!
+          try check(body.frame.height > scroll.contentSize.height, "Long hints did not enable scrolling")
+          let end = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+            windowNumber: window.windowNumber, context: nil, characters: "", charactersIgnoringModifiers: "",
+            isARepeat: false, keyCode: 119)!
+          window.firstResponder?.keyDown(with: end)
+          try check(scroll.contentView.bounds.minY > 0, "Keyboard could not scroll the hint text")
+        }
+        if tier < 2 {
+          let title = tier == 0 ? (deck.checked ? "Reveal the approach" : "Make a small plan")
+            : (deck.checked ? "Reveal opening moves" : "Show practice tips")
+          button(title, in: page)!.performClick(nil)
+        }
+      }
+      GameScreen.shared.dismissAll()
+    }
+    let host = SpeedTestWindow(contentRect: window.frame, styleMask: [], backing: .buffered, defer: false)
+    let keyboard = GameplayKeyboard(window: host)
+    keyboard.active = { true }
+    var opened = 0; keyboard.hints = { opened += 1 }
+    for repeated in [false, true] {
+      let event = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+        windowNumber: host.windowNumber, context: nil, characters: "", charactersIgnoringModifiers: "",
+        isARepeat: repeated, keyCode: 122)!
+      try check(keyboard.handle(event) == nil, "F1 leaked into gameplay")
+    }
+    try check(opened == 1, "Holding F1 opened hints repeatedly")
+    for modern in [false, true] {
+      keyboard.modern = { modern }
+      for repeated in [false, true] {
+        let event = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 2,
+          windowNumber: host.windowNumber, context: nil, characters: "/", charactersIgnoringModifiers: "/",
+          isARepeat: repeated, keyCode: 44)!
+        try check(keyboard.handle(event) == nil, "Slash leaked into gameplay")
+      }
+    }
+    try check(opened == 3, "Slash did not open hints once in each control mode")
+    let hintSkills = SkillShortcuts(names: ["Hopper", "Hiker", "Shimmier"])
+    try check(hintSkills.index(for: "h", current: 0) == nil && !hintSkills.letters.contains("h"),
+      "A skill claimed H from the camera")
+    try testTimelinePanelControls()
+
+    let fallback = LevelHintDeck.practice(title: "Fan level", skills: ["Builder"])
+    try check(!fallback.checked && fallback.stages.allSatisfy { $0.moves.isEmpty }, "General coaching claimed a solved route")
+    print("PASS checked hints, confirmed winning ghosts, exact before/after-tick playback, unchanged live runs, flat/CRT and fallback coaching")
+  }
+
+  fileprivate func testVariableSpeedInput() throws {
+    GameScreen.shared.dismissAll()
+    let host = SpeedTestWindow(contentRect: NSRect(x: 0, y: 0, width: 600, height: 400), styleMask: [], backing: .buffered, defer: false)
+    host.contentView = NSView(frame: host.contentView!.bounds)
+    let controller = GameSpeedControl(), keyboard = GameplayKeyboard(window: host)
+    var musicCents = 0.0
+    controller.onMusicPitchChange = { musicCents = $0 }
+    keyboard.speedControl = controller; keyboard.active = { true }
+    func key(_ type: NSEvent.EventType, _ time: Double, text: String = "f", code: UInt16 = 3, repeatKey: Bool = false, flags: NSEvent.ModifierFlags = [], in window: NSWindow? = nil) -> NSEvent {
+      NSEvent.keyEvent(with: type, location: .zero, modifierFlags: flags, timestamp: time,
+        windowNumber: (window ?? host).windowNumber, context: nil, characters: text,
+        charactersIgnoringModifiers: text.lowercased(), isARepeat: repeatKey, keyCode: code)!
+    }
+    try check(keyboard.handle(key(.keyDown, 10)) == nil, "F leaked to the skill or window handler")
+    _ = keyboard.handle(key(.keyUp, 10.1))
+    try check(controller.target == 2, "Tap F did not select 2x")
+    _ = keyboard.handle(key(.flagsChanged, 11, text: "", code: 56, flags: .shift))
+    for time in [11.3, 11.8, 12.3, 12.8, 13.1] { controller.update(at: time, active: true) }
+    _ = keyboard.handle(key(.keyDown, 13.2, repeatKey: true))
+    try check(controller.target == 10, "Shift did not boost or an F repeat changed speed")
+    try check(abs(musicCents - 1200 * log2(GameplayMusicPitch.ratio(for: 10))) < 0.001,
+      "Held speed did not reach the music pitch target")
+    _ = keyboard.handle(key(.flagsChanged, 13.3, text: "", code: 56))
+    try check(controller.multiplier == 2, "Shift release did not immediately restore cruise")
+    var precisionActions: [PrecisionZoomKind] = []
+    keyboard.precisionZoom = { kind in
+      precisionActions.append(kind)
+      controller.bulletTimeActive = kind == .superzoom && !controller.bulletTimeActive
+    }
+    try check(keyboard.handle(key(.keyDown, 13.4, text: "z", code: 6)) == nil,
+      "Z leaked to the old rewind handler")
+    _ = keyboard.handle(key(.keyDown, 13.45, text: "z", code: 6, repeatKey: true))
+    try check(precisionActions == [.zoom], "Z did not select Zoom once")
+    _ = keyboard.handle(key(.flagsChanged, 13.5, text: "", code: 56, flags: .shift))
+    _ = keyboard.handle(key(.keyDown, 13.6, text: "Z", code: 6, flags: .shift))
+    try check(precisionActions == [.zoom, .superzoom] && controller.multiplier == 0.5
+      && !controller.isFast && controller.panelLabel == "0.5×", "Shift-Z did not enter bullet-time")
+    _ = keyboard.handle(key(.keyDown, 13.7, text: "Z", code: 6, flags: .shift))
+    try check(controller.multiplier == 2, "Switching off Superzoom did not restore cruise speed")
+    _ = keyboard.handle(key(.flagsChanged, 13.8, text: "", code: 56))
+    _ = keyboard.handle(key(.keyDown, 14)); _ = keyboard.handle(key(.keyUp, 14.1))
+    _ = keyboard.handle(key(.keyDown, 14.2)); _ = keyboard.handle(key(.keyUp, 14.25))
+    try check(!controller.isFast, "Rapid F restarted a stopped game")
+    var rateSteps: [Int] = [], rateLimits: [Int] = [], nukes = 0
+    keyboard.rate = { rateSteps.append($0) }
+    keyboard.rateLimit = { rateLimits.append($0) }
+    keyboard.nukeToggle = { nukes += 1 }
+    let interval = NSEvent.doubleClickInterval
+    _ = keyboard.handle(key(.keyDown, 20, text: "=", code: 24))
+    _ = keyboard.handle(key(.keyDown, 20 + interval / 2, text: "=", code: 24))
+    try check(rateSteps == [1] && rateLimits == [1], "Double-tap = did not set the maximum release rate")
+    _ = keyboard.handle(key(.keyDown, 21, text: "-", code: 27))
+    _ = keyboard.handle(key(.keyDown, 21.05, text: "-", code: 27, repeatKey: true))
+    _ = keyboard.handle(key(.keyDown, 21.1, text: "-", code: 27, repeatKey: true))
+    try check(rateSteps == [1, -1, -1, -1] && rateLimits == [1], "Holding - did not step the release rate one at a time")
+    _ = keyboard.handle(key(.keyDown, 22, text: "-", code: 27))
+    _ = keyboard.handle(key(.keyDown, 22 + interval * 2, text: "-", code: 27))
+    try check(rateLimits == [1], "A slow second - press set the minimum release rate")
+    _ = keyboard.handle(key(.keyDown, 30, text: "-", code: 27))
+    _ = keyboard.handle(key(.keyDown, 30 + interval / 2, text: "-", code: 27))
+    try check(rateLimits == [1, -1], "Double-tap - did not set the minimum release rate")
+    try check(keyboard.handle(key(.keyDown, 31, text: "n", code: 45)) == nil, "N leaked past the nuke toggle")
+    _ = keyboard.handle(key(.keyDown, 31.05, text: "n", code: 45, repeatKey: true))
+    try check(nukes == 1, "N did not toggle the nuke exactly once per press")
+    keyboard.rate = nil; keyboard.rateLimit = nil; keyboard.nukeToggle = nil
+    _ = keyboard.handle(key(.keyDown, 15, text: "}", code: 30, flags: .shift))
+    try check(controller.target == 2 && controller.state.cruise == 2, "Shift+] did not apply the selected tier")
+    _ = keyboard.handle(key(.keyDown, 16, text: "|", code: 42, flags: .shift))
+    try check(!controller.isFast, "Shift+backslash did not reset")
+    controller.update(at: 16, active: true); controller.update(at: 16.13, active: true)
+    try check(musicCents == 0, "Reset left the music pitch raised")
+    controller.tap(at: 17)
+    var escaped = false; keyboard.mainMenu = { escaped = true }
+    _ = keyboard.handle(key(.keyDown, 18, text: "\u{1b}", code: 53))
+    try check(!controller.isFast && escaped, "Escape failed to stop speed and reach the main menu in one press")
+    _ = keyboard.handle(key(.keyDown, 19, text: "\u{1b}", code: 53))
+    try check(escaped, "Escape at 1x failed to reach the main menu")
+    escaped = false
+    _ = keyboard.handle(key(.flagsChanged, 19.1, text: "", code: 56, flags: .shift))
+    controller.update(at: 19.5, active: true)
+    _ = keyboard.handle(key(.keyDown, 19.6, text: "\u{1b}", code: 53, flags: .shift))
+    _ = keyboard.handle(key(.flagsChanged, 19.7, text: "", code: 56))
+    try check(controller.multiplier == 1 && escaped, "Escape while holding Shift missed the main menu or restarted speed")
+    let attached = SpeedTestWindow(contentRect: host.frame, styleMask: [], backing: .buffered, defer: false)
+    keyboard.bind(to: attached)
+    try check(keyboard.handle(key(.keyDown, 20)) != nil, "The detached window retained speed control")
+    _ = keyboard.handle(key(.keyDown, 21, in: attached)); _ = keyboard.handle(key(.keyUp, 21.1, in: attached))
+    try check(controller.target == 2, "Speed keys failed after attaching to the shared game window")
+    NotificationCenter.default.post(name: NSWindow.didResignKeyNotification, object: attached)
+    try check(!controller.isFast, "Focus loss left the game accelerated")
+    keyboard.modern = { false }; controller.variableEnabled = false
+    _ = keyboard.handle(key(.keyDown, 22, in: attached)); _ = keyboard.handle(key(.keyUp, 22.1, in: attached))
+    try check(controller.multiplier == 3, "OG mode did not retain the fixed speed")
+    controller.variableEnabled = true; controller.newLevel()
+    let speedPanel = PanelView(frame: CGRect(x: 0, y: 0, width: 640, height: 80))
+    host.contentView = speedPanel
+    speedPanel.onSpeedPress = { controller.pointerDown(at: $0, clickCount: $1) }
+    speedPanel.onSpeedRelease = { controller.release(.mouse, at: $0) }
+    speedPanel.onSpeedStep = { controller.step($0, at: $1) }
+    speedPanel.cacheDisplay(in: speedPanel.bounds, to: speedPanel.bitmapImageRepForCachingDisplay(in: speedPanel.bounds)!)
+    let rect = speedPanel.speedControlBounds
+    try check(rect.width > 0, "Speed control has no mouse target")
+    func mouse(_ type: NSEvent.EventType, _ time: Double, fraction: Double = 0.5, clicks: Int = 1) {
+      let point = speedPanel.convert(CGPoint(x: rect.minX + rect.width * fraction, y: rect.midY), to: nil)
+      let event = NSEvent.mouseEvent(with: type, location: point, modifierFlags: [], timestamp: time,
+        windowNumber: host.windowNumber, context: nil, eventNumber: 0, clickCount: clicks, pressure: 1)!
+      if type == .leftMouseDown { speedPanel.mouseDown(with: event) } else { speedPanel.mouseUp(with: event) }
+    }
+    mouse(.leftMouseDown, 30); mouse(.leftMouseUp, 30.05)
+    try check(controller.target == 2, "Mouse tap did not engage immediately")
+    mouse(.leftMouseDown, 30.1, fraction: 0.1); mouse(.leftMouseUp, 30.15)
+    try check(controller.target == 1, "Left arrow must step from 2× to 1×")
+    mouse(.leftMouseDown, 30.2); mouse(.leftMouseUp, 30.25)
+    try check(controller.target == 2, "Middle must restore 2× after stepping down to 1×")
+    mouse(.leftMouseDown, 31, fraction: 0.9); mouse(.leftMouseUp, 31.05)
+    try check(controller.target == 3, "Mouse arrow did not increase speed")
+    mouse(.leftMouseDown, 32); mouse(.leftMouseUp, 32.05)
+    mouse(.leftMouseDown, 32.1, clicks: 2); mouse(.leftMouseUp, 32.15, clicks: 2)
+    try check(controller.target == 3, "Each middle click must toggle, including a double-click")
+    mouse(.leftMouseDown, 32.2, clicks: 3); mouse(.leftMouseUp, 32.25, clicks: 3)
+    try check(controller.target == 1, "Third middle click did not toggle off")
+    mouse(.leftMouseDown, 33); mouse(.leftMouseUp, 33.05)
+    try check(controller.target == 3, "Mouse toggle lost the chosen tier")
+    mouse(.leftMouseDown, 34); controller.update(at: 36, active: true)
+    try check(controller.target == 10, "Mouse hold did not boost")
+    mouse(.leftMouseUp, 36.1)
+    try check(controller.multiplier == 3, "Mouse release did not restore cruise immediately")
+    mouse(.leftMouseDown, 37); controller.update(at: 39, active: true); controller.reset(at: 39.1)
+    mouse(.leftMouseUp, 39.2)
+    try check(controller.multiplier == 1, "Mouse release undid an emergency exit")
+    mouse(.leftMouseDown, 40); mouse(.leftMouseUp, 40.05)
+    mouse(.leftMouseDown, 40.1, clicks: 2); mouse(.leftMouseUp, 40.15, clicks: 2)
+    try check(controller.multiplier == 1, "Second mouse press did not stop fast-forward")
+    mouse(.leftMouseDown, 40.2, clicks: 3)
+    controller.update(at: 42.1, active: true)
+    try check(controller.target == 10, "Holding the second mouse press could not ramp to 10x")
+    mouse(.leftMouseUp, 42.2, clicks: 2)
+    try check(controller.multiplier == 1, "Second-click hold did not restore normal speed")
+    controller.newLevel()
+    mouse(.leftMouseDown, 50, fraction: 0.9); mouse(.leftMouseUp, 50.05)
+    controller.update(at: 50.4, active: true)
+    try check(controller.multiplier == 2, "Mouse speed choice from 1x did not affect the clock")
+    mouse(.leftMouseDown, 51, fraction: 0.1); mouse(.leftMouseUp, 51.05)
+    try check(controller.multiplier == 1, "Mouse decrease did not apply immediately")
+    keyboard.bind(to: host)
+    for initialSpeed in [1.0, 3.0] {
+      controller.newLevel()
+      if initialSpeed > 1 { controller.step(1, at: 98); controller.step(1, at: 99); controller.update(at: 99.5, active: true) }
+      _ = keyboard.handle(key(.keyDown, 100))
+      try check(controller.target == initialSpeed, "F press toggled before distinguishing a hold")
+      for (time, tier) in [(100.26, initialSpeed == 1 ? 2.0 : 5.0),
+                           (100.77, initialSpeed == 1 ? 3.0 : 10.0),
+                           (101.27, initialSpeed == 1 ? 5.0 : 10.0), (101.77, 10.0), (105, 10.0)] {
+        _ = keyboard.handle(key(.keyDown, time, repeatKey: true))
+        controller.update(at: time, active: true)
+        try check(controller.target == tier, "Held F did not ramp through the same tiers as the mouse and RT")
+      }
+      _ = keyboard.handle(key(.keyUp, 105.1))
+      try check(controller.multiplier == 10 && controller.state.cruise == 10, "F release did not retain the reached speed")
+    }
+    controller.newLevel()
+    _ = keyboard.handle(key(.keyDown, 110)); controller.update(at: 112, active: true)
+    _ = keyboard.handle(key(.keyDown, 112.1, text: "\u{1b}", code: 53))
+    _ = keyboard.handle(key(.keyUp, 112.2))
+    try check(controller.multiplier == 1, "F release restarted speed after Escape")
+    try check(keyboard.helpText.contains("Hold F"), "Keyboard help omitted the F hold")
+    print("PASS native mouse toggle, arrows, complete double-click sequence, hold and emergency release")
+    print("PASS real key events: tap/hold/release, repeats, rapid exits, shortcut routing, window attachment and OG mode")
+  }
+
+  fileprivate func testPrecisionZoomWallet() throws {
+    let suite = "PrecisionZoomTests." + UUID().uuidString
+    guard let defaults = UserDefaults(suiteName: suite) else {
+      throw IntegrationFailure(message: "Could not create isolated Zoom test storage")
+    }
+    defer { defaults.removePersistentDomain(forName: suite) }
+    var earned = PrecisionZoomEarnings(careerStars: 6, threeStarLevels: 3)
+    let first = UUID()
+    let wallet = PrecisionZoomController(defaults: defaults, earnings: { _ in earned })
+    wallet.start(attemptID: first, profileID: "one")
+    try check(wallet.remaining(.zoom) == 2 && wallet.remaining(.superzoom) == 1,
+      "No-Rewind career earnings were not available")
+    try check(wallet.applyScroll(.zoomIn) == .changed && wallet.remaining(.zoom) == 1,
+      "Scroll up did not spend exactly one Zoom use")
+    try check(wallet.applyScroll(.zoomIn) == .unchanged && wallet.remaining(.zoom) == 1,
+      "Repeated scroll up spent another Zoom use")
+    try check(wallet.applyScroll(.zoomOut) == .changed && wallet.remaining(.zoom) == 1,
+      "Scroll down did not switch off Zoom without a charge")
+    try check(wallet.applyScroll(.zoomOut) == .unchanged && wallet.toggle(.superzoom),
+      "Scroll down altered an inactive Zoom or Superzoom could not start")
+    let restored = PrecisionZoomController(defaults: defaults, earnings: { _ in earned })
+    restored.start(attemptID: first, profileID: "one")
+    try check(restored.active == .superzoom && restored.remaining(.zoom) == 1,
+      "Saved Zoom state did not survive recovery")
+    try check(restored.applyScroll(.zoomIn) == .unchanged && restored.active == .superzoom
+      && restored.remaining(.zoom) == 1, "Scroll up replaced an active Superzoom")
+    try check(restored.applyScroll(.zoomOut) == .changed && restored.active == nil
+      && restored.remaining(.superzoom) == 0, "Scroll down did not switch off Superzoom")
+    restored.finish(attemptID: first, didWin: false)
+    restored.start(attemptID: UUID(), profileID: "one")
+    try check(restored.remaining(.zoom) == 1 && restored.remaining(.superzoom) == 0,
+      "A failed run did not keep its spent uses")
+    restored.start(attemptID: UUID(), profileID: "two")
+    try check(restored.remaining(.zoom) == 2, "Another profile inherited spent uses")
+    earned = PrecisionZoomEarnings(careerStars: 9, threeStarLevels: 6)
+    restored.start(attemptID: UUID(), profileID: "one")
+    try check(restored.remaining(.zoom) == 2 && restored.remaining(.superzoom) == 1,
+      "New stars did not add uses to a failed-run balance")
+    restored.removeProfile("one")
+    restored.start(attemptID: UUID(), profileID: "one")
+    try check(restored.remaining(.zoom) == 3 && restored.remaining(.superzoom) == 2,
+      "Deleted profile costs were retained")
+    print("PASS profile Zoom storage, recovery, failure cost and new earnings")
+  }
+
+  fileprivate func testHintsFromControlsHelp() async throws {
+    GameScreen.shared.dismissAll()
+    launchMode = .singleTitle; activeTitle = .lemmings
+    gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
+    selectDataSet()
+    settings.display = .flat
+    window.setContentSize(NSSize(width: 1280, height: 800))
+    setAllClassicLevelsUnlocked(true)
+    defer { setAllClassicLevelsUnlocked(false) }
+    picker.selectItem(at: 30); levelChanged()
+    if phase == .briefing { advancePhase() }
+    phase = .playing; isPaused = false
+    applyDisplayMode()
+    installKeyboardShortcuts()
+    gameplayKeyboard?.controllerAction(.help)
+    guard let overlay = gameplayKeyboard?.overlay else { throw IntegrationFailure(message: "Visual controls overlay did not open") }
+    try check(isPaused && GameScreen.shared.contains(overlay), "Visual help did not freeze the level")
+    try check(GameCursor.gameplaySuppressed && (window.firstResponder as? NSButton)?.title == "Close (Esc)", "Help did not restore the arrow and focus Close: suppressed=\(GameCursor.gameplaySuppressed), focus=\(String(describing: window.firstResponder))")
+    try check(overlay.anchors().count >= 8, "Overlay did not attach key badges to the skill bar")
+    let frozenSpeed = speedControl.target
+    let speedEvent = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1, windowNumber: window.windowNumber, context: nil, characters: "f", charactersIgnoringModifiers: "f", isARepeat: false, keyCode: 3)!
+    overlay.keyDown(with: speedEvent)
+    try check(speedControl.target == frozenSpeed, "A speed key acted through visual help")
+    let frozenTick = session?.currentTick
+    step(at: ProcessInfo.processInfo.systemUptime + 10)
+    try check(session?.currentTick == frozenTick, "The level advanced under visual help")
+    window.contentView?.layoutSubtreeIfNeeded()
+    if let content = window.contentView, let bitmap = content.bitmapImageRepForCachingDisplay(in: content.bounds) {
+      content.cacheDisplay(in: content.bounds, to: bitmap)
+      try bitmap.representation(using: .png, properties: [:])?.write(to: URL(fileURLWithPath: ".build/keyboard-overlay.png"))
+    }
+    let escapeEvent = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1, windowNumber: window.windowNumber, context: nil, characters: "\u{1b}", charactersIgnoringModifiers: "\u{1b}", isARepeat: false, keyCode: 53)!
+    overlay.keyDown(with: escapeEvent)
+    try check(!isPaused && gameplayKeyboard?.overlay == nil, "Closing visual help failed to restore play")
+    isPaused = true
+    gameplayKeyboard?.showHelp()
+    gameplayKeyboard?.controllerMenuAction(.cancel)
+    try check(isPaused, "Visual help resumed a previously paused level")
+    isPaused = false
+    gameplayKeyboard?.showHelp()
+    gameplayKeyboard?.overlay?.onCommands()
+    guard let sheet = window.attachedSheet else { throw IntegrationFailure(message: "Controls help did not open") }
+    func findGuide(_ view: NSView) -> KeyboardCommandsView? {
+      if let guide = view as? KeyboardCommandsView { return guide }
+      return view.subviews.compactMap(findGuide).first
+    }
+    guard let guide = sheet.contentView.flatMap(findGuide) else { throw IntegrationFailure(message: "Missing command reference") }
+    try check(guide.commands.contains { $0.keys == "Escape" } && guide.commands.contains { $0.keys == "N" }, "Guide omitted navigation bindings")
+    guide.search.stringValue = "rewind"; guide.refresh()
+    try check(!guide.filtered.isEmpty && guide.filtered.allSatisfy { $0.action.localizedCaseInsensitiveContains("rewind") }, "Command search did not filter")
+    guide.search.stringValue = "no-command-matches-this"; guide.refresh()
+    try check(guide.filtered.isEmpty, "Command search did not show an empty result")
+    guide.search.stringValue = ""; guide.refresh()
+    sheet.contentView?.layoutSubtreeIfNeeded()
+    if let content = sheet.contentView, let bitmap = content.bitmapImageRepForCachingDisplay(in: content.bounds) {
+      content.cacheDisplay(in: content.bounds, to: bitmap)
+      let url = URL(fileURLWithPath: ".build/keyboard-guide.png")
+      try bitmap.representation(using: .png, properties: [:])?.write(to: url)
+    }
+    func find(_ view: NSView) -> NSButton? {
+      if let button = view as? NSButton, button.title == "Level hints" { return button }
+      return view.subviews.compactMap(find).first
+    }
+    guard let hints = sheet.contentView.flatMap(find) else { throw IntegrationFailure(message: "Controls help omitted hints") }
+    let helpInterruption = gameplayKeyboard?.interruptionCount
+    GameScreen.shared.keyboardNavigation.focus(hints, in: sheet)
+    let selectedEnter = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+      windowNumber: sheet.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r", isARepeat: false, keyCode: 76)!
+    try check(GameScreen.shared.handleDialogKey(selectedEnter), "Native help sheet did not activate the focused hints button with Enter")
+    try await Task.sleep(nanoseconds: 500_000_000)
+    try check(LevelHintWindow.shared.page != nil && isPaused, "Controls help failed to hand off to hints; sheet: \(window.attachedSheet != nil)")
+    GameScreen.shared.dismissAll()
+    try check(isPaused == (gameplayKeyboard?.interruptionCount != helpInterruption), "Closing hints after controls help restored the wrong pause state")
+    isPaused = false
+    gameplayKeyboard?.escape()
+    guard let pause = window.attachedSheet, let hints = pause.contentView.flatMap(find) else {
+      throw IntegrationFailure(message: "Pause menu omitted hints")
+    }
+    let pauseInterruption = gameplayKeyboard?.interruptionCount
+    GameScreen.shared.keyboardNavigation.focus(hints, in: pause)
+    let pauseEnter = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+      windowNumber: pause.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r", isARepeat: false, keyCode: 36)!
+    try check(GameScreen.shared.handleDialogKey(pauseEnter), "Native pause sheet did not activate the focused hints button with Return")
+    try await Task.sleep(nanoseconds: 500_000_000)
+    try check(LevelHintWindow.shared.page != nil && isPaused, "Pause menu failed to open hints")
+    GameScreen.shared.dismissAll()
+    try check(isPaused == (gameplayKeyboard?.interruptionCount != pauseInterruption), "Closing hints after pause menu restored the wrong pause state")
+    isPaused = false
+    print("PASS controls-help and pause-menu buttons open hints and restore play")
+  }
+
+  fileprivate func testVariableSimulationClock() throws {
+    GameScreen.shared.dismissAll()
+    // A synthetic clock check must not record the preceding level's scene.
+    runMovie.discard()
+    let game = FinalTickSession(win: false, finalTick: 10000)
+    // The synthetic session is not a fresh start, so clear any countdown
+    // armed by the previous level.
+    playfield.startCountdown.cancel()
+    session = game; phase = .playing; isPaused = false
+    settings.modernControlsEnabled = true; settings.variableSpeedEnabled = true
+    speedControl.variableEnabled = true; speedControl.reset(at: 100)
+    lastStepTime = 100; accumulator = 0
+    for (index, rate) in [2, 3, 5, 10].enumerated() {
+      let time = 101 + Double(index) * 2
+      if index == 0 { speedControl.newLevel(); speedControl.tap(at: time) }
+      else { speedControl.step(1, at: time) }
+      step(at: time + 0.25)
+      let before = game.currentTick
+      for frame in 1...10 { step(at: time + 0.25 + Double(frame) / 10) }
+      try check(abs(game.currentTick - before - rate * 17) <= 1, "The game clock did not run at \(rate)x: ticks \(game.currentTick-before), speed \(speedControl.multiplier), paused \(isPaused), pages \(GameScreen.shared.isPresented), sequel \(sequelIsActive), phase \(phase)")
+    }
+    speedControl.reset(at: 110); lastStepTime = 110; accumulator = 0
+    let before = game.currentTick
+    for frame in 1...10 { step(at: 110 + Double(frame) / 10) }
+    try check(abs(game.currentTick - before - 17) <= 1, "Quick exit failed to restore the 1x simulation clock")
+    print("PASS actual Classic simulation clock at 2x, 3x, 5x, 10x and quick return to 1x")
+  }
+}
+
+private final class FinalTickSession: GameSession {
+  let levelWidth = 320, levelHeight = 160, ticksPerSecond = 17
+  let lemmings: [SessionLemming] = []
+  let entranceX: Int? = nil
+  let released = 1, total = 1, required = 1, rate = 50
+  let rateLabel = "Rate"
+  let remainingSeconds: Int? = 1
+  let isNuking = false, supportsRewind = true
+  let skills: [SessionSkill] = []
+  let lastCues: [ClassicSoundEffect] = []
+  private(set) var currentTick = 0
+  let saved: Int
+  let finalTick: Int
+  init(win: Bool, finalTick: Int = 1) { saved = win ? 1 : 0; self.finalTick = finalTick }
+  var isComplete: Bool { currentTick >= finalTick }
+  var didWin: Bool { isComplete && saved == 1 }
+  func tick() { currentTick += 1 }
+  func assign(skillIndex: Int, to lemmingID: Int) -> String? { nil }
+  func assignmentState(skillIndex: Int, to lemmingID: Int) -> AssignmentState { .unavailable }
+  func adjustRate(by delta: Int) {}
+  func setRateLimit(maximum: Bool) {}
+  func nuke() {}
+  let canUndoNuke = false
+  func undoNuke() {}
+  func rewind(seconds: Double) -> Bool { false }
+  func stepBackward() -> Bool { false }
+  func stepForward() -> Bool { tick(); return true }
+}
+
+extension AppDelegate {
+  fileprivate func testFirstLaunchEffects() throws {
+    GameScreen.shared.dismissAll()
+    settings.music = .silent
+    let suite = "hd-effects-tests-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suite)!
+    defer { defaults.removePersistentDomain(forName: suite) }
+    var choices: [Bool] = []
+    func choose(_ enabled: Bool) { choices.append(enabled); setExperiencePreset(enabled) }
+    func button(_ title: String, in view: NSView) -> NSButton? {
+      if let button = view as? NSButton, button.title == title { return button }
+      return view.subviews.compactMap { button(title, in: $0) }.first
+    }
+    let welcome = EffectsWelcome(defaults: defaults)
+    welcome.showIfNeeded(in: window, onChoose: choose)
+    let root = window.contentView!
+    guard let page = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
+          let oldSchool = button("Old school", in: page), let hd = button("Play with modern defaults", in: page) else {
+      throw IntegrationFailure(message: "First launch did not offer both effects choices")
+    }
+    try check(hd.keyEquivalent == "\r", "HD effects are not the default keyboard choice")
+    page.layoutSubtreeIfNeeded()
+    let bitmap = page.bitmapImageRepForCachingDisplay(in: page.bounds)!
+    page.cacheDisplay(in: page.bounds, to: bitmap)
+    let output = URL(fileURLWithPath: ".build/hd-defaults-tests/welcome.png")
+    try FileManager.default.createDirectory(at: output.deletingLastPathComponent(), withIntermediateDirectories: true)
+    try bitmap.representation(using: .png, properties: [:])!.write(to: output)
+    oldSchool.performClick(nil)
+    try check(choices == [false] && !settings.hdEffectsEnabled && !playfield.hdEffectsEnabled,
+      "Old school did not disable and apply HD effects")
+    // Old school means original controls everywhere, not only original effects.
+    func usesModernControls() -> [String] {
+      var active: [String] = []
+      if settings.modernControlsEnabled { active.append("modern controls") }
+      if settings.variableSpeedEnabled || speedControl.variableEnabled { active.append("variable speed") }
+      if panel.modernControlsEnabled { active.append("modern panel") }
+      if gameplayKeyboard?.modern() == true { active.append("modern keys") }
+      if settings.controllerEnabled { active.append("controller") }
+      if settings.confinePointer { active.append("pointer capture") }
+      if settings.pauseOnInterruption { active.append("interruption pause") }
+      if settings.favorApproachingLemmings || playfield.favorApproachingLemmings { active.append("approaching targeting") }
+      if settings.favorBombBlockers || playfield.favorBombBlockers { active.append("blocker targeting") }
+      if settings.favorBuilders || playfield.favorBuilders { active.append("builder targeting") }
+      if settings.skillCursorIconSize != .none { active.append("skill icon") }
+      return active
+    }
+    let stillModern = usesModernControls()
+    try check(stillModern.isEmpty && settings.experiencePreset == .original,
+      "Old school left modern behaviour active: \(stillModern.joined(separator: ", "))")
+    let saved = try JSONDecoder().decode(ClassicSettings.self, from: UserDefaults.standard.data(forKey: settingsKey)!)
+    try check(!saved.hdEffectsEnabled && !GameScreen.shared.isPresented, "The first-launch choice was not saved and dismissed")
+    restoreSettings()
+    let afterRelaunch = usesModernControls()
+    try check(afterRelaunch.isEmpty, "Old school did not survive a relaunch: \(afterRelaunch.joined(separator: ", "))")
+    let restarted = EffectsWelcome(defaults: defaults)
+    restarted.showIfNeeded(in: window, onChoose: choose)
+    try check(!GameScreen.shared.isPresented && choices.count == 1, "The effects choice returned on a later launch")
+    defaults.removeObject(forKey: EffectsWelcome.choiceKey)
+    restarted.showIfNeeded(in: window, onChoose: choose)
+    button("Play with modern defaults", in: root)!.performClick(nil)
+    try check(choices == [false, true] && settings.hdEffectsEnabled && settings.fullScreenHDRFlashes,
+      "The default HD choice failed to enable the effects")
+    try check(settings.modernControlsEnabled && speedControl.variableEnabled && panel.modernControlsEnabled
+      && gameplayKeyboard?.modern() != false && settings.favorApproachingLemmings && settings.experiencePreset == .modern,
+      "Modern defaults did not restore modern controls")
+    print("PASS first-launch HD/old-school choices, default action, live application, persistence and one-time presentation")
+  }
+
+  fileprivate func testSuperSpeedPresentation() throws {
+    GameScreen.shared.dismissAll()
+    settings.music = .silent
+    session = FinalTickSession(win:false,finalTick:1000)
+    phase = .playing; isPaused = false; isFastForward = false
+    accumulator = 0; lastStepTime = nil
+    for mode in [ClassicDisplayMode.flat,.monitor,.television] {
+      settings.display = mode
+      step(at:1)
+      speedControl.setFast(!isFastForward)
+      step(at:1.01)
+      try check(playfield.isFastForward && screenFlash.isSuperSpeedActive,
+        "3x did not engage the sprite wakes and screen effects in \(mode)")
+      var updated = settings
+      updated.fullScreenHDRFlashes = false
+      apply(updated)
+      try check(screenFlash.isSuperSpeedActive, "the explosion setting disabled super speed")
+      updated.hdEffectsEnabled = false; apply(updated)
+      step(at: 1.011)
+      try check(isFastForward && panel.isFastForward && !playfield.isFastForward && !screenFlash.isSuperSpeedActive,
+        "Old-school mode failed to remove effects while retaining 3x gameplay")
+      updated.hdEffectsEnabled = true; apply(updated); step(at: 1.012)
+      try check(screenFlash.isSuperSpeedActive, "The HD effects switch failed to restore super speed")
+      updated.reduceMotion = true; apply(updated); step(at: 1.013)
+      try check(isFastForward && !screenFlash.isSuperSpeedActive && playfield.reduceMotion,
+        "Reduced motion changed gameplay speed or left speed effects active")
+      updated.reduceMotion = false; updated.reduceFlashes = true; apply(updated); step(at: 1.014)
+      try check(screenFlash.isSuperSpeedActive && playfield.reduceFlashes && !settings.cinematicExplosionsEnabled,
+        "Reduced flashes disabled speed effects or left cinematic explosions enabled")
+      updated.reduceFlashes = false; apply(updated)
+      updated.reduceFlashes = true; apply(updated)
+      try check(screenFlash.isSuperSpeedActive, "Changing flash reduction cleared the active speed overlay")
+      updated.reduceFlashes = false; apply(updated)
+      isPaused = true; step(at:1.02)
+      try check(!playfield.isFastForward && !screenFlash.isSuperSpeedActive,
+        "pause left the speed effects running")
+      isPaused = false; step(at:1.03)
+      try check(screenFlash.isSuperSpeedActive, "unpausing did not resume super speed")
+      speedControl.setFast(!isFastForward); step(at:1.04)
+      try check(!screenFlash.isSuperSpeedActive, "returning to 1x retained super speed")
+    }
+    speedControl.setFast(!isFastForward); step(at:2)
+    let page = GameMenuPage(title:"Speed test")
+    GameScreen.shared.present(page,owner:window)
+    step(at:2.1)
+    try check(!screenFlash.isSuperSpeedActive, "speed effects continued behind a game menu")
+    GameScreen.shared.dismiss(page)
+    step(at:2.2)
+    try check(screenFlash.isSuperSpeedActive, "closing the menu failed to restore super speed")
+    phase = .results
+    try check(!screenFlash.isSuperSpeedActive, "results retained the speed effect")
+    isFastForward = false; panel.isFastForward = false
+    print("PASS super speed controls: flat/CRT, pause, resume, 1x, menus, results and independent explosion settings")
+  }
+  fileprivate func testPortArtworkSwitching() throws {
+    settings.music = .silent
+    loadContent()
+    guard let index = dataSets.firstIndex(where: { $0.set.title == .ohYesMoreLemmings }) else {
+      throw IntegrationFailure(message: "Missing bundled Oh Yes! campaign")
+    }
+    gamePicker.selectItem(at: index); selectDataSet()
+    for levelIndex in [0, 20, 30, 59, 20, 0] {
+      session = nil
+      loadLevel(at: levelIndex)
+      guard let game = session as? ClassicSession else { throw IntegrationFailure(message: "Oh Yes! level \(levelIndex) failed to start") }
+      let expected = dataSets[index].set.campaign.levels[levelIndex]
+      let directory = PortExclusivePack.artworkDirectory(for: expected, portsRoot: dataSets[index].directory)
+      try check(loadedArtworkDirectory == directory, "Switching Oh Yes! ranks kept the previous artwork")
+      for _ in 0..<110 { game.tick() }
+      try check(game.released > 0 && playfield.classicScene != nil, "Oh Yes! did not render and release lemmings")
+    }
+    print("PASS live Oh Yes! rank changes load the original, Oh No and Sunsoft artwork")
+  }
+  fileprivate func testRestartSelection() throws {
+    settings.music = .silent
+    loadContent()
+    guard let index = dataSets.firstIndex(where: { $0.set.title == .lemmings }) else {
+      throw IntegrationFailure(message: "Missing bundled Lemmings campaign")
+    }
+    gamePicker.selectItem(at: index); selectDataSet()
+    picker.selectItem(at: 0); levelChanged(); advancePhase()
+    guard let original = session, original.skills.count > 1 else {
+      throw IntegrationFailure(message: "Restart test could not load the first level")
+    }
+    let defaultSkill = panel.selectedSkillIndex
+    // Include an empty skill slot: retry must preserve the choice, not pick an available skill.
+    for selected in [original.skills.count - 1, 0] {
+      handle(.skill(selected))
+      let name = session!.skills[selected].name
+      session?.tick()
+      playfield.onRetry?()
+      try check(phase == .playing && session?.currentTick == 0 && session !== original,
+        "Retry did not immediately start a fresh level")
+      try check(session?.skills[panel.selectedSkillIndex].name == name,
+        "Retry changed the selected skill")
+    }
+    handle(.skill(3))
+    for _ in 0..<110 { session?.tick() }
+    session?.nuke()
+    for _ in 0..<2000 where session?.isComplete == false { session?.tick() }
+    finishSessionIfNeeded()
+    try check(phase == .results, "Restart test did not reach results")
+    arcadeAutoPresent = true; presentArcadeResult(); arcadeAutoPresent = false
+    let store = ArcadeStore.shared
+    let host = store.records.activeProfileID
+    let guest = store.addProfile(initials: "PAL", portrait: 2)!
+    store.selectProfile(host)
+    store.toggleSessionProfile(guest.id)
+    let previousRun = arcadeRunID
+    let previousLevel = arcadeLevel?.conditions
+    let progressNamespace = store.progressKey(progressKey)
+    ArcadeWindow.shared.arcadeView.retryAsNextProfile()
+    try check(arcadeProfileID == guest.id && arcadeRunID != previousRun && arcadeLevel?.conditions == previousLevel,
+      "Hot-seat retry changed the level or failed to assign a new guest attempt")
+    try check(store.records.activeProfileID == host && store.progressKey(progressKey) == progressNamespace,
+      "Hot-seat retry moved shared campaign progress to the guest")
+    try check(store.records.runs.first(where: { $0.id == previousRun })?.profileID == host,
+      "Hot-seat retry reassigned the completed host run")
+    store.endHotSeat()
+    try check(phase == .playing && session?.currentTick == 0 && panel.selectedSkillIndex == 3,
+      "Results Retry changed the selected skill")
+    levelChanged()
+    try check(panel.selectedSkillIndex == defaultSkill,
+      "An explicit level selection inherited the previous run's skill")
+    print("PASS restart preserves selected skills, including empty slots, while level selection uses its default")
+  }
+  /// Records whose owner has earned `skips` from three-star levels outside the Classic campaign.
+  private func recordsWithSkips(_ skips: Int) throws -> URL {
+    var records = ArcadeRecords()
+    for index in 0..<(skips * LevelSkipBalance.threeStarLevelsPerSkip) {
+      let c = TrolleyConditions(gameID: "fixture", packID: "skips", levelID: "star-\(index)", levelFingerprint: "star-\(index)",
+        rulesetVersion: "classic-dos-v1", physicsMode: "classic-dos-v1", population: 60, rescueRequirement: 40,
+        startingSkills: ["builder": 20], timeLimitSeconds: 300, modifiers: [:])
+      try records.acceptTrolleyMaximum(.init(value: 58, status: .verified, source: "Integration proof",
+        date: Date(timeIntervalSince1970: 500), buildVersion: "test-1"), conditions: c, assisted: false)
+      _ = records.record(ArcadeRun(profileID: records.activeProfileID,
+        level: ArcadeLevel(id: c.levelID, title: "Star", game: c.gameID, rules: c.rulesetVersion, total: 60, required: 40, conditions: c),
+        saved: 58, didWin: true, skills: ["builder": 8], seconds: 120,
+        telemetry: .init(released: 60, buildVersion: "test-1")))
+    }
+    let url = FileManager.default.temporaryDirectory.appendingPathComponent("skips-\(UUID().uuidString).json")
+    try ArcadeRecordFile(url: url).save(records)
+    return url
+  }
+  private func failFirstClassicLevel(position: Int = 0) throws {
+    settings.music = .silent
+    loadContent()
+    guard let index = dataSets.firstIndex(where: { $0.set.title == .lemmings }) else {
+      throw IntegrationFailure(message: "Missing bundled Lemmings campaign")
+    }
+    gamePicker.selectItem(at: index); selectDataSet()
+    picker.selectItem(at: position); levelChanged(); advancePhase()
+    for _ in 0..<110 { session?.tick() }
+    session?.nuke()
+    for _ in 0..<2000 where session?.isComplete == false { session?.tick() }
+    finishSessionIfNeeded()
+    try check(phase == .results && session?.didWin == false, "The skip test did not fail its level")
+    arcadeAutoPresent = true; presentArcadeResult(); arcadeAutoPresent = false
+  }
+  /// Draws the result screen, as a player sees it, and keeps a capture for review.
+  @discardableResult private func captureResult(_ name: String) throws -> String {
+    let view = ArcadeWindow.shared.arcadeView
+    guard let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds) else {
+      throw IntegrationFailure(message: "The result screen could not be drawn")
+    }
+    view.cacheDisplay(in: view.bounds, to: bitmap)
+    let folder = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent(".build/skip-ui")
+    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    try bitmap.representation(using: .png, properties: [:])?.write(to: folder.appendingPathComponent(name + ".png"))
+    return view.accessibilityLabel() ?? ""
+  }
+  fileprivate func testHotSeatJourneyRetry() throws {
+    GameScreen.shared.dismissAll()
+    let previous = ArcadeStore.shared
+    let store = ArcadeStore(file: try recordsWithSkips(0), bundledProofs: nil)
+    ArcadeStore.shared = store
+    let view = ArcadeWindow.shared.arcadeView
+    defer {
+      view.onLater = nil; view.onHints = nil
+      GameScreen.shared.dismissAll(); store.endHotSeat(); ArcadeStore.shared = previous
+    }
+    let host = store.records.activeProfileID
+    let guest = store.addProfile(initials: "PAL", portrait: 2)!
+    store.selectProfile(host); store.toggleSessionProfile(guest.id)
+    try failFirstClassicLevel()
+    view.onLater = {}; view.onHints = {}
+    try captureResult("hot-seat-journey-retry")
+    let controls = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
+    let ownerTitle = "Retry as \(store.records.profile(host)!.initials)"
+    guard let retry = controls.first(where: { $0.accessibilityLabel() == ownerTitle }),
+      let next = controls.first(where: { $0.accessibilityLabel() == "Retry as PAL" }) else {
+      throw IntegrationFailure(message: "Journey result omitted a named Hot Seat retry")
+    }
+    try check(!controls.contains(where: { $0.accessibilityLabel() == "Back" })
+      && retry.accessibilityFrame().maxX <= next.accessibilityFrame().minX,
+      "Journey retry kept Back or overlapped the next player's target")
+    let runID = arcadeRunID
+    try check(retry.accessibilityPerformPress(), "Same-player retry has no input action")
+    try check(arcadeProfileID == host && store.playingProfileID == host
+      && arcadeRunID != runID && phase == .playing && isPaused && panel.isPaused,
+      "Journey retry changed owner, failed to restart, or skipped the paused start")
+    print("PASS Hot Seat journey names both retries; same-player retry restarts paused with the attempt owner")
+  }
+
+  fileprivate func testLevelSkipResult() throws {
+    let previousStore = ArcadeStore.shared
+    defer { ArcadeStore.shared = previousStore; arcadeAutoPresent = false }
+    let view = ArcadeWindow.shared.arcadeView
+
+    ArcadeStore.shared = ArcadeStore(file: try recordsWithSkips(0), bundledProofs: nil)
+    try failFirstClassicLevel()
+    try check(view.availableSkips == 0 && !(try captureResult("solo-no-skips")).contains("K skips"),
+      "A player without skips was offered one")
+    let unmoved = flow?.screen
+    view.skipLevel()
+    try check(flow?.screen == unmoved, "Skip moved the campaign without a skip to spend")
+
+    ArcadeStore.shared = ArcadeStore(file: try recordsWithSkips(1), bundledProofs: nil)
+    let modern = settings
+    var oldSchool = settings; oldSchool.applyExperiencePreset(modern: false); apply(oldSchool)
+    try failFirstClassicLevel()
+    try check(view.availableSkips == 0, "Old school offered a level skip")
+    apply(modern)
+    try failFirstClassicLevel()
+    let owner = ArcadeStore.shared.records.activeProfileID
+    try check(view.availableSkips == 1 && view.skipTitle == "Skip level (1)"
+      && (try captureResult("solo-one-skip")).contains("K skips this level"), "An earned skip was not offered")
+    if var earning = view.report {
+      earning.earnedLevelSkip = true; view.report = earning
+      try check((try captureResult("earned-skip-cue")).contains("Earned a level skip"), "The earned skip cue was not announced")
+    }
+    view.page(.career)
+    try check((try captureResult("career-one-skip")).contains("1 level skips. 3 more three-star levels"), "The career page hid the skip balance")
+    view.page(.result)
+    guard let skipped = arcadeLevel, let skippedNumber = flow?.currentNumber else {
+      throw IntegrationFailure(message: "The failed level had no records identity")
+    }
+    view.skipLevel()
+    try check(ArcadeStore.shared.records.hasSkipped(skipped, profileID: owner)
+      && ArcadeStore.shared.records.levelSkips(profileID: owner).available == 0, "Skip did not spend the owner's skip")
+    try check(flow?.currentNumber == skippedNumber + 1, "Skip did not open the next level")
+    if case .briefing = flow?.screen {} else { throw IntegrationFailure(message: "Skip did not open the next briefing") }
+    try check(flow?.hasPassed(rank: flow!.currentRank!.name, position: skippedNumber - 1) == false,
+      "The skipped level was recorded as passed")
+
+    ArcadeStore.shared = ArcadeStore(file: try recordsWithSkips(1), bundledProofs: nil)
+    let store = ArcadeStore.shared, host = store.records.activeProfileID
+    let guest = store.addProfile(initials: "PAL", portrait: 2)!
+    store.selectProfile(host); store.toggleSessionProfile(guest.id)
+    try failFirstClassicLevel()
+    try check(view.skipTitle.hasPrefix("Skip as \(store.records.profile(host)!.initials)"), "Hot Seat Skip did not name its payer")
+    try captureResult("hot-seat-one-skip")
+    let ownerRetry = "Retry as \(store.records.profile(host)!.initials)"
+    let retryButtons = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
+      .filter { $0.accessibilityLabel() == ownerRetry }
+    try check(retryButtons.count == 1, "The Hot Seat loss row drew the owner's Retry twice")
+    view.skipLevel()
+    try check(store.records.levelSkips(profileID: host).available == 0, "Hot Seat Skip did not charge the attempt owner")
+    try check(store.playingProfileID == guest.id,
+      "Hot Seat Skip did not pass the turn like a loss")
+    GameScreen.shared.dismissAll()
+    store.endHotSeat()
+    print("PASS level skips: offered only when owned, owner pays, next level opens, Hot Seat hands over")
+  }
+  fileprivate func testBundledRescueTarget() throws {
+    settings.music = .silent
+    loadContent()
+    guard let index = dataSets.firstIndex(where: { $0.set.title == .lemmings }) else {
+      throw IntegrationFailure(message: "Missing bundled Lemmings campaign")
+    }
+    gamePicker.selectItem(at: index); selectDataSet(); loadLevel(at: 0)
+    try check(arcadeLevel?.conditions?.packID == dataSets[index].set.identifierKey,
+      "Returning to a bundled campaign kept the previous fan pack's identity")
+    guard let conditions = arcadeLevel?.conditions, let classic = session as? ClassicSession,
+          let proofs = TrolleyBundledProofs.load(), let proof = proofs.maximum(for: conditions),
+          let entry = proofs.catalogue.levels.first(where: { $0.conditions == conditions }), let witness = entry.witness else {
+      throw IntegrationFailure(message: "Live Classic conditions do not match the bundled proof")
+    }
+    let replayURL = Bundle.main.resourceURL!.appendingPathComponent("Trolley").appendingPathComponent(witness.path)
+    let replay = try JSONDecoder().decode(ClassicDOSReplay.self, from: Data(contentsOf: replayURL))
+    let result = try ClassicDOSReplayPlayer.run(replay, simulation: classic.simulation)
+    try check(result.saved == classic.total && proof.value == result.saved && result.didWin,
+      "Bundled witness did not rescue the full live Classic population")
+    try check(ArcadeStore.shared.records.trolley.maximum(conditions: conditions, assisted: false) == proof,
+      "The live level start did not install its verified target")
+    print("PASS bundled proof matches live Classic conditions and replays to a full rescue")
+  }
+  fileprivate func prepareArcadeTests() {
+    arcadeAutoPresent = false
+    ArcadeStore.shared = ArcadeStore(file: FileManager.default.temporaryDirectory.appendingPathComponent("arcade-integration-\(UUID().uuidString).json"))
+  }
+  fileprivate func testHomeSettingsButton() throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll()
+    let previousFlow = flow
+    let previousFanScreen = fanScreen
+    let previousFanPlaying = fanPlaying
+    let previousWindowFrame = window.frame
+    defer {
+      GameScreen.shared.dismissAll()
+      flow = previousFlow
+      fanScreen = previousFanScreen
+      fanPlaying = previousFanPlaying
+      window.setFrame(previousWindowFrame, display: false)
+    }
+
+    flow = ClassicGameFlow(ranks: [ClassicRank(name: "Fun", levelIndices: [0])])
+    fanScreen = .off
+    fanPlaying = false
+    window.setContentSize(CGSize(width: 900, height: 620))
+    window.contentView?.layoutSubtreeIfNeeded()
+    renderScreen()
+    let expectedFamilies = HomeContentFamily.allCases.map {
+      $0.displayName.uppercased()
+    }
+    let familyLines = Array(playfield.overlayLines.suffix(expectedFamilies.count))
+    try check(zip(familyLines, expectedFamilies).allSatisfy { line, family in
+      line.hasPrefix(family)
+    }, "The home screen did not show the seven content families in order")
+    let routedFamilies = homeMenuItems().compactMap { item -> HomeContentFamily? in
+      if case let .browse(family) = item.action { return family }
+      return nil
+    }
+    try check(routedFamilies == HomeContentFamily.allCases,
+      "The home content rows did not keep their CoverFlow routes")
+    guard let allLemmings = homeMenuItems().first(where: {
+      if case .fullQuest = $0.action { return true }
+      return false
+    }) else {
+      throw IntegrationFailure(message: "The home screen omitted the all-level run")
+    }
+    let journeyCompleted = LearningJourneyLibrary.journey.flatMap { journey in
+      try? playlistStore().learningProgress.solvedCount(in: journey)
+    } ?? 0
+    let journeyLessons = LearningJourneyLibrary.journey?.lessons.count ?? 0
+    try check(journeyLessons > 0 && allLemmings.title
+      == "\(Self.allLemmingsMenuTitle)  \(journeyCompleted)/\(journeyLessons)",
+      "The all-level run did not use its player-facing name and journey progress")
+    let nonFanTitles = Set(HomeContentFamily.allCases
+      .filter { $0 != .fan }.flatMap(\.titles))
+    try check(nonFanTitles == Set(ClassicTitle.allCases),
+      "The all-level run did not cover every non-fan content family")
+    let bitmap = playfield.bitmapImageRepForCachingDisplay(in: playfield.bounds)!
+    playfield.cacheDisplay(in: playfield.bounds, to: bitmap)
+    let capture = URL(fileURLWithPath: ".build/home-screen-settings-minimum.png")
+    try FileManager.default.createDirectory(at: capture.deletingLastPathComponent(), withIntermediateDirectories: true)
+    try bitmap.representation(using: .png, properties: [:])!.write(to: capture)
+    let controls = playfield.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement } ?? []
+    guard let settings = controls.first(where: { $0.accessibilityLabel() == "Settings" }) else {
+      throw IntegrationFailure(message: "The real home screen omitted the Settings gear")
+    }
+    let settingsFrame = settings.localFrame
+    try check(abs(settingsFrame.width - settingsFrame.height) < 0.01
+      && settingsFrame.width >= 44 && playfield.bounds.contains(settingsFrame),
+      "The home Settings gear is not a square, full-size input target")
+    try check(controls.filter { $0 !== settings && $0.accessibilityRole() == .button }
+      .allSatisfy { !$0.localFrame.intersects(settingsFrame) },
+      "The home Settings gear overlaps another input target")
+    let familyControls = expectedFamilies.compactMap { family in
+      controls.first { ($0.accessibilityLabel() ?? "").hasPrefix(family) }
+    }
+    try check(familyControls.count == expectedFamilies.count
+      && familyControls.allSatisfy {
+        $0.accessibilityRole() == .button
+          && $0.localFrame.width >= 44
+          && $0.localFrame.height >= 28
+          && playfield.bounds.contains($0.localFrame)
+      }, "A home content family lost its visible input target")
+    for left in familyControls.indices {
+      for right in familyControls.indices where right > left {
+        try check(!familyControls[left].localFrame.intersects(
+          familyControls[right].localFrame),
+          "Home content family input targets overlap")
+      }
+    }
+    try check(settings.accessibilityPerformPress(), "The home Settings gear did not perform its action")
+    try check(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Settings",
+      "The home Settings gear did not open the existing Settings page")
+    GameScreen.shared.dismissAll()
+    playfield.handleClick(at: CGPoint(x: settingsFrame.midX, y: settingsFrame.midY))
+    try check(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Settings",
+      "The home Settings gear mouse target did not open Settings")
+    GameScreen.shared.dismissAll()
+
+    playfield.overlayAvailableUpdate = "Version 1.7 available to download"
+    let previousUpdateAction = playfield.onUpdate
+    var updatesOpened = 0
+    playfield.onUpdate = { updatesOpened += 1 }
+    defer { playfield.overlayAvailableUpdate = nil; playfield.onUpdate = previousUpdateAction }
+    playfield.needsDisplay = true
+    playfield.displayIgnoringOpacity(playfield.bounds, in: NSGraphicsContext(bitmapImageRep: bitmap)!)
+    try bitmap.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: ".build/home-update-available.png"))
+    let updatedControls = playfield.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement } ?? []
+    guard let update = updatedControls.first(where: { $0.accessibilityLabel()?.contains("1.7") == true }) else {
+      throw IntegrationFailure(message: "Home screen did not expose the available update")
+    }
+    try check(update.localFrame.width >= 44 && update.localFrame.height >= 44
+      && playfield.bounds.contains(update.localFrame)
+      && updatedControls.filter { $0 !== update && $0.accessibilityRole() == .button }
+        .allSatisfy { !$0.localFrame.intersects(update.localFrame) }, "Update icon lost its distinct input target")
+    try check(update.accessibilityPerformPress(), "Update icon lost its accessible action")
+    playfield.handleClick(at: CGPoint(x: update.localFrame.midX, y: update.localFrame.midY))
+    try check(updatesOpened == 2, "Update mouse and accessibility actions diverged")
+    var next = flow!
+    next.startGame()
+    flow = next
+    renderScreen()
+    playfield.cacheDisplay(in: playfield.bounds, to: bitmap)
+    try check(playfield.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement }
+      .contains(where: { $0.accessibilityLabel() == "Settings" }) != true,
+      "The home Settings gear remained on the rating screen")
+    try check(playfield.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement }
+      .contains(where: { $0.accessibilityLabel()?.contains("1.7") == true }) != true,
+      "The update reminder appeared outside the home screen")
+    print("PASS seven home content families and the Settings gear use distinct targets")
+  }
+  fileprivate func testHomeContentFamilyFiltering() throws {
+    GameScreen.shared.dismissAll()
+    let originalCatalogue = levelCatalogue
+    let originalFamilies = levelBrowserPackFamilies
+    let originalPackSelection = levelBrowserPackSelection
+    let originalDataSets = dataSets
+    let originalFanPacks = fanPacks
+    let originalBrowserFanPacks = levelBrowserFanPacks
+    let originalInvalidFanPacks = levelBrowserInvalidFanPacks
+    let originalInvalidFanPackRevisions = levelBrowserInvalidFanPackRevisions
+    let originalLibrary = library
+    let originalFlow = flow
+    let originalActiveTitle = activeTitle
+    let originalLaunchMode = launchMode
+    let fanProgressKey = ArcadeStore.shared.progressKey("FanLevelsPassed")
+    let originalFanProgress = UserDefaults.standard.object(forKey: fanProgressKey)
+    let fanCountsKey = "FanLevelCountsV2"
+    let originalFanCounts = UserDefaults.standard.object(forKey: fanCountsKey)
+    defer {
+      GameScreen.shared.dismissAll()
+      levelCatalogue = originalCatalogue
+      levelBrowserPackFamilies = originalFamilies
+      levelBrowserPackSelection = originalPackSelection
+      dataSets = originalDataSets
+      fanPacks = originalFanPacks
+      levelBrowserFanPacks = originalBrowserFanPacks
+      levelBrowserInvalidFanPacks = originalInvalidFanPacks
+      levelBrowserInvalidFanPackRevisions = originalInvalidFanPackRevisions
+      library = originalLibrary
+      flow = originalFlow
+      activeTitle = originalActiveTitle
+      launchMode = originalLaunchMode
+      if let originalFanProgress {
+        UserDefaults.standard.set(originalFanProgress, forKey: fanProgressKey)
+      } else {
+        UserDefaults.standard.removeObject(forKey: fanProgressKey)
+      }
+      if let originalFanCounts {
+        UserDefaults.standard.set(originalFanCounts, forKey: fanCountsKey)
+      } else {
+        UserDefaults.standard.removeObject(forKey: fanCountsKey)
+      }
+    }
+
+    let installedFanPack = URL(fileURLWithPath: "0384-Gronklems-1.zip")
+    let removedFanPack = URL(fileURLWithPath: "0386-Gronklems-1.zip")
+    UserDefaults.standard.set([
+      FanLevelLibrary.Progress.identifier(
+        pack: installedFanPack, label: "Installed level"),
+      FanLevelLibrary.Progress.identifier(
+        pack: removedFanPack, label: "Removed level"),
+    ], forKey: fanProgressKey)
+    try check(FanLevelLibrary.Progress.passedCount(for: [installedFanPack]) == 1,
+      "Fan progress included a pass from a removed pack")
+    FanLevelLibrary.Progress.setCount(1, for: installedFanPack)
+    fanPacks = [installedFanPack]
+    dataSets = []
+    try check(fanHomeRow() == "FAN LEMMINGS  1/1",
+      "The Fan Lemmings home row included progress from a removed pack")
+    library = UnifiedGameLibrary(entries: [
+      .init(title: .lemmings, total: 1),
+    ])
+    flow = ClassicGameFlow(ranks: [
+      ClassicRank(name: "Fun", levelIndices: [0]),
+    ])
+    activeTitle = nil
+    launchMode = .quest
+    launchTitle(.lemmings)
+    try check(flow?.screen == .title && activeTitle == nil,
+      "The all-level run started the previous flow when its release could not load")
+    try check(!Self.shouldSkipDetectedDataSet(
+      kind: .scanned,
+      title: .lemmings,
+      identifierKey: "lemmings-LEVEL-120",
+      loadedOfficialKeys: ["lemmings-LEVEL-120"])
+      && Self.shouldSkipDetectedDataSet(
+        kind: .originalLemmings,
+        title: .lemmings,
+        identifierKey: "lemmings-LEVEL-120",
+        loadedOfficialKeys: ["lemmings-LEVEL-120"]),
+      "A title-like scanned campaign used the official duplicate rule")
+    let questCandidates: [(title: ClassicTitle?, kind: ClassicDataSet.Kind)] = [
+      (title: .lemmings, kind: .scanned),
+      (title: .lemmings, kind: .originalLemmings),
+      (title: .ohYesMoreLemmings, kind: .scanned),
+    ]
+    try check(Self.nonFanQuestDataSetIndex(
+      for: .lemmings, in: questCandidates) == 1
+      && Self.nonFanQuestDataSetIndex(
+        for: .ohYesMoreLemmings, in: questCandidates) == 2,
+      "The all-level run did not select the non-fan data set")
+
+    let packs = HomeContentFamily.allCases.enumerated().map { index, family in
+      LevelCataloguePack(
+        engine: family == .lemmings2 ? .lemmings2
+          : family == .lemmings3 ? .lemmings3 : .classic,
+        id: "home-family-\(index)",
+        name: family.displayName,
+        status: .complete,
+        levels: [])
+    }
+    levelCatalogue = LevelCatalogue(revision: "home-family-test", packs: packs)
+    levelBrowserPackFamilies = Dictionary(uniqueKeysWithValues:
+      zip(packs, HomeContentFamily.allCases).map {
+        (browserPackKey($0.0), $0.1)
+      })
+    try check(levelBrowserPacks(for: nil).map(\.id) == packs.map(\.id),
+      "The File menu Level Select route lost part of the full catalogue")
+    for (pack, family) in zip(packs, HomeContentFamily.allCases) {
+      try check(levelBrowserPacks(for: family).map(\.id) == [pack.id],
+        "The \(family.displayName) home route included another content family")
+    }
+
+    let releaseFamilies: [(ClassicTitle?, HomeContentFamily)] = [
+      (.lemmings, .classic),
+      (.ohNoMoreLemmings, .ohNo),
+      (.xmasLemmings1991, .holiday),
+      (.xmasLemmings1992, .holiday),
+      (.holidayLemmings1993, .holiday),
+      (.holidayLemmings1994, .holiday),
+      (.ohYesMoreLemmings, .ohYes),
+      (.lemmings2TheTribes, .lemmings2),
+      (.lemmings3TheChronicles, .lemmings3),
+      (nil, .fan),
+    ]
+    try check(releaseFamilies.allSatisfy {
+      HomeContentFamily.family(for: $0.0) == $0.1
+    } && HomeContentFamily.family(for: .lemmings, kind: .scanned) == .fan
+      && HomeContentFamily.family(
+        for: .lemmings2TheTribes, kind: .scanned) == .fan
+      && HomeContentFamily.family(
+        for: .ohYesMoreLemmings, kind: .scanned) == .ohYes,
+      "A release or imported Classic pack was assigned to the wrong home family")
+
+    let identity = LevelCatalogueIdentity(
+      engine: .classic, packID: "live-pack", levelID: "level-1")
+    func livePack(_ availability: LevelAvailability) -> LevelCataloguePack {
+      LevelCataloguePack(
+        engine: .classic,
+        id: identity.packID,
+        name: "Live pack",
+        status: .complete,
+        levels: [LevelCatalogueEntry(
+          identity: identity,
+          packName: "Live pack",
+          levelName: "Live level",
+          number: 1,
+          status: .complete,
+          availability: availability)])
+    }
+    let lockedPack = livePack(.locked)
+    levelBrowserFanPacks[lockedPack.id] = installedFanPack
+    levelCatalogue = LevelCatalogue(
+      revision: "home-family-live-pack", packs: [lockedPack])
+    presentLevelPackBrowser(packs: [lockedPack], title: "Live family")
+    levelCatalogue = LevelCatalogue(
+      revision: "home-family-live-pack", packs: [livePack(.available)])
+    func descendants(of view: NSView) -> [NSView] {
+      [view] + view.subviews.flatMap { descendants(of: $0) }
+    }
+    guard let packPage = GameScreen.shared.controllerPage(in: window),
+          let packCarousel = descendants(of: packPage)
+            .compactMap({ $0 as? LevelCoverFlowView }).first,
+          let browse = descendants(of: packPage).compactMap({ $0 as? NSButton })
+            .first(where: { $0.title == "Browse levels" }) else {
+      throw IntegrationFailure(message: "The family pack browser did not open")
+    }
+    invalidateResolvedFanPack(id: lockedPack.id)
+    try check(packCarousel.selectedItem?.isAvailable == false
+      && packCarousel.selectedItem?.detail.hasPrefix("Unavailable") == true
+      && FanLevelLibrary.knownLevelCount(in: installedFanPack) == nil
+      && levelBrowserInvalidFanPacks.contains(lockedPack.id)
+      && levelBrowserInvalidFanPackRevisions[lockedPack.id]
+        == Self.fanPackFileRevision(installedFanPack),
+      "Invalidating a pack did not refresh its open CoverFlow card")
+    levelCatalogue = LevelCatalogue(
+      revision: "home-family-live-pack", packs: [livePack(.available)])
+    levelBrowserInvalidFanPacks.remove(lockedPack.id)
+    levelBrowserInvalidFanPackRevisions[lockedPack.id] = nil
+    refreshOpenLevelPackBrowser()
+    browse.performClick(nil)
+    guard let levelPage = GameScreen.shared.controllerPage(in: window),
+          levelPage !== packPage,
+          let levels = descendants(of: levelPage)
+            .compactMap({ $0 as? LevelCoverFlowView }).first else {
+      throw IntegrationFailure(message: "The family route did not open its level carousel")
+    }
+    try check(levels.selectedItem?.isAvailable == true,
+      "The family route opened a stale pack after catalogue availability changed")
+    print("PASS home families filter the typed catalogue without changing release identities")
+  }
+  fileprivate func testClassicRatingBrowser() async throws {
+    GameScreen.shared.dismissAll()
+    func descendants(of view: NSView) -> [NSView] {
+      [view] + view.subviews.flatMap { descendants(of: $0) }
+    }
+    let originalLevelSelections = levelBrowserLevelSelections
+    defer {
+      GameScreen.shared.dismissAll()
+      levelBrowserLevelSelections = originalLevelSelections
+    }
+
+    let names = ["Fun", "Tricky", "Taxing", "Mayhem"]
+    var ranksByLevelID: [String: String] = [:]
+    let entries = names.enumerated().flatMap { rankIndex, rank in
+      (0..<30).map { levelIndex in
+        let levelID = "\(rankIndex)-\(levelIndex)"
+        ranksByLevelID[levelID] = rank
+        return LevelCatalogueEntry(
+          identity: .init(engine: .classic, packID: "classic-ratings", levelID: levelID),
+          packName: "Lemmings",
+          levelName: "\(rank) \(levelIndex + 1)",
+          number: rankIndex * 30 + levelIndex + 1,
+          status: .complete)
+      }
+    }
+    let pack = LevelCataloguePack(
+      engine: .classic, id: "classic-ratings", name: "Lemmings",
+      status: .complete, levels: entries)
+    let ratings = Self.classicBrowserRatings(in: pack) {
+      ranksByLevelID[$0.identity.levelID]
+    }
+    try check(ratings.map(\.name) == names,
+      "Classic ratings did not keep their original order and names")
+
+    presentClassicRatingBrowser(pack: pack, ratings: ratings)
+    guard let ratingPage = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
+          let fun = descendants(of: ratingPage).compactMap({ $0 as? NSButton })
+            .first(where: { $0.title == "Fun  30 levels" }),
+          let tricky = descendants(of: ratingPage).compactMap({ $0 as? NSButton })
+            .first(where: { $0.title == "Tricky  30 levels" }) else {
+      throw IntegrationFailure(message: "Classic release did not open its rating browser")
+    }
+    window.contentView?.layoutSubtreeIfNeeded()
+    try check(ratingPage.controllerInitialControl === fun
+      && tricky.isEnabled,
+      "Classic rating browser did not expose Fun and Tricky as direct choices")
+    ratingPage.displayIfNeeded()
+    let bitmap = ratingPage.bitmapImageRepForCachingDisplay(in: ratingPage.bounds)!
+    ratingPage.cacheDisplay(in: ratingPage.bounds, to: bitmap)
+    let capture = URL(fileURLWithPath: ".build/classic-rating-browser.png")
+    try FileManager.default.createDirectory(
+      at: capture.deletingLastPathComponent(), withIntermediateDirectories: true)
+    try bitmap.representation(using: .png, properties: [:])!.write(to: capture)
+    fun.performClick(nil)
+    guard let levelPage = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
+          levelPage !== ratingPage,
+          let levelCarousel = descendants(of: levelPage)
+            .compactMap({ $0 as? LevelCoverFlowView }).first else {
+      throw IntegrationFailure(message: "Classic rating did not open its level browser")
+    }
+    window.contentView?.layoutSubtreeIfNeeded()
+    try check(levelCarousel.selectedItem?.detail.hasPrefix("Fun 1/30") == true,
+      "Classic level browser lost its selected rating and local level number")
+    let controls = descendants(of: ratingPage).compactMap { $0 as? NSButton }
+    try check(controls.allSatisfy { $0.frame.width >= 44 && $0.frame.height >= 44 },
+      "Classic rating browser has an undersized input target")
+    print("PASS Classic releases restore rating selection before level selection")
+  }
+  fileprivate func testLevelBrowserRouteIntegrity() async throws {
+    GameScreen.shared.dismissAll()
+    let folder = URL(fileURLWithPath: ".build/content-browser")
+    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    let archive = folder.appendingPathComponent("route-change-fixture")
+    defer {
+      try? FileManager.default.removeItem(at: archive)
+      GameScreen.shared.dismissAll()
+    }
+    try Data("before".utf8).write(to: archive, options: .atomic)
+    guard let fingerprint = FanLevelLibrary.archiveFingerprint(archive) else {
+      throw IntegrationFailure(message: "The route fixture could not be fingerprinted")
+    }
+    let identity = LevelCatalogueIdentity(
+      engine: .classic, packID: "fan:fixture", levelID: "fixture.lvl#-1")
+    let entry = LevelCatalogueEntry(
+      identity: identity,
+      packName: "Fixture pack",
+      levelName: "Fixture level",
+      number: 1,
+      status: .unverified)
+    levelCatalogue = LevelCatalogue(revision: "route-fixture", packs: [
+      .init(engine: .classic, id: identity.packID, name: "Fixture pack",
+        status: .unverified, levels: [entry]),
+    ])
+    levelBrowserRoutes = [identity: .fan(
+      pack: archive,
+      entry: .init(file: "fixture.lvl", section: nil, label: "Fixture level"),
+      archiveFingerprint: fingerprint)]
+    launchMode = .quest
+    try Data("after".utf8).write(to: archive, options: .atomic)
+    startBrowserLevel(identity)
+    for _ in 0..<200 where levelBrowserLaunchTask != nil {
+      try await Task.sleep(nanoseconds: 10_000_000)
+    }
+    try check(levelBrowserLaunchTask == nil,
+      "The changed fan route did not finish its background validation")
+    try check(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Fixture level",
+      "The real browser route did not reject changed fan bytes")
+    try check(launchMode == .quest,
+      "A rejected browser route changed the current run mode")
+    GameScreen.shared.dismissAll()
+
+    levelCatalogue = LevelCatalogue(revision: "route-fixture-2", packs: [])
+    startBrowserLevel(identity)
+    try check(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Level unavailable",
+      "The real browser route did not report a removed catalogue entry")
+    print("PASS changed and removed level routes fail visibly")
+  }
+
+  /// Every journey lesson must resolve against the live catalogue, or no
+  /// journey session can start.
+  fileprivate func testLearningJourneyEntriesResolve() async throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll()
+    settings.music = .silent; loadContent()
+    guard let journey = LearningJourneyLibrary.journey else {
+      throw IntegrationFailure(message: "The bundled learning journey did not load")
+    }
+    guard let discovery = await makeLevelBrowserDiscoveryTask().value else {
+      throw IntegrationFailure(message: "The level catalogue did not load")
+    }
+    rebuildLevelCatalogue(discovery)
+    let failures: Set<String> = await withCheckedContinuation { continuation in
+      ensureFanPacksResolved(for: journey.lessons.map(\.entry), title: "Journey test") { continuation.resume(returning: $0) }
+    }
+    try check(failures.isEmpty, "Journey fan packs did not resolve: \(failures.sorted().prefix(5))")
+    let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+      pool: .init(id: LearningJourney.version, summary: LearningJourney.title),
+      entries: journey.lessons.map(\.entry))
+    var blocked: [String: [String]] = [:]
+    for lesson in journey.lessons where !sequenceEntryCanStart(lesson.entry, run: run) {
+      let kind: String
+      switch playlistResolution(for: lesson.entry) {
+      case .available: kind = "available"
+      case .locked: kind = "locked"
+      case .unavailable: kind = "unavailable"
+      case .changed:
+        kind = "changed"
+        let live = playlistSourceRevision(for: lesson.entry.identity) ?? "none"
+        blocked["revisions", default: []].append("\(lesson.entry.packNameSnapshot): saved \(lesson.entry.sourceRevision.prefix(12)) live \(live.prefix(12))")
+      case .missing: kind = "missing"
+      }
+      blocked[kind, default: []].append(lesson.entry.packNameSnapshot + " / " + lesson.entry.levelNameSnapshot)
+    }
+    try check(blocked.isEmpty, "Journey lessons cannot start: " + blocked.map {
+      "\($0.key) \($0.value.count), e.g. \($0.value.prefix(3).joined(separator: "; "))"
+    }.sorted().joined(separator: " | "))
+    print("PASS all \(journey.lessons.count) journey lessons resolve and can start")
+  }
+
+  fileprivate func testLearningJourneySessionsStart() async throws {
+    guard let journey = LearningJourneyLibrary.journey else {
+      throw IntegrationFailure(message: "The bundled learning journey did not load")
+    }
+    let directory = FileManager.default.temporaryDirectory
+      .appendingPathComponent("learning-sessions-\(UUID().uuidString)")
+    let previousArcade = ArcadeStore.shared
+    let previousCache = playlistStoreCache
+    let previousSequenceStore = sequencePlaylistStore
+    let defaultsName = "learning-sessions-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: defaultsName)!
+    let arcade = ArcadeStore(file: directory.appendingPathComponent("records.json"),
+      bundledProofs: nil, defaults: defaults)
+    ArcadeStore.shared = arcade
+    defer {
+      returnToLibrary()
+      ArcadeStore.shared = previousArcade
+      playlistStoreCache = previousCache
+      sequencePlaylistStore = previousSequenceStore
+      GameScreen.shared.dismissAll()
+      defaults.removePersistentDomain(forName: defaultsName)
+      try? FileManager.default.removeItem(at: directory)
+    }
+    try check(arcade.addProfile(initials: "PAL", portrait: 2, select: false) != nil,
+      "The journey test could not create a Hot Seat guest")
+    let store = try LevelPlaylistStore(file: directory.appendingPathComponent("playlists.json"))
+    try store.add(journey.playlist())
+    playlistStoreCache = (arcade.records.activeProfileID, store)
+    let entries = journey.lessons.map(\.entry)
+    let first = entries[0].identity
+    func waitForLaunch() async throws {
+      for _ in 0..<3000 where playlistFanLoadTask != nil || levelBrowserLaunchTask != nil {
+        try await Task.sleep(nanoseconds: 10_000_000)
+      }
+      try check(playlistFanLoadTask == nil && levelBrowserLaunchTask == nil,
+        "The journey session launch did not finish")
+    }
+    func buttons(_ view: NSView) -> [NSButton] {
+      (view as? NSButton).map { [$0] } ?? view.subviews.flatMap(buttons)
+    }
+    startLearningEntries(entries, in: store)
+    try await waitForLaunch()
+    try check(store.activeRun?.currentEntry.identity == first
+      && sequencePlayingIdentity == first && !arcade.hotSeatIsActive,
+      "New solo did not start the learning journey")
+    let firstSoloID = store.activeRun!.id
+    try check(try store.advanceLearningJourney(runID: firstSoloID, won: true),
+      "The first journey lesson did not complete")
+    let pending = store.learningProgress.unseen(in: journey)
+    try check(pending.first?.identity != first, "The restart fixture did not have prior player progress")
+    returnToLibrary()
+    arcade.prepareHotSeat()
+    let profileRecords = arcade.records
+    try check(arcade.startNewHotSeat(), "The fresh Hot Seat fixture did not start")
+    presentLearningJourney()
+    try await waitForLaunch()
+    guard let hub = GameScreen.shared.controllerPage(in: window) else {
+      throw IntegrationFailure(message: "The fresh Hot Seat journey hub did not open")
+    }
+    func labels(_ view: NSView) -> [String] {
+      [view.accessibilityLabel() ?? ""]
+        + ((view as? NSTextField).map { [$0.stringValue] } ?? [])
+        + view.subviews.flatMap(labels)
+    }
+    try check(labels(hub).contains(where: { $0.contains("Just dig!") })
+      && buttons(hub).contains(where: { $0.title == "Let's play" })
+      && !buttons(hub).contains(where: { $0.title == "Continue" }),
+      "A new Hot Seat inherited another session's journey position: \(labels(hub)), \(buttons(hub).map(\.title))")
+    try check(arcade.records == profileRecords && store.learningProgress.completed.contains(first),
+      "A new Hot Seat erased profile scores, achievements or saved learning history")
+    GameScreen.shared.dismissAll()
+    startLearningEntries(pending, in: store)
+    guard let soloChooser = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
+          let newSolo = buttons(soloChooser).first(where: { $0.title == "New solo" }) else {
+      throw IntegrationFailure(message: "The journey did not offer New solo")
+    }
+    newSolo.performClick(nil)
+    try await waitForLaunch()
+    try check(store.activeRun?.currentEntry.identity == first
+      && sequencePlayingIdentity == first && !arcade.hotSeatIsActive
+      && store.activeRun?.id != firstSoloID
+      && store.savedRuns.contains(where: { $0.run.id == firstSoloID }),
+      "New solo did not replace and save the learning journey session")
+    let soloID = store.activeRun!.id
+    returnToLibrary()
+    startLearningEntries(pending, in: store)
+    guard let chooser = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
+          let newHotSeat = buttons(chooser).first(where: { $0.title == "New Hot Seat" }) else {
+      throw IntegrationFailure(message: "The journey did not offer New Hot Seat")
+    }
+    newHotSeat.performClick(nil)
+    try await waitForLaunch()
+    let ready = GameScreen.shared.controllerPage(in: window)
+    try check(arcade.hotSeatIsActive && store.activeRunHotSeatID == arcade.hotSeatID
+      && sequencePlayingIdentity == first
+      && artworkLevel?.title == "Just dig!"
+      && store.activeRun?.entries.count == journey.lessons.count
+      && isPaused
+      && store.savedRuns.contains(where: { $0.run.id == soloID })
+      && ready.map { buttons($0).contains(where: { $0.title.hasPrefix("Ready,") }) } == true,
+      "New Hot Seat did not start the learning journey or show Ready")
+    print("PASS new solo and Hot Seat journeys start at Just dig! despite prior player progress; handover remains paused")
+
+    // Follow the actual mixed-campaign route that previously drew snow as marble.
+    GameScreen.shared.dismissAll()
+    try check(try store.advanceLearningJourney(runID: store.activeRun!.id, won: true),
+      "The Hot Seat journey did not advance to its floater lesson")
+    returnToLibrary()
+    sequencePlaylistStore = store
+    settings.graphics = .macintosh
+    startActiveSequence()
+    try await waitForLaunch()
+    try check(sequencePlayingIdentity == entries[1].identity
+      && artworkLevel?.title == entries[1].levelNameSnapshot,
+      "The second journey lesson did not match the bundled teaching order")
+    GameScreen.shared.dismissAll()
+    phase = .playing; playfield.phase = .playing
+    playfield.startCountdown.cancel()
+    refreshProgressText()
+    try check(panel.progressText.hasPrefix("JOURNEY 2/\(journey.lessons.count)"),
+      "A fan lesson retained the Classic campaign's Fun 1/30 HUD")
+
+    // Keep the snow-art regression independent of generated lesson order.
+    returnToLibrary()
+    guard let snowEntry = levelCatalogue.packs.flatMap(\.levels).first(where: {
+      $0.identity.packID == "fan:lldb-535" && $0.levelName == "Floating Down!"
+    }) else { throw IntegrationFailure(message: "The snow artwork fixture is missing") }
+    startBrowserLevel(snowEntry.identity)
+    try await waitForLaunch()
+    try check(fanPlaying && artworkLevel?.title == "Floating Down!",
+      "The snow artwork fixture did not start")
+    guard let ports = Bundle.main.resourceURL?.appendingPathComponent("Ports"),
+      let rendered = playfield.classicScene, let level = artworkLevel,
+      let scene = playfield.macScene, let game = session as? ClassicSession else {
+      throw IntegrationFailure(message: "The snow lesson did not have a rendered scene")
+    }
+    let snow = try ClassicGroundSet.load(style: 2, from: ports.appendingPathComponent("holiday_native_1994"))
+    let holiday = try ClassicMacArtwork(directory: Bundle.main.resourceURL!.appendingPathComponent("MacArtwork/holiday"))
+    let expected = try ClassicMacScene(level: level, rendered: rendered, artwork: holiday, groundSet: snow)
+    try check(scene.terrainRGBA == expected.terrainRGBA && artworkGroundOverride == snow,
+      "The snow lesson reused another campaign's terrain artwork")
+    let initialHash = ClassicDOSReplayRecorder.stateHash(of: game.simulation)
+    for graphics in [ClassicGraphicsSource.dosVGA, .amiga, .macintosh] {
+      var updated = settings; updated.graphics = graphics; apply(updated)
+      try check(ClassicDOSReplayRecorder.stateHash(of: game.simulation) == initialHash,
+        "Changing graphics changed the fan level's collision or simulation")
+      if graphics == .macintosh {
+        try check(playfield.macScene?.terrainRGBA == expected.terrainRGBA,
+          "Changing graphics lost the resolved snow artwork")
+      }
+    }
+    GameScreen.shared.dismissAll()
+    phase = .playing; playfield.phase = .playing
+    playfield.startCountdown.cancel()
+    for _ in 0..<225 { game.tick() }
+    playfield.overlayTitle = nil; playfield.overlayLines = []; playfield.overlayFooter = nil
+    refreshProgressText()
+    let captureFolder = URL(fileURLWithPath: ".build/journey-regression")
+    try FileManager.default.createDirectory(at: captureFolder, withIntermediateDirectories: true)
+    if let bitmap = playfield.bitmapImageRepForCachingDisplay(in: playfield.bounds) {
+      playfield.cacheDisplay(in: playfield.bounds, to: bitmap)
+      try bitmap.representation(using: .png, properties: [:])?.write(to: captureFolder.appendingPathComponent("floating-down-mac.png"))
+    }
+    print("PASS Floating Down! uses Holiday snow artwork, retains collision through graphics changes; the current second lesson shows JOURNEY 2")
+  }
+
+  /// The CE packs ship in the app. They need no folder choice, and a saved run
+  /// finds its level by ID after the path it saved no longer exists.
+  fileprivate func testBundledNeoLemmixPacks() throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll()
+    let oldStyles = stylesDirectory, oldRoot = neoLevelsDirectory
+    defer { stylesDirectory = oldStyles; neoLevelsDirectory = oldRoot; GameScreen.shared.dismissAll() }
+    stylesDirectory = nil
+    neoLevelsDirectory = nil
+    let bundled = try BundledGameResources.neoLemmix()
+    try check(neoLemmixSources == [bundled] && !homeContentRow(.neolemmix).contains("NO PACKS"),
+      "Bundled NeoLemmix packs still need a folder choice")
+    let library = NeoLemmixLibrary.discover(neoLemmixSources)
+    rebuildLevelCatalogue(LevelBrowserDiscovery(
+      classic: [], neoLemmix: library,
+      lemmings2Root: nil, lemmings2: [], lemmings3Root: nil, lemmings3: []))
+    let neoPacks = levelCatalogue.packs.filter { $0.engine == .neolemmix }
+    let entries = neoPacks.flatMap(\.levels)
+    try check(neoPacks.count == 3 && entries.count == 788
+      && entries.filter { $0.availability == .unavailable }.count == 75,
+      "Bundled NeoLemmix catalogue lost packs or community-style availability")
+
+    guard let pack = library.first(where: { $0.pack.title == "Lemmings Redux" }),
+          let level = pack.pack.levels.first(where: { pack.stylesRoot(for: $0) != nil }) else {
+      throw IntegrationFailure(message: "No ready bundled Redux level")
+    }
+    let identity = LevelCatalogueIdentity(engine: .neolemmix, packID: pack.pack.id, levelID: level.levelID)
+    try check(loadNxlv(level.url, stylesDirectory: pack.stylesRoot(for: level),
+      catalogueIdentity: identity, packName: pack.pack.title), "Bundled NeoLemmix level did not start")
+    guard let live = session as? NeoLemmixSession else {
+      throw IntegrationFailure(message: "Bundled NeoLemmix level did not load a Neo session")
+    }
+    for _ in 0..<30 { live.tick() }
+    saveRunCheckpoint(immediately: true)
+    guard var disk = try recoveryStore.latest(profileID: arcadeProfileID), disk.neo != nil else {
+      throw IntegrationFailure(message: "Bundled NeoLemmix run was not saved")
+    }
+    try check(disk.neoPackID == pack.pack.id && disk.neoLevelID == level.levelID,
+      "Bundled NeoLemmix checkpoint lost its stable IDs")
+    disk.sourcePath = "/private/tmp/removed-neolemmix-ce/levels/" + level.relativePath
+    GameScreen.shared.dismissAll()
+    restoreRun(disk)
+    try check((session as? NeoLemmixSession)?.simulation == live.simulation && phase == .playing && isPaused,
+      "A bundled NeoLemmix run did not restore after its saved path was removed")
+    try recoveryStore.clear(disk.runID)
+    print("PASS bundled NeoLemmix packs: no folder prompt, 788 levels, 75 need community styles, restore by stable IDs")
+  }
+
+  fileprivate func testNeoLemmixPackBrowser() async throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll()
+    let root = FileManager.default.temporaryDirectory
+      .appendingPathComponent("NeoPackBrowser-\(UUID())")
+    let rank = root.appendingPathComponent("First", isDirectory: true)
+    try FileManager.default.createDirectory(at: rank, withIntermediateDirectories: true)
+    let theme = root.appendingPathComponent("fixture", isDirectory: true)
+    try FileManager.default.createDirectory(at: theme, withIntermediateDirectories: true)
+    try "LEMMINGS fixture\n".write(
+      to: theme.appendingPathComponent("theme.nxtm"), atomically: true, encoding: .utf8)
+    defer { try? FileManager.default.removeItem(at: root); GameScreen.shared.dismissAll() }
+    try "TITLE Browser Pack\nAUTHOR Test\n".write(
+      to: root.appendingPathComponent("info.nxmi"), atomically: true, encoding: .utf8)
+    try "$GROUP\n NAME First Steps\n FOLDER First\n$END\n".write(
+      to: root.appendingPathComponent("levels.nxmi"), atomically: true, encoding: .utf8)
+    try "LEVEL one.nxlv\nLEVEL two.nxlv\n".write(
+      to: rank.appendingPathComponent("levels.nxmi"), atomically: true, encoding: .utf8)
+    func source(_ title: String, _ id: String) -> String {
+      "TITLE \(title)\nID \(id)\nTHEME fixture\nWIDTH 320\nHEIGHT 160\nLEMMINGS 1\nSAVE_REQUIREMENT 1\n"
+    }
+    let firstURL = rank.appendingPathComponent("one.nxlv")
+    try source("One", "x1").write(to: firstURL, atomically: true, encoding: .utf8)
+    try source("Two", "x2").write(
+      to: rank.appendingPathComponent("two.nxlv"), atomically: true, encoding: .utf8)
+    let packs = try NeoLemmixPackLibrary.discover(in: root)
+    let discovery = LevelBrowserDiscovery(
+      classic: [], neoLemmixRoot: root,
+      neoLemmix: NeoLemmixLibrary.discover([.init(levelsRoot: root, stylesRoot: root)]),
+      lemmings2Root: nil, lemmings2: [], lemmings3Root: nil, lemmings3: [])
+    let oldStyles = stylesDirectory
+    let oldRoot = neoLevelsDirectory
+    defer { stylesDirectory = oldStyles; neoLevelsDirectory = oldRoot }
+    stylesDirectory = root
+    neoLevelsDirectory = root
+    rebuildLevelCatalogue(discovery)
+    guard let pack = levelCatalogue.packs.first(where: { $0.engine == .neolemmix }) else {
+      throw IntegrationFailure(message: "NeoLemmix pack did not enter the typed catalogue")
+    }
+    try check(pack.levels.map(\.levelName) == ["One", "Two"]
+      && pack.levels.map(\.identity.levelID) == ["x0000000000000001", "x0000000000000002"]
+      && neoLemmixBrowserRatings(in: pack).map(\.name) == ["First Steps"]
+      && levelBrowserPacks(for: .neolemmix).map(\.id) == [pack.id],
+      "NeoLemmix browser lost manifest order, IDs, groups or family routing")
+    let playlist = try playlistEntry(for: pack.levels[0].identity)
+    try check(playlist.sourceRevision == packs[0].levels[0].sourceRevision,
+      "NeoLemmix playlist did not retain the exact level revision")
+    guard let previewRequest = levelPreviewRequests[pack.levels[0].identity] else {
+      throw IntegrationFailure(message: "NeoLemmix level did not register a preview")
+    }
+    let preview = try await LevelPreviewStore.shared.bitmap(for: previewRequest)
+    try check(preview.width == 320 && preview.height == 160,
+      "NeoLemmix preview did not use the shared browser dimensions")
+    let completedIdentity = pack.levels[0].identity
+    let completedConditions = TrolleyConditions(
+      gameID: "neolemmix",
+      packID: completedIdentity.packID,
+      levelID: completedIdentity.levelID,
+      levelFingerprint: packs[0].levels[0].sourceRevision,
+      rulesetVersion: "neolemmix-v1",
+      physicsMode: "neolemmix-v1",
+      population: 1,
+      rescueRequirement: 1,
+      startingSkills: [:],
+      timeLimitSeconds: nil)
+    let completedLevel = ArcadeLevel(
+      id: "neolemmix:\(completedIdentity.levelID)",
+      title: pack.levels[0].levelName,
+      game: pack.name,
+      rules: "neolemmix-v1",
+      total: 1,
+      required: 1,
+      conditions: completedConditions)
+    try check(ArcadeStore.shared.record(ArcadeRun(
+      profileID: ArcadeStore.shared.records.activeProfileID,
+      level: completedLevel,
+      saved: 1,
+      didWin: true,
+      skills: [:],
+      seconds: 1,
+      telemetry: TrolleyTelemetry(released: 1))) != nil,
+      "NeoLemmix completion fixture was not recorded")
+    try check(ArcadeStore.shared.records.trolley.attempts.contains { attempt in
+      attempt.run.profileID == ArcadeStore.shared.records.activeProfileID
+        && attempt.run.didWin
+        && attempt.run.level.conditions?.gameID == "neolemmix"
+        && attempt.run.level.conditions?.packID == completedIdentity.packID
+        && attempt.run.level.conditions?.levelID == completedIdentity.levelID
+    }, "NeoLemmix completion record lost its stable identity")
+    presentResolvedLevelBrowser(pack)
+    guard let completionCarousel = levelBrowserCurrentLevelPage?.body.subviews
+      .compactMap({ $0 as? LevelCoverFlowView }).first else {
+      throw IntegrationFailure(message: "NeoLemmix completion browser was not presented")
+    }
+    try check(completionCarousel.selectedItem?.detail.contains("✓") == true,
+      "NeoLemmix browser did not show the completion mark for its stable identity: "
+        + (completionCarousel.selectedItem?.detail ?? "no selected item"))
+    GameScreen.shared.dismissAll()
+    let previousSession = session
+    try source("Changed", "x1").write(to: firstURL, atomically: true, encoding: .utf8)
+    do {
+      _ = try await LevelPreviewStore.shared.bitmap(for: previewRequest)
+      throw IntegrationFailure(message: "A changed NeoLemmix source reused its stale preview")
+    } catch let failure as IntegrationFailure {
+      throw failure
+    } catch {}
+    startBrowserLevel(pack.levels[0].identity)
+    try check(session === previousSession
+      && GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "One",
+      "A changed NeoLemmix pack started under a stale catalogue identity")
+    print("PASS NeoLemmix packs keep manifest order, rank groups, stable IDs and source validation")
+  }
+
+  fileprivate func testPlaylistStartRevalidatesFanSources() async throws {
+    GameScreen.shared.dismissAll()
+    let folder = URL(fileURLWithPath: ".build/content-browser")
+    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    let source = URL(fileURLWithPath:
+      "Tests/FanLevelLibraryTests/Fixtures/literal-members.zip")
+    let archive = folder.appendingPathComponent(
+      "playlist-source-\(UUID().uuidString).zip")
+    let storeFile = folder.appendingPathComponent(
+      "playlist-store-\(UUID().uuidString).json")
+    let originalCatalogue = levelCatalogue
+    let originalFanPacks = levelBrowserFanPacks
+    let originalFanEntries = levelBrowserFanEntries
+    let originalRoutes = levelBrowserRoutes
+    let originalPreviews = levelPreviewRequests
+    let originalStoreCache = playlistStoreCache
+    let originalSequenceStore = sequencePlaylistStore
+    defer {
+      cancelPlaylistFanLoading()
+      GameScreen.shared.dismissAll()
+      levelCatalogue = originalCatalogue
+      levelBrowserFanPacks = originalFanPacks
+      levelBrowserFanEntries = originalFanEntries
+      levelBrowserRoutes = originalRoutes
+      levelPreviewRequests = originalPreviews
+      playlistStoreCache = originalStoreCache
+      sequencePlaylistStore = originalSequenceStore
+      try? FileManager.default.removeItem(at: archive)
+      LevelPlaylistStore.removeData(at: storeFile)
+      try? FileManager.default.removeItem(
+        at: storeFile.appendingPathExtension("lock"))
+    }
+
+    let sourceData = try Data(contentsOf: source)
+    let packID = "fan:playlist-source-revalidation"
+    let placeholder = LevelCataloguePack(
+      engine: .classic,
+      id: packID,
+      name: "Source revalidation fixture",
+      status: .unverified,
+      levels: [])
+    func resolveFixture() throws -> LevelCataloguePack {
+      try sourceData.write(to: archive, options: .atomic)
+      let entries = try FanLevelLibrary.validatedEntries(in: archive)
+      let fingerprint = try checkFingerprint(archive)
+      levelCatalogue = LevelCatalogue(
+        revision: "playlist-source-revalidation",
+        packs: [placeholder])
+      levelBrowserFanPacks = [packID: archive]
+      return resolveBrowserPack(
+        placeholder,
+        discovery: LevelBrowserFanDiscovery(
+          fingerprint: fingerprint,
+          entries: entries))
+    }
+    func waitForRevalidation() async throws {
+      for _ in 0..<300 where playlistFanLoadTask != nil {
+        try await Task.sleep(nanoseconds: 10_000_000)
+      }
+      try check(playlistFanLoadTask == nil,
+        "Fan-source revalidation did not finish")
+    }
+
+    _ = try resolveFixture()
+    levelCatalogue = LevelCatalogue(revision: "pending-fan-test", packs: [placeholder])
+    presentLevelPackBrowser(packs: [placeholder], title: "Fan levels")
+    guard let sourcePage = levelBrowserPackPage else {
+      throw IntegrationFailure(message: "The fan pack browser did not open")
+    }
+    sourcePage.layoutSubtreeIfNeeded()
+    presentLevelBrowser(for: placeholder)
+    try check(GameScreen.shared.controllerPage(in: window) === sourcePage
+      && levelBrowserFanLoadTask != nil,
+      "Reading a fan pack replaced the useful browser with a waiting screen")
+    let back = sourcePage.controllerBackButton
+    try check(back.isEnabled && !back.isHidden && back.window === window,
+      "Back is not available while a fan pack is prepared")
+    let point = back.convert(NSPoint(x: back.bounds.midX, y: back.bounds.midY), to: sourcePage)
+    try check(sourcePage.hitTest(point) === back,
+      "The fan preparation intercepted the Back target")
+    if let view = window.contentView,
+       let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds) {
+      view.cacheDisplay(in: view.bounds, to: bitmap)
+      try bitmap.representation(using: .png, properties: [:])?.write(
+        to: folder.appendingPathComponent("background-fan-browser.png"))
+    }
+    back.performClick(nil)
+    try check(levelBrowserFanLoadTask == nil && !GameScreen.shared.contains(sourcePage),
+      "Back did not cancel fan preparation")
+    try await Task.sleep(nanoseconds: 100_000_000)
+    try check(GameScreen.shared.controllerPage(in: window) == nil,
+      "Cancelled fan preparation reopened the browser")
+
+    GameScreen.shared.present(sourcePage, owner: window)
+    var completedCancelledRequest = false
+    ensureFanPacksResolved(forPackIDs: [packID], title: "Fan levels", reloadResolved: true) { _ in
+      completedCancelledRequest = true
+    }
+    try check(GameScreen.shared.controllerPage(in: window) === sourcePage,
+      "Playlist preparation presented a waiting screen")
+    let otherPage = GameMenuPage(title: "Playlists")
+    GameScreen.shared.present(otherPage, owner: window)
+    try await Task.sleep(nanoseconds: 100_000_000)
+    try check(!completedCancelledRequest && playlistFanLoadTask == nil
+      && GameScreen.shared.controllerPage(in: window) === otherPage,
+      "Fan preparation replaced the player's new destination")
+    GameScreen.shared.dismissAll()
+    print("PASS background fan preparation preserves the browser and Back, and cannot reopen after navigation")
+
+    let resolved = try resolveFixture()
+    guard let level = resolved.levels.first else {
+      throw IntegrationFailure(message: "The fan-source fixture had no levels")
+    }
+    let store = try LevelPlaylistStore(file: storeFile)
+    let playlist = try LevelPlaylist(
+      name: "Changed source",
+      entries: [try playlistEntry(for: level.identity)])
+    try store.add(playlist)
+    playlistStoreCache = (
+      ArcadeStore.shared.records.activeProfileID,
+      store)
+    presentPlaylistEditor(id: playlist.id)
+    let originalEditor = playlistEditorPage
+    try Data("changed after the playlist editor opened".utf8)
+      .write(to: archive, options: .atomic)
+    startPlaylist(id: playlist.id, shuffled: false)
+    try await waitForRevalidation()
+    try check(store.activeRun == nil,
+      "Playlist Play persisted a run after its fan source changed")
+    func descendants(of view: NSView) -> [NSView] {
+      [view] + view.subviews.flatMap { descendants(of: $0) }
+    }
+    guard let refreshedEditor = playlistEditorPage else {
+      throw IntegrationFailure(message: "The changed-source playlist editor disappeared")
+    }
+    let editorViews = descendants(of: refreshedEditor)
+    let editorCarousel = editorViews.compactMap { $0 as? LevelCoverFlowView }.first
+    let editorButtons = editorViews.compactMap { $0 as? NSButton }
+    try check(refreshedEditor !== originalEditor
+      && editorCarousel?.selectedItem?.isAvailable == false
+      && editorButtons.first(where: { $0.title == "Play" })?.isEnabled == false
+      && editorButtons.first(where: { $0.title == "Shuffle" })?.isEnabled == false,
+      "A failed source check left the open playlist editor playable")
+    GameScreen.shared.dismissAll()
+
+    _ = try resolveFixture()
+    let shuffleInput = try shuffleAllRunInput()
+    try Data("changed while the Shuffle all confirmation was open".utf8)
+      .write(to: archive, options: .atomic)
+    startConfirmedShuffleAllFanLevels(expectedPoolID: shuffleInput.pool.id)
+    try await waitForRevalidation()
+    try check(store.activeRun == nil,
+      "Shuffle all persisted a run after a fan source changed")
+    print("PASS Playlist Play and Shuffle all revalidate fan archives at confirmation time")
+  }
+
+  private func checkFingerprint(_ archive: URL) throws -> String {
+    guard let fingerprint = FanLevelLibrary.archiveFingerprint(archive) else {
+      throw IntegrationFailure(message: "The fan-source fixture could not be fingerprinted")
+    }
+    return fingerprint
+  }
+
+  fileprivate func testPlaylistSessions() async throws {
+    returnToLibrary()
+    window.setContentSize(NSSize(width: 1120, height: 720))
+    let previousStore = ArcadeStore.shared
+    let previousCache = playlistStoreCache
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent("playlist-sessions-\(UUID().uuidString)")
+    let defaults = UserDefaults(suiteName: "playlist-sessions-\(UUID().uuidString)")!
+    let arcade = ArcadeStore(file: directory.appendingPathComponent("records.json"), bundledProofs: nil, defaults: defaults)
+    ArcadeStore.shared = arcade
+    defer {
+      returnToLibrary(); ArcadeStore.shared = previousStore; playlistStoreCache = previousCache
+      sequencePlaylistStore = nil; GameScreen.shared.dismissAll()
+      try? FileManager.default.removeItem(at: directory)
+    }
+    func buttons(_ view: NSView) -> [NSButton] {
+      (view as? NSButton).map { [$0] } ?? view.subviews.flatMap(buttons)
+    }
+    func press(_ title: String) throws {
+      guard let page = GameScreen.shared.controllerPage(in: window),
+            let button = buttons(page).first(where: { $0.title == title }) else {
+        throw IntegrationFailure(message: "Missing session action: " + title)
+      }
+      button.performClick(nil)
+    }
+    func waitForLaunch() async throws {
+      for _ in 0..<1500 where levelBrowserLaunchTask != nil || playlistFanLoadTask != nil {
+        try await Task.sleep(nanoseconds: 10_000_000)
+      }
+      try check(levelBrowserLaunchTask == nil && playlistFanLoadTask == nil, "Session launch did not finish")
+    }
+    func capture(_ name: String, _ view: NSView) throws {
+      window.contentView?.layoutSubtreeIfNeeded()
+      view.layoutSubtreeIfNeeded()
+      guard let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds) else {
+        throw IntegrationFailure(message: "Session screenshot has no visible bounds: " + name)
+      }
+      func invalidate(_ child: NSView) { child.needsDisplay = true; child.subviews.forEach(invalidate) }
+      invalidate(view)
+      view.displayIgnoringOpacity(view.bounds, in: NSGraphicsContext(bitmapImageRep: bitmap)!)
+      let output = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent(".build/session-ui")
+      try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+      try bitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent(name + ".png"))
+    }
+    let host = arcade.records.activeProfileID
+    let guest = arcade.addProfile(initials: "PAL", portrait: 2)!
+    arcade.selectProfile(host); arcade.toggleSessionProfile(guest.id)
+    let oldHotSeat = arcade.hotSeatID!
+    loadContent()
+    gamePicker.selectItem(at: dataSets.firstIndex(where: { $0.set.title == .lemmings })!)
+    selectDataSet()
+    picker.selectItem(at: flow!.ranks[0].levelIndices[0]); levelChanged(); advancePhase()
+    try check(arcadeHotSeatID == oldHotSeat && arcadeProfileID == host,
+      "Classic session fixture did not start with the shared owner")
+    installKeyboardShortcuts()
+    let oldAttempt = arcadeRunID
+    saveRunCheckpoint(immediately: true)
+    let checkpointFile = recoveryStore.directory.appendingPathComponent(oldAttempt.uuidString + ".json")
+    let checkpointBytes = try Data(contentsOf: checkpointFile)
+    _ = arcade.passSessionTurn(after: host)
+    let l2Root = try BundledGameResources.lemmings2()
+    let l2Campaign = try Lemmings2Campaign(root: l2Root)
+    let l2Progress = Lemmings2Campaign.Progress(tribe: 0, level: 1, results: [0:
+      .init(startingPopulation: 60, saved: 47,
+        medal: Lemmings2Campaign.medal(saved: 47, total: 60, allowedLosses: l2Campaign.levels[0].allowedLossesForGold),
+        levelFingerprint: l2Campaign.levels[0].fingerprint)])
+    let l2Key = arcade.progressKey("nativeL2Campaign.v1." + Lemmings2PlayWindow.playlistProgressID(root: l2Root))
+    UserDefaults.standard.set(try JSONEncoder().encode(l2Progress), forKey: l2Key)
+    defer { UserDefaults.standard.removeObject(forKey: l2Key) }
+    let newL2Progress = try JSONDecoder().decode(Lemmings2Campaign.Progress.self,
+      from: Lemmings2PlayWindow.playlistProgress(root: l2Root, startingAt: [.init(tribe: 0, level: 0)]))
+    try check(newL2Progress.results.isEmpty && newL2Progress.skipped?.isEmpty != false,
+      "A new L2 playlist at level one inherited campaign results")
+    try check(try JSONDecoder().decode(Lemmings2Campaign.Progress.self,
+      from: UserDefaults.standard.data(forKey: l2Key)!) == l2Progress,
+      "A fresh L2 session changed saved campaign progress")
+    let l3Root = try BundledGameResources.lemmings3()
+    let l3Key = arcade.progressKey("nativeL3ClassicPreview.v1.bundled")
+    let l3Progress = Lemmings3ClassicCampaign.Progress(index: 1, population: 20,
+      completed: [0: 20], tribe: .classic)
+    let l3Bytes = try JSONEncoder().encode(l3Progress)
+    UserDefaults.standard.set(l3Bytes, forKey: l3Key)
+    defer { UserDefaults.standard.removeObject(forKey: l3Key) }
+    let freshL3 = try Lemmings3PlayWindow(root: l3Root,
+      selection: .init(tribe: .classic, level: 0), recordsCampaignProgress: false)
+    try check(freshL3.testCampaignProgress.index == 0 && freshL3.testCampaignProgress.completed.isEmpty,
+      "A new L3 playlist inherited campaign completions")
+    freshL3.stop(); freshL3.close()
+    try check(UserDefaults.standard.data(forKey: l3Key) == l3Bytes,
+      "A fresh L3 session changed saved campaign progress")
+    guard let discovery = await makeLevelBrowserDiscoveryTask().value else {
+      throw IntegrationFailure(message: "Session fixture could not discover bundled levels")
+    }
+    rebuildLevelCatalogue(discovery)
+    var entries: [LevelPlaylistEntry] = []
+    for engine: LevelSourceEngine in [.lemmings2, .lemmings3, .classic] {
+      guard let entry = levelCatalogue.packs.filter({ $0.engine == engine })
+        .flatMap(\.levels).first(where: { $0.isAvailable && (engine != .lemmings2 || $0.number == 2) }) else {
+        throw IntegrationFailure(message: "No available session fixture for " + engine.displayName)
+      }
+      entries.append(try playlistEntry(for: entry.identity))
+    }
+    let store = try LevelPlaylistStore(file: directory.appendingPathComponent("playlists.json"))
+    let playlist = try LevelPlaylist(name: "Session test", entries: entries)
+    try store.add(playlist)
+    playlistStoreCache = (host, store)
+    let pool = try LevelPool(id: "session-test", summary: "Across all three games")
+    let solo = try LevelSequenceRun.playlist(playlist, pool: pool)
+    installActiveSequence(solo, in: store)
+    guard let chooser = GameScreen.shared.controllerPage(in: window) as? GameMenuPage else {
+      throw IntegrationFailure(message: "Hot Seat did not offer a new session")
+    }
+    try capture("new-session", chooser)
+    let choices = buttons(chooser)
+    try check(Set(choices.map(\.title)) == Set(["Back", "New solo", "New Hot Seat"])
+      && window.firstResponder === chooser.controllerBackButton,
+      "Session choice lost its actions or safe keyboard focus")
+    for button in choices {
+      let rect = button.convert(button.bounds, to: chooser)
+      let hit = chooser.hitTest(CGPoint(x: rect.midX, y: rect.midY))
+      try check(chooser.bounds.contains(rect) && (hit === button || hit?.isDescendant(of: button) == true),
+        "Session choice has a misplaced input target")
+      try check(choices.filter { $0 !== button }.allSatisfy {
+        !rect.intersects($0.convert($0.bounds, to: chooser))
+      }, "Session choices overlap")
+    }
+    let backKey = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+      windowNumber: window.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r", isARepeat: false, keyCode: 36)!
+    _ = GameScreen.shared.keyboardNavigation.handle(backKey, in: chooser, window: window, dismiss: { chooser.onBack?() })
+    try check(arcade.hotSeatID == oldHotSeat && arcadeRunID == oldAttempt && store.activeRun == nil,
+      "Back changed the current session")
+    installActiveSequence(solo, in: store)
+    try Data("changed by another writer".utf8).write(to: checkpointFile, options: .atomic)
+    try press("New solo")
+    try check(arcade.hotSeatID == oldHotSeat && store.activeRun == nil && arcadeRunID == oldAttempt
+      && GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Session not started",
+      "A failed checkpoint save switched the session: phase=\(phase), sameSeat=\(arcade.hotSeatID == oldHotSeat), run=\(String(describing: store.activeRun?.id)), sameAttempt=\(arcadeRunID == oldAttempt), page=\(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() ?? "none")")
+    try capture("save-failed", GameScreen.shared.controllerPage(in: window)!)
+    try checkpointBytes.write(to: checkpointFile, options: .atomic)
+    GameScreen.shared.dismissAll()
+    installActiveSequence(solo, in: store)
+    try press("New solo"); try await waitForLaunch()
+    try check(!arcade.hotSeatIsActive && store.activeRun?.id == solo.id
+      && nativeL2Window != nil && sequencePlayingIdentity == entries[0].identity,
+      "New solo did not continue into the selected playlist")
+    try check(arcade.savedHotSeats.contains(where: { $0.id == oldHotSeat && $0.turn == guest.id }),
+      "New solo lost the previous Hot Seat or its next turn")
+    let checkpoint = try recoveryStore.latest(profileID: host, hotSeatID: oldHotSeat)
+    try check(checkpoint?.runID == oldAttempt, "New solo did not checkpoint the previous Classic attempt")
+    returnToLibrary()
+    _ = arcade.resumeHotSeat(id: oldHotSeat)
+    let shared = try LevelSequenceRun.playlist(playlist, pool: pool)
+    installActiveSequence(shared, in: store)
+    try press("New Hot Seat"); try await waitForLaunch()
+    let sharedID = arcade.hotSeatID
+    try check(sharedID != oldHotSeat && sharedID != nil && store.activeRunHotSeatID == sharedID
+      && store.savedRuns.contains(where: { $0.run.id == solo.id && $0.hotSeatID == nil }),
+      "New Hot Seat did not preserve the previous solo and shared sessions")
+    for (index, entry) in entries.enumerated() {
+      try check(sequencePlayingIdentity == entry.identity
+        && sequenceRunMatches(shared.id, identity: entry.identity),
+        "Hot Seat sequence ownership failed for " + entry.identity.engine.displayName)
+      guard let ready = GameScreen.shared.controllerPage(in: window) as? GameMenuPage else {
+        throw IntegrationFailure(message: "Shared playlist skipped Ready for " + entry.identity.engine.displayName)
+      }
+      try check(ready.controllerBackButton.isHidden && buttons(ready).contains(where: { $0.title.hasPrefix("Ready,") }),
+        "Shared playlist handover can bypass Ready")
+      try capture("ready-" + entry.identity.engine.rawValue, ready)
+      try press("Ready, " + arcade.playingProfile!.initials)
+      if index + 1 < entries.count {
+        _ = arcade.passSessionTurn(after: arcade.playingProfileID)
+        try check(continueActiveSequence(completed: entry.identity, runID: shared.id), "Shared sequence failed to advance")
+        try await waitForLaunch()
+      }
+    }
+    returnToLibrary()
+    ArcadeWindow.shared.showSession(owner: window)
+    if GameScreen.shared.controllerPage(in: window) is GameMenuPage { try press("Save and return to library") }
+    try capture("hot-seat-history", ArcadeWindow.shared.arcadeView)
+    let rosterView = ArcadeWindow.shared.arcadeView
+    guard let savedSeats = rosterView.accessibilityChildren()?.compactMap({ $0 as? GameAccessibleElement })
+      .first(where: { $0.accessibilityLabel() == "Saved Hot Seats" }) else {
+      throw IntegrationFailure(message: "Saved Hot Seats has no input target")
+    }
+    try check(rosterView.bounds.contains(savedSeats.localFrame) && savedSeats.accessibilityPerformPress(),
+      "Saved Hot Seats has an invalid input target")
+    try capture("saved-hot-seats", GameScreen.shared.controllerPage(in: window)!)
+    try press("Resume")
+    try check(arcade.hotSeatID == oldHotSeat && arcade.playingProfileID == guest.id,
+      "Saved Hot Seats did not resume the selected roster and next turn")
+    _ = arcade.resumeHotSeat(id: sharedID!)
+    GameScreen.shared.dismissAll()
+    presentPlaylistLibrary()
+    try capture("saved-playlists", GameScreen.shared.controllerPage(in: window)!)
+    activatePlaylistLibraryItem("playlist:resume:" + solo.id.uuidString)
+    try press("Resume solo"); try await waitForLaunch()
+    try check(store.activeRun?.id == solo.id && !arcade.hotSeatIsActive
+      && store.savedRuns.first(where: { $0.run.id == shared.id })?.run.currentIndex == 2,
+      "Resuming solo discarded the shared sequence position")
+    print("PASS saved Solo/Hot Seat choices, checkpoint, history, targets and Ready across Classic, L2 and L3")
+  }
+
+  fileprivate func testSequenceNavigationGuards() throws {
+    GameScreen.shared.dismissAll()
+    if resumeSavedRunItem == nil { buildMenu() }
+    defer {
+      sequenceLaunchRunID = nil
+      setSequencePlayingIdentity(nil)
+      GameScreen.shared.dismissAll()
+    }
+
+    for engine in LevelSourceEngine.allCases {
+      let identity = LevelCatalogueIdentity(
+        engine: engine,
+        packID: "sequence-guard-pack",
+        levelID: "sequence-guard-level")
+      setSequencePlayingIdentity(identity)
+      try check(resumeSavedRunItem?.isEnabled == false
+        && !gamePicker.isEnabled && !picker.isEnabled,
+        "A running \(engine.displayName) sequence left alternate navigation enabled")
+      resumeSavedRun()
+      try check(sequencePlayingIdentity == identity,
+        "Resume Saved Run replaced a running \(engine.displayName) sequence")
+      GameScreen.shared.dismissAll()
+      setSequencePlayingIdentity(nil)
+    }
+
+    let pendingRunID = UUID()
+    sequenceLaunchRunID = pendingRunID
+    refreshSequenceNavigationAvailability()
+    try check(resumeSavedRunItem?.isEnabled == false,
+      "A pending sequence left Resume Saved Run enabled")
+    try check(allowNavigationAwayFromSequence() && sequenceLaunchRunID == nil,
+      "Alternate navigation did not cancel the pending sequence launch")
+    sequenceLaunchRunID = nil
+    refreshSequenceNavigationAvailability()
+    try check(resumeSavedRunItem?.isEnabled == true
+      && gamePicker.isEnabled && picker.isEnabled,
+      "Leaving a sequence did not restore normal navigation")
+    print("PASS active sequences guard navigation and pending starts can be cancelled")
+  }
+
+  fileprivate func testClassicLevelPickerUnlockGate() throws {
+    GameScreen.shared.dismissAll()
+    struct EncodedCampaign: Encodable {
+      let name: String
+      let levels: [ClassicCampaignLevel]
+    }
+    let level = try ClassicLevel(data: Data(repeating: 0, count: ClassicLevel.recordSize))
+    let fixture = try JSONDecoder().decode(
+      ClassicCampaign.self,
+      from: JSONEncoder().encode(EncodedCampaign(
+        name: "Classic unlock fixture",
+        levels: [
+          .standalone(level, rank: "Fun", number: 1),
+          .standalone(level, rank: "Fun", number: 2),
+        ])))
+    campaign = fixture
+    flow = ClassicGameFlow(campaign: fixture)
+    classicSelectionRecordsCampaignProgress = true
+    // A data-set switch saves progress, and so refreshes, before it fills
+    // the picker. Build 39 stopped launch here with an NSMenu assertion.
+    picker.removeAllItems()
+    picker.addItem(withTitle: "1. Fun - First")
+    refreshClassicLevelPickerAvailability()
+    try check(picker.numberOfItems == 1 && picker.item(at: 0)?.isEnabled == true,
+      "A level picker with fewer rows than the campaign did not refresh")
+    picker.removeAllItems()
+    picker.addItems(withTitles: ["1. Fun - First", "2. Fun - Second"])
+    refreshClassicLevelPickerAvailability()
+    let initialProgress = flow!.progress
+    defer {
+      var restored = settings
+      restored.unlockAllClassicLevels = false
+      apply(restored)
+      GameScreen.shared.dismissAll()
+    }
+
+    try check(picker.item(at: 0)?.isEnabled == true
+      && picker.item(at: 1)?.isEnabled == false,
+      "The legacy level pop-up did not disable locked Fun 2")
+    picker.selectItem(at: 1)
+    levelChanged()
+    try check(picker.indexOfSelectedItem == 0
+      && flow?.screen == .title
+      && flow?.progress == initialProgress,
+      "The legacy level pop-up opened locked Fun 2")
+
+    var updated = settings
+    updated.unlockAllClassicLevels = true
+    apply(updated)
+    try check(picker.item(at: 1)?.isEnabled == true,
+      "The Classic unlock setting did not update the open level pop-up")
+    updated.unlockAllClassicLevels = false
+    apply(updated)
+    try check(picker.item(at: 1)?.isEnabled == false,
+      "Turning off the Classic override left locked levels visually enabled")
+    try check(flow?.progress == initialProgress,
+      "Changing the Classic unlock setting advanced campaign progress")
+    print("PASS legacy Classic level pop-up enforces progress and reflects the unlock override")
+  }
+
+  fileprivate func testGamePages() throws {
+    playfield.startCountdown.cancel()
+    let running = FinalTickSession(win: false, finalTick: 1000)
+    session = running; phase = .playing; isPaused = false; lastStepTime = 1; accumulator = 0
+    let count = NSApp.windows.count
+    let page = GameMenuPage(title: "Settings")
+    GameScreen.shared.present(page, owner: window)
+    step(at: 3)
+    try check(running.currentTick == 0, "The level clock ran behind a game page")
+    settings.display = tubeIsActive ? .flat : .monitor
+    applyDisplayMode()
+    // Dialog navigation may focus the page's default control rather than the page.
+    let menuFocused = (window.firstResponder as? NSView).map { $0 === page || $0.isDescendant(of: page) } == true
+    try check(page.window === window && menuFocused, "Changing display mode lost the menu")
+    try check(NSApp.windows.count == count, "A game page opened another window")
+    GameScreen.shared.dismiss(page)
+    step(at: 3.1)
+    try check(running.currentTick > 0 && running.currentTick <= 2, "Closing a page lost play or caught up its paused time")
+    var confirmed = 0
+    GameScreen.shared.confirm("End this run?", detail: "The lemmings you have rescued will count. You can review this attempt, then retry when you are ready.",
+      actionTitle: "End run", owner: window) { confirmed += 1 }
+    let confirmation = window!.contentView!.subviews.last!
+    confirmation.layoutSubtreeIfNeeded()
+    let bitmap = confirmation.bitmapImageRepForCachingDisplay(in: confirmation.bounds)!
+    confirmation.cacheDisplay(in: confirmation.bounds, to: bitmap)
+    let output = URL(fileURLWithPath: ".build/trolley/confirmation.png")
+    try FileManager.default.createDirectory(at: output.deletingLastPathComponent(), withIntermediateDirectories: true)
+    try bitmap.representation(using: .png, properties: [:])!.write(to: output)
+    func actionButton(in view: NSView) -> NSButton? {
+      if let button = view as? NSButton, button.title == "End run" { return button }
+      return view.subviews.compactMap { actionButton(in: $0) }.first
+    }
+    guard let endRun = actionButton(in: confirmation) else { throw IntegrationFailure(message: "Native confirmation lost its action") }
+    endRun.performClick(nil)
+    try check(confirmed == 1 && !GameScreen.shared.isPresented && NSApp.windows.count == count,
+      "Native confirmation failed to invoke its action and return to the game")
+    print("PASS same-window pages, paused clock, display changes, focus and resuming play")
+    let welcome = ReleaseWelcome(build: 61, version: ReleaseWelcome.notesVersion)
+    welcome.show(in: window)
+    guard let notes = GameScreen.shared.controllerPage(in: window) else {
+      throw IntegrationFailure(message: "Release notes did not open")
+    }
+    notes.layoutSubtreeIfNeeded()
+    let notesBitmap = notes.bitmapImageRepForCachingDisplay(in: notes.bounds)!
+    notes.cacheDisplay(in: notes.bounds, to: notesBitmap)
+    try notesBitmap.representation(using: .png, properties: [:])!.write(
+      to: output.deletingLastPathComponent().appendingPathComponent("release-welcome.png"))
+    let continueKey = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [],
+      timestamp: 0, windowNumber: window.windowNumber, context: nil, characters: "\r",
+      charactersIgnoringModifiers: "\r", isARepeat: false, keyCode: 36)!
+    try check(GameScreen.shared.handleDialogKey(continueKey) && !GameScreen.shared.isPresented,
+      "Release notes Continue did not return to the game")
+  }
+  fileprivate func testElapsedTimeAndAudioRecovery() async throws {
+    phase = .playing
+    isPaused = false
+    lastStepTime = nil
+    accumulator = 0
+    let running = FinalTickSession(win: false, finalTick: 1000)
+    session = running
+    step(at: 1)
+    step(at: 1.1)
+    step(at: 1.2)
+    try check(running.currentTick == 3, "missed display callbacks slowed the simulation")
+    step(at: 1000)
+    try check(running.currentTick <= 8, "wake caused an unbounded simulation catch-up")
+    var updated = settings
+    updated.music = .amigaModules
+    apply(updated)
+    suspendAudioOutput()
+    try check(!music.isOutputRunning, "sleep did not suspend module output")
+    wakeAudioOutput()
+    try await Task.sleep(nanoseconds: 100_000_000)
+    try check(music.isOutputRunning, "wake did not restore module output")
+    for source in [ClassicMusicSource.adaptiveDJ, try recordingForCurrentLevel()].compactMap({ $0 }) {
+      updated.music = source
+      apply(updated)
+      suspendAudioOutput()
+      try check(!dj.isPlaying && !soundtrack.isPlaying, "sleep left a recording playing")
+      wakeAudioOutput()
+      try await Task.sleep(nanoseconds: 100_000_000)
+      try check(dj.isPlaying || soundtrack.isPlaying, "wake did not restore recorded audio")
+    }
+    suspendCurrentEngine()
+    resumeAudioOutput()
+    try await Task.sleep(nanoseconds: 100_000_000)
+    try check(!music.isRunning && !dj.isPlaying && !soundtrack.isPlaying, "wake resurrected a stopped source")
+    print("PASS elapsed-time catch-up and audio interruption recovery")
+  }
+  /// Recording albums play only a documented version of the level's tune.
+  /// Pick the first album that has one, as a player would need to.
+  fileprivate func recordingForCurrentLevel() throws -> ClassicMusicSource? {
+    guard let root = Bundle.main.resourceURL?.appendingPathComponent("Music") else {
+      throw IntegrationFailure(message: "missing bundled music")
+    }
+    let assignedName = LevelMusicSelection.track(index: currentNxlvURL == nil ? max(0, picker.indexOfSelectedItem) : 0,
+      title: currentNxlvURL == nil ? artworkLevel?.title ?? "" : "", holiday: seasonalMusic, ohNo: musicTitle == .ohNoMoreLemmings)
+    let game = seasonalMusic ? "holiday" : musicTitle == .ohNoMoreLemmings ? "ohno" : "classic"
+    let trackID = game + "." + assignedName.lowercased()
+    guard let name = soundtrackLibrary.keys.sorted().first(where: { album in
+      soundtrackLibrary[album]?.contains { SoundtrackPlayer.matches($0, trackID: trackID, root: root) } == true
+    }) else { return nil }
+    return .remix(name: name)
+  }
+  fileprivate func testMusicTransitions() throws {
+    isPaused = false; userPausedMusic = false
+    playfield.startCountdown.cancel(); music.stop(); soundtrack.stop(); dj.stop()
+    settings.music = .silent
+    music.loadLibrary(at: URL(fileURLWithPath: "Sources/Music/lemmings_music_mod"))
+    loadSoundtracks()
+    try check(!music.library.isEmpty && !soundtrackLibrary.isEmpty, "missing audio fixtures")
+    let recording = try recordingForCurrentLevel()
+    let sources: [ClassicMusicSource] = [ClassicMusicSource.amigaModules, recording, .adaptiveDJ, .silent].compactMap { $0 }
+    for from in sources {
+      for to in sources {
+        for source in [from, to] {
+          var updated = settings
+          updated.music = source
+          updated.musicVolume = 0
+          updated.soundVolume = 0
+          apply(updated)
+        }
+        try check(music.isRunning == (to == .amigaModules), "module engine wrong after \(from) -> \(to)")
+        try check(soundtrack.isPlaying == (to == recording), "recording wrong after \(from) -> \(to)")
+        try check(dj.isPlaying == (to == .adaptiveDJ), "DJ wrong after \(from) -> \(to)")
+      }
+    }
+    settings.music = .amigaModules
+    for shuffled in [ClassicMusicSource.adaptiveDJ, recording].compactMap({ $0 }) {
+      levelMusic = shuffled
+      playMusicForCurrentLevel()
+      apply(settings)
+      try check(shuffled == .adaptiveDJ ? dj.isPlaying : soundtrack.isPlaying,
+        "applying settings stopped the shuffled source")
+    }
+    levelMusic = nil
+    suspendCurrentEngine()
+    print("PASS \(sources.count * sources.count) available music source transitions and settings applied during shuffled playback")
+  }
+
+  fileprivate func testSeasonalMusic() throws {
+    let recording = ClassicMusicSource.remix(name: soundtrackLibrary.keys.sorted()[0])
+    levelMusic = nil
+    let root = URL(fileURLWithPath: "Sources/Music")
+    // Catalogue identity decides seasonal music, as in the app. Path words
+    // cover only uncatalogued files, such as the bundled modules.
+    let roots = [root] + [Bundle.main.resourceURL?.appendingPathComponent("Music")].compactMap { $0 }
+    let catalogues = roots.map { ($0, SoundtrackCatalogue.load(at: $0)) }
+    func isChristmas(_ url: URL) -> Bool {
+      for (base, catalogue) in catalogues {
+        if let path = SoundtrackPlayer.relativePath(url, under: base), let entry = catalogue?.entry(path: path) {
+          return entry.track.game == "holiday"
+        }
+      }
+      return SoundtrackPlayer.isSeasonal(url.path)
+    }
+    for includeOthers in [false, true] {
+      let regular = SoundtrackPlayer.djSoundtracks(at: root, includeOtherSoundtracks: includeOthers)
+      let seasonal = SoundtrackPlayer.djSoundtracks(at: root, includeOtherSoundtracks: includeOthers, seasonal: true)
+      try check(!regular.isEmpty && !seasonal.isEmpty, "missing regular or seasonal DJ pool")
+      try check(regular.values.flatMap { $0 }.allSatisfy { !isChristmas($0) }, "regular DJ includes Christmas tracks")
+      try check(seasonal.values.flatMap { $0 }.allSatisfy { isChristmas($0) }, "Christmas DJ includes regular tracks")
+    }
+    loadContent()
+    let selected = gamePicker.indexOfSelectedItem
+    let oldFan = fanPlaying
+    let oldURL = currentNxlvURL
+    defer {
+      gamePicker.selectItem(at: selected)
+      fanPlaying = oldFan
+      currentNxlvURL = oldURL
+      settings.music = .amigaModules
+      levelMusic = nil
+      suspendCurrentEngine()
+    }
+    fanPlaying = false
+    currentNxlvURL = nil
+    for title in [ClassicTitle.holidayLemmings1994, .lemmings, .xmasLemmings1991, .ohNoMoreLemmings, .xmasLemmings1992, .holidayLemmings1993] {
+      guard let index = dataSets.firstIndex(where: { $0.set.title == title }) else {
+        throw NSError(domain: "MusicTests", code: 1, userInfo: [NSLocalizedDescriptionKey: "Missing campaign \(title)"])
+      }
+      gamePicker.selectItem(at: index)
+      for source in [ClassicMusicSource.amigaModules, recording, .adaptiveDJ] {
+        // Direct picker changes bypass the normal level-start identity reset.
+        startedMusicIdentity = nil
+        settings.music = source
+        playMusicForCurrentLevel()
+        let url = dj.isPlaying ? dj.currentURL : soundtrack.isPlaying ? soundtrack.currentURL : music.currentURL
+        try check(url != nil && isChristmas(url!) == SoundtrackPlayer.isSeasonal(title), "wrong seasonal music for \(title), \(source)")
+      }
+    }
+    fanPlaying = true
+    startedMusicIdentity = nil
+    settings.music = .amigaModules
+    playMusicForCurrentLevel()
+    try check(music.currentURL.map { !isChristmas($0) } == true, "fan level retained Christmas modules")
+    print("PASS all 16 music source transitions, seasonal DJ pools and campaign music boundaries")
+  }
+
+  fileprivate func testSavedAudioAndBanks() throws {
+    UserDefaults.standard.set(false, forKey: "AudioMuted")
+    UserDefaults.standard.set(true, forKey: musicPresetKey)
+    for silent in [false, true] {
+      let saved = ClassicSettings(music: silent ? .silent : .amigaModules,
+        musicStyle: .faithful, musicVolume: 0.12,
+        sound: silent ? .silent : .macintoshResources, soundVolume: 0.23)
+      UserDefaults.standard.set(try JSONEncoder().encode(saved), forKey: settingsKey)
+      restoreSettings()
+      applyAudioSettings()
+      try check(music.muted == silent && soundtrack.muted == silent && dj.isMuted == silent,
+        "saved music silence was not applied")
+      try check(effects.muted == silent, "saved sound silence was not applied")
+      try check(abs(music.volume - 0.12) < 0.001 && abs(effects.volume - 0.23) < 0.001
+        && abs(soundtrack.volume - 0.12) < 0.001 && abs(dj.masterVolume - 0.12) < 0.001,
+        "saved volumes were not applied to every player")
+      try check(!music.usesModernPreset, "legacy preset overrode current settings")
+    }
+    var updated = settings
+    updated.musicVolume = 0
+    updated.soundVolume = 0
+    updated.sound = .macintoshResources
+    apply(updated)
+    let macEffects = effects.loadedEffects
+    try check(Set(macEffects) == Set(ClassicSoundEffect.allCases), "bundled Macintosh bank has missing effects")
+    updated.sound = .amigaVoices
+    apply(updated)
+    let amigaEffects = effects.loadedEffects
+    try check(Set(amigaEffects) == Set(ClassicSoundEffect.allCases), "Amiga bank has missing effects")
+    updated.sound = .macintoshResources
+    apply(updated)
+    try check(effects.loadedEffects == macEffects, "Macintosh bank did not return")
+    print("PASS saved silence, volume and preset; Macintosh/Amiga sound coverage")
+  }
+
+  fileprivate func testGlobalMuteAndStop() throws {
+    for source in [ClassicMusicSource.adaptiveDJ, try recordingForCurrentLevel()].compactMap({ $0 }) {
+      var updated = settings
+      updated.music = source
+      apply(updated)
+      audioMuted = false
+      toggleMute()
+      try check(music.muted && soundtrack.muted && dj.isMuted && effects.muted,
+        "global mute omitted a player")
+      restoreSettings()
+      try check(audioMuted, "global mute did not persist")
+      toggleMute()
+      try check(!soundtrack.muted && !dj.isMuted, "recordings did not unmute")
+      suspendCurrentEngine()
+      try check(!music.isRunning && !effects.isRunning && !soundtrack.isPlaying && !dj.isPlaying,
+        "title suspension left audio playing")
+    }
+    print("PASS global mute persists and title suspension stops all players")
+  }
+
+  fileprivate func testMenuDisplayTransition() throws {
+    if window == nil { buildInterface(); window.orderOut(nil) }
+    GameScreen.shared.dismissAll()
+    settings.display = .monitor
+    phase = .playing
+    playfield.phase = .playing
+    panel.isMenuMode = false
+    applyDisplayMode()
+    try check(tubeIsActive && playfield.bounds.width == 640, "CRT fixture did not enter native gameplay")
+
+    // A menu can replace the playfield before the controller phase settles.
+    playfield.phase = .briefing
+    panel.isMenuMode = true
+    playfield.overlayTitle = "LEMMINGS"
+    playfield.overlayLines = ["OH MY! ALL LEMMINGS!", "LEMMINGS", "XMAS LEMMINGS 1991"]
+    applyDisplayMode()
+    window.contentView?.layoutSubtreeIfNeeded()
+    try check(!tubeIsActive && window.contentView === plainRoot,
+      "A visible menu was sent to the fixed-resolution CRT texture")
+    try check(playfield.bounds.width >= 900 && playfield.bounds.height >= 500,
+      "Menu retained native gameplay dimensions after restoring the plain view")
+    for size in [CGSize(width: 1920, height: 1080), CGSize(width: 1000, height: 620)] {
+      window.setContentSize(size)
+      fitClassicDisplay()
+      try check(abs(playfield.bounds.width - size.width) < 1,
+        "Menu width disagrees with the window after resize")
+      let rep = playfield.bitmapImageRepForCachingDisplay(in: playfield.bounds)!
+      playfield.cacheDisplay(in: playfield.bounds, to: rep)
+    }
+    phase = .briefing
+    print("PASS CRT-to-menu transition, mismatched phase, native menu resolution and full-screen resize")
+  }
+
+  fileprivate func testCRTInput() async throws {
+    phase = .playing
+    playfield.phase = .playing
+    settings.display = .monitor
+    panel.panelImage = nil
+    panel.macArtwork = nil
+    panel.session = FinalTickSession(win: false)
+    panel.isMenuMode = false
+    applyDisplayMode()
+    guard let frame = composeNativeFrame() else { throw IntegrationFailure(message: "no CRT frame") }
+    try check(frame.width == 640 && frame.height == 400, "CRT source inherited Retina scale")
+    crtView.setSource(frame)
+    crtView.settings.curvature = 0
+    let mapped = crtView.sourcePoint(from: CGPoint(x: crtView.bounds.midX, y: crtView.bounds.height * 0.1))
+    try check(abs((mapped?.y ?? 0) - 360) < 0.01, "bottom panel did not map to source row 360")
+    crtView.settings.curvature = 10
+    let edge = crtView.sourcePoint(from: CGPoint(x: crtView.bounds.width * 0.9, y: crtView.bounds.height * 0.2))
+    try check(abs((edge?.x ?? 0) - 576.9216) < 0.01, "CRT input disagrees with shader sampling")
+    let speedClick = panel.onSpeedPress
+    var forwardedSpeedClick: (TimeInterval, Int)?
+    panel.onSpeedPress = { forwardedSpeedClick = ($0, $1) }
+    let speedBounds = panel.speedControlBounds
+    let speedPoint = crtView.viewPoint(fromSource: CGPoint(x: speedBounds.midX, y: speedBounds.midY + 320))!
+    let doubleClick = NSEvent.mouseEvent(with: .leftMouseDown,
+      location: crtView.convert(speedPoint, to: nil), modifierFlags: [], timestamp: 42,
+      windowNumber: window.windowNumber, context: nil, eventNumber: 1, clickCount: 2, pressure: 1)!
+    crtView.mouseDown(with: doubleClick)
+    panel.handlePointerUp()
+    panel.onSpeedPress = speedClick
+    try check(forwardedSpeedClick?.0 == 42 && forwardedSpeedClick?.1 == 2,
+      "CRT speed button lost the native double-click count or timestamp")
+    var presses = 0
+    panel.onButton = { if $0 == .rateDown { presses += 1 } }
+    tubeClick(CGPoint(x: 16, y: speedBounds.midY + 320))
+    try await Task.sleep(nanoseconds: 450_000_000)
+    try check(presses >= 3, "detached CRT panel did not repeat a held rate button")
+    crtView.onMouseUp?()
+    let released = presses
+    try await Task.sleep(nanoseconds: 100_000_000)
+    try check(presses == released, "CRT release did not stop repetition")
+    var scrolled: Double?
+    panel.levelSize = CGSize(width: 1600, height: 160)
+    panel.onMinimapScroll = { scrolled = $0 }
+    let map = panel.minimapBounds
+    tubeClick(CGPoint(x: map.midX, y: map.midY + 320))
+    try check(scrolled != nil, "CRT minimap click did not scroll")
+    scrolled = nil
+    crtView.onMouseDragged?(CGPoint(x: panel.timeline.frame.midX, y: panel.timeline.frame.midY + 320))
+    try check(scrolled == nil, "CRT timeline drag moved the minimap")
+    crtView.onMouseDragged?(CGPoint(x: map.midX + 1, y: map.midY + 320))
+    try check(scrolled != nil, "CRT minimap drag did not scroll")
+    crtView.onMouseUp?()
+    settings.display = .flat
+    applyDisplayMode()
+    print("PASS CRT dimensions, shader coordinates, held rate, release and minimap drag")
+  }
+
+  /// Polls until `condition` holds. Returns false when `timeout` passes first.
+  private func waitUntil(_ timeout: TimeInterval, _ condition: () -> Bool) async throws -> Bool {
+    let deadline = ProcessInfo.processInfo.systemUptime + timeout
+    while !condition() {
+      guard ProcessInfo.processInfo.systemUptime < deadline else { return false }
+      try await Task.sleep(nanoseconds: 10_000_000)
+    }
+    return true
+  }
+  fileprivate func testVinylRetry() async throws {
+    GameScreen.shared.dismissAll()
+    var updated = settings
+    updated.music = .amigaModules
+    updated.musicVolume = 0
+    apply(updated)
+    levelMusic = nil
+    if session == nil { levelChanged() }
+    phase = .playing
+    startedMusicIdentity = nil
+    playMusicForCurrentLevel()
+    try check(music.isOutputRunning && music.currentURL != nil, "No module played before the vinyl retry")
+    let tune = music.currentURL
+    retry()
+    try check(music.isVinylBraking, "R did not brake the music like a record")
+    // Level loading can hold the main actor, so wait on the ramp, not a fixed time.
+    // The brake takes 0.45 seconds and the release 0.3 seconds.
+    let braked = try await waitUntil(1) { music.vinylRate < 0.7 }
+    try check(braked, "The brake did not lower the pitch")
+    let released = try await waitUntil(2) { !music.isVinylBraking && music.vinylRate == 1 && music.isOutputRunning }
+    try check(released, "The next attempt did not release the record to full speed")
+    try check(music.currentURL == tune, "A retry changed the tune")
+    print("PASS R brakes the music like a record and the retry releases it")
+  }
+
+  fileprivate func testInterruptedFade() async throws {
+    // Level entry provides repeatable transitions without a rescue cue.
+    let recordings = soundtrackLibrary.values.flatMap { $0 }.sorted { $0.path < $1.path }
+    try check(!recordings.isEmpty, "missing DJ fade fixtures")
+    var entries = 0
+    func enterLevel() {
+      entries += 1
+      dj.startLevel(url: recordings[entries % recordings.count], identity: "interrupted-fade-\(entries)")
+    }
+    dj.setVolume(0)
+    dj.start()
+    enterLevel()
+    // A module deck can hold the incoming track for up to one second to meet
+    // its next beat. Interrupt after that, while both decks play.
+    try await Task.sleep(nanoseconds: 1_200_000_000)
+    enterLevel()
+    try await Task.sleep(nanoseconds: 80_000_000)
+    try check(dj.isCrossfading && dj.playingDeckCount == 2, "cancelled fade finished the new transition")
+    try await Task.sleep(nanoseconds: 2_800_000_000)
+    try check(!dj.isCrossfading && dj.playingDeckCount == 1, "fade did not retire its outgoing deck")
+    enterLevel()
+    try await Task.sleep(nanoseconds: 80_000_000)
+    dj.suspendOutput()
+    try await Task.sleep(nanoseconds: 2_800_000_000)
+    try check(dj.isCrossfading && dj.playingDeckCount == 0, "Suspended fade consumed its remaining duration")
+    dj.resumeOutput()
+    try await Task.sleep(nanoseconds: 80_000_000)
+    try check(dj.isCrossfading && dj.playingDeckCount >= 1, "Resuming skipped the suspended fade")
+    // Resume plans again from the audible deck's grid. A bar plan can hold the
+    // destination for up to 4 seconds before it starts.
+    let resumed = ProcessInfo.processInfo.systemUptime
+    while dj.isCrossfading && dj.playingDeckCount < 2 && ProcessInfo.processInfo.systemUptime - resumed < 4.5 {
+      try await Task.sleep(nanoseconds: 50_000_000)
+    }
+    try check(dj.isCrossfading && dj.playingDeckCount == 2, "The resumed fade did not start its destination")
+    // Simulate a long frame, longer than a 2-second pickup and a bar-planned
+    // fade. Fade duration must not depend on timer callback count.
+    usleep(7_500_000)
+    try await Task.sleep(nanoseconds: 100_000_000)
+    try check(!dj.isCrossfading && dj.playingDeckCount == 1, "A delayed main actor stretched the fade")
+    enterLevel()
+    dj.stop()
+    dj.start()
+    try await Task.sleep(nanoseconds: 100_000_000)
+    try check(dj.isPlaying && dj.playingDeckCount == 1, "cancelled fade damaged restarted playback")
+    dj.stop()
+    print("PASS overlapping DJ cues, fade completion and stop/start cancellation")
+  }
+
+  fileprivate func testSteppedCompletion() throws {
+    buildInterface()
+    autoreleasepool { window.close() }
+    window.title = "Window ownership check"
+    renderScreen()
+    try check(window.title == "Window ownership check", "Closing the main window invalidated the app-owned window")
+    window.orderOut(nil)
+    print("PASS closing the main window preserves ownership for delayed screen refreshes")
+    for fan in [false, true] {
+      for win in [false, true] {
+        let label = "step-\(fan)-\(win)-\(UUID())"
+        var gameFlow = ClassicGameFlow(ranks: [ClassicRank(name: "Test", levelIndices: [0, 1])])
+        gameFlow.startGame()
+        gameFlow.selectRank(0)
+        gameFlow.beginPlaying()
+        flow = gameFlow
+        phase = .playing
+        session = FinalTickSession(win: win)
+        arcadeRunID = UUID(); arcadeProfileID = ArcadeStore.shared.records.activeProfileID
+        let trolleyConditions = TrolleyConditions(gameID: "integration", packID: fan ? "fan" : "classic", levelID: label,
+          levelFingerprint: label, rulesetVersion: "test-v1", physicsMode: "test", population: 1, rescueRequirement: 1,
+          startingSkills: [:], timeLimitSeconds: 1)
+        arcadeLevel = ArcadeLevel(id: label, title: label, game: "Test", rules: "Test rules", total: 1, required: 1,
+          conditions: trolleyConditions)
+        fanPlaying = fan
+        fanPack = URL(fileURLWithPath: "/test-pack.zip")
+        fanQueue = [FanLevelLibrary.Entry(file: "test.lvl", section: nil, label: label)]
+        stepForward()
+        try check(phase == .results, "single-step did not show results (fan=\(fan), win=\(win))")
+        try check(arcadeReport?.run.saved == (win ? 1 : 0), "Completion did not record the actual rescue result")
+        try check(arcadeReport?.trolley?.attempt.run.didWin == win,
+          "Trolley did not preserve the original pass/fail outcome")
+        try check(arcadeReport?.trolley?.attempt.metrics.lost == (win ? 0 : 1),
+          "Trolley did not capture released population on final tick")
+        try check(arcadeReport?.trolley?.attempt.maximum.status == .observed,
+          "Game completion fabricated verified metadata")
+        try check(playfield.overlayRetryLine != nil, "Results omitted the clickable retry action")
+        if fan {
+          try check(FanLevelLibrary.Progress.hasPassed(pack: fanPack!, label: label) == win,
+            "single-step recorded the wrong fan result")
+        } else {
+          try check(flow?.hasPassed(rank: "Test", position: 0) == win,
+            "single-step recorded the wrong campaign result")
+        }
+        let trolleyCount = ArcadeStore.shared.records.trolley.attempts.count
+        finishSessionIfNeeded()
+        try check(ArcadeStore.shared.records.trolley.attempts.count == trolleyCount, "Repeated completion changed Trolley history")
+        try check(phase == .results, "completion was not idempotent")
+        try check(ArcadeStore.shared.records.stats(level: arcadeLevel!, profileID: arcadeProfileID, assisted: false).attempts == 1,
+          "One completed level counted as several arcade attempts")
+      }
+    }
+    fanPlaying = false
+    print("PASS final single-step handles wins, losses, campaign and fan progress")
+  }
+}
+
+@MainActor private func testPointerAssignment() throws {
+    var terrain = try NeoLemmixTerrain(width: 128, height: 96)
+    for x in 0..<128 { terrain.setSolid(true, x: x, y: 48) }
+    let config = try NeoLemmixConfiguration(totalLemmings: 2, requiredToSave: 1,
+        spawnInterval: 4, entrances: [], preplacedLemmings: [
+            .init(position: .init(x: 40, y: 48)), .init(position: .init(x: 44, y: 48))],
+        skills: [.climber: .finite(2), .builder: .finite(1)])
+    let simulation = try NeoLemmixSimulation(terrain: terrain, configuration: config)
+    let session = NeoLemmixSession(simulation: simulation, width: 128, height: 96)
+    let skill = session.skills.firstIndex { $0.name.lowercased() == "climber" }!
+    let ids = session.lemmings.map(\.id)
+    let view = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 384, height: 288))
+    view.levelImage = CGContext(data: nil, width: 128, height: 96, bitsPerComponent: 8,
+        bytesPerRow: 128 * 4, space: CGColorSpaceCreateDeviceRGB(),
+        bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!.makeImage()
+    view.session = session; view.phase = .playing; view.selectedSkill = { skill }
+    view.viewport.levelSize = CGSize(width: 128, height: 96)
+    view.viewport.viewSize = view.bounds.size
+    var feedback = ReticleFeedback()
+    try check(feedback.state(eligible: false, duplicate: nil, now: 1) == .unavailable, "Empty reticle was not grey")
+    try check(feedback.state(eligible: true, duplicate: nil, now: 1) == .eligible, "Eligible reticle was not green")
+    feedback.assigned(now: 2)
+    try check(feedback.state(eligible: false, duplicate: "1:climber", now: 2.05) == .assigned, "Successful assignment did not pulse")
+    try check(feedback.state(eligible: false, duplicate: "1:climber", now: 2.11) == .alreadyAssigned, "Already assigned target did not show orange")
+    try check(feedback.state(eligible: false, duplicate: "1:climber", now: 2.20) == .unavailable, "Orange cue lingered")
+    try check(feedback.state(eligible: true, duplicate: "1:climber", now: 2.21) == .eligible, "Orange cue obscured an eligible neighbour")
+    let point = CGPoint(x: 40, y: 43)
+    let before = session.simulation.snapshot()
+    try check(view.lemming(at: point)?.id == ids[0], "Pointer did not choose the nearest eligible lemming")
+    try check(session.simulation.snapshot() == before && session.recovery.inputs.isEmpty,
+        "Hover eligibility mutated simulation or replay history")
+    try check(session.assign(skillIndex: skill, to: ids[0]) == nil, "Target fixture could not assign the first climber")
+    try check(session.assignmentState(skillIndex: skill, to: ids[0]) == .alreadyAssigned,
+        "An existing permanent skill was not distinguished from an invalid assignment")
+    try check(view.lemming(at: point)?.id == ids[1], "An ineligible overlapping lemming blocked an eligible neighbour")
+    try check(view.lemming(at: CGPoint(x: 50, y: 43))?.id == ids[1], "Sprite-edge allowance was not applied")
+    try check(view.lemming(at: CGPoint(x: 65, y: 43)) == nil, "Pointer reached a distant lemming")
+    var assigned: Int?
+    view.onAssign = { id in
+        if session.assign(skillIndex: skill, to: id) == nil { assigned = id }
+    }
+    view.handleClick(at: view.viewport.viewPoint(fromLevel: point))
+    try check(assigned == ids[1] && view.lemming(at: point) == nil,
+        "Green target did not assign, or empty supply still offered a target")
+
+    let moving = NeoLemmixSession(simulation: simulation, width: 128, height: 96)
+    view.session = moving
+    view.onAssign = { id in
+        if moving.assign(skillIndex: skill, to: id) == nil { assigned = id }
+    }
+    view.handleMove(to: view.viewport.viewPoint(fromLevel: point))
+    let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+    view.cacheDisplay(in: view.bounds, to: bitmap)
+    for _ in 0..<8 { moving.tick() }
+    try check(view.clickTarget(at: point)?.id == ids[0], "Click lost the recently displayed green target while it moved")
+    assigned = nil
+    view.handleClick(at: view.viewport.viewPoint(fromLevel: point))
+    try check(assigned == ids[0], "Moving green target was not assigned on click")
+    view.didAssign(to: ids[0])
+    view.cacheDisplay(in: view.bounds, to: bitmap)
+    try check(view.hdrFlashes.contains { $0.tint == .green }, "Assignment pulse did not reach the HDR compositor")
+    view.reduceFlashes = true
+    view.cacheDisplay(in: view.bounds, to: bitmap)
+    try check(view.hdrFlashes.allSatisfy { $0.tint != .green }, "Reduced flashes still emitted an HDR assignment pulse")
+
+    try check(GameMenuArtwork.renderer() != nil, "Bundled menu artwork font is missing")
+    let menu = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 1000, height: 720))
+    menu.interfaceArtwork = nil
+    menu.phase = .briefing
+    menu.overlayTitle = "LEMMINGS"
+    menu.overlayLines = ["LEMMINGS 1/120", "OH MY! ALL LEMMINGS!"]
+    menu.overlayHighlight = 0
+    let menuBitmap = menu.bitmapImageRepForCachingDisplay(in: menu.bounds)!
+    menu.cacheDisplay(in: menu.bounds, to: menuBitmap)
+    var bluePixels = 0
+    for y in stride(from: 0, to: menuBitmap.pixelsHigh, by: 4) {
+      for x in stride(from: 0, to: menuBitmap.pixelsWide, by: 4) {
+        if let color = menuBitmap.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB),
+           color.blueComponent > 0.25, color.blueComponent > color.greenComponent * 1.3,
+           color.blueComponent > color.redComponent * 1.3 { bluePixels += 1 }
+      }
+    }
+    try check(bluePixels > 30, "Game selection menu fell back to plain lettering without level artwork")
+    let captures = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+        .appendingPathComponent(".build/ui-font-check")
+    try FileManager.default.createDirectory(at: captures, withIntermediateDirectories: true)
+    try menuBitmap.representation(using: .png, properties: [:])!.write(
+        to: captures.appendingPathComponent("menu-without-level-artwork.png"))
+
+
+    let floor = Data((0..<(128 * 96)).map { UInt8($0 / 128 >= 48 ? 1 : 0) })
+    let classicTerrain = try ClassicDOSTerrain(width: 128, height: 96, solidMask: floor, steelMask: Data(repeating: 0, count: 128 * 96))
+    let classicConfig = ClassicDOSConfiguration(totalLemmings: 1, requiredToSave: 1, timeLimitTicks: nil,
+        initialReleaseRate: 99, entrances: [.init(x: 40, y: 20)], initialSkills: [.climber: 1], maximumX: 127, maximumY: 95)
+    let classic = ClassicSession(simulation: try ClassicDOSSimulation(terrain: classicTerrain, configuration: classicConfig), width: 128, height: 96)
+    for _ in 0..<100 where classic.lemmings.isEmpty { classic.tick() }
+    let climber = ClassicSkill.allCases.firstIndex(of: .climber)!
+    let id = classic.lemmings.first!.id
+    let hash = ClassicDOSReplayRecorder.stateHash(of: classic.simulation)
+    try check(classic.canAssign(skillIndex: climber, to: id), "Classic eligibility rejected a valid climber")
+    try check(ClassicDOSReplayRecorder.stateHash(of: classic.simulation) == hash && classic.recoveryEvents.isEmpty,
+        "Classic hover eligibility changed the run")
+    try check(classic.assign(skillIndex: climber, to: id) == nil && !classic.canAssign(skillIndex: climber, to: id),
+        "Classic hover eligibility did not follow actual assignment rules")
+    print("PASS nearest eligible targeting, overlap, edge allowance, moving green target, exhausted skills and mutation-free Classic/fan probes")
+}
+
+@MainActor private func testGameTypography() async throws {
+    GameScreen.shared.dismissAll()
+    let previousWindow = GameScreen.shared.gameWindow
+    let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 1280, height: 800), styleMask: [], backing: .buffered, defer: false)
+    host.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 1280, height: 800))
+    GameScreen.shared.gameWindow = host
+    defer { GameScreen.shared.dismissAll(); GameScreen.shared.gameWindow = previousWindow }
+    let folder = URL(fileURLWithPath: ".build/typography/screens")
+    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    func children(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap(children) }
+    func capture(_ name: String) async throws {
+        let root = host.contentView!
+        root.layoutSubtreeIfNeeded()
+        try await Task.sleep(nanoseconds: 30_000_000)
+        CATransaction.flush()
+        children(root).forEach { $0.needsDisplay = true }
+        let bitmap = root.bitmapImageRepForCachingDisplay(in: root.bounds)!
+        root.displayIgnoringOpacity(root.bounds, in: NSGraphicsContext(bitmapImageRep: bitmap)!)
+        try bitmap.representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent(name + ".png"))
+    }
+    let settingsPage = SettingsWindow(settings: ClassicSettings(), options: ClassicSettingsOptions(graphics: [], music: [.silent], sound: []))
+    settingsPage.show()
+    host.contentView!.layoutSubtreeIfNeeded()
+    let tabs = children(host.contentView!).compactMap { $0 as? GameTabButton }
+    try check(tabs.count == 7, "Settings lost a tab")
+    for tab in tabs {
+        try check(tab.frame.width > 0 && tab.frame.height >= 28, "Settings tab lost its input target")
+        tab.performClick(nil)
+        try check(tab.state == .on, "Settings tab did not select")
+        try await capture("settings-" + tab.title.lowercased())
+        if tab.title.lowercased() == "audio" {
+            let falls = children(host.contentView!).compactMap { $0 as? GameCheckButton }.first { $0.title == "Play death sound" }
+            try check(falls?.state == .on, "Bottom-fall sounds must default on")
+            guard let falls else { fatalError("Missing bottom-fall setting") }
+            try check(falls.bounds.width >= falls.intrinsicContentSize.width && falls.bounds.height >= 28, "Bottom-fall input target is clipped")
+            falls.performClick(nil)
+            try check(falls.state == .off, "Bottom-fall switch did not turn off")
+            try await capture("settings-audio-falls-off")
+            falls.performClick(nil)
+            try check(falls.state == .on, "Bottom-fall switch did not turn on")
+        }
+    }
+    GameScreen.shared.dismissAll()
+    let achievements = AchievementsWindow()
+    achievements.show(progress: ClassicAchievementProgress())
+    try await capture("achievements")
+    GameScreen.shared.dismissAll()
+    let page = GameMenuPage(title: "Typography", subtitle: "Green headings / blue supporting text")
+    let heading = GameLabel(labelWithString: "Section heading"); heading.role = .heading
+    let body = GameLabel(labelWithString: "Supporting text"); body.role = .body
+    let title = GameLabel(labelWithString: "Page title"); title.role = .title
+    for (index, label) in [title, heading, body].enumerated() {
+        label.frame = CGRect(x: 24, y: 390 - index * 60, width: 700, height: 48)
+        label.alignment = .left; page.body.addSubview(label)
+    }
+    try check(title.intrinsicContentSize.height > body.intrinsicContentSize.height, "Page title lost its larger game face")
+    let search = GameSearchField(frame: CGRect(x: 24, y: 120, width: 480, height: 36))
+    search.stringValue = "Builder"; page.body.addSubview(search)
+    var pressed = 0
+    let action = GameActionButton(title: "Continue") { pressed += 1 }
+    action.frame = CGRect(x: 24, y: 36, width: 240, height: 48); page.body.addSubview(action)
+    GameScreen.shared.present(page, owner: host)
+    try await capture("roles")
+    action.performClick(nil)
+    try check(pressed == 1, "Bitmap action lost its input")
+    search.selectText(nil)
+    guard let editor = search.currentEditor() as? GameFieldEditor else {
+        throw IntegrationFailure(message: "Search editing exposed the native font: \(String(describing: search.currentEditor()))")
+    }
+    editor.insertText("Miner", replacementRange: NSRange(location: 0, length: (editor.string as NSString).length))
+    try check(editor.string == "Miner", "Bitmap editor broke text replacement")
+    editor.setSelectedRange(NSRange(location: 0, length: 2))
+    try await capture("search-editing")
+    print("PASS game typography, settings tab targets, title hierarchy, actions and bitmap search editing")
+}
+
+/** Supplies precise trackpad-sized deltas without depending on attached hardware. */
+private final class ContentBrowserScrollEvent: NSEvent {
+    private let horizontal: CGFloat
+    private let vertical: CGFloat
+    private let precise: Bool
+    private let scrollPhase: NSEvent.Phase
+    private let scrollMomentumPhase: NSEvent.Phase
+
+    init(
+        horizontal: CGFloat = 0,
+        vertical: CGFloat,
+        precise: Bool = true,
+        phase: NSEvent.Phase = [],
+        momentumPhase: NSEvent.Phase = []
+    ) {
+        self.horizontal = horizontal
+        self.vertical = vertical
+        self.precise = precise
+        scrollPhase = phase
+        scrollMomentumPhase = momentumPhase
+        super.init()
+    }
+
+    required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
+    override var scrollingDeltaX: CGFloat { horizontal }
+    override var scrollingDeltaY: CGFloat { vertical }
+    override var hasPreciseScrollingDeltas: Bool { precise }
+    override var phase: NSEvent.Phase { scrollPhase }
+    override var momentumPhase: NSEvent.Phase { scrollMomentumPhase }
+}
+
+private actor ContentBrowserArtworkFixture {
+    private var requests: [String: Int] = [:]
+
+    func load(_ key: String) -> LevelPreviewBitmap? {
+        requests[key, default: 0] += 1
+        let width = 320, height = 160
+        let seed = key.utf8.reduce(UInt32(2_166_136_261)) {
+            ($0 ^ UInt32($1)) &* 16_777_619
+        }
+        var pixels = [UInt8](repeating: 255, count: width * height * 4)
+        for y in 0..<height {
+            for x in 0..<width {
+                let offset = (y * width + x) * 4
+                let stripe = UInt8((x / 32 + y / 20) % 2)
+                pixels[offset] = UInt8(truncatingIfNeeded: seed >> 16) &+ stripe &* 48
+                pixels[offset + 1] = UInt8(truncatingIfNeeded: seed >> 8)
+                  &+ UInt8(truncatingIfNeeded: y)
+                pixels[offset + 2] = UInt8(truncatingIfNeeded: seed)
+                  &+ UInt8(truncatingIfNeeded: x)
+            }
+        }
+        return LevelPreviewBitmap(width: width, height: height, rgba: Data(pixels))
+    }
+
+    func requestCounts() -> [String: Int] { requests }
+}
+
+@MainActor private func testContentBrowser() async throws {
+    GameScreen.shared.dismissAll()
+    let host = SpeedTestWindow(
+        contentRect: CGRect(x: 0, y: 0, width: 1120, height: 720),
+        styleMask: [], backing: .buffered, defer: false)
+    host.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 1120, height: 720))
+    host.makeKeyAndOrderFront(nil)
+    defer { GameScreen.shared.dismissAll(); host.orderOut(nil) }
+    let output = URL(fileURLWithPath: ".build/content-browser")
+    try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+    func capture(_ name: String) async throws {
+        let root = host.contentView!
+        func invalidate(_ view: NSView) {
+            view.needsDisplay = true
+            view.subviews.forEach(invalidate)
+        }
+        invalidate(root)
+        root.layoutSubtreeIfNeeded()
+        try await Task.sleep(nanoseconds: 30_000_000)
+        CATransaction.flush()
+        invalidate(root)
+        if let composited = CGWindowListCreateImage(
+          .null,
+          .optionIncludingWindow,
+          CGWindowID(host.windowNumber),
+          [.boundsIgnoreFraming, .bestResolution]) {
+            let bitmap = NSBitmapImageRep(cgImage: composited)
+            try bitmap.representation(using: .png, properties: [:])!.write(
+              to: output.appendingPathComponent(name + ".png"))
+            return
+        }
+        let bitmap = root.bitmapImageRepForCachingDisplay(in: root.bounds)!
+        root.displayIgnoringOpacity(
+          root.bounds,
+          in: NSGraphicsContext(bitmapImageRep: bitmap)!)
+        try bitmap.representation(using: .png, properties: [:])!.write(
+            to: output.appendingPathComponent(name + ".png"))
+    }
+
+    let classicIdentity = LevelCatalogueIdentity(
+        engine: .classic, packID: "fixture-pack", levelID: "fixture-level")
+    let typedEntry = LevelCatalogueEntry(
+        identity: classicIdentity, packName: "Fixture pack", levelName: "Fixture level",
+        number: 1, status: .complete)
+    let typedCatalogue = LevelCatalogue(revision: "fixture", packs: [
+        .init(engine: .classic, id: "fixture-pack", name: "Fixture pack",
+              status: .complete, levels: [typedEntry]),
+    ])
+    try check(typedCatalogue.resolve(classicIdentity) == typedEntry
+      && typedCatalogue.resolve(.init(
+        engine: .lemmings2, packID: classicIdentity.packID, levelID: classicIdentity.levelID)) == nil,
+      "The catalogue resolved a level without its explicit engine identity")
+    let removedCatalogue = LevelCatalogue(revision: "fixture-2", packs: [])
+    try check(removedCatalogue.resolve(classicIdentity) == nil,
+      "The catalogue silently substituted a removed level")
+
+    let archive = output.appendingPathComponent("changed-archive-fixture")
+    defer { try? FileManager.default.removeItem(at: archive) }
+    try Data("before".utf8).write(to: archive, options: .atomic)
+    guard let archiveFingerprint = FanLevelLibrary.archiveFingerprint(archive) else {
+        throw IntegrationFailure(message: "The browser could not fingerprint a fan archive")
+    }
+    try check(FanLevelLibrary.archiveMatches(archive, fingerprint: archiveFingerprint),
+      "An unchanged fan archive failed its identity check")
+    try Data("after".utf8).write(to: archive, options: .atomic)
+    try check(!FanLevelLibrary.archiveMatches(archive, fingerprint: archiveFingerprint),
+      "A changed fan archive kept its previous identity")
+    try check(FanLevelLibrary.catalogueStatus(archive) == .unverified,
+      "An imported archive was labelled Playable without corpus evidence")
+
+    let artworkKeys = (0..<7).map { "level-\($0):revision-1" }
+    let items = (0..<7).map { index in
+        LevelCoverFlowItem(
+            id: "level-\(index)",
+            title: "Level \(index + 1)",
+            subtitle: index < 3 ? "Classic / Complete" : "Lemmings 2 / Preview",
+            detail: "Pack \(index / 3 + 1)",
+            isAvailable: index != 6,
+            artworkKey: artworkKeys[index])
+    }
+    let page = GameMenuPage(title: "Level Select", subtitle: "Fixture pack")
+    let carousel = LevelCoverFlowView(frame: page.body.bounds)
+    let artworkFixture = ContentBrowserArtworkFixture()
+    carousel.artworkLoader = { key in await artworkFixture.load(key) }
+    carousel.autoresizingMask = [.width, .height]
+    page.body.addSubview(carousel)
+    var starts = 0
+    carousel.onStart = { _ in starts += 1 }
+    let primary = page.addPrimaryAction("Start") { carousel.startSelectedItem() }
+    primary.keyEquivalent = "\r"; primary.keyEquivalentModifierMask = []
+    page.preferControllerControl(primary)
+    carousel.onSelectionChanged = { [weak primary] item in
+        primary?.isEnabled = item.isAvailable
+        primary?.needsDisplay = true
+    }
+    carousel.configure(items: items, selectedID: "level-3", reduceMotion: false)
+    GameScreen.shared.present(page, owner: host, focus: carousel)
+    host.contentView?.layoutSubtreeIfNeeded()
+    for _ in 0..<200 {
+        if (0..<7).allSatisfy({ carousel.visualState(at: $0)?.hasArtwork == true }) { break }
+        try await Task.sleep(nanoseconds: 5_000_000)
+    }
+    try check((0..<7).allSatisfy({ carousel.visualState(at: $0)?.hasArtwork == true }),
+      "CoverFlow did not load artwork for every visible level")
+    try await capture("coverflow")
+
+    try check(carousel.selectedItem?.id == "level-3" && !carousel.usesReducedMotionLayout,
+      "CoverFlow did not centre the requested typed entry")
+    var cards = carousel.subviews.compactMap { $0 as? NSButton }
+    try check(cards.count == 7 && cards.allSatisfy { $0.frame.width >= 100 && $0.frame.height >= 150 },
+      "CoverFlow cards lost their input targets")
+    try check(cards.allSatisfy { !($0.accessibilityLabel() ?? "").isEmpty },
+      "CoverFlow cards lost their VoiceOver names")
+
+    guard let centreState = carousel.visualState(at: 3),
+          let leftState = carousel.visualState(at: 2),
+          let rightState = carousel.visualState(at: 4) else {
+        throw IntegrationFailure(message: "CoverFlow omitted a visible 3D state")
+    }
+    let tolerance: CGFloat = 0.001
+    try check(abs(centreState.rotationY) < tolerance
+      && centreState.depth > 0
+      && abs(centreState.scale - 1.5) < tolerance,
+      "The centred CoverFlow card did not face forward and move towards the viewer")
+    try check(leftState.rotationY * rightState.rotationY < 0
+      && leftState.rotationY > 0 && rightState.rotationY < 0
+      && abs(abs(leftState.rotationY) - .pi / 4) < tolerance
+      && abs(abs(leftState.rotationY) - abs(rightState.rotationY)) < tolerance,
+      "CoverFlow side cards did not use balanced opposing rotations")
+    try check(leftState.depth < 0 && rightState.depth < 0
+      && centreState.backDepth > leftState.frontDepth
+      && centreState.backDepth > rightState.frontDepth
+      && leftState.backDepth < leftState.frontDepth
+      && rightState.backDepth < rightState.frontDepth
+      && leftState.scale < centreState.scale && rightState.scale < centreState.scale,
+      "CoverFlow side planes did not settle fully behind the centred card")
+    try check(centreState.perspective < 0
+      && centreState.inputTransformIsIdentity
+      && leftState.inputTransformIsIdentity
+      && rightState.inputTransformIsIdentity,
+      "CoverFlow did not keep stable input slots under one perspective stage")
+    func edgeLength(_ first: CGPoint, _ second: CGPoint) -> CGFloat {
+        hypot(first.x - second.x, first.y - second.y)
+    }
+    let leftCorners = leftState.projectedCoverCorners
+    let rightCorners = rightState.projectedCoverCorners
+    let centreCorners = centreState.projectedCoverCorners
+    func xExtent(_ corners: [CGPoint]) -> ClosedRange<CGFloat> {
+        corners.map(\.x).min()!...corners.map(\.x).max()!
+    }
+    try check(leftCorners.count == 4 && rightCorners.count == 4
+      && abs(edgeLength(leftCorners[0], leftCorners[3])
+        - edgeLength(leftCorners[1], leftCorners[2])) > 2
+      && abs(edgeLength(rightCorners[0], rightCorners[3])
+        - edgeLength(rightCorners[1], rightCorners[2])) > 2,
+      "CoverFlow side cards did not project to visible perspective trapezoids")
+    try check(xExtent(leftCorners).upperBound + 4 <= xExtent(centreCorners).lowerBound
+      && xExtent(centreCorners).upperBound + 4 <= xExtent(rightCorners).lowerBound,
+      "A settled side cover cut across the centred cover border")
+    try check((0..<7).allSatisfy {
+        guard let state = carousel.visualState(at: $0) else { return false }
+        return state.reflectionVisible && state.hasArtwork
+          && state.artworkKey == artworkKeys[$0]
+      }, "CoverFlow lost a level image or its reflection")
+
+    carousel.setReducedMotion(true)
+    host.contentView?.layoutSubtreeIfNeeded()
+    guard let reducedCentre = carousel.visualState(at: 3),
+          let reducedSide = carousel.visualState(at: 2) else {
+        throw IntegrationFailure(message: "Live reduced motion omitted a visible card")
+    }
+    try check(carousel.selectedItem?.id == "level-3"
+      && carousel.usesReducedMotionLayout
+      && abs(reducedCentre.perspective) < tolerance
+      && abs(reducedCentre.rotationY) < tolerance
+      && abs(reducedSide.rotationY) < tolerance
+      && !reducedCentre.reflectionVisible
+      && !reducedSide.reflectionVisible,
+      "Turning on reduced motion did not update the open CoverFlow in place")
+    carousel.setReducedMotion(false)
+    host.contentView?.layoutSubtreeIfNeeded()
+    guard let restoredCentre = carousel.visualState(at: 3),
+          let restoredSide = carousel.visualState(at: 2) else {
+        throw IntegrationFailure(message: "Restored CoverFlow omitted a visible card")
+    }
+    try check(carousel.selectedItem?.id == "level-3"
+      && !carousel.usesReducedMotionLayout
+      && restoredCentre.perspective < 0
+      && abs(restoredSide.rotationY) > tolerance
+      && restoredCentre.reflectionVisible
+      && restoredSide.reflectionVisible,
+      "Turning off reduced motion did not restore the open CoverFlow in place")
+    let initialArtworkRequests = await artworkFixture.requestCounts()
+    try check(initialArtworkRequests.count == artworkKeys.count
+      && artworkKeys.allSatisfy { initialArtworkRequests[$0] == 1 },
+      "CoverFlow requested a visible level image more than once")
+
+    carousel.scrollWheel(with: ContentBrowserScrollEvent(vertical: -30, phase: .began))
+    try check(abs(carousel.coverFlowPosition - 3.5) < tolerance,
+      "The CoverFlow fixture did not reach an exact half-card position")
+    guard let halfwayLeft = carousel.visualState(at: 3),
+          let halfwayRight = carousel.visualState(at: 4) else {
+        throw IntegrationFailure(message: "CoverFlow omitted a half-card plane")
+    }
+    let halfwayLeftExtent = xExtent(halfwayLeft.projectedCoverCorners)
+    let halfwayRightExtent = xExtent(halfwayRight.projectedCoverCorners)
+    try check(halfwayLeftExtent.upperBound + 4 <= halfwayRightExtent.lowerBound,
+      "The two half-card planes intersected at the centre hand-off")
+    try check(halfwayRight.stackOrder > halfwayLeft.stackOrder,
+      "The selected half-card did not have an explicit front order")
+    try await capture("coverflow-halfway")
+    for (index, state) in [(3, halfwayLeft), (4, halfwayRight)] {
+        let centroid = state.projectedCoverCorners.reduce(CGPoint.zero) {
+            CGPoint(x: $0.x + $1.x / 4, y: $0.y + $1.y / 4)
+        }
+        let hostPoint = carousel.convert(centroid, to: host.contentView)
+        let hit = host.contentView?.hitTest(hostPoint)
+        try check(hit === cards.first(where: { $0.tag == index }),
+          "Half-card \(index) lost its projected mouse target; hit \((hit as? NSButton)?.tag ?? -1)")
+    }
+    carousel.configure(items: items, selectedID: "level-3", reduceMotion: false)
+    try await Task.sleep(nanoseconds: 30_000_000)
+    CATransaction.flush()
+
+    guard let selectedInputCard = cards.first(where: { $0.tag == 3 }) else {
+        throw IntegrationFailure(message: "CoverFlow omitted its selected input slot")
+    }
+    let projectedCentre = centreState.projectedCoverCorners
+    let projectedLeft = projectedCentre.map(\.x).min()!
+    let projectedMidY = (projectedCentre.map(\.y).min()!
+      + projectedCentre.map(\.y).max()!) / 2
+    let projectedOnlyPoint = CGPoint(
+      x: (projectedLeft + selectedInputCard.frame.minX) / 2,
+      y: projectedMidY)
+    try check(!selectedInputCard.frame.contains(projectedOnlyPoint),
+      "The CoverFlow fixture did not extend beyond its stable input slot")
+    let projectedHostPoint = carousel.convert(projectedOnlyPoint, to: host.contentView)
+    try check(host.contentView?.hitTest(projectedHostPoint) === selectedInputCard,
+      "CoverFlow did not hit the visible projected cover outside its raw input slot")
+
+    guard let mouseCard = cards.first(where: { $0.tag == 4 }) else {
+        throw IntegrationFailure(message: "CoverFlow omitted a visible mouse target")
+    }
+    let rightCentroid = rightCorners.reduce(CGPoint.zero) {
+        CGPoint(x: $0.x + $1.x / 4, y: $0.y + $1.y / 4)
+    }
+    let rightOutsideEdge = CGPoint(
+      x: (rightCorners[1].x + rightCorners[2].x) / 2,
+      y: (rightCorners[1].y + rightCorners[2].y) / 2)
+    let visibleRightPoint = CGPoint(
+      x: rightCentroid.x * 0.25 + rightOutsideEdge.x * 0.75,
+      y: rightCentroid.y * 0.25 + rightOutsideEdge.y * 0.75)
+    let mousePoint = carousel.convert(visibleRightPoint, to: host.contentView)
+    try check(host.contentView?.hitTest(mousePoint) === mouseCard,
+      "CoverFlow's visible mouse target did not hit its card")
+    let windowPoint = host.contentView!.convert(mousePoint, to: nil)
+    let mouseDown = NSEvent.mouseEvent(with: .leftMouseDown, location: windowPoint,
+      modifierFlags: [], timestamp: 1, windowNumber: host.windowNumber, context: nil,
+      eventNumber: 0, clickCount: 1, pressure: 1)!
+    let mouseUp = NSEvent.mouseEvent(with: .leftMouseUp, location: windowPoint,
+      modifierFlags: [], timestamp: 1.01, windowNumber: host.windowNumber, context: nil,
+      eventNumber: 0, clickCount: 1, pressure: 0)!
+    NSApp.postEvent(mouseUp, atStart: true)
+    host.sendEvent(mouseDown)
+    try check(carousel.selectedItem?.id == "level-4", "A mouse action did not select its card")
+    let transitionKeys = Set(
+      (carousel.visualState(at: 3)?.activeAnimationKeys ?? [])
+      + (carousel.visualState(at: 4)?.activeAnimationKeys ?? []))
+    try check(transitionKeys.contains("coverFlow.position")
+      && transitionKeys.contains("coverFlow.transform"),
+      "CoverFlow did not animate position and depth between selections")
+
+    carousel.scrollWheel(with: ContentBrowserScrollEvent(vertical: -18, phase: .began))
+    guard let partialState = carousel.visualState(at: 4) else {
+      throw IntegrationFailure(message: "Precise scrolling hid the centred card")
+    }
+    try check(carousel.selectedItem?.id == "level-4"
+      && carousel.isTrackingPreciseScroll
+      && carousel.coverFlowPosition > 4 && carousel.coverFlowPosition < 4.5
+      && partialState.rotationY > 0 && partialState.rotationY < abs(rightState.rotationY)
+      && partialState.frontDepth > rightState.frontDepth
+      && partialState.frontDepth < centreState.frontDepth
+      && partialState.backDepth < partialState.frontDepth
+      && partialState.scale < centreState.scale && partialState.scale > rightState.scale,
+      "A precise scroll did not continuously interpolate the CoverFlow cards")
+    carousel.scrollWheel(with: ContentBrowserScrollEvent(vertical: -9, phase: .ended))
+    try check(carousel.isTrackingPreciseScroll && carousel.coverFlowPosition > 4.4,
+      "CoverFlow snapped before a pending momentum event could begin")
+    carousel.scrollWheel(with: ContentBrowserScrollEvent(
+      vertical: 0, momentumPhase: .began))
+    try check(carousel.isTrackingPreciseScroll && carousel.coverFlowPosition > 4.4,
+      "CoverFlow did not carry the finger position into trackpad momentum")
+    carousel.scrollWheel(with: ContentBrowserScrollEvent(
+      vertical: -12, momentumPhase: .changed))
+    try check(carousel.selectedItem?.id == "level-5"
+      && carousel.coverFlowPosition > 4.5 && carousel.coverFlowPosition < 5,
+      "CoverFlow did not preserve its fractional position through momentum")
+    carousel.scrollWheel(with: ContentBrowserScrollEvent(
+      vertical: 0, momentumPhase: .ended))
+    try check(carousel.selectedItem?.id == "level-5"
+      && !carousel.isTrackingPreciseScroll
+      && abs(carousel.coverFlowPosition - 5) < tolerance,
+      "CoverFlow did not snap to the nearest card when momentum ended")
+    carousel.scrollWheel(with: ContentBrowserScrollEvent(vertical: 0.1, precise: false))
+    try check(carousel.selectedItem?.id == "level-4",
+      "A non-precise wheel event did not make one discrete move")
+    carousel.scrollWheel(with: ContentBrowserScrollEvent(vertical: 0.1, precise: false))
+    try check(carousel.selectedItem?.id == "level-3",
+      "A second non-precise wheel event did not make one discrete move")
+    let left = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 0,
+      windowNumber: host.windowNumber, context: nil, characters: "", charactersIgnoringModifiers: "",
+      isARepeat: false, keyCode: 123)!
+    host.makeFirstResponder(carousel)
+    host.sendEvent(left)
+    try check(carousel.selectedItem?.id == "level-2", "Left did not move the CoverFlow selection")
+    let enter = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 0,
+      windowNumber: host.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r",
+      isARepeat: false, keyCode: 36)!
+    host.sendEvent(enter)
+    try check(starts == 1, "Enter did not start the focused level")
+
+    carousel.selectItem(at: 6); carousel.startSelectedItem()
+    try check(starts == 1 && !primary.isEnabled,
+      "An unavailable level started or left the primary action enabled")
+    carousel.configure(items: Array(items.reversed()), reduceMotion: true)
+    host.contentView?.layoutSubtreeIfNeeded()
+    carousel.scrollWheel(with: ContentBrowserScrollEvent(vertical: -0.6))
+    try check(carousel.selectedIndex == 0 && !carousel.isTrackingPreciseScroll,
+      "One reduced-motion scroll fragment moved or animated the list")
+    carousel.scrollWheel(with: ContentBrowserScrollEvent(vertical: -0.6))
+    try check(carousel.selectedIndex == 1
+      && !carousel.isTrackingPreciseScroll
+      && abs(carousel.coverFlowPosition - 1) < tolerance,
+      "Reduced motion did not keep precise scrolling discrete")
+    carousel.selectItem(at: 0)
+    try await capture("reduced-motion-list")
+    try check(carousel.selectedItem?.id == "level-6" && carousel.usesReducedMotionLayout,
+      "A catalogue refresh lost the typed selection or reduced-motion fallback")
+    cards = carousel.subviews.compactMap { $0 as? NSButton }
+    let widths = Set(cards.map { Int($0.frame.width.rounded()) })
+    try check(cards.count == 5 && widths.count == 1 && cards.allSatisfy { $0.frame.height >= 54 },
+      "The reduced-motion list has uneven or clipped targets")
+    try check((0..<5).allSatisfy {
+        guard let state = carousel.visualState(at: $0) else { return false }
+        return abs(state.rotationY) < tolerance
+          && abs(state.depth) < tolerance
+          && abs(state.scale - 1) < tolerance
+          && abs(state.perspective) < tolerance
+          && state.inputTransformIsIdentity
+          && !state.reflectionVisible
+          && state.activeAnimationKeys.isEmpty
+          && state.hasArtwork
+      }, "Reduced motion retained a 3D transform, reflection or transition animation")
+    let reusedArtworkRequests = await artworkFixture.requestCounts()
+    try check(reusedArtworkRequests == initialArtworkRequests,
+      "CoverFlow reloaded cached level images after selection and layout changes")
+    try check(cards.filter { $0.isAccessibilitySelected() }.map(\.tag) == [0]
+      && cards.first(where: { $0.tag == 0 })?.accessibilityValueDescription() == "Selected",
+      "VoiceOver could not identify the current CoverFlow selection")
+
+    guard let voiceOverCard = cards.first(where: { $0.tag == 2 }) else {
+        throw IntegrationFailure(message: "The reduced-motion list omitted a VoiceOver target")
+    }
+    try check(voiceOverCard.accessibilityPerformPress()
+      && carousel.selectedIndex == voiceOverCard.tag,
+      "The VoiceOver action did not select its level")
+
+    let navigator = ControllerMenuNavigator()
+    try check(navigator.handle(.assign, in: page) && starts == 2,
+      "The controller did not activate the primary Start action")
+    var selectedCard: NSButton?
+    for _ in 0..<10 where selectedCard == nil {
+        _ = navigator.handle(.focusUnassigned(-1), in: page)
+        if let button = navigator.selected as? NSButton,
+           button !== primary, button !== page.controllerBackButton,
+           button.tag != carousel.selectedIndex { selectedCard = button }
+    }
+    guard let selectedCard else {
+        throw IntegrationFailure(message: "The controller could not focus a CoverFlow card")
+    }
+    _ = navigator.handle(.assign, in: page)
+    try check(carousel.selectedIndex == selectedCard.tag,
+      "The controller did not select its focused CoverFlow card")
+
+    let cacheItems = (0..<30).map { index in
+      LevelCoverFlowItem(
+        id: "cache-level-\(index)",
+        title: "Cache level \(index + 1)",
+        subtitle: "Classic / Complete",
+        detail: "Cache fixture",
+        isAvailable: true,
+        artworkKey: "cache-level-\(index):revision-1")
+    }
+    carousel.configure(items: cacheItems, selectedID: cacheItems[0].id, reduceMotion: false)
+    for index in cacheItems.indices {
+      carousel.selectItem(at: index)
+      for _ in 0..<100 {
+        if carousel.visualState(at: index)?.hasArtwork == true { break }
+        try await Task.sleep(nanoseconds: 1_000_000)
+      }
+      try check(carousel.visualState(at: index)?.hasArtwork == true,
+        "CoverFlow did not load cache stress fixture \(index)")
+    }
+    let cacheLimits = carousel.artworkCacheLimits
+    try check(carousel.artworkCacheEntryCount <= cacheLimits.entries
+      && carousel.artworkCacheCost <= cacheLimits.cost,
+      "CoverFlow's view-local image cache exceeded its fixed limits")
+    let recentKey = cacheItems[28].artworkKey!
+    let recentRequests = await artworkFixture.requestCounts()[recentKey]
+    carousel.selectItem(at: 28)
+    let reusedRecentRequests = await artworkFixture.requestCounts()[recentKey]
+    try check(reusedRecentRequests == recentRequests,
+      "CoverFlow reloaded a recently visited image instead of using its bounded cache")
+
+    func selectedReducedMotionRowIsVisible(_ expectedIndex: Int) -> Bool {
+      guard carousel.selectedIndex == expectedIndex,
+            let row = carousel.subviews.compactMap({ $0 as? NSButton })
+              .first(where: { $0.tag == expectedIndex }) else { return false }
+      let rowFrame = row.convert(row.bounds, to: carousel)
+      return !row.isHidden && carousel.bounds.insetBy(dx: -1, dy: -1).contains(rowFrame)
+    }
+    carousel.configure(items: cacheItems, selectedID: cacheItems[0].id, reduceMotion: true)
+    host.contentView?.layoutSubtreeIfNeeded()
+    host.makeFirstResponder(carousel)
+    let pageDown = NSEvent.keyEvent(
+      with: .keyDown, location: .zero, modifierFlags: [], timestamp: 0,
+      windowNumber: host.windowNumber, context: nil,
+      characters: "", charactersIgnoringModifiers: "", isARepeat: false, keyCode: 121)!
+    host.sendEvent(pageDown)
+    try check(selectedReducedMotionRowIsVisible(5),
+      "Reduced motion hid the selected row after keyboard navigation")
+    host.sendEvent(pageDown)
+    try check(selectedReducedMotionRowIsVisible(10),
+      "Reduced motion did not keep a later keyboard selection visible")
+
+    let longListNavigator = ControllerMenuNavigator()
+    var laterControllerCard: NSButton?
+    for _ in 0..<20 where laterControllerCard == nil {
+      _ = longListNavigator.handle(.focusUnassigned(1), in: page)
+      if let button = longListNavigator.selected as? NSButton,
+         button.superview === carousel, button.tag > carousel.selectedIndex {
+        laterControllerCard = button
+      }
+    }
+    guard let laterControllerCard else {
+      throw IntegrationFailure(message: "The controller could not focus a later reduced-motion row")
+    }
+    _ = longListNavigator.handle(.assign, in: page)
+    try check(selectedReducedMotionRowIsVisible(laterControllerCard.tag),
+      "Reduced motion hid the selected row after controller navigation")
+    print("PASS typed CoverFlow selection, mouse, keyboard, controller, VoiceOver and reduced motion")
+}
+
+extension AppDelegate {
+  fileprivate func testLoadingLatency() async throws {
+    if window == nil { buildInterface() }
+    func measure(_ name: String, _ work: () throws -> Void) rethrows {
+      let start = ProcessInfo.processInfo.systemUptime
+      try work()
+      print("LOAD \(name): \(String(format: "%.1f", (ProcessInfo.processInfo.systemUptime - start) * 1000)) ms")
+    }
+    for pass in 1...2 {
+      if let root = try? BundledGameResources.lemmings2() {
+        try measure("L2 catalogue \(pass)") { _ = try Lemmings2PlayWindow.browserLevels(root: root, progressData: nil) }
+      }
+      if let root = try? BundledGameResources.lemmings3() {
+        try measure("L3 catalogue \(pass)") { _ = try Lemmings3PlayWindow.browserLevels(root: root, progressData: [:]) }
+      }
+    }
+    settings.music = .silent
+    measure("Classic content") { loadContent() }
+    launchMode = .singleTitle; activeTitle = .lemmings
+    gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
+    measure("Classic select") { selectDataSet() }
+    for pass in 1...3 {
+      measure("Classic retry \(pass)") { retry() }
+    }
+    let discovery = await makeLevelBrowserDiscoveryTask().value
+    preparedLevelBrowserDiscovery = discovery
+    window.makeKeyAndOrderFront(nil)
+    for pass in 1...2 {
+      GameScreen.shared.dismissAll()
+      measure("Classic browser \(pass)") { openLevelBrowser(family: .classic) }
+      try check(levelBrowserLoadTask == nil, "Prepared browser showed a loading page")
+      try check(GameScreen.shared.controllerPage(in: window) != nil, "Prepared browser was not presented")
+    }
+    try await Task.sleep(nanoseconds: 250_000_000)
+    if let view = window.contentView, let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds) {
+      view.cacheDisplay(in: view.bounds, to: bitmap)
+      try bitmap.representation(using: .png, properties: [:])?.write(to: URL(fileURLWithPath: ".build/loading-browser.png"))
+    }
+    let selected = levelBrowserPacks(for: .classic).first!.levels.first!
+    measure("Prepared Classic Start") { startBrowserLevel(selected.identity) }
+    try check(levelBrowserLaunchTask == nil && artworkLevel?.title == selected.levelName,
+      "Prepared Start showed a loading page or opened the wrong level")
+    GameScreen.shared.dismissAll()
+    let replayFolder = FileManager.default.temporaryDirectory.appendingPathComponent("replay-latency-\(UUID().uuidString)")
+    try FileManager.default.createDirectory(at: replayFolder, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: replayFolder) }
+    let store = ArcadeStore(file: replayFolder.appendingPathComponent("records.json"), bundledProofs: nil)
+    let level = arcadeLevel!
+    let run = ArcadeRun(profileID: store.records.activeProfileID, level: level,
+      saved: level.total, didWin: true, skills: [:], seconds: 1, telemetry: .init(released: level.total))
+    guard let report = store.record(run), let attempt = report.trolley?.attempt else {
+      throw IntegrationFailure(message: "Replay retention fixture did not create an attempt")
+    }
+    let bytes = Data(repeating: 42, count: 32 * 1024 * 1024)
+    let source = replayFolder.appendingPathComponent("temporary.mp4")
+    try bytes.write(to: source)
+    var retention: Task<Void, Never>?
+    measure("Replay retention dispatch (32 MB)") {
+      retention = store.preserveReplay(source, attemptID: attempt.id)
+    }
+    try FileManager.default.removeItem(at: source)
+    await retention?.value
+    guard let replay = store.records.trolley.replays.first else {
+      throw IntegrationFailure(message: "Background replay retention did not finish")
+    }
+    try check(try Data(contentsOf: replayFolder.appendingPathComponent(replay.relativePath)) == bytes,
+      "Background retention lost a discarded temporary movie")
+    try check(replay.sha256 == ArcadeStore.fingerprint(bytes),
+      "Background retention checksum changed")
+    print("PASS background replay retention survives source deletion")
+    print("Loading latency checks completed")
+  }
+}
+
+let testApp = NSApplication.shared
+guard let testDomain = Bundle.main.bundleIdentifier,
+  testDomain.hasPrefix("academy.glasscode.lemmings.integration-tests") else { exit(2) }
+UserDefaults.standard.removePersistentDomain(forName: testDomain)
+// AppKit logs an Objective-C exception from an event and keeps running, so a
+// check that raises one never finishes. Stop the run instead.
+UserDefaults.standard.set(true, forKey: "NSApplicationCrashOnExceptions")
+testApp.setActivationPolicy(.accessory)
+Task { @MainActor in
+  do {
+    let subject = AppDelegate()
+    subject.prepareArcadeTests()
+    // Match normal startup: use the packaged index before opening the home screen.
+    FanLevelLibrary.Progress.seedBundledCounts()
+    #if !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
+    try subject.testFailureMoodDecision()
+    try subject.testSteppedCompletion()
+    try subject.testFirstLaunchEffects()
+    try subject.testHomeSettingsButton()
+    try subject.testHomeContentFamilyFiltering()
+    #if !CONTENT_BROWSER_TESTS
+    try await subject.testAccessibleMenusAndHelp()
+    try testPointerAssignment()
+    #endif
+    #endif
+    #if SELECTION_HDR_TESTS
+    try await subject.testSelectionRendering()
+    print("Selection integration tests passed.")
+    #elseif NEO_RECOVERY_TESTS
+    try subject.testNeoRunRecovery()
+    print("NeoLemmix recovery integration tests passed.")
+    #elseif LEARNING_TESTS
+    try await subject.testLearningJourneyEntriesResolve()
+    try await subject.testLearningJourneySessionsStart()
+    print("Learning journey integration tests passed.")
+    #elseif NEO_PACK_TESTS
+    try subject.testBundledNeoLemmixPacks()
+    try await subject.testNeoLemmixPackBrowser()
+    print("NeoLemmix pack integration tests passed.")
+    #elseif SESSION_TESTS
+    try await subject.testPlaylistSessions()
+    try subject.testSequenceNavigationGuards()
+    try subject.testHotSeatBoundaries()
+    print("Session integration tests passed.")
+    #elseif DIALOG_TESTS
+    try subject.testDialogNavigation()
+    try subject.testHomeSettingsButton()
+    try await subject.testAccessibleMenusAndHelp()
+    try await subject.testLevelHints()
+    try await subject.testHintsFromControlsHelp()
+    try subject.testTimelineToolbar()
+    #elseif TRANSPORT_TESTS
+    try subject.testTimelineToolbar()
+    try subject.testPrecisionZoomWallet()
+    #elseif LOADING_LATENCY_TESTS
+    try await subject.testLoadingLatency()
+    #elseif PERFORMANCE_TESTS
+    try await subject.testReleasePerformance()
+    #elseif HOT_SEAT_TESTS
+    try subject.testPageKeyboardContinuation()
+    try subject.testHotSeatBoundaries()
+    try subject.testHandoverPreviousLevel()
+    try subject.testHotSeatJourneyRetry()
+    try subject.testRunRecovery()
+    try subject.testFanRunRecovery()
+    try subject.testEscapeToMainMenu()
+    print("Hot Seat boundary integration tests passed.")
+    #elseif CONTROLLER_QOL_TESTS
+    try await subject.testControllerQoL()
+    try subject.testVariableSpeedInput()
+    try await subject.testLevelHints()
+    try subject.testControllerRemapping()
+    try subject.testEarlyNukeEndsLevel()
+    try subject.testNeoRunRecovery()
+    try subject.testRunRecovery()
+    try subject.testFanRunRecovery()
+    try subject.testEscapeToMainMenu()
+    try subject.testPauseKeyRelease()
+    try subject.testInterruptionPolicy()
+    print("Controller QoL integration tests passed.")
+    #elseif RELEASE_BLOCKER_TESTS
+    try subject.testControllerRemapping()
+    try subject.testNeoRunRecovery()
+    try subject.testRunRecovery()
+    try subject.testFanRunRecovery()
+    try subject.testEscapeToMainMenu()
+    print("Release blocker integration tests passed.")
+    #elseif HINT_TESTS
+    try await testGameTypography()
+    try await subject.testLevelHints()
+    try await subject.testHintsFromControlsHelp()
+    print("Level hints integration tests passed.")
+    #elseif CONTENT_BROWSER_TESTS
+    try await subject.testClassicRatingBrowser()
+    try await subject.testNeoLemmixPackBrowser()
+    try await subject.testLevelBrowserRouteIntegrity()
+    try await subject.testPlaylistStartRevalidatesFanSources()
+    try subject.testSequenceNavigationGuards()
+    try subject.testClassicLevelPickerUnlockGate()
+    try await testContentBrowser()
+    print("Content browser integration tests passed.")
+    #elseif MUSIC_TESTS
+    try subject.testMusicTransitions()
+    try subject.testSavedAudioAndBanks()
+    try subject.testGlobalMuteAndStop()
+    try await subject.testMusicPauseModes()
+    try subject.testHandoverPreviousLevel()
+    try subject.testHotSeatJourneyRetry()
+    print("Music integration tests passed.")
+    #elseif VARIABLE_SPEED_TESTS
+    try subject.testVariableSpeedInput()
+    try subject.testPrecisionZoomWallet()
+    try subject.testVariableSimulationClock()
+    try subject.testSuperSpeedPresentation()
+    try subject.testMenuDisplayTransition()
+    try await subject.testCRTInput()
+    print("Variable speed integration tests passed.")
+    #elseif RELEASE_UI_TESTS
+    try subject.testPauseKeyRelease()
+    let pauseL2 = try Lemmings2PlayWindow(root: BundledGameResources.lemmings2(), recordsCampaignProgress: false)
+    try pauseL2.testPauseKeyboard()
+    let pauseL3 = try Lemmings3PlayWindow(root: BundledGameResources.lemmings3(), recordsCampaignProgress: false)
+    try pauseL3.testPauseKeyboard()
+    try subject.testPageKeyboardContinuation()
+    try subject.testDialogNavigation()
+    try subject.testGamePages()
+    try subject.testEarlyNukeEndsLevel()
+    try subject.testRunRecovery()
+    try subject.testFanRunRecovery()
+    try subject.testNeoRunRecovery()
+    try await subject.testLearningJourneyEntriesResolve()
+    try await subject.testLearningJourneySessionsStart()
+    try await subject.testPlaylistSessions()
+    print("PASS release UI: cursor presets, backpacks, input, dialogs, welcome, nuke, recovery, journey and cross-game sessions")
+    #elseif CURSOR_INPUT_TESTS
+    try subject.testPauseKeyRelease()
+    let pauseL2 = try Lemmings2PlayWindow(root: BundledGameResources.lemmings2(), recordsCampaignProgress: false)
+    try pauseL2.testPauseKeyboard()
+    let pauseL3 = try Lemmings3PlayWindow(root: BundledGameResources.lemmings3(), recordsCampaignProgress: false)
+    try pauseL3.testPauseKeyboard()
+    print("Cursor input integration tests passed.")
+    #elseif HD_EFFECTS_TESTS
+    try subject.testSuperSpeedPresentation()
+    print("HD effects integration tests passed.")
+    #else
+    try subject.testMusicTransitions()
+    try subject.testSavedAudioAndBanks()
+    try subject.testGlobalMuteAndStop()
+    try subject.testMenuDisplayTransition()
+    try await subject.testCRTInput()
+    try await subject.testInterruptedFade()
+    try await subject.testVinylRetry()
+    try await subject.testElapsedTimeAndAudioRecovery()
+    try await testGameTypography()
+    try subject.testGamePages()
+    try subject.testRestartSelection()
+    try subject.testLevelSkipResult()
+    try subject.testBundledRescueTarget()
+    try subject.testPortArtworkSwitching()
+    try subject.testSuperSpeedPresentation()
+    try await subject.testControllerQoL()
+    try subject.testVariableSpeedInput()
+    try subject.testVariableSimulationClock()
+    try await subject.testLevelHints()
+    try await subject.testHintsFromControlsHelp()
+    try subject.testControllerRemapping()
+    try subject.testNeoRunRecovery()
+    try subject.testRunRecovery()
+    try subject.testFanRunRecovery()
+    try subject.testEscapeToMainMenu()
+    try subject.testPauseKeyRelease()
+    try subject.testEarlyNukeEndsLevel()
+    try subject.testInterruptionPolicy()
+    try subject.testHotSeatBoundaries()
+    try subject.testHandoverPreviousLevel()
+    try subject.testHotSeatJourneyRetry()
+    try subject.testSeasonalMusic()
+    try await subject.testLevelBrowserRouteIntegrity()
+    try await subject.testPlaylistStartRevalidatesFanSources()
+    try subject.testSequenceNavigationGuards()
+    try subject.testClassicLevelPickerUnlockGate()
+    try await testContentBrowser()
+    try await subject.testLearningJourneyEntriesResolve()
+    try await subject.testLearningJourneySessionsStart()
+    try await subject.testPlaylistSessions()
+    print("App integration tests passed.")
+    #endif
+    exit(0)
+  } catch {
+    print("FAIL \(error)")
+    exit(1)
+  }
+}
+testApp.run()
+
+
+extension AppDelegate {
+  fileprivate func testPageKeyboardContinuation() throws {
+    for code: UInt16 in [36, 76, 49] {
+      var activations = 0
+      let page = GameMenuPage(title: "UVA's turn", subtitle: "PASS THE CONTROLS")
+      page.controllerBackButton.isHidden = true
+      page.setDetail("The game will wait. Give the controls to UVA, then choose Ready.")
+      page.addPrimaryAction("Ready, UVA") { activations += 1 }
+      GameScreen.shared.present(page, owner: window)
+      let event = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [],
+        timestamp: 0, windowNumber: window.windowNumber, context: nil,
+        characters: code == 49 ? " " : "\r", charactersIgnoringModifiers: "", isARepeat: false, keyCode: code)!
+      try check(GameScreen.shared.handleDialogKey(event) && activations == 1,
+        "Handover key did not activate Ready exactly once")
+      let repeated = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [],
+        timestamp: 0, windowNumber: window.windowNumber, context: nil,
+        characters: " ", charactersIgnoringModifiers: " ", isARepeat: true, keyCode: code)!
+      _ = GameScreen.shared.handleDialogKey(repeated)
+      try check(activations == 1, "Held handover key repeated Ready")
+      page.layoutSubtreeIfNeeded()
+      if code == 49, let bitmap = page.bitmapImageRepForCachingDisplay(in: page.bounds) {
+        page.cacheDisplay(in: page.bounds, to: bitmap)
+        try bitmap.representation(using: .png, properties: [:])?.write(to: URL(fileURLWithPath: ".build/keyboard-handover.png"))
+      }
+      GameScreen.shared.dismiss(page)
+    }
+    print("PASS Enter, keypad Enter and Space activate Ready once; held keys do not repeat")
+  }
+}
+
+@MainActor private func testTimelinePanelControls() throws {
+  let controls = TimelinePanelControls()
+  controls.frame = CGRect(x: 4, y: 4, width: 252, height: 30)
+  var performed: [TimelinePanelControls.Action] = []
+  controls.perform = { performed.append($0) }
+  controls.enabled = { $0 == .forward || $0 == .hints }
+  for action in TimelinePanelControls.Action.allCases {
+    let box = controls.rect(for: action)
+    try check(controls.click(at: CGPoint(x: box.midX, y: box.midY)), "Timeline target leaked its click")
+  }
+  try check(performed == [.forward, .hints], "Disabled timeline controls activated")
+  let first = controls.rect(for: .rewind)
+  try check(controls.click(at: CGPoint(x: first.maxX + 1, y: first.midY)), "Timeline gap leaked input")
+  try check(performed.count == 2, "Timeline gap activated a neighbour")
+  let directory = URL(fileURLWithPath: ".build/transport")
+  try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+  for enabled in [false, true] {
+    controls.enabled = { enabled || $0 == .hints }
+    let image = NSImage(size: CGSize(width: 260, height: 38))
+    image.lockFocusFlipped(true); controls.draw(); image.unlockFocus()
+    let bitmap = NSBitmapImageRep(data: image.tiffRepresentation!)!
+    try bitmap.representation(using: .png, properties: [:])!.write(to: directory.appendingPathComponent(enabled ? "enabled.png" : "disabled.png"))
+  }
+  print("PASS timeline controls: active, unavailable, hit regions and gap capture")
+}
+
+@MainActor func validateTimelineCanvas(_ canvas: NSView, timeline: TimelinePanelControls, name: String,
+                                      tick: () -> Int, paused: () -> Bool) throws {
+  canvas.setFrameSize(CGSize(width: 1050, height: 680))
+  canvas.layoutSubtreeIfNeeded()
+  func capture(_ suffix: String) throws {
+    let image = NSImage(size: canvas.bounds.size)
+    image.lockFocusFlipped(true); canvas.draw(canvas.bounds); image.unlockFocus()
+    let bitmap = NSBitmapImageRep(data: image.tiffRepresentation!)!
+    print("CAPTURE \(name)\(suffix): \(canvas.bounds), timeline \(timeline.frame)")
+    try bitmap.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: ".build/transport/" + name + suffix + ".png"))
+  }
+  try capture("-start")
+  try check(!timeline.enabled(.backward), "Fresh level enabled rewind")
+  func click(_ action: TimelinePanelControls.Action) {
+    let box = timeline.rect(for: action)
+    let point = canvas.convert(CGPoint(x: box.midX, y: box.midY), to: nil)
+    let event = NSEvent.mouseEvent(with: .leftMouseDown, location: point, modifierFlags: [], timestamp: 1,
+      windowNumber: canvas.window?.windowNumber ?? 0, context: nil, eventNumber: 0, clickCount: 1, pressure: 1)!
+    canvas.mouseDown(with: event)
+  }
+  click(.forward)
+  try check(tick() == 1 && paused(), "Forward toolbar button failed to step and pause " + name)
+  click(.backward)
+  try check(tick() == 0 && paused(), "Backward toolbar button failed to restore " + name)
+  click(.forward)
+  try check(tick() == 1 && paused(), "Forward toolbar button failed to restore history " + name)
+  try capture("-paused")
+  click(.rewind)
+  try check(tick() == 0 && paused(), "Rewind toolbar button failed " + name)
+  click(.hints)
+  try check(LevelHintWindow.shared.page != nil && paused(), "Hint toolbar button failed " + name)
+  try check(GameCursor.gameplaySuppressed, "Hints retained the game cursor in " + name)
+  try capture("-hint-background")
+  GameScreen.shared.dismissAll()
+  print("PASS " + name + " toolbar input, history and paused hints")
+}
+
+extension AppDelegate {
+  fileprivate func testTimelineToolbar() throws {
+    try testTimelinePanelControls()
+    buildInterface()
+    settings.music = .silent
+    loadContent()
+    guard let gameIndex = dataSets.firstIndex(where: { $0.set.title == .lemmings }) else {
+      throw IntegrationFailure(message: "Missing Classic resources")
+    }
+    gamePicker.selectItem(at: gameIndex); selectDataSet(); loadLevel(at: 0)
+    phase = .playing; panel.isMenuMode = false
+    installKeyboardShortcuts()
+    if let keyboard = gameplayKeyboard {
+      try validateCameraKeyboard(keyboard, name: "classic")
+      keyboard.bind(to: window)
+    }
+    for tube in [false, true] {
+      panel.isCRTSource = tube
+      panel.frame = CGRect(x: 0, y: 0, width: tube ? 640 : 1050, height: tube ? 80 : panel.intrinsicHeight)
+      panel.isMenuMode = false
+      let image = NSImage(size: panel.bounds.size)
+      image.lockFocusFlipped(true); panel.draw(panel.bounds); image.unlockFocus()
+      let bitmap = NSBitmapImageRep(data: image.tiffRepresentation!)!
+      try bitmap.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: ".build/transport/classic-" + (tube ? "crt" : "flat") + ".png"))
+      for action in TimelinePanelControls.Action.allCases {
+        try check(panel.bounds.contains(panel.timeline.rect(for: action)), "Classic timeline was clipped: \(panel.timeline.frame) in \(panel.bounds)")
+      }
+      let before = session!.currentTick
+      let forward = panel.timeline.rect(for: .forward)
+      panel.handlePointerDown(at: CGPoint(x: forward.midX, y: forward.midY)); panel.handlePointerUp()
+      try check(session!.currentTick == before + 1 && isPaused, "Classic forward button failed")
+      let backward = panel.timeline.rect(for: .backward)
+      panel.handlePointerDown(at: CGPoint(x: backward.midX, y: backward.midY)); panel.handlePointerUp()
+      try check(session!.currentTick == before && isPaused, "Classic backward button failed")
+    }
+    let host = SpeedTestWindow(contentRect: window.frame, styleMask: [], backing: .buffered, defer: false)
+    let keyboard = GameplayKeyboard(window: host)
+    keyboard.active = { true }
+    var hints = 0; keyboard.hints = { hints += 1 }
+    for modern in [false, true] {
+      keyboard.modern = { modern }
+      for repeated in [false, true] {
+        let event = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+          windowNumber: host.windowNumber, context: nil, characters: "/", charactersIgnoringModifiers: "/",
+          isARepeat: repeated, keyCode: 44)!
+        try check(keyboard.handle(event) == nil, "Slash leaked into skill selection")
+      }
+    }
+    try check(hints == 2, "Slash repeated or failed in a control mode")
+    try check(SkillShortcuts(names: ["Hopper", "Hiker"]).index(for: "h", current: 0) == nil, "Skills claimed H")
+    let l2 = try Lemmings2PlayWindow(root: BundledGameResources.lemmings2(), recordsCampaignProgress: false)
+    try l2.testTimelinePanel(); l2.window?.orderOut(nil)
+    let l3 = try Lemmings3PlayWindow(root: BundledGameResources.lemmings3(), recordsCampaignProgress: false)
+    try l3.testTimelinePanel(); l3.window?.orderOut(nil)
+    print("PASS Slash hints and Classic flat/CRT timeline toolbar")
+  }
+}
+
+@MainActor private final class OriginalMovieAudioProbe: OriginalMovieAudio {
+  var playCount = 0
+  var pauseCount = 0
+  var stopCount = 0
+  func play() -> Bool { playCount += 1; return true }
+  func pause() { pauseCount += 1 }
+  func stop() { stopCount += 1 }
+}
+
+extension AppDelegate {
+  fileprivate func testDialogNavigation() throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll()
+    let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 1120, height: 720), styleMask: [], backing: .buffered, defer: false)
+    host.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 1120, height: 720))
+    let oldWindow = GameScreen.shared.gameWindow
+    defer { GameScreen.shared.dismissAll(); GameScreen.shared.gameWindow = oldWindow }
+    func event(_ code: UInt16, shift: Bool = false, repeatKey: Bool = false) -> NSEvent {
+      NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: shift ? [.shift] : [],
+        timestamp: 0, windowNumber: host.windowNumber, context: nil,
+        characters: code == 49 ? " " : code == 53 ? "\u{1b}" : "\r", charactersIgnoringModifiers: "",
+        isARepeat: repeatKey, keyCode: code)!
+    }
+    func key(_ code: UInt16, shift: Bool = false, repeatKey: Bool = false) {
+      let input = event(code, shift: shift, repeatKey: repeatKey)
+      if !GameScreen.shared.handleDialogKey(input) { host.firstResponder?.keyDown(with: input) }
+    }
+    func capture(_ view: NSView, _ name: String) throws {
+      view.layoutSubtreeIfNeeded()
+      let folder = URL(fileURLWithPath: ".build/dialog-shots")
+      try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+      func redraw(_ item: NSView) { item.needsDisplay = true; item.subviews.forEach(redraw) }
+      redraw(view)
+      let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+      view.cacheDisplay(in: view.bounds, to: bitmap)
+      guard let png = bitmap.representation(using: .png, properties: [:]) else {
+        throw IntegrationFailure(message: "Could not capture dialog")
+      }
+      try png.write(to: folder.appendingPathComponent(name + ".png"))
+    }
+    var primaryCount = 0, secondaryCount = 0
+    let page = GameMenuPage(title: "Keyboard controls")
+    let primary = page.addPrimaryAction("Continue") { primaryCount += 1 }
+    let secondary = page.addSecondaryAction("Previous") { secondaryCount += 1 }
+    page.onBack = { GameScreen.shared.dismiss(page) }
+    GameScreen.shared.present(page, owner: host)
+    try check(host.firstResponder === primary, "Dialog did not focus its default action")
+    try check(GameCursor.gameplaySuppressed && !GameCursor.hidesSystemCursor(at: .zero, inside: CGRect(x: 0, y: 0, width: 20, height: 20)), "Dialog retained the game cursor")
+    key(36); key(76); key(36, repeatKey: true)
+    try check(primaryCount == 2, "Return/keypad Enter/repeat handling failed")
+    GameScreen.shared.keyboardNavigation.focus(secondary, in: host)
+    key(36); key(76)
+    try check(secondaryCount == 2 && primaryCount == 2, "Return ignored the selected button")
+    let controls = GameScreen.shared.keyboardNavigation.controls(in: page)
+    for _ in controls.indices { key(48) }
+    try check(host.firstResponder === secondary, "Tab escaped the dialog")
+    key(48, shift: true); key(48)
+    try check(host.firstResponder === secondary, "Shift-Tab did not reverse focus")
+    try capture(page, "focused-secondary")
+    var accepted = 0
+    GameScreen.shared.confirm("Restart level?", detail: "Start this level again.", actionTitle: "Restart", owner: host) { accepted += 1 }
+    key(76)
+    try check(accepted == 0 && GameScreen.shared.controllerPage(in: host) === page, "Confirmation did not default to Back")
+    try check(host.firstResponder === secondary && GameCursor.gameplaySuppressed, "Nested dialog lost focus or restored the game cursor too soon")
+    GameScreen.shared.confirm("Restart level?", detail: "Start this level again.", actionTitle: "Restart", owner: host) { accepted += 1 }
+    key(48); key(36)
+    try check(accepted == 1, "Deliberately selected confirmation failed")
+    let children = host.accessibilityChildren() ?? []
+    try check(children.count == 1 && host.isAccessibilityModal(), "Covered gameplay remained in the dialog accessibility tree")
+    key(53)
+    try check(!GameCursor.gameplaySuppressed, "Closing the final dialog did not restore gameplay cursor policy")
+
+    LevelHintWindow.shared.show(.practice(title: "Practice level", skills: ["Builder"]), owner: host)
+    guard let hints = LevelHintWindow.shared.page else { throw IntegrationFailure(message: "Hints did not open") }
+    key(123)
+    try check(LevelHintWindow.shared.revealedTier == 0, "Hints moved before the first hint")
+    key(124); key(124, repeatKey: true)
+    try check(LevelHintWindow.shared.revealedTier == 1, "Held arrow revealed multiple hints")
+    key(124); key(124)
+    try check(LevelHintWindow.shared.revealedTier == 2, "Hints moved past the last hint")
+    key(123)
+    try check(LevelHintWindow.shared.revealedTier == 1, "Left arrow failed to revisit a hint")
+    let hintButtons = GameScreen.shared.keyboardNavigation.controls(in: hints).compactMap { $0 as? NSButton }
+    guard let previous = hintButtons.first(where: { $0.accessibilityLabel() == "Previous hint" }) else { throw IntegrationFailure(message: "Previous hint button missing") }
+    GameScreen.shared.keyboardNavigation.focus(previous, in: host)
+    key(76)
+    try check(LevelHintWindow.shared.revealedTier == 0 && !previous.isEnabled, "Previous hint button failed")
+    key(124)
+    try check(LevelHintWindow.shared.revealedTier == 1, "Hint arrows failed when a button had focus")
+    try capture(hints, "hint-middle")
+    key(53)
+
+    let bar = ReplayBar(frame: CGRect(x: 0, y: 0, width: 1120, height: 180))
+    var actions = 0, position = 0.0
+    bar.onAction = { _ in actions += 1 }; bar.onSeek = { position = $0 }
+    GameScreen.shared.present(bar, owner: host, focus: bar)
+    key(36); key(76); key(76, repeatKey: true)
+    try check(actions == 2, "Replay default Return and keypad Enter failed")
+    let elements = bar.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement } ?? []
+    try check(elements.count == 7, "Replay controls missing from accessibility tree")
+    elements[0].setAccessibilityValue(NSNumber(value: 40))
+    try check(position == 0.4, "Accessible replay position failed")
+    try check(elements[1].accessibilityPerformPress() && actions == 3, "Accessible replay button failed")
+    key(48); key(76)
+    try check(actions == 4, "Replay selected button failed")
+    try capture(bar, "replay-focus")
+    GameScreen.shared.dismissAll()
+    let movieAudio = OriginalMovieAudioProbe()
+    let movie = try OriginalMoviePlayer(
+      url: BundledGameResources.lemmings3().appendingPathComponent("MOVIE/INTRO.FLI"), soundtrack: movieAudio)
+    try check(movie.present(owner: host), "Original movie did not open")
+    try check(movieAudio.playCount == 1, "Original movie did not start its soundtrack")
+    key(36)
+    try check(movie.paused, "Original movie Return did not activate Pause")
+    try check(movieAudio.pauseCount == 1, "Original movie did not pause its soundtrack")
+    key(76)
+    try check(!movie.paused, "Original movie keypad Enter did not activate Play")
+    try check(movieAudio.playCount == 2, "Original movie did not resume its soundtrack")
+    key(48)
+    try check((host.firstResponder as? NSButton)?.title == "Back", "Movie controls were not keyboard navigable")
+    try capture(movie, "original-movie")
+    key(76)
+    try check(!GameScreen.shared.isPresented, "Original movie selected Back failed")
+    try check(movieAudio.stopCount == 1, "Original movie did not stop its soundtrack on close")
+    let overlay = KeyboardOverlayView(commands: [], modern: true, hints: true)
+    overlay.onClose = { GameScreen.shared.dismiss(overlay) }
+    GameScreen.shared.present(overlay, owner: host)
+    key(76)
+    try check(!GameScreen.shared.isPresented, "Keyboard overlay default Enter failed")
+    try testPageKeyboardContinuation()
+    print("PASS dialog defaults, Return/keypad Enter, focus loops, confirmations, hint arrows, replay accessibility and cursor lifecycle")
+  }
+}
+
+extension AppDelegate {
+  fileprivate func testMusicPauseModes() async throws {
+    GameScreen.shared.dismissAll()
+    let root = Bundle.main.resourceURL!.appendingPathComponent("Music/lemmings_music_mod/cancan.mod")
+    soundtrack.stop(); dj.stop()
+    phase = .playing; session = FinalTickSession(win: true)
+    playfield.startCountdown.cancel(); isPaused = false; userPausedMusic = false
+    settings.music = .amigaModules; settings.musicVolume = 0; settings.pauseMusicBeatOnly = false
+    _ = music.play(url: root); try music.start(); music.setVolume(0)
+    defer { music.stop(); userPausedMusic = false; isPaused = false }
+    togglePause()
+    try check(isPaused && !music.isOutputRunning, "Classic pause did not suspend music")
+    settings.pauseMusicBeatOnly = true; applyAudioSettings()
+    try check(isPaused && music.isOutputRunning, "Classic beat-only pause did not keep native percussion")
+    interruptGameplay()
+    try check(isPaused && !userPausedMusic && !music.isOutputRunning, "An interruption kept pause percussion playing")
+    togglePause()
+    try check(!isPaused && music.isOutputRunning, "Classic resume did not restore the track")
+    session = FinalTickSession(win: false); session?.tick(); phase = .results
+    updateFailureMood()
+    try await Task.sleep(nanoseconds: 250_000_000)
+    try check(failureMood.amount > 0, "Classic result screen cleared funeral mood")
+    phase = .briefing; updateFailureMood()
+    print("PASS Classic silence/beat pause, setting changes, interruption silence, resume and funeral result")
+  }
+}

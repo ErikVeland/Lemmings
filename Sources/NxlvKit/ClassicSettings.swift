@@ -45,7 +45,7 @@ public enum ClassicMusicSource: Equatable, Codable, Sendable {
         switch self {
         case .adaptiveDJ: return "Adaptive DJ Mix (The True Choice) 🎧"
         case .amigaModules: return "Amiga Modules"
-        case .macintoshMIDI: return "Macintosh MIDI"
+        case .macintoshMIDI: return "Macintosh (original)"
         case .dosAdlib: return "DOS Ad-Lib (OPL2)"
         case .snesSPC: return "SNES SPC Synth"
         case .genesisFM: return "Sega Genesis FM"
@@ -124,7 +124,7 @@ public enum ClassicColorDepth: String, Equatable, Codable, CaseIterable, Sendabl
 public enum ClassicMusicStyle: String, Equatable, Codable, CaseIterable, Sendable {
     /// Exactly as the hardware played it.
     case faithful
-    /// Widened, equalised and given a small room.
+    /// Narrower MOD stereo, centred percussion, EQ and a small room.
     case modern
 
     public var displayName: String {
@@ -141,10 +141,48 @@ public enum ClassicInterfaceSize: String, Codable, CaseIterable, Sendable {
     public var title: String { switch self { case .standard: "Standard (100%)"; case .large: "Large (125%)"; case .extraLarge: "Extra large (150%)" } }
 }
 
+public enum SkillCursorIconSize: String, CaseIterable, Codable, Sendable {
+    case none, one = "double", two = "quadruple"
+    public var title: String { switch self { case .none: "None"; case .one: "1×"; case .two: "2×" } }
+    public var multiplier: Int { switch self { case .none: 0; case .one: 2; case .two: 4 } }
+
+    public init(from decoder: Decoder) throws {
+        let value = try decoder.singleValueContainer().decode(String.self)
+        // Preserve the old 2× size and raise the old 1× choice to the new minimum.
+        switch value {
+        case "none": self = .none
+        case "one", "two", "double": self = .one
+        case "quadruple": self = .two
+        default: self = .one
+        }
+    }
+}
+
+public enum ClassicExperiencePreset: String, CaseIterable, Codable, Sendable {
+    case original, modern, custom
+    public var title: String { rawValue.capitalized }
+}
+
+public enum GameplayCursorStyle: String, CaseIterable, Codable, Sendable {
+    case original, modern
+    public var title: String { rawValue.capitalized }
+}
+
+public enum LemmingSelectionStyle: String, CaseIterable, Codable, Sendable {
+    case none, obvious, modern
+    public var title: String { rawValue.capitalized }
+}
+
+public enum ClassicCounterStyle: String, CaseIterable, Codable, Sendable {
+    case game, macintosh
+    public var title: String { self == .macintosh ? "Original Macintosh" : "Game lettering" }
+}
+
 public struct ClassicSettings: Equatable, Codable, Sendable {
     // Graphics
     public var graphics: ClassicGraphicsSource
     public var colorDepth: ClassicColorDepth
+    public var counterStyle: ClassicCounterStyle
 
     // Video
     public var display: ClassicDisplayMode
@@ -156,7 +194,15 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public var modernControlsEnabled: Bool
     public var variableSpeedEnabled: Bool
     public var pauseOnInterruption: Bool
+    public var gameplayCursorStyle: GameplayCursorStyle
+    public var showClassicSkillBackpacks: Bool
+    public var showReticleCount: Bool
+    public var skillCursorIconSize: SkillCursorIconSize
+    public var lemmingSelectionStyle: LemmingSelectionStyle
     public var favorApproachingLemmings: Bool
+    public var favorBombBlockers: Bool
+    public var favorBuilders: Bool
+    public var experiencePreset: ClassicExperiencePreset
     public var controllerEnabled: Bool
     public var controllerTapSpeed: Bool
     public var controllerMappings: [String: String]
@@ -176,6 +222,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public var music: ClassicMusicSource
     public var musicStyle: ClassicMusicStyle
     public var musicVolume: Double
+    public var pauseMusicBeatOnly: Bool
     public var sound: ClassicSoundSource
     public var soundVolume: Double
     public var bottomFallSounds: Bool
@@ -194,6 +241,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public init(
         graphics: ClassicGraphicsSource = .macintosh,
         colorDepth: ClassicColorDepth = .full,
+        counterStyle: ClassicCounterStyle = .game,
         display: ClassicDisplayMode = .flat,
         displayIntensity: Double = 0.8,
         pixelAspect: Double = 1.0,
@@ -201,7 +249,15 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         modernControlsEnabled: Bool = true,
         variableSpeedEnabled: Bool = true,
         pauseOnInterruption: Bool = true,
+        gameplayCursorStyle: GameplayCursorStyle = .modern,
+        showClassicSkillBackpacks: Bool = true,
+        showReticleCount: Bool = false,
+        skillCursorIconSize: SkillCursorIconSize = .one,
+        lemmingSelectionStyle: LemmingSelectionStyle = .modern,
         favorApproachingLemmings: Bool = true,
+        favorBombBlockers: Bool = true,
+        favorBuilders: Bool = true,
+        experiencePreset: ClassicExperiencePreset = .modern,
         controllerEnabled: Bool = true,
         controllerTapSpeed: Bool = true,
         controllerSwapSticks: Bool = false,
@@ -216,6 +272,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         music: ClassicMusicSource = .amigaModules,
         musicStyle: ClassicMusicStyle = .modern,
         musicVolume: Double = 0.8,
+        pauseMusicBeatOnly: Bool = false,
         sound: ClassicSoundSource = .macintoshResources,
         soundVolume: Double = 0.9,
         bottomFallSounds: Bool = true,
@@ -225,6 +282,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     ) {
         self.graphics = graphics
         self.colorDepth = colorDepth
+        self.counterStyle = counterStyle
         self.display = display
         self.displayIntensity = displayIntensity
         self.pixelAspect = pixelAspect
@@ -232,7 +290,15 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         self.modernControlsEnabled = modernControlsEnabled
         self.variableSpeedEnabled = variableSpeedEnabled
         self.pauseOnInterruption = pauseOnInterruption
+        self.gameplayCursorStyle = gameplayCursorStyle
+        self.showClassicSkillBackpacks = showClassicSkillBackpacks
+        self.showReticleCount = showReticleCount
+        self.skillCursorIconSize = skillCursorIconSize
+        self.lemmingSelectionStyle = lemmingSelectionStyle
         self.favorApproachingLemmings = favorApproachingLemmings
+        self.favorBombBlockers = favorBombBlockers
+        self.favorBuilders = favorBuilders
+        self.experiencePreset = experiencePreset
         self.controllerEnabled = controllerEnabled
         self.controllerTapSpeed = controllerTapSpeed
         self.controllerSwapSticks = controllerSwapSticks
@@ -247,6 +313,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         self.music = music
         self.musicStyle = musicStyle
         self.musicVolume = musicVolume
+        self.pauseMusicBeatOnly = pauseMusicBeatOnly
         self.sound = sound
         self.soundVolume = soundVolume
         self.bottomFallSounds = bottomFallSounds
@@ -281,6 +348,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         }
 
         graphics = source(.graphics, fallback.graphics)
+        counterStyle = source(.counterStyle, fallback.counterStyle)
         colorDepth = try values.decodeIfPresent(
             ClassicColorDepth.self, forKey: .colorDepth) ?? fallback.colorDepth
         display = try values.decodeIfPresent(
@@ -294,7 +362,17 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         modernControlsEnabled = try values.decodeIfPresent(Bool.self, forKey: .modernControlsEnabled) ?? fallback.modernControlsEnabled
         variableSpeedEnabled = try values.decodeIfPresent(Bool.self, forKey: .variableSpeedEnabled) ?? fallback.variableSpeedEnabled
         pauseOnInterruption = try values.decodeIfPresent(Bool.self, forKey: .pauseOnInterruption) ?? modernControlsEnabled
+        let savedExperience = try? values.decodeIfPresent(ClassicExperiencePreset.self, forKey: .experiencePreset)
+        let modernPresentation = savedExperience == .original ? false : savedExperience == .modern ? true : modernControlsEnabled
+        gameplayCursorStyle = source(.gameplayCursorStyle, modernPresentation ? .modern : .original)
+        showClassicSkillBackpacks = (try? values.decodeIfPresent(Bool.self, forKey: .showClassicSkillBackpacks)) ?? modernPresentation
+        showReticleCount = (try? values.decodeIfPresent(Bool.self, forKey: .showReticleCount)) ?? false
+        skillCursorIconSize = (try? values.decodeIfPresent(SkillCursorIconSize.self, forKey: .skillCursorIconSize)) ?? .one
+        lemmingSelectionStyle = source(.lemmingSelectionStyle, modernControlsEnabled ? .modern : .none)
         favorApproachingLemmings = try values.decodeIfPresent(Bool.self, forKey: .favorApproachingLemmings) ?? modernControlsEnabled
+        favorBombBlockers = try values.decodeIfPresent(Bool.self, forKey: .favorBombBlockers) ?? modernControlsEnabled
+        favorBuilders = try values.decodeIfPresent(Bool.self, forKey: .favorBuilders) ?? modernControlsEnabled
+        experiencePreset = .custom
         controllerEnabled = try values.decodeIfPresent(Bool.self, forKey: .controllerEnabled) ?? modernControlsEnabled
         controllerTapSpeed = try values.decodeIfPresent(Bool.self, forKey: .controllerTapSpeed) ?? fallback.controllerTapSpeed
         controllerSwapSticks = try values.decodeIfPresent(Bool.self, forKey: .controllerSwapSticks) ?? fallback.controllerSwapSticks
@@ -311,6 +389,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
             ClassicMusicStyle.self, forKey: .musicStyle) ?? fallback.musicStyle
         musicVolume = try values.decodeIfPresent(
             Double.self, forKey: .musicVolume) ?? fallback.musicVolume
+        pauseMusicBeatOnly = try values.decodeIfPresent(Bool.self, forKey: .pauseMusicBeatOnly) ?? false
         sound = source(.sound, fallback.sound)
         soundVolume = try values.decodeIfPresent(
             Double.self, forKey: .soundVolume) ?? fallback.soundVolume
@@ -322,14 +401,33 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
             Bool.self, forKey: .shuffleMusic) ?? fallback.shuffleMusic
         unlockAllClassicLevels = try values.decodeIfPresent(
             Bool.self, forKey: .unlockAllClassicLevels) ?? fallback.unlockAllClassicLevels
+        if let saved = try? values.decodeIfPresent(ClassicExperiencePreset.self, forKey: .experiencePreset) {
+            experiencePreset = saved
+        } else {
+            // Older saves have no preset label. Identify a matching bundle without changing any choices.
+            for modern in [false, true] {
+                var preset = self
+                preset.applyExperiencePreset(modern: modern)
+                preset.experiencePreset = .custom
+                if self == preset { experiencePreset = modern ? .modern : .original; break }
+            }
+        }
     }
 
     /// Changes the added conveniences while preserving the chosen machine and volumes.
     public mutating func applyExperiencePreset(modern: Bool) {
+        experiencePreset = modern ? .modern : .original
         modernControlsEnabled = modern
         variableSpeedEnabled = modern
         pauseOnInterruption = modern
         favorApproachingLemmings = modern
+        favorBombBlockers = modern
+        favorBuilders = modern
+        skillCursorIconSize = modern ? .one : .none
+        lemmingSelectionStyle = modern ? .modern : .none
+        gameplayCursorStyle = modern ? .modern : .original
+        showClassicSkillBackpacks = modern
+        showReticleCount = false
         controllerEnabled = modern
         controllerTapSpeed = modern
         controllerSwapSticks = false
@@ -397,7 +495,7 @@ public struct ClassicSettingsOptions: Sendable {
     /// control that changes nothing is worse than a control that is missing,
     /// because the player cannot tell which of their choices took effect.
     /// Adding a decoder means adding its source here.
-    public static let playableMusic: [ClassicMusicSource] = [.amigaModules, .adaptiveDJ, .silent]
+    public static let playableMusic: [ClassicMusicSource] = [.amigaModules, .macintoshMIDI, .adaptiveDJ, .silent]
     public static let playableSound: [ClassicSoundSource] = [
         .macintoshResources, .amigaVoices, .silent,
     ]
@@ -414,7 +512,8 @@ public struct ClassicSettingsOptions: Sendable {
         moduleCount: Int,
         remixFolders: [String] = [],
         customGraphics: [String] = [],
-        hasSoundtracks: Bool = false
+        hasSoundtracks: Bool = false,
+        hasMacintoshMusic: Bool = false
     ) -> ClassicSettingsOptions {
         var graphics: [ClassicGraphicsSource] = []
         if hasMacintoshDisk { graphics.append(.macintosh) }
@@ -427,7 +526,7 @@ public struct ClassicSettingsOptions: Sendable {
         // the conditions below name the data that is present.
         var music: [ClassicMusicSource] = []
         if moduleCount > 0 { music.append(.amigaModules) }
-        if hasMacintoshDisk { music.append(.macintoshMIDI) }
+        if hasMacintoshMusic { music.append(.macintoshMIDI) }
         // The mix moves between the soundtracks the player supplied, so it
         // needs at least one of them to have anything to play.
         if hasSoundtracks { music.append(.adaptiveDJ) }

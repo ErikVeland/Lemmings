@@ -22,21 +22,70 @@ public enum ClassicSoundEffect: String, CaseIterable, Codable, Sendable {
     case yippee
     case letsGo
     case pop
+    case toolPickup
+    case clockPickup
+    case projectileLaunch
+    case trampolineBounce
+    case trapTrigger
+    case brickPlace
+    case waterEntry
+    case timerWarning
+    case actionRejected
+    case ready
+
+    public var isRescue: Bool { self == .exitLevel || self == .yippee }
+
+    /// Player actions and warnings remain clear when the crowd is noisy.
+    public var presentationPriority: Int {
+        switch self {
+        case .assignSkill, .builderWarning, .timerWarning, .actionRejected, .ready: return 3
+        case .exitLevel, .yippee, .toolPickup, .clockPickup: return 2
+        default: return 1
+        }
+    }
+
+    /// Rescue voices and useful warnings never share a repetition gate.
+    public var repetitionInterval: Double {
+        switch self {
+        case .actionRejected: return 0.18
+        case .splat, .fallOut, .drown, .vaporize, .trapTrigger: return 0.08
+        case .hitSteel, .brickPlace: return 0.06
+        default: return 0
+        }
+    }
 }
 
 /// Turns engine events into sound requests.
 public enum ClassicSoundCue {
+    /// Keep each event's origin until the presentation layer places its sound.
+    public static func positionedCues(for events: [ClassicDOSEvent],
+                                      lemmings: [ClassicDOSLemming], entrances: [ClassicDOSPoint]) -> [PositionedSoundCue] {
+        let positions = Dictionary(uniqueKeysWithValues: lemmings.map { ($0.id, GameplaySoundPoint(x: Double($0.foot.x), y: Double($0.foot.y))) })
+        return events.flatMap { event -> [PositionedSoundCue] in
+            let id: Int?
+            switch event {
+            case let .skillAssigned(lemmingID, _), let .saved(lemmingID), let .builderWarning(lemmingID),
+                 let .hitSteel(lemmingID), let .fellOut(lemmingID), let .actionChanged(lemmingID, _, _): id = lemmingID
+            case .entrancesOpened:
+                return entrances.flatMap { point in cues(for: [event]).map {
+                    PositionedSoundCue($0, at: GameplaySoundPoint(x: Double(point.x), y: Double(point.y)))
+                } }
+            default: id = nil
+            }
+            return cues(for: [event]).map { PositionedSoundCue($0, at: id.flatMap { positions[$0] }) }
+        }
+    }
+
     /// Maps one tick's events to the sounds that tick should play.
     ///
-    /// Duplicates are collapsed. A nuke can push a dozen lemmings into the
-    /// same state on one tick, and playing a dozen copies of one recording is
-    /// noise rather than feedback.
+    /// Ordinary duplicates are collapsed when several lemmings enter the same
+    /// state on one tick. Every rescue keeps its own celebration sounds.
     public static func cues(for events: [ClassicDOSEvent]) -> [ClassicSoundEffect] {
         var seen = Set<ClassicSoundEffect>()
         var ordered: [ClassicSoundEffect] = []
 
         func add(_ effect: ClassicSoundEffect) {
-            guard seen.insert(effect).inserted else { return }
+            guard effect.isRescue || seen.insert(effect).inserted else { return }
             ordered.append(effect)
         }
 
@@ -220,4 +269,3 @@ extension ClassicSoundMapping {
         .nuke: 7,
     ]
 }
-

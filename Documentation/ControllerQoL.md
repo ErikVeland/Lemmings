@@ -104,6 +104,11 @@ campaign refreshes the module library, including when entering a fan level.
 Silence and mute remain available. A manually chosen soundtrack in a regular
 campaign remains an explicit override.
 
+During play, − and + step the release rate. A double tap moves it to the
+minimum or the maximum. A held key still steps one at a time. N starts the nuke,
+and a second N undoes it while undo is still possible. Outside play, N in Classic
+still opens the next level. L2 has no release rate, and L3 has no release rate or nuke.
+
 Help > Keyboard commands (Command-?) opens a searchable command reference.
 During gameplay, ? opens the same guide. Categories cover skills, speed, camera,
 menus and results, app menu shortcuts, and the current controller mapping. Skill

@@ -1,6 +1,6 @@
 # Additional campaign completion evidence
 
-The manifest holds 273 fixed-input winning replays. These supplement the original
+The manifest holds 275 fixed-input winning replays. These supplement the original
 [120-level DOS gate](../ClassicCompletion/README.md) and the existing L2 tests.
 
 | Campaign | Winning replays | Levels without a fixture |
@@ -11,7 +11,7 @@ The manifest holds 273 fixed-input winning replays. These supplement the origina
 | Holiday 1993 | 32/32 | 0 |
 | Holiday 1994 | 32/32 | 0 |
 | Oh Yes! conversions | 60/60 | 0 |
-| Lemmings 3 | 41/90 | 49 |
+| Lemmings 3 | 43/90 | 47 |
 
 These counts come from the committed [fixture manifest](evidence.json).
 To confirm them, run `python3 Tools/CampaignCompletion/report.py --check`.
@@ -37,7 +37,17 @@ invalid actions, changed data, wrong level numbers and changed outcomes. Its
 negative tests deliberately damage each kind of evidence. Some routes use the
 game's End Run action after rescuing at least one lemming. Reserves are reported
 separately; they are not counted as rescues. These are standalone winning
-witnesses, not continuous campaign runs or original-engine equivalence proofs.
+witnesses, not original-engine equivalence proofs.
+
+The separate [L3 chain evidence](l3-chain-evidence.json) replays each tribe from
+its first level with the population carried from the preceding result. It uses
+population-specific fixtures when a standalone input schedule does not work at
+the carried population. `zsh Scripts/verify-l3-campaign.sh` checks the
+recorded fixture hashes, outcomes and first gap in each tribe; `--require-all`
+fails until all three 30-level chains complete with at least 50 survivors at
+each tribe's final result. This is native simulation evidence. Focused tests
+check the ending decision and movie handover. Player input, recovery, original
+engine parity and a played three-tribe finale need separate checks.
 
 `Tools/ClassicCompletion` and `Tools/Lemmings3Completion` can discover routes.
 After deliberately adding or improving a fixture, run
@@ -53,7 +63,7 @@ source rank. Missing conversion data fails rather than reducing the level count.
 The full Classic corpus gate independently replays them. Sequel regression
 checks remain separate.
 
-24 Lemmings 3 routes come from the beam solver in
+25 Lemmings 3 routes come from the beam solver in
 [`Tools/Lemmings3Solver`](../../Tools/Lemmings3Solver). Run
 `zsh Scripts/solve-lemmings3-levels.sh missing --fewer-inputs-first --promote` to
 search the levels without a fixture. A second pass without `--fewer-inputs-first`

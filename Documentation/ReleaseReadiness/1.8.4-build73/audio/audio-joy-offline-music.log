@@ -1,0 +1,4 @@
+UI test windows: offscreen; audio: muted
+2026-10-08 20:52:37.217 OfflineMusicPlaybackTests[12434:8669876] Audio files cannot be non-interleaved. Ignoring setting AVLinearPCMIsNonInterleaved YES.
+Offline loop signal frames: intro=43251, body=222092, outro=0, completed=5
+PASS offline recording signal: intro once, continuing exact loop, no rendered outro/fade and measured trim routing

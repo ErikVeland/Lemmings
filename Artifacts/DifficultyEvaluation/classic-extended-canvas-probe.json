@@ -1,0 +1,111 @@
+{
+  "packID": "fan:lldb-200",
+  "archive": "Content/LevelPacks/0200-Gronklems-4.zip",
+  "archiveSHA256": "df9f798f55c909c8f0ef925a70b9dea3a607455ce9b63b3d40ebded40ff0d29f",
+  "entry": "Gronklems #4 (v3)/1) Good Reception.ini",
+  "sourceObjectsOutsideClassicBounds": true,
+  "sourceTerrainOutsideClassicBounds": true,
+  "classicCanvas": {
+    "width": 1600,
+    "height": 160,
+    "solidPixels": 7179
+  },
+  "experimentalCanvas": {
+    "width": 2200,
+    "height": 400,
+    "solidPixels": 52288,
+    "solidPixelsBeyondClassicBounds": 45109
+  },
+  "invalidOversizedCanvasRejected": true,
+  "initialSourceBuiltLibrarySHA256": "14095e66a38562dced02ec069b6b5eae3d688f0e6c4b8681d6cbb19a3cc1a630",
+  "initialSourceBuiltSolverSHA256": "83114af354247e261a5b3208e6f4a9beb537b29224aec0dc61863b32afda77bb",
+  "terrainCoordinateProbeLibrarySHA256": "52238919ea231e927ed4fa1596a86308ceeaba551f5d801f51141305f4b04f4d",
+  "terrainCoordinateProbeSolverSHA256": "47f85f9eb7cfbebc7317b1bfe0eba7cbdc7bb06cebf5c3f361e5991584ca0944",
+  "objectCoordinateProbeLibrarySHA256": "c8f7962200d3e131d9f72fc4486fb716c76573098cf5485ba7baa8d82fd932ee",
+  "objectCoordinateProbeSolverSHA256": "fcd0d29d8bfab0648d68d95e37ca40407c16682b1a62799a5c0d5464dd2319dc",
+  "terrainCoordinateProbe": {
+    "sourceEntry": "Gronklems #4 (v3)/1) Good Reception.ini",
+    "sourceTerrainY": 296,
+    "dosRoundTripTerrainY": -216,
+    "extendedCanvasSolidPixelsWithDOSRoundTrip": 52288,
+    "extendedCanvasSolidPixelsWithSourceTerrain": 58917,
+    "iniMembersWithTerrain": 272,
+    "membersWithPositiveYBeyondDOSLimit": 265,
+    "membersBeyondNineBitY": 2,
+    "membersBelowDOSNegativeLimit": 1,
+    "optInOnly": true
+  },
+  "objectCoordinateProbe": {
+    "iniMembersWithObjects": 272,
+    "membersWithXChangedByDOSObjectAlignment": 214,
+    "goodReceptionFirstObjectSourceX": 1750,
+    "goodReceptionFirstObjectDOSX": 1744,
+    "optInOnly": true,
+    "lostTempleWithBothSourceCoordinateFlags": {
+      "bestSaved": 0,
+      "waitingTick": 232,
+      "oneSkillRollouts": 40
+    }
+  },
+  "targetedSearch": {
+    "beamWidth": 32,
+    "timeBoundSeconds": 10,
+    "defaultCanvasBestSaved": 0,
+    "defaultCanvasExpanded": 6,
+    "experimentalCanvasBestSaved": 0,
+    "experimentalCanvasExpanded": 10,
+    "winningReplay": false
+  },
+  "lemminiIniPlacementScan": {
+    "sourcePackIDs": 20,
+    "iniMembersWithObjectOrTerrainPlacements": 272,
+    "membersWithTerrainOriginAtOrBelowClassicBottom": 272,
+    "membersWithTerrainOriginBeyondClassicRightEdge": 264,
+    "method": "Read-only scan of exact bundled ZIP members whose pack ID is in source-engine-families.json. Counts are INI members with parsed placements, not unique ledger identities or a full pixel render."
+  },
+  "smallPopulationExtendedProbes": [
+    {
+      "packID": "fan:lldb-209",
+      "archiveSHA256": "df965c0277163d6af6da6ab40ba80369ad2f0a446e05929c50c9091e6015974c",
+      "entry": "grams88 Levels/1)Calder Glen.ini",
+      "requirement": "2/2",
+      "canvas": "3200x400",
+      "oneSkillWaitingTick": 147,
+      "oneSkillRollouts": 1,
+      "bestSaved": 0,
+      "firstLossTick": 147
+    },
+    {
+      "packID": "fan:lldb-209",
+      "archiveSHA256": "df965c0277163d6af6da6ab40ba80369ad2f0a446e05929c50c9091e6015974c",
+      "entry": "grams88 Levels/3)08 BC lost temple.ini",
+      "requirement": "1/2",
+      "canvas": "3200x400",
+      "oneSkillWaitingTick": 169,
+      "oneSkillRollouts": 2,
+      "bestSaved": 0,
+      "firstLossTick": 116
+    }
+  ],
+  "smallPopulationSourceTerrainProbe": {
+    "canvas": "3200x400",
+    "coordinateMode": "source-terrain-coordinates",
+    "calderGlen": {
+      "bestSaved": 0,
+      "waitingTick": 147,
+      "oneSkillRollouts": 1
+    },
+    "lostTemple": {
+      "bestSaved": 0,
+      "waitingTick": 232,
+      "oneSkillRollouts": 40
+    }
+  },
+  "defaultCanvasStrictControl": {
+    "level": "fan:lldb-505/KillerMaster 1 Tame 1.dat#1",
+    "result": "1/1 at tick 375",
+    "replaySHA256": "b9ca8ab40c9f47693ff9a200fee04996454471c8cd184eaa382ab8247d4616fa",
+    "matchesPreviousReplay": true
+  },
+  "interpretation": "The current Classic renderer clips most of this Lemmini-source puzzle. An explicit larger canvas retains its terrain in the native renderer and can be searched experimentally, but it does not provide source-correct Lemmini physics or a strict app-compatible win. No difficulty score is assigned."
+}

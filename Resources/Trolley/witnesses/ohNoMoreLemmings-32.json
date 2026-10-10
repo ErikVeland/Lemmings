@@ -1,0 +1,74 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "afterTick" : true,
+      "tick" : 21
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 67
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 75
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 18,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 676
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 973
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 11,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1224
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 20,
+    "required" : 10,
+    "saved" : 11,
+    "stateHash" : "d715c7d2051bfed659f895f503548c6957d70657fc7c5ddfaafcbf7dd0661514",
+    "ticks" : 1903
+  },
+  "initialStateHash" : "12d145b58172aac4ceaf1678a7decbf6533b77eb8b734db789bc1ff86e61a0a9",
+  "number" : 13,
+  "rank" : "Crazy",
+  "title" : "It`s a trade off"
+}

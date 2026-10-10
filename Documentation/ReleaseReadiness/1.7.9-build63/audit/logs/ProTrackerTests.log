@@ -1,0 +1,13 @@
+PASS parse — 'test module', 4ch, 1 pattern
+PASS playback period 428 — expected 129.5 Hz, measured 130.0 Hz
+PASS playback period 214 — expected 259.0 Hz, measured 258.0 Hz
+PASS playback period 856 — expected 64.7 Hz, measured 65.0 Hz
+PASS volume effect — 0.1953 at 64, 0.0488 at 16
+PASS malformed modules are rejected
+PASS faithful default is unchanged — worst delta 0.00e+00
+PASS stereo separation — 0 is mono, 1 spreads by 0.1953
+PASS equalizer — RMS 0.1953 to 0.5379
+PASS reverb — changed by 0.1941, peak 0.1944
+PASS per-instrument tuning — gain 0.5 gave ratio 0.500
+PASS modern preset — peak 0.2116, no clipping
+ProTracker tests passed.

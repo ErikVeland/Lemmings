@@ -1,0 +1,33 @@
+....E.F............................
+======================================================================
+ERROR: test_current_repository_inputs_are_valid (test_automatic_updates.AutomaticUpdateTests.test_current_repository_inputs_are_valid)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/Tests/ReleaseReadinessTests/test_automatic_updates.py", line 16, in test_current_repository_inputs_are_valid
+    version, build, items = validate_repository(ROOT, allow_empty=True, allow_stale_release=True)
+                            ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/Tools/ReleaseReadiness/automatic_updates.py", line 111, in validate_repository
+    version, build = validate_info_plist(root / "Resources/Info.plist")
+                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/Tools/ReleaseReadiness/automatic_updates.py", line 38, in validate_info_plist
+    raise ValueError("Info.plist must identify a 1.7 application.")
+ValueError: Info.plist must identify a 1.7 application.
+
+======================================================================
+FAIL: test_info_plist_rejects_an_invalid_public_key (test_automatic_updates.AutomaticUpdateTests.test_info_plist_rejects_an_invalid_public_key)
+----------------------------------------------------------------------
+ValueError: Info.plist must identify a 1.7 application.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/Tests/ReleaseReadinessTests/test_automatic_updates.py", line 27, in test_info_plist_rejects_an_invalid_public_key
+    with self.assertRaisesRegex(ValueError, "Ed25519"):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "Ed25519" does not match "Info.plist must identify a 1.7 application."
+
+----------------------------------------------------------------------
+Ran 35 tests in 1.726s
+
+FAILED (failures=1, errors=1)
+playback: 2 re-encoded entries

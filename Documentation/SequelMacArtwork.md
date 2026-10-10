@@ -130,6 +130,16 @@ at 2× resolution. It can refine binary silhouettes in front-end assets, which
 have no collision masks. It never runs on gameplay terrain or actors. This is
 discrete reconstruction, not hand-drawn Macintosh sequel artwork.
 
+L2 rope, pole and fill particles use 2× pixel marks inside their original
+one-pixel positions. L3 blast rings and fireballs use fixed pixel art inside
+their original 40×40 and 6×4 bounds. These effects keep their source timing and
+positions. They use inferred colours and shapes because no matching Macintosh
+sequel frames exist. L3's contextual tool picker uses the eight green directional
+frames in the original `TRIBE` sprite bank. Its pickup and carried-tool icons use
+decoded `PERM` object frames. Thrown bombs and grenades still use pickup art
+because their native effect animation and anchor mapping is unverified. The red
+direction frames exist in the source bank, but their state mapping is unverified.
+
 ## Using the artwork
 
 The option is on by default, including upgrades from the earlier opt-in release.
@@ -205,6 +215,10 @@ Visual hashes in `Tests/SequelMacArtworkTests/goldens.json` cover materials,
 characters, skills, objects, creatures and UI. After inspecting a deliberate
 artwork change, `--record-goldens` records a new baseline. Do not use it to hide
 an unexplained regression.
+
+`zsh Scripts/run-sequel-effect-artwork-tests.sh` checks the recreated effect
+footprints, binary alpha, palette detail and logical image size. It writes an
+offscreen proof image to `.build/sequel-effect-artwork/proof.png`.
 
 ## Visual assessment
 

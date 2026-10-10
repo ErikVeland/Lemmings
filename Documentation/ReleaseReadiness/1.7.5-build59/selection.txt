@@ -1,0 +1,10 @@
+UI test windows: offscreen; audio: muted
+PASS selection Settings choices, mouse/keyboard targets, presets, persistence and layout
+PASS classic visible halo on native terrain; cached draw mean 0.601 ms, p95 0.688 ms
+PASS classic None/Obvious/Modern, native animation frames, cache reuse, dialog suppression and click-through
+SKIP composited CRT window capture in offscreen mode; covered by offscreen Metal pixel tests
+PASS lemmings2 visible halo on native terrain; cached draw mean 0.284 ms, p95 0.375 ms
+PASS lemmings2 None/Obvious/Modern, native animation frames, cache reuse, dialog suppression and click-through
+PASS lemmings3 visible halo on native terrain; cached draw mean 0.321 ms, p95 0.349 ms
+PASS lemmings3 None/Obvious/Modern, native animation frames, cache reuse, dialog suppression and click-through
+Selection integration tests passed.

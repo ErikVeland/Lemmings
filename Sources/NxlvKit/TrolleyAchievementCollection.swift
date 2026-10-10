@@ -69,8 +69,9 @@ extension TrolleyAchievement {
     }
     public var philosopherID: String? { self == .falsifier ? "popper" : Self.collection[self]?.philosopher }
     public static func forPhilosopher(_ id: String) -> Self? { allCases.first { $0.philosopherID == id } }
-    public static func forBoard(_ board: TrolleyBoard) -> Self {
+    public static func forBoard(_ board: TrolleyBoard) -> Self? {
         switch board {
+        case .fastestClear, .fastestAllSaved: nil
         case .mostSaved: .rescueRival
         case .rescuePotential: .potentialRival
         case .zeroAvoidableLosses: .recordMatched

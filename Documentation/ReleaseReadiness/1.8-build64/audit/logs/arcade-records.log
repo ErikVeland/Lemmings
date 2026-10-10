@@ -1,0 +1,6 @@
+Sources/LemmingsLocal/AppUpdates.swift:2:8: error: no such module 'Sparkle'
+ 1 | import AppKit
+ 2 | import Sparkle
+   |        `- error: no such module 'Sparkle'
+ 3 | 
+ 4 | /// Sparkle owns download verification and installation. The home screen offers a quiet reminder.

@@ -28,9 +28,11 @@ if [[ "$engine_before" != "$("$build_dir/audit" fingerprint)" ]]; then
   echo "Verifier and packager fingerprints differ. No replays were run." >&2
   exit 1
 fi
+search_args=()
+if [[ "${TROLLEY_AUDIT_SEARCH:-1}" == 1 ]]; then search_args=(--search); fi
 workers=()
 for (( shard=0; shard<jobs; shard++ )); do
-  "$build_dir/audit" classic --search "--shard=$shard/$jobs" > "$build_dir/classic-$shard.log" 2>&1 &
+  "$build_dir/audit" classic "${search_args[@]}" "--shard=$shard/$jobs" > "$build_dir/classic-$shard.log" 2>&1 &
   workers+=($!)
 done
 for family in ports l2 l3; do

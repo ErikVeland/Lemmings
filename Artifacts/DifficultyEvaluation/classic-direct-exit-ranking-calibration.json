@@ -1,0 +1,52 @@
+{
+  "calibration": {
+    "alternateProbeCount": 10,
+    "alternateReplayBasedDifficultyScore": 258.5016715947094,
+    "builderActions": 5,
+    "builderArchiveSHA256": "164a98b095105dfa73a6bd8df695b6eff20947227f5c0c35d6c6e366f758de6a",
+    "builderExpansions": 14188,
+    "builderIdentity": "fan:lldb-546/Deceit Extras 1.DAT#4",
+    "builderInitialStateHash": "9cecae314f94dd7637ac0bcc40fa5b091bfde6e4cf53b39db9d5e64464e3ca7b",
+    "builderOutcome": {
+      "didWin": true,
+      "released": 20,
+      "required": 10,
+      "saved": 20,
+      "stateHash": "c11412804cfd10239dd15c2e76a09d8867a5e20e4baffd8ef9999a8e9945e15b",
+      "ticks": 1496
+    },
+    "builderReplayPath": "classic-direct-exit-replays/140b7f15f733f7e06a172c2cf076ef0ca5ac1262282a70f319d2f00ca24a8c4a.json",
+    "builderReplaySHA256": "140b7f15f733f7e06a172c2cf076ef0ca5ac1262282a70f319d2f00ca24a8c4a",
+    "builderSearchSeconds": 4,
+    "existingSelectedDifficultyScore": 67.35611126027135,
+    "ledgerDecision": "retain existing selected route and score; the alternate has fewer inputs but a substantially higher execution score",
+    "oneFloaterIdentity": "fan:lldb-505/KillerMaster 1 Tame 1.dat#1",
+    "oneFloaterOutcome": "strict solver win 1/1, waiting tick 59, one continuation",
+    "oneFloaterReplaySHA256": "968d366c6c60b1f15c6485ea6549a8546887b6222006eae204b4d8ef99a6add3",
+    "strictExactMemberPlayback": "1/1"
+  },
+  "date": "2026-10-04",
+  "interpretation": "The new ranking finds an independently replayed shorter Builder route on a known level. It has not yet produced a first win for an unscored target. Static terrain distance misses built paths, but this calibration alone does not establish general search superiority or source physics parity.",
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "scope": "Direct exit-distance search policy for the source-built ClassicSolver",
+  "searchChange": "--direct-exit-distance ranks active workers by Manhattan distance to an exit instead of a distance field frozen before bridges or tunnels are built.",
+  "sourceBuiltScorerSHA256": "486955df10abe70221be410377dfa0eafc1b67fe930954e97324f16e9ec35314",
+  "sourceBuiltSolverSHA256": "3e2e3ebe5c5505d715d60a37dfee4087fee401ddd177f2cf8be43fb0a6f85c1c",
+  "unsolvedProbes": [
+    {
+      "partialReplaySHA256": "b8204a5dfcf59c4a417bb73888a95d3226266ea0b781a7f41c5dcc9947794d3a",
+      "result": "no win",
+      "target": "The Rock Peaks rate 300"
+    },
+    {
+      "partialReplaySHA256": "69814467a192ec8a1e7037329e3171fa04a3753b209dd145016002cf8f9ab99d",
+      "result": "no win",
+      "target": "The big stair"
+    },
+    {
+      "partialReplaySHA256": "d32ae24606be5a391d23d9e38869d03eec20e909e240af747d558ab389671596",
+      "result": "no win",
+      "target": "Blind Builder"
+    }
+  ]
+}

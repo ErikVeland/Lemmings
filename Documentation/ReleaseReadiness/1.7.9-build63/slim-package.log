@@ -1,0 +1,8 @@
+main: 54 versions, 5.6 MB
+{'matchingFilesOutsideMusicBeforeSigning': 13680, 'fullMusicVersions': 495, 'slimMusicVersions': 54, 'optionalLibraries': 18}
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/.build/release-1.7.9/slim/Ultimate Lemmings.app: replacing existing signature
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/.build/release-1.7.9/slim/Ultimate Lemmings.app: valid on disk
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/.build/release-1.7.9/slim/Ultimate Lemmings.app: satisfies its Designated Requirement
+Error: No Keychain password item found for profile: lemmings-beta
+
+Run 'notarytool store-credentials' to create another credential profile.

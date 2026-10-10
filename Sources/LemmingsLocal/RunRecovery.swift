@@ -31,6 +31,9 @@ struct RunRecovery: Codable, Sendable {
     var l2: L2RunRecovery? = nil
     var l3: L3RunRecovery? = nil
     var neo: NeoRunRecovery? = nil
+    var neoPackID: String? = nil
+    var neoLevelID: String? = nil
+    var neoPackName: String? = nil
     var fan: FanRunRecovery? = nil
     /// The Classic engine state at `tick`. A later build restores from it
     /// when its engine no longer replays `events` to the same state, so an
@@ -72,6 +75,8 @@ struct RunRecovery: Codable, Sendable {
         }
         if let neo {
             guard events.isEmpty, sourcePath?.hasPrefix("/") == true,
+                  [neoPackID, neoLevelID, neoPackName].compactMap({ $0 })
+                    .allSatisfy({ !$0.isEmpty && $0.utf8.count <= 4096 }),
                   neo.state.tickCount == tick else { throw RunRecoveryError.invalid }
             try neo.validate()
         }
@@ -99,7 +104,7 @@ struct FanRunRecovery: Codable, Sendable {
 }
 
 enum RunRecoveryError: Error, LocalizedError {
-    case version, invalid, changed, busy, differentGame
+    case version, invalid, changed, busy, differentGame, differentSession
     var errorDescription: String? {
         switch self {
         case .version: return "This saved run needs a different app version. Its files were preserved."
@@ -107,6 +112,7 @@ enum RunRecoveryError: Error, LocalizedError {
         case .changed: return "The saved run changed in another app. Reopen the game before saving again."
         case .busy: return "Another app is saving this run. Try again."
         case .differentGame: return "The saved run uses different game data or rules. Its files were preserved."
+        case .differentSession: return "This run belongs to another player or Hot Seat. Resume that session first. Its files were preserved."
         }
     }
 }
@@ -124,11 +130,38 @@ final class RunRecoveryFile {
     private(set) var recoveredBackup = false
     init(url: URL) { self.url = url }
     private func hash(_ data: Data) -> String { SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined() }
-    private func decode(_ data: Data) throws -> RunRecovery? {
+    /// The fields that choose the latest run. Decoding only these skips the engine snapshot.
+    struct Header: Decodable, Sendable {
+        let profileID: String
+        var hotSeatID: String? = nil
+        var savedAt = Date()
+    }
+    private func verifiedPayload(_ data: Data) throws -> Data? {
         let document = try JSONDecoder().decode(Document.self, from: data)
         guard document.version == 1 else { throw RunRecoveryError.version }
         guard document.checksum == hash(document.payload ?? Data()) else { throw RunRecoveryError.invalid }
-        return try document.payload.map { try JSONDecoder().decode(RunRecovery.self, from: $0).validated() }
+        return document.payload
+    }
+    private func decode(_ data: Data) throws -> RunRecovery? {
+        try verifiedPayload(data).map { try JSONDecoder().decode(RunRecovery.self, from: $0).validated() }
+    }
+    /// Reads the primary file's header without the lock or backup recovery. Callers fall back to `load()`.
+    func header() throws -> Header? {
+        try verifiedPayload(read(url)).map { try JSONDecoder().decode(Header.self, from: $0) }
+    }
+    /// Keep ownership verification and removal under the same writer lock.
+    /// The lock file stays in place so another process cannot acquire a new inode.
+    func discard(profileID: String) throws -> Bool {
+        try locked {
+            let manager = FileManager.default
+            let data = try current() ?? (manager.fileExists(atPath: backupURL.path) ? read(backupURL) : nil)
+            guard let data, let payload = try verifiedPayload(data),
+                  try JSONDecoder().decode(Header.self, from: payload).profileID == profileID else { return false }
+            if manager.fileExists(atPath: backupURL.path) { try manager.removeItem(at: backupURL) }
+            if manager.fileExists(atPath: url.path) { try manager.removeItem(at: url) }
+            expected = nil
+            return true
+        }
     }
     private func read(_ path: URL) throws -> Data {
         var freshPath = path
@@ -199,6 +232,7 @@ final class RunRecoveryStore: @unchecked Sendable {
     let directory: URL
     private let queue = DispatchQueue(label: "academy.glasscode.lemmings.checkpoints", qos: .utility)
     private var files: [UUID: RunRecoveryFile] = [:]
+    private var lastSaveError: Error?
     init(directory: URL? = nil) {
         if let directory { self.directory = directory }
         else if Bundle.main.bundleIdentifier?.contains("integration-tests") == true {
@@ -210,17 +244,30 @@ final class RunRecoveryStore: @unchecked Sendable {
     }
     private func file(_ id: UUID) throws -> RunRecoveryFile {
         if let file = files[id] { return file }
+        try loadRun(id)
+        return files[id]!
+    }
+    /// Loads a run once, including the first open that registers its file.
+    @discardableResult private func loadRun(_ id: UUID) throws -> RunRecovery? {
+        if let file = files[id] { return try file.load() }
         let file = RunRecoveryFile(url: directory.appendingPathComponent(id.uuidString + ".json"))
-        _ = try file.load(); files[id] = file
-        return file
+        let value = try file.load(); files[id] = file
+        return value
     }
     func save(_ recovery: RunRecovery, immediately: Bool = false,
               onError: @escaping @MainActor @Sendable (String) -> Void) {
         let operation: @Sendable () -> Void = { [self] in
-            do { try file(recovery.runID).save(recovery) }
-            catch { let message = error.localizedDescription; Task { @MainActor in onError(message) } }
+            do { try file(recovery.runID).save(recovery); lastSaveError = nil }
+            catch {
+                lastSaveError = error
+                let message = error.localizedDescription
+                Task { @MainActor in onError(message) }
+            }
         }
         if immediately { queue.sync(execute: operation) } else { queue.async(execute: operation) }
+    }
+    func checkSaveSucceeded() throws {
+        try queue.sync { if let lastSaveError { throw lastSaveError } }
     }
     func clear(_ id: UUID) throws { try queue.sync { try file(id).save(nil) } }
     /// Unrestorable runs leave Resume. Their bytes move to "Set aside" instead of being deleted.
@@ -242,22 +289,42 @@ final class RunRecoveryStore: @unchecked Sendable {
     func discard(profileID: String) throws {
         try queue.sync {
             for id in try runIDs() {
-                guard let value = try? file(id).load(), value.profileID == profileID else { continue }
-                files[id] = nil
-                for suffix in [".json", ".json.backup", ".json.lock"] {
-                    try? FileManager.default.removeItem(at: directory.appendingPathComponent(id.uuidString + suffix))
+                let candidate = RunRecoveryFile(url: directory.appendingPathComponent(id.uuidString + ".json"))
+                do {
+                    if try candidate.discard(profileID: profileID) {
+                        files[id] = nil; summaries[id] = nil
+                        if loadedRun?.id == id { loadedRun = nil }
+                    }
+                } catch RunRecoveryError.invalid {
+                    continue
+                } catch RunRecoveryError.version {
+                    continue
+                } catch is DecodingError {
+                    // Unknown or damaged data must not be deleted on behalf of a player.
+                    continue
                 }
             }
         }
     }
-    private func runIDs() throws -> Set<UUID> {
-        guard FileManager.default.fileExists(atPath: directory.path) else { return [] }
-        let urls = try FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)
-        // Include missing-primary backups after an interrupted file operation.
-        return Set(urls.compactMap { URL -> UUID? in
-            let stem = URL.deletingPathExtension()
-            return UUID(uuidString: URL.pathExtension == "backup" ? stem.deletingPathExtension().lastPathComponent : stem.lastPathComponent)
-        })
+    private func runIDs() throws -> Set<UUID> { try listing().ids }
+    /// Run IDs, and a stamp for each primary file, from one directory listing.
+    private func listing() throws -> (ids: Set<UUID>, stamps: [UUID: Stamp]) {
+        guard FileManager.default.fileExists(atPath: directory.path) else { return ([], [:]) }
+        let keys: Set<URLResourceKey> = [.contentModificationDateKey, .fileSizeKey]
+        let urls = try FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: Array(keys))
+        var ids = Set<UUID>(), stamps: [UUID: Stamp] = [:]
+        for url in urls {
+            // Include missing-primary backups after an interrupted file operation.
+            let stem = url.deletingPathExtension()
+            let isBackup = url.pathExtension == "backup"
+            guard let id = UUID(uuidString: isBackup ? stem.deletingPathExtension().lastPathComponent : stem.lastPathComponent) else { continue }
+            ids.insert(id)
+            if url.pathExtension == "json", let values = try? url.resourceValues(forKeys: keys),
+               let modified = values.contentModificationDate, let size = values.fileSize {
+                stamps[id] = Stamp(modified: modified, size: size)
+            }
+        }
+        return (ids, stamps)
     }
     private func moveAside(_ id: UUID) throws {
         files[id] = nil
@@ -271,20 +338,85 @@ final class RunRecoveryStore: @unchecked Sendable {
         }
         try? manager.removeItem(at: directory.appendingPathComponent(id.uuidString + ".json.lock"))
     }
+    /// A file's identity on disk. Any write, from this process or another, changes it.
+    private struct Stamp: Equatable {
+        let modified: Date
+        let size: Int
+    }
+    private struct Summary {
+        let stamp: Stamp
+        let header: RunRecoveryFile.Header?
+    }
+    private var summaries: [UUID: Summary] = [:]
+    private var loadedRun: (id: UUID, stamp: Stamp, value: RunRecovery)?
+    private func stamp(_ id: UUID) -> Stamp? {
+        var url = directory.appendingPathComponent(id.uuidString + ".json")
+        url.removeAllCachedResourceValues()
+        guard let values = try? url.resourceValues(forKeys: [.contentModificationDateKey, .fileSizeKey]),
+              let modified = values.contentModificationDate, let size = values.fileSize else { return nil }
+        return Stamp(modified: modified, size: size)
+    }
+    private final class HeaderReads: @unchecked Sendable {
+        private let lock = NSLock()
+        private var values: [UUID: RunRecoveryFile.Header?] = [:]
+        func record(_ header: RunRecoveryFile.Header?, for id: UUID) { lock.lock(); values[id] = .some(header); lock.unlock() }
+        /// `nil` when the quick read failed; `.some(nil)` for a cleared run.
+        func header(for id: UUID) -> RunRecoveryFile.Header?? { lock.lock(); defer { lock.unlock() }; return values[id] }
+    }
+    /// Headers of all runs. Only files that changed since the last scan are read, in parallel.
+    /// A file that fails the quick read goes through the full load, which also recovers backups.
+    private func headers(_ ids: Set<UUID>, stamps listed: [UUID: Stamp]) -> [UUID: Result<RunRecoveryFile.Header?, Error>] {
+        let changed = ids.filter { id in listed[id].map { summaries[id]?.stamp != $0 } ?? true }
+        let readable = Array(changed.filter { listed[$0] != nil })
+        let reads = HeaderReads()
+        let directory = directory
+        DispatchQueue.concurrentPerform(iterations: readable.count) { index in
+            let id = readable[index]
+            if let header = try? RunRecoveryFile(url: directory.appendingPathComponent(id.uuidString + ".json")).header() {
+                reads.record(header, for: id)
+            }
+        }
+        var result: [UUID: Result<RunRecoveryFile.Header?, Error>] = [:]
+        for id in ids {
+            if !changed.contains(id), let cached = summaries[id] { result[id] = .success(cached.header); continue }
+            let header: RunRecoveryFile.Header?
+            if let quick = reads.header(for: id) { header = quick }
+            else {
+                do { header = try loadRun(id).map { RunRecoveryFile.Header(profileID: $0.profileID, hotSeatID: $0.hotSeatID, savedAt: $0.savedAt) } }
+                catch { result[id] = .failure(error); continue }
+            }
+            result[id] = .success(header)
+            // A write during the read leaves the entry out, so the next scan reads it again.
+            if let settled = stamp(id), listed[id] == nil || settled == listed[id] { summaries[id] = Summary(stamp: settled, header: header) }
+        }
+        return result
+    }
+    /// Chooses the newest run from cached headers, then fully loads only that run.
     func latest(profileID: String, hotSeatID: String? = nil) throws -> RunRecovery? {
         try queue.sync {
-            let ids = try runIDs()
-            var latest: RunRecovery?
+            var candidates: [(id: UUID, savedAt: Date)] = []
             var firstError: Error?
-            for id in ids {
+            let (ids, listed) = try listing()
+            for (id, read) in headers(ids, stamps: listed) {
+                switch read {
+                case .success(let header):
+                    guard let header, header.profileID == profileID, header.hotSeatID == hotSeatID else { continue }
+                    candidates.append((id, header.savedAt))
+                case .failure(let error): if firstError == nil { firstError = error }
+                }
+            }
+            for candidate in candidates.sorted(by: { $0.savedAt > $1.savedAt }) {
+                let current = stamp(candidate.id)
+                if let loadedRun, loadedRun.id == candidate.id, let current, loadedRun.stamp == current,
+                   files[candidate.id] != nil { return loadedRun.value }
                 do {
-                    let item = try file(id)
-                    guard let value = try item.load(), value.profileID == profileID, value.hotSeatID == hotSeatID else { continue }
-                    if latest == nil || value.savedAt > latest!.savedAt { latest = value }
+                    guard let value = try loadRun(candidate.id), value.profileID == profileID, value.hotSeatID == hotSeatID else { continue }
+                    if let settled = stamp(candidate.id), settled == current { loadedRun = (candidate.id, settled, value) }
+                    return value
                 } catch { if firstError == nil { firstError = error } }
             }
-            if latest == nil, let firstError { throw firstError }
-            return latest
+            if let firstError { throw firstError }
+            return nil
         }
     }
 }
@@ -313,6 +445,10 @@ struct NeoRunRecovery: Codable, Sendable {
 }
 
 struct L3RunRecovery: Codable, Sendable {
+    struct RestoredRun {
+        let initial: Lemmings3Runtime
+        let game: Lemmings3Runtime
+    }
     struct Input: Codable, Sendable {
         let tick: Int
         let action: String
@@ -330,13 +466,107 @@ struct L3RunRecovery: Codable, Sendable {
               skillAssignments.values.allSatisfy({ (0...100_000).contains($0) }),
               toolUses.values.allSatisfy({ (0...100_000).contains($0) }) else { throw RunRecoveryError.invalid }
     }
-    func restore(initial: Lemmings3Runtime, checkpoint: RunRecovery) throws -> Lemmings3Runtime {
+    func restore(initial: Lemmings3Runtime, checkpoint: RunRecovery) throws -> RestoredRun {
         _ = try checkpoint.validated()
-        guard Self.stateHash(initial) == checkpoint.initialStateHash else { throw RunRecoveryError.differentGame }
-        let game = try Self.replay(initial: initial, inputs: inputs, through: checkpoint.tick)
+        let replayInitial: Lemmings3Runtime
+        if Self.stateHash(initial) == checkpoint.initialStateHash {
+            replayInitial = initial
+        } else if let previous = try Self.previousInitials(initial).first(where: {
+            Self.stateHash($0) == checkpoint.initialStateHash
+        }) {
+            replayInitial = previous
+        } else {
+            throw RunRecoveryError.differentGame
+        }
+        let game = try Self.replay(initial: replayInitial, inputs: inputs, through: checkpoint.tick)
         guard game.tick == checkpoint.tick, !game.isComplete,
               Self.stateHash(game) == checkpoint.stateHash else { throw RunRecoveryError.invalid }
-        return game
+        return RestoredRun(initial: replayInitial, game: game)
+    }
+    /**
+     * Finds earlier Preview pickup rules by their exact saved-run identity.
+     */
+    private static func previousInitials(_ initial: Lemmings3Runtime) throws -> [Lemmings3Runtime] {
+        var candidates: [Lemmings3Runtime] = []
+        if let previous = try previousHadokenInitial(initial) { candidates.append(previous) }
+        candidates.append(contentsOf: try previousToolMappingInitials(initial))
+        for candidate in [initial] + candidates {
+            if let previous = try previousSpadeInitial(candidate) { candidates.append(previous) }
+        }
+        return candidates
+    }
+    /**
+     * Recreates the six-use Spade pickup in earlier Preview saved runs.
+     */
+    private static func previousSpadeInitial(_ initial: Lemmings3Runtime) throws -> Lemmings3Runtime? {
+        guard initial.tick == 0 else { return nil }
+        var pickups = initial.configuration.pickups
+        var changed = false
+        for index in pickups.indices where pickups[index].tool == .spade && pickups[index].quantity == 8 {
+            pickups[index].quantity = 6
+            changed = true
+        }
+        guard changed else { return nil }
+        return try runtime(initial, pickups: pickups)
+    }
+    /**
+     * Recreates the one-use Hadoken rule used before the eight-use Preview trial.
+     */
+    private static func previousHadokenInitial(_ initial: Lemmings3Runtime) throws -> Lemmings3Runtime? {
+        guard initial.tick == 0 else { return nil }
+        let configuration = initial.configuration
+        var pickups = configuration.pickups
+        var changed = false
+        for index in pickups.indices where pickups[index].tool == .hadoken && pickups[index].quantity == 8 {
+            pickups[index].quantity = 1
+            changed = true
+        }
+        guard changed else { return nil }
+        return try runtime(initial, pickups: pickups)
+    }
+    /**
+     * Recreates Preview pickups from before the original tool numbers were checked.
+     */
+    private static func previousToolMappingInitials(_ initial: Lemmings3Runtime) throws -> [Lemmings3Runtime] {
+        guard initial.tick == 0 else { return [] }
+        let original = initial.configuration.pickups
+        guard original.contains(where: { [.hadoken, .shimmy, .sucker].contains($0.tool) }) else { return [] }
+        var candidates: [Lemmings3Runtime] = []
+        for hadokenQuantity in [8, 1] {
+            for suckerQuantity in [8, 1] {
+                let pickups = original.map { pickup -> Lemmings3Runtime.Pickup in
+                    let tool: Lemmings3Runtime.Tool
+                    let quantity: Int
+                    switch pickup.tool {
+                    case .hadoken: tool = .shimmy; quantity = 1
+                    case .shimmy: tool = .hadoken; quantity = hadokenQuantity
+                    case .sucker: tool = .sucker; quantity = suckerQuantity
+                    default: tool = pickup.tool; quantity = pickup.quantity
+                    }
+                    var previous = Lemmings3Runtime.Pickup(id: pickup.id, tool: tool, x: pickup.x,
+                        y: pickup.y, quantity: quantity)
+                    previous.ignoredBy = pickup.ignoredBy
+                    return previous
+                }
+                candidates.append(try runtime(initial, pickups: pickups))
+            }
+        }
+        return candidates
+    }
+    /**
+     * Builds a run with the same level data and replacement pickups.
+     */
+    private static func runtime(_ initial: Lemmings3Runtime, pickups: [Lemmings3Runtime.Pickup]) throws -> Lemmings3Runtime {
+        let configuration = initial.configuration
+        return try Lemmings3Runtime(configuration: .init(
+            width: configuration.width, height: configuration.height,
+            attributes: configuration.attributes, entrance: configuration.entrance, exits: configuration.exits,
+            total: configuration.total, releaseInterval: configuration.releaseInterval,
+            releaseDelay: configuration.releaseDelay, timeLimit: configuration.timeLimit,
+            pickups: pickups, extras: configuration.extras,
+            backgroundAttributes: configuration.backgroundAttributes,
+            sourceLevelReference: configuration.sourceLevelReference, traps: configuration.traps,
+            creatures: configuration.creatures, additionalEntrances: configuration.additionalEntrances))
     }
     /// Reconstructs the deterministic L3 state at a recorded tick.
     static func replay(initial: Lemmings3Runtime, inputs: [Input], through tick: Int) throws -> Lemmings3Runtime {

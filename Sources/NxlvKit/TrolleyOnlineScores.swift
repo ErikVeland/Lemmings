@@ -6,7 +6,10 @@ public struct TrolleyOnlineConfiguration: Codable, Sendable {
         public let conditions: TrolleyConditions
         public let maximum: TrolleyMaximum
         public let leaderboardID: String?
-        public init(conditions: TrolleyConditions, maximum: TrolleyMaximum, leaderboardID: String?) {
+        public let fastestClearID: String?
+        public let fastestAllSavedID: String?
+        public init(conditions: TrolleyConditions, maximum: TrolleyMaximum, leaderboardID: String?, fastestClearID: String? = nil, fastestAllSavedID: String? = nil) {
+            self.fastestClearID = fastestClearID; self.fastestAllSavedID = fastestAllSavedID
             self.conditions = conditions; self.maximum = maximum; self.leaderboardID = leaderboardID
         }
     }
@@ -28,6 +31,11 @@ public struct TrolleyOnlineConfiguration: Codable, Sendable {
             let stars = TrolleyRescueGoals(run: attempt.run, maximum: level.maximum).stars
             let key = TrolleyCareerScore.levelKey(attempt.run)
             best[key] = max(best[key] ?? 0, stars)
+            if attempt.run.seconds.isFinite, attempt.run.seconds > 0, attempt.run.seconds < Double(Int.max / 1000) {
+                let milliseconds = max(1, Int((attempt.run.seconds * 1000).rounded()))
+                if let id = level.fastestClearID { scores[id] = min(scores[id] ?? milliseconds, milliseconds) }
+                if attempt.run.savedAll, let id = level.fastestAllSavedID { scores[id] = min(scores[id] ?? milliseconds, milliseconds) }
+            }
             if let id = level.leaderboardID { scores[id] = max(scores[id] ?? 0, attempt.run.saved) }
         }
         if !best.isEmpty {
@@ -38,7 +46,7 @@ public struct TrolleyOnlineConfiguration: Codable, Sendable {
         return scores
     }
     public var isValid: Bool {
-        let ids = [starsID, clearsID, perfectID] + levels.compactMap(\.leaderboardID)
+        let ids = [starsID, clearsID, perfectID] + levels.flatMap { [$0.leaderboardID, $0.fastestClearID, $0.fastestAllSavedID].compactMap { $0 } }
         return !levels.isEmpty && Set(ids).count == ids.count && ids.allSatisfy { !$0.isEmpty && $0.count <= 100 }
             && Set(levels.map { $0.conditions.fingerprint }).count == levels.count
             && levels.allSatisfy { $0.conditions.isValid && $0.maximum.isRescueTarget

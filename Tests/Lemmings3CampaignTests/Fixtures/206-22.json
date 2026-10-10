@@ -1,0 +1,72 @@
+{
+  "expected" : {
+    "lost" : 0,
+    "reserves" : 12,
+    "saved" : 11,
+    "stateHash" : "20d41a80fd4d45a0b725ade141d5afd3d20010169c0144c3d3a7d55e1ed59fc3",
+    "ticks" : 2949
+  },
+  "initialStateHash" : "d47f5c78d3ed582e492b4139418647d94dc7b423abfa365b955808b6fc4de347",
+  "inputs" : [
+    {
+      "action" : "use",
+      "direction" : "up",
+      "lemming" : 1,
+      "tick" : 425
+    },
+    {
+      "action" : "walker",
+      "lemming" : 1,
+      "tick" : 441
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 2,
+      "tick" : 446
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 3,
+      "tick" : 469
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 4,
+      "tick" : 492
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 5,
+      "tick" : 515
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 6,
+      "tick" : 538
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 7,
+      "tick" : 561
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 8,
+      "tick" : 584
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 9,
+      "tick" : 607
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 10,
+      "tick" : 630
+    }
+  ],
+  "level" : 206,
+  "levelSHA256" : "b4b60edccc38a649d0a5f3a7e6a7f5ab8da57c77402b7eb8cf94302e718fa7ad",
+  "population" : 22,
+  "version" : 1
+}

@@ -110,6 +110,8 @@ public struct ClassicDOSRewind: Sendable {
     public var earliestTick: Int { keyframes.first?.tick ?? simulation.tickCount }
     public var currentTick: Int { simulation.tickCount }
     public var canRewind: Bool { simulation.tickCount > earliestTick }
+    /// Commands that belong to the current point, excluding a future kept for scrubbing.
+    public var appliedCommands: [LoggedCommand] { Array(commands.prefix(appliedCommandCount)) }
 
     /// Moves to an exact tick, forward or back.
     ///
@@ -159,7 +161,12 @@ public struct ClassicDOSRewind: Sendable {
         return seek(toTick: simulation.tickCount - ticks)
     }
 
-    /// A successful new command replaces the abandoned future branch.
+    /// Starts live play from this point without repeating commands from the old future.
+    public mutating func resumeFromCurrentTick() {
+        discardFutureCommands()
+    }
+
+    /// A successful new command also replaces the abandoned future branch.
     private mutating func discardFutureCommands() {
         commands.removeSubrange(appliedCommandCount...)
         keyframes.removeAll { $0.tick > simulation.tickCount }
@@ -210,7 +217,7 @@ public struct ClassicDOSRewind: Sendable {
             number: number,
             title: title,
             initialStateHash: initialStateHash,
-            events: commands.prefix(appliedCommandCount).map { ClassicDOSReplayEvent(tick: $0.tick, action: $0.action, afterTick: true) }
+            events: appliedCommands.map { ClassicDOSReplayEvent(tick: $0.tick, action: $0.action, afterTick: true) }
         )
     }
 }

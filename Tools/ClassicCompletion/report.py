@@ -98,7 +98,17 @@ The remaining levels are:
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true')
+    parser.add_argument('--check-fixtures', action='store_true',
+                        help='Check the preserved solution fixture hashes without checking the engine fingerprint.')
     args = parser.parse_args()
+    if args.check_fixtures:
+        evidence = json.loads((REPORT / 'evidence.json').read_text())
+        recorded = {row['fixture']: row['sha256'] for row in evidence['fixtures']}
+        actual = {str(path.relative_to(ROOT)): sha256(path.read_bytes()).hexdigest()
+                  for path in sorted(FIXTURES.glob('*.json'))}
+        assert len(recorded) == 120 and recorded == actual, 'Classic solution fixtures changed or lack a matching manifest.'
+        print('PASS 120 preserved solution fixture hashes')
+        return
     evidence, text = build()
     payload = json.dumps(evidence, indent=2) + '\n'
     if args.check:

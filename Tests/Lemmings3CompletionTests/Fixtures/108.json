@@ -3,10 +3,10 @@
     "lost" : 19,
     "reserves" : 0,
     "saved" : 1,
-    "stateHash" : "2e556bfba3ec4b42543a5e3937bf3b4e9ebc589d2a46fe80f57524aa963f86e8",
-    "ticks" : 1560
+    "stateHash" : "daa65490d976bfd285da92ef7251e25a5b4e4136bfaf780b1da0da4f5fbdcde5",
+    "ticks" : 1221
   },
-  "initialStateHash" : "e671617fb9afde311954e36d56ef93d4663e87882681347197889281ba3de4bb",
+  "initialStateHash" : "990bdd4b786eb008d7fe637bd3c9584b9454ae3b6e99263732feeaa398cfc203",
   "inputs" : [
     {
       "action" : "walker",
@@ -32,42 +32,7 @@
     {
       "action" : "walker",
       "lemming" : 8,
-      "tick" : 575
-    },
-    {
-      "action" : "blocker",
-      "lemming" : 8,
-      "tick" : 592
-    },
-    {
-      "action" : "walker",
-      "lemming" : 8,
-      "tick" : 593
-    },
-    {
-      "action" : "walker",
-      "lemming" : 8,
-      "tick" : 594
-    },
-    {
-      "action" : "walker",
-      "lemming" : 8,
-      "tick" : 596
-    },
-    {
-      "action" : "walker",
-      "lemming" : 8,
-      "tick" : 597
-    },
-    {
-      "action" : "walker",
-      "lemming" : 2,
-      "tick" : 605
-    },
-    {
-      "action" : "walker",
-      "lemming" : 2,
-      "tick" : 606
+      "tick" : 560
     },
     {
       "action" : "jumper",
@@ -75,71 +40,14 @@
       "tick" : 612
     },
     {
-      "action" : "walker",
+      "action" : "jumper",
       "lemming" : 8,
-      "tick" : 614
+      "tick" : 645
     },
     {
       "action" : "jumper",
-      "lemming" : 2,
-      "tick" : 623
-    },
-    {
-      "action" : "walker",
       "lemming" : 8,
-      "tick" : 631
-    },
-    {
-      "action" : "walker",
-      "lemming" : 8,
-      "tick" : 632
-    },
-    {
-      "action" : "walker",
-      "lemming" : 8,
-      "tick" : 633
-    },
-    {
-      "action" : "walker",
-      "lemming" : 2,
-      "tick" : 636
-    },
-    {
-      "action" : "walker",
-      "lemming" : 2,
-      "tick" : 637
-    },
-    {
-      "action" : "walker",
-      "lemming" : 9,
-      "tick" : 651
-    },
-    {
-      "action" : "use",
-      "direction" : "right",
-      "lemming" : 2,
-      "tick" : 653
-    },
-    {
-      "action" : "use",
-      "direction" : "upRight",
-      "lemming" : 2,
-      "tick" : 654
-    },
-    {
-      "action" : "drop",
-      "lemming" : 2,
       "tick" : 655
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 8,
-      "tick" : 670
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 8,
-      "tick" : 680
     }
   ],
   "level" : 108,

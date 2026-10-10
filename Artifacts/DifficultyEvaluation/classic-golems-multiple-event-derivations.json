@@ -1,0 +1,32 @@
+[
+  {
+    "adjustedEvents": [
+      {
+        "eventIndex": 1,
+        "nativeTick": 74,
+        "sourceTick": 75
+      },
+      {
+        "eventIndex": 3,
+        "nativeTick": 127,
+        "sourceTick": 128
+      }
+    ],
+    "identity": {
+      "engine": "classic",
+      "levelID": "TWPAK01.dat#9",
+      "packID": "fan:lldb-303"
+    },
+    "initialStateHash": "09dcbaa0980d9c1ad80a69c0e83554ad9b0ac7835931284f2717fe85e7b84fe5",
+    "levelSourceRevision": "697a9fc2adb8c4a7e2b49b2741eee766cf7d944fe40b66640827db12163f0b99",
+    "nativeCompletionTicks": 1895,
+    "nativeReplaySHA256": "4d9bf30b0094c5863fff777bc84e69a181fea31db2100b464e1d6d6535b72bc7",
+    "nativeSaved": 3,
+    "publishedReplaySHA256": "7706ebde9bcf2eb38bf6f5866decffa69d419b8dfc1c10c64afa630caa324ebb",
+    "publishedReplayURL": "https://lldb.camanis.net/level/303/10",
+    "replayScore": 451.1314578646489,
+    "sourceGameMode": 3,
+    "sourceHeaderTicks": 1893,
+    "sourceSaved": 3
+  }
+]
