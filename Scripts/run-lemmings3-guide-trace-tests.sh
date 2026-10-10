@@ -5,6 +5,7 @@ project_dir="${0:A:h:h}"
 build_dir="$project_dir/.build/l3-guide-trace-tests"
 cd "$project_dir"
 mkdir -p "$build_dir/modules"
+export CLANG_MODULE_CACHE_PATH="$build_dir/module-cache"
 swiftc -O -swift-version 6 -warnings-as-errors -parse-as-library \
   -emit-module -emit-library -module-name NxlvKit \
   -emit-module-path "$build_dir/modules/NxlvKit.swiftmodule" \
