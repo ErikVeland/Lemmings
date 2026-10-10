@@ -3304,6 +3304,17 @@ extension AppDelegate {
           "Home content family input targets overlap")
       }
     }
+    let previousSelectAction = playfield.onSelectOverlayLine
+    var selectedRow: Int?
+    playfield.onSelectOverlayLine = { selectedRow = $0 }
+    for control in familyControls {
+      selectedRow = nil
+      playfield.handleClick(at: CGPoint(x: control.localFrame.midX, y: control.localFrame.maxY - 0.5))
+      try check(selectedRow.flatMap { playfield.overlayLines.indices.contains($0)
+        ? playfield.overlayLines[$0] : nil } == control.accessibilityLabel(),
+        "A compact home row's lower mouse target did not select that row")
+    }
+    playfield.onSelectOverlayLine = previousSelectAction
     try check(settings.accessibilityPerformPress(), "The home Settings gear did not perform its action")
     try check(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Settings",
       "The home Settings gear did not open the existing Settings page")

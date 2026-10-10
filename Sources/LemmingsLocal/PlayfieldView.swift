@@ -993,7 +993,9 @@ struct ReticleFeedback {
     for (index, line) in overlayLines.enumerated() {
       let row = CGRect(x: board.minX + 18 * scale, y: y,
         width: board.width - 36 * scale, height: rowHeight - 5 * scale)
-      overlayLineRects.append(row)
+      // Include the row spacing in selectable targets when the home menu is compact.
+      overlayLineRects.append(overlayHighlight == nil ? row : CGRect(
+        x: row.minX, y: row.minY, width: row.width, height: rowHeight))
       let chosen = index == overlayHighlight
       if overlayHighlight != nil {
         (chosen
