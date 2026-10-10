@@ -216,6 +216,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
   /// The soundtrack this level plays, on the same basis.
   private var levelMusic: ClassicMusicSource?
   private var startedMusicIdentity: String?
+  private var legacyMusicHandoffTask: Task<Void, Never>?
+  private var legacyMusicHandoffPosition: Double?
+  private var legacyMusicHandoffReversing = false
+  private var legacyMusicRetryRunID: UUID?
   private let effects = SoundEffectPlayer()
 
   /// Which fan level screen is showing, if any.
@@ -1224,10 +1228,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if music.usesModernPreset != (settings.musicStyle == .modern) {
       music.setEnhancements(settings.musicStyle == .modern ? .modern : .faithful)
     }
-    music.setVolume(settings.musicVolume)
-    soundtrack.setVolume(settings.musicVolume)
     dj.setEnhancements(settings.musicStyle == .modern ? .modern : .faithful)
-    dj.setVolume(settings.musicVolume)
+    if legacyMusicHandoffPosition != nil { applyLegacyMusicHandoffLevels() }
+    else {
+      music.setVolume(settings.musicVolume)
+      soundtrack.setVolume(settings.musicVolume)
+      dj.setVolume(settings.musicVolume)
+    }
     effects.setVolume(settings.soundVolume)
     effects.setBottomFallSounds(settings.bottomFallSounds)
     music.setMuted(audioMuted || settings.music == .silent)
@@ -1284,6 +1291,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     nativeL2Window = nil
     nativeL3Window = nil
     if !preservingMusic {
+      legacyMusicHandoffTask?.cancel()
+      legacyMusicHandoffTask = nil
+      legacyMusicHandoffPosition = nil
+      legacyMusicHandoffReversing = false
       music.stop()
       soundtrack.stop()
       dj.stop()
@@ -1452,6 +1463,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func prepareLibrary(preservingMusic: Bool) {
+    prepareLibrary(preservingMusic: preservingMusic, resumeMusic: !preservingMusic)
+  }
+
+  private func prepareLibrary(preservingMusic: Bool, resumeMusic: Bool) {
     launchChoice = 0
     handoverRetry = nil
     let wasSequenceActive = sequenceIsActive
@@ -1489,7 +1504,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     // monitor last time comes back to a flat picture.
     applyDisplayMode()
     renderScreen()
-    if !preservingMusic { playMusicForCurrentLevel() }
+    if resumeMusic { playMusicForCurrentLevel() }
     window.makeKeyAndOrderFront(nil)
   }
 
@@ -4341,10 +4356,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
             }
           }
           try self.saveBeforeSessionChange()
-          self.returnToLibrary()
+          self.prepareLibrary(preservingMusic: run.source == .playlist(LearningJourney.playlistID),
+            resumeMusic: false)
           if hotSeat {
             arcade.prepareHotSeat()
             guard arcade.startNewHotSeat() else {
+              self.playMusicForCurrentLevel()
               GameScreen.shared.message("Session not started", detail: "Choose at least two players for Hot Seat.")
               return
             }
@@ -4358,6 +4375,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
           self.sequencePlaylistStore = store
           self.startActiveSequence()
         } catch {
+          self.playMusicForCurrentLevel()
           GameScreen.shared.message("Session not started", detail: error.localizedDescription)
         }
       }
@@ -4403,6 +4421,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   ) -> Bool {
     guard let runID else { return true }
     guard sequenceRunMatches(runID, identity: identity) else {
+      playMusicForCurrentLevel()
       GameScreen.shared.message(
         "Run not started",
         detail: "The player, Hot Seat session or saved run changed before the level loaded.")
@@ -4421,6 +4440,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard sequenceLaunchRunID == runID,
           sequenceRunMatches(runID, identity: identity) else {
       clearSequenceLaunch(runID)
+      playMusicForCurrentLevel()
       GameScreen.shared.message(
         "Run not started",
         detail: "The player, Hot Seat session or saved run changed while the level was loading.")
@@ -4929,7 +4949,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func startActiveSequence() {
     do {
       let store = try playlistStore()
-      guard let run = store.activeRun else { return }
+      guard let run = store.activeRun else {
+        playMusicForCurrentLevel()
+        return
+      }
       let owner = ArcadeStore.shared.records.activeProfileID
       let hotSeat = ArcadeStore.shared.hotSeatID
       ensureFanPacksResolved(for: [run.currentEntry], title: "Resume session") { [weak self] _ in
@@ -4940,13 +4963,19 @@ let achievementProgressKey = "ClassicAchievementProgress"
               store.activeRun?.currentEntry.identity == run.currentEntry.identity else { return }
         self.startResolvedActiveSequence()
       }
-    } catch { GameScreen.shared.message("Run unavailable", detail: error.localizedDescription) }
+    } catch {
+      playMusicForCurrentLevel()
+      GameScreen.shared.message("Run unavailable", detail: error.localizedDescription)
+    }
   }
 
   private func startResolvedActiveSequence() {
     do {
       let store = try playlistStore()
-      guard let run = store.activeRun else { return }
+      guard let run = store.activeRun else {
+        playMusicForCurrentLevel()
+        return
+      }
       if store.activeRunHotSeatID != ArcadeStore.shared.hotSeatID {
         resumeSequenceSession(runID: run.id, hotSeatID: store.activeRunHotSeatID, store: store)
         return
@@ -4956,13 +4985,17 @@ let achievementProgressKey = "ClassicAchievementProgress"
         sequencePlaylistStore = store
         startBrowserLevel(run.currentEntry.identity, sequenceRunID: run.id)
       case .unavailable:
+        playMusicForCurrentLevel()
         presentInvalidSequenceEntry(run, reason: "is not available")
       case .changed:
+        playMusicForCurrentLevel()
         presentInvalidSequenceEntry(run, reason: "changed after this run was created")
       case .missing:
+        playMusicForCurrentLevel()
         presentInvalidSequenceEntry(run, reason: "is missing")
       }
     } catch {
+      playMusicForCurrentLevel()
       GameScreen.shared.message("Run unavailable", detail: error.localizedDescription)
     }
   }
@@ -4977,9 +5010,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
               arcade.hotSeatID == previousSession, self.playlistStoreCache?.store === store else { return }
         do {
           try self.saveBeforeSessionChange()
-          self.returnToLibrary()
+          self.prepareLibrary(preservingMusic: true)
           if let hotSeatID {
             guard arcade.resumeHotSeat(id: hotSeatID) else {
+              self.playMusicForCurrentLevel()
               GameScreen.shared.message("Session not resumed", detail: "The saved Hot Seat or one of its players is no longer available.")
               return
             }
@@ -4993,7 +5027,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
           }
           self.sequencePlaylistStore = store
           self.startActiveSequence()
-        } catch { GameScreen.shared.message("Session not resumed", detail: error.localizedDescription) }
+        } catch {
+          self.playMusicForCurrentLevel()
+          GameScreen.shared.message("Session not resumed", detail: error.localizedDescription)
+        }
       }
   }
 
@@ -5168,6 +5205,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       guard let run = sequenceStore?.activeRun,
             run.id == sequenceRunID,
             run.currentEntry.identity == identity else {
+        playMusicForCurrentLevel()
         GameScreen.shared.message(
           "Run unavailable",
           detail: "The saved sequence changed before this level started.")
@@ -5176,6 +5214,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     guard let entry = levelCatalogue.resolve(identity),
           let route = levelBrowserRoutes[identity] else {
+      playMusicForCurrentLevel()
       GameScreen.shared.message("Level unavailable", detail: "The selected catalogue entry changed. Open Level Select and choose it again.")
       return
     }
@@ -5186,6 +5225,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return true
     }()
     guard canStart else {
+      playMusicForCurrentLevel()
       GameScreen.shared.message(entry.levelName, detail: "Complete the preceding level or choose an available level.")
       return
     }
@@ -5197,6 +5237,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
                 dataSet: browserDataSet,
                 directory: dataSetDirectory,
                 levelIndex: levelIndex) else {
+        playMusicForCurrentLevel()
         GameScreen.shared.message(entry.levelName,
           detail: "Complete the preceding level, or enable Unlock all Classic levels in Settings.")
         return
@@ -5205,6 +5246,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
               $0.directory.standardizedFileURL == dataSetDirectory.standardizedFileURL
             }),
             browserDataSet.campaign.levels.indices.contains(levelIndex) else {
+        playMusicForCurrentLevel()
         GameScreen.shared.message(entry.levelName, detail: "The selected game data is no longer available.")
         return
       }
@@ -5238,6 +5280,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
           switch preparation {
           case let .failed(message):
             self.clearSequenceLaunch(sequenceRunID)
+            self.playMusicForCurrentLevel()
             GameScreen.shared.message(entry.levelName, detail: message)
           case let .ready(prepared):
             self.commitClassicBrowserLevel(
@@ -5254,6 +5297,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
     case let .fan(pack, fanEntry, archiveFingerprint):
       guard let portsRoot = Bundle.main.resourceURL?.appendingPathComponent("Ports") else {
+        playMusicForCurrentLevel()
         GameScreen.shared.message(entry.levelName,
           detail: "The Classic graphics library is not available.")
         return
@@ -5277,6 +5321,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
           switch preparation {
           case let .failed(message):
             self.clearSequenceLaunch(sequenceRunID)
+            self.playMusicForCurrentLevel()
             GameScreen.shared.message(entry.levelName, detail: message)
           case let .ready(prepared):
             self.commitFanBrowserLevel(
@@ -5292,6 +5337,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
     case let .neolemmix(level, packRoot, packID, packName, _, neoStyles):
       guard let neoStyles else {
+        playMusicForCurrentLevel()
         GameScreen.shared.message(
           "NeoLemmix styles needed",
           detail: "This level uses community styles. Choose Add NeoLemmix Packs and select a NeoLemmix folder with its styles.")
@@ -5304,6 +5350,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
               $0.levelID == level.levelID && $0.sourceRevision == level.sourceRevision
             }) == true else {
         clearSequenceLaunch(sequenceRunID)
+        playMusicForCurrentLevel()
         GameScreen.shared.message(
           entry.levelName,
           detail: "The NeoLemmix pack changed. Open Level Select and choose the level again.")
@@ -5329,6 +5376,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         launchMode = .singleTitle
       } else {
         clearSequenceLaunch(sequenceRunID)
+        playMusicForCurrentLevel()
       }
     case let .lemmings2(root, selection, expectedLevelID, sourceRevision):
       guard beginSequenceLaunch(runID: sequenceRunID, identity: identity) else { return }
@@ -5348,7 +5396,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
           presentSequenceHandover()
         }
         launchMode = .singleTitle
-      } else { clearSequenceLaunch(sequenceRunID) }
+      } else {
+        clearSequenceLaunch(sequenceRunID)
+        playMusicForCurrentLevel()
+      }
     case let .lemmings3(root, selection, expectedLevelID, sourceRevision):
       guard beginSequenceLaunch(runID: sequenceRunID, identity: identity) else { return }
       saveRunCheckpoint(immediately: true)
@@ -5367,7 +5418,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
           presentSequenceHandover()
         }
         launchMode = .singleTitle
-      } else { clearSequenceLaunch(sequenceRunID) }
+      } else {
+        clearSequenceLaunch(sequenceRunID)
+        playMusicForCurrentLevel()
+      }
     }
   }
 
@@ -5400,6 +5454,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
             == dataSetDirectory.standardizedFileURL,
           browserDataSet.campaign.levels.indices.contains(levelIndex) else {
       clearSequenceLaunch(sequenceRunID)
+      playMusicForCurrentLevel()
       GameScreen.shared.message(entry.levelName,
         detail: "The selected game data is no longer available.")
       return
@@ -5425,6 +5480,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
           preparedArtwork: preparedArtwork)
       } catch {
         clearSequenceLaunch(sequenceRunID)
+        playMusicForCurrentLevel()
         GameScreen.shared.message(entry.levelName,
           detail: "The selected game data could not load: \(error)")
         return
@@ -5462,6 +5518,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
           currentEntry.section == fanEntry.section,
           currentFingerprint == archiveFingerprint else {
       clearSequenceLaunch(sequenceRunID)
+      playMusicForCurrentLevel()
       GameScreen.shared.message(entry.levelName,
         detail: "The selected catalogue entry changed. Open Level Select and choose it again.")
       return
@@ -5491,6 +5548,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if !fanPlaying {
       setSequencePlayingIdentity(nil)
       launchMode = previousLaunchMode
+      playMusicForCurrentLevel()
     } else if sequenceRunID != nil { presentSequenceHandover() }
   }
 
@@ -6162,7 +6220,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         themeStyle: level.themeStyle, macArtwork: neoMacArtwork?.lemmings, classicAssets: neoClassicSprites
       )
 
-      returnToLibrary()
+      prepareLibrary(preservingMusic: false, resumeMusic: false)
       flow = nil
       loadedFlowProgressKey = nil
       activeTitle = nil
@@ -6842,7 +6900,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
     }
     effects.setViewport(playfield.soundViewport)
-    if let session, phase == .playing { dj.updateTelemetry(djTelemetry(session)) }
+    if let session, phase == .playing { updateDJTelemetry(session) }
     if advanceFreshLevelStart(seconds: elapsed, visible: window.isKeyWindow) { return }
     guard phase == .playing, let session else { return }
     // A nuke before any release completes the run without a tick.
@@ -6866,7 +6924,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       countdownWarning.reset(seconds: before)
       if countdownWarning.update(seconds: session.remainingSeconds) { effects.play(.timerWarning) }
       flashExplosions(previous: previousExplosions)
-      dj.updateTelemetry(djTelemetry(session))
+      updateDJTelemetry(session)
       effects.play(session.lastPositionedCues)
       captureReplayFrame()
       advanced = true
@@ -6957,7 +7015,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       AnonymousTelemetry.shared.finish(arcadeLevel, hotSeat: arcadeHotSeatID != nil,
                                        attemptID: arcadeRunID, won: session.didWin, saved: session.saved)
     }
-    dj.updateTelemetry(djTelemetry(session))
+    updateDJTelemetry(session)
     let recordsPlayerArtifacts = sequencePlayingIdentity == nil
     runMovie.finish()
     do { try recoveryStore.clear(arcadeRunID) } catch { setStatus("Could not clear completed checkpoint: " + error.localizedDescription) }
@@ -7321,10 +7379,19 @@ let achievementProgressKey = "ClassicAchievementProgress"
       didWin: session.didWin, isComplete: session.isComplete)
   }
 
+  private func updateDJTelemetry(_ session: any GameSession) {
+    guard activeMusic == .adaptiveDJ, !isLearningJourneyActive else { return }
+    dj.updateTelemetry(djTelemetry(session))
+  }
+
   /// The original cycles through its tunes as the campaign advances.
   private func playMusicForCurrentLevel() {
     guard !preparingLaunch, !sequelIsActive else { return }
     if settings.music == .silent {
+      legacyMusicHandoffTask?.cancel()
+      legacyMusicHandoffTask = nil
+      legacyMusicHandoffPosition = nil
+      legacyMusicHandoffReversing = false
       music.stop()
       soundtrack.stop()
       dj.stop()
@@ -7334,8 +7401,22 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let identity = arcadeRunID.uuidString + String(describing: activeMusic)
     guard startedMusicIdentity != identity else { return }
     startedMusicIdentity = identity
-    let assignedName = LevelMusicSelection.track(index: currentNxlvURL == nil ? max(0, picker.indexOfSelectedItem) : 0,
+    // The saved run may contain only the remaining or revisited lessons.
+    // Use the full journey's position so a new session keeps the score order.
+    let journeyPosition = isLearningJourneyActive && sequencePlayingIdentity != nil
+      ? LearningJourneyLibrary.journey?.lessons.firstIndex(where: {
+          $0.entry.identity == sequencePlayingIdentity
+        }) : nil
+    let position = journeyPosition ?? max(0, picker.indexOfSelectedItem)
+    let assignedName = LevelMusicSelection.track(index: currentNxlvURL == nil ? position : 0,
       title: currentNxlvURL == nil ? artworkLevel?.title ?? "" : "", holiday: seasonalMusic, ohNo: musicTitle == .ohNoMoreLemmings)
+    let game = seasonalMusic ? "holiday" : musicTitle == .ohNoMoreLemmings ? "ohno" : "classic"
+    if isLearningJourneyActive {
+      if playLearningJourneyMusic(assignedName: assignedName, game: game, position: position) { return }
+      startedMusicIdentity = nil
+      setStatus("Assigned music unavailable: \(assignedName)")
+      return
+    }
     if activeMusic == .adaptiveDJ {
       reloadDJLibrary()
       let folder = seasonalMusic ? "holiday_lemmings_music_mod" : musicTitle == .ohNoMoreLemmings ? "oh_no_more_lemmings_music_mod" : "lemmings_music_mod"
@@ -7375,15 +7456,17 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard let root = directory ?? BundledGameResources.music(folder) else { music.stop(); return }
     music.loadLibrary(at: root)
     guard !music.library.isEmpty else { music.stop(); return }
-    do {
-      try music.start()
-    } catch {
-      setStatus("Audio unavailable: \(error.localizedDescription)")
-      return
-    }
     let bundled = BundledGameResources.music(folder)?.appendingPathComponent(assignedName + ".mod")
     let url = music.library.first(where: { $0.deletingPathExtension().lastPathComponent.lowercased() == assignedName.lowercased() }) ?? bundled
     if let url, let title = music.play(url: url) {
+      do {
+        try music.start()
+      } catch {
+        music.stop()
+        startedMusicIdentity = nil
+        setStatus("Audio unavailable: \(error.localizedDescription)")
+        return
+      }
       setStatus("♪ \(title)")
     } else {
       music.stop()
@@ -7394,6 +7477,170 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
       startedMusicIdentity = nil
       setStatus("Assigned music unavailable: \(assignedName)")
+    }
+  }
+
+  private func playLearningJourneyMusic(assignedName: String, game: String, position: Int) -> Bool {
+    let musicRoot = Bundle.main.resourceURL?.appendingPathComponent("Music")
+    dj.setEnhancements(settings.musicStyle == .modern ? .modern : .faithful)
+    reloadDJLibrary()
+    let handoffInProgress = legacyMusicHandoffTask != nil
+    let identity = arcadeRunID.uuidString
+    if activeMusic == .adaptiveDJ {
+      let folder = seasonalMusic ? "holiday_lemmings_music_mod"
+        : musicTitle == .ohNoMoreLemmings ? "oh_no_more_lemmings_music_mod" : "lemmings_music_mod"
+      let module = BundledGameResources.music(folder)?.appendingPathComponent(assignedName + ".mod")
+      let fallback = module.flatMap { FileManager.default.isReadableFile(atPath: $0.path) ? $0 : nil }
+      let cycle = fanPlaying ? position / LevelMusicSelection.classic.count
+        : LevelMusicSelection.cycle(index: position, titles: picker.itemTitles,
+          holiday: seasonalMusic, ohNo: musicTitle == .ohNoMoreLemmings)
+      let legacyIsPlaying = music.isOutputRunning || soundtrack.isPlaying
+      if legacyIsPlaying && !dj.isPlaying { dj.setVolume(0) }
+      if dj.startJourney(trackID: game + "." + assignedName.lowercased(), cycle: cycle,
+          identity: identity, fallback: fallback, includeAlternates: settings.djIncludesOtherSoundtracks) {
+        if legacyIsPlaying {
+          if !handoffInProgress || legacyMusicHandoffReversing { fadeLegacyMusicIntoDJ() }
+        }
+        else { music.stop(); soundtrack.stop(); dj.setVolume(settings.musicVolume) }
+        return true
+      }
+      if legacyIsPlaying && !handoffInProgress { dj.setVolume(settings.musicVolume) }
+    }
+
+    var selected: URL?
+    if case let .remix(name) = activeMusic, let tracks = soundtrackLibrary[name], let musicRoot {
+      selected = tracks.first(where: { SoundtrackPlayer.matches($0,
+        trackID: game + "." + assignedName.lowercased(), root: musicRoot) })
+    }
+    if selected == nil {
+      let folder = seasonalMusic ? "holiday_lemmings_music_mod"
+        : musicTitle == .ohNoMoreLemmings ? "oh_no_more_lemmings_music_mod" : "lemmings_music_mod"
+      let directory = !seasonalMusic ? UserDefaults.standard.string(forKey: musicPathKey)
+        .map { URL(fileURLWithPath: $0, isDirectory: true) } : nil
+      if let root = directory ?? BundledGameResources.music(folder) {
+        music.loadLibrary(at: root)
+        selected = music.library.first(where: {
+          $0.deletingPathExtension().lastPathComponent.lowercased() == assignedName.lowercased()
+        }) ?? BundledGameResources.music(folder)?.appendingPathComponent(assignedName + ".mod")
+      }
+    }
+    if selected == nil, let musicRoot {
+      selected = SoundtrackPlayer.recording(trackID: game + "." + assignedName.lowercased(), root: musicRoot)
+    }
+    guard let selected, FileManager.default.isReadableFile(atPath: selected.path) else { return false }
+    let selectedFile = selected.resolvingSymlinksInPath().standardizedFileURL
+    let legacyMatches = (music.isOutputRunning
+      && music.currentURL?.resolvingSymlinksInPath().standardizedFileURL == selectedFile)
+      || (soundtrack.isPlaying
+        && soundtrack.currentURL?.resolvingSymlinksInPath().standardizedFileURL == selectedFile)
+    if legacyMatches {
+      if handoffInProgress && dj.isPlaying { fadeDJBackToLegacyMusic() }
+      else if handoffInProgress { finishDJToLegacyMusicHandoff() }
+      return true
+    }
+    let legacyIsPlaying = music.isOutputRunning || soundtrack.isPlaying
+    if legacyIsPlaying && !dj.isPlaying { dj.setVolume(0) }
+    guard dj.startLevel(url: selected, identity: identity) else {
+      if legacyIsPlaying && !handoffInProgress { dj.setVolume(settings.musicVolume) }
+      return false
+    }
+    if legacyIsPlaying {
+      if !handoffInProgress || legacyMusicHandoffReversing { fadeLegacyMusicIntoDJ() }
+    }
+    else { music.stop(); soundtrack.stop(); dj.setVolume(settings.musicVolume) }
+    return true
+  }
+
+  private func finishLegacyMusicHandoff() {
+    legacyMusicHandoffTask?.cancel()
+    legacyMusicHandoffTask = nil
+    legacyMusicHandoffPosition = nil
+    legacyMusicHandoffReversing = false
+    music.stop()
+    soundtrack.stop()
+    dj.setVolume(settings.musicVolume)
+  }
+
+  private func finishDJToLegacyMusicHandoff() {
+    legacyMusicHandoffTask?.cancel()
+    legacyMusicHandoffTask = nil
+    legacyMusicHandoffPosition = nil
+    legacyMusicHandoffReversing = false
+    dj.stop()
+    music.setVolume(settings.musicVolume)
+    soundtrack.setVolume(settings.musicVolume)
+  }
+
+  private func applyLegacyMusicHandoffLevels() {
+    guard let position = legacyMusicHandoffPosition else { return }
+    let outgoing = settings.musicVolume * cos(position * .pi / 2)
+    music.setVolume(outgoing)
+    soundtrack.setVolume(outgoing)
+    dj.setVolume(settings.musicVolume * sin(position * .pi / 2))
+  }
+
+  private func fadeLegacyMusicIntoDJ() {
+    legacyMusicHandoffTask?.cancel()
+    legacyMusicHandoffReversing = false
+    legacyMusicHandoffPosition = max(0.08, legacyMusicHandoffPosition ?? 0.08)
+    applyLegacyMusicHandoffLevels()
+    let duration = 2.6
+    legacyMusicHandoffTask = Task { @MainActor [weak self] in
+      guard let self else { return }
+      var elapsed = duration * (self.legacyMusicHandoffPosition ?? 0.08)
+      var last = ProcessInfo.processInfo.systemUptime
+      while elapsed < duration && !Task.isCancelled {
+        try? await Task.sleep(nanoseconds: 33_333_333)
+        guard !Task.isCancelled else { return }
+        let now = ProcessInfo.processInfo.systemUptime
+        if self.dj.isPlaying {
+          elapsed += now - last
+        } else if self.music.isOutputRunning || self.soundtrack.isPlaying {
+          self.finishDJToLegacyMusicHandoff()
+          self.startedMusicIdentity = nil
+          let runID = self.arcadeRunID
+          guard self.legacyMusicRetryRunID != runID else {
+            self.setStatus("Music output interrupted. Previous track continues.")
+            return
+          }
+          self.legacyMusicRetryRunID = runID
+          Task { @MainActor [weak self] in
+            try? await Task.sleep(nanoseconds: 300_000_000)
+            guard let self, self.arcadeRunID == runID, self.isLearningJourneyActive,
+              self.startedMusicIdentity == nil, !self.dj.isPlaying,
+              self.music.isOutputRunning || self.soundtrack.isPlaying else { return }
+            self.playMusicForCurrentLevel()
+          }
+          return
+        }
+        last = now
+        self.legacyMusicHandoffPosition = min(1, elapsed / duration)
+        self.applyLegacyMusicHandoffLevels()
+      }
+      guard !Task.isCancelled else { return }
+      self.finishLegacyMusicHandoff()
+    }
+  }
+
+  private func fadeDJBackToLegacyMusic() {
+    legacyMusicHandoffTask?.cancel()
+    legacyMusicHandoffReversing = true
+    let duration = 2.6
+    legacyMusicHandoffTask = Task { @MainActor [weak self] in
+      guard let self else { return }
+      var elapsed = duration * (self.legacyMusicHandoffPosition ?? 0)
+      var last = ProcessInfo.processInfo.systemUptime
+      while elapsed > 0 && !Task.isCancelled {
+        try? await Task.sleep(nanoseconds: 33_333_333)
+        guard !Task.isCancelled else { return }
+        let now = ProcessInfo.processInfo.systemUptime
+        if self.music.isOutputRunning || self.soundtrack.isPlaying { elapsed -= now - last }
+        last = now
+        self.legacyMusicHandoffPosition = max(0, elapsed / duration)
+        self.applyLegacyMusicHandoffLevels()
+      }
+      guard !Task.isCancelled else { return }
+      self.finishDJToLegacyMusicHandoff()
     }
   }
 
@@ -7458,8 +7705,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func retry() {
-    brakeMusicForRetry()
-    defer { releaseMusicAfterRetry() }
+    let keepsLearningMusic = isLearningJourneyActive
+    if !keepsLearningMusic { brakeMusicForRetry() }
+    defer { if !keepsLearningMusic { releaseMusicAfterRetry() } }
     if phase == .briefing, availableHandoverRetry != nil { retryPreviousHandoverLevel(); return }
     let skills = session?.skills ?? []
     let selectedSkill = skills.indices.contains(panel.selectedSkillIndex)
@@ -8128,7 +8376,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.startCountdown.cancel()
     if countdownWarning.update(seconds: session.remainingSeconds) { effects.play(.timerWarning) }
     effects.play(session.lastPositionedCues)
-    dj.updateTelemetry(djTelemetry(session))
+    updateDJTelemetry(session)
     captureReplayFrame()
     isPaused = true
     panel.isPaused = true
