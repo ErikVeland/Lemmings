@@ -16,5 +16,9 @@
   "publishedItemsPreserved": 8,
   "fullArchiveBytes": 2043810178,
   "remoteAssetVerified": true,
-  "publicDownloadVerified": true
+  "publicDownloadVerified": true,
+  "mainFeedVerified": true,
+  "rawFeedVerified": true,
+  "feedSha256": "abd83df9e20d8bbb8b43f3f0d0a742250bd7d01b7282488c2f290c5a5f8fd6de",
+  "publishedAt": "2026-10-10T07:44:32.452153+00:00"
 }

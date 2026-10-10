@@ -53,7 +53,7 @@
   "audit/results.json": "0aa649365173a7633cf7b0635374fd7c218bae328584d9ad555e7e27cde5c050",
   "build.log": "2cda6b02a1253f37009363bc6468621c8dcd269302a06d7336f861c9c402ef63",
   "delta/codesign.log": "163ef3ee83616d3d26433c427a371d7fbd96b52db1b98c3f27e026ff0948e52e",
-  "delta/delta-publication.json": "36f11f9d16586f37f827c206319453a6b6b1b7ec719bdc6ebb9b1159751aa39d",
+  "delta/delta-publication.json": "79187c615401761f64efa45bdfe33e483864017e5ad73f60902ebf618d4b4057",
   "delta/delta-verification.json": "7c5e6fa637b9f0e43f00e1fd0babe3c84e6e2ef1ed6bd116a38a75e669656a7b",
   "delta/gatekeeper.log": "50e28427e76d04d8d8ae75b325a60415757507ea9a1677d5fd3310590cda9327",
   "delta/pipeline-generate.log": "92be910c5be23bd28984fc83f303b88b20d6e14dae95f79236a6839e1c0051dc",
