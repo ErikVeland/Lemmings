@@ -3,6 +3,28 @@
     <channel>
         <title>Ultimate Lemmings</title>
         <item>
+            <title>1.9.1</title>
+            <pubDate>Sat, 10 Oct 2026 17:04:53 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>76</sparkle:version>
+            <sparkle:shortVersionString>1.9.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>This update fixes crowded-wall targeting, clarifies Gameplay settings and restores the nuke funeral music transition.</p>
+<h3>Targeting</h3>
+<p><b>Favor lemmings still approaching</b> uses nearby walls to favour eligible lemmings facing into the work. This fixes Basher selection in crowds at the top of a staircase. Classic also refreshes its hovered target when that lemming turns. The shared correction covers Classic, NeoLemmix, Lemmings 2 and Lemmings 3. Existing bomb, builder and manual direction preferences retain their priority.</p>
+<p>All three targeting preferences now share one outlined group in Gameplay settings.</p>
+<h3>Flat Panel</h3>
+<p>Selecting <b>Flat Panel</b> disables and greys out <b>Tube Strength</b> and <b>Pixel Width</b>. Selecting Monitor or Television enables them again and retains their saved values.</p>
+<h3>Nuke music</h3>
+<p>The funeral music slowdown starts at the <b>2→1 countdown</b>. Screen saturation changes only when rescue becomes impossible, so colour continues to show the actual game state. Music returns to normal over 2.4 seconds after the final explosion. Classic, NeoLemmix and Lemmings 2 share this timing. Lemmings 3 has no mass-nuke action.</p>
+<h3>Compatibility and validation scope</h3>
+<p>Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Both full and slim downloads retain the original Macintosh music from 1.9. Lemmings 2: The Tribes remains Complete. Lemmings 3: Chronicles and NeoLemmix remain Beta. The existing campaign, original-hardware and ending limits remain recorded in the 1.9 release evidence.</p>
+<p>Checks cover wall-facing selection, a real Classic Basher assignment, settings renders and input targets, countdown timing, separate saturation, rewind and music recovery. Native UI and audio checks run offscreen and muted. Audible listening, foreground launch, physical Intel and minimum-macOS checks remain open.</p>
+<p class="meta">Build: 76<br>Release commit: 9ba3fc25c42a57cd89394680d46e5aee79ba3d44<br>Release base: v1.9</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.1/UltimateLemmings-1.9.1-build76.zip" length="2043810178" type="application/octet-stream" sparkle:edSignature="jpDZhxpMNFmgzNUg/HpDTdqGKWmnH1GhKlZyhTiPfmkWHTgl/QB66pUFDkGqksxDc5qCMPLIMfgvva5YU/tRAw=="/>
+        </item>
+        <item>
             <title>1.9</title>
             <pubDate>Sat, 10 Oct 2026 14:50:17 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -47,7 +69,7 @@
 </description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.5/UltimateLemmings-1.8.5-build74.zip" length="1944858923" type="application/octet-stream" sparkle:edSignature="DJIC4eyCco3tq5/TAT5r/0VHYT7RjLqeKuVaBarH4efmOhJzYpoe0XzBYyhNLV/K1dMtOy3946iPs5iYy4RABg=="/>
         </item>
-        <item>
+    <item>
             <title>1.8.4</title>
             <pubDate>Fri, 09 Oct 2026 12:26:24 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -73,7 +95,7 @@
 </description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.4/UltimateLemmings-1.8.4-build73.zip" length="1944808624" type="application/octet-stream" sparkle:edSignature="SRZwmFpSDD9qi1jvTla2m6D0j3E1bnC7pvjlT9E0c+ferFPfKHX4oRjxRRUK7ZYA7gCdj0aI9ySaKlKU7ZoNCQ=="/>
         </item>
-    <item>
+<item>
             <title>1.8.3</title>
             <pubDate>Thu, 08 Oct 2026 18:46:43 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
