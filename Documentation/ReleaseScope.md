@@ -1,19 +1,17 @@
 # Release scope
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-The current public macOS release is 1.8.5 build 74. The
-[distribution record](ReleaseReadiness/1.8.5Build74Distribution.md) records the
-notarised downloads, signed feed and validation limits. This release adds personal
-Favourites and Recently Played across the catalogue, with result bookmarks that
-retain the attempt owner's identity during Hot Seat. L2/L3 remain Preview, with
-completion planned for 1.9. NeoLemmix remains Beta. Updated 10 October 2026.
-Automated checks support the recorded routes;
-remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)
-and the current [Classic validation](ReleaseReadiness/ClassicValidation-current.md).
+The 1.9 build 75 candidate marks Lemmings 2: The Tribes **Complete** and
+Lemmings 3: Chronicles **Beta**, as approved by the owner on 10 October 2026.
+The current public release remains 1.8.5 build 74 until the 1.9 packages and
+signed update feed are published. See the [1.9 notes](ReleaseNotes-1.9-build75.md).
+NeoLemmix remains Beta. The release adds original Macintosh music, release-rate
+pitch feedback, optional Macintosh counters, full Hot Seat Resume rosters and
+shared saved-run fixes. See [Macintosh fidelity](MacintoshFidelity.md).
 
-The 1.9 development source adds original Macintosh music, release-rate pitch
-feedback and optional Macintosh skill counters. See
-[Macintosh fidelity](MacintoshFidelity.md) for scope and validation limits.
+Automated evidence supports the recorded native routes. Original-engine
+fidelity, high-survivor endings and hardware acceptance retain their recorded
+limits. See the [gate register](ReleaseReadiness/gates.json).
 
 ## Wording
 
@@ -25,6 +23,10 @@ reproduces. The gate fails if a replay is missing, altered, or stops winning.
 **Playable.** Every level loads, renders and runs. Some levels have a preserved
 winning replay and some do not. A level without one is not a broken level. It is
 a level nobody has recorded a win for yet.
+
+**Beta.** The game is available for broader testing, with remaining compatibility,
+campaign and fidelity checks stated. Beta does not claim a winning route for
+every level.
 
 **Preview.** The game runs and is enjoyable, and its rules are not yet proven
 against the original engine. Expect differences.
@@ -111,8 +113,8 @@ See [the current campaign closure evidence](ReleaseReadiness/CampaignClosure-202
 
 | Release | Levels | Proven routes | Claim |
 | --- | ---: | ---: | --- |
-| Lemmings 2: The Tribes | 120 | 120 | **Preview** |
-| Lemmings 3: The Chronicles | 90 | 74 | **Preview** |
+| Lemmings 2: The Tribes | 120 | 120 | **Complete** |
+| Lemmings 3: The Chronicles | 90 | 74 | **Beta** |
 
 The strict native L2 gate passes all 120 standalone routes, 70 carry-over variants
 and twelve continuous tribe chains. Every witness reproduces its win twice with
@@ -131,10 +133,11 @@ Both play through their campaigns with original artwork, music and interfaces.
 Lemmings 3 keeps provisional rules in several areas, and its environmental
 effects, movie soundtracks and story transitions are incomplete.
 
-The 1.9 roadmap makes completion verification the exit gate for both sequels.
-They remain Preview until all advertised levels have winning-route evidence,
-engine-fidelity comparisons, continuous progression, recovery checks, media
-closure and verified endings.
+The owner approved these 1.9 release classifications on 10 October 2026.
+L2 meets the per-level winning-route definition of Complete. Its high-survivor
+ark ending and original-engine equivalence remain separate evidence gaps.
+L3 Beta keeps its sixteen missing standalone routes and open media, campaign
+and fidelity checks visible. The classifications do not close those gates.
 
 ## iPhone and iPad 2.0
 
@@ -157,11 +160,11 @@ The macOS 1.5 release does not include iPhone, iPad or consoles. Mobile 2.0 is a
 separate release gate. Consoles have no application target. A Mac
 release does not imply support for either platform group.
 
-## Open before 1.0
+## Retained validation limits
 
-- The `Oh My! ALL Lemmings!` run across the sequel previews remains outside the
+- The `Oh My! ALL Lemmings!` run across the sequel campaigns remains outside the
   completed 352-level Classic campaign gate.
-- L2 and L3 retain preview status. L2 has no missing level routes. L3 retains
+- L2 is Complete and L3 is Beta for 1.9. L2 has no missing level routes. L3 retains
   16 missing routes, tracked separately from the Classic 1.0 milestone.
 - Physical Intel, minimum macOS, HDR, multiple displays and high refresh rates
   are untested. Sustained 10x play is not established.

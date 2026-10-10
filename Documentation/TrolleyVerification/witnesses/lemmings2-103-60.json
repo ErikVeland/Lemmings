@@ -1,0 +1,128 @@
+{
+  "events" : [
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 312,
+          "y" : 180
+        }
+      },
+      "tick" : 105
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 45
+        }
+      },
+      "tick" : 105
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 270,
+          "y" : 170
+        }
+      },
+      "tick" : 174
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 45
+        }
+      },
+      "tick" : 174
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 33
+        }
+      },
+      "tick" : 286
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 15
+        }
+      },
+      "tick" : 471
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 15
+        }
+      },
+      "tick" : 593
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 29
+        }
+      },
+      "tick" : 752
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 15
+        }
+      },
+      "tick" : 1039
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 15
+        }
+      },
+      "tick" : 1350
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 33
+        }
+      },
+      "tick" : 1857
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 33
+        }
+      },
+      "tick" : 2128
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 33
+        }
+      },
+      "tick" : 2512
+    }
+  ],
+  "expectedSaved" : 11,
+  "expectedTicks" : 3065,
+  "levelSHA256" : "df7b8385c35629958cdc7eedcbf94081916ebf4efb42968dfd830065a116efb9",
+  "population" : 60,
+  "version" : 2
+}

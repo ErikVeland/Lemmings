@@ -87,7 +87,7 @@ import NxlvKit
             modifiers: ["releaseInterval": String(c.releaseInterval), "releaseDelay": String(c.releaseDelay),
                         "reserves": String(c.total), "extras": String(c.extras.count)])
         return ArcadeLevel(id: "l3:" + hash, title: "\(campaign.tribe.title) \(campaign.index + 1)",
-            game: "Lemmings 3", rules: "L3 native preview v1",
+            game: "Lemmings 3", rules: "L3 native beta v1",
             total: c.total + c.extras.count, required: 1, conditions: conditions)
     }
     private let warningSound = SoundEffectPlayer()
@@ -254,7 +254,7 @@ import NxlvKit
             self.warningSound.setViewport(self.canvas.soundViewport)
         }
 
-        window.title = "Lemmings 3 — \(campaign.tribe.title) \(campaign.index + 1) — Experimental native preview"
+        window.title = "Lemmings 3 — \(campaign.tribe.title) \(campaign.index + 1) — Beta"
         window.delegate = self; window.isReleasedWhenClosed = false
         window.minSize = NSSize(width: 850, height: 540)
         NotificationCenter.default.addObserver(self, selector: #selector(artworkChanged),
@@ -990,7 +990,7 @@ import NxlvKit
                 UserDefaults.standard.set(tribe.rawValue, forKey: ArcadeStore.shared.progressKey(
                     "nativeL3SelectedTribe.v1." + Self.storageIdentity(dataRoot)))
             }
-            window?.title = "Lemmings 3 — \(tribe.title) \(campaign.index + 1) — Experimental native preview"
+            window?.title = "Lemmings 3 — \(tribe.title) \(campaign.index + 1) — Beta"
             restart()
         } catch {
             message = String(describing: error); refresh()
@@ -1027,7 +1027,7 @@ import NxlvKit
         let scene = try Lemmings3Scene(level: level, style: style, permanent: perm, temporary: temp)
         try canvas.load(scene: scene, style: style, permanent: perm, temporary: temp, sprites: sprites, root: dataRoot, terrainStyle: level.style)
         campaign = proposed; initial = replacement; freshInitial = replacement; save()
-        window?.title = "Lemmings 3 — \(campaign.tribe.title) \(campaign.index + 1) — Experimental native preview"
+        window?.title = "Lemmings 3 — \(campaign.tribe.title) \(campaign.index + 1) — Beta"
         restart()
     }
     private func assign(x: Int, y: Int) {

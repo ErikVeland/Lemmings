@@ -39,8 +39,8 @@ Both paths run the same simulation and produce the same win.
 | **Official Classic total** | **292** | **292** | **Complete** |
 | Oh Yes! More Lemmings (conversions) | 60 | 60 | Complete |
 | **Classic release total** | **352** | **352** | **Complete** |
-| Lemmings 2: The Tribes | 120 | 75 | Preview |
-| Lemmings 3: The Chronicles | 90 | 43 | Preview |
+| Lemmings 2: The Tribes | 120 | 120 | Complete |
+| Lemmings 3: The Chronicles | 90 | 74 | Beta |
 
 "Complete" means every level has a winning route, recorded once and
 reproduced by the current engine on every check. "Preview" means the game
@@ -133,9 +133,11 @@ reliable music recovery after a nuke. L2/L3 remain Preview and NeoLemmix Beta.
 The patch branch combines the current work. See the
 [1.8.x consolidation evidence](ReleaseReadiness/1.8xConsolidation.md).
 
-**1.9: complete Lemmings 2 and Lemmings 3.** The remaining 83 winning routes
-need proof. Both games also need engine-fidelity, campaign-progression, media
-and recovery evidence. Until the 1.9 gate passes, both games remain Preview.
+**1.9: The Tribes complete, Chronicles Beta.** L2 has preserved wins for all
+120 levels and continuous runs through twelve tribes. L3 has 74 of 90 retained
+standalone wins. High-survivor endings, remaining L3 routes, original-engine
+fidelity and media checks remain separate work. The update also adds original
+Macintosh music and counters, Hot Seat Resume rosters and saved-run fixes.
 
 **2.0: complete physical iPhone and iPad acceptance, including launch support
 for iPhone Duo.** The repository has a UIKit/Metal app target, player-owned

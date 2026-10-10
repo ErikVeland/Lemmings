@@ -3357,6 +3357,46 @@ extension AppDelegate {
       "The update reminder appeared outside the home screen")
     print("PASS seven home content families and the Settings gear use distinct targets")
   }
+  fileprivate func testSequelReleaseStatus() async throws {
+    if window == nil { buildInterface() }
+    loadContent()
+    guard let discovery = await makeLevelBrowserDiscoveryTask().value else {
+      throw IntegrationFailure(message: "Missing bundled sequel catalogue")
+    }
+    rebuildLevelCatalogue(discovery)
+    for (engine, count, packCount, status) in [
+      (LevelSourceEngine.lemmings2, 120, 12, LevelContentStatus.complete),
+      (.lemmings3, 90, 3, .beta),
+    ] {
+      let packs = levelCatalogue.packs.filter { $0.engine == engine }
+      try check(packs.count == packCount && packs.flatMap(\.levels).count == count
+        && packs.allSatisfy { $0.status == status && $0.levels.allSatisfy { $0.status == status } },
+        "The bundled \(engine.displayName) catalogue has the wrong release status")
+    }
+    try check(library.entries.first(where: { $0.title == .lemmings2TheTribes })?.detail == "COMPLETE"
+      && library.entries.first(where: { $0.title == .lemmings3TheChronicles })?.detail == "BETA",
+      "The library has the wrong sequel release status")
+    try check(!homeContentRow(.lemmings2).contains("BETA")
+      && !homeContentRow(.lemmings2).contains("PREVIEW")
+      && homeContentRow(.lemmings3).hasSuffix(" — BETA"),
+      "The home rows have the wrong sequel release status")
+    returnToLibrary()
+    window.setContentSize(CGSize(width: 900, height: 620))
+    window.contentView?.layoutSubtreeIfNeeded()
+    renderScreen()
+    let bitmap = playfield.bitmapImageRepForCachingDisplay(in: playfield.bounds)!
+    playfield.cacheDisplay(in: playfield.bounds, to: bitmap)
+    try bitmap.representation(using: .png, properties: [:])!.write(
+      to: URL(fileURLWithPath: ".build/release-1.9/home-status.png"))
+    let sequel = try Lemmings3PlayWindow(root: BundledGameResources.lemmings3(),
+      selection: .init(tribe: .classic, level: 0), recordsCampaignProgress: false)
+    try check(sequel.window?.title.contains("Beta") == true
+      && sequel.window?.title.contains("Preview") == false,
+      "The Chronicles window has the wrong release status")
+    sequel.stop(); sequel.close()
+    print("PASS Tribes Complete and Chronicles Beta in the bundled catalogue, library, home and window")
+  }
+
   fileprivate func testHomeContentFamilyFiltering() throws {
     GameScreen.shared.dismissAll()
     let originalCatalogue = levelCatalogue
@@ -6365,6 +6405,7 @@ Task { @MainActor in
     try subject.testNeoRunRecovery()
     print("Collections integration tests passed.")
     #elseif RELEASE_NOTES_TESTS
+    try await subject.testSequelReleaseStatus()
     try subject.testScrollableReleaseNotes()
     #elseif SOLUTION_AUDIO_TESTS
     try subject.testSolutionReplaySounds()

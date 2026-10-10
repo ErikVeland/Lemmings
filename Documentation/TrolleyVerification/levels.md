@@ -256,23 +256,27 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 
 | Level | Population | Pass goal | Best rescued | Verified maximum | Minimum sacrifices | Evidence |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Beach 1: Quad Quirks on the Quay! | 60 | 1 | 29 | — | — | [Observed](witnesses/lemmings2-10-60.json) |
-| Beach 2: The Barley Mow.... | 60 | 1 | — | — | — | No witness collected |
-| Beach 3: Cannonball | 60 | 1 | — | — | — | No witness collected |
-| Beach 4: Coastal Suction Function | 60 | 1 | — | — | — | No witness collected |
+| Beach 1: Quad Quirks on the Quay! | 60 | 1 | 42 | — | — | [Observed](witnesses/lemmings2-10-60.json) |
+| Beach 2: The Barley Mow.... | 60 | 1 | 60 | 60 | 0 | [Verified](witnesses/lemmings2-11-60.json) |
+| Beach 3: Cannonball | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-12-60.json) |
+| Beach 3: Cannonball (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-12-1.json) |
+| Beach 4: Coastal Suction Function | 60 | 1 | 60 | 60 | 0 | [Verified](witnesses/lemmings2-13-60.json) |
+| Beach 4: Coastal Suction Function (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-13-1.json) |
 | Beach 5: Sand Stone | 60 | 1 | 54 | — | — | [Observed](witnesses/lemmings2-14-60.json) |
 | Beach 6: Beach Lems | 60 | 1 | 54 | — | — | [Observed](witnesses/lemmings2-15-60.json) |
-| Beach 7: SAND IN YER SARNIES | 60 | 1 | — | — | — | No witness collected |
+| Beach 7: SAND IN YER SARNIES | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-16-60.json) |
+| Beach 7: SAND IN YER SARNIES (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-16-1.json) |
 | Beach 8: Beach Mania | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-17-60.json) |
-| Beach 9: Sand Blaster | 60 | 1 | — | — | — | No witness collected |
+| Beach 9: Sand Blaster | 60 | 1 | 2 | — | — | [Observed](witnesses/lemmings2-18-60.json) |
+| Beach 9: Sand Blaster (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-18-1.json) |
 | Beach 10: Surf Lem ! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-19-60.json) |
-| Cavelems 1: Audex Powder | 60 | 1 | 47 | — | — | [Observed](witnesses/lemmings2-20-60.json) |
+| Cavelems 1: Audex Powder | 60 | 1 | 52 | — | — | [Observed](witnesses/lemmings2-20-60.json) |
 | Cavelems 2: Successive division | 60 | 1 | 3 | — | — | [Observed](witnesses/lemmings2-21-60.json) |
 | Cavelems 2: Successive division (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-21-1.json) |
 | Cavelems 3: Mortal men doomed to die | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-22-60.json) |
 | Cavelems 3: Mortal men doomed to die (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-22-1.json) |
 | Cavelems 4: A stompin` good time! | 60 | 1 | 26 | — | — | [Observed](witnesses/lemmings2-23-60.json) |
-| Cavelems 5: This Is The Pits ! | 60 | 1 | 2 | — | — | [Observed](witnesses/lemmings2-24-60.json) |
+| Cavelems 5: This Is The Pits ! | 60 | 1 | 57 | — | — | [Observed](witnesses/lemmings2-24-60.json) |
 | Cavelems 5: This Is The Pits ! (carry-over) | 2 | 1 | 2 | 2 | 0 | [Verified](witnesses/lemmings2-24-2.json) |
 | Cavelems 6: Ain`t No Time | 60 | 1 | — | — | — | No witness collected |
 | Cavelems 6: Ain`t No Time (carry-over) | 2 | 1 | 2 | 2 | 0 | [Verified](witnesses/lemmings2-25-2.json) |
@@ -288,22 +292,25 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Circus 2: Lemmings In The Family (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-31-1.json) |
 | Circus 3: We`re Coming Home | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-32-60.json) |
 | Circus 3: We`re Coming Home (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-32-1.json) |
-| Circus 4: `Round the Blox! | 60 | 1 | — | — | — | No witness collected |
+| Circus 4: `Round the Blox! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-33-60.json) |
+| Circus 4: `Round the Blox! (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-33-1.json) |
 | Circus 5: Big Top Time | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-34-60.json) |
 | Circus 6: HEADACHE | 60 | 1 | 3 | — | — | [Observed](witnesses/lemmings2-35-60.json) |
 | Circus 7: Circus Of Fear | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-36-60.json) |
 | Circus 8: PLAY THAT FUNKY LEMMING | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-37-60.json) |
-| Circus 9: The Carpet Capers.... | 60 | 1 | — | — | — | No witness collected |
+| Circus 9: The Carpet Capers.... | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-38-60.json) |
+| Circus 9: The Carpet Capers.... (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-38-1.json) |
 | Circus 10: Swingz and Roundaboutz! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-39-60.json) |
 | Classic 1: Do You Remember? | 60 | 1 | 60 | 60 | 0 | [Verified](witnesses/lemmings2-0-60.json) |
-| Classic 2: Mr Lemmy Lives Next Door | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-1-60.json) |
+| Classic 2: Mr Lemmy Lives Next Door | 60 | 1 | 13 | — | — | [Observed](witnesses/lemmings2-1-60.json) |
 | Classic 3: LEMTRIS | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-2-60.json) |
 | Classic 4: Tension Sheet, Good Idea | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-3-60.json) |
 | Classic 5: The Magnificent Severn | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-4-60.json) |
-| Classic 6: The Starry Threshold | 60 | 1 | — | — | — | No witness collected |
-| Classic 7: So close but so far away | 60 | 1 | — | — | — | No witness collected |
+| Classic 6: The Starry Threshold | 60 | 1 | 60 | 60 | 0 | [Verified](witnesses/lemmings2-5-60.json) |
+| Classic 7: So close but so far away | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-6-60.json) |
 | Classic 8: The Secret Of LEMH | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-7-60.json) |
-| Classic 9: Flying The Mad Pursuit | 60 | 1 | — | — | — | No witness collected |
+| Classic 9: Flying The Mad Pursuit | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-8-60.json) |
+| Classic 9: Flying The Mad Pursuit (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-8-1.json) |
 | Classic 10: What`s it like up there? | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-9-60.json) |
 | Egyptian 1: Two`s Company.... | 60 | 1 | 40 | — | — | [Observed](witnesses/lemmings2-40-60.json) |
 | Egyptian 2: G1ued to the Goal! | 60 | 1 | 20 | — | — | [Observed](witnesses/lemmings2-41-60.json) |
@@ -311,71 +318,102 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Egyptian 4: Spiralling DNA | 60 | 1 | 58 | — | — | [Observed](witnesses/lemmings2-43-60.json) |
 | Egyptian 5: Echo Of Light | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-44-60.json) |
 | Egyptian 6: RUPER`Z QUESTLING | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-45-60.json) |
-| Egyptian 7: The Egypt Cottage! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-46-60.json) |
+| Egyptian 7: The Egypt Cottage! | 60 | 1 | 3 | — | — | [Observed](witnesses/lemmings2-46-60.json) |
 | Egyptian 8: HEROE`Z QUEST.... | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-47-60.json) |
-| Egyptian 9: Wave Pathway | 60 | 1 | — | — | — | No witness collected |
-| Egyptian 10: Pyramid of Despair! | 60 | 1 | — | — | — | No witness collected |
+| Egyptian 9: Wave Pathway | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-48-60.json) |
+| Egyptian 9: Wave Pathway (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-48-1.json) |
+| Egyptian 10: Pyramid of Despair! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-49-60.json) |
+| Egyptian 10: Pyramid of Despair! (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-49-1.json) |
 | Highland 1: CREAM OF LEMMING SOUP | 60 | 1 | 60 | 60 | 0 | [Verified](witnesses/lemmings2-50-60.json) |
-| Highland 2: WEE BEASTIES !!! | 60 | 1 | — | — | — | No witness collected |
-| Highland 3: Stop your ticklin` Jock! | 60 | 1 | — | — | — | No witness collected |
-| Highland 4: A mere stone`s throw | 60 | 1 | — | — | — | No witness collected |
-| Highland 5: DONALD WHARS YER LEMMING | 60 | 1 | — | — | — | No witness collected |
+| Highland 2: WEE BEASTIES !!! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-51-60.json) |
+| Highland 2: WEE BEASTIES !!! (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-51-1.json) |
+| Highland 3: Stop your ticklin` Jock! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-52-60.json) |
+| Highland 3: Stop your ticklin` Jock! (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-52-1.json) |
+| Highland 4: A mere stone`s throw | 60 | 1 | 53 | — | — | [Observed](witnesses/lemmings2-53-60.json) |
+| Highland 4: A mere stone`s throw (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-53-1.json) |
+| Highland 5: DONALD WHARS YER LEMMING | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-54-60.json) |
+| Highland 5: DONALD WHARS YER LEMMING (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-54-1.json) |
 | Highland 6: Brigadoom! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-55-60.json) |
-| Highland 7: In memory of McAngus | 60 | 1 | — | — | — | No witness collected |
-| Highland 8: The White Heather Club | 60 | 1 | — | — | — | No witness collected |
+| Highland 7: In memory of McAngus | 60 | 1 | 3 | — | — | [Observed](witnesses/lemmings2-56-60.json) |
+| Highland 8: The White Heather Club | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-57-60.json) |
+| Highland 8: The White Heather Club (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-57-1.json) |
 | Highland 9: TAKE A RUNNING JUMP !! | 60 | 1 | 2 | — | — | [Observed](witnesses/lemmings2-58-60.json) |
 | Highland 10: EAT MY SHRAPNEL !! | 60 | 1 | — | — | — | No witness collected |
-| Medieval 1: LEMMING OF NOTTINGHAM | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-60-60.json) |
-| Medieval 2: SIR! I KID YE NOT | 60 | 1 | — | — | — | No witness collected |
-| Medieval 3: ALL IN A KNIGHTS WORK!! | 60 | 1 | — | — | — | No witness collected |
-| Medieval 4: WATCH THAT LAST STEP! | 60 | 1 | — | — | — | No witness collected |
+| Highland 10: EAT MY SHRAPNEL !! (carry-over) | 4 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-59-4.json) |
+| Medieval 1: LEMMING OF NOTTINGHAM | 60 | 1 | 2 | — | — | [Observed](witnesses/lemmings2-60-60.json) |
+| Medieval 2: SIR! I KID YE NOT | 60 | 1 | 60 | 60 | 0 | [Verified](witnesses/lemmings2-61-60.json) |
+| Medieval 2: SIR! I KID YE NOT (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-61-1.json) |
+| Medieval 3: ALL IN A KNIGHTS WORK!! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-62-60.json) |
+| Medieval 3: ALL IN A KNIGHTS WORK!! (carry-over) | 2 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-62-2.json) |
+| Medieval 4: WATCH THAT LAST STEP! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-63-60.json) |
+| Medieval 4: WATCH THAT LAST STEP! (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-63-1.json) |
 | Medieval 5: KING ARTHURS LEMMINGS | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-64-60.json) |
-| Medieval 6: Let`s play twister! | 60 | 1 | — | — | — | No witness collected |
+| Medieval 6: Let`s play twister! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-65-60.json) |
+| Medieval 6: Let`s play twister! (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-65-1.json) |
 | Medieval 7: UNDERGROUND | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-66-60.json) |
-| Medieval 8: What shall we do now? | 60 | 1 | — | — | — | No witness collected |
+| Medieval 8: What shall we do now? | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-67-60.json) |
+| Medieval 8: What shall we do now? (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-67-1.json) |
 | Medieval 9: LEMMING IN DISTRESS !! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-68-60.json) |
-| Medieval 10: JUST JOUSTING AROUND | 60 | 1 | — | — | — | No witness collected |
+| Medieval 10: JUST JOUSTING AROUND | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-69-60.json) |
+| Medieval 10: JUST JOUSTING AROUND (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-69-1.json) |
 | Outdoor 1: Pa-tent-ly Obvious | 60 | 1 | 59 | — | — | [Observed](witnesses/lemmings2-70-60.json) |
-| Outdoor 2: Swing/Roundabout Theory | 60 | 1 | 2 | — | — | [Observed](witnesses/lemmings2-71-60.json) |
+| Outdoor 2: Swing/Roundabout Theory | 60 | 1 | 17 | — | — | [Observed](witnesses/lemmings2-71-60.json) |
 | Outdoor 3: Glide Like The Wind | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-72-60.json) |
 | Outdoor 4: Deliverance ? | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-73-60.json) |
 | Outdoor 5: Friday`s Walk | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-74-60.json) |
 | Outdoor 6: The Magic of Mushrooms | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-75-60.json) |
 | Outdoor 7: Natural Selection | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-76-60.json) |
-| Outdoor 8: The Laws of Tradition | 60 | 1 | — | — | — | No witness collected |
-| Outdoor 9: 22934 | 60 | 1 | — | — | — | No witness collected |
+| Outdoor 8: The Laws of Tradition | 60 | 1 | 15 | — | — | [Observed](witnesses/lemmings2-77-60.json) |
+| Outdoor 8: The Laws of Tradition (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-77-1.json) |
+| Outdoor 9: 22934 | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-78-60.json) |
+| Outdoor 9: 22934 (carry-over) | 2 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-78-2.json) |
 | Outdoor 10: Garden of Stone | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-79-60.json) |
-| Polar 1: Lem Me Out ! | 60 | 1 | 26 | — | — | [Observed](witnesses/lemmings2-80-60.json) |
-| Polar 2: Ice Ice Lemy | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-81-60.json) |
+| Polar 1: Lem Me Out ! | 60 | 1 | 60 | 60 | 0 | [Verified](witnesses/lemmings2-80-60.json) |
+| Polar 2: Ice Ice Lemy | 60 | 1 | 7 | — | — | [Observed](witnesses/lemmings2-81-60.json) |
 | Polar 3: Snow More Lems | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-82-60.json) |
 | Polar 4: DANGER THIN ICE ! | 60 | 1 | 42 | — | — | [Observed](witnesses/lemmings2-83-60.json) |
-| Polar 5: Take Your Best Shot ! | 60 | 1 | — | — | — | No witness collected |
+| Polar 5: Take Your Best Shot ! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-84-60.json) |
+| Polar 5: Take Your Best Shot ! (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-84-1.json) |
 | Polar 6: Turn Back ! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-85-60.json) |
-| Polar 7: SLIPPIN & SLIDING | 60 | 1 | — | — | — | No witness collected |
+| Polar 7: SLIPPIN & SLIDING | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-86-60.json) |
+| Polar 7: SLIPPIN & SLIDING (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-86-1.json) |
 | Polar 8: Snowed In ! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-87-60.json) |
-| Polar 9: Its all up hill ! | 60 | 1 | — | — | — | No witness collected |
-| Polar 10: Stay Frosty | 60 | 1 | — | — | — | No witness collected |
+| Polar 9: Its all up hill ! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-88-60.json) |
+| Polar 9: Its all up hill ! (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-88-1.json) |
+| Polar 10: Stay Frosty | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-89-60.json) |
+| Polar 10: Stay Frosty (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-89-1.json) |
 | Shadow 1: Land of OZ! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-90-60.json) |
 | Shadow 2: NITRAM THE HUGE! | 60 | 1 | 7 | — | — | [Observed](witnesses/lemmings2-91-60.json) |
 | Shadow 3: Twin Bleeps | 60 | 1 | 30 | — | — | [Observed](witnesses/lemmings2-92-60.json) |
-| Shadow 4: The Pancake Factory. | 60 | 1 | — | — | — | No witness collected |
-| Shadow 5: Swingadingding | 60 | 1 | — | — | — | No witness collected |
+| Shadow 4: The Pancake Factory. | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-93-60.json) |
+| Shadow 4: The Pancake Factory. (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-93-1.json) |
+| Shadow 5: Swingadingding | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-94-60.json) |
+| Shadow 5: Swingadingding (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-94-1.json) |
 | Shadow 6: The School Gate. | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-95-60.json) |
-| Shadow 7: Fritbatter Frolics! | 60 | 1 | — | — | — | No witness collected |
-| Shadow 8: Goossen`s Inferno! | 60 | 1 | — | — | — | No witness collected |
-| Shadow 9: SPINNY THANG.... | 60 | 1 | — | — | — | No witness collected |
-| Shadow 10: Moonswings | 60 | 1 | — | — | — | No witness collected |
+| Shadow 7: Fritbatter Frolics! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-96-60.json) |
+| Shadow 7: Fritbatter Frolics! (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-96-1.json) |
+| Shadow 8: Goossen`s Inferno! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-97-60.json) |
+| Shadow 8: Goossen`s Inferno! (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-97-1.json) |
+| Shadow 9: SPINNY THANG.... | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-98-60.json) |
+| Shadow 9: SPINNY THANG.... (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-98-1.json) |
+| Shadow 10: Moonswings | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-99-60.json) |
+| Shadow 10: Moonswings (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-99-1.json) |
 | Space 1: HIT THE SPACE BAR | 60 | 1 | 51 | — | — | [Observed](witnesses/lemmings2-100-60.json) |
 | Space 2: Perpetual motion | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-101-60.json) |
 | Space 2: Perpetual motion (carry-over) | 3 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-101-3.json) |
-| Space 3: THE LEMMINGS HAVE LANDED | 60 | 1 | — | — | — | No witness collected |
-| Space 4: The Vortex | 60 | 1 | — | — | — | No witness collected |
+| Space 3: THE LEMMINGS HAVE LANDED | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-102-60.json) |
+| Space 3: THE LEMMINGS HAVE LANDED (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-102-1.json) |
+| Space 4: The Vortex | 60 | 1 | 11 | — | — | [Observed](witnesses/lemmings2-103-60.json) |
+| Space 4: The Vortex (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-103-1.json) |
 | Space 5: The Stainless Steel Lemm | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-104-60.json) |
 | Space 6: Lunar Olympics | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-105-60.json) |
 | Space 7: GoSh It`S fUlL oF lEmMs | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-106-60.json) |
-| Space 8: Odyssey | 60 | 1 | — | — | — | No witness collected |
-| Space 9: Inside The Steel Box | 60 | 1 | — | — | — | No witness collected |
-| Space 10: Frontier of surreality | 60 | 1 | — | — | — | No witness collected |
+| Space 8: Odyssey | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-107-60.json) |
+| Space 8: Odyssey (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-107-1.json) |
+| Space 9: Inside The Steel Box | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-108-60.json) |
+| Space 9: Inside The Steel Box (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-108-1.json) |
+| Space 10: Frontier of surreality | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-109-60.json) |
+| Space 10: Frontier of surreality (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-109-1.json) |
 | Sports 1: Ceci n`est pas une pipe. | 60 | 1 | 2 | — | — | [Observed](witnesses/lemmings2-110-60.json) |
 | Sports 2: School Sports Day | 60 | 1 | 56 | — | — | [Observed](witnesses/lemmings2-111-60.json) |
 | Sports 3: The Octathalon! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-112-60.json) |
@@ -385,9 +423,12 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Sports 6: Double Trouble | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-115-60.json) |
 | Sports 7: The Sun Sign Selection | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-116-60.json) |
 | Sports 7: The Sun Sign Selection (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-116-1.json) |
-| Sports 8: Run the Risk | 60 | 1 | — | — | — | No witness collected |
-| Sports 9: The Nervous Network! | 60 | 1 | — | — | — | No witness collected |
-| Sports 10: Take up Archery | 60 | 1 | — | — | — | No witness collected |
+| Sports 8: Run the Risk | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-117-60.json) |
+| Sports 8: Run the Risk (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-117-1.json) |
+| Sports 9: The Nervous Network! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-118-60.json) |
+| Sports 9: The Nervous Network! (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-118-1.json) |
+| Sports 10: Take up Archery | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-119-60.json) |
+| Sports 10: Take up Archery (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-119-1.json) |
 
 ## Holiday Lemmings 1993
 

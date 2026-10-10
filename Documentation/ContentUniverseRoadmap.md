@@ -11,11 +11,9 @@ gate.
 - **Complete** content has a verified winning route for every advertised level.
 - **Playable** content loads, renders and runs, but does not claim full route
   coverage. Community content can use this status when its limits are clear.
-- **Preview** content appears in a separate, labelled area. Lemmings 2 and
-  Lemmings 3 remain Preview until their engine fidelity and campaign evidence
-  meet the required gate.
-- **Beta** content appears only in a beta build or after the player enables the
-  relevant preview option.
+- **Preview** content carries an explicit early-development label.
+- **Beta** content carries its testing label in the library and records its
+  remaining compatibility and campaign limits. L3 uses Beta in 1.9.
 - **Unverified** content does not appear in the normal library. It can remain
   available through an explicit import or developer test path.
 
@@ -129,26 +127,23 @@ candidate with muted offscreen app checks, retained replay checks, signing,
 notarisation and public download and update-feed verification. Full sequel
 completion is the separate 1.9 gate.
 
-### 1.9 — Lemmings 2 and Lemmings 3 completion
+### 1.9 — The Tribes complete, Chronicles Beta
 
-Make sequel completion verification the 1.9 exit gate. Keep the current Preview
-labels until every condition passes:
+The owner approved L2 Complete and L3 Beta on 10 October 2026. L2 has all 120
+winning routes and twelve continuous tribe chains. L3 retains 74 of 90
+standalone wins, with sixteen missing routes. See the [1.9 milestone evidence](ReleaseReadiness/1.9Milestone.md).
 
-- preserve and replay a winning route for all 120 Lemmings 2 levels and all 90
-  Lemmings 3 levels;
-- compare Lemmings 2 rules with the original engine and resolve the provisional
-  Lemmings 3 tool, movement and trap semantics;
-- verify continuous campaign progression, Lemmings 2 survivor carry-over,
-  at least 50 surviving lemmings at the end of each Lemmings 3 tribe, and both
-  games' endings;
-- complete Lemmings 3 environmental effects, original movie audio and story
-  transitions, and close the remaining Lemmings 2 media and fidelity gaps;
-- verify app-session completion, saved-run recovery, replay identity and result
-  records against the current engine and content revisions.
+Continue the separate validation work:
 
-The current baseline is 75/120 Lemmings 2 routes and 52/90 Lemmings 3 routes.
-The missing 83 routes are an open verification gap, not evidence that those
-levels are broken. A passing load or smoke check does not close this gate.
+- compare native rules, movement, tools, traps and input cadence with the
+  original DOS engines;
+- prove L2's golden-talisman ark ending with at least 30 survivors per tribe,
+  and L3's three complete campaigns with at least 50 final survivors;
+- close environmental effects, original movie audio and story transitions;
+- keep recovery, replay identity and result records validated against the
+  actual release candidate.
+
+The release labels do not certify these outstanding fidelity or ending claims.
 
 ### 2.0 — iPhone and iPad release
 

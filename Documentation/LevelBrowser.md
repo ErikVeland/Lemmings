@@ -113,8 +113,8 @@ name and input target and shows `PREVIEW UNAVAILABLE`.
 
 ## Content boundary
 
-Official Classic campaigns keep their `Complete` status. L2 and L3 remain
-`Preview`. Bundled fan packs keep their existing `Playable` evidence. Packs from
+Official Classic campaigns and Lemmings 2 use `Complete`. Lemmings 3 uses
+`Beta` in 1.9. Bundled fan packs keep their existing `Playable` evidence. Packs from
 other folders are visible only through the existing import or update paths and
 are labelled `Unverified`.
 

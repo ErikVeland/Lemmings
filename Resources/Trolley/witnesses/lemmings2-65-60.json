@@ -1,0 +1,192 @@
+{
+  "events" : [
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 107,
+          "y" : 369
+        }
+      },
+      "tick" : 1
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 41
+        }
+      },
+      "tick" : 61
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 2
+        }
+      },
+      "tick" : 204
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 34
+        }
+      },
+      "tick" : 329
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 46
+        }
+      },
+      "tick" : 527
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 61,
+          "y" : 357
+        }
+      },
+      "tick" : 548
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 61,
+          "y" : 360
+        }
+      },
+      "tick" : 550
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 62,
+          "y" : 363
+        }
+      },
+      "tick" : 551
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 63,
+          "y" : 366
+        }
+      },
+      "tick" : 552
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 64,
+          "y" : 370
+        }
+      },
+      "tick" : 553
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 65,
+          "y" : 374
+        }
+      },
+      "tick" : 554
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 68,
+          "y" : 378
+        }
+      },
+      "tick" : 555
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 68,
+          "y" : 383
+        }
+      },
+      "tick" : 556
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 42
+        }
+      },
+      "tick" : 629
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 1
+        }
+      },
+      "tick" : 629
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 46
+        }
+      },
+      "tick" : 670
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 185,
+          "y" : 439
+        }
+      },
+      "tick" : 671
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 185,
+          "y" : 442
+        }
+      },
+      "tick" : 673
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 186,
+          "y" : 445
+        }
+      },
+      "tick" : 674
+    }
+  ],
+  "expectedSaved" : 1,
+  "expectedTicks" : 3600,
+  "levelSHA256" : "b81aa2e911ea92e72880e69ed440f2d0a5ef4aa2fbc7019a5d6ca150adb41aca",
+  "population" : 60,
+  "version" : 2
+}

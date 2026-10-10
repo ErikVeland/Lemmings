@@ -1,0 +1,138 @@
+{
+  "events" : [
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 373,
+          "y" : 400
+        }
+      },
+      "tick" : 61
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 37
+        }
+      },
+      "tick" : 61
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 373,
+          "y" : 280
+        }
+      },
+      "tick" : 89
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 130,
+          "y" : 312
+        }
+      },
+      "tick" : 100
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 130,
+          "y" : 296
+        }
+      },
+      "tick" : 105
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 130,
+          "y" : 324
+        }
+      },
+      "tick" : 115
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 130,
+          "y" : 230
+        }
+      },
+      "tick" : 129
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 300,
+          "y" : 230
+        }
+      },
+      "tick" : 140
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 300,
+          "y" : 160
+        }
+      },
+      "tick" : 160
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 344,
+          "y" : 160
+        }
+      },
+      "tick" : 168
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 344,
+          "y" : 50
+        }
+      },
+      "tick" : 173
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 138,
+          "y" : 32
+        }
+      },
+      "tick" : 186
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 104,
+          "y" : 64
+        }
+      },
+      "tick" : 211
+    }
+  ],
+  "expectedSaved" : 1,
+  "expectedTicks" : 1505,
+  "levelSHA256" : "fa507e9d6126196f69feb383bdb69646e299ab7fd1f41dced3c420dc8821ef62",
+  "population" : 60,
+  "version" : 2
+}

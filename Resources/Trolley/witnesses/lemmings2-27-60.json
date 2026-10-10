@@ -290,7 +290,7 @@
     }
   ],
   "expectedSaved" : 1,
-  "expectedTicks" : 2059,
+  "expectedTicks" : 7200,
   "levelSHA256" : "2a0f5961bb15aee1a65ee3c1aec8f0e96d2086958570a5ebd4f68494afd22353",
   "population" : 60,
   "version" : 2

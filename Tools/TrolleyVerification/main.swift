@@ -275,11 +275,12 @@ typealias L2Replay = Lemmings2ReplayWitness
     let campaign = try Lemmings2Campaign(root: root), masks = try Lemmings2TerrainMasks(root: root)
     struct Catalogue: Decodable { let levels: [Row] }
     let proofRoot = project.appendingPathComponent("Resources/Trolley")
-    let bundled = family == "l2-proofs" ? try JSONDecoder().decode(Catalogue.self,
-        from: Data(contentsOf: proofRoot.appendingPathComponent("verified-maxima.json"))).levels.filter { $0.gameID == "lemmings2" } : []
+    let bundled = try JSONDecoder().decode(Catalogue.self,
+        from: Data(contentsOf: proofRoot.appendingPathComponent("verified-maxima.json"))).levels.filter { $0.gameID == "lemmings2" }
     for (index, level) in campaign.levels.enumerated() {
         if let shard, index % shard[1] != shard[0] { continue }
-        let proof = bundled.first { $0.conditions?.levelID == "\(index / 10):\(index % 10)" }
+        let retained = bundled.filter { $0.conditions?.levelID == "\(index / 10):\(index % 10)" }
+        let proof = family == "l2-proofs" ? retained.first : nil
         if family == "l2-proofs" && proof == nil { continue }
         let tribe = Lemmings2Campaign.tribeNames[level.style]
         let style = try Lemmings2Style(data: Data(contentsOf: root.appendingPathComponent("STYLES/\(Lemmings2Campaign.styleNames[level.style]).DAT")))
@@ -296,7 +297,7 @@ typealias L2Replay = Lemmings2ReplayWitness
             }
         }
         let populations = proof.map { [$0.population] }
-            ?? fixture.map { $0.population != 60 ? [60, $0.population] : [60] } ?? [60]
+            ?? Array(Set([60] + (fixture.map { [$0.population] } ?? []) + retained.map(\.population))).sorted(by: >)
         for population in populations {
             var row = Row(gameID: "lemmings2", rank: tribe, number: index % 10 + 1, title: level.title, population: population, required: 1)
             do {
@@ -351,7 +352,13 @@ typealias L2Replay = Lemmings2ReplayWitness
                     guard cursor.next == events.count else { throw SequelDataError.invalid("Replay ended before all inputs were used") }
                     return trial
                 }
-                for candidate in (family == "l2-proofs" ? [fixture] : [nil, fixture]) as [L2Replay?] {
+                let published = try retained.filter { $0.population == population }.compactMap { row -> L2Replay? in
+                    guard let witness = row.witness else { return nil }
+                    let url = proofRoot.appendingPathComponent(witness.path)
+                    guard try fileHash(url) == witness.sha256 else { throw SequelDataError.invalid("Published Tribes witness hash changed.") }
+                    return try JSONDecoder().decode(L2Replay.self, from: Data(contentsOf: url))
+                }
+                for candidate in (family == "l2-proofs" ? [fixture] : [nil, fixture] + published.map { Optional($0) }) as [L2Replay?] {
                     if candidate == nil && row.testedCandidates > 0 { continue }
                     row.testedCandidates += 1
                     do {

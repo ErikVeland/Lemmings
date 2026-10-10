@@ -101,6 +101,12 @@ The Macintosh SHPD and Presage LZSS decoder follows the format implementation in
 https://github.com/fuzziqersoftware/resource_dasm (SpriteDecoders/Lemmings-PrinceOfPersia-SHPD.cc
 and DataCodecs/Presage-LZSS.cc). Original game artwork remains supplied game data.
 
+The 1.9 build also uses pinned resource_dasm and phosg as file-only preparation
+tools for the original Macintosh sampled-instrument music. Neither tool is
+linked into the app. See `Documentation/MacintoshFidelity.md` for versions,
+source hashes and the WAV-size correction. Original music remains supplied
+game data.
+
 The MIT License (MIT)
 
 Copyright (c) 2023 Martin Michelsen

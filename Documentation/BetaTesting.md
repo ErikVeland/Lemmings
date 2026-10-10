@@ -39,7 +39,7 @@ Monterey worktree contains the current commit. It does not create missing
 notes. It then writes three timestamped ZIP files to
 `~/Downloads`: Developer ID standard, macOS 12 Monterey and Game Center.
 
-Lemmings 2 and Lemmings 3 remain Preview. NeoLemmix remains Beta or Preview.
+For 1.9, Lemmings 2 is Complete and Lemmings 3 is Beta. NeoLemmix remains Beta.
 Physical Intel, minimum-macOS, complete VoiceOver, physical-controller and
 sustained performance checks remain separate from automated checks.
 

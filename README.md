@@ -14,9 +14,9 @@ before distributing a build.
 
 ## Download
 
-Download [1.8.5 build 74](https://github.com/ErikVeland/Lemmings/releases/tag/v1.8.5),
+Download [1.9 build 75](https://github.com/ErikVeland/Lemmings/releases/tag/v1.9),
 the current public release. Installed copies update automatically. Read the
-[1.8.5 release notes](Documentation/ReleaseNotes-1.8.5-build74.md) and the
+[1.9 release notes](Documentation/ReleaseNotes-1.9-build75.md) and the
 [tester guide](Documentation/BetaTesting.md).
 
 [Collections](Documentation/LevelCollections.md) keeps each player's favourite
@@ -29,7 +29,7 @@ or their result screens across Classic, fan packs, NeoLemmix, Lemmings 2 and 3.
 - [Project overview](Documentation/Overview.md) — player-facing status and roadmap.
 - [2.0 mobile roadmap](Documentation/2.0Roadmap.md) — iPhone/iPad scope, source state and device gates.
 - [1.7 NeoLemmix roadmap](Documentation/1.7Roadmap.md) — pinned oracle, executable gates and compatibility limits.
-- [1.9 sequel gate](Documentation/ContentUniverseRoadmap.md#19--lemmings-2-and-lemmings-3-completion) — winning routes, engine fidelity and campaign evidence.
+- [1.9 sequel gate](Documentation/ContentUniverseRoadmap.md#19--the-tribes-complete-chronicles-beta) — winning routes, engine fidelity and campaign evidence.
 - [1.5 NeoLemmix source handoff](Documentation/ReleaseReadiness/1.5NeoLemmixHandoff.md) — verified source and corpus evidence, open release gates and non-claims.
 - [Precision Zoom](Documentation/PrecisionZoom.md) — Z, Shift-Z and scroll controls, earnings and retry rules.
 - [Play insights](Documentation/PlayInsights.md) — home-screen saved counts, consent and collector setup.
@@ -46,13 +46,12 @@ or their result screens across Classic, fan packs, NeoLemmix, Lemmings 2 and 3.
 
 The iPhone and iPad 1.3 source and Simulator gates pass. Physical-device,
 VoiceOver, thermal, signing and distribution evidence remain open for 2.0.
-The macOS local candidate is version 1.6 build 51. NeoLemmix compatibility
-targets 1.7. Classic content is the completed reference engine.
-Lemmings 2 and Lemmings 3 are labelled Preview. The bundled corpus contains
+The macOS 1.9 release marks Lemmings 2: The Tribes Complete and Lemmings 3:
+Chronicles Beta. Classic content remains the completed reference engine. The bundled corpus contains
 6,020 Classic-format fan levels in 535 packs; this is not a claim of NeoLemmix
 fan-pack compatibility. NeoLemmix support remains Beta or Preview until its
-real-pack and reference-replay gates pass. Lemmings 2 and Lemmings 3 completion
-targets 1.9.
+real-pack and reference-replay gates pass. Remaining sequel fidelity, high-survivor endings and L3 route coverage are
+tracked in the release evidence.
 
 ## Requirements
 

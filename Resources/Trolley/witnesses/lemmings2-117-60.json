@@ -1,0 +1,174 @@
+{
+  "events" : [
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 300,
+          "y" : 24
+        }
+      },
+      "tick" : 60
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 37
+        }
+      },
+      "tick" : 60
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 365,
+          "y" : 24
+        }
+      },
+      "tick" : 108
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 363,
+          "y" : 224
+        }
+      },
+      "tick" : 117
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 29
+        }
+      },
+      "tick" : 171
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 29
+        }
+      },
+      "tick" : 682
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 28
+        }
+      },
+      "tick" : 825
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 552,
+          "y" : 196
+        }
+      },
+      "tick" : 1105
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 37
+        }
+      },
+      "tick" : 1105
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 536,
+          "y" : 201
+        }
+      },
+      "tick" : 1129
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 536,
+          "y" : 152
+        }
+      },
+      "tick" : 1131
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 552,
+          "y" : 153
+        }
+      },
+      "tick" : 1136
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 552,
+          "y" : 100
+        }
+      },
+      "tick" : 1138
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 690,
+          "y" : 128
+        }
+      },
+      "tick" : 1143
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 688,
+          "y" : 128
+        }
+      },
+      "tick" : 1159
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 760,
+          "y" : 128
+        }
+      },
+      "tick" : 1159
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 762,
+          "y" : 248
+        }
+      },
+      "tick" : 1168
+    }
+  ],
+  "expectedSaved" : 1,
+  "expectedTicks" : 8100,
+  "levelSHA256" : "426a25ff8afed40f6a0988a364e88570da01e11b85fb3e4a7425ccb6828d7355",
+  "population" : 60,
+  "version" : 2
+}

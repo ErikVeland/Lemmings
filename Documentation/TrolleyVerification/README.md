@@ -1,10 +1,10 @@
 # Rescue maximum verification
 
-This audit covered 562 bundled level identities. It produced 242 proven maxima and 258 completed solutions without optimality proofs. It collected no winning witness for 62 levels. Classic Lemmings has a winning replay for every level. Coverage of the other campaigns remains incomplete.
+This audit covered 562 bundled level identities. It produced 247 proven maxima and 297 completed solutions without optimality proofs. It collected no winning witness for 18 levels. Classic Lemmings has a winning replay for every level. Coverage of the other campaigns remains incomplete.
 
 See the [level-by-level results](levels.md) for every campaign level and the [full evidence data](audit.json) for exact conditions and notes.
 
-The audit tried 1,237 candidate runs. Failed searches do not establish an optimum.
+The audit tried 1,338 candidate runs. Failed searches do not establish an optimum.
 
 Maximum saveable means the population minus unavoidable sacrifices. A successful solution proves that its saved count is achievable. It does not prove that its deaths are necessary. The bundled certificates currently require a completed, repeatable rescue of the entire finite population.
 
@@ -14,13 +14,13 @@ Maximum saveable means the population minus unavoidable sacrifices. A successful
 | Xmas Lemmings 1991 | 4 | 3 | 1 | 0 |
 | Oh No! More Lemmings | 100 | 45 | 55 | 0 |
 | Xmas Lemmings 1992 | 4 | 4 | 0 | 0 |
-| Lemmings 2: The Tribes | 120 | 2 | 72 | 46 |
+| Lemmings 2: The Tribes | 120 | 7 | 111 | 2 |
 | Holiday Lemmings 1993 | 32 | 24 | 8 | 0 |
 | Oh Yes! More Lemmings | 60 | 39 | 21 | 0 |
 | All New World of Lemmings | 90 | 0 | 74 | 16 |
 | Holiday Lemmings 1994 | 32 | 22 | 10 | 0 |
 
-Tribes uses 60 Lemmings for the campaign audit. Preserved fixtures also cover 12 carry-over configurations. Each certificate applies only to its exact population.
+Tribes uses 60 Lemmings for the campaign audit. Preserved fixtures also cover 53 carry-over configurations. Each certificate applies only to its exact population.
 
 Chronicles keeps unreleased Lemmings in reserve. They are survivors, not sacrifices. Fixed-input L3 completion fixtures are checked twice with their level hashes, exact starting population, accepted inputs, terminal state and retained reserves. Uncovered levels receive a no-input check. See [the completion fixtures](../../Tests/Lemmings3CompletionTests/Fixtures) and [verification tools](../../Tools/Lemmings3Completion).
 
@@ -191,8 +191,13 @@ The [community maximum-saved records](https://www.lemmingsforums.net/index.php?t
 | Xmas Lemmings 1992 | Xmas 2: Happy Holidays Mr Lemming! | 80/80 | 0 | [Witness](witnesses/xmasLemmings1992-1.json) |
 | Xmas Lemmings 1992 | Xmas 3: A Lemming Holiday | 80/80 | 0 | [Witness](witnesses/xmasLemmings1992-2.json) |
 | Xmas Lemmings 1992 | Xmas 4: The North Poles | 2/2 | 0 | [Witness](witnesses/xmasLemmings1992-3.json) |
+| Lemmings 2: The Tribes | Beach 2: The Barley Mow.... | 60/60 | 0 | [Witness](witnesses/lemmings2-11-60.json) |
+| Lemmings 2: The Tribes | Beach 4: Coastal Suction Function | 60/60 | 0 | [Witness](witnesses/lemmings2-13-60.json) |
 | Lemmings 2: The Tribes | Classic 1: Do You Remember? | 60/60 | 0 | [Witness](witnesses/lemmings2-0-60.json) |
+| Lemmings 2: The Tribes | Classic 6: The Starry Threshold | 60/60 | 0 | [Witness](witnesses/lemmings2-5-60.json) |
 | Lemmings 2: The Tribes | Highland 1: CREAM OF LEMMING SOUP | 60/60 | 0 | [Witness](witnesses/lemmings2-50-60.json) |
+| Lemmings 2: The Tribes | Medieval 2: SIR! I KID YE NOT | 60/60 | 0 | [Witness](witnesses/lemmings2-61-60.json) |
+| Lemmings 2: The Tribes | Polar 1: Lem Me Out ! | 60/60 | 0 | [Witness](witnesses/lemmings2-80-60.json) |
 | Holiday Lemmings 1993 | Blizzard 2: Lemmings Up High | 80/80 | 0 | [Witness](witnesses/holidayLemmings1993-17.json) |
 | Holiday Lemmings 1993 | Blizzard 3: Check Your Hints! | 80/80 | 0 | [Witness](witnesses/holidayLemmings1993-18.json) |
 | Holiday Lemmings 1993 | Blizzard 4: Santus Lemmingus | 80/80 | 0 | [Witness](witnesses/holidayLemmings1993-19.json) |

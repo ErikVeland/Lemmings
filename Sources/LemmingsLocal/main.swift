@@ -816,7 +816,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let recordedRoutes = NSMenuItem(title: "Show Recorded Routes", action: #selector(showRecordedRoutes), keyEquivalent: "")
     recordedRoutes.target = self
     appMenu.addItem(recordedRoutes)
-    let nativeL3 = NSMenuItem(title: "Play Lemmings 3 Native Preview…", action: #selector(chooseNativeL3), keyEquivalent: "3")
+    let nativeL3 = NSMenuItem(title: "Play Lemmings 3: Chronicles Beta…", action: #selector(chooseNativeL3), keyEquivalent: "3")
     nativeL3.keyEquivalentModifierMask = [.command, .shift]
     nativeL3.target = self
     appMenu.addItem(nativeL3)
@@ -1269,7 +1269,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let info = Bundle.main.infoDictionary ?? [:]
     let version = info["CFBundleShortVersionString"] as? String ?? "Unknown"
     let build = info["CFBundleVersion"] as? String ?? "Unknown"
-    GameScreen.shared.message("Ultimate Lemmings", detail: "Version \(version) · Beta \(build)\nA rescue worth another try.")
+    GameScreen.shared.message("Ultimate Lemmings", detail: "Version \(version) · Build \(build)\nA rescue worth another try.")
   }
 
   @objc private func showAchievements() {
@@ -1547,8 +1547,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
         : title == .lemmings3TheChronicles ? (try? BundledGameResources.lemmings3()) != nil : false
       // The menu is set in the game's own fixed-width font, so a row holds
       // only a short note. One word says as much as a sentence here.
-      let detail = title == .lemmings2TheTribes ? "PREVIEW"
-        : title == .lemmings3TheChronicles ? "PREVIEW" : "NO DATA"
+      let detail = title == .lemmings2TheTribes ? "COMPLETE"
+        : title == .lemmings3TheChronicles ? "BETA" : "NO DATA"
       return .init(title: title, total: title.expectedLevelCount ?? 0,
         passed: sequelCompletion[title] ?? 0, available: available, detail: detail)
     })
@@ -2832,14 +2832,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
             packName: "The Tribes - \(Lemmings2Campaign.tribeNames[tribe])",
             levelName: level.title.isEmpty ? "Level \(level.selection.level + 1)" : level.title,
             number: level.selection.level + 1,
-            status: .preview,
+            status: .complete,
             isAvailable: level.isAvailable)
         }
         let pack = LevelCataloguePack(
           engine: .lemmings2,
           id: packID,
           name: "The Tribes - \(Lemmings2Campaign.tribeNames[tribe])",
-          status: .preview,
+          status: .complete,
           levels: tribeLevels)
         packs.append(pack)
         levelBrowserPackFamilies[browserPackKey(pack)] = .lemmings2
@@ -2869,14 +2869,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
             packName: "The Chronicles - \(tribe.title)",
             levelName: "\(tribe.title) \(level.selection.level + 1)",
             number: level.selection.level + 1,
-            status: .preview,
+            status: .beta,
             isAvailable: level.isAvailable)
         }
         let pack = LevelCataloguePack(
           engine: .lemmings3,
           id: packID,
           name: "The Chronicles - \(tribe.title)",
-          status: .preview,
+          status: .beta,
           levels: tribeLevels)
         packs.append(pack)
         levelBrowserPackFamilies[browserPackKey(pack)] = .lemmings3
@@ -5632,8 +5632,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     let passed = installed.reduce(0) { $0 + $1.passed }
     let total = installed.reduce(0) { $0 + $1.total }
-    let preview = family == .lemmings2 || family == .lemmings3 ? "  — PREVIEW" : ""
-    return "\(family.displayName.uppercased())  \(passed)/\(total)\(preview)"
+    let status = family == .lemmings3 ? "  — BETA" : ""
+    return "\(family.displayName.uppercased())  \(passed)/\(total)\(status)"
   }
 
   private func homeResumePlayers(hotSeatID: String?, profileID: String) -> String {

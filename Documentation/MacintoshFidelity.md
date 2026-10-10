@@ -90,5 +90,5 @@ bundle when it is outside `.build/local`. They cover file hashes and decoded
 lengths, campaign routing, source transitions, pause/resume, the original
 rate sample/pitches, mute/volume/replay, queued and locked Neo input, and
 rendered counter/settings targets. Source changes retain both manual and
-interruption pauses, then resume the selected soundtrack. The source update
-has not been published.
+interruption pauses, then resume the selected soundtrack. The 1.9 candidate packages carry these features. Publication evidence is
+recorded separately.

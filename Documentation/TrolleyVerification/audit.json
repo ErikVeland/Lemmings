@@ -1,7 +1,7 @@
 {
-  "engineSourceFingerprint": "a23fc195617af7cd2d6b162d5244b44a0f45ad12be10ac9f013d4ad9e794fe86",
+  "engineSourceFingerprint": "cb8ce27d37f9f7603dd422661bf0030c6327a2d5b93bb2a6834c337a23dc9e3f",
   "exhaustive": false,
-  "generatedAt": "2026-10-09T01:50:09Z",
+  "generatedAt": "2026-10-10T04:21:47Z",
   "levels": [
     {
       "bestSaved": 10,
@@ -134,7 +134,7 @@
       "rank": "Fun",
       "required": 5,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Tailor-made for blockers",
       "witness": {
         "completed": true,
@@ -279,7 +279,7 @@
       "rank": "Fun",
       "required": 10,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "A task for blockers and bombers",
       "witness": {
         "completed": true,
@@ -865,7 +865,7 @@
       "rank": "Fun",
       "required": 50,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Let's block and blow",
       "witness": {
         "completed": true,
@@ -1696,7 +1696,7 @@
       "rank": "Mayhem",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Down, along, up. In that order",
       "witness": {
         "completed": true,
@@ -1939,7 +1939,7 @@
       "rank": "Mayhem",
       "required": 50,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Pillars of Hercules",
       "witness": {
         "completed": true,
@@ -2378,7 +2378,7 @@
       "rank": "Mayhem",
       "required": 46,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Time to get up!",
       "witness": {
         "completed": true,
@@ -2719,7 +2719,7 @@
       "rank": "Mayhem",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "The Steel Mines of Kessel",
       "witness": {
         "completed": true,
@@ -2864,7 +2864,7 @@
       "rank": "Mayhem",
       "required": 64,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Save Me",
       "witness": {
         "completed": true,
@@ -3254,7 +3254,7 @@
       "rank": "Taxing",
       "required": 78,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Every Lemming for himself!!!",
       "witness": {
         "completed": true,
@@ -3840,7 +3840,7 @@
       "rank": "Taxing",
       "required": 64,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Bomboozal",
       "witness": {
         "completed": true,
@@ -4230,7 +4230,7 @@
       "rank": "Taxing",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Call in the bomb squad",
       "witness": {
         "completed": true,
@@ -4277,7 +4277,7 @@
       "rank": "Taxing",
       "required": 56,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "POOR WEE CREATURES!",
       "witness": {
         "completed": true,
@@ -5108,7 +5108,7 @@
       "rank": "Tricky",
       "required": 6,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Ozone friendly Lemmings",
       "witness": {
         "completed": true,
@@ -5155,7 +5155,7 @@
       "rank": "Tricky",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Luvly Jubly",
       "witness": {
         "completed": true,
@@ -5202,7 +5202,7 @@
       "rank": "Tricky",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Diet Lemmingaid",
       "witness": {
         "completed": true,
@@ -5249,7 +5249,7 @@
       "rank": "Tricky",
       "required": 9,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "It's Lemmingentry Watson",
       "witness": {
         "completed": true,
@@ -5492,7 +5492,7 @@
       "rank": "Tricky",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "From The Boundary Line",
       "witness": {
         "completed": true,
@@ -5980,7 +5980,7 @@
       "rank": "Xmas",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Time waits for no Lemming",
       "witness": {
         "completed": true,
@@ -6076,7 +6076,7 @@
       "rank": "Crazy",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Quote: \"That`s a good level\"",
       "witness": {
         "completed": true,
@@ -6172,7 +6172,7 @@
       "rank": "Crazy",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Many Lemmings make level work",
       "witness": {
         "completed": true,
@@ -6415,7 +6415,7 @@
       "rank": "Crazy",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "KEEP ON TRUCKING",
       "witness": {
         "completed": true,
@@ -6511,7 +6511,7 @@
       "rank": "Crazy",
       "required": 79,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "ROCKY VI",
       "witness": {
         "completed": true,
@@ -6558,7 +6558,7 @@
       "rank": "Crazy",
       "required": 8,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "No Problemming!",
       "witness": {
         "completed": true,
@@ -6654,7 +6654,7 @@
       "rank": "Crazy",
       "required": 10,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "It`s a trade off",
       "witness": {
         "completed": true,
@@ -6701,7 +6701,7 @@
       "rank": "Crazy",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Time waits for no Lemming",
       "witness": {
         "completed": true,
@@ -6748,7 +6748,7 @@
       "rank": "Crazy",
       "required": 44,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Worra load of old blocks!",
       "witness": {
         "completed": true,
@@ -6844,7 +6844,7 @@
       "rank": "Crazy",
       "required": 49,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "DIGGING FOR VICTORY",
       "witness": {
         "completed": true,
@@ -6891,7 +6891,7 @@
       "rank": "Crazy",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "NO PROBLEM",
       "witness": {
         "completed": true,
@@ -6938,7 +6938,7 @@
       "rank": "Crazy",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "DON`T PANIC",
       "witness": {
         "completed": true,
@@ -6985,7 +6985,7 @@
       "rank": "Crazy",
       "required": 10,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Ice Ice Lemming",
       "witness": {
         "completed": true,
@@ -7032,7 +7032,7 @@
       "rank": "Havoc",
       "required": 76,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Tubular Lemmings",
       "witness": {
         "completed": true,
@@ -7079,7 +7079,7 @@
       "rank": "Havoc",
       "required": 29,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Be more than just a number",
       "witness": {
         "completed": true,
@@ -7322,7 +7322,7 @@
       "rank": "Havoc",
       "required": 15,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Creature Discomforts",
       "witness": {
         "completed": true,
@@ -7467,7 +7467,7 @@
       "rank": "Havoc",
       "required": 3,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Flow Control",
       "witness": {
         "completed": true,
@@ -7612,7 +7612,7 @@
       "rank": "Havoc",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "HIGHLAND FLING",
       "witness": {
         "completed": true,
@@ -7757,7 +7757,7 @@
       "rank": "Havoc",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Scaling the Heights",
       "witness": {
         "completed": true,
@@ -7804,7 +7804,7 @@
       "rank": "Havoc",
       "required": 78,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Where Lemmings Dare",
       "witness": {
         "completed": true,
@@ -7851,7 +7851,7 @@
       "rank": "Havoc",
       "required": 68,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Lemmings in a situation",
       "witness": {
         "completed": true,
@@ -7947,7 +7947,7 @@
       "rank": "Havoc",
       "required": 50,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "LOoK BeFoRe YoU LeAp!",
       "witness": {
         "completed": true,
@@ -8043,7 +8043,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Rent-a-Lemming",
       "witness": {
         "completed": true,
@@ -8188,7 +8188,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Snuggle up to a Lemming",
       "witness": {
         "completed": true,
@@ -8284,7 +8284,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Who`s That Lemming",
       "witness": {
         "completed": true,
@@ -8331,7 +8331,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Dangerzone",
       "witness": {
         "completed": true,
@@ -8378,7 +8378,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "And now this...",
       "witness": {
         "completed": true,
@@ -8621,7 +8621,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Get a little extra help",
       "witness": {
         "completed": true,
@@ -8668,7 +8668,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Not just a pretty Lemming",
       "witness": {
         "completed": true,
@@ -8862,7 +8862,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Lemming Productions Present...",
       "witness": {
         "completed": true,
@@ -8958,7 +8958,7 @@
       "rank": "Wicked",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "LeMming ToMato KetchUp fAcilitY",
       "witness": {
         "completed": true,
@@ -9103,7 +9103,7 @@
       "rank": "Wicked",
       "required": 30,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Oh No! It`s the 4TH DIMENSION!",
       "witness": {
         "completed": true,
@@ -9199,7 +9199,7 @@
       "rank": "Wicked",
       "required": 30,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "PoP TiL YoU DrOp!",
       "witness": {
         "completed": true,
@@ -9246,7 +9246,7 @@
       "rank": "Wicked",
       "required": 72,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Last Lemming To Lemmingcentral",
       "witness": {
         "completed": true,
@@ -9293,7 +9293,7 @@
       "rank": "Wicked",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "A TOWERING PROBLEM",
       "witness": {
         "completed": true,
@@ -9340,7 +9340,7 @@
       "rank": "Wicked",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "How on Earth?",
       "witness": {
         "completed": true,
@@ -9387,7 +9387,7 @@
       "rank": "Wicked",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Temple of Love",
       "witness": {
         "completed": true,
@@ -9434,7 +9434,7 @@
       "rank": "Wicked",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "ROCKY ROAD",
       "witness": {
         "completed": true,
@@ -9481,7 +9481,7 @@
       "rank": "Wicked",
       "required": 78,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Suicidal Tendencies",
       "witness": {
         "completed": true,
@@ -9528,7 +9528,7 @@
       "rank": "Wicked",
       "required": 70,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Almost Nearly Virtual Reality",
       "witness": {
         "completed": true,
@@ -9624,7 +9624,7 @@
       "rank": "Wicked",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "SPAM,SPAM,SPAM,EGG AND LEMMING",
       "witness": {
         "completed": true,
@@ -9671,7 +9671,7 @@
       "rank": "Wicked",
       "required": 5,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Five Alive",
       "witness": {
         "completed": true,
@@ -9718,7 +9718,7 @@
       "rank": "Wicked",
       "required": 29,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Down the tube",
       "witness": {
         "completed": true,
@@ -9814,7 +9814,7 @@
       "rank": "Wicked",
       "required": 41,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Up, Down or Round and Round",
       "witness": {
         "completed": true,
@@ -9861,7 +9861,7 @@
       "rank": "Wicked",
       "required": 68,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "The Lemming Funhouse",
       "witness": {
         "completed": true,
@@ -9957,7 +9957,7 @@
       "rank": "Wild",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Lemming Hotel",
       "witness": {
         "completed": true,
@@ -10004,7 +10004,7 @@
       "rank": "Wild",
       "required": 65,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Lemming Rhythms",
       "witness": {
         "completed": true,
@@ -10100,7 +10100,7 @@
       "rank": "Wild",
       "required": 68,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Lemming Head",
       "witness": {
         "completed": true,
@@ -10343,7 +10343,7 @@
       "rank": "Wild",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Higgledy Piggledy",
       "witness": {
         "completed": true,
@@ -10390,7 +10390,7 @@
       "rank": "Wild",
       "required": 49,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Mutiny On The Bounty",
       "witness": {
         "completed": true,
@@ -10437,7 +10437,7 @@
       "rank": "Wild",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "SNOW JOKE",
       "witness": {
         "completed": true,
@@ -10484,7 +10484,7 @@
       "rank": "Wild",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "ONWARD AND UPWARD",
       "witness": {
         "completed": true,
@@ -10580,7 +10580,7 @@
       "rank": "Wild",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "THE SILENCE OF THE LEMMINGS",
       "witness": {
         "completed": true,
@@ -10725,7 +10725,7 @@
       "rank": "Wild",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Dr Lemminggood",
       "witness": {
         "completed": true,
@@ -10772,7 +10772,7 @@
       "rank": "Wild",
       "required": 65,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Lemmingdelica",
       "witness": {
         "completed": true,
@@ -10819,7 +10819,7 @@
       "rank": "Wild",
       "required": 29,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Got anything....Lemmingy???",
       "witness": {
         "completed": true,
@@ -11030,7 +11030,7 @@
       }
     },
     {
-      "bestSaved": 29,
+      "bestSaved": 42,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "f8d7c88965a8301b552fbafe84d9d03afa8ba402369d5bb6509105f622869ce3:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -11060,8 +11060,9 @@
         "timeLimitSeconds": 540
       },
       "gameID": "lemmings2",
-      "lossesInBestSolution": 31,
+      "lossesInBestSolution": 18,
       "notes": [
+        "Existing completion fixture changed: expected 29 at 8100, got 42 at 8100.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 1,
@@ -11069,21 +11070,22 @@
       "rank": "Beach",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Quad Quirks on the Quay!",
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 31,
+        "lost": 18,
         "path": "witnesses/lemmings2-10-60.json",
         "released": 60,
         "retainedReserves": 0,
-        "saved": 29,
-        "sha256": "673f84492dd441d7dbcbcd1c8e5018951c0858a637ca44ba74e22c8b916a45b8",
+        "saved": 42,
+        "sha256": "2acf9da85d935484df22d1c37b83470268561946424bef7d20666361b43b1fa3",
         "ticks": 8100
       }
     },
     {
+      "bestSaved": 60,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "11835510902dfa77b7dd30d8e7b15622a5c61c212957adbd5007bb82d7303fcb:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -11112,19 +11114,31 @@
         "timeLimitSeconds": 540
       },
       "gameID": "lemmings2",
-      "notes": [
-        "No recorded solution fixture is available.",
-        "The medal loss allowance is not an optimality proof."
-      ],
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 60,
+      "minimumSacrifices": 0,
+      "notes": [],
       "number": 2,
       "population": 60,
       "rank": "Beach",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "The Barley Mow...."
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "The Barley Mow....",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-11-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 60,
+        "sha256": "d0b91784d76e728d154b35caa0cfb92eeaf02cc444a802f8c7ae31374f75723f",
+        "ticks": 2066
+      }
     },
     {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "1fc0f2454dcf16e1560d63ed8448291c34f33eb5a2205d36996d40e1e7892664:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -11154,19 +11168,85 @@
         "timeLimitSeconds": 240
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 3,
       "population": 60,
       "rank": "Beach",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Cannonball"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Cannonball",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-12-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "4345bfaa42933005a7e1c2187969f7d94da447821a92492cb58c01b3419cf112",
+        "ticks": 1359
+      }
     },
     {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "1fc0f2454dcf16e1560d63ed8448291c34f33eb5a2205d36996d40e1e7892664:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "1:2",
+        "modifiers": {
+          "firstReleaseTick": "49",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "archer": 6,
+          "bomber": 2,
+          "diver": 5,
+          "glue_pourer": 1,
+          "hang_glider": 2,
+          "jumper": 5,
+          "kayaker": 3,
+          "laser_blaster": 1
+        },
+        "timeLimitSeconds": 240
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 3,
+      "population": 1,
+      "rank": "Beach",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Cannonball",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-12-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "0de3c276ff210b1c401bf9ecf49504a11fd1f0cef9a65029575d4f1a1a44cf52",
+        "ticks": 726
+      }
+    },
+    {
+      "bestSaved": 60,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "7e065f2a37cf435e3b14ebfa67102ff027feaca1cfa430a83860dc1ef48e3d24:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -11194,17 +11274,80 @@
         "timeLimitSeconds": 540
       },
       "gameID": "lemmings2",
-      "notes": [
-        "No recorded solution fixture is available.",
-        "The medal loss allowance is not an optimality proof."
-      ],
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 60,
+      "minimumSacrifices": 0,
+      "notes": [],
       "number": 4,
       "population": 60,
       "rank": "Beach",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Coastal Suction Function"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Coastal Suction Function",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-13-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 60,
+        "sha256": "354cfd6d5f92f4debebf0b6e6387b8af975ed620e40ae970d05561a785e9953b",
+        "ticks": 1506
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "7e065f2a37cf435e3b14ebfa67102ff027feaca1cfa430a83860dc1ef48e3d24:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "1:3",
+        "modifiers": {
+          "firstReleaseTick": "49",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "": 0,
+          "bazooka": 2,
+          "jumper": 12,
+          "kayaker": 1,
+          "laser_blaster": 2,
+          "runner": 12
+        },
+        "timeLimitSeconds": 540
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 4,
+      "population": 1,
+      "rank": "Beach",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Coastal Suction Function",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-13-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "eaeed552760652ef5f4d9f445e979ac43a6eef3ceb29572baafee9da89ad8ba6",
+        "ticks": 864
+      }
     },
     {
       "bestSaved": 54,
@@ -11245,7 +11388,7 @@
       "rank": "Beach",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Sand Stone",
       "witness": {
         "completed": true,
@@ -11299,7 +11442,7 @@
       "rank": "Beach",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Beach Lems",
       "witness": {
         "completed": true,
@@ -11314,6 +11457,7 @@
       }
     },
     {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "b87fad3f6863f6a33dedad6dd2f03f83c65d3fd4e110ace56a813e39eca206b1:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -11343,17 +11487,82 @@
         "timeLimitSeconds": 300
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 7,
       "population": 60,
       "rank": "Beach",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "SAND IN YER SARNIES"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "SAND IN YER SARNIES",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-16-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "72ff7e96b067df69f2e431506c80e9e2611e5d790b763c47817091e37393eabe",
+        "ticks": 1416
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "b87fad3f6863f6a33dedad6dd2f03f83c65d3fd4e110ace56a813e39eca206b1:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "1:6",
+        "modifiers": {
+          "firstReleaseTick": "49",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "": 0,
+          "basher": 5,
+          "jumper": 10,
+          "miner": 2,
+          "platformer": 2,
+          "runner": 1,
+          "stomper": 5,
+          "swimmer": 1
+        },
+        "timeLimitSeconds": 300
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 7,
+      "population": 1,
+      "rank": "Beach",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "SAND IN YER SARNIES",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-16-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "824a25e35f8491e4f0134dfc53a94b4102548a17c5af45dd7c27e87d4292ecd2",
+        "ticks": 1055
+      }
     },
     {
       "bestSaved": 1,
@@ -11395,7 +11604,7 @@
       "rank": "Beach",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Beach Mania",
       "witness": {
         "completed": true,
@@ -11410,6 +11619,7 @@
       }
     },
     {
+      "bestSaved": 2,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "fe869260f7ccfe92812dc8422a75abca3b060c3ea98cdc3cd1a0e3a8888f4628:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -11439,17 +11649,82 @@
         "timeLimitSeconds": 420
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 58,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 9,
       "population": 60,
       "rank": "Beach",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Sand Blaster"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Sand Blaster",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 58,
+        "path": "witnesses/lemmings2-18-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 2,
+        "sha256": "cf1097b01e2b5e489957ac399c6466e806f056fd334575a24943536416f2dca6",
+        "ticks": 6300
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "fe869260f7ccfe92812dc8422a75abca3b060c3ea98cdc3cd1a0e3a8888f4628:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "1:8",
+        "modifiers": {
+          "firstReleaseTick": "49",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "archer": 1,
+          "attractor": 1,
+          "bazooka": 7,
+          "filler": 1,
+          "jumper": 20,
+          "mortar": 6,
+          "platformer": 5,
+          "roller": 20
+        },
+        "timeLimitSeconds": 420
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 9,
+      "population": 1,
+      "rank": "Beach",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Sand Blaster",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-18-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "aff75c92345fa05268668399736f9b4310c69e2cad93935ab6dbb1b6c3f93b17",
+        "ticks": 4796
+      }
     },
     {
       "bestSaved": 1,
@@ -11491,7 +11766,7 @@
       "rank": "Beach",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Surf Lem !",
       "witness": {
         "completed": true,
@@ -11506,7 +11781,7 @@
       }
     },
     {
-      "bestSaved": 47,
+      "bestSaved": 52,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "1094544c5d82d3fe95d445af818e5944ac5b63185951a49ce365444526a6d380:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -11532,8 +11807,9 @@
         "timeLimitSeconds": 240
       },
       "gameID": "lemmings2",
-      "lossesInBestSolution": 13,
+      "lossesInBestSolution": 8,
       "notes": [
+        "Existing completion fixture changed: expected 47 at 1752, got 52 at 1752.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 1,
@@ -11541,17 +11817,17 @@
       "rank": "Cavelems",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Audex Powder",
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 13,
+        "lost": 8,
         "path": "witnesses/lemmings2-20-60.json",
         "released": 60,
         "retainedReserves": 0,
-        "saved": 47,
-        "sha256": "7dbe1c8e9aa4396f7e04d1bf8d3a3bb83dbb262f7d640ad7092f0473243a5532",
+        "saved": 52,
+        "sha256": "9f84c1734d11b5ca37d4c71121206bbe61f32ad07e2c5da11cf370b170e65357",
         "ticks": 1752
       }
     },
@@ -11590,7 +11866,7 @@
       "rank": "Cavelems",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Successive division",
       "witness": {
         "completed": true,
@@ -11639,7 +11915,7 @@
       "rank": "Cavelems",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Successive division",
       "witness": {
         "completed": true,
@@ -11689,7 +11965,7 @@
       "rank": "Cavelems",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Mortal men doomed to die",
       "witness": {
         "completed": true,
@@ -11739,7 +12015,7 @@
       "rank": "Cavelems",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Mortal men doomed to die",
       "witness": {
         "completed": true,
@@ -11790,7 +12066,7 @@
       "rank": "Cavelems",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "A stompin` good time!",
       "witness": {
         "completed": true,
@@ -11805,7 +12081,7 @@
       }
     },
     {
-      "bestSaved": 2,
+      "bestSaved": 57,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "7c5265672324bc36b35e507c594f23c8ef4b2bb50e5c90154e4645f9792a91c1:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -11835,8 +12111,9 @@
         "timeLimitSeconds": 420
       },
       "gameID": "lemmings2",
-      "lossesInBestSolution": 58,
+      "lossesInBestSolution": 3,
       "notes": [
+        "Existing completion fixture changed: expected 2 at 1361, got 57 at 1529.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 5,
@@ -11844,18 +12121,18 @@
       "rank": "Cavelems",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "This Is The Pits !",
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 58,
+        "lost": 3,
         "path": "witnesses/lemmings2-24-60.json",
         "released": 60,
         "retainedReserves": 0,
-        "saved": 2,
-        "sha256": "957fe328d4f8357b0d996d71f74037d689047d5ba4b240bd6001982042f2e731",
-        "ticks": 1361
+        "saved": 57,
+        "sha256": "19ff1a8a026aa791704fef2bc83ff8706edfc0cfe1378a5304367a12fea81241",
+        "ticks": 1529
       }
     },
     {
@@ -11898,7 +12175,7 @@
       "rank": "Cavelems",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "This Is The Pits !",
       "witness": {
         "completed": true,
@@ -11994,7 +12271,7 @@
       "rank": "Cavelems",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Ain`t No Time",
       "witness": {
         "completed": true,
@@ -12046,7 +12323,7 @@
       "rank": "Cavelems",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Deadly Exit",
       "witness": {
         "completed": true,
@@ -12098,7 +12375,7 @@
       "rank": "Cavelems",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Deadly Exit",
       "witness": {
         "completed": true,
@@ -12145,6 +12422,7 @@
       "gameID": "lemmings2",
       "lossesInBestSolution": 59,
       "notes": [
+        "Existing completion fixture changed: expected 1 at 2059, got 1 at 7200.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 8,
@@ -12152,7 +12430,7 @@
       "rank": "Cavelems",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Wilma!",
       "witness": {
         "completed": true,
@@ -12162,8 +12440,8 @@
         "released": 60,
         "retainedReserves": 0,
         "saved": 1,
-        "sha256": "6220c5e95bf8fe1b6ae9d0ce6f210171b32df34639eb5a92648b2a975759bc0b",
-        "ticks": 2059
+        "sha256": "71e3da6acd4744fc2a596448e0f0a4cb2fa4b247d7a0bf7c2ec9168540c75a70",
+        "ticks": 7200
       }
     },
     {
@@ -12206,7 +12484,7 @@
       "rank": "Cavelems",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Wilma!",
       "witness": {
         "completed": true,
@@ -12260,7 +12538,7 @@
       "rank": "Cavelems",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "EVOLUTION OF LEMMINGS",
       "witness": {
         "completed": true,
@@ -12314,7 +12592,7 @@
       "rank": "Cavelems",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Ah`m No Done Yet",
       "witness": {
         "completed": true,
@@ -12368,7 +12646,7 @@
       "rank": "Cavelems",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Ah`m No Done Yet",
       "witness": {
         "completed": true,
@@ -12412,6 +12690,7 @@
       "gameID": "lemmings2",
       "lossesInBestSolution": 58,
       "notes": [
+        "Existing completion fixture changed: expected 2 at 8100, got 1 at 8100.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 1,
@@ -12419,7 +12698,7 @@
       "rank": "Circus",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "LIGHTLINES....",
       "witness": {
         "completed": true,
@@ -12429,7 +12708,7 @@
         "released": 60,
         "retainedReserves": 0,
         "saved": 2,
-        "sha256": "98a50101251e0c6419e5d4ed6933123f2b920f1e7a99f0de2da967bd3c122b8b",
+        "sha256": "31e002f3608b0176517e4c33ae76d809a290ef874da80d08f179798b79ecaaee",
         "ticks": 8100
       }
     },
@@ -12473,7 +12752,7 @@
       "rank": "Circus",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Lemmings In The Family",
       "witness": {
         "completed": true,
@@ -12527,7 +12806,7 @@
       "rank": "Circus",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Lemmings In The Family",
       "witness": {
         "completed": true,
@@ -12580,7 +12859,7 @@
       "rank": "Circus",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "We`re Coming Home",
       "witness": {
         "completed": true,
@@ -12633,7 +12912,7 @@
       "rank": "Circus",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "We`re Coming Home",
       "witness": {
         "completed": true,
@@ -12648,6 +12927,7 @@
       }
     },
     {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "16c346f5d76d8622b65ad6850458ac52ee19e65c1ff9b512f96468daed481f4b:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -12677,17 +12957,82 @@
         "timeLimitSeconds": 540
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 4,
       "population": 60,
       "rank": "Circus",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "`Round the Blox!"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "`Round the Blox!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-33-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "51798bb45e96e39e809ce082369998c8c5ed5cd2a48465810c61893cb3bc7e54",
+        "ticks": 8100
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "16c346f5d76d8622b65ad6850458ac52ee19e65c1ff9b512f96468daed481f4b:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "3:3",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "attractor": 5,
+          "basher": 5,
+          "club_basher": 5,
+          "fencer": 5,
+          "flame_thrower": 5,
+          "scooper": 5,
+          "stomper": 5,
+          "twister": 5
+        },
+        "timeLimitSeconds": 540
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 4,
+      "population": 1,
+      "rank": "Circus",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "`Round the Blox!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-33-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "b3a155f493b97dbea5eaaa64332f4c90c86a1320697e40d68a8ceb757697c15e",
+        "ticks": 800
+      }
     },
     {
       "bestSaved": 1,
@@ -12719,6 +13064,7 @@
       "gameID": "lemmings2",
       "lossesInBestSolution": 59,
       "notes": [
+        "Existing completion fixture changed: expected 1 at 1595, got 1 at 1834.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 5,
@@ -12726,7 +13072,7 @@
       "rank": "Circus",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Big Top Time",
       "witness": {
         "completed": true,
@@ -12736,8 +13082,8 @@
         "released": 60,
         "retainedReserves": 0,
         "saved": 1,
-        "sha256": "0e7188199ec395fe0a1dd8f9005cfef2b33f11dd3c87d25a3201517a093295eb",
-        "ticks": 1595
+        "sha256": "dc55ffe7fc974cd733a5995ed2badbd30488cda96f974cb20a90eef9e944a8c2",
+        "ticks": 1834
       }
     },
     {
@@ -12778,7 +13124,7 @@
       "rank": "Circus",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "HEADACHE",
       "witness": {
         "completed": true,
@@ -12830,7 +13176,7 @@
       "rank": "Circus",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Circus Of Fear",
       "witness": {
         "completed": true,
@@ -12883,7 +13229,7 @@
       "rank": "Circus",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "PLAY THAT FUNKY LEMMING",
       "witness": {
         "completed": true,
@@ -12898,6 +13244,7 @@
       }
     },
     {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "5545ceeb557e6932d53fcb4e6018bd77070826ca6abacbfe7d98e44d13156ec0:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -12926,17 +13273,81 @@
         "timeLimitSeconds": 540
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 9,
       "population": 60,
       "rank": "Circus",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "The Carpet Capers...."
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "The Carpet Capers....",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-38-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "d496e54668dff4310d8f896e7caf9c3869695b07dc760a2ccf291cc12d7158c6",
+        "ticks": 8100
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "5545ceeb557e6932d53fcb4e6018bd77070826ca6abacbfe7d98e44d13156ec0:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "3:8",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "": 0,
+          "attractor": 1,
+          "hopper": 10,
+          "laser_blaster": 1,
+          "magic_carpet": 5,
+          "platformer": 1,
+          "pole_vaulter": 3
+        },
+        "timeLimitSeconds": 540
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 9,
+      "population": 1,
+      "rank": "Circus",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "The Carpet Capers....",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-38-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "28aa69dcae8ff95781c3c9fb7e7a74aa33592e7ae6118e8b34b0c54021b2d074",
+        "ticks": 268
+      }
     },
     {
       "bestSaved": 1,
@@ -12978,7 +13389,7 @@
       "rank": "Circus",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Swingz and Roundaboutz!",
       "witness": {
         "completed": true,
@@ -13026,13 +13437,15 @@
       "lossesInBestSolution": 0,
       "maximumSaveable": 60,
       "minimumSacrifices": 0,
-      "notes": [],
+      "notes": [
+        "Existing completion fixture changed: expected 60 at 3074, got 2 at 4500."
+      ],
       "number": 1,
       "population": 60,
       "rank": "Classic",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Do You Remember?",
       "witness": {
         "completed": true,
@@ -13042,12 +13455,12 @@
         "released": 60,
         "retainedReserves": 0,
         "saved": 60,
-        "sha256": "2c7c765550bb6bc59933d2268dfb53ef9c8a5c1d41d7ff5fa2352d1e5e68c334",
+        "sha256": "81bdcb79489501a7d2a7c36da0f1195053c7580b877cb0da58b43cc7dd65a5a7",
         "ticks": 3074
       }
     },
     {
-      "bestSaved": 1,
+      "bestSaved": 13,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "2fe29f898f471ef8507f7f1bbe4a21fd167e7d808cdff12b6e4ffad39d0d801c:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -13077,7 +13490,7 @@
         "timeLimitSeconds": 300
       },
       "gameID": "lemmings2",
-      "lossesInBestSolution": 59,
+      "lossesInBestSolution": 47,
       "notes": [
         "The medal loss allowance is not an optimality proof."
       ],
@@ -13086,17 +13499,17 @@
       "rank": "Classic",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Mr Lemmy Lives Next Door",
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 59,
+        "lost": 47,
         "path": "witnesses/lemmings2-1-60.json",
         "released": 60,
         "retainedReserves": 0,
-        "saved": 1,
-        "sha256": "57f45243350e6536fca435b53bded520f6faae41a0310a77d4db6532fd68ca0e",
+        "saved": 13,
+        "sha256": "3e7f3d5fa75ab09c632e40c2858c85d416ef170928e85cd235b3b03ae2cf93e5",
         "ticks": 4500
       }
     },
@@ -13140,7 +13553,7 @@
       "rank": "Classic",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "LEMTRIS",
       "witness": {
         "completed": true,
@@ -13194,7 +13607,7 @@
       "rank": "Classic",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Tension Sheet, Good Idea",
       "witness": {
         "completed": true,
@@ -13248,7 +13661,7 @@
       "rank": "Classic",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The Magnificent Severn",
       "witness": {
         "completed": true,
@@ -13263,6 +13676,7 @@
       }
     },
     {
+      "bestSaved": 60,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "9bdc0d229b90b226b4c6517582e976a5de3269acf0a83057e6c00be28fb576f5:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -13292,19 +13706,31 @@
         "timeLimitSeconds": 360
       },
       "gameID": "lemmings2",
-      "notes": [
-        "No recorded solution fixture is available.",
-        "The medal loss allowance is not an optimality proof."
-      ],
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 60,
+      "minimumSacrifices": 0,
+      "notes": [],
       "number": 6,
       "population": 60,
       "rank": "Classic",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "The Starry Threshold"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "The Starry Threshold",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-5-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 60,
+        "sha256": "0b001d399e6eeadd24ee6b52d7c989bf4691869f52ddf8ea2a00e669b166794b",
+        "ticks": 3651
+      }
     },
     {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "5077ebd1144435ddfde4fa9f6c95452fc4a8de45797338fc57de4682f7e1ffc8:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -13334,17 +13760,28 @@
         "timeLimitSeconds": 480
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 7,
       "population": 60,
       "rank": "Classic",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "So close but so far away"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "So close but so far away",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-6-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "ca8519906dd6334b985a329e01a668d4b1c78fced273d2c8992cfc4d979e34c3",
+        "ticks": 7200
+      }
     },
     {
       "bestSaved": 1,
@@ -13386,7 +13823,7 @@
       "rank": "Classic",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The Secret Of LEMH",
       "witness": {
         "completed": true,
@@ -13401,6 +13838,7 @@
       }
     },
     {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "2986ae09a25b2dd8e03484fc5458c1c1235caa6acb838dd719857af252334341:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -13430,17 +13868,82 @@
         "timeLimitSeconds": 300
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 9,
       "population": 60,
       "rank": "Classic",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Flying The Mad Pursuit"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Flying The Mad Pursuit",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-8-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "7d757b51e0e8b4bd42659b7f5a5cef89a124fc2cf97a675ca9cc8466b7d15698",
+        "ticks": 2425
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "2986ae09a25b2dd8e03484fc5458c1c1235caa6acb838dd719857af252334341:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "0:8",
+        "modifiers": {
+          "firstReleaseTick": "51",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "basher": 1,
+          "blocker": 10,
+          "builder": 10,
+          "climber": 1,
+          "digger": 10,
+          "exploder": 10,
+          "floater": 10,
+          "miner": 2
+        },
+        "timeLimitSeconds": 300
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 9,
+      "population": 1,
+      "rank": "Classic",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Flying The Mad Pursuit",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-8-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "6f9951910e976fcfd3b2d86db4ea0746720db7e90172b58797bb666a7db77ba6",
+        "ticks": 2425
+      }
     },
     {
       "bestSaved": 1,
@@ -13482,7 +13985,7 @@
       "rank": "Classic",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "What`s it like up there?",
       "witness": {
         "completed": true,
@@ -13535,7 +14038,7 @@
       "rank": "Egyptian",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Two`s Company....",
       "witness": {
         "completed": true,
@@ -13589,7 +14092,7 @@
       "rank": "Egyptian",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "G1ued to the Goal!",
       "witness": {
         "completed": true,
@@ -13643,7 +14146,7 @@
       "rank": "Egyptian",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "LABYRINTH OF FUN",
       "witness": {
         "completed": true,
@@ -13695,7 +14198,7 @@
       "rank": "Egyptian",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Spiralling DNA",
       "witness": {
         "completed": true,
@@ -13749,7 +14252,7 @@
       "rank": "Egyptian",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Echo Of Light",
       "witness": {
         "completed": true,
@@ -13803,7 +14306,7 @@
       "rank": "Egyptian",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "RUPER`Z QUESTLING",
       "witness": {
         "completed": true,
@@ -13818,7 +14321,7 @@
       }
     },
     {
-      "bestSaved": 1,
+      "bestSaved": 3,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "10cb0539faaba37796abf067465132b783e8f7ce8927b5388f6b3cb098c2c26d:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -13848,8 +14351,9 @@
         "timeLimitSeconds": 540
       },
       "gameID": "lemmings2",
-      "lossesInBestSolution": 59,
+      "lossesInBestSolution": 57,
       "notes": [
+        "Existing completion fixture changed: expected 1 at 8100, got 3 at 8100.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 7,
@@ -13857,17 +14361,17 @@
       "rank": "Egyptian",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The Egypt Cottage!",
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 59,
+        "lost": 57,
         "path": "witnesses/lemmings2-46-60.json",
         "released": 60,
         "retainedReserves": 0,
-        "saved": 1,
-        "sha256": "fee9808cf7aa9afb7c097a4caa65609f624980e1cf0956ff6c484916dadecfea",
+        "saved": 3,
+        "sha256": "979af3b72e2243a79088d4fd1fcf63694786fa896b0c052bfb23137c8820fa60",
         "ticks": 8100
       }
     },
@@ -13911,7 +14415,7 @@
       "rank": "Egyptian",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "HEROE`Z QUEST....",
       "witness": {
         "completed": true,
@@ -13926,6 +14430,7 @@
       }
     },
     {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "2e676419d3b7a9698a366e3ef09c762c9b3ef132cee12cd1c3797c2241a7d595:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -13954,19 +14459,84 @@
         "timeLimitSeconds": 270
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 9,
       "population": 60,
       "rank": "Egyptian",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Wave Pathway"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Wave Pathway",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-48-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "453b9bad2a12f885a667cc0758d9134c12c4461ca19df2ee4a159e79c8b55116",
+        "ticks": 4050
+      }
     },
     {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "2e676419d3b7a9698a366e3ef09c762c9b3ef132cee12cd1c3797c2241a7d595:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "4:8",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "": 0,
+          "basher": 6,
+          "bomber": 2,
+          "jumper": 1,
+          "platformer": 3,
+          "stacker": 1,
+          "stomper": 6
+        },
+        "timeLimitSeconds": 270
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 9,
+      "population": 1,
+      "rank": "Egyptian",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Wave Pathway",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-48-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "4a14cd2f45ea3c8c64cf23baef29a2008f0f8491b4e5e67c70cf9257a234285b",
+        "ticks": 2461
+      }
+    },
+    {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "57347101f60629435b96c12453fccf20f783333e5012c43037d1a0460ab98866:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -13996,17 +14566,82 @@
         "timeLimitSeconds": 540
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 10,
       "population": 60,
       "rank": "Egyptian",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Pyramid of Despair!"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Pyramid of Despair!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-49-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "7ab4eaf02243d7404604f60ac08a6a868d64effca09dedaaafd22117e0672803",
+        "ticks": 8100
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "57347101f60629435b96c12453fccf20f783333e5012c43037d1a0460ab98866:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "4:9",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "glue_pourer": 5,
+          "hopper": 10,
+          "jumper": 1,
+          "mortar": 1,
+          "rock_climber": 5,
+          "sand_pourer": 15,
+          "shimmier": 5,
+          "slider": 5
+        },
+        "timeLimitSeconds": 540
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 10,
+      "population": 1,
+      "rank": "Egyptian",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Pyramid of Despair!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-49-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "579e2dfde589c978bc86f3ea01862a41fa029d249eabbfcd257beb82b7ca1fb9",
+        "ticks": 1036
+      }
     },
     {
       "bestSaved": 60,
@@ -14047,7 +14682,7 @@
       "rank": "Highland",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "CREAM OF LEMMING SOUP",
       "witness": {
         "completed": true,
@@ -14062,6 +14697,7 @@
       }
     },
     {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "0b2b4b9324e1239fcaf8f48cdd758257d7aba79f9867c2999c0992608ba719e5:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -14091,19 +14727,85 @@
         "timeLimitSeconds": 300
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 2,
       "population": 60,
       "rank": "Highland",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "WEE BEASTIES !!!"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "WEE BEASTIES !!!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-51-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "ecc19d1cf8af330013e7248c3d8aee61e47795b2a132f6a6b016e6af75310d0e",
+        "ticks": 4500
+      }
     },
     {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "0b2b4b9324e1239fcaf8f48cdd758257d7aba79f9867c2999c0992608ba719e5:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "5:1",
+        "modifiers": {
+          "firstReleaseTick": "49",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "archer": 20,
+          "fencer": 1,
+          "filler": 10,
+          "jumper": 30,
+          "platformer": 5,
+          "runner": 10,
+          "stacker": 4,
+          "stomper": 1
+        },
+        "timeLimitSeconds": 300
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 2,
+      "population": 1,
+      "rank": "Highland",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "WEE BEASTIES !!!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-51-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "3a8a0ab57390fcb9f27018ed8f13952b5b2c889a864a663d38a8e2760d17357a",
+        "ticks": 1030
+      }
+    },
+    {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "505b273f21deba5a44e231c0474f42d94f5e18264daac34f94c7739ef16169df:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -14129,19 +14831,81 @@
         "timeLimitSeconds": 240
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 3,
       "population": 60,
       "rank": "Highland",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Stop your ticklin` Jock!"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Stop your ticklin` Jock!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-52-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "bdfb4c619c9ec4680cdb1db2bbf66b80b8ef30ee80e3eb31a862842cb874e973",
+        "ticks": 3600
+      }
     },
     {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "505b273f21deba5a44e231c0474f42d94f5e18264daac34f94c7739ef16169df:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "5:2",
+        "modifiers": {
+          "firstReleaseTick": "49",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "": 0,
+          "builder": 5,
+          "filler": 20,
+          "jumper": 20
+        },
+        "timeLimitSeconds": 240
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 3,
+      "population": 1,
+      "rank": "Highland",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Stop your ticklin` Jock!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-52-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "ecbddddc8d34fad3fda5919470231134fd0b5d267c5cd7c2ebd5540187faabdb",
+        "ticks": 1237
+      }
+    },
+    {
+      "bestSaved": 53,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "2e03c85e535f62163c4f1c8521eda705bcbf6e20bf62c1b8d5c8a02cdc621753:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -14169,19 +14933,83 @@
         "timeLimitSeconds": 300
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 7,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 4,
       "population": 60,
       "rank": "Highland",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "A mere stone`s throw"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "A mere stone`s throw",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 7,
+        "path": "witnesses/lemmings2-53-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 53,
+        "sha256": "c5bd117d137af50d1a36755764fc54406688681789c1fac5daff0e5d66b466da",
+        "ticks": 4500
+      }
     },
     {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "2e03c85e535f62163c4f1c8521eda705bcbf6e20bf62c1b8d5c8a02cdc621753:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "5:3",
+        "modifiers": {
+          "firstReleaseTick": "49",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "": 0,
+          "attractor": 5,
+          "fencer": 5,
+          "filler": 5,
+          "jumper": 10,
+          "thrower": 25
+        },
+        "timeLimitSeconds": 300
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 4,
+      "population": 1,
+      "rank": "Highland",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "A mere stone`s throw",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-53-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "52b6d3931b680b810e359795e06c689214718b86de21eb6061f978748009f99f",
+        "ticks": 844
+      }
+    },
+    {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "71bb656d051c0870647a7e667504c6830574ecba69a50e670c8e424fc19988b9:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -14209,17 +15037,80 @@
         "timeLimitSeconds": 240
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 5,
       "population": 60,
       "rank": "Highland",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "DONALD WHARS YER LEMMING"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "DONALD WHARS YER LEMMING",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-54-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "5ce4ffa3da55dc803500772e93096d2952f52320535fbdf1c77e43653d6851af",
+        "ticks": 3600
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "71bb656d051c0870647a7e667504c6830574ecba69a50e670c8e424fc19988b9:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "5:4",
+        "modifiers": {
+          "firstReleaseTick": "49",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "": 0,
+          "builder": 4,
+          "club_basher": 5,
+          "jumper": 3,
+          "platformer": 5,
+          "pole_vaulter": 1
+        },
+        "timeLimitSeconds": 240
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 5,
+      "population": 1,
+      "rank": "Highland",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "DONALD WHARS YER LEMMING",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-54-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "03b1920914543c91d58c359071e441d0ca104061c8b4a0386e860299297bb27d",
+        "ticks": 693
+      }
     },
     {
       "bestSaved": 1,
@@ -14260,7 +15151,7 @@
       "rank": "Highland",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Brigadoom!",
       "witness": {
         "completed": true,
@@ -14275,6 +15166,7 @@
       }
     },
     {
+      "bestSaved": 3,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "73ee1e597cb31b65d278bf4ab9e96cdc16bc4be701f35203240381a6afe818c2:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -14300,19 +15192,31 @@
         "timeLimitSeconds": 300
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 57,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 7,
       "population": 60,
       "rank": "Highland",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "In memory of McAngus"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "In memory of McAngus",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 57,
+        "path": "witnesses/lemmings2-56-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 3,
+        "sha256": "702601b4611a6ceab9708fe13e72ab9ba366855d63935fa9a0d3a3657fb2e8de",
+        "ticks": 4500
+      }
     },
     {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "c14b2786316eaed0d198efede85d5266cad11ea36ec047e2d05b7d4d8dedb5f3:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -14340,17 +15244,80 @@
         "timeLimitSeconds": 300
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 8,
       "population": 60,
       "rank": "Highland",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "The White Heather Club"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "The White Heather Club",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-57-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "d37b15a93bc4e426d3e0f4686252f88f8828e069850949111c31a30349f117c2",
+        "ticks": 4500
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "c14b2786316eaed0d198efede85d5266cad11ea36ec047e2d05b7d4d8dedb5f3:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "5:7",
+        "modifiers": {
+          "firstReleaseTick": "49",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "": 0,
+          "basher": 2,
+          "hopper": 5,
+          "jumper": 5,
+          "laser_blaster": 1,
+          "platformer": 2
+        },
+        "timeLimitSeconds": 300
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 8,
+      "population": 1,
+      "rank": "Highland",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "The White Heather Club",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-57-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "6bbc5b1b8d43c968942eb26ff498c3b1ef1f62b91fa7ac58c625bee5d69ebc49",
+        "ticks": 1756
+      }
     },
     {
       "bestSaved": 2,
@@ -14385,6 +15352,7 @@
       "gameID": "lemmings2",
       "lossesInBestSolution": 58,
       "notes": [
+        "Replay ended before all inputs were used",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 9,
@@ -14392,7 +15360,7 @@
       "rank": "Highland",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "TAKE A RUNNING JUMP !!",
       "witness": {
         "completed": true,
@@ -14402,8 +15370,8 @@
         "released": 60,
         "retainedReserves": 0,
         "saved": 2,
-        "sha256": "f9fec769dff3a03f76729496f9269fec057e55117baa48fcaf1ea28317ef8d93",
-        "ticks": 4500
+        "sha256": "ab5b477ec536755b6ff1f66fb53b763d06cd02085521523465d6932285418870",
+        "ticks": 1613
       }
     },
     {
@@ -14437,7 +15405,7 @@
       },
       "gameID": "lemmings2",
       "notes": [
-        "No recorded solution fixture is available.",
+        "rejectedInput(53)",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 10,
@@ -14445,11 +15413,65 @@
       "rank": "Highland",
       "required": 1,
       "status": "UNKNOWN",
-      "testedCandidates": 1,
+      "testedCandidates": 2,
       "title": "EAT MY SHRAPNEL !!"
     },
     {
       "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "fdc73ee404a049418416830ed016f17d91d2bf96a597e04ea7d840eacff4c8c8:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "5:9",
+        "modifiers": {
+          "firstReleaseTick": "49",
+          "goldRequirement": "3",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 4,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "attractor": 4,
+          "ballooner": 1,
+          "exploder": 5,
+          "jumper": 5,
+          "mortar": 2,
+          "platformer": 2,
+          "rock_climber": 1,
+          "slider": 3
+        },
+        "timeLimitSeconds": 240
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 3,
+      "notes": [
+        "The medal loss allowance is not an optimality proof."
+      ],
+      "number": 10,
+      "population": 4,
+      "rank": "Highland",
+      "required": 1,
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "EAT MY SHRAPNEL !!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 3,
+        "path": "witnesses/lemmings2-59-4.json",
+        "released": 4,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "bf10d26ea1525e99b8edf4c7f4c92e35416ae5c9fc5f9f463897738dc0817c41",
+        "ticks": 1563
+      }
+    },
+    {
+      "bestSaved": 2,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "1f7788abaa004cbe0b6614f4be4a53fb935f33557496cf6732f331b2871d2121:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -14479,7 +15501,7 @@
         "timeLimitSeconds": 360
       },
       "gameID": "lemmings2",
-      "lossesInBestSolution": 59,
+      "lossesInBestSolution": 58,
       "notes": [
         "The medal loss allowance is not an optimality proof."
       ],
@@ -14488,21 +15510,22 @@
       "rank": "Medieval",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "LEMMING OF NOTTINGHAM",
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 59,
+        "lost": 58,
         "path": "witnesses/lemmings2-60-60.json",
         "released": 60,
         "retainedReserves": 0,
-        "saved": 1,
-        "sha256": "604a8bfab6d0117c7d26430033fdf37f1177079cf355c876305e693b37b3dda7",
+        "saved": 2,
+        "sha256": "2541876f4e3d8dee56869c01fee836d44918c7c3243f5c3ad23b9430fa162826",
         "ticks": 5400
       }
     },
     {
+      "bestSaved": 60,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "d34be94c66a4cec0dd8d909f9744f9fa0b6f83abd27a24ef020c53fddc80434a:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -14532,19 +15555,85 @@
         "timeLimitSeconds": 360
       },
       "gameID": "lemmings2",
-      "notes": [
-        "No recorded solution fixture is available.",
-        "The medal loss allowance is not an optimality proof."
-      ],
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 60,
+      "minimumSacrifices": 0,
+      "notes": [],
       "number": 2,
       "population": 60,
       "rank": "Medieval",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "SIR! I KID YE NOT"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "SIR! I KID YE NOT",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-61-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 60,
+        "sha256": "2cca75e1b88b1ce758f9d16e8215c4f9580c13b941986a8ca1dcd1c44a2f69b1",
+        "ticks": 2650
+      }
     },
     {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "d34be94c66a4cec0dd8d909f9744f9fa0b6f83abd27a24ef020c53fddc80434a:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "6:1",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "": 0,
+          "club_basher": 5,
+          "filler": 8,
+          "flame_thrower": 5,
+          "platformer": 5,
+          "sand_pourer": 10,
+          "stomper": 8,
+          "twister": 8
+        },
+        "timeLimitSeconds": 360
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 2,
+      "population": 1,
+      "rank": "Medieval",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "SIR! I KID YE NOT",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-61-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "09c85f97a9e381e3dd285f39f7eaa4a16eeb9c4127af54eafade00f16fbce0ac",
+        "ticks": 2249
+      }
+    },
+    {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "38279700faf311312a2d2ba09c8d8b5438803116294cb771629c48a8d7e97032:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -14573,19 +15662,84 @@
         "timeLimitSeconds": 180
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 3,
       "population": 60,
       "rank": "Medieval",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "ALL IN A KNIGHTS WORK!!"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "ALL IN A KNIGHTS WORK!!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-62-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "f415ff65a6ba39a7f8c8aae251ad37cca6d6c61656d8feb22977c2bd9d90dffd",
+        "ticks": 2700
+      }
     },
     {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "38279700faf311312a2d2ba09c8d8b5438803116294cb771629c48a8d7e97032:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "6:2",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 2,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "": 0,
+          "exploder": 1,
+          "jumper": 10,
+          "platformer": 2,
+          "roper": 1,
+          "stacker": 1,
+          "stomper": 2
+        },
+        "timeLimitSeconds": 180
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 1,
+      "notes": [
+        "The medal loss allowance is not an optimality proof."
+      ],
+      "number": 3,
+      "population": 2,
+      "rank": "Medieval",
+      "required": 1,
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "ALL IN A KNIGHTS WORK!!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 1,
+        "path": "witnesses/lemmings2-62-2.json",
+        "released": 2,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "c296e734dc8e5134c132bea107b4deee5858910717cb4b7dfb98bcf93389ae29",
+        "ticks": 1680
+      }
+    },
+    {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "3447c967fae1ff8b196dfe08c25af416d4474885fdc321fc8fbc4b2474be9c14:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -14613,17 +15767,80 @@
         "timeLimitSeconds": 420
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 4,
       "population": 60,
       "rank": "Medieval",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "WATCH THAT LAST STEP!"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "WATCH THAT LAST STEP!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-63-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "f99603e5c1ead422c661c83a7fbd0346f57a71f4723a45f7e1aea8917770a820",
+        "ticks": 1702
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "3447c967fae1ff8b196dfe08c25af416d4474885fdc321fc8fbc4b2474be9c14:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "6:3",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "": 0,
+          "club_basher": 1,
+          "glue_pourer": 2,
+          "sand_pourer": 2,
+          "stacker": 4,
+          "surfer": 1
+        },
+        "timeLimitSeconds": 420
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 4,
+      "population": 1,
+      "rank": "Medieval",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "WATCH THAT LAST STEP!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-63-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "7ff4f612c564dc6367bceeaae08b222d43a360d90732d5f7e10a3b0624ccfdd0",
+        "ticks": 1068
+      }
     },
     {
       "bestSaved": 1,
@@ -14663,7 +15880,7 @@
       "rank": "Medieval",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "KING ARTHURS LEMMINGS",
       "witness": {
         "completed": true,
@@ -14678,6 +15895,7 @@
       }
     },
     {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "b81aa2e911ea92e72880e69ed440f2d0a5ef4aa2fbc7019a5d6ca150adb41aca:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -14706,17 +15924,81 @@
         "timeLimitSeconds": 240
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 6,
       "population": 60,
       "rank": "Medieval",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Let`s play twister!"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Let`s play twister!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-65-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "b121ad480eb8178c6d1f9daeba0f1004afcf31a7ab6b3ec456372ad4968e8379",
+        "ticks": 3600
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "b81aa2e911ea92e72880e69ed440f2d0a5ef4aa2fbc7019a5d6ca150adb41aca:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "6:5",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "": 0,
+          "jumper": 5,
+          "platformer": 1,
+          "rock_climber": 5,
+          "runner": 5,
+          "slider": 5,
+          "twister": 5
+        },
+        "timeLimitSeconds": 240
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 6,
+      "population": 1,
+      "rank": "Medieval",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Let`s play twister!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-65-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "d7506418136490b1658d3fc8700a3964cfc19bb0be4d8e702a13cdc102066ed4",
+        "ticks": 825
+      }
     },
     {
       "bestSaved": 1,
@@ -14751,6 +16033,7 @@
       "gameID": "lemmings2",
       "lossesInBestSolution": 59,
       "notes": [
+        "Existing completion fixture changed: expected 1 at 3600, got 0 at 3600.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 7,
@@ -14758,7 +16041,7 @@
       "rank": "Medieval",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "UNDERGROUND",
       "witness": {
         "completed": true,
@@ -14768,11 +16051,12 @@
         "released": 60,
         "retainedReserves": 0,
         "saved": 1,
-        "sha256": "1c077722a6c311749abe5a141424f3e34625ed72806a2926ba7389017bafe150",
+        "sha256": "e5f95feaf7ffb9fcf9d1ced9e51b16a81d0a206e740916feb431553f468d3d5c",
         "ticks": 3600
       }
     },
     {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "f203f6a889a8988fc1215279c3fafc1c8451feb57c5b35167675f4d577a58e95:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -14802,17 +16086,82 @@
         "timeLimitSeconds": 360
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 8,
       "population": 60,
       "rank": "Medieval",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "What shall we do now?"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "What shall we do now?",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-67-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "e3707718deef1a9f1aef5857b5c6951fb519aafae429e140804c10e2ab2fad80",
+        "ticks": 1846
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "f203f6a889a8988fc1215279c3fafc1c8451feb57c5b35167675f4d577a58e95:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "6:7",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "attractor": 10,
+          "ballooner": 2,
+          "bomber": 5,
+          "filler": 10,
+          "jumper": 10,
+          "platformer": 10,
+          "runner": 5,
+          "stomper": 10
+        },
+        "timeLimitSeconds": 360
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 8,
+      "population": 1,
+      "rank": "Medieval",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "What shall we do now?",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-67-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "5805da2249c3ee36aa322476da6752bc8a438e43be6fa20f4b4a98b14f56fbe4",
+        "ticks": 1221
+      }
     },
     {
       "bestSaved": 1,
@@ -14854,7 +16203,7 @@
       "rank": "Medieval",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "LEMMING IN DISTRESS !!",
       "witness": {
         "completed": true,
@@ -14869,6 +16218,7 @@
       }
     },
     {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "23b9af06c3ec4deab2a27208a0bbd984b085bfdf0d7691bcf8aaab1f5e0d2385:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -14898,17 +16248,82 @@
         "timeLimitSeconds": 420
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 10,
       "population": 60,
       "rank": "Medieval",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "JUST JOUSTING AROUND"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "JUST JOUSTING AROUND",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-69-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "1cb5bc11be69ee53e3e6f4be13bde95d930f25d4039bc090cd9ef3435eafaf93",
+        "ticks": 6300
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "23b9af06c3ec4deab2a27208a0bbd984b085bfdf0d7691bcf8aaab1f5e0d2385:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "6:9",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "ballooner": 1,
+          "bomber": 1,
+          "floater": 2,
+          "glue_pourer": 2,
+          "pole_vaulter": 1,
+          "roper": 1,
+          "runner": 4,
+          "stacker": 2
+        },
+        "timeLimitSeconds": 420
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 10,
+      "population": 1,
+      "rank": "Medieval",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "JUST JOUSTING AROUND",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-69-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "6a724347e6b779e1f3aebe4f38e28c9de7766cae150a2cda0e812fc913bff448",
+        "ticks": 922
+      }
     },
     {
       "bestSaved": 59,
@@ -14943,6 +16358,7 @@
       "gameID": "lemmings2",
       "lossesInBestSolution": 1,
       "notes": [
+        "Replay ended before all inputs were used",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 1,
@@ -14950,7 +16366,7 @@
       "rank": "Outdoor",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Pa-tent-ly Obvious",
       "witness": {
         "completed": true,
@@ -14960,12 +16376,12 @@
         "released": 60,
         "retainedReserves": 0,
         "saved": 59,
-        "sha256": "f8f01c570bfb40e3b481fae6c56408b2fef8223b65c1f128bb19c88ee26734bb",
-        "ticks": 4491
+        "sha256": "a8f57b739be9c8107b606e53cab8958f63c67d6046b6fa5daf439c3216e0fa30",
+        "ticks": 2033
       }
     },
     {
-      "bestSaved": 2,
+      "bestSaved": 17,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "70bafc5c89cde29f8283d04adfec2534be4e8bd4b38318dc257ee05e2b749a75:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -14993,8 +16409,9 @@
         "timeLimitSeconds": 360
       },
       "gameID": "lemmings2",
-      "lossesInBestSolution": 58,
+      "lossesInBestSolution": 43,
       "notes": [
+        "Existing completion fixture changed: expected 2 at 5400, got 17 at 5400.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 2,
@@ -15002,17 +16419,17 @@
       "rank": "Outdoor",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Swing/Roundabout Theory",
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 58,
+        "lost": 43,
         "path": "witnesses/lemmings2-71-60.json",
         "released": 60,
         "retainedReserves": 0,
-        "saved": 2,
-        "sha256": "07474ffe5a5e07681a0322011868a5c4d7b4c8419605115c41dd4c80a580ba19",
+        "saved": 17,
+        "sha256": "dbf83cde48103f2d519183eebc9dd8db6545b9cb2d887d4c72d0e030affd45c7",
         "ticks": 5400
       }
     },
@@ -15053,7 +16470,7 @@
       "rank": "Outdoor",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Glide Like The Wind",
       "witness": {
         "completed": true,
@@ -15106,7 +16523,7 @@
       "rank": "Outdoor",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Deliverance ?",
       "witness": {
         "completed": true,
@@ -15153,6 +16570,7 @@
       "gameID": "lemmings2",
       "lossesInBestSolution": 59,
       "notes": [
+        "rejectedInput(13)",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 5,
@@ -15160,7 +16578,7 @@
       "rank": "Outdoor",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Friday`s Walk",
       "witness": {
         "completed": true,
@@ -15170,7 +16588,7 @@
         "released": 60,
         "retainedReserves": 0,
         "saved": 1,
-        "sha256": "10fda4f27f2c3db03514ef3236d89511646a426d82c38c2528ae98a32afa77ae",
+        "sha256": "e2969ba0cb7cacf75ce6e6d84cd0489d382d395de7935723c9e8a634434d01a9",
         "ticks": 2700
       }
     },
@@ -15214,7 +16632,7 @@
       "rank": "Outdoor",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The Magic of Mushrooms",
       "witness": {
         "completed": true,
@@ -15268,7 +16686,7 @@
       "rank": "Outdoor",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Natural Selection",
       "witness": {
         "completed": true,
@@ -15283,6 +16701,7 @@
       }
     },
     {
+      "bestSaved": 15,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "34d0ec7cbeb3a96a45553885c5f48b72a9a0fe1c1dd625f1b78b04034900c703:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -15312,19 +16731,85 @@
         "timeLimitSeconds": 270
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 45,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 8,
       "population": 60,
       "rank": "Outdoor",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "The Laws of Tradition"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "The Laws of Tradition",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 45,
+        "path": "witnesses/lemmings2-77-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 15,
+        "sha256": "b02bd040dc203cacde901082a4cf33047cf7b87fb69d4e3cbb8a280f996767c4",
+        "ticks": 4050
+      }
     },
     {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "34d0ec7cbeb3a96a45553885c5f48b72a9a0fe1c1dd625f1b78b04034900c703:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "7:7",
+        "modifiers": {
+          "firstReleaseTick": "49",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "attractor": 2,
+          "bomber": 1,
+          "fencer": 4,
+          "platformer": 9,
+          "rock_climber": 1,
+          "scooper": 2,
+          "slider": 1,
+          "stomper": 1
+        },
+        "timeLimitSeconds": 270
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 8,
+      "population": 1,
+      "rank": "Outdoor",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "The Laws of Tradition",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-77-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "8d1bce2dccb2c53c22008807d784a4728cde61391e99791efb6a0913dfaba202",
+        "ticks": 2563
+      }
+    },
+    {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "0b63c80c2f7860995ea22a65daa7c198c74250ff2fe6d97c543802f4e98a03a0:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -15354,17 +16839,82 @@
         "timeLimitSeconds": 300
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 9,
       "population": 60,
       "rank": "Outdoor",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "22934"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "22934",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-78-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "358c8bcdbf6db54ccc5ae42b892d8505649fbe0b9a80c3222c09ba281d2c363f",
+        "ticks": 4500
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "0b63c80c2f7860995ea22a65daa7c198c74250ff2fe6d97c543802f4e98a03a0:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "7:8",
+        "modifiers": {
+          "firstReleaseTick": "49",
+          "goldRequirement": "2",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 2,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "archer": 10,
+          "basher": 1,
+          "builder": 10,
+          "club_basher": 1,
+          "jumper": 10,
+          "parachuter": 1,
+          "roper": 1,
+          "runner": 1
+        },
+        "timeLimitSeconds": 300
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 1,
+      "notes": [
+        "The medal loss allowance is not an optimality proof."
+      ],
+      "number": 9,
+      "population": 2,
+      "rank": "Outdoor",
+      "required": 1,
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "22934",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 1,
+        "path": "witnesses/lemmings2-78-2.json",
+        "released": 2,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "a6952091f0b37ec4a746dad51c07ac08c6c620eded658fa49b05cf88635f1528",
+        "ticks": 4500
+      }
     },
     {
       "bestSaved": 1,
@@ -15406,7 +16956,7 @@
       "rank": "Outdoor",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Garden of Stone",
       "witness": {
         "completed": true,
@@ -15421,7 +16971,7 @@
       }
     },
     {
-      "bestSaved": 26,
+      "bestSaved": 60,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "c4a6e555264ffd588e987d81e0346fe7054ecf0583b4d28dc563e24820beb73a:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -15449,31 +16999,33 @@
         "timeLimitSeconds": 300
       },
       "gameID": "lemmings2",
-      "lossesInBestSolution": 34,
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 60,
+      "minimumSacrifices": 0,
       "notes": [
-        "The medal loss allowance is not an optimality proof."
+        "rejectedInput(17)"
       ],
       "number": 1,
       "population": 60,
       "rank": "Polar",
       "required": 1,
-      "status": "OBSERVED",
-      "testedCandidates": 2,
+      "status": "VERIFIED",
+      "testedCandidates": 3,
       "title": "Lem Me Out !",
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 34,
+        "lost": 0,
         "path": "witnesses/lemmings2-80-60.json",
         "released": 60,
         "retainedReserves": 0,
-        "saved": 26,
-        "sha256": "a85ea3fa7c11c755c82e09e3081c733c71e01486e775c94414a31d97b06b1dfc",
-        "ticks": 4500
+        "saved": 60,
+        "sha256": "cc7a78cc1a628a89a4aa23db7077bf3d0b2be7054c6bfa9cd495a553c1083d1d",
+        "ticks": 1829
       }
     },
     {
-      "bestSaved": 1,
+      "bestSaved": 7,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "befc9ae6a15f8eccb17df77bd3fdb9085f56208f35a4167ee4a8a8ed3f637fec:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -15503,7 +17055,7 @@
         "timeLimitSeconds": 300
       },
       "gameID": "lemmings2",
-      "lossesInBestSolution": 59,
+      "lossesInBestSolution": 53,
       "notes": [
         "The medal loss allowance is not an optimality proof."
       ],
@@ -15512,17 +17064,17 @@
       "rank": "Polar",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Ice Ice Lemy",
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 59,
+        "lost": 53,
         "path": "witnesses/lemmings2-81-60.json",
         "released": 60,
         "retainedReserves": 0,
-        "saved": 1,
-        "sha256": "296ba2c94a6fcf844fe7fb7811b361a1f86ec210d1da6c8cd21901d8f4c9bdd4",
+        "saved": 7,
+        "sha256": "b5e6bee8827d2beae3c3dd1f9fc11b65b412d9fe7b8cf97de20955bc0115142f",
         "ticks": 4500
       }
     },
@@ -15566,7 +17118,7 @@
       "rank": "Polar",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Snow More Lems",
       "witness": {
         "completed": true,
@@ -15620,7 +17172,7 @@
       "rank": "Polar",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "DANGER THIN ICE !",
       "witness": {
         "completed": true,
@@ -15635,6 +17187,7 @@
       }
     },
     {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "2d4ef634516a52045ed11fea149971b2caf93a338c732db1bbb041583129e195:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -15664,17 +17217,82 @@
         "timeLimitSeconds": 540
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 5,
       "population": 60,
       "rank": "Polar",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Take Your Best Shot !"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Take Your Best Shot !",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-84-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "97fac20058238a99a900bcc060f05e2e3ea7b081e593dec8bbb8f75ebc161b44",
+        "ticks": 8100
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "2d4ef634516a52045ed11fea149971b2caf93a338c732db1bbb041583129e195:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "8:4",
+        "modifiers": {
+          "firstReleaseTick": "51",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "bazooka": 3,
+          "bomber": 3,
+          "fencer": 3,
+          "filler": 2,
+          "jumper": 1,
+          "mortar": 1,
+          "roper": 7,
+          "scooper": 3
+        },
+        "timeLimitSeconds": 540
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 5,
+      "population": 1,
+      "rank": "Polar",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Take Your Best Shot !",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-84-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "06c45f83cc890e9be7fa3d99bec6ddd65e0f7e3842f9e1bff945d1ca1370ed63",
+        "ticks": 1576
+      }
     },
     {
       "bestSaved": 1,
@@ -15716,7 +17334,7 @@
       "rank": "Polar",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Turn Back !",
       "witness": {
         "completed": true,
@@ -15731,6 +17349,7 @@
       }
     },
     {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "d45393e4aad240c3031306aa123f0502c9fa0b57eb0b7b293c10478b6b05f08d:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -15760,17 +17379,82 @@
         "timeLimitSeconds": 300
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 7,
       "population": 60,
       "rank": "Polar",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "SLIPPIN & SLIDING"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "SLIPPIN & SLIDING",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-86-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "16835e665d14abc2c34dc129db715310ddfcfa04d492169e6de93c8ce3af4c3c",
+        "ticks": 4500
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "d45393e4aad240c3031306aa123f0502c9fa0b57eb0b7b293c10478b6b05f08d:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "8:6",
+        "modifiers": {
+          "firstReleaseTick": "51",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "archer": 2,
+          "bomber": 2,
+          "jumper": 6,
+          "platformer": 2,
+          "runner": 2,
+          "skater": 5,
+          "stacker": 1,
+          "thrower": 2
+        },
+        "timeLimitSeconds": 300
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 7,
+      "population": 1,
+      "rank": "Polar",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "SLIPPIN & SLIDING",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-86-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "20fcee04b0ae00390f8a6d466bd7784a3d406fac9fe04bc560a53fbebd69fd48",
+        "ticks": 1803
+      }
     },
     {
       "bestSaved": 1,
@@ -15811,7 +17495,7 @@
       "rank": "Polar",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Snowed In !",
       "witness": {
         "completed": true,
@@ -15826,6 +17510,7 @@
       }
     },
     {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "fa507e9d6126196f69feb383bdb69646e299ab7fd1f41dced3c420dc8821ef62:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -15855,19 +17540,85 @@
         "timeLimitSeconds": 360
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 9,
       "population": 60,
       "rank": "Polar",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Its all up hill !"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Its all up hill !",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-88-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "4fe6f647bdc6638ccd22aadcd02f6944412d377062e0f29d2df39fd0982a8056",
+        "ticks": 1505
+      }
     },
     {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "fa507e9d6126196f69feb383bdb69646e299ab7fd1f41dced3c420dc8821ef62:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "8:8",
+        "modifiers": {
+          "firstReleaseTick": "51",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "archer": 4,
+          "builder": 6,
+          "jumper": 1,
+          "miner": 2,
+          "roper": 1,
+          "runner": 1,
+          "skier": 2,
+          "superlem": 2
+        },
+        "timeLimitSeconds": 360
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 9,
+      "population": 1,
+      "rank": "Polar",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Its all up hill !",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-88-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "1f112acbddd26c224b59991a39514e478fd17587eb83b1f232697729ad2a9133",
+        "ticks": 292
+      }
+    },
+    {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "bea6c0ed208b6b4153068672ba5299be30b4c225c34d811786ec87f8e824e3f9:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -15897,17 +17648,82 @@
         "timeLimitSeconds": 360
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 10,
       "population": 60,
       "rank": "Polar",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Stay Frosty"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Stay Frosty",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-89-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "8459194c793d21d23d95432f43e3a36739953ace66932f5aaf9576379cf9bf3e",
+        "ticks": 1971
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "bea6c0ed208b6b4153068672ba5299be30b4c225c34d811786ec87f8e824e3f9:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "8:9",
+        "modifiers": {
+          "firstReleaseTick": "51",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "": 0,
+          "attractor": 1,
+          "flame_thrower": 4,
+          "floater": 10,
+          "glue_pourer": 4,
+          "icarus_wings": 4,
+          "jumper": 5,
+          "twister": 5
+        },
+        "timeLimitSeconds": 360
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 10,
+      "population": 1,
+      "rank": "Polar",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Stay Frosty",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-89-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "298139e74940cbf8014a630c18c2c02a259a86fbfeaa2d3039dca5ada8da8a8d",
+        "ticks": 795
+      }
     },
     {
       "bestSaved": 1,
@@ -15945,7 +17761,7 @@
       "rank": "Shadow",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Land of OZ!",
       "witness": {
         "completed": true,
@@ -15999,7 +17815,7 @@
       "rank": "Shadow",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "NITRAM THE HUGE!",
       "witness": {
         "completed": true,
@@ -16049,7 +17865,7 @@
       "rank": "Shadow",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Twin Bleeps",
       "witness": {
         "completed": true,
@@ -16064,6 +17880,7 @@
       }
     },
     {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "8efed1e2f57f9dfbad89fb0c58f8b64aef1b9570309f181c7a118c95c4434c2a:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -16089,19 +17906,81 @@
         "timeLimitSeconds": 540
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 4,
       "population": 60,
       "rank": "Shadow",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "The Pancake Factory."
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "The Pancake Factory.",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-93-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "dff6dfdbe0cc7b3f91caf4cec1e189e598ccb148d06691089c0a7bfbeb14946d",
+        "ticks": 8100
+      }
     },
     {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "8efed1e2f57f9dfbad89fb0c58f8b64aef1b9570309f181c7a118c95c4434c2a:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "9:3",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "": 0,
+          "basher": 5,
+          "glue_pourer": 5,
+          "jet_pack": 1
+        },
+        "timeLimitSeconds": 540
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 4,
+      "population": 1,
+      "rank": "Shadow",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "The Pancake Factory.",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-93-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "769f615bdad646b521cc6d473bdb3248a261da7a83b7b9c665265c6beb00f645",
+        "ticks": 407
+      }
+    },
+    {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "88046e055849cdbfa8e7c3e40610b46af8d2389f8d88156276a0016f73780a76:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -16129,17 +18008,80 @@
         "timeLimitSeconds": 240
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 5,
       "population": 60,
       "rank": "Shadow",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Swingadingding"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Swingadingding",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-94-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "1c91e9bcc451f86ec7222dcb3f32955438fed99d63be64747d85d9de4b97d1c2",
+        "ticks": 3600
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "88046e055849cdbfa8e7c3e40610b46af8d2389f8d88156276a0016f73780a76:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "9:4",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "": 0,
+          "basher": 1,
+          "jumper": 1,
+          "laser_blaster": 1,
+          "platformer": 3,
+          "rock_climber": 1
+        },
+        "timeLimitSeconds": 240
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 5,
+      "population": 1,
+      "rank": "Shadow",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Swingadingding",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-94-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "de4fac594731cc2bf2f72b8c9c3036f4c582023b0f7621b8c33f2b055d04d1ed",
+        "ticks": 1157
+      }
     },
     {
       "bestSaved": 1,
@@ -16174,6 +18116,7 @@
       "gameID": "lemmings2",
       "lossesInBestSolution": 59,
       "notes": [
+        "Existing completion fixture changed: expected 1 at 1432, got 1 at 8100.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 6,
@@ -16181,7 +18124,7 @@
       "rank": "Shadow",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The School Gate.",
       "witness": {
         "completed": true,
@@ -16191,11 +18134,12 @@
         "released": 60,
         "retainedReserves": 0,
         "saved": 1,
-        "sha256": "34db17e3cb585d633622c1268fb71f2028f31a8d85e00355120fd7ad0f566aa4",
-        "ticks": 1432
+        "sha256": "a54003d97c56aaf777bd988560fd137eee9bd71c44bc54f1da40b9f5dc403661",
+        "ticks": 8100
       }
     },
     {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "32d10fcffb212caef89c7957510cc67364417b310863b0f30ea921cadaadc9b5:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -16224,19 +18168,84 @@
         "timeLimitSeconds": 541
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 7,
       "population": 60,
       "rank": "Shadow",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Fritbatter Frolics!"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Fritbatter Frolics!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-96-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "111e85262623416fc13dd3345089d5999a42e318a2d3c80b0a1f8ae8102dabbe",
+        "ticks": 8115
+      }
     },
     {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "32d10fcffb212caef89c7957510cc67364417b310863b0f30ea921cadaadc9b5:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "9:6",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "": 0,
+          "digger": 2,
+          "jumper": 10,
+          "rock_climber": 1,
+          "scooper": 2,
+          "shimmier": 2,
+          "swimmer": 1
+        },
+        "timeLimitSeconds": 541
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 7,
+      "population": 1,
+      "rank": "Shadow",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Fritbatter Frolics!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-96-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "c1d5ad763b2f25e958c61ae0d84304a030bc3f88fc5f30068a4f85d47bc0ac91",
+        "ticks": 1111
+      }
+    },
+    {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "35e6e8288fc61402815899e189d8003671672ee9b685d9e72b137794ef0ff3b7:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -16266,19 +18275,85 @@
         "timeLimitSeconds": 540
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 8,
       "population": 60,
       "rank": "Shadow",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Goossen`s Inferno!"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Goossen`s Inferno!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-97-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "378368269b6c6fd11f57f069986644ae9fa646f55a77701f4d8c50e188e86835",
+        "ticks": 8100
+      }
     },
     {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "35e6e8288fc61402815899e189d8003671672ee9b685d9e72b137794ef0ff3b7:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "9:7",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "attractor": 1,
+          "ballooner": 40,
+          "basher": 6,
+          "bazooka": 5,
+          "fencer": 1,
+          "filler": 5,
+          "platformer": 3,
+          "runner": 5
+        },
+        "timeLimitSeconds": 540
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 8,
+      "population": 1,
+      "rank": "Shadow",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Goossen`s Inferno!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-97-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "d49b2c9cdff25cbb53558b3a223bc0f7b1a3154665bbb699dab9dbdee77ad114",
+        "ticks": 2429
+      }
+    },
+    {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "9e275d7667556d22f51340daa717198248df177a42b532c288230231043ff02a:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -16305,19 +18380,82 @@
         "timeLimitSeconds": 540
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 9,
       "population": 60,
       "rank": "Shadow",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "SPINNY THANG...."
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "SPINNY THANG....",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-98-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "63fb9c0be2cca6eb8cfd7ade1ae1cbe4cbc16727375de57b276258461b68b840",
+        "ticks": 8100
+      }
     },
     {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "9e275d7667556d22f51340daa717198248df177a42b532c288230231043ff02a:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "9:8",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "": 0,
+          "glue_pourer": 15,
+          "laser_blaster": 10,
+          "roper": 2,
+          "twister": 10
+        },
+        "timeLimitSeconds": 540
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 9,
+      "population": 1,
+      "rank": "Shadow",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "SPINNY THANG....",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-98-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "0e8ff2673a2c9edd37e3f577d7695c975d895731b81f4695b9555536bbb3813e",
+        "ticks": 1676
+      }
+    },
+    {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "6e1acaf339b27ed3be9ae30d38c5cecd117c29178a63fc8cf7e95f61f5bb31c8:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -16347,17 +18485,82 @@
         "timeLimitSeconds": 360
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 10,
       "population": 60,
       "rank": "Shadow",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Moonswings"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Moonswings",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-99-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "e121428e1bda9799de73c59df2da2296e9596d2903fd2f57f0c923f8a1a7c32e",
+        "ticks": 1365
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "6e1acaf339b27ed3be9ae30d38c5cecd117c29178a63fc8cf7e95f61f5bb31c8:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "9:9",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "": 0,
+          "attractor": 1,
+          "builder": 4,
+          "glue_pourer": 3,
+          "jumper": 3,
+          "planter": 1,
+          "stomper": 1,
+          "superlem": 1
+        },
+        "timeLimitSeconds": 360
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 10,
+      "population": 1,
+      "rank": "Shadow",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Moonswings",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-99-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "fef7a98a15e1e3b0224ba65062a1cdcd99566dca85fa9c029cf0673db2959103",
+        "ticks": 239
+      }
     },
     {
       "bestSaved": 51,
@@ -16399,7 +18602,7 @@
       "rank": "Space",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "HIT THE SPACE BAR",
       "witness": {
         "completed": true,
@@ -16451,7 +18654,7 @@
       "rank": "Space",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Perpetual motion",
       "witness": {
         "completed": true,
@@ -16503,7 +18706,7 @@
       "rank": "Space",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Perpetual motion",
       "witness": {
         "completed": true,
@@ -16518,6 +18721,7 @@
       }
     },
     {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "7203b1a5586d6a276478106ecf0dda23faab9c56a8588979b01e22b7ccffeac7:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -16547,19 +18751,85 @@
         "timeLimitSeconds": 300
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 3,
       "population": 60,
       "rank": "Space",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "THE LEMMINGS HAVE LANDED"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "THE LEMMINGS HAVE LANDED",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-102-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "4f4c398d1bdf3289b48b783cb4e0f7e7d7ae8426241ec865d16cca209e584891",
+        "ticks": 4500
+      }
     },
     {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "7203b1a5586d6a276478106ecf0dda23faab9c56a8588979b01e22b7ccffeac7:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "10:2",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "fencer": 5,
+          "jumper": 8,
+          "platformer": 1,
+          "rock_climber": 1,
+          "runner": 1,
+          "shimmier": 1,
+          "slider": 1,
+          "stomper": 2
+        },
+        "timeLimitSeconds": 300
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 3,
+      "population": 1,
+      "rank": "Space",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "THE LEMMINGS HAVE LANDED",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-102-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "5543ca4db54d3e10979438be984ac78f5ed5f97166a7e4ab6f0bb0beb6349528",
+        "ticks": 1701
+      }
+    },
+    {
+      "bestSaved": 11,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "df7b8385c35629958cdc7eedcbf94081916ebf4efb42968dfd830065a116efb9:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -16589,17 +18859,82 @@
         "timeLimitSeconds": 540
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 49,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 4,
       "population": 60,
       "rank": "Space",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "The Vortex"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "The Vortex",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 49,
+        "path": "witnesses/lemmings2-103-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 11,
+        "sha256": "8db8e5c5fe1a183c60564777e959da01985fd5ba03676145eec3012b37d05ac1",
+        "ticks": 3065
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "df7b8385c35629958cdc7eedcbf94081916ebf4efb42968dfd830065a116efb9:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "10:3",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "attractor": 2,
+          "club_basher": 5,
+          "filler": 4,
+          "mortar": 5,
+          "platformer": 3,
+          "roper": 3,
+          "spearer": 1,
+          "stomper": 1
+        },
+        "timeLimitSeconds": 540
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 4,
+      "population": 1,
+      "rank": "Space",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "The Vortex",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-103-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "d7dcb9d30cc0f34fa6c9aea1c00456afec4b9e70e00d13f33d060ee97813bafe",
+        "ticks": 3065
+      }
     },
     {
       "bestSaved": 1,
@@ -16641,7 +18976,7 @@
       "rank": "Space",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The Stainless Steel Lemm",
       "witness": {
         "completed": true,
@@ -16695,7 +19030,7 @@
       "rank": "Space",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Lunar Olympics",
       "witness": {
         "completed": true,
@@ -16749,7 +19084,7 @@
       "rank": "Space",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "GoSh It`S fUlL oF lEmMs",
       "witness": {
         "completed": true,
@@ -16764,6 +19099,7 @@
       }
     },
     {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "5ec798b40c9116977f747ecbfa68423b5df1d9755d45e994861d93cd65105a3e:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -16793,19 +19129,85 @@
         "timeLimitSeconds": 240
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 8,
       "population": 60,
       "rank": "Space",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Odyssey"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Odyssey",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-107-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "1cffaa250fd8569e0581ac4f6389b9633a4f8dacd94225b3ab2a0e40dedd22fb",
+        "ticks": 3600
+      }
     },
     {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "5ec798b40c9116977f747ecbfa68423b5df1d9755d45e994861d93cd65105a3e:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "10:7",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "": 0,
+          "jumper": 2,
+          "laser_blaster": 2,
+          "rock_climber": 1,
+          "shimmier": 1,
+          "slider": 1,
+          "stacker": 2,
+          "stomper": 1
+        },
+        "timeLimitSeconds": 240
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 8,
+      "population": 1,
+      "rank": "Space",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Odyssey",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-107-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "1383db16f20f3e0a08d5ad3e3994e38268c1fef36569261dc369ee0a71e0e84f",
+        "ticks": 1661
+      }
+    },
+    {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "0832a2fd93c576ed0268315116bee5190992f8d8ea502b80a80d9ad5759cae11:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -16834,19 +19236,84 @@
         "timeLimitSeconds": 360
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 9,
       "population": 60,
       "rank": "Space",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Inside The Steel Box"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Inside The Steel Box",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-108-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "51ff402f020ed0d0006d03302697e9c4d158f785a15278bdbf1b8463561832fb",
+        "ticks": 2283
+      }
     },
     {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "0832a2fd93c576ed0268315116bee5190992f8d8ea502b80a80d9ad5759cae11:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "10:8",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "": 0,
+          "builder": 2,
+          "filler": 2,
+          "platformer": 2,
+          "roper": 3,
+          "runner": 1,
+          "stacker": 1
+        },
+        "timeLimitSeconds": 360
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 9,
+      "population": 1,
+      "rank": "Space",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Inside The Steel Box",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-108-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "a10fa1e443e52019011b8021c2b60e88fdf2236c8bcd429e46ae46e4e76a4e19",
+        "ticks": 2283
+      }
+    },
+    {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "1fb005bcccfe68e0f70b73adc625c1fa9ef99bd0192c646b86062073510a7708:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -16875,17 +19342,81 @@
         "timeLimitSeconds": 300
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 10,
       "population": 60,
       "rank": "Space",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Frontier of surreality"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Frontier of surreality",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-109-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "a503bf7c3d347a8b0cddfc46032b6395a79600513be7a35aa32439c86ea06771",
+        "ticks": 4500
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "1fb005bcccfe68e0f70b73adc625c1fa9ef99bd0192c646b86062073510a7708:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "10:9",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "": 0,
+          "bazooka": 20,
+          "club_basher": 2,
+          "glue_pourer": 1,
+          "jumper": 10,
+          "rock_climber": 2,
+          "runner": 2
+        },
+        "timeLimitSeconds": 300
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 10,
+      "population": 1,
+      "rank": "Space",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Frontier of surreality",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-109-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "519121182c7b99a40dc79b9591a956ff86d76999a1d6db8e2785b1b1019aaaae",
+        "ticks": 1008
+      }
     },
     {
       "bestSaved": 2,
@@ -16922,7 +19453,7 @@
       "rank": "Sports",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Ceci n`est pas une pipe.",
       "witness": {
         "completed": true,
@@ -16976,7 +19507,7 @@
       "rank": "Sports",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "School Sports Day",
       "witness": {
         "completed": true,
@@ -17030,7 +19561,7 @@
       "rank": "Sports",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The Octathalon!",
       "witness": {
         "completed": true,
@@ -17084,7 +19615,7 @@
       "rank": "Sports",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The Octathalon!",
       "witness": {
         "completed": true,
@@ -17138,7 +19669,7 @@
       "rank": "Sports",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "RRRACKETEERZ!",
       "witness": {
         "completed": true,
@@ -17188,7 +19719,7 @@
       "rank": "Sports",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Blow Back....",
       "witness": {
         "completed": true,
@@ -17242,7 +19773,7 @@
       "rank": "Sports",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Double Trouble",
       "witness": {
         "completed": true,
@@ -17296,7 +19827,7 @@
       "rank": "Sports",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The Sun Sign Selection",
       "witness": {
         "completed": true,
@@ -17350,7 +19881,7 @@
       "rank": "Sports",
       "required": 1,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The Sun Sign Selection",
       "witness": {
         "completed": true,
@@ -17365,6 +19896,7 @@
       }
     },
     {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "426a25ff8afed40f6a0988a364e88570da01e11b85fb3e4a7425ccb6828d7355:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -17394,19 +19926,85 @@
         "timeLimitSeconds": 540
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 8,
       "population": 60,
       "rank": "Sports",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Run the Risk"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Run the Risk",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-117-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "a41e8f295f49ab34314760c249f88d313c4ff14fe5a0e380c50fe7d93e536b3f",
+        "ticks": 8100
+      }
     },
     {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "426a25ff8afed40f6a0988a364e88570da01e11b85fb3e4a7425ccb6828d7355:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "11:7",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "archer": 2,
+          "builder": 5,
+          "fencer": 1,
+          "platformer": 3,
+          "pole_vaulter": 2,
+          "stacker": 2,
+          "stomper": 3,
+          "superlem": 2
+        },
+        "timeLimitSeconds": 540
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 8,
+      "population": 1,
+      "rank": "Sports",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Run the Risk",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-117-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "db5880b03d75df90eb5582f20f22d06e35925eb66027d0f26f0a280a3f25e0e6",
+        "ticks": 1235
+      }
+    },
+    {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "4f64ccbe3030c97247ee721f419f32a32036e0d0d7badfd46a24f3c27a2e77d3:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -17436,19 +20034,85 @@
         "timeLimitSeconds": 540
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 9,
       "population": 60,
       "rank": "Sports",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "The Nervous Network!"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "The Nervous Network!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-118-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "2aedc735b2249e277ba27c37113afb670a4457caa123e7578936ba5c31f08fd0",
+        "ticks": 8100
+      }
     },
     {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "4f64ccbe3030c97247ee721f419f32a32036e0d0d7badfd46a24f3c27a2e77d3:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "11:8",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "bomber": 3,
+          "glue_pourer": 3,
+          "jumper": 10,
+          "rock_climber": 1,
+          "roper": 5,
+          "scooper": 1,
+          "shimmier": 2,
+          "slider": 2
+        },
+        "timeLimitSeconds": 540
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 9,
+      "population": 1,
+      "rank": "Sports",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "The Nervous Network!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-118-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "b080e9383ba255660c04da9adaccce5b0d50c98df1d2edfd0a5d373725ff2b1d",
+        "ticks": 2000
+      }
+    },
+    {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "7d7447f3320c94f311e7d07864ce86c6f648809bb9490a0d6a3b52f3647bf725:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -17478,17 +20142,82 @@
         "timeLimitSeconds": 540
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 10,
       "population": 60,
       "rank": "Sports",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Take up Archery"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Take up Archery",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-119-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "6dfa21bd31882b12b8aca5ed00211e10bd0ceed1c65c3e3f4d5681cd78099510",
+        "ticks": 1474
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings2",
+        "levelFingerprint": "7d7447f3320c94f311e7d07864ce86c6f648809bb9490a0d6a3b52f3647bf725:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelID": "11:9",
+        "modifiers": {
+          "firstReleaseTick": "50",
+          "goldRequirement": "1",
+          "practice": "false",
+          "releaseInterval": "21"
+        },
+        "packID": "tribes",
+        "physicsMode": "l2-native-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l2-native-v1",
+        "startingSkills": {
+          "archer": 10,
+          "hopper": 1,
+          "jumper": 10,
+          "pole_vaulter": 1,
+          "roller": 1,
+          "roper": 2,
+          "runner": 3,
+          "spearer": 5
+        },
+        "timeLimitSeconds": 540
+      },
+      "gameID": "lemmings2",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 10,
+      "population": 1,
+      "rank": "Sports",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Take up Archery",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-119-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "f682e08726cdd785ae74631c7cc1c1bb76066eebf319ccd82ad4f0ddbc546135",
+        "ticks": 965
+      }
     },
     {
       "bestSaved": 22,
@@ -17523,7 +20252,7 @@
       "rank": "Blizzard",
       "required": 22,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Oogilemming!",
       "witness": {
         "completed": true,
@@ -17717,7 +20446,7 @@
       "rank": "Blizzard",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "It Came Upon a Lemnight Clear",
       "witness": {
         "completed": true,
@@ -18058,7 +20787,7 @@
       "rank": "Blizzard",
       "required": 70,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "The Voyage Home...",
       "witness": {
         "completed": true,
@@ -18105,7 +20834,7 @@
       "rank": "Blizzard",
       "required": 65,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "The Final Frontier",
       "witness": {
         "completed": true,
@@ -18201,7 +20930,7 @@
       "rank": "Blizzard",
       "required": 8,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "The Needs of the Many...",
       "witness": {
         "completed": true,
@@ -18248,7 +20977,7 @@
       "rank": "Blizzard",
       "required": 47,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "The Next Lemeration",
       "witness": {
         "completed": true,
@@ -18638,7 +21367,7 @@
       "rank": "Flurry",
       "required": 70,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Clouds of Lemmings",
       "witness": {
         "completed": true,
@@ -19028,7 +21757,7 @@
       "rank": "Flurry",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "The Long Way Around",
       "witness": {
         "completed": true,
@@ -19075,7 +21804,7 @@
       "rank": "Lemmings Versus",
       "required": 65,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "There can be only one",
       "witness": {
         "completed": true,
@@ -19122,7 +21851,7 @@
       "rank": "Lemmings Versus",
       "required": 65,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "We`re in this one together",
       "witness": {
         "completed": true,
@@ -19610,7 +22339,7 @@
       "rank": "Lemmings Versus",
       "required": 65,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Good game! Good game!",
       "witness": {
         "completed": true,
@@ -19657,7 +22386,7 @@
       "rank": "Lemmings Versus",
       "required": 90,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "The Hammock...",
       "witness": {
         "completed": true,
@@ -19753,7 +22482,7 @@
       "rank": "Lemmings Versus",
       "required": 90,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Graffiti",
       "witness": {
         "completed": true,
@@ -19898,7 +22627,7 @@
       "rank": "Lemmings Versus",
       "required": 26,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "The Rope Bridge",
       "witness": {
         "completed": true,
@@ -19945,7 +22674,7 @@
       "rank": "Lemmings Versus",
       "required": 26,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Islands in the Sky",
       "witness": {
         "completed": true,
@@ -19992,7 +22721,7 @@
       "rank": "Lemmings Versus",
       "required": 20,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Cross-over Point",
       "witness": {
         "completed": true,
@@ -20235,7 +22964,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 49,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Watch your step",
       "witness": {
         "completed": true,
@@ -20282,7 +23011,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Libra",
       "witness": {
         "completed": true,
@@ -20476,7 +23205,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 98,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Spiral staircase",
       "witness": {
         "completed": true,
@@ -20572,7 +23301,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 49,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Water processing plant",
       "witness": {
         "completed": true,
@@ -20619,7 +23348,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Doomsday",
       "witness": {
         "completed": true,
@@ -20764,7 +23493,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Here is Mr.Lemming's house",
       "witness": {
         "completed": true,
@@ -20860,7 +23589,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "SUNSOFT Special",
       "witness": {
         "completed": true,
@@ -20956,7 +23685,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 59,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Haunted botanical garden",
       "witness": {
         "completed": true,
@@ -21052,7 +23781,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 46,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Watch right or left (Part two)",
       "witness": {
         "completed": true,
@@ -21148,7 +23877,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 49,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Out, away from the tune",
       "witness": {
         "completed": true,
@@ -21195,7 +23924,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 80,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Stray sheep",
       "witness": {
         "completed": true,
@@ -21291,7 +24020,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 1,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Two heads are better...",
       "witness": {
         "completed": true,
@@ -21387,7 +24116,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 80,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "I am A.T.",
       "witness": {
         "completed": true,
@@ -26060,7 +28789,7 @@
       "rank": "Frost",
       "required": 69,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "The Land of the Bizarre",
       "witness": {
         "completed": true,
@@ -26107,7 +28836,7 @@
       "rank": "Frost",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Happy New Year!",
       "witness": {
         "completed": true,
@@ -26448,7 +29177,7 @@
       "rank": "Frost",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Happy New Year II!",
       "witness": {
         "completed": true,
@@ -26495,7 +29224,7 @@
       "rank": "Frost",
       "required": 49,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Plethora of Presents",
       "witness": {
         "completed": true,
@@ -26542,7 +29271,7 @@
       "rank": "Frost",
       "required": 79,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Up on the Rooftops",
       "witness": {
         "completed": true,
@@ -26638,7 +29367,7 @@
       "rank": "Hail",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Break On Through",
       "witness": {
         "completed": true,
@@ -26685,7 +29414,7 @@
       "rank": "Hail",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "And a Happy New Year!",
       "witness": {
         "completed": true,
@@ -26732,7 +29461,7 @@
       "rank": "Hail",
       "required": 78,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Lemmintaschen?",
       "witness": {
         "completed": true,
@@ -26779,7 +29508,7 @@
       "rank": "Hail",
       "required": 68,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Get the Point?",
       "witness": {
         "completed": true,
@@ -26826,7 +29555,7 @@
       "rank": "Hail",
       "required": 27,
       "status": "OBSERVED",
-      "testedCandidates": 4,
+      "testedCandidates": 3,
       "title": "Surprise Package?",
       "witness": {
         "completed": true,
