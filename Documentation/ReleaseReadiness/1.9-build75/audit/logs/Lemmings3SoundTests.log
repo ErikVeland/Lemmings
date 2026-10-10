@@ -1,0 +1,4 @@
+PASS six original L3 voices, declared rates, signed/unsigned PCM, malformed files and event timing
+PASS L3 bottom deaths are distinct from other losses
+PASS L3 positioned exit, death and brick cues, with no paused duplicates
+PASS causal L3 pickup, clock, launch, blast, brick warning, steel, water, trap and individual rescue sounds

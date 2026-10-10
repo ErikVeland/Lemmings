@@ -1,6 +1,6 @@
 # Macintosh sound and counters — 1.9
 
-The 1.9 development source adds **Macintosh (original)** to Settings → Audio
+The 1.9 release adds **Macintosh (original)** to Settings → Audio
 and **Original Macintosh** to Settings → Graphics → Counters. Existing
 preferences keep their current counter style. Counter and soundtrack choices
 are independent of the selected terrain artwork.
@@ -90,5 +90,7 @@ bundle when it is outside `.build/local`. They cover file hashes and decoded
 lengths, campaign routing, source transitions, pause/resume, the original
 rate sample/pitches, mute/volume/replay, queued and locked Neo input, and
 rendered counter/settings targets. Source changes retain both manual and
-interruption pauses, then resume the selected soundtrack. The 1.9 candidate packages carry these features. Publication evidence is
-recorded separately.
+interruption pauses, then resume the selected soundtrack. The published 1.9
+packages carry these features. See the
+[distribution record](ReleaseReadiness/1.9Build75Distribution.md) for signing,
+notarisation and live-update checks.

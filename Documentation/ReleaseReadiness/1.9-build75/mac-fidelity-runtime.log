@@ -1,0 +1,8 @@
+UI test windows: offscreen; audio: muted
+PASS native counter glyphs, 0/1/99/999/unlimited, Classic/Neo/21 skills, three sizes and stable accessible targets
+PASS original MousePress sample, 24-step octave pitches, volume/mute/throttle/replay and actual Classic/queued/locked Neo input
+PASS 25 available music source transitions and settings applied during shuffled playback
+PASS music source changes retain user/interruption pause and resume the selected source
+PASS 31 lossless Mac files, all six campaigns, seasonal Mac cycle, special themes, pause/resume and native sequel routing
+PASS rendered Graphics/Audio preferences, choice pages and input actions
+PASS release candidate scope: mac-fidelity

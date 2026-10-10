@@ -1,0 +1,14 @@
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.000s
+
+OK
+PASS 120 Lemmings 2 fixture hashes and 70 carry-over fixture hashes
+PASS incomplete campaign rejected in strict mode
+PASS changed carry-over levelSHA256 rejected
+PASS changed carry-over expectedSaved rejected
+PASS changed carry-over version rejected
+PASS changed carry-over population rejected
+PASS duplicate starting population rejected
+PASS orphan carry-over witness rejected
+PASS valid carry-over route accepted, strict gaps and six damaged cases rejected

@@ -1,0 +1,16 @@
+PASS targeting presets, saved Custom state and readable icon migration
+PASS interface size persistence, migration and presets
+PASS independent reduced effects, migration, persistence and preserved controls
+PASS HD defaults, legacy preference migration and saved old-school mode
+PASS modern defaults, OG bundle, saved preference and preserved machine/volumes
+PASS pointer capture defaults and saved opt-out
+PASS the options offered follow the data installed
+PASS sources that are not decoded yet are not offered
+PASS artwork, music and sound can come from different machines
+PASS settings pointing at missing data are corrected
+PASS a machine preset fills the settings in
+PASS supplied remixes and artwork are offered alongside the originals
+PASS settings survive being saved and loaded
+PASS settings written by an older build still load
+PASS a removed source falls back without discarding other settings
+Classic settings tests passed.

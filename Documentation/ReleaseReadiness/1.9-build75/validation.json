@@ -1,0 +1,27 @@
+{
+  "sourceCommit": "6eb9e174b9663f3dc3f85aff62cfa5f923b718c5",
+  "minorAuditPassed": 48,
+  "sourceDrift": 0,
+  "nativeReleaseScopes": [
+    "mac-fidelity",
+    "exit-progress",
+    "updates",
+    "release-ui",
+    "music"
+  ],
+  "releaseToolTests": 36,
+  "L2StandaloneWins": 120,
+  "L2CarryOverVariants": 70,
+  "L2TribeChains": 12,
+  "L3StandaloneWins": 74,
+  "L3MissingStandaloneWins": 16,
+  "broadAuditGroupsNotRun": [
+    "replay-movies",
+    "mac-app-integration",
+    "local-performance-measurement",
+    "sequel-views",
+    "arcade-records"
+  ],
+  "signedShippingAppLaunch": "not-run; requires a foreground window",
+  "physicalHardwareAndListening": "unverified"
+}

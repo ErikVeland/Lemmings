@@ -20,8 +20,8 @@ commit the key or pass the key value as a command argument.
 
 ## Current releases
 
-Public 1.8.5 build 74 is the current release. The
-[1.8.5 distribution record](ReleaseReadiness/1.8.5Build74Distribution.md) covers
+Public 1.9 build 75 is the current release. The
+[1.9 distribution record](ReleaseReadiness/1.9Build75Distribution.md) covers
 the notarised archives, signed live feed and validation limits. Publish an
 appcast only with its matching signed and notarised archive.
 
@@ -40,11 +40,11 @@ home screen. Scheduled checks use a quiet reminder. Selecting the icon or
 a version, dismissing the alert or ending a failed session clears its reminder.
 A failed network check does not invent availability.
 
-The next source revision retains a single manual request while Sparkle is busy
+Version 1.9 retains a single manual request while Sparkle is busy
 checking the feed or downloading automatically. Both entry points use that request;
 it runs when Sparkle's `canCheckForUpdates` becomes true. Further clicks can bring
-existing update controls forward. This fix is not included in the published 1.8.5
-archives. It follows Sparkle's [gentle reminder lifecycle](https://sparkle-project.org/documentation/gentle-reminders/).
+existing update controls forward. This fix ships in 1.9. It follows Sparkle's
+[gentle reminder lifecycle](https://sparkle-project.org/documentation/gentle-reminders/).
 
 Run `TEST_SCOPE=updates zsh Scripts/run-app-integration-tests.sh` for the muted,
 offscreen regression checks. They exercise busy checks, repeated clicks, automatic

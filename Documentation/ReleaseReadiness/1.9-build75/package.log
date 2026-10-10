@@ -1,0 +1,30 @@
+PASS 294 proofs, 303 rescue records, and replay hashes
+PASS universal macOS 12.3 package, hosted endpoint, current proofs/hints/journey, full music and optional Game Center
+PASS 495 music versions, 422 gain/loop profiles, playback hashes, rescue MP3, sequel assets and unchanged build sources
+main: 54 versions, 5.6 MB
+Processing: /Users/veland/Lemmings/.build/release-1.9/standard/Ultimate Lemmings.app
+Processing: /Users/veland/Lemmings/.build/release-1.9/standard/Ultimate Lemmings.app
+The staple and validate action worked!
+Processing: /Users/veland/Lemmings/.build/release-1.9/standard/Ultimate Lemmings.app
+The validate action worked!
+/Users/veland/Lemmings/.build/release-1.9/verify-standard/Ultimate Lemmings.app: valid on disk
+/Users/veland/Lemmings/.build/release-1.9/verify-standard/Ultimate Lemmings.app: satisfies its Designated Requirement
+Processing: /Users/veland/Lemmings/.build/release-1.9/verify-standard/Ultimate Lemmings.app
+The validate action worked!
+/Users/veland/Lemmings/.build/release-1.9/verify-standard/Ultimate Lemmings.app: accepted
+source=Notarized Developer ID
+origin=Developer ID Application: Erik Veland (54WU29TRTY)
+PASS archive integrity and size: UltimateLemmings-1.9-build75.zip 2043795519
+Processing: /Users/veland/Lemmings/.build/release-1.9/slim/Ultimate Lemmings.app
+Processing: /Users/veland/Lemmings/.build/release-1.9/slim/Ultimate Lemmings.app
+The staple and validate action worked!
+Processing: /Users/veland/Lemmings/.build/release-1.9/slim/Ultimate Lemmings.app
+The validate action worked!
+/Users/veland/Lemmings/.build/release-1.9/verify-slim/Ultimate Lemmings.app: valid on disk
+/Users/veland/Lemmings/.build/release-1.9/verify-slim/Ultimate Lemmings.app: satisfies its Designated Requirement
+Processing: /Users/veland/Lemmings/.build/release-1.9/verify-slim/Ultimate Lemmings.app
+The validate action worked!
+/Users/veland/Lemmings/.build/release-1.9/verify-slim/Ultimate Lemmings.app: accepted
+source=Notarized Developer ID
+origin=Developer ID Application: Erik Veland (54WU29TRTY)
+PASS archive integrity and size: UltimateLemmings-1.9-build75-slim.zip 259739178

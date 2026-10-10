@@ -1,0 +1,11 @@
+PASS 120 routes replay the same as version 1 and as converted events
+PASS version 2 rejects refused, off-viewport and out-of-order events; a lenient replay drops without a trace
+PASS undamaged base route accepted
+PASS changed starting population rejected
+PASS changed level hash rejected
+PASS changed saved count rejected
+PASS changed tick count rejected
+PASS rejected input rejected
+PASS out-of-order inputs rejected
+PASS pointer outside the viewport rejected
+PASS seven damaged Lemmings 2 routes rejected

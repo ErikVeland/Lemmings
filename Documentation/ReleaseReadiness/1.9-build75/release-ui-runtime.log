@@ -1,0 +1,6 @@
+UI test windows: offscreen; audio: muted
+PASS seven home content families and the Settings gear use distinct targets
+PASS Tribes Complete and Chronicles Beta in the bundled catalogue, library, home and window
+PASS home families filter the typed catalogue without changing release identities
+PASS release notes stay clipped and scrollable at three sizes; Continue remains visible and usable
+PASS release candidate scope: release-ui

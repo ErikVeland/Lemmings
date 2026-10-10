@@ -1,0 +1,202 @@
+PASS plain fall 64/65/99/100-pixel landing boundaries and stunned recovery
+PASS native state 107 entry, displacement, rise, exit, single-wall walking and Runner isolation
+PASS Classic blocker grid, walker ordering and continuous builder reflection
+PASS original control hit regions, double-click nuke, selection priority and native sound events
+PASS native stacker and platformer masks, both directions, phases, continuation and steel
+PASS timed trap phases, paired teleporters and valve-controlled launchers
+PASS cannon and catapult loading, held rail controls, rider alignment and launch
+PASS chain capture, fan response, rider movement and release control
+PASS Superlem preparation, cursor flight and landing; Archer aim and terrain impact
+PASS Skier flat speed, terrain contact and ledge launch
+PASS Roller ground height, cruise speed and directional wall impacts
+PASS Jet Pack wall, roof and floor reflections
+PASS authored play bounds independent of terrain allocation
+PASS replay witness rejects out-of-order inputs
+PASS Magno Booter floor, wall, ceiling, both directions and loss of contact
+PASS native Stone diamond, major-axis path and impact origins
+PASS Thrower and Spearer launch phases, impacts and terrain addition
+PASS ordinary ice slipping, Skater travel and Slider ledge descent
+PASS Climber wall cadence, ceiling release, top transfer and Rock Climber overhangs in both directions
+PASS non-Classic nuke timing and native skill sound selection
+PASS explosion animation frames, signed positions, hidden points and validation
+PASS Shimmier roof edges, wall transfers, Slider transitions and ceiling rises in both directions
+PASS native Jumper, Hopper, Shimmier and Diver assignment clearance
+PASS Diver timing, Roller collision, Shimmier ceiling traversal and Jet Pack fuel expiry
+PASS multiple entrances share population, cadence and native round-robin order
+PASS trap capture, busy exclusion, rearming and launcher velocity
+PASS all sixteen native trampoline launch segments
+PASS Hopper launch, landing, repeated hops and inventory
+PASS Swimmer permanent ability, water crossing, shore exit and ordinary drowning
+PASS Attractor capture, interrupt and dancer release
+PASS distinct fill, sand and glue rules, emission limits and settling
+PASS Ballooner inflation, upward drift, roof contact and falling recovery
+PASS Planter growth frames, native terrain and completion timing
+PASS Rock Climber permanent ability, wall ascent and hoist
+PASS native Rock entry rear column depths 1/7, clear depth8, both directions and Walker entry
+PASS Roper aim, anchor, range limit, terrain and inventory
+PASS distinct Icarus and Hang Glider motion; Kayaker rescue, deployment, shore and exit
+PASS dry eight-pixel kayak bank exit and wet solid-bank exit
+PASS Bazooka and Mortar launch, projectile motion, terrain impact and completion
+PASS fan ramp, range, signed drag, direction and Parachuter landing
+PASS Bomber frame timing, native terrain mask, flash, self and neighbour impulses
+PASS Laser Blaster and Flame Thrower terrain, steel and termination
+PASS Scooper, Fencer and Club Basher native terrain cuts, phases, steel and inventory
+PASS Runner speed, inventory, stronger jump and persistent ability
+PASS Jumper, Hopper and Shimmier persistent catches and native priority
+PASS Jumper launch, landing, inventory and swept wall/floor/ceiling collision
+PASS Stomper native mask, action phases, both directions, steel, falling and inventory
+PASS favorApproachingLemmings prefers the lemming still walking toward the wall
+PASS same-direction lemming pack keeps the plain nearest-distance pick
+PASS favorApproachingLemmings falls back to the only candidate when nothing approaches
+PASS Lemmings 2 targeting favours a follower behind a builder
+PASS native L2 walking, rescue, inventory, terrain, replay and nuke tests
+PASS native Scooper mask origins and sustained digging in both directions
+PASS Laser Blaster and Flame Thrower terrain, steel and termination
+PASS Bomber frame timing, native terrain mask, flash, self and neighbour impulses
+PASS Planter growth frames, native terrain and completion timing
+PASS Thrower and Spearer launch phases, impacts and terrain addition
+PASS Bazooka and Mortar launch, projectile motion, terrain impact and completion
+PASS Scooper, Fencer and Club Basher native terrain cuts, phases, steel and inventory
+PASS Stomper native mask, action phases, both directions, steel, falling and inventory
+PASS native stacker and platformer masks, both directions, phases, continuation and steel
+PASS original L2 masks and builder, digger, miner, exploder action phases
+PASS Classic 1: Do You Remember?, 3 object parts
+PASS Classic 2: Mr Lemmy Lives Next Door, 46 object parts
+PASS Classic 3: LEMTRIS, 140 object parts
+PASS Classic 4: Tension Sheet, Good Idea, 51 object parts
+PASS Classic 5: The Magnificent Severn, 147 object parts
+PASS Classic 6: The Starry Threshold, 186 object parts
+PASS Classic 7: So close but so far away, 70 object parts
+PASS Classic 8: The Secret Of LEMH, 55 object parts
+PASS Classic 9: Flying The Mad Pursuit, 70 object parts
+PASS Classic 10: What`s it like up there?, 79 object parts
+PASS all 120 campaign levels load and advance through native physics
+PASS all four original practice maps, selected skills and separate progress
+PASS beach-01: 42 rescued, 8100 ticks, recorded pointer and skill inputs
+PASS beach-02: 60 rescued, 2066 ticks, recorded pointer and skill inputs
+PASS beach-03: 1 rescued, 726 ticks, recorded pointer and skill inputs
+PASS beach-04: 1 rescued, 864 ticks, recorded pointer and skill inputs
+PASS beach-05: 54 rescued, 1987 ticks, recorded pointer and skill inputs
+PASS beach-06: 54 rescued, 1670 ticks, recorded pointer and skill inputs
+PASS beach-07: 1 rescued, 1055 ticks, recorded pointer and skill inputs
+PASS beach-08: 1 rescued, 1505 ticks, recorded pointer and skill inputs
+PASS beach-09: 1 rescued, 4796 ticks, recorded pointer and skill inputs
+PASS beach-10: 1 rescued, 2140 ticks, recorded pointer and skill inputs
+PASS cavelem-01: 52 rescued, 1752 ticks, recorded pointer and skill inputs
+PASS cavelem-02: 1 rescued, 1337 ticks, recorded pointer and skill inputs
+PASS cavelem-03: 1 rescued, 555 ticks, recorded pointer and skill inputs
+PASS cavelem-04: 26 rescued, 1534 ticks, recorded pointer and skill inputs
+PASS cavelem-05: 2 rescued, 580 ticks, recorded pointer and skill inputs
+PASS cavelem-06: 2 rescued, 2503 ticks, recorded pointer and skill inputs
+PASS cavelem-07: 1 rescued, 8100 ticks, recorded pointer and skill inputs
+PASS cavelem-08: 1 rescued, 2059 ticks, recorded pointer and skill inputs
+PASS cavelem-09: 1 rescued, 1681 ticks, recorded pointer and skill inputs
+PASS cavelem-10: 1 rescued, 917 ticks, recorded pointer and skill inputs
+PASS circus-01: 2 rescued, 8100 ticks, recorded pointer and skill inputs
+PASS circus-02: 1 rescued, 721 ticks, recorded pointer and skill inputs
+PASS circus-03: 1 rescued, 1029 ticks, recorded pointer and skill inputs
+PASS circus-04: 1 rescued, 800 ticks, recorded pointer and skill inputs
+PASS circus-05: 1 rescued, 1834 ticks, recorded pointer and skill inputs
+PASS circus-06: 3 rescued, 8985 ticks, recorded pointer and skill inputs
+PASS circus-07: 1 rescued, 3600 ticks, recorded pointer and skill inputs
+PASS circus-08: 1 rescued, 1338 ticks, recorded pointer and skill inputs
+PASS circus-09: 1 rescued, 268 ticks, recorded pointer and skill inputs
+PASS circus-10: 1 rescued, 8100 ticks, recorded pointer and skill inputs
+PASS classic-01: 60 rescued, 3074 ticks, recorded pointer and skill inputs
+PASS classic-02: 13 rescued, 4500 ticks, recorded pointer and skill inputs
+PASS classic-03: 1 rescued, 3600 ticks, recorded pointer and skill inputs
+PASS classic-04: 1 rescued, 4500 ticks, recorded pointer and skill inputs
+PASS classic-05: 1 rescued, 4500 ticks, recorded pointer and skill inputs
+PASS classic-06: 60 rescued, 3651 ticks, recorded pointer and skill inputs
+PASS classic-07: 1 rescued, 7200 ticks, recorded pointer and skill inputs
+PASS classic-08: 1 rescued, 1584 ticks, recorded pointer and skill inputs
+PASS classic-09: 1 rescued, 2425 ticks, recorded pointer and skill inputs
+PASS classic-10: 1 rescued, 4500 ticks, recorded pointer and skill inputs
+PASS egyptian-01: 40 rescued, 8100 ticks, recorded pointer and skill inputs
+PASS egyptian-02: 20 rescued, 8100 ticks, recorded pointer and skill inputs
+PASS egyptian-03: 1 rescued, 1830 ticks, recorded pointer and skill inputs
+PASS egyptian-04: 58 rescued, 1690 ticks, recorded pointer and skill inputs
+PASS egyptian-05: 1 rescued, 2700 ticks, recorded pointer and skill inputs
+PASS egyptian-06: 1 rescued, 8100 ticks, recorded pointer and skill inputs
+PASS egyptian-07: 3 rescued, 8100 ticks, recorded pointer and skill inputs
+PASS egyptian-08: 1 rescued, 8100 ticks, recorded pointer and skill inputs
+PASS egyptian-09: 1 rescued, 2461 ticks, recorded pointer and skill inputs
+PASS egyptian-10: 1 rescued, 1036 ticks, recorded pointer and skill inputs
+PASS highland-01: 60 rescued, 1941 ticks, recorded pointer and skill inputs
+PASS highland-02: 1 rescued, 1030 ticks, recorded pointer and skill inputs
+PASS highland-03: 1 rescued, 1237 ticks, recorded pointer and skill inputs
+PASS highland-04: 1 rescued, 844 ticks, recorded pointer and skill inputs
+PASS highland-05: 1 rescued, 693 ticks, recorded pointer and skill inputs
+PASS highland-06: 1 rescued, 2700 ticks, recorded pointer and skill inputs
+PASS highland-07: 3 rescued, 4500 ticks, recorded pointer and skill inputs
+PASS highland-08: 1 rescued, 1756 ticks, recorded pointer and skill inputs
+PASS highland-09: 2 rescued, 1613 ticks, recorded pointer and skill inputs
+PASS highland-10: 1 rescued, 1563 ticks, recorded pointer and skill inputs
+PASS medieval-01: 2 rescued, 5400 ticks, recorded pointer and skill inputs
+PASS medieval-02: 1 rescued, 2249 ticks, recorded pointer and skill inputs
+PASS medieval-03: 1 rescued, 1680 ticks, recorded pointer and skill inputs
+PASS medieval-04: 1 rescued, 1068 ticks, recorded pointer and skill inputs
+PASS medieval-05: 1 rescued, 1558 ticks, recorded pointer and skill inputs
+PASS medieval-06: 1 rescued, 825 ticks, recorded pointer and skill inputs
+PASS medieval-07: 1 rescued, 3600 ticks, recorded pointer and skill inputs
+PASS medieval-08: 1 rescued, 1221 ticks, recorded pointer and skill inputs
+PASS medieval-09: 1 rescued, 1403 ticks, recorded pointer and skill inputs
+PASS medieval-10: 1 rescued, 922 ticks, recorded pointer and skill inputs
+PASS outdoor-01: 59 rescued, 2033 ticks, recorded pointer and skill inputs
+PASS outdoor-02: 17 rescued, 5400 ticks, recorded pointer and skill inputs
+PASS outdoor-03: 1 rescued, 1892 ticks, recorded pointer and skill inputs
+PASS outdoor-04: 1 rescued, 2775 ticks, recorded pointer and skill inputs
+PASS outdoor-05: 1 rescued, 2700 ticks, recorded pointer and skill inputs
+PASS outdoor-06: 1 rescued, 1462 ticks, recorded pointer and skill inputs
+PASS outdoor-07: 1 rescued, 4051 ticks, recorded pointer and skill inputs
+PASS outdoor-08: 1 rescued, 2563 ticks, recorded pointer and skill inputs
+PASS outdoor-09: 1 rescued, 4500 ticks, recorded pointer and skill inputs
+PASS outdoor-10: 1 rescued, 1528 ticks, recorded pointer and skill inputs
+PASS polar-01: 60 rescued, 1829 ticks, recorded pointer and skill inputs
+PASS polar-02: 7 rescued, 4500 ticks, recorded pointer and skill inputs
+PASS polar-03: 1 rescued, 1691 ticks, recorded pointer and skill inputs
+PASS polar-04: 42 rescued, 4500 ticks, recorded pointer and skill inputs
+PASS polar-05: 1 rescued, 1576 ticks, recorded pointer and skill inputs
+PASS polar-06: 1 rescued, 1864 ticks, recorded pointer and skill inputs
+PASS polar-07: 1 rescued, 1803 ticks, recorded pointer and skill inputs
+PASS polar-08: 1 rescued, 3600 ticks, recorded pointer and skill inputs
+PASS polar-09: 1 rescued, 292 ticks, recorded pointer and skill inputs
+PASS polar-10: 1 rescued, 795 ticks, recorded pointer and skill inputs
+PASS shadow-01: 1 rescued, 2149 ticks, recorded pointer and skill inputs
+PASS shadow-02: 7 rescued, 8115 ticks, recorded pointer and skill inputs
+PASS shadow-03: 30 rescued, 2700 ticks, recorded pointer and skill inputs
+PASS shadow-04: 1 rescued, 407 ticks, recorded pointer and skill inputs
+PASS shadow-05: 1 rescued, 1157 ticks, recorded pointer and skill inputs
+PASS shadow-06: 1 rescued, 8100 ticks, recorded pointer and skill inputs
+PASS shadow-07: 1 rescued, 1111 ticks, recorded pointer and skill inputs
+PASS shadow-08: 1 rescued, 2429 ticks, recorded pointer and skill inputs
+PASS shadow-09: 1 rescued, 1676 ticks, recorded pointer and skill inputs
+PASS shadow-10: 1 rescued, 239 ticks, recorded pointer and skill inputs
+PASS space-01: 51 rescued, 3440 ticks, recorded pointer and skill inputs
+PASS space-02: 1 rescued, 1105 ticks, recorded pointer and skill inputs
+PASS space-03: 1 rescued, 1701 ticks, recorded pointer and skill inputs
+PASS space-04: 1 rescued, 3065 ticks, recorded pointer and skill inputs
+PASS space-05: 1 rescued, 1498 ticks, recorded pointer and skill inputs
+PASS space-06: 1 rescued, 794 ticks, recorded pointer and skill inputs
+PASS space-07: 1 rescued, 3600 ticks, recorded pointer and skill inputs
+PASS space-08: 1 rescued, 1661 ticks, recorded pointer and skill inputs
+PASS space-09: 1 rescued, 2283 ticks, recorded pointer and skill inputs
+PASS space-10: 1 rescued, 1008 ticks, recorded pointer and skill inputs
+PASS sports-01: 2 rescued, 8100 ticks, recorded pointer and skill inputs
+PASS sports-02: 56 rescued, 8100 ticks, recorded pointer and skill inputs
+PASS sports-03: 1 rescued, 8100 ticks, recorded pointer and skill inputs
+PASS sports-04: 1 rescued, 2376 ticks, recorded pointer and skill inputs
+PASS sports-05: 1 rescued, 8100 ticks, recorded pointer and skill inputs
+PASS sports-06: 1 rescued, 5400 ticks, recorded pointer and skill inputs
+PASS sports-07: 1 rescued, 7178 ticks, recorded pointer and skill inputs
+PASS sports-08: 1 rescued, 1235 ticks, recorded pointer and skill inputs
+PASS sports-09: 1 rescued, 2000 ticks, recorded pointer and skill inputs
+PASS sports-10: 1 rescued, 965 ticks, recorded pointer and skill inputs
+PASS 120 distinct recorded campaign level completions
+PASS cavelem 1: 52 rescued, 1752 ticks, survivor carry-over verified
+PASS cavelem 2: 32 rescued, 2199 ticks, survivor carry-over verified
+PASS cavelem 3: 12 rescued, 1102 ticks, survivor carry-over verified
+PASS circus 1: 2 rescued, 8100 ticks, survivor carry-over verified
+PASS circus 2: 2 rescued, 1218 ticks, survivor carry-over verified
+PASS twelve-tribe progress, native medal thresholds, save validation and ending eligibility
+PASS original first L2 level completed natively: 60 rescued, 3074 ticks

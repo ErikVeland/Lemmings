@@ -33,7 +33,7 @@ or their result screens across Classic, fan packs, NeoLemmix, Lemmings 2 and 3.
 - [1.5 NeoLemmix source handoff](Documentation/ReleaseReadiness/1.5NeoLemmixHandoff.md) — verified source and corpus evidence, open release gates and non-claims.
 - [Precision Zoom](Documentation/PrecisionZoom.md) — Z, Shift-Z and scroll controls, earnings and retry rules.
 - [Play insights](Documentation/PlayInsights.md) — home-screen saved counts, consent and collector setup.
-- [Release scope](Documentation/ReleaseScope.md) — the meaning of Complete, Playable and Preview.
+- [Release scope](Documentation/ReleaseScope.md) — the meaning of Complete, Playable, Beta and Preview.
 - [Content roadmap](Documentation/ContentUniverseRoadmap.md) — the path towards broader 2D content.
 - [Level browser](Documentation/LevelBrowser.md) — CoverFlow controls, content boundaries and current evidence.
 - [Beta testing](Documentation/BetaTesting.md) — local package and validation procedure.

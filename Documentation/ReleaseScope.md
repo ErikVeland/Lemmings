@@ -1,10 +1,11 @@
 # Release scope
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-The 1.9 build 75 candidate marks Lemmings 2: The Tribes **Complete** and
+The public 1.9 build 75 release marks Lemmings 2: The Tribes **Complete** and
 Lemmings 3: Chronicles **Beta**, as approved by the owner on 10 October 2026.
-The current public release remains 1.8.5 build 74 until the 1.9 packages and
-signed update feed are published. See the [1.9 notes](ReleaseNotes-1.9-build75.md).
+The signed, notarised downloads and live update feed passed publication checks.
+See the [distribution record](ReleaseReadiness/1.9Build75Distribution.md) and
+[1.9 notes](ReleaseNotes-1.9-build75.md).
 NeoLemmix remains Beta. The release adds original Macintosh music, release-rate
 pitch feedback, optional Macintosh counters, full Hot Seat Resume rosters and
 shared saved-run fixes. See [Macintosh fidelity](MacintoshFidelity.md).

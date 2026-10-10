@@ -1,0 +1,11 @@
+UI test windows: offscreen; audio: muted
+PASS classic Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS classic Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS lemmings2 Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS lemmings2 Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS lemmings3 Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS lemmings3 Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS all three engine completion callbacks persist Journey wins before Next, preserve turn ownership and reject stale results; result Menu/Q/Escape exit
+PASS Escape returns directly to the main menu and saves the active run
+PASS Classic/L2/L3 Resume labels show two/eight players for Journey/Session and level saves; scaled renders and mouse targets
+PASS release candidate scope: exit-progress

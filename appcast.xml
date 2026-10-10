@@ -1,7 +1,32 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
         <title>Ultimate Lemmings</title>
+        <item>
+            <title>1.9</title>
+            <pubDate>Sat, 10 Oct 2026 14:50:17 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>75</sparkle:version>
+            <sparkle:shortVersionString>1.9</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>Lemmings 2: The Tribes is complete and leaves beta. Lemmings 3: Chronicles moves from Preview to Beta. This update also restores more of the original Macintosh presentation and improves saved runs, Hot Seat, music and updates.</p>
+<h3>The Tribes is complete</h3>
+<p>All 120 levels have preserved winning routes. All twelve tribes have continuous ten-level runs, with verified survivor carry-over. This release includes the latest climbing, stone-collision and native runtime corrections.</p>
+<h3>Chronicles moves to Beta</h3>
+<p>Lemmings 3: Chronicles now carries the Beta label throughout the library and native game window. The retained evidence covers 74 of 90 standalone wins. Work continues on the remaining routes, original-engine fidelity and endings.</p>
+<h3>Original Macintosh presentation</h3>
+<p>Choose <b>Macintosh (original)</b> in Audio for 31 arrangements rendered with the game's original sampled instruments: 21 Classic, six Oh No! and four Xmas tunes. Release-rate changes use the original MousePress sound and changing pitch. Choose <b>Original Macintosh</b> under Graphics → Counters for the original skill-counter digits. These choices are independent of terrain artwork.</p>
+<h3>Saved runs and Hot Seat</h3>
+<p>Resume shows every participating player's initials in turn order. Long rosters wrap inside the button. Journey wins save at completion, before Next level. A visible Menu action, Q and Escape return to the library with the saved run. Classic, Lemmings 2 and Lemmings 3 share these controls.</p>
+<h3>Music and update reliability</h3>
+<p>Music-source changes retain manual and interruption pauses. Journey and shuffled music playback retain their continuity. The download icon and Check for Updates share a recoverable flow after repeated clicks, cancellation or a busy update.</p>
+<h3>Compatibility and validation scope</h3>
+<p>Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. NeoLemmix remains Beta. The slim download includes original Mac music and essential soundtracks. Automatic updates retain the full soundtrack bundle.</p>
+<p>The L2 recorded tribe chains finish with one survivor. The golden-talisman ark ending and complete original-hardware fidelity remain separate validation. L3 retains sixteen missing standalone routes and open campaign/ending checks. Original-Mac listening comparison, physical Intel, minimum-macOS, controller and VoiceOver listening journeys remain unverified.</p>
+<p class="meta">Build: 75<br>Release commit: 6eb9e174b9663f3dc3f85aff62cfa5f923b718c5<br>Release base: v1.8.5</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9/UltimateLemmings-1.9-build75.zip" length="2043795519" type="application/octet-stream" sparkle:edSignature="EQVuKDiz46Bi4yDjfpPs1bGBA6ezJ6rJs+o0PlbTIOFxxEJIoXbbAlpQFTmPgVvWdbZxU7IYJRBFPo5KhRoxCA=="/>
+        </item>
         <item>
             <title>1.8.5</title>
             <pubDate>Sat, 10 Oct 2026 01:53:44 +1000</pubDate>
@@ -20,7 +45,7 @@
 &lt;p&gt;Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. NeoLemmix remains Beta. Lemmings 2 and Lemmings 3 remain Preview. The slim download includes essential music and offers optional soundtrack libraries. Automatic updates retain the full soundtrack bundle.&lt;/p&gt;
 &lt;p class="meta"&gt;Build: 74&lt;br&gt;Release commit: ecafd64c09ca0f87e3ad45d842683ab9b2a4b11d&lt;br&gt;Release base: v1.8.4&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
 </description>
-            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.5/UltimateLemmings-1.8.5-build74.zip" length="1944858923" type="application/octet-stream" sparkle:edSignature="DJIC4eyCco3tq5/TAT5r/0VHYT7RjLqeKuVaBarH4efmOhJzYpoe0XzBYyhNLV/K1dMtOy3946iPs5iYy4RABg==" />
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.5/UltimateLemmings-1.8.5-build74.zip" length="1944858923" type="application/octet-stream" sparkle:edSignature="DJIC4eyCco3tq5/TAT5r/0VHYT7RjLqeKuVaBarH4efmOhJzYpoe0XzBYyhNLV/K1dMtOy3946iPs5iYy4RABg=="/>
         </item>
         <item>
             <title>1.8.4</title>
@@ -46,9 +71,9 @@
 &lt;p&gt;Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. NeoLemmix remains Beta. Lemmings 2 and Lemmings 3 remain Preview. The slim download includes essential music and offers optional soundtrack libraries. Automatic updates retain the full soundtrack bundle.&lt;/p&gt;
 &lt;p class="meta"&gt;Build: 73&lt;br&gt;Release commit: aff210c0d1aa1a67c281e1e9240d3c2516db1003&lt;br&gt;Release base: v1.8.3&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
 </description>
-            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.4/UltimateLemmings-1.8.4-build73.zip" length="1944808624" type="application/octet-stream" sparkle:edSignature="SRZwmFpSDD9qi1jvTla2m6D0j3E1bnC7pvjlT9E0c+ferFPfKHX4oRjxRRUK7ZYA7gCdj0aI9ySaKlKU7ZoNCQ==" />
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.4/UltimateLemmings-1.8.4-build73.zip" length="1944808624" type="application/octet-stream" sparkle:edSignature="SRZwmFpSDD9qi1jvTla2m6D0j3E1bnC7pvjlT9E0c+ferFPfKHX4oRjxRRUK7ZYA7gCdj0aI9ySaKlKU7ZoNCQ=="/>
         </item>
-        <item>
+    <item>
             <title>1.8.3</title>
             <pubDate>Thu, 08 Oct 2026 18:46:43 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -74,7 +99,7 @@
 </description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.3/UltimateLemmings-1.8.3-build72.zip" length="1944623460" type="application/octet-stream" sparkle:edSignature="G89mKt64zpK9v+RZ0R2dsbIYDHf49pO4d07u7dahTg5tLWd6b4tHXCH7iGwe0ZCsWQtrtVbOJ8qgLkNvGernBw==" />
         </item>
-    <item>
+<item>
             <title>1.8.1</title>
             <pubDate>Tue, 06 Oct 2026 14:52:32 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -101,7 +126,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.1/Ultimate%20Lemmings65-39.delta" sparkle:deltaFrom="39" length="1519960290" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="fPMdTZ4ISfhY+8GosNTa5GoDPFUtciqB8FWdeQHxDVy+9rOaNPGJyxW53aSdduAiMSH/a8iE0ai0He0AreszCw==" />
             </sparkle:deltas>
         </item>
-    <item>
+<item>
             <title>1.8</title>
             <pubDate>Mon, 05 Oct 2026 18:24:15 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>

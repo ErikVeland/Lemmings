@@ -1,0 +1,10 @@
+UI test windows: offscreen; audio: muted
+PASS seven home content families and the Settings gear use distinct targets
+PASS 25 available music source transitions and settings applied during shuffled playback
+PASS seasonal-to-fan handover retains music and starts one destination crossfade
+PASS saved silence, volume and preset; Macintosh/Amiga sound coverage
+PASS global mute persists and title suspension stops all players
+PASS Classic silence/beat pause, setting changes, interruption silence, resume and funeral result
+PASS green handover identity, mouse retry of the previous level as UVA, rightmost begin action, shared progress and solo boundaries
+PASS Hot Seat journey names both retries; same-player retry restarts paused with the attempt owner
+PASS release candidate scope: music

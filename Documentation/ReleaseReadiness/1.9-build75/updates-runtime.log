@@ -1,0 +1,4 @@
+UI test windows: offscreen; audio: muted
+PASS busy icon/menu checks, coalesced clicks, repeated focus, automatic notes, session cleanup and retry without restart
+PASS seven home content families and the Settings gear use distinct targets
+PASS release candidate scope: updates

@@ -1,0 +1,23 @@
+PASS final audit and all five offscreen release UI scopes
+Wrote 1 new update, updated 0 existing updates, and removed 4 old updates in appcast.xml
+Wrote signed appcast: /Users/veland/Lemmings/appcast.xml
+PASS all 6 previous feed entries and enclosure attributes retained
+PASS Ed25519 archive signature against the shipping app's public key
+PASS local signatures, archive digests and preserved update entries
+PASS 1.9 update inputs: version 1.9, build 75, appcast items 7
+PASS data-independent 1.9 release checks
+PASS publication inputs for 1.9 build 75 at 6eb9e174b9663f3dc3f85aff62cfa5f923b718c5
+From https://github.com/ErikVeland/Lemmings
+ * branch              main       -> FETCH_HEAD
+error: src refspec 6eb9e174b9663f3dc3f85aff62cfa5f923b718c5efs/heads/main does not match any
+error: failed to push some refs to 'https://github.com/ErikVeland/Lemmings.git'
+PASS publication inputs for 1.9 build 75 at 6eb9e174b9663f3dc3f85aff62cfa5f923b718c5
+From https://github.com/ErikVeland/Lemmings
+ * branch              main       -> FETCH_HEAD
+To https://github.com/ErikVeland/Lemmings.git
+   cfc04182..6eb9e174  6eb9e174b9663f3dc3f85aff62cfa5f923b718c5 -> main
+==> Creating GitHub release v1.9
+https://github.com/ErikVeland/Lemmings/releases/tag/v1.9
+==> Publishing appcast.xml to the main branch
+{"content":{"name":"appcast.xml","path":"appcast.xml","sha":"83bcef53197e84542020a259219224b3eb14607f","size":24772,"url":"https://api.github.com/repos/ErikVeland/Lemmings/contents/appcast.xml?ref=main","html_url":"https://github.com/ErikVeland/Lemmings/blob/main/appcast.xml","git_url":"https://api.github.com/repos/ErikVeland/Lemmings/git/blobs/83bcef53197e84542020a259219224b3eb14607f","download_url":"https://raw.githubusercontent.com/ErikVeland/Lemmings/main/appcast.xml","type":"file","_links":{"self":"https://api.github.com/repos/ErikVeland/Lemmings/contents/appcast.xml?ref=main","git":"https://api.github.com/repos/ErikVeland/Lemmings/git/blobs/83bcef53197e84542020a259219224b3eb14607f","html":"https://github.com/ErikVeland/Lemmings/blob/main/appcast.xml"}},"commit":{"sha":"79488a9dcf9320ef325f1aca29ab1d79095bc7b7","node_id":"C_kwDOUm6QmtoAKDc5NDg4YTlkY2Y5MzIwZWYzMjVmMWFjYTI5YWIxZDc5MDk1YmM3Yjc","url":"https://api.github.com/repos/ErikVeland/Lemmings/git/commits/79488a9dcf9320ef325f1aca29ab1d79095bc7b7","html_url":"https://github.com/ErikVeland/Lemmings/commit/79488a9dcf9320ef325f1aca29ab1d79095bc7b7","author":{"name":"Erik Veland","email":"erikveland@gmail.com","date":"2026-10-10T05:03:29Z"},"committer":{"name":"Erik Veland","email":"erikveland@gmail.com","date":"2026-10-10T05:03:29Z"},"tree":{"sha":"12962b4937a296024556ec9165e910250ec80a54","url":"https://api.github.com/repos/ErikVeland/Lemmings/git/trees/12962b4937a296024556ec9165e910250ec80a54"},"message":"Publish 1.9 update feed","parents":[{"sha":"6eb9e174b9663f3dc3f85aff62cfa5f923b718c5","url":"https://api.github.com/repos/ErikVeland/Lemmings/git/commits/6eb9e174b9663f3dc3f85aff62cfa5f923b718c5","html_url":"https://github.com/ErikVeland/Lemmings/commit/6eb9e174b9663f3dc3f85aff62cfa5f923b718c5"}],"verification":{"verified":false,"reason":"unsigned","signature":null,"payload":null,"verified_at":null}}}Published v1.9 and appcast.xml to ErikVeland/Lemmings
+PASS public release tag, both remote SHA256 digests/sizes/ZIP responses, and live main and raw Sparkle update feeds
