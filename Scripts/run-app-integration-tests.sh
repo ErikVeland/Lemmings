@@ -38,6 +38,7 @@ rsync -a --delete "$sparkle_framework" "$test_app/Contents/Frameworks/"
 resource_app="${LEMMINGS_TEST_APP:-$project_dir/.build/local/Ultimate Lemmings.app}"
 ln -sfn "$resource_app/Contents/Resources" "$test_app/Contents/Resources"
 test_flags=()
+if [[ "${TEST_SCOPE:-all}" == updates ]]; then test_flags+=(-D UPDATE_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == collections ]]; then test_flags+=(-D COLLECTION_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == release-notes ]]; then test_flags+=(-D RELEASE_NOTES_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == solution-audio ]]; then test_flags+=(-D SOLUTION_AUDIO_TESTS); fi

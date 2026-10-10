@@ -1,5 +1,6 @@
 // Appended to main.swift by the runner to exercise private app wiring directly.
 import ImageIO
+import Sparkle
 private struct IntegrationFailure: Error { let message: String }
 private func check(_ value: @autoclosure () throws -> Bool, _ message: String) throws {
   if try value() == false { throw IntegrationFailure(message: message) }
@@ -3242,7 +3243,8 @@ extension AppDelegate {
     let expectedFamilies = HomeContentFamily.allCases.map {
       $0.displayName.uppercased()
     }
-    let familyLines = Array(playfield.overlayLines.suffix(expectedFamilies.count))
+    try check(playfield.overlayLines.last == "COLLECTIONS", "The home screen omitted Collections")
+    let familyLines = Array(playfield.overlayLines.dropLast().suffix(expectedFamilies.count))
     try check(zip(familyLines, expectedFamilies).allSatisfy { line, family in
       line.hasPrefix(family)
     }, "The home screen did not show the seven content families in order")
@@ -6191,7 +6193,7 @@ Task { @MainActor in
     subject.prepareArcadeTests()
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
-    #if !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
+    #if !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -6202,7 +6204,11 @@ Task { @MainActor in
     try testPointerAssignment()
     #endif
     #endif
-    #if COLLECTION_TESTS
+    #if UPDATE_TESTS
+    try await testUpdateRequests()
+    try subject.testHomeSettingsButton()
+    print("Update integration tests passed.")
+    #elseif COLLECTION_TESTS
     try await subject.testLevelCollections()
     try subject.testScrollableReleaseNotes()
     try subject.testHotSeatBoundaries()
@@ -7016,4 +7022,108 @@ extension AppDelegate {
 
 func validateMusicRouting(_ condition: Bool, _ message: String) throws {
     try check(condition, message)
+}
+
+@MainActor private final class BusyUpdateChecker: AppUpdateChecking {
+  var canCheckForUpdates = false {
+    didSet { availabilityChanged?() }
+  }
+  var availabilityChanged: (@MainActor () -> Void)?
+  private(set) var checks = 0
+  private(set) var rejectedChecks = 0
+  private(set) var observations = 0
+  func checkForUpdates() {
+    if canCheckForUpdates { checks += 1 } else { rejectedChecks += 1 }
+  }
+  func observeAvailability(_ action: @escaping @MainActor () -> Void) -> NSKeyValueObservation? {
+    observations += 1
+    availabilityChanged = action
+    return nil
+  }
+}
+
+@MainActor private func testUpdateRequests() async throws {
+  let nativeUpdater = SPUStandardUpdaterController(startingUpdater: false,
+    updaterDelegate: nil, userDriverDelegate: nil).updater
+  var nativeAvailabilityEvents = 0
+  let nativeObservation = nativeUpdater.observeAvailability { nativeAvailabilityEvents += 1 }
+  func notifyAvailability() {
+    nativeUpdater.willChangeValue(forKey: "canCheckForUpdates")
+    nativeUpdater.didChangeValue(forKey: "canCheckForUpdates")
+  }
+  notifyAvailability()
+  await Task.yield()
+  try await Task.sleep(nanoseconds: 20_000_000)
+  try check(nativeAvailabilityEvents == 1 && nativeObservation != nil,
+    "Sparkle's availability observation did not reach the main actor")
+  let checker = BusyUpdateChecker()
+  let updates = AppUpdates(updater: checker)
+  try check(updates.responds(to: NSSelectorFromString("standardUserDriverWillFinishUpdateSession"))
+    && updates.responds(to: NSSelectorFromString("updater:didFinishUpdateCycleForUpdateCheck:error:")),
+    "Sparkle could not deliver session cleanup callbacks")
+  let item = SUAppcastItem(dictionary: ["enclosure": ["url": "https://example.invalid/update.zip",
+    "sparkle:version": "75", "sparkle:shortVersionString": "1.8.6"]])!
+  try check(updates.availableVersion == nil, "An unavailable update had a reminder")
+
+  // The icon followed by the menu must preserve one request during a silent download.
+  updates.showUpdate()
+  updates.showUpdate()
+  updates.start()
+  try check(checker.checks == 0 && checker.rejectedChecks == 0 && checker.observations == 1,
+    "Busy update clicks were sent to Sparkle or registered duplicate observers")
+  checker.canCheckForUpdates = false
+  try check(checker.checks == 0, "An unrelated availability event consumed the request")
+  checker.canCheckForUpdates = true
+  try check(checker.checks == 1, "The icon/menu request was lost during the background download")
+  checker.canCheckForUpdates = true
+  try check(checker.checks == 1, "A completed request repeated without a click")
+  updates.showUpdate()
+  updates.showUpdate()
+  try check(checker.checks == 3, "Repeated checks could not bring existing update controls forward")
+
+  var changes = 0
+  updates.onChange = { changes += 1 }
+  updates.updateWillBePresented(item, downloaded: false, automaticallyShowNotes: false)
+  try check(updates.availableVersion == "1.8.6" && !updates.isDownloaded && changes == 1,
+    "The ready alert did not publish its download reminder")
+  updates.standardUserDriverWillFinishUpdateSession()
+  try check(updates.availableVersion == nil && !updates.isDownloaded && changes == 2,
+    "A dismissed, skipped or failed session left a stale icon")
+
+  checker.canCheckForUpdates = false
+  updates.updateWillBePresented(item, downloaded: true, automaticallyShowNotes: true)
+  updates.updateWillBePresented(item, downloaded: true, automaticallyShowNotes: true)
+  await Task.yield()
+  try await Task.sleep(nanoseconds: 20_000_000)
+  try check(updates.isDownloaded && checker.checks == 3 && checker.rejectedChecks == 0,
+    "Automatic notes attempted to open before Sparkle became ready")
+  checker.canCheckForUpdates = true
+  try check(checker.checks == 4, "Downloaded notes were lost or opened more than once")
+
+  // If a background cycle fails, the pending menu check still gets its turn.
+  checker.canCheckForUpdates = false
+  updates.showUpdate()
+  updates.standardUserDriverWillFinishUpdateSession()
+  checker.canCheckForUpdates = true
+  try check(checker.checks == 5 && updates.availableVersion == nil,
+    "Session cleanup discarded a player's pending retry")
+
+  // A deferred automatic request must not outlive the dismissed update.
+  updates.updateWillBePresented(item, downloaded: true, automaticallyShowNotes: true)
+  updates.standardUserDriverWillFinishUpdateSession()
+  await Task.yield()
+  try await Task.sleep(nanoseconds: 20_000_000)
+  try check(checker.checks == 5 && checker.rejectedChecks == 0,
+    "Dismissed automatic notes unexpectedly started another update check")
+  updates.showUpdate()
+  try check(checker.checks == 6, "A check after cancellation still required an app restart")
+
+  checker.canCheckForUpdates = false
+  updates.updateWillBePresented(item, downloaded: true, automaticallyShowNotes: true)
+  await Task.yield()
+  try await Task.sleep(nanoseconds: 20_000_000)
+  updates.standardUserDriverWillFinishUpdateSession()
+  checker.canCheckForUpdates = true
+  try check(checker.checks == 6, "Failed automatic notes started an unrequested retry")
+  print("PASS busy icon/menu checks, coalesced clicks, repeated focus, automatic notes, session cleanup and retry without restart")
 }
