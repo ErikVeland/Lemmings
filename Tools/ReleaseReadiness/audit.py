@@ -151,6 +151,8 @@ def main():
                 arguments = [app / "Contents/Resources"]
             if name == "BundledGameResourcesTests":
                 arguments = [app]
+            if name == "PlatformExclusiveTests":
+                arguments = [ports]
             if name == "PortableTests":
                 arguments = [ROOT]
             binary = library / name
