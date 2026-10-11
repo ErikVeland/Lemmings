@@ -3,6 +3,34 @@
     <channel>
         <title>Ultimate Lemmings</title>
         <item>
+            <title>1.9.2</title>
+            <pubDate>Sun, 11 Oct 2026 23:46:45 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>77</sparkle:version>
+            <sparkle:shortVersionString>1.9.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>This maintenance update restores completion celebrations and precision rewards, and improves navigation during play and in Records.</p>
+<h3>Celebrations and rewards</h3>
+<p>Securing the rescue goal restores the celebratory music transition. A subtle golden glow adds to the moment and honours reduced-motion and reduced-flash settings. Classic, Lemmings 2 and Lemmings 3 share the completion treatment.</p>
+<p>Learning and Hot Seat journey results now credit earned Zooms and Superzooms. Results show the newly awarded amounts. The existing rules remain: one Zoom per three unassisted stars and one Superzoom per three distinct unassisted three-star levels. Assisted runs and repeat clears do not create extra rewards.</p>
+<h3>Learning journey</h3>
+<p>Cellbash is now lesson 2. Come back! moves to lesson 71 in Intermediate. Existing journeys retain their current level, history and players, including unvisited lessons moved earlier in the sequence.</p>
+<h3>Navigation and music</h3>
+<p>The gameplay Menu button fades after a few seconds and returns on hover or keyboard focus. Moving to the top edge releases cursor capture so the Mac menu bar remains accessible. Capture stays released while a menu is open.</p>
+<p>Records supports Previous, Next and arrow keys through the current campaign, including levels without a saved run. A song change briefly shows its title and soundtrack in pixel lettering, then fades without blocking gameplay clicks.</p>
+<p>The shared artwork module keeps Mac controls consistent with the iOS beta work. Settings include contextual help, and compatible shared leaderboard records can open action replays. iOS 2.0 remains a separate device beta and is not part of these macOS downloads.</p>
+<h3>Compatibility and validation scope</h3>
+<p>Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Both full and slim downloads retain original Macintosh music. Automatic updates carry the full music library, with a signed delta from build 76.</p>
+<p>Lemmings 2: The Tribes remains Complete. Lemmings 3: Chronicles and NeoLemmix remain Beta. The existing original-engine, campaign and ending limits remain.</p>
+<p>Checks cover shared engines, preserved route manifests, journey migration, reward accounting, muted music transitions, Records input, notices and rendered pixel controls. Native UI tests run offscreen with all test audio muted. Audible listening, foreground launch, physical Intel and minimum-macOS checks remain open. Final package and publication evidence is recorded separately.</p>
+<p class="meta">Build: 77<br>Release commit: 71559011ce09631479bc27644abe60b348bd88ae<br>Release base: v1.9.1</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.2/UltimateLemmings-1.9.2-build77.zip" length="2044191073" type="application/octet-stream" sparkle:edSignature="XeXb3ZvNebGroe7ikvkkcnUwsHNAinemN6mtFRBdhF5qKz3Z3DoM6jWU0oz4rKEHFVFrKv1p46PL32kJQycsAA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.2/UltimateLemmings-build77-from76.delta" sparkle:deltaFrom="76" length="2039554" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="PVLTlHAphtxlLYlFDtOT3pzOYQ8M4G58CKGsVu/hf3XQpXQHL11egg0QgKidA2xRPPejvTe+hC8DjCSU5rRRAg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>1.9.1</title>
             <pubDate>Sat, 10 Oct 2026 17:04:53 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
