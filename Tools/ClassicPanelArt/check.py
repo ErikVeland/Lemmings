@@ -8,7 +8,7 @@ root = Path(__file__).resolve().parents[2]
 source = root / 'Sources/Ports/amiga_extracted/lemmings/panel1'
 data = source.read_bytes()
 assert len(data) == 12800
-swift = (root / 'Sources/LemmingsLocal/PanelGlyphs.swift').read_text()
+swift = (root / 'Sources/LemmingsGameArt/PanelGlyphArt.swift').read_text()
 for name, slot in [('pause', 10), ('nuke', 11)]:
     expected = []
     for y in range(17, 39):

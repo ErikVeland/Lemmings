@@ -166,7 +166,8 @@ def main():
         checks.append(run("cross-build-recovery", [["zsh", "Scripts/run-cross-build-recovery-tests.sh"]],
                           dict(os.environ, SAVE_TEST_LIBRARY_DIR=str(library), CROSS_BUILD_PORTS=str(ports))))
         checks.append(run("fan-library", [["zsh", "Scripts/run-fan-library-tests.sh"]],
-                          dict(os.environ, FAN_TEST_LIBRARY_DIR=str(library))))
+                          dict(os.environ, FAN_TEST_LIBRARY_DIR=str(library),
+                               FAN_TEST_PORTS_DIR=str(ports))))
         if args.scope == "minor":
             checks.append(run("preserved-solution-manifests", [
                 [sys.executable, "Tools/ClassicCompletion/report.py", "--check-fixtures"],
