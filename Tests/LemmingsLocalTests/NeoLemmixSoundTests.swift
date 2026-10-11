@@ -1,3 +1,4 @@
+#if os(macOS)
 import AVFoundation
 import XCTest
 import NxlvKit
@@ -258,3 +259,4 @@ final class NeoLemmixSoundTests: XCTestCase {
     }
 
 }
+#endif

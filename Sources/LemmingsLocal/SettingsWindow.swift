@@ -1,9 +1,11 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
 /// Settings are a page inside the game. Choices apply immediately.
 @MainActor final class SettingsWindow: NSObject {
   private var page: GameMenuPage?
+  private let help = GameSettingsHelp()
   private var options: ClassicSettingsOptions
   private var settings: ClassicSettings
   private let telemetry: AnonymousTelemetry
@@ -86,16 +88,21 @@ import NxlvKit
 
   func show() {
     if let page, GameScreen.shared.contains(page) { GameScreen.shared.present(page); return }
+    help.reset()
     let page = GameMenuPage(title: "Settings")
-    page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
+    page.onBack = { [weak self, weak page] in
+      self?.help.dismiss()
+      if let page { GameScreen.shared.dismiss(page) }
+    }
     let tabs = GameTabs()
+    tabs.onSelectionChanged = { [weak self] in self?.help.dismiss() }
     tabs.addTabViewItem(tab("Gameplay", gameplayPane()))
     tabs.addTabViewItem(tab("Controller", controllerPane()))
     tabs.addTabViewItem(tab("Graphics", graphicsPane()))
     tabs.addTabViewItem(tab("Video", videoPane()))
     tabs.addTabViewItem(tab("Audio", audioPane()))
-    tabs.addTabViewItem(tab("Privacy", privacyPane()))
     tabs.addTabViewItem(tab("Accessibility", accessibilityPane()))
+    tabs.addTabViewItem(tab("Privacy", privacyPane()))
     tabs.translatesAutoresizingMaskIntoConstraints = false
     page.body.addSubview(tabs)
     NSLayoutConstraint.activate([
@@ -106,7 +113,7 @@ import NxlvKit
     ])
     self.page = page
     rebuildSources()
-    GameScreen.shared.present(page)
+    GameScreen.shared.present(page, onDismiss: { [weak self] in self?.help.dismiss() })
   }
 
   private func tab(_ label: String, _ view: NSView) -> NSTabViewItem {
@@ -119,8 +126,26 @@ import NxlvKit
   // MARK: - Building panes
 
   /// Lays out labelled rows down a pane.
-  private func pane(_ rows: [(String, NSView)], spacing: CGFloat = 22, topInset: CGFloat = 32) -> NSView {
-    let container = NSView()
+  private func groupedPane(_ sections: [(String, [(String, NSView)])]) -> NSView {
+    pane(sections.flatMap { title, rows -> [(String, NSView)] in
+      if title.isEmpty { return rows }
+      let heading = GameLabel(labelWithString: title)
+      heading.role = .heading
+      heading.alignment = .left
+      heading.setAccessibilityLabel(title)
+      return [("", heading as NSView)] + rows
+    }, spacing: 4, topInset: 12)
+  }
+
+  private func pane(_ rows: [(String, NSView)], spacing: CGFloat = 8, topInset: CGFloat = 16) -> NSView {
+    let scroll = GameSettingsScrollView()
+    scroll.hasVerticalScroller = true
+    scroll.scrollerStyle = .overlay
+    scroll.drawsBackground = false
+    scroll.onScroll = { [weak self] in self?.help.dismiss() }
+    let container = GameSettingsDocument()
+    container.frame = CGRect(x: 0, y: 0, width: 992, height: 438)
+    scroll.documentView = container
     var previous: NSView?
     for (label, control) in rows {
       let caption = GameLabel(labelWithString: label)
@@ -133,6 +158,10 @@ import NxlvKit
       control.translatesAutoresizingMaskIntoConstraints = false
       container.addSubview(caption)
       container.addSubview(control)
+      installHelp(for: control, caption: caption)
+      let heading = (control as? GameLabel)?.role == .heading
+      if heading { control.heightAnchor.constraint(equalToConstant: 20).isActive = true }
+      else { control.heightAnchor.constraint(greaterThanOrEqualToConstant: 28).isActive = true }
 
       NSLayoutConstraint.activate([
         caption.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 18),
@@ -143,11 +172,82 @@ import NxlvKit
           equalTo: container.trailingAnchor, constant: -18),
         control.topAnchor.constraint(
           equalTo: previous?.bottomAnchor ?? container.topAnchor,
-          constant: previous == nil ? topInset : spacing),
+          constant: previous == nil ? topInset : heading || (control is GameButton && !(control is GameCheckButton)) ? 12 : spacing),
       ])
       previous = control
     }
-    return container
+    previous?.bottomAnchor.constraint(lessThanOrEqualTo: container.bottomAnchor, constant: -8).isActive = true
+    return scroll
+  }
+
+  private func installHelp(for view: NSView, caption: GameLabel? = nil) {
+    if let group = view as? GameControlGroup {
+      group.arrangedSubviews.forEach { installHelp(for: $0) }
+    }
+    guard let control = view as? NSControl, let action = control.action,
+          let text = settingHelp[NSStringFromSelector(action)] else { return }
+    let title = control.accessibilityLabel() ?? (control as? NSButton)?.title ?? caption?.stringValue ?? "Settings"
+    help.attach(text, to: control, title: title)
+    if let caption, !caption.stringValue.isEmpty { help.attach(text, to: caption, title: title) }
+  }
+
+  private var settingHelp: [String: String] { [
+    "experienceChanged:": "Original restores the original controls and presentation. Modern enables gameplay aids. Individual changes select Custom.",
+    "modernControlsChanged:": "Use modern keyboard shortcuts for skills, pause, speed, camera movement and hints in all three games.",
+    "variableSpeedChanged:": SpeedPanelControls.help,
+    "interruptionChanged:": "Pause when you switch apps or disconnect a controller. Resume when you are ready.",
+    "pointerCaptureChanged:": "Keep the pointer inside the game window, including paused screens and menus. Hold Option or switch apps to release it.",
+    "favorApproachingChanged:": "When lemmings overlap, favour an eligible lemming still approaching rather than one that has turned away.",
+    "favorBombBlockersChanged:": "Prefer eligible blockers for bomb skills. L2 Exploder supports blockers, but Bomber does not. L3 uses carried bombs.",
+    "favorBuildersChanged:": "Prefer the current builder when assigning Build again. Native skill rules still apply. L3 uses carried bricks.",
+    "cursorStyleChanged:": "Original uses the Amiga crosshair. Modern uses thin corner brackets that show skill eligibility. Applies to all three games.",
+    "selectionStyleChanged:": "None hides selection effects. Obvious adds a coloured marker. Modern adds a white outline and green glow in all three games.",
+    "skillBackpacksChanged:": "Show Climber and Floater backpacks on Classic lemmings. L2 and L3 keep their own skill artwork.",
+    "skillCursorSizeChanged:": "Show the selected skill beside the pointer at 1× or 2×, or hide it with None. L3 Use shows carried tool uses.",
+    "reticleCountChanged:": "Show the number of live lemmings inside the reticule. This also works when the skill icon is hidden.",
+    "levelSelectionChanged:": "Choose unlocked levels or all levels for direct Classic selection. L2 and L3 keep their campaign selection rules.",
+    "controllerChanged:": "Enable gamepad gameplay and menu controls in Classic, L2 and L3.",
+    "controllerTapChanged:": "Tap the right trigger to toggle fast-forward. Hold it for a temporary speed boost.",
+    "controllerSwapChanged:": "Use the right stick to aim and the left stick to move the camera.",
+    "showControllerRemapping": "Choose the gameplay action for each controller button. Menu navigation keeps the standard bindings.",
+    "remapSourceChanged:": "Choose the physical controller button to change.",
+    "remapRoleChanged:": "Choose its gameplay action. If another button uses that action, their bindings swap.",
+    "resetControllerMapping": "Restore the default gameplay actions for every controller button.",
+    "presetChanged:": "Apply a machine's artwork, music and sound choices together. Further changes select Custom.",
+    "graphicsChanged:": "Choose the Classic artwork source. Available sources depend on installed game data.",
+    "depthChanged:": "Choose the colour palette for Classic artwork.",
+    "graphicsShuffleChanged:": "Choose a different available Classic artwork source for each level.",
+    "counterStyleChanged:": "Choose the style of Classic skill counters, including the original Macintosh bitmap digits.",
+    "sequelArtworkChanged:": "Use recreated Macintosh-style artwork in Lemmings 2 and Lemmings 3.",
+    "displayChanged:": "Choose Flat Panel, Monitor or Television. Classic uses the tube simulation. L2 and L3 keep their bitmap renderers.",
+    "intensityChanged:": "Adjust the Classic tube effect. Available with Monitor or Television. Flat Panel keeps the saved value.",
+    "aspectChanged:": "Adjust Classic pixel width with Monitor or Television. Flat Panel keeps the saved value.",
+    "integerChanged:": "Scale the playfield in whole pixel steps to keep pixel edges crisp.",
+    "hdEffectsChanged:": "Enable added explosions, flashes, speed streaks and ghost trails. Motion and flash reductions still apply.",
+    "hdrFlashesChanged:": "Add a fireball, shockwave, smoke and flash to nuclear explosions. HDR displays add brightness. Requires HD effects.",
+    "interfaceSizeChanged:": "Enlarge menu pages and controls help. Scroll to reach controls when the enlarged page exceeds the window.",
+    "reduceMotionChanged:": "Disable speed trails and cinematic explosions. Keep gameplay speed and controls.",
+    "reduceFlashesChanged:": "Disable added bright explosion cores, HDR flashes and cinematic explosions. Original game sprites remain.",
+    "musicChanged:": "Choose a soundtrack or Adaptive DJ Mix. Available soundtracks depend on installed music libraries.",
+    "styleChanged:": "Faithful keeps the source's original sound. Modern applies the enhanced music treatment.",
+    "musicVolumeChanged:": "Adjust music volume independently of sound effects.",
+    "soundChanged:": "Choose the sound-effects source. Available choices depend on installed game data.",
+    "soundVolumeChanged:": "Adjust sound-effects volume independently of music.",
+    "musicShuffleChanged:": "Change the soundtrack source each level. Adaptive DJ Mix selects tracks during play.",
+    "djSoundtracksChanged:": "Let Adaptive DJ Mix include music from L2, L3 and other ports, when installed.",
+    "pauseBeatChanged:": "On pause, play only isolated percussion. Tracks without a rhythm part stop. Applies to all three games.",
+    "bottomFallSoundsChanged:": "Play a death sound when a lemming falls out of the bottom of the level in any of the three games.",
+    "openMusicLibraries": "Download or remove optional soundtrack libraries. Installed libraries become available in the music choices.",
+    "telemetryChanged:": privacyHelp,
+    "showPrivacyInfo:": privacyHelp,
+    "openPlayInsights": "View play counts and music use for this Mac, and shared totals when the service is available.",
+    "clearPlayInsights:": "Clear this Mac's play counts. This does not reset the service's shared saved total."
+  ] }
+
+  private var privacyHelp: String {
+    telemetry.endpoint == nil
+      ? "This build has no shared counts service. Play insights show this Mac only."
+      : "Shares daily use, results, lemmings saved, solo or Hot Seat play, and music use. No names, IDs, pack names or replays are sent.\n\nThe shared saved total remains until the service owner resets it. The service sees your network address during delivery."
   }
 
   private func popUp(_ action: Selector) -> NSPopUpButton {
@@ -194,11 +294,10 @@ import NxlvKit
     modernControlsCheck = modern
     let variable = GameCheckButton(title: "Variable speed: 2×, 3×, 5×, 10×", target: self, action: #selector(variableSpeedChanged))
     variableSpeedCheck = variable
-    let interruption = GameCheckButton(title: "Pause when switching apps or a controller disconnects", target: self, action: #selector(interruptionChanged))
+    let interruption = GameCheckButton(title: "Pause on interruption", target: self, action: #selector(interruptionChanged))
     interruption.state = settings.pauseOnInterruption ? .on : .off
     interruptionCheck = interruption
     let favorApproaching = GameCheckButton(title: "Favor lemmings still approaching", target: self, action: #selector(favorApproachingChanged))
-    favorApproaching.toolTip = "When a click could match more than one lemming, pick the one still approaching. Skip the one that already turned away."
     favorApproaching.state = settings.favorApproachingLemmings ? .on : .off
     favorApproachingCheck = favorApproaching
     let bombBlockers = GameCheckButton(title: "Favor blockers for bombs", target: self, action: #selector(favorBombBlockersChanged))
@@ -211,17 +310,20 @@ import NxlvKit
     let levelSelection = popUp(#selector(levelSelectionChanged))
     levelSelection.addItems(withTitles: ["Player Unlocked", "All"])
     levelSelection.setAccessibilityLabel("Level selection")
-    levelSelection.toolTip = "Choose which Classic levels are available for direct selection."
     levelSelection.selectItem(at: settings.unlockAllClassicLevels ? 1 : 0)
     levelSelectionPopUp = levelSelection
-    variable.toolTip = SpeedPanelControls.help
     modern.state = settings.modernControlsEnabled ? .on : .off
     variable.state = settings.variableSpeedEnabled ? .on : .off
     variable.isEnabled = settings.modernControlsEnabled
-    return pane([
-      ("Preset", experience), ("Controls", modern), ("Speed", variable), ("Pause", interruption),
-      ("Targeting", targeting), ("Cursor", cursor), ("Selection", selection), ("Classic", backpacks), ("Skill icon", iconSize), ("Reticule", count), ("Level Select", levelSelection),
-    ], spacing: 4, topInset: 16)
+    let pointer = GameCheckButton(title: "Keep pointer inside the game", target: self, action: #selector(pointerCaptureChanged))
+    pointer.state = settings.confinePointer ? .on : .off
+    pointerCaptureCheck = pointer
+    return groupedPane([
+      ("Play", [("Preset", experience), ("Controls", modern), ("Speed", variable), ("Pause", interruption), ("Pointer", pointer)]),
+      ("Skill targeting", [("", targeting)]),
+      ("Pointer and selection", [("Cursor", cursor), ("Skill icon", iconSize), ("Reticule", count), ("Selection", selection), ("Classic", backpacks)]),
+      ("Level access", [("Level Select", levelSelection)]),
+    ])
   }
 
   @objc private func cursorStyleChanged(_ sender: NSPopUpButton) {
@@ -280,8 +382,8 @@ import NxlvKit
   }
   private func controllerPane() -> NSView {
     let enabled = GameCheckButton(title: "Enable gamepad controls", target: self, action: #selector(controllerChanged))
-    let tap = GameCheckButton(title: "Tap RT to toggle fast-forward; hold RT for a temporary boost", target: self, action: #selector(controllerTapChanged))
-    let swap = GameCheckButton(title: "Swap sticks: right aims, left moves the camera", target: self, action: #selector(controllerSwapChanged))
+    let tap = GameCheckButton(title: "Tap RT to toggle fast-forward", target: self, action: #selector(controllerTapChanged))
+    let swap = GameCheckButton(title: "Swap sticks", target: self, action: #selector(controllerSwapChanged))
     controllerCheck = enabled; controllerTapCheck = tap; controllerSwapCheck = swap
     enabled.state = settings.controllerEnabled ? .on : .off
     tap.state = settings.controllerTapSpeed ? .on : .off
@@ -299,9 +401,13 @@ import NxlvKit
     scroll.documentView = text
     let remap = GameButton(title: "Remap buttons…", target: self, action: #selector(showControllerRemapping))
     remap.isEnabled = settings.controllerEnabled; controllerRemapButton = remap
-    return pane([("Gamepad", enabled), ("Speed", tap), ("Sticks", swap), ("Buttons", remap), ("Bindings", scroll)])
+    return groupedPane([
+      ("Gamepad", [("Controls", enabled), ("Speed", tap), ("Sticks", swap)]),
+      ("Button mapping", [("Buttons", remap), ("Bindings", scroll)]),
+    ])
   }
   @objc private func showControllerRemapping() {
+    help.dismiss()
     let page = GameMenuPage(title: "Controller buttons", subtitle: "Choose a button, then choose what it does during play.")
     let source = GamePopUpButton(), role = GamePopUpButton()
     source.target = self; source.action = #selector(remapSourceChanged)
@@ -321,7 +427,7 @@ import NxlvKit
     page.body.addSubview(content)
     page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
     remapSourceChanged(source)
-    GameScreen.shared.present(page)
+    GameScreen.shared.present(page, onDismiss: { [weak self] in self?.help.dismiss() })
   }
   @objc private func remapSourceChanged(_ sender: NSPopUpButton) {
     guard ControllerBindings.Button.allCases.indices.contains(sender.indexOfSelectedItem) else { return }
@@ -384,9 +490,10 @@ import NxlvKit
                           action: #selector(sequelArtworkChanged))
     sequelArtworkCheck = sequel
     sequel.state = SequelArtworkPreference.enabled ? .on : .off
-    return pane([
-      ("Machine", preset), ("Artwork", graphics), ("Colour Depth", depth), ("Shuffle", shuffle),
-      ("Counters", counters), ("Lemmings 2 + 3", sequel),
+    return groupedPane([
+      ("Machine preset", [("Machine", preset)]),
+      ("Classic artwork", [("Artwork", graphics), ("Colour Depth", depth), ("Shuffle", shuffle), ("Counters", counters)]),
+      ("Sequel artwork", [("Lemmings 2 + 3", sequel)]),
     ])
   }
 
@@ -429,29 +536,17 @@ import NxlvKit
         ? "" : "The tube simulation is not in the drawing path yet.")
 
     let hdEffects = GameCheckButton(title: "Enable HD effects", target: self, action: #selector(hdEffectsChanged))
-    hdEffects.toolTip = "Cinematic explosions, HDR flashes, speed streaks and ghost trails. Turn off for old-school effects."
     hdEffects.state = settings.hdEffectsEnabled ? .on : .off
     hdEffectsCheck = hdEffects
     let flashes = GameCheckButton(title: "Cinematic nuclear explosions", target: self, action: #selector(hdrFlashesChanged))
-    flashes.toolTip = "White flash, expanding fireball, shockwave and rising smoke. Works on all displays, with extra brightness in HDR."
     flashes.state = settings.fullScreenHDRFlashes ? .on : .off
     flashes.isEnabled = settings.hdEffectsEnabled
     hdrFlashCheck = flashes
-    let pointer = GameCheckButton(title: "Keep pointer inside the game", target: self, action: #selector(pointerCaptureChanged))
-    pointer.toolTip = "Hold Option or pause to release the pointer. Menus also release it."
-    pointer.state = settings.confinePointer ? .on : .off
-    pointerCaptureCheck = pointer
     tubeCaptions.removeAll()
-    let content = pane([
-      ("Effects", hdEffects),
-      ("Screen", display),
-      ("Tube Strength", intensity),
-      ("Pixel Width", aspect),
-      ("Scaling", integer),
-      ("Explosions", flashes),
-      ("Pointer", pointer),
-      ("", note),
-    ])
+    let content = groupedPane([
+      ("Display", [("Screen", display), ("Tube Strength", intensity), ("Pixel Width", aspect), ("Scaling", integer)]),
+      ("Added effects", [("Effects", hdEffects), ("Explosions", flashes)]),
+    ] + (videoIsConnected ? [] : [("Availability", [("", note)])]))
     refreshVideoControls()
     return content
   }
@@ -472,19 +567,19 @@ import NxlvKit
 
   private func accessibilityPane() -> NSView {
     let motion = GameCheckButton(title: "Reduce added motion", target: self, action: #selector(reduceMotionChanged))
-    motion.toolTip = "Disable speed trails and cinematic explosions. Keep gameplay speed and controls."
     motion.state = settings.reduceMotion ? .on : .off
     reduceMotionCheck = motion
     let reducedFlashes = GameCheckButton(title: "Reduce added flashes", target: self, action: #selector(reduceFlashesChanged))
-    reducedFlashes.toolTip = "Disable added bright explosion cores, HDR flashes and cinematic explosions. Original game sprites remain."
     reducedFlashes.state = settings.reduceFlashes ? .on : .off
     reduceFlashesCheck = reducedFlashes
     let size = popUp(#selector(interfaceSizeChanged))
     size.addItems(withTitles: ClassicInterfaceSize.allCases.map(\.title))
     size.selectItem(at: ClassicInterfaceSize.allCases.firstIndex(of: settings.interfaceSize) ?? 0)
-    size.toolTip = "Enlarge menu pages and controls help. Scroll enlarged pages to reach every control."
     interfaceSizePopUp = size
-    return pane([("UI size", size), ("Motion", motion), ("Flashes", reducedFlashes)])
+    return groupedPane([
+      ("Interface", [("UI size", size)]),
+      ("Added effects", [("Motion", motion), ("Flashes", reducedFlashes)]),
+    ])
   }
 
   private func audioPane() -> NSView {
@@ -494,6 +589,8 @@ import NxlvKit
     let musicLevel = slider(#selector(musicVolumeChanged), value: settings.musicVolume)
     let sound = popUp(#selector(soundChanged))
     let soundLevel = slider(#selector(soundVolumeChanged), value: settings.soundVolume)
+    musicLevel.setAccessibilityLabel("Music volume")
+    soundLevel.setAccessibilityLabel("Effects volume")
     let falls = GameCheckButton(title: "Play death sound", target: self, action: #selector(bottomFallSoundsChanged))
     falls.state = settings.bottomFallSounds ? .on : .off
 
@@ -514,65 +611,48 @@ import NxlvKit
     let beat = GameCheckButton(title: "Keep the rhythm", target: self, action: #selector(pauseBeatChanged))
     beat.setAccessibilityLabel("Pause: Keep the rhythm")
     beat.state = settings.pauseMusicBeatOnly ? .on : .off
-    beat.toolTip = "On pause, play only isolated percussion. Tracks without a rhythm part stop."
     pauseBeatCheck = beat
-    return pane([
-      ("Music", music),
-      ("Music Style", style),
-      ("Music Volume", musicLevel),
-      ("Shuffle", shuffle),
-      ("DJ Mix", mixes),
-      ("Pause", beat),
-      ("", folders),
-      ("Sound Effects", sound),
-      ("Effects Volume", soundLevel),
-      ("Bottom Falls", falls),
-    ], spacing: 14)
+    return groupedPane([
+      ("Music", [("Soundtrack", music), ("Style", style), ("Volume", musicLevel), ("Shuffle", shuffle), ("DJ Mix", mixes)]),
+      ("Sound effects", [("Source", sound), ("Volume", soundLevel)]),
+      ("Playback behaviour", [("Pause", beat), ("Bottom Falls", falls)]),
+      ("", [("", folders)]),
+    ])
   }
 
   private func privacyPane() -> NSView {
-    let container = NSView()
     let share = GameCheckButton(title: "Share play counts", target: self,
                                 action: #selector(telemetryChanged(_:)))
-    share.frame = CGRect(x: 26, y: 386, width: 720, height: 38)
     share.state = telemetry.sharesCounts ? .on : .off
     share.isEnabled = telemetry.endpoint != nil
     share.setAccessibilityLabel("Share play counts")
     telemetryCheck = share
-    container.addSubview(share)
-    let details = telemetry.endpoint == nil
-        ? ["This build has no shared counts service. Play insights show this Mac only."]
-        : ["Daily use, results, lemmings saved, solo or Hot Seat, and all music.",
-           "No names, IDs, pack names or replays are sent.",
-           "The shared saved total remains until the service owner resets it.",
-           "The service sees your network address during delivery."]
-    for (index, line) in details.enumerated() {
-      let label = GameLabel(labelWithString: line)
-      label.alignment = .left
-      label.frame = CGRect(x: 26, y: 338 - index * 36, width: 900, height: 32)
-      container.addSubview(label)
-    }
-    let insights = GameButton(title: "View play insights", target: self,
-                              action: #selector(openPlayInsights))
-    insights.frame = CGRect(x: 26, y: 170, width: 330, height: 42)
-    container.addSubview(insights)
-    let clear = GameButton(title: "Clear this Mac's counts", target: self,
-                           action: #selector(clearPlayInsights))
-    clear.frame = CGRect(x: 26, y: 106, width: 330, height: 42)
-    container.addSubview(clear)
-    return container
+    let info = GameButton(title: "Privacy info", target: self, action: #selector(showPrivacyInfo(_:)))
+    let insights = GameButton(title: "View play insights", target: self, action: #selector(openPlayInsights))
+    let clear = GameButton(title: "Clear this Mac's counts", target: self, action: #selector(clearPlayInsights))
+    return groupedPane([
+      ("Sharing", [("Counts", share), ("Details", info)]),
+      ("This Mac", [("Insights", insights), ("Reset", clear)]),
+    ])
+  }
+
+  @objc private func showPrivacyInfo(_ sender: NSButton) {
+    help.show(privacyHelp, title: "Privacy", relativeTo: sender, pinned: true)
   }
 
   @objc private func telemetryChanged(_ sender: NSButton) {
+    help.dismiss()
     telemetry.setSharing(sender.state == .on)
     telemetryCheck?.state = telemetry.sharesCounts ? .on : .off
   }
 
   @objc private func openPlayInsights() {
+    help.dismiss()
     TelemetryDashboard.shared.show(owner: page?.window)
   }
 
   @objc private func clearPlayInsights(_ sender: NSButton) {
+    help.dismiss()
     telemetry.clearLocalCounts()
     sender.title = "Counts cleared"
     sender.isEnabled = false
@@ -648,6 +728,7 @@ import NxlvKit
   // MARK: - Changes
 
   private func changed(customizeExperience: Bool = true) {
+    help.dismiss()
     if customizeExperience { settings.experiencePreset = .custom }
     experiencePopUp?.selectItem(at: ClassicExperiencePreset.allCases.firstIndex(of: settings.experiencePreset) ?? 2)
     experiencePopUp?.needsDisplay = true
@@ -789,7 +870,7 @@ import NxlvKit
     catch { GameScreen.shared.message("Soundtrack folder", detail: error.localizedDescription) }
   }
 
-  @objc private func openMusicLibraries() { MusicLibraryWindow.shared.show() }
+  @objc private func openMusicLibraries() { help.dismiss(); MusicLibraryWindow.shared.show() }
 
   @objc private func pointerCaptureChanged(_ sender: NSButton) {
     settings.confinePointer = sender.state == .on
@@ -845,3 +926,4 @@ import NxlvKit
     changed()
   }
 }
+#endif

@@ -1,0 +1,4 @@
+00d6c60a7078e4f14678762593bc82136bf459622d62a60b17b2d92350eb3071  .build/celebration-beta/Ultimate Lemmings.app/Contents/MacOS/LemmingsLocal
+e8b17e866d984c4af1c78abb9377bf30ff81345fcd8d41f60bb6ee1f49de0d4e  .build/celebration-beta/Ultimate Lemmings.app/Contents/Frameworks/libNxlvKit.dylib
+4a0c402bdf5b0e50c49c7fe11b1cd213b62d0913fe8980b01357ab8d2b34055f  .build/celebration-beta/Ultimate Lemmings.app/Contents/Frameworks/libLemmingsGameArt.dylib
+52f1c130573ab817744a8644cc5be13071c4dd57ee1c9ccf2571be3f4f6c4c4c  .build/celebration-beta/Ultimate Lemmings.app/Contents/Resources/Progression/learning.json

@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 import NxlvKit
 
@@ -81,3 +82,4 @@ enum PrecisionZoomScrollOutcome: Equatable {
         catch { storageError = "Could not save Zoom uses." }
     }
 }
+#endif

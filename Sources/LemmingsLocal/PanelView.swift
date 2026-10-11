@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
@@ -782,3 +783,4 @@ extension Array {
     indices.contains(index) ? self[index] : nil
   }
 }
+#endif

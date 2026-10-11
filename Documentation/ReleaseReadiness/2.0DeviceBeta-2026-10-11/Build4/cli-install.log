@@ -1,0 +1,16 @@
+------------------------------------------------------------------------------------------------------------
+| iMazing Command Line Interface (3.5.2.10001)                                                             |
+|                                                                                                          |
+| https://imazing.com/cli                                                                                  |
+|                                                                                                          |
+| © DigiDNA SARL, 2008-2026. All rights reserved. iMazing ® is a registered trademark of DigiDNA SARL.     |
+------------------------------------------------------------------------------------------------------------
+
+3c4b6e12624a577712d178b63203c9d7c249bf77 - Looking for device...
+3c4b6e12624a577712d178b63203c9d7c249bf77 (GenErik) - Command started
+3c4b6e12624a577712d178b63203c9d7c249bf77 (GenErik) - Command ended in 0 seconds
+Command errors: 
+-----------------------------------------------------
+iMazing CLI is not activated. Please run imazing --license <your iMazing CLI license code>
+-----------------------------------------------------
+

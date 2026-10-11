@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import ImageIO
 import NxlvKit
@@ -775,3 +776,4 @@ final class NeoLemmixSpriteSet {
     UInt32(red) << 16 | UInt32(green) << 8 | UInt32(blue)
   }
 }
+#endif

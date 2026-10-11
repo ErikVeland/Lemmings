@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 import CryptoKit
 import NxlvKit
@@ -59,3 +60,4 @@ enum ClassicRouteRecorder {
 
     static func flush() { queue.sync {} }
 }
+#endif

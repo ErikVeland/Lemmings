@@ -1,0 +1,100 @@
+PASS 1.3 mobile project, target and source contracts
+Building for debugging...
+[Using on-disk description]
+[1 / 1]
+[2 / 12] LemmingsLocal
+[3 / 12] LemmingsLocal
+[9 / 18] LemmingsLocal-product
+[11 / 20] LemmingsLocal-product
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6073 |       openPanel.canChooseFiles = true
+6074 |       openPanel.canChooseDirectories = false
+6075 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6076 |       openPanel.message = "Choose a NeoLemmix level file."
+6077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:7341:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7339 |       openPanel.canChooseFiles = true
+7340 |       openPanel.canChooseDirectories = false
+7341 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7342 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+7343 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8012:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8010 |     keyboard.controllerRewindHeld = { [weak self] held in
+8011 |       guard let self else { return }
+8012 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8013 |       else if self.rewindHeld { self.endContinuousRewind() }
+8014 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[16 / 27] LemmingsLocal-product
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6075:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6073 |       openPanel.canChooseFiles = true
+6074 |       openPanel.canChooseDirectories = false
+6075 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6076 |       openPanel.message = "Choose a NeoLemmix level file."
+6077 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:7341:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7339 |       openPanel.canChooseFiles = true
+7340 |       openPanel.canChooseDirectories = false
+7341 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7342 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+7343 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8012:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8010 |     keyboard.controllerRewindHeld = { [weak self] held in
+8011 |       guard let self else { return }
+8012 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8013 |       else if self.rewindHeld { self.endContinuousRewind() }
+8014 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[20 / 29] LemmingsLocal
+[20 / 29] LemmingsLocal-product
+[23 / 28] LemmingsLocalTests-product
+[26 / 29] LemmingsLocalTests-product
+[28 / 32] LemmingsLocalTests-product
+Build complete! (6.92 sec.)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite MobileCoreTests started.
+􀟈  Test classicJumpingRisesAcrossTheRemainingStepPixel() started.
+􀟈  Test viewportZoomKeepsTheGestureAnchorStable() started.
+􀟈  Test classicSessionRestoresTheExactTick() started.
+􀟈  Test checkpointRejectsAnOlderWriter() started.
+􀟈  Test thermalPolicyNeverChangesSimulationRules() started.
+􀟈  Test safeAreaLayoutKeepsTouchTargetsOnScreen() started.
+􀟈  Test lifecycleSavesOnceAndRequiresExplicitResume() started.
+􀟈  Test checkpointFallsBackToTheLastValidatedCopy() started.
+􀟈  Test touchRouterDoesNotAssignAfterAPan() started.
+􀟈  Test fixedTickClockDropsSuspensionTime() started.
+􀟈  Test sequelSessionsReplayTheirInputCheckpoints() started.
+􀟈  Test touchTargetingPrefersEligibilityFollowersAndTools() started.
+􀟈  Test contentImportStagesBeforeCommitAndPreservesTheLiveCopyOnFailure() started.
+􁁛  Test fixedTickClockDropsSuspensionTime() passed after 0.001 seconds.
+􁁛  Test viewportZoomKeepsTheGestureAnchorStable() passed after 0.001 seconds.
+􁁛  Test touchRouterDoesNotAssignAfterAPan() passed after 0.001 seconds.
+􁁛  Test touchTargetingPrefersEligibilityFollowersAndTools() passed after 0.001 seconds.
+􁁛  Test thermalPolicyNeverChangesSimulationRules() passed after 0.001 seconds.
+􁁛  Test lifecycleSavesOnceAndRequiresExplicitResume() passed after 0.001 seconds.
+􁁛  Test safeAreaLayoutKeepsTouchTargetsOnScreen() passed after 0.001 seconds.
+􁁛  Test classicJumpingRisesAcrossTheRemainingStepPixel() passed after 0.001 seconds.
+􁁛  Test checkpointRejectsAnOlderWriter() passed after 0.003 seconds.
+􁁛  Test checkpointFallsBackToTheLastValidatedCopy() passed after 0.004 seconds.
+􁁛  Test classicSessionRestoresTheExactTick() passed after 0.005 seconds.
+􁁛  Test contentImportStagesBeforeCommitAndPreservesTheLiveCopyOnFailure() passed after 0.006 seconds.
+􁁛  Test sequelSessionsReplayTheirInputCheckpoints() passed after 0.006 seconds.
+􁁛  Suite MobileCoreTests passed after 0.006 seconds.
+􁁛  Test run with 13 tests in 1 suite passed after 0.007 seconds.
+PASS 1.3 tests, Debug and Release Simulator builds, and unsigned Release device build

@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
@@ -85,3 +86,4 @@ import NxlvKit
     return NSImage(cgImage: image, size: CGSize(width: outputWidth, height: height))
   }
 }
+#endif

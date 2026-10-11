@@ -1,35 +1,12 @@
 import Foundation
 import NxlvKit
 
-public struct ClassicMobileLevelSummary: Codable, Equatable, Sendable {
-    public let index: Int
-    public let rank: String
-    public let number: Int
-    public let title: String
-
-    public init(index: Int, rank: String, number: Int, title: String) {
-        self.index = index
-        self.rank = rank
-        self.number = number
-        self.title = title
-    }
-}
-
-public struct ClassicMobileContent {
-    public let summary: ClassicMobileLevelSummary
-    public let session: ClassicMobileSession
-
-    public init(summary: ClassicMobileLevelSummary, session: ClassicMobileSession) {
-        self.summary = summary
-        self.session = session
-    }
-}
-
 /// Loads user-selected DOS data once and creates sessions from the authored order.
-public final class ClassicMobileLibrary {
+public final class ClassicMobileLibrary: MobileGameLibrary {
     public let directory: URL
     public let dataSet: ClassicDataSet
-    public let levels: [ClassicMobileLevelSummary]
+    public let levels: [MobileLevelSummary]
+    public var displayName: String { dataSet.name }
 
     private let assets: ClassicMainDATAssets
     private var grounds: [Int: ClassicGroundSet] = [:]
@@ -40,7 +17,7 @@ public final class ClassicMobileLibrary {
         dataSet = try ClassicDataSet.detect(directory: directory)
         assets = try ClassicMainDATAssets.load(from: directory)
         levels = dataSet.campaign.levels.enumerated().map { index, item in
-            ClassicMobileLevelSummary(
+            MobileLevelSummary(
                 index: index,
                 rank: item.rank,
                 number: item.number,
@@ -49,7 +26,7 @@ public final class ClassicMobileLibrary {
         }
     }
 
-    public func loadLevel(at index: Int) throws -> ClassicMobileContent {
+    public func loadLevel(at index: Int) throws -> MobileLevelContent {
         guard dataSet.campaign.levels.indices.contains(index) else {
             throw MobileSessionError.changedLevel
         }
@@ -87,7 +64,7 @@ public final class ClassicMobileLibrary {
         )
         let palette = try ClassicLemmingPalette.inLevelVGA(terrainPalette: ground.terrainPalette)
         let summary = levels[index]
-        return ClassicMobileContent(
+        return MobileLevelContent(
             summary: summary,
             session: ClassicMobileSession(
                 simulation: simulation,
@@ -95,7 +72,8 @@ public final class ClassicMobileLibrary {
                 assets: assets,
                 palette: palette,
                 levelIdentifier: "\(dataSet.identifierKey)/\(entry.rank)/\(entry.number)",
-                levelIndex: index
+                levelIndex: index,
+                startX: level.startX
             )
         )
     }
@@ -115,6 +93,7 @@ public final class ClassicMobileSession: MobileGameSession {
     public let levelIndex: Int
     public let levelFingerprint: String
     public let levelSize: MobileSize
+    public let initialCameraOrigin: MobilePoint
     public let ticksPerSecond = Double(ClassicDOSRules.ticksPerSecond)
 
     private let initialStateHash: String
@@ -130,8 +109,10 @@ public final class ClassicMobileSession: MobileGameSession {
         assets: ClassicMainDATAssets? = nil,
         palette: [ClassicRGBColor] = [],
         levelIdentifier: String,
-        levelIndex: Int
+        levelIndex: Int,
+        startX: Int = 0
     ) {
+        initialCameraOrigin = MobilePoint(x: Double(startX), y: 0)
         self.simulation = simulation
         self.renderedLevel = renderedLevel
         self.assets = assets

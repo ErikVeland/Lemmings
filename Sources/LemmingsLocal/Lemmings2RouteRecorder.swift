@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 import NxlvKit
 
@@ -63,3 +64,4 @@ enum Lemmings2RouteRecorder {
         return url
     }
 }
+#endif

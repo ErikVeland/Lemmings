@@ -1,0 +1,9 @@
+{
+  "artworkFiles": 309,
+  "format": "RGBA",
+  "exactFrozenArtworkBytes": true,
+  "filteredManifestMatchesFrozenInputs": true,
+  "sourceManifestFiles": 518,
+  "testedCoreMatchesFrozenCandidate": true,
+  "physicalUIKitAcceptance": "pending"
+}

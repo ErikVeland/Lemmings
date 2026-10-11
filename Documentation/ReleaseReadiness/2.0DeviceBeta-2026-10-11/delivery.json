@@ -1,0 +1,48 @@
+{
+  "checkedDate": "2026-10-11",
+  "candidate": "2.0-3-device",
+  "version": "2.0",
+  "build": 3,
+  "scope": "Classic touch device beta",
+  "launchScope": [
+    "Classic",
+    "Lemmings 2",
+    "Lemmings 3"
+  ],
+  "coreTests": 19,
+  "releaseToolingTests": 61,
+  "classicLevels": 120,
+  "simulationTicks": 6000,
+  "sourceGate": "passed: Debug/Release Simulator compilation and unsigned Release device compilation",
+  "devicePreflight": {
+    "iPhone": {
+      "preflightVerified": true,
+      "build": 3,
+      "includedInProfile": true
+    },
+    "iPad": {
+      "preflightVerified": false,
+      "error": "The signing profile does not include this device. Register it and export again."
+    }
+  },
+  "iPhoneConnection": "available to inventory; app query failed because it was locked",
+  "iPadConnection": "absent from latest USB and CoreDevice inventories",
+  "iPadRegistration": "Apple annual Reset awaits explicit owner approval; all three existing devices selected to retain",
+  "installationAttempted": false,
+  "installedBuildVerified": false,
+  "appLaunched": false,
+  "uploaded": false,
+  "renderedUIKitStates": "pending manual device acceptance",
+  "sourceChangesAfterCompletedDevelopmentExport": [
+    "Package.swift",
+    "Tools/IOSBeta/build.py",
+    "Tools/IOSBeta/install.py"
+  ],
+  "mobileSwiftFilesChangedAfterExport": [],
+  "packageChangeAfterExport": "Only the Mac executable Sparkle dependency gained a macOS condition. Removing this one condition reproduces the exact frozen Package.swift hash. Mobile target definitions are unchanged.",
+  "helperCorrection": "Installer compares extracted executable to the frozen IPA, because export re-signing changes the archive executable hash. Symbol UUID checks remain required.",
+  "testSourceSHA256": {
+    "Tests/LemmingsMobileCoreTests/MobileCoreTests.swift": "2445d4e519ba7916ba94a5e1e2cbfd06a5b579dc972a3f8bbc0d71517cc20ba7",
+    "Tests/ReleaseReadinessTests/test_ios_beta_install.py": "469e232a8cd59322ab70c4473e179a52852e4508caa29bb54595e29a6164ee68"
+  }
+}

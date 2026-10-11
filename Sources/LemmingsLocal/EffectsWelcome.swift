@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 
 /// Offers the effects choice once, including on the first launch after an upgrade.
@@ -28,3 +29,4 @@ import AppKit
         if !GameScreen.shared.present(page, owner: window) { self.page = nil }
     }
 }
+#endif

@@ -3,7 +3,7 @@ import Foundation
 /// A teaching order, independent of retail ranks. Estimates never certify human insight.
 public struct LearningJourney: Codable, Equatable, Sendable {
     public static let title = "Oh My! All Lemmings!"
-    public static let version = "learning-15"
+    public static let version = "learning-17"
     public static let communityPlacementPolicy = "redux-calibrated-2"
     public static let playlistID = UUID(uuidString: "80368144-659B-4697-B2D0-76894BF20B18")!
     public static let maximumScoreStep = 65.0
@@ -116,7 +116,14 @@ public struct LearningJourney: Codable, Equatable, Sendable {
         let visited = Set(run.entries.prefix(run.currentIndex).map(\.identity))
         let current = lessons.firstIndex { $0.entry.identity == run.currentEntry.identity
             && $0.entry.sourceRevision == run.currentEntry.sourceRevision }
-        let future = lessons.dropFirst(current ?? 0).map(\.entry).filter { !visited.contains($0.identity) }
+        // Preserve the current lesson, then include every unvisited lesson in its new order.
+        // Moving a future lesson earlier must not silently remove it from a saved queue.
+        var future = lessons.map(\.entry).filter { !visited.contains($0.identity) }
+        if let current {
+            let entry = lessons[current].entry
+            future.removeAll { $0.identity == entry.identity }
+            future.insert(entry, at: 0)
+        }
         guard !future.isEmpty else { return nil }
         // Past visits are history, not proof of completion. Progress records stay untouched.
         let past = Array(run.entries.prefix(run.currentIndex))

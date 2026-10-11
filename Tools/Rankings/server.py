@@ -14,6 +14,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlsplit
 import uuid
 
+MAX_ACTIONS = 8 * 1024 * 1024
 MAX_MOVIE = 64 * 1024 * 1024
 MAX_STORAGE = 1024 * 1024 * 1024
 BOARDS = {
@@ -64,6 +65,61 @@ def checked_conditions(raw):
         raise ValueError("Conditions must use canonical JSON")
     return c, hashlib.sha256(raw.encode()).hexdigest()
 
+def validate_actions(value, run):
+    fields = {"version", "runID", "conditions", "engine", "engineFingerprint", "initialStateHash",
+              "finalStateHash", "ticks", "saved", "population", "skills", "won", "assisted", "commands"}
+    if not isinstance(value, dict) or set(value) != fields or type(value["version"]) is not int or value["version"] != 1:
+        raise ValueError("Invalid replay fields")
+    if not isinstance(value["runID"], str):
+        raise ValueError("Invalid replay run ID")
+    if str(uuid.UUID(value["runID"])) != run["id"] or canonical(value["conditions"]) != run["conditions"]:
+        raise ValueError("Replay belongs to another run")
+    for key in ("saved", "population", "skills"):
+        if type(value[key]) is not int or value[key] != run[key]:
+            raise ValueError("Replay outcome differs")
+    for key in ("won", "assisted"):
+        if type(value[key]) is not bool or value[key] != bool(run[key]):
+            raise ValueError("Replay outcome differs")
+    engine = value["engine"]
+    rates = {"classic": 17, "neolemmix": 17, "lemmings2": 17.5, "lemmings3": 23}
+    expected = value["conditions"]["gameID"] if value["conditions"]["gameID"] in ("lemmings2", "lemmings3", "neolemmix") else "classic"
+    if engine not in rates or engine != expected:
+        raise ValueError("Invalid engine")
+    ticks = integer(value["ticks"], 0, 120000)
+    if abs(ticks * 1000 / rates[engine] - run["milliseconds"]) > 1:
+        raise ValueError("Replay duration differs")
+    if not isinstance(value["engineFingerprint"], str) or not 1 <= len(value["engineFingerprint"]) <= 256:
+        raise ValueError("Invalid engine identity")
+    for key in ("initialStateHash", "finalStateHash"):
+        if not isinstance(value[key], str) or not re.fullmatch("[a-f0-9]{64}", value[key]):
+            raise ValueError("Invalid replay identity")
+    commands = value["commands"]
+    if not isinstance(commands, list) or len(commands) > 100000:
+        raise ValueError("Too many commands")
+    previous = 0
+    shapes = {"assign": {"lemming", "skill"}, "rate": {"value"}, "nuke": set()}
+    if engine == "lemmings2":
+        shapes = {"assign": {"lemming", "skill"}, "fan": {"x", "y", "held"}, "aim": {"x", "y", "held"},
+                  "releasePointer": set(), "machine": {"x", "y"}, "chain": {"x", "y"}, "nuke": set()}
+    elif engine == "lemmings3":
+        shapes = {a: {"lemming"} for a in ("walker", "blocker", "jumper", "drop")}
+        shapes.update(use={"lemming", "direction"}, abort=set())
+    for c in commands:
+        if not isinstance(c, dict) or not isinstance(c.get("action"), str) or c["action"] not in shapes or set(c) != {"tick", "action"} | shapes[c["action"]]:
+            raise ValueError("Invalid command")
+        previous = integer(c["tick"], previous, ticks)
+        for k in ("x", "y", "value"):
+            if k in c:
+                integer(c[k], -1000000, 1000000)
+        if "lemming" in c:
+            integer(c["lemming"], 0, 1000000)
+        if "skill" in c:
+            integer(c["skill"], 0, 31 if engine == "neolemmix" else 7)
+        if "held" in c and type(c["held"]) is not bool:
+            raise ValueError("Invalid pointer input")
+        if "direction" in c and c["direction"] not in ("upLeft", "up", "upRight", "left", "right", "downLeft", "down", "downRight"):
+            raise ValueError("Invalid direction")
+
 class Store:
     def __init__(self, root, catalogue=None):
         self.root = Path(root)
@@ -91,6 +147,9 @@ class Store:
               CREATE INDEX IF NOT EXISTS board_lookup ON runs(board_key,assisted,player);
               CREATE INDEX IF NOT EXISTS player_runs ON runs(player);
             """)
+            columns = {r["name"] for r in db.execute("PRAGMA table_info(runs)")}
+            if "action_bytes" not in columns:
+                db.execute("ALTER TABLE runs ADD COLUMN action_bytes INTEGER NOT NULL DEFAULT 0")
             # A new shipped solution can change the rescue target without changing a run.
             for key, target in self.targets.items():
                 db.execute("""UPDATE runs SET stars=CASE WHEN won=0 THEN 0 WHEN saved>=? THEN 3
@@ -188,8 +247,49 @@ class Store:
         return {"entries": [{"rank": r["rank"], "name": r["name"],
                             "score": r["score"] if category in CAREER else r["milliseconds"] if category.startswith("fastest") else r["skills"] if category == "leastSkills" else r["saved"],
                             "runID": None if category in CAREER else r["id"],
-                            "replay": False if category in CAREER else r["replay_bytes"] > 0} for r in rows[:5]],
+                            "replay": False if category in CAREER else r["replay_bytes"] > 0,
+                            "actionReplay": False if category in CAREER else r["rank"] <= 10 and r["action_bytes"] > 0} for r in rows[:5]],
                 "page": page, "hasMore": len(rows) > 5, "verification": "community"}
+
+    def top_ten(self, rid):
+        # A run may lead one category and not another. Keep each category independent.
+        with self.db() as db:
+            row = db.execute("SELECT board_key,assisted FROM runs WHERE id=?", (rid,)).fetchone()
+            if not row:
+                return False
+        return any(e["runID"] == rid for category in BOARDS for page in (0, 1)
+                   for e in self.board(row["board_key"], category, bool(row["assisted"]), page)["entries"])
+
+    def upload_actions(self, player, rid, stream, length):
+        integer(length, 1, MAX_ACTIONS)
+        rid = str(uuid.UUID(rid))
+        with self.upload_lock:
+            with self.db() as db:
+                row = db.execute("SELECT * FROM runs WHERE id=?", (rid,)).fetchone()
+                if not row or row["player"] != player:
+                    raise PermissionError("Not your run")
+                if row["action_bytes"]:
+                    raise FileExistsError("Replay already stored")
+                used = sum(p.stat().st_size for p in self.movies.iterdir() if p.is_file())
+                personal = db.execute("SELECT COALESCE(SUM(action_bytes),0) FROM runs WHERE player=?", (player,)).fetchone()[0]
+                if used + length > MAX_STORAGE or personal + length > 128 * 1024 * 1024:
+                    raise OverflowError("Replay storage is full")
+            data = stream.read(length)
+            if len(data) != length:
+                raise ValueError("Incomplete upload")
+            value = json.loads(data)
+            validate_actions(value, row)
+            target = self.movies / (rid + ".actions.json")
+            tmp = self.movies / (rid + ".actions.pending")
+            try:
+                tmp.write_bytes(data)
+                os.replace(tmp, target)
+                with self.db() as db:
+                    db.execute("UPDATE runs SET action_bytes=? WHERE id=?", (length, rid))
+            except Exception:
+                tmp.unlink(missing_ok=True)
+                target.unlink(missing_ok=True)
+                raise
 
     def upload(self, player, rid, stream, length):
         integer(length, 16, MAX_MOVIE)
@@ -234,6 +334,7 @@ class Store:
                 rows = db.execute("SELECT id FROM runs WHERE player=?", (player,)).fetchall()
                 for row in rows:
                     (self.movies / (row["id"] + ".mp4")).unlink(missing_ok=True)
+                    (self.movies / (row["id"] + ".actions.json")).unlink(missing_ok=True)
                 db.execute("DELETE FROM runs WHERE player=?", (player,))
                 db.execute("DELETE FROM players WHERE id=?", (player,))
 
@@ -287,6 +388,23 @@ class Handler(BaseHTTPRequestHandler):
                     raise ValueError("Invalid category")
                 return self.response(200, store.board(q.get("conditions", [""])[0], q.get("board", ["mostSaved"])[0],
                                                      assisted == "1", int(q.get("page", ["0"])[0])))
+            if path.path.startswith("/v1/actions/") and not path.query:
+                rid = str(uuid.UUID(path.path.rsplit("/", 1)[1]))
+                file = store.movies / (rid + ".actions.json")
+                with store.db() as db:
+                    row = db.execute("SELECT action_bytes FROM runs WHERE id=?", (rid,)).fetchone()
+                if not row or not row["action_bytes"] or not file.is_file() or row["action_bytes"] != file.stat().st_size or not store.top_ten(rid):
+                    return self.response(404)
+                data = file.read_bytes()
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Length", str(len(data)))
+                self.send_header("X-Replay-SHA256", hashlib.sha256(data).hexdigest())
+                self.send_header("Cache-Control", "private, no-store")
+                self.send_header("X-Content-Type-Options", "nosniff")
+                self.end_headers()
+                self.wfile.write(data)
+                return
             if path.path.startswith("/v1/replays/") and not path.query:
                 rid = str(uuid.UUID(path.path.rsplit("/", 1)[1]))
                 file = store.movies / (rid + ".mp4")
@@ -313,6 +431,12 @@ class Handler(BaseHTTPRequestHandler):
             return self.response(200, {"id": store.identity(token, payload["name"])})
         elif self.command == "POST" and path.path == "/v1/runs" and not path.query:
             return self.response(200, {"id": store.submit(store.identity(token), self.body())})
+        elif self.command == "PUT" and path.path.startswith("/v1/actions/") and not path.query:
+            if self.headers.get_content_type() != "application/json":
+                raise ValueError("Expected actions")
+            store.upload_actions(store.identity(token), path.path.rsplit("/", 1)[1], self.rfile,
+                                 int(self.headers.get("Content-Length", "0")))
+            return self.response(204)
         elif self.command == "PUT" and path.path.startswith("/v1/replays/") and not path.query:
             if self.headers.get_content_type() != "video/mp4":
                 raise ValueError("Expected movie")

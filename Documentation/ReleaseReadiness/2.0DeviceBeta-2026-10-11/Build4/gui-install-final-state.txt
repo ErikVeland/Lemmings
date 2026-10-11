@@ -1,0 +1,52 @@
+Window: "iMazing", App: iMazing.
+0 standard window iMazing, Secondary Actions: Raise
+	1 image
+	2 text Help: GenErik, Value: GenErik iPad Pro - iPadOS 17.7.11
+	3 image Description: BatteryCharging80 Template, Help: 80%
+	4 image Description: CommonStatusUsbBold Template, Help: Connected via USB
+	5 button Device Info
+	6 button More
+	7 scroll area
+		8 outline
+			9 row (selectable, expanded) Secondary Actions: Collapse
+			10 row (selectable) Description: Info Stroke Template, Value: Overview
+			11 row (selectable) Description: Datasets Stroke Template, Value: Data
+			12 row (selected) Description: Tools Color, Value: Tools
+			13 row (selectable) Description: Settings Stroke Template, Value: Settings
+	14 button Collapse Sidebar
+	15 button Close
+	16 button Cancel
+	17 text GenErik
+	18 image
+	19 button GenErik
+	20 text Manage Apps
+	21 text field (settable) Search
+	22 button Operations
+	23 button iMazing License
+	24 button Help
+	25 image
+	26 busy indicator on
+	27 text Loading Apps - Please wait... Operations
+	28 button Description: stop progress, Help: Close
+	29 scroll area
+		30 table
+			31 row (selectable)
+				32 cell
+					33 image
+					34 text Ultimate Lemmings Installed
+					35 image Checkmark Color
+					36 text 1 of 1 item successfully processed.
+	37 button Clear
+	38 button Close
+	39 menu button Window sharing
+40 menu bar
+	41 iMazing
+	42 File
+	43 Edit
+	44 View
+	45 Tools
+	46 License
+	47 Window
+	48 Help
+
+The focused UI element is 0 standard window iMazing, Secondary Actions: Raise

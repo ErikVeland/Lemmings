@@ -1,0 +1,21 @@
+{
+  "checkedDate": "2026-10-11",
+  "candidate": "2.0-2-touch",
+  "trustConfirmedByOwner": true,
+  "usbInitiallyIdentifiedTarget": true,
+  "developerDiskImageUsable": true,
+  "xcodeCoreDevicePairing": "unsupported",
+  "alternateDeviceTool": "iMazing 3.5.2.10001",
+  "alternateToolInitiallyIdentifiedTarget": true,
+  "latestUSBScanFoundTarget": false,
+  "appleDeveloperTeam": "54WU29TRTY",
+  "registeredDeviceCount": 3,
+  "targetRegistered": false,
+  "annualDeviceUpdate": "All three existing devices selected to keep; Reset submission rejected by automatic approval review; awaiting explicit user approval.",
+  "installationAttempted": false,
+  "appLaunched": false,
+  "uploaded": false,
+  "inputsChangedSinceBuild2": [
+    "Tools/IOSBeta/build.py"
+  ]
+}

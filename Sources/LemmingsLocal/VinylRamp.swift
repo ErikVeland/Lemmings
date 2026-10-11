@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 import NxlvKit
 
@@ -41,3 +42,4 @@ import NxlvKit
     task = nil
   }
 }
+#endif

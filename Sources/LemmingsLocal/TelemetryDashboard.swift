@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
@@ -234,3 +235,4 @@ import NxlvKit
         GameStoneButton.draw(bounds, selected: false, pixel: 1)
     }
 }
+#endif

@@ -1,0 +1,71 @@
+warning: /Users/veland/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'lemmings': failed storing manifest for 'lemmings' in cache: attempt to write a readonly database
+warning: 'sparkle': failed storing manifest for 'sparkle' in cache: attempt to write a readonly database
+Building for debugging...
+[Computing dependencies]
+[Using on-disk description]
+[1 / 3] NxlvKit
+[2 / 38] NxlvKit
+[4 / 40] NxlvKit
+[11 / 41] NxlvKit
+[20 / 37] LemmingsMobileMenuAudit-product
+[23 / 40] LemmingsMobileCoreTests-product
+[24 / 40] NxlvKitTests-product
+[37 / 52] NxlvKitTests-product
+[39 / 52] NxlvKitTests-product
+[42 / 53] LemmingsMobileMenuAudit-product
+[45 / 56] LemmingsLocal-product
+[49 / 59] LemmingsLocal-product
+[49 / 59] LemmingsLocal
+[53 / 59] LemmingsLocal
+[53 / 59] LemmingsLocal-product
+[56 / 57] LemmingsLocalTests-product
+Build complete! (9.28 sec.)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite LearningJourneyTests started.
+􀟈  Suite RescueCelebrationTests started.
+􀟈  Test goldenRimIsSubtleClippedAndLeavesTheCentreUntouched() started.
+􀟈  Test cellbashIsSecondAndMigratesEveryUnvisitedLesson() started.
+􀟈  Test nearEqualRepetitionsAreSpacedAndOriginDoesNotChooseTheOpening() started.
+􀟈  Test onlySecuredTargetsAndCompletedWinsCelebrate() started.
+􀟈  Test keepsTheWholeCampaignAndFillsTheRetailJump() started.
+􀟈  Test complexRoutesWaitForSecondBasicSkillPractice() started.
+􀟈  Test unsupportedGapsAreFlaggedAndPriorsRejected() started.
+􀟈  Test highSourceConstraintsStartAtDifficult() started.
+􀟈  Test aLowAverageCannotHideExpertTiming() started.
+􀟈  Test officialLevelsLeadComparablePortLevelsWithoutOverridingDifficulty() started.
+􀟈  Test covoxIsReplacedAtTheSameDifficultyAndRetiredRunsRecover() started.
+􀟈  Test rawReplayScoreKeepsAComparableDemandBandSmooth() started.
+􀟈  Test learning13MigrationIncludesBoth182AdditionsWithoutChangingHistory() started.
+􀟈  Test isolatedPracticePrecedesCombinationsAndPassiveLevelsDoNotOpen() started.
+􀟈  Test authoredObjectivesSeparateIntroductionsFromCombinations() started.
+􀟈  Test measuredNarrowTimingStartsAtDifficult() started.
+􀟈  Test multiplayerSourcesCannotEnterTheLearningPath() started.
+􀟈  Test DifficultyOrderAndParkingDoesNotAwardAWin() started.
+􀟈  Test somethingWrongIsReplacedByANukeFreeRoute() started.
+􁁛  Test onlySecuredTargetsAndCompletedWinsCelebrate() passed after 0.002 seconds.
+􁁛  Test aLowAverageCannotHideExpertTiming() passed after 0.002 seconds.
+􁁛  Test nearEqualRepetitionsAreSpacedAndOriginDoesNotChooseTheOpening() passed after 0.002 seconds.
+􁁛  Test unsupportedGapsAreFlaggedAndPriorsRejected() passed after 0.002 seconds.
+􁁛  Test rawReplayScoreKeepsAComparableDemandBandSmooth() passed after 0.002 seconds.
+􁁛  Test measuredNarrowTimingStartsAtDifficult() passed after 0.002 seconds.
+􁁛  Test multiplayerSourcesCannotEnterTheLearningPath() passed after 0.002 seconds.
+􁁛  Test highSourceConstraintsStartAtDifficult() passed after 0.003 seconds.
+􁁛  Test isolatedPracticePrecedesCombinationsAndPassiveLevelsDoNotOpen() passed after 0.003 seconds.
+􁁛  Test DifficultyOrderAndParkingDoesNotAwardAWin() passed after 0.003 seconds.
+􁁛  Test authoredObjectivesSeparateIntroductionsFromCombinations() passed after 0.003 seconds.
+􁁛  Test officialLevelsLeadComparablePortLevelsWithoutOverridingDifficulty() passed after 0.003 seconds.
+􁁛  Test complexRoutesWaitForSecondBasicSkillPractice() passed after 0.003 seconds.
+􁁛  Test goldenRimIsSubtleClippedAndLeavesTheCentreUntouched() passed after 0.014 seconds.
+􁁛  Suite RescueCelebrationTests passed after 0.014 seconds.
+􁁛  Test learning13MigrationIncludesBoth182AdditionsWithoutChangingHistory() passed after 0.021 seconds.
+􁁛  Test covoxIsReplacedAtTheSameDifficultyAndRetiredRunsRecover() passed after 0.022 seconds.
+􁁛  Test cellbashIsSecondAndMigratesEveryUnvisitedLesson() passed after 0.102 seconds.
+􁁛  Test somethingWrongIsReplacedByANukeFreeRoute() passed after 0.171 seconds.
+􁁛  Test keepsTheWholeCampaignAndFillsTheRetailJump() passed after 2.272 seconds.
+􁁛  Suite LearningJourneyTests passed after 2.272 seconds.
+􁁛  Test run with 19 tests in 2 suites passed after 2.272 seconds.

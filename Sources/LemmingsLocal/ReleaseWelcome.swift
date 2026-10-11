@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 
 /// Local notes also appear after an update installs without an update alert.
@@ -5,14 +6,15 @@ import AppKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "1.9.1"
-    static let subtitle = "Targeting, display and nuke hotfixes"
+    static let notesVersion = "1.9.2"
+    static let subtitle = "Celebrations, rewards and smoother navigation"
     static let sections = [
-        ("Wall-facing targeting", "Favor lemmings still approaching now uses nearby walls to choose the lemming facing into the work. It handles crowded staircases and refreshes the target when a lemming turns. Classic, NeoLemmix and both sequels share the correction."),
-        ("Grouped targeting controls", "The three targeting preferences share one outlined group in Gameplay settings. Favor approaching lemmings, blockers for bombs and current builders are clearly part of the same group. Their existing keyboard and controller controls remain available."),
-        ("Flat Panel controls", "Flat Panel greys out Tube Strength and Pixel Width because those controls apply to tube screens. Monitor and Television enable them again. Your saved values stay ready when you change screens."),
-        ("Nuke music countdown", "The funeral music slowdown starts when the first active countdown changes from 2 to 1. The screen keeps its colour until rescue becomes impossible. Music returns to normal after the final explosion, with the same recovery in Classic, NeoLemmix and The Tribes."),
-        ("Compatibility", "Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. The Tribes remains Complete. Chronicles and NeoLemmix remain Beta. The slim download includes original Mac music and essential soundtracks. Automatic updates include the full music library.")
+        ("Rewarding finishes", "Securing the rescue goal restores the celebratory music transition and adds a subtle golden glow. Reduced motion and reduced flashes keep the glow steady."),
+        ("Precision rewards", "Learning and Hot Seat journey results now credit earned Zooms and Superzooms. Results show each new award. Assisted runs and repeat clears keep the existing reward rules."),
+        ("A smoother learning journey", "Cellbash is now lesson 2. Come back! moves to the Intermediate section. Existing journeys retain their current level, history and players."),
+        ("Gameplay navigation", "The Menu button fades after a few seconds and returns on hover or keyboard focus. Move to the top edge to reach the Mac menu bar. Records supports Previous, Next and arrow keys through the current campaign."),
+        ("Now playing", "Song changes briefly show the title and soundtrack in the game's pixel lettering. The notice fades and leaves gameplay clicks available."),
+        ("Compatibility", "Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. The Tribes remains Complete. Chronicles and NeoLemmix remain Beta. Automatic updates retain the full music library.")
     ]
     private let defaults: UserDefaults
     private let build: Int
@@ -82,3 +84,4 @@ import AppKit
         GameScreen.shared.present(page, owner: window)
     }
 }
+#endif

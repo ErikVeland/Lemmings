@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
@@ -76,3 +77,4 @@ struct AnimatedPrecisionZoomLens {
         }
     }
 }
+#endif

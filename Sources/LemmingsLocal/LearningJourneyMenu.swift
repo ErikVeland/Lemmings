@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
@@ -44,3 +45,4 @@ enum LearningJourneyLibrary {
         return page
     }
 }
+#endif

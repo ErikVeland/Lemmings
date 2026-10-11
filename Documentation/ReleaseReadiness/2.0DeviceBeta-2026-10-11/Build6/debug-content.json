@@ -1,0 +1,16 @@
+{
+  "check": "normal Xcode Debug device build with no IOS_BETA_CONTENT_DIR override",
+  "buildSucceeded": true,
+  "signed": false,
+  "installed": false,
+  "appLaunched": false,
+  "dataFiles": 26,
+  "campaignLevels": 120,
+  "contentManifestSHA256": "012bada8669f71d193747064cad6db469184e2783acf1cdddea7142104f80da2",
+  "matchesSignedBuild4Content": true,
+  "bundleID": "academy.glasscode.lemmings.ios",
+  "version": "2.0",
+  "build": "1",
+  "releaseToolingTestsPassed": 65,
+  "mechanicalTestAudio": "muted"
+}

@@ -145,12 +145,15 @@ Continue the separate validation work:
 
 The release labels do not certify these outstanding fidelity or ending claims.
 
-### 2.0 — iPhone and iPad release
+### 2.0 — full iOS release
 
-Complete the physical-device, accessibility, performance, signing and
-distribution gates for the player-facing Classic mobile app. The 1.3 source
-milestone and Simulator checks are development evidence, not 2.0 acceptance.
-See the [2.0 iPhone and iPad roadmap](2.0Roadmap.md).
+Ship Classic, Lemmings 2 and Lemmings 3 on iPad, iPhone and iPhone Duo.
+Add mobile sequel content loading, original rendering, campaign progression,
+audio, controller input, shared QoL and paused Hot Seat handovers. Complete
+adaptive UI, physical-device, accessibility, performance, signing, TestFlight
+and App Store gates. The 1.3 Classic-only source milestone and Simulator checks
+are development evidence, not 2.0 acceptance.
+See the [2.0 iOS release roadmap](2.0Roadmap.md).
 
 ### Later — wider 2D content
 

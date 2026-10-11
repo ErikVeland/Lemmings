@@ -1,0 +1,70 @@
+Building for debugging...
+[Provisioning 14 / 15]
+[Planning 1 / 387]
+[Planning deferred tasks]
+[15 / 57]
+[16 / 58] NxlvKit
+[31 / 73] NxlvKit
+[37 / 77] NxlvKit
+[50 / 92] LemmingsMobileCore
+[52 / 92] LemmingsMobileCore
+[59 / 99] LemmingsMobileCore
+[76 / 108] LemmingsDataTool-product
+[81 / 112] LemmingsMobileBetaTool-product
+[84 / 112] NxlvKit
+[97 / 107] NxlvKitTests-product
+[97 / 105] LemmingsMobileCoreTests-product
+[103 / 108] LemmingsMobileCoreTests-product
+[107 / 110] LemmingsMobileCoreTests-product
+[109 / 110] LemmingsMobileCoreTests-product
+Build complete! (7.87 sec.)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2084
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite MobileCoreTests started.
+􀟈  Test lifecycleSavesOnceAndRequiresExplicitResume() started.
+􀟈  Test thermalPolicyNeverChangesSimulationRules() started.
+􀟈  Test completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test planningDoesNotBypassReadyInterruptionOrResults() started.
+􀟈  Test fixedTickClockDropsSuspensionTime() started.
+􀟈  Test classicSessionRestoresTheExactTick() started.
+􀟈  Test previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􀟈  Test loupeKeepsExactPixelsAndClipsAtLevelEdges() started.
+􀟈  Test allThreeGamesAssignDuringPlanningWithoutAdvancingTime() started.
+􀟈  Test checkpointRejectsAnOlderWriter() started.
+􀟈  Test classicJumpingRisesAcrossTheRemainingStepPixel() started.
+􀟈  Test contentImportStagesBeforeCommitAndPreservesTheLiveCopyOnFailure() started.
+􀟈  Test checkpointFallsBackToTheLastValidatedCopy() started.
+􀟈  Test heldTouchCommitsButCancellationAndReleaseOnlyDragDoNot() started.
+􀟈  Test sequelSessionsReplayTheirInputCheckpoints() started.
+􀟈  Test touchRouterDoesNotAssignAfterAPan() started.
+􀟈  Test touchTargetingPrefersEligibilityFollowersAndTools() started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test case passing 1 argument engine → "classic-dos" to completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test viewportZoomKeepsTheGestureAnchorStable() started.
+􀟈  Test case passing 1 argument engine → "classic-dos" to previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􀟈  Test safeAreaLayoutKeepsTouchTargetsOnScreen() started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􁁛  Test thermalPolicyNeverChangesSimulationRules() passed after 0.001 seconds.
+􁁛  Test fixedTickClockDropsSuspensionTime() passed after 0.001 seconds.
+􁁛  Test planningDoesNotBypassReadyInterruptionOrResults() passed after 0.001 seconds.
+􁁛  Test lifecycleSavesOnceAndRequiresExplicitResume() passed after 0.001 seconds.
+􁁛  Test heldTouchCommitsButCancellationAndReleaseOnlyDragDoNot() passed after 0.001 seconds.
+􁁛  Test touchRouterDoesNotAssignAfterAPan() passed after 0.001 seconds.
+􁁛  Test viewportZoomKeepsTheGestureAnchorStable() passed after 0.001 seconds.
+􁁛  Test touchTargetingPrefersEligibilityFollowersAndTools() passed after 0.001 seconds.
+􁁛  Test loupeKeepsExactPixelsAndClipsAtLevelEdges() passed after 0.001 seconds.
+􁁛  Test safeAreaLayoutKeepsTouchTargetsOnScreen() passed after 0.001 seconds.
+􁁛  Test classicJumpingRisesAcrossTheRemainingStepPixel() passed after 0.001 seconds.
+􁁛  Test checkpointRejectsAnOlderWriter() passed after 0.005 seconds.
+􁁛  Test completedRunRejectsLateCheckpointWrites(engine:) with 3 test cases passed after 0.005 seconds.
+􁁛  Test previousRunCleanupPreservesRetryCheckpoint(engine:) with 3 test cases passed after 0.006 seconds.
+􁁛  Test checkpointFallsBackToTheLastValidatedCopy() passed after 0.006 seconds.
+􁁛  Test contentImportStagesBeforeCommitAndPreservesTheLiveCopyOnFailure() passed after 0.007 seconds.
+􁁛  Test classicSessionRestoresTheExactTick() passed after 0.007 seconds.
+􁁛  Test allThreeGamesAssignDuringPlanningWithoutAdvancingTime() passed after 0.011 seconds.
+􁁛  Test sequelSessionsReplayTheirInputCheckpoints() passed after 0.015 seconds.
+􁁛  Suite MobileCoreTests passed after 0.015 seconds.
+􁁛  Test run with 19 tests in 1 suite passed after 0.016 seconds.

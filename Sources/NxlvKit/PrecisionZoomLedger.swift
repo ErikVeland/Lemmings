@@ -9,6 +9,11 @@ public struct PrecisionZoomEarnings: Equatable, Sendable {
     public let zoomUses: Int
     public let superzoomUses: Int
 
+    public init(zoomUses: Int, superzoomUses: Int) {
+        self.zoomUses = max(0, zoomUses)
+        self.superzoomUses = max(0, superzoomUses)
+    }
+
     public init(careerStars: Int, threeStarLevels: Int) {
         zoomUses = max(0, careerStars) / 3
         superzoomUses = max(0, threeStarLevels) / 3

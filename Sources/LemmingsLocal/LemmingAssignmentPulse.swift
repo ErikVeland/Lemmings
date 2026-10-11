@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 
 /// A short assignment acknowledgement clipped to the lemming sprite.
@@ -56,3 +57,4 @@ import AppKit
         context.restoreGState()
     }
 }
+#endif

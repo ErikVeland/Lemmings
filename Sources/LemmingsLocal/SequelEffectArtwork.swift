@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 
 /**
@@ -130,3 +131,4 @@ import AppKit
             size: NSSize(width: frame.width / 2, height: frame.height / 2))
     }
 }
+#endif

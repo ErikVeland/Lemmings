@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
@@ -122,3 +123,4 @@ import NxlvKit
     }
 
 }
+#endif

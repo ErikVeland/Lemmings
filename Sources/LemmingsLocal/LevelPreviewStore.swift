@@ -1,3 +1,4 @@
+#if os(macOS)
 import CryptoKit
 import Foundation
 import NxlvKit
@@ -805,3 +806,4 @@ private enum LevelPreviewRenderer {
         return LevelPreviewBitmap(width: width, height: height, rgba: Data(output))
     }
 }
+#endif

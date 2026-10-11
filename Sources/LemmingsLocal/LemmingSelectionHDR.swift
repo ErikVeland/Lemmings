@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import Metal
 
@@ -309,3 +310,4 @@ struct LemmingSelectionUniforms {
     }
     """
 }
+#endif

@@ -1,0 +1,5 @@
+2026-10-10 23:30:56.097 xcodebuild[28632:22666565] [MT] IDEDistribution: -[IDEDistributionLogging _createLoggingBundleAtPath:]: Created bundle at path "/var/folders/x4/552661tn5vzgxk5405585gg80000gq/T/UltimateLemmingsIOS_2026-10-10_23-30-56.096.xcdistributionlogs".
+2026-10-10 23:30:56.127 xcodebuild[28632:22666715]  DVTDeveloperAccountManager: Failed to load credentials for <older Apple account>: Error Domain=DVTDeveloperAccountCredentialsError Code=0 "Invalid credentials in keychain for <older Apple account>, missing Xcode-Token" UserInfo={NSLocalizedDescription=Invalid credentials in keychain for <older Apple account>, missing Xcode-Token}
+Exported UltimateLemmingsIOS to: /Users/veland/Lemmings/.build/ios-beta/2.0-2-touch/TestFlightExport-system
+** EXPORT SUCCEEDED **
+

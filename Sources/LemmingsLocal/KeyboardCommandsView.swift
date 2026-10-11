@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 
 struct KeyboardCommand {
@@ -74,3 +75,4 @@ struct KeyboardCommand {
         return label
     }
 }
+#endif

@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import GameController
 import NxlvKit
@@ -120,3 +121,4 @@ import NxlvKit
     }
     deinit { timer?.invalidate() }
 }
+#endif

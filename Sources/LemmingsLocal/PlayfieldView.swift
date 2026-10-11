@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
@@ -348,6 +349,7 @@ struct ReticleFeedback {
     didSet { if oldValue !== session { reticleFeedback = ReticleFeedback(); assignedTarget = nil; displayedTarget = nil; hdrBirths.removeAll(); hdrLastTick = 0; speedTrails.reset() } }
   }
   var failureMoodAmount: CGFloat = 0
+  var completionGlowAmount: CGFloat = 0
   var assets: ClassicMainDATAssets?
   var neoSprites: NeoLemmixSpriteSet? { didSet { invalidateSprites() } }
   var palette: [ClassicRGBColor] = []
@@ -815,6 +817,9 @@ struct ReticleFeedback {
         drawLevel(levelImage)
         speedTrails.draw(enabled: hdEffectsEnabled && !reduceMotion && isFastForward && phase == .playing, in: bounds) { drawLemmings() }
         NSGraphicsContext.restoreGraphicsState()
+      }
+      if let context = NSGraphicsContext.current?.cgContext {
+        RescueCelebration.draw(in: bounds, amount: completionGlowAmount, context: context)
       }
       FailureMoodOverlay.draw(in: bounds, amount: failureMoodAmount)
       drawRewindCue()
@@ -1669,3 +1674,4 @@ struct ReticleFeedback {
     return NSImage(cgImage: image, size: CGSize(width: width, height: height))
   }
 }
+#endif

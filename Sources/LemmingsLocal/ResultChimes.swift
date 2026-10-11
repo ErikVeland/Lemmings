@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 
 /// Three short rising notes, prepared once and played only on the result page.
@@ -73,3 +74,4 @@ import AppKit
         activeNote?.stop(); activeNote = nil; currentVolume = 0
     }
 }
+#endif

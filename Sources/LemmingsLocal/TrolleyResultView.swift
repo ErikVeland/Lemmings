@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
@@ -264,3 +265,4 @@ import NxlvKit
         color.setFill(); silhouette.fill()
     }
 }
+#endif

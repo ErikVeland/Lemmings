@@ -3,6 +3,28 @@ import Testing
 @testable import NxlvKit
 
 struct LearningJourneyTests {
+    @Test func intermediateBridgeLessonMigratesWithoutSkippingOrRepeatingVisits() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let journey = try JSONDecoder().decode(LearningJourney.self,
+            from: Data(contentsOf: root.appendingPathComponent("Resources/Progression/learning.json"))).validated()
+        let index = try #require(journey.lessons.firstIndex { $0.entry.identity.packID == "fan:lldb-327"
+            && $0.entry.identity.levelID == "JM01.DAT#7" })
+        #expect(index > 58 && journey.lessons[index].stage == .intermediate)
+        #expect(journey.lessons[1].entry.levelNameSnapshot == "Cellbash")
+        var previous = journey.lessons.map(\.entry)
+        let bridge = previous.remove(at: index)
+        previous.insert(bridge, at: 20)
+        for current in [1, 19, 20, 21, index, index + 1] {
+            let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+                pool: .init(id: "learning-16", summary: "Earlier journey"), entries: previous, currentIndex: current)
+            let migrated = try #require(try journey.migrating(run))
+            #expect(migrated.id == run.id && migrated.currentIndex == current && migrated.currentEntry == run.currentEntry)
+            #expect(Array(migrated.entries.prefix(current)) == Array(previous.prefix(current)))
+            #expect(migrated.entries.count == 294 && Set(migrated.entries.map(\.identity)).count == 294)
+            #expect(try journey.migrating(migrated) == migrated)
+        }
+    }
     @Test func somethingWrongIsReplacedByANukeFreeRoute() throws {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
             .deletingLastPathComponent().deletingLastPathComponent()
@@ -13,8 +35,8 @@ struct LearningJourneyTests {
             && $0.entry.identity.levelID == "ssam1221 Tame 1.dat#9" })
         let replacement = try #require(journey.lessons.first { $0.entry.identity.packID == "fan:lldb-327"
             && $0.entry.identity.levelID == "JM01.DAT#7" })
-        #expect(replacement.demand == 70)
-        #expect(replacement.stage == .fun)
+        #expect(replacement.demand == 207.5)
+        #expect(replacement.stage == .intermediate)
         let replays = try JSONDecoder().decode([String: ClassicDOSReplay].self,
             from: Data(contentsOf: root.appendingPathComponent("Resources/Progression/solutions.json")))
         let replay = try #require(replays["cf1897bbc491e55ec3f89ae50851175fda68154e757f7870c750139ecd2ccbd5"])
@@ -49,30 +71,33 @@ struct LearningJourneyTests {
         #expect(migrated.entries.count == 294)
     }
 
-    @Test func cellbashMovesAfterTutorialsAndMigratesExistingRuns() throws {
+    @Test func cellbashIsSecondAndMigratesEveryUnvisitedLesson() throws {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
             .deletingLastPathComponent().deletingLastPathComponent()
         let journey = try JSONDecoder().decode(LearningJourney.self,
             from: Data(contentsOf: root.appendingPathComponent("Resources/Progression/learning.json"))).validated()
         #expect(journey.lessons.count == 294)
-        #expect(journey.lessons[6].entry.levelNameSnapshot == "Builders will help you here")
-        #expect(journey.lessons[7].entry.levelNameSnapshot == "Cellbash")
-        #expect(journey.lessons[8].entry.levelNameSnapshot == "Snuggle up to a Lemming")
-        var previous = journey.lessons.map(\.entry)
-        let cellbash = previous.remove(at: 7)
-        previous.insert(cellbash, at: 19)
-        for index in [0, 7, 19, 20] {
-            let old = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
-                pool: .init(id: "learning-14", summary: "Previous journey"),
-                entries: previous, currentIndex: index)
-            let migrated = try #require(try journey.migrating(old))
-            #expect(migrated.pool.id == "learning-15")
-            #expect(migrated.id == old.id)
-            #expect(migrated.currentEntry == old.currentEntry)
-            #expect(migrated.currentIndex == index)
-            #expect(Array(migrated.entries.prefix(index)) == Array(previous.prefix(index)))
-            #expect(Set(migrated.entries.map(\.identity)).count == migrated.entries.count)
-            #expect(try journey.migrating(migrated) == migrated)
+        #expect(journey.lessons[0].entry.levelNameSnapshot.lowercased().contains("just dig"))
+        #expect(journey.lessons[1].entry.levelNameSnapshot == "Cellbash")
+        #expect(journey.lessons[2].entry.levelNameSnapshot == "Only floaters can survive this")
+        for (version, oldPosition) in [("learning-14", 19), ("learning-15", 7)] {
+            var previous = journey.lessons.map(\.entry)
+            let cellbash = previous.remove(at: 1)
+            previous.insert(cellbash, at: oldPosition)
+            for index in [0, 1, 3, 7, 8, 19, 20] {
+                let old = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+                    pool: .init(id: version, summary: "Previous journey"),
+                    entries: previous, currentIndex: index)
+                let migrated = try #require(try journey.migrating(old))
+                #expect(migrated.pool.id == "learning-17")
+                #expect(migrated.id == old.id)
+                #expect(migrated.currentEntry == old.currentEntry)
+                #expect(migrated.currentIndex == index)
+                #expect(Array(migrated.entries.prefix(index)) == Array(previous.prefix(index)))
+                #expect(Set(migrated.entries.map(\.identity)).count == 294)
+                #expect(migrated.entries.count == 294)
+                #expect(try journey.migrating(migrated) == migrated)
+            }
         }
     }
 
@@ -87,7 +112,7 @@ struct LearningJourneyTests {
         let old = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
             pool: .init(id: "learning-13", summary: "Previous journey"), entries: previous, currentIndex: 20)
         let migrated = try #require(try journey.migrating(old))
-        #expect(migrated.pool.id == "learning-15")
+        #expect(migrated.pool.id == "learning-17")
         #expect(migrated.id == old.id)
         #expect(migrated.currentIndex == old.currentIndex)
         #expect(migrated.currentEntry == old.currentEntry)

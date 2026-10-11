@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import CryptoKit
 import NxlvKit
@@ -117,7 +118,6 @@ import NxlvKit
   private var fadeIsLevelEntry = false
   private var fadeBass = true
   private var levelOpeningHoldEndSourceSeconds: Double?
-  private var suppressResultCue = false
   private var playbackRate: Float = 1
   private var speedPitch: Double = 0
   private var enhancements: ProTrackerEnhancements = .modern
@@ -462,15 +462,26 @@ import NxlvKit
   /// A new level, so every cue may happen again.
   func resetLevel() {
     director.reset()
-    suppressResultCue = false
+  }
+
+  func setCelebrationAlternates(_ enabled: Bool) { allowCelebrationAlternates = enabled }
+
+  /// Lift a legacy deck's composition without restarting its original recording.
+  func startCelebration(after url: URL, identity: String) -> Bool {
+    guard let path = relativePath(url),
+          let variant = catalogue?.celebration(currentPath: path, cycle: journeyCycle,
+            availablePaths: availablePaths, includeAlternates: allowCelebrationAlternates),
+          let selected = availableURLs[variant.path], startLevel(url: selected, identity: identity) else { return false }
+    _ = director.cue(for: .init(didWin: true, isComplete: true))
+    return true
   }
 
   /// Reaching the rescue target allows one musical transition.
   func updateTelemetry(_ telemetry: AdaptiveDJEngine.Telemetry) {
     guard isPlaying, let deck = activeDeck, let holdEnd = levelOpeningHoldEndSourceSeconds else { return }
-    if telemetry.isComplete && deck.sourceSeconds < holdEnd { suppressResultCue = true }
-    guard !suppressResultCue, deck.sourceSeconds >= holdEnd,
-          let cue = director.cue(for: telemetry) else { return }
+    // A completed win must celebrate even when the opening section is unfinished.
+    guard (telemetry.isComplete && telemetry.didWin) || deck.sourceSeconds >= holdEnd else { return }
+    guard let cue = director.cue(for: telemetry) else { return }
     _ = crossfade(seconds: Fade.phrase, victory: cue.reason == .won, failure: cue.reason == .lost)
   }
 
@@ -768,7 +779,6 @@ import NxlvKit
     pendingLevel = nil
     director.reset()
     levelOpeningHoldEndSourceSeconds = nil
-    suppressResultCue = false
     fadeBass = true
   }
 
@@ -823,3 +833,4 @@ import NxlvKit
     }
   }
 }
+#endif

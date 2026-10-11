@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 import Darwin
 import NxlvKit
@@ -106,3 +107,4 @@ final class ArcadeRecordFile {
         expectedData = data
     }
 }
+#endif

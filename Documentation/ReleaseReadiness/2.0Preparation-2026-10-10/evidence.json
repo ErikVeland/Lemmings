@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-10",
+  "kind": "iOS source preparation",
+  "releaseAccepted": false,
+  "baseCommit": "0398d081d0aa4b1f25717eb59d2095f35d81f542",
+  "workingTree": true,
+  "sourceManifest": "source-manifest.json",
+  "manifestFileCount": 197,
+  "sourceDrift": [],
+  "xcode": "27.2",
+  "xcodeBuild": "27B5019j",
+  "sdk": "iOS 27.2",
+  "availableIOSRuntime": "26.0",
+  "audio": "muted",
+  "simulatorBooted": false,
+  "uiTestsRun": false,
+  "sourceGate": {
+    "command": "zsh Scripts/check-1.3-mobile.sh --require-sdk",
+    "exitCode": 0,
+    "incremental": true,
+    "log": "source-gate.log",
+    "mobileCoreTests": 13
+  },
+  "releaseTooling": {
+    "command": "python3 -m unittest discover -s Tests/ReleaseReadinessTests -p 'test_*.py'",
+    "passedTests": 48
+  },
+  "runtimeProbeCases": [
+    "available iOS",
+    "unavailable iOS",
+    "non-iOS",
+    "malformed response"
+  ],
+  "products": {
+    "debugSimulator": {
+      "path": ".build/ios-products/Debug-iphonesimulator/UltimateLemmingsIOS.app/UltimateLemmingsIOS",
+      "sha256": "e526c8f9cd1d67945fe8d0575dd3f1837189a3a29048f47dcabebe660030840f",
+      "architectures": [
+        "x86_64",
+        "arm64"
+      ]
+    },
+    "releaseSimulator": {
+      "path": ".build/ios-release-products/Release-iphonesimulator/UltimateLemmingsIOS.app/UltimateLemmingsIOS",
+      "sha256": "e3a86f4bf7a1d8d7d1c9458349b80381e748a13360a3c08c4a8b5feea8fc4d71",
+      "architectures": [
+        "x86_64",
+        "arm64"
+      ]
+    },
+    "unsignedDevice": {
+      "path": ".build/ios-device-release-products/Release-iphoneos/UltimateLemmingsIOS.app/UltimateLemmingsIOS",
+      "sha256": "cd8be29384e4c813bdc94c9f006b70cc26b47445731a598557c736043a7326de",
+      "architectures": [
+        "arm64"
+      ]
+    }
+  },
+  "limits": [
+    "Only Classic content is connected to the mobile library.",
+    "L2/L3 content factories, native renderers and campaign flows remain open.",
+    "Shared QoL, Hot Seat, audio playback, controller routing and Duo layouts remain open.",
+    "No current iOS UI, physical-device, accessibility, signing, TestFlight or App Store acceptance is claimed.",
+    "The initial pass built products but exited 127 after the runner changed during execution. It also emitted Xcode failed-with-exit-code-zero diagnostics. The stable incremental rerun exited zero without those diagnostics. Initial output is retained in initial-source-gate.log."
+  ]
+}

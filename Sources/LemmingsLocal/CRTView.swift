@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import Metal
 import QuartzCore
@@ -537,3 +538,4 @@ struct CRTUniforms {
     buffer.commit()
   }
 }
+#endif

@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
@@ -131,3 +132,4 @@ import NxlvKit
 private final class AchievementListView: NSView {
   override var isFlipped: Bool { true }
 }
+#endif

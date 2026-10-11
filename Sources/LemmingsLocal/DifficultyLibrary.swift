@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 import CryptoKit
 import NxlvKit
@@ -149,3 +150,4 @@ enum DifficultyLibrary {
         try encoder.encode(result.diagnostics).write(to: directory.appendingPathComponent(result.policy.rawValue + ".json"), options: .atomic)
     }
 }
+#endif

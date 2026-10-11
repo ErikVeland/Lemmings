@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 @preconcurrency import GameKit
 import NxlvKit
@@ -262,3 +263,4 @@ struct GameCenterAccount: Equatable, Sendable {
             + (service.board?.personal.map { " Your rank: \($0.rank). Your score: \($0.score)." } ?? "") + " Ranked catalogue only, without rewinds.")
     }
 }
+#endif

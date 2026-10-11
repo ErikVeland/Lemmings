@@ -1,0 +1,49 @@
+{
+  "info" : {
+    "arguments" : [
+      "devicectl",
+      "device",
+      "info",
+      "apps",
+      "--device",
+      "3c4b6e12624a577712d178b63203c9d7c249bf77",
+      "--bundle-id",
+      "academy.glasscode.lemmings.ios",
+      "--timeout",
+      "30",
+      "--json-output",
+      "/Users/veland/Lemmings/.build/ios-beta/2.0-7-playfield/Delivery-20261010T203426801955Z/apps.json"
+    ],
+    "commandType" : "devicectl.device.info.apps",
+    "environment" : {
+      "TERM" : "dumb"
+    },
+    "jsonVersion" : 5,
+    "outcome" : "success",
+    "version" : "651.13.4"
+  },
+  "result" : {
+    "apps" : [
+      {
+        "appClip" : false,
+        "builtByDeveloper" : true,
+        "bundleIdentifier" : "academy.glasscode.lemmings.ios",
+        "bundleVersion" : "7",
+        "containerAccessible" : true,
+        "defaultApp" : false,
+        "hidden" : false,
+        "internalApp" : false,
+        "name" : "Ultimate Lemmings",
+        "removable" : true,
+        "url" : "file:///private/var/containers/Bundle/Application/415D6DDD-7479-4E83-A669-6F3EF91E29C3/UltimateLemmingsIOS.app/",
+        "version" : "2.0"
+      }
+    ],
+    "defaultAppsIncluded" : false,
+    "deviceIdentifier" : "88D728A8-8C8E-5F8A-A195-9CDDE817C1F7",
+    "hiddenAppsIncluded" : false,
+    "internalAppsIncluded" : false,
+    "matchingBundleIdentifier" : "academy.glasscode.lemmings.ios",
+    "removableAppsIncluded" : true
+  }
+}

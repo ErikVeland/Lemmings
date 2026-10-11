@@ -1,3 +1,4 @@
+#if os(macOS)
 import AVFoundation
 import Foundation
 import NxlvKit
@@ -697,3 +698,4 @@ final class SoundEffectPlayer: @unchecked Sendable {
     return isMuted || outputSuspended ? 0 : level
   }
 }
+#endif

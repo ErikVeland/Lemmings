@@ -1,0 +1,37 @@
+/Users/veland/Lemmings/Sources/LemmingsLocal/ReleaseWelcome.swift:47:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+45 |         scroll.hasHorizontalScroller = false
+46 |         scroll.drawsBackground = false
+47 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+48 |         scroll.scrollerStyle = .overlay
+49 |         scroll.setAccessibilityLabel("Release notes")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6081:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6079 |       openPanel.canChooseFiles = true
+6080 |       openPanel.canChooseDirectories = false
+6081 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6082 |       openPanel.message = "Choose a NeoLemmix level file."
+6083 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:7391:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7389 |       openPanel.canChooseFiles = true
+7390 |       openPanel.canChooseDirectories = false
+7391 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7392 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+7393 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8098:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8096 |     keyboard.controllerRewindHeld = { [weak self] held in
+8097 |       guard let self else { return }
+8098 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8099 |       else if self.rewindHeld { self.endContinuousRewind() }
+8100 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+/Users/veland/Lemmings/.build/menu-records-track-beta/Ultimate Lemmings.app: replacing existing signature
+/Users/veland/Lemmings/.build/menu-records-track-beta/Ultimate Lemmings.app

@@ -12,10 +12,10 @@ struct MobileCoreTests {
         let portrait = MobileLayoutEngine.make(
             container: MobileSize(width: 390, height: 844),
             safeArea: MobileInsets(top: 47, bottom: 34),
-            controlCount: 13
+            controlCount: 15
         )
         #expect(portrait.orientation == .portrait)
-        #expect(portrait.controlFrames.count == 13)
+        #expect(portrait.controlFrames.count == 15)
         #expect(portrait.controlFrames.allSatisfy {
             $0.width >= MobileLayoutEngine.minimumControlExtent
                 && $0.height >= MobileLayoutEngine.minimumControlExtent
@@ -37,6 +37,9 @@ struct MobileCoreTests {
         for (container, insets) in [
             (MobileSize(width: 1_024, height: 1_366), MobileInsets(top: 24, bottom: 20)),
             (MobileSize(width: 1_366, height: 1_024), MobileInsets(top: 24, bottom: 20)),
+            (MobileSize(width: 834, height: 1_112), MobileInsets(top: 20, bottom: 0)),
+            (MobileSize(width: 1_112, height: 834), MobileInsets(top: 20, bottom: 0)),
+            (MobileSize(width: 375, height: 834), MobileInsets(top: 24, bottom: 20)),
         ] {
             let tablet = MobileLayoutEngine.make(
                 container: container,
@@ -174,6 +177,74 @@ struct MobileCoreTests {
         #expect(state.isPaused)
     }
 
+    @Test func planningDoesNotBypassReadyInterruptionOrResults() {
+        var state = MobilePlayState()
+        #expect(state.isPaused && !state.canEdit && !state.canStep)
+        #expect(state.pauseForPlanning() == false)
+        #expect(state.resume(isForeground: false, isInterrupted: false) == false)
+        #expect(state.resume(isForeground: true, isInterrupted: false) == true)
+        #expect(!state.isPaused && state.canEdit && !state.canStep)
+        #expect(state.pauseForPlanning() == true)
+        #expect(state.isPaused && state.canEdit && state.canStep)
+        state.suspend()
+        #expect(state.isPaused && !state.canEdit && !state.canStep)
+        #expect(state.pauseForPlanning() == false)
+        #expect(state.resume(isForeground: true, isInterrupted: true) == false)
+        #expect(state.resume(isForeground: true, isInterrupted: false) == true)
+        state.complete()
+        state.suspend()
+        #expect(state.phase == .completed)
+        #expect(state.resume(isForeground: true, isInterrupted: false) == false)
+    }
+
+    @Test func heldTouchCommitsButCancellationAndReleaseOnlyDragDoNot() {
+        var router = MobileTouchRouter(movementThreshold: 8)
+        let point = MobilePoint(x: 20, y: 30)
+        _ = router.began(id: 1, at: point, time: 1)
+        #expect(router.ended(id: 1, at: point, time: 6) == [.commit(point)])
+        _ = router.began(id: 2, at: point, time: 7)
+        #expect(router.cancel() == [.cancelPreview])
+        #expect(router.ended(id: 2, at: point, time: 8).isEmpty)
+        _ = router.began(id: 3, at: point, time: 9)
+        #expect(router.ended(id: 3, at: MobilePoint(x: 60, y: 30), time: 9.1) == [.cancelPreview])
+    }
+
+    @Test func loupeKeepsExactPixelsAndClipsAtLevelEdges() throws {
+        let pixels = Data((0..<48).map(UInt8.init))
+        let frame = try MobilePixelFrame(width: 4, height: 3, rgba: pixels)
+        let first = try frame.cropped(around: MobilePoint(x: 0, y: 0), width: 2, height: 2)
+        #expect(first.rgba == Data(Array(pixels[0..<8]) + Array(pixels[16..<24])))
+        let last = try frame.cropped(around: MobilePoint(x: 4, y: 3), width: 2, height: 2)
+        #expect(last.rgba == Data(Array(pixels[24..<32]) + Array(pixels[40..<48])))
+        #expect(try frame.cropped(around: MobilePoint(x: 2, y: 1), width: 64, height: 40) == frame)
+        #expect(throws: MobileSessionError.invalidFrame) {
+            try frame.cropped(around: MobilePoint(x: .infinity, y: 1), width: 2, height: 2)
+        }
+    }
+
+    @Test @MainActor func allThreeGamesAssignDuringPlanningWithoutAdvancingTime() throws {
+        let classic = ClassicMobileSession(simulation: try Self.classicSimulation(), levelIdentifier: "fixture/1", levelIndex: 0)
+        let l2 = Lemmings2MobileSession(runtime: try Self.lemmings2Runtime(), engineFingerprint: "l2-engine", levelIdentifier: "l2/1", levelIndex: 0, levelFingerprint: "l2-level")
+        let l3 = Lemmings3MobileSession(runtime: try Self.lemmings3Runtime(), engineFingerprint: "l3-engine", levelIdentifier: "l3/1", levelIndex: 0, levelFingerprint: "l3-level")
+        for (session, control) in [(classic as any MobileGameSession, 0), (l2 as any MobileGameSession, 0), (l3 as any MobileGameSession, 2)] {
+            for _ in 0..<80 where !session.targetCandidates(for: control).contains(where: { $0.assignment == .eligible }) { session.tick() }
+            var state = MobilePlayState()
+            #expect(state.resume(isForeground: true, isInterrupted: false) == true)
+            #expect(state.pauseForPlanning() == true)
+            let tick = session.snapshot.tick
+            let target = try #require(session.targetCandidates(for: control).first(where: { $0.assignment == .eligible }))
+            #expect(state.canEdit && session.assign(control: control, to: target.id))
+            #expect(session.snapshot.tick == tick)
+            #expect(state.isPaused)
+            let payload = try session.checkpointPayload()
+            let assigned = session.snapshot
+            session.tick()
+            #expect(session.snapshot.tick == tick + 1)
+            try session.restoreCheckpointPayload(payload)
+            #expect(session.snapshot == assigned)
+        }
+    }
+
     @Test func thermalPolicyNeverChangesSimulationRules() {
         let nominal = MobileThermalPolicy.budget(
             for: .nominal,
@@ -230,6 +301,37 @@ struct MobileCoreTests {
         try await store.save(newer)
         try await store.save(older)
         #expect(try await store.load() == newer)
+    }
+
+    @Test(arguments: ["classic-dos", "lemmings2", "lemmings3"])
+    func completedRunRejectsLateCheckpointWrites(engine: String) async throws {
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("MobileRetiredRunTests-\(UUID().uuidString)")
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let store = MobileCheckpointStore(url: directory.appendingPathComponent("run.json"))
+        let run = checkpoint(tick: 10, payload: Data("completed".utf8), engine: engine)
+        try await store.save(run)
+        try await store.retire(runID: run.runID)
+        try await store.save(checkpoint(tick: 20, payload: Data("late".utf8), engine: engine))
+        #expect(try await store.load() == nil)
+        let backupURL = await store.backupURL
+        #expect(!FileManager.default.fileExists(atPath: backupURL.path))
+    }
+
+    @Test(arguments: ["classic-dos", "lemmings2", "lemmings3"])
+    func previousRunCleanupPreservesRetryCheckpoint(engine: String) async throws {
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("MobileRetryRunTests-\(UUID().uuidString)")
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let store = MobileCheckpointStore(url: directory.appendingPathComponent("run.json"))
+        let previous = checkpoint(tick: 10, payload: Data("previous".utf8), engine: engine)
+        let retry = checkpoint(tick: 20, payload: Data("retry".utf8), runID: UUID(), engine: engine)
+        try await store.save(previous)
+        try await store.save(retry)
+        try await store.retire(runID: previous.runID)
+        #expect(try await store.load() == retry)
+        try await store.save(checkpoint(tick: 30, payload: Data("late".utf8), engine: engine))
+        #expect(try await store.load() == retry)
     }
 
     @Test func contentImportStagesBeforeCommitAndPreservesTheLiveCopyOnFailure() throws {
@@ -410,10 +512,12 @@ struct MobileCoreTests {
         #expect(l3Restored.snapshot == l3Expected)
     }
 
-    private func checkpoint(tick: Int, payload: Data) -> MobileCheckpointEnvelope {
+    private func checkpoint(tick: Int, payload: Data,
+                            runID: UUID = UUID(uuidString: "00000000-0000-0000-0000-000000000001")!,
+                            engine: String = "classic-dos") -> MobileCheckpointEnvelope {
         MobileCheckpointEnvelope(
-            runID: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!,
-            engine: "classic-dos",
+            runID: runID,
+            engine: engine,
             engineFingerprint: "engine",
             levelIdentifier: "fixture/1",
             levelIndex: 0,

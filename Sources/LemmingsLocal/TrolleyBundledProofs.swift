@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 import CryptoKit
 import NxlvKit
@@ -36,3 +37,4 @@ struct TrolleyBundledProofs {
         return result
     }
 }
+#endif

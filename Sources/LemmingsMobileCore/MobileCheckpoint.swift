@@ -99,6 +99,7 @@ public actor MobileCheckpointStore {
     public static let maximumDocumentBytes = 64 * 1_024 * 1_024
     public let url: URL
     public var backupURL: URL { url.appendingPathExtension("backup") }
+    private var retiredRuns: Set<UUID> = []
 
     public init(url: URL) {
         self.url = url
@@ -126,6 +127,7 @@ public actor MobileCheckpointStore {
     }
 
     public func save(_ envelope: MobileCheckpointEnvelope) throws {
+        guard !retiredRuns.contains(envelope.runID) else { return }
         let validated = try envelope.validated()
         let payload = try JSONEncoder().encode(validated)
         let document = Document(payload: payload, checksum: Self.hash(payload))
@@ -164,6 +166,16 @@ public actor MobileCheckpointStore {
     public func remove() throws {
         for path in [url, backupURL] where FileManager.default.fileExists(atPath: path.path) {
             try FileManager.default.removeItem(at: path)
+        }
+    }
+
+    /// Late saves from a finished run cannot restore it or delete a newer run.
+    public func retire(runID: UUID) throws {
+        retiredRuns.insert(runID)
+        for path in [url, backupURL] where FileManager.default.fileExists(atPath: path.path) {
+            if let bytes = try? read(path), let envelope = try? decode(bytes), envelope.runID == runID {
+                try FileManager.default.removeItem(at: path)
+            }
         }
     }
 

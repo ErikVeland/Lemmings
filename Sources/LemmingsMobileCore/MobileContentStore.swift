@@ -33,9 +33,13 @@ public struct MobileContentStore: Sendable {
         self.validator = validator
     }
 
-    public func loadLibrary() throws -> ClassicMobileLibrary? {
-        guard FileManager.default.fileExists(atPath: gameDataDirectory.path) else { return nil }
-        return try ClassicMobileLibrary(directory: gameDataDirectory)
+    public func loadLibrary(bundledDirectory: URL? = nil) throws -> ClassicMobileLibrary? {
+        if FileManager.default.fileExists(atPath: gameDataDirectory.path) {
+            return try ClassicMobileLibrary(directory: gameDataDirectory)
+        }
+        guard let bundledDirectory,
+              FileManager.default.fileExists(atPath: bundledDirectory.path) else { return nil }
+        return try ClassicMobileLibrary(directory: bundledDirectory)
     }
 
     /// Copies a document-picker folder only after complete staged validation.

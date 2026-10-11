@@ -1,0 +1,41 @@
+{
+  "app": "/Users/veland/Lemmings/.build/ios-beta/2.0-7-playfield/UltimateLemmingsIOS.xcarchive/Products/Applications/UltimateLemmingsIOS.app",
+  "archiveSigned": true,
+  "build": 7,
+  "bundleID": "academy.glasscode.lemmings.ios",
+  "contentFiles": 26,
+  "contentManifestSHA256": "012bada8669f71d193747064cad6db469184e2783acf1cdddea7142104f80da2",
+  "executableSHA256": "4935d7c97384e0db9182a97f29e15b6fdfac636ec5bc799e22f9f1c9ce595a93",
+  "exportExecutableSHA256": "8996b116d1e279d81db51815b25d659d05e3d414d7f635145e1d4e43c09c25e8",
+  "exportMethod": "debugging",
+  "exportSignatureVerified": true,
+  "exported": true,
+  "finishedUTC": "2026-10-10T20:33:00.954912+00:00",
+  "gitCommit": "0398d081d0aa4b1f25717eb59d2095f35d81f542",
+  "installApp": "/Users/veland/Lemmings/.build/ios-beta/2.0-7-playfield/Install/Payload/UltimateLemmingsIOS.app",
+  "ipa": "/Users/veland/Lemmings/.build/ios-beta/2.0-7-playfield/Export/UltimateLemmingsIOS.ipa",
+  "ipaSHA256": "ea30baa9f3b407f7ddbef052a8d4167336efce3d5963f9069802368321af33aa",
+  "launchScope": [
+    "Classic",
+    "Lemmings 2",
+    "Lemmings 3"
+  ],
+  "minimumOS": "16.0",
+  "physicalDeviceAcceptance": "pending",
+  "profileExpiresUTC": "2027-10-10T19:48:30Z",
+  "requestedDeviceIncluded": true,
+  "scope": "Classic first device beta",
+  "signed": true,
+  "startedUTC": "2026-10-10T20:30:24.423672+00:00",
+  "status": "signed archive and IPA exported",
+  "symbolUUIDs": [
+    [
+      "C84921F3-7D48-31B2-8AD8-2204E2BFCA12",
+      "arm64"
+    ]
+  ],
+  "team": "54WU29TRTY",
+  "uploaded": false,
+  "version": "2.0",
+  "xcode": "Xcode 27.2\nBuild version 27B5019j"
+}

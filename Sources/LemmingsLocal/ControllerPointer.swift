@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 
 @MainActor enum ControllerPointer {
@@ -10,3 +11,4 @@ import AppKit
         NSColor.white.setStroke(); path.lineWidth = 2; path.stroke()
     }
 }
+#endif

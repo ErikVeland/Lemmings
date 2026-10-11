@@ -1,10 +1,12 @@
+#if os(macOS)
 import AppKit
 import CoreGraphics
 
-/// Arms inside the game, then keeps samples one point inside its visible edges.
+/// Captures side and bottom edges. The top edge releases access to macOS menus.
 struct PointerConfinement {
     private(set) var capturedBounds: CGRect?
     var isCaptured: Bool { capturedBounds != nil }
+    var allowsTopExit = false
 
     mutating func release() { capturedBounds = nil }
 
@@ -12,6 +14,8 @@ struct PointerConfinement {
                          releaseRequested: Bool) -> CGPoint? {
         guard active, !releaseRequested, !bounds.isNull, !bounds.isInfinite,
               bounds.width > 2, bounds.height > 2 else { release(); return nil }
+        // A top strip also prevents immediate recapture while reaching the menu bar.
+        if allowsTopExit && point.y >= bounds.maxY - 4 { release(); return nil }
         // A moved or resized window must acquire the pointer again.
         if capturedBounds != bounds { release() }
         guard isCaptured || bounds.contains(point) else { return nil }
@@ -38,16 +42,18 @@ struct PointerCaptureGate {
     var viewHidden: Bool
     var liveResize: Bool
     var sheetAttached: Bool
+    var menuTracking = false
 
     var allowsCapture: Bool {
         appActive && windowKey && windowOrdered && onScreen
-            && !miniaturized && !viewHidden && !liveResize && !sheetAttached
+            && !miniaturized && !viewHidden && !liveResize && !sheetAttached && !menuTracking
     }
 }
 
 /// Uses absolute positions so normal clicks, dragging and system shortcuts still work.
 @MainActor final class GamePointerCapture: NSObject {
-    private var confinement = PointerConfinement()
+    private var confinement = PointerConfinement(allowsTopExit: true)
+    private(set) var menuTracking = false
     private let readPosition: () -> CGPoint
     private let warpPosition: (CGPoint) -> CGError
     var isCaptured: Bool { confinement.isCaptured && !NSEvent.modifierFlags.contains(.option) }
@@ -69,11 +75,15 @@ struct PointerCaptureGate {
         super.init()
         for name in [NSWindow.didResignKeyNotification, NSApplication.didResignActiveNotification,
                      NSWindow.willCloseNotification, NSWindow.willStartLiveResizeNotification,
-                     NSApplication.didChangeScreenParametersNotification, NSMenu.didBeginTrackingNotification] {
+                     NSApplication.didChangeScreenParametersNotification] {
             NotificationCenter.default.addObserver(self, selector: #selector(reset), name: name, object: nil)
         }
+        NotificationCenter.default.addObserver(self, selector: #selector(menuStarted), name: NSMenu.didBeginTrackingNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(menuEnded), name: NSMenu.didEndTrackingNotification, object: nil)
     }
 
+    @objc private func menuStarted() { menuTracking = true; reset(); NSCursor.arrow.set() }
+    @objc private func menuEnded() { menuTracking = false }
     @objc func reset() { confinement.release() }
 
     /// Returns the current point in the view even when a warp generates no mouse event.
@@ -85,7 +95,7 @@ struct PointerCaptureGate {
                                  miniaturized: window.isMiniaturized,
                                  viewHidden: view.isHiddenOrHasHiddenAncestor,
                                  liveResize: view.inLiveResize,
-                                 sheetAttached: window.attachedSheet != nil).allowsCapture,
+                                 sheetAttached: window.attachedSheet != nil, menuTracking: menuTracking).allowsCapture,
               let screen = window.screen, let primary = NSScreen.screens.first else {
             reset(); return nil
         }
@@ -93,7 +103,10 @@ struct PointerCaptureGate {
         let bounds = window.convertToScreen(view.convert(visible, to: nil)).intersection(screen.frame)
         let point = readPosition()
         guard let captured = confinement.sample(point, in: bounds, active: true,
-                releaseRequested: NSEvent.modifierFlags.contains(.option)) else { return nil }
+                releaseRequested: NSEvent.modifierFlags.contains(.option)) else {
+            if point.y >= bounds.maxY - 4 { NSCursor.arrow.set() }
+            return nil
+        }
         if captured != point {
             let result = warpPosition(PointerConfinement.quartzPoint(captured, primaryDisplayTop: primary.frame.maxY))
             guard result == .success else { reset(); return nil }
@@ -101,3 +114,4 @@ struct PointerCaptureGate {
         return view.convert(window.convertPoint(fromScreen: captured), from: nil)
     }
 }
+#endif

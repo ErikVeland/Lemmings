@@ -1,0 +1,13 @@
+{
+  "banks": [
+    "Charset1",
+    "Charset2",
+    "Icons",
+    "Logo1",
+    "Logo2"
+  ],
+  "pngFiles": 309,
+  "manifestSHA256": "66b3f17cb4585411954025931ece9bfd657f31becf7f1b962c79ae804127cd35",
+  "allExportedFramesMatchFrozenSource": true,
+  "actualUIKitRenderAcceptance": "pending manual device check"
+}

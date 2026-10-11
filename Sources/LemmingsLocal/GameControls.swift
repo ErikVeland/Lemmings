@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 
 /// Game artwork supplies the visible controls; AppKit retains input and accessibility.
@@ -224,6 +225,7 @@ import AppKit
 @MainActor final class GameTabButton: GameButton {}
 
 @MainActor final class GameTabs: NSView, NSTabViewDelegate {
+    var onSelectionChanged: (() -> Void)?
     private let tabs = NSTabView()
     private var buttons: [GameButton] = []
     var font: NSFont?
@@ -252,6 +254,7 @@ import AppKit
     }
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) { updateSelection() }
     private func updateSelection() {
+        onSelectionChanged?()
         for (index, button) in buttons.enumerated() {
             button.state = tabs.selectedTabViewItem === tabs.tabViewItems[index] ? .on : .off
             button.setAccessibilityValue(button.state == .on ? 1 : 0)
@@ -349,3 +352,4 @@ import AppKit
         GameControlText.draw(stringValue, in: cellFrame.insetBy(dx: 8, dy: 2), role: .heading)
     }
 }
+#endif

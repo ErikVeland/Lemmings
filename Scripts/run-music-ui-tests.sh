@@ -27,4 +27,8 @@ swiftc -Onone -swift-version 6 -target "$(uname -m)-apple-macos12.3" \
   -I "$module_root/modules" -L "$module_root" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$module_root" -Xlinker -rpath -Xlinker "$app_root/Contents/Frameworks" -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
   -o "$test_app/Contents/MacOS/Tests" "$build_dir/main.swift" "${app_sources[@]}"
+if [[ "${TEST_COMPILE_ONLY:-0}" == 1 ]]; then
+  print "PASS music UI test compilation only."
+  exit 0
+fi
 python3 Tools/UITestRunner/run.py "$test_app/Contents/MacOS/Tests"

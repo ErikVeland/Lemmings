@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 @preconcurrency import AVFoundation
 import NxlvKit
@@ -375,3 +376,4 @@ private final class ReplayMusic {
     NSGraphicsContext.restoreGraphicsState()
   }
 }
+#endif

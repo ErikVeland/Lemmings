@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 
 /// Bounded, process-local storage for decoded assets and verified content identities.
@@ -33,3 +34,4 @@ private enum InstalledGameResourceRoot {
         return Bundle.main.resourceURL?.resolvingSymlinksInPath().standardizedFileURL.path
     }()
 }
+#endif

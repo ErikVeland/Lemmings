@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
@@ -1235,3 +1236,4 @@ private struct LevelCoverFlowSynchronousTransfer<Value>: @unchecked Sendable {
         self.value = value
     }
 }
+#endif

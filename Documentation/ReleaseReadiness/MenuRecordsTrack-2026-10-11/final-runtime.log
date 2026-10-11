@@ -1,0 +1,7 @@
+UI test windows: offscreen; audio: muted
+PASS lemmings-unplayed ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS lemmings2-unplayed ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS lemmings3-unplayed ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS neolemmix-unplayed ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS catalogue song/source names, variant changes, Now Playing bitmap renders, expiry, accessibility, silence and pointer pass-through
+Records and track-notice integration tests passed.

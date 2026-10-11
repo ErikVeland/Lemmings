@@ -58,3 +58,33 @@ check(!sheet.allowsCapture, "A system sheet left the pointer captured")
 var background = ready; background.appActive = false
 check(!background.allowsCapture, "A background app captured the pointer")
 print("PASS pointer capture: sustained edges, four display positions, release, reacquisition, moved windows, off-screen windows and Quartz coordinates")
+
+// The production policy lets the pointer reach title bars and macOS menus.
+for frame in [CGRect(x: 0, y: 0, width: 2560, height: 1440),
+              CGRect(x: -1920, y: 280, width: 1920, height: 1080),
+              CGRect(x: 2560, y: -900, width: 1440, height: 900),
+              CGRect(x: 0, y: 1440, width: 1920, height: 1080)] {
+    var menus = PointerConfinement(allowsTopExit: true)
+    let centre = CGPoint(x: frame.midX, y: frame.midY)
+    _ = menus.sample(centre, in: frame, active: true, releaseRequested: false)
+    check(menus.sample(CGPoint(x: frame.maxX + 100, y: frame.midY), in: frame, active: true, releaseRequested: false)?.x == frame.maxX - 1,
+          "Menu access released the side scrolling edge")
+    check(menus.sample(CGPoint(x: frame.midX, y: frame.maxY - 2), in: frame, active: true, releaseRequested: false) == nil && !menus.isCaptured,
+          "The top edge prevented menu bar access")
+    for y in [frame.maxY - 1, frame.maxY, frame.maxY + 24] {
+        check(menus.sample(CGPoint(x: frame.midX, y: y), in: frame, active: true, releaseRequested: false) == nil,
+              "The menu corridor recaptured the pointer")
+    }
+    check(menus.sample(centre, in: frame, active: true, releaseRequested: false) == centre && menus.isCaptured,
+          "Returning to play did not reacquire capture")
+}
+print("PASS top-edge menu access and reacquisition on four display positions; no system cursor moved")
+
+var openMenu = ready; openMenu.menuTracking = true
+check(!openMenu.allowsCapture, "An open system menu allowed capture")
+let menuCapture = GamePointerCapture(readPosition: { .zero }, warpPosition: { _ in fatalError("Notification check moved the cursor") })
+NotificationCenter.default.post(name: NSMenu.didBeginTrackingNotification, object: nil)
+check(menuCapture.menuTracking && !menuCapture.isCaptured, "Menu tracking did not hold capture released")
+NotificationCenter.default.post(name: NSMenu.didEndTrackingNotification, object: nil)
+check(!menuCapture.menuTracking, "Closing the menu did not restore the capture gate")
+print("PASS native menu tracking notifications keep capture released without moving the cursor")

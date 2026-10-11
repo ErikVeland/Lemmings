@@ -1,0 +1,8 @@
+warning: /Users/veland/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'sourcesnapshot-8': failed storing manifest for 'sourcesnapshot-8' in cache: attempt to write a readonly database
+warning: 'sparkle': failed storing manifest for 'sparkle' in cache: attempt to write a readonly database
+Building for debugging...
+Build complete! (0.27 sec.)
+PASS: 66 front-end renders, touch targets, disabled actions, menu gaps and scroll reachability.

@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 
 /// Cursor presentation shared by gameplay views and their controls.
@@ -125,3 +126,4 @@ import AppKit
     return NSColor(calibratedWhite: 0.6, alpha: 0.9)
   }
 }
+#endif

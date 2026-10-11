@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 import NxlvKit
 
@@ -61,3 +62,4 @@ final class Lemmings2SoundPlayer: @unchecked Sendable {
         }
     }
 }
+#endif

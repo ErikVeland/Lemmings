@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 import NxlvKit
 
@@ -319,3 +320,4 @@ struct AnonymousTelemetrySummary: Codable, Sendable {
         return String(format: "%04d-%02d-%02d", parts.year ?? 0, parts.month ?? 0, parts.day ?? 0)
     }
 }
+#endif

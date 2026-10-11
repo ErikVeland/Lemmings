@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import XCTest
 import NxlvKit
@@ -145,3 +146,4 @@ final class LearningJourneyDesktopTests: XCTestCase {
         }
     }
 }
+#endif

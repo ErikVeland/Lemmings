@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 
 struct LevelHintCatalogue: Decodable {
@@ -124,3 +125,4 @@ struct LevelHintDeck {
         ])
     }
 }
+#endif

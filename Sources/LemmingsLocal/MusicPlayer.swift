@@ -1,3 +1,4 @@
+#if os(macOS)
 import AVFoundation
 import Foundation
 import NxlvKit
@@ -535,3 +536,4 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     return !enhancements.isFaithful
   }
 }
+#endif

@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
@@ -40,3 +41,4 @@ import NxlvKit
         catch { GameScreen.shared.message("Favourite not saved", detail: error.localizedDescription) }
     }
 }
+#endif

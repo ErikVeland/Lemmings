@@ -1,0 +1,18 @@
+{
+  "startedUTC": "2026-10-10T19:49:46.453619+00:00",
+  "backend": "imazing",
+  "installed": false,
+  "installationAttempted": true,
+  "appLaunched": false,
+  "uploaded": false,
+  "bundleID": "academy.glasscode.lemmings.ios",
+  "version": "2.0",
+  "build": 4,
+  "ipaSHA256": "a5a67f154f8806002b2bbc5692a3c5f11175ec76cc942c3fe2f65bbaae4b8b70",
+  "contentManifestSHA256": "012bada8669f71d193747064cad6db469184e2783acf1cdddea7142104f80da2",
+  "requestedDeviceIncluded": true,
+  "preflightVerified": true,
+  "status": "blocked",
+  "error": "Command '['/Applications/iMazing.app/Contents/MacOS/iMazing', '--device-install-custom-package', '--udid', '3c4b6e12624a577712d178b63203c9d7c249bf77', '--item-path', '/Users/veland/Lemmings/.build/ios-beta/2.0-4-ipad/Export/UltimateLemmingsIOS.ipa', '--package-type', 'Developer', '--timeout', '30', '--usb']' returned non-zero exit status 1.",
+  "finishedUTC": "2026-10-10T19:49:49.469021+00:00"
+}

@@ -1,0 +1,29 @@
+{
+  "startedUTC": "2026-10-10T19:58:10.209873+00:00",
+  "backend": "devicectl",
+  "installed": true,
+  "installationAttempted": true,
+  "appLaunched": false,
+  "uploaded": false,
+  "bundleID": "academy.glasscode.lemmings.ios",
+  "version": "2.0",
+  "build": 4,
+  "ipaSHA256": "a5a67f154f8806002b2bbc5692a3c5f11175ec76cc942c3fe2f65bbaae4b8b70",
+  "contentManifestSHA256": "012bada8669f71d193747064cad6db469184e2783acf1cdddea7142104f80da2",
+  "requestedDeviceIncluded": true,
+  "preflightVerified": true,
+  "installedApp": {
+    "bundleID": "academy.glasscode.lemmings.ios",
+    "version": "2.0",
+    "build": "4"
+  },
+  "status": "installed build verified",
+  "finishedUTC": "2026-10-10T19:58:13.017559+00:00",
+  "deviceUDID": "3c4b6e12624a577712d178b63203c9d7c249bf77",
+  "deviceName": "GenErik",
+  "productType": "iPad7,3",
+  "model": "iPad Pro (10.5-inch) (Model A1701)",
+  "osVersion": "17.7.11",
+  "physicalDeviceAcceptance": "pending manual first launch and touch checks",
+  "installedBuildVerified": true
+}

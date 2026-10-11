@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 
 /// Metal source for the display stage.
@@ -278,3 +279,4 @@ enum CRTShaders {
   }
   """
 }
+#endif

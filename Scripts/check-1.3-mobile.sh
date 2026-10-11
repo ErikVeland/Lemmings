@@ -20,6 +20,8 @@ if ! DEVELOPER_DIR="$developer_dir" xcrun --sdk iphonesimulator --show-sdk-path 
   developer_dir=/Applications/Xcode.app/Contents/Developer
 fi
 export DEVELOPER_DIR="$developer_dir"
+# This gate runs mechanical checks only. Preserve the player's audio settings.
+export LEMMINGS_TEST_AUDIO=muted
 
 plutil -lint \
   Apps/UltimateLemmingsIOS/Info.plist \
@@ -54,12 +56,30 @@ if ! command -v xcodebuild >/dev/null 2>&1 || ! xcrun --sdk iphonesimulator --sh
 fi
 
 runtime_available=0
-if runtime_json="$(xcrun simctl list runtimes -j 2>/dev/null)" \
-    && [[ "$runtime_json" == *com.apple.CoreSimulator.SimRuntime.iOS* ]]; then
-  runtime_available=1
+runtime_query_failed=0
+runtime_diagnostic="$(mktemp -t lemmings-mobile-runtimes)"
+if runtime_json="$(xcrun simctl list runtimes -j 2>"$runtime_diagnostic")"; then
+  if ! runtime_available="$(print -r -- "$runtime_json" | python3 -c '
+import json, sys
+runtimes = json.load(sys.stdin)["runtimes"]
+print(int(any(r.get("isAvailable") is True and
+              r.get("identifier", "").startswith("com.apple.CoreSimulator.SimRuntime.iOS-")
+              for r in runtimes)))
+')"; then
+    runtime_query_failed=1
+  fi
+else
+  runtime_query_failed=1
 fi
+if (( require_sdk && runtime_query_failed )); then
+  print -u2 "FAILED: Could not query iOS Simulator runtimes. Check CoreSimulator service access."
+  cat "$runtime_diagnostic" >&2
+  rm -f "$runtime_diagnostic"
+  exit 1
+fi
+rm -f "$runtime_diagnostic"
 if (( require_sdk && !runtime_available )); then
-  print -u2 "FAILED: Install an iOS Simulator runtime in Xcode before running the required 1.3 gate."
+  print -u2 "FAILED: Install an available iOS Simulator runtime in Xcode before running the required 1.3 gate."
   exit 1
 fi
 

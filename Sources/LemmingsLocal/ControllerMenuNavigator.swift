@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
@@ -126,3 +127,4 @@ import NxlvKit
         line.lineWidth = 3; line.stroke()
     }
 }
+#endif

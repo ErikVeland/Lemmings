@@ -139,19 +139,19 @@ standalone wins. High-survivor endings, remaining L3 routes, original-engine
 fidelity and media checks remain separate work. The update also adds original
 Macintosh music and counters, Hot Seat Resume rosters and saved-run fixes.
 
-**2.0: complete physical iPhone and iPad acceptance, including launch support
-for iPhone Duo.** The repository has a UIKit/Metal app target, player-owned
-Classic data import, direct crowd selection, pan and zoom, safe-area controls,
-interruption checkpoints and presentation-only thermal budgets. The shared
-session and checkpoint boundary covers Classic, Lemmings 2 and Lemmings 3, but
-only Classic is player-facing mobile content. Duo must adapt the same session
-across its closed, open and partially folded poses. See the
-[2.0 mobile roadmap](2.0Roadmap.md) for the requirements and release gates.
+**2.0: full iOS release for iPad, iPhone and iPhone Duo.** Classic,
+Lemmings 2 and Lemmings 3 are all required at launch. The current UIKit/Metal
+prototype imports Classic data and provides touch targeting, pan/zoom,
+interruption checkpoints and thermal budgets. L2/L3 session adapters exist,
+but their mobile content loading, rendering and campaign flows remain open.
+Shared QoL, Hot Seat, audio and controller support also need mobile delivery.
+Duo must preserve the same run across closed, open and partially folded poses.
+See the [2.0 mobile roadmap](2.0Roadmap.md) for the delivery sequence and gates.
 
-The GitHub iPhone and iPad Simulator matrix passes. The remaining gates are
-physical touch, audio, background, thermal, accessibility, signing and
-distribution checks. This Mac has the iOS SDK but no Simulator runtime or
-connected device, so it cannot supply that evidence.
+The historical iPhone/iPad Simulator matrix covers its recorded source commit.
+It does not certify the full three-game release. Final source, rendered UI,
+physical touch, audio, recovery, thermal, accessibility, signing, TestFlight
+and App Store checks remain open.
 
 **Content discovery from 1.2.** The shared CoverFlow-style
 level browser is implemented in source with shipped pixel artwork and one clear

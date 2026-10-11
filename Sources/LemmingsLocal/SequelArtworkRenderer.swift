@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import CryptoKit
 import NxlvKit
@@ -76,3 +77,4 @@ import NxlvKit
         return image
     }
 }
+#endif

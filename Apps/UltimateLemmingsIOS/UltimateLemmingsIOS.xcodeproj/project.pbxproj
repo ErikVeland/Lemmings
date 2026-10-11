@@ -100,6 +100,8 @@
 				100000000000000000000040 /* Sources */,
 				100000000000000000000020 /* Frameworks */,
 				100000000000000000000042 /* Resources */,
+				100000000000000000000044 /* Beta content */,
+				100000000000000000000045 /* Mac artwork */,
 			);
 			buildRules = ();
 			dependencies = ();
@@ -174,6 +176,33 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		100000000000000000000044 /* Beta content */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = ();
+			inputPaths = ();
+			name = "Beta content";
+			outputPaths = ();
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "python3 \"$SRCROOT/../../Tools/IOSBeta/content.py\" copy --source \"${IOS_BETA_CONTENT_DIR:-}\" --destination \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/BetaGameData\" --development-source \"${IOS_LOCAL_CLASSIC_DATA_DIR:-}\"\n";
+		};
+		100000000000000000000045 /* Mac artwork */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = ();
+			inputPaths = ();
+			name = "Mac artwork";
+			outputPaths = ();
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "python3 \"$SRCROOT/../../Tools/IOSBeta/artwork.py\" --source \"${IOS_MAC_ARTWORK_DIR:-$SRCROOT/../../.build/mac-artwork/export/lemmings}\" --destination \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/MacArtwork/lemmings\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		100000000000000000000040 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -229,12 +258,14 @@
 			ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 			CODE_SIGN_STYLE = Automatic;
 			CURRENT_PROJECT_VERSION = 1;
-			ENABLE_USER_SCRIPT_SANDBOXING = YES;
+			DEVELOPMENT_TEAM = 54WU29TRTY;
+			ENABLE_USER_SCRIPT_SANDBOXING = NO;
 			GENERATE_INFOPLIST_FILE = NO;
 			INFOPLIST_FILE = Info.plist;
+			IOS_LOCAL_CLASSIC_DATA_DIR = "$(SRCROOT)/../../Sources/Ports/lemmings_dos_1991-07-30";
 			IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 			LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-			MARKETING_VERSION = 1.3;
+			MARKETING_VERSION = 2.0;
 			PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.lemmings.ios;
 			PRODUCT_NAME = "$(TARGET_NAME)";
 			SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -246,12 +277,13 @@
 			ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 			CODE_SIGN_STYLE = Automatic;
 			CURRENT_PROJECT_VERSION = 1;
-			ENABLE_USER_SCRIPT_SANDBOXING = YES;
+			DEVELOPMENT_TEAM = 54WU29TRTY;
+			ENABLE_USER_SCRIPT_SANDBOXING = NO;
 			GENERATE_INFOPLIST_FILE = NO;
 			INFOPLIST_FILE = Info.plist;
 			IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 			LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-			MARKETING_VERSION = 1.3;
+			MARKETING_VERSION = 2.0;
 			PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.lemmings.ios;
 			PRODUCT_NAME = "$(TARGET_NAME)";
 			SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

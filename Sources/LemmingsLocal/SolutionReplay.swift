@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import CryptoKit
 import NxlvKit
@@ -418,3 +419,4 @@ struct VerifiedSolution: Sendable {
         highlight(false)
     }
 }
+#endif

@@ -1,4 +1,5 @@
 import Foundation
+import CryptoKit
 
 /// Check native file upload/download against the deployed service, then remove the temporary player.
 @main struct NativeRankingsSmoke {
@@ -12,7 +13,7 @@ import Foundation
             var request = URLRequest(url: base.appendingPathComponent(path), timeoutInterval: 30)
             request.httpMethod = method
             request.setValue("Bearer " + token, forHTTPHeaderField: "Authorization")
-            request.setValue("UltimateLemmings/1.8.2 NativeDeploymentCheck", forHTTPHeaderField: "User-Agent")
+            request.setValue("UltimateLemmings/1.9.2 NativeDeploymentCheck", forHTTPHeaderField: "User-Agent")
             if let json { request.httpBody = try JSONSerialization.data(withJSONObject: json); request.setValue("application/json", forHTTPHeaderField: "Content-Type") }
             return request
         }
@@ -28,7 +29,7 @@ import Foundation
             let raw = String(decoding: try JSONSerialization.data(withJSONObject: conditions, options: [.sortedKeys, .withoutEscapingSlashes]), as: UTF8.self)
             let id = UUID().uuidString.lowercased()
             let (_, response) = try await session.data(for: request("v1/runs", method: "POST", json: ["id": id, "conditionsJSON": raw,
-                "assisted": true, "saved": 10, "population": 10, "skills": 0, "milliseconds": 12345, "won": true]))
+                "assisted": true, "saved": 10, "population": 10, "skills": 0, "milliseconds": 10000, "won": true]))
             try check(response)
             let bytes = Data([0,0,0,24,102,116,121,112,105,115,111,109,0,0,0,0])
             let movie = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".mp4")
@@ -41,7 +42,24 @@ import Foundation
             defer { try? FileManager.default.removeItem(at: download) }
             try check(received)
             guard try Data(contentsOf: download) == bytes else { throw URLError(.cannotDecodeContentData) }
-            print("PASS native URLSession registration, score, file upload and file download")
+            let actions: [String: Any] = ["version": 1, "runID": id, "conditions": conditions,
+                "engine": "classic", "engineFingerprint": "deployment-check", "initialStateHash": String(repeating: "a", count: 64),
+                "finalStateHash": String(repeating: "b", count: 64), "ticks": 170, "saved": 10, "population": 10,
+                "skills": 0, "won": true, "assisted": true, "commands": [[String: Any]]()]
+            let actionBytes = try JSONSerialization.data(withJSONObject: actions, options: [.sortedKeys, .withoutEscapingSlashes])
+            let actionFile = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".actions.json")
+            try actionBytes.write(to: actionFile)
+            defer { try? FileManager.default.removeItem(at: actionFile) }
+            var actionUpload = try request("v1/actions/" + id, method: "PUT")
+            actionUpload.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            let (_, actionResponse) = try await session.upload(for: actionUpload, fromFile: actionFile); try check(actionResponse)
+            let (actionDownload, actionReceived) = try await session.download(for: request("v1/actions/" + id, method: "GET"))
+            defer { try? FileManager.default.removeItem(at: actionDownload) }
+            try check(actionReceived)
+            let digest = SHA256.hash(data: actionBytes).map { String(format: "%02x", $0) }.joined()
+            guard try Data(contentsOf: actionDownload) == actionBytes,
+                  (actionReceived as? HTTPURLResponse)?.value(forHTTPHeaderField: "X-Replay-SHA256") == digest else { throw URLError(.cannotDecodeContentData) }
+            print("PASS native URLSession registration, score, action/movie file upload and download")
         } catch {
             let (_, deletion) = try await session.data(for: request("v1/player", method: "DELETE")); try check(deletion)
             throw error

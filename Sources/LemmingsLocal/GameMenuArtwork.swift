@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
@@ -14,3 +15,4 @@ import NxlvKit
     }()
     static func renderer() -> MacInterfaceRenderer? { sharedRenderer }
 }
+#endif

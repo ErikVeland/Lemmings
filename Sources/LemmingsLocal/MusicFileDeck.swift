@@ -1,3 +1,4 @@
+#if os(macOS)
 import AVFoundation
 import NxlvKit
 
@@ -363,3 +364,4 @@ final class MusicFileDeck {
     }
   }
 }
+#endif

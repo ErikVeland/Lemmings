@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
@@ -8,6 +9,7 @@ import NxlvKit
     var requestReturnToSolo: (() -> Void)?
     var prepareSession: (() -> NSWindow?)?
     var finishSession: (() -> Void)?
+    var actionReplayContext: (() -> LeaderboardReplayContext?)?
     private init() { arcadeView.onClose = { [weak self] in self?.close() } }
     static func captureScene(_ view: NSView) -> CGImage? {
         let size = CGSize(width: max(1, view.bounds.width), height: max(1, view.bounds.height))
@@ -44,10 +46,11 @@ import NxlvKit
         arcadeView.startCelebration()
         GameCenterScores.shared.onChange = { [weak self] in self?.arcadeView.needsDisplay = true }
     }
-    func showRecords(level: ArcadeLevel?, owner: NSWindow? = nil, background: CGImage? = nil) {
+    func showRecords(level: ArcadeLevel?, owner: NSWindow? = nil, background: CGImage? = nil, levels: [ArcadeLevel] = []) {
         arcadeView.background = background
         arcadeView.mode = .records; arcadeView.report = nil
         arcadeView.level = level ?? ArcadeStore.shared.records.runs.last?.level
+        arcadeView.recordLevels = levels.isEmpty ? RecordLevelNavigation.savedLevels(current: arcadeView.level) : levels
         arcadeView.assisted = false; arcadeView.board = .rescue
         arcadeView.boardScope = .level
         arcadeView.onLater = nil; arcadeView.onHints = nil; arcadeView.onStoredReplay = nil
@@ -136,6 +139,7 @@ import NxlvKit
     var hostedCategory = HostedCategory.fastestClear
     var hostedPage = 0
     var level: ArcadeLevel?
+    var recordLevels: [ArcadeLevel] = []
     var assisted = false
     var board = ArcadeBoard.rescue
     var trolleyBoard = TrolleyBoard.mostSaved
@@ -308,6 +312,9 @@ import NxlvKit
         let panel = CGRect(x: 44, y: 20, width: 1032, height: mode == .result ? 556 : 676)
         GameStyle.fill(panel, NSColor.black.withAlphaComponent(0.94))
         GameMenuFrame.draw(panel)
+        if mode == .result, report?.run.qualifies == true, let context = NSGraphicsContext.current?.cgContext {
+            RescueCelebration.draw(in: panel.insetBy(dx: 3, dy: 3), amount: 1, context: context)
+        }
         switch mode {
         case .result: drawResult()
         case .profiles: drawProfiles()
@@ -492,7 +499,8 @@ import NxlvKit
         link("Replay", CGRect(x: 64, y: y + 67, width: 110, height: 36), alpha: 0.8) { [weak self] in self?.onReplay?(false) }
         link("Records", CGRect(x: 190, y: y + 67, width: 140, height: 36), alpha: 0.8) { [weak self] in self?.page(.records) }
         link("Details", CGRect(x: 350, y: y + 67, width: 140, height: 36), alpha: 0.8) { [weak self] in self?.page(.details) }
-        link("Players", CGRect(x: 510, y: y + 67, width: 140, height: 36), alpha: 0.8) { [weak self] in self?.openSession() }
+        link("Hot Seat", CGRect(x: 510, y: y + 67, width: 140, height: 36), alpha: 0.8) { [weak self] in self?.openSession() }
+        link("Worldwide", CGRect(x: 668, y: y + 67, width: 180, height: 36), alpha: 0.8) { [weak self] in self?.openWorldwideBoard() }
     }
     var player: ArcadeProfile {
         let records = ArcadeStore.shared.records
@@ -513,8 +521,9 @@ import NxlvKit
     func pageFooter() {
         button(report == nil ? "Back" : "Back to result", CGRect(x: 64, y: 634, width: 240, height: 48)) { [weak self] in self?.back() }
         if report == nil && mode == .records && boardScope == .level {
-            link("< Previous level", CGRect(x: 614, y: 634, width: 244, height: 48)) { [weak self] in self?.changeLevel(-1) }
-            link("Next level >", CGRect(x: 890, y: 634, width: 166, height: 48)) { [weak self] in self?.changeLevel(1) }
+            let index = recordLevels.firstIndex { $0.boardID == level?.boardID }
+            button("< Previous level", CGRect(x: 544, y: 634, width: 244, height: 48), enabled: index.map { $0 > 0 } ?? false) { [weak self] in self?.changeLevel(-1) }
+            button("Next level >", CGRect(x: 812, y: 634, width: 244, height: 48), enabled: index.map { $0 + 1 < recordLevels.count } ?? false) { [weak self] in self?.changeLevel(1) }
         }
     }
     func tabs() {
@@ -809,7 +818,7 @@ import NxlvKit
         if boardScope == .career { drawCareerBoard(); return }
         if boardScope == .worldwide { drawWorldwideBoard(); return }
         if let conditions = level?.conditions { drawTrolleyRecords(conditions); return }
-        header(level?.title ?? "Level records"); tabs()
+        header(level?.title ?? "Level records"); tabs(); boardScopeLinks()
         guard let level else {
             text("Your first rescue starts the story.", 64, 293, 992)
             text("Play a level to set a record.", 64, 346, 992)
@@ -889,12 +898,14 @@ import NxlvKit
         pageFooter()
     }
     private func changeLevel(_ direction: Int) {
-        guard report == nil else { return }
-        let levels = Dictionary(grouping: ArcadeStore.shared.records.runs.map(\.level), by: \.boardID).values.compactMap(\.first)
-            .sorted { ($0.game, $0.title, $0.boardID) < ($1.game, $1.title, $1.boardID) }
-        guard !levels.isEmpty else { return }
-        let index = levels.firstIndex { $0.boardID == level?.boardID } ?? 0
-        level = levels[(index + direction + levels.count) % levels.count]; needsDisplay = true
+        guard report == nil, mode == .records, boardScope == .level else { return }
+        guard let index = recordLevels.firstIndex(where: { $0.boardID == level?.boardID }),
+              recordLevels.indices.contains(index + direction) else { return }
+        affinityPopover?.close(); affinityPopover = nil
+        level = recordLevels[index + direction]
+        keyboardButton = nil
+        hostedPage = 0
+        needsDisplay = true
     }
     static func time(_ seconds: Double) -> String { String(format: "%d:%05.2f", Int(seconds) / 60, seconds.truncatingRemainder(dividingBy: 60)) }
     private func localPoint(_ event: NSEvent) -> CGPoint {
@@ -927,6 +938,7 @@ import NxlvKit
         let horizontal = [123, 124].contains(event.keyCode), vertical = [125, 126].contains(event.keyCode)
         let pageOwnsArrow = ([.awards, .career, .profiles].contains(mode) && horizontal)
             || (mode == .awards && level?.conditions != nil && vertical)
+            || (mode == .records && report == nil && boardScope == .level && horizontal)
         if [48, 123, 124, 125, 126].contains(event.keyCode), !pageOwnsArrow, !buttons.isEmpty {
             let direction = event.keyCode == 48 ? (event.modifierFlags.contains(.shift) ? -1 : 1) : ([123, 126].contains(event.keyCode) ? -1 : 1)
             keyboardButton = ((keyboardButton ?? (direction > 0 ? -1 : 0)) + direction + buttons.count) % buttons.count
@@ -1018,3 +1030,4 @@ import NxlvKit
         needsDisplay = true
     }
 }
+#endif

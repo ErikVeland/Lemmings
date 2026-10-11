@@ -47410,14 +47410,15 @@
     },
     "pack": "JM01",
     "placement": {
+      "adjustment": "User playtest 2026-10-11: two-bomber bridge route belongs in Intermediate, not the early Fun lessons.",
       "basis": "solutionEstimate",
-      "lower": 0,
-      "position": 70.0,
-      "reference": "Gentle/Get_a_little_extra_help.nxlv",
+      "lower": 180.0,
+      "position": 207.5,
+      "reference": "Quirky/Exodus!.nxlv",
       "replayRevision": "SHA256 digest: fba3349cc4add7e0f3a69b5d09f0cfcd322c73eeb40a262f9d1d1d3de183cdc1",
       "sourceRevision": "4ed40d2dad89484a0565b4fc472ba6db8a18a36f97c174cb4ea392eac14073c2",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 395.0
+      "upper": 355.0
     },
     "risks": [
       "incomplete timing probes",
@@ -51403,15 +51404,15 @@
     },
     "pack": "Ji Hoons Lemmings Remake Heaven",
     "placement": {
-      "adjustment": "User playtest 2026-10-07: single-basher practice after the seven skill introductions.",
+      "adjustment": "User playtest 2026-10-11: single-basher practice as lesson 2, after Just Dig.",
       "basis": "solutionEstimate",
-      "lower": 35.0,
-      "position": 37.5,
-      "reference": "Gentle/Builders_will_help_you_here.nxlv",
+      "lower": 5.0,
+      "position": 7.5,
+      "reference": "Gentle/Just_dig!.nxlv",
       "replayRevision": "SHA256 digest: 51ba9acbd5b076cf36b722c6ffd922fb511c0383e32c3b56ac73760c9ca59d29",
       "sourceRevision": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 40.0
+      "upper": 10.0
     },
     "risks": [
       "incomplete timing probes",

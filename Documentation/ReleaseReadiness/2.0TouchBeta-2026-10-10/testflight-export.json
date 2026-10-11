@@ -1,0 +1,23 @@
+{
+  "installApp": "/Users/veland/Lemmings/.build/ios-beta/2.0-2-touch/TestFlightValidation/Install/Payload/UltimateLemmingsIOS.app",
+  "minimumOS": "16.0",
+  "requestedDeviceIncluded": null,
+  "profileExpiresUTC": "2027-10-10T13:17:05Z",
+  "exportSignatureVerified": true,
+  "ipa": "/Users/veland/Lemmings/.build/ios-beta/2.0-2-touch/TestFlightExport-system/UltimateLemmingsIOS.ipa",
+  "ipaSHA256": "38d2a54785198bc4fe2f83a8ba3ad7ad450e4bc32d2605db0dedad0ca9dfb1ce",
+  "build": 2,
+  "version": "2.0",
+  "bundleID": "academy.glasscode.lemmings.ios",
+  "exportMethod": "app-store-connect",
+  "distributionProfileVerified": true,
+  "uploaded": false,
+  "scope": "Classic beta",
+  "symbolUUIDs": [
+    [
+      "BFE1A367-12C8-30FD-82AA-E757FD4AAD1F",
+      "arm64"
+    ]
+  ],
+  "contentManifestSHA256": "012bada8669f71d193747064cad6db469184e2783acf1cdddea7142104f80da2"
+}

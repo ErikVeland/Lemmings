@@ -16,6 +16,23 @@ public struct MobilePixelFrame: Equatable, Sendable {
         self.height = height
         self.rgba = rgba
     }
+
+    /// Keeps the original pixels and clips the loupe to the level boundary.
+    public func cropped(around point: MobilePoint, width requestedWidth: Int, height requestedHeight: Int) throws -> MobilePixelFrame {
+        guard requestedWidth > 0, requestedHeight > 0,
+              point.x.isFinite, point.y.isFinite else { throw MobileSessionError.invalidFrame }
+        let cropWidth = min(width, requestedWidth)
+        let cropHeight = min(height, requestedHeight)
+        let x = Int(min(Double(width - cropWidth), max(0, point.x - Double(cropWidth) / 2)))
+        let y = Int(min(Double(height - cropHeight), max(0, point.y - Double(cropHeight) / 2)))
+        var pixels = Data()
+        pixels.reserveCapacity(cropWidth * cropHeight * 4)
+        for row in y..<(y + cropHeight) {
+            let start = (row * width + x) * 4
+            pixels.append(rgba[start..<(start + cropWidth * 4)])
+        }
+        return try MobilePixelFrame(width: cropWidth, height: cropHeight, rgba: pixels)
+    }
 }
 
 public struct MobileSkillState: Codable, Equatable, Sendable {
@@ -101,6 +118,7 @@ public protocol MobileGameSession: AnyObject {
     var levelIndex: Int { get }
     var levelFingerprint: String { get }
     var levelSize: MobileSize { get }
+    var initialCameraOrigin: MobilePoint { get }
     var ticksPerSecond: Double { get }
     var snapshot: MobileGameSnapshot { get }
     var panelFrame: MobilePixelFrame? { get }
@@ -118,6 +136,7 @@ public protocol MobileGameSession: AnyObject {
 }
 
 public extension MobileGameSession {
+    var initialCameraOrigin: MobilePoint { MobilePoint(x: 0, y: 0) }
     var panelFrame: MobilePixelFrame? { nil }
     func releaseTransientResources() {}
 }

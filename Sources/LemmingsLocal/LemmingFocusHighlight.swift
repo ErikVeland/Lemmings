@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 
 @MainActor enum LemmingSelectionGlow {
@@ -66,3 +67,4 @@ import AppKit
     func show(_ id: Int) { self.id = id; until = ProcessInfo.processInfo.systemUptime + 2 }
     func clear() { id = nil }
 }
+#endif

@@ -1,11 +1,12 @@
 # Modern Lemmings release plan
 
-Updated 5 October 2026. This is the current engineering plan, not an announcement of an official release.
+Updated 10 October 2026. This is the current engineering plan, not an announcement of an official release.
 
-The next planned release milestones are 1.8 Mac polish, 1.9
-Lemmings 2 and Lemmings 3 completion, and 2.0 iPhone and iPad. The existing
-1.3 mobile and 1.5 NeoLemmix source work is development evidence for those
-later gates. See the [project overview](Overview.md) for current release status.
+The next platform milestone is a full 2.0 iOS release for iPad, iPhone and
+iPhone Duo, with Classic, Lemmings 2 and Lemmings 3 at launch. Mac releases
+1.8 and 1.9 have shipped. The existing 1.3 mobile source work is development
+evidence for the mobile gates. See [release scope](ReleaseScope.md) for current
+release claims and the [2.0 roadmap](2.0Roadmap.md) for the delivery sequence.
 
 The objective is an official-quality edition that preserves the original puzzles and makes them comfortable to play on modern devices. The strongest route is to finish and prove the Mac reference build, bring the same rules and replay fixtures to iPhone and iPad, then reach Windows and Linux. Consoles are not a current target; see the platform plan below.
 
@@ -56,17 +57,20 @@ Additional product work includes input remapping, left-handed touch layouts, loc
 | Platform | Starting point | Next demonstrable result |
 | --- | --- | --- |
 | macOS | Running AppKit/Metal app, universal arm64/x86_64 binaries targeting macOS 13 | Signed reference candidate with hardware and novice-play evidence. |
-| iPhone/iPad | A version 1.3 UIKit/Metal source target imports player-owned Classic DOS data. Shared mobile contracts cover direct targeting, pan/zoom, safe areas, interruption checkpoints and thermal budgets. Synthetic checkpoint tests cover all three native engines; only Classic is player-facing on mobile. | For 2.0, validate touch, audio routes, background termination, thermal behaviour, accessibility, signing and complete journeys on physical devices. Add player-facing L2/L3 import and renderers only under their Preview wording. |
+| iPad/iPhone/iPhone Duo | A version 1.3 UIKit/Metal source target imports player-owned Classic DOS data. Shared mobile contracts cover direct targeting, pan/zoom, safe areas, interruption checkpoints and thermal budgets. Synthetic checkpoint tests cover all three native engines; only Classic is player-facing on mobile. | For 2.0, deliver all three games, native sequel renderers, campaign progress, audio, controller input, shared QoL and Hot Seat. Validate Duo poses, touch, recovery, thermal behaviour, accessibility, signing, TestFlight and App Store journeys. Preserve current completion claims and fidelity limits. See [2.0 roadmap](2.0Roadmap.md). |
 | Windows/Linux | `Package.swift` declares only macOS and iOS. `NxlvKit` imports CoreGraphics, ImageIO and CryptoKit, all Apple-only. There is no Windows or Linux target. | Replace the Apple-only graphics, image and hashing dependencies with portable equivalents, then build a non-AppKit interface that runs the same replay fixtures. |
 
 Consoles (Switch, PlayStation, Xbox) are not a current target. This repository has no console target, no approved SDK integration and no relationship with a console platform owner. Revisit this only after a decision to pursue it.
 
 Do not rewrite the simulation before proving a need. Keep simulation ticks, replay commands, deterministic outcomes and data formats as the reference contract. Extract rendering, input, audio, files, clocks and account services behind platform adapters when implementing each shell. A portable data model does not imply that this Swift executable runs on every platform.
 
-The current workstation has Xcode 26.6 and the iOS 26.5 SDK. The Swift app and
-package modules compile for both Simulator architectures. No iOS Simulator
-runtime or physical iPhone/iPad is installed, so launch, asset-catalogue and
-device results are not claimed. Apple documents [virtual controls for controller-based iOS games](https://developer.apple.com/documentation/gamecontroller/adding-virtual-controls-to-games-that-support-game-controllers-in-ios); the committed 1.3 design uses direct touch and still needs physical-device validation.
+The 10 October workstation audit finds Xcode 27.2 and the iOS 27.2 SDK,
+including UIKit reserved-region APIs for Duo. The required mobile source gate
+passes source and metadata checks. Its sandboxed attempt stops at a
+CoreSimulator service-access failure. A service-accessible inventory confirms
+an available iOS 26.0 runtime. See the roadmap for current build results.
+The historical source and Simulator results remain tied to their recorded
+commits. See [2.0 verification](2.0Roadmap.md#source-verification).
 
 ## Repeatable verification
 

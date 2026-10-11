@@ -43,3 +43,7 @@ __pycache__/
 Documentation/ForumPost-*
 Documentation/ForumThread-*
 Documentation/Threads*
+
+# Xcode user state and accidental compiler index output.
+.swiftpm/
+Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj/-Xcc/

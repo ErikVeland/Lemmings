@@ -10,18 +10,28 @@ let package = Package(
     products: [
         // Shared format, rendering, and simulation code.
         .library(name: "NxlvKit", targets: ["NxlvKit"]),
+        .library(name: "LemmingsGameArt", targets: ["LemmingsGameArt"]),
         .library(name: "LemmingsMobileCore", targets: ["LemmingsMobileCore"]),
         .library(name: "LemmingsMobileUI", targets: ["LemmingsMobileUI"]),
         .executable(name: "LemmingsLocal", targets: ["LemmingsLocal"]),
-        .executable(name: "LemmingsDataTool", targets: ["LemmingsDataTool"])
+        .executable(name: "LemmingsDataTool", targets: ["LemmingsDataTool"]),
+        .executable(name: "LemmingsMobileBetaTool", targets: ["LemmingsMobileBetaTool"]),
+        .executable(name: "LemmingsMobileMenuAudit", targets: ["LemmingsMobileMenuAudit"])
     ],
     dependencies: [
         .package(url: "https://github.com/sparkle-project/Sparkle.git", exact: "2.7.3")
     ],
     targets: [
+        .executableTarget(name: "LemmingsMobileMenuAudit", dependencies: ["LemmingsGameArt", "LemmingsMobileCore"],
+                          path: "Tools/IOSMenuAudit"),
         .target(
             name: "NxlvKit",
             path: "Sources/NxlvKit"
+        ),
+        .target(
+            name: "LemmingsGameArt",
+            dependencies: ["NxlvKit"],
+            path: "Sources/LemmingsGameArt"
         ),
         .target(
             name: "LemmingsMobileCore",
@@ -30,14 +40,22 @@ let package = Package(
         ),
         .target(
             name: "LemmingsMobileUI",
-            dependencies: ["LemmingsMobileCore", "NxlvKit"],
+            dependencies: ["LemmingsGameArt", "LemmingsMobileCore", "NxlvKit"],
             path: "Sources/LemmingsMobileUI"
+        ),
+        .executableTarget(
+            name: "LemmingsMobileBetaTool",
+            dependencies: ["LemmingsMobileCore", "NxlvKit"],
+            path: "Tools/IOSBeta",
+            exclude: ["content.py", "build.py", "install.py", "artwork.py", "__pycache__"],
+            sources: ["validate-content.swift"]
         ),
         .executableTarget(
             name: "LemmingsLocal",
             dependencies: [
+                "LemmingsGameArt",
                 "NxlvKit",
-                .product(name: "Sparkle", package: "Sparkle")
+                .product(name: "Sparkle", package: "Sparkle", condition: .when(platforms: [.macOS]))
             ],
             path: "Sources/LemmingsLocal"
         ),

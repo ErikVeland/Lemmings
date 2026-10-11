@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 
 /// Bitmap views with their own virtual controls retain their internal focus loop.
@@ -114,3 +115,4 @@ import AppKit
         return false
     }
 }
+#endif

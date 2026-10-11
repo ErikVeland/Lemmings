@@ -7,7 +7,7 @@ if [[ "${TEST_SCOPE:-all}" == selection-hdr && "${TEST_COMPILE_ONLY:-0}" != 1 &&
 fi
 test_arch="${TEST_ARCH:-$(uname -m)}"
 [[ "$test_arch" == arm64 || "$test_arch" == x86_64 ]] || exit 1
-build_dir="$project_dir/.build/app-integration-tests-$test_arch"
+build_dir="${LEMMINGS_INTEGRATION_BUILD_DIR:-$project_dir/.build/app-integration-tests-$test_arch}"
 mkdir -p "$build_dir/modules"
 sparkle_framework="$(SPARKLE_FRAMEWORK_PATH="${SPARKLE_FRAMEWORK_PATH:-}" \
   LEMMINGS_BUILD_ROOT="$build_dir/dependencies" \
@@ -21,6 +21,8 @@ swiftc -swift-version 6 "${compatibility[@]}" "${optimization_flags[@]}" -target
   -module-name NxlvKit -emit-module-path "$build_dir/modules/NxlvKit.swiftmodule" \
   -Xlinker -install_name -Xlinker @rpath/libNxlvKit.dylib \
   -o "$build_dir/libNxlvKit.dylib" "$project_dir"/Sources/NxlvKit/*.swift
+zsh "$project_dir/Scripts/build-game-art-module.sh" "$build_dir/modules" "$build_dir" \
+  "$test_arch-apple-macos12.3" "${optimization_flags[@]}"
 # Keep the checks in the same file so production members can remain private.
 cat "$project_dir/Sources/LemmingsLocal/main.swift" \
   "$project_dir/Tests/AppIntegrationTests/checks.swift" > "$build_dir/main.swift"
@@ -49,6 +51,8 @@ if [[ "${TEST_SCOPE:-all}" == audio-joy ]]; then test_flags+=(-D AUDIO_JOY_TESTS
 if [[ "${TEST_SCOPE:-all}" == pack-navigation ]]; then test_flags+=(-D PACK_NAVIGATION_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == consolidation ]]; then test_flags+=(-D CONSOLIDATION_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == profile-sessions ]]; then test_flags+=(-D PROFILE_SESSION_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == action-replay ]]; then test_flags+=(-D ACTION_REPLAY_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == result-navigation ]]; then test_flags+=(-D RESULT_NAVIGATION_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == selection-hdr ]]; then test_flags+=(-D SELECTION_HDR_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == selection-raster ]]; then test_flags+=(-D SELECTION_HDR_TESTS -D SELECTION_RASTER_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == sessions ]]; then test_flags+=(-D SESSION_TESTS); fi
@@ -71,8 +75,10 @@ if [[ "${TEST_SCOPE:-all}" == content-browser ]]; then test_flags+=(-D CONTENT_B
 if [[ "${TEST_SCOPE:-all}" == neo-recovery ]]; then test_flags+=(-D NEO_RECOVERY_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == neo-pack ]]; then test_flags+=(-D NEO_PACK_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == learning ]]; then test_flags+=(-D LEARNING_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == celebration ]]; then test_flags+=(-D CELEBRATION_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == menu-records-track ]]; then test_flags+=(-D MENU_RECORDS_TRACK_TESTS); fi
 swiftc -swift-version 6 "${compatibility[@]}" "${optimization_flags[@]}" -target "$test_arch-apple-macos12.3" -D APP_INTEGRATION_TESTS "${test_flags[@]}" \
-  -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
+  -I "$build_dir/modules" -L "$build_dir" -lNxlvKit -lLemmingsGameArt \
   -F "$sparkle_framework_dir" -framework Sparkle \
   -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
   -Xlinker -rpath -Xlinker "$build_dir" \

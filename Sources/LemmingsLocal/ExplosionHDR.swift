@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import Metal
 import QuartzCore
@@ -611,3 +612,4 @@ enum ExplosionHDR {
     }
   }
 }
+#endif

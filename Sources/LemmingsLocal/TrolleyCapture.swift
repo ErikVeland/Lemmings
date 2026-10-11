@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 import CryptoKit
 import NxlvKit
@@ -84,3 +85,4 @@ import NxlvKit
         return ArcadeStore.fingerprint((try? encoder.encode(entries)) ?? Data(UUID().uuidString.utf8))
     }
 }
+#endif

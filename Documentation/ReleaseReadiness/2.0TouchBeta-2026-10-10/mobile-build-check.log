@@ -1,0 +1,61 @@
+PASS 1.3 mobile project, target and source contracts
+Building for debugging...
+[Using on-disk description]
+[1 / 4]
+Build complete! (13.23 sec.)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2084
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite MobileCoreTests started.
+􀟈  Test sequelSessionsReplayTheirInputCheckpoints() started.
+􀟈  Test contentImportStagesBeforeCommitAndPreservesTheLiveCopyOnFailure() started.
+􀟈  Test classicJumpingRisesAcrossTheRemainingStepPixel() started.
+􀟈  Test loupeKeepsExactPixelsAndClipsAtLevelEdges() started.
+􀟈  Test planningDoesNotBypassReadyInterruptionOrResults() started.
+􀟈  Test heldTouchCommitsButCancellationAndReleaseOnlyDragDoNot() started.
+􀟈  Test lifecycleSavesOnceAndRequiresExplicitResume() started.
+􀟈  Test viewportZoomKeepsTheGestureAnchorStable() started.
+􀟈  Test classicSessionRestoresTheExactTick() started.
+􀟈  Test allThreeGamesAssignDuringPlanningWithoutAdvancingTime() started.
+􀟈  Test touchRouterDoesNotAssignAfterAPan() started.
+􀟈  Test thermalPolicyNeverChangesSimulationRules() started.
+􀟈  Test checkpointFallsBackToTheLastValidatedCopy() started.
+􀟈  Test checkpointRejectsAnOlderWriter() started.
+􀟈  Test touchTargetingPrefersEligibilityFollowersAndTools() started.
+􀟈  Test safeAreaLayoutKeepsTouchTargetsOnScreen() started.
+􀟈  Test fixedTickClockDropsSuspensionTime() started.
+􁁛  Test thermalPolicyNeverChangesSimulationRules() passed after 0.001 seconds.
+􁁛  Test planningDoesNotBypassReadyInterruptionOrResults() passed after 0.001 seconds.
+􁁛  Test fixedTickClockDropsSuspensionTime() passed after 0.001 seconds.
+􁁛  Test heldTouchCommitsButCancellationAndReleaseOnlyDragDoNot() passed after 0.001 seconds.
+􁁛  Test touchRouterDoesNotAssignAfterAPan() passed after 0.001 seconds.
+􁁛  Test lifecycleSavesOnceAndRequiresExplicitResume() passed after 0.001 seconds.
+􁁛  Test safeAreaLayoutKeepsTouchTargetsOnScreen() passed after 0.001 seconds.
+􁁛  Test viewportZoomKeepsTheGestureAnchorStable() passed after 0.001 seconds.
+􁁛  Test touchTargetingPrefersEligibilityFollowersAndTools() passed after 0.001 seconds.
+􁁛  Test loupeKeepsExactPixelsAndClipsAtLevelEdges() passed after 0.002 seconds.
+􁁛  Test classicJumpingRisesAcrossTheRemainingStepPixel() passed after 0.003 seconds.
+􁁛  Test checkpointRejectsAnOlderWriter() passed after 0.005 seconds.
+􁁛  Test checkpointFallsBackToTheLastValidatedCopy() passed after 0.006 seconds.
+􁁛  Test classicSessionRestoresTheExactTick() passed after 0.008 seconds.
+􁁛  Test contentImportStagesBeforeCommitAndPreservesTheLiveCopyOnFailure() passed after 0.008 seconds.
+􁁛  Test sequelSessionsReplayTheirInputCheckpoints() passed after 0.010 seconds.
+􁁛  Test allThreeGamesAssignDuringPlanningWithoutAdvancingTime() passed after 0.018 seconds.
+􁁛  Suite MobileCoreTests passed after 0.018 seconds.
+􁁛  Test run with 17 tests in 1 suite passed after 0.018 seconds.
+warning: Conditional compilation flags do not have values in Swift; they are either present or absent (rather than '_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG') (in target 'NxlvKit' from project 'LemmingsNativePort')
+warning: Conditional compilation flags do not have values in Swift; they are either present or absent (rather than '_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG') (in target 'NxlvKit' from project 'LemmingsNativePort')
+error: the following command failed with exit code 0 but produced no further output
+SwiftDriver NxlvKit normal x86_64 com.apple.xcode.tools.swift.compiler (in target 'NxlvKit' from project 'LemmingsNativePort')
+warning: Conditional compilation flags do not have values in Swift; they are either present or absent (rather than '_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG') (in target 'LemmingsMobileCore' from project 'LemmingsNativePort')
+warning: Conditional compilation flags do not have values in Swift; they are either present or absent (rather than '_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG') (in target 'LemmingsMobileCore' from project 'LemmingsNativePort')
+warning: Conditional compilation flags do not have values in Swift; they are either present or absent (rather than '_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG') (in target 'LemmingsMobileUI' from project 'LemmingsNativePort')
+warning: Conditional compilation flags do not have values in Swift; they are either present or absent (rather than '_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG') (in target 'LemmingsMobileUI' from project 'LemmingsNativePort')
+/Users/veland/Lemmings/Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj: UltimateLemmingsIOSUITests: ld: warning: building for iOS-simulator-16.0, but linking with dylib '@rpath/XCTest.framework/XCTest' which was built for newer version 17.0
+/Users/veland/Lemmings/Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj: UltimateLemmingsIOSUITests: ld: warning: building for iOS-simulator-16.0, but linking with dylib '@rpath/libXCTestSwiftSupport.dylib' which was built for newer version 17.0
+/Users/veland/Lemmings/Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj: UltimateLemmingsIOSUITests: ld: warning: building for iOS-simulator-16.0, but linking with dylib '@rpath/XCUIAutomation.framework/XCUIAutomation' which was built for newer version 17.0
+/Users/veland/Lemmings/Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj: UltimateLemmingsIOSUITests: ld: warning: building for iOS-simulator-16.0, but linking with dylib '@rpath/XCTest.framework/XCTest' which was built for newer version 17.0
+/Users/veland/Lemmings/Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj: UltimateLemmingsIOSUITests: ld: warning: building for iOS-simulator-16.0, but linking with dylib '@rpath/libXCTestSwiftSupport.dylib' which was built for newer version 17.0
+/Users/veland/Lemmings/Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj: UltimateLemmingsIOSUITests: ld: warning: building for iOS-simulator-16.0, but linking with dylib '@rpath/XCUIAutomation.framework/XCUIAutomation' which was built for newer version 17.0
+note: Run script build phase 'Beta content' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'UltimateLemmingsIOS' from project 'UltimateLemmingsIOS')
+PASS 1.3 tests, Debug and Release Simulator builds, and unsigned Release device build

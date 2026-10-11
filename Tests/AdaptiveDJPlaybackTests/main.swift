@@ -178,7 +178,6 @@ extension AdaptiveDJPlayer {
   fileprivate var activeDeckForTest: DJDeck? { activeDeck }
   fileprivate var openingHoldForTest: Double? { levelOpeningHoldEndSourceSeconds }
   fileprivate var rescueCueFiredForTest: Bool { !director.fired.isEmpty }
-  fileprivate var resultSuppressedForTest: Bool { suppressResultCue }
   fileprivate var incomingPlayingForTest: Bool { fadingIn?.isPlaying == true }
   fileprivate func expireOpeningHoldForTest() {
     levelOpeningHoldEndSourceSeconds = (activeDeck?.sourceSeconds ?? 0) - 0.01
@@ -560,16 +559,28 @@ extension AdaptiveDJPlayer {
   player.updateTelemetry(.init(didWin: false, isComplete: true))
   try require(player.currentURL == assigned, "No failure theme should substitute an arbitrary tune")
   player.updateTelemetry(.init(savedCount: 5, requiredCount: 5, didWin: true, isComplete: true))
-  try require(player.currentURL == assigned && player.resultSuppressedForTest,
-    "An early completed level cut off its selected track")
-  player.expireOpeningHoldForTest()
+  try require(player.currentURL != assigned && player.rescueCueFiredForTest,
+    "An early completed win lost its celebration")
+  let earlyCelebration = player.currentURL
   player.updateTelemetry(.init(savedCount: 5, requiredCount: 5, didWin: true, isComplete: true))
-  try require(player.currentURL == assigned, "Results triggered a delayed rescue cue")
+  try require(player.currentURL == earlyCelebration, "Results repeated the early celebration")
   try require(player.startLevel(url: assigned, identity: "same-song-after-result"), "Same tune was rejected after results")
-  try require(!player.resultSuppressedForTest, "A new level kept the previous result suppression")
+  try require(!player.rescueCueFiredForTest, "A new level kept the previous celebration cue")
   player.expireOpeningHoldForTest()
   player.updateTelemetry(rescued)
   try require(player.currentURL != assigned, "New level did not restore its one-shot rescue cue")
+  player.stop()
+  player.setCelebrationAlternates(false)
+  try require(!player.startCelebration(after: assigned, identity: "legacy-disabled"),
+    "A legacy celebration ignored the disabled alternates preference")
+  player.setCelebrationAlternates(true)
+  try require(player.startCelebration(after: assigned, identity: "legacy-win")
+      && player.currentURL != assigned && player.rescueCueFiredForTest,
+    "A completed legacy deck did not lift its own composition")
+  try player.checkWinningThemeIsLooped()
+  let legacyCelebration = player.currentURL
+  player.updateTelemetry(.init(didWin: true, isComplete: true))
+  try require(player.currentURL == legacyCelebration, "The legacy handoff repeated its celebration")
   player.stop()
   try require(!player.isPlaying, "the mix kept playing after stop")
   let invalid = FileManager.default.temporaryDirectory.appendingPathComponent("invalid-dj-\(UUID().uuidString).mod")

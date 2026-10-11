@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
@@ -14,6 +15,7 @@ import NxlvKit
   static let audioExtensions: Set<String> = ["wav", "aif", "aiff", "aifc", "mp3", "m4a", "caf", "flac"]
 
   private var player: MusicFileDeck?
+  var sourceSeconds: Double { player?.sourceSeconds ?? 0 }
   private(set) var currentURL: URL?
   private var resumeAfterSleep = false
   private var outputSuspended = false
@@ -278,4 +280,6 @@ import NxlvKit
   }
 
   var isPlaying: Bool { player?.isPlaying == true }
+  var hasCurrentTrack: Bool { player != nil }
 }
+#endif

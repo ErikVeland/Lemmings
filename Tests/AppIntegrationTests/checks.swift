@@ -6,6 +6,41 @@ private func check(_ value: @autoclosure () throws -> Bool, _ message: String) t
   if try value() == false { throw IntegrationFailure(message: message) }
 }
 
+@MainActor private final class ResultBoardTransport: HostedRankingsTransport {
+  var requests: [URLRequest] = []
+  var code = 200
+  var board = HostedBoard(entries: [.init(rank: 1, name: "PAL", score: 12345, runID: nil, replay: false)], page: 0, hasMore: true, verification: "community")
+  func data(for request: URLRequest) async throws -> (Data, URLResponse) {
+    requests.append(request)
+    try await Task.sleep(nanoseconds: 30_000_000)
+    return (try JSONEncoder().encode(board), HTTPURLResponse(url: request.url!, statusCode: code, httpVersion: nil, headerFields: nil)!)
+  }
+  func upload(for request: URLRequest, fromFile file: URL) async throws -> (Data, URLResponse) { throw URLError(.unsupportedURL) }
+  func download(for request: URLRequest) async throws -> (URL, URLResponse) { throw URLError(.unsupportedURL) }
+}
+
+@MainActor private final class ActionBoardTransport: HostedRankingsTransport {
+  var requests: [URLRequest] = []
+  var downloads = 0
+  var payload = Data()
+  var hash = ""
+  func data(for request: URLRequest) async throws -> (Data, URLResponse) {
+    requests.append(request)
+    return (Data(), HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!)
+  }
+  func upload(for request: URLRequest, fromFile file: URL) async throws -> (Data, URLResponse) {
+    requests.append(request); payload = try Data(contentsOf: file)
+    return (Data(), HTTPURLResponse(url: request.url!, statusCode: 204, httpVersion: nil, headerFields: nil)!)
+  }
+  func download(for request: URLRequest) async throws -> (URL, URLResponse) {
+    requests.append(request); downloads += 1
+    let file = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    try payload.write(to: file)
+    return (file, HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil,
+      headerFields: ["Content-Type": "application/json", "X-Replay-SHA256": hash])!)
+  }
+}
+
 @MainActor private final class SpeedTestWindow: NSWindow {
   override var isKeyWindow: Bool { true }
 }
@@ -752,6 +787,319 @@ extension AppDelegate {
     navigation.handle(.focusUnassigned(-1), in: menu)
     try check(choices.indexOfSelectedItem == 0, "Controller navigation did not skip unavailable settings in reverse")
     print("PASS actual controller dispatch: RT tiers/hold/release, rapid and B exits, reconnect, hints, sheets, settings and ownership")
+  }
+
+  fileprivate func testLeaderboardActions() async throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll()
+    settings.music = .silent; settings.musicVolume = 0; settings.soundVolume = 0
+    loadContent()
+    gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
+    selectDataSet(); loadLevel(at: 0)
+    let classicContext = leaderboardReplayContext()!
+    let l2 = try Lemmings2PlayWindow(root: BundledGameResources.lemmings2(), recordsCampaignProgress: false)
+    let l2Context = l2.testLeaderboardContext()!
+    let l3 = try Lemmings3PlayWindow(root: BundledGameResources.lemmings3(), recordsCampaignProgress: false)
+    let l3Context = l3.leaderboardReplayContext()
+    defer { GameScreen.shared.dismissAll(); l2.stop(); l2.window?.orderOut(nil); l3.stop(); l3.window?.orderOut(nil); returnToLibrary() }
+    var terrain = try NeoLemmixTerrain(width: 512, height: 96)
+    for x in 0..<512 { terrain.setSolid(true, x: x, y: 48) }
+    let neoInitial = try NeoLemmixSimulation(terrain: terrain, configuration: .init(totalLemmings: 1, requiredToSave: 1,
+      spawnInterval: 4, entrances: [], preplacedLemmings: [.init(position: .init(x: 20, y: 48))],
+      skills: [.walker: .infinite, .builder: .finite(5)]))
+    let classicFloor = Data((0..<(128 * 96)).map { UInt8($0 / 128 >= 48 ? 1 : 0) })
+    let liveClassic = ClassicSession(simulation: try ClassicDOSSimulation(terrain: .init(width: 128, height: 96,
+      solidMask: classicFloor, steelMask: Data(repeating: 0, count: 128 * 96)), configuration: .init(totalLemmings: 1,
+      requiredToSave: 1, timeLimitTicks: 1000, initialReleaseRate: 99, entrances: [.init(x: 40, y: 20)],
+      initialSkills: [.climber: 1], maximumX: 127, maximumY: 95)), width: 128, height: 96)
+    for _ in 0..<100 where liveClassic.lemmings.isEmpty { liveClassic.tick() }
+    try check(liveClassic.assign(skillIndex: ClassicSkill.allCases.firstIndex(of: .climber)!, to: 0) == nil, "Live Classic fixture rejected climber")
+    liveClassic.nuke(); liveClassic.tick(); liveClassic.undoNuke()
+    liveClassic.adjustRate(by: -1); liveClassic.nuke()
+    for _ in 0..<3000 where !liveClassic.isComplete { liveClassic.tick() }
+    let liveConditions = TrolleyConditions(gameID: "lemmings", packID: "fixture", levelID: "1", levelFingerprint: "fixture",
+      rulesetVersion: "test", physicsMode: "test", population: 1, rescueRequirement: 1, startingSkills: ["climber": 1], timeLimitSeconds: nil)
+    let liveLevel = ArcadeLevel(id: "fixture", title: "Fixture", game: "lemmings", rules: "test", total: 1, required: 1, conditions: liveConditions)
+    let liveRun = ArcadeRun(profileID: ArcadeProfile.legacyID, level: liveLevel, saved: liveClassic.saved, didWin: liveClassic.didWin,
+      skills: liveClassic.skillAssignments, seconds: Double(liveClassic.currentTick) / 17, assisted: liveClassic.usedRewind)
+    let liveReplay = try LeaderboardActionReplay.capture(run: liveRun, initial: .classic(liveClassic.initialSimulation), final: .classic(liveClassic.simulation),
+      commands: liveClassic.recoveryEvents.map(LeaderboardActionReplay.Command.classic))
+    _ = try liveReplay.checked(initial: .classic(liveClassic.initialSimulation))
+    try check(liveReplay.assisted && liveReplay.commands.filter { $0.action == "nuke" }.count == 1, "Undone live input leaked into replay")
+    // Storage and sharing use temporary players and a fake transport.
+    let oldStore = ArcadeStore.shared, oldService = HostedRankings.shared
+    let storage = FileManager.default.temporaryDirectory.appendingPathComponent("action-replay-test-" + UUID().uuidString)
+    let suite = "action-replay-" + UUID().uuidString
+    let defaults = UserDefaults(suiteName: suite)!
+    let store = ArcadeStore(file: storage.appendingPathComponent("records.json"), bundledProofs: nil)
+    let player = store.addProfile(initials: "ACT", portrait: 1, select: false)!
+    let transport = ActionBoardTransport()
+    let service = HostedRankings(endpoint: URL(string: "https://example.invalid/rankings"), transport: transport, defaults: defaults,
+      credentials: { _ in String(repeating: "a", count: 64) })
+    service.networkEnabled = true; ArcadeStore.shared = store; HostedRankings.shared = service
+    defer { ArcadeStore.shared = oldStore; HostedRankings.shared = oldService; defaults.removePersistentDomain(forName: suite); try? FileManager.default.removeItem(at: storage) }
+    let storedRun = ArcadeRun(profileID: player.id, level: liveLevel, saved: liveClassic.saved, didWin: liveClassic.didWin,
+      skills: liveClassic.skillAssignments, seconds: Double(liveClassic.currentTick) / 17, assisted: liveClassic.usedRewind, telemetry: TrolleyCapture.telemetry(liveClassic))
+    try check(store.record(storedRun)?.trolley != nil, "Replay attempt was not stored in the ranked history")
+    await store.preserveActions(run: storedRun, initial: .classic(liveClassic.initialSimulation), final: .classic(liveClassic.simulation),
+      commands: try liveClassic.recoveryEvents.map(LeaderboardActionReplay.Command.classic))?.value
+    try check(store.actionReplayURL(attemptID: storedRun.id) != nil && transport.requests.isEmpty, "Action storage uploaded without consent")
+    service.setSharing(true, profile: player.id)
+    for _ in 0..<500 where service.syncing { try await Task.sleep(nanoseconds: 10_000_000) }
+    try check(!service.syncing && transport.requests.contains { $0.httpMethod == "PUT" && $0.url!.path.contains("/v1/actions/") }, "Sharing omitted action replay")
+    try check(!transport.requests.contains { $0.url!.path.contains("/v1/replays/") }, "Sharing uploaded a video")
+    let storedReplay = try JSONDecoder().decode(LeaderboardActionReplay.self, from: transport.payload)
+    try check(storedReplay.runID == storedRun.id, "Uploaded replay belongs to another attempt")
+    transport.hash = ArcadeStore.fingerprint(transport.payload)
+    let entry = HostedBoard.Entry(rank: 10, name: "ACT", score: 0, runID: storedRun.id, replay: false, actionReplay: true)
+    var opened = 0
+    service.playbackActions(entry, conditions: liveConditions) { replay, _ in if replay.runID == storedRun.id { opened += 1 } }
+    for _ in 0..<500 where service.busy { try await Task.sleep(nanoseconds: 1_000_000) }
+    try check(opened == 1 && transport.requests.last?.value(forHTTPHeaderField: "Authorization") == nil, "Top-ten browsing needed a private credential")
+    transport.hash = "wrong"
+    service.playbackActions(entry, conditions: liveConditions) { _, _ in opened += 1 }
+    for _ in 0..<500 where service.busy { try await Task.sleep(nanoseconds: 1_000_000) }
+    try check(opened == 1 && service.status.contains("unavailable"), "Corrupt download opened")
+    let downloads = transport.downloads
+    service.playbackActions(.init(rank: 11, name: "ACT", score: 0, runID: storedRun.id, replay: false, actionReplay: true), conditions: liveConditions) { _, _ in opened += 1 }
+    try check(downloads == transport.downloads, "Rank eleven downloaded actions")
+    service.setSharing(false, profile: player.id)
+    let retainedURL = store.actionReplayURL(attemptID: storedRun.id)!
+    try check(store.deleteProfile(player.id) && !FileManager.default.fileExists(atPath: retainedURL.path), "Profile deletion retained actions")
+    for _ in 0..<500 where service.busy { try await Task.sleep(nanoseconds: 1_000_000) }
+    ArcadeStore.shared = oldStore; HostedRankings.shared = oldService
+    print("PASS live Classic inputs/undo, local retention, opt-in action upload, no video upload, unauthenticated top-ten downloads, checksum rejection and profile deletion")
+    let captures = URL(fileURLWithPath: ".build/action-replay/screens")
+    try FileManager.default.createDirectory(at: captures, withIntermediateDirectories: true)
+    let initialStates: [ActionReplayState] = [classicContext.initial, l2Context.initial, l3Context.initial, .neolemmix(neoInitial)]
+    for initial in initialStates {
+      var state = initial
+      for _ in 0..<120 where !state.complete { state.step() }
+      var commands: [LeaderboardActionReplay.Command] = []
+      func command(_ c: LeaderboardActionReplay.Command) throws { try state.apply(c); commands.append(c) }
+      switch state {
+      case .classic:
+        try command(.init(tick: state.tick, action: "rate", value: 99))
+        try command(.init(tick: state.tick, action: "nuke"))
+      case .lemmings2:
+        try command(.init(tick: state.tick, action: "fan", x: 100, y: 50, held: true))
+        state.step()
+        try command(.init(tick: state.tick, action: "aim", x: 100, y: 50, held: false))
+        try command(.init(tick: state.tick, action: "releasePointer"))
+        try command(.init(tick: state.tick, action: "nuke"))
+      case .lemmings3:
+        try command(.init(tick: state.tick, action: "blocker", lemming: 0))
+        for _ in 0..<30 { state.step() }
+        try command(.init(tick: state.tick, action: "abort"))
+      case .neolemmix:
+        try command(.init(tick: state.tick, action: "assign", lemming: 0, skill: 1))
+        try command(.init(tick: state.tick, action: "rate", value: 1))
+        try command(.init(tick: state.tick, action: "nuke"))
+      }
+      for _ in 0..<3000 where !state.complete { state.step() }
+      try check(state.complete, initial.engine + " action fixture did not finish")
+      let conditions = TrolleyConditions(gameID: initial.engine == "classic" ? "lemmings" : initial.engine,
+        packID: "action-test", levelID: "1", levelFingerprint: try initial.hash(), rulesetVersion: "test", physicsMode: "test",
+        population: initial.population, rescueRequirement: 1, startingSkills: [:], timeLimitSeconds: nil)
+      let level = ArcadeLevel(id: conditions.fingerprint, title: initial.engine, game: initial.engine, rules: "test", total: initial.population, required: 1, conditions: conditions)
+      let skillCount = commands.filter { $0.action == "assign" || $0.action == "blocker" }.count
+      let run = ArcadeRun(profileID: ArcadeStore.shared.records.activeProfileID, level: level, saved: state.saved,
+        didWin: state.didWin, skills: ["used": skillCount], seconds: Double(state.tick) / state.ticksPerSecond, assisted: false)
+      let replay = try LeaderboardActionReplay.capture(run: run, initial: initial, final: state, commands: commands)
+      let bytes = try JSONEncoder().encode(replay)
+      let decoded = try JSONDecoder().decode(LeaderboardActionReplay.self, from: bytes)
+      var cursor = try decoded.checked(initial: initial)
+      try cursor.seek(to: state.tick)
+      try check(try cursor.state.hash() == state.hash(), initial.engine + " replay changed the final state")
+      try cursor.seek(to: 100); let middle = try cursor.state.hash()
+      try cursor.seek(to: 0); try cursor.seek(to: 100)
+      try check(try cursor.state.hash() == middle, initial.engine + " rewind changed state")
+      var object = try JSONSerialization.jsonObject(with: bytes) as! [String: Any]
+      try check(Set(object.keys) == Set(["version", "runID", "conditions", "engine", "engineFingerprint", "initialStateHash", "finalStateHash", "ticks", "saved", "population", "skills", "won", "assisted", "commands"]), "Action file includes saved states or private identity")
+      for key in ["initialStateHash", "finalStateHash", "skills"] {
+        let previous = object[key]
+        if key == "skills" { object[key] = 999 } else { object[key] = String(repeating: "0", count: 64) }
+        let bad = try JSONDecoder().decode(LeaderboardActionReplay.self, from: JSONSerialization.data(withJSONObject: object))
+        var rejected = false
+        do { _ = try bad.checked(initial: initial) } catch { rejected = true }
+        try check(rejected, initial.engine + " accepted changed " + key)
+        object[key] = previous
+      }
+      var invalid = try ActionReplayCursor(replay: replay, initial: initial)
+      var badState = invalid.state
+      var rejected = false
+      do { try badState.apply(.init(tick: badState.tick, action: "assign", lemming: 999999, skill: 99)) } catch { rejected = true }
+      try check(rejected, initial.engine + " accepted invalid skill input")
+      try invalid.seek(to: 100)
+      let context = initial.engine == "classic" ? classicContext : initial.engine == "lemmings2" ? l2Context : initial.engine == "lemmings3" ? l3Context : nil
+      if let context {
+        let (field, render) = try context.makeField()
+        let controller = LeaderboardReplayWindow(cursor: try replay.checked(initial: initial), field: field, render: render, title: initial.engine)
+        window.setContentSize(CGSize(width: 1120, height: 720))
+        var resumes = 0
+        controller.show(owner: window, resume: { resumes += 1 })
+        for (name, tick) in [("start", 0), ("middle", 100), ("end", state.tick), ("rewound", 100)] {
+          controller.seek(tick); window.contentView?.layoutSubtreeIfNeeded(); controller.page.layoutSubtreeIfNeeded()
+          func invalidate(_ view: NSView) { view.needsDisplay = true; view.subviews.forEach(invalidate) }
+          invalidate(controller.page); controller.page.displayIfNeeded(); CATransaction.flush()
+          let bitmap = controller.page.bitmapImageRepForCachingDisplay(in: controller.page.bounds)!
+          controller.page.cacheDisplay(in: controller.page.bounds, to: bitmap)
+          try bitmap.representation(using: .png, properties: [:])!.write(to: captures.appendingPathComponent(initial.engine + "-" + name + ".png"))
+          let buttons = controller.page.subviews.compactMap { $0 as? GameActionButton }
+          for button in buttons {
+            try check(controller.page.bounds.contains(button.frame), "Replay target clipped")
+            try check(buttons.filter { $0 !== button }.allSatisfy { !$0.frame.intersects(button.frame) }, "Replay targets overlap")
+            try check(controller.page.hitTest(CGPoint(x: button.frame.midX, y: button.frame.midY)) === button, "Replay target has no hit region")
+          }
+        }
+        let step = controller.page.subviews.compactMap { $0 as? GameActionButton }.first { $0.title == "Step +1" }!
+        step.performClick(nil)
+        try check(controller.cursor.state.tick == 101, "Replay step did not advance one tick")
+        let play = controller.page.subviews.compactMap { $0 as? GameActionButton }.first { $0.title == "Play" }!
+        play.performClick(nil)
+        try check(play.title == "Pause", "Replay did not enter its playing state")
+        try await Task.sleep(nanoseconds: 130_000_000)
+        try check(controller.cursor.state.tick > 101, "Replay timer did not advance")
+        play.performClick(nil)
+        try check(play.title == "Play", "Replay did not return to its paused state")
+        let speed = controller.page.subviews.compactMap { $0 as? GameActionButton }.first { $0.title == "Speed 1x" }!
+        for expected in ["Speed 2x", "Speed 5x", "Speed 1x"] {
+          speed.performClick(nil); try check(speed.title == expected, "Replay speed state did not cycle")
+        }
+        window.setContentSize(CGSize(width: 760, height: 520))
+        window.contentView?.layoutSubtreeIfNeeded(); controller.page.layoutSubtreeIfNeeded()
+        func invalidateCompact(_ view: NSView) { view.needsDisplay = true; view.subviews.forEach(invalidateCompact) }
+        invalidateCompact(controller.page); controller.page.displayIfNeeded(); CATransaction.flush()
+        let compact = controller.page.bitmapImageRepForCachingDisplay(in: controller.page.bounds)!
+        controller.page.cacheDisplay(in: controller.page.bounds, to: compact)
+        try compact.representation(using: .png, properties: [:])!.write(to: captures.appendingPathComponent(initial.engine + "-compact.png"))
+        let compactButtons = controller.page.subviews.compactMap { $0 as? GameActionButton }
+        try check(compactButtons.allSatisfy { controller.page.bounds.contains($0.frame) }, "Compact replay clipped a control")
+        let back = compactButtons.first { $0.title == "Back" }!
+        back.performClick(nil)
+        try check(resumes == 1 && controller.page.window == nil, "Replay did not restore its owner once")
+      }
+      print("PASS \(initial.engine) bounded action-only format, commands, final verification, tamper rejection, seek and replay render targets")
+    }
+  }
+
+  fileprivate func testResultNavigation() async throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll()
+    let previousStore = ArcadeStore.shared, previousHosted = HostedRankings.shared
+    let folder = FileManager.default.temporaryDirectory.appendingPathComponent("result-navigation-" + UUID().uuidString)
+    let suite = "result-navigation-" + UUID().uuidString
+    let defaults = UserDefaults(suiteName: suite)!
+    let store = ArcadeStore(file: folder.appendingPathComponent("records.json"), bundledProofs: nil)
+    let transport = ResultBoardTransport()
+    let service = HostedRankings(endpoint: URL(string: "https://example.invalid/rankings"), transport: transport, defaults: defaults,
+      credentials: { _ in throw IntegrationFailure(message: "Browsing requested a credential") })
+    service.networkEnabled = true
+    ArcadeStore.shared = store; HostedRankings.shared = service
+    defer {
+      GameScreen.shared.dismissAll(); returnToLibrary()
+      ArcadeStore.shared = previousStore; HostedRankings.shared = previousHosted
+      defaults.removePersistentDomain(forName: suite)
+      try? FileManager.default.removeItem(at: folder)
+    }
+    settings.music = .silent; settings.musicVolume = 0; settings.soundVolume = 0
+    loadContent()
+    gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
+    selectDataSet(); loadLevel(at: 0); phase = .results
+    installKeyboardShortcuts()
+    let host = store.records.activeProfileID
+    let guest = store.addProfile(initials: "PAL", portrait: 2, select: false)!
+    store.prepareHotSeat()
+    if !store.sessionProfileIDs.contains(guest.id) { store.toggleSessionProfile(guest.id) }
+    window.setContentSize(CGSize(width: 1120, height: 720))
+    let sharedID = store.hotSeatID, runID = arcadeRunID
+    let view = ArcadeWindow.shared.arcadeView
+    let captures = URL(fileURLWithPath: ".build/result-navigation")
+    try FileManager.default.createDirectory(at: captures, withIntermediateDirectories: true)
+    func render(_ name: String) throws {
+      if view.mode == .result { view.finishCelebration() }
+      window.contentView?.layoutSubtreeIfNeeded()
+      view.layoutSubtreeIfNeeded()
+      guard let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds) else { throw IntegrationFailure(message: "No result render") }
+      view.cacheDisplay(in: view.bounds, to: bitmap)
+      try bitmap.representation(using: .png, properties: [:])!.write(to: captures.appendingPathComponent(name + ".png"))
+      let buttons = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.filter { $0.accessibilityRole() == .button }
+      for button in buttons {
+        try check(view.bounds.contains(button.localFrame), "Result action is clipped: " + (button.accessibilityLabel() ?? ""))
+        if ["Hot Seat", "Worldwide", "This level >", "This level *", "All levels >", "All levels *", "Worldwide >", "Worldwide *"].contains(button.accessibilityLabel() ?? "") {
+          try check(buttons.filter { $0 !== button }.allSatisfy { !$0.localFrame.intersects(button.localFrame) },
+            "Navigation action target overlaps: " + (button.accessibilityLabel() ?? ""))
+          try check(view.hitTest(CGPoint(x: button.localFrame.midX, y: button.localFrame.midY)) === view, "Navigation action has no mouse target")
+        }
+      }
+    }
+    func press(_ title: String) throws {
+      try render("current")
+      let action = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.first { $0.accessibilityRole() == .button && $0.accessibilityLabel() == title }
+      try check(action?.accessibilityPerformPress() == true, "Missing result action: " + title)
+    }
+    func waitBoard() async throws {
+      for _ in 0..<200 where service.busy { try await Task.sleep(nanoseconds: 5_000_000) }
+      try check(!service.busy, "Community board did not finish")
+    }
+    for game in ["lemmings", "lemmings2", "lemmings3"] {
+      let conditions = TrolleyConditions(gameID: game, packID: "test", levelID: "1", levelFingerprint: "abc", rulesetVersion: "v1", physicsMode: "classic", population: 10, rescueRequirement: 5, startingSkills: [:], timeLimitSeconds: nil)
+      let level = ArcadeLevel(id: game, title: "Navigation test", game: game, rules: "v1", total: 10, required: 5, conditions: conditions)
+      let run = ArcadeRun(profileID: host, level: level, saved: 9, didWin: true, skills: [:], seconds: 20)
+      let report = store.record(run)!
+      ArcadeWindow.shared.showResult(report, owner: window, retry: {}, next: {}, replay: { _ in })
+      try render(game + "-result")
+      try press("Worldwide")
+      try check(!view.usesGameCenter && view.boardScope == .worldwide && service.busy, "Worldwide did not open community boards")
+      try render(game + "-loading"); try await waitBoard()
+      try check(service.board?.entries.first?.name == "PAL" && transport.requests.last?.url?.query?.contains(conditions.fingerprint) == true,
+        "Community board used the wrong game's conditions")
+      try check(transport.requests.allSatisfy { $0.httpMethod == "GET" && $0.value(forHTTPHeaderField: "Authorization") == nil }
+        && !service.sharing(host), "Browsing shared records or required an account")
+      try render(game + "-worldwide")
+      try press("Back to result")
+      try check(view.mode == .result && view.report?.run.id == run.id && store.hotSeatID == sharedID, "Returning from Worldwide changed the turn")
+    }
+    let lastReport = view.report!
+    transport.board = .init(entries: [], page: 0, hasMore: false, verification: "community")
+    try press("Worldwide"); try await waitBoard(); try render("worldwide-empty")
+    try check(service.board?.entries.isEmpty == true, "Empty community board was hidden")
+    transport.code = 503
+    try press("Worldwide *"); try await waitBoard(); try render("worldwide-offline")
+    try check(service.board == nil && service.status.contains("Offline"), "Unavailable community board retained stale rows")
+    try press("Game Center >"); try render("game-center")
+    try check(view.usesGameCenter, "Game Center provider did not stay separate")
+    transport.code = 200
+    try press("Worldwide *"); try await waitBoard()
+    try check(!view.usesGameCenter, "Worldwide did not return to community boards")
+    ArcadeWindow.shared.showRecords(level: ArcadeLevel(id: "legacy", title: "Older record", game: "lemmings", rules: "v1", total: 10, required: 5), owner: window)
+    try render("legacy-records"); try press("Worldwide >"); try await waitBoard()
+    try check(view.hostedCategory == .stars && !view.usesGameCenter, "Older records could not browse community career boards")
+    ArcadeWindow.shared.showResult(lastReport, owner: window, retry: {}, next: {}, replay: { _ in })
+    sequencePlayingIdentity = LevelCatalogueIdentity(engine: .classic, packID: "test", levelID: "1")
+    phase = .playing
+    showHotSeat()
+    try check(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Run in progress", "Unfinished sequence lost its navigation guard")
+    (GameScreen.shared.controllerPage(in: window) as? GameMenuPage)?.onBack?()
+    phase = .results
+    try press("Hot Seat")
+    guard let confirmation = GameScreen.shared.controllerPage(in: window) as? GameMenuPage else { throw IntegrationFailure(message: "Hot Seat rejected a result in a sequence") }
+    try check(confirmation.accessibilityLabel() == "Change Hot Seat players?", "Hot Seat showed a run-in-progress error")
+    confirmation.onBack?()
+    try check(sequencePlayingIdentity != nil && store.hotSeatID == sharedID && arcadeRunID == runID && view.mode == .result,
+      "Cancelling Hot Seat setup changed the run")
+    // The P shortcut must use the same confirmation as the pointer target.
+    let event = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1, windowNumber: window.windowNumber,
+      context: nil, characters: "p", charactersIgnoringModifiers: "p", isARepeat: false, keyCode: 35)!
+    view.keyDown(with: event)
+    guard let page = GameScreen.shared.controllerPage(in: window) as? GameMenuPage else { throw IntegrationFailure(message: "P did not confirm Hot Seat setup") }
+    func buttons(_ root: NSView) -> [NSButton] { (root as? NSButton).map { [$0] } ?? root.subviews.flatMap(buttons) }
+    guard let save = buttons(page).first(where: { $0.title == "Save and return to library" }) else { throw IntegrationFailure(message: "No saved Hot Seat exit") }
+    save.performClick(nil)
+    try check(sequencePlayingIdentity == nil && view.mode == .hotSeat && store.hotSeatID == sharedID && store.playingProfileID == host,
+      "Hot Seat setup did not return safely to the library")
+    try render("hot-seat-setup")
+    print("PASS result Hot Seat confirmation/cancellation/saved exit and P shortcut; shared Classic/L2/L3 community navigation, loading/empty/offline states, legacy records, provider selection, account-free browsing and return targets")
   }
 
   fileprivate func testHotSeatBoundaries() throws {
@@ -3956,19 +4304,24 @@ extension AppDelegate {
   }
 
   fileprivate func testLearningJourneySessionsStart() async throws {
+    if window == nil { buildInterface() }
     guard let journey = LearningJourneyLibrary.journey else {
       throw IntegrationFailure(message: "The bundled learning journey did not load")
     }
     let previousMusic = settings.music
     let previousMusicVolume = settings.musicVolume
     let previousShuffleMusic = settings.shuffleMusic
+    let previousAlternates = settings.djIncludesOtherSoundtracks
     let previousLevelMusic = levelMusic
     let previousAudioMuted = audioMuted
     let previousMusicDirectory = UserDefaults.standard.string(forKey: musicPathKey)
     UserDefaults.standard.removeObject(forKey: musicPathKey)
+    settings.music = .silent
+    loadContent()
     settings.music = .amigaModules
     settings.musicVolume = 0.5
     settings.shuffleMusic = false
+    settings.djIncludesOtherSoundtracks = true
     levelMusic = nil
     audioMuted = false
     applyAudioSettings()
@@ -3987,6 +4340,7 @@ extension AppDelegate {
       settings.music = previousMusic
       settings.musicVolume = previousMusicVolume
       settings.shuffleMusic = previousShuffleMusic
+      settings.djIncludesOtherSoundtracks = previousAlternates
       levelMusic = previousLevelMusic
       audioMuted = previousAudioMuted
       if let previousMusicDirectory { UserDefaults.standard.set(previousMusicDirectory, forKey: musicPathKey) }
@@ -4004,6 +4358,10 @@ extension AppDelegate {
     let store = try LevelPlaylistStore(file: directory.appendingPathComponent("playlists.json"))
     try store.add(journey.playlist())
     playlistStoreCache = (arcade.records.activeProfileID, store)
+    guard let discovery = await makeLevelBrowserDiscoveryTask().value else {
+      throw IntegrationFailure(message: "The journey catalogue could not load")
+    }
+    rebuildLevelCatalogue(discovery)
     let entries = journey.lessons.map(\.entry)
     // Migrate both Solo and Hot Seat queues without changing ownership or progress.
     let migrationFile = directory.appendingPathComponent("migration.json")
@@ -4096,12 +4454,18 @@ extension AppDelegate {
       && sequencePlayingIdentity == first && !arcade.hotSeatIsActive
       && music.isOutputRunning && music.currentURL != nil
       && !music.muted && music.volume > 0,
-      "New solo did not start the learning journey")
+      "New solo did not start the learning journey: run=\(String(describing: store.activeRun?.currentEntry.identity)), sequence=\(String(describing: sequencePlayingIdentity)), music=\(music.isOutputRunning), muted=\(music.muted), page=\(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() ?? "none")")
     let firstSoloID = store.activeRun!.id
     try check(sameFile(music.currentURL, openingTrack),
       "The first journey lesson did not start Can-Can")
     let openingAdvanced = try await waitUntil(3) { music.sourceSeconds > 0.2 }
     try check(openingAdvanced, "The opening module did not advance before handoff")
+    let beforeLegacyWin = music.sourceSeconds
+    updateDJTelemetry(.init(savedCount: 1, requiredCount: 1, didWin: true, isComplete: true))
+    try check(dj.isPlaying && !sameFile(dj.currentURL, openingTrack) && music.isOutputRunning
+      && music.sourceSeconds >= beforeLegacyWin,
+      "The first journey win suppressed celebration or restarted its legacy tune")
+    finishDJToLegacyMusicHandoff()
     let beforeRetry = music.sourceSeconds
     retry()
     try check(sequencePlayingIdentity == first && music.isOutputRunning
@@ -4157,6 +4521,13 @@ extension AppDelegate {
       !music.isOutputRunning && dj.isPlaying && sameFile(dj.currentURL, nextTrack)
     }
     try check(retired, "The outgoing module did not retire after the level handoff")
+    let beforeCelebration = dj.currentURL
+    updateDJTelemetry(.init(savedCount: 1, requiredCount: 1, didWin: true, isComplete: true))
+    try check(dj.currentURL != beforeCelebration,
+      "The learning journey suppressed its completed-win arrangement change")
+    let celebrated = dj.currentURL
+    updateDJTelemetry(.init(savedCount: 1, requiredCount: 1, didWin: true, isComplete: true))
+    try check(dj.currentURL == celebrated, "The journey repeated its celebration cue")
     returnToLibrary()
     startLearningEntries([entries[1]], in: store, allowsFullRestart: false)
     guard let subsetChooser = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
@@ -6513,7 +6884,7 @@ Task { @MainActor in
     subject.prepareArcadeTests()
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
-    #if !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
+    #if !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -6527,6 +6898,15 @@ Task { @MainActor in
     #if MAC_FIDELITY_TESTS
     try await subject.testMacintoshFidelity()
     print("Macintosh fidelity integration tests passed.")
+    #elseif MENU_RECORDS_TRACK_TESTS
+    try testRecordNavigationAndTrackNotice()
+    print("Records and track-notice integration tests passed.")
+    #elseif CELEBRATION_TESTS
+    try await subject.testLearningJourneySessionsStart()
+    try await subject.testExitAndImmediateProgress()
+    try testPrecisionRewardResults()
+    try testRecordNavigationAndTrackNotice()
+    print("Celebration music, golden glow and result-input integration tests passed.")
     #elseif EXIT_PROGRESS_TESTS
     try await subject.testExitAndImmediateProgress()
     try subject.testEscapeToMainMenu()
@@ -6594,6 +6974,10 @@ Task { @MainActor in
       try subject.testEscapeToMainMenu()
     }
     print("1.8.x consolidation integration tests passed.")
+    #elseif ACTION_REPLAY_TESTS
+    try await subject.testLeaderboardActions()
+    #elseif RESULT_NAVIGATION_TESTS
+    try await subject.testResultNavigation()
     #elseif PROFILE_SESSION_TESTS
     try subject.testSoloHotSeatRoundTrips()
     try subject.testReportedRecovery()
@@ -7462,15 +7846,91 @@ func validateMusicRouting(_ condition: Bool, _ message: String) throws {
 }
 
 
+@MainActor func validateCompletionGlow(_ view: NSView, name: String, set: (CGFloat) -> Void) throws {
+  let folder = URL(fileURLWithPath: ".build/celebration-renders")
+  try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+  func capture(_ state: String, amount: CGFloat) throws -> CGImage {
+    set(amount)
+    guard let image = ReplayFrameCapture.image(size: view.bounds.size, draw: { view.draw(view.bounds) }) else {
+      throw IntegrationFailure(message: name + " celebration capture failed")
+    }
+    try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(
+      to: folder.appendingPathComponent(name + "-" + state + ".png"))
+    return image
+  }
+  let inactive = try capture("inactive", amount: 0), earned = try capture("earned", amount: 1)
+  let a = inactive.dataProvider!.data! as Data, b = earned.dataProvider!.data! as Data
+  let changed = stride(from: 0, to: a.count, by: 4).filter { a[$0..<$0 + 4] != b[$0..<$0 + 4] }.count
+  try check(changed > 0 && Double(changed) / Double(a.count / 4) < 0.12,
+    name + " golden rim is missing or covers too much of the game")
+  _ = try capture("reset", amount: 0)
+  print("PASS " + name + " native golden rim capture and restrained pixel coverage")
+}
+
+@MainActor func testPrecisionRewardResults() throws {
+  let folder = URL(fileURLWithPath: ".build/precision-reward-renders")
+  try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+  let directory = FileManager.default.temporaryDirectory.appendingPathComponent("precision-results-\(UUID())")
+  let previous = ArcadeStore.shared
+  let store = ArcadeStore(file: directory.appendingPathComponent("records.json"), bundledProofs: nil)
+  ArcadeStore.shared = store
+  defer { GameScreen.shared.dismissAll(); ArcadeStore.shared = previous; try? FileManager.default.removeItem(at: directory) }
+  let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 900, height: 620), styleMask: [], backing: .buffered, defer: false)
+  let defaultsName = "precision-results-\(UUID())"
+  let defaults = UserDefaults(suiteName: defaultsName)!
+  defer { defaults.removePersistentDomain(forName: defaultsName) }
+  let wallet = PrecisionZoomController(defaults: defaults)
+  let player = store.records.activeProfileID
+  for (index, engine) in ["lemmings", "lemmings2", "lemmings3"].enumerated() {
+    let run = ArcadeRun(profileID: player, level: rewardFixtureLevel(engine), saved: 1, didWin: true, skills: [:], seconds: 10,
+      telemetry: .init(released: 1))
+    guard let report = store.record(run) else { throw IntegrationFailure(message: "Reward fixture could not save") }
+    wallet.start(attemptID: UUID(), profileID: player)
+    try check(wallet.remaining(.zoom) == index + 1 && wallet.remaining(.superzoom) == (index == 2 ? 1 : 0),
+      engine + " saved career did not fund its precision uses")
+    for width in [900, 1600] {
+      host.setContentSize(CGSize(width: width, height: width == 900 ? 620 : 1000))
+      ArcadeWindow.shared.showResult(report, owner: host, retry: {}, next: {}, replay: { _ in }, menu: {})
+      let result = ArcadeWindow.shared.arcadeView
+      result.finishCelebration()
+      let image = ReplayFrameCapture.image(size: result.bounds.size) { ReplayFrameCapture.draw(result, in: result.bounds) }!
+      try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(
+        to: folder.appendingPathComponent(engine + "-\(width).png"))
+      let label = result.accessibilityLabel() ?? ""
+      try check(label.contains("+1 ZOOM") && label.contains("+1 SUPERZOOM") == (index == 2),
+        engine + " result did not announce the actual new uses")
+      let rewardRows = result.accessibilityChildren()!.compactMap { $0 as? GameAccessibleElement }
+        .filter { $0.accessibilityLabel()?.contains("+1 ZOOM") == true }
+      try check(!rewardRows.isEmpty && rewardRows.allSatisfy { result.bounds.contains($0.localFrame) },
+        engine + " reward caption was missing or clipped")
+      GameScreen.shared.dismissAll()
+    }
+  }
+  let reopened = ArcadeStore(file: directory.appendingPathComponent("records.json"), bundledProofs: nil)
+  let score = TrolleyCareerScore(profileID: player, attempts: reopened.records.trolley.attempts, assisted: false)
+  try check(score.stars == 9 && score.threeStarLevels == 3, "Zoom career rewards did not survive reopening")
+  print("PASS persisted Classic/L2/L3 three-star precision rewards, wallet balances, bitmap captions and accessibility at compact/large sizes")
+}
+
+@MainActor func rewardFixtureLevel(_ engine: String) -> ArcadeLevel {
+  let conditions = TrolleyConditions(gameID: engine, packID: "sequence-reward-test", levelID: "one-survivor",
+    levelFingerprint: "test", rulesetVersion: "test", physicsMode: "test", population: 1,
+    rescueRequirement: 1, startingSkills: [:], timeLimitSeconds: 60)
+  return .init(id: engine + "-reward", title: "Reward fixture", game: engine, rules: "test", total: 1, required: 1, conditions: conditions)
+}
+
 @MainActor func validateExitControl(_ keyboard: GameplayKeyboard, owner: NSWindow, name: String) throws {
   GameScreen.shared.dismissAll()
   let oldAction = keyboard.mainMenu, oldActive = keyboard.active, oldAvailable = keyboard.navigationAvailable
   let oldOwnership = keyboard.ownsController
+  let oldReduction = keyboard.navigationReduceMotion
   var exits = 0
   keyboard.mainMenu = { exits += 1 }; keyboard.navigationAvailable = { true }; keyboard.ownsController = { true }
+  keyboard.navigationReduceMotion = { false }
   defer {
     keyboard.mainMenu = oldAction; keyboard.active = oldActive; keyboard.navigationAvailable = oldAvailable
     keyboard.ownsController = oldOwnership; keyboard.bind(to: owner); keyboard.refreshNavigationControl()
+    keyboard.navigationReduceMotion = oldReduction
   }
   let folder = URL(fileURLWithPath: ".build/exit-progress")
   try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
@@ -7484,6 +7944,38 @@ func validateMusicRouting(_ condition: Bool, _ message: String) throws {
     try check(menu.frame.width >= 44 && menu.frame.height >= 44 && root.bounds.contains(menu.frame), name + " clipped Menu")
     let centre = CGPoint(x: menu.frame.midX, y: menu.frame.midY)
     try check(root.hitTest(root.convert(centre, to: root.superview)) === menu, name + " Menu lost its input target")
+    let fading = menu as! GameplayMenuButton
+    keyboard.active = { true }
+    fading.resetAppearance()
+    keyboard.refreshNavigationControl(at: 100)
+    try check(fading.artworkOpacity == 1, name + " Menu did not start visible")
+    keyboard.refreshNavigationControl(at: 103.3)
+    try check(abs(fading.artworkOpacity - 0.5) < 0.01, name + " Menu did not fade smoothly")
+    let halfway = ReplayFrameCapture.image(size: fading.bounds.size) { fading.draw(fading.bounds) }!
+    try NSBitmapImageRep(cgImage: halfway).representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent(name + "-menu-half.png"))
+    keyboard.refreshNavigationControl(at: 104)
+    try check(fading.artworkOpacity == 0 && !fading.isHidden && fading.alphaValue == 1
+      && root.hitTest(root.convert(centre, to: root.superview)) === fading,
+      name + " faded Menu lost its hover/input target")
+    let faded = ReplayFrameCapture.image(size: fading.bounds.size) { fading.draw(fading.bounds) }!
+    try NSBitmapImageRep(cgImage: faded).representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent(name + "-menu-faded.png"))
+    try check((faded.dataProvider!.data! as Data).allSatisfy { $0 == 0 }, name + " faded Menu left visible artwork")
+    let hover = NSEvent.enterExitEvent(with: .mouseEntered, location: centre, modifierFlags: [], timestamp: 104,
+      windowNumber: owner.windowNumber, context: nil, eventNumber: 0, trackingNumber: 0, userData: nil)!
+    fading.mouseEntered(with: hover)
+    keyboard.refreshNavigationControl(at: 110)
+    try check(fading.artworkOpacity == 1 && fading.isHovered, name + " hover did not restore Menu")
+    fading.resetAppearance()
+    fading.updateAppearance(at: 100, autoHide: true, reduceMotion: true)
+    fading.updateAppearance(at: 103, autoHide: true, reduceMotion: true)
+    try check(fading.artworkOpacity == 0, name + " reduced motion retained Menu animation")
+    owner.makeFirstResponder(fading)
+    fading.updateAppearance(at: 110, autoHide: true, reduceMotion: false)
+    try check(fading.artworkOpacity == 1, name + " keyboard focus did not reveal Menu")
+    owner.makeFirstResponder(nil)
+    keyboard.active = { false }
+    keyboard.refreshNavigationControl(at: 120)
+    try check(fading.artworkOpacity == 1, name + " result Menu faded away")
     let control = ReplayFrameCapture.image(size: menu.bounds.size) { menu.draw(menu.bounds) }!
     try NSBitmapImageRep(cgImage: control).representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent(name + "-menu.png"))
     let bitmap = root.bitmapImageRepForCachingDisplay(in: root.bounds)!
@@ -7631,8 +8123,16 @@ extension AppDelegate {
           setSequencePlayingIdentity(entry.identity)
           installKeyboardShortcuts()
           try validateExitControl(gameplayKeyboard!, owner: window, name: "classic")
-          session = FinalTickSession(win: won); session?.tick(); arcadeLevel = nil; arcadeReport = nil
+          try validateRecordNavigation(recordLevelChoices(), current: arcadeLevel!, owner: window, name: "classic-pack")
+          session = FinalTickSession(win: won); session?.tick(); arcadeLevel = rewardFixtureLevel("lemmings"); arcadeReport = nil; arcadeRunID = UUID()
           finishSessionIfNeeded()
+          try check(ArcadeStore.shared.records.trolley.attempts.contains { $0.id == arcadeRunID },
+            "Classic sequence result did not persist its career stars")
+          updateFailureMood()
+          completionGlow.advance(at: ProcessInfo.processInfo.systemUptime + 2)
+          try check(playfield.completionGlowAmount == (won ? 1 : 0), "Classic result celebration state is wrong")
+          try validateCompletionGlow(playfield, name: "classic-\(won)") { self.playfield.completionGlowAmount = $0 }
+          playfield.completionGlowAmount = won ? 1 : 0
         } else if engine == .lemmings2 {
           try check(openNativeL2(selection: .init(tribe: 0, level: 0), sequenceRunID: run.id, sequenceIdentity: entry.identity), "L2 did not open")
           try nativeL2Window!.testExitAndSequenceResult(won: won)
@@ -7943,4 +8443,121 @@ extension AppDelegate {
     try capturePage("audio-mac-music")
     print("PASS rendered Graphics/Audio preferences, choice pages and input actions")
   }
+}
+
+@MainActor func validateRecordNavigation(_ levels: [ArcadeLevel], current: ArcadeLevel, owner: NSWindow, name: String) throws {
+  guard let start = levels.firstIndex(where: { $0.boardID == current.boardID }), levels.count > 1 else {
+    throw IntegrationFailure(message: name + " omitted its current level or unplayed neighbours")
+  }
+  let records = ArcadeStore.shared.records
+  let oldSize = owner.contentView!.bounds.size
+  defer { GameScreen.shared.dismissAll(); owner.setContentSize(oldSize) }
+  let folder = URL(fileURLWithPath: ".build/menu-records-track-renders")
+  try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+  for width in [900, 1600] {
+    owner.setContentSize(CGSize(width: width, height: width == 900 ? 620 : 1000))
+    ArcadeWindow.shared.showRecords(level: current, owner: owner, levels: levels)
+    let view = ArcadeWindow.shared.arcadeView
+    func render(_ suffix: String) throws {
+      let image = ReplayFrameCapture.image(size: view.bounds.size) { view.draw(view.bounds) }!
+      try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(
+        to: folder.appendingPathComponent("\(name)-\(suffix)-\(width).png"))
+      if let font = view.font {
+        for label in ["< Previous level", "Next level >"] {
+          try check(font.width(of: MacInterfaceRenderer.menuText(label), face: .small, scale: 1) <= 220,
+            name + " navigation caption exceeds its bitmap button")
+        }
+      }
+      let frames = view.accessibilityChildren()!.compactMap { $0 as? GameAccessibleElement }.map(\.localFrame)
+      try check(frames.allSatisfy { view.bounds.contains($0) }, name + " clipped a records input target")
+    }
+    try render("current")
+    let direction = start + 1 < levels.count ? 1 : -1
+    let label = direction == 1 ? "Next level >" : "< Previous level"
+    guard let action = view.accessibilityChildren()!.compactMap({ $0 as? GameAccessibleElement }).first(where: { $0.accessibilityLabel() == label }) else {
+      throw IntegrationFailure(message: name + " disabled an available neighbour")
+    }
+    let centre = CGPoint(x: action.localFrame.midX, y: action.localFrame.midY)
+    let click = NSEvent.mouseEvent(with: .leftMouseDown, location: view.convert(centre, to: nil), modifierFlags: [], timestamp: 1,
+      windowNumber: owner.windowNumber, context: nil, eventNumber: 1, clickCount: 1, pressure: 1)!
+    view.mouseDown(with: click)
+    try check(view.level?.boardID == levels[start + direction].boardID, name + " Records mouse action did not change levels")
+    try render("adjacent")
+    let event = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+      windowNumber: owner.windowNumber, context: nil, characters: "", charactersIgnoringModifiers: "",
+      isARepeat: false, keyCode: direction == 1 ? 123 : 124)!
+    view.keyDown(with: event)
+    try check(view.level?.boardID == current.boardID, name + " Records arrow key did not return to the current level")
+    view.level = levels.first; try render("first")
+    try check(!view.accessibilityChildren()!.compactMap { $0 as? GameAccessibleElement }.contains { $0.accessibilityLabel() == "< Previous level" }, name + " first level retained an active Previous target")
+    view.level = levels.last; try render("last")
+    try check(!view.accessibilityChildren()!.compactMap { $0 as? GameAccessibleElement }.contains { $0.accessibilityLabel() == "Next level >" }, name + " last level retained an active Next target")
+    try check(ArcadeStore.shared.records == records, name + " records browsing changed progression or turn ownership")
+    GameScreen.shared.dismissAll()
+  }
+  print("PASS " + name + " ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes")
+}
+
+@MainActor func testRecordNavigationAndTrackNotice() throws {
+  let previous = ArcadeStore.shared
+  let directory = FileManager.default.temporaryDirectory.appendingPathComponent("records-track-\(UUID())")
+  ArcadeStore.shared = ArcadeStore(file: directory.appendingPathComponent("records.json"), bundledProofs: nil)
+  defer { GameScreen.shared.dismissAll(); ArcadeStore.shared = previous; try? FileManager.default.removeItem(at: directory) }
+  let owner = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 900, height: 620), styleMask: [], backing: .buffered, defer: false)
+  for engine in ["lemmings", "lemmings2", "lemmings3", "neolemmix"] {
+    let c = TrolleyConditions(gameID: engine, packID: "pack", levelID: "0", levelFingerprint: "current", rulesetVersion: "test", physicsMode: "test",
+      population: 1, rescueRequirement: 1, startingSkills: [:], timeLimitSeconds: 60)
+    let level = ArcadeLevel(id: engine, title: "Zebra first", game: engine, rules: "test", total: 1, required: 1, conditions: c)
+    let choices = RecordLevelNavigation.levels(current: level, entries: [("0", "Zebra first"), ("1", "Apple second"), ("2", "Banana third")])
+    try check(choices.map(\.title) == ["Zebra first", "Apple second", "Banana third"] && choices[0] == level && choices[1].conditions == nil,
+      engine + " navigation sorted by name or fabricated an unplayed verified board")
+    try validateRecordNavigation(choices, current: level, owner: owner, name: engine + "-unplayed")
+  }
+  guard let root = Bundle.main.resourceURL?.appendingPathComponent("Music"), let catalogue = SoundtrackCatalogue.load(at: root),
+        let track = catalogue.track(id: "classic.awesome"), let variant = track.variants.first(where: { $0.port == "amiga" && $0.quality == "native-module" }) else {
+    throw IntegrationFailure(message: "Now Playing catalogue fixture missing")
+  }
+  let metadata = PlayingTrackMetadata.track(url: root.appendingPathComponent(variant.path), fallbackTitle: "Wrong filename")
+  try check(metadata.title == track.title && metadata.soundtrack.contains("Lemmings") && metadata.soundtrack.contains("Amiga"),
+    "Now Playing did not resolve composition title and soundtrack")
+  let mac = PlayingTrackMetadata.track(url: Bundle.main.resourceURL!.appendingPathComponent("MacMusic/classic/awesome.m4a"))
+  try check(mac.title == track.title && mac.soundtrack == "Lemmings - Macintosh (original)",
+    "The Macintosh bank did not identify its title and soundtrack")
+  let remix = track.variants.first { $0.remix != "original" }!
+  let remixed = PlayingTrackMetadata.track(url: root.appendingPathComponent(remix.path))
+  try check(remixed.title == track.title && remixed.soundtrack != metadata.soundtrack, "A soundtrack change kept the old source caption")
+  let keyboard = GameplayKeyboard(window: owner)
+  keyboard.active = { true }; keyboard.navigationAvailable = { true }; keyboard.mainMenu = {}
+  var selected: PlayingTrack? = metadata
+  keyboard.playingTrack = { selected }
+  let folder = URL(fileURLWithPath: ".build/menu-records-track-renders")
+  for width in [640, 900, 1600] {
+    owner.setContentSize(CGSize(width: width, height: 620))
+    selected = nil; keyboard.refreshNavigationControl(at: 90)
+    selected = metadata; keyboard.refreshNavigationControl(at: 100)
+    let notice = owner.contentView!.subviews.compactMap { $0 as? NowPlayingNotice }.first!
+    try check(!notice.isHidden && notice.track == metadata && notice.hitTest(.zero) == nil && owner.contentView!.bounds.contains(notice.frame),
+      "Now Playing was missing, clipped or intercepted gameplay")
+    let image = ReplayFrameCapture.image(size: notice.bounds.size) { notice.draw(notice.bounds) }!
+    try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent("track-\(width).png"))
+    try check(notice.accessibilityLabel()?.contains(metadata.title) == true && notice.accessibilityLabel()?.contains(metadata.soundtrack) == true,
+      "Now Playing omitted accessible song/source names")
+    keyboard.refreshNavigationControl(at: 104.25)
+    try check(abs(notice.alphaValue - 0.5) < 0.01, "Now Playing did not fade after four seconds")
+    keyboard.refreshNavigationControl(at: 105)
+    try check(notice.isHidden, "Now Playing remained visible")
+    keyboard.refreshNavigationControl(at: 106)
+    try check(notice.isHidden, "The same track repeatedly reopened its notice")
+    selected = remixed; keyboard.refreshNavigationControl(at: 107)
+    try check(!notice.isHidden && notice.track == remixed, "Changing soundtrack did not replace the notice")
+    keyboard.navigationReduceMotion = { true }; keyboard.refreshNavigationControl(at: 111.25)
+    try check(!notice.isHidden && notice.alphaValue == 1, "Reduced motion animated the notice")
+    keyboard.refreshNavigationControl(at: 112)
+    try check(notice.isHidden, "Reduced motion prevented expiry")
+    selected = nil; keyboard.refreshNavigationControl(at: 113)
+    try check(notice.isHidden && notice.track == nil, "Silent music retained a stale title")
+    keyboard.navigationReduceMotion = { false }
+  }
+  keyboard.removeNavigationControl()
+  print("PASS catalogue song/source names, variant changes, Now Playing bitmap renders, expiry, accessibility, silence and pointer pass-through")
 }

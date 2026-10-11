@@ -1,5 +1,14 @@
 #if os(iOS)
+import LemmingsGameArt
 import UIKit
+
+/// The Macintosh release's menu lettering, shared with the Mac app. Nil when the bundle lacks it.
+@MainActor enum MobileGameArt {
+    static let typography: GameMenuTypography? = {
+        guard let url = Bundle.main.resourceURL?.appendingPathComponent("MacArtwork/lemmings") else { return nil }
+        return GameMenuTypography(directory: url)
+    }()
+}
 
 @MainActor enum MobilePixelText {
     private static let columns: [Character: [UInt8]] = [
@@ -28,6 +37,8 @@ import UIKit
         case green
         case warning
 
+        var menu: GameMenuTypography.Palette { self == .blue ? .blue : .green }
+
         var colour: UIColor {
             switch self {
             case .blue: return UIColor(red: 0.20, green: 0.50, blue: 1, alpha: 1)
@@ -42,9 +53,32 @@ import UIKit
         in rect: CGRect,
         palette: Palette = .blue,
         maximumScale: CGFloat = 4,
-        alignment: NSTextAlignment = .center
+        alignment: NSTextAlignment = .center,
+        face: GameMenuTypography.Face = .small,
+        alpha: CGFloat = 1,
+        bitmapOnly: Bool = false
     ) {
         guard let context = UIGraphicsGetCurrentContext(), rect.width > 0, rect.height > 0 else { return }
+        if !bitmapOnly, let typography = MobileGameArt.typography {
+            // Lettering keeps one size by purpose. Titles take 2× when they fit, as on the Mac pages.
+            let plain = GameMenuTypography.menuText(text)
+            let doubled = face == .large
+                && typography.width(of: plain, face: face, scale: 2) <= rect.width
+                && typography.height(face: face, scale: 2) <= rect.height
+            let scale = doubled ? 2 : 1
+            let height = typography.height(face: face, scale: scale)
+            typography.menuLine(
+                text,
+                in: CGRect(x: rect.minX, y: rect.midY - height / 2, width: rect.width, height: height),
+                context: context,
+                face: face,
+                scale: scale,
+                alignment: alignment == .left ? .left : alignment == .right ? .right : .center,
+                alpha: alpha,
+                palette: palette.menu
+            )
+            return
+        }
         let normalized = text.uppercased().replacingOccurrences(of: "×", with: "X")
         let naturalWidth = max(1, normalized.count * 6 - 1)
         let scale = max(1, min(maximumScale, floor(min(rect.height / 7, rect.width / CGFloat(naturalWidth)))))
@@ -81,10 +115,12 @@ import UIKit
     var palette = MobilePixelText.Palette.blue { didSet { setNeedsDisplay() } }
     var alignment = NSTextAlignment.center { didSet { setNeedsDisplay() } }
     var maximumScale: CGFloat = 4 { didSet { setNeedsDisplay() } }
+    var face = GameMenuTypography.Face.small { didSet { setNeedsDisplay() } }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
+        contentMode = .redraw
         isAccessibilityElement = true
         accessibilityTraits = .staticText
     }
@@ -93,7 +129,7 @@ import UIKit
 
     override func draw(_ rect: CGRect) {
         MobilePixelText.draw(text, in: bounds, palette: palette,
-                             maximumScale: maximumScale, alignment: alignment)
+                             maximumScale: maximumScale, alignment: alignment, face: face)
         accessibilityLabel = text
     }
 }
@@ -108,6 +144,7 @@ import UIKit
         super.init(frame: frame)
         isAccessibilityElement = true
         accessibilityTraits = .button
+        contentMode = .redraw
         addTarget(self, action: #selector(pressed), for: .touchUpInside)
         backgroundColor = .clear
     }
@@ -120,28 +157,35 @@ import UIKit
         didSet { setNeedsDisplay() }
     }
 
+    override var isEnabled: Bool {
+        didSet { setNeedsDisplay() }
+    }
+
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
-        let selected = isHighlighted || isSelectedState
-        context.setShouldAntialias(false)
-        context.setFillColor(UIColor(red: 0.12, green: 0.13, blue: 0.15, alpha: 1).cgColor)
-        context.fill(bounds)
-        let pixel = max(1, floor(min(bounds.width, bounds.height) / 24))
-        let top = selected ? UIColor(white: 0.22, alpha: 1) : UIColor(white: 0.42, alpha: 1)
-        let bottom = selected ? UIColor(white: 0.52, alpha: 1) : UIColor(white: 0.18, alpha: 1)
-        context.setFillColor(top.cgColor)
-        context.fill(CGRect(x: 0, y: 0, width: bounds.width, height: pixel * 2))
-        context.fill(CGRect(x: 0, y: 0, width: pixel * 2, height: bounds.height))
-        context.setFillColor(bottom.cgColor)
-        context.fill(CGRect(x: 0, y: bounds.height - pixel * 2, width: bounds.width, height: pixel * 2))
-        context.fill(CGRect(x: bounds.width - pixel * 2, y: 0, width: pixel * 2, height: bounds.height))
-        if isPrimary || isSelectedState {
-            context.setStrokeColor(MobilePixelText.Palette.green.colour.cgColor)
-            context.setLineWidth(pixel)
-            context.stroke(bounds.insetBy(dx: pixel * 3, dy: pixel * 3))
-        }
-        MobilePixelText.draw(title, in: bounds.insetBy(dx: 8, dy: 8),
-                             palette: isPrimary || isSelectedState ? .green : .blue)
+        let chosen = isEnabled && (isPrimary || isSelectedState || isHighlighted)
+        GameStoneArt.draw(in: context, frame: bounds, selected: chosen, pixel: 1)
+        MobilePixelText.draw(title, in: CGRect(x: 12, y: bounds.midY - 10, width: bounds.width - 24, height: 20),
+                             palette: chosen ? .green : .blue, alpha: isEnabled ? 1 : 0.45)
+    }
+}
+/// The black page with the stone edging and moss cap the Mac menu pages use.
+@MainActor final class MobileMenuBackdrop: UIView {
+    var board = CGRect.zero { didSet { setNeedsDisplay() } }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .black
+        isOpaque = true
+        isUserInteractionEnabled = false
+        isAccessibilityElement = false
+    }
+
+    required init?(coder: NSCoder) { nil }
+
+    override func draw(_ rect: CGRect) {
+        guard let context = UIGraphicsGetCurrentContext(), !board.isEmpty else { return }
+        GameMenuFrameArt.draw(in: context, board: board)
     }
 }
 #else

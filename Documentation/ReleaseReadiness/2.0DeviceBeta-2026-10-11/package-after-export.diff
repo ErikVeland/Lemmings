@@ -1,0 +1,11 @@
+--- Package.swift at archive
++++ Package.swift after export
+@@ -45,7 +45,7 @@
+             name: "LemmingsLocal",
+             dependencies: [
+                 "NxlvKit",
+-                .product(name: "Sparkle", package: "Sparkle")
++                .product(name: "Sparkle", package: "Sparkle", condition: .when(platforms: [.macOS]))
+             ],
+             path: "Sources/LemmingsLocal"
+         ),

@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
@@ -25,3 +26,4 @@ extension PrecisionZoomScrollGesture {
             time: event.timestamp)
     }
 }
+#endif

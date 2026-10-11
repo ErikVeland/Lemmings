@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import CryptoKit
 import Security
@@ -10,6 +11,7 @@ struct HostedBoard: Codable, Equatable {
         let score: Int
         let runID: UUID?
         let replay: Bool
+        var actionReplay: Bool? = nil
     }
     let entries: [Entry]
     let page: Int
@@ -65,7 +67,7 @@ enum HostedCategory: String, CaseIterable {
     private(set) var syncStatus = ""
     private var requestID = UUID()
     private var submitted: Set<UUID> = []
-    private var movies: Set<UUID> = []
+    private var actions: Set<UUID> = []
     private var pending: Set<String> = []
     private var stopped: Set<String> = []
     private var deleting = false
@@ -150,7 +152,7 @@ enum HostedCategory: String, CaseIterable {
         guard networkEnabled, let endpoint, endpoint.scheme == "https", let url = URL(string: endpoint.absoluteString + path) else { throw URLError(.notConnectedToInternet) }
         var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 60)
         request.httpMethod = method; request.httpBody = data
-        request.setValue("UltimateLemmings/1.8.2", forHTTPHeaderField: "User-Agent")
+        request.setValue("UltimateLemmings/1.9.2", forHTTPHeaderField: "User-Agent")
         if let token { request.setValue("Bearer " + token, forHTTPHeaderField: "Authorization") }
         if data != nil { request.setValue("application/json", forHTTPHeaderField: "Content-Type") }
         return request
@@ -207,19 +209,20 @@ enum HostedCategory: String, CaseIterable {
                             submitted.insert(run.id)
                         }
                     }
-                    var movieFailure = false
+                    var replayFailure = false
                     for run in runs {
                         guard sharing(profile), !stopped.contains(profile) else { break }
-                        guard !movies.contains(run.id), let file = ArcadeStore.shared.replayURL(attemptID: run.id) else { continue }
-                        guard let size = try file.resourceValues(forKeys: [.fileSizeKey]).fileSize, size <= Self.movieLimit else { movieFailure = true; continue }
+                        guard !actions.contains(run.id), let file = ArcadeStore.shared.actionReplayURL(attemptID: run.id) else { continue }
+                        guard let size = try file.resourceValues(forKeys: [.fileSizeKey]).fileSize,
+                              size <= LeaderboardActionReplay.byteLimit else { replayFailure = true; continue }
                         do {
-                            var upload = try request("/v1/replays/" + run.id.uuidString.lowercased(), method: "PUT", token: token)
-                            upload.setValue("video/mp4", forHTTPHeaderField: "Content-Type")
+                            var upload = try request("/v1/actions/" + run.id.uuidString.lowercased(), method: "PUT", token: token)
+                            upload.setValue("application/json", forHTTPHeaderField: "Content-Type")
                             let (_, response) = try await transport.upload(for: upload, fromFile: file)
-                            try checked(response, allowingConflict: true); movies.insert(run.id)
-                        } catch { movieFailure = true; break }
+                            try checked(response, allowingConflict: true); actions.insert(run.id)
+                        } catch { replayFailure = true; break }
                     }
-                    syncStatus = movieFailure ? "Scores shared. Some replays remain local." : "Records shared"; onChange?()
+                    syncStatus = replayFailure ? "Scores shared. Some replays remain local." : "Records shared"; onChange?()
                 } catch { syncStatus = "Sync incomplete. Retry to share local records."; onChange?() }
             }
         }
@@ -247,9 +250,32 @@ enum HostedCategory: String, CaseIterable {
                     if (response as? HTTPURLResponse)?.statusCode != 401 { try checked(response) }
                     defaults.set(false, forKey: "HostedRankings.hasShared." + profile)
                     removals.remove(profile)
-                    submitted = []; movies = []; board = nil; status = "Shared records removed"
+                    submitted = []; actions = []; board = nil; status = "Shared records removed"
                 } catch { status = "Removal queued. Retry when connected." }
             }
+        }
+    }
+    func playbackActions(_ entry: HostedBoard.Entry, conditions: TrolleyConditions?,
+                         opened: @escaping (LeaderboardActionReplay, String) -> Void) {
+        guard let id = entry.runID, entry.actionReplay == true, (1...10).contains(entry.rank),
+              let conditions, !busy else { return }
+        busy = true; status = "Loading replay..."; onChange?()
+        Task {
+            defer { busy = false; onChange?() }
+            do {
+                let (file, response) = try await transport.download(for: request("/v1/actions/" + id.uuidString.lowercased()))
+                defer { try? FileManager.default.removeItem(at: file) }
+                try checked(response)
+                guard response.mimeType == "application/json", let size = try file.resourceValues(forKeys: [.fileSizeKey]).fileSize,
+                      size > 0, size <= LeaderboardActionReplay.byteLimit else { throw URLError(.dataLengthExceedsMaximum) }
+                let data = try Data(contentsOf: file)
+                let hash = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+                guard (response as? HTTPURLResponse)?.value(forHTTPHeaderField: "X-Replay-SHA256") == hash else { throw URLError(.cannotParseResponse) }
+                let replay = try JSONDecoder().decode(LeaderboardActionReplay.self, from: data)
+                try replay.validateStructure()
+                guard replay.runID == id, replay.conditions == conditions else { throw RunRecoveryError.differentGame }
+                opened(replay, "\(entry.name) - worldwide replay"); status = "Community records"
+            } catch { status = "Replay unavailable. Retry when connected." }
         }
     }
     func playback(_ entry: HostedBoard.Entry, opened: @escaping (URL, String) -> Void) {
@@ -268,3 +294,4 @@ enum HostedCategory: String, CaseIterable {
         }
     }
 }
+#endif

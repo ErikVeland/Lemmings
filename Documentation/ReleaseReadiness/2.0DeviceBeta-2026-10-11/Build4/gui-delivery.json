@@ -1,0 +1,43 @@
+{
+  "startedUTC": "2026-10-10T19:52:30.667081+00:00",
+  "backend": "iMazing standard GUI Install .IPA File",
+  "deviceUDID": "3c4b6e12624a577712d178b63203c9d7c249bf77",
+  "deviceName": "GenErik",
+  "model": "iPad Pro (10.5-inch) (Model A1701)",
+  "productType": "iPad7,3",
+  "osVersion": "17.7.11",
+  "version": "2.0",
+  "build": 4,
+  "bundleID": "academy.glasscode.lemmings.ios",
+  "ipaSHA256": "a5a67f154f8806002b2bbc5692a3c5f11175ec76cc942c3fe2f65bbaae4b8b70",
+  "contentManifestSHA256": "012bada8669f71d193747064cad6db469184e2783acf1cdddea7142104f80da2",
+  "requestedDeviceIncluded": true,
+  "preflightVerified": true,
+  "installationAttempted": true,
+  "installed": false,
+  "appLaunched": false,
+  "uploaded": false,
+  "developerMode": "Apple Device Hub reports disabled; owner asked to enable",
+  "status": "GUI operation reports Installed; Apple query returned earlier build 1; direct Apple installation requested",
+  "installerReportedComplete": true,
+  "installedBuildVerified": false,
+  "appInventoryStatus": "Loading Apps - Please wait...",
+  "updatedUTC": "2026-10-10T19:58:22.447467+00:00",
+  "remainingAction": "Complete direct Apple installation and verify version 2.0 build 4 before manual launch",
+  "queriedApps": [
+    {
+      "appClip": false,
+      "builtByDeveloper": true,
+      "bundleIdentifier": "academy.glasscode.lemmings.ios",
+      "bundleVersion": "1",
+      "containerAccessible": true,
+      "defaultApp": false,
+      "hidden": false,
+      "internalApp": false,
+      "name": "Ultimate Lemmings",
+      "removable": true,
+      "url": "file:///private/var/containers/Bundle/Application/32D96564-3406-47C9-8CF9-D68C3B0D962B/UltimateLemmingsIOS.app/",
+      "version": "2.0"
+    }
+  ]
+}

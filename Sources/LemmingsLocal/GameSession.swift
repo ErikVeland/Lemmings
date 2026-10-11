@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
@@ -645,3 +646,4 @@ final class NeoLemmixSession: GameSession {
     self.beforeNuke = nil
   }
 }
+#endif

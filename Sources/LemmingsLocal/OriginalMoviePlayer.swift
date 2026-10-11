@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import AVFoundation
 import NxlvKit
@@ -162,3 +163,4 @@ extension AVAudioPlayer: OriginalMovieAudio {}
     }
     override func mouseDown(with event: NSEvent) { if finished { close() } else { togglePause() } }
 }
+#endif

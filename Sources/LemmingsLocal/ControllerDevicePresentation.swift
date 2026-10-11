@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import GameController
 import NxlvKit
@@ -68,3 +69,4 @@ import NxlvKit
         ]).filter { !$0.isEmpty }.joined(separator: "\n")
     }
 }
+#endif

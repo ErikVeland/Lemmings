@@ -1,3 +1,4 @@
+#if os(macOS)
 import NxlvKit
 
 /// One lemming as the click-targeting decision needs to see it.
@@ -157,3 +158,4 @@ extension Lemmings3Runtime {
     }
 
 }
+#endif

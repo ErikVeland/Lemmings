@@ -42,6 +42,7 @@ sparkle_framework="$(SPARKLE_FRAMEWORK_PATH="${SPARKLE_FRAMEWORK_PATH:-}" \
 sparkle_framework_dir="${sparkle_framework:h}"
 
 library_inputs=()
+art_library_inputs=()
 executable_inputs=()
 for architecture in "${architectures[@]}"; do
   architecture_dir="$build_dir/$architecture"
@@ -63,10 +64,12 @@ for architecture in "${architectures[@]}"; do
     -Xlinker -install_name -Xlinker @rpath/libNxlvKit.dylib -Xlinker -w \
     -o "$architecture_dir/libNxlvKit.dylib" \
     "$project_dir"/Sources/NxlvKit/*.swift
+  zsh "$project_dir/Scripts/build-game-art-module.sh" "$module_dir" "$architecture_dir" \
+    "$target" "$swift_optimization" -module-cache-path "$build_dir/ModuleCache"
 
   swiftc -swift-version 6 "$swift_optimization" -target "$target" "${compatibility[@]}" \
     -module-cache-path "$build_dir/ModuleCache" \
-    -I "$module_dir" -L "$architecture_dir" -lNxlvKit \
+    -I "$module_dir" -L "$architecture_dir" -lNxlvKit -lLemmingsGameArt \
     -F "$sparkle_framework_dir" -framework Sparkle \
     -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
     -Xlinker -rpath -Xlinker @executable_path/../Frameworks -Xlinker -w \
@@ -74,14 +77,17 @@ for architecture in "${architectures[@]}"; do
     "$project_dir"/Sources/LemmingsLocal/*.swift
 
   library_inputs+=("$architecture_dir/libNxlvKit.dylib")
+  art_library_inputs+=("$architecture_dir/libLemmingsGameArt.dylib")
   executable_inputs+=("$architecture_dir/LemmingsLocal")
 done
 
 if (( ${#library_inputs} == 1 )); then
   cp "${library_inputs[1]}" "$contents_dir/Frameworks/libNxlvKit.dylib"
+  cp "${art_library_inputs[1]}" "$contents_dir/Frameworks/libLemmingsGameArt.dylib"
   cp "${executable_inputs[1]}" "$contents_dir/MacOS/LemmingsLocal"
 else
   lipo -create "${library_inputs[@]}" -output "$contents_dir/Frameworks/libNxlvKit.dylib"
+  lipo -create "${art_library_inputs[@]}" -output "$contents_dir/Frameworks/libLemmingsGameArt.dylib"
   lipo -create "${executable_inputs[@]}" -output "$contents_dir/MacOS/LemmingsLocal"
 fi
 cp "$project_dir/Resources/Info.plist" "$contents_dir/Info.plist"

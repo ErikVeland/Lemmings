@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 import CryptoKit
 import NxlvKit
@@ -262,6 +263,9 @@ import NxlvKit
         if previous.activeProfileID == id { endHotSeat() }
         let folder = file.deletingLastPathComponent()
         let replayURLs = replays.map { folder.appendingPathComponent($0.relativePath) }
+            + previous.trolley.attempts.filter { $0.run.profileID == id }.map {
+                folder.appendingPathComponent("Replays/\($0.id.uuidString).actions.json")
+            }
         let recoveryStore = recoveryStore
         let cleanup: @Sendable () -> String? = {
             do {
@@ -404,6 +408,35 @@ import NxlvKit
             try? records.acceptTrolleyMaximum(proof, conditions: conditions, assisted: assisted)
         }
     }
+    /// Action files are small sidecars keyed by an existing, immutable attempt.
+    func actionReplayURL(attemptID: UUID) -> URL? {
+        guard records.trolley.attempts.contains(where: { $0.id == attemptID }) else { return nil }
+        let url = file.deletingLastPathComponent().appendingPathComponent("Replays/\(attemptID.uuidString).actions.json")
+        return FileManager.default.isReadableFile(atPath: url.path) ? url : nil
+    }
+    @discardableResult
+    func preserveActions(run: ArcadeRun, initial: ActionReplayState, final: ActionReplayState,
+                         commands: [LeaderboardActionReplay.Command]) -> Task<Void, Never>? {
+        guard canWrite, records.trolley.attempts.contains(where: { $0.id == run.id }),
+              actionReplayURL(attemptID: run.id) == nil else { return nil }
+        let url = file.deletingLastPathComponent().appendingPathComponent("Replays/\(run.id.uuidString).actions.json")
+        return Task { [self] in
+            do {
+                let bytes = try await Task.detached(priority: .utility) {
+                    let replay = try LeaderboardActionReplay.capture(run: run, initial: initial, final: final, commands: commands)
+                    _ = try replay.checked(initial: initial)
+                    let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys, .withoutEscapingSlashes]
+                    let data = try encoder.encode(replay)
+                    guard data.count <= LeaderboardActionReplay.byteLimit else { throw RunRecoveryError.invalid }
+                    return data
+                }.value
+                guard canWrite, records.trolley.attempts.contains(where: { $0.id == run.id }) else { return }
+                try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+                try bytes.write(to: url, options: .atomic)
+                HostedRankings.shared.completed(profileID: run.profileID)
+            } catch { NSLog("Action replay not retained: %@", error.localizedDescription) }
+        }
+    }
     func replayURL(attemptID: UUID) -> URL? {
         guard let reference = records.trolley.replays.first(where: { $0.attemptID == attemptID }),
               reference.relativePath == "Replays/\(attemptID.uuidString).mp4" else { return nil }
@@ -485,3 +518,4 @@ import NxlvKit
         SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
     }
 }
+#endif

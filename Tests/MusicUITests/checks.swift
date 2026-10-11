@@ -18,6 +18,109 @@ private func checkUI(_ value: Bool, _ message: String) throws {
     try checkUI(hit === control || hit?.isDescendant(of: control) == true, "Control has no input target: \(control)")
 }
 extension SettingsWindow {
+    @MainActor fileprivate func checkSettings() async throws {
+        show()
+        let tabs = page!.body.subviews.first { $0 is GameTabs } as! GameTabs
+        let buttons = tabs.subviews.compactMap { $0 as? GameTabButton }
+        try checkUI(buttons.map(\.title) == ["Gameplay", "Controller", "Graphics", "Video", "Audio", "Accessibility", "Privacy"], "Settings tab order changed")
+        func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap(descendants) }
+        for size in [NSSize(width: 1120, height: 720), NSSize(width: 900, height: 620)] {
+            window.setContentSize(size)
+            for button in buttons {
+                button.performClick(nil)
+                page!.layoutSubtreeIfNeeded()
+                try checkTarget(button, in: page!)
+                let selected = descendants(tabs).compactMap { $0 as? NSTabView }.first!.selectedTabViewItem!.view!
+                let controls = descendants(selected).compactMap { $0 as? NSControl }.filter { $0 is NSButton || $0 is NSSlider }
+                try checkUI(!controls.isEmpty, "Settings pane has no controls")
+                for control in controls {
+                    control.scrollToVisible(control.bounds)
+                    page!.layoutSubtreeIfNeeded()
+                    try checkTarget(control, in: page!)
+                    try checkUI(control.accessibilityLabel()?.isEmpty == false && control.accessibilityHelp()?.isEmpty == false,
+                        "Setting lacks accessible help: \(control)")
+                    try checkUI(control.toolTip == nil && !control.trackingAreas.isEmpty, "Setting lacks game hover help")
+                    if let checkbox = control as? GameCheckButton {
+                        let labelPoint = checkbox.convert(CGPoint(x: 30, y: checkbox.bounds.midY), to: page!)
+                        try checkUI(page!.hitTest(labelPoint) === checkbox, "Checkbox text is not part of its target")
+                    }
+                }
+                let scroll = selected as! GameSettingsScrollView
+                let document = scroll.documentView!
+                scroll.contentView.scroll(to: .zero)
+                scroll.reflectScrolledClipView(scroll.contentView)
+                try shot(page!, "settings-\(Int(size.width))-" + button.title.lowercased())
+                if document.bounds.height > scroll.contentSize.height {
+                    scroll.contentView.scroll(to: CGPoint(x: 0, y: document.bounds.height - scroll.contentSize.height))
+                    scroll.reflectScrolledClipView(scroll.contentView)
+                    try shot(page!, "settings-\(Int(size.width))-" + button.title.lowercased() + "-bottom")
+                }
+            }
+        }
+        window.setContentSize(NSSize(width: 1120, height: 720))
+        buttons.first { $0.title == "Audio" }!.performClick(nil)
+        page!.layoutSubtreeIfNeeded()
+        let beat = pauseBeatCheck!
+        let audioScroll = beat.enclosingScrollView!
+        try checkUI(audioScroll.documentView!.bounds.height <= audioScroll.contentSize.height + 1, "Audio requires scrolling at the standard menu size: \(audioScroll.documentView!.bounds.height) / \(audioScroll.contentSize.height)")
+        let falls = (beat.superview!.subviews.compactMap { $0 as? GameCheckButton }).first { $0.title == "Play death sound" }!
+        let download = (beat.superview!.subviews.compactMap { $0 as? GameButton }).first { $0.title == "Download soundtracks" }!
+        try checkUI(beat.frame.maxY <= falls.frame.minY && falls.frame.maxY < download.frame.minY, "Audio behaviour and downloads are in the wrong order")
+        try checkUI(abs(beat.frame.maxY - falls.frame.minY) <= 8, "Audio behaviour switches are separated")
+        beat.scrollToVisible(beat.bounds)
+        let enter = NSEvent.enterExitEvent(with: .mouseEntered, location: .zero, modifierFlags: [], timestamp: 0,
+            windowNumber: window.windowNumber, context: nil, eventNumber: 0, trackingNumber: 0, userData: nil)!
+        let exit = NSEvent.enterExitEvent(with: .mouseExited, location: .zero, modifierFlags: [], timestamp: 0,
+            windowNumber: window.windowNumber, context: nil, eventNumber: 0, trackingNumber: 0, userData: nil)!
+        let tracker = beat.trackingAreas.first!.owner as! NSObject
+        tracker.perform(NSSelectorFromString("mouseEntered:"), with: enter)
+        try await Task.sleep(nanoseconds: 200_000_000)
+        try checkUI(help.panel == nil, "Help appeared before its delay")
+        try await Task.sleep(nanoseconds: 700_000_000)
+        guard let panel = help.panel else { throw CocoaError(.validationMissingMandatoryProperty) }
+        try checkUI(!panel.pinned && panel.superview!.bounds.contains(panel.frame), "Hover help is clipped")
+        try checkTarget(beat, in: page!)
+        try shot(page!, "settings-hover-help")
+        tracker.perform(NSSelectorFromString("mouseExited:"), with: exit)
+        try checkUI(help.panel == nil, "Hover help survived pointer exit")
+        tracker.perform(NSSelectorFromString("mouseEntered:"), with: enter)
+        tracker.perform(NSSelectorFromString("mouseExited:"), with: exit)
+        try await Task.sleep(nanoseconds: 900_000_000)
+        try checkUI(help.panel == nil, "Brief hover opened stale help")
+        help.hover(beat, title: "Pause", text: "Delayed help")
+        buttons.first { $0.title == "Privacy" }!.performClick(nil)
+        try await Task.sleep(nanoseconds: 900_000_000)
+        try checkUI(help.panel == nil, "Delayed help survived a tab change")
+        let info = descendants(tabs).compactMap { $0 as? GameButton }.first { $0.title == "Privacy info" }!
+        try checkUI(telemetryCheck!.isEnabled == (telemetry.endpoint != nil), "Sharing availability is incorrect")
+        GameScreen.shared.keyboardNavigation.focus(info, in: window)
+        let activation = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 0,
+            windowNumber: window.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r", isARepeat: false, keyCode: 36)!
+        try checkUI(GameScreen.shared.handleDialogKey(activation), "Privacy info did not accept keyboard activation")
+        try checkUI(help.panel?.pinned == true, "Privacy info did not open")
+        try shot(page!, "settings-privacy-popover")
+        let close = help.panel!.subviews.compactMap { $0 as? NSButton }.first!
+        try checkTarget(close, in: page!)
+        try checkUI(GameScreen.shared.keyboardNavigation.controls(in: page!).contains { $0 === close }, "Privacy Close is unavailable to keyboard navigation")
+        close.performClick(nil)
+        try checkUI(help.panel == nil, "Privacy popover did not close")
+        try checkUI(!descendants(telemetryCheck!.superview!).compactMap { $0 as? GameLabel }.contains { $0.stringValue.contains("network address") }, "Privacy detail remains inline")
+        try checkUI(pointerCaptureCheck!.superview === experiencePopUp!.superview, "Pointer capture is outside Gameplay")
+        buttons.first { $0.title == "Controller" }!.performClick(nil)
+        controllerRemapButton!.performClick(nil)
+        let mappingPage = GameScreen.shared.controllerPage(in: window) as! GameMenuPage
+        mappingPage.layoutSubtreeIfNeeded()
+        try checkTarget(remapSource!, in: mappingPage)
+        try checkTarget(remapRole!, in: mappingPage)
+        help.show(remapRole!.accessibilityHelp()!, title: "Gameplay action", relativeTo: remapRole!)
+        try checkUI(help.panel != nil, "Button mapping lacks its help popover")
+        try shot(mappingPage, "settings-controller-mapping-help")
+        mappingPage.onBack?()
+        try checkUI(help.panel == nil, "Mapping help survived Back")
+        GameScreen.shared.dismiss(page!)
+        print("PASS all settings groups, two window sizes, targets, checkbox labels, delayed hover, cancellation and privacy popover")
+    }
+
     @MainActor fileprivate func checkAudio() throws {
         show()
         let tabs = page!.body.subviews.first { $0 is GameTabs }!
@@ -25,6 +128,7 @@ extension SettingsWindow {
         audio.performClick(nil)
         page!.layoutSubtreeIfNeeded()
         let beat = pauseBeatCheck!
+        beat.scrollToVisible(beat.bounds)
         try checkTarget(beat, in: page!)
         var changed = false
         onChange = { changed = $0.pauseMusicBeatOnly }
@@ -33,7 +137,7 @@ extension SettingsWindow {
         try checkUI(beat.accessibilityLabel()?.contains("Pause") == true, "Pause control lacks its accessible action name")
         let pane = beat.superview!
         let controls = pane.subviews.filter { $0 is NSControl && !($0 is NSTextField) }
-        for control in controls { try checkTarget(control, in: page!) }
+        for control in controls { control.scrollToVisible(control.bounds); try checkTarget(control, in: page!) }
         for (index, control) in controls.enumerated() {
             for other in controls.dropFirst(index+1) {
                 try checkUI(!control.frame.intersects(other.frame), "Audio controls overlap")
@@ -279,7 +383,20 @@ ArcadeStore.shared = ArcadeStore(file: temporary.appendingPathComponent("arcade.
 let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1120, height: 720), styleMask: [.titled], backing: .buffered, defer: false)
 window.contentView = NSView(frame: NSRect(x: 0, y: 0, width: 1120, height: 720))
 GameScreen.shared.gameWindow = window
-if ProcessInfo.processInfo.environment["TEST_SCOPE"] == "nuke" {
+if ProcessInfo.processInfo.environment["TEST_SCOPE"] == "settings" {
+    let suite = "settings-ui-" + UUID().uuidString
+    let defaults = UserDefaults(suiteName: suite)!
+    defer { defaults.removePersistentDomain(forName: suite) }
+    let telemetry = AnonymousTelemetry(defaults: defaults, endpoint: URL(string: "https://example.invalid/counts"))
+    let preferences = SettingsWindow(settings: ClassicSettings(), options: ClassicSettingsOptions(graphics: [.macintosh], music: ClassicSettingsOptions.playableMusic, sound: ClassicSettingsOptions.playableSound), telemetry: telemetry)
+    try await preferences.checkSettings()
+    try preferences.checkAudio()
+    let offline = SettingsWindow(settings: ClassicSettings(), options: ClassicSettingsOptions(graphics: [], music: [.silent], sound: []), telemetry: AnonymousTelemetry(defaults: defaults, endpoint: URL(string: "http://example.invalid")))
+    try await offline.checkSettings()
+} else if ProcessInfo.processInfo.environment["TEST_SCOPE"] == "sequel-pause" {
+    try Lemmings2PlayWindow(root: Bundle.main.resourceURL!.appendingPathComponent("Ports/Lemm2")).checkMusicPause()
+    try Lemmings3PlayWindow(root: Bundle.main.resourceURL!.appendingPathComponent("Ports/LEM3CD")).checkMusicPause()
+} else if ProcessInfo.processInfo.environment["TEST_SCOPE"] == "nuke" {
     try Lemmings2PlayWindow(root: Bundle.main.resourceURL!.appendingPathComponent("Ports/Lemm2")).checkNukeReturn()
     print("Nuke controller integration tests passed.")
 } else {
@@ -294,3 +411,5 @@ try Lemmings3PlayWindow(root: Bundle.main.resourceURL!.appendingPathComponent("P
 
 print("Music UI and sequel pause tests passed.")
 }
+
+exit(0)

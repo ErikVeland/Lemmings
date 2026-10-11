@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 
 /// The same timeline buttons and hit regions serve all three game panels.
@@ -70,3 +71,4 @@ import AppKit
         }
     }
 }
+#endif

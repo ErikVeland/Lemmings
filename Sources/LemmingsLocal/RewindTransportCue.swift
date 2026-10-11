@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 
 /// Draws the small, shared rewind transport cue used by each playfield.
@@ -31,3 +32,4 @@ import AppKit
     ).fill()
   }
 }
+#endif

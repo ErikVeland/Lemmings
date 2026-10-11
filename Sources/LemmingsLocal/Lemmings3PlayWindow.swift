@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import AVFoundation
 import CryptoKit
@@ -73,6 +74,7 @@ import NxlvKit
     private var toolUses: [String: Int] = [:]
     private var arcadeReport: ArcadeReport?
     var canSwitchProfile: Bool { game.isComplete || (game.tick == 0 && skillAssignments.isEmpty) }
+    var hasCompletedAttempt: Bool { game.isComplete }
     private var arcadeLevelSnapshot: ArcadeLevel?
     private var arcadeLevel: ArcadeLevel {
         if let arcadeLevelSnapshot { return arcadeLevelSnapshot }
@@ -94,6 +96,7 @@ import NxlvKit
     private let music = ModuleMusicPlayer()
     private let dj = AdaptiveDJPlayer()
     private let failureMood = FailureMoodTransition()
+    private let completionGlow = FailureMoodTransition(duration: 1.4, recoveryDuration: 0.6)
     private var musicGain: Float = 0.8
     private var movieMusicMuted = false
     private var audioSettings = ClassicSettings()
@@ -241,6 +244,10 @@ import NxlvKit
         super.init(window: NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1050, height: 680),
             styleMask: [.titled, .closable, .miniaturizable, .resizable], backing: .buffered, defer: false))
         guard let window else { return }
+        completionGlow.onChange = { [weak self] amount in
+            self?.canvas.completionGlowAmount = amount
+            self?.canvas.needsDisplay = true
+        }
         failureMood.onChange = { [weak self] amount in
             guard let self else { return }
             self.canvas.failureMoodAmount = amount
@@ -319,6 +326,11 @@ import NxlvKit
             guard let self else { return false }
             return self.canvas.menuRows == nil && !self.game.isComplete
         }
+        keyboard.playingTrack = { [weak self] in
+            guard let self, self.audioSettings.music != .silent else { return nil }
+            let url = self.dj.currentURL ?? (self.music.isRunning ? self.music.currentURL : nil)
+            return url.map { PlayingTrackMetadata.track(url: $0, fallbackTitle: self.music.currentURL == $0 ? self.music.currentTitle : nil) }
+        }
         keyboard.assignSelected = { [weak self] in
             guard let self else { return }
             if self.pendingTool != nil { self.canvas.confirmControllerDirection(); return }
@@ -374,6 +386,9 @@ import NxlvKit
             self.refresh()
         }
         keyboard.centre = { [weak self] entrance in self?.canvas.centre(onEntrance: entrance) }
+        keyboard.navigationReduceMotion = { [weak self] in
+            self?.audioSettings.reduceMotion == true || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
+        }
         keyboard.mainMenu = { [weak self] in
             guard let self else { return }
             self.paused = true; self.pendingTool = nil; self.canvas.directionPoint = nil
@@ -467,6 +482,7 @@ import NxlvKit
     func testExitAndSequenceResult(won: Bool) throws {
         timer?.invalidate(); paused = true; canvas.startCountdown.cancel()
         try validateExitControl(gameplayKeyboard!, owner: window!, name: "lemmings3")
+        try validateRecordNavigation(recordLevelChoices(), current: arcadeLevel, owner: window!, name: "lemmings3-pack")
         var attributes = [UInt16](repeating: 0, count: 128 * 96)
         for y in 48..<96 { for x in 0..<128 { attributes[y * 128 + x] = 0x20 } }
         let configuration = Lemmings3Runtime.Configuration(width: 128, height: 96, attributes: attributes,
@@ -475,7 +491,13 @@ import NxlvKit
         var fixture = try Lemmings3Runtime(configuration: configuration)
         for _ in 0..<1000 where !fixture.isComplete { fixture.step() }
         try validateMusicRouting(fixture.isComplete && (fixture.saved > 0) == won, "L3 completion fixture failed")
-        game = fixture; recorded = false; refresh()
+        game = fixture; arcadeLevelSnapshot = rewardFixtureLevel("lemmings3"); arcadeReport = nil; arcadeRunID = UUID()
+        recorded = false; refresh()
+        try validateMusicRouting(ArcadeStore.shared.records.trolley.attempts.contains { $0.id == arcadeRunID }, "L3 sequence result did not persist career stars")
+        completionGlow.advance(at: ProcessInfo.processInfo.systemUptime + 2)
+        try validateMusicRouting(canvas.completionGlowAmount == (won ? 1 : 0), "L3 result celebration state is wrong")
+        try validateCompletionGlow(canvas, name: "lemmings3-\(won)") { self.canvas.completionGlowAmount = $0 }
+        canvas.completionGlowAmount = won ? 1 : 0
     }
     func testCollectionVisitAndRetry() throws {
         timer?.invalidate()
@@ -1293,10 +1315,27 @@ import NxlvKit
         }
     }
     func reviewReplay() { if game.isComplete { runMovie.review() } }
+    private func recordLevelChoices() -> [ArcadeLevel] {
+        let entries = campaign.levels.indices.map { (id: String(campaign.tribe.firstLevel + $0), title: "\(campaign.tribe.title) \($0 + 1)") }
+        return RecordLevelNavigation.levels(current: arcadeLevel, entries: entries)
+    }
     func showLevelRecords() {
-        ArcadeWindow.shared.showRecords(level: arcadeLevel, owner: window, background: arcadeBackdrop)
+        ArcadeWindow.shared.actionReplayContext = { [weak self] in self?.leaderboardReplayContext() }
+        ArcadeWindow.shared.showRecords(level: arcadeLevel, owner: window, background: arcadeBackdrop, levels: recordLevelChoices())
     }
     var arcadeBackdrop: CGImage? { ArcadeWindow.captureScene(canvas) }
+    func leaderboardReplayContext() -> LeaderboardReplayContext {
+        let level = campaign.levels[campaign.index], root = dataRoot, style = style, sprites = sprites
+        return LeaderboardReplayContext(conditions: arcadeLevel.conditions!.fingerprint, initial: .lemmings3(initial), makeField: {
+            let permanent = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/PERM%03d.OBS", level.permanentObjectsReference))))
+            let temporary = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/TEMP%03d.OBS", level.temporaryObjectsReference))))
+            let scene = try Lemmings3Scene(level: level, style: style, permanent: permanent, temporary: temporary)
+            let field = Lemmings3Canvas()
+            field.readOnlyReplay = true; field.hdEffectsEnabled = false; field.variableSpeedEnabled = false
+            try field.load(scene: scene, style: style, permanent: permanent, temporary: temporary, sprites: sprites, root: root, terrainStyle: level.style)
+            return (field, { state in guard case .lemmings3(let game) = state else { return }; field.game = game })
+        }, suspend: { [weak self] in self?.suspendForReplay() ?? {} })
+    }
     private func recordArcadeResult() {
         AnonymousTelemetry.shared.finish(arcadeLevel, hotSeat: arcadeHotSeatID != nil,
                                          attemptID: arcadeRunID, won: game.saved > 0, saved: game.saved)
@@ -1306,14 +1345,20 @@ import NxlvKit
             level: arcadeLevel, saved: game.saved, didWin: game.saved > 0, skills: skillAssignments,
             seconds: Double(game.tick) / Lemmings3Runtime.ticksPerSecond, assisted: usedRewind,
             telemetry: TrolleyTelemetry(released: game.released + game.configuration.extras.count,
-                destructiveSkillCount: TrolleyCapture.destructiveCount(toolUses), buildVersion: TrolleyCapture.buildVersion,
+                rewindCount: usedRewind ? 1 : 0, destructiveSkillCount: TrolleyCapture.destructiveCount(toolUses), buildVersion: TrolleyCapture.buildVersion,
                 additionalStatistics: ["reserve": Double(game.reserve), "engineLost": Double(game.lost),
                                        "timeRemaining": Double(game.remainingSeconds)].merging(Dictionary(uniqueKeysWithValues: toolUses.map { ("tool." + $0.key, Double($0.value)) }), uniquingKeysWith: { _, b in b })))
-        arcadeReport = recordsCampaignProgress
+        arcadeReport = (recordsCampaignProgress || onSequenceContinue != nil)
             ? ArcadeStore.shared.record(run)
             : ArcadeStore.shared.previewReport(for: run)
+        syncPrecisionZoom()
         guard let arcadeReport else { return }
-        if recordsCampaignProgress { runMovie.preserveRecord(arcadeReport) }
+        if recordsCampaignProgress {
+            runMovie.preserveRecord(arcadeReport)
+            ArcadeStore.shared.preserveActions(run: run, initial: .lemmings3(initial), final: .lemmings3(game),
+                commands: recoveryInputs.map(LeaderboardActionReplay.Command.l3))
+        }
+        ArcadeWindow.shared.actionReplayContext = { [weak self] in self?.leaderboardReplayContext() }
         ArcadeWindow.shared.showResult(arcadeReport, owner: window, retry: { [weak self] in self?.retryLevel() },
             next: { [weak self] in self?.continueArcadeResult() },
             replay: { [weak self] save in self?.runMovie.review(save: save) },
@@ -1414,6 +1459,9 @@ import NxlvKit
         let impossible = game.isComplete ? game.saved == 0 : canvas.menuRows == nil && FailureMoodDecision.isUnrecoverable(
             saved: game.saved, active: game.lemmings.filter(\.active).count,
             unreleased: game.reserve, required: 1)
+        completionGlow.set(active: RescueCelebration.isSecured(saved: game.saved, required: 1,
+            isComplete: game.isComplete, didWin: game.saved > 0),
+            animated: !canvas.reduceMotion && !canvas.reduceFlashes)
         failureMood.set(active: impossible)
         let deathCounter = FailureMoodDecision.deathCounter(
             saved: game.saved, active: game.lemmings.filter(\.active).count,
@@ -1467,6 +1515,7 @@ import NxlvKit
 }
 
 @MainActor private final class Lemmings3Canvas: NSView {
+    var readOnlyReplay = false
     let timeline = TimelinePanelControls()
     private func layoutTimeline() {
         let width = min(260, bounds.width - 16)
@@ -1559,6 +1608,7 @@ import NxlvKit
     override func isAccessibilityElement() -> Bool { true }
     override func accessibilityRole() -> NSAccessibility.Role? { .group }
     override func accessibilityChildren() -> [Any]? {
+        guard !readOnlyReplay else { return [] }
         func rect(_ r: CGRect) -> CGRect { CGRect(x: screenOrigin.x + r.minX * zoom, y: screenOrigin.y + r.minY * zoom, width: r.width * zoom, height: r.height * zoom) }
         if let rows = menuRows {
             return rows.enumerated().map { index, title in
@@ -1684,6 +1734,7 @@ import NxlvKit
     private var skillBadge: NSImage?
     private var menuSelection = 0
     var failureMoodAmount: CGFloat = 0
+    var completionGlowAmount: CGFloat = 0
     private var terrain: NSImage?
     private var sprites: [[NSImage]] = []
     private var objects: [(Int, Int, Int, Bool, [NSImage])] = []
@@ -1732,8 +1783,8 @@ import NxlvKit
     }
     override var isFlipped: Bool { true }
     override var acceptsFirstResponder: Bool { true }
-    private var zoom: CGFloat { max(0.1, min(bounds.width / 320, (bounds.height - 38) / 212)) }
-    private var screenOrigin: NSPoint { NSPoint(x: (bounds.width - 320 * zoom) / 2, y: (bounds.height - 38 - 212 * zoom) / 2) }
+    private var zoom: CGFloat { max(0.1, min(bounds.width / 320, (bounds.height - (readOnlyReplay ? 0 : 38)) / 212)) }
+    private var screenOrigin: NSPoint { NSPoint(x: (bounds.width - 320 * zoom) / 2, y: (bounds.height - (readOnlyReplay ? 0 : 38) - 212 * zoom) / 2) }
     private var origin: NSPoint { NSPoint(x: screenOrigin.x, y: screenOrigin.y + 12 * zoom) }
     var playfieldRect: CGRect { CGRect(x: origin.x, y: origin.y, width: 320 * zoom, height: 160 * zoom) }
     var panelRect: CGRect { CGRect(x: origin.x, y: origin.y + 160 * zoom, width: 320 * zoom, height: 40 * zoom) }
@@ -1867,7 +1918,7 @@ import NxlvKit
         defer {
             NSGraphicsContext.restoreGraphicsState()
             layoutTimeline()
-            if menuRows == nil { timeline.draw() }
+            if menuRows == nil && !readOnlyReplay { timeline.draw() }
         }
         defer { if menuRows == nil { startCountdown.draw(in: playfieldRect) } }
         defer {
@@ -1901,6 +1952,9 @@ import NxlvKit
         guard let game, let terrain else { return }
         speedTrails.draw(enabled: usesSpeedEffects && menuRows == nil, in: playfieldRect) {
             drawWorld(game, terrain: terrain)
+        }
+        if let context = NSGraphicsContext.current?.cgContext {
+            RescueCelebration.draw(in: playfieldRect, amount: completionGlowAmount, context: context)
         }
         FailureMoodOverlay.draw(in: playfieldRect, amount: failureMoodAmount)
         if menuRows == nil {
@@ -2187,14 +2241,20 @@ import NxlvKit
         NSColor.black.setFill(); CGRect(x: 0, y: 0, width: 320, height: 12).fill()
         let status = "OUT \(game.released) SAVE \(game.saved) LEFT \(game.reserve) LOST \(game.lost)"
         art.text(menuRows == nil ? status + " " + deathCountdownText : status, x: 2, y: 3, scale: 0.65)
-        art.text("MENU", x: 286, y: 3, scale: 0.8)
+        if !readOnlyReplay { art.text("MENU", x: 286, y: 3, scale: 0.8) }
         art.normal.draw(in: CGRect(x: 0, y: 172, width: 320, height: 40), from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
-        for slot in [selectedAction] + (fast ? [6] : []) + (paused ? [7] : []) {
+        for slot in readOnlyReplay ? [] : [selectedAction] + (fast ? [6] : []) + (paused ? [7] : []) {
             let left = CGFloat(Lemmings3Panel.edges[slot]), width = CGFloat(Lemmings3Panel.edges[slot + 1]) - left
             NSGraphicsContext.saveGraphicsState()
             NSBezierPath(rect: CGRect(x: left, y: 172, width: width, height: 40)).addClip()
             art.pressed.draw(in: CGRect(x: 0, y: 172, width: 320, height: 40), from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
             NSGraphicsContext.restoreGraphicsState()
+        }
+        if readOnlyReplay {
+            NSColor(white: 0, alpha: 0.55).setFill()
+            for slot in [0, 1, 2, 3, 4, 6, 7, 8] {
+                CGRect(x: Lemmings3Panel.edges[slot], y: 172, width: Lemmings3Panel.edges[slot + 1] - Lemmings3Panel.edges[slot], height: 40).fill()
+            }
         }
         if variableSpeedEnabled { SpeedPanelControls.draw(in: CGRect(x: 214, y: 172, width: 35, height: 40), label: speedLabel, active: fast) }
         else if fast { art.text(speedLabel.replacingOccurrences(of: "×", with: "X"), x: 218, y: 198, scale: 0.7) }
@@ -2277,3 +2337,4 @@ import NxlvKit
             event.modifierFlags.contains(.shift) ? 0 : event.scrollingDeltaY * 4)
     }
 }
+#endif

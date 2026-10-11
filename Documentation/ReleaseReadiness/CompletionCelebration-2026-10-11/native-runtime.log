@@ -1,0 +1,18 @@
+UI test windows: offscreen; audio: muted
+PASS community placement validation and saved Solo/Hot Seat migration
+PASS new solo and Hot Seat journeys start at the first curated lesson despite prior player progress; handover remains paused
+PASS Floating Down! uses Holiday snow artwork, retains collision through graphics changes; the current second lesson shows JOURNEY 2
+PASS classic Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS classic-false native golden rim capture and restrained pixel coverage
+PASS classic Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS classic-true native golden rim capture and restrained pixel coverage
+PASS lemmings2 Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS lemmings2-false native golden rim capture and restrained pixel coverage
+PASS lemmings2 Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS lemmings2-true native golden rim capture and restrained pixel coverage
+PASS lemmings3 Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS lemmings3-false native golden rim capture and restrained pixel coverage
+PASS lemmings3 Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS lemmings3-true native golden rim capture and restrained pixel coverage
+PASS all three engine completion callbacks persist Journey wins before Next, preserve turn ownership and reject stale results; result Menu/Q/Escape exit
+Celebration music, golden glow and result-input integration tests passed.

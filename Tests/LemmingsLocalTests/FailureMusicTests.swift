@@ -1,3 +1,4 @@
+#if os(macOS)
 import XCTest
 @testable import LemmingsLocal
 
@@ -44,3 +45,4 @@ final class FailureMusicTests: XCTestCase {
         XCTAssertEqual(music.rate, 1)
     }
 }
+#endif

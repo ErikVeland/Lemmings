@@ -1,0 +1,38 @@
+{
+  "candidate": "2.0-2-touch",
+  "version": "2.0",
+  "build": 2,
+  "targetDevice": {
+    "name": "GenErik",
+    "model": "iPad7,3",
+    "OS": "17.7.11",
+    "includedInExportProfile": false,
+    "pairingState": "unsupported",
+    "availableToXcode": false,
+    "trustConfirmedByOwner": true,
+    "latestUSBScanFoundTarget": false
+  },
+  "coreTests": 17,
+  "releaseToolingTests": 55,
+  "classicLevels": 120,
+  "simulationTicks": 6000,
+  "sourceGate": "passed: Debug/Release Simulator and unsigned Release device builds",
+  "renderedUIKitStates": "pending manual iPad acceptance",
+  "installationAttempted": false,
+  "uploaded": false,
+  "appLaunched": false,
+  "accountGUI": "active account and developer team confirmed; manual profiles downloaded",
+  "signingCLI": "Active account authenticated successfully and created distribution signing assets. The older account token warning is unrelated.",
+  "sourceChangesAfterCompletedExport": [
+    "Tools/IOSBeta/build.py: preserve ZIP executable permissions for future extraction",
+    "Tools/IOSBeta/build.py: prefer Apple system tools for Xcode symbol copying"
+  ],
+  "testsSourceSHA256": {
+    "Tests/LemmingsMobileCoreTests/MobileCoreTests.swift": "88d09e8490e1bec95fe414851eec73d22d8289e8a2280c791f36e12db076b65a",
+    "Tests/ReleaseReadinessTests/test_ios_beta_build.py": "47d4be61436eab715f786704b49d7e615a0f1356098c5b965079b77aa4bc197a"
+  },
+  "testFlightExport": "distribution IPA exported and signature/profile/content/symbols verified; not uploaded",
+  "testFlightIPA_SHA256": "38d2a54785198bc4fe2f83a8ba3ad7ad450e4bc32d2605db0dedad0ca9dfb1ce",
+  "latestInstallCheck": "device-install-2026-10-11.json",
+  "deviceRegistration": "Awaiting explicit approval for Apple annual device-list update; all existing devices selected to retain."
+}

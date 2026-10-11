@@ -1,0 +1,130 @@
+import CoreGraphics
+import Foundation
+import NxlvKit
+
+/// Menu lettering drawn from the Macintosh release's own character sets.
+///
+/// Rectangles use a top-left origin, as in `GameStoneArt`. Every glyph lands on a
+/// whole-number scale with no smoothing, as in the original.
+public final class GameMenuTypography {
+    public enum Palette: String, Sendable { case blue, green }
+    public enum Alignment: Sendable { case left, center, right }
+    public typealias Face = ClassicMacUserInterface.Face
+
+    public let interface: ClassicMacUserInterface
+    private var glyphs: [String: CGImage] = [:]
+
+    public init(interface: ClassicMacUserInterface) {
+        self.interface = interface
+    }
+
+    /// Reads the bundled `MacArtwork/lemmings` banks, or nil when they are absent.
+    public convenience init?(directory: URL) {
+        guard let artwork = try? ClassicMacArtwork(directory: directory),
+              let interface = ClassicMacUserInterface(artwork: artwork) else { return nil }
+        self.init(interface: interface)
+    }
+
+    public func font(_ face: Face) -> ClassicMacUserInterface.Font? { interface.font(face) }
+
+    public func width(of text: String, face: Face, scale: Int) -> CGFloat {
+        CGFloat(font(face)?.width(of: text, scale: scale) ?? 0)
+    }
+
+    public func height(face: Face, scale: Int) -> CGFloat {
+        CGFloat(font(face)?.height(scale: scale) ?? 0)
+    }
+
+    /// Draws a line with its top-left corner at `origin`.
+    public func draw(_ text: String, face: Face, at origin: CGPoint, scale: Int, in context: CGContext,
+                     alpha: CGFloat = 1, palette: Palette = .blue) {
+        guard let font = font(face) else { return }
+        context.saveGState()
+        defer { context.restoreGState() }
+        context.interpolationQuality = .none
+        context.setShouldAntialias(false)
+        context.setAlpha(alpha)
+        var pen = origin.x
+        let step = CGFloat(font.cellWidth * scale)
+        for character in text {
+            defer { pen += step }
+            guard let glyph = font.glyph(for: character),
+                  let image = image(for: glyph, key: "\(face.rawValue)-\(character)", palette: palette) else { continue }
+            let rect = CGRect(x: pen + CGFloat(glyph.x * scale), y: origin.y + CGFloat(glyph.y * scale),
+                              width: CGFloat(glyph.width * scale), height: CGFloat(glyph.height * scale))
+            Self.draw(image, in: rect, context: context)
+        }
+    }
+
+    /// Uses the original glyphs at a fixed size, with the same cell spacing on every page.
+    public func menuLine(_ value: String, in rect: CGRect, context: CGContext, face: Face = .small, scale: Int = 1,
+                         alignment: Alignment = .center, alpha: CGFloat = 1, palette: Palette = .blue) {
+        guard let font = font(face) else { return }
+        let columns = max(0, Int(rect.width) / (font.cellWidth * scale))
+        guard columns > 0 else { return }
+        let plain = Self.menuText(value)
+        let line = plain.count <= columns ? plain
+            : String(plain.prefix(max(0, columns - 3))) + String(repeating: ".", count: min(3, columns))
+        let width = width(of: line, face: face, scale: scale)
+        let x: CGFloat
+        switch alignment {
+        case .left: x = rect.minX
+        case .right: x = rect.maxX - width
+        case .center: x = rect.midX - width / 2
+        }
+        draw(line, face: face, at: CGPoint(x: x.rounded(), y: rect.minY.rounded()), scale: scale,
+             in: context, alpha: alpha, palette: palette)
+    }
+
+    /// The largest whole-number scale whose cell fits the height.
+    public func scale(face: Face, fitting height: CGFloat) -> Int {
+        guard let font = font(face), font.cellHeight > 0 else { return 1 }
+        return max(1, Int(height / CGFloat(font.cellHeight)))
+    }
+
+    public static func menuText(_ value: String) -> String {
+        let plain = value.folding(options: [.diacriticInsensitive, .widthInsensitive], locale: Locale(identifier: "en"))
+            .uppercased().replacingOccurrences(of: "—", with: "-").replacingOccurrences(of: "–", with: "-")
+            .replacingOccurrences(of: "−", with: "-").replacingOccurrences(of: "’", with: "'")
+            .replacingOccurrences(of: "“", with: "\"").replacingOccurrences(of: "”", with: "\"")
+            .replacingOccurrences(of: "·", with: "*").replacingOccurrences(of: "•", with: "*")
+            .replacingOccurrences(of: "→", with: "->").replacingOccurrences(of: "←", with: "<-")
+            .replacingOccurrences(of: "×", with: "X").replacingOccurrences(of: "↵", with: "ENTER")
+            .replacingOccurrences(of: "‹", with: "<").replacingOccurrences(of: "›", with: ">")
+        return String(plain.map { $0.isASCII || $0 == "💀" ? $0 : "?" })
+    }
+
+    private static func draw(_ image: CGImage, in rect: CGRect, context: CGContext) {
+        // The context is top-left origin, and `draw(_:in:)` assumes bottom-left.
+        context.saveGState()
+        context.translateBy(x: rect.minX, y: rect.maxY)
+        context.scaleBy(x: 1, y: -1)
+        context.draw(image, in: CGRect(x: 0, y: 0, width: rect.width, height: rect.height))
+        context.restoreGState()
+    }
+
+    private func image(for frame: ClassicMacArtwork.Frame, key: String, palette: Palette) -> CGImage? {
+        let key = palette.rawValue + ":" + key
+        if let cached = glyphs[key] { return cached }
+        var pixels = frame.rgba
+        if palette == .green {
+            // Rotate the blue ramp into grass green. Preserve the original bevel,
+            // neutral highlights, dark outline and alpha without filtering pixels.
+            pixels.withUnsafeMutableBytes { raw in
+                let bytes = raw.bindMemory(to: UInt8.self)
+                for i in stride(from: 0, to: bytes.count, by: 4) {
+                    let red = bytes[i], green = bytes[i + 1], blue = bytes[i + 2]
+                    bytes[i] = green; bytes[i + 1] = blue; bytes[i + 2] = red
+                }
+            }
+        }
+        guard let provider = CGDataProvider(data: pixels as CFData),
+              let image = CGImage(width: frame.width, height: frame.height, bitsPerComponent: 8, bitsPerPixel: 32,
+                                  bytesPerRow: frame.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+                                  bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
+                                  provider: provider, decode: nil, shouldInterpolate: false,
+                                  intent: .defaultIntent) else { return nil }
+        glyphs[key] = image
+        return image
+    }
+}

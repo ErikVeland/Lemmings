@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 import CryptoKit
 import Darwin
@@ -647,7 +648,7 @@ struct L3RunRecovery: Codable, Sendable {
 
 /// Canonical value encoding for the native L2 runtime, including private state.
 /// Checkpoints remain tied to the exact engine fingerprint and validated assets.
-private enum RecoveryValueEncoding {
+enum RecoveryValueEncoding {
     static func data(_ value: Any) throws -> Data {
         if let data = value as? Data { return data }
         if let bytes = value as? [UInt8] { return Data(bytes) }
@@ -780,3 +781,4 @@ struct L2RunRecovery: Codable, Sendable {
         return game
     }
 }
+#endif

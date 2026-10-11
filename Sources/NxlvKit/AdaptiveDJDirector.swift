@@ -25,8 +25,8 @@ public struct AdaptiveDJDirector: Sendable {
 
     public mutating func cue(for telemetry: AdaptiveDJEngine.Telemetry) -> AdaptiveDJCue? {
         guard firedReasons.isEmpty else { return nil }
-        let secured = telemetry.requiredCount > 0 && telemetry.savedCount >= telemetry.requiredCount
-        guard secured || (telemetry.isComplete && telemetry.didWin) else { return nil }
+        guard RescueCelebration.isSecured(saved: telemetry.savedCount, required: telemetry.requiredCount,
+                                          isComplete: telemetry.isComplete, didWin: telemetry.didWin) else { return nil }
         let reason: AdaptiveDJCue.Reason = .won
         firedReasons.insert(reason)
         return AdaptiveDJCue(reason: reason, timing: .atNextPhrase)

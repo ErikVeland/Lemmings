@@ -1,0 +1,55 @@
+{
+  "app": "/Users/veland/Lemmings/.build/ios-beta/2.0-1-development/UltimateLemmingsIOS.xcarchive/Products/Applications/UltimateLemmingsIOS.app",
+  "archiveSigned": true,
+  "build": 1,
+  "bundleID": "academy.glasscode.lemmings.ios",
+  "contentFiles": 26,
+  "contentManifestSHA256": "012bada8669f71d193747064cad6db469184e2783acf1cdddea7142104f80da2",
+  "coreTestsPassed": 13,
+  "deviceInstallation": {
+    "appLaunched": false,
+    "attemptExitCode": 1,
+    "reason": "The paired iPhone was locked (CoreDevice 10003). The owner asked to retain the signed build for later.",
+    "status": "deferred by owner"
+  },
+  "executableSHA256": "421341a6edb3dbce1fd64d4cd79918f256bfacfa8b895c764cd030f10e814293",
+  "exportMethod": "debugging",
+  "exported": true,
+  "exportedAppSignatureVerified": true,
+  "finishedUTC": "2026-10-10T12:42:27.642428+00:00",
+  "frozenInputsUnchangedAfterExport": true,
+  "gitCommit": "0398d081d0aa4b1f25717eb59d2095f35d81f542",
+  "ipa": "/Users/veland/Lemmings/.build/ios-beta/2.0-1-development/Export/UltimateLemmingsIOS.ipa",
+  "ipaSHA256": "3c7c8e37a1cff521ee00b9f43b9be1f8a24713fa0151a66af9d7c5fe121d4c7c",
+  "launchScope": [
+    "Classic",
+    "Lemmings 2",
+    "Lemmings 3"
+  ],
+  "physicalDeviceAcceptance": "pending",
+  "releaseToolingTestsPassed": 52,
+  "scope": "Classic first device beta",
+  "signed": true,
+  "startedUTC": "2026-10-10T12:40:03.245117+00:00",
+  "status": "signed archive and IPA exported",
+  "symbolUUIDs": [
+    [
+      "2E30F23E-23EB-3627-8B3B-FF9A5B777637",
+      "arm64"
+    ]
+  ],
+  "team": "54WU29TRTY",
+  "testFlightExport": {
+    "attemptExitCode": 70,
+    "reason": "Xcode has no valid account session and no matching iOS App Store provisioning profile.",
+    "status": "blocked",
+    "uploaded": false
+  },
+  "testSourceSHA256": {
+    "Tests/LemmingsMobileCoreTests/MobileCoreTests.swift": "a4686938b0561410f0e0e41ed0e48f995fdc8a960d7358717b2bbb1cecb69673",
+    "Tests/ReleaseReadinessTests/test_ios_beta_content.py": "1d4ec733df784e75b245eda8cf5389223119035362493c752f10faaf5430da37"
+  },
+  "uploaded": false,
+  "version": "2.0",
+  "xcode": "Xcode 27.1\nBuild version 27A9269"
+}

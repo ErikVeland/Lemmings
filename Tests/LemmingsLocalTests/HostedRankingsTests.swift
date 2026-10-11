@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import Foundation
 import NxlvKit
@@ -135,3 +136,4 @@ final class HostedRankingsTests: XCTestCase {
         XCTAssertEqual(transport.requests.last?.httpMethod, "DELETE")
     }
 }
+#endif

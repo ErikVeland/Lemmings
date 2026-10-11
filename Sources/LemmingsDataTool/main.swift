@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 import NxlvKit
 
@@ -122,3 +123,4 @@ do {
 } catch {
     fail(error.localizedDescription, code: .dataError)
 }
+#endif

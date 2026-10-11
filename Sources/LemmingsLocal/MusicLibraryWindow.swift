@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
@@ -185,3 +186,4 @@ import NxlvKit
         GameScreen.shared.present(page)
     }
 }
+#endif

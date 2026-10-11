@@ -20,7 +20,7 @@ SOURCE = 'https://www.lemmingsforums.net/index.php?topic=4374.0'
 RANKS = ['Gentle', 'Quirky', 'Zany', 'Manic', 'Lunatic']
 BASIC = {'climber', 'floater', 'bomber', 'blocker', 'builder', 'basher', 'miner', 'digger'}
 POLICY = 'redux-calibrated-2'
-VERSION = 'learning-15'
+VERSION = 'learning-17'
 BASE_TARGET = 292
 TARGET = 294
 # An explicit counterpart with a changed title, not a fuzzy fan-level match.
@@ -438,8 +438,8 @@ def build(pool, witnesses, resources, reference, reviews):
     for anchor in anchor_rows:
         predicted, _, _, _ = estimate(anchor['context'], [a for a in anchor_rows if a is not anchor])
         calibration.append(abs(predicted - anchor['placement']['position']))
-    # User playtest, 2026-10-07: Cellbash needs only one basher. Put it directly
-    # after the seven teaching levels. This is a placement correction, not a
+    # User playtest, 2026-10-11: Cellbash needs only one basher. Put it second,
+    # immediately after Just Dig. This is a placement correction, not a
     # claim that the full human discovery-review checklist has been completed.
     cellbash = next(item for item in selected
                     if item['row']['entry']['identity'] == {
@@ -447,11 +447,21 @@ def build(pool, witnesses, resources, reference, reviews):
                         'levelID': 'Ji Hoon Heaven 1.DAT#5'})
     assert cellbash['row']['entry']['sourceRevision'] == '8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971'
     assert set(cellbash['context']['usedSkills']) == {'basher'}
-    after = references['Gentle/Builders_will_help_you_here.nxlv']
+    after = references['Gentle/Just_dig!.nxlv']
     cellbash['reference'] = after
-    cellbash['placement'].update(position=37.5, lower=35.0, upper=40.0,
+    cellbash['placement'].update(position=7.5, lower=5.0, upper=10.0,
         reference=after['reference'],
-        adjustment='User playtest 2026-10-07: single-basher practice after the seven skill introductions.')
+        adjustment='User playtest 2026-10-11: single-basher practice as lesson 2, after Just Dig.')
+    # The owner found the two-bomber bridge route too early. Its inventory permits
+    # builders even though the stored witness uses only bombers.
+    comeback = next(item for item in selected if item['row']['entry']['identity'] == {
+        'engine': 'classic', 'packID': 'fan:lldb-327', 'levelID': 'JM01.DAT#7'})
+    assert comeback['row']['entry']['sourceRevision'] == '4ed40d2dad89484a0565b4fc472ba6db8a18a36f97c174cb4ea392eac14073c2'
+    after = references['Quirky/Exodus!.nxlv']
+    comeback['reference'] = after
+    comeback['placement'].update(position=207.5, lower=180.0, upper=355.0,
+        reference=after['reference'],
+        adjustment='User playtest 2026-10-11: two-bomber bridge route belongs in Intermediate, not the early Fun lessons.')
     selected.sort(key=lambda r: (r['placement']['position'], key(r['row'])))
     assert selected and selected[0]['reference']['ordinal'] == 1, 'The tutorial opening must not silently disappear'
     lessons, curriculum, transitions = [], [], []
@@ -523,7 +533,7 @@ def report(manifest, plan, pending, transitions):
         f"{len(lessons)} curated Classic-mechanics levels: a full journey equivalent to Classic, Oh No! and the Christmas campaigns combined.", '',
         f"[Redux's community order]({SOURCE}) supplies the reference spine. The remaining official and fan levels are placed by comparisons with five reference solutions. Actual assignments, worker changes, skill combinations, bursts of input, timing evidence and resource pressure inform those comparisons.", '',
         'Resource pressure uses the skills actually spent and the route’s rescue margin. Release cadence is considered alongside input density. High rescue percentages, rapid release rates and large inventories never assign a grade by themselves. All selected levels have an exact-version winning replay. Explicit unsuitable-level exclusions remain in force. Estimated additions need an initial-state visibility audit and exclude mostly concealed exits or traps. This pixel-visibility check does not prove that the route or all visual information is obvious.', '',
-        'The first seven teaching levels stay intact. Repeated practice is retained. Selection targets coverage across the curve, limits repeated fan packs and avoids long repetitive witnesses. Estimated beginner additions cannot have measured narrow timing, more than three skill types, multiple worker role changes, or an exhausted combination with no rescue margin. It does not raise or lower grades to make adjacent numbers look smooth. The production generator fails if it cannot supply all 294 levels. The two promised 1.8.2 additions are mandatory and retain exact native witnesses. Port counterparts use the Redux position with recorded conversion differences; they do not claim human variant review.', '',
+        'The first seven reference tutorials retain their relative order. Cellbash follows Just dig! as lesson 2, based on the owner’s single-basher playtest. Come back! moves to Intermediate after the owner’s two-bomber bridge playtest; its stored witness uses two bombers and does not certify that bridge route. Repeated practice is retained. Selection targets coverage across the curve, limits repeated fan packs and avoids long repetitive witnesses. Estimated beginner additions cannot have measured narrow timing, more than three skill types, multiple worker role changes, or an exhausted combination with no rescue margin. It does not raise or lower grades to make adjacent numbers look smooth. The production generator fails if it cannot supply all 294 levels. The two promised 1.8.2 additions are mandatory and retain exact native witnesses. Port counterparts use the Redux position with recorded conversion differences; they do not claim human variant review.', '',
         '## Estimated grades and review', '',
         'A solutionEstimate is an estimate of solving demands against the references, not a human-reviewed difficulty label. Its lower and upper bounds include disagreement among comparable solutions and at least the median held-out calibration error. They are uncertainty ranges, not confidence intervals. Unknown discovery and incomplete timing tests add uncertainty. A named, exact-version human review can replace that estimate. human-review-queue.json includes both selected estimates and reserves; inclusion is explicitly recorded.', '',
         'For human review, record an ordinary completion, what had to be discovered, hints used, execution retries and whether spare resources offered recovery. Compare nearby reference levels played by the same person. Hidden-information checks remain a human-review requirement. No human observations are fabricated.', '',

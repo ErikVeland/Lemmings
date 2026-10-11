@@ -82,6 +82,106 @@
       ]
     },
     {
+      "comparisons": [
+        {
+          "distance": 0.6493,
+          "position": 45.0,
+          "reference": "Gentle/Get_a_little_extra_help.nxlv"
+        },
+        {
+          "distance": 1.5137,
+          "position": 50.0,
+          "reference": "Gentle/Downwardly_Mobile_Lemmings.nxlv"
+        },
+        {
+          "distance": 2.2326,
+          "position": 15.0,
+          "reference": "Gentle/Tailor-made_for_blockers.nxlv"
+        },
+        {
+          "distance": 2.3548,
+          "position": 5.0,
+          "reference": "Gentle/Just_dig!.nxlv"
+        },
+        {
+          "distance": 2.4826,
+          "position": 625.0,
+          "reference": "Manic/Just_a_Minute_(Part_Two).nxlv"
+        }
+      ],
+      "context": {
+        "allowedLosses": 9,
+        "assignments": 3,
+        "completionSeconds": 31.352941176470587,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [],
+        "initialHatchIntervalSeconds": 1.6470588235294117,
+        "jobChanges": 0,
+        "narrowActions": 0,
+        "peakAssignmentsInTwoSeconds": 1,
+        "population": 10,
+        "probedAssignments": 3,
+        "remainingSeconds": 268.6470588235294,
+        "replayRevision": "SHA256 digest: 51ba9acbd5b076cf36b722c6ffd922fb511c0383e32c3b56ac73760c9ca59d29",
+        "required": 1,
+        "rescueFraction": 0.1,
+        "savedAboveRequirement": 9,
+        "spareUsedSkills": {
+          "basher": 7
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 50,
+        "timingProbeComplete": false,
+        "usedSkills": {
+          "basher": 3
+        },
+        "workers": 2
+      },
+      "identity": {
+        "engine": "classic",
+        "levelID": "Ji Hoon Heaven 1.DAT#5",
+        "packID": "fan:lldb-547"
+      },
+      "lesson": "Discover: Basher",
+      "level": "Cellbash",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"Ji Hoon Heaven 1.DAT#5\", \"packID\": \"fan:lldb-547\"}",
+      "placement": {
+        "adjustment": "User playtest 2026-10-11: single-basher practice as lesson 2, after Just Dig.",
+        "basis": "solutionEstimate",
+        "lower": 5.0,
+        "position": 7.5,
+        "reference": "Gentle/Just_dig!.nxlv",
+        "replayRevision": "SHA256 digest: 51ba9acbd5b076cf36b722c6ffd922fb511c0383e32c3b56ac73760c9ca59d29",
+        "sourceRevision": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 10.0
+      },
+      "purpose": "Community-ordered practice with an exact native winning witness",
+      "reference": {
+        "author": "Amiga Lemmings",
+        "number": 1,
+        "ordinal": 1,
+        "population": 10,
+        "rank": "Gentle",
+        "rankIndex": 0,
+        "reference": "Gentle/Just_dig!.nxlv",
+        "required": 1,
+        "sha256": "cf628069afa939363993b59bb13972771a173f1a6e1febdb95203172ce4cec89",
+        "skills": {
+          "digger": 10
+        },
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "spawnInterval": 28,
+        "timeLimitSeconds": null,
+        "title": "Just dig!"
+      },
+      "risks": [
+        "incomplete timing probes",
+        "spatial tolerance unmeasured"
+      ],
+      "variantDifferences": []
+    },
+    {
       "comparisons": [],
       "context": {
         "allowedLosses": 9,
@@ -358,7 +458,7 @@
         "levelID": "4:Fun:5:9:3",
         "packID": "lemmings-LEVEL-120"
       },
-      "lesson": "Discover: Basher",
+      "lesson": "Practise: Basher",
       "level": "You need bashers this time",
       "objective": "community:Gentle/You_need_bashers_this_time.nxlv",
       "placement": {
@@ -562,106 +662,6 @@
         "different population",
         "Classic retains a time limit"
       ]
-    },
-    {
-      "comparisons": [
-        {
-          "distance": 0.6493,
-          "position": 45.0,
-          "reference": "Gentle/Get_a_little_extra_help.nxlv"
-        },
-        {
-          "distance": 1.5137,
-          "position": 50.0,
-          "reference": "Gentle/Downwardly_Mobile_Lemmings.nxlv"
-        },
-        {
-          "distance": 2.2326,
-          "position": 15.0,
-          "reference": "Gentle/Tailor-made_for_blockers.nxlv"
-        },
-        {
-          "distance": 2.3548,
-          "position": 5.0,
-          "reference": "Gentle/Just_dig!.nxlv"
-        },
-        {
-          "distance": 2.4826,
-          "position": 625.0,
-          "reference": "Manic/Just_a_Minute_(Part_Two).nxlv"
-        }
-      ],
-      "context": {
-        "allowedLosses": 9,
-        "assignments": 3,
-        "completionSeconds": 31.352941176470587,
-        "discoveryDifficulty": "unknown from replay",
-        "exhaustedUsedSkills": [],
-        "initialHatchIntervalSeconds": 1.6470588235294117,
-        "jobChanges": 0,
-        "narrowActions": 0,
-        "peakAssignmentsInTwoSeconds": 1,
-        "population": 10,
-        "probedAssignments": 3,
-        "remainingSeconds": 268.6470588235294,
-        "replayRevision": "SHA256 digest: 51ba9acbd5b076cf36b722c6ffd922fb511c0383e32c3b56ac73760c9ca59d29",
-        "required": 1,
-        "rescueFraction": 0.1,
-        "savedAboveRequirement": 9,
-        "spareUsedSkills": {
-          "basher": 7
-        },
-        "spatialToleranceMeasured": false,
-        "startingReleaseRate": 50,
-        "timingProbeComplete": false,
-        "usedSkills": {
-          "basher": 3
-        },
-        "workers": 2
-      },
-      "identity": {
-        "engine": "classic",
-        "levelID": "Ji Hoon Heaven 1.DAT#5",
-        "packID": "fan:lldb-547"
-      },
-      "lesson": "Practise: Basher",
-      "level": "Cellbash",
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"Ji Hoon Heaven 1.DAT#5\", \"packID\": \"fan:lldb-547\"}",
-      "placement": {
-        "adjustment": "User playtest 2026-10-07: single-basher practice after the seven skill introductions.",
-        "basis": "solutionEstimate",
-        "lower": 35.0,
-        "position": 37.5,
-        "reference": "Gentle/Builders_will_help_you_here.nxlv",
-        "replayRevision": "SHA256 digest: 51ba9acbd5b076cf36b722c6ffd922fb511c0383e32c3b56ac73760c9ca59d29",
-        "sourceRevision": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 40.0
-      },
-      "purpose": "Community-ordered practice with an exact native winning witness",
-      "reference": {
-        "author": "Amiga Lemmings",
-        "number": 7,
-        "ordinal": 7,
-        "population": 20,
-        "rank": "Gentle",
-        "rankIndex": 0,
-        "reference": "Gentle/Builders_will_help_you_here.nxlv",
-        "required": 10,
-        "sha256": "df246974aa5d4bfaa10b2ae3c7a93bdd5fa01703b7ed67ec6eab926eb7dbe87d",
-        "skills": {
-          "builder": 20
-        },
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "spawnInterval": 28,
-        "timeLimitSeconds": null,
-        "title": "Builders will help you here"
-      },
-      "risks": [
-        "incomplete timing probes",
-        "spatial tolerance unmeasured"
-      ],
-      "variantDifferences": []
     },
     {
       "comparisons": [],
@@ -1836,112 +1836,6 @@
         "incomplete timing probes",
         "spatial tolerance unmeasured",
         "less than 30 seconds spare on the witness"
-      ],
-      "variantDifferences": []
-    },
-    {
-      "comparisons": [
-        {
-          "distance": 2.3392,
-          "position": 45.0,
-          "reference": "Gentle/Get_a_little_extra_help.nxlv"
-        },
-        {
-          "distance": 2.3491,
-          "position": 5.0,
-          "reference": "Gentle/Just_dig!.nxlv"
-        },
-        {
-          "distance": 2.3988,
-          "position": 50.0,
-          "reference": "Gentle/Downwardly_Mobile_Lemmings.nxlv"
-        },
-        {
-          "distance": 2.6872,
-          "position": 30.0,
-          "reference": "Gentle/A_task_for_bombers.nxlv"
-        },
-        {
-          "distance": 2.8903,
-          "position": 370.0,
-          "reference": "Zany/Flow_Control.nxlv"
-        }
-      ],
-      "context": {
-        "allowedLosses": 10,
-        "assignments": 2,
-        "completionSeconds": 32.64705882352941,
-        "discoveryDifficulty": "unknown from replay",
-        "exhaustedUsedSkills": [],
-        "initialHatchIntervalSeconds": 1.6470588235294117,
-        "jobChanges": 0,
-        "narrowActions": 0,
-        "peakAssignmentsInTwoSeconds": 2,
-        "population": 60,
-        "probedAssignments": 2,
-        "remainingSeconds": 87.3529411764706,
-        "replayRevision": "SHA256 digest: fba3349cc4add7e0f3a69b5d09f0cfcd322c73eeb40a262f9d1d1d3de183cdc1",
-        "required": 50,
-        "rescueFraction": 0.8333333333333334,
-        "savedAboveRequirement": 8,
-        "spareUsedSkills": {
-          "bomber": 8
-        },
-        "spatialToleranceMeasured": false,
-        "startingReleaseRate": 50,
-        "timingProbeComplete": false,
-        "usedSkills": {
-          "bomber": 2
-        },
-        "workers": 2
-      },
-      "identity": {
-        "engine": "classic",
-        "levelID": "JM01.DAT#7",
-        "packID": "fan:lldb-327"
-      },
-      "lesson": "Practise: Bomber",
-      "level": "Come back!",
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"JM01.DAT#7\", \"packID\": \"fan:lldb-327\"}",
-      "placement": {
-        "basis": "solutionEstimate",
-        "lower": 0,
-        "position": 70.0,
-        "reference": "Gentle/Get_a_little_extra_help.nxlv",
-        "replayRevision": "SHA256 digest: fba3349cc4add7e0f3a69b5d09f0cfcd322c73eeb40a262f9d1d1d3de183cdc1",
-        "sourceRevision": "4ed40d2dad89484a0565b4fc472ba6db8a18a36f97c174cb4ea392eac14073c2",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 395.0
-      },
-      "purpose": "Community-ordered practice with an exact native winning witness",
-      "reference": {
-        "author": "Oh No! More Lemmings",
-        "number": 9,
-        "ordinal": 9,
-        "population": 20,
-        "rank": "Gentle",
-        "rankIndex": 0,
-        "reference": "Gentle/Get_a_little_extra_help.nxlv",
-        "required": 20,
-        "sha256": "ba95f51859f2c388b58b38d952087b0d9179257c38069491f1038176159c58ce",
-        "skills": {
-          "basher": 10,
-          "blocker": 10,
-          "bomber": 10,
-          "builder": 10,
-          "climber": 10,
-          "digger": 10,
-          "floater": 10,
-          "miner": 10
-        },
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "spawnInterval": 53,
-        "timeLimitSeconds": null,
-        "title": "Get a little extra help"
-      },
-      "risks": [
-        "incomplete timing probes",
-        "spatial tolerance unmeasured"
       ],
       "variantDifferences": []
     },
@@ -7026,6 +6920,110 @@
         "different population",
         "Classic retains a time limit"
       ]
+    },
+    {
+      "comparisons": [
+        {
+          "distance": 2.3392,
+          "position": 45.0,
+          "reference": "Gentle/Get_a_little_extra_help.nxlv"
+        },
+        {
+          "distance": 2.3491,
+          "position": 5.0,
+          "reference": "Gentle/Just_dig!.nxlv"
+        },
+        {
+          "distance": 2.3988,
+          "position": 50.0,
+          "reference": "Gentle/Downwardly_Mobile_Lemmings.nxlv"
+        },
+        {
+          "distance": 2.6872,
+          "position": 30.0,
+          "reference": "Gentle/A_task_for_bombers.nxlv"
+        },
+        {
+          "distance": 2.8903,
+          "position": 370.0,
+          "reference": "Zany/Flow_Control.nxlv"
+        }
+      ],
+      "context": {
+        "allowedLosses": 10,
+        "assignments": 2,
+        "completionSeconds": 32.64705882352941,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [],
+        "initialHatchIntervalSeconds": 1.6470588235294117,
+        "jobChanges": 0,
+        "narrowActions": 0,
+        "peakAssignmentsInTwoSeconds": 2,
+        "population": 60,
+        "probedAssignments": 2,
+        "remainingSeconds": 87.3529411764706,
+        "replayRevision": "SHA256 digest: fba3349cc4add7e0f3a69b5d09f0cfcd322c73eeb40a262f9d1d1d3de183cdc1",
+        "required": 50,
+        "rescueFraction": 0.8333333333333334,
+        "savedAboveRequirement": 8,
+        "spareUsedSkills": {
+          "bomber": 8
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 50,
+        "timingProbeComplete": false,
+        "usedSkills": {
+          "bomber": 2
+        },
+        "workers": 2
+      },
+      "identity": {
+        "engine": "classic",
+        "levelID": "JM01.DAT#7",
+        "packID": "fan:lldb-327"
+      },
+      "lesson": "Practise: Bomber",
+      "level": "Come back!",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"JM01.DAT#7\", \"packID\": \"fan:lldb-327\"}",
+      "placement": {
+        "adjustment": "User playtest 2026-10-11: two-bomber bridge route belongs in Intermediate, not the early Fun lessons.",
+        "basis": "solutionEstimate",
+        "lower": 180.0,
+        "position": 207.5,
+        "reference": "Quirky/Exodus!.nxlv",
+        "replayRevision": "SHA256 digest: fba3349cc4add7e0f3a69b5d09f0cfcd322c73eeb40a262f9d1d1d3de183cdc1",
+        "sourceRevision": "4ed40d2dad89484a0565b4fc472ba6db8a18a36f97c174cb4ea392eac14073c2",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 355.0
+      },
+      "purpose": "Community-ordered practice with an exact native winning witness",
+      "reference": {
+        "author": "Genesis Lemmings",
+        "number": 9,
+        "ordinal": 41,
+        "population": 30,
+        "rank": "Quirky",
+        "rankIndex": 1,
+        "reference": "Quirky/Exodus!.nxlv",
+        "required": 30,
+        "sha256": "4a6adaa2782750fd2a8c6ba4d017158313be2cfe1d2bac435745dd1a85fe143d",
+        "skills": {
+          "basher": 1,
+          "blocker": 5,
+          "builder": 4,
+          "climber": 2,
+          "floater": 1
+        },
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "spawnInterval": 53,
+        "timeLimitSeconds": null,
+        "title": "Exodus!"
+      },
+      "risks": [
+        "incomplete timing probes",
+        "spatial tolerance unmeasured"
+      ],
+      "variantDifferences": []
     },
     {
       "comparisons": [],

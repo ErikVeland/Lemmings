@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
@@ -38,11 +39,11 @@ import NxlvKit
                 let y = CGFloat(306 + i * 47)
                 text("#\(row.rank)", 80, y, 130); text(row.name, 230, y, 240)
                 text(hostedCategory.score(row.score), 495, y, 250)
-                if row.replay {
+                if row.actionReplay == true && (1...10).contains(row.rank) {
                     link("Play replay >", CGRect(x: 780, y: y - 5, width: 270, height: 40), alignment: .left) { [weak self] in
-                        service.playback(row) { [weak self] url, title in
-                            if let review = self?.onStoredReplay { review(url, title) }
-                            else { ReplayMovieWindow.shared.open(url, title: title, save: false) }
+                        service.playbackActions(row, conditions: self?.level?.conditions) { [weak self] replay, title in
+                            guard let self, boardScope == .worldwide, level?.conditions == replay.conditions else { return }
+                            LeaderboardReplayWindow.open(replay, context: ArcadeWindow.shared.actionReplayContext?(), owner: window, title: title)
                         }
                     }
                 } else { text("-", 780, y, 270, alpha: 0.5) }
@@ -59,7 +60,7 @@ import NxlvKit
         text(service.status, 80, 558, 450, height: 26, alpha: 0.8)
         let sharing = service.sharing(player.id)
         if sharing { text(service.syncStatus, 80, 601, 960, height: 25, alpha: 0.8) }
-        if !sharing { text("Public: initials, scores and available replays.", 80, 601, 960, height: 25, alpha: 0.8) }
+        if !sharing { text("Public: initials, scores and action replays.", 80, 601, 960, height: 25, alpha: 0.8) }
         link("Game Center >", CGRect(x: 540, y: 550, width: 252, height: 42), alignment: .left) { [weak self] in
             self?.usesGameCenter = true; self?.openGameCenterBoard()
         }
@@ -81,3 +82,4 @@ import NxlvKit
             (service.board?.entries.map { "Rank \($0.rank), \($0.name), \(hostedCategory.score($0.score))." }.joined(separator: " ") ?? ""))
     }
 }
+#endif

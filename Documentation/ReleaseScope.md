@@ -14,6 +14,20 @@ Automated evidence supports the recorded native routes. Original-engine
 fidelity, high-survivor endings and hardware acceptance retain their recorded
 limits. See the [gate register](ReleaseReadiness/gates.json).
 
+## iOS 2.0 launch scope
+
+On 10 October 2026, the owner confirmed a full iOS release for iPad, iPhone and
+iPhone Duo, including Classic, Lemmings 2 and Lemmings 3. The current
+Classic-only prototype does not satisfy this scope. All three games require
+native mobile rendering, content loading, campaign progression, recovery,
+audio, controller input, shared QoL and Hot Seat journeys. Duo support is a
+launch gate, including closed, open, partially folded and resized play.
+
+Keep the current game-completion claims and remaining fidelity limits.
+Mobile acceptance does not turn L3 Beta into Complete. Freeze distribution
+inputs and prove the signed iOS package separately from Mac release evidence.
+See the [2.0 roadmap](2.0Roadmap.md) and [gate register](ReleaseReadiness/gates.json).
+
 ## Wording
 
 Three words carry the claims, and they mean different things.
@@ -140,10 +154,10 @@ ark ending and original-engine equivalence remain separate evidence gaps.
 L3 Beta keeps its sixteen missing standalone routes and open media, campaign
 and fidelity checks visible. The classifications do not close those gates.
 
-## iPhone and iPad 2.0
+## Existing iOS source baseline
 
-The repository contains an iOS 16 UIKit/Metal application target. Its first
-player-facing slice imports a player-owned Classic DOS folder. It uses the same
+The repository contains an iOS 16 UIKit/Metal application target. Its current
+prototype imports a player-owned Classic DOS folder. It uses the same
 deterministic Classic simulation as the Mac application and adds direct touch,
 pan, zoom, safe-area controls, interruption recovery and thermal presentation
 budgets.

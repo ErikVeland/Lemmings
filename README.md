@@ -2,7 +2,8 @@
 
 Ultimate Lemmings is an unofficial native Swift port of the 2D Lemmings games.
 The current release shell is for macOS. Version 1.3 added an iPhone/iPad
-development target. Version 2.0 is the planned mobile release. The app uses
+development target. Version 2.0 targets a full iOS release for iPad, iPhone and iPhone Duo,
+including Classic, Lemmings 2 and Lemmings 3. The app uses
 native interpreters and does not run DOS code through an emulator. Commercial
 game data is not committed to this repository;
 local builds use the assets supplied in `Sources/Ports`, `Sources/Music` and
@@ -14,9 +15,9 @@ before distributing a build.
 
 ## Download
 
-Download [1.9.1 build 76](https://github.com/ErikVeland/Lemmings/releases/tag/v1.9.1),
+Download [1.9.2 build 77](https://github.com/ErikVeland/Lemmings/releases/tag/v1.9.2),
 the current public release. Installed copies update automatically. Read the
-[1.9.1 release notes](Documentation/ReleaseNotes-1.9.1-build76.md) and the
+[1.9.2 release notes](Documentation/ReleaseNotes-1.9.2-build77.md) and the
 [tester guide](Documentation/BetaTesting.md).
 
 [Collections](Documentation/LevelCollections.md) keeps each player's favourite
@@ -27,7 +28,7 @@ or their result screens across Classic, fan packs, NeoLemmix, Lemmings 2 and 3.
 
 - [Architecture](ARCHITECTURE.md) — module boundaries, runtime flow and release packaging.
 - [Project overview](Documentation/Overview.md) — player-facing status and roadmap.
-- [2.0 mobile roadmap](Documentation/2.0Roadmap.md) — iPhone/iPad scope, source state and device gates.
+- [2.0 mobile roadmap](Documentation/2.0Roadmap.md) — three-game iOS scope, Duo layouts, delivery sequence and release gates.
 - [1.7 NeoLemmix roadmap](Documentation/1.7Roadmap.md) — pinned oracle, executable gates and compatibility limits.
 - [1.9 sequel gate](Documentation/ContentUniverseRoadmap.md#19--the-tribes-complete-chronicles-beta) — winning routes, engine fidelity and campaign evidence.
 - [1.5 NeoLemmix source handoff](Documentation/ReleaseReadiness/1.5NeoLemmixHandoff.md) — verified source and corpus evidence, open release gates and non-claims.
@@ -40,12 +41,15 @@ or their result screens across Classic, fan packs, NeoLemmix, Lemmings 2 and 3.
 - [Release evidence](Documentation/ReleaseReadiness/) — current gate records and manifests.
 - [1.7 distribution](Documentation/ReleaseReadiness/1.7Build53Distribution.md) — the 1.7.0 release record and its gates.
 - [1.3 mobile handoff](Documentation/ReleaseReadiness/1.3MobileHandoff.md) — iOS source evidence and remaining device checks.
+- [2.0 device beta](Documentation/ReleaseReadiness/2.0DeviceBeta.md) — bundled Classic content, signed archives, device installation and TestFlight preparation.
 - [Automatic updates](#automatic-updates) — Sparkle feed and release requirements.
 - [Music timing audit](Documentation/MusicTiming.md) — measured beats, bar estimates and DJ fallback rules.
 - [Automatic update evidence](Documentation/AutomaticUpdates.md) — release checks and records.
 
-The iPhone and iPad 1.3 source and Simulator gates pass. Physical-device,
-VoiceOver, thermal, signing and distribution evidence remain open for 2.0.
+The recorded iPhone/iPad 1.3 source and Simulator gates pass for their exact
+commits. The current mobile prototype exposes Classic only. Sequel rendering,
+content loading, campaigns, shared QoL, Hot Seat, audio and controller support
+remain required for 2.0, alongside Duo, physical-device and distribution gates.
 The macOS 1.9 release marks Lemmings 2: The Tribes Complete and Lemmings 3:
 Chronicles Beta. Classic content remains the completed reference engine. The bundled corpus contains
 6,020 Classic-format fan levels in 535 packs; this is not a claim of NeoLemmix

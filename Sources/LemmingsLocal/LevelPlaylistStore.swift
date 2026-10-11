@@ -1,3 +1,4 @@
+#if os(macOS)
 import Darwin
 import Foundation
 import NxlvKit
@@ -448,3 +449,4 @@ import NxlvKit
         }
     }
 }
+#endif

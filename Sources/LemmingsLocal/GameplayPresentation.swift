@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
@@ -517,3 +518,4 @@ struct PrecisionZoomStatus: Equatable {
         GamePixelText.draw(String(number), in: rect, maxScale: 6, palette: .green)
     }
 }
+#endif

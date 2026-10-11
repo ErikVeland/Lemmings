@@ -1,0 +1,89 @@
+warning: /Users/veland/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'lemmings': failed storing manifest for 'lemmings' in cache: attempt to write a readonly database
+warning: 'sparkle': failed storing manifest for 'sparkle' in cache: attempt to write a readonly database
+Building for debugging...
+[Computing dependencies]
+[Pre-planning 1 / 474]
+[Planning 1 / 474]
+[Planning deferred tasks]
+[Starting]
+[10 / 51] NxlvKit
+[24 / 66] NxlvKit
+[25 / 66] NxlvKit
+[32 / 76] LemmingsGameArt
+[45 / 98] LemmingsMobileCore
+[50 / 98] LemmingsGameArt
+[54 / 98] LemmingsMobileCore
+[59 / 101] LemmingsMobileCore
+[64 / 108] LemmingsMobileCore
+[74 / 119] LemmingsMobileUI
+[82 / 118] LemmingsDataTool-product
+[84 / 120] LemmingsDataTool-product
+[85 / 120] LemmingsDataTool-product
+[86 / 120] LemmingsMobileBetaTool-product
+[90 / 124] LemmingsMobileBetaTool-product
+[102 / 123] LemmingsGameArt-product
+[104 / 121] LemmingsMobileMenuAudit-product
+[109 / 122] LemmingsMobileMenuAudit-product
+[119 / 130] LemmingsLocal-product
+[125 / 131] LemmingsLocal-product
+[128 / 133] LemmingsLocalTests-product
+[131 / 134] LemmingsLocalTests-product
+[133 / 134] LemmingsLocalTests-product
+Build complete! (10.38 sec.)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite MobileBitmapTests started.
+􀟈  Suite MobileCoreTests started.
+􀟈  Test bitmapCameraMatchesTouchAfterPanZoomAndRotation() started.
+􀟈  Test heldTouchCommitsButCancellationAndReleaseOnlyDragDoNot() started.
+􀟈  Test thermalPolicyNeverChangesSimulationRules() started.
+􀟈  Test checkpointFallsBackToTheLastValidatedCopy() started.
+􀟈  Test allThreeGamesAssignDuringPlanningWithoutAdvancingTime() started.
+􀟈  Test viewportZoomKeepsTheGestureAnchorStable() started.
+􀟈  Test classicSessionRestoresTheExactTick() started.
+􀟈  Test touchTargetingPrefersEligibilityFollowersAndTools() started.
+􀟈  Test previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􀟈  Test fixedTickClockDropsSuspensionTime() started.
+􀟈  Test classicJumpingRisesAcrossTheRemainingStepPixel() started.
+􀟈  Test touchRouterDoesNotAssignAfterAPan() started.
+􀟈  Test checkpointRejectsAnOlderWriter() started.
+􀟈  Test planningDoesNotBypassReadyInterruptionOrResults() started.
+􀟈  Test contentImportStagesBeforeCommitAndPreservesTheLiveCopyOnFailure() started.
+􀟈  Test sequelSessionsReplayTheirInputCheckpoints() started.
+􀟈  Test safeAreaLayoutKeepsTouchTargetsOnScreen() started.
+􀟈  Test loupeKeepsExactPixelsAndClipsAtLevelEdges() started.
+􀟈  Test completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test case passing 1 argument engine → "classic-dos" to previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􀟈  Test lifecycleSavesOnceAndRequiresExplicitResume() started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􀟈  Test case passing 1 argument engine → "classic-dos" to completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to completedRunRejectsLateCheckpointWrites(engine:) started.
+􁁛  Test fixedTickClockDropsSuspensionTime() passed after 0.001 seconds.
+􁁛  Test viewportZoomKeepsTheGestureAnchorStable() passed after 0.001 seconds.
+􁁛  Test planningDoesNotBypassReadyInterruptionOrResults() passed after 0.001 seconds.
+􁁛  Test thermalPolicyNeverChangesSimulationRules() passed after 0.001 seconds.
+􁁛  Test heldTouchCommitsButCancellationAndReleaseOnlyDragDoNot() passed after 0.001 seconds.
+􁁛  Test touchRouterDoesNotAssignAfterAPan() passed after 0.001 seconds.
+􁁛  Test touchTargetingPrefersEligibilityFollowersAndTools() passed after 0.001 seconds.
+􁁛  Test safeAreaLayoutKeepsTouchTargetsOnScreen() passed after 0.001 seconds.
+􁁛  Test lifecycleSavesOnceAndRequiresExplicitResume() passed after 0.001 seconds.
+􁁛  Test classicJumpingRisesAcrossTheRemainingStepPixel() passed after 0.001 seconds.
+􁁛  Test loupeKeepsExactPixelsAndClipsAtLevelEdges() passed after 0.001 seconds.
+􁁛  Test classicSessionRestoresTheExactTick() passed after 0.006 seconds.
+􁁛  Test contentImportStagesBeforeCommitAndPreservesTheLiveCopyOnFailure() passed after 0.010 seconds.
+􁁛  Test allThreeGamesAssignDuringPlanningWithoutAdvancingTime() passed after 0.010 seconds.
+􁁛  Test checkpointRejectsAnOlderWriter() passed after 0.013 seconds.
+􁁛  Test completedRunRejectsLateCheckpointWrites(engine:) with 3 test cases passed after 0.013 seconds.
+􁁛  Test sequelSessionsReplayTheirInputCheckpoints() passed after 0.015 seconds.
+􁁛  Test previousRunCleanupPreservesRetryCheckpoint(engine:) with 3 test cases passed after 0.017 seconds.
+􁁛  Test checkpointFallsBackToTheLastValidatedCopy() passed after 0.018 seconds.
+􁁛  Suite MobileCoreTests passed after 0.018 seconds.
+􁁛  Test bitmapCameraMatchesTouchAfterPanZoomAndRotation() passed after 0.040 seconds.
+􁁛  Suite MobileBitmapTests passed after 0.040 seconds.
+􁁛  Test run with 20 tests in 2 suites passed after 0.040 seconds.

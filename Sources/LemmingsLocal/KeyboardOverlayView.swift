@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 
 /// The real paused level remains visible beneath these annotations.
@@ -126,3 +127,4 @@ import AppKit
     @objc private func allCommands() { onCommands() }
     @objc private func levelHints() { onHints() }
 }
+#endif

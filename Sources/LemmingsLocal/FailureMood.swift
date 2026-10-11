@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 
 enum FailureMoodDecision {
@@ -41,8 +42,15 @@ enum FailureMoodDecision {
   private(set) var amount: CGFloat = 0
   var onChange: ((CGFloat) -> Void)?
 
-  func set(active: Bool, now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
+  func set(active: Bool, now: TimeInterval = ProcessInfo.processInfo.systemUptime, animated: Bool = true) {
     let target: CGFloat = active ? 1 : 0
+    if !animated {
+      guard target != targetAmount || amount != target else { return }
+      timer?.invalidate(); timer = nil
+      targetAmount = target; amount = target
+      onChange?(amount)
+      return
+    }
     guard target != targetAmount else { return }
     targetAmount = target
     timer?.invalidate()
@@ -174,3 +182,4 @@ enum FailureMoodDecision {
     onChange?(0)
   }
 }
+#endif

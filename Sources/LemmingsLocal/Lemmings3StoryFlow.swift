@@ -1,3 +1,4 @@
+#if os(macOS)
 import NxlvKit
 
 /**
@@ -21,3 +22,4 @@ struct Lemmings3StoryFlow: Sendable {
             && !wasTribeCompleted && !wasCampaignCompleted && isCampaignCompleted
     }
 }
+#endif

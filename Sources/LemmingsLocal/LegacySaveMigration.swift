@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 
 /// Imports only game preferences, once, without replacing current choices.
@@ -57,3 +58,4 @@ enum LegacySaveMigration {
         return count
     }
 }
+#endif

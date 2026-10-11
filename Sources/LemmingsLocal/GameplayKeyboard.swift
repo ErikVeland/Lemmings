@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
@@ -96,32 +97,43 @@ import NxlvKit
     var escape: () -> Void = {}
     var mainMenu: (() -> Void)?
     var navigationAvailable: () -> Bool = { true }
-    private lazy var navigationButton: GameButton = {
-        let button = GameButton(frame: .zero)
+    var playingTrack: () -> PlayingTrack? = { nil }
+    private let nowPlayingNotice = NowPlayingNotice(frame: .zero)
+    var navigationReduceMotion: () -> Bool = { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion }
+    private lazy var navigationButton: GameplayMenuButton = {
+        let button = GameplayMenuButton(frame: .zero)
         button.title = "Menu"; button.target = self; button.action = #selector(openMainMenu)
         button.setAccessibilityLabel("Save run and return to library")
         button.toolTip = "Return to library (Esc or Q)"
         return button
     }()
     @objc private func openMainMenu() { mainMenu?() }
-    func removeNavigationControl() { navigationButton.removeFromSuperview() }
+    func removeNavigationControl() { navigationButton.resetAppearance(); navigationButton.removeFromSuperview(); nowPlayingNotice.removeFromSuperview() }
     func navigationFrame(in view: NSView) -> CGRect? {
         guard !navigationButton.isHidden, let root = navigationButton.superview,
               view.window === root.window else { return nil }
         return view.convert(navigationButton.frame, from: root)
     }
-    func refreshNavigationControl() {
+    func refreshNavigationControl(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
         guard let root = window?.contentView else { return }
+        if nowPlayingNotice.superview !== root { nowPlayingNotice.removeFromSuperview(); root.addSubview(nowPlayingNotice) }
+        nowPlayingNotice.frame = CGRect(x: 12, y: root.isFlipped ? 36 : max(0, root.bounds.maxY - 96),
+            width: max(1, min(600, root.bounds.width - 136)), height: 60)
+        nowPlayingNotice.update(track: playingTrack(), at: now,
+            visible: active() && ownsController() && !GameScreen.shared.isPresented && window?.attachedSheet == nil,
+            reduceMotion: navigationReduceMotion())
         let visible = mainMenu != nil && ownsController() && navigationAvailable()
             && window?.attachedSheet == nil && !GameScreen.shared.isPresented
-        guard visible else { navigationButton.isHidden = true; return }
+        guard visible else { navigationButton.isHidden = true; navigationButton.resetAppearance(); return }
         if navigationButton.superview !== root {
             navigationButton.removeFromSuperview()
             root.addSubview(navigationButton)
+            navigationButton.resetAppearance()
         }
         navigationButton.frame = CGRect(x: max(0, root.bounds.maxX - 100),
             y: root.isFlipped ? 36 : max(0, root.bounds.maxY - 80), width: 88, height: 44)
         navigationButton.isHidden = false
+        navigationButton.updateAppearance(at: now, autoHide: active(), reduceMotion: navigationReduceMotion())
     }
     var help: () -> String = { "" }
     var skillNames: () -> [String] = { [] }
@@ -477,3 +489,4 @@ import NxlvKit
         if let appFocusObserver { NotificationCenter.default.removeObserver(appFocusObserver) }
     }
 }
+#endif

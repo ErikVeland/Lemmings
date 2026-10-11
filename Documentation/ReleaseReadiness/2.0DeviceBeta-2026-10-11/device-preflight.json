@@ -1,0 +1,11 @@
+{
+  "iPhone": {
+    "preflightVerified": true,
+    "build": 3,
+    "includedInProfile": true
+  },
+  "iPad": {
+    "preflightVerified": false,
+    "error": "The signing profile does not include this device. Register it and export again."
+  }
+}

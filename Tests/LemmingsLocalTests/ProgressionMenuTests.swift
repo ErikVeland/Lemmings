@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import XCTest
 import NxlvKit
@@ -37,3 +38,4 @@ final class ProgressionMenuTests: XCTestCase {
         }
     }
 }
+#endif

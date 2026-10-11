@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 
 /// Checks the public catalogue without delaying the library or changing a running pack.
@@ -131,3 +132,4 @@ actor FanLevelUpdates {
     return outcome
   }
 }
+#endif

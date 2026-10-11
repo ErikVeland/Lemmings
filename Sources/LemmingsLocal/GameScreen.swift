@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
 
@@ -471,3 +472,4 @@ import NxlvKit
     }
     @objc private func invoke() { onPress?() }
 }
+#endif

@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 @preconcurrency import AVFoundation
 import NxlvKit
@@ -426,3 +427,4 @@ import UniformTypeIdentifiers
     }
   }
 }
+#endif

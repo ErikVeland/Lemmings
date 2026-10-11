@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import Sparkle
 
@@ -100,3 +101,4 @@ extension SPUUpdater: AppUpdateChecking {
         onChange?()
     }
 }
+#endif

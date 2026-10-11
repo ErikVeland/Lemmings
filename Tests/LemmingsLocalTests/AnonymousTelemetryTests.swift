@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import Foundation
 import NxlvKit
@@ -467,3 +468,4 @@ final class AnonymousTelemetryTests: XCTestCase {
                            rules: "test", total: 10, required: 1, conditions: conditions)
     }
 }
+#endif

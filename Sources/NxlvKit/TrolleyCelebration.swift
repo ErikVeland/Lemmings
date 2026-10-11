@@ -82,6 +82,7 @@ public struct TrolleyCelebration: Sendable {
     public let bestStars: Int
     public let careerBefore: TrolleyCareerScore
     public let career: TrolleyCareerScore
+    public let precisionRewards: PrecisionZoomEarnings
     public let careerRank: Int?
     public let careerPlayers: Int
     public let awards: [TrolleyAwardDelta]
@@ -121,6 +122,10 @@ public struct TrolleyCelebration: Sendable {
         bestStars = max(previousStars, goals.stars)
         careerBefore = .init(profileID: run.profileID, attempts: old, assisted: run.assisted)
         career = .init(profileID: run.profileID, attempts: current, assisted: run.assisted)
+        let earnedBefore = PrecisionZoomEarnings(careerStars: careerBefore.stars, threeStarLevels: careerBefore.threeStarLevels)
+        let earnedAfter = PrecisionZoomEarnings(careerStars: career.stars, threeStarLevels: career.threeStarLevels)
+        precisionRewards = .init(zoomUses: !run.assisted && run.qualifies ? earnedAfter.zoomUses - earnedBefore.zoomUses : 0,
+                                 superzoomUses: !run.assisted && run.qualifies ? earnedAfter.superzoomUses - earnedBefore.superzoomUses : 0)
         let careerBoard = TrolleyCareerScore.rank(attempts: current, assisted: run.assisted)
         careerRank = careerBoard.firstIndex { $0.profileID == run.profileID }.map { $0 + 1 }
         careerPlayers = careerBoard.count

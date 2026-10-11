@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 
 /// Provides adjacent punctuation keys for precise and continuous timeline transport.
@@ -81,3 +82,4 @@ import AppKit
     if let monitor { NSEvent.removeMonitor(monitor) }
   }
 }
+#endif

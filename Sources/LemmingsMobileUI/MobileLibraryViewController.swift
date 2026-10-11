@@ -1,180 +1,253 @@
 #if os(iOS)
+import LemmingsGameArt
 import LemmingsMobileCore
 import UIKit
 import UniformTypeIdentifiers
 
-@MainActor final class MobileLibraryViewController: UIViewController, UIDocumentPickerDelegate {
-    private let titleLabel = MobilePixelLabel()
-    private let statusLabel = MobilePixelLabel()
-    private let importButton = MobilePixelButton()
-    private let resumeButton = MobilePixelButton()
-    private let scrollView = UIScrollView()
-    private let contentView = UIView()
+private struct MobileMenuPreview: Sendable {
+    let frame: MobilePixelFrame
+    let origin: MobilePoint
+    let snapshot: MobileGameSnapshot
+}
 
+private actor MobileMenuPreviewLoader {
+    let directory: URL
+    private var library: ClassicMobileLibrary?
+    private var frames: [Int: MobileMenuPreview] = [:]
+    init(directory: URL) { self.directory = directory }
+    func load(_ index: Int) throws -> MobileMenuPreview {
+        try Task.checkCancellation()
+        if let cached = frames[index] { return cached }
+        let library = try self.library ?? ClassicMobileLibrary(directory: directory)
+        self.library = library
+        let session = try library.loadLevel(at: index).session
+        let preview = MobileMenuPreview(frame: try session.render(highlight: nil),
+                                        origin: session.initialCameraOrigin, snapshot: session.snapshot)
+        try Task.checkCancellation()
+        if frames.count >= 6 { frames.removeAll() }
+        frames[index] = preview
+        return preview
+    }
+}
+
+@MainActor final class MobileLibraryViewController: UIViewController, UIDocumentPickerDelegate {
+    private enum Route { case home, levels, settings, data }
+    private let scrollView = UIScrollView()
+    private let canvas = MobileMenuCanvas()
+    private var route = Route.home
     private var store: MobileContentStore?
     private var checkpointStore: MobileCheckpointStore?
-    private var library: ClassicMobileLibrary?
-    private var levelViews: [UIView] = []
+    private var library: (any MobileGameLibrary)?
     private var pendingCheckpoint: MobileCheckpointEnvelope?
+    private var selectedIndex = 0
+    private var previewLoader: MobileMenuPreviewLoader?
+    private var previewTask: Task<Void, Never>?
+    private var previewGeneration = UUID()
+    private var selectedPreview: MobileMenuPreview?
+    private var notice = ""
+    private var loading = false
+    private var game: MobileGameViewController?
+    private var solved: Set<Int> {
+        Set(UserDefaults.standard.array(forKey: progressKey) as? [Int] ?? [])
+    }
+    private var progressKey: String { "mobile.completed." + (library?.displayName ?? "classic") }
 
+    override var prefersStatusBarHidden: Bool { true }
+    override var prefersHomeIndicatorAutoHidden: Bool { game != nil }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
-        titleLabel.text = "ULTIMATE LEMMINGS 1.3"
-        titleLabel.palette = .green
-        titleLabel.maximumScale = 3
-        view.addSubview(titleLabel)
-
-        statusLabel.maximumScale = 2
-        view.addSubview(statusLabel)
-
-        importButton.title = "IMPORT GAME DATA"
-        importButton.onPress = { [weak self] in self?.chooseGameData() }
-        view.addSubview(importButton)
-
-        resumeButton.title = "RESUME SAVED RUN"
-        resumeButton.isPrimary = true
-        resumeButton.isHidden = true
-        resumeButton.onPress = { [weak self] in self?.resumeSavedRun() }
-        view.addSubview(resumeButton)
-
-        scrollView.backgroundColor = .clear
-        scrollView.alwaysBounceVertical = true
-        scrollView.addSubview(contentView)
+        scrollView.backgroundColor = .black
+        scrollView.alwaysBounceVertical = false
+        scrollView.addSubview(canvas)
         view.addSubview(scrollView)
-
+        canvas.onAction = { [weak self] in self?.handle($0) }
+        for direction in [UISwipeGestureRecognizer.Direction.left, .right] {
+            let swipe = UISwipeGestureRecognizer(target: self, action: #selector(swiped(_:)))
+            swipe.direction = direction
+            swipe.cancelsTouchesInView = false
+            canvas.addGestureRecognizer(swipe)
+        }
         do {
             let configured = try MobileContentStore()
             store = configured
             checkpointStore = MobileCheckpointStore(url: configured.checkpointURL)
             reloadLibrary()
-        } catch {
-            show(error.localizedDescription, warning: true)
-        }
+        } catch { notice = error.localizedDescription; rebuild() }
     }
-
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let safe = view.safeAreaLayoutGuide.layoutFrame
-        titleLabel.frame = CGRect(x: safe.minX + 12, y: safe.minY + 8, width: safe.width - 24, height: 34)
-        var y = titleLabel.frame.maxY + 8
-        importButton.frame = CGRect(x: safe.minX + 12, y: y, width: safe.width - 24, height: 48)
-        y = importButton.frame.maxY + 6
-        if !resumeButton.isHidden {
-            resumeButton.frame = CGRect(x: safe.minX + 12, y: y, width: safe.width - 24, height: 48)
-            y = resumeButton.frame.maxY + 6
-        }
-        statusLabel.frame = CGRect(x: safe.minX + 12, y: y, width: safe.width - 24, height: 30)
-        y = statusLabel.frame.maxY + 6
-        scrollView.frame = CGRect(x: safe.minX, y: y, width: safe.width, height: max(0, safe.maxY - y))
-        layoutLevelViews()
+        scrollView.frame = view.safeAreaLayoutGuide.layoutFrame
+        let size = canvas.size(width: scrollView.bounds.width, minimumHeight: scrollView.bounds.height)
+        canvas.frame = CGRect(origin: .zero, size: size)
+        scrollView.contentSize = size
+        game?.view.frame = view.bounds
     }
-
-    private func reloadLibrary() {
-        do {
-            library = try store?.loadLibrary()
-            rebuildLevelViews()
-            if let library {
-                show("\(library.dataSet.name)  \(library.levels.count) LEVELS", warning: false)
-            } else {
-                show("IMPORT YOUR ORIGINAL DOS DATA FOLDER", warning: false)
+    private func rebuild() {
+        let count = library?.levels.count ?? 0
+        let subtitle = loading ? "Loading..." : notice
+        switch route {
+        case .home:
+            var rows: [GameFrontEnd.Action] = []
+            if pendingCheckpoint != nil { rows.append(.init("resume", "Resume saved run", primary: true)) }
+            rows.append(.init("classic", "Lemmings  \(solved.count)/\(count)", enabled: count > 0,
+                              primary: pendingCheckpoint == nil && count > 0))
+            rows.append(.init("l2", "Lemmings 2 - Unavailable", enabled: false))
+            rows.append(.init("l3", "Lemmings 3 - Unavailable", enabled: false))
+            canvas.page = .init(title: "Lemmings", subtitle: subtitle, home: true, rows: rows,
+                                footer: [.init("settings", "Settings"), .init("data", "Game Data")])
+            canvas.preview = nil
+        case .levels:
+            guard let library, library.levels.indices.contains(selectedIndex) else { route = .home; rebuild(); return }
+            let level = library.levels[selectedIndex]
+            let rank = library.levels.filter { $0.rank == level.rank }
+            let rankIndex = rank.firstIndex(where: { $0.index == selectedIndex }) ?? 0
+            let stats: [String] = selectedPreview.map {
+                let s = $0.snapshot
+                return ["\(s.total) Lemmings   Save \(s.required)",
+                        s.remainingSeconds.map { "Time \($0 / 60):\(String(format: "%02d", $0 % 60))" } ?? "No time limit"]
+            } ?? []
+            canvas.page = .init(title: level.title,
+                                subtitle: loading ? "Loading..." : "\(level.rank)  \(level.number)/\(rank.count)",
+                                details: stats,
+                                footer: [.init("rankPrevious", "< Rank"), .init("rankNext", "Rank >"),
+                                         .init("previous", "< Level", enabled: rankIndex > 0),
+                                         .init("next", "Level >", enabled: rankIndex + 1 < rank.count),
+                                         .init("home", "Back"),
+                                         .init("play", solved.contains(selectedIndex) ? "Play again" : "Play", enabled: !loading, primary: true)],
+                                preview: true, footerColumns: 2)
+            if let preview = selectedPreview {
+                canvas.preview = MobileBitmapRenderer.image(preview.frame)
+                canvas.previewSource = CGRect(x: max(0, min(Double(max(0, preview.frame.width - 320)), preview.origin.x)),
+                                              y: 0, width: Double(min(320, preview.frame.width)), height: Double(preview.frame.height))
             }
-            loadCheckpoint()
-        } catch {
-            library = nil
-            rebuildLevelViews()
-            show(error.localizedDescription, warning: true)
+        case .settings:
+            let defaults = UserDefaults.standard
+            let planning = !defaults.bool(forKey: "mobile.continuousSkillSelection")
+            let fast = defaults.integer(forKey: "mobile.fastSpeed")
+            let fastSpeed = [2, 3, 5, 10].contains(fast) ? fast : 2
+            canvas.page = .init(title: "Settings", subtitle: subtitle,
+                                rows: [.init("planning", "Pause to assign", selected: planning),
+                                       .init("speed", "Fast speed: \(fastSpeed)X")],
+                                footer: [.init("home", "Back")])
+            canvas.preview = nil
+        case .data:
+            canvas.page = .init(title: "Game Data", subtitle: subtitle,
+                                details: library.map { ["\($0.displayName)", "\($0.levels.count) levels"] } ?? [],
+                                footer: [.init("home", "Back"), .init("import", "Import", enabled: !loading, primary: library == nil)])
+            canvas.preview = nil
         }
-    }
-
-    private func rebuildLevelViews() {
-        levelViews.forEach { $0.removeFromSuperview() }
-        levelViews = []
-        guard let library else { return }
-        var lastRank: String?
-        for summary in library.levels {
-            if summary.rank != lastRank {
-                let header = MobilePixelLabel()
-                header.text = summary.rank
-                header.palette = .green
-                header.alignment = .left
-                header.maximumScale = 2
-                contentView.addSubview(header)
-                levelViews.append(header)
-                lastRank = summary.rank
-            }
-            let button = MobilePixelButton()
-            button.title = "\(summary.number)  \(summary.title)"
-            button.accessibilityLabel = "\(summary.rank) \(summary.number), \(summary.title)"
-            button.onPress = { [weak self] in self?.startLevel(summary.index, checkpoint: nil) }
-            contentView.addSubview(button)
-            levelViews.append(button)
-        }
+        canvas.previewSource = route == .levels ? canvas.previewSource : nil
         view.setNeedsLayout()
     }
-
-    private func layoutLevelViews() {
-        let width = max(0, scrollView.bounds.width - 24)
-        var y = 4.0
-        for item in levelViews {
-            let isHeader = item is MobilePixelLabel
-            item.frame = CGRect(x: 12, y: y, width: width, height: isHeader ? 34 : 48)
-            y = item.frame.maxY + (isHeader ? 2 : 5)
-        }
-        contentView.frame = CGRect(x: 0, y: 0, width: scrollView.bounds.width, height: y + 12)
-        scrollView.contentSize = contentView.bounds.size
+    private func navigate(_ next: Route) {
+        previewTask?.cancel(); previewGeneration = UUID(); loading = false
+        route = next; notice = ""
+        scrollView.setContentOffset(.zero, animated: false)
+        rebuild()
     }
-
+    private func handle(_ id: String) {
+        switch id {
+        case "classic": navigate(.levels); selectLevel(selectedIndex)
+        case "home": navigate(.home)
+        case "settings": navigate(.settings)
+        case "data": navigate(.data)
+        case "import": chooseGameData()
+        case "resume": resumeSavedRun()
+        case "previous": moveLevel(-1)
+        case "next": moveLevel(1)
+        case "rankPrevious": moveRank(-1)
+        case "rankNext": moveRank(1)
+        case "play": startLevel(selectedIndex, checkpoint: nil)
+        case "planning":
+            let defaults = UserDefaults.standard
+            defaults.set(!defaults.bool(forKey: "mobile.continuousSkillSelection"), forKey: "mobile.continuousSkillSelection")
+            rebuild()
+        case "speed":
+            let defaults = UserDefaults.standard
+            let speeds = [2, 3, 5, 10]
+            let current = speeds.firstIndex(of: defaults.integer(forKey: "mobile.fastSpeed")) ?? 0
+            defaults.set(speeds[(current + 1) % speeds.count], forKey: "mobile.fastSpeed")
+            rebuild()
+        default: break
+        }
+    }
+    @objc private func swiped(_ gesture: UISwipeGestureRecognizer) {
+        guard route == .levels, game == nil else { return }
+        moveLevel(gesture.direction == .left ? 1 : -1)
+    }
+    private func moveLevel(_ offset: Int) {
+        guard let library else { return }
+        let index = selectedIndex + offset
+        guard library.levels.indices.contains(index),
+              library.levels[index].rank == library.levels[selectedIndex].rank else { return }
+        selectLevel(index)
+    }
+    private func moveRank(_ offset: Int) {
+        guard let library else { return }
+        var ranks: [String] = []
+        for level in library.levels where !ranks.contains(level.rank) { ranks.append(level.rank) }
+        guard let current = ranks.firstIndex(of: library.levels[selectedIndex].rank) else { return }
+        let next = (current + offset + ranks.count) % ranks.count
+        if let level = library.levels.first(where: { $0.rank == ranks[next] }) { selectLevel(level.index) }
+    }
+    private func selectLevel(_ index: Int) {
+        guard let previewLoader else { selectedIndex = index; rebuild(); return }
+        previewTask?.cancel()
+        let generation = UUID(); previewGeneration = generation
+        loading = true; rebuild()
+        previewTask = Task {
+            do {
+                let preview = try await previewLoader.load(index)
+                guard !Task.isCancelled, previewGeneration == generation, route == .levels else { return }
+                selectedIndex = index; selectedPreview = preview; loading = false
+                rebuild()
+            } catch {
+                guard !Task.isCancelled, previewGeneration == generation else { return }
+                loading = false; notice = error.localizedDescription
+                rebuild()
+            }
+        }
+    }
+    private func reloadLibrary() {
+        do {
+            library = try store?.loadLibrary(bundledDirectory: Bundle.main.resourceURL?.appendingPathComponent("BetaGameData", isDirectory: true))
+            if let classic = library as? ClassicMobileLibrary { previewLoader = MobileMenuPreviewLoader(directory: classic.directory) }
+            selectedIndex = 0; selectedPreview = nil
+            if library == nil { route = .data }
+            rebuild(); loadCheckpoint()
+        } catch { library = nil; notice = error.localizedDescription; rebuild() }
+    }
     private func chooseGameData() {
         let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.folder], asCopy: false)
-        picker.delegate = self
-        picker.allowsMultipleSelection = false
+        picker.delegate = self; picker.allowsMultipleSelection = false
         present(picker, animated: true)
     }
-
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         guard let source = urls.first, let store else { return }
-        show("IMPORTING AND VERIFYING...", warning: false)
-        importButton.isEnabled = false
+        loading = true; rebuild()
         let accessed = source.startAccessingSecurityScopedResource()
         Task {
-            defer {
-                if accessed { source.stopAccessingSecurityScopedResource() }
-                importButton.isEnabled = true
-            }
-            let result = await Task.detached(priority: .userInitiated) {
-                Result { try store.install(directory: source) }
-            }.value
+            defer { if accessed { source.stopAccessingSecurityScopedResource() } }
+            let result = await Task.detached(priority: .userInitiated) { Result { try store.install(directory: source) } }.value
+            loading = false
             switch result {
-            case .success:
-                reloadLibrary()
-            case let .failure(error):
-                show(error.localizedDescription, warning: true)
+            case .success: notice = ""; reloadLibrary()
+            case let .failure(error): notice = error.localizedDescription; rebuild()
             }
         }
     }
-
     private func loadCheckpoint() {
         guard let checkpointStore else { return }
         Task {
-            do {
-                let checkpoint = try await checkpointStore.load()
-                pendingCheckpoint = checkpoint
-                resumeButton.isHidden = checkpoint == nil
-                view.setNeedsLayout()
-            } catch {
-                pendingCheckpoint = nil
-                resumeButton.isHidden = true
-                show(error.localizedDescription, warning: true)
-            }
+            do { pendingCheckpoint = try await checkpointStore.load(); rebuild() }
+            catch { pendingCheckpoint = nil; notice = error.localizedDescription; rebuild() }
         }
     }
-
     private func resumeSavedRun() {
         guard let checkpoint = pendingCheckpoint else { return }
         startLevel(checkpoint.levelIndex, checkpoint: checkpoint)
     }
-
     private func startLevel(_ index: Int, checkpoint: MobileCheckpointEnvelope?) {
         guard let library, let checkpointStore else { return }
         do {
@@ -183,45 +256,40 @@ import UniformTypeIdentifiers
                 guard checkpoint.engine == content.session.engineIdentifier,
                       checkpoint.engineFingerprint == content.session.engineFingerprint,
                       checkpoint.levelIdentifier == content.session.levelIdentifier,
-                      checkpoint.levelFingerprint == content.session.levelFingerprint else {
-                    throw MobileSessionError.changedLevel
-                }
+                      checkpoint.levelFingerprint == content.session.levelFingerprint else { throw MobileSessionError.changedLevel }
                 try content.session.restoreCheckpointPayload(checkpoint.payload)
             }
-            let game = MobileGameViewController(
-                summary: content.summary,
-                session: content.session,
-                checkpointStore: checkpointStore,
-                restoredCheckpoint: checkpoint
-            )
-            game.modalPresentationStyle = .fullScreen
-            game.onExit = { [weak self, weak game] action in
-                game?.dismiss(animated: true) {
-                    guard let self else { return }
-                    switch action {
-                    case .library:
-                        self.loadCheckpoint()
-                    case .retry:
-                        self.startLevel(index, checkpoint: nil)
-                    case .next:
-                        if library.levels.indices.contains(index + 1) {
-                            self.startLevel(index + 1, checkpoint: nil)
-                        } else {
-                            self.loadCheckpoint()
-                        }
-                    }
+            let next = MobileGameViewController(summary: content.summary, session: content.session,
+                                               checkpointStore: checkpointStore, restoredCheckpoint: checkpoint)
+            next.onCompleted = { [weak self] snapshot in
+                guard let self, snapshot.didWin else { return }
+                var completed = self.solved; completed.insert(index)
+                UserDefaults.standard.set(completed.sorted(), forKey: self.progressKey)
+            }
+            next.onExit = { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .library:
+                    self.game?.willMove(toParent: nil); self.game?.view.removeFromSuperview(); self.game?.removeFromParent()
+                    self.game = nil; self.scrollView.isHidden = false; self.loadCheckpoint(); self.rebuild()
+                    self.setNeedsUpdateOfHomeIndicatorAutoHidden()
+                case .retry: self.startLevel(index, checkpoint: nil)
+                case .next:
+                    if library.levels.indices.contains(index + 1) { self.startLevel(index + 1, checkpoint: nil) }
+                    else { self.handle("home"); self.game?.onExit?(.library) }
                 }
             }
-            present(game, animated: true)
+            let previous = game
+            addChild(next); next.view.frame = view.bounds
+            next.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            view.addSubview(next.view); next.didMove(toParent: self)
+            game = next; scrollView.isHidden = true
+            previous?.willMove(toParent: nil); previous?.view.removeFromSuperview(); previous?.removeFromParent()
+            setNeedsUpdateOfHomeIndicatorAutoHidden()
         } catch {
-            show(error.localizedDescription, warning: true)
+            if let game { game.showPreparationError(error.localizedDescription) }
+            else { notice = error.localizedDescription; rebuild() }
         }
-    }
-
-    private func show(_ message: String, warning: Bool) {
-        statusLabel.text = message
-        statusLabel.palette = warning ? .warning : .blue
-        statusLabel.accessibilityLabel = message
     }
 }
 #endif

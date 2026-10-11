@@ -1,0 +1,14 @@
+{
+  "installApp": "/Users/veland/Lemmings/.build/ios-beta/2.0-3-device/TestFlightValidation/Install/Payload/UltimateLemmingsIOS.app",
+  "minimumOS": "16.0",
+  "exportExecutableSHA256": "a894ed30fad1858c0e7d6f0bca434b1e6a61a72ab4e63930990cb38707dae52f",
+  "requestedDeviceIncluded": null,
+  "profileExpiresUTC": "2027-10-10T13:17:05Z",
+  "exportSignatureVerified": true,
+  "version": "2.0",
+  "build": 3,
+  "ipaSHA256": "6eca4b15530fd23f72883200148564c358a793bb904bbab64f69bcc927b03c20",
+  "distributionProfileVerified": true,
+  "uploaded": false,
+  "appLaunched": false
+}

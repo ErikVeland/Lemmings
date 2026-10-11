@@ -1,4 +1,6 @@
+#if os(macOS)
 import AppKit
+import LemmingsGameArt
 import NxlvKit
 
 /// Text roles use the shipped glyphs. Size follows purpose, never word length.
@@ -207,17 +209,7 @@ import NxlvKit
     return CGFloat(logo.height) / CGFloat(logo.width)
   }
 
-  static func menuText(_ value: String) -> String {
-    let plain = value.folding(options: [.diacriticInsensitive, .widthInsensitive], locale: Locale(identifier: "en"))
-      .uppercased().replacingOccurrences(of: "—", with: "-").replacingOccurrences(of: "–", with: "-")
-      .replacingOccurrences(of: "−", with: "-").replacingOccurrences(of: "’", with: "'")
-      .replacingOccurrences(of: "“", with: "\"").replacingOccurrences(of: "”", with: "\"")
-      .replacingOccurrences(of: "·", with: "*").replacingOccurrences(of: "•", with: "*")
-      .replacingOccurrences(of: "→", with: "->").replacingOccurrences(of: "←", with: "<-")
-      .replacingOccurrences(of: "×", with: "X").replacingOccurrences(of: "↵", with: "ENTER")
-      .replacingOccurrences(of: "‹", with: "<").replacingOccurrences(of: "›", with: ">")
-    return String(plain.map { $0.isASCII || $0 == "💀" ? $0 : "?" })
-  }
+  static func menuText(_ value: String) -> String { GameMenuTypography.menuText(value) }
 
   /// Uses the original glyphs at a fixed size, with the same cell spacing on every page.
   func menuLine(_ value: String, in rect: CGRect, face: ClassicMacUserInterface.Face = .small,
@@ -300,18 +292,8 @@ import NxlvKit
 @MainActor enum GameMenuFrame {
     /// The same stone edging and moss cap used by the level briefing.
     static func draw(_ board: CGRect, scale: CGFloat = 1) {
-        let stone = NSColor(calibratedRed: 0.36, green: 0.39, blue: 0.43, alpha: 1)
-        for x in stride(from: board.minX, to: board.maxX, by: 28 * scale) {
-            Self.fill(CGRect(x: x, y: board.minY, width: min(26 * scale, board.maxX - x), height: 7 * scale), stone)
-            Self.fill(CGRect(x: x, y: board.maxY - 7 * scale, width: min(26 * scale, board.maxX - x), height: 7 * scale), stone)
-        }
-        let moss = NSColor(calibratedRed: 0.27, green: 0.62, blue: 0.12, alpha: 1)
-        Self.fill(CGRect(x: board.minX, y: board.minY - 3 * scale, width: board.width, height: 4 * scale), moss)
-        for x in stride(from: board.minX, to: board.maxX - 8 * scale, by: 19 * scale) {
-            Self.fill(CGRect(x: x, y: board.minY, width: 6 * scale, height: 5 * scale), moss)
-        }
-    }
-    private static func fill(_ rect: CGRect, _ color: NSColor) {
-        color.setFill(); rect.fill()
+        guard let context = NSGraphicsContext.current?.cgContext else { return }
+        GameMenuFrameArt.draw(in: context, board: board, scale: scale)
     }
 }
+#endif

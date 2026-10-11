@@ -1,4 +1,5 @@
 #if os(iOS)
+import LemmingsGameArt
 import LemmingsMobileCore
 import UIKit
 
@@ -10,24 +11,29 @@ import UIKit
 
 @MainActor final class MobileGameViewController: UIViewController {
     var onExit: ((MobileGameExitAction) -> Void)?
+    var onCompleted: ((MobileGameSnapshot) -> Void)?
 
-    private let summary: ClassicMobileLevelSummary
+    private let summary: MobileLevelSummary
     private let session: any MobileGameSession
     private let checkpointStore: MobileCheckpointStore
     private let runID: UUID
 
-    private let metalView: MobileMetalView
+    private let playfieldView: MobilePlayfieldView
     private let hud = MobileHUDView()
-    private let overlay = UIView()
-    private let overlayTitle = MobilePixelLabel()
-    private var overlayButtons: [MobilePixelButton] = []
+    private let touchLoupe = MobileTouchLoupe()
+    private let overlay = UIScrollView()
+    private let overlayCanvas = MobileMenuCanvas()
+    private var overlayActions: [() -> Void] = []
+    private var latestFrame: MobilePixelFrame?
 
     private var selectedControl: Int
     private var lifecycle = MobileLifecycleState()
     private var clock: MobileTickClock
     private var displayLink: CADisplayLink?
-    private var paused = true
+    private var playState = MobilePlayState()
+    private var paused: Bool { playState.isPaused }
     private var speed = 1.0
+    private var fastSpeed = 2.0
     private var previewPoint: MobilePoint?
     private var highlightedTarget: MobileTargetSelection?
     private var lastRenderedTick = -1
@@ -38,7 +44,7 @@ import UIKit
     private let audio = MobileAudioSessionController()
 
     init(
-        summary: ClassicMobileLevelSummary,
+        summary: MobileLevelSummary,
         session: any MobileGameSession,
         checkpointStore: MobileCheckpointStore,
         restoredCheckpoint: MobileCheckpointEnvelope?
@@ -52,15 +58,17 @@ import UIKit
             max(0, session.snapshot.skills.count - 1)
         )
         clock = MobileTickClock(ticksPerSecond: session.ticksPerSecond)
+        let savedSpeed = UserDefaults.standard.integer(forKey: "mobile.fastSpeed")
+        fastSpeed = [2, 3, 5, 10].contains(savedSpeed) ? Double(savedSpeed) : 2
         let camera = restoredCheckpoint?.camera
         let viewport = MobileViewport(
             levelSize: session.levelSize,
             viewSize: MobileSize(width: 1, height: 1),
-            origin: camera?.origin ?? MobilePoint(x: 0, y: 0),
+            origin: camera?.origin ?? session.initialCameraOrigin,
             zoom: camera?.zoom,
             pixelAspect: session.engineIdentifier == "classic-dos" ? 1.2 : 1
         )
-        metalView = MobileMetalView(viewport: viewport, automaticallyFitsViewport: camera == nil)
+        playfieldView = MobilePlayfieldView(viewport: viewport, automaticallyFitsViewport: camera == nil)
         super.init(nibName: nil, bundle: nil)
         modalPresentationCapturesStatusBarAppearance = true
     }
@@ -73,13 +81,15 @@ import UIKit
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
-        view.addSubview(metalView)
+        view.addSubview(playfieldView)
         view.addSubview(hud)
+        view.addSubview(touchLoupe)
         configureOverlay()
 
         hud.onAction = { [weak self] action in self?.handle(action) }
-        metalView.onTouchEffects = { [weak self] effects in self?.handle(effects) }
-        metalView.onViewportChanged = { [weak self] _ in self?.renderCurrentFrame(force: true) }
+        playfieldView.onTouchEffects = { [weak self] effects in self?.handle(effects) }
+        hud.onMinimap = { [weak self] point in self?.scrollToLevelX(point.x) }
+        playfieldView.onViewportChanged = { [weak self] _ in self?.renderCurrentFrame(force: true) }
         audio.onEvent = { [weak self] event in
             switch event {
             case .interruptionBegan, .outputRouteLost:
@@ -95,7 +105,7 @@ import UIKit
         updateHUD()
         renderCurrentFrame(force: true)
         showOverlay(
-            title: "\(summary.rank) \(summary.number)\n\(summary.title)",
+            title: summary.title,
             actions: [
                 ("START", { [weak self] in self?.resumePlay() }),
                 ("LIBRARY", { [weak self] in self?.leaveToLibrary() }),
@@ -113,21 +123,13 @@ import UIKit
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         let insets = view.safeAreaInsets
-        let layout = MobileLayoutEngine.make(
-            container: MobileSize(width: view.bounds.width, height: view.bounds.height),
-            safeArea: MobileInsets(
-                top: insets.top,
-                left: insets.left,
-                bottom: insets.bottom,
-                right: insets.right
-            ),
-            controlCount: controlCount
-        )
-        metalView.frame = Self.cgRect(layout.playfieldFrame)
+        let layout = hudLayout(insets: insets)
+        playfieldView.frame = Self.cgRect(layout.interface.playfieldFrame)
         hud.frame = view.bounds
         updateHUD(layout: layout)
         overlay.frame = view.bounds
         layoutOverlay()
+        if previewPoint != nil { renderCurrentFrame(force: true) }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -163,20 +165,41 @@ import UIKit
         }
     }
 
-    private var controlCount: Int {
-        (session.snapshot.releaseRate == nil ? 0 : 2) + session.snapshot.skills.count + 3
+    private func hudLayout(insets: UIEdgeInsets) -> MobileHUDLayout {
+        MobileHUDLayout.make(
+            container: MobileSize(width: view.bounds.width, height: view.bounds.height),
+            safeArea: MobileInsets(top: insets.top, left: insets.left, bottom: insets.bottom, right: insets.right),
+            hasRate: session.snapshot.releaseRate != nil,
+            skillCount: session.snapshot.skills.count
+        )
     }
 
     private func handle(_ action: MobileHUDAction) {
+        guard overlay.isHidden, playState.canEdit,
+              lifecycle.isForeground, !lifecycle.isInterrupted,
+              !session.snapshot.isComplete else { return }
         switch action {
         case let .releaseRate(delta):
             _ = session.adjustReleaseRate(by: delta)
             saveCheckpoint(reason: .periodic)
         case let .skill(index):
+            guard session.snapshot.skills.indices.contains(index) else { return }
             selectedControl = index
+            if !UserDefaults.standard.bool(forKey: "mobile.continuousSkillSelection") { pauseForPlanning() }
             highlightedTarget = previewPoint.flatMap(target)
+            saveCheckpoint(reason: .periodic)
         case .pause:
-            paused ? resumePlay() : pausePlay(showControls: true)
+            paused ? resumePlay() : pauseForPlanning()
+        case .step:
+            guard playState.canStep else { return }
+            playfieldView.cancelInteraction()
+            session.tick()
+            clock.suspend()
+            renderCurrentFrame(force: true)
+            saveCheckpoint(reason: .periodic)
+            if session.snapshot.isComplete { presentCompletion() }
+        case .menu:
+            pausePlay(showControls: true)
         case .endRun:
             if session.snapshot.isEndingRun {
                 _ = session.undoEndRun()
@@ -192,9 +215,15 @@ import UIKit
             }
             renderCurrentFrame(force: true)
         case .speed:
+            // A tap holds fast-forward and returns to normal, as on the Mac.
+            if speed > 1 { fastSpeed = speed; speed = 1 } else { speed = fastSpeed }
+            clock.speed = speed
+            updatePerformanceBudget()
+        case let .speedStep(direction):
             let speeds = [1.0, 2.0, 3.0, 5.0, 10.0]
             let current = speeds.firstIndex(of: speed) ?? 0
-            speed = speeds[(current + 1) % speeds.count]
+            speed = speeds[min(speeds.count - 1, max(0, current + direction))]
+            if speed > 1 { fastSpeed = speed }
             clock.speed = speed
             updatePerformanceBudget()
         }
@@ -202,7 +231,9 @@ import UIKit
     }
 
     private func handle(_ effects: [MobileTouchEffect]) {
-        guard !paused, !session.snapshot.isComplete else { return }
+        guard overlay.isHidden, playState.canEdit,
+              lifecycle.isForeground, !lifecycle.isInterrupted,
+              !session.snapshot.isComplete else { return }
         var needsFrame = false
         for effect in effects {
             switch effect {
@@ -223,8 +254,8 @@ import UIKit
             case let .pan(delta):
                 previewPoint = nil
                 highlightedTarget = nil
-                metalView.stopAutomaticFitting()
-                metalView.gameViewport.pan(viewDelta: delta)
+                playfieldView.stopAutomaticFitting()
+                playfieldView.gameViewport.pan(viewDelta: delta)
                 needsFrame = true
             case .cancelPreview:
                 previewPoint = nil
@@ -232,7 +263,10 @@ import UIKit
                 needsFrame = true
             }
         }
-        if needsFrame { renderCurrentFrame(force: true) }
+        if needsFrame {
+            renderCurrentFrame(force: true)
+            updateHUD()
+        }
     }
 
     private func target(at point: MobilePoint) -> MobileTargetSelection? {
@@ -241,17 +275,44 @@ import UIKit
         return MobileTargetSelector.select(
             candidates: session.targetCandidates(for: selectedControl),
             touch: point,
-            viewport: metalView.gameViewport,
+            viewport: playfieldView.gameViewport,
             radius: 30,
             preference: preference
         )
+    }
+
+    private func scrollToLevelX(_ x: CGFloat) {
+        guard overlay.isHidden else { return }
+        var viewport = playfieldView.gameViewport
+        viewport.origin = MobilePoint(x: Double(x) - viewport.visibleLevelSize.width / 2, y: viewport.origin.y)
+        viewport.clamp()
+        playfieldView.stopAutomaticFitting()
+        playfieldView.gameViewport = viewport
+        renderCurrentFrame(force: true)
     }
 
     private func renderCurrentFrame(force: Bool) {
         let tick = session.snapshot.tick
         guard force || tick != lastRenderedTick else { return }
         do {
-            metalView.update(frame: try session.render(highlight: highlightedTarget))
+            let frame = try session.render(highlight: highlightedTarget)
+            latestFrame = frame
+            try playfieldView.update(frame: frame)
+            if !overlay.isHidden, overlayCanvas.page.preview {
+                overlayCanvas.preview = MobileBitmapRenderer.image(frame)
+                let visible = playfieldView.gameViewport.visibleLevelRect
+                overlayCanvas.previewSource = CGRect(x: visible.x, y: visible.y, width: visible.width, height: visible.height)
+            }
+            hud.updateMinimap(frame: frame, visible: playfieldView.gameViewport.visibleLevelRect,
+                              levelSize: session.levelSize)
+            if let point = previewPoint, let target = highlightedTarget {
+                touchLoupe.update(bitmap: frame, target: target.point,
+                                  finger: playfieldView.convert(CGPoint(x: point.x, y: point.y), to: view),
+                                  bounds: playfieldView.frame,
+                                  pixelAspect: session.engineIdentifier == "classic-dos" ? 1.2 : 1)
+            } else {
+                touchLoupe.isHidden = true
+            }
             lastRenderedTick = tick
         } catch {
             pausePlay(showControls: false)
@@ -263,7 +324,11 @@ import UIKit
     }
 
     private func pausePlay(showControls: Bool) {
-        paused = true
+        playState.suspend()
+        playfieldView.cancelInteraction()
+        previewPoint = nil
+        highlightedTarget = nil
+        touchLoupe.isHidden = true
         clock.suspend()
         audio.suspend()
         updateHUD()
@@ -277,18 +342,32 @@ import UIKit
         )
     }
 
+    private func pauseForPlanning() {
+        guard playState.pauseForPlanning() else { return }
+        playfieldView.cancelInteraction()
+        previewPoint = nil
+        highlightedTarget = nil
+        touchLoupe.isHidden = true
+        clock.suspend()
+        audio.suspend()
+        renderCurrentFrame(force: true)
+        updateHUD()
+    }
+
     private func resumePlay() {
+        guard !session.snapshot.isComplete,
+              playState.resume(isForeground: lifecycle.isForeground, isInterrupted: lifecycle.isInterrupted) else { return }
         let needsLifecycleResume = lifecycle.requiresPlayerResume
         if needsLifecycleResume {
             applyEffects(lifecycle.handle(.playerRequestedResume))
         }
         guard lifecycle.isForeground, !lifecycle.isInterrupted else { return }
         if !needsLifecycleResume { try? audio.resume() }
-        paused = false
         clock.suspend()
+        playfieldView.cancelInteraction()
         overlay.isHidden = true
         overlay.accessibilityViewIsModal = false
-        metalView.accessibilityElementsHidden = false
+        playfieldView.accessibilityElementsHidden = false
         hud.accessibilityElementsHidden = false
         updateHUD()
         UIAccessibility.post(notification: .announcement, argument: "Game resumed")
@@ -297,10 +376,11 @@ import UIKit
     private func presentCompletion() {
         guard !completionPresented else { return }
         completionPresented = true
-        paused = true
+        playState.complete()
         clock.suspend()
-        Task { try? await checkpointStore.remove() }
+        Task { try? await checkpointStore.retire(runID: runID) }
         let snapshot = session.snapshot
+        onCompleted?(snapshot)
         let result = snapshot.didWin
             ? "LEVEL COMPLETE\n\(snapshot.saved) SAVED"
             : "LEVEL ENDED\n\(snapshot.saved) SAVED"
@@ -317,19 +397,21 @@ import UIKit
                 ("LIBRARY", { [weak self] in self?.finish(.library) }),
             ]
         }
-        showOverlay(title: result, actions: actions)
+        showOverlay(title: result, actions: actions, results: true)
     }
 
     private func finish(_ action: MobileGameExitAction) {
         displayLink?.isPaused = true
         audio.suspend()
         Task {
-            try? await checkpointStore.remove()
+            try? await checkpointStore.retire(runID: runID)
             onExit?(action)
         }
     }
 
     private func leaveToLibrary() {
+        playState.suspend()
+        clock.suspend()
         displayLink?.isPaused = true
         audio.suspend()
         guard !session.snapshot.isComplete else {
@@ -339,7 +421,7 @@ import UIKit
         showOverlay(title: "SAVING...", actions: [])
         do {
             let envelope = try makeCheckpoint()
-            Task {
+            Task { [self] in
                 do {
                     try await checkpointStore.save(envelope)
                     onExit?(.library)
@@ -386,7 +468,7 @@ import UIKit
     }
 
     private func makeCheckpoint() throws -> MobileCheckpointEnvelope {
-        let viewport = metalView.gameViewport
+        let viewport = playfieldView.gameViewport
         return MobileCheckpointEnvelope(
             runID: runID,
             engine: session.engineIdentifier,
@@ -442,14 +524,16 @@ import UIKit
         for effect in effects {
             switch effect {
             case .pauseSimulation:
-                paused = true
+                playState.suspend()
                 clock.suspend()
             case .resumeSimulation:
-                paused = false
+                _ = playState.resume(isForeground: lifecycle.isForeground, isInterrupted: lifecycle.isInterrupted)
                 clock.suspend()
             case .cancelInput:
+                playfieldView.cancelInteraction()
                 previewPoint = nil
                 highlightedTarget = nil
+                touchLoupe.isHidden = true
             case let .saveCheckpoint(reason):
                 saveCheckpoint(reason: reason)
             case .suspendAudio:
@@ -460,10 +544,10 @@ import UIKit
             case .resumeAudio:
                 try? audio.resume()
             case .showResumeControl:
-                pausePlay(showControls: true)
+                if overlay.isHidden { pausePlay(showControls: true) }
             case .purgeTransientResources:
                 session.releaseTransientResources()
-                metalView.purgeTexture()
+                // The visible bitmap is the current frame, not a transient cache.
             }
         }
         updateHUD()
@@ -489,26 +573,14 @@ import UIKit
             maximum: Float(budget.framesPerSecond),
             preferred: Float(budget.framesPerSecond)
         )
-        metalView.preferredFramesPerSecond = budget.framesPerSecond
         let speedCatchUp = Int(ceil(
             session.ticksPerSecond * speed / Double(max(1, budget.framesPerSecond)) * 2
         ))
         clock.maximumCatchUpTicks = max(budget.maximumCatchUpTicks, speedCatchUp)
     }
 
-    private func updateHUD(layout: MobileInterfaceLayout? = nil) {
-        let resolved: MobileInterfaceLayout
-        if let layout {
-            resolved = layout
-        } else {
-            let insets = view.safeAreaInsets
-            resolved = MobileLayoutEngine.make(
-                container: MobileSize(width: view.bounds.width, height: view.bounds.height),
-                safeArea: MobileInsets(top: insets.top, left: insets.left,
-                                       bottom: insets.bottom, right: insets.right),
-                controlCount: controlCount
-            )
-        }
+    private func updateHUD(layout: MobileHUDLayout? = nil) {
+        let resolved = layout ?? hudLayout(insets: view.safeAreaInsets)
         hud.update(
             layout: resolved,
             snapshot: session.snapshot,
@@ -521,45 +593,58 @@ import UIKit
     }
 
     private func configureOverlay() {
-        overlay.backgroundColor = UIColor.black.withAlphaComponent(0.90)
+        overlay.backgroundColor = .black
         overlay.accessibilityViewIsModal = true
+        overlay.addSubview(overlayCanvas)
+        overlayCanvas.onAction = { [weak self] id in
+            guard let self, let index = Int(id), self.overlayActions.indices.contains(index) else { return }
+            self.overlayActions[index]()
+        }
         view.addSubview(overlay)
-        overlayTitle.palette = .green
-        overlayTitle.maximumScale = 3
-        overlay.addSubview(overlayTitle)
     }
 
-    private func showOverlay(title: String, actions: [(String, () -> Void)]) {
-        overlayTitle.text = title.replacingOccurrences(of: "\n", with: "  ")
-        overlayButtons.forEach { $0.removeFromSuperview() }
-        overlayButtons = actions.enumerated().map { index, action in
-            let button = MobilePixelButton()
-            button.title = action.0
-            button.isPrimary = index == 0
-            button.onPress = action.1
-            overlay.addSubview(button)
-            return button
+    func showPreparationError(_ message: String) {
+        showOverlay(title: message, actions: [("LIBRARY", { [weak self] in self?.onExit?(.library) })])
+    }
+
+    private func showOverlay(title: String, actions: [(String, () -> Void)], results: Bool = false) {
+        overlayActions = actions.map { $0.1 }
+        let snapshot = session.snapshot
+        let ready = playState.phase == .ready
+        let completed = results
+        let details: [String]
+        if ready {
+            details = ["\(snapshot.total) Lemmings   Save \(snapshot.required)",
+                       snapshot.remainingSeconds.map { "Time \($0 / 60):\(String(format: "%02d", $0 % 60))" } ?? "No time limit"]
+        } else if completed {
+            details = ["Saved \(snapshot.saved) of \(snapshot.total)", "Required \(snapshot.required)"]
+        } else { details = [] }
+        let heading = completed ? (snapshot.didWin ? "Level complete" : "Try again") : title
+        let subtitle = ready ? "\(summary.rank) \(summary.number)" : "\(summary.rank) \(summary.number)  \(summary.title)"
+        overlayCanvas.page = .init(title: heading, subtitle: subtitle,
+                                   details: details,
+                                   footer: actions.enumerated().map { .init(String($0.offset), $0.element.0, primary: $0.offset == 0) },
+                                   preview: ready || completed)
+        if let frame = latestFrame {
+            overlayCanvas.preview = MobileBitmapRenderer.image(frame)
+            let visible = playfieldView.gameViewport.visibleLevelRect
+            overlayCanvas.previewSource = CGRect(x: visible.x, y: visible.y, width: visible.width, height: visible.height)
         }
         overlay.isHidden = false
         overlay.accessibilityViewIsModal = true
-        metalView.accessibilityElementsHidden = true
+        playfieldView.accessibilityElementsHidden = true
         hud.accessibilityElementsHidden = true
         layoutOverlay()
-        UIAccessibility.post(notification: .screenChanged, argument: overlayTitle)
+        UIAccessibility.post(notification: .screenChanged, argument: overlayCanvas)
     }
 
     private func layoutOverlay() {
         guard !overlay.isHidden else { return }
-        let safe = overlay.safeAreaLayoutGuide.layoutFrame
-        let width = min(520, max(200, safe.width - 32))
-        let total = 70 + Double(overlayButtons.count) * 54
-        var y = safe.midY - total / 2
-        overlayTitle.frame = CGRect(x: safe.midX - width / 2, y: y, width: width, height: 58)
-        y = overlayTitle.frame.maxY + 12
-        for button in overlayButtons {
-            button.frame = CGRect(x: safe.midX - width / 2, y: y, width: width, height: 46)
-            y = button.frame.maxY + 8
-        }
+        let insets = view.safeAreaInsets
+        let width = max(280, overlay.bounds.width - insets.left - insets.right)
+        let size = overlayCanvas.size(width: width, minimumHeight: overlay.bounds.height - insets.top - insets.bottom)
+        overlayCanvas.frame = CGRect(x: insets.left, y: insets.top, width: size.width, height: size.height)
+        overlay.contentSize = CGSize(width: overlay.bounds.width, height: size.height + insets.top + insets.bottom)
     }
 
     private static func cgRect(_ rect: MobileRect) -> CGRect {

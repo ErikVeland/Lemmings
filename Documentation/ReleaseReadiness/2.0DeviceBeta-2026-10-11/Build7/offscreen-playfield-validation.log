@@ -1,0 +1,39 @@
+warning: '--skip-update' option is deprecated and will be removed in a future release
+warning: /Users/veland/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'sourcesnapshot-7': failed storing manifest for 'sourcesnapshot-7' in cache: attempt to write a readonly database
+warning: 'sparkle': failed storing manifest for 'sparkle' in cache: attempt to write a readonly database
+Building for debugging...
+[Planning deferred tasks]
+[29 / 52]
+[30 / 53] NxlvKit
+[40 / 112]
+[45 / 112]
+[49 / 112]
+[50 / 112]
+[54 / 112]
+[57 / 112]
+[59 / 112]
+[63 / 112]
+[66 / 112]
+[67 / 112]
+[68 / 112]
+[73 / 112]
+[74 / 112]
+[89 / 112] NxlvKit
+[96 / 113] LemmingsMobileCore
+[105 / 128] LemmingsMobileCore
+[106 / 128] LemmingsMobileCore
+[108 / 128] LemmingsMobileCore
+[113 / 128] LemmingsMobileCore
+[120 / 129]
+[120 / 129] LemmingsMobileCore
+[120 / 129] LemmingsMobileBetaTool-product
+[123 / 131] NxlvKit
+[124 / 131] LemmingsMobileBetaTool-product
+[125 / 131] NxlvKit
+[127 / 131] NxlvKit
+[129 / 131] LemmingsMobileBetaTool-product
+Build complete! (21.43 sec.)
+PASS: 120 Classic mobile levels, bitmap frames, panels and exact checkpoint restoration (6,000 ticks).

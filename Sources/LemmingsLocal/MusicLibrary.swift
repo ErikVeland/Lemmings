@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 import CryptoKit
 import NxlvKit
@@ -167,3 +168,4 @@ actor MusicLibraryInstaller {
         return data
     }
 }
+#endif

@@ -195,7 +195,10 @@ Space and P toggle pause once per press during gameplay in all three engines,
 including imported fan levels. Key repeat and key release do not toggle pause.
 Text entry and menu/handover actions retain their own Space handling.
 
-Gameplay and results offer a visible Menu action. Q and Escape use the same
+Gameplay Menu fades after three seconds, with a 0.6-second fade. Hover or keyboard
+focus reveals it. Its 88 × 44 input target stays active. Reduced motion hides it
+without animation. Results and handovers keep their navigation actions visible.
+Q and Escape use the same
 return-to-library path, keeping the saved run and its owner. Command-Q retains
 the app's quit action. Dialogs and text entry keep their own input handling.
 Journey wins save at completion; Next level advances the queue and turn.
@@ -205,7 +208,11 @@ the same roster lettering as the library badge. Solo Resume keeps its owner.
 Handover pages accept Space, Return and keypad Enter for their primary Ready action.
 Held keys must not repeat that action. Pointer confinement also applies to paused
 screens and menus in all three games. Respect the capture preference, Option release,
-window focus, system sheets and app switching.
+window focus, system sheets and app switching. The top four points of the
+captured window release the pointer so it can reach title bars and macOS menus.
+Capture stays released while a macOS menu is open. Re-entering below that strip
+restores capture after the menu closes. Side and bottom edges retain
+confinement. This policy is shared by Classic, Lemmings 2 and Lemmings 3.
 
 ## Dialog input and accessibility
 
@@ -275,3 +282,108 @@ after the winning tick. Existing journey runs retain their ID, owner and visit
 history when excluded entries are removed. The next retained entry becomes current.
 This is an editorial exclusion list, not a claim that all hidden exits have been
 automatically detected or that every lesson has a level-specific hint deck.
+
+## Settings (1.9.2)
+
+Group each settings tab by purpose. Gameplay contains play controls, targeting,
+pointer feedback and level access. Pointer capture belongs with play controls.
+Audio places music choices before sound effects, then playback behaviour.
+Keep rhythm-on-pause and bottom-fall death sounds adjacent. Soundtrack downloads
+are the final Audio action. Graphics separates machine presets, Classic artwork
+and sequel artwork. Video separates display options from added effects.
+Controller separates gamepad behaviour from button mapping. Accessibility
+separates interface size from motion and flash reductions. Privacy separates
+sharing from local counts.
+
+Show setting explanations after an 800 ms hover over a control or its caption.
+Use the stone frame and bitmap fonts inside the existing game canvas. Help must
+not take focus or intercept the setting's input. Cancel pending help on pointer
+exit, scrolling, tab changes or Back. Dismiss visible help on input or focus loss.
+Retain the same explanation as accessibility help, including for disabled options.
+Privacy details live in a hover popover and a clickable Privacy info popover.
+Keep every setting reachable by scrolling and keyboard/controller focus.
+The shared page retains all three games' settings and native engine limits.
+
+Offscreen, muted settings checks cover all seven tabs at 1120×720 and 900×620,
+checkbox text targets, scrolling, delayed hover and cancellation, keyboard
+activation of Privacy info, remapping help, and available/unavailable sharing.
+Classic settings model and persistence checks pass. The broader music suite
+stops at its missing `demos` catalogue fixture. An isolated sequel check fails
+L2's existing frame-step rhythm assertion before reaching L3. Runtime audio
+parity therefore remains unverified for this change. The settings reorganisation
+retains the existing engine actions and saved values. Physical controllers,
+audible playback and Intel execution were not tested.
+
+## Result navigation (1.9.2)
+
+Name the result's session setup action Hot Seat. Keep the P shortcut on the same
+route. A completed playlist or journey attempt can open the confirmation to
+return to the library and change players. Cancelling keeps the result, attempt
+owner and queued turn. Unfinished sequence attempts retain their navigation
+guard. Classic, Lemmings 2 and Lemmings 3 supply their completion state to this
+shared flow.
+
+Place Worldwide beside the other secondary result links. It opens community
+boards directly. Keep Game Center as a separate provider. Older local record
+pages also retain the This level, All levels and Worldwide links.
+
+Offscreen, muted checks cover the shared result layout with Classic, L2 and L3
+conditions, community loading/empty/offline states, provider selection, older
+records, mouse targets and accessible actions. The Classic app wiring checks
+Hot Seat cancellation, the P shortcut, return to setup and the unfinished-run
+guard. Actual sequel result-to-setup transitions were not exercised in this
+focused run. Their completion state uses each native engine's `isComplete`.
+
+## Leaderboard action replay (1.9.2)
+
+Use the shared stone replay actions and each engine's bitmap renderer. Keep Play
+as the primary action. It changes to Pause while running. Keep the time and
+player identity above the playfield. Group the transport below it and wrap into
+a second row in compact windows. Dim the native skill/transport panels, remove
+unused timeline controls and the L3 Menu action, and omit those inactive targets
+from accessibility. The playback simulation has no live gameplay callbacks.
+
+Offscreen muted checks passed for reconstruction in all four engines and for
+Classic, L2 and L3 rendered start, middle, end, rewound and compact states. Target
+bounds, mouse hits, single stepping, play/pause, timer progression and speed
+changes were checked. The native renders were inspected at 1120 x 720 and
+760 x 520. NeoLemmix uses the shared Classic playfield. Its reconstruction was
+checked, but a separate NeoLemmix artwork render was not captured in this run.
+
+## Rescue celebration
+
+When the rescue target is secured, give Classic, Lemmings 2 and Lemmings 3 the
+same subtle golden rim around their playfields. Keep the centre artwork clear
+and input targets unchanged. Use whole-pixel bands with a gentle fade into a
+steady state. Rewind and retry clear it. Reduced motion or reduced flashes use
+the steady state without an animated transition. Qualifying result panels use
+the same golden rim; failed results do not.
+
+Golden Path must retain Adaptive DJ's same-composition musical lift. A completed
+win can lift during the opening section so short lessons still celebrate. Keep
+silent music, soundtrack preferences and paused handovers intact. This change
+applies to the Mac front end. The installed iPad build 8 has no music player and
+does not contain this feedback yet.
+
+Saved journey and playlist results contribute to the player’s career across all
+three engines. Result panels show each newly earned Zoom and Superzoom use in
+bitmap lettering, including accessibility. Credit follows existing thresholds:
+one Zoom per three no-Rewind stars and one Superzoom per three distinct no-Rewind
+three-star levels. Repeated clears do not add credit. Preview results do not claim
+a saved reward.
+
+## Records level browsing and music notices
+
+Records Previous/Next follows the current campaign or pack order, including
+levels without attempts. Unplayed levels show empty boards. Recorded levels keep
+their exact rules and conditions. The first and last levels disable the outward
+action. Mouse and arrow keys use the same list without changing gameplay,
+progression or Hot Seat ownership. Standalone files fall back to saved boards.
+
+Classic, Lemmings 2 and Lemmings 3 share a brief Now Playing notice when the
+actual track file changes. Use the catalogue song title and soundtrack name,
+with the source folder as a fallback for user files. Keep both rows in the
+existing green/blue bitmap fonts and stone artwork. The notice accepts no pointer
+input. Show it for four seconds, then fade for half a second. Reduced motion
+keeps it steady until expiry. Do not repeat it for the same track or show it
+on results or handovers. Silent music clears it.
