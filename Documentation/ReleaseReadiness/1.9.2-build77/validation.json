@@ -1,0 +1,32 @@
+{
+  "sourceCommit": "71559011ce09631479bc27644abe60b348bd88ae",
+  "minorAuditPassed": 48,
+  "sourceDrift": 0,
+  "releaseToolTests": 67,
+  "xctestCases": 44,
+  "xctestInitialSkips": 1,
+  "skippedCasePassedAgainstReleaseResources": true,
+  "sharedCoreTests": 86,
+  "mobileCoreTests": 20,
+  "rankingsTests": 17,
+  "proofLevels": 562,
+  "proofConfigurations": 615,
+  "exactConditionCertificates": 294,
+  "bestKnownRescueRecords": 303,
+  "nativeWindows": "offscreen",
+  "testAudio": "muted",
+  "broadAuditGroupsNotRun": [
+    "replay-movies",
+    "mac-app-integration",
+    "local-performance-measurement",
+    "sequel-views",
+    "arcade-records"
+  ],
+  "signedShippingAppForegroundLaunch": "not-run; requires a new explicit request",
+  "physicalHardwareAndListening": "unverified",
+  "auditInputCorrections": [
+    "candidate Ports argument for PlatformExclusiveTests",
+    "candidate FAN_TEST_PORTS_DIR for fan-library",
+    "shared PanelGlyphArt.swift for original-pixel verification"
+  ]
+}

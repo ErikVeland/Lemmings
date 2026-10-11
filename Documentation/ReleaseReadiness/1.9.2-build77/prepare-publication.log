@@ -1,0 +1,32 @@
+PASS frozen source, release audit, native UI and both notarised downloads
+From https://github.com/ErikVeland/Lemmings
+ * branch              main       -> FETCH_HEAD
+PASS Ed25519 archive signature against the shipping app's public key
+PASS previous published full archive signature
+Delta base: shipped build 76 (UltimateLemmings-1.9.1-build76.zip)
+
+Warning: detected irregular file permissions 0777 for '/Users/veland/Library/Caches/Sparkle_generate_appcast/78458cf2756934ad64cda83bf48fd3ab9f983cdd48ec2c0405d13290d100f789/Ultimate Lemmings.app/Contents/Resources/Music/Lemmings (MP3)/01 Title Screen.mp3'
+Warning: detected irregular file permissions 0777 for '/Users/veland/Library/Caches/Sparkle_generate_appcast/78458cf2756934ad64cda83bf48fd3ab9f983cdd48ec2c0405d13290d100f789/Ultimate Lemmings.app/Contents/Resources/Music/Lemmings (MP3)/02 Stage Intro.mp3'
+Warning: detected irregular file permissions 0777 for '/Users/veland/Library/Caches/Sparkle_generate_appcast/78458cf2756934ad64cda83bf48fd3ab9f983cdd48ec2c0405d13290d100f789/Ultimate Lemmings.app/Contents/Resources/Music/Lemmings (MP3)/03 Stage Clear.mp3'
+Warning: detected irregular file permissions 0777 for '/Users/veland/Library/Caches/Sparkle_generate_appcast/78458cf2756934ad64cda83bf48fd3ab9f983cdd48ec2c0405d13290d100f789/Ultimate Lemmings.app/Contents/Resources/Music/Lemmings (MP3)/04 Failure.mp3'
+Warning: detected irregular file permissions 0777 for '/Users/veland/Library/Caches/Sparkle_generate_appcast/78458cf2756934ad64cda83bf48fd3ab9f983cdd48ec2c0405d13290d100f789/Ultimate Lemmings.app/Contents/Resources/Music/Lemmings (MP3)/05 Just Dig!.mp3'
+Warning: detected irregular file permissions 0777 for '/Users/veland/Library/Caches/Sparkle_generate_appcast/78458cf2756934ad64cda83bf48fd3ab9f983cdd48ec2c0405d13290d100f789/Ultimate Lemmings.app/Contents/Resources/Music/Lemmings (MP3)/06 Only Floaters Can Survive This.mp3'
+Warning: detected irregular file permissions 0777 for '/Users/veland/Library/Caches/Sparkle_generate_appcast/78458cf2756934ad64cda83bf48fd3ab9f983cdd48ec2c0405d13290d100f789/Ultimate Lemmings.app/Contents/Resources/Music/Lemmings (MP3)/07 Tailor-Made For Blockers.mp3'
+Warning: detected irregular file permissions 0777 for '/Users/veland/Library/Caches/Sparkle_generate_appcast/78458cf2756934ad64cda83bf48fd3ab9f983cdd48ec2c0405d13290d100f789/Ultimate Lemmings.app/Contents/Resources/Music/Lemmings (MP3)/08 Now Use Miners and Climbers.mp3'
+Warning: detected irregular file permissions 0777 for '/Users/veland/Library/Caches/Sparkle_generate_appcast/78458cf2756934ad64cda83bf48fd3ab9f983cdd48ec2c0405d13290d100f789/Ultimate Lemmings.app/Contents/Resources/Music/Lemmings (MP3)/09 You Need Bashers This Time.mp3'
+Warning: detected irregular file permissions 0777 for '/Users/veland/Library/Caches/Sparkle_generate_appcast/78458cf2756934ad64cda83bf48fd3ab9f983cdd48ec2c0405d13290d100f789/Ultimate Lemmings.app/Contents/Resources/Music/Lemmings (MP3)/10 A Task For Blockers and Bombers.mp3'
+Warning: detected irregular file permissions 0777 for '/Users/veland/Library/Caches/Sparkle_generate_appcast/78458cf2756934ad64cda83bf48fd3ab9f983cdd48ec2c0405d13290d100f789/Ultimate Lemmings.app/Contents/Resources/Music/Lemmings (MP3)/11 Builders Will Help You Here.mp3'
+Warning: detected irregular file permissions 0777 for '/Users/veland/Library/Caches/Sparkle_generate_appcast/78458cf2756934ad64cda83bf48fd3ab9f983cdd48ec2c0405d13290d100f789/Ultimate Lemmings.app/Contents/Resources/Music/Lemmings (MP3)/12 Not As Complicated As it Looks.mp3'
+Warning: detected irregular file permissions 0777 for '/Users/veland/Library/Caches/Sparkle_generate_appcast/78458cf2756934ad64cda83bf48fd3ab9f983cdd48ec2c0405d13290d100f789/Ultimate Lemmings.app/Contents/Resources/Music/Lemmings (MP3)/14 Smile if You Love Lemmings.mp3'
+Warning: detected irregular file permissions 0777 for '/Users/veland/Library/Caches/Sparkle_generate_appcast/78458cf2756934ad64cda83bf48fd3ab9f983cdd48ec2c0405d13290d100f789/Ultimate Lemmings.app/Contents/Resources/Music/Lemmings (MP3)/15 Keep Your Hair on Mr. Lemming.mp3'
+Warning: detected irregular file permissions 0777 for '/Users/veland/Library/Caches/Sparkle_generate_appcast/78458cf2756934ad64cda83bf48fd3ab9f983cdd48ec2c0405d13290d100f789/Ultimate Lemmings.app/Contents/Resources/Music/Lemmings (MP3)/16 Patience.mp3'
+Warning: detected irregular file permissions 0777 for '/Users/veland/Library/Caches/Sparkle_generate_appcast/78458cf2756934ad64cda83bf48fd3ab9f983cdd48ec2c0405d13290d100f789/Ultimate Lemmings.app/Contents/Resources/Music/Lemmings (MP3)/17 We All Fall Down.mp3'
+Warning: encountered too many warnings.. Ignoring the rest..Wrote 1 new update, updated 1 existing update, and removed 0 old updates in appcast.xml
+/Users/veland/Lemmings/.build/release-1.9.2/updates/UltimateLemmings-build77-from76.delta
+Wrote signed appcast: /Users/veland/Lemmings/appcast.xml
+PASS Ed25519 archive signature against the shipping app's public key
+PASS local signatures, archive digests and preserved update entries
+PASS 1.9.2 update inputs: version 1.9.2, build 77, appcast items 9
+PASS data-independent 1.9.2 release checks
+PASS publication inputs for 1.9.2 build 77 at 71559011ce09631479bc27644abe60b348bd88ae
+PASS signed update feed, exact delta payload and publication inputs

@@ -1,0 +1,394 @@
+UI test windows: offscreen; audio: muted
+Test Suite 'All tests' started at 2026-10-11 23:01:49.147.
+Test Suite 'All tests' passed at 2026-10-11 23:01:49.150.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.003) seconds
+Test Suite 'All tests' started at 2026-10-11 23:01:49.233.
+Test Suite 'All tests' passed at 2026-10-11 23:01:49.234.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+Test Suite 'All tests' started at 2026-10-11 23:01:50.025.
+Test Suite 'LemmingsLocalTests.xctest' started at 2026-10-11 23:01:50.026.
+Test Suite 'AnonymousTelemetryTests' started at 2026-10-11 23:01:50.027.
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testAllSoundtrackChoiceCountsOncePerInstallation]' started.
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testAllSoundtrackChoiceCountsOncePerInstallation]' passed (0.009 seconds).
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testConfiguredDashboardShowsSharedControls]' started.
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testConfiguredDashboardShowsSharedControls]' passed (0.232 seconds).
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testConsentDefaultsToDeclineAndRendersBothChoices]' started.
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testConsentDefaultsToDeclineAndRendersBothChoices]' passed (0.011 seconds).
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testDashboardRendersAndButtonsHaveTargets]' started.
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testDashboardRendersAndButtonsHaveTargets]' passed (0.008 seconds).
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testEventUsesFixedFieldsWithExplicitNulls]' started.
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testEventUsesFixedFieldsWithExplicitNulls]' passed (0.000 seconds).
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testHomeSavedCountFitsAndLeavesMenuTargetsUsable]' started.
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testHomeSavedCountFitsAndLeavesMenuTargetsUsable]' passed (0.046 seconds).
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testLemmingsThreeTribesAndLemmingsTwoPracticeUseSafeBuckets]' started.
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testLemmingsThreeTribesAndLemmingsTwoPracticeUseSafeBuckets]' passed (0.003 seconds).
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testLocalCountsDeduplicateResultsAndHidePrivateLevelDetails]' started.
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testLocalCountsDeduplicateResultsAndHidePrivateLevelDetails]' passed (0.003 seconds).
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testNoUploadBeforeConsentOrAfterOptOut]' started.
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testNoUploadBeforeConsentOrAfterOptOut]' passed (0.074 seconds).
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testOnlyOfficialClassicLevelNumbersAreCounted]' started.
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testOnlyOfficialClassicLevelNumbersAreCounted]' passed (0.002 seconds).
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testOwnerSummaryUsesTokenAndDecodesCounts]' started.
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testOwnerSummaryUsesTokenAndDecodesCounts]' passed (0.001 seconds).
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testPlainHTTPIsNeverEnabled]' started.
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testPlainHTTPIsNeverEnabled]' passed (0.001 seconds).
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testPrivacySettingsRendersAndButtonsHaveTargets]' started.
+/Users/veland/Lemmings/Sources/LemmingsLocal/GameScreen.swift:176: warning: -[LemmingsLocalTests.AnonymousTelemetryTests testPrivacySettingsRendersAndButtonsHaveTargets] : Conflicting constraints detected: <private>.
+
+Will attempt to recover by breaking <private>.
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testPrivacySettingsRendersAndButtonsHaveTargets]' passed (0.729 seconds).
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testPublicSavedTotalRequiresConsentAndUsesNoOwnerToken]' started.
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testPublicSavedTotalRequiresConsentAndUsesNoOwnerToken]' passed (0.056 seconds).
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testSavedCountAddsCompletedAttemptsIncludingClonesAndFormatsHomeLine]' started.
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testSavedCountAddsCompletedAttemptsIncludingClonesAndFormatsHomeLine]' passed (0.003 seconds).
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testSavedCountUploadsOneWeightedEvent]' started.
+Test Case '-[LemmingsLocalTests.AnonymousTelemetryTests testSavedCountUploadsOneWeightedEvent]' passed (0.006 seconds).
+Test Suite 'AnonymousTelemetryTests' passed at 2026-10-11 23:01:51.212.
+	 Executed 16 tests, with 0 failures (0 unexpected) in 1.184 (1.186) seconds
+Test Suite 'FailureMusicTests' started at 2026-10-11 23:01:51.212.
+Test Case '-[LemmingsLocalTests.FailureMusicTests testNukeSlowsBeforeFailureAndFinalPopRestoresTempo]' started.
+Test Case '-[LemmingsLocalTests.FailureMusicTests testNukeSlowsBeforeFailureAndFinalPopRestoresTempo]' passed (1.032 seconds).
+Test Case '-[LemmingsLocalTests.FailureMusicTests testOrdinaryLossAndWinningNukeKeepTheirMusicPolicy]' started.
+Test Case '-[LemmingsLocalTests.FailureMusicTests testOrdinaryLossAndWinningNukeKeepTheirMusicPolicy]' passed (0.317 seconds).
+Test Suite 'FailureMusicTests' passed at 2026-10-11 23:01:52.561.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 1.348 (1.348) seconds
+Test Suite 'HostedRankingsTests' started at 2026-10-11 23:01:52.561.
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testBrowseNeedsNoAccountAndDoesNotShare]' started.
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testBrowseNeedsNoAccountAndDoesNotShare]' passed (0.012 seconds).
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testCareerCandidateSurvivesBetterFailedRescue]' started.
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testCareerCandidateSurvivesBetterFailedRescue]' passed (0.012 seconds).
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testRemovalRetriesAfterRestartWithoutLocalProfile]' started.
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testRemovalRetriesAfterRestartWithoutLocalProfile]' passed (0.007 seconds).
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testStaleResponseCannotReplaceSelectedBoard]' started.
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testStaleResponseCannotReplaceSelectedBoard]' passed (0.099 seconds).
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testSyncUsesLocalPlayerCredentialAndRemovalStopsSharing]' started.
+CoreData: error: Unable to create token NSXPCConnection.  NSXPCStoreServerEndpointFactory 0x754fa36e30 -newEndpointWithError returned error Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.contactsd.persistence" UserInfo={NSDebugDescription=connection to service named com.apple.contactsd.persistence}
+CoreData: error: NSXPCStoreConnectionManager failed to initialize any connections for store at file:///Users/veland/Library/Application%20Support/AddressBook/AddressBook-v22.abcddb with error = Error Domain=NSCocoaErrorDomain Code=4097 "Couldn’t communicate with a helper application." UserInfo={NSUnderlyingError=0x755007bb40 {Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.contactsd.persistence" UserInfo={NSDebugDescription=connection to service named com.apple.contactsd.persistence}}}
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testSyncUsesLocalPlayerCredentialAndRemovalStopsSharing]' passed (0.152 seconds).
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testWireIdentityAcrossAllEngines]' started.
+Test Case '-[LemmingsLocalTests.HostedRankingsTests testWireIdentityAcrossAllEngines]' passed (0.363 seconds).
+Test Suite 'HostedRankingsTests' passed at 2026-10-11 23:01:53.206.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.645 (0.646) seconds
+Test Suite 'JourneySolutionTests' started at 2026-10-11 23:01:53.206.
+Test Case '-[LemmingsLocalTests.JourneySolutionTests testEarlyFanLessonsHavePlayableSolutionReplays]' started.
+/Users/veland/Lemmings/Tests/LemmingsLocalTests/JourneySolutionTests.swift:70: -[LemmingsLocalTests.JourneySolutionTests testEarlyFanLessonsHavePlayableSolutionReplays] : Test skipped - Build the local game resources to validate the real Journey replays
+Test Case '-[LemmingsLocalTests.JourneySolutionTests testEarlyFanLessonsHavePlayableSolutionReplays]' skipped (0.002 seconds).
+Test Case '-[LemmingsLocalTests.JourneySolutionTests testFullRescueWitnessCannotBecomeAnOpeningIntroduction]' started.
+Test Case '-[LemmingsLocalTests.JourneySolutionTests testFullRescueWitnessCannotBecomeAnOpeningIntroduction]' passed (0.004 seconds).
+Test Case '-[LemmingsLocalTests.JourneySolutionTests testOpeningAnd182AdditionsRenderWithUsableTargets]' started.
+Test Case '-[LemmingsLocalTests.JourneySolutionTests testOpeningAnd182AdditionsRenderWithUsableTargets]' passed (0.300 seconds).
+Test Suite 'JourneySolutionTests' passed at 2026-10-11 23:01:53.513.
+	 Executed 3 tests, with 1 test skipped and 0 failures (0 unexpected) in 0.307 (0.307) seconds
+Test Suite 'LearningJourneyDesktopTests' started at 2026-10-11 23:01:53.513.
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testJourneyPagesRenderWithUsableTargets]' started.
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testJourneyPagesRenderWithUsableTargets]' passed (0.017 seconds).
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testLearningFailureActionsAndSharedEngineDefaults]' started.
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testLearningFailureActionsAndSharedEngineDefaults]' passed (0.032 seconds).
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testOhYesRevisionIgnoresUnrelatedPorts]' started.
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testOhYesRevisionIgnoresUnrelatedPorts]' passed (0.016 seconds).
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testVisitsPersistAtomicallyAndOldDocumentsMigrate]' started.
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testVisitsPersistAtomicallyAndOldDocumentsMigrate]' passed (0.006 seconds).
+Test Suite 'LearningJourneyDesktopTests' passed at 2026-10-11 23:01:53.584.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.071 (0.071) seconds
+Test Suite 'NeoLemmixSoundTests' started at 2026-10-11 23:01:53.584.
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testConstructiveWarningsUseLastThreeBricks]' started.
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testConstructiveWarningsUseLastThreeBricks]' passed (0.027 seconds).
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testCustomTrapReplacesFallbackAndDisarmingStaysSilent]' started.
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testCustomTrapReplacesFallbackAndDisarmingStaysSilent]' passed (0.000 seconds).
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testDeathsAndRescuesKeepTheirPositionsWithoutDuplicateDeathSounds]' started.
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testDeathsAndRescuesKeepTheirPositionsWithoutDuplicateDeathSounds]' passed (0.000 seconds).
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testDestructiveSkillsSoundAtSteelButNotOneWayTerrain]' started.
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testDestructiveSkillsSoundAtSteelButNotOneWayTerrain]' passed (0.106 seconds).
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testDiggerSteelContactSoundsOnceAndOrdinaryTerrainStaysSilent]' started.
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testDiggerSteelContactSoundsOnceAndOrdinaryTerrainStaysSilent]' passed (0.015 seconds).
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testGadgetActivationUsesNamedSamplesWithoutDeathFallback]' started.
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testGadgetActivationUsesNamedSamplesWithoutDeathFallback]' passed (0.000 seconds).
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testHatchAndAssignmentReachSessionSoundOutput]' started.
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testHatchAndAssignmentReachSessionSoundOutput]' passed (0.003 seconds).
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testNamedSamplePlaybackDeduplicatesHonoursMuteAndClearsBetweenLevels]' started.
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testNamedSamplePlaybackDeduplicatesHonoursMuteAndClearsBetweenLevels]' passed (0.158 seconds).
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testNukeExplosionSoundsOnceWithoutChangingSimulation]' started.
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testNukeExplosionSoundsOnceWithoutChangingSimulation]' passed (0.006 seconds).
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testQueuedNukeAndUndoDoNotReplayOldCues]' started.
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testQueuedNukeAndUndoDoNotReplayOldCues]' passed (0.003 seconds).
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testResolvedGadgetMetadataKeepsSoundAndVisualIdentity]' started.
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testResolvedGadgetMetadataKeepsSoundAndVisualIdentity]' passed (0.002 seconds).
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testSoundEventsRoundTripAndContinueWithoutRepeatingWarning]' started.
+Test Case '-[LemmingsLocalTests.NeoLemmixSoundTests testSoundEventsRoundTripAndContinueWithoutRepeatingWarning]' passed (0.076 seconds).
+Test Suite 'NeoLemmixSoundTests' passed at 2026-10-11 23:01:53.982.
+	 Executed 12 tests, with 0 failures (0 unexpected) in 0.396 (0.397) seconds
+Test Suite 'ProgressionMenuTests' started at 2026-10-11 23:01:53.982.
+Test Case '-[LemmingsLocalTests.ProgressionMenuTests testRenderedPolicyControlsAndTargets]' started.
+Test Case '-[LemmingsLocalTests.ProgressionMenuTests testRenderedPolicyControlsAndTargets]' passed (0.010 seconds).
+Test Suite 'ProgressionMenuTests' passed at 2026-10-11 23:01:53.992.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.010 (0.010) seconds
+Test Suite 'LemmingsLocalTests.xctest' passed at 2026-10-11 23:01:53.992.
+	 Executed 44 tests, with 1 test skipped and 0 failures (0 unexpected) in 3.961 (3.965) seconds
+Test Suite 'All tests' passed at 2026-10-11 23:01:53.992.
+	 Executed 44 tests, with 1 test skipped and 0 failures (0 unexpected) in 3.961 (3.966) seconds
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite RescueCelebrationTests started.
+􀟈  Suite SkillShortcutsTests started.
+􀟈  Suite LearningJourneyTests started.
+􀟈  Suite DifficultyTests started.
+􀟈  Suite PrecisionRewardTests started.
+􀟈  Suite ControllerBindingsTests started.
+􀟈  Suite "NeoLemmix bundled and player libraries" started.
+􀟈  Suite NxlvKitTests started.
+􀟈  Suite "NeoLemmix pack library" started.
+􀟈  Suite FanTextTerrainTests started.
+􀟈  Suite BeastMixTests started.
+􀟈  Suite AssignmentFocusTests started.
+􀟈  Suite "NeoLemmix final-state oracle" started.
+􀟈  Test controllerSpeedHoldRestoresSelection() started.
+􀟈  Test reconnectAndRelease() started.
+􀟈  Test interruptedAndDisabledTapsNeverSelectSpeed() started.
+􀟈  Test reservedKeysNeverReachASkill() started.
+􀟈  Suite LevelPlaylistTests started.
+􀟈  Test initialsBeforeFallbacksAndLevelChanges() started.
+􀟈  Test improvementsEarnOnlyTheNewCreditAndRewindsDoNotEarnUses() started.
+􀟈  Test buttonsAndModifier() started.
+􀟈  Test everyQoLChordAndMenuLayer() started.
+􀟈  Test sharedInitialsCycleAndNumbersStayAbsolute() started.
+􀟈  Suite LevelCatalogueTests started.
+􀟈  Test testTabsAndNestedSectionsParse() started.
+􀟈  Test "Manifest order, groups and stable revisions" started.
+􀟈  Test completeOriginalPlusRetainsEveryAnchorBeyondOneHundred() started.
+􀟈  Test "A saved run finds its level by IDs after its old path is gone" started.
+􀟈  Test testLevelParses() started.
+􀟈  Test testLastValueWins() started.
+􀟈  Test corpusInferenceRequiresRepeatedAsymmetricEvidence() started.
+􀟈  Test remappingKeepsEveryActionReachable() started.
+􀟈  Test classicBindings() started.
+􀟈  Test "Bundled packs win, and each level uses a styles root that resolves it" started.
+􀟈  Test cycleSkipsEmptySkillsAndWraps() started.
+􀟈  Test testMissingTitleReturnsNil() started.
+􀟈  Suite "Double tap" started.
+􀟈  Test classicTimingBudgetOnlyMeasuresSuccessfulInputs() started.
+􀟈  Test "Source placements survive DOS terrain range and object alignment" started.
+􀟈  Test distinctThreeStarLevelsEarnZoomAndSuperzoomAcrossEngines() started.
+􀟈  Test cameraKeysReserveHAndGExceptGlider() started.
+􀟈  Test cacheVersionsAndRoundTrip() started.
+􀟈  Test noReplayLevelsStayInCandidatePoolAndConfidenceBreaksNearTies() started.
+􀟈  Test curriculumDoesNotExhaustIdenticalMetadataPriors() started.
+􀟈  Test triggerMatchesFTapHoldAndRapidExit() started.
+􀟈  Test deterministicGenerationAndStableTies() started.
+􀟈  Test testReleaseRateFallback() started.
+􀟈  Test originalPlusPreservesOfficialOrderAndBridgesGaps() started.
+􀟈  Test forgivingAndNarrowWindows() started.
+􀟈  Test routineCrowdAssignmentsAreNotIndependentWorkers() started.
+􀟈  Test modernBeastRhythmIsCentredWithoutChangingFaithfulStereo() started.
+􀟈  Test cycleTracksSuccessfulAssignments() started.
+􀟈  Test classicReplayObservationPreservesTheVerifiedOutcome() started.
+􀟈  Test mechanicalOrderingAndResources() started.
+􀟈  Test originalPlusKeepsSuitableOfficialTutorialSteps() started.
+􀟈  Test inconclusiveProbesRetainUnknownEvidence() started.
+􀟈  Test "Fallback order and unsafe manifests" started.
+􀟈  Test unknownTechniquesAreNotInvented() started.
+􀟈  Test classicDifficultyAnalysesAWinAtTheSourceClockLimit() started.
+􀟈  Test gradeBoundaries() started.
+􀟈  Test originalPlusBridgesDoNotOvershootOrExtendPastTheCampaign() started.
+􀟈  Test incompleteProbesAreUnknownRatherThanFailures() started.
+􀟈  Test cancellationPropagatesWithoutReturningPartialSuccess() started.
+􀟈  Test "Manifest order follows replay hashes" started.
+􀟈  Test officialPreferenceCannotBuyLargeJump() started.
+􀟈  Test timingProbesUseRealSimulationOutcomes() started.
+􀟈  Test "Stable encoding and terrain sensitivity" started.
+􀟈  Test conceptIntroductionAndLowPrecision() started.
+􀟈  Test shuffleUsesOneStableCanonicalOrder() started.
+􀟈  Test randomTenAndFullShuffleNeverRepeat() started.
+􀟈  Test randomTenCanCreateAnEditablePlaylist() started.
+􀟈  Test activeRunRetainsItsSnapshotAndPosition() started.
+􀟈  Test malformedSavedValuesAreRejected() started.
+􀟈  Test playlistAndDisplaySnapshotsRoundTrip() started.
+􀟈  Test manualPlaylistKeepsAUniqueOrderedSet() started.
+􀟈  Test generatedSequencesRejectEmptyAndDuplicatePools() started.
+􀟈  Test complexRoutesWaitForSecondBasicSkillPractice() started.
+􀟈  Test highSourceConstraintsStartAtDifficult() started.
+􀟈  Test keepsTheWholeCampaignAndFillsTheRetailJump() started.
+􀟈  Test intermediateBridgeLessonMigratesWithoutSkippingOrRepeatingVisits() started.
+􀟈  Test cellbashIsSecondAndMigratesEveryUnvisitedLesson() started.
+􀟈  Test learning13MigrationIncludesBoth182AdditionsWithoutChangingHistory() started.
+􀟈  Test rawReplayScoreKeepsAComparableDemandBandSmooth() started.
+􀟈  Test measuredNarrowTimingStartsAtDifficult() started.
+􀟈  Test covoxIsReplacedAtTheSameDifficultyAndRetiredRunsRecover() started.
+􀟈  Test unsupportedGapsAreFlaggedAndPriorsRejected() started.
+􀟈  Test authoredObjectivesSeparateIntroductionsFromCombinations() started.
+􀟈  Test officialLevelsLeadComparablePortLevelsWithoutOverridingDifficulty() started.
+􀟈  Test isolatedPracticePrecedesCombinationsAndPassiveLevelsDoNotOpen() started.
+􀟈  Test somethingWrongIsReplacedByANukeFreeRoute() started.
+􀟈  Test multiplayerSourcesCannotEnterTheLearningPath() started.
+􀟈  Test DifficultyOrderAndParkingDoesNotAwardAWin() started.
+􀟈  Test nearEqualRepetitionsAreSpacedAndOriginDoesNotChooseTheOpening() started.
+􀟈  Test packRejectsEntriesFromAnotherEngineOrPack() started.
+􀟈  Test aLowAverageCannotHideExpertTiming() started.
+􀟈  Test catalogueRoundTripKeepsRevisionAndReleaseBoundary() started.
+􀟈  Test goldenRimIsSubtleClippedAndLeavesTheCentreUntouched() started.
+􀟈  Test onlySecuredTargetsAndCompletedWinsCelebrate() started.
+􀟈  Test resolvesTheFullTypedIdentity() started.
+􁁛  Test interruptedAndDisabledTapsNeverSelectSpeed() passed after 0.013 seconds.
+􁁛  Test controllerSpeedHoldRestoresSelection() passed after 0.014 seconds.
+􁁛  Test reconnectAndRelease() passed after 0.014 seconds.
+􁁛  Test buttonsAndModifier() passed after 0.014 seconds.
+􁁛  Test everyQoLChordAndMenuLayer() passed after 0.014 seconds.
+􁁛  Test remappingKeepsEveryActionReachable() passed after 0.014 seconds.
+􁁛  Test reservedKeysNeverReachASkill() passed after 0.014 seconds.
+􁁛  Test cycleSkipsEmptySkillsAndWraps() passed after 0.014 seconds.
+􀟈  Test "A slow second press, another key or a held repeat is not a double tap" started.
+􀟈  Test "A second press of the same key within the interval is a double tap" started.
+􀟈  Test "Time that goes backwards cannot complete a double tap" started.
+􁁛  Test sharedInitialsCycleAndNumbersStayAbsolute() passed after 0.014 seconds.
+􁁛  Test classicBindings() passed after 0.014 seconds.
+􁁛  Test testTabsAndNestedSectionsParse() passed after 0.014 seconds.
+􁁛  Test testLastValueWins() passed after 0.014 seconds.
+􁁛  Test initialsBeforeFallbacksAndLevelChanges() passed after 0.014 seconds.
+􁁛  Test cameraKeysReserveHAndGExceptGlider() passed after 0.014 seconds.
+􁁛  Test testMissingTitleReturnsNil() passed after 0.014 seconds.
+􁁛  Test triggerMatchesFTapHoldAndRapidExit() passed after 0.014 seconds.
+􁁛  Test corpusInferenceRequiresRepeatedAsymmetricEvidence() passed after 0.014 seconds.
+􁁛  Test noReplayLevelsStayInCandidatePoolAndConfidenceBreaksNearTies() passed after 0.015 seconds.
+􁁛  Test testReleaseRateFallback() passed after 0.016 seconds.
+􁁛  Test originalPlusPreservesOfficialOrderAndBridgesGaps() passed after 0.020 seconds.
+􁁛  Test cacheVersionsAndRoundTrip() passed after 0.021 seconds.
+􁁛  Test cycleTracksSuccessfulAssignments() passed after 0.027 seconds.
+􁁛  Test testLevelParses() passed after 0.030 seconds.
+􁁛  Test routineCrowdAssignmentsAreNotIndependentWorkers() passed after 0.034 seconds.
+􁁛  Test mechanicalOrderingAndResources() passed after 0.061 seconds.
+􁁛  Test originalPlusKeepsSuitableOfficialTutorialSteps() passed after 0.061 seconds.
+􁁛  Test curriculumDoesNotExhaustIdenticalMetadataPriors() passed after 0.062 seconds.
+􁁛  Test unknownTechniquesAreNotInvented() passed after 0.061 seconds.
+􁁛  Test deterministicGenerationAndStableTies() passed after 0.062 seconds.
+􁁛  Test gradeBoundaries() passed after 0.061 seconds.
+􁁛  Test classicReplayObservationPreservesTheVerifiedOutcome() passed after 0.062 seconds.
+􁁛  Test inconclusiveProbesRetainUnknownEvidence() passed after 0.062 seconds.
+􁁛  Test forgivingAndNarrowWindows() passed after 0.062 seconds.
+􁁛  Test incompleteProbesAreUnknownRatherThanFailures() passed after 0.062 seconds.
+􁁛  Test originalPlusBridgesDoNotOvershootOrExtendPastTheCampaign() passed after 0.062 seconds.
+􁁛  Test officialPreferenceCannotBuyLargeJump() passed after 0.062 seconds.
+􁁛  Test "Source placements survive DOS terrain range and object alignment" passed after 0.062 seconds.
+􁁛  Test conceptIntroductionAndLowPrecision() passed after 0.061 seconds.
+􁁛  Test shuffleUsesOneStableCanonicalOrder() passed after 0.055 seconds.
+􁁛  Test randomTenAndFullShuffleNeverRepeat() passed after 0.055 seconds.
+􁁛  Test randomTenCanCreateAnEditablePlaylist() passed after 0.055 seconds.
+􁁛  Test activeRunRetainsItsSnapshotAndPosition() passed after 0.054 seconds.
+􁁛  Test malformedSavedValuesAreRejected() passed after 0.054 seconds.
+􁁛  Test playlistAndDisplaySnapshotsRoundTrip() passed after 0.054 seconds.
+􁁛  Test "A saved run finds its level by IDs after its old path is gone" passed after 0.062 seconds.
+􁁛  Test generatedSequencesRejectEmptyAndDuplicatePools() passed after 0.054 seconds.
+􁁛  Test manualPlaylistKeepsAUniqueOrderedSet() passed after 0.054 seconds.
+􁁛  Test highSourceConstraintsStartAtDifficult() passed after 0.054 seconds.
+􁁛  Test classicTimingBudgetOnlyMeasuresSuccessfulInputs() passed after 0.062 seconds.
+􁁛  Test "Manifest order follows replay hashes" passed after 0.062 seconds.
+􁁛  Test "Stable encoding and terrain sensitivity" passed after 0.062 seconds.
+􁁛  Test complexRoutesWaitForSecondBasicSkillPractice() passed after 0.054 seconds.
+􁁛  Test rawReplayScoreKeepsAComparableDemandBandSmooth() passed after 0.054 seconds.
+􁁛  Test measuredNarrowTimingStartsAtDifficult() passed after 0.054 seconds.
+􁁛  Test "Manifest order, groups and stable revisions" passed after 0.062 seconds.
+􁁛  Test unsupportedGapsAreFlaggedAndPriorsRejected() passed after 0.053 seconds.
+􁁛  Test authoredObjectivesSeparateIntroductionsFromCombinations() passed after 0.053 seconds.
+􁁛  Test officialLevelsLeadComparablePortLevelsWithoutOverridingDifficulty() passed after 0.053 seconds.
+􁁛  Test isolatedPracticePrecedesCombinationsAndPassiveLevelsDoNotOpen() passed after 0.053 seconds.
+􁁛  Test learning13MigrationIncludesBoth182AdditionsWithoutChangingHistory() passed after 0.054 seconds.
+􁁛  Test DifficultyOrderAndParkingDoesNotAwardAWin() passed after 0.053 seconds.
+􁁛  Test multiplayerSourcesCannotEnterTheLearningPath() passed after 0.053 seconds.
+􁁛  Test nearEqualRepetitionsAreSpacedAndOriginDoesNotChooseTheOpening() passed after 0.053 seconds.
+􁁛  Test packRejectsEntriesFromAnotherEngineOrPack() passed after 0.053 seconds.
+􁁛  Test aLowAverageCannotHideExpertTiming() passed after 0.053 seconds.
+􁁛  Test catalogueRoundTripKeepsRevisionAndReleaseBoundary() passed after 0.053 seconds.
+􁁛  Test "Bundled packs win, and each level uses a styles root that resolves it" passed after 0.062 seconds.
+􁁛  Test onlySecuredTargetsAndCompletedWinsCelebrate() passed after 0.053 seconds.
+􁁛  Test resolvesTheFullTypedIdentity() passed after 0.053 seconds.
+􁁛  Suite ControllerBindingsTests passed after 0.063 seconds.
+􁁛  Suite SkillShortcutsTests passed after 0.063 seconds.
+􁁛  Test "A slow second press, another key or a held repeat is not a double tap" passed after 0.048 seconds.
+􁁛  Test "Time that goes backwards cannot complete a double tap" passed after 0.048 seconds.
+􁁛  Suite NxlvKitTests passed after 0.063 seconds.
+􁁛  Suite AssignmentFocusTests passed after 0.063 seconds.
+􁁛  Test improvementsEarnOnlyTheNewCreditAndRewindsDoNotEarnUses() passed after 0.063 seconds.
+􁁛  Suite FanTextTerrainTests passed after 0.063 seconds.
+􁁛  Test cancellationPropagatesWithoutReturningPartialSuccess() passed after 0.062 seconds.
+􁁛  Suite LevelPlaylistTests passed after 0.063 seconds.
+􁁛  Suite "NeoLemmix bundled and player libraries" passed after 0.063 seconds.
+􁁛  Suite "NeoLemmix final-state oracle" passed after 0.063 seconds.
+􁁛  Suite LevelCatalogueTests passed after 0.063 seconds.
+􁁛  Test covoxIsReplacedAtTheSameDifficultyAndRetiredRunsRecover() passed after 0.057 seconds.
+􁁛  Test "A second press of the same key within the interval is a double tap" passed after 0.048 seconds.
+􁁛  Suite "Double tap" passed after 0.065 seconds.
+􁁛  Test goldenRimIsSubtleClippedAndLeavesTheCentreUntouched() passed after 0.060 seconds.
+􁁛  Suite RescueCelebrationTests passed after 0.070 seconds.
+􁁛  Test "Fallback order and unsafe manifests" passed after 0.071 seconds.
+􁁛  Suite "NeoLemmix pack library" passed after 0.071 seconds.
+􁁛  Test distinctThreeStarLevelsEarnZoomAndSuperzoomAcrossEngines() passed after 0.079 seconds.
+􁁛  Suite PrecisionRewardTests passed after 0.079 seconds.
+􁁛  Test intermediateBridgeLessonMigratesWithoutSkippingOrRepeatingVisits() passed after 0.075 seconds.
+􁁛  Test classicDifficultyAnalysesAWinAtTheSourceClockLimit() passed after 0.126 seconds.
+􁁛  Test cellbashIsSecondAndMigratesEveryUnvisitedLesson() passed after 0.146 seconds.
+􁁛  Test somethingWrongIsReplacedByANukeFreeRoute() passed after 0.233 seconds.
+􁁛  Test timingProbesUseRealSimulationOutcomes() passed after 1.245 seconds.
+􁁛  Test modernBeastRhythmIsCentredWithoutChangingFaithfulStereo() passed after 1.500 seconds.
+􁁛  Suite BeastMixTests passed after 1.500 seconds.
+􁁛  Test keepsTheWholeCampaignAndFillsTheRetailJump() passed after 2.854 seconds.
+􁁛  Suite LearningJourneyTests passed after 2.863 seconds.
+􁁛  Test completeOriginalPlusRetainsEveryAnchorBeyondOneHundred() passed after 5.794 seconds.
+􁁛  Suite DifficultyTests passed after 5.795 seconds.
+􁁛  Test run with 86 tests in 16 suites passed after 5.795 seconds.
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite MobileCoreTests started.
+􀟈  Suite MobileBitmapTests started.
+􀟈  Test thermalPolicyNeverChangesSimulationRules() started.
+􀟈  Test fixedTickClockDropsSuspensionTime() started.
+􀟈  Test touchTargetingPrefersEligibilityFollowersAndTools() started.
+􀟈  Test safeAreaLayoutKeepsTouchTargetsOnScreen() started.
+􀟈  Test allThreeGamesAssignDuringPlanningWithoutAdvancingTime() started.
+􀟈  Test sequelSessionsReplayTheirInputCheckpoints() started.
+􀟈  Test planningDoesNotBypassReadyInterruptionOrResults() started.
+􀟈  Test completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test checkpointRejectsAnOlderWriter() started.
+􀟈  Test classicJumpingRisesAcrossTheRemainingStepPixel() started.
+􀟈  Test loupeKeepsExactPixelsAndClipsAtLevelEdges() started.
+􀟈  Test touchRouterDoesNotAssignAfterAPan() started.
+􀟈  Test bitmapCameraMatchesTouchAfterPanZoomAndRotation() started.
+􀟈  Test viewportZoomKeepsTheGestureAnchorStable() started.
+􀟈  Test lifecycleSavesOnceAndRequiresExplicitResume() started.
+􀟈  Test contentImportStagesBeforeCommitAndPreservesTheLiveCopyOnFailure() started.
+􀟈  Test classicSessionRestoresTheExactTick() started.
+􀟈  Test checkpointFallsBackToTheLastValidatedCopy() started.
+􀟈  Test heldTouchCommitsButCancellationAndReleaseOnlyDragDoNot() started.
+􀟈  Test previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test case passing 1 argument engine → "classic-dos" to completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test case passing 1 argument engine → "classic-dos" to previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􁁛  Test fixedTickClockDropsSuspensionTime() passed after 0.001 seconds.
+􁁛  Test planningDoesNotBypassReadyInterruptionOrResults() passed after 0.001 seconds.
+􁁛  Test touchRouterDoesNotAssignAfterAPan() passed after 0.001 seconds.
+􁁛  Test viewportZoomKeepsTheGestureAnchorStable() passed after 0.001 seconds.
+􁁛  Test thermalPolicyNeverChangesSimulationRules() passed after 0.001 seconds.
+􁁛  Test heldTouchCommitsButCancellationAndReleaseOnlyDragDoNot() passed after 0.001 seconds.
+􁁛  Test touchTargetingPrefersEligibilityFollowersAndTools() passed after 0.001 seconds.
+􁁛  Test safeAreaLayoutKeepsTouchTargetsOnScreen() passed after 0.001 seconds.
+􁁛  Test lifecycleSavesOnceAndRequiresExplicitResume() passed after 0.001 seconds.
+􁁛  Test loupeKeepsExactPixelsAndClipsAtLevelEdges() passed after 0.001 seconds.
+􁁛  Test classicJumpingRisesAcrossTheRemainingStepPixel() passed after 0.002 seconds.
+􁁛  Test checkpointRejectsAnOlderWriter() passed after 0.005 seconds.
+􁁛  Test completedRunRejectsLateCheckpointWrites(engine:) with 3 test cases passed after 0.006 seconds.
+􁁛  Test checkpointFallsBackToTheLastValidatedCopy() passed after 0.007 seconds.
+􁁛  Test previousRunCleanupPreservesRetryCheckpoint(engine:) with 3 test cases passed after 0.008 seconds.
+􁁛  Test classicSessionRestoresTheExactTick() passed after 0.009 seconds.
+􁁛  Test contentImportStagesBeforeCommitAndPreservesTheLiveCopyOnFailure() passed after 0.010 seconds.
+􁁛  Test allThreeGamesAssignDuringPlanningWithoutAdvancingTime() passed after 0.020 seconds.
+􁁛  Test sequelSessionsReplayTheirInputCheckpoints() passed after 0.026 seconds.
+􁁛  Suite MobileCoreTests passed after 0.027 seconds.
+􁁛  Test bitmapCameraMatchesTouchAfterPanZoomAndRotation() passed after 0.047 seconds.
+􁁛  Suite MobileBitmapTests passed after 0.047 seconds.
+􁁛  Test run with 20 tests in 2 suites passed after 0.047 seconds.
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􁁛  Test run with 0 tests in 0 suites passed after 0.001 seconds.

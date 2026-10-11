@@ -1,0 +1,15 @@
+PASS release identity and verified delta payload
+From https://github.com/ErikVeland/Lemmings
+ * branch              main       -> FETCH_HEAD
+To https://github.com/ErikVeland/Lemmings.git
+   0398d081..71559011  71559011ce09631479bc27644abe60b348bd88ae -> main
+==> Creating GitHub release v1.9.2
+https://github.com/ErikVeland/Lemmings/releases/tag/v1.9.2
+==> Publishing appcast.xml to the main branch
+{"content":{"name":"appcast.xml","path":"appcast.xml","sha":"153f51caf6e8b4f378f76efcd8982d8a881690e9","size":32517,"url":"https://api.github.com/repos/ErikVeland/Lemmings/contents/appcast.xml?ref=main","html_url":"https://github.com/ErikVeland/Lemmings/blob/main/appcast.xml","git_url":"https://api.github.com/repos/ErikVeland/Lemmings/git/blobs/153f51caf6e8b4f378f76efcd8982d8a881690e9","download_url":"https://raw.githubusercontent.com/ErikVeland/Lemmings/main/appcast.xml","type":"file","_links":{"self":"https://api.github.com/repos/ErikVeland/Lemmings/contents/appcast.xml?ref=main","git":"https://api.github.com/repos/ErikVeland/Lemmings/git/blobs/153f51caf6e8b4f378f76efcd8982d8a881690e9","html":"https://github.com/ErikVeland/Lemmings/blob/main/appcast.xml"}},"commit":{"sha":"8eed2412cbd9aaa3809103a17100e5971c94d2c2","node_id":"C_kwDOUm6QmtoAKDhlZWQyNDEyY2JkOWFhYTM4MDkxMDNhMTcxMDBlNTk3MWM5NGQyYzI","url":"https://api.github.com/repos/ErikVeland/Lemmings/git/commits/8eed2412cbd9aaa3809103a17100e5971c94d2c2","html_url":"https://github.com/ErikVeland/Lemmings/commit/8eed2412cbd9aaa3809103a17100e5971c94d2c2","author":{"name":"Erik Veland","email":"erikveland@gmail.com","date":"2026-10-11T14:00:52Z"},"committer":{"name":"Erik Veland","email":"erikveland@gmail.com","date":"2026-10-11T14:00:52Z"},"tree":{"sha":"d7da6db47f002a80e842c91b10ea0dd23097d3de","url":"https://api.github.com/repos/ErikVeland/Lemmings/git/trees/d7da6db47f002a80e842c91b10ea0dd23097d3de"},"message":"Publish 1.9.2 update feed","parents":[{"sha":"71559011ce09631479bc27644abe60b348bd88ae","url":"https://api.github.com/repos/ErikVeland/Lemmings/git/commits/71559011ce09631479bc27644abe60b348bd88ae","html_url":"https://github.com/ErikVeland/Lemmings/commit/71559011ce09631479bc27644abe60b348bd88ae"}],"verification":{"verified":false,"reason":"unsigned","signature":null,"payload":null,"verified_at":null}}}Published v1.9.2 and appcast.xml to ErikVeland/Lemmings
+Traceback (most recent call last):
+  File "/Users/veland/Lemmings/.build/release-1.9.2/verify-live.py", line 21, in <module>
+    if attempt==11:raise AssertionError('Raw Sparkle feed has not reached the published contents')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Raw Sparkle feed has not reached the published contents
+PASS public release tag, both remote SHA256 digests/sizes/ZIP responses, and live main and raw Sparkle update feeds

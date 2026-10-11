@@ -1,0 +1,29 @@
+UI test windows: offscreen; audio: muted
+warning: /Users/veland/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'lemmings': failed storing manifest for 'lemmings' in cache: attempt to write a readonly database
+warning: 'sparkle': failed storing manifest for 'sparkle' in cache: attempt to write a readonly database
+Test Suite 'Selected tests' started at 2026-10-11 23:14:55.554.
+Test Suite 'NxlvKitTests.xctest' started at 2026-10-11 23:14:55.558.
+Test Suite 'NxlvKitTests.xctest' passed at 2026-10-11 23:14:55.558.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-10-11 23:14:55.558.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.004) seconds
+Test Suite 'Selected tests' started at 2026-10-11 23:14:55.638.
+Test Suite 'LemmingsMobileCoreTests.xctest' started at 2026-10-11 23:14:55.639.
+Test Suite 'LemmingsMobileCoreTests.xctest' passed at 2026-10-11 23:14:55.639.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-10-11 23:14:55.639.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+Test Suite 'Selected tests' started at 2026-10-11 23:14:55.726.
+Test Suite 'LemmingsLocalTests.xctest' started at 2026-10-11 23:14:55.727.
+Test Suite 'JourneySolutionTests' started at 2026-10-11 23:14:55.727.
+Test Case '-[LemmingsLocalTests.JourneySolutionTests testEarlyFanLessonsHavePlayableSolutionReplays]' started.
+Test Case '-[LemmingsLocalTests.JourneySolutionTests testEarlyFanLessonsHavePlayableSolutionReplays]' passed (1.572 seconds).
+Test Suite 'JourneySolutionTests' passed at 2026-10-11 23:14:57.299.
+	 Executed 1 test, with 0 failures (0 unexpected) in 1.572 (1.572) seconds
+Test Suite 'LemmingsLocalTests.xctest' passed at 2026-10-11 23:14:57.299.
+	 Executed 1 test, with 0 failures (0 unexpected) in 1.572 (1.572) seconds
+Test Suite 'Selected tests' passed at 2026-10-11 23:14:57.299.
+	 Executed 1 test, with 0 failures (0 unexpected) in 1.572 (1.573) seconds

@@ -1,0 +1,51 @@
+PASS native L3 attribute grids and bounds
+PASS experimental L3 landing, blocker, turn, jump, exit and deterministic ticks
+PASS L3 source soft terrain wears under walking feet
+PASS L3 directional high rise and projected clearance
+PASS L3 leftward source stair rise
+PASS L3 trap bounds, capture, animation, cooldown, covering and jumping
+PASS L3 sucker activation, wall climbing, shimmy jump, ceiling traversal and release
+PASS L3 bomb and grenade inventory, fuses, terrain, permanent protection and tool-box survival
+PASS L3 Fatale charm, distraction, Hadoken combat, Potato attacks, reserves and Buzzard pursuit
+PASS L3 pickups, directional tools, drop, terrain protection and reserves
+PASS L3 umbrella, automatic clock, swimming and swimming turns
+PASS native L3 first tutorial: 10 rescued, 10 in reserve, 482 experimental ticks
+PASS L3 skips keep the population and never pass a completed or final level
+PASS L3 Classic 2: 2 tool boxes, 2 extra lemmings
+PASS L3 Classic 2 tool replay: 12 rescued, 10 in reserve, 1059 experimental ticks
+PASS L3 Classic 3 spade replay: 10 rescued, 11 in reserve, 1 lost, 686 experimental ticks
+PASS L3 Classic 3: 4 tool boxes, 0 extra lemmings
+PASS L3 Classic 4: 5 tool boxes, 2 extra lemmings
+PASS L3 Classic 5: 15 tool boxes, 0 extra lemmings
+PASS L3 Classic 6: 4 tool boxes, 0 extra lemmings
+PASS L3 Classic 7: 6 tool boxes, 0 extra lemmings
+PASS L3 Classic 8: 11 tool boxes, 2 extra lemmings
+PASS L3 Classic 9: 7 tool boxes, 1 extra lemmings
+PASS L3 Classic 10: 4 tool boxes, 2 extra lemmings
+PASS L3 Classic 11: 22 tool boxes, 1 extra lemmings
+PASS L3 Classic 12: 19 tool boxes, 0 extra lemmings
+PASS L3 Classic 13: 6 tool boxes, 3 extra lemmings
+PASS L3 Classic 14: 10 tool boxes, 2 extra lemmings
+PASS L3 Classic 15: 5 tool boxes, 3 extra lemmings
+PASS L3 Classic 16: 16 tool boxes, 2 extra lemmings
+PASS L3 Classic 17: 5 tool boxes, 0 extra lemmings
+PASS L3 Classic 18: 10 tool boxes, 0 extra lemmings
+PASS L3 Classic 19: 12 tool boxes, 2 extra lemmings
+PASS L3 Classic 20: 7 tool boxes, 2 extra lemmings
+PASS L3 Classic 21: 5 tool boxes, 0 extra lemmings
+PASS L3 Classic 22: 7 tool boxes, 0 extra lemmings
+PASS L3 Classic 23: 6 tool boxes, 3 extra lemmings
+PASS L3 Classic 24: 31 tool boxes, 0 extra lemmings
+PASS L3 Classic 25: 25 tool boxes, 2 extra lemmings
+PASS L3 Classic 26: 20 tool boxes, 2 extra lemmings
+PASS L3 Classic 27: 21 tool boxes, 2 extra lemmings
+PASS L3 Classic 28: 38 tool boxes, 2 extra lemmings
+PASS L3 Classic 29: 14 tool boxes, 2 extra lemmings
+PASS L3 Classic 30: 15 tool boxes, 2 extra lemmings
+PASS L3 Egyptian 27 connected source stairs
+PASS L3 Egyptian 25 grenade boxes
+PASS L3 nine native trap types: trigger cells, idle frames, frame delays, cycle pauses, capture and cooldown
+PASS L3 Shadow 1 bridge/jumper replay: 9 rescued, 1 abandoned, 10 in reserve, 594 experimental ticks, campaign advances
+PASS L3 Shadow: all 30 levels release, isolated progress
+PASS L3 Egyptian 1 spade replay: 10 rescued, 10 in reserve, 502 experimental ticks, campaign advances
+PASS L3 Egyptian: all 30 levels release, isolated progress

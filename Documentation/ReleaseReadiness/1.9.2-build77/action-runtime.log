@@ -1,0 +1,6 @@
+UI test windows: offscreen; audio: muted
+PASS live Classic inputs/undo, local retention, opt-in action upload, no video upload, unauthenticated top-ten downloads, checksum rejection and profile deletion
+PASS classic bounded action-only format, commands, final verification, tamper rejection, seek and replay render targets
+PASS lemmings2 bounded action-only format, commands, final verification, tamper rejection, seek and replay render targets
+PASS lemmings3 bounded action-only format, commands, final verification, tamper rejection, seek and replay render targets
+PASS neolemmix bounded action-only format, commands, final verification, tamper rejection, seek and replay render targets

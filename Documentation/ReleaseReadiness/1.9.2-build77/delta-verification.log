@@ -1,0 +1,5 @@
+PASS Ed25519 archive signature against the shipping app's public key
+PASS delta signature, all 14700 payload files including 649 music files, and published feed entries
+/Users/veland/Lemmings/.build/release-1.9.2/delta-patched/Ultimate Lemmings.app: accepted
+source=Notarized Developer ID
+origin=Developer ID Application: Erik Veland (54WU29TRTY)
