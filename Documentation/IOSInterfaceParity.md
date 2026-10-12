@@ -39,6 +39,9 @@ has tested the installed candidate. No automatic foreground fallback is allowed.
 
 Release evidence: [build 8](ReleaseReadiness/2.0DeviceBeta-2026-10-11/Build8/README.md).
 
+The phased work to close the remaining gaps is in the
+[iPad feature parity plan](IPadFeatureParityPlan.md).
+
 ## 12 October adaptive source increment
 
 The source now keeps the Mac-style cover browser in both iPad orientations and
@@ -122,3 +125,27 @@ same action. A lone last action in a page footer now spans the full row.
 Open items: collections, playlists, filters by status and the Mac's own
 level-count measuring are not ported. The Mac keeps its own `unzip`-based
 updater. The two updaters share one rule set by test, not by code.
+
+## 12 October collections and playlists increment
+
+The home page has a Collections row. Collections holds Favourites, Recently
+played and Playlists. Recently played keeps the latest 50 distinct levels,
+newest first, and a replay moves its level to the front.
+
+A playlist is an ordered list of levels from any packs. The editor can rename,
+reorder, remove and delete. Delete asks for a second tap. A level page can add
+its level to a playlist or make a new one. Random 10 makes a playlist of ten
+distinct levels from the open pack.
+
+Play runs a playlist in order. Shuffle runs it in a repeatable random order that
+the app stores with its seed, so a relaunch resumes the same sequence. A run
+saves its position when each level starts. A Resume row appears on the home page
+and in Collections until the run ends or its playlist is deleted. Playlist results
+do not advance pack progress. An entry whose pack or level is gone stays visible,
+and it blocks Play until it is removed. Tests cover the stores, the shuffle and
+the saved run. The favourites, recents and playlists share one list library.
+
+Open items: Shuffle all across the installed fan pool is not ported. The wide
+level browser has no Playlist action. Playlists are not per profile, and Hot
+Seat turn ownership does not apply yet. The Mac's playlist file keeps revisions
+and a backup. The iOS store keeps a single saved copy in app defaults.

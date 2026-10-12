@@ -106,3 +106,72 @@ struct MobileFavouritesTests {
         }
     }
 }
+
+struct MobilePlaylistTests {
+    private func entry(_ n: Int) -> MobileFavourites.Entry { .init(pack: "p", level: "l\(n)") }
+
+    @Test func recentsKeepFiftyDistinctNewestFirst() {
+        var recents = MobileRecents()
+        for n in 0..<60 { recents.record(entry(n)) }
+        #expect(recents.entries.count == 50 && recents.entries.first == entry(59) && recents.entries.last == entry(10))
+        recents.record(entry(30))   // a replay moves to the front
+        #expect(recents.entries.first == entry(30) && recents.entries.count == 50
+                && recents.entries.filter { $0 == entry(30) }.count == 1)
+    }
+
+    @Test func editingKeepsOrderAndRejectsDuplicates() throws {
+        var store = MobilePlaylistStore()
+        let created = store.create(name: "  ")
+        let id = try #require(created)
+        #expect(store.playlist(id)?.name == "Playlist")
+        let first = store.add(entry(1), to: id), second = store.add(entry(2), to: id)
+        let third = store.add(entry(3), to: id), duplicate = store.add(entry(2), to: id)
+        #expect(first && second && third && !duplicate)
+        store.move(at: 2, by: -2, in: id)
+        #expect(store.playlist(id)?.entries == [entry(3), entry(1), entry(2)])
+        store.move(at: 0, by: -5, in: id)   // stops at the end
+        #expect(store.playlist(id)?.entries.first == entry(3))
+        store.remove(at: 1, from: id)
+        #expect(store.playlist(id)?.entries == [entry(3), entry(2)])
+        store.rename(id, to: "Hard ones")
+        #expect(store.playlist(id)?.name == "Hard ones")
+        store.delete(id)
+        #expect(store.playlists.isEmpty)
+    }
+
+    @Test func shuffleIsAPermutationThatRepeatsForASeed() {
+        let pool = (0..<40).map(entry)
+        let a = MobilePlaylistStore.shuffled(pool, seed: 7), b = MobilePlaylistStore.shuffled(pool, seed: 7)
+        let c = MobilePlaylistStore.shuffled(pool, seed: 8)
+        #expect(a == b && a != c && a != pool && Set(a) == Set(pool) && a.count == pool.count)
+        let ten = MobilePlaylistStore.random(10, from: pool, seed: 3)
+        #expect(ten.count == 10 && Set(ten).count == 10 && ten == MobilePlaylistStore.random(10, from: pool, seed: 3))
+        #expect(MobilePlaylistStore.random(10, from: Array(pool.prefix(4)), seed: 3).count == 4)
+    }
+
+    @Test func runsPersistWithTheirFixedOrder() throws {
+        let defaults = try #require(UserDefaults(suiteName: "playlist-test-" + UUID().uuidString))
+        var store = MobilePlaylistStore()
+        let created = store.create(name: "Run", entries: (0..<6).map(entry))
+        let id = try #require(created)
+        let started = store.startRun(id, shuffle: true, seed: 42)
+        let run = try #require(started)
+        #expect(run.entries == MobilePlaylistStore.shuffled((0..<6).map(entry), seed: 42))
+        store.advance(to: 3)
+        store.save(to: defaults)
+        let loaded = MobilePlaylistStore.load(from: defaults)
+        #expect(loaded.run?.position == 3 && loaded.run?.entries == run.entries && loaded.playlists.count == 1)
+        var ended = loaded
+        ended.advance(to: 99)   // past the end finishes the run
+        #expect(ended.run == nil)
+        var empty = MobilePlaylistStore()
+        let blankID = empty.create(name: "Empty")
+        let blank = try #require(blankID)
+        let none = empty.startRun(blank, shuffle: false)
+        #expect(none == nil)
+        // Deleting the playlist removes its saved run.
+        var removing = loaded
+        removing.delete(id)
+        #expect(removing.run == nil && removing.playlists.isEmpty)
+    }
+}

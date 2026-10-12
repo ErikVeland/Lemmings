@@ -38,33 +38,45 @@ public struct MobileFavourites: Equatable, Sendable {
     }
 }
 
-/// The starred levels as one library, in the order they were starred.
+/// A list of levels from any packs, played as one library.
 ///
-/// Each level keeps its own pack's session, so a saved run reopens in that pack.
-public final class MobileFavouritesLibrary: MobileGameLibrary {
+/// Favourites, Recently Played and playlists all use it. Each level keeps its own
+/// pack's session, so a saved run reopens in that pack. An entry whose pack or
+/// level is gone is skipped.
+public final class MobileListLibrary: MobileGameLibrary {
     public let levels: [MobileLevelSummary]
-    public var displayName: String { "Favourites" }
+    public let displayName: String
 
+    /// For each level shown, its position in the entry list this library was built from.
+    public let entryIndices: [Int]
     private let resolved: [(pack: String, index: Int)]
     private let libraries: [String: any MobileGameLibrary]
 
-    public init(favourites: MobileFavourites, catalogue: MobileCatalogue) {
+    public init(entries: [MobileFavourites.Entry], name: String, catalogue: MobileCatalogue) {
+        displayName = name
         var opened: [String: any MobileGameLibrary] = [:]
         var found: [(pack: String, index: Int)] = []
         var summaries: [MobileLevelSummary] = []
-        for entry in favourites.entries {
+        var sources: [Int] = []
+        for (entryIndex, entry) in entries.enumerated() {
             if opened[entry.pack] == nil, let pack = catalogue.pack(id: entry.pack),
                let library = try? catalogue.library(for: pack) { opened[entry.pack] = library }
             guard let library = opened[entry.pack],
                   let index = library.levels.indices.first(where: { library.levelKey(at: $0) == entry.level }),
                   let title = catalogue.pack(id: entry.pack)?.title else { continue }
             found.append((entry.pack, index))
+            sources.append(entryIndex)
             summaries.append(MobileLevelSummary(index: summaries.count, rank: title,
                                                 number: summaries.count + 1, title: library.levels[index].title))
         }
         resolved = found
+        entryIndices = sources
         libraries = opened
         levels = summaries
+    }
+
+    public convenience init(favourites: MobileFavourites, catalogue: MobileCatalogue) {
+        self.init(entries: favourites.entries, name: "Favourites", catalogue: catalogue)
     }
 
     public func levelKey(at index: Int) -> String {
@@ -80,8 +92,10 @@ public final class MobileFavouritesLibrary: MobileGameLibrary {
         return MobileLevelContent(summary: levels[index], session: content.session)
     }
 
-    /// Where a level of this library really lives.
+    /// Where a level of this list really lives.
     public func origin(of index: Int) -> (pack: String, index: Int)? {
         resolved.indices.contains(index) ? resolved[index] : nil
     }
 }
+
+public typealias MobileFavouritesLibrary = MobileListLibrary

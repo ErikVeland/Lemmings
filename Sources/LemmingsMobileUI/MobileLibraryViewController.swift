@@ -5,13 +5,13 @@ import NxlvKit
 import UIKit
 import UniformTypeIdentifiers
 
-private struct MobileMenuPreview: Sendable {
+struct MobileMenuPreview: Sendable {
     let frame: MobilePixelFrame
     let origin: MobilePoint
     let snapshot: MobileGameSnapshot
 }
 
-private actor MobileMenuPreviewLoader {
+actor MobileMenuPreviewLoader {
     /// Each loader opens its own library, so previews never share state with the one being played.
     private let makeLibrary: @Sendable () throws -> any MobileGameLibrary
     private var library: (any MobileGameLibrary)?
@@ -33,34 +33,45 @@ private actor MobileMenuPreviewLoader {
 }
 
 @MainActor final class MobileLibraryViewController: UIViewController, UIDocumentPickerDelegate {
-    private enum Route: Equatable { case home, family(MobileFamily), levels, settings, soundtrack, data }
+    enum Route: Equatable {
+        case home, family(MobileFamily), levels, settings, soundtrack, data
+        case collections, playlists, playlist(UUID), addToPlaylist
+    }
     private let scrollView = UIScrollView()
-    private let canvas = MobileMenuCanvas()
+    let canvas = MobileMenuCanvas()
     private let unfold = MobileUnfoldView()
     private var previousSize = CGSize.zero
-    private let browser = MobileLevelBrowserView()
-    private var browserShown = false
-    private var route = Route.home
+    let browser = MobileLevelBrowserView()
+    var browserShown = false
+    var route = Route.home
     private var store: MobileContentStore?
     private var checkpointStore: MobileCheckpointStore?
-    private var library: (any MobileGameLibrary)?
-    private var catalogue: MobileCatalogue?
-    private var currentPack: MobileContentPack?
-    private var levelsBackRoute = Route.home
-    private var favourites = MobileFavourites.load()
-    private var searchQuery = ""
-    private let searchField = UITextField()
+    var library: (any MobileGameLibrary)?
+    var catalogue: MobileCatalogue?
+    var currentPack: MobileContentPack?
+    var levelsBackRoute = Route.home
+    var favourites = MobileFavourites.load()
+    var recents = MobileRecents.load()
+    var playlists = MobilePlaylistStore.load()
+    var playlistSelection: Int?
+    var confirmingDelete = false
+    /// Non-nil while the keyboard edits a playlist name.
+    var nameDraft: String?
+    /// Set while a playlist run is the library being played.
+    var activeRun: MobilePlaylistRun?
+    var searchQuery = ""
+    let searchField = UITextField()
     private var fanUpdateStatus = ""
     private var fanUpdating = false
     private var pendingCheckpoint: MobileCheckpointEnvelope?
-    private var selectedIndex = 0
-    private var previewLoader: MobileMenuPreviewLoader?
+    var selectedIndex = 0
+    var previewLoader: MobileMenuPreviewLoader?
     private var previewTask: Task<Void, Never>?
     private var previewGeneration = UUID()
-    private var selectedPreview: MobileMenuPreview?
-    private var notice = ""
+    var selectedPreview: MobileMenuPreview?
+    var notice = ""
     private var loading = false
-    private var game: MobileGameViewController?
+    var game: MobileGameViewController?
     private var solved: Set<Int> {
         // Favourites mirror the progress of the packs their levels belong to.
         if let list = library as? MobileFavouritesLibrary {
@@ -75,7 +86,7 @@ private actor MobileMenuPreviewLoader {
     private static func progressKey(for pack: String?, fallback: String) -> String {
         "mobile.completed." + (pack ?? fallback)
     }
-    private func solvedLevels(for pack: String?) -> Set<Int> {
+    func solvedLevels(for pack: String?) -> Set<Int> {
         let defaults = UserDefaults.standard
         var all = Set(defaults.array(forKey: Self.progressKey(for: pack, fallback: library?.displayName ?? "classic")) as? [Int] ?? [])
         // Builds before the catalogue stored Classic progress under the release name.
@@ -118,8 +129,10 @@ private actor MobileMenuPreviewLoader {
         searchField.alpha = 0.01
         searchField.frame = CGRect(x: -100, y: -100, width: 10, height: 10)
         searchField.addAction(UIAction { [weak self] _ in
-            self?.searchQuery = self?.searchField.text ?? ""
-            self?.rebuild()
+            guard let self else { return }
+            if self.nameDraft != nil { self.nameDraft = String((self.searchField.text ?? "").prefix(40)) }
+            else { self.searchQuery = self.searchField.text ?? "" }
+            self.rebuild()
         }, for: .editingChanged)
         searchField.addAction(UIAction { [weak self] _ in self?.searchField.resignFirstResponder(); self?.rebuild() }, for: .editingDidEndOnExit)
         view.addSubview(searchField)
@@ -147,7 +160,7 @@ private actor MobileMenuPreviewLoader {
         scrollView.contentSize = size
         game?.view.frame = view.bounds
     }
-    private func rebuild() {
+    func rebuild() {
         unfold.stop()
         let count = library?.levels.count ?? 0
         let subtitle = loading ? "Loading..." : notice
@@ -155,6 +168,10 @@ private actor MobileMenuPreviewLoader {
         case .home:
             var rows: [GameFrontEnd.Action] = []
             if pendingCheckpoint != nil { rows.append(.init("resume", "Resume saved run", primary: true)) }
+            if catalogue != nil, let run = playlists.run {
+                rows.append(.init("runResume", "Resume \(run.name)  \(run.position + 1)/\(run.entries.count)",
+                                  primary: pendingCheckpoint == nil))
+            }
             if let catalogue {
                 for family in catalogue.families {
                     let packs = catalogue.packs(in: family)
@@ -171,8 +188,8 @@ private actor MobileMenuPreviewLoader {
                 rows.append(.init("classic", "Lemmings  \(solved.count)/\(count)", enabled: count > 0,
                                   primary: pendingCheckpoint == nil && count > 0))
             }
-            if catalogue != nil, !favourites.entries.isEmpty {
-                rows.append(.init("favourites", "Favourites  \(favourites.entries.count)"))
+            if catalogue != nil {
+                rows.append(.init("collections", "Collections"))
             }
             rows.append(.init("l2", "Lemmings 2 - Unavailable", enabled: false))
             rows.append(.init("l3", "Lemmings 3 - Unavailable", enabled: false))
@@ -217,7 +234,9 @@ private actor MobileMenuPreviewLoader {
                                     + [.init("previous", "< Level", enabled: rankIndex > 0),
                                          .init("next", "Level >", enabled: rankIndex + 1 < rank.count),
                                          .init("favourite", "Favourite", selected: isFavourite(selectedIndex)),
-                                         .init("back", "Back"),
+                                         .init("addPlaylist", "Playlist", enabled: catalogue != nil && favouriteIdentity(selectedIndex) != nil)]
+                                    + (currentPack != nil && activeRun == nil && library.levels.count > 1 ? [.init("random", "Random 10")] : [])
+                                    + [.init("back", "Back"),
                                          .init("play", solved.contains(selectedIndex) ? "Play again" : "Play", enabled: !loading, primary: true)],
                                 preview: true, footerColumns: 2)
             if let preview = selectedPreview {
@@ -238,6 +257,14 @@ private actor MobileMenuPreviewLoader {
                                        .init("soundtrack", "Soundtrack libraries")],
                                 footer: [.init("home", "Back")])
             canvas.preview = nil
+        case .collections:
+            canvas.page = collectionsPage(subtitle: subtitle); canvas.preview = nil
+        case .playlists:
+            canvas.page = playlistsPage(subtitle: subtitle); canvas.preview = nil
+        case let .playlist(id):
+            canvas.page = playlistPage(id, subtitle: subtitle); canvas.preview = nil
+        case .addToPlaylist:
+            canvas.page = addToPlaylistPage(subtitle: subtitle); canvas.preview = nil
         case .soundtrack:
             let libraries = MobileMusicLibraries.shared
             let packs = libraries.catalogue?.packs ?? []
@@ -283,14 +310,16 @@ private actor MobileMenuPreviewLoader {
         let x = max(0, min(image.width - width, Int(preview.origin.x)))
         return image.cropping(to: CGRect(x: x, y: 0, width: width, height: image.height))
     }
-    private func navigate(_ next: Route) {
+    func navigate(_ next: Route) {
         searchField.resignFirstResponder()
+        if nameDraft != nil, !{ if case .playlist = next { return true } else { return false } }() { nameDraft = nil; searchField.text = searchQuery }
+        confirmingDelete = false
         previewTask?.cancel(); previewGeneration = UUID(); loading = false
         route = next; notice = ""
         scrollView.setContentOffset(.zero, animated: false)
         rebuild()
     }
-    private func handle(_ id: String) {
+    func handle(_ id: String) {
         switch id {
         case "classic": levelsBackRoute = .home; navigate(.levels); selectLevel(selectedIndex)
         case "home": navigate(.home)
@@ -334,6 +363,7 @@ private actor MobileMenuPreviewLoader {
             defaults.set(speeds[(current + 1) % speeds.count], forKey: "mobile.fastSpeed")
             rebuild()
         default:
+            if handleCollections(id) { return }
             if id.hasPrefix("lib."), let pack = MobileMusicLibraries.shared.catalogue?.packs.first(where: { $0.id == String(id.dropFirst(4)) }) {
                 let libraries = MobileMusicLibraries.shared
                 if libraries.progress[pack.id] != nil { libraries.cancel(pack) }
@@ -349,7 +379,7 @@ private actor MobileMenuPreviewLoader {
     }
 
     /// The pack and level key that identify the selected level in the favourites store.
-    private func favouriteIdentity(_ index: Int) -> (pack: String, level: String)? {
+    func favouriteIdentity(_ index: Int) -> (pack: String, level: String)? {
         guard let library else { return nil }
         if let list = library as? MobileFavouritesLibrary, let origin = list.origin(of: index),
            let source = catalogue?.pack(id: origin.pack), let real = try? catalogue?.library(for: source) {
@@ -359,7 +389,7 @@ private actor MobileMenuPreviewLoader {
         return (pack.id, library.levelKey(at: index))
     }
 
-    private func isFavourite(_ index: Int) -> Bool {
+    func isFavourite(_ index: Int) -> Bool {
         favouriteIdentity(index).map { favourites.contains(pack: $0.pack, level: $0.level) } ?? false
     }
 
@@ -463,7 +493,7 @@ private actor MobileMenuPreviewLoader {
         let next = (current + offset + ranks.count) % ranks.count
         if let level = library.levels.first(where: { $0.rank == ranks[next] }) { selectLevel(level.index) }
     }
-    private func selectLevel(_ index: Int) {
+    func selectLevel(_ index: Int) {
         guard let previewLoader else { selectedIndex = index; rebuild(); return }
         previewTask?.cancel()
         let generation = UUID(); previewGeneration = generation
@@ -526,7 +556,7 @@ private actor MobileMenuPreviewLoader {
         }
         startLevel(checkpoint.levelIndex, checkpoint: checkpoint)
     }
-    private func startLevel(_ index: Int, checkpoint: MobileCheckpointEnvelope?) {
+    func startLevel(_ index: Int, checkpoint: MobileCheckpointEnvelope?) {
         guard let library, let checkpointStore else { return }
         do {
             let content = try library.loadLevel(at: index)
@@ -537,10 +567,14 @@ private actor MobileMenuPreviewLoader {
                       checkpoint.levelFingerprint == content.session.levelFingerprint else { throw MobileSessionError.changedLevel }
                 try content.session.restoreCheckpointPayload(checkpoint.payload)
             }
+            levelStarted(index)
+            // Playlist and shuffle results do not advance campaign or pack progress.
+            let inRun = activeRun != nil
             let next = MobileGameViewController(summary: content.summary, session: content.session,
                                                checkpointStore: checkpointStore, restoredCheckpoint: checkpoint)
             next.onCompleted = { [weak self] snapshot in
                 guard let self, snapshot.didWin else { return }
+                if inRun { self.finishRunIfNeeded(afterLast: index); return }
                 var pack = self.currentPack?.id, real = index
                 if let list = library as? MobileFavouritesLibrary, let origin = list.origin(of: index) {
                     pack = origin.pack; real = origin.index
@@ -559,7 +593,7 @@ private actor MobileMenuPreviewLoader {
                 case .retry: self.startLevel(index, checkpoint: nil)
                 case .next:
                     if library.levels.indices.contains(index + 1) { self.startLevel(index + 1, checkpoint: nil) }
-                    else { self.handle("home"); self.game?.onExit?(.library) }
+                    else { self.finishRunIfNeeded(afterLast: index); self.handle("home"); self.game?.onExit?(.library) }
                 }
             }
             let previous = game
