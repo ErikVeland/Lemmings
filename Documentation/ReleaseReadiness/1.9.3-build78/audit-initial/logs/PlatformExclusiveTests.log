@@ -1,0 +1,6 @@
+PASS SNESLevelDecoder 5 Sunsoft Special levels verified
+PASS GenesisLevelDecoder 30 Presenter levels verified
+PASS ArcadeLevelDecoder bonus stages verified
+PASS the four titles with no playable levels stay out of the library
+PASS all 60 Oh Yes! levels render and release lemmings using their source artwork
+Platform exclusive tests passed successfully.

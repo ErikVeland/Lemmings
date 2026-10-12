@@ -1,0 +1,4 @@
+UI test windows: offscreen; audio: muted
+PASS classic native golden aura: live sprite masks, reduced flashes, expiry and rendered states
+PASS lemmings2 native golden aura: live sprite masks, reduced flashes, expiry and rendered states
+PASS lemmings3 native golden aura: live sprite masks, reduced flashes, expiry and rendered states

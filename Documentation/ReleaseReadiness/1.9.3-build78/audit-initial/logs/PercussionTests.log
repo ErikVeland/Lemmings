@@ -1,0 +1,5 @@
+Percussion tests failed: no shipped module names a drum sample
+PASS drum names are recognised
+PASS melodic instruments are not mistaken for drums
+PASS shape is only consulted when the name says nothing
+PASS held, looping and long samples are not hits

@@ -3,6 +3,32 @@
     <channel>
         <title>Ultimate Lemmings</title>
         <item>
+            <title>1.9.3</title>
+            <pubDate>Mon, 12 Oct 2026 19:14:33 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>78</sparkle:version>
+            <sparkle:shortVersionString>1.9.3</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>This Mac update makes rescue celebrations clearer and gives players more control over visual distractions.</p>
+<h3>Rescue celebrations</h3>
+<p>Reaching the rescue goal adds a stronger golden haze and warm light around the lemmings. HDR screens add extra light. Reduced flashes disables the sprite aura; reduced motion keeps the glow steady.</p>
+<p>Levels that require every lemming show a brief glow and retain their current music, avoiding a short celebratory track change before the next level. Classic, Lemmings 2 and Lemmings 3 share this rule.</p>
+<h3>Accessibility</h3>
+<p>Accessibility settings now include Show song info and Fade Menu button. Both can be disabled. Song information fades in gently over 350 milliseconds and leaves gameplay clicks available.</p>
+<h3>Update alerts</h3>
+<p>Compatible updates appear in the home menu as soon as Sparkle discovers them, including during automatic downloads. Launch checks can bring the update alert forward, and scheduled checks run hourly by default. Saved update preferences are retained.</p>
+<h3>Compatibility and validation scope</h3>
+<p>Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Full and slim downloads retain original Macintosh music. Automatic updates retain the full music library, with a signed delta from build 77.</p>
+<p>The Tribes remains Complete. Chronicles and NeoLemmix remain Beta. iOS 2.0 remains separate from this Mac release.</p>
+<p>Checks cover rescue timing, music selection, saved accessibility settings, rendered controls, all three Mac playfields and the Metal aura. Native UI checks run offscreen with test audio muted. Physical HDR appearance, audible listening, physical Intel and minimum-macOS checks remain open. Package and publication evidence is recorded separately.</p>
+<p class="meta">Build: 78<br>Release commit: 361241f9607929c03977d6971df1d907a185b78f<br>Release base: v1.9.2</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.3/UltimateLemmings-1.9.3-build78.zip" length="2044222765" type="application/octet-stream" sparkle:edSignature="UvvMwJYYvYSLG5hIFnHYPwAc1pXTpzH/c2BHzcGDkOJ82C15xJykYa/B5r8dWYwEecMAVZtn8IegZKEzJm0dDA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.3/UltimateLemmings-build78-from77.delta" sparkle:deltaFrom="77" length="1683234" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="69N4hGgT6iSVt92OfxiUfFkx/5vidxzeJ7DsMul+s1TZ7V4ruuBAoeZ0ilrZu4Hphi5sn37u2ZPBVy580molBQ=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>1.9.2</title>
             <pubDate>Sun, 11 Oct 2026 23:46:45 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>

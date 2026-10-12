@@ -1,8 +1,7 @@
 # Automatic updates
 
 Ultimate Lemmings uses Sparkle 2.7.3 for macOS updates.
-The hourly schedule and discovery reminders below are source changes for the
-next release. Public build 77 retains the daily schedule.
+Version 1.9.3 build 78 adds hourly checks and early discovery reminders.
 
 ## Runtime contract
 
@@ -24,8 +23,8 @@ commit the key or pass the key value as a command argument.
 
 ## Current releases
 
-Public 1.9.2 build 77 is the current release. The
-[1.9.2 distribution record](ReleaseReadiness/1.9.2Build77Distribution.md) covers
+Public 1.9.3 build 78 is the current release. The
+[1.9.3 distribution record](ReleaseReadiness/1.9.3Build78Distribution.md) covers
 the notarised archives, signed live feed and validation limits. Publish an
 appcast only with its matching signed and notarised archive.
 

@@ -1,0 +1,156 @@
+E../opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106e82d40>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106e82e30>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106e832e0>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106e834c0>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106e836a0>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106e835b0>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106e83880>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106e83790>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106e83970>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106e83b50>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106e83d30>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106e83e20>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106e83f10>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa4040>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa4130>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa4220>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa4310>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa4400>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106e83a60>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa44f0>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa45e0>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa46d0>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa47c0>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa49a0>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa48b0>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa4a90>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa4b80>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa4c70>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa4e50>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa5030>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa4f40>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa5120>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa5210>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa5300>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa53f0>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa55d0>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa56c0>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa54e0>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/encoder.py:263: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x106fa57b0>
+  return _iterencode(o, 0)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....E.........
+======================================================================
+ERROR: test_action_http_contract_and_hash (test_server.RankingsTests.test_action_http_contract_and_hash)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/veland/Lemmings/.build/release-1.9.3/source/Tools/Rankings/test_server.py", line 105, in test_action_http_contract_and_hash
+    server=Server(('127.0.0.1',0),Handler);server.store=self.store
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py", line 148, in server_bind
+    socketserver.TCPServer.server_bind(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py", line 478, in server_bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted
+
+======================================================================
+ERROR: test_http_contract (test_server.RankingsTests.test_http_contract)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/veland/Lemmings/.build/release-1.9.3/source/Tools/Rankings/test_server.py", line 193, in test_http_contract
+    server = Server(('127.0.0.1',0), Handler); server.store=self.store
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py", line 148, in server_bind
+    socketserver.TCPServer.server_bind(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py", line 478, in server_bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.376s
+
+FAILED (errors=2)
