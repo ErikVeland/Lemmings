@@ -1,0 +1,9 @@
+{
+  "changedChannels" : 230976,
+  "frameCount" : 1000,
+  "glowDrawMaximumMilliseconds" : 8.4538333467207849,
+  "glowDrawP95Milliseconds" : 7.0870000054128468,
+  "maximumChannelDelta" : 1,
+  "scope" : "Windowless 1280x640 bitmap draw with the actual production helper, fresh scene identities and a warmed async glow. Does not certify whole-game throughput or physical HDR.",
+  "sourceImageReplacedEveryFrame" : true
+}

@@ -15,9 +15,9 @@ before distributing a build.
 
 ## Download
 
-Download [1.9.3 build 78](https://github.com/ErikVeland/Lemmings/releases/tag/v1.9.3),
+Download [1.9.4 build 79](https://github.com/ErikVeland/Lemmings/releases/tag/v1.9.4),
 the current public release. Installed copies update automatically. Read the
-[1.9.3 release notes](Documentation/ReleaseNotes-1.9.3-build78.md) and the
+[1.9.4 release notes](Documentation/ReleaseNotes-1.9.4-build79.md) and the
 [tester guide](Documentation/BetaTesting.md).
 
 [Collections](Documentation/LevelCollections.md) keeps each player's favourite

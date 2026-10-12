@@ -30,3 +30,5 @@ Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Full and s
 The Tribes remains Complete. Chronicles and NeoLemmix remain Beta. iOS 2.0 remains separate from this Mac release.
 
 Public-release checks run headlessly with native UI windows offscreen and test audio muted. Package, update-feed and focused regression results are recorded in the distribution evidence. Physical HDR appearance, audible listening, physical Intel, minimum macOS and sustained high-speed hardware acceptance remain manual checks.
+
+Release commit: 4cf2c500bf9f8759bfc0c01b00051e195775e533

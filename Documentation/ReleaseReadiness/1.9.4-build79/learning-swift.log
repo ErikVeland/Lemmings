@@ -1,0 +1,259 @@
+UI test windows: offscreen; audio: muted
+Fetching https://github.com/sparkle-project/Sparkle.git from cache
+Fetched https://github.com/sparkle-project/Sparkle.git from cache (1.24s)
+Computing version for https://github.com/sparkle-project/Sparkle.git
+Computed https://github.com/sparkle-project/Sparkle.git at 2.7.3 (2.12s)
+Creating working copy for https://github.com/sparkle-project/Sparkle.git
+Working copy of https://github.com/sparkle-project/Sparkle.git resolved at 2.7.3
+Fetching binary artifact https://github.com/sparkle-project/Sparkle/releases/download/2.7.3/Sparkle-for-Swift-Package-Manager.zip from cache
+Fetched https://github.com/sparkle-project/Sparkle/releases/download/2.7.3/Sparkle-for-Swift-Package-Manager.zip from cache (0.56s)
+Building for debugging...
+[Computing dependencies]
+[Pre-planning 1 / 474]
+[Planning 1 / 474]
+[Planning deferred tasks]
+[75 / 212]
+[95 / 212]
+[96 / 213] NxlvKit
+[105 / 272]
+[108 / 272]
+[111 / 272]
+[114 / 272]
+[116 / 272]
+[120 / 272]
+[122 / 272]
+[125 / 272]
+[129 / 272]
+[132 / 272]
+[133 / 272]
+[134 / 272]
+[139 / 272]
+[140 / 272]
+[155 / 272] NxlvKit
+[168 / 275] LemmingsGameArt
+[180 / 299] LemmingsMobileCore
+[193 / 299] LemmingsMobileCore
+[195 / 299] LemmingsMobileCore
+[198 / 299] LemmingsMobileCore
+[205 / 299] LemmingsMobileCore
+[211 / 311] LemmingsMobileUI
+[220 / 311] LemmingsMobileUI
+[236 / 314]
+[238 / 315] LemmingsMobileCore
+[238 / 315] NxlvKit
+[239 / 315] LemmingsMobileMenuAudit-product
+[243 / 319] LemmingsMobileBetaTool-product
+[244 / 319] LemmingsMobileMenuAudit-product
+[245 / 319] LemmingsMobileBetaTool-product
+[247 / 319] LemmingsLocal
+[260 / 389]
+[266 / 389]
+[270 / 389]
+[271 / 389]
+[273 / 389]
+[276 / 389]
+[278 / 389]
+[283 / 389]
+[285 / 389]
+[286 / 389]
+[287 / 389]
+[301 / 389] LemmingsLocal-product
+[304 / 389] NxlvKit
+[305 / 389] LemmingsLocal-product
+[307 / 389] LemmingsLocal
+[308 / 389] LemmingsLocal-product
+[311 / 389] LemmingsLocal
+/Users/veland/Lemmings/.build/release-1.9.3/source/Sources/LemmingsLocal/ReleaseWelcome.swift:48:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+46 |         scroll.hasHorizontalScroller = false
+47 |         scroll.drawsBackground = false
+48 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+49 |         scroll.scrollerStyle = .overlay
+50 |         scroll.setAccessibilityLabel("Release notes")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[318 / 389] LemmingsLocal
+[319 / 389] LemmingsLocal
+[319 / 389] LemmingsLocal-product
+[320 / 389] LemmingsLocalTests-product
+[321 / 389] LemmingsLocalTests-product
+[323 / 389] LemmingsLocal
+[324 / 389] LemmingsLocal
+[325 / 389] LemmingsLocal
+[326 / 389] LemmingsLocal
+[326 / 389]
+[332 / 389] LemmingsGameArt
+[333 / 389] LemmingsMobileCore
+[335 / 390]
+[338 / 390]
+[341 / 409] LemmingsDataTool-product
+[344 / 413] LemmingsMobileBetaTool-product
+[346 / 413] LemmingsGameArt-product
+[351 / 413]
+/Users/veland/Lemmings/.build/release-1.9.3/source/Sources/LemmingsLocal/ReleaseWelcome.swift:48:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+46 |         scroll.hasHorizontalScroller = false
+47 |         scroll.drawsBackground = false
+48 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+49 |         scroll.scrollerStyle = .overlay
+50 |         scroll.setAccessibilityLabel("Release notes")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[356 / 413] NxlvKitTests-product
+[357 / 413] NxlvKitTests-product
+[357 / 413] LemmingsLocal
+[361 / 413] LemmingsMobileCoreTests-product
+[367 / 413] NxlvKitTests-product
+[373 / 413] NxlvKitTests-product
+[376 / 413] NxlvKitTests-product
+[378 / 413] NxlvKitTests-product
+[379 / 413] LemmingsMobileCoreTests-product
+[380 / 413] LemmingsMobileCoreTests-product
+[382 / 413] LemmingsMobileCoreTests-product
+[382 / 413] NxlvKitTests-product
+/Users/veland/Lemmings/.build/release-1.9.3/source/Sources/LemmingsLocal/main.swift:6089:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6087 |       openPanel.canChooseFiles = true
+6088 |       openPanel.canChooseDirectories = false
+6089 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6090 |       openPanel.message = "Choose a NeoLemmix level file."
+6091 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/.build/release-1.9.3/source/Sources/LemmingsLocal/main.swift:7399:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7397 |       openPanel.canChooseFiles = true
+7398 |       openPanel.canChooseDirectories = false
+7399 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7400 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+7401 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/.build/release-1.9.3/source/Sources/LemmingsLocal/main.swift:8107:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8105 |     keyboard.controllerRewindHeld = { [weak self] held in
+8106 |       guard let self else { return }
+8107 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8108 |       else if self.rewindHeld { self.endContinuousRewind() }
+8109 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[383 / 413] LemmingsLocal-product
+[384 / 413] LemmingsLocal
+[384 / 413] LemmingsMobileCoreTests-product
+[388 / 413] LemmingsLocal-product
+[389 / 413] LemmingsLocal-product
+[390 / 413] LemmingsMobileCoreTests-product
+[394 / 413] LemmingsMobileCoreTests-product
+[398 / 413] LemmingsLocal
+/Users/veland/Lemmings/.build/release-1.9.3/source/Sources/LemmingsLocal/main.swift:6089:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6087 |       openPanel.canChooseFiles = true
+6088 |       openPanel.canChooseDirectories = false
+6089 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6090 |       openPanel.message = "Choose a NeoLemmix level file."
+6091 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/.build/release-1.9.3/source/Sources/LemmingsLocal/main.swift:7399:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7397 |       openPanel.canChooseFiles = true
+7398 |       openPanel.canChooseDirectories = false
+7399 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7400 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+7401 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/.build/release-1.9.3/source/Sources/LemmingsLocal/main.swift:8107:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8105 |     keyboard.controllerRewindHeld = { [weak self] held in
+8106 |       guard let self else { return }
+8107 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8108 |       else if self.rewindHeld { self.endContinuousRewind() }
+8109 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[400 / 413] LemmingsLocal
+[403 / 414] LemmingsLocalTests-product
+[404 / 427]
+[406 / 427]
+[407 / 427]
+[416 / 427] LemmingsLocalTests-product
+[421 / 427] AllIncludingTests
+[421 / 427] LemmingsLocalTests-product
+[423 / 427] LemmingsLocalTests-product
+[426 / 427] LemmingsLocalTests-product
+Build complete! (47.54 sec.)
+Test Suite 'Selected tests' started at 2026-10-13 03:29:15.861.
+Test Suite 'NxlvKitTests.xctest' started at 2026-10-13 03:29:15.865.
+Test Suite 'NxlvKitTests.xctest' passed at 2026-10-13 03:29:15.865.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-10-13 03:29:15.865.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.004) seconds
+Test Suite 'Selected tests' started at 2026-10-13 03:29:15.975.
+Test Suite 'LemmingsMobileCoreTests.xctest' started at 2026-10-13 03:29:15.977.
+Test Suite 'LemmingsMobileCoreTests.xctest' passed at 2026-10-13 03:29:15.977.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-10-13 03:29:15.977.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.002) seconds
+Test Suite 'Selected tests' started at 2026-10-13 03:29:16.152.
+Test Suite 'LemmingsLocalTests.xctest' started at 2026-10-13 03:29:16.154.
+Test Suite 'LearningJourneyDesktopTests' started at 2026-10-13 03:29:16.154.
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testJourneyHubPrefersTheCurrentSessionAndFindsAnActiveSoloFallback]' started.
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testJourneyHubPrefersTheCurrentSessionAndFindsAnActiveSoloFallback]' passed (0.007 seconds).
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testJourneyPagesRenderWithUsableTargets]' started.
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testJourneyPagesRenderWithUsableTargets]' passed (0.356 seconds).
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testLearningFailureActionsAndSharedEngineDefaults]' started.
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testLearningFailureActionsAndSharedEngineDefaults]' passed (0.255 seconds).
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testOhYesRevisionIgnoresUnrelatedPorts]' started.
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testOhYesRevisionIgnoresUnrelatedPorts]' passed (0.021 seconds).
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testSavedJourneyResumesAfterAnotherEngineSessionWithoutLosingEitherQueue]' started.
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testSavedJourneyResumesAfterAnotherEngineSessionWithoutLosingEitherQueue]' passed (0.015 seconds).
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testVisitsPersistAtomicallyAndOldDocumentsMigrate]' started.
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testVisitsPersistAtomicallyAndOldDocumentsMigrate]' passed (0.004 seconds).
+Test Suite 'LearningJourneyDesktopTests' passed at 2026-10-13 03:29:16.813.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.659 (0.660) seconds
+Test Suite 'LemmingsLocalTests.xctest' passed at 2026-10-13 03:29:16.814.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.659 (0.660) seconds
+Test Suite 'Selected tests' passed at 2026-10-13 03:29:16.814.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.659 (0.662) seconds
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite LearningJourneyTests started.
+􀟈  Test unsupportedGapsAreFlaggedAndPriorsRejected() started.
+􀟈  Test isolatedPracticePrecedesCombinationsAndPassiveLevelsDoNotOpen() started.
+􀟈  Test officialLevelsLeadComparablePortLevelsWithoutOverridingDifficulty() started.
+􀟈  Test covoxIsReplacedAtTheSameDifficultyAndRetiredRunsRecover() started.
+􀟈  Test measuredNarrowTimingStartsAtDifficult() started.
+􀟈  Test cellbashIsSecondAndMigratesEveryUnvisitedLesson() started.
+􀟈  Test DifficultyOrderAndParkingDoesNotAwardAWin() started.
+􀟈  Test rawReplayScoreKeepsAComparableDemandBandSmooth() started.
+􀟈  Test aLowAverageCannotHideExpertTiming() started.
+􀟈  Test keepsTheWholeCampaignAndFillsTheRetailJump() started.
+􀟈  Test intermediateBridgeLessonMigratesWithoutSkippingOrRepeatingVisits() started.
+􀟈  Test authoredObjectivesSeparateIntroductionsFromCombinations() started.
+􀟈  Test highSourceConstraintsStartAtDifficult() started.
+􀟈  Test multiplayerSourcesCannotEnterTheLearningPath() started.
+􀟈  Test complexRoutesWaitForSecondBasicSkillPractice() started.
+􀟈  Test nearEqualRepetitionsAreSpacedAndOriginDoesNotChooseTheOpening() started.
+􀟈  Test learning13MigrationIncludesBoth182AdditionsWithoutChangingHistory() started.
+􀟈  Test somethingWrongIsReplacedByANukeFreeRoute() started.
+􁁛  Test unsupportedGapsAreFlaggedAndPriorsRejected() passed after 0.006 seconds.
+􁁛  Test measuredNarrowTimingStartsAtDifficult() passed after 0.006 seconds.
+􁁛  Test rawReplayScoreKeepsAComparableDemandBandSmooth() passed after 0.006 seconds.
+􁁛  Test officialLevelsLeadComparablePortLevelsWithoutOverridingDifficulty() passed after 0.006 seconds.
+􁁛  Test multiplayerSourcesCannotEnterTheLearningPath() passed after 0.006 seconds.
+􁁛  Test highSourceConstraintsStartAtDifficult() passed after 0.006 seconds.
+􁁛  Test authoredObjectivesSeparateIntroductionsFromCombinations() passed after 0.006 seconds.
+􁁛  Test aLowAverageCannotHideExpertTiming() passed after 0.006 seconds.
+􁁛  Test complexRoutesWaitForSecondBasicSkillPractice() passed after 0.006 seconds.
+􁁛  Test isolatedPracticePrecedesCombinationsAndPassiveLevelsDoNotOpen() passed after 0.006 seconds.
+􁁛  Test nearEqualRepetitionsAreSpacedAndOriginDoesNotChooseTheOpening() passed after 0.009 seconds.
+􁁛  Test DifficultyOrderAndParkingDoesNotAwardAWin() passed after 0.009 seconds.
+􁁛  Test covoxIsReplacedAtTheSameDifficultyAndRetiredRunsRecover() passed after 0.042 seconds.
+􁁛  Test learning13MigrationIncludesBoth182AdditionsWithoutChangingHistory() passed after 0.046 seconds.
+􁁛  Test intermediateBridgeLessonMigratesWithoutSkippingOrRepeatingVisits() passed after 0.103 seconds.
+􁁛  Test cellbashIsSecondAndMigratesEveryUnvisitedLesson() passed after 0.160 seconds.
+􁁛  Test somethingWrongIsReplacedByANukeFreeRoute() passed after 0.233 seconds.
+􁁛  Test keepsTheWholeCampaignAndFillsTheRetailJump() passed after 3.389 seconds.
+􁁛  Suite LearningJourneyTests passed after 3.389 seconds.
+􁁛  Test run with 18 tests in 1 suite passed after 3.390 seconds.

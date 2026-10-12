@@ -1,0 +1,15 @@
+Sources/LemmingsLocal/ReleaseWelcome.swift:48:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+46 |         scroll.hasHorizontalScroller = false
+47 |         scroll.drawsBackground = false
+48 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+49 |         scroll.scrollerStyle = .overlay
+50 |         scroll.setAccessibilityLabel("Release notes")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+UI test windows: offscreen; audio: muted
+PASS stalled encoding preserves input responsiveness, rejects partial movies and stops unused capture work
+PASS 51 exact video ticks, upright frames, non-silent module/SFX audio, half/double-speed exports; 0.75s
+PASS exact 17.5 Hz L2 and 23 Hz L3 movie clocks
+PASS encoded directional ghosts: all 41 frames, slopes, reversal, fall, climb, camera shifts and unequal live/replay render cadence
+FAIL: Error Domain=NSCocoaErrorDomain Code=260 "The file “manifest.json” couldn’t be opened because there is no such file." UserInfo={NSFilePath=/Users/veland/Lemmings/.build/release-1.9.3/source/.build/local/Ultimate Lemmings.app/Contents/Resources/MacArtwork/lemmings/manifest.json, NSURL=.build/local/Ultimate%20Lemmings.app/Contents/Resources/MacArtwork/lemmings/manifest.json -- file:///Users/veland/Lemmings/.build/release-1.9.3/source/, NSUnderlyingError=0x7732527180 {Error Domain=NSPOSIXErrorDomain Code=2 "No such file or directory"}}

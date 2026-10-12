@@ -1,0 +1,47 @@
+{
+  "previousFingerprint": "591dd08a3c6aa918771b080669ec332c18d2808a20b6664f47a34e96752ebdf4",
+  "previousExclusions": [
+    "AdaptiveDJDirector.swift",
+    "AssignmentFocus.swift",
+    "ClassicMacArtwork.swift",
+    "ClassicSettings.swift",
+    "ControllerBindings.swift",
+    "GameplaySpeed.swift",
+    "Lemmings2Controls.swift",
+    "MusicLibraryCatalogue.swift",
+    "MusicRhythmCatalogue.swift",
+    "ProTrackerEnhancements.swift",
+    "RescueCelebration.swift",
+    "SkillShortcuts.swift",
+    "VinylMotion.swift"
+  ],
+  "physicsFingerprint": "d0d2ddf11c89bc40b74692253f9404d33bdf593f87e4897c0040e04d663aecbf",
+  "unchangedEngineFiles": 133,
+  "excludedPresentationFiles": [
+    "AdaptiveDJDirector.swift",
+    "AssignmentFocus.swift",
+    "ClassicMacArtwork.swift",
+    "ClassicSettings.swift",
+    "ControllerBindings.swift",
+    "GameplaySpeed.swift",
+    "LearningJourney.swift",
+    "LearningRouteSafety.swift",
+    "Lemmings2Controls.swift",
+    "MusicLibraryCatalogue.swift",
+    "MusicRhythmCatalogue.swift",
+    "ProTrackerEnhancements.swift",
+    "ProgressionPlaylist.swift",
+    "RescueCelebration.swift",
+    "SkillShortcuts.swift",
+    "VinylMotion.swift"
+  ],
+  "changedPresentationFiles": [
+    "LearningJourney.swift",
+    "LearningRouteSafety.swift",
+    "ProgressionPlaylist.swift",
+    "RescueCelebration.swift"
+  ],
+  "witnesses": 597,
+  "witnessHashesValidated": true,
+  "verifiedSourceSnapshot": "/Users/veland/Lemmings/.build/release-1.9.3/source/.build/release-1.9.3/audit/source"
+}

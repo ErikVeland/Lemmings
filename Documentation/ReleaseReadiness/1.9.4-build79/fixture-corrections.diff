@@ -1,0 +1,288 @@
+diff --git a/Scripts/run-arcade-records-tests.sh b/Scripts/run-arcade-records-tests.sh
+index 83606795..345623c2 100755
+--- a/Scripts/run-arcade-records-tests.sh
++++ b/Scripts/run-arcade-records-tests.sh
+@@ -10,10 +10,11 @@ test_optimisation="${ARCADE_TEST_OPTIMISATION:--O}"
+ swiftc "$test_optimisation" -swift-version 6 -target "$(uname -m)-apple-macos12.3" -parse-as-library -emit-module -emit-library \
+   -module-name NxlvKit -emit-module-path "$build_dir/modules/NxlvKit.swiftmodule" \
+   -Xlinker -install_name -Xlinker @rpath/libNxlvKit.dylib -o "$build_dir/libNxlvKit.dylib" Sources/NxlvKit/*.swift
++zsh "$project_dir/Scripts/build-game-art-module.sh" "$build_dir/modules" "$build_dir" "$(uname -m)-apple-macos12.3" -O
+ sources=(Sources/LemmingsLocal/*.swift)
+ sources=("${(@)sources:#*/main.swift}")
+ swiftc "$test_optimisation" -swift-version 6 -target "$(uname -m)-apple-macos12.3" \
+-  -I "$build_dir/modules" -L "$build_dir" -lNxlvKit -Xlinker -rpath -Xlinker "$build_dir" \
++  -I "$build_dir/modules" -L "$build_dir" -lNxlvKit -lLemmingsGameArt -Xlinker -rpath -Xlinker "$build_dir" \
+   -F "$sparkle_framework_dir" -framework Sparkle -Xlinker -rpath -Xlinker "$sparkle_framework_dir" \
+   -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
+   -o "$build_dir/arcade-tests" "${sources[@]}" Tests/ArcadeRecordsTests/main.swift
+diff --git a/Scripts/run-replay-movie-tests.sh b/Scripts/run-replay-movie-tests.sh
+index c7ea7881..b2e70504 100755
+--- a/Scripts/run-replay-movie-tests.sh
++++ b/Scripts/run-replay-movie-tests.sh
+@@ -12,13 +12,14 @@ swiftc -O -swift-version 6 -target "$(uname -m)-apple-macos12.3" -parse-as-libra
+   -Xlinker -install_name -Xlinker @rpath/libNxlvKit.dylib \
+   -o "$build_dir/libNxlvKit.dylib" Sources/NxlvKit/*.swift
+ fi
++zsh "$project_dir/Scripts/build-game-art-module.sh" "$library_dir/modules" "$library_dir" "$(uname -m)-apple-macos12.3" -O
+ sources=(Sources/LemmingsLocal/*.swift)
+ sources=("${(@)sources:#*/main.swift}")
+ sources=("${(@)sources:#*/AppUpdates.swift}")
+ sources=("${(@)sources:#*/ReplayWindow.swift}")
+ cat Sources/LemmingsLocal/ReplayWindow.swift Tests/ReplayMovieTests/main.swift > "$build_dir/main.swift"
+ swiftc -O -swift-version 6 -target "$(uname -m)-apple-macos12.3" \
+-  -I "$library_dir/modules" -L "$library_dir" -lNxlvKit \
++  -I "$library_dir/modules" -L "$library_dir" -lNxlvKit -lLemmingsGameArt \
+   -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
+   -Xlinker -rpath -Xlinker "$library_dir" \
+   -o "$build_dir/tests" "${sources[@]}" "$build_dir/main.swift"
+diff --git a/Scripts/run-sequel-mac-artwork-tests.sh b/Scripts/run-sequel-mac-artwork-tests.sh
+index fd19171b..a4d5c7dd 100644
+--- a/Scripts/run-sequel-mac-artwork-tests.sh
++++ b/Scripts/run-sequel-mac-artwork-tests.sh
+@@ -22,6 +22,7 @@ swiftc -O -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos1
+   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
+   -Xlinker -rpath -Xlinker "$build_dir" -o "$build_dir/tests" Tests/SequelMacArtworkTests/main.swift
+ "$build_dir/tests" "$@"
++zsh "$project_dir/Scripts/build-game-art-module.sh" "$build_dir/modules" "$build_dir" "$(uname -m)-apple-macos12.3" -O
+ cat Sources/LemmingsLocal/Lemmings2PlayWindow.swift Sources/LemmingsLocal/Lemmings3PlayWindow.swift \
+   Sources/LemmingsLocal/SettingsWindow.swift \
+   Tests/SequelMacArtworkAppTests/checks.swift > "$build_dir/app-test/main.swift"
+@@ -32,7 +33,7 @@ app_sources=("${(@)app_sources:#*/Lemmings3PlayWindow.swift}")
+ app_sources=("${(@)app_sources:#*/SettingsWindow.swift}")
+ swiftc -O -swift-version 6 -target "$(uname -m)-apple-macos12.3" \
+   -module-cache-path "$module_cache" \
+-  -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
++  -I "$build_dir/modules" -L "$build_dir" -lNxlvKit -lLemmingsGameArt \
+   -Xlinker -rpath -Xlinker "$build_dir" -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
+   -F "$sparkle_framework_dir" -framework Sparkle \
+   -Xlinker -rpath -Xlinker "$sparkle_framework_dir" \
+diff --git a/Tests/AppIntegrationTests/checks.swift b/Tests/AppIntegrationTests/checks.swift
+index 7f48752e..986e2efa 100644
+--- a/Tests/AppIntegrationTests/checks.swift
++++ b/Tests/AppIntegrationTests/checks.swift
+@@ -1452,11 +1452,17 @@ extension AppDelegate {
+     togglePause()
+     try check(isPaused && !playfield.startCountdown.isActive, "Pause during countdown must remain paused")
+     togglePause()
++    GameScreen.shared.gameWindow = window
+     let preferences = SettingsWindow(settings: ClassicSettings(), options: settingsOptions())
+     preferences.onChange = { [weak self] in self?.apply($0) }
+     preferences.show()
+     func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap { descendants($0) } }
+     let root = window.contentView!
++    func reveal(_ control: NSView) {
++      root.layoutSubtreeIfNeeded()
++      if control.enclosingScrollView != nil { control.scrollToVisible(control.bounds) }
++      root.layoutSubtreeIfNeeded()
++    }
+     guard let iconSize = descendants(root).compactMap({ $0 as? NSPopUpButton }).first(where: { $0.accessibilityLabel() == "Skill icon size" }) else {
+       try check(false, "Skill icon size control is missing"); return
+     }
+@@ -1482,21 +1488,26 @@ extension AppDelegate {
+     try check(backpacks.state == .on && preferences.current.showClassicSkillBackpacks,
+       "Modern must show backpacks by default")
+     root.layoutSubtreeIfNeeded()
++    reveal(backpacks)
+     try check(backpacks.visibleRect.contains(backpacks.bounds.insetBy(dx: 1, dy: 1)), "Backpack toggle is clipped")
+     let targeting = descendants(root).compactMap { $0 as? GameControlGroup }.first { $0.accessibilityLabel() == "Targeting" }!
+-    let targetingCaption = descendants(root).compactMap { $0 as? GameLabel }.first { $0.stringValue == "Targeting" }!
+-    let firstTarget = targeting.arrangedSubviews.first!
+-    try check(abs(targetingCaption.convert(targetingCaption.bounds, to: root).midY
+-      - firstTarget.convert(firstTarget.bounds, to: root).midY) < 1, "Targeting label must align with the start of its group")
++    let targetingCaption = descendants(root).compactMap { $0 as? GameLabel }.first { $0.stringValue == "Skill targeting" }!
++    let targetingDocument = targeting.superview!
++    try check(targetingCaption.convert(targetingCaption.bounds, to: targetingDocument).maxY
++      <= targeting.convert(targeting.bounds, to: targetingDocument).minY,
++      "Skill targeting heading must precede its control group")
+     for control in targeting.arrangedSubviews {
+       try check(targeting.bounds.insetBy(dx: 4, dy: 4).contains(control.convert(control.bounds, to: targeting)),
+         "Targeting group clips an option")
+     }
++    reveal(targeting)
+     try check(root.hitTest(targeting.convert(CGPoint(x: targeting.bounds.maxX - 3, y: targeting.bounds.midY), to: root)) !== playfield,
+       "Targeting group background leaked input to gameplay")
++    reveal(backpacks)
+     try check(root.hitTest(backpacks.convert(CGPoint(x: backpacks.bounds.midX, y: backpacks.bounds.midY), to: root)) === backpacks,
+       "Backpack toggle has the wrong input target")
+     func click(_ point: CGPoint, in view: NSView, releaseAt: CGPoint? = nil) {
++      reveal(view)
+       let location = view.convert(point, to: nil)
+       let down = NSEvent.mouseEvent(with: .leftMouseDown, location: location, modifierFlags: [], timestamp: 1,
+         windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1)!
+@@ -1515,6 +1526,7 @@ extension AppDelegate {
+       if GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Settings",
+          let levelSelection = descendants(root).compactMap({ $0 as? NSPopUpButton }).first(where: { $0.accessibilityLabel() == "Level selection" }),
+          let back = descendants(root).compactMap({ $0 as? NSButton }).first(where: { $0.title == "Back" }) {
++        reveal(levelSelection)
+         let levelRect = levelSelection.convert(levelSelection.bounds, to: root)
+         let backRect = back.convert(back.bounds, to: root)
+         try check(!levelRect.intersects(backRect), "Gameplay options overlap the Back button")
+@@ -1525,6 +1537,7 @@ extension AppDelegate {
+       try bitmap.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: ".build/gameplay-preset-\(name).png"))
+     }
+     func selectPreset(_ name: String, keyboard: Bool = false) throws {
++      reveal(experience)
+       try check(experience.accessibilityPerformPress(), "Preset choices could not open")
+       guard let page = GameScreen.shared.controllerPage(in: window),
+         let button = descendants(page).compactMap({ $0 as? NSButton }).first(where: { $0.title == name }) else {
+@@ -1623,6 +1636,7 @@ extension AppDelegate {
+     }
+     for style: GameplayCursorStyle in [.modern, .original] {
+       root.layoutSubtreeIfNeeded()
++      reveal(cursorStyle)
+       let centre = CGPoint(x: cursorStyle.bounds.midX, y: cursorStyle.bounds.midY)
+       try check(root.hitTest(cursorStyle.convert(centre, to: root)) === cursorStyle, "Cursor control is obscured")
+       try check(cursorStyle.accessibilityPerformPress(), "Cursor choices did not open")
+@@ -3485,7 +3499,7 @@ extension AppDelegate {
+     }
+     print("PASS live Oh Yes! rank changes load the original, Oh No and Sunsoft artwork")
+   }
+-  fileprivate func testRestartSelection() throws {
++  fileprivate func testRestartSelection() async throws {
+     settings.music = .silent
+     loadContent()
+     guard let index = dataSets.firstIndex(where: { $0.set.title == .lemmings }) else {
+@@ -3512,6 +3526,10 @@ extension AppDelegate {
+     for _ in 0..<110 { session?.tick() }
+     session?.nuke()
+     for _ in 0..<2000 where session?.isComplete == false { session?.tick() }
++    if let classic = session as? ClassicSession, let conditions = arcadeLevel?.conditions {
++      await ArcadeStore.shared.prepareSolutionTarget(initial: classic.initialSimulation, conditions: conditions,
++        resources: Bundle.main.resourceURL, buildVersion: TrolleyCapture.buildVersion).value
++    }
+     finishSessionIfNeeded()
+     try check(phase == .results, "Restart test did not reach results")
+     arcadeAutoPresent = true; presentArcadeResult(); arcadeAutoPresent = false
+@@ -4147,6 +4165,7 @@ extension AppDelegate {
+   }
+   fileprivate func testLevelBrowserRouteIntegrity() async throws {
+     GameScreen.shared.dismissAll()
++    GameScreen.shared.gameWindow = window
+     let folder = URL(fileURLWithPath: ".build/content-browser")
+     try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+     let archive = folder.appendingPathComponent("route-change-fixture")
+@@ -4557,10 +4576,26 @@ extension AppDelegate {
+         + ((view as? NSTextField).map { [$0.stringValue] } ?? [])
+         + view.subviews.flatMap(labels)
+     }
+-    try check(labels(hub).contains(where: { $0.contains(entries[0].levelNameSnapshot) })
+-      && buttons(hub).contains(where: { $0.title == "Let's play" })
+-      && !buttons(hub).contains(where: { $0.title == "Continue" }),
+-      "A new Hot Seat inherited another session's journey position: \(labels(hub)), \(buttons(hub).map(\.title))")
++    guard let savedJourney = store.resumableLearningJourney(hotSeatID: arcade.hotSeatID),
++          let continueJourney = buttons(hub).first(where: { $0.title == "Continue" }) else {
++      throw IntegrationFailure(message: "The new Hot Seat could not find the saved Solo journey")
++    }
++    let freshHotSeat = arcade.hotSeatID, runBeforePrompt = store.activeRun
++    try check(labels(hub).contains(where: { $0.contains(savedJourney.run.currentEntry.levelNameSnapshot) })
++      && savedJourney.hotSeatID == nil,
++      "The hub did not show the saved Solo journey's current lesson")
++    continueJourney.performClick(nil)
++    guard let resumePrompt = GameScreen.shared.controllerPage(in: window) as? GameMenuPage else {
++      throw IntegrationFailure(message: "Continue did not open the saved-session prompt")
++    }
++    try check(resumePrompt.accessibilityLabel() == "Resume session?"
++      && buttons(resumePrompt).contains(where: { $0.title == "Resume solo" })
++      && arcade.hotSeatID == freshHotSeat && store.activeRun == runBeforePrompt,
++      "Continue started a new session or switched ownership before confirmation")
++    resumePrompt.controllerBackButton.performClick(nil)
++    try check(arcade.hotSeatID == freshHotSeat && store.activeRun == runBeforePrompt,
++      "Cancelling the saved journey prompt changed the current session")
++    print("PASS saved Solo journey is offered after a new Hot Seat; Continue confirms resumption and Back preserves the session")
+     try check(arcade.records == profileRecords && store.learningProgress.completed.contains(first),
+       "A new Hot Seat erased profile scores, achievements or saved learning history")
+     GameScreen.shared.dismissAll()
+@@ -5564,7 +5599,11 @@ extension AppDelegate {
+   }
+ 
+   fileprivate func testSeasonalMusic() throws {
+-    let recording = ClassicMusicSource.remix(name: soundtrackLibrary.keys.sorted()[0])
++    loadSoundtracks()
++    guard let recordingName = soundtrackLibrary.keys.sorted().first else {
++      throw IntegrationFailure(message: "The seasonal fixture needs bundled recordings")
++    }
++    let recording = ClassicMusicSource.remix(name: recordingName)
+     levelMusic = nil
+     let root = URL(fileURLWithPath: "Sources/Music")
+     // Catalogue identity decides seasonal music, as in the app. Path words
+@@ -7142,7 +7181,7 @@ Task { @MainActor in
+     try await subject.testElapsedTimeAndAudioRecovery()
+     try await testGameTypography()
+     try subject.testGamePages()
+-    try subject.testRestartSelection()
++    try await subject.testRestartSelection()
+     try await subject.testLevelSkipResult()
+     try subject.testBundledRescueTarget()
+     try subject.testPortArtworkSwitching()
+diff --git a/Tests/ExplosionHDRTests/main.swift b/Tests/ExplosionHDRTests/main.swift
+index 5f580b1e..8afb34db 100644
+--- a/Tests/ExplosionHDRTests/main.swift
++++ b/Tests/ExplosionHDRTests/main.swift
+@@ -197,9 +197,9 @@ func require(_ value: Bool, _ message: String) throws {
+     }
+     let sdr = try golden(1), hdr = try golden(3), extra = try golden(3, additive: true)
+     let bright = stride(from: 0, to: hdr.count, by: 4).max { hdr[$0] < hdr[$1] }!
+-    try require(hdr[bright] > 1 && hdr[bright] > hdr[bright + 1] && hdr[bright + 1] > hdr[bright + 2],
++    try require(hdr[bright] > sdr[bright] * 1.5 && hdr[bright] < 0.7 && hdr[bright] > hdr[bright + 1] && hdr[bright + 1] > hdr[bright + 2],
+       "Rescue aura did not emit golden HDR light")
+-    try require(sdr[bright] <= 1 && sdr[bright] > 0.5, "Rescue aura disappeared without HDR headroom")
++    try require(sdr[bright] <= 0.265 && sdr[bright] > 0.05, "Rescue aura disappeared without HDR headroom")
+     try require(abs(extra[bright] + sdr[bright] - hdr[bright]) < 0.01 && extra[bright + 3] == 0,
+       "HDR aura enhancement duplicated its SDR base or darkened the frame")
+     try require(hdr[(24 * 64 + 17) * 4 + 3] == 0 && hdr[(63 * 64 + 63) * 4 + 3] == 0,
+diff --git a/Tests/ReplayMovieTests/main.swift b/Tests/ReplayMovieTests/main.swift
+index 5ac2d89b..8e27dbd8 100644
+--- a/Tests/ReplayMovieTests/main.swift
++++ b/Tests/ReplayMovieTests/main.swift
+@@ -254,7 +254,9 @@ extension ReplayMovieWindow {
+     try require(playbackRate == 8, "Fast replay did not stop at 8x")
+     bar.onAction?(.play)
+     try require(player.rate == 0, "Replay pause did not stop playback")
+-    let artwork = try ClassicMacArtwork(directory: URL(fileURLWithPath: ".build/local/Ultimate Lemmings.app/Contents/Resources/MacArtwork/lemmings"))
++    let testApp = ProcessInfo.processInfo.environment["LEMMINGS_TEST_APP"].map { URL(fileURLWithPath: $0) }
++      ?? URL(fileURLWithPath: ".build/local/Ultimate Lemmings.app")
++    let artwork = try ClassicMacArtwork(directory: testApp.appendingPathComponent("Contents/Resources/MacArtwork/lemmings"))
+     bar.useTestArtwork(artwork)
+     bar.frame.size = CGSize(width: 1120, height: 154)
+     refresh()
+diff --git a/Tests/SequelMacArtworkAppTests/checks.swift b/Tests/SequelMacArtworkAppTests/checks.swift
+index ce1139d1..2edb97ab 100644
+--- a/Tests/SequelMacArtworkAppTests/checks.swift
++++ b/Tests/SequelMacArtworkAppTests/checks.swift
+@@ -695,10 +695,11 @@ extension Lemmings3PlayWindow {
+ extension Lemmings3PlayWindow {
+     fileprivate func checkMusic() throws {
+         defer { stop() }
++        var settings = ClassicSettings(); settings.music = .amigaModules
++        setAudioSettings(settings, muted: true)
+         try assertArtwork(music.library.count == 8, "L3 did not load its eight bundled modules")
+         try assertArtwork(music.currentURL?.lastPathComponent.uppercased().hasPrefix("CLASSIC") == true,
+             "L3 Classic started another tribe's music")
+-        var settings = ClassicSettings()
+         settings.music = .silent
+         setAudioSettings(settings, muted: false)
+         try assertArtwork(music.muted, "L3 ignored silent music")
+@@ -716,7 +717,7 @@ extension Lemmings3PlayWindow {
+         print("PASS L3 module playback, silence, global mute, replay suspension and stopped-player safety")
+     }
+ }
+-try Lemmings3PlayWindow(root: l3root).checkMusic()
++try Lemmings3PlayWindow(root: l3root, selection: .init(tribe: .classic, level: 0), recordsCampaignProgress: false).checkMusic()
+ try Lemmings3PlayWindow(root: l3root).checkArcadeResult()
+ 
+ private final class L3VoiceCapture: @unchecked Sendable {
+@@ -744,10 +745,12 @@ extension Lemmings3PlayWindow {
+         try assertArtwork(captures.count == 1 && captures.last?.0 == 5112 && captures.last?.1 == 14037,
+             "Accepted L3 assignment did not supply original voice samples to recording")
+         applyAction(to: actor.id, direction: .right)
+-        try assertArtwork(captures.count == 1, "Rejected L3 assignment played a voice")
++        let rejected = GameplaySupplementSounds.clip(for: .actionRejected)!
++        try assertArtwork(captures.count == 2 && captures.last?.0 == rejected.samples.count
++            && captures.last?.1 == rejected.sampleRate, "Rejected L3 assignment did not use the short rejection cue")
+         settings.sound = .silent; setAudioSettings(settings, muted: false)
+         selected = 0; applyAction(to: actor.id, direction: .right)
+-        try assertArtwork(captures.count == 1 && warningSound.muted, "L3 silent effects reached replay audio")
++        try assertArtwork(captures.count == 2 && warningSound.muted, "L3 silent effects reached replay audio")
+         settings.sound = .sampleBank; setAudioSettings(settings, muted: false)
+         let tick = game.tick
+         showGameMenu()

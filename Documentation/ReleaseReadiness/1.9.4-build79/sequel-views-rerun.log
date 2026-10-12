@@ -1,0 +1,61 @@
+PASS L2 CLASSIC: tiles, objects, lemmings, walker and effects
+PASS L2 BEACH: tiles, objects, lemmings, walker and effects
+PASS L2 CAVEMAN: tiles, objects, lemmings, walker and effects
+PASS L2 CIRCUS: tiles, objects, lemmings, walker and effects
+PASS L2 EGYPTIAN: tiles, objects, lemmings, walker and effects
+PASS L2 HIGHLAND: tiles, objects, lemmings, walker and effects
+PASS L2 MEDIEVAL: tiles, objects, lemmings, walker and effects
+PASS L2 OUTDOOR: tiles, objects, lemmings, walker and effects
+PASS L2 POLAR: tiles, objects, lemmings, walker and effects
+PASS L2 SHADOW: tiles, objects, lemmings, walker and effects
+PASS L2 SPACE: tiles, objects, lemmings, walker and effects
+PASS L2 SPORTS: tiles, objects, lemmings, walker and effects
+PASS L3 style 1: both object banks and 30 levels
+PASS L3 style 2: both object banks and 30 levels
+PASS L3 style 3: both object banks and 30 levels
+PASS 120 checked-in visual hashes
+PASS 59542 frames, 52299 generated cache entries, 214 levels
+Sources/LemmingsLocal/ReleaseWelcome.swift:48:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+46 |         scroll.hasHorizontalScroller = false
+47 |         scroll.drawsBackground = false
+48 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+49 |         scroll.scrollerStyle = .overlay
+50 |         scroll.setAccessibilityLabel("Release notes")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+UI test windows: offscreen; audio: muted
+PASS front-end contour treatment differs from terrain reconstruction without changing layout
+PASS default-on artwork, explicit opt-out, and all L2 front-end picture backing sizes
+PASS L2 live canvas 0, 110 ticks, original/2x/toggle restoration
+PASS L2 speed afterimages changes only presentation
+PASS L2 super speed: engagement, explosion independence, detach, return and 1x
+PASS L2 live canvas 10, 110 ticks, original/2x/toggle restoration
+PASS L2 live canvas 20, 110 ticks, original/2x/toggle restoration
+PASS L2 live canvas 30, 110 ticks, original/2x/toggle restoration
+PASS L2 live canvas 40, 110 ticks, original/2x/toggle restoration
+PASS L2 live canvas 50, 110 ticks, original/2x/toggle restoration
+PASS L2 live canvas 60, 110 ticks, original/2x/toggle restoration
+PASS L2 live canvas 70, 110 ticks, original/2x/toggle restoration
+PASS L2 live canvas 80, 110 ticks, original/2x/toggle restoration
+PASS L2 live canvas 90, 110 ticks, original/2x/toggle restoration
+PASS L2 live canvas 100, 110 ticks, original/2x/toggle restoration
+PASS L2 live canvas 110, 110 ticks, original/2x/toggle restoration
+PASS L3 super speed: engagement, menu, resume, explosion independence and 1x
+PASS L3 live canvas 1, 110 ticks, original/2x/toggle restoration
+PASS L3 live canvas 101, 110 ticks, original/2x/toggle restoration
+PASS L3 live canvas 201, 110 ticks, original/2x/toggle restoration
+PASS Beach default and preserved Classic save selection: Quad Quirks on the Quay!
+PASS live L2 menu, map, briefing, practice, preferences, save/load and intro artwork toggles
+PASS first-run L2 replay dimensions match the attached game view
+PASS attached L2 hints pause and restore both running and paused games
+PASS attached L2 controller hints, settings, retry and end-run confirmation
+PASS Settings HD switch, dependent explosion control and preserved old-school choice across presets
+PASS Settings HD switch, dependent explosion control and preserved old-school choice across presets
+PASS Settings Original, Modern and Custom presets, variable speed and default controls
+L2 benchmark: 90 Mac-artwork ticks, speed trails and movie capture in 0.40s
+PASS native results, talisman and ending use reversible 2x front-end artwork
+PASS completed L2 run records actual skill use and rescues exactly once
+PASS L2 one-star primary action advances to the next briefing
+PASS actual Settings checkbox updates the attached Beach player and preserves its state
+Swift/ErrorType.swift:254: Fatal error: Error raised at top level: L3 Classic started another tribe's music

@@ -197,9 +197,9 @@ func require(_ value: Bool, _ message: String) throws {
     }
     let sdr = try golden(1), hdr = try golden(3), extra = try golden(3, additive: true)
     let bright = stride(from: 0, to: hdr.count, by: 4).max { hdr[$0] < hdr[$1] }!
-    try require(hdr[bright] > 1 && hdr[bright] > hdr[bright + 1] && hdr[bright + 1] > hdr[bright + 2],
+    try require(hdr[bright] > sdr[bright] * 1.5 && hdr[bright] < 0.7 && hdr[bright] > hdr[bright + 1] && hdr[bright + 1] > hdr[bright + 2],
       "Rescue aura did not emit golden HDR light")
-    try require(sdr[bright] <= 1 && sdr[bright] > 0.5, "Rescue aura disappeared without HDR headroom")
+    try require(sdr[bright] <= 0.265 && sdr[bright] > 0.05, "Rescue aura disappeared without HDR headroom")
     try require(abs(extra[bright] + sdr[bright] - hdr[bright]) < 0.01 && extra[bright + 3] == 0,
       "HDR aura enhancement duplicated its SDR base or darkened the frame")
     try require(hdr[(24 * 64 + 17) * 4 + 3] == 0 && hdr[(63 * 64 + 63) * 4 + 3] == 0,

@@ -456,3 +456,19 @@ release audit. Automated tests were skipped for the local manual build. The exis
 and Resume controls are reused. Their captions and bounds were inspected in
 windowless exports. Native pointer dispatch and complete session round trips
 remain for manual validation.
+
+## 1.9.4 public validation
+
+The public audit passes the saved-journey XCTest and Swift Testing regressions,
+including retained queues and native progress across all three engines. Native
+offscreen checks cover saved-session navigation, replay inventory and exact
+skill ticks, compact and large render states, update discovery, song notices,
+completion callbacks, result actions, and paused Hot Seat handovers. Settings
+checks scroll each control into view before testing visibility and input.
+
+The scenery haze is a faint SDR effect built asynchronously. Pixel comparisons
+preserve empty black space and original artwork; a 1,000-frame bitmap check
+bounds draw overhead with changing scene-image identities. GPU checks verify
+the reduced sprite aura and idle cleanup. Sustained speed and physical HDR
+appearance remain manual. Offscreen focus-dependent checks remain skipped.
+See the 1.9.4 distribution evidence for measured speed and remaining limits.

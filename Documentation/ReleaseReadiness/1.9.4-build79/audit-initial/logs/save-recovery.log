@@ -1,0 +1,5 @@
+PASS initial backup, previous generation, corruption preservation, recovery and subsequent saves
+PASS unsupported versions, invalid backups and unreadable-file preservation
+PASS stale-writer rejection, backup failure, primary preservation and retry
+PASS shipping identifier, domain priority, profile isolation, explicit choices, registered defaults and one-time migration
+Save recovery tests passed.

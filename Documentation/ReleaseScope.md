@@ -14,13 +14,14 @@ Automated evidence supports the recorded native routes. Original-engine
 fidelity, high-survivor endings and hardware acceptance retain their recorded
 limits. See the [gate register](ReleaseReadiness/gates.json).
 
-The 1.9.3 build 78 macOS maintenance release is signed, notarised and public.
-Its full updater, slim download and signed build-77 delta pass publication
-checks. It adds golden sprite auras, calmer full-rescue celebrations,
-Accessibility options and visible update reminders while retaining the current
-game classifications and limits. See the
-[1.9.3 distribution record](ReleaseReadiness/1.9.3Build78Distribution.md) and
-[release notes](ReleaseNotes-1.9.3-build78.md).
+The 1.9.4 build 79 macOS maintenance release is signed, notarised and public.
+Its full updater, slim download and signed build-78 delta pass publication
+checks. It softens golden effects, caches gameplay rendering, restores saved
+Golden Path sessions, adds exact replay skill ticks and places identified
+engine-quirk routes late in Expert. Current game classifications and limits
+remain in force. See the
+[1.9.4 distribution record](ReleaseReadiness/1.9.4Build79Distribution.md) and
+[release notes](ReleaseNotes-1.9.4-build79.md).
 
 ## iOS 2.0 launch scope
 

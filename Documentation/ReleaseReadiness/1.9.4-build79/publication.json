@@ -1,0 +1,40 @@
+{
+  "version": "1.9.4",
+  "build": 79,
+  "sourceCommit": "4cf2c500bf9f8759bfc0c01b00051e195775e533",
+  "oldFeedEntriesPreserved": 10,
+  "assets": [
+    {
+      "name": "UltimateLemmings-1.9.4-build79.zip",
+      "size": 2044303097,
+      "sha256": "8ff1403b8044abc4a2ef9f8d27b9c2b89a9642fc0a3706fe722b7d43ee8db49c",
+      "notary": {
+        "status": "Accepted",
+        "id": "c7de4461-eeab-4822-a0a9-088ff6318fe0",
+        "message": "Processing complete"
+      },
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v1.9.4/UltimateLemmings-1.9.4-build79.zip",
+      "remoteDigestVerified": true,
+      "zipResponseVerified": true
+    },
+    {
+      "name": "UltimateLemmings-1.9.4-build79-slim.zip",
+      "size": 260246743,
+      "sha256": "5a02508e6f0b25c27aafff5a9912e992896068a340dbbfad173433a15c7ab318",
+      "notary": {
+        "message": "Processing complete",
+        "id": "59546eb4-8dba-4fba-b44c-6e2b32cc8a11",
+        "status": "Accepted"
+      },
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v1.9.4/UltimateLemmings-1.9.4-build79-slim.zip",
+      "remoteDigestVerified": true,
+      "zipResponseVerified": true
+    }
+  ],
+  "rawFeedVerified": true,
+  "rawFeedURL": "https://raw.githubusercontent.com/ErikVeland/Lemmings/main/appcast.xml",
+  "releaseURL": "https://github.com/ErikVeland/Lemmings/releases/tag/v1.9.4",
+  "publishedAt": "2026-10-12T18:22:32Z",
+  "remoteTagVerified": true,
+  "mainFeedVerified": true
+}
