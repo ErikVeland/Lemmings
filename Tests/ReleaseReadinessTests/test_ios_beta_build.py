@@ -31,6 +31,7 @@ class IOSBetaBuildTests(unittest.TestCase):
             art = root / ".build/mac-artwork/export/lemmings"
             art.mkdir(parents=True)
             (art / "charset.png").write_bytes(b"font pixels")
+            (art / "not-copied.png").write_bytes(b"terrain pixels")
             (art / "manifest.json").write_text(json.dumps({
                 "names": {"font": "Charset1", "unused": "Terrain"},
                 "banks": {"font": [{"file": "charset.png"}], "unused": [{"file": "not-copied.png"}]}
@@ -39,8 +40,8 @@ class IOSBetaBuildTests(unittest.TestCase):
                 before = BUILD.source_manifest()
                 self.assertIn("Sources/LemmingsGameArt/GameStoneArt.swift", before)
                 self.assertIn("Tools/IOSMenuAudit/main.swift", before)
-                self.assertIn("MacArtworkInput/charset.png", before)
-                self.assertNotIn("MacArtworkInput/not-copied.png", before)
+                self.assertIn("MacArtworkInput/lemmings/charset.png", before)
+                self.assertIn("MacArtworkInput/lemmings/not-copied.png", before)
                 (art / "charset.png").write_bytes(b"changed font pixels")
                 self.assertNotEqual(before, BUILD.source_manifest())
 

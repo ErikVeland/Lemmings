@@ -3,7 +3,7 @@ import Foundation
 /// A teaching order, independent of retail ranks. Estimates never certify human insight.
 public struct LearningJourney: Codable, Equatable, Sendable {
     public static let title = "Oh My! All Lemmings!"
-    public static let version = "learning-17"
+    public static let version = "learning-18"
     public static let communityPlacementPolicy = "redux-calibrated-2"
     public static let playlistID = UUID(uuidString: "80368144-659B-4697-B2D0-76894BF20B18")!
     public static let maximumScoreStep = 65.0
@@ -77,6 +77,7 @@ public struct LearningJourney: Codable, Equatable, Sendable {
               Set(lessons.compactMap(\.objective)).count == lessons.compactMap(\.objective).count,
               lessons.allSatisfy({ $0.entry.identity.engine == .classic && Self.isSinglePlayer($0.entry) && $0.score.isFinite
                   && $0.demand.isFinite && (0...1000).contains($0.demand)
+                  && $0.demand >= LearningRouteSafety.minimumDemand(for: $0.entry, concepts: $0.concepts)
                   && $0.stage == Stage.forLesson(demand: $0.demand, objective: $0.objective) }),
               zip(lessons, lessons.dropFirst()).allSatisfy({
                   $0.stage.order <= $1.stage.order && Int($0.demand / 35) <= Int($1.demand / 35)
@@ -87,14 +88,14 @@ public struct LearningJourney: Codable, Equatable, Sendable {
             guard placementPolicy == Self.communityPlacementPolicy,
                   lessons.allSatisfy({ lesson in
                       guard let p = lesson.placement else { return false }
-                      return ["reduxClassicCounterpart", "reduxPortCounterpart", "reviewedFan", "solutionEstimate"].contains(p.basis)
+                      return ["reduxClassicCounterpart", "reduxPortCounterpart", "reviewedFan", "solutionEstimate", "userPlaytest"].contains(p.basis)
                           && !p.reference.isEmpty && p.sourceURL.hasPrefix("https://")
                           && p.position.isFinite && p.lower.isFinite && p.upper.isFinite
                           && 0 <= p.lower && p.lower <= p.position && p.position <= p.upper
                           && p.upper <= 1000 && p.upper - p.lower <= (p.basis == "solutionEstimate" ? 1000 : 20)
                           && lesson.demand == p.position && p.sourceRevision == lesson.entry.sourceRevision
                           && !p.replayRevision.isEmpty
-                          && (!lesson.entry.identity.packID.hasPrefix("fan:") || ["reduxPortCounterpart", "reviewedFan", "solutionEstimate"].contains(p.basis))
+                          && (!lesson.entry.identity.packID.hasPrefix("fan:") || ["reduxPortCounterpart", "reviewedFan", "solutionEstimate", "userPlaytest"].contains(p.basis))
                   }),
                   zip(lessons, lessons.dropFirst()).allSatisfy({
                       (0...Self.maximumScoreStep).contains($1.demand - $0.demand)
@@ -104,7 +105,7 @@ public struct LearningJourney: Codable, Equatable, Sendable {
     }
 
     /// Replace an older built-in queue without inventing wins or changing its owner.
-    /// Keep a retained current lesson; a withdrawn lesson returns to the first unvisited reference.
+    /// Defer reported advanced lessons. Retain other current lessons and all past visits.
     public func migrating(_ run: LevelSequenceRun) throws -> LevelSequenceRun? {
         guard run.source == .playlist(Self.playlistID),
               run.pool.id.hasPrefix("learning-"),
@@ -116,10 +117,11 @@ public struct LearningJourney: Codable, Equatable, Sendable {
         let visited = Set(run.entries.prefix(run.currentIndex).map(\.identity))
         let current = lessons.firstIndex { $0.entry.identity == run.currentEntry.identity
             && $0.entry.sourceRevision == run.currentEntry.sourceRevision }
-        // Preserve the current lesson, then include every unvisited lesson in its new order.
+        // Retain ordinary current lessons. Defer reported advanced lessons to their new position.
         // Moving a future lesson earlier must not silently remove it from a saved queue.
         var future = lessons.map(\.entry).filter { !visited.contains($0.identity) }
-        if let current {
+        if let current, LearningRouteSafety.minimumDemand(for: lessons[current].entry) == 0
+            || future.first?.identity == lessons[current].entry.identity {
             let entry = lessons[current].entry
             future.removeAll { $0.identity == entry.identity }
             future.insert(entry, at: 0)
@@ -207,6 +209,8 @@ public struct LearningJourney: Codable, Equatable, Sendable {
         }
         func placementDemand(_ candidate: ProgressionCandidate) -> Double {
             let profile = candidate.profile
+            let safetyFloor = LearningRouteSafety.minimumDemand(for: candidate.entry,
+                concepts: profile.detectedTechniques, assetsRevision: profile.key.assetsRevision)
             let rankFloor = candidate.rankIsUnverified ? 180.0
                 : Self.rankDemandFloor(for: candidate.entry, sourceRank: profile.sourceRank)
             let rescueFloor = candidate.requiresFullRescue ? 360.0 : 0.0
@@ -221,17 +225,19 @@ public struct LearningJourney: Codable, Equatable, Sendable {
             let sequenceFloor = lessons.last?.demand ?? 0.0
             let observed = demand(for: profile)
             guard profile.detectedTechniques.count > 1 else {
-                return [observed, rankFloor, rescueFloor, sourceConstraintFloor, sequenceFloor].max()!
+                return [observed, safetyFloor, rankFloor, rescueFloor, sourceConstraintFloor, sequenceFloor].max()!
             }
             // A combination cannot precede its easiest available isolated lesson.
             let preparation = profile.detectedTechniques.count > 2
                 ? profile.detectedTechniques.compactMap { secondPractice[$0] }.max() ?? 0 : 0
             return [observed, profile.detectedTechniques.compactMap { foundations[$0] }.max() ?? 0,
-                    preparation, rankFloor, rescueFloor, sourceConstraintFloor,
+                    preparation, safetyFloor, rankFloor, rescueFloor, sourceConstraintFloor,
                     missingPracticeFloor, sequenceFloor].max()!
         }
         func effectiveDemand(_ candidate: ProgressionCandidate) -> Double {
             [demand(for: candidate.profile),
+             LearningRouteSafety.minimumDemand(for: candidate.entry, concepts: candidate.profile.detectedTechniques,
+                 assetsRevision: candidate.profile.key.assetsRevision),
              candidate.rankIsUnverified ? 180.0
                 : Self.rankDemandFloor(for: candidate.entry, sourceRank: candidate.profile.sourceRank),
              candidate.requiresFullRescue ? 360.0 : 0.0,

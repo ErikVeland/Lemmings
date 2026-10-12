@@ -354,18 +354,44 @@ checked, but a separate NeoLemmix artwork render was not captured in this run.
 
 ## Rescue celebration
 
+Solved Mac playfields add a very faint golden haze to terrain and scenery in
+Classic, Lemmings 2 and Lemmings 3. Limit it to 5.5% opacity at SDR brightness.
+Keep original artwork sharp and draw the haze beneath lemmings and interface
+text. Empty space receives only the soft falloff near scenery edges. Use the
+existing fade, rewind reset and brief celebration for 100% rescue requirements.
+Windowless before-and-after exports of two Classic scenes were inspected.
+Sequel gameplay and mobile appearance remain for manual validation. Automated
+tests and public release audits were skipped for this local manual build.
+
+Build background haze images off the main thread. Reuse dynamic scene haze for
+at least 0.25 seconds and limit its source width to 256 pixels. Keep fade opacity
+independent of that refresh rate. Bound each canvas cache to 32 entries and
+16 MiB, with at most two pending renders. Classic replaces its scene bitmap each
+tick, so image identity alone must not trigger a fresh blur on every frame.
+Both Mac sequels reuse decoded bitmap pixels for gameplay draws. Lemmings 2
+rebuilds its panel image only when its pixels or palette change. Artwork reloads
+clear that panel cache. Windowless exports retain normal and mirrored pixel
+orientation. Higher-speed gameplay remains for manual validation.
+
 When the rescue target is secured, give Classic, Lemmings 2 and Lemmings 3 the
-same subtle golden rim around their playfields. Keep the centre artwork clear
-and input targets unchanged. Use whole-pixel bands with a gentle fade into a
-steady state. Rewind and retry clear it. Reduced motion or reduced flashes use
-the steady state without an animated transition. Qualifying result panels use
-the same golden rim; failed results do not.
+same golden haze around their playfields and a soft golden aura around the
+rendered lemmings. Reuse their sprite masks and keep the original sprite pixels
+clear. The aura follows scrolling, precision zoom and mirrored artwork. HDR adds
+golden light to the SDR aura, bounded by the display's available headroom.
+Reduced flashes or disabled HD effects keep the steady rim and omit the bright
+sprite aura. Keep input targets unchanged. Rewind and retry clear the glow.
+Qualifying result panels use the same golden rim; failed results do not.
 
 Golden Path must retain Adaptive DJ's same-composition musical lift. A completed
-win can lift during the opening section so short lessons still celebrate. Keep
-silent music, soundtrack preferences and paused handovers intact. This change
-applies to the Mac front end. The installed iPad build 8 has no music player and
-does not contain this feedback yet.
+win can lift during the opening section so short lessons still celebrate.
+Levels requiring every lemming keep their current music. They get one brief
+glow: 0.35 seconds in, a short hold, and 0.65 seconds out, ending after 2.2 seconds.
+Reduced motion or reduced flashes show it steadily for 1.5 seconds. Do not
+repeat it while the rescue target remains secured. Other levels retain the
+steady glow and musical lift. Keep silent music, soundtrack preferences and
+paused handovers intact. The iPad source shares the music exception and brief
+glow timing. Its per-lemming golden aura and HDR output remain unvalidated;
+the mobile sequel renderers do not yet expose the shared sprite masks.
 
 Saved journey and playlist results contribute to the player’s career across all
 three engines. Result panels show each newly earned Zoom and Superzoom use in
@@ -394,3 +420,39 @@ default on and survive presets and saved settings. Do not repeat the notice for
 the same track or show it on results or handovers. Silent music clears it.
 The iOS source shares Show song info and the short fade-in. Its Menu control
 remains visible and does not use the Mac's fading preference.
+
+## Replay skill information
+
+Solution and leaderboard action replays show remaining skills in the upper-right
+corner. The shared stone panel uses the shipped bitmap font. It retains the last
+three successful skill uses with exact tick numbers. A directional marker and
+green lettering identify uses at the current tick. Seeking reconstructs both
+the inventory and event history. The panel passes pointer input to the playfield.
+
+Classic and NeoLemmix show their configured skills. Lemmings 2 uses its native
+skill slots and supplies. Lemmings 3 shows tools held by active lemmings and names
+the tool used by each recorded action. Recorded video replays retain their
+captured HUD and do not gain command annotations.
+
+Windowless, muted bitmap exports were inspected for long names, infinite supplies,
+exhausted skills, current-tick markers and six-digit ticks.
+The panel adjusts its spacing to keep these values complete. Tests and release
+audits were skipped for this local Apple silicon manual build.
+
+## Saved journey resumption
+
+The journey hub finds its saved queue across solo and Hot Seat sessions. Prefer
+this session's journey, then the active journey, then the most recently saved
+journey. Show its current lesson and Continue. Switching sessions uses the shared
+Resume session confirmation and restores the saved solo mode or Hot Seat roster
+and turn. Save the departing level and retain its queued session. Opening the hub
+must not switch players, move a run or change progress. New-session actions apply
+when no compatible journey exists. Classic, Lemmings 2 and Lemmings 3 keep the
+shared resume flow and paused Hot Seat readiness step.
+
+Persistence regression cases cover saved queues, session selection and retained
+native progress in all three engines. These cases were added for the next public
+release audit. Automated tests were skipped for the local manual build. The existing Continue
+and Resume controls are reused. Their captions and bounds were inspected in
+windowless exports. Native pointer dispatch and complete session round trips
+remain for manual validation.

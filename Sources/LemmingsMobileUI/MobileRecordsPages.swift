@@ -27,9 +27,17 @@ extension MobileLibraryViewController {
         MobileCareerArt.recordLevelPage(key, records: arcadeStore.records, profileID: profiles.activeID,
                                         profileName: profiles.active.name, subtitle: subtitle)
     }
+    func mobileCampaignProgress(profileID: String) -> ClassicAchievementProgress {
+        let packs = catalogue.map { value in value.families.flatMap { value.packs(in: $0) } } ?? []
+        let counts = Dictionary(packs.compactMap { pack -> (String, Int)? in
+            guard case let .release(_, title) = pack.source, let count = pack.levelCount else { return nil }
+            return (title.rawValue, count)
+        }, uniquingKeysWith: { first, _ in first })
+        return MobileCareerArt.campaignProgress(records: arcadeStore.records, profileID: profileID, levelCounts: counts)
+    }
     func achievementsPage(subtitle: String) -> GameFrontEnd.Page {
         MobileCareerArt.achievementsPage(records: arcadeStore.records, profileID: profiles.activeID,
-                                        profileName: profiles.active.name, subtitle: subtitle)
+            profileName: profiles.active.name, subtitle: subtitle, campaign: mobileCampaignProgress(profileID: profiles.activeID))
     }
 
     func handleRecords(_ id: String) -> Bool {
@@ -39,6 +47,10 @@ extension MobileLibraryViewController {
         default:
             if id.hasPrefix("record.") { navigate(.recordLevel(String(id.dropFirst(7)))) }
             else if id.hasPrefix("award."), let award = ArcadeLevelAchievement(rawValue: String(id.dropFirst(6))) {
+                canvas.page = .init(title: award.title, details: [award.detail], footer: [.init("achievements", "Back")])
+            } else if id.hasPrefix("careerAward."), let award = TrolleyAchievement(rawValue: String(id.dropFirst(12))) {
+                canvas.page = .init(title: award.title, details: [award.detail], footer: [.init("achievements", "Back")])
+            } else if id.hasPrefix("campaignAward."), let award = ClassicAchievement.catalog.first(where: { $0.id.rawValue == String(id.dropFirst(14)) }) {
                 canvas.page = .init(title: award.title, details: [award.detail], footer: [.init("achievements", "Back")])
             } else { return false }
         }
@@ -53,6 +65,7 @@ extension MobileLibraryViewController {
         let bestTime = arcadeStore.records.runs.filter {
             $0.profileID == run.profileID && $0.level.boardID == run.level.boardID && $0.assisted == run.assisted && $0.qualifies
         }.map(\.seconds).min()
+        let campaignBefore = mobileCampaignProgress(profileID: run.profileID).unlocked
         guard let report = arcadeStore.record(run) else {
             return ([], arcadeStore.storageError ?? "Records were not saved. Retry the save before continuing.")
         }
@@ -60,7 +73,9 @@ extension MobileLibraryViewController {
         if MobileResultAwardsCache.values.count > 128 { MobileResultAwardsCache.values.removeAll() }
         MobileResultAwardsCache.values[run.id] = (celebration.goals.stars,
             ResultAwards.ornament(report: report, celebration: celebration, history: arcadeStore.records.trolley))
-        var details = report.earned.map(\.title)
+        let campaignAfter = mobileCampaignProgress(profileID: run.profileID).unlocked
+        var details = report.earned.map(\.title) + celebration.newAwards.map { $0.award.title }
+        details += ClassicAchievement.catalog.filter { campaignAfter.contains($0.id) && !campaignBefore.contains($0.id) }.map(\.title)
         if report.newRescueBest { details.insert("New rescue record", at: 0) }
         if report.newSkillBest { details.append("New skill record") }
         if run.qualifies, bestTime.map({ run.seconds < $0 }) ?? true { details.append("New time record") }

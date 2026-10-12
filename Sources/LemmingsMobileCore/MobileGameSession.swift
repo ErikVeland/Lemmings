@@ -168,6 +168,7 @@ public protocol MobileGameSession: AnyObject {
     func resumeFromCurrentTick()
     func replayDocument() throws -> Data?
     func makeReplaySession(document: Data) throws -> (any MobileGameSession)?
+    func skillCursorFrame(control: Int) -> MobilePixelFrame?
     func applySettings(_ settings: ClassicSettings)
 
     func drainSoundCues() -> [PositionedSoundCue]
@@ -206,6 +207,7 @@ public extension MobileGameSession {
     func resumeFromCurrentTick() {}
     func replayDocument() throws -> Data? { nil }
     func makeReplaySession(document: Data) throws -> (any MobileGameSession)? { nil }
+    func skillCursorFrame(control: Int) -> MobilePixelFrame? { nil }
     func applySettings(_ settings: ClassicSettings) {}
     func drainSoundCues() -> [PositionedSoundCue] { [] }
     var initialCameraOrigin: MobilePoint { MobilePoint(x: 0, y: 0) }

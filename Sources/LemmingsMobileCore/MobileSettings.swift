@@ -47,6 +47,11 @@ public struct MobileSettings: Codable, Equatable, Sendable {
         encoder.outputFormatting = [.sortedKeys]
         if let data = try? encoder.encode(self) { defaults.set(data, forKey: Self.defaultsKey) }
     }
+
+    public mutating func applyExperiencePreset(modern: Bool) {
+        classic.applyExperiencePreset(modern: modern)
+        if !modern, soundtrack == "Adaptive DJ" { soundtrack = "Original" }
+    }
 }
 
 public enum MobileSettingsGroup: String, CaseIterable, Codable, Sendable {

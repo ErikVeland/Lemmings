@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Run one native UI test app at a time, with silent audio and offscreen windows by default."""
 import fcntl
+from contextlib import nullcontext
 import os
 from pathlib import Path
 import subprocess
@@ -31,7 +32,7 @@ def test_environment():
                 "-o", str(library),
             ], check=True)
         libraries = environment.get("DYLD_INSERT_LIBRARIES")
-        environment["DYLD_INSERT_LIBRARIES"] = str(library) + (":" + libraries if libraries else "")
+        environment["DYLD_INSERT_LIBRARIES"] = libraries if libraries and str(library) in libraries.split(":") else str(library) + (":" + libraries if libraries else "")
     print(f"UI test windows: {mode}; audio: {audio}", flush=True)
     return environment
 
@@ -40,8 +41,13 @@ def main():
     if len(sys.argv) < 2:
         raise SystemExit("Usage: run.py command [arguments ...]")
     lock = Path(tempfile.gettempdir()) / f"lemmings-ui-tests-{os.getuid()}.lock"
-    with lock.open("a") as handle:
-        fcntl.flock(handle, fcntl.LOCK_EX)
+    # A test script may invoke this runner again. Its inherited placement library
+    # identifies the outer runner, which already holds the process-wide lock.
+    library = Path(__file__).resolve().parents[2] / ".build/ui-test-runner/WindowPlacement.dylib"
+    nested = str(library) in os.environ.get("DYLD_INSERT_LIBRARIES", "").split(":")
+    with nullcontext() if nested else lock.open("a") as handle:
+        if handle is not None:
+            fcntl.flock(handle, fcntl.LOCK_EX)
         try:
             os.nice(10)
         except PermissionError:

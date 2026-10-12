@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import LemmingsGameArt
 import LemmingsAppCore
 import NxlvKit
 
@@ -247,23 +248,8 @@ import NxlvKit
 
 @MainActor enum GameStar {
     static func draw(at origin: CGPoint, earned: Bool, size: CGFloat) {
-        NSGraphicsContext.saveGraphicsState()
-        NSGraphicsContext.current?.shouldAntialias = false
-        defer { NSGraphicsContext.restoreGraphicsState() }
-        let pixels = [".....#.....", "....###....", "....###....", "###########", ".#########.",
-                      "..#######..", "..#######..", ".####.####.", ".##.....##."]
-        let color = earned ? GameStyle.gold : NSColor(calibratedWhite: 0.62, alpha: 1)
-        let silhouette = NSBezierPath()
-        for (y, row) in pixels.enumerated() {
-            for (x, pixel) in row.enumerated() where pixel == "#" {
-                let interior = x > 0 && x + 1 < row.count && y > 0 && y + 1 < pixels.count
-                    && Array(row)[x - 1] == "#" && Array(row)[x + 1] == "#"
-                    && Array(pixels[y - 1])[x] == "#" && Array(pixels[y + 1])[x] == "#"
-                if !earned && interior { continue }
-                silhouette.appendRect(CGRect(x: origin.x + CGFloat(x) * size, y: origin.y + CGFloat(y) * size, width: size, height: size))
-            }
-        }
-        color.setFill(); silhouette.fill()
+        guard let context = NSGraphicsContext.current?.cgContext else { return }
+        GameStarArt.draw(at: origin, earned: earned, size: size, context: context)
     }
 }
 #endif

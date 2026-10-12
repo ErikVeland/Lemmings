@@ -69,7 +69,7 @@ actor MobileMenuPreviewLoader {
     private var inputLink: CADisplayLink?
     override var canBecomeFirstResponder: Bool { game == nil && !searchField.isFirstResponder && mobileInsights.field?.isFirstResponder != true }
     private var store: MobileContentStore?
-    private var checkpointStore: MobileCheckpointStore?
+    var checkpointStore: MobileCheckpointStore?
     var library: (any MobileGameLibrary)?
     var catalogue: MobileCatalogue?
     var currentPack: MobileContentPack?
@@ -658,9 +658,17 @@ actor MobileMenuPreviewLoader {
     }
     func loadCheckpoint() {
         guard let checkpointStore else { return }
+        let owner = profiles.activeID, scope = hotSeat?.scope
         Task {
-            do { pendingCheckpoint = try await checkpointStore.load(owner: profiles.activeID, scope: hotSeat?.scope); rebuild() }
-            catch { pendingCheckpoint = nil; notice = error.localizedDescription; rebuild() }
+            do {
+                let checkpoint = try await checkpointStore.load(owner: owner, scope: scope)
+                guard profiles.activeID == owner, hotSeat?.scope == scope else { return }
+                pendingCheckpoint = checkpoint; rebuild()
+            }
+            catch {
+                guard profiles.activeID == owner, hotSeat?.scope == scope else { return }
+                pendingCheckpoint = nil; notice = error.localizedDescription; rebuild()
+            }
         }
     }
     private func resumeSavedRun() {
@@ -717,6 +725,17 @@ actor MobileMenuPreviewLoader {
             let next = MobileGameViewController(summary: content.summary, session: content.session,
                                                checkpointStore: checkpointStore, restoredCheckpoint: checkpoint,
                                                turn: currentTurn())
+            let journeyMusic = inLearning && self.learning.run?.pool.id.hasPrefix("learning-") == true
+            var sourceTitles = library.levels.map(\.title)
+            if let queue = library as? MobileJourneyLibrary, let origin = try? queue.origin(of: index) { sourceTitles = origin.library.levels.map(\.title) }
+            else if let queue = library as? MobileFavouritesLibrary, let origin = queue.origin(of: index),
+                    let pack = catalogue?.pack(id: origin.pack), let source = try? catalogue?.library(for: pack) { sourceTitles = source.levels.map(\.title) }
+            let fullJourney = self.bundledJourney
+            let fullPosition = journeyMusic ? (library as? MobileJourneyLibrary).flatMap { queue in
+                fullJourney?.lessons.firstIndex { $0.entry.identity == queue.entries[index].identity }
+            } : nil
+            next.musicContext = MobileMusicContext(scorePosition: fullPosition, titles: journeyMusic ? (fullJourney?.lessons.map { $0.entry.levelNameSnapshot } ?? sourceTitles) : sourceTitles,
+                isFan: content.session.levelIdentifier.hasPrefix("fan/"), isLearningJourney: journeyMusic)
             next.canDefer = inLearning
             next.soloOwnerID = profiles.activeID
             let attemptID = checkpoint?.runID ?? next.recordRunID
@@ -725,6 +744,13 @@ actor MobileMenuPreviewLoader {
                 pack: favouriteIdentity(index)?.pack ?? library.displayName)
             if !inRun, library.levels.indices.contains(index + 1), arcadeStore.records.levelSkips(profileID: ownerID).available > 0 {
                 next.onSkipLevel = { [weak self] in self?.arcadeStore.spendLevelSkip(on: recordLevel, profileID: ownerID) ?? false }
+            }
+            if checkpoint == nil {
+                guard arcadeStore.beginAttempt(id: attemptID, profileID: ownerID, level: recordLevel,
+                                               previousID: game?.recordRunID) else {
+                    throw NSError(domain: "MobileRecords", code: 1, userInfo: [NSLocalizedDescriptionKey:
+                        arcadeStore.storageError ?? "The attempt was not saved."])
+                }
             }
             AnonymousTelemetry.shared.start(recordLevel, hotSeat: hotSeat != nil, attemptID: attemptID)
             next.onRecordCompletion = { [weak self, weak session = content.session] snapshot in

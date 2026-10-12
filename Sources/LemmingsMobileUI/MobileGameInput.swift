@@ -84,7 +84,7 @@ extension MobileGameViewController {
     func aim(at point: MobilePoint?) {
         guard overlay.isHidden, playState.canEdit else { return }
         previewPoint = point
-        highlightedTarget = point.flatMap { target(at: $0) }
+        highlightedTarget = point.flatMap { self.target(at: $0) }
         renderCurrentFrame(force: true)
     }
     func panInput(dx: Double, dy: Double) {
@@ -115,7 +115,7 @@ extension MobileGameViewController {
         case .speed: handle(.speed)
         case .speedStep(let delta): handle(.speedStep(delta))
         case .speedReset:
-            if speed == 1 { pausePlay(showControls: true) }
+            if speed == 1 && !inputSpeed.isHeld { pausePlay(showControls: true) }
             else { inputSpeed.reset(at: ProcessInfo.processInfo.systemUptime); updateInputSpeed(at: ProcessInfo.processInfo.systemUptime) }
         case .zoom(let superzoom):
             let viewport = playfieldView.gameViewport
@@ -157,7 +157,8 @@ extension MobileGameViewController {
         inputSpeed.variableEnabled = MobileSettings.load(from: .standard).classic.variableSpeedEnabled
         if held {
             guard overlay.isHidden, lifecycle.isForeground, !lifecycle.isInterrupted else { return }
-            inputSpeed.press(input, at: now, tapEnabled: input != .controller || MobileSettings.load(from: .standard).classic.controllerTapSpeed)
+            if input == .key && !inputSpeed.variableEnabled { inputSpeed.tap(at: now) }
+            else { inputSpeed.press(input, at: now, tapEnabled: input != .controller || MobileSettings.load(from: .standard).classic.controllerTapSpeed) }
         } else {
             inputSpeed.release(input, at: now, allowTap: overlay.isHidden && lifecycle.isForeground && !lifecycle.isInterrupted)
         }
@@ -191,6 +192,7 @@ extension MobileGameViewController {
                 }
                 self.leaveToLibrary()
             } else if library.handleSettings(id) {
+                if id == "setting.speed" { self.inputSpeed.setCruise(Double(library.mobileSettings.fastSpeed)) }
                 self.session.applySettings(library.mobileSettings.classic)
                 self.renderCurrentFrame(force: true)
                 self.showInGameSettings(group, mappings: mappings)

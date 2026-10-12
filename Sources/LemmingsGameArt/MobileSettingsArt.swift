@@ -41,7 +41,7 @@ public enum MobileSettingsArt {
                     toggle("reticule", "Reticule count", c.showReticleCount),
                     choice("selection", "Selection effect", c.lemmingSelectionStyle.title),
                     toggle("backpacks", "Skill backpacks", c.showClassicSkillBackpacks),
-                    choice("levelAccess", "Level selection", c.unlockAllClassicLevels ? "All" : "Player unlocked")]
+                    choice("levelAccess", "Levels", c.unlockAllClassicLevels ? "All" : "Unlocked")]
         case .controller:
             rows = [toggle("controller", "Enable controller", c.controllerEnabled),
                     toggle("controllerTap", "Tap RT for fast-forward", c.controllerTapSpeed, enabled: c.controllerEnabled),

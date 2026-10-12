@@ -1,12 +1,14 @@
 # Oh My! All Lemmings! progression
 
-294 curated Classic-mechanics levels: a full journey equivalent to Classic, Oh No! and the Christmas campaigns combined.
+295 curated Classic-mechanics levels: a full journey with official lessons and fan levels.
 
 [Redux's community order](https://www.lemmingsforums.net/index.php?topic=4374.0) supplies the reference spine. The remaining official and fan levels are placed by comparisons with five reference solutions. Actual assignments, worker changes, skill combinations, bursts of input, timing evidence and resource pressure inform those comparisons.
 
 Resource pressure uses the skills actually spent and the route’s rescue margin. Release cadence is considered alongside input density. High rescue percentages, rapid release rates and large inventories never assign a grade by themselves. All selected levels have an exact-version winning replay. Explicit unsuitable-level exclusions remain in force. Estimated additions need an initial-state visibility audit and exclude mostly concealed exits or traps. This pixel-visibility check does not prove that the route or all visual information is obvious.
 
-The first seven reference tutorials retain their relative order. Cellbash follows Just dig! as lesson 2, based on the owner’s single-basher playtest. Come back! moves to Intermediate after the owner’s two-bomber bridge playtest; its stored witness uses two bombers and does not certify that bridge route. Repeated practice is retained. Selection targets coverage across the curve, limits repeated fan packs and avoids long repetitive witnesses. Estimated beginner additions cannot have measured narrow timing, more than three skill types, multiple worker role changes, or an exhausted combination with no rescue margin. It does not raise or lower grades to make adjacent numbers look smooth. The production generator fails if it cannot supply all 294 levels. The two promised 1.8.2 additions are mandatory and retain exact native witnesses. Port counterparts use the Redux position with recorded conversion differences; they do not claim human variant review.
+The first seven reference tutorials retain their relative order. Cellbash follows Just dig! as lesson 2, based on the owner’s single-basher playtest. Come back! moves to Intermediate after the owner’s two-bomber bridge playtest; its stored witness uses two bombers and does not certify that bridge route. Repeated practice is retained. Selection targets coverage across the curve, limits repeated fan packs and avoids long repetitive witnesses. Estimated beginner additions cannot have measured narrow timing, more than three skill types, multiple worker role changes, or an exhausted combination with no rescue margin. It does not raise or lower grades to make adjacent numbers look smooth. The production generator fails if it cannot supply all 295 levels. The two promised 1.8.2 additions are mandatory and retain exact native witnesses. Port counterparts use the Redux position with recorded conversion differences; they do not claim human variant review.
+
+The owner’s reported Time waits for no Lemming and This Corrosion routes are the final two Expert lessons. route-safety.json records the exact official and fan variants, including matching initial states. These routes have a late-Expert placement floor. This is an editorial decision from the owner’s playtest, not proof that every possible solution needs an engine quirk. Explicit engine-quirk concepts also receive this floor. Other fan levels still need route review.
 
 ## Estimated grades and review
 
@@ -280,43 +282,44 @@ Regenerate with `zsh Scripts/generate-learning-journey.sh BUNDLED_RESOURCES`. Ch
 | 252 | Lunatic 4 | No added colors or Lemmings | Expert | solutionEstimate |
 | 253 | Lunatic 5 | The Descending Pillar Scenario | Expert | solutionEstimate |
 | 254 | Lunatic 12 | Water processing plant | Expert | reduxClassicCounterpart |
-| 255 | Lunatic 13 | This Corrosion | Expert | reduxClassicCounterpart |
-| 256 | Lunatic 14 | Move on in two separate groups. | Expert | reduxClassicCounterpart |
-| 257 | Lunatic 14 | Why can't they just run? | Expert | solutionEstimate |
-| 258 | Manic 15 | Industry "Hanger" | Expert | solutionEstimate |
-| 259 | Manic 18 | Descending Pillar Scenario | Expert | solutionEstimate |
-| 260 | Lunatic 12 | Old MacDonald Had a Farm... | Expert | solutionEstimate |
-| 261 | Lunatic 10 | A Trap is a trap | Expert | solutionEstimate |
-| 262 | Manic 18 | Beethoven's Revenge | Expert | solutionEstimate |
-| 263 | Lunatic 17 | Creature Discomforts | Expert | reduxClassicCounterpart |
-| 264 | Lunatic 12 | This might be a doddle! | Expert | solutionEstimate |
-| 265 | Lunatic 12 | Pass The Obstacles | Expert | solutionEstimate |
-| 266 | Lunatic 3 | An Unfriendly Gesture | Expert | solutionEstimate |
-| 267 | Lunatic 21 | Anticlimacticism II | Expert | solutionEstimate |
-| 268 | Lunatic 12 | Unimatrix zero | Expert | solutionEstimate |
-| 269 | Lunatic 12 | Who can do the rest? | Expert | solutionEstimate |
-| 270 | Lunatic 18 | Scaling the Heights | Expert | reduxClassicCounterpart |
-| 271 | Lunatic 23 | Lem- me- in. | Expert | solutionEstimate |
-| 272 | Lunatic 14 | Sink beneath the line | Expert | solutionEstimate |
-| 273 | Lunatic 14 | Keep your hair on | Expert | solutionEstimate |
-| 274 | Lunatic 32 | Three steps to heaven | Expert | solutionEstimate |
-| 275 | Lunatic 14 | Diamond Ribs | Expert | solutionEstimate |
-| 276 | Manic 5 | High-tech or Low-tech | Expert | solutionEstimate |
-| 277 | Lunatic 21 | The Steel Mines of Kessel | Expert | reduxClassicCounterpart |
-| 278 | Lunatic 23 | The Great Lemming Caper | Expert | reduxClassicCounterpart |
-| 279 | Lunatic 23 | Santus Lemmingus | Expert | solutionEstimate |
-| 280 | Lunatic 23 | Polar Expedition | Expert | solutionEstimate |
-| 281 | Lunatic 28 | Lemmings in a situation | Expert | reduxClassicCounterpart |
-| 282 | Lunatic 23 | The Razor's Edge | Expert | solutionEstimate |
-| 283 | Lunatic 23 | Doomed | Expert | solutionEstimate |
-| 284 | Lunatic 32 | The Lemconricdion | Expert | solutionEstimate |
-| 285 | Lunatic 12 | Someone must help us! | Expert | solutionEstimate |
-| 286 | Lunatic 12 | No One Here But Us Three | Expert | solutionEstimate |
-| 287 | Lunatic 29 | Save Me | Expert | reduxClassicCounterpart |
-| 288 | Lunatic 31 | I am A.T. | Expert | reduxClassicCounterpart |
-| 289 | Lunatic 32 | Fall and no life (Part Two) | Expert | reduxClassicCounterpart |
-| 290 | Lunatic 32 | The Thin Red Line (Colorblind) | Expert | solutionEstimate |
-| 291 | Lunatic 29 | The Only Way is Up | Expert | solutionEstimate |
-| 292 | Lunatic 2 | Lemming City | Expert | solutionEstimate |
-| 293 | Lunatic 28 | The Barbarous Bars | Expert | solutionEstimate |
-| 294 | Lunatic 29 | City Of The Damned | Expert | solutionEstimate |
+| 255 | Lunatic 14 | Move on in two separate groups. | Expert | reduxClassicCounterpart |
+| 256 | Lunatic 14 | Why can't they just run? | Expert | solutionEstimate |
+| 257 | Manic 15 | Industry "Hanger" | Expert | solutionEstimate |
+| 258 | Manic 18 | Descending Pillar Scenario | Expert | solutionEstimate |
+| 259 | Lunatic 12 | Old MacDonald Had a Farm... | Expert | solutionEstimate |
+| 260 | Lunatic 10 | A Trap is a trap | Expert | solutionEstimate |
+| 261 | Manic 18 | Beethoven's Revenge | Expert | solutionEstimate |
+| 262 | Lunatic 17 | Creature Discomforts | Expert | reduxClassicCounterpart |
+| 263 | Lunatic 12 | This might be a doddle! | Expert | solutionEstimate |
+| 264 | Lunatic 12 | Pass The Obstacles | Expert | solutionEstimate |
+| 265 | Lunatic 3 | An Unfriendly Gesture | Expert | solutionEstimate |
+| 266 | Lunatic 21 | Anticlimacticism II | Expert | solutionEstimate |
+| 267 | Lunatic 12 | Unimatrix zero | Expert | solutionEstimate |
+| 268 | Lunatic 12 | Who can do the rest? | Expert | solutionEstimate |
+| 269 | Lunatic 18 | Scaling the Heights | Expert | reduxClassicCounterpart |
+| 270 | Lunatic 23 | Lem- me- in. | Expert | solutionEstimate |
+| 271 | Lunatic 14 | Sink beneath the line | Expert | solutionEstimate |
+| 272 | Lunatic 14 | Keep your hair on | Expert | solutionEstimate |
+| 273 | Lunatic 32 | Three steps to heaven | Expert | solutionEstimate |
+| 274 | Lunatic 14 | Diamond Ribs | Expert | solutionEstimate |
+| 275 | Manic 5 | High-tech or Low-tech | Expert | solutionEstimate |
+| 276 | Lunatic 21 | The Steel Mines of Kessel | Expert | reduxClassicCounterpart |
+| 277 | Lunatic 23 | The Great Lemming Caper | Expert | reduxClassicCounterpart |
+| 278 | Lunatic 23 | Santus Lemmingus | Expert | solutionEstimate |
+| 279 | Lunatic 23 | Polar Expedition | Expert | solutionEstimate |
+| 280 | Lunatic 28 | Lemmings in a situation | Expert | reduxClassicCounterpart |
+| 281 | Lunatic 23 | The Razor's Edge | Expert | solutionEstimate |
+| 282 | Lunatic 23 | Doomed | Expert | solutionEstimate |
+| 283 | Lunatic 32 | The Lemconricdion | Expert | solutionEstimate |
+| 284 | Lunatic 12 | Someone must help us! | Expert | solutionEstimate |
+| 285 | Lunatic 12 | No One Here But Us Three | Expert | solutionEstimate |
+| 286 | Lunatic 29 | Save Me | Expert | reduxClassicCounterpart |
+| 287 | Lunatic 31 | I am A.T. | Expert | reduxClassicCounterpart |
+| 288 | Lunatic 32 | Fall and no life (Part Two) | Expert | reduxClassicCounterpart |
+| 289 | Lunatic 32 | The Thin Red Line (Colorblind) | Expert | solutionEstimate |
+| 290 | Lunatic 29 | The Only Way is Up | Expert | solutionEstimate |
+| 291 | Lunatic 2 | Lemming City | Expert | solutionEstimate |
+| 292 | Lunatic 28 | The Barbarous Bars | Expert | solutionEstimate |
+| 293 | Lunatic 29 | City Of The Damned | Expert | solutionEstimate |
+| 294 | Lunatic 13 | Time waits for no Lemming | Expert | userPlaytest |
+| 295 | Lunatic 13 | This Corrosion | Expert | userPlaytest |

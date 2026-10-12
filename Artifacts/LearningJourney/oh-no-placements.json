@@ -140,23 +140,28 @@
     "step": 251
   },
   {
-    "level": "This Corrosion",
-    "objective": "community:Lunatic/This_Corrosion.nxlv",
-    "step": 255
-  },
-  {
     "level": "Creature Discomforts",
     "objective": "community:Lunatic/Creature_Discomforts.nxlv",
-    "step": 263
+    "step": 262
   },
   {
     "level": "Scaling the Heights",
     "objective": "community:Lunatic/Scaling_the_Heights.nxlv",
-    "step": 270
+    "step": 269
   },
   {
     "level": "Lemmings in a situation",
     "objective": "community:Lunatic/Lemmings_in_a_situation.nxlv",
-    "step": 281
+    "step": 280
+  },
+  {
+    "level": "Time waits for no Lemming",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"33:Crazy:14:1:5\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 294
+  },
+  {
+    "level": "This Corrosion",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"62:Wicked:3:9:0\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 295
   }
 ]

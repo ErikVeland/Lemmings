@@ -3,20 +3,19 @@ import Foundation
 /// The information pages share their bitmap layout with the headless capture tool.
 public enum MobileInformationArt {
     public static func effectsWelcome() -> GameFrontEnd.Page {
-        .init(title: "Choose your play style", details: ["Modern aiming aids and variable speed", "Original controls and effects"],
+        .init(title: "Choose your play style", details: ["Modern:", "Aiming aids", "Variable speed",
+                                                        "Old school:", "Original inputs", "Classic effects"],
               footer: [.init("welcomeOriginal", "Old school"), .init("welcomeModern", "Modern", primary: true)])
     }
     public static func whatsNew(version: String) -> GameFrontEnd.Page {
         .init(title: "What's new in " + version,
-              details: ["Classic campaigns and fan packs", "Players, records and achievements",
-                        "Playlists and Hot Seat", "Journey and progression playlists",
-                        "Rewind and replay review", "Music and controller settings"],
+              details: ["Classic + fans", "Player records", "Achievements", "Playlists", "Hot Seat",
+                        "Journeys", "Progression", "Rewind/replays", "Music/controls"],
               footer: [.init("welcomeContinue", "Continue", primary: true)])
     }
     public static func telemetryConsent() -> GameFrontEnd.Page {
-        .init(title: "Share play counts?", details: ["Daily use, level results and saves",
-              "Solo, Hot Seat and soundtrack choices", "No names, IDs, pack names or replays",
-              "The service sees your network address", "Change this in Settings > Privacy"],
+        .init(title: "Share play counts?", details: ["Daily use", "Level results", "Saved lemmings",
+              "Solo / Hot Seat", "Soundtrack use", "No names or IDs", "No pack names", "No replays", "Service sees IP"],
               footer: [.init("telemetryNo", "Not now"), .init("telemetryYes", "Share counts", primary: true)])
     }
     public static func insights(counts: [String: Int], shared: Bool, days: Int,

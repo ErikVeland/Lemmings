@@ -16,10 +16,11 @@ swiftc -O -swift-version 6 -warnings-as-errors -parse-as-library \
   -Xlinker -install_name -Xlinker @rpath/libNxlvKit.dylib \
   -o "$app_dir/Contents/Frameworks/libNxlvKit.dylib" \
   "$project_dir"/Sources/NxlvKit/*.swift
+zsh "$project_dir/Scripts/build-shared-modules.sh" "$build_dir/modules" "$app_dir/Contents/Frameworks" "$(uname -m)-apple-macos12.3" -O
 app_sources=("$project_dir"/Sources/LemmingsLocal/*.swift)
 app_sources=("${(@)app_sources:#*/main.swift}")
 swiftc -O -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos12.3" \
-  -I "$build_dir/modules" -L "$app_dir/Contents/Frameworks" -lNxlvKit \
+  -I "$build_dir/modules" -L "$app_dir/Contents/Frameworks" -lNxlvKit -lLemmingsMobileCore -lLemmingsGameArt -lLemmingsAudio -lLemmingsAppCore \
   -F "$sparkle_framework_dir" -framework Sparkle \
   -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
   -Xlinker -rpath -Xlinker @executable_path/../Frameworks \

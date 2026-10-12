@@ -26,6 +26,7 @@ or their result screens across Classic, fan packs, NeoLemmix, Lemmings 2 and 3.
 
 ## Start here
 
+- [Development workflow](Documentation/Development.md) — the combined branch, unfinished work and shared build modules.
 - [Architecture](ARCHITECTURE.md) — module boundaries, runtime flow and release packaging.
 - [Project overview](Documentation/Overview.md) — player-facing status and roadmap.
 - [2.0 mobile roadmap](Documentation/2.0Roadmap.md) — three-game iOS scope, Duo layouts, delivery sequence and release gates.

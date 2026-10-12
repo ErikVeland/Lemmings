@@ -23,6 +23,7 @@ extension MobileGameViewController {
                     throw MobileSessionError.unsupportedControl
                 }
                 recorder.setMusic(url: MobileMusic.shared.currentTrackURL, gain: Float(MobileSettings.load(from: .standard).classic.musicVolume))
+                let movieEffects = effects.movieEffects()
                 let expected = try JSONDecoder().decode(ClassicDOSReplay.self, from: document).expected?.ticks
                 repeat {
                     guard !cancelled.cancelled else { return }
@@ -31,6 +32,7 @@ extension MobileGameViewController {
                           let image = Self.movieFrame(bitmap, viewport: viewport, renderScale: replay.renderScale) else {
                         throw MobileSessionError.invalidFrame
                     }
+                    movieEffects.record(session: replay, viewport: viewport, into: recorder)
                     recorder.append(image)
                     guard recorder.isAcceptingFrames else { break }
                     if replay.snapshot.isComplete || expected.map({ replay.snapshot.tick >= $0 }) == true { break }

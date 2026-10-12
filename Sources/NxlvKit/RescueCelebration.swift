@@ -17,7 +17,7 @@ public enum RescueCelebration {
     #if canImport(CoreGraphics)
     /// A steady golden haze. Whole-pixel bands keep the playfield artwork crisp.
     public static func draw(in rect: CGRect, amount: CGFloat, context: CGContext) {
-        let amount = min(1, max(0, amount))
+        let amount = min(1, max(0, amount)) * 0.3
         guard amount > 0, rect.width > 0, rect.height > 0 else { return }
         context.saveGState()
         defer { context.restoreGState() }

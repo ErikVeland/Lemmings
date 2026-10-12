@@ -142,8 +142,19 @@ Task { @MainActor in
             "Background test stole desktop focus")
         let windows = CGWindowListCopyWindowInfo([.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID)
             as? [[String: Any]] ?? []
-        require(!windows.contains { ($0[kCGWindowOwnerPID as String] as? Int32) == ProcessInfo.processInfo.processIdentifier },
-            "Background test left a window on the desktop")
+        let owned = windows.filter { ($0[kCGWindowOwnerPID as String] as? Int32) == ProcessInfo.processInfo.processIdentifier }
+        // Quartz can list an ordered offscreen window as onscreen. Its bounds
+        // use display coordinates, whose vertical axis differs from AppKit.
+        let displays = NSScreen.screens.compactMap { screen -> CGRect? in
+            guard let number = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber else { return nil }
+            return CGDisplayBounds(number.uint32Value)
+        }
+        require(displays.count == NSScreen.screens.count, "Could not resolve display bounds")
+        require(!owned.contains { info in
+            guard let dictionary = info[kCGWindowBounds as String] as? NSDictionary,
+                  let bounds = CGRect(dictionaryRepresentation: dictionary as CFDictionary) else { return true }
+            return displays.contains { $0.intersects(bounds) }
+        }, "Background test left a window on the desktop: \(owned)")
     }
     window.orderOut(nil)
     print("PASS \(mode): window/panel placement, resizing, input, responder focus and captures")

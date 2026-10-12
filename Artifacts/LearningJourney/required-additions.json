@@ -21,5 +21,16 @@
       "packID": "lemmings-LEVEL-120"
     },
     "reason": "Restore the DOS Tricky 21 level promised for 1.8.2 using the native route comparisons."
+  },
+  {
+    "basis": "userPlaytest",
+    "identity": {
+      "engine": "classic",
+      "packID": "ohNoMoreLemmings-DLVEL-100",
+      "levelID": "33:Crazy:14:1:5"
+    },
+    "reference": "Lunatic/This_Corrosion.nxlv",
+    "minimumDemand": 850.0,
+    "reason": "User playtest 2026-10-12: keep Time waits for no Lemming beside This Corrosion at the end of Expert."
   }
 ]

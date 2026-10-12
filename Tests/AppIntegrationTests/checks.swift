@@ -1482,21 +1482,33 @@ extension AppDelegate {
     try check(backpacks.state == .on && preferences.current.showClassicSkillBackpacks,
       "Modern must show backpacks by default")
     root.layoutSubtreeIfNeeded()
+    backpacks.scrollToVisible(backpacks.bounds)
+    root.layoutSubtreeIfNeeded()
     try check(backpacks.visibleRect.contains(backpacks.bounds.insetBy(dx: 1, dy: 1)), "Backpack toggle is clipped")
     let targeting = descendants(root).compactMap { $0 as? GameControlGroup }.first { $0.accessibilityLabel() == "Targeting" }!
-    let targetingCaption = descendants(root).compactMap { $0 as? GameLabel }.first { $0.stringValue == "Targeting" }!
+    guard let targetingCaption = descendants(root).compactMap({ $0 as? GameLabel }).first(where: { $0.stringValue == "Skill targeting" }),
+          let targetingDocument = targeting.superview else {
+      throw IntegrationFailure(message: "Skill targeting section heading is missing")
+    }
     let firstTarget = targeting.arrangedSubviews.first!
-    try check(abs(targetingCaption.convert(targetingCaption.bounds, to: root).midY
-      - firstTarget.convert(firstTarget.bounds, to: root).midY) < 1, "Targeting label must align with the start of its group")
+    try check(targetingCaption.convert(targetingCaption.bounds, to: targetingDocument).maxY
+      <= firstTarget.convert(firstTarget.bounds, to: targetingDocument).minY,
+      "Skill targeting heading must precede its group")
     for control in targeting.arrangedSubviews {
       try check(targeting.bounds.insetBy(dx: 4, dy: 4).contains(control.convert(control.bounds, to: targeting)),
         "Targeting group clips an option")
     }
+    targeting.scrollToVisible(targeting.bounds)
+    root.layoutSubtreeIfNeeded()
     try check(root.hitTest(targeting.convert(CGPoint(x: targeting.bounds.maxX - 3, y: targeting.bounds.midY), to: root)) !== playfield,
       "Targeting group background leaked input to gameplay")
+    backpacks.scrollToVisible(backpacks.bounds)
+    root.layoutSubtreeIfNeeded()
     try check(root.hitTest(backpacks.convert(CGPoint(x: backpacks.bounds.midX, y: backpacks.bounds.midY), to: root)) === backpacks,
       "Backpack toggle has the wrong input target")
     func click(_ point: CGPoint, in view: NSView, releaseAt: CGPoint? = nil) {
+      view.scrollToVisible(view.bounds)
+      root.layoutSubtreeIfNeeded()
       let location = view.convert(point, to: nil)
       let down = NSEvent.mouseEvent(with: .leftMouseDown, location: location, modifierFlags: [], timestamp: 1,
         windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1)!
@@ -1515,6 +1527,8 @@ extension AppDelegate {
       if GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Settings",
          let levelSelection = descendants(root).compactMap({ $0 as? NSPopUpButton }).first(where: { $0.accessibilityLabel() == "Level selection" }),
          let back = descendants(root).compactMap({ $0 as? NSButton }).first(where: { $0.title == "Back" }) {
+        levelSelection.scrollToVisible(levelSelection.bounds)
+        root.layoutSubtreeIfNeeded()
         let levelRect = levelSelection.convert(levelSelection.bounds, to: root)
         let backRect = back.convert(back.bounds, to: root)
         try check(!levelRect.intersects(backRect), "Gameplay options overlap the Back button")
@@ -1525,6 +1539,8 @@ extension AppDelegate {
       try bitmap.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: ".build/gameplay-preset-\(name).png"))
     }
     func selectPreset(_ name: String, keyboard: Bool = false) throws {
+      experience.scrollToVisible(experience.bounds)
+      root.layoutSubtreeIfNeeded()
       try check(experience.accessibilityPerformPress(), "Preset choices could not open")
       guard let page = GameScreen.shared.controllerPage(in: window),
         let button = descendants(page).compactMap({ $0 as? NSButton }).first(where: { $0.title == name }) else {
@@ -3485,7 +3501,7 @@ extension AppDelegate {
     }
     print("PASS live Oh Yes! rank changes load the original, Oh No and Sunsoft artwork")
   }
-  fileprivate func testRestartSelection() throws {
+  fileprivate func testRestartSelection() async throws {
     settings.music = .silent
     loadContent()
     guard let index = dataSets.firstIndex(where: { $0.set.title == .lemmings }) else {
@@ -3512,6 +3528,10 @@ extension AppDelegate {
     for _ in 0..<110 { session?.tick() }
     session?.nuke()
     for _ in 0..<2000 where session?.isComplete == false { session?.tick() }
+    if let classic = session as? ClassicSession, let conditions = arcadeLevel?.conditions {
+      await ArcadeStore.shared.prepareSolutionTarget(initial: classic.initialSimulation, conditions: conditions,
+        resources: Bundle.main.resourceURL, buildVersion: TrolleyCapture.buildVersion).value
+    }
     finishSessionIfNeeded()
     try check(phase == .results, "Restart test did not reach results")
     arcadeAutoPresent = true; presentArcadeResult(); arcadeAutoPresent = false
@@ -7142,7 +7162,7 @@ Task { @MainActor in
     try await subject.testElapsedTimeAndAudioRecovery()
     try await testGameTypography()
     try subject.testGamePages()
-    try subject.testRestartSelection()
+    try await subject.testRestartSelection()
     try await subject.testLevelSkipResult()
     try subject.testBundledRescueTarget()
     try subject.testPortArtworkSwitching()
@@ -8161,8 +8181,10 @@ extension AppDelegate {
           try check(ArcadeStore.shared.records.trolley.attempts.contains { $0.id == arcadeRunID },
             "Classic sequence result did not persist its career stars")
           updateFailureMood()
-          completionGlow.advance(at: ProcessInfo.processInfo.systemUptime + 2)
+          completionGlow.advance(at: ProcessInfo.processInfo.systemUptime + 0.7)
           try check(playfield.completionGlowAmount == (won ? 1 : 0), "Classic result celebration state is wrong")
+          completionGlow.advance(at: ProcessInfo.processInfo.systemUptime + 3)
+          try check(playfield.completionGlowAmount == 0, "Classic all-rescued fixture did not end its brief glow")
           try validateCompletionGlow(playfield, name: "classic-\(won)") { self.playfield.completionGlowAmount = $0 }
           playfield.completionGlowAmount = won ? 1 : 0
         } else if engine == .lemmings2 {

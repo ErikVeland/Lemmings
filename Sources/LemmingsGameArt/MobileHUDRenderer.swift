@@ -36,15 +36,19 @@ public enum MobileHUDAction: Equatable, Sendable {
     private let paused: Bool
     private let speed: Double
     private let endRunArmed: Bool
+    private let skillIcons: [CGImage?]
+    private let readOnly: Bool
     private let counterStyle: ClassicCounterStyle
     private let panelImage: CGImage?
     private let typography: GameMenuTypography?
     private let items: [Item]
 
     public init(layout: MobileHUDLayout, snapshot: MobileGameSnapshot, selectedSkill: Int,
-                paused: Bool, speed: Double, endRunArmed: Bool, panelImage: CGImage?, typography: GameMenuTypography?, counterStyle: ClassicCounterStyle = .game) {
+                paused: Bool, speed: Double, endRunArmed: Bool, panelImage: CGImage?, typography: GameMenuTypography?, counterStyle: ClassicCounterStyle = .game, skillIcons: [CGImage?] = [], readOnly: Bool = false) {
         self.layout = layout; self.snapshot = snapshot; self.selectedSkill = selectedSkill
         self.paused = paused; self.speed = speed; self.endRunArmed = endRunArmed
+        self.skillIcons = skillIcons
+        self.readOnly = readOnly
         self.counterStyle = counterStyle
         self.panelImage = panelImage; self.typography = typography
         items = Self.targets(layout: layout, snapshot: snapshot, selectedSkill: selectedSkill,
@@ -137,8 +141,11 @@ public enum MobileHUDAction: Equatable, Sendable {
                 drawTextButton(item, context: context)
             case .speedStep:
                 break
-            case .releaseRate, .skill:
-                break
+            case let .skill(index):
+                if let icon = skillIcons[safe: index] ?? nil { drawNativeSkill(item, icon: icon, context: context, pixel: panel.bevel) }
+                else if readOnly { context.setFillColor(CGColor(gray: 0, alpha: 0.65)); context.fill(item.frame) }
+            case .releaseRate:
+                if readOnly { context.setFillColor(CGColor(gray: 0, alpha: 0.65)); context.fill(item.frame) }
             }
         }
         drawCounts(panel, context: context)
@@ -146,6 +153,18 @@ public enum MobileHUDAction: Equatable, Sendable {
         if let item = items.first(where: { $0.action == .skill(selectedSkill) }) {
             outline(item.frame, context: context)
         }
+    }
+
+    private func drawNativeSkill(_ item: Item, icon: CGImage, context: CGContext, pixel: CGFloat) {
+        guard case let .skill(index) = item.action else { return }
+        drawStoneSocket(item.frame, selected: selectedSkill == index, pixel: pixel, context: context)
+        let well = GameStoneArt.well(item.frame, pixel: pixel)
+        let fit = min(well.width / CGFloat(icon.width), well.height / CGFloat(icon.height))
+        let width = CGFloat(icon.width) * fit, height = CGFloat(icon.height) * fit
+        context.saveGState()
+        context.setAlpha(readOnly || snapshot.skills[safe: index]?.count == 0 ? 0.35 : 1)
+        GameStoneArt.drawImage(icon, in: CGRect(x: floor(well.midX - width / 2), y: well.maxY - height, width: width, height: height), context: context)
+        context.restoreGState()
     }
 
     private func drawCounts(_ panel: MobilePanelMetrics, context: CGContext) {
@@ -234,9 +253,13 @@ public enum MobileHUDAction: Equatable, Sendable {
             let well = GameStoneArt.well(frame, pixel: 1)
             context.saveGState()
             context.clip(to: well)
+            if readOnly { context.setAlpha(0.35) }
             context.setFillColor(CGColor(gray: 0, alpha: 1))
             context.fill(well)
-            if let cell = item.sourceCell,
+            if case let .skill(index) = item.action, let icon = skillIcons[safe: index] ?? nil {
+                let fit = min(well.width / CGFloat(icon.width), (well.height - 12) / CGFloat(icon.height))
+                GameStoneArt.drawImage(icon, in: CGRect(x: floor(well.midX - CGFloat(icon.width) * fit / 2), y: well.maxY - CGFloat(icon.height) * fit, width: CGFloat(icon.width) * fit, height: CGFloat(icon.height) * fit), context: context)
+            } else if let cell = item.sourceCell,
                let image = panelImage?.cropping(to: CGRect(x: cell * 16, y: 16, width: 16, height: 24)) {
                 let art = CGRect(x: frame.midX - 8 * scale, y: frame.minY + (scale == 1 ? 16 : 18), width: 16 * scale, height: 24 * scale)
                 GameStoneArt.drawImage(image, in: art, context: context)
@@ -303,6 +326,9 @@ public enum MobileHUDAction: Equatable, Sendable {
     }
 
     private func drawGlyphButton(_ item: Item, context: CGContext, pixel: CGFloat) {
+        context.saveGState()
+        defer { context.restoreGState() }
+        if readOnly && item.action == .endRun { context.setAlpha(0.35) }
         let selected = item.action == .pause ? paused : (snapshot.isEndingRun == true)
         let glyph: PanelGlyphArt
         if item.action == .pause { glyph = paused ? .play : .pause }

@@ -105,15 +105,16 @@ import NxlvKit
             }
         }
         let adaptive = try auditAdaptive(session: session, typography: typography, artwork: artwork, output: output)
+        let nativeHUD = try auditNativeArtwork(library: library, typography: typography, artwork: artwork, output: output)
         let covers = try auditBrowser(typography: typography, preview: image, output: output)
         let settingsSizes = try auditSettingsSizes(typography: typography, output: output)
         let report: [String: Any] = ["renderedStates": evidence.count, "originalMacGlyphsAndLogo": true,
                                     "targetsValidated": true, "audio": "muted", "windows": "none",
                                     "physicalUIKitAcceptance": "pending", "captures": evidence, "adaptiveHUD": adaptive,
-                                    "coverArtwork": covers, "settingsSizes": settingsSizes]
+                                    "coverArtwork": covers, "settingsSizes": settingsSizes, "nativeArtworkHUD": nativeHUD]
         try JSONSerialization.data(withJSONObject: report, options: [.prettyPrinted, .sortedKeys])
             .write(to: output.appendingPathComponent("report.json"), options: .atomic)
-        print("PASS: \(evidence.count) pages, \(adaptive.count) HUD states , \(covers.count) cover states and 3 unfold frames; touch targets, reserved regions and scroll reachability.")
+        print("PASS: \(evidence.count) pages, \(adaptive.count) HUD states, \(nativeHUD.count) native art states, \(covers.count) cover states and 3 unfold frames; touch targets, reserved regions and scroll reachability.")
     }
     static func careerPages() throws -> [(String, GameFrontEnd.Page)] {
         var profiles = MobileProfiles()
@@ -125,9 +126,19 @@ import NxlvKit
         var records = ArcadeRecords()
         try records.importProfiles(profiles.players.map { .init(id: $0.id, initials: $0.name, portrait: $0.portrait) }, activeID: profiles.activeID)
         let empty = records
-        let level = ArcadeLevel(id: "fun-1", title: "Just Dig!", game: "Lemmings", rules: "DOS", total: 10, required: 5)
-        _ = records.record(.init(profileID: profiles.activeID, level: level, saved: 10, didWin: true, skills: [:], seconds: 12.34))
-        _ = records.record(.init(profileID: profiles.activeID, level: level, saved: 8, didWin: true, skills: ["dig": 1], seconds: 18, assisted: true))
+        let conditions = TrolleyConditions(gameID: ClassicTitle.lemmings.rawValue, packID: "classic",
+            levelID: "level-0", levelFingerprint: String(repeating: "a", count: 64),
+            rulesetVersion: "classic-dos-v1", physicsMode: "classic-dos-v1", population: 10,
+            rescueRequirement: 5, startingSkills: ["digger": 1], timeLimitSeconds: 300)
+        let level = ArcadeLevel(id: "fun-1", title: "Just Dig!", game: "Lemmings", rules: "DOS", total: 10, required: 5, conditions: conditions)
+        let direct = records.record(.init(profileID: profiles.activeID, level: level, saved: 10, didWin: true, skills: [:], seconds: 12.34, telemetry: .init(released: 10)))
+        let assisted = records.record(.init(profileID: profiles.activeID, level: level, saved: 8, didWin: true, skills: ["digger": 1], seconds: 18, assisted: true, telemetry: .init(released: 10, rewindCount: 1)))
+        guard direct != nil, assisted != nil else { throw Failure.invalidTargets }
+        let campaign = MobileCareerArt.campaignProgress(records: records, profileID: profiles.activeID,
+            levelCounts: [ClassicTitle.lemmings.rawValue: 120])
+        guard campaign.isUnlocked(.firstRescue), !campaign.isUnlocked(.lemmingsComplete),
+              MobileCareerArt.campaignProgress(records: records, profileID: "player-1",
+                levelCounts: [ClassicTitle.lemmings.rawValue: 120]).unlocked.isEmpty else { throw Failure.invalidTargets }
         typealias Action = GameFrontEnd.Action
         let communityRows: [Action] = [.init("rankCategory", "Career stars"), .init("rankShare", "Share records", selected: true)]
         let boards: [Action] = ["Career stars", "Levels cleared", "Three-star levels", "This level", "Fastest clear", "Fastest 100%"].enumerated().map {
@@ -144,7 +155,7 @@ import NxlvKit
             ("records-direct", MobileCareerArt.recordLevelPage("direct|" + level.boardID, records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
             ("records-assisted", MobileCareerArt.recordLevelPage("assisted|" + level.boardID, records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
             ("achievements-empty", MobileCareerArt.achievementsPage(records: empty, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
-            ("achievements-earned", MobileCareerArt.achievementsPage(records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
+            ("achievements-earned", MobileCareerArt.achievementsPage(records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "", campaign: campaign)),
             ("rankings-loading", MobileCareerArt.rankings(community: true, subtitle: "", busy: true, status: "", rows: communityRows, connected: false, available: true)),
             ("rankings-empty", MobileCareerArt.rankings(community: true, subtitle: "", busy: false, status: "No scores", rows: communityRows, connected: false, available: true)),
             ("rankings-offline", MobileCareerArt.rankings(community: true, subtitle: "", busy: false, status: "Connection unavailable", rows: communityRows, connected: false, available: true)),
@@ -310,6 +321,62 @@ import NxlvKit
                 try save(context: context, to: output.appendingPathComponent(file))
                 evidence.append(["pose": pose, "state": state, "file": file, "targets": layout.actions.count,
                                  "perspectiveLayersAndUIKitHitDispatch": "pending"])
+            }
+        }
+        return evidence
+    }
+
+    @MainActor static func auditNativeArtwork(library: ClassicMobileLibrary, typography: GameMenuTypography, artwork: URL, output: URL) throws -> [[String: Any]] {
+        let temporary = FileManager.default.temporaryDirectory.appendingPathComponent("native-art-audit-" + UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: temporary) }
+        let amigaCandidates = [artwork.deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("AmigaArtwork/lemmings"),
+            artwork.deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("amiga-artwork/export/lemmings")]
+        guard let amiga = amigaCandidates.first(where: { FileManager.default.fileExists(atPath: $0.appendingPathComponent("manifest.json").path) }) else { throw Failure.missingArtwork }
+        for (kind, source) in [("MacArtwork", artwork), ("AmigaArtwork", amiga)] {
+            let parent = temporary.appendingPathComponent(kind)
+            try FileManager.default.createDirectory(at: parent, withIntermediateDirectories: true)
+            try FileManager.default.createSymbolicLink(at: parent.appendingPathComponent("lemmings"), withDestinationURL: source)
+        }
+        let level = library.dataSet.campaign.levels[0].level
+        let ground = try ClassicGroundSet.load(style: level.groundStyle, from: library.directory)
+        let assets = try ClassicMainDATAssets.load(from: library.directory)
+        let rendered = try ClassicLevelRenderer.render(level, groundSet: ground, specialGraphic: nil)
+        let initial = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets)
+        let palette = try ClassicLemmingPalette.inLevelVGA(terrainPalette: ground.terrainPalette)
+        var evidence: [[String: Any]] = []
+        for (source, name) in [(ClassicGraphicsSource.macintosh, "macintosh"), (.amiga, "amiga")] {
+            let game = ClassicMobileSession(simulation: initial, renderedLevel: rendered, assets: assets, palette: palette,
+                levelIdentifier: "native-audit", levelIndex: 0, startX: level.startX, authoredLevel: level, ground: ground,
+                artworkFamily: "lemmings", artworkRoot: temporary)
+            var settings = ClassicSettings(); settings.graphics = source; settings.colorDepth = .full
+            game.applySettings(settings)
+            for _ in 0..<60 { game.tick() }
+            let bitmap = try game.render(highlight: nil)
+            guard game.renderScale == 2, let image = MobileBitmapRenderer.image(bitmap) else { throw Failure.missingArtwork }
+            let size = MobileSize(width: 1194, height: 834)
+            let layout = MobileHUDLayout.make(container: size, safeArea: .init(top: 20, bottom: 20), hasRate: true,
+                skillCount: game.snapshot.skills.count, supportsRewind: true)
+            for state in ["running", "paused", "review"] {
+                let context = try bitmapContext(size: CGSize(width: size.width, height: size.height))
+                context.setFillColor(CGColor(gray: 0, alpha: 1)); context.fill(CGRect(x: 0, y: 0, width: size.width, height: size.height))
+                let field = cg(layout.interface.playfieldFrame)
+                let viewport = MobileViewport(levelSize: game.levelSize, viewSize: .init(width: field.width, height: field.height),
+                    origin: game.initialCameraOrigin, zoom: 2, pixelAspect: 1.2)
+                context.saveGState(); context.translateBy(x: field.minX, y: field.minY)
+                context.clip(to: CGRect(origin: .zero, size: field.size))
+                MobileBitmapRenderer.draw(image, viewport: viewport, in: context)
+                RescueCelebration.draw(in: CGRect(origin: .zero, size: field.size), amount: state == "review" ? 1 : 0, context: context)
+                context.restoreGState()
+                let icons = game.snapshot.skills.indices.map { game.skillCursorFrame(control: $0).flatMap(MobileBitmapRenderer.image) }
+                MobileHUDRenderer(layout: layout, snapshot: game.snapshot, selectedSkill: 7, paused: state != "running", speed: 1,
+                    endRunArmed: false, panelImage: game.panelFrame.flatMap(MobileBitmapRenderer.image), typography: typography,
+                    counterStyle: .macintosh, skillIcons: icons, readOnly: state == "review").draw(in: context, bounds: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+                if state == "review" {
+                    for star in 0..<3 { GameStarArt.draw(at: CGPoint(x: field.midX - 51 + CGFloat(star * 38), y: field.minY + 16), earned: star < 2, size: 3, context: context) }
+                }
+                let file = "hud-native-" + name + "-" + state + ".png"
+                try save(context: context, to: output.appendingPathComponent(file))
+                evidence.append(["source": name, "state": state, "file": file, "nativeScale": 2, "readOnly": state == "review"])
             }
         }
         return evidence

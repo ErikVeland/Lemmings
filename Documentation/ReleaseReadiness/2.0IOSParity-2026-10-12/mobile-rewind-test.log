@@ -1,0 +1,65 @@
+Another instance of SwiftPM (PID: 85662) is already running using '/Users/veland/Lemmings/.build', waiting until that process has finished execution...warning: /Users/veland/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'lemmings': failed storing manifest for 'lemmings' in cache: attempt to write a readonly database
+warning: 'sparkle': failed storing manifest for 'sparkle' in cache: attempt to write a readonly database
+Building for debugging...
+[Computing dependencies]
+[Using on-disk description]
+[2 / 46] NxlvKit
+[16 / 61] NxlvKit
+[17 / 61] NxlvKit
+[22 / 69] LemmingsDataTool-product
+[23 / 69] LemmingsAudio
+[25 / 70] LemmingsAppCore
+[37 / 85] LemmingsAppCore
+[38 / 85] LemmingsAppCore
+[39 / 85] LemmingsAppCore
+[41 / 86] LemmingsAudio
+[42 / 85] LemmingsAppCore
+[45 / 89] LemmingsAppCore
+[45 / 89] LemmingsMobileCore
+[57 / 104] LemmingsMobileCore
+[59 / 104] LemmingsMobileCore
+[60 / 104] LemmingsMobileCore
+[63 / 106] LemmingsAppCore
+[64 / 106] NxlvKit
+[67 / 105] NxlvKitTests-product
+[81 / 121] LemmingsGameArt
+[87 / 120] LemmingsGameArt
+[88 / 120] LemmingsDataTool-product
+[90 / 122] LemmingsAppCoreTests-product
+[92 / 123] LemmingsGameArt
+[98 / 130] LemmingsLocal
+[98 / 130] LemmingsGameArt
+[102 / 131] LemmingsMobileUI
+[105 / 134] LemmingsGameArt
+[105 / 132] LemmingsMobileMenuAudit-product
+[111 / 135] LemmingsMobileCoreTests-product
+[111 / 135] LemmingsGameArt
+[113 / 131] LemmingsMobileCoreTests-product
+[115 / 133] NxlvKitTests-product
+[119 / 133] LemmingsMobileMenuAudit-product
+[121 / 133] LemmingsLocal-product
+[123 / 134] LemmingsMobileCoreTests-product
+[128 / 134] LemmingsMobileMenuAudit-product
+[129 / 134] LemmingsMobileMenuAudit-product
+[130 / 135] LemmingsLocal
+[134 / 140] LemmingsLocalTests-product
+Build complete! (25.26 sec.)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite MobileRewindTests started.
+􀟈  Test oldCheckpointRestoresAfterRewindChange() started.
+􀟈  Test rewindThenAssignDropsTheFuture() started.
+􀟈  Test winningReplayIsReadOnlyAndKeepsOutcome() started.
+􀟈  Test undoNukeIsAssistedAndPersistsUsage() started.
+􀟈  Test checkpointPreservesHistoryAndAbandonedFuture() started.
+􁁛  Test rewindThenAssignDropsTheFuture() passed after 0.016 seconds.
+􁁛  Test undoNukeIsAssistedAndPersistsUsage() passed after 0.035 seconds.
+􁁛  Test winningReplayIsReadOnlyAndKeepsOutcome() passed after 0.045 seconds.
+􁁛  Test oldCheckpointRestoresAfterRewindChange() passed after 0.084 seconds.
+􁁛  Test checkpointPreservesHistoryAndAbandonedFuture() passed after 0.088 seconds.
+􁁛  Suite MobileRewindTests passed after 0.088 seconds.
+􁁛  Test run with 5 tests in 1 suite passed after 0.088 seconds.

@@ -10,11 +10,15 @@ extension MobileLibraryViewController {
     var learning: MobileLearningState {
         get {
             var saved = learningStorage.load(MobileLearningState.self, name: "learning") ?? .init()
-            if let run = saved.run, let journey = bundledJourney,
-               let migrated = try? journey.migrating(run), migrated != run {
-                saved.run = migrated
-                do { try learningStorage.save(saved, name: "learning") }
-                catch { notice = error.localizedDescription }
+            if let run = saved.run, let journey = bundledJourney {
+                do {
+                    let migrated = try journey.migrating(run)
+                    if migrated != run {
+                        var updated = saved; updated.run = migrated
+                        try learningStorage.save(updated, name: "learning")
+                        saved = updated
+                    }
+                } catch { notice = error.localizedDescription }
             }
             return saved
         }

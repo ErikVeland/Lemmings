@@ -1,0 +1,506 @@
+UI test windows: offscreen; audio: muted
+Building for debugging...
+[Computing dependencies]
+[Using on-disk description]
+[1 / 74] LemmingsMobileCoreTests-product
+[8 / 55]
+[9 / 56] NxlvKit
+[24 / 71] NxlvKit
+[32 / 81] NxlvKit
+[33 / 81] LemmingsDataTool-product
+[33 / 81] NxlvKit
+[33 / 81] LemmingsAudio
+[48 / 97] LemmingsAppCore
+[49 / 97] LemmingsAppCore
+[50 / 97] LemmingsAppCore
+[52 / 97] LemmingsAppCore
+[58 / 105] LemmingsAppCore
+[67 / 120] LemmingsMobileCore
+[71 / 120] LemmingsMobileCore
+[72 / 120] LemmingsMobileCore
+[73 / 120] LemmingsMobileCore
+[82 / 125] LemmingsMobileBetaTool-product
+[86 / 128] LemmingsMobileCore
+[92 / 131] LemmingsAppCore
+[93 / 131] NxlvKit
+[96 / 131] NxlvKit
+[104 / 134] LemmingsMobileMenuAudit-product
+[111 / 132] LemmingsMobileUI-product
+[111 / 132] NxlvKitTests-product
+[117 / 135] LemmingsMobileBetaTool-product
+[120 / 138] NxlvKitTests-product
+[123 / 141] LemmingsAppCoreTests-product
+[128 / 144] LemmingsAppCoreTests-product
+[132 / 148] LemmingsLocal-product
+[136 / 150] NxlvKitTests-product
+[140 / 152] NxlvKitTests-product
+[142 / 153] LemmingsMobileMenuAudit-product
+[144 / 154] LemmingsMobileCoreTests-product
+[148 / 155] LemmingsMobileCoreTests-product
+[150 / 157] LemmingsLocal-product
+[150 / 158] LemmingsLocal
+[153 / 159] LemmingsLocalTests-product
+[156 / 158] LemmingsLocalTests-product
+Build complete! (37.07 sec.)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite ZipArchiveTests started.
+􀟈  Suite BeastMixTests started.
+􀟈  Suite LearningJourneyTests started.
+􀟈  Suite FanTextTerrainTests started.
+􀟈  Suite AssignmentFocusTests started.
+􀟈  Suite DifficultyTests started.
+􀟈  Suite LevelPlaylistTests started.
+􀟈  Suite FanPackUpdaterTests started.
+􀟈  Suite "NeoLemmix bundled and player libraries" started.
+􀟈  Suite LevelCatalogueTests started.
+􀟈  Test rejectsDamagedAndNonArchives() started.
+􀟈  Test everyBundledPackDecodesLikeUnzip() started.
+􀟈  Test "Source placements survive DOS terrain range and object alignment" started.
+􀟈  Test rawReplayScoreKeepsAComparableDemandBandSmooth() started.
+􀟈  Test multiplayerSourcesCannotEnterTheLearningPath() started.
+􀟈  Test intermediateBridgeLessonMigratesWithoutSkippingOrRepeatingVisits() started.
+􀟈  Test authoredObjectivesSeparateIntroductionsFromCombinations() started.
+􀟈  Test learning13MigrationIncludesBoth182AdditionsWithoutChangingHistory() started.
+􀟈  Test unsupportedGapsAreFlaggedAndPriorsRejected() started.
+􀟈  Test officialLevelsLeadComparablePortLevelsWithoutOverridingDifficulty() started.
+􀟈  Test cycleTracksSuccessfulAssignments() started.
+􀟈  Test corpusInferenceRequiresRepeatedAsymmetricEvidence() started.
+􀟈  Test originalPlusBridgesDoNotOvershootOrExtendPastTheCampaign() started.
+􀟈  Test deterministicGenerationAndStableTies() started.
+􀟈  Test originalPlusKeepsSuitableOfficialTutorialSteps() started.
+􀟈  Test officialPreferenceCannotBuyLargeJump() started.
+􀟈  Test routineCrowdAssignmentsAreNotIndependentWorkers() started.
+􀟈  Test somethingWrongIsReplacedByANukeFreeRoute() started.
+􀟈  Test highSourceConstraintsStartAtDifficult() started.
+􀟈  Test complexRoutesWaitForSecondBasicSkillPractice() started.
+􀟈  Test forgivingAndNarrowWindows() started.
+􀟈  Test cacheVersionsAndRoundTrip() started.
+􀟈  Test classicReplayObservationPreservesTheVerifiedOutcome() started.
+􀟈  Test conceptIntroductionAndLowPrecision() started.
+􀟈  Test classicTimingBudgetOnlyMeasuresSuccessfulInputs() started.
+􀟈  Test modernBeastRhythmIsCentredWithoutChangingFaithfulStereo() started.
+􀟈  Test incompleteProbesAreUnknownRatherThanFailures() started.
+􀟈  Test noReplayLevelsStayInCandidatePoolAndConfidenceBreaksNearTies() started.
+􀟈  Test completeOriginalPlusRetainsEveryAnchorBeyondOneHundred() started.
+􀟈  Test gradeBoundaries() started.
+􀟈  Test curriculumDoesNotExhaustIdenticalMetadataPriors() started.
+􀟈  Test classicDifficultyAnalysesAWinAtTheSourceClockLimit() started.
+􀟈  Test cancellationPropagatesWithoutReturningPartialSuccess() started.
+􀟈  Test inconclusiveProbesRetainUnknownEvidence() started.
+􀟈  Test playlistAndDisplaySnapshotsRoundTrip() started.
+􀟈  Test unknownTechniquesAreNotInvented() started.
+􀟈  Test mechanicalOrderingAndResources() started.
+􀟈  Test randomTenCanCreateAnEditablePlaylist() started.
+􀟈  Test shuffleUsesOneStableCanonicalOrder() started.
+􀟈  Test randomTenAndFullShuffleNeverRepeat() started.
+􀟈  Test activeRunRetainsItsSnapshotAndPosition() started.
+􀟈  Test manualPlaylistKeepsAUniqueOrderedSet() started.
+􀟈  Suite "NeoLemmix final-state oracle" started.
+􀟈  Test malformedSavedValuesAreRejected() started.
+􀟈  Suite ControllerBindingsTests started.
+􀟈  Test installsOnlyMissingValidPacks() started.
+􀟈  Test covoxIsReplacedAtTheSameDifficultyAndRetiredRunsRecover() started.
+􀟈  Test aLowAverageCannotHideExpertTiming() started.
+􀟈  Suite "Double tap" started.
+􀟈  Suite PrecisionRewardTests started.
+􀟈  Test isolatedPracticePrecedesCombinationsAndPassiveLevelsDoNotOpen() started.
+􀟈  Test keepsTheWholeCampaignAndFillsTheRetailJump() started.
+􀟈  Suite NxlvKitTests started.
+􀟈  Suite RescueCelebrationTests started.
+􀟈  Test nearEqualRepetitionsAreSpacedAndOriginDoesNotChooseTheOpening() started.
+􀟈  Test measuredNarrowTimingStartsAtDifficult() started.
+􀟈  Test DifficultyOrderAndParkingDoesNotAwardAWin() started.
+􀟈  Test "Bundled packs win, and each level uses a styles root that resolves it" started.
+􀟈  Suite MusicLibraryInstallerTests started.
+􀟈  Test catalogueRoundTripKeepsRevisionAndReleaseBoundary() started.
+􀟈  Test "A saved run finds its level by IDs after its old path is gone" started.
+􀟈  Test resolvesTheFullTypedIdentity() started.
+􀟈  Test packRejectsEntriesFromAnotherEngineOrPack() started.
+􀟈  Suite "NeoLemmix pack library" started.
+􀟈  Suite SkillShortcutsTests started.
+􀟈  Test originalPlusPreservesOfficialOrderAndBridgesGaps() started.
+􀟈  Test timingProbesUseRealSimulationOutcomes() started.
+􀟈  Test parsesCatalogueAndDownloadLinks() started.
+􀟈  Test cellbashIsSecondAndMigratesEveryUnvisitedLesson() started.
+􀟈  Test generatedSequencesRejectEmptyAndDuplicatePools() started.
+􁁛  Test multiplayerSourcesCannotEnterTheLearningPath() passed after 0.027 seconds.
+􁁛  Test cycleTracksSuccessfulAssignments() passed after 0.038 seconds.
+􁁛  Test deterministicGenerationAndStableTies() passed after 0.040 seconds.
+􁁛  Test originalPlusKeepsSuitableOfficialTutorialSteps() passed after 0.044 seconds.
+􁁛  Test officialPreferenceCannotBuyLargeJump() passed after 0.044 seconds.
+􁁛  Test routineCrowdAssignmentsAreNotIndependentWorkers() passed after 0.044 seconds.
+􁁛  Test originalPlusBridgesDoNotOvershootOrExtendPastTheCampaign() passed after 0.044 seconds.
+􁁛  Test highSourceConstraintsStartAtDifficult() passed after 0.044 seconds.
+􁁛  Test corpusInferenceRequiresRepeatedAsymmetricEvidence() passed after 0.044 seconds.
+􁁛  Test forgivingAndNarrowWindows() passed after 0.044 seconds.
+􁁛  Test complexRoutesWaitForSecondBasicSkillPractice() passed after 0.044 seconds.
+􁁛  Test conceptIntroductionAndLowPrecision() passed after 0.044 seconds.
+􁁛  Test rawReplayScoreKeepsAComparableDemandBandSmooth() passed after 0.044 seconds.
+􁁛  Test authoredObjectivesSeparateIntroductionsFromCombinations() passed after 0.044 seconds.
+􁁛  Test noReplayLevelsStayInCandidatePoolAndConfidenceBreaksNearTies() passed after 0.044 seconds.
+􁁛  Test gradeBoundaries() passed after 0.044 seconds.
+􁁛  Test unsupportedGapsAreFlaggedAndPriorsRejected() passed after 0.044 seconds.
+􁁛  Test "Source placements survive DOS terrain range and object alignment" passed after 0.044 seconds.
+􁁛  Test incompleteProbesAreUnknownRatherThanFailures() passed after 0.044 seconds.
+􁁛  Test inconclusiveProbesRetainUnknownEvidence() passed after 0.044 seconds.
+􁁛  Test cacheVersionsAndRoundTrip() passed after 0.044 seconds.
+􁁛  Test unknownTechniquesAreNotInvented() passed after 0.044 seconds.
+􁁛  Test playlistAndDisplaySnapshotsRoundTrip() passed after 0.044 seconds.
+􁁛  Test randomTenCanCreateAnEditablePlaylist() passed after 0.044 seconds.
+􁁛  Test mechanicalOrderingAndResources() passed after 0.044 seconds.
+􁁛  Test officialLevelsLeadComparablePortLevelsWithoutOverridingDifficulty() passed after 0.044 seconds.
+􁁛  Test shuffleUsesOneStableCanonicalOrder() passed after 0.044 seconds.
+􁁛  Test randomTenAndFullShuffleNeverRepeat() passed after 0.044 seconds.
+􀟈  Test "Stable encoding and terrain sensitivity" started.
+􀟈  Test "Manifest order follows replay hashes" started.
+􁁛  Test manualPlaylistKeepsAUniqueOrderedSet() passed after 0.044 seconds.
+􀟈  Test interruptedAndDisabledTapsNeverSelectSpeed() started.
+􀟈  Test buttonsAndModifier() started.
+􀟈  Test reconnectAndRelease() started.
+􀟈  Test controllerSpeedHoldRestoresSelection() started.
+􁁛  Test malformedSavedValuesAreRejected() passed after 0.044 seconds.
+􀟈  Test triggerMatchesFTapHoldAndRapidExit() started.
+􀟈  Test remappingKeepsEveryActionReachable() started.
+􀟈  Test everyQoLChordAndMenuLayer() started.
+􁁛  Test curriculumDoesNotExhaustIdenticalMetadataPriors() passed after 0.044 seconds.
+􁁛  Test aLowAverageCannotHideExpertTiming() passed after 0.044 seconds.
+􀟈  Test "Time that goes backwards cannot complete a double tap" started.
+􀟈  Test "A second press of the same key within the interval is a double tap" started.
+􀟈  Test "A slow second press, another key or a held repeat is not a double tap" started.
+􀟈  Test distinctThreeStarLevelsEarnZoomAndSuperzoomAcrossEngines() started.
+􀟈  Test improvementsEarnOnlyTheNewCreditAndRewindsDoNotEarnUses() started.
+􁁛  Test activeRunRetainsItsSnapshotAndPosition() passed after 0.044 seconds.
+􁁛  Test isolatedPracticePrecedesCombinationsAndPassiveLevelsDoNotOpen() passed after 0.044 seconds.
+􀟈  Test testReleaseRateFallback() started.
+􀟈  Test testTabsAndNestedSectionsParse() started.
+􀟈  Test testLevelParses() started.
+􀟈  Test testLastValueWins() started.
+􀟈  Test testMissingTitleReturnsNil() started.
+􀟈  Test allRescuedGlowExpiresWithoutRepeatingAndResetsOnRewind() started.
+􀟈  Test onlySecuredTargetsAndCompletedWinsCelebrate() started.
+􀟈  Test allRescuedLevelsKeepTheirTrack() started.
+􀟈  Test goldenHazeIsClippedAndLeavesTheCentreUntouched() started.
+􁁛  Test nearEqualRepetitionsAreSpacedAndOriginDoesNotChooseTheOpening() passed after 0.044 seconds.
+􁁛  Test measuredNarrowTimingStartsAtDifficult() passed after 0.044 seconds.
+􁁛  Test rejectsDamagedAndNonArchives() passed after 0.045 seconds.
+􁁛  Test DifficultyOrderAndParkingDoesNotAwardAWin() passed after 0.044 seconds.
+􀟈  Test installsVerifiesAndReplaces() started.
+􀟈  Test rejectsTamperedAndUnexpectedArchives() started.
+􁁛  Test catalogueRoundTripKeepsRevisionAndReleaseBoundary() passed after 0.044 seconds.
+􁁛  Test classicReplayObservationPreservesTheVerifiedOutcome() passed after 0.045 seconds.
+􁁛  Test resolvesTheFullTypedIdentity() passed after 0.044 seconds.
+􁁛  Test packRejectsEntriesFromAnotherEngineOrPack() passed after 0.044 seconds.
+􀟈  Test "Manifest order, groups and stable revisions" started.
+􀟈  Test "Fallback order and unsafe manifests" started.
+􀟈  Test classicBindings() started.
+􀟈  Test sharedInitialsCycleAndNumbersStayAbsolute() started.
+􀟈  Test initialsBeforeFallbacksAndLevelChanges() started.
+􀟈  Test cameraKeysReserveHAndGExceptGlider() started.
+􀟈  Test cycleSkipsEmptySkillsAndWraps() started.
+􀟈  Test reservedKeysNeverReachASkill() started.
+􁁛  Test originalPlusPreservesOfficialOrderAndBridgesGaps() passed after 0.045 seconds.
+􁁛  Test covoxIsReplacedAtTheSameDifficultyAndRetiredRunsRecover() passed after 0.044 seconds.
+􁁛  Test parsesCatalogueAndDownloadLinks() passed after 0.042 seconds.
+􁁛  Test learning13MigrationIncludesBoth182AdditionsWithoutChangingHistory() passed after 0.045 seconds.
+􁁛  Test generatedSequencesRejectEmptyAndDuplicatePools() passed after 0.036 seconds.
+􁁛  Suite AssignmentFocusTests passed after 0.131 seconds.
+􁁛  Suite FanTextTerrainTests passed after 0.132 seconds.
+􁁛  Test cancellationPropagatesWithoutReturningPartialSuccess() passed after 0.131 seconds.
+􁁛  Suite LevelPlaylistTests passed after 0.131 seconds.
+􁁛  Test "Stable encoding and terrain sensitivity" passed after 0.086 seconds.
+􁁛  Test classicTimingBudgetOnlyMeasuresSuccessfulInputs() passed after 0.131 seconds.
+􁁛  Test interruptedAndDisabledTapsNeverSelectSpeed() passed after 0.086 seconds.
+􁁛  Test buttonsAndModifier() passed after 0.086 seconds.
+􁁛  Test reconnectAndRelease() passed after 0.086 seconds.
+􁁛  Test controllerSpeedHoldRestoresSelection() passed after 0.086 seconds.
+􁁛  Test triggerMatchesFTapHoldAndRapidExit() passed after 0.086 seconds.
+􁁛  Test remappingKeepsEveryActionReachable() passed after 0.086 seconds.
+􁁛  Test "Manifest order follows replay hashes" passed after 0.086 seconds.
+􁁛  Test "Time that goes backwards cannot complete a double tap" passed after 0.086 seconds.
+􁁛  Test everyQoLChordAndMenuLayer() passed after 0.086 seconds.
+􁁛  Test "A second press of the same key within the interval is a double tap" passed after 0.086 seconds.
+􁁛  Test "A slow second press, another key or a held repeat is not a double tap" passed after 0.086 seconds.
+􁁛  Test testReleaseRateFallback() passed after 0.086 seconds.
+􁁛  Test testTabsAndNestedSectionsParse() passed after 0.086 seconds.
+􁁛  Test testLevelParses() passed after 0.086 seconds.
+􁁛  Test testLastValueWins() passed after 0.086 seconds.
+􁁛  Test testMissingTitleReturnsNil() passed after 0.086 seconds.
+􁁛  Test onlySecuredTargetsAndCompletedWinsCelebrate() passed after 0.086 seconds.
+􁁛  Test allRescuedLevelsKeepTheirTrack() passed after 0.086 seconds.
+􁁛  Test "A saved run finds its level by IDs after its old path is gone" passed after 0.130 seconds.
+􁁛  Test intermediateBridgeLessonMigratesWithoutSkippingOrRepeatingVisits() passed after 0.131 seconds.
+􁁛  Test goldenHazeIsClippedAndLeavesTheCentreUntouched() passed after 0.086 seconds.
+􁁛  Suite LevelCatalogueTests passed after 0.132 seconds.
+􁁛  Test "Bundled packs win, and each level uses a styles root that resolves it" passed after 0.130 seconds.
+􁁛  Test "Manifest order, groups and stable revisions" passed after 0.086 seconds.
+􁁛  Test classicBindings() passed after 0.086 seconds.
+􁁛  Test sharedInitialsCycleAndNumbersStayAbsolute() passed after 0.086 seconds.
+􁁛  Test initialsBeforeFallbacksAndLevelChanges() passed after 0.086 seconds.
+􁁛  Test cameraKeysReserveHAndGExceptGlider() passed after 0.086 seconds.
+􁁛  Test cycleSkipsEmptySkillsAndWraps() passed after 0.086 seconds.
+􁁛  Test reservedKeysNeverReachASkill() passed after 0.086 seconds.
+􁁛  Test allRescuedGlowExpiresWithoutRepeatingAndResetsOnRewind() passed after 0.087 seconds.
+􁁛  Suite "NeoLemmix final-state oracle" passed after 0.132 seconds.
+􁁛  Suite ControllerBindingsTests passed after 0.133 seconds.
+􁁛  Suite "Double tap" passed after 0.133 seconds.
+􁁛  Suite NxlvKitTests passed after 0.133 seconds.
+􁁛  Suite "NeoLemmix bundled and player libraries" passed after 0.132 seconds.
+􁁛  Suite SkillShortcutsTests passed after 0.133 seconds.
+􁁛  Suite RescueCelebrationTests passed after 0.135 seconds.
+􁁛  Test "Fallback order and unsafe manifests" passed after 0.088 seconds.
+􁁛  Suite "NeoLemmix pack library" passed after 0.134 seconds.
+􁁛  Test distinctThreeStarLevelsEarnZoomAndSuperzoomAcrossEngines() passed after 0.092 seconds.
+􁁛  Test improvementsEarnOnlyTheNewCreditAndRewindsDoNotEarnUses() passed after 0.094 seconds.
+􁁛  Suite PrecisionRewardTests passed after 0.140 seconds.
+􁁛  Test installsOnlyMissingValidPacks() passed after 0.146 seconds.
+􁁛  Suite FanPackUpdaterTests passed after 0.147 seconds.
+􁁛  Test cellbashIsSecondAndMigratesEveryUnvisitedLesson() passed after 0.225 seconds.
+􁁛  Test classicDifficultyAnalysesAWinAtTheSourceClockLimit() passed after 0.228 seconds.
+􁁛  Test somethingWrongIsReplacedByANukeFreeRoute() passed after 0.424 seconds.
+􁁛  Test timingProbesUseRealSimulationOutcomes() passed after 1.655 seconds.
+􁁛  Test modernBeastRhythmIsCentredWithoutChangingFaithfulStereo() passed after 2.341 seconds.
+􁁛  Suite BeastMixTests passed after 2.342 seconds.
+􁁛  Test keepsTheWholeCampaignAndFillsTheRetailJump() passed after 4.056 seconds.
+􁁛  Suite LearningJourneyTests passed after 4.058 seconds.
+􁁛  Test installsVerifiesAndReplaces() passed after 4.778 seconds.
+􁁛  Test rejectsTamperedAndUnexpectedArchives() passed after 7.220 seconds.
+􁁛  Suite MusicLibraryInstallerTests passed after 7.266 seconds.
+􁁛  Test completeOriginalPlusRetainsEveryAnchorBeyondOneHundred() passed after 7.791 seconds.
+􁁛  Suite DifficultyTests passed after 7.792 seconds.
+􁁛  Test everyBundledPackDecodesLikeUnzip() passed after 30.240 seconds.
+􁁛  Suite ZipArchiveTests passed after 30.240 seconds.
+􁁛  Test run with 94 tests in 19 suites passed after 30.241 seconds.
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite MobileAdaptiveLayoutTests started.
+􀟈  Suite MobileLearningTests started.
+􀟈  Suite MobileBitmapTests started.
+􀟈  Suite MobileCollectionsMigrationTests started.
+􀟈  Suite MobileStorageTests started.
+􀟈  Suite MobileMusicContextTests started.
+􀟈  Suite MobilePlaylistTests started.
+􀟈  Suite MobileCheckpointOwnershipTests started.
+􀟈  Suite MobileShuffleAllTests started.
+􀟈  Suite MobileFanCountStoreTests started.
+􀟈  Suite MobileSettingsTests started.
+􀟈  Suite MobileRewindTests started.
+􀟈  Suite MobileFavouritesTests started.
+􀟈  Suite MobileProgressionBuilderTests started.
+􀟈  Suite MobileCoreTests started.
+􀟈  Test menusStayClearOfDivisionAndOcclusionWhileScrolling() started.
+􀟈  Test controlDeckAvoidsSystemRegionsAcrossEngineControlSets() started.
+􀟈  Test wideIPadUsesOriginalPanelAndTinyViewsSuspend() started.
+􀟈  Test pythonStagingUsesMacSourceRevision() started.
+􀟈  Suite MobileMusicAssignmentTests started.
+􀟈  Test testMobileCollectionsMigrateToActiveProfile() started.
+􀟈  Test importsOlderDefaultsOnce() started.
+􀟈  Test profilesKeepTheirOwnKeysAndAlwaysHaveOne() started.
+􀟈  Test oldProfileDocumentKeepsItsIDAndDefaultPortrait() started.
+􀟈  Test bitmapCameraMatchesTouchAfterPanZoomAndRotation() started.
+􀟈  Test journeyContextRetainsItsFullScorePosition() started.
+􀟈  Test arrangementCyclesCountTheRealCampaignOccurrences() started.
+􀟈  Test theFanPoolListsEveryLevelOnceAndPlaysLazily() started.
+􀟈  Test shuffleIsAPermutationThatRepeatsForASeed() started.
+􀟈  Test editingKeepsOrderAndRejectsDuplicates() started.
+􀟈  Test recentsKeepFiftyDistinctNewestFirst() started.
+􀟈  Test differentPlayersAndHotSeatsKeepTheirCheckpoints() started.
+􀟈  Suite MobileArtworkTests started.
+􀟈  Test testLegacyKeysMigrate() started.
+􀟈  Test testSharedClassicPreferencesSurviveRoundTrip() started.
+􀟈  Test curatedJourneyStartsWithoutScanningFuturePacks() started.
+􀟈  Test winningReplayIsReadOnlyAndKeepsOutcome() started.
+􀟈  Test testOlderMobileDocumentKeepsChoicesAndDefaultsNewFields() started.
+􀟈  Test rewindThenAssignDropsTheFuture() started.
+􀟈  Test favouritesSpanPacksAndPlayInTheirOwnSession() started.
+􀟈  Test undoNukeIsAssistedAndPersistsUsage() started.
+􀟈  Test oldCheckpointRestoresAfterRewindChange() started.
+􀟈  Test realCampaignSkillsAndPopulationReachTheSharedScorer() started.
+􀟈  Test storesToggleAndRoundTrips() started.
+􀟈  Suite MobileHotSeatTests started.
+􀟈  Test planningDoesNotBypassReadyInterruptionOrResults() started.
+􀟈  Test loupeKeepsExactPixelsAndClipsAtLevelEdges() started.
+􀟈  Test safeAreaLayoutKeepsTouchTargetsOnScreen() started.
+􀟈  Test unfoldingRevealsTerrainWithoutChangingZoomOrCameraCentre() started.
+􀟈  Test checkpointRejectsAnOlderWriter() started.
+􀟈  Test sequelSessionsReplayTheirInputCheckpoints() started.
+􀟈  Test newerCheckpointVersionCannotBeOverwritten() started.
+􀟈  Test classicSessionRestoresTheExactTick() started.
+􀟈  Test checkpointFallsBackToTheLastValidatedCopy() started.
+􀟈  Test storedQueueKeepsOwnerScopePositionAndDeferrals() started.
+􀟈  Test measuredCountsSurviveRelaunchAndChangedPacksAreMeasuredAgain() started.
+􀟈  Test fallsBackToTheBackupAndKeepsTheDamagedFile() started.
+􀟈  Suite MobileCatalogueTests started.
+􀟈  Test viewportZoomKeepsTheGestureAnchorStable() started.
+􀟈  Test completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test allThreeGamesAssignDuringPlanningWithoutAdvancingTime() started.
+􀟈  Test thermalPolicyNeverChangesSimulationRules() started.
+􀟈  Test contentImportStagesBeforeCommitAndPreservesTheLiveCopyOnFailure() started.
+􀟈  Test fixedTickClockDropsSuspensionTime() started.
+􀟈  Test heldTouchCommitsButCancellationAndReleaseOnlyDragDoNot() started.
+􀟈  Test lifecycleSavesOnceAndRequiresExplicitResume() started.
+􀟈  Test testUnknownFastSpeedFallsBackToTwo() started.
+􀟈  Test runsPersistWithTheirFixedOrder() started.
+􀟈  Test classicJumpingRisesAcrossTheRemainingStepPixel() started.
+􀟈  Test touchRouterDoesNotAssignAfterAPan() started.
+􀟈  Test checkpointPreservesHistoryAndAbandonedFuture() started.
+􀟈  Test touchTargetingPrefersEligibilityFollowersAndTools() started.
+􀟈  Test previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􁁛  Test wideIPadUsesOriginalPanelAndTinyViewsSuspend() passed after 0.043 seconds.
+􀟈  Test tunesFollowTheReleaseAndLevelTitle() started.
+􀟈  Test case passing 1 argument engine → "classic-dos" to completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to completedRunRejectsLateCheckpointWrites(engine:) started.
+􁁛  Test profilesKeepTheirOwnKeysAndAlwaysHaveOne() passed after 0.076 seconds.
+􁁛  Test journeyContextRetainsItsFullScorePosition() passed after 0.076 seconds.
+􁁛  Test arrangementCyclesCountTheRealCampaignOccurrences() passed after 0.078 seconds.
+􀟈  Test nativeArtworkKeepsAuthoredPixelsAndSimulation() started.
+􀟈  Test countdownHoldsWhenHiddenAndCancelsForPlanning() started.
+􁁛  Test menusStayClearOfDivisionAndOcclusionWhileScrolling() passed after 0.082 seconds.
+􁁛  Test editingKeepsOrderAndRejectsDuplicates() passed after 0.082 seconds.
+􀟈  Test case passing 1 argument engine → "classic-dos" to previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􁁛  Test shuffleIsAPermutationThatRepeatsForASeed() passed after 0.092 seconds.
+􁁛  Test recentsKeepFiftyDistinctNewestFirst() passed after 0.092 seconds.
+􁁛  Test testOlderMobileDocumentKeepsChoicesAndDefaultsNewFields() passed after 0.092 seconds.
+􁁛  Test controlDeckAvoidsSystemRegionsAcrossEngineControlSets() passed after 0.092 seconds.
+􁁛  Test rewindThenAssignDropsTheFuture() passed after 0.092 seconds.
+􁁛  Test winningReplayIsReadOnlyAndKeepsOutcome() passed after 0.092 seconds.
+􀟈  Test oneProfileIsNotAHotSeat() started.
+􀟈  Test sessionsSurviveSavingAndKeepTheirRule() started.
+􀟈  Test restartKeepsPlayersAndStartsWithTheHost() started.
+􀟈  Test turnsRotateAndWrap() started.
+􀟈  Test aPlayerWhoLeavesLosesTheTurn() started.
+􁁛  Test planningDoesNotBypassReadyInterruptionOrResults() passed after 0.092 seconds.
+􁁛  Test loupeKeepsExactPixelsAndClipsAtLevelEdges() passed after 0.092 seconds.
+􀟈  Test oldCheckpointsDecodeWithoutAScope() started.
+􀟈  Test resultChoicesFollowTheHouseRule() started.
+􀟈  Test theHostStaysInTheRoster() started.
+􀟈  Test deletingAPlayerEndsSessionsThatNeedThem() started.
+􁁛  Test safeAreaLayoutKeepsTouchTargetsOnScreen() passed after 0.092 seconds.
+􁁛  Test unfoldingRevealsTerrainWithoutChangingZoomOrCameraCentre() passed after 0.093 seconds.
+􁁛  Test checkpointRejectsAnOlderWriter() passed after 0.092 seconds.
+􁁛  Test newerCheckpointVersionCannotBeOverwritten() passed after 0.092 seconds.
+􁁛  Test oldCheckpointRestoresAfterRewindChange() passed after 0.092 seconds.
+􁁛  Test undoNukeIsAssistedAndPersistsUsage() passed after 0.092 seconds.
+􁁛  Test storesToggleAndRoundTrips() passed after 0.092 seconds.
+􁁛  Test differentPlayersAndHotSeatsKeepTheirCheckpoints() passed after 0.092 seconds.
+􁁛  Test importsOlderDefaultsOnce() passed after 0.093 seconds.
+􀟈  Test listsEveryFamilyWithTheRightCounts() started.
+􀟈  Test everyOfficialLevelLoadsRendersAndTicks() started.
+􁁛  Test viewportZoomKeepsTheGestureAnchorStable() passed after 0.092 seconds.
+􁁛  Test testSharedClassicPreferencesSurviveRoundTrip() passed after 0.093 seconds.
+􁁛  Test fallsBackToTheBackupAndKeepsTheDamagedFile() passed after 0.093 seconds.
+􁁛  Test completedRunRejectsLateCheckpointWrites(engine:) with 3 test cases passed after 0.092 seconds.
+􁁛  Test thermalPolicyNeverChangesSimulationRules() passed after 0.092 seconds.
+􁁛  Test fixedTickClockDropsSuspensionTime() passed after 0.092 seconds.
+􁁛  Test heldTouchCommitsButCancellationAndReleaseOnlyDragDoNot() passed after 0.092 seconds.
+􁁛  Test lifecycleSavesOnceAndRequiresExplicitResume() passed after 0.091 seconds.
+􁁛  Test runsPersistWithTheirFixedOrder() passed after 0.093 seconds.
+􁁛  Test classicJumpingRisesAcrossTheRemainingStepPixel() passed after 0.093 seconds.
+􁁛  Test touchRouterDoesNotAssignAfterAPan() passed after 0.091 seconds.
+􁁛  Test classicSessionRestoresTheExactTick() passed after 0.092 seconds.
+􁁛  Test touchTargetingPrefersEligibilityFollowersAndTools() passed after 0.091 seconds.
+􁁛  Test testLegacyKeysMigrate() passed after 0.098 seconds.
+􁁛  Test testUnknownFastSpeedFallsBackToTwo() passed after 0.097 seconds.
+􁁛  Test checkpointFallsBackToTheLastValidatedCopy() passed after 0.097 seconds.
+􁁛  Test contentImportStagesBeforeCommitAndPreservesTheLiveCopyOnFailure() passed after 0.100 seconds.
+􁁛  Suite MobileAdaptiveLayoutTests passed after 0.102 seconds.
+􁁛  Test sequelSessionsReplayTheirInputCheckpoints() passed after 0.101 seconds.
+􁁛  Test tunesFollowTheReleaseAndLevelTitle() passed after 0.033 seconds.
+􁁛  Suite MobileStorageTests passed after 0.104 seconds.
+􁁛  Suite MobileMusicContextTests passed after 0.104 seconds.
+􁁛  Suite MobilePlaylistTests passed after 0.104 seconds.
+􁁛  Suite MobileSettingsTests passed after 0.104 seconds.
+􁁛  Test oneProfileIsNotAHotSeat() passed after 0.012 seconds.
+􁁛  Test restartKeepsPlayersAndStartsWithTheHost() passed after 0.011 seconds.
+􁁛  Test turnsRotateAndWrap() passed after 0.011 seconds.
+􁁛  Test aPlayerWhoLeavesLosesTheTurn() passed after 0.011 seconds.
+􁁛  Test oldCheckpointsDecodeWithoutAScope() passed after 0.011 seconds.
+􁁛  Test resultChoicesFollowTheHouseRule() passed after 0.011 seconds.
+􁁛  Test theHostStaysInTheRoster() passed after 0.011 seconds.
+􁁛  Suite MobileCheckpointOwnershipTests passed after 0.105 seconds.
+􁁛  Test deletingAPlayerEndsSessionsThatNeedThem() passed after 0.011 seconds.
+􁁛  Test sessionsSurviveSavingAndKeepTheirRule() passed after 0.012 seconds.
+􁁛  Test countdownHoldsWhenHiddenAndCancelsForPlanning() passed after 0.022 seconds.
+􁁛  Test storedQueueKeepsOwnerScopePositionAndDeferrals() passed after 0.103 seconds.
+􁁛  Suite MobileMusicAssignmentTests passed after 0.105 seconds.
+􁁛  Suite MobileHotSeatTests passed after 0.104 seconds.
+􁁛  Test allThreeGamesAssignDuringPlanningWithoutAdvancingTime() passed after 0.105 seconds.
+􁁛  Test previousRunCleanupPreservesRetryCheckpoint(engine:) with 3 test cases passed after 0.111 seconds.
+􁁛  Suite MobileCoreTests passed after 0.114 seconds.
+􁁛  Test bitmapCameraMatchesTouchAfterPanZoomAndRotation() passed after 0.129 seconds.
+􁁛  Suite MobileBitmapTests passed after 0.130 seconds.
+􁁛  Test pythonStagingUsesMacSourceRevision() passed after 0.133 seconds.
+􁁛  Test testMobileCollectionsMigrateToActiveProfile() passed after 0.159 seconds.
+􁁛  Test oldProfileDocumentKeepsItsIDAndDefaultPortrait() passed after 0.159 seconds.
+􁁛  Suite MobileCollectionsMigrationTests passed after 0.160 seconds.
+􁁛  Test checkpointPreservesHistoryAndAbandonedFuture() passed after 0.176 seconds.
+􁁛  Suite MobileRewindTests passed after 0.176 seconds.
+􁁛  Test measuredCountsSurviveRelaunchAndChangedPacksAreMeasuredAgain() passed after 0.181 seconds.
+􁁛  Suite MobileFanCountStoreTests passed after 0.182 seconds.
+􁁛  Test listsEveryFamilyWithTheRightCounts() passed after 0.168 seconds.
+􁁛  Test curatedJourneyStartsWithoutScanningFuturePacks() passed after 0.648 seconds.
+􁁛  Suite MobileLearningTests passed after 0.649 seconds.
+􁁛  Test favouritesSpanPacksAndPlayInTheirOwnSession() passed after 1.148 seconds.
+􁁛  Suite MobileFavouritesTests passed after 1.149 seconds.
+􁁛  Test realCampaignSkillsAndPopulationReachTheSharedScorer() passed after 1.312 seconds.
+􁁛  Suite MobileProgressionBuilderTests passed after 1.313 seconds.
+􁁛  Test nativeArtworkKeepsAuthoredPixelsAndSimulation() passed after 2.467 seconds.
+􁁛  Suite MobileArtworkTests passed after 2.550 seconds.
+􁁛  Test theFanPoolListsEveryLevelOnceAndPlaysLazily() passed after 10.079 seconds.
+􁁛  Suite MobileShuffleAllTests passed after 10.079 seconds.
+􁁛  Test everyOfficialLevelLoadsRendersAndTicks() passed after 37.466 seconds.
+􁁛  Suite MobileCatalogueTests passed after 37.558 seconds.
+􁁛  Test run with 68 tests in 19 suites passed after 37.560 seconds.
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite StoreRoundTripTests started.
+􀟈  Suite ResultAwardsTests started.
+􀟈  Suite GameplayCommandsTests started.
+􀟈  Test playlistsRoundTripInMacFormat() started.
+􀟈  Suite AppStorageTests started.
+􀟈  Suite ProfileIdentityTests started.
+􀟈  Test checkpointsRoundTripInMacFormat() started.
+􀟈  Test sharedAwardsUseSavedResultsAndPersonalImprovements() started.
+􀟈  Test arcadeRecordsRoundTripInMacFormat() started.
+􀟈  Test testSharedPauseHintsAndReadyKeys() started.
+􀟈  Test temporaryStorageIsIsolated() started.
+􀟈  Suite OnlineServiceParityTests started.
+􀟈  Test integrationTestBuildsUseTemporaryFolders() started.
+􀟈  Test testMacPathsAreUnchanged() started.
+􀟈  Test bundledDataLoadsFromInjectedResources() started.
+􀟈  Test previewBuildKeepsItsOwnRecords() started.
+􀟈  Test telemetryUsesInjectedDefaults() started.
+􀟈  Test failedRecordsSaveDoesNotAdvanceOwnerOrCredit() started.
+􀟈  Test testSameInitialsKeepSeparateRecords() started.
+􀟈  Test hostedBrowseRequiresNoSharingOrCredential() started.
+􀟈  Test sharedGameCenterKeepsConfiguredIDsAndGuestOwnership() started.
+􀟈  Test testSkillAndShiftBindingsRemainDistinct() started.
+􁁛  Test testSharedPauseHintsAndReadyKeys() passed after 0.001 seconds.
+􁁛  Test testSkillAndShiftBindingsRemainDistinct() passed after 0.001 seconds.
+􁁛  Suite GameplayCommandsTests passed after 0.001 seconds.
+􁁛  Test testMacPathsAreUnchanged() passed after 0.003 seconds.
+􁁛  Test previewBuildKeepsItsOwnRecords() passed after 0.004 seconds.
+􁁛  Test integrationTestBuildsUseTemporaryFolders() passed after 0.004 seconds.
+􁁛  Test temporaryStorageIsIsolated() passed after 0.009 seconds.
+􁁛  Suite AppStorageTests passed after 0.009 seconds.
+􁁛  Test playlistsRoundTripInMacFormat() passed after 0.025 seconds.
+􁁛  Test arcadeRecordsRoundTripInMacFormat() passed after 0.025 seconds.
+􁁛  Test checkpointsRoundTripInMacFormat() passed after 0.025 seconds.
+􁁛  Test sharedAwardsUseSavedResultsAndPersonalImprovements() passed after 0.032 seconds.
+􁁛  Suite ResultAwardsTests passed after 0.032 seconds.
+􁁛  Test bundledDataLoadsFromInjectedResources() passed after 0.048 seconds.
+􁁛  Test telemetryUsesInjectedDefaults() passed after 0.049 seconds.
+􁁛  Test testSameInitialsKeepSeparateRecords() passed after 0.048 seconds.
+􁁛  Test failedRecordsSaveDoesNotAdvanceOwnerOrCredit() passed after 0.048 seconds.
+􁁛  Test hostedBrowseRequiresNoSharingOrCredential() passed after 0.048 seconds.
+􁁛  Suite ProfileIdentityTests passed after 0.049 seconds.
+􁁛  Suite StoreRoundTripTests passed after 0.049 seconds.
+􁁛  Test sharedGameCenterKeepsConfiguredIDsAndGuestOwnership() passed after 0.049 seconds.
+􁁛  Suite OnlineServiceParityTests passed after 0.050 seconds.
+􁁛  Test run with 16 tests in 6 suites passed after 0.050 seconds.

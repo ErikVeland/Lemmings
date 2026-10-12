@@ -60,8 +60,8 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   private var rewindRenderedVoices: [Bool]
 
   private let sampleRate = 44100.0
-  private(set) var isRunning = false
-  private(set) var loadedEffects: [ClassicSoundEffect] = []
+  public private(set) var isRunning = false
+  public private(set) var loadedEffects: [ClassicSoundEffect] = []
 
   public init(voiceCount: Int = 64) {
     voices = [Voice](repeating: Voice(), count: max(1, voiceCount))
@@ -658,6 +658,42 @@ public final class SoundEffectPlayer: @unchecked Sendable {
 
   public func play(_ effects: [ClassicSoundEffect], pan: Float = 0.0) {
     for effect in effects { play(effect, pan: pan) }
+  }
+
+  public struct MovieCue: Sendable {
+    public let samples: [Float]
+    public let rate: Double
+    public let gain: Float
+  }
+
+  /// Resolves movie samples on simulation time without starting an audio engine.
+  public func movieCues(_ cues: [PositionedSoundCue], viewport: GameplaySoundViewport, time: Double) -> [MovieCue] {
+    lock.lock(); defer { lock.unlock() }
+    guard !isMuted, !outputSuspended else { return [] }
+    var seen = Set<String>()
+    var result: [MovieCue] = []
+    for cue in cues {
+      guard cue.effect != .fallOut || bottomFallSounds else { continue }
+      let region = Self.regionKey(cue.point)
+      let key = (cue.sampleName?.lowercased() ?? cue.effect.rawValue) + region
+      guard cue.effect.isRescue || seen.insert(key).inserted else { continue }
+      if cue.effect.repetitionInterval > 0 {
+        if let previous = recentEffectTimes[key], time - previous < cue.effect.repetitionInterval { continue }
+        recentEffectTimes[key] = time
+      }
+      let named = cue.sampleName.flatMap { namedSounds[$0.lowercased()] }
+      if cue.sampleName != nil, named == nil, !cue.allowsFallback { continue }
+      guard let samples = named?.samples ?? library[cue.effect] else { continue }
+      let rate = named?.rate ?? rates[cue.effect] ?? sampleRate
+      let gain = Float(level) * (named == nil ? gains[cue.effect] ?? 0.6 : 0.6)
+        * (cue.point.map { viewport.placement(of: $0).gain } ?? 1)
+      result.append(.init(samples: samples, rate: rate, gain: gain))
+      if nukeActive, cue.effect == .explode || cue.effect == .pop, time - lastNukeImpact >= 0.3 {
+        lastNukeImpact = time
+        result.append(.init(samples: Self.nukeBass, rate: sampleRate, gain: Float(level) * 0.22))
+      }
+    }
+    return result
   }
 
   /// Sets the output level, from silent to full.

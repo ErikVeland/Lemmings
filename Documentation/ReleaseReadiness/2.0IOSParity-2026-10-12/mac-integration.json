@@ -1,0 +1,12 @@
+{
+  "audio": "muted",
+  "checksPassed": 63,
+  "fixture": "Complete local bundled game data and recordings, with current parity metadata in a separate test fixture",
+  "productionFilesChangedByFixtureSetup": false,
+  "skips": [
+    "SKIP controls-help focus checks: require an explicitly authorised foreground run"
+  ],
+  "status": "passed",
+  "testSourceSHA256": "0f166fc6373994cd220c45401e49030c0ffcb275a7aad144fa7317054aaf9f1e",
+  "windows": "offscreen"
+}

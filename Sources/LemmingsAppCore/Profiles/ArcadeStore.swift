@@ -424,8 +424,9 @@ import NxlvKit
     public func solutionTargetIsPending(for conditions: TrolleyConditions) -> Bool {
         pendingSolutionTargets.contains(conditions.fingerprint)
     }
-    public func beginAttempt(id: UUID, profileID: String, level: ArcadeLevel, previousID: UUID?) {
-        guard let conditions = level.conditions else { return }
+    @discardableResult public func beginAttempt(id: UUID, profileID: String, level: ArcadeLevel, previousID: UUID?) -> Bool {
+        guard canWrite, let conditions = level.conditions else { return false }
+        let previous = records
         acceptBundledProof(for: conditions)
         let prior = records.trolley.starts.first { $0.id == previousID && $0.profileID == profileID && $0.conditions == conditions }
         let completed = records.trolley.attempts.first { $0.id == previousID && $0.run.profileID == profileID && $0.run.level.conditions == conditions }
@@ -434,6 +435,8 @@ import NxlvKit
         records.beginTrolleyAttempt(.init(id: id, profileID: profileID, conditions: conditions,
             parentAttemptID: completed?.id ?? prior?.id, kind: kind))
         save()
+        guard storageError == nil else { records = previous; return false }
+        return true
     }
     public func acceptMaximum(_ evidence: TrolleyMaximum, conditions: TrolleyConditions, assisted: Bool) throws {
         try records.acceptTrolleyMaximum(evidence, conditions: conditions, assisted: assisted); save()

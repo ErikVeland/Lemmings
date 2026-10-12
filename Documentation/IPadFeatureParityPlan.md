@@ -10,6 +10,16 @@
 
 **Spec:** This document and [IOSInterfaceParity.md](IOSInterfaceParity.md). Feature behaviour comes from the Mac docs that each phase names, for example [HotSeat.md](HotSeat.md).
 
+## Implementation status, 12 October 2026
+
+The Classic implementation is present across phases 1–9. The current feature
+matrix and engine-specific limits are in [IOSInterfaceParity.md](IOSInterfaceParity.md).
+Validation is recorded in [Classic port evidence](ReleaseReadiness/2.0IOSParity-2026-10-12/README.md).
+The task checklists below retain the original implementation procedure. They do
+not claim device acceptance or completion of the owner's App Store Connect
+configuration. Changes remain in the workspace for review; phase commit steps
+have not been performed.
+
 ## Scope
 
 In scope: every Mac feature that is available for Classic-engine content (Lemmings, Oh No!, Holiday, Oh Yes! and fan packs).

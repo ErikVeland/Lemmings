@@ -1,0 +1,198 @@
+Another instance of SwiftPM (PID: 77213) is already running using '/Users/veland/Lemmings/.build', waiting until that process has finished execution...warning: /Users/veland/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'lemmings': failed storing manifest for 'lemmings' in cache: attempt to write a readonly database
+warning: 'sparkle': failed storing manifest for 'sparkle' in cache: attempt to write a readonly database
+Building for debugging...
+[Computing dependencies]
+[Constructing description]
+[Pre-planning 1 / 619]
+[Planning 1 / 619]
+[Planning deferred tasks]
+[Starting]
+[1 / 14] LemmingsAppCore-product
+[8 / 68] LemmingsAppCoreTests-product
+[14 / 78] NxlvKit
+[18 / 82] NxlvKit
+[26 / 90] LemmingsDataTool-product
+[28 / 90] NxlvKit
+[31 / 95] LemmingsDataTool-product
+[33 / 97] LemmingsDataTool-product
+[43 / 107] LemmingsDataTool-product
+[45 / 107] NxlvKitTests-product
+[50 / 137] NxlvKitTests-product
+[51 / 137] NxlvKitTests-product
+[52 / 138] LemmingsAudio
+[55 / 138] NxlvKitTests-product
+[55 / 138] LemmingsAudio
+[64 / 141] NxlvKitTests-product
+[67 / 141] NxlvKitTests-product
+[69 / 141] LemmingsAudio
+[71 / 141] NxlvKitTests-product
+[78 / 143] NxlvKitTests-product
+[80 / 146] LemmingsMobileCore
+[84 / 144] LemmingsAppCore
+[87 / 144] LemmingsAppCore
+[89 / 144] LemmingsAudio-product
+[95 / 159] LemmingsMobileCore
+[96 / 159] LemmingsMobileCore
+[97 / 159] LemmingsMobileCore
+[98 / 159] LemmingsMobileCore
+[99 / 159] LemmingsMobileCore
+[101 / 159] LemmingsMobileCore
+[104 / 159] LemmingsMobileCore
+[109 / 162] LemmingsMobileCore
+[110 / 163] LemmingsMobileCoreTests-product
+[111 / 165] LemmingsMobileBetaTool-product
+[113 / 166] LemmingsMobileBetaTool-product
+[113 / 166] LemmingsGameArt
+[119 / 181] LemmingsGameArt
+[121 / 181] LemmingsGameArt
+[125 / 181] NxlvKitTests-product
+[129 / 181] LemmingsGameArt
+[132 / 181] LemmingsAppCoreTests-product
+[139 / 187] LemmingsGameArt
+[140 / 191] LemmingsMobileUI
+[143 / 191] LemmingsLocal
+[145 / 191] LemmingsGameArt
+[149 / 191] LemmingsGameArt
+[149 / 191] LemmingsMobileUI
+[154 / 207] LemmingsMobileUI
+[161 / 207] LemmingsMobileUI
+[168 / 208] LemmingsMobileUI
+[177 / 216] LemmingsAppCoreTests-product
+[178 / 218] LemmingsMobileMenuAudit-product
+[179 / 218] LemmingsMobileCoreTests-product
+[183 / 233] LemmingsAppCoreTests-product
+[184 / 232] NxlvKitTests-product
+[189 / 232] LemmingsMobileCoreTests-product
+[191 / 232] LemmingsMobileCoreTests-product
+[191 / 232] LemmingsAppCoreTests-product
+[193 / 232] LemmingsMobileCoreTests-product
+[194 / 232] LemmingsMobileCoreTests-product
+[195 / 232] LemmingsMobileCoreTests-product
+[197 / 247] LemmingsLocal-product
+[198 / 262] LemmingsLocal
+[201 / 261] LemmingsMobileMenuAudit-product
+[206 / 261] NxlvKitTests-product
+[209 / 263] LemmingsMobileCoreTests-product
+[212 / 264] LemmingsLocal-product
+[214 / 264] LemmingsLocal-product
+[214 / 264] LemmingsMobileCoreTests-product
+[216 / 264] LemmingsLocal-product
+[217 / 264] LemmingsLocal-product
+[219 / 264] LemmingsMobileCoreTests-product
+[221 / 264] LemmingsLocal-product
+[223 / 264] LemmingsLocal-product
+[225 / 264] LemmingsLocal-product
+/Users/veland/Lemmings/Sources/LemmingsLocal/ReleaseWelcome.swift:48:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+46 |         scroll.hasHorizontalScroller = false
+47 |         scroll.drawsBackground = false
+48 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+49 |         scroll.scrollerStyle = .overlay
+50 |         scroll.setAccessibilityLabel("Release notes")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[227 / 264] LemmingsLocal-product
+[228 / 265] LemmingsLocal-product
+[231 / 269] LemmingsMobileCoreTests-product
+[238 / 269] LemmingsMobileCoreTests-product
+[239 / 269] LemmingsLocal
+[240 / 269] LemmingsMobileCoreTests-product
+[242 / 270] LemmingsLocal-product
+[244 / 270] LemmingsLocal
+/Users/veland/Lemmings/Sources/LemmingsLocal/ReleaseWelcome.swift:48:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+46 |         scroll.hasHorizontalScroller = false
+47 |         scroll.drawsBackground = false
+48 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+49 |         scroll.scrollerStyle = .overlay
+50 |         scroll.setAccessibilityLabel("Release notes")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[245 / 270] LemmingsLocal
+[247 / 270] LemmingsLocal
+[247 / 270] LemmingsGameArt
+[250 / 270] NxlvKitTests-product
+[253 / 270] LemmingsMobileCoreTests-product
+[255 / 270] LemmingsGameArt-product
+[259 / 272] LemmingsAppCoreTests-product
+[261 / 273] LemmingsMobileBetaTool-product
+[263 / 275] LemmingsMobileMenuAudit-product
+[265 / 276] LemmingsLocal
+[265 / 276] LemmingsLocal-product
+[265 / 276] LemmingsLocal
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6083:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6081 |       openPanel.canChooseFiles = true
+6082 |       openPanel.canChooseDirectories = false
+6083 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6084 |       openPanel.message = "Choose a NeoLemmix level file."
+6085 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:7393:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7391 |       openPanel.canChooseFiles = true
+7392 |       openPanel.canChooseDirectories = false
+7393 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7394 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+7395 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8101:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8099 |     keyboard.controllerRewindHeld = { [weak self] held in
+8100 |       guard let self else { return }
+8101 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8102 |       else if self.rewindHeld { self.endContinuousRewind() }
+8103 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[265 / 276] LemmingsLocal-product
+[266 / 277] LemmingsLocal-product
+[267 / 278] LemmingsLocal-product
+[269 / 278] LemmingsLocal
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6083:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6081 |       openPanel.canChooseFiles = true
+6082 |       openPanel.canChooseDirectories = false
+6083 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6084 |       openPanel.message = "Choose a NeoLemmix level file."
+6085 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:7393:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7391 |       openPanel.canChooseFiles = true
+7392 |       openPanel.canChooseDirectories = false
+7393 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7394 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+7395 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8101:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8099 |     keyboard.controllerRewindHeld = { [weak self] held in
+8100 |       guard let self else { return }
+8101 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8102 |       else if self.rewindHeld { self.endContinuousRewind() }
+8103 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[271 / 278] LemmingsLocal
+[273 / 279] LemmingsLocalTests-product
+[283 / 289] LemmingsLocalTests-product
+[285 / 289] LemmingsLocalTests-product
+[287 / 289] LemmingsLocalTests-product
+[289 / 291] LemmingsLocalTests-product
+Build complete! (56.65 sec.)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite MobileArtworkTests started.
+􀟈  Test countdownHoldsWhenHiddenAndCancelsForPlanning() started.
+􀟈  Test nativeArtworkKeepsAuthoredPixelsAndSimulation() started.
+􁁛  Test countdownHoldsWhenHiddenAndCancelsForPlanning() passed after 0.001 seconds.
+􁁛  Test nativeArtworkKeepsAuthoredPixelsAndSimulation() passed after 2.731 seconds.
+􁁛  Suite MobileArtworkTests passed after 2.731 seconds.
+􁁛  Test run with 2 tests in 1 suite passed after 2.731 seconds.

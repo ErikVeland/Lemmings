@@ -71,26 +71,36 @@ import UIKit
         if !isEnabled || isTestAudioMuted { stop() }
     }
 
-    func play(identifier: String, index: Int, title: String) {
+    func play(identifier: String, index: Int, title: String, attemptID: UUID, context: MobileMusicContext = .init()) {
         applySettings()
         guard isEnabled, !isTestAudioMuted else { return }
-        let key = identifier + "|" + soundtrack
+        let key = attemptID.uuidString + "|" + soundtrack
         guard playing != key else { return }
-        let tune = MobileMusicAssignment.tune(identifier: identifier, index: index, title: title)
+        let position = context.scorePosition ?? index
+        let tune = MobileMusicAssignment.tune(identifier: identifier, index: position, title: title)
+        let cycle = MobileMusicAssignment.cycle(tune: tune, index: position, titles: context.titles, isFan: context.isFan)
         let source = moduleURL(tune)
-        if soundtrack == "Adaptive DJ", let root = musicRoot {
+        if soundtrack == "Adaptive DJ" || context.isLearningJourney, let root = musicRoot {
             var pools = SoundtrackPlayer.djSoundtracks(at: root,
                 includeOtherSoundtracks: settings.classic.djIncludesOtherSoundtracks,
                 seasonal: SoundtrackPlayer.isSeasonal(tune.folder))
             if let source { pools["Original", default: []].append(source) }
             dj.load(soundtracks: pools, catalogueRoot: root)
-            if dj.startJourney(trackID: tune.game + "." + tune.track.lowercased(), cycle: index,
-                               identity: identifier, fallback: source,
-                               includeAlternates: settings.classic.djIncludesOtherSoundtracks) {
+            dj.setCelebrationAlternates(settings.classic.djIncludesOtherSoundtracks)
+            let started: Bool
+            if soundtrack == "Adaptive DJ" {
+                started = dj.startJourney(trackID: tune.game + "." + tune.track.lowercased(), cycle: cycle,
+                    identity: attemptID.uuidString, fallback: source, includeAlternates: settings.classic.djIncludesOtherSoundtracks)
+            } else {
+                let selected = recordingURL(tune: tune) ?? source
+                    ?? SoundtrackPlayer.recording(trackID: tune.game + "." + tune.track.lowercased(), root: root)
+                started = selected.map { dj.startLevel(url: $0, identity: attemptID.uuidString) } ?? false
+            }
+            if started {
                 module.stop(); recordings.stop(); usingDJ = true; usingRecording = false
                 playing = key
-                dj.onTrackChange = { [weak self] _ in self?.announce(self?.dj.currentURL, soundtrack: "Adaptive DJ") }
-                announce(dj.currentURL, soundtrack: "Adaptive DJ")
+                dj.onTrackChange = { [weak self] _ in self?.announce(self?.dj.currentURL, soundtrack: self?.soundtrack ?? "Original") }
+                announce(dj.currentURL, soundtrack: soundtrack)
                 applyOutputState(); return
             }
         }
@@ -116,16 +126,18 @@ import UIKit
                 && $0.pathExtension.lowercased() == "mod"
         }
     }
+    private func recordingURL(tune: MobileMusicAssignment.Tune) -> URL? {
+        guard soundtrack != "Original", soundtrack != "Adaptive DJ", let root = musicRoot,
+              let tracks = SoundtrackPlayer.soundtracks(at: root)[soundtrack] else { return nil }
+        return tracks.first {
+            SoundtrackPlayer.matches($0, trackID: tune.game + "." + tune.track.lowercased(), root: root)
+        }
+    }
     private func playRecording(tune: MobileMusicAssignment.Tune) -> Bool {
-        let name = soundtrack
-        guard name != "Original", name != "Adaptive DJ", let root = musicRoot,
-              let tracks = SoundtrackPlayer.soundtracks(at: root)[name],
-              let index = tracks.firstIndex(where: {
-                  SoundtrackPlayer.matches($0, trackID: tune.game + "." + tune.track.lowercased(), root: root)
-              }) else { return false }
-        recordings.load(tracks, originalMix: settings.classic.musicStyle == .faithful)
-        guard recordings.play(index: index) != nil else { return false }
-        announce(tracks[index], soundtrack: name)
+        guard let selected = recordingURL(tune: tune) else { return false }
+        recordings.load([selected], originalMix: settings.classic.musicStyle == .faithful)
+        guard recordings.play(index: 0) != nil else { return false }
+        announce(selected, soundtrack: soundtrack)
         return true
     }
     private func announce(_ url: URL?, soundtrack: String) {

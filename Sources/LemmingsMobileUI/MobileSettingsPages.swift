@@ -42,7 +42,7 @@ extension MobileLibraryViewController {
         } else if id.hasPrefix("setting.") {
             let key = String(id.dropFirst(8))
             switch key {
-            case "preset": settings.classic.applyExperiencePreset(modern: settings.classic.experiencePreset != .modern)
+            case "preset": settings.applyExperiencePreset(modern: settings.classic.experiencePreset != .modern)
             case "planning": settings.pauseToAssign.toggle()
             case "speed": settings.fastSpeed = cycle(settings.fastSpeed, MobileSettings.fastSpeeds)
             case "variableSpeed": settings.classic.variableSpeedEnabled.toggle()

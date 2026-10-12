@@ -14,6 +14,9 @@ from automatic_updates import validate_appcast, validate_info_plist, validate_re
 class AutomaticUpdateTests(unittest.TestCase):
     def test_current_repository_inputs_are_valid(self):
         version, build, items = validate_repository(ROOT, allow_empty=True, allow_stale_release=True)
+        info = plistlib.loads((ROOT / "Resources/Info.plist").read_bytes())
+        self.assertEqual(version, info["CFBundleShortVersionString"])
+        self.assertEqual(build, info["CFBundleVersion"])
         self.assertRegex(version, r"^\d+\.\d+(?:\.\d+)?$")
         self.assertTrue(build.isdigit())
         self.assertGreaterEqual(items, 0)

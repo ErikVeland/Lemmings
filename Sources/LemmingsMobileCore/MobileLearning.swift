@@ -53,7 +53,10 @@ public final class MobileJourneyLibrary: MobileGameLibrary {
             pack = catalogue.pack(id: "release/" + release)
         }
         guard let pack else { throw MobileSessionError.changedLevel }
-        if opened[pack.id] == nil { opened[pack.id] = try catalogue.library(for: pack) }
+        if opened[pack.id] == nil {
+            let current = try catalogue.library(for: pack)
+            opened = [pack.id: current]
+        }
         guard let library = opened[pack.id] else { throw MobileSessionError.changedLevel }
         let index: Int?
         if let fan = library as? ClassicFanMobileLibrary {

@@ -31,6 +31,7 @@ struct FanPackCorpusTests {
                     guard frame.width > 0, frame.height > 0 else { throw MobileSessionError.frameUnavailable }
                     content.session.tick()
                     levels += 1
+                    if levels.isMultiple(of: 500) { print("fan corpus progress: \(levels) levels") }
                 } catch {
                     failures.append("\(file.lastPathComponent) #\(summary.number) \(summary.title): \(error)")
                 }

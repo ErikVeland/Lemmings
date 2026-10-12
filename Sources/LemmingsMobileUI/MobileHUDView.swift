@@ -48,6 +48,7 @@ import UIKit
     private var paused = true
     private var speed = 1.0
     private var endRunArmed = false
+    var skillIcons: [CGImage?] = []
     var counterStyle: ClassicCounterStyle = .game
     private var panelImage: CGImage?
 
@@ -134,7 +135,7 @@ import UIKit
         guard let context = UIGraphicsGetCurrentContext(), let layout, let snapshot else { return }
         MobileHUDRenderer(layout: layout, snapshot: snapshot, selectedSkill: selectedSkill,
                           paused: paused, speed: speed, endRunArmed: endRunArmed,
-                          panelImage: panelImage, typography: MobileGameArt.typography, counterStyle: counterStyle).draw(in: context, bounds: bounds)
+                          panelImage: panelImage, typography: MobileGameArt.typography, counterStyle: counterStyle, skillIcons: skillIcons, readOnly: readOnly).draw(in: context, bounds: bounds)
     }
 
     private func rebuildButtons() {

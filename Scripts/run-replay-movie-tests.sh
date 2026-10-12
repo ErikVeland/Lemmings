@@ -12,13 +12,16 @@ swiftc -O -swift-version 6 -target "$(uname -m)-apple-macos12.3" -parse-as-libra
   -Xlinker -install_name -Xlinker @rpath/libNxlvKit.dylib \
   -o "$build_dir/libNxlvKit.dylib" Sources/NxlvKit/*.swift
 fi
+if [[ ! -f "$library_dir/modules/LemmingsAppCore.swiftmodule" ]]; then
+  zsh "$project_dir/Scripts/build-shared-modules.sh" "$library_dir/modules" "$library_dir" "$(uname -m)-apple-macos12.3" -O
+fi
 sources=(Sources/LemmingsLocal/*.swift)
 sources=("${(@)sources:#*/main.swift}")
 sources=("${(@)sources:#*/AppUpdates.swift}")
 sources=("${(@)sources:#*/ReplayWindow.swift}")
 cat Sources/LemmingsLocal/ReplayWindow.swift Tests/ReplayMovieTests/main.swift > "$build_dir/main.swift"
 swiftc -O -swift-version 6 -target "$(uname -m)-apple-macos12.3" \
-  -I "$library_dir/modules" -L "$library_dir" -lNxlvKit \
+  -I "$library_dir/modules" -L "$library_dir" -lNxlvKit -lLemmingsMobileCore -lLemmingsGameArt -lLemmingsAudio -lLemmingsAppCore \
   -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
   -Xlinker -rpath -Xlinker "$library_dir" \
   -o "$build_dir/tests" "${sources[@]}" "$build_dir/main.swift"

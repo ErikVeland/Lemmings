@@ -1,5 +1,6 @@
 #if os(iOS)
 import LemmingsAudio
+import LemmingsAppCore
 import LemmingsMobileCore
 import NxlvKit
 import UIKit
@@ -65,9 +66,23 @@ import UIKit
         let samples = ResultChimeSamples.samples(star: star, ornament: ornament).map { Float($0) / 32768 }
         player.play(samples: samples, rate: ResultChimeSamples.sampleRate, gain: 1)
     }
+    func movieEffects() -> MobileMovieEffects { MobileMovieEffects(player: player.replayPlayer()) }
     func pause() { player.silence() }
     func suspend() { suspended = true; player.suspendOutput() }
     func resume() { guard !isTestAudioMuted else { return }; suspended = false; try? player.resumeOutput() }
     func stop() { player.stop() }
+}
+
+@MainActor final class MobileMovieEffects {
+    private let player: SoundEffectPlayer
+    fileprivate init(player: SoundEffectPlayer) { self.player = player }
+    func record(session: any MobileGameSession, viewport: MobileViewport, into recorder: ReplayMovieRecorder) {
+        let rect = viewport.visibleLevelRect
+        player.setNukeActive(session.snapshot.isEndingRun)
+        let cues = player.movieCues(session.drainSoundCues(),
+            viewport: .init(x: rect.x, y: rect.y, width: rect.width, height: rect.height),
+            time: Double(session.snapshot.tick) / session.ticksPerSecond)
+        for cue in cues { recorder.sound(samples: cue.samples, rate: cue.rate, gain: cue.gain) }
+    }
 }
 #endif

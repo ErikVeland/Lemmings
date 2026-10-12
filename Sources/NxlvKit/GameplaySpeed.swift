@@ -53,6 +53,10 @@ public struct GameplaySpeed: Sendable {
     private var stoppedAt: TimeInterval?
 
     public init(legacyMultiplier: Double = 3) { self.legacyMultiplier = legacyMultiplier }
+    /// A saved mobile fast tier sets the next tap without starting the clock.
+    public mutating func setCruise(_ value: Double) {
+        if Self.steps.contains(value), value > 1 { cruise = value }
+    }
     public var isFast: Bool { target > 1 }
     public var isHeld: Bool { !held.isEmpty }
     /// The held pedal winds pitch up continuously while physics keeps its discrete tiers.

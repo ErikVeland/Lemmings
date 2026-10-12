@@ -42,5 +42,12 @@ import NxlvKit
         #expect(store.storageError != nil)
         #expect(store.records == before)
         #expect(store.playingProfileID == owner)
+        let conditions = TrolleyConditions(gameID: "lemmings", packID: "pack", levelID: "level-0",
+            levelFingerprint: String(repeating: "c", count: 64), rulesetVersion: "classic-dos-v1", physicsMode: "classic-dos-v1",
+            population: 10, rescueRequirement: 5, startingSkills: ["digger": 1], timeLimitSeconds: 300)
+        let started = store.beginAttempt(id: UUID(), profileID: owner,
+            level: .init(id: "l", title: "Level", game: "Classic", rules: "DOS", total: 10, required: 5, conditions: conditions), previousID: nil)
+        #expect(!started)
+        #expect(store.records == before)
     }
 }

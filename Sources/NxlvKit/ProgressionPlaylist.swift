@@ -40,10 +40,14 @@ public struct ProgressionCandidate: Sendable {
         self.rescueRequirementRatio = rescueRequirementRatio
         self.skillAssignmentCount = skillAssignmentCount
     }
+    var placementScore: Double {
+        max(profile.overallScore, LearningRouteSafety.minimumDemand(for: entry,
+            concepts: profile.detectedTechniques, assetsRevision: profile.key.assetsRevision))
+    }
     var stableKey: String { [entry.identity.engine.rawValue, entry.identity.packID, entry.identity.levelID].joined(separator: "\u{0}") }
 }
 
-public enum ProgressionModel { public static let version = "progression-3" }
+public enum ProgressionModel { public static let version = "progression-4" }
 
 public struct ProgressionConfiguration: Codable, Equatable, Sendable {
     public var maximumLevels = 100
@@ -114,27 +118,27 @@ public enum ProgressionGenerator {
             var eligible = remaining.filter { candidate in
                 if policy == .originalPlus, let anchor {
                     if candidate.isOfficial { return candidate.stableKey == nextOfficial }
-                    guard let previous, candidate.profile.overallScore <= anchor.profile.overallScore else { return false }
+                    guard let previous, candidate.placementScore <= anchor.placementScore else { return false }
                     let newAnchorConcepts = Set(anchor.profile.detectedTechniques).subtracting(learned)
                     let advancedIntroduction = DifficultyTechniques.definitions.contains {
                         newAnchorConcepts.contains($0.id) && $0.sophistication > 1
                     }
-                    guard anchor.profile.overallScore - previous.profile.overallScore > configuration.significantAnchorJump
+                    guard anchor.placementScore - previous.placementScore > configuration.significantAnchorJump
                         || newAnchorConcepts.count > 1 || advancedIntroduction else { return false }
-                    let bridgesScore = candidate.profile.overallScore > previous.profile.overallScore + configuration.targetStep / 4
-                        && candidate.profile.overallScore < anchor.profile.overallScore
+                    let bridgesScore = candidate.placementScore > previous.placementScore + configuration.targetStep / 4
+                        && candidate.placementScore < anchor.placementScore
                     let teachesTarget = !Set(candidate.profile.detectedTechniques).subtracting(learned)
                         .intersection(anchor.profile.detectedTechniques + anchor.profile.prerequisiteConcepts).isEmpty
                     if !bridgesScore && !teachesTarget { return false }
                 }
                 if let previous, policy != .originalPlus,
-                   candidate.profile.overallScore < previous.profile.overallScore - configuration.maximumRegression { return false }
+                   candidate.placementScore < previous.placementScore - configuration.maximumRegression { return false }
                 return true
             }
             if policy != .originalPlus || officialOrder.isEmpty, let previous {
                 let advancing = eligible.filter { candidate in
                     let reinforces = candidate.profile.detectedTechniques.contains { exposures[$0, default: 0] < 2 }
-                    return candidate.profile.overallScore >= previous.profile.overallScore + max(1, configuration.targetStep / 4)
+                    return candidate.placementScore >= previous.placementScore + max(1, configuration.targetStep / 4)
                         || reinforces
                 }
                 // Do not spend a finite curriculum on hundreds of mechanically identical priors.
@@ -167,7 +171,7 @@ public enum ProgressionGenerator {
             let introduced = Set(candidate.profile.detectedTechniques).subtracting(learned).sorted()
             let reason = candidate.isOfficial ? "Official level retained."
                 : policy == .originalPlus && nextOfficial != nil ? "Community bridge before the next official level." : "Community level fills the next curriculum step."
-            diagnostics.append(.init(identity: candidate.entry.identity, score: candidate.profile.overallScore,
+            diagnostics.append(.init(identity: candidate.entry.identity, score: candidate.placementScore,
                                      transitionCost: selected.1, introducedConcepts: introduced, reason: reason))
             if selected.1 > 250 { warnings.append("Large remaining transition to \(candidate.entry.levelNameSnapshot): \(Int(selected.1)).") }
             chosen.append(candidate); learned.formUnion(candidate.profile.detectedTechniques)
@@ -181,8 +185,8 @@ public enum ProgressionGenerator {
                                   learned: Set<String>, policy: ProgressionPolicy,
                                   configuration: ProgressionConfiguration, statistics: DifficultyCorpusStatistics? = nil) -> Double {
         let profile = next.profile
-        let priorScore = previous?.profile.overallScore ?? 0
-        let increase = profile.overallScore - priorScore
+        let priorScore = previous?.placementScore ?? 0
+        let increase = next.placementScore - priorScore
         let introduced = Set(profile.detectedTechniques).subtracting(learned)
         let advanced = DifficultyTechniques.definitions.filter { introduced.contains($0.id) && $0.sophistication > 1 }.count
         let prerequisites = Set(profile.prerequisiteConcepts + (statistics?.prerequisites.filter {

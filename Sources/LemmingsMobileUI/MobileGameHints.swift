@@ -4,20 +4,44 @@ import LemmingsMobileCore
 import NxlvKit
 import UIKit
 
+private actor MobileTeachingLoader {
+    static let shared = MobileTeachingLoader()
+    private var catalogue: (LevelHintCatalogue, String)?
+    private var results: [String: (LevelHintDeck, VerifiedSolution?)] = [:]
+    func load(initial: ClassicDOSSimulation?, title: String, skills: [String]) -> (LevelHintDeck, VerifiedSolution?) {
+        let fingerprint = initial.map { TrolleyCapture.classicFingerprint($0) } ?? title
+        if let cached = results[fingerprint] { return cached }
+        if catalogue == nil { catalogue = LevelHintCatalogue.load() }
+        let deck = catalogue.flatMap { $0.0.level(for: fingerprint, engine: $0.1)?.deck }
+            ?? .practice(title: title, skills: skills)
+        let solution = initial.flatMap { VerifiedSolution.load(initial: $0, from: Bundle.main.resourceURL) }
+        if results.count > 32 { results.removeAll() }
+        results[fingerprint] = (deck, solution)
+        return (deck, solution)
+    }
+}
+
 extension MobileGameViewController {
     func showHints(stage: Int = 0) {
         pauseForPlanning()
-        let catalogue = LevelHintCatalogue.load()
-        let fingerprint = (session as? ClassicMobileSession).map { TrolleyCapture.classicFingerprint($0.initialSimulation) } ?? ""
-        let deck = catalogue.flatMap { $0.0.level(for: fingerprint, engine: $0.1)?.deck }
-            ?? .practice(title: summary.title, skills: session.snapshot.skills.filter { $0.count != 0 }.map(\.name))
+        showCustomOverlay(title: "Hints", details: ["Loading..."], actions: [("BACK", { [weak self] in self?.pausePlay(showControls: true) })])
+        let request = UUID(); hintRequestID = request
+        let initial = (session as? ClassicMobileSession)?.initialSimulation
+        let title = summary.title, skills = session.snapshot.skills.filter { $0.count != 0 }.map(\.name)
+        Task { [weak self] in
+            let (deck, solution) = await MobileTeachingLoader.shared.load(initial: initial, title: title, skills: skills)
+            guard let self, self.hintRequestID == request, self.paused else { return }
+            self.presentHints(deck: deck, solution: solution, stage: stage)
+        }
+    }
+
+    private func presentHints(deck: LevelHintDeck, solution: VerifiedSolution?, stage: Int) {
         let index = min(max(0, stage), deck.stages.count - 1)
         let hint = deck.stages[index]
         var actions: [(String, () -> Void)] = []
         if index > 0 { actions.append(("PREVIOUS", { [weak self] in self?.showHints(stage: index - 1) })) }
         if index + 1 < deck.stages.count { actions.append(("NEXT HINT", { [weak self] in self?.showHints(stage: index + 1) })) }
-        if let classic = session as? ClassicMobileSession,
-           let solution = VerifiedSolution.load(initial: classic.initialSimulation, from: Bundle.main.resourceURL) {
+        if let solution {
             actions.append(("WATCH SOLUTION", { [weak self] in
                 self?.showCustomOverlay(title: "Watch solution?", details: [], actions: [
                     ("CANCEL", { [weak self] in self?.showHints(stage: index) }),

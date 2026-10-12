@@ -24,6 +24,11 @@ import UIKit
     private var bitmap: CGImage?
     private let tube = MobileCRTView(tubeDevice: true)
     private var sprites: [String: CGImage] = [:]
+    var selectionPoint: MobilePoint?
+    var cursorPoint: MobilePoint?
+    var cursorIcon: CGImage?
+    var cursorCount: Int?
+    var cursorRemaining: Int?
     var selectionSprite: MobileSpriteHighlight?
     var assignmentSprite: MobileSpriteHighlight?
     var assignmentProgress: Double?
@@ -36,9 +41,10 @@ import UIKit
     func setRescueFeedback(saved: Int, required: Int, total: Int, isComplete: Bool, didWin: Bool) {
         completionGlow.set(active: RescueCelebration.isSecured(saved: saved, required: required, isComplete: isComplete, didWin: didWin),
             brief: RescueCelebration.requiresAll(required: required, total: total),
-            animated: !displaySettings.reduceMotion && !displaySettings.reduceFlashes)
+            animated: !motionReduced && !displaySettings.reduceFlashes)
     }
-    var failed = false { didSet { failureMood.set(active: failed, animated: !displaySettings.reduceMotion) } }
+    var failed = false { didSet { failureMood.set(active: failed, animated: !motionReduced) } }
+    private var motionReduced: Bool { displaySettings.reduceMotion || UIAccessibility.isReduceMotionEnabled }
     var displaySettings = MobileSettings.load(from: .standard).classic { didSet { updateTube() } }
 
     init(viewport: MobileViewport, automaticallyFitsViewport: Bool = true) {
@@ -74,8 +80,9 @@ import UIKit
 
     @objc private func handleHover(_ gesture: UIHoverGestureRecognizer) {
         if gesture.state == .ended || gesture.state == .cancelled { onHover?(nil); return }
-        let point = inputPoint(gesture.location(in: self))
-        guard !blockedInputFrames.contains(where: { $0.contains(point) }) else { onHover?(nil); return }
+        let raw = gesture.location(in: self)
+        let point = inputPoint(raw)
+        guard !blockedInputFrames.contains(where: { $0.contains(raw) }) else { onHover?(nil); return }
         onHover?(MobilePoint(x: point.x, y: point.y))
     }
     func pointerInteraction(_ interaction: UIPointerInteraction, styleFor region: UIPointerRegion) -> UIPointerStyle? {
@@ -85,6 +92,14 @@ import UIKit
             path.addLine(to: CGPoint(x: x, y: y + dy * 5))
         }
         return UIPointerStyle(shape: .path(path))
+    }
+
+    func advanceVisualEffects() {
+        let now = ProcessInfo.processInfo.systemUptime
+        guard !explosionBirths.isEmpty, explosionBirths.values.contains(where: { $0.expires > 0 && $0.expires <= now }) else { return }
+        for (id, value) in explosionBirths where value.expires > 0 && value.expires <= now { explosionBirths[id] = (value.tick, 0) }
+        updateTube()
+        setNeedsDisplay()
     }
 
     func update(frame: MobilePixelFrame) throws {
@@ -112,12 +127,14 @@ import UIKit
     override func draw(_ rect: CGRect) {
         guard tube?.isHidden != false, let context = UIGraphicsGetCurrentContext(), let bitmap else { return }
         MobileBitmapRenderer.draw(bitmap, viewport: gameViewport, in: context)
+        drawObviousSelection(viewport: gameViewport, context: context)
         if let effect = selectionEffect(viewport: gameViewport) { LemmingSelectionRenderer.draw(effect, in: context) }
         if let sprite = assignmentSprite, let progress = assignmentProgress, let image = spriteImage(sprite) {
             SpriteAssignmentPulse.draw(sprite: image, in: spriteRect(sprite, viewport: gameViewport), context: context,
-                progress: progress, reduceMotion: displaySettings.reduceMotion, reduceFlashes: displaySettings.reduceFlashes)
+                progress: progress, reduceMotion: motionReduced, reduceFlashes: displaySettings.reduceFlashes)
         }
         _ = drawExplosionCores(viewport: gameViewport, context: context)
+        drawCursorBadge(viewport: gameViewport, context: context)
     }
 
     override func layoutSubviews() {
@@ -153,14 +170,47 @@ import UIKit
         context.translateBy(x: 0, y: CGFloat(height))
         context.scaleBy(x: 1, y: -1)
         MobileBitmapRenderer.draw(bitmap, viewport: viewport, in: context)
+        drawObviousSelection(viewport: viewport, context: context)
         if let sprite = assignmentSprite, let progress = assignmentProgress, let image = spriteImage(sprite) {
             SpriteAssignmentPulse.draw(sprite: image, in: spriteRect(sprite, viewport: viewport), context: context,
-                progress: progress, reduceMotion: displaySettings.reduceMotion, reduceFlashes: displaySettings.reduceFlashes)
+                progress: progress, reduceMotion: motionReduced, reduceFlashes: displaySettings.reduceFlashes)
         }
         let flashes = drawExplosionCores(viewport: viewport, context: context)
+        drawCursorBadge(viewport: viewport, context: context)
         guard let image = context.makeImage() else { return }
         tube.selection = selectionEffect(viewport: viewport)
         tube.update(image: image, settings: displaySettings, flashMask: ExplosionGlow.textureMask(width: width, height: height, flashes: flashes))
+    }
+
+    private func drawObviousSelection(viewport: MobileViewport, context: CGContext) {
+        guard displaySettings.lemmingSelectionStyle == .obvious, let selectionPoint else { return }
+        let point = viewport.viewPoint(fromLevel: selectionPoint)
+        LemmingSelectionRenderer.drawObvious(at: CGPoint(x: point.x, y: point.y), scale: viewport.zoom,
+            animated: !motionReduced && !displaySettings.reduceFlashes, context: context)
+    }
+
+    private func drawCursorBadge(viewport: MobileViewport, context: CGContext) {
+        guard let cursorPoint else { return }
+        let point = viewport.viewPoint(fromLevel: cursorPoint)
+        let sourceFactor = viewport.zoom / max(0.1, gameViewport.zoom)
+        let size = displaySettings.skillCursorIconSize
+        let scale = (size == .two ? 2.0 : 1.0) * sourceFactor
+        let height = 7 * scale
+        let gap = 18 * sourceFactor
+        let maxX = viewport.viewSize.width, maxY = viewport.viewSize.height
+        let width = cursorIcon.map { max(1, floor(height * Double($0.width) / Double($0.height))) } ?? height
+        let rect = CGRect(x: min(max(0, point.x + gap), max(0, maxX - width)),
+            y: min(max(0, point.y + gap), max(0, maxY - height)), width: width, height: height)
+        if size != .none {
+            if cursorRemaining == 0 {
+                GamePixelTypography.draw("X", in: rect, context: context, typography: nil, palette: .warning, maximumScale: scale, bitmapOnly: true)
+            } else if let cursorIcon { GameStoneArt.drawImage(cursorIcon, in: rect, context: context) }
+        }
+        if displaySettings.showReticleCount, let cursorCount {
+            let countWidth = Double(String(cursorCount).count * 6) * scale
+            GamePixelTypography.draw(String(cursorCount), in: CGRect(x: max(0, point.x - gap - countWidth), y: rect.minY, width: countWidth, height: height),
+                context: context, typography: nil, maximumScale: scale, bitmapOnly: true)
+        }
     }
 
     private func drawExplosionCores(viewport: MobileViewport, context: CGContext) -> [ExplosionGlow.Flash] {
@@ -203,7 +253,7 @@ import UIKit
         let content = viewport.contentFrame
         return .init(sprite: image, rect: spriteRect(sprite, viewport: viewport),
             clipRect: CGRect(x: content.x, y: content.y, width: content.width, height: content.height),
-            bloom: true, time: sprite.time)
+            bloom: true, time: motionReduced || displaySettings.reduceFlashes ? nil : sprite.time)
     }
 
     private func inputPoint(_ point: CGPoint) -> CGPoint {
@@ -212,7 +262,7 @@ import UIKit
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard activeTouchID == nil, let touch = touches.first else { return }
-        let initial = inputPoint(touch.location(in: self))
+        let initial = touch.location(in: self)
         guard !blockedInputFrames.contains(where: { $0.contains(initial) }) else { return }
         let id = ObjectIdentifier(touch).hashValue
         activeTouchID = id
@@ -236,7 +286,7 @@ import UIKit
               let touch = touches.first(where: { ObjectIdentifier($0).hashValue == id }) else { return }
         activeTouchID = nil
         let point = inputPoint(touch.location(in: self))
-        guard !blockedInputFrames.contains(where: { $0.contains(point) }) else {
+        guard !blockedInputFrames.contains(where: { $0.contains(touch.location(in: self)) }) else {
             onTouchEffects?(router.cancel())
             return
         }

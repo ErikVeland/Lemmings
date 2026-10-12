@@ -1,0 +1,17 @@
+2026-10-12 18:23:36.209 checks[3413:37130234] Audio files cannot be non-interleaved. Ignoring setting AVLinearPCMIsNonInterleaved YES.
+2026-10-12 18:23:36.779 checks[3413:37130234] Audio files cannot be non-interleaved. Ignoring setting AVLinearPCMIsNonInterleaved YES.
+2026-10-12 18:23:37.054 checks[3413:37130234] Audio files cannot be non-interleaved. Ignoring setting AVLinearPCMIsNonInterleaved YES.
+2026-10-12 18:23:37.175 checks[3413:37130234] Audio files cannot be non-interleaved. Ignoring setting AVLinearPCMIsNonInterleaved YES.
+2026-10-12 18:23:37.301 checks[3413:37130234] Audio files cannot be non-interleaved. Ignoring setting AVLinearPCMIsNonInterleaved YES.
+2026-10-12 18:23:37.375 checks[3413:37130234] Audio files cannot be non-interleaved. Ignoring setting AVLinearPCMIsNonInterleaved YES.
+2026-10-12 18:23:37.442 checks[3413:37130234] Audio files cannot be non-interleaved. Ignoring setting AVLinearPCMIsNonInterleaved YES.
+2026-10-12 18:23:37.525 checks[3413:37130234] Audio files cannot be non-interleaved. Ignoring setting AVLinearPCMIsNonInterleaved YES.
+2026-10-12 18:23:37.592 checks[3413:37130234] Audio files cannot be non-interleaved. Ignoring setting AVLinearPCMIsNonInterleaved YES.
+2026-10-12 18:23:37.666 checks[3413:37130234] Audio files cannot be non-interleaved. Ignoring setting AVLinearPCMIsNonInterleaved YES.
+2026-10-12 18:23:37.744 checks[3413:37130234] Audio files cannot be non-interleaved. Ignoring setting AVLinearPCMIsNonInterleaved YES.
+PASS nuke EQ at 100.0 Hz: 2.7312583669313426 dB
+PASS nuke EQ at 800.0 Hz: -10.41398035259393 dB
+PASS nuke EQ at 8000.0 Hz: -52.02689535183911 dB
+PASS progressive treble sweep, retained bass, pause, speed, rewind and restored countdown
+PASS nuke bass envelope, spatial origin, mass-explosion limit, reset and mute (offline only)
+PASS last-pop hold, 2.4 s filter return, stopped simulation ticks, result refresh, rewind and cancellation

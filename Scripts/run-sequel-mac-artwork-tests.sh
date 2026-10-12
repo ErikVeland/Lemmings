@@ -17,6 +17,8 @@ swiftc -O -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos1
   -emit-module-path "$build_dir/modules/NxlvKit.swiftmodule" \
   -Xlinker -install_name -Xlinker @rpath/libNxlvKit.dylib \
   -o "$build_dir/libNxlvKit.dylib" Sources/NxlvKit/*.swift
+zsh "$project_dir/Scripts/build-shared-modules.sh" "$build_dir/modules" "$build_dir" "$(uname -m)-apple-macos12.3" -O \
+  -module-cache-path "$module_cache"
 swiftc -O -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos12.3" \
   -module-cache-path "$module_cache" \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
@@ -32,7 +34,7 @@ app_sources=("${(@)app_sources:#*/Lemmings3PlayWindow.swift}")
 app_sources=("${(@)app_sources:#*/SettingsWindow.swift}")
 swiftc -O -swift-version 6 -target "$(uname -m)-apple-macos12.3" \
   -module-cache-path "$module_cache" \
-  -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
+  -I "$build_dir/modules" -L "$build_dir" -lNxlvKit -lLemmingsMobileCore -lLemmingsGameArt -lLemmingsAudio -lLemmingsAppCore \
   -Xlinker -rpath -Xlinker "$build_dir" -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
   -F "$sparkle_framework_dir" -framework Sparkle \
   -Xlinker -rpath -Xlinker "$sparkle_framework_dir" \

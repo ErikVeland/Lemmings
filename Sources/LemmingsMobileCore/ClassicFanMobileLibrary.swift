@@ -18,10 +18,16 @@ public final class ClassicFanMobileLibrary: MobileGameLibrary {
     public var catalogueID: String { ClassicFanPack.catalogueID(pack.url) }
 
     private let assets: ClassicMainDATAssets
+    private let usesNativeArtwork: Bool
 
     public init(packURL: URL, portsRoot: URL) throws {
         pack = try ClassicFanPack(url: packURL)
         self.portsRoot = portsRoot
+        usesNativeArtwork = Bundle.main.resourceURL.map { root in
+            ["MacArtwork", "AmigaArtwork"].contains { kind in
+                FileManager.default.fileExists(atPath: root.appendingPathComponent(kind + "/lemmings/manifest.json").path)
+            }
+        } ?? false
         assets = try ClassicMainDATAssets.load(from: portsRoot.appendingPathComponent(Self.engineFolder))
         let found = pack.entries()
         guard !found.isEmpty else { throw MobileSessionError.changedLevel }
@@ -42,7 +48,7 @@ public final class ClassicFanMobileLibrary: MobileGameLibrary {
         let (level, styleName) = try pack.level(entry)
         let ground = try pack.groundSet(for: level, styleName: styleName, portsRoot: portsRoot, entry: entry)
         let special = try pack.specialGraphic(for: level, entry: entry, portsRoot: portsRoot)
-        let artwork = ClassicFanArtwork.artworkMatch(for: level, ground: ground, special: special, portsRoot: portsRoot)
+        let artwork = usesNativeArtwork ? ClassicFanArtwork.artworkMatch(for: level, ground: ground, special: special, portsRoot: portsRoot) : nil
         return try ClassicMobileSession.makeContent(
             summary: levels[index], level: level, ground: ground, special: special, assets: assets,
             mechanics: pack.mechanics(for: entry),

@@ -113,6 +113,11 @@ public actor MobileCheckpointStore {
         self.url = url
     }
 
+    public func hasSavedSoloRun(owner: String) async throws -> Bool {
+        guard let saved = try await load(owner: owner, scope: nil), saved.scope == nil else { return false }
+        return (saved.owner ?? MobileProfiles.defaultID) == owner
+    }
+
     public func load() throws -> MobileCheckpointEnvelope? {
         guard FileManager.default.fileExists(atPath: url.path) else {
             guard FileManager.default.fileExists(atPath: backupURL.path) else { return nil }

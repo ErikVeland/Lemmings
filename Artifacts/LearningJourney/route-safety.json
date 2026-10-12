@@ -1,0 +1,110 @@
+{
+  "version": "route-safety-1",
+  "reportedLevels": [
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Crazy.DAT#13",
+        "packID": "fan:lldb-478"
+      },
+      "sourceRevision": "8d65d85e93e941b486e9543d3b6d4435495d2e56eadb53d744bd1782eb051da6",
+      "initialHash": "5599a2951d606da4deced2bbca5695b3f00f8797138f8e9d57b9d992c469b8b2",
+      "title": "Time waits for no Lemming",
+      "minimumDemand": 850.0,
+      "reason": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
+      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug."
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Wicked.DAT#2",
+        "packID": "fan:lldb-480"
+      },
+      "sourceRevision": "63ab956e498283467aba9a3dd87680abe43f00fd07ae16279a6bfd950c54a0a2",
+      "initialHash": "56f8f19a1df74a39fc111bf483570771fa31b820a41ddf98f51220759b8f1fb6",
+      "title": "This Corrosion",
+      "minimumDemand": 850.0,
+      "reason": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
+      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug."
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Xmas 1991.DAT#2",
+        "packID": "fan:lldb-486"
+      },
+      "sourceRevision": "fd76e9ca94eeb1d7a54ca3ae0861efecc9541422a9972c39376d40795b7258be",
+      "initialHash": "41595c7ecb7849c5ed662fe5bea9f9fa3e74aff9c975b5880d0699c1ecc6c631",
+      "title": "Time waits for no Lemming",
+      "minimumDemand": 850.0,
+      "reason": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
+      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug."
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Xmas 1991.DAT#3",
+        "packID": "fan:lldb-486"
+      },
+      "sourceRevision": "fd76e9ca94eeb1d7a54ca3ae0861efecc9541422a9972c39376d40795b7258be",
+      "initialHash": "f5d3110d5e960c995d2a82f8b078095777b0b419ec22fad35ad9e4ad2e089331",
+      "title": "This Corrosion",
+      "minimumDemand": 850.0,
+      "reason": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
+      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug."
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "33:Crazy:14:1:5",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "initialHash": "2ca3f8af1521fdee1d47bcb46c92632b9aa60a3004a39f140cfd6dfe58d21c9d",
+      "title": "Time waits for no Lemming",
+      "minimumDemand": 850.0,
+      "reason": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
+      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug."
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "62:Wicked:3:9:0",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "initialHash": "d491c56aa389208cc43f8f810e45349be04f9210c3c6a4d140384813bb8ee41e",
+      "title": "This Corrosion",
+      "minimumDemand": 850.0,
+      "reason": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
+      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug."
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "2:Xmas:3:0:2",
+        "packID": "xmasLemmings1991-LEVEL-4"
+      },
+      "sourceRevision": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
+      "initialHash": "2ca3f8af1521fdee1d47bcb46c92632b9aa60a3004a39f140cfd6dfe58d21c9d",
+      "title": "Time waits for no Lemming",
+      "minimumDemand": 850.0,
+      "reason": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
+      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug."
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "3:Xmas:4:0:3",
+        "packID": "xmasLemmings1991-LEVEL-4"
+      },
+      "sourceRevision": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
+      "initialHash": "d491c56aa389208cc43f8f810e45349be04f9210c3c6a4d140384813bb8ee41e",
+      "title": "This Corrosion",
+      "minimumDemand": 850.0,
+      "reason": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
+      "evidence": "Editorial placement from the user report; no claim that all alternative routes require a bug."
+    }
+  ],
+  "rule": "Reported advanced routes and verified engine-quirk concepts have a late-Expert floor. New ordinary-route evidence requires an explicit placement review."
+}

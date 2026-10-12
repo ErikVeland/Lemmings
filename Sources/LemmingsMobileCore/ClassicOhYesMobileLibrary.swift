@@ -45,6 +45,6 @@ public final class ClassicOhYesMobileLibrary: MobileGameLibrary {
             mechanics: ClassicDOSMechanics(title: dataSet.title, rank: entry.rank),
             objectSemantics: .dos,
             levelIdentifier: "\(dataSet.identifierKey)/\(entry.rank)/\(entry.number)",
-            levelIndex: index, artworkFamily: entry.rank.lowercased().contains("oh no") ? "ohno" : "lemmings")
+            levelIndex: index, artworkFamily: assetsDirectory.lastPathComponent.lowercased().contains("oh_no") ? "ohno" : "lemmings")
     }
 }

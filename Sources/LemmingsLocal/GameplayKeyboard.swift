@@ -196,8 +196,15 @@ import NxlvKit
             pressedF = false; speedControl?.cancelInput()
         }
         guard let window, event.window === window, window.isKeyWindow,
-              window.attachedSheet == nil, !GameScreen.shared.isPresented, !(window.firstResponder is NSTextView),
-              event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { return event }
+              window.attachedSheet == nil, !GameScreen.shared.isPresented,
+              !(window.firstResponder is NSTextView) else { return event }
+        if event.type == .keyDown, active(), ownsController(),
+           event.modifierFlags.intersection([.command, .control, .option, .shift]) == .command,
+           event.charactersIgnoringModifiers?.lowercased() == "z", let step {
+            if !event.isARepeat { step(-1) }
+            return nil
+        }
+        guard event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { return event }
         if event.type == .keyDown, ownsController(), navigationAvailable(),
            event.keyCode == 53 || event.charactersIgnoringModifiers?.lowercased() == "q", let mainMenu {
             if !event.isARepeat {
@@ -371,6 +378,7 @@ import NxlvKit
             let goal = selectGliderBeforeGoal == nil ? "G / End: centre goal" : "G: Glider, then goal\nEnd: centre goal"
             sections.append("Tab / Shift-Tab: next / previous available skill\nH / Home: centre entrance\n" + goal + "\n[ / ]: previous / next unassigned lemming\n\\: focus last assignment\nReturn: repeat last skill")
         } else { sections.append("Modern keyboard shortcuts are off. Number keys select skills.") }
+        if step != nil { sections.append("⌘Z: rewind one tick") }
         sections.append("Escape / Q: save run and return to library\n?: controls help")
         if hints != nil { sections.append("Slash / I / F1: level goals and tiered hints") }
         if rate != nil {

@@ -69,6 +69,24 @@ struct MobileRewindTests {
         #expect(replay.events.isEmpty)
     }
 
+    @Test func undoNukeIsAssistedAndPersistsUsage() throws {
+        let initial = try fixture()
+        let game = session(initial)
+        for _ in 0..<60 { game.tick() }
+        #expect(game.beginEndRun())
+        #expect(game.undoEndRun())
+        #expect(game.usedRewind)
+        #expect(game.nukeCount == 1)
+        #expect(game.undoCount == 1)
+        let restored = session(initial)
+        try restored.restoreCheckpointPayload(game.checkpointPayload())
+        #expect(restored.usedRewind)
+        #expect(restored.nukeCount == 1)
+        #expect(restored.undoCount == 1)
+        let replay = try JSONDecoder().decode(ClassicDOSReplay.self, from: #require(try restored.replayDocument()))
+        #expect(!replay.events.contains { $0.action == .nuke })
+    }
+
     @Test func winningReplayIsReadOnlyAndKeepsOutcome() throws {
         let game = session(try fixture(winning: true))
         for _ in 0..<1_000 where !game.snapshot.isComplete { game.tick() }

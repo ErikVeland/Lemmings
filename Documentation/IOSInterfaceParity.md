@@ -5,6 +5,59 @@ features across Classic, Lemmings 2 and Lemmings 3. Touch layout may adapt the
 presentation, but it must not silently drop actions or bypass player-ready
 boundaries. A Classic device beta does not establish three-game parity.
 
+## Current Classic port source
+
+The 12 October source implements the Classic scope in the
+[iPad feature parity plan](IPadFeatureParityPlan.md). Lemmings 2 and Lemmings 3
+mobile campaigns and renderers remain owner-deferred. NeoLemmix remains a
+separate engine decision. These exclusions do not establish three-game parity.
+
+| Feature | Current source |
+| --- | --- |
+| Settings | Seven bitmap groups, preset and individual choices, controller mapping, legacy-key migration and accessibility preferences |
+| Profiles and career | Stable profile IDs, original portraits, records, assisted boards, level and career achievements, ordered campaign trophies and level skips |
+| Collections | Shared authoritative playlist store with mobile adapters; legacy favourites, recents, playlist order, run position and shuffle seed retained |
+| Rewind and replay | Backward/forward step, held rewind, saved rewind history, read-only review and verified solutions, cancellable movie export with offline effect audio |
+| Teaching | Progressive hints, bundled learning journey, revisit/defer progress, shared source revisions and real progression-policy analysis |
+| Hot Seat | Attempt-owner records, scoped checkpoints, paused Ready pages, transactional turn saves and duplicate transition guards |
+| Online | Shared Game Center IDs and score rules, iOS authentication adapter, hosted board consent, worldwide pages and verified action replay loading |
+| Input | Shared command data, keyboard discovery and presses, controller remapping/aim/pan/tap/hold speed, page focus/scrolling and pointer targeting |
+| Presentation | Original DOS, Mac and Amiga Classic artwork, shared CRT shaders, selection/assignment/explosion effects, failure transitions and result stars |
+| Audio | Shared Adaptive DJ and recording/module decks, pause rhythm, speed pitch, failure/nuke recovery, retry brake, positional effects, chimes and now-playing notices |
+| Information | What's New, explicit effects welcome, anonymous count consent, real local/shared Play Insights and background fan-count measurement |
+
+Storage errors block result continuation and turn changes. Earlier Classic
+checkpoints restore their exact current tick and lemming states; a checkpoint
+from before rewind history was stored can rewind only from its restored state.
+The owner of a solo checkpoint and the scope of a Hot Seat checkpoint determine
+which saved run is resumed. Older formats and unsupported future checkpoint
+versions are retained.
+
+Migrated mobile collection identities retain their original mobile pack keys and
+`mobile-v1` revision. The shared store preserves their order and ownership; this
+adapter does not convert historical mobile entries into the Mac catalogue's
+source-revision identity. Curated journeys use the verified Mac catalogue
+identities and bundle source-revision metadata.
+
+Game Center still requires the owner's iOS App Store Connect app record and
+production configuration. The capability and entitlement are present; no account
+or leaderboard configuration was changed. Downloads retain their existing
+foreground-only lifecycle. The compact touch deck retains its current grouped
+controls; a dedicated one-thumb edge layout remains a separate adaptive UI item.
+
+Source verification and remaining device checks are recorded in
+[Classic port evidence](ReleaseReadiness/2.0IOSParity-2026-10-12/README.md).
+UIKit event delivery, VoiceOver, physical keyboard/controller/pointer, EDR/CRT,
+Duo, live sign-in/download/share and audible playback need the owner's installed
+candidate. Headless captures verify bitmap drawing and target geometry only.
+Automated checks remain offscreen and muted.
+
+## Earlier build and source increments
+
+The dated notes below describe the state at each earlier increment. Open items
+in those notes are historical; use the current matrix and evidence above for the
+present source.
+
 Build 8 introduces shared bitmap page drawing for the iOS title screen, rank
 and level preview, briefing, pause, result and data/settings pages. It reuses
 `GameMenuTypography`, `GameMenuFrameArt` and `GameStoneArt`. UIKit controls use

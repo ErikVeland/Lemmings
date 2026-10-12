@@ -68,6 +68,67 @@ final class LearningJourneyDesktopTests: XCTestCase {
         XCTAssertEqual(json["version"] as? Int, 3)
     }
 
+
+    @MainActor func testSavedJourneyResumesAfterAnotherEngineSessionWithoutLosingEitherQueue() throws {
+        for engine in [LevelSourceEngine.classic, .lemmings2, .lemmings3] {
+            let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+            try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+            defer { try? FileManager.default.removeItem(at: folder) }
+            let file = folder.appendingPathComponent("playlists.json")
+            let store = try LevelPlaylistStore(file: file)
+            let journey = try LevelPlaylist(id: LearningJourney.playlistID, name: LearningJourney.title,
+                entries: [entry(0), entry(1)])
+            try store.add(journey)
+            let golden = try LevelSequenceRun(source: .playlist(journey.id),
+                pool: .init(id: LearningJourney.version, summary: journey.name),
+                entries: journey.entries, currentIndex: 1)
+            try store.startRun(golden, hotSeatID: "golden")
+            let other = try LevelPlaylist(name: "Other campaign", entries: [
+                .init(identity: .init(engine: engine, packID: "test", levelID: "campaign"),
+                    catalogueRevision: "v1", sourceRevision: "v1", packNameSnapshot: "Campaign",
+                    levelNameSnapshot: "Campaign level", levelNumberSnapshot: 1)])
+            try store.add(other)
+            let campaign = try LevelSequenceRun.playlist(other, pool: .init(id: "campaign", summary: other.name))
+            let nativeProgress = ["native": Data([1, 2, 3])]
+            try store.startRun(campaign, hotSeatID: "other", l2Progress: nativeProgress)
+            let saved = try XCTUnwrap(store.resumableLearningJourney(hotSeatID: "other"))
+            XCTAssertEqual(saved.run, golden)
+            XCTAssertEqual(saved.hotSeatID, "golden")
+            XCTAssertEqual(store.activeRun, campaign, "Opening the hub must not switch sessions")
+            XCTAssertNil(store.resumableRun(id: UUID()))
+            try store.resumeRun(id: saved.run.id)
+            let reopened = try LevelPlaylistStore(file: file)
+            XCTAssertEqual(reopened.activeRun, golden)
+            XCTAssertEqual(reopened.activeRunHotSeatID, "golden")
+            let prior = try XCTUnwrap(reopened.savedRuns.first { $0.run.id == campaign.id })
+            XCTAssertEqual(prior.run, campaign)
+            XCTAssertEqual(prior.hotSeatID, "other")
+            XCTAssertEqual(prior.l2Progress, nativeProgress)
+        }
+    }
+
+    @MainActor func testJourneyHubPrefersTheCurrentSessionAndFindsAnActiveSoloFallback() throws {
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let store = try LevelPlaylistStore(file: folder.appendingPathComponent("playlists.json"))
+        XCTAssertNil(store.resumableLearningJourney(hotSeatID: "Christmas"))
+        let playlist = try LevelPlaylist(id: LearningJourney.playlistID, name: LearningJourney.title,
+            entries: [entry(0), entry(1)])
+        try store.add(playlist)
+        func run(_ index: Int) throws -> LevelSequenceRun {
+            try .init(source: .playlist(playlist.id), pool: .init(id: LearningJourney.version, summary: playlist.name),
+                entries: playlist.entries, currentIndex: index)
+        }
+        let hotSeat = try run(1), solo = try run(0)
+        try store.startRun(hotSeat, hotSeatID: "Golden")
+        try store.startRun(solo, hotSeatID: nil)
+        XCTAssertEqual(store.resumableLearningJourney(hotSeatID: "Golden")?.run, hotSeat)
+        XCTAssertEqual(store.resumableLearningJourney(hotSeatID: nil)?.run, solo)
+        XCTAssertEqual(store.resumableLearningJourney(hotSeatID: "Christmas")?.run, solo)
+        XCTAssertEqual(store.activeRun, solo)
+    }
+
     @MainActor func testLearningFailureActionsAndSharedEngineDefaults() throws {
         _ = NSApplication.shared
         let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)

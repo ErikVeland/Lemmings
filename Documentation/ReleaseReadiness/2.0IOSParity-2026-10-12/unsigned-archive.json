@@ -1,0 +1,32 @@
+{
+  "app": "/Users/veland/Lemmings/.build/ios-beta/2.0-9-parity-final-current/UltimateLemmingsIOS.xcarchive/Products/Applications/UltimateLemmingsIOS.app",
+  "archiveSigned": false,
+  "build": 9,
+  "bundleID": "academy.glasscode.lemmings.ios",
+  "contentFiles": 26,
+  "contentManifestSHA256": "012bada8669f71d193747064cad6db469184e2783acf1cdddea7142104f80da2",
+  "executableSHA256": "0bc53f188805acdf6a63d02b6b88c8028324e40ba053d41a514189b620aa80a3",
+  "exported": false,
+  "finishedUTC": "2026-10-12T09:52:19.579227+00:00",
+  "gitCommit": "3df83756abc289da0b83bb67f75792f2ef21743b",
+  "launchScope": [
+    "Classic",
+    "Lemmings 2",
+    "Lemmings 3"
+  ],
+  "physicalDeviceAcceptance": "pending",
+  "scope": "Classic first device beta",
+  "signed": false,
+  "startedUTC": "2026-10-12T09:48:06.101253+00:00",
+  "status": "unsigned archive verified",
+  "symbolUUIDs": [
+    [
+      "CF818B8F-246C-38C6-B206-EDF2792494CB",
+      "arm64"
+    ]
+  ],
+  "team": "54WU29TRTY",
+  "uploaded": false,
+  "version": "2.0",
+  "xcode": "Xcode 27.1\nBuild version 27A9275"
+}

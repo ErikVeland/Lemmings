@@ -24,7 +24,7 @@ for omitted in main.swift AppUpdates.swift SettingsWindow.swift MusicLibraryWind
 done
 swiftc -Onone -swift-version 6 -target "$(uname -m)-apple-macos12.3" \
   -F "$app_root/Contents/Frameworks" -framework Sparkle \
-  -I "$module_root/modules" -L "$module_root" -lNxlvKit \
+  -I "$module_root/modules" -L "$module_root" -lNxlvKit -lLemmingsMobileCore -lLemmingsGameArt -lLemmingsAudio -lLemmingsAppCore \
   -Xlinker -rpath -Xlinker "$module_root" -Xlinker -rpath -Xlinker "$app_root/Contents/Frameworks" -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
   -o "$test_app/Contents/MacOS/Tests" "$build_dir/main.swift" "${app_sources[@]}"
 if [[ "${TEST_COMPILE_ONLY:-0}" == 1 ]]; then

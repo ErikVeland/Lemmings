@@ -1,6 +1,18 @@
 import Foundation
 import NxlvKit
 
+/// A saved journey uses its position in the full score, including revisits.
+public struct MobileMusicContext: Sendable {
+    public var scorePosition: Int?
+    public var titles: [String]
+    public var isFan: Bool
+    public var isLearningJourney: Bool
+    public init(scorePosition: Int? = nil, titles: [String] = [], isFan: Bool = false, isLearningJourney: Bool = false) {
+        self.scorePosition = scorePosition; self.titles = titles
+        self.isFan = isFan; self.isLearningJourney = isLearningJourney
+    }
+}
+
 /// Which tune a level plays, decided from the level's own identity.
 public enum MobileMusicAssignment {
     public struct Tune: Equatable, Sendable {
@@ -19,5 +31,10 @@ public enum MobileMusicAssignment {
         let folder = holiday ? "holiday_lemmings_music_mod" : ohNo ? "oh_no_more_lemmings_music_mod" : "lemmings_music_mod"
         return Tune(folder: folder, track: LevelMusicSelection.track(index: index, title: title, holiday: holiday, ohNo: ohNo),
                     game: holiday ? "holiday" : ohNo ? "ohno" : "classic")
+    }
+
+    public static func cycle(tune: Tune, index: Int, titles: [String], isFan: Bool) -> Int {
+        if isFan { return max(0, index) / LevelMusicSelection.classic.count }
+        return LevelMusicSelection.cycle(index: index, titles: titles, holiday: tune.game == "holiday", ohNo: tune.game == "ohno")
     }
 }

@@ -323,6 +323,7 @@ public final class ClassicMobileSession: MobileGameSession {
         history = beforeEndRun
         if replayInitial.tickCount > 0, history.commands.isEmpty { replayInitial = history.simulation }
         self.beforeEndRun = nil
+        usedRewind = true
         undoCount += 1
         return true
     }
@@ -352,7 +353,7 @@ public final class ClassicMobileSession: MobileGameSession {
             simulation.lemmings.first(where: { $0.id == id }).flatMap(spriteHighlight)
         }
         if let highlight {
-            if scale == 1 { Self.drawReticle(highlight, into: &pixels, width: width, height: height) }
+            Self.drawReticle(highlight, into: &pixels, width: width, height: height, scale: scale)
         }
         if settings?.colorDepth == .amigaOCS {
             for offset in stride(from: 0, to: pixels.count, by: 4) {
@@ -495,6 +496,18 @@ public final class ClassicMobileSession: MobileGameSession {
         case let .releaseRate(value): history.setReleaseRate(value)
         case .nuke: history.beginNuke()
         }
+    }
+
+    public func skillCursorFrame(control: Int) -> MobilePixelFrame? {
+        let poses: [ClassicLemmingPose] = [.climbing, .floating, .ohNo, .blocking, .building, .bashing, .mining, .digging]
+        guard poses.indices.contains(control), let assets, palette.count >= 8 else { return nil }
+        let pose = poses[control]
+        if let frame = nativeArtwork?.lemming(pose: pose, left: false, tick: 0) {
+            return try? MobilePixelFrame(width: frame.width, height: frame.height, rgba: frame.rgba)
+        }
+        guard let animation = assets.animation(for: pose, direction: .right) ?? assets.animation(for: pose, direction: .none),
+            let frame = animation.frames.first, let rgba = try? frame.rgba(using: palette) else { return nil }
+        return try? MobilePixelFrame(width: frame.width, height: frame.height, rgba: rgba)
     }
 
     public func applySettings(_ settings: ClassicSettings) {
@@ -754,7 +767,7 @@ public final class ClassicMobileSession: MobileGameSession {
         _ selection: MobileTargetSelection,
         into pixels: inout [UInt8],
         width: Int,
-        height: Int
+        height: Int, scale: Int = 1
     ) {
         let colour: (UInt8, UInt8, UInt8)
         switch selection.state {
@@ -762,11 +775,11 @@ public final class ClassicMobileSession: MobileGameSession {
         case .alreadyAssigned: colour = (255, 151, 32)
         case .unavailable: colour = (140, 140, 140)
         }
-        let centreX = Int(selection.point.x.rounded())
-        let centreY = Int(selection.point.y.rounded())
-        let radius = 8
+        let centreX = Int((selection.point.x * Double(scale)).rounded())
+        let centreY = Int((selection.point.y * Double(scale)).rounded())
+        let radius = 8 * scale
         let marks = (-radius...radius).flatMap { offset -> [(Int, Int)] in
-            guard abs(offset) >= radius - 2 else { return [] }
+            guard abs(offset) >= radius - 2 * scale else { return [] }
             return [
                 (centreX + offset, centreY - radius),
                 (centreX + offset, centreY + radius),

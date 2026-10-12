@@ -2,13 +2,19 @@ import Foundation
 
 /// Piece matching shared by native and mobile fan artwork.
 public enum ClassicFanArtwork {
+    private static let presentationGrounds = GameAssetCache<ClassicGroundSet>(capacity: 32)
     private static let artworkReleases = [
         ("holiday_native_1994", "holiday"), ("lemmings_dos_1991-07-30", "lemmings"),
         ("oh_no_more_lemmings_dos-1991-11-14_2232", "ohno"),
         ("xmas_dos_XmasLemmingsV1.9", "xmas"), ("xmas_dos_XmasLemmingsV1.9a1", "xmas")
     ]
     private static func stockGround(style: Int, folder: String, portsRoot: URL) -> ClassicGroundSet? {
-        try? ClassicGroundSet.load(style: style, from: portsRoot.appendingPathComponent(folder))
+        let directory = portsRoot.appendingPathComponent(folder)
+        let key = GameAssetCache<ClassicGroundSet>.bundledKey(directory).map { "\($0):\(style)" }
+        if let key, let cached = presentationGrounds.value(for: key) { return cached }
+        guard let loaded = try? ClassicGroundSet.load(style: style, from: directory) else { return nil }
+        if let key { presentationGrounds.insert(loaded, for: key) }
+        return loaded
     }
   /// The release artwork a fan level may borrow, and which of its pieces.
   public struct ArtworkMatch: Equatable {

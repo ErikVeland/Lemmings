@@ -24,7 +24,7 @@ extension MobileLibraryViewController {
         case "whatsNew": navigate(.whatsNew)
         case "welcomeOriginal", "welcomeModern":
             var saved = mobileSettings
-            saved.classic.applyExperiencePreset(modern: id == "welcomeModern")
+            saved.applyExperiencePreset(modern: id == "welcomeModern")
             mobileSettings = saved
             UserDefaults.standard.set(true, forKey: "mobile.effectsChoice.v1")
             UserDefaults.standard.set(mobileBuild, forKey: "mobile.whatsNew.seenBuild")

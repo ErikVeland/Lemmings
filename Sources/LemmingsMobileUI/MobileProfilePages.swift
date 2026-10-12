@@ -37,7 +37,16 @@ extension MobileLibraryViewController {
         let previous = profiles
         profiles.select(id)
         guard saveProfiles() else { profiles = previous; rebuild(); return }
-        if hotSeat != nil { hotSeats.endSession(); saveHotSeats(); hotSeatRoster = nil }
+        if hotSeat != nil {
+            hotSeats.endSession()
+            guard saveHotSeats() else {
+                let error = notice
+                profiles = previous
+                _ = saveProfiles()
+                notice = error; rebuild(); return
+            }
+            hotSeatRoster = nil
+        }
         reloadPlayerData()
         navigate(.players)
     }
@@ -59,6 +68,7 @@ extension MobileLibraryViewController {
         activeRun = nil
         playlistSelection = nil
         confirmingDelete = false
+        loadCheckpoint()
     }
 
     func saveSharedCollections() {
@@ -94,6 +104,11 @@ extension MobileLibraryViewController {
     func finishProfileNaming(commit: Bool) {
         let newGuest = creatingPlayer && hotSeatRoster != nil
         if commit, let draft = nameDraft {
+            if creatingPlayer && !newGuest && hotSeat != nil {
+                hotSeats.endSession()
+                guard saveHotSeats() else { rebuild(); return }
+                hotSeatRoster = nil
+            }
             let initials = ArcadeProfile(initials: draft).initials
             let previous = profiles
             let previousRoster = hotSeatRoster
@@ -107,7 +122,6 @@ extension MobileLibraryViewController {
             if !newGuest { profiles.setPortrait(profiles.activeID, to: draftPortrait) }
             guard saveProfiles() else { profiles = previous; hotSeatRoster = previousRoster; rebuild(); return }
             if creatingPlayer && !newGuest {
-                if hotSeat != nil { hotSeats.endSession(); saveHotSeats(); hotSeatRoster = nil }
                 reloadPlayerData()
             }
         }
@@ -117,6 +131,22 @@ extension MobileLibraryViewController {
     }
 
     func deleteActivePlayer() {
+        guard canDeleteActivePlayer else { return }
+        let candidate = profiles.activeID
+        Task {
+            do {
+                guard let checkpointStore else { throw MobileCheckpointError.invalid }
+                let ownsSavedRun = try await checkpointStore.hasSavedSoloRun(owner: candidate)
+                guard candidate == profiles.activeID else { return }
+                if ownsSavedRun {
+                    loadCheckpoint(); notice = "Resume this player's saved run before deleting."; rebuild(); return
+                }
+                deleteUnsavedActivePlayer()
+            } catch { notice = error.localizedDescription; rebuild() }
+        }
+    }
+
+    private func deleteUnsavedActivePlayer() {
         guard canDeleteActivePlayer else { return }
         if !confirmingDelete { confirmingDelete = true; rebuild(); return }
         let removed = profiles.activeID

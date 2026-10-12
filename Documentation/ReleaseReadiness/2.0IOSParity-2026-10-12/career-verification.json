@@ -1,0 +1,26 @@
+{
+  "audio": "muted",
+  "auditCareerCaptures": 108,
+  "auditCareerStates": 18,
+  "auditCoverStates": 6,
+  "auditHUDStates": 40,
+  "auditPages": 264,
+  "auditTouchTargets": 2178,
+  "auditUnfoldFrames": 3,
+  "filteredSuitesPassed": 5,
+  "filteredTestCommand": "LEMMINGS_TEST_AUDIO=muted DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer zsh Scripts/run-swift-tests.sh --filter 'ResultAwardsTests|MobileCheckpointOwnershipTests|ProfileIdentityTests|MobileCollectionsMigrationTests|OnlineServiceParityTests'",
+  "filteredTestsPassed": 9,
+  "nativeUIKitPhysicalAcceptance": "pending",
+  "sha256": {
+    "Sources/LemmingsGameArt/MobileCareerArt.swift": "28ebca7bf689705f7a63f5549b4af7a55c29caf798737bc9086e1112ab64c234",
+    "Tests/LemmingsAppCoreTests/OnlineServiceParityTests.swift": "67b29686e732bd02396b2eff683ac3b23501ec78bc1159579d786e95c5058027",
+    "Tests/LemmingsAppCoreTests/ProfileIdentityTests.swift": "ab8d4a29ef2bcbf239ca1687638ba77856bebd1d3009980ac8549e8c16cd303c",
+    "Tests/LemmingsAppCoreTests/ResultAwardsTests.swift": "3409b5d60e7a266e31ce0604d0053f6b040b6c0c446ed5b6162062f4abd3cb89",
+    "Tests/LemmingsMobileCoreTests/MobileCheckpointOwnershipTests.swift": "d027ee89af14ef444a9a6bfa3eaa05d8429cea2ef04cba0f26d008ef838d8f0d",
+    "Tests/LemmingsMobileCoreTests/MobileCollectionsMigrationTests.swift": "e0da5a5d4fe9dbbe0af9eeaa9e621fa566bfdd166325c6ce939e468860ddde3f",
+    "Tools/IOSMenuAudit/main.swift": "b93c950063a2b5efe49fe9bbd10e201b85eb7fc7f2eb4307a47e1d3fd1642765"
+  },
+  "testBuildSeconds": 42.28,
+  "verifiedAtUTC": "2026-10-12T08:38:58.665719+00:00",
+  "windows": "none"
+}

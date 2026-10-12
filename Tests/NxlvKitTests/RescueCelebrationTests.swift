@@ -65,7 +65,8 @@ struct RescueCelebrationTests {
         #expect(rgb(earned, 9, 10) == rgb(inactive, 9, 10))
         let rim = rgb(earned, 10, 50), softer = rgb(half, 10, 50)
         #expect(rim[0] > rim[1] && rim[1] > rim[2])
-        #expect(rim[0] >= 80 && rim[0] < 100)
+        // The rim uses 30% of the original glow intensity.
+        #expect(rim[0] >= 24 && rim[0] < 30)
         #expect(softer[0] > 0 && softer[0] < rim[0])
         #expect(try render(-1) == inactive)
         #expect(try render(2) == earned)

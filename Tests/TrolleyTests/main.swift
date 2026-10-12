@@ -1,4 +1,5 @@
 import AppKit
+import LemmingsAppCore
 import NxlvKit
 
 func require(_ condition: @autoclosure () -> Bool, _ message: String) throws {

@@ -1,0 +1,42 @@
+UI test windows: offscreen; audio: muted
+warning: /Users/veland/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'lemmings': failed storing manifest for 'lemmings' in cache: attempt to write a readonly database
+warning: 'sparkle': failed storing manifest for 'sparkle' in cache: attempt to write a readonly database
+Building for debugging...
+[Computing dependencies]
+[Using on-disk description]
+[1 / 1]
+[1 / 6]
+[1 / 34] LemmingsLocal-product
+[1 / 6] LemmingsLocalTests-product
+Build complete! (2.01 sec.)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite MobileMusicContextTests started.
+􀟈  Suite MobileSettingsTests started.
+􀟈  Suite MobileFanCountStoreTests started.
+􀟈  Test testLegacyKeysMigrate() started.
+􀟈  Suite MobileProgressionBuilderTests started.
+􀟈  Test testUnknownFastSpeedFallsBackToTwo() started.
+􀟈  Test testOlderMobileDocumentKeepsChoicesAndDefaultsNewFields() started.
+􀟈  Test testSharedClassicPreferencesSurviveRoundTrip() started.
+􀟈  Test measuredCountsSurviveRelaunchAndChangedPacksAreMeasuredAgain() started.
+􀟈  Test realCampaignSkillsAndPopulationReachTheSharedScorer() started.
+􀟈  Test arrangementCyclesCountTheRealCampaignOccurrences() started.
+􀟈  Test journeyContextRetainsItsFullScorePosition() started.
+􁁛  Test arrangementCyclesCountTheRealCampaignOccurrences() passed after 0.002 seconds.
+􁁛  Test journeyContextRetainsItsFullScorePosition() passed after 0.003 seconds.
+􁁛  Suite MobileMusicContextTests passed after 0.003 seconds.
+􁁛  Test testOlderMobileDocumentKeepsChoicesAndDefaultsNewFields() passed after 0.006 seconds.
+􁁛  Test testSharedClassicPreferencesSurviveRoundTrip() passed after 0.031 seconds.
+􁁛  Test testUnknownFastSpeedFallsBackToTwo() passed after 0.043 seconds.
+􁁛  Test testLegacyKeysMigrate() passed after 0.056 seconds.
+􁁛  Suite MobileSettingsTests passed after 0.056 seconds.
+􁁛  Test measuredCountsSurviveRelaunchAndChangedPacksAreMeasuredAgain() passed after 0.159 seconds.
+􁁛  Suite MobileFanCountStoreTests passed after 0.159 seconds.
+􁁛  Test realCampaignSkillsAndPopulationReachTheSharedScorer() passed after 1.038 seconds.
+􁁛  Suite MobileProgressionBuilderTests passed after 1.038 seconds.
+􁁛  Test run with 8 tests in 4 suites passed after 1.038 seconds.

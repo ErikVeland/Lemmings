@@ -232,6 +232,32 @@ struct LemmingSelectionUniforms {
     }
 
     /// Paint with the game frame. Selection never owns a surface or a timer.
+    public static func drawObvious(at point: CGPoint, scale: CGFloat, animated: Bool, context: CGContext) {
+        let pixel = max(1, floor(scale))
+        let radius = max(8 * pixel, 7 * scale * 1.3)
+        let alpha = CGFloat(0.62 + (animated ? 0.06 * sin(ProcessInfo.processInfo.systemUptime * .pi) : 0))
+        let tint = CGColor(srgbRed: 0.3, green: 0.85, blue: 0.2, alpha: 1)
+        context.saveGState()
+        defer { context.restoreGState() }
+        context.setShouldAntialias(true)
+        for (colour, opacity, haloRadius) in [(CGColor(gray: 0, alpha: 1), CGFloat(0.34), radius * 1.25), (tint, alpha, radius)] {
+            if let start = colour.copy(alpha: opacity), let end = colour.copy(alpha: 0),
+               let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(), colors: [start, end] as CFArray, locations: [0, 1]) {
+                context.drawRadialGradient(gradient, startCenter: point, startRadius: 0, endCenter: point, endRadius: haloRadius, options: [])
+            }
+        }
+        context.setShouldAntialias(false)
+        let x = floor(point.x / pixel) * pixel, y = floor(point.y / pixel) * pixel - 15 * pixel
+        context.setFillColor(CGColor(gray: 0, alpha: 1))
+        for (dx, dy, width, height) in [(-4.0, 0.0, 8.0, 3.0), (-3, 3, 6, 1), (-2, 4, 4, 1), (-1, 5, 2, 1)] {
+            context.fill(CGRect(x: x + dx * pixel, y: y + dy * pixel, width: width * pixel, height: height * pixel))
+        }
+        context.setFillColor(tint)
+        for (dx, dy, width, height) in [(-3.0, 1.0, 6.0, 2.0), (-2, 3, 4, 1), (-1, 4, 2, 1)] {
+            context.fill(CGRect(x: x + dx * pixel, y: y + dy * pixel, width: width * pixel, height: height * pixel))
+        }
+    }
+
     public static func draw(_ effect: LemmingSelectionEffect, in context: CGContext) {
         guard let frame = frame(effect.sprite),
               effect.rect.width > 0, effect.rect.height > 0 else { return }
@@ -265,7 +291,7 @@ struct LemmingSelectionUniforms {
             context.saveGState()
             let glowRect = effect.rect.insetBy(dx: -CGFloat(padding) * dx, dy: -CGFloat(padding) * dy)
             context.interpolationQuality = .low
-            context.setAlpha(effect.rescueAmount > 0 ? effect.rescueAmount : effect.glowGain)
+            context.setAlpha(effect.rescueAmount > 0 ? effect.rescueAmount * 0.3 : effect.glowGain)
             context.translateBy(x: effect.mirrored ? glowRect.maxX : glowRect.minX, y: glowRect.maxY)
             context.scaleBy(x: effect.mirrored ? -1 : 1, y: -1)
             context.draw(effect.rescueAmount > 0 ? frame.goldGlow : frame.glow, in: CGRect(origin: .zero, size: glowRect.size))
@@ -330,7 +356,7 @@ struct LemmingSelectionUniforms {
         constexpr sampler linear(filter::linear, address::clamp_to_zero);
         float light = mask.sample(linear, uv).g * u.style.x * glass;
         if (u.style.y > .5) {
-            float alpha = min(.88f, light);
+            float alpha = min(.88f, light) * .3f;
             float peak = 1 + (u.style.z - 1) * .65;
             if (u.style.w > .5) return float4(float3(1,.72,.18) * alpha * (peak - 1), 0);
             return float4(float3(1,.72,.18) * alpha * peak, alpha);

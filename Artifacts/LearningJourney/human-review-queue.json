@@ -7181,26 +7181,7 @@
     "title": "A ladder would be handy"
   },
   {
-    "comparisons": [
-      {
-        "executionDistance": 1.586,
-        "level": "Rainbow Island",
-        "ordinal": 24,
-        "reference": "Gentle/Rainbow_Island.nxlv"
-      },
-      {
-        "executionDistance": 1.652,
-        "level": "Meeting Adjourned",
-        "ordinal": 46,
-        "reference": "Quirky/Meeting_Adjourned.nxlv"
-      },
-      {
-        "executionDistance": 1.835,
-        "level": "If at first you don`t succeed..",
-        "ordinal": 99,
-        "reference": "Manic/If_at_first_you_don't_succeed....nxlv"
-      }
-    ],
+    "comparisons": [],
     "context": {
       "allowedLosses": 5,
       "assignments": 9,
@@ -7246,13 +7227,24 @@
       "packID": "ohNoMoreLemmings-DLVEL-100"
     },
     "pack": "Oh No! More Lemmings",
+    "placement": {
+      "adjustment": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
+      "basis": "userPlaytest",
+      "lower": 850.0,
+      "position": 850.0,
+      "reference": "Lunatic/This_Corrosion.nxlv",
+      "replayRevision": "3b40b8b19130ce0d8dc8fbade7850f91c1ed81b7fb6df0f10fa6be2a0fbb9b54",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+      "upper": 850.0
+    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-    "status": "needs human discovery/variant review",
+    "status": "included with an estimated grade; human review still needed",
     "title": "Time waits for no Lemming"
   },
   {

@@ -1,0 +1,33 @@
+UI test windows: offscreen; audio: muted
+warning: /Users/veland/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'lemmings': failed storing manifest for 'lemmings' in cache: attempt to write a readonly database
+warning: 'sparkle': failed storing manifest for 'sparkle' in cache: attempt to write a readonly database
+Building for debugging...
+[Computing dependencies]
+[Using on-disk description]
+[1 / 9] LemmingsMobileCore
+[1 / 23] LemmingsGameArt
+Build complete! (1.53 sec.)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite FanPackCorpusTests started.
+􀟈  Test everyBundledFanLevelLoadsRendersAndTicks() started.
+fan corpus progress: 500 levels
+fan corpus progress: 1000 levels
+fan corpus progress: 1500 levels
+fan corpus progress: 2000 levels
+fan corpus progress: 2500 levels
+fan corpus progress: 3000 levels
+fan corpus progress: 3500 levels
+fan corpus progress: 4000 levels
+fan corpus progress: 4500 levels
+fan corpus progress: 5000 levels
+fan corpus progress: 5500 levels
+fan corpus progress: 6000 levels
+fan corpus: 6020 levels loaded, 0 failed, 0 packs without levels
+􁁛  Test everyBundledFanLevelLoadsRendersAndTicks() passed after 1465.980 seconds.
+􁁛  Suite FanPackCorpusTests passed after 1465.981 seconds.
+􁁛  Test run with 1 test in 1 suite passed after 1465.981 seconds.

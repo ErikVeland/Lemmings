@@ -4,7 +4,7 @@ import NxlvKit
 /// Translates engine observations into records without participating in simulation or campaign decisions.
 /// The Mac adds the session observations in `TrolleyCapture+Session.swift`.
 @MainActor public enum TrolleyCapture {
-    public static func classicFingerprint(_ simulation: ClassicDOSSimulation) -> String {
+    nonisolated public static func classicFingerprint(_ simulation: ClassicDOSSimulation) -> String {
         let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]
         var bytes = Data(ClassicDOSReplayRecorder.stateHash(of: simulation).utf8)
         bytes.append((try? encoder.encode(simulation.configuration.entrances)) ?? Data())

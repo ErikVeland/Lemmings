@@ -32,7 +32,7 @@ public enum MobileCareerArt {
             details: status.isEmpty ? [] : [status],
             footer: [.init("records", "Back"),
                      .init("rankRefresh", community || connected ? "Refresh" : "Connect",
-                           enabled: !busy && available, primary: true)])
+                           enabled: !busy && available, primary: true)], footerColumns: 1)
     }
 
     public static func recordsPage(records: ArcadeRecords, profileID: String, profileName: String, subtitle: String) -> GameFrontEnd.Page {
@@ -44,7 +44,7 @@ public enum MobileCareerArt {
         return .init(title: "Records", subtitle: subtitle.isEmpty ? profileName : subtitle,
             rows: levels.map { .init("record." + ($0.assisted ? "assisted|" : "direct|") + $0.level.boardID,
                                     $0.level.title + ($0.assisted ? "  Rewind" : "")) },
-            details: levels.isEmpty ? ["No records"] : [], footer: [.init("home", "Back"), .init("worldwide", "Worldwide")])
+            details: levels.isEmpty ? ["No records"] : [], footer: [.init("home", "Back"), .init("worldwide", "Worldwide")], footerColumns: 1)
     }
 
     public static func recordLevelPage(_ key: String, records: ArcadeRecords, profileID: String, profileName: String, subtitle: String) -> GameFrontEnd.Page {
@@ -66,11 +66,33 @@ public enum MobileCareerArt {
                      details: details + awards, footer: [.init("records", "Back")])
     }
 
-    public static func achievementsPage(records: ArcadeRecords, profileID: String, profileName: String, subtitle: String) -> GameFrontEnd.Page {
+    public static func campaignProgress(records: ArcadeRecords, profileID: String,
+                                        levelCounts: [String: Int]) -> ClassicAchievementProgress {
+        var progress = ClassicAchievementProgress()
+        // Only recorded wins in their actual order advance the shared campaign cursor.
+        for run in records.runs where run.profileID == profileID && run.qualifies {
+            guard let conditions = run.level.conditions, let title = ClassicTitle(rawValue: conditions.gameID),
+                  conditions.levelID.hasPrefix("level-"), let index = Int(conditions.levelID.dropFirst(6)),
+                  let count = levelCounts[title.rawValue] else { continue }
+            _ = progress.recordWin(title: title, levelIndex: index, levelCount: count)
+        }
+        return progress
+    }
+
+    public static func achievementsPage(records: ArcadeRecords, profileID: String, profileName: String, subtitle: String, campaign: ClassicAchievementProgress = .init()) -> GameFrontEnd.Page {
         let earned = records.careerAchievements(profileID: profileID)
+        let levelRows = ArcadeLevelAchievement.allCases.map {
+            GameFrontEnd.Action("award." + $0.rawValue, $0.title, selected: earned.contains($0))
+        }
+        let careerRows = TrolleyAchievement.allCases.filter(\.isOffered).map { award in
+            let progress = award.progress(attempts: records.trolley.attempts, profileID: profileID)
+            return GameFrontEnd.Action("careerAward." + award.rawValue,
+                award.title + (progress.goal > 1 ? "  \(progress.value)/\(progress.goal)" : ""), selected: progress.earned)
+        }
         return .init(title: "Achievements", subtitle: subtitle.isEmpty ? profileName : subtitle,
-            rows: ArcadeLevelAchievement.allCases.map { .init("award." + $0.rawValue, $0.title, selected: earned.contains($0)) },
-            footer: [.init("home", "Back")])
+            rows: levelRows + careerRows + ClassicAchievement.catalog.map {
+                .init("campaignAward." + $0.id.rawValue, $0.title, selected: campaign.isUnlocked($0.id))
+            }, footer: [.init("home", "Back")])
     }
 
 }

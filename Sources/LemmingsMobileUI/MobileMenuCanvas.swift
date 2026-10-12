@@ -7,6 +7,9 @@ import UIKit
 @MainActor final class MobileMenuCanvas: UIView {
     var page = GameFrontEnd.Page(title: "Lemmings") { didSet { rebuild() } }
     var preview: CGImage? { didSet { setNeedsDisplay() } }
+    var resultStars: Int? { didSet { setNeedsDisplay() } }
+    var revealedStars = 3 { didSet { setNeedsDisplay() } }
+    var stampedStar: Int? { didSet { setNeedsDisplay() } }
     var previewSource: CGRect? { didSet { setNeedsDisplay() } }
     var onAction: ((String) -> Void)?
     var onPageChanged: (() -> Void)?
@@ -125,6 +128,19 @@ import UIKit
         }
         GameFrontEnd.draw(page, layout: layout, typography: typography, preview: preview,
                          previewSource: previewSource, highlighted: highlighted, portraits: Self.portraits, in: context)
+        if let resultStars, !layout.preview.isEmpty {
+            let preview = layout.preview
+            let pixel: CGFloat = preview.width >= 400 ? 3 : 2
+            let width = 3 * 11 * pixel + 2 * 8
+            let origin = CGPoint(x: preview.midX - width / 2, y: preview.maxY - 9 * pixel - 10)
+            context.setFillColor(CGColor(gray: 0, alpha: 0.8))
+            context.fill(CGRect(x: origin.x - 6, y: origin.y - 6, width: width + 12, height: 9 * pixel + 12))
+            for index in 0..<3 {
+                let stamp = stampedStar == index + 1
+                GameStarArt.draw(at: CGPoint(x: origin.x + CGFloat(index) * (11 * pixel + 8) - (stamp ? 2 : 0), y: origin.y - (stamp ? 2 : 0)),
+                    earned: index < resultStars && index < revealedStars, size: pixel + (stamp ? 0.4 : 0), context: context)
+            }
+        }
 
     }
 }

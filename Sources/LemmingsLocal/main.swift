@@ -4247,20 +4247,23 @@ let achievementProgressKey = "ClassicAchievementProgress"
       if let existing = store.playlist(id: playlist.id) {
         if existing.entries != playlist.entries { try store.update(playlist, select: false) }
       } else { try store.add(playlist, select: false) }
-      let active = store.activeRun.flatMap {
-        $0.source == .playlist(LearningJourney.playlistID) && $0.pool.id == LearningJourney.version
-          && store.activeRunHotSeatID == ArcadeStore.shared.hotSeatID ? $0 : nil
-      }
+      let savedJourney = store.resumableLearningJourney(hotSeatID: ArcadeStore.shared.hotSeatID)
       let progress = store.learningProgress
       let pending = journey.lessons.map(\.entry)
-      let next = active?.currentEntry ?? pending.first
+      let next = savedJourney?.run.currentEntry ?? pending.first
       let lesson = journey.lessons.first { $0.entry.identity == next?.identity }
       let page = LearningJourneyMenu.hub(next: lesson, solved: progress.solvedCount(in: journey),
-        total: journey.lessons.count, later: progress.revisit(in: journey).count, resume: active != nil,
+        total: journey.lessons.count, later: progress.revisit(in: journey).count, resume: savedJourney != nil,
         play: { [weak self] in
-          guard let self else { return }
-          if active != nil { self.startActiveSequence() }
-          else { self.startLearningEntries(pending, in: store) }
+          guard let self, self.playlistStoreCache?.store === store else { return }
+          if let savedJourney {
+            if store.activeRun?.id == savedJourney.run.id,
+               store.activeRunHotSeatID == ArcadeStore.shared.hotSeatID {
+              self.startActiveSequence()
+            } else {
+              self.resumeSequenceSession(runID: savedJourney.run.id, hotSeatID: savedJourney.hotSeatID, store: store)
+            }
+          } else { self.startLearningEntries(pending, in: store) }
         }, revisit: { [weak self] in self?.presentLearningRevisit() })
       GameScreen.shared.present(page, owner: self.window)
     } catch { GameScreen.shared.message("Journey unavailable", detail: error.localizedDescription) }
@@ -5025,13 +5028,18 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func resumeSequenceSession(runID: UUID, hotSeatID: String?, store: LevelPlaylistStore) {
+    guard let target = store.resumableRun(id: runID), target.hotSeatID == hotSeatID else {
+      GameScreen.shared.message("Session not resumed", detail: "The saved session changed. Choose it again.")
+      return
+    }
     let arcade = ArcadeStore.shared
     let owner = arcade.records.activeProfileID
     let previousSession = arcade.hotSeatID
     GameScreen.shared.confirm("Resume session?", detail: "Your current session will stay saved.",
       actionTitle: hotSeatID == nil ? "Resume solo" : "Resume Hot Seat", owner: window) { [weak self] in
         guard let self, ArcadeStore.shared === arcade, arcade.records.activeProfileID == owner,
-              arcade.hotSeatID == previousSession, self.playlistStoreCache?.store === store else { return }
+              arcade.hotSeatID == previousSession, self.playlistStoreCache?.store === store,
+              let current = store.resumableRun(id: runID), current.hotSeatID == hotSeatID else { return }
         do {
           try self.saveBeforeSessionChange()
           self.prepareLibrary(preservingMusic: true)

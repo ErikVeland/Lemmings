@@ -11,6 +11,7 @@ import NxlvKit
     private(set) var session: ClassicSession
     private let events: [Int: [ClassicDOSReplayEvent]]
     private(set) var lastAssignment: (id: Int, skill: ClassicSkill)?
+    private(set) var skillUses: [ReplaySkillUse] = []
 
     init(_ solution: VerifiedSolution, width: Int, height: Int) {
         self.solution = solution
@@ -36,6 +37,7 @@ import NxlvKit
             }
         }
         session = ClassicSession(simulation: simulation, width: session.levelWidth, height: session.levelHeight)
+        lastAssignment = nil; skillUses.removeAll(keepingCapacity: true)
         for event in events[0] ?? [] { apply(event.action) }
         for _ in 0..<target { tick() }
     }
@@ -45,18 +47,25 @@ import NxlvKit
         lastAssignment = nil
         let next = session.currentTick + 1
         for event in events[next] ?? [] where event.afterTick != true {
-            if case let .assign(id, skill) = event.action { lastAssignment = (id, skill) }
-            else { apply(event.action) }
+            if case .assign = event.action {} else { apply(event.action) }
         }
         session.tick()
+        for event in session.simulation.lastTickEvents {
+            if case let .skillAssigned(id, skill) = event { record(id: id, skill: skill) }
+        }
         for event in events[next] ?? [] where event.afterTick == true { apply(event.action) }
+    }
+
+    private func record(id: Int, skill: ClassicSkill) {
+        lastAssignment = (id, skill)
+        skillUses.append(.init(tick: session.currentTick, name: skill.rawValue.capitalized))
     }
 
     private func apply(_ action: ClassicDOSReplayAction) {
         switch action {
         case let .assign(id, skill):
             if let index = ClassicSkill.allCases.firstIndex(of: skill), session.assign(skillIndex: index, to: id) == nil {
-                lastAssignment = (id, skill)
+                record(id: id, skill: skill)
             }
         case let .releaseRate(value): session.adjustRate(by: value - session.rate)
         case .nuke: session.nuke()
@@ -74,6 +83,7 @@ import NxlvKit
     var onSoundCues: (([PositionedSoundCue]) -> Void)?
     private let marker = SolutionMarker(frame: .zero)
     private let status = HintBitmapText()
+    private let skillPanel = ReplaySkillPanel(frame: .zero)
     private var timer: Timer?
     private var monitor: Any?
     private var paused = false
@@ -102,7 +112,7 @@ import NxlvKit
         field.viewport.levelSize = CGSize(width: width, height: height)
         marker.field = field
         page.setAccessibilityLabel("Solution replay: " + solution.replay.title)
-        page.addSubview(field); page.addSubview(marker); page.addSubview(status)
+        page.addSubview(field); page.addSubview(marker); page.addSubview(status); page.addSubview(skillPanel)
         func button(_ title: String, _ help: String, primary: Bool = false, speed: Bool = false, action: @escaping () -> Void) -> GameActionButton {
             let value: GameActionButton = speed
                 ? SolutionSpeedButton(title: title, primary: primary, onPress: action)
@@ -156,6 +166,7 @@ import NxlvKit
         let rows = (buttons.count + columns - 1) / columns
         field.frame = CGRect(x: 0, y: 30 * scale, width: size.width, height: max(1, size.height - 42 * scale - Double(rows) * (rowHeight + gap)))
         marker.frame = field.frame
+        layoutSkillPanel(scale: scale)
         status.frame = CGRect(x: margin, y: 2 * scale, width: size.width - 2 * margin, height: 26 * scale)
         status.bounds.size = CGSize(width: status.frame.width / scale, height: 26)
         let width = (size.width - 2 * margin - Double(columns - 1) * gap) / Double(columns)
@@ -241,7 +252,6 @@ import NxlvKit
                 assignmentFocus.record(id: lemming.id, skill: ClassicSkill.allCases.firstIndex(of: assignment.skill) ?? 0, tick: playback.session.currentTick)
                 if automaticTracking { followedID = lemming.id }
                 marker.point = CGPoint(x: lemming.x, y: lemming.y)
-                status.stringValue = "Tick \(playback.session.currentTick): \(assignment.skill.rawValue)"
                 assignmentUntil = ProcessInfo.processInfo.systemUptime + 1.5
             }
             updateTracking(); playTickSounds()
@@ -315,14 +325,23 @@ import NxlvKit
         if event.keyCode == 53 { close(); return true }
         return false
     }
+    private func layoutSkillPanel(scale: CGFloat) {
+        let logical = skillPanel.logicalSize
+        skillPanel.frame = CGRect(x: max(8, page.bounds.width - logical.width * scale - 8 * scale),
+            y: field.frame.minY + 8 * scale, width: logical.width * scale, height: logical.height * scale)
+        skillPanel.bounds.size = logical
+    }
     private func refresh() {
+        skillPanel.update(stocks: ReplaySkillPresentation.stocks(.classic(playback.session.simulation)),
+            uses: playback.skillUses, tick: playback.session.currentTick)
+        layoutSkillPanel(scale: max(1, min(2, page.bounds.width / 1120, page.bounds.height / 720)))
         effects?.setViewport(field.soundViewport)
         field.session = playback.session
         if playback.session.isComplete {
             status.stringValue = "\(playback.session.simulation.savedCount) rescued"; marker.point = nil
-        } else if ProcessInfo.processInfo.systemUptime > assignmentUntil {
+        } else {
             status.stringValue = "\(playback.solution.replay.title)   \(playback.session.currentTick) / \(playback.solution.replay.expected?.ticks ?? 0)"
-            marker.point = nil
+            if ProcessInfo.processInfo.systemUptime > assignmentUntil { marker.point = nil }
         }
         transport?.title = playback.session.isComplete ? "Replay" : paused ? "Play" : "Pause"
         speedButton?.title = speedControl.label

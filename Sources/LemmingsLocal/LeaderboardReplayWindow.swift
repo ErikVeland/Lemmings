@@ -23,6 +23,7 @@ import LemmingsAppCore
     private var paused = true
     private var speed = 1
     private let status = GameLabel()
+    private let skillPanel = ReplaySkillPanel(frame: .zero)
     private var buttons: [GameActionButton] = []
     private var play: GameActionButton!
     private var credit = 0.0
@@ -30,7 +31,7 @@ import LemmingsAppCore
     init(cursor replayCursor: ActionReplayCursor, field: NSView, render: @escaping (ActionReplayState) -> Void, title: String) {
         self.cursor = replayCursor; self.field = field; self.render = render; self.title = title
         status.isEditable = false; status.isSelectable = false; status.isBordered = false; status.drawsBackground = false
-        page.addSubview(field); page.addSubview(status)
+        page.addSubview(field); page.addSubview(status); page.addSubview(skillPanel)
         page.setAccessibilityLabel(title + ". Action replay. Space or P plays or pauses. Left and right seek one second.")
         func button(_ text: String, primary: Bool = false, action: @escaping () -> Void) -> GameActionButton {
             let b = GameActionButton(title: text, primary: primary, onPress: action)
@@ -67,6 +68,7 @@ import LemmingsAppCore
         status.frame = CGRect(x: 12, y: 2, width: w - 24, height: 26)
         let width = (w - 24 - CGFloat(columns - 1) * 6) / CGFloat(columns)
         render(cursor.state)
+        layoutSkillPanel()
         for (i, b) in buttons.enumerated() {
             b.frame = CGRect(x: 12 + CGFloat(i % columns) * (width + 6), y: field.frame.maxY + 6 + CGFloat(i / columns) * 46, width: width, height: 40)
         }
@@ -99,7 +101,17 @@ import LemmingsAppCore
         if cursor.state.tick == cursor.replay.ticks { seek(0) }
         paused.toggle(); credit = 0; lastTime = ProcessInfo.processInfo.systemUptime; refresh()
     }
+    private func layoutSkillPanel() {
+        let size = skillPanel.logicalSize
+        skillPanel.frame = CGRect(x: max(8, page.bounds.width - size.width - 8), y: field.frame.minY + 8,
+            width: size.width, height: size.height)
+        skillPanel.bounds.size = size
+    }
     private func refresh() {
+        skillPanel.update(stocks: ReplaySkillPresentation.stocks(cursor.state),
+            uses: cursor.skillUses.suffix(3).map { .init(tick: $0.tick, name: $0.name) },
+            tick: cursor.state.tick, title: cursor.state.engine == "lemmings3" ? "TOOLS HELD" : "LEFT")
+        layoutSkillPanel()
         render(cursor.state); field.needsDisplay = true
         field.setAccessibilityLabel("Action replay. \(cursor.state.saved) of \(cursor.state.population) saved. Tick \(cursor.state.tick) of \(cursor.replay.ticks).")
         status.stringValue = title + "   " + "\(ArcadeView.time(Double(cursor.state.tick) / cursor.state.ticksPerSecond)) / \(ArcadeView.time(Double(cursor.replay.ticks) / cursor.state.ticksPerSecond))"
