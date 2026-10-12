@@ -198,6 +198,8 @@ Text entry and menu/handover actions retain their own Space handling.
 Gameplay Menu fades after three seconds, with a 0.6-second fade. Hover or keyboard
 focus reveals it. Its 88 × 44 input target stays active. Reduced motion hides it
 without animation. Results and handovers keep their navigation actions visible.
+Accessibility offers Fade Menu button. Turning it off keeps Menu visible during
+play in Classic, Lemmings 2 and Lemmings 3, including with reduced motion enabled.
 Q and Escape use the same
 return-to-library path, keeping the saved run and its owner. Command-Q retains
 the app's quit action. Dialogs and text entry keep their own input handling.
@@ -384,6 +386,11 @@ Classic, Lemmings 2 and Lemmings 3 share a brief Now Playing notice when the
 actual track file changes. Use the catalogue song title and soundtrack name,
 with the source folder as a fallback for user files. Keep both rows in the
 existing green/blue bitmap fonts and stone artwork. The notice accepts no pointer
-input. Show it for four seconds, then fade for half a second. Reduced motion
-keeps it steady until expiry. Do not repeat it for the same track or show it
-on results or handovers. Silent music clears it.
+input. Fade it in gently over 0.35 seconds. Keep its four-second display period,
+then fade out for half a second. Reduced motion keeps it steady until expiry.
+Accessibility offers Show song info. Turning it off hides the notice and its
+accessible title immediately, across all three Mac engines. Both new options
+default on and survive presets and saved settings. Do not repeat the notice for
+the same track or show it on results or handovers. Silent music clears it.
+The iOS source shares Show song info and the short fade-in. Its Menu control
+remains visible and does not use the Mac's fading preference.

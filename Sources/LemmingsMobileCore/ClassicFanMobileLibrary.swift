@@ -42,12 +42,13 @@ public final class ClassicFanMobileLibrary: MobileGameLibrary {
         let (level, styleName) = try pack.level(entry)
         let ground = try pack.groundSet(for: level, styleName: styleName, portsRoot: portsRoot, entry: entry)
         let special = try pack.specialGraphic(for: level, entry: entry, portsRoot: portsRoot)
+        let artwork = ClassicFanArtwork.artworkMatch(for: level, ground: ground, special: special, portsRoot: portsRoot)
         return try ClassicMobileSession.makeContent(
             summary: levels[index], level: level, ground: ground, special: special, assets: assets,
             mechanics: pack.mechanics(for: entry),
             objectSemantics: .forFanLevel(level, groundSet: ground),
             clock: .golems,
             levelIdentifier: "fan/\(catalogueID)/\(pack.fingerprint.prefix(12))/\(entry.key)",
-            levelIndex: index)
+            levelIndex: index, artworkFamily: artwork?.family, artworkMatch: artwork?.pieces)
     }
 }

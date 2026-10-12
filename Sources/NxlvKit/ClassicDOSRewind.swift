@@ -11,7 +11,7 @@ import Foundation
 /// Each keyframe records how many commands had been applied when it was taken.
 /// Replay resumes from that index, which removes any ambiguity about commands
 /// issued on the same tick the keyframe was captured.
-public struct ClassicDOSRewind: Sendable {
+public struct ClassicDOSRewind: Codable, Sendable {
     /// A command as it was actually applied, with the tick it landed on.
     public struct LoggedCommand: Codable, Equatable, Sendable {
         public let tick: Int
@@ -23,7 +23,7 @@ public struct ClassicDOSRewind: Sendable {
         }
     }
 
-    private struct Keyframe: Sendable {
+    private struct Keyframe: Codable, Sendable {
         let tick: Int
         let state: ClassicDOSSimulation
         /// Commands already applied when this was captured.
@@ -51,6 +51,17 @@ public struct ClassicDOSRewind: Sendable {
         self.interval = max(1, keyframeInterval)
         self.maximumKeyframes = max(2, maximumKeyframes)
         keyframes = [Keyframe(tick: simulation.tickCount, state: simulation, commandCount: 0)]
+    }
+
+    /// Checkpoints retain the oldest state and log. Intermediate keyframes are rebuilt on demand.
+    public func encode(to encoder: Encoder) throws {
+        var values = encoder.container(keyedBy: CodingKeys.self)
+        try values.encode(simulation, forKey: .simulation)
+        try values.encode(commands, forKey: .commands)
+        try values.encode(Array(keyframes.prefix(1)), forKey: .keyframes)
+        try values.encode(appliedCommandCount, forKey: .appliedCommandCount)
+        try values.encode(interval, forKey: .interval)
+        try values.encode(maximumKeyframes, forKey: .maximumKeyframes)
     }
 
     // MARK: - Running forward

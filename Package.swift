@@ -43,7 +43,7 @@ let package = Package(
         ),
         .target(
             name: "LemmingsMobileCore",
-            dependencies: ["NxlvKit"],
+            dependencies: ["LemmingsAppCore", "NxlvKit"],
             path: "Sources/LemmingsMobileCore"
         ),
         .target(
@@ -96,7 +96,7 @@ let package = Package(
         ),
         .testTarget(
             name: "LemmingsMobileCoreTests",
-            dependencies: ["LemmingsMobileCore", "NxlvKit"],
+            dependencies: ["LemmingsAppCore", "LemmingsMobileCore", "NxlvKit"],
             path: "Tests/LemmingsMobileCoreTests"
         )
     ]

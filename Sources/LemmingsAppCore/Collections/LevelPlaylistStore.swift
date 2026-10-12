@@ -124,6 +124,20 @@ import NxlvKit
     public var favourites: [LevelPlaylistEntry] { document.favourites ?? [] }
     public var recentlyPlayed: [LevelPlaylistEntry] { document.recentlyPlayed ?? [] }
 
+    /// Saves an existing mobile collection as one transaction. Ownership stays with the file's profile ID.
+    public func importMobileCollections(playlists: [LevelPlaylist], favourites: [LevelPlaylistEntry],
+                                        recents: [LevelPlaylistEntry], run: LevelSequenceRun?, hotSeatID: String? = nil) throws {
+        let previous = document
+        document.playlists = playlists
+        document.selectedPlaylistID = playlists.first?.id
+        document.favourites = favourites
+        document.recentlyPlayed = recents
+        document.activeRun = run
+        document.activeRunHotSeatID = run == nil ? nil : hotSeatID
+        do { document = try document.validated(); try save() }
+        catch { document = previous; throw error }
+    }
+
     public func toggleFavourite(_ entry: LevelPlaylistEntry) throws {
         let previous = document
         var entries = favourites

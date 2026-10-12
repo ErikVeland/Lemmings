@@ -41,7 +41,7 @@
 	<key>SUPublicEDKey</key>
 	<string>AGH6HkcWMbg42X7O6QXwwHXa0jreXxFuvgwMFZMEv6c=</string>
 	<key>SUScheduledCheckInterval</key>
-	<integer>86400</integer>
+	<integer>3600</integer>
 	<key>SUVerifyUpdateBeforeExtraction</key>
 	<true/>
 </dict>

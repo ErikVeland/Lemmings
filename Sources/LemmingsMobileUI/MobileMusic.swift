@@ -4,109 +4,192 @@ import LemmingsMobileCore
 import NxlvKit
 import UIKit
 
-/// Plays each level's assigned tune, as the Mac does.
-///
-/// The slim bundle carries the essential tracker modules. Recordings from
-/// downloaded libraries are a later layer over the same assignment.
+/// Uses the shared music decks and level-theme assignment on iPad.
 @MainActor final class MobileMusic {
     static let shared = MobileMusic()
-    static let enabledKey = "mobile.music"
-
-    static let soundtrackKey = "mobile.soundtrack"
-
     private let module = ModuleMusicPlayer()
     private let recordings = SoundtrackPlayer()
+    private let dj = AdaptiveDJPlayer()
     private var playing: String?
     private var usingRecording = false
-
-    private var musicRoot: URL? { Bundle.main.resourceURL?.appendingPathComponent("Music") }
-
-    /// "Original" first, then every folder of recordings found in the bundle and installed libraries.
-    var soundtrackNames: [String] {
-        guard let root = musicRoot else { return ["Original"] }
-        return ["Original"] + SoundtrackPlayer.soundtracks(at: root).keys.sorted()
+    private var usingDJ = false
+    private var paused = true
+    private var resultComplete = false
+    private var inactive = false
+    private var speed = 1.0
+    private var rewinding = false
+    private var pitch = GameplayMusicPitch()
+    private var failureMusic = FailureMusicTransition()
+    private let nukeMood = NukeMusicSweep()
+    private var lastTrack: URL?
+    var onTrackChange: ((String, String) -> Void)?
+    var currentTrackURL: URL? { usingDJ ? dj.currentURL : lastTrack }
+    private init() { connectFailureMusic() }
+    private func connectFailureMusic() {
+        failureMusic.onChange = { [weak self] rate in
+            self?.module.setTempoScale(rate); self?.recordings.setPlaybackRate(rate); self?.dj.setPlaybackRate(rate)
+        }
+        nukeMood.onChange = { [weak self] amount in
+            self?.module.setNukeAmount(Float(amount)); self?.recordings.setNukeAmount(Float(amount)); self?.dj.setNukeAmount(Float(amount))
+        }
     }
 
-    /// The chosen soundtrack. A folder that is no longer installed falls back to the original modules.
+    private var settings: MobileSettings { MobileSettings.load(from: .standard) }
+    private var musicRoot: URL? { Bundle.main.resourceURL?.appendingPathComponent("Music") }
+    private var isTestAudioMuted: Bool { ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] == "muted" }
+
+    var soundtrackNames: [String] {
+        ["Original", "Adaptive DJ"] + (musicRoot.map { SoundtrackPlayer.soundtracks(at: $0).keys.sorted() } ?? [])
+    }
     var soundtrack: String {
-        get {
-            let saved = UserDefaults.standard.string(forKey: Self.soundtrackKey) ?? "Original"
-            return soundtrackNames.contains(saved) ? saved : "Original"
-        }
+        get { soundtrackNames.contains(settings.soundtrack) ? settings.soundtrack : "Original" }
         set {
-            UserDefaults.standard.set(newValue, forKey: Self.soundtrackKey)
+            var value = settings; value.soundtrack = newValue
+            value.classic.music = newValue == "Adaptive DJ" ? .adaptiveDJ : .amigaModules
+            value.save(to: .standard)
             stop()
         }
     }
-
+    var isEnabled: Bool {
+        get { settings.musicEnabled }
+        set { var value = settings; value.musicEnabled = newValue; value.save(to: .standard); applySettings() }
+    }
     func cycleSoundtrack() {
         let names = soundtrackNames
-        let current = names.firstIndex(of: soundtrack) ?? 0
-        soundtrack = names[(current + 1) % names.count]
+        soundtrack = names[((names.firstIndex(of: soundtrack) ?? 0) + 1) % names.count]
     }
-    // Mechanical tests stay silent without changing the player's saved preference.
-    private var isTestAudioMuted: Bool {
-        ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] == "muted"
+    func applySettings() {
+        let c = settings.classic
+        if let playing, !playing.hasSuffix("|" + soundtrack) { stop() }
+        module.setEnhancements(c.musicStyle == .modern ? .modern : .faithful)
+        dj.setEnhancements(c.musicStyle == .modern ? .modern : .faithful)
+        let volume = c.musicVolume * (rewinding ? 0.22 : 1)
+        module.setVolume(volume); recordings.setVolume(volume); dj.setVolume(volume)
+        module.setMuted(!isEnabled || isTestAudioMuted)
+        recordings.setMuted(!isEnabled || isTestAudioMuted)
+        dj.setMuted(!isEnabled || isTestAudioMuted)
+        if !isEnabled || isTestAudioMuted { stop() }
     }
 
-    var isEnabled: Bool {
-        get { UserDefaults.standard.object(forKey: Self.enabledKey) as? Bool ?? true }
-        set {
-            UserDefaults.standard.set(newValue, forKey: Self.enabledKey)
-            if !newValue { stop() }
-        }
-    }
-
-    /// Starts the tune for a level. Repeat calls for the same level keep it playing.
     func play(identifier: String, index: Int, title: String) {
+        applySettings()
         guard isEnabled, !isTestAudioMuted else { return }
         let key = identifier + "|" + soundtrack
         guard playing != key else { return }
         let tune = MobileMusicAssignment.tune(identifier: identifier, index: index, title: title)
-        let (folder, track) = (tune.folder, tune.track)
-        if playRecording(tune: tune) {
-            module.stop()
-            playing = key
-            usingRecording = true
-            return
+        let source = moduleURL(tune)
+        if soundtrack == "Adaptive DJ", let root = musicRoot {
+            var pools = SoundtrackPlayer.djSoundtracks(at: root,
+                includeOtherSoundtracks: settings.classic.djIncludesOtherSoundtracks,
+                seasonal: SoundtrackPlayer.isSeasonal(tune.folder))
+            if let source { pools["Original", default: []].append(source) }
+            dj.load(soundtracks: pools, catalogueRoot: root)
+            if dj.startJourney(trackID: tune.game + "." + tune.track.lowercased(), cycle: index,
+                               identity: identifier, fallback: source,
+                               includeAlternates: settings.classic.djIncludesOtherSoundtracks) {
+                module.stop(); recordings.stop(); usingDJ = true; usingRecording = false
+                playing = key
+                dj.onTrackChange = { [weak self] _ in self?.announce(self?.dj.currentURL, soundtrack: "Adaptive DJ") }
+                announce(dj.currentURL, soundtrack: "Adaptive DJ")
+                applyOutputState(); return
+            }
         }
-        recordings.stop()
-        usingRecording = false
-        guard let root = BundledGameResources.music(folder),
-              let url = (try? FileManager.default.contentsOfDirectory(at: root, includingPropertiesForKeys: nil))?
-                .first(where: { $0.deletingPathExtension().lastPathComponent.lowercased() == track.lowercased() && $0.pathExtension.lowercased() == "mod" })
-        else { return }
+        usingDJ = false; dj.stop()
+        if playRecording(tune: tune) {
+            module.stop(); usingRecording = true; playing = key
+            applyOutputState(); return
+        }
+        recordings.stop(); usingRecording = false
+        guard let source else { return }
         do {
             try module.start()
-            module.play(url: url)
-            playing = key
-        } catch {
-            playing = nil
+            guard module.play(url: source) != nil else { return }
+            playing = key; announce(source, soundtrack: "Original")
+            applyOutputState()
+        } catch { playing = nil }
+    }
+
+    private func moduleURL(_ tune: MobileMusicAssignment.Tune) -> URL? {
+        guard let root = BundledGameResources.music(tune.folder) else { return nil }
+        return (try? FileManager.default.contentsOfDirectory(at: root, includingPropertiesForKeys: nil))?.first {
+            $0.deletingPathExtension().lastPathComponent.lowercased() == tune.track.lowercased()
+                && $0.pathExtension.lowercased() == "mod"
         }
     }
-
-    /// A recording matches only when it is the assigned composition, as on the Mac.
     private func playRecording(tune: MobileMusicAssignment.Tune) -> Bool {
         let name = soundtrack
-        guard name != "Original", let root = musicRoot,
-              let tracks = SoundtrackPlayer.soundtracks(at: root)[name] else { return false }
-        guard let index = tracks.firstIndex(where: {
-            SoundtrackPlayer.matches($0, trackID: tune.game + "." + tune.track.lowercased(), root: root)
-        }) else { return false }
-        recordings.load(tracks)
-        return recordings.play(index: index) != nil
+        guard name != "Original", name != "Adaptive DJ", let root = musicRoot,
+              let tracks = SoundtrackPlayer.soundtracks(at: root)[name],
+              let index = tracks.firstIndex(where: {
+                  SoundtrackPlayer.matches($0, trackID: tune.game + "." + tune.track.lowercased(), root: root)
+              }) else { return false }
+        recordings.load(tracks, originalMix: settings.classic.musicStyle == .faithful)
+        guard recordings.play(index: index) != nil else { return false }
+        announce(tracks[index], soundtrack: name)
+        return true
+    }
+    private func announce(_ url: URL?, soundtrack: String) {
+        guard let url, url != lastTrack else { return }
+        lastTrack = url
+        let title = musicRoot.flatMap { root in
+            SoundtrackPlayer.cataloguePath(url, root: root).flatMap { SoundtrackCatalogue.load(at: root)?.entry(path: $0)?.track.title }
+        } ?? url.deletingPathExtension().lastPathComponent
+        onTrackChange?(title, soundtrack)
     }
 
-    func suspend() { module.suspendOutput() }
-
-    func resume() {
-        guard isEnabled, !isTestAudioMuted, playing != nil else { return }
-        try? module.resumeOutput()
+    /// Pause and speed use the same processing as the Mac, with an independent rewind duck.
+    func setGameplayState(paused: Bool, speed: Double, rewinding: Bool = false) {
+        let changed = self.paused != paused || self.rewinding != rewinding
+        self.paused = paused; self.speed = speed; self.rewinding = rewinding
+        pitch.update(speed: settings.classic.variableSpeedEnabled ? speed : 1, at: ProcessInfo.processInfo.systemUptime)
+        module.setSpeedPitch(pitch.cents); recordings.setSpeedPitch(pitch.cents); dj.setSpeedPitch(pitch.cents)
+        if changed { applySettings(); applyOutputState() }
     }
-
+    func update(_ snapshot: MobileGameSnapshot, active: Int? = nil, nukeRemainingTicks: Int? = nil,
+                allNukePopped: Bool? = nil, ticksPerSecond: Double = 17) {
+        guard !isTestAudioMuted else { return }
+        if resultComplete != snapshot.isComplete { resultComplete = snapshot.isComplete; applyOutputState() }
+        let failed = snapshot.isComplete ? !snapshot.didWin : active.map {
+            FailureMoodDecision.isUnrecoverable(saved: snapshot.saved, active: $0,
+                unreleased: snapshot.total - snapshot.released, required: snapshot.required)
+        } ?? false
+        let allPopped = allNukePopped ?? (snapshot.isComplete || active == 0)
+        let now = ProcessInfo.processInfo.systemUptime
+        failureMusic.update(failed: failed, isNuking: snapshot.isEndingRun, allPopped: allPopped,
+            remainingTicks: nukeRemainingTicks, oneCountTicks: Int(ticksPerSecond), tick: snapshot.tick, now: now)
+        nukeMood.update(active: snapshot.isEndingRun && settings.classic.hdEffectsEnabled,
+            tick: snapshot.tick, durationTicks: 79, remainingTicks: nukeRemainingTicks, allPopped: allPopped, now: now)
+        guard usingDJ else { return }
+        dj.updateTelemetry(.init(releasedCount: snapshot.released, totalCount: snapshot.total,
+            savedCount: snapshot.saved, requiredCount: snapshot.required, releaseRate: snapshot.releaseRate ?? 50,
+            remainingSeconds: snapshot.remainingSeconds, isNuking: snapshot.isEndingRun,
+            didWin: snapshot.didWin, isComplete: snapshot.isComplete))
+    }
+    func advance() {
+        guard !inactive, !isTestAudioMuted else { return }
+        let now = ProcessInfo.processInfo.systemUptime
+        failureMusic.advance(at: now); nukeMood.advanceReturn(at: now)
+        pitch.update(speed: settings.classic.variableSpeedEnabled ? speed : 1, at: now)
+        module.setSpeedPitch(pitch.cents); recordings.setSpeedPitch(pitch.cents); dj.setSpeedPitch(pitch.cents)
+    }
+    private func applyOutputState() {
+        guard playing != nil else { return }
+        if (paused && !resultComplete) || inactive {
+            let rhythm = !inactive && settings.classic.pauseMusicBeatOnly
+            module.suspendOutput(rhythmOnly: rhythm); recordings.suspendOutput(rhythmOnly: rhythm)
+            dj.suspendOutput(rhythmOnly: rhythm)
+        } else {
+            try? module.resumeOutput(); recordings.resumeOutput(); dj.resumeOutput()
+        }
+    }
+    func vinylStop() { module.vinylStop(); recordings.vinylStop(); dj.vinylStop(); playing = nil }
+    func suspend() { inactive = true; applyOutputState() }
+    func resume() { inactive = false; applyOutputState() }
     func stop() {
-        module.stop()
-        playing = nil
+        module.stop(); recordings.stop(); dj.stop()
+        playing = nil; lastTrack = nil; resultComplete = false
+        nukeMood.reset(); failureMusic = FailureMusicTransition(); connectFailureMusic()
+        module.setTempoScale(1); recordings.setPlaybackRate(1); dj.setPlaybackRate(1)
     }
 }
 #endif

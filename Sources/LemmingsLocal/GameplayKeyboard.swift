@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import LemmingsAppCore
 import NxlvKit
 
 @MainActor final class GameSpeedControl {
@@ -100,6 +101,8 @@ import NxlvKit
     var playingTrack: () -> PlayingTrack? = { nil }
     private let nowPlayingNotice = NowPlayingNotice(frame: .zero)
     var navigationReduceMotion: () -> Bool = { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion }
+    var showSongInfo: () -> Bool = { true }
+    var fadeMenuButton: () -> Bool = { true }
     private lazy var navigationButton: GameplayMenuButton = {
         let button = GameplayMenuButton(frame: .zero)
         button.title = "Menu"; button.target = self; button.action = #selector(openMainMenu)
@@ -121,7 +124,7 @@ import NxlvKit
             width: max(1, min(600, root.bounds.width - 136)), height: 60)
         nowPlayingNotice.update(track: playingTrack(), at: now,
             visible: active() && ownsController() && !GameScreen.shared.isPresented && window?.attachedSheet == nil,
-            reduceMotion: navigationReduceMotion())
+            reduceMotion: navigationReduceMotion(), enabled: showSongInfo())
         let visible = mainMenu != nil && ownsController() && navigationAvailable()
             && window?.attachedSheet == nil && !GameScreen.shared.isPresented
         guard visible else { navigationButton.isHidden = true; navigationButton.resetAppearance(); return }
@@ -133,7 +136,7 @@ import NxlvKit
         navigationButton.frame = CGRect(x: max(0, root.bounds.maxX - 100),
             y: root.isFlipped ? 36 : max(0, root.bounds.maxY - 80), width: 88, height: 44)
         navigationButton.isHidden = false
-        navigationButton.updateAppearance(at: now, autoHide: active(), reduceMotion: navigationReduceMotion())
+        navigationButton.updateAppearance(at: now, autoHide: active() && fadeMenuButton(), reduceMotion: navigationReduceMotion())
     }
     var help: () -> String = { "" }
     var skillNames: () -> [String] = { [] }
@@ -209,7 +212,9 @@ import NxlvKit
         }
         guard event.type == .keyDown else { return event }
         // Handle pause before AppKit sends Space to the focused control or canvas.
-        if event.keyCode == 49 || event.charactersIgnoringModifiers?.lowercased() == "p" {
+        let sharedCommand = GameplayCommands.command(key: event.keyCode == 122 ? "f1" : (event.charactersIgnoringModifiers ?? ""),
+            shift: event.modifierFlags.contains(.shift))
+        if sharedCommand == .pause || event.keyCode == 49 {
             if !event.isARepeat { togglePause() }
             return nil
         }
@@ -219,7 +224,7 @@ import NxlvKit
             return nil
         }
         // Slash opens hints. Question mark keeps the controls guide.
-        if event.keyCode == 122 || event.characters == "/" || event.charactersIgnoringModifiers?.lowercased() == "i",
+        if sharedCommand == .hints,
            let hints {
             if !event.isARepeat { hints() }
             return nil

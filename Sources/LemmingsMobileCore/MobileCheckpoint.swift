@@ -134,6 +134,16 @@ public actor MobileCheckpointStore {
         }
     }
 
+    /// Resume this owner or shared session first. Keep the global copy as a route to another saved session.
+    public func load(owner: String, scope: String?) async throws -> MobileCheckpointEnvelope? {
+        let scoped = scopedURL(owner: owner, scope: scope)
+        if FileManager.default.fileExists(atPath: scoped.path)
+            || FileManager.default.fileExists(atPath: scoped.appendingPathExtension("backup").path) {
+            return try await MobileCheckpointStore(url: scoped).load()
+        }
+        return try load()
+    }
+
     public func save(_ envelope: MobileCheckpointEnvelope) throws {
         guard !retiredRuns.contains(envelope.runID) else { return }
         let validated = try envelope.validated()
@@ -141,6 +151,13 @@ public actor MobileCheckpointStore {
         let document = Document(payload: payload, checksum: Self.hash(payload))
         let bytes = try JSONEncoder().encode(document)
         guard bytes.count <= Self.maximumDocumentBytes else { throw MobileCheckpointError.tooLarge }
+        try rejectFutureVersion(at: url)
+        try rejectFutureVersion(at: backupURL)
+        // Preserve the old global owner before a different player or session takes this slot.
+        if let previousBytes = try? read(url), let previous = try? decode(previousBytes) {
+            try saveScoped(previous, bytes: previousBytes)
+        }
+        try saveScoped(validated, bytes: bytes)
         let newest = [url, backupURL].compactMap { path -> MobileCheckpointEnvelope? in
             guard FileManager.default.fileExists(atPath: path.path),
                   let bytes = try? read(path) else { return nil }
@@ -180,11 +197,43 @@ public actor MobileCheckpointStore {
     /// Late saves from a finished run cannot restore it or delete a newer run.
     public func retire(runID: UUID) throws {
         retiredRuns.insert(runID)
-        for path in [url, backupURL] where FileManager.default.fileExists(atPath: path.path) {
+        let directory = url.deletingLastPathComponent()
+        let scoped = (try? FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil))?
+            .filter { $0.lastPathComponent.hasPrefix("scoped-") && ["json", "backup"].contains($0.pathExtension) } ?? []
+        for path in [url, backupURL] + scoped where FileManager.default.fileExists(atPath: path.path) {
             if let bytes = try? read(path), let envelope = try? decode(bytes), envelope.runID == runID {
                 try FileManager.default.removeItem(at: path)
             }
         }
+    }
+
+    private func scopedURL(owner: String, scope: String?) -> URL {
+        let key = scope.map { "shared:" + $0 } ?? "solo:" + owner
+        return url.deletingLastPathComponent().appendingPathComponent("scoped-" + Self.hash(Data(key.utf8)) + ".json")
+    }
+
+    private func saveScoped(_ envelope: MobileCheckpointEnvelope, bytes: Data) throws {
+        guard !retiredRuns.contains(envelope.runID) else { return }
+        let target = scopedURL(owner: envelope.owner ?? MobileProfiles.defaultID, scope: envelope.scope)
+        try rejectFutureVersion(at: target)
+        let backup = target.appendingPathExtension("backup")
+        try rejectFutureVersion(at: backup)
+        if let storedBytes = try? read(target), let stored = try? decode(storedBytes) {
+            guard stored.savedAt <= envelope.savedAt else { return }
+            if stored.savedAt == envelope.savedAt, stored.runID == envelope.runID, stored.tick > envelope.tick { return }
+            if storedBytes == bytes { return }
+            try storedBytes.write(to: backup, options: .atomic)
+        }
+        try FileManager.default.createDirectory(at: target.deletingLastPathComponent(), withIntermediateDirectories: true)
+        if !FileManager.default.fileExists(atPath: backup.path) { try bytes.write(to: backup, options: .atomic) }
+        try bytes.write(to: target, options: .atomic)
+    }
+
+    private func rejectFutureVersion(at target: URL) throws {
+        guard let bytes = try? read(target) else { return }
+        do { _ = try decode(bytes) }
+        catch MobileCheckpointError.version { throw MobileCheckpointError.version }
+        catch { return }
     }
 
     private func read(_ path: URL) throws -> Data {

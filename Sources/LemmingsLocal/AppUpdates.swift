@@ -62,14 +62,18 @@ extension SPUUpdater: AppUpdateChecking {
 
     var supportsGentleScheduledUpdateReminders: Bool { true }
     func standardUserDriverShouldHandleShowingScheduledUpdate(_ update: SUAppcastItem,
-        andInImmediateFocus immediateFocus: Bool) -> Bool { false }
+        andInImmediateFocus immediateFocus: Bool) -> Bool { immediateFocus }
+    func updater(_ updater: SPUUpdater, didFindValidUpdate item: SUAppcastItem) {
+        // Announce discovery before an automatic download creates its alert.
+        setAvailable(item, downloaded: availableVersion == item.displayVersionString && isDownloaded)
+    }
     func standardUserDriverWillHandleShowingUpdate(_ handleShowingUpdate: Bool,
         forUpdate update: SUAppcastItem, state: SPUUserUpdateState) {
         updateWillBePresented(update, downloaded: state.stage != .notDownloaded,
             automaticallyShowNotes: !handleShowingUpdate && !state.userInitiated && state.stage != .notDownloaded)
     }
     func updateWillBePresented(_ update: SUAppcastItem, downloaded: Bool, automaticallyShowNotes: Bool) {
-        // Publish the reminder only when Sparkle has created the update alert.
+        // Refresh the discovery reminder with the alert's download state.
         setAvailable(update, downloaded: downloaded)
         if automaticallyShowNotes, automaticNotesVersion != update.versionString {
             automaticNotesVersion = update.versionString
@@ -81,7 +85,10 @@ extension SPUUpdater: AppUpdateChecking {
         }
     }
     func standardUserDriverWillFinishUpdateSession() { clear() }
-    func updater(_ updater: SPUUpdater, didFinishUpdateCycleFor updateCheck: SPUUpdateCheck, error: Error?) { clear() }
+    func updater(_ updater: SPUUpdater, didFinishUpdateCycleFor updateCheck: SPUUpdateCheck, error: Error?) {
+        // A successful background cycle can leave an update waiting for the player.
+        if error != nil { clear() }
+    }
     func updaterDidNotFindUpdate(_ updater: SPUUpdater) { clear() }
     func updater(_ updater: SPUUpdater, userDidMake choice: SPUUserUpdateChoice,
         forUpdate update: SUAppcastItem, state: SPUUserUpdateState) {

@@ -1,5 +1,6 @@
 #if os(iOS)
 import LemmingsGameArt
+import LemmingsMobileCore
 import UIKit
 
 /// Decoration only. It neither delays navigation nor intercepts a player's input.
@@ -24,7 +25,7 @@ import UIKit
 
     func play(in region: CGRect) {
         stop()
-        guard !UIAccessibility.isReduceMotionEnabled,
+        guard !UIAccessibility.isReduceMotionEnabled, !MobileSettings.load(from: .standard).classic.reduceMotion,
               let art = Self.artwork, region.width >= 280, region.height >= 88 else { return }
         frame = superview?.bounds ?? .zero
         let start = art.frame(in: region, progress: 0), end = art.frame(in: region, progress: 1)

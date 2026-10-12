@@ -10,10 +10,12 @@ public struct GameFrontEnd {
         public var enabled: Bool
         public var primary: Bool
         public var selected: Bool
+        public var portrait: Int?
         public init(_ id: String, _ title: String, enabled: Bool = true,
-                    primary: Bool = false, selected: Bool = false) {
+                    primary: Bool = false, selected: Bool = false, portrait: Int? = nil) {
             self.id = id; self.title = title; self.enabled = enabled
             self.primary = primary; self.selected = selected
+            self.portrait = portrait
         }
     }
     public struct Page: Equatable, Sendable {
@@ -111,7 +113,7 @@ public struct GameFrontEnd {
 
     public static func draw(_ page: Page, layout: Layout, typography: GameMenuTypography,
                             preview: CGImage? = nil, previewSource: CGRect? = nil,
-                            highlighted: String? = nil, in context: CGContext) {
+                            highlighted: String? = nil, portraits: GamePortraitArt? = nil, in context: CGContext) {
         context.saveGState()
         defer { context.restoreGState() }
         context.setFillColor(CGColor(gray: 0, alpha: 1))
@@ -151,7 +153,7 @@ public struct GameFrontEnd {
                 GameStoneArt.draw(in: context, frame: target.frame, selected: chosen, pixel: 1)
             }
             if action.selected {
-                context.setFillColor(CGColor(srgbRed: 0.48, green: 0.80, blue: 0.24, alpha: 1))
+                context.setFillColor(CGColor(srgbRed: 0.48, green: 0.80, blue: 0.24, alpha: action.enabled ? 1 : 0.45))
                 context.fill(CGRect(x: target.frame.minX + 8, y: target.frame.maxY - 6,
                                     width: target.frame.width - 16, height: 3))
             }
@@ -163,7 +165,13 @@ public struct GameFrontEnd {
                 context.addLine(to: CGPoint(x: target.frame.minX + 10, y: target.frame.midY + 5))
                 context.closePath(); context.fillPath()
             }
-            actionLabel(action.title, box: target.frame.insetBy(dx: action.primary ? 24 : 12, dy: 2), typography: typography,
+            if let portrait = action.portrait {
+                portraits?.draw(portrait, in: CGRect(x: target.frame.minX + 12,
+                    y: target.frame.minY + 7, width: 30, height: 36), context: context)
+            }
+            var caption = target.frame.insetBy(dx: action.primary ? 24 : 12, dy: 2)
+            if action.portrait != nil { caption.origin.x += 36; caption.size.width -= 36 }
+            actionLabel(action.title, box: caption, typography: typography,
                         palette: chosen ? .green : .blue, alpha: action.enabled ? 1 : 0.45, context: context)
         }
     }

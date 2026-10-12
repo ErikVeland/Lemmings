@@ -50,8 +50,8 @@ public struct MobileStorage: Sendable {
     public func loadMigrating<T: Codable>(_ type: T.Type, name: String, defaults: UserDefaults, legacyKey: String) -> T? {
         if let value = load(type, name: name) { return value }
         guard let data = defaults.data(forKey: legacyKey), let value = try? JSONDecoder().decode(type, from: data) else { return nil }
+        // Retain the defaults copy for older builds, including when the file save fails.
         try? save(value, name: name)
-        defaults.removeObject(forKey: legacyKey)
         return value
     }
 }
@@ -59,6 +59,19 @@ public struct MobileStorage: Sendable {
 public struct MobileProfile: Codable, Equatable, Identifiable, Sendable {
     public let id: String
     public var name: String
+    public var portrait: Int
+
+    public init(id: String, name: String, portrait: Int = 0) {
+        self.id = id; self.name = name; self.portrait = max(0, min(7, portrait))
+    }
+
+    private enum CodingKeys: String, CodingKey { case id, name, portrait }
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(id: try values.decode(String.self, forKey: .id),
+                  name: try values.decode(String.self, forKey: .name),
+                  portrait: try values.decodeIfPresent(Int.self, forKey: .portrait) ?? 0)
+    }
 }
 
 /// The players on this device. Each keeps their own collections and progress.
@@ -95,6 +108,11 @@ public struct MobileProfiles: Codable, Equatable, Sendable {
     public mutating func rename(_ id: String, to name: String) {
         guard let index = players.firstIndex(where: { $0.id == id }) else { return }
         players[index].name = Self.clean(name)
+    }
+
+    public mutating func setPortrait(_ id: String, to portrait: Int) {
+        guard let index = players.firstIndex(where: { $0.id == id }) else { return }
+        players[index].portrait = max(0, min(7, portrait))
     }
 
     public mutating func select(_ id: String) {

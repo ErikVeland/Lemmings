@@ -3,6 +3,7 @@ import CoreGraphics
 import ImageIO
 import LemmingsGameArt
 import LemmingsMobileCore
+import NxlvKit
 
 @main struct MenuAudit {
     @MainActor static func main() throws {
@@ -24,7 +25,7 @@ import LemmingsMobileCore
                                  .init("l2", "Lemmings 2 - Unavailable", enabled: false),
                                  .init("l3", "Lemmings 3 - Unavailable", enabled: false)]
         let footer: [Action] = [.init("settings", "Settings"), .init("data", "Game Data")]
-        let pages: [(String, GameFrontEnd.Page)] = [
+        var pages: [(String, GameFrontEnd.Page)] = [
             ("long-title", .init(title: library.levels.max(by: { $0.title.count < $1.title.count })!.title,
                                 subtitle: "Mayhem", footer: [.init("home", "Back"), .init("play", "Play again", primary: true)], preview: true)),
             ("home", .init(title: "Lemmings", home: true, rows: homeRows, footer: footer)),
@@ -43,12 +44,27 @@ import LemmingsMobileCore
                           footer: [.init("0", "Next level", primary: true), .init("1", "Retry"), .init("2", "Library")], preview: true)),
             ("loss", .init(title: "Try again", subtitle: "Fun 1  Just Dig!", details: ["Saved 4 of 10", "Required 10"],
                            footer: [.init("0", "Retry", primary: true), .init("1", "Library")], preview: true)),
-            ("settings", .init(title: "Settings", rows: [.init("planning", "Pause to assign", selected: true),
-                                                        .init("speed", "Fast speed: 2X")], footer: [.init("home", "Back")])),
+            ("settings", MobileSettingsArt.groups()),
             ("data", .init(title: "Game Data", details: ["Lemmings", "120 levels"],
                            footer: [.init("home", "Back"), .init("import", "Import")])),
             ("empty", .init(title: "Game Data", footer: [.init("home", "Back"), .init("import", "Import", primary: true)])),
         ]
+        pages += MobileSettingsGroup.allCases.map {
+            ("settings-" + $0.rawValue, MobileSettingsArt.page($0, settings: MobileSettings()))
+        }
+        pages.append(("settings-controller-remap", MobileSettingsArt.controllerMappings(MobileSettings())))
+        let insightCounts = ["starts": 120, "wins": 80, "fails": 30, "abandoned": 10,
+                             "saved": 560, "solo": 70, "hotSeat": 50, "music": 1, "downloads": 1]
+        pages += [("effects-welcome", MobileInformationArt.effectsWelcome()),
+                  ("whats-new", MobileInformationArt.whatsNew(version: "2.0")),
+                  ("telemetry-consent", MobileInformationArt.telemetryConsent()),
+                  ("insights-local", MobileInformationArt.insights(counts: insightCounts, shared: false, days: 30, sharingAvailable: false)),
+                  ("insights-shared", MobileInformationArt.insights(counts: insightCounts, shared: true, days: 7, sharingAvailable: true)),
+                  ("insights-token", MobileInformationArt.insightsToken(length: 12)),
+                  ("insights-clear", MobileInformationArt.insightsClear())]
+        pages += try careerPages()
+        let portraits = GamePortraitArt(directory: artwork)
+        guard (0..<8).allSatisfy({ portraits?.image($0) != nil }) else { throw Failure.missingArtwork }
         var evidence: [[String: Any]] = []
         for (device, size) in [("ipad-portrait", CGSize(width: 834, height: 1092)),
                                ("ipad-landscape", CGSize(width: 1112, height: 814)),
@@ -76,7 +92,7 @@ import LemmingsMobileCore
                                                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { throw Failure.missingArtwork }
                 context.translateBy(x: 0, y: layout.size.height); context.scaleBy(x: 1, y: -1)
                 GameFrontEnd.draw(page, layout: layout, typography: typography, preview: image,
-                                 previewSource: previewSource, in: context)
+                                 previewSource: previewSource, portraits: portraits, in: context)
                 guard let result = context.makeImage() else { throw Failure.missingArtwork }
                 let file = output.appendingPathComponent("\(device)-\(state).png")
                 guard let destination = CGImageDestinationCreateWithURL(file as CFURL, "public.png" as CFString, 1, nil) else { throw Failure.missingArtwork }
@@ -90,12 +106,90 @@ import LemmingsMobileCore
         }
         let adaptive = try auditAdaptive(session: session, typography: typography, artwork: artwork, output: output)
         let covers = try auditBrowser(typography: typography, preview: image, output: output)
+        let settingsSizes = try auditSettingsSizes(typography: typography, output: output)
         let report: [String: Any] = ["renderedStates": evidence.count, "originalMacGlyphsAndLogo": true,
                                     "targetsValidated": true, "audio": "muted", "windows": "none",
-                                    "physicalUIKitAcceptance": "pending", "captures": evidence, "adaptiveHUD": adaptive, "coverArtwork": covers]
+                                    "physicalUIKitAcceptance": "pending", "captures": evidence, "adaptiveHUD": adaptive,
+                                    "coverArtwork": covers, "settingsSizes": settingsSizes]
         try JSONSerialization.data(withJSONObject: report, options: [.prettyPrinted, .sortedKeys])
             .write(to: output.appendingPathComponent("report.json"), options: .atomic)
         print("PASS: \(evidence.count) pages, \(adaptive.count) HUD states , \(covers.count) cover states and 3 unfold frames; touch targets, reserved regions and scroll reachability.")
+    }
+    static func careerPages() throws -> [(String, GameFrontEnd.Page)] {
+        var profiles = MobileProfiles()
+        profiles.rename(MobileProfiles.defaultID, to: "AB")
+        for index in 1..<8 {
+            _ = profiles.add(name: "AB", id: "player-\(index)")
+            profiles.setPortrait("player-\(index)", to: index)
+        }
+        var records = ArcadeRecords()
+        try records.importProfiles(profiles.players.map { .init(id: $0.id, initials: $0.name, portrait: $0.portrait) }, activeID: profiles.activeID)
+        let empty = records
+        let level = ArcadeLevel(id: "fun-1", title: "Just Dig!", game: "Lemmings", rules: "DOS", total: 10, required: 5)
+        _ = records.record(.init(profileID: profiles.activeID, level: level, saved: 10, didWin: true, skills: [:], seconds: 12.34))
+        _ = records.record(.init(profileID: profiles.activeID, level: level, saved: 8, didWin: true, skills: ["dig": 1], seconds: 18, assisted: true))
+        typealias Action = GameFrontEnd.Action
+        let communityRows: [Action] = [.init("rankCategory", "Career stars"), .init("rankShare", "Share records", selected: true)]
+        let boards: [Action] = ["Career stars", "Levels cleared", "Three-star levels", "This level", "Fastest clear", "Fastest 100%"].enumerated().map {
+            .init("rankBoard.board-\($0.offset)", $0.element, selected: $0.offset == 0)
+        }
+        return [
+            ("players-full", MobileCareerArt.players(profiles, subtitle: "", canDelete: true)),
+            ("players-protected", MobileCareerArt.players(profiles, subtitle: "", canDelete: false)),
+            ("players-delete", MobileCareerArt.players(profiles, subtitle: "", canDelete: true, confirmingDelete: true)),
+            ("players-new", MobileCareerArt.players(profiles, subtitle: "", draft: "", creating: true, portrait: 7)),
+            ("players-edit", MobileCareerArt.players(profiles, subtitle: "", draft: "AB", portrait: 3)),
+            ("records-empty", MobileCareerArt.recordsPage(records: empty, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
+            ("records-levels", MobileCareerArt.recordsPage(records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
+            ("records-direct", MobileCareerArt.recordLevelPage("direct|" + level.boardID, records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
+            ("records-assisted", MobileCareerArt.recordLevelPage("assisted|" + level.boardID, records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
+            ("achievements-empty", MobileCareerArt.achievementsPage(records: empty, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
+            ("achievements-earned", MobileCareerArt.achievementsPage(records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
+            ("rankings-loading", MobileCareerArt.rankings(community: true, subtitle: "", busy: true, status: "", rows: communityRows, connected: false, available: true)),
+            ("rankings-empty", MobileCareerArt.rankings(community: true, subtitle: "", busy: false, status: "No scores", rows: communityRows, connected: false, available: true)),
+            ("rankings-offline", MobileCareerArt.rankings(community: true, subtitle: "", busy: false, status: "Connection unavailable", rows: communityRows, connected: false, available: true)),
+            ("rankings-replays", MobileCareerArt.rankings(community: true, subtitle: "", busy: false, status: "", rows: communityRows + [.init("rankReplay.1", "#1 AB 12:34", enabled: true), .init("rankReplay.2", "#2 CD 12:56", enabled: false)], connected: false, available: true)),
+            ("gamecenter-unavailable", MobileCareerArt.rankings(community: false, subtitle: "", busy: false, status: "Unavailable", rows: boards.map { .init($0.id, $0.title, enabled: false) }, connected: false, available: false)),
+            ("gamecenter-connect", MobileCareerArt.rankings(community: false, subtitle: "", busy: false, status: "", rows: boards, connected: false, available: true)),
+            ("gamecenter-scores", MobileCareerArt.rankings(community: false, subtitle: "", busy: false, status: "", rows: boards + [.init("rankRow.1", "#1 AB 120", enabled: false)], connected: true, available: true))
+        ]
+    }
+    static func auditSettingsSizes(typography: GameMenuTypography, output: URL) throws -> [[String: Any]] {
+        var evidence: [[String: Any]] = []
+        for (device, size) in [("ipad-portrait", CGSize(width: 834, height: 1092)),
+                               ("ipad-landscape", CGSize(width: 1112, height: 814)),
+                               ("iphone-portrait", CGSize(width: 390, height: 763)),
+                               ("iphone-landscape", CGSize(width: 756, height: 369)),
+                               ("iphone-narrow-portrait", CGSize(width: 320, height: 548)),
+                               ("iphone-narrow-landscape", CGSize(width: 568, height: 300))] {
+            for interfaceSize in [ClassicInterfaceSize.large, .extraLarge] {
+                var settings = MobileSettings(); settings.classic.interfaceSize = interfaceSize
+                let scale = MobileSettingsArt.interfaceScale(interfaceSize, width: size.width)
+                for group in MobileSettingsGroup.allCases {
+                    let page = MobileSettingsArt.page(group, settings: settings)
+                    let layout = GameFrontEnd.layout(page, width: size.width / scale, minimumHeight: size.height / scale)
+                    let transform = CGAffineTransform(scaleX: scale, y: scale)
+                    let content = CGSize(width: layout.size.width * scale, height: layout.size.height * scale)
+                    guard abs(content.width - size.width) < 0.01 else { throw Failure.invalidTargets }
+                    for target in layout.targets {
+                        let actual = target.frame.applying(transform)
+                        guard actual.width >= 44, actual.height >= 44,
+                              CGRect(origin: .zero, size: content).contains(actual),
+                              layout.action(at: CGPoint(x: actual.midX / scale, y: actual.midY / scale))
+                                == (target.action.enabled ? target.action.id : nil) else { throw Failure.invalidTargets }
+                    }
+                    let context = try bitmapContext(size: content)
+                    context.scaleBy(x: scale, y: scale)
+                    GameFrontEnd.draw(page, layout: layout, typography: typography, in: context)
+                    let file = "\(device)-settings-\(group.rawValue)-\(interfaceSize.rawValue).png"
+                    try save(context: context, to: output.appendingPathComponent(file))
+                    evidence.append(["device": device, "group": group.rawValue, "size": interfaceSize.rawValue,
+                                     "scale": scale, "targets": layout.targets.count, "file": file,
+                                     "minimumTouchExtent": 44, "contentFitsWidth": true])
+                }
+            }
+        }
+        return evidence
     }
     @MainActor static func auditAdaptive(session: any MobileGameSession, typography: GameMenuTypography,
                               artwork: URL, output: URL) throws -> [[String: Any]] {
@@ -125,7 +219,7 @@ import LemmingsMobileCore
                     saved: original.saved, required: original.required, remainingSeconds: original.remainingSeconds,
                     releaseRate: original.releaseRate, isComplete: false, didWin: false, isEndingRun: ending, skills: original.skills)
                 let layout = MobileHUDLayout.make(container: size, safeArea: .init(top: 20, bottom: 20),
-                    hasRate: true, skillCount: snapshot.skills.count, reservedRegions: regions)
+                    hasRate: true, skillCount: snapshot.skills.count, reservedRegions: regions, supportsRewind: true)
                 let targets = MobileHUDRenderer.targets(layout: layout, snapshot: snapshot, selectedSkill: selected,
                     paused: paused, speed: speed, endRunArmed: state == "armed")
                 let safe = cg(layout.interface.safeFrame)

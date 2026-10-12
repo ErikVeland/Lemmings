@@ -1,4 +1,5 @@
 #if os(iOS)
+import NxlvKit
 import LemmingsGameArt
 import LemmingsMobileCore
 import UIKit
@@ -32,6 +33,8 @@ import UIKit
 
 @MainActor final class MobileHUDView: UIView {
     private typealias Item = MobileHUDRenderer.Item
+    var onRewindHold: ((Bool) -> Void)?
+    private var readOnly = false
     var onAction: ((MobileHUDAction) -> Void)?
     /// A touch on the map, as a point in level pixels.
     var onMinimap: ((CGPoint) -> Void)?
@@ -45,6 +48,7 @@ import UIKit
     private var paused = true
     private var speed = 1.0
     private var endRunArmed = false
+    var counterStyle: ClassicCounterStyle = .game
     private var panelImage: CGImage?
 
     override init(frame: CGRect) {
@@ -86,8 +90,10 @@ import UIKit
         paused: Bool,
         speed: Double,
         endRunArmed: Bool,
-        panel: MobilePixelFrame?
+        panel: MobilePixelFrame?,
+        readOnly: Bool = false
     ) {
+        self.readOnly = readOnly
         self.layout = layout
         self.snapshot = snapshot
         self.selectedSkill = selectedSkill
@@ -107,7 +113,8 @@ import UIKit
             button.accessibilityLabel = item.accessibilityLabel
             button.accessibilityTraits = item.action == .skill(selectedSkill)
                 ? [.button, .selected] : .button
-            button.isEnabled = item.action != .step || paused
+            button.isEnabled = isEnabled(item.action)
+            button.accessibilityElementsHidden = readOnly && !button.isEnabled
         }
         setNeedsDisplay()
     }
@@ -127,7 +134,7 @@ import UIKit
         guard let context = UIGraphicsGetCurrentContext(), let layout, let snapshot else { return }
         MobileHUDRenderer(layout: layout, snapshot: snapshot, selectedSkill: selectedSkill,
                           paused: paused, speed: speed, endRunArmed: endRunArmed,
-                          panelImage: panelImage, typography: MobileGameArt.typography).draw(in: context, bounds: bounds)
+                          panelImage: panelImage, typography: MobileGameArt.typography, counterStyle: counterStyle).draw(in: context, bounds: bounds)
     }
 
     private func rebuildButtons() {
@@ -140,10 +147,24 @@ import UIKit
             button.accessibilityTraits = item.action == .skill(selectedSkill)
                 ? [.button, .selected]
                 : .button
-            button.isEnabled = item.action != .step || paused
-            button.addAction(UIAction { [weak self] _ in self?.onAction?(item.action) }, for: .touchUpInside)
+            button.isEnabled = isEnabled(item.action)
+            if item.action == .rewind {
+                button.addAction(UIAction { [weak self] _ in self?.onRewindHold?(true) }, for: .touchDown)
+                button.addAction(UIAction { [weak self] _ in self?.onRewindHold?(false) }, for: [.touchUpInside, .touchUpOutside, .touchCancel])
+            } else {
+                button.addAction(UIAction { [weak self] _ in self?.onAction?(item.action) }, for: .touchUpInside)
+            }
             addSubview(button)
             return button
+        }
+    }
+
+    private func isEnabled(_ action: MobileHUDAction) -> Bool {
+        switch action {
+        case .skill, .releaseRate, .endRun: return !readOnly
+        case .step: return paused
+        case .rewind, .stepBackward: return (snapshot?.tick ?? 0) > 0
+        default: return true
         }
     }
 

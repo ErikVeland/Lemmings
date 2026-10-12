@@ -13,6 +13,7 @@ public struct MobileTargetCandidate: Codable, Equatable, Sendable {
     public let direction: Int
     public let assignment: MobileAssignmentState
     public let isBuilding: Bool
+    public let isBlocking: Bool
     public let hasTool: Bool
 
     public init(
@@ -21,6 +22,7 @@ public struct MobileTargetCandidate: Codable, Equatable, Sendable {
         direction: Int,
         assignment: MobileAssignmentState,
         isBuilding: Bool = false,
+        isBlocking: Bool = false,
         hasTool: Bool = false
     ) {
         self.id = id
@@ -28,6 +30,7 @@ public struct MobileTargetCandidate: Codable, Equatable, Sendable {
         self.direction = direction < 0 ? -1 : 1
         self.assignment = assignment
         self.isBuilding = isBuilding
+        self.isBlocking = isBlocking
         self.hasTool = hasTool
     }
 }
@@ -35,6 +38,8 @@ public struct MobileTargetCandidate: Codable, Equatable, Sendable {
 public enum MobileTargetPreference: Equatable, Sendable {
     case assignable
     case toolHolder
+    case builder
+    case bombBlocker
 }
 
 public struct MobileTargetSelection: Codable, Equatable, Sendable {
@@ -76,6 +81,10 @@ public enum MobileTargetSelector {
                 return candidate.assignment == .eligible
             case .toolHolder:
                 return candidate.hasTool
+            case .builder:
+                return candidate.assignment == .eligible && candidate.isBuilding
+            case .bombBlocker:
+                return candidate.assignment == .eligible && candidate.isBlocking
             }
         }
         func precedes(
@@ -95,7 +104,7 @@ public enum MobileTargetSelector {
 
         let sorted = projected.sorted(by: precedes)
         guard var chosen = sorted.first?.0 else { return nil }
-        if favourApproaching, chosen.assignment == .eligible {
+        if favourApproaching, chosen.assignment == .eligible, preference != .builder, preference != .bombBlocker {
             let touchLevel = viewport.levelPoint(fromView: touch)
             func isApproaching(_ candidate: MobileTargetCandidate) -> Bool {
                 (touchLevel.x - candidate.point.x) * Double(candidate.direction) >= 0

@@ -134,6 +134,7 @@ struct ReticleFeedback {
   private var rewindCueTask: Task<Void, Never>?
   private var hdrOverlay: ExplosionHDRView?
   private(set) var selectionEffect: LemmingSelectionEffect?
+  private(set) var rescueAuras: [LemmingSelectionEffect] = []
   private(set) var hdrFlashes: [ExplosionFlash] = []
   private var displayedHDRFlashes: [ExplosionFlash] {
     hdrFlashes.map { .init(rect: precisionLens.display($0.rect), strength: $0.strength,
@@ -763,7 +764,10 @@ struct ReticleFeedback {
 
   override func draw(_ dirtyRect: NSRect) {
     selectionEffect = nil
+    rescueAuras.removeAll(keepingCapacity: true)
     defer {
+      for effect in rescueAuras { LemmingSelectionRenderer.draw(effect) }
+      hdrOverlay?.setRescueAuras(presentsHDR ? rescueAuras : [])
       if phase == .playing { startCountdown.draw(in: bounds) }
       if lemmingSelectionStyle == .obvious, phase == .playing, !GameCursor.gameplaySuppressed,
          let id = assignmentHighlight.target, let lem = session?.lemmings.first(where: { $0.id == id }) {
@@ -1408,10 +1412,16 @@ struct ReticleFeedback {
   }
 
   private func captureSelectionSprite(for id: Int, key: String, sprite: NSImage, in rect: CGRect) {
-    guard selectionTargetID == id,
+    let glowing = completionGlowAmount > 0 && hdEffectsEnabled && !reduceFlashes
+    guard selectionTargetID == id || glowing,
           let pixels = spritePixels[key] ?? sprite.cgImage(forProposedRect: nil, context: nil, hints: nil)
     else { return }
-    selectedSprite = (pixels, rect)
+    if selectionTargetID == id { selectedSprite = (pixels, rect) }
+    if glowing {
+      var effect = LemmingSelectionEffect(sprite: pixels, rect: precisionLens.display(rect), clipRect: bounds)
+      effect.rescueAmount = completionGlowAmount
+      rescueAuras.append(effect)
+    }
   }
 
   private func drawCountdown(_ countdown: Int, above rect: CGRect) {

@@ -1,5 +1,6 @@
 #if os(iOS)
 import LemmingsGameArt
+import LemmingsMobileCore
 import UIKit
 
 /// The artwork and UIKit targets share one layout, including disabled controls.
@@ -8,9 +9,14 @@ import UIKit
     var preview: CGImage? { didSet { setNeedsDisplay() } }
     var previewSource: CGRect? { didSet { setNeedsDisplay() } }
     var onAction: ((String) -> Void)?
+    var onPageChanged: (() -> Void)?
     private var targets: [UIButton] = []
     private var highlighted: String?
+    var focusedID: String?
     private var pageLayout: GameFrontEnd.Layout?
+    private static let portraits = Bundle.main.resourceURL.flatMap {
+        GamePortraitArt(directory: $0.appendingPathComponent("MacArtwork/lemmings"))
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -20,26 +26,37 @@ import UIKit
     }
     required init?(coder: NSCoder) { nil }
 
+    private func interfaceScale(width: CGFloat) -> CGFloat {
+        MobileSettingsArt.interfaceScale(MobileSettings.load(from: .standard).classic.interfaceSize, width: width)
+    }
     func size(width: CGFloat, minimumHeight: CGFloat) -> CGSize {
-        GameFrontEnd.layout(page, width: width, minimumHeight: minimumHeight).size
+        let scale = interfaceScale(width: width)
+        let size = GameFrontEnd.layout(page, width: width / scale, minimumHeight: minimumHeight / scale).size
+        return CGSize(width: size.width * scale, height: size.height * scale)
     }
     override func layoutSubviews() {
         super.layoutSubviews()
-        let layout = GameFrontEnd.layout(page, width: bounds.width, minimumHeight: bounds.height)
+        let scale = interfaceScale(width: bounds.width)
+        let transform = CGAffineTransform(scaleX: scale, y: scale)
+        let layout = GameFrontEnd.layout(page, width: bounds.width / scale, minimumHeight: bounds.height / scale)
         pageLayout = layout
-        for (button, target) in zip(targets, layout.targets) { button.frame = target.frame }
+        for (button, target) in zip(targets, layout.targets) { button.frame = target.frame.applying(transform) }
         var elements: [Any] = []
         for (text, frame) in [(page.title, layout.heading), (page.subtitle, layout.subtitle)] + Array(zip(page.details, layout.details)) where !text.isEmpty {
             let element = UIAccessibilityElement(accessibilityContainer: self)
             element.accessibilityLabel = text
             element.accessibilityTraits = .staticText
-            element.accessibilityFrameInContainerSpace = frame
+            element.accessibilityFrameInContainerSpace = frame.applying(transform)
             elements.append(element)
         }
         accessibilityElements = elements + targets
         setNeedsDisplay()
     }
     private func rebuild() {
+        onPageChanged?()
+        let actions = page.rows + page.footer
+        focusedID = actions.first(where: { $0.primary && $0.enabled })?.id
+        highlighted = focusedID
         targets.forEach { $0.removeFromSuperview() }
         targets = (page.rows + page.footer).map { action in
             let button = UIButton(type: .custom)
@@ -60,9 +77,44 @@ import UIKit
         setNeedsLayout()
         setNeedsDisplay()
     }
+    func moveFocus(_ offset: Int) {
+        let enabled = (page.rows + page.footer).filter(\.enabled)
+        guard !enabled.isEmpty else { return }
+        let current = enabled.firstIndex { $0.id == focusedID }
+        let index = current.map { ($0 + offset + enabled.count) % enabled.count } ?? 0
+        focusedID = enabled[index].id
+        highlighted = focusedID
+        if let scroll = superview as? UIScrollView,
+           let target = targets.first(where: { $0.accessibilityIdentifier == "menu." + focusedID! }) {
+            scroll.scrollRectToVisible(target.frame.insetBy(dx: 0, dy: -8), animated: false)
+        }
+        UIAccessibility.post(notification: .layoutChanged, argument: targets.first { $0.accessibilityIdentifier == "menu." + focusedID! })
+        setNeedsDisplay()
+    }
+    func activateFocused() {
+        let actions = page.rows + page.footer
+        guard let action = actions.first(where: { $0.id == focusedID && $0.enabled })
+                ?? actions.first(where: { $0.primary && $0.enabled }) else { return }
+        onAction?(action.id)
+    }
+    func scrollInput(delta: CGFloat) {
+        guard let scroll = superview as? UIScrollView else { return }
+        let minimum = -scroll.adjustedContentInset.top
+        let maximum = max(minimum, scroll.contentSize.height - scroll.bounds.height + scroll.adjustedContentInset.bottom)
+        scroll.setContentOffset(CGPoint(x: scroll.contentOffset.x, y: min(maximum, max(minimum, scroll.contentOffset.y + delta))), animated: false)
+    }
+    func goBack() {
+        if let action = page.footer.last(where: { $0.enabled && ["BACK", "CANCEL", "LIBRARY"].contains($0.title.uppercased()) }) {
+            onAction?(action.id)
+        }
+    }
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
-        let layout = pageLayout ?? GameFrontEnd.layout(page, width: bounds.width, minimumHeight: bounds.height)
+        let scale = interfaceScale(width: bounds.width)
+        context.saveGState()
+        defer { context.restoreGState() }
+        context.scaleBy(x: scale, y: scale)
+        let layout = pageLayout ?? GameFrontEnd.layout(page, width: bounds.width / scale, minimumHeight: bounds.height / scale)
         guard let typography = MobileGameArt.typography else {
             MobilePixelText.draw(page.title, in: layout.heading, palette: .green)
             for target in layout.targets {
@@ -72,7 +124,8 @@ import UIKit
             return
         }
         GameFrontEnd.draw(page, layout: layout, typography: typography, preview: preview,
-                         previewSource: previewSource, highlighted: highlighted, in: context)
+                         previewSource: previewSource, highlighted: highlighted, portraits: Self.portraits, in: context)
+
     }
 }
 #endif

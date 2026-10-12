@@ -50,23 +50,10 @@ import NxlvKit
     }
     static func ornamentsResult(_ report: ArcadeReport, celebration: TrolleyCelebration,
                                 history suppliedHistory: TrolleyHistory? = nil) -> Bool {
-        guard report.run.qualifies else { return false }
-        let improved = report.previousBest != nil && (report.newRescueBest || report.newSkillBest)
-        let rareAward = celebration.newAwards.contains { $0.award.tier == .gold || $0.award.tier == .legendary }
-        if improved || rareAward { return true }
-        let history = suppliedHistory ?? ArcadeStore.shared.records.trolley
-        guard let attempt = report.trolley?.attempt, let conditions = attempt.run.level.conditions,
-              let index = history.attempts.firstIndex(where: { $0.id == attempt.id }) else { return false }
-        let before = Array(history.attempts.prefix(index))
-        let maximum = history.maximum(conditions: conditions, assisted: attempt.run.assisted)
-        return [TrolleyBoard.fastestClear, .fastestAllSaved].contains { board in
-            guard TrolleyLeaderboards.eligible(attempt, board: board, maximum: maximum),
-                  let previous = TrolleyLeaderboards.rank(before, comparisonID: attempt.comparisonID,
-                                                         board: board, maximum: maximum)
-                    .first(where: { $0.run.profileID == attempt.run.profileID }) else { return false }
-            return attempt.run.seconds < previous.run.seconds
-        }
+        ResultAwards.ornament(report: report, celebration: celebration,
+                              history: suppliedHistory ?? ArcadeStore.shared.records.trolley)
     }
+
     func paragraph(_ value: String, _ rect: CGRect) {
         if let font { font.menuParagraph(value, in: rect, alignment: .left) }
         else { GamePixelText.draw(value, in: rect) }

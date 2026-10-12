@@ -25,6 +25,38 @@ public final class GameMenuTypography {
         self.init(interface: interface)
     }
 
+    /// The Macintosh panel's authored black digits and pink counter socket.
+    public func drawCounter(_ text: String, in box: CGRect, panelScale: CGFloat, context: CGContext) -> Bool {
+        guard interface.counterGlyphs.count == 11, interface.counterGlyphs.prefix(10).allSatisfy({ $0 != nil }),
+            CGFloat(text.count * 6) <= box.width else { return false }
+        let scale = max(1, floor(min(panelScale / 2, box.width / CGFloat(max(1, text.count * 6 + 4)), box.height / 9)))
+        let width = min(box.width, max(24 * scale, CGFloat(text.count * 6 + 4) * scale))
+        let socket = CGRect(x: floor(box.midX - width / 2), y: floor(box.minY), width: width, height: box.height)
+        if let panel = interface.counterPanel, let image = bitmap(panel), image.width == 640,
+            let crop = image.cropping(to: CGRect(x: 38, y: 2, width: 24, height: 18)) {
+            GameStoneArt.drawImage(crop, in: socket, context: context)
+        } else { context.setFillColor(CGColor(srgbRed: 1, green: 221.0 / 255, blue: 221.0 / 255, alpha: 1)); context.fill(socket) }
+        if text == "∞" {
+            GamePixelTypography.draw(text, in: socket, context: context, typography: nil, maximumScale: scale, bitmapOnly: true, color: CGColor(gray: 0, alpha: 1))
+            return true
+        }
+        let left = floor(box.midX - CGFloat(text.count * 6) * scale / 2)
+        for (offset, character) in text.enumerated() {
+            guard let digit = character.wholeNumberValue, (0..<10).contains(digit),
+                let glyph = interface.counterGlyphs[digit], let image = bitmap(glyph) else { return false }
+            GameStoneArt.drawImage(image, in: CGRect(x: left + CGFloat(offset * 6) * scale,
+                y: floor(box.midY - 4.5 * scale), width: 6 * scale, height: 9 * scale), context: context)
+        }
+        return true
+    }
+    private func bitmap(_ frame: ClassicMacArtwork.Frame) -> CGImage? {
+        guard let provider = CGDataProvider(data: frame.rgba as CFData) else { return nil }
+        return CGImage(width: frame.width, height: frame.height, bitsPerComponent: 8, bitsPerPixel: 32,
+            bytesPerRow: frame.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider,
+            decode: nil, shouldInterpolate: false, intent: .defaultIntent)
+    }
+
     public func font(_ face: Face) -> ClassicMacUserInterface.Font? { interface.font(face) }
 
     public func width(of text: String, face: Face, scale: Int) -> CGFloat {

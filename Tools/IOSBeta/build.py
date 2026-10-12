@@ -29,25 +29,19 @@ def source_manifest():
     for relative in ("Sources/NxlvKit", "Sources/LemmingsAppCore", "Sources/LemmingsAudio", "Sources/LemmingsGameArt", "Sources/LemmingsMobileCore", "Sources/LemmingsMobileUI", "Tools/IOSBeta", "Tools/IOSMenuAudit"):
         files += [p for p in (ROOT / relative).rglob("*") if p.suffix in (".swift", ".py")]
     files += [p for p in (ROOT / "Apps/UltimateLemmingsIOS").rglob("*")
-              if p.is_file() and p.suffix in (".swift", ".plist", ".xcprivacy", ".pbxproj", ".xcscheme", ".png", ".json", ".resolved")
+              if p.is_file() and p.suffix in (".swift", ".plist", ".xcprivacy", ".pbxproj", ".xcscheme", ".png", ".json", ".resolved", ".entitlements")
               and "xcuserdata" not in p.parts]
+    from content import PARITY_RESOURCES
+    for name in PARITY_RESOURCES:
+        files += [p for p in (ROOT / "Resources" / name).rglob("*") if p.is_file()]
     result = {str(p.relative_to(ROOT)): digest(p) for p in sorted(set(files))}
-    artwork = Path(os.environ.get("IOS_MAC_ARTWORK_DIR", ROOT / ".build/mac-artwork/export/lemmings"))
-    manifest = artwork / "manifest.json"
-    if manifest.is_file():
-        from artwork import BANKS
-        document = json.loads(manifest.read_text())
-        selected = {key for key, name in document.get("names", {}).items() if name in BANKS}
-        inputs = {manifest}
-        for key, frames in document["banks"].items():
-            if key in selected:
-                for frame in frames:
-                    if frame:
-                        name = frame["file"]
-                        if "/" in name or ".." in name:
-                            raise ValueError("Unsafe artwork frame path.")
-                        inputs.add(artwork / name)
-        result.update({"MacArtworkInput/" + p.name: digest(p) for p in sorted(inputs)})
+    from artwork import FAMILIES, inputs
+    mac = Path(os.environ.get("IOS_MAC_ARTWORK_DIR", ROOT / ".build/mac-artwork/export/lemmings")).parent
+    amiga = Path(os.environ.get("IOS_AMIGA_ARTWORK_DIR", ROOT / ".build/amiga-artwork/export"))
+    for kind, artwork_root in (("MacArtworkInput", mac), ("AmigaArtworkInput", amiga)):
+        for family in FAMILIES:
+            for path in inputs(artwork_root / family):
+                result[f"{kind}/{family}/{path.name}"] = digest(path)
     return result
 
 

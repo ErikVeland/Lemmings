@@ -370,13 +370,26 @@ import NxlvKit
         return true
     }
     @discardableResult public func record(_ run: ArcadeRun) -> ArcadeReport? {
+        guard canWrite else { return nil }
+        let previous = records
         if let conditions = run.level.conditions { acceptBundledProof(for: conditions) }
         let result = records.record(run)
         if result != nil {
             save()
+            guard storageError == nil else { records = previous; return nil }
             if storageError == nil { hooks.runRecorded(run.profileID, records.trolley); hooks.rankingEvidenceAdded(run.profileID) }
         }
         return result
+    }
+    /// Moves existing iPad player IDs into the shared records file in one save.
+    @discardableResult public func importProfiles(_ profiles: [ArcadeProfile], activeID: String) -> Bool {
+        guard canWrite else { return false }
+        let previous = records
+        do { try records.importProfiles(profiles, activeID: activeID) }
+        catch { storageError = error.localizedDescription; return false }
+        save()
+        guard storageError == nil else { records = previous; return false }
+        return true
     }
     /**
      * Builds a result report without changing player records or verified evidence.

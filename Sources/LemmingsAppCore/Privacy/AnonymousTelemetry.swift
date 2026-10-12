@@ -152,6 +152,7 @@ public struct AnonymousTelemetrySummary: Codable, Sendable {
         self.transport = transport ?? URLSessionAnonymousTelemetryTransport()
     }
 
+    public var sharingAvailable: Bool { endpoint != nil }
     public var consentDecided: Bool { defaults.bool(forKey: Self.decidedKey) }
     public var sharesCounts: Bool { endpoint != nil && defaults.bool(forKey: Self.consentKey) }
 

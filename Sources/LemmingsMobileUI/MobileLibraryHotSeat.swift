@@ -10,7 +10,15 @@ extension MobileLibraryViewController {
     /// Appended to a progress key. A shared campaign has its own, apart from every solo player.
     var progressSuffix: String { hotSeat.map { "." + $0.scope } ?? profiles.suffix }
 
-    func saveHotSeats() { try? hotSeats.save(to: MobileStorage.standard(profile: "_players")) }
+    @discardableResult func saveHotSeats() -> Bool {
+        let storage = MobileStorage.standard(profile: "_players")
+        do { try hotSeats.save(to: storage); return true }
+        catch {
+            hotSeats = MobileHotSeatStore.load(from: storage)
+            notice = error.localizedDescription
+            return false
+        }
+    }
 
     func playerName(_ id: String) -> String { profiles.players.first { $0.id == id }?.name ?? "Player" }
 
@@ -30,11 +38,11 @@ extension MobileLibraryViewController {
     }
 
     /// Hands the turn to a player and saves it, so a relaunch resumes with them.
-    func handOver(to player: String) {
-        guard var seat = hotSeat else { return }
+    @discardableResult func handOver(to player: String) -> Bool {
+        guard arcadeStore.storageError == nil, var seat = hotSeat else { return false }
         seat.pass(to: player)
         hotSeats.update(seat)
-        saveHotSeats()
+        return saveHotSeats()
     }
 
     // MARK: - Pages
@@ -76,10 +84,7 @@ extension MobileLibraryViewController {
             confirmingRestart = false
             navigate(.hotSeat)
         case "seatNew":
-            guard let created = profiles.add(name: "Player \(profiles.players.count + 1)") else { break }
-            saveProfiles()
-            hotSeatRoster?.toggle(created)
-            rebuild()
+            newPlayer()
         case "seatRule":
             hotSeats.policy = hotSeats.policy.other
             if var seat = hotSeat { seat.policy = hotSeats.policy; hotSeats.update(seat) }
@@ -143,15 +148,24 @@ extension MobileLibraryViewController {
             }
         } else {
             hotSeats.endSession()
+            let owner = checkpoint.owner ?? MobileProfiles.defaultID
+            guard profiles.players.contains(where: { $0.id == owner }) else {
+                notice = "That player is no longer saved."; rebuild(); return
+            }
+            profiles.select(owner)
+            guard saveProfiles() else { rebuild(); return }
+            reloadPlayerData()
         }
-        saveHotSeats()
+        guard saveHotSeats() else { rebuild(); return }
         activeRun = nil
         rebuild()
     }
 
     /// True when a saved level can resume in the session that is open now.
     func checkpointMatchesSession(_ checkpoint: MobileCheckpointEnvelope) -> Bool {
-        checkpoint.scope == hotSeat?.scope
+        guard checkpoint.scope == hotSeat?.scope else { return false }
+        if let seat = hotSeat { return checkpoint.owner.map(seat.players.contains) ?? true }
+        return checkpoint.owner.map { $0 == profiles.activeID } ?? (profiles.activeID == MobileProfiles.defaultID)
     }
 
     func otherSessionTitle(for checkpoint: MobileCheckpointEnvelope) -> String {

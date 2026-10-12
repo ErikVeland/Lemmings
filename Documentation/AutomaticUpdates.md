@@ -1,11 +1,15 @@
 # Automatic updates
 
 Ultimate Lemmings uses Sparkle 2.7.3 for macOS updates.
+The hourly schedule and discovery reminders below are source changes for the
+next release. Public build 77 retains the daily schedule.
 
 ## Runtime contract
 
-- The app checks the HTTPS appcast once per day.
-- Compatible updates add a download icon to the home screen. Selecting it opens
+- The app checks the HTTPS appcast once per hour by default. Sparkle retains any
+  interval the player has explicitly saved.
+- Compatible updates add a download icon to the home screen as soon as Sparkle
+  finds them, including during automatic downloads. Selecting it opens
   Sparkle's release notes and update controls.
 - Automatic updates are supported and enabled by default in 1.6. Sparkle respects
   the player's saved update preferences. Automatic downloads bring the release
@@ -20,8 +24,8 @@ commit the key or pass the key value as a command argument.
 
 ## Current releases
 
-Public 1.9.1 build 76 is the current release. The
-[1.9.1 distribution record](ReleaseReadiness/1.9.1Build76Distribution.md) covers
+Public 1.9.2 build 77 is the current release. The
+[1.9.2 distribution record](ReleaseReadiness/1.9.2Build77Distribution.md) covers
 the notarised archives, signed live feed and validation limits. Publish an
 appcast only with its matching signed and notarised archive.
 
@@ -40,10 +44,14 @@ a slim bundle with a different file tree. See Sparkle's
 
 ## Player experience
 
-Compatible updates ready for Sparkle to present add a pixel download icon to the shared
-home screen. Scheduled checks use a quiet reminder. Selecting the icon or
-**Check for Updates** opens Sparkle's release notes and update controls. Skipping
+Compatible updates add a pixel download icon to the shared home screen when
+Sparkle discovers them. Startup checks let Sparkle show its update alert when it
+requests immediate focus. Later scheduled checks use the quiet home reminder.
+Selecting the icon or **Check for Updates** opens Sparkle's release notes and
+update controls. Skipping
 a version, dismissing the alert or ending a failed session clears its reminder.
+A successful background check keeps a discovered update visible until the
+player handles it or a later check finds no update.
 A failed network check does not invent availability.
 
 Version 1.9 retains a single manual request while Sparkle is busy
@@ -53,9 +61,10 @@ existing update controls forward. This fix ships in 1.9. It follows Sparkle's
 [gentle reminder lifecycle](https://sparkle-project.org/documentation/gentle-reminders/).
 
 Run `TEST_SCOPE=updates zsh Scripts/run-app-integration-tests.sh` for the muted,
-offscreen regression checks. They exercise busy checks, repeated clicks, automatic
-notes, session cleanup and home icon input targets without downloading or installing
-an update. A public archive installation and relaunch remain separate release checks.
+offscreen regression checks. They exercise startup alerts, early discovery,
+busy checks, repeated clicks, automatic notes, session cleanup and home icon input
+targets without downloading or installing an update. A public archive installation
+and relaunch remain separate release checks.
 
 Automatic downloads and installation remain supported. Bundled **What's New**
 notes appear once after each upgrade, even if installation did not show an alert.

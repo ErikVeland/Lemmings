@@ -1,7 +1,6 @@
-#if os(macOS)
-import AppKit
+#if os(macOS) || os(iOS)
+import Foundation
 import CryptoKit
-import LemmingsAudio
 import NxlvKit
 
 /// One deck can play either a recording or a native ProTracker module.
@@ -76,7 +75,7 @@ import NxlvKit
 }
 
 /// Mixes versions of the level theme, including a lift at the rescue target.
-@MainActor final class AdaptiveDJPlayer {
+@MainActor public final class AdaptiveDJPlayer {
   /// How long each kind of change takes.
   private enum Fade {
     /// Long enough to read as a mix rather than a cut.
@@ -129,27 +128,27 @@ import NxlvKit
   /// Soundtracks the player supplied, keyed by folder name.
   private var pools: [String: [URL]] = [:]
   private var currentPool: String?
-  private(set) var currentURL: URL?
+  public private(set) var currentURL: URL?
   private var catalogue: SoundtrackCatalogue?
   private var timingCatalogue: MusicTimingCatalogue?
   private var catalogueRoot: URL?
   private var availablePaths: Set<String> = []
   private var availableURLs: [String: URL] = [:]
 
-  private(set) var masterVolume: Float = 0.8
-  private(set) var isMuted = false
+  public private(set) var masterVolume: Float = 0.8
+  public private(set) var isMuted = false
 
-  private(set) var currentTrackName = ""
+  public private(set) var currentTrackName = ""
   /// Called when the mix moves, so the status line can say what is playing.
-  var onTrackChange: ((String) -> Void)?
+  public var onTrackChange: ((String) -> Void)?
 
-  init() {}
+  public init() {}
 
-  var isPlaying: Bool { playingDeckCount > 0 }
-  var isCrossfading: Bool { fadeTask != nil }
-  var playingDeckCount: Int { allDecks.filter(\.isPlaying).count }
+  public var isPlaying: Bool { playingDeckCount > 0 }
+  public var isCrossfading: Bool { fadeTask != nil }
+  public var playingDeckCount: Int { allDecks.filter(\.isPlaying).count }
   /// The mix needs somewhere to travel between.
-  var hasTracks: Bool { !pools.isEmpty }
+  public var hasTracks: Bool { !pools.isEmpty }
 
   private var activeDeck: DJDeck? { activeIsA ? deckA : deckB }
   private var idleDeck: DJDeck? { activeIsA ? deckB : deckA }
@@ -179,7 +178,7 @@ import NxlvKit
     }
   }
 
-  func load(soundtracks: [String: [URL]], catalogueRoot: URL? = nil) {
+  public func load(soundtracks: [String: [URL]], catalogueRoot: URL? = nil) {
     pools = soundtracks.filter { !$0.value.isEmpty }
     self.catalogueRoot = catalogueRoot
     catalogue = catalogueRoot.flatMap { SoundtrackCatalogue.load(at: $0) }
@@ -198,7 +197,7 @@ import NxlvKit
   /// Resolve a composition once per level. The caller's score position, never
   /// elapsed time or a random seed, owns progression through its versions.
   @discardableResult
-  func startJourney(trackID: String, cycle: Int, identity: String, fallback: URL? = nil,
+  public func startJourney(trackID: String, cycle: Int, identity: String, fallback: URL? = nil,
                     includeAlternates: Bool = true) -> Bool {
     journeyCycle = cycle
     allowCelebrationAlternates = includeAlternates
@@ -210,7 +209,7 @@ import NxlvKit
   }
 
   /// Starts the mix, or leaves it alone when it is already running.
-  func start() {
+  public func start() {
     // A suspended or crossfading deck may not report isPlaying yet (the engine
     // starts asynchronously), so treat those states as already running too.
     guard !vinylStopping else { return }
@@ -243,7 +242,7 @@ import NxlvKit
 
   /// Level entry owns track selection. Repeated UI refreshes leave it playing.
   @discardableResult
-  func startLevel(url: URL, identity: String) -> Bool {
+  public func startLevel(url: URL, identity: String) -> Bool {
     guard identity != levelIdentity else { return true }
     guard FileManager.default.isReadableFile(atPath: url.path) else { return false }
     let canonicalURL = url.resolvingSymlinksInPath().standardizedFileURL
@@ -415,7 +414,7 @@ import NxlvKit
   /// A retry calls this. `vinylRelease()` lets the track run on from the
   /// finger hold. A `startLevel` releases its own track instead, even when
   /// the attempt keeps the same identity.
-  func vinylStop() {
+  public func vinylStop() {
     guard !outputSuspended, !vinylStopping, !vinylHeld else { return }
     fadeTask?.cancel()
     fadeGeneration += 1
@@ -444,7 +443,7 @@ import NxlvKit
   }
 
   /// Lets a braked track run on from the finger hold.
-  func vinylRelease() {
+  public func vinylRelease() {
     if vinylStopping { vinylReleaseRequested = true; return }
     guard vinylHeld, let deck = activeDeck else { return }
     vinylHeld = false
@@ -461,14 +460,14 @@ import NxlvKit
   }
 
   /// A new level, so every cue may happen again.
-  func resetLevel() {
+  public func resetLevel() {
     director.reset()
   }
 
-  func setCelebrationAlternates(_ enabled: Bool) { allowCelebrationAlternates = enabled }
+  public func setCelebrationAlternates(_ enabled: Bool) { allowCelebrationAlternates = enabled }
 
   /// Lift a legacy deck's composition without restarting its original recording.
-  func startCelebration(after url: URL, identity: String) -> Bool {
+  public func startCelebration(after url: URL, identity: String) -> Bool {
     guard let path = relativePath(url),
           let variant = catalogue?.celebration(currentPath: path, cycle: journeyCycle,
             availablePaths: availablePaths, includeAlternates: allowCelebrationAlternates),
@@ -478,7 +477,7 @@ import NxlvKit
   }
 
   /// Reaching the rescue target allows one musical transition.
-  func updateTelemetry(_ telemetry: AdaptiveDJEngine.Telemetry) {
+  public func updateTelemetry(_ telemetry: AdaptiveDJEngine.Telemetry) {
     guard isPlaying, let deck = activeDeck, let holdEnd = levelOpeningHoldEndSourceSeconds else { return }
     // A completed win must celebrate even when the opening section is unfinished.
     guard (telemetry.isComplete && telemetry.didWin) || deck.sourceSeconds >= holdEnd else { return }
@@ -489,7 +488,7 @@ import NxlvKit
   // MARK: - Decks
 
   private var nukeAmount: Float = 0
-  func setNukeAmount(_ amount: Float) {
+  public func setNukeAmount(_ amount: Float) {
     nukeAmount = amount
     allDecks.forEach { $0.setNukeAmount(amount) }
   }
@@ -515,18 +514,18 @@ import NxlvKit
   }
 
   /// Apply the shared MOD mix to every deck and all later tracks.
-  func setEnhancements(_ value: ProTrackerEnhancements) {
+  public func setEnhancements(_ value: ProTrackerEnhancements) {
     guard enhancements != value else { return }
     enhancements = value
     allDecks.forEach { $0.setEnhancements(value) }
   }
 
-  func setPlaybackRate(_ value: Double) {
+  public func setPlaybackRate(_ value: Double) {
     playbackRate = Float(min(1, max(0.5, value)))
     allDecks.forEach { $0.setBaseRate(playbackRate) }
   }
 
-  func setSpeedPitch(_ cents: Double) {
+  public func setSpeedPitch(_ cents: Double) {
     speedPitch = cents
     allDecks.forEach { $0.setSpeedPitch(cents) }
   }
@@ -745,17 +744,17 @@ import NxlvKit
 
   // MARK: - Levels
 
-  func setVolume(_ volume: Double) {
+  public func setVolume(_ volume: Double) {
     masterVolume = Float(min(1, max(0, volume)))
     refreshVolumes()
   }
 
-  func setMuted(_ muted: Bool) {
+  public func setMuted(_ muted: Bool) {
     isMuted = muted
     refreshVolumes()
   }
 
-  func stop() {
+  public func stop() {
     resetVinyl()
     outputSuspended = false
     suspendedAtUptime = nil
@@ -783,7 +782,7 @@ import NxlvKit
     fadeBass = true
   }
 
-  func suspendOutput(rhythmOnly: Bool = false) {
+  public func suspendOutput(rhythmOnly: Bool = false) {
     guard !outputSuspended || rhythmOnly != pauseUsesRhythm else { return }
     if !outputSuspended {
       suspendedAtUptime = ProcessInfo.processInfo.systemUptime
@@ -798,7 +797,7 @@ import NxlvKit
     resumeCarry.forEach { $0.pause(rhythmOnly: rhythmOnly) }
   }
 
-  func resumeOutput() {
+  public func resumeOutput() {
     guard outputSuspended else { return }
     let interruptedDestination = fadingIn?.url
     let interruptedLevelEntry = fadeIsLevelEntry

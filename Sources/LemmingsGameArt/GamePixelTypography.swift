@@ -50,7 +50,7 @@ public enum GamePixelTypography {
         alignment: GameMenuTypography.Alignment = .center,
         face: GameMenuTypography.Face = .small,
         alpha: CGFloat = 1,
-        bitmapOnly: Bool = false
+        bitmapOnly: Bool = false, color: CGColor? = nil
     ) {
         guard rect.width > 0, rect.height > 0 else { return }
         if !bitmapOnly, let typography {
@@ -91,7 +91,7 @@ public enum GamePixelTypography {
         context.saveGState()
         context.clip(to: rect)
         context.setShouldAntialias(false)
-        context.setFillColor(palette.colour)
+        context.setFillColor(color ?? palette.colour)
         context.setAlpha(alpha)
         for (index, character) in normalized.enumerated() {
             guard let glyph = columns[character] else { continue }

@@ -1,4 +1,6 @@
 #if os(iOS)
+import LemmingsAppCore
+import NxlvKit
 import LemmingsGameArt
 import LemmingsMobileCore
 import UIKit
@@ -19,45 +21,69 @@ struct MobileGameTurn {
 }
 
 @MainActor final class MobileGameViewController: UIViewController {
+    lazy var inputAdapter = makeInputAdapter()
+    override var canBecomeFirstResponder: Bool { true }
     var onExit: ((MobileGameExitAction) -> Void)?
     /// Called with the player who acts next, before the game leaves for a retry or the next level.
-    var onHandover: ((String) -> Void)?
+    var onHandover: ((String) -> Bool)?
+    var soloOwnerID: String?
+    var canDefer = false
+    var onSkipLevel: (() -> Bool)?
+    var onRecordCompletion: ((MobileGameSnapshot) -> (details: [String], error: String?))?
+    var onHints: (() -> Void)?
+    var onControlsHelp: (() -> Void)?
+    private var completionActions: [(String, () -> Void)] = []
+    private var completionTitle = ""
+    private var completionDetails: [String] = []
+    private var recordSaveError: String?
+    private var rewindHeld = false
+    private var lastRewindTime = 0.0
     var onCompleted: ((MobileGameSnapshot) -> Void)?
 
-    private let summary: MobileLevelSummary
-    private let session: any MobileGameSession
-    private let checkpointStore: MobileCheckpointStore
-    private let runID: UUID
+    let summary: MobileLevelSummary
+    let session: any MobileGameSession
+    let checkpointStore: MobileCheckpointStore
+    let runID: UUID
+    var recordRunID: UUID { runID }
     private let turn: MobileGameTurn?
     private let turnBadge = MobilePixelLabel()
 
-    private let playfieldView: MobilePlayfieldView
-    private let hud = MobileHUDView()
+    let playfieldView: MobilePlayfieldView
+    let hud = MobileHUDView()
     private let touchLoupe = MobileTouchLoupe()
-    private let overlay = UIScrollView()
-    private let overlayCanvas = MobileMenuCanvas()
+    let overlay = UIScrollView()
+    let overlayCanvas = MobileMenuCanvas()
     private var overlayActions: [() -> Void] = []
     private var latestFrame: MobilePixelFrame?
 
     private var lastHUDLayout: MobileHUDLayout?
     private var layoutSuspended = false
-    private var selectedControl: Int
-    private var lifecycle = MobileLifecycleState()
+    var selectedControl: Int
+    var lifecycle = MobileLifecycleState()
     private weak var owningScene: UIWindowScene?
-    private var clock: MobileTickClock
+    var clock: MobileTickClock
     private var displayLink: CADisplayLink?
-    private var playState = MobilePlayState()
-    private var paused: Bool { playState.isPaused }
-    private var speed = 1.0
-    private var fastSpeed = 2.0
-    private var previewPoint: MobilePoint?
-    private var highlightedTarget: MobileTargetSelection?
+    var playState = MobilePlayState()
+    var paused: Bool { playState.isPaused }
+    var speed = 1.0
+    var fastSpeed = 2.0
+    var inputSpeed = GameplaySpeed(legacyMultiplier: 3)
+    var lastAssignmentControl: Int?
+    var lastInputAssignment: MobileTargetSelection?
+    var previewPoint: MobilePoint?
+    var highlightedTarget: MobileTargetSelection?
     private var lastRenderedTick = -1
     private var lastCheckpointTick = -1
     private var endRunArmedUntil = 0.0
     private var completionPresented = false
     private let observers = MobileNotificationObserverBag()
     private let audio = MobileAudioSessionController()
+    private let effects = MobileEffects()
+    private let nowPlaying = MobileNowPlayingView()
+    private var countdown = GameplayStartCountdown()
+    private let countdownLabel = MobilePixelLabel()
+    private let freshStart: Bool
+    private var lastVisibleTimestamp: Double?
 
     init(
         summary: MobileLevelSummary,
@@ -66,6 +92,7 @@ struct MobileGameTurn {
         restoredCheckpoint: MobileCheckpointEnvelope?,
         turn: MobileGameTurn? = nil
     ) {
+        freshStart = restoredCheckpoint == nil && !session.isReadOnly
         self.turn = turn
         self.summary = summary
         self.session = session
@@ -76,8 +103,9 @@ struct MobileGameTurn {
             max(0, session.snapshot.skills.count - 1)
         )
         clock = MobileTickClock(ticksPerSecond: session.ticksPerSecond)
-        let savedSpeed = UserDefaults.standard.integer(forKey: "mobile.fastSpeed")
-        fastSpeed = [2, 3, 5, 10].contains(savedSpeed) ? Double(savedSpeed) : 2
+        let settings = MobileSettings.load(from: .standard)
+        fastSpeed = Double(settings.fastSpeed)
+        session.applySettings(settings.classic)
         let camera = restoredCheckpoint?.camera
         let viewport = MobileViewport(
             levelSize: session.levelSize,
@@ -95,6 +123,7 @@ struct MobileGameTurn {
 
     override var prefersStatusBarHidden: Bool { true }
     override var prefersHomeIndicatorAutoHidden: Bool { true }
+    override var keyCommands: [UIKeyCommand]? { gameplayKeyCommands }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,6 +131,17 @@ struct MobileGameTurn {
         view.addSubview(playfieldView)
         view.addSubview(hud)
         view.addSubview(touchLoupe)
+        view.addSubview(nowPlaying)
+        countdownLabel.palette = .green
+        countdownLabel.maximumScale = 6
+        countdownLabel.backgroundColor = UIColor.black.withAlphaComponent(0.75)
+        countdownLabel.isHidden = true
+        countdownLabel.isUserInteractionEnabled = false
+        view.addSubview(countdownLabel)
+        MobileMusic.shared.onTrackChange = { [weak self] title, soundtrack in
+            guard let self, !self.paused, !self.session.snapshot.isComplete, self.overlay.isHidden else { return }
+            self.nowPlaying.show(title: title, soundtrack: soundtrack)
+        }
         if let turn {
             turnBadge.text = turn.ownerName.uppercased()
             turnBadge.palette = .green
@@ -110,8 +150,12 @@ struct MobileGameTurn {
             turnBadge.isUserInteractionEnabled = false
             view.addSubview(turnBadge)
         }
+        playfieldView.displaySettings = MobileSettings.load(from: .standard).classic
         configureOverlay()
 
+        onHints = { [weak self] in self?.showHints() }
+        onControlsHelp = { [weak self] in self?.showControlsHelp() }
+        hud.onRewindHold = { [weak self] held in self?.setRewindHeld(held) }
         hud.onAction = { [weak self] action in self?.handle(action) }
         playfieldView.onTouchEffects = { [weak self] effects in self?.handle(effects) }
         hud.onMinimap = { [weak self] point in self?.scrollToLevelX(point.x) }
@@ -125,6 +169,7 @@ struct MobileGameTurn {
             }
         }
         try? audio.prepare()
+        effects.prepare()
         observeSystemState()
         startDisplayLink()
         updatePerformanceBudget()
@@ -133,11 +178,32 @@ struct MobileGameTurn {
         showOverlay(
             title: summary.title,
             actions: [
-                (turn == nil ? "START" : "READY", { [weak self] in self?.resumePlay() }),
-                ("LIBRARY", { [weak self] in self?.leaveToLibrary() }),
+                (session.isReadOnly ? "PLAY" : (turn == nil ? "START" : "READY"), { [weak self] in self?.resumePlay() }),
+                (session.isReadOnly ? "BACK" : "LIBRARY", { [weak self] in self?.leaveToLibrary() }),
             ]
         )
 
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        becomeFirstResponder()
+    }
+
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        let handled = inputAdapter.began(presses)
+        super.pressesBegan(presses.subtracting(handled), with: event)
+    }
+
+    override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        let handled = inputAdapter.ended(presses)
+        super.pressesEnded(presses.subtracting(handled), with: event)
+    }
+
+    override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        _ = inputAdapter.ended(presses)
+        inputAdapter.reset()
+        super.pressesCancelled(presses, with: event)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -174,6 +240,9 @@ struct MobileGameTurn {
         }
         playfieldView.frame = Self.cgRect(layout.interface.playfieldFrame)
         playfieldView.blockedInputFrames = layout.reservedRegions.map { playfieldView.convert(Self.cgRect($0.frame), from: view) }
+        nowPlaying.frame = CGRect(x: playfieldView.frame.minX + 8, y: playfieldView.frame.minY + 8,
+                                  width: min(320, playfieldView.frame.width - 16), height: 60)
+        countdownLabel.frame = CGRect(x: playfieldView.frame.midX - 44, y: playfieldView.frame.midY - 44, width: 88, height: 88)
         hud.frame = view.bounds
         if turn != nil {
             let field = playfieldView.frame
@@ -200,6 +269,31 @@ struct MobileGameTurn {
     }
 
     @objc private func displayFrame(_ link: CADisplayLink) {
+        inputAdapter.poll(context: ObjectIdentifier(overlay.isHidden ? playfieldView : overlayCanvas), at: link.timestamp)
+        updateInputSpeed(at: link.timestamp)
+        MobileMusic.shared.advance()
+        let elapsed = lastVisibleTimestamp.map { min(0.1, max(0, link.timestamp - $0)) } ?? 0
+        lastVisibleTimestamp = link.timestamp
+        if countdown.isActive {
+            _ = countdown.advance(seconds: elapsed, visible: overlay.isHidden && lifecycle.isForeground && !lifecycle.isInterrupted && !paused)
+            countdownLabel.text = countdown.number.map(String.init) ?? ""
+            countdownLabel.isHidden = !countdown.isActive
+            clock.suspend()
+            if countdown.isActive { return }
+        }
+        MobileMusic.shared.setGameplayState(paused: paused, speed: speed, rewinding: rewindHeld)
+        if rewindHeld {
+            guard lifecycle.isForeground, !lifecycle.isInterrupted, overlay.isHidden else { setRewindHeld(false); return }
+            if link.timestamp - lastRewindTime >= 0.08 {
+                lastRewindTime = link.timestamp
+                _ = session.rewind(seconds: 0.4)
+                effects.update(session: session, viewport: playfieldView.gameViewport, rewinding: true)
+                clock.suspend()
+                renderCurrentFrame(force: true)
+                updateHUD()
+            }
+            return
+        }
         if endRunArmedUntil > 0, link.timestamp > endRunArmedUntil {
             endRunArmedUntil = 0
             updateHUD()
@@ -207,7 +301,10 @@ struct MobileGameTurn {
         guard !paused, !session.snapshot.isComplete else { return }
         let ticks = clock.advance(at: link.timestamp)
         guard ticks > 0 else { return }
-        for _ in 0..<ticks where !session.snapshot.isComplete { session.tick() }
+        for _ in 0..<ticks where !session.snapshot.isComplete {
+            session.tick()
+            effects.update(session: session, viewport: playfieldView.gameViewport)
+        }
         if let previewPoint { highlightedTarget = target(at: previewPoint) }
         renderCurrentFrame(force: true)
         updateHUD()
@@ -224,34 +321,51 @@ struct MobileGameTurn {
             safeArea: MobileInsets(top: insets.top, left: insets.left, bottom: insets.bottom, right: insets.right),
             hasRate: session.snapshot.releaseRate != nil,
             skillCount: session.snapshot.skills.count,
-            reservedRegions: MobileSystemRegions.read(in: view)
+            reservedRegions: MobileSystemRegions.read(in: view),
+            supportsRewind: session.supportsRewind
         )
     }
 
-    private func handle(_ action: MobileHUDAction) {
+    func handle(_ action: MobileHUDAction) {
         guard overlay.isHidden, playState.canEdit,
               lifecycle.isForeground, !lifecycle.isInterrupted,
-              !session.snapshot.isComplete else { return }
+              !session.snapshot.isComplete || (session.isReadOnly && [.pause, .rewind, .stepBackward, .menu].contains(action)) else { return }
         switch action {
         case let .releaseRate(delta):
-            _ = session.adjustReleaseRate(by: delta)
+            if session.adjustReleaseRate(by: delta), let rate = session.snapshot.releaseRate { effects.releaseRate(rate) }
             saveCheckpoint(reason: .periodic)
         case let .skill(index):
             guard session.snapshot.skills.indices.contains(index) else { return }
             selectedControl = index
-            if !UserDefaults.standard.bool(forKey: "mobile.continuousSkillSelection") { pauseForPlanning() }
+            if MobileSettings.load(from: .standard).pauseToAssign { pauseForPlanning() }
             highlightedTarget = previewPoint.flatMap(target)
             saveCheckpoint(reason: .periodic)
         case .pause:
+            if session.isReadOnly, session.snapshot.isComplete {
+                _ = session.rewind(seconds: Double(session.snapshot.tick) / session.ticksPerSecond)
+                completionPresented = false
+            }
             paused ? resumePlay() : pauseForPlanning()
         case .step:
             guard playState.canStep else { return }
             playfieldView.cancelInteraction()
-            session.tick()
+            _ = session.stepForward()
+            effects.update(session: session, viewport: playfieldView.gameViewport)
             clock.suspend()
             renderCurrentFrame(force: true)
             saveCheckpoint(reason: .periodic)
             if session.snapshot.isComplete { presentCompletion() }
+        case .rewind, .stepBackward:
+            if session.isReadOnly { completionPresented = false }
+            pauseForPlanning()
+            playfieldView.cancelInteraction()
+            if action == .rewind { _ = session.rewind(seconds: 2) }
+            else { _ = session.stepBackward() }
+            clock.suspend()
+            highlightedTarget = nil
+            previewPoint = nil
+            renderCurrentFrame(force: true)
+            saveCheckpoint(reason: .periodic)
         case .menu:
             pausePlay(showControls: true)
         case .endRun:
@@ -269,27 +383,22 @@ struct MobileGameTurn {
             }
             renderCurrentFrame(force: true)
         case .speed:
-            // A tap holds fast-forward and returns to normal, as on the Mac.
-            if speed > 1 { fastSpeed = speed; speed = 1 } else { speed = fastSpeed }
-            clock.speed = speed
-            updatePerformanceBudget()
+            inputSpeed.variableEnabled = MobileSettings.load(from: .standard).classic.variableSpeedEnabled
+            inputSpeed.tap(at: ProcessInfo.processInfo.systemUptime)
+            updateInputSpeed(at: ProcessInfo.processInfo.systemUptime)
         case let .speedStep(direction):
-            let speeds = [1.0, 2.0, 3.0, 5.0, 10.0]
-            let current = speeds.firstIndex(of: speed) ?? 0
-            speed = speeds[min(speeds.count - 1, max(0, current + direction))]
-            if speed > 1 { fastSpeed = speed }
-            clock.speed = speed
-            updatePerformanceBudget()
+            inputSpeed.step(direction, at: ProcessInfo.processInfo.systemUptime)
+            updateInputSpeed(at: ProcessInfo.processInfo.systemUptime)
         }
         updateHUD()
     }
 
-    private func handle(_ effects: [MobileTouchEffect]) {
-        guard overlay.isHidden, playState.canEdit,
+    private func handle(_ touchEffects: [MobileTouchEffect]) {
+        guard !session.isReadOnly, overlay.isHidden, playState.canEdit,
               lifecycle.isForeground, !lifecycle.isInterrupted,
               !session.snapshot.isComplete else { return }
         var needsFrame = false
-        for effect in effects {
+        for effect in touchEffects {
             switch effect {
             case let .preview(point), let .movePreview(point):
                 previewPoint = point
@@ -298,7 +407,10 @@ struct MobileGameTurn {
             case let .commit(point):
                 previewPoint = nil
                 if let selection = target(at: point), selection.state == .eligible {
-                    _ = session.assign(control: selectedControl, to: selection.id)
+                    lastInputAssignment = selection
+                    lastAssignmentControl = selectedControl
+                    let accepted = session.assign(control: selectedControl, to: selection.id)
+                    effects.assignment(accepted: accepted)
                     highlightedTarget = selection
                     saveCheckpoint(reason: .periodic)
                 } else {
@@ -324,14 +436,19 @@ struct MobileGameTurn {
     }
 
     private func target(at point: MobilePoint) -> MobileTargetSelection? {
-        let preference: MobileTargetPreference = session.engineIdentifier == "lemmings3"
-            && selectedControl >= 3 ? .toolHolder : .assignable
+        let settings = MobileSettings.load(from: .standard).classic
+        let preference: MobileTargetPreference
+        if session.engineIdentifier == "classic-dos", selectedControl == 4, settings.favorBuilders { preference = .builder }
+        else if session.engineIdentifier == "classic-dos", selectedControl == 2, settings.favorBombBlockers { preference = .bombBlocker }
+        else if session.engineIdentifier == "lemmings3", selectedControl >= 3 { preference = .toolHolder }
+        else { preference = .assignable }
         return MobileTargetSelector.select(
             candidates: session.targetCandidates(for: selectedControl),
             touch: point,
             viewport: playfieldView.gameViewport,
             radius: 30,
-            preference: preference
+            preference: preference,
+            favourApproaching: settings.favorApproachingLemmings
         )
     }
 
@@ -345,17 +462,25 @@ struct MobileGameTurn {
         renderCurrentFrame(force: true)
     }
 
-    private func renderCurrentFrame(force: Bool) {
+    func renderCurrentFrame(force: Bool) {
         let tick = session.snapshot.tick
         guard force || tick != lastRenderedTick else { return }
         do {
             let frame = try session.render(highlight: highlightedTarget)
             latestFrame = frame
+            playfieldView.renderScale = session.renderScale
+            playfieldView.explosions = session.explosions
+            playfieldView.selectionSprite = session.selectionSprite
+            playfieldView.assignmentSprite = session.assignmentSprite
+            playfieldView.assignmentProgress = session.assignmentProgress
+            playfieldView.setRescueFeedback(saved: session.snapshot.saved, required: session.snapshot.required, total: session.snapshot.total,
+                isComplete: session.snapshot.isComplete, didWin: session.snapshot.didWin)
+            playfieldView.failed = session.snapshot.isComplete ? !session.snapshot.didWin : (session.snapshot.saved + session.activeLemmingCount + max(0, session.snapshot.total - session.snapshot.released) < session.snapshot.required)
             try playfieldView.update(frame: frame)
             if !overlay.isHidden, overlayCanvas.page.preview {
                 overlayCanvas.preview = MobileBitmapRenderer.image(frame)
                 let visible = playfieldView.gameViewport.visibleLevelRect
-                overlayCanvas.previewSource = CGRect(x: visible.x, y: visible.y, width: visible.width, height: visible.height)
+                overlayCanvas.previewSource = CGRect(x: visible.x * session.renderScale, y: visible.y * session.renderScale, width: visible.width * session.renderScale, height: visible.height * session.renderScale)
             }
             hud.updateMinimap(frame: frame, visible: playfieldView.gameViewport.visibleLevelRect,
                               levelSize: session.levelSize)
@@ -367,7 +492,7 @@ struct MobileGameTurn {
                     avoiding: lastHUDLayout?.reservedRegions ?? [])
                 let containing = free.filter { $0.contains(MobilePoint(x: finger.x, y: finger.y)) }
                 let area = (containing.isEmpty ? free : containing).max { $0.width * $0.height < $1.width * $1.height }
-                touchLoupe.update(bitmap: frame, target: target.point,
+                touchLoupe.update(bitmap: frame, target: .init(x: target.point.x * session.renderScale, y: target.point.y * session.renderScale),
                                   finger: finger,
                                   bounds: area.map(Self.cgRect) ?? .zero,
                                   pixelAspect: session.engineIdentifier == "classic-dos" ? 1.2 : 1)
@@ -385,18 +510,21 @@ struct MobileGameTurn {
     }
 
     private func suspendAudio() {
+        setRewindHeld(false)
+        effects.suspend()
         audio.suspend()
         MobileMusic.shared.suspend()
     }
 
     /// Reactivates the session, then starts this level's tune or lifts its pause.
     private func resumeAudio() {
+        effects.resume()
         try? audio.resume()
         MobileMusic.shared.play(identifier: session.levelIdentifier, index: summary.index, title: summary.title)
         MobileMusic.shared.resume()
     }
 
-    private func pausePlay(showControls: Bool) {
+    func pausePlay(showControls: Bool) {
         playState.suspend()
         playfieldView.cancelInteraction()
         previewPoint = nil
@@ -410,12 +538,17 @@ struct MobileGameTurn {
             title: "PAUSED",
             actions: [
                 ("RESUME", { [weak self] in self?.resumePlay() }),
-                ("LIBRARY", { [weak self] in self?.leaveToLibrary() }),
-            ]
+                (session.isReadOnly ? "BACK" : "LIBRARY", { [weak self] in self?.leaveToLibrary() }),
+            ] + (session.isReadOnly ? [] : [
+                ("HINT", { [weak self] in self?.onHints?() }),
+                ("CONTROLS", { [weak self] in self?.onControlsHelp?() }),
+            ])
         )
     }
 
-    private func pauseForPlanning() {
+    func pauseForPlanning() {
+        countdown.cancel()
+        countdownLabel.isHidden = true
         guard playState.pauseForPlanning() else { return }
         playfieldView.cancelInteraction()
         previewPoint = nil
@@ -427,15 +560,22 @@ struct MobileGameTurn {
         updateHUD()
     }
 
-    private func resumePlay() {
+    func resumePlay() {
+        let wasReady = playState.phase == .ready
         guard hudLayout(insets: view.safeAreaInsets).canPlay, !session.snapshot.isComplete,
               playState.resume(isForeground: lifecycle.isForeground, isInterrupted: lifecycle.isInterrupted) else { return }
+        if wasReady {
+            effects.ready()
+            if freshStart { countdown.arm(); countdownLabel.text = "3"; countdownLabel.isHidden = false }
+        }
         let needsLifecycleResume = lifecycle.requiresPlayerResume
         if needsLifecycleResume {
             applyEffects(lifecycle.handle(.playerRequestedResume))
         }
         guard lifecycle.isForeground, !lifecycle.isInterrupted else { return }
+        overlay.isHidden = true
         if !needsLifecycleResume { resumeAudio() }
+        session.resumeFromCurrentTick()
         clock.suspend()
         playfieldView.cancelInteraction()
         overlay.isHidden = true
@@ -453,8 +593,21 @@ struct MobileGameTurn {
         completionPresented = true
         playState.complete()
         clock.suspend()
+        if session.isReadOnly {
+            playState = MobilePlayState()
+            _ = playState.resume(isForeground: lifecycle.isForeground, isInterrupted: lifecycle.isInterrupted)
+            _ = playState.pauseForPlanning()
+            updateHUD()
+            return
+        }
         Task { try? await checkpointStore.retire(runID: runID) }
         let snapshot = session.snapshot
+        if let report = onRecordCompletion?(snapshot) {
+            completionDetails = report.details
+            recordSaveError = report.error
+        }
+        nowPlaying.hide()
+        effects.result(won: snapshot.didWin)
         onCompleted?(snapshot)
         let result = snapshot.didWin
             ? "LEVEL COMPLETE\n\(snapshot.saved) SAVED"
@@ -481,13 +634,49 @@ struct MobileGameTurn {
                 ("LIBRARY", { [weak self] in self?.finish(.library) }),
             ]
         }
+        if !snapshot.didWin, canDefer {
+            actions.append(("LATER", { [weak self] in
+                guard let self else { return }
+                self.finish(.next, handingTo: self.turn?.choices(false).first?.choice.player)
+            }))
+        }
+        if !snapshot.didWin, onSkipLevel != nil {
+            actions.append(("SKIP LEVEL", { [weak self] in
+                guard let self, !self.transitionInFlight, self.onSkipLevel?() == true else { return }
+                self.finish(.next)
+            }))
+        }
+        if let data = try? session.replayDocument() {
+            actions.append(("REVIEW", { [weak self] in self?.showReplay(document: data) }))
+            actions.append(("SHARE MOVIE", { [weak self] in self?.shareReplayMovie(document: data) }))
+        }
+        if recordSaveError != nil {
+            showOverlay(title: recordSaveError ?? "SAVE FAILED", actions: [("TRY AGAIN", { [weak self] in
+                guard let self else { return }
+                self.completionPresented = false
+                self.presentCompletion()
+            })])
+            return
+        }
+        completionTitle = result
+        completionActions = actions
         showOverlay(title: result, actions: actions, results: true)
     }
 
+    private var transitionInFlight = false
+    func resetTransition() { transitionInFlight = false }
+
     private func finish(_ action: MobileGameExitAction, handingTo player: String? = nil) {
-        if let player { onHandover?(player) }
+        guard recordSaveError == nil, !transitionInFlight else { return }
+        if action == .retry { MobileMusic.shared.vinylStop() }
+        if let player, onHandover?(player) == false {
+            showOverlay(title: "HOT SEAT WAS NOT SAVED", actions: [("TRY AGAIN", { [weak self] in self?.finish(action, handingTo: player) })])
+            return
+        }
+        transitionInFlight = true
         displayLink?.isPaused = true
         suspendAudio()
+        effects.stop()
         if action == .library { MobileMusic.shared.stop() }
         Task {
             try? await checkpointStore.retire(runID: runID)
@@ -495,7 +684,8 @@ struct MobileGameTurn {
         }
     }
 
-    private func leaveToLibrary() {
+    func leaveToLibrary() {
+        if session.isReadOnly { dismiss(animated: false); return }
         playState.suspend()
         clock.suspend()
         displayLink?.isPaused = true
@@ -531,7 +721,7 @@ struct MobileGameTurn {
     }
 
     private func saveCheckpoint(reason: MobileCheckpointReason) {
-        guard !session.snapshot.isComplete else { return }
+        guard !session.isReadOnly, !session.snapshot.isComplete else { return }
         do {
             let envelope = try makeCheckpoint()
             lastCheckpointTick = envelope.tick
@@ -568,7 +758,7 @@ struct MobileGameTurn {
             camera: MobileCameraState(origin: viewport.origin, zoom: viewport.zoom),
             payload: try session.checkpointPayload(),
             scope: turn?.scope,
-            owner: turn?.owner
+            owner: turn?.owner ?? soloOwnerID
         )
     }
 
@@ -615,6 +805,7 @@ struct MobileGameTurn {
     }
 
     private func applyLifecycle(_ event: MobileLifecycleEvent) {
+        inputAdapter.reset()
         applyEffects(lifecycle.handle(event))
     }
 
@@ -651,7 +842,7 @@ struct MobileGameTurn {
         updateHUD()
     }
 
-    private func updatePerformanceBudget() {
+    func updatePerformanceBudget() {
         let level: MobileThermalLevel
         switch ProcessInfo.processInfo.thermalState {
         case .nominal: level = .nominal
@@ -677,8 +868,11 @@ struct MobileGameTurn {
         clock.maximumCatchUpTicks = max(budget.maximumCatchUpTicks, speedCatchUp)
     }
 
-    private func updateHUD(layout: MobileHUDLayout? = nil) {
+    func updateHUD(layout: MobileHUDLayout? = nil) {
+        MobileMusic.shared.update(session.snapshot, active: session.activeLemmingCount, nukeRemainingTicks: session.nukeRemainingTicks, allNukePopped: session.allNukeExplosionsPlayed, ticksPerSecond: session.ticksPerSecond)
+        MobileMusic.shared.setGameplayState(paused: paused, speed: speed, rewinding: rewindHeld)
         let resolved = layout ?? hudLayout(insets: view.safeAreaInsets)
+        hud.counterStyle = MobileSettings.load(from: .standard).classic.counterStyle
         hud.update(
             layout: resolved,
             snapshot: session.snapshot,
@@ -686,7 +880,8 @@ struct MobileGameTurn {
             paused: paused,
             speed: speed,
             endRunArmed: endRunArmedUntil > ProcessInfo.processInfo.systemUptime,
-            panel: session.panelFrame
+            panel: session.panelFrame,
+            readOnly: session.isReadOnly
         )
     }
 
@@ -701,11 +896,49 @@ struct MobileGameTurn {
         view.addSubview(overlay)
     }
 
+    func returnToResult() {
+        showOverlay(title: completionTitle, actions: completionActions, results: true)
+    }
+
+    func showReplay(document: Data) {
+        do {
+            guard let replay = try session.makeReplaySession(document: document) else { return }
+            pausePlay(showControls: false)
+            let player = MobileGameViewController(summary: summary, session: replay,
+                checkpointStore: checkpointStore, restoredCheckpoint: nil)
+            player.modalPresentationStyle = .fullScreen
+            present(player, animated: false)
+        } catch {
+            showOverlay(title: error.localizedDescription,
+                actions: [("BACK", { [weak self] in self?.pausePlay(showControls: true) })])
+        }
+    }
+
+    private func setRewindHeld(_ held: Bool) {
+        if held {
+            guard session.supportsRewind, overlay.isHidden, playState.canEdit,
+                  lifecycle.isForeground, !lifecycle.isInterrupted else { return }
+            pauseForPlanning()
+            _ = session.rewind(seconds: 2)
+            lastRewindTime = ProcessInfo.processInfo.systemUptime
+            renderCurrentFrame(force: true)
+        }
+        rewindHeld = held
+        MobileMusic.shared.setGameplayState(paused: paused, speed: speed, rewinding: held)
+        if !held { saveCheckpoint(reason: .periodic) }
+        updateHUD()
+    }
+
     func showPreparationError(_ message: String) {
         showOverlay(title: message, actions: [("LIBRARY", { [weak self] in MobileMusic.shared.stop(); self?.onExit?(.library) })])
     }
 
-    private func showOverlay(title: String, actions: [(String, () -> Void)], results: Bool = false) {
+    func showOverlay(title: String, actions: [(String, () -> Void)], results: Bool = false) {
+        nowPlaying.hide()
+        overlayCanvas.onAction = { [weak self] id in
+            guard let self, let index = Int(id), self.overlayActions.indices.contains(index) else { return }
+            self.overlayActions[index]()
+        }
         overlayActions = actions.map { $0.1 }
         let snapshot = session.snapshot
         let ready = playState.phase == .ready
@@ -715,7 +948,7 @@ struct MobileGameTurn {
             details = ["\(snapshot.total) Lemmings   Save \(snapshot.required)",
                        snapshot.remainingSeconds.map { "Time \($0 / 60):\(String(format: "%02d", $0 % 60))" } ?? "No time limit"]
         } else if completed {
-            details = ["Saved \(snapshot.saved) of \(snapshot.total)", "Required \(snapshot.required)"]
+            details = ["Saved \(snapshot.saved) of \(snapshot.total)", "Required \(snapshot.required)"] + completionDetails
         } else { details = [] }
         let heading = completed ? (snapshot.didWin ? "Level complete" : "Try again") : (ready ? (turn?.ownerName ?? title) : title)
         let subtitle = ready && turn == nil ? "\(summary.rank) \(summary.number)" : "\(summary.rank) \(summary.number)  \(summary.title)"
@@ -726,7 +959,7 @@ struct MobileGameTurn {
         if let frame = latestFrame {
             overlayCanvas.preview = MobileBitmapRenderer.image(frame)
             let visible = playfieldView.gameViewport.visibleLevelRect
-            overlayCanvas.previewSource = CGRect(x: visible.x, y: visible.y, width: visible.width, height: visible.height)
+            overlayCanvas.previewSource = CGRect(x: visible.x * session.renderScale, y: visible.y * session.renderScale, width: visible.width * session.renderScale, height: visible.height * session.renderScale)
         }
         overlay.isHidden = false
         overlay.accessibilityViewIsModal = true
@@ -736,6 +969,13 @@ struct MobileGameTurn {
         hud.accessibilityElementsHidden = true
         layoutOverlay()
         UIAccessibility.post(notification: .screenChanged, argument: overlayCanvas)
+    }
+
+    func showCustomOverlay(title: String, details: [String], actions: [(String, () -> Void)]) {
+        showOverlay(title: title, actions: actions)
+        overlayCanvas.page = .init(title: title, details: details,
+            footer: actions.enumerated().map { .init(String($0.offset), $0.element.0, primary: $0.offset == 0) })
+        layoutOverlay()
     }
 
     private func layoutOverlay() {

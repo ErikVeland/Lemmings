@@ -25,6 +25,7 @@ public struct AdaptiveDJDirector: Sendable {
 
     public mutating func cue(for telemetry: AdaptiveDJEngine.Telemetry) -> AdaptiveDJCue? {
         guard firedReasons.isEmpty else { return nil }
+        guard !RescueCelebration.requiresAll(required: telemetry.requiredCount, total: telemetry.totalCount) else { return nil }
         guard RescueCelebration.isSecured(saved: telemetry.savedCount, required: telemetry.requiredCount,
                                           isComplete: telemetry.isComplete, didWin: telemetry.didWin) else { return nil }
         let reason: AdaptiveDJCue.Reason = .won

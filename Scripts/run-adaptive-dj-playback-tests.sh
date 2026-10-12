@@ -11,7 +11,7 @@ swiftc -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos12.3
   -o "$build_dir/libNxlvKit.dylib" "$project_dir"/Sources/NxlvKit/*.swift
 
 # Keep signal checks beside the private audio graph, without exposing test APIs.
-cat "$project_dir/Sources/LemmingsLocal/AdaptiveDJPlayer.swift" \
+cat "$project_dir/Sources/LemmingsAudio/AdaptiveDJPlayer.swift" \
   "$project_dir/Sources/LemmingsAudio/MusicLibrary.swift" \
   "$project_dir/Sources/LemmingsAudio/MusicFileDeck.swift" \
   "$project_dir/Sources/LemmingsAudio/ModuleMusicPlayer.swift" \

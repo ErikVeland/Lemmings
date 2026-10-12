@@ -10,6 +10,8 @@ public enum MobileHUDAction: Equatable, Sendable {
     case endRun
     case speed
     case speedStep(Int)
+    case rewind
+    case stepBackward
     case step
     case menu
 }
@@ -34,14 +36,16 @@ public enum MobileHUDAction: Equatable, Sendable {
     private let paused: Bool
     private let speed: Double
     private let endRunArmed: Bool
+    private let counterStyle: ClassicCounterStyle
     private let panelImage: CGImage?
     private let typography: GameMenuTypography?
     private let items: [Item]
 
     public init(layout: MobileHUDLayout, snapshot: MobileGameSnapshot, selectedSkill: Int,
-                paused: Bool, speed: Double, endRunArmed: Bool, panelImage: CGImage?, typography: GameMenuTypography?) {
+                paused: Bool, speed: Double, endRunArmed: Bool, panelImage: CGImage?, typography: GameMenuTypography?, counterStyle: ClassicCounterStyle = .game) {
         self.layout = layout; self.snapshot = snapshot; self.selectedSkill = selectedSkill
         self.paused = paused; self.speed = speed; self.endRunArmed = endRunArmed
+        self.counterStyle = counterStyle
         self.panelImage = panelImage; self.typography = typography
         items = Self.targets(layout: layout, snapshot: snapshot, selectedSkill: selectedSkill,
                              paused: paused, speed: speed, endRunArmed: endRunArmed)
@@ -65,6 +69,10 @@ public enum MobileHUDAction: Equatable, Sendable {
             : (endRunArmed ? "Confirm end run" : "End run")
         descriptors.append((.endRun, 11, endRunLabel))
         descriptors.append((.speed, nil, "Game speed \(Self.speedLabel(speed))"))
+        if layout.supportsRewind {
+            descriptors.append((.rewind, nil, "Rewind two seconds"))
+            descriptors.append((.stepBackward, nil, "Step backward one tick"))
+        }
         descriptors.append((.step, nil, "Advance one tick"))
         descriptors.append((.menu, nil, "Menu"))
 
@@ -123,7 +131,9 @@ public enum MobileHUDAction: Equatable, Sendable {
                 drawGlyphButton(item, context: context, pixel: panel.bevel)
             case .speed:
                 drawSpeed(item.frame, bevel: panel.bevel, context: context)
-            case .step, .menu:
+            case .rewind, .stepBackward, .step:
+                drawIconButton(item, context: context)
+            case .menu:
                 drawTextButton(item, context: context)
             case .speedStep:
                 break
@@ -156,7 +166,9 @@ public enum MobileHUDAction: Equatable, Sendable {
                              width: item.frame.width, height: 9 * panel.scale)
             context.setFillColor(CGColor(gray: 0, alpha: 1))
             context.fill(box)
-            drawGameLabel(value, in: box, context: context)
+            if counterStyle != .macintosh || typography?.drawCounter(value, in: box, panelScale: panel.scale, context: context) != true {
+                drawGameLabel(value, in: box, context: context)
+            }
         }
     }
 
@@ -238,7 +250,7 @@ public enum MobileHUDAction: Equatable, Sendable {
             drawSpeed(frame, bevel: 1, context: context)
         case .menu:
             drawTextButton(item, context: context)
-        case .step:
+        case .rewind, .stepBackward, .step:
             drawIconButton(item, context: context)
         case .speedStep:
             break
@@ -267,9 +279,9 @@ public enum MobileHUDAction: Equatable, Sendable {
     }
 
     private func drawIconButton(_ item: Item, context: CGContext) {
-        let enabled = item.action != .step || paused
+        let enabled = item.action == .step ? paused : (item.action == .stepBackward || item.action == .rewind ? snapshot.tick > 0 : true)
         GameStoneArt.draw(in: context, frame: item.frame, selected: false, pixel: 1)
-        let glyph: PanelGlyphArt = item.action == .step ? .stepForward : .settings
+        let glyph: PanelGlyphArt = item.action == .rewind ? .rewind : item.action == .stepBackward ? .stepBackward : .stepForward
         let well = GameStoneArt.well(item.frame, pixel: 1)
         guard let image = Self.glyphImage(glyph, fitting: CGSize(width: well.width, height: well.height / 2)) else { return }
         context.saveGState()
@@ -339,7 +351,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         let status = "OUT \(snapshot.released)  HOME \(snapshot.saved)/\(snapshot.required)  \(time)"
         let available = panelMode
             ? CGRect(x: frame.minX, y: frame.minY,
-                     width: max(0, (items.first { $0.action == .step }?.frame.minX ?? frame.maxX) - frame.minX - 4), height: frame.height)
+                     width: max(0, (items.first { $0.action == .rewind || $0.action == .step }?.frame.minX ?? frame.maxX) - frame.minX - 4), height: frame.height)
             : frame
         let inset = panelMode ? CGFloat(8) : 6
         GamePixelTypography.draw(status, in: available.insetBy(dx: inset, dy: 2), context: context, typography: typography,

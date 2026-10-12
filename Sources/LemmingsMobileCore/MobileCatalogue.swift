@@ -54,7 +54,7 @@ public final class MobileCatalogue {
 
     public let portsRoot: URL
     public let fanFolders: [URL]
-    private let measuredCounts: [String: Int]
+    private var measuredCounts: [String: Int]
     private var opened: [(id: String, library: any MobileGameLibrary)] = []
 
     /// - Parameters:
@@ -72,6 +72,8 @@ public final class MobileCatalogue {
         }
         measuredCounts = counts
     }
+
+    public func updateMeasuredCounts(_ counts: [String: Int]) { measuredCounts.merge(counts) { _, measured in measured } }
 
     // MARK: - Packs
 

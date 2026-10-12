@@ -125,7 +125,7 @@ public struct MobileViewport: Codable, Equatable, Sendable {
         origin.y = min(max(0, origin.y.mobileFiniteOrZero), max(0, levelSize.height - visible.height))
     }
 
-    private var fittedGameplayZoom: Double {
+    public var fittedGameplayZoom: Double {
         let fitHeight = viewSize.height / levelSize.height
         let gameplayWidth = min(320, levelSize.width)
         let fitGameplayWidth = viewSize.width / (gameplayWidth * pixelAspect)

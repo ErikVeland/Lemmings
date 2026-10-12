@@ -1,4 +1,5 @@
 import Foundation
+import NxlvKit
 
 public struct MobilePixelFrame: Equatable, Sendable {
     public let width: Int
@@ -32,6 +33,26 @@ public struct MobilePixelFrame: Equatable, Sendable {
             pixels.append(rgba[start..<(start + cropWidth * 4)])
         }
         return try MobilePixelFrame(width: cropWidth, height: cropHeight, rgba: pixels)
+    }
+}
+
+public struct MobileExplosion: Sendable {
+    public let id: Int
+    public let birthTick: Int
+    public let rect: MobileRect
+    public let phase: Int
+    public init(id: Int, birthTick: Int, rect: MobileRect, phase: Int) {
+        self.id = id; self.birthTick = birthTick; self.rect = rect; self.phase = phase
+    }
+}
+
+public struct MobileSpriteHighlight: Sendable {
+    public let frame: MobilePixelFrame
+    public let rect: MobileRect
+    public let cacheKey: String
+    public let time: Double?
+    public init(frame: MobilePixelFrame, rect: MobileRect, cacheKey: String, time: Double?) {
+        self.frame = frame; self.rect = rect; self.cacheKey = cacheKey; self.time = time
     }
 }
 
@@ -122,6 +143,34 @@ public protocol MobileGameSession: AnyObject {
     var ticksPerSecond: Double { get }
     var snapshot: MobileGameSnapshot { get }
     var panelFrame: MobilePixelFrame? { get }
+    var renderScale: Double { get }
+    var activeLemmingCount: Int { get }
+    var nukeRemainingTicks: Int? { get }
+    var allNukeExplosionsPlayed: Bool { get }
+    var explosions: [MobileExplosion] { get }
+    var selectionSprite: MobileSpriteHighlight? { get }
+    var assignmentSprite: MobileSpriteHighlight? { get }
+    var assignmentProgress: Double? { get }
+
+    var entrancePoint: MobilePoint { get }
+    var goalPoint: MobilePoint { get }
+    var supportsRewind: Bool { get }
+    var isReadOnly: Bool { get }
+    var usedRewind: Bool { get }
+    var assignedSkillCount: Int { get }
+    var assignedSkills: [String: Int] { get }
+    var nukeCount: Int { get }
+    var rewindCount: Int { get }
+    var undoCount: Int { get }
+    @discardableResult func rewind(seconds: Double) -> Bool
+    @discardableResult func stepBackward() -> Bool
+    @discardableResult func stepForward() -> Bool
+    func resumeFromCurrentTick()
+    func replayDocument() throws -> Data?
+    func makeReplaySession(document: Data) throws -> (any MobileGameSession)?
+    func applySettings(_ settings: ClassicSettings)
+
+    func drainSoundCues() -> [PositionedSoundCue]
 
     func tick()
     func targetCandidates(for control: Int) -> [MobileTargetCandidate]
@@ -136,7 +185,33 @@ public protocol MobileGameSession: AnyObject {
 }
 
 public extension MobileGameSession {
+    var renderScale: Double { 1 }
+    var activeLemmingCount: Int { max(0, snapshot.released - snapshot.saved) }
+    var nukeRemainingTicks: Int? { nil }
+    var allNukeExplosionsPlayed: Bool { snapshot.isComplete }
+    var explosions: [MobileExplosion] { [] }
+    var entrancePoint: MobilePoint { initialCameraOrigin }
+    var goalPoint: MobilePoint { MobilePoint(x: levelSize.width, y: levelSize.height / 2) }
+    var supportsRewind: Bool { false }
+    var isReadOnly: Bool { false }
+    var usedRewind: Bool { false }
+    var assignedSkillCount: Int { 0 }
+    var assignedSkills: [String: Int] { [:] }
+    var nukeCount: Int { 0 }
+    var rewindCount: Int { 0 }
+    var undoCount: Int { 0 }
+    func rewind(seconds: Double) -> Bool { false }
+    func stepBackward() -> Bool { false }
+    func stepForward() -> Bool { tick(); return true }
+    func resumeFromCurrentTick() {}
+    func replayDocument() throws -> Data? { nil }
+    func makeReplaySession(document: Data) throws -> (any MobileGameSession)? { nil }
+    func applySettings(_ settings: ClassicSettings) {}
+    func drainSoundCues() -> [PositionedSoundCue] { [] }
     var initialCameraOrigin: MobilePoint { MobilePoint(x: 0, y: 0) }
     var panelFrame: MobilePixelFrame? { nil }
+    var selectionSprite: MobileSpriteHighlight? { nil }
+    var assignmentSprite: MobileSpriteHighlight? { nil }
+    var assignmentProgress: Double? { nil }
     func releaseTransientResources() {}
 }

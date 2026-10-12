@@ -62,6 +62,11 @@ public struct MobilePlaylistStore: Codable, Equatable, Sendable {
 
     public init() {}
 
+    public init(playlists: [MobilePlaylist], run: MobilePlaylistRun?) {
+        self.playlists = playlists
+        self.run = run
+    }
+
     public static func load(from storage: MobileStorage, defaults: UserDefaults = .standard, legacy: Bool = true) -> MobilePlaylistStore {
         storage.loadMigrating(MobilePlaylistStore.self, name: "playlists", defaults: defaults,
                               legacyKey: legacy ? defaultsKey : "mobile.none") ?? MobilePlaylistStore()

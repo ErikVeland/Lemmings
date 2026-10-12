@@ -1,4 +1,5 @@
 #if os(iOS)
+import LemmingsAppCore
 import LemmingsGameArt
 import LemmingsMobileCore
 import NxlvKit
@@ -79,6 +80,7 @@ extension MobileLibraryViewController {
         case "playerNew": newPlayer()
         case "playerRename": beginRenamingPlayer()
         case "playerDelete": deleteActivePlayer()
+        case "playerPortrait": cyclePlayerPortrait()
         case "favourites": openList(favourites.entries, name: "Favourites", back: .collections)
         case "recents": openList(recents.entries, name: "Recently played", back: .collections)
         case "playlists": navigate(.playlists)
@@ -107,7 +109,7 @@ extension MobileLibraryViewController {
         return true
     }
 
-    func savePlaylists() { playlists.save(to: storage) }
+    func savePlaylists() { saveSharedCollections() }
 
     private func openPlaylist(_ id: UUID) {
         playlistSelection = nil
@@ -157,11 +159,7 @@ extension MobileLibraryViewController {
     private func endNaming(commit: Bool) {
         searchField.resignFirstResponder()
         if renamingPlayer {
-            if commit, let draft = nameDraft { profiles.rename(profiles.activeID, to: draft); saveProfiles() }
-            renamingPlayer = false
-            nameDraft = nil
-            searchField.text = searchQuery
-            rebuild()
+            finishProfileNaming(commit: commit)
             return
         }
         if commit, let id = openPlaylistID, let draft = nameDraft { playlists.rename(id, to: draft); savePlaylists() }
@@ -235,7 +233,7 @@ extension MobileLibraryViewController {
     func levelStarted(_ index: Int) {
         if let identity = favouriteIdentity(index) {
             recents.record(.init(pack: identity.pack, level: identity.level))
-            recents.save(to: storage)
+            saveSharedCollections()
         }
         if activeRun != nil {
             playlists.advance(to: index)
@@ -250,75 +248,6 @@ extension MobileLibraryViewController {
         playlists.endRun()
         savePlaylists()
         activeRun = nil
-    }
-
-    // MARK: - Players
-
-    func saveProfiles() { try? MobileStorage.standard(profile: "_players").save(profiles, name: "players") }
-
-    func playersPage(subtitle: String) -> GameFrontEnd.Page {
-        if let draft = nameDraft, renamingPlayer {
-            return .init(title: "Rename", subtitle: subtitle,
-                         rows: [.init("nameField", "Name: " + draft.uppercased() + "_", selected: true)],
-                         footer: [.init("nameCancel", "Cancel"), .init("nameDone", "Done", primary: true)])
-        }
-        var rows = profiles.players.map { GameFrontEnd.Action("player." + $0.id, $0.name, selected: $0.id == profiles.activeID) }
-        rows.append(.init("playerNew", "New player", enabled: profiles.players.count < MobileProfiles.maximum))
-        return .init(title: "Players", subtitle: subtitle, rows: rows,
-                     footer: [.init("playerRename", "Rename"),
-                              .init("playerDelete", confirmingDelete ? "Confirm delete" : "Delete",
-                                    enabled: profiles.players.count > 1, selected: confirmingDelete),
-                              .init("settings", "Back")])
-    }
-
-    /// Loads the chosen player's collections. Open runs and lists belong to the previous player.
-    private func switchPlayer(_ id: String) {
-        profiles.select(id)
-        saveProfiles()
-        // A shared session belongs to its host, so a new active player returns to solo play.
-        if hotSeat != nil { hotSeats.endSession(); saveHotSeats(); hotSeatRoster = nil }
-        reloadPlayerData()
-        navigate(.players)
-    }
-
-    private func reloadPlayerData() {
-        let isDefault = profiles.active.id == MobileProfiles.defaultID
-        favourites = MobileFavourites.load(from: storage, legacy: isDefault)
-        recents = MobileRecents.load(from: storage, legacy: isDefault)
-        playlists = MobilePlaylistStore.load(from: storage, legacy: isDefault)
-        activeRun = nil
-        playlistSelection = nil
-        confirmingDelete = false
-    }
-
-    private func newPlayer() {
-        guard let id = profiles.add(name: "Player \(profiles.players.count + 1)") else { return }
-        profiles.select(id)
-        saveProfiles()
-        if hotSeat != nil { hotSeats.endSession(); saveHotSeats(); hotSeatRoster = nil }
-        reloadPlayerData()
-        navigate(.players)
-    }
-
-    private func beginRenamingPlayer() {
-        renamingPlayer = true
-        nameDraft = profiles.active.name
-        searchField.text = profiles.active.name
-        searchField.becomeFirstResponder()
-        rebuild()
-    }
-
-    /// The first tap asks for confirmation. A second tap removes the player and their collections.
-    private func deleteActivePlayer() {
-        guard profiles.players.count > 1 else { return }
-        if !confirmingDelete { confirmingDelete = true; rebuild(); return }
-        let removed = profiles.activeID
-        profiles.delete(removed)
-        saveProfiles()
-        removeFromHotSeats(removed)
-        try? FileManager.default.removeItem(at: MobileStorage.standard(profile: removed).directory)
-        reloadPlayerData()
-        navigate(.players)
     }
 
     // MARK: - Shuffle all

@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import LemmingsGameArt
 import Metal
 import QuartzCore
 import simd
@@ -23,119 +24,6 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
   }
 }
 #endif
-
-/// Display settings for the picture tube stage.
-struct CRTSettings {
-  var curvature: Float
-  var curvatureY: Float
-  var cornerRadius: Float
-  var cornerSoftness: Float
-  var scanlineDepth: Float
-  var beamWidth: Float
-  var beamBloom: Float
-  var maskStrength: Float
-  /// 0 is an aperture grille, 1 is a shadow mask.
-  var maskType: Float
-  var maskSize: Float
-  var maskDark: Float
-  var maskLight: Float
-  var bloomAmount: Float
-  var gamma: Float
-  var brightness: Float
-  var brightBoostDark: Float
-  var brightBoostBright: Float
-  var saturation: Float
-  var convergence: Float
-  var convergenceY: Float
-  var vignette: Float
-  var pixelAspect: Float
-  /// 0 keeps full depth. 16 matches the Amiga OCS and ECS palette, which
-  /// held four bits per channel.
-  var colorLevels: Float
-
-  /// A Commodore 1084 style monitor, which is how most people saw an A500.
-  ///
-  /// A fine shadow mask, mild curvature, and aligned colour channels.
-  static let amiga1084 = CRTSettings(
-    curvature: 24.0,
-    curvatureY: 24.0,
-    cornerRadius: 0.012,
-    cornerSoftness: 0.006,
-    scanlineDepth: 0.16,
-    beamWidth: 0.30,
-    beamBloom: 0.10,
-    maskStrength: 0.10,
-    maskType: 1,
-    maskSize: 1.0,
-    maskDark: 0.76,
-    maskLight: 1.12,
-    bloomAmount: 0.025,
-    gamma: 2.2,
-    brightness: 1.02,
-    brightBoostDark: 1.08,
-    brightBoostBright: 1.03,
-    saturation: 1.02,
-    convergence: 0,
-    convergenceY: 0,
-    vignette: 0.025,
-    pixelAspect: 1.0,
-    colorLevels: 16)
-
-  /// A softer television with restrained glow and a fine aperture grille.
-  static let television = CRTSettings(
-    curvature: 18.0,
-    curvatureY: 24.0,
-    cornerRadius: 0.022,
-    cornerSoftness: 0.009,
-    scanlineDepth: 0.22,
-    beamWidth: 0.34,
-    beamBloom: 0.16,
-    maskStrength: 0.13,
-    maskType: 0,
-    maskSize: 1.0,
-    maskDark: 0.70,
-    maskLight: 1.18,
-    bloomAmount: 0.045,
-    gamma: 2.2,
-    brightness: 1.03,
-    brightBoostDark: 1.10,
-    brightBoostBright: 1.05,
-    saturation: 1.04,
-    convergence: 0.10,
-    convergenceY: 0.03,
-    vignette: 0.04,
-    pixelAspect: 1.15,
-    colorLevels: 16)
-}
-
-struct CRTUniforms {
-  var sourceSize: SIMD2<Float> = .zero
-  var outputSize: SIMD2<Float> = .zero
-  var curvature: Float = 0
-  var curvatureY: Float = 0
-  var cornerRadius: Float = 0
-  var cornerSoftness: Float = 0
-  var scanlineDepth: Float = 0
-  var beamWidth: Float = 0.4
-  var beamBloom: Float = 0
-  var maskStrength: Float = 0
-  var maskType: Float = 0
-  var maskSize: Float = 1
-  var maskDark: Float = 0.76
-  var maskLight: Float = 1.12
-  var bloomAmount: Float = 0
-  var gamma: Float = 2.4
-  var brightness: Float = 1
-  var brightBoostDark: Float = 1
-  var brightBoostBright: Float = 1
-  var saturation: Float = 1
-  var convergence: Float = 0
-  var convergenceY: Float = 0
-  var vignette: Float = 0
-  var pixelAspect: Float = 1
-  var colorLevels: Float = 0
-  var hdrHeadroom: Float = 1
-}
 
 /// Draws a game frame through a simulated picture tube.
 ///
@@ -162,6 +50,7 @@ struct CRTUniforms {
   private var sourceSize = CGSize.zero
   private var selectionRenderer: LemmingSelectionRenderer?
   private var selection: LemmingSelectionEffect?
+  private var rescueAuras: [LemmingSelectionEffect] = []
 
   var settings = CRTSettings.amiga1084
 
@@ -379,8 +268,10 @@ struct CRTUniforms {
   // MARK: - Source
 
   /// Uploads the composed game frame.
-  func setSource(_ image: CGImage, flashes: [ExplosionFlash] = [], selection: LemmingSelectionEffect? = nil) {
+  func setSource(_ image: CGImage, flashes: [ExplosionFlash] = [], selection: LemmingSelectionEffect? = nil,
+                 rescueAuras: [LemmingSelectionEffect] = []) {
     self.selection = selection
+    self.rescueAuras = rescueAuras
     guard let device else { return }
     let width = image.width
     let height = image.height
@@ -511,15 +402,21 @@ struct CRTUniforms {
     pass(composite, target: drawable.texture, textures: [sourceTexture, scratchA, flashTexture])
     // Selection is composited after the tube. Its neighbour samples are always
     // two physical output pixels apart, even on a Retina display or curved edge.
-    if !GameCursor.gameplaySuppressed, let selection, let selectionRenderer {
+    if (!rescueAuras.isEmpty || (!GameCursor.gameplaySuppressed && selection != nil)), let selectionRenderer {
       let descriptor = MTLRenderPassDescriptor()
       descriptor.colorAttachments[0].texture = drawable.texture
       descriptor.colorAttachments[0].loadAction = .load
       descriptor.colorAttachments[0].storeAction = .store
       if let encoder = buffer.makeRenderCommandEncoder(descriptor: descriptor) {
-        selectionRenderer.encode(selection, sourceSize: sourceSize, outputSize: layer.drawableSize,
-          glass: SIMD4(settings.curvature, settings.curvatureY, settings.cornerRadius, settings.cornerSoftness),
-          into: encoder)
+        let glass = SIMD4(settings.curvature, settings.curvatureY, settings.cornerRadius, settings.cornerSoftness)
+        for effect in rescueAuras {
+          selectionRenderer.encode(effect, sourceSize: sourceSize, outputSize: layer.drawableSize,
+            glass: glass, headroom: Float(window?.screen?.maximumExtendedDynamicRangeColorComponentValue ?? 1),
+            additive: true, into: encoder)
+        }
+        if !GameCursor.gameplaySuppressed, let selection {
+          selectionRenderer.encode(selection, sourceSize: sourceSize, outputSize: layer.drawableSize, glass: glass, into: encoder)
+        }
         encoder.endEncoding()
       }
     }

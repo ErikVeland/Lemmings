@@ -14,6 +14,19 @@ REQUIRED = frozenset(
     + [f"VGASPEC{i}.DAT" for i in range(4)]
 )
 
+PARITY_RESOURCES = ("Hints", "Progression", "Trolley", "GameCenter", "Sounds")
+
+
+def copy_parity_resources(resources, app):
+    """Copy the shared teaching and record catalogues into the mobile bundle."""
+    for name in PARITY_RESOURCES:
+        source = resources / name
+        destination = app / name
+        if destination.exists():
+            shutil.rmtree(destination)
+        if source.is_dir():
+            shutil.copytree(source, destination)
+
 
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -75,6 +88,7 @@ def copy_into_app(source, destination, development_source=None):
         raise ValueError("Beta content can only be copied into an app bundle.")
     if destination.is_symlink():
         raise ValueError("App content destination must not be a link.")
+    copy_parity_resources(Path(__file__).resolve().parents[2] / "Resources", destination.parent)
     if not source:
         if destination.exists():
             shutil.rmtree(destination)

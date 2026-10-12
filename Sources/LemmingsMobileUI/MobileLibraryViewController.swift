@@ -1,4 +1,5 @@
 #if os(iOS)
+import LemmingsAppCore
 import LemmingsGameArt
 import LemmingsMobileCore
 import NxlvKit
@@ -11,12 +12,24 @@ struct MobileMenuPreview: Sendable {
     let snapshot: MobileGameSnapshot
 }
 
+/// Each prepared session transfers from the loader to the main thread once.
+/// Libraries retain assets and never retain the sessions they create.
+struct MobilePreparedLevel: @unchecked Sendable { let content: MobileLevelContent }
+
 actor MobileMenuPreviewLoader {
     /// Each loader opens its own library, so previews never share state with the one being played.
     private let makeLibrary: @Sendable () throws -> any MobileGameLibrary
     private var library: (any MobileGameLibrary)?
     private var frames: [Int: MobileMenuPreview] = [:]
     init(makeLibrary: @escaping @Sendable () throws -> any MobileGameLibrary) { self.makeLibrary = makeLibrary }
+    func prepare(_ index: Int) throws -> MobilePreparedLevel {
+        try Task.checkCancellation()
+        let opened = try library ?? makeLibrary()
+        library = opened
+        let content = try opened.loadLevel(at: index)
+        try Task.checkCancellation()
+        return MobilePreparedLevel(content: content)
+    }
     func load(_ index: Int) throws -> MobileMenuPreview {
         try Task.checkCancellation()
         if let cached = frames[index] { return cached }
@@ -34,8 +47,10 @@ actor MobileMenuPreviewLoader {
 
 @MainActor final class MobileLibraryViewController: UIViewController, UIDocumentPickerDelegate {
     enum Route: Equatable {
-        case home, family(MobileFamily), levels, settings, soundtrack, data
-        case collections, playlists, playlist(UUID), addToPlaylist, players, shuffleAll, hotSeat, hotSeats
+        case home, family(MobileFamily), levels, settings, settingsGroup(MobileSettingsGroup), controllerMappings, playInsights, soundtrack, data
+        case whatsNew, effectsWelcome, telemetryConsent, insightsToken, insightsClear
+        case journey, progression, techniques, rankings
+        case collections, playlists, playlist(UUID), addToPlaylist, players, shuffleAll, hotSeat, hotSeats, records, achievements, recordLevel(String)
     }
     private let scrollView = UIScrollView()
     let canvas = MobileMenuCanvas()
@@ -44,6 +59,15 @@ actor MobileMenuPreviewLoader {
     let browser = MobileLevelBrowserView()
     var browserShown = false
     var route = Route.home
+    var mobileInsights = MobileInsightsState()
+    var fanCountsTask: Task<Void, Never>?
+    var fanCountGeneration = UUID()
+    var learningTask: Task<Void, Never>?
+    var learningPreparing = false
+    lazy var mobileRankings = MobileRankingsController(presenter: self, store: arcadeStore)
+    lazy var libraryInput = makeLibraryInput()
+    private var inputLink: CADisplayLink?
+    override var canBecomeFirstResponder: Bool { game == nil && !searchField.isFirstResponder && mobileInsights.field?.isFirstResponder != true }
     private var store: MobileContentStore?
     private var checkpointStore: MobileCheckpointStore?
     var library: (any MobileGameLibrary)?
@@ -52,6 +76,10 @@ actor MobileMenuPreviewLoader {
     var levelsBackRoute = Route.home
     /// The players on this device. Each has their own collections and progress.
     var profiles = MobileStorage.standard(profile: "_players").load(MobileProfiles.self, name: "players") ?? MobileProfiles()
+    lazy var arcadeStore = ArcadeStore(storage: .current(), bundledProofs: nil)
+    var collectionsBridge: MobileCollectionsBridge?
+    var creatingPlayer = false
+    var draftPortrait = 0
     var storage: MobileStorage { .standard(profile: profiles.active.id) }
     lazy var favourites = MobileFavourites.load(from: storage, legacy: profiles.active.id == MobileProfiles.defaultID)
     lazy var recents = MobileRecents.load(from: storage, legacy: profiles.active.id == MobileProfiles.defaultID)
@@ -81,6 +109,7 @@ actor MobileMenuPreviewLoader {
     var selectedPreview: MobileMenuPreview?
     var notice = ""
     private var loading = false
+    private var preparingLevel = false
     var game: MobileGameViewController?
     private var solved: Set<Int> {
         // Favourites mirror the progress of the packs their levels belong to.
@@ -142,7 +171,12 @@ actor MobileMenuPreviewLoader {
             swipe.cancelsTouchesInView = false
             canvas.addGestureRecognizer(swipe)
         }
+        _ = saveProfiles()
+        reloadPlayerData()
         catalogue = Self.makeCatalogue()
+        inputLink = CADisplayLink(target: self, selector: #selector(pollLibraryInput(_:)))
+        inputLink?.preferredFramesPerSecond = 30
+        inputLink?.add(to: .main, forMode: .common)
         searchField.autocorrectionType = .no
         searchField.autocapitalizationType = .none
         searchField.returnKeyType = .done
@@ -162,6 +196,25 @@ actor MobileMenuPreviewLoader {
             checkpointStore = MobileCheckpointStore(url: configured.checkpointURL)
             reloadLibrary()
         } catch { notice = error.localizedDescription; rebuild() }
+        beginWelcomeIfNeeded()
+        measureMobileFanPacks()
+        AnonymousTelemetry.shared.recordActiveDay()
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if game == nil { becomeFirstResponder() }
+    }
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        let handled = libraryInput.began(presses)
+        super.pressesBegan(presses.subtracting(handled), with: event)
+    }
+    override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        let handled = libraryInput.ended(presses)
+        super.pressesEnded(presses.subtracting(handled), with: event)
+    }
+    override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        libraryInput.reset()
+        super.pressesCancelled(presses, with: event)
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -187,6 +240,9 @@ actor MobileMenuPreviewLoader {
         switch route {
         case .home:
             var rows: [GameFrontEnd.Action] = []
+            rows.append(.init("players", "Player: " + profiles.active.name, portrait: profiles.active.portrait))
+            rows.append(.init("records", "Records"))
+            rows.append(.init("achievements", "Achievements"))
             if let hot = hotSeat {
                 rows.append(.init("hotSeat", "Hot Seat: \(playerName(hot.turn))"))
             }
@@ -215,12 +271,14 @@ actor MobileMenuPreviewLoader {
                                   primary: pendingCheckpoint == nil && count > 0))
             }
             if catalogue != nil {
+                rows.append(.init("journey", "Journey", enabled: bundledJourney != nil))
+                if learning.run != nil { rows.append(.init("learningResume", "Resume journey")) }
                 rows.append(.init("collections", "Collections"))
             }
             rows.append(.init("l2", "Lemmings 2 - Unavailable", enabled: false))
             rows.append(.init("l3", "Lemmings 3 - Unavailable", enabled: false))
             canvas.page = .init(title: "Lemmings", subtitle: subtitle, home: true, rows: rows,
-                                footer: [.init("settings", "Settings"), .init("data", "Game Data")])
+                                footer: [.init("settings", "Settings"), .init("whatsNew", "What's New"), .init("data", "Game Data")])
             canvas.preview = nil
         case let .family(family):
             let all = catalogue?.packs(in: family) ?? []
@@ -248,7 +306,7 @@ actor MobileMenuPreviewLoader {
             let level = library.levels[selectedIndex]
             let rank = library.levels.filter { $0.rank == level.rank }
             let rankIndex = rank.firstIndex(where: { $0.index == selectedIndex }) ?? 0
-            let ranksCount = Set(library.levels.map(\.rank)).count
+            let ranksCount = library is MobileJourneyLibrary ? 1 : Set(library.levels.map(\.rank)).count
             let stats: [String] = selectedPreview.map {
                 let s = $0.snapshot
                 return ["\(s.total) Lemmings   Save \(s.required)",
@@ -258,8 +316,8 @@ actor MobileMenuPreviewLoader {
                                 subtitle: loading ? "Loading..." : "\(level.rank)  \(level.number)/\(rank.count)",
                                 details: stats,
                                 footer: (ranksCount > 1 ? [.init("rankPrevious", "< Rank"), .init("rankNext", "Rank >")] : [])
-                                    + [.init("previous", "< Level", enabled: rankIndex > 0),
-                                         .init("next", "Level >", enabled: rankIndex + 1 < rank.count),
+                                    + [.init("previous", "< Level", enabled: !(library is MobileJourneyLibrary) && rankIndex > 0),
+                                         .init("next", "Level >", enabled: !(library is MobileJourneyLibrary) && rankIndex + 1 < rank.count),
                                          .init("favourite", "Favourite", selected: isFavourite(selectedIndex)),
                                          .init("addPlaylist", "Playlist", enabled: catalogue != nil && favouriteIdentity(selectedIndex) != nil)]
                                     + (currentPack != nil && activeRun == nil && library.levels.count > 1 ? [.init("random", "Random 10")] : [])
@@ -271,25 +329,42 @@ actor MobileMenuPreviewLoader {
                 canvas.previewSource = CGRect(x: max(0, min(Double(max(0, preview.frame.width - 320)), preview.origin.x)),
                                               y: 0, width: Double(min(320, preview.frame.width)), height: Double(preview.frame.height))
             }
+        case .journey:
+            canvas.page = learningPage(subtitle: subtitle); canvas.preview = nil
+        case .progression:
+            canvas.page = progressionPage(subtitle: subtitle); canvas.preview = nil
+        case .techniques:
+            canvas.page = techniquePage(subtitle: subtitle); canvas.preview = nil
+        case .rankings:
+            canvas.page = rankingsPage(subtitle: subtitle); canvas.preview = nil
+        case .whatsNew:
+            canvas.page = whatsNewPage(); canvas.preview = nil
+        case .effectsWelcome:
+            canvas.page = effectsWelcomePage(); canvas.preview = nil
+        case .telemetryConsent:
+            canvas.page = telemetryConsentPage(); canvas.preview = nil
+        case .insightsToken:
+            canvas.page = insightsTokenPage(); canvas.preview = nil
+        case .insightsClear:
+            canvas.page = insightsClearPage(); canvas.preview = nil
         case .settings:
-            let defaults = UserDefaults.standard
-            let planning = !defaults.bool(forKey: "mobile.continuousSkillSelection")
-            let fast = defaults.integer(forKey: "mobile.fastSpeed")
-            let fastSpeed = [2, 3, 5, 10].contains(fast) ? fast : 2
-            canvas.page = .init(title: "Settings", subtitle: subtitle,
-                                rows: [.init("planning", "Pause to assign", selected: planning),
-                                       .init("speed", "Fast speed: \(fastSpeed)X"),
-                                       .init("music", "Music", selected: MobileMusic.shared.isEnabled),
-                                       .init("players", "Player: \(profiles.active.name)"),
-                                       .init("hotSeat", hotSeat == nil ? "Hot Seat" : "Hot Seat: On"),
-                                       .init("soundtrackChoice", "Soundtrack: \(MobileMusic.shared.soundtrack)"),
-                                       .init("soundtrack", "Soundtrack libraries")],
-                                footer: [.init("home", "Back")])
-            canvas.preview = nil
+            canvas.page = settingsGroupsPage(); canvas.preview = nil
+        case let .settingsGroup(group):
+            canvas.page = settingsPage(group); canvas.preview = nil
+        case .controllerMappings:
+            canvas.page = MobileSettingsArt.controllerMappings(mobileSettings); canvas.preview = nil
+        case .playInsights:
+            canvas.page = insightsDashboardPage(); canvas.preview = nil
         case .hotSeat:
             canvas.page = hotSeatPage(subtitle: subtitle); canvas.preview = nil
         case .hotSeats:
             canvas.page = savedHotSeatsPage(subtitle: subtitle); canvas.preview = nil
+        case .records:
+            canvas.page = recordsPage(subtitle: subtitle); canvas.preview = nil
+        case .achievements:
+            canvas.page = achievementsPage(subtitle: subtitle); canvas.preview = nil
+        case let .recordLevel(board):
+            canvas.page = recordLevelPage(board, subtitle: subtitle); canvas.preview = nil
         case .players:
             canvas.page = playersPage(subtitle: subtitle); canvas.preview = nil
         case .shuffleAll:
@@ -313,7 +388,7 @@ actor MobileMenuPreviewLoader {
                                                  pack.title + "  " + (percent ?? MobileMusicLibraries.size(pack.bytes)),
                                                  selected: libraries.isInstalled(pack))
                                 },
-                                footer: [.init("settings", "Back")])
+                                footer: [.init("settingsGroup.audio", "Back")])
             canvas.preview = nil
         case .data:
             canvas.page = .init(title: "Game Data", subtitle: subtitle,
@@ -329,7 +404,7 @@ actor MobileMenuPreviewLoader {
     /// iPad keeps the Mac carousel in both orientations. Narrow panes use the stacked page.
     private func syncPages() {
         let available = MobileSystemRegions.menuFrame(in: view)
-        let coverBrowser = available.width >= 600 && available.height >= 300
+        let coverBrowser = available.width >= 600 && available.height >= 300 && !(library is MobileJourneyLibrary)
         let show = game == nil && route == .levels && coverBrowser && library != nil
         scrollView.isHidden = game != nil || show
         browser.isHidden = !show
@@ -348,15 +423,28 @@ actor MobileMenuPreviewLoader {
         return image.cropping(to: CGRect(x: x, y: 0, width: width, height: image.height))
     }
     func navigate(_ next: Route) {
+        if next != .insightsToken {
+            mobileInsights.field?.resignFirstResponder(); mobileInsights.field?.text = nil
+            mobileInsights.field?.removeFromSuperview(); mobileInsights.field = nil; mobileInsights.token = ""
+        }
+        if next != .playInsights {
+            mobileInsights.task?.cancel(); mobileInsights.loading = false
+        }
+        learningTask?.cancel(); learningPreparing = false
         searchField.resignFirstResponder()
-        if nameDraft != nil, !{ if case .playlist = next { return true } else { return false } }() { nameDraft = nil; renamingPlayer = false; searchField.text = searchQuery }
+        if nameDraft != nil, !{ if case .playlist = next { return true }; return next == .players }() { nameDraft = nil; renamingPlayer = false; searchField.text = searchQuery }
         confirmingDelete = false
-        previewTask?.cancel(); previewGeneration = UUID(); loading = false
+        previewTask?.cancel(); previewGeneration = UUID(); loading = false; preparingLevel = false
         route = next; notice = ""
+        libraryInput.reset()
+        if game == nil { becomeFirstResponder() }
         scrollView.setContentOffset(.zero, animated: false)
         rebuild()
     }
     func handle(_ id: String) {
+        if handleWelcome(id) || handleInsights(id) { return }
+        if handleLearning(id) || handleRankings(id) { return }
+        if handleSettings(id) { return }
         switch id {
         case "classic": levelsBackRoute = .home; navigate(.levels); selectLevel(selectedIndex)
         case "home": navigate(.home)
@@ -383,24 +471,8 @@ actor MobileMenuPreviewLoader {
                 self.rebuild()
             }
             navigate(.soundtrack)
-        case "soundtrackChoice":
-            MobileMusic.shared.cycleSoundtrack()
-            rebuild()
-        case "music":
-            MobileMusic.shared.isEnabled.toggle()
-            rebuild()
-        case "planning":
-            let defaults = UserDefaults.standard
-            defaults.set(!defaults.bool(forKey: "mobile.continuousSkillSelection"), forKey: "mobile.continuousSkillSelection")
-            rebuild()
-        case "speed":
-            let defaults = UserDefaults.standard
-            let speeds = [2, 3, 5, 10]
-            let current = speeds.firstIndex(of: defaults.integer(forKey: "mobile.fastSpeed")) ?? 0
-            defaults.set(speeds[(current + 1) % speeds.count], forKey: "mobile.fastSpeed")
-            rebuild()
         default:
-            if handleHotSeat(id) || handleCollections(id) { return }
+            if handleRecords(id) || handleHotSeat(id) || handleCollections(id) { return }
             if id.hasPrefix("lib."), let pack = MobileMusicLibraries.shared.catalogue?.packs.first(where: { $0.id == String(id.dropFirst(4)) }) {
                 let libraries = MobileMusicLibraries.shared
                 if libraries.progress[pack.id] != nil { libraries.cancel(pack) }
@@ -422,6 +494,9 @@ actor MobileMenuPreviewLoader {
            let source = catalogue?.pack(id: origin.pack), let real = try? catalogue?.library(for: source) {
             return (origin.pack, real.levelKey(at: origin.index))
         }
+        if let journey = library as? MobileJourneyLibrary, let origin = try? journey.origin(of: index) {
+            return (origin.pack, origin.library.levelKey(at: origin.index))
+        }
         guard let pack = currentPack else { return nil }
         return (pack.id, library.levelKey(at: index))
     }
@@ -433,7 +508,7 @@ actor MobileMenuPreviewLoader {
     private func toggleFavourite(_ index: Int) {
         guard let identity = favouriteIdentity(index) else { return }
         favourites.toggle(pack: identity.pack, level: identity.level)
-        favourites.save(to: storage)
+        saveSharedCollections()
         browser.setFavourite(isFavourite(index))
         rebuild()
     }
@@ -468,6 +543,7 @@ actor MobileMenuPreviewLoader {
             let outcome = await FanPackUpdater().check(existing: existing, destination: destination)
             fanUpdating = false
             fanUpdateStatus = outcome.status
+            measureMobileFanPacks()
             rebuild()
         }
     }
@@ -531,6 +607,7 @@ actor MobileMenuPreviewLoader {
         if let level = library.levels.first(where: { $0.rank == ranks[next] }) { selectLevel(level.index) }
     }
     func selectLevel(_ index: Int) {
+        if library is MobileJourneyLibrary, let run = learning.run, index != run.currentIndex { return }
         guard let previewLoader else { selectedIndex = index; rebuild(); return }
         previewTask?.cancel()
         let generation = UUID(); previewGeneration = generation
@@ -582,21 +659,47 @@ actor MobileMenuPreviewLoader {
     func loadCheckpoint() {
         guard let checkpointStore else { return }
         Task {
-            do { pendingCheckpoint = try await checkpointStore.load(); rebuild() }
+            do { pendingCheckpoint = try await checkpointStore.load(owner: profiles.activeID, scope: hotSeat?.scope); rebuild() }
             catch { pendingCheckpoint = nil; notice = error.localizedDescription; rebuild() }
         }
     }
     private func resumeSavedRun() {
         guard let checkpoint = pendingCheckpoint, checkpointMatchesSession(checkpoint) else { return }
+        if let run = learning.run, let catalogue {
+            let queue = MobileJourneyLibrary(entries: run.entries, name: run.pool.summary, catalogue: catalogue)
+            if let content = try? queue.loadLevel(at: run.currentIndex), content.session.levelIdentifier == checkpoint.levelIdentifier {
+                openLearningRun(checkpoint: checkpoint); return
+            }
+        }
         if let catalogue, let pack = catalogue.pack(forLevelIdentifier: checkpoint.levelIdentifier) {
             openPack(pack, back: .home, navigateToLevels: false)
         }
         startLevel(checkpoint.levelIndex, checkpoint: checkpoint)
     }
     func startLevel(_ index: Int, checkpoint: MobileCheckpointEnvelope?) {
-        guard let library, let checkpointStore else { return }
+        guard !preparingLevel, let library, let checkpointStore else { return }
+        guard let previewLoader else { return }
+        previewTask?.cancel()
+        let generation = UUID(); previewGeneration = generation
+        preparingLevel = true; loading = true; rebuild()
+        previewTask = Task {
+            do {
+                let prepared = try await previewLoader.prepare(index)
+                guard !Task.isCancelled, previewGeneration == generation else { return }
+                loading = false; preparingLevel = false
+                presentPreparedLevel(index, checkpoint: checkpoint, library: library,
+                                     checkpointStore: checkpointStore, content: prepared.content)
+            } catch {
+                guard !Task.isCancelled, previewGeneration == generation else { return }
+                loading = false; preparingLevel = false
+                if let game { game.showPreparationError(error.localizedDescription) }
+                else { notice = error.localizedDescription; rebuild() }
+            }
+        }
+    }
+    private func presentPreparedLevel(_ index: Int, checkpoint: MobileCheckpointEnvelope?, library: any MobileGameLibrary,
+                                      checkpointStore: MobileCheckpointStore, content: MobileLevelContent) {
         do {
-            let content = try library.loadLevel(at: index)
             if let checkpoint {
                 guard checkpoint.engine == content.session.engineIdentifier,
                       checkpoint.engineFingerprint == content.session.engineFingerprint,
@@ -609,13 +712,39 @@ actor MobileMenuPreviewLoader {
             }
             levelStarted(index)
             // Playlist and shuffle results do not advance campaign or pack progress.
-            let inRun = activeRun != nil
+            let inLearning = library is MobileJourneyLibrary
+            let inRun = activeRun != nil || inLearning
             let next = MobileGameViewController(summary: content.summary, session: content.session,
                                                checkpointStore: checkpointStore, restoredCheckpoint: checkpoint,
                                                turn: currentTurn())
-            next.onHandover = { [weak self] player in self?.handOver(to: player) }
+            next.canDefer = inLearning
+            next.soloOwnerID = profiles.activeID
+            let attemptID = checkpoint?.runID ?? next.recordRunID
+            let ownerID = checkpoint?.owner ?? hotSeat?.turn ?? profiles.activeID
+            let recordLevel = mobileArcadeLevel(session: content.session, summary: content.summary,
+                pack: favouriteIdentity(index)?.pack ?? library.displayName)
+            if !inRun, library.levels.indices.contains(index + 1), arcadeStore.records.levelSkips(profileID: ownerID).available > 0 {
+                next.onSkipLevel = { [weak self] in self?.arcadeStore.spendLevelSkip(on: recordLevel, profileID: ownerID) ?? false }
+            }
+            AnonymousTelemetry.shared.start(recordLevel, hotSeat: hotSeat != nil, attemptID: attemptID)
+            next.onRecordCompletion = { [weak self, weak session = content.session] snapshot in
+                guard let self, let session else { return ([], "Records are not available.") }
+                if inLearning {
+                    do { try self.recordLearningResult(snapshot) }
+                    catch { return ([], error.localizedDescription) }
+                }
+                let run = ArcadeRun(id: attemptID, profileID: ownerID, level: recordLevel,
+                    saved: snapshot.saved, didWin: snapshot.didWin, skills: session.assignedSkills,
+                    seconds: Double(snapshot.tick) / session.ticksPerSecond, assisted: session.usedRewind,
+                    telemetry: self.mobileTelemetry(session: session, snapshot: snapshot))
+                return self.recordMobileCompletion(run, session: session)
+            }
+            next.onResultAwards = { [weak self] in self?.mobileResultAwards(runID: attemptID) ?? (0, false) }
+            next.onHandover = { [weak self] player in self?.handOver(to: player) ?? false }
             next.onCompleted = { [weak self] snapshot in
-                guard let self, snapshot.didWin else { return }
+                guard let self else { return }
+                if inLearning { return }
+                guard snapshot.didWin else { return }
                 if inRun { self.finishRunIfNeeded(afterLast: index); return }
                 var pack = self.currentPack?.id, real = index
                 if let list = library as? MobileFavouritesLibrary, let origin = list.origin(of: index) {
@@ -629,11 +758,20 @@ actor MobileMenuPreviewLoader {
                 guard let self else { return }
                 switch action {
                 case .library:
+                    self.previewTask?.cancel(); self.previewGeneration = UUID()
+                    self.loading = false; self.preparingLevel = false
                     self.game?.willMove(toParent: nil); self.game?.view.removeFromSuperview(); self.game?.removeFromParent()
                     self.game = nil; self.loadCheckpoint(); self.rebuild()
                     self.setNeedsUpdateOfHomeIndicatorAutoHidden()
                 case .retry: self.startLevel(index, checkpoint: nil)
                 case .next:
+                    if inLearning {
+                        do {
+                            if try !self.advanceLearningRun() {
+                                self.navigate(.journey); self.game?.onExit?(.library); return
+                            }
+                        } catch { self.game?.showPreparationError(error.localizedDescription); return }
+                    }
                     if library.levels.indices.contains(index + 1) { self.startLevel(index + 1, checkpoint: nil) }
                     else { self.finishRunIfNeeded(afterLast: index); self.handle("home"); self.game?.onExit?(.library) }
                 }

@@ -5,6 +5,40 @@ import CoreGraphics
 #endif
 
 struct RescueCelebrationTests {
+    @Test func allRescuedLevelsKeepTheirTrack() {
+        for count in [1, 10, 100] {
+            var director = AdaptiveDJDirector()
+            #expect(director.cue(for: .init(totalCount: count, savedCount: count, requiredCount: count)) == nil)
+            #expect(director.cue(for: .init(totalCount: count, savedCount: count, requiredCount: count,
+                                           didWin: true, isComplete: true)) == nil)
+            #expect(director.fired.isEmpty)
+        }
+        var director = AdaptiveDJDirector()
+        #expect(director.cue(for: .init(totalCount: 10, savedCount: 9, requiredCount: 9))?.reason == .won)
+    }
+
+    @Test @MainActor func allRescuedGlowExpiresWithoutRepeatingAndResetsOnRewind() {
+        let glow = RescueCelebrationTransition()
+        glow.set(active: true, brief: true, now: 10)
+        #expect(glow.amount == 0)
+        glow.advance(at: 10.175)
+        #expect(abs(glow.amount - 0.5) < 0.001)
+        glow.advance(at: 11)
+        #expect(glow.amount == 1)
+        glow.advance(at: 12.3)
+        #expect(glow.amount == 0)
+        glow.set(active: true, brief: true, now: 20)
+        #expect(glow.amount == 0)
+        glow.set(active: false, now: 21)
+        glow.set(active: true, brief: true, now: 22, animated: false)
+        #expect(glow.amount == 1)
+        glow.advance(at: 23.5)
+        #expect(glow.amount == 0)
+        glow.set(active: false, now: 24)
+        glow.set(active: true, now: 25)
+        glow.advance(at: 27)
+        #expect(glow.amount == 1)
+    }
     @Test func onlySecuredTargetsAndCompletedWinsCelebrate() {
         #expect(!RescueCelebration.isSecured(saved: 0, required: 0, isComplete: false, didWin: false))
         #expect(!RescueCelebration.isSecured(saved: 4, required: 5, isComplete: false, didWin: false))
@@ -16,7 +50,7 @@ struct RescueCelebrationTests {
     }
 
     #if canImport(CoreGraphics)
-    @Test func goldenRimIsSubtleClippedAndLeavesTheCentreUntouched() throws {
+    @Test func goldenHazeIsClippedAndLeavesTheCentreUntouched() throws {
         func render(_ amount: CGFloat) throws -> [UInt8] {
             let context = try #require(CGContext(data: nil, width: 120, height: 100, bitsPerComponent: 8,
                 bytesPerRow: 480, space: CGColorSpaceCreateDeviceRGB(),
@@ -31,7 +65,7 @@ struct RescueCelebrationTests {
         #expect(rgb(earned, 9, 10) == rgb(inactive, 9, 10))
         let rim = rgb(earned, 10, 50), softer = rgb(half, 10, 50)
         #expect(rim[0] > rim[1] && rim[1] > rim[2])
-        #expect(rim[0] > 0 && rim[0] < 64)
+        #expect(rim[0] >= 80 && rim[0] < 100)
         #expect(softer[0] > 0 && softer[0] < rim[0])
         #expect(try render(-1) == inactive)
         #expect(try render(2) == earned)

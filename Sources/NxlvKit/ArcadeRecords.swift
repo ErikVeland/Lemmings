@@ -187,6 +187,24 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
         profiles.first { $0.id == activeProfileID } ?? profiles[0]
     }
     public func profile(_ id: String) -> ArcadeProfile? { profiles.first { $0.id == id } }
+    /// Imports existing device identities without deriving ownership from display names.
+    public mutating func importProfiles(_ imported: [ArcadeProfile], activeID: String) throws {
+        guard !imported.isEmpty, imported.count <= 8,
+              Set(imported.map(\.id)).count == imported.count,
+              imported.allSatisfy({ !$0.id.isEmpty }), imported.contains(where: { $0.id == activeID }) else {
+            throw SequelDataError.invalid("The player identities are invalid.")
+        }
+        let pristine = profiles.count == 1 && profiles[0].id == ArcadeProfile.legacyID
+            && runs.isEmpty && statistics.isEmpty && trolley.attempts.isEmpty
+        if pristine { profiles = imported }
+        else {
+            let missing = imported.filter { profile($0.id) == nil }
+            guard profiles.count + missing.count <= 8 else { throw SequelDataError.invalid("The player limit was reached.") }
+            profiles.append(contentsOf: missing)
+            for value in imported { updateProfile(value.id, initials: value.initials, portrait: value.portrait) }
+        }
+        activeProfileID = activeID
+    }
     public mutating func addProfile(initials: String, portrait: Int, select: Bool = true) -> ArcadeProfile? {
         guard profiles.count < 8 else { return nil }
         let profile = ArcadeProfile(initials: initials, portrait: portrait)

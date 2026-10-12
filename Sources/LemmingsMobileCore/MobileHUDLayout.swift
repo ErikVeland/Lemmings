@@ -24,6 +24,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
     /// The panel keeps its Mac layout on wide screens. A narrow screen keeps touch-sized cells.
     public var canPlay: Bool { !interface.controlFrames.isEmpty && interface.playfieldFrame.height >= 88 }
     public let reservedRegions: [MobileReservedRegion]
+    public let supportsRewind: Bool
     public let isDiorama: Bool
 
     public static let panelWidth: CGFloat = 320
@@ -31,8 +32,8 @@ public struct MobileHUDLayout: Equatable, Sendable {
     public static let rowHeight: CGFloat = 44
 
     public static func make(container: MobileSize, safeArea: MobileInsets, hasRate: Bool, skillCount: Int,
-                            reservedRegions: [MobileReservedRegion] = []) -> MobileHUDLayout {
-        let controlCount = (hasRate ? 2 : 0) + max(0, skillCount) + 5
+                            reservedRegions: [MobileReservedRegion] = [], supportsRewind: Bool = false) -> MobileHUDLayout {
+        let controlCount = (hasRate ? 2 : 0) + max(0, skillCount) + (supportsRewind ? 7 : 5)
         let base = MobileLayoutEngine.make(container: container, safeArea: safeArea, controlCount: 0)
         let safe = base.safeFrame
         let horizontal = horizontalDivision(in: safe, regions: reservedRegions)
@@ -46,7 +47,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
         // At 3×, the original sockets also meet the 44-point touch minimum.
         guard hasRate, skillCount == 8, let bank, scale >= 3,
               bank.height >= panelHeight * scale + rowHeight + 120 else {
-            return compact(base: base, controlCount: controlCount, regions: reservedRegions)
+            return compact(base: base, controlCount: controlCount, regions: reservedRegions, supportsRewind: supportsRewind)
         }
         let row = MobileRect(x: bank.minX, y: bank.maxY - rowHeight, width: bank.width, height: rowHeight)
         let panelFrame = CGRect(
@@ -60,13 +61,17 @@ public struct MobileHUDLayout: Equatable, Sendable {
             MobileRect(x: panelFrame.minX + cell * CGFloat(index), y: panelFrame.minY + 16 * scale,
                        width: cell * units, height: 24 * scale)
         }
-        let buttonWidth = min(120, row.width / 4)
+        let buttonWidth = supportsRewind ? CGFloat(44) : min(120, row.width / 4)
         let gap: CGFloat = 4
         let menu = MobileRect(x: row.maxX - buttonWidth - gap, y: row.y, width: buttonWidth, height: row.height)
         let step = MobileRect(x: menu.x - buttonWidth - gap, y: menu.y, width: buttonWidth, height: menu.height)
         var frames = (0..<12).map { cellFrame($0) }
         let speed = cellFrame(12, units: 3)
         frames.append(speed)
+        if supportsRewind {
+            frames.append(MobileRect(x: step.x - 2 * (buttonWidth + gap), y: step.y, width: buttonWidth, height: step.height))
+            frames.append(MobileRect(x: step.x - buttonWidth - gap, y: step.y, width: buttonWidth, height: step.height))
+        }
         frames.append(step)
         frames.append(menu)
 
@@ -90,7 +95,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
                                    frame: panelFrame, scale: scale, speedArrows: arrows,
                                    minimap: CGRect(x: panelFrame.minX + 256 * scale, y: panelFrame.minY + 18 * scale,
                                                    width: 60 * scale, height: 20 * scale)),
-                               compactScale: 0, speedArrows: arrows, reservedRegions: reservedRegions, isDiorama: horizontal != nil)
+                               compactScale: 0, speedArrows: arrows, reservedRegions: reservedRegions, supportsRewind: supportsRewind, isDiorama: horizontal != nil)
     }
 
     /// A grid of touch-sized sockets. Each holds the panel art at a whole-number scale,
@@ -103,7 +108,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
     }
 
     private static func compact(base: MobileInterfaceLayout, controlCount: Int,
-                                regions: [MobileReservedRegion]) -> MobileHUDLayout {
+                                regions: [MobileReservedRegion], supportsRewind: Bool) -> MobileHUDLayout {
         let safe = base.safeFrame
         let horizontal = horizontalDivision(in: safe, regions: regions)
         let deckSafe = horizontal.map {
@@ -124,9 +129,9 @@ public struct MobileHUDLayout: Equatable, Sendable {
             var column = 0, row = 0
             for index in 0..<controlCount {
                 // Skills and transport form separate groups, as in the Mac panel.
-                if index == controlCount - 5, column > 0 { column = 0; row += 1 }
+                if index == controlCount - (supportsRewind ? 7 : 5), column > 0 { column = 0; row += 1 }
                 // Slower, speed and faster each have a separate 44-point target.
-                let span = index == controlCount - 3 ? 3 : index == controlCount - 1 ? 2 : 1
+                let span = index == controlCount - (supportsRewind ? 5 : 3) ? 3 : index == controlCount - 1 ? 2 : 1
                 if column + span > columns { column = 0; row += 1 }
                 slots.append((row, column, span))
                 column += span
@@ -161,13 +166,13 @@ public struct MobileHUDLayout: Equatable, Sendable {
             return MobileHUDLayout(interface: MobileInterfaceLayout(
                 orientation: base.orientation, safeFrame: safe, playfieldFrame: safe,
                 statusFrame: empty, controlsFrame: empty, controlFrames: []),
-                panel: nil, compactScale: artScale, speedArrows: [], reservedRegions: regions, isDiorama: horizontal != nil)
+                panel: nil, compactScale: artScale, speedArrows: [], reservedRegions: regions, supportsRewind: supportsRewind, isDiorama: horizontal != nil)
         }
-        let speed = chosen.controlFrames[controlCount - 3]
+        let speed = chosen.controlFrames[controlCount - (supportsRewind ? 5 : 3)]
         let side = max(44, speed.width / 3)
         let arrows = [CGRect(x: speed.x, y: speed.y, width: side, height: speed.height),
                       CGRect(x: speed.maxX - side, y: speed.y, width: side, height: speed.height)]
         return MobileHUDLayout(interface: chosen, panel: nil, compactScale: artScale,
-                               speedArrows: arrows, reservedRegions: regions, isDiorama: horizontal != nil)
+                               speedArrows: arrows, reservedRegions: regions, supportsRewind: supportsRewind, isDiorama: horizontal != nil)
     }
 }

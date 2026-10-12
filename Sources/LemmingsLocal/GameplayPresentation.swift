@@ -498,17 +498,14 @@ struct PrecisionZoomStatus: Equatable {
 
 /// A fresh level starts after three visible seconds. Explicit pause cancels it.
 @MainActor final class FreshLevelCountdown {
-    private(set) var remaining: Double? = nil
-    var isActive: Bool { remaining != nil }
-    var number: Int? { remaining.map { max(1, Int(ceil($0))) } }
-    func arm() { remaining = 3 }
-    func cancel() { remaining = nil }
+    private var countdown = GameplayStartCountdown()
+    var remaining: Double? { countdown.remaining }
+    var isActive: Bool { countdown.isActive }
+    var number: Int? { countdown.number }
+    func arm() { countdown.arm() }
+    func cancel() { countdown.cancel() }
     @discardableResult func advance(seconds: Double, visible: Bool) -> Bool {
-        guard visible, let remaining else { return false }
-        let next = remaining - max(0, seconds)
-        if next <= 0 { cancel(); return true }
-        self.remaining = next
-        return false
+        countdown.advance(seconds: seconds, visible: visible)
     }
     func draw(in bounds: CGRect) {
         guard let number else { return }

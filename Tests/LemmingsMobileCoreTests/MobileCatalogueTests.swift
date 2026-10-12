@@ -209,7 +209,7 @@ struct MobileStorageTests {
         let defaults = try #require(UserDefaults(suiteName: "store-test-" + UUID().uuidString))
         defaults.set(try JSONEncoder().encode(Doc(value: 9)), forKey: "legacy")
         #expect(storage.loadMigrating(Doc.self, name: "doc", defaults: defaults, legacyKey: "legacy") == Doc(value: 9))
-        #expect(defaults.data(forKey: "legacy") == nil)
+        #expect(defaults.data(forKey: "legacy") != nil)
         #expect(storage.load(Doc.self, name: "doc") == Doc(value: 9))
     }
 

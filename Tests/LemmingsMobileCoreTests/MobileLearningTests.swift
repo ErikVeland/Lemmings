@@ -1,0 +1,60 @@
+import Foundation
+import LemmingsAppCore
+import NxlvKit
+import Testing
+@testable import LemmingsMobileCore
+
+struct MobileLearningTests {
+    private var root: URL { URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent() }
+    @Test func curatedJourneyStartsWithoutScanningFuturePacks() throws {
+        let resources = root.appendingPathComponent("Resources")
+        let temporary = try AppStorage.temporary(named: "journey")
+        defer { temporary.removeTemporaryFiles() }
+        let storage = AppStorage(applicationSupport: temporary.applicationSupport, resources: resources, defaults: temporary.defaults)
+        let journey = try #require(LearningJourneyLibrary.journey(storage: storage))
+        let catalogue = MobileCatalogue(portsRoot: root.appendingPathComponent("Sources/Ports"),
+            fanFolders: [URL(fileURLWithPath: "/nonexistent-future-packs")])
+        let library = MobileJourneyLibrary(entries: journey.lessons.map(\.entry), name: LearningJourney.title, catalogue: catalogue)
+        #expect(library.levels.count == journey.lessons.count)
+        let content = try library.loadLevel(at: 0)
+        #expect(content.summary.title == "Just dig!")
+        #expect(content.session.snapshot.tick == 0)
+        #expect(content.session.snapshot.total == 10)
+        #expect(content.session.snapshot.required == 1)
+    }
+    @Test func storedQueueKeepsOwnerScopePositionAndDeferrals() throws {
+        let resources = root.appendingPathComponent("Resources")
+        let temporary = try AppStorage.temporary(named: "journey-save")
+        defer { temporary.removeTemporaryFiles() }
+        let storage = AppStorage(applicationSupport: temporary.applicationSupport, resources: resources, defaults: temporary.defaults)
+        let journey = try #require(LearningJourneyLibrary.journey(storage: storage))
+        var learning = MobileLearningState()
+        try learning.start(Array(journey.lessons.prefix(3).map(\.entry)), name: LearningJourney.title, poolID: journey.version)
+        learning.record(won: false)
+        let advanced = learning.advance()
+        #expect(advanced)
+        let files = MobileStorage(directory: temporary.applicationSupport.appendingPathComponent("hotseat.123"))
+        try files.save(learning, name: "learning")
+        let restored = try #require(files.load(MobileLearningState.self, name: "learning"))
+        #expect(restored.run?.id == learning.run?.id)
+        #expect(restored.run?.currentIndex == 1)
+        #expect(restored.progress.revisit(in: journey).map(\.identity) == [journey.lessons[0].entry.identity])
+        #expect(restored.progress.solvedCount(in: journey) == 0)
+        #expect(MobileStorage(directory: temporary.applicationSupport.appendingPathComponent("solo")).load(MobileLearningState.self, name: "learning") == nil)
+    }
+    @Test func pythonStagingUsesMacSourceRevision() throws {
+        let temporary = try AppStorage.temporary(named: "revision")
+        defer { temporary.removeTemporaryFiles() }
+        try Data([1, 2, 3]).write(to: temporary.resources.appendingPathComponent("LEVEL000.DAT"))
+        try FileManager.default.createDirectory(at: temporary.resources.appendingPathComponent("nested"), withIntermediateDirectories: true)
+        try Data([4, 5]).write(to: temporary.resources.appendingPathComponent("nested/GROUND.DAT"))
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
+        process.arguments = ["python3", "-c", "import sys; sys.path.insert(0, sys.argv[1]); import ports; from pathlib import Path; print(ports.directory_revision(Path(sys.argv[2])))", root.appendingPathComponent("Tools/IOSBeta").path, temporary.resources.path]
+        let output = Pipe(); process.standardOutput = output
+        try process.run(); process.waitUntilExit()
+        #expect(process.terminationStatus == 0)
+        let actual = String(data: output.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines)
+        #expect(actual == ClassicSourceRevision.directory(temporary.resources))
+    }
+}

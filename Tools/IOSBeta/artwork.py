@@ -1,37 +1,56 @@
 #!/usr/bin/env python3
-"""Copy the Macintosh front-end banks the iOS interface draws into an app bundle."""
+"""Copy locally decoded Classic artwork banks into an iOS app bundle."""
 import argparse
 import json
+import os
 from pathlib import Path
 import shutil
 
+# Kept for callers that inspect front-end names. Gameplay copies every bank.
 BANKS = frozenset(["Charset1", "Charset2", "Logo1", "Logo2", "Icons", "Lemmings"])
+FAMILIES = ("lemmings", "ohno", "xmas", "holiday")
+ROOT = Path(__file__).resolve().parents[2]
+
+
+def inputs(source):
+    source = Path(source)
+    manifest = source / "manifest.json"
+    if not manifest.is_file():
+        return []
+    document = json.loads(manifest.read_text())
+    result = {manifest}
+    for frames in document["banks"].values():
+        for frame in frames:
+            if frame:
+                name = frame["file"]
+                if "/" in name or ".." in name or (source / name).is_symlink():
+                    raise ValueError("Unsafe artwork frame path.")
+                result.add(source / name)
+    return sorted(result)
+
+
+def copy_family(source, destination):
+    if destination.is_symlink():
+        raise ValueError("App artwork destination must not be a link.")
+    if destination.exists():
+        shutil.rmtree(destination)
+    files = inputs(source)
+    if not files:
+        return
+    destination.mkdir(parents=True)
+    for path in files:
+        shutil.copyfile(path, destination / path.name)
 
 
 def copy_into_app(source, destination):
     if destination.name != "lemmings" or destination.parent.name != "MacArtwork" or destination.parent.parent.suffix != ".app":
         raise ValueError("Mac artwork can only be copied into an app bundle.")
-    if destination.is_symlink():
-        raise ValueError("App artwork destination must not be a link.")
-    if destination.exists():
-        shutil.rmtree(destination)
-    if not source or not (Path(source) / "manifest.json").is_file():
-        return
-    source = Path(source)
-    manifest = json.loads((source / "manifest.json").read_text())
-    names = manifest.get("names") or {}
-    keep = {key for key, name in names.items() if name in BANKS}
-    manifest["banks"] = {key: frames for key, frames in manifest["banks"].items() if key in keep}
-    manifest["objects"] = {}
-    destination.mkdir(parents=True)
-    for frames in manifest["banks"].values():
-        for frame in frames:
-            if frame:
-                name = frame["file"]
-                if "/" in name or ".." in name:
-                    raise ValueError("Unsafe artwork frame path.")
-                shutil.copyfile(source / name, destination / name)
-    (destination / "manifest.json").write_text(json.dumps(manifest))
+    # The Xcode option remains a single-family path; siblings carry the other releases.
+    mac = Path(source).parent if source else ROOT / ".build/mac-artwork/export"
+    amiga = Path(os.environ.get("IOS_AMIGA_ARTWORK_DIR", ROOT / ".build/amiga-artwork/export"))
+    for kind, root in (("MacArtwork", mac), ("AmigaArtwork", amiga)):
+        for family in FAMILIES:
+            copy_family(root / family, destination.parent.parent / kind / family)
 
 
 def main():

@@ -428,24 +428,7 @@ enum FanLevelLibrary {
   static func directoryFingerprint(_ root: URL) -> String? {
     let key = GameAssetCache<String>.bundledKey(root).map { "directory:" + $0 }
     if let key, let cached = bundledFingerprints.value(for: key) { return cached }
-    let root = root.resolvingSymlinksInPath().standardizedFileURL
-    guard let enumerator = FileManager.default.enumerator(
-      at: root,
-      includingPropertiesForKeys: [.isRegularFileKey],
-      options: [.skipsHiddenFiles]) else { return nil }
-    let ignored = Set(["sav", "mp4", "m4a", "wav", "ogg", "mp3", "mod", "mid", "png", "jpg"])
-    var entries: [String: String] = [:]
-    for case let url as URL in enumerator {
-      if Task.isCancelled { return nil }
-      if ignored.contains(url.pathExtension.lowercased()) { continue }
-      guard (try? url.resourceValues(forKeys: [.isRegularFileKey]).isRegularFile) == true,
-            let fingerprint = archiveFingerprint(url) else { continue }
-      entries[relativeKey(url, level: enumerator.level)] = fingerprint
-    }
-    let encoder = JSONEncoder()
-    encoder.outputFormatting = [.sortedKeys]
-    guard !entries.isEmpty, let data = try? encoder.encode(entries) else { return nil }
-    let result = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+    guard let result = ClassicSourceRevision.directory(root) else { return nil }
     if let key { bundledFingerprints.insert(result, for: key) }
     return result
   }

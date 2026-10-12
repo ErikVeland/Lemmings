@@ -7762,6 +7762,8 @@ func validateMusicRouting(_ condition: Bool, _ message: String) throws {
 @MainActor private func testUpdateRequests() async throws {
   let nativeUpdater = SPUStandardUpdaterController(startingUpdater: false,
     updaterDelegate: nil, userDriverDelegate: nil).updater
+  try check(nativeUpdater.updateCheckInterval == 3600,
+    "The app's default update schedule did not use hourly checks")
   var nativeAvailabilityEvents = 0
   let nativeObservation = nativeUpdater.observeAvailability { nativeAvailabilityEvents += 1 }
   func notifyAvailability() {
@@ -7781,6 +7783,28 @@ func validateMusicRouting(_ condition: Bool, _ message: String) throws {
   let item = SUAppcastItem(dictionary: ["enclosure": ["url": "https://example.invalid/update.zip",
     "sparkle:version": "75", "sparkle:shortVersionString": "1.8.6"]])!
   try check(updates.availableVersion == nil, "An unavailable update had a reminder")
+  try check(updates.responds(to: NSSelectorFromString("updater:didFindValidUpdate:")),
+    "Sparkle could not deliver update discovery callbacks")
+  try check(updates.standardUserDriverShouldHandleShowingScheduledUpdate(item, andInImmediateFocus: true),
+    "A startup update suppressed Sparkle's visible alert")
+  try check(!updates.standardUserDriverShouldHandleShowingScheduledUpdate(item, andInImmediateFocus: false),
+    "A background update interrupted gameplay")
+  updates.updater(nativeUpdater, didFindValidUpdate: item)
+  try check(updates.availableVersion == "1.8.6" && !updates.isDownloaded && checker.checks == 0,
+    "Update discovery waited for a download or opened update UI")
+  updates.updater(nativeUpdater, didFinishUpdateCycleFor: .updatesInBackground, error: nil)
+  try check(updates.availableVersion == "1.8.6",
+    "A successful background check erased the update reminder")
+  updates.updateWillBePresented(item, downloaded: true, automaticallyShowNotes: false)
+  updates.updater(nativeUpdater, didFindValidUpdate: item)
+  try check(updates.isDownloaded, "Repeated discovery erased the downloaded state")
+  updates.updater(nativeUpdater, didFinishUpdateCycleFor: .updatesInBackground,
+    error: NSError(domain: "update-test", code: 1))
+  try check(updates.availableVersion == nil && !updates.isDownloaded,
+    "A failed update cycle retained a stale reminder")
+  updates.updater(nativeUpdater, didFindValidUpdate: item)
+  updates.updaterDidNotFindUpdate(nativeUpdater)
+  try check(updates.availableVersion == nil, "A no-update check retained a discovery reminder")
 
   // The icon followed by the menu must preserve one request during a silent download.
   updates.showUpdate()
@@ -7842,7 +7866,7 @@ func validateMusicRouting(_ condition: Bool, _ message: String) throws {
   updates.standardUserDriverWillFinishUpdateSession()
   checker.canCheckForUpdates = true
   try check(checker.checks == 6, "Failed automatic notes started an unrequested retry")
-  print("PASS busy icon/menu checks, coalesced clicks, repeated focus, automatic notes, session cleanup and retry without restart")
+  print("PASS hourly checks, startup alerts, discovery/download reminders, busy icon/menu checks, automatic notes, session cleanup and retry without restart")
 }
 
 
@@ -7924,13 +7948,16 @@ func validateMusicRouting(_ condition: Bool, _ message: String) throws {
   let oldAction = keyboard.mainMenu, oldActive = keyboard.active, oldAvailable = keyboard.navigationAvailable
   let oldOwnership = keyboard.ownsController
   let oldReduction = keyboard.navigationReduceMotion
+  let oldFade = keyboard.fadeMenuButton
   var exits = 0
   keyboard.mainMenu = { exits += 1 }; keyboard.navigationAvailable = { true }; keyboard.ownsController = { true }
   keyboard.navigationReduceMotion = { false }
+  keyboard.fadeMenuButton = { true }
   defer {
     keyboard.mainMenu = oldAction; keyboard.active = oldActive; keyboard.navigationAvailable = oldAvailable
     keyboard.ownsController = oldOwnership; keyboard.bind(to: owner); keyboard.refreshNavigationControl()
     keyboard.navigationReduceMotion = oldReduction
+    keyboard.fadeMenuButton = oldFade
   }
   let folder = URL(fileURLWithPath: ".build/exit-progress")
   try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
@@ -7960,6 +7987,11 @@ func validateMusicRouting(_ condition: Bool, _ message: String) throws {
     let faded = ReplayFrameCapture.image(size: fading.bounds.size) { fading.draw(fading.bounds) }!
     try NSBitmapImageRep(cgImage: faded).representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent(name + "-menu-faded.png"))
     try check((faded.dataProvider!.data! as Data).allSatisfy { $0 == 0 }, name + " faded Menu left visible artwork")
+    keyboard.fadeMenuButton = { false }
+    keyboard.refreshNavigationControl(at: 105)
+    try check(fading.artworkOpacity == 1 && root.hitTest(root.convert(centre, to: root.superview)) === fading,
+      name + " disabling Menu fading did not restore the artwork and input target")
+    keyboard.fadeMenuButton = { true }
     let hover = NSEvent.enterExitEvent(with: .mouseEntered, location: centre, modifierFlags: [], timestamp: 104,
       windowNumber: owner.windowNumber, context: nil, eventNumber: 0, trackingNumber: 0, userData: nil)!
     fading.mouseEntered(with: hover)
@@ -8536,6 +8568,11 @@ extension AppDelegate {
     selected = nil; keyboard.refreshNavigationControl(at: 90)
     selected = metadata; keyboard.refreshNavigationControl(at: 100)
     let notice = owner.contentView!.subviews.compactMap { $0 as? NowPlayingNotice }.first!
+    try check(notice.artworkOpacity == 0, "Now Playing appeared abruptly")
+    keyboard.refreshNavigationControl(at: 100.175)
+    try check(abs(notice.artworkOpacity - 0.5) < 0.01, "Now Playing did not fade in smoothly")
+    keyboard.refreshNavigationControl(at: 100.35)
+    try check(abs(notice.artworkOpacity - 1) < 0.01, "Now Playing never reached full opacity")
     try check(!notice.isHidden && notice.track == metadata && notice.hitTest(.zero) == nil && owner.contentView!.bounds.contains(notice.frame),
       "Now Playing was missing, clipped or intercepted gameplay")
     let image = ReplayFrameCapture.image(size: notice.bounds.size) { notice.draw(notice.bounds) }!
@@ -8543,15 +8580,20 @@ extension AppDelegate {
     try check(notice.accessibilityLabel()?.contains(metadata.title) == true && notice.accessibilityLabel()?.contains(metadata.soundtrack) == true,
       "Now Playing omitted accessible song/source names")
     keyboard.refreshNavigationControl(at: 104.25)
-    try check(abs(notice.alphaValue - 0.5) < 0.01, "Now Playing did not fade after four seconds")
+    try check(abs(notice.artworkOpacity - 0.5) < 0.01, "Now Playing did not fade after four seconds")
     keyboard.refreshNavigationControl(at: 105)
     try check(notice.isHidden, "Now Playing remained visible")
     keyboard.refreshNavigationControl(at: 106)
     try check(notice.isHidden, "The same track repeatedly reopened its notice")
     selected = remixed; keyboard.refreshNavigationControl(at: 107)
     try check(!notice.isHidden && notice.track == remixed, "Changing soundtrack did not replace the notice")
+    keyboard.showSongInfo = { false }; keyboard.refreshNavigationControl(at: 107.1)
+    try check(notice.isHidden && notice.track == nil && !notice.isAccessibilityElement(),
+      "Disabled song info retained a notice or accessible stale title")
+    keyboard.showSongInfo = { true }; keyboard.refreshNavigationControl(at: 107.2)
+    try check(!notice.isHidden && notice.artworkOpacity == 0, "Enabling song info missed the gentle fade-in")
     keyboard.navigationReduceMotion = { true }; keyboard.refreshNavigationControl(at: 111.25)
-    try check(!notice.isHidden && notice.alphaValue == 1, "Reduced motion animated the notice")
+    try check(!notice.isHidden && notice.artworkOpacity == 1, "Reduced motion animated the notice")
     keyboard.refreshNavigationControl(at: 112)
     try check(notice.isHidden, "Reduced motion prevented expiry")
     selected = nil; keyboard.refreshNavigationControl(at: 113)

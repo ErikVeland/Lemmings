@@ -12,6 +12,7 @@ cat "$project_dir/Sources/LemmingsAudio/MusicFileDeck.swift" \
   "$project_dir/Sources/LemmingsAudio/ModuleMusicPlayer.swift" \
   "$project_dir/Sources/LemmingsAudio/VinylRamp.swift" \
   "$project_dir/Sources/LemmingsAudio/SoundEffectPlayer.swift" \
+  "$project_dir/Sources/LemmingsAudio/FailureMusic.swift" \
   "$project_dir/Sources/LemmingsLocal/FailureMood.swift" \
   "$project_dir/Tests/NukeAudioTests/checks.swift" > "$build_dir/main.swift"
 # The shared audio files join this single module here.
