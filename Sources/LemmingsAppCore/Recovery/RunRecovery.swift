@@ -1,54 +1,77 @@
-#if os(macOS)
 import Foundation
 import CryptoKit
 import Darwin
 import NxlvKit
 
-struct RunRecovery: Codable, Sendable {
-    var version = 1
-    let engine: String
-    let profileID: String
-    var hotSeatID: String? = nil
-    var fullQuest: Bool? = nil
-    var fanPackGraphics: Bool? = nil
-    var fanTextSteel: Bool? = nil
-    var fanLocalStyles: Bool? = nil
-    var fanHolidayStyles: Bool? = nil
-    let runID: UUID
-    let dataSetID: String
-    let levelIndex: Int
-    let levelFingerprint: String
-    let initialStateHash: String
-    let tick: Int
-    let events: [ClassicDOSReplayEvent]
-    let stateHash: String
-    let usedRewind: Bool
-    let nukeCount: Int
-    let rewindCount: Int
-    let undoCount: Int
-    let selectedSkill: Int
-    let scrollX: Double
-    let scrollY: Double
-    var l2: L2RunRecovery? = nil
-    var l3: L3RunRecovery? = nil
-    var neo: NeoRunRecovery? = nil
-    var neoPackID: String? = nil
-    var neoLevelID: String? = nil
-    var neoPackName: String? = nil
-    var fan: FanRunRecovery? = nil
+public struct RunRecovery: Codable, Sendable {
+    public var version = 1
+    public let engine: String
+    public let profileID: String
+    public var hotSeatID: String? = nil
+    public var fullQuest: Bool? = nil
+    public var fanPackGraphics: Bool? = nil
+    public var fanTextSteel: Bool? = nil
+    public var fanLocalStyles: Bool? = nil
+    public var fanHolidayStyles: Bool? = nil
+    public let runID: UUID
+    public let dataSetID: String
+    public let levelIndex: Int
+    public let levelFingerprint: String
+    public let initialStateHash: String
+    public let tick: Int
+    public let events: [ClassicDOSReplayEvent]
+    public let stateHash: String
+    public let usedRewind: Bool
+    public let nukeCount: Int
+    public let rewindCount: Int
+    public let undoCount: Int
+    public let selectedSkill: Int
+    public let scrollX: Double
+    public let scrollY: Double
+    public var l2: L2RunRecovery? = nil
+    public var l3: L3RunRecovery? = nil
+    public var neo: NeoRunRecovery? = nil
+    public var neoPackID: String? = nil
+    public var neoLevelID: String? = nil
+    public var neoPackName: String? = nil
+    public var fan: FanRunRecovery? = nil
     /// The Classic engine state at `tick`. A later build restores from it
     /// when its engine no longer replays `events` to the same state, so an
     /// update never strands a saved run.
-    var classicState: ClassicDOSSimulation? = nil
-    var sourcePath: String? = nil
-    var savedAt = Date()
+    public var classicState: ClassicDOSSimulation? = nil
+    public var sourcePath: String? = nil
+    public var savedAt = Date()
 
-    static let bundledEngine: String = {
-        guard let root = Bundle.main.resourceURL else { return "" }
-        return (try? String(contentsOf: root.appendingPathComponent("Trolley/engine-fingerprint.txt"), encoding: .utf8))?
+    /// The memberwise initializer, public for the apps. The order and defaults match the synthesized one.
+    public init(version: Int = 1, engine: String, profileID: String, hotSeatID: String? = nil,
+                fullQuest: Bool? = nil, fanPackGraphics: Bool? = nil, fanTextSteel: Bool? = nil,
+                fanLocalStyles: Bool? = nil, fanHolidayStyles: Bool? = nil, runID: UUID, dataSetID: String,
+                levelIndex: Int, levelFingerprint: String, initialStateHash: String, tick: Int,
+                events: [ClassicDOSReplayEvent], stateHash: String, usedRewind: Bool, nukeCount: Int,
+                rewindCount: Int, undoCount: Int, selectedSkill: Int, scrollX: Double, scrollY: Double,
+                l2: L2RunRecovery? = nil, l3: L3RunRecovery? = nil, neo: NeoRunRecovery? = nil,
+                neoPackID: String? = nil, neoLevelID: String? = nil, neoPackName: String? = nil,
+                fan: FanRunRecovery? = nil, classicState: ClassicDOSSimulation? = nil,
+                sourcePath: String? = nil, savedAt: Date = Date()) {
+        self.version = version; self.engine = engine; self.profileID = profileID; self.hotSeatID = hotSeatID
+        self.fullQuest = fullQuest; self.fanPackGraphics = fanPackGraphics; self.fanTextSteel = fanTextSteel
+        self.fanLocalStyles = fanLocalStyles; self.fanHolidayStyles = fanHolidayStyles; self.runID = runID
+        self.dataSetID = dataSetID; self.levelIndex = levelIndex; self.levelFingerprint = levelFingerprint
+        self.initialStateHash = initialStateHash; self.tick = tick; self.events = events
+        self.stateHash = stateHash; self.usedRewind = usedRewind; self.nukeCount = nukeCount
+        self.rewindCount = rewindCount; self.undoCount = undoCount; self.selectedSkill = selectedSkill
+        self.scrollX = scrollX; self.scrollY = scrollY; self.l2 = l2; self.l3 = l3; self.neo = neo
+        self.neoPackID = neoPackID; self.neoLevelID = neoLevelID; self.neoPackName = neoPackName
+        self.fan = fan; self.classicState = classicState; self.sourcePath = sourcePath; self.savedAt = savedAt
+    }
+
+    public static let bundledEngine: String = engineFingerprint(resources: AppStorage.current().resources)
+    /// The engine fingerprint in the bundled resources, or an empty string.
+    public static func engineFingerprint(resources: URL) -> String {
+        (try? String(contentsOf: resources.appendingPathComponent("Trolley/engine-fingerprint.txt"), encoding: .utf8))?
             .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-    }()
-    func validated() throws -> Self {
+    }
+    public func validated() throws -> Self {
         guard version == 1 else { throw RunRecoveryError.version }
         guard (0...120_000).contains(tick), (0..<10_000).contains(levelIndex),
               events.count <= 100_000, !dataSetID.isEmpty, !engine.isEmpty,
@@ -85,16 +108,22 @@ struct RunRecovery: Codable, Sendable {
     }
 }
 
-struct FanRunRecovery: Codable, Sendable {
-    struct Entry: Codable, Sendable {
-        let file: String
-        let section: Int?
-        let label: String
+public struct FanRunRecovery: Codable, Sendable {
+    public struct Entry: Codable, Sendable {
+        public let file: String
+        public let section: Int?
+        public let label: String
+        public init(file: String, section: Int?, label: String) {
+            self.file = file; self.section = section; self.label = label
+        }
     }
-    let queue: [Entry]
-    let index: Int
-    var baseDataSetID: String? = nil
-    func validate() throws {
+    public let queue: [Entry]
+    public let index: Int
+    public var baseDataSetID: String? = nil
+    public init(queue: [Entry], index: Int, baseDataSetID: String? = nil) {
+        self.queue = queue; self.index = index; self.baseDataSetID = baseDataSetID
+    }
+    public func validate() throws {
         guard queue.count <= 10_000, queue.indices.contains(index),
             baseDataSetID.map({ !$0.isEmpty && $0.utf8.count <= 4096 }) ?? true,
             queue.allSatisfy({ !$0.file.isEmpty && $0.file.utf8.count <= 4096
@@ -104,9 +133,9 @@ struct FanRunRecovery: Codable, Sendable {
     }
 }
 
-enum RunRecoveryError: Error, LocalizedError {
+public enum RunRecoveryError: Error, LocalizedError {
     case version, invalid, changed, busy, differentGame, differentSession
-    var errorDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case .version: return "This saved run needs a different app version. Its files were preserved."
         case .invalid: return "The saved run could not be verified. Its files were preserved."
@@ -119,23 +148,23 @@ enum RunRecoveryError: Error, LocalizedError {
 }
 
 /// Atomic checkpoints have a validated backup and never overwrite an unseen writer.
-final class RunRecoveryFile {
+public final class RunRecoveryFile {
     private struct Document: Codable {
         var version = 1
         let payload: Data?
         let checksum: String
     }
-    let url: URL
-    var backupURL: URL { url.appendingPathExtension("backup") }
+    public let url: URL
+    public var backupURL: URL { url.appendingPathExtension("backup") }
     private var expected: Data?
-    private(set) var recoveredBackup = false
-    init(url: URL) { self.url = url }
+    public private(set) var recoveredBackup = false
+    public init(url: URL) { self.url = url }
     private func hash(_ data: Data) -> String { SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined() }
     /// The fields that choose the latest run. Decoding only these skips the engine snapshot.
-    struct Header: Decodable, Sendable {
-        let profileID: String
-        var hotSeatID: String? = nil
-        var savedAt = Date()
+    public struct Header: Decodable, Sendable {
+        public let profileID: String
+        public var hotSeatID: String? = nil
+        public var savedAt = Date()
     }
     private func verifiedPayload(_ data: Data) throws -> Data? {
         let document = try JSONDecoder().decode(Document.self, from: data)
@@ -147,12 +176,12 @@ final class RunRecoveryFile {
         try verifiedPayload(data).map { try JSONDecoder().decode(RunRecovery.self, from: $0).validated() }
     }
     /// Reads the primary file's header without the lock or backup recovery. Callers fall back to `load()`.
-    func header() throws -> Header? {
+    public func header() throws -> Header? {
         try verifiedPayload(read(url)).map { try JSONDecoder().decode(Header.self, from: $0) }
     }
     /// Keep ownership verification and removal under the same writer lock.
     /// The lock file stays in place so another process cannot acquire a new inode.
-    func discard(profileID: String) throws -> Bool {
+    public func discard(profileID: String) throws -> Bool {
         try locked {
             let manager = FileManager.default
             let data = try current() ?? (manager.fileExists(atPath: backupURL.path) ? read(backupURL) : nil)
@@ -185,7 +214,7 @@ final class RunRecoveryFile {
         defer { flock(fd, LOCK_UN) }
         return try body()
     }
-    func load() throws -> RunRecovery? {
+    public func load() throws -> RunRecovery? {
         try locked {
             recoveredBackup = false
             do {
@@ -212,7 +241,7 @@ final class RunRecoveryFile {
             return value
         }
     }
-    func save(_ recovery: RunRecovery?) throws {
+    public func save(_ recovery: RunRecovery?) throws {
         try locked {
             let existing = try current()
             guard existing == expected else { throw RunRecoveryError.changed }
@@ -228,19 +257,18 @@ final class RunRecoveryFile {
 }
 
 /// One serial writer keeps disk work off the game clock. Forced saves drain it on exit.
-final class RunRecoveryStore: @unchecked Sendable {
+public final class RunRecoveryStore: @unchecked Sendable {
     private static let integrationDirectory = FileManager.default.temporaryDirectory.appendingPathComponent("RunRecovery-\(UUID().uuidString)")
-    let directory: URL
+    public let directory: URL
     private let queue = DispatchQueue(label: "academy.glasscode.lemmings.checkpoints", qos: .utility)
     private var files: [UUID: RunRecoveryFile] = [:]
     private var lastSaveError: Error?
-    init(directory: URL? = nil) {
+    public init(storage: AppStorage = .current(), directory: URL? = nil) {
         if let directory { self.directory = directory }
-        else if Bundle.main.bundleIdentifier?.contains("integration-tests") == true {
+        else if storage.isIntegrationTestBuild {
             self.directory = Self.integrationDirectory
         } else {
-            self.directory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-                .appendingPathComponent("Ultimate Lemmings/Checkpoints")
+            self.directory = storage.applicationSupport.appendingPathComponent("Checkpoints")
         }
     }
     private func file(_ id: UUID) throws -> RunRecoveryFile {
@@ -255,7 +283,7 @@ final class RunRecoveryStore: @unchecked Sendable {
         let value = try file.load(); files[id] = file
         return value
     }
-    func save(_ recovery: RunRecovery, immediately: Bool = false,
+    public func save(_ recovery: RunRecovery, immediately: Bool = false,
               onError: @escaping @MainActor @Sendable (String) -> Void) {
         let operation: @Sendable () -> Void = { [self] in
             do { try file(recovery.runID).save(recovery); lastSaveError = nil }
@@ -267,15 +295,15 @@ final class RunRecoveryStore: @unchecked Sendable {
         }
         if immediately { queue.sync(execute: operation) } else { queue.async(execute: operation) }
     }
-    func checkSaveSucceeded() throws {
+    public func checkSaveSucceeded() throws {
         try queue.sync { if let lastSaveError { throw lastSaveError } }
     }
-    func clear(_ id: UUID) throws { try queue.sync { try file(id).save(nil) } }
+    public func clear(_ id: UUID) throws { try queue.sync { try file(id).save(nil) } }
     /// Unrestorable runs leave Resume. Their bytes move to "Set aside" instead of being deleted.
-    var setAsideDirectory: URL { directory.appendingPathComponent("Set aside") }
-    func setAside(_ id: UUID) throws { try queue.sync { try moveAside(id) } }
+    public var setAsideDirectory: URL { directory.appendingPathComponent("Set aside") }
+    public func setAside(_ id: UUID) throws { try queue.sync { try moveAside(id) } }
     /// Sets aside every run that cannot be read. Returns how many were moved.
-    @discardableResult func setAsideUnreadable() throws -> Int {
+    @discardableResult public func setAsideUnreadable() throws -> Int {
         try queue.sync {
             var moved = 0
             for id in try runIDs() {
@@ -287,7 +315,7 @@ final class RunRecoveryStore: @unchecked Sendable {
         }
     }
     /// Deletes the readable runs of a removed player. Runs that cannot be read stay untouched.
-    func discard(profileID: String) throws {
+    public func discard(profileID: String) throws {
         try queue.sync {
             for id in try runIDs() {
                 let candidate = RunRecoveryFile(url: directory.appendingPathComponent(id.uuidString + ".json"))
@@ -393,7 +421,7 @@ final class RunRecoveryStore: @unchecked Sendable {
         return result
     }
     /// Chooses the newest run from cached headers, then fully loads only that run.
-    func latest(profileID: String, hotSeatID: String? = nil) throws -> RunRecovery? {
+    public func latest(profileID: String, hotSeatID: String? = nil) throws -> RunRecovery? {
         try queue.sync {
             var candidates: [(id: UUID, savedAt: Date)] = []
             var firstError: Error?
@@ -422,20 +450,24 @@ final class RunRecoveryStore: @unchecked Sendable {
     }
 }
 
-struct NeoRunRecovery: Codable, Sendable {
-    struct Input: Codable, Sendable {
-        enum Action: Codable, Sendable {
+public struct NeoRunRecovery: Codable, Sendable {
+    public struct Input: Codable, Sendable {
+        public enum Action: Codable, Sendable {
             case assign(skill: Int, lemming: Int)
             case rate(delta: Int)
             case nuke
         }
-        let tick: Int
-        let action: Action
+        public let tick: Int
+        public let action: Action
+        public init(tick: Int, action: Action) { self.tick = tick; self.action = action }
     }
-    let initialState: NeoLemmixSimulation
-    let state: NeoLemmixSimulation
-    let inputs: [Input]
-    func validate() throws {
+    public let initialState: NeoLemmixSimulation
+    public let state: NeoLemmixSimulation
+    public let inputs: [Input]
+    public init(initialState: NeoLemmixSimulation, state: NeoLemmixSimulation, inputs: [Input]) {
+        self.initialState = initialState; self.state = state; self.inputs = inputs
+    }
+    public func validate() throws {
         guard initialState.tickCount == 0, (0...120_000).contains(state.tickCount),
               inputs.count <= 100_000,
               inputs.allSatisfy({ (0...state.tickCount).contains($0.tick) }),
@@ -445,29 +477,36 @@ struct NeoRunRecovery: Codable, Sendable {
     }
 }
 
-struct L3RunRecovery: Codable, Sendable {
-    struct RestoredRun {
-        let initial: Lemmings3Runtime
-        let game: Lemmings3Runtime
+public struct L3RunRecovery: Codable, Sendable {
+    public struct RestoredRun: Sendable {
+        public let initial: Lemmings3Runtime
+        public let game: Lemmings3Runtime
     }
-    struct Input: Codable, Sendable {
-        let tick: Int
-        let action: String
-        let lemming: Int?
-        let direction: String?
+    public struct Input: Codable, Sendable {
+        public let tick: Int
+        public let action: String
+        public let lemming: Int?
+        public let direction: String?
+        public init(tick: Int, action: String, lemming: Int?, direction: String?) {
+            self.tick = tick; self.action = action; self.lemming = lemming; self.direction = direction
+        }
     }
-    let progress: Lemmings3ClassicCampaign.Progress
-    let inputs: [Input]
-    let skillAssignments: [String: Int]
-    let toolUses: [String: Int]
-    func validate(tick: Int) throws {
+    public let progress: Lemmings3ClassicCampaign.Progress
+    public let inputs: [Input]
+    public let skillAssignments: [String: Int]
+    public let toolUses: [String: Int]
+    public init(progress: Lemmings3ClassicCampaign.Progress, inputs: [Input], skillAssignments: [String: Int],
+                toolUses: [String: Int]) {
+        self.progress = progress; self.inputs = inputs; self.skillAssignments = skillAssignments; self.toolUses = toolUses
+    }
+    public func validate(tick: Int) throws {
         guard progress.version == 1, progress.tribe != nil, (0..<30).contains(progress.index),
               inputs.count <= 100_000, inputs.allSatisfy({ (0...tick).contains($0.tick) }),
               zip(inputs, inputs.dropFirst()).allSatisfy({ $0.tick <= $1.tick }),
               skillAssignments.values.allSatisfy({ (0...100_000).contains($0) }),
               toolUses.values.allSatisfy({ (0...100_000).contains($0) }) else { throw RunRecoveryError.invalid }
     }
-    func restore(initial: Lemmings3Runtime, checkpoint: RunRecovery) throws -> RestoredRun {
+    public func restore(initial: Lemmings3Runtime, checkpoint: RunRecovery) throws -> RestoredRun {
         _ = try checkpoint.validated()
         let replayInitial: Lemmings3Runtime
         if Self.stateHash(initial) == checkpoint.initialStateHash {
@@ -570,7 +609,7 @@ struct L3RunRecovery: Codable, Sendable {
             creatures: configuration.creatures, additionalEntrances: configuration.additionalEntrances))
     }
     /// Reconstructs the deterministic L3 state at a recorded tick.
-    static func replay(initial: Lemmings3Runtime, inputs: [Input], through tick: Int) throws -> Lemmings3Runtime {
+    public static func replay(initial: Lemmings3Runtime, inputs: [Input], through tick: Int) throws -> Lemmings3Runtime {
         guard (0...120_000).contains(tick), inputs.count <= 100_000,
               inputs.allSatisfy({ (0...tick).contains($0.tick) }),
               zip(inputs, inputs.dropFirst()).allSatisfy({ $0.tick <= $1.tick }) else {
@@ -585,7 +624,7 @@ struct L3RunRecovery: Codable, Sendable {
         guard game.tick == tick, !game.isComplete else { throw RunRecoveryError.invalid }
         return game
     }
-    static func stateHash(_ game: Lemmings3Runtime) -> String {
+    public static func stateHash(_ game: Lemmings3Runtime) -> String {
         var hash = SHA256()
         func number(_ value: Int) {
             var value = Int64(value).littleEndian
@@ -630,7 +669,7 @@ struct L3RunRecovery: Codable, Sendable {
         for trap in c.traps.sorted(by: { $0.id < $1.id }) { number(trap.id); number(game.trapFrame(id: trap.id)) }
         return hash.finalize().map { String(format: "%02x", $0) }.joined()
     }
-    @discardableResult static func apply(_ input: Input, to game: inout Lemmings3Runtime) -> Bool {
+    @discardableResult public static func apply(_ input: Input, to game: inout Lemmings3Runtime) -> Bool {
         guard input.tick == game.tick, !game.isComplete else { return false }
         if input.action == "abort" {
             guard input.lemming == nil, input.direction == nil else { return false }
@@ -648,8 +687,8 @@ struct L3RunRecovery: Codable, Sendable {
 
 /// Canonical value encoding for the native L2 runtime, including private state.
 /// Checkpoints remain tied to the exact engine fingerprint and validated assets.
-enum RecoveryValueEncoding {
-    static func data(_ value: Any) throws -> Data {
+public enum RecoveryValueEncoding {
+    public static func data(_ value: Any) throws -> Data {
         if let data = value as? Data { return data }
         if let bytes = value as? [UInt8] { return Data(bytes) }
         if let bits = value as? [Bool] { return Data(bits.map { $0 ? 1 : 0 }) }
@@ -683,19 +722,20 @@ enum RecoveryValueEncoding {
     }
 }
 
-struct L2RunRecovery: Codable, Sendable {
-    struct Practice: Codable, Sendable {
-        let choice: Int
-        let skills: [Int]
-        func validate() throws {
+public struct L2RunRecovery: Codable, Sendable {
+    public struct Practice: Codable, Sendable {
+        public let choice: Int
+        public let skills: [Int]
+        public init(choice: Int, skills: [Int]) { self.choice = choice; self.skills = skills }
+        public func validate() throws {
             guard Lemmings2Practice.tribes.indices.contains(choice), skills.count == 8,
                 Set(skills).count == 8,
                 skills.allSatisfy({ Lemmings2Runtime.Skill(rawValue: $0).map { $0 != .unused } == true })
                 else { throw RunRecoveryError.invalid }
         }
     }
-    struct Input: Codable, Sendable {
-        enum Action: Codable, Equatable, Sendable {
+    public struct Input: Codable, Sendable {
+        public enum Action: Codable, Equatable, Sendable {
             case assign(slot: Int, lemming: Int)
             case fan(x: Int, y: Int, active: Bool)
             case aim(x: Int, y: Int, held: Bool)
@@ -704,13 +744,17 @@ struct L2RunRecovery: Codable, Sendable {
             case chain(x: Int, y: Int)
             case nuke
         }
-        let tick: Int
-        let action: Action
+        public let tick: Int
+        public let action: Action
+        public init(tick: Int, action: Action) { self.tick = tick; self.action = action }
     }
-    let progress: Lemmings2Campaign.Progress
-    let inputs: [Input]
-    var practice: Practice? = nil
-    static func stateHash(_ game: Lemmings2Runtime, includeConfiguration: Bool = false) throws -> String {
+    public let progress: Lemmings2Campaign.Progress
+    public let inputs: [Input]
+    public var practice: Practice? = nil
+    public init(progress: Lemmings2Campaign.Progress, inputs: [Input], practice: Practice? = nil) {
+        self.progress = progress; self.inputs = inputs; self.practice = practice
+    }
+    public static func stateHash(_ game: Lemmings2Runtime, includeConfiguration: Bool = false) throws -> String {
         var digest = SHA256()
         for child in Mirror(reflecting: game).children {
             guard child.label != "soundEvents", includeConfiguration || child.label != "configuration" else { continue }
@@ -719,14 +763,14 @@ struct L2RunRecovery: Codable, Sendable {
         }
         return digest.finalize().map { String(format: "%02x", $0) }.joined()
     }
-    func validate(tick: Int) throws {
+    public func validate(tick: Int) throws {
         try practice?.validate()
         guard progress.version == 1, (0..<12).contains(progress.tribe), (0..<10).contains(progress.level),
             inputs.count <= 100_000, inputs.allSatisfy({ (0...tick).contains($0.tick) }),
             zip(inputs, inputs.dropFirst()).allSatisfy({ $0.tick <= $1.tick }) else { throw RunRecoveryError.invalid }
     }
     private static func absSafe(_ coordinate: Int) -> Bool { (-1_000_000...1_000_000).contains(coordinate) }
-    static func apply(_ input: Input, to game: inout Lemmings2Runtime) throws {
+    public static func apply(_ input: Input, to game: inout Lemmings2Runtime) throws {
         guard game.tick == input.tick, !game.isComplete else { throw RunRecoveryError.invalid }
         switch input.action {
         case let .assign(slot, id): guard game.assign(slot: slot, to: id) else { throw RunRecoveryError.invalid }
@@ -742,7 +786,7 @@ struct L2RunRecovery: Codable, Sendable {
         case .nuke: guard !game.isNuking else { throw RunRecoveryError.invalid }; game.nuke()
         }
     }
-    func restore(initial: Lemmings2Runtime, checkpoint: RunRecovery) throws -> (Lemmings2Runtime, Lemmings2Runtime?, Int) {
+    public func restore(initial: Lemmings2Runtime, checkpoint: RunRecovery) throws -> (Lemmings2Runtime, Lemmings2Runtime?, Int) {
         _ = try checkpoint.validated()
         guard try Self.stateHash(initial, includeConfiguration: true) == checkpoint.initialStateHash else { throw RunRecoveryError.differentGame }
         var game = try Self.replay(initial: initial, inputs: inputs, through: checkpoint.tick)
@@ -759,7 +803,7 @@ struct L2RunRecovery: Codable, Sendable {
         return (game, beforeNuke, beforeNukeCount)
     }
     /// Reconstructs the deterministic L2 state at a recorded tick.
-    static func replay(initial: Lemmings2Runtime, inputs: [Input], through tick: Int) throws -> Lemmings2Runtime {
+    public static func replay(initial: Lemmings2Runtime, inputs: [Input], through tick: Int) throws -> Lemmings2Runtime {
         guard (0...120_000).contains(tick), inputs.count <= 100_000,
               inputs.allSatisfy({ (0...tick).contains($0.tick) }),
               zip(inputs, inputs.dropFirst()).allSatisfy({ $0.tick <= $1.tick }) else {
@@ -781,4 +825,3 @@ struct L2RunRecovery: Codable, Sendable {
         return game
     }
 }
-#endif

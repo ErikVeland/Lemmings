@@ -1,6 +1,7 @@
 #if os(macOS)
 import AppKit
 @preconcurrency import GameKit
+import LemmingsAppCore
 import NxlvKit
 
 struct WorldwideEntry: Equatable, Sendable {

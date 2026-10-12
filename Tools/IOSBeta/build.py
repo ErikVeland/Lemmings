@@ -26,7 +26,7 @@ def run(arguments, log=None, env=None):
 
 def source_manifest():
     files = [ROOT / "Package.swift", ROOT / "Package.resolved", ROOT / "Scripts/run-swift-tests.sh"]
-    for relative in ("Sources/NxlvKit", "Sources/LemmingsGameArt", "Sources/LemmingsMobileCore", "Sources/LemmingsMobileUI", "Tools/IOSBeta", "Tools/IOSMenuAudit"):
+    for relative in ("Sources/NxlvKit", "Sources/LemmingsAppCore", "Sources/LemmingsAudio", "Sources/LemmingsGameArt", "Sources/LemmingsMobileCore", "Sources/LemmingsMobileUI", "Tools/IOSBeta", "Tools/IOSMenuAudit"):
         files += [p for p in (ROOT / relative).rglob("*") if p.suffix in (".swift", ".py")]
     files += [p for p in (ROOT / "Apps/UltimateLemmingsIOS").rglob("*")
               if p.is_file() and p.suffix in (".swift", ".plist", ".xcprivacy", ".pbxproj", ".xcscheme", ".png", ".json", ".resolved")

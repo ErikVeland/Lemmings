@@ -1,38 +1,42 @@
-#if os(macOS)
-import AppKit
+import Foundation
 import CryptoKit
 import NxlvKit
 
 /// Public replay data contains commands and identities, never level assets or saved states.
-struct LeaderboardActionReplay: Codable, Sendable {
-    static let byteLimit = 8 * 1024 * 1024
-    struct Command: Codable, Sendable {
-        let tick: Int
-        let action: String
-        var lemming: Int? = nil
-        var skill: Int? = nil
-        var value: Int? = nil
-        var x: Int? = nil
-        var y: Int? = nil
-        var held: Bool? = nil
-        var direction: String? = nil
+public struct LeaderboardActionReplay: Codable, Sendable {
+    public static let byteLimit = 8 * 1024 * 1024
+    public struct Command: Codable, Sendable {
+        public let tick: Int
+        public let action: String
+        public var lemming: Int? = nil
+        public var skill: Int? = nil
+        public var value: Int? = nil
+        public var x: Int? = nil
+        public var y: Int? = nil
+        public var held: Bool? = nil
+        public var direction: String? = nil
+        public init(tick: Int, action: String, lemming: Int? = nil, skill: Int? = nil, value: Int? = nil,
+                    x: Int? = nil, y: Int? = nil, held: Bool? = nil, direction: String? = nil) {
+            self.tick = tick; self.action = action; self.lemming = lemming; self.skill = skill; self.value = value
+            self.x = x; self.y = y; self.held = held; self.direction = direction
+        }
     }
-    let version: Int
-    let runID: UUID
-    let conditions: TrolleyConditions
-    let engine: String
-    let engineFingerprint: String
-    let initialStateHash: String
-    let finalStateHash: String
-    let ticks: Int
-    let saved: Int
-    let population: Int
-    let skills: Int
-    let won: Bool
-    let assisted: Bool
-    let commands: [Command]
+    public let version: Int
+    public let runID: UUID
+    public let conditions: TrolleyConditions
+    public let engine: String
+    public let engineFingerprint: String
+    public let initialStateHash: String
+    public let finalStateHash: String
+    public let ticks: Int
+    public let saved: Int
+    public let population: Int
+    public let skills: Int
+    public let won: Bool
+    public let assisted: Bool
+    public let commands: [Command]
 
-    func validateStructure() throws {
+    public func validateStructure() throws {
         func hash(_ value: String) -> Bool { value.count == 64 && value.allSatisfy { "0123456789abcdef".contains($0) } }
         guard version == 1, conditions.isValid, !engineFingerprint.isEmpty, engineFingerprint.count <= 256,
               hash(initialStateHash), hash(finalStateHash), (0...120_000).contains(ticks),
@@ -45,7 +49,7 @@ struct LeaderboardActionReplay: Codable, Sendable {
         guard engine == expected else { throw RunRecoveryError.invalid }
     }
 
-    static func capture(run: ArcadeRun, initial: ActionReplayState, final: ActionReplayState,
+    public static func capture(run: ArcadeRun, initial: ActionReplayState, final: ActionReplayState,
                         commands: [Command]) throws -> Self {
         guard let conditions = run.level.conditions, final.complete else { throw RunRecoveryError.invalid }
         let result = Self(version: 1, runID: run.id, conditions: conditions, engine: initial.engine,
@@ -55,7 +59,7 @@ struct LeaderboardActionReplay: Codable, Sendable {
         try result.validateStructure()
         return result
     }
-    func checked(initial: ActionReplayState) throws -> ActionReplayCursor {
+    public func checked(initial: ActionReplayState) throws -> ActionReplayCursor {
         try validateStructure()
         guard engineFingerprint == RunRecovery.bundledEngine, engine == initial.engine,
               try initial.hash() == initialStateHash else { throw RunRecoveryError.differentGame }
@@ -70,33 +74,33 @@ struct LeaderboardActionReplay: Codable, Sendable {
 }
 
 /// Playback copies the engine. It has no campaign, profile, telemetry or sound callbacks.
-enum ActionReplayState: Sendable {
+public enum ActionReplayState: Sendable {
     case classic(ClassicDOSSimulation)
     case neolemmix(NeoLemmixSimulation)
     case lemmings2(Lemmings2Runtime)
     case lemmings3(Lemmings3Runtime)
-    var engine: String {
+    public var engine: String {
         switch self { case .classic: "classic"; case .neolemmix: "neolemmix"; case .lemmings2: "lemmings2"; case .lemmings3: "lemmings3" }
     }
-    var tick: Int {
+    public var tick: Int {
         switch self { case .classic(let g): g.tickCount; case .neolemmix(let g): g.tickCount; case .lemmings2(let g): g.tick; case .lemmings3(let g): g.tick }
     }
-    var complete: Bool {
+    public var complete: Bool {
         switch self { case .classic(let g): g.isComplete; case .neolemmix(let g): g.isComplete; case .lemmings2(let g): g.isComplete; case .lemmings3(let g): g.isComplete }
     }
-    var didWin: Bool {
+    public var didWin: Bool {
         switch self { case .classic(let g): g.didWin; case .neolemmix(let g): g.didWin; case .lemmings2(let g): g.didWin; case .lemmings3(let g): g.saved > 0 }
     }
-    var saved: Int {
+    public var saved: Int {
         switch self { case .classic(let g): g.savedCount; case .neolemmix(let g): g.savedCount; case .lemmings2(let g): g.saved; case .lemmings3(let g): g.saved }
     }
-    var population: Int {
+    public var population: Int {
         switch self { case .classic(let g): g.configuration.totalLemmings; case .neolemmix(let g): g.totalPopulation; case .lemmings2(let g): g.configuration.total; case .lemmings3(let g): g.configuration.total + g.configuration.extras.count }
     }
-    var ticksPerSecond: Double {
+    public var ticksPerSecond: Double {
         switch self { case .classic: Double(ClassicDOSRules.ticksPerSecond); case .neolemmix: Double(NeoLemmixRules.ticksPerSecond); case .lemmings2: Lemmings2Runtime.ticksPerSecond; case .lemmings3: Lemmings3Runtime.ticksPerSecond }
     }
-    func hash() throws -> String {
+    public func hash() throws -> String {
         switch self {
         case .classic(let g): return ClassicDOSReplayRecorder.stateHash(of: g)
         case .lemmings2(let g): return try L2RunRecovery.stateHash(g, includeConfiguration: true)
@@ -104,7 +108,7 @@ enum ActionReplayState: Sendable {
         case .neolemmix(let g): return SHA256.hash(data: try RecoveryValueEncoding.data(g)).map { String(format: "%02x", $0) }.joined()
         }
     }
-    mutating func step() {
+    public mutating func step() {
         switch self {
         case .classic(var g): _ = g.tick(); self = .classic(g)
         case .neolemmix(var g): _ = g.tick(); self = .neolemmix(g)
@@ -112,7 +116,7 @@ enum ActionReplayState: Sendable {
         case .lemmings3(var g): g.step(); self = .lemmings3(g)
         }
     }
-    mutating func apply(_ c: LeaderboardActionReplay.Command) throws {
+    public mutating func apply(_ c: LeaderboardActionReplay.Command) throws {
         guard c.tick == tick, !complete else { throw RunRecoveryError.invalid }
         switch self {
         case .classic(var g):
@@ -157,12 +161,12 @@ enum ActionReplayState: Sendable {
     }
 }
 
-struct ActionReplayCursor {
-    let replay: LeaderboardActionReplay
-    let initial: ActionReplayState
-    private(set) var state: ActionReplayState
+public struct ActionReplayCursor: Sendable {
+    public let replay: LeaderboardActionReplay
+    public let initial: ActionReplayState
+    public private(set) var state: ActionReplayState
     private var next = 0
-    init(replay: LeaderboardActionReplay, initial: ActionReplayState) throws {
+    public init(replay: LeaderboardActionReplay, initial: ActionReplayState) throws {
         guard initial.tick == 0, !initial.complete else { throw RunRecoveryError.invalid }
         self.replay = replay; self.initial = initial; state = initial
         try applyCurrent()
@@ -172,12 +176,12 @@ struct ActionReplayCursor {
             try state.apply(replay.commands[next]); next += 1
         }
     }
-    mutating func step() throws {
+    public mutating func step() throws {
         guard state.tick < replay.ticks else { return }
         guard !state.complete else { throw RunRecoveryError.invalid }
         state.step(); try applyCurrent()
     }
-    mutating func seek(to tick: Int) throws {
+    public mutating func seek(to tick: Int) throws {
         let target = max(0, min(replay.ticks, tick))
         if target < state.tick { self = try Self(replay: replay, initial: initial) }
         while state.tick < target { try step() }
@@ -185,7 +189,7 @@ struct ActionReplayCursor {
 }
 
 extension LeaderboardActionReplay.Command {
-    static func classic(_ e: ClassicDOSReplayEvent) throws -> Self {
+    public static func classic(_ e: ClassicDOSReplayEvent) throws -> Self {
         guard e.afterTick == true else { throw RunRecoveryError.invalid }
         switch e.action {
         case let .assign(id, skill): return .init(tick: e.tick, action: "assign", lemming: id, skill: ClassicSkill.allCases.firstIndex(of: skill)!)
@@ -193,14 +197,14 @@ extension LeaderboardActionReplay.Command {
         case .nuke: return .init(tick: e.tick, action: "nuke")
         }
     }
-    static func neo(_ e: NeoRunRecovery.Input) -> Self {
+    public static func neo(_ e: NeoRunRecovery.Input) -> Self {
         switch e.action {
         case let .assign(skill, id): .init(tick: e.tick, action: "assign", lemming: id, skill: skill)
         case .rate(let value): .init(tick: e.tick, action: "rate", value: value)
         case .nuke: .init(tick: e.tick, action: "nuke")
         }
     }
-    static func l2(_ e: L2RunRecovery.Input) -> Self {
+    public static func l2(_ e: L2RunRecovery.Input) -> Self {
         switch e.action {
         case let .assign(slot, id): .init(tick: e.tick, action: "assign", lemming: id, skill: slot)
         case let .fan(x, y, active): .init(tick: e.tick, action: "fan", x: x, y: y, held: active)
@@ -211,6 +215,5 @@ extension LeaderboardActionReplay.Command {
         case .nuke: .init(tick: e.tick, action: "nuke")
         }
     }
-    static func l3(_ e: L3RunRecovery.Input) -> Self { .init(tick: e.tick, action: e.action, lemming: e.lemming, direction: e.direction) }
+    public static func l3(_ e: L3RunRecovery.Input) -> Self { .init(tick: e.tick, action: e.action, lemming: e.lemming, direction: e.direction) }
 }
-#endif

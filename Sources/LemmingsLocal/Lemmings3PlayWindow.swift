@@ -2,6 +2,7 @@
 import AppKit
 import AVFoundation
 import CryptoKit
+import LemmingsAppCore
 import LemmingsAudio
 import NxlvKit
 

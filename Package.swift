@@ -13,6 +13,8 @@ let package = Package(
         .library(name: "LemmingsAudio", targets: ["LemmingsAudio"]),
         .library(name: "LemmingsGameArt", targets: ["LemmingsGameArt"]),
         .library(name: "LemmingsMobileCore", targets: ["LemmingsMobileCore"]),
+        // Stores and records that the Mac and iPad apps share.
+        .library(name: "LemmingsAppCore", targets: ["LemmingsAppCore"]),
         .library(name: "LemmingsMobileUI", targets: ["LemmingsMobileUI"]),
         .executable(name: "LemmingsLocal", targets: ["LemmingsLocal"]),
         .executable(name: "LemmingsDataTool", targets: ["LemmingsDataTool"]),
@@ -45,8 +47,13 @@ let package = Package(
             path: "Sources/LemmingsMobileCore"
         ),
         .target(
+            name: "LemmingsAppCore",
+            dependencies: ["NxlvKit"],
+            path: "Sources/LemmingsAppCore"
+        ),
+        .target(
             name: "LemmingsMobileUI",
-            dependencies: ["LemmingsAudio", "LemmingsGameArt", "LemmingsMobileCore", "NxlvKit"],
+            dependencies: ["LemmingsAppCore", "LemmingsAudio", "LemmingsGameArt", "LemmingsMobileCore", "NxlvKit"],
             path: "Sources/LemmingsMobileUI"
         ),
         .executableTarget(
@@ -59,6 +66,7 @@ let package = Package(
         .executableTarget(
             name: "LemmingsLocal",
             dependencies: [
+                "LemmingsAppCore",
                 "LemmingsAudio",
                 "LemmingsGameArt",
                 "NxlvKit",
@@ -78,8 +86,13 @@ let package = Package(
         ),
         .testTarget(
             name: "LemmingsLocalTests",
-            dependencies: ["LemmingsLocal", "NxlvKit"],
+            dependencies: ["LemmingsAppCore", "LemmingsAudio", "LemmingsLocal", "NxlvKit"],
             path: "Tests/LemmingsLocalTests"
+        ),
+        .testTarget(
+            name: "LemmingsAppCoreTests",
+            dependencies: ["LemmingsAppCore", "NxlvKit"],
+            path: "Tests/LemmingsAppCoreTests"
         ),
         .testTarget(
             name: "LemmingsMobileCoreTests",

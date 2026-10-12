@@ -1,6 +1,7 @@
 #if os(macOS)
 import AppKit
 import AVFoundation
+import LemmingsAppCore
 import LemmingsAudio
 import NxlvKit
 import Sparkle
@@ -3819,7 +3820,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
           let level = dataSet.campaign.levels[index]
           source = .classic(level.level, root: root, rank: level.rank, number: level.number)
           official = dataSet.kind != .scanned && dataSet.title != nil
-        case let .fan(pack, entry, _): source = .fan(pack, entry); official = false
+        case let .fan(pack, entry, _): source = .fan { try FanLevelLibrary.level(entry, in: pack).0 }; official = false
         case .neolemmix:
           sourceFailures.append("NeoLemmix difficulty analysis is not yet available.")
           continue

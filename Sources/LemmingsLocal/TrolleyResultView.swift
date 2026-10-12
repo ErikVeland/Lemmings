@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import LemmingsAppCore
 import NxlvKit
 
 /// Shares the game's pixel headings, sprite portraits, input and page stack.

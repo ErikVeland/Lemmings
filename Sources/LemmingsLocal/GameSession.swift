@@ -1,5 +1,9 @@
 #if os(macOS)
 import AppKit
+// Standalone test scripts compile the shared files into the same module.
+#if canImport(LemmingsAppCore)
+import LemmingsAppCore
+#endif
 import NxlvKit
 
 /// One lemming, reduced to what the views need to draw it.

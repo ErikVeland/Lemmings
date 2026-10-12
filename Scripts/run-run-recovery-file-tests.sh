@@ -14,5 +14,5 @@ fi
 swiftc -O -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos12.3" \
   -I "$library_dir/modules" -L "$library_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$library_dir" -o "$build_dir/tests" \
-  Sources/LemmingsLocal/RunRecovery.swift Tests/RunRecoveryFileTests/main.swift
+  Sources/LemmingsAppCore/Recovery/RunRecovery.swift Sources/LemmingsAppCore/AppStorage.swift Tests/RunRecoveryFileTests/main.swift
 "$build_dir/tests"

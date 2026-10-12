@@ -31,7 +31,8 @@ swiftc -swift-version 6 \
   "$project_dir/Sources/LemmingsLocal/PanelView.swift" \
   "$project_dir/Sources/LemmingsLocal/TimelinePanelControls.swift" \
   "$project_dir/Sources/LemmingsLocal/PanelGlyphs.swift" \
-  "$project_dir/Sources/LemmingsLocal/RunRecovery.swift" \
+  "$project_dir/Sources/LemmingsAppCore/Recovery/RunRecovery.swift" \
+  "$project_dir/Sources/LemmingsAppCore/AppStorage.swift" \
   "$project_dir/Sources/LemmingsLocal/GameSession.swift" \
   "$project_dir/Sources/LemmingsLocal/NeoLemmixSpriteSet.swift" \
   "$project_dir/Sources/LemmingsLocal/CRTShaders.swift" \

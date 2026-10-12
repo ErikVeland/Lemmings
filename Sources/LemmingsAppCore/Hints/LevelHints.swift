@@ -1,18 +1,17 @@
-#if os(macOS)
 import Foundation
 
-struct LevelHintCatalogue: Decodable {
-    struct Move: Decodable, Equatable {
-        let skill: String, lemmingID: Int, x: Int, y: Int, tick: Int
-        let facingLeft: Bool
+public struct LevelHintCatalogue: Decodable, Sendable {
+    public struct Move: Decodable, Equatable, Sendable {
+        public let skill: String, lemmingID: Int, x: Int, y: Int, tick: Int
+        public let facingLeft: Bool
     }
-    struct Rate: Decodable { let tick: Int, value: Int }
-    struct Level: Decodable {
-        let fingerprint: String, title: String, rank: String
-        let number: Int, width: Int, height: Int
-        let opening: [Move], skillOrder: [String], rates: [Rate]
+    public struct Rate: Decodable, Sendable { public let tick: Int, value: Int }
+    public struct Level: Decodable, Sendable {
+        public let fingerprint: String, title: String, rank: String
+        public let number: Int, width: Int, height: Int
+        public let opening: [Move], skillOrder: [String], rates: [Rate]
 
-        var deck: LevelHintDeck {
+        public var deck: LevelHintDeck {
             let first = opening.first?.skill ?? ""
             let nudge = LevelHintDeck.nudges[first]
                 ?? "Trace a path from the entrance to the exit. Check the landing places before changing the terrain."
@@ -62,9 +61,9 @@ struct LevelHintCatalogue: Decodable {
             ])
         }
     }
-    let schemaVersion: Int, engineFingerprint: String, levels: [Level]
+    public let schemaVersion: Int, engineFingerprint: String, levels: [Level]
 
-    func level(for fingerprint: String, engine: String) -> Level? {
+    public func level(for fingerprint: String, engine: String) -> Level? {
         guard schemaVersion == 1, engineFingerprint == engine, !fingerprint.isEmpty else { return nil }
         let matches = levels.filter { $0.fingerprint == fingerprint }
         guard matches.count == 1, let level = matches.first, level.width > 0, level.height > 0,
@@ -74,23 +73,29 @@ struct LevelHintCatalogue: Decodable {
         return level
     }
 
-    static func load(in bundle: Bundle = .main) -> (Self, String)? {
-        guard let root = bundle.resourceURL,
-              let bytes = try? Data(contentsOf: root.appendingPathComponent("Hints/classic.json")),
+    public static func load(storage: AppStorage = .current()) -> (Self, String)? {
+        let root = storage.resources
+        guard let bytes = try? Data(contentsOf: root.appendingPathComponent("Hints/classic.json")),
               let catalogue = try? JSONDecoder().decode(Self.self, from: bytes),
               let engine = try? String(contentsOf: root.appendingPathComponent("Trolley/engine-fingerprint.txt"), encoding: .utf8) else { return nil }
         return (catalogue, engine.trimmingCharacters(in: .whitespacesAndNewlines))
     }
 }
 
-struct LevelHintDeck {
-    struct Stage {
-        let title: String, body: String
-        var moves: [LevelHintCatalogue.Move] = []
-        var width = 0, height = 0
+public struct LevelHintDeck: Sendable {
+    public struct Stage: Sendable {
+        public let title: String, body: String
+        public var moves: [LevelHintCatalogue.Move] = []
+        public var width = 0, height = 0
+        public init(title: String, body: String, moves: [LevelHintCatalogue.Move] = [], width: Int = 0, height: Int = 0) {
+            self.title = title; self.body = body; self.moves = moves; self.width = width; self.height = height
+        }
     }
-    let title: String, checked: Bool, stages: [Stage]
-    static let nudges = [
+    public let title: String, checked: Bool, stages: [Stage]
+    public init(title: String, checked: Bool, stages: [Stage]) {
+        self.title = title; self.checked = checked; self.stages = stages
+    }
+    public static let nudges = [
         "blocker": "Think about giving one worker room to prepare the route. The whole crowd does not need to move together.",
         "builder": "Look for the first gap or change in height. Work out where a staircase could reach firm ground.",
         "basher": "Look at the first wall in the route. Think about opening a passage at the height where the lemmings walk.",
@@ -100,7 +105,7 @@ struct LevelHintDeck {
         "floater": "Check the first long drop. A safe landing is the first part of the route.",
         "bomber": "A small opening can change the route. Check how much ground needs to be removed."
     ]
-    static let jobs = [
+    public static let jobs = [
         "blocker": "A Blocker turns other lemmings back. Leave room for the worker who will prepare the path.",
         "builder": "A Builder makes a short rising staircase. Check its landing point and leave room for the next staircase.",
         "basher": "A Basher cuts horizontally through ground. Choose the side and height of the passage carefully.",
@@ -111,7 +116,7 @@ struct LevelHintDeck {
         "bomber": "A Bomber removes nearby ground after a countdown. A moving lemming can travel during the countdown."
     ]
 
-    static func practice(title: String, skills: [String], chronicles: Bool = false) -> Self {
+    public static func practice(title: String, skills: [String], chronicles: Bool = false) -> Self {
         let available = skills.filter { jobs[$0.lowercased()] != nil }
         let tips = available.prefix(3).compactMap { jobs[$0.lowercased()] }.joined(separator: "\n\n")
         return Self(title: title, checked: false, stages: [
@@ -125,4 +130,3 @@ struct LevelHintDeck {
         ])
     }
 }
-#endif

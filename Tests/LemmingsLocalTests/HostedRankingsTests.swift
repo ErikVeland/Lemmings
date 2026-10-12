@@ -1,6 +1,7 @@
 #if os(macOS)
 import AppKit
 import Foundation
+@testable import LemmingsAppCore
 import NxlvKit
 import XCTest
 @testable import LemmingsLocal

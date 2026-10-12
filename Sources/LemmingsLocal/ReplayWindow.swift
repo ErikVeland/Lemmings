@@ -1,6 +1,7 @@
 #if os(macOS)
 import AppKit
 @preconcurrency import AVFoundation
+import LemmingsAppCore
 import NxlvKit
 import UniformTypeIdentifiers
 

@@ -1,8 +1,7 @@
-#if os(macOS)
 import Foundation
 import NxlvKit
 
-@MainActor protocol AnonymousTelemetryTransport {
+@MainActor public protocol AnonymousTelemetryTransport {
     func data(for request: URLRequest) async throws -> (Data, URLResponse)
 }
 
@@ -25,8 +24,8 @@ import NxlvKit
 /**
  * A fixed, identifier-free event sent only after the player agrees to share counts.
  */
-struct AnonymousTelemetryEvent: Encodable, Equatable, Sendable {
-    enum Kind: String, Codable, Sendable {
+public struct AnonymousTelemetryEvent: Encodable, Equatable, Sendable {
+    public enum Kind: String, Codable, Sendable {
         case activeDay = "active_day"
         case levelStart = "level_start"
         case levelWin = "level_win"
@@ -37,14 +36,14 @@ struct AnonymousTelemetryEvent: Encodable, Equatable, Sendable {
         case allSoundtracksDownloaded = "all_soundtracks_downloaded"
     }
 
-    let v = 1
-    let event: Kind
-    let game: String?
-    let level: String?
-    let mode: String?
-    let amount: Int?
+    public let v = 1
+    public let event: Kind
+    public let game: String?
+    public let level: String?
+    public let mode: String?
+    public let amount: Int?
 
-    init(_ event: Kind, game: String? = nil, level: String? = nil,
+    public init(_ event: Kind, game: String? = nil, level: String? = nil,
          mode: String? = nil, amount: Int? = nil) {
         self.event = event
         self.game = game
@@ -55,7 +54,7 @@ struct AnonymousTelemetryEvent: Encodable, Equatable, Sendable {
 
     private enum CodingKeys: String, CodingKey { case v, event, game, level, mode, amount }
 
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var values = encoder.container(keyedBy: CodingKeys.self)
         try values.encode(v, forKey: .v)
         try values.encode(event, forKey: .event)
@@ -66,30 +65,36 @@ struct AnonymousTelemetryEvent: Encodable, Equatable, Sendable {
     }
 }
 
-struct AnonymousTelemetryCount: Codable, Sendable {
-    let day: String?
-    let event: String
-    let game: String?
-    let level: String?
-    let mode: String?
-    let count: Int
+public struct AnonymousTelemetryCount: Codable, Sendable {
+    public let day: String?
+    public let event: String
+    public let game: String?
+    public let level: String?
+    public let mode: String?
+    public let count: Int
+    public init(day: String?, event: String, game: String?, level: String?, mode: String?, count: Int) {
+        self.day = day; self.event = event; self.game = game; self.level = level; self.mode = mode; self.count = count
+    }
 }
 
-struct AnonymousTelemetrySummary: Codable, Sendable {
-    let days: Int
-    let counts: [AnonymousTelemetryCount]
+public struct AnonymousTelemetrySummary: Codable, Sendable {
+    public let days: Int
+    public let counts: [AnonymousTelemetryCount]
+    public init(days: Int, counts: [AnonymousTelemetryCount]) { self.days = days; self.counts = counts }
 
-    func total(_ event: AnonymousTelemetryEvent.Kind, mode: String? = nil) -> Int {
+    public func total(_ event: AnonymousTelemetryEvent.Kind, mode: String? = nil) -> Int {
         counts.filter { $0.event == event.rawValue && (mode == nil || $0.mode == mode) }
             .reduce(0) { $0 + $1.count }
     }
 }
 
-@MainActor struct SavedLemmingsCounter {
-    let local: Int
-    let global: Int?
+@MainActor public struct SavedLemmingsCounter {
+    public let local: Int
+    public let global: Int?
 
-    var text: String {
+    public init(local: Int, global: Int?) { self.local = local; self.global = global }
+
+    public var text: String {
         "LEMMINGS SAVED   LOCAL \(Self.grouped(local))   GLOBAL \(global.map(Self.grouped) ?? "—")"
     }
 
@@ -105,10 +110,10 @@ struct AnonymousTelemetrySummary: Codable, Sendable {
  * Keeps local aggregate counts. The optional network copy has no player, device,
  * profile, run, replay, timestamp, pack name or free-form level title.
  */
-@MainActor final class AnonymousTelemetry {
-    static let shared = AnonymousTelemetry()
-    static let consentKey = "AnonymousTelemetryConsentV1"
-    static let decidedKey = "AnonymousTelemetryDecisionV1"
+@MainActor public final class AnonymousTelemetry {
+    public static let shared = AnonymousTelemetry()
+    public static let consentKey = "AnonymousTelemetryConsentV1"
+    public static let decidedKey = "AnonymousTelemetryDecisionV1"
     private static let countsKey = "AnonymousTelemetryCountsV1"
     private static let activeDayKey = "AnonymousTelemetryActiveDayV1"
     private static let soundtrackSelectedKey = "AnonymousTelemetryAllSoundtracksSelectedV1"
@@ -127,16 +132,17 @@ struct AnonymousTelemetrySummary: Codable, Sendable {
 
     private let defaults: UserDefaults
     private let transport: any AnonymousTelemetryTransport
-    let endpoint: URL?
+    public let endpoint: URL?
     private var active: Attempt?
     private var finishedAttempts = Set<UUID>()
     private var uploads: [UUID: Task<Void, Never>] = [:]
-    var onCountsChanged: (() -> Void)?
+    public var onCountsChanged: (() -> Void)?
 
-    init(defaults: UserDefaults = .standard, endpoint: URL? = nil,
-         transport: (any AnonymousTelemetryTransport)? = nil) {
-        self.defaults = defaults
-        let supplied = endpoint ?? (Bundle.main.object(forInfoDictionaryKey: "AnonymousTelemetryURL") as? String)
+    /// A nil `defaults` uses `storage.defaults`. A nil `endpoint` uses the Info.plist value of `storage.bundle`.
+    public init(storage: AppStorage = .current(), defaults: UserDefaults? = nil, endpoint: URL? = nil,
+                transport: (any AnonymousTelemetryTransport)? = nil) {
+        self.defaults = defaults ?? storage.defaults
+        let supplied = endpoint ?? (storage.bundle.object(forInfoDictionaryKey: "AnonymousTelemetryURL") as? String)
             .flatMap(URL.init(string:))
         self.endpoint = supplied.flatMap { url in
             guard url.scheme == "https", url.host != nil, url.user == nil, url.password == nil,
@@ -146,10 +152,10 @@ struct AnonymousTelemetrySummary: Codable, Sendable {
         self.transport = transport ?? URLSessionAnonymousTelemetryTransport()
     }
 
-    var consentDecided: Bool { defaults.bool(forKey: Self.decidedKey) }
-    var sharesCounts: Bool { endpoint != nil && defaults.bool(forKey: Self.consentKey) }
+    public var consentDecided: Bool { defaults.bool(forKey: Self.decidedKey) }
+    public var sharesCounts: Bool { endpoint != nil && defaults.bool(forKey: Self.consentKey) }
 
-    func setSharing(_ enabled: Bool) {
+    public func setSharing(_ enabled: Bool) {
         let wasSharing = sharesCounts
         defaults.set(true, forKey: Self.decidedKey)
         defaults.set(enabled && endpoint != nil, forKey: Self.consentKey)
@@ -161,12 +167,12 @@ struct AnonymousTelemetrySummary: Codable, Sendable {
         if sharesCounts != wasSharing { onCountsChanged?() }
     }
 
-    func clearLocalCounts() {
+    public func clearLocalCounts() {
         defaults.removeObject(forKey: Self.countsKey)
         onCountsChanged?()
     }
 
-    func recordActiveDay() {
+    public func recordActiveDay() {
         guard sharesCounts else { return }
         let day = Self.utcDay()
         guard defaults.string(forKey: Self.activeDayKey) != day else { return }
@@ -174,7 +180,7 @@ struct AnonymousTelemetrySummary: Codable, Sendable {
         record(.init(.activeDay))
     }
 
-    func start(_ level: ArcadeLevel, hotSeat: Bool, attemptID: UUID) {
+    public func start(_ level: ArcadeLevel, hotSeat: Bool, attemptID: UUID) {
         guard let next = Self.safeLevel(level, hotSeat: hotSeat) else { return }
         guard active?.id != attemptID else { return }
         if let active {
@@ -186,7 +192,7 @@ struct AnonymousTelemetrySummary: Codable, Sendable {
         record(.init(.levelStart, game: next.game, level: next.level, mode: next.mode))
     }
 
-    func finish(_ level: ArcadeLevel, hotSeat: Bool, attemptID: UUID, won: Bool, saved: Int) {
+    public func finish(_ level: ArcadeLevel, hotSeat: Bool, attemptID: UUID, won: Bool, saved: Int) {
         guard let current = Self.safeLevel(level, hotSeat: hotSeat) else { return }
         guard finishedAttempts.insert(attemptID).inserted else { return }
         if active?.id != attemptID {
@@ -206,19 +212,19 @@ struct AnonymousTelemetrySummary: Codable, Sendable {
         }
     }
 
-    func soundtrackAllSelected() {
+    public func soundtrackAllSelected() {
         guard !defaults.bool(forKey: Self.soundtrackSelectedKey) else { return }
         defaults.set(true, forKey: Self.soundtrackSelectedKey)
         record(.init(.allSoundtracksSelected))
     }
 
-    func soundtrackAllDownloaded() {
+    public func soundtrackAllDownloaded() {
         guard !defaults.bool(forKey: Self.soundtrackDownloadedKey) else { return }
         defaults.set(true, forKey: Self.soundtrackDownloadedKey)
         record(.init(.allSoundtracksDownloaded))
     }
 
-    func localSummary() -> AnonymousTelemetrySummary {
+    public func localSummary() -> AnonymousTelemetrySummary {
         let counts = defaults.dictionary(forKey: Self.countsKey) as? [String: Int] ?? [:]
         let rows = counts.compactMap { key, count -> AnonymousTelemetryCount? in
             let parts = key.split(separator: "|", omittingEmptySubsequences: false).map(String.init)
@@ -230,9 +236,9 @@ struct AnonymousTelemetrySummary: Codable, Sendable {
         return .init(days: 0, counts: rows)
     }
 
-    var localSavedTotal: Int { localSummary().total(.lemmingsSaved) }
+    public var localSavedTotal: Int { localSummary().total(.lemmingsSaved) }
 
-    func publicSavedTotal() async throws -> Int {
+    public func publicSavedTotal() async throws -> Int {
         guard sharesCounts, let endpoint else { throw URLError(.userAuthenticationRequired) }
         let request = URLRequest(url: endpoint.appendingPathComponent("v1/saved"),
                                  cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 8)
@@ -246,7 +252,7 @@ struct AnonymousTelemetrySummary: Codable, Sendable {
 
     private struct PublicSavedTotal: Decodable { let saved: Int }
 
-    func sharedSummary(token: String, days: Int = 30) async throws -> AnonymousTelemetrySummary {
+    public func sharedSummary(token: String, days: Int = 30) async throws -> AnonymousTelemetrySummary {
         guard let endpoint, [7, 30].contains(days), !token.isEmpty else {
             throw URLError(.badURL)
         }
@@ -320,4 +326,3 @@ struct AnonymousTelemetrySummary: Codable, Sendable {
         return String(format: "%04d-%02d-%02d", parts.year ?? 0, parts.month ?? 0, parts.day ?? 0)
     }
 }
-#endif

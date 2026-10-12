@@ -1,18 +1,17 @@
-#if os(macOS)
 import Foundation
 
 /// Imports only game preferences, once, without replacing current choices.
-enum LegacySaveMigration {
-    static let currentIdentifier = "academy.glasscode.lemmings"
-    static let previousIdentifier = "org.lemmingslocal.LemmingsLocal"
-    static let marker = "LegacySaveMigration.v1"
+public enum LegacySaveMigration {
+    public static let currentIdentifier = "academy.glasscode.lemmings"
+    public static let previousIdentifier = "org.lemmingslocal.LemmingsLocal"
+    public static let marker = "LegacySaveMigration.v1"
     private static let preferences: Set<String> = [
         "ClassicDataDirectory", "ClassicGameDirectories", "NeoLemmixStylesDirectory",
         "NeoLemmixLevelsDirectory",
         "MusicDirectory", "MusicUsesModernPreset", "MacintoshDiskImage", "ClassicSettings",
         "AudioMuted", "PreferMacArtworkV1", "SequelMacArtworkEnabledV2", "HDEffectsChoiceV1", "FanLevelFolder"
     ]
-    static func isProgress(_ key: String) -> Bool {
+    public static func isProgress(_ key: String) -> Bool {
         ["ModernCampaignProgress", "ClassicAchievementProgress", "ClassicGameProgress", "FanLevelsPassed"].contains(key)
             || key.hasPrefix("ClassicGameProgress.") || key.hasPrefix("nativeL2Campaign.v1.")
             || key.hasPrefix("nativeL3ClassicPreview.v1.") || key.hasPrefix("nativeL3EgyptianPreview.v1.")
@@ -33,7 +32,7 @@ enum LegacySaveMigration {
         let pieces = key.dropFirst("ArcadeProfile.".count).split(separator: ".", maxSplits: 1)
         return pieces.count == 2 && isProgress(String(pieces[1]))
     }
-    @discardableResult static func migrate(
+    @discardableResult public static func migrate(
         bundleIdentifier: String?, defaults: UserDefaults = .standard,
         readDomain: ((String) -> [String: Any])? = nil
     ) -> Int {
@@ -58,4 +57,3 @@ enum LegacySaveMigration {
         return count
     }
 }
-#endif

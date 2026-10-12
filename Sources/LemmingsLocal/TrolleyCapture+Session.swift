@@ -1,24 +1,12 @@
 #if os(macOS)
 import Foundation
-import CryptoKit
+import LemmingsAppCore
 import NxlvKit
 
-/// Translates engine observations into records without participating in simulation or campaign decisions.
-@MainActor enum TrolleyCapture {
-    static var buildVersion: String {
-        let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "development"
-        let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "local"
-        return "\(version) (\(build))"
-    }
-    static func skillKey(_ name: String) -> String { name.lowercased().replacingOccurrences(of: " ", with: "_") }
+/// Session observations for records. They use the Mac game sessions.
+extension TrolleyCapture {
     static func skills(_ skills: [SessionSkill]) -> [String: Int] {
         Dictionary(skills.map { (skillKey($0.name), $0.isInfinite ? -1 : $0.count) }, uniquingKeysWith: +)
-    }
-    static func destructiveCount(_ skills: [String: Int]) -> Int {
-        let destructive: Set<String> = ["bomber", "basher", "miner", "digger", "stoner", "fencer", "laserer", "batter",
-            "exploder", "scooper", "stomper", "club_basher", "laser_blaster", "flame_thrower", "bazooka", "mortar",
-            "thrower", "spearer", "archer", "bomb", "grenade", "spade", "hadoken"]
-        return skills.reduce(0) { $0 + (destructive.contains(skillKey($1.key)) ? $1.value : 0) }
     }
     static func telemetry(_ session: any GameSession) -> TrolleyTelemetry {
         var additional: [String: Double] = [:]
