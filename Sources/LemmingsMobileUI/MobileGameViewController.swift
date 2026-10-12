@@ -9,14 +9,27 @@ import UIKit
     case next
 }
 
+/// Who is playing a shared Hot Seat attempt, and what each result can lead to.
+struct MobileGameTurn {
+    let scope: String
+    let owner: String
+    let ownerName: String
+    /// The result buttons for a win or a loss, each naming the player who acts next.
+    let choices: (Bool) -> [(label: String, choice: MobileHotSeat.Choice)]
+}
+
 @MainActor final class MobileGameViewController: UIViewController {
     var onExit: ((MobileGameExitAction) -> Void)?
+    /// Called with the player who acts next, before the game leaves for a retry or the next level.
+    var onHandover: ((String) -> Void)?
     var onCompleted: ((MobileGameSnapshot) -> Void)?
 
     private let summary: MobileLevelSummary
     private let session: any MobileGameSession
     private let checkpointStore: MobileCheckpointStore
     private let runID: UUID
+    private let turn: MobileGameTurn?
+    private let turnBadge = MobilePixelLabel()
 
     private let playfieldView: MobilePlayfieldView
     private let hud = MobileHUDView()
@@ -50,8 +63,10 @@ import UIKit
         summary: MobileLevelSummary,
         session: any MobileGameSession,
         checkpointStore: MobileCheckpointStore,
-        restoredCheckpoint: MobileCheckpointEnvelope?
+        restoredCheckpoint: MobileCheckpointEnvelope?,
+        turn: MobileGameTurn? = nil
     ) {
+        self.turn = turn
         self.summary = summary
         self.session = session
         self.checkpointStore = checkpointStore
@@ -87,6 +102,14 @@ import UIKit
         view.addSubview(playfieldView)
         view.addSubview(hud)
         view.addSubview(touchLoupe)
+        if let turn {
+            turnBadge.text = turn.ownerName.uppercased()
+            turnBadge.palette = .green
+            turnBadge.alignment = .left
+            turnBadge.maximumScale = 2
+            turnBadge.isUserInteractionEnabled = false
+            view.addSubview(turnBadge)
+        }
         configureOverlay()
 
         hud.onAction = { [weak self] action in self?.handle(action) }
@@ -110,7 +133,7 @@ import UIKit
         showOverlay(
             title: summary.title,
             actions: [
-                ("START", { [weak self] in self?.resumePlay() }),
+                (turn == nil ? "START" : "READY", { [weak self] in self?.resumePlay() }),
                 ("LIBRARY", { [weak self] in self?.leaveToLibrary() }),
             ]
         )
@@ -152,6 +175,10 @@ import UIKit
         playfieldView.frame = Self.cgRect(layout.interface.playfieldFrame)
         playfieldView.blockedInputFrames = layout.reservedRegions.map { playfieldView.convert(Self.cgRect($0.frame), from: view) }
         hud.frame = view.bounds
+        if turn != nil {
+            let field = playfieldView.frame
+            turnBadge.frame = CGRect(x: field.minX + 6, y: field.minY + 4, width: min(field.width - 12, 220), height: 20)
+        }
         updateHUD(layout: layout)
         overlay.frame = view.bounds
         layoutOverlay()
@@ -432,8 +459,17 @@ import UIKit
         let result = snapshot.didWin
             ? "LEVEL COMPLETE\n\(snapshot.saved) SAVED"
             : "LEVEL ENDED\n\(snapshot.saved) SAVED"
-        let actions: [(String, () -> Void)]
-        if snapshot.didWin {
+        var actions: [(String, () -> Void)]
+        if let turn {
+            actions = turn.choices(snapshot.didWin).map { entry in
+                (entry.label, { [weak self] in
+                    self?.finish(entry.choice.kind == .next ? .next : .retry, handingTo: entry.choice.player)
+                })
+            }
+            // The level is over, so the turn passes by the house rule even when the player leaves.
+            let following = turn.choices(snapshot.didWin).first(where: { $0.choice.primary })?.choice.player
+            actions.append(("LIBRARY", { [weak self] in self?.finish(.library, handingTo: following) }))
+        } else if snapshot.didWin {
             actions = [
                 ("NEXT LEVEL", { [weak self] in self?.finish(.next) }),
                 ("RETRY", { [weak self] in self?.finish(.retry) }),
@@ -448,7 +484,8 @@ import UIKit
         showOverlay(title: result, actions: actions, results: true)
     }
 
-    private func finish(_ action: MobileGameExitAction) {
+    private func finish(_ action: MobileGameExitAction, handingTo player: String? = nil) {
+        if let player { onHandover?(player) }
         displayLink?.isPaused = true
         suspendAudio()
         if action == .library { MobileMusic.shared.stop() }
@@ -529,7 +566,9 @@ import UIKit
             tick: session.snapshot.tick,
             selectedControl: selectedControl,
             camera: MobileCameraState(origin: viewport.origin, zoom: viewport.zoom),
-            payload: try session.checkpointPayload()
+            payload: try session.checkpointPayload(),
+            scope: turn?.scope,
+            owner: turn?.owner
         )
     }
 
@@ -678,8 +717,8 @@ import UIKit
         } else if completed {
             details = ["Saved \(snapshot.saved) of \(snapshot.total)", "Required \(snapshot.required)"]
         } else { details = [] }
-        let heading = completed ? (snapshot.didWin ? "Level complete" : "Try again") : title
-        let subtitle = ready ? "\(summary.rank) \(summary.number)" : "\(summary.rank) \(summary.number)  \(summary.title)"
+        let heading = completed ? (snapshot.didWin ? "Level complete" : "Try again") : (ready ? (turn?.ownerName ?? title) : title)
+        let subtitle = ready && turn == nil ? "\(summary.rank) \(summary.number)" : "\(summary.rank) \(summary.number)  \(summary.title)"
         overlayCanvas.page = .init(title: heading, subtitle: subtitle,
                                    details: details,
                                    footer: actions.enumerated().map { .init(String($0.offset), $0.element.0, primary: $0.offset == 0) },

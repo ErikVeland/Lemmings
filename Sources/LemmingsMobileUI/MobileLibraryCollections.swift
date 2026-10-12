@@ -275,6 +275,8 @@ extension MobileLibraryViewController {
     private func switchPlayer(_ id: String) {
         profiles.select(id)
         saveProfiles()
+        // A shared session belongs to its host, so a new active player returns to solo play.
+        if hotSeat != nil { hotSeats.endSession(); saveHotSeats(); hotSeatRoster = nil }
         reloadPlayerData()
         navigate(.players)
     }
@@ -293,6 +295,7 @@ extension MobileLibraryViewController {
         guard let id = profiles.add(name: "Player \(profiles.players.count + 1)") else { return }
         profiles.select(id)
         saveProfiles()
+        if hotSeat != nil { hotSeats.endSession(); saveHotSeats(); hotSeatRoster = nil }
         reloadPlayerData()
         navigate(.players)
     }
@@ -312,6 +315,7 @@ extension MobileLibraryViewController {
         let removed = profiles.activeID
         profiles.delete(removed)
         saveProfiles()
+        removeFromHotSeats(removed)
         try? FileManager.default.removeItem(at: MobileStorage.standard(profile: removed).directory)
         reloadPlayerData()
         navigate(.players)

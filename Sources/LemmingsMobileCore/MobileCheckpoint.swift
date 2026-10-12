@@ -24,6 +24,10 @@ public struct MobileCheckpointEnvelope: Codable, Equatable, Sendable {
     public let camera: MobileCameraState
     public let payload: Data
     public var savedAt: Date
+    /// The shared session this run belongs to. Nil for a solo run.
+    public var scope: String?
+    /// The Hot Seat player who owns the attempt.
+    public var owner: String?
 
     public init(
         runID: UUID,
@@ -36,7 +40,9 @@ public struct MobileCheckpointEnvelope: Codable, Equatable, Sendable {
         selectedControl: Int,
         camera: MobileCameraState,
         payload: Data,
-        savedAt: Date = Date()
+        savedAt: Date = Date(),
+        scope: String? = nil,
+        owner: String? = nil
     ) {
         self.runID = runID
         self.engine = engine
@@ -49,6 +55,8 @@ public struct MobileCheckpointEnvelope: Codable, Equatable, Sendable {
         self.camera = camera
         self.payload = payload
         self.savedAt = savedAt
+        self.scope = scope
+        self.owner = owner
     }
 
     @discardableResult

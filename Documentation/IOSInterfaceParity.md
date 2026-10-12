@@ -21,7 +21,7 @@ the renderer's exact target rectangles and retain accessibility names.
 | Results | Bitmap page, saved/required counts, next/retry/library | Mac celebrations, achievements, trophies, records and engine-specific outcomes |
 | Settings | Persistent pause-to-assign and fast-speed controls | Full Mac settings groups, audio/music system and accessibility preferences |
 | Game data | Offline Classic campaign and folder import | Native L2/L3 data libraries and rendering; approved release packaging |
-| Profiles and Hot Seat | Not ported | Rosters, turn ownership and paused Ready handovers for each engine |
+| Profiles and Hot Seat | Classic family ported | Rosters, turn ownership and paused Ready handovers. L2 and L3 wait on their engines |
 | Journey, collections, replays and hints | Not ported | Shared flows and their mobile input adapters |
 | Controller-only navigation and Duo | Not accepted | Controller focus, reserved regions, adaptive poses and live-session continuity |
 
@@ -166,5 +166,33 @@ atomic and keeps the previous copy as a backup. A file that cannot be read is ke
 under a new name and the store starts empty. Tests cover the store, the legacy
 import and the fan pool.
 
-Open items: Hot Seat turn ownership does not apply yet. The Mac playlist file keeps
-revisions. The iOS store keeps one backup.
+Open items: The Mac playlist file keeps revisions. The iOS store keeps one backup.
+
+## 12 October Hot Seat increment
+
+Settings has a Hot Seat row. The page lists the players as tiles. A tap adds or
+removes a player, and the host always stays. New player adds a profile to the
+roster. Choose a game needs two players. Turns sets the house rule, Every level or
+At first fail. A running session adds New Hot Seat, which asks for a second tap,
+and Return to solo. Saved Hot Seats lists earlier sessions of the host.
+
+The shared campaign keeps its progress apart from every solo player. The roster,
+the turn and the rule survive a relaunch. A new session starts with the host.
+Switching or deleting a player leaves sessions that need them.
+
+A Ready page names the player who acts next. Play stays paused until Ready. The
+same page returns after a relaunch and after a checkpoint restore. The Classic
+HUD shows the attempt owner. A result page names the player on each button, and
+the results table matches the Mac. Leaving by Library after a result passes the
+turn by the house rule.
+
+A saved level keeps its session and owner. In another session the home page
+shows Resume Hot Seat run or Resume solo run instead of loading it, and the run
+stays saved. Tests cover the roster, turns, results, saved sessions and the old
+checkpoint format.
+
+Open items: L2 and L3 have no iOS engine yet. A playlist or shuffle run continues
+the open session and does not offer New solo or New Hot Seat. Level skips,
+per-player scores and achievements have no iOS counterpart. Mid-level takeovers
+stay deferred, as on the Mac. The Ready page after a return from the background
+uses the existing pause page and has no device test.

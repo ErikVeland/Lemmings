@@ -35,7 +35,7 @@ actor MobileMenuPreviewLoader {
 @MainActor final class MobileLibraryViewController: UIViewController, UIDocumentPickerDelegate {
     enum Route: Equatable {
         case home, family(MobileFamily), levels, settings, soundtrack, data
-        case collections, playlists, playlist(UUID), addToPlaylist, players, shuffleAll
+        case collections, playlists, playlist(UUID), addToPlaylist, players, shuffleAll, hotSeat, hotSeats
     }
     private let scrollView = UIScrollView()
     let canvas = MobileMenuCanvas()
@@ -58,6 +58,9 @@ actor MobileMenuPreviewLoader {
     lazy var playlists = MobilePlaylistStore.load(from: storage, legacy: profiles.active.id == MobileProfiles.defaultID)
     /// Set while the Players page keyboard edits a name, and while Shuffle all scans the packs.
     var renamingPlayer = false
+    var hotSeats = MobileHotSeatStore.load(from: MobileStorage.standard(profile: "_players"))
+    var hotSeatRoster: MobileHotSeatRoster?
+    var confirmingRestart = false
     var shufflePool: (entries: [MobileFavourites.Entry], packs: Int)?
     var shuffleScanning = false
     var playlistSelection: Int?
@@ -70,7 +73,7 @@ actor MobileMenuPreviewLoader {
     let searchField = UITextField()
     private var fanUpdateStatus = ""
     private var fanUpdating = false
-    private var pendingCheckpoint: MobileCheckpointEnvelope?
+    var pendingCheckpoint: MobileCheckpointEnvelope?
     var selectedIndex = 0
     var previewLoader: MobileMenuPreviewLoader?
     private var previewTask: Task<Void, Never>?
@@ -94,13 +97,13 @@ actor MobileMenuPreviewLoader {
         return solvedLevels(for: currentPack?.id)
     }
     private func progressKey(for pack: String?, fallback: String) -> String {
-        "mobile.completed." + (pack ?? fallback) + profiles.suffix
+        "mobile.completed." + (pack ?? fallback) + progressSuffix
     }
     func solvedLevels(for pack: String?) -> Set<Int> {
         let defaults = UserDefaults.standard
         var all = Set(defaults.array(forKey: progressKey(for: pack, fallback: library?.displayName ?? "classic")) as? [Int] ?? [])
         // Builds before the catalogue stored Classic progress under the release name.
-        if pack == "release/lemmings", profiles.active.id == MobileProfiles.defaultID {
+        if pack == "release/lemmings", profiles.active.id == MobileProfiles.defaultID, hotSeat == nil {
             all.formUnion(defaults.array(forKey: "mobile.completed.Lemmings") as? [Int] ?? [])
         }
         return all
@@ -184,7 +187,13 @@ actor MobileMenuPreviewLoader {
         switch route {
         case .home:
             var rows: [GameFrontEnd.Action] = []
-            if pendingCheckpoint != nil { rows.append(.init("resume", "Resume saved run", primary: true)) }
+            if let hot = hotSeat {
+                rows.append(.init("hotSeat", "Hot Seat: \(playerName(hot.turn))"))
+            }
+            if let saved = pendingCheckpoint {
+                if checkpointMatchesSession(saved) { rows.append(.init("resume", "Resume saved run", primary: true)) }
+                else { rows.append(.init("seatOther", otherSessionTitle(for: saved), primary: true)) }
+            }
             if catalogue != nil, let run = playlists.run {
                 rows.append(.init("runResume", "Resume \(run.name)  \(run.position + 1)/\(run.entries.count)",
                                   primary: pendingCheckpoint == nil))
@@ -272,10 +281,15 @@ actor MobileMenuPreviewLoader {
                                        .init("speed", "Fast speed: \(fastSpeed)X"),
                                        .init("music", "Music", selected: MobileMusic.shared.isEnabled),
                                        .init("players", "Player: \(profiles.active.name)"),
+                                       .init("hotSeat", hotSeat == nil ? "Hot Seat" : "Hot Seat: On"),
                                        .init("soundtrackChoice", "Soundtrack: \(MobileMusic.shared.soundtrack)"),
                                        .init("soundtrack", "Soundtrack libraries")],
                                 footer: [.init("home", "Back")])
             canvas.preview = nil
+        case .hotSeat:
+            canvas.page = hotSeatPage(subtitle: subtitle); canvas.preview = nil
+        case .hotSeats:
+            canvas.page = savedHotSeatsPage(subtitle: subtitle); canvas.preview = nil
         case .players:
             canvas.page = playersPage(subtitle: subtitle); canvas.preview = nil
         case .shuffleAll:
@@ -386,7 +400,7 @@ actor MobileMenuPreviewLoader {
             defaults.set(speeds[(current + 1) % speeds.count], forKey: "mobile.fastSpeed")
             rebuild()
         default:
-            if handleCollections(id) { return }
+            if handleHotSeat(id) || handleCollections(id) { return }
             if id.hasPrefix("lib."), let pack = MobileMusicLibraries.shared.catalogue?.packs.first(where: { $0.id == String(id.dropFirst(4)) }) {
                 let libraries = MobileMusicLibraries.shared
                 if libraries.progress[pack.id] != nil { libraries.cancel(pack) }
@@ -565,7 +579,7 @@ actor MobileMenuPreviewLoader {
             }
         }
     }
-    private func loadCheckpoint() {
+    func loadCheckpoint() {
         guard let checkpointStore else { return }
         Task {
             do { pendingCheckpoint = try await checkpointStore.load(); rebuild() }
@@ -573,7 +587,7 @@ actor MobileMenuPreviewLoader {
         }
     }
     private func resumeSavedRun() {
-        guard let checkpoint = pendingCheckpoint else { return }
+        guard let checkpoint = pendingCheckpoint, checkpointMatchesSession(checkpoint) else { return }
         if let catalogue, let pack = catalogue.pack(forLevelIdentifier: checkpoint.levelIdentifier) {
             openPack(pack, back: .home, navigateToLevels: false)
         }
@@ -588,13 +602,18 @@ actor MobileMenuPreviewLoader {
                       checkpoint.engineFingerprint == content.session.engineFingerprint,
                       checkpoint.levelIdentifier == content.session.levelIdentifier,
                       checkpoint.levelFingerprint == content.session.levelFingerprint else { throw MobileSessionError.changedLevel }
+                // A shared run resumes only in its own session, with the player who started it.
+                guard checkpointMatchesSession(checkpoint) else { throw MobileSessionError.changedLevel }
                 try content.session.restoreCheckpointPayload(checkpoint.payload)
+                if let owner = checkpoint.owner, hotSeat?.players.contains(owner) == true { handOver(to: owner) }
             }
             levelStarted(index)
             // Playlist and shuffle results do not advance campaign or pack progress.
             let inRun = activeRun != nil
             let next = MobileGameViewController(summary: content.summary, session: content.session,
-                                               checkpointStore: checkpointStore, restoredCheckpoint: checkpoint)
+                                               checkpointStore: checkpointStore, restoredCheckpoint: checkpoint,
+                                               turn: currentTurn())
+            next.onHandover = { [weak self] player in self?.handOver(to: player) }
             next.onCompleted = { [weak self] snapshot in
                 guard let self, snapshot.didWin else { return }
                 if inRun { self.finishRunIfNeeded(afterLast: index); return }
