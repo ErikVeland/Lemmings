@@ -188,7 +188,8 @@ def main():
             checks.append(run("official-classic-quest", [
                 compile_command(ROOT / "Tools/OfficialClassicQuest/main.swift", quest_verifier,
                                 [ROOT / "Sources/LemmingsLocal/GameSession.swift",
-                                 ROOT / "Sources/LemmingsLocal/RunRecovery.swift"]),
+                                 ROOT / "Sources/LemmingsAppCore/Recovery/RunRecovery.swift",
+                                 ROOT / "Sources/LemmingsAppCore/AppStorage.swift"]),
                 [quest_verifier, ports, base / "official-classic-quest.json"],
                 [quest_verifier, ports, base / "classic-conversion-quest.json", "--include-conversions"],
                 [sys.executable, "Tests/ClassicFamilyCompletionTests/test_official_quest.py", quest_verifier, ports, "--include-conversions"]]))

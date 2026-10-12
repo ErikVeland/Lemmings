@@ -1,5 +1,7 @@
 #if os(macOS)
 import AppKit
+import LemmingsAppCore
+import LemmingsAudio
 import NxlvKit
 
 /// Hints move one tier per deliberate action. Reopening starts with the nudge.

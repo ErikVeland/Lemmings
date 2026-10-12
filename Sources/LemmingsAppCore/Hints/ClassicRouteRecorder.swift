@@ -1,38 +1,30 @@
-#if os(macOS)
 import Foundation
 import CryptoKit
 import NxlvKit
 
 /// Preserves completed player inputs for replay verification, including fan levels.
-enum ClassicRouteRecorder {
+/// The Mac records a finished session in `ClassicRouteRecorder+Session.swift`.
+public enum ClassicRouteRecorder {
     private static let queue = DispatchQueue(label: "academy.glasscode.lemmings.classic-routes", qos: .utility)
-    static var folder: URL {
-        if Bundle.main.bundleIdentifier?.contains("integration-tests") == true {
+    public static var folder: URL { folder(storage: .current()) }
+    public static func folder(storage: AppStorage) -> URL {
+        if storage.isIntegrationTestBuild {
             return FileManager.default.temporaryDirectory.appendingPathComponent("LemmingsIntegrationClassicRoutes")
         }
-        return FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("Ultimate Lemmings/ClassicRoutes", isDirectory: true)
+        return storage.applicationSupport.appendingPathComponent("ClassicRoutes", isDirectory: true)
     }
 
-    @MainActor static func record(session: ClassicSession, level: ArcadeLevel, title: String, rank: String, number: Int,
-                                  onError: @escaping @MainActor @Sendable (String) -> Void) {
-        guard session.isComplete, session.didWin else { return }
-        let final = session.simulation
-        let replay = ClassicDOSReplay(rank: rank, number: number, title: title,
-            initialStateHash: session.initialStateHash, events: session.recoveryEvents,
-            expected: .init(ticks: final.tickCount, released: final.releasedCount, saved: final.savedCount,
-                required: final.configuration.requiredToSave, didWin: final.didWin,
-                stateHash: ClassicDOSReplayRecorder.stateHash(of: final)))
-        let initial = session.initialSimulation
-        let destination = folder
+    /// Saves a verified winning route in the background. Errors go to `onError` on the main actor.
+    public static func record(_ replay: ClassicDOSReplay, initial: ClassicDOSSimulation, conditions: TrolleyConditions?,
+                              folder destination: URL = folder, onError: @escaping @MainActor @Sendable (String) -> Void) {
         queue.async {
-            do { _ = try save(replay, initial: initial, conditions: level.conditions, folder: destination) }
+            do { _ = try save(replay, initial: initial, conditions: conditions, folder: destination) }
             catch { let message = error.localizedDescription; Task { @MainActor in onError(message) } }
         }
     }
 
     @discardableResult
-    static func save(_ replay: ClassicDOSReplay, initial: ClassicDOSSimulation,
+    public static func save(_ replay: ClassicDOSReplay, initial: ClassicDOSSimulation,
                      conditions: TrolleyConditions?, folder: URL) throws -> URL {
         guard replay.events.allSatisfy({ $0.afterTick == true }),
               VerifiedSolution.validate(replay, initial: initial) != nil else { throw RunRecoveryError.invalid }
@@ -58,6 +50,5 @@ enum ClassicRouteRecorder {
         return path
     }
 
-    static func flush() { queue.sync {} }
+    public static func flush() { queue.sync {} }
 }
-#endif

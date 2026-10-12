@@ -1,6 +1,7 @@
 #if os(macOS)
 import AppKit
 import CryptoKit
+import LemmingsAppCore
 import Security
 import NxlvKit
 

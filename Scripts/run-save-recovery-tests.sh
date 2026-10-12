@@ -14,6 +14,6 @@ fi
 swiftc -O -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos12.3" \
   -I "$library_dir/modules" -L "$library_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$library_dir" -o "$build_dir/tests" \
-  Sources/LemmingsLocal/ArcadeRecordFile.swift Sources/LemmingsLocal/LegacySaveMigration.swift \
+  Sources/LemmingsAppCore/Profiles/ArcadeRecordFile.swift Sources/LemmingsAppCore/Profiles/LegacySaveMigration.swift \
   Tests/SaveRecoveryTests/main.swift
 "$build_dir/tests"

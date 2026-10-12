@@ -15,12 +15,16 @@ swiftc -O -swift-version 6 -parse-as-library -I "$build_dir/modules" -L "$build_
   "$project_dir/Tools/DifficultyDiagnostics/ClassicCorpus.swift" \
   "$project_dir/Sources/LemmingsLocal/GameAssetCache.swift" \
   "$project_dir/Sources/LemmingsLocal/FanLevelLibrary.swift" \
-  "$project_dir/Sources/LemmingsLocal/LevelPlaylistStore.swift" \
+  "$project_dir/Sources/LemmingsAppCore/Collections/LevelPlaylistStore.swift" \
+  "$project_dir/Sources/LemmingsAppCore/Collections/LearningJourneyLibrary.swift" \
+  "$project_dir/Sources/LemmingsAppCore/AppStorage.swift" \
   -o "$build_dir/ClassicCorpus"
 shasum -a 256 "$project_dir/Tools/DifficultyDiagnostics/ClassicCorpus.swift" \
   "$project_dir/Sources/LemmingsLocal/GameAssetCache.swift" \
   "$project_dir/Sources/LemmingsLocal/FanLevelLibrary.swift" \
-  "$project_dir/Sources/LemmingsLocal/LevelPlaylistStore.swift" > "$build_dir/adapter-manifest.sha256"
+  "$project_dir/Sources/LemmingsAppCore/Collections/LevelPlaylistStore.swift" \
+  "$project_dir/Sources/LemmingsAppCore/Collections/LearningJourneyLibrary.swift" \
+  "$project_dir/Sources/LemmingsAppCore/AppStorage.swift" > "$build_dir/adapter-manifest.sha256"
 python3 "$project_dir/Tools/DifficultyDiagnostics/classic_fan_replays.py" "$1/LevelPacks" "$3"
 "$build_dir/ClassicCorpus" "${@:1:3}"
 CLASSIC_AUDIT_REBUILD=1 "$build_dir/ClassicCorpus" "$@"

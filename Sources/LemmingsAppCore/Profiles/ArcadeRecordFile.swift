@@ -1,15 +1,14 @@
-#if os(macOS)
 import Foundation
 import Darwin
 import NxlvKit
 
 /// Keeps the previous validated save and refuses to overwrite a changed file.
-final class ArcadeRecordFile {
-    enum Failure: Error, LocalizedError {
+public final class ArcadeRecordFile {
+    public enum Failure: Error, LocalizedError {
         case unsupportedVersion
         case changedOnDisk
         case busy
-        var errorDescription: String? {
+        public var errorDescription: String? {
             switch self {
             case .unsupportedVersion: return "Records need a different app version. Existing files were preserved."
             case .changedOnDisk: return "Records changed in another app. Close and reopen this app."
@@ -17,13 +16,13 @@ final class ArcadeRecordFile {
             }
         }
     }
-    let url: URL
-    var backupURL: URL { url.appendingPathExtension("backup") }
+    public let url: URL
+    public var backupURL: URL { url.appendingPathExtension("backup") }
     private var expectedData: Data?
-    private(set) var recovered = false
-    private(set) var preservedURL: URL?
+    public private(set) var recovered = false
+    public private(set) var preservedURL: URL?
 
-    init(url: URL) { self.url = url }
+    public init(url: URL) { self.url = url }
 
     private func decode(_ data: Data) throws -> ArcadeRecords {
         struct Header: Decodable { let version: Int }
@@ -35,7 +34,7 @@ final class ArcadeRecordFile {
         return try JSONDecoder().decode(ArcadeRecords.self, from: data).validated()
     }
 
-    func load() throws -> ArcadeRecords? {
+    public func load() throws -> ArcadeRecords? {
         let fm = FileManager.default
         guard fm.fileExists(atPath: url.path) else {
             guard fm.fileExists(atPath: backupURL.path) else { return nil }
@@ -89,7 +88,7 @@ final class ArcadeRecordFile {
         return records
     }
 
-    func save(_ records: ArcadeRecords) throws {
+    public func save(_ records: ArcadeRecords) throws {
         try withLock { try write(records) }
     }
 
@@ -107,4 +106,3 @@ final class ArcadeRecordFile {
         expectedData = data
     }
 }
-#endif

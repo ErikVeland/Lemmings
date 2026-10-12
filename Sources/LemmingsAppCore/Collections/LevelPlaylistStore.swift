@@ -1,16 +1,15 @@
-#if os(macOS)
 import Darwin
 import Foundation
 import NxlvKit
 
 /// Stores one player's playlists and active level sequence outside campaign progress.
-@MainActor final class LevelPlaylistStore {
-    struct SavedRun: Codable {
-        let run: LevelSequenceRun
-        let hotSeatID: String?
-        var l2Progress: [String: Data]?
+@MainActor public final class LevelPlaylistStore {
+    public struct SavedRun: Codable, Sendable {
+        public let run: LevelSequenceRun
+        public let hotSeatID: String?
+        public var l2Progress: [String: Data]?
     }
-    enum Failure: Error, LocalizedError {
+    public enum Failure: Error, LocalizedError {
         case unsupportedVersion
         case changedOnDisk
         case busy
@@ -19,7 +18,7 @@ import NxlvKit
         case duplicatePlaylist
         case invalidDocument
 
-        var errorDescription: String? {
+        public var errorDescription: String? {
             switch self {
             case .unsupportedVersion:
                 "Playlists need a different app version. Existing files were preserved."
@@ -109,23 +108,23 @@ import NxlvKit
         let version: Int
     }
 
-    let file: URL
-    var backupFile: URL { file.appendingPathExtension("backup") }
+    public let file: URL
+    public var backupFile: URL { file.appendingPathExtension("backup") }
     private var document = Document()
     private var expectedData: Data?
-    private(set) var recovered = false
+    public private(set) var recovered = false
 
-    var playlists: [LevelPlaylist] { document.playlists }
-    var selectedPlaylistID: UUID? { document.selectedPlaylistID }
-    var activeRun: LevelSequenceRun? { document.activeRun }
-    var activeRunHotSeatID: String? { document.activeRunHotSeatID }
-    var activeRunL2Progress: [String: Data] { document.activeRunL2Progress ?? [:] }
-    var savedRuns: [SavedRun] { document.savedRuns ?? [] }
-    var learningProgress: LearningJourneyProgress { document.learningProgress ?? .init() }
-    var favourites: [LevelPlaylistEntry] { document.favourites ?? [] }
-    var recentlyPlayed: [LevelPlaylistEntry] { document.recentlyPlayed ?? [] }
+    public var playlists: [LevelPlaylist] { document.playlists }
+    public var selectedPlaylistID: UUID? { document.selectedPlaylistID }
+    public var activeRun: LevelSequenceRun? { document.activeRun }
+    public var activeRunHotSeatID: String? { document.activeRunHotSeatID }
+    public var activeRunL2Progress: [String: Data] { document.activeRunL2Progress ?? [:] }
+    public var savedRuns: [SavedRun] { document.savedRuns ?? [] }
+    public var learningProgress: LearningJourneyProgress { document.learningProgress ?? .init() }
+    public var favourites: [LevelPlaylistEntry] { document.favourites ?? [] }
+    public var recentlyPlayed: [LevelPlaylistEntry] { document.recentlyPlayed ?? [] }
 
-    func toggleFavourite(_ entry: LevelPlaylistEntry) throws {
+    public func toggleFavourite(_ entry: LevelPlaylistEntry) throws {
         let previous = document
         var entries = favourites
         if entries.contains(where: { $0.identity == entry.identity }) {
@@ -138,14 +137,14 @@ import NxlvKit
         do { try save() } catch { document = previous; throw error }
     }
 
-    func recordVisit(_ entry: LevelPlaylistEntry) throws {
+    public func recordVisit(_ entry: LevelPlaylistEntry) throws {
         let previous = document
         document.recentlyPlayed = [entry] + recentlyPlayed.filter { $0.identity != entry.identity }.prefix(49)
         do { try save() } catch { document = previous; throw error }
     }
 
     /// Save a win before the player leaves the result. Keep the current turn in place.
-    func recordLearningWin(runID: UUID, level: LevelCatalogueIdentity) throws {
+    public func recordLearningWin(runID: UUID, level: LevelCatalogueIdentity) throws {
         guard let run = document.activeRun, run.id == runID,
               run.source == .playlist(LearningJourney.playlistID),
               run.currentEntry.identity == level else { throw Failure.invalidDocument }
@@ -158,7 +157,7 @@ import NxlvKit
     }
 
     /// Save the visit and next position together. A deferred level is never a win.
-    @discardableResult func advanceLearningJourney(runID: UUID, won: Bool) throws -> Bool {
+    @discardableResult public func advanceLearningJourney(runID: UUID, won: Bool) throws -> Bool {
         guard var run = document.activeRun, run.id == runID,
               run.source == .playlist(LearningJourney.playlistID) else { throw Failure.invalidDocument }
         let previous = document
@@ -171,23 +170,22 @@ import NxlvKit
         return advanced
     }
 
-    static func fileURL(profileID: String) -> URL {
-        let root = FileManager.default.urls(
-            for: .applicationSupportDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("Ultimate Lemmings/Playlists", isDirectory: true)
+    nonisolated public static func fileURL(profileID: String, storage: AppStorage = .current()) -> URL {
+        let root = storage.applicationSupport
+            .appendingPathComponent("Playlists", isDirectory: true)
         let identity = ArcadeStore.fingerprint(Data(profileID.utf8))
         return root.appendingPathComponent(identity + ".json")
     }
 
-    static func removeData(profileID: String) {
-        removeData(at: fileURL(profileID: profileID))
+    public static func removeData(profileID: String, storage: AppStorage = .current()) {
+        removeData(at: fileURL(profileID: profileID, storage: storage))
     }
 
-    static func removeData(at file: URL) {
+    public static func removeData(at file: URL) {
         try? removeDataChecked(at: file)
     }
 
-    static func removeDataChecked(at file: URL) throws {
+    public static func removeDataChecked(at file: URL) throws {
         let manager = FileManager.default
         try manager.createDirectory(
             at: file.deletingLastPathComponent(), withIntermediateDirectories: true)
@@ -211,11 +209,11 @@ import NxlvKit
         }
     }
 
-    convenience init(profileID: String) throws {
-        try self.init(file: Self.fileURL(profileID: profileID))
+    public convenience init(profileID: String, storage: AppStorage = .current()) throws {
+        try self.init(file: Self.fileURL(profileID: profileID, storage: storage))
     }
 
-    init(file: URL) throws {
+    public init(file: URL) throws {
         self.file = file
         try load()
         try removeExcludedLearningLessons(LearningJourneyLibrary.excludedIdentities)
@@ -223,7 +221,7 @@ import NxlvKit
     }
 
     /// Retain run identity, owner and completed visits when an editorial lesson is withdrawn.
-    func removeExcludedLearningLessons(_ excluded: Set<LevelCatalogueIdentity>) throws {
+    public func removeExcludedLearningLessons(_ excluded: Set<LevelCatalogueIdentity>) throws {
         guard !excluded.isEmpty else { return }
         func revised(_ run: LevelSequenceRun) throws -> LevelSequenceRun? {
             guard run.source == .playlist(LearningJourney.playlistID) else { return run }
@@ -248,7 +246,7 @@ import NxlvKit
         do { try save() } catch { document = previous; throw error }
     }
 
-    func migrateLearningJourney(_ journey: LearningJourney) throws {
+    public func migrateLearningJourney(_ journey: LearningJourney) throws {
         let previous = document
         let active = try document.activeRun.flatMap { try journey.migrating($0) }
         var changed = active != document.activeRun
@@ -263,15 +261,15 @@ import NxlvKit
         do { try save() } catch { document = previous; throw error }
     }
 
-    func playlist(id: UUID) -> LevelPlaylist? {
+    public func playlist(id: UUID) -> LevelPlaylist? {
         document.playlists.first { $0.id == id }
     }
 
-    func selectedPlaylist() -> LevelPlaylist? {
+    public func selectedPlaylist() -> LevelPlaylist? {
         selectedPlaylistID.flatMap { playlist(id: $0) }
     }
 
-    func add(_ playlist: LevelPlaylist, select: Bool = true) throws {
+    public func add(_ playlist: LevelPlaylist, select: Bool = true) throws {
         guard document.playlists.count < Document.maximumPlaylists else {
             throw Failure.tooManyPlaylists
         }
@@ -284,7 +282,7 @@ import NxlvKit
         do { try save() } catch { document = previous; throw error }
     }
 
-    func update(_ playlist: LevelPlaylist, select: Bool = true) throws {
+    public func update(_ playlist: LevelPlaylist, select: Bool = true) throws {
         guard let index = document.playlists.firstIndex(where: { $0.id == playlist.id }) else {
             throw Failure.missingPlaylist
         }
@@ -294,7 +292,7 @@ import NxlvKit
         do { try save() } catch { document = previous; throw error }
     }
 
-    func removePlaylist(id: UUID) throws {
+    public func removePlaylist(id: UUID) throws {
         guard document.playlists.contains(where: { $0.id == id }) else { return }
         let previous = document
         document.playlists.removeAll { $0.id == id }
@@ -314,7 +312,7 @@ import NxlvKit
         do { try save() } catch { document = previous; throw error }
     }
 
-    func selectPlaylist(id: UUID?) throws {
+    public func selectPlaylist(id: UUID?) throws {
         guard id == nil || document.playlists.contains(where: { $0.id == id }) else {
             throw Failure.missingPlaylist
         }
@@ -323,7 +321,7 @@ import NxlvKit
         do { try save() } catch { document = previous; throw error }
     }
 
-    func setActiveRun(_ run: LevelSequenceRun?) throws {
+    public func setActiveRun(_ run: LevelSequenceRun?) throws {
         if case let .playlist(playlistID)? = run?.source,
            !document.playlists.contains(where: { $0.id == playlistID }) {
             throw Failure.missingPlaylist
@@ -338,7 +336,7 @@ import NxlvKit
     }
 
     /// Keep the previous sequence and its turn ownership when starting another session.
-    func startRun(_ run: LevelSequenceRun, hotSeatID: String?, l2Progress: [String: Data]? = nil) throws {
+    public func startRun(_ run: LevelSequenceRun, hotSeatID: String?, l2Progress: [String: Data]? = nil) throws {
         if case let .playlist(id) = run.source, playlist(id: id) == nil { throw Failure.missingPlaylist }
         let previous = document
         var saved = savedRuns.filter { $0.run.id != run.id }
@@ -353,12 +351,12 @@ import NxlvKit
         do { try save() } catch { document = previous; throw error }
     }
 
-    func resumeRun(id: UUID) throws {
+    public func resumeRun(id: UUID) throws {
         guard let saved = savedRuns.first(where: { $0.run.id == id }) else { throw Failure.invalidDocument }
         try startRun(saved.run, hotSeatID: saved.hotSeatID, l2Progress: saved.l2Progress)
     }
 
-    @discardableResult func advanceActiveRun() throws -> Bool {
+    @discardableResult public func advanceActiveRun() throws -> Bool {
         guard var run = document.activeRun else { return false }
         guard run.advance() else { return false }
         let previous = document
@@ -449,4 +447,3 @@ import NxlvKit
         }
     }
 }
-#endif

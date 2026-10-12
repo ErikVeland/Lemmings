@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import LemmingsAppCore
 
 /// A level supplies its shipped renderer and an independent starting simulation.
 @MainActor struct LeaderboardReplayContext {

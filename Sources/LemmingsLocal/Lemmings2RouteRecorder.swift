@@ -1,5 +1,6 @@
 #if os(macOS)
 import Foundation
+import LemmingsAppCore
 import NxlvKit
 
 /// Saves a played Lemmings 2 campaign level as a version 2 route, so the route solver can

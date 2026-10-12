@@ -1,5 +1,9 @@
 #if os(macOS)
 import Foundation
+// Standalone test scripts compile the shared files into the same module.
+#if canImport(LemmingsAudio)
+import LemmingsAudio
+#endif
 import NxlvKit
 
 /// L2's original samples use the same independent spatial voices as Classic and L3.

@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import LemmingsAppCore
 import NxlvKit
 
 /// Personal shortcuts share the playlist file's atomic writes and recovery guards.

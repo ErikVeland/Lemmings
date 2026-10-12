@@ -1,5 +1,6 @@
 #if os(macOS)
 import Foundation
+import LemmingsAppCore
 import NxlvKit
 
 enum PrecisionZoomScrollOutcome: Equatable {

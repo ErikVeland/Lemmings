@@ -1,45 +1,49 @@
-#if os(macOS)
 import Foundation
 import CryptoKit
 import NxlvKit
 
 /// App adapter for the existing catalogue and loaders. Analysis files are disposable.
-enum DifficultyLibrary {
-    enum Source: Sendable {
+public enum DifficultyLibrary {
+    public enum Source: Sendable {
         case classic(ClassicLevel, root: URL, rank: String?, number: Int)
-        case fan(URL, FanLevelLibrary.Entry)
+        /// A fan level. The closure reads the level from its pack, for example with the Mac `FanLevelLibrary`.
+        case fan(level: @Sendable () throws -> ClassicLevel)
         case lemmings2(URL, tribe: Int, level: Int)
         case lemmings3(URL, tribe: Lemmings3ClassicCampaign.Tribe, level: Int)
     }
-    struct Input: Sendable {
-        let entry: LevelPlaylistEntry
-        let source: Source
-        let isOfficial: Bool
-        let campaignOrder: Int
+    public struct Input: Sendable {
+        public let entry: LevelPlaylistEntry
+        public let source: Source
+        public let isOfficial: Bool
+        public let campaignOrder: Int
+        public init(entry: LevelPlaylistEntry, source: Source, isOfficial: Bool, campaignOrder: Int) {
+            self.entry = entry; self.source = source; self.isOfficial = isOfficial; self.campaignOrder = campaignOrder
+        }
     }
-    struct Output: Sendable {
-        let candidates: [ProgressionCandidate]
-        let statistics: DifficultyCorpusStatistics
+    public struct Output: Sendable {
+        public let candidates: [ProgressionCandidate]
+        public let statistics: DifficultyCorpusStatistics
     }
-    static var directory: URL {
-        FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("Ultimate Lemmings/Difficulty", isDirectory: true)
+    public static var directory: URL { directory(storage: .current()) }
+    public static func directory(storage: AppStorage) -> URL {
+        storage.applicationSupport.appendingPathComponent("Difficulty", isDirectory: true)
     }
-    static func metadata(_ level: ClassicLevel, rank: String?) -> DifficultyMetadataEvidence {
+    public static func metadata(_ level: ClassicLevel, rank: String?) -> DifficultyMetadataEvidence {
         .init(availableSkills: Dictionary(uniqueKeysWithValues: level.skills.map { ($0.key.rawValue, $0.value) }),
               population: level.lemmingCount, rescueRequirement: level.saveRequirement,
               timeLimitFrames: level.timeLimitMinutes * 60 * 17,
               interactingSystems: Set(level.objects.map(\.id)).count, rank: rank)
     }
-    static func analyse(_ inputs: [Input], sourceFailures: [String] = [], progress: @Sendable (Int, Int) async -> Void) async throws -> Output {
+    public static func analyse(_ inputs: [Input], sourceFailures: [String] = [], storage: AppStorage = .current(),
+                               progress: @Sendable (Int, Int) async -> Void) async throws -> Output {
+        let directory = Self.directory(storage: storage)
         let cache = DifficultyProfileCache(file: directory.appendingPathComponent("profiles.json"))
         var candidates: [ProgressionCandidate] = []
         var failures = sourceFailures.map { "Pack unavailable: " + $0 }
         var replays: [String: ClassicDOSReplay] = [:]
-        if let url = Bundle.main.resourceURL?.appendingPathComponent("Hints/solutions.json"),
-           let data = try? Data(contentsOf: url),
+        if let data = try? Data(contentsOf: storage.resources.appendingPathComponent("Hints/solutions.json")),
            let bundled = try? JSONDecoder().decode([String: ClassicDOSReplay].self, from: data) { replays = bundled }
-        let routes = (try? FileManager.default.contentsOfDirectory(at: ClassicRouteRecorder.folder,
+        let routes = (try? FileManager.default.contentsOfDirectory(at: ClassicRouteRecorder.folder(storage: storage),
             includingPropertiesForKeys: nil)) ?? []
         for url in routes.sorted(by: { $0.path < $1.path }) where url.pathExtension == "json" {
             if let data = try? Data(contentsOf: url), let replay = try? JSONDecoder().decode(ClassicDOSReplay.self, from: data),
@@ -90,9 +94,8 @@ enum DifficultyLibrary {
                     let metadata: DifficultyMetadataEvidence
                     switch input.source {
                     case let .classic(level, _, rank, _): metadata = self.metadata(level, rank: rank)
-                    case let .fan(pack, entry):
-                        let (level, _) = try FanLevelLibrary.level(entry, in: pack)
-                        metadata = self.metadata(level, rank: nil)
+                    case let .fan(load):
+                        metadata = self.metadata(try load(), rank: nil)
                     case let .lemmings2(root, tribe, index):
                         let campaign: Lemmings2Campaign
                         if let cached = l2Campaigns[root.path] { campaign = cached }
@@ -135,8 +138,8 @@ enum DifficultyLibrary {
         try encoder.encode(failures).write(to: directory.appendingPathComponent("analysis-failures.json"), options: .atomic)
         return Output(candidates: candidates, statistics: statistics)
     }
-    static func cachedProfiles() -> [DifficultyProfile] {
-        guard let data = try? Data(contentsOf: directory.appendingPathComponent("profiles.json")),
+    public static func cachedProfiles(storage: AppStorage = .current()) -> [DifficultyProfile] {
+        guard let data = try? Data(contentsOf: directory(storage: storage).appendingPathComponent("profiles.json")),
               let profiles = try? JSONDecoder().decode([DifficultyProfile].self, from: data) else { return [] }
         return profiles.filter { $0.analyserVersion == DifficultyModel.version && $0.key.simulationVersion == DifficultyModel.simulationVersion }
             .sorted {
@@ -145,9 +148,8 @@ enum DifficultyLibrary {
                 return $0.key.replayRevision < $1.key.replayRevision
             }
     }
-    static func saveDiagnostics(_ result: ProgressionResult) throws {
+    public static func saveDiagnostics(_ result: ProgressionResult, storage: AppStorage = .current()) throws {
         let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-        try encoder.encode(result.diagnostics).write(to: directory.appendingPathComponent(result.policy.rawValue + ".json"), options: .atomic)
+        try encoder.encode(result.diagnostics).write(to: directory(storage: storage).appendingPathComponent(result.policy.rawValue + ".json"), options: .atomic)
     }
 }
-#endif

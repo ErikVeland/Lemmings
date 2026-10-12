@@ -1,6 +1,7 @@
 #if os(macOS)
 import AVFoundation
 import XCTest
+@testable import LemmingsAudio
 import NxlvKit
 @testable import LemmingsLocal
 

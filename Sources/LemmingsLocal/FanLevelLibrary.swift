@@ -1,6 +1,10 @@
 #if os(macOS)
 import Foundation
 import CryptoKit
+// Standalone test scripts compile the shared files into the same module.
+#if canImport(LemmingsAppCore)
+import LemmingsAppCore
+#endif
 import NxlvKit
 
 /// Combines embedded packs, automatic downloads and optional local packs.
