@@ -499,7 +499,7 @@ import NxlvKit
         finishIfComplete(fixture)
         try validateMusicRouting(ArcadeStore.shared.records.trolley.attempts.contains { $0.id == arcadeRunID }, "L2 sequence result did not persist career stars")
         refreshGame()
-        completionGlow.advance(at: ProcessInfo.processInfo.systemUptime + 2)
+        completionGlow.advance(at: ProcessInfo.processInfo.systemUptime + 0.7)
         try validateMusicRouting(canvas.completionGlowAmount == (won ? 1 : 0), "L2 result celebration state is wrong")
         try validateCompletionGlow(canvas, name: "lemmings2-\(won)") { self.canvas.completionGlowAmount = $0 }
         canvas.completionGlowAmount = won ? 1 : 0
