@@ -145,7 +145,26 @@ do not advance pack progress. An entry whose pack or level is gone stays visible
 and it blocks Play until it is removed. Tests cover the stores, the shuffle and
 the saved run. The favourites, recents and playlists share one list library.
 
-Open items: Shuffle all across the installed fan pool is not ported. The wide
-level browser has no Playlist action. Playlists are not per profile, and Hot
-Seat turn ownership does not apply yet. The Mac's playlist file keeps revisions
-and a backup. The iOS store keeps a single saved copy in app defaults.
+Open items: Hot Seat turn ownership does not apply yet.
+
+## 12 October profiles and shuffle increment
+
+Shuffle all on the Fan page counts the installed fan levels away from the main
+thread, then Start runs every level once in a repeatable random order. The run
+resumes from the home page like a playlist. A long list shows its titles without
+opening each pack. A pack is opened when its level is selected.
+
+The level browser shows a Playlist action beside Favourite at every size.
+
+Settings has a Player row. A player has their own progress, favourites, recents
+and playlists. A new player starts empty, and the first player keeps the keys
+from earlier builds. The page can switch, add, rename and delete players, up to
+eight. Delete asks for a second tap.
+
+The app writes favourites, recents and playlists through one store. Each write is
+atomic and keeps the previous copy as a backup. A file that cannot be read is kept
+under a new name and the store starts empty. Tests cover the store, the legacy
+import and the fan pool.
+
+Open items: Hot Seat turn ownership does not apply yet. The Mac playlist file keeps
+revisions. The iOS store keeps one backup.

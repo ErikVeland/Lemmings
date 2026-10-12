@@ -10,6 +10,7 @@ import UIKit
     var onPlay: ((Int) -> Void)?
     var onSelect: ((Int) -> Void)?
     var onFavourite: ((Int) -> Void)?
+    var onPlaylist: ((Int) -> Void)?
 
     private let backdrop = MobileMenuBackdrop()
     private let titleLabel = MobilePixelLabel()
@@ -19,6 +20,7 @@ import UIKit
     private let rankPrevious = MobilePixelButton()
     private let rankNext = MobilePixelButton()
     private let favourite = MobilePixelButton()
+    private let playlist = MobilePixelButton()
     private let play = MobilePixelButton()
     private var levels: [MobileLevelSummary] = []
     private var hasRanks = true
@@ -32,6 +34,7 @@ import UIKit
         rankPrevious.title = "< RANK"
         rankNext.title = "RANK >"
         favourite.title = "FAVOURITE"
+        playlist.title = "PLAYLIST"
         play.title = "PLAY"
         play.isPrimary = true
         back.onPress = { [weak self] in self?.onBack?() }
@@ -40,6 +43,10 @@ import UIKit
         favourite.onPress = { [weak self] in
             guard let self, self.levels.indices.contains(self.flow.selectedIndex) else { return }
             self.onFavourite?(self.levels[self.flow.selectedIndex].index)
+        }
+        playlist.onPress = { [weak self] in
+            guard let self, self.levels.indices.contains(self.flow.selectedIndex) else { return }
+            self.onPlaylist?(self.levels[self.flow.selectedIndex].index)
         }
         play.onPress = { [weak self] in
             guard let self, self.levels.indices.contains(self.flow.selectedIndex) else { return }
@@ -50,7 +57,7 @@ import UIKit
             guard let self, self.levels.indices.contains(index) else { return }
             self.onPlay?(self.levels[index].index)
         }
-        [backdrop, titleLabel, subtitleLabel, flow, back, rankPrevious, rankNext, favourite, play].forEach(addSubview)
+        [backdrop, titleLabel, subtitleLabel, flow, back, rankPrevious, rankNext, favourite, playlist, play].forEach(addSubview)
     }
 
     required init?(coder: NSCoder) { nil }
@@ -96,7 +103,12 @@ import UIKit
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        let buttons = hasRanks ? [back, rankPrevious, rankNext, favourite, play] : [back, favourite, play]
+        // A short screen has room for four actions in a row, so the rank pair steps aside.
+        // The carousel itself still reaches every level.
+        let wideRoom = bounds.height >= 430
+        let buttons = hasRanks && wideRoom ? [back, rankPrevious, rankNext, favourite, playlist, play]
+            : [back, favourite, playlist, play]
+        for button in [rankPrevious, rankNext] { button.isHidden = !(hasRanks && wideRoom) }
         let layout = LevelBrowserGeometry(safe: MobileSystemRegions.menuFrame(in: self), actionCount: buttons.count)
         backdrop.frame = bounds
         backdrop.board = layout.board

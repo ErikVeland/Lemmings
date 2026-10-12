@@ -70,15 +70,16 @@ struct MobileFavouritesTests {
         .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
 
     @Test func storesToggleAndRoundTrips() throws {
-        let defaults = try #require(UserDefaults(suiteName: "favourites-test-" + UUID().uuidString))
-        var favourites = MobileFavourites.load(from: defaults)
+        let storage = MobileStorage(directory: FileManager.default.temporaryDirectory.appendingPathComponent("fav-" + UUID().uuidString))
+        defer { try? FileManager.default.removeItem(at: storage.directory) }
+        var favourites = MobileFavourites.load(from: storage, legacy: false)
         #expect(favourites.entries.isEmpty)
         let added = favourites.toggle(pack: "release/lemmings", level: "Fun/1")
         let second = favourites.toggle(pack: "lldb-1", level: "a.dat#0")
         let removed = favourites.toggle(pack: "release/lemmings", level: "Fun/1")
         #expect(added && second && !removed)
-        favourites.save(to: defaults)
-        let loaded = MobileFavourites.load(from: defaults)
+        favourites.save(to: storage)
+        let loaded = MobileFavourites.load(from: storage, legacy: false)
         #expect(loaded.entries == [.init(pack: "lldb-1", level: "a.dat#0")])
         #expect(loaded.contains(pack: "lldb-1", level: "a.dat#0"))
     }
@@ -150,7 +151,8 @@ struct MobilePlaylistTests {
     }
 
     @Test func runsPersistWithTheirFixedOrder() throws {
-        let defaults = try #require(UserDefaults(suiteName: "playlist-test-" + UUID().uuidString))
+        let storage = MobileStorage(directory: FileManager.default.temporaryDirectory.appendingPathComponent("pl-" + UUID().uuidString))
+        defer { try? FileManager.default.removeItem(at: storage.directory) }
         var store = MobilePlaylistStore()
         let created = store.create(name: "Run", entries: (0..<6).map(entry))
         let id = try #require(created)
@@ -158,8 +160,8 @@ struct MobilePlaylistTests {
         let run = try #require(started)
         #expect(run.entries == MobilePlaylistStore.shuffled((0..<6).map(entry), seed: 42))
         store.advance(to: 3)
-        store.save(to: defaults)
-        let loaded = MobilePlaylistStore.load(from: defaults)
+        store.save(to: storage)
+        let loaded = MobilePlaylistStore.load(from: storage, legacy: false)
         #expect(loaded.run?.position == 3 && loaded.run?.entries == run.entries && loaded.playlists.count == 1)
         var ended = loaded
         ended.advance(to: 99)   // past the end finishes the run
@@ -173,5 +175,80 @@ struct MobilePlaylistTests {
         var removing = loaded
         removing.delete(id)
         #expect(removing.run == nil && removing.playlists.isEmpty)
+    }
+}
+
+
+struct MobileStorageTests {
+    private struct Doc: Codable, Equatable { var value: Int }
+
+    private func makeStorage() -> MobileStorage {
+        MobileStorage(directory: FileManager.default.temporaryDirectory.appendingPathComponent("store-" + UUID().uuidString))
+    }
+
+    @Test func fallsBackToTheBackupAndKeepsTheDamagedFile() throws {
+        let storage = makeStorage()
+        defer { try? FileManager.default.removeItem(at: storage.directory) }
+        try storage.save(Doc(value: 1), name: "doc")
+        try storage.save(Doc(value: 2), name: "doc")      // the first copy becomes the backup
+        #expect(storage.load(Doc.self, name: "doc") == Doc(value: 2))
+        try Data("{broken".utf8).write(to: storage.directory.appendingPathComponent("doc.json"))
+        #expect(storage.load(Doc.self, name: "doc") == Doc(value: 1))
+        let kept = try FileManager.default.contentsOfDirectory(atPath: storage.directory.path)
+        #expect(kept.contains { $0.hasPrefix("doc.invalid-") })
+        // A damaged file never overwrites the last good backup.
+        try Data("{broken".utf8).write(to: storage.directory.appendingPathComponent("doc.json"))
+        try storage.save(Doc(value: 3), name: "doc")
+        let backup = try Data(contentsOf: storage.directory.appendingPathComponent("doc.json.bak"))
+        #expect(try JSONDecoder().decode(Doc.self, from: backup) == Doc(value: 1))
+    }
+
+    @Test func importsOlderDefaultsOnce() throws {
+        let storage = makeStorage()
+        defer { try? FileManager.default.removeItem(at: storage.directory) }
+        let defaults = try #require(UserDefaults(suiteName: "store-test-" + UUID().uuidString))
+        defaults.set(try JSONEncoder().encode(Doc(value: 9)), forKey: "legacy")
+        #expect(storage.loadMigrating(Doc.self, name: "doc", defaults: defaults, legacyKey: "legacy") == Doc(value: 9))
+        #expect(defaults.data(forKey: "legacy") == nil)
+        #expect(storage.load(Doc.self, name: "doc") == Doc(value: 9))
+    }
+
+    @Test func profilesKeepTheirOwnKeysAndAlwaysHaveOne() {
+        var profiles = MobileProfiles()
+        #expect(profiles.suffix == "" && profiles.active.name == "Player 1")
+        let added = profiles.add(name: "  ", id: "abc")
+        #expect(added == "abc")
+        profiles.select("abc")
+        #expect(profiles.suffix == ".abc" && profiles.active.name == "Player")
+        profiles.rename("abc", to: "Sam")
+        #expect(profiles.active.name == "Sam")
+        profiles.delete("abc")
+        #expect(profiles.players.count == 1 && profiles.activeID == MobileProfiles.defaultID)
+        profiles.delete(MobileProfiles.defaultID)   // the last player stays
+        #expect(profiles.players.count == 1)
+    }
+}
+
+struct MobileShuffleAllTests {
+    private static let root = URL(fileURLWithPath: #filePath)
+        .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+
+    @Test func theFanPoolListsEveryLevelOnceAndPlaysLazily() throws {
+        let ports = Self.root.appendingPathComponent(".build/ios-ports")
+        try #require(FileManager.default.fileExists(atPath: ports.path))
+        let catalogue = MobileCatalogue(portsRoot: ports, fanFolders: [Self.root.appendingPathComponent("Content/LevelPacks")])
+        let pool = catalogue.fanPool()
+        #expect(pool.packs == catalogue.packs(in: .fan).count && pool.entries.count == 6_020)
+        #expect(Set(pool.entries).count == pool.entries.count)
+        var store = MobilePlaylistStore()
+        let started = store.startShuffleAll(pool.entries, seed: 5)
+        let run = try #require(started)
+        #expect(run.playlist == nil && run.entries.count == 6_020 && Set(run.entries) == Set(pool.entries))
+        // The lazy library opens no pack until a level is played.
+        let library = MobileListLibrary(entries: Array(run.entries.prefix(300)), name: "Shuffle all", catalogue: catalogue, lazy: true)
+        #expect(library.levels.count == 300 && library.levels.allSatisfy { !$0.title.isEmpty })
+        let content = try library.loadLevel(at: 7)
+        _ = try content.session.render(highlight: nil)
+        #expect(library.origin(of: 7) != nil)
     }
 }

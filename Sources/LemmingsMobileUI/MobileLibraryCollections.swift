@@ -72,6 +72,13 @@ extension MobileLibraryViewController {
     func handleCollections(_ id: String) -> Bool {
         switch id {
         case "collections": navigate(.collections)
+        case "players": navigate(.players)
+        case "fanBack": navigate(.family(.fan))
+        case "shuffleAll": beginShuffleAll()
+        case "shuffleStart": startShuffleAll()
+        case "playerNew": newPlayer()
+        case "playerRename": beginRenamingPlayer()
+        case "playerDelete": deleteActivePlayer()
         case "favourites": openList(favourites.entries, name: "Favourites", back: .collections)
         case "recents": openList(recents.entries, name: "Recently played", back: .collections)
         case "playlists": navigate(.playlists)
@@ -89,7 +96,8 @@ extension MobileLibraryViewController {
         case "nameDone": endNaming(commit: true)
         case "listDelete": deleteSelectedPlaylist()
         default:
-            if id.hasPrefix("list."), let uuid = UUID(uuidString: String(id.dropFirst(5))) { openPlaylist(uuid) }
+            if id.hasPrefix("player."), case let key = String(id.dropFirst(7)), profiles.players.contains(where: { $0.id == key }) { switchPlayer(key) }
+            else if id.hasPrefix("list."), let uuid = UUID(uuidString: String(id.dropFirst(5))) { openPlaylist(uuid) }
             else if id.hasPrefix("add."), let uuid = UUID(uuidString: String(id.dropFirst(4))) { addCurrentLevel(to: uuid) }
             else if id.hasPrefix("entry."), let index = Int(id.dropFirst(6)) {
                 playlistSelection = playlistSelection == index ? nil : index
@@ -99,7 +107,7 @@ extension MobileLibraryViewController {
         return true
     }
 
-    func savePlaylists() { playlists.save() }
+    func savePlaylists() { playlists.save(to: storage) }
 
     private func openPlaylist(_ id: UUID) {
         playlistSelection = nil
@@ -148,6 +156,14 @@ extension MobileLibraryViewController {
 
     private func endNaming(commit: Bool) {
         searchField.resignFirstResponder()
+        if renamingPlayer {
+            if commit, let draft = nameDraft { profiles.rename(profiles.activeID, to: draft); saveProfiles() }
+            renamingPlayer = false
+            nameDraft = nil
+            searchField.text = searchQuery
+            rebuild()
+            return
+        }
         if commit, let id = openPlaylistID, let draft = nameDraft { playlists.rename(id, to: draft); savePlaylists() }
         nameDraft = nil
         searchField.text = searchQuery
@@ -158,7 +174,7 @@ extension MobileLibraryViewController {
 
     private func addCurrentLevel(to id: UUID?) {
         guard let id, let identity = favouriteIdentity(selectedIndex) else { return }
-        let entry = MobileFavourites.Entry(pack: identity.pack, level: identity.level)
+        let entry = MobileFavourites.Entry(pack: identity.pack, level: identity.level, title: library?.levels[selectedIndex].title)
         let added = playlists.add(entry, to: id)
         savePlaylists()
         notice = added ? "ADDED" : "ALREADY IN PLAYLIST"
@@ -171,7 +187,7 @@ extension MobileLibraryViewController {
     private func makeRandomPlaylist() {
         guard let library, currentPack != nil, library.levels.count > 1 else { return }
         let pool = library.levels.indices.compactMap { index in
-            favouriteIdentity(index).map { MobileFavourites.Entry(pack: $0.pack, level: $0.level) }
+            favouriteIdentity(index).map { MobileFavourites.Entry(pack: $0.pack, level: $0.level, title: library.levels[index].title) }
         }
         let picks = MobilePlaylistStore.random(10, from: pool, seed: UInt64.random(in: 0...UInt64.max))
         let name = "Random 10 " + (currentPack?.title ?? "")
@@ -185,14 +201,16 @@ extension MobileLibraryViewController {
     /// Opens a list of levels from any packs as the current library.
     func openList(_ entries: [MobileFavourites.Entry], name: String, back: Route, run: MobilePlaylistRun? = nil, position: Int = 0) {
         guard let catalogue else { return }
-        let list = MobileListLibrary(entries: entries, name: name, catalogue: catalogue)
+        // A long list shows its titles without opening every pack.
+        let lazy = entries.count > 100 && entries.allSatisfy { $0.title != nil }
+        let list = MobileListLibrary(entries: entries, name: name, catalogue: catalogue, lazy: lazy)
         guard !list.levels.isEmpty else { return }
         library = list
         currentPack = nil
         activeRun = run
         let ports = catalogue.portsRoot, fan = catalogue.fanFolders
         previewLoader = MobileMenuPreviewLoader {
-            MobileListLibrary(entries: entries, name: name, catalogue: MobileCatalogue(portsRoot: ports, fanFolders: fan))
+            MobileListLibrary(entries: entries, name: name, catalogue: MobileCatalogue(portsRoot: ports, fanFolders: fan), lazy: lazy)
         }
         selectedIndex = min(position, list.levels.count - 1)
         selectedPreview = nil
@@ -217,7 +235,7 @@ extension MobileLibraryViewController {
     func levelStarted(_ index: Int) {
         if let identity = favouriteIdentity(index) {
             recents.record(.init(pack: identity.pack, level: identity.level))
-            recents.save()
+            recents.save(to: storage)
         }
         if activeRun != nil {
             playlists.advance(to: index)
@@ -232,6 +250,107 @@ extension MobileLibraryViewController {
         playlists.endRun()
         savePlaylists()
         activeRun = nil
+    }
+
+    // MARK: - Players
+
+    func saveProfiles() { try? MobileStorage.standard(profile: "_players").save(profiles, name: "players") }
+
+    func playersPage(subtitle: String) -> GameFrontEnd.Page {
+        if let draft = nameDraft, renamingPlayer {
+            return .init(title: "Rename", subtitle: subtitle,
+                         rows: [.init("nameField", "Name: " + draft.uppercased() + "_", selected: true)],
+                         footer: [.init("nameCancel", "Cancel"), .init("nameDone", "Done", primary: true)])
+        }
+        var rows = profiles.players.map { GameFrontEnd.Action("player." + $0.id, $0.name, selected: $0.id == profiles.activeID) }
+        rows.append(.init("playerNew", "New player", enabled: profiles.players.count < MobileProfiles.maximum))
+        return .init(title: "Players", subtitle: subtitle, rows: rows,
+                     footer: [.init("playerRename", "Rename"),
+                              .init("playerDelete", confirmingDelete ? "Confirm delete" : "Delete",
+                                    enabled: profiles.players.count > 1, selected: confirmingDelete),
+                              .init("settings", "Back")])
+    }
+
+    /// Loads the chosen player's collections. Open runs and lists belong to the previous player.
+    private func switchPlayer(_ id: String) {
+        profiles.select(id)
+        saveProfiles()
+        reloadPlayerData()
+        navigate(.players)
+    }
+
+    private func reloadPlayerData() {
+        let isDefault = profiles.active.id == MobileProfiles.defaultID
+        favourites = MobileFavourites.load(from: storage, legacy: isDefault)
+        recents = MobileRecents.load(from: storage, legacy: isDefault)
+        playlists = MobilePlaylistStore.load(from: storage, legacy: isDefault)
+        activeRun = nil
+        playlistSelection = nil
+        confirmingDelete = false
+    }
+
+    private func newPlayer() {
+        guard let id = profiles.add(name: "Player \(profiles.players.count + 1)") else { return }
+        profiles.select(id)
+        saveProfiles()
+        reloadPlayerData()
+        navigate(.players)
+    }
+
+    private func beginRenamingPlayer() {
+        renamingPlayer = true
+        nameDraft = profiles.active.name
+        searchField.text = profiles.active.name
+        searchField.becomeFirstResponder()
+        rebuild()
+    }
+
+    /// The first tap asks for confirmation. A second tap removes the player and their collections.
+    private func deleteActivePlayer() {
+        guard profiles.players.count > 1 else { return }
+        if !confirmingDelete { confirmingDelete = true; rebuild(); return }
+        let removed = profiles.activeID
+        profiles.delete(removed)
+        saveProfiles()
+        try? FileManager.default.removeItem(at: MobileStorage.standard(profile: removed).directory)
+        reloadPlayerData()
+        navigate(.players)
+    }
+
+    // MARK: - Shuffle all
+
+    func shuffleAllPage(subtitle: String) -> GameFrontEnd.Page {
+        var details: [String] = []
+        if shuffleScanning { details = ["Counting levels..."] }
+        else if let pool = shufflePool { details = ["\(pool.entries.count) levels", "\(pool.packs) packs"] }
+        else { details = ["Fan levels are not available."] }
+        return .init(title: "Shuffle all", subtitle: subtitle, details: details,
+                     footer: [.init("fanBack", "Back"),
+                              .init("shuffleStart", "Start", enabled: !shuffleScanning && (shufflePool?.entries.isEmpty == false),
+                                    primary: true)])
+    }
+
+    /// Counts the installed fan levels away from the main thread, then offers to start.
+    func beginShuffleAll() {
+        guard let catalogue, !shuffleScanning else { return }
+        shuffleScanning = true
+        shufflePool = nil
+        navigate(.shuffleAll)
+        let ports = catalogue.portsRoot, folders = catalogue.fanFolders
+        Task {
+            let pool = await Task.detached(priority: .userInitiated) {
+                MobileCatalogue(portsRoot: ports, fanFolders: folders).fanPool()
+            }.value
+            shufflePool = pool
+            shuffleScanning = false
+            if route == .shuffleAll { rebuild() }
+        }
+    }
+
+    private func startShuffleAll() {
+        guard let pool = shufflePool, let run = playlists.startShuffleAll(pool.entries) else { return }
+        savePlaylists()
+        openList(run.entries, name: run.name, back: .family(.fan), run: run)
     }
 }
 #endif

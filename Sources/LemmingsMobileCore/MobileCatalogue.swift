@@ -135,6 +135,21 @@ public final class MobileCatalogue {
         return result.values.sorted { $0.lastPathComponent < $1.lastPathComponent }
     }
 
+    /// Every installed fan level, for a run that visits each once. Reading all packs takes a few seconds,
+    /// so call it away from the main thread.
+    public func fanPool() -> (entries: [MobileFavourites.Entry], packs: Int) {
+        var pool: [MobileFavourites.Entry] = []
+        var packs = 0
+        for pack in self.packs(in: .fan) {
+            guard case let .fan(file) = pack.source, let reader = try? ClassicFanPack(url: file) else { continue }
+            let found = reader.entries()
+            guard !found.isEmpty else { continue }
+            packs += 1
+            pool += found.map { MobileFavourites.Entry(pack: pack.id, level: $0.key, title: $0.label) }
+        }
+        return (pool, packs)
+    }
+
     // MARK: - Opening
 
     /// Opens a pack. The last few stay in memory, so paging back and forth is instant.

@@ -35,7 +35,7 @@ actor MobileMenuPreviewLoader {
 @MainActor final class MobileLibraryViewController: UIViewController, UIDocumentPickerDelegate {
     enum Route: Equatable {
         case home, family(MobileFamily), levels, settings, soundtrack, data
-        case collections, playlists, playlist(UUID), addToPlaylist
+        case collections, playlists, playlist(UUID), addToPlaylist, players, shuffleAll
     }
     private let scrollView = UIScrollView()
     let canvas = MobileMenuCanvas()
@@ -50,9 +50,16 @@ actor MobileMenuPreviewLoader {
     var catalogue: MobileCatalogue?
     var currentPack: MobileContentPack?
     var levelsBackRoute = Route.home
-    var favourites = MobileFavourites.load()
-    var recents = MobileRecents.load()
-    var playlists = MobilePlaylistStore.load()
+    /// The players on this device. Each has their own collections and progress.
+    var profiles = MobileStorage.standard(profile: "_players").load(MobileProfiles.self, name: "players") ?? MobileProfiles()
+    var storage: MobileStorage { .standard(profile: profiles.active.id) }
+    lazy var favourites = MobileFavourites.load(from: storage, legacy: profiles.active.id == MobileProfiles.defaultID)
+    lazy var recents = MobileRecents.load(from: storage, legacy: profiles.active.id == MobileProfiles.defaultID)
+    lazy var playlists = MobilePlaylistStore.load(from: storage, legacy: profiles.active.id == MobileProfiles.defaultID)
+    /// Set while the Players page keyboard edits a name, and while Shuffle all scans the packs.
+    var renamingPlayer = false
+    var shufflePool: (entries: [MobileFavourites.Entry], packs: Int)?
+    var shuffleScanning = false
     var playlistSelection: Int?
     var confirmingDelete = false
     /// Non-nil while the keyboard edits a playlist name.
@@ -75,22 +82,27 @@ actor MobileMenuPreviewLoader {
     private var solved: Set<Int> {
         // Favourites mirror the progress of the packs their levels belong to.
         if let list = library as? MobileFavouritesLibrary {
+            // Resolving a level opens its pack, so only packs with progress are resolved.
+            var progress: [String: Set<Int>] = [:]
             return Set(list.levels.indices.filter { index in
-                list.origin(of: index).map { solvedLevels(for: $0.pack).contains($0.index) } ?? false
+                let pack = String(list.levelKey(at: index).split(separator: "|", maxSplits: 1).first ?? "")
+                if progress[pack] == nil { progress[pack] = solvedLevels(for: pack) }
+                guard progress[pack]?.isEmpty == false else { return false }
+                return list.origin(of: index).map { progress[$0.pack]?.contains($0.index) ?? false } ?? false
             })
         }
         return solvedLevels(for: currentPack?.id)
     }
-    private var progressKey: String { Self.progressKey(for: currentPack?.id, fallback: library?.displayName ?? "classic") }
-
-    private static func progressKey(for pack: String?, fallback: String) -> String {
-        "mobile.completed." + (pack ?? fallback)
+    private func progressKey(for pack: String?, fallback: String) -> String {
+        "mobile.completed." + (pack ?? fallback) + profiles.suffix
     }
     func solvedLevels(for pack: String?) -> Set<Int> {
         let defaults = UserDefaults.standard
-        var all = Set(defaults.array(forKey: Self.progressKey(for: pack, fallback: library?.displayName ?? "classic")) as? [Int] ?? [])
+        var all = Set(defaults.array(forKey: progressKey(for: pack, fallback: library?.displayName ?? "classic")) as? [Int] ?? [])
         // Builds before the catalogue stored Classic progress under the release name.
-        if pack == "release/lemmings" { all.formUnion(defaults.array(forKey: "mobile.completed.Lemmings") as? [Int] ?? []) }
+        if pack == "release/lemmings", profiles.active.id == MobileProfiles.defaultID {
+            all.formUnion(defaults.array(forKey: "mobile.completed.Lemmings") as? [Int] ?? [])
+        }
         return all
     }
 
@@ -113,6 +125,11 @@ actor MobileMenuPreviewLoader {
             self.browser.setFavourite(self.isFavourite(index))
         }
         browser.onFavourite = { [weak self] index in self?.toggleFavourite(index) }
+        browser.onPlaylist = { [weak self] index in
+            guard let self else { return }
+            self.selectedIndex = index
+            _ = self.handleCollections("addPlaylist")
+        }
         browser.artworkLoader = { [weak self] index in await self?.coverArtwork(index) }
         view.addSubview(browser)
         view.addSubview(unfold)
@@ -182,7 +199,7 @@ actor MobileMenuPreviewLoader {
                         title += "  \(packs.count)"
                     }
                     rows.append(.init("family." + family.rawValue, title,
-                                      primary: pendingCheckpoint == nil && family == catalogue.families.first))
+                                      primary: pendingCheckpoint == nil && playlists.run == nil && family == catalogue.families.first))
                 }
             } else {
                 rows.append(.init("classic", "Lemmings  \(solved.count)/\(count)", enabled: count > 0,
@@ -204,6 +221,7 @@ actor MobileMenuPreviewLoader {
             if family == .fan {
                 rows.append(.init("search", "Search: " + searchQuery.uppercased() + (searchField.isFirstResponder ? "_" : ""),
                                   selected: !query.isEmpty))
+                rows.append(.init("shuffleAll", "Shuffle all"))
             }
             rows += packs.map { pack in
                 .init("pack." + pack.id, pack.title + (pack.levelCount.map { "  \($0)" } ?? "") + solvedMark(pack))
@@ -253,10 +271,15 @@ actor MobileMenuPreviewLoader {
                                 rows: [.init("planning", "Pause to assign", selected: planning),
                                        .init("speed", "Fast speed: \(fastSpeed)X"),
                                        .init("music", "Music", selected: MobileMusic.shared.isEnabled),
+                                       .init("players", "Player: \(profiles.active.name)"),
                                        .init("soundtrackChoice", "Soundtrack: \(MobileMusic.shared.soundtrack)"),
                                        .init("soundtrack", "Soundtrack libraries")],
                                 footer: [.init("home", "Back")])
             canvas.preview = nil
+        case .players:
+            canvas.page = playersPage(subtitle: subtitle); canvas.preview = nil
+        case .shuffleAll:
+            canvas.page = shuffleAllPage(subtitle: subtitle); canvas.preview = nil
         case .collections:
             canvas.page = collectionsPage(subtitle: subtitle); canvas.preview = nil
         case .playlists:
@@ -312,7 +335,7 @@ actor MobileMenuPreviewLoader {
     }
     func navigate(_ next: Route) {
         searchField.resignFirstResponder()
-        if nameDraft != nil, !{ if case .playlist = next { return true } else { return false } }() { nameDraft = nil; searchField.text = searchQuery }
+        if nameDraft != nil, !{ if case .playlist = next { return true } else { return false } }() { nameDraft = nil; renamingPlayer = false; searchField.text = searchQuery }
         confirmingDelete = false
         previewTask?.cancel(); previewGeneration = UUID(); loading = false
         route = next; notice = ""
@@ -396,7 +419,7 @@ actor MobileMenuPreviewLoader {
     private func toggleFavourite(_ index: Int) {
         guard let identity = favouriteIdentity(index) else { return }
         favourites.toggle(pack: identity.pack, level: identity.level)
-        favourites.save()
+        favourites.save(to: storage)
         browser.setFavourite(isFavourite(index))
         rebuild()
     }
@@ -581,7 +604,7 @@ actor MobileMenuPreviewLoader {
                 }
                 var completed = self.solvedLevels(for: pack); completed.insert(real)
                 UserDefaults.standard.set(completed.sorted(),
-                                          forKey: Self.progressKey(for: pack, fallback: self.library?.displayName ?? "classic"))
+                                          forKey: self.progressKey(for: pack, fallback: self.library?.displayName ?? "classic"))
             }
             next.onExit = { [weak self] action in
                 guard let self else { return }

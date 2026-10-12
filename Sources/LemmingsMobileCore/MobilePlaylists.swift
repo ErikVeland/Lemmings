@@ -9,14 +9,14 @@ public struct MobileRecents: Equatable, Sendable {
 
     public init(entries: [MobileFavourites.Entry] = []) { self.entries = entries }
 
-    public static func load(from defaults: UserDefaults = .standard) -> MobileRecents {
-        guard let data = defaults.data(forKey: defaultsKey),
-              let entries = try? JSONDecoder().decode([MobileFavourites.Entry].self, from: data) else { return MobileRecents() }
-        return MobileRecents(entries: Array(entries.prefix(limit)))
+    public static func load(from storage: MobileStorage, defaults: UserDefaults = .standard, legacy: Bool = true) -> MobileRecents {
+        let found = storage.loadMigrating([MobileFavourites.Entry].self, name: "recents", defaults: defaults,
+                                          legacyKey: legacy ? defaultsKey : "mobile.none") ?? []
+        return MobileRecents(entries: Array(found.prefix(limit)))
     }
 
-    public func save(to defaults: UserDefaults = .standard) {
-        defaults.set(try? JSONEncoder().encode(entries), forKey: Self.defaultsKey)
+    public func save(to storage: MobileStorage) {
+        try? storage.save(entries, name: "recents")
     }
 
     /// Replaying a level moves it to the front.
@@ -42,7 +42,8 @@ public struct MobilePlaylist: Codable, Equatable, Identifiable, Sendable {
 /// A shuffled run keeps its seed and its fixed order, so a relaunch resumes the
 /// same sequence and no level repeats within the run.
 public struct MobilePlaylistRun: Codable, Equatable, Sendable {
-    public let playlist: UUID
+    /// The playlist this run came from. A shuffle across all fan levels has none.
+    public let playlist: UUID?
     public let name: String
     public let entries: [MobileFavourites.Entry]
     public var position: Int
@@ -61,14 +62,13 @@ public struct MobilePlaylistStore: Codable, Equatable, Sendable {
 
     public init() {}
 
-    public static func load(from defaults: UserDefaults = .standard) -> MobilePlaylistStore {
-        guard let data = defaults.data(forKey: defaultsKey),
-              let store = try? JSONDecoder().decode(MobilePlaylistStore.self, from: data) else { return MobilePlaylistStore() }
-        return store
+    public static func load(from storage: MobileStorage, defaults: UserDefaults = .standard, legacy: Bool = true) -> MobilePlaylistStore {
+        storage.loadMigrating(MobilePlaylistStore.self, name: "playlists", defaults: defaults,
+                              legacyKey: legacy ? defaultsKey : "mobile.none") ?? MobilePlaylistStore()
     }
 
-    public func save(to defaults: UserDefaults = .standard) {
-        defaults.set(try? JSONEncoder().encode(self), forKey: Self.defaultsKey)
+    public func save(to storage: MobileStorage) {
+        try? storage.save(self, name: "playlists")
     }
 
     public func playlist(_ id: UUID) -> MobilePlaylist? { playlists.first { $0.id == id } }
@@ -156,6 +156,16 @@ public struct MobilePlaylistStore: Codable, Equatable, Sendable {
         guard let playlist = playlist(id), !playlist.entries.isEmpty else { return nil }
         let order = shuffle ? Self.shuffled(playlist.entries, seed: seed) : playlist.entries
         run = MobilePlaylistRun(playlist: id, name: playlist.name, entries: order, position: 0, shuffled: shuffle, seed: seed)
+        return run
+    }
+
+    /// A run through a pool of levels, such as every installed fan level, each once.
+    @discardableResult
+    public mutating func startShuffleAll(_ pool: [MobileFavourites.Entry], name: String = "Shuffle all",
+                                         seed: UInt64 = UInt64.random(in: 0...UInt64.max)) -> MobilePlaylistRun? {
+        guard !pool.isEmpty else { return nil }
+        run = MobilePlaylistRun(playlist: nil, name: name, entries: Self.shuffled(pool, seed: seed),
+                                position: 0, shuffled: true, seed: seed)
         return run
     }
 
