@@ -1452,11 +1452,17 @@ extension AppDelegate {
     togglePause()
     try check(isPaused && !playfield.startCountdown.isActive, "Pause during countdown must remain paused")
     togglePause()
+    GameScreen.shared.gameWindow = window
     let preferences = SettingsWindow(settings: ClassicSettings(), options: settingsOptions())
     preferences.onChange = { [weak self] in self?.apply($0) }
     preferences.show()
     func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap { descendants($0) } }
     let root = window.contentView!
+    func reveal(_ control: NSView) {
+      root.layoutSubtreeIfNeeded()
+      if control.enclosingScrollView != nil { control.scrollToVisible(control.bounds) }
+      root.layoutSubtreeIfNeeded()
+    }
     guard let iconSize = descendants(root).compactMap({ $0 as? NSPopUpButton }).first(where: { $0.accessibilityLabel() == "Skill icon size" }) else {
       try check(false, "Skill icon size control is missing"); return
     }
@@ -1482,21 +1488,26 @@ extension AppDelegate {
     try check(backpacks.state == .on && preferences.current.showClassicSkillBackpacks,
       "Modern must show backpacks by default")
     root.layoutSubtreeIfNeeded()
+    reveal(backpacks)
     try check(backpacks.visibleRect.contains(backpacks.bounds.insetBy(dx: 1, dy: 1)), "Backpack toggle is clipped")
     let targeting = descendants(root).compactMap { $0 as? GameControlGroup }.first { $0.accessibilityLabel() == "Targeting" }!
-    let targetingCaption = descendants(root).compactMap { $0 as? GameLabel }.first { $0.stringValue == "Targeting" }!
-    let firstTarget = targeting.arrangedSubviews.first!
-    try check(abs(targetingCaption.convert(targetingCaption.bounds, to: root).midY
-      - firstTarget.convert(firstTarget.bounds, to: root).midY) < 1, "Targeting label must align with the start of its group")
+    let targetingCaption = descendants(root).compactMap { $0 as? GameLabel }.first { $0.stringValue == "Skill targeting" }!
+    let targetingDocument = targeting.superview!
+    try check(targetingCaption.convert(targetingCaption.bounds, to: targetingDocument).maxY
+      <= targeting.convert(targeting.bounds, to: targetingDocument).minY,
+      "Skill targeting heading must precede its control group")
     for control in targeting.arrangedSubviews {
       try check(targeting.bounds.insetBy(dx: 4, dy: 4).contains(control.convert(control.bounds, to: targeting)),
         "Targeting group clips an option")
     }
+    reveal(targeting)
     try check(root.hitTest(targeting.convert(CGPoint(x: targeting.bounds.maxX - 3, y: targeting.bounds.midY), to: root)) !== playfield,
       "Targeting group background leaked input to gameplay")
+    reveal(backpacks)
     try check(root.hitTest(backpacks.convert(CGPoint(x: backpacks.bounds.midX, y: backpacks.bounds.midY), to: root)) === backpacks,
       "Backpack toggle has the wrong input target")
     func click(_ point: CGPoint, in view: NSView, releaseAt: CGPoint? = nil) {
+      reveal(view)
       let location = view.convert(point, to: nil)
       let down = NSEvent.mouseEvent(with: .leftMouseDown, location: location, modifierFlags: [], timestamp: 1,
         windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1)!
@@ -1515,6 +1526,7 @@ extension AppDelegate {
       if GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Settings",
          let levelSelection = descendants(root).compactMap({ $0 as? NSPopUpButton }).first(where: { $0.accessibilityLabel() == "Level selection" }),
          let back = descendants(root).compactMap({ $0 as? NSButton }).first(where: { $0.title == "Back" }) {
+        reveal(levelSelection)
         let levelRect = levelSelection.convert(levelSelection.bounds, to: root)
         let backRect = back.convert(back.bounds, to: root)
         try check(!levelRect.intersects(backRect), "Gameplay options overlap the Back button")
@@ -1525,6 +1537,7 @@ extension AppDelegate {
       try bitmap.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: ".build/gameplay-preset-\(name).png"))
     }
     func selectPreset(_ name: String, keyboard: Bool = false) throws {
+      reveal(experience)
       try check(experience.accessibilityPerformPress(), "Preset choices could not open")
       guard let page = GameScreen.shared.controllerPage(in: window),
         let button = descendants(page).compactMap({ $0 as? NSButton }).first(where: { $0.title == name }) else {
@@ -1623,6 +1636,7 @@ extension AppDelegate {
     }
     for style: GameplayCursorStyle in [.modern, .original] {
       root.layoutSubtreeIfNeeded()
+      reveal(cursorStyle)
       let centre = CGPoint(x: cursorStyle.bounds.midX, y: cursorStyle.bounds.midY)
       try check(root.hitTest(cursorStyle.convert(centre, to: root)) === cursorStyle, "Cursor control is obscured")
       try check(cursorStyle.accessibilityPerformPress(), "Cursor choices did not open")
@@ -3485,7 +3499,7 @@ extension AppDelegate {
     }
     print("PASS live Oh Yes! rank changes load the original, Oh No and Sunsoft artwork")
   }
-  fileprivate func testRestartSelection() throws {
+  fileprivate func testRestartSelection() async throws {
     settings.music = .silent
     loadContent()
     guard let index = dataSets.firstIndex(where: { $0.set.title == .lemmings }) else {
@@ -3512,6 +3526,10 @@ extension AppDelegate {
     for _ in 0..<110 { session?.tick() }
     session?.nuke()
     for _ in 0..<2000 where session?.isComplete == false { session?.tick() }
+    if let classic = session as? ClassicSession, let conditions = arcadeLevel?.conditions {
+      await ArcadeStore.shared.prepareSolutionTarget(initial: classic.initialSimulation, conditions: conditions,
+        resources: Bundle.main.resourceURL, buildVersion: TrolleyCapture.buildVersion).value
+    }
     finishSessionIfNeeded()
     try check(phase == .results, "Restart test did not reach results")
     arcadeAutoPresent = true; presentArcadeResult(); arcadeAutoPresent = false
@@ -4147,6 +4165,7 @@ extension AppDelegate {
   }
   fileprivate func testLevelBrowserRouteIntegrity() async throws {
     GameScreen.shared.dismissAll()
+    GameScreen.shared.gameWindow = window
     let folder = URL(fileURLWithPath: ".build/content-browser")
     try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
     let archive = folder.appendingPathComponent("route-change-fixture")
@@ -4557,10 +4576,26 @@ extension AppDelegate {
         + ((view as? NSTextField).map { [$0.stringValue] } ?? [])
         + view.subviews.flatMap(labels)
     }
-    try check(labels(hub).contains(where: { $0.contains(entries[0].levelNameSnapshot) })
-      && buttons(hub).contains(where: { $0.title == "Let's play" })
-      && !buttons(hub).contains(where: { $0.title == "Continue" }),
-      "A new Hot Seat inherited another session's journey position: \(labels(hub)), \(buttons(hub).map(\.title))")
+    guard let savedJourney = store.resumableLearningJourney(hotSeatID: arcade.hotSeatID),
+          let continueJourney = buttons(hub).first(where: { $0.title == "Continue" }) else {
+      throw IntegrationFailure(message: "The new Hot Seat could not find the saved Solo journey")
+    }
+    let freshHotSeat = arcade.hotSeatID, runBeforePrompt = store.activeRun
+    try check(labels(hub).contains(where: { $0.contains(savedJourney.run.currentEntry.levelNameSnapshot) })
+      && savedJourney.hotSeatID == nil,
+      "The hub did not show the saved Solo journey's current lesson")
+    continueJourney.performClick(nil)
+    guard let resumePrompt = GameScreen.shared.controllerPage(in: window) as? GameMenuPage else {
+      throw IntegrationFailure(message: "Continue did not open the saved-session prompt")
+    }
+    try check(resumePrompt.accessibilityLabel() == "Resume session?"
+      && buttons(resumePrompt).contains(where: { $0.title == "Resume solo" })
+      && arcade.hotSeatID == freshHotSeat && store.activeRun == runBeforePrompt,
+      "Continue started a new session or switched ownership before confirmation")
+    resumePrompt.controllerBackButton.performClick(nil)
+    try check(arcade.hotSeatID == freshHotSeat && store.activeRun == runBeforePrompt,
+      "Cancelling the saved journey prompt changed the current session")
+    print("PASS saved Solo journey is offered after a new Hot Seat; Continue confirms resumption and Back preserves the session")
     try check(arcade.records == profileRecords && store.learningProgress.completed.contains(first),
       "A new Hot Seat erased profile scores, achievements or saved learning history")
     GameScreen.shared.dismissAll()
@@ -5564,7 +5599,11 @@ extension AppDelegate {
   }
 
   fileprivate func testSeasonalMusic() throws {
-    let recording = ClassicMusicSource.remix(name: soundtrackLibrary.keys.sorted()[0])
+    loadSoundtracks()
+    guard let recordingName = soundtrackLibrary.keys.sorted().first else {
+      throw IntegrationFailure(message: "The seasonal fixture needs bundled recordings")
+    }
+    let recording = ClassicMusicSource.remix(name: recordingName)
     levelMusic = nil
     let root = URL(fileURLWithPath: "Sources/Music")
     // Catalogue identity decides seasonal music, as in the app. Path words
@@ -7142,7 +7181,7 @@ Task { @MainActor in
     try await subject.testElapsedTimeAndAudioRecovery()
     try await testGameTypography()
     try subject.testGamePages()
-    try subject.testRestartSelection()
+    try await subject.testRestartSelection()
     try await subject.testLevelSkipResult()
     try subject.testBundledRescueTarget()
     try subject.testPortArtworkSwitching()

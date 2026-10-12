@@ -695,10 +695,11 @@ extension Lemmings3PlayWindow {
 extension Lemmings3PlayWindow {
     fileprivate func checkMusic() throws {
         defer { stop() }
+        var settings = ClassicSettings(); settings.music = .amigaModules
+        setAudioSettings(settings, muted: true)
         try assertArtwork(music.library.count == 8, "L3 did not load its eight bundled modules")
         try assertArtwork(music.currentURL?.lastPathComponent.uppercased().hasPrefix("CLASSIC") == true,
             "L3 Classic started another tribe's music")
-        var settings = ClassicSettings()
         settings.music = .silent
         setAudioSettings(settings, muted: false)
         try assertArtwork(music.muted, "L3 ignored silent music")
@@ -716,7 +717,7 @@ extension Lemmings3PlayWindow {
         print("PASS L3 module playback, silence, global mute, replay suspension and stopped-player safety")
     }
 }
-try Lemmings3PlayWindow(root: l3root).checkMusic()
+try Lemmings3PlayWindow(root: l3root, selection: .init(tribe: .classic, level: 0), recordsCampaignProgress: false).checkMusic()
 try Lemmings3PlayWindow(root: l3root).checkArcadeResult()
 
 private final class L3VoiceCapture: @unchecked Sendable {
@@ -744,10 +745,12 @@ extension Lemmings3PlayWindow {
         try assertArtwork(captures.count == 1 && captures.last?.0 == 5112 && captures.last?.1 == 14037,
             "Accepted L3 assignment did not supply original voice samples to recording")
         applyAction(to: actor.id, direction: .right)
-        try assertArtwork(captures.count == 1, "Rejected L3 assignment played a voice")
+        let rejected = GameplaySupplementSounds.clip(for: .actionRejected)!
+        try assertArtwork(captures.count == 2 && captures.last?.0 == rejected.samples.count
+            && captures.last?.1 == rejected.sampleRate, "Rejected L3 assignment did not use the short rejection cue")
         settings.sound = .silent; setAudioSettings(settings, muted: false)
         selected = 0; applyAction(to: actor.id, direction: .right)
-        try assertArtwork(captures.count == 1 && warningSound.muted, "L3 silent effects reached replay audio")
+        try assertArtwork(captures.count == 2 && warningSound.muted, "L3 silent effects reached replay audio")
         settings.sound = .sampleBank; setAudioSettings(settings, muted: false)
         let tick = game.tick
         showGameMenu()

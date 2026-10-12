@@ -1,0 +1,4 @@
+UI test windows: offscreen; audio: muted
+PASS idle HDR overlay skips masks and clears the last effect
+PASS world-anchored explosions across camera pan, zoom, resize and offscreen travel
+FAIL: Failure(message: "Rescue aura did not emit golden HDR light")

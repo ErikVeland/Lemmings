@@ -1,0 +1,86 @@
+/Users/veland/Lemmings/.build/release-1.9.3/source/Sources/LemmingsLocal/ReleaseWelcome.swift:48:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+46 |         scroll.hasHorizontalScroller = false
+47 |         scroll.drawsBackground = false
+48 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+49 |         scroll.scrollerStyle = .overlay
+50 |         scroll.setAccessibilityLabel("Release notes")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+/Users/veland/Lemmings/.build/release-1.9.3/source/.build/release-1.9.4/release-checks/main.swift:6089:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 6087 |       openPanel.canChooseFiles = true
+ 6088 |       openPanel.canChooseDirectories = false
+ 6089 |       openPanel.allowedFileTypes = ["nxlv"]
+      |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 6090 |       openPanel.message = "Choose a NeoLemmix level file."
+ 6091 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/.build/release-1.9.3/source/.build/release-1.9.4/release-checks/main.swift:7399:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 7397 |       openPanel.canChooseFiles = true
+ 7398 |       openPanel.canChooseDirectories = false
+ 7399 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+      |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 7400 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+ 7401 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/.build/release-1.9.3/source/.build/release-1.9.4/release-checks/main.swift:8107:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+ 8105 |     keyboard.controllerRewindHeld = { [weak self] held in
+ 8106 |       guard let self else { return }
+ 8107 |       if held { self.beginContinuousRewind() }
+      |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+ 8108 |       else if self.rewindHeld { self.endContinuousRewind() }
+ 8109 |     }
+
+/Users/veland/Lemmings/.build/release-1.9.3/source/.build/release-1.9.4/release-checks/main.swift:16449:14: warning: 'init(dictionary:)' is deprecated: Properties that depend on the system or application version are not supported when used with this initializer. The designated initializer is available in SUAppcastItem+Private.h. Please first explore other APIs or contact us to describe your use case. [#DeprecatedDeclaration]
+16447 |     && updates.responds(to: NSSelectorFromString("updater:didFinishUpdateCycleForUpdateCheck:error:")),
+16448 |     "Sparkle could not deliver session cleanup callbacks")
+16449 |   let item = SUAppcastItem(dictionary: ["enclosure": ["url": "https://example.invalid/update.zip",
+      |              `- warning: 'init(dictionary:)' is deprecated: Properties that depend on the system or application version are not supported when used with this initializer. The designated initializer is available in SUAppcastItem+Private.h. Please first explore other APIs or contact us to describe your use case. [#DeprecatedDeclaration]
+16450 |     "sparkle:version": "75", "sparkle:shortVersionString": "1.8.6"]])!
+16451 |   try check(updates.availableVersion == nil, "An unavailable update had a reminder")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+UI test windows: offscreen; audio: muted
+PASS unrecoverable-run failure mood decision
+PASS closing the main window preserves ownership for delayed screen refreshes
+PASS final single-step handles wins, losses, campaign and fan progress
+PASS first-launch HD/old-school choices, default action, live application, persistence and one-time presentation
+PASS seven home content families and the Settings gear use distinct targets
+PASS home families filter the typed catalogue without changing release identities
+PASS context-aware help, scalable pages, accessible actions and turn badge
+PASS nearest eligible targeting, overlap, edge allowance, moving green target, exhausted skills and mutation-free Classic/fan probes
+PASS live Classic inputs/undo, local retention, opt-in action upload, no video upload, unauthenticated top-ten downloads, checksum rejection and profile deletion
+PASS classic bounded action-only format, commands, final verification, tamper rejection, seek and replay render targets
+PASS lemmings2 bounded action-only format, commands, final verification, tamper rejection, seek and replay render targets
+PASS lemmings3 bounded action-only format, commands, final verification, tamper rejection, seek and replay render targets
+PASS neolemmix bounded action-only format, commands, final verification, tamper rejection, seek and replay render targets
+PASS repeated Solo/Hot Seat mode, campaign, save namespace and library round trips
+PASS mouse Start new Hot Seat, saved session retention and confirmed profile switch
+PASS hourly checks, startup alerts, discovery/download reminders, busy icon/menu checks, automatic notes, session cleanup and retry without restart
+PASS release notes stay clipped and scrollable at three sizes; Continue remains visible and usable
+PASS lemmings-unplayed ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS lemmings2-unplayed ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS lemmings3-unplayed ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS neolemmix-unplayed ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS catalogue song/source names, variant changes, Now Playing bitmap renders, expiry, accessibility, silence and pointer pass-through
+PASS classic Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS classic-pack ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS classic-false native golden rim capture and restrained pixel coverage
+PASS classic Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS classic-pack ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS classic-true native golden rim capture and restrained pixel coverage
+PASS lemmings2 Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS lemmings2-pack ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS lemmings2-false native golden rim capture and restrained pixel coverage
+PASS lemmings2 Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS lemmings2-pack ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS lemmings2-true native golden rim capture and restrained pixel coverage
+PASS lemmings3 Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS lemmings3-pack ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS lemmings3-false native golden rim capture and restrained pixel coverage
+PASS lemmings3 Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS lemmings3-pack ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS lemmings3-true native golden rim capture and restrained pixel coverage
+PASS all three engine completion callbacks persist Journey wins before Next, preserve turn ownership and reject stale results; result Menu/Q/Escape exit
+PASS 1.9.4 replay panels, saved-session flows, update discovery, welcome, track fades and three-game celebration

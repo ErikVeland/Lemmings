@@ -254,7 +254,9 @@ extension ReplayMovieWindow {
     try require(playbackRate == 8, "Fast replay did not stop at 8x")
     bar.onAction?(.play)
     try require(player.rate == 0, "Replay pause did not stop playback")
-    let artwork = try ClassicMacArtwork(directory: URL(fileURLWithPath: ".build/local/Ultimate Lemmings.app/Contents/Resources/MacArtwork/lemmings"))
+    let testApp = ProcessInfo.processInfo.environment["LEMMINGS_TEST_APP"].map { URL(fileURLWithPath: $0) }
+      ?? URL(fileURLWithPath: ".build/local/Ultimate Lemmings.app")
+    let artwork = try ClassicMacArtwork(directory: testApp.appendingPathComponent("Contents/Resources/MacArtwork/lemmings"))
     bar.useTestArtwork(artwork)
     bar.frame.size = CGSize(width: 1120, height: 154)
     refresh()

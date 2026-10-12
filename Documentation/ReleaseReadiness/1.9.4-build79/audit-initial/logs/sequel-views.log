@@ -1,0 +1,24 @@
+PASS L2 CLASSIC: tiles, objects, lemmings, walker and effects
+PASS L2 BEACH: tiles, objects, lemmings, walker and effects
+PASS L2 CAVEMAN: tiles, objects, lemmings, walker and effects
+PASS L2 CIRCUS: tiles, objects, lemmings, walker and effects
+PASS L2 EGYPTIAN: tiles, objects, lemmings, walker and effects
+PASS L2 HIGHLAND: tiles, objects, lemmings, walker and effects
+PASS L2 MEDIEVAL: tiles, objects, lemmings, walker and effects
+PASS L2 OUTDOOR: tiles, objects, lemmings, walker and effects
+PASS L2 POLAR: tiles, objects, lemmings, walker and effects
+PASS L2 SHADOW: tiles, objects, lemmings, walker and effects
+PASS L2 SPACE: tiles, objects, lemmings, walker and effects
+PASS L2 SPORTS: tiles, objects, lemmings, walker and effects
+PASS L3 style 1: both object banks and 30 levels
+PASS L3 style 2: both object banks and 30 levels
+PASS L3 style 3: both object banks and 30 levels
+PASS 120 checked-in visual hashes
+PASS 59542 frames, 52299 generated cache entries, 214 levels
+Sources/LemmingsLocal/MacInterfaceRenderer.swift:3:8: error: no such module 'LemmingsGameArt'
+  1 | #if os(macOS)
+  2 | import AppKit
+  3 | import LemmingsGameArt
+    |        `- error: no such module 'LemmingsGameArt'
+  4 | import NxlvKit
+  5 | 

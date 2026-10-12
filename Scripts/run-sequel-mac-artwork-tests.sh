@@ -22,6 +22,7 @@ swiftc -O -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos1
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$build_dir" -o "$build_dir/tests" Tests/SequelMacArtworkTests/main.swift
 "$build_dir/tests" "$@"
+zsh "$project_dir/Scripts/build-game-art-module.sh" "$build_dir/modules" "$build_dir" "$(uname -m)-apple-macos12.3" -O
 cat Sources/LemmingsLocal/Lemmings2PlayWindow.swift Sources/LemmingsLocal/Lemmings3PlayWindow.swift \
   Sources/LemmingsLocal/SettingsWindow.swift \
   Tests/SequelMacArtworkAppTests/checks.swift > "$build_dir/app-test/main.swift"
@@ -32,7 +33,7 @@ app_sources=("${(@)app_sources:#*/Lemmings3PlayWindow.swift}")
 app_sources=("${(@)app_sources:#*/SettingsWindow.swift}")
 swiftc -O -swift-version 6 -target "$(uname -m)-apple-macos12.3" \
   -module-cache-path "$module_cache" \
-  -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
+  -I "$build_dir/modules" -L "$build_dir" -lNxlvKit -lLemmingsGameArt \
   -Xlinker -rpath -Xlinker "$build_dir" -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
   -F "$sparkle_framework_dir" -framework Sparkle \
   -Xlinker -rpath -Xlinker "$sparkle_framework_dir" \

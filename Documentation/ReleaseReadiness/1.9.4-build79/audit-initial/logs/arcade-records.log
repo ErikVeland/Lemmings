@@ -1,0 +1,7 @@
+Sources/LemmingsLocal/MacInterfaceRenderer.swift:3:8: error: no such module 'LemmingsGameArt'
+  1 | #if os(macOS)
+  2 | import AppKit
+  3 | import LemmingsGameArt
+    |        `- error: no such module 'LemmingsGameArt'
+  4 | import NxlvKit
+  5 | 

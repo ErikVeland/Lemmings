@@ -1,0 +1,5 @@
+PASS original exits centre arrivals; Golems exits accept first contact
+Classic DOS rules: RR1=53, RR2=52, RR98=4, RR99=4; entrance tick=35; first hatch tick=54.
+Classic DOS edge cases: hatch tables, half-open triggers, fall 60/61, fixed blocker overlays, trap cooldown, RR0, zero-dx splats, immutable masks, Codable continuation, and replay ordering passed.
+Official campaign soak: 120 levels, 60000 tick calls, 2562 released, 1604 active, 0 saved, 958 lost.
+Classic DOS simulation regressions passed.

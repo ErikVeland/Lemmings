@@ -1,0 +1,16 @@
+{
+  "sourceCommit": "4cf2c500bf9f8759bfc0c01b00051e195775e533",
+  "cases": [
+    "testLeaderboardActions",
+    "testSoloHotSeatRoundTrips",
+    "testReportedRecovery",
+    "testProfileSessionActions",
+    "testUpdateRequests",
+    "testScrollableReleaseNotes",
+    "testRecordNavigationAndTrackNotice",
+    "testExitAndImmediateProgress"
+  ],
+  "offscreen": true,
+  "audio": "muted",
+  "result": "passed"
+}

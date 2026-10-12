@@ -1,0 +1,2 @@
+UI test windows: offscreen; audio: muted
+PASS asynchronous glow, faint SDR cap, empty-space preservation and 1000 fresh-image draws; p95 7.087000005412847 ms

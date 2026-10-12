@@ -1,0 +1,376 @@
+{
+  "sourceCommit": "4cf2c500bf9f8759bfc0c01b00051e195775e533",
+  "initialAuditPassed": 47,
+  "initialAuditFailuresResolved": [
+    "hdr-gpu",
+    "replay-movies",
+    "mac-app-integration",
+    "local-performance-measurement",
+    "sequel-views",
+    "arcade-records"
+  ],
+  "finalPassed": 53,
+  "checks": [
+    {
+      "name": "shared-library",
+      "status": "passed",
+      "seconds": 173.8,
+      "log": "audit-initial/logs/shared-library.log"
+    },
+    {
+      "name": "ClassicGameFlowTests",
+      "status": "passed",
+      "seconds": 1.5,
+      "log": "audit-initial/logs/ClassicGameFlowTests.log"
+    },
+    {
+      "name": "ClassicSettingsTests",
+      "status": "passed",
+      "seconds": 2.0,
+      "log": "audit-initial/logs/ClassicSettingsTests.log"
+    },
+    {
+      "name": "ClassicSoundCueTests",
+      "status": "passed",
+      "seconds": 2.0,
+      "log": "audit-initial/logs/ClassicSoundCueTests.log"
+    },
+    {
+      "name": "AudioMatrixTests",
+      "status": "passed",
+      "seconds": 1.5,
+      "log": "audit-initial/logs/AudioMatrixTests.log"
+    },
+    {
+      "name": "NeoLemmixSimulationTests",
+      "status": "passed",
+      "seconds": 4.7,
+      "log": "audit-initial/logs/NeoLemmixSimulationTests.log"
+    },
+    {
+      "name": "NxlvRendererTests",
+      "status": "passed",
+      "seconds": 2.7,
+      "log": "audit-initial/logs/NxlvRendererTests.log"
+    },
+    {
+      "name": "NxlvStyleResolverTests",
+      "status": "passed",
+      "seconds": 1.7,
+      "log": "audit-initial/logs/NxlvStyleResolverTests.log"
+    },
+    {
+      "name": "ClassicDOSSimulationRegressions",
+      "status": "passed",
+      "seconds": 8.3,
+      "log": "audit-initial/logs/ClassicDOSSimulationRegressions.log"
+    },
+    {
+      "name": "ClassicDOSRewindTests",
+      "status": "passed",
+      "seconds": 1.7,
+      "log": "audit-initial/logs/ClassicDOSRewindTests.log"
+    },
+    {
+      "name": "ClassicDOSReplayTests",
+      "status": "passed",
+      "seconds": 2.2,
+      "log": "audit-initial/logs/ClassicDOSReplayTests.log"
+    },
+    {
+      "name": "ProTrackerTests",
+      "status": "passed",
+      "seconds": 2.0,
+      "log": "audit-initial/logs/ProTrackerTests.log"
+    },
+    {
+      "name": "PercussionTests",
+      "status": "passed",
+      "seconds": 1.4,
+      "log": "audit-initial/logs/PercussionTests.log"
+    },
+    {
+      "name": "AdaptiveDJDirectorTests",
+      "status": "passed",
+      "seconds": 1.2,
+      "log": "audit-initial/logs/AdaptiveDJDirectorTests.log"
+    },
+    {
+      "name": "FLICTests",
+      "status": "passed",
+      "seconds": 4.0,
+      "log": "audit-initial/logs/FLICTests.log"
+    },
+    {
+      "name": "Lemmings2RuntimeTests",
+      "status": "passed",
+      "seconds": 99.4,
+      "log": "audit-initial/logs/Lemmings2RuntimeTests.log"
+    },
+    {
+      "name": "Lemmings2IntroTests",
+      "status": "passed",
+      "seconds": 3.0,
+      "log": "audit-initial/logs/Lemmings2IntroTests.log"
+    },
+    {
+      "name": "Lemmings3RuntimeTests",
+      "status": "passed",
+      "seconds": 13.1,
+      "log": "audit-initial/logs/Lemmings3RuntimeTests.log"
+    },
+    {
+      "name": "Lemmings3SoundTests",
+      "status": "passed",
+      "seconds": 2.2,
+      "log": "audit-initial/logs/Lemmings3SoundTests.log"
+    },
+    {
+      "name": "UnifiedGameTests",
+      "status": "passed",
+      "seconds": 3.3,
+      "log": "audit-initial/logs/UnifiedGameTests.log"
+    },
+    {
+      "name": "ClassicSagaTests",
+      "status": "passed",
+      "seconds": 1.7,
+      "log": "audit-initial/logs/ClassicSagaTests.log"
+    },
+    {
+      "name": "PlatformProfileTests",
+      "status": "passed",
+      "seconds": 1.5,
+      "log": "audit-initial/logs/PlatformProfileTests.log"
+    },
+    {
+      "name": "AmigaSoundTests",
+      "status": "passed",
+      "seconds": 1.3,
+      "log": "audit-initial/logs/AmigaSoundTests.log"
+    },
+    {
+      "name": "AmigaVersusTests",
+      "status": "passed",
+      "seconds": 2.2,
+      "log": "audit-initial/logs/AmigaVersusTests.log"
+    },
+    {
+      "name": "BundledGameResourcesTests",
+      "status": "passed",
+      "seconds": 36.9,
+      "log": "audit-initial/logs/BundledGameResourcesTests.log"
+    },
+    {
+      "name": "PlatformExclusiveTests",
+      "status": "passed",
+      "seconds": 1.7,
+      "log": "audit-initial/logs/PlatformExclusiveTests.log"
+    },
+    {
+      "name": "NeoLemmixEndToEnd",
+      "status": "passed",
+      "seconds": 1.7,
+      "log": "audit-initial/logs/NeoLemmixEndToEnd.log"
+    },
+    {
+      "name": "PortableTests",
+      "status": "passed",
+      "seconds": 3.9,
+      "log": "audit-initial/logs/PortableTests.log"
+    },
+    {
+      "name": "ModernEngineTests",
+      "status": "passed",
+      "seconds": 0.9,
+      "log": "audit-initial/logs/ModernEngineTests.log"
+    },
+    {
+      "name": "SequelDataTests",
+      "status": "passed",
+      "seconds": 4.9,
+      "log": "audit-initial/logs/SequelDataTests.log"
+    },
+    {
+      "name": "save-recovery",
+      "status": "passed",
+      "seconds": 3.4,
+      "log": "audit-initial/logs/save-recovery.log"
+    },
+    {
+      "name": "run-recovery-files",
+      "status": "passed",
+      "seconds": 8.2,
+      "log": "audit-initial/logs/run-recovery-files.log"
+    },
+    {
+      "name": "cross-build-recovery",
+      "status": "passed",
+      "seconds": 10.6,
+      "log": "audit-initial/logs/cross-build-recovery.log"
+    },
+    {
+      "name": "fan-library",
+      "status": "passed",
+      "seconds": 60.7,
+      "log": "audit-initial/logs/fan-library.log"
+    },
+    {
+      "name": "preserved-solution-manifests",
+      "status": "passed",
+      "seconds": 0.4,
+      "log": "audit-initial/logs/preserved-solution-manifests.log"
+    },
+    {
+      "name": "audit-integrity",
+      "status": "passed",
+      "seconds": 0.1,
+      "log": "audit-initial/logs/audit-integrity.log"
+    },
+    {
+      "name": "package-closure",
+      "status": "passed",
+      "seconds": 0.7,
+      "log": "audit-initial/logs/package-closure.log"
+    },
+    {
+      "name": "automatic-updates",
+      "status": "passed",
+      "seconds": 0.1,
+      "log": "audit-initial/logs/automatic-updates.log"
+    },
+    {
+      "name": "classic-panel-art",
+      "status": "passed",
+      "seconds": 0.0,
+      "log": "audit-initial/logs/classic-panel-art.log"
+    },
+    {
+      "name": "fan-pruning",
+      "status": "passed",
+      "seconds": 0.1,
+      "log": "audit-initial/logs/fan-pruning.log"
+    },
+    {
+      "name": "retained-rescue-targets",
+      "status": "passed",
+      "seconds": 0.1,
+      "log": "audit-initial/logs/retained-rescue-targets.log"
+    },
+    {
+      "name": "hint-catalogue",
+      "status": "passed",
+      "seconds": 3.0,
+      "log": "audit-initial/logs/hint-catalogue.log"
+    },
+    {
+      "name": "controller",
+      "status": "passed",
+      "seconds": 1.1,
+      "log": "audit-initial/logs/controller.log"
+    },
+    {
+      "name": "variable-speed",
+      "status": "passed",
+      "seconds": 1.1,
+      "log": "audit-initial/logs/variable-speed.log"
+    },
+    {
+      "name": "pointer-capture",
+      "status": "passed",
+      "seconds": 1.5,
+      "log": "audit-initial/logs/pointer-capture.log"
+    },
+    {
+      "name": "dialog-cursor",
+      "status": "passed",
+      "seconds": 2.2,
+      "log": "audit-initial/logs/dialog-cursor.log"
+    },
+    {
+      "name": "hdr-gpu",
+      "status": "passed",
+      "seconds": 8.2,
+      "log": "audit-initial/logs/hdr-gpu.log",
+      "resolvedBy": [
+        "hdr-gpu-rerun.log"
+      ]
+    },
+    {
+      "name": "rescue-certificates",
+      "status": "passed",
+      "seconds": 0.2,
+      "log": "audit-initial/logs/rescue-certificates.log"
+    },
+    {
+      "name": "replay-movies",
+      "status": "passed",
+      "seconds": 2.3,
+      "log": "audit-initial/logs/replay-movies.log",
+      "resolvedBy": [
+        "replay-movies-final.log"
+      ]
+    },
+    {
+      "name": "mac-app-integration",
+      "status": "passed",
+      "seconds": 189.5,
+      "log": "audit-initial/logs/mac-app-integration.log",
+      "resolvedBy": [
+        "mac-app-integration-final.log",
+        "mac-app-integration-complete.log",
+        "mac-app-integration-remaining.log",
+        "mac-app-integration-browser.log",
+        "mac-app-integration-journey.log"
+      ]
+    },
+    {
+      "name": "local-performance-measurement",
+      "status": "passed",
+      "seconds": 333.8,
+      "log": "audit-initial/logs/local-performance-measurement.log",
+      "resolvedBy": [
+        "performance-rerun.log"
+      ]
+    },
+    {
+      "name": "sequel-views",
+      "status": "passed",
+      "seconds": 186.8,
+      "log": "audit-initial/logs/sequel-views.log",
+      "resolvedBy": [
+        "sequel-views-complete.log"
+      ]
+    },
+    {
+      "name": "arcade-records",
+      "status": "passed",
+      "seconds": 134.9,
+      "log": "audit-initial/logs/arcade-records.log",
+      "resolvedBy": [
+        "arcade-records-rerun.log"
+      ]
+    }
+  ],
+  "nativeWindows": "offscreen",
+  "audio": "muted",
+  "productionCodeUnchangedByFinalFixtureCorrections": true,
+  "initialAuditSourceDrift": [],
+  "focusedJourneyTests": {
+    "xctest": 6,
+    "swiftTesting": 18,
+    "log": "learning-swift.log"
+  },
+  "nativeChecks": [
+    "release-fixes.log",
+    "native-focus-cases.json",
+    "cursor-fixture-complete.log",
+    "glow-performance.log"
+  ],
+  "limits": [
+    "Focus-dependent controls help and physical Retry focus remain skipped offscreen.",
+    "Physical HDR appearance, audible listening, physical Intel, minimum macOS and sustained hardware speed remain manual."
+  ],
+  "performance": "performance.json",
+  "fixtureCorrections": "fixture-corrections.diff"
+}
