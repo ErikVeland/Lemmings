@@ -11,5 +11,8 @@
   "MusicLibraryCatalogue.swift",
   "MusicRhythmCatalogue.swift",
   "VinylMotion.swift",
-  "RescueCelebration.swift"
+  "RescueCelebration.swift",
+  "LearningJourney.swift",
+  "LearningRouteSafety.swift",
+  "ProgressionPlaylist.swift"
 ]

@@ -112,6 +112,26 @@ enum ActionReplayState: Sendable {
         case .lemmings3(var g): g.step(); self = .lemmings3(g)
         }
     }
+    func replaySkillName(_ command: LeaderboardActionReplay.Command) -> String? {
+        switch self {
+        case .classic:
+            guard command.action == "assign", let skill = command.skill, ClassicSkill.allCases.indices.contains(skill) else { return nil }
+            return ClassicSkill.allCases[skill].rawValue.capitalized
+        case .neolemmix(let game):
+            let order = NeoLemmixSkill.allCases.filter { game.configuration.skills[$0] != nil }
+            guard command.action == "assign", let skill = command.skill, order.indices.contains(skill) else { return nil }
+            return order[skill].rawValue.capitalized
+        case .lemmings2(let game):
+            guard command.action == "assign", let skill = command.skill, game.configuration.skills.indices.contains(skill) else { return nil }
+            return game.configuration.skills[skill].name
+        case .lemmings3(let game):
+            guard ["walker", "blocker", "jumper", "use", "drop"].contains(command.action) else { return nil }
+            let tool = game.lemmings.first { $0.id == command.lemming }?.tool
+            let name = command.action == "use" ? tool.map { String(describing: $0).capitalized } ?? "Use"
+                : command.action.capitalized
+            return name + (command.lemming.map { " L\($0)" } ?? "")
+        }
+    }
     mutating func apply(_ c: LeaderboardActionReplay.Command) throws {
         guard c.tick == tick, !complete else { throw RunRecoveryError.invalid }
         switch self {
@@ -161,6 +181,7 @@ struct ActionReplayCursor {
     let replay: LeaderboardActionReplay
     let initial: ActionReplayState
     private(set) var state: ActionReplayState
+    private(set) var skillUses: [(tick: Int, name: String)] = []
     private var next = 0
     init(replay: LeaderboardActionReplay, initial: ActionReplayState) throws {
         guard initial.tick == 0, !initial.complete else { throw RunRecoveryError.invalid }
@@ -169,7 +190,11 @@ struct ActionReplayCursor {
     }
     private mutating func applyCurrent() throws {
         while next < replay.commands.count, replay.commands[next].tick == state.tick {
-            try state.apply(replay.commands[next]); next += 1
+            let command = replay.commands[next]
+            let name = state.replaySkillName(command)
+            try state.apply(command)
+            if let name { skillUses.append((tick: command.tick, name: name)) }
+            next += 1
         }
     }
     mutating func step() throws {

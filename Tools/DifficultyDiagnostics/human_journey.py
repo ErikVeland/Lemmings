@@ -20,9 +20,9 @@ SOURCE = 'https://www.lemmingsforums.net/index.php?topic=4374.0'
 RANKS = ['Gentle', 'Quirky', 'Zany', 'Manic', 'Lunatic']
 BASIC = {'climber', 'floater', 'bomber', 'blocker', 'builder', 'basher', 'miner', 'digger'}
 POLICY = 'redux-calibrated-2'
-VERSION = 'learning-17'
+VERSION = 'learning-18'
 BASE_TARGET = 292
-TARGET = 294
+TARGET = 295
 # An explicit counterpart with a changed title, not a fuzzy fan-level match.
 ALIASES = {'ataskforbombers': 'ataskforblockersandbombers'}
 
@@ -391,7 +391,7 @@ def build(pool, witnesses, resources, reference, reviews):
         pack_counts[chosen['row']['entry']['identity']['packID']] += 1
         selected[slot] = chosen
     assert not any(key(item['row']) in excluded for item in selected)
-    # Preserve the existing selection, then insert the two promised additions.
+    # Preserve the existing selection, then insert the required additions.
     # Required entries still need exact source resources and winning native routes.
     assert len(required) == TARGET - BASE_TARGET
     for addition in additions:
@@ -401,7 +401,12 @@ def build(pool, witnesses, resources, reference, reviews):
         visibility = resource_by_id[ident].get('interactiveVisibility')
         assert visibility and any(v['effect'] == 1 for v in visibility)
         assert all(v['visibleFraction'] >= .2 for v in visibility)
-        if addition['basis'] == 'reduxPortCounterpart':
+        if addition['basis'] == 'userPlaytest':
+            reference = references[addition['reference']]
+            value = addition['minimumDemand']
+            lower = upper = value
+            neighbours = []
+        elif addition['basis'] == 'reduxPortCounterpart':
             reference = references[addition['reference']]
             assert normalized(row['entry']['levelNameSnapshot']) == normalized(reference['title'])
             value = reference['ordinal'] * 5.0
@@ -462,6 +467,18 @@ def build(pool, witnesses, resources, reference, reviews):
     comeback['placement'].update(position=207.5, lower=180.0, upper=355.0,
         reference=after['reference'],
         adjustment='User playtest 2026-10-11: two-bomber bridge route belongs in Intermediate, not the early Fun lessons.')
+    # The user's reported advanced routes cannot use an early estimated grade.
+    # Match known variants and exact starting states, not a shared level title.
+    safety = read(OUT / 'route-safety.json')['reportedLevels']
+    by_identity = {key(row): row for row in safety}
+    by_state = {row['initialHash']: row for row in safety}
+    for item in selected:
+        row = item['row']
+        report = by_identity.get(key(row)) or by_state.get(row.get('initialHash'))
+        if report:
+            value = max(report['minimumDemand'], item['placement']['position'])
+            item['placement'].update(basis='userPlaytest', position=value, lower=value, upper=value,
+                adjustment=report['reason'])
     selected.sort(key=lambda r: (r['placement']['position'], key(r['row'])))
     assert selected and selected[0]['reference']['ordinal'] == 1, 'The tutorial opening must not silently disappear'
     lessons, curriculum, transitions = [], [], []
@@ -495,7 +512,7 @@ def build(pool, witnesses, resources, reference, reviews):
             'calibration': {'method': 'leave-one-reference-out', 'samples': len(calibration),
                 'medianAbsolutePositionError': sorted(calibration)[len(calibration)//2],
                 'meaning': 'Diagnostic error against community order; not a human playtest pass.'}, 'lessons': curriculum,
-            'selectionPolicy': '294 levels: existing 292-level selection plus the required Macintosh and DOS additions. Redux reference spine plus resource-aware solution comparisons, repeated practice and pack diversity. Estimated grades retain uncertainty. No score clamping.',
+            'selectionPolicy': '295 levels: existing 292-level selection, the required Macintosh and DOS additions, and the reported advanced lesson. Redux reference spine plus resource-aware solution comparisons, repeated practice and pack diversity. Estimated grades retain uncertainty. No score clamping.',
             'limits': 'Redux ordinal positions are not equal human-difficulty units. Classic counterparts differ from Redux. A replay proves a route, not novice discovery. Solution comparisons are estimated grades, not claims of human review.'}
     pending.sort(key=lambda r: key(r))
     return manifest, plan, pending, transitions
@@ -525,15 +542,16 @@ def report(manifest, plan, pending, transitions):
     write(OUT / 'validation.json', {'policy': POLICY, 'checks': [
         'Exact source revisions and native winning replay identities required',
         'Redux file hashes and community order pinned',
-        'Full 294-level size; solution estimates are distinguished from human reviews',
+        'Full 295-level size; solution estimates are distinguished from human reviews',
         'No fabricated precision, rank floors, cumulative clamps or application-pattern deduplication',
         'Adjacent reference gaps are checked without changing any placement score'],
         'limits': plan['limits']})
     lines = ['# Oh My! All Lemmings! progression', '',
-        f"{len(lessons)} curated Classic-mechanics levels: a full journey equivalent to Classic, Oh No! and the Christmas campaigns combined.", '',
+        f"{len(lessons)} curated Classic-mechanics levels: a full journey with official lessons and fan levels.", '',
         f"[Redux's community order]({SOURCE}) supplies the reference spine. The remaining official and fan levels are placed by comparisons with five reference solutions. Actual assignments, worker changes, skill combinations, bursts of input, timing evidence and resource pressure inform those comparisons.", '',
         'Resource pressure uses the skills actually spent and the route’s rescue margin. Release cadence is considered alongside input density. High rescue percentages, rapid release rates and large inventories never assign a grade by themselves. All selected levels have an exact-version winning replay. Explicit unsuitable-level exclusions remain in force. Estimated additions need an initial-state visibility audit and exclude mostly concealed exits or traps. This pixel-visibility check does not prove that the route or all visual information is obvious.', '',
-        'The first seven reference tutorials retain their relative order. Cellbash follows Just dig! as lesson 2, based on the owner’s single-basher playtest. Come back! moves to Intermediate after the owner’s two-bomber bridge playtest; its stored witness uses two bombers and does not certify that bridge route. Repeated practice is retained. Selection targets coverage across the curve, limits repeated fan packs and avoids long repetitive witnesses. Estimated beginner additions cannot have measured narrow timing, more than three skill types, multiple worker role changes, or an exhausted combination with no rescue margin. It does not raise or lower grades to make adjacent numbers look smooth. The production generator fails if it cannot supply all 294 levels. The two promised 1.8.2 additions are mandatory and retain exact native witnesses. Port counterparts use the Redux position with recorded conversion differences; they do not claim human variant review.', '',
+        'The first seven reference tutorials retain their relative order. Cellbash follows Just dig! as lesson 2, based on the owner’s single-basher playtest. Come back! moves to Intermediate after the owner’s two-bomber bridge playtest; its stored witness uses two bombers and does not certify that bridge route. Repeated practice is retained. Selection targets coverage across the curve, limits repeated fan packs and avoids long repetitive witnesses. Estimated beginner additions cannot have measured narrow timing, more than three skill types, multiple worker role changes, or an exhausted combination with no rescue margin. It does not raise or lower grades to make adjacent numbers look smooth. The production generator fails if it cannot supply all 295 levels. The two promised 1.8.2 additions are mandatory and retain exact native witnesses. Port counterparts use the Redux position with recorded conversion differences; they do not claim human variant review.', '',
+        'The owner’s reported Time waits for no Lemming and This Corrosion routes are the final two Expert lessons. route-safety.json records the exact official and fan variants, including matching initial states. These routes have a late-Expert placement floor. This is an editorial decision from the owner’s playtest, not proof that every possible solution needs an engine quirk. Explicit engine-quirk concepts also receive this floor. Other fan levels still need route review.', '',
         '## Estimated grades and review', '',
         'A solutionEstimate is an estimate of solving demands against the references, not a human-reviewed difficulty label. Its lower and upper bounds include disagreement among comparable solutions and at least the median held-out calibration error. They are uncertainty ranges, not confidence intervals. Unknown discovery and incomplete timing tests add uncertainty. A named, exact-version human review can replace that estimate. human-review-queue.json includes both selected estimates and reserves; inclusion is explicitly recorded.', '',
         'For human review, record an ordinary completion, what had to be discovered, hints used, execution retries and whether spare resources offered recovery. Compare nearby reference levels played by the same person. Hidden-information checks remain a human-review requirement. No human observations are fabricated.', '',

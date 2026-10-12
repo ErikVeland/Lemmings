@@ -293,7 +293,7 @@ struct LemmingSelectionUniforms {
             context.saveGState()
             let glowRect = effect.rect.insetBy(dx: -CGFloat(padding) * dx, dy: -CGFloat(padding) * dy)
             context.interpolationQuality = .low
-            context.setAlpha(effect.rescueAmount > 0 ? effect.rescueAmount : effect.glowGain)
+            context.setAlpha(effect.rescueAmount > 0 ? effect.rescueAmount * 0.3 : effect.glowGain)
             context.translateBy(x: effect.mirrored ? glowRect.maxX : glowRect.minX, y: glowRect.maxY)
             context.scaleBy(x: effect.mirrored ? -1 : 1, y: -1)
             context.draw(effect.rescueAmount > 0 ? frame.goldGlow : frame.glow, in: CGRect(origin: .zero, size: glowRect.size))
@@ -358,7 +358,7 @@ struct LemmingSelectionUniforms {
         constexpr sampler linear(filter::linear, address::clamp_to_zero);
         float light = mask.sample(linear, uv).g * u.style.x * glass;
         if (u.style.y > .5) {
-            float alpha = min(.88f, light);
+            float alpha = min(.88f, light) * .3f;
             float peak = 1 + (u.style.z - 1) * .65;
             if (u.style.w > .5) return float4(float3(1,.72,.18) * alpha * (peak - 1), 0);
             return float4(float3(1,.72,.18) * alpha * peak, alpha);

@@ -121,6 +121,26 @@ import NxlvKit
     var activeRunHotSeatID: String? { document.activeRunHotSeatID }
     var activeRunL2Progress: [String: Data] { document.activeRunL2Progress ?? [:] }
     var savedRuns: [SavedRun] { document.savedRuns ?? [] }
+    /// Find the saved queue without changing its session or turn ownership.
+    func resumableRun(id: UUID) -> SavedRun? {
+        if let run = document.activeRun, run.id == id {
+            return SavedRun(run: run, hotSeatID: document.activeRunHotSeatID,
+                l2Progress: document.activeRunL2Progress)
+        }
+        return savedRuns.first { $0.run.id == id }
+    }
+
+    /// Prefer this session's journey, then the active or most recently saved journey.
+    func resumableLearningJourney(hotSeatID: String?) -> SavedRun? {
+        func isJourney(_ run: LevelSequenceRun) -> Bool {
+            run.source == .playlist(LearningJourney.playlistID) && run.pool.id == LearningJourney.version
+        }
+        let active = document.activeRun.flatMap { isJourney($0) ? resumableRun(id: $0.id) : nil }
+        if let active, active.hotSeatID == hotSeatID { return active }
+        let saved = savedRuns.filter { isJourney($0.run) }
+        return saved.first { $0.hotSeatID == hotSeatID } ?? active ?? saved.first
+    }
+
     var learningProgress: LearningJourneyProgress { document.learningProgress ?? .init() }
     var favourites: [LevelPlaylistEntry] { document.favourites ?? [] }
     var recentlyPlayed: [LevelPlaylistEntry] { document.recentlyPlayed ?? [] }

@@ -9940,44 +9940,6 @@
     },
     {
       "concepts": [
-        "builder",
-        "digger"
-      ],
-      "demand": 705.0,
-      "entry": {
-        "catalogueRevision": "1.2-runtime-v2",
-        "id": "85691651-16D3-F324-D7AB-E2228A3533CF",
-        "identity": {
-          "engine": "classic",
-          "levelID": "62:Wicked:3:9:0",
-          "packID": "ohNoMoreLemmings-DLVEL-100"
-        },
-        "levelNameSnapshot": "This Corrosion",
-        "levelNumberSnapshot": 63,
-        "packNameSnapshot": "Oh No! More Lemmings",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
-      },
-      "focus": "Practise: Builder + Digger",
-      "intrinsicDemand": 342.8443010019039,
-      "introduced": [],
-      "needsSupport": true,
-      "objective": "community:Lunatic/This_Corrosion.nxlv",
-      "placement": {
-        "basis": "reduxClassicCounterpart",
-        "lower": 695.0,
-        "position": 705.0,
-        "reference": "Lunatic/This_Corrosion.nxlv",
-        "replayRevision": "d3606325c07b09bb1ea31ce3bf0235ffa0bbc05749c26f3a956860bd7e966efe",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 715.0
-      },
-      "preparationGaps": [],
-      "score": 342.8443010019039,
-      "stage": "Expert"
-    },
-    {
-      "concepts": [
         "basher",
         "blocker",
         "builder"
@@ -11543,8 +11505,88 @@
       "preparationGaps": [],
       "score": 479.28150999607993,
       "stage": "Expert"
+    },
+    {
+      "concepts": [
+        "basher",
+        "blocker",
+        "builder",
+        "digger"
+      ],
+      "demand": 850.0,
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "360A36F9-096C-2EBF-CA46-A8A3FA848EF0",
+        "identity": {
+          "engine": "classic",
+          "levelID": "33:Crazy:14:1:5",
+          "packID": "ohNoMoreLemmings-DLVEL-100"
+        },
+        "levelNameSnapshot": "Time waits for no Lemming",
+        "levelNumberSnapshot": 34,
+        "packNameSnapshot": "Oh No! More Lemmings",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
+      },
+      "focus": "Practise: Basher + Blocker",
+      "intrinsicDemand": 397.44998820971836,
+      "introduced": [],
+      "needsSupport": true,
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"33:Crazy:14:1:5\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+      "placement": {
+        "adjustment": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
+        "basis": "userPlaytest",
+        "lower": 850.0,
+        "position": 850.0,
+        "reference": "Lunatic/This_Corrosion.nxlv",
+        "replayRevision": "3b40b8b19130ce0d8dc8fbade7850f91c1ed81b7fb6df0f10fa6be2a0fbb9b54",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 850.0
+      },
+      "preparationGaps": [],
+      "score": 397.44998820971836,
+      "stage": "Expert"
+    },
+    {
+      "concepts": [
+        "builder",
+        "digger"
+      ],
+      "demand": 850.0,
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "85691651-16D3-F324-D7AB-E2228A3533CF",
+        "identity": {
+          "engine": "classic",
+          "levelID": "62:Wicked:3:9:0",
+          "packID": "ohNoMoreLemmings-DLVEL-100"
+        },
+        "levelNameSnapshot": "This Corrosion",
+        "levelNumberSnapshot": 63,
+        "packNameSnapshot": "Oh No! More Lemmings",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
+      },
+      "focus": "Practise: Builder + Digger",
+      "intrinsicDemand": 342.8443010019039,
+      "introduced": [],
+      "needsSupport": true,
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"62:Wicked:3:9:0\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+      "placement": {
+        "adjustment": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
+        "basis": "userPlaytest",
+        "lower": 850.0,
+        "position": 850.0,
+        "reference": "Lunatic/This_Corrosion.nxlv",
+        "replayRevision": "d3606325c07b09bb1ea31ce3bf0235ffa0bbc05749c26f3a956860bd7e966efe",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 850.0
+      },
+      "preparationGaps": [],
+      "score": 342.8443010019039,
+      "stage": "Expert"
     }
   ],
   "placementPolicy": "redux-calibrated-2",
-  "version": "learning-17"
+  "version": "learning-18"
 }

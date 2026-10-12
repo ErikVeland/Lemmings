@@ -6,14 +6,15 @@ import AppKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "1.9.3"
-    static let subtitle = "Golden celebrations and calmer gameplay"
+    static let notesVersion = "1.9.4"
+    static let subtitle = "Calmer celebrations and smoother play"
     static let sections = [
-        ("Golden celebrations", "Securing the rescue goal adds a stronger golden haze and a warm aura around the lemmings. HDR screens add extra light. Reduced flashes disables the aura."),
-        ("Full rescue goals", "Levels that require every lemming keep their current music and show a brief golden glow."),
-        ("Less distraction", "Accessibility settings now include Show song info and Fade Menu button. Song titles fade in gently. Both options can be turned off."),
-        ("Update alerts", "The app checks for compatible updates at launch and hourly. Available updates stay visible in the menu until installed."),
-        ("Compatibility", "Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. The Tribes remains Complete. Chronicles and NeoLemmix remain Beta. Automatic updates retain the full music library.")
+        ("Calmer celebrations", "Solved levels get a faint golden haze around scenery. The lemming aura is much softer. Full-rescue levels keep their brief glow and current music."),
+        ("Smoother play", "Background glow renders off the main thread. Both sequels reuse bitmap draws, and The Tribes avoids rebuilding unchanged skill panels."),
+        ("Resume Golden Path", "Continue finds your saved journey after you play another solo or Hot Seat session. It restores the saved players and turn."),
+        ("Clearer replays", "The upper-right panel shows remaining skills and the last three successful skill uses with exact ticks."),
+        ("Controls and level order", "Command-Z rewinds one step. Time waits for no Lemming and This Corrosion now appear near the end of Golden Path, including their known fan variants."),
+        ("Compatibility", "Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. The Tribes remains Complete. Chronicles and NeoLemmix remain Beta.")
     ]
     private let defaults: UserDefaults
     private let build: Int

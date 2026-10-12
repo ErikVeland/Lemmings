@@ -2121,6 +2121,9 @@ import NxlvKit
     private var game: Lemmings2Runtime?
     private var terrain: NSImage?
     private var terrainRevision: Int?
+    private let bitmapCache = GameplayBitmapCache()
+    private let backgroundGlow = RescueBackgroundGlow()
+    private var panelSource: SequelIndexedImage?
     private var panel: NSImage?
     private var panelBackground = NSColor.black
     var rewindOriginTick: Int?
@@ -2381,6 +2384,7 @@ import NxlvKit
         setAccessibilityRole(.group)
         let resolved = try Lemmings2Objects(level: level, style: style)
         terrainRevision = nil
+        panelSource = nil
         objects = []
         for (name, frames) in bank.animations {
             sprites[name] = frames.map { frame in
@@ -2431,6 +2435,9 @@ import NxlvKit
         needsDisplay = true
     }
     func setPanel(_ panel: SequelIndexedImage) {
+        if let previous = panelSource, previous.width == panel.width, previous.height == panel.height,
+            previous.pixels == panel.pixels, previous.palette == panel.palette { return }
+        panelSource = panel
         let colour = Int(Lemmings2Panel.backgroundIndex) * 4
         panelBackground = NSColor(deviceRed: CGFloat(panel.palette[colour]) / 255,
             green: CGFloat(panel.palette[colour + 1]) / 255,
@@ -2441,14 +2448,7 @@ import NxlvKit
     private func drawImage(_ image: NSImage, x: CGFloat, y: CGFloat, mirrored: Bool = false) {
         let rect = NSRect(x: origin.x + (x - cameraX) * zoom, y: origin.y + (y - cameraY) * zoom * 1.2,
                           width: image.size.width * zoom, height: image.size.height * zoom * 1.2)
-        NSGraphicsContext.saveGraphicsState()
-        if mirrored {
-            let transform = NSAffineTransform()
-            transform.translateX(by: rect.midX * 2, yBy: 0); transform.scaleX(by: -1, yBy: 1); transform.concat()
-        }
-        image.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
-                   hints: [.interpolation: NSImageInterpolation.none.rawValue])
-        NSGraphicsContext.restoreGraphicsState()
+        bitmapCache.draw(image, in: rect, mirrored: mirrored)
     }
     private func updateSpeedTrails() {
         let actors: [SpeedTrails.Actor] = usesSpeedEffects ? (game?.lemmings ?? []).compactMap { lem in
@@ -2843,11 +2843,20 @@ import NxlvKit
         }
     }
     private var speedRect: CGRect { CGRect(x: panelX + 288 * zoom, y: origin.y + 216 * zoom, width: 32 * zoom, height: 24 * zoom) }
+    private func drawBackgroundImage(_ image: NSImage, x: CGFloat, y: CGFloat) {
+        drawImage(image, x: x, y: y)
+        let rect = CGRect(x: origin.x + (x - cameraX) * zoom, y: origin.y + (y - cameraY) * zoom * 1.2,
+            width: image.size.width * zoom, height: image.size.height * zoom * 1.2)
+        if let context = NSGraphicsContext.current?.cgContext, let pixels = bitmapCache.pixels(image) {
+            backgroundGlow.draw(pixels, in: rect, amount: completionGlowAmount, context: context,
+                slot: image === terrain ? "terrain" : nil)
+        }
+    }
     private func drawWorld(_ game: Lemmings2Runtime, terrain: NSImage) {
         NSGraphicsContext.saveGraphicsState()
         NSBezierPath(rect: NSRect(x: origin.x, y: origin.y, width: visibleWidth * zoom, height: 192 * zoom)).addClip()
         precisionLens.applyToCurrentGraphicsContext()
-        drawImage(terrain, x: 0, y: 0)
+        drawBackgroundImage(terrain, x: 0, y: 0)
         if usesSpeedEffects { drawLemmings(game, ghostsOnly: true) }
         for object in objects where !object.frames.isEmpty {
             let machine = game.machines.first { $0.id == object.id }
@@ -2857,7 +2866,7 @@ import NxlvKit
                 : object.entrance ? min(object.frames.count - 1, max(0, game.tick - 20))
                 : (object.animated ? game.tick / 2 % object.frames.count : 0))
             let sprite = object.frames[frame]
-            drawImage(sprite.image, x: CGFloat(object.x + movement + sprite.x), y: CGFloat(object.y + sprite.y))
+            drawBackgroundImage(sprite.image, x: CGFloat(object.x + movement + sprite.x), y: CGFloat(object.y + sprite.y))
         }
         if let smoke = sprites["SMOKE"] {
             for machine in game.machines where machine.kind == .cannon && machine.delay > 0 && smoke.count == 8 {

@@ -26294,92 +26294,6 @@
       "comparisons": [],
       "context": {
         "allowedLosses": 0,
-        "assignments": 5,
-        "completionSeconds": 81.0,
-        "discoveryDifficulty": "unknown from replay",
-        "exhaustedUsedSkills": [
-          "digger"
-        ],
-        "initialHatchIntervalSeconds": 3.1176470588235294,
-        "jobChanges": 1,
-        "narrowActions": 1,
-        "peakAssignmentsInTwoSeconds": 1,
-        "population": 50,
-        "probedAssignments": 5,
-        "remainingSeconds": 99.0,
-        "replayRevision": "d3606325c07b09bb1ea31ce3bf0235ffa0bbc05749c26f3a956860bd7e966efe",
-        "required": 50,
-        "rescueFraction": 1.0,
-        "savedAboveRequirement": 0,
-        "spareUsedSkills": {
-          "builder": 5,
-          "digger": 0
-        },
-        "spatialToleranceMeasured": false,
-        "startingReleaseRate": 1,
-        "timingProbeComplete": false,
-        "usedSkills": {
-          "builder": 3,
-          "digger": 2
-        },
-        "workers": 4
-      },
-      "identity": {
-        "engine": "classic",
-        "levelID": "62:Wicked:3:9:0",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "lesson": "Practise: Builder + Digger",
-      "level": "This Corrosion",
-      "objective": "community:Lunatic/This_Corrosion.nxlv",
-      "placement": {
-        "basis": "reduxClassicCounterpart",
-        "lower": 695.0,
-        "position": 705.0,
-        "reference": "Lunatic/This_Corrosion.nxlv",
-        "replayRevision": "d3606325c07b09bb1ea31ce3bf0235ffa0bbc05749c26f3a956860bd7e966efe",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 715.0
-      },
-      "purpose": "Community-ordered practice with an exact native winning witness",
-      "reference": {
-        "author": "Oh No! More Lemmings",
-        "number": 13,
-        "ordinal": 141,
-        "population": 30,
-        "rank": "Lunatic",
-        "rankIndex": 4,
-        "reference": "Lunatic/This_Corrosion.nxlv",
-        "required": 30,
-        "sha256": "b854b77c148b4005d305dc886f002a0788f3a27d798ff00cf1988ef0a70e2f49",
-        "skills": {
-          "basher": 3,
-          "builder": 8,
-          "climber": 1,
-          "digger": 2
-        },
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "spawnInterval": 53,
-        "timeLimitSeconds": null,
-        "title": "This Corrosion"
-      },
-      "risks": [
-        "incomplete timing probes",
-        "spatial tolerance unmeasured",
-        "narrow measured timing",
-        "witness exhausts at least one used skill"
-      ],
-      "variantDifferences": [
-        "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-        "different population",
-        "Classic retains a time limit"
-      ]
-    },
-    {
-      "comparisons": [],
-      "context": {
-        "allowedLosses": 0,
         "assignments": 12,
         "completionSeconds": 119.41176470588235,
         "discoveryDifficulty": "unknown from replay",
@@ -30626,11 +30540,187 @@
         "spatial tolerance unmeasured"
       ],
       "variantDifferences": []
+    },
+    {
+      "comparisons": [],
+      "context": {
+        "allowedLosses": 5,
+        "assignments": 9,
+        "completionSeconds": 120.58823529411765,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [
+          "blocker",
+          "basher",
+          "builder",
+          "digger"
+        ],
+        "initialHatchIntervalSeconds": 3.1176470588235294,
+        "jobChanges": 1,
+        "narrowActions": 0,
+        "peakAssignmentsInTwoSeconds": 1,
+        "population": 50,
+        "probedAssignments": 9,
+        "remainingSeconds": 119.41176470588235,
+        "replayRevision": "3b40b8b19130ce0d8dc8fbade7850f91c1ed81b7fb6df0f10fa6be2a0fbb9b54",
+        "required": 45,
+        "rescueFraction": 0.9,
+        "savedAboveRequirement": 3,
+        "spareUsedSkills": {
+          "basher": 0,
+          "blocker": 0,
+          "builder": 0,
+          "digger": 0
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 1,
+        "timingProbeComplete": false,
+        "usedSkills": {
+          "basher": 2,
+          "blocker": 2,
+          "builder": 4,
+          "digger": 1
+        },
+        "workers": 5
+      },
+      "identity": {
+        "engine": "classic",
+        "levelID": "33:Crazy:14:1:5",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "lesson": "Practise: Basher + Blocker",
+      "level": "Time waits for no Lemming",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"33:Crazy:14:1:5\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+      "placement": {
+        "adjustment": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
+        "basis": "userPlaytest",
+        "lower": 850.0,
+        "position": 850.0,
+        "reference": "Lunatic/This_Corrosion.nxlv",
+        "replayRevision": "3b40b8b19130ce0d8dc8fbade7850f91c1ed81b7fb6df0f10fa6be2a0fbb9b54",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 850.0
+      },
+      "purpose": "Community-ordered practice with an exact native winning witness",
+      "reference": {
+        "author": "Oh No! More Lemmings",
+        "number": 13,
+        "ordinal": 141,
+        "population": 30,
+        "rank": "Lunatic",
+        "rankIndex": 4,
+        "reference": "Lunatic/This_Corrosion.nxlv",
+        "required": 30,
+        "sha256": "b854b77c148b4005d305dc886f002a0788f3a27d798ff00cf1988ef0a70e2f49",
+        "skills": {
+          "basher": 3,
+          "builder": 8,
+          "climber": 1,
+          "digger": 2
+        },
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "spawnInterval": 53,
+        "timeLimitSeconds": null,
+        "title": "This Corrosion"
+      },
+      "risks": [
+        "incomplete timing probes",
+        "spatial tolerance unmeasured",
+        "witness exhausts at least one used skill"
+      ],
+      "variantDifferences": []
+    },
+    {
+      "comparisons": [],
+      "context": {
+        "allowedLosses": 0,
+        "assignments": 5,
+        "completionSeconds": 81.0,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [
+          "digger"
+        ],
+        "initialHatchIntervalSeconds": 3.1176470588235294,
+        "jobChanges": 1,
+        "narrowActions": 1,
+        "peakAssignmentsInTwoSeconds": 1,
+        "population": 50,
+        "probedAssignments": 5,
+        "remainingSeconds": 99.0,
+        "replayRevision": "d3606325c07b09bb1ea31ce3bf0235ffa0bbc05749c26f3a956860bd7e966efe",
+        "required": 50,
+        "rescueFraction": 1.0,
+        "savedAboveRequirement": 0,
+        "spareUsedSkills": {
+          "builder": 5,
+          "digger": 0
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 1,
+        "timingProbeComplete": false,
+        "usedSkills": {
+          "builder": 3,
+          "digger": 2
+        },
+        "workers": 4
+      },
+      "identity": {
+        "engine": "classic",
+        "levelID": "62:Wicked:3:9:0",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "lesson": "Practise: Builder + Digger",
+      "level": "This Corrosion",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"62:Wicked:3:9:0\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+      "placement": {
+        "adjustment": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
+        "basis": "userPlaytest",
+        "lower": 850.0,
+        "position": 850.0,
+        "reference": "Lunatic/This_Corrosion.nxlv",
+        "replayRevision": "d3606325c07b09bb1ea31ce3bf0235ffa0bbc05749c26f3a956860bd7e966efe",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 850.0
+      },
+      "purpose": "Community-ordered practice with an exact native winning witness",
+      "reference": {
+        "author": "Oh No! More Lemmings",
+        "number": 13,
+        "ordinal": 141,
+        "population": 30,
+        "rank": "Lunatic",
+        "rankIndex": 4,
+        "reference": "Lunatic/This_Corrosion.nxlv",
+        "required": 30,
+        "sha256": "b854b77c148b4005d305dc886f002a0788f3a27d798ff00cf1988ef0a70e2f49",
+        "skills": {
+          "basher": 3,
+          "builder": 8,
+          "climber": 1,
+          "digger": 2
+        },
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "spawnInterval": 53,
+        "timeLimitSeconds": null,
+        "title": "This Corrosion"
+      },
+      "risks": [
+        "incomplete timing probes",
+        "spatial tolerance unmeasured",
+        "narrow measured timing",
+        "witness exhausts at least one used skill"
+      ],
+      "variantDifferences": [
+        "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+        "different population",
+        "Classic retains a time limit"
+      ]
     }
   ],
   "limits": "Redux ordinal positions are not equal human-difficulty units. Classic counterparts differ from Redux. A replay proves a route, not novice discovery. Solution comparisons are estimated grades, not claims of human review.",
   "poolSize": 1721,
-  "selectionPolicy": "294 levels: existing 292-level selection plus the required Macintosh and DOS additions. Redux reference spine plus resource-aware solution comparisons, repeated practice and pack diversity. Estimated grades retain uncertainty. No score clamping.",
-  "targetSize": 294,
+  "selectionPolicy": "295 levels: existing 292-level selection, the required Macintosh and DOS additions, and the reported advanced lesson. Redux reference spine plus resource-aware solution comparisons, repeated practice and pack diversity. Estimated grades retain uncertainty. No score clamping.",
+  "targetSize": 295,
   "version": "curriculum-8"
 }

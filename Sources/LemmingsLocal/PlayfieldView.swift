@@ -259,6 +259,7 @@ struct ReticleFeedback {
       if phase != oldValue { window?.invalidateCursorRects(for: self) }
     }
   }
+  private let backgroundGlow = RescueBackgroundGlow()
   var levelImage: CGImage?
   var imageScale = 1.0
   var macArtwork: ClassicMacArtwork? { didSet { invalidateSprites() } }
@@ -813,6 +814,9 @@ struct ReticleFeedback {
           width: width, height: CGFloat(levelImage.height))) {
           NSImage(cgImage: cropped, size: .zero).draw(in: bounds, from: .zero,
             operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
+          if let context = NSGraphicsContext.current?.cgContext {
+            backgroundGlow.draw(cropped, in: bounds, amount: completionGlowAmount, context: context, slot: "menu")
+          }
         }
       } else {
         NSGraphicsContext.saveGraphicsState()
@@ -1211,6 +1215,9 @@ struct ReticleFeedback {
       x: origin.x, y: origin.y,
       width: crop.width * viewport.zoom / imageScale, height: crop.height * viewport.zoom / imageScale)
     drawPixels(cropped, in: destination)
+    if let context = NSGraphicsContext.current?.cgContext {
+      backgroundGlow.draw(cropped, in: destination, amount: completionGlowAmount, context: context, slot: "scene")
+    }
   }
 
   private func drawPixels(_ image: CGImage, in rect: CGRect, alpha: CGFloat = 1) {

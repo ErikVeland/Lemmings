@@ -354,6 +354,25 @@ checked, but a separate NeoLemmix artwork render was not captured in this run.
 
 ## Rescue celebration
 
+Solved Mac playfields add a very faint golden haze to terrain and scenery in
+Classic, Lemmings 2 and Lemmings 3. Limit it to 5.5% opacity at SDR brightness.
+Keep original artwork sharp and draw the haze beneath lemmings and interface
+text. Empty space receives only the soft falloff near scenery edges. Use the
+existing fade, rewind reset and brief celebration for 100% rescue requirements.
+Windowless before-and-after exports of two Classic scenes were inspected.
+Sequel gameplay and mobile appearance remain for manual validation. Automated
+tests and public release audits were skipped for this local manual build.
+
+Build background haze images off the main thread. Reuse dynamic scene haze for
+at least 0.25 seconds and limit its source width to 256 pixels. Keep fade opacity
+independent of that refresh rate. Bound each canvas cache to 32 entries and
+16 MiB, with at most two pending renders. Classic replaces its scene bitmap each
+tick, so image identity alone must not trigger a fresh blur on every frame.
+Both Mac sequels reuse decoded bitmap pixels for gameplay draws. Lemmings 2
+rebuilds its panel image only when its pixels or palette change. Artwork reloads
+clear that panel cache. Windowless exports retain normal and mirrored pixel
+orientation. Higher-speed gameplay remains for manual validation.
+
 When the rescue target is secured, give Classic, Lemmings 2 and Lemmings 3 the
 same golden haze around their playfields and a soft golden aura around the
 rendered lemmings. Reuse their sprite masks and keep the original sprite pixels
@@ -401,3 +420,39 @@ default on and survive presets and saved settings. Do not repeat the notice for
 the same track or show it on results or handovers. Silent music clears it.
 The iOS source shares Show song info and the short fade-in. Its Menu control
 remains visible and does not use the Mac's fading preference.
+
+## Replay skill information
+
+Solution and leaderboard action replays show remaining skills in the upper-right
+corner. The shared stone panel uses the shipped bitmap font. It retains the last
+three successful skill uses with exact tick numbers. A directional marker and
+green lettering identify uses at the current tick. Seeking reconstructs both
+the inventory and event history. The panel passes pointer input to the playfield.
+
+Classic and NeoLemmix show their configured skills. Lemmings 2 uses its native
+skill slots and supplies. Lemmings 3 shows tools held by active lemmings and names
+the tool used by each recorded action. Recorded video replays retain their
+captured HUD and do not gain command annotations.
+
+Windowless, muted bitmap exports were inspected for long names, infinite supplies,
+exhausted skills, current-tick markers and six-digit ticks.
+The panel adjusts its spacing to keep these values complete. Tests and release
+audits were skipped for this local Apple silicon manual build.
+
+## Saved journey resumption
+
+The journey hub finds its saved queue across solo and Hot Seat sessions. Prefer
+this session's journey, then the active journey, then the most recently saved
+journey. Show its current lesson and Continue. Switching sessions uses the shared
+Resume session confirmation and restores the saved solo mode or Hot Seat roster
+and turn. Save the departing level and retain its queued session. Opening the hub
+must not switch players, move a run or change progress. New-session actions apply
+when no compatible journey exists. Classic, Lemmings 2 and Lemmings 3 keep the
+shared resume flow and paused Hot Seat readiness step.
+
+Persistence regression cases cover saved queues, session selection and retained
+native progress in all three engines. These cases were added for the next public
+release audit. Automated tests were skipped for the local manual build. The existing Continue
+and Resume controls are reused. Their captions and bounds were inspected in
+windowless exports. Native pointer dispatch and complete session round trips
+remain for manual validation.

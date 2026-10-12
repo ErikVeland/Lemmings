@@ -20,6 +20,9 @@ The defaults include fast-forward toggles, temporary held boosts, quick exits, s
 unassigned and last-assigned focus, repeat assignment, entrance/exit focus, hints, settings and retry.
 Rewind and backward stepping remain limited to engines with history support. Classic, Lemmings 2 and Lemmings 3 support forward stepping.
 Unsupported engine actions do not mutate the game.
+During gameplay, ⌘Z rewinds one simulation tick and pauses the run in Classic,
+NeoLemmix, Lemmings 2 and Lemmings 3. Each press steps once. Text fields retain
+normal undo. Controls help lists the shortcut.
 
 **Settings > Controller** controls gamepad support, trigger taps and stick layout.
 Preferences persist, follow the modern/OG presets and survive changes to machine artwork or sound presets.

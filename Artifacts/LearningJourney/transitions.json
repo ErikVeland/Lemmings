@@ -4220,38 +4220,18 @@
     ]
   },
   {
-    "demand": 705.0,
-    "level": "This Corrosion",
-    "newSkills": [],
-    "rawReplayScore": 342.8443010019039,
-    "rawReplayScoreChange": -89.13409150326788,
-    "referenceStep": 1.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "narrow measured timing",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 255,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "Classic retains a time limit"
-    ]
-  },
-  {
     "demand": 710.0,
     "level": "Move on in two separate groups.",
     "newSkills": [],
     "rawReplayScore": 421.14236347027156,
-    "rawReplayScoreChange": 78.29806246836768,
-    "referenceStep": 1.0,
+    "rawReplayScoreChange": -10.836029034900207,
+    "referenceStep": 2.0,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 256,
+    "step": 255,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -4270,7 +4250,7 @@
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness"
     ],
-    "step": 257,
+    "step": 256,
     "variantDifferences": []
   },
   {
@@ -4285,7 +4265,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 258,
+    "step": 257,
     "variantDifferences": []
   },
   {
@@ -4300,7 +4280,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 259,
+    "step": 258,
     "variantDifferences": []
   },
   {
@@ -4315,7 +4295,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 260,
+    "step": 259,
     "variantDifferences": []
   },
   {
@@ -4330,7 +4310,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 261,
+    "step": 260,
     "variantDifferences": []
   },
   {
@@ -4345,7 +4325,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 262,
+    "step": 261,
     "variantDifferences": []
   },
   {
@@ -4362,7 +4342,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 263,
+    "step": 262,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different rescue fraction",
@@ -4382,7 +4362,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 264,
+    "step": 263,
     "variantDifferences": []
   },
   {
@@ -4398,7 +4378,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 265,
+    "step": 264,
     "variantDifferences": []
   },
   {
@@ -4413,7 +4393,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 266,
+    "step": 265,
     "variantDifferences": []
   },
   {
@@ -4428,7 +4408,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 267,
+    "step": 266,
     "variantDifferences": []
   },
   {
@@ -4443,7 +4423,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 268,
+    "step": 267,
     "variantDifferences": []
   },
   {
@@ -4458,7 +4438,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 269,
+    "step": 268,
     "variantDifferences": []
   },
   {
@@ -4474,7 +4454,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 270,
+    "step": 269,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -4495,7 +4475,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 271,
+    "step": 270,
     "variantDifferences": []
   },
   {
@@ -4510,7 +4490,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 272,
+    "step": 271,
     "variantDifferences": []
   },
   {
@@ -4526,7 +4506,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 273,
+    "step": 272,
     "variantDifferences": []
   },
   {
@@ -4540,7 +4520,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 274,
+    "step": 273,
     "variantDifferences": []
   },
   {
@@ -4555,7 +4535,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 275,
+    "step": 274,
     "variantDifferences": []
   },
   {
@@ -4571,7 +4551,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 276,
+    "step": 275,
     "variantDifferences": []
   },
   {
@@ -4586,7 +4566,7 @@
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness"
     ],
-    "step": 277,
+    "step": 276,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -4608,7 +4588,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 278,
+    "step": 277,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different skill inventory",
@@ -4628,7 +4608,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 279,
+    "step": 278,
     "variantDifferences": []
   },
   {
@@ -4643,7 +4623,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 280,
+    "step": 279,
     "variantDifferences": []
   },
   {
@@ -4659,7 +4639,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 281,
+    "step": 280,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -4680,7 +4660,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 282,
+    "step": 281,
     "variantDifferences": []
   },
   {
@@ -4695,7 +4675,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 283,
+    "step": 282,
     "variantDifferences": []
   },
   {
@@ -4711,7 +4691,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 284,
+    "step": 283,
     "variantDifferences": []
   },
   {
@@ -4726,7 +4706,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 285,
+    "step": 284,
     "variantDifferences": []
   },
   {
@@ -4742,7 +4722,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 286,
+    "step": 285,
     "variantDifferences": []
   },
   {
@@ -4758,7 +4738,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 287,
+    "step": 286,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -4779,7 +4759,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 288,
+    "step": 287,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different rescue fraction",
@@ -4799,7 +4779,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 289,
+    "step": 288,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -4818,7 +4798,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 290,
+    "step": 289,
     "variantDifferences": []
   },
   {
@@ -4832,7 +4812,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 291,
+    "step": 290,
     "variantDifferences": []
   },
   {
@@ -4847,7 +4827,7 @@
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness"
     ],
-    "step": 292,
+    "step": 291,
     "variantDifferences": []
   },
   {
@@ -4862,7 +4842,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 293,
+    "step": 292,
     "variantDifferences": []
   },
   {
@@ -4876,7 +4856,42 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
+    "step": 293,
+    "variantDifferences": []
+  },
+  {
+    "demand": 850.0,
+    "level": "Time waits for no Lemming",
+    "newSkills": [],
+    "rawReplayScore": 397.44998820971836,
+    "rawReplayScoreChange": -81.83152178636158,
+    "referenceStep": 10.0,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
     "step": 294,
     "variantDifferences": []
+  },
+  {
+    "demand": 850.0,
+    "level": "This Corrosion",
+    "newSkills": [],
+    "rawReplayScore": 342.8443010019039,
+    "rawReplayScoreChange": -54.60568720781447,
+    "referenceStep": 0.0,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 295,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "Classic retains a time limit"
+    ]
   }
 ]

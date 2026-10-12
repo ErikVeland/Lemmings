@@ -21,7 +21,7 @@ struct LearningJourneyTests {
             let migrated = try #require(try journey.migrating(run))
             #expect(migrated.id == run.id && migrated.currentIndex == current && migrated.currentEntry == run.currentEntry)
             #expect(Array(migrated.entries.prefix(current)) == Array(previous.prefix(current)))
-            #expect(migrated.entries.count == 294 && Set(migrated.entries.map(\.identity)).count == 294)
+            #expect(migrated.entries.count == 295 && Set(migrated.entries.map(\.identity)).count == 295)
             #expect(try journey.migrating(migrated) == migrated)
         }
     }
@@ -30,7 +30,7 @@ struct LearningJourneyTests {
             .deletingLastPathComponent().deletingLastPathComponent()
         let journey = try JSONDecoder().decode(LearningJourney.self,
             from: Data(contentsOf: root.appendingPathComponent("Resources/Progression/learning.json"))).validated()
-        #expect(journey.lessons.count == 294)
+        #expect(journey.lessons.count == 295)
         #expect(!journey.lessons.contains { $0.entry.identity.packID == "fan:lldb-512"
             && $0.entry.identity.levelID == "ssam1221 Tame 1.dat#9" })
         let replacement = try #require(journey.lessons.first { $0.entry.identity.packID == "fan:lldb-327"
@@ -49,7 +49,7 @@ struct LearningJourneyTests {
             .deletingLastPathComponent().deletingLastPathComponent()
         let journey = try JSONDecoder().decode(LearningJourney.self,
             from: Data(contentsOf: root.appendingPathComponent("Resources/Progression/learning.json"))).validated()
-        #expect(journey.lessons.count == 294)
+        #expect(journey.lessons.count == 295)
         #expect(!journey.lessons.contains { $0.entry.identity.packID == "fan:lldb-584"
             && $0.entry.identity.levelID == "LEVEL000.DAT#0" })
         let replacement = try #require(journey.lessons.first { $0.entry.levelNameSnapshot == "Guard!" })
@@ -68,7 +68,7 @@ struct LearningJourneyTests {
         #expect(migrated.currentIndex == old.currentIndex)
         #expect(Array(migrated.entries.prefix(22)) == Array(previous.prefix(22)))
         #expect(migrated.currentEntry.identity == replacement.entry.identity)
-        #expect(migrated.entries.count == 294)
+        #expect(migrated.entries.count == 295)
     }
 
     @Test func cellbashIsSecondAndMigratesEveryUnvisitedLesson() throws {
@@ -76,7 +76,7 @@ struct LearningJourneyTests {
             .deletingLastPathComponent().deletingLastPathComponent()
         let journey = try JSONDecoder().decode(LearningJourney.self,
             from: Data(contentsOf: root.appendingPathComponent("Resources/Progression/learning.json"))).validated()
-        #expect(journey.lessons.count == 294)
+        #expect(journey.lessons.count == 295)
         #expect(journey.lessons[0].entry.levelNameSnapshot.lowercased().contains("just dig"))
         #expect(journey.lessons[1].entry.levelNameSnapshot == "Cellbash")
         #expect(journey.lessons[2].entry.levelNameSnapshot == "Only floaters can survive this")
@@ -89,13 +89,13 @@ struct LearningJourneyTests {
                     pool: .init(id: version, summary: "Previous journey"),
                     entries: previous, currentIndex: index)
                 let migrated = try #require(try journey.migrating(old))
-                #expect(migrated.pool.id == "learning-17")
+                #expect(migrated.pool.id == "learning-18")
                 #expect(migrated.id == old.id)
                 #expect(migrated.currentEntry == old.currentEntry)
                 #expect(migrated.currentIndex == index)
                 #expect(Array(migrated.entries.prefix(index)) == Array(previous.prefix(index)))
-                #expect(Set(migrated.entries.map(\.identity)).count == 294)
-                #expect(migrated.entries.count == 294)
+                #expect(Set(migrated.entries.map(\.identity)).count == 295)
+                #expect(migrated.entries.count == 295)
                 #expect(try journey.migrating(migrated) == migrated)
             }
         }
@@ -107,17 +107,18 @@ struct LearningJourneyTests {
         let journey = try JSONDecoder().decode(LearningJourney.self,
             from: Data(contentsOf: root.appendingPathComponent("Resources/Progression/learning.json"))).validated()
         let additions = Set(["lm_set08.dat#5", "50:Tricky:21:0:5"])
-        let previous = journey.lessons.map(\.entry).filter { !additions.contains($0.identity.levelID) }
+        let previous = journey.lessons.map(\.entry).filter { !additions.contains($0.identity.levelID)
+            && $0.identity.levelID != "33:Crazy:14:1:5" }
         #expect(previous.count == 292)
         let old = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
             pool: .init(id: "learning-13", summary: "Previous journey"), entries: previous, currentIndex: 20)
         let migrated = try #require(try journey.migrating(old))
-        #expect(migrated.pool.id == "learning-17")
+        #expect(migrated.pool.id == "learning-18")
         #expect(migrated.id == old.id)
         #expect(migrated.currentIndex == old.currentIndex)
         #expect(migrated.currentEntry == old.currentEntry)
         #expect(Array(migrated.entries.prefix(20)) == Array(previous.prefix(20)))
-        #expect(migrated.entries.count == 294)
+        #expect(migrated.entries.count == 295)
         #expect(Set(migrated.entries.dropFirst(20).map { $0.identity.levelID }).isSuperset(of: additions))
         #expect(try journey.migrating(migrated) == migrated)
     }

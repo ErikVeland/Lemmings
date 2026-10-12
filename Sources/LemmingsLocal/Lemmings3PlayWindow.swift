@@ -1893,10 +1893,11 @@ import NxlvKit
         cameraX = CGFloat(min(max(0, mapWidth - 320), level.screenX))
         cameraY = CGFloat(min(max(0, mapHeight - 160), level.screenY))
     }
+    private let bitmapCache = GameplayBitmapCache()
+    private let backgroundGlow = RescueBackgroundGlow()
     private func drawImage(_ image: NSImage, x: CGFloat, y: CGFloat) {
-        image.draw(in: NSRect(x: origin.x + (x - cameraX) * zoom, y: origin.y + (y - cameraY) * zoom,
-            width: image.size.width * zoom, height: image.size.height * zoom), from: .zero,
-            operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
+        bitmapCache.draw(image, in: CGRect(x: origin.x + (x - cameraX) * zoom, y: origin.y + (y - cameraY) * zoom,
+            width: image.size.width * zoom, height: image.size.height * zoom))
     }
     private func updateSpeedTrails() {
         let enabled = usesSpeedEffects && menuRows == nil
@@ -2022,15 +2023,24 @@ import NxlvKit
                 time: reduceMotion || reduceFlashes ? nil : Double(game.tick) / Lemmings3Runtime.ticksPerSecond)
         }
     }
+    private func drawBackgroundImage(_ image: NSImage, x: CGFloat, y: CGFloat) {
+        drawImage(image, x: x, y: y)
+        let rect = CGRect(x: origin.x + (x - cameraX) * zoom, y: origin.y + (y - cameraY) * zoom,
+            width: image.size.width * zoom, height: image.size.height * zoom)
+        if let context = NSGraphicsContext.current?.cgContext, let pixels = bitmapCache.pixels(image) {
+            backgroundGlow.draw(pixels, in: rect, amount: completionGlowAmount, context: context,
+                slot: image === terrain ? "terrain" : nil)
+        }
+    }
     private func drawWorld(_ game: Lemmings3Runtime, terrain: NSImage) {
         NSGraphicsContext.saveGraphicsState()
         NSBezierPath(rect: playfieldRect).addClip()
         precisionLens.applyToCurrentGraphicsContext()
-        drawImage(terrain, x: 0, y: 0)
+        drawBackgroundImage(terrain, x: 0, y: 0)
         for (id, x, y, entrance, frames) in objects {
             let isTrap = game.configuration.traps.contains { $0.id == id }
             let index = isTrap ? game.trapFrame(id: id) : (entrance ? min(frames.count - 1, game.tick / 3) : game.tick / 3 % frames.count)
-            drawImage(frames[index], x: CGFloat(x), y: CGFloat(y))
+            drawBackgroundImage(frames[index], x: CGFloat(x), y: CGFloat(y))
         }
         if game.terrainEdits != renderedEdits {
             var pixels = foregroundPixels
@@ -2041,7 +2051,7 @@ import NxlvKit
                 foreground = frame; renderedEdits = game.terrainEdits
             }
         }
-        if let foreground { drawImage(foreground, x: 0, y: 0) }
+        if let foreground { drawBackgroundImage(foreground, x: 0, y: 0) }
         if usesSpeedEffects { drawLemmings(game, ghostsOnly: true) }
         for pickup in game.pickups where pickup.quantity > 0 {
             if let frame = pickupImages[pickup.tool.rawValue] { drawImage(frame, x: CGFloat(pickup.x), y: CGFloat(pickup.y)) }
