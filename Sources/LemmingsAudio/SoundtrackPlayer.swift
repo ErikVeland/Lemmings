@@ -1,5 +1,5 @@
-#if os(macOS)
-import AppKit
+import AVFoundation
+import LemmingsAudio
 import NxlvKit
 
 /// Plays a soundtrack made of ordinary audio files.
@@ -10,28 +10,30 @@ import NxlvKit
 /// several and choose between them.
 ///
 /// Recordings come from the main bundle, optional libraries or user files.
-@MainActor final class SoundtrackPlayer {
+@MainActor public final class SoundtrackPlayer {
+  public init() {}
+
   /// Extensions the system decoder reads without extra work.
-  static let audioExtensions: Set<String> = ["wav", "aif", "aiff", "aifc", "mp3", "m4a", "caf", "flac"]
+  static public let audioExtensions: Set<String> = ["wav", "aif", "aiff", "aifc", "mp3", "m4a", "caf", "flac"]
 
   private var player: MusicFileDeck?
-  var sourceSeconds: Double { player?.sourceSeconds ?? 0 }
-  private(set) var currentURL: URL?
+  public var sourceSeconds: Double { player?.sourceSeconds ?? 0 }
+  public private(set) var currentURL: URL?
   private var resumeAfterSleep = false
   private var outputSuspended = false
   private var pauseUsesRhythm = false
-  private(set) var tracks: [URL] = []
-  private(set) var volume: Float = 0.8
-  private(set) var muted = false
-  private(set) var playbackRate: Float = 1
+  public private(set) var tracks: [URL] = []
+  public private(set) var volume: Float = 0.8
+  public private(set) var muted = false
+  public private(set) var playbackRate: Float = 1
   private var speedPitch: Double = 0
-  private(set) var originalMix = false
+  public private(set) var originalMix = false
 
   /// The soundtracks found under a root, one per folder.
   ///
   /// A folder counts only when it holds audio files directly. Module folders
   /// belong to the module player and are left out.
-  static func soundtracks(at root: URL) -> [String: [URL]] {
+  static public func soundtracks(at root: URL) -> [String: [URL]] {
     var found: [String: [URL]] = [:]
     for directory in [root] + MusicLibrary.installedRoots() {
       for (name, urls) in recordings(in: directory) { found[name, default: []].append(contentsOf: urls) }
@@ -59,14 +61,14 @@ import NxlvKit
   /// The path of a file below a root. The directory enumerator can return
   /// resolved paths for a root reached through a symbolic link, so compare
   /// both sides after resolution.
-  static func relativePath(_ url: URL, under root: URL) -> String? {
+  static public func relativePath(_ url: URL, under root: URL) -> String? {
     let base = root.resolvingSymlinksInPath().path + "/"
     let path = url.resolvingSymlinksInPath().path
     return path.hasPrefix(base) ? String(path.dropFirst(base.count)) : nil
   }
 
   /// Resolve recordings through composition identity before using legacy aliases.
-  static func matches(_ url: URL, trackID: String, root: URL) -> Bool {
+  static public func matches(_ url: URL, trackID: String, root: URL) -> Bool {
     guard let relative = cataloguePath(url, root: root) else { return false }
     if let entry = SoundtrackCatalogue.load(at: root)?.entry(path: relative) {
       return entry.track.id == trackID && entry.variant.confidence == "documented"
@@ -76,7 +78,7 @@ import NxlvKit
   }
 
   /// Some port-exclusive themes have no Amiga module counterpart.
-  static func recording(trackID: String, root: URL) -> URL? {
+  static public func recording(trackID: String, root: URL) -> URL? {
     guard let catalogue = SoundtrackCatalogue.load(at: root) else { return nil }
     let paths = Set((catalogue.track(id: trackID)?.variants ?? []).filter {
       audioExtensions.contains(URL(fileURLWithPath: $0.path).pathExtension.lowercased()) &&
@@ -86,19 +88,19 @@ import NxlvKit
       .map { root.appendingPathComponent($0.path) }
   }
 
-  static func isSeasonal(_ name: String) -> Bool {
+  static public func isSeasonal(_ name: String) -> Bool {
     let name = name.lowercased()
     return ["holiday", "xmas", "christmas"].contains { name.contains($0) }
   }
 
-  static func isSeasonal(_ title: ClassicTitle?) -> Bool {
+  static public func isSeasonal(_ title: ClassicTitle?) -> Bool {
     switch title {
     case .xmasLemmings1991, .xmasLemmings1992, .holidayLemmings1993, .holidayLemmings1994: return true
     default: return false
     }
   }
 
-  static func djSoundtracks(at root: URL, includeOtherSoundtracks: Bool = true, seasonal: Bool = false) -> [String: [URL]] {
+  static public func djSoundtracks(at root: URL, includeOtherSoundtracks: Bool = true, seasonal: Bool = false) -> [String: [URL]] {
     let roots = [root] + MusicLibrary.installedRoots() + (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first.map {
       [$0.appendingPathComponent("Ultimate Lemmings/Soundtracks", isDirectory: true)]
     } ?? [])
@@ -126,7 +128,7 @@ import NxlvKit
     return found.mapValues { $0.sorted { $0.path < $1.path } }
   }
 
-  static func cataloguePath(_ url: URL, root: URL) -> String? {
+  static public func cataloguePath(_ url: URL, root: URL) -> String? {
     if let path = relativePath(url, under: root) { return path }
     guard let relative = relativePath(url, under: MusicLibrary.directory) else { return nil }
     let pieces = relative.split(separator: "/")
@@ -135,7 +137,7 @@ import NxlvKit
   }
 
   /// Installed libraries carry their own playback hashes after AAC encoding.
-  static func playbackProfile(for url: URL,
+  static public func playbackProfile(for url: URL,
       musicRoot: URL? = Bundle.main.resourceURL?.appendingPathComponent("Music")) -> MusicPlaybackCatalogue.Entry? {
     var roots = [musicRoot].compactMap { $0 } + MusicLibrary.installedRoots()
     var parent = url.deletingLastPathComponent()
@@ -155,7 +157,7 @@ import NxlvKit
     return nil
   }
 
-  func load(_ urls: [URL], originalMix: Bool = false) {
+  public func load(_ urls: [URL], originalMix: Bool = false) {
     // A braking or resting record keeps its place for the next attempt.
     if !vinylStopping && !vinylHeld { stop() }
     tracks = urls
@@ -164,7 +166,7 @@ import NxlvKit
 
   /// Plays a track, wrapping around, and returns its name for the status line.
   @discardableResult
-  func play(index: Int) -> String? {
+  public func play(index: Int) -> String? {
     guard !tracks.isEmpty else { return nil }
     let url = tracks[((index % tracks.count) + tracks.count) % tracks.count]
     if vinylStopping {
@@ -199,7 +201,7 @@ import NxlvKit
   ///
   /// `vinylRelease()` lets it run on from the finger hold. A `play(index:)`
   /// releases its new track instead. Either waits for an unfinished brake.
-  func vinylStop() {
+  public func vinylStop() {
     guard let deck = player, deck.isPlaying, !vinylStopping, !vinylHeld else { return }
     vinylStopping = true
     vinylRamp.run(.stop, apply: { deck.setVinyl(rate: $0, gain: $1) }) { [weak self] in
@@ -219,14 +221,14 @@ import NxlvKit
   }
 
   /// Lets a braked track run on from the finger hold.
-  func vinylRelease() {
+  public func vinylRelease() {
     if vinylStopping { vinylReleaseRequested = true; return }
     guard vinylHeld, let deck = player else { return }
     vinylHeld = false
     vinylRamp.run(.start, apply: { deck.setVinyl(rate: $0, gain: $1) }) { deck.setVinyl(rate: 1, gain: 1) }
   }
 
-  func stop() {
+  public func stop() {
     vinylRamp.cancel()
     vinylStopping = false
     vinylHeld = false
@@ -238,7 +240,7 @@ import NxlvKit
     player = nil
   }
 
-  func suspendOutput(rhythmOnly: Bool = false) {
+  public func suspendOutput(rhythmOnly: Bool = false) {
     guard !outputSuspended || pauseUsesRhythm != rhythmOnly else { return }
     if !outputSuspended { resumeAfterSleep = isPlaying }
     outputSuspended = true
@@ -246,7 +248,7 @@ import NxlvKit
     player?.suspendOutput(rhythmOnly: rhythmOnly)
   }
 
-  func resumeOutput() {
+  public func resumeOutput() {
     guard outputSuspended else { return }
     outputSuspended = false
     if resumeAfterSleep { player?.resumeOutput() }
@@ -254,32 +256,31 @@ import NxlvKit
   }
 
   private var nukeAmount: Float = 0
-  func setNukeAmount(_ amount: Float) {
+  public func setNukeAmount(_ amount: Float) {
     nukeAmount = amount
     player?.setNukeAmount(amount)
   }
 
-  func setVolume(_ value: Double) {
+  public func setVolume(_ value: Double) {
     volume = Float(min(1, max(0, value)))
     player?.volume = muted ? 0 : volume
   }
 
-  func setPlaybackRate(_ value: Double) {
+  public func setPlaybackRate(_ value: Double) {
     playbackRate = Float(min(1, max(0.5, value)))
     player?.playbackRate = playbackRate
   }
 
-  func setSpeedPitch(_ cents: Double) {
+  public func setSpeedPitch(_ cents: Double) {
     speedPitch = cents
     player?.setSpeedPitch(cents)
   }
 
-  func setMuted(_ value: Bool) {
+  public func setMuted(_ value: Bool) {
     muted = value
     player?.volume = muted ? 0 : volume
   }
 
-  var isPlaying: Bool { player?.isPlaying == true }
-  var hasCurrentTrack: Bool { player != nil }
+  public var isPlaying: Bool { player?.isPlaying == true }
+  public var hasCurrentTrack: Bool { player != nil }
 }
-#endif

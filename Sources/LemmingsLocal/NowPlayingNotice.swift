@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import LemmingsAudio
 import NxlvKit
 
 struct PlayingTrack: Equatable {

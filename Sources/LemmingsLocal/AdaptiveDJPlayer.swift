@@ -1,6 +1,7 @@
 #if os(macOS)
 import AppKit
 import CryptoKit
+import LemmingsAudio
 import NxlvKit
 
 /// One deck can play either a recording or a native ProTracker module.

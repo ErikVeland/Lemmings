@@ -1,6 +1,7 @@
 #if os(macOS)
 import AppKit
 import AVFoundation
+import LemmingsAudio
 import NxlvKit
 import Sparkle
 

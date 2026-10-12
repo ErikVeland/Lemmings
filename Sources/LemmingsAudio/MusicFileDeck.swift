@@ -1,17 +1,16 @@
-#if os(macOS)
 import AVFoundation
 import NxlvKit
 
 /// Keep the countdown audible while progressively removing treble.
-enum NukeMusicFilter {
-  static func configure(_ eq: AVAudioUnitEQ) {
+public enum NukeMusicFilter {
+  public static func configure(_ eq: AVAudioUnitEQ) {
     eq.bands[0].filterType = .lowShelf
     eq.bands[0].frequency = 180
     eq.bands[0].bypass = false
     eq.bands[1].filterType = .lowPass
   }
 
-  static func apply(_ value: Float, to eq: AVAudioUnitEQ) {
+  public static func apply(_ value: Float, to eq: AVAudioUnitEQ) {
     let amount = value.isFinite ? min(1, max(0, value)) : 0
     eq.bands[0].gain = 3 * amount
     eq.bands[1].frequency = 20000 * pow(450.0 / 20000, amount)
@@ -25,7 +24,7 @@ enum NukeMusicFilter {
 /// File segments stream through the audio engine. Two queued passes keep
 /// the loop continuous without decoding the whole song on the UI thread.
 @MainActor
-final class MusicFileDeck {
+public final class MusicFileDeck {
   private let engine = AVAudioEngine()
   private let nukeEQ = AVAudioUnitEQ(numberOfBands: 2)
   private var nukeFilterAmount: Float = 0
@@ -50,7 +49,7 @@ final class MusicFileDeck {
   private var restingWet: Float { originalMix ? 0 : Turntable.restingWet }
   private let profile: MusicPlaybackCatalogue.Entry?
   private var playbackGeneration = 0
-  private(set) var completedLoops = 0
+  public private(set) var completedLoops = 0
   private var fadeTask: Task<Void, Never>?
   private var outputSuspended = false
   private var resumeAfterSuspend = false
@@ -71,7 +70,7 @@ final class MusicFileDeck {
     static let tailWet: Float = 40
   }
 
-  var volume: Float {
+  public var volume: Float {
     get { masterVolume }
     set {
       masterVolume = min(1, max(0, newValue))
@@ -81,13 +80,13 @@ final class MusicFileDeck {
 
   private var vinyl: (rate: Float, gain: Float) = (1, 1)
 
-  var playbackRate: Float {
+  public var playbackRate: Float {
     get { requestedRate }
     set { requestedRate = min(1.08, max(0.5, newValue)); applyRate() }
   }
 
   /// The player's timeline excludes pauses and advances in source samples.
-  var sourceSeconds: Double {
+  public var sourceSeconds: Double {
     guard let renderTime = player.lastRenderTime,
       let time = player.playerTime(forNodeTime: renderTime), time.sampleRate > 0 else { return 0 }
     let elapsed = Double(time.sampleTime) / time.sampleRate
@@ -98,7 +97,7 @@ final class MusicFileDeck {
 
   /// Turntable speed and level for a vinyl stop or start. Varispeed cannot
   /// go below a quarter speed, so the gain carries the last of the brake.
-  func setVinyl(rate: Double, gain: Double) {
+  public func setVinyl(rate: Double, gain: Double) {
     vinyl = (Float(rate), Float(min(1, max(0, gain))))
     applyRate()
     applyOutputVolume()
@@ -107,9 +106,9 @@ final class MusicFileDeck {
   private func applyRate() { if !outputSuspended { varispeed.rate = max(0.25, requestedRate * vinyl.rate) } }
   private func applyOutputVolume() { outputMixer.outputVolume = muted ? 0 : masterVolume * vinyl.gain }
 
-  var isPlaying: Bool { started && !outputSuspended && player.isPlaying }
+  public var isPlaying: Bool { started && !outputSuspended && player.isPlaying }
 
-  init?(url: URL, repeats: Bool = true, rhythmURL: URL? = nil,
+  public init?(url: URL, repeats: Bool = true, rhythmURL: URL? = nil,
         profile: MusicPlaybackCatalogue.Entry? = nil, originalMix: Bool = false) {
     guard let file = try? AVAudioFile(forReading: url), file.length > 0 else { return nil }
     self.file = file
@@ -180,24 +179,24 @@ final class MusicFileDeck {
   }
 
   /// Independent of the DJ bass swap and the user's normal music mix.
-  func setNukeAmount(_ value: Float) {
+  public func setNukeAmount(_ value: Float) {
     nukeFilterAmount = value.isFinite ? min(1, max(0, value)) : 0
     NukeMusicFilter.apply(nukeFilterAmount, to: nukeEQ)
   }
 
-  func setMixBass(_ gain: Float) { equaliser.bands[0].gain = (originalMix ? 0 : 1.5) + gain; equaliser.bands[0].bypass = false }
+  public func setMixBass(_ gain: Float) { equaliser.bands[0].gain = (originalMix ? 0 : 1.5) + gain; equaliser.bands[0].bypass = false }
 
-  func setSpeedPitch(_ cents: Double) {
+  public func setSpeedPitch(_ cents: Double) {
     gameplayPitch = min(1200 * log2(1.5), max(0, cents))
     speedPitch.pitch = Float(gameplayPitch + mixPitch)
   }
 
-  func setMixTempoRatio(_ ratio: Double) {
+  public func setMixTempoRatio(_ ratio: Double) {
     mixPitch = -1200 * log2(min(1.08, max(0.92, ratio)))
     speedPitch.pitch = Float(gameplayPitch + mixPitch)
   }
 
-  func play() {
+  public func play() {
     setRhythmMode(false)
     // A deck held for its next beat was not playing when paused. Play still
     // starts it, as it did before the spin-up.
@@ -257,7 +256,7 @@ final class MusicFileDeck {
   }
 
   /// A vinyl stop slows the source, lets the reverb ring out, then parks the engine.
-  func suspendOutput(rhythmOnly: Bool = false) {
+  public func suspendOutput(rhythmOnly: Bool = false) {
     if rhythmOnly, rhythmBuffer != nil, started {
       if outputSuspended { resumeOutput() }
       setRhythmMode(true)
@@ -292,7 +291,7 @@ final class MusicFileDeck {
     }
   }
 
-  func resumeOutput() {
+  public func resumeOutput() {
     setRhythmMode(false)
     guard outputSuspended else { return }
     fadeTask?.cancel()
@@ -323,12 +322,12 @@ final class MusicFileDeck {
     }
   }
 
-  func setMuted(_ muted: Bool) {
+  public func setMuted(_ muted: Bool) {
     self.muted = muted
     applyOutputVolume()
   }
 
-  func stop() {
+  public func stop() {
     rhythmTask?.cancel(); rhythmTask = nil; rhythmMode = false
     if rhythmBuffer != nil { rhythmPlayer.stop() }
     musicLayer.outputVolume = 1; rhythmLayer.outputVolume = 0
@@ -364,4 +363,3 @@ final class MusicFileDeck {
     }
   }
 }
-#endif

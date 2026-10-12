@@ -1,4 +1,3 @@
-#if os(macOS)
 import AVFoundation
 import Foundation
 import NxlvKit
@@ -9,7 +8,9 @@ import NxlvKit
 /// one lock, and the callback holds it for the whole fill. Loading a module is
 /// rare and brief, so the two rarely contend. A real-time safe handoff would
 /// swap buffers without locking, which is worth doing if this ever glitches.
-final class ModuleMusicPlayer: @unchecked Sendable {
+public final class ModuleMusicPlayer: @unchecked Sendable {
+  public init() {}
+
   private let engine = AVAudioEngine()
   private let nukeEQ = AVAudioUnitEQ(numberOfBands: 2)
   private var nukeFilterAmount: Float = 0
@@ -58,21 +59,21 @@ final class ModuleMusicPlayer: @unchecked Sendable {
   private var loopBlendIndex: Int?
 
   private let sampleRate = 44100.0
-  private(set) var isRunning = false
-  var isOutputRunning: Bool {
+  public private(set) var isRunning = false
+  public var isOutputRunning: Bool {
     lock.lock()
     defer { lock.unlock() }
     return isRunning && !outputSuspended
   }
-  private(set) var currentTitle: String?
-  private(set) var currentURL: URL?
+  public private(set) var currentTitle: String?
+  public private(set) var currentURL: URL?
 
   /// Modules found in the chosen directory, sorted by name.
-  private(set) var library: [URL] = []
+  public private(set) var library: [URL] = []
 
   // MARK: - Engine
 
-  func start() throws {
+  public func start() throws {
     guard !isRunning else { return }
     let format = AVAudioFormat(
       standardFormatWithSampleRate: sampleRate, channels: 2)!
@@ -128,7 +129,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     isRunning = true
   }
 
-  func stop() {
+  public func stop() {
     resetVinyl()
     guard isRunning else { return }
     pauseWorkItem?.cancel()
@@ -153,7 +154,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
   }
 
   /// Keep native percussion, or slow the source into a short vinyl stop.
-  func suspendOutput(rhythmOnly: Bool = false) {
+  public func suspendOutput(rhythmOnly: Bool = false) {
     guard isRunning else { return }
     lock.lock()
     if rhythmOnly, player?.hasRhythm == true {
@@ -184,7 +185,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     DispatchQueue.main.asyncAfter(deadline: .now() + vinylStopSeconds + vinylTailSeconds, execute: work)
   }
 
-  func resumeOutput() throws {
+  public func resumeOutput() throws {
     guard isRunning else { return }
     pauseWorkItem?.cancel()
     pauseWorkItem = nil
@@ -309,7 +310,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
   // MARK: - Library
 
   /// Collects every module under a directory, including subfolders.
-  func loadLibrary(at root: URL) {
+  public func loadLibrary(at root: URL) {
     guard let walker = FileManager.default.enumerator(
       at: root, includingPropertiesForKeys: nil) else {
       library = []
@@ -322,14 +323,14 @@ final class ModuleMusicPlayer: @unchecked Sendable {
 
   /// Plays the module at an index, wrapping around the library.
   @discardableResult
-  func play(index: Int) -> String? {
+  public func play(index: Int) -> String? {
     guard !library.isEmpty else { return nil }
     let url = library[((index % library.count) + library.count) % library.count]
     return play(url: url)
   }
 
   @discardableResult
-  func play(url: URL) -> String? {
+  public func play(url: URL) -> String? {
     guard let data = try? Data(contentsOf: url),
       let module = try? ProTrackerModule(data: data)
     else { return nil }
@@ -382,16 +383,16 @@ final class ModuleMusicPlayer: @unchecked Sendable {
   private var vinylReleaseRequested = false
 
   /// Whether a retry is braking the record now.
-  var isVinylBraking: Bool { vinylStopping }
+  public var isVinylBraking: Bool { vinylStopping }
   /// The turntable speed factor, where 1 is normal speed.
-  var vinylRate: Double {
+  public var vinylRate: Double {
     lock.lock()
     defer { lock.unlock() }
     return vinylRateLocked
   }
 
   /// Applies a turntable speed and level directly, for a DJ deck's own ramp.
-  func applyVinyl(rate: Double, gain: Double) {
+  public func applyVinyl(rate: Double, gain: Double) {
     lock.lock()
     vinylRateLocked = rate
     vinylGain = Float(gain)
@@ -403,7 +404,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
   /// The record then rests silent. `vinylRelease()` lets it run on from where
   /// the hand stopped it. A `play(url:)` releases its new module instead.
   /// Either waits for the brake when it comes early.
-  @MainActor func vinylStop() {
+  @MainActor public func vinylStop() {
     guard isRunning, currentURL != nil, !vinylStopping, !vinylHeld else { return }
     vinylStopping = true
     let ramp = vinylRamp ?? VinylRamp()
@@ -426,7 +427,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
   }
 
   /// Lets a braked record run on from the finger hold.
-  @MainActor func vinylRelease() {
+  @MainActor public func vinylRelease() {
     if vinylStopping { vinylReleaseRequested = true; return }
     guard vinylHeld else { return }
     vinylHeld = false
@@ -456,14 +457,14 @@ final class ModuleMusicPlayer: @unchecked Sendable {
   // MARK: - Controls
 
   /// Sets the output level, from silent to full.
-  func setVolume(_ value: Double) {
+  public func setVolume(_ value: Double) {
     lock.lock()
     level = min(1, max(0, value))
     lock.unlock()
   }
 
   /// Tracker beat timing, including tempo commands on the opening row.
-  var beatInfo: (bpm: Double, delay: Double)? {
+  public var beatInfo: (bpm: Double, delay: Double)? {
     lock.lock(); defer { lock.unlock() }
     guard let player else { return nil }
     var clock = player.player
@@ -473,56 +474,56 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     }
     return (clock.musicalBPM * tempoScale, clock.secondsUntilNextBeat / tempoScale)
   }
-  var sourceSeconds: Double {
+  public var sourceSeconds: Double {
     lock.lock(); defer { lock.unlock() }
     return Double(sourceFrames) / sampleRate
   }
   /// Independent of the DJ bass swap and the user's normal music mix.
-  func setNukeAmount(_ value: Float) {
+  public func setNukeAmount(_ value: Float) {
     nukeFilterAmount = value.isFinite ? min(1, max(0, value)) : 0
     NukeMusicFilter.apply(nukeFilterAmount, to: nukeEQ)
   }
 
-  func setMixBass(_ gain: Float) { mixEQ.bands[0].gain = gain }
+  public func setMixBass(_ gain: Float) { mixEQ.bands[0].gain = gain }
 
   /// Gameplay supplies a smoothed pitch in cents. Keep the tracker clock unchanged.
-  func setSpeedPitch(_ cents: Double) {
+  public func setSpeedPitch(_ cents: Double) {
     gameplayPitch = min(1200 * log2(1.5), max(0, cents))
     speedPitch.pitch = Float(gameplayPitch + mixPitch)
   }
 
-  func setMixTempoRatio(_ ratio: Double) {
+  public func setMixTempoRatio(_ ratio: Double) {
     mixPitch = -1200 * log2(min(1.08, max(0.92, ratio)))
     speedPitch.pitch = Float(gameplayPitch + mixPitch)
   }
 
   /// Sets module playback rate independently of the game clock.
-  func setTempoScale(_ value: Double) {
+  public func setTempoScale(_ value: Double) {
     lock.lock()
     tempoScale = min(1.08, max(0.5, value))
     lock.unlock()
   }
 
-  func setMuted(_ muted: Bool) {
+  public func setMuted(_ muted: Bool) {
     lock.lock()
     isMuted = muted
     lock.unlock()
   }
 
-  var muted: Bool {
+  public var muted: Bool {
     lock.lock()
     defer { lock.unlock() }
     return isMuted
   }
 
-  var volume: Double {
+  public var volume: Double {
     lock.lock()
     defer { lock.unlock() }
     return level
   }
 
   /// Applies new processing without restarting the tune or its beat clock.
-  func setEnhancements(_ value: ProTrackerEnhancements) {
+  public func setEnhancements(_ value: ProTrackerEnhancements) {
     lock.lock()
     guard enhancements != value else { lock.unlock(); return }
     enhancements = value
@@ -530,10 +531,9 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     lock.unlock()
   }
 
-  var usesModernPreset: Bool {
+  public var usesModernPreset: Bool {
     lock.lock()
     defer { lock.unlock() }
     return !enhancements.isFaithful
   }
 }
-#endif

@@ -10,6 +10,7 @@ let package = Package(
     products: [
         // Shared format, rendering, and simulation code.
         .library(name: "NxlvKit", targets: ["NxlvKit"]),
+        .library(name: "LemmingsAudio", targets: ["LemmingsAudio"]),
         .library(name: "LemmingsGameArt", targets: ["LemmingsGameArt"]),
         .library(name: "LemmingsMobileCore", targets: ["LemmingsMobileCore"]),
         .library(name: "LemmingsMobileUI", targets: ["LemmingsMobileUI"]),
@@ -29,8 +30,13 @@ let package = Package(
             path: "Sources/NxlvKit"
         ),
         .target(
-            name: "LemmingsGameArt",
+            name: "LemmingsAudio",
             dependencies: ["NxlvKit"],
+            path: "Sources/LemmingsAudio"
+        ),
+        .target(
+            name: "LemmingsGameArt",
+            dependencies: ["NxlvKit", "LemmingsMobileCore"],
             path: "Sources/LemmingsGameArt"
         ),
         .target(
@@ -40,7 +46,7 @@ let package = Package(
         ),
         .target(
             name: "LemmingsMobileUI",
-            dependencies: ["LemmingsGameArt", "LemmingsMobileCore", "NxlvKit"],
+            dependencies: ["LemmingsAudio", "LemmingsGameArt", "LemmingsMobileCore", "NxlvKit"],
             path: "Sources/LemmingsMobileUI"
         ),
         .executableTarget(
@@ -53,6 +59,7 @@ let package = Package(
         .executableTarget(
             name: "LemmingsLocal",
             dependencies: [
+                "LemmingsAudio",
                 "LemmingsGameArt",
                 "NxlvKit",
                 .product(name: "Sparkle", package: "Sparkle", condition: .when(platforms: [.macOS]))

@@ -2,6 +2,7 @@
 import AppKit
 import AVFoundation
 import CryptoKit
+import LemmingsAudio
 import NxlvKit
 
 @MainActor final class Lemmings3PlayWindow: NSWindowController, NSWindowDelegate {
