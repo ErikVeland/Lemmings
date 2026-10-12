@@ -18,6 +18,13 @@ retry/continue actions, handovers, hints or saved-run navigation. Reuse shared
 controls and flows. Keep handovers paused until the player is ready. Record
 engine-specific limits and validation gaps instead of silently omitting support.
 
+# Local test builds
+
+A request for a test build means a quick local build for manual testing.
+Build only for the current Mac architecture. Bypass automated tests, audits,
+Intel compilation and notarisation. Put the app in Downloads immediately.
+Run release audits and universal builds only for public releases.
+
 # Test windows
 
 Run native UI tests through `Tools/UITestRunner/run.py`. Keep its default

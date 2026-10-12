@@ -185,6 +185,32 @@ func require(_ value: Bool, _ message: String) throws {
   // Use the production encoder as well as the full-screen reference shader.
   // A bad curved scissor would pass shader-only tests but cut off the highlight.
   let renderer = try LemmingSelectionRenderer(device: gpu)
+  do {
+    var aura = effect
+    aura.rescueAmount = 1
+    func golden(_ headroom: Float, additive: Bool = false) throws -> [Float] {
+      try render(code: LemmingSelectionRenderer.shader, vertex: "selection_vertex", fragment: "selection_fragment",
+        textures: [], uniforms: Float(0), width: 64, height: 64, encode: { encoder in
+          renderer.encode(aura, sourceSize: CGSize(width: 64, height: 64), outputSize: CGSize(width: 64, height: 64),
+            headroom: headroom, additive: additive, into: encoder)
+        })
+    }
+    let sdr = try golden(1), hdr = try golden(3), extra = try golden(3, additive: true)
+    let bright = stride(from: 0, to: hdr.count, by: 4).max { hdr[$0] < hdr[$1] }!
+    try require(hdr[bright] > 1 && hdr[bright] > hdr[bright + 1] && hdr[bright + 1] > hdr[bright + 2],
+      "Rescue aura did not emit golden HDR light")
+    try require(sdr[bright] <= 1 && sdr[bright] > 0.5, "Rescue aura disappeared without HDR headroom")
+    try require(abs(extra[bright] + sdr[bright] - hdr[bright]) < 0.01 && extra[bright + 3] == 0,
+      "HDR aura enhancement duplicated its SDR base or darkened the frame")
+    try require(hdr[(24 * 64 + 17) * 4 + 3] == 0 && hdr[(63 * 64 + 63) * 4 + 3] == 0,
+      "Rescue aura bleached the sprite or distant terrain")
+    idle.setRescueAuras([aura])
+    try require(!idle.isHidden && !idle.hasAllocatedFlashMask && idle.hitTest(.zero) == nil,
+      "Rescue aura lost its HDR overlay or intercepted input")
+    idle.setRescueAuras([])
+    try require(idle.isHidden, "Expired rescue aura left the HDR overlay visible")
+    print("PASS golden sprite aura, bounded SDR/HDR light, additive enhancement, preserved sprite pixels and idle cleanup")
+  }
   for x: CGFloat in [-4, 0, 16, 44, 60] { for y: CGFloat in [0, 20, 52] {
     effect.rect = CGRect(x: x, y: y, width: 12, height: 16)
     let size = CGSize(width: 128, height: 128)

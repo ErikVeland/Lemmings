@@ -198,6 +198,8 @@ Text entry and menu/handover actions retain their own Space handling.
 Gameplay Menu fades after three seconds, with a 0.6-second fade. Hover or keyboard
 focus reveals it. Its 88 × 44 input target stays active. Reduced motion hides it
 without animation. Results and handovers keep their navigation actions visible.
+Accessibility offers Fade Menu button. Turning it off keeps Menu visible during
+play in Classic, Lemmings 2 and Lemmings 3, including with reduced motion enabled.
 Q and Escape use the same
 return-to-library path, keeping the saved run and its owner. Command-Q retains
 the app's quit action. Dialogs and text entry keep their own input handling.
@@ -353,17 +355,24 @@ checked, but a separate NeoLemmix artwork render was not captured in this run.
 ## Rescue celebration
 
 When the rescue target is secured, give Classic, Lemmings 2 and Lemmings 3 the
-same subtle golden rim around their playfields. Keep the centre artwork clear
-and input targets unchanged. Use whole-pixel bands with a gentle fade into a
-steady state. Rewind and retry clear it. Reduced motion or reduced flashes use
-the steady state without an animated transition. Qualifying result panels use
-the same golden rim; failed results do not.
+same golden haze around their playfields and a soft golden aura around the
+rendered lemmings. Reuse their sprite masks and keep the original sprite pixels
+clear. The aura follows scrolling, precision zoom and mirrored artwork. HDR adds
+golden light to the SDR aura, bounded by the display's available headroom.
+Reduced flashes or disabled HD effects keep the steady rim and omit the bright
+sprite aura. Keep input targets unchanged. Rewind and retry clear the glow.
+Qualifying result panels use the same golden rim; failed results do not.
 
 Golden Path must retain Adaptive DJ's same-composition musical lift. A completed
-win can lift during the opening section so short lessons still celebrate. Keep
-silent music, soundtrack preferences and paused handovers intact. This change
-applies to the Mac front end. The installed iPad build 8 has no music player and
-does not contain this feedback yet.
+win can lift during the opening section so short lessons still celebrate.
+Levels requiring every lemming keep their current music. They get one brief
+glow: 0.35 seconds in, a short hold, and 0.65 seconds out, ending after 2.2 seconds.
+Reduced motion or reduced flashes show it steadily for 1.5 seconds. Do not
+repeat it while the rescue target remains secured. Other levels retain the
+steady glow and musical lift. Keep silent music, soundtrack preferences and
+paused handovers intact. The iPad source shares the music exception and brief
+glow timing. Its per-lemming golden aura and HDR output remain unvalidated;
+the mobile sequel renderers do not yet expose the shared sprite masks.
 
 Saved journey and playlist results contribute to the player’s career across all
 three engines. Result panels show each newly earned Zoom and Superzoom use in
@@ -384,6 +393,11 @@ Classic, Lemmings 2 and Lemmings 3 share a brief Now Playing notice when the
 actual track file changes. Use the catalogue song title and soundtrack name,
 with the source folder as a fallback for user files. Keep both rows in the
 existing green/blue bitmap fonts and stone artwork. The notice accepts no pointer
-input. Show it for four seconds, then fade for half a second. Reduced motion
-keeps it steady until expiry. Do not repeat it for the same track or show it
-on results or handovers. Silent music clears it.
+input. Fade it in gently over 0.35 seconds. Keep its four-second display period,
+then fade out for half a second. Reduced motion keeps it steady until expiry.
+Accessibility offers Show song info. Turning it off hides the notice and its
+accessible title immediately, across all three Mac engines. Both new options
+default on and survive presets and saved settings. Do not repeat the notice for
+the same track or show it on results or handovers. Silent music clears it.
+The iOS source shares Show song info and the short fade-in. Its Menu control
+remains visible and does not use the Mac's fading preference.

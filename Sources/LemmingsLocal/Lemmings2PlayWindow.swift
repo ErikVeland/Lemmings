@@ -66,7 +66,7 @@ import NxlvKit
     private let masks: Lemmings2TerrainMasks
     private let music = ModuleMusicPlayer()
     private let failureMood = FailureMoodTransition()
-    private let completionGlow = FailureMoodTransition(duration: 1.4, recoveryDuration: 0.6)
+    private let completionGlow = RescueCelebrationTransition()
     private let failureMusic = FailureMusicTransition()
     private let nukeMood = NukeMusicSweep()
     private var audioSettings = ClassicSettings()
@@ -354,6 +354,8 @@ import NxlvKit
         keyboard.navigationReduceMotion = { [weak self] in
             self?.audioSettings.reduceMotion == true || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
         }
+        keyboard.showSongInfo = { [weak self] in self?.audioSettings.showSongInfo ?? true }
+        keyboard.fadeMenuButton = { [weak self] in self?.audioSettings.fadeMenuButton ?? true }
         keyboard.mainMenu = { [weak self] in
             guard let self else { return }
             self.paused = true; self.fanSelected = false; self.releasePointerInput()
@@ -1132,6 +1134,7 @@ import NxlvKit
             unreleased: game.configuration.total - game.released, required: 1))
         completionGlow.set(active: (screen == .playing || screen == .results) &&
             RescueCelebration.isSecured(saved: game.saved, required: 1, isComplete: game.isComplete, didWin: game.didWin),
+            brief: RescueCelebration.requiresAll(required: 1, total: game.configuration.total),
             now: now, animated: !canvas.reduceMotion && !canvas.reduceFlashes)
         failureMood.set(active: impossible, now: now)
         failureMusic.update(failed: impossible,
@@ -1259,7 +1262,7 @@ import NxlvKit
             sounds.play(game.drainSoundEvents())
             canvas.flashExplosions(game)
             self.game = game; refreshGame(); captureReplayFrame()
-            dj.updateTelemetry(.init(savedCount: game.saved, requiredCount: 1, isNuking: game.isNuking))
+            dj.updateTelemetry(.init(totalCount: game.configuration.total, savedCount: game.saved, requiredCount: 1, isNuking: game.isNuking))
             if speedControl.variableEnabled && speedControl.multiplier > 1 && ProcessInfo.processInfo.systemUptime >= inputDeadline { break }
         }
         guard game.tick != previousTick else {
@@ -1284,7 +1287,7 @@ import NxlvKit
             }
             PrecisionZoomController.shared.finish(attemptID: arcadeRunID, didWin: game.didWin)
             syncPrecisionZoom()
-            dj.updateTelemetry(.init(didWin: game.didWin, isComplete: true))
+            dj.updateTelemetry(.init(totalCount: game.configuration.total, savedCount: game.saved, requiredCount: 1, didWin: game.didWin, isComplete: true))
             if recordsCampaignProgress {
                 do { try recoveryStore.clear(arcadeRunID) } catch { message = error.localizedDescription }
             }
@@ -2331,6 +2334,7 @@ import NxlvKit
     private let speedTrails = SpeedTrails()
     private var hdrOverlay: ExplosionHDRView?
     private(set) var selectionEffect: LemmingSelectionEffect?
+    private(set) var rescueAuras: [LemmingSelectionEffect] = []
     override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
         if window != nil, hdrOverlay == nil {
@@ -2693,11 +2697,17 @@ import NxlvKit
             let spriteRect = CGRect(x: origin.x + (CGFloat(lem.x + offsetX + sprite.x) - cameraX) * zoom,
                 y: origin.y + (CGFloat(lem.y + offsetY + sprite.y) - cameraY) * zoom * 1.2,
                 width: sprite.image.size.width * zoom, height: sprite.image.size.height * zoom * 1.2)
-            let pixels = (assignmentPulse.target == lem.id || selectedID == lem.id)
+            let glowing = completionGlowAmount > 0 && hdEffectsEnabled && !reduceFlashes
+            let pixels = (glowing || assignmentPulse.target == lem.id || selectedID == lem.id)
                 ? sprite.image.cgImage(forProposedRect: nil, context: nil, hints: nil) : nil
             if assignmentPulse.target == lem.id, let pixels {
                 assignmentPulse.draw(sprite: pixels, in: spriteRect, scale: zoom,
                     reduceMotion: reduceMotion, reduceFlashes: reduceFlashes)
+            }
+            if glowing, let pixels {
+                var effect = LemmingSelectionEffect(sprite: pixels, rect: precisionLens.display(spriteRect), clipRect: gameplayRect, mirrored: mirrored)
+                effect.rescueAmount = completionGlowAmount
+                rescueAuras.append(effect)
             }
             if selectedID == lem.id, let pixels {
                 selectedSprite = (pixels, spriteRect, mirrored)
@@ -2750,7 +2760,10 @@ import NxlvKit
     }
     override func draw(_ dirtyRect: NSRect) {
         selectionEffect = nil
+        rescueAuras.removeAll(keepingCapacity: true)
         defer {
+            for effect in rescueAuras { LemmingSelectionRenderer.draw(effect) }
+            hdrOverlay?.setRescueAuras(rescueAuras)
             if let selectionEffect {
                 LemmingSelectionRenderer.draw(selectionEffect)
             }

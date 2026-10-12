@@ -17,6 +17,19 @@ private func require(
 
 private func testOptionsFollowInstalledData() throws {
     let upgraded = try JSONDecoder().decode(ClassicSettings.self, from: Data("{}".utf8))
+    try require(upgraded.showSongInfo && upgraded.fadeMenuButton,
+        "Existing players must retain song notices and Menu fading by default")
+    for songInfo in [false, true] {
+        for fadeMenu in [false, true] {
+            var saved = upgraded
+            saved.showSongInfo = songInfo; saved.fadeMenuButton = fadeMenu
+            saved.applyExperiencePreset(modern: false)
+            saved.applyExperiencePreset(modern: true)
+            let restored = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(saved))
+            try require(restored.showSongInfo == songInfo && restored.fadeMenuButton == fadeMenu,
+                "Accessibility notice choices must survive presets and persistence")
+        }
+    }
     try require(upgraded.bottomFallSounds && ClassicSettings().bottomFallSounds, "Bottom falls must default on for new and existing players")
     try require(!upgraded.unlockAllClassicLevels && !ClassicSettings().unlockAllClassicLevels,
         "Classic levels must follow campaign progress by default")

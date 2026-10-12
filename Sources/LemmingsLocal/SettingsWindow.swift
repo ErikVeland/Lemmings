@@ -55,6 +55,8 @@ import NxlvKit
   private var interfaceSizePopUp: NSPopUpButton?
   private var reduceMotionCheck: NSButton?
   private var reduceFlashesCheck: NSButton?
+  private var showSongInfoCheck: NSButton?
+  private var fadeMenuButtonCheck: NSButton?
   private var hdEffectsCheck: NSButton?
   private var hdrFlashCheck: NSButton?
   private var djSoundtracksCheck: NSButton?
@@ -227,6 +229,8 @@ import NxlvKit
     "hdrFlashesChanged:": "Add a fireball, shockwave, smoke and flash to nuclear explosions. HDR displays add brightness. Requires HD effects.",
     "interfaceSizeChanged:": "Enlarge menu pages and controls help. Scroll to reach controls when the enlarged page exceeds the window.",
     "reduceMotionChanged:": "Disable speed trails and cinematic explosions. Keep gameplay speed and controls.",
+    "showSongInfoChanged:": "Show the song title and soundtrack briefly when the music changes.",
+    "fadeMenuButtonChanged:": "Fade Menu during play. Turn this off to keep the button visible.",
     "reduceFlashesChanged:": "Disable added bright explosion cores, HDR flashes and cinematic explosions. Original game sprites remain.",
     "musicChanged:": "Choose a soundtrack or Adaptive DJ Mix. Available soundtracks depend on installed music libraries.",
     "styleChanged:": "Faithful keeps the source's original sound. Modern applies the enhanced music treatment.",
@@ -566,6 +570,14 @@ import NxlvKit
   }
 
   private func accessibilityPane() -> NSView {
+    let songInfo = GameCheckButton(title: "Show song info", target: self, action: #selector(showSongInfoChanged))
+    songInfo.setAccessibilityLabel("Show song info")
+    songInfo.state = settings.showSongInfo ? .on : .off
+    showSongInfoCheck = songInfo
+    let fadeMenu = GameCheckButton(title: "Fade Menu button", target: self, action: #selector(fadeMenuButtonChanged))
+    fadeMenu.setAccessibilityLabel("Fade Menu button")
+    fadeMenu.state = settings.fadeMenuButton ? .on : .off
+    fadeMenuButtonCheck = fadeMenu
     let motion = GameCheckButton(title: "Reduce added motion", target: self, action: #selector(reduceMotionChanged))
     motion.state = settings.reduceMotion ? .on : .off
     reduceMotionCheck = motion
@@ -577,7 +589,7 @@ import NxlvKit
     size.selectItem(at: ClassicInterfaceSize.allCases.firstIndex(of: settings.interfaceSize) ?? 0)
     interfaceSizePopUp = size
     return groupedPane([
-      ("Interface", [("UI size", size)]),
+      ("Interface", [("UI size", size), ("", songInfo), ("", fadeMenu)]),
       ("Added effects", [("Motion", motion), ("Flashes", reducedFlashes)]),
     ])
   }
@@ -715,6 +727,8 @@ import NxlvKit
     controllerSwapCheck?.isEnabled = settings.controllerEnabled
     reduceMotionCheck?.state = settings.reduceMotion ? .on : .off
     reduceFlashesCheck?.state = settings.reduceFlashes ? .on : .off
+    showSongInfoCheck?.state = settings.showSongInfo ? .on : .off
+    fadeMenuButtonCheck?.state = settings.fadeMenuButton ? .on : .off
     hdEffectsCheck?.state = settings.hdEffectsEnabled ? .on : .off
     hdrFlashCheck?.isEnabled = settings.hdEffectsEnabled
     hdrFlashCheck?.state = settings.fullScreenHDRFlashes ? .on : .off
@@ -780,6 +794,8 @@ import NxlvKit
     applied.interfaceSize = settings.interfaceSize
     applied.reduceMotion = settings.reduceMotion
     applied.reduceFlashes = settings.reduceFlashes
+    applied.showSongInfo = settings.showSongInfo
+    applied.fadeMenuButton = settings.fadeMenuButton
     applied.hdEffectsEnabled = settings.hdEffectsEnabled
     applied.confinePointer = settings.confinePointer
     applied.fullScreenHDRFlashes = settings.fullScreenHDRFlashes
@@ -879,6 +895,16 @@ import NxlvKit
 
   @objc private func reduceMotionChanged(_ sender: NSButton) {
     settings.reduceMotion = sender.state == .on
+    changed()
+  }
+
+  @objc private func showSongInfoChanged(_ sender: NSButton) {
+    settings.showSongInfo = sender.state == .on
+    changed()
+  }
+
+  @objc private func fadeMenuButtonChanged(_ sender: NSButton) {
+    settings.fadeMenuButton = sender.state == .on
     changed()
   }
 

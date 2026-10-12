@@ -316,6 +316,8 @@ enum ExplosionHDR {
   private var pipeline: MTLRenderPipelineState?
   private var nuclearPipeline: MTLRenderPipelineState?
   private var speedPipeline: MTLRenderPipelineState?
+  private var rescueRenderer: LemmingSelectionRenderer?
+  private var rescueAuras: [LemmingSelectionEffect] = []
   private var surface: CAMetalLayer?
   private var texture: MTLTexture?
   private var flashes: [ExplosionFlash] = []
@@ -376,6 +378,7 @@ enum ExplosionHDR {
   }
 
   func clear() {
+    rescueAuras.removeAll()
     speed = SuperSpeedTimeline()
     speedMotionTime = 0; speedMotionLast = nil
     clearExplosions()
@@ -399,6 +402,7 @@ enum ExplosionHDR {
   override init(frame: NSRect) {
     super.init(frame: frame)
     guard let gpu else { return }
+    rescueRenderer = try? LemmingSelectionRenderer(device: gpu)
     queue = gpu.makeCommandQueue()
     let layer = CAMetalLayer()
     layer.device = gpu
@@ -458,6 +462,12 @@ enum ExplosionHDR {
     if force || changed || !flashes.isEmpty || texture == nil { render() }
   }
 
+  func setRescueAuras(_ effects: [LemmingSelectionEffect]) {
+    guard !effects.isEmpty || !rescueAuras.isEmpty else { return }
+    rescueAuras = effects
+    render()
+  }
+
   private func scheduleExpiration() {
     expiration?.cancel()
     let now = ProcessInfo.processInfo.systemUptime
@@ -493,7 +503,7 @@ enum ExplosionHDR {
     // An idle overlay has no pixels to present. Hide the previous frame without
     // allocating a full-window mask or waiting for a Metal drawable.
     let currentFlashes = renderedFlashes
-    let active = !currentFlashes.isEmpty || !timeline.bursts.isEmpty || speed.isAnimating(now: now)
+    let active = !rescueAuras.isEmpty || !currentFlashes.isEmpty || !timeline.bursts.isEmpty || speed.isAnimating(now: now)
     // AppKit can restore a backing layer's visibility during display. Hide the
     // view too, so idle effects stay out of window composition.
     isHidden = !active
@@ -557,6 +567,11 @@ enum ExplosionHDR {
       encoder.setFragmentBytes(&uniforms,length:MemoryLayout<NuclearExplosionUniforms>.stride,index:0)
       samples.withUnsafeBytes { encoder.setFragmentBytes($0.baseAddress!,length:$0.count,index:1) }
       encoder.drawPrimitives(type:.triangleStrip,vertexStart:0,vertexCount:4)
+    }
+    if let rescueRenderer {
+      for effect in rescueAuras {
+        rescueRenderer.encode(effect, sourceSize: bounds.size, outputSize: surface.drawableSize, headroom: headroom, additive: true, into: encoder)
+      }
     }
     encoder.endEncoding()
     command.present(drawable)

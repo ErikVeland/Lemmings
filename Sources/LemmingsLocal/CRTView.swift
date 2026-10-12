@@ -162,6 +162,7 @@ struct CRTUniforms {
   private var sourceSize = CGSize.zero
   private var selectionRenderer: LemmingSelectionRenderer?
   private var selection: LemmingSelectionEffect?
+  private var rescueAuras: [LemmingSelectionEffect] = []
 
   var settings = CRTSettings.amiga1084
 
@@ -379,8 +380,10 @@ struct CRTUniforms {
   // MARK: - Source
 
   /// Uploads the composed game frame.
-  func setSource(_ image: CGImage, flashes: [ExplosionFlash] = [], selection: LemmingSelectionEffect? = nil) {
+  func setSource(_ image: CGImage, flashes: [ExplosionFlash] = [], selection: LemmingSelectionEffect? = nil,
+                 rescueAuras: [LemmingSelectionEffect] = []) {
     self.selection = selection
+    self.rescueAuras = rescueAuras
     guard let device else { return }
     let width = image.width
     let height = image.height
@@ -511,15 +514,21 @@ struct CRTUniforms {
     pass(composite, target: drawable.texture, textures: [sourceTexture, scratchA, flashTexture])
     // Selection is composited after the tube. Its neighbour samples are always
     // two physical output pixels apart, even on a Retina display or curved edge.
-    if !GameCursor.gameplaySuppressed, let selection, let selectionRenderer {
+    if (!rescueAuras.isEmpty || (!GameCursor.gameplaySuppressed && selection != nil)), let selectionRenderer {
       let descriptor = MTLRenderPassDescriptor()
       descriptor.colorAttachments[0].texture = drawable.texture
       descriptor.colorAttachments[0].loadAction = .load
       descriptor.colorAttachments[0].storeAction = .store
       if let encoder = buffer.makeRenderCommandEncoder(descriptor: descriptor) {
-        selectionRenderer.encode(selection, sourceSize: sourceSize, outputSize: layer.drawableSize,
-          glass: SIMD4(settings.curvature, settings.curvatureY, settings.cornerRadius, settings.cornerSoftness),
-          into: encoder)
+        let glass = SIMD4(settings.curvature, settings.curvatureY, settings.cornerRadius, settings.cornerSoftness)
+        for effect in rescueAuras {
+          selectionRenderer.encode(effect, sourceSize: sourceSize, outputSize: layer.drawableSize,
+            glass: glass, headroom: Float(window?.screen?.maximumExtendedDynamicRangeColorComponentValue ?? 1),
+            additive: true, into: encoder)
+        }
+        if !GameCursor.gameplaySuppressed, let selection {
+          selectionRenderer.encode(selection, sourceSize: sourceSize, outputSize: layer.drawableSize, glass: glass, into: encoder)
+        }
         encoder.endEncoding()
       }
     }

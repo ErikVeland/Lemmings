@@ -1,19 +1,27 @@
 #if os(macOS)
 import AppKit
+import Foundation
+import CoreGraphics
 import Metal
 
 /// Sprite coordinates are in the playfield after precision zoom, before CRT projection.
-struct LemmingSelectionEffect {
-    var sprite: CGImage
-    var rect: CGRect
-    var clipRect: CGRect
-    var mirrored = false
-    var bloom = true
+public struct LemmingSelectionEffect {
+    public init(sprite: CGImage, rect: CGRect, clipRect: CGRect, mirrored: Bool = false, bloom: Bool = true, time: TimeInterval? = nil) {
+        self.sprite = sprite; self.rect = rect; self.clipRect = clipRect
+        self.mirrored = mirrored; self.bloom = bloom; self.time = time
+    }
+    public var sprite: CGImage
+    public var rect: CGRect
+    public var clipRect: CGRect
+    public var mirrored = false
+    public var bloom = true
+    /// Golden rescue light uses the same sprite mask without a selection outline.
+    public var rescueAmount: CGFloat = 0
     /// Simulation time keeps the pulse in the game frame and holds it on pause.
     /// Nil holds the midpoint for reduced motion and reduced flashes.
-    var time: TimeInterval? = nil
+    public var time: TimeInterval? = nil
 
-    var glowGain: CGFloat {
+    public var glowGain: CGFloat {
         guard let time else { return 0.87 }
         return 0.87 - 0.13 * cos(time * 2 * .pi / 2.8)
     }
@@ -33,15 +41,17 @@ struct LemmingSelectionUniforms {
         clip = SIMD4(Float(effect.clipRect.minX), Float(effect.clipRect.minY), Float(effect.clipRect.maxX), Float(effect.clipRect.maxY))
         dimensions = SIMD4(Float(sourceSize.width), Float(sourceSize.height), Float(outputSize.width), Float(outputSize.height))
         shape = SIMD4(Float(effect.sprite.width), Float(effect.sprite.height), Float(LemmingSelectionRenderer.padding), effect.mirrored ? 1 : 0)
-        style = SIMD4(effect.bloom ? Float(effect.glowGain) : 0, 0, 0, 0)
+        style = effect.rescueAmount > 0
+            ? SIMD4(Float(effect.rescueAmount) * 2.4, 1, 1, 0)
+            : SIMD4(effect.bloom ? Float(effect.glowGain) : 0, 0, 0, 0)
     }
 }
 
 /// Shared by flat and CRT output. The sprite mask stays native; its outline is
 /// sampled two output pixels away, after every zoom and projection.
-@MainActor final class LemmingSelectionRenderer {
-    nonisolated static let padding = 16
-    nonisolated static let outlineWidth = 2
+@MainActor public final class LemmingSelectionRenderer {
+    nonisolated public static let padding = 16
+    nonisolated public static let outlineWidth = 2
     private let device: MTLDevice
     private let pipeline: MTLRenderPipelineState
     private struct Frame {
@@ -51,17 +61,18 @@ struct LemmingSelectionUniforms {
         let height: Int
         let cells: [CGRect]
         let glow: CGImage
+        let goldGlow: CGImage
     }
     // Retain the source image with its entry, so object identities cannot be reused.
     // Animation cycles reuse their masks instead of rebuilding every pose change.
     private static var frames: [ObjectIdentifier: Frame] = [:]
     private static var frameOrder: [ObjectIdentifier] = []
-    static let cacheLimit = 128
-    static var cachedFrameCount: Int { frames.count }
+    public static let cacheLimit = 128
+    public static var cachedFrameCount: Int { frames.count }
     private var textures: [ObjectIdentifier: (sprite: CGImage, texture: MTLTexture)] = [:]
     private var textureOrder: [ObjectIdentifier] = []
 
-    init(device: MTLDevice) throws {
+    public init(device: MTLDevice) throws {
         self.device = device
         let library = try device.makeLibrary(source: Self.shader, options: nil)
         let descriptor = MTLRenderPipelineDescriptor()
@@ -79,7 +90,7 @@ struct LemmingSelectionUniforms {
 
     /// R is the silhouette. G is a soft distance falloff shared by the bitmap
     /// and CRT paths. Thin limbs emit the same light as solid parts of the sprite.
-    static func mask(_ sprite: CGImage) -> (bytes: [UInt8], width: Int, height: Int)? {
+    public static func mask(_ sprite: CGImage) -> (bytes: [UInt8], width: Int, height: Int)? {
         guard let frame = frame(sprite) else { return nil }
         return (frame.bytes, frame.width, frame.height)
     }
@@ -149,14 +160,25 @@ struct LemmingSelectionUniforms {
                 bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
                 bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue),
                 provider: provider, decode: nil, shouldInterpolate: true, intent: .defaultIntent) else { return nil }
-        let result = Frame(sprite: sprite, bytes: bytes, width: width, height: height, cells: cells, glow: glow)
+        let goldBytes = stride(from: 1, to: bytes.count, by: 2).flatMap { index -> [UInt8] in
+            let light = min(255, Float(bytes[index]) * 2.4)
+            return [UInt8(light), UInt8(light * 0.72), UInt8(light * 0.18), UInt8(light)]
+        }
+        guard let goldProvider = CGDataProvider(data: Data(goldBytes) as CFData),
+              let goldGlow = CGImage(width: width, height: height, bitsPerComponent: 8, bitsPerPixel: 32,
+                bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue),
+                provider: goldProvider, decode: nil, shouldInterpolate: true, intent: .defaultIntent) else { return nil }
+        let result = Frame(sprite: sprite, bytes: bytes, width: width, height: height, cells: cells, glow: glow, goldGlow: goldGlow)
         if frameOrder.count == cacheLimit { frames.removeValue(forKey: frameOrder.removeFirst()) }
         frameOrder.append(key); frames[key] = result
         return result
     }
 
-    func encode(_ effect: LemmingSelectionEffect, sourceSize: CGSize, outputSize: CGSize,
+    public func encode(_ effect: LemmingSelectionEffect, sourceSize: CGSize, outputSize: CGSize,
                 glass: SIMD4<Float> = .zero,
+                headroom: Float = 1,
+                additive: Bool = false,
                 into encoder: MTLRenderCommandEncoder) {
         guard effect.rect.width > 0, effect.rect.height > 0,
               sourceSize.width > 0, sourceSize.height > 0 else { return }
@@ -175,6 +197,8 @@ struct LemmingSelectionUniforms {
             textureOrder.append(key); textures[key] = (effect.sprite, fresh)
         }
         var uniforms = LemmingSelectionUniforms(effect, sourceSize: sourceSize, outputSize: outputSize)
+        uniforms.style.z = min(3, max(1, headroom))
+        uniforms.style.w = additive ? 1 : 0
         uniforms.glass = glass
         do {
             let scaleX = outputSize.width / sourceSize.width, scaleY = outputSize.height / sourceSize.height
@@ -210,8 +234,34 @@ struct LemmingSelectionUniforms {
     }
 
     /// Paint with the game frame. Selection never owns a surface or a timer.
-    static func draw(_ effect: LemmingSelectionEffect) {
-        guard let context = NSGraphicsContext.current?.cgContext, let frame = frame(effect.sprite),
+    public static func drawObvious(at point: CGPoint, scale: CGFloat, animated: Bool, context: CGContext) {
+        let pixel = max(1, floor(scale))
+        let radius = max(8 * pixel, 7 * scale * 1.3)
+        let alpha = CGFloat(0.62 + (animated ? 0.06 * sin(ProcessInfo.processInfo.systemUptime * .pi) : 0))
+        let tint = CGColor(srgbRed: 0.3, green: 0.85, blue: 0.2, alpha: 1)
+        context.saveGState()
+        defer { context.restoreGState() }
+        context.setShouldAntialias(true)
+        for (colour, opacity, haloRadius) in [(CGColor(gray: 0, alpha: 1), CGFloat(0.34), radius * 1.25), (tint, alpha, radius)] {
+            if let start = colour.copy(alpha: opacity), let end = colour.copy(alpha: 0),
+               let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(), colors: [start, end] as CFArray, locations: [0, 1]) {
+                context.drawRadialGradient(gradient, startCenter: point, startRadius: 0, endCenter: point, endRadius: haloRadius, options: [])
+            }
+        }
+        context.setShouldAntialias(false)
+        let x = floor(point.x / pixel) * pixel, y = floor(point.y / pixel) * pixel - 15 * pixel
+        context.setFillColor(CGColor(gray: 0, alpha: 1))
+        for (dx, dy, width, height) in [(-4.0, 0.0, 8.0, 3.0), (-3, 3, 6, 1), (-2, 4, 4, 1), (-1, 5, 2, 1)] {
+            context.fill(CGRect(x: x + dx * pixel, y: y + dy * pixel, width: width * pixel, height: height * pixel))
+        }
+        context.setFillColor(tint)
+        for (dx, dy, width, height) in [(-3.0, 1.0, 6.0, 2.0), (-2, 3, 4, 1), (-1, 4, 2, 1)] {
+            context.fill(CGRect(x: x + dx * pixel, y: y + dy * pixel, width: width * pixel, height: height * pixel))
+        }
+    }
+
+    public static func draw(_ effect: LemmingSelectionEffect, in context: CGContext) {
+        guard let frame = frame(effect.sprite),
               effect.rect.width > 0, effect.rect.height > 0 else { return }
         let deviceScale = abs(context.convertToDeviceSpace(CGSize(width: 1, height: 0)).width)
         let stroke = CGFloat(outlineWidth) / max(1, deviceScale)
@@ -243,18 +293,19 @@ struct LemmingSelectionUniforms {
             context.saveGState()
             let glowRect = effect.rect.insetBy(dx: -CGFloat(padding) * dx, dy: -CGFloat(padding) * dy)
             context.interpolationQuality = .low
-            context.setAlpha(effect.glowGain)
+            context.setAlpha(effect.rescueAmount > 0 ? effect.rescueAmount : effect.glowGain)
             context.translateBy(x: effect.mirrored ? glowRect.maxX : glowRect.minX, y: glowRect.maxY)
             context.scaleBy(x: effect.mirrored ? -1 : 1, y: -1)
-            context.draw(frame.glow, in: CGRect(origin: .zero, size: glowRect.size))
+            context.draw(effect.rescueAmount > 0 ? frame.goldGlow : frame.glow, in: CGRect(origin: .zero, size: glowRect.size))
             context.restoreGState()
         }
-        context.setFillColor(NSColor.white.cgColor)
+        guard effect.rescueAmount == 0 else { return }
+        context.setFillColor(CGColor(gray: 1, alpha: 1))
         context.addRects(cells.map { $0.insetBy(dx: -stroke, dy: -stroke) })
         context.fillPath()
     }
 
-    static let shader = """
+    public static let shader = """
     #include <metal_stdlib>
     using namespace metal;
     struct SelectionVertex { float4 position [[position]]; };
@@ -301,13 +352,26 @@ struct LemmingSelectionUniforms {
         for (int y = -\(outlineWidth); y <= \(outlineWidth); ++y) for (int x = -\(outlineWidth); x <= \(outlineWidth); ++x) {
             edge = max(edge, selection_alpha(v.position.xy + float2(x, y), mask, u));
         }
-        if (edge > .5) {
+        if (edge > .5 && u.style.y < .5) {
             return float4(float3(glass), glass);
         }
         constexpr sampler linear(filter::linear, address::clamp_to_zero);
         float light = mask.sample(linear, uv).g * u.style.x * glass;
+        if (u.style.y > .5) {
+            float alpha = min(.88f, light);
+            float peak = 1 + (u.style.z - 1) * .65;
+            if (u.style.w > .5) return float4(float3(1,.72,.18) * alpha * (peak - 1), 0);
+            return float4(float3(1,.72,.18) * alpha * peak, alpha);
+        }
         return float4(float3(.32, 1, .56) * light, light);
     }
     """
+}
+
+extension LemmingSelectionRenderer {
+    static func draw(_ effect: LemmingSelectionEffect) {
+        guard let context = NSGraphicsContext.current?.cgContext else { return }
+        draw(effect, in: context)
+    }
 }
 #endif

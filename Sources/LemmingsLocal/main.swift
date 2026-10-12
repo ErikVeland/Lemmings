@@ -203,7 +203,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var arcadeAutoPresent = true
   private let music = ModuleMusicPlayer()
   private let failureMood = FailureMoodTransition()
-  private let completionGlow = FailureMoodTransition(duration: 1.4, recoveryDuration: 0.6)
+  private let completionGlow = RescueCelebrationTransition()
   private let failureMusic = FailureMusicTransition()
   private let nukeMood = NukeMusicSweep()
   /// Plays recordings the player supplied, as an alternative to the modules.
@@ -6938,7 +6938,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         playfield.viewport.viewSize = wanted.size
       }
       if let frame = composeNativeFrame() {
-        crtView.setSource(frame, flashes: playfield.hdrFlashes, selection: playfield.selectionEffect)
+        crtView.setSource(frame, flashes: playfield.hdrFlashes, selection: playfield.selectionEffect, rescueAuras: playfield.rescueAuras)
       }
     }
     effects.setViewport(playfield.soundViewport)
@@ -7497,6 +7497,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func updateDJTelemetry(_ telemetry: AdaptiveDJEngine.Telemetry) {
     guard activeMusic != .silent, activeMusic == .adaptiveDJ || isLearningJourneyActive else { return }
     if isLearningJourneyActive, !dj.isPlaying,
+       !RescueCelebration.requiresAll(required: telemetry.requiredCount, total: telemetry.totalCount),
        RescueCelebration.isSecured(saved: telemetry.savedCount, required: telemetry.requiredCount,
                                   isComplete: telemetry.isComplete, didWin: telemetry.didWin) {
       let legacy = music.isOutputRunning ? music.currentURL : soundtrack.currentURL
@@ -8242,8 +8243,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     keyboard.mainMenu = { [weak self] in self?.returnToLibrary() }
     keyboard.navigationReduceMotion = { [weak self] in
-      self?.settings.reduceMotion == true || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
+        self?.settings.reduceMotion == true || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
     }
+    keyboard.showSongInfo = { [weak self] in self?.settings.showSongInfo ?? true }
+    keyboard.fadeMenuButton = { [weak self] in self?.settings.fadeMenuButton ?? true }
     keyboard.navigationAvailable = { [weak self] in
       guard let self else { return false }
       return self.phase == .playing || self.phase == .results
@@ -8606,7 +8609,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     let failed = session.isComplete ? !session.didWin : !session.canStillReachRequirement
     completionGlow.set(active: RescueCelebration.isSecured(saved: session.saved, required: session.required,
-      isComplete: session.isComplete, didWin: session.didWin), now: now,
+      isComplete: session.isComplete, didWin: session.didWin),
+      brief: RescueCelebration.requiresAll(required: session.required, total: session.total), now: now,
       animated: !settings.reduceMotion && !settings.reduceFlashes)
     failureMood.set(active: failed, now: now)
     failureMusic.update(failed: failed, isNuking: session.isNuking, allPopped: allPopped,

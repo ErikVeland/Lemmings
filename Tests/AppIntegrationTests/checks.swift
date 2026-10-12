@@ -7762,6 +7762,8 @@ func validateMusicRouting(_ condition: Bool, _ message: String) throws {
 @MainActor private func testUpdateRequests() async throws {
   let nativeUpdater = SPUStandardUpdaterController(startingUpdater: false,
     updaterDelegate: nil, userDriverDelegate: nil).updater
+  try check(nativeUpdater.updateCheckInterval == 3600,
+    "The app's default update schedule did not use hourly checks")
   var nativeAvailabilityEvents = 0
   let nativeObservation = nativeUpdater.observeAvailability { nativeAvailabilityEvents += 1 }
   func notifyAvailability() {
@@ -7781,6 +7783,28 @@ func validateMusicRouting(_ condition: Bool, _ message: String) throws {
   let item = SUAppcastItem(dictionary: ["enclosure": ["url": "https://example.invalid/update.zip",
     "sparkle:version": "75", "sparkle:shortVersionString": "1.8.6"]])!
   try check(updates.availableVersion == nil, "An unavailable update had a reminder")
+  try check(updates.responds(to: NSSelectorFromString("updater:didFindValidUpdate:")),
+    "Sparkle could not deliver update discovery callbacks")
+  try check(updates.standardUserDriverShouldHandleShowingScheduledUpdate(item, andInImmediateFocus: true),
+    "A startup update suppressed Sparkle's visible alert")
+  try check(!updates.standardUserDriverShouldHandleShowingScheduledUpdate(item, andInImmediateFocus: false),
+    "A background update interrupted gameplay")
+  updates.updater(nativeUpdater, didFindValidUpdate: item)
+  try check(updates.availableVersion == "1.8.6" && !updates.isDownloaded && checker.checks == 0,
+    "Update discovery waited for a download or opened update UI")
+  updates.updater(nativeUpdater, didFinishUpdateCycleFor: .updatesInBackground, error: nil)
+  try check(updates.availableVersion == "1.8.6",
+    "A successful background check erased the update reminder")
+  updates.updateWillBePresented(item, downloaded: true, automaticallyShowNotes: false)
+  updates.updater(nativeUpdater, didFindValidUpdate: item)
+  try check(updates.isDownloaded, "Repeated discovery erased the downloaded state")
+  updates.updater(nativeUpdater, didFinishUpdateCycleFor: .updatesInBackground,
+    error: NSError(domain: "update-test", code: 1))
+  try check(updates.availableVersion == nil && !updates.isDownloaded,
+    "A failed update cycle retained a stale reminder")
+  updates.updater(nativeUpdater, didFindValidUpdate: item)
+  updates.updaterDidNotFindUpdate(nativeUpdater)
+  try check(updates.availableVersion == nil, "A no-update check retained a discovery reminder")
 
   // The icon followed by the menu must preserve one request during a silent download.
   updates.showUpdate()
@@ -7842,7 +7866,7 @@ func validateMusicRouting(_ condition: Bool, _ message: String) throws {
   updates.standardUserDriverWillFinishUpdateSession()
   checker.canCheckForUpdates = true
   try check(checker.checks == 6, "Failed automatic notes started an unrequested retry")
-  print("PASS busy icon/menu checks, coalesced clicks, repeated focus, automatic notes, session cleanup and retry without restart")
+  print("PASS hourly checks, startup alerts, discovery/download reminders, busy icon/menu checks, automatic notes, session cleanup and retry without restart")
 }
 
 
@@ -8129,7 +8153,7 @@ extension AppDelegate {
           try check(ArcadeStore.shared.records.trolley.attempts.contains { $0.id == arcadeRunID },
             "Classic sequence result did not persist its career stars")
           updateFailureMood()
-          completionGlow.advance(at: ProcessInfo.processInfo.systemUptime + 2)
+          completionGlow.advance(at: ProcessInfo.processInfo.systemUptime + 0.7)
           try check(playfield.completionGlowAmount == (won ? 1 : 0), "Classic result celebration state is wrong")
           try validateCompletionGlow(playfield, name: "classic-\(won)") { self.playfield.completionGlowAmount = $0 }
           playfield.completionGlowAmount = won ? 1 : 0
@@ -8543,7 +8567,7 @@ extension AppDelegate {
     try check(notice.accessibilityLabel()?.contains(metadata.title) == true && notice.accessibilityLabel()?.contains(metadata.soundtrack) == true,
       "Now Playing omitted accessible song/source names")
     keyboard.refreshNavigationControl(at: 104.25)
-    try check(abs(notice.alphaValue - 0.5) < 0.01, "Now Playing did not fade after four seconds")
+    try check(abs(notice.artworkOpacity - 0.5) < 0.01, "Now Playing did not fade after four seconds")
     keyboard.refreshNavigationControl(at: 105)
     try check(notice.isHidden, "Now Playing remained visible")
     keyboard.refreshNavigationControl(at: 106)
@@ -8551,7 +8575,7 @@ extension AppDelegate {
     selected = remixed; keyboard.refreshNavigationControl(at: 107)
     try check(!notice.isHidden && notice.track == remixed, "Changing soundtrack did not replace the notice")
     keyboard.navigationReduceMotion = { true }; keyboard.refreshNavigationControl(at: 111.25)
-    try check(!notice.isHidden && notice.alphaValue == 1, "Reduced motion animated the notice")
+    try check(!notice.isHidden && notice.artworkOpacity == 1, "Reduced motion animated the notice")
     keyboard.refreshNavigationControl(at: 112)
     try check(notice.isHidden, "Reduced motion prevented expiry")
     selected = nil; keyboard.refreshNavigationControl(at: 113)

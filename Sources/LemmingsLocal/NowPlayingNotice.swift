@@ -47,12 +47,18 @@ struct PlayingTrack: Equatable {
 /// A brief bitmap notice. Pointer input passes through to the game.
 @MainActor final class NowPlayingNotice: NSView {
     private(set) var track: PlayingTrack?
+    private(set) var artworkOpacity: CGFloat = 1
     private var shownAt: TimeInterval = 0
     private var currentURL: URL?
     override var isFlipped: Bool { true }
     override func hitTest(_ point: NSPoint) -> NSView? { nil }
 
-    func update(track next: PlayingTrack?, at now: TimeInterval, visible: Bool, reduceMotion: Bool) {
+    func update(track next: PlayingTrack?, at now: TimeInterval, visible: Bool, reduceMotion: Bool, enabled: Bool = true) {
+        guard enabled else {
+            currentURL = nil; track = nil; isHidden = true; artworkOpacity = 0
+            setAccessibilityElement(false)
+            return
+        }
         guard visible, let next else {
             isHidden = true
             if next == nil { currentURL = nil; track = nil }
@@ -65,15 +71,24 @@ struct PlayingTrack: Equatable {
         }
         let elapsed = now - shownAt
         isHidden = elapsed >= 4.5
-        alphaValue = reduceMotion ? 1 : CGFloat(min(1, max(0, (4.5 - elapsed) / 0.5)))
+        let fadeIn = min(1, max(0, elapsed / 0.35))
+        let fadeOut = min(1, max(0, (4.5 - elapsed) / 0.5))
+        let progress = min(fadeIn, fadeOut)
+        artworkOpacity = reduceMotion ? 1 : CGFloat(progress * progress * (3 - 2 * progress))
         needsDisplay = !isHidden
+        superview?.setNeedsDisplay(frame)
     }
 
     override func draw(_ dirtyRect: NSRect) {
-        guard let track else { return }
+        guard let track, artworkOpacity > 0, let context = NSGraphicsContext.current?.cgContext else { return }
+        context.saveGState()
+        context.setAlpha(artworkOpacity)
+        context.beginTransparencyLayer(auxiliaryInfo: nil)
         GameStoneButton.draw(bounds, selected: false, pixel: 1)
         GameControlText.draw(track.title, in: CGRect(x: 12, y: 5, width: bounds.width - 24, height: 24), role: .heading)
         GameControlText.draw(track.soundtrack, in: CGRect(x: 12, y: 30, width: bounds.width - 24, height: 24))
+        context.endTransparencyLayer()
+        context.restoreGState()
     }
 }
 #endif

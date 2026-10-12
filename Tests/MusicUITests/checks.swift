@@ -17,7 +17,152 @@ private func checkUI(_ value: Bool, _ message: String) throws {
     let hit = root.hitTest(NSPoint(x: rect.midX, y: rect.midY))
     try checkUI(hit === control || hit?.isDescendant(of: control) == true, "Control has no input target: \(control)")
 }
+
+@MainActor private func checkDistractionFeedback() throws {
+    let keyboard = GameplayKeyboard(window: window)
+    keyboard.active = { true }; keyboard.ownsController = { true }
+    keyboard.navigationAvailable = { true }; keyboard.mainMenu = {}
+    keyboard.navigationReduceMotion = { false }
+    var preferences = ClassicSettings()
+    keyboard.showSongInfo = { preferences.showSongInfo }
+    keyboard.fadeMenuButton = { preferences.fadeMenuButton }
+    var track: PlayingTrack? = .init(url: URL(fileURLWithPath: "/test/song.mod"),
+        title: "Lend a Helping Hand", soundtrack: "Lemmings - Amiga")
+    keyboard.playingTrack = { track }
+    defer { keyboard.removeNavigationControl() }
+    for width in [1120, 900] {
+        window.setContentSize(NSSize(width: width, height: 620))
+        keyboard.removeNavigationControl()
+        track = nil; keyboard.refreshNavigationControl(at: 90)
+        track = .init(url: URL(fileURLWithPath: "/test/song.mod"), title: "Lend a Helping Hand", soundtrack: "Lemmings - Amiga")
+        keyboard.refreshNavigationControl(at: 100)
+        let root = window.contentView!
+        let notice = root.subviews.compactMap { $0 as? NowPlayingNotice }.first!
+        let menu = root.subviews.compactMap { $0 as? GameplayMenuButton }.first!
+        try checkUI(notice.artworkOpacity == 0 && notice.hitTest(.zero) == nil, "Song notice appeared abruptly or captured input")
+        keyboard.refreshNavigationControl(at: 100.175)
+        try checkUI(abs(notice.artworkOpacity - 0.5) < 0.01, "Song notice missed its smooth fade-in")
+        try shot(root, "song-fade-in-\(width)")
+        keyboard.refreshNavigationControl(at: 100.35)
+        try checkUI(abs(notice.artworkOpacity - 1) < 0.01 && root.bounds.contains(notice.frame), "Song notice was clipped or never became visible")
+        try shot(root, "song-visible-\(width)")
+        keyboard.refreshNavigationControl(at: 104.25)
+        try checkUI(abs(notice.artworkOpacity - 0.5) < 0.01, "Song notice missed its fade-out")
+        preferences.showSongInfo = false; preferences.fadeMenuButton = false
+        keyboard.refreshNavigationControl(at: 104.3)
+        try checkUI(notice.isHidden && notice.track == nil && !notice.isAccessibilityElement(), "Disabled song info retained a stale notice")
+        try checkUI(menu.artworkOpacity == 1 && !menu.isHidden, "Disabling Menu fading did not restore it")
+        try checkTarget(menu, in: root)
+        try shot(root, "song-off-menu-steady-\(width)")
+        keyboard.navigationReduceMotion = { true }
+        preferences.showSongInfo = true
+        keyboard.refreshNavigationControl(at: 110)
+        try checkUI(notice.artworkOpacity == 1 && !notice.isHidden && menu.artworkOpacity == 1, "Reduced motion changed steady notice/Menu states")
+        keyboard.refreshNavigationControl(at: 115)
+        try checkUI(notice.isHidden, "Reduced motion prevented notice expiry")
+        keyboard.navigationReduceMotion = { false }
+        preferences.fadeMenuButton = true
+    }
+    print("PASS shared song/Menu controls: fade-in/out, disabled/steady states, reduced motion, compact renders and pointer targets")
+}
+
+@MainActor private func checkRescueCanvas(_ view: NSView, name: String,
+    set: (CGFloat, Bool) -> Void, effects: () -> [LemmingSelectionEffect]) throws {
+    func capture(_ state: String, amount: CGFloat, reduced: Bool = false) throws -> CGImage {
+        set(amount, reduced)
+        let image = ReplayFrameCapture.image(size: view.bounds.size) { view.draw(view.bounds) }!
+        try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(
+            to: shots.appendingPathComponent("rescue-\(name)-\(state).png"))
+        return image
+    }
+    let inactive = try capture("inactive", amount: 0)
+    try checkUI(effects().isEmpty, "\(name) had a rescue aura before meeting the target")
+    let earned = try capture("earned", amount: 1)
+    try checkUI(!effects().isEmpty && effects().allSatisfy { $0.rescueAmount == 1 && $0.rect.intersects($0.clipRect) },
+        "\(name) did not collect visible sprite masks for its golden aura")
+    try checkUI((inactive.dataProvider!.data! as Data) != (earned.dataProvider!.data! as Data), "\(name) glow was invisible")
+    _ = try capture("reduced", amount: 1, reduced: true)
+    try checkUI(effects().isEmpty, "\(name) kept bright sprite auras with reduced flashes")
+    _ = try capture("reset", amount: 0)
+    try checkUI(effects().isEmpty, "\(name) retained an aura after the glow expired")
+    print("PASS \(name) native golden aura: live sprite masks, reduced flashes, expiry and rendered states")
+}
+
+@MainActor private func checkClassicRescueAura() throws {
+    let width = 320, height = 96
+    let terrain = try ClassicDOSTerrain(width: width, height: height,
+        solidMask: Data((0..<(width * height)).map { UInt8($0 / width >= 80 ? 1 : 0) }),
+        steelMask: Data(repeating: 0, count: width * height))
+    let config = ClassicDOSConfiguration(totalLemmings: 10, requiredToSave: 5, timeLimitTicks: nil,
+        initialReleaseRate: 99, entrances: [.init(x: 80, y: 50)], initialSkills: [:], maximumX: width - 1, maximumY: height - 1)
+    let session = ClassicSession(simulation: try ClassicDOSSimulation(terrain: terrain, configuration: config), width: width, height: height)
+    for _ in 0..<50 { session.tick() }
+    let view = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 900, height: 400))
+    view.phase = .playing; view.session = session; view.assets = try ClassicMainDATAssets.load(from: Bundle.main.resourceURL!.appendingPathComponent("Ports/lemmings_dos_1991-07-30"))
+    view.palette = ClassicLemmingPalette.panelVGA
+    let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: width * 4,
+        space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+    context.setFillColor(CGColor(gray: 0.03, alpha: 1)); context.fill(CGRect(x: 0, y: 0, width: width, height: height))
+    view.levelImage = context.makeImage(); view.viewport.zoom = 3
+    try checkRescueCanvas(view, name: "classic", set: { view.completionGlowAmount = $0; view.reduceFlashes = $1 }, effects: { view.rescueAuras })
+}
+
+extension Lemmings2PlayWindow {
+    @MainActor fileprivate func checkRescueAura() throws {
+        defer { stop() }
+        prepareBriefing(); startLevel(); timer?.invalidate(); timer = nil
+        paused = true; canvas.startCountdown.cancel()
+        for _ in 0..<120 { game?.step() }
+        refreshGame()
+        if let id = game?.lemmings.first(where: { $0.active })?.id { canvas.focusLemming(id) }
+        try checkRescueCanvas(canvas, name: "lemmings2", set: { self.canvas.completionGlowAmount = $0; self.canvas.reduceFlashes = $1 }, effects: { self.canvas.rescueAuras })
+    }
+}
+
+extension Lemmings3PlayWindow {
+    @MainActor fileprivate func checkRescueAura() throws {
+        defer { stop() }
+        timer?.invalidate(); timer = nil; paused = true; canvas.startCountdown.cancel(); canvas.menuRows = nil
+        for _ in 0..<120 { game.step() }
+        refresh()
+        if let id = game.lemmings.first(where: { $0.active })?.id { canvas.focusLemming(id) }
+        try checkRescueCanvas(canvas, name: "lemmings3", set: { self.canvas.completionGlowAmount = $0; self.canvas.reduceFlashes = $1 }, effects: { self.canvas.rescueAuras })
+    }
+}
+
 extension SettingsWindow {
+    @MainActor fileprivate func checkDistractionOptions() throws {
+        show()
+        let tabs = page!.body.subviews.first { $0 is GameTabs } as! GameTabs
+        tabs.subviews.compactMap { $0 as? GameTabButton }.first { $0.title == "Accessibility" }!.performClick(nil)
+        var lastSettings = settings
+        onChange = { lastSettings = $0 }
+        for size in [NSSize(width: 1120, height: 720), NSSize(width: 900, height: 620)] {
+            window.setContentSize(size); page!.layoutSubtreeIfNeeded()
+            for button in [showSongInfoCheck!, fadeMenuButtonCheck!] {
+                try checkTarget(button, in: page!)
+                let captionPoint = button.convert(NSPoint(x: 50, y: button.bounds.midY), to: page!)
+                try checkUI(page!.hitTest(captionPoint) === button, "Accessibility caption lost its checkbox target")
+                try checkUI(button.accessibilityPerformPress(), "Accessibility checkbox could not be toggled")
+            }
+            try checkUI(!lastSettings.showSongInfo && !lastSettings.fadeMenuButton,
+                "Accessibility changes did not reach the settings callback")
+            try shot(page!, "distraction-options-off-\(Int(size.width))")
+            for button in [showSongInfoCheck!, fadeMenuButtonCheck!] {
+                window.makeFirstResponder(button)
+                let key = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 0,
+                    windowNumber: window.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r",
+                    isARepeat: false, keyCode: 36)!
+                try checkUI(GameScreen.shared.handleDialogKey(key), "Accessibility checkbox missed Return")
+            }
+            try checkUI(lastSettings.showSongInfo && lastSettings.fadeMenuButton,
+                "Keyboard changes did not restore the Accessibility choices")
+            try shot(page!, "distraction-options-on-\(Int(size.width))")
+        }
+        GameScreen.shared.dismissAll()
+        print("PASS Accessibility options: checked/unchecked/focused renders, caption targets, accessible press and Return")
+    }
+
     @MainActor fileprivate func checkSettings() async throws {
         show()
         let tabs = page!.body.subviews.first { $0 is GameTabs } as! GameTabs
@@ -383,7 +528,15 @@ ArcadeStore.shared = ArcadeStore(file: temporary.appendingPathComponent("arcade.
 let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1120, height: 720), styleMask: [.titled], backing: .buffered, defer: false)
 window.contentView = NSView(frame: NSRect(x: 0, y: 0, width: 1120, height: 720))
 GameScreen.shared.gameWindow = window
-if ProcessInfo.processInfo.environment["TEST_SCOPE"] == "settings" {
+if ProcessInfo.processInfo.environment["TEST_SCOPE"] == "distraction" {
+    let preferences = SettingsWindow(settings: ClassicSettings(), options: ClassicSettingsOptions(graphics: [.macintosh], music: [.silent], sound: [.silent]))
+    try preferences.checkDistractionOptions()
+    try checkDistractionFeedback()
+} else if ProcessInfo.processInfo.environment["TEST_SCOPE"] == "rescue-aura" {
+    try checkClassicRescueAura()
+    try Lemmings2PlayWindow(root: Bundle.main.resourceURL!.appendingPathComponent("Ports/Lemm2")).checkRescueAura()
+    try Lemmings3PlayWindow(root: Bundle.main.resourceURL!.appendingPathComponent("Ports/LEM3CD")).checkRescueAura()
+} else if ProcessInfo.processInfo.environment["TEST_SCOPE"] == "settings" {
     let suite = "settings-ui-" + UUID().uuidString
     let defaults = UserDefaults(suiteName: suite)!
     defer { defaults.removePersistentDomain(forName: suite) }

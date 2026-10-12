@@ -210,6 +210,8 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public var interfaceSize: ClassicInterfaceSize
     public var reduceMotion: Bool
     public var reduceFlashes: Bool
+    public var showSongInfo: Bool
+    public var fadeMenuButton: Bool
     public var speedEffectsEnabled: Bool { hdEffectsEnabled && !reduceMotion }
     public var explosionEffectsEnabled: Bool { hdEffectsEnabled && !reduceFlashes }
     public var cinematicExplosionsEnabled: Bool { explosionEffectsEnabled && !reduceMotion && fullScreenHDRFlashes }
@@ -265,6 +267,8 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         interfaceSize: ClassicInterfaceSize = .standard,
         reduceMotion: Bool = false,
         reduceFlashes: Bool = false,
+        showSongInfo: Bool = true,
+        fadeMenuButton: Bool = true,
         hdEffectsEnabled: Bool = true,
         confinePointer: Bool = true,
         fullScreenHDRFlashes: Bool = true,
@@ -306,6 +310,8 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         self.interfaceSize = interfaceSize
         self.reduceMotion = reduceMotion
         self.reduceFlashes = reduceFlashes
+        self.showSongInfo = showSongInfo
+        self.fadeMenuButton = fadeMenuButton
         self.hdEffectsEnabled = hdEffectsEnabled
         self.confinePointer = confinePointer
         self.fullScreenHDRFlashes = fullScreenHDRFlashes
@@ -380,6 +386,8 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         interfaceSize = (try? values.decodeIfPresent(ClassicInterfaceSize.self, forKey: .interfaceSize)) ?? .standard
         reduceMotion = try values.decodeIfPresent(Bool.self, forKey: .reduceMotion) ?? false
         reduceFlashes = try values.decodeIfPresent(Bool.self, forKey: .reduceFlashes) ?? false
+        showSongInfo = try values.decodeIfPresent(Bool.self, forKey: .showSongInfo) ?? true
+        fadeMenuButton = try values.decodeIfPresent(Bool.self, forKey: .fadeMenuButton) ?? true
         hdEffectsEnabled = try values.decodeIfPresent(Bool.self, forKey: .hdEffectsEnabled) ?? fallback.hdEffectsEnabled
         confinePointer = try values.decodeIfPresent(Bool.self, forKey: .confinePointer) ?? fallback.confinePointer
         fullScreenHDRFlashes = try values.decodeIfPresent(Bool.self, forKey: .fullScreenHDRFlashes) ?? fallback.fullScreenHDRFlashes
