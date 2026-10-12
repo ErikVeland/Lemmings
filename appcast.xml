@@ -3,6 +3,34 @@
     <channel>
         <title>Ultimate Lemmings</title>
         <item>
+            <title>1.9.4</title>
+            <pubDate>Tue, 13 Oct 2026 03:52:48 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>79</sparkle:version>
+            <sparkle:shortVersionString>1.9.4</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>This Mac update softens solved-level effects and fixes saved journey navigation, replay information and rendering overhead.</p>
+<h3>Calmer celebrations and smoother rendering</h3>
+<p>The golden lemming aura is at least 70% softer. Terrain and scenery receive a very faint golden haze when the rescue goal is secured. The effect fades gently and keeps original artwork sharp. Levels requiring every lemming retain their brief glow and current music.</p>
+<p>Background haze builds off the main thread and reuses cached images during fast-forward. Both sequels reuse decoded bitmap pixels. The Tribes skips unchanged skill-panel image conversions.</p>
+<h3>Saved journeys and controls</h3>
+<p>Golden Path Continue finds a saved journey after another solo or Hot Seat session. Resuming restores the saved session, players and turn while keeping the departing run saved.</p>
+<p>Command-Z rewinds one step through the shared Mac gameplay controls.</p>
+<h3>Clearer replays and level order</h3>
+<p>Solution and leaderboard action replays show remaining skills and the last three successful skill uses in the upper-right corner. Each use shows its exact tick. Chronicles shows tools held by active lemmings and names each recorded tool use.</p>
+<p>Time waits for no Lemming and This Corrosion now appear near the end of Golden Path. Their known official and fan variants retain a late Expert placement. Identified routes based on engine quirks cannot enter Intermediate. Golden Path includes 295 lessons.</p>
+<h3>Compatibility and validation scope</h3>
+<p>Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. Full and slim downloads retain original Macintosh music. Automatic updates retain the full music library.</p>
+<p>The Tribes remains Complete. Chronicles and NeoLemmix remain Beta. iOS 2.0 remains separate from this Mac release.</p>
+<p>Public-release checks run headlessly with native UI windows offscreen and test audio muted. Package, update-feed and focused regression results are recorded in the distribution evidence. Physical HDR appearance, audible listening, physical Intel, minimum macOS and sustained high-speed hardware acceptance remain manual checks.</p>
+<p class="meta">Build: 79<br>Release base: v1.9.3<br>Release commit: 4cf2c500bf9f8759bfc0c01b00051e195775e533</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.4/UltimateLemmings-1.9.4-build79.zip" length="2044303097" type="application/octet-stream" sparkle:edSignature="9kTfRuYgdZVLPwLfDiM/rFxLCvy/rs+WhOxEmV8IBcg0MRkWUVKm+YW2vGGcB5hX2+zMf+VGh3BAFOcCnI8ZBA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.4/UltimateLemmings-build79-from78.delta" sparkle:deltaFrom="78" length="1569334" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="D5r0ZcXEEaRyUX4LgjdD1+RL73kCM4n7lM6Z6Y+8c6PAWlvNgAtEQeNOLLca5V0gSKYdHJ5sP83h5mypDVT4AQ=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>1.9.3</title>
             <pubDate>Mon, 12 Oct 2026 19:14:33 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
