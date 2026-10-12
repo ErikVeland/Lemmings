@@ -13,7 +13,7 @@ import UIKit
         isHidden = true
         backgroundColor = .black
         layer.borderWidth = 2
-        layer.borderColor = MobilePixelText.Palette.green.colour.cgColor
+        layer.borderColor = CGColor(srgbRed: 0.45, green: 1, blue: 0.10, alpha: 1)
         imageView.layer.magnificationFilter = .nearest
         imageView.layer.minificationFilter = .nearest
         imageView.contentMode = .scaleToFill

@@ -1,0 +1,1168 @@
+{
+  "adaptiveHUD": [
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-ipad-landscape-ready.png",
+      "pose": "ipad-landscape",
+      "state": "ready",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-ipad-landscape-running.png",
+      "pose": "ipad-landscape",
+      "state": "running",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-ipad-landscape-fast.png",
+      "pose": "ipad-landscape",
+      "state": "fast",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-ipad-landscape-armed.png",
+      "pose": "ipad-landscape",
+      "state": "armed",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-ipad-landscape-undo.png",
+      "pose": "ipad-landscape",
+      "state": "undo",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-ipad-portrait-ready.png",
+      "pose": "ipad-portrait",
+      "state": "ready",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-ipad-portrait-running.png",
+      "pose": "ipad-portrait",
+      "state": "running",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-ipad-portrait-fast.png",
+      "pose": "ipad-portrait",
+      "state": "fast",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-ipad-portrait-armed.png",
+      "pose": "ipad-portrait",
+      "state": "armed",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-ipad-portrait-undo.png",
+      "pose": "ipad-portrait",
+      "state": "undo",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-pocket-ready.png",
+      "pose": "pocket",
+      "state": "ready",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-pocket-running.png",
+      "pose": "pocket",
+      "state": "running",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-pocket-fast.png",
+      "pose": "pocket",
+      "state": "fast",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-pocket-armed.png",
+      "pose": "pocket",
+      "state": "armed",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-pocket-undo.png",
+      "pose": "pocket",
+      "state": "undo",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-open-ready.png",
+      "pose": "open",
+      "state": "ready",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-open-running.png",
+      "pose": "open",
+      "state": "running",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-open-fast.png",
+      "pose": "open",
+      "state": "fast",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-open-armed.png",
+      "pose": "open",
+      "state": "armed",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-open-undo.png",
+      "pose": "open",
+      "state": "undo",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": true,
+      "file": "hud-diorama-ready.png",
+      "pose": "diorama",
+      "state": "ready",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": true,
+      "file": "hud-diorama-running.png",
+      "pose": "diorama",
+      "state": "running",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": true,
+      "file": "hud-diorama-fast.png",
+      "pose": "diorama",
+      "state": "fast",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": true,
+      "file": "hud-diorama-armed.png",
+      "pose": "diorama",
+      "state": "armed",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": true,
+      "file": "hud-diorama-undo.png",
+      "pose": "diorama",
+      "state": "undo",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-camera-ready.png",
+      "pose": "camera",
+      "state": "ready",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-camera-running.png",
+      "pose": "camera",
+      "state": "running",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-camera-fast.png",
+      "pose": "camera",
+      "state": "fast",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-camera-armed.png",
+      "pose": "camera",
+      "state": "armed",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-camera-undo.png",
+      "pose": "camera",
+      "state": "undo",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-resized-ready.png",
+      "pose": "resized",
+      "state": "ready",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-resized-running.png",
+      "pose": "resized",
+      "state": "running",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-resized-fast.png",
+      "pose": "resized",
+      "state": "fast",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-resized-armed.png",
+      "pose": "resized",
+      "state": "armed",
+      "targets": 17
+    },
+    {
+      "canPlay": true,
+      "diorama": false,
+      "file": "hud-resized-undo.png",
+      "pose": "resized",
+      "state": "undo",
+      "targets": 17
+    },
+    {
+      "canPlay": false,
+      "diorama": false,
+      "file": "hud-unavailable-ready.png",
+      "pose": "unavailable",
+      "state": "ready",
+      "targets": 0
+    },
+    {
+      "canPlay": false,
+      "diorama": false,
+      "file": "hud-unavailable-running.png",
+      "pose": "unavailable",
+      "state": "running",
+      "targets": 0
+    },
+    {
+      "canPlay": false,
+      "diorama": false,
+      "file": "hud-unavailable-fast.png",
+      "pose": "unavailable",
+      "state": "fast",
+      "targets": 0
+    },
+    {
+      "canPlay": false,
+      "diorama": false,
+      "file": "hud-unavailable-armed.png",
+      "pose": "unavailable",
+      "state": "armed",
+      "targets": 0
+    },
+    {
+      "canPlay": false,
+      "diorama": false,
+      "file": "hud-unavailable-undo.png",
+      "pose": "unavailable",
+      "state": "undo",
+      "targets": 0
+    }
+  ],
+  "audio": "muted",
+  "captures": [
+    {
+      "contentHeight": 1092,
+      "device": "ipad-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "ipad-portrait-long-title.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "long-title",
+      "targets": 2,
+      "viewportHeight": 1092,
+      "viewportWidth": 834
+    },
+    {
+      "contentHeight": 1092,
+      "device": "ipad-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "ipad-portrait-home.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "home",
+      "targets": 5,
+      "viewportHeight": 1092,
+      "viewportWidth": 834
+    },
+    {
+      "contentHeight": 1092,
+      "device": "ipad-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "ipad-portrait-resume.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "resume",
+      "targets": 6,
+      "viewportHeight": 1092,
+      "viewportWidth": 834
+    },
+    {
+      "contentHeight": 1092,
+      "device": "ipad-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "ipad-portrait-levels.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "levels",
+      "targets": 6,
+      "viewportHeight": 1092,
+      "viewportWidth": 834
+    },
+    {
+      "contentHeight": 1092,
+      "device": "ipad-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "ipad-portrait-briefing.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "briefing",
+      "targets": 2,
+      "viewportHeight": 1092,
+      "viewportWidth": 834
+    },
+    {
+      "contentHeight": 1092,
+      "device": "ipad-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "ipad-portrait-pause.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "pause",
+      "targets": 2,
+      "viewportHeight": 1092,
+      "viewportWidth": 834
+    },
+    {
+      "contentHeight": 1092,
+      "device": "ipad-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "ipad-portrait-win.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "win",
+      "targets": 3,
+      "viewportHeight": 1092,
+      "viewportWidth": 834
+    },
+    {
+      "contentHeight": 1092,
+      "device": "ipad-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "ipad-portrait-loss.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "loss",
+      "targets": 2,
+      "viewportHeight": 1092,
+      "viewportWidth": 834
+    },
+    {
+      "contentHeight": 1092,
+      "device": "ipad-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "ipad-portrait-settings.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "settings",
+      "targets": 3,
+      "viewportHeight": 1092,
+      "viewportWidth": 834
+    },
+    {
+      "contentHeight": 1092,
+      "device": "ipad-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "ipad-portrait-data.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "data",
+      "targets": 2,
+      "viewportHeight": 1092,
+      "viewportWidth": 834
+    },
+    {
+      "contentHeight": 1092,
+      "device": "ipad-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "ipad-portrait-empty.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "empty",
+      "targets": 2,
+      "viewportHeight": 1092,
+      "viewportWidth": 834
+    },
+    {
+      "contentHeight": 814,
+      "device": "ipad-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "ipad-landscape-long-title.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "long-title",
+      "targets": 2,
+      "viewportHeight": 814,
+      "viewportWidth": 1112
+    },
+    {
+      "contentHeight": 814,
+      "device": "ipad-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "ipad-landscape-home.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "home",
+      "targets": 5,
+      "viewportHeight": 814,
+      "viewportWidth": 1112
+    },
+    {
+      "contentHeight": 814,
+      "device": "ipad-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "ipad-landscape-resume.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "resume",
+      "targets": 6,
+      "viewportHeight": 814,
+      "viewportWidth": 1112
+    },
+    {
+      "contentHeight": 814,
+      "device": "ipad-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "ipad-landscape-levels.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "levels",
+      "targets": 6,
+      "viewportHeight": 814,
+      "viewportWidth": 1112
+    },
+    {
+      "contentHeight": 814,
+      "device": "ipad-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "ipad-landscape-briefing.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "briefing",
+      "targets": 2,
+      "viewportHeight": 814,
+      "viewportWidth": 1112
+    },
+    {
+      "contentHeight": 814,
+      "device": "ipad-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "ipad-landscape-pause.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "pause",
+      "targets": 2,
+      "viewportHeight": 814,
+      "viewportWidth": 1112
+    },
+    {
+      "contentHeight": 814,
+      "device": "ipad-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "ipad-landscape-win.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "win",
+      "targets": 3,
+      "viewportHeight": 814,
+      "viewportWidth": 1112
+    },
+    {
+      "contentHeight": 814,
+      "device": "ipad-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "ipad-landscape-loss.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "loss",
+      "targets": 2,
+      "viewportHeight": 814,
+      "viewportWidth": 1112
+    },
+    {
+      "contentHeight": 814,
+      "device": "ipad-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "ipad-landscape-settings.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "settings",
+      "targets": 3,
+      "viewportHeight": 814,
+      "viewportWidth": 1112
+    },
+    {
+      "contentHeight": 814,
+      "device": "ipad-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "ipad-landscape-data.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "data",
+      "targets": 2,
+      "viewportHeight": 814,
+      "viewportWidth": 1112
+    },
+    {
+      "contentHeight": 814,
+      "device": "ipad-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "ipad-landscape-empty.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "empty",
+      "targets": 2,
+      "viewportHeight": 814,
+      "viewportWidth": 1112
+    },
+    {
+      "contentHeight": 763,
+      "device": "iphone-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-portrait-long-title.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "long-title",
+      "targets": 2,
+      "viewportHeight": 763,
+      "viewportWidth": 390
+    },
+    {
+      "contentHeight": 763,
+      "device": "iphone-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-portrait-home.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "home",
+      "targets": 5,
+      "viewportHeight": 763,
+      "viewportWidth": 390
+    },
+    {
+      "contentHeight": 763,
+      "device": "iphone-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-portrait-resume.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "resume",
+      "targets": 6,
+      "viewportHeight": 763,
+      "viewportWidth": 390
+    },
+    {
+      "contentHeight": 763,
+      "device": "iphone-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-portrait-levels.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "levels",
+      "targets": 6,
+      "viewportHeight": 763,
+      "viewportWidth": 390
+    },
+    {
+      "contentHeight": 763,
+      "device": "iphone-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-portrait-briefing.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "briefing",
+      "targets": 2,
+      "viewportHeight": 763,
+      "viewportWidth": 390
+    },
+    {
+      "contentHeight": 763,
+      "device": "iphone-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-portrait-pause.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "pause",
+      "targets": 2,
+      "viewportHeight": 763,
+      "viewportWidth": 390
+    },
+    {
+      "contentHeight": 763,
+      "device": "iphone-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-portrait-win.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "win",
+      "targets": 3,
+      "viewportHeight": 763,
+      "viewportWidth": 390
+    },
+    {
+      "contentHeight": 763,
+      "device": "iphone-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-portrait-loss.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "loss",
+      "targets": 2,
+      "viewportHeight": 763,
+      "viewportWidth": 390
+    },
+    {
+      "contentHeight": 763,
+      "device": "iphone-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-portrait-settings.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "settings",
+      "targets": 3,
+      "viewportHeight": 763,
+      "viewportWidth": 390
+    },
+    {
+      "contentHeight": 763,
+      "device": "iphone-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-portrait-data.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "data",
+      "targets": 2,
+      "viewportHeight": 763,
+      "viewportWidth": 390
+    },
+    {
+      "contentHeight": 763,
+      "device": "iphone-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-portrait-empty.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "empty",
+      "targets": 2,
+      "viewportHeight": 763,
+      "viewportWidth": 390
+    },
+    {
+      "contentHeight": 381,
+      "device": "iphone-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-landscape-long-title.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": true,
+      "state": "long-title",
+      "targets": 2,
+      "viewportHeight": 369,
+      "viewportWidth": 756
+    },
+    {
+      "contentHeight": 520,
+      "device": "iphone-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-landscape-home.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": true,
+      "state": "home",
+      "targets": 5,
+      "viewportHeight": 369,
+      "viewportWidth": 756
+    },
+    {
+      "contentHeight": 580,
+      "device": "iphone-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-landscape-resume.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": true,
+      "state": "resume",
+      "targets": 6,
+      "viewportHeight": 369,
+      "viewportWidth": 756
+    },
+    {
+      "contentHeight": 410,
+      "device": "iphone-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-landscape-levels.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": true,
+      "state": "levels",
+      "targets": 6,
+      "viewportHeight": 369,
+      "viewportWidth": 756
+    },
+    {
+      "contentHeight": 381,
+      "device": "iphone-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-landscape-briefing.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": true,
+      "state": "briefing",
+      "targets": 2,
+      "viewportHeight": 369,
+      "viewportWidth": 756
+    },
+    {
+      "contentHeight": 369,
+      "device": "iphone-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-landscape-pause.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "pause",
+      "targets": 2,
+      "viewportHeight": 369,
+      "viewportWidth": 756
+    },
+    {
+      "contentHeight": 381,
+      "device": "iphone-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-landscape-win.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": true,
+      "state": "win",
+      "targets": 3,
+      "viewportHeight": 369,
+      "viewportWidth": 756
+    },
+    {
+      "contentHeight": 381,
+      "device": "iphone-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-landscape-loss.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": true,
+      "state": "loss",
+      "targets": 2,
+      "viewportHeight": 369,
+      "viewportWidth": 756
+    },
+    {
+      "contentHeight": 369,
+      "device": "iphone-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-landscape-settings.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "settings",
+      "targets": 3,
+      "viewportHeight": 369,
+      "viewportWidth": 756
+    },
+    {
+      "contentHeight": 369,
+      "device": "iphone-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-landscape-data.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "data",
+      "targets": 2,
+      "viewportHeight": 369,
+      "viewportWidth": 756
+    },
+    {
+      "contentHeight": 369,
+      "device": "iphone-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-landscape-empty.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "empty",
+      "targets": 2,
+      "viewportHeight": 369,
+      "viewportWidth": 756
+    },
+    {
+      "contentHeight": 548,
+      "device": "iphone-narrow-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-narrow-portrait-long-title.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "long-title",
+      "targets": 2,
+      "viewportHeight": 548,
+      "viewportWidth": 320
+    },
+    {
+      "contentHeight": 548,
+      "device": "iphone-narrow-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-narrow-portrait-home.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "home",
+      "targets": 5,
+      "viewportHeight": 548,
+      "viewportWidth": 320
+    },
+    {
+      "contentHeight": 548,
+      "device": "iphone-narrow-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-narrow-portrait-resume.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "resume",
+      "targets": 6,
+      "viewportHeight": 548,
+      "viewportWidth": 320
+    },
+    {
+      "contentHeight": 570,
+      "device": "iphone-narrow-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-narrow-portrait-levels.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": true,
+      "state": "levels",
+      "targets": 6,
+      "viewportHeight": 548,
+      "viewportWidth": 320
+    },
+    {
+      "contentHeight": 548,
+      "device": "iphone-narrow-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-narrow-portrait-briefing.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "briefing",
+      "targets": 2,
+      "viewportHeight": 548,
+      "viewportWidth": 320
+    },
+    {
+      "contentHeight": 548,
+      "device": "iphone-narrow-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-narrow-portrait-pause.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "pause",
+      "targets": 2,
+      "viewportHeight": 548,
+      "viewportWidth": 320
+    },
+    {
+      "contentHeight": 548,
+      "device": "iphone-narrow-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-narrow-portrait-win.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "win",
+      "targets": 3,
+      "viewportHeight": 548,
+      "viewportWidth": 320
+    },
+    {
+      "contentHeight": 548,
+      "device": "iphone-narrow-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-narrow-portrait-loss.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "loss",
+      "targets": 2,
+      "viewportHeight": 548,
+      "viewportWidth": 320
+    },
+    {
+      "contentHeight": 548,
+      "device": "iphone-narrow-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-narrow-portrait-settings.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "settings",
+      "targets": 3,
+      "viewportHeight": 548,
+      "viewportWidth": 320
+    },
+    {
+      "contentHeight": 548,
+      "device": "iphone-narrow-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-narrow-portrait-data.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "data",
+      "targets": 2,
+      "viewportHeight": 548,
+      "viewportWidth": 320
+    },
+    {
+      "contentHeight": 548,
+      "device": "iphone-narrow-portrait",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-narrow-portrait-empty.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "empty",
+      "targets": 2,
+      "viewportHeight": 548,
+      "viewportWidth": 320
+    },
+    {
+      "contentHeight": 312,
+      "device": "iphone-narrow-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-narrow-landscape-long-title.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": true,
+      "state": "long-title",
+      "targets": 2,
+      "viewportHeight": 300,
+      "viewportWidth": 568
+    },
+    {
+      "contentHeight": 511.20000000000005,
+      "device": "iphone-narrow-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-narrow-landscape-home.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": true,
+      "state": "home",
+      "targets": 5,
+      "viewportHeight": 300,
+      "viewportWidth": 568
+    },
+    {
+      "contentHeight": 571.2,
+      "device": "iphone-narrow-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-narrow-landscape-resume.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": true,
+      "state": "resume",
+      "targets": 6,
+      "viewportHeight": 300,
+      "viewportWidth": 568
+    },
+    {
+      "contentHeight": 410,
+      "device": "iphone-narrow-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-narrow-landscape-levels.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": true,
+      "state": "levels",
+      "targets": 6,
+      "viewportHeight": 300,
+      "viewportWidth": 568
+    },
+    {
+      "contentHeight": 312,
+      "device": "iphone-narrow-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-narrow-landscape-briefing.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": true,
+      "state": "briefing",
+      "targets": 2,
+      "viewportHeight": 300,
+      "viewportWidth": 568
+    },
+    {
+      "contentHeight": 300,
+      "device": "iphone-narrow-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-narrow-landscape-pause.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "pause",
+      "targets": 2,
+      "viewportHeight": 300,
+      "viewportWidth": 568
+    },
+    {
+      "contentHeight": 372,
+      "device": "iphone-narrow-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-narrow-landscape-win.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": true,
+      "state": "win",
+      "targets": 3,
+      "viewportHeight": 300,
+      "viewportWidth": 568
+    },
+    {
+      "contentHeight": 312,
+      "device": "iphone-narrow-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-narrow-landscape-loss.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": true,
+      "state": "loss",
+      "targets": 2,
+      "viewportHeight": 300,
+      "viewportWidth": 568
+    },
+    {
+      "contentHeight": 364,
+      "device": "iphone-narrow-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-narrow-landscape-settings.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": true,
+      "state": "settings",
+      "targets": 3,
+      "viewportHeight": 300,
+      "viewportWidth": 568
+    },
+    {
+      "contentHeight": 308,
+      "device": "iphone-narrow-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-narrow-landscape-data.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": true,
+      "state": "data",
+      "targets": 2,
+      "viewportHeight": 300,
+      "viewportWidth": 568
+    },
+    {
+      "contentHeight": 300,
+      "device": "iphone-narrow-landscape",
+      "disabledAndGapTargetsBlocked": true,
+      "file": "iphone-narrow-landscape-empty.png",
+      "minimumTouchExtent": 44,
+      "needsVerticalScroll": false,
+      "state": "empty",
+      "targets": 2,
+      "viewportHeight": 300,
+      "viewportWidth": 568
+    }
+  ],
+  "coverArtwork": [
+    {
+      "file": "cover-portrait-selected.png",
+      "perspectiveLayersAndUIKitHitDispatch": "pending",
+      "pose": "portrait",
+      "state": "selected",
+      "targets": 4
+    },
+    {
+      "file": "cover-portrait-inactive.png",
+      "perspectiveLayersAndUIKitHitDispatch": "pending",
+      "pose": "portrait",
+      "state": "inactive",
+      "targets": 4
+    },
+    {
+      "file": "cover-portrait-loading.png",
+      "perspectiveLayersAndUIKitHitDispatch": "pending",
+      "pose": "portrait",
+      "state": "loading",
+      "targets": 4
+    },
+    {
+      "file": "cover-landscape-selected.png",
+      "perspectiveLayersAndUIKitHitDispatch": "pending",
+      "pose": "landscape",
+      "state": "selected",
+      "targets": 4
+    },
+    {
+      "file": "cover-landscape-inactive.png",
+      "perspectiveLayersAndUIKitHitDispatch": "pending",
+      "pose": "landscape",
+      "state": "inactive",
+      "targets": 4
+    },
+    {
+      "file": "cover-landscape-loading.png",
+      "perspectiveLayersAndUIKitHitDispatch": "pending",
+      "pose": "landscape",
+      "state": "loading",
+      "targets": 4
+    }
+  ],
+  "originalMacGlyphsAndLogo": true,
+  "physicalUIKitAcceptance": "pending",
+  "renderedStates": 66,
+  "targetsValidated": true,
+  "windows": "none"
+}

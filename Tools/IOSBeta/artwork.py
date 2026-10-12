@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 import shutil
 
-BANKS = frozenset(["Charset1", "Charset2", "Logo1", "Logo2", "Icons"])
+BANKS = frozenset(["Charset1", "Charset2", "Logo1", "Logo2", "Icons", "Lemmings"])
 
 
 def copy_into_app(source, destination):

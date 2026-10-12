@@ -26,8 +26,11 @@ import UIKit
     private var overlayActions: [() -> Void] = []
     private var latestFrame: MobilePixelFrame?
 
+    private var lastHUDLayout: MobileHUDLayout?
+    private var layoutSuspended = false
     private var selectedControl: Int
     private var lifecycle = MobileLifecycleState()
+    private weak var owningScene: UIWindowScene?
     private var clock: MobileTickClock
     private var displayLink: CADisplayLink?
     private var playState = MobilePlayState()
@@ -122,9 +125,32 @@ import UIKit
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        if let scene = view.window?.windowScene { owningScene = scene }
         let insets = view.safeAreaInsets
         let layout = hudLayout(insets: insets)
+        if let previous = lastHUDLayout, previous != layout {
+            playfieldView.cancelInteraction()
+            previewPoint = nil
+            highlightedTarget = nil
+            touchLoupe.isHidden = true
+        }
+        lastHUDLayout = layout
+        // A layout transition changes the viewport, never the session or its Ready boundary.
+        if !layout.canPlay, !session.snapshot.isComplete {
+            if !layoutSuspended {
+                layoutSuspended = true
+                pausePlay(showControls: false)
+                showOverlay(title: "Paused", actions: [("LIBRARY", { [weak self] in self?.leaveToLibrary() })])
+            }
+        } else if layoutSuspended {
+            layoutSuspended = false
+            showOverlay(title: "Paused", actions: [
+                ("RESUME", { [weak self] in self?.resumePlay() }),
+                ("LIBRARY", { [weak self] in self?.leaveToLibrary() }),
+            ])
+        }
         playfieldView.frame = Self.cgRect(layout.interface.playfieldFrame)
+        playfieldView.blockedInputFrames = layout.reservedRegions.map { playfieldView.convert(Self.cgRect($0.frame), from: view) }
         hud.frame = view.bounds
         updateHUD(layout: layout)
         overlay.frame = view.bounds
@@ -136,7 +162,7 @@ import UIKit
         super.viewDidDisappear(animated)
         displayLink?.invalidate()
         displayLink = nil
-        audio.suspend()
+        suspendAudio()
     }
 
     private func startDisplayLink() {
@@ -170,7 +196,8 @@ import UIKit
             container: MobileSize(width: view.bounds.width, height: view.bounds.height),
             safeArea: MobileInsets(top: insets.top, left: insets.left, bottom: insets.bottom, right: insets.right),
             hasRate: session.snapshot.releaseRate != nil,
-            skillCount: session.snapshot.skills.count
+            skillCount: session.snapshot.skills.count,
+            reservedRegions: MobileSystemRegions.read(in: view)
         )
     }
 
@@ -306,9 +333,16 @@ import UIKit
             hud.updateMinimap(frame: frame, visible: playfieldView.gameViewport.visibleLevelRect,
                               levelSize: session.levelSize)
             if let point = previewPoint, let target = highlightedTarget {
+                let finger = playfieldView.convert(CGPoint(x: point.x, y: point.y), to: view)
+                let field = playfieldView.frame
+                let free = MobileDisplayRegions.freeFrames(
+                    in: MobileRect(x: field.minX, y: field.minY, width: field.width, height: field.height),
+                    avoiding: lastHUDLayout?.reservedRegions ?? [])
+                let containing = free.filter { $0.contains(MobilePoint(x: finger.x, y: finger.y)) }
+                let area = (containing.isEmpty ? free : containing).max { $0.width * $0.height < $1.width * $1.height }
                 touchLoupe.update(bitmap: frame, target: target.point,
-                                  finger: playfieldView.convert(CGPoint(x: point.x, y: point.y), to: view),
-                                  bounds: playfieldView.frame,
+                                  finger: finger,
+                                  bounds: area.map(Self.cgRect) ?? .zero,
                                   pixelAspect: session.engineIdentifier == "classic-dos" ? 1.2 : 1)
             } else {
                 touchLoupe.isHidden = true
@@ -323,6 +357,18 @@ import UIKit
         }
     }
 
+    private func suspendAudio() {
+        audio.suspend()
+        MobileMusic.shared.suspend()
+    }
+
+    /// Reactivates the session, then starts this level's tune or lifts its pause.
+    private func resumeAudio() {
+        try? audio.resume()
+        MobileMusic.shared.play(identifier: session.levelIdentifier, index: summary.index, title: summary.title)
+        MobileMusic.shared.resume()
+    }
+
     private func pausePlay(showControls: Bool) {
         playState.suspend()
         playfieldView.cancelInteraction()
@@ -330,7 +376,7 @@ import UIKit
         highlightedTarget = nil
         touchLoupe.isHidden = true
         clock.suspend()
-        audio.suspend()
+        suspendAudio()
         updateHUD()
         guard showControls else { return }
         showOverlay(
@@ -349,24 +395,26 @@ import UIKit
         highlightedTarget = nil
         touchLoupe.isHidden = true
         clock.suspend()
-        audio.suspend()
+        suspendAudio()
         renderCurrentFrame(force: true)
         updateHUD()
     }
 
     private func resumePlay() {
-        guard !session.snapshot.isComplete,
+        guard hudLayout(insets: view.safeAreaInsets).canPlay, !session.snapshot.isComplete,
               playState.resume(isForeground: lifecycle.isForeground, isInterrupted: lifecycle.isInterrupted) else { return }
         let needsLifecycleResume = lifecycle.requiresPlayerResume
         if needsLifecycleResume {
             applyEffects(lifecycle.handle(.playerRequestedResume))
         }
         guard lifecycle.isForeground, !lifecycle.isInterrupted else { return }
-        if !needsLifecycleResume { try? audio.resume() }
+        if !needsLifecycleResume { resumeAudio() }
         clock.suspend()
         playfieldView.cancelInteraction()
         overlay.isHidden = true
         overlay.accessibilityViewIsModal = false
+        playfieldView.isUserInteractionEnabled = true
+        hud.isUserInteractionEnabled = true
         playfieldView.accessibilityElementsHidden = false
         hud.accessibilityElementsHidden = false
         updateHUD()
@@ -402,7 +450,8 @@ import UIKit
 
     private func finish(_ action: MobileGameExitAction) {
         displayLink?.isPaused = true
-        audio.suspend()
+        suspendAudio()
+        if action == .library { MobileMusic.shared.stop() }
         Task {
             try? await checkpointStore.retire(runID: runID)
             onExit?(action)
@@ -413,7 +462,7 @@ import UIKit
         playState.suspend()
         clock.suspend()
         displayLink?.isPaused = true
-        audio.suspend()
+        suspendAudio()
         guard !session.snapshot.isComplete else {
             finish(.library)
             return
@@ -424,6 +473,7 @@ import UIKit
             Task { [self] in
                 do {
                     try await checkpointStore.save(envelope)
+                    MobileMusic.shared.stop()
                     onExit?(.library)
                 } catch {
                     displayLink?.isPaused = false
@@ -485,14 +535,23 @@ import UIKit
 
     private func observeSystemState() {
         let centre = NotificationCenter.default
-        func observe(_ name: Notification.Name, _ event: MobileLifecycleEvent) {
-            observers.append(centre.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in
-                MainActor.assumeIsolated { self?.applyLifecycle(event) }
+        func observe(_ name: Notification.Name, _ event: MobileLifecycleEvent, sceneOnly: Bool = false) {
+            observers.append(centre.addObserver(forName: name, object: nil, queue: .main) { [weak self] notification in
+                let scene = notification.object as? UIWindowScene
+                MainActor.assumeIsolated {
+                    guard let self else { return }
+                    if sceneOnly {
+                        guard let scene,
+                              scene === (self.viewIfLoaded?.window?.windowScene ?? self.owningScene) else { return }
+                    }
+                    self.applyLifecycle(event)
+                }
             })
         }
-        observe(UIApplication.willResignActiveNotification, .becameInactive)
-        observe(UIApplication.didEnterBackgroundNotification, .enteredBackground)
-        observe(UIApplication.didBecomeActiveNotification, .becameActive)
+        observe(UIScene.willDeactivateNotification, .becameInactive, sceneOnly: true)
+        observe(UIScene.didEnterBackgroundNotification, .enteredBackground, sceneOnly: true)
+        observe(UIScene.didActivateNotification, .becameActive, sceneOnly: true)
+        observe(UIScene.didDisconnectNotification, .sceneDisconnected, sceneOnly: true)
         observe(UIApplication.didReceiveMemoryWarningNotification, .memoryWarning)
         observers.append(centre.addObserver(
             forName: UIAccessibility.reduceMotionStatusDidChangeNotification,
@@ -537,12 +596,12 @@ import UIKit
             case let .saveCheckpoint(reason):
                 saveCheckpoint(reason: reason)
             case .suspendAudio:
-                audio.suspend()
+                suspendAudio()
             case .prepareAudio:
                 try? audio.prepare()
                 renderCurrentFrame(force: true)
             case .resumeAudio:
-                try? audio.resume()
+                resumeAudio()
             case .showResumeControl:
                 if overlay.isHidden { pausePlay(showControls: true) }
             case .purgeTransientResources:
@@ -604,7 +663,7 @@ import UIKit
     }
 
     func showPreparationError(_ message: String) {
-        showOverlay(title: message, actions: [("LIBRARY", { [weak self] in self?.onExit?(.library) })])
+        showOverlay(title: message, actions: [("LIBRARY", { [weak self] in MobileMusic.shared.stop(); self?.onExit?(.library) })])
     }
 
     private func showOverlay(title: String, actions: [(String, () -> Void)], results: Bool = false) {
@@ -632,6 +691,8 @@ import UIKit
         }
         overlay.isHidden = false
         overlay.accessibilityViewIsModal = true
+        playfieldView.isUserInteractionEnabled = false
+        hud.isUserInteractionEnabled = false
         playfieldView.accessibilityElementsHidden = true
         hud.accessibilityElementsHidden = true
         layoutOverlay()
@@ -640,11 +701,11 @@ import UIKit
 
     private func layoutOverlay() {
         guard !overlay.isHidden else { return }
-        let insets = view.safeAreaInsets
-        let width = max(280, overlay.bounds.width - insets.left - insets.right)
-        let size = overlayCanvas.size(width: width, minimumHeight: overlay.bounds.height - insets.top - insets.bottom)
-        overlayCanvas.frame = CGRect(x: insets.left, y: insets.top, width: size.width, height: size.height)
-        overlay.contentSize = CGSize(width: overlay.bounds.width, height: size.height + insets.top + insets.bottom)
+        let region = MobileSystemRegions.menuFrame(in: view)
+        overlay.frame = region
+        let size = overlayCanvas.size(width: max(280, region.width), minimumHeight: region.height)
+        overlayCanvas.frame = CGRect(origin: .zero, size: size)
+        overlay.contentSize = size
     }
 
     private static func cgRect(_ rect: MobileRect) -> CGRect {

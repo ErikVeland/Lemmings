@@ -55,25 +55,42 @@ public struct GameFrontEnd {
         let inset: CGFloat = width < 600 ? 14 : 32
         let boardWidth = min(1032, width - inset * 2)
         let x = (width - boardWidth) / 2
-        let headingHeight: CGFloat = page.home ? min(160, boardWidth * 0.28) : 64
-        let heading = CGRect(x: x + 20, y: 32, width: boardWidth - 40, height: headingHeight)
-        let subtitle = CGRect(x: x + 20, y: heading.maxY + 8, width: boardWidth - 40, height: 28)
-        var y = subtitle.maxY + 16
+        // A short, wide screen puts the preview beside its details so the actions stay in view.
+        let compact = page.preview && minimumHeight < 520 && width > minimumHeight * 1.3
+        let headingHeight: CGFloat = compact ? 40 : page.home ? min(160, boardWidth * 0.28) : 64
+        let heading = CGRect(x: x + 20, y: compact ? 28 : 32, width: boardWidth - 40, height: headingHeight)
+        let subtitle = CGRect(x: x + 20, y: heading.maxY + (compact ? 2 : 8), width: boardWidth - 40, height: compact ? 24 : 28)
+        var y = subtitle.maxY + (compact ? 8 : 16)
         var targets: [Target] = []
         for row in page.rows {
             targets.append(Target(action: row, frame: CGRect(x: x + 20, y: y, width: boardWidth - 40, height: 52)))
             y += 60
         }
         var preview = CGRect.zero
-        if page.preview {
-            let previewWidth = boardWidth - 40
-            preview = CGRect(x: x + 20, y: y, width: previewWidth, height: min(360, previewWidth / 2))
-            y = preview.maxY + 16
-        }
         var details: [CGRect] = []
-        for _ in page.details {
-            details.append(CGRect(x: x + 20, y: y, width: boardWidth - 40, height: 28))
-            y += 32
+        if compact {
+            let footerRows = Int(ceil(Double(page.footer.count) / Double(max(1, min(page.footerColumns ?? 3, max(1, page.footer.count))))))
+            let room = max(80, minimumHeight - y - CGFloat(footerRows) * 60 - 36)
+            let previewWidth = min((boardWidth - 40) * 0.55, room * 2)
+            preview = CGRect(x: x + 20, y: y, width: previewWidth, height: previewWidth / 2)
+            let side = boardWidth - 40 - previewWidth - 16
+            let block = CGFloat(page.details.count) * 32
+            var detailY = preview.midY - block / 2
+            for _ in page.details {
+                details.append(CGRect(x: preview.maxX + 16, y: detailY, width: side, height: 28))
+                detailY += 32
+            }
+            y = preview.maxY + 12
+        } else {
+            if page.preview {
+                let previewWidth = boardWidth - 40
+                preview = CGRect(x: x + 20, y: y, width: previewWidth, height: min(360, previewWidth / 2))
+                y = preview.maxY + 16
+            }
+            for _ in page.details {
+                details.append(CGRect(x: x + 20, y: y, width: boardWidth - 40, height: 28))
+                y += 32
+            }
         }
         let columns = max(1, min(page.footerColumns ?? (boardWidth >= 620 ? 3 : 2), max(1, page.footer.count)))
         let rows = Int(ceil(Double(page.footer.count) / Double(columns)))
@@ -81,8 +98,10 @@ public struct GameFrontEnd {
         y = max(y + 12, height - CGFloat(rows) * 60 - 24)
         let cell = (boardWidth - 40 - CGFloat(columns - 1) * 12) / CGFloat(columns)
         for (index, action) in page.footer.enumerated() {
+            // A lone action in the last row takes the whole row.
+            let alone = columns > 1 && index == page.footer.count - 1 && index % columns == 0
             targets.append(Target(action: action, frame: CGRect(x: x + 20 + CGFloat(index % columns) * (cell + 12),
-                y: y + CGFloat(index / columns) * 60, width: cell, height: 48)))
+                y: y + CGFloat(index / columns) * 60, width: alone ? boardWidth - 40 : cell, height: 48)))
         }
         return Layout(size: CGSize(width: width, height: height),
                       board: CGRect(x: x, y: 16, width: boardWidth, height: height - 32),
@@ -178,7 +197,7 @@ public struct GameFrontEnd {
         let top = box.midY - CGFloat(count) * height / 2
         for (index, value) in lines.prefix(count).enumerated() {
             line(value, box: CGRect(x: box.minX, y: top + CGFloat(index) * height, width: box.width, height: height),
-                 typography: typography, face: face, palette: .green, context: context)
+                 typography: typography, face: face, palette: .green, scale: 1, context: context)
         }
     }
 
@@ -198,8 +217,8 @@ public struct GameFrontEnd {
 
     private static func line(_ text: String, box: CGRect, typography: GameMenuTypography,
                              face: GameMenuTypography.Face = .small, palette: GameMenuTypography.Palette = .blue,
-                             alpha: CGFloat = 1, context: CGContext) {
-        let scale = face == .large && typography.width(of: GameMenuTypography.menuText(text), face: face, scale: 2) <= box.width ? 2 : 1
+                             alpha: CGFloat = 1, scale fixed: Int? = nil, context: CGContext) {
+        let scale = fixed ?? (face == .large && typography.width(of: GameMenuTypography.menuText(text), face: face, scale: 2) <= box.width ? 2 : 1)
         let height = typography.height(face: face, scale: scale)
         typography.menuLine(text, in: CGRect(x: box.minX, y: box.midY - height / 2, width: box.width, height: height),
                             context: context, face: face, scale: scale, alpha: alpha, palette: palette)

@@ -140,12 +140,12 @@
   {
     "area": "iPhone Duo adaptive layouts and live-session continuity",
     "priority": "P0",
-    "status": "not-implemented",
+    "status": "partial",
     "exitCriteria": "Verify every game across closed, open, tabletop, rotated and resized configurations using system reserved regions and availability-gated APIs. Keep fixed controls outside division and occlusion regions with at least 44-point targets. Preserve run identity, simulation, selected control, camera, progress and recovery. Cancel input across layout transitions and require explicit Resume when space cannot support play. Verify actual renders and input targets, accessibility order and reduced motion on the current Duo Simulator and hardware.",
     "scopes": [
       "all"
     ],
-    "progress": "10 October: the source only provides a bottom control grid based on the safe area. It has no Duo reserved-region adapter, edge-control or tabletop layout. The installed iOS 27.2 SDK declares reserved-region APIs from iOS 27.1. Source geometry and iPhone/iPad launch results do not certify Duo support."
+    "progress": "10 October: the source only provides a bottom control grid based on the safe area. It has no Duo reserved-region adapter, edge-control or tabletop layout. The installed iOS 27.2 SDK declares reserved-region APIs from iOS 27.1. Source geometry and iPhone/iPad launch results do not certify Duo support. 12 October: the source now reads availability-gated system division and occlusion regions, keeps fixed controls and scrolling pages clear, separates the level and console at horizontal divisions, preserves zoom/camera centre on unfold and pauses insufficient layouts until explicit Resume. A native pixel walker decorates menu unfolding only and respects reduced motion. 24 mobile core tests and 19 iOS tooling tests pass. Shared drawing validates 66 pages, 40 Classic HUD states, six cover artwork states and three unfold frames. The unsigned iOS app compiles. Dedicated one-thumb edge controls, native UIKit/perspective hit dispatch, VoiceOver, physical folds and full three-game acceptance remain open. See ReleaseReadiness/2.0AdaptiveUI-2026-10-12/README.md."
   },
   {
     "area": "iOS physical-device and accessibility acceptance",

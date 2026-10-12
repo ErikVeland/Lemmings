@@ -1,0 +1,176 @@
+warning: /Users/veland/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/veland/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'lemmings': failed storing manifest for 'lemmings' in cache: attempt to write a readonly database
+warning: 'sparkle': failed storing manifest for 'sparkle' in cache: attempt to write a readonly database
+Building for debugging...
+[Computing dependencies]
+[Using on-disk description]
+[1 / 24] LemmingsLocal-product
+[2 / 24] LemmingsGameArt
+[6 / 28] LemmingsGameArt
+[15 / 34] LemmingsMobileUI
+[24 / 42] LemmingsGameArt
+[30 / 43] LemmingsGameArt-product
+[30 / 44] LemmingsMobileMenuAudit-product
+[31 / 44] LemmingsMobileMenuAudit-product
+[33 / 44] LemmingsMobileMenuAudit-product
+[36 / 46] LemmingsMobileBetaTool-product
+[51 / 77] LemmingsLocal-product
+[52 / 77] LemmingsMobileBetaTool-product
+[53 / 77] LemmingsMobileBetaTool-product
+/Users/veland/Lemmings/Sources/LemmingsLocal/ReleaseWelcome.swift:48:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+46 |         scroll.hasHorizontalScroller = false
+47 |         scroll.drawsBackground = false
+48 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+49 |         scroll.scrollerStyle = .overlay
+50 |         scroll.setAccessibilityLabel("Release notes")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[56 / 77] LemmingsLocal-product
+[58 / 77] LemmingsLocal-product
+[59 / 77] LemmingsLocal-product
+[62 / 77] LemmingsLocal-product
+[63 / 77] LemmingsLocal-product
+[64 / 77] LemmingsLocal-product
+[65 / 77] LemmingsLocal-product
+[66 / 77] LemmingsLocal-product
+/Users/veland/Lemmings/Sources/LemmingsLocal/ReleaseWelcome.swift:48:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+46 |         scroll.hasHorizontalScroller = false
+47 |         scroll.drawsBackground = false
+48 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+49 |         scroll.scrollerStyle = .overlay
+50 |         scroll.setAccessibilityLabel("Release notes")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[67 / 77] LemmingsLocal-product
+[68 / 77] LemmingsLocal-product
+[70 / 79] LemmingsLocal-product
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6081:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6079 |       openPanel.canChooseFiles = true
+6080 |       openPanel.canChooseDirectories = false
+6081 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6082 |       openPanel.message = "Choose a NeoLemmix level file."
+6083 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:7391:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7389 |       openPanel.canChooseFiles = true
+7390 |       openPanel.canChooseDirectories = false
+7391 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7392 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+7393 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8098:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8096 |     keyboard.controllerRewindHeld = { [weak self] held in
+8097 |       guard let self else { return }
+8098 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8099 |       else if self.rewindHeld { self.endContinuousRewind() }
+8100 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[70 / 79] LemmingsLocal
+[71 / 79] LemmingsLocal
+[71 / 78] LemmingsLocal-product
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6081:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6079 |       openPanel.canChooseFiles = true
+6080 |       openPanel.canChooseDirectories = false
+6081 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6082 |       openPanel.message = "Choose a NeoLemmix level file."
+6083 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:7391:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7389 |       openPanel.canChooseFiles = true
+7390 |       openPanel.canChooseDirectories = false
+7391 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7392 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+7393 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8098:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8096 |     keyboard.controllerRewindHeld = { [weak self] held in
+8097 |       guard let self else { return }
+8098 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8099 |       else if self.rewindHeld { self.endContinuousRewind() }
+8100 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[73 / 80] LemmingsLocal-product
+[76 / 81] LemmingsLocalTests-product
+[85 / 90] LemmingsLocalTests-product
+[87 / 90] LemmingsLocalTests-product
+[89 / 90] LemmingsLocalTests-product
+[92 / 92] LemmingsLocalTests-product
+Build complete! (12.68 sec.)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite MobileCoreTests started.
+􀟈  Suite MobileBitmapTests started.
+􀟈  Suite MobileAdaptiveLayoutTests started.
+􀟈  Test bitmapCameraMatchesTouchAfterPanZoomAndRotation() started.
+􀟈  Test viewportZoomKeepsTheGestureAnchorStable() started.
+􀟈  Test lifecycleSavesOnceAndRequiresExplicitResume() started.
+􀟈  Test fixedTickClockDropsSuspensionTime() started.
+􀟈  Test touchRouterDoesNotAssignAfterAPan() started.
+􀟈  Test contentImportStagesBeforeCommitAndPreservesTheLiveCopyOnFailure() started.
+􀟈  Test sequelSessionsReplayTheirInputCheckpoints() started.
+􀟈  Test checkpointFallsBackToTheLastValidatedCopy() started.
+􀟈  Test safeAreaLayoutKeepsTouchTargetsOnScreen() started.
+􀟈  Test heldTouchCommitsButCancellationAndReleaseOnlyDragDoNot() started.
+􀟈  Test allThreeGamesAssignDuringPlanningWithoutAdvancingTime() started.
+􀟈  Test loupeKeepsExactPixelsAndClipsAtLevelEdges() started.
+􀟈  Test completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test classicJumpingRisesAcrossTheRemainingStepPixel() started.
+􀟈  Test unfoldingRevealsTerrainWithoutChangingZoomOrCameraCentre() started.
+􀟈  Test planningDoesNotBypassReadyInterruptionOrResults() started.
+􀟈  Test touchTargetingPrefersEligibilityFollowersAndTools() started.
+􀟈  Test classicSessionRestoresTheExactTick() started.
+􀟈  Test checkpointRejectsAnOlderWriter() started.
+􀟈  Test previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􀟈  Test menusStayClearOfDivisionAndOcclusionWhileScrolling() started.
+􀟈  Test wideIPadUsesOriginalPanelAndTinyViewsSuspend() started.
+􀟈  Test controlDeckAvoidsSystemRegionsAcrossEngineControlSets() started.
+􀟈  Test case passing 1 argument engine → "classic-dos" to completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test thermalPolicyNeverChangesSimulationRules() started.
+􀟈  Test case passing 1 argument engine → "classic-dos" to previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings2" to completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to completedRunRejectsLateCheckpointWrites(engine:) started.
+􀟈  Test case passing 1 argument engine → "lemmings3" to previousRunCleanupPreservesRetryCheckpoint(engine:) started.
+􁁛  Test fixedTickClockDropsSuspensionTime() passed after 0.001 seconds.
+􁁛  Test heldTouchCommitsButCancellationAndReleaseOnlyDragDoNot() passed after 0.001 seconds.
+􁁛  Test viewportZoomKeepsTheGestureAnchorStable() passed after 0.001 seconds.
+􁁛  Test touchRouterDoesNotAssignAfterAPan() passed after 0.001 seconds.
+􁁛  Test planningDoesNotBypassReadyInterruptionOrResults() passed after 0.001 seconds.
+􁁛  Test unfoldingRevealsTerrainWithoutChangingZoomOrCameraCentre() passed after 0.001 seconds.
+􁁛  Test lifecycleSavesOnceAndRequiresExplicitResume() passed after 0.001 seconds.
+􁁛  Test touchTargetingPrefersEligibilityFollowersAndTools() passed after 0.001 seconds.
+􁁛  Test menusStayClearOfDivisionAndOcclusionWhileScrolling() passed after 0.001 seconds.
+􁁛  Test safeAreaLayoutKeepsTouchTargetsOnScreen() passed after 0.001 seconds.
+􁁛  Test wideIPadUsesOriginalPanelAndTinyViewsSuspend() passed after 0.001 seconds.
+􁁛  Test classicJumpingRisesAcrossTheRemainingStepPixel() passed after 0.001 seconds.
+􁁛  Test thermalPolicyNeverChangesSimulationRules() passed after 0.001 seconds.
+􁁛  Test loupeKeepsExactPixelsAndClipsAtLevelEdges() passed after 0.002 seconds.
+􁁛  Test controlDeckAvoidsSystemRegionsAcrossEngineControlSets() passed after 0.003 seconds.
+􁁛  Suite MobileAdaptiveLayoutTests passed after 0.003 seconds.
+􁁛  Test classicSessionRestoresTheExactTick() passed after 0.006 seconds.
+􁁛  Test allThreeGamesAssignDuringPlanningWithoutAdvancingTime() passed after 0.011 seconds.
+􁁛  Test contentImportStagesBeforeCommitAndPreservesTheLiveCopyOnFailure() passed after 0.012 seconds.
+􁁛  Test completedRunRejectsLateCheckpointWrites(engine:) with 3 test cases passed after 0.014 seconds.
+􁁛  Test checkpointRejectsAnOlderWriter() passed after 0.014 seconds.
+􁁛  Test sequelSessionsReplayTheirInputCheckpoints() passed after 0.016 seconds.
+􁁛  Test previousRunCleanupPreservesRetryCheckpoint(engine:) with 3 test cases passed after 0.017 seconds.
+􁁛  Test checkpointFallsBackToTheLastValidatedCopy() passed after 0.018 seconds.
+􁁛  Suite MobileCoreTests passed after 0.018 seconds.
+􁁛  Test bitmapCameraMatchesTouchAfterPanZoomAndRotation() passed after 0.042 seconds.
+􁁛  Suite MobileBitmapTests passed after 0.043 seconds.
+􁁛  Test run with 24 tests in 3 suites passed after 0.043 seconds.

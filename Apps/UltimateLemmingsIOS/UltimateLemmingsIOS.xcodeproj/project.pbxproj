@@ -102,6 +102,8 @@
 				100000000000000000000042 /* Resources */,
 				100000000000000000000044 /* Beta content */,
 				100000000000000000000045 /* Mac artwork */,
+				100000000000000000000046 /* Level catalogue */,
+				100000000000000000000047 /* Slim music */,
 			);
 			buildRules = ();
 			dependencies = ();
@@ -200,6 +202,30 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "python3 \"$SRCROOT/../../Tools/IOSBeta/artwork.py\" --source \"${IOS_MAC_ARTWORK_DIR:-$SRCROOT/../../.build/mac-artwork/export/lemmings}\" --destination \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/MacArtwork/lemmings\"\n";
+		};
+		100000000000000000000046 /* Level catalogue */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = ();
+			inputPaths = ();
+			name = "Level catalogue";
+			outputPaths = ();
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "python3 \"$SRCROOT/../../Tools/IOSBeta/packs.py\" --resources \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH\"\n";
+		};
+		100000000000000000000047 /* Slim music */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = ();
+			inputPaths = ();
+			name = "Slim music";
+			outputPaths = ();
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "python3 \"$SRCROOT/../../Tools/IOSBeta/music.py\" --app \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

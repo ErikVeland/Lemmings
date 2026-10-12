@@ -30,6 +30,15 @@ public protocol MobileGameLibrary: AnyObject {
     var displayName: String { get }
     var levels: [MobileLevelSummary] { get }
     func loadLevel(at index: Int) throws -> MobileLevelContent
+    /// A key for the level that survives a pack gaining or losing other levels.
+    func levelKey(at index: Int) -> String
+}
+
+public extension MobileGameLibrary {
+    func levelKey(at index: Int) -> String {
+        guard levels.indices.contains(index) else { return "" }
+        return "\(levels[index].rank)/\(levels[index].number)"
+    }
 }
 
 public typealias ClassicMobileLevelSummary = MobileLevelSummary

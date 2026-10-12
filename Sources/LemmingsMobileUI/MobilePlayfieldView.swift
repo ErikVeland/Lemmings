@@ -3,6 +3,7 @@ import LemmingsMobileCore
 import UIKit
 
 @MainActor final class MobilePlayfieldView: UIView, UIGestureRecognizerDelegate {
+    var blockedInputFrames: [CGRect] = []
     var onTouchEffects: (([MobileTouchEffect]) -> Void)?
     var onViewportChanged: ((MobileViewport) -> Void)?
 
@@ -65,9 +66,11 @@ import UIKit
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        guard bounds.width > 1, bounds.height > 1 else { return }
         let size = MobileSize(width: bounds.width, height: bounds.height)
         if automaticallyFitsViewport {
             gameViewport.fitGameplay(in: size)
+            automaticallyFitsViewport = false
         } else {
             gameViewport.resize(size)
         }
@@ -77,6 +80,8 @@ import UIKit
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard activeTouchID == nil, let touch = touches.first else { return }
+        let initial = touch.location(in: self)
+        guard !blockedInputFrames.contains(where: { $0.contains(initial) }) else { return }
         let id = ObjectIdentifier(touch).hashValue
         activeTouchID = id
         let point = touch.location(in: self)
@@ -99,6 +104,10 @@ import UIKit
               let touch = touches.first(where: { ObjectIdentifier($0).hashValue == id }) else { return }
         activeTouchID = nil
         let point = touch.location(in: self)
+        guard !blockedInputFrames.contains(where: { $0.contains(point) }) else {
+            onTouchEffects?(router.cancel())
+            return
+        }
         onTouchEffects?(router.ended(
             id: id,
             at: MobilePoint(x: point.x, y: point.y),

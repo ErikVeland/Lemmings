@@ -50,32 +50,12 @@ public final class ClassicMobileLibrary: MobileGameLibrary {
             specials[level.specialStyle] = loaded
             special = loaded
         }
-        let rendered = try ClassicLevelRenderer.render(
-            level,
-            groundSet: ground,
-            specialGraphic: special
-        )
-        let mechanics = ClassicDOSMechanics(title: dataSet.title, rank: entry.rank)
-        let simulation = try ClassicDOSSimulation(
-            level: level,
-            renderedLevel: rendered,
-            mainDATAssets: assets,
-            mechanics: mechanics
-        )
-        let palette = try ClassicLemmingPalette.inLevelVGA(terrainPalette: ground.terrainPalette)
-        let summary = levels[index]
-        return MobileLevelContent(
-            summary: summary,
-            session: ClassicMobileSession(
-                simulation: simulation,
-                renderedLevel: rendered,
-                assets: assets,
-                palette: palette,
-                levelIdentifier: "\(dataSet.identifierKey)/\(entry.rank)/\(entry.number)",
-                levelIndex: index,
-                startX: level.startX
-            )
-        )
+        return try ClassicMobileSession.makeContent(
+            summary: levels[index], level: level, ground: ground, special: special, assets: assets,
+            mechanics: ClassicDOSMechanics(title: dataSet.title, rank: entry.rank),
+            objectSemantics: .dos,
+            levelIdentifier: "\(dataSet.identifierKey)/\(entry.rank)/\(entry.number)",
+            levelIndex: index)
     }
 }
 
@@ -102,6 +82,39 @@ public final class ClassicMobileSession: MobileGameSession {
     private let palette: [ClassicRGBColor]
     private var simulation: ClassicDOSSimulation
     private var beforeEndRun: ClassicDOSSimulation?
+
+    /// Renders a level, starts its simulation and wraps both in a session.
+    ///
+    /// Every Classic-engine library goes through here, so official releases and
+    /// fan packs share one construction path.
+    public static func makeContent(
+        summary: MobileLevelSummary,
+        level: ClassicLevel,
+        ground: ClassicGroundSet,
+        special: ClassicSpecialGraphic?,
+        assets: ClassicMainDATAssets,
+        mechanics: ClassicDOSMechanics,
+        objectSemantics: ClassicObjectSemantics,
+        clock: ClassicDOSClock = .dos,
+        levelIdentifier: String,
+        levelIndex: Int
+    ) throws -> MobileLevelContent {
+        let rendered = try ClassicLevelRenderer.render(
+            level, groundSet: ground, specialGraphic: special, objectSemantics: objectSemantics)
+        let simulation = try ClassicDOSSimulation(
+            level: level, renderedLevel: rendered, mainDATAssets: assets, mechanics: mechanics, clock: clock)
+        let palette = try ClassicLemmingPalette.inLevelVGA(terrainPalette: ground.terrainPalette)
+        return MobileLevelContent(
+            summary: summary,
+            session: ClassicMobileSession(
+                simulation: simulation,
+                renderedLevel: rendered,
+                assets: assets,
+                palette: palette,
+                levelIdentifier: levelIdentifier,
+                levelIndex: levelIndex,
+                startX: level.startX))
+    }
 
     public init(
         simulation: ClassicDOSSimulation,
