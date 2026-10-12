@@ -1,0 +1,14 @@
+classic-0 0
+classic-1 0
+classic-3 0
+classic-2 0
+classic-4 0
+classic-5 0
+classic-6 0
+classic-7 0
+l3 0
+ports 0
+l2 0
+Audited 562 levels (615 configurations): {'VERIFIED': 247, 'OBSERVED': 297, 'UNKNOWN': 18}
+Packaged 294 exact-condition certificates and 303 best-known rescue targets.
+PASS 294 proofs, 303 rescue records, and replay hashes

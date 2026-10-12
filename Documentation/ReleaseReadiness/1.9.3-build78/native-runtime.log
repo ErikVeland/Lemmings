@@ -1,0 +1,32 @@
+UI test windows: offscreen; audio: muted
+PASS hourly checks, startup alerts, discovery/download reminders, busy icon/menu checks, automatic notes, session cleanup and retry without restart
+PASS release notes stay clipped and scrollable at three sizes; Continue remains visible and usable
+PASS community placement validation and saved Solo/Hot Seat migration
+PASS new solo and Hot Seat journeys start at the first curated lesson despite prior player progress; handover remains paused
+PASS Floating Down! uses Holiday snow artwork, retains collision through graphics changes; the current second lesson shows JOURNEY 2
+PASS classic Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS classic-pack ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS classic-false native golden rim capture and restrained pixel coverage
+PASS classic Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS classic-pack ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS classic-true native golden rim capture and restrained pixel coverage
+PASS lemmings2 Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS lemmings2-pack ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS lemmings2-false native golden rim capture and restrained pixel coverage
+PASS lemmings2 Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS lemmings2-pack ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS lemmings2-true native golden rim capture and restrained pixel coverage
+PASS lemmings3 Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS lemmings3-pack ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS lemmings3-false native golden rim capture and restrained pixel coverage
+PASS lemmings3 Menu renders, targets, Q/Escape, inactive-result input, repeat and modifier/text guards
+PASS lemmings3-pack ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS lemmings3-true native golden rim capture and restrained pixel coverage
+PASS all three engine completion callbacks persist Journey wins before Next, preserve turn ownership and reject stale results; result Menu/Q/Escape exit
+PASS persisted Classic/L2/L3 three-star precision rewards, wallet balances, bitmap captions and accessibility at compact/large sizes
+PASS lemmings-unplayed ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS lemmings2-unplayed ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS lemmings3-unplayed ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS neolemmix-unplayed ordered Records neighbours, unplayed boards, pointer/key actions and disabled endpoints at compact/large sizes
+PASS catalogue song/source names, variant changes, Now Playing bitmap renders, expiry, accessibility, silence and pointer pass-through
+Celebration music, golden glow and result-input integration tests passed.

@@ -14,12 +14,13 @@ Automated evidence supports the recorded native routes. Original-engine
 fidelity, high-survivor endings and hardware acceptance retain their recorded
 limits. See the [gate register](ReleaseReadiness/gates.json).
 
-The 1.9.2 build 77 macOS maintenance release is signed, notarised and public.
-Its full updater, slim download and signed build-76 delta pass publication
-checks. It restores completion celebrations, precision rewards and gameplay
-navigation while retaining the 1.9 game classifications and limits. See the
-[1.9.2 distribution record](ReleaseReadiness/1.9.2Build77Distribution.md) and
-[release notes](ReleaseNotes-1.9.2-build77.md).
+The 1.9.3 build 78 macOS maintenance release is signed, notarised and public.
+Its full updater, slim download and signed build-77 delta pass publication
+checks. It adds golden sprite auras, calmer full-rescue celebrations,
+Accessibility options and visible update reminders while retaining the current
+game classifications and limits. See the
+[1.9.3 distribution record](ReleaseReadiness/1.9.3Build78Distribution.md) and
+[release notes](ReleaseNotes-1.9.3-build78.md).
 
 ## iOS 2.0 launch scope
 
