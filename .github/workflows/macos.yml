@@ -27,7 +27,7 @@ jobs:
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode_16.4.app
       - name: Shared regression tests
-        run: zsh Scripts/run-swift-tests.sh --disable-sandbox
+        run: zsh Scripts/run-source-tests.sh
       - name: Universal Release executable
         run: swift build --disable-sandbox -c release --arch arm64 --arch x86_64 --product LemmingsLocal
       - name: Release and iOS distribution tooling

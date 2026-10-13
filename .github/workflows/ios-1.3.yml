@@ -34,7 +34,7 @@ jobs:
         run: zsh Scripts/check-1.3-mobile.sh --require-sdk
 
   ui-matrix:
-    name: Launch and rotate (${{ matrix.device }})
+    name: Layout and lifecycle (${{ matrix.device }})
     needs: source-gate
     runs-on: macos-15
     timeout-minutes: 30
