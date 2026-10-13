@@ -60,9 +60,20 @@ jobs:
 
       - name: Run iOS layout and lifecycle tests
         run: |
+          result_bundle="$RUNNER_TEMP/ios-${{ matrix.device }}.xcresult"
           xcodebuild test \
             -project Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj \
             -scheme UltimateLemmingsIOS \
             -destination "platform=iOS Simulator,id=${{ steps.simulator.outputs.id }}" \
             -only-testing:UltimateLemmingsIOSUITests/MobileCoreIOSSmokeTests \
+            -resultBundlePath "$result_bundle" \
             CODE_SIGNING_ALLOWED=NO
+
+      - name: Retain iOS test diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-${{ matrix.device }}-test-results
+          path: ${{ runner.temp }}/ios-${{ matrix.device }}.xcresult
+          if-no-files-found: ignore
+          retention-days: 7
