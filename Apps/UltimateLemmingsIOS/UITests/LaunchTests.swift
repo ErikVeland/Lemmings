@@ -9,7 +9,7 @@ final class LaunchTests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
 
-        let importButton = app.buttons["IMPORT GAME DATA"]
+        let importButton = app.buttons["Import original game data"]
         XCTAssertTrue(importButton.waitForExistence(timeout: 5))
         XCTAssertTrue(importButton.isHittable)
 

@@ -1,0 +1,20 @@
+{
+  "expected" : {
+    "lost" : 4,
+    "reserves" : 27,
+    "saved" : 10,
+    "stateHash" : "8273b00f10a1f8ace9d702b6696636a87a5c0c936122d6ab01dfcc41622cf71f",
+    "ticks" : 8000
+  },
+  "initialStateHash" : "c76e27e86bfcf7d76ab3747e21cd115ad055a1db3a9d7f391e8275d370a6177e",
+  "inputs" : [
+    {
+      "action" : "abort",
+      "tick" : 8000
+    }
+  ],
+  "level" : 119,
+  "levelSHA256" : "865a628a60295bc9f98ae884ff1412bee299d91e199114f46fe62f1a959e7d85",
+  "population" : 37,
+  "version" : 1
+}

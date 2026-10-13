@@ -1,0 +1,105 @@
+{
+  "expected" : {
+    "lost" : 11,
+    "reserves" : 12,
+    "saved" : 1,
+    "stateHash" : "d19ae5259b385234d20dd944f20236abd900971aee0f50b88d75cb3934dac1de",
+    "ticks" : 9660
+  },
+  "initialStateHash" : "918e907cf5f439affe6bf80c5fc617410ee886db6d19b7b16c223f823da03fac",
+  "inputs" : [
+    {
+      "action" : "jumper",
+      "lemming" : 2,
+      "tick" : 126
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 2,
+      "tick" : 540
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 2,
+      "tick" : 740
+    },
+    {
+      "action" : "drop",
+      "lemming" : 2,
+      "tick" : 1000
+    },
+    {
+      "action" : "walker",
+      "lemming" : 2,
+      "tick" : 1007
+    },
+    {
+      "action" : "use",
+      "direction" : "left",
+      "lemming" : 2,
+      "tick" : 1008
+    },
+    {
+      "action" : "drop",
+      "lemming" : 2,
+      "tick" : 1174
+    },
+    {
+      "action" : "walker",
+      "lemming" : 2,
+      "tick" : 1218
+    },
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 2,
+      "tick" : 1230
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 2,
+      "tick" : 1239
+    },
+    {
+      "action" : "use",
+      "direction" : "left",
+      "lemming" : 2,
+      "tick" : 1252
+    },
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 2,
+      "tick" : 1254
+    },
+    {
+      "action" : "use",
+      "direction" : "up",
+      "lemming" : 2,
+      "tick" : 1287
+    },
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 2,
+      "tick" : 1480
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 2,
+      "tick" : 1489
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 2,
+      "tick" : 1490
+    }
+  ],
+  "level" : 28,
+  "levelSHA256" : "5befc0d948229f6a5c27ef8d42eec7cc626d24fe39649a08e376912b7588749f",
+  "population" : 22,
+  "version" : 1
+}

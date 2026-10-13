@@ -95,6 +95,12 @@ stable touch targeting, input routing, lifecycle state, fixed-tick clocks,
 thermal presentation budgets, versioned checkpoints and typed engine sessions.
 It does not import UIKit, Metal or AVFoundation.
 
+For 2.0, keep gameplay actions behind one typed input contract. The UIKit
+adapters detect touch, Apple Pencil, pointer, keyboard and accessibility input;
+the core resolves target selection and eligibility; each source then invokes
+the same gameplay action. Add Game Controller routing at the platform boundary.
+Input-source details must not change engine rules or deterministic tick order.
+
 Classic, Lemmings 2 and Lemmings 3 sessions implement the same contract. The
 Classic session includes the current player-facing pixel renderer. The sequel
 sessions expose deterministic input/checkpoint seams, but the 1.3 app does not
@@ -105,7 +111,10 @@ claim player-facing sequel import or rendering.
 `LemmingsMobileUI` owns UIKit, MetalKit, AVFAudio, the system document picker,
 application support paths and mobile view-controller flow. It converts typed
 mobile-core state into pixel controls and a nearest-neighbour Metal playfield.
-It must not own engine rules.
+It must not own engine rules. Its 2.0 input adapters translate UIKit and Game
+Controller events to the shared mobile-core input contract. Platform event
+recognition stays here; target preference, eligibility and action semantics stay
+in `LemmingsMobileCore`.
 
 `Apps/UltimateLemmingsIOS` is the thin iOS executable, metadata, asset catalogue
 and UI-test target. Version 1.3 imports a player-owned Classic DOS folder into a

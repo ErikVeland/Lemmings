@@ -75,6 +75,12 @@ public struct MobileViewport: Codable, Equatable, Sendable {
         clamp()
     }
 
+    /// Applies the first real view size without moving a restored camera origin.
+    public mutating func resizeKeepingOrigin(_ size: MobileSize) {
+        viewSize = MobileSize(width: max(1, size.width), height: max(1, size.height))
+        clamp()
+    }
+
     /// Fits the original gameplay window when a view receives its first size.
     public mutating func fitGameplay(in size: MobileSize) {
         viewSize = MobileSize(width: max(1, size.width), height: max(1, size.height))

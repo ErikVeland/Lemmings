@@ -678,7 +678,7 @@ public struct Lemmings3Runtime: Sendable {
             if [.walking, .falling, .floating, .jumping, .swimming].contains(lem.state) {
                 for pickupIndex in pickups.indices where pickups[pickupIndex].quantity > 0 {
                     let box = pickups[pickupIndex]
-                    let overlaps = lem.x >= box.x && lem.x < box.x + 8 && lem.y > box.y && lem.y <= box.y + 12
+                    let overlaps = lem.x >= box.x && lem.x < box.x + 8 && lem.y >= box.y && lem.y <= box.y + 12
                     if box.ignoredBy == lem.id {
                         if !overlaps { pickups[pickupIndex].ignoredBy = nil }
                         continue
