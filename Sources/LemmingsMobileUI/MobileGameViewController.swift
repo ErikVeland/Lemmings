@@ -160,6 +160,7 @@ struct MobileGameTurn {
             self.nowPlaying.show(title: title, soundtrack: soundtrack)
         }
         hud.playerName = turn?.ownerName
+        overlayCanvas.playerName = turn?.ownerName
         playfieldView.displaySettings = gameSettings.classic
         configureOverlay()
 
@@ -1047,7 +1048,7 @@ struct MobileGameTurn {
             guard let replay = try session.makeReplaySession(document: document) else { return }
             pausePlay(showControls: false)
             let player = MobileGameViewController(summary: summary, session: replay,
-                checkpointStore: checkpointStore, restoredCheckpoint: nil)
+                checkpointStore: checkpointStore, restoredCheckpoint: nil, turn: turn)
             player.modalPresentationStyle = .fullScreen
             present(player, animated: false)
         } catch {

@@ -6,6 +6,8 @@ import UIKit
 /// The artwork and UIKit targets share one layout, including disabled controls.
 @MainActor final class MobileMenuCanvas: UIView {
     var page = GameFrontEnd.Page(title: "Lemmings") { didSet { rebuild() } }
+    var playerName: String? { didSet { if oldValue != playerName { rebuild() } } }
+    private var displayedPage: GameFrontEnd.Page { MobileTurnArt.page(page, playerName: playerName) }
     var preview: CGImage? { didSet { setNeedsDisplay() } }
     var resultStars: Int? { didSet { setNeedsDisplay() } }
     var revealedStars = 3 { didSet { setNeedsDisplay() } }
@@ -34,11 +36,12 @@ import UIKit
     }
     func size(width: CGFloat, minimumHeight: CGFloat) -> CGSize {
         let scale = interfaceScale(width: width)
-        let size = GameFrontEnd.layout(page, width: width / scale, minimumHeight: minimumHeight / scale).size
+        let size = GameFrontEnd.layout(displayedPage, width: width / scale, minimumHeight: minimumHeight / scale).size
         return CGSize(width: size.width * scale, height: size.height * scale)
     }
     override func layoutSubviews() {
         super.layoutSubviews()
+        let page = displayedPage
         let scale = interfaceScale(width: bounds.width)
         let transform = CGAffineTransform(scaleX: scale, y: scale)
         let layout = GameFrontEnd.layout(page, width: bounds.width / scale, minimumHeight: bounds.height / scale)
@@ -120,6 +123,7 @@ import UIKit
     }
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
+        let page = displayedPage
         let scale = interfaceScale(width: bounds.width)
         context.saveGState()
         defer { context.restoreGState() }

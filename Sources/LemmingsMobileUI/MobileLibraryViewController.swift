@@ -247,6 +247,7 @@ import UniformTypeIdentifiers
         game?.view.frame = view.bounds
     }
     func rebuild() {
+        canvas.playerName = hotSeat.map { playerName($0.turn) }
         unfold.stop()
         let count = library?.levels.count ?? 0
         let subtitle = loading ? "Loading..." : notice
@@ -410,6 +411,7 @@ import UniformTypeIdentifiers
 
     /// iPad keeps the Mac carousel in both orientations. Narrow panes use the stacked page.
     private func syncPages() {
+        browser.playerName = hotSeat.map { playerName($0.turn) }
         let available = MobileSystemRegions.menuFrame(in: view)
         let coverBrowser = available.width >= 600 && available.height >= 300 && !(library is MobileJourneyLibrary)
         let show = game == nil && route == .levels && coverBrowser && library != nil
@@ -738,7 +740,13 @@ import UniformTypeIdentifiers
                       checkpoint.levelFingerprint == content.session.levelFingerprint else { throw MobileSessionError.changedLevel }
                 // A shared run resumes only in its own session, with the player who started it.
                 guard checkpointMatchesSession(checkpoint) else { throw MobileSessionError.changedLevel }
-                if let owner = checkpoint.owner, hotSeat?.players.contains(owner) == true { handOver(to: owner) }
+                if let owner = checkpoint.owner, hotSeat?.players.contains(owner) == true {
+                    guard handOver(to: owner) else {
+                        if let game { game.showPreparationError(notice) }
+                        else { rebuild() }
+                        return
+                    }
+                }
             }
             levelStarted(index)
             // Playlist and shuffle results do not advance campaign or pack progress.
