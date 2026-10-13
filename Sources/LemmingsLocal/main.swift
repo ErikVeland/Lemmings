@@ -643,6 +643,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private let cloudTransport = AppleGameProgressTransport()
   private var cloudProgress: GameCenterProgressSync?
+  private let libraryCloudTransport = AppleCloudLibraryTransport()
+  private var libraryCloud: CloudLibrarySync?
+  private var libraryCloudView: CloudLibraryView?
   private var cloudAuthentication: NSViewController?
   private var cloudAuthenticationSheet: NSWindow?
   private func presentCloudAuthentication() {
@@ -693,7 +696,35 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
       self.refreshSequelProgress(); self.rebuildLibrary(); self.renderScreen()
     }
-    ArcadeStore.shared.onProgressChanged = { [weak service] in service?.requestSync() }
+    let library = CloudLibrarySync(store: ArcadeStore.shared, transport: libraryCloudTransport)
+    libraryCloud = library
+    library.canImport = { [weak self] in
+      guard let self, self.cloudCanImport else { return false }
+      return !GameScreen.shared.isPresented || self.libraryCloudView.map { GameScreen.shared.contains($0) } == true
+    }
+    library.captureExtra = { [weak self] profileID, seatID in
+      guard let self else { return .init() }
+      var extra = GameProgressPreferences()
+      for entry in self.dataSets {
+        guard let title = entry.set.title, !self.dataSetID(entry).contains(":source-") else { continue }
+        let base = "\(flowProgressKey).\(entry.set.identifierKey)"
+        let key = seatID.map { "HotSeat.\($0).\(base)" } ?? ArcadeStore.progressKey(base, profileID: profileID)
+        guard let data = UserDefaults.standard.data(forKey: key),
+          let saved = try? JSONDecoder().decode(ClassicGameFlow.Progress.self, from: data) else { continue }
+        let passed = Set(saved.passed)
+        extra.addCompleted(entry.set.campaign.levels.enumerated().compactMap { index, level in
+          passed.contains("\(level.rank)#\(level.number - 1)") ? index : nil
+        }, pack: "release/" + title.rawValue)
+      }
+      return extra
+    }
+    library.onImported = service.onImported
+    library.onChange = { [weak self] in self?.libraryCloudView?.needsDisplay = true }
+    ArcadeWindow.shared.arcadeView.onCloudSaves = { [weak self] in self?.showCloudSaves() }
+    ArcadeStore.shared.onProgressChanged = { [weak service, weak library] in
+      library?.requestSync()
+      if library?.enabled == true { service?.requestSync() }
+    }
     cloudTransport.onChange = { [weak self, weak service] in
       if let sheet = self?.cloudAuthenticationSheet {
         sheet.sheetParent?.endSheet(sheet); sheet.close(); self?.cloudAuthenticationSheet = nil
@@ -701,8 +732,24 @@ let achievementProgressKey = "ClassicAchievementProgress"
       service?.requestSync()
     }
     cloudTransport.start { [weak self] controller in self?.cloudAuthentication = controller; self?.presentCloudAuthentication() }
+    library.start()
   }
-  func applicationDidBecomeActive(_ notification: Notification) { cloudProgress?.requestSync() }
+  @objc private func showCloudSaves() {
+    guard let libraryCloud else { return }
+    let page = libraryCloudView ?? CloudLibraryView(sync: libraryCloud)
+    libraryCloudView = page
+    page.onBack = { [weak page] in
+      if let page { GameScreen.shared.dismiss(page) }
+      ArcadeWindow.shared.arcadeView.selectProfile(ArcadeStore.shared.records.activeProfile)
+      ArcadeWindow.shared.arcadeView.needsDisplay = true
+    }
+    GameScreen.shared.present(page, owner: nativeL2Window?.window ?? nativeL3Window?.window ?? window, focus: page)
+    libraryCloud.requestSync()
+  }
+  func applicationDidBecomeActive(_ notification: Notification) {
+    libraryCloud?.requestSync()
+    if libraryCloud?.enabled != false { cloudProgress?.requestSync() }
+  }
 
   func applicationDidFinishLaunching(_ notification: Notification) {
     preparingLaunch = true
@@ -869,6 +916,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     appMenu.addItem(achievementsItem)
     let profiles = NSMenuItem(title: "Player Profiles…", action: #selector(showProfiles), keyEquivalent: "p")
     profiles.keyEquivalentModifierMask = [.command, .shift]; profiles.target = self; appMenu.addItem(profiles)
+    let cloudSaves = NSMenuItem(title: "Cloud Saves…", action: #selector(showCloudSaves), keyEquivalent: "")
+    cloudSaves.target = self; appMenu.addItem(cloudSaves)
     let hotSeat = NSMenuItem(title: "Hot Seat…", action: #selector(showHotSeat), keyEquivalent: "")
     hotSeat.target = self; appMenu.addItem(hotSeat)
     let records = NSMenuItem(title: "Level Records…", action: #selector(showLevelRecords), keyEquivalent: "b")
@@ -2018,10 +2067,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
   ) -> Data? {
     let store = UserDefaults.standard
     func withCloud(_ data: Data?) -> Data? {
-      guard !ArcadeStore.shared.hotSeatIsActive, let title = entry.set.title,
+      guard let title = entry.set.title,
         !dataSetID(entry).contains(":source-") else { return data }
       let completed = GameProgressPreferences.completed(pack: "release/" + title.rawValue,
-        profileID: ArcadeStore.shared.records.activeProfileID)
+        profileID: ArcadeStore.shared.hotSeatID.map { "hotseat." + $0 } ?? ArcadeStore.shared.records.activeProfileID)
       guard !completed.isEmpty else { return data }
       let saved = data.flatMap { try? JSONDecoder().decode(ClassicGameFlow.Progress.self, from: $0) }
       let merged = GameProgressPreferences.classicProgress(saved, completed: completed,

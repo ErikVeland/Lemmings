@@ -109,6 +109,10 @@ public final class MobileJourneyLibrary: MobileGameLibrary {
         guard let index, revisions[pack.id] == entry.sourceRevision else { throw MobileSessionError.changedLevel }
         return (pack.id, index, library)
     }
+    public func checkpointLevelIdentifier(at index: Int) throws -> String? {
+        let source = try origin(of: index)
+        return try source.library.checkpointLevelIdentifier(at: source.index)
+    }
     public func loadLevel(at index: Int) throws -> MobileLevelContent {
         let origin = try origin(of: index)
         let loaded = try origin.library.loadLevel(at: origin.index)

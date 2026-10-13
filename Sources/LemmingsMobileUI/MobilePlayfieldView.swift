@@ -190,6 +190,8 @@ import UIKit
 
     override func draw(_ rect: CGRect) {
         guard tube?.isHidden != false, let context = UIGraphicsGetCurrentContext(), let bitmap else { return }
+        let drawStarted = ProcessInfo.processInfo.systemUptime
+        defer { MobileDevicePerformance.recordCPU(ProcessInfo.processInfo.systemUptime - drawStarted, source: "bitmap") }
         MobileBitmapRenderer.draw(bitmap, viewport: gameViewport, in: context)
         drawRescueBackground(bitmap, viewport: gameViewport, context: context)
         for effect in rescueEffects(viewport: gameViewport) { LemmingSelectionRenderer.draw(effect, in: context) }

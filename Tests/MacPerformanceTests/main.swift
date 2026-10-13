@@ -9,7 +9,10 @@ private func check(_ value: @autoclosure () -> Bool, _ message: String) throws {
 }
 
 @main struct MacPerformanceTests {
-    @MainActor static func main() throws {
+    @MainActor static func main() {
+        do { try run() } catch { print("FAIL: \(error)"); exit(1) }
+    }
+    @MainActor static func run() throws {
         let root = URL(fileURLWithPath: CommandLine.arguments[1])
         try verifyAdaptiveFXPolicy()
         try verifyMacFXRendering(root: root)

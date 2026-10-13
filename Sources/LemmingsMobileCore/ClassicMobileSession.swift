@@ -26,6 +26,12 @@ public final class ClassicMobileLibrary: MobileGameLibrary {
         }
     }
 
+    public func checkpointLevelIdentifier(at index: Int) throws -> String? {
+        guard dataSet.campaign.levels.indices.contains(index) else { throw MobileSessionError.changedLevel }
+        let entry = dataSet.campaign.levels[index]
+        return "\(dataSet.identifierKey)/\(entry.rank)/\(entry.number)"
+    }
+
     public func loadLevel(at index: Int) throws -> MobileLevelContent {
         guard dataSet.campaign.levels.indices.contains(index) else {
             throw MobileSessionError.changedLevel
@@ -54,7 +60,7 @@ public final class ClassicMobileLibrary: MobileGameLibrary {
             summary: levels[index], level: level, ground: ground, special: special, assets: assets,
             mechanics: ClassicDOSMechanics(title: dataSet.title, rank: entry.rank),
             objectSemantics: .dos,
-            levelIdentifier: "\(dataSet.identifierKey)/\(entry.rank)/\(entry.number)",
+            levelIdentifier: try checkpointLevelIdentifier(at: index)!,
             levelIndex: index, artworkFamily: ClassicMobileSession.family(for: dataSet.title))
     }
 }

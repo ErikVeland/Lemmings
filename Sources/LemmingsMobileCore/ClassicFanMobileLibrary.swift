@@ -42,6 +42,11 @@ public final class ClassicFanMobileLibrary: MobileGameLibrary {
         entries.indices.contains(index) ? entries[index].key : ""
     }
 
+    public func checkpointLevelIdentifier(at index: Int) throws -> String? {
+        guard entries.indices.contains(index) else { throw MobileSessionError.changedLevel }
+        return "fan/\(catalogueID)/\(pack.fingerprint.prefix(12))/\(entries[index].key)"
+    }
+
     public func loadLevel(at index: Int) throws -> MobileLevelContent {
         guard entries.indices.contains(index) else { throw MobileSessionError.changedLevel }
         let entry = entries[index]
@@ -54,7 +59,7 @@ public final class ClassicFanMobileLibrary: MobileGameLibrary {
             mechanics: pack.mechanics(for: entry),
             objectSemantics: .forFanLevel(level, groundSet: ground),
             clock: .golems,
-            levelIdentifier: "fan/\(catalogueID)/\(pack.fingerprint.prefix(12))/\(entry.key)",
+            levelIdentifier: try checkpointLevelIdentifier(at: index)!,
             levelIndex: index, artworkFamily: artwork?.family, artworkMatch: artwork?.pieces)
     }
 }

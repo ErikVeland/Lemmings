@@ -118,6 +118,11 @@ public struct MobileProfiles: Codable, Equatable, Sendable {
     public mutating func select(_ id: String) {
         if players.contains(where: { $0.id == id }) { activeID = id }
     }
+    public mutating func importCloudProfiles(_ profiles: [MobileProfile], active: String) {
+        guard !profiles.isEmpty, profiles.count <= Self.maximum,
+            Set(profiles.map(\.id)).count == profiles.count, profiles.contains(where: { $0.id == active }) else { return }
+        players = profiles; activeID = active
+    }
 
     /// Removes a player. The last player cannot be removed.
     public mutating func delete(_ id: String) {

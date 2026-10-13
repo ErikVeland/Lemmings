@@ -6,25 +6,23 @@ import LemmingsGameArt
 /// One presentation policy covers Classic, NeoLemmix and both native sequels.
 @MainActor final class MacFXPerformance {
     static let shared = MacFXPerformance()
-    private var budget = AdaptiveFXQuality()
-    private var hardwareCeiling = FXQuality.full
-    private var ceiling = FXQuality.full
+    private var budget: AdaptiveFXPerformance
     private var lastPoll = -Double.infinity
-    private var gpuCosts: [String: (seconds: Double, at: Double)] = [:]
     #if PERFORMANCE_TESTS
     var overrideQuality: FXQuality?
     #endif
     var quality: FXQuality {
+        presentation.quality
+    }
+    var presentation: FXPresentationBudget {
         #if PERFORMANCE_TESTS
-        if let overrideQuality { return overrideQuality }
+        if let overrideQuality { return FXPresentationBudget(cpuQuality: overrideQuality, gpuQuality: overrideQuality) }
         #endif
         poll()
-        return FXQuality(rawValue: min(budget.quality.rawValue, ceiling.rawValue))!
+        return budget.presentation
     }
     private init() {
-        if let device = MTLCreateSystemDefaultDevice() {
-            if device.recommendedMaxWorkingSetSize < 256 * 1024 * 1024 { hardwareCeiling = .balanced }
-        } else { hardwareCeiling = .minimal }
+        budget = AdaptiveFXPerformance(profile: .detect(device: MTLCreateSystemDefaultDevice(), mobile: false))
     }
     private func poll() {
         let now = ProcessInfo.processInfo.systemUptime
@@ -34,20 +32,19 @@ import LemmingsGameArt
         let pressure: FXQuality
         switch process.thermalState {
         case .serious, .critical: pressure = .minimal
+        case .fair: pressure = .balanced
         default: pressure = process.isLowPowerModeEnabled ? .balanced : .full
         }
-        ceiling = FXQuality(rawValue: min(hardwareCeiling.rawValue, pressure.rawValue))!
+        budget.setPressure(ceiling: pressure, framesPerSecond: process.isLowPowerModeEnabled ? 30 : 60, now: now)
     }
     func recordCPU(_ seconds: Double) {
         poll()
         let now = ProcessInfo.processInfo.systemUptime
-        gpuCosts = gpuCosts.filter { now - $0.value.at < 0.5 }
-        budget.observe(cpuSeconds: seconds, gpuSeconds: gpuCosts.values.reduce(0) { $0 + $1.seconds },
-                       now: now, ceiling: ceiling)
+        budget.recordCPU(seconds, now: now)
     }
     func recordGPU(_ seconds: Double, source: String) {
-        guard seconds.isFinite, seconds >= 0 else { return }
-        gpuCosts[source] = (seconds, ProcessInfo.processInfo.systemUptime)
+        poll()
+        budget.recordGPU(seconds, source: source, now: ProcessInfo.processInfo.systemUptime)
     }
 }
 #endif

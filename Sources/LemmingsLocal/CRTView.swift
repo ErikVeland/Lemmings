@@ -400,11 +400,11 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
     buffer.commit()
   }
 
-  private func encode(_ slot: FrameSlot, target: MTLTexture, buffer: MTLCommandBuffer) {
+  private func encode(_ slot: FrameSlot, target: MTLTexture, buffer: MTLCommandBuffer, headroom: Float? = nil) {
     guard let device, let sourceTexture = slot.source, let flashTexture = slot.flash,
       let bright = brightPipeline, let blurH = blurHPipeline, let blurV = blurVPipeline,
       let composite = compositePipeline else { return }
-    let scale = MacFXPerformance.shared.quality.bloomScale
+    let scale = MacFXPerformance.shared.presentation.bloomScale
     let width = max(1, Int(sourceSize.width * scale)), height = max(1, Int(sourceSize.height * scale))
     if settings.bloomAmount > 0, scratchA?.width != width || scratchA?.height != height {
       let scratch = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba16Float,
@@ -445,7 +445,7 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
     uniforms.vignette = settings.vignette
     uniforms.pixelAspect = settings.pixelAspect
     uniforms.colorLevels = settings.colorLevels
-    uniforms.hdrHeadroom = ExplosionHDR.headroom(window?.screen?.maximumExtendedDynamicRangeColorComponentValue ?? 1)
+    uniforms.hdrHeadroom = headroom ?? ExplosionHDR.headroom(window?.screen?.maximumExtendedDynamicRangeColorComponentValue ?? 1)
     metalLayer?.wantsExtendedDynamicRangeContent = (window?.screen?.maximumPotentialExtendedDynamicRangeColorComponentValue ?? 1) > 1
 
     func pass(
@@ -506,7 +506,7 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
 
   #if PERFORMANCE_TESTS
   /// Exercise the shipping passes without a visible window or drawable.
-  func renderForTesting(size: CGSize) -> MTLTexture? {
+  func renderForTesting(size: CGSize, headroom: Float = 1) -> MTLTexture? {
     guard let device, let queue else { return nil }
     let slot = slots[0]
     guard !slot.busy, prepare(slot), let command = queue.makeCommandBuffer() else { return nil }
@@ -514,7 +514,7 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
       width: Int(size.width), height: Int(size.height), mipmapped: false)
     descriptor.usage = [.renderTarget, .shaderRead]
     guard let target = device.makeTexture(descriptor: descriptor) else { return nil }
-    encode(slot, target: target, buffer: command)
+    encode(slot, target: target, buffer: command, headroom: headroom)
     command.commit(); command.waitUntilCompleted()
     return command.status == .completed ? target : nil
   }

@@ -4,7 +4,7 @@ import NxlvKit
 /// One merge coordinator for every profile and all three campaign engines.
 /// Provider failures never prevent local play or replace another device's save.
 @MainActor public final class CloudLibrarySync {
-    public enum State: Equatable { case idle, syncing, synced, pending, offline, failed(String) }
+    public enum State: Equatable { case idle, syncing, synced, pending, offline, paused, failed(String) }
     public private(set) var state: State = .idle
     public private(set) var lastSynced: Date?
     public var onChange: (@MainActor () -> Void)?
@@ -47,8 +47,13 @@ import NxlvKit
         case .synced: "Synced"
         case .pending: "Saved on this device"
         case .offline: "Offline - saved on this device"
+        case .paused: "Cloud saves paused"
         case .failed(let message): message
         }
+    }
+    public var enabled: Bool {
+        get { defaults.object(forKey: "CloudLibrary.enabled") as? Bool ?? true }
+        set { defaults.set(newValue, forKey: "CloudLibrary.enabled"); if newValue { requestSync() } else { setState(.paused) } }
     }
     public var providerNames: String {
         (transport as? AppleCloudLibraryTransport)?.providers.sorted().joined(separator: " + ") ?? "Cloud"
@@ -116,7 +121,7 @@ import NxlvKit
             try progress.merge(captureExtra(seat.host, seat.id))
             var value = CloudLibraryArchive.Seat(id: seat.id, host: host, players: seat.players.compactMap { local.mapping[$0] },
                 turn: local.mapping[seat.turn ?? seat.host] ?? host, everyLevel: seat.policy != .atFirstFail,
-                progress: progress, stamp: next)
+                progress: progress, stamp: next, savedAt: seat.savedAt ?? Date())
             let branches = local.archive.seats[seat.id] ?? []
             if let previous = branches.first(where: { $0.revision == local.seatRevisions[seat.id] }) ?? branches.first, previous.sameState(as: value) {
                 value = previous
@@ -132,6 +137,7 @@ import NxlvKit
         try local.archive.validate(); return local
     }
     public func syncNow() async {
+        guard enabled else { setState(.paused); return }
         guard !running else { requested = true; return }
         guard !stateReadFailed else { return }
         running = true; defer { running = false }
@@ -154,7 +160,7 @@ import NxlvKit
                 }
             }
             guard !writable.isEmpty else { setState(.offline); return }
-            guard revision == store.progressRevision else { requested = true; setState(.pending); return }
+            guard enabled, revision == store.progressRevision else { requested = enabled; setState(enabled ? .pending : .paused); return }
             var base = saved
             // A fresh installation adopts the existing primary player. Existing
             // local progress gets its own identity and is never matched by initials.
@@ -181,7 +187,7 @@ import NxlvKit
             let merged = try await Task.detached(priority: .utility) {
                 var archive = captured.archive; try archive.merge(incomingRemote); return archive
             }.value
-            guard revision == store.progressRevision else { requested = true; setState(.pending); return }
+            guard enabled, revision == store.progressRevision else { requested = enabled; setState(enabled ? .pending : .paused); return }
             local.archive = merged
             let safe = canImport()
             if safe {
@@ -196,6 +202,7 @@ import NxlvKit
             let payload = try await Task.detached(priority: .utility) { try merged.encoded() }.value
             var uploaded = false
             for identity in writable {
+                guard enabled else { setState(.paused); return }
                 do { try await transport.save(payload, identity: identity, device: saved.device); uploaded = true }
                 catch { /* Retry from local state on activation or the periodic pass. */ }
             }
@@ -231,12 +238,17 @@ import NxlvKit
                 ?? branches.sorted { $0.stamp > $1.stamp }.first!
             for branch in branches {
                 let destination = branch.revision == chosen.revision ? id : branch.branchID
+                if destination != id, local.archive.seats[destination] != nil { continue }
                 let reverse = Dictionary(local.mapping.map { ($0.value, $0.key) }, uniquingKeysWith: { a, _ in a })
                 guard let host = reverse[branch.host], let turn = reverse[branch.turn] else { throw SequelDataError.invalid("The shared campaign players are missing.") }
                 try branch.progress.apply(defaults: defaults, profileID: host, sessionID: destination)
                 seats.append(.init(id: destination, host: host, players: branch.players.compactMap { reverse[$0] }, turn: turn,
-                    active: false, savedAt: Date(), policy: branch.everyLevel ? .everyLevel : .atFirstFail))
+                    active: false, savedAt: branch.savedAt, policy: branch.everyLevel ? .everyLevel : .atFirstFail))
                 local.seatRevisions[destination] = branch.revision
+                if destination != id {
+                    var fork = branch; fork.id = destination
+                    local.archive.seats[destination] = [fork]
+                }
             }
         }
         try store.importLibraryHotSeats(seats); try importSeats(seats)
@@ -244,7 +256,8 @@ import NxlvKit
     }
     public func makeLink() async throws -> String {
         await syncNow()
-        guard lastSynced != nil, let apple = transport as? AppleCloudLibraryTransport else { throw SequelDataError.invalid("Connect to the internet to link a device.") }
+        guard enabled, state == .synced || state == .pending, let apple = transport as? AppleCloudLibraryTransport,
+            apple.providers.contains("Cloud"), !apple.issues.contains(where: { $0.hasPrefix("Cloud") }) else { throw SequelDataError.invalid("Connect to the internet to link a device.") }
         return try await apple.makeLink(identities)
     }
     public func join(_ code: String) async throws {

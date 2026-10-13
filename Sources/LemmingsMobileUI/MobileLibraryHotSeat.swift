@@ -12,7 +12,7 @@ extension MobileLibraryViewController {
 
     @discardableResult func saveHotSeats() -> Bool {
         let storage = MobileStorage.standard(profile: "_players")
-        do { try hotSeats.save(to: storage); return true }
+        do { try hotSeats.save(to: storage); arcadeStore.notifyProgressChanged(); return true }
         catch {
             hotSeats = MobileHotSeatStore.load(from: storage)
             notice = error.localizedDescription

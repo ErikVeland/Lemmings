@@ -178,6 +178,7 @@ import NxlvKit
     var onStoredReplay: ((URL, String) -> Void)?
     var onClose: (() -> Void)?
     var onMenu: (() -> Void)?
+    var onCloudSaves: (() -> Void)?
     var continueTitle = "Next level"
     var resultStatus: String?
     var continueHandlesHandover = false
@@ -799,6 +800,9 @@ import NxlvKit
             }))
         }
         button("Back", CGRect(x: 64, y: 627, width: 200, height: 55)) { [weak self] in self?.closeProfiles() }
+        if onCloudSaves != nil {
+            button("Cloud saves", CGRect(x: 418, y: 574, width: 638, height: 38)) { [weak self] in self?.onCloudSaves?() }
+        }
         if let id = selectedProfileID {
             button("Delete", CGRect(x: 280, y: 627, width: 200, height: 55),
                    enabled: store.canDeleteProfile(id, runInProgress: runInProgress)) { [weak self] in self?.confirmDeleteSelectedProfile() }

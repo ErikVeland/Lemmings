@@ -21,11 +21,18 @@ public struct AdaptiveFXQuality: Sendable {
 
     public init(initial: FXQuality = .full) { quality = initial }
 
+    /// System pressure can lower the budget even while the simulation is paused.
+    public mutating func restrict(to ceiling: FXQuality, now: Double) {
+        guard now.isFinite, quality.rawValue > ceiling.rawValue else { return }
+        quality = ceiling; lastChange = now; pressureSince = nil; spareSince = nil
+    }
+
     /// Brief spikes are ignored. Recovery needs twelve seconds of spare capacity.
     public mutating func observe(cpuSeconds: Double, gpuSeconds: Double, now: Double,
-                                 ceiling: FXQuality = .full) {
+                                 ceiling: FXQuality = .full, framesPerSecond: Double = 60) {
         guard now.isFinite, cpuSeconds.isFinite, gpuSeconds.isFinite,
-              cpuSeconds >= 0, gpuSeconds >= 0 else { return }
+              cpuSeconds >= 0, gpuSeconds >= 0,
+              framesPerSecond.isFinite, framesPerSecond > 0 else { return }
         let elapsed = lastSample.map { now - $0 } ?? 0
         if elapsed < 0 || elapsed > 1 {
             pressureSince = nil; spareSince = nil; smoothedCost = 0
@@ -34,17 +41,16 @@ public struct AdaptiveFXQuality: Sendable {
         let cost = max(cpuSeconds, gpuSeconds)
         let blend = smoothedCost == 0 ? 1 : 1 - exp(-max(0, elapsed) / 0.5)
         smoothedCost += (cost - smoothedCost) * blend
-        if quality.rawValue > ceiling.rawValue {
-            quality = ceiling; lastChange = now; pressureSince = nil; spareSince = nil
-        }
-        if smoothedCost > 0.013 {
+        restrict(to: ceiling, now: now)
+        let interval = 1 / framesPerSecond
+        if smoothedCost > interval * 0.78 {
             spareSince = nil
             if pressureSince == nil { pressureSince = now }
             if now - pressureSince! >= 2 && now - lastChange >= 3,
                let lower = FXQuality(rawValue: quality.rawValue - 1) {
                 quality = lower; lastChange = now; pressureSince = nil
             }
-        } else if smoothedCost < 0.007 {
+        } else if smoothedCost < interval * 0.42 {
             pressureSince = nil
             if spareSince == nil { spareSince = now }
             if now - spareSince! >= 12 && now - lastChange >= 12,

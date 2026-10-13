@@ -9,6 +9,8 @@ extension ModuleMusicPlayer {
         for (index, value) in "M.K.".utf8.enumerated() { bytes[1080 + index] = value }
         bytes[43] = 32; bytes[45] = 64; bytes[49] = 32
         bytes[1084] = 1; bytes[1085] = 172; bytes[1086] = 16
+        // End the pattern on row two to exercise repeated tracker restart and crossfade.
+        bytes[1102] = 0x0D
         for frame in 0..<64 { bytes[2108 + frame] = UInt8(bitPattern: frame < 32 ? 100 : -100) }
         let module = try ProTrackerModule(data: Data(bytes))
         load(module, url: URL(fileURLWithPath: "/tmp/buffer-fixture.mod"))
@@ -44,12 +46,15 @@ extension ModuleMusicPlayer {
             previousSeconds = seconds
         }
         precondition(energy > 0 && previousSeconds > 0.5 && scheduledFrames > 4096)
+        precondition(previousLoopTail.count == loopCrossfadeFrames)
         setMuted(true)
+        precondition(spatialMixer.outputVolume == 0)
         stop()
         try start()
         synthesisQueue.sync {}
         precondition(scheduledFrames == 4096 && sourceNode?.isPlaying == true)
-        print("PASS queued MOD playback, finite signal, source clock, refill, mute and restart; render with synthesis lock held: \(elapsed) ms")
+        precondition(spatialMixer.outputVolume == 0)
+        print("PASS queued MOD playback, finite signal, source clock, refill, loop crossfade, immediate mute and restart; render with synthesis lock held: \(elapsed) ms")
     }
 }
 

@@ -60,6 +60,47 @@ controls, selection timing and bitmap/Metal fade pixels. Physical iOS EDR output
 sustained frame timing, touch pass-through and thermal transitions need device
 validation. These checks do not claim measured performance on older hardware.
 
+## iOS loading and audio, 13 October 2026
+
+The mobile preview worker retains up to three prepared sessions and 12 MiB of
+preview pixels. Play consumes the selected session once. Retry creates a fresh
+session. The worker applies artwork settings and restores saved payloads before
+transferring ownership to the UI. Saved journeys check their level identity from
+catalogue metadata without building a simulation. Memory warnings release the
+preview cache. Immutable bundled Macintosh and Amiga artwork banks share a bounded
+NSCache. Imported artwork keeps its existing reload behaviour.
+
+The shared MOD player synthesises on a serial worker into four reusable stereo
+PCM buffers of 1,024 frames. AVAudioPlayerNode consumes them. Tracker synthesis,
+its control lock, loop reconstruction and crossfade allocation no longer run in
+the audio render callback. The queue holds about 93 ms of audio at 44.1 kHz.
+The source and beat clocks compensate for queued samples. The output mixer mutes
+queued samples and effect tails immediately. Music style, pitch, stereo treatment,
+spatial effects and rescue polyphony retain their existing behaviour.
+
+Silent spatial voices zero their output directly. Effect history clears once per
+render block and accumulates active voices without repeated silent-source work.
+Unchanged camera geometry skips spatial mixer updates. UIKit reuses skill images
+and skips camera layout work when its size is unchanged. Camera movement redraws
+the retained playfield instead of composing the same world frame again.
+
+`Scripts/run-audio-performance-tests.sh` uses the muted, offscreen runner and
+offline audio rendering. Checks cover queued playback while the synthesis lock is
+held, refill, short module loops, crossfades, clocks, mute, restart, spatial output,
+rewind history, the 128-voice rescue chorus, DJ style and recording pitch/tempo.
+Apple audio units need access outside the filesystem sandbox on this host. The
+first sandboxed run could not initialise them and is not counted as a pass.
+The local Apple silicon debug measurement for one idle 64-voice, 1,024-frame block
+was about 0.13 ms. This is a host CPU measurement, not iPhone frame timing.
+
+Twenty-one focused mobile tests cover layout, input, camera and preparation
+ownership. The bitmap audit checks portrait and landscape input geometry,
+including all skills after scrolling. The iOS device target compiles. Physical
+iPhone 17 Pro crackle, route changes, sustained frame timing, load durations and
+touch delivery still need installed-device validation. The audio-session category
+and buffer preference remain unchanged. L2/L3 use shared audio and controls,
+but playable mobile libraries and native sprite renderers remain deferred.
+
 ## Validation
 
 `Scripts/run-mac-performance-tests.sh` builds for the current Mac architecture

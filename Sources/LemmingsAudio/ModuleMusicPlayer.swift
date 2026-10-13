@@ -103,6 +103,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     NukeMusicFilter.apply(nukeFilterAmount, to: nukeEQ)
     engine.attach(reverb)
     engine.attach(spatialMixer)
+    spatialMixer.outputVolume = muted ? 0 : 1
     reverb.loadFactoryPreset(.mediumRoom)
     reverb.wetDryMix = 0
     // Music stays stereo. Positional effects use a separate environment node.
@@ -555,6 +556,8 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     lock.lock()
     isMuted = muted
     lock.unlock()
+    // Silence already queued samples and the effect tail immediately.
+    spatialMixer.outputVolume = muted ? 0 : 1
   }
 
   public var muted: Bool {

@@ -11,7 +11,7 @@ import UniformTypeIdentifiers
         case home, family(MobileFamily), levels, settings, settingsGroup(MobileSettingsGroup), controllerMappings, playInsights, soundtrack, data
         case whatsNew, effectsWelcome, telemetryConsent, insightsToken, insightsClear
         case journey, progression, techniques, rankings
-        case collections, playlists, playlist(UUID), addToPlaylist, players, shuffleAll, hotSeat, hotSeats, records, achievements, recordLevel(String)
+        case collections, playlists, playlist(UUID), addToPlaylist, players, cloudSaves, shuffleAll, hotSeat, hotSeats, records, achievements, recordLevel(String)
     }
     private let scrollView = UIScrollView()
     let canvas = MobileMenuCanvas()
@@ -41,6 +41,12 @@ import UniformTypeIdentifiers
     private let cloudTransport = AppleGameProgressTransport()
     private var cloudAuthentication: UIViewController?
     lazy var cloudProgress = GameCenterProgressSync(store: arcadeStore, transport: cloudTransport)
+    let libraryCloudTransport = AppleCloudLibraryTransport()
+    lazy var libraryCloud = CloudLibrarySync(store: arcadeStore, transport: libraryCloudTransport)
+    var syncCode: String?
+    var syncDraft: String?
+    var syncMessage = ""
+    var syncBusy = false
     var collectionsBridge: MobileCollectionsBridge?
     var creatingPlayer = false
     var draftPortrait = 0
@@ -75,6 +81,7 @@ import UniformTypeIdentifiers
     var notice = ""
     private var loading = false
     private var preparingLevel = false
+    var preparingCloudLevel: Bool { preparingLevel }
     var game: MobileGameViewController?
     private var solved: Set<Int> {
         // Favourites mirror the progress of the packs their levels belong to.
@@ -160,7 +167,8 @@ import UniformTypeIdentifiers
         searchField.frame = CGRect(x: -100, y: -100, width: 10, height: 10)
         searchField.addAction(UIAction { [weak self] _ in
             guard let self else { return }
-            if self.nameDraft != nil { self.nameDraft = String((self.searchField.text ?? "").prefix(40)) }
+            if self.route == .cloudSaves, self.syncDraft != nil { self.syncDraft = String(AppleCloudLibraryTransport.cleanCode(self.searchField.text ?? "").prefix(12)) }
+            else if self.nameDraft != nil { self.nameDraft = String((self.searchField.text ?? "").prefix(40)) }
             else { self.searchQuery = self.searchField.text ?? "" }
             self.rebuild()
         }, for: .editingChanged)
@@ -181,7 +189,11 @@ import UniformTypeIdentifiers
             return saved.map { .init(values: ["LearningJourneyProgress": .learning($0.progress)]) } ?? .init()
         }
         cloudProgress.onImported = { [weak self] in self?.rebuild() }
-        arcadeStore.onProgressChanged = { [weak self] in self?.cloudProgress.requestSync() }
+        configureLibraryCloud()
+        arcadeStore.onProgressChanged = { [weak self] in
+            self?.libraryCloud.requestSync()
+            if self?.libraryCloud.enabled == true { self?.cloudProgress.requestSync() }
+        }
         cloudTransport.onChange = { [weak self] in self?.cloudProgress.requestSync() }
         NotificationCenter.default.addObserver(self, selector: #selector(cloudForeground), name: UIApplication.didBecomeActiveNotification, object: nil)
         cloudTransport.start { [weak self] controller in
@@ -194,11 +206,12 @@ import UniformTypeIdentifiers
         cloudAuthentication = nil
         present(controller, animated: true)
     }
-    @objc private func cloudForeground() { cloudProgress.requestSync(); presentCloudAuthentication() }
+    @objc private func cloudForeground() { libraryCloud.requestSync(); if libraryCloud.enabled { cloudProgress.requestSync(); presentCloudAuthentication() } }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if game == nil { becomeFirstResponder() }
         cloudProgress.requestSync()
+        libraryCloud.requestSync()
         presentCloudAuthentication()
     }
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
@@ -346,6 +359,10 @@ import UniformTypeIdentifiers
             canvas.page = hotSeatPage(subtitle: subtitle); canvas.preview = nil
         case .hotSeats:
             canvas.page = savedHotSeatsPage(subtitle: subtitle); canvas.preview = nil
+        case .cloudSaves:
+            canvas.page = CloudSyncArt.page(status: libraryCloud.status, providers: libraryCloud.providerNames,
+                enabled: libraryCloud.enabled, busy: syncBusy || libraryCloud.state == .syncing,
+                code: syncCode, draft: syncDraft, message: syncMessage); canvas.preview = nil
         case .records:
             canvas.page = recordsPage(subtitle: subtitle); canvas.preview = nil
         case .achievements:
@@ -432,6 +449,7 @@ import UniformTypeIdentifiers
         rebuild()
     }
     func handle(_ id: String) {
+        if handleCloudSync(id) { return }
         if handleWelcome(id) || handleInsights(id) { return }
         if handleLearning(id) || handleRankings(id) { return }
         if handleSettings(id) { return }
@@ -665,7 +683,7 @@ import UniformTypeIdentifiers
         guard let checkpoint = pendingCheckpoint, checkpointMatchesSession(checkpoint) else { return }
         if let run = learning.run, let catalogue {
             let queue = MobileJourneyLibrary(entries: run.entries, name: run.pool.summary, catalogue: catalogue)
-            if let content = try? queue.loadLevel(at: run.currentIndex), content.session.levelIdentifier == checkpoint.levelIdentifier {
+            if (try? queue.checkpointLevelIdentifier(at: run.currentIndex)) == checkpoint.levelIdentifier {
                 openLearningRun(checkpoint: checkpoint); return
             }
         }

@@ -80,14 +80,22 @@ playfield viewport. The shared camera supports Classic, L2 and L3 entrance
 positions. Saved runs retain their existing resume and paused handover behaviour. Level
 edges clamp entrance centring, and the existing maximum zoom still applies.
 
-Portrait and standard-height landscape windows use the same touch deck, including
-iPad landscape. Skills occupy an 80-point row. Narrow phones and larger skill
+Portrait and landscape reuse the same controls and input handlers. Portrait
+skills occupy an 80-point row. Narrow phones and larger skill
 sets scroll horizontally with 44-point targets. A 48-point bottom row places
 one continuous minus/rate/plus socket beside speed, nuke/undo and pause/play.
 Engines without a release rate omit that socket. Rewind and backward/forward
 tick controls stay visible to the left of the 44-point minimap, above skills.
 Only engines that support rewind receive backward controls. Forward tick remains
 dimmed and disabled while running.
+
+Landscape places skills, the rate socket, speed, nuke/undo and pause/play in
+one 80-point row. The navigation/map row stays above it. This reduces the deck
+from 176 to 126 points and gives the playfield 50 more points of height.
+The speed pedal uses a fast-forward glyph between its multiplier and HOLD cue.
+Crowded skill banks scroll within their own clipped input region. Fixed transport
+controls remain visible outside it. The 844×390 phone capture includes both
+47-point side insets and the 21-point bottom inset.
 
 The 44-point top strip keeps quantities and the pixel hamburger Menu inside the
 safe area. Its background extends across the screen and under the top inset.
@@ -105,13 +113,14 @@ for 0.6 seconds to open the pause menu. VoiceOver retains a separate Pause menu
 action and names the speed pedal's tap and hold behaviour. Leaving a target,
 changing layouts, opening a menu or losing the window cancels held input.
 
-Validation: the unsigned iOS device build passes. Eighteen focused, offscreen,
+Validation: the unsigned iOS device build passes. Twenty-one focused, offscreen,
 muted checks pass for camera framing, entrance positions, rotation, Classic/L2/L3
-control sets, input timing and bitmap/touch alignment. The bitmap audit passes
-54 HUD states and 18 DOS/Mac/Amiga artwork states, including target sizes,
+control sets, input timing, bitmap/touch alignment and worker-owned level preparation.
+The bitmap audit passes 60 HUD states and 18 DOS/Mac/Amiga artwork states, including target sizes,
 non-overlap, reserved-region avoidance and scroll reachability. Phone ready,
 fast and undo captures and iPad landscape running captures were inspected.
-Captures and logs stay in ignored `.build/ios-hud-feedback-*` paths.
+Captures and logs stay in ignored `.build/ios-hud-feedback-*` and
+`.build/ios-landscape-performance-*` paths.
 An initial broad test selection stalled and was stopped; its incomplete run
 is not counted as a pass.
 

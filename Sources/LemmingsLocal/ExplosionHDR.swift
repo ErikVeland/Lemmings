@@ -92,6 +92,7 @@ enum ExplosionHDR {
     }
   }
   private var expiration: Task<Void,Never>?
+  private var lastPresented = -Double.infinity
   private var timeline = NuclearExplosionTimeline()
   private var speed = SuperSpeedTimeline()
   private var speedMotionTime: TimeInterval = 0
@@ -226,7 +227,7 @@ enum ExplosionHDR {
     expiration?.cancel()
     let now = ProcessInfo.processInfo.systemUptime
     let end: TimeInterval
-    if !timeline.bursts.isEmpty || !worldFlashes.isEmpty || speed.isAnimating(now: now) { end = now + 1.0/MacFXPerformance.shared.quality.effectHz }
+    if !timeline.bursts.isEmpty || !worldFlashes.isEmpty || speed.isAnimating(now: now) { end = now + 1.0/MacFXPerformance.shared.presentation.effectHz }
     else if let expiry = (flashes + worldFlashes).map(\.expiresAt).filter({$0.isFinite && $0 > now}).min() { end = expiry }
     else { return }
     expiration = Task { @MainActor [weak self] in
@@ -263,6 +264,7 @@ enum ExplosionHDR {
     isHidden = !active
     surface?.isHidden = !active
     guard active else {
+      lastPresented = -.infinity
       texture = nil
       if surface == nil { needsDisplay = true }
       return
@@ -272,8 +274,10 @@ enum ExplosionHDR {
           bounds.width > 0, bounds.height > 0, !isHidden else { return }
     // Opt in while idle, so the display has headroom ready for the short pop.
     surface.wantsExtendedDynamicRangeContent = screen.maximumPotentialExtendedDynamicRangeColorComponentValue > 1
-    let quality = MacFXPerformance.shared.quality
-    let scale = (window?.backingScaleFactor ?? 1) * quality.overlayScale
+    let quality = MacFXPerformance.shared.presentation
+    guard now - lastPresented >= 1 / quality.effectHz else { return }
+    let scale = quality.overlayRenderScale(width: bounds.width, height: bounds.height,
+                                          nativeScale: window?.backingScaleFactor ?? 1)
     surface.contentsScale = scale
     surface.drawableSize = CGSize(width:bounds.width*scale,height:bounds.height*scale)
     let width = Int(ceil(bounds.width)), height = Int(ceil(bounds.height))
@@ -339,6 +343,7 @@ enum ExplosionHDR {
       let seconds = max(0, completed.gpuEndTime - completed.gpuStartTime)
       Task { @MainActor in MacFXPerformance.shared.recordGPU(seconds, source: "effects") }
     }
+    lastPresented = now
     command.present(drawable)
     command.commit()
     #if PERFORMANCE_TESTS
@@ -348,7 +353,7 @@ enum ExplosionHDR {
 
   override func draw(_ dirtyRect: NSRect) {
     guard surface == nil else { return }
-    let samples = explosionSamples(now: ProcessInfo.processInfo.systemUptime).suffix(MacFXPerformance.shared.quality.explosionLimit)
+    let samples = explosionSamples(now: ProcessInfo.processInfo.systemUptime).suffix(MacFXPerformance.shared.presentation.explosionLimit)
     NSGraphicsContext.saveGraphicsState()
     defer { NSGraphicsContext.restoreGraphicsState() }
     bounds.clip()

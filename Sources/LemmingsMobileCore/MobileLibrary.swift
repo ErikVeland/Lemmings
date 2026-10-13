@@ -32,9 +32,12 @@ public protocol MobileGameLibrary: AnyObject {
     func loadLevel(at index: Int) throws -> MobileLevelContent
     /// A key for the level that survives a pack gaining or losing other levels.
     func levelKey(at index: Int) -> String
+    /// Identifies a saved run without constructing its simulation or artwork.
+    func checkpointLevelIdentifier(at index: Int) throws -> String?
 }
 
 public extension MobileGameLibrary {
+    func checkpointLevelIdentifier(at index: Int) throws -> String? { nil }
     func levelKey(at index: Int) -> String {
         guard levels.indices.contains(index) else { return "" }
         return "\(levels[index].rank)/\(levels[index].number)"

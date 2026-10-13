@@ -18,6 +18,8 @@ import NxlvKit
               typography.interface.logo != nil,
               typography.font(.small) != nil, typography.font(.large) != nil else { throw Failure.missingArtwork }
         let library = try ClassicMobileLibrary(directory: content)
+        guard try library.checkpointLevelIdentifier(at: 0) == library.loadLevel(at: 0).session.levelIdentifier
+        else { throw Failure.invalidTargets }
         if hotSeat { try checkHotSeat(typography: typography, portraits: GamePortraitArt(directory: artwork), output: output); return }
         if latestFixes { try await checkCurrentFixes(library: library, typography: typography, output: output); return }
         let session = try library.loadLevel(at: 0).session
@@ -232,6 +234,7 @@ import NxlvKit
         let vertical = MobileReservedRegion(kind: .division, frame: .init(x: 589, y: 0, width: 16, height: 834))
         let horizontal = MobileReservedRegion(kind: .division, frame: .init(x: 0, y: 405, width: 1194, height: 24))
         let poses: [(String, MobileSize, [MobileReservedRegion])] = [
+            ("phone-landscape", .init(width: 844, height: 390), []),
             ("ipad-landscape", .init(width: 1112, height: 834), []),
             ("ipad-portrait", .init(width: 834, height: 1112), []),
             ("pocket", .init(width: 390, height: 844), []),
@@ -256,7 +259,8 @@ import NxlvKit
                 let snapshot = MobileGameSnapshot(tick: original.tick, released: original.released, total: original.total,
                     saved: original.saved, required: original.required, remainingSeconds: original.remainingSeconds,
                     releaseRate: original.releaseRate, isComplete: false, didWin: false, isEndingRun: ending, skills: original.skills)
-                let layout = MobileHUDLayout.make(container: size, safeArea: .init(top: 20, bottom: 20),
+                let insets: MobileInsets = pose == "phone-landscape" ? .init(left: 47, bottom: 21, right: 47) : .init(top: 20, bottom: 20)
+                let layout = MobileHUDLayout.make(container: size, safeArea: insets,
                     hasRate: true, skillCount: snapshot.skills.count, reservedRegions: regions, supportsRewind: true)
                 let targets = MobileHUDRenderer.targets(layout: layout, snapshot: snapshot, selectedSkill: selected,
                     paused: paused, speed: speed, endRunArmed: state == "armed")

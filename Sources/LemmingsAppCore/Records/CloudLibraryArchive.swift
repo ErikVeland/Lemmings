@@ -63,11 +63,13 @@ public struct CloudLibraryArchive: Codable, Equatable, Sendable {
         public var revision: String
         public var ancestors: Set<String>
         public var stamp: Stamp
+        public var savedAt: Date
         public init(id: String, host: String, players: [String], turn: String, everyLevel: Bool,
                     progress: GameProgressPreferences, revision: String = UUID().uuidString.lowercased(),
-                    ancestors: Set<String> = [], stamp: Stamp) {
+                    ancestors: Set<String> = [], stamp: Stamp, savedAt: Date = Date()) {
             self.id = id; self.host = host; self.players = players; self.turn = turn; self.everyLevel = everyLevel
             self.progress = progress; self.revision = revision; self.ancestors = ancestors; self.stamp = stamp
+            self.savedAt = savedAt
         }
         /// A stable namespace preserves both sides of an offline shared-campaign conflict.
         public var branchID: String {

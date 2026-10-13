@@ -310,6 +310,8 @@ struct MobileGameTurn {
     }
 
     @objc private func displayFrame(_ link: CADisplayLink) {
+        let frameStarted = ProcessInfo.processInfo.systemUptime
+        defer { MobileDevicePerformance.recordCPU(ProcessInfo.processInfo.systemUptime - frameStarted, source: "frame") }
         inputAdapter.poll(context: ObjectIdentifier(overlay.isHidden ? playfieldView : overlayCanvas), at: link.timestamp)
         updateInputSpeed(at: link.timestamp)
         MobileMusic.shared.advance()
@@ -983,6 +985,7 @@ struct MobileGameTurn {
             reduceFlashes: UIAccessibility.isReduceMotionEnabled,
             constrainedDevice: MobileDevicePerformance.constrained
         )
+        MobileDevicePerformance.update(framesPerSecond: budget.framesPerSecond)
         displayLink?.preferredFrameRateRange = CAFrameRateRange(
             minimum: Float(min(20, budget.framesPerSecond)),
             maximum: Float(budget.framesPerSecond),

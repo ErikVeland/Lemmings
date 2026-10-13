@@ -195,6 +195,16 @@ public struct MobileHotSeatStore: Codable, Equatable, Sendable {
         current = current.flatMap(apply)
         saved = saved.compactMap(apply)
     }
+    /// Imports safe-menu cloud sessions without selecting a different campaign.
+    public mutating func importCloudSessions(_ sessions: [MobileHotSeat]) {
+        for seat in sessions {
+            if current?.id == seat.id { current = seat }
+            else {
+                saved.removeAll { $0.id == seat.id }; saved.append(seat)
+            }
+        }
+        saved.sort { $0.savedAt > $1.savedAt }
+    }
 
     private mutating func archive() {
         guard let running = current else { return }

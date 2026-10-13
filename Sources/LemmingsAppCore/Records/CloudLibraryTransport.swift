@@ -21,6 +21,8 @@ import Security
     private var root: URL?
     private var account: Data?
     private var readable: [String: Set<String>] = [:]
+    private var etags: [String: String] = [:]
+    private var hashes: [String: Set<Data>] = [:]
     private static let service = "academy.glasscode.lemmings.cloud-library-v2"
     public init(defaults: UserDefaults = .standard, endpoint: URL? = nil) {
         self.defaults = defaults
@@ -118,7 +120,7 @@ import Security
     }
     private nonisolated static func readIdentities(at root: URL) throws -> [CloudLibraryIdentity] {
         guard FileManager.default.fileExists(atPath: root.path) else { return [] }
-        let files = try FileManager.default.contentsOfDirectory(at: root, includingPropertiesForKeys: nil)
+        let files = try Self.files(at: root)
             .filter { $0.lastPathComponent.hasPrefix("identity-") && $0.pathExtension == "json" }
         guard files.count <= 16 else { throw SequelDataError.invalid("Too many iCloud libraries.") }
         return try files.map { file in
@@ -127,6 +129,15 @@ import Security
             try identity.validate()
             guard file.lastPathComponent == "identity-\(identity.id).json" else { throw SequelDataError.invalid("Invalid iCloud library identity.") }
             return identity
+        }
+    }
+    private nonisolated static func files(at root: URL) throws -> [URL] {
+        try FileManager.default.contentsOfDirectory(at: root, includingPropertiesForKeys: nil).map { file in
+            let name = file.lastPathComponent
+            if name.hasPrefix("."), name.hasSuffix(".icloud") {
+                return root.appendingPathComponent(String(name.dropFirst().dropLast(7)))
+            }
+            return file
         }
     }
     private nonisolated static func read(at url: URL, limit: Int) throws -> Data {
@@ -157,23 +168,26 @@ import Security
     }
     public func load(_ identity: CloudLibraryIdentity) async throws -> [Data] {
         var data: [Data] = [], success = Set<String>()
+        hashes[identity.id + "iCloud"] = []; hashes[identity.id + "Cloud"] = []
         if let root {
             do {
                 try checkAccount()
                 let folder = root.appendingPathComponent(identity.id, isDirectory: true)
                 let cloud = try await Task.detached(priority: .utility) {
                     guard FileManager.default.fileExists(atPath: folder.path) else { return [Data]() }
-                    let files = try FileManager.default.contentsOfDirectory(at: folder, includingPropertiesForKeys: nil).filter { $0.pathExtension == "save" }
+                    let files = try Self.files(at: folder).filter { $0.pathExtension == "save" }
                     guard files.count <= 256 else { throw SequelDataError.invalid("Too many iCloud saves.") }
                     return try files.map { try identity.open(Self.read(at: $0, limit: CloudLibraryArchive.maximumBytes + 28)) }
                 }.value
                 // Decode every version before marking this provider writable.
                 for value in cloud { _ = try CloudLibraryArchive.decode(value) }
                 try checkAccount(); data += cloud; success.insert("iCloud")
+                hashes[identity.id + "iCloud"] = Set(cloud.map { Data(SHA256.hash(data: $0)) })
             } catch { issues.append("iCloud saves unavailable") }
         }
         if endpoint != nil {
             do {
+                etags = etags.filter { !$0.key.hasPrefix("/v1/vaults/\(identity.id)/") }
                 let (body, status) = try await request("/v1/vaults/\(identity.id)", token: identity.token, allowMissing: true)
                 if status != 404 {
                     struct Manifest: Decodable { let devices: [String] }
@@ -183,6 +197,7 @@ import Security
                         let (sealed, _) = try await request("/v1/vaults/\(identity.id)/devices/\(device)", token: identity.token)
                         let opened = try identity.open(sealed)
                         _ = try CloudLibraryArchive.decode(opened); data.append(opened)
+                        hashes[identity.id + "Cloud", default: []].insert(Data(SHA256.hash(data: opened)))
                     }
                 }
                 success.insert("Cloud"); providers.insert("Cloud")
@@ -195,8 +210,11 @@ import Security
     public func save(_ data: Data, identity: CloudLibraryIdentity, device: String) async throws {
         _ = try CloudLibraryArchive.decode(data)
         let sealed = try identity.seal(data)
+        let contentHash = Data(SHA256.hash(data: data))
         var saved = false
         if readable[identity.id]?.contains("iCloud") == true, let root {
+            if hashes[identity.id + "iCloud"]?.contains(contentHash) == true { saved = true }
+            else {
             do {
                 try checkAccount()
                 let folder = root.appendingPathComponent(identity.id, isDirectory: true)
@@ -208,18 +226,26 @@ import Security
                     if !FileManager.default.fileExists(atPath: file.path) { try Self.write(sealed, at: file) }
                     let old = try FileManager.default.contentsOfDirectory(at: folder, includingPropertiesForKeys: [.contentModificationDateKey])
                         .filter { $0.lastPathComponent.hasPrefix(device + "-") && $0.pathExtension == "save" }
-                        .sorted { (try? $0.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate ?? .distantPast) ?? .distantPast > (try? $1.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate ?? .distantPast) ?? .distantPast }
+                        .sorted { a, b in
+                            let first = (try? a.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate) ?? .distantPast
+                            let second = (try? b.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate) ?? .distantPast
+                            return first > second
+                        }
                     // Every old generation was decoded during load before this save.
                     for obsolete in old.dropFirst(2) where obsolete != file { try FileManager.default.removeItem(at: obsolete) }
                 }.value
                 try checkAccount(); saved = true
             } catch { issues.append("iCloud upload pending") }
+            }
         }
         if readable[identity.id]?.contains("Cloud") == true {
+            if hashes[identity.id + "Cloud"]?.contains(contentHash) == true { saved = true }
+            else {
             do {
                 _ = try await request("/v1/vaults/\(identity.id)/devices/\(device)", method: "PUT", token: identity.token, body: sealed)
                 saved = true
             } catch { issues.append("Cloud upload pending") }
+            }
         }
         guard saved else { throw URLError(.notConnectedToInternet) }
     }
@@ -229,9 +255,14 @@ import Security
         request.httpMethod = method; request.httpBody = body
         request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
         if let token { request.setValue("Bearer " + token, forHTTPHeaderField: "Authorization") }
+        if method == "PUT" { request.setValue(etags[path] ?? "*", forHTTPHeaderField: "If-Match") }
         let (data, response) = try await network.data(for: request)
         guard let response = response as? HTTPURLResponse, (200..<300).contains(response.statusCode) || (allowMissing && response.statusCode == 404) else { throw URLError(.badServerResponse) }
         guard data.count <= CloudLibraryArchive.maximumBytes + 28 else { throw SequelDataError.invalid("The cloud response is too large.") }
+        if method == "GET", path.contains("/devices/"), response.statusCode == 200 {
+            guard let etag = response.value(forHTTPHeaderField: "ETag"), etag.count == 64 else { throw URLError(.badServerResponse) }
+            etags[path] = etag
+        }
         return (data, response.statusCode)
     }
     public func makeLink(_ identities: [CloudLibraryIdentity]) async throws -> String {

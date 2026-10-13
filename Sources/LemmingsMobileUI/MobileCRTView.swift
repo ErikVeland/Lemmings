@@ -13,6 +13,8 @@ import UIKit
     private var scratch: [MTLTexture] = []
     private var flash: MTLTexture?
     private var uniform = CRTUniforms()
+    private var bloomDirty = true
+    private var bloomGamma: Float = .nan
     var selection: LemmingSelectionEffect?
     var rescueAuras: [LemmingSelectionEffect] = []
     private var selectionRenderer: LemmingSelectionRenderer?
@@ -57,6 +59,8 @@ import UIKit
 
     func update(image: CGImage, settings: ClassicSettings, flashMask: [UInt8]) {
         guard let device else { return }
+        let updateStarted = ProcessInfo.processInfo.systemUptime
+        defer { MobileDevicePerformance.recordCPU(ProcessInfo.processInfo.systemUptime - updateStarted, source: "upload") }
         tubeSettings = settings.display == .television ? .television : .amiga1084
         let intensity = Float(settings.displayIntensity)
         tubeSettings.scanlineDepth *= intensity
@@ -73,9 +77,6 @@ import UIKit
                 width: width, height: height, mipmapped: false)
             descriptor.usage = .shaderRead
             source = device.makeTexture(descriptor: descriptor)
-            descriptor.pixelFormat = .rgba16Float
-            descriptor.usage = [.shaderRead, .renderTarget]
-            scratch = [device.makeTexture(descriptor: descriptor), device.makeTexture(descriptor: descriptor)].compactMap { $0 }
             descriptor.pixelFormat = .rg8Unorm
             descriptor.usage = .shaderRead
             flash = device.makeTexture(descriptor: descriptor)
@@ -85,6 +86,7 @@ import UIKit
                     withBytes: bytes.baseAddress!, bytesPerRow: width * 2)
             }
         }
+        bloomDirty = true
         var rgba = [UInt8](repeating: 0, count: width * height * 4)
         rgba.withUnsafeMutableBytes { bytes in
             guard let context = CGContext(data: bytes.baseAddress, width: width, height: height,
@@ -157,24 +159,44 @@ import UIKit
     }
 
     override func draw(_ rect: CGRect) {
-        guard let source, scratch.count == 2, let flash, let drawable = currentDrawable,
+        let drawStarted = ProcessInfo.processInfo.systemUptime
+        defer { MobileDevicePerformance.recordCPU(ProcessInfo.processInfo.systemUptime - drawStarted, source: "crt") }
+        guard let device, let source, let flash, let drawable = currentDrawable,
               let buffer = commands.makeCommandBuffer() else { return }
+        let budget = MobileDevicePerformance.presentation
+        if uniform.bloomAmount > 0 {
+            let width = max(1, Int(Double(source.width) * budget.bloomScale))
+            let height = max(1, Int(Double(source.height) * budget.bloomScale))
+            if scratch.count != 2 || scratch[0].width != width || scratch[0].height != height {
+                let descriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba16Float,
+                    width: width, height: height, mipmapped: false)
+                descriptor.usage = [.shaderRead, .renderTarget]
+                scratch = [device.makeTexture(descriptor: descriptor), device.makeTexture(descriptor: descriptor)].compactMap { $0 }
+                bloomDirty = true
+            }
+            guard scratch.count == 2 else { return }
+        }
         uniform.outputSize = SIMD2(Float(drawableSize.width), Float(drawableSize.height))
-        let destinations = [scratch[0], scratch[1], scratch[0], drawable.texture]
-        let sources = [[source], [scratch[0]], [scratch[1]], [source, scratch[0], flash]]
+        let glow = uniform.bloomAmount > 0 ? scratch[0] : source
+        let temporary = uniform.bloomAmount > 0 ? scratch[1] : source
+        let destinations = [glow, temporary, glow, drawable.texture]
+        let sources = [[source], [glow], [temporary], [source, glow, flash]]
+        let rebuildBloom = uniform.bloomAmount > 0 && (bloomDirty || bloomGamma != uniform.gamma)
         for index in pipelines.indices {
+            if index < 3 && !rebuildBloom { continue }
             let descriptor = MTLRenderPassDescriptor()
             descriptor.colorAttachments[0].texture = destinations[index]
             descriptor.colorAttachments[0].loadAction = .clear
             descriptor.colorAttachments[0].storeAction = .store
             descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1)
-            guard let encoder = buffer.makeRenderCommandEncoder(descriptor: descriptor) else { continue }
+            guard let encoder = buffer.makeRenderCommandEncoder(descriptor: descriptor) else { return }
             encoder.setRenderPipelineState(pipelines[index])
             for (slot, texture) in sources[index].enumerated() { encoder.setFragmentTexture(texture, index: slot) }
             encoder.setFragmentBytes(&uniform, length: MemoryLayout<CRTUniforms>.stride, index: 0)
             encoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
             encoder.endEncoding()
         }
+        if rebuildBloom { bloomDirty = false; bloomGamma = uniform.gamma }
         if let selectionRenderer, selection != nil || !rescueAuras.isEmpty {
             let pass = MTLRenderPassDescriptor()
             pass.colorAttachments[0].texture = drawable.texture
@@ -188,6 +210,14 @@ import UIKit
                 if let selection { selectionRenderer.encode(selection,
                     sourceSize: sourceSize, outputSize: drawableSize, glass: glass, into: encoder) }
                 encoder.endEncoding()
+            }
+        }
+        buffer.addCompletedHandler { completed in
+            let seconds = max(0, completed.gpuEndTime - completed.gpuStartTime)
+            let succeeded = completed.status == .completed
+            Task { @MainActor [weak self] in
+                if succeeded { MobileDevicePerformance.recordGPU(seconds, source: "crt") }
+                else { self?.bloomDirty = true }
             }
         }
         buffer.present(drawable)

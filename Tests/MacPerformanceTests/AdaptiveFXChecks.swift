@@ -42,6 +42,10 @@ func verifyAdaptiveFXPolicy() throws {
     MacFXPerformance.shared.overrideQuality = .full
     defer { MacFXPerformance.shared.overrideQuality = nil; GameCursor.gameplaySuppressed = true }
     GameCursor.gameplaySuppressed = false
+    if MTLCreateSystemDefaultDevice() == nil {
+        print("SKIP shipping CRT GPU checks: Metal unavailable in this process")
+        return
+    }
     let image = ReplayFrameCapture.image(size: CGSize(width: 64, height: 48)) {
         NSColor.black.setFill(); CGRect(x: 0, y: 0, width: 64, height: 48).fill()
         NSColor.white.setFill(); CGRect(x: 20, y: 12, width: 10, height: 18).fill()
@@ -93,11 +97,11 @@ func verifyAdaptiveFXPolicy() throws {
     let flash = ExplosionFlash(rect: CGRect(x: 10, y: 10, width: 8, height: 8), strength: 1)
     let beforeFlash = view.flashUploads
     view.updateEffects(flashes: [flash], selection: nil)
-    let lit = try pixels(view.renderForTesting(size: size))
+    let lit = try pixels(view.renderForTesting(size: size, headroom: 8))
     try fxCheck(lit != zero && view.flashUploads == beforeFlash + 1 && view.sourceUploads == uploads,
-                "Flash-only redraw did not reuse the scene")
+                "Flash-only HDR redraw did not reuse the scene")
     view.updateEffects(flashes: [.init(rect: flash.rect, strength: 1, expiresAt: 0)], selection: nil)
-    try fxCheck(zero == pixels(view.renderForTesting(size: size)), "Expired flash retained stale light")
+    try fxCheck(zero == pixels(view.renderForTesting(size: size, headroom: 8)), "Expired flash retained stale light")
     let replacement = ReplayFrameCapture.image(size: CGSize(width: 64, height: 48)) {
         NSColor.blue.setFill(); CGRect(x: 0, y: 0, width: 64, height: 48).fill()
     }!

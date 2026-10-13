@@ -38,6 +38,8 @@ import LemmingsGameArt
   private final class SpriteTrails {
     let source: CGImage
     var images: [TrailKey: TrailImage] = [:]
+    var order: [TrailKey] = []
+    var byteCost = 0
     init(source: CGImage) { self.source = source }
   }
   private let sprites = NSCache<NSImage, SpriteTrails>()
@@ -48,7 +50,7 @@ import LemmingsGameArt
   private var currentPositions: [Int: MotionSample] = [:]
   private(set) var drawnTrailCount = 0
 
-  init() { sprites.countLimit = 128 }
+  init() { sprites.countLimit = 128; sprites.totalCostLimit = 32 * 1024 * 1024 }
 
   func reset() {
     drawingContext = nil
@@ -133,7 +135,7 @@ import LemmingsGameArt
 
   func drawBehind(actor: Int, sprite: NSImage, in rect: CGRect, motion: CGVector,
     pixelSize: CGSize, mirrored: Bool = false) {
-    guard let context = drawingContext, drawnTrailCount < MacFXPerformance.shared.quality.trailLimit,
+    guard let context = drawingContext, drawnTrailCount < MacFXPerformance.shared.presentation.trailLimit,
       rect.width > 0, rect.height > 0, rect.intersects(clip),
       pixelSize.width > 0, pixelSize.height > 0,
       motion.dx != 0 || motion.dy != 0 else { return }
@@ -167,12 +169,17 @@ import LemmingsGameArt
       let key = TrailKey(direction: direction,
         pixelX: max(1, Int((pixelSize.width * CGFloat(cached.source.width) / rect.width).rounded())),
         pixelY: max(1, Int((pixelSize.height * CGFloat(cached.source.height) / rect.height).rounded())),
-        tier: tier, echoes: MacFXPerformance.shared.quality.trailEchoLimit, mirrored: mirrored)
+        tier: tier, echoes: MacFXPerformance.shared.presentation.trailEchoLimit, mirrored: mirrored)
       let trail: TrailImage
       if let existing = cached.images[key] { trail = existing }
       else {
         guard let image = Self.makeTrail(source: cached.source, key: key) else { continue }
-        cached.images[key] = image
+        if cached.order.count == 96, let removed = cached.images.removeValue(forKey: cached.order.removeFirst()) {
+          cached.byteCost -= removed.image.bytesPerRow * removed.image.height
+        }
+        cached.images[key] = image; cached.order.append(key)
+        cached.byteCost += image.image.bytesPerRow * image.image.height
+        sprites.setObject(cached, forKey: sprite, cost: cached.byteCost)
         trail = image
       }
       let scaleX = rect.width / CGFloat(cached.source.width)

@@ -78,9 +78,11 @@ import UIKit
             (layer as? CAMetalLayer)?.wantsExtendedDynamicRangeContent = false
             return
         }
-        if let lastPaint, now - lastPaint < 1.0 / 30 { return }
+        let budget = MobileDevicePerformance.presentation
+        if let lastPaint, now - lastPaint < 1.0 / budget.effectHz { return }
         lastPaint = now
-        let scale = min(2, window?.screen.scale ?? 1)
+        let scale = budget.overlayRenderScale(width: bounds.width, height: bounds.height,
+                                             nativeScale: min(2, window?.screen.scale ?? 1))
         drawableSize = CGSize(width: max(1, bounds.width * scale), height: max(1, bounds.height * scale))
         (layer as? CAMetalLayer)?.wantsExtendedDynamicRangeContent = (window?.screen.potentialEDRHeadroom ?? 1) > 1
         setNeedsDisplay()
@@ -110,9 +112,15 @@ import UIKit
             encoder.setFragmentBytes(&uniforms, length: MemoryLayout<SuperSpeedUniforms>.stride, index: 0)
             encoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
         }
-        let samples = pops.samples(now: now) { centre in
+        let allSamples = pops.samples(now: now) { centre in
             let point = project(centre)
             return SIMD2(Float(point.x / self.bounds.width), Float(point.y / self.bounds.height))
+        }
+        let limit = MobileDevicePerformance.presentation.explosionLimit
+        var samples = Array(allSamples.suffix(limit))
+        if let exposure = allSamples.first(where: { $0.w > 0 }), !samples.contains(exposure) {
+            if samples.count == limit { samples.removeFirst() }
+            samples.insert(exposure, at: 0)
         }
         if !samples.isEmpty {
             var uniforms = NuclearExplosionUniforms(size: SIMD2(Float(bounds.width), Float(bounds.height)), headroom: headroom, count: UInt32(samples.count))
@@ -146,7 +154,13 @@ import UIKit
                 encoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
             }
         }
-        encoder.endEncoding(); buffer.present(drawable); buffer.commit()
+        encoder.endEncoding()
+        buffer.addCompletedHandler { completed in
+            guard completed.status == .completed else { return }
+            let seconds = max(0, completed.gpuEndTime - completed.gpuStartTime)
+            Task { @MainActor in MobileDevicePerformance.recordGPU(seconds, source: "effects") }
+        }
+        buffer.present(drawable); buffer.commit()
     }
 }
 #endif
