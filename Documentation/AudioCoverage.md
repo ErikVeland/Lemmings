@@ -42,7 +42,12 @@ Both transports place Apple's peak limiter after the music effects to protect
 against EQ and reverb boosts. Gain trims and normal volume controls still apply.
 
 Offline checks cover continuing source loops while the main actor is occupied,
-tracker output with its synthesis lock held, and contended rewind callbacks.
+short ALAC loops at mono 48 kHz, abrupt joins, boosted output peaks, and restart.
+Tracker checks cover a 140 ms synthesis stall and contended rewind callbacks.
+Muted checks also cover parked scratches, volume, suspension, spin-up and
+Adaptive DJ reverse routing. Reverse audio bypasses the forward effects.
+The full DJ suite passes one-shot completion, pitch and tempo, nuke filters,
+Classic and sequel track assignment, retry stability and suspended crossfades.
 Both shared audio modules compile for macOS 12.3 and iOS 16 or later.
 Listening on physical devices, Bluetooth output, route changes, and stalls longer
 than the buffered reserve remain unverified. A playback change cannot remove
