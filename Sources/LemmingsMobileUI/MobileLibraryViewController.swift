@@ -178,6 +178,9 @@ actor MobileMenuPreviewLoader {
         inputLink?.preferredFramesPerSecond = 30
         inputLink?.add(to: .main, forMode: .common)
         searchField.autocorrectionType = .no
+        searchField.spellCheckingType = .no
+        searchField.textContentType = nil
+        if #available(iOS 17.0, *) { searchField.inlinePredictionType = .no }
         searchField.autocapitalizationType = .none
         searchField.returnKeyType = .done
         searchField.alpha = 0.01
@@ -684,7 +687,7 @@ actor MobileMenuPreviewLoader {
         }
         startLevel(checkpoint.levelIndex, checkpoint: checkpoint)
     }
-    func startLevel(_ index: Int, checkpoint: MobileCheckpointEnvelope?) {
+    func startLevel(_ index: Int, checkpoint: MobileCheckpointEnvelope?, restoringMatchingCheckpoint: Bool = false) {
         guard !preparingLevel, let library, let checkpointStore else { return }
         guard let previewLoader else { return }
         previewTask?.cancel()
@@ -695,7 +698,9 @@ actor MobileMenuPreviewLoader {
                 let prepared = try await previewLoader.prepare(index)
                 guard !Task.isCancelled, previewGeneration == generation else { return }
                 loading = false; preparingLevel = false
-                presentPreparedLevel(index, checkpoint: checkpoint, library: library,
+                let matching = restoringMatchingCheckpoint && checkpoint?.levelIdentifier != prepared.content.session.levelIdentifier
+                    ? nil : checkpoint
+                presentPreparedLevel(index, checkpoint: matching, library: library,
                                      checkpointStore: checkpointStore, content: prepared.content)
             } catch {
                 guard !Task.isCancelled, previewGeneration == generation else { return }

@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import shutil
 
@@ -26,6 +27,15 @@ def copy_parity_resources(resources, app):
             shutil.rmtree(destination)
         if source.is_dir():
             shutil.copytree(source, destination)
+    activation = os.environ.get("IOS_GAME_CENTER_ACTIVATION")
+    if activation:
+        from game_center import validate_activation
+        validate_activation(activation, resources, os.environ.get("IOS_GAME_CENTER_BUNDLE_ID", "academy.glasscode.lemmings.ios"))
+        catalogue = app / "GameCenter/leaderboards.json"
+        config = json.loads(catalogue.read_text())
+        config["enabled"] = True
+        catalogue.write_text(json.dumps(config, indent=2, sort_keys=True) + "\n")
+
 
 
 def digest(path):

@@ -18,4 +18,13 @@ struct GameplayCommandsTests {
         #expect(GameplayCommands.command(key: "[", shift: true) == .speedStep(-1))
         #expect(GameplayCommands.command(key: "unknown") == nil)
     }
+    @Test func testCommandRewindKeepsZoomAndSystemShortcutsDistinct() {
+        #expect(GameplayCommands.command(key: "z", command: true) == .step(-1))
+        #expect(GameplayCommands.command(key: "z") == .zoom(false))
+        #expect(GameplayCommands.command(key: "z", shift: true) == .zoom(true))
+        #expect(GameplayCommands.command(key: "z", shift: true, command: true) == nil)
+        for key in ["q", "f", "r", "1"] {
+            #expect(GameplayCommands.command(key: key, command: true) == nil)
+        }
+    }
 }

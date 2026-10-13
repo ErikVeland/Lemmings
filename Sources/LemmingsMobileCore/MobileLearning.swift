@@ -23,6 +23,31 @@ public struct MobileLearningState: Codable, Equatable, Sendable {
     }
 }
 
+/// A saved journey retains its solo owner or complete Hot Seat roster and turn.
+public struct MobileLearningResume: Sendable {
+    public let state: MobileLearningState
+    public let seat: MobileHotSeat?
+    public let owner: String
+    public var scope: String { seat?.scope ?? owner }
+
+    public static func find(owner: String, seats: MobileHotSeatStore,
+                            storage: (String) -> MobileStorage) -> Self? {
+        let candidates = [seats.current].compactMap { $0 }.filter { $0.host == owner }
+            + seats.resumable(host: owner)
+        let scopes: [(String, MobileHotSeat?)] = seats.current?.host == owner
+            ? [(seats.current!.scope, seats.current)] + [(owner, nil)]
+                + candidates.filter { $0.id != seats.current?.id }.map { ($0.scope, $0) }
+            : [(owner, nil)] + candidates.map { ($0.scope, $0) }
+        for (scope, seat) in scopes {
+            guard let state = storage(scope).load(MobileLearningState.self, name: "learning"),
+                  let run = state.run, run.source == .playlist(LearningJourney.playlistID),
+                  run.pool.id.hasPrefix("learning-") else { continue }
+            return Self(state: state, seat: seat, owner: owner)
+        }
+        return nil
+    }
+}
+
 /// A shared catalogue queue opens only its current pack. Missing entries never disappear.
 public final class MobileJourneyLibrary: MobileGameLibrary {
     public let entries: [LevelPlaylistEntry]

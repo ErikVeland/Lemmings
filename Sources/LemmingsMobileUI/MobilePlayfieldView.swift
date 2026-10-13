@@ -30,6 +30,7 @@ import UIKit
     var cursorCount: Int?
     var cursorRemaining: Int?
     var selectionSprite: MobileSpriteHighlight?
+    var rescueSprites: [MobileSpriteHighlight] = []
     var assignmentSprite: MobileSpriteHighlight?
     var assignmentProgress: Double?
     var renderScale = 1.0
@@ -38,6 +39,7 @@ import UIKit
     private let decoration = MobilePlayfieldDecoration()
     private let failureMood = FailureMoodTransition()
     private let completionGlow = RescueCelebrationTransition()
+    private let backgroundGlow = RescueBackgroundGlow()
     func setRescueFeedback(saved: Int, required: Int, total: Int, isComplete: Bool, didWin: Bool) {
         completionGlow.set(active: RescueCelebration.isSecured(saved: saved, required: required, isComplete: isComplete, didWin: didWin),
             brief: RescueCelebration.requiresAll(required: required, total: total),
@@ -62,7 +64,11 @@ import UIKit
         decoration.backgroundColor = .clear
         addSubview(decoration)
         failureMood.onChange = { [weak self] value in self?.decoration.failureAmount = value }
-        completionGlow.onChange = { [weak self] value in self?.decoration.rescueAmount = value }
+        completionGlow.onChange = { [weak self] value in
+            guard let self else { return }
+            self.decoration.rescueAmount = value
+            self.setNeedsDisplay(); self.updateTube()
+        }
 
         let pinch = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
         pinch.delegate = self
@@ -127,6 +133,8 @@ import UIKit
     override func draw(_ rect: CGRect) {
         guard tube?.isHidden != false, let context = UIGraphicsGetCurrentContext(), let bitmap else { return }
         MobileBitmapRenderer.draw(bitmap, viewport: gameViewport, in: context)
+        drawRescueBackground(bitmap, viewport: gameViewport, context: context)
+        for effect in rescueEffects(viewport: gameViewport) { LemmingSelectionRenderer.draw(effect, in: context) }
         drawObviousSelection(viewport: gameViewport, context: context)
         if let effect = selectionEffect(viewport: gameViewport) { LemmingSelectionRenderer.draw(effect, in: context) }
         if let sprite = assignmentSprite, let progress = assignmentProgress, let image = spriteImage(sprite) {
@@ -170,6 +178,7 @@ import UIKit
         context.translateBy(x: 0, y: CGFloat(height))
         context.scaleBy(x: 1, y: -1)
         MobileBitmapRenderer.draw(bitmap, viewport: viewport, in: context)
+        drawRescueBackground(bitmap, viewport: viewport, context: context)
         drawObviousSelection(viewport: viewport, context: context)
         if let sprite = assignmentSprite, let progress = assignmentProgress, let image = spriteImage(sprite) {
             SpriteAssignmentPulse.draw(sprite: image, in: spriteRect(sprite, viewport: viewport), context: context,
@@ -179,6 +188,7 @@ import UIKit
         drawCursorBadge(viewport: viewport, context: context)
         guard let image = context.makeImage() else { return }
         tube.selection = selectionEffect(viewport: viewport)
+        tube.rescueAuras = rescueEffects(viewport: viewport)
         tube.update(image: image, settings: displaySettings, flashMask: ExplosionGlow.textureMask(width: width, height: height, flashes: flashes))
     }
 
@@ -254,6 +264,23 @@ import UIKit
         return .init(sprite: image, rect: spriteRect(sprite, viewport: viewport),
             clipRect: CGRect(x: content.x, y: content.y, width: content.width, height: content.height),
             bloom: true, time: motionReduced || displaySettings.reduceFlashes ? nil : sprite.time)
+    }
+
+    private func rescueEffects(viewport: MobileViewport) -> [LemmingSelectionEffect] {
+        MobileRescueArt.effects(sprites: rescueSprites, viewport: viewport, amount: completionGlow.amount,
+            enabled: displaySettings.hdEffectsEnabled && !displaySettings.reduceFlashes, image: spriteImage)
+    }
+
+    private func drawRescueBackground(_ image: CGImage, viewport: MobileViewport, context: CGContext) {
+        guard completionGlow.amount > 0 else { return }
+        let content = viewport.contentFrame
+        let sx = viewport.zoom * viewport.pixelAspect, sy = viewport.zoom
+        context.saveGState()
+        defer { context.restoreGState() }
+        context.clip(to: CGRect(x: content.x, y: content.y, width: content.width, height: content.height))
+        backgroundGlow.draw(image, in: CGRect(x: content.x - viewport.origin.x * sx,
+            y: content.y - viewport.origin.y * sy, width: viewport.levelSize.width * sx,
+            height: viewport.levelSize.height * sy), amount: completionGlow.amount, context: context, slot: "scene")
     }
 
     private func inputPoint(_ point: CGPoint) -> CGPoint {

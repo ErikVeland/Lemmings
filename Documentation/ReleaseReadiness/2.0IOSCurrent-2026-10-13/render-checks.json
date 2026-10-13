@@ -1,0 +1,50 @@
+{
+  "audio" : "muted",
+  "captures" : [
+    {
+      "canPlay" : true,
+      "device" : "iphone-portrait",
+      "file" : "iphone-portrait-replay-rescue.png",
+      "rescueMasks" : 1,
+      "targets" : 19
+    },
+    {
+      "canPlay" : false,
+      "device" : "iphone-landscape",
+      "file" : "iphone-landscape-replay-rescue.png",
+      "rescueMasks" : 1,
+      "targets" : 0
+    },
+    {
+      "canPlay" : true,
+      "device" : "narrow-portrait",
+      "file" : "narrow-portrait-replay-rescue.png",
+      "rescueMasks" : 1,
+      "targets" : 19
+    },
+    {
+      "canPlay" : false,
+      "device" : "narrow-landscape",
+      "file" : "narrow-landscape-replay-rescue.png",
+      "rescueMasks" : 1,
+      "targets" : 0
+    },
+    {
+      "canPlay" : true,
+      "device" : "ipad-portrait",
+      "file" : "ipad-portrait-replay-rescue.png",
+      "rescueMasks" : 1,
+      "targets" : 19
+    },
+    {
+      "canPlay" : true,
+      "device" : "ipad-landscape",
+      "file" : "ipad-landscape-replay-rescue.png",
+      "rescueMasks" : 1,
+      "targets" : 19
+    }
+  ],
+  "physicalUIKitAcceptance" : "pending",
+  "replayPanelOverlapsControls" : false,
+  "windows" : "none"
+}

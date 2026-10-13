@@ -10,7 +10,10 @@ public enum GameplayCommand: Equatable, Sendable {
 public struct KeyChord: Hashable, Sendable {
     public let key: String
     public let shift: Bool
-    public init(_ key: String, shift: Bool = false) { self.key = key.lowercased(); self.shift = shift }
+    public let command: Bool
+    public init(_ key: String, shift: Bool = false, command: Bool = false) {
+        self.key = key.lowercased(); self.shift = shift; self.command = command
+    }
 }
 
 public enum GameplayCommands {
@@ -25,6 +28,7 @@ public enum GameplayCommands {
             .init("f"): .speed, .init("n"): .endRun,
             .init("r"): .rewind, .init("r", shift: true): .retry,
             .init(","): .step(-1), .init("."): .step(1),
+            .init("z", command: true): .step(-1),
             .init("["): .focusUnassigned(-1), .init("]"): .focusUnassigned(1),
             .init("[", shift: true): .speedStep(-1), .init("]", shift: true): .speedStep(1),
             .init("|", shift: true): .speedReset,
@@ -38,12 +42,15 @@ public enum GameplayCommands {
         for index in 0..<8 { result[.init(String(index + 1))] = .skill(index) }
         return result
     }()
-    public static func command(key: String, shift: Bool = false) -> GameplayCommand? {
-        bindings[KeyChord(key, shift: shift)] ?? bindings[KeyChord(key)]
+    public static func command(key: String, shift: Bool = false, command: Bool = false) -> GameplayCommand? {
+        let exact = bindings[KeyChord(key, shift: shift, command: command)]
+        if command { return exact }
+        return exact ?? bindings[KeyChord(key)]
     }
     public static let help = [
         "Space / P: Pause", "1-8: Skill", "Tab: Next skill", "Shift+Tab: Previous skill",
         "F: Fast speed", "R: Rewind", ", / .: Step back / forward", "Shift+R: Retry",
+        "Command+Z: Step back",
         "H / Home: Entrance", "G / End: Goal", "Arrow keys: Pan", "Z / Shift+Z: Zoom",
         "[ / ]: Unassigned lemming", "Return: Repeat assignment", "N: End run / undo",
         "/ / I / F1: Hints", "?: Controls", "Escape / Q: Library",

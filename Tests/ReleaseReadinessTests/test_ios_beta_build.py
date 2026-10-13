@@ -63,7 +63,7 @@ class IOSBetaBuildTests(unittest.TestCase):
 
     def validate(self, package, root, profile, record, device):
         with patch.object(BUILD, "run"), patch.object(BUILD, "uuids", return_value=record["symbolUUIDs"]), \
-                patch.object(BUILD, "verify"), patch.object(BUILD.subprocess, "check_output", return_value=plistlib.dumps(profile)):
+                patch.object(BUILD, "verify"), patch.object(BUILD, "signing_capabilities", return_value=profile):
             return BUILD.validate_export(package, root, record, device, "debugging")
 
     def test_export_preserves_executable_permissions_and_checks_device(self):

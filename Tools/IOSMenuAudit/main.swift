@@ -6,8 +6,9 @@ import LemmingsMobileCore
 import NxlvKit
 
 @main struct MenuAudit {
-    @MainActor static func main() throws {
-        guard CommandLine.arguments.count == 4 else { throw Failure.invalidArguments }
+    @MainActor static func main() async throws {
+        let latestFixes = CommandLine.arguments.last == "--current-fixes"
+        guard CommandLine.arguments.count == (latestFixes ? 5 : 4) else { throw Failure.invalidArguments }
         let artwork = URL(fileURLWithPath: CommandLine.arguments[1])
         let content = URL(fileURLWithPath: CommandLine.arguments[2])
         let output = URL(fileURLWithPath: CommandLine.arguments[3])
@@ -16,6 +17,7 @@ import NxlvKit
               typography.interface.logo != nil,
               typography.font(.small) != nil, typography.font(.large) != nil else { throw Failure.missingArtwork }
         let library = try ClassicMobileLibrary(directory: content)
+        if latestFixes { try await checkCurrentFixes(library: library, typography: typography, output: output); return }
         let session = try library.loadLevel(at: 0).session
         let bitmap = try session.render(highlight: nil)
         guard let image = MobileBitmapRenderer.image(bitmap) else { throw Failure.missingArtwork }

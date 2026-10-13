@@ -22,6 +22,8 @@ import UIKit
     private var failureMusic = FailureMusicTransition()
     private let nukeMood = NukeMusicSweep()
     private var lastTrack: URL?
+    private var lastPitchCents: Double?
+    private var cachedSettings = MobileSettings.load(from: .standard)
     var onTrackChange: ((String, String) -> Void)?
     var currentTrackURL: URL? { usingDJ ? dj.currentURL : lastTrack }
     private init() { connectFailureMusic() }
@@ -34,7 +36,7 @@ import UIKit
         }
     }
 
-    private var settings: MobileSettings { MobileSettings.load(from: .standard) }
+    private var settings: MobileSettings { cachedSettings }
     private var musicRoot: URL? { Bundle.main.resourceURL?.appendingPathComponent("Music") }
     private var isTestAudioMuted: Bool { ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] == "muted" }
 
@@ -47,6 +49,7 @@ import UIKit
             var value = settings; value.soundtrack = newValue
             value.classic.music = newValue == "Adaptive DJ" ? .adaptiveDJ : .amigaModules
             value.save(to: .standard)
+            cachedSettings = value
             stop()
         }
     }
@@ -59,6 +62,7 @@ import UIKit
         soundtrack = names[((names.firstIndex(of: soundtrack) ?? 0) + 1) % names.count]
     }
     func applySettings() {
+        cachedSettings = MobileSettings.load(from: .standard)
         let c = settings.classic
         if let playing, !playing.hasSuffix("|" + soundtrack) { stop() }
         module.setEnhancements(c.musicStyle == .modern ? .modern : .faithful)
@@ -76,6 +80,7 @@ import UIKit
         guard isEnabled, !isTestAudioMuted else { return }
         let key = attemptID.uuidString + "|" + soundtrack
         guard playing != key else { return }
+        lastPitchCents = nil
         let position = context.scorePosition ?? index
         let tune = MobileMusicAssignment.tune(identifier: identifier, index: position, title: title)
         let cycle = MobileMusicAssignment.cycle(tune: tune, index: position, titles: context.titles, isFan: context.isFan)
@@ -154,7 +159,7 @@ import UIKit
         let changed = self.paused != paused || self.rewinding != rewinding
         self.paused = paused; self.speed = speed; self.rewinding = rewinding
         pitch.update(speed: settings.classic.variableSpeedEnabled ? speed : 1, at: ProcessInfo.processInfo.systemUptime)
-        module.setSpeedPitch(pitch.cents); recordings.setSpeedPitch(pitch.cents); dj.setSpeedPitch(pitch.cents)
+        applyPitch()
         if changed { applySettings(); applyOutputState() }
     }
     func update(_ snapshot: MobileGameSnapshot, active: Int? = nil, nukeRemainingTicks: Int? = nil,
@@ -182,6 +187,11 @@ import UIKit
         let now = ProcessInfo.processInfo.systemUptime
         failureMusic.advance(at: now); nukeMood.advanceReturn(at: now)
         pitch.update(speed: settings.classic.variableSpeedEnabled ? speed : 1, at: now)
+        applyPitch()
+    }
+    private func applyPitch() {
+        if let lastPitchCents, abs(lastPitchCents - pitch.cents) < 0.1 { return }
+        lastPitchCents = pitch.cents
         module.setSpeedPitch(pitch.cents); recordings.setSpeedPitch(pitch.cents); dj.setSpeedPitch(pitch.cents)
     }
     private func applyOutputState() {
@@ -200,6 +210,7 @@ import UIKit
     func stop() {
         module.stop(); recordings.stop(); dj.stop()
         playing = nil; lastTrack = nil; resultComplete = false
+        lastPitchCents = nil
         nukeMood.reset(); failureMusic = FailureMusicTransition(); connectFailureMusic()
         module.setTempoScale(1); recordings.setPlaybackRate(1); dj.setPlaybackRate(1)
     }

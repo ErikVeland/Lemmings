@@ -247,10 +247,14 @@ public struct ClassicMacScene: Sendable {
         terrainRGBA = Data(pixels)
     }
 
-    public func rgba(simulation: ClassicDOSSimulation) -> Data {
+    public func terrainFrame(terrain: ClassicDOSTerrain) -> Data {
+        Data(terrainPixels(solid: [UInt8](terrain.solidMask)))
+    }
+
+    private func terrainPixels(solid: [UInt8]) -> [UInt8] {
         var pixels = [UInt8](terrainRGBA)
-        let original = [UInt8](level.solidMask), solid = [UInt8](simulation.terrain.solidMask)
-        guard original.count == solid.count else { return terrainRGBA }
+        let original = [UInt8](level.solidMask)
+        guard original.count == solid.count else { return pixels }
         for i in solid.indices where solid[i] != original[i] {
             let x = (i % level.width) * 2, y = (i / level.width) * 2
             for dy in 0..<2 { for dx in 0..<2 {
@@ -259,6 +263,13 @@ public struct ClassicMacScene: Sendable {
                 else { pixels[p] = 240; pixels[p+1] = 208; pixels[p+2] = 96; pixels[p+3] = 255 }
             } }
         }
+        return pixels
+    }
+
+    public func rgba(simulation: ClassicDOSSimulation, terrain: Data? = nil) -> Data {
+        let solid = [UInt8](simulation.terrain.solidMask)
+        guard solid.count == level.solidMask.count else { return terrainRGBA }
+        var pixels = terrain.map { [UInt8]($0) } ?? terrainPixels(solid: solid)
         var triggerIndex = 0
         for (position, object) in level.objects.enumerated() {
             let placement = object.placement, graphic = object.graphic

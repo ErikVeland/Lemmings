@@ -1,0 +1,9 @@
+UI test windows: offscreen; audio: muted
+Building for debugging...
+[1 / 1]
+[2 / 5] LemmingsMobileMenuAudit-product
+[4 / 7] LemmingsMobileMenuAudit-product
+[7 / 9] LemmingsMobileMenuAudit-product
+[8 / 9] LemmingsMobileMenuAudit-product
+Build complete! (2.17 sec.)
+PASS: six replay and rescue renders, control targets and reduced-effect gates.

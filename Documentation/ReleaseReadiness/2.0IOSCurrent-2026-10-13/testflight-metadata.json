@@ -1,0 +1,12 @@
+{
+  "betaAppDescription": "Ultimate Lemmings iOS is a fan-made Lemmings port for iPhone and iPad. This beta supports Classic campaigns and fan packs, original DOS, Macintosh and Amiga artwork, player profiles, records, playlists, hints, a learning journey, rewind, replay and Hot Seat play. Game Center is unavailable in this build. Lemmings 2 and Lemmings 3 mobile campaigns are not included.",
+  "whatToTest": "Test touch targets and camera zoom on iPhone and iPad. Check keyboard and controller input, including Command+Z step back. Resume a saved solo or Hot Seat journey and confirm its player, turn and position. Check replay skill history and backward seeking. Try hints, records, playlists and audio pause/retry behaviour. Report crashes, clipped controls, incorrect targets and save failures through TestFlight. Game Center is unavailable in this build. Lemmings 2 and Lemmings 3 mobile campaigns are not included.",
+  "reviewNotes": "This is the Classic-engine iOS beta. No app login is required. Gameplay begins from the Lemmings library. Hot Seat handovers stay paused until Ready. Optional online rankings have their own consent. Game Center is unavailable in this build. The mobile Lemmings 2 and Lemmings 3 campaigns are deferred.",
+  "platform": "IOS",
+  "version": "2.0",
+  "build": 12,
+  "appStoreConnectAppID": "6822112090",
+  "bundleID": "academy.glasscode.lemmings.ios",
+  "publicLinkRequested": true,
+  "publicBetaGroup": "iOS Public Beta"
+}

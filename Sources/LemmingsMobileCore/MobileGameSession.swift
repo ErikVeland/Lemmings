@@ -36,6 +36,18 @@ public struct MobilePixelFrame: Equatable, Sendable {
     }
 }
 
+/// Captures one game state cheaply so a worker can encode it without accessing live play.
+public struct MobileCheckpointPayload: Sendable {
+    private let encodeValue: @Sendable () throws -> Data
+
+    public init<Value: Encodable & Sendable>(_ value: Value) {
+        encodeValue = { try JSONEncoder().encode(value) }
+    }
+
+    public init(encoded: Data) { encodeValue = { encoded } }
+    public func encode() throws -> Data { try encodeValue() }
+}
+
 public struct MobileExplosion: Sendable {
     public let id: Int
     public let birthTick: Int
@@ -54,6 +66,12 @@ public struct MobileSpriteHighlight: Sendable {
     public init(frame: MobilePixelFrame, rect: MobileRect, cacheKey: String, time: Double?) {
         self.frame = frame; self.rect = rect; self.cacheKey = cacheKey; self.time = time
     }
+}
+
+public struct MobileReplaySkillUse: Equatable, Sendable {
+    public let tick: Int
+    public let name: String
+    public init(tick: Int, name: String) { self.tick = tick; self.name = name }
 }
 
 public struct MobileSkillState: Codable, Equatable, Sendable {
@@ -149,8 +167,10 @@ public protocol MobileGameSession: AnyObject {
     var allNukeExplosionsPlayed: Bool { get }
     var explosions: [MobileExplosion] { get }
     var selectionSprite: MobileSpriteHighlight? { get }
+    var rescueSprites: [MobileSpriteHighlight] { get }
     var assignmentSprite: MobileSpriteHighlight? { get }
     var assignmentProgress: Double? { get }
+    var replaySkillUses: [MobileReplaySkillUse] { get }
 
     var entrancePoint: MobilePoint { get }
     var goalPoint: MobilePoint { get }
@@ -181,11 +201,15 @@ public protocol MobileGameSession: AnyObject {
     @discardableResult func undoEndRun() -> Bool
     func render(highlight: MobileTargetSelection?) throws -> MobilePixelFrame
     func checkpointPayload() throws -> Data
+    func prepareCheckpointPayload() throws -> MobileCheckpointPayload
     func restoreCheckpointPayload(_ data: Data) throws
     func releaseTransientResources()
 }
 
 public extension MobileGameSession {
+    func prepareCheckpointPayload() throws -> MobileCheckpointPayload {
+        .init(encoded: try checkpointPayload())
+    }
     var renderScale: Double { 1 }
     var activeLemmingCount: Int { max(0, snapshot.released - snapshot.saved) }
     var nukeRemainingTicks: Int? { nil }
@@ -213,7 +237,9 @@ public extension MobileGameSession {
     var initialCameraOrigin: MobilePoint { MobilePoint(x: 0, y: 0) }
     var panelFrame: MobilePixelFrame? { nil }
     var selectionSprite: MobileSpriteHighlight? { nil }
+    var rescueSprites: [MobileSpriteHighlight] { [] }
     var assignmentSprite: MobileSpriteHighlight? { nil }
+    var replaySkillUses: [MobileReplaySkillUse] { [] }
     var assignmentProgress: Double? { nil }
     func releaseTransientResources() {}
 }

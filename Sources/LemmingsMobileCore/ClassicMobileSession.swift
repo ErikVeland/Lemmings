@@ -60,7 +60,7 @@ public final class ClassicMobileLibrary: MobileGameLibrary {
 }
 
 public final class ClassicMobileSession: MobileGameSession {
-    private struct Checkpoint: Codable {
+    private struct Checkpoint: Codable, Sendable {
         var version = 2
         let initialStateHash: String
         let simulation: ClassicDOSSimulation
@@ -92,6 +92,8 @@ public final class ClassicMobileSession: MobileGameSession {
     private let artworkRoot: URL?
     private var nativeArtwork: ClassicMacArtwork?
     private var nativeScene: ClassicMacScene?
+    private var terrainFrame: Data?
+    private var cachedPanelFrame: MobilePixelFrame?
     public var renderScale: Double { nativeScene == nil ? 1 : 2 }
     public var activeLemmingCount: Int { simulation.activeCount }
     public var explosions: [MobileExplosion] {
@@ -110,6 +112,7 @@ public final class ClassicMobileSession: MobileGameSession {
     private let levelInitial: ClassicDOSSimulation
     private var replayInitial: ClassicDOSSimulation
     private var soundCues: [PositionedSoundCue] = []
+    private var playbackSkillHistory: [MobileReplaySkillUse] = []
     private var playbackReplay: ClassicDOSReplay?
     private var playbackEvents: [Int: [ClassicDOSReplayEvent]] = [:]
     private var playbackEndTick: Int?
@@ -119,6 +122,12 @@ public final class ClassicMobileSession: MobileGameSession {
     public private(set) var usedRewind = false
     private var settings: ClassicSettings?
     public private(set) var selectionSprite: MobileSpriteHighlight?
+    public var rescueSprites: [MobileSpriteHighlight] {
+        guard settings?.hdEffectsEnabled == true, settings?.reduceFlashes != true,
+              RescueCelebration.isSecured(saved: snapshot.saved, required: snapshot.required,
+                  isComplete: snapshot.isComplete, didWin: snapshot.didWin) else { return [] }
+        return simulation.lemmings.filter(\.isActive).compactMap(spriteHighlight)
+    }
     public private(set) var assignmentSprite: MobileSpriteHighlight?
     public var assignmentProgress: Double? {
         guard let tick = assignmentTick else { return nil }
@@ -128,6 +137,10 @@ public final class ClassicMobileSession: MobileGameSession {
     private var assignmentID: Int?
     private var assignmentTick: Int?
     public var assignedSkillCount: Int { history.appliedCommands.filter { if case .assign = $0.action { return true }; return false }.count }
+    public var replaySkillUses: [MobileReplaySkillUse] {
+        guard isReadOnly else { return [] }
+        return Array(playbackSkillHistory.suffix(3))
+    }
     public var assignedSkills: [String: Int] {
         var counts: [String: Int] = [:]
         for command in history.appliedCommands {
@@ -237,12 +250,14 @@ public final class ClassicMobileSession: MobileGameSession {
     }
 
     public var panelFrame: MobilePixelFrame? {
+        if let cachedPanelFrame { return cachedPanelFrame }
         guard let panel = assets?.panel else { return nil }
-        return try? MobilePixelFrame(
+        cachedPanelFrame = try? MobilePixelFrame(
             width: panel.width,
             height: panel.height,
             rgba: panel.rgba(using: ClassicLemmingPalette.panelVGA)
         )
+        return cachedPanelFrame
     }
 
     public func tick() {
@@ -253,15 +268,31 @@ public final class ClassicMobileSession: MobileGameSession {
                 applyReplayAction(event.action)
             }
             let events = history.tick()
+            invalidateTerrain(for: events)
+            for event in events {
+                if case let .skillAssigned(_, skill) = event {
+                    recordReplaySkill(skill)
+                }
+            }
             soundCues += ClassicSoundCue.positionedCues(for: events, lemmings: simulation.lemmings, entrances: simulation.configuration.entrances)
             for event in playbackEvents[simulation.tickCount] ?? [] where event.afterTick == true {
                 applyReplayAction(event.action)
             }
         } else {
             let events = history.tick()
+            invalidateTerrain(for: events)
             soundCues += ClassicSoundCue.positionedCues(for: events, lemmings: simulation.lemmings, entrances: simulation.configuration.entrances)
         }
         if !simulation.isNuking { beforeEndRun = nil }
+    }
+
+    private func invalidateTerrain(for events: [ClassicDOSEvent]) {
+        if events.contains(where: {
+            switch $0 {
+            case .terrainAdded, .terrainRemoved: return true
+            default: return false
+            }
+        }) { terrainFrame = nil }
     }
 
     public func targetCandidates(for control: Int) -> [MobileTargetCandidate] {
@@ -321,6 +352,7 @@ public final class ClassicMobileSession: MobileGameSession {
     public func undoEndRun() -> Bool {
         guard let beforeEndRun else { return false }
         history = beforeEndRun
+        terrainFrame = nil
         if replayInitial.tickCount > 0, history.commands.isEmpty { replayInitial = history.simulation }
         self.beforeEndRun = nil
         usedRewind = true
@@ -332,7 +364,12 @@ public final class ClassicMobileSession: MobileGameSession {
         guard let renderedLevel else { throw MobileSessionError.frameUnavailable }
         let scale = nativeScene == nil ? 1 : 2
         let width = renderedLevel.width * scale, height = renderedLevel.height * scale
-        var pixels = [UInt8](nativeScene?.rgba(simulation: simulation) ?? ClassicSceneFrame.rgba(renderedLevel, simulation: simulation))
+        if terrainFrame == nil {
+            terrainFrame = nativeScene?.terrainFrame(terrain: simulation.terrain)
+                ?? ClassicSceneFrame.terrainRGBA(renderedLevel, terrain: simulation.terrain)
+        }
+        var pixels = [UInt8](nativeScene?.rgba(simulation: simulation, terrain: terrainFrame)
+            ?? ClassicSceneFrame.rgba(renderedLevel, simulation: simulation, terrain: terrainFrame))
         if let assets, palette.count >= 8 {
             for lemming in simulation.lemmings where lemming.isActive {
                 if nativeScene != nil, let sprite = spriteHighlight(lemming) {
@@ -364,7 +401,11 @@ public final class ClassicMobileSession: MobileGameSession {
     }
 
     public func checkpointPayload() throws -> Data {
-        try JSONEncoder().encode(Checkpoint(
+        try prepareCheckpointPayload().encode()
+    }
+
+    public func prepareCheckpointPayload() -> MobileCheckpointPayload {
+        MobileCheckpointPayload(Checkpoint(
             initialStateHash: initialStateHash,
             simulation: simulation,
             beforeEndRun: beforeEndRun?.simulation,
@@ -379,6 +420,7 @@ public final class ClassicMobileSession: MobileGameSession {
     }
 
     public func restoreCheckpointPayload(_ data: Data) throws {
+        terrainFrame = nil
         let checkpoint = try JSONDecoder().decode(Checkpoint.self, from: data)
         guard [1, 2].contains(checkpoint.version) else { throw MobileCheckpointError.version }
         guard checkpoint.initialStateHash == initialStateHash else { throw MobileSessionError.changedLevel }
@@ -406,6 +448,7 @@ public final class ClassicMobileSession: MobileGameSession {
     }
 
     @discardableResult public func rewind(seconds: Double) -> Bool {
+        terrainFrame = nil
         beforeEndRun = nil
         soundCues.removeAll(keepingCapacity: true)
         if isReadOnly {
@@ -421,6 +464,7 @@ public final class ClassicMobileSession: MobileGameSession {
     }
 
     @discardableResult public func stepBackward() -> Bool {
+        terrainFrame = nil
         beforeEndRun = nil
         soundCues.removeAll(keepingCapacity: true)
         if isReadOnly { return seekReplay(to: simulation.tickCount - 1) }
@@ -472,6 +516,8 @@ public final class ClassicMobileSession: MobileGameSession {
     }
 
     private func resetReplay() {
+        terrainFrame = nil
+        playbackSkillHistory.removeAll(keepingCapacity: true)
         var initial = replayInitial
         for event in playbackReplay?.events ?? [] where event.afterTick != true {
             if case let .assign(id, skill) = event.action {
@@ -490,9 +536,17 @@ public final class ClassicMobileSession: MobileGameSession {
         return simulation.tickCount == target
     }
 
+    private func recordReplaySkill(_ skill: ClassicSkill) {
+        playbackSkillHistory.append(.init(tick: simulation.tickCount, name: skill.rawValue.capitalized))
+        if playbackSkillHistory.count > 3 { playbackSkillHistory.removeFirst() }
+    }
+
     private func applyReplayAction(_ action: ClassicDOSReplayAction) {
         switch action {
-        case let .assign(id, skill): _ = history.assign(skill, to: id)
+        case let .assign(id, skill):
+            if history.assign(skill, to: id) == .assigned {
+                recordReplaySkill(skill)
+            }
         case let .releaseRate(value): history.setReleaseRate(value)
         case .nuke: history.beginNuke()
         }
@@ -514,6 +568,7 @@ public final class ClassicMobileSession: MobileGameSession {
         let changed = self.settings?.graphics != settings.graphics
         self.settings = settings
         guard changed else { return }
+        terrainFrame = nil
         nativeScene = nil; nativeArtwork = nil
         guard [.macintosh, .amiga].contains(settings.graphics), let authoredLevel, let renderedLevel,
               let artworkFamily, let artworkRoot else { return }
@@ -543,7 +598,7 @@ public final class ClassicMobileSession: MobileGameSession {
         return soundCues
     }
 
-    public func releaseTransientResources() {}
+    public func releaseTransientResources() { terrainFrame = nil; cachedPanelFrame = nil }
 
     private func spriteHighlight(_ lemming: ClassicDOSLemming) -> MobileSpriteHighlight? {
         guard let assets, palette.count >= 8 else { return nil }

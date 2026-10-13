@@ -96,8 +96,16 @@ import UIKit
     func began(_ presses: Set<UIPress>) -> Set<UIPress> {
         var unhandled = Set<UIPress>()
         for press in presses {
-            guard let key = press.key, key.modifierFlags.intersection([.command, .control, .alternate]).isEmpty else {
+            guard let key = press.key, key.modifierFlags.intersection([.control, .alternate]).isEmpty else {
                 unhandled.insert(press); continue
+            }
+            if key.modifierFlags.contains(.command) {
+                guard !isMenu(), isActive(), let command = GameplayCommands.command(key: Self.name(key),
+                    shift: key.modifierFlags.contains(.shift), command: true) else {
+                    unhandled.insert(press); continue
+                }
+                if pressedKeys.insert(key.keyCode).inserted { onCommand?(command) }
+                continue
             }
             guard pressedKeys.insert(key.keyCode).inserted else { continue }
             let name = Self.name(key)

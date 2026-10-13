@@ -88,15 +88,16 @@ extension MobileLibraryViewController {
         if route != .hotSeat { hotSeatRoster = nil }
         creatingPlayer = true; renamingPlayer = true
         nameDraft = ""; draftPortrait = profiles.players.count % 8
-        searchField.text = ""; searchField.becomeFirstResponder()
+        searchField.text = ""
         navigate(.players)
+        searchField.becomeFirstResponder()
     }
 
     func beginRenamingPlayer() {
         creatingPlayer = false; renamingPlayer = true
         nameDraft = arcadeStore.records.profile(profiles.activeID)?.initials ?? profiles.active.name
         draftPortrait = profiles.active.portrait
-        searchField.text = nameDraft; searchField.becomeFirstResponder(); rebuild()
+        searchField.text = nameDraft; rebuild(); searchField.becomeFirstResponder()
     }
 
     func cyclePlayerPortrait() { draftPortrait = (draftPortrait + 1) % 8; rebuild() }

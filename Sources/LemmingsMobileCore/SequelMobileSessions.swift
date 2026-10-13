@@ -7,12 +7,12 @@ public typealias Lemmings2MobileRenderer = (
 ) throws -> MobilePixelFrame
 
 public final class Lemmings2MobileSession: MobileGameSession {
-    private enum Input: Codable {
+    private enum Input: Codable, Sendable {
         case assign(tick: Int, control: Int, target: Int)
         case endRun(tick: Int)
     }
 
-    private struct Checkpoint: Codable {
+    private struct Checkpoint: Codable, Sendable {
         var version = 1
         let initialFingerprint: String
         let tick: Int
@@ -124,7 +124,11 @@ public final class Lemmings2MobileSession: MobileGameSession {
     }
 
     public func checkpointPayload() throws -> Data {
-        try JSONEncoder().encode(Checkpoint(
+        try prepareCheckpointPayload().encode()
+    }
+
+    public func prepareCheckpointPayload() -> MobileCheckpointPayload {
+        MobileCheckpointPayload(Checkpoint(
             initialFingerprint: levelFingerprint,
             tick: runtime.tick,
             inputs: inputs
@@ -181,13 +185,13 @@ public typealias Lemmings3MobileRenderer = (
 ) throws -> MobilePixelFrame
 
 public final class Lemmings3MobileSession: MobileGameSession {
-    private struct Input: Codable {
+    private struct Input: Codable, Sendable {
         let tick: Int
         let action: String
         let target: Int?
     }
 
-    private struct Checkpoint: Codable {
+    private struct Checkpoint: Codable, Sendable {
         var version = 1
         let initialFingerprint: String
         let tick: Int
@@ -293,8 +297,12 @@ public final class Lemmings3MobileSession: MobileGameSession {
     }
 
     public func checkpointPayload() throws -> Data {
+        try prepareCheckpointPayload().encode()
+    }
+
+    public func prepareCheckpointPayload() throws -> MobileCheckpointPayload {
         guard !runtime.isComplete else { throw MobileSessionError.invalidCheckpoint }
-        return try JSONEncoder().encode(Checkpoint(
+        return MobileCheckpointPayload(Checkpoint(
             initialFingerprint: levelFingerprint,
             tick: runtime.tick,
             inputs: inputs

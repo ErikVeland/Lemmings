@@ -3,11 +3,14 @@ import Foundation
 /// Combines the current terrain mask with the original animated objects.
 /// Collision triggers are independent from this visual composition.
 public enum ClassicSceneFrame {
-    public static func rgba(_ level: ClassicRenderedLevel, simulation: ClassicDOSSimulation) -> Data {
-        let solid = [UInt8](simulation.terrain.solidMask)
+    public static func terrainRGBA(_ level: ClassicRenderedLevel, terrain: ClassicDOSTerrain) -> Data {
+        Data(terrainPixels(level, solid: [UInt8](terrain.solidMask)))
+    }
+
+    private static func terrainPixels(_ level: ClassicRenderedLevel, solid: [UInt8]) -> [UInt8] {
         let original = [UInt8](level.solidMask)
         var pixels = [UInt8](level.rgba)
-        guard solid.count == original.count, pixels.count == solid.count * 4 else { return level.rgba }
+        guard solid.count == original.count, pixels.count == solid.count * 4 else { return pixels }
         for index in solid.indices {
             let offset = index * 4
             if solid[index] == 0 && original[index] != 0 {
@@ -17,6 +20,13 @@ public enum ClassicSceneFrame {
                 pixels[offset] = 240; pixels[offset + 1] = 208; pixels[offset + 2] = 96; pixels[offset + 3] = 255
             }
         }
+        return pixels
+    }
+
+    public static func rgba(_ level: ClassicRenderedLevel, simulation: ClassicDOSSimulation, terrain: Data? = nil) -> Data {
+        let solid = [UInt8](simulation.terrain.solidMask)
+        var pixels = terrain.map { [UInt8]($0) } ?? terrainPixels(level, solid: solid)
+        guard solid.count == level.solidMask.count, pixels.count == solid.count * 4 else { return level.rgba }
         var triggerIndex = 0
         for object in level.objects {
             let graphic = object.graphic

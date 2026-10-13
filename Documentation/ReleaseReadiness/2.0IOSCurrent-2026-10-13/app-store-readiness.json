@@ -1,0 +1,27 @@
+{
+  "bundleID": "academy.glasscode.lemmings.ios",
+  "teamID": "54WU29TRTY",
+  "displayName": "Ultimate Lemmings",
+  "version": "2.0",
+  "platform": "IOS",
+  "minimumOS": "16.0",
+  "deviceFamilies": [
+    "iPhone",
+    "iPad"
+  ],
+  "gameCenterBoards": 359,
+  "gameCenterSets": 4,
+  "appStoreConnectAppID": "6822112090",
+  "appleConfigurationVerified": false,
+  "gameCenterRuntimeEnabled": false,
+  "appStoreConnectSignIn": "signed in",
+  "uploaded": true,
+  "submittedForReview": false,
+  "testFlightNotes": "Classic parity with macOS 1.9.4: Command+Z step back, calmer rescue effects, successful replay skill history including legacy inputs, saved solo and Hot Seat journey resume, and the latest shared learning content. Game Center activation and physical-device acceptance remain pending. Lemmings 2 and Lemmings 3 mobile campaigns remain deferred.",
+  "build": 12,
+  "ipa": "/Users/veland/Lemmings/.build/ios-beta/2.0-12-macos-1.9.4/Export/UltimateLemmingsIOS.ipa",
+  "ipaSHA256": "7d97c984d1cf0d6ab087404e97b869bd751c761daa74da8d43bc6d1f5474e72d",
+  "signedAppStoreExport": true,
+  "appStoreConnectName": "Ultimate Lemmings iOS",
+  "publicLinkRequested": true
+}

@@ -14,6 +14,7 @@ import UIKit
     private var flash: MTLTexture?
     private var uniform = CRTUniforms()
     var selection: LemmingSelectionEffect?
+    var rescueAuras: [LemmingSelectionEffect] = []
     private var selectionRenderer: LemmingSelectionRenderer?
     private(set) var tubeSettings = CRTSettings.amiga1084
 
@@ -35,7 +36,8 @@ import UIKit
         self.pipelines = pipelines
         super.init(frame: .zero, device: device)
         colorPixelFormat = .rgba16Float
-        framebufferOnly = false
+        framebufferOnly = true
+        autoResizeDrawable = false
         isPaused = true
         enableSetNeedsDisplay = true
         isUserInteractionEnabled = false
@@ -46,6 +48,12 @@ import UIKit
     }
 
     required init(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let scale = MobileDevicePerformance.constrained ? CGFloat(1) : (window?.screen.scale ?? contentScaleFactor)
+        drawableSize = CGSize(width: max(1, bounds.width * scale), height: max(1, bounds.height * scale))
+    }
 
     func update(image: CGImage, settings: ClassicSettings, flashMask: [UInt8]) {
         guard let device else { return }
@@ -132,7 +140,8 @@ import UIKit
         uniform.vignette = tubeSettings.vignette
         uniform.pixelAspect = tubeSettings.pixelAspect
         uniform.colorLevels = tubeSettings.colorLevels
-        uniform.hdrHeadroom = settings.hdEffectsEnabled ? Float(max(1, min(8, window?.screen.currentEDRHeadroom ?? 1))) : 1
+        uniform.hdrHeadroom = settings.hdEffectsEnabled && !MobileDevicePerformance.constrained
+            ? Float(max(1, min(8, window?.screen.currentEDRHeadroom ?? 1))) : 1
         (layer as? CAMetalLayer)?.wantsExtendedDynamicRangeContent = settings.hdEffectsEnabled && uniform.hdrHeadroom > 1
     }
 
@@ -155,15 +164,18 @@ import UIKit
             encoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
             encoder.endEncoding()
         }
-        if let selection, let selectionRenderer {
+        if let selectionRenderer, selection != nil || !rescueAuras.isEmpty {
             let pass = MTLRenderPassDescriptor()
             pass.colorAttachments[0].texture = drawable.texture
             pass.colorAttachments[0].loadAction = .load
             pass.colorAttachments[0].storeAction = .store
             if let encoder = buffer.makeRenderCommandEncoder(descriptor: pass) {
-                selectionRenderer.encode(selection,
-                    sourceSize: CGSize(width: source.width, height: source.height), outputSize: drawableSize,
-                    glass: SIMD4(tubeSettings.curvature, tubeSettings.curvatureY, tubeSettings.cornerRadius, tubeSettings.cornerSoftness), into: encoder)
+                let glass = SIMD4(tubeSettings.curvature, tubeSettings.curvatureY, tubeSettings.cornerRadius, tubeSettings.cornerSoftness)
+                let sourceSize = CGSize(width: source.width, height: source.height)
+                for effect in rescueAuras { selectionRenderer.encode(effect, sourceSize: sourceSize,
+                    outputSize: drawableSize, glass: glass, headroom: uniform.hdrHeadroom, into: encoder) }
+                if let selection { selectionRenderer.encode(selection,
+                    sourceSize: sourceSize, outputSize: drawableSize, glass: glass, into: encoder) }
                 encoder.endEncoding()
             }
         }

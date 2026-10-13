@@ -1,0 +1,152 @@
+UI test windows: offscreen; audio: muted
+Building for debugging...
+[Computing dependencies]
+[1 / 48]
+[2 / 49] NxlvKit
+[17 / 64] NxlvKit
+[23 / 72] NxlvKit
+[23 / 72] LemmingsDataTool-product
+[24 / 72] LemmingsAudio
+[35 / 88] LemmingsAppCore
+[37 / 88] LemmingsAppCore
+[43 / 88] LemmingsAppCore
+[47 / 92] LemmingsAppCore
+[47 / 92] NxlvKit
+[57 / 107] LemmingsMobileCore
+[59 / 107] LemmingsAppCore
+[62 / 107] LemmingsMobileCore
+[68 / 113] LemmingsMobileCore
+[68 / 113] LemmingsMobileBetaTool-product
+[81 / 130] LemmingsGameArt
+[82 / 130] LemmingsGameArt
+[85 / 130] LemmingsGameArt
+[94 / 134] LemmingsGameArt
+[96 / 134] NxlvKit
+[105 / 134] LemmingsGameArt
+[111 / 133] LemmingsGameArt-product
+[112 / 135] LemmingsMobileBetaTool-product
+[114 / 136] LemmingsMobileMenuAudit-product
+[118 / 139] NxlvKitTests-product
+[119 / 139] LemmingsAppCoreTests-product
+[122 / 140] LemmingsMobileCoreTests-product
+[126 / 144] NxlvKitTests-product
+[127 / 148] LemmingsAppCoreTests-product
+[131 / 150] LemmingsAppCoreTests-product
+[132 / 150] LemmingsLocal-product
+[139 / 155] NxlvKitTests-product
+[147 / 159] LemmingsMobileMenuAudit-product
+[151 / 161] LemmingsDataTool-product
+[153 / 163] LemmingsMobileCoreTests-product
+[155 / 163] LemmingsMobileCoreTests-product
+[158 / 165] LemmingsLocal-product
+[159 / 166] LemmingsLocal
+[162 / 167] LemmingsLocalTests-product
+[165 / 168] LemmingsLocalTests-product
+[167 / 168] LemmingsLocalTests-product
+Build complete! (11.96 sec.)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2084
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite LearningJourneyTests started.
+􀟈  Suite RescueCelebrationTests started.
+􀟈  Test isolatedPracticePrecedesCombinationsAndPassiveLevelsDoNotOpen() started.
+􀟈  Test multiplayerSourcesCannotEnterTheLearningPath() started.
+􀟈  Test DifficultyOrderAndParkingDoesNotAwardAWin() started.
+􀟈  Test complexRoutesWaitForSecondBasicSkillPractice() started.
+􀟈  Test rawReplayScoreKeepsAComparableDemandBandSmooth() started.
+􀟈  Test cellbashIsSecondAndMigratesEveryUnvisitedLesson() started.
+􀟈  Test somethingWrongIsReplacedByANukeFreeRoute() started.
+􀟈  Test measuredNarrowTimingStartsAtDifficult() started.
+􀟈  Test nearEqualRepetitionsAreSpacedAndOriginDoesNotChooseTheOpening() started.
+􀟈  Test highSourceConstraintsStartAtDifficult() started.
+􀟈  Test unsupportedGapsAreFlaggedAndPriorsRejected() started.
+􀟈  Test authoredObjectivesSeparateIntroductionsFromCombinations() started.
+􀟈  Test allRescuedGlowExpiresWithoutRepeatingAndResetsOnRewind() started.
+􀟈  Test intermediateBridgeLessonMigratesWithoutSkippingOrRepeatingVisits() started.
+􀟈  Test officialLevelsLeadComparablePortLevelsWithoutOverridingDifficulty() started.
+􀟈  Test onlySecuredTargetsAndCompletedWinsCelebrate() started.
+􀟈  Test aLowAverageCannotHideExpertTiming() started.
+􀟈  Test keepsTheWholeCampaignAndFillsTheRetailJump() started.
+􀟈  Test goldenHazeIsClippedAndLeavesTheCentreUntouched() started.
+􀟈  Test allRescuedLevelsKeepTheirTrack() started.
+􀟈  Test learning13MigrationIncludesBoth182AdditionsWithoutChangingHistory() started.
+􀟈  Test covoxIsReplacedAtTheSameDifficultyAndRetiredRunsRecover() started.
+􁁛  Test measuredNarrowTimingStartsAtDifficult() passed after 0.003 seconds.
+􁁛  Test onlySecuredTargetsAndCompletedWinsCelebrate() passed after 0.003 seconds.
+􁁛  Test multiplayerSourcesCannotEnterTheLearningPath() passed after 0.003 seconds.
+􁁛  Test allRescuedLevelsKeepTheirTrack() passed after 0.003 seconds.
+􁁛  Test unsupportedGapsAreFlaggedAndPriorsRejected() passed after 0.003 seconds.
+􁁛  Test highSourceConstraintsStartAtDifficult() passed after 0.003 seconds.
+􁁛  Test authoredObjectivesSeparateIntroductionsFromCombinations() passed after 0.003 seconds.
+􁁛  Test nearEqualRepetitionsAreSpacedAndOriginDoesNotChooseTheOpening() passed after 0.003 seconds.
+􁁛  Test allRescuedGlowExpiresWithoutRepeatingAndResetsOnRewind() passed after 0.003 seconds.
+􁁛  Test aLowAverageCannotHideExpertTiming() passed after 0.003 seconds.
+􁁛  Test complexRoutesWaitForSecondBasicSkillPractice() passed after 0.003 seconds.
+􁁛  Test DifficultyOrderAndParkingDoesNotAwardAWin() passed after 0.003 seconds.
+􁁛  Test officialLevelsLeadComparablePortLevelsWithoutOverridingDifficulty() passed after 0.004 seconds.
+􁁛  Test isolatedPracticePrecedesCombinationsAndPassiveLevelsDoNotOpen() passed after 0.005 seconds.
+􁁛  Test rawReplayScoreKeepsAComparableDemandBandSmooth() passed after 0.006 seconds.
+􁁛  Test goldenHazeIsClippedAndLeavesTheCentreUntouched() passed after 0.021 seconds.
+􁁛  Suite RescueCelebrationTests passed after 0.021 seconds.
+􁁛  Test covoxIsReplacedAtTheSameDifficultyAndRetiredRunsRecover() passed after 0.032 seconds.
+􁁛  Test learning13MigrationIncludesBoth182AdditionsWithoutChangingHistory() passed after 0.034 seconds.
+􁁛  Test intermediateBridgeLessonMigratesWithoutSkippingOrRepeatingVisits() passed after 0.072 seconds.
+􁁛  Test cellbashIsSecondAndMigratesEveryUnvisitedLesson() passed after 0.121 seconds.
+􁁛  Test somethingWrongIsReplacedByANukeFreeRoute() passed after 0.180 seconds.
+􁁛  Test keepsTheWholeCampaignAndFillsTheRetailJump() passed after 2.427 seconds.
+􁁛  Suite LearningJourneyTests passed after 2.428 seconds.
+􁁛  Test run with 22 tests in 2 suites passed after 2.428 seconds.
+􀟈  Test run started.
+􀄵  Testing Library Version: 2084
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite MobileRewindTests started.
+􀟈  Suite MobileLearningTests started.
+􀟈  Suite MobileArtworkTests started.
+􀟈  Test resumeFindsArchivedJourneyAndPreservesItsTurnAndQueue() started.
+􀟈  Test oldCheckpointRestoresAfterRewindChange() started.
+􀟈  Test undoNukeIsAssistedAndPersistsUsage() started.
+􀟈  Test countdownHoldsWhenHiddenAndCancelsForPlanning() started.
+􀟈  Test storedQueueKeepsOwnerScopePositionAndDeferrals() started.
+􀟈  Test nativeArtworkKeepsAuthoredPixelsAndSimulation() started.
+􀟈  Test replayHistoryIncludesLegacyScheduledAssignments() started.
+􀟈  Test checkpointPreservesHistoryAndAbandonedFuture() started.
+􀟈  Test winningReplayIsReadOnlyAndKeepsOutcome() started.
+􀟈  Test rewindThenAssignDropsTheFuture() started.
+􀟈  Test pythonStagingUsesMacSourceRevision() started.
+􀟈  Test curatedJourneyStartsWithoutScanningFuturePacks() started.
+􀟈  Test replayHistoryShowsOnlySuccessfulUsesAndFollowsSeeking() started.
+􁁛  Test countdownHoldsWhenHiddenAndCancelsForPlanning() passed after 0.001 seconds.
+􁁛  Test rewindThenAssignDropsTheFuture() passed after 0.003 seconds.
+􁁛  Test replayHistoryShowsOnlySuccessfulUsesAndFollowsSeeking() passed after 0.004 seconds.
+􁁛  Test replayHistoryIncludesLegacyScheduledAssignments() passed after 0.005 seconds.
+􁁛  Test winningReplayIsReadOnlyAndKeepsOutcome() passed after 0.017 seconds.
+􁁛  Test storedQueueKeepsOwnerScopePositionAndDeferrals() passed after 0.024 seconds.
+􁁛  Test resumeFindsArchivedJourneyAndPreservesItsTurnAndQueue() passed after 0.026 seconds.
+􁁛  Test undoNukeIsAssistedAndPersistsUsage() passed after 0.027 seconds.
+􁁛  Test oldCheckpointRestoresAfterRewindChange() passed after 0.027 seconds.
+􁁛  Test checkpointPreservesHistoryAndAbandonedFuture() passed after 0.043 seconds.
+􁁛  Suite MobileRewindTests passed after 0.044 seconds.
+􁁛  Test pythonStagingUsesMacSourceRevision() passed after 0.055 seconds.
+􁁛  Test curatedJourneyStartsWithoutScanningFuturePacks() passed after 0.364 seconds.
+􁁛  Suite MobileLearningTests passed after 0.364 seconds.
+􁁛  Test nativeArtworkKeepsAuthoredPixelsAndSimulation() passed after 1.511 seconds.
+􁁛  Suite MobileArtworkTests passed after 1.511 seconds.
+􁁛  Test run with 13 tests in 3 suites passed after 1.512 seconds.
+􀟈  Test run started.
+􀄵  Testing Library Version: 2084
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite GameplayCommandsTests started.
+􀟈  Suite OnlineServiceParityTests started.
+􀟈  Test testSkillAndShiftBindingsRemainDistinct() started.
+􀟈  Test testCommandRewindKeepsZoomAndSystemShortcutsDistinct() started.
+􀟈  Test testSharedPauseHintsAndReadyKeys() started.
+􀟈  Test sharedGameCenterKeepsConfiguredIDsAndGuestOwnership() started.
+􀟈  Test hostedBrowseRequiresNoSharingOrCredential() started.
+􁁛  Test testCommandRewindKeepsZoomAndSystemShortcutsDistinct() passed after 0.001 seconds.
+􁁛  Test testSkillAndShiftBindingsRemainDistinct() passed after 0.001 seconds.
+􁁛  Test testSharedPauseHintsAndReadyKeys() passed after 0.001 seconds.
+􁁛  Suite GameplayCommandsTests passed after 0.001 seconds.
+􁁛  Test hostedBrowseRequiresNoSharingOrCredential() passed after 0.018 seconds.
+􁁛  Test sharedGameCenterKeepsConfiguredIDsAndGuestOwnership() passed after 0.018 seconds.
+􁁛  Suite OnlineServiceParityTests passed after 0.018 seconds.
+􁁛  Test run with 5 tests in 2 suites passed after 0.019 seconds.

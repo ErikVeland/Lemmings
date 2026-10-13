@@ -230,3 +230,37 @@ The installed Session Test 18 application is unchanged.
 Authenticated worldwide rankings and replay uploads are deployed separately under
 /lemmings-api/rankings. They do not feed this aggregate counter. Uploaded movies
 are community playback records, not independently verified rescue targets.
+
+## iOS 2.0 preparation
+
+The iOS bundle remains `academy.glasscode.lemmings.ios`, under team `54WU29TRTY`.
+Its Game Center entitlement and Xcode capability are present. The signed archive
+and IPA checks require matching Game Center entitlements in the signature and
+provisioning profile. These checks do not verify App Store Connect configuration.
+
+[The iOS setup manifest](GameCenterIOSSetup.json) retains the frozen Mac score
+rules and all 359 board IDs. It defines four sets with at most 100 boards each.
+It remains a setup manifest, rather than an Apple API import file. The historical
+macOS activation record does not establish activation for the separate iOS app.
+The iOS app record, version and complete board catalogue still require Apple-side
+verification. The later [TestFlight delivery](ReleaseReadiness/2.0IOSCurrent-2026-10-13/README.md#testflight-delivery) created the matching iOS app record and uploaded build 12. Game Center board verification remains pending.
+
+1. Sign in to App Store Connect with the owner's account.
+2. Create or confirm the iOS app record for `academy.glasscode.lemmings.ios`.
+3. Enable Game Center for iOS version 2.0.
+4. Create or confirm every board, score rule, set membership and localisation in the iOS manifest.
+5. Record Apple's numeric app ID and the verification time in a copy of that manifest.
+6. Set its `verification.status` to `verified` only after checking the complete Apple configuration.
+7. Run `python3 Tools/IOSBeta/game_center.py --check /absolute/path/activation.json`.
+8. Build with `python3 Tools/IOSBeta/build.py --build NEW_NUMBER --export app-store-connect --allow-provisioning-updates --game-center-activation /absolute/path/activation.json`.
+
+The activation record is the owner's recorded verification, rather than an
+independent query of Apple's live service. The build compares the complete
+catalogue, score rules, sets, bundle ID, platform, version and source hash.
+It enables only the staged iOS catalogue. Shared Mac resources stay unchanged.
+Without this record, the exported app keeps Game Center unavailable. Hosted
+rankings retain their separate consent and service path.
+
+Confirm sandbox authentication, profile ownership, offline retry, account changes
+and each score category on a physical device before calling live service accepted.
+Preparing or exporting an IPA does not upload it or submit its Game Center components.

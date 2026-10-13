@@ -54,6 +54,24 @@ def uuids(path):
     return sorted(re.findall(r"UUID: ([0-9A-F-]+) \(([^)]+)\)", output))
 
 
+def signing_capabilities(app, bundle_id):
+    signature = subprocess.run(["codesign", "-d", "--entitlements", ":-", str(app)], capture_output=True, check=True)
+    actual = plistlib.loads(signature.stdout)
+    profile = plistlib.loads(subprocess.check_output([
+        "openssl", "smime", "-verify", "-noverify", "-inform", "DER", "-in", str(app / "embedded.mobileprovision")
+    ], stderr=subprocess.DEVNULL))
+    allowed = profile["Entitlements"]
+    app_id = actual.get("application-identifier")
+    profile_id = allowed.get("application-identifier", "")
+    if actual.get("com.apple.developer.game-center") is not True or allowed.get("com.apple.developer.game-center") is not True:
+        raise ValueError("Game Center is missing from the signature or provisioning profile.")
+    if not app_id or not app_id.endswith("." + bundle_id) or (profile_id != app_id and profile_id != app_id.split(".")[0] + ".*"):
+        raise ValueError("The signature and profile do not authorise this iOS bundle ID.")
+    if actual.get("com.apple.developer.team-identifier") != allowed.get("com.apple.developer.team-identifier"):
+        raise ValueError("The signature and provisioning profile have different teams.")
+    return profile
+
+
 def validate_export(package, output, archive_record, device_id, export_method):
     destination = output / "Install"
     with zipfile.ZipFile(package) as bundle:
@@ -79,9 +97,7 @@ def validate_export(package, output, archive_record, device_id, export_method):
     verify(app / "BetaGameData")
     if digest(app / "BetaGameData/manifest.json") != archive_record["contentManifestSHA256"]:
         raise ValueError("The exported game content differs from the archive.")
-    profile = plistlib.loads(subprocess.check_output([
-        "openssl", "smime", "-verify", "-noverify", "-inform", "DER", "-in", str(app / "embedded.mobileprovision")
-    ], stderr=subprocess.DEVNULL))
+    profile = signing_capabilities(app, archive_record["bundleID"])
     included = device_id in profile.get("ProvisionedDevices", []) if device_id else None
     if device_id and export_method != "app-store-connect" and not included:
         raise ValueError("The exported signing profile does not include the requested device.")
@@ -129,6 +145,7 @@ def validate_archive(archive, build, bundle_id, signed):
         run(["codesign", "--verify", "--deep", "--strict", str(app)])
         if not (app / "embedded.mobileprovision").is_file():
             raise ValueError("The signed device archive has no provisioning profile.")
+        signing_capabilities(app, bundle_id)
     return {
         "app": str(app), "bundleID": bundle_id, "version": "2.0", "build": build,
         "executableSHA256": digest(binary), "symbolUUIDs": binary_uuids,
@@ -144,6 +161,7 @@ def main():
     parser.add_argument("--bundle-id", default="academy.glasscode.lemmings.ios")
     parser.add_argument("--content", type=Path, default=ROOT / "Sources/Ports/lemmings_dos_1991-07-30")
     parser.add_argument("--output", type=Path, help="New candidate directory. Must not already exist.")
+    parser.add_argument("--game-center-activation", type=Path, help="Apple-verified iOS activation record. Enables only this candidate.")
     parser.add_argument("--unsigned", action="store_true", help="Inspect a device archive without signing or exporting")
     parser.add_argument("--export", choices=["debugging", "release-testing", "app-store-connect"], default="debugging")
     parser.add_argument("--allow-provisioning-updates", action="store_true", help="Let Xcode use its signed-in account to create/download signing assets")
@@ -159,9 +177,18 @@ def main():
         parser.error("Device signing requires a valid UDID, signing and --allow-provisioning-updates.")
     if requested_device and args.export == "app-store-connect":
         parser.error("Device profile checks require a development or ad hoc export.")
+    if args.game_center_activation:
+        if args.unsigned:
+            parser.error("Game Center activation requires a signed candidate.")
+        from game_center import validate_activation
+        validate_activation(args.game_center_activation, bundle_id=args.bundle_id)
     output = (args.output or ROOT / f".build/ios-beta/2.0-{args.build}").resolve()
     output.mkdir(parents=True, exist_ok=False)
     env = dict(os.environ, LEMMINGS_TEST_AUDIO="muted")
+    env.pop("IOS_GAME_CENTER_ACTIVATION", None)
+    env["IOS_GAME_CENTER_BUNDLE_ID"] = args.bundle_id
+    if args.game_center_activation:
+        env["IOS_GAME_CENTER_ACTIVATION"] = str(args.game_center_activation.resolve())
     # Apple's rsync must also resolve itself for Xcode's symbol-copy subprocess.
     env["PATH"] = "/usr/bin:/bin:/usr/sbin:/sbin:" + env.get("PATH", "")
     stable_xcode = Path("/Applications/Xcode.app/Contents/Developer")
@@ -201,7 +228,16 @@ def main():
         command.append("archive")
         with (output / "archive.log").open("w") as log:
             run(command, log, env)
+        if args.game_center_activation:
+            import shutil
+            shutil.copy2(args.game_center_activation, output / "game-center-activation.json")
         record.update(validate_archive(archive, args.build, args.bundle_id, not args.unsigned))
+        expected_enabled = args.game_center_activation is not None
+        config = json.loads((archive / "Products/Applications/UltimateLemmingsIOS.app/GameCenter/leaderboards.json").read_text())
+        if config["enabled"] != expected_enabled:
+            raise ValueError("The archived Game Center availability differs from the candidate activation.")
+        record["gameCenterEnabled"] = expected_enabled
+        record["gameCenterAppleVerified"] = expected_enabled
         record["signed"] = not args.unsigned
         # Publishing always needs an explicit separate action.
         if not args.unsigned:

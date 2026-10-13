@@ -38,7 +38,19 @@ struct MobileArtworkTests {
             let target = try #require(game.targetCandidates(for: 0).first)
             _ = try game.render(highlight: .init(id: target.id, point: target.point, state: target.assignment))
             #expect(game.skillCursorFrame(control: 0) != nil)
-            #expect(game.rewind(seconds: 60 / game.ticksPerSecond))
+            for _ in 0..<60 where !game.targetCandidates(for: 7).contains(where: { $0.assignment == .eligible }) { game.tick() }
+            let digger = try #require(game.targetCandidates(for: 7).first(where: { $0.assignment == .eligible }))
+            #expect(game.assign(control: 7, to: digger.id))
+            let checkpoint = try game.checkpointPayload()
+            for _ in 0..<24 {
+                game.tick()
+                try checkTerrainCache(game)
+            }
+            #expect(game.rewind(seconds: 1))
+            try checkTerrainCache(game)
+            try game.restoreCheckpointPayload(checkpoint)
+            try checkTerrainCache(game)
+            #expect(game.rewind(seconds: Double(game.snapshot.tick) / game.ticksPerSecond))
         }
         var settings = ClassicSettings(); settings.graphics = .dosVGA; settings.colorDepth = .amigaOCS
         game.applySettings(settings)
@@ -48,6 +60,16 @@ struct MobileArtworkTests {
         #expect(stride(from: 0, to: frame.rgba.count, by: 4).allSatisfy {
             frame.rgba[$0] % 17 == 0 && frame.rgba[$0 + 1] % 17 == 0 && frame.rgba[$0 + 2] % 17 == 0
         })
+        for _ in 0..<120 where !game.targetCandidates(for: 7).contains(where: { $0.assignment == .eligible }) { game.tick() }
+        let digger = try #require(game.targetCandidates(for: 7).first(where: { $0.assignment == .eligible }))
+        #expect(game.assign(control: 7, to: digger.id))
+        for _ in 0..<24 { game.tick(); try checkTerrainCache(game) }
+    }
+
+    private func checkTerrainCache(_ game: ClassicMobileSession) throws {
+        let cached = try game.render(highlight: nil)
+        game.releaseTransientResources()
+        #expect(try game.render(highlight: nil) == cached)
     }
 
     @Test func countdownHoldsWhenHiddenAndCancelsForPlanning() {

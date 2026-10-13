@@ -263,6 +263,13 @@ struct MobileCoreTests {
         #expect(!critical.presentsMotionEffects)
         #expect(!critical.presentsFlashEffects)
         #expect(critical.audioVoiceLimit < nominal.audioVoiceLimit)
+        let older = MobileThermalPolicy.budget(for: .nominal, lowPowerMode: false,
+            reduceMotion: false, reduceFlashes: false, constrainedDevice: true)
+        #expect(older.framesPerSecond == 30)
+        var clock = MobileTickClock(ticksPerSecond: 17, maximumCatchUpTicks: older.maximumCatchUpTicks)
+        _ = clock.advance(at: 0)
+        let ticks = (1...30).reduce(0) { count, frame in count + clock.advance(at: Double(frame) / 30) }
+        #expect(ticks == 17)
     }
 
     @Test func fixedTickClockDropsSuspensionTime() {
@@ -442,7 +449,7 @@ struct MobileCoreTests {
         #expect(restored.levelFingerprint == session.levelFingerprint)
     }
 
-    @Test @MainActor func sequelSessionsReplayTheirInputCheckpoints() throws {
+    @Test @MainActor func sequelSessionsReplayTheirInputCheckpoints() async throws {
         let l2Initial = try Self.lemmings2Runtime()
         let l2 = Lemmings2MobileSession(
             runtime: l2Initial,
@@ -458,8 +465,10 @@ struct MobileCoreTests {
         let l2Target = try #require(l2.targetCandidates(for: 0).first(where: { $0.assignment == .eligible }))
         #expect(l2.assign(control: 0, to: l2Target.id))
         for _ in 0..<25 { l2.tick() }
-        let l2Payload = try l2.checkpointPayload()
+        let l2Captured = l2.prepareCheckpointPayload()
         let l2Expected = l2.snapshot
+        for _ in 0..<10 { l2.tick() }
+        let l2Payload = try await Task.detached { try l2Captured.encode() }.value
         let l2Restored = Lemmings2MobileSession(
             runtime: l2Initial,
             engineFingerprint: "l2-fixture-engine",
@@ -499,8 +508,10 @@ struct MobileCoreTests {
         let l3Target = try #require(l3.targetCandidates(for: 2).first(where: { $0.assignment == .eligible }))
         #expect(l3.assign(control: 2, to: l3Target.id))
         for _ in 0..<25 { l3.tick() }
-        let l3Payload = try l3.checkpointPayload()
+        let l3Captured = try l3.prepareCheckpointPayload()
         let l3Expected = l3.snapshot
+        for _ in 0..<10 { l3.tick() }
+        let l3Payload = try await Task.detached { try l3Captured.encode() }.value
         let l3Restored = Lemmings3MobileSession(
             runtime: l3Initial,
             engineFingerprint: "l3-fixture-engine",

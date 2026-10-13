@@ -94,6 +94,7 @@ extension MobileLibraryViewController {
         case "entryUp", "entryDown": moveSelectedEntry(id == "entryUp" ? -1 : 1)
         case "entryRemove": removeSelectedEntry()
         case "listRename": beginNaming()
+        case "nameField": if nameDraft != nil { searchField.becomeFirstResponder() }
         case "nameCancel": endNaming(commit: false)
         case "nameDone": endNaming(commit: true)
         case "listDelete": deleteSelectedPlaylist()

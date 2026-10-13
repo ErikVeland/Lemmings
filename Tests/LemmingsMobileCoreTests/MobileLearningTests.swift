@@ -42,6 +42,38 @@ struct MobileLearningTests {
         #expect(restored.progress.solvedCount(in: journey) == 0)
         #expect(MobileStorage(directory: temporary.applicationSupport.appendingPathComponent("solo")).load(MobileLearningState.self, name: "learning") == nil)
     }
+    @Test func resumeFindsArchivedJourneyAndPreservesItsTurnAndQueue() throws {
+        let temporary = try AppStorage.temporary(named: "journey-resume")
+        defer { temporary.removeTemporaryFiles() }
+        func files(_ scope: String) -> MobileStorage {
+            MobileStorage(directory: temporary.applicationSupport.appendingPathComponent(scope))
+        }
+        let resources = root.appendingPathComponent("Resources")
+        let storage = AppStorage(applicationSupport: temporary.applicationSupport, resources: resources, defaults: temporary.defaults)
+        let journey = try #require(LearningJourneyLibrary.journey(storage: storage))
+        var state = MobileLearningState()
+        try state.start(Array(journey.lessons.prefix(3).map(\.entry)), name: LearningJourney.title, poolID: journey.version)
+        state.record(won: false); state.advance()
+        var seats = MobileHotSeatStore()
+        let started = seats.start(roster: .init(host: "host", players: ["guest"]))
+        var archived = try #require(started)
+        archived.pass(to: "guest"); seats.update(archived)
+        try files(archived.scope).save(state, name: "learning")
+        seats.endSession()
+        _ = seats.start(roster: .init(host: "host", players: ["other"]))
+        let original = seats
+        let found = try #require(MobileLearningResume.find(owner: "host", seats: seats, storage: files))
+        #expect(found.state == state)
+        #expect(found.seat == archived)
+        #expect(found.seat?.turn == "guest")
+        #expect(found.scope == archived.scope)
+        #expect(seats == original)
+        #expect(MobileLearningResume.find(owner: "guest", seats: seats, storage: files) == nil)
+        try files("host").save(state, name: "learning")
+        #expect(MobileLearningResume.find(owner: "host", seats: seats, storage: files)?.seat == nil)
+        try files(try #require(seats.current).scope).save(state, name: "learning")
+        #expect(MobileLearningResume.find(owner: "host", seats: seats, storage: files)?.seat == seats.current)
+    }
     @Test func pythonStagingUsesMacSourceRevision() throws {
         let temporary = try AppStorage.temporary(named: "revision")
         defer { temporary.removeTemporaryFiles() }

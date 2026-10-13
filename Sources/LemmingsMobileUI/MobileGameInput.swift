@@ -45,7 +45,9 @@ extension MobileGameViewController {
             case .zoom(let superzoom): title = superzoom ? "Superzoom" : "Zoom"
             case .pan: title = "Pan"
             }
-            let key = UIKeyCommand(input: input, modifierFlags: chord.shift ? .shift : [], action: #selector(discoveredCommand(_:)))
+            var modifiers: UIKeyModifierFlags = chord.shift ? .shift : []
+            if chord.command { modifiers.insert(.command) }
+            let key = UIKeyCommand(input: input, modifierFlags: modifiers, action: #selector(discoveredCommand(_:)))
             key.discoverabilityTitle = title
             return key
         }.sorted { ($0.discoverabilityTitle ?? "") < ($1.discoverabilityTitle ?? "") }
@@ -55,7 +57,8 @@ extension MobileGameViewController {
         let names = [UIKeyCommand.inputEscape: "escape", UIKeyCommand.inputLeftArrow: "left",
                      UIKeyCommand.inputRightArrow: "right", UIKeyCommand.inputUpArrow: "up",
                      UIKeyCommand.inputDownArrow: "down", "\r": "return", "\t": "tab"]
-        if let command = GameplayCommands.command(key: names[input] ?? input, shift: key.modifierFlags.contains(.shift)) { performCommand(command) }
+        if let command = GameplayCommands.command(key: names[input] ?? input, shift: key.modifierFlags.contains(.shift),
+            command: key.modifierFlags.contains(.command)) { performCommand(command) }
     }
 
     func makeInputAdapter() -> MobileInputAdapter {

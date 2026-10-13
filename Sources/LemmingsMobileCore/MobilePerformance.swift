@@ -38,7 +38,8 @@ public enum MobileThermalPolicy {
         for level: MobileThermalLevel,
         lowPowerMode: Bool,
         reduceMotion: Bool,
-        reduceFlashes: Bool
+        reduceFlashes: Bool,
+        constrainedDevice: Bool = false
     ) -> MobilePerformanceBudget {
         let base: MobilePerformanceBudget
         switch level {
@@ -80,12 +81,12 @@ public enum MobileThermalPolicy {
             )
         }
         return MobilePerformanceBudget(
-            framesPerSecond: lowPowerMode ? min(30, base.framesPerSecond) : base.framesPerSecond,
+            framesPerSecond: lowPowerMode || constrainedDevice ? min(30, base.framesPerSecond) : base.framesPerSecond,
             presentsMotionEffects: base.presentsMotionEffects && !reduceMotion && !lowPowerMode,
             presentsFlashEffects: base.presentsFlashEffects && !reduceFlashes && !lowPowerMode,
             preloadsAdjacentLevels: base.preloadsAdjacentLevels && !lowPowerMode,
             audioVoiceLimit: lowPowerMode ? min(12, base.audioVoiceLimit) : base.audioVoiceLimit,
-            maximumCatchUpTicks: base.maximumCatchUpTicks
+            maximumCatchUpTicks: constrainedDevice ? min(4, base.maximumCatchUpTicks) : base.maximumCatchUpTicks
         )
     }
 }

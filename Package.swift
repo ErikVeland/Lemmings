@@ -60,7 +60,7 @@ let package = Package(
             name: "LemmingsMobileBetaTool",
             dependencies: ["LemmingsMobileCore", "NxlvKit"],
             path: "Tools/IOSBeta",
-            exclude: ["content.py", "build.py", "install.py", "artwork.py", "ports.py", "packs.py", "music.py", "__pycache__"],
+            exclude: ["content.py", "build.py", "install.py", "artwork.py", "ports.py", "packs.py", "music.py", "game_center.py", "__pycache__"],
             sources: ["validate-content.swift"]
         ),
         .executableTarget(

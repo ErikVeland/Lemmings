@@ -7,7 +7,7 @@ boundaries. A Classic device beta does not establish three-game parity.
 
 ## Current Classic port source
 
-The 12 October source implements the Classic scope in the
+The 13 October source implements the Classic scope in the
 [iPad feature parity plan](IPadFeatureParityPlan.md). Lemmings 2 and Lemmings 3
 mobile campaigns and renderers remain owner-deferred. NeoLemmix remains a
 separate engine decision. These exclusions do not establish three-game parity.
@@ -17,12 +17,12 @@ separate engine decision. These exclusions do not establish three-game parity.
 | Settings | Seven bitmap groups, preset and individual choices, controller mapping, legacy-key migration and accessibility preferences |
 | Profiles and career | Stable profile IDs, original portraits, records, assisted boards, level and career achievements, ordered campaign trophies and level skips |
 | Collections | Shared authoritative playlist store with mobile adapters; legacy favourites, recents, playlist order, run position and shuffle seed retained |
-| Rewind and replay | Backward/forward step, held rewind, saved rewind history, read-only review and verified solutions, cancellable movie export with offline effect audio |
-| Teaching | Progressive hints, bundled learning journey, revisit/defer progress, shared source revisions and real progression-policy analysis |
+| Rewind and replay | Backward/forward step, held rewind, saved rewind history, read-only review with the last three successful skill uses and their ticks, verified solutions, cancellable movie export with offline effect audio |
+| Teaching | Progressive hints, bundled learning journey with saved solo/Hot Seat lookup, revisit/defer progress, shared source revisions and real progression-policy analysis |
 | Hot Seat | Attempt-owner records, scoped checkpoints, paused Ready pages, transactional turn saves and duplicate transition guards |
 | Online | Shared Game Center IDs and score rules, iOS authentication adapter, hosted board consent, worldwide pages and verified action replay loading |
-| Input | Shared command data, keyboard discovery and presses, controller remapping/aim/pan/tap/hold speed, page focus/scrolling and pointer targeting |
-| Presentation | Original DOS, Mac and Amiga Classic artwork, shared CRT shaders, selection/assignment/explosion effects, failure transitions and result stars |
+| Input | Shared command data, keyboard discovery and presses including Command+Z step back, controller remapping/aim/pan/tap/hold speed, page focus/scrolling and pointer targeting |
+| Presentation | Original DOS, Mac and Amiga Classic artwork, shared CRT shaders, selection/assignment/explosion effects, calmer sprite rescue auras and shared cached scenery haze, failure transitions and result stars |
 | Audio | Shared Adaptive DJ and recording/module decks, pause rhythm, speed pitch, failure/nuke recovery, retry brake, positional effects, chimes and now-playing notices |
 | Information | What's New, explicit effects welcome, anonymous count consent, real local/shared Play Insights and background fan-count measurement |
 
@@ -51,6 +51,27 @@ UIKit event delivery, VoiceOver, physical keyboard/controller/pointer, EDR/CRT,
 Duo, live sign-in/download/share and audible playback need the owner's installed
 candidate. Headless captures verify bitmap drawing and target geometry only.
 Automated checks remain offscreen and muted.
+
+## Latest Mac fixes, 13 October 2026
+
+The iOS source includes the applicable Classic fixes from published macOS 1.9.4
+(commit `bdb7ba5b`). Shared learning version 18, progression version 4 and the
+295-lesson catalogue are bundled. Saved journeys retain their original queue,
+position, progress, profile and Hot Seat turn. Resuming a different saved scope
+restores its matching checkpoint and retains the previous scope's save.
+
+The replay panel displays the last three successful uses and their exact ticks.
+Seeking updates that history. Remaining stock stays in the existing HUD.
+Command+Z steps back without changing plain Z zoom or intercepting system chords.
+Rescue effects reuse the Mac's calmer sprite masks and bounded, asynchronous
+scenery cache. Reduced flashes and HD effect choices still govern sprite auras.
+The full-rescue music behaviour and Show Song Info setting already share Mac logic.
+
+Sparkle updates and the fading floating Mac Menu button are platform-specific.
+The permanent grouped iOS Menu control remains visible. L2/L3 mobile campaigns
+and renderers remain deferred. Their Mac cache fixes do not establish an iOS port.
+See [current verification](ReleaseReadiness/2.0IOSCurrent-2026-10-13/README.md)
+and [iOS Game Center preparation](GameCenterSetup.md#ios-20-preparation).
 
 ## Earlier build and source increments
 
@@ -213,6 +234,32 @@ Settings has a Player row. A player has their own progress, favourites, recents
 and playlists. A new player starts empty, and the first player keeps the keys
 from earlier builds. The page can switch, add, rename and delete players, up to
 eight. Delete asks for a second tap.
+
+New player opens initials entry after navigation completes. Tapping Initials in
+the editor reopens the keyboard. Initials entry disables autocorrection, spell
+checking and inline predictions. The shared Players page also serves Hot Seat
+and all three game engines. Headless renders verify the editor artwork and touch
+targets. The iOS UI target compiles. Keyboard presentation on a device remains
+unverified because these checks run without a foreground window.
+
+Older GPUs and two-core devices cap display updates at 30 Hz. Their CRT output
+uses one pixel per point and SDR, while simulation keeps its authored tick rate.
+Classic caches terrain between edits and retains animated objects and sprites.
+Digging, construction, rewind, nuke undo, restore and artwork changes invalidate
+the cache. Static panel artwork is reused.
+
+Classic, Lemmings 2 and Lemmings 3 capture immutable checkpoint values before
+background encoding. The shared controller orders saves and limits concurrent
+autosaves. Music reuses settings and avoids unchanged pitch updates. Audio asks
+for a 1,024-frame buffer at 44.1 kHz to reduce callback overhead.
+
+A windowless host check of Just Dig reduced average simulation and DOS rendering
+from 24.5 ms to 3.5 ms. Snapshot capture took about 0.005 ms instead of synchronous
+encoding at 35 ms. These are Mac debug measurements, not iPad frame rates.
+Muted checks cover captured digging state, sequel checkpoint replay, saved-run
+ownership, authored tick timing, native artwork, cache invalidation and bitmap
+camera input. Sustained first-generation iPad GPU performance and audible output
+remain device validation gaps.
 
 The app writes favourites, recents and playlists through one store. Each write is
 atomic and keeps the previous copy as a backup. A file that cannot be read is kept

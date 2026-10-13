@@ -59,6 +59,8 @@ final class MobileNotificationObserverBag: @unchecked Sendable {
     func prepare() throws {
         let session = AVAudioSession.sharedInstance()
         try session.setCategory(.ambient, mode: .default, options: [])
+        // Give tracker synthesis and effects one 1,024-frame buffer at 44.1 kHz.
+        try session.setPreferredIOBufferDuration(1024.0 / 44100.0)
     }
 
     func resume() throws {

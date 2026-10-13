@@ -28,17 +28,20 @@ extension MobileLibraryViewController {
         }
     }
     var bundledJourney: LearningJourney? { LearningJourneyLibrary.journey }
+    var resumableLearningJourney: MobileLearningResume? {
+        MobileLearningResume.find(owner: profiles.activeID, seats: hotSeats, storage: MobileStorage.standard)
+    }
 
     func learningPage(subtitle: String) -> GameFrontEnd.Page {
         guard let journey = bundledJourney else { return .init(title: "Journey", details: ["Journey is unavailable"], footer: [.init("home", "Back")]) }
         let saved = learning
         var rows: [GameFrontEnd.Action] = []
-        if let run = saved.run {
+        if let run = resumableLearningJourney?.state.run {
             rows.append(.init("learningResume", "Resume  \(run.currentIndex + 1)/\(run.entries.count)", primary: true))
         }
         let unseen = saved.progress.unseen(in: journey), revisit = saved.progress.revisit(in: journey)
         rows += [.init("learningStart", "Continue journey  \(saved.progress.solvedCount(in: journey))/\(journey.lessons.count)",
-                       enabled: !unseen.isEmpty, primary: saved.run == nil),
+                       enabled: !unseen.isEmpty, primary: resumableLearningJourney == nil),
                  .init("learningRevisit", "Revisit  \(revisit.count)", enabled: !revisit.isEmpty),
                  .init("progression", "Progression playlists")]
         return .init(title: LearningJourney.title, subtitle: subtitle, rows: rows, footer: [.init("home", "Back")])
@@ -56,8 +59,9 @@ extension MobileLibraryViewController {
     func handleLearning(_ id: String) -> Bool {
         switch id {
         case "journey": navigate(.journey)
-        case "learningResume": openLearningRun()
+        case "learningResume": resumeLearningJourney()
         case "learningStart", "learningRevisit":
+            if id == "learningStart", resumableLearningJourney != nil { resumeLearningJourney(); return true }
             guard let journey = bundledJourney else { return true }
             let entries = id == "learningStart" ? learning.progress.unseen(in: journey) : learning.progress.revisit(in: journey)
             do {
@@ -74,6 +78,29 @@ extension MobileLibraryViewController {
             else { return false }
         }
         return true
+    }
+    func resumeLearningJourney() {
+        guard let saved = resumableLearningJourney, saved.owner == profiles.activeID else { return }
+        if let seat = saved.seat {
+            guard seat.players.allSatisfy({ id in profiles.players.contains { $0.id == id } }) else {
+                notice = "A saved player is unavailable"; rebuild(); return
+            }
+            if hotSeat?.id != seat.id { guard hotSeats.resume(id: seat.id) != nil else { return } }
+        } else { hotSeats.endSession() }
+        guard saveHotSeats() else { rebuild(); return }
+        hotSeatRoster = nil; activeRun = nil
+        reloadPlayerData()
+        let owner = profiles.activeID, scope = hotSeat?.scope
+        learningTask?.cancel()
+        learningTask = Task { [weak self] in
+            guard let self, let checkpointStore else { return }
+            do {
+                let checkpoint = try await checkpointStore.load(owner: owner, scope: scope)
+                guard !Task.isCancelled, profiles.activeID == owner, hotSeat?.scope == scope else { return }
+                openLearningRun()
+                if let run = learning.run { startLevel(run.currentIndex, checkpoint: checkpoint, restoringMatchingCheckpoint: true) }
+            } catch { notice = error.localizedDescription; rebuild() }
+        }
     }
     func openLearningRun(checkpoint: MobileCheckpointEnvelope? = nil) {
         guard let catalogue, let run = learning.run else { return }

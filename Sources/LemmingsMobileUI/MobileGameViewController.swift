@@ -43,6 +43,7 @@ struct MobileGameTurn {
     var onCompleted: ((MobileGameSnapshot) -> Void)?
 
     let summary: MobileLevelSummary
+    private let gameSettings: MobileSettings
     let session: any MobileGameSession
     let checkpointStore: MobileCheckpointStore
     let runID: UUID
@@ -66,6 +67,8 @@ struct MobileGameTurn {
     private weak var owningScene: UIWindowScene?
     var clock: MobileTickClock
     private var displayLink: CADisplayLink?
+    private var checkpointSaveTask: Task<Void, Never>?
+    private var checkpointSaveGeneration = UUID()
     var playState = MobilePlayState()
     var paused: Bool { playState.isPaused }
     var speed = 1.0
@@ -84,6 +87,7 @@ struct MobileGameTurn {
     private let audio = MobileAudioSessionController()
     let effects = MobileEffects()
     private let nowPlaying = MobileNowPlayingView()
+    private let replaySkillInfo = MobileReplaySkillView()
     private var countdown = GameplayStartCountdown()
     private let countdownLabel = MobilePixelLabel()
     private let freshStart: Bool
@@ -108,6 +112,7 @@ struct MobileGameTurn {
         )
         clock = MobileTickClock(ticksPerSecond: session.ticksPerSecond)
         let settings = MobileSettings.load(from: .standard)
+        gameSettings = settings
         fastSpeed = Double(settings.fastSpeed)
         inputSpeed = GameplaySpeed(legacyMultiplier: fastSpeed)
         inputSpeed.setCruise(fastSpeed)
@@ -138,6 +143,7 @@ struct MobileGameTurn {
         view.addSubview(hud)
         view.addSubview(touchLoupe)
         view.addSubview(nowPlaying)
+        view.addSubview(replaySkillInfo)
         countdownLabel.palette = .green
         countdownLabel.maximumScale = 6
         countdownLabel.backgroundColor = UIColor.black.withAlphaComponent(0.75)
@@ -156,7 +162,7 @@ struct MobileGameTurn {
             turnBadge.isUserInteractionEnabled = false
             view.addSubview(turnBadge)
         }
-        playfieldView.displaySettings = MobileSettings.load(from: .standard).classic
+        playfieldView.displaySettings = gameSettings.classic
         configureOverlay()
 
         onHints = { [weak self] in self?.showHints() }
@@ -249,6 +255,9 @@ struct MobileGameTurn {
         nowPlaying.frame = CGRect(x: playfieldView.frame.minX + 8, y: playfieldView.frame.minY + 8,
                                   width: min(320, playfieldView.frame.width - 16), height: 60)
         countdownLabel.frame = CGRect(x: playfieldView.frame.midX - 44, y: playfieldView.frame.midY - 44, width: 88, height: 88)
+        let replayWidth = min(MobileReplaySkillArt.size.width, max(0, playfieldView.frame.width - 16))
+        replaySkillInfo.frame = CGRect(x: playfieldView.frame.maxX - replayWidth - 8, y: playfieldView.frame.minY + 8,
+            width: replayWidth, height: replayWidth * MobileReplaySkillArt.size.height / MobileReplaySkillArt.size.width)
         hud.frame = view.bounds
         if turn != nil {
             let field = playfieldView.frame
@@ -289,6 +298,7 @@ struct MobileGameTurn {
             if countdown.isActive { return }
         }
         MobileMusic.shared.setGameplayState(paused: paused, speed: speed, rewinding: rewindHeld)
+        replaySkillInfo.update(session.replaySkillUses, tick: session.snapshot.tick, visible: session.isReadOnly && overlay.isHidden)
         if rewindHeld {
             guard lifecycle.isForeground, !lifecycle.isInterrupted, overlay.isHidden else { setRewindHeld(false); return }
             if link.timestamp - lastRewindTime >= 0.08 {
@@ -344,7 +354,7 @@ struct MobileGameTurn {
         case let .skill(index):
             guard session.snapshot.skills.indices.contains(index) else { return }
             selectedControl = index
-            if MobileSettings.load(from: .standard).pauseToAssign { pauseForPlanning() }
+            if gameSettings.pauseToAssign { pauseForPlanning() }
             highlightedTarget = previewPoint.flatMap(target)
             saveCheckpoint(reason: .periodic)
         case .pause:
@@ -390,7 +400,7 @@ struct MobileGameTurn {
             }
             renderCurrentFrame(force: true)
         case .speed:
-            inputSpeed.variableEnabled = MobileSettings.load(from: .standard).classic.variableSpeedEnabled
+            inputSpeed.variableEnabled = gameSettings.classic.variableSpeedEnabled
             inputSpeed.tap(at: ProcessInfo.processInfo.systemUptime)
             updateInputSpeed(at: ProcessInfo.processInfo.systemUptime)
         case let .speedStep(direction):
@@ -442,7 +452,7 @@ struct MobileGameTurn {
     }
 
     func target(at point: MobilePoint) -> MobileTargetSelection? {
-        let settings = MobileSettings.load(from: .standard).classic
+        let settings = gameSettings.classic
         let preference: MobileTargetPreference
         if session.engineIdentifier == "classic-dos", selectedControl == 4, settings.favorBuilders { preference = .builder }
         else if session.engineIdentifier == "classic-dos", selectedControl == 2, settings.favorBombBlockers { preference = .bombBlocker }
@@ -484,6 +494,7 @@ struct MobileGameTurn {
                 playfieldView.cursorCount = session.targetCandidates(for: selectedControl).filter { abs($0.point.x - point.x) <= 8 && abs($0.point.y - point.y) <= 8 }.count
             } else { playfieldView.cursorCount = nil }
             playfieldView.selectionSprite = session.selectionSprite
+            playfieldView.rescueSprites = session.rescueSprites
             playfieldView.assignmentSprite = session.assignmentSprite
             playfieldView.assignmentProgress = session.assignmentProgress
             playfieldView.setRescueFeedback(saved: session.snapshot.saved, required: session.snapshot.required, total: session.snapshot.total,
@@ -686,7 +697,7 @@ struct MobileGameTurn {
     private func startResultCelebration() {
         celebrationTask?.cancel()
         guard let award = onResultAwards?(), award.stars > 0 else { return }
-        let reduced = MobileSettings.load(from: .standard).classic.reduceMotion || UIAccessibility.isReduceMotionEnabled
+        let reduced = gameSettings.classic.reduceMotion || UIAccessibility.isReduceMotionEnabled
         overlayCanvas.revealedStars = reduced ? 3 : 0
         celebrationTask = Task { @MainActor [weak self] in
             for star in 1...min(3, award.stars) {
@@ -741,9 +752,12 @@ struct MobileGameTurn {
         }
         showOverlay(title: "SAVING...", actions: [])
         do {
-            let envelope = try makeCheckpoint()
+            let encoding = try makeCheckpoint()
+            let previousSave = checkpointSaveTask
             Task { [self] in
                 do {
+                    await previousSave?.value
+                    let envelope = try await encoding.value
                     try await checkpointStore.save(envelope)
                     MobileMusic.shared.stop()
                     onExit?(.library)
@@ -767,31 +781,44 @@ struct MobileGameTurn {
 
     private func saveCheckpoint(reason: MobileCheckpointReason) {
         guard !session.isReadOnly, !session.snapshot.isComplete else { return }
+        if reason == .periodic, checkpointSaveTask != nil { return }
         do {
-            let envelope = try makeCheckpoint()
-            lastCheckpointTick = envelope.tick
+            let encoding = try makeCheckpoint()
+            let previousSave = checkpointSaveTask
+            let generation = UUID()
+            checkpointSaveGeneration = generation
+            lastCheckpointTick = session.snapshot.tick
             let backgroundTask: UIBackgroundTaskIdentifier
             if reason == .suspension || reason == .sceneDisconnect || reason == .audioInterruption {
                 backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "Save Lemmings run")
             } else {
                 backgroundTask = .invalid
             }
-            Task {
+            checkpointSaveTask = Task {
                 defer {
+                    if checkpointSaveGeneration == generation { checkpointSaveTask = nil }
                     if backgroundTask != .invalid {
                         UIApplication.shared.endBackgroundTask(backgroundTask)
                     }
                 }
-                try? await checkpointStore.save(envelope)
+                await previousSave?.value
+                do {
+                    let envelope = try await encoding.value
+                    try await checkpointStore.save(envelope)
+                } catch {
+                    // Retry on the next periodic or lifecycle save.
+                    lastCheckpointTick = min(lastCheckpointTick, session.snapshot.tick - Int(session.ticksPerSecond * 5))
+                }
             }
         } catch {
             // The current run stays in memory. A later lifecycle save can retry.
         }
     }
 
-    private func makeCheckpoint() throws -> MobileCheckpointEnvelope {
+    private func makeCheckpoint() throws -> Task<MobileCheckpointEnvelope, Error> {
         let viewport = playfieldView.gameViewport
-        return MobileCheckpointEnvelope(
+        let payload = try session.prepareCheckpointPayload()
+        let metadata = MobileCheckpointEnvelope(
             runID: runID,
             engine: session.engineIdentifier,
             engineFingerprint: session.engineFingerprint,
@@ -801,10 +828,17 @@ struct MobileGameTurn {
             tick: session.snapshot.tick,
             selectedControl: selectedControl,
             camera: MobileCameraState(origin: viewport.origin, zoom: viewport.zoom),
-            payload: try session.checkpointPayload(),
+            payload: Data(),
             scope: turn?.scope,
             owner: turn?.owner ?? soloOwnerID
         )
+        return Task.detached(priority: .utility) {
+            MobileCheckpointEnvelope(runID: metadata.runID, engine: metadata.engine,
+                engineFingerprint: metadata.engineFingerprint, levelIdentifier: metadata.levelIdentifier,
+                levelIndex: metadata.levelIndex, levelFingerprint: metadata.levelFingerprint,
+                tick: metadata.tick, selectedControl: metadata.selectedControl, camera: metadata.camera,
+                payload: try payload.encode(), savedAt: metadata.savedAt, scope: metadata.scope, owner: metadata.owner)
+        }
     }
 
     private func observeSystemState() {
@@ -900,7 +934,8 @@ struct MobileGameTurn {
             for: level,
             lowPowerMode: ProcessInfo.processInfo.isLowPowerModeEnabled,
             reduceMotion: UIAccessibility.isReduceMotionEnabled,
-            reduceFlashes: UIAccessibility.isReduceMotionEnabled
+            reduceFlashes: UIAccessibility.isReduceMotionEnabled,
+            constrainedDevice: MobileDevicePerformance.constrained
         )
         displayLink?.preferredFrameRateRange = CAFrameRateRange(
             minimum: Float(min(20, budget.framesPerSecond)),
@@ -918,7 +953,7 @@ struct MobileGameTurn {
         MobileMusic.shared.setGameplayState(paused: paused, speed: speed, rewinding: rewindHeld)
         let resolved = layout ?? hudLayout(insets: view.safeAreaInsets)
         hud.skillIcons = session.renderScale > 1 ? session.snapshot.skills.indices.map { session.skillCursorFrame(control: $0).flatMap(MobileBitmapRenderer.image) } : []
-        hud.counterStyle = MobileSettings.load(from: .standard).classic.counterStyle
+        hud.counterStyle = gameSettings.classic.counterStyle
         hud.update(
             layout: resolved,
             snapshot: session.snapshot,

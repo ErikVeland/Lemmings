@@ -4,6 +4,27 @@ import Testing
 @testable import LemmingsMobileCore
 
 struct MobileRewindTests {
+    @Test func backgroundCheckpointKeepsTheCapturedDiggerState() async throws {
+        let initial = try fixture()
+        let game = session(initial)
+        for _ in 0..<120 where !game.targetCandidates(for: 7).contains(where: { $0.assignment == .eligible }) {
+            game.tick()
+        }
+        let target = try #require(game.targetCandidates(for: 7).first(where: { $0.assignment == .eligible }))
+        #expect(game.assign(control: 7, to: target.id))
+        let expected = game.snapshot
+        let state = ClassicDOSReplayRecorder.stateHash(of: game.finalSimulation)
+        let captured = game.prepareCheckpointPayload()
+        let encoding = Task.detached { try captured.encode() }
+        for _ in 0..<30 { game.tick() }
+        #expect(game.snapshot.tick > expected.tick)
+        #expect(ClassicDOSReplayRecorder.stateHash(of: game.finalSimulation) != state)
+        let restored = session(initial)
+        try restored.restoreCheckpointPayload(try await encoding.value)
+        #expect(restored.snapshot == expected)
+        #expect(ClassicDOSReplayRecorder.stateHash(of: restored.finalSimulation) == state)
+        #expect(restored.stepBackward())
+    }
     private struct LegacyCheckpoint: Codable {
         var version = 1
         let initialStateHash: String
@@ -106,6 +127,49 @@ struct MobileRewindTests {
         #expect(review.snapshot == game.snapshot)
     }
 
+    @Test func replayHistoryShowsOnlySuccessfulUsesAndFollowsSeeking() throws {
+        let game = session(try fixture())
+        for _ in 0..<60 { game.tick() }
+        let ids = game.targetCandidates(for: 0).map(\.id)
+        #expect(ids.count >= 2)
+        #expect(game.assign(control: 0, to: ids[0]))
+        #expect(!game.assign(control: 0, to: ids[0]))
+        game.tick()
+        #expect(game.assign(control: 1, to: ids[0]))
+        game.tick()
+        #expect(game.assign(control: 0, to: ids[1]))
+        game.tick()
+        #expect(game.assign(control: 1, to: ids[1]))
+        game.tick()
+        #expect(game.replaySkillUses.isEmpty)
+        let document = try #require(try game.replayDocument())
+        let review = try #require(try game.makeReplaySession(document: document))
+        for _ in 0..<game.snapshot.tick { review.tick() }
+        #expect(review.replaySkillUses == [.init(tick: 61, name: "Floater"), .init(tick: 62, name: "Climber"), .init(tick: 63, name: "Floater")])
+        #expect(review.rewind(seconds: 4 / review.ticksPerSecond))
+        #expect(review.replaySkillUses == [.init(tick: 60, name: "Climber")])
+        #expect(!review.assign(control: 1, to: ids[0]))
+        let unchanged = try JSONDecoder().decode(ClassicDOSReplay.self, from: #require(try game.replayDocument()))
+        #expect(unchanged == (try JSONDecoder().decode(ClassicDOSReplay.self, from: document)))
+    }
+
+    @Test func replayHistoryIncludesLegacyScheduledAssignments() throws {
+        let initial = try fixture()
+        let game = session(initial)
+        for _ in 0..<60 { game.tick() }
+        let id = try #require(game.targetCandidates(for: 0).first).id
+        let replay = ClassicDOSReplay(rank: "", number: 1, title: "Legacy",
+            initialStateHash: ClassicDOSReplayRecorder.stateHash(of: initial), events: [
+                .init(tick: 60, action: .assign(lemmingID: id, skill: .climber)),
+                .init(tick: 61, action: .assign(lemmingID: id, skill: .climber), afterTick: true),
+                .init(tick: 62, action: .assign(lemmingID: id, skill: .floater), afterTick: true)])
+        let review = try #require(try game.makeReplaySession(document: JSONEncoder().encode(replay)))
+        for _ in 0..<64 { review.tick() }
+        #expect(review.replaySkillUses == [.init(tick: 60, name: "Climber"), .init(tick: 62, name: "Floater")])
+        #expect(review.rewind(seconds: 3 / review.ticksPerSecond))
+        #expect(review.replaySkillUses == [.init(tick: 60, name: "Climber")])
+    }
+
     private func decodeSimulation(_ game: ClassicMobileSession) throws -> ClassicDOSSimulation {
         try JSONDecoder().decode(LegacyCheckpoint.self, from: game.checkpointPayload()).simulation
     }
@@ -125,7 +189,7 @@ struct MobileRewindTests {
         return try ClassicDOSSimulation(terrain: terrain, configuration: ClassicDOSConfiguration(
             totalLemmings: winning ? 1 : 5, requiredToSave: 1, timeLimitTicks: 1_000,
             initialReleaseRate: 99, entrances: [.init(x: 20, y: 20)],
-            triggers: winning ? [exit] : [], initialSkills: [.climber: 5, .floater: 5],
+            triggers: winning ? [exit] : [], initialSkills: [.climber: 5, .floater: 5, .digger: 5],
             maximumX: width - 1, maximumY: height - 1))
     }
 }

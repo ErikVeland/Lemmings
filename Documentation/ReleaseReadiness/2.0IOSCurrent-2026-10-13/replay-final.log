@@ -1,0 +1,45 @@
+UI test windows: offscreen; audio: muted
+Building for debugging...
+[Computing dependencies]
+[1 / 1]
+[1 / 29] LemmingsAppCoreTests-product
+[2 / 25] LemmingsMobileCore
+[3 / 26] LemmingsMobileCore
+[10 / 36] LemmingsMobileBetaTool-product
+[13 / 37] LemmingsGameArt
+[18 / 41] LemmingsMobileMenuAudit-product
+[21 / 44] LemmingsMobileCore
+[25 / 46] LemmingsMobileCore
+[32 / 48] LemmingsMobileCore-product
+[32 / 48] LemmingsLocal-product
+[41 / 55] LemmingsMobileMenuAudit-product
+[43 / 57] LemmingsLocal-product
+[48 / 58] LemmingsMobileBetaTool-product
+[49 / 59] LemmingsMobileCoreTests-product
+[51 / 59] LemmingsMobileCoreTests-product
+[54 / 61] LemmingsLocal-product
+[55 / 62] LemmingsLocal
+[58 / 63] LemmingsLocalTests-product
+[61 / 64] LemmingsLocalTests-product
+[63 / 64] LemmingsLocalTests-product
+Build complete! (5.66 sec.)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2084
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite MobileRewindTests started.
+􀟈  Test replayHistoryIncludesLegacyScheduledAssignments() started.
+􀟈  Test oldCheckpointRestoresAfterRewindChange() started.
+􀟈  Test undoNukeIsAssistedAndPersistsUsage() started.
+􀟈  Test checkpointPreservesHistoryAndAbandonedFuture() started.
+􀟈  Test rewindThenAssignDropsTheFuture() started.
+􀟈  Test replayHistoryShowsOnlySuccessfulUsesAndFollowsSeeking() started.
+􀟈  Test winningReplayIsReadOnlyAndKeepsOutcome() started.
+􁁛  Test rewindThenAssignDropsTheFuture() passed after 0.003 seconds.
+􁁛  Test replayHistoryIncludesLegacyScheduledAssignments() passed after 0.003 seconds.
+􁁛  Test replayHistoryShowsOnlySuccessfulUsesAndFollowsSeeking() passed after 0.003 seconds.
+􁁛  Test winningReplayIsReadOnlyAndKeepsOutcome() passed after 0.018 seconds.
+􁁛  Test undoNukeIsAssistedAndPersistsUsage() passed after 0.020 seconds.
+􁁛  Test oldCheckpointRestoresAfterRewindChange() passed after 0.022 seconds.
+􁁛  Test checkpointPreservesHistoryAndAbandonedFuture() passed after 0.034 seconds.
+􁁛  Suite MobileRewindTests passed after 0.034 seconds.
+􁁛  Test run with 7 tests in 1 suite passed after 0.034 seconds.

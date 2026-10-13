@@ -1,0 +1,19 @@
+{
+  "build": 12,
+  "version": "2.0",
+  "bundleID": "academy.glasscode.lemmings.ios",
+  "distributionProfileVerified": true,
+  "developmentDebuggingAllowed": false,
+  "allDevicesProfile": false,
+  "gameCenterEntitled": true,
+  "gameCenterRuntimeEnabled": false,
+  "appleConfigurationVerified": false,
+  "sourceInputs": 8323,
+  "sourceFreezeMatchesCurrent": true,
+  "uploaded": false,
+  "installed": false,
+  "launched": false,
+  "physicalDeviceAcceptance": "pending",
+  "ipa": "/Users/veland/Lemmings/.build/ios-beta/2.0-12-macos-1.9.4/Export/UltimateLemmingsIOS.ipa",
+  "ipaSHA256": "7d97c984d1cf0d6ab087404e97b869bd751c761daa74da8d43bc6d1f5474e72d"
+}
