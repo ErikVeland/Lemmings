@@ -4,7 +4,11 @@ import LemmingsAppCore
 import NxlvKit
 
 extension ArcadeStore {
-    static var shared = ArcadeStore()
+    static var shared = makeSharedMacStore()
+
+    // Swift 6.1 crashes when its fast module emitter lowers the convenience
+    // initializer's default arguments here. Keep that call in a function body.
+    private static func makeSharedMacStore() -> ArcadeStore { ArcadeStore() }
 
     /// The Mac services that follow record changes.
     static var macHooks: Hooks {
