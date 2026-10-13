@@ -4,7 +4,7 @@ import LemmingsGameArt
 import LemmingsMobileCore
 
 extension MenuAudit {
-    @MainActor static func checkHotSeatHUD(library: ClassicMobileLibrary, typography: GameMenuTypography, output: URL) throws {
+    @MainActor static func checkHotSeatHUD(library: ClassicMobileLibrary, typography: GameMenuTypography, portraits: GamePortraitArt?, output: URL) throws {
         let session = try library.loadLevel(at: 0).session
         for _ in 0..<60 { session.tick() }
         guard let image = MobileBitmapRenderer.image(try session.render(highlight: nil)) else { throw Failure.missingArtwork }
@@ -20,10 +20,14 @@ extension MenuAudit {
             ("occluded", .init(width: 390, height: 844), .init(top: 59, bottom: 34),
                 [.init(kind: .occlusion, frame: .init(x: 0, y: 200, width: 20, height: 100))])
         ]
+        guard let portraits, (0..<8).allSatisfy({ portraits.image($0) != nil }) else { throw Failure.missingArtwork }
+        let states: [(String, String?, Bool, Int)] = [("solo", nil, false, 0), ("host", "ERI", false, 0),
+            ("guest", "UVA", false, 1), ("paused-guest", "UVA", true, 1)]
+            + (2..<8).map { ("portrait-\($0)", "UVA", false, $0) }
         var captures: [[String: Any]] = []
         for (pose, size, insets, regions) in poses {
-            for (state, name, paused) in [("solo", nil as String?, false), ("host", "ERI", false),
-                                         ("guest", "UVA", false), ("paused-guest", "UVA", true)] {
+            for (state, name, paused, portrait) in states {
+                let icon = name == nil ? nil : portraits.image(portrait)
                 let layout = MobileHUDLayout.make(container: size, safeArea: insets, hasRate: true,
                     skillCount: session.snapshot.skills.count, reservedRegions: regions, supportsRewind: true,
                     hasPlayer: name != nil)
@@ -45,9 +49,12 @@ extension MenuAudit {
                         guard !player.intersects(visible), !frames.counters.intersects(visible) else { throw Failure.invalidTargets }
                     }
                 }
-                let identityText = MobileTurnArt.subtitle("", playerName: name)
+                let identityText = name ?? ""
                 if let player = frames.player {
-                    guard typography.width(of: GameMenuTypography.menuText(identityText), face: .small, scale: 1) <= player.width - 12 else { throw Failure.invalidTargets }
+                    let identity = MobileHUDRenderer.playerFrames(in: player, name: identityText, portrait: icon, typography: typography)
+                    guard let portraitFrame = identity.portrait, player.contains(portraitFrame), player.contains(identity.name),
+                          !portraitFrame.intersects(identity.name),
+                          typography.width(of: GameMenuTypography.menuText(identityText), face: .small, scale: 1) <= identity.name.width else { throw Failure.invalidTargets }
                     guard cg(layout.interface.safeFrame).contains(player), !player.intersects(frames.counters),
                           !player.intersects(cg(layout.interface.playfieldFrame)),
                           regions.allSatisfy({ !player.intersects(cg($0.frame)) }) else { throw Failure.invalidTargets }
@@ -64,7 +71,7 @@ extension MenuAudit {
                 MobileHUDRenderer(layout: layout, snapshot: session.snapshot, selectedSkill: 0,
                     paused: paused, speed: 1, endRunArmed: false,
                     panelImage: session.panelFrame.flatMap(MobileBitmapRenderer.image), typography: typography,
-                    playerName: name).draw(in: context, bounds: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+                    playerName: name, playerPortrait: icon).draw(in: context, bounds: CGRect(x: 0, y: 0, width: size.width, height: size.height))
                 if let minimap = layout.minimapFrame {
                     GameMinimapArt.draw(in: context, bounds: minimap, image: image,
                         visible: cg(viewport.visibleLevelRect),
@@ -73,7 +80,7 @@ extension MenuAudit {
                 }
                 let file = pose + "-" + state + ".png"
                 try save(context: context, to: output.appendingPathComponent(file))
-                captures.append(["file": file, "player": name ?? "solo", "identityText": identityText, "paused": paused,
+                captures.append(["file": file, "player": name ?? "solo", "identityText": identityText, "portrait": name == nil ? -1 : portrait, "paused": paused,
                     "layout": layout.panel != nil ? "panel" : layout.portrait != nil ? "two-rows" : "compact",
                     "targets": targets.count,
                     "status": [frames.counters.minX, frames.counters.minY, frames.counters.width, frames.counters.height],

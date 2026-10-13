@@ -23,7 +23,7 @@ import NxlvKit
         guard try library.checkpointLevelIdentifier(at: 0) == library.loadLevel(at: 0).session.levelIdentifier
         else { throw Failure.invalidTargets }
         if hotSeatFlow { try checkHotSeatFlow(typography: typography, output: output); return }
-        if hotSeatHUD { try checkHotSeatHUD(library: library, typography: typography, output: output); return }
+        if hotSeatHUD { try checkHotSeatHUD(library: library, typography: typography, portraits: GamePortraitArt(directory: artwork), output: output); return }
         if hotSeat { try checkHotSeat(typography: typography, portraits: GamePortraitArt(directory: artwork), output: output); return }
         if latestFixes { try await checkCurrentFixes(library: library, typography: typography, output: output); return }
         let session = try library.loadLevel(at: 0).session

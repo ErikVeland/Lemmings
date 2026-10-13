@@ -39,18 +39,20 @@ public enum MobileHUDAction: Equatable, Sendable {
     private let skillIcons: [CGImage?]
     private let readOnly: Bool
     private let playerName: String?
+    private let playerPortrait: CGImage?
     private let counterStyle: ClassicCounterStyle
     private let panelImage: CGImage?
     private let typography: GameMenuTypography?
     private let items: [Item]
 
     public init(layout: MobileHUDLayout, snapshot: MobileGameSnapshot, selectedSkill: Int,
-                paused: Bool, speed: Double, endRunArmed: Bool, panelImage: CGImage?, typography: GameMenuTypography?, counterStyle: ClassicCounterStyle = .game, skillIcons: [CGImage?] = [], readOnly: Bool = false, playerName: String? = nil) {
+                paused: Bool, speed: Double, endRunArmed: Bool, panelImage: CGImage?, typography: GameMenuTypography?, counterStyle: ClassicCounterStyle = .game, skillIcons: [CGImage?] = [], readOnly: Bool = false, playerName: String? = nil, playerPortrait: CGImage? = nil) {
         self.layout = layout; self.snapshot = snapshot; self.selectedSkill = selectedSkill
         self.paused = paused; self.speed = speed; self.endRunArmed = endRunArmed
         self.skillIcons = skillIcons
         self.readOnly = readOnly
         self.playerName = playerName
+        self.playerPortrait = playerPortrait
         self.counterStyle = counterStyle
         self.panelImage = panelImage; self.typography = typography
         items = Self.targets(layout: layout, snapshot: snapshot, selectedSkill: selectedSkill,
@@ -151,9 +153,12 @@ public enum MobileHUDAction: Equatable, Sendable {
         }
         let frames = Self.statusFrames(layout: layout, hasPlayer: playerName != nil)
         if let playerName, let player = frames.player {
-            GamePixelTypography.draw(MobileTurnArt.subtitle("", playerName: playerName),
-                in: player.insetBy(dx: 6, dy: 1), context: context,
-                typography: typography, palette: .green, maximumScale: 1)
+            let identity = Self.playerFrames(in: player, name: playerName, portrait: playerPortrait, typography: typography)
+            if let playerPortrait, let icon = identity.portrait {
+                GameStoneArt.drawImage(playerPortrait, in: icon, context: context)
+            }
+            GamePixelTypography.draw(playerName, in: identity.name, context: context,
+                typography: typography, palette: .green, maximumScale: 1, alignment: .left)
         }
         drawStatus(in: frames.counters, panelMode: layout.panel != nil, context: context)
     }
@@ -444,6 +449,26 @@ public enum MobileHUDAction: Equatable, Sendable {
             let scale = max(1, min(3, floor(min(box.height / 7, box.width / CGFloat(max(1, plain.count * 6))))))
             GamePixelTypography.draw(plain, in: box, context: context, typography: typography, maximumScale: scale, bitmapOnly: true)
         }
+    }
+
+    /// Centre the player's existing profile portrait and name as one compact group.
+    public static func playerFrames(in frame: CGRect, name: String, portrait: CGImage?,
+                                    typography: GameMenuTypography?) -> (portrait: CGRect?, name: CGRect) {
+        let row = frame.insetBy(dx: 6, dy: 0)
+        let iconSize: CGSize
+        if let portrait {
+            let fit = min(row.height / CGFloat(portrait.height), 20 / CGFloat(portrait.width))
+            let scale = fit >= 1 ? floor(fit) : 1 / ceil(1 / fit)
+            iconSize = CGSize(width: CGFloat(portrait.width) * scale, height: CGFloat(portrait.height) * scale)
+        } else { iconSize = .zero }
+        let gap: CGFloat = portrait == nil ? 0 : 6
+        let plain = GameMenuTypography.menuText(name)
+        let naturalWidth = typography?.width(of: plain, face: .small, scale: 1) ?? CGFloat(max(1, plain.count * 6 - 1))
+        let width = min(naturalWidth, max(0, row.width - iconSize.width - gap))
+        let x = floor(row.midX - (iconSize.width + gap + width) / 2)
+        let icon = portrait.map { _ in CGRect(x: x, y: floor(row.midY - iconSize.height / 2),
+                                              width: iconSize.width, height: iconSize.height) }
+        return (icon, CGRect(x: x + iconSize.width + gap, y: row.minY, width: width, height: row.height))
     }
 
     /// Player identity and counters share the opaque HUD strip, away from gameplay input.

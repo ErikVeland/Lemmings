@@ -8,6 +8,7 @@
     "layout" : "two-rows",
     "paused" : false,
     "player" : "solo",
+    "portrait" : -1,
     "status" : [
       0,
       59,
@@ -24,10 +25,11 @@
       342,
       20
     ],
-    "identityText" : "Turn: ERI",
+    "identityText" : "ERI",
     "layout" : "two-rows",
     "paused" : false,
     "player" : "ERI",
+    "portrait" : 0,
     "status" : [
       0,
       79,
@@ -44,10 +46,11 @@
       342,
       20
     ],
-    "identityText" : "Turn: UVA",
+    "identityText" : "UVA",
     "layout" : "two-rows",
     "paused" : false,
     "player" : "UVA",
+    "portrait" : 1,
     "status" : [
       0,
       79,
@@ -64,10 +67,137 @@
       342,
       20
     ],
-    "identityText" : "Turn: UVA",
+    "identityText" : "UVA",
     "layout" : "two-rows",
     "paused" : true,
     "player" : "UVA",
+    "portrait" : 1,
+    "status" : [
+      0,
+      79,
+      342,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-portrait-portrait-2.png",
+    "identity" : [
+      0,
+      59,
+      342,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 2,
+    "status" : [
+      0,
+      79,
+      342,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-portrait-portrait-3.png",
+    "identity" : [
+      0,
+      59,
+      342,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 3,
+    "status" : [
+      0,
+      79,
+      342,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-portrait-portrait-4.png",
+    "identity" : [
+      0,
+      59,
+      342,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 4,
+    "status" : [
+      0,
+      79,
+      342,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-portrait-portrait-5.png",
+    "identity" : [
+      0,
+      59,
+      342,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 5,
+    "status" : [
+      0,
+      79,
+      342,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-portrait-portrait-6.png",
+    "identity" : [
+      0,
+      59,
+      342,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 6,
+    "status" : [
+      0,
+      79,
+      342,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-portrait-portrait-7.png",
+    "identity" : [
+      0,
+      59,
+      342,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 7,
     "status" : [
       0,
       79,
@@ -85,6 +215,7 @@
     "layout" : "two-rows",
     "paused" : false,
     "player" : "solo",
+    "portrait" : -1,
     "status" : [
       59,
       0,
@@ -101,10 +232,11 @@
       678,
       20
     ],
-    "identityText" : "Turn: ERI",
+    "identityText" : "ERI",
     "layout" : "two-rows",
     "paused" : false,
     "player" : "ERI",
+    "portrait" : 0,
     "status" : [
       59,
       20,
@@ -121,10 +253,11 @@
       678,
       20
     ],
-    "identityText" : "Turn: UVA",
+    "identityText" : "UVA",
     "layout" : "two-rows",
     "paused" : false,
     "player" : "UVA",
+    "portrait" : 1,
     "status" : [
       59,
       20,
@@ -141,10 +274,137 @@
       678,
       20
     ],
-    "identityText" : "Turn: UVA",
+    "identityText" : "UVA",
     "layout" : "two-rows",
     "paused" : true,
     "player" : "UVA",
+    "portrait" : 1,
+    "status" : [
+      59,
+      20,
+      678,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-landscape-portrait-2.png",
+    "identity" : [
+      59,
+      0,
+      678,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 2,
+    "status" : [
+      59,
+      20,
+      678,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-landscape-portrait-3.png",
+    "identity" : [
+      59,
+      0,
+      678,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 3,
+    "status" : [
+      59,
+      20,
+      678,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-landscape-portrait-4.png",
+    "identity" : [
+      59,
+      0,
+      678,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 4,
+    "status" : [
+      59,
+      20,
+      678,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-landscape-portrait-5.png",
+    "identity" : [
+      59,
+      0,
+      678,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 5,
+    "status" : [
+      59,
+      20,
+      678,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-landscape-portrait-6.png",
+    "identity" : [
+      59,
+      0,
+      678,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 6,
+    "status" : [
+      59,
+      20,
+      678,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-landscape-portrait-7.png",
+    "identity" : [
+      59,
+      0,
+      678,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 7,
     "status" : [
       59,
       20,
@@ -162,6 +422,7 @@
     "layout" : "two-rows",
     "paused" : false,
     "player" : "solo",
+    "portrait" : -1,
     "status" : [
       0,
       20,
@@ -178,10 +439,11 @@
       272,
       20
     ],
-    "identityText" : "Turn: ERI",
+    "identityText" : "ERI",
     "layout" : "two-rows",
     "paused" : false,
     "player" : "ERI",
+    "portrait" : 0,
     "status" : [
       0,
       40,
@@ -198,10 +460,11 @@
       272,
       20
     ],
-    "identityText" : "Turn: UVA",
+    "identityText" : "UVA",
     "layout" : "two-rows",
     "paused" : false,
     "player" : "UVA",
+    "portrait" : 1,
     "status" : [
       0,
       40,
@@ -218,10 +481,137 @@
       272,
       20
     ],
-    "identityText" : "Turn: UVA",
+    "identityText" : "UVA",
     "layout" : "two-rows",
     "paused" : true,
     "player" : "UVA",
+    "portrait" : 1,
+    "status" : [
+      0,
+      40,
+      272,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-narrow-portrait-2.png",
+    "identity" : [
+      0,
+      20,
+      272,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 2,
+    "status" : [
+      0,
+      40,
+      272,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-narrow-portrait-3.png",
+    "identity" : [
+      0,
+      20,
+      272,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 3,
+    "status" : [
+      0,
+      40,
+      272,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-narrow-portrait-4.png",
+    "identity" : [
+      0,
+      20,
+      272,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 4,
+    "status" : [
+      0,
+      40,
+      272,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-narrow-portrait-5.png",
+    "identity" : [
+      0,
+      20,
+      272,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 5,
+    "status" : [
+      0,
+      40,
+      272,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-narrow-portrait-6.png",
+    "identity" : [
+      0,
+      20,
+      272,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 6,
+    "status" : [
+      0,
+      40,
+      272,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-narrow-portrait-7.png",
+    "identity" : [
+      0,
+      20,
+      272,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 7,
     "status" : [
       0,
       40,
@@ -239,6 +629,7 @@
     "layout" : "compact",
     "paused" : false,
     "player" : "solo",
+    "portrait" : -1,
     "status" : [
       0,
       228,
@@ -255,10 +646,11 @@
       280,
       20
     ],
-    "identityText" : "Turn: ERI",
+    "identityText" : "ERI",
     "layout" : "compact",
     "paused" : false,
     "player" : "ERI",
+    "portrait" : 0,
     "status" : [
       0,
       230,
@@ -275,10 +667,11 @@
       280,
       20
     ],
-    "identityText" : "Turn: UVA",
+    "identityText" : "UVA",
     "layout" : "compact",
     "paused" : false,
     "player" : "UVA",
+    "portrait" : 1,
     "status" : [
       0,
       230,
@@ -295,10 +688,137 @@
       280,
       20
     ],
-    "identityText" : "Turn: UVA",
+    "identityText" : "UVA",
     "layout" : "compact",
     "paused" : true,
     "player" : "UVA",
+    "portrait" : 1,
+    "status" : [
+      0,
+      230,
+      280,
+      24
+    ],
+    "targets" : 19
+  },
+  {
+    "file" : "compact-portrait-2.png",
+    "identity" : [
+      0,
+      210,
+      280,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "compact",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 2,
+    "status" : [
+      0,
+      230,
+      280,
+      24
+    ],
+    "targets" : 19
+  },
+  {
+    "file" : "compact-portrait-3.png",
+    "identity" : [
+      0,
+      210,
+      280,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "compact",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 3,
+    "status" : [
+      0,
+      230,
+      280,
+      24
+    ],
+    "targets" : 19
+  },
+  {
+    "file" : "compact-portrait-4.png",
+    "identity" : [
+      0,
+      210,
+      280,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "compact",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 4,
+    "status" : [
+      0,
+      230,
+      280,
+      24
+    ],
+    "targets" : 19
+  },
+  {
+    "file" : "compact-portrait-5.png",
+    "identity" : [
+      0,
+      210,
+      280,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "compact",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 5,
+    "status" : [
+      0,
+      230,
+      280,
+      24
+    ],
+    "targets" : 19
+  },
+  {
+    "file" : "compact-portrait-6.png",
+    "identity" : [
+      0,
+      210,
+      280,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "compact",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 6,
+    "status" : [
+      0,
+      230,
+      280,
+      24
+    ],
+    "targets" : 19
+  },
+  {
+    "file" : "compact-portrait-7.png",
+    "identity" : [
+      0,
+      210,
+      280,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "compact",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 7,
     "status" : [
       0,
       230,
@@ -316,6 +836,7 @@
     "layout" : "two-rows",
     "paused" : false,
     "player" : "solo",
+    "portrait" : -1,
     "status" : [
       0,
       20,
@@ -332,10 +853,11 @@
       720,
       20
     ],
-    "identityText" : "Turn: ERI",
+    "identityText" : "ERI",
     "layout" : "two-rows",
     "paused" : false,
     "player" : "ERI",
+    "portrait" : 0,
     "status" : [
       0,
       40,
@@ -352,10 +874,11 @@
       720,
       20
     ],
-    "identityText" : "Turn: UVA",
+    "identityText" : "UVA",
     "layout" : "two-rows",
     "paused" : false,
     "player" : "UVA",
+    "portrait" : 1,
     "status" : [
       0,
       40,
@@ -372,10 +895,137 @@
       720,
       20
     ],
-    "identityText" : "Turn: UVA",
+    "identityText" : "UVA",
     "layout" : "two-rows",
     "paused" : true,
     "player" : "UVA",
+    "portrait" : 1,
+    "status" : [
+      0,
+      40,
+      720,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "ipad-portrait-portrait-2.png",
+    "identity" : [
+      0,
+      20,
+      720,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 2,
+    "status" : [
+      0,
+      40,
+      720,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "ipad-portrait-portrait-3.png",
+    "identity" : [
+      0,
+      20,
+      720,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 3,
+    "status" : [
+      0,
+      40,
+      720,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "ipad-portrait-portrait-4.png",
+    "identity" : [
+      0,
+      20,
+      720,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 4,
+    "status" : [
+      0,
+      40,
+      720,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "ipad-portrait-portrait-5.png",
+    "identity" : [
+      0,
+      20,
+      720,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 5,
+    "status" : [
+      0,
+      40,
+      720,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "ipad-portrait-portrait-6.png",
+    "identity" : [
+      0,
+      20,
+      720,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 6,
+    "status" : [
+      0,
+      40,
+      720,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "ipad-portrait-portrait-7.png",
+    "identity" : [
+      0,
+      20,
+      720,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 7,
     "status" : [
       0,
       40,
@@ -393,6 +1043,7 @@
     "layout" : "two-rows",
     "paused" : false,
     "player" : "solo",
+    "portrait" : -1,
     "status" : [
       0,
       20,
@@ -409,10 +1060,11 @@
       976,
       20
     ],
-    "identityText" : "Turn: ERI",
+    "identityText" : "ERI",
     "layout" : "two-rows",
     "paused" : false,
     "player" : "ERI",
+    "portrait" : 0,
     "status" : [
       0,
       40,
@@ -429,10 +1081,11 @@
       976,
       20
     ],
-    "identityText" : "Turn: UVA",
+    "identityText" : "UVA",
     "layout" : "two-rows",
     "paused" : false,
     "player" : "UVA",
+    "portrait" : 1,
     "status" : [
       0,
       40,
@@ -449,10 +1102,137 @@
       976,
       20
     ],
-    "identityText" : "Turn: UVA",
+    "identityText" : "UVA",
     "layout" : "two-rows",
     "paused" : true,
     "player" : "UVA",
+    "portrait" : 1,
+    "status" : [
+      0,
+      40,
+      976,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "ipad-landscape-portrait-2.png",
+    "identity" : [
+      0,
+      20,
+      976,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 2,
+    "status" : [
+      0,
+      40,
+      976,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "ipad-landscape-portrait-3.png",
+    "identity" : [
+      0,
+      20,
+      976,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 3,
+    "status" : [
+      0,
+      40,
+      976,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "ipad-landscape-portrait-4.png",
+    "identity" : [
+      0,
+      20,
+      976,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 4,
+    "status" : [
+      0,
+      40,
+      976,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "ipad-landscape-portrait-5.png",
+    "identity" : [
+      0,
+      20,
+      976,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 5,
+    "status" : [
+      0,
+      40,
+      976,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "ipad-landscape-portrait-6.png",
+    "identity" : [
+      0,
+      20,
+      976,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 6,
+    "status" : [
+      0,
+      40,
+      976,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "ipad-landscape-portrait-7.png",
+    "identity" : [
+      0,
+      20,
+      976,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 7,
     "status" : [
       0,
       40,
@@ -470,6 +1250,7 @@
     "layout" : "panel",
     "paused" : false,
     "player" : "solo",
+    "portrait" : -1,
     "status" : [
       0,
       770,
@@ -486,10 +1267,11 @@
       916,
       20
     ],
-    "identityText" : "Turn: ERI",
+    "identityText" : "ERI",
     "layout" : "panel",
     "paused" : false,
     "player" : "ERI",
+    "portrait" : 0,
     "status" : [
       0,
       790,
@@ -506,10 +1288,11 @@
       916,
       20
     ],
-    "identityText" : "Turn: UVA",
+    "identityText" : "UVA",
     "layout" : "panel",
     "paused" : false,
     "player" : "UVA",
+    "portrait" : 1,
     "status" : [
       0,
       790,
@@ -526,10 +1309,137 @@
       916,
       20
     ],
-    "identityText" : "Turn: UVA",
+    "identityText" : "UVA",
     "layout" : "panel",
     "paused" : true,
     "player" : "UVA",
+    "portrait" : 1,
+    "status" : [
+      0,
+      790,
+      916,
+      24
+    ],
+    "targets" : 19
+  },
+  {
+    "file" : "divided-portrait-2.png",
+    "identity" : [
+      0,
+      770,
+      916,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "panel",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 2,
+    "status" : [
+      0,
+      790,
+      916,
+      24
+    ],
+    "targets" : 19
+  },
+  {
+    "file" : "divided-portrait-3.png",
+    "identity" : [
+      0,
+      770,
+      916,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "panel",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 3,
+    "status" : [
+      0,
+      790,
+      916,
+      24
+    ],
+    "targets" : 19
+  },
+  {
+    "file" : "divided-portrait-4.png",
+    "identity" : [
+      0,
+      770,
+      916,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "panel",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 4,
+    "status" : [
+      0,
+      790,
+      916,
+      24
+    ],
+    "targets" : 19
+  },
+  {
+    "file" : "divided-portrait-5.png",
+    "identity" : [
+      0,
+      770,
+      916,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "panel",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 5,
+    "status" : [
+      0,
+      790,
+      916,
+      24
+    ],
+    "targets" : 19
+  },
+  {
+    "file" : "divided-portrait-6.png",
+    "identity" : [
+      0,
+      770,
+      916,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "panel",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 6,
+    "status" : [
+      0,
+      790,
+      916,
+      24
+    ],
+    "targets" : 19
+  },
+  {
+    "file" : "divided-portrait-7.png",
+    "identity" : [
+      0,
+      770,
+      916,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "panel",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 7,
     "status" : [
       0,
       790,
@@ -547,6 +1457,7 @@
     "layout" : "two-rows",
     "paused" : false,
     "player" : "solo",
+    "portrait" : -1,
     "status" : [
       0,
       59,
@@ -563,10 +1474,11 @@
       342,
       20
     ],
-    "identityText" : "Turn: ERI",
+    "identityText" : "ERI",
     "layout" : "two-rows",
     "paused" : false,
     "player" : "ERI",
+    "portrait" : 0,
     "status" : [
       0,
       79,
@@ -583,10 +1495,11 @@
       342,
       20
     ],
-    "identityText" : "Turn: UVA",
+    "identityText" : "UVA",
     "layout" : "two-rows",
     "paused" : false,
     "player" : "UVA",
+    "portrait" : 1,
     "status" : [
       0,
       79,
@@ -603,10 +1516,137 @@
       342,
       20
     ],
-    "identityText" : "Turn: UVA",
+    "identityText" : "UVA",
     "layout" : "two-rows",
     "paused" : true,
     "player" : "UVA",
+    "portrait" : 1,
+    "status" : [
+      0,
+      79,
+      342,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "occluded-portrait-2.png",
+    "identity" : [
+      0,
+      59,
+      342,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 2,
+    "status" : [
+      0,
+      79,
+      342,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "occluded-portrait-3.png",
+    "identity" : [
+      0,
+      59,
+      342,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 3,
+    "status" : [
+      0,
+      79,
+      342,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "occluded-portrait-4.png",
+    "identity" : [
+      0,
+      59,
+      342,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 4,
+    "status" : [
+      0,
+      79,
+      342,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "occluded-portrait-5.png",
+    "identity" : [
+      0,
+      59,
+      342,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 5,
+    "status" : [
+      0,
+      79,
+      342,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "occluded-portrait-6.png",
+    "identity" : [
+      0,
+      59,
+      342,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 6,
+    "status" : [
+      0,
+      79,
+      342,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "occluded-portrait-7.png",
+    "identity" : [
+      0,
+      59,
+      342,
+      20
+    ],
+    "identityText" : "UVA",
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "UVA",
+    "portrait" : 7,
     "status" : [
       0,
       79,

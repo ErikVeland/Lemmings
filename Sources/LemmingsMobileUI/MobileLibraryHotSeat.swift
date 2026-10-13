@@ -28,7 +28,8 @@ extension MobileLibraryViewController {
     /// The turn a level is played under, or nil in solo play.
     func currentTurn() -> MobileGameTurn? {
         guard let seat = hotSeat else { return nil }
-        return MobileGameTurn(scope: seat.scope, owner: seat.turn, ownerName: playerName(seat.turn)) { [weak self] win in
+        return MobileGameTurn(scope: seat.scope, owner: seat.turn, ownerName: playerName(seat.turn),
+                              ownerPortrait: profiles.players.first { $0.id == seat.turn }?.portrait ?? 0) { [weak self] win in
             seat.choices(didWin: win).map { choice in
                 let name = self?.short(choice.player) ?? ""
                 let label = choice.kind == .next ? "Next: \(name)" : "Retry: \(name)"

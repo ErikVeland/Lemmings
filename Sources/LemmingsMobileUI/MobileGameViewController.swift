@@ -16,6 +16,7 @@ struct MobileGameTurn {
     let scope: String
     let owner: String
     let ownerName: String
+    let ownerPortrait: Int
     /// The result buttons for a win or a loss, each naming the player who acts next.
     let choices: (Bool) -> [(label: String, choice: MobileHotSeat.Choice)]
 }
@@ -162,6 +163,7 @@ struct MobileGameTurn {
             self.nowPlaying.show(title: title, soundtrack: soundtrack)
         }
         hud.playerName = turn?.ownerName
+        hud.playerPortrait = turn.flatMap { MobileGameArt.portraits?.image($0.ownerPortrait) }
         overlayCanvas.playerName = turn?.ownerName
         playfieldView.displaySettings = gameSettings.classic
         configureOverlay()

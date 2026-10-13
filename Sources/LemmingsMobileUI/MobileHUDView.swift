@@ -45,6 +45,7 @@ import UIKit
     var onRewindHold: ((Bool) -> Void)?
     private var readOnly = false
     var playerName: String?
+    var playerPortrait: CGImage?
     private let playerIdentity = UIView()
     var onAction: ((MobileHUDAction) -> Void)?
     /// A touch on the map, as a point in level pixels.
@@ -195,7 +196,7 @@ import UIKit
         guard let layout, let snapshot else { return nil }
         return MobileHUDRenderer(layout: layout, snapshot: snapshot, selectedSkill: selectedSkill,
                           paused: paused, speed: speed, endRunArmed: endRunArmed,
-                          panelImage: panelImage, typography: MobileGameArt.typography, counterStyle: counterStyle, skillIcons: skillIcons, readOnly: readOnly, playerName: playerName)
+                          panelImage: panelImage, typography: MobileGameArt.typography, counterStyle: counterStyle, skillIcons: skillIcons, readOnly: readOnly, playerName: playerName, playerPortrait: playerPortrait)
     }
 
     private func rebuildButtons() {

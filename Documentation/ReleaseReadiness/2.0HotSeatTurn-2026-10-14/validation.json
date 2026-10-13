@@ -1,18 +1,23 @@
 {
   "date": "2026-10-14",
-  "renderChecks": 32,
+  "renderChecks": 80,
   "rendering": "windowless Core Graphics",
   "mechanicalAudio": "muted",
-  "visibleIdentity": "Turn: <attempt owner>",
+  "visibleIdentity": "<attempt owner profile portrait> <attempt owner name>",
   "sourceSHA256": {
-    "Sources/LemmingsGameArt/MobileHUDRenderer.swift": "78cd622d823dfcb9e2a758065c3a9a62c7b0bde79ca2b6f1ab276cdbb68b50d7",
-    "Sources/LemmingsGameArt/MobileTurnArt.swift": "2ca7b95dd881f35fdef3bd0bf43d7dab2b9e1c1b33de8a97a49ba9cb62a80d03",
-    "Sources/LemmingsMobileUI/MobileHUDView.swift": "990f61357ebdb71479d8c53abe6f81f2aad301dc84f1eb191fccfe9c96373d82",
-    "Tools/IOSMenuAudit/hot-seat-hud.swift": "51cdc6ce3a61f4418c7be6a0477efbbdf2afc22b6c829c8064ccfa32e59e008f"
+    "Sources/LemmingsGameArt/MobileHUDRenderer.swift": "4554ace0ef0e2a059b1bc2bce1203eb127cfdc88f161ae5154429c1593a4f398",
+    "Sources/LemmingsMobileUI/MobileHUDView.swift": "3898f4d7cf82bb9ab0e3e787abe479365c9dbaa4b3442cfd6c5c109c3437caac",
+    "Sources/LemmingsMobileUI/MobileGameViewController.swift": "da81dba2faa2243956b9cc9d7597c71680636aa0898b121183c63580baa6638c",
+    "Sources/LemmingsMobileUI/MobileLibraryHotSeat.swift": "e92683b19bc97df3f696f6722743b29d2117a30fb70338dc043a1b6d6f73c829",
+    "Sources/LemmingsMobileUI/MobilePixelText.swift": "19a1eab4af03cbd9db18d191c7ef4fe8b84c302727c908bf51184219a1606a3b",
+    "Tools/IOSMenuAudit/main.swift": "c46cda6046b5915c88f8269b3396301e177f6f8d4ce6b54b834a72640bacb93b",
+    "Tools/IOSMenuAudit/hot-seat-hud.swift": "f19d761aa452c39a25711d4684dbc55c752006d8300aae527a28f64723615cdc"
   },
   "unsignedIOSCompilation": "passed: Debug iphoneos arm64, CODE_SIGNING_ALLOWED=NO",
   "limits": [
     "Physical UIKit input and VoiceOver not exercised",
     "Playable L2/L3 campaigns unavailable in the iOS library"
-  ]
+  ],
+  "portraitChoices": 8,
+  "sourceState": "Tested working tree, including concurrent work in shared files"
 }

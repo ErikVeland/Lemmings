@@ -505,10 +505,10 @@ Physical UIKit/VoiceOver checks remain outstanding. L2 and L3 remain unavailable
 in the iOS library; their existing Mac handovers are unchanged.
 
 
-## 14 October explicit in-play turn
+## 14 October player icon and name
 
-Gameplay now labels its persistent green identity row `Turn: ERI` instead of
-showing only the name. This distinguishes the current attempt from `Next: ERI`
-on selection and handover pages. VoiceOver says “Current turn” and the full name.
-All 32 windowless render/target checks pass, including caption width and all
-adaptive layouts. See [turn-label evidence](ReleaseReadiness/2.0HotSeatTurn-2026-10-14/README.md).
+Gameplay shows the attempt owner's profile portrait beside their name in the
+existing green identity row. VoiceOver says “Current turn” and the full name.
+All 80 windowless render/target checks pass, covering all eight profile portraits
+and adaptive layouts. The unsigned arm64 iOS build passes. See
+[player identity evidence](ReleaseReadiness/2.0HotSeatTurn-2026-10-14/README.md).

@@ -2,8 +2,11 @@
 import LemmingsGameArt
 import UIKit
 
-/// The Macintosh release's menu lettering, shared with the Mac app. Nil when the bundle lacks it.
+/// Shipped Macintosh portraits and menu lettering, shared with the Mac app.
 @MainActor enum MobileGameArt {
+    static let portraits = Bundle.main.resourceURL.flatMap {
+        GamePortraitArt(directory: $0.appendingPathComponent("MacArtwork/lemmings"))
+    }
     static let typography: GameMenuTypography? = {
         guard let url = Bundle.main.resourceURL?.appendingPathComponent("MacArtwork/lemmings") else { return nil }
         return GameMenuTypography(directory: url)
