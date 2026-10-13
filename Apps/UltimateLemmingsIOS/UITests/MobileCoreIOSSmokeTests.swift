@@ -63,4 +63,28 @@ final class MobileCoreIOSSmokeTests: XCTestCase {
         XCTAssertTrue(lifecycle.handle(.becameActive).contains(.showResumeControl))
         XCTAssertTrue(lifecycle.isPaused)
     }
+
+    @MainActor func testGameDataOffersSeparateImportRoutes() {
+        let app = XCUIApplication()
+        app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
+        app.launch()
+
+        let classicImport = app.buttons["menu.import.classic"]
+        if !classicImport.waitForExistence(timeout: 2) {
+            let settings = app.buttons["menu.settings"]
+            XCTAssertTrue(settings.waitForExistence(timeout: 5))
+            settings.tap()
+            let data = app.buttons["menu.data"]
+            XCTAssertTrue(data.waitForExistence(timeout: 5))
+            data.tap()
+        }
+
+        for game in ["classic", "lemmings2", "lemmings3", "neoLemmix"] {
+            let button = app.buttons["menu.import.\(game)"]
+            XCTAssertTrue(button.waitForExistence(timeout: 5), "Missing import route for \(game)")
+            XCTAssertTrue(button.isHittable, "Import route for \(game) must be reachable")
+            XCTAssertGreaterThanOrEqual(button.frame.width, 44)
+            XCTAssertGreaterThanOrEqual(button.frame.height, 44)
+        }
+    }
 }

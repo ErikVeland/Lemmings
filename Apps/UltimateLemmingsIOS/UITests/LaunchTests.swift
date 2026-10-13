@@ -43,22 +43,6 @@ final class LaunchTests: XCTestCase {
         }
     }
 
-    @MainActor func testGameDataOffersSeparateImportRoutes() {
-        let app = XCUIApplication()
-        app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
-        app.launch()
-
-        let data = app.buttons["menu.data"]
-        let classicImport = app.buttons["menu.import.classic"]
-        XCTAssertTrue(data.waitForExistence(timeout: 5) || classicImport.waitForExistence(timeout: 5))
-        if data.exists { tap(data) }
-
-        for game in ["classic", "lemmings2", "lemmings3", "neoLemmix"] {
-            assertTarget(app.buttons["menu.import.\(game)"])
-        }
-        capture(app, name: "Independent Game Data Import Routes")
-    }
-
     @MainActor func testClassicReadyPauseRotationAndForegroundResume() throws {
         let device = XCUIDevice.shared
         let originalOrientation = device.orientation
