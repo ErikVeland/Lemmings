@@ -299,6 +299,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
     public let levelFingerprint: String
     public let levelSize: MobileSize
     public let ticksPerSecond = Lemmings3Runtime.ticksPerSecond
+    public let panelFrame: MobilePixelFrame?
 
     private let initial: Lemmings3Runtime
     private let renderer: Lemmings3MobileRenderer?
@@ -320,6 +321,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         levelIdentifier: String,
         levelIndex: Int,
         levelFingerprint: String,
+        panelFrame: MobilePixelFrame? = nil,
         renderer: Lemmings3MobileRenderer? = nil,
         onCompletion: ((Lemmings3Runtime) -> Void)? = nil
     ) {
@@ -329,6 +331,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         self.levelIdentifier = levelIdentifier
         self.levelIndex = levelIndex
         self.levelFingerprint = levelFingerprint
+        self.panelFrame = panelFrame
         self.renderer = renderer
         self.onCompletion = onCompletion
         levelSize = MobileSize(
@@ -520,12 +523,26 @@ public typealias NeoLemmixMobileRenderer = (
  * Adapts the supported NeoLemmix simulation to the shared mobile session contract.
  */
 public final class NeoLemmixMobileSession: MobileGameSession {
+    private enum Input: Codable, Sendable {
+        case assign(tick: Int, skill: NeoLemmixSkill, target: Int)
+        case spawnInterval(tick: Int, value: Int)
+        case nuke(tick: Int)
+    }
+
     private struct Checkpoint: Codable, Sendable {
         var version = 1
         let levelFingerprint: String
         let simulation: NeoLemmixSimulation
         let simulationBeforeNuke: NeoLemmixSimulation?
         let requestedSpawnInterval: Int?
+        var inputs: [Input]? = nil
+        var historyBase: NeoLemmixSimulation? = nil
+        var historyBaseBeforeNuke: NeoLemmixSimulation? = nil
+        var historyBaseRequestedInterval: Int? = nil
+        var rewindCount: Int? = nil
+        var usedRewind: Bool? = nil
+        var nukeCount: Int? = nil
+        var undoCount: Int? = nil
     }
 
     public let engineIdentifier = "neolemmix"
@@ -540,16 +557,27 @@ public final class NeoLemmixMobileSession: MobileGameSession {
     private let controls: [NeoLemmixSkill]
     private let renderer: NeoLemmixMobileRenderer?
     private let onCompletion: ((NeoLemmixSimulation) -> Void)?
+    private var historyBase: NeoLemmixSimulation
+    private var historyBaseBeforeNuke: NeoLemmixSimulation?
+    private var historyBaseRequestedInterval: Int?
     private var simulation: NeoLemmixSimulation
     private var simulationBeforeNuke: NeoLemmixSimulation?
     private var requestedSpawnInterval: Int?
+    private var inputs: [Input] = []
     private var didNotifyCompletion = false
+    public private(set) var rewindCount = 0
+    public private(set) var usedRewind = false
+    public private(set) var nukeCount = 0
+    public private(set) var undoCount = 0
 
     public init(simulation: NeoLemmixSimulation, controls: [NeoLemmixSkill],
                 engineFingerprint: String, levelIdentifier: String, levelIndex: Int,
                 levelFingerprint: String, renderer: NeoLemmixMobileRenderer? = nil,
                 onCompletion: ((NeoLemmixSimulation) -> Void)? = nil) {
         initial = simulation
+        historyBase = simulation
+        historyBaseBeforeNuke = nil
+        historyBaseRequestedInterval = nil
         self.simulation = simulation
         self.controls = controls
         self.engineFingerprint = engineFingerprint
@@ -584,6 +612,11 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         )
     }
 
+    public var supportsRewind: Bool { true }
+    public var assignedSkillCount: Int {
+        inputs.filter { if case .assign = $0 { return true }; return false }.count
+    }
+
     public func tick() {
         _ = simulation.tick()
         requestedSpawnInterval = simulation.snapshot().spawnInterval
@@ -613,19 +646,25 @@ public final class NeoLemmixMobileSession: MobileGameSession {
 
     @discardableResult
     public func assign(control: Int, to target: Int) -> Bool {
-        guard controls.indices.contains(control) else { return false }
-        return simulation.assign(skill: controls[control], to: target).wasAssigned
+        guard controls.indices.contains(control), !simulation.isComplete,
+              simulationBeforeNuke == nil else { return false }
+        let skill = controls[control]
+        guard simulation.assign(skill: skill, to: target).wasAssigned else { return false }
+        inputs.append(.assign(tick: simulation.tickCount, skill: skill, target: target))
+        return true
     }
 
     @discardableResult
     public func adjustReleaseRate(by delta: Int) -> Bool {
-        guard delta != 0, !simulation.isComplete, !simulation.configuration.spawnIntervalLocked else { return false }
+        guard delta != 0, !simulation.isComplete, !simulation.isNuking,
+              simulationBeforeNuke == nil, !simulation.configuration.spawnIntervalLocked else { return false }
         let current = requestedSpawnInterval ?? simulation.snapshot().spawnInterval
         let next = min(simulation.configuration.spawnInterval,
                        max(NeoLemmixRules.minimumSpawnInterval, current - delta))
         guard next != current else { return false }
         requestedSpawnInterval = next
         simulation.enqueue(.setSpawnInterval(next))
+        inputs.append(.spawnInterval(tick: simulation.tickCount, value: next))
         return true
     }
 
@@ -634,15 +673,32 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         guard !simulation.isComplete, !simulation.isNuking, simulationBeforeNuke == nil else { return false }
         simulationBeforeNuke = simulation
         simulation.enqueue(.nuke)
+        inputs.append(.nuke(tick: simulation.tickCount))
+        nukeCount += 1
         return true
     }
 
     @discardableResult
     public func undoEndRun() -> Bool {
         guard let simulationBeforeNuke, !simulation.isComplete else { return false }
+        let restoredRequestedInterval = inputs.reversed().compactMap { input -> Int? in
+            if case let .spawnInterval(_, value) = input { return value }
+            return nil
+        }.first ?? requestedSpawnInterval ?? simulation.snapshot().spawnInterval
         simulation = simulationBeforeNuke
         self.simulationBeforeNuke = nil
+        if case .nuke = inputs.last {
+            inputs.removeLast()
+        } else if historyBaseBeforeNuke != nil {
+            historyBase = simulation
+            historyBaseBeforeNuke = nil
+            inputs = []
+            historyBaseRequestedInterval = restoredRequestedInterval
+        }
+        requestedSpawnInterval = restoredRequestedInterval
         didNotifyCompletion = false
+        usedRewind = true
+        undoCount += 1
         return true
     }
 
@@ -657,9 +713,20 @@ public final class NeoLemmixMobileSession: MobileGameSession {
 
     public func prepareCheckpointPayload() throws -> MobileCheckpointPayload {
         guard !simulation.isComplete else { throw MobileSessionError.invalidCheckpoint }
-        return MobileCheckpointPayload(Checkpoint(levelFingerprint: levelFingerprint, simulation: simulation,
-                                                  simulationBeforeNuke: simulationBeforeNuke,
-                                                  requestedSpawnInterval: requestedSpawnInterval))
+        return MobileCheckpointPayload(Checkpoint(
+            levelFingerprint: levelFingerprint,
+            simulation: simulation,
+            simulationBeforeNuke: simulationBeforeNuke,
+            requestedSpawnInterval: requestedSpawnInterval,
+            inputs: inputs,
+            historyBase: historyBase == initial ? nil : historyBase,
+            historyBaseBeforeNuke: historyBaseBeforeNuke,
+            historyBaseRequestedInterval: historyBaseRequestedInterval,
+            rewindCount: rewindCount,
+            usedRewind: usedRewind,
+            nukeCount: nukeCount,
+            undoCount: undoCount
+        ))
     }
 
     public func restoreCheckpointPayload(_ data: Data) throws {
@@ -672,10 +739,141 @@ public final class NeoLemmixMobileSession: MobileGameSession {
            beforeNuke.configuration != initial.configuration || beforeNuke.isComplete {
             throw MobileSessionError.invalidCheckpoint
         }
-        simulation = checkpoint.simulation
-        simulationBeforeNuke = checkpoint.simulationBeforeNuke
-        requestedSpawnInterval = checkpoint.requestedSpawnInterval ?? checkpoint.simulation.snapshot().spawnInterval
+        if let checkpointInputs = checkpoint.inputs {
+            let base = checkpoint.historyBase ?? initial
+            guard base.configuration == initial.configuration, !base.isComplete else {
+                throw MobileSessionError.invalidCheckpoint
+            }
+            let (restored, restoredBeforeNuke, restoredRequestedInterval) = try replay(
+                inputs: checkpointInputs,
+                from: base,
+                beforeNuke: checkpoint.historyBaseBeforeNuke,
+                requestedInterval: checkpoint.historyBaseRequestedInterval,
+                through: checkpoint.simulation.tickCount
+            )
+            guard restored == checkpoint.simulation,
+                  restoredBeforeNuke == checkpoint.simulationBeforeNuke else {
+                throw MobileSessionError.invalidCheckpoint
+            }
+            historyBase = base
+            historyBaseBeforeNuke = checkpoint.historyBaseBeforeNuke
+            historyBaseRequestedInterval = checkpoint.historyBaseRequestedInterval
+            simulation = restored
+            simulationBeforeNuke = restoredBeforeNuke
+            inputs = checkpointInputs
+            requestedSpawnInterval = checkpoint.requestedSpawnInterval ?? restoredRequestedInterval
+        } else {
+            // Older checkpoints retained only the current state, so rewind begins here.
+            historyBase = checkpoint.simulation
+            historyBaseBeforeNuke = checkpoint.simulationBeforeNuke
+            historyBaseRequestedInterval = checkpoint.requestedSpawnInterval
+            simulation = checkpoint.simulation
+            simulationBeforeNuke = checkpoint.simulationBeforeNuke
+            inputs = []
+            requestedSpawnInterval = checkpoint.requestedSpawnInterval ?? checkpoint.simulation.snapshot().spawnInterval
+        }
         didNotifyCompletion = false
+        rewindCount = checkpoint.rewindCount ?? 0
+        usedRewind = checkpoint.usedRewind ?? false
+        nukeCount = checkpoint.nukeCount ?? (checkpoint.simulationBeforeNuke == nil ? 0 : 1)
+        undoCount = checkpoint.undoCount ?? 0
+    }
+
+    @discardableResult
+    public func rewind(seconds: Double) -> Bool {
+        guard seconds.isFinite, seconds >= 0 else { return false }
+        let currentTick = simulation.snapshot().tickCount
+        let distance = Int(min(Double(currentTick - historyBase.tickCount), (seconds * ticksPerSecond).rounded()))
+        guard distance > 0 else { return false }
+        return move(to: currentTick - distance)
+    }
+
+    @discardableResult
+    public func stepBackward() -> Bool {
+        move(to: simulation.snapshot().tickCount - 1)
+    }
+
+    @discardableResult
+    public func stepForward() -> Bool {
+        guard !simulation.isComplete else { return false }
+        tick()
+        return true
+    }
+
+    public func resumeFromCurrentTick() {}
+
+    private func move(to tick: Int) -> Bool {
+        guard tick >= historyBase.tickCount, tick < simulation.snapshot().tickCount else { return false }
+        do {
+            let retainedInputs = inputs.filter { inputTick($0) <= tick }
+            let (restored, restoredBeforeNuke, restoredRequestedInterval) = try replay(
+                inputs: retainedInputs,
+                from: historyBase,
+                beforeNuke: historyBaseBeforeNuke,
+                requestedInterval: historyBaseRequestedInterval,
+                through: tick
+            )
+            simulation = restored
+            simulationBeforeNuke = restoredBeforeNuke
+            requestedSpawnInterval = restoredRequestedInterval
+            inputs = retainedInputs
+            didNotifyCompletion = false
+            usedRewind = true
+            rewindCount += 1
+            return true
+        } catch {
+            return false
+        }
+    }
+
+    private func replay(
+        inputs: [Input],
+        from base: NeoLemmixSimulation,
+        beforeNuke initialBeforeNuke: NeoLemmixSimulation?,
+        requestedInterval initialRequestedInterval: Int?,
+        through tick: Int
+    ) throws -> (NeoLemmixSimulation, NeoLemmixSimulation?, Int?) {
+        var restored = base
+        var restoredBeforeNuke = initialBeforeNuke
+        var requestedInterval = initialRequestedInterval
+        var inputIndex = 0
+        while restored.tickCount <= tick {
+            while inputIndex < inputs.count, inputTick(inputs[inputIndex]) == restored.tickCount {
+                switch inputs[inputIndex] {
+                case let .assign(_, skill, target):
+                    guard restored.assign(skill: skill, to: target).wasAssigned else {
+                        throw MobileSessionError.invalidCheckpoint
+                    }
+                case let .spawnInterval(_, value):
+                    guard !restored.configuration.spawnIntervalLocked else {
+                        throw MobileSessionError.invalidCheckpoint
+                    }
+                    restored.enqueue(.setSpawnInterval(value))
+                    requestedInterval = value
+                case .nuke:
+                    guard !restored.isComplete, !restored.isNuking, restoredBeforeNuke == nil else {
+                        throw MobileSessionError.invalidCheckpoint
+                    }
+                    restoredBeforeNuke = restored
+                    restored.enqueue(.nuke)
+                }
+                inputIndex += 1
+            }
+            if restored.tickCount == tick { break }
+            guard !restored.isComplete else { throw MobileSessionError.invalidCheckpoint }
+            _ = restored.tick()
+            requestedInterval = restored.snapshot().spawnInterval
+        }
+        guard restored.tickCount == tick, inputIndex == inputs.count, !restored.isComplete else {
+            throw MobileSessionError.invalidCheckpoint
+        }
+        return (restored, restoredBeforeNuke, requestedInterval)
+    }
+
+    private func inputTick(_ input: Input) -> Int {
+        switch input {
+        case let .assign(tick, _, _), let .spawnInterval(tick, _), let .nuke(tick): tick
+        }
     }
 
     public func releaseTransientResources() {}

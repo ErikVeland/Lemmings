@@ -178,6 +178,10 @@ public enum MobileHUDAction: Equatable, Sendable {
     // MARK: - Classic panel
 
     private func drawPanel(_ panel: MobilePanelMetrics, context: CGContext) {
+        if panel.style == .lemmings3 {
+            drawLemmings3Panel(panel, context: context)
+            return
+        }
         if let panelImage {
             GameStoneArt.drawImage(panelImage, in: panel.frame, context: context)
         }
@@ -204,6 +208,41 @@ public enum MobileHUDAction: Equatable, Sendable {
         drawSkillLabels(panel, context: context)
         if let item = items.first(where: { $0.action == .skill(selectedSkill) }) {
             outline(item.frame, context: context)
+        }
+    }
+
+    private func drawLemmings3Panel(_ panel: MobilePanelMetrics, context: CGContext) {
+        if let panelImage {
+            GameStoneArt.drawImage(panelImage, in: panel.frame, context: context)
+        }
+        for item in items {
+            switch item.action {
+            case let .skill(index) where index == selectedSkill:
+                outline(item.frame, context: context)
+            case .pause where paused:
+                outline(item.frame, context: context)
+            case .endRun where endRunArmed || snapshot.isEndingRun == true:
+                outline(item.frame, context: context)
+            case .speed where speed > 1:
+                outline(item.frame, context: context)
+            case .rewind, .stepBackward, .step, .menu:
+                if item.action == .step || item.action == .stepBackward || item.action == .rewind {
+                    drawIconButton(item, context: context)
+                } else {
+                    drawTextButton(item, context: context)
+                }
+            default:
+                break
+            }
+        }
+        if let remaining = snapshot.remainingSeconds {
+            let minutes = remaining / 60
+            let seconds = remaining % 60
+            let time = String(format: "%d:%02d", minutes, seconds)
+            let box = CGRect(x: panel.frame.minX + 176 * panel.scale,
+                             y: panel.frame.minY + 21 * panel.scale,
+                             width: 37 * panel.scale, height: 12 * panel.scale)
+            drawGameLabel(time, in: box, context: context)
         }
     }
 
@@ -327,7 +366,7 @@ public enum MobileHUDAction: Equatable, Sendable {
                 let art = CGRect(x: well.minX, y: frame.minY + 18, width: well.width, height: max(0, frame.height - 34))
                 let fit = min(art.width / CGFloat(icon.width), art.height / CGFloat(icon.height))
                 GameStoneArt.drawImage(icon, in: CGRect(x: floor(art.midX - CGFloat(icon.width) * fit / 2), y: art.maxY - CGFloat(icon.height) * fit, width: CGFloat(icon.width) * fit, height: CGFloat(icon.height) * fit), context: context)
-            } else if let cell = item.sourceCell,
+            } else if layout.panel?.style != .lemmings3, let cell = item.sourceCell,
                let image = panelImage?.cropping(to: CGRect(x: cell * 16, y: 16, width: 16, height: 24)) {
                 let art = CGRect(x: frame.midX - 8 * scale, y: frame.minY + (scale == 1 ? 16 : 18), width: 16 * scale, height: 24 * scale)
                 GameStoneArt.drawImage(image, in: art, context: context)

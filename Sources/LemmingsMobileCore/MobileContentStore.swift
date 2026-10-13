@@ -224,6 +224,7 @@ public struct MobileContentStore: Sendable {
                 commands: Data(contentsOf: directory.appendingPathComponent(graphicsPrefix + ".CMP")))
             _ = try Lemmings3Sprites.palette(
                 Data(contentsOf: directory.appendingPathComponent(graphicsPrefix + ".PAL")), over: style.palette)
+            _ = try Lemmings3MobileSceneRenderer.panelFrame(directory: directory, tribe: tribe.spriteStyle)
             guard sprites.animations.count >= 2,
                   sprites.animations.prefix(2).allSatisfy({ !$0.frames.isEmpty }) else {
                 throw MobileContentStoreError.invalidData(.lemmings3)
@@ -274,6 +275,9 @@ public struct MobileContentStore: Sendable {
         let packs = try NeoLemmixPackLibrary.discover(in: levelsRoot)
         guard !packs.isEmpty else { throw MobileContentStoreError.invalidData(.neoLemmix) }
         let resolver = NxlvStyleResolver(stylesRootURL: stylesRoot)
+        let renderer = NxlvRenderer()
+        var validatedSpriteThemes = Set<String>()
+        var supportedLevelCount = 0
         for levelFile in packs.flatMap(\.levels) {
             let data = try Data(contentsOf: levelFile.url)
             guard let text = String(data: data, encoding: .utf8) ?? String(data: data, encoding: .isoLatin1),
@@ -281,15 +285,22 @@ public struct MobileContentStore: Sendable {
                 throw MobileContentStoreError.invalidData(.neoLemmix)
             }
             let resolution = resolver.resolve(level: level)
-            guard resolution.isComplete else { throw MobileContentStoreError.invalidData(.neoLemmix) }
-            let result = NxlvRenderer(retainsVisualLayers: true).render(level: level, resolution: resolution)
+            // A pack can include levels that need styles the player did not import.
+            // The mobile library omits those levels and keeps compatible entries.
+            guard resolution.isComplete else { continue }
+            let result = renderer.render(level: level, resolution: resolution)
             guard let rendered = result.renderedLevel, !result.hasErrors,
                   NeoLemmixRules.unsupportedFeatures(level: level, renderedLevel: rendered).isEmpty else {
                 throw MobileContentStoreError.invalidData(.neoLemmix)
             }
-            try validateNeoLemmixSprites(level: level, resolver: resolver)
+            let theme = level.themeStyle.isEmpty ? "default" : level.themeStyle.lowercased()
+            if validatedSpriteThemes.insert(theme).inserted {
+                try validateNeoLemmixSprites(level: level, resolver: resolver)
+            }
             _ = try NeoLemmixSimulation(level: level, renderedLevel: rendered)
+            supportedLevelCount += 1
         }
+        guard supportedLevelCount > 0 else { throw MobileContentStoreError.invalidData(.neoLemmix) }
     }
 
     private static func validateNeoLemmixSprites(level: NxlvLevel, resolver: NxlvStyleResolver) throws {

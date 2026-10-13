@@ -5,6 +5,42 @@ import NxlvKit
  * Draws the native Chronicles scene and animated lemmings into an RGBA frame.
  */
 public struct Lemmings3MobileSceneRenderer: Sendable {
+    /** One indexed native trap animation at its level position. */
+    public struct AnimatedObject: Sendable {
+        /** One decoded trap frame with its source palette. */
+        public struct Frame: Sendable {
+            public let width: Int
+            public let height: Int
+            public let pixels: [UInt8]
+            public let palette: [UInt8]
+
+            /** Creates a frame from a native indexed image. */
+            public init(width: Int, height: Int, pixels: [UInt8], palette: [UInt8]) throws {
+                guard width > 0, height > 0, width <= Int.max / height,
+                      pixels.count == width * height, palette.count == 1024 else {
+                    throw MobileSessionError.invalidFrame
+                }
+                self.width = width
+                self.height = height
+                self.pixels = pixels
+                self.palette = palette
+            }
+        }
+
+        public let id: Int
+        public let x: Int
+        public let y: Int
+        public let frames: [Frame]
+
+        /** Creates an animated object keyed by its placement index. */
+        public init(id: Int, x: Int, y: Int, frames: [Frame]) {
+            self.id = id
+            self.x = x
+            self.y = y
+            self.frames = frames
+        }
+    }
+
     public struct CreatureBank: Sendable {
         public let animations: [Lemmings3Sprites.Animation]
         public let palette: [UInt8]
@@ -21,19 +57,48 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
     private let brickPixels: [UInt8]
     private let toolFrames: [Int: SequelIndexedImage]
     private let creatureBanks: [Lemmings3Runtime.Creature.Kind: CreatureBank]
+    private let animatedObjects: [Int: AnimatedObject]
 
     public init(scene: Lemmings3Scene, style: Lemmings3Style,
                 sprites: Lemmings3Sprites, palette: [UInt8],
-                creatureBanks: [Lemmings3Runtime.Creature.Kind: CreatureBank] = [:]) throws {
+                creatureBanks: [Lemmings3Runtime.Creature.Kind: CreatureBank] = [:],
+                animatedObjects: [AnimatedObject] = []) throws {
         guard palette.count == 1024 else { throw MobileSessionError.invalidFrame }
         self.scene = scene
         self.palette = palette
         animations = sprites.animations
         self.creatureBanks = creatureBanks
+        self.animatedObjects = Dictionary(uniqueKeysWithValues: animatedObjects.map { ($0.id, $0) })
         brickPixels = try style.constructionTile().pixels
         toolFrames = try Dictionary(uniqueKeysWithValues: Lemmings3Runtime.Tool.allCases.map { tool in
             (tool.rawValue, try style.permanent.image(object: tool.sourceIdentifier, palette: style.palette))
         })
+    }
+
+    static func panelFrame(directory: URL, tribe: Int) throws -> MobilePixelFrame {
+        let graphics = directory.appendingPathComponent("GRAPHICS")
+        let raw = try Data(contentsOf: graphics.appendingPathComponent(String(format: "PAN%03d.RAW", tribe)))
+        let colours = try Data(contentsOf: graphics.appendingPathComponent(String(format: "TRIBE%03d.PAL", tribe)))
+        return try decodePanel(raw: raw, colours: colours)
+    }
+
+    static func decodePanel(raw: Data, colours: Data) throws -> MobilePixelFrame {
+        guard raw.count == 12_800, colours.count == 96 else { throw MobileSessionError.invalidFrame }
+        var palette = [UInt8](repeating: 0, count: 1024)
+        for index in 0..<32 {
+            for channel in 0..<3 {
+                palette[index * 4 + channel] = UInt8(Int(colours[index * 3 + channel] & 63) * 255 / 63)
+            }
+            palette[index * 4 + 3] = 255
+        }
+        var pixels = [UInt8](repeating: 0, count: 320 * 40)
+        for y in 0..<40 {
+            for x in 0..<320 {
+                pixels[y * 320 + x] = raw[(x % 4) * 3_200 + y * 80 + x / 4]
+            }
+        }
+        return try MobilePixelFrame(width: 320, height: 40,
+                                    rgba: Data(expand(pixels, palette: palette)))
     }
 
     public func render(_ runtime: Lemmings3Runtime, highlight: MobileTargetSelection?) throws -> MobilePixelFrame {
@@ -51,6 +116,13 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
                 : scene.background.pixels[index]
         }
         var rgba = Self.expand(pixels, palette: palette)
+        for trap in runtime.configuration.traps {
+            guard let object = animatedObjects[trap.id],
+                  let frameIndex = Self.animatedFrameIndex(runtime.trapFrame(id: trap.id), count: object.frames.count),
+                  object.frames.indices.contains(frameIndex) else { continue }
+            let frame = object.frames[frameIndex]
+            Self.composite(frame, x: object.x, y: object.y, width: width, height: height, into: &rgba)
+        }
         for pickup in runtime.pickups where pickup.quantity > 0 {
             guard let frame = toolFrames[pickup.tool.rawValue] else { continue }
             Self.composite(frame.pixels, frameWidth: frame.width, frameHeight: frame.height,
@@ -74,6 +146,10 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
                            x: creature.x - animation.width / 2,
                            y: creature.y - animation.height,
                            width: width, height: height, into: &rgba)
+        }
+        for fireball in runtime.fireballs {
+            Self.compositeFireball(x: fireball.x - 3, y: fireball.y - 2,
+                                   width: width, height: height, into: &rgba)
         }
         for lemming in runtime.lemmings where lemming.active {
             let animationIndex = lemming.direction > 0 ? 0 : 1
@@ -109,6 +185,42 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
         composite(frame.pixels, opaque: frame.opaque, frameWidth: animation.width,
                   frameHeight: animation.height, palette: palette, x: x, y: y,
                   width: width, height: height, into: &rgba)
+    }
+
+    static func animatedFrameIndex(_ frame: Int, count: Int) -> Int? {
+        guard count > 0 else { return nil }
+        return min(count - 1, max(0, frame))
+    }
+
+    static func composite(_ frame: AnimatedObject.Frame, x: Int, y: Int,
+                          width: Int, height: Int, into rgba: inout [UInt8]) {
+        composite(frame.pixels, frameWidth: frame.width, frameHeight: frame.height,
+                  palette: frame.palette, x: x, y: y, width: width, height: height, into: &rgba)
+    }
+
+    static func compositeFireball(x: Int, y: Int, width: Int, height: Int, into rgba: inout [UInt8]) {
+        let rows = [".boob.", "boywyo", "boyyob", "..bb.."]
+        guard width > 0, height > 0, width <= Int.max / height else { return }
+        let pixelCount = width * height
+        guard pixelCount <= Int.max / 4, rgba.count == pixelCount * 4 else { return }
+        for (offsetY, row) in rows.enumerated() {
+            let targetY = y + offsetY
+            guard (0..<height).contains(targetY) else { continue }
+            for (offsetX, pixel) in row.enumerated() {
+                let targetX = x + offsetX
+                guard (0..<width).contains(targetX) else { continue }
+                let colour: [UInt8]
+                switch pixel {
+                case "b": colour = [0, 120, 184, 255]
+                case "o": colour = [0, 230, 255, 255]
+                case "y": colour = [142, 255, 255, 255]
+                case "w": colour = [255, 255, 238, 255]
+                default: continue
+                }
+                let index = (targetY * width + targetX) * 4
+                rgba[index..<index + 4] = colour[...]
+            }
+        }
     }
 
     static func composite(_ pixels: [UInt8], opaque: [Bool], frameWidth: Int, frameHeight: Int,
