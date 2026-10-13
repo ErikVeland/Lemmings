@@ -100,9 +100,28 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
                 Data(contentsOf: directory.appendingPathComponent(prefix + ".PAL")), over: style.palette)
             creatureBanks[kind] = .init(animations: bank.animations, palette: creaturePalette)
         }
+        var animatedFrames: [Int: [Lemmings3MobileSceneRenderer.AnimatedObject.Frame]] = [:]
+        let animatedObjects = try permanent.placements.enumerated().compactMap { index, placement -> Lemmings3MobileSceneRenderer.AnimatedObject? in
+            guard let definition = style.permanent.objects[placement.identifier],
+                  (0x4002...0x400a).contains(definition.flags), definition.frameCount > 1 else { return nil }
+            let frames: [Lemmings3MobileSceneRenderer.AnimatedObject.Frame]
+            if let cached = animatedFrames[placement.identifier] {
+                frames = cached
+            } else {
+                frames = try (0..<definition.frameCount).map { frameIndex in
+                    let image = try style.permanent.image(object: placement.identifier, frame: frameIndex, palette: style.palette)
+                    return try Lemmings3MobileSceneRenderer.AnimatedObject.Frame(
+                        width: image.width, height: image.height, pixels: image.pixels, palette: image.palette)
+                }
+                animatedFrames[placement.identifier] = frames
+            }
+            return Lemmings3MobileSceneRenderer.AnimatedObject(
+                id: index, x: placement.x, y: placement.y, frames: frames)
+        }
         let renderer = try Lemmings3MobileSceneRenderer(scene: scene, style: style,
                                                        sprites: sprites, palette: actorPalette,
-                                                       creatureBanks: creatureBanks)
+                                                       creatureBanks: creatureBanks,
+                                                       animatedObjects: animatedObjects)
         let fingerprint = Self.digest(level.rawData)
         let session = Lemmings3MobileSession(runtime: runtime,
             engineFingerprint: Self.engineFingerprint,
