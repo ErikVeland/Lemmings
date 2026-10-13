@@ -102,9 +102,11 @@ the same gameplay action. Add Game Controller routing at the platform boundary.
 Input-source details must not change engine rules or deterministic tick order.
 
 Classic, Lemmings 2 and Lemmings 3 sessions implement the same contract. The
-Classic session includes the current player-facing pixel renderer. The sequel
-sessions expose deterministic input/checkpoint seams, but the 1.3 app does not
-claim player-facing sequel import or rendering.
+Classic session includes the current player-facing pixel renderer. The 2.0
+source connects L2 and L3 libraries, native scene renderers, campaign records
+and checkpoint routes to the mobile session flow. Supported NeoLemmix packs use
+the same flow with native style rendering and validated simulation features.
+Real-data fidelity and device acceptance remain separate release gates.
 
 ### `Sources/LemmingsMobileUI` and `Apps/UltimateLemmingsIOS`
 
@@ -118,8 +120,9 @@ in `LemmingsMobileCore`.
 
 `Apps/UltimateLemmingsIOS` is the thin iOS executable, metadata, asset catalogue
 and UI-test target. Version 1.3 imports a player-owned Classic DOS folder into a
-staged application-support location. Import validates the complete staged copy
-before replacing the prior content and restores the prior copy on failure.
+staged application-support location. The 2.0 source adds separate import paths
+for L2, L3 and supported NeoLemmix data. Each import validates the staged copy
+before replacing installed data and restores the prior copy on failure.
 
 ### `Sources/LemmingsDataTool`
 
