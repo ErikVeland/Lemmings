@@ -121,6 +121,10 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
                            y: creature.y - animation.height,
                            width: width, height: height, into: &rgba)
         }
+        for fireball in runtime.fireballs {
+            Self.compositeFireball(x: fireball.x - 3, y: fireball.y - 2,
+                                   width: width, height: height, into: &rgba)
+        }
         for lemming in runtime.lemmings where lemming.active {
             let animationIndex = lemming.direction > 0 ? 0 : 1
             guard animations.indices.contains(animationIndex),
@@ -166,6 +170,31 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
                           width: Int, height: Int, into rgba: inout [UInt8]) {
         composite(frame.pixels, frameWidth: frame.width, frameHeight: frame.height,
                   palette: frame.palette, x: x, y: y, width: width, height: height, into: &rgba)
+    }
+
+    static func compositeFireball(x: Int, y: Int, width: Int, height: Int, into rgba: inout [UInt8]) {
+        let rows = [".boob.", "boywyo", "boyyob", "..bb.."]
+        guard width > 0, height > 0, width <= Int.max / height else { return }
+        let pixelCount = width * height
+        guard pixelCount <= Int.max / 4, rgba.count == pixelCount * 4 else { return }
+        for (offsetY, row) in rows.enumerated() {
+            let targetY = y + offsetY
+            guard (0..<height).contains(targetY) else { continue }
+            for (offsetX, pixel) in row.enumerated() {
+                let targetX = x + offsetX
+                guard (0..<width).contains(targetX) else { continue }
+                let colour: [UInt8]
+                switch pixel {
+                case "b": colour = [0, 120, 184, 255]
+                case "o": colour = [0, 230, 255, 255]
+                case "y": colour = [142, 255, 255, 255]
+                case "w": colour = [255, 255, 238, 255]
+                default: continue
+                }
+                let index = (targetY * width + targetX) * 4
+                rgba[index..<index + 4] = colour[...]
+            }
+        }
     }
 
     static func composite(_ pixels: [UInt8], opaque: [Bool], frameWidth: Int, frameHeight: Int,

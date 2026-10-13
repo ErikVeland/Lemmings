@@ -45,4 +45,16 @@ struct Lemmings3MobileRendererTests {
                 width: 1, height: 1, pixels: [1], palette: [0, 0, 0, 255])
         }
     }
+
+    @Test func fireballUsesTheNativeSixByFourFootprint() {
+        var canvas = [UInt8](repeating: 0, count: 6 * 4 * 4)
+
+        Lemmings3MobileSceneRenderer.compositeFireball(
+            x: 0, y: 0, width: 6, height: 4, into: &canvas)
+
+        let core = (1 * 6 + 3) * 4
+        #expect(Array(canvas[core..<core + 4]) == [255, 255, 238, 255])
+        let transparent = 0
+        #expect(Array(canvas[transparent..<transparent + 4]) == [0, 0, 0, 0])
+    }
 }
