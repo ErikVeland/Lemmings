@@ -5,6 +5,16 @@ public enum MobileInterfaceOrientation: String, Codable, Sendable {
     case landscape
 }
 
+public enum MobileLayoutDirection: Equatable, Sendable {
+    case leftToRight
+    case rightToLeft
+}
+
+public enum MobileControlsPlacement: Equatable, Sendable {
+    case bottom
+    case trailingRail
+}
+
 public struct MobileInterfaceLayout: Equatable, Sendable {
     public let orientation: MobileInterfaceOrientation
     public let safeFrame: MobileRect
@@ -12,6 +22,7 @@ public struct MobileInterfaceLayout: Equatable, Sendable {
     public let statusFrame: MobileRect
     public let controlsFrame: MobileRect
     public let controlFrames: [MobileRect]
+    public let controlsPlacement: MobileControlsPlacement
 
     public init(
         orientation: MobileInterfaceOrientation,
@@ -19,7 +30,8 @@ public struct MobileInterfaceLayout: Equatable, Sendable {
         playfieldFrame: MobileRect,
         statusFrame: MobileRect,
         controlsFrame: MobileRect,
-        controlFrames: [MobileRect]
+        controlFrames: [MobileRect],
+        controlsPlacement: MobileControlsPlacement = .bottom
     ) {
         self.orientation = orientation
         self.safeFrame = safeFrame
@@ -27,6 +39,7 @@ public struct MobileInterfaceLayout: Equatable, Sendable {
         self.statusFrame = statusFrame
         self.controlsFrame = controlsFrame
         self.controlFrames = controlFrames
+        self.controlsPlacement = controlsPlacement
     }
 }
 
@@ -34,12 +47,14 @@ public enum MobileLayoutEngine {
     public static let minimumControlExtent = 44.0
     public static let controlGap = 2.0
     public static let statusHeight = 26.0
+    public static let edgeRailAspectThreshold = 0.62
 
     /// Keeps the playfield and every input target inside the system safe area.
     public static func make(
         container: MobileSize,
         safeArea: MobileInsets,
-        controlCount: Int
+        controlCount: Int,
+        direction: MobileLayoutDirection = .leftToRight
     ) -> MobileInterfaceLayout {
         let bounds = MobileRect(
             x: 0,
@@ -55,6 +70,18 @@ public enum MobileLayoutEngine {
         ))
         let orientation: MobileInterfaceOrientation = safe.width > safe.height ? .landscape : .portrait
         let count = max(0, controlCount)
+
+        if count > 0,
+           safe.width / max(1, safe.height) >= edgeRailAspectThreshold,
+           let railLayout = makeTrailingRail(
+            safe: safe,
+            orientation: orientation,
+            controlCount: count,
+            direction: direction
+           ) {
+            return railLayout
+        }
+
         let idealColumns = max(1, Int((safe.width + controlGap) / (minimumControlExtent + controlGap)))
         let columns = min(max(1, count), idealColumns)
         let rows = count == 0 ? 0 : Int(ceil(Double(count) / Double(columns)))
@@ -102,7 +129,73 @@ public enum MobileLayoutEngine {
             playfieldFrame: playfield,
             statusFrame: status,
             controlsFrame: controls,
-            controlFrames: frames
+            controlFrames: frames,
+            controlsPlacement: .bottom
+        )
+    }
+
+    private static func makeTrailingRail(
+        safe: MobileRect,
+        orientation: MobileInterfaceOrientation,
+        controlCount: Int,
+        direction: MobileLayoutDirection
+    ) -> MobileInterfaceLayout? {
+        let rowCapacity = max(1, Int((safe.height + controlGap) / (minimumControlExtent + controlGap)))
+        let columns = Int(ceil(Double(controlCount) / Double(rowCapacity)))
+        let railWidth = Double(columns) * minimumControlExtent + Double(columns - 1) * controlGap
+        let playfieldWidth = safe.width - railWidth
+        guard playfieldWidth >= max(160, safe.width * 0.48) else { return nil }
+
+        let railIsLeading = direction == .rightToLeft
+        let railX = railIsLeading ? safe.minX : safe.maxX - railWidth
+        let playfieldX = railIsLeading ? safe.minX + railWidth : safe.minX
+        let statusHeight = min(statusHeight, safe.height)
+        let contentWidth = max(0, playfieldWidth)
+        let status = MobileRect(
+            x: playfieldX,
+            y: safe.minY,
+            width: contentWidth,
+            height: statusHeight
+        )
+        let playfield = MobileRect(
+            x: playfieldX,
+            y: status.maxY,
+            width: contentWidth,
+            height: max(0, safe.maxY - status.maxY)
+        )
+        let controls = MobileRect(x: railX, y: safe.minY, width: railWidth, height: safe.height)
+        let rows = Int(ceil(Double(controlCount) / Double(columns)))
+        let controlsHeight = Double(rows) * minimumControlExtent + Double(rows - 1) * controlGap
+        let controlsY = safe.minY + (safe.height - controlsHeight) / 2
+        var frames: [MobileRect] = []
+        frames.reserveCapacity(controlCount)
+
+        for index in 0..<controlCount {
+            let column = index / rows
+            let row = index % rows
+            let x: Double
+            if railIsLeading {
+                x = controls.minX + Double(column) * (minimumControlExtent + controlGap)
+            } else {
+                x = controls.maxX - Double(column + 1) * minimumControlExtent
+                    - Double(column) * controlGap
+            }
+            frames.append(MobileRect(
+                x: x,
+                y: controlsY + Double(row) * (minimumControlExtent + controlGap),
+                width: minimumControlExtent,
+                height: minimumControlExtent
+            ))
+        }
+
+        return MobileInterfaceLayout(
+            orientation: orientation,
+            safeFrame: safe,
+            playfieldFrame: playfield,
+            statusFrame: status,
+            controlsFrame: controls,
+            controlFrames: frames,
+            controlsPlacement: .trailingRail
         )
     }
 }

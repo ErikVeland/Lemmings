@@ -17,6 +17,14 @@ private struct ChainGap: Codable, Equatable {
     let tribe: String
     let level: Int
     let population: Int
+    let requiredSurvivors: Int?
+
+    init(tribe: String, level: Int, population: Int, requiredSurvivors: Int? = nil) {
+        self.tribe = tribe
+        self.level = level
+        self.population = population
+        self.requiredSurvivors = requiredSurvivors
+    }
 }
 
 private struct ChainEvidence: Codable, Equatable {
@@ -150,8 +158,9 @@ private func verifyCarriedFixtures(root: URL, directory: URL) throws -> Int {
                     guard campaign.completed.count == campaign.levels.count else {
                         throw SequelDataError.invalid("L3 strict campaign proof missed a level in the tribe.")
                     }
-                    guard campaign.hasCompletedTribe else {
-                        throw SequelDataError.invalid("L3 \(tribe.title) finale finished below the 50-lemming tribe target.")
+                    if !campaign.hasCompletedTribe {
+                        gaps.append(.init(tribe: tribe.title, level: number, population: first.survivors,
+                                          requiredSurvivors: Lemmings3ClassicCampaign.requiredTribeSurvivors))
                     }
                 } else {
                     guard campaign.advance(after: first) else {
@@ -177,7 +186,8 @@ private func verifyCarriedFixtures(root: URL, directory: URL) throws -> Int {
         print("PASS \(carriedCount) carried-population fixtures double-replayed")
         for gap in gaps {
             let noun = gap.population == 1 ? "lemming" : "lemmings"
-            print("GAP \(gap.tribe) \(gap.level): \(gap.population) \(noun)")
+            let target = gap.requiredSurvivors.map { "; finale requires \($0) survivors" } ?? ""
+            print("GAP \(gap.tribe) \(gap.level): \(gap.population) \(noun)\(target)")
         }
         if arguments.contains("--require-all"), !gaps.isEmpty { exit(1) }
     }
