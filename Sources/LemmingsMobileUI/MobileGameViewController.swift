@@ -83,6 +83,7 @@ struct MobileGameTurn {
     private var lastCheckpointTick = -1
     private var endRunArmedUntil = 0.0
     private var completionPresented = false
+    private var lastPlayfieldFrame: CGRect?
     private let observers = MobileNotificationObserverBag()
     private let audio = MobileAudioSessionController()
     let effects = MobileEffects()
@@ -963,6 +964,20 @@ struct MobileGameTurn {
             endRunArmed: endRunArmedUntil > ProcessInfo.processInfo.systemUptime,
             panel: session.panelFrame,
             readOnly: session.isReadOnly
+        )
+    }
+
+    private func makeInterfaceLayout() -> MobileInterfaceLayout {
+        let insets = view.safeAreaInsets
+        let direction: MobileLayoutDirection = view.effectiveUserInterfaceLayoutDirection == .rightToLeft
+            ? .rightToLeft
+            : .leftToRight
+        return MobileLayoutEngine.make(
+            container: MobileSize(width: view.bounds.width, height: view.bounds.height),
+            safeArea: MobileInsets(top: insets.top, left: insets.left,
+                                   bottom: insets.bottom, right: insets.right),
+            controlCount: controlCount,
+            direction: direction
         )
     }
 

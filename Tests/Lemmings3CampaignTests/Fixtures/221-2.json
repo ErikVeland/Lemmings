@@ -3,8 +3,8 @@
     "lost" : 1,
     "reserves" : 0,
     "saved" : 2,
-    "stateHash" : "12f7d364a82d016c2991a18a69cf123180146b855898c69b8da10948ca615d55",
-    "ticks" : 930
+    "stateHash" : "3999ccf26bac84cc29f18f62f97751b587676b3a49c4b9cca54f4442dc5ef9ed",
+    "ticks" : 1166
   },
   "initialStateHash" : "44f3e33b71896c77e12f843b2af94ec6968fb446a296e6b21b3df695ee254c94",
   "inputs" : [
@@ -145,10 +145,6 @@
       "action" : "walker",
       "lemming" : 2,
       "tick" : 884
-    },
-    {
-      "action" : "abort",
-      "tick" : 930
     }
   ],
   "level" : 221,

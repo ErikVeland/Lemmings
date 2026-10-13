@@ -73,6 +73,19 @@ do {
     try require(aborted.isComplete && aborted.lost == 1 && aborted.tick == abortedTick, "L3 abort is terminal")
     print("PASS experimental L3 landing, blocker, turn, jump, exit and deterministic ticks")
 
+    var ledgePickup = try Lemmings3Runtime(configuration: .init(width: 128, height: 64, attributes: tags,
+        entrance: .init(x: 100, y: 40), exits: [.init(x: 110, y: 46)], total: 1,
+        releaseInterval: 1000, releaseDelay: 1000, pickups: [.init(id: 0, tool: .shimmy, x: 20, y: 48)],
+        extras: [.init(x: 20, y: 47, direction: 1)]))
+    ledgePickup.step()
+    try require(ledgePickup.lemmings[0].tool == nil && ledgePickup.lemmings[0].y == 48,
+        "L3 does not collect a tool before landing on its top cell")
+    ledgePickup.step()
+    try require(ledgePickup.lemmings[0].tool == .shimmy && ledgePickup.lemmings[0].quantity == 8 &&
+                ledgePickup.pickups[0].quantity == 0,
+        "L3 collects the full tool stock at an exact ledge contact")
+    print("PASS L3 landing on the top pickup cell")
+
     var softTags = tags
     for x in 24..<32 { softTags[48 * 128 + x] = 0x2020 }
     var worn = try Lemmings3Runtime(configuration: .init(width: 128, height: 64, attributes: softTags,

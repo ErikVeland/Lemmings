@@ -1,53 +1,83 @@
 {
   "expected" : {
-    "lost" : 19,
-    "reserves" : 0,
-    "saved" : 1,
-    "stateHash" : "daa65490d976bfd285da92ef7251e25a5b4e4136bfaf780b1da0da4f5fbdcde5",
-    "ticks" : 1221
+    "lost" : 0,
+    "reserves" : 10,
+    "saved" : 10,
+    "stateHash" : "31ae7779c1c46324bad5f7c3f37e432e6d75d96083a88778d37f0399b921b1aa",
+    "ticks" : 1411
   },
   "initialStateHash" : "990bdd4b786eb008d7fe637bd3c9584b9454ae3b6e99263732feeaa398cfc203",
   "inputs" : [
     {
-      "action" : "walker",
+      "action" : "drop",
       "lemming" : 0,
-      "tick" : 60
+      "tick" : 200
+    },
+    {
+      "action" : "blocker",
+      "lemming" : 1,
+      "tick" : 220
     },
     {
       "action" : "jumper",
-      "lemming" : 8,
-      "tick" : 408
+      "lemming" : 0,
+      "tick" : 224
     },
     {
       "action" : "use",
-      "direction" : "upLeft",
-      "lemming" : 8,
-      "tick" : 519
+      "direction" : "upRight",
+      "lemming" : 0,
+      "tick" : 294
     },
     {
       "action" : "walker",
-      "lemming" : 8,
-      "tick" : 560
-    },
-    {
-      "action" : "walker",
-      "lemming" : 8,
-      "tick" : 560
+      "lemming" : 1,
+      "tick" : 640
     },
     {
       "action" : "jumper",
-      "lemming" : 10,
-      "tick" : 612
+      "lemming" : 1,
+      "tick" : 664
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 6,
+      "tick" : 689
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 7,
+      "tick" : 712
     },
     {
       "action" : "jumper",
       "lemming" : 8,
-      "tick" : 645
+      "tick" : 735
     },
     {
       "action" : "jumper",
-      "lemming" : 8,
-      "tick" : 655
+      "lemming" : 9,
+      "tick" : 758
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 2,
+      "tick" : 927
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 3,
+      "tick" : 950
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 4,
+      "tick" : 973
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 5,
+      "tick" : 996
     }
   ],
   "level" : 108,

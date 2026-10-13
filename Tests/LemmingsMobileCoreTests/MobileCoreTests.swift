@@ -30,9 +30,15 @@ struct MobileCoreTests {
             controlCount: 13
         )
         #expect(landscape.orientation == .landscape)
-        #expect(Set(landscape.controlFrames.map(\.y)).count == 1)
+        #expect(landscape.controlsPlacement == .trailingRail)
         #expect(landscape.playfieldFrame.minX == landscape.safeFrame.minX)
-        #expect(landscape.controlsFrame.maxY == landscape.safeFrame.maxY)
+        #expect(landscape.playfieldFrame.maxX == landscape.controlsFrame.minX)
+        #expect(landscape.controlFrames.allSatisfy {
+            $0.width >= MobileLayoutEngine.minimumControlExtent
+                && $0.height >= MobileLayoutEngine.minimumControlExtent
+                && landscape.safeFrame.contains(MobilePoint(x: $0.minX, y: $0.minY))
+                && landscape.safeFrame.contains(MobilePoint(x: $0.maxX, y: $0.maxY))
+        })
 
         for (container, insets) in [
             (MobileSize(width: 1_024, height: 1_366), MobileInsets(top: 24, bottom: 20)),
@@ -56,6 +62,44 @@ struct MobileCoreTests {
             #expect(tablet.playfieldFrame.width > 0)
             #expect(tablet.playfieldFrame.height > 0)
         }
+    }
+
+    @Test func duoAspectRatiosKeepPlayfieldAndOneHandedControlsUsable() {
+        let regularPhone = MobileLayoutEngine.make(
+            container: MobileSize(width: 390, height: 844),
+            safeArea: MobileInsets(top: 47, bottom: 34),
+            controlCount: 16
+        )
+        let duoClosed = MobileLayoutEngine.make(
+            container: MobileSize(width: 330, height: 460),
+            safeArea: MobileInsets(top: 12, bottom: 12),
+            controlCount: 16
+        )
+        let duoOpen = MobileLayoutEngine.make(
+            container: MobileSize(width: 650, height: 465),
+            safeArea: MobileInsets(top: 12, bottom: 12),
+            controlCount: 16
+        )
+        let duoClosedRightToLeft = MobileLayoutEngine.make(
+            container: MobileSize(width: 330, height: 460),
+            safeArea: MobileInsets(top: 12, bottom: 12),
+            controlCount: 16,
+            direction: .rightToLeft
+        )
+
+        #expect(regularPhone.controlsPlacement == .bottom)
+        #expect(duoClosed.controlsPlacement == .trailingRail)
+        #expect(duoOpen.controlsPlacement == .trailingRail)
+        #expect(duoOpen.playfieldFrame.width > duoClosed.playfieldFrame.width)
+        #expect(duoClosed.controlFrames.count == 16)
+        #expect(duoClosed.controlFrames.allSatisfy {
+            $0.width >= MobileLayoutEngine.minimumControlExtent
+                && $0.height >= MobileLayoutEngine.minimumControlExtent
+                && duoClosed.safeFrame.contains(MobilePoint(x: $0.minX, y: $0.minY))
+                && duoClosed.safeFrame.contains(MobilePoint(x: $0.maxX, y: $0.maxY))
+        })
+        #expect(duoClosedRightToLeft.controlsFrame.minX == duoClosedRightToLeft.safeFrame.minX)
+        #expect(duoClosedRightToLeft.playfieldFrame.minX == duoClosedRightToLeft.controlsFrame.maxX)
     }
 
     @Test func viewportZoomKeepsTheGestureAnchorStable() {
@@ -92,6 +136,35 @@ struct MobileCoreTests {
         viewport.pan(viewDelta: MobilePoint(x: 10_000, y: -10_000))
         #expect(viewport.origin.x == 0)
         #expect(viewport.origin.y <= viewport.levelSize.height)
+    }
+
+    @Test func viewportResizeKeepsCameraCentreAndRestoredOrigin() {
+        var viewport = MobileViewport(
+            levelSize: MobileSize(width: 1_600, height: 1_000),
+            viewSize: MobileSize(width: 320, height: 160),
+            origin: MobilePoint(x: 400, y: 200),
+            zoom: 2
+        )
+        let oldCentre = MobilePoint(
+            x: viewport.origin.x + viewport.visibleLevelSize.width / 2,
+            y: viewport.origin.y + viewport.visibleLevelSize.height / 2
+        )
+        viewport.resize(MobileSize(width: 640, height: 320))
+        let newCentre = MobilePoint(
+            x: viewport.origin.x + viewport.visibleLevelSize.width / 2,
+            y: viewport.origin.y + viewport.visibleLevelSize.height / 2
+        )
+        #expect(abs(oldCentre.x - newCentre.x) < 0.001)
+        #expect(abs(oldCentre.y - newCentre.y) < 0.001)
+
+        var restored = MobileViewport(
+            levelSize: MobileSize(width: 1_600, height: 1_000),
+            viewSize: MobileSize(width: 1, height: 1),
+            origin: MobilePoint(x: 500, y: 200),
+            zoom: 2
+        )
+        restored.resizeKeepingOrigin(MobileSize(width: 650, height: 465))
+        #expect(restored.origin == MobilePoint(x: 500, y: 200))
     }
 
     @Test func touchTargetingPrefersEligibilityFollowersAndTools() {
