@@ -515,6 +515,106 @@ struct MobileCoreTests {
         }
     }
 
+    @Test func gameDataImportsUseIndependentDestinations() throws {
+        let manager = FileManager.default
+        let temporary = manager.temporaryDirectory
+            .appendingPathComponent("MobileGameDataKinds-\(UUID().uuidString)", isDirectory: true)
+        defer { try? manager.removeItem(at: temporary) }
+        let classic = temporary.appendingPathComponent("Classic", isDirectory: true)
+        let sequel = temporary.appendingPathComponent("L2", isDirectory: true)
+        try manager.createDirectory(at: classic, withIntermediateDirectories: true)
+        try manager.createDirectory(at: sequel, withIntermediateDirectories: true)
+        try Data("classic".utf8).write(to: classic.appendingPathComponent("marker.dat"))
+        try Data("lemmings2".utf8).write(to: sequel.appendingPathComponent("marker.dat"))
+
+        let store = MobileContentStore(root: temporary.appendingPathComponent("Support")) { staged in
+            guard FileManager.default.fileExists(atPath: staged.appendingPathComponent("marker.dat").path) else {
+                throw ImportFixtureError.rejected
+            }
+        }
+        try store.install(directory: classic)
+        let sequelStore = MobileContentStore(root: temporary.appendingPathComponent("Support"), validators: [
+            .classic: { _ in },
+            .lemmings2: { staged in
+                guard try Data(contentsOf: staged.appendingPathComponent("marker.dat")) == Data("lemmings2".utf8) else {
+                    throw ImportFixtureError.rejected
+                }
+            },
+        ])
+        try sequelStore.install(directory: sequel, for: .lemmings2)
+
+        #expect(try Data(contentsOf: store.gameDataDirectory.appendingPathComponent("marker.dat")) == Data("classic".utf8))
+        #expect(try Data(contentsOf: store.dataDirectory(for: .lemmings2).appendingPathComponent("marker.dat")) == Data("lemmings2".utf8))
+        #expect(store.dataDirectory(for: .lemmings2) != store.gameDataDirectory)
+        try store.install(directory: classic)
+        #expect(try Data(contentsOf: store.dataDirectory(for: .lemmings2).appendingPathComponent("marker.dat")) == Data("lemmings2".utf8))
+
+        let rejected = temporary.appendingPathComponent("Rejected L2", isDirectory: true)
+        try manager.createDirectory(at: rejected, withIntermediateDirectories: true)
+        try Data("rejected".utf8).write(to: rejected.appendingPathComponent("marker.dat"))
+        let rejectingSequelStore = MobileContentStore(root: temporary.appendingPathComponent("Support"), validators: [
+            .lemmings2: { _ in throw ImportFixtureError.rejected },
+        ])
+        do {
+            try rejectingSequelStore.install(directory: rejected, for: .lemmings2)
+            Issue.record("An invalid L2 replacement was committed.")
+        } catch ImportFixtureError.rejected {
+            #expect(try Data(contentsOf: store.gameDataDirectory.appendingPathComponent("marker.dat")) == Data("classic".utf8))
+            #expect(try Data(contentsOf: store.dataDirectory(for: .lemmings2).appendingPathComponent("marker.dat")) == Data("lemmings2".utf8))
+        }
+    }
+
+    @Test func neoLemmixImportResolvesInstallAndPackLayouts() throws {
+        let manager = FileManager.default
+        let temporary = manager.temporaryDirectory
+            .appendingPathComponent("MobileNeoLemmixLayouts-\(UUID().uuidString)", isDirectory: true)
+        defer { try? manager.removeItem(at: temporary) }
+        let levels = temporary.appendingPathComponent("levels", isDirectory: true)
+        let styles = temporary.appendingPathComponent("styles", isDirectory: true)
+        let pack = levels.appendingPathComponent("Example", isDirectory: true)
+        try manager.createDirectory(at: pack, withIntermediateDirectories: true)
+        try manager.createDirectory(at: styles.appendingPathComponent("default", isDirectory: true),
+                                   withIntermediateDirectories: true)
+
+        #expect(MobileNeoLemmixDataLayout.levelsRoot(in: temporary) == levels)
+        #expect(MobileNeoLemmixDataLayout.stylesRoot(in: temporary) == styles)
+
+        let directPack = temporary.appendingPathComponent("DirectPack", isDirectory: true)
+        try manager.createDirectory(at: directPack, withIntermediateDirectories: true)
+        try Data("TITLE Direct Pack\n".utf8).write(to: directPack.appendingPathComponent("info.nxmi"))
+        #expect(MobileNeoLemmixDataLayout.levelsRoot(in: directPack) == directPack)
+        #expect(MobileNeoLemmixDataLayout.stylesRoot(in: directPack) == directPack)
+        #expect(NeoLemmixMobileSupport.animationName(for: .walking) == "walker")
+        #expect(NeoLemmixMobileSupport.animationName(for: .teleporting) == nil)
+        #expect(NeoLemmixMobileSupport.requiredAnimationNames.contains("drowner"))
+    }
+
+    @Test func lemmings3ImportValidatesCreatureSpriteBanksBeforeInstall() throws {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent("MobileL3CreatureBank-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let graphics = root.appendingPathComponent("GRAPHICS", isDirectory: true)
+        try FileManager.default.createDirectory(at: graphics, withIntermediateDirectories: true)
+        let prefix = graphics.appendingPathComponent("CREAT002")
+        try Data([2, 0, 1, 0, 2, 0, 2, 0, 1, 0, 2, 0])
+            .write(to: prefix.appendingPathExtension("IND"))
+        try Data(repeating: 255, count: 16).write(to: prefix.appendingPathExtension("CMP"))
+        try Data(repeating: 0, count: 96).write(to: prefix.appendingPathExtension("PAL"))
+        let palette = [UInt8](repeating: 0, count: 1024)
+
+        try MobileContentStore.validateLemmings3CreatureSpriteBanks(
+            directory: root, kinds: [.mole], palette: palette)
+
+        try Data(repeating: 255, count: 4).write(to: prefix.appendingPathExtension("CMP"))
+        do {
+            try MobileContentStore.validateLemmings3CreatureSpriteBanks(
+                directory: root, kinds: [.mole], palette: palette)
+            Issue.record("A truncated creature sprite bank passed import validation.")
+        } catch {
+            #expect(error is SequelDataError)
+        }
+    }
+
     @Test func classicJumpingRisesAcrossTheRemainingStepPixel() throws {
         let width = 96
         let height = 64
@@ -604,6 +704,28 @@ struct MobileCoreTests {
         try l2Restored.restoreCheckpointPayload(l2Payload)
         #expect(l2Restored.snapshot == l2Expected)
 
+        #expect(l2Restored.supportsRewind)
+        for _ in 0..<5 { l2Restored.tick() }
+        let l2RewindTarget = l2Restored.snapshot
+        for _ in 0..<20 { l2Restored.tick() }
+        #expect(l2Restored.rewind(seconds: 20 / l2Restored.ticksPerSecond))
+        #expect(l2Restored.snapshot == l2RewindTarget)
+        #expect(l2Restored.usedRewind)
+        #expect(l2Restored.stepBackward())
+        #expect(l2Restored.stepForward())
+        #expect(l2Restored.snapshot == l2RewindTarget)
+        let l2RewindCheckpoint = try l2Restored.checkpointPayload()
+        let l2RewindRestored = Lemmings2MobileSession(
+            runtime: l2Initial,
+            engineFingerprint: "l2-fixture-engine",
+            levelIdentifier: "l2/fixture/1",
+            levelIndex: 0,
+            levelFingerprint: "l2-fixture-level"
+        )
+        try l2RewindRestored.restoreCheckpointPayload(l2RewindCheckpoint)
+        #expect(l2RewindRestored.usedRewind)
+        #expect(l2RewindRestored.rewindCount == l2Restored.rewindCount)
+
         #expect(l2.beginEndRun())
         for _ in 0..<3 { l2.tick() }
         let endingPayload = try l2.checkpointPayload()
@@ -616,8 +738,11 @@ struct MobileCoreTests {
         )
         try endingRestored.restoreCheckpointPayload(endingPayload)
         #expect(endingRestored.snapshot.isEndingRun)
+        #expect(endingRestored.nukeCount == 1)
         #expect(endingRestored.undoEndRun())
         #expect(!endingRestored.snapshot.isEndingRun)
+        #expect(endingRestored.usedRewind)
+        #expect(endingRestored.undoCount == 1)
 
         let l3Initial = try Self.lemmings3Runtime()
         let l3 = Lemmings3MobileSession(
@@ -646,6 +771,135 @@ struct MobileCoreTests {
         )
         try l3Restored.restoreCheckpointPayload(l3Payload)
         #expect(l3Restored.snapshot == l3Expected)
+
+        #expect(l3Restored.supportsRewind)
+        for _ in 0..<5 { l3Restored.tick() }
+        let l3RewindTarget = l3Restored.snapshot
+        for _ in 0..<20 { l3Restored.tick() }
+        #expect(l3Restored.rewind(seconds: 20 / l3Restored.ticksPerSecond))
+        #expect(l3Restored.snapshot == l3RewindTarget)
+        #expect(l3Restored.usedRewind)
+        #expect(l3Restored.stepBackward())
+        #expect(l3Restored.stepForward())
+        #expect(l3Restored.snapshot == l3RewindTarget)
+        let l3RewindCheckpoint = try l3Restored.checkpointPayload()
+        let l3RewindRestored = Lemmings3MobileSession(
+            runtime: l3Initial,
+            engineFingerprint: "l3-fixture-engine",
+            levelIdentifier: "l3/fixture/1",
+            levelIndex: 0,
+            levelFingerprint: "l3-fixture-level"
+        )
+        try l3RewindRestored.restoreCheckpointPayload(l3RewindCheckpoint)
+        #expect(l3RewindRestored.usedRewind)
+        #expect(l3RewindRestored.rewindCount == l3Restored.rewindCount)
+    }
+
+    @Test @MainActor func lemmings2CompletionIsReportedOnceForCampaignPersistence() throws {
+        var completions = 0
+        let session = Lemmings2MobileSession(
+            runtime: try Self.lemmings2Runtime(),
+            engineFingerprint: "l2-fixture-engine",
+            levelIdentifier: "lemmings2/fixture",
+            levelIndex: 0,
+            levelFingerprint: "l2-fixture-level",
+            onCompletion: { _ in completions += 1 }
+        )
+
+        for _ in 0..<5_000 where !session.snapshot.isComplete { session.tick() }
+
+        #expect(session.snapshot.isComplete)
+        #expect(completions == 1)
+        session.tick()
+        #expect(completions == 1)
+    }
+
+    @Test @MainActor func lemmings3CompletionIsReportedOnceForCampaignPersistence() throws {
+        var completions = 0
+        let session = Lemmings3MobileSession(
+            runtime: try Self.lemmings3Runtime(),
+            engineFingerprint: "l3-fixture-engine",
+            levelIdentifier: "lemmings3/fixture",
+            levelIndex: 0,
+            levelFingerprint: "l3-fixture-level",
+            onCompletion: { _ in completions += 1 }
+        )
+
+        #expect(session.beginEndRun())
+        session.tick()
+        session.tick()
+
+        #expect(session.snapshot.isComplete)
+        #expect(completions == 1)
+    }
+
+    @Test func neoLemmixSessionRestoresCheckpointAndReportsCompletionOnce() throws {
+        var terrain = try NeoLemmixTerrain(width: 64, height: 32)
+        for x in 0..<64 { terrain.setSolid(true, x: x, y: 20) }
+        let configuration = try NeoLemmixConfiguration(
+            totalLemmings: 1,
+            requiredToSave: 0,
+            spawnInterval: 30,
+            entrances: [],
+            preplacedLemmings: [.init(position: .init(x: 20, y: 20))],
+            skills: [.builder: .infinite]
+        )
+        let initial = try NeoLemmixSimulation(terrain: terrain, configuration: configuration)
+        var completions = 0
+        let session = NeoLemmixMobileSession(
+            simulation: initial,
+            controls: [.builder],
+            engineFingerprint: "neo-fixture-engine",
+            levelIdentifier: "neo/fixture/1",
+            levelIndex: 0,
+            levelFingerprint: "neo-fixture-level",
+            onCompletion: { _ in completions += 1 }
+        )
+
+        let target = try #require(session.targetCandidates(for: 0).first)
+        #expect(target.assignment == .eligible)
+        #expect(session.assign(control: 0, to: target.id))
+        #expect(session.snapshot.releaseRate == 46)
+        #expect(session.adjustReleaseRate(by: 2))
+        session.tick()
+        #expect(session.snapshot.releaseRate == 50)
+        let expected = session.snapshot
+        let payload = try session.checkpointPayload()
+        session.tick()
+
+        let restored = NeoLemmixMobileSession(
+            simulation: initial,
+            controls: [.builder],
+            engineFingerprint: "neo-fixture-engine",
+            levelIdentifier: "neo/fixture/1",
+            levelIndex: 0,
+            levelFingerprint: "neo-fixture-level"
+        )
+        try restored.restoreCheckpointPayload(payload)
+        #expect(restored.snapshot == expected)
+
+        #expect(session.beginEndRun())
+        for _ in 0..<5 { session.tick() }
+        let nukePayload = try session.checkpointPayload()
+        let restoredNuke = NeoLemmixMobileSession(
+            simulation: initial,
+            controls: [.builder],
+            engineFingerprint: "neo-fixture-engine",
+            levelIdentifier: "neo/fixture/1",
+            levelIndex: 0,
+            levelFingerprint: "neo-fixture-level"
+        )
+        try restoredNuke.restoreCheckpointPayload(nukePayload)
+        #expect(restoredNuke.snapshot.isEndingRun)
+        #expect(restoredNuke.undoEndRun())
+        #expect(session.undoEndRun())
+        #expect(!session.snapshot.isEndingRun)
+        #expect(session.beginEndRun())
+        for _ in 0..<5_000 where !session.snapshot.isComplete { session.tick() }
+        #expect(session.snapshot.isComplete)
+        #expect(completions == 1)
+        session.tick()
+        #expect(completions == 1)
     }
 
     private func checkpoint(tick: Int, payload: Data,
