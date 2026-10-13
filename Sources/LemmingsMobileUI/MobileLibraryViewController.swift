@@ -30,6 +30,16 @@ import UniformTypeIdentifiers
     private var inputLink: CADisplayLink?
     override var canBecomeFirstResponder: Bool { game == nil && !searchField.isFirstResponder && mobileInsights.field?.isFirstResponder != true }
     private var store: MobileContentStore?
+    private var hasLemmings2Data: Bool {
+        store.map { FileManager.default.fileExists(atPath: $0.dataDirectory(for: .lemmings2).path) } ?? false
+    }
+    private var hasLemmings3Data: Bool {
+        store.map { FileManager.default.fileExists(atPath: $0.dataDirectory(for: .lemmings3).path) } ?? false
+    }
+    private var hasNeoLemmixData: Bool {
+        store.map { FileManager.default.fileExists(atPath: $0.dataDirectory(for: .neoLemmix).path) } ?? false
+    }
+    private var selectedImportKind: MobileGameDataKind = .classic
     var checkpointStore: MobileCheckpointStore?
     var library: (any MobileGameLibrary)?
     var catalogue: MobileCatalogue?
@@ -277,9 +287,9 @@ import UniformTypeIdentifiers
                 let passed = packs.reduce(0) { $0 + solvedLevels(for: $1.id).count }
                 let title = family.title + (packs.isEmpty ? " - No data" : "  \(passed)/\(total)")
                 return .init("family." + family.rawValue, title, enabled: !packs.isEmpty)
-            } + [.init("neolemmix", "NeoLemmix - Unavailable", enabled: false),
-                 .init("l2", "Lemmings 2 - Unavailable", enabled: false),
-                 .init("l3", "Lemmings 3 - Unavailable", enabled: false)]
+            } + [.init("neolemmix", hasNeoLemmixData ? "NeoLemmix Preview" : "Import NeoLemmix data"),
+                 .init("l2", hasLemmings2Data ? "Lemmings 2  120 levels" : "Import Lemmings 2 data"),
+                 .init("l3", hasLemmings3Data ? "Lemmings 3 Preview  90 levels" : "Import Lemmings 3 data", enabled: true)]
             let journey = bundledJourney
             let journeyTitle = LearningJourney.title + "  \(journey.map { learning.progress.solvedCount(in: $0) } ?? 0)/\(journey?.lessons.count ?? 0)"
             let initials = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") } ?? profiles.active.name
@@ -319,14 +329,18 @@ import UniformTypeIdentifiers
                 return ["\(s.total) Lemmings   Save \(s.required)",
                         s.remainingSeconds.map { "Time \($0 / 60):\(String(format: "%02d", $0 % 60))" } ?? "No time limit"]
             } ?? []
+            let collectionActions: [GameFrontEnd.Action] = favouriteIdentity(selectedIndex) == nil ? [] : [
+                .init("favourite", "Favourite", selected: isFavourite(selectedIndex)),
+                .init("addPlaylist", "Playlist", enabled: catalogue != nil),
+            ]
             canvas.page = .init(title: level.title,
                                 subtitle: loading ? "Loading..." : "\(level.rank)  \(level.number)/\(rank.count)",
                                 details: stats,
                                 footer: (ranksCount > 1 ? [.init("rankPrevious", "< Rank"), .init("rankNext", "Rank >")] : [])
                                     + [.init("previous", "< Level", enabled: !(library is MobileJourneyLibrary) && rankIndex > 0),
                                          .init("next", "Level >", enabled: !(library is MobileJourneyLibrary) && rankIndex + 1 < rank.count),
-                                         .init("favourite", "Favourite", selected: isFavourite(selectedIndex)),
-                                         .init("addPlaylist", "Playlist", enabled: catalogue != nil && favouriteIdentity(selectedIndex) != nil)]
+                                        ]
+                                    + collectionActions
                                     + (currentPack != nil && activeRun == nil && library.levels.count > 1 ? [.init("random", "Random 10")] : [])
                                     + [.init("back", "Back"),
                                          .init("play", solved.contains(selectedIndex) ? "Play again" : "Play", enabled: !loading, primary: true)],
@@ -404,8 +418,14 @@ import UniformTypeIdentifiers
             canvas.preview = nil
         case .data:
             canvas.page = .init(title: "Game Data", subtitle: subtitle,
+                                rows: MobileGameDataKind.allCases.map { kind in
+                                    let installed = store.map { FileManager.default.fileExists(atPath: $0.dataDirectory(for: kind).path) } ?? false
+                                    let action = installed ? "Replace" : "Import"
+                                    return .init("import." + kind.rawValue,
+                                                 "\(action) \(kind.displayTitle)", enabled: !loading)
+                                },
                                 details: library.map { ["\($0.displayName)", "\($0.levels.count) levels"] } ?? [],
-                                footer: [.init("home", "Back"), .init("import", "Import", enabled: !loading, primary: library == nil)])
+                                footer: [.init("home", "Back")])
             canvas.preview = nil
         }
         canvas.previewSource = route == .levels ? canvas.previewSource : nil
@@ -417,7 +437,8 @@ import UniformTypeIdentifiers
     private func syncPages() {
         browser.playerName = hotSeat.map { playerName($0.turn) }
         let available = MobileSystemRegions.menuFrame(in: view)
-        let coverBrowser = available.width >= 600 && available.height >= 300 && !(library is MobileJourneyLibrary)
+        let coverBrowser = available.width >= 600 && available.height >= 300
+            && !(library is MobileJourneyLibrary) && !(library is Lemmings2MobileLibrary)
         let show = game == nil && route == .levels && coverBrowser && library != nil
         scrollView.isHidden = game != nil || show
         browser.isHidden = !show
@@ -464,6 +485,12 @@ import UniformTypeIdentifiers
         if handleSettings(id) { return }
         switch id {
         case "classic": levelsBackRoute = .home; navigate(.levels); selectLevel(selectedIndex)
+        case "l2":
+            if hasLemmings2Data { openLemmings2() } else { navigate(.data) }
+        case "l3":
+            if hasLemmings3Data { openLemmings3() } else { navigate(.data) }
+        case "neolemmix":
+            if hasNeoLemmixData { openNeoLemmix() } else { navigate(.data) }
         case "home": navigate(.home)
         case "back": navigate(levelsBackRoute)
         case "favourite": toggleFavourite(selectedIndex)
@@ -474,7 +501,11 @@ import UniformTypeIdentifiers
             rebuild()
         case "settings": navigate(.settings)
         case "data": navigate(.data)
-        case "import": chooseGameData()
+        case "import": chooseGameData(for: .classic)
+        case "import.classic": chooseGameData(for: .classic)
+        case "import.lemmings2": chooseGameData(for: .lemmings2)
+        case "import.lemmings3": chooseGameData(for: .lemmings3)
+        case "import.neoLemmix": chooseGameData(for: .neoLemmix)
         case "resume": resumeSavedRun()
         case "previous": moveLevel(-1)
         case "next": moveLevel(1)
@@ -654,7 +685,115 @@ import UniformTypeIdentifiers
             rebuild(); loadCheckpoint()
         } catch { library = nil; notice = error.localizedDescription; rebuild() }
     }
-    private func chooseGameData() {
+    private func openLemmings2(at requestedIndex: Int? = nil,
+                               checkpoint: MobileCheckpointEnvelope? = nil) {
+        do {
+            guard let store, let loaded = try store.loadLemmings2Library(storage: storage) else {
+                navigate(.data)
+                return
+            }
+            library = loaded
+            currentPack = nil
+            activeRun = nil
+            levelsBackRoute = .home
+            selectedIndex = requestedIndex ?? loaded.currentLevelIndex
+            selectedPreview = nil
+            browserShown = false
+            let directory = loaded.directory
+            let progressStorage = storage
+            previewLoader = MobileMenuPreviewLoader {
+                try Lemmings2MobileLibrary(directory: directory, storage: progressStorage)
+            }
+            navigate(.levels)
+            if let checkpoint {
+                startLevel(checkpoint.levelIndex, checkpoint: checkpoint)
+            } else {
+                selectLevel(selectedIndex)
+            }
+        } catch {
+            notice = error.localizedDescription
+            rebuild()
+        }
+    }
+    private func openLemmings3(at requestedIndex: Int? = nil,
+                               checkpoint: MobileCheckpointEnvelope? = nil) {
+        do {
+            guard let store, let loaded = try store.loadLemmings3Library(storage: storage) else {
+                navigate(.data)
+                return
+            }
+            library = loaded
+            currentPack = nil
+            activeRun = nil
+            levelsBackRoute = .home
+            selectedIndex = requestedIndex ?? loaded.currentLevelIndex
+            selectedPreview = nil
+            browserShown = false
+            let directory = loaded.directory
+            let progressStorage = storage
+            previewLoader = MobileMenuPreviewLoader {
+                try Lemmings3MobileLibrary(directory: directory, storage: progressStorage)
+            }
+            navigate(.levels)
+            if let checkpoint {
+                startLevel(checkpoint.levelIndex, checkpoint: checkpoint)
+            } else {
+                selectLevel(selectedIndex)
+            }
+        } catch {
+            notice = error.localizedDescription
+            rebuild()
+        }
+    }
+    private func openNeoLemmix(at requestedIndex: Int? = nil,
+                               checkpoint: MobileCheckpointEnvelope? = nil) {
+        do {
+            guard let store else {
+                navigate(.data)
+                return
+            }
+            let directory = store.dataDirectory(for: .neoLemmix)
+            guard FileManager.default.fileExists(atPath: directory.path) else {
+                navigate(.data)
+                return
+            }
+            let loaded = try NeoLemmixMobileLibrary(directory: directory, storage: storage)
+            let restoredIndex = checkpoint.flatMap { saved in
+                loaded.levels.indices.first { index in
+                    guard let identifier = try? loaded.checkpointLevelIdentifier(at: index) else { return false }
+                    return identifier == saved.levelIdentifier
+                }
+            }
+            if checkpoint != nil, restoredIndex == nil {
+                navigate(.home)
+                notice = "The saved NeoLemmix level is no longer available."
+                rebuild()
+                return
+            }
+            library = loaded
+            currentPack = nil
+            activeRun = nil
+            levelsBackRoute = .home
+            selectedIndex = restoredIndex ?? requestedIndex ?? loaded.currentLevelIndex
+            selectedPreview = nil
+            browserShown = false
+            let progressStorage = storage
+            previewLoader = MobileMenuPreviewLoader {
+                try NeoLemmixMobileLibrary(directory: directory, storage: progressStorage)
+            }
+            navigate(.levels)
+            if let checkpoint {
+                startLevel(restoredIndex ?? checkpoint.levelIndex, checkpoint: checkpoint)
+            } else {
+                selectLevel(selectedIndex)
+            }
+        } catch {
+            notice = error.localizedDescription
+            rebuild()
+        }
+    }
+    private func chooseGameData(for kind: MobileGameDataKind) {
+        selectedImportKind = kind
         let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.folder], asCopy: false)
         picker.delegate = self; picker.allowsMultipleSelection = false
         present(picker, animated: true)
@@ -666,11 +805,14 @@ import UniformTypeIdentifiers
             return
         }
         guard let source = urls.first, let store else { return }
+        let kind = selectedImportKind
         loading = true; rebuild()
         let accessed = source.startAccessingSecurityScopedResource()
         Task {
             defer { if accessed { source.stopAccessingSecurityScopedResource() } }
-            let result = await Task.detached(priority: .userInitiated) { Result { try store.install(directory: source) } }.value
+            let result = await Task.detached(priority: .userInitiated) {
+                Result { try store.install(directory: source, for: kind) }
+            }.value
             loading = false
             switch result {
             case .success: notice = ""; reloadLibrary()
@@ -699,6 +841,18 @@ import UniformTypeIdentifiers
     }
     func resumeSavedRun() {
         guard let checkpoint = pendingCheckpoint, checkpointMatchesSession(checkpoint) else { return }
+        if checkpoint.engine == "lemmings2" {
+            openLemmings2(at: checkpoint.levelIndex, checkpoint: checkpoint)
+            return
+        }
+        if checkpoint.engine == "lemmings3" {
+            openLemmings3(at: checkpoint.levelIndex, checkpoint: checkpoint)
+            return
+        }
+        if checkpoint.engine == "neolemmix" {
+            openNeoLemmix(at: checkpoint.levelIndex, checkpoint: checkpoint)
+            return
+        }
         if let run = learning.run, let catalogue {
             let queue = MobileJourneyLibrary(entries: run.entries, name: run.pool.summary, catalogue: catalogue)
             if (try? queue.checkpointLevelIdentifier(at: run.currentIndex)) == checkpoint.levelIdentifier {

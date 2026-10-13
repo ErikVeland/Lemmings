@@ -38,9 +38,9 @@ import NxlvKit
             .init("family.holiday", "Holiday Lemmings  0/72"),
             .init("family.ohYes", "Oh Yes! More Lemmings  0/60"),
             .init("family.fan", "Fan Lemmings  0/15000"),
-            .init("neolemmix", "NeoLemmix - Unavailable", enabled: false),
-            .init("l2", "Lemmings 2 - Unavailable", enabled: false),
-            .init("l3", "Lemmings 3 - Unavailable", enabled: false)]
+            .init("neolemmix", "NeoLemmix Preview"),
+            .init("l2", "Lemmings 2  120 levels"),
+            .init("l3", "Lemmings 3 Preview  90 levels")]
         let journey = Action("journey", LearningJourney.title + "  0/120")
         let home = MobileHomeArt.page(journey: journey, families: homeFamilies, initials: "LEM")
         let resumedHome = MobileHomeArt.page(resume: [.init("resume", "Resume - AB v CD")],
