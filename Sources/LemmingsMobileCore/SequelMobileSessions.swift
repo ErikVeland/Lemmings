@@ -299,6 +299,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
     public let levelFingerprint: String
     public let levelSize: MobileSize
     public let ticksPerSecond = Lemmings3Runtime.ticksPerSecond
+    public let panelFrame: MobilePixelFrame?
 
     private let initial: Lemmings3Runtime
     private let renderer: Lemmings3MobileRenderer?
@@ -320,6 +321,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         levelIdentifier: String,
         levelIndex: Int,
         levelFingerprint: String,
+        panelFrame: MobilePixelFrame? = nil,
         renderer: Lemmings3MobileRenderer? = nil,
         onCompletion: ((Lemmings3Runtime) -> Void)? = nil
     ) {
@@ -329,6 +331,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         self.levelIdentifier = levelIdentifier
         self.levelIndex = levelIndex
         self.levelFingerprint = levelFingerprint
+        self.panelFrame = panelFrame
         self.renderer = renderer
         self.onCompletion = onCompletion
         levelSize = MobileSize(

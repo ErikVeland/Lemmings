@@ -3,6 +3,32 @@ import Testing
 @testable import LemmingsMobileCore
 
 struct Lemmings3MobileRendererTests {
+    @Test func nativePanelDecoderUsesModeXPlanesAndSixBitPalette() throws {
+        var raw = Data(repeating: 0, count: 12_800)
+        raw[0] = 1
+        raw[3_200] = 2
+        raw[6_400] = 3
+        raw[9_600] = 4
+        var colours = Data(repeating: 0, count: 96)
+        colours.replaceSubrange(3...5, with: [63, 32, 0])
+
+        let frame = try Lemmings3MobileSceneRenderer.decodePanel(raw: raw, colours: colours)
+
+        #expect(frame.width == 320)
+        #expect(frame.height == 40)
+        #expect(Array(frame.rgba[0..<4]) == [255, 129, 0, 255])
+        #expect(Array(frame.rgba[4..<8]) == [0, 0, 0, 255])
+        #expect(Array(frame.rgba[8..<12]) == [0, 0, 0, 255])
+        #expect(Array(frame.rgba[12..<16]) == [0, 0, 0, 255])
+        #expect(Array(frame.rgba[(4 * 4)..<(4 * 4 + 4)]) == [0, 0, 0, 255])
+    }
+
+    @Test func nativePanelDecoderRejectsInvalidSourceDimensions() {
+        #expect(throws: MobileSessionError.invalidFrame) {
+            try Lemmings3MobileSceneRenderer.decodePanel(raw: Data(), colours: Data())
+        }
+    }
+
     @Test func creatureSpriteUsesItsOwnPaletteAndHonoursTransparency() {
         var palette = [UInt8](repeating: 0, count: 1024)
         palette[4...7] = [210, 120, 30, 255]

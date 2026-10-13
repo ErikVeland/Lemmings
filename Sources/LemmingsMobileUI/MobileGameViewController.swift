@@ -387,7 +387,8 @@ struct MobileGameTurn {
             skillCount: session.snapshot.skills.count,
             reservedRegions: MobileSystemRegions.read(in: view),
             supportsRewind: session.supportsRewind,
-            hasPlayer: turn != nil
+            hasPlayer: turn != nil,
+            engineIdentifier: session.engineIdentifier
         )
     }
 

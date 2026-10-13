@@ -224,6 +224,7 @@ public struct MobileContentStore: Sendable {
                 commands: Data(contentsOf: directory.appendingPathComponent(graphicsPrefix + ".CMP")))
             _ = try Lemmings3Sprites.palette(
                 Data(contentsOf: directory.appendingPathComponent(graphicsPrefix + ".PAL")), over: style.palette)
+            _ = try Lemmings3MobileSceneRenderer.panelFrame(directory: directory, tribe: tribe.spriteStyle)
             guard sprites.animations.count >= 2,
                   sprites.animations.prefix(2).allSatisfy({ !$0.frames.isEmpty }) else {
                 throw MobileContentStoreError.invalidData(.lemmings3)

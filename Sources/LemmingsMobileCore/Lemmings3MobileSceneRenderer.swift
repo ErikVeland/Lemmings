@@ -75,6 +75,32 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
         })
     }
 
+    static func panelFrame(directory: URL, tribe: Int) throws -> MobilePixelFrame {
+        let graphics = directory.appendingPathComponent("GRAPHICS")
+        let raw = try Data(contentsOf: graphics.appendingPathComponent(String(format: "PAN%03d.RAW", tribe)))
+        let colours = try Data(contentsOf: graphics.appendingPathComponent(String(format: "TRIBE%03d.PAL", tribe)))
+        return try decodePanel(raw: raw, colours: colours)
+    }
+
+    static func decodePanel(raw: Data, colours: Data) throws -> MobilePixelFrame {
+        guard raw.count == 12_800, colours.count == 96 else { throw MobileSessionError.invalidFrame }
+        var palette = [UInt8](repeating: 0, count: 1024)
+        for index in 0..<32 {
+            for channel in 0..<3 {
+                palette[index * 4 + channel] = UInt8(Int(colours[index * 3 + channel] & 63) * 255 / 63)
+            }
+            palette[index * 4 + 3] = 255
+        }
+        var pixels = [UInt8](repeating: 0, count: 320 * 40)
+        for y in 0..<40 {
+            for x in 0..<320 {
+                pixels[y * 320 + x] = raw[(x % 4) * 3_200 + y * 80 + x / 4]
+            }
+        }
+        return try MobilePixelFrame(width: 320, height: 40,
+                                    rgba: Data(expand(pixels, palette: palette)))
+    }
+
     public func render(_ runtime: Lemmings3Runtime, highlight: MobileTargetSelection?) throws -> MobilePixelFrame {
         let width = scene.image.width
         let height = scene.image.height

@@ -19,6 +19,8 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
 
     private let storage: MobileStorage
     private let progressLock = NSRecursiveLock()
+    private let panelLock = NSLock()
+    private var panelFrames: [Int: MobilePixelFrame] = [:]
     private var savedProgress: SavedProgress
     private var progressFailure: String?
 
@@ -61,6 +63,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
         let localIndex = index % 30
         let level = try Lemmings3Level(data: levelData(at: index))
         let style = try Lemmings3Style(directory: directory.appendingPathComponent("STYLES"), number: tribe.rawValue)
+        let panel = try panelFrame(for: tribe.spriteStyle)
         let permanent = try Lemmings3Objects(data: Data(contentsOf: objectURL(level.permanentObjectsReference, temporary: false)))
         let temporary = try Lemmings3Objects(data: Data(contentsOf: objectURL(level.temporaryObjectsReference, temporary: true)))
         let scene = try Lemmings3Scene(level: level, style: style, permanent: permanent, temporary: temporary)
@@ -126,7 +129,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
         let session = Lemmings3MobileSession(runtime: runtime,
             engineFingerprint: Self.engineFingerprint,
             levelIdentifier: "lemmings3/\(fingerprint)", levelIndex: index,
-            levelFingerprint: fingerprint, renderer: renderer.render) { [weak self] completed in
+            levelFingerprint: fingerprint, panelFrame: panel, renderer: renderer.render) { [weak self] completed in
                 self?.record(completed, at: localIndex, tribe: tribe)
             }
         return MobileLevelContent(summary: levels[index], session: session)
@@ -162,6 +165,15 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
         let tribe = Lemmings3ClassicCampaign.Tribe(rawValue: index / 30 + 1)!
         return try Data(contentsOf: directory.appendingPathComponent(
             String(format: "LEVELS/LEVEL%03d.DAT", tribe.firstLevel + index % 30)))
+    }
+
+    private func panelFrame(for tribe: Int) throws -> MobilePixelFrame {
+        panelLock.lock()
+        defer { panelLock.unlock() }
+        if let cached = panelFrames[tribe] { return cached }
+        let frame = try Lemmings3MobileSceneRenderer.panelFrame(directory: directory, tribe: tribe)
+        panelFrames[tribe] = frame
+        return frame
     }
 
     private func objectURL(_ reference: Int, temporary: Bool) -> URL {

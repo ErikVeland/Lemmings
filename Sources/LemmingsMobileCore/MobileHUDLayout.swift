@@ -1,7 +1,12 @@
 import CoreGraphics
 import Foundation
 
-/// Where the Classic panel sits. The panel keeps the Mac app's proportions and whole-number scale.
+/// The native panel appearance used by a mobile layout.
+public enum MobilePanelStyle: Equatable, Sendable {
+    case classic
+    case lemmings3
+}
+
 public struct MobilePanelMetrics: Equatable, Sendable {
     /// The original 320×40 bar, drawn at a whole-number scale.
     public let frame: CGRect
@@ -9,8 +14,18 @@ public struct MobilePanelMetrics: Equatable, Sendable {
     public let speedArrows: [CGRect]
     /// The map beside the speed control, positioned as in the Mac panel.
     public let minimap: CGRect
+    public let style: MobilePanelStyle
 
     public var bevel: CGFloat { max(1, scale / 2) }
+
+    public init(frame: CGRect, scale: CGFloat, speedArrows: [CGRect], minimap: CGRect,
+                style: MobilePanelStyle = .classic) {
+        self.frame = frame
+        self.scale = scale
+        self.speedArrows = speedArrows
+        self.minimap = minimap
+        self.style = style
+    }
 }
 
 public struct MobileHUDLayout: Equatable, Sendable {
@@ -21,7 +36,11 @@ public struct MobileHUDLayout: Equatable, Sendable {
         public let minimap: CGRect
     }
     public var portrait: Portrait? = nil
-    public var minimapFrame: CGRect? { portrait?.minimap ?? panel?.minimap }
+    public var minimapFrame: CGRect? {
+        if let portrait { return portrait.minimap }
+        guard panel?.style != .lemmings3 else { return nil }
+        return panel?.minimap
+    }
     public let interface: MobileInterfaceLayout
     public let panel: MobilePanelMetrics?
     /// Whole-number scale of the panel art inside the touch grid used on narrow screens. Zero beside a panel.
@@ -41,10 +60,15 @@ public struct MobileHUDLayout: Equatable, Sendable {
 
     public static func make(container: MobileSize, safeArea: MobileInsets, hasRate: Bool, skillCount: Int,
                             reservedRegions: [MobileReservedRegion] = [], supportsRewind: Bool = false,
-                            hasPlayer: Bool = false) -> MobileHUDLayout {
+                            hasPlayer: Bool = false, engineIdentifier: String = "classic") -> MobileHUDLayout {
         let controlCount = (hasRate ? 2 : 0) + max(0, skillCount) + (supportsRewind ? 7 : 5)
         let base = MobileLayoutEngine.make(container: container, safeArea: safeArea, controlCount: 0)
         let safe = base.safeFrame
+        if engineIdentifier == "lemmings3", base.orientation == .landscape,
+           let panel = lemmings3PanelLayout(base: base, reservedRegions: reservedRegions,
+                                            supportsRewind: supportsRewind, skillCount: skillCount) {
+            return panel
+        }
         if base.orientation == .landscape, safe.width >= 400, safe.height >= 258 {
             let landscape = landscapeLayout(base: base, hasRate: hasRate, skillCount: max(0, skillCount),
                                             supportsRewind: supportsRewind, reservedRegions: reservedRegions)
@@ -116,6 +140,74 @@ public struct MobileHUDLayout: Equatable, Sendable {
                                    minimap: CGRect(x: panelFrame.minX + 256 * scale, y: panelFrame.minY + 18 * scale,
                                                    width: 60 * scale, height: 20 * scale)),
                                compactScale: 0, speedArrows: arrows, reservedRegions: reservedRegions, supportsRewind: supportsRewind, isDiorama: horizontal != nil)
+    }
+
+    private static func lemmings3PanelLayout(base: MobileInterfaceLayout,
+                                             reservedRegions: [MobileReservedRegion],
+                                             supportsRewind: Bool, skillCount: Int) -> MobileHUDLayout? {
+        guard skillCount == 5 else { return nil }
+        let safe = base.safeFrame
+        let candidates = MobileDisplayRegions.freeFrames(in: safe, avoiding: reservedRegions)
+            .filter { $0.width >= 640 && $0.height >= 260 }
+        guard let bank = candidates.max(by: { $0.width * $0.height < $1.width * $1.height }) else { return nil }
+        let scale = min(4.0, floor(bank.width / Double(Self.panelWidth)))
+        guard scale >= 2 else { return nil }
+
+        let scaledPanelWidth = Double(Self.panelWidth) * scale
+        let scaledPanelHeight = Double(Self.panelHeight) * scale
+        let panelFrame = MobileRect(x: floor(bank.midX - scaledPanelWidth / 2), y: bank.maxY - scaledPanelHeight,
+                                    width: scaledPanelWidth, height: scaledPanelHeight)
+        let navigationHeight = 44.0
+        let statusHeight = 44.0
+        let navigation = MobileRect(x: bank.minX, y: panelFrame.minY - navigationHeight,
+                                    width: bank.width, height: navigationHeight)
+        let status = MobileRect(x: bank.minX, y: navigation.minY - statusHeight,
+                               width: bank.width, height: statusHeight)
+        let playfieldBottom = status.minY
+        guard playfieldBottom - safe.minY >= 88 else { return nil }
+
+        let edges: [Double] = [0, 35, 70, 105, 140, 175, 214, 249, 284, 320]
+        func slot(_ index: Int) -> MobileRect {
+            MobileRect(x: panelFrame.minX + edges[index] * scale, y: panelFrame.minY,
+                       width: (edges[index + 1] - edges[index]) * scale, height: scaledPanelHeight)
+        }
+        let navigationCount = supportsRewind ? 4 : 2
+        let buttonWidth = 44.0
+        let gap = 4.0
+        let groupWidth = Double(navigationCount) * buttonWidth + Double(navigationCount - 1) * gap
+        let startX = navigation.minX + floor((navigation.width - groupWidth) / 2)
+        let navFrames = (0..<navigationCount).map { index in
+            MobileRect(x: startX + Double(index) * (buttonWidth + gap), y: navigation.minY,
+                       width: buttonWidth, height: navigationHeight)
+        }
+        var controls = (0..<5).map { slot($0) }
+        controls += [slot(7), slot(8), slot(6)]
+        if supportsRewind { controls += [navFrames[0], navFrames[1]] }
+        controls += supportsRewind ? [navFrames[2], navFrames[3]] : navFrames
+
+        guard controls.allSatisfy({ frame in
+            safe.contains(.init(x: frame.minX, y: frame.minY))
+                && safe.contains(.init(x: frame.maxX, y: frame.maxY))
+                && reservedRegions.allSatisfy { !frame.intersects($0.frame) }
+        }) else { return nil }
+
+        let interface = MobileInterfaceLayout(
+            orientation: base.orientation,
+            safeFrame: safe,
+            playfieldFrame: MobileRect(x: safe.minX, y: safe.minY, width: safe.width,
+                                       height: playfieldBottom - safe.minY),
+            statusFrame: status,
+            controlsFrame: MobileRect(x: bank.minX, y: navigation.minY, width: bank.width,
+                                      height: bank.maxY - navigation.minY),
+            controlFrames: controls
+        )
+        let panel = MobilePanelMetrics(frame: CGRect(x: CGFloat(panelFrame.x), y: CGFloat(panelFrame.y),
+                                                    width: CGFloat(panelFrame.width), height: CGFloat(panelFrame.height)),
+                                       scale: CGFloat(scale), speedArrows: [],
+                                       minimap: .zero, style: .lemmings3)
+        return MobileHUDLayout(interface: interface, panel: panel, compactScale: 0,
+                               speedArrows: [], reservedRegions: reservedRegions,
+                               supportsRewind: supportsRewind, isDiorama: false)
     }
 
     private static func portraitLayout(base: MobileInterfaceLayout, hasRate: Bool, skillCount: Int,
