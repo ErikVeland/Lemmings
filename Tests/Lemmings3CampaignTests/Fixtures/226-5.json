@@ -1,0 +1,43 @@
+{
+  "expected" : {
+    "lost" : 0,
+    "reserves" : 0,
+    "saved" : 5,
+    "stateHash" : "c5466497ab6c093422ee839407ef29780332ad7d00f363424409fa65fb62626c",
+    "ticks" : 2736
+  },
+  "initialStateHash" : "363c7ed107f2216c129a01de4d56d5fb201924a1ce6ca22de74fc5a8626ee788",
+  "inputs" : [
+    {
+      "action" : "jumper",
+      "lemming" : 0,
+      "tick" : 2474
+    },
+    {
+      "action" : "walker",
+      "lemming" : 0,
+      "tick" : 2501
+    },
+    {
+      "action" : "use",
+      "direction" : "upLeft",
+      "lemming" : 0,
+      "tick" : 2534
+    },
+    {
+      "action" : "drop",
+      "lemming" : 0,
+      "tick" : 2584
+    },
+    {
+      "action" : "use",
+      "direction" : "down",
+      "lemming" : 0,
+      "tick" : 2675
+    }
+  ],
+  "level" : 226,
+  "levelSHA256" : "f81b27c79f425a143c7316e1d45fbe4436cacd23f1aedf378e1454cb757636ba",
+  "population" : 5,
+  "version" : 1
+}

@@ -1,0 +1,225 @@
+{
+  "expected" : {
+    "lost" : 0,
+    "reserves" : 33,
+    "saved" : 11,
+    "stateHash" : "4b2291755b7a8056a11937e4bfc9c01ead2c400286ab82730cac62b0e9bde9bf",
+    "ticks" : 2534
+  },
+  "initialStateHash" : "06308e77771197fa10e7cd05ef2d7967cd4b7c54864caa2c596aee15d1f0c926",
+  "inputs" : [
+    {
+      "action" : "walker",
+      "lemming" : 1,
+      "tick" : 192
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 1,
+      "tick" : 193
+    },
+    {
+      "action" : "blocker",
+      "lemming" : 2,
+      "tick" : 198
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 1,
+      "tick" : 232
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 1,
+      "tick" : 354
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 1,
+      "tick" : 370
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 1,
+      "tick" : 392
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 1,
+      "tick" : 408
+    },
+    {
+      "action" : "drop",
+      "lemming" : 1,
+      "tick" : 477
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 1,
+      "tick" : 531
+    },
+    {
+      "action" : "walker",
+      "lemming" : 1,
+      "tick" : 562
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 1,
+      "tick" : 586
+    },
+    {
+      "action" : "use",
+      "direction" : "left",
+      "lemming" : 1,
+      "tick" : 618
+    },
+    {
+      "action" : "walker",
+      "lemming" : 1,
+      "tick" : 714
+    },
+    {
+      "action" : "walker",
+      "lemming" : 1,
+      "tick" : 714
+    },
+    {
+      "action" : "use",
+      "direction" : "downRight",
+      "lemming" : 1,
+      "tick" : 839
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 1,
+      "tick" : 849
+    },
+    {
+      "action" : "walker",
+      "lemming" : 1,
+      "tick" : 851
+    },
+    {
+      "action" : "drop",
+      "lemming" : 1,
+      "tick" : 863
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 1,
+      "tick" : 864
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 1,
+      "tick" : 895
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 1,
+      "tick" : 918
+    },
+    {
+      "action" : "use",
+      "direction" : "left",
+      "lemming" : 1,
+      "tick" : 1108
+    },
+    {
+      "action" : "drop",
+      "lemming" : 1,
+      "tick" : 1117
+    },
+    {
+      "action" : "drop",
+      "lemming" : 1,
+      "tick" : 1210
+    },
+    {
+      "action" : "walker",
+      "lemming" : 1,
+      "tick" : 1211
+    },
+    {
+      "action" : "use",
+      "direction" : "left",
+      "lemming" : 1,
+      "tick" : 1256
+    },
+    {
+      "action" : "walker",
+      "lemming" : 1,
+      "tick" : 1304
+    },
+    {
+      "action" : "walker",
+      "lemming" : 1,
+      "tick" : 1304
+    },
+    {
+      "action" : "drop",
+      "lemming" : 1,
+      "tick" : 1396
+    },
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 1,
+      "tick" : 1408
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 1,
+      "tick" : 1432
+    },
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 1,
+      "tick" : 1440
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 1,
+      "tick" : 1456
+    },
+    {
+      "action" : "walker",
+      "lemming" : 1,
+      "tick" : 1592
+    },
+    {
+      "action" : "walker",
+      "lemming" : 1,
+      "tick" : 1592
+    },
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 1,
+      "tick" : 1700
+    },
+    {
+      "action" : "walker",
+      "lemming" : 2,
+      "tick" : 2000
+    },
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 2,
+      "tick" : 2332
+    }
+  ],
+  "level" : 124,
+  "levelSHA256" : "021f76f59fb445cd171ec7a345359f4526b1dc0f0fbc53c4a0fb11b557a0afa6",
+  "population" : 43,
+  "version" : 1
+}

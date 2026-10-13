@@ -49,6 +49,13 @@ each tribe's final result. This is native simulation evidence. Focused tests
 check the ending decision and movie handover. Player input, recovery, original
 engine parity and a played three-tribe finale need separate checks.
 
+The 13 October 2026 native gate passed all ninety standalone routes and all
+326 carried fixtures. All three thirty-level chains complete with fifty
+survivors: Classic 50, Shadow 50 and Egyptian 50. The strict campaign proof
+reports 90 carried results and no open chains. This closes the native route
+and survivor-count gate; original-engine parity, player input, recovery and
+release-candidate checks remain separate.
+
 `Tools/ClassicCompletion` and `Tools/Lemmings3Completion` can discover routes.
 After deliberately adding or improving a fixture, run
 `python3 Tools/CampaignCompletion/report.py`, the replay gate, and

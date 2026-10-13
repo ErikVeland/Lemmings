@@ -130,8 +130,9 @@ completion is the separate 1.9 gate.
 ### 1.9 — The Tribes complete, Chronicles Beta
 
 The owner approved L2 Complete and L3 Beta on 10 October 2026. L2 has all 120
-winning routes and twelve continuous tribe chains. L3 retains 74 of 90
-standalone wins, with sixteen missing routes. See the [1.9 milestone evidence](ReleaseReadiness/1.9Milestone.md).
+winning routes and twelve continuous tribe chains. L3 now has all 90 standalone
+wins and three 50-survivor chains. Original-engine parity, media and release
+checks remain open. See the [1.9 milestone evidence](ReleaseReadiness/1.9Milestone.md).
 
 Continue the separate validation work:
 
