@@ -49,9 +49,9 @@ struct ZipArchiveTests {
 
     @Test func rejectsDamagedAndNonArchives() throws {
         #expect(throws: ZipArchiveError.self) { try ZipArchive(data: Data("not a zip".utf8)) }
-        let file = try #require(try FileManager.default.contentsOfDirectory(at: Self.packs, includingPropertiesForKeys: nil)
-            .first { $0.pathExtension == "zip" })
-        var bytes = try Data(contentsOf: file)
+        // A small deflated member keeps corruption coverage independent of bundled game data.
+        var bytes = try #require(Data(base64Encoded:
+            "UEsDBBQAAAAIAHW3TV2kcnBrLAAAAPwIAAAIAAAAdGVzdC50eHSL8gxQyMwrSU0vyiypVEjLrCgpLUrVU4gaFR4VHhUeFR4VHhUeFR4VHo7CAFBLAQIUAxQAAAAIAHW3TV2kcnBrLAAAAPwIAAAIAAAAAAAAAAAAAACAAQAAAAB0ZXN0LnR4dFBLBQYAAAAAAQABADYAAABSAAAAAAA="))
         let archive = try ZipArchive(data: bytes)
         let member = try #require(archive.members.first { $0.uncompressedSize > 0 && $0.method == 8 })
         // Flip a byte inside the packed data: the checksum or inflate must fail.

@@ -177,8 +177,9 @@ public final class MusicFileDeck {
   private var restingWet: Float { originalMix ? 0 : Turntable.restingWet }
   private let profile: MusicPlaybackCatalogue.Entry?
   private var playbackGeneration = 0
+  private var finishedLoops = 0
   public var completedLoops: Int {
-    guard started, let time = player.lastRenderTime.flatMap({ player.playerTime(forNodeTime: $0) }) else { return 0 }
+    guard started, let time = player.lastRenderTime.flatMap({ player.playerTime(forNodeTime: $0) }) else { return finishedLoops }
     let first: (start: Int64, count: Int64) = profile?.segment(first: true, repeats: repeats, fileFrames: file.length,
       fileRate: file.processingFormat.sampleRate) ?? (0, file.length)
     let loop: (start: Int64, count: Int64) = profile?.segment(first: false, repeats: repeats, fileFrames: file.length,
@@ -312,7 +313,8 @@ public final class MusicFileDeck {
     engine.connect(equaliser, to: sourceMixer, format: format)
     engine.connect(sourceMixer, to: nukeEQ, format: format)
     engine.connect(nukeEQ, to: reverb, format: format)
-    engine.connect(reverb, to: spatialMixer, format: format)
+    engine.connect(reverb, to: limiter, format: format)
+    engine.connect(limiter, to: spatialMixer, format: format)
     engine.connect(spatialMixer, to: outputMixer, fromBus: 0, toBus: 0, format: format)
     let history = rewindAudio
     let reverse = history.source(format: format)
@@ -320,8 +322,8 @@ public final class MusicFileDeck {
     engine.connect(reverse, to: outputMixer, fromBus: 0, toBus: 1, format: format)
     rewindNode = reverse
     player.installTap(onBus: 0, bufferSize: 1024, format: sourceFormat) { @Sendable buffer, _ in history.record(buffer) }
-    engine.connect(outputMixer, to: limiter, format: format)
-    engine.connect(limiter, to: engine.mainMixerNode, format: format)
+    // The short reverse source bypasses the forward effects and their latency.
+    engine.connect(outputMixer, to: engine.mainMixerNode, format: format)
 
     // Music stays stereo. Positional effects use a separate environment node.
     sourceMixer.outputVolume = 1
@@ -366,12 +368,21 @@ public final class MusicFileDeck {
     sourceMixer.outputVolume = 0
     do {
       if !started {
+        finishedLoops = 0
         playbackGeneration += 1
         let generation = playbackGeneration
         try stream.start(offline: engine.isInManualRenderingMode) { [weak self] in
           Task { @MainActor [weak self] in
             guard let self, self.started, self.playbackGeneration == generation else { return }
-            self.stop()
+            self.started = false
+            self.finishedLoops = 1
+            self.player.stop()
+            self.fadeTask?.cancel(); self.fadeTask = nil
+            self.rhythmTask?.cancel(); self.rhythmTask = nil
+            if self.rhythmBuffer != nil { self.rhythmPlayer.stop() }
+            self.rhythmMode = false
+            self.musicLayer.outputVolume = 1
+            self.rhythmLayer.outputVolume = 0
           }
         }
       }
@@ -486,6 +497,7 @@ public final class MusicFileDeck {
     outputSuspended = false
     resumeAfterSuspend = false
     playbackGeneration += 1
+    finishedLoops = 0
     stream.stop()
     player.stop()
     engine.stop()

@@ -12,7 +12,7 @@ extension MenuAudit {
             ("iphone-portrait", .init(width: 390, height: 844), .init(top: 59, bottom: 34), []),
             ("iphone-landscape", .init(width: 844, height: 390), .init(left: 59, bottom: 21, right: 59), []),
             ("iphone-narrow", .init(width: 320, height: 568), .init(top: 20), []),
-            ("compact", .init(width: 568, height: 300), .init(), []),
+            ("compact", .init(width: 280, height: 600), .init(top: 20, bottom: 20), []),
             ("ipad-portrait", .init(width: 768, height: 1024), .init(top: 20, bottom: 20), []),
             ("ipad-landscape", .init(width: 1024, height: 768), .init(top: 20, bottom: 20), []),
             ("divided", .init(width: 1112, height: 834), .init(top: 20, bottom: 20),
@@ -27,7 +27,7 @@ extension MenuAudit {
                 let layout = MobileHUDLayout.make(container: size, safeArea: insets, hasRate: true,
                     skillCount: session.snapshot.skills.count, reservedRegions: regions, supportsRewind: true,
                     hasPlayer: name != nil)
-                guard layout.canPlay else { throw Failure.invalidTargets }
+                guard layout.canPlay, pose != "compact" || layout.portrait == nil && layout.panel == nil else { throw Failure.invalidTargets }
                 let frames = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: name != nil)
                 guard (frames.player != nil) == (name != nil), frames.counters.height >= 20 else { throw Failure.invalidTargets }
                 let targets = MobileHUDRenderer.targets(layout: layout, snapshot: session.snapshot,
@@ -53,18 +53,29 @@ extension MenuAudit {
                 let context = try bitmapContext(size: .init(width: size.width, height: size.height))
                 context.setFillColor(CGColor(gray: 0, alpha: 1)); context.fill(CGRect(x: 0, y: 0, width: size.width, height: size.height))
                 let field = cg(layout.interface.playfieldFrame)
-                context.saveGState(); context.clip(to: field)
-                GameStoneArt.drawImage(image, in: field, context: context)
+                let viewport = MobileViewport(levelSize: session.levelSize,
+                    viewSize: .init(width: field.width, height: field.height),
+                    origin: session.initialCameraOrigin, zoom: 2, pixelAspect: 1.2)
+                context.saveGState(); context.clip(to: field); context.translateBy(x: field.minX, y: field.minY)
+                MobileBitmapRenderer.draw(image, viewport: viewport, in: context)
                 context.restoreGState()
                 MobileHUDRenderer(layout: layout, snapshot: session.snapshot, selectedSkill: 0,
                     paused: paused, speed: 1, endRunArmed: false,
                     panelImage: session.panelFrame.flatMap(MobileBitmapRenderer.image), typography: typography,
                     playerName: name).draw(in: context, bounds: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+                if let minimap = layout.minimapFrame {
+                    GameMinimapArt.draw(in: context, bounds: minimap, image: image,
+                        visible: cg(viewport.visibleLevelRect),
+                        levelSize: CGSize(width: session.levelSize.width, height: session.levelSize.height),
+                        overlay: layout.portrait != nil)
+                }
                 let file = pose + "-" + state + ".png"
                 try save(context: context, to: output.appendingPathComponent(file))
                 captures.append(["file": file, "player": name ?? "solo", "paused": paused,
                     "layout": layout.panel != nil ? "panel" : layout.portrait != nil ? "two-rows" : "compact",
-                    "targets": targets.count])
+                    "targets": targets.count,
+                    "status": [frames.counters.minX, frames.counters.minY, frames.counters.width, frames.counters.height],
+                    "identity": frames.player.map { [$0.minX, $0.minY, $0.width, $0.height] } ?? []])
             }
         }
         try JSONSerialization.data(withJSONObject: captures, options: [.prettyPrinted, .sortedKeys])

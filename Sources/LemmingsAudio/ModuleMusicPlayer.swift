@@ -123,13 +123,13 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     engine.connect(speedPitch, to: mixEQ, format: format)
     engine.connect(mixEQ, to: nukeEQ, format: format)
     engine.connect(nukeEQ, to: reverb, format: format)
-    engine.connect(reverb, to: spatialMixer, format: format)
+    engine.connect(reverb, to: limiter, format: format)
+    engine.connect(limiter, to: spatialMixer, format: format)
     engine.connect(spatialMixer, to: outputMixer, fromBus: 0, toBus: 0, format: format)
     let reverse = rewindAudio.source(format: format)
     engine.attach(reverse)
     engine.connect(reverse, to: outputMixer, fromBus: 0, toBus: 1, format: format)
-    engine.connect(outputMixer, to: limiter, format: format)
-    engine.connect(limiter, to: engine.mainMixerNode, format: format)
+    engine.connect(outputMixer, to: engine.mainMixerNode, format: format)
     rewindNode = reverse
     sourceNode = node
     do {

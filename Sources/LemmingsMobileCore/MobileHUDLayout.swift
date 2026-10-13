@@ -63,7 +63,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
         let bank = MobileDisplayRegions.freeFrames(in: deck, avoiding: reservedRegions)
             .filter { $0.width >= 960 && $0.height >= 284 }
             .max { $0.width * $0.height < $1.width * $1.height }
-        let scale = min(4, floor((bank?.width ?? 0) / panelWidth))
+        let scale: CGFloat = min(4, floor((bank?.width ?? 0) / panelWidth))
         // At 3×, the original sockets also meet the 44-point touch minimum.
         guard hasRate, skillCount == 8, let bank, scale >= 3,
               bank.height >= panelHeight * scale + rowHeight + 120 else {

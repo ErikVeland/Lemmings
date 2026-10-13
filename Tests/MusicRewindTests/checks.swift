@@ -69,7 +69,11 @@ extension MusicFileDeck {
         deck.play()
         RunLoop.current.run(until: Date().addingTimeInterval(0.15))
         let output = stereoBuffer(1024)
-        for _ in 0..<40 { _ = try deck.engine.renderOffline(1024, to: output) }
+        for _ in 0..<40 {
+            _ = try deck.engine.renderOffline(1024, to: output)
+            // Offline time advances faster than the decoder's wall clock.
+            deck.stream.drain()
+        }
         RunLoop.current.run(until: Date().addingTimeInterval(0.05))
         try assertMusicRewind(deck.rewindAudio.capturedFrames > 4096, "The recording tap did not capture real soundtrack PCM")
         deck.suspendOutput()
@@ -83,7 +87,7 @@ extension MusicFileDeck {
         var reverseEnergy = 0.0
         for _ in 0..<6 {
             let status = try deck.engine.renderOffline(1024, to: output)
-            print("Rewind render: \(status.rawValue), frames=\(output.frameLength), energy=\(energy(output)), active=\(deck.rewindAudio.isRewinding)")
+            try assertMusicRewind(status == .success, "The parked recording could not render a scratch")
             reverseEnergy += energy(output)
         }
         try assertMusicRewind(reverseEnergy > 1, "The recording rewind was silent")
