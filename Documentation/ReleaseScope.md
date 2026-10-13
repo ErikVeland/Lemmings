@@ -138,7 +138,7 @@ See [the current campaign closure evidence](ReleaseReadiness/CampaignClosure-202
 | Release | Levels | Proven routes | Claim |
 | --- | ---: | ---: | --- |
 | Lemmings 2: The Tribes | 120 | 120 | **Complete** |
-| Lemmings 3: The Chronicles | 90 | 74 | **Beta** |
+| Lemmings 3: The Chronicles | 90 | 90 | **Beta** |
 
 The strict native L2 gate passes all 120 standalone routes, 70 carry-over variants
 and twelve continuous tribe chains. Every witness reproduces its win twice with
@@ -147,10 +147,11 @@ lemming. The ark ending requires a golden talisman and at least 30 survivors
 from each tribe, and remains unproved.
 See [L2 completion evidence](Lemmings2Completion/README.md).
 
-The current L3 evidence records 74 of 90 standalone wins, 155 carried fixtures
-replayed twice and 68 linked campaign results. Sixteen standalone routes remain
-missing. The three continuous campaigns with at least 50 survivors, original
-DOS parity and verified endings remain open. See the
+The 13 October strict native L3 evidence records 90 of 90 standalone wins, 326
+carried fixtures replayed twice and all 90 linked campaign results. Classic,
+Shadow and Egyptian each finish with 50 survivors. Original DOS parity, media,
+release-candidate recovery and package validation remain open. See the
+[campaign evidence](CampaignCompletion/README.md) and
 [sequel verification record](ReleaseReadiness/1.8SequelVerification.md).
 
 Both play through their campaigns with original artwork, music and interfaces.
@@ -188,8 +189,8 @@ release does not imply support for either platform group.
 
 - The `Oh My! ALL Lemmings!` run across the sequel campaigns remains outside the
   completed 352-level Classic campaign gate.
-- L2 is Complete and L3 is Beta for 1.9. L2 has no missing level routes. L3 retains
-  16 missing routes, tracked separately from the Classic 1.0 milestone.
+- L2 is Complete and L3 is Beta for 1.9. Neither game has a missing level route.
+  L3 original-engine fidelity and release-candidate checks remain open.
 - Physical Intel, minimum macOS, HDR, multiple displays and high refresh rates
   are untested. Sustained 10x play is not established.
 - Scalable menus and VoiceOver navigation are implemented. Full VoiceOver

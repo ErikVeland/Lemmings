@@ -134,10 +134,11 @@ The patch branch combines the current work. See the
 [1.8.x consolidation evidence](ReleaseReadiness/1.8xConsolidation.md).
 
 **1.9: The Tribes complete, Chronicles Beta.** L2 has preserved wins for all
-120 levels and continuous runs through twelve tribes. L3 has 74 of 90 retained
-standalone wins. High-survivor endings, remaining L3 routes, original-engine
-fidelity and media checks remain separate work. The update also adds original
-Macintosh music and counters, Hot Seat Resume rosters and saved-run fixes.
+120 levels and continuous runs through twelve tribes. L3 has 90 of 90 retained
+standalone wins. Its three 30-level chains each finish with 50 survivors.
+Original-engine fidelity, media and release-candidate checks remain open. The
+update also adds original Macintosh music and counters, Hot Seat Resume rosters
+and saved-run fixes.
 
 **2.0: full iOS release for iPad, iPhone and iPhone Duo.** Classic,
 Lemmings 2 and Lemmings 3 are all required at launch. The current UIKit/Metal
