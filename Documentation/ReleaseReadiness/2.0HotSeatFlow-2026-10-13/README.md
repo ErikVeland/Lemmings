@@ -19,6 +19,10 @@ A failed turn save prevents checkpoint handover. Skip passes the turn before
 advancing. The shared collection import preserves archived runs and their L2
 progress metadata when another session saves.
 
+## 14 October update
+
+PR [#6](https://github.com/ErikVeland/Lemmings/pull/6) is merged to `main` as `b238a401`. Its player-owned L2, L3 and supported NeoLemmix libraries now use the same Hot Seat owner, roster, result choices, scoped campaign progress, checkpoint ownership and paused Ready flow described above. The earlier statement that L2/L3 were unavailable describes the source on 13 October and is superseded for source connectivity. Real commercial-content journeys and physical UIKit/VoiceOver acceptance are still open.
+
 ## Validation
 
 - **95 renders and target checks pass:** 19 states at five iPhone/iPad sizes.
