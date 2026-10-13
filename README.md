@@ -51,13 +51,14 @@ The recorded iPhone/iPad 1.3 source and Simulator gates pass for their exact
 commits. The 2.0 source connects Classic, Lemmings 2, Lemmings 3 and supported
 NeoLemmix packs to mobile libraries and sessions. L2 and L3 have native scene
 renderers, campaign records and checkpoint routes. NeoLemmix import validates
-styles, sprites, rendering and supported simulation features. Focused renderer
-and layout tests pass, and the mobile core builds for the iOS Simulator target.
-The full UI build and Simulator flows have not passed for this source. Local
-Xcode 26.6 lacks required iOS 27 APIs and has no Simulator runtime. The Xcode
-27.2 CI checks remain in progress. Real-data parity, physical-device and
-accessibility acceptance, audio, controller, Duo and distribution gates remain
-open. See the [2.0 release gate](Documentation/ReleaseReadiness/2.0ReleaseGate-2026-10-14.md).
+styles, sprites, rendering and supported simulation features. The exact main
+commit `c7305724` passes the Xcode 27.2 source gate, the Mac workflow and the
+NeoLemmix gate. Its iPhone and iPad layout and lifecycle tests pass. Local
+Xcode 26.6 lacks the iOS 27 APIs used by the full app,
+and CoreSimulatorService cannot provide a local runtime. Real-data parity,
+physical-device and accessibility acceptance, audio, controller, Duo and
+distribution gates remain open. See the
+[2.0 release gate](Documentation/ReleaseReadiness/2.0ReleaseGate-2026-10-14.md).
 The macOS 1.9 release marks Lemmings 2: The Tribes Complete and Lemmings 3:
 Chronicles Beta. Classic content remains the completed reference engine. The bundled corpus contains
 6,020 Classic-format fan levels in 535 packs; this is not a claim of NeoLemmix
