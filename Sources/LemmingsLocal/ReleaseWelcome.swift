@@ -6,15 +6,14 @@ import AppKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "1.9.4"
-    static let subtitle = "Calmer celebrations and smoother play"
+    static let notesVersion = "1.9.6"
+    static let subtitle = "Shared fixes and smoother music"
     static let sections = [
-        ("Calmer celebrations", "Solved levels get a faint golden haze around scenery. The lemming aura is much softer. Full-rescue levels keep their brief glow and current music."),
-        ("Smoother play", "Background glow renders off the main thread. Both sequels reuse bitmap draws, and The Tribes avoids rebuilding unchanged skill panels."),
-        ("Resume Golden Path", "Continue finds your saved journey after you play another solo or Hot Seat session. It restores the saved players and turn."),
-        ("Clearer replays", "The upper-right panel shows remaining skills and the last three successful skill uses with exact ticks."),
-        ("Controls and level order", "Command-Z rewinds one step. Time waits for no Lemming and This Corrosion now appear near the end of Golden Path, including their known fan variants."),
-        ("Compatibility", "Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. The Tribes remains Complete. Chronicles and NeoLemmix remain Beta.")
+        ("Smoother music", "Recorded music uses bounded decoding, smooth loop seams and peak protection after effects. Mono and stereo recordings share the same output format."),
+        ("Pixel effects", "Bombs scatter crisp pixel debris and show bitmap countdowns. Dying, exiting and exploding lemmings no longer keep selection outlines."),
+        ("Responsive rewind", "Rewind scratches backwards through recent music and effects. Repeated requests reuse buffers. Modern Mac effects add brief sprite echoes."),
+        ("Shared controls and saves", "Profiles, records, playlists, recovery and Hot Seat share code with iPhone and iPad. Saved runs and handovers wait for Ready. Primary actions stay last in navigation order."),
+        ("Compatibility", "Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. The Tribes remains Complete. Chronicles and NeoLemmix remain Beta. The companion iOS beta remains 2.0.")
     ]
     private let defaults: UserDefaults
     private let build: Int

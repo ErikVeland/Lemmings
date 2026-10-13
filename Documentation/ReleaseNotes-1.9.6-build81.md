@@ -3,7 +3,7 @@
 Build: 81
 Release base: v1.9.4
 
-This release brings the current shared engine, artwork, saves and audio fixes to macOS. The companion iPhone and iPad beta keeps version 2.0 and uses the same release source.
+This release brings the current shared engine, artwork, saves and audio fixes to macOS. The companion iPhone and iPad beta is version 2.0, build 13, and uses the same release source.
 
 ## All platforms
 
@@ -28,7 +28,7 @@ The universal Mac app supports Apple silicon and Intel on macOS 12.3 or later. T
 
 The beta plays the Classic family, Holiday packs, Oh Yes! More Lemmings! and installed fan packs. It includes profiles, favourites, recent levels, playlists, journeys, records and Hot Seat.
 
-Portrait and landscape controls use the shared stone artwork and bitmap symbols. Mouse, trackpad and Pencil targeting use level-space pick boxes. Camera movement refreshes targeting while paused. Collections places Resume beside Back as the primary action.
+Portrait and landscape controls use the shared stone artwork and bitmap symbols. Mouse, trackpad and Pencil targeting use level-space pick boxes. Camera movement refreshes targeting while paused. Hot Seat names the active player in green bitmap text above the HUD counters. Collections places Resume beside Back as the primary action.
 
 Music, replay history, calmer rescue effects, recovery and saved-journey fixes follow the shared Mac source. Optional soundtrack libraries download from Settings. Downloads require the app to remain in the foreground.
 

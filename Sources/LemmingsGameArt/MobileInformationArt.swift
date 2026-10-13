@@ -9,8 +9,8 @@ public enum MobileInformationArt {
     }
     public static func whatsNew(version: String) -> GameFrontEnd.Page {
         .init(title: "What's new in " + version,
-              details: ["Classic + fans", "Player records", "Achievements", "Playlists", "Hot Seat",
-                        "Journeys", "Progression", "Rewind/replays", "Music/controls"],
+              details: ["Classic + fans", "Hot Seat player HUD", "Bomb countdowns", "Smooth music loops",
+                        "Rewind scratch", "Portrait controls", "Pointer targeting", "Shared saves/replays"],
               footer: [.init("welcomeContinue", "Continue", primary: true)])
     }
     public static func telemetryConsent() -> GameFrontEnd.Page {
