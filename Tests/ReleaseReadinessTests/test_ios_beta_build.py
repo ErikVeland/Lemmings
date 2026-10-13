@@ -1,4 +1,5 @@
 import importlib.util
+import copy
 import hashlib
 import json
 from datetime import datetime
@@ -20,6 +21,20 @@ SPEC.loader.exec_module(BUILD)
 
 
 class IOSBetaBuildTests(unittest.TestCase):
+    def test_privacy_accepts_reviewed_services_and_rejects_scope_changes(self):
+        privacy = plistlib.loads((TOOLS.parents[1] / "Apps/UltimateLemmingsIOS/PrivacyInfo.xcprivacy").read_bytes())
+        BUILD.validate_privacy(privacy)
+        for change in ("tracking", "domain", "advertising", "unlinked", "new-category", "missing-category"):
+            with self.subTest(change=change):
+                changed = copy.deepcopy(privacy)
+                if change == "tracking": changed["NSPrivacyTracking"] = True
+                elif change == "domain": changed["NSPrivacyTrackingDomains"] = ["example.com"]
+                elif change == "advertising": changed["NSPrivacyCollectedDataTypes"][0]["NSPrivacyCollectedDataTypePurposes"] = ["NSPrivacyCollectedDataTypePurposeThirdPartyAdvertising"]
+                elif change == "unlinked": changed["NSPrivacyCollectedDataTypes"][0]["NSPrivacyCollectedDataTypeLinked"] = False
+                elif change == "new-category": changed["NSPrivacyCollectedDataTypes"][0]["NSPrivacyCollectedDataType"] = "NSPrivacyCollectedDataTypeEmailAddress"
+                else: changed["NSPrivacyCollectedDataTypes"].pop()
+                with self.assertRaises(ValueError): BUILD.validate_privacy(changed)
+
     def test_source_freeze_includes_shared_art_code_and_used_artwork(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

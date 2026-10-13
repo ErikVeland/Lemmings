@@ -55,8 +55,9 @@ def uuids(path):
 
 
 def signing_capabilities(app, bundle_id):
-    signature = subprocess.run(["codesign", "-d", "--entitlements", ":-", str(app)], capture_output=True, check=True)
-    actual = plistlib.loads(signature.stdout)
+    signature = subprocess.run(["codesign", "-d", "--entitlements", "-", "--der", str(app)], capture_output=True, check=True)
+    decoded = subprocess.check_output(["derq", "query", "-x"], input=signature.stdout)
+    actual = plistlib.loads(decoded)
     profile = plistlib.loads(subprocess.check_output([
         "openssl", "smime", "-verify", "-noverify", "-inform", "DER", "-in", str(app / "embedded.mobileprovision")
     ], stderr=subprocess.DEVNULL))
@@ -117,6 +118,23 @@ def validate_export(package, output, archive_record, device_id, export_method):
             "exportSignatureVerified": True}
 
 
+def validate_privacy(privacy):
+    reviewed = plistlib.loads((ROOT / "Apps/UltimateLemmingsIOS/PrivacyInfo.xcprivacy").read_bytes())
+    if privacy != reviewed:
+        raise ValueError("The archived privacy declarations differ from the reviewed source manifest.")
+    if privacy.get("NSPrivacyTracking") or privacy.get("NSPrivacyTrackingDomains"):
+        raise ValueError("Tracking is outside the reviewed beta privacy scope.")
+    expected = [{
+        "NSPrivacyCollectedDataType": kind,
+        "NSPrivacyCollectedDataTypeLinked": True,
+        "NSPrivacyCollectedDataTypeTracking": False,
+        "NSPrivacyCollectedDataTypePurposes": ["NSPrivacyCollectedDataTypePurposeAppFunctionality"],
+    } for kind in ("NSPrivacyCollectedDataTypeUserID", "NSPrivacyCollectedDataTypeDeviceID",
+                   "NSPrivacyCollectedDataTypeGameplayContent")]
+    if privacy.get("NSPrivacyCollectedDataTypes") != expected:
+        raise ValueError("Collected data changed from the reviewed IDs and gameplay privacy scope.")
+
+
 def validate_archive(archive, build, bundle_id, signed):
     app = archive / "Products/Applications/UltimateLemmingsIOS.app"
     info = plistlib.loads((app / "Info.plist").read_bytes())
@@ -140,8 +158,7 @@ def validate_archive(archive, build, bundle_id, signed):
         raise ValueError("The local and imported file privacy reasons are missing.")
     if reasons.get("NSPrivacyAccessedAPICategoryUserDefaults") != {"CA92.1"}:
         raise ValueError("The local settings and progress privacy reason is missing.")
-    if privacy["NSPrivacyTracking"] or privacy["NSPrivacyCollectedDataTypes"]:
-        raise ValueError("Beta privacy declarations changed. Audit them before distribution.")
+    validate_privacy(privacy)
     content = verify(app / "BetaGameData")
     binary = app / info["CFBundleExecutable"]
     symbols = archive / "dSYMs/UltimateLemmingsIOS.app.dSYM"
