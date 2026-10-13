@@ -13,20 +13,33 @@ struct MobilePlayerContentImportTests {
 
         let store = MobileContentStore(root: root.appendingPathComponent("Support", isDirectory: true))
         try store.install(directory: source, for: .lemmings2)
-        let library = try #require(try store.loadLemmings2Library(
-            storage: MobileStorage(directory: root.appendingPathComponent("Progress", isDirectory: true))))
+        let progressStorage = MobileStorage(directory: root.appendingPathComponent("Progress", isDirectory: true))
+        let installed = store.dataDirectory(for: .lemmings2)
+        let sourceCampaign = try Lemmings2Campaign(root: installed)
+        let results = Dictionary(uniqueKeysWithValues: sourceCampaign.levels.enumerated().map { index, level in
+            (index, Lemmings2Campaign.Result(startingPopulation: 60, saved: 60,
+                medal: Lemmings2Campaign.medal(saved: 60, total: 60,
+                                               allowedLosses: level.allowedLossesForGold),
+                levelFingerprint: level.fingerprint))
+        })
+        try progressStorage.save(Lemmings2Campaign.Progress(tribe: 1, level: 0, results: results),
+                                 name: "lemmings2-campaign")
+        let library = try #require(try store.loadLemmings2Library(storage: progressStorage))
         #expect(library.levels.count == 120)
 
-        for index in stride(from: 0, to: library.levels.count, by: 10) {
+        let checkpointIndices = Set(stride(from: 0, to: library.levels.count, by: 10))
+        for index in library.levels.indices {
             let session = try library.loadLevel(at: index).session
             let frame = try session.render(highlight: nil)
             #expect(frame.width > 0)
             #expect(frame.height > 0)
             session.tick()
-            let checkpoint = try session.checkpointPayload()
-            let resumed = try library.loadLevel(at: index).session
-            try resumed.restoreCheckpointPayload(checkpoint)
-            #expect(resumed.snapshot == session.snapshot)
+            if checkpointIndices.contains(index) {
+                let checkpoint = try session.checkpointPayload()
+                let resumed = try library.loadLevel(at: index).session
+                try resumed.restoreCheckpointPayload(checkpoint)
+                #expect(resumed.snapshot == session.snapshot)
+            }
         }
     }
 
@@ -43,16 +56,19 @@ struct MobilePlayerContentImportTests {
             storage: MobileStorage(directory: root.appendingPathComponent("Progress", isDirectory: true))))
         #expect(library.levels.count == 90)
 
-        for index in [0, 30, 60] {
+        let checkpointIndices: Set<Int> = [0, 15, 29, 30, 45, 59, 60, 75, 89]
+        for index in library.levels.indices {
             let session = try library.loadLevel(at: index).session
             let frame = try session.render(highlight: nil)
             #expect(frame.width > 0)
             #expect(frame.height > 0)
             session.tick()
-            let checkpoint = try session.checkpointPayload()
-            let resumed = try library.loadLevel(at: index).session
-            try resumed.restoreCheckpointPayload(checkpoint)
-            #expect(resumed.snapshot == session.snapshot)
+            if checkpointIndices.contains(index) {
+                let checkpoint = try session.checkpointPayload()
+                let resumed = try library.loadLevel(at: index).session
+                try resumed.restoreCheckpointPayload(checkpoint)
+                #expect(resumed.snapshot == session.snapshot)
+            }
         }
     }
 
