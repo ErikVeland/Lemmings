@@ -26,7 +26,8 @@ let package = Package(
     ],
     targets: [
         .executableTarget(name: "LemmingsMobileMenuAudit", dependencies: ["LemmingsGameArt", "LemmingsMobileCore"],
-                          path: "Tools/IOSMenuAudit"),
+                          path: "Tools/IOSMenuAudit",
+                          swiftSettings: [.unsafeFlags(["-parse-as-library"])]),
         .target(
             name: "NxlvKit",
             path: "Sources/NxlvKit"
