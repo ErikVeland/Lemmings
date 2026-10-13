@@ -10,6 +10,14 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: neolemmix-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  LEMMINGS_TEST_AUDIO: muted
+  LEMMINGS_TEST_WINDOWS: offscreen
+
 jobs:
   source-gate:
     name: Source gate

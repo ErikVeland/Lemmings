@@ -34,7 +34,7 @@ grep -q 'com.apple.product-type.application' \
   Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj/project.pbxproj
 grep -q 'TARGETED_DEVICE_FAMILY = "1,2"' \
   Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj/project.pbxproj
-grep -q 'MTKView' Sources/LemmingsMobileUI/MobileMetalView.swift
+grep -q 'MTKView' Sources/LemmingsMobileUI/MobileCRTView.swift
 grep -q 'MobileCheckpointStore' Sources/LemmingsMobileCore/MobileCheckpoint.swift
 grep -q 'AppIcon-1024.png' Apps/UltimateLemmingsIOS/Assets.xcassets/AppIcon.appiconset/Contents.json
 grep -q 'import LemmingsMobileCore' Apps/UltimateLemmingsIOS/UITests/MobileCoreIOSSmokeTests.swift
@@ -89,8 +89,7 @@ if (( !runtime_available )); then
 fi
 
 zsh Scripts/run-swift-tests.sh --disable-sandbox \
-  --test-product LemmingsNativePortPackageTests \
-  --filter LemmingsMobileCoreTests
+  --filter 'LemmingsMobileCoreTests|LemmingsAppCoreTests'
 xcodebuild -quiet \
   -project Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj \
   -target UltimateLemmingsIOSUITests \

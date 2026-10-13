@@ -1,0 +1,40 @@
+name: macOS
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: macos-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  LEMMINGS_TEST_AUDIO: muted
+  LEMMINGS_TEST_WINDOWS: offscreen
+
+jobs:
+  source-gate:
+    name: Shared tests and universal Mac build
+    runs-on: macos-15
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_16.4.app
+      - name: Shared regression tests
+        run: zsh Scripts/run-swift-tests.sh --disable-sandbox
+      - name: Universal Release executable
+        run: swift build --disable-sandbox -c release --arch arm64 --arch x86_64 --product LemmingsLocal
+      - name: Release and iOS distribution tooling
+        run: python3 -m unittest discover -s Tests/ReleaseReadinessTests -v
+      - name: Retain universal executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-release-executable
+          path: .build/apple/Products/Release/LemmingsLocal
+          if-no-files-found: error
