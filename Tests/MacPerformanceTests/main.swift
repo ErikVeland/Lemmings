@@ -112,6 +112,17 @@ private func check(_ value: @autoclosure () -> Bool, _ message: String) throws {
             for _ in 0..<100 { session.tick(); try drawAndCompare() }
             try check(session.simulation.terrain.solidMask != beforeExplosion, "Nuke did not destroy test terrain")
 
+            view.viewport.levelSize = CGSize(width: scene.width, height: scene.height)
+            view.viewport.viewSize = view.bounds.size
+            let captureStarted = ProcessInfo.processInfo.systemUptime
+            for _ in 0..<32 {
+                _ = ReplayFrameCapture.image(size: CGSize(width: 1280, height: 720)) {
+                    ReplayFrameCapture.draw(view, in: CGRect(x: 0, y: 0, width: 1280, height: 640))
+                }
+            }
+            print(String(format: "PROFILE %@ real playfield movie composition: %.3f ms/frame at 1280x720", name,
+                (ProcessInfo.processInfo.systemUptime - captureStarted) * 1000 / 32))
+
             let simulation = session.simulation
             let iterations = 64
             let started = ProcessInfo.processInfo.systemUptime
