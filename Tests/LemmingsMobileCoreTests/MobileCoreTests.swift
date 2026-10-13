@@ -312,6 +312,29 @@ struct MobileCoreTests {
         }
     }
 
+    @Test @MainActor func pausePopulationCountsExcludeActorsLostByAllThreeEngines() throws {
+        let sessions: [any MobileGameSession] = [
+            ClassicMobileSession(simulation: try Self.classicSimulation(), levelIdentifier: "fixture", levelIndex: 0),
+            Lemmings2MobileSession(runtime: try Self.lemmings2Runtime(), engineFingerprint: "l2", levelIdentifier: "fixture", levelIndex: 0, levelFingerprint: "l2"),
+            Lemmings3MobileSession(runtime: try Self.lemmings3Runtime(), engineFingerprint: "l3", levelIdentifier: "fixture", levelIndex: 0, levelFingerprint: "l3")
+        ]
+        for session in sessions {
+            for _ in 0..<300 where session.activeLemmingCount == 0 && !session.snapshot.isComplete { session.tick() }
+            #expect(session.activeLemmingCount > 0)
+            #expect(session.beginEndRun())
+            for _ in 0..<600 where !session.snapshot.isComplete { session.tick() }
+            #expect(session.activeLemmingCount == 0)
+            let info = MobilePauseSummary(level: .init(index: 0, rank: "Test", number: 1, title: "Population"),
+                snapshot: session.snapshot, activeCount: session.activeLemmingCount,
+                ticksPerSecond: session.ticksPerSecond, speed: 1, assignedSkills: session.assignedSkillCount,
+                supportsRewind: session.supportsRewind, usedRewind: session.usedRewind, isReplay: false,
+                soundtrack: "Original", track: nil, audio: "Music off")
+            #expect(info.active == 0 && info.lost == session.snapshot.released - session.snapshot.saved)
+            #expect(info.lost > 0)
+            #expect(session.assignedSkillCount == 0)
+        }
+    }
+
     @Test @MainActor func allThreeGamesAssignDuringPlanningWithoutAdvancingTime() throws {
         let classic = ClassicMobileSession(simulation: try Self.classicSimulation(), levelIdentifier: "fixture/1", levelIndex: 0)
         let l2 = Lemmings2MobileSession(runtime: try Self.lemmings2Runtime(), engineFingerprint: "l2-engine", levelIdentifier: "l2/1", levelIndex: 0, levelFingerprint: "l2-level")
@@ -335,6 +358,7 @@ struct MobileCoreTests {
                 #expect(target.pointerBounds == MobileRect(x: -9, y: -12, width: 18, height: 24))
             }
             #expect(state.canEdit && session.assign(control: control, to: target.id))
+            #expect(session.assignedSkillCount == 1)
             #expect(session.snapshot.tick == tick)
             #expect(state.isPaused)
             let payload = try session.checkpointPayload()

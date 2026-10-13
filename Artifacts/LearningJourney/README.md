@@ -8,6 +8,8 @@ Resource pressure uses the skills actually spent and the route’s rescue margin
 
 The first seven reference tutorials retain their relative order. Cellbash follows Just dig! as lesson 2, based on the owner’s single-basher playtest. Come back! moves to Intermediate after the owner’s two-bomber bridge playtest; its stored witness uses two bombers and does not certify that bridge route. Repeated practice is retained. Selection targets coverage across the curve, limits repeated fan packs and avoids long repetitive witnesses. Estimated beginner additions cannot have measured narrow timing, more than three skill types, multiple worker role changes, or an exhausted combination with no rescue margin. It does not raise or lower grades to make adjacent numbers look smooth. The production generator fails if it cannot supply all 295 levels. The two promised 1.8.2 additions are mandatory and retain exact native witnesses. Port counterparts use the Redux position with recorded conversion differences; they do not claim human variant review.
 
+Let's be careful out there moves from lesson 32 to later Intermediate combination practice after the owner's 2026-10-14 playtest. The retail route needs more planning than its Gentle Redux counterpart. Its source and exact winning witness stay unchanged. Saved queues defer this level while preserving visits and ownership.
+
 Stop, Block and Blow, the snow bomber level from Ji Hoons Lemmings Remake Heaven, moves from lesson 13 to late Intermediate after the owner’s 2026-10-13 playtest. Its exact source and winning witness stay unchanged. The new position is an editorial correction, not a measured human difficulty score.
 
 The owner’s reported Time waits for no Lemming and This Corrosion routes are the final two Expert lessons. route-safety.json records the exact official and fan variants, including matching initial states. These routes have a late-Expert placement floor. This is an editorial decision from the owner’s playtest, not proof that every possible solution needs an engine quirk. Explicit engine-quirk concepts also receive this floor. Other fan levels still need route review.
@@ -60,71 +62,71 @@ Regenerate with `zsh Scripts/generate-learning-journey.sh BUNDLED_RESOURCES`. Ch
 | 28 | Gentle 16 | A Beast of a level | Fun | reduxClassicCounterpart |
 | 29 | Gentle 17 | You Live and Lem | Fun | reduxClassicCounterpart |
 | 30 | Gentle 20 | Patience | Fun | reduxClassicCounterpart |
-| 31 | Gentle 22 | Let's be careful out there | Fun | reduxClassicCounterpart |
-| 32 | Gentle 17 | 5 miles if you love Lemmings | Fun | solutionEstimate |
-| 33 | Gentle 17 | Wish you had them? | Fun | solutionEstimate |
-| 34 | Gentle 24 | Rainbow Island | Fun | reduxClassicCounterpart |
-| 35 | Gentle 25 | The Crankshaft | Fun | reduxClassicCounterpart |
-| 36 | Gentle 26 | Careless clicking costs lives | Fun | reduxClassicCounterpart |
-| 37 | Gentle 27 | Quest for Kieran | Fun | reduxClassicCounterpart |
-| 38 | Gentle 7 | Climb and Build | Fun | solutionEstimate |
-| 39 | Gentle 30 | Turn around young lemmings! | Fun | reduxClassicCounterpart |
-| 40 | Gentle 1 | Acrophobia | Fun | solutionEstimate |
-| 41 | Gentle 1 | Time to Go Down | Fun | solutionEstimate |
-| 42 | Gentle 31 | Doomsday | Fun | reduxClassicCounterpart |
-| 43 | Gentle 26 | Tailor-made for builders | Fun | solutionEstimate |
-| 44 | Gentle 26 | Builders can build stairs | Fun | solutionEstimate |
-| 45 | Gentle 26 | Lemming in the attic | Fun | solutionEstimate |
-| 46 | Gentle 26 | Genome Project | Fun | solutionEstimate |
-| 47 | Gentle 26 | We want to escape! | Fun | solutionEstimate |
-| 48 | Gentle 26 | It'll be Comin' Round the Mtn. | Fun | solutionEstimate |
-| 49 | Gentle 7 | Bash This! | Fun | solutionEstimate |
-| 50 | Zany 10 | Blow two lemmings | Fun | solutionEstimate |
-| 51 | Gentle 6 | Subterranean Exit | Fun | solutionEstimate |
-| 52 | Gentle 32 | Going their separate ways | Fun | reduxPortCounterpart |
-| 53 | Quirky 1 | PoP YoR ToP!!! | Fun | reduxClassicCounterpart |
-| 54 | Quirky 2 | It's Lemmingentry Watson | Fun | reduxClassicCounterpart |
-| 55 | Zany 18 | Trough the breach | Fun | solutionEstimate |
-| 56 | Gentle 24 | Maniacal Lemmings | Fun | solutionEstimate |
-| 57 | Quirky 6 | Just A Quicky | Intermediate | reduxClassicCounterpart |
-| 58 | Gentle 26 | Take a little rest. | Intermediate | solutionEstimate |
-| 59 | Quirky 1 | It's...... FACE?? | Intermediate | solutionEstimate |
-| 60 | Quirky 1 | PRACTICE: BASHER | Intermediate | solutionEstimate |
-| 61 | Zany 10 | PRACTICE: BUILDER | Intermediate | solutionEstimate |
-| 62 | Quirky 15 | The Mountain Peaks | Intermediate | solutionEstimate |
-| 63 | Quirky 1 | Frozen Lemmings | Intermediate | solutionEstimate |
-| 64 | Zany 10 | So much with my lemmings | Intermediate | solutionEstimate |
-| 65 | Gentle 9 | We are now at LEMCON TWO | Intermediate | solutionEstimate |
-| 66 | Gentle 9 | Invisible Terrain | Intermediate | solutionEstimate |
-| 67 | Zany 10 | Simple lemminga level | Intermediate | solutionEstimate |
-| 68 | Gentle 9 | Weave Your Lemmings | Intermediate | solutionEstimate |
-| 69 | Quirky 9 | Exodus! | Intermediate | reduxClassicCounterpart |
-| 70 | Quirky 9 | Come back! | Intermediate | solutionEstimate |
-| 71 | Quirky 10 | The Needs of the Many... | Intermediate | reduxClassicCounterpart |
-| 72 | Quirky 11 | DON`T PANIC | Intermediate | reduxClassicCounterpart |
-| 73 | Quirky 14 | Meeting Adjourned | Intermediate | reduxClassicCounterpart |
-| 74 | Quirky 15 | Plethora of Presents | Intermediate | reduxClassicCounterpart |
-| 75 | Quirky 18 | One way or another | Intermediate | reduxClassicCounterpart |
-| 76 | Zany 21 | Lemmings to the aid | Intermediate | solutionEstimate |
-| 77 | Quirky 15 | The lemsnow caper | Intermediate | solutionEstimate |
-| 78 | Gentle 26 | Mount Highpick | Intermediate | solutionEstimate |
-| 79 | Quirky 14 | Lemmings on Stilts | Intermediate | solutionEstimate |
-| 80 | Quirky 14 | All The Lonely Lemmings | Intermediate | solutionEstimate |
-| 81 | Zany 21 | Get Up There | Intermediate | solutionEstimate |
-| 82 | Quirky 20 | Perseverance | Intermediate | reduxClassicCounterpart |
-| 83 | Quirky 15 | Mount. Bashmore | Intermediate | solutionEstimate |
-| 84 | Gentle 27 | The ancient pile of Lemmings | Intermediate | solutionEstimate |
-| 85 | Zany 10 | The Blocking chain | Intermediate | solutionEstimate |
-| 86 | Quirky 1 | Save 'em First... | Intermediate | solutionEstimate |
-| 87 | Quirky 15 | Welcome to Hell | Intermediate | solutionEstimate |
-| 88 | Quirky 15 | Dunes | Intermediate | solutionEstimate |
-| 89 | Quirky 2 | How do I Turn Back ? | Intermediate | solutionEstimate |
-| 90 | Quirky 15 | A job for Miners | Intermediate | solutionEstimate |
-| 91 | Gentle 27 | A Glorious Battle | Intermediate | solutionEstimate |
-| 92 | Quirky 21 | The Long Way Around | Intermediate | reduxClassicCounterpart |
-| 93 | Quirky 22 | The Far Side | Intermediate | reduxClassicCounterpart |
-| 94 | Quirky 23 | Emmings!  (No L) | Intermediate | reduxClassicCounterpart |
-| 95 | Gentle 17 | The Strange Relict of Rhodes | Intermediate | solutionEstimate |
+| 31 | Gentle 17 | 5 miles if you love Lemmings | Fun | solutionEstimate |
+| 32 | Gentle 17 | Wish you had them? | Fun | solutionEstimate |
+| 33 | Gentle 24 | Rainbow Island | Fun | reduxClassicCounterpart |
+| 34 | Gentle 25 | The Crankshaft | Fun | reduxClassicCounterpart |
+| 35 | Gentle 26 | Careless clicking costs lives | Fun | reduxClassicCounterpart |
+| 36 | Gentle 27 | Quest for Kieran | Fun | reduxClassicCounterpart |
+| 37 | Gentle 7 | Climb and Build | Fun | solutionEstimate |
+| 38 | Gentle 30 | Turn around young lemmings! | Fun | reduxClassicCounterpart |
+| 39 | Gentle 1 | Acrophobia | Fun | solutionEstimate |
+| 40 | Gentle 1 | Time to Go Down | Fun | solutionEstimate |
+| 41 | Gentle 31 | Doomsday | Fun | reduxClassicCounterpart |
+| 42 | Gentle 26 | Tailor-made for builders | Fun | solutionEstimate |
+| 43 | Gentle 26 | Builders can build stairs | Fun | solutionEstimate |
+| 44 | Gentle 26 | Lemming in the attic | Fun | solutionEstimate |
+| 45 | Gentle 26 | Genome Project | Fun | solutionEstimate |
+| 46 | Gentle 26 | We want to escape! | Fun | solutionEstimate |
+| 47 | Gentle 26 | It'll be Comin' Round the Mtn. | Fun | solutionEstimate |
+| 48 | Gentle 7 | Bash This! | Fun | solutionEstimate |
+| 49 | Zany 10 | Blow two lemmings | Fun | solutionEstimate |
+| 50 | Gentle 6 | Subterranean Exit | Fun | solutionEstimate |
+| 51 | Gentle 32 | Going their separate ways | Fun | reduxPortCounterpart |
+| 52 | Quirky 1 | PoP YoR ToP!!! | Fun | reduxClassicCounterpart |
+| 53 | Quirky 2 | It's Lemmingentry Watson | Fun | reduxClassicCounterpart |
+| 54 | Zany 18 | Trough the breach | Fun | solutionEstimate |
+| 55 | Gentle 24 | Maniacal Lemmings | Fun | solutionEstimate |
+| 56 | Quirky 6 | Just A Quicky | Intermediate | reduxClassicCounterpart |
+| 57 | Gentle 26 | Take a little rest. | Intermediate | solutionEstimate |
+| 58 | Quirky 1 | It's...... FACE?? | Intermediate | solutionEstimate |
+| 59 | Quirky 1 | PRACTICE: BASHER | Intermediate | solutionEstimate |
+| 60 | Zany 10 | PRACTICE: BUILDER | Intermediate | solutionEstimate |
+| 61 | Quirky 15 | The Mountain Peaks | Intermediate | solutionEstimate |
+| 62 | Quirky 1 | Frozen Lemmings | Intermediate | solutionEstimate |
+| 63 | Zany 10 | So much with my lemmings | Intermediate | solutionEstimate |
+| 64 | Gentle 9 | We are now at LEMCON TWO | Intermediate | solutionEstimate |
+| 65 | Gentle 9 | Invisible Terrain | Intermediate | solutionEstimate |
+| 66 | Zany 10 | Simple lemminga level | Intermediate | solutionEstimate |
+| 67 | Gentle 9 | Weave Your Lemmings | Intermediate | solutionEstimate |
+| 68 | Quirky 9 | Exodus! | Intermediate | reduxClassicCounterpart |
+| 69 | Quirky 9 | Come back! | Intermediate | solutionEstimate |
+| 70 | Quirky 10 | The Needs of the Many... | Intermediate | reduxClassicCounterpart |
+| 71 | Quirky 11 | DON`T PANIC | Intermediate | reduxClassicCounterpart |
+| 72 | Quirky 14 | Meeting Adjourned | Intermediate | reduxClassicCounterpart |
+| 73 | Quirky 15 | Plethora of Presents | Intermediate | reduxClassicCounterpart |
+| 74 | Quirky 18 | One way or another | Intermediate | reduxClassicCounterpart |
+| 75 | Zany 21 | Lemmings to the aid | Intermediate | solutionEstimate |
+| 76 | Quirky 15 | The lemsnow caper | Intermediate | solutionEstimate |
+| 77 | Gentle 26 | Mount Highpick | Intermediate | solutionEstimate |
+| 78 | Quirky 14 | Lemmings on Stilts | Intermediate | solutionEstimate |
+| 79 | Quirky 14 | All The Lonely Lemmings | Intermediate | solutionEstimate |
+| 80 | Zany 21 | Get Up There | Intermediate | solutionEstimate |
+| 81 | Quirky 20 | Perseverance | Intermediate | reduxClassicCounterpart |
+| 82 | Quirky 15 | Mount. Bashmore | Intermediate | solutionEstimate |
+| 83 | Gentle 27 | The ancient pile of Lemmings | Intermediate | solutionEstimate |
+| 84 | Zany 10 | The Blocking chain | Intermediate | solutionEstimate |
+| 85 | Quirky 1 | Save 'em First... | Intermediate | solutionEstimate |
+| 86 | Quirky 15 | Welcome to Hell | Intermediate | solutionEstimate |
+| 87 | Quirky 15 | Dunes | Intermediate | solutionEstimate |
+| 88 | Quirky 2 | How do I Turn Back ? | Intermediate | solutionEstimate |
+| 89 | Quirky 15 | A job for Miners | Intermediate | solutionEstimate |
+| 90 | Gentle 27 | A Glorious Battle | Intermediate | solutionEstimate |
+| 91 | Quirky 21 | The Long Way Around | Intermediate | reduxClassicCounterpart |
+| 92 | Quirky 22 | The Far Side | Intermediate | reduxClassicCounterpart |
+| 93 | Quirky 23 | Emmings!  (No L) | Intermediate | reduxClassicCounterpart |
+| 94 | Gentle 17 | The Strange Relict of Rhodes | Intermediate | solutionEstimate |
+| 95 | Gentle 22 | Let's be careful out there | Intermediate | userPlaytest |
 | 96 | Quirky 26 | Take care, Sweetie | Intermediate | reduxClassicCounterpart |
 | 97 | Gentle 22 | You Live and Lem (remake) | Intermediate | solutionEstimate |
 | 98 | Quirky 27 | The Island of the Wicker people | Intermediate | reduxClassicCounterpart |

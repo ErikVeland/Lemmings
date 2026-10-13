@@ -24,6 +24,8 @@ import UIKit
     private var lastTrack: URL?
     private var lastPitchCents: Double?
     private var cachedSettings = MobileSettings.load(from: .standard)
+    private(set) var currentTrackTitle: String?
+    private(set) var currentSoundtrackName: String?
     var onTrackChange: ((String, String) -> Void)?
     var currentTrackURL: URL? { usingDJ ? dj.currentURL : lastTrack }
     private init() { connectFailureMusic() }
@@ -146,11 +148,14 @@ import UIKit
         return true
     }
     private func announce(_ url: URL?, soundtrack: String) {
-        guard let url, url != lastTrack else { return }
+        guard let url else { return }
+        currentSoundtrackName = soundtrack
+        guard url != lastTrack else { return }
         lastTrack = url
         let title = musicRoot.flatMap { root in
             SoundtrackPlayer.cataloguePath(url, root: root).flatMap { SoundtrackCatalogue.load(at: root)?.entry(path: $0)?.track.title }
         } ?? url.deletingPathExtension().lastPathComponent
+        currentTrackTitle = title
         onTrackChange?(title, soundtrack)
     }
 
@@ -213,7 +218,7 @@ import UIKit
     func resume() { inactive = false; applyOutputState() }
     func stop() {
         module.stop(); recordings.stop(); dj.stop()
-        playing = nil; lastTrack = nil; resultComplete = false
+        playing = nil; lastTrack = nil; currentTrackTitle = nil; currentSoundtrackName = nil; resultComplete = false
         lastPitchCents = nil
         nukeMood.reset(); failureMusic = FailureMusicTransition(); connectFailureMusic()
         module.setTempoScale(1); recordings.setPlaybackRate(1); dj.setPlaybackRate(1)

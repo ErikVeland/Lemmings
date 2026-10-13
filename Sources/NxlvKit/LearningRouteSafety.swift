@@ -23,6 +23,8 @@ public enum LearningRouteSafety {
     ]
     public static func minimumDemand(for entry: LevelPlaylistEntry, concepts: [String] = [], assetsRevision: String = "") -> Double {
         let identity = [entry.identity.engine.rawValue, entry.identity.packID, entry.identity.levelID].joined(separator: "|")
+        // The retail route needs more planning than its Gentle Redux counterpart.
+        if identity == "classic|lemmings-LEVEL-120|26:Fun:27:4:6" { return 287.5 }
         let state = String(assetsRevision.prefix(64))
         let quirk = concepts.contains { $0 == "engine-quirk" || $0.hasPrefix("engine-quirk:") }
         return quirk || reportedIdentities.contains(identity) || reportedStates.contains(state) ? lateExpertDemand : 0

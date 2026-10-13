@@ -20,7 +20,7 @@ SOURCE = 'https://www.lemmingsforums.net/index.php?topic=4374.0'
 RANKS = ['Gentle', 'Quirky', 'Zany', 'Manic', 'Lunatic']
 BASIC = {'climber', 'floater', 'bomber', 'blocker', 'builder', 'basher', 'miner', 'digger'}
 POLICY = 'redux-calibrated-2'
-VERSION = 'learning-19'
+VERSION = 'learning-20'
 BASE_TARGET = 292
 TARGET = 295
 # An explicit counterpart with a changed title, not a fuzzy fan-level match.
@@ -475,6 +475,12 @@ def build(pool, witnesses, resources, reference, reviews):
     assert set(snow_bombers['context']['usedSkills']) == {'bomber'}
     snow_bombers['placement'].update(position=342.5, lower=320.0, upper=355.0,
         adjustment='User playtest 2026-10-13: Stop, Block and Blow belongs late in Intermediate, not at lesson 13.')
+    # The owner found the retail bridge route too tricky at journey lesson 32.
+    # Keep its exact native witness, but defer it to established combination practice.
+    careful = next(item for item in selected if item['row']['entry']['identity'] == {
+        'engine': 'classic', 'packID': 'lemmings-LEVEL-120', 'levelID': '26:Fun:27:4:6'})
+    careful['placement'].update(basis='userPlaytest', position=287.5, lower=280.0, upper=295.0,
+        adjustment="User playtest 2026-10-14: Let's be careful out there is too tricky at lesson 32; move to later Intermediate combination practice.")
     # The user's reported advanced routes cannot use an early estimated grade.
     # Match known variants and exact starting states, not a shared level title.
     safety = read(OUT / 'route-safety.json')['reportedLevels']
@@ -559,6 +565,7 @@ def report(manifest, plan, pending, transitions):
         f"[Redux's community order]({SOURCE}) supplies the reference spine. The remaining official and fan levels are placed by comparisons with five reference solutions. Actual assignments, worker changes, skill combinations, bursts of input, timing evidence and resource pressure inform those comparisons.", '',
         'Resource pressure uses the skills actually spent and the route’s rescue margin. Release cadence is considered alongside input density. High rescue percentages, rapid release rates and large inventories never assign a grade by themselves. All selected levels have an exact-version winning replay. Explicit unsuitable-level exclusions remain in force. Estimated additions need an initial-state visibility audit and exclude mostly concealed exits or traps. This pixel-visibility check does not prove that the route or all visual information is obvious.', '',
         'The first seven reference tutorials retain their relative order. Cellbash follows Just dig! as lesson 2, based on the owner’s single-basher playtest. Come back! moves to Intermediate after the owner’s two-bomber bridge playtest; its stored witness uses two bombers and does not certify that bridge route. Repeated practice is retained. Selection targets coverage across the curve, limits repeated fan packs and avoids long repetitive witnesses. Estimated beginner additions cannot have measured narrow timing, more than three skill types, multiple worker role changes, or an exhausted combination with no rescue margin. It does not raise or lower grades to make adjacent numbers look smooth. The production generator fails if it cannot supply all 295 levels. The two promised 1.8.2 additions are mandatory and retain exact native witnesses. Port counterparts use the Redux position with recorded conversion differences; they do not claim human variant review.', '',
+        "Let's be careful out there moves from lesson 32 to later Intermediate combination practice after the owner's 2026-10-14 playtest. The retail route needs more planning than its Gentle Redux counterpart. Its source and exact winning witness stay unchanged. Saved queues defer this level while preserving visits and ownership.", '',
         'Stop, Block and Blow, the snow bomber level from Ji Hoons Lemmings Remake Heaven, moves from lesson 13 to late Intermediate after the owner’s 2026-10-13 playtest. Its exact source and winning witness stay unchanged. The new position is an editorial correction, not a measured human difficulty score.', '',
         'The owner’s reported Time waits for no Lemming and This Corrosion routes are the final two Expert lessons. route-safety.json records the exact official and fan variants, including matching initial states. These routes have a late-Expert placement floor. This is an editorial decision from the owner’s playtest, not proof that every possible solution needs an engine quirk. Explicit engine-quirk concepts also receive this floor. Other fan levels still need route review.', '',
         '## Estimated grades and review', '',

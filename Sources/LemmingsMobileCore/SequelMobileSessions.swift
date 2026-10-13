@@ -64,6 +64,11 @@ public final class Lemmings2MobileSession: MobileGameSession {
         return MobilePoint(x: Double(point.x), y: Double(point.y))
     }
 
+    public var activeLemmingCount: Int { runtime.lemmings.filter(\.active).count }
+    public var assignedSkillCount: Int {
+        inputs.filter { if case .assign = $0 { return true }; return false }.count
+    }
+
     public var snapshot: MobileGameSnapshot {
         MobileGameSnapshot(
             tick: runtime.tick,
@@ -255,6 +260,9 @@ public final class Lemmings3MobileSession: MobileGameSession {
         let point = initial.configuration.entrance
         return MobilePoint(x: Double(point.x), y: Double(point.y))
     }
+
+    public var activeLemmingCount: Int { runtime.lemmings.filter(\.active).count }
+    public var assignedSkillCount: Int { inputs.filter { $0.action != "abort" }.count }
 
     public var snapshot: MobileGameSnapshot {
         MobileGameSnapshot(

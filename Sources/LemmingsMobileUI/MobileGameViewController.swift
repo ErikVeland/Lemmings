@@ -21,7 +21,7 @@ struct MobileGameTurn {
     let choices: (Bool) -> [(label: String, choice: MobileHotSeat.Choice)]
 }
 
-@MainActor final class MobileGameViewController: UIViewController {
+@MainActor final class MobileGameViewController: UIViewController, UIScrollViewDelegate {
     lazy var inputAdapter = makeInputAdapter()
     override var canBecomeFirstResponder: Bool { true }
     var onExit: ((MobileGameExitAction) -> Void)?
@@ -159,7 +159,13 @@ struct MobileGameTurn {
         countdownLabel.isUserInteractionEnabled = false
         view.addSubview(countdownLabel)
         MobileMusic.shared.onTrackChange = { [weak self] title, soundtrack in
-            guard let self, !self.paused, !self.session.snapshot.isComplete, self.overlay.isHidden else { return }
+            guard let self else { return }
+            if self.overlayCanvas.page.pause != nil, !self.overlay.isHidden {
+                self.overlayCanvas.page = MobilePauseArt.page(self.pauseSummary(), actions: self.overlayCanvas.page.footer)
+                self.layoutOverlay()
+                return
+            }
+            guard !self.paused, !self.session.snapshot.isComplete, self.overlay.isHidden else { return }
             self.nowPlaying.show(title: title, soundtrack: soundtrack)
         }
         hud.playerName = turn?.ownerName
@@ -1041,6 +1047,7 @@ struct MobileGameTurn {
     }
 
     private func configureOverlay() {
+        overlay.delegate = self
         overlay.backgroundColor = .black
         overlay.accessibilityViewIsModal = true
         overlay.addSubview(overlayCanvas)
@@ -1089,6 +1096,21 @@ struct MobileGameTurn {
         showOverlay(title: message, actions: [("LIBRARY", { [weak self] in MobileMusic.shared.stop(); self?.onExit?(.library) })])
     }
 
+    private func pauseSummary() -> MobilePauseSummary {
+        let music = MobileMusic.shared
+        let c = gameSettings.classic
+        let musicState = !music.isEnabled ? "Music off" : c.musicVolume == 0 ? "Music muted"
+            : lifecycle.isInterrupted || !lifecycle.isForeground ? "Audio suspended"
+            : c.pauseMusicBeatOnly ? "Music: beat only" : "Music paused"
+        let soundState = c.sound == .silent ? "SFX off" : c.soundVolume == 0 ? "SFX muted" : "SFX \(Int(c.soundVolume * 100))%"
+        return MobilePauseSummary(level: summary, snapshot: session.snapshot,
+            activeCount: session.activeLemmingCount, ticksPerSecond: session.ticksPerSecond,
+            speed: speed, assignedSkills: session.assignedSkillCount, supportsRewind: session.supportsRewind,
+            usedRewind: session.usedRewind, isReplay: session.isReadOnly,
+            soundtrack: music.currentSoundtrackName ?? music.soundtrack,
+            track: music.currentTrackTitle, audio: musicState + "   /   " + soundState)
+    }
+
     func showOverlay(title: String, actions: [(String, () -> Void)], results: Bool = false) {
         playfieldView.suspendVisualEffects()
         selectionFade.reset()
@@ -1115,10 +1137,17 @@ struct MobileGameTurn {
         } else { details = [] }
         let heading = completed ? (snapshot.didWin ? "Level complete" : "Try again") : (ready ? (turn?.ownerName ?? title) : title)
         let subtitle = ready && turn == nil ? "\(summary.rank) \(summary.number)" : "\(summary.rank) \(summary.number)  \(summary.title)"
+        let wasHidden = overlay.isHidden
         overlayCanvas.page = .init(title: heading, subtitle: subtitle,
                                    details: details,
                                    footer: actions.enumerated().map { .init(String($0.offset), $0.element.0, primary: $0.offset == 0) },
                                    preview: ready || completed)
+        let isPause = !ready && !completed && title.uppercased() == "PAUSED"
+        if isPause {
+            overlayCanvas.page = MobilePauseArt.page(pauseSummary(), actions: overlayCanvas.page.footer)
+        }
+        overlay.bounces = !isPause
+        overlay.setContentOffset(.zero, animated: false)
         if let frame = latestFrame {
             overlayCanvas.preview = MobileBitmapRenderer.image(frame)
             let visible = playfieldView.gameViewport.visibleLevelRect
@@ -1131,6 +1160,17 @@ struct MobileGameTurn {
         playfieldView.accessibilityElementsHidden = true
         hud.accessibilityElementsHidden = true
         layoutOverlay()
+        if isPause && wasHidden && !UIAccessibility.isReduceMotionEnabled
+            && !gameSettings.classic.reduceMotion && !gameSettings.classic.reduceFlashes {
+            overlay.layer.removeAllAnimations()
+            overlay.alpha = 0
+            UIView.animate(withDuration: 0.25, delay: 0, options: [.curveEaseOut, .beginFromCurrentState]) {
+                self.overlay.alpha = 1
+            }
+        } else {
+            overlay.layer.removeAllAnimations()
+            overlay.alpha = 1
+        }
         UIAccessibility.post(notification: .screenChanged, argument: overlayCanvas)
     }
 
@@ -1139,6 +1179,10 @@ struct MobileGameTurn {
         overlayCanvas.page = .init(title: title, details: details,
             footer: actions.enumerated().map { .init(String($0.offset), $0.element.0, primary: $0.offset == 0) })
         layoutOverlay()
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView === overlay, overlayCanvas.page.pause != nil { overlayCanvas.setNeedsLayout() }
     }
 
     private func layoutOverlay() {

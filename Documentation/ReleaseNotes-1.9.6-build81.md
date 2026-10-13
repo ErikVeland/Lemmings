@@ -13,6 +13,7 @@ This release brings the current shared engine, artwork, saves and audio fixes to
 - Recorded music decodes in bounded queues. Short loops blend their seams, and peak protection follows the effects mix.
 - Shared rendering budgets reduce added-effects work while simulation keeps its authored tick rate. Terrain and panel caches avoid unchanged bitmap conversions.
 - Profiles, records, recovery, playlists and Hot Seat use shared modules. Saved runs and handovers stay paused until the player is ready.
+- Golden Path moves “Let’s be careful out there” later in the journey. Saved journeys preserve visited levels and player ownership.
 
 ## macOS
 
@@ -28,9 +29,11 @@ The universal Mac app supports Apple silicon and Intel on macOS 12.3 or later. T
 
 The beta plays the Classic family, Holiday packs, Oh Yes! More Lemmings! and installed fan packs. It includes profiles, favourites, recent levels, playlists, journeys, records and Hot Seat.
 
-Portrait and landscape controls use the shared stone artwork and bitmap symbols. Mouse, trackpad and Pencil targeting use level-space pick boxes. Camera movement refreshes targeting while paused. Hot Seat identifies the player through Ready, play, pause, results and handover. A small green name sits above the HUD counters during play. Skip and restored runs preserve the saved turn. Collections places Resume beside Back as the primary action.
+Portrait and landscape controls use the shared stone artwork and bitmap symbols. Mouse, trackpad and Pencil targeting use level-space pick boxes. Camera movement refreshes targeting while paused. Hot Seat identifies the player through Ready, play, pause, results and handover. The player's portrait and green name sit above the HUD counters during play. Skip and restored runs preserve the saved turn. Collections places Resume beside Back as the primary action.
 
-Music, replay history, calmer rescue effects, recovery and saved-journey fixes follow the shared Mac source. Optional soundtrack libraries download from Settings. Downloads require the app to remain in the foreground.
+The pause screen shows the level preview, rescue target, remaining lemmings, skills, time and current music. Resume stays in a fixed position while the details scroll.
+
+Music, replay history, calmer rescue effects, recovery and saved-journey fixes follow the shared Mac source. The companion private beta includes all 495 soundtrack versions. Local builds now include them by default. Slim builds offer optional soundtrack libraries in Settings; downloads require the app to remain in the foreground.
 
 The display adapts to sustained load and avoids repeated bitmap conversion. Gameplay keeps its authored tick rate. Sustained performance on older iPads remains a device acceptance check.
 

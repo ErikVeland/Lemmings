@@ -1153,46 +1153,6 @@
     {
       "concepts": [
         "builder",
-        "digger",
-        "floater",
-        "miner"
-      ],
-      "demand": 110.0,
-      "entry": {
-        "catalogueRevision": "1.2-runtime-v2",
-        "id": "2F83AC7C-635E-BFFF-BBBD-0CBC9CEFEB9F",
-        "identity": {
-          "engine": "classic",
-          "levelID": "26:Fun:27:4:6",
-          "packID": "lemmings-LEVEL-120"
-        },
-        "levelNameSnapshot": "Let's be careful out there",
-        "levelNumberSnapshot": 27,
-        "packNameSnapshot": "Lemmings",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
-      },
-      "focus": "Practise: Builder + Digger",
-      "intrinsicDemand": 288.6567609305363,
-      "introduced": [],
-      "needsSupport": false,
-      "objective": "community:Gentle/Let's_be_careful_out_there.nxlv",
-      "placement": {
-        "basis": "reduxClassicCounterpart",
-        "lower": 100.0,
-        "position": 110.0,
-        "reference": "Gentle/Let's_be_careful_out_there.nxlv",
-        "replayRevision": "014e829383739997cb113ad8e888f0ababc4c5d18541e4355fb807e297801f84",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 120.0
-      },
-      "preparationGaps": [],
-      "score": 288.6567609305363,
-      "stage": "Fun"
-    },
-    {
-      "concepts": [
-        "builder",
         "miner"
       ],
       "demand": 110.0,
@@ -3650,6 +3610,47 @@
       },
       "preparationGaps": [],
       "score": 289.2559387788915,
+      "stage": "Intermediate"
+    },
+    {
+      "concepts": [
+        "builder",
+        "digger",
+        "floater",
+        "miner"
+      ],
+      "demand": 287.5,
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "2F83AC7C-635E-BFFF-BBBD-0CBC9CEFEB9F",
+        "identity": {
+          "engine": "classic",
+          "levelID": "26:Fun:27:4:6",
+          "packID": "lemmings-LEVEL-120"
+        },
+        "levelNameSnapshot": "Let's be careful out there",
+        "levelNumberSnapshot": 27,
+        "packNameSnapshot": "Lemmings",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
+      },
+      "focus": "Practise: Builder + Digger",
+      "intrinsicDemand": 288.6567609305363,
+      "introduced": [],
+      "needsSupport": false,
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"26:Fun:27:4:6\", \"packID\": \"lemmings-LEVEL-120\"}",
+      "placement": {
+        "adjustment": "User playtest 2026-10-14: Let's be careful out there is too tricky at lesson 32; move to later Intermediate combination practice.",
+        "basis": "userPlaytest",
+        "lower": 280.0,
+        "position": 287.5,
+        "reference": "Gentle/Let's_be_careful_out_there.nxlv",
+        "replayRevision": "014e829383739997cb113ad8e888f0ababc4c5d18541e4355fb807e297801f84",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 295.0
+      },
+      "preparationGaps": [],
+      "score": 288.6567609305363,
       "stage": "Intermediate"
     },
     {
@@ -11589,5 +11590,5 @@
     }
   ],
   "placementPolicy": "redux-calibrated-2",
-  "version": "learning-19"
+  "version": "learning-20"
 }

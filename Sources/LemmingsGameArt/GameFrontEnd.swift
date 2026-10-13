@@ -1,6 +1,7 @@
 import CoreGraphics
 import Foundation
 import NxlvKit
+import LemmingsMobileCore
 
 /// Shared bitmap pages. UIKit supplies input over these exact drawing rectangles.
 public struct GameFrontEnd {
@@ -35,6 +36,7 @@ public struct GameFrontEnd {
             return footer.filter { !forward($0) } + footer.filter(forward)
         }
         public var preview: Bool
+        public var pause: MobilePauseSummary? = nil
         public var footerColumns: Int?
         public init(title: String, subtitle: String = "", home: Bool = false,
                     rows: [Action] = [], details: [String] = [], footer: [Action] = [], preview: Bool = false,
@@ -64,6 +66,7 @@ public struct GameFrontEnd {
     }
 
     public static func layout(_ page: Page, width: CGFloat, minimumHeight: CGFloat) -> Layout {
+        if page.pause != nil { return MobilePauseArt.layout(page, width: width, minimumHeight: minimumHeight) }
         if page.home { return homeLayout(page, width: width, minimumHeight: minimumHeight) }
         let width = max(280, width)
         let inset: CGFloat = width < 600 ? 14 : 32
@@ -190,19 +193,28 @@ public struct GameFrontEnd {
         } else {
             heading(page.title, box: layout.heading, typography: typography, context: context)
         }
-        line(page.subtitle, box: layout.subtitle, typography: typography, context: context)
+        if page.pause == nil { line(page.subtitle, box: layout.subtitle, typography: typography, context: context) }
         if page.home, !page.homeInitials.isEmpty {
             line(page.homeInitials, box: layout.initials, typography: typography, palette: .green, context: context)
         }
-        if page.preview {
+        if page.pause != nil {
+            MobilePauseArt.draw(page, layout: layout, typography: typography, preview: preview, previewSource: previewSource, in: context)
+        } else if page.preview {
             GameStoneArt.draw(in: context, frame: layout.preview, selected: true, pixel: 2)
             if let preview {
                 let image = previewSource.flatMap { preview.cropping(to: $0.integral) } ?? preview
                 drawImage(image, fittedIn: GameStoneArt.well(layout.preview, pixel: 2).insetBy(dx: 4, dy: 4), context: context)
             }
         }
-        for (value, box) in zip(page.details, layout.details) {
-            line(value, box: box, typography: typography, context: context)
+        if page.pause == nil {
+            for (value, box) in zip(page.details, layout.details) {
+                line(value, box: box, typography: typography, context: context)
+            }
+        }
+        if page.pause != nil, let first = layout.targets.first, let last = layout.targets.last {
+            context.setFillColor(CGColor(gray: 0, alpha: 1))
+            context.fill(CGRect(x: layout.board.minX + 1, y: first.frame.minY - 8,
+                width: layout.board.width - 2, height: max(layout.size.height, last.frame.maxY + 24) - first.frame.minY + 8))
         }
         let rowIDs = Set(page.rows.map(\.id))
         for target in layout.targets {

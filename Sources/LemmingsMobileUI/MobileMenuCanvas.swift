@@ -46,7 +46,12 @@ import UIKit
         let page = displayedPage
         let scale = interfaceScale(width: bounds.width)
         let transform = CGAffineTransform(scaleX: scale, y: scale)
-        let layout = GameFrontEnd.layout(page, width: bounds.width / scale, minimumHeight: bounds.height / scale)
+        let minimumHeight = page.pause != nil ? (superview as? UIScrollView)?.bounds.height ?? bounds.height : bounds.height
+        var layout = GameFrontEnd.layout(page, width: bounds.width / scale, minimumHeight: minimumHeight / scale)
+        if page.pause != nil, let scroll = superview as? UIScrollView {
+            layout = MobilePauseArt.pinningFooter(layout, viewport: CGRect(x: 0, y: scroll.contentOffset.y / scale,
+                width: scroll.bounds.width / scale, height: scroll.bounds.height / scale))
+        }
         pageLayout = layout
         for (button, target) in zip(targets, layout.targets) { button.frame = target.frame.applying(transform) }
         var elements: [Any] = []

@@ -2858,97 +2858,6 @@
       ]
     },
     {
-      "comparisons": [],
-      "context": {
-        "allowedLosses": 25,
-        "assignments": 8,
-        "completionSeconds": 47.88235294117647,
-        "discoveryDifficulty": "unknown from replay",
-        "exhaustedUsedSkills": [],
-        "initialHatchIntervalSeconds": 3.1176470588235294,
-        "jobChanges": 3,
-        "narrowActions": 0,
-        "peakAssignmentsInTwoSeconds": 2,
-        "population": 50,
-        "probedAssignments": 8,
-        "remainingSeconds": 252.11764705882354,
-        "replayRevision": "014e829383739997cb113ad8e888f0ababc4c5d18541e4355fb807e297801f84",
-        "required": 25,
-        "rescueFraction": 0.5,
-        "savedAboveRequirement": 25,
-        "spareUsedSkills": {
-          "builder": 18,
-          "digger": 19,
-          "floater": 16,
-          "miner": 19
-        },
-        "spatialToleranceMeasured": false,
-        "startingReleaseRate": 1,
-        "timingProbeComplete": false,
-        "usedSkills": {
-          "builder": 2,
-          "digger": 1,
-          "floater": 4,
-          "miner": 1
-        },
-        "workers": 5
-      },
-      "identity": {
-        "engine": "classic",
-        "levelID": "26:Fun:27:4:6",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "lesson": "Practise: Builder + Digger",
-      "level": "Let's be careful out there",
-      "objective": "community:Gentle/Let's_be_careful_out_there.nxlv",
-      "placement": {
-        "basis": "reduxClassicCounterpart",
-        "lower": 100.0,
-        "position": 110.0,
-        "reference": "Gentle/Let's_be_careful_out_there.nxlv",
-        "replayRevision": "014e829383739997cb113ad8e888f0ababc4c5d18541e4355fb807e297801f84",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 120.0
-      },
-      "purpose": "Community-ordered practice with an exact native winning witness",
-      "reference": {
-        "author": "Amiga Lemmings",
-        "number": 22,
-        "ordinal": 22,
-        "population": 30,
-        "rank": "Gentle",
-        "rankIndex": 0,
-        "reference": "Gentle/Let's_be_careful_out_there.nxlv",
-        "required": 15,
-        "sha256": "d53c33492fa490e20da23a37acf00d37294860ce865afd36ef85725349f369e7",
-        "skills": {
-          "basher": 10,
-          "blocker": 10,
-          "bomber": 10,
-          "builder": 20,
-          "climber": 10,
-          "digger": 10,
-          "floater": 10,
-          "miner": 10
-        },
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "spawnInterval": 53,
-        "timeLimitSeconds": null,
-        "title": "Let's be careful out there"
-      },
-      "risks": [
-        "incomplete timing probes",
-        "spatial tolerance unmeasured"
-      ],
-      "variantDifferences": [
-        "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-        "different population",
-        "different skill inventory",
-        "Classic retains a time limit"
-      ]
-    },
-    {
       "comparisons": [
         {
           "distance": 1.9028,
@@ -9502,6 +9411,98 @@
         "witness exhausts at least one used skill"
       ],
       "variantDifferences": []
+    },
+    {
+      "comparisons": [],
+      "context": {
+        "allowedLosses": 25,
+        "assignments": 8,
+        "completionSeconds": 47.88235294117647,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [],
+        "initialHatchIntervalSeconds": 3.1176470588235294,
+        "jobChanges": 3,
+        "narrowActions": 0,
+        "peakAssignmentsInTwoSeconds": 2,
+        "population": 50,
+        "probedAssignments": 8,
+        "remainingSeconds": 252.11764705882354,
+        "replayRevision": "014e829383739997cb113ad8e888f0ababc4c5d18541e4355fb807e297801f84",
+        "required": 25,
+        "rescueFraction": 0.5,
+        "savedAboveRequirement": 25,
+        "spareUsedSkills": {
+          "builder": 18,
+          "digger": 19,
+          "floater": 16,
+          "miner": 19
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 1,
+        "timingProbeComplete": false,
+        "usedSkills": {
+          "builder": 2,
+          "digger": 1,
+          "floater": 4,
+          "miner": 1
+        },
+        "workers": 5
+      },
+      "identity": {
+        "engine": "classic",
+        "levelID": "26:Fun:27:4:6",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "lesson": "Practise: Builder + Digger",
+      "level": "Let's be careful out there",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"26:Fun:27:4:6\", \"packID\": \"lemmings-LEVEL-120\"}",
+      "placement": {
+        "adjustment": "User playtest 2026-10-14: Let's be careful out there is too tricky at lesson 32; move to later Intermediate combination practice.",
+        "basis": "userPlaytest",
+        "lower": 280.0,
+        "position": 287.5,
+        "reference": "Gentle/Let's_be_careful_out_there.nxlv",
+        "replayRevision": "014e829383739997cb113ad8e888f0ababc4c5d18541e4355fb807e297801f84",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 295.0
+      },
+      "purpose": "Community-ordered practice with an exact native winning witness",
+      "reference": {
+        "author": "Amiga Lemmings",
+        "number": 22,
+        "ordinal": 22,
+        "population": 30,
+        "rank": "Gentle",
+        "rankIndex": 0,
+        "reference": "Gentle/Let's_be_careful_out_there.nxlv",
+        "required": 15,
+        "sha256": "d53c33492fa490e20da23a37acf00d37294860ce865afd36ef85725349f369e7",
+        "skills": {
+          "basher": 10,
+          "blocker": 10,
+          "bomber": 10,
+          "builder": 20,
+          "climber": 10,
+          "digger": 10,
+          "floater": 10,
+          "miner": 10
+        },
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "spawnInterval": 53,
+        "timeLimitSeconds": null,
+        "title": "Let's be careful out there"
+      },
+      "risks": [
+        "incomplete timing probes",
+        "spatial tolerance unmeasured"
+      ],
+      "variantDifferences": [
+        "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+        "different population",
+        "different skill inventory",
+        "Classic retains a time limit"
+      ]
     },
     {
       "comparisons": [],

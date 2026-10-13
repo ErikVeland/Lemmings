@@ -3,6 +3,35 @@ import Testing
 @testable import NxlvKit
 
 struct LearningJourneyTests {
+    @Test func carefulRetailRouteMovesToIntermediateAndDefersTheCurrentSavedAttempt() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let journey = try JSONDecoder().decode(LearningJourney.self,
+            from: Data(contentsOf: root.appendingPathComponent("Resources/Progression/learning.json"))).validated()
+        let index = try #require(journey.lessons.firstIndex {
+            $0.entry.identity.packID == "lemmings-LEVEL-120" && $0.entry.identity.levelID == "26:Fun:27:4:6"
+        })
+        let lesson = journey.lessons[index]
+        #expect(index == 94 && lesson.stage == .intermediate && lesson.demand == 287.5)
+        #expect(lesson.placement?.basis == "userPlaytest")
+        var previous = journey.lessons.map(\.entry)
+        let moved = previous.remove(at: index)
+        previous.insert(moved, at: 31)
+        for current in [0, 30, 31, 32, 94, 200] {
+            let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+                pool: .init(id: "learning-19", summary: "Previous journey"), entries: previous, currentIndex: current)
+            let migrated = try #require(try journey.migrating(run))
+            #expect(migrated.id == run.id && migrated.currentIndex == current)
+            #expect(Array(migrated.entries.prefix(current)) == Array(previous.prefix(current)))
+            #expect(migrated.entries.count == 295 && Set(migrated.entries.map(\.identity)).count == 295)
+            if current == 31 {
+                #expect(migrated.currentEntry == previous[32])
+                #expect(migrated.entries.firstIndex { $0.identity == moved.identity } == index)
+            } else { #expect(migrated.currentEntry == run.currentEntry) }
+            #expect(try journey.migrating(migrated) == migrated)
+        }
+    }
+
     @Test func snowBomberLessonMovesLateInIntermediateAndSavedVisitsStayIntact() throws {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
             .deletingLastPathComponent().deletingLastPathComponent()
