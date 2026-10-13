@@ -59,6 +59,7 @@ public enum MobileNeoLemmixDataLayout {
 /// Stages and validates player-owned game data before replacing the live copy.
 public struct MobileContentStore: Sendable {
     public static let maximumImportBytes: Int64 = 2 * 1_024 * 1_024 * 1_024
+    public static let maximumImportEntries = 100_000
 
     public let root: URL
     public var gameDataDirectory: URL { root.appendingPathComponent("Game Data", isDirectory: true) }
@@ -143,8 +144,11 @@ public struct MobileContentStore: Sendable {
             options: [.skipsHiddenFiles]
         ) else { throw MobileContentStoreError.unreadable }
         var total: Int64 = 0
+        var entryCount = 0
         let sourceParts = source.standardizedFileURL.pathComponents
         for case let item as URL in walker {
+            entryCount += 1
+            try Self.validateImportEntryCount(entryCount)
             let itemValues = try item.resourceValues(forKeys: [
                 .isDirectoryKey, .isRegularFileKey, .isSymbolicLinkKey, .fileSizeKey,
             ])
@@ -159,8 +163,14 @@ public struct MobileContentStore: Sendable {
             if itemValues.isDirectory == true {
                 try manager.createDirectory(at: destination, withIntermediateDirectories: true)
             } else if itemValues.isRegularFile == true {
-                total += Int64(itemValues.fileSize ?? 0)
-                guard total <= Self.maximumImportBytes else { throw MobileContentStoreError.tooLarge }
+                guard let reportedSize = itemValues.fileSize, reportedSize >= 0 else {
+                    throw MobileContentStoreError.unreadable
+                }
+                let fileSize = Int64(reportedSize)
+                guard fileSize >= 0, fileSize <= Self.maximumImportBytes - total else {
+                    throw MobileContentStoreError.tooLarge
+                }
+                total += fileSize
                 try manager.createDirectory(
                     at: destination.deletingLastPathComponent(),
                     withIntermediateDirectories: true
@@ -189,6 +199,10 @@ public struct MobileContentStore: Sendable {
             }
             throw error
         }
+    }
+
+    static func validateImportEntryCount(_ count: Int) throws {
+        guard count <= maximumImportEntries else { throw MobileContentStoreError.tooManyEntries }
     }
 
     private static let defaultValidators: [MobileGameDataKind: MobileContentValidator] = [
@@ -369,6 +383,7 @@ public enum MobileContentStoreError: Error, LocalizedError, Equatable {
     case unreadable
     case symbolicLink
     case tooLarge
+    case tooManyEntries
     case validatorUnavailable(MobileGameDataKind)
     case invalidData(MobileGameDataKind)
 
@@ -378,6 +393,7 @@ public enum MobileContentStoreError: Error, LocalizedError, Equatable {
         case .unreadable: return "The selected game-data folder could not be read safely."
         case .symbolicLink: return "Remove symbolic links from the game-data folder."
         case .tooLarge: return "The selected folder is larger than 2 GB."
+        case .tooManyEntries: return "The selected folder contains too many items."
         case let .validatorUnavailable(kind): return "The \(kind.displayTitle) data validator is not available."
         case let .invalidData(kind): return "The selected \(kind.displayTitle) data is incomplete or invalid."
         }
