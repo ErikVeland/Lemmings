@@ -450,17 +450,22 @@ import NxlvKit
         if !cleared, onLater != nil {
             if nextSessionPlayer != nil {
                 button("Retry as \(player.initials)", CGRect(x: 64, y: y, width: 250, height: 48)) { [weak self] in self?.onRetry?() }
-                button(primaryResultTitle, CGRect(x: 766, y: y, width: 290, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
                 button("Hints", CGRect(x: 332, y: y, width: 168, height: 48)) { [weak self] in self?.onHints?() }
                 button("Try later", CGRect(x: 518, y: y, width: 230, height: 48)) { [weak self] in self?.onLater?() }
-            } else {
                 button(primaryResultTitle, CGRect(x: 766, y: y, width: 290, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
+            } else {
+                button("Back", CGRect(x: 64, y: y, width: 192, height: 48)) { [weak self] in self?.onClose?() }
                 button("Hints", CGRect(x: 274, y: y, width: 208, height: 48)) { [weak self] in self?.onHints?() }
                 button("Try later", CGRect(x: 500, y: y, width: 248, height: 48)) { [weak self] in self?.onLater?() }
-                button("Back", CGRect(x: 64, y: y, width: 192, height: 48)) { [weak self] in self?.onClose?() }
+                button(primaryResultTitle, CGRect(x: 766, y: y, width: 290, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
             }
             return
         }
+        link("Replay", CGRect(x: 64, y: y - 52, width: 110, height: 36), alpha: 0.8) { [weak self] in self?.onReplay?(false) }
+        link("Records", CGRect(x: 190, y: y - 52, width: 140, height: 36), alpha: 0.8) { [weak self] in self?.page(.records) }
+        link("Details", CGRect(x: 350, y: y - 52, width: 140, height: 36), alpha: 0.8) { [weak self] in self?.page(.details) }
+        link("Hot Seat", CGRect(x: 510, y: y - 52, width: 140, height: 36), alpha: 0.8) { [weak self] in self?.openSession() }
+        link("Worldwide", CGRect(x: 668, y: y - 52, width: 180, height: 36), alpha: 0.8) { [weak self] in self?.openWorldwideBoard() }
         if let next = nextSessionPlayer {
             let canHandOver = ArcadeStore.shared.profilesAreWritable && ArcadeStore.shared.storageError == nil
             // The four-button loss row narrows this button, so each row draws its own.
@@ -474,35 +479,30 @@ import NxlvKit
                        enabled: handsOverAfterClear == nil || canHandOver) { [weak self] in self?.continueAsNextProfile() }
             } else if availableSkips > 0 {
                 button("Retry as \(player.initials)", CGRect(x: 64, y: y, width: 220, height: 48)) { [weak self] in self?.onRetry?() }
-                button("Retry as \(next.initials)", CGRect(x: 806, y: y, width: 250, height: 48), primary: true,
-                       enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
                 button(skipTitle, CGRect(x: 312, y: y, width: 240, height: 48), enabled: canHandOver) { [weak self] in self?.skipLevel() }
                 button("Back to library", CGRect(x: 566, y: y, width: 226, height: 48)) { [weak self] in
                     if let prepare = ArcadeWindow.shared.prepareSession { _ = prepare() } else { self?.onClose?() }
                 }
-            } else {
-                button("Retry as \(next.initials)", CGRect(x: 726, y: y, width: 330, height: 48), primary: true,
+                button("Retry as \(next.initials)", CGRect(x: 806, y: y, width: 250, height: 48), primary: true,
                        enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
+            } else {
                 button("Back to library", CGRect(x: 412, y: y, width: 296, height: 48)) { [weak self] in
                     if let prepare = ArcadeWindow.shared.prepareSession { _ = prepare() } else { self?.onClose?() }
                 }
+                button("Retry as \(next.initials)", CGRect(x: 726, y: y, width: 330, height: 48), primary: true,
+                       enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
             }
         } else if availableSkips > 0 {
-            button(primaryResultTitle, CGRect(x: 662, y: y, width: 330, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
-            button(skipTitle, CGRect(x: 352, y: y, width: 290, height: 48)) { [weak self] in self?.skipLevel() }
             button("Back", CGRect(x: 128, y: y, width: 204, height: 48)) { [weak self] in self?.onClose?() }
+            button(skipTitle, CGRect(x: 352, y: y, width: 290, height: 48)) { [weak self] in self?.skipLevel() }
+            button(primaryResultTitle, CGRect(x: 662, y: y, width: 330, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
         } else {
-        button(primaryResultTitle, CGRect(x: 696, y: y, width: 360, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
         button(cleared ? "Retry" : "Back", CGRect(x: 64, y: y, width: 256, height: 48)) { [weak self] in
             guard let self else { return }
             if self.cleared { self.onRetry?() } else { self.onClose?() }
         }
+        button(primaryResultTitle, CGRect(x: 696, y: y, width: 360, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
         }
-        link("Replay", CGRect(x: 64, y: y - 52, width: 110, height: 36), alpha: 0.8) { [weak self] in self?.onReplay?(false) }
-        link("Records", CGRect(x: 190, y: y - 52, width: 140, height: 36), alpha: 0.8) { [weak self] in self?.page(.records) }
-        link("Details", CGRect(x: 350, y: y - 52, width: 140, height: 36), alpha: 0.8) { [weak self] in self?.page(.details) }
-        link("Hot Seat", CGRect(x: 510, y: y - 52, width: 140, height: 36), alpha: 0.8) { [weak self] in self?.openSession() }
-        link("Worldwide", CGRect(x: 668, y: y - 52, width: 180, height: 36), alpha: 0.8) { [weak self] in self?.openWorldwideBoard() }
     }
     var player: ArcadeProfile {
         let records = ArcadeStore.shared.records

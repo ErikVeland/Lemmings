@@ -575,7 +575,8 @@ struct MobileGameTurn {
                 touchLoupe.update(bitmap: frame, target: .init(x: target.point.x * session.renderScale, y: target.point.y * session.renderScale),
                                   finger: finger,
                                   bounds: area.map(Self.cgRect) ?? .zero,
-                                  pixelAspect: session.engineIdentifier == "classic-dos" ? 1.2 : 1)
+                                  pixelAspect: session.engineIdentifier == "classic-dos" ? 1.2 : 1,
+                                  countdowns: session.bombCountdowns, renderScale: session.renderScale)
             } else {
                 touchLoupe.isHidden = true
             }

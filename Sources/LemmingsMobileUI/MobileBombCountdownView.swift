@@ -30,7 +30,7 @@ import UIKit
 
     override func didMoveToWindow() {
         super.didMoveToWindow()
-        contentScaleFactor = window?.screen.scale ?? traitCollection.displayScale
+        contentScaleFactor = max(1, window?.screen.scale ?? traitCollection.displayScale)
         setNeedsDisplay()
     }
 
