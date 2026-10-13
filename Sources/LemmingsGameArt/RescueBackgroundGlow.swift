@@ -5,8 +5,12 @@ import Foundation
 
 /// A faint warm haze follows scenery pixels without lighting empty black space.
 @MainActor public final class RescueBackgroundGlow {
-    // CIContext supports concurrent rendering. No graphics context crosses actors.
-    nonisolated private static let renderer = CIContext(options: [.cacheIntermediates: false])
+    // Apple permits concurrent rendering through CIContext. Older SDKs omit its
+    // Sendable annotation. Filters remain local to each rendering request.
+    private struct SharedRenderer: @unchecked Sendable {
+        let context = CIContext(options: [.cacheIntermediates: false])
+    }
+    nonisolated private static let renderer = SharedRenderer()
     private struct Key: Hashable {
         let image: ObjectIdentifier?
         let slot: String?
@@ -95,7 +99,7 @@ import Foundation
         let size = CGSize(width: crop.width * sampling, height: crop.height * sampling)
         let extent = CGRect(origin: .zero, size: size).insetBy(dx: -padding, dy: -padding)
         guard let output = matrix.outputImage?.applyingFilter("CIGaussianBlur", parameters: [kCIInputRadiusKey: radius]),
-              let glow = renderer.createCGImage(output, from: extent, format: .RGBA8,
+              let glow = renderer.context.createCGImage(output, from: extent, format: .RGBA8,
                 colorSpace: CGColorSpaceCreateDeviceRGB()) else { return nil }
         return Frame(source: image, glow: glow, expansion: CGSize(width: padding / size.width, height: padding / size.height),
             createdAt: ProcessInfo.processInfo.systemUptime)
