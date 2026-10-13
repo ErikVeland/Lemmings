@@ -1,0 +1,24 @@
+{
+  "engineFingerprint": "d1a74fc9e9fffa9c76e3b8d5f86df8ad323c3a23eb9f075d39dfba83f212f914",
+  "sharedTestGroups": [
+    {
+      "tests": 94,
+      "suites": 19
+    },
+    {
+      "tests": 87,
+      "suites": 14
+    },
+    {
+      "tests": 43,
+      "suites": 9
+    }
+  ],
+  "sourceHashes": "source-hashes.json",
+  "nativeReplayConfigurations": 615,
+  "certificates": 294,
+  "rescueRecords": 319,
+  "mutedAudio": true,
+  "offscreenWindows": true,
+  "scope": "Local source and engine preflight; signed packages and final CI remain separate gates."
+}

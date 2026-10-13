@@ -5,6 +5,35 @@ import Testing
 @testable import LemmingsMobileCore
 
 struct MobileBitmapTests {
+    @Test func reusedCRTSourceMatchesLegacyConversionAndClearsCameraMargins() throws {
+        let surface = MobileBitmapSurface()
+        for (width, height) in [(64, 40), (64, 40), (128, 80), (64, 40)] {
+            let context = try #require(surface.prepare(width: width, height: height))
+            let storage = context.data
+            context.saveGState()
+            context.translateBy(x: 0, y: CGFloat(height))
+            context.scaleBy(x: 1, y: -1)
+            context.setFillColor(CGColor(srgbRed: 1, green: 0, blue: 0, alpha: 1))
+            context.fill(CGRect(x: 3, y: 2, width: 17, height: 9))
+            context.setFillColor(CGColor(srgbRed: 0, green: 1, blue: 0, alpha: 1))
+            context.fill(CGRect(x: 8, y: 22, width: 21, height: 5))
+            context.restoreGState()
+            let image = try #require(context.makeImage())
+            let legacy = try #require(CGContext(data: nil, width: width, height: height,
+                bitsPerComponent: 8, bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+            legacy.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
+            func pixels(_ source: CGContext) throws -> Data {
+                Data(bytes: try #require(source.data), count: source.bytesPerRow * source.height)
+            }
+            #expect(try pixels(context) == pixels(legacy))
+            let reused = try #require(surface.prepare(width: width, height: height))
+            #expect(reused === context)
+            #expect(reused.data == storage)
+            #expect(try pixels(reused).allSatisfy { $0 == 0 })
+        }
+    }
+
     @Test func bitmapCameraMatchesTouchAfterPanZoomAndRotation() throws {
         let width = 640, height = 160
         let red: [UInt8] = [255, 0, 0, 255]

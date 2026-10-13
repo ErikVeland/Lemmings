@@ -18,6 +18,8 @@ import LemmingsGameArt
             && ProcessInfo.processInfo.thermalState != .serious && ProcessInfo.processInfo.thermalState != .critical
     }
     static var constrained: Bool { !profile.supportsEnhancedEffects }
+    static var cpuFrameCost: Double { adaptive.cpu.smoothedCost }
+    static var gpuFrameCost: Double { adaptive.gpu.smoothedCost }
 
     static func update(framesPerSecond: Int) {
         self.framesPerSecond = Double(max(1, framesPerSecond))

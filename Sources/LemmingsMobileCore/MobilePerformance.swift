@@ -91,6 +91,77 @@ public enum MobileThermalPolicy {
     }
 }
 
+/// Changes presentation cadence only. Engine clocks retain their authored tick rate.
+public struct MobileFramePacing: Sendable {
+    public private(set) var framesPerSecond: Int
+    private var maximumFramesPerSecond: Int
+    private var lastTime: Double?
+    private var pressureSince: Double?
+    private var spareSince: Double?
+    private var smoothedWork = 0.0
+    private var missedFraction = 0.0
+
+    public init(maximumFramesPerSecond: Int = 60) {
+        let rate = Self.rate(below: maximumFramesPerSecond)
+        self.maximumFramesPerSecond = rate
+        framesPerSecond = rate
+    }
+
+    public mutating func setMaximumFramesPerSecond(_ maximum: Int) {
+        maximumFramesPerSecond = Self.rate(below: maximum)
+        if framesPerSecond > maximumFramesPerSecond {
+            framesPerSecond = maximumFramesPerSecond
+            resetSamples()
+        }
+    }
+
+    public mutating func observe(at time: Double, cpuSeconds: Double, gpuSeconds: Double, active: Bool) {
+        guard time.isFinite, cpuSeconds.isFinite, gpuSeconds.isFinite,
+              cpuSeconds >= 0, gpuSeconds >= 0 else { return }
+        guard active else { resetSamples(); return }
+        let previous = lastTime
+        lastTime = time
+        guard let previous else { return }
+        let elapsed = time - previous
+        guard elapsed > 0, elapsed <= 0.25 else {
+            resetSamples(); lastTime = time
+            return
+        }
+        let interval = 1 / Double(framesPerSecond)
+        let blend = 1 - exp(-elapsed / 0.5)
+        smoothedWork += (max(cpuSeconds, gpuSeconds) - smoothedWork) * blend
+        missedFraction += ((elapsed > interval * 1.4 ? 1.0 : 0.0) - missedFraction) * blend
+        if smoothedWork > interval * 0.82 || missedFraction > 0.2 {
+            spareSince = nil
+            if pressureSince == nil { pressureSince = time }
+            if time - pressureSince! >= 3, framesPerSecond > 20 {
+                framesPerSecond = framesPerSecond > 30 ? 30 : 20
+                resetSamples()
+            }
+        } else if smoothedWork < interval * 0.35 && missedFraction < 0.02 {
+            pressureSince = nil
+            if spareSince == nil { spareSince = time }
+            let higher = framesPerSecond < 30 ? 30 : 60
+            // Recovery must also have capacity at the higher rate.
+            if time - spareSince! >= 12, higher <= maximumFramesPerSecond,
+               smoothedWork < 0.55 / Double(higher) {
+                framesPerSecond = higher
+                resetSamples()
+            }
+        } else { pressureSince = nil; spareSince = nil }
+    }
+
+    private static func rate(below maximum: Int) -> Int {
+        // Whole divisors avoid an uneven 45 Hz cadence on a 60 Hz panel.
+        maximum >= 60 ? 60 : (maximum >= 30 ? 30 : 20)
+    }
+
+    private mutating func resetSamples() {
+        lastTime = nil; pressureSince = nil; spareSince = nil
+        smoothedWork = 0; missedFraction = 0
+    }
+}
+
 public struct MobileTickClock: Equatable, Sendable {
     public var ticksPerSecond: Double
     public var speed: Double

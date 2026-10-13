@@ -28,9 +28,11 @@ The universal Mac app supports Apple silicon and Intel on macOS 12.3 or later. T
 
 The beta plays the Classic family, Holiday packs, Oh Yes! More Lemmings! and installed fan packs. It includes profiles, favourites, recent levels, playlists, journeys, records and Hot Seat.
 
-Portrait and landscape controls use the shared stone artwork and bitmap symbols. Mouse, trackpad and Pencil targeting use level-space pick boxes. Camera movement refreshes targeting while paused. Hot Seat names the active player in green bitmap text above the HUD counters. Collections places Resume beside Back as the primary action.
+Portrait and landscape controls use the shared stone artwork and bitmap symbols. Mouse, trackpad and Pencil targeting use level-space pick boxes. Camera movement refreshes targeting while paused. Hot Seat identifies the player through Ready, play, pause, results and handover. A small green name sits above the HUD counters during play. Skip and restored runs preserve the saved turn. Collections places Resume beside Back as the primary action.
 
 Music, replay history, calmer rescue effects, recovery and saved-journey fixes follow the shared Mac source. Optional soundtrack libraries download from Settings. Downloads require the app to remain in the foreground.
+
+The display adapts to sustained load and avoids repeated bitmap conversion. Gameplay keeps its authored tick rate. Sustained performance on older iPads remains a device acceptance check.
 
 Lemmings 2, Lemmings 3 and NeoLemmix remain unavailable to play on iOS. Game Center runtime availability remains disabled until Apple-side configuration is verified. TestFlight delivery and Beta App Review are separate from public App Store publication.
 

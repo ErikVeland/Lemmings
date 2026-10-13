@@ -74,13 +74,13 @@ import NxlvKit
             sheetObservers.append(NotificationCenter.default.addObserver(forName: name, object: nil, queue: .main) { [weak self] notification in
                 let window = notification.object as? NSWindow
                 let beginning = notification.name == NSWindow.willBeginSheetNotification
-                MainActor.assumeIsolated {
+                MainActor.assumeIsolated { [weak self] in
                     if let window, window === self?.gameWindow, beginning {
                         self?.onNavigate?()
                         self?.updateCursor(suppressed: true)
                     }
                 }
-                DispatchQueue.main.async { self?.updateAccessibility() }
+                DispatchQueue.main.async { [weak self] in self?.updateAccessibility() }
             })
         }
     }

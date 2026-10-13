@@ -62,6 +62,29 @@ Selection-only redraws reuse unchanged bloom. Disabled bloom runs no extraction
 or blur passes. Changes to source pixels, gamma or bloom dimensions rebuild the
 intermediates. Selection and input projection retain their existing geometry.
 
+Mobile gameplay also measures display-link cadence. Sustained CPU/GPU work above
+82% of the frame interval, or more than 20% late callbacks, lowers the presentation
+target after three seconds. Targets use 60, 30 and 20 Hz. Thermal and power limits
+still bound the target, and constrained devices retain their 30 Hz ceiling.
+Recovery needs twelve seconds of measured spare capacity at the next higher
+target. Pauses, Ready screens and lifecycle gaps neither trigger reductions nor
+earn recovery. The simulation clock keeps its authored rate at every target,
+including fast-forward. HUD updates reuse the current layout between size changes.
+
+The mobile CRT compositor retains its drawing context at a stable source size.
+It uploads those pixels directly instead of making an image and drawing that
+image into a second allocation. Three source/flash texture slots keep submitted
+pixels immutable until their GPU commands complete. GPU saturation retains only
+the latest pending source and defers presentation without waiting on a source
+slot. Empty explosion masks reuse zero pixels. A slot that previously held a
+flash is cleared before reuse. Resize replaces the source storage, while already
+submitted commands retain their old slots until completion.
+
+Classic pointer eligibility now uses the engine's read-only assignment rules in
+one batch. It avoids copying a simulation per lemming and repeated searches by
+ID. Interactive assignment and replay assignment use the same validation rules.
+These changes do not alter skill outcomes or recorded commands.
+
 L2/L3 mobile adapters still lack complete native sprite rendering, masks and
 explosion metadata. The shared policy is available to them, but it cannot create
 those missing visuals. There is no tvOS target yet. Apple TV needs its own adapter
@@ -95,3 +118,13 @@ event-aware preparation, shader variants and smooth quality transitions. Expand
 the quality curve only when visual comparisons and sustained measurements justify
 the additional levels. Avoid oscillating texture allocations or draining a battery
 merely because a device has spare processing capacity.
+
+The focused older-iPad changes passed 25 headless, muted mobile checks: cadence
+pressure, recovery, pause/gap handling, exact Classic/L2/L3 clocks at 1×, 2× and
+8×, pixel equality with the previous CRT conversion, storage reuse and clearing,
+camera targeting, assignment probes and rewind restoration. Shared FX policy
+checks, the 120-level/60,000-tick Classic engine soak and replay determinism also
+passed. The final arm64 iOS NxlvKit, MobileCore and MobileUI modules compile.
+These checks do not exercise UIKit/Metal submission on an older physical iPad.
+Sustained device frame pacing, thermal behaviour and L2/L3 mobile renderers remain
+manual validation gaps. No new beta was installed or distributed by these checks.

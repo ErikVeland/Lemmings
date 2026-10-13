@@ -2,6 +2,26 @@
 import CoreGraphics
 import Foundation
 
+/// Reuses source pixels for CRT composition without an intermediate image conversion.
+public final class MobileBitmapSurface {
+    public private(set) var context: CGContext?
+
+    public init() {}
+
+    public func prepare(width: Int, height: Int) -> CGContext? {
+        guard width > 0, height > 0 else { return nil }
+        if context?.width != width || context?.height != height {
+            context = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8,
+                bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)
+        }
+        guard let context else { return nil }
+        // Retained storage must not retain pixels outside the current camera clip.
+        context.clear(CGRect(x: 0, y: 0, width: width, height: height))
+        return context
+    }
+}
+
 /// Presents the engine's RGBA pixels with the same camera used for touch input.
 public enum MobileBitmapRenderer {
     public static func image(_ frame: MobilePixelFrame) -> CGImage? {

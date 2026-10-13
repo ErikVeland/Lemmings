@@ -5456,7 +5456,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
           levelIndex: levelIndex,
           expectedFingerprint: sourceRevision)
         guard !Task.isCancelled else { return }
-        await MainActor.run {
+        await MainActor.run { [weak self] in
           guard let self, self.levelBrowserLaunchID == launchID,
                 self.window.attachedSheet == nil else { return }
           self.levelBrowserLaunchTask = nil
@@ -5497,7 +5497,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
           expectedFingerprint: archiveFingerprint,
           portsRoot: portsRoot)
         guard !Task.isCancelled else { return }
-        await MainActor.run {
+        await MainActor.run { [weak self] in
           guard let self, self.levelBrowserLaunchID == launchID,
                 self.window.attachedSheet == nil else { return }
           self.levelBrowserLaunchTask = nil

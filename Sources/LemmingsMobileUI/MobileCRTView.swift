@@ -9,9 +9,23 @@ import UIKit
 @MainActor final class MobileCRTView: MTKView {
     private let commands: MTLCommandQueue
     private let pipelines: [MTLRenderPipelineState]
-    private var source: MTLTexture?
+    @MainActor private final class SourceSlot {
+        let source: MTLTexture
+        let flash: MTLTexture
+        var submissions = 0
+        var hasFlash = false
+        init(source: MTLTexture, flash: MTLTexture) {
+            self.source = source; self.flash = flash
+        }
+    }
+    private var slots: [SourceSlot] = []
+    private var currentSlot: SourceSlot?
+    private var outstandingSubmissions = 0
+    private var submissionDeferred = false
+    private var pendingSource: (context: CGContext, settings: ClassicSettings, flashes: [ExplosionGlow.Flash])?
+    private var source: MTLTexture? { currentSlot?.source }
+    private var blackMask = [UInt8]()
     private var scratch: [MTLTexture] = []
-    private var flash: MTLTexture?
     private var uniform = CRTUniforms()
     private var bloomDirty = true
     private var bloomGamma: Float = .nan
@@ -57,8 +71,37 @@ import UIKit
         drawableSize = CGSize(width: max(1, bounds.width * scale), height: max(1, bounds.height * scale))
     }
 
-    func update(image: CGImage, settings: ClassicSettings, flashMask: [UInt8]) {
-        guard let device else { return }
+    func update(context: CGContext, settings: ClassicSettings, flashes: [ExplosionGlow.Flash]) {
+        guard let device, let pixels = context.data else { return }
+        pendingSource = nil
+        let width = context.width, height = context.height
+        if source?.width != width || source?.height != height {
+            slots.removeAll(); currentSlot = nil
+            blackMask = [UInt8](repeating: 0, count: width * height * 2)
+        }
+        // Never overwrite pixels that an outstanding GPU command can still read.
+        let slot: SourceSlot
+        if let available = slots.first(where: { $0.submissions == 0 }) {
+            slot = available
+        } else if slots.count < 3 {
+            let descriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba8Unorm,
+                width: width, height: height, mipmapped: false)
+            descriptor.usage = .shaderRead
+            guard let texture = device.makeTexture(descriptor: descriptor) else { return }
+            descriptor.pixelFormat = .rg8Unorm
+            guard let flash = device.makeTexture(descriptor: descriptor) else { return }
+            slot = SourceSlot(source: texture, flash: flash)
+            blackMask.withUnsafeBytes { bytes in
+                flash.replace(region: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0,
+                    withBytes: bytes.baseAddress!, bytesPerRow: width * 2)
+            }
+            slots.append(slot)
+        } else {
+            // Keep input and simulation moving rather than waiting for a texture.
+            pendingSource = (context, settings, flashes)
+            return
+        }
+        currentSlot = slot
         tubeSettings = settings.display == .television ? .television : .amiga1084
         let intensity = Float(settings.displayIntensity)
         tubeSettings.scanlineDepth *= intensity
@@ -69,36 +112,22 @@ import UIKit
         tubeSettings.convergenceY *= intensity
         tubeSettings.colorLevels = settings.colorDepth == .amigaOCS ? 16 : 0
         tubeSettings.pixelAspect = Float(settings.pixelAspect)
-        let width = image.width, height = image.height
-        if source?.width != width || source?.height != height {
-            let descriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba8Unorm,
-                width: width, height: height, mipmapped: false)
-            descriptor.usage = .shaderRead
-            source = device.makeTexture(descriptor: descriptor)
-            descriptor.pixelFormat = .rg8Unorm
-            descriptor.usage = .shaderRead
-            flash = device.makeTexture(descriptor: descriptor)
-            let black = [UInt8](repeating: 0, count: width * height * 2)
-            black.withUnsafeBytes { bytes in
-                flash?.replace(region: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0,
+        bloomDirty = true
+        slot.source.replace(region: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0,
+            withBytes: pixels, bytesPerRow: context.bytesPerRow)
+        if !flashes.isEmpty {
+            let mask = ExplosionGlow.textureMask(width: width, height: height, flashes: flashes)
+            mask.withUnsafeBytes { bytes in
+                slot.flash.replace(region: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0,
                     withBytes: bytes.baseAddress!, bytesPerRow: width * 2)
             }
-        }
-        bloomDirty = true
-        var rgba = [UInt8](repeating: 0, count: width * height * 4)
-        rgba.withUnsafeMutableBytes { bytes in
-            guard let context = CGContext(data: bytes.baseAddress, width: width, height: height,
-                bitsPerComponent: 8, bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
-                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return }
-            context.interpolationQuality = .none
-            context.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
-            source?.replace(region: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0,
-                withBytes: bytes.baseAddress!, bytesPerRow: width * 4)
-        }
-        if flashMask.count == width * height * 2 {
-            flashMask.withUnsafeBytes { bytes in
-                flash?.replace(region: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0, withBytes: bytes.baseAddress!, bytesPerRow: width * 2)
+            slot.hasFlash = true
+        } else if slot.hasFlash {
+            blackMask.withUnsafeBytes { bytes in
+                slot.flash.replace(region: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0,
+                    withBytes: bytes.baseAddress!, bytesPerRow: width * 2)
             }
+            slot.hasFlash = false
         }
         updateUniforms(settings: settings)
         setNeedsDisplay()
@@ -159,8 +188,11 @@ import UIKit
     override func draw(_ rect: CGRect) {
         let drawStarted = ProcessInfo.processInfo.systemUptime
         defer { MobileDevicePerformance.recordCPU(ProcessInfo.processInfo.systemUptime - drawStarted, source: "crt") }
-        guard let device, let source, let flash, let drawable = currentDrawable,
+        guard outstandingSubmissions < 3 else { submissionDeferred = true; return }
+        guard let device, let slot = currentSlot, let drawable = currentDrawable,
               let buffer = commands.makeCommandBuffer() else { return }
+        submissionDeferred = false
+        let source = slot.source, flash = slot.flash
         let budget = MobileDevicePerformance.presentation
         if uniform.bloomAmount > 0 {
             let width = max(1, Int(Double(source.width) * budget.bloomScale))
@@ -210,12 +242,21 @@ import UIKit
                 encoder.endEncoding()
             }
         }
-        buffer.addCompletedHandler { [weak self] completed in
+        slot.submissions += 1
+        outstandingSubmissions += 1
+        buffer.addCompletedHandler { [weak self, slot] completed in
             let seconds = max(0, completed.gpuEndTime - completed.gpuStartTime)
             let succeeded = completed.status == .completed
-            Task { @MainActor [weak self] in
+            Task { @MainActor [weak self, slot] in
+                slot.submissions -= 1
+                self?.outstandingSubmissions -= 1
                 if succeeded { MobileDevicePerformance.recordGPU(seconds, source: "crt") }
                 else { self?.bloomDirty = true }
+                if let pending = self?.pendingSource {
+                    self?.update(context: pending.context, settings: pending.settings, flashes: pending.flashes)
+                } else if self?.submissionDeferred == true {
+                    self?.setNeedsDisplay()
+                }
             }
         }
         buffer.present(drawable)

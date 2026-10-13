@@ -67,6 +67,8 @@ struct MobileGameTurn {
     private weak var owningScene: UIWindowScene?
     var clock: MobileTickClock
     private var displayLink: CADisplayLink?
+    private var framePacing = MobileFramePacing()
+    private var appliedFrameRate = 0
     private var checkpointSaveTask: Task<Void, Never>?
     private var checkpointSaveGeneration = UUID()
     var playState = MobilePlayState()
@@ -302,7 +304,13 @@ struct MobileGameTurn {
 
     @objc private func displayFrame(_ link: CADisplayLink) {
         let frameStarted = ProcessInfo.processInfo.systemUptime
-        defer { MobileDevicePerformance.recordCPU(ProcessInfo.processInfo.systemUptime - frameStarted, source: "frame") }
+        defer {
+            MobileDevicePerformance.recordCPU(ProcessInfo.processInfo.systemUptime - frameStarted, source: "frame")
+            framePacing.observe(at: link.timestamp, cpuSeconds: MobileDevicePerformance.cpuFrameCost,
+                gpuSeconds: MobileDevicePerformance.gpuFrameCost,
+                active: !paused && !countdown.isActive && overlay.isHidden && lifecycle.isForeground && !lifecycle.isInterrupted)
+            if framePacing.framesPerSecond != appliedFrameRate { updatePerformanceBudget() }
+        }
         inputAdapter.poll(context: ObjectIdentifier(overlay.isHidden ? playfieldView : overlayCanvas), at: link.timestamp)
         updateInputSpeed(at: link.timestamp)
         MobileMusic.shared.advance()
@@ -994,10 +1002,12 @@ struct MobileGameTurn {
             reduceFlashes: UIAccessibility.isReduceMotionEnabled,
             constrainedDevice: MobileDevicePerformance.constrained
         )
-        let framesPerSecond = min(budget.framesPerSecond, view.window?.screen.maximumFramesPerSecond ?? 60)
+        framePacing.setMaximumFramesPerSecond(min(budget.framesPerSecond, view.window?.screen.maximumFramesPerSecond ?? 60))
+        let framesPerSecond = framePacing.framesPerSecond
+        appliedFrameRate = framesPerSecond
         MobileDevicePerformance.update(framesPerSecond: framesPerSecond)
         displayLink?.preferredFrameRateRange = CAFrameRateRange(
-            minimum: Float(min(20, framesPerSecond)),
+            minimum: Float(framesPerSecond),
             maximum: Float(framesPerSecond),
             preferred: Float(framesPerSecond)
         )
@@ -1010,7 +1020,7 @@ struct MobileGameTurn {
     func updateHUD(layout: MobileHUDLayout? = nil) {
         MobileMusic.shared.update(session.snapshot, active: session.activeLemmingCount, nukeRemainingTicks: session.nukeRemainingTicks, allNukePopped: session.allNukeExplosionsPlayed, ticksPerSecond: session.ticksPerSecond)
         MobileMusic.shared.setGameplayState(paused: paused, speed: speed, rewinding: rewindHeld)
-        let resolved = layout ?? hudLayout(insets: view.safeAreaInsets)
+        let resolved = layout ?? lastHUDLayout ?? hudLayout(insets: view.safeAreaInsets)
         if hudArtworkSource != gameSettings.classic.graphics {
             hud.skillIcons = session.renderScale > 1 ? session.snapshot.skills.indices.map { session.skillCursorFrame(control: $0).flatMap(MobileBitmapRenderer.image) } : []
             hudArtworkSource = gameSettings.classic.graphics

@@ -148,8 +148,10 @@ import NxlvKit
             }
         }
         pageFooter()
-        setAccessibilityLabel("Worldwide Game Center leaderboard. \(service.status) " + (service.board?.entries.map { "Rank \($0.rank). \($0.name). \($0.score)." }.joined(separator: " ") ?? "")
-            + (service.board?.personal.map { " Your rank: \($0.rank). Your score: \($0.score)." } ?? "") + " Ranked catalogue only, without rewinds.")
+        let entries = service.board?.entries.map { "Rank \($0.rank). \($0.name). \($0.score)." }.joined(separator: " ") ?? ""
+        let personal = service.board?.personal.map { " Your rank: \($0.rank). Your score: \($0.score)." } ?? ""
+        let summary = "Worldwide Game Center leaderboard. \(service.status) " + entries + personal
+        setAccessibilityLabel(summary + " Ranked catalogue only, without rewinds.")
     }
 }
 #endif

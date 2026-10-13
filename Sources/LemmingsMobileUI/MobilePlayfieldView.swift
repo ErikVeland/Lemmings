@@ -33,6 +33,7 @@ import UIKit
     private let initialCameraFocus: MobilePoint?
     private var bitmap: CGImage?
     private var tubeViewport: MobileViewport?
+    private let tubeSurface = MobileBitmapSurface()
     private let tube = MobileCRTView(tubeDevice: true)
     private var hdr: MobileHDRView?
     private var attemptedHDR = false
@@ -278,13 +279,13 @@ import UIKit
         // Draw at native vertical resolution. The tube supplies the final display scale.
         let width = max(1, Int(ceil(bounds.width / max(0.1, gameViewport.zoom) * renderScale)))
         let height = max(1, Int(ceil(bounds.height / max(0.1, gameViewport.zoom) * renderScale)))
-        guard let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8,
-            bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
-            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return }
+        guard let context = tubeSurface.prepare(width: width, height: height) else { return }
         var viewport = gameViewport
         viewport.viewSize = MobileSize(width: Double(width), height: Double(height))
         viewport.zoom = renderScale
         tubeViewport = viewport
+        context.saveGState()
+        defer { context.restoreGState() }
         context.translateBy(x: 0, y: CGFloat(height))
         context.scaleBy(x: 1, y: -1)
         MobileBitmapRenderer.draw(bitmap, viewport: viewport, in: context)
@@ -296,10 +297,9 @@ import UIKit
         }
         let flashes = drawExplosionCores(viewport: viewport, context: context)
         drawCursorBadge(viewport: viewport, context: context)
-        guard let image = context.makeImage() else { return }
         tube.selection = selectionEffect(viewport: viewport)
         tube.rescueAuras = rescueEffects(viewport: viewport)
-        tube.update(image: image, settings: displaySettings, flashMask: ExplosionGlow.textureMask(width: width, height: height, flashes: flashes))
+        tube.update(context: context, settings: displaySettings, flashes: flashes)
     }
 
     private func updateBombCountdowns() {

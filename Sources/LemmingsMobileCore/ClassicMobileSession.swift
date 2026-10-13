@@ -334,9 +334,10 @@ public final class ClassicMobileSession: MobileGameSession {
     public func targetCandidates(for control: Int) -> [MobileTargetCandidate] {
         guard ClassicSkill.allCases.indices.contains(control) else { return [] }
         let skill = ClassicSkill.allCases[control]
-        return simulation.lemmings.filter(Self.canHighlight).map { lemming in
-            var probe = simulation
-            let result = probe.assign(skill, to: lemming.id)
+        let results = simulation.assignmentResults(for: skill)
+        return simulation.lemmings.enumerated().compactMap { index, lemming in
+            guard Self.canHighlight(lemming) else { return nil }
+            let result = results[index]
             let state: MobileAssignmentState
             if result == .assigned {
                 state = .eligible

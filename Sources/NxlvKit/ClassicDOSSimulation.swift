@@ -781,6 +781,24 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         lastTickEvents = [.nukeStarted]
     }
 
+    /// Uses the assignment rules without copying and mutating the whole simulation for a pointer probe.
+    public func assignmentResult(_ skill: ClassicSkill, to lemmingID: Int) -> ClassicDOSAssignmentResult {
+        guard let index = lemmings.firstIndex(where: { $0.id == lemmingID }) else { return .noSuchLemming }
+        guard lemmings[index].isActive else { return .inactiveLemming }
+        guard remainingSkillCount(skill) > 0 else { return .noSkillRemaining }
+        return assignmentResult(skill, toLemmingAt: index, sourceReplay: false)
+    }
+
+    /// Results follow the current lemming array, without repeated searches by ID.
+    public func assignmentResults(for skill: ClassicSkill) -> [ClassicDOSAssignmentResult] {
+        let hasSupply = remainingSkillCount(skill) > 0
+        return lemmings.indices.map { index in
+            guard lemmings[index].isActive else { return .inactiveLemming }
+            guard hasSupply else { return .noSkillRemaining }
+            return assignmentResult(skill, toLemmingAt: index, sourceReplay: false)
+        }
+    }
+
     @discardableResult
     public mutating func assign(_ skill: ClassicSkill, to lemmingID: Int) -> ClassicDOSAssignmentResult {
         var events: [ClassicDOSEvent] = []
@@ -925,47 +943,33 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         nukeCursor += 1
     }
 
-    private mutating func assign(
-        _ skill: ClassicSkill,
-        toLemmingAt index: Int,
-        events: inout [ClassicDOSEvent],
-        sourceReplay: Bool
-    ) -> ClassicDOSAssignmentResult {
-        var lemming = lemmings[index]
+    private func assignmentResult(_ skill: ClassicSkill, toLemmingAt index: Int,
+                                  sourceReplay: Bool) -> ClassicDOSAssignmentResult {
+        let lemming = lemmings[index]
         switch skill {
         case .climber:
             guard !lemming.hasClimber else { return .alreadyHasSkill }
             guard ![.blocking, .splatting, .exploding].contains(lemming.action) else {
                 return .invalidAction
             }
-            lemming.hasClimber = true
-            // Original Lemmings only: the climber ends a builder's shrug.
-            if lemming.action == .shrugging, configuration.mechanics == .original {
-                transition(&lemming, to: .walking, events: &events)
-            }
-
+            return .assigned
         case .floater:
             guard !lemming.hasFloater else { return .alreadyHasSkill }
             guard ![.blocking, .splatting, .exploding].contains(lemming.action) else {
                 return .invalidAction
             }
-            lemming.hasFloater = true
-
+            return .assigned
         case .bomber:
             guard lemming.bomberCountdown == nil,
                   ![.ohNo, .exploding, .vaporizing, .splatting].contains(lemming.action) else {
                 return .invalidAction
             }
-            lemming.bomberCountdown = 79
-
+            return .assigned
         case .blocker:
             let allowed: [ClassicDOSAction] = [.walking, .shrugging, .building, .bashing, .mining, .digging]
             guard allowed.contains(lemming.action) else { return .invalidAction }
             guard !blockerFieldWouldOverlap(lemming) else { return .overlappingBlockerField }
-            transition(&lemming, to: .blocking, events: &events)
-            lemming.ownsBlockerField = true
-            lemming.blockerAnchor = lemming.foot
-
+            return .assigned
         case .builder:
             let allowed: [ClassicDOSAction] = [.walking, .shrugging, .bashing, .mining, .digging]
             let directSourceReplay = sourceReplay && configuration.mechanics == .golems
@@ -973,8 +977,7 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
                   lemming.foot.y + frameTop(for: lemming.action) >= -5 else {
                 return .invalidAction
             }
-            transition(&lemming, to: .building, events: &events)
-
+            return .assigned
         case .basher:
             guard destructionMasks != nil else { return .destructionMasksUnavailable }
             let allowed: [ClassicDOSAction] = [.walking, .shrugging, .building, .mining, .digging]
@@ -985,8 +988,7 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
                 && !directSourceReplay {
                 return .wrongOneWayDirection
             }
-            transition(&lemming, to: .bashing, events: &events)
-
+            return .assigned
         case .miner:
             guard destructionMasks != nil else { return .destructionMasksUnavailable }
             let allowed: [ClassicDOSAction] = [.walking, .shrugging, .building, .bashing, .digging]
@@ -997,13 +999,54 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
                blocksDirection(lemming.objectInFront, direction: lemming.direction) {
                 return .wrongOneWayDirection
             }
-            transition(&lemming, to: .mining, events: &events)
-
+            return .assigned
         case .digger:
             let directSourceReplay = sourceReplay && configuration.mechanics == .golems
             guard lemming.objectBelow != .steel || directSourceReplay else { return .steel }
             let allowed: [ClassicDOSAction] = [.walking, .shrugging, .building, .bashing, .mining]
             guard allowed.contains(lemming.action) || directSourceReplay else { return .invalidAction }
+            return .assigned
+        }
+    }
+
+    private mutating func assign(
+        _ skill: ClassicSkill,
+        toLemmingAt index: Int,
+        events: inout [ClassicDOSEvent],
+        sourceReplay: Bool
+    ) -> ClassicDOSAssignmentResult {
+        var lemming = lemmings[index]
+        let result = assignmentResult(skill, toLemmingAt: index, sourceReplay: sourceReplay)
+        guard result == .assigned else { return result }
+        switch skill {
+        case .climber:
+            lemming.hasClimber = true
+            // Original Lemmings only: the climber ends a builder's shrug.
+            if lemming.action == .shrugging, configuration.mechanics == .original {
+                transition(&lemming, to: .walking, events: &events)
+            }
+
+        case .floater:
+            lemming.hasFloater = true
+
+        case .bomber:
+            lemming.bomberCountdown = 79
+
+        case .blocker:
+            transition(&lemming, to: .blocking, events: &events)
+            lemming.ownsBlockerField = true
+            lemming.blockerAnchor = lemming.foot
+
+        case .builder:
+            transition(&lemming, to: .building, events: &events)
+
+        case .basher:
+            transition(&lemming, to: .bashing, events: &events)
+
+        case .miner:
+            transition(&lemming, to: .mining, events: &events)
+
+        case .digger:
             transition(&lemming, to: .digging, events: &events)
         }
         lemmings[index] = lemming

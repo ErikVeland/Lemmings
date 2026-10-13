@@ -1,0 +1,175 @@
+Building for debugging...
+[Computing dependencies]
+[Using on-disk description]
+[2 / 6] NxlvKit
+[3 / 7] NxlvKit
+[9 / 13] LemmingsAppCore
+[10 / 14] LemmingsAppCore
+[14 / 19] NxlvKit
+[20 / 25] NxlvKit
+[22 / 26] NxlvKit
+[31 / 36] LemmingsAppCore
+[34 / 37] LemmingsAppCoreTests-product
+[38 / 41] LemmingsAppCoreTests-product
+[40 / 41] LemmingsAppCoreTests-product
+[44 / 44] LemmingsAppCoreTests-product
+[45 / 49] LemmingsAudio
+[46 / 50] LemmingsAudio
+[49 / 53] LemmingsMobileCore
+[50 / 54] LemmingsMobileCore
+[54 / 58] LemmingsGameArt
+[55 / 59] LemmingsGameArt
+[58 / 61] LemmingsLocal-product
+[59 / 62] LemmingsLocal-product
+[61 / 65] LemmingsLocal
+[62 / 66] LemmingsLocal
+[70 / 75] LemmingsMobileCore
+[73 / 81] LemmingsLocal-product
+[87 / 94] LemmingsLocal-product
+[96 / 103] LemmingsLocal-product
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6237:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6235 |       openPanel.canChooseFiles = true
+6236 |       openPanel.canChooseDirectories = false
+6237 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6238 |       openPanel.message = "Choose a NeoLemmix level file."
+6239 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:7558:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7556 |       openPanel.canChooseFiles = true
+7557 |       openPanel.canChooseDirectories = false
+7558 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7559 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+7560 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8266:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8264 |     keyboard.controllerRewindHeld = { [weak self] held in
+8265 |       guard let self else { return }
+8266 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8267 |       else if self.rewindHeld { self.endContinuousRewind() }
+8268 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[98 / 103] LemmingsLocal-product
+[100 / 106] LemmingsLocal
+[114 / 119] LemmingsLocal
+[123 / 128] LemmingsLocal
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:6237:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6235 |       openPanel.canChooseFiles = true
+6236 |       openPanel.canChooseDirectories = false
+6237 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+6238 |       openPanel.message = "Choose a NeoLemmix level file."
+6239 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:7558:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7556 |       openPanel.canChooseFiles = true
+7557 |       openPanel.canChooseDirectories = false
+7558 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7559 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+7560 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/Sources/LemmingsLocal/main.swift:8266:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8264 |     keyboard.controllerRewindHeld = { [weak self] held in
+8265 |       guard let self else { return }
+8266 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+8267 |       else if self.rewindHeld { self.endContinuousRewind() }
+8268 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[125 / 129] LemmingsLocal
+[126 / 129] LemmingsLocalTests-product
+[131 / 134] LemmingsLocalTests-product
+[133 / 134] LemmingsLocalTests-product
+[137 / 137] LemmingsLocalTests-product
+[138 / 141] LemmingsMobileCoreTests-product
+[145 / 148] LemmingsMobileCoreTests-product
+[147 / 148] LemmingsMobileCoreTests-product
+[153 / 156] NxlvKitTests-product
+[155 / 158] NxlvKitTests-product
+[157 / 158] NxlvKitTests-product
+[162 / 162] LemmingsAppCore-product
+[170 / 182] NxlvKit-product
+[170 / 183] LemmingsMobileUI
+[173 / 186] LemmingsMobileUI
+[181 / 187] LemmingsDataTool-product
+[187 / 191] LemmingsDataTool-product
+[190 / 194] LemmingsMobileBetaTool-product
+[193 / 196] LemmingsMobileMenuAudit-product
+[195 / 196] LemmingsMobileMenuAudit-product
+Build complete! (34.85 sec.)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite MobileBitmapTests started.
+􀟈  Suite MobileRewindTests started.
+􀟈  Suite MobilePrecisionSelectionTests started.
+􀟈  Suite MobileCoreTests started.
+􀟈  Suite MobileFramePacingTests started.
+􀟈  Test precisionRejectsTheLetterboxAndOutsideThePlayfield() started.
+􀟈  Test pointerBoundsKeepSequelSpriteGeometryAndSkillEligibility() started.
+􀟈  Test thermalCeilingsUseEvenCadenceAndDoNotRestoreImmediately() started.
+􀟈  Test fixedTickClockDropsSuspensionTime() started.
+􀟈  Test precisionDoesNotUseTheFingerAllowanceAcrossACrowd() started.
+􀟈  Test thermalPolicyNeverChangesSimulationRules() started.
+􀟈  Test everyEngineRetainsItsClockAtEveryCadenceAndSpeed() started.
+􀟈  Test checkpointPreservesHistoryAndAbandonedFuture() started.
+􀟈  Test winningReplayIsReadOnlyAndKeepsOutcome() started.
+􀟈  Test bitmapCameraMatchesTouchAfterPanZoomAndRotation() started.
+􀟈  Test reusedCRTSourceMatchesLegacyConversionAndClearsCameraMargins() started.
+􀟈  Test backgroundCheckpointKeepsTheCapturedDiggerState() started.
+􀟈  Test pencilCanAdjustAimBeforeCommittingWithoutPanning() started.
+􀟈  Test missedDeadlinesReduceCadenceEvenWithCheapMeasuredWork() started.
+􀟈  Test isolatedStallIsIgnoredAndRecoveryNeedsSustainedHeadroom() started.
+􀟈  Test pauseAndLifecycleGapsDoNotCreatePressureOrEarnRecovery() started.
+􀟈  Test pointerProbesMatchAssignmentsWithoutChangingTheRun() started.
+􀟈  Test precisionBoundsFollowZoomAndPixelAspect(zoom:) started.
+􀟈  Test sustainedCPUAndGPUPressureReduceCadence() started.
+􀟈  Test replayHistoryIncludesLegacyScheduledAssignments() started.
+􀟈  Test stationaryPointerChangesTargetWhenPausedCameraPans() started.
+􀟈  Test oldCheckpointRestoresAfterRewindChange() started.
+􀟈  Test undoNukeIsAssistedAndPersistsUsage() started.
+􀟈  Test replayHistoryShowsOnlySuccessfulUsesAndFollowsSeeking() started.
+􀟈  Test rewindThenAssignDropsTheFuture() started.
+􀟈  Test case passing 1 argument zoom → 0.75 to precisionBoundsFollowZoomAndPixelAspect(zoom:) started.
+􀟈  Test case passing 1 argument zoom → 2.0 to precisionBoundsFollowZoomAndPixelAspect(zoom:) started.
+􀟈  Test case passing 1 argument zoom → 4.0 to precisionBoundsFollowZoomAndPixelAspect(zoom:) started.
+􀟈  Test case passing 1 argument zoom → 12.0 to precisionBoundsFollowZoomAndPixelAspect(zoom:) started.
+􁁛  Test missedDeadlinesReduceCadenceEvenWithCheapMeasuredWork() passed after 0.002 seconds.
+􁁛  Test pencilCanAdjustAimBeforeCommittingWithoutPanning() passed after 0.002 seconds.
+􁁛  Test pauseAndLifecycleGapsDoNotCreatePressureOrEarnRecovery() passed after 0.002 seconds.
+􁁛  Test precisionDoesNotUseTheFingerAllowanceAcrossACrowd() passed after 0.002 seconds.
+􁁛  Test precisionRejectsTheLetterboxAndOutsideThePlayfield() passed after 0.002 seconds.
+􁁛  Test isolatedStallIsIgnoredAndRecoveryNeedsSustainedHeadroom() passed after 0.002 seconds.
+􁁛  Test thermalPolicyNeverChangesSimulationRules() passed after 0.002 seconds.
+􁁛  Test pointerBoundsKeepSequelSpriteGeometryAndSkillEligibility() passed after 0.002 seconds.
+􁁛  Test stationaryPointerChangesTargetWhenPausedCameraPans() passed after 0.002 seconds.
+􁁛  Test fixedTickClockDropsSuspensionTime() passed after 0.002 seconds.
+􁁛  Test thermalCeilingsUseEvenCadenceAndDoNotRestoreImmediately() passed after 0.002 seconds.
+􁁛  Test sustainedCPUAndGPUPressureReduceCadence() passed after 0.002 seconds.
+􁁛  Suite MobileCoreTests passed after 0.003 seconds.
+􀟈  Test case passing 1 argument zoom → 1.0 to precisionBoundsFollowZoomAndPixelAspect(zoom:) started.
+􁁛  Test precisionBoundsFollowZoomAndPixelAspect(zoom:) with 5 test cases passed after 0.003 seconds.
+􁁛  Suite MobilePrecisionSelectionTests passed after 0.003 seconds.
+􁁛  Test everyEngineRetainsItsClockAtEveryCadenceAndSpeed() passed after 0.004 seconds.
+􁁛  Suite MobileFramePacingTests passed after 0.004 seconds.
+􁁛  Test rewindThenAssignDropsTheFuture() passed after 0.006 seconds.
+􁁛  Test replayHistoryShowsOnlySuccessfulUsesAndFollowsSeeking() passed after 0.007 seconds.
+􁁛  Test replayHistoryIncludesLegacyScheduledAssignments() passed after 0.009 seconds.
+􁁛  Test reusedCRTSourceMatchesLegacyConversionAndClearsCameraMargins() passed after 0.013 seconds.
+􁁛  Test winningReplayIsReadOnlyAndKeepsOutcome() passed after 0.022 seconds.
+􁁛  Test pointerProbesMatchAssignmentsWithoutChangingTheRun() passed after 0.023 seconds.
+􁁛  Test undoNukeIsAssistedAndPersistsUsage() passed after 0.036 seconds.
+􁁛  Test oldCheckpointRestoresAfterRewindChange() passed after 0.038 seconds.
+􁁛  Test backgroundCheckpointKeepsTheCapturedDiggerState() passed after 0.043 seconds.
+􁁛  Test checkpointPreservesHistoryAndAbandonedFuture() passed after 0.051 seconds.
+􁁛  Suite MobileRewindTests passed after 0.051 seconds.
+􁁛  Test bitmapCameraMatchesTouchAfterPanZoomAndRotation() passed after 0.060 seconds.
+􁁛  Suite MobileBitmapTests passed after 0.060 seconds.
+􁁛  Test run with 25 tests in 5 suites passed after 0.060 seconds.

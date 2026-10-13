@@ -4,6 +4,28 @@ import Testing
 @testable import LemmingsMobileCore
 
 struct MobileRewindTests {
+    @Test func pointerProbesMatchAssignmentsWithoutChangingTheRun() throws {
+        var simulation = try fixture()
+        for _ in 0..<70 { simulation.tick() }
+        let id = try #require(simulation.lemmings.first).id
+        for skill in ClassicSkill.allCases { _ = simulation.assign(skill, to: id) }
+        for _ in 0..<50 {
+            let before = ClassicDOSReplayRecorder.stateHash(of: simulation)
+            for skill in ClassicSkill.allCases {
+                let results = simulation.assignmentResults(for: skill)
+                for (index, lemming) in simulation.lemmings.enumerated() {
+                    let result = simulation.assignmentResult(skill, to: lemming.id)
+                    #expect(results[index] == result)
+                    var probe = simulation
+                    #expect(result == probe.assign(skill, to: lemming.id))
+                }
+            }
+            #expect(simulation.assignmentResult(.builder, to: -1) == .noSuchLemming)
+            #expect(ClassicDOSReplayRecorder.stateHash(of: simulation) == before)
+            simulation.tick()
+        }
+    }
+
     @Test func backgroundCheckpointKeepsTheCapturedDiggerState() async throws {
         let initial = try fixture()
         let game = session(initial)

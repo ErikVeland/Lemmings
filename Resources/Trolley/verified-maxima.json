@@ -1,7 +1,7 @@
 {
-  "engineSourceFingerprint": "dd04e1a0accef72ae39672f1191326d56fa372e7260f77c3c67219da875ec145",
+  "engineSourceFingerprint": "d1a74fc9e9fffa9c76e3b8d5f86df8ad323c3a23eb9f075d39dfba83f212f914",
   "exhaustive": false,
-  "generatedAt": "2026-10-13T12:31:08Z",
+  "generatedAt": "2026-10-13T13:57:01Z",
   "levels": [
     {
       "bestSaved": 10,
@@ -14667,7 +14667,7 @@
       "rank": "Fun",
       "required": 5,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Tailor-made for blockers",
       "witness": {
         "completed": true,
@@ -14714,7 +14714,7 @@
       "rank": "Fun",
       "required": 10,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "A task for blockers and bombers",
       "witness": {
         "completed": true,
@@ -14761,7 +14761,7 @@
       "rank": "Fun",
       "required": 50,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Let's block and blow",
       "witness": {
         "completed": true,
@@ -14808,7 +14808,7 @@
       "rank": "Mayhem",
       "required": 60,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Down, along, up. In that order",
       "witness": {
         "completed": true,
@@ -14855,7 +14855,7 @@
       "rank": "Mayhem",
       "required": 50,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Pillars of Hercules",
       "witness": {
         "completed": true,
@@ -14902,7 +14902,7 @@
       "rank": "Mayhem",
       "required": 46,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Time to get up!",
       "witness": {
         "completed": true,
@@ -14949,7 +14949,7 @@
       "rank": "Mayhem",
       "required": 60,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "The Steel Mines of Kessel",
       "witness": {
         "completed": true,
@@ -14996,7 +14996,7 @@
       "rank": "Mayhem",
       "required": 64,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Save Me",
       "witness": {
         "completed": true,
@@ -15043,7 +15043,7 @@
       "rank": "Taxing",
       "required": 78,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Every Lemming for himself!!!",
       "witness": {
         "completed": true,
@@ -15090,7 +15090,7 @@
       "rank": "Taxing",
       "required": 64,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Bomboozal",
       "witness": {
         "completed": true,
@@ -15137,7 +15137,7 @@
       "rank": "Taxing",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Call in the bomb squad",
       "witness": {
         "completed": true,
@@ -15184,7 +15184,7 @@
       "rank": "Taxing",
       "required": 56,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "POOR WEE CREATURES!",
       "witness": {
         "completed": true,
@@ -15231,7 +15231,7 @@
       "rank": "Tricky",
       "required": 6,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Ozone friendly Lemmings",
       "witness": {
         "completed": true,
@@ -15278,7 +15278,7 @@
       "rank": "Tricky",
       "required": 40,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Luvly Jubly",
       "witness": {
         "completed": true,
@@ -15325,7 +15325,7 @@
       "rank": "Tricky",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Diet Lemmingaid",
       "witness": {
         "completed": true,
@@ -15372,7 +15372,7 @@
       "rank": "Tricky",
       "required": 9,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "It's Lemmingentry Watson",
       "witness": {
         "completed": true,
@@ -15419,7 +15419,7 @@
       "rank": "Tricky",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "From The Boundary Line",
       "witness": {
         "completed": true,
@@ -15466,7 +15466,7 @@
       "rank": "Xmas",
       "required": 45,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Time waits for no Lemming",
       "witness": {
         "completed": true,
@@ -15513,7 +15513,7 @@
       "rank": "Crazy",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Quote: \"That`s a good level\"",
       "witness": {
         "completed": true,
@@ -15560,7 +15560,7 @@
       "rank": "Crazy",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Many Lemmings make level work",
       "witness": {
         "completed": true,
@@ -15607,7 +15607,7 @@
       "rank": "Crazy",
       "required": 75,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "KEEP ON TRUCKING",
       "witness": {
         "completed": true,
@@ -15654,7 +15654,7 @@
       "rank": "Crazy",
       "required": 79,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "ROCKY VI",
       "witness": {
         "completed": true,
@@ -15701,7 +15701,7 @@
       "rank": "Crazy",
       "required": 8,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "No Problemming!",
       "witness": {
         "completed": true,
@@ -15748,7 +15748,7 @@
       "rank": "Crazy",
       "required": 10,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "It`s a trade off",
       "witness": {
         "completed": true,
@@ -15795,7 +15795,7 @@
       "rank": "Crazy",
       "required": 45,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Time waits for no Lemming",
       "witness": {
         "completed": true,
@@ -15842,7 +15842,7 @@
       "rank": "Crazy",
       "required": 44,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Worra load of old blocks!",
       "witness": {
         "completed": true,
@@ -15889,7 +15889,7 @@
       "rank": "Crazy",
       "required": 49,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "DIGGING FOR VICTORY",
       "witness": {
         "completed": true,
@@ -15936,7 +15936,7 @@
       "rank": "Crazy",
       "required": 45,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "NO PROBLEM",
       "witness": {
         "completed": true,
@@ -15983,7 +15983,7 @@
       "rank": "Crazy",
       "required": 45,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "DON`T PANIC",
       "witness": {
         "completed": true,
@@ -16030,7 +16030,7 @@
       "rank": "Crazy",
       "required": 10,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Ice Ice Lemming",
       "witness": {
         "completed": true,
@@ -16077,7 +16077,7 @@
       "rank": "Havoc",
       "required": 76,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Tubular Lemmings",
       "witness": {
         "completed": true,
@@ -16124,7 +16124,7 @@
       "rank": "Havoc",
       "required": 29,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Be more than just a number",
       "witness": {
         "completed": true,
@@ -16171,7 +16171,7 @@
       "rank": "Havoc",
       "required": 15,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Creature Discomforts",
       "witness": {
         "completed": true,
@@ -16218,7 +16218,7 @@
       "rank": "Havoc",
       "required": 3,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Flow Control",
       "witness": {
         "completed": true,
@@ -16265,7 +16265,7 @@
       "rank": "Havoc",
       "required": 75,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "HIGHLAND FLING",
       "witness": {
         "completed": true,
@@ -16312,7 +16312,7 @@
       "rank": "Havoc",
       "required": 45,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Scaling the Heights",
       "witness": {
         "completed": true,
@@ -16359,7 +16359,7 @@
       "rank": "Havoc",
       "required": 78,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Where Lemmings Dare",
       "witness": {
         "completed": true,
@@ -16406,7 +16406,7 @@
       "rank": "Havoc",
       "required": 68,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Lemmings in a situation",
       "witness": {
         "completed": true,
@@ -16453,7 +16453,7 @@
       "rank": "Havoc",
       "required": 50,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "LOoK BeFoRe YoU LeAp!",
       "witness": {
         "completed": true,
@@ -16500,7 +16500,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Rent-a-Lemming",
       "witness": {
         "completed": true,
@@ -16547,7 +16547,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Snuggle up to a Lemming",
       "witness": {
         "completed": true,
@@ -16594,7 +16594,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Who`s That Lemming",
       "witness": {
         "completed": true,
@@ -16641,7 +16641,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Dangerzone",
       "witness": {
         "completed": true,
@@ -16688,7 +16688,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "And now this...",
       "witness": {
         "completed": true,
@@ -16735,7 +16735,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Get a little extra help",
       "witness": {
         "completed": true,
@@ -16782,7 +16782,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Not just a pretty Lemming",
       "witness": {
         "completed": true,
@@ -16829,7 +16829,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Lemming Productions Present...",
       "witness": {
         "completed": true,
@@ -16876,7 +16876,7 @@
       "rank": "Wicked",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "LeMming ToMato KetchUp fAcilitY",
       "witness": {
         "completed": true,
@@ -16923,7 +16923,7 @@
       "rank": "Wicked",
       "required": 30,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Oh No! It`s the 4TH DIMENSION!",
       "witness": {
         "completed": true,
@@ -16970,7 +16970,7 @@
       "rank": "Wicked",
       "required": 30,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "PoP TiL YoU DrOp!",
       "witness": {
         "completed": true,
@@ -17017,7 +17017,7 @@
       "rank": "Wicked",
       "required": 72,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Last Lemming To Lemmingcentral",
       "witness": {
         "completed": true,
@@ -17064,7 +17064,7 @@
       "rank": "Wicked",
       "required": 45,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "A TOWERING PROBLEM",
       "witness": {
         "completed": true,
@@ -17111,7 +17111,7 @@
       "rank": "Wicked",
       "required": 45,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "How on Earth?",
       "witness": {
         "completed": true,
@@ -17158,7 +17158,7 @@
       "rank": "Wicked",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Temple of Love",
       "witness": {
         "completed": true,
@@ -17205,7 +17205,7 @@
       "rank": "Wicked",
       "required": 40,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "ROCKY ROAD",
       "witness": {
         "completed": true,
@@ -17252,7 +17252,7 @@
       "rank": "Wicked",
       "required": 78,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Suicidal Tendencies",
       "witness": {
         "completed": true,
@@ -17299,7 +17299,7 @@
       "rank": "Wicked",
       "required": 70,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Almost Nearly Virtual Reality",
       "witness": {
         "completed": true,
@@ -17346,7 +17346,7 @@
       "rank": "Wicked",
       "required": 40,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "SPAM,SPAM,SPAM,EGG AND LEMMING",
       "witness": {
         "completed": true,
@@ -17393,7 +17393,7 @@
       "rank": "Wicked",
       "required": 5,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Five Alive",
       "witness": {
         "completed": true,
@@ -17440,7 +17440,7 @@
       "rank": "Wicked",
       "required": 29,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Down the tube",
       "witness": {
         "completed": true,
@@ -17487,7 +17487,7 @@
       "rank": "Wicked",
       "required": 41,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Up, Down or Round and Round",
       "witness": {
         "completed": true,
@@ -17534,7 +17534,7 @@
       "rank": "Wicked",
       "required": 68,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "The Lemming Funhouse",
       "witness": {
         "completed": true,
@@ -17581,7 +17581,7 @@
       "rank": "Wild",
       "required": 60,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Lemming Hotel",
       "witness": {
         "completed": true,
@@ -17628,7 +17628,7 @@
       "rank": "Wild",
       "required": 65,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Lemming Rhythms",
       "witness": {
         "completed": true,
@@ -17675,7 +17675,7 @@
       "rank": "Wild",
       "required": 68,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Lemming Head",
       "witness": {
         "completed": true,
@@ -17722,7 +17722,7 @@
       "rank": "Wild",
       "required": 60,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Higgledy Piggledy",
       "witness": {
         "completed": true,
@@ -17769,7 +17769,7 @@
       "rank": "Wild",
       "required": 49,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Mutiny On The Bounty",
       "witness": {
         "completed": true,
@@ -17816,7 +17816,7 @@
       "rank": "Wild",
       "required": 40,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "SNOW JOKE",
       "witness": {
         "completed": true,
@@ -17863,7 +17863,7 @@
       "rank": "Wild",
       "required": 75,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "ONWARD AND UPWARD",
       "witness": {
         "completed": true,
@@ -17910,7 +17910,7 @@
       "rank": "Wild",
       "required": 40,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "THE SILENCE OF THE LEMMINGS",
       "witness": {
         "completed": true,
@@ -17957,7 +17957,7 @@
       "rank": "Wild",
       "required": 60,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Dr Lemminggood",
       "witness": {
         "completed": true,
@@ -18004,7 +18004,7 @@
       "rank": "Wild",
       "required": 65,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Lemmingdelica",
       "witness": {
         "completed": true,
@@ -18051,7 +18051,7 @@
       "rank": "Wild",
       "required": 29,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Got anything....Lemmingy???",
       "witness": {
         "completed": true,
@@ -24316,7 +24316,7 @@
       "rank": "Blizzard",
       "required": 22,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Oogilemming!",
       "witness": {
         "completed": true,
@@ -24363,7 +24363,7 @@
       "rank": "Blizzard",
       "required": 75,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "It Came Upon a Lemnight Clear",
       "witness": {
         "completed": true,
@@ -24410,7 +24410,7 @@
       "rank": "Blizzard",
       "required": 70,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "The Voyage Home...",
       "witness": {
         "completed": true,
@@ -24457,7 +24457,7 @@
       "rank": "Blizzard",
       "required": 65,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "The Final Frontier",
       "witness": {
         "completed": true,
@@ -24504,7 +24504,7 @@
       "rank": "Blizzard",
       "required": 8,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "The Needs of the Many...",
       "witness": {
         "completed": true,
@@ -24551,7 +24551,7 @@
       "rank": "Blizzard",
       "required": 47,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "The Next Lemeration",
       "witness": {
         "completed": true,
@@ -24598,7 +24598,7 @@
       "rank": "Flurry",
       "required": 70,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Clouds of Lemmings",
       "witness": {
         "completed": true,
@@ -24645,7 +24645,7 @@
       "rank": "Flurry",
       "required": 45,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "The Long Way Around",
       "witness": {
         "completed": true,
@@ -24692,7 +24692,7 @@
       "rank": "Lemmings Versus",
       "required": 65,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "There can be only one",
       "witness": {
         "completed": true,
@@ -24739,7 +24739,7 @@
       "rank": "Lemmings Versus",
       "required": 65,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "We`re in this one together",
       "witness": {
         "completed": true,
@@ -24786,7 +24786,7 @@
       "rank": "Lemmings Versus",
       "required": 65,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Good game! Good game!",
       "witness": {
         "completed": true,
@@ -24833,7 +24833,7 @@
       "rank": "Lemmings Versus",
       "required": 90,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "The Hammock...",
       "witness": {
         "completed": true,
@@ -24880,7 +24880,7 @@
       "rank": "Lemmings Versus",
       "required": 90,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Graffiti",
       "witness": {
         "completed": true,
@@ -24927,7 +24927,7 @@
       "rank": "Lemmings Versus",
       "required": 26,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "The Rope Bridge",
       "witness": {
         "completed": true,
@@ -24974,7 +24974,7 @@
       "rank": "Lemmings Versus",
       "required": 26,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Islands in the Sky",
       "witness": {
         "completed": true,
@@ -25021,7 +25021,7 @@
       "rank": "Lemmings Versus",
       "required": 20,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Cross-over Point",
       "witness": {
         "completed": true,
@@ -25068,7 +25068,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 49,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Watch your step",
       "witness": {
         "completed": true,
@@ -25115,7 +25115,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Libra",
       "witness": {
         "completed": true,
@@ -25162,7 +25162,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 98,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Spiral staircase",
       "witness": {
         "completed": true,
@@ -25209,7 +25209,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 49,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Water processing plant",
       "witness": {
         "completed": true,
@@ -25256,7 +25256,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 45,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Doomsday",
       "witness": {
         "completed": true,
@@ -25303,7 +25303,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 40,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Here is Mr.Lemming's house",
       "witness": {
         "completed": true,
@@ -25350,7 +25350,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "SUNSOFT Special",
       "witness": {
         "completed": true,
@@ -25397,7 +25397,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 59,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Haunted botanical garden",
       "witness": {
         "completed": true,
@@ -25444,7 +25444,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 46,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Watch right or left (Part two)",
       "witness": {
         "completed": true,
@@ -25491,7 +25491,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 49,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Out, away from the tune",
       "witness": {
         "completed": true,
@@ -25538,7 +25538,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 80,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Stray sheep",
       "witness": {
         "completed": true,
@@ -25585,7 +25585,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 1,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Two heads are better...",
       "witness": {
         "completed": true,
@@ -25632,7 +25632,7 @@
       "rank": "Mega Drive Sunsoft",
       "required": 80,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "I am A.T.",
       "witness": {
         "completed": true,
@@ -26817,7 +26817,7 @@
       }
     },
     {
-      "bestSaved": 1,
+      "bestSaved": 12,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "839fa256eec5d8f9a59c48b40731578cc29d5fab99ff97115c350a02f2d4c780:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -26838,7 +26838,7 @@
         "timeLimitSeconds": 340
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 11,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -26852,17 +26852,17 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 11,
+        "lost": 0,
         "path": "witnesses/lemmings3-27.json",
         "released": 12,
         "retainedReserves": 10,
-        "saved": 1,
-        "sha256": "592cdcf938012aba38603ef42db19fd84d72ce7c4e2eeedf94008c23d9ad63e7",
-        "ticks": 7820
+        "saved": 12,
+        "sha256": "e739bedf351c597f2043dbda692464aa528abad6793de9c835eb82544b4894cf",
+        "ticks": 1465
       }
     },
     {
-      "bestSaved": 1,
+      "bestSaved": 12,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "5befc0d948229f6a5c27ef8d42eec7cc626d24fe39649a08e376912b7588749f:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -26883,7 +26883,7 @@
         "timeLimitSeconds": 420
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 11,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -26897,17 +26897,17 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 11,
+        "lost": 0,
         "path": "witnesses/lemmings3-28.json",
         "released": 12,
         "retainedReserves": 10,
-        "saved": 1,
-        "sha256": "8e54f68e5ead3764485a83a69d59388881bcbea603db09b28c09f6b7c116b8c7",
-        "ticks": 9660
+        "saved": 12,
+        "sha256": "4a479da1a1a9f5b9c3af0102d32ccfd6ab2b2fa37bc030d6fb1b363f687c1c80",
+        "ticks": 5024
       }
     },
     {
-      "bestSaved": 1,
+      "bestSaved": 12,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "464e03a68980d741d0406cb405e51709e47cda90d4a91380a9ca5eb667bed96f:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -26928,7 +26928,7 @@
         "timeLimitSeconds": 420
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 11,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -26942,17 +26942,17 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 11,
+        "lost": 0,
         "path": "witnesses/lemmings3-29.json",
         "released": 12,
         "retainedReserves": 10,
-        "saved": 1,
-        "sha256": "c3873a4f64b8a2f74cf014e7baa54dabb645b25911e0773490bb507beb3c6fd4",
-        "ticks": 288
+        "saved": 12,
+        "sha256": "bc46c9f8541743799b1ef45e904e56d650292a331a86368deeccde0e6822197b",
+        "ticks": 7601
       }
     },
     {
-      "bestSaved": 1,
+      "bestSaved": 12,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "83838e25bb2516094fd4791988c396b16362888cd7350eb34c24966207b243e0:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -26973,7 +26973,7 @@
         "timeLimitSeconds": 420
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 11,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -26987,13 +26987,13 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 11,
+        "lost": 0,
         "path": "witnesses/lemmings3-30.json",
         "released": 12,
         "retainedReserves": 10,
-        "saved": 1,
-        "sha256": "2f970f1751ad3c28f92a1d334119e7c80aa44d8399291b3cfdd51fa9285fd151",
-        "ticks": 9660
+        "saved": 12,
+        "sha256": "37b40afccac51b8db1f68b3ea8564bc398b8e09cde766108bb6069e41a2f424f",
+        "ticks": 3743
       }
     },
     {
@@ -27447,7 +27447,7 @@
       }
     },
     {
-      "bestSaved": 1,
+      "bestSaved": 10,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "8ac64f06259b503328eae6ae573e7e459ba7a025cce77f657041591a2927e363:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -27468,7 +27468,7 @@
         "timeLimitSeconds": 300
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 19,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -27482,13 +27482,13 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 19,
+        "lost": 0,
         "path": "witnesses/lemmings3-211.json",
-        "released": 20,
-        "retainedReserves": 0,
-        "saved": 1,
-        "sha256": "e448750eddd0d2775d4b2c628b4a9b95669d04873885d302eb28d02903a6bc16",
-        "ticks": 1314
+        "released": 10,
+        "retainedReserves": 10,
+        "saved": 10,
+        "sha256": "a9cb88deab2e94c03e97eee1515f3d6e5cd9f4491bfa26ffda55295bfeccaddb",
+        "ticks": 1705
       }
     },
     {
@@ -27582,7 +27582,7 @@
       }
     },
     {
-      "bestSaved": 10,
+      "bestSaved": 13,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "798190f8988f139a35735e6795ae264b306d614ad883b95b2fdd3289a5e0795b:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -27603,7 +27603,7 @@
         "timeLimitSeconds": 303
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 3,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -27617,17 +27617,17 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 3,
+        "lost": 0,
         "path": "witnesses/lemmings3-214.json",
         "released": 13,
         "retainedReserves": 10,
-        "saved": 10,
-        "sha256": "08acd2fc758ca613ee4fb232a5d9141bbea91cf875a76b9668717c19191d076d",
-        "ticks": 6969
+        "saved": 13,
+        "sha256": "d430c84feb2ef34dfbed910bd032dd8d7f53ca7f9fa9d9dca96edd26eaaa0d25",
+        "ticks": 4065
       }
     },
     {
-      "bestSaved": 10,
+      "bestSaved": 11,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "c8e9f30f2174e49d48b058b56a81442fda63d24c0b44e3d7691e4de365543eb1:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -27648,7 +27648,7 @@
         "timeLimitSeconds": 210
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 3,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -27662,13 +27662,13 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 3,
+        "lost": 0,
         "path": "witnesses/lemmings3-215.json",
-        "released": 13,
-        "retainedReserves": 8,
-        "saved": 10,
-        "sha256": "14c80a707c73bb46bd25f4685a186cb05473f79dbe378e0a14bf3119f063e7a0",
-        "ticks": 4830
+        "released": 11,
+        "retainedReserves": 10,
+        "saved": 11,
+        "sha256": "2160c25458f0191074ab35578b5b21471f333a8ae03f10cc0e15f9cd6de8c14e",
+        "ticks": 2956
       }
     },
     {
@@ -27717,7 +27717,7 @@
       }
     },
     {
-      "bestSaved": 4,
+      "bestSaved": 14,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "9ee72008901c237e7d067e1bde2090b67252e3d1b3b63b6a893447499268fc0b:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -27738,7 +27738,7 @@
         "timeLimitSeconds": 240
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 14,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -27752,17 +27752,17 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 14,
+        "lost": 0,
         "path": "witnesses/lemmings3-217.json",
-        "released": 18,
-        "retainedReserves": 6,
-        "saved": 4,
-        "sha256": "636962e3729875027543c8b7beac83f40cc10d60eb0f6b52a4bd1f80c2cdbbf2",
-        "ticks": 5520
+        "released": 14,
+        "retainedReserves": 10,
+        "saved": 14,
+        "sha256": "8f1d9c5e40fd9ac2268f32b6aa2810cb157a995c49145c40b222fd22da102d6f",
+        "ticks": 1463
       }
     },
     {
-      "bestSaved": 10,
+      "bestSaved": 18,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "2af74da2487c368d5febb3177374c0cfac4dc19766b2cffba9cae434ceb433ff:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -27783,7 +27783,7 @@
         "timeLimitSeconds": 420
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 8,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -27797,17 +27797,17 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 8,
+        "lost": 0,
         "path": "witnesses/lemmings3-218.json",
         "released": 18,
         "retainedReserves": 10,
-        "saved": 10,
-        "sha256": "de9cec59cb4e8e2a93f68cd59b14eb4a1660686ce048de820ec8800455bb50ef",
-        "ticks": 8000
+        "saved": 18,
+        "sha256": "a77793d617912f7ae5794b49455a81b27f137822627551746c6710e3d1b9a746",
+        "ticks": 630
       }
     },
     {
-      "bestSaved": 1,
+      "bestSaved": 10,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "d96ebf3c8233c33d90954801ff9081983f3bca250e167f84abbc07eb0787ef29:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -27828,7 +27828,7 @@
         "timeLimitSeconds": 180
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 9,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -27842,17 +27842,17 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 9,
+        "lost": 0,
         "path": "witnesses/lemmings3-219.json",
         "released": 10,
         "retainedReserves": 10,
-        "saved": 1,
-        "sha256": "5225cbc242695b93be48f3d9c990e40fc85a9614df4970fbac4a0ac6d3e986bd",
-        "ticks": 4140
+        "saved": 10,
+        "sha256": "4eb3a95cc52c48bc8ad87c78423b0b7d38f6b7e70c8b7c2267ceb54ccde9fba6",
+        "ticks": 636
       }
     },
     {
-      "bestSaved": 1,
+      "bestSaved": 12,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "482ab01a8cc7ee40a3daba2ad5331c4246e9c80ee9dd478a64e265bf983a932a:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -27873,7 +27873,7 @@
         "timeLimitSeconds": 420
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 11,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -27887,17 +27887,17 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 11,
+        "lost": 0,
         "path": "witnesses/lemmings3-220.json",
         "released": 12,
         "retainedReserves": 10,
-        "saved": 1,
-        "sha256": "d0b4542d982d6a53ea102b06a7b26ed29ed85d371d5c6770b8a3ee15d6d9c265",
-        "ticks": 9660
+        "saved": 12,
+        "sha256": "21f03bfea006fbafc89c39d5f165e5147abd129b4a534b956afac58ecaee3290",
+        "ticks": 2425
       }
     },
     {
-      "bestSaved": 2,
+      "bestSaved": 11,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "5e7081c21619fefb724657afc6811862c51df7f72f24b26b6e6082fa516f3f84:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -27918,7 +27918,7 @@
         "timeLimitSeconds": 420
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 19,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -27932,13 +27932,13 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 19,
+        "lost": 0,
         "path": "witnesses/lemmings3-221.json",
-        "released": 21,
-        "retainedReserves": 0,
-        "saved": 2,
-        "sha256": "f967b82181f96fd3581fbaeba3eca5ee74507550283a65c1c8f909841e50f6a1",
-        "ticks": 901
+        "released": 11,
+        "retainedReserves": 10,
+        "saved": 11,
+        "sha256": "46b2054d2712c34a240beef8b3220d1103d0a6883ec297171a45189e0bc00393",
+        "ticks": 1618
       }
     },
     {
@@ -28257,7 +28257,7 @@
       }
     },
     {
-      "bestSaved": 2,
+      "bestSaved": 11,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "9ac56b12beeb8e5bb8ee10f375b53d49a80b4c79300c1c1130a54a805f484505:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -28278,7 +28278,7 @@
         "timeLimitSeconds": 420
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 10,
+      "lossesInBestSolution": 1,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -28292,17 +28292,17 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 10,
+        "lost": 1,
         "path": "witnesses/lemmings3-229.json",
         "released": 12,
         "retainedReserves": 10,
-        "saved": 2,
-        "sha256": "a653adc9372b6c3d7581cab3a6f94e00b574bc69a130c0177bf910e51a4d264e",
-        "ticks": 9660
+        "saved": 11,
+        "sha256": "fc4eddbc9b818e2bf8aed34a275c2e8bb27f64fd705a6ccae395d5b9b318c650",
+        "ticks": 3191
       }
     },
     {
-      "bestSaved": 1,
+      "bestSaved": 16,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "e6c23ce6d8170a7504cb9498cc41e26479d403df6d94f43b29c9f0a21cda7703:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -28323,7 +28323,7 @@
         "timeLimitSeconds": 300
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 15,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -28337,13 +28337,13 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 15,
+        "lost": 0,
         "path": "witnesses/lemmings3-230.json",
         "released": 16,
         "retainedReserves": 10,
-        "saved": 1,
-        "sha256": "b2dded69181a1954f822bccd62a9c130019e3eae1e1c7ea01a0fc6b04e6430ea",
-        "ticks": 6900
+        "saved": 16,
+        "sha256": "10fb8bca1c6805222e0cfd9dee0764262ab21160f53a0da3d4abe7f013f1c0dd",
+        "ticks": 2256
       }
     },
     {
@@ -28707,7 +28707,7 @@
       }
     },
     {
-      "bestSaved": 11,
+      "bestSaved": 12,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "ba2d44e965e07fb8e023cb8ed90dff0b5fbeec11901f6f2a7379c57cdd51d873:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -28728,7 +28728,7 @@
         "timeLimitSeconds": 180
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 1,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -28742,13 +28742,13 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 1,
+        "lost": 0,
         "path": "witnesses/lemmings3-109.json",
         "released": 12,
         "retainedReserves": 10,
-        "saved": 11,
-        "sha256": "50e801e978b7d3b41e99f64b96fc70ec0c32b41042d13104a43ab970fdf24d03",
-        "ticks": 700
+        "saved": 12,
+        "sha256": "0fbeed9226a9b1a57a626b98b8ffd98bc97e82159dfb0bff5b04eb12135c88da",
+        "ticks": 605
       }
     },
     {
@@ -29157,7 +29157,7 @@
       }
     },
     {
-      "bestSaved": 10,
+      "bestSaved": 14,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "865a628a60295bc9f98ae884ff1412bee299d91e199114f46fe62f1a959e7d85:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -29178,7 +29178,7 @@
         "timeLimitSeconds": 360
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 4,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -29192,13 +29192,13 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 4,
+        "lost": 0,
         "path": "witnesses/lemmings3-119.json",
         "released": 14,
         "retainedReserves": 10,
-        "saved": 10,
-        "sha256": "fc1aadf56f8918d8987329d94d4d148a914f91f3a6f6e1af5d4164f20041e627",
-        "ticks": 8000
+        "saved": 14,
+        "sha256": "392757d4d596ff2d9db8c403cf7e21af3097ef1fd2b348b62b43c060191ada8f",
+        "ticks": 1659
       }
     },
     {
@@ -29247,7 +29247,7 @@
       }
     },
     {
-      "bestSaved": 2,
+      "bestSaved": 11,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "9a652da9d3805bcdc5e1c60496a47760bbe5ae3034791a7d35a21465e2f87b49:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -29268,7 +29268,7 @@
         "timeLimitSeconds": 360
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 9,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -29282,13 +29282,13 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 9,
+        "lost": 0,
         "path": "witnesses/lemmings3-121.json",
         "released": 11,
         "retainedReserves": 10,
-        "saved": 2,
-        "sha256": "1b1d43ac9becbbf0e9bb70e979232c18c0ac274ded39b4040479b0c60fe9dabc",
-        "ticks": 8280
+        "saved": 11,
+        "sha256": "02f95e933f62ca4f0512c5073ab5722cec837ea73d14807e8165e81494885339",
+        "ticks": 2634
       }
     },
     {
@@ -29337,7 +29337,7 @@
       }
     },
     {
-      "bestSaved": 4,
+      "bestSaved": 11,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "fe46b40480d3efb87c4c178269323258a6db5022e1a617f9babd8f3600e7ccce:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -29358,7 +29358,7 @@
         "timeLimitSeconds": 360
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 14,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -29372,17 +29372,17 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 14,
+        "lost": 0,
         "path": "witnesses/lemmings3-123.json",
-        "released": 18,
-        "retainedReserves": 3,
-        "saved": 4,
-        "sha256": "311dff8820636ab45e7060f6a4b8575528ec7342dadc8820c85d74fb3ad1bb05",
-        "ticks": 8280
+        "released": 11,
+        "retainedReserves": 10,
+        "saved": 11,
+        "sha256": "c012df8de7d67b6e3ab18649bc19004f6fc3cd4285a25f6ffdc8b0971fe9b9d6",
+        "ticks": 2576
       }
     },
     {
-      "bestSaved": 1,
+      "bestSaved": 11,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "021f76f59fb445cd171ec7a345359f4526b1dc0f0fbc53c4a0fb11b557a0afa6:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -29403,7 +29403,7 @@
         "timeLimitSeconds": 240
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 10,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -29417,13 +29417,13 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 10,
+        "lost": 0,
         "path": "witnesses/lemmings3-124.json",
         "released": 11,
         "retainedReserves": 10,
-        "saved": 1,
-        "sha256": "044c642cc1e10ff22b0d08e25daaf78f639c20a716bb622b520bd7d02f0d0a1b",
-        "ticks": 5520
+        "saved": 11,
+        "sha256": "51fb2aec3d3a420228a21ea6bb6baf05b2157f4bbb55b80d1ac1c5f1013c1fac",
+        "ticks": 2534
       }
     },
     {
@@ -29472,7 +29472,7 @@
       }
     },
     {
-      "bestSaved": 2,
+      "bestSaved": 11,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "125566a9579b208db9ab94f8a8c052d52c478776af2ff57417f42dba9db30f01:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -29493,7 +29493,7 @@
         "timeLimitSeconds": 420
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 9,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -29507,17 +29507,17 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 9,
+        "lost": 0,
         "path": "witnesses/lemmings3-126.json",
         "released": 11,
         "retainedReserves": 10,
-        "saved": 2,
-        "sha256": "34508abd5f72115d94bbe430a5da5c4c7de251a73ae76876bd5a6818f5ea5d32",
-        "ticks": 9660
+        "saved": 11,
+        "sha256": "5e83a2cbb606116502a0a41aff505d1a0319153af069f0bf6a3ab24c1e26cfab",
+        "ticks": 1950
       }
     },
     {
-      "bestSaved": 1,
+      "bestSaved": 10,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "f3be69f7b14f00b5e281cb9711019be134140de9ee22f95d306742ea47ac371e:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -29538,7 +29538,7 @@
         "timeLimitSeconds": 420
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 9,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -29552,17 +29552,17 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 9,
+        "lost": 0,
         "path": "witnesses/lemmings3-127.json",
         "released": 10,
         "retainedReserves": 10,
-        "saved": 1,
-        "sha256": "134b2549fcbafe133c1ce158704e8a115d01b7c6f918e60130abeb638c7b9fa6",
-        "ticks": 9660
+        "saved": 10,
+        "sha256": "97146820cd777484e64482bd221ce6d631e5f511f75983ee998b1336479733f0",
+        "ticks": 6459
       }
     },
     {
-      "bestSaved": 10,
+      "bestSaved": 12,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "c1ac1e180d3b70139ea7924b547d5518bfc736b55d81271aae3c1f64468b95b5:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -29583,7 +29583,7 @@
         "timeLimitSeconds": 240
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 2,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -29597,17 +29597,17 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 2,
+        "lost": 0,
         "path": "witnesses/lemmings3-128.json",
         "released": 12,
         "retainedReserves": 10,
-        "saved": 10,
-        "sha256": "35ddbd055579634c6302acb12c177fabbf8d9bc4bafa1ed07221d8e0ff872407",
-        "ticks": 5520
+        "saved": 12,
+        "sha256": "d56d49a146f6ba3919afc73395cdce37ffec19f41ac90532b2229ec1effa63a2",
+        "ticks": 2214
       }
     },
     {
-      "bestSaved": 1,
+      "bestSaved": 11,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "84085a4f5ed4ca98ce6139b957b38216ddfb64b01b952f0082f1c65b98d2867a:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -29628,7 +29628,7 @@
         "timeLimitSeconds": 300
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 20,
+      "lossesInBestSolution": 1,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -29642,17 +29642,17 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 20,
+        "lost": 1,
         "path": "witnesses/lemmings3-129.json",
-        "released": 21,
-        "retainedReserves": 0,
-        "saved": 1,
-        "sha256": "004064baf3db682efe848ab9522c90d185556de7a621bcb3907d53c0756a7267",
-        "ticks": 8280
+        "released": 12,
+        "retainedReserves": 9,
+        "saved": 11,
+        "sha256": "15db6cb2452dfdd162660662ab30faddc00852a851835327508e9e5bd456a048",
+        "ticks": 6773
       }
     },
     {
-      "bestSaved": 2,
+      "bestSaved": 11,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "d3b95e192c8491769d3a49ba85c9227b3a43eeda335cbf32d186872af91866c8:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -29673,7 +29673,7 @@
         "timeLimitSeconds": 360
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 10,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -29687,13 +29687,13 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 10,
+        "lost": 0,
         "path": "witnesses/lemmings3-130.json",
-        "released": 12,
-        "retainedReserves": 9,
-        "saved": 2,
-        "sha256": "8574b8acefc3be6160c4126aa010952c34328f82be792284a6a410e10cf70e76",
-        "ticks": 8280
+        "released": 11,
+        "retainedReserves": 10,
+        "saved": 11,
+        "sha256": "dbcc12200bfa32df80f91367750b5139be9fc2a91235a47a52c6ca8e837673e3",
+        "ticks": 3126
       }
     },
     {
@@ -29729,7 +29729,7 @@
       "rank": "Frost",
       "required": 69,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "The Land of the Bizarre",
       "witness": {
         "completed": true,
@@ -29776,7 +29776,7 @@
       "rank": "Frost",
       "required": 25,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Happy New Year!",
       "witness": {
         "completed": true,
@@ -29823,7 +29823,7 @@
       "rank": "Frost",
       "required": 40,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Happy New Year II!",
       "witness": {
         "completed": true,
@@ -29870,7 +29870,7 @@
       "rank": "Frost",
       "required": 49,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Plethora of Presents",
       "witness": {
         "completed": true,
@@ -29917,7 +29917,7 @@
       "rank": "Frost",
       "required": 79,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Up on the Rooftops",
       "witness": {
         "completed": true,
@@ -29964,7 +29964,7 @@
       "rank": "Hail",
       "required": 75,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Break On Through",
       "witness": {
         "completed": true,
@@ -30011,7 +30011,7 @@
       "rank": "Hail",
       "required": 25,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "And a Happy New Year!",
       "witness": {
         "completed": true,
@@ -30058,7 +30058,7 @@
       "rank": "Hail",
       "required": 78,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Lemmintaschen?",
       "witness": {
         "completed": true,
@@ -30105,7 +30105,7 @@
       "rank": "Hail",
       "required": 68,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Get the Point?",
       "witness": {
         "completed": true,
@@ -30152,7 +30152,7 @@
       "rank": "Hail",
       "required": 27,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 3,
+      "testedCandidates": 4,
       "title": "Surprise Package?",
       "witness": {
         "completed": true,
