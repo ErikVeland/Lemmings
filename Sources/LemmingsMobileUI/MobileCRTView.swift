@@ -59,8 +59,6 @@ import UIKit
 
     func update(image: CGImage, settings: ClassicSettings, flashMask: [UInt8]) {
         guard let device else { return }
-        let updateStarted = ProcessInfo.processInfo.systemUptime
-        defer { MobileDevicePerformance.recordCPU(ProcessInfo.processInfo.systemUptime - updateStarted, source: "upload") }
         tubeSettings = settings.display == .television ? .television : .amiga1084
         let intensity = Float(settings.displayIntensity)
         tubeSettings.scanlineDepth *= intensity
