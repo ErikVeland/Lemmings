@@ -39,16 +39,73 @@ extension MusicFileDeck {
         if sample > 0.35 { loopFrames += 1 }
         if sample < -0.1 { outroFrames += 1 }
       }
-      await Task.yield()
-      try await Task.sleep(nanoseconds: 1_000_000)
+      // Keep the main actor busy for the entire song. Refill must continue on
+      // the decoder worker, even across several source-loop boundaries.
+      deck.stream.drain()
     }
     print("Offline loop signal frames: intro=\(introFrames), body=\(loopFrames), outro=\(outroFrames), completed=\(deck.completedLoops)")
     precondition((40_000...46_000).contains(introFrames), "The intro repeated or went missing")
     precondition(loopFrames > 150_000 && outroFrames == 0, "Source loop repeated its fade/outro or stopped")
     precondition(deck.completedLoops >= 3, "Rendered loop completions did not replenish the queue")
     deck.stop(); deck.engine.disableManualRenderingMode()
-    print("PASS offline recording signal: intro once, continuing exact loop, no rendered outro/fade and measured trim routing")
+    print("PASS offline recording signal with main actor held: intro once, continuing exact loop, no rendered outro/fade and measured trim routing")
+  }
+
+  @MainActor static func checkShortLoopAndPeakProtection() throws {
+    let url = FileManager.default.temporaryDirectory.appendingPathComponent("music-short-loop-\(UUID().uuidString).caf")
+    defer { try? FileManager.default.removeItem(at: url) }
+    let format = AVAudioFormat(standardFormatWithSampleRate: 48000, channels: 1)!
+    let source = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 4800)!
+    source.frameLength = 4800
+    for frame in 0..<4800 { source.floatChannelData![0][frame] = -0.8 + 1.6 * Float(frame) / 4800 }
+    // Exercise compressed decoding, mono, 48 kHz and many loops per queue.
+    do {
+      let file = try AVAudioFile(forWriting: url, settings: [
+        AVFormatIDKey: kAudioFormatAppleLossless, AVSampleRateKey: 48000,
+        AVNumberOfChannelsKey: 1, AVEncoderBitDepthHintKey: 16])
+      try file.write(from: source)
+    }
+    let deck = MusicFileDeck(url: url, originalMix: true)!
+    deck.equaliser.bypass = true; deck.reverb.wetDryMix = 0
+    try deck.engine.enableManualRenderingMode(.offline, format: format, maximumFrameCount: 1024)
+    deck.play(); deck.fadeTask?.cancel(); deck.fadeTask = nil; deck.sourceMixer.outputVolume = 1
+    let output = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 1024)!
+    var previous: Float = 0
+    var worstStep: Float = 0
+    var energy = 0.0
+    for block in 0..<50 {
+      let result = try deck.engine.renderOffline(1024, to: output)
+      precondition(result == .success)
+      deck.stream.drain()
+      for frame in 0..<Int(output.frameLength) {
+        let sample = output.floatChannelData![0][frame]
+        precondition(sample.isFinite && abs(sample) <= 1.001)
+        if block > 0 { worstStep = max(worstStep, abs(sample - previous)) }
+        previous = sample; energy += Double(sample * sample)
+      }
+    }
+    precondition(deck.completedLoops >= 10 && energy > 1000, "Short compressed loops stopped while the UI was busy")
+    precondition(worstStep < 0.08, "An abrupt loop seam reached the output: \(worstStep)")
+    // Push the internal EQ above full scale. Peak protection follows the mix.
+    deck.equaliser.bypass = false; deck.equaliser.globalGain = 18
+    deck.setNukeAmount(1)
+    for _ in 0..<30 {
+      let result = try deck.engine.renderOffline(1024, to: output)
+      precondition(result == .success)
+      deck.stream.drain()
+      for frame in 0..<Int(output.frameLength) {
+        let sample = output.floatChannelData![0][frame]
+        precondition(sample.isFinite && abs(sample) <= 1.001, "Boosted music clipped after its effects: \(sample)")
+      }
+    }
+    deck.stop()
+    deck.play(); deck.fadeTask?.cancel(); deck.fadeTask = nil; deck.sourceMixer.outputVolume = 1
+    let result = try deck.engine.renderOffline(1024, to: output)
+    precondition(result == .success)
+    deck.stop(); deck.engine.disableManualRenderingMode()
+    print("PASS short ALAC loops, mono 48 kHz, bounded decoding, smooth seams, post-effect peak protection and restart")
   }
 }
 
 try await MusicFileDeck.checkRecordedLoopSignal()
+try MusicFileDeck.checkShortLoopAndPeakProtection()

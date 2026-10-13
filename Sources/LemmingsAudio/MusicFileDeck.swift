@@ -179,9 +179,9 @@ public final class MusicFileDeck {
   private var playbackGeneration = 0
   public var completedLoops: Int {
     guard started, let time = player.lastRenderTime.flatMap({ player.playerTime(forNodeTime: $0) }) else { return 0 }
-    let first = profile?.segment(first: true, repeats: repeats, fileFrames: file.length,
+    let first: (start: Int64, count: Int64) = profile?.segment(first: true, repeats: repeats, fileFrames: file.length,
       fileRate: file.processingFormat.sampleRate) ?? (0, file.length)
-    let loop = profile?.segment(first: false, repeats: repeats, fileFrames: file.length,
+    let loop: (start: Int64, count: Int64) = profile?.segment(first: false, repeats: repeats, fileFrames: file.length,
       fileRate: file.processingFormat.sampleRate) ?? (0, file.length)
     guard time.sampleTime >= first.count else { return 0 }
     return 1 + (repeats ? Int((time.sampleTime - first.count) / max(1, loop.count)) : 0)
@@ -294,12 +294,15 @@ public final class MusicFileDeck {
     engine.attach(outputMixer)
     engine.attach(limiter)
 
-    let format = file.processingFormat
-    engine.connect(player, to: musicLayer, format: format)
+    let sourceFormat = file.processingFormat
+    // Reverb and pitch processing use a stable stereo bus. The layer mixers
+    // convert mono recordings before those effects, at the source sample rate.
+    let format = AVAudioFormat(standardFormatWithSampleRate: sourceFormat.sampleRate, channels: 2)!
+    engine.connect(player, to: musicLayer, format: sourceFormat)
     engine.connect(musicLayer, to: inputMixer, fromBus: 0, toBus: 0, format: format)
     if rhythmBuffer != nil {
       engine.attach(rhythmPlayer); engine.attach(rhythmLayer)
-      engine.connect(rhythmPlayer, to: rhythmLayer, format: format)
+      engine.connect(rhythmPlayer, to: rhythmLayer, format: sourceFormat)
       engine.connect(rhythmLayer, to: inputMixer, fromBus: 0, toBus: 1, format: format)
       rhythmLayer.outputVolume = 0
     }
@@ -316,7 +319,7 @@ public final class MusicFileDeck {
     engine.attach(reverse)
     engine.connect(reverse, to: outputMixer, fromBus: 0, toBus: 1, format: format)
     rewindNode = reverse
-    player.installTap(onBus: 0, bufferSize: 1024, format: format) { @Sendable buffer, _ in history.record(buffer) }
+    player.installTap(onBus: 0, bufferSize: 1024, format: sourceFormat) { @Sendable buffer, _ in history.record(buffer) }
     engine.connect(outputMixer, to: limiter, format: format)
     engine.connect(limiter, to: engine.mainMixerNode, format: format)
 

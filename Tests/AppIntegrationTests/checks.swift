@@ -1024,7 +1024,8 @@ extension AppDelegate {
       view.cacheDisplay(in: view.bounds, to: bitmap)
       try bitmap.representation(using: .png, properties: [:])!.write(to: captures.appendingPathComponent(name + ".png"))
       let buttons = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.filter { $0.accessibilityRole() == .button }
-      if view.mode == .result, let primary = buttons.first(where: { $0.accessibilityLabel() == view.primaryResultTitle }) {
+      if view.mode == .result, let primary = buttons.first(where: { $0.accessibilityLabel() == view.primaryResultTitle
+        || (view.cleared && ($0.accessibilityLabel() ?? "").hasPrefix(view.continueTitle)) }) {
         try check(buttons.allSatisfy { $0.localFrame.maxY <= primary.localFrame.maxY + 1 },
           "A result action sits below the primary action")
         try check(buttons.filter { abs($0.localFrame.midY - primary.localFrame.midY) < 1 }
@@ -1052,6 +1053,33 @@ extension AppDelegate {
     for game in ["lemmings", "lemmings2", "lemmings3"] {
       let conditions = TrolleyConditions(gameID: game, packID: "test", levelID: "1", levelFingerprint: "abc", rulesetVersion: "v1", physicsMode: "classic", population: 10, rescueRequirement: 5, startingSkills: [:], timeLimitSeconds: nil)
       let level = ArcadeLevel(id: game, title: "Navigation test", game: game, rules: "v1", total: 10, required: 5, conditions: conditions)
+      for solo in [false, true] {
+        if solo { store.endHotSeat() } else { _ = store.resumeHotSeat(id: sharedID!) }
+        for saved in [0, 6, 10] {
+          let attempt = ArcadeRun(profileID: host, level: level, saved: saved, didWin: saved >= 5, skills: [:], seconds: 20)
+          guard let preview = store.previewReport(for: attempt) else { throw IntegrationFailure(message: "Missing result preview") }
+          ArcadeWindow.shared.showResult(preview, owner: window, retry: {}, next: {}, replay: { _ in })
+          try render(game + (solo ? "-solo-" : "-hot-seat-") + String(saved))
+          if solo {
+            let primary = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
+              .first { $0.accessibilityRole() == .button && $0.accessibilityLabel() == view.primaryResultTitle }!
+            let oldRetry = view.onRetry, oldContinue = view.onContinue
+            var clicks = 0
+            view.onRetry = { clicks += 1 }; view.onContinue = { clicks += 1 }
+            let location = view.convert(CGPoint(x: primary.localFrame.midX, y: primary.localFrame.midY), to: nil)
+            let click = NSEvent.mouseEvent(with: .leftMouseDown, location: location, modifierFlags: [], timestamp: 0,
+              windowNumber: window.windowNumber, context: nil, eventNumber: 1, clickCount: 1, pressure: 1)!
+            view.mouseDown(with: click)
+            view.onRetry = oldRetry; view.onContinue = oldContinue
+            try check(clicks == 1, "The primary result target did not dispatch its visible action")
+          }
+          if saved == 0 {
+            ArcadeWindow.shared.showResult(preview, owner: window, retry: {}, next: {}, replay: { _ in }, later: {}, hints: {})
+            try render(game + (solo ? "-solo-later" : "-hot-seat-later"))
+          }
+        }
+      }
+      _ = store.resumeHotSeat(id: sharedID!)
       let run = ArcadeRun(profileID: host, level: level, saved: 9, didWin: true, skills: [:], seconds: 20)
       let report = store.record(run)!
       ArcadeWindow.shared.showResult(report, owner: window, retry: {}, next: {}, replay: { _ in })

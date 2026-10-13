@@ -807,8 +807,6 @@ import NxlvKit
             button("Delete", CGRect(x: 280, y: 627, width: 200, height: 55),
                    enabled: store.canDeleteProfile(id, runInProgress: runInProgress)) { [weak self] in self?.confirmDeleteSelectedProfile() }
         }
-        button(profilePrimaryTitle, CGRect(x: 736, y: 627, width: 320, height: 55), primary: true,
-               enabled: store.profilesAreWritable) { [weak self] in self?.performProfilePrimaryAction() }
         if !profilesReturnToHotSeat {
             let sessionTitle = store.hotSeatIsActive ? "Return to solo" : "Hot Seat"
             button(sessionTitle, CGRect(x: 496, y: 627, width: 224, height: 55),
@@ -817,6 +815,8 @@ import NxlvKit
                 else { self?.openSession() }
             }
         }
+        button(profilePrimaryTitle, CGRect(x: 736, y: 627, width: 320, height: 55), primary: true,
+               enabled: store.profilesAreWritable) { [weak self] in self?.performProfilePrimaryAction() }
         setAccessibilityLabel("Players. \(records.profiles.map(\.initials).joined(separator: ", ")). Type initials. Arrow keys choose a portrait. Changes save automatically. Enter: \(profilePrimaryTitle). Escape goes back.")
     }
     private func drawRecords() {

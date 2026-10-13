@@ -19,15 +19,27 @@ extension ModuleMusicPlayer {
         defer { stop(); engine.disableManualRenderingMode() }
         try start()
         synthesisQueue.sync {}
-        precondition(sourceNode?.isPlaying == true && scheduledFrames == 4096)
+        precondition(sourceNode?.isPlaying == true && scheduledFrames == Int64(bufferedFrameCount * bufferCount))
         let output = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 512)!
         // A control thread may hold the synthesis lock. Buffered rendering must still complete.
         lock.lock()
         let begin = DispatchTime.now().uptimeNanoseconds
         let status = try engine.renderOffline(512, to: output)
         let elapsed = Double(DispatchTime.now().uptimeNanoseconds - begin) / 1_000_000
+        // Cover a 140 ms worker stall, beyond the old 93 ms reserve.
+        for _ in 0..<11 {
+            let bufferedStatus = try engine.renderOffline(512, to: output)
+            precondition(bufferedStatus == .success)
+        }
+        let bufferedEnergy = (0..<Int(output.frameLength)).reduce(0.0) {
+            $0 + abs(Double(output.floatChannelData![0][$1]))
+        }
         lock.unlock()
         precondition(status == .success)
+        precondition(bufferedEnergy > 0.01, "Tracker reserve ran dry during a bounded synthesis stall")
+        // The reverse source shares this engine and runs during forward music.
+        // A UI command or recorder must never block its render callback.
+        rewindAudio.checkNonblockingCallbacks(output)
         var energy = 0.0
         var previousSeconds = 0.0
         for _ in 0..<80 {
@@ -45,16 +57,39 @@ extension ModuleMusicPlayer {
             precondition(seconds >= previousSeconds - 0.025)
             previousSeconds = seconds
         }
-        precondition(energy > 0 && previousSeconds > 0.5 && scheduledFrames > 4096)
+        precondition(energy > 0 && previousSeconds > 0.5 && scheduledFrames > Int64(bufferedFrameCount * bufferCount))
         precondition(previousLoopTail.count == loopCrossfadeFrames)
+        // The first loop sample must join the final sample, rather than jump
+        // back to the beginning of the saved tail.
+        lock.lock()
+        previousLoopTail = [(left: -0.7, right: 0.7), (left: 0.3, right: -0.3)]
+        loopBlendIndex = 0
+        let join = nextSourceFrameLocked()
+        lock.unlock()
+        precondition(abs(join.left - 0.3) < 0.00001 && abs(join.right + 0.3) < 0.00001)
         setMuted(true)
         precondition(spatialMixer.outputVolume == 0)
         stop()
         try start()
         synthesisQueue.sync {}
-        precondition(scheduledFrames == 4096 && sourceNode?.isPlaying == true)
+        precondition(scheduledFrames == Int64(bufferedFrameCount * bufferCount) && sourceNode?.isPlaying == true)
         precondition(spatialMixer.outputVolume == 0)
         print("PASS queued MOD playback, finite signal, source clock, refill, loop crossfade, immediate mute and restart; render with synthesis lock held: \(elapsed) ms")
+    }
+}
+
+extension MusicRewindBuffer {
+    func checkNonblockingCallbacks(_ output: AVAudioPCMBuffer) {
+        lock.lock()
+        defer { lock.unlock() }
+        let buffers = UnsafeMutableAudioBufferListPointer(output.mutableAudioBufferList)
+        let begin = DispatchTime.now().uptimeNanoseconds
+        render(buffers, frames: Int(output.frameLength))
+        record(output)
+        precondition((0..<Int(output.frameLength)).allSatisfy { output.floatChannelData![0][$0] == 0 })
+        let elapsed = Double(DispatchTime.now().uptimeNanoseconds - begin) / 1_000_000
+        precondition(elapsed < 20, "Rewind callbacks waited for a control lock")
+        print("PASS contended history capture and reverse render return without waiting: \(elapsed) ms")
     }
 }
 

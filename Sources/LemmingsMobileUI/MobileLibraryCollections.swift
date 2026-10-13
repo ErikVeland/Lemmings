@@ -10,15 +10,16 @@ extension MobileLibraryViewController {
     // MARK: - Pages
 
     func collectionsPage(subtitle: String) -> GameFrontEnd.Page {
-        var rows: [GameFrontEnd.Action] = [
+        let rows: [GameFrontEnd.Action] = [
             .init("favourites", "Favourites  \(favourites.entries.count)", enabled: !favourites.entries.isEmpty),
             .init("recents", "Recently played  \(recents.entries.count)", enabled: !recents.entries.isEmpty),
             .init("playlists", "Playlists  \(playlists.playlists.count)"),
         ]
+        var footer = [GameFrontEnd.Action("home", "Back")]
         if let run = playlists.run {
-            rows.insert(.init("runResume", "Resume \(run.name)  \(run.position + 1)/\(run.entries.count)", primary: true), at: 0)
+            footer.append(.init("runResume", "Resume \(run.name)  \(run.position + 1)/\(run.entries.count)", primary: true))
         }
-        return .init(title: "Collections", subtitle: subtitle, rows: rows, footer: [.init("home", "Back")])
+        return .init(title: "Collections", subtitle: subtitle, rows: rows, footer: footer)
     }
 
     func playlistsPage(subtitle: String) -> GameFrontEnd.Page {

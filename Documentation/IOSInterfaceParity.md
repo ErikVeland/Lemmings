@@ -75,18 +75,22 @@ and [iOS Game Center preparation](GameCenterSetup.md#ios-20-preparation).
 
 ## 13 October bomb and nuke countdowns
 
-Classic iOS draws the supplied white 5–4–3–2–1 digits above each lemming for
-both assigned bombs and nukes. DOS uses the original glyph size. Macintosh and
-Amiga artwork use doubled pixel glyphs above the current sprite. All paths use
-the simulation's remaining fuse ticks, so pause, rewind, checkpoint restore and
-nuke undo preserve the countdown. The digits remain in the playfield bitmap for
-flat, CRT, magnified and replay rendering. They add no input surface.
+Classic iOS draws white, bold system 5–4–3–2–1 digits above each lemming for
+both assigned bombs and nukes. The font and size relative to zoom match Mac.
+One transparent view draws all digits at native Retina resolution, outside the
+low-resolution scene and CRT texture. It follows the sprite's top edge, camera,
+pixel aspect and curved CRT projection. The touch magnifier uses the same text.
+All paths use the simulation's remaining fuse ticks, so pause, rewind,
+checkpoint restore and nuke undo preserve the countdown. The view passes all
+gameplay input through. Game artwork and minimaps retain their original resolution.
 
 The muted headless regression checks every fuse tick across six combinations
-of artwork and bomb/nuke assignment. It verifies each digit's pixels, removal
-when the fuse ends, rewind, checkpoint restore and nuke undo. Thirty exported
-renders were inspected. Thirteen existing artwork, camera and touch-deck checks
-pass, and the arm64 iOS core typechecks. Physical-device gameplay and CRT
+of artwork and bomb/nuke assignment. It verifies each digit and sprite anchor,
+removal when the fuse ends, rewind, checkpoint restore and nuke undo.
+`Scripts/run-bomb-countdown-tests.sh` checks native text at 1×/2×/3× backing
+scale and fractional zoom, fixed digit widths, expiry and camera input mapping.
+It exports native-resolution previews for all five digits with DOS, Macintosh
+and Amiga artwork. Physical-device gameplay, UIKit text appearance and CRT
 acceptance remain pending.
 
 Lemmings 2 uses its native `bombTicks` and `COUNTDOWN` sprites on Mac. Lemmings 3

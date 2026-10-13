@@ -182,7 +182,7 @@ import UIKit
         guard let view = MobileHDRView(effects: true) else { return }
         view.frame = bounds
         // The decoration and input stay above the light surface.
-        insertSubview(view, belowSubview: decoration)
+        insertSubview(view, belowSubview: bombCountdownView)
         hdr = view
     }
     func suspendVisualEffects() { hdr?.clear(); speedEffectsActive = false }

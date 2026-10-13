@@ -97,7 +97,7 @@ import NxlvKit
                         && page.footer.contains($0.action)
                 }) {
                     guard layout.targets.allSatisfy({ $0.frame.maxY <= primary.frame.maxY }),
-                          primary.frame.maxX == layout.board.maxX - 20,
+                          abs(primary.frame.maxX - (layout.board.maxX - 20)) < 0.01,
                           layout.targets.map(\.action) == page.rows + page.orderedFooter
                     else { throw Failure.invalidTargets }
                 }

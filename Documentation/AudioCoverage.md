@@ -23,6 +23,31 @@ The library searches the bundled `Music` directory and the optional
 `~/Library/Application Support/Ultimate Lemmings/Soundtracks` directory,
 including nested folders.
 
+## Continuous music output
+
+Mac and iOS use the same tracker and recording transports. Classic, NeoLemmix,
+Lemmings 2 and Lemmings 3 therefore share these playback changes, including the
+Adaptive DJ and the recorded versions of other platforms' soundtracks.
+
+Recordings decode on a dedicated worker into eight reusable 2,048-frame PCM
+buffers. Loop refill does not wait for the main actor. Verified source loops
+retain their intro, loop points and frame counts. Abrupt joins receive a 3 ms
+correction. Memory stays bounded instead of growing with the recording's length.
+Tracker playback keeps eight 1,024-frame buffers ahead of output. Its loop joins
+start from the final sample instead of jumping backwards into the saved tail.
+
+Rewind capture and rendering use nonblocking lock attempts. A busy history
+buffer can skip capture or reverse output, but cannot hold up forward music.
+Both transports place Apple's peak limiter after the music effects to protect
+against EQ and reverb boosts. Gain trims and normal volume controls still apply.
+
+Offline checks cover continuing source loops while the main actor is occupied,
+tracker output with its synthesis lock held, and contended rewind callbacks.
+Both shared audio modules compile for macOS 12.3 and iOS 16 or later.
+Listening on physical devices, Bluetooth output, route changes, and stalls longer
+than the buffered reserve remain unverified. A playback change cannot remove
+distortion already present in a source recording.
+
 The DJ supports these decoded file formats:
 
 | Format | Status | Import location |

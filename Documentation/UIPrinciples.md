@@ -67,9 +67,11 @@ not queue an early click. Honour the reduced-flash setting.
 
 Use the shipped green and blue bitmap fonts for all interface text, including
 in-game notices. Classic lemming explosion countdowns use white, bold system
-digits for crisp, readable numbers above each lemming on Mac. The iOS bitmap
-renderer reuses the supplied white countdown glyphs at the artwork's pixel scale
-for DOS, Macintosh and Amiga graphics. Use large green lettering for page titles,
+digits for crisp, readable numbers above each lemming on Mac and iOS. iOS draws
+these digits at the screen's native Retina resolution above the flat or curved
+playfield, with the Mac's font size relative to zoom. The touch magnifier uses
+the same native text. Countdown text follows the sprite and adds no input surface.
+Use large green lettering for page titles,
 small green lettering for section headings and selected or primary actions,
 and small blue lettering for body text, quantities and secondary actions.
 Keep each row of peer controls at the same face and scale. Do not size individual
