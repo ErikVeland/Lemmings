@@ -13,7 +13,10 @@ struct MobileProgressionBuilderTests {
         let directory = Self.ports.appendingPathComponent("lemmings_dos_1991-07-30")
         let library = try ClassicMobileLibrary(directory: directory)
         let authored = library.dataSet.campaign.levels[0]
-        let revision = try #require(ClassicSourceRevision.campaign(library.dataSet.title, root: directory))
+        let revisionsURL = Self.ports.appendingPathComponent("source-revisions.json")
+        let revisions = try JSONDecoder().decode([String: String].self, from: Data(contentsOf: revisionsURL))
+        let packPrefix = try #require(library.dataSet.identifierKey.split(separator: "-").first.map(String.init))
+        let revision = try #require(revisions[packPrefix])
         let entry = try LevelPlaylistEntry(identity: .init(engine: .classic, packID: library.dataSet.identifierKey,
             levelID: "0:\(authored.rank):\(authored.number):\(authored.archiveFile):\(authored.archiveSection)"),
             catalogueRevision: "1.2-runtime-v2", sourceRevision: revision,
