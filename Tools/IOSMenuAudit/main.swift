@@ -92,6 +92,15 @@ import NxlvKit
                 let layout = GameFrontEnd.layout(page, width: size.width, minimumHeight: size.height)
                 guard Set(layout.targets.map { $0.action.id }).count == layout.targets.count,
                       layout.targets.filter({ $0.action.primary && $0.action.enabled }).count <= 1 else { throw Failure.invalidTargets }
+                if !page.home, let primary = layout.targets.first(where: {
+                    $0.action.primary && !["BACK", "CANCEL"].contains($0.action.title.uppercased())
+                        && page.footer.contains($0.action)
+                }) {
+                    guard layout.targets.allSatisfy({ $0.frame.maxY <= primary.frame.maxY }),
+                          primary.frame.maxX == layout.board.maxX - 20,
+                          layout.targets.map(\.action) == page.rows + page.orderedFooter
+                    else { throw Failure.invalidTargets }
+                }
                 for target in layout.targets {
                     guard target.frame.width >= 44, target.frame.height >= 44,
                           CGRect(origin: .zero, size: layout.size).contains(target.frame),

@@ -111,10 +111,12 @@ public struct GameFrontEnd {
         let height = max(minimumHeight, y + CGFloat(rows) * 60 + 36)
         y = max(y + 12, height - CGFloat(rows) * 60 - 24)
         let cell = (boardWidth - 40 - CGFloat(columns - 1) * 12) / CGFloat(columns)
+        let lastRowCount = page.footer.count % columns
         for (index, action) in page.orderedFooter.enumerated() {
             // A lone action in the last row takes the whole row.
             let alone = columns > 1 && index == page.footer.count - 1 && index % columns == 0
-            targets.append(Target(action: action, frame: CGRect(x: x + 20 + CGFloat(index % columns) * (cell + 12),
+            let trailingOffset = lastRowCount > 1 && index / columns == rows - 1 ? columns - lastRowCount : 0
+            targets.append(Target(action: action, frame: CGRect(x: x + 20 + CGFloat(index % columns + trailingOffset) * (cell + 12),
                 y: y + CGFloat(index / columns) * 60, width: alone ? boardWidth - 40 : cell, height: 48)))
         }
         return Layout(size: CGSize(width: width, height: height),

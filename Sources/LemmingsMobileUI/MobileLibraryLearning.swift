@@ -39,18 +39,16 @@ extension MobileLibraryViewController {
     func learningPage(subtitle: String) -> GameFrontEnd.Page {
         guard let journey = bundledJourney else { return .init(title: "Journey", details: ["Journey is unavailable"], footer: [.init("home", "Back")]) }
         let saved = learning
-        var rows: [GameFrontEnd.Action] = []
+        var footer = [GameFrontEnd.Action("home", "Back")]
         if let run = resumableLearningJourney?.state.run {
-            rows.append(.init("learningResume", "Resume  \(run.currentIndex + 1)/\(run.entries.count)", primary: true))
+            footer.append(.init("learningResume", "Resume  \(run.currentIndex + 1)/\(run.entries.count)", primary: true))
         }
         let unseen = saved.progress.unseen(in: journey), revisit = saved.progress.revisit(in: journey)
-        var footer = [GameFrontEnd.Action("home", "Back")]
-        footer += rows
-        rows = []
         footer.append(.init("learningStart", "Continue journey  \(saved.progress.solvedCount(in: journey))/\(journey.lessons.count)",
-                       enabled: !unseen.isEmpty, primary: resumableLearningJourney == nil))
-        rows += [.init("learningRevisit", "Revisit  \(revisit.count)", enabled: !revisit.isEmpty),
-                 .init("progression", "Progression playlists")]
+                            enabled: !unseen.isEmpty, primary: resumableLearningJourney == nil))
+        let rows: [GameFrontEnd.Action] = [
+            .init("learningRevisit", "Revisit  \(revisit.count)", enabled: !revisit.isEmpty),
+            .init("progression", "Progression playlists")]
         return .init(title: LearningJourney.title, subtitle: subtitle, rows: rows, footer: footer)
     }
     func progressionPage(subtitle: String) -> GameFrontEnd.Page {

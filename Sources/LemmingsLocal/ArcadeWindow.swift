@@ -497,11 +497,11 @@ import NxlvKit
             button(skipTitle, CGRect(x: 352, y: y, width: 290, height: 48)) { [weak self] in self?.skipLevel() }
             button(primaryResultTitle, CGRect(x: 662, y: y, width: 330, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
         } else {
-        button(cleared ? "Retry" : "Back", CGRect(x: 64, y: y, width: 256, height: 48)) { [weak self] in
-            guard let self else { return }
-            if self.cleared { self.onRetry?() } else { self.onClose?() }
-        }
-        button(primaryResultTitle, CGRect(x: 696, y: y, width: 360, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
+            button(cleared ? "Retry" : "Back", CGRect(x: 64, y: y, width: 256, height: 48)) { [weak self] in
+                guard let self else { return }
+                if self.cleared { self.onRetry?() } else { self.onClose?() }
+            }
+            button(primaryResultTitle, CGRect(x: 696, y: y, width: 360, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
         }
     }
     var player: ArcadeProfile {

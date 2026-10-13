@@ -1024,6 +1024,13 @@ extension AppDelegate {
       view.cacheDisplay(in: view.bounds, to: bitmap)
       try bitmap.representation(using: .png, properties: [:])!.write(to: captures.appendingPathComponent(name + ".png"))
       let buttons = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.filter { $0.accessibilityRole() == .button }
+      if view.mode == .result, let primary = buttons.first(where: { $0.accessibilityLabel() == view.primaryResultTitle }) {
+        try check(buttons.allSatisfy { $0.localFrame.maxY <= primary.localFrame.maxY + 1 },
+          "A result action sits below the primary action")
+        try check(buttons.filter { abs($0.localFrame.midY - primary.localFrame.midY) < 1 }
+          .allSatisfy { $0.localFrame.maxX <= primary.localFrame.maxX + 1 },
+          "The primary result action is not rightmost")
+      }
       for button in buttons {
         try check(view.bounds.contains(button.localFrame), "Result action is clipped: " + (button.accessibilityLabel() ?? ""))
         if ["Hot Seat", "Worldwide", "This level >", "This level *", "All levels >", "All levels *", "Worldwide >", "Worldwide *"].contains(button.accessibilityLabel() ?? "") {
