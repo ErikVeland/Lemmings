@@ -57,8 +57,9 @@ private final class MusicPCMStream: @unchecked Sendable {
       let token = generation
       file.framePosition = firstSegment.start
       segmentEnd = firstSegment.start + firstSegment.count
-      ended = false; joining = false; joinFrame = 0
+      ended = false; joining = false; joinFrame = joinFrames
       lastSamples = .init(repeating: 0, count: lastSamples.count)
+      joinOffsets = lastSamples
       for _ in 0..<bufferCount where !ended {
         let buffer = Buffer(format: file.processingFormat, frames: frames)
         try schedule(buffer, token: token, offline: offline, completion: completion)

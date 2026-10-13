@@ -4,7 +4,7 @@ import NxlvKit
 
 /// Plays ProTracker modules through the system audio output.
 ///
-/// A serial worker synthesises into four reusable PCM buffers. The audio engine
+/// A serial worker synthesises into eight reusable PCM buffers. The audio engine
 /// consumes those buffers without taking the synthesis/control lock.
 public final class ModuleMusicPlayer: @unchecked Sendable {
   public init() {}
@@ -19,6 +19,8 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   private var mixPitch: Double = 0
   private var appliedPitch: Float?
   private let spatialMixer = AVAudioMixerNode()
+  private let outputMixer = AVAudioMixerNode()
+  private let limiter = MusicOutputSafety.limiter()
   private var sourceNode: AVAudioPlayerNode?
   private let rewindAudio = MusicRewindBuffer()
   private var rewindNode: AVAudioSourceNode?
@@ -31,6 +33,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   private let bufferClockLock = NSLock()
   private var scheduledFrames: Int64 = 0
   private let bufferedFrameCount = 1024
+  private let bufferCount = 8
   private final class PCMBuffer: @unchecked Sendable {
     let value: AVAudioPCMBuffer
     init(format: AVAudioFormat, frames: Int) {
@@ -110,6 +113,8 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     NukeMusicFilter.apply(nukeFilterAmount, to: nukeEQ)
     engine.attach(reverb)
     engine.attach(spatialMixer)
+    engine.attach(outputMixer)
+    engine.attach(limiter)
     spatialMixer.outputVolume = muted ? 0 : 1
     reverb.loadFactoryPreset(.mediumRoom)
     reverb.wetDryMix = 0
@@ -119,10 +124,12 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     engine.connect(mixEQ, to: nukeEQ, format: format)
     engine.connect(nukeEQ, to: reverb, format: format)
     engine.connect(reverb, to: spatialMixer, format: format)
-    engine.connect(spatialMixer, to: engine.mainMixerNode, fromBus: 0, toBus: 0, format: format)
+    engine.connect(spatialMixer, to: outputMixer, fromBus: 0, toBus: 0, format: format)
     let reverse = rewindAudio.source(format: format)
     engine.attach(reverse)
-    engine.connect(reverse, to: engine.mainMixerNode, fromBus: 0, toBus: 1, format: format)
+    engine.connect(reverse, to: outputMixer, fromBus: 0, toBus: 1, format: format)
+    engine.connect(outputMixer, to: limiter, format: format)
+    engine.connect(limiter, to: engine.mainMixerNode, format: format)
     rewindNode = reverse
     sourceNode = node
     do {
@@ -136,6 +143,8 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
       engine.detach(reverb)
       engine.detach(mixEQ)
       engine.detach(nukeEQ)
+      engine.detach(outputMixer)
+      engine.detach(limiter)
       sourceNode = nil
       throw error
     }
@@ -148,7 +157,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
       self.bufferGeneration += 1
       self.bufferClockLock.lock(); self.scheduledFrames = 0; self.bufferClockLock.unlock()
       let generation = self.bufferGeneration
-      for _ in 0..<4 {
+      for _ in 0..<self.bufferCount {
         let buffer = PCMBuffer(format: format, frames: self.bufferedFrameCount)
         self.queueBuffer(buffer, node: node, generation: generation)
       }
@@ -174,7 +183,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     guard let node = sourceNode, isRunning else { return 0 }
     bufferClockLock.lock(); let scheduled = scheduledFrames; bufferClockLock.unlock()
     let played = node.lastRenderTime.flatMap { node.playerTime(forNodeTime: $0) }?.sampleTime ?? 0
-    return Double(max(0, scheduled - played)) / sampleRate
+    return Double(min(Int64(bufferedFrameCount * bufferCount), max(0, scheduled - played))) / sampleRate
   }
 
   public func stop() {
@@ -194,6 +203,8 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     engine.detach(reverb)
     engine.detach(mixEQ)
     engine.detach(nukeEQ)
+    engine.detach(outputMixer)
+    engine.detach(limiter)
     sourceNode = nil
     if let rewindNode { engine.detach(rewindNode) }
     rewindNode = nil
@@ -212,7 +223,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   public func suspendOutput(rhythmOnly: Bool = false) {
     cancelRewind()
     guard isRunning else { return }
-    let queuedFrames = min(bufferedFrameCount * 4, Int(bufferedSeconds * sampleRate))
+    let queuedFrames = min(bufferedFrameCount * bufferCount, Int(bufferedSeconds * sampleRate))
     lock.lock()
     if rhythmOnly, player?.hasRhythm == true {
       pauseWorkItem?.cancel()
@@ -334,13 +345,12 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     sourceFrames += 1
     let frame: (left: Float, right: Float)
     if let blendIndex = loopBlendIndex, blendIndex < previousLoopTail.count {
-      let amount = Float(blendIndex + 1) / Float(previousLoopTail.count)
-      let tail = previousLoopTail[blendIndex]
-      let outgoingGain = cos(amount * .pi / 2)
-      let incomingGain = sin(amount * .pi / 2)
+      let amount = Float(blendIndex) / Float(previousLoopTail.count)
+      let tail = previousLoopTail.last!
+      let incomingGain = 0.5 - 0.5 * cos(amount * .pi)
       frame = (
-        left: tail.left * outgoingGain + raw.left * incomingGain,
-        right: tail.right * outgoingGain + raw.right * incomingGain)
+        left: tail.left + (raw.left - tail.left) * incomingGain,
+        right: tail.right + (raw.right - tail.right) * incomingGain)
       loopBlendIndex = blendIndex + 1 < previousLoopTail.count ? blendIndex + 1 : nil
     } else {
       frame = raw
@@ -350,8 +360,8 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     loopTailWriteIndex = (loopTailWriteIndex + 1) % loopTail.count
     loopTailCount = min(loopTail.count, loopTailCount + 1)
 
-    // A short equal-power overlap hides the order-list boundary without
-    // changing the module clock or its pattern data.
+    // Join from the final sample. Replaying the start of the saved tail here
+    // made an abrupt backward jump at every order-list boundary.
     if player!.hasFinished {
       previousLoopTail = loopTailSnapshotLocked()
       loopTailWriteIndex = 0
@@ -374,7 +384,6 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     guard let module = loadedModule else { return }
     player = ProTrackerEnhancedPlayer(
       module: module, sampleRate: sampleRate, enhancements: enhancements)
-    interpolationPhase = 1
   }
 
   // MARK: - Library
@@ -537,7 +546,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
 
   /// Scratches recent mixed tracker samples without replaying the tracker on the UI thread.
   @MainActor public func playRewind() {
-    let queuedFrames = min(bufferedFrameCount * 4, Int(bufferedSeconds * sampleRate))
+    let queuedFrames = min(bufferedFrameCount * bufferCount, Int(bufferedSeconds * sampleRate))
     // A parked player has no render clock. Retain the queue offset measured
     // before the pause instead of treating its whole lifetime as queued audio.
     let skip = lock.withLock { outputSuspended ? rewindBufferedFrames : queuedFrames }
