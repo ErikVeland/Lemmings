@@ -99,6 +99,11 @@ let package = Package(
             name: "LemmingsMobileCoreTests",
             dependencies: ["LemmingsAppCore", "LemmingsMobileCore", "NxlvKit"],
             path: "Tests/LemmingsMobileCoreTests"
+        ),
+        .testTarget(
+            name: "LemmingsMobileUITests",
+            dependencies: ["LemmingsMobileCore", "LemmingsMobileUI"],
+            path: "Tests/LemmingsMobileUITests"
         )
     ]
 )
