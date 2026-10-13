@@ -22,6 +22,8 @@ fi
 export DEVELOPER_DIR="$developer_dir"
 # This gate runs mechanical checks only. Preserve the player's audio settings.
 export LEMMINGS_TEST_AUDIO=muted
+export IOS_SOURCE_GATE_ONLY=1
+export IOS_MUSIC_SCOPE=main
 
 plutil -lint \
   Apps/UltimateLemmingsIOS/Info.plist \

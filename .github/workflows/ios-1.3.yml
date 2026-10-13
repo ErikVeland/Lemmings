@@ -18,6 +18,8 @@ concurrency:
 
 env:
   LEMMINGS_TEST_AUDIO: muted
+  IOS_SOURCE_GATE_ONLY: "1"
+  IOS_MUSIC_SCOPE: main
 
 jobs:
   source-gate:

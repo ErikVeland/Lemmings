@@ -391,13 +391,14 @@ import UniformTypeIdentifiers
         case .soundtrack:
             let libraries = MobileMusicLibraries.shared
             let packs = libraries.catalogue?.packs ?? []
-            let status = libraries.failure ?? (libraries.isDownloading ? "Downloading..." : "\(packs.filter(libraries.isInstalled).count)/\(packs.count)")
+            let status = libraries.failure ?? (libraries.isDownloading ? "Downloading..." : "\(packs.filter { libraries.isBundled($0) || libraries.isInstalled($0) }.count)/\(packs.count)")
             canvas.page = .init(title: "Soundtrack", subtitle: status,
                                 rows: packs.map { pack in
+                                    let included = libraries.isBundled(pack)
                                     let percent = libraries.progress[pack.id].map { "  \(Int($0 * 100))%" }
                                     return .init("lib." + pack.id,
-                                                 pack.title + "  " + (percent ?? MobileMusicLibraries.size(pack.bytes)),
-                                                 selected: libraries.isInstalled(pack))
+                                                 pack.title + "  " + (included ? "Included" : (percent ?? MobileMusicLibraries.size(pack.bytes))),
+                                                 enabled: !included, selected: included || libraries.isInstalled(pack))
                                 },
                                 footer: [.init("settingsGroup.audio", "Back")])
             canvas.preview = nil

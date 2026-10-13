@@ -171,6 +171,8 @@ def main():
     parser.add_argument("--game-center-activation", type=Path, help="Apple-verified iOS activation record. Enables only this candidate.")
     parser.add_argument("--unsigned", action="store_true", help="Inspect a device archive without signing or exporting")
     parser.add_argument("--export", choices=["debugging", "release-testing", "app-store-connect"], default="debugging")
+    parser.add_argument("--music-scope", choices=["main", "full"],
+                        help="Default: full for local candidates, main for App Store Connect")
     parser.add_argument("--allow-provisioning-updates", action="store_true", help="Let Xcode use its signed-in account to create/download signing assets")
     device = parser.add_mutually_exclusive_group()
     device.add_argument("--device-id", help="Connected device UDID to register and include in the development profile")
@@ -192,6 +194,8 @@ def main():
     output = (args.output or ROOT / f".build/ios-beta/2.0-{args.build}").resolve()
     output.mkdir(parents=True, exist_ok=False)
     env = dict(os.environ, LEMMINGS_TEST_AUDIO="muted")
+    music_scope = args.music_scope or ("main" if args.export == "app-store-connect" else "full")
+    env["IOS_MUSIC_SCOPE"] = music_scope
     env.pop("IOS_GAME_CENTER_ACTIVATION", None)
     env["IOS_GAME_CENTER_BUNDLE_ID"] = args.bundle_id
     if args.game_center_activation:
@@ -208,6 +212,7 @@ def main():
         "launchScope": ["Classic", "Lemmings 2", "Lemmings 3"],
         "status": "preparing", "signed": False, "exported": False, "uploaded": False,
         "physicalDeviceAcceptance": "pending", "team": args.team, "build": args.build,
+        "musicScope": music_scope,
         "xcode": subprocess.check_output(["xcodebuild", "-version"], env=env, text=True).strip(),
         "gitCommit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
     }
@@ -225,7 +230,7 @@ def main():
                    "-clonedSourcePackagesDirPath", str(ROOT / ".build/ios-packages"),
                    f"CURRENT_PROJECT_VERSION={args.build}", "MARKETING_VERSION=2.0",
                    f"PRODUCT_BUNDLE_IDENTIFIER={args.bundle_id}", f"DEVELOPMENT_TEAM={args.team}",
-                   f"IOS_BETA_CONTENT_DIR={output / 'BetaGameData'}", "COMPILER_INDEX_STORE_ENABLE=NO"]
+                   f"IOS_BETA_CONTENT_DIR={output / 'BetaGameData'}", f"IOS_MUSIC_SCOPE={music_scope}", "COMPILER_INDEX_STORE_ENABLE=NO"]
         if args.unsigned:
             command.append("CODE_SIGNING_ALLOWED=NO")
         if args.allow_provisioning_updates and not args.unsigned:

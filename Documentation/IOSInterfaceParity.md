@@ -261,7 +261,31 @@ Open items for this increment:
 - The adaptive DJ, pause rhythm and variable-speed pitch are not connected on iOS.
 - Downloads run only while the app is in the foreground.
 - A live download, recording playback and listening acceptance need a device.
-- The slim build needs the music source tree at build time. Without it the app is silent.
+- Signed builds require the music source tree at build time. Missing music stops the build.
+
+### Local soundtrack bundles
+
+Local Xcode builds and development/ad hoc candidates now include all 495 music
+versions by default. Recordings use the shared AAC cache and carry updated
+playback hashes. App Store Connect candidates retain the main bundle by default.
+Use `--music-scope main` with `Tools/IOSBeta/build.py`, or set `IOS_MUSIC_SCOPE=main`
+for an Xcode build, to use optional downloads. Missing music sources now stop
+the build instead of silently producing an app without music.
+
+Settings > Audio > Soundtrack libraries counts bundled libraries as available
+and marks them Included. Their rows cannot request a redundant download or
+remove bundled files. Downloaded libraries retain their download/remove flow.
+
+Adaptive DJ and Golden Path can lift a tune only when a richer arrangement of
+the same composition is available. The main bundle usually has only its module.
+Full-rescue levels retain their current music through the shared director rule.
+Lemmings 2 and Lemmings 3 use that director on Mac but remain unavailable on iOS.
+
+Background checks passed for full/main packaging, all 422 recording playback
+hashes, a live demos-library download through the shared installer, and the
+unsigned iOS Debug build. Windowless iPhone/iPad exports covered included,
+available, downloading and installed rows, with disabled and gap targets blocked.
+The reported device download failure and audible celebrations remain unverified.
 
 ## 12 October browser increment
 

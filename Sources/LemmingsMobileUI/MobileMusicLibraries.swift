@@ -32,7 +32,7 @@ import NxlvKit
         MusicLibraryStore.isInstalled(pack, in: Self.directory)
     }
 
-    private func isBundled(_ pack: MusicLibraryCatalogue.Pack) -> Bool {
+    func isBundled(_ pack: MusicLibraryCatalogue.Pack) -> Bool {
         guard let root = Bundle.main.resourceURL else { return false }
         return pack.files.filter { !$0.path.hasSuffix(".json") }.allSatisfy {
             FileManager.default.isReadableFile(atPath: root.appendingPathComponent($0.path).path)
