@@ -1,6 +1,6 @@
 # iOS Hot Seat player identity — 13 October 2026
 
-Hot Seat now shows `Hot Seat: <player>` in green bitmap lettering above the
+Hot Seat shows only the player’s name in green bitmap lettering above the
 HUD counters. The opaque strip keeps identity clear of terrain, music notices,
 touch targeting and controls. The name comes from the attempt owner, including
 restored runs. Solo play has no identity row. VoiceOver gets `Current player:

@@ -474,7 +474,7 @@ remain deferred, so these checks do not establish playable sequel parity.
 
 ## 13 October in-play Hot Seat identity
 
-Hot Seat keeps `Hot Seat: <player>` in a dedicated green bitmap row above the
+Hot Seat keeps only the player’s name in a green bitmap row above the
 HUD counters. Identity stays clear of terrain, notices and input targets.
 It uses the attempt owner and has a full-name VoiceOver label. Solo play keeps
 its existing HUD. Compact layouts reserve a second status row during Hot Seat.

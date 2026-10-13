@@ -151,7 +151,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         }
         let frames = Self.statusFrames(layout: layout, hasPlayer: playerName != nil)
         if let playerName, let player = frames.player {
-            GamePixelTypography.draw("Hot Seat: " + playerName, in: player.insetBy(dx: 6, dy: 1), context: context,
+            GamePixelTypography.draw(playerName, in: player.insetBy(dx: 6, dy: 1), context: context,
                 typography: typography, palette: .green, maximumScale: 1)
         }
         drawStatus(in: frames.counters, panelMode: layout.panel != nil, context: context)
