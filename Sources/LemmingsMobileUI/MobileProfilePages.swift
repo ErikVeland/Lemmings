@@ -22,13 +22,9 @@ extension MobileLibraryViewController {
     }
 
     func playersPage(subtitle: String) -> GameFrontEnd.Page {
-        var page = MobileCareerArt.players(profiles, subtitle: subtitle, draft: renamingPlayer ? nameDraft : nil,
+        MobileCareerArt.players(profiles, subtitle: subtitle, draft: renamingPlayer ? nameDraft : nil,
             creating: creatingPlayer, portrait: draftPortrait, canDelete: canDeleteActivePlayer,
-            confirmingDelete: confirmingDelete)
-        if let hot = hotSeat, !renamingPlayer {
-            page.rows.append(.init("hotSeat", "Hot Seat: " + playerName(hot.turn)))
-        }
-        return page
+            confirmingDelete: confirmingDelete, hotSeatTurn: hotSeat.map { playerName($0.turn) })
     }
 
     var canDeleteActivePlayer: Bool {

@@ -159,6 +159,7 @@ final class ClassicSession: GameSession {
   private(set) var initialSimulation: ClassicDOSSimulation
   private var history: ClassicDOSRewind
   private var beforeNuke: ClassicDOSRewind?
+  private(set) var terrainRevision: UInt64 = 0
   private(set) var usedRewind = false
   private(set) var nukeCount = 0
   private(set) var rewindCount = 0
@@ -205,6 +206,7 @@ final class ClassicSession: GameSession {
        saved.terrain.height == initialSimulation.terrain.height,
        ClassicDOSReplayRecorder.stateHash(of: saved) == recovery.stateHash, !saved.isComplete {
       history = ClassicDOSRewind(simulation: saved); beforeNuke = nil
+      terrainRevision &+= 1
       // The inputs no longer prove this state, so the run counts as assisted.
       usedRewind = true; nukeCount = recovery.nukeCount
       rewindCount = recovery.rewindCount; undoCount = recovery.undoCount
@@ -243,6 +245,7 @@ final class ClassicSession: GameSession {
       throw RunRecoveryError.invalid
     }
     history = restored.history; beforeNuke = restored.beforeNuke
+    terrainRevision &+= 1
     initialSimulation = start; initialStateHash = ClassicDOSReplayRecorder.stateHash(of: start)
     usedRewind = recovery.usedRewind; nukeCount = recovery.nukeCount
     rewindCount = recovery.rewindCount; undoCount = recovery.undoCount
@@ -254,13 +257,13 @@ final class ClassicSession: GameSession {
 
   @discardableResult func rewind(seconds: Double) -> Bool {
     let moved = history.rewind(seconds: seconds)
-    if moved { usedRewind = true; rewindCount += 1; lastCues = []; if !simulation.isNuking { beforeNuke = nil } }
+    if moved { terrainRevision &+= 1; usedRewind = true; rewindCount += 1; lastCues = []; if !simulation.isNuking { beforeNuke = nil } }
     return moved
   }
 
   @discardableResult func stepBackward() -> Bool {
     let moved = history.stepBackward()
-    if moved { usedRewind = true; rewindCount += 1; lastCues = []; if !simulation.isNuking { beforeNuke = nil } }
+    if moved { terrainRevision &+= 1; usedRewind = true; rewindCount += 1; lastCues = []; if !simulation.isNuking { beforeNuke = nil } }
     return moved
   }
 
@@ -322,7 +325,13 @@ final class ClassicSession: GameSession {
   }
 
 
-  func tick() { lastCues = ClassicSoundCue.cues(for: history.tick()) }
+  func tick() {
+    let events = history.tick()
+    if events.contains(where: { event in
+      switch event { case .terrainAdded, .terrainRemoved: return true; default: return false }
+    }) { terrainRevision &+= 1 }
+    lastCues = ClassicSoundCue.cues(for: events)
+  }
 
   /// Probe a value copy so targeting follows the engine without changing the run.
   func assignmentState(skillIndex: Int, to lemmingID: Int) -> AssignmentState {
@@ -362,6 +371,7 @@ final class ClassicSession: GameSession {
     guard let beforeNuke else { return }
     usedRewind = true; undoCount += 1
     history = beforeNuke
+    terrainRevision &+= 1
     self.beforeNuke = nil
     lastCues = []
   }

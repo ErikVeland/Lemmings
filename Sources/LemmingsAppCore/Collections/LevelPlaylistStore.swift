@@ -141,6 +141,13 @@ import NxlvKit
     }
 
     public var learningProgress: LearningJourneyProgress { document.learningProgress ?? .init() }
+    public func mergeLearningProgress(_ incoming: LearningJourneyProgress) throws {
+        let merged = GameProgressValue.mergeLearning(learningProgress, incoming)
+        guard merged != learningProgress else { return }
+        let previous = document
+        document.learningProgress = merged
+        do { try save() } catch { document = previous; throw error }
+    }
     public var favourites: [LevelPlaylistEntry] { document.favourites ?? [] }
     public var recentlyPlayed: [LevelPlaylistEntry] { document.recentlyPlayed ?? [] }
 

@@ -102,13 +102,30 @@ struct MobileCoreTests {
         #expect(duoClosedRightToLeft.playfieldFrame.minX == duoClosedRightToLeft.controlsFrame.maxX)
     }
 
+    @Test func freshCameraFitsHeightAndCentresEntranceAcrossEngines() {
+        for (level, aspect) in [(MobileSize(width: 1600, height: 160), 1.2),
+                                (.init(width: 1600, height: 320), 1.0),
+                                (.init(width: 1024, height: 512), 1.0)] {
+            for view in [MobileSize(width: 390, height: 540), .init(width: 756, height: 149),
+                         .init(width: 834, height: 872)] {
+                var camera = MobileViewport(levelSize: level, viewSize: .init(width: 1, height: 1), pixelAspect: aspect)
+                camera.fitGameplay(in: view, centring: .init(x: level.width / 2, y: 60))
+                #expect(abs(camera.contentFrame.height - view.height) < 0.001)
+                #expect(abs(camera.viewPoint(fromLevel: .init(x: level.width / 2, y: 60)).x - view.width / 2) < 0.001)
+                #expect(camera.origin.y == 0)
+                camera.fitGameplay(in: view, centring: .init(x: 2, y: 60))
+                #expect(camera.origin.x == 0)
+            }
+        }
+    }
+
     @Test func viewportZoomKeepsTheGestureAnchorStable() {
         let portrait = MobileViewport(
             levelSize: MobileSize(width: 1_600, height: 160),
             viewSize: MobileSize(width: 390, height: 620),
             pixelAspect: 1.2
         )
-        #expect(portrait.visibleLevelSize.width >= 320)
+        #expect(abs(portrait.zoom * portrait.levelSize.height - portrait.viewSize.height) < 0.001)
 
         var firstLayout = MobileViewport(
             levelSize: MobileSize(width: 1_600, height: 160),
@@ -117,7 +134,7 @@ struct MobileCoreTests {
         )
         firstLayout.fitGameplay(in: MobileSize(width: 756, height: 300))
         #expect(firstLayout.zoom > 1)
-        #expect(firstLayout.visibleLevelSize.width >= 320)
+        #expect(abs(firstLayout.zoom * firstLayout.levelSize.height - firstLayout.viewSize.height) < 0.001)
 
         var viewport = MobileViewport(
             levelSize: MobileSize(width: 1_600, height: 160),
@@ -299,6 +316,9 @@ struct MobileCoreTests {
         let classic = ClassicMobileSession(simulation: try Self.classicSimulation(), levelIdentifier: "fixture/1", levelIndex: 0)
         let l2 = Lemmings2MobileSession(runtime: try Self.lemmings2Runtime(), engineFingerprint: "l2-engine", levelIdentifier: "l2/1", levelIndex: 0, levelFingerprint: "l2-level")
         let l3 = Lemmings3MobileSession(runtime: try Self.lemmings3Runtime(), engineFingerprint: "l3-engine", levelIdentifier: "l3/1", levelIndex: 0, levelFingerprint: "l3-level")
+        #expect(classic.entrancePoint == MobilePoint(x: 20, y: 20))
+        #expect(l2.entrancePoint == MobilePoint(x: 20, y: 45))
+        #expect(l3.entrancePoint == MobilePoint(x: 20, y: 40))
         for (session, control) in [(classic as any MobileGameSession, 0), (l2 as any MobileGameSession, 0), (l3 as any MobileGameSession, 2)] {
             for _ in 0..<80 where !session.targetCandidates(for: control).contains(where: { $0.assignment == .eligible }) { session.tick() }
             var state = MobilePlayState()

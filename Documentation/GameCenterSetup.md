@@ -27,7 +27,8 @@ are rescued counts. Equal rescue counts use Apple's tie handling. Local boards
 also use skills and time, so tied worldwide positions can differ.
 
 `Resources/GameCenter/GameCenter.entitlements` contains the Game Center
-and Spatial Audio Profile entitlements. The signing script requests both. The registered App ID,
+and Spatial Audio Profile entitlements, plus the shared iCloud Documents container.
+The signing script requests cloud access only when the selected profile authorizes it. The registered App ID,
 provisioning profile and signature must agree. An ad-hoc signature cannot enable
 Game Center by adding this file alone.
 
@@ -92,7 +93,10 @@ playback on their leaderboard rows. Older times remain ranked when a movie was
 never retained; those rows show playback as unavailable. Playback suspends the
 active engine audio when opened from results.
 
-The Game Center integration does not upload movies, attempt histories or local initials.
+Game Center leaderboard submissions do not upload movies, attempt histories or local initials.
+Private cross-device progress now uses a separate GameKit saved-game archive with
+attempt history, but without initials or movies. See [Cross-device progress](GameCenterProgress.md)
+for scope, merge rules and the pending shared-container provisioning checks.
 The separate, opt-in GlassCode service uploads selected records and available movies.
 Hosted board rows link to those movies. Game Center rows do not have replay links.
 Game Center provides the displayed player name. Scores are client submissions;

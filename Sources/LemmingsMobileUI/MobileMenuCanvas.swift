@@ -52,6 +52,13 @@ import UIKit
             element.accessibilityFrameInContainerSpace = frame.applying(transform)
             elements.append(element)
         }
+        if page.home, !page.homeInitials.isEmpty {
+            let element = UIAccessibilityElement(accessibilityContainer: self)
+            element.accessibilityLabel = "Active players: " + page.homeInitials
+            element.accessibilityTraits = .staticText
+            element.accessibilityFrameInContainerSpace = layout.initials.applying(transform)
+            elements.append(element)
+        }
         accessibilityElements = elements + targets
         setNeedsDisplay()
     }

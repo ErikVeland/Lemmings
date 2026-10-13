@@ -15,32 +15,38 @@ enum PanelButton: Equatable {
 }
 
 @MainActor final class PanelView: NSView {
+  private(set) var presentationRevision: UInt64 = 0
+  override var needsDisplay: Bool {
+    get { super.needsDisplay }
+    set { if newValue { presentationRevision &+= 1 }; super.needsDisplay = newValue }
+  }
+
   var session: (any GameSession)? {
     didSet {
-      if oldValue !== session { nukeGesture.reset() }
+      if oldValue !== session { nukeGesture.reset(); needsDisplay = true }
       toolTip = nil
     }
   }
   private var nukeGesture = NukeClickGesture()
-  var selectedSkillIndex = 0
-  var isPaused = false
-  var isFastForward = false
-  var modernControlsEnabled = true
+  var selectedSkillIndex = 0 { didSet { if oldValue != selectedSkillIndex { needsDisplay = true } } }
+  var isPaused = false { didSet { if oldValue != isPaused { needsDisplay = true } } }
+  var isFastForward = false { didSet { if oldValue != isFastForward { needsDisplay = true } } }
+  var modernControlsEnabled = true { didSet { if oldValue != modernControlsEnabled { needsDisplay = true } } }
   var speedLabel = "1×" { didSet { if oldValue != speedLabel { needsDisplay = true } } }
-  var speedChoiceLabel = "2×"
-    var variableSpeedEnabled = true
+  var speedChoiceLabel = "2×" { didSet { if oldValue != speedChoiceLabel { needsDisplay = true } } }
+  var variableSpeedEnabled = true { didSet { if oldValue != variableSpeedEnabled { needsDisplay = true } } }
   var onSpeedPress: ((TimeInterval, Int) -> Void)?
   var onSpeedRelease: ((TimeInterval) -> Void)?
   var onSpeedStep: ((Int, TimeInterval) -> Void)?
   private var speedPointerDown = false
   var onSpeedClick: ((TimeInterval, Int) -> Void)?
-  var statusText = ""
+  var statusText = "" { didSet { if oldValue != statusText { needsDisplay = true } } }
   /// Right-hand half of the status strip. Tells the player where they are in the
   /// journey at a glance: rank position, rescue progress against the target and
   /// the best known result, and the play style the run is shaping into.
-  var progressText = ""
-  var levelSize = CGSize(width: 1, height: 1)
-  var visibleLevelRect = CGRect.zero
+  var progressText = "" { didSet { if oldValue != progressText { needsDisplay = true } } }
+  var levelSize = CGSize(width: 1, height: 1) { didSet { if oldValue != levelSize { needsDisplay = true } } }
+  var visibleLevelRect = CGRect.zero { didSet { if oldValue != visibleLevelRect { needsDisplay = true } } }
 
   /// The original status bar, when the imported data provides it.
   var macArtwork: ClassicMacArtwork?
@@ -61,7 +67,7 @@ enum PanelButton: Equatable {
   var terrainImage: CGImage?
   /// The skill bar belongs to a level in progress, not to a menu.
   var isMenuMode = false {
-    didSet { if oldValue != isMenuMode { window?.invalidateCursorRects(for: self) } }
+    didSet { if oldValue != isMenuMode { needsDisplay = true; window?.invalidateCursorRects(for: self) } }
   }
   /// The CRT source reserves exactly 80 pixels for the controls.
   var isCRTSource = false

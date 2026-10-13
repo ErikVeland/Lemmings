@@ -68,10 +68,58 @@ scenery cache. Reduced flashes and HD effect choices still govern sprite auras.
 The full-rescue music behaviour and Show Song Info setting already share Mac logic.
 
 Sparkle updates and the fading floating Mac Menu button are platform-specific.
-The permanent grouped iOS Menu control remains visible. L2/L3 mobile campaigns
+The iOS hamburger Menu control stays at the top right of the touch deck. L2/L3 mobile campaigns
 and renderers remain deferred. Their Mac cache fixes do not establish an iOS port.
 See [current verification](ReleaseReadiness/2.0IOSCurrent-2026-10-13/README.md)
 and [iOS Game Center preparation](GameCenterSetup.md#ios-20-preparation).
+
+## 13 October touch controls and camera
+
+Fresh runs and retries centre the first entrance and fit the level height to the
+playfield viewport. The shared camera supports Classic, L2 and L3 entrance
+positions. Saved runs retain their existing resume and paused handover behaviour. Level
+edges clamp entrance centring, and the existing maximum zoom still applies.
+
+Portrait and standard-height landscape windows use the same touch deck, including
+iPad landscape. Skills occupy an 80-point row. Narrow phones and larger skill
+sets scroll horizontally with 44-point targets. A 48-point bottom row places
+one continuous minus/rate/plus socket beside speed, nuke/undo and pause/play.
+Engines without a release rate omit that socket. Rewind and backward/forward
+tick controls stay visible to the left of the 44-point minimap, above skills.
+Only engines that support rewind receive backward controls. Forward tick remains
+dimmed and disabled while running.
+
+The 44-point top strip keeps quantities and the pixel hamburger Menu inside the
+safe area. Its background extends across the screen and under the top inset.
+The top and bottom controls share the safe area's left and right edges, without
+extra outer margins. The playfield occupies the space between the strips, so
+map and HUD input cannot assign skills through them. Essential counters remain
+below the Dynamic Island, following Apple's safe-area guidance. Hot Seat Ready
+handovers remain paused until the player acts.
+
+Tap speed to toggle the chosen fast tier. Its compact HOLD cue identifies the
+pedal: hold to boost temporarily, then release to return to the chosen tier.
+Rate buttons repeat while held. Nuke keeps two-tap confirmation and a 0.6-second
+hold. Its active state shows Undo. Tap pause/play to toggle planning, or hold
+for 0.6 seconds to open the pause menu. VoiceOver retains a separate Pause menu
+action and names the speed pedal's tap and hold behaviour. Leaving a target,
+changing layouts, opening a menu or losing the window cancels held input.
+
+Validation: the unsigned iOS device build passes. Eighteen focused, offscreen,
+muted checks pass for camera framing, entrance positions, rotation, Classic/L2/L3
+control sets, input timing and bitmap/touch alignment. The bitmap audit passes
+54 HUD states and 18 DOS/Mac/Amiga artwork states, including target sizes,
+non-overlap, reserved-region avoidance and scroll reachability. Phone ready,
+fast and undo captures and iPad landscape running captures were inspected.
+Captures and logs stay in ignored `.build/ios-hud-feedback-*` paths.
+An initial broad test selection stalled and was stopped; its incomplete run
+is not counted as a pass.
+
+The shared controls serve sequel session adapters, but playable L2/L3 mobile
+libraries and native renderers remain deferred. UIKit gesture delivery,
+VoiceOver and physical Dynamic Island devices still need installed-device
+acceptance. Cramped windows and system divisions/occlusions retain the adaptive
+fallback. These checks do not establish a complete L2/L3 iOS port.
 
 ## Earlier build and source increments
 
@@ -261,6 +309,27 @@ ownership, authored tick timing, native artwork, cache invalidation and bitmap
 camera input. Sustained first-generation iPad GPU performance and audible output
 remain device validation gaps.
 
+The mobile home page follows the Mac order: saved runs, Oh My! All Lemmings!,
+Classic, Oh No, Holiday, Oh Yes, Fan, NeoLemmix, Lemmings 2, Lemmings 3 and
+Collections. Settings and release notes sit beside the logo. Initials, Profiles,
+Records and Playlists form the footer. Narrow screens wrap footer actions and
+scroll while retaining complete action names and 44-point targets. Game Data is
+under Settings; Achievements is under Records. Hot Seat setup is available from
+Profiles, including before the first session, without changing session ownership
+or handover timing.
+
+Release-rate minus and plus use the desktop stone sockets and bitmap symbols.
+Portrait puts their shared value between them in the transport row below skills.
+Landscape retains adjacent rate buttons with counts above them. The shared renderer covers all mobile engines that expose a
+release rate; L2 and L3 currently expose none and retain their own controls.
+Their home entries and NeoLemmix remain visibly unavailable on iOS.
+
+Muted, windowless checks pass 264 menu renders, 40 HUD states, six native-art HUD
+states, footer caption widths, action order, rate-button placement and input
+targets. Phone and iPad home and HUD exports were inspected. The iOS UI target
+compiles. Physical UIKit input and gameplay with the sequel engines remain
+manual validation gaps.
+
 The app writes favourites, recents and playlists through one store. Each write is
 atomic and keeps the previous copy as a backup. A file that cannot be read is kept
 under a new name and the store starts empty. Tests cover the store, the legacy
@@ -270,7 +339,7 @@ Open items: The Mac playlist file keeps revisions. The iOS store keeps one backu
 
 ## 12 October Hot Seat increment
 
-Settings has a Hot Seat row. The page lists the players as tiles. A tap adds or
+Profiles has a Hot Seat row. The page lists the players as tiles. A tap adds or
 removes a player, and the host always stays. New player adds a profile to the
 roster. Choose a game needs two players. Turns sets the house rule, Every level or
 At first fail. A running session adds New Hot Seat, which asks for a second tap,
@@ -296,3 +365,48 @@ the open session and does not offer New solo or New Hot Seat. Level skips,
 per-player scores and achievements have no iOS counterpart. Mid-level takeovers
 stay deferred, as on the Mac. The Ready page after a return from the background
 uses the existing pause page and has no device test.
+
+## 13 October Hot Seat profile entry
+
+The Players page always offers Hot Seat outside the initials editor. The previous
+active-session-only row prevented a first session from starting. Setup initializes
+its roster on entry, keeps the host selected, and returns to the originating page
+with Back. Adding a guest retains the draft roster. New player is the primary
+action when the device has only one profile. Choose a game becomes primary once
+two players are selected. Starting, restarting, resuming or leaving a session
+keeps setup visible when the local save fails.
+
+The app and windowless audit use the same profile and Hot Seat page composer,
+stone controls, bitmap fonts and portraits. Focused checks cover five screen
+sizes and eleven states, including one profile, unselected guests, a ready
+roster, active/saved sessions, restart confirmation, the initials editor and the
+full eight-player roster. Touch targets remain at least 44 points and do not
+intersect. All 55 renders and input-target checks pass, and the rendered states
+were inspected. All 13 mobile roster, turn and Learning Journey checks pass.
+The offscreen Mac session suite passes profile-to-session navigation, Ready
+handovers, adding players and failed-save guards. Its desktop-focus check after
+Retry is skipped in offscreen mode. All three Mac engines block play while the Ready page is
+presented. Native L2/L3 gameplay on iOS remains unavailable. Physical UIKit taps,
+keyboard-to-setup transitions and full native sequel session round trips still
+need device validation.
+
+## 13 October portrait layout follow-up
+
+The latest Xcode device build links the two-row portrait HUD from this repository.
+The layout previously fell back to the compact grid whenever UIKit reported any
+reserved region. Portrait now stays active when that region lies outside the
+safe area or only covers the playfield. The playfield still blocks input in that
+region. Divisions and regions covering the controls, menu, minimap, status or
+tick drawer retain the adaptive fallback.
+
+Debug builds print a `[MobileHUD]` line when the layout changes, with its mode,
+view bounds, safe insets, control frame and reserved regions. This provides the
+runtime geometry needed to diagnose a device still showing the compact grid.
+Thirteen focused layout and gesture checks pass, including both original iPad
+Pro sizes and rotation. Ten muted, windowless HUD renders pass their input-target
+checks; the original iPad and expanded tick-drawer states were inspected. The
+iOS UI target compiles. The full unsigned Xcode project build could not resolve
+packages: after reusing cached Sparkle, Xcode still required a manifest cache
+outside the writable sandbox. Device inspection timed out in CoreDeviceService.
+These checks do not establish the cause on the reported device: its model,
+window geometry and runtime layout remain unconfirmed.

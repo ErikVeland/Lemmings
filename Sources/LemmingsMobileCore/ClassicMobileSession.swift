@@ -122,6 +122,9 @@ public final class ClassicMobileSession: MobileGameSession {
     public private(set) var usedRewind = false
     private var settings: ClassicSettings?
     public private(set) var selectionSprite: MobileSpriteHighlight?
+    public func spriteHighlight(for actor: Int) -> MobileSpriteHighlight? {
+        simulation.lemmings.first(where: { $0.id == actor && $0.isActive }).flatMap(spriteHighlight)
+    }
     public var rescueSprites: [MobileSpriteHighlight] {
         guard settings?.hdEffectsEnabled == true, settings?.reduceFlashes != true,
               RescueCelebration.isSecured(saved: snapshot.saved, required: snapshot.required,
@@ -577,7 +580,10 @@ public final class ClassicMobileSession: MobileGameSession {
                 authoredLevel.specialStyle == 0 || artworkMatch.special else { return }
         }
         let source = settings.graphics == .amiga ? "AmigaArtwork" : "MacArtwork"
-        guard let art = try? ClassicMacArtwork(directory: artworkRoot.appendingPathComponent(source).appendingPathComponent(artworkFamily)),
+        let directory = artworkRoot.appendingPathComponent(source).appendingPathComponent(artworkFamily)
+        let art = try? (artworkRoot == Bundle.main.resourceURL
+            ? ClassicMobileArtworkCache.shared.load(directory) : ClassicMacArtwork(directory: directory))
+        guard let art,
               let scene = try? ClassicMacScene(level: authoredLevel, rendered: renderedLevel, artwork: art,
                   groundSet: ground, match: artworkMatch, reconstructUnmatched: settings.graphics == .macintosh) else { return }
         nativeArtwork = art; nativeScene = scene

@@ -20,7 +20,7 @@ public struct RunRecovery: Codable, Sendable {
     public let initialStateHash: String
     public let tick: Int
     public let events: [ClassicDOSReplayEvent]
-    public let stateHash: String
+    public var stateHash: String
     public let usedRewind: Bool
     public let nukeCount: Int
     public let rewindCount: Int
@@ -263,6 +263,8 @@ public final class RunRecoveryStore: @unchecked Sendable {
     private let queue = DispatchQueue(label: "academy.glasscode.lemmings.checkpoints", qos: .utility)
     private var files: [UUID: RunRecoveryFile] = [:]
     private var lastSaveError: Error?
+    private let saveAdmission = NSLock()
+    private var pendingSaves = 0
     public init(storage: AppStorage = .current(), directory: URL? = nil) {
         if let directory { self.directory = directory }
         else if storage.isIntegrationTestBuild {
@@ -283,10 +285,24 @@ public final class RunRecoveryStore: @unchecked Sendable {
         let value = try file.load(); files[id] = file
         return value
     }
-    public func save(_ recovery: RunRecovery, immediately: Bool = false,
+    /// Prepare the hash from captured values on the writer queue. Busy periodic saves may be skipped.
+    /// Session changes and exit saves retain their order and drain the queue when requested.
+    public func save(_ recovery: RunRecovery, immediately: Bool = false, coalescing: Bool = false,
+              prepareStateHash: (@Sendable () throws -> String)? = nil,
               onError: @escaping @MainActor @Sendable (String) -> Void) {
+        saveAdmission.lock()
+        if coalescing && pendingSaves > 0 { saveAdmission.unlock(); return }
+        pendingSaves += 1
+        saveAdmission.unlock()
         let operation: @Sendable () -> Void = { [self] in
-            do { try file(recovery.runID).save(recovery); lastSaveError = nil }
+            defer {
+                saveAdmission.lock(); pendingSaves -= 1; saveAdmission.unlock()
+            }
+            do {
+                var captured = recovery
+                if let prepareStateHash { captured.stateHash = try prepareStateHash() }
+                try file(captured.runID).save(captured); lastSaveError = nil
+            }
             catch {
                 lastSaveError = error
                 let message = error.localizedDescription

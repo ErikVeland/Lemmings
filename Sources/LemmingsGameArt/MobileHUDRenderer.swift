@@ -72,7 +72,7 @@ public enum MobileHUDAction: Equatable, Sendable {
             ? "Undo end run"
             : (endRunArmed ? "Confirm end run" : "End run")
         descriptors.append((.endRun, 11, endRunLabel))
-        descriptors.append((.speed, nil, "Game speed \(Self.speedLabel(speed))"))
+        descriptors.append((.speed, nil, "Game speed \(Self.speedLabel(speed)), tap to toggle, hold to accelerate"))
         if layout.supportsRewind {
             descriptors.append((.rewind, nil, "Rewind two seconds"))
             descriptors.append((.stepBackward, nil, "Step backward one tick"))
@@ -80,6 +80,12 @@ public enum MobileHUDAction: Equatable, Sendable {
         descriptors.append((.step, nil, "Advance one tick"))
         descriptors.append((.menu, nil, "Menu"))
 
+        if layout.portrait != nil {
+            descriptors = descriptors.map { action, cell, label in
+                (action, cell, action == .pause ? label + ", hold for pause menu" :
+                    action == .endRun ? label + (snapshot.isEndingRun ? ", tap or hold" : ", tap twice or hold") : label)
+            }
+        }
         var items = zip(descriptors, layout.interface.controlFrames).map { descriptor, frame in
             Item(
                 action: descriptor.0,
@@ -107,7 +113,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         "laserer": "LASER", "basher": "BASH", "fencer": "FENCE", "miner": "MINE", "digger": "DIG", "cloner": "CLONE",
     ]
 
-    public func draw(in context: CGContext, bounds: CGRect) {
+    public func draw(in context: CGContext, bounds: CGRect, includeSkills: Bool = true, includeTicks: Bool = true) {
         context.setShouldAntialias(false)
         context.interpolationQuality = .none
         let statusFrame = Self.cgRect(layout.interface.statusFrame)
@@ -118,9 +124,42 @@ public enum MobileHUDAction: Equatable, Sendable {
         } else {
             context.setFillColor(CGColor(gray: 0, alpha: 1))
             context.fill(statusFrame)
-            for item in items { drawCell(item, context: context) }
+            if layout.portrait != nil {
+                context.setFillColor(CGColor(gray: 0.06, alpha: 1))
+                context.fill(CGRect(x: 0, y: 0, width: bounds.width, height: statusFrame.maxY))
+                context.setFillColor(CGColor(gray: 0.25, alpha: 1))
+                context.fill(CGRect(x: 0, y: statusFrame.maxY - 1, width: bounds.width, height: 1))
+                context.setFillColor(CGColor(gray: 0, alpha: 1))
+                context.fill(Self.cgRect(layout.interface.controlsFrame))
+                if let value = layout.portrait?.rateValue {
+                    drawStoneSocket(value.insetBy(dx: -44, dy: 0), selected: false, pixel: 1, context: context)
+                }
+                for item in items {
+                    if case .skill = item.action { continue }
+                    if !includeTicks && (item.action == .step || item.action == .stepBackward) { continue }
+                    drawCell(item, context: context)
+                }
+                if includeSkills { drawSkills(in: context) }
+                if let value = layout.portrait?.rateValue, let rate = snapshot.releaseRate {
+                    drawGameLabel("\(rate)", in: value, context: context)
+                }
+            } else {
+                for item in items { drawCell(item, context: context) }
+            }
         }
         drawStatus(in: statusFrame, panelMode: layout.panel != nil, context: context)
+    }
+
+    public func drawSkills(in context: CGContext, clipped: Bool = true) {
+        guard let portrait = layout.portrait else { return }
+        context.saveGState()
+        if clipped { context.clip(to: portrait.skills) }
+        for item in items { if case .skill = item.action { drawCell(item, context: context) } }
+        context.restoreGState()
+    }
+
+    public func drawTicks(in context: CGContext) {
+        for item in items where item.action == .step || item.action == .stepBackward { drawCell(item, context: context) }
     }
 
     // MARK: - Classic panel
@@ -222,6 +261,17 @@ public enum MobileHUDAction: Equatable, Sendable {
         if layout.speedArrows.count == 2 {
             let left = layout.speedArrows[0], right = layout.speedArrows[1]
             boxes = [left, CGRect(x: left.maxX, y: frame.minY, width: right.minX - left.maxX, height: frame.height), right]
+        } else if layout.portrait != nil {
+            drawGameLabel(Self.speedLabel(speed), in: CGRect(x: frame.minX + 4, y: frame.minY + 4,
+                width: frame.width - 8, height: 22), context: context)
+            if frame.height >= 70, let glyph = Self.glyphImage(.fastForward, fitting: CGSize(width: 28, height: 24)) {
+                GameStoneArt.drawImage(glyph.image, in: CGRect(x: floor(frame.midX - glyph.size.width / 2),
+                    y: floor(frame.midY - glyph.size.height / 2), width: glyph.size.width, height: glyph.size.height), context: context)
+            }
+            GamePixelTypography.draw("HOLD", in: CGRect(x: frame.minX + 4, y: frame.maxY - 16,
+                width: frame.width - 8, height: 10), context: context, typography: typography,
+                palette: active ? .green : .blue, maximumScale: 1, bitmapOnly: true)
+            return
         } else { boxes = SpeedPanelArt.boxes(in: frame) }
         SpeedPanelArt.drawArrow(in: context, box: boxes[0], pointsRight: false)
         SpeedPanelArt.drawArrow(in: context, box: boxes[2], pointsRight: true)
@@ -248,9 +298,9 @@ public enum MobileHUDAction: Equatable, Sendable {
 
         switch item.action {
         case .releaseRate:
-            let socket = CGRect(x: frame.minX, y: frame.minY + 18, width: frame.width, height: frame.height - 18)
+            let socket = layout.portrait != nil ? frame : CGRect(x: frame.minX, y: frame.minY + 18, width: frame.width, height: frame.height - 18)
             drawRateButton(item, frame: socket, pixel: 1, context: context)
-            drawCompactCount(item, in: frame, context: context)
+            if layout.portrait == nil { drawCompactCount(item, in: frame, context: context) }
         case .skill:
             drawStoneSocket(frame, selected: false, pixel: 1, context: context)
             let scale = layout.compactScale
@@ -261,8 +311,9 @@ public enum MobileHUDAction: Equatable, Sendable {
             context.setFillColor(CGColor(gray: 0, alpha: 1))
             context.fill(well)
             if case let .skill(index) = item.action, let icon = skillIcons[safe: index] ?? nil {
-                let fit = min(well.width / CGFloat(icon.width), (well.height - 12) / CGFloat(icon.height))
-                GameStoneArt.drawImage(icon, in: CGRect(x: floor(well.midX - CGFloat(icon.width) * fit / 2), y: well.maxY - CGFloat(icon.height) * fit, width: CGFloat(icon.width) * fit, height: CGFloat(icon.height) * fit), context: context)
+                let art = CGRect(x: well.minX, y: frame.minY + 18, width: well.width, height: max(0, frame.height - 34))
+                let fit = min(art.width / CGFloat(icon.width), art.height / CGFloat(icon.height))
+                GameStoneArt.drawImage(icon, in: CGRect(x: floor(art.midX - CGFloat(icon.width) * fit / 2), y: art.maxY - CGFloat(icon.height) * fit, width: CGFloat(icon.width) * fit, height: CGFloat(icon.height) * fit), context: context)
             } else if let cell = item.sourceCell,
                let image = panelImage?.cropping(to: CGRect(x: cell * 16, y: 16, width: 16, height: 24)) {
                 let art = CGRect(x: frame.midX - 8 * scale, y: frame.minY + (scale == 1 ? 16 : 18), width: 16 * scale, height: 24 * scale)
@@ -276,7 +327,8 @@ public enum MobileHUDAction: Equatable, Sendable {
         case .speed:
             drawSpeed(frame, bevel: 1, context: context)
         case .menu:
-            drawTextButton(item, context: context)
+            if layout.portrait != nil { drawIconButton(item, context: context) }
+            else { drawTextButton(item, context: context) }
         case .rewind, .stepBackward, .step:
             drawIconButton(item, context: context)
         case .speedStep:
@@ -308,9 +360,15 @@ public enum MobileHUDAction: Equatable, Sendable {
     private func drawIconButton(_ item: Item, context: CGContext) {
         let enabled = item.action == .step ? paused : (item.action == .stepBackward || item.action == .rewind ? snapshot.tick > 0 : true)
         GameStoneArt.draw(in: context, frame: item.frame, selected: false, pixel: 1)
-        let glyph: PanelGlyphArt = item.action == .rewind ? .rewind : item.action == .stepBackward ? .stepBackward : .stepForward
+        let glyph: PanelGlyphArt
+        switch item.action {
+        case .menu: glyph = .mobileMenu
+        case .rewind: glyph = .rewind
+        case .stepBackward: glyph = .stepBackward
+        default: glyph = .stepForward
+        }
         let well = GameStoneArt.well(item.frame, pixel: 1)
-        guard let image = Self.glyphImage(glyph, fitting: CGSize(width: well.width, height: well.height / 2)) else { return }
+        guard let image = Self.glyphImage(glyph, fitting: CGSize(width: well.width, height: well.height * 0.85)) else { return }
         context.saveGState()
         context.setAlpha(enabled ? 1 : 0.35)
         GameStoneArt.drawImage(image.image, in: CGRect(
@@ -323,7 +381,7 @@ public enum MobileHUDAction: Equatable, Sendable {
 
     private func drawRateButton(_ item: Item, frame: CGRect, pixel: CGFloat, context: CGContext) {
         guard case let .releaseRate(delta) = item.action else { return }
-        drawStoneSocket(frame, selected: false, pixel: pixel, context: context)
+        if layout.portrait == nil { drawStoneSocket(frame, selected: false, pixel: pixel, context: context) }
         context.saveGState()
         context.setAlpha(readOnly ? 0.35 : 1)
         drawGameLabel(delta < 0 ? "-" : "+", in: GameStoneArt.well(frame, pixel: pixel), context: context)
@@ -348,12 +406,12 @@ public enum MobileHUDAction: Equatable, Sendable {
         else { glyph = snapshot.isEndingRun == true ? .undo : .nuke }
         drawStoneSocket(item.frame, selected: selected, pixel: pixel, context: context)
         let well = GameStoneArt.well(item.frame, pixel: pixel)
-        if glyph.isOriginalTile {
+        if glyph.isOriginalTile && layout.portrait == nil {
             if let image = Self.glyphImage(glyph, fitting: item.frame.size) {
                 GameStoneArt.drawTile(in: context, image: image.image, logicalSize: image.size,
                                       frame: item.frame, pixel: pixel)
             }
-        } else if let image = Self.glyphImage(glyph, fitting: well.size) {
+        } else if let image = Self.glyphImage(glyph, fitting: glyph.isOriginalTile ? item.frame.insetBy(dx: 2, dy: 2).size : well.size) {
             GameStoneArt.drawImage(image.image, in: CGRect(
                 x: floor(well.midX - image.size.width / 2), y: floor(well.midY - image.size.height / 2),
                 width: image.size.width, height: image.size.height), context: context)
@@ -388,6 +446,10 @@ public enum MobileHUDAction: Equatable, Sendable {
             time = "--:--"
         }
         let status = "OUT \(snapshot.released)  HOME \(snapshot.saved)/\(snapshot.required)  \(time)"
+        if layout.portrait != nil {
+            drawGameLabel(status.replacingOccurrences(of: "  ", with: " "), in: frame.insetBy(dx: 4, dy: 2), context: context)
+            return
+        }
         let available = panelMode
             ? CGRect(x: frame.minX, y: frame.minY,
                      width: max(0, (items.first { $0.action == .rewind || $0.action == .step }?.frame.minX ?? frame.maxX) - frame.minX - 4), height: frame.height)

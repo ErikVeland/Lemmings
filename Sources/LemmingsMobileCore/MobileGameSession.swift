@@ -167,6 +167,7 @@ public protocol MobileGameSession: AnyObject {
     var allNukeExplosionsPlayed: Bool { get }
     var explosions: [MobileExplosion] { get }
     var selectionSprite: MobileSpriteHighlight? { get }
+    func spriteHighlight(for actor: Int) -> MobileSpriteHighlight?
     var rescueSprites: [MobileSpriteHighlight] { get }
     var assignmentSprite: MobileSpriteHighlight? { get }
     var assignmentProgress: Double? { get }
@@ -241,5 +242,6 @@ public extension MobileGameSession {
     var assignmentSprite: MobileSpriteHighlight? { nil }
     var replaySkillUses: [MobileReplaySkillUse] { [] }
     var assignmentProgress: Double? { nil }
+    func spriteHighlight(for actor: Int) -> MobileSpriteHighlight? { nil }
     func releaseTransientResources() {}
 }

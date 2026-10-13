@@ -1,5 +1,6 @@
 import AppKit
 import Metal
+import LemmingsGameArt
 
 struct Failure: Error { let message: String }
 func require(_ value: Bool, _ message: String) throws {
@@ -12,6 +13,20 @@ func require(_ value: Bool, _ message: String) throws {
   }
   try require(ExplosionHDR.headroom(1) == 1 && ExplosionHDR.headroom(12) == 8 && ExplosionHDR.headroom(.nan) == 1,
     "display headroom is not bounded")
+  var fade = SelectionFade<Int>()
+  fade.set(7, at: 10)
+  try require(fade.sample(at: 20)?.opacity == 1, "Active selection faded")
+  fade.set(nil, at: 20)
+  fade.set(nil, at: 20.1)
+  try require(fade.sample(at: 20)?.value == 7 && abs((fade.sample(at: 20.175)?.opacity ?? 0) - 0.5) < 0.0001,
+    "Selection fade did not retain the actor or repeated empty frames restarted it")
+  try require(fade.sample(at: 20.351) == nil, "Selection did not fully fade away")
+  fade.set(8, at: 21)
+  try require(fade.sample(at: 21)?.value == 8 && fade.sample(at: 21)?.opacity == 1,
+    "New selection inherited the previous fade")
+  fade.reset()
+  try require(fade.sample(at: 21) == nil, "Selection survived a run reset")
+  print("PASS selection release timing, repeated frames, reselection and reset")
   let host = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 1600, height: 1000),
     styleMask: [.titled], backing: .buffered, defer: false)
   let idle = ExplosionHDRView(frame: host.contentView!.bounds)
@@ -268,6 +283,20 @@ func require(_ value: Bool, _ message: String) throws {
   try require(raster(effect) == low, "Halo animation did not repeat after 2.8 seconds")
   effect.time = nil
   let steady = raster(effect)
+  let steadyMetal = try selection(effect)
+  effect.opacity = 0.5
+  let half = raster(effect), halfMetal = try selection(effect)
+  for index in 0..<steady.count {
+    try require(abs(Int(half[index]) * 2 - Int(steady[index])) <= 2,
+      "Bitmap selection did not fade its outline and bloom together")
+    try require(abs(halfMetal[index] * 2 - steadyMetal[index]) < 0.0001,
+      "Metal selection did not fade its outline and bloom together")
+  }
+  effect.opacity = 0
+  try require(raster(effect).allSatisfy { $0 == 0 } && (try selection(effect)).allSatisfy { $0 == 0 },
+    "Zero opacity left selection pixels behind")
+  effect.opacity = 1
+  print("PASS bitmap and Metal selection fade, including bloom and final cleanup")
   try require(steady == raster(effect) && steady[near + 1] > low[near + 1] && steady[near + 1] < peak[near + 1],
     "Reduced effects must hold a visible midpoint")
   effect.clipRect = CGRect(x: 20, y: 20, width: 10, height: 10)
@@ -461,10 +490,10 @@ func require(_ value: Bool, _ message: String) throws {
   speedClock.setEnabled(true,now:23)
   try require(speedClock.sample(now:23.1,headroom:1).z > 0, "resuming speed did not re-engage")
 
-  func savePreview(_ pixels: [Float], to url: URL) throws {
-    let bitmap = NSBitmapImageRep(bitmapDataPlanes:nil,pixelsWide:960,pixelsHigh:540,bitsPerSample:8,
+  func savePreview(_ pixels: [Float], to url: URL, width: Int = 960, height: Int = 540) throws {
+    let bitmap = NSBitmapImageRep(bitmapDataPlanes:nil,pixelsWide:width,pixelsHigh:height,bitsPerSample:8,
       samplesPerPixel:4,hasAlpha:true,isPlanar:false,colorSpaceName:.deviceRGB,
-      bitmapFormat:.alphaNonpremultiplied,bytesPerRow:960*4,bitsPerPixel:32)!
+      bitmapFormat:.alphaNonpremultiplied,bytesPerRow:width*4,bitsPerPixel:32)!
     for i in stride(from:0,to:pixels.count,by:4) {
       let alpha = pixels[i+3]
       for c in 0..<3 {
@@ -475,6 +504,18 @@ func require(_ value: Bool, _ message: String) throws {
       bitmap.bitmapData![i+3] = UInt8((alpha*255).rounded())
     }
     try bitmap.representation(using:.png,properties:[:])!.write(to:url)
+  }
+  if let option = CommandLine.arguments.firstIndex(of:"--selection-preview"), option+1 < CommandLine.arguments.count {
+    let directory = URL(fileURLWithPath:CommandLine.arguments[option+1])
+    try FileManager.default.createDirectory(at:directory,withIntermediateDirectories:true)
+    var selected = effect
+    selected.rect = CGRect(x: 16, y: 16, width: 12, height: 16)
+    selected.clipRect = CGRect(x: 0, y: 0, width: 64, height: 64)
+    selected.time = nil
+    for (index, opacity) in [CGFloat(1), 0.5, 0].enumerated() {
+      selected.opacity = opacity
+      try savePreview(selection(selected), to:directory.appendingPathComponent("selection-\(index).png"), width:64, height:64)
+    }
   }
   if let option = CommandLine.arguments.firstIndex(of:"--speed-preview"), option+1 < CommandLine.arguments.count {
     let directory = URL(fileURLWithPath:CommandLine.arguments[option+1])

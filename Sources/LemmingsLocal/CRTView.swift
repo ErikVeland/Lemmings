@@ -43,8 +43,30 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
   private var blurVPipeline: MTLRenderPipelineState?
   private var compositePipeline: MTLRenderPipelineState?
 
-  private var sourceTexture: MTLTexture?
-  private var flashTexture: MTLTexture?
+  @MainActor private final class FrameSlot {
+    var source: MTLTexture?
+    var flash: MTLTexture?
+    var pixels: CGContext?
+    var sourceRevision = UInt64.max
+    var flashRevision = UInt64.max
+    var busy = false
+  }
+  private let slots = (0..<3).map { _ in FrameSlot() }
+  private var nextSlot = 0
+  private var sourceImage: CGImage?
+  private var sourceRevision: UInt64 = 0
+  private var flashes: [ExplosionFlash] = []
+  private var flashRevision: UInt64 = 0
+  private var pendingRender = false
+  private var bloomRevision = UInt64.max
+  private var bloomGamma: Float = 0
+  private var bloomScale: Double = 0
+  #if PERFORMANCE_TESTS
+  private(set) var sourceUploads = 0
+  private(set) var flashUploads = 0
+  private(set) var textureAllocations = 0
+  private(set) var bloomPasses = 0
+  #endif
   private var scratchA: MTLTexture?
   private var scratchB: MTLTexture?
   private var sourceSize = CGSize.zero
@@ -100,7 +122,7 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
     layer.pixelFormat = .rgba16Float
     layer.colorspace = CGColorSpace(name:CGColorSpace.extendedLinearSRGB)
     layer.wantsExtendedDynamicRangeContent = true
-    layer.framebufferOnly = false
+    layer.framebufferOnly = true
     layer.isOpaque = true
     self.layer = layer
     metalLayer = layer
@@ -270,55 +292,62 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
   /// Uploads the composed game frame.
   func setSource(_ image: CGImage, flashes: [ExplosionFlash] = [], selection: LemmingSelectionEffect? = nil,
                  rescueAuras: [LemmingSelectionEffect] = []) {
-    self.selection = selection
-    self.rescueAuras = rescueAuras
-    guard let device else { return }
-    let width = image.width
-    let height = image.height
+    if sourceImage !== image { sourceImage = image; sourceRevision &+= 1 }
+    updateEffects(flashes: flashes, selection: selection, rescueAuras: rescueAuras)
+  }
 
-    if sourceTexture == nil || Int(sourceSize.width) != width
-      || Int(sourceSize.height) != height {
-      let descriptor = MTLTextureDescriptor.texture2DDescriptor(
-        pixelFormat: .rgba8Unorm, width: width, height: height, mipmapped: false)
-      descriptor.usage = [.shaderRead]
-      sourceTexture = device.makeTexture(descriptor: descriptor)
+  /// Effect-only redraws reuse the scene pixels and cached halation.
+  func updateEffects(flashes: [ExplosionFlash], selection: LemmingSelectionEffect?,
+                     rescueAuras: [LemmingSelectionEffect] = []) {
+    self.selection = selection; self.rescueAuras = rescueAuras
+    let active = flashes.filter { $0.expiresAt > ProcessInfo.processInfo.systemUptime }
+    if self.flashes != active { self.flashes = active; flashRevision &+= 1 }
+    render()
+  }
 
-      let scratch = MTLTextureDescriptor.texture2DDescriptor(
-        pixelFormat: .rgba16Float, width: width, height: height, mipmapped: false)
-      scratch.usage = [.shaderRead, .renderTarget]
-      scratchA = device.makeTexture(descriptor: scratch)
-      scratchB = device.makeTexture(descriptor: scratch)
-      sourceSize = CGSize(width: width, height: height)
-    }
-    guard let sourceTexture else { return }
-
-    // Draw the image into a tight RGBA buffer, then upload it.
-    var bytes = [UInt8](repeating: 0, count: width * height * 4)
-    bytes.withUnsafeMutableBytes { raw in
-      guard let context = CGContext(
-        data: raw.baseAddress, width: width, height: height, bitsPerComponent: 8,
+  private func prepare(_ slot: FrameSlot) -> Bool {
+    guard let device, let image = sourceImage else { return false }
+    let width = image.width, height = image.height
+    if slot.source?.width != width || slot.source?.height != height {
+      let descriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba8Unorm,
+        width: width, height: height, mipmapped: false)
+      descriptor.usage = .shaderRead
+      slot.source = device.makeTexture(descriptor: descriptor)
+      descriptor.pixelFormat = .rg8Unorm
+      slot.flash = device.makeTexture(descriptor: descriptor)
+      slot.pixels = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8,
         bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
         bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)
-      else { return }
-      context.interpolationQuality = .none
-      context.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
+      slot.sourceRevision = .max; slot.flashRevision = .max
+      #if PERFORMANCE_TESTS
+      textureAllocations += 2
+      #endif
     }
-    sourceTexture.replace(
-      region: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0,
-      withBytes: bytes, bytesPerRow: width * 4)
-    let mask = ExplosionHDR.textureMask(width:width,height:height,flashes:flashes)
-    let flash = MTLTextureDescriptor.texture2DDescriptor(pixelFormat:.rg8Unorm,width:width,height:height,mipmapped:false)
-    flash.usage = .shaderRead
-    flashTexture = device.makeTexture(descriptor:flash)
-    mask.withUnsafeBytes { bytes in
-      flashTexture?.replace(region:MTLRegionMake2D(0,0,width,height),mipmapLevel:0,
-        withBytes:bytes.baseAddress!,bytesPerRow:width*2)
+    guard let source = slot.source, let flash = slot.flash, let pixels = slot.pixels else { return false }
+    if slot.sourceRevision != sourceRevision {
+      pixels.interpolationQuality = .none
+      pixels.setBlendMode(.copy)
+      pixels.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
+      source.replace(region: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0,
+        withBytes: pixels.data!, bytesPerRow: width * 4)
+      slot.sourceRevision = sourceRevision
+      #if PERFORMANCE_TESTS
+      sourceUploads += 1
+      #endif
     }
-    // Draw straight away rather than asking for a redraw. Assigning a
-    // CAMetalLayer to `layer` makes this view layer-hosting, and a
-    // layer-hosting view never receives `draw(_:)`, so `needsDisplay` here
-    // would mark a redraw that never arrives and the tube would stay black.
-    render()
+    if slot.flashRevision != flashRevision {
+      let mask = ExplosionHDR.textureMask(width: width, height: height, flashes: flashes)
+      mask.withUnsafeBytes { bytes in
+        flash.replace(region: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0,
+          withBytes: bytes.baseAddress!, bytesPerRow: width * 2)
+      }
+      slot.flashRevision = flashRevision
+      #if PERFORMANCE_TESTS
+      flashUploads += 1
+      #endif
+    }
+    sourceSize = CGSize(width: width, height: height)
+    return true
   }
 
   // MARK: - Drawing
@@ -338,16 +367,61 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
   }
 
   func render() {
-    guard let queue, let layer = metalLayer, let sourceTexture, let flashTexture,
-      let bright = brightPipeline, let blurH = blurHPipeline, let blurV = blurVPipeline,
-      let composite = compositePipeline, let scratchA, let scratchB,
-      let drawable = layer.nextDrawable(), let buffer = queue.makeCommandBuffer()
-    else { return }
+    guard let queue, let layer = metalLayer else { return }
+    guard let offset = (0..<slots.count).first(where: { !slots[(nextSlot + $0) % slots.count].busy }) else {
+      pendingRender = true; return
+    }
+    let slot = slots[(nextSlot + offset) % slots.count]
+    guard prepare(slot), window != nil, let drawable = layer.nextDrawable(), let buffer = queue.makeCommandBuffer() else { return }
+    nextSlot = (nextSlot + offset + 1) % slots.count
+    slot.busy = true; pendingRender = false
+    encode(slot, target: drawable.texture, buffer: buffer)
+    #if PERFORMANCE_TESTS
+    let metrics = performanceMetrics
+    let submittedAt = ProcessInfo.processInfo.systemUptime
+    metrics.submit()
+    #endif
+    buffer.addCompletedHandler { [weak self] completed in
+      let gpuSeconds = max(0, completed.gpuEndTime - completed.gpuStartTime)
+      let failed = completed.status != .completed
+      #if PERFORMANCE_TESTS
+      metrics.complete(gpuMS: gpuSeconds * 1000,
+        completionMS: (ProcessInfo.processInfo.systemUptime - submittedAt) * 1000,
+        failed: completed.status != .completed)
+      #endif
+      Task { @MainActor in
+        slot.busy = false
+        if failed { self?.bloomRevision = .max; slot.sourceRevision = .max; slot.flashRevision = .max }
+        MacFXPerformance.shared.recordGPU(gpuSeconds, source: "crt")
+        if self?.pendingRender == true { self?.render() }
+      }
+    }
+    buffer.present(drawable)
+    buffer.commit()
+  }
 
+  private func encode(_ slot: FrameSlot, target: MTLTexture, buffer: MTLCommandBuffer) {
+    guard let device, let sourceTexture = slot.source, let flashTexture = slot.flash,
+      let bright = brightPipeline, let blurH = blurHPipeline, let blurV = blurVPipeline,
+      let composite = compositePipeline else { return }
+    let scale = MacFXPerformance.shared.quality.bloomScale
+    let width = max(1, Int(sourceSize.width * scale)), height = max(1, Int(sourceSize.height * scale))
+    if settings.bloomAmount > 0, scratchA?.width != width || scratchA?.height != height {
+      let scratch = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba16Float,
+        width: width, height: height, mipmapped: false)
+      scratch.usage = [.shaderRead, .renderTarget]
+      scratchA = device.makeTexture(descriptor: scratch); scratchB = device.makeTexture(descriptor: scratch)
+      bloomRevision = .max
+      #if PERFORMANCE_TESTS
+      textureAllocations += 2
+      #endif
+    }
+    guard settings.bloomAmount <= 0 || (scratchA != nil && scratchB != nil) else { return }
+    let scratchA = scratchA ?? sourceTexture, scratchB = scratchB ?? sourceTexture
     var uniforms = CRTUniforms()
     uniforms.sourceSize = SIMD2(Float(sourceSize.width), Float(sourceSize.height))
     uniforms.outputSize = SIMD2(
-      Float(layer.drawableSize.width), Float(layer.drawableSize.height))
+      Float(target.width), Float(target.height))
     uniforms.curvature = settings.curvature
     uniforms.curvatureY = settings.curvatureY
     uniforms.cornerRadius = settings.cornerRadius
@@ -372,7 +446,7 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
     uniforms.pixelAspect = settings.pixelAspect
     uniforms.colorLevels = settings.colorLevels
     uniforms.hdrHeadroom = ExplosionHDR.headroom(window?.screen?.maximumExtendedDynamicRangeColorComponentValue ?? 1)
-    layer.wantsExtendedDynamicRangeContent = (window?.screen?.maximumPotentialExtendedDynamicRangeColorComponentValue ?? 1) > 1
+    metalLayer?.wantsExtendedDynamicRangeContent = (window?.screen?.maximumPotentialExtendedDynamicRangeColorComponentValue ?? 1) > 1
 
     func pass(
       _ pipeline: MTLRenderPipelineState,
@@ -396,43 +470,54 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
     }
 
     // Halation: pull out the bright parts, then spread them.
-    pass(bright, target: scratchA, textures: [sourceTexture])
-    pass(blurH, target: scratchB, textures: [scratchA])
-    pass(blurV, target: scratchA, textures: [scratchB])
-    pass(composite, target: drawable.texture, textures: [sourceTexture, scratchA, flashTexture])
+    if settings.bloomAmount > 0,
+       bloomRevision != sourceRevision || bloomGamma != settings.gamma || bloomScale != scale {
+      pass(bright, target: scratchA, textures: [sourceTexture])
+      pass(blurH, target: scratchB, textures: [scratchA])
+      pass(blurV, target: scratchA, textures: [scratchB])
+      bloomRevision = sourceRevision; bloomGamma = settings.gamma; bloomScale = scale
+      #if PERFORMANCE_TESTS
+      bloomPasses += 3
+      #endif
+    }
+    pass(composite, target: target, textures: [sourceTexture, settings.bloomAmount > 0 ? scratchA : sourceTexture, flashTexture])
     // Selection is composited after the tube. Its neighbour samples are always
     // two physical output pixels apart, even on a Retina display or curved edge.
     if (!rescueAuras.isEmpty || (!GameCursor.gameplaySuppressed && selection != nil)), let selectionRenderer {
       let descriptor = MTLRenderPassDescriptor()
-      descriptor.colorAttachments[0].texture = drawable.texture
+      descriptor.colorAttachments[0].texture = target
       descriptor.colorAttachments[0].loadAction = .load
       descriptor.colorAttachments[0].storeAction = .store
       if let encoder = buffer.makeRenderCommandEncoder(descriptor: descriptor) {
         let glass = SIMD4(settings.curvature, settings.curvatureY, settings.cornerRadius, settings.cornerSoftness)
         for effect in rescueAuras {
-          selectionRenderer.encode(effect, sourceSize: sourceSize, outputSize: layer.drawableSize,
+          selectionRenderer.encode(effect, sourceSize: sourceSize, outputSize: CGSize(width: target.width, height: target.height),
             glass: glass, headroom: Float(window?.screen?.maximumExtendedDynamicRangeColorComponentValue ?? 1),
             additive: true, into: encoder)
         }
         if !GameCursor.gameplaySuppressed, let selection {
-          selectionRenderer.encode(selection, sourceSize: sourceSize, outputSize: layer.drawableSize, glass: glass, into: encoder)
+          selectionRenderer.encode(selection, sourceSize: sourceSize, outputSize: CGSize(width: target.width, height: target.height), glass: glass, into: encoder)
         }
         encoder.endEncoding()
       }
     }
 
-    #if PERFORMANCE_TESTS
-    let metrics = performanceMetrics
-    let submittedAt = ProcessInfo.processInfo.systemUptime
-    metrics.submit()
-    buffer.addCompletedHandler { completed in
-      metrics.complete(gpuMS: max(0, completed.gpuEndTime - completed.gpuStartTime) * 1000,
-        completionMS: (ProcessInfo.processInfo.systemUptime - submittedAt) * 1000,
-        failed: completed.status != .completed)
-    }
-    #endif
-    buffer.present(drawable)
-    buffer.commit()
   }
+
+  #if PERFORMANCE_TESTS
+  /// Exercise the shipping passes without a visible window or drawable.
+  func renderForTesting(size: CGSize) -> MTLTexture? {
+    guard let device, let queue else { return nil }
+    let slot = slots[0]
+    guard !slot.busy, prepare(slot), let command = queue.makeCommandBuffer() else { return nil }
+    let descriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba16Float,
+      width: Int(size.width), height: Int(size.height), mipmapped: false)
+    descriptor.usage = [.renderTarget, .shaderRead]
+    guard let target = device.makeTexture(descriptor: descriptor) else { return nil }
+    encode(slot, target: target, buffer: command)
+    command.commit(); command.waitUntilCompleted()
+    return command.status == .completed ? target : nil
+  }
+  #endif
 }
 #endif

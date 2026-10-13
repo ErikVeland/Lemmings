@@ -8,7 +8,8 @@ import NxlvKit
 @main struct MenuAudit {
     @MainActor static func main() async throws {
         let latestFixes = CommandLine.arguments.last == "--current-fixes"
-        guard CommandLine.arguments.count == (latestFixes ? 5 : 4) else { throw Failure.invalidArguments }
+        let hotSeat = CommandLine.arguments.last == "--hot-seat"
+        guard CommandLine.arguments.count == (latestFixes || hotSeat ? 5 : 4) else { throw Failure.invalidArguments }
         let artwork = URL(fileURLWithPath: CommandLine.arguments[1])
         let content = URL(fileURLWithPath: CommandLine.arguments[2])
         let output = URL(fileURLWithPath: CommandLine.arguments[3])
@@ -17,6 +18,7 @@ import NxlvKit
               typography.interface.logo != nil,
               typography.font(.small) != nil, typography.font(.large) != nil else { throw Failure.missingArtwork }
         let library = try ClassicMobileLibrary(directory: content)
+        if hotSeat { try checkHotSeat(typography: typography, portraits: GamePortraitArt(directory: artwork), output: output); return }
         if latestFixes { try await checkCurrentFixes(library: library, typography: typography, output: output); return }
         let session = try library.loadLevel(at: 0).session
         let bitmap = try session.render(highlight: nil)
@@ -99,7 +101,11 @@ import NxlvKit
                     let first = layout.targets.first!.frame
                     let profiles = layout.targets.first { $0.action.id == "players" }!.frame
                     guard settings.maxY <= first.minY, profiles.minY >= layout.targets[page.rows.count - 1].frame.maxY,
-                          layout.heading.intersection(settings).isNull else { throw Failure.invalidTargets }
+                          layout.heading.intersection(settings).isEmpty else { throw Failure.invalidTargets }
+                    for target in layout.targets where ["players", "records", "playlists"].contains(target.action.id) {
+                        guard typography.width(of: target.action.title.uppercased(), face: .small, scale: 1) <= target.frame.width - 24
+                            else { throw Failure.invalidTargets }
+                    }
                 }
                 guard layout.action(at: CGPoint(x: layout.board.minX + 1, y: layout.board.midY)) == nil else { throw Failure.invalidTargets }
                 for (index, target) in layout.targets.enumerated() {
@@ -229,6 +235,7 @@ import NxlvKit
             ("ipad-landscape", .init(width: 1112, height: 834), []),
             ("ipad-portrait", .init(width: 834, height: 1112), []),
             ("pocket", .init(width: 390, height: 844), []),
+            ("narrow-portrait", .init(width: 320, height: 568), []),
             ("open", .init(width: 1194, height: 834), [vertical]),
             ("diorama", .init(width: 1194, height: 834), [horizontal]),
             ("camera", .init(width: 1194, height: 834), [vertical, .init(kind: .occlusion, frame: .init(x: 1120, y: 740, width: 74, height: 94))]),
@@ -243,6 +250,7 @@ import NxlvKit
                 ("ready", true, false, 0, 1.0), ("running", false, false, 1, 1.0),
                 ("fast", false, false, 3, 5.0), ("armed", true, false, 2, 1.0),
                 ("undo", true, true, 7, 1.0),
+                ("ticks", true, false, 7, 1.0),
             ] {
                 let original = session.snapshot
                 let snapshot = MobileGameSnapshot(tick: original.tick, released: original.released, total: original.total,
@@ -252,23 +260,38 @@ import NxlvKit
                     hasRate: true, skillCount: snapshot.skills.count, reservedRegions: regions, supportsRewind: true)
                 let targets = MobileHUDRenderer.targets(layout: layout, snapshot: snapshot, selectedSkill: selected,
                     paused: paused, speed: speed, endRunArmed: state == "armed")
-                let safe = cg(layout.interface.safeFrame)
+                if layout.canPlay {
+                    guard targets[0].action == .releaseRate(-1), targets[1].action == .releaseRate(1),
+                          targets[0].frame.minY == targets[1].frame.minY,
+                          targets[0].frame.maxX <= targets[1].frame.minX else { throw Failure.invalidTargets }
+                    if let portrait = layout.portrait {
+                        let deck = cg(layout.interface.controlsFrame)
+                        guard deck.contains(portrait.minimap),
+                              portrait.minimap.height >= 44,
+                              targets.allSatisfy({ !portrait.minimap.intersects($0.inputFrame) }) else { throw Failure.invalidTargets }
+                    }
+                }
                 for (index, target) in targets.enumerated() {
                     let frame = target.inputFrame
-                    guard frame.width >= 44 - 0.001, frame.height >= 44, safe.contains(frame),
-                          !target.accessibilityLabel.isEmpty,
+                    guard frame.width >= 44 - 0.001, frame.height >= 44, hudTargetFits(target, layout: layout),
+                          !target.accessibilityLabel.isEmpty, hudScrollTargetIsReachable(target, layout: layout),
                           regions.allSatisfy({ !frame.intersects(cg($0.frame)) }) else { throw Failure.invalidTargets }
-                    for other in targets.dropFirst(index + 1) where frame.intersection(other.inputFrame).width > 0.001
-                        && frame.intersection(other.inputFrame).height > 0.001 { throw Failure.invalidTargets }
-                    let hit = targets.first { $0.inputFrame.contains(CGPoint(x: frame.midX, y: frame.midY)) }
+                    let visible = hudVisibleInputFrame(target, layout: layout)
+                    for other in targets.dropFirst(index + 1) where visible.intersection(hudVisibleInputFrame(other, layout: layout)).width > 0.001
+                        && visible.intersection(hudVisibleInputFrame(other, layout: layout)).height > 0.001 { throw Failure.invalidTargets }
+                    let hit = targets.first {
+                        if case .skill = target.action { if case .skill = $0.action { return $0.inputFrame.contains(CGPoint(x: frame.midX, y: frame.midY)) }; return false }
+                        return hudVisibleInputFrame($0, layout: layout).contains(CGPoint(x: frame.midX, y: frame.midY))
+                    }
                     guard hit?.action == target.action else { throw Failure.invalidTargets }
                 }
                 let context = try bitmapContext(size: CGSize(width: size.width, height: size.height))
                 context.setFillColor(CGColor(gray: 0, alpha: 1)); context.fill(CGRect(x: 0, y: 0, width: size.width, height: size.height))
                 if let image {
                     let field = cg(layout.interface.playfieldFrame)
-                    let viewport = MobileViewport(levelSize: session.levelSize, viewSize: .init(width: field.width, height: field.height),
-                        origin: .init(x: 400, y: 0), zoom: 2, pixelAspect: 1.2)
+                    var viewport = MobileViewport(levelSize: session.levelSize, viewSize: .init(width: field.width, height: field.height),
+                        pixelAspect: 1.2)
+                    viewport.fitGameplay(in: .init(width: field.width, height: field.height), centring: session.entrancePoint)
                     context.saveGState(); context.translateBy(x: field.minX, y: field.minY)
                     context.clip(to: CGRect(origin: .zero, size: field.size))
                     MobileBitmapRenderer.draw(image, viewport: viewport, in: context); context.restoreGState()
@@ -276,12 +299,13 @@ import NxlvKit
                 MobileHUDRenderer(layout: layout, snapshot: snapshot, selectedSkill: selected, paused: paused, speed: speed,
                     endRunArmed: state == "armed", panelImage: panel, typography: typography)
                     .draw(in: context, bounds: CGRect(x: 0, y: 0, width: size.width, height: size.height))
-                if let panel = layout.panel {
+                if let minimap = layout.minimapFrame {
                     let field = layout.interface.playfieldFrame
-                    let camera = MobileViewport(levelSize: session.levelSize, viewSize: field.size,
-                                                origin: .init(x: 400, y: 0), zoom: 2, pixelAspect: 1.2)
-                    GameMinimapArt.draw(in: context, bounds: panel.minimap, image: image,
-                                       visible: cg(camera.visibleLevelRect), levelSize: CGSize(width: session.levelSize.width, height: session.levelSize.height))
+                    var camera = MobileViewport(levelSize: session.levelSize, viewSize: field.size,
+                                                pixelAspect: 1.2)
+                    camera.fitGameplay(in: field.size, centring: session.entrancePoint)
+                    GameMinimapArt.draw(in: context, bounds: minimap, image: image,
+                                       visible: cg(camera.visibleLevelRect), levelSize: CGSize(width: session.levelSize.width, height: session.levelSize.height), overlay: layout.portrait != nil)
                 }
                 if !layout.canPlay {
                     let page = GameFrontEnd.Page(title: "Paused", footer: [.init("library", "Library", primary: true)])
@@ -372,30 +396,37 @@ import NxlvKit
             for _ in 0..<60 { game.tick() }
             let bitmap = try game.render(highlight: nil)
             guard game.renderScale == 2, let image = MobileBitmapRenderer.image(bitmap) else { throw Failure.missingArtwork }
-            let size = MobileSize(width: 1194, height: 834)
-            let layout = MobileHUDLayout.make(container: size, safeArea: .init(top: 20, bottom: 20), hasRate: true,
-                skillCount: game.snapshot.skills.count, supportsRewind: true)
-            for state in ["running", "paused", "review"] {
-                let context = try bitmapContext(size: CGSize(width: size.width, height: size.height))
-                context.setFillColor(CGColor(gray: 0, alpha: 1)); context.fill(CGRect(x: 0, y: 0, width: size.width, height: size.height))
-                let field = cg(layout.interface.playfieldFrame)
-                let viewport = MobileViewport(levelSize: game.levelSize, viewSize: .init(width: field.width, height: field.height),
-                    origin: game.initialCameraOrigin, zoom: 2, pixelAspect: 1.2)
-                context.saveGState(); context.translateBy(x: field.minX, y: field.minY)
-                context.clip(to: CGRect(origin: .zero, size: field.size))
-                MobileBitmapRenderer.draw(image, viewport: viewport, in: context)
-                RescueCelebration.draw(in: CGRect(origin: .zero, size: field.size), amount: state == "review" ? 1 : 0, context: context)
-                context.restoreGState()
-                let icons = game.snapshot.skills.indices.map { game.skillCursorFrame(control: $0).flatMap(MobileBitmapRenderer.image) }
-                MobileHUDRenderer(layout: layout, snapshot: game.snapshot, selectedSkill: 7, paused: state != "running", speed: 1,
-                    endRunArmed: false, panelImage: game.panelFrame.flatMap(MobileBitmapRenderer.image), typography: typography,
-                    counterStyle: .macintosh, skillIcons: icons, readOnly: state == "review").draw(in: context, bounds: CGRect(x: 0, y: 0, width: size.width, height: size.height))
-                if state == "review" {
-                    for star in 0..<3 { GameStarArt.draw(at: CGPoint(x: field.midX - 51 + CGFloat(star * 38), y: field.minY + 16), earned: star < 2, size: 3, context: context) }
+            for (pose, size) in [("landscape", MobileSize(width: 1194, height: 834)),
+                                  ("portrait", MobileSize(width: 834, height: 1112)),
+                                  ("phone", MobileSize(width: 390, height: 844))] {
+                let layout = MobileHUDLayout.make(container: size, safeArea: .init(top: 20, bottom: 20), hasRate: true,
+                    skillCount: game.snapshot.skills.count, supportsRewind: true)
+                for state in ["running", "paused", "review"] {
+                    let context = try bitmapContext(size: CGSize(width: size.width, height: size.height))
+                    context.setFillColor(CGColor(gray: 0, alpha: 1)); context.fill(CGRect(x: 0, y: 0, width: size.width, height: size.height))
+                    let field = cg(layout.interface.playfieldFrame)
+                    let viewport = MobileViewport(levelSize: game.levelSize, viewSize: .init(width: field.width, height: field.height),
+                        origin: game.initialCameraOrigin, zoom: 2, pixelAspect: 1.2)
+                    context.saveGState(); context.translateBy(x: field.minX, y: field.minY)
+                    context.clip(to: CGRect(origin: .zero, size: field.size))
+                    MobileBitmapRenderer.draw(image, viewport: viewport, in: context)
+                    RescueCelebration.draw(in: CGRect(origin: .zero, size: field.size), amount: state == "review" ? 1 : 0, context: context)
+                    context.restoreGState()
+                    let icons = game.snapshot.skills.indices.map { game.skillCursorFrame(control: $0).flatMap(MobileBitmapRenderer.image) }
+                    MobileHUDRenderer(layout: layout, snapshot: game.snapshot, selectedSkill: 7, paused: state != "running", speed: 1,
+                        endRunArmed: false, panelImage: game.panelFrame.flatMap(MobileBitmapRenderer.image), typography: typography,
+                        counterStyle: .macintosh, skillIcons: icons, readOnly: state == "review").draw(in: context, bounds: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+                    if let minimap = layout.minimapFrame {
+                        GameMinimapArt.draw(in: context, bounds: minimap, image: image, visible: cg(viewport.visibleLevelRect),
+                            levelSize: CGSize(width: game.levelSize.width, height: game.levelSize.height), overlay: layout.portrait != nil)
+                    }
+                    if state == "review" {
+                        for star in 0..<3 { GameStarArt.draw(at: CGPoint(x: field.midX - 51 + CGFloat(star * 38), y: field.minY + 16), earned: star < 2, size: 3, context: context) }
+                    }
+                    let file = "hud-native-" + name + "-" + pose + "-" + state + ".png"
+                    try save(context: context, to: output.appendingPathComponent(file))
+                    evidence.append(["source": name, "state": state, "file": file, "nativeScale": 2, "readOnly": state == "review"])
                 }
-                let file = "hud-native-" + name + "-" + state + ".png"
-                try save(context: context, to: output.appendingPathComponent(file))
-                evidence.append(["source": name, "state": state, "file": file, "nativeScale": 2, "readOnly": state == "review"])
             }
         }
         return evidence

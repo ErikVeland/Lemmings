@@ -81,10 +81,14 @@ public struct MobileViewport: Codable, Equatable, Sendable {
         clamp()
     }
 
-    /// Fits the original gameplay window when a view receives its first size.
-    public mutating func fitGameplay(in size: MobileSize) {
+    /// Fits the level height and centres a fresh run on its entrance.
+    public mutating func fitGameplay(in size: MobileSize, centring point: MobilePoint? = nil) {
         viewSize = MobileSize(width: max(1, size.width), height: max(1, size.height))
         zoom = fittedGameplayZoom
+        if let point {
+            origin = MobilePoint(x: point.x - visibleLevelSize.width / 2,
+                                 y: point.y - visibleLevelSize.height / 2)
+        }
         clamp()
     }
 
@@ -132,9 +136,6 @@ public struct MobileViewport: Codable, Equatable, Sendable {
     }
 
     public var fittedGameplayZoom: Double {
-        let fitHeight = viewSize.height / levelSize.height
-        let gameplayWidth = min(320, levelSize.width)
-        let fitGameplayWidth = viewSize.width / (gameplayWidth * pixelAspect)
-        return max(1, min(maximumZoom, min(fitHeight, fitGameplayWidth)))
+        min(maximumZoom, max(minimumZoom, viewSize.height / levelSize.height))
     }
 }

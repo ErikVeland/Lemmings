@@ -130,6 +130,11 @@ with a fixed entry limit. Keep bitmap clipping and CRT shading local to the spri
 The effect adds no input surface. Pausing holds the current brightness, and
 reduced motion or reduced flashes hold the midpoint. Reuse the same cached glow
 for every pulse phase. Change its opacity rather than blurring it again.
+When selection ends, keep following the last actor and fade the combined border
+and glow to zero over 0.35 seconds. New selection restores full opacity. Use the
+existing frame clock, including while paused, and clear retained selection on
+rewind or a new run. The iOS CRT fade updates selection without uploading the
+unchanged playfield image.
 
 L2's mask follows the primary lemming sprite, including mirroring and its vertical
 pixel aspect. Separate projectiles, flames, balloons and parachutes are not part

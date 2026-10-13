@@ -58,6 +58,7 @@ public final class MusicFileDeck {
   private var requestedRate: Float = 1
   private var gameplayPitch: Double = 0
   private var mixPitch: Double = 0
+  private var appliedPitch: Float?
   private var muted = false
 
   /// Turntable timings for a pause and the spin-up that follows it.
@@ -188,12 +189,19 @@ public final class MusicFileDeck {
 
   public func setSpeedPitch(_ cents: Double) {
     gameplayPitch = min(1200 * log2(1.5), max(0, cents))
-    speedPitch.pitch = Float(gameplayPitch + mixPitch)
+    applyPitch()
   }
 
   public func setMixTempoRatio(_ ratio: Double) {
     mixPitch = -1200 * log2(min(1.08, max(0.92, ratio)))
-    speedPitch.pitch = Float(gameplayPitch + mixPitch)
+    applyPitch()
+  }
+
+  private func applyPitch() {
+    let value = Float(gameplayPitch + mixPitch)
+    guard appliedPitch.map({ abs(value - $0) >= 0.1 }) ?? true else { return }
+    speedPitch.pitch = value
+    appliedPitch = value
   }
 
   public func play() {

@@ -13,6 +13,7 @@ public struct LemmingSelectionEffect {
     public var clipRect: CGRect
     public var mirrored = false
     public var bloom = true
+    public var opacity: CGFloat = 1
     /// Golden rescue light uses the same sprite mask without a selection outline.
     public var rescueAmount: CGFloat = 0
     /// Simulation time keeps the pulse in the game frame and holds it on pause.
@@ -33,12 +34,14 @@ struct LemmingSelectionUniforms {
     var shape: SIMD4<Float>
     var style: SIMD4<Float>
     var glass = SIMD4<Float>.zero
+    var fade = SIMD4<Float>(1, 0, 0, 0)
 
     init(_ effect: LemmingSelectionEffect, sourceSize: CGSize, outputSize: CGSize) {
         rect = SIMD4(Float(effect.rect.minX), Float(effect.rect.minY), Float(effect.rect.width), Float(effect.rect.height))
         clip = SIMD4(Float(effect.clipRect.minX), Float(effect.clipRect.minY), Float(effect.clipRect.maxX), Float(effect.clipRect.maxY))
         dimensions = SIMD4(Float(sourceSize.width), Float(sourceSize.height), Float(outputSize.width), Float(outputSize.height))
         shape = SIMD4(Float(effect.sprite.width), Float(effect.sprite.height), Float(LemmingSelectionRenderer.padding), effect.mirrored ? 1 : 0)
+        fade.x = Float(min(1, max(0, effect.opacity)))
         style = effect.rescueAmount > 0
             ? SIMD4(Float(effect.rescueAmount) * 2.4, 1, 1, 0)
             : SIMD4(effect.bloom ? Float(effect.glowGain) : 0, 0, 0, 0)
@@ -282,7 +285,12 @@ struct LemmingSelectionUniforms {
         context.saveGState()
         defer { context.restoreGState() }
         // Keep the clip mask local to this sprite, even on a large display.
+        let opacity = min(1, max(0, effect.opacity))
+        context.setAlpha(opacity)
         context.clip(to: field.intersection(effect.clipRect))
+        // Fade the composited halo and border once, including overlapping cells.
+        if opacity < 1 { context.beginTransparencyLayer(auxiliaryInfo: nil) }
+        defer { if opacity < 1 { context.endTransparencyLayer() } }
         context.setShouldAntialias(false)
         context.addRect(field)
         context.addRects(cells)
@@ -308,7 +316,7 @@ struct LemmingSelectionUniforms {
     using namespace metal;
     struct SelectionVertex { float4 position [[position]]; };
     struct SelectionUniforms {
-        float4 rect, clip, dimensions, shape, style, glass;
+        float4 rect, clip, dimensions, shape, style, glass, fade;
     };
     vertex SelectionVertex selection_vertex(uint id [[vertex_id]]) {
         float2 p[4] = {float2(-1,-1),float2(1,-1),float2(-1,1),float2(1,1)};
@@ -351,17 +359,17 @@ struct LemmingSelectionUniforms {
             edge = max(edge, selection_alpha(v.position.xy + float2(x, y), mask, u));
         }
         if (edge > .5 && u.style.y < .5) {
-            return float4(float3(glass), glass);
+            return float4(float3(glass), glass) * u.fade.x;
         }
         constexpr sampler linear(filter::linear, address::clamp_to_zero);
         float light = mask.sample(linear, uv).g * u.style.x * glass;
         if (u.style.y > .5) {
             float alpha = min(.88f, light) * .3f;
             float peak = 1 + (u.style.z - 1) * .65;
-            if (u.style.w > .5) return float4(float3(1,.72,.18) * alpha * (peak - 1), 0);
-            return float4(float3(1,.72,.18) * alpha * peak, alpha);
+            if (u.style.w > .5) return float4(float3(1,.72,.18) * alpha * (peak - 1), 0) * u.fade.x;
+            return float4(float3(1,.72,.18) * alpha * peak, alpha) * u.fade.x;
         }
-        return float4(float3(.32, 1, .56) * light, light);
+        return float4(float3(.32, 1, .56) * light, light) * u.fade.x;
     }
     """
 }

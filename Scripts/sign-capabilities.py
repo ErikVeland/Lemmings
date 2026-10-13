@@ -13,9 +13,18 @@ import tempfile
 
 BUNDLE_ID = 'academy.glasscode.lemmings'
 CAPABILITIES = ('com.apple.developer.game-center', 'com.apple.developer.spatial-audio.profile-access')
+CLOUD_CONTAINER = 'iCloud.academy.glasscode.lemmings'
+CLOUD_KEYS = ('com.apple.developer.icloud-container-identifiers', 'com.apple.developer.ubiquity-container-identifiers')
+
+
+def supports_cloud(entitlements):
+    services = entitlements.get('com.apple.developer.icloud-services', [])
+    return ((services == '*' or 'CloudDocuments' in services)
+            and all(CLOUD_CONTAINER in entitlements.get(key, []) for key in CLOUD_KEYS))
 
 
 def select_profile(paths, identities):
+    candidates = []
     for path in paths:
         result = subprocess.run(['security', 'cms', '-D', '-i', str(path)], capture_output=True)
         if result.returncode:
@@ -34,7 +43,10 @@ def select_profile(paths, identities):
         for certificate in profile.get('DeveloperCertificates', []):
             fingerprint = hashlib.sha1(certificate).hexdigest().upper()
             if fingerprint in identities:
-                return path, entitlements, fingerprint
+                candidates.append((path, entitlements, fingerprint))
+                break
+    if candidates:
+        return next((candidate for candidate in candidates if supports_cloud(candidate[1])), candidates[0])
     raise SystemExit('No valid macOS provisioning profile for academy.glasscode.lemmings with both capabilities and an installed signing identity. Download the profile from Apple Developer, then retry.')
 
 
@@ -92,10 +104,21 @@ def main():
     paths = [args.profile] if args.profile else [p for root in roots for p in sorted(root.glob('*.provisionprofile'))]
     path, allowed, identity = select_profile(paths, identities)
     print('Selected profile: ' + str(path))
+    cloud_enabled = supports_cloud(allowed)
+    if not cloud_enabled:
+        print('Cloud progress unavailable: this profile does not authorise the shared iCloud Documents container.')
     if args.check:
         return
     # Only request app capabilities and the identifiers authorised by this profile.
     entitlements = {key: True for key in CAPABILITIES}
+    if cloud_enabled:
+        entitlements['com.apple.developer.icloud-services'] = ['CloudDocuments']
+        for key in CLOUD_KEYS:
+            entitlements[key] = [CLOUD_CONTAINER]
+        if 'com.apple.developer.icloud-container-environment' in allowed:
+            entitlements['com.apple.developer.icloud-container-environment'] = allowed['com.apple.developer.icloud-container-environment']
+    info['LemmingsCloudProgressEnabled'] = cloud_enabled
+    (contents / 'Info.plist').write_bytes(plistlib.dumps(info))
     for key in ('com.apple.application-identifier', 'com.apple.developer.team-identifier', 'get-task-allow'):
         if key in allowed:
             entitlements[key] = allowed[key]
@@ -121,6 +144,9 @@ def main():
     actual = plistlib.loads(signed.stdout)
     if not all(actual.get(key) is True for key in CAPABILITIES):
         raise SystemExit('The finished signature is missing a required capability.')
+    if cloud_enabled and (actual.get('com.apple.developer.icloud-services') != ['CloudDocuments']
+                          or any(actual.get(key) != [CLOUD_CONTAINER] for key in CLOUD_KEYS)):
+        raise SystemExit('The finished signature is missing the shared progress container.')
     print('Signed and verified both capabilities: ' + str(args.app))
 
 

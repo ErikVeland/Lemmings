@@ -21,8 +21,14 @@ import UIKit
     private var router = MobileTouchRouter()
     private var activeTouchID: Int?
     private var automaticallyFitsViewport: Bool
+    private let initialCameraFocus: MobilePoint?
     private var bitmap: CGImage?
+    private var tubeViewport: MobileViewport?
     private let tube = MobileCRTView(tubeDevice: true)
+    private var hdr: MobileHDRView?
+    private var attemptedHDR = false
+    private var speedMultiplier = 1.0
+    private var speedEffectsActive = false
     private var sprites: [String: CGImage] = [:]
     var selectionPoint: MobilePoint?
     var cursorPoint: MobilePoint?
@@ -30,6 +36,7 @@ import UIKit
     var cursorCount: Int?
     var cursorRemaining: Int?
     var selectionSprite: MobileSpriteHighlight?
+    var selectionOpacity: CGFloat = 1
     var rescueSprites: [MobileSpriteHighlight] = []
     var assignmentSprite: MobileSpriteHighlight?
     var assignmentProgress: Double?
@@ -49,9 +56,10 @@ import UIKit
     private var motionReduced: Bool { displaySettings.reduceMotion || UIAccessibility.isReduceMotionEnabled }
     var displaySettings = MobileSettings.load(from: .standard).classic { didSet { updateTube() } }
 
-    init(viewport: MobileViewport, automaticallyFitsViewport: Bool = true) {
+    init(viewport: MobileViewport, automaticallyFitsViewport: Bool = true, initialCameraFocus: MobilePoint? = nil) {
         gameViewport = viewport
         self.automaticallyFitsViewport = automaticallyFitsViewport
+        self.initialCameraFocus = initialCameraFocus
         super.init(frame: .zero)
         backgroundColor = .black
         isOpaque = true
@@ -102,20 +110,70 @@ import UIKit
 
     func advanceVisualEffects() {
         let now = ProcessInfo.processInfo.systemUptime
-        guard !explosionBirths.isEmpty, explosionBirths.values.contains(where: { $0.expires > 0 && $0.expires <= now }) else { return }
-        for (id, value) in explosionBirths where value.expires > 0 && value.expires <= now { explosionBirths[id] = (value.tick, 0) }
-        updateTube()
-        setNeedsDisplay()
+        if explosionBirths.values.contains(where: { $0.expires > 0 && $0.expires <= now }) {
+            for (id, value) in explosionBirths where value.expires > 0 && value.expires <= now { explosionBirths[id] = (value.tick, 0) }
+            updateTube(); setNeedsDisplay()
+        }
+        guard enhancedEffects else { hdr?.clear(); return }
+        let content = gameViewport.contentFrame
+        hdr?.advance(at: now, multiplier: speedMultiplier, enabled: speedEffectsActive && !motionReduced,
+            field: CGRect(x: content.x, y: content.y, width: content.width, height: content.height), project: { [weak self] centre in
+                guard let self else { return .zero }
+                let point = self.gameViewport.viewPoint(fromLevel: .init(x: Double(centre.x), y: Double(centre.y)))
+                let viewPoint = CGPoint(x: point.x, y: point.y)
+                return self.tube?.isHidden == false ? self.tube?.outputViewPoint(viewPoint) ?? viewPoint : viewPoint
+            })
+    }
+
+    private var enhancedEffects: Bool {
+        MobileDevicePerformance.enhancedEffectsAllowed && displaySettings.hdEffectsEnabled && !displaySettings.reduceFlashes
+    }
+    func setSpeedEffects(multiplier: Double, active: Bool) {
+        speedMultiplier = multiplier; speedEffectsActive = active
+        if active && multiplier > 1.01 && !motionReduced && enhancedEffects { prepareHDR() }
+    }
+    private func prepareHDR() {
+        guard hdr == nil, !attemptedHDR, enhancedEffects else { return }
+        attemptedHDR = true
+        guard let view = MobileHDRView(effects: true) else { return }
+        view.frame = bounds
+        // The decoration and input stay above the light surface.
+        insertSubview(view, belowSubview: decoration)
+        hdr = view
+    }
+    func suspendVisualEffects() { hdr?.clear(); speedEffectsActive = false }
+    func resetTransientEffects() { hdr?.clear(); explosionBirths.removeAll() }
+    func redrawSelection() {
+        if let tube, !tube.isHidden, let tubeViewport {
+            tube.selection = selectionEffect(viewport: tubeViewport)
+            tube.setNeedsDisplay()
+        } else { setNeedsDisplay() }
     }
 
     func update(frame: MobilePixelFrame) throws {
         guard let image = MobileBitmapRenderer.image(frame) else { throw MobileSessionError.frameUnavailable }
         bitmap = image
+        let now = ProcessInfo.processInfo.systemUptime
+        if !displaySettings.hdEffectsEnabled || displaySettings.reduceFlashes { explosionBirths.removeAll(); hdr?.clear() }
+        else {
+            var fresh: [CGRect] = []
+            for explosion in explosions where explosionBirths[explosion.id]?.tick != explosion.birthTick {
+                explosionBirths[explosion.id] = (explosion.birthTick, now + 0.14)
+                let rect = explosion.rect
+                guard gameViewport.visibleLevelRect.contains(.init(x: rect.x + rect.width / 2, y: rect.y + rect.height / 2)) else { continue }
+                fresh.append(CGRect(x: rect.x + rect.width / 2 - 3, y: rect.y + rect.height / 2 - 3, width: 6, height: 6))
+            }
+            if !fresh.isEmpty, enhancedEffects {
+                prepareHDR()
+                hdr?.trigger(rects: fresh, cinematic: displaySettings.cinematicExplosionsEnabled, at: now)
+            }
+        }
         updateTube()
         setNeedsDisplay()
     }
 
     func purgeBitmap() {
+        hdr?.clear(); explosionBirths.removeAll()
         bitmap = nil
         tube?.isHidden = true
         setNeedsDisplay()
@@ -148,10 +206,12 @@ import UIKit
     override func layoutSubviews() {
         super.layoutSubviews()
         decoration.frame = bounds
+        hdr?.frame = bounds
         guard bounds.width > 1, bounds.height > 1 else { return }
         let size = MobileSize(width: bounds.width, height: bounds.height)
+        guard size != gameViewport.viewSize else { return }
         if automaticallyFitsViewport {
-            gameViewport.fitGameplay(in: size)
+            gameViewport.fitGameplay(in: size, centring: initialCameraFocus)
             automaticallyFitsViewport = false
         } else {
             gameViewport.resize(size)
@@ -175,6 +235,7 @@ import UIKit
         var viewport = gameViewport
         viewport.viewSize = MobileSize(width: Double(width), height: Double(height))
         viewport.zoom = renderScale
+        tubeViewport = viewport
         context.translateBy(x: 0, y: CGFloat(height))
         context.scaleBy(x: 1, y: -1)
         MobileBitmapRenderer.draw(bitmap, viewport: viewport, in: context)
@@ -261,9 +322,11 @@ import UIKit
     private func selectionEffect(viewport: MobileViewport) -> LemmingSelectionEffect? {
         guard let sprite = selectionSprite, let image = spriteImage(sprite) else { return nil }
         let content = viewport.contentFrame
-        return .init(sprite: image, rect: spriteRect(sprite, viewport: viewport),
+        var effect = LemmingSelectionEffect(sprite: image, rect: spriteRect(sprite, viewport: viewport),
             clipRect: CGRect(x: content.x, y: content.y, width: content.width, height: content.height),
             bloom: true, time: motionReduced || displaySettings.reduceFlashes ? nil : sprite.time)
+        effect.opacity = selectionOpacity
+        return effect
     }
 
     private func rescueEffects(viewport: MobileViewport) -> [LemmingSelectionEffect] {

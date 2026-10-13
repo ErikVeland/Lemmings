@@ -9,7 +9,7 @@ public enum PanelGlyphArt: String, Sendable {
   case undo
   case fastForward
   case rewind, stepBackward, stepForward
-  case settings, download
+  case settings, download, menu, mobileMenu, reveal, dismiss
   /// Shown on the pause button while the level is held, so the button says
   /// what it will do rather than what it did.
   case play
@@ -47,6 +47,14 @@ public enum PanelGlyphArt: String, Sendable {
       ]
     case .undo:
       return [".....####...", "...########.", "..###....###", "..##......##", "#.##........", "####........", "###.........", "####........", "#####.......", "...........#", "...#########", ".....#####.."]
+    case .menu:
+      return ["############", "############", "............", "............", "############", "############", "............", "............", "############", "############"]
+    case .mobileMenu:
+      return [".############.", "##############", "..............", "..............", ".############.", "##############", "..............", "..............", ".############.", "##############"]
+    case .reveal:
+      return [".....##", "....##.", "...##..", "..##...", ".##....", "##.....", ".##....", "..##...", "...##..", "....##.", ".....##"]
+    case .dismiss:
+      return PanelGlyphArt.reveal.rows.map { String($0.reversed()) }
     case .fastForward:
       return ["#.....#.....", "##....##....", "###...###...", "####..####..", "#####.#####.", "############", "#####.#####.", "####..####..", "###...###...", "##....##....", "#.....#.....", "............"]
     case .rewind:
@@ -154,7 +162,7 @@ public enum PanelGlyphArt: String, Sendable {
       return Dictionary(uniqueKeysWithValues: Self.classicPalette.enumerated().map { index, colour in
         (Character(String(index, radix: 16)), (colour.red, colour.green, colour.blue))
       })
-    case .play, .fastForward, .undo, .settings, .download, .rewind, .stepBackward, .stepForward:
+    case .play, .fastForward, .undo, .settings, .download, .menu, .mobileMenu, .reveal, .dismiss, .rewind, .stepBackward, .stepForward:
       return ["#": (194, 224, 158)]
     }
   }

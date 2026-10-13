@@ -1,13 +1,14 @@
 #if os(macOS)
 import AppKit
 import NxlvKit
+import LemmingsGameArt
 
 /// Afterimages follow moving actors. Solid sprites stay sharp.
 @MainActor final class SpeedTrails {
   static let maximumTrails = 24
   var multiplier: Double = 3
   private struct TrailKey: Hashable {
-    let direction: Int, pixelX: Int, pixelY: Int, tier: Int
+    let direction: Int, pixelX: Int, pixelY: Int, tier: Int, echoes: Int
     let mirrored: Bool
     var motion: CGVector {
       let angle = CGFloat(direction) * .pi / 8
@@ -132,7 +133,7 @@ import NxlvKit
 
   func drawBehind(actor: Int, sprite: NSImage, in rect: CGRect, motion: CGVector,
     pixelSize: CGSize, mirrored: Bool = false) {
-    guard let context = drawingContext, drawnTrailCount < Self.maximumTrails,
+    guard let context = drawingContext, drawnTrailCount < MacFXPerformance.shared.quality.trailLimit,
       rect.width > 0, rect.height > 0, rect.intersects(clip),
       pixelSize.width > 0, pixelSize.height > 0,
       motion.dx != 0 || motion.dy != 0 else { return }
@@ -166,7 +167,7 @@ import NxlvKit
       let key = TrailKey(direction: direction,
         pixelX: max(1, Int((pixelSize.width * CGFloat(cached.source.width) / rect.width).rounded())),
         pixelY: max(1, Int((pixelSize.height * CGFloat(cached.source.height) / rect.height).rounded())),
-        tier: tier, mirrored: mirrored)
+        tier: tier, echoes: MacFXPerformance.shared.quality.trailEchoLimit, mirrored: mirrored)
       let trail: TrailImage
       if let existing = cached.images[key] { trail = existing }
       else {
@@ -194,7 +195,7 @@ import NxlvKit
   private static func makeTrail(source: CGImage, key: TrailKey) -> TrailImage? {
     let motion = key.motion
     let dx = motion.dx * CGFloat(key.pixelX), dy = motion.dy * CGFloat(key.pixelY)
-    let distances = Self.distances[key.tier]
+    let distances = Array(Self.distances[key.tier].prefix(key.echoes))
     let reach = distances.last! + 2 + CGFloat(key.tier)
     let paddingX = CGFloat(key.pixelX) * 5, paddingY = CGFloat(key.pixelY) * 5
     let width = source.width + Int(ceil(abs(dx) * reach) + 2 * paddingX)

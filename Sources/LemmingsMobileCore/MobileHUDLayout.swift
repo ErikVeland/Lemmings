@@ -14,6 +14,14 @@ public struct MobilePanelMetrics: Equatable, Sendable {
 }
 
 public struct MobileHUDLayout: Equatable, Sendable {
+    public struct Portrait: Equatable, Sendable {
+        public let skills: CGRect
+        public let skillContentWidth: CGFloat
+        public let rateValue: CGRect?
+        public let minimap: CGRect
+    }
+    public var portrait: Portrait? = nil
+    public var minimapFrame: CGRect? { portrait?.minimap ?? panel?.minimap }
     public let interface: MobileInterfaceLayout
     public let panel: MobilePanelMetrics?
     /// Whole-number scale of the panel art inside the touch grid used on narrow screens. Zero beside a panel.
@@ -36,6 +44,17 @@ public struct MobileHUDLayout: Equatable, Sendable {
         let controlCount = (hasRate ? 2 : 0) + max(0, skillCount) + (supportsRewind ? 7 : 5)
         let base = MobileLayoutEngine.make(container: container, safeArea: safeArea, controlCount: 0)
         let safe = base.safeFrame
+        if base.orientation == .landscape, safe.width >= 400, safe.height >= 258 {
+            let landscape = landscapeLayout(base: base, hasRate: hasRate, skillCount: max(0, skillCount),
+                                            supportsRewind: supportsRewind, reservedRegions: reservedRegions)
+            if portraitControlsFit(landscape, avoiding: reservedRegions) { return landscape }
+        }
+        if safe.width >= 308, safe.height >= 308 {
+            let portrait = portraitLayout(base: base, hasRate: hasRate, skillCount: max(0, skillCount),
+                                          supportsRewind: supportsRewind,
+                                          reservedRegions: reservedRegions)
+            if portraitControlsFit(portrait, avoiding: reservedRegions) { return portrait }
+        }
         let horizontal = horizontalDivision(in: safe, regions: reservedRegions)
         let deck = horizontal.map {
             MobileRect(x: safe.x, y: $0.frame.maxY, width: safe.width, height: safe.maxY - $0.frame.maxY)
@@ -96,6 +115,130 @@ public struct MobileHUDLayout: Equatable, Sendable {
                                    minimap: CGRect(x: panelFrame.minX + 256 * scale, y: panelFrame.minY + 18 * scale,
                                                    width: 60 * scale, height: 20 * scale)),
                                compactScale: 0, speedArrows: arrows, reservedRegions: reservedRegions, supportsRewind: supportsRewind, isDiorama: horizontal != nil)
+    }
+
+    private static func portraitLayout(base: MobileInterfaceLayout, hasRate: Bool, skillCount: Int,
+                                       supportsRewind: Bool,
+                                       reservedRegions: [MobileReservedRegion]) -> MobileHUDLayout {
+        let safe = base.safeFrame
+        let gap: CGFloat = 2, skillHeight: CGFloat = 80, transportHeight: CGFloat = 48
+        let skillY = safe.maxY - transportHeight - gap - skillHeight
+        let navigationY = skillY - gap - 44
+        let skillWidth = max(44, (safe.width - gap * CGFloat(max(0, skillCount - 1))) / CGFloat(max(1, skillCount)))
+        let skills = (0..<skillCount).map { index in
+            MobileRect(x: safe.minX + CGFloat(index) * (skillWidth + gap), y: skillY,
+                       width: skillWidth, height: skillHeight)
+        }
+        let transportY = skillY + skillHeight + gap
+        let rateWidth: CGFloat = hasRate ? 116 : 0
+        let groupGap: CGFloat = 4
+        let buttonWidth = (safe.width - rateWidth - groupGap * CGFloat(hasRate ? 3 : 2)) / 3
+        let start = safe.minX + rateWidth + (hasRate ? groupGap : 0)
+        func transport(_ index: Int) -> MobileRect {
+            let x = start + CGFloat(index) * (buttonWidth + groupGap)
+            return MobileRect(x: x, y: transportY,
+                              width: index == 2 ? safe.maxX - x : buttonWidth, height: transportHeight)
+        }
+        let menu = MobileRect(x: safe.maxX - 44, y: safe.minY, width: 44, height: 44)
+        let navigationCount = supportsRewind ? 3 : 1
+        func navigation(_ index: Int) -> MobileRect {
+            MobileRect(x: safe.minX + CGFloat(index) * 46, y: navigationY, width: 44, height: 44)
+        }
+        let navigationWidth = CGFloat(navigationCount) * 46 - gap
+        let map = CGRect(x: safe.minX + navigationWidth + groupGap, y: navigationY,
+                         width: safe.width - navigationWidth - groupGap, height: 44)
+        var frames: [MobileRect] = []
+        if hasRate {
+            frames += [MobileRect(x: safe.minX, y: transportY, width: 44, height: transportHeight),
+                       MobileRect(x: safe.minX + 72, y: transportY, width: 44, height: transportHeight)]
+        }
+        frames += skills + [transport(2), transport(1), transport(0)]
+        if supportsRewind { frames += [navigation(0), navigation(1)] }
+        frames += [navigation(navigationCount - 1), menu]
+        let interface = MobileInterfaceLayout(orientation: base.orientation, safeFrame: safe,
+            playfieldFrame: MobileRect(x: safe.minX, y: safe.minY + 44, width: safe.width,
+                                      height: navigationY - safe.minY - 44),
+            statusFrame: MobileRect(x: safe.minX, y: safe.minY, width: safe.width - 48, height: 44),
+            controlsFrame: MobileRect(x: safe.minX, y: navigationY, width: safe.width, height: safe.maxY - navigationY),
+            controlFrames: frames)
+        return MobileHUDLayout(portrait: Portrait(
+            skills: CGRect(x: safe.minX, y: skillY, width: safe.width, height: skillHeight),
+            skillContentWidth: CGFloat(skillCount) * (skillWidth + gap) - (skillCount > 0 ? gap : 0),
+            rateValue: hasRate ? CGRect(x: safe.minX + 44, y: transportY, width: 28, height: transportHeight) : nil,
+            minimap: map),
+            interface: interface, panel: nil, compactScale: 2, speedArrows: [],
+            reservedRegions: reservedRegions, supportsRewind: supportsRewind, isDiorama: false)
+    }
+
+    /// Landscape puts skills and the main controls in one row to preserve playfield height.
+    private static func landscapeLayout(base: MobileInterfaceLayout, hasRate: Bool, skillCount: Int,
+                                        supportsRewind: Bool, reservedRegions: [MobileReservedRegion]) -> MobileHUDLayout {
+        let safe = base.safeFrame
+        let height: CGFloat = 80, gap: CGFloat = 2, groupGap: CGFloat = 4
+        let rowY = safe.maxY - height
+        let navigationY = rowY - gap - 44
+        let buttonWidth = min(64, max(44, floor(safe.width * 0.08)))
+        let speedWidth = max(72, buttonWidth + 20)
+        let rateWidth: CGFloat = hasRate ? 116 : 0
+        let transportWidth = rateWidth + speedWidth + 2 * buttonWidth + groupGap * CGFloat(hasRate ? 3 : 2)
+        let transportX = safe.maxX - transportWidth
+        let skillBankWidth = transportX - safe.minX - groupGap
+        let skillWidth = max(44, (skillBankWidth - gap * CGFloat(max(0, skillCount - 1))) / CGFloat(max(1, skillCount)))
+        let skills = (0..<skillCount).map { index in
+            MobileRect(x: safe.minX + CGFloat(index) * (skillWidth + gap), y: rowY,
+                       width: skillWidth, height: height)
+        }
+        let speedX = transportX + rateWidth + (hasRate ? groupGap : 0)
+        let speed = MobileRect(x: speedX, y: rowY, width: speedWidth, height: height)
+        let nuke = MobileRect(x: speed.maxX + groupGap, y: rowY, width: buttonWidth, height: height)
+        let pause = MobileRect(x: nuke.maxX + groupGap, y: rowY, width: safe.maxX - nuke.maxX - groupGap, height: height)
+        let navigationCount = supportsRewind ? 3 : 1
+        func navigation(_ index: Int) -> MobileRect {
+            MobileRect(x: safe.minX + CGFloat(index) * 46, y: navigationY, width: 44, height: 44)
+        }
+        let navigationWidth = CGFloat(navigationCount) * 46 - gap
+        let map = CGRect(x: safe.minX + navigationWidth + groupGap, y: navigationY,
+                         width: safe.width - navigationWidth - groupGap, height: 44)
+        let menu = MobileRect(x: safe.maxX - 44, y: safe.minY, width: 44, height: 44)
+        var frames: [MobileRect] = []
+        if hasRate {
+            frames += [MobileRect(x: transportX, y: rowY, width: 44, height: height),
+                       MobileRect(x: transportX + 72, y: rowY, width: 44, height: height)]
+        }
+        frames += skills + [pause, nuke, speed]
+        if supportsRewind { frames += [navigation(0), navigation(1)] }
+        frames += [navigation(navigationCount - 1), menu]
+        let interface = MobileInterfaceLayout(orientation: base.orientation, safeFrame: safe,
+            playfieldFrame: MobileRect(x: safe.minX, y: safe.minY + 44, width: safe.width,
+                                      height: navigationY - safe.minY - 44),
+            statusFrame: MobileRect(x: safe.minX, y: safe.minY, width: safe.width - 48, height: 44),
+            controlsFrame: MobileRect(x: safe.minX, y: navigationY, width: safe.width, height: safe.maxY - navigationY),
+            controlFrames: frames)
+        return MobileHUDLayout(portrait: Portrait(
+            skills: CGRect(x: safe.minX, y: rowY, width: skillBankWidth, height: height),
+            skillContentWidth: CGFloat(skillCount) * (skillWidth + gap) - (skillCount > 0 ? gap : 0),
+            rateValue: hasRate ? CGRect(x: transportX + 44, y: rowY, width: 28, height: height) : nil,
+            minimap: map), interface: interface, panel: nil, compactScale: 2, speedArrows: [],
+            reservedRegions: reservedRegions, supportsRewind: supportsRewind, isDiorama: false)
+    }
+
+    private static func portraitControlsFit(_ layout: MobileHUDLayout,
+                                            avoiding regions: [MobileReservedRegion]) -> Bool {
+        guard let portrait = layout.portrait, let menu = layout.interface.controlFrames.last else { return false }
+        func rect(_ frame: CGRect) -> MobileRect {
+            MobileRect(x: frame.minX, y: frame.minY, width: frame.width, height: frame.height)
+        }
+        // Check the visible scroll bank and navigation row before placing fixed controls.
+        let occupied = [layout.interface.controlsFrame, layout.interface.statusFrame, menu,
+                        rect(portrait.minimap)]
+            + layout.interface.controlFrames.suffix(layout.supportsRewind ? 3 : 2)
+        return !regions.contains { region in
+            let frame = region.frame
+            guard frame.x.isFinite, frame.y.isFinite, frame.width.isFinite, frame.height.isFinite,
+                  frame.width > 0, frame.height > 0,
+                  frame.intersects(layout.interface.safeFrame) else { return false }
+            return region.kind == .division || occupied.contains { $0.intersects(frame) }
+        }
     }
 
     /// A grid of touch-sized sockets. Each holds the panel art at a whole-number scale,

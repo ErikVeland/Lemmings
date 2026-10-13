@@ -6,7 +6,8 @@ import NxlvKit
 public enum MobileCareerArt {
     public static func players(_ profiles: MobileProfiles, subtitle: String, draft: String? = nil,
                                creating: Bool = false, portrait: Int = 0,
-                               canDelete: Bool = false, confirmingDelete: Bool = false) -> GameFrontEnd.Page {
+                               canDelete: Bool = false, confirmingDelete: Bool = false,
+                               hotSeatTurn: String? = nil) -> GameFrontEnd.Page {
         if let draft {
             return .init(title: creating ? "New player" : "Edit player", subtitle: subtitle,
                 rows: [.init("nameField", "Initials: " + String(draft.uppercased().prefix(3)) + "_", selected: true),
@@ -17,10 +18,31 @@ public enum MobileCareerArt {
             GameFrontEnd.Action("player." + $0.id, $0.name, selected: $0.id == profiles.activeID, portrait: $0.portrait)
         }
         rows.append(.init("playerNew", "New player", enabled: profiles.players.count < MobileProfiles.maximum))
+        rows.append(.init("hotSeat", hotSeatTurn.map { "Hot Seat: " + $0 } ?? "Hot Seat"))
         return .init(title: "Players", subtitle: subtitle, rows: rows,
             footer: [.init("playerRename", "Edit"),
                      .init("playerDelete", confirmingDelete ? "Confirm delete" : "Delete",
                            enabled: canDelete, selected: confirmingDelete), .init("home", "Back")])
+    }
+
+    public static func hotSeat(_ profiles: MobileProfiles, subtitle: String, roster: MobileHotSeatRoster,
+                               policy: MobileHotSeat.TurnPolicy, active: Bool, hasSaved: Bool,
+                               confirmingRestart: Bool = false) -> GameFrontEnd.Page {
+        var rows = profiles.players.map { player in
+            GameFrontEnd.Action("seat." + player.id, player.name + (player.id == roster.host ? "  Host" : ""),
+                                selected: roster.contains(player.id), portrait: player.portrait)
+        }
+        rows.append(.init("seatNew", "New player", enabled: profiles.players.count < MobileProfiles.maximum,
+                          primary: profiles.players.count < MobileHotSeat.minimumPlayers))
+        rows.append(.init("seatRule", "Turns: \(policy.title)"))
+        if hasSaved { rows.append(.init("seatSaved", "Saved Hot Seats")) }
+        if active {
+            rows.append(.init("seatRestart", confirmingRestart ? "Confirm new Hot Seat" : "New Hot Seat", selected: confirmingRestart))
+            rows.append(.init("seatSolo", "Return to solo"))
+        }
+        return .init(title: "Hot Seat", subtitle: subtitle, rows: rows,
+                     footer: [.init("seatBack", "Back"),
+                              .init("seatStart", "Choose a game", enabled: roster.canStart, primary: roster.canStart)])
     }
 
     public static func rankings(community: Bool, subtitle: String, busy: Bool,

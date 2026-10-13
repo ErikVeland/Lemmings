@@ -22,7 +22,7 @@ public struct PositionedSoundCue: Sendable {
 }
 
 /// The visible playfield maps to a front-facing 120° by 60° sound stage.
-public struct GameplaySoundViewport: Sendable {
+public struct GameplaySoundViewport: Equatable, Sendable {
     public var x: Double, y: Double, width: Double, height: Double
     public init(x: Double, y: Double, width: Double, height: Double) {
         self.x = x; self.y = y; self.width = width; self.height = height

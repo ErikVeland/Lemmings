@@ -327,4 +327,95 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
         _ = try trolley.validated(profileIDs: Set(profiles.map(\.id)))
         return self
     }
+
+    public static let cloudProfileID = "game-center-player"
+
+    /// Export one player's records without device identities or replay file paths.
+    public func cloudRecords(profileID: String) throws -> Self {
+        guard profile(profileID) != nil else { throw SequelDataError.invalid("The player no longer exists.") }
+        var copy = self
+        copy.profiles = [ArcadeProfile(id: Self.cloudProfileID, initials: "LEM")]
+        copy.activeProfileID = Self.cloudProfileID
+        copy.runs = runs.filter { $0.profileID == profileID }.map { $0.cloudOwned(by: Self.cloudProfileID) }
+            .sorted { $0.id.uuidString < $1.id.uuidString }
+        copy.statistics = [:]
+        for (key, stats) in statistics {
+            for assisted in [false, true] {
+                let suffix = "|\(profileID)|\(assisted)"
+                if key.hasSuffix(suffix) {
+                    copy.statistics[String(key.dropLast(suffix.count)) + "|\(Self.cloudProfileID)|\(assisted)"] = stats
+                }
+            }
+        }
+        copy.skippedLevels = skippedLevels[profileID].map { [Self.cloudProfileID: $0.sorted()] } ?? [:]
+        copy.trolley = trolley.cloudHistory(profileID: profileID, destinationID: Self.cloudProfileID)
+        return try copy.validated()
+    }
+
+    /// Merge immutable result IDs. Local player selection and guest records stay local.
+    public mutating func mergeCloudRecords(_ incoming: Self, profileID: String) throws {
+        var proposed = self
+        try proposed.mergeCloudRecordsInPlace(incoming, profileID: profileID)
+        self = proposed
+    }
+    private mutating func mergeCloudRecordsInPlace(_ incoming: Self, profileID: String) throws {
+        _ = try incoming.validated()
+        guard incoming.profiles.map(\.id) == [Self.cloudProfileID], profile(profileID) != nil else {
+            throw SequelDataError.invalid("The cloud player is invalid.")
+        }
+        let localEvents = Self.cloudEventCounts(trolley.attempts)
+        let remoteEvents = Self.cloudEventCounts(incoming.trolley.attempts)
+        try trolley.mergeCloudHistory(incoming.trolley, sourceID: Self.cloudProfileID, destinationID: profileID)
+        let mergedEvents = Self.cloudEventCounts(trolley.attempts)
+        var knownRuns = Dictionary(runs.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+        for run in incoming.runs {
+            let mapped = run.cloudOwned(by: profileID)
+            if let previous = knownRuns[mapped.id] {
+                guard previous == mapped else { throw SequelDataError.invalid("Saved result identities conflict.") }
+            } else { runs.append(mapped); knownRuns[mapped.id] = mapped }
+        }
+        for (key, remote) in incoming.statistics {
+            for assisted in [false, true] {
+                let suffix = "|\(Self.cloudProfileID)|\(assisted)"
+                guard key.hasSuffix(suffix) else { continue }
+                let localKey = String(key.dropLast(suffix.count)) + "|\(profileID)|\(assisted)"
+                let local = statistics[localKey] ?? ArcadeLevelStats()
+                let before = localEvents[localKey] ?? ArcadeLevelStats()
+                let remoteCount = remoteEvents[key] ?? ArcadeLevelStats()
+                let combinedCount = mergedEvents[localKey] ?? ArcadeLevelStats()
+                var combined = local
+                combined.attempts = max(0, max(local.attempts - before.attempts, remote.attempts - remoteCount.attempts)) + combinedCount.attempts
+                combined.clears = max(0, max(local.clears - before.clears, remote.clears - remoteCount.clears)) + combinedCount.clears
+                combined.zeroSaved = max(0, max(local.zeroSaved - before.zeroSaved, remote.zeroSaved - remoteCount.zeroSaved)) + combinedCount.zeroSaved
+                combined.allSaved = max(0, max(local.allSaved - before.allSaved, remote.allSaved - remoteCount.allSaved)) + combinedCount.allSaved
+                combined.achievements.formUnion(remote.achievements)
+                statistics[localKey] = combined
+            }
+        }
+        let cleared = Set(runs.filter { $0.profileID == profileID && $0.qualifies }.map { TrolleyCareerScore.levelKey($0.level) })
+        let skipped = Set(skippedLevels[profileID] ?? []).union(incoming.skippedLevels[Self.cloudProfileID] ?? []).subtracting(cleared)
+        skippedLevels[profileID] = skipped.isEmpty ? nil : skipped.sorted()
+        _ = try validated()
+    }
+    private static func cloudEventCounts(_ attempts: [TrolleyAttempt]) -> [String: ArcadeLevelStats] {
+        var counts: [String: ArcadeLevelStats] = [:]
+        for attempt in attempts {
+            let run = attempt.run
+            let key = statsKey(level: run.level, profileID: run.profileID, assisted: run.assisted)
+            var count = counts[key] ?? ArcadeLevelStats()
+            count.attempts += 1
+            if run.qualifies { count.clears += 1 }
+            if run.saved == 0 { count.zeroSaved += 1 }
+            if run.savedAll { count.allSaved += 1 }
+            counts[key] = count
+        }
+        return counts
+    }
+}
+
+extension ArcadeRun {
+    func cloudOwned(by profileID: String) -> Self {
+        .init(id: id, profileID: profileID, level: level, saved: saved, didWin: didWin,
+            skills: skills, seconds: seconds, assisted: assisted, date: date, telemetry: telemetry)
+    }
 }

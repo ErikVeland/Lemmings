@@ -9,8 +9,9 @@ public enum GameMinimapArt {
         return CGRect(x: bounds.midX - size.width / 2, y: bounds.midY - size.height / 2, width: size.width, height: size.height)
     }
 
-    public static func draw(in context: CGContext, bounds: CGRect, image: CGImage?, visible: CGRect, levelSize: CGSize) {
-        let map = content(in: bounds, levelSize: levelSize)
+    public static func draw(in context: CGContext, bounds: CGRect, image: CGImage?, visible: CGRect, levelSize: CGSize, overlay: Bool = false) {
+        if overlay { GameStoneArt.drawSocket(in: context, frame: bounds, selected: false, pixel: 1) }
+        let map = content(in: overlay ? bounds.insetBy(dx: 4, dy: 4) : bounds, levelSize: levelSize)
         guard !map.isEmpty else { return }
         context.saveGState()
         defer { context.restoreGState() }

@@ -55,6 +55,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   private var latestRecentSample: Int64?
   private var rewindSequence: UInt64 = 0
   private var rewindRenderStart: Int64?
+  private var recentRenderPrepared = false
   private var rewindRenderFrames = 0
   private var rewindRenderCount = 0
   private var rewindRenderedVoices: [Bool]
@@ -173,11 +174,28 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     // the whole render block, even when an earlier source finishes mid-block.
     if rewindRenderStart != start || rewindRenderFrames != frames || rewindRenderedVoices[index] {
       rewindRenderStart = start
+      recentRenderPrepared = false
       rewindRenderFrames = frames
       rewindRenderCount = voices.reduce(0) { $0 + ($1.isActive && $1.rewindSequence != nil ? 1 : 0) }
       for index in rewindRenderedVoices.indices { rewindRenderedVoices[index] = false }
     }
     rewindRenderedVoices[index] = true
+    // Clear the history once per block, rather than for every silent spatial source.
+    // Scrub-only renders retain their history and never record their own output.
+    if voice.rewindSequence == nil, !recentRenderPrepared {
+      for frame in 0..<frames {
+        let position = start + Int64(frame)
+        let slot = Int((position % Int64(recentSampleLimit) + Int64(recentSampleLimit)) % Int64(recentSampleLimit))
+        recentSamplePositions[slot] = position
+        recentSamples[slot] = 0
+      }
+      latestRecentSample = max(latestRecentSample ?? start, start + Int64(max(0, frames - 1)))
+      recentRenderPrepared = true
+    }
+    guard !isMuted, voice.isActive else {
+      for buffer in buffers { memset(buffer.mData, 0, Int(buffer.mDataByteSize)) }
+      return
+    }
     let rewindGain: Float = voice.rewindSequence == nil ? 1 : 1 / Float(max(1, rewindRenderCount))
     for frame in 0..<frames {
       var sample: Float = 0
@@ -210,12 +228,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       guard voice.rewindSequence == nil else { continue }
       let position = start + Int64(frame)
       let slot = Int((position % Int64(recentSampleLimit) + Int64(recentSampleLimit)) % Int64(recentSampleLimit))
-      if recentSamplePositions[slot] != position {
-        recentSamplePositions[slot] = position
-        recentSamples[slot] = 0
-      }
       recentSamples[slot] += sourceSample
-      latestRecentSample = max(latestRecentSample ?? position, position)
     }
     voices[index] = voice
   }
@@ -494,6 +507,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   /// Refresh active one-shots as well as the next event when the camera moves.
   public func setViewport(_ value: GameplaySoundViewport) {
     lock.lock(); defer { lock.unlock() }
+    guard viewport != value else { return }
     viewport = value
     for index in voices.indices where voices[index].isActive { placeVoice(index) }
   }

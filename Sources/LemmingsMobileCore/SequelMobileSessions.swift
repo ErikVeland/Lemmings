@@ -54,6 +54,11 @@ public final class Lemmings2MobileSession: MobileGameSession {
         )
     }
 
+    public var entrancePoint: MobilePoint {
+        let point = initial.configuration.entrance
+        return MobilePoint(x: Double(point.x), y: Double(point.y))
+    }
+
     public var snapshot: MobileGameSnapshot {
         MobileGameSnapshot(
             tick: runtime.tick,
@@ -230,6 +235,11 @@ public final class Lemmings3MobileSession: MobileGameSession {
             width: Double(runtime.configuration.width),
             height: Double(runtime.configuration.height)
         )
+    }
+
+    public var entrancePoint: MobilePoint {
+        let point = initial.configuration.entrance
+        return MobilePoint(x: Double(point.x), y: Double(point.y))
     }
 
     public var snapshot: MobileGameSnapshot {

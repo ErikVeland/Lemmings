@@ -995,6 +995,7 @@ import NxlvKit
         guard recordsCampaignProgress else { return }
         if let data = try? JSONEncoder().encode(campaign.progress) {
             UserDefaults.standard.set(data, forKey: progressKey)
+            ArcadeStore.shared.notifyProgressChanged()
         }
     }
     @objc private func chooseTribe() {
@@ -1199,12 +1200,19 @@ import NxlvKit
         }
     }
     private func update() {
+        let frameStarted = ProcessInfo.processInfo.systemUptime
+        defer {
+            if !paused, !game.isComplete, canvas.menuRows == nil, pendingTool == nil, !GameScreen.shared.isPresented {
+                MacFXPerformance.shared.recordCPU(ProcessInfo.processInfo.systemUptime - frameStarted)
+            }
+        }
         gameplayKeyboard?.refreshNavigationControl()
         canvas.navigationFrame = gameplayKeyboard?.navigationFrame(in: canvas)
         let now = ProcessInfo.processInfo.systemUptime
         let elapsed = min(0.1, now - lastTime); lastTime = now
         let playing = !paused && !game.isComplete && !GameScreen.shared.isPresented && canvas.menuRows == nil && pendingTool == nil
         speedControl.update(at: now, active: !game.isComplete && !GameScreen.shared.isPresented && canvas.menuRows == nil && pendingTool == nil)
+        canvas.advanceSelectionFade(at: now)
         let turn = ArcadeStore.shared.hotSeatIsActive ? ArcadeStore.shared.records.profile(arcadeProfileID) : nil
         canvas.turnBadge.show(initials: turn?.initials, portrait: turn.flatMap { ArcadeWindow.shared.arcadeView.portraitImage($0.portrait) })
         canvas.speedMultiplier = speedControl.multiplier
@@ -1420,17 +1428,19 @@ import NxlvKit
           let fingerprint = arcadeLevel.conditions?.levelFingerprint,
           immediately || now - lastCheckpointTime >= 5 else { return }
         lastCheckpointTime = now
+        let captured = game
         var checkpoint = RunRecovery(engine: engine, profileID: arcadeProfileID, runID: arcadeRunID,
           dataSetID: "lemmings3", levelIndex: progress.index,
           levelFingerprint: fingerprint, initialStateHash: recoveryInitialHash,
-          tick: game.tick, events: [], stateHash: L3RunRecovery.stateHash(game), usedRewind: usedRewind,
+          tick: game.tick, events: [], stateHash: "", usedRewind: usedRewind,
           nukeCount: 0, rewindCount: 0, undoCount: 0, selectedSkill: selected,
           scrollX: Double(canvas.cameraX), scrollY: Double(canvas.cameraY))
         checkpoint.sourcePath = dataRoot.path
         checkpoint.l3 = L3RunRecovery(progress: progress, inputs: recoveryInputs,
           skillAssignments: skillAssignments, toolUses: toolUses)
         checkpoint.hotSeatID = arcadeHotSeatID
-        recoveryStore.save(checkpoint, immediately: immediately && waitForDisk) { [weak self] error in
+        recoveryStore.save(checkpoint, immediately: immediately && waitForDisk, coalescing: !immediately,
+            prepareStateHash: { L3RunRecovery.stateHash(captured) }) { [weak self] error in
             self?.message = "Run recovery save failed: " + error
         }
     }
@@ -1573,6 +1583,14 @@ import NxlvKit
     private let speedTrails = SpeedTrails()
     private var hdrOverlay: ExplosionHDRView?
     private(set) var selectionEffect: LemmingSelectionEffect?
+    private var selectionFade = SelectionFade<Int>()
+    private var selectionOpacity: CGFloat = 1
+    private var selectionWasFading = false
+    func advanceSelectionFade(at now: Double) {
+        let fading = selectionFade.isFading(at: now)
+        if fading || selectionWasFading { needsDisplay = true }
+        selectionWasFading = fading
+    }
     private(set) var rescueAuras: [LemmingSelectionEffect] = []
     private var lastBlastTick = -1
     override func viewDidMoveToWindow() {
@@ -1604,7 +1622,14 @@ import NxlvKit
                 width: world.width * self.zoom, height: world.height * self.zoom))
         }
     }
-    var game: Lemmings3Runtime? { didSet { updateSpeedTrails() } }
+    var game: Lemmings3Runtime? {
+        didSet {
+            if game == nil || oldValue == nil || (game?.tick ?? 0) < (oldValue?.tick ?? 0) {
+                selectionFade.reset()
+            }
+            updateSpeedTrails()
+        }
+    }
     var rewindOriginTick: Int?
     var rewindCurrentTick = 0
     var onClick: ((Int, Int) -> Void)?
@@ -1891,6 +1916,7 @@ import NxlvKit
         }
     }
     func resetCamera(_ level: Lemmings3Level) {
+        selectionFade.reset()
         terrainCategory = .lemmings3Terrain(style: level.style)
         cameraX = CGFloat(min(max(0, mapWidth - 320), level.screenX))
         cameraY = CGFloat(min(max(0, mapHeight - 160), level.screenY))
@@ -1973,8 +1999,17 @@ import NxlvKit
         }
     }
     private func drawLemmings(_ game: Lemmings3Runtime, ghostsOnly: Bool) {
-        let selectedID = !ghostsOnly && !GameCursor.gameplaySuppressed && menuRows == nil
+        var selectedID = !ghostsOnly && !GameCursor.gameplaySuppressed && menuRows == nil
             ? manualCarrierID ?? assignmentHighlight.target ?? pointerTarget : nil
+        if !ghostsOnly {
+            if lemmingSelectionStyle == .modern, !GameCursor.gameplaySuppressed, menuRows == nil {
+                let now = ProcessInfo.processInfo.systemUptime
+                selectionFade.set(selectedID, at: now)
+                let selection = selectionFade.sample(at: now)
+                selectedID = selection?.value
+                selectionOpacity = selection?.opacity ?? 1
+            } else { selectionFade.reset() }
+        }
         var selectedSprite: (pixels: CGImage, rect: CGRect)?
         for lem in game.lemmings where lem.active {
             // Animation IDs and anchors remain provisional. The bytes are native.
@@ -2023,6 +2058,7 @@ import NxlvKit
             selectionEffect = LemmingSelectionEffect(sprite: selectedSprite.pixels,
                 rect: precisionLens.display(selectedSprite.rect), clipRect: playfieldRect,
                 time: reduceMotion || reduceFlashes ? nil : Double(game.tick) / Lemmings3Runtime.ticksPerSecond)
+            selectionEffect?.opacity = selectionOpacity
         }
     }
     private func drawBackgroundImage(_ image: NSImage, x: CGFloat, y: CGFloat) {

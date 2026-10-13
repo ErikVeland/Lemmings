@@ -2,6 +2,17 @@ import LemmingsMobileCore
 import XCTest
 
 final class MobileCoreIOSSmokeTests: XCTestCase {
+    func testProductionPortraitHUDOnOriginalIPadPro() {
+        for size in [MobileSize(width: 768, height: 1024), .init(width: 1024, height: 1366)] {
+            let layout = MobileHUDLayout.make(container: size, safeArea: MobileInsets(top: 20),
+                hasRate: true, skillCount: 8, supportsRewind: true)
+            XCTAssertNotNil(layout.portrait)
+            XCTAssertEqual(layout.interface.controlsFrame.height, 130)
+            XCTAssertEqual(layout.interface.playfieldFrame.height, size.height - 150)
+            XCTAssertEqual(layout.interface.controlFrames.last?.width, 44)
+        }
+    }
+
     func testLayoutTouchAndLifecycleContractsOnIOS() {
         let layout = MobileLayoutEngine.make(
             container: MobileSize(width: 390, height: 844),

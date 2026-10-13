@@ -115,6 +115,17 @@ import UIKit
         return CGPoint(x: (x + 1) / 2 * bounds.width, y: (y + 1) / 2 * bounds.height)
     }
 
+    /// Invert the input projection to anchor light on the curved output.
+    func outputViewPoint(_ point: CGPoint) -> CGPoint {
+        var output = point
+        for _ in 0..<6 {
+            let source = sourceViewPoint(output)
+            output.x += (point.x - source.x) * 0.5
+            output.y += (point.y - source.y) * 0.5
+        }
+        return output
+    }
+
     private func updateUniforms(settings: ClassicSettings) {
         uniform.sourceSize = SIMD2(Float(source?.width ?? 1), Float(source?.height ?? 1))
         uniform.curvature = tubeSettings.curvature

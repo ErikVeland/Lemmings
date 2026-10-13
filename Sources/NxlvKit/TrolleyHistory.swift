@@ -79,6 +79,7 @@ public struct TrolleyHistory: Codable, Equatable, Sendable {
     public private(set) var maxima: [String: TrolleyMaximumRecord] = [:]
     public private(set) var replays: [TrolleyReplayReference] = []
     public init() { installationID = UUID().uuidString }
+    private init(cloudInstallationID: String) { installationID = cloudInstallationID }
     public mutating func begin(_ start: TrolleyStart) {
         guard start.conditions.isValid, !starts.contains(where: { $0.id == start.id }),
               !attempts.contains(where: { $0.id == start.id }) else { return }
@@ -198,6 +199,52 @@ public struct TrolleyHistory: Codable, Equatable, Sendable {
             throw SequelDataError.invalid("Invalid Trolley attempt history. The saved file must be preserved.")
         }
         return self
+    }
+
+    func cloudHistory(profileID: String, destinationID: String) -> Self {
+        var copy = Self(cloudInstallationID: "00000000-0000-4000-8000-000000000001")
+        copy.starts = starts.filter { $0.profileID == profileID }.map { $0.cloudOwned(by: destinationID) }
+            .sorted { $0.id.uuidString < $1.id.uuidString }
+        copy.attempts = attempts.filter { $0.run.profileID == profileID }.map { $0.cloudOwned(by: destinationID) }
+            .sorted { $0.id.uuidString < $1.id.uuidString }
+        copy.maxima = [:]
+        copy.replays = []
+        return copy
+    }
+
+    mutating func mergeCloudHistory(_ incoming: Self, sourceID: String, destinationID: String) throws {
+        var knownStarts = Dictionary(starts.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+        var knownAttempts = Dictionary(attempts.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+        for start in incoming.starts where start.profileID == sourceID {
+            let mapped = start.cloudOwned(by: destinationID)
+            if let previous = knownStarts[mapped.id] {
+                guard previous == mapped else { throw SequelDataError.invalid("Saved attempt identities conflict.") }
+            } else { starts.append(mapped); knownStarts[mapped.id] = mapped }
+        }
+        for attempt in incoming.attempts where attempt.run.profileID == sourceID {
+            let mapped = attempt.cloudOwned(by: destinationID)
+            if let previous = knownAttempts[mapped.id] {
+                guard previous == mapped else { throw SequelDataError.invalid("Saved attempt identities conflict.") }
+            } else { attempts.append(mapped); knownAttempts[mapped.id] = mapped }
+            var maximum = maxima[mapped.comparisonID] ?? TrolleyMaximumRecord()
+            maximum.observe(mapped.run)
+            maxima[mapped.comparisonID] = maximum
+        }
+        attempts.sort { ($0.run.date, $0.id.uuidString) < ($1.run.date, $1.id.uuidString) }
+        starts.sort { ($0.date, $0.id.uuidString) < ($1.date, $1.id.uuidString) }
+    }
+}
+
+private extension TrolleyStart {
+    func cloudOwned(by profileID: String) -> Self {
+        .init(id: id, profileID: profileID, conditions: conditions, date: date,
+            parentAttemptID: parentAttemptID, kind: kind)
+    }
+}
+private extension TrolleyAttempt {
+    func cloudOwned(by profileID: String) -> Self {
+        .init(run: run.cloudOwned(by: profileID), start: start?.cloudOwned(by: profileID), maximum: maximum,
+            metrics: metrics, philosophy: philosophy, achievements: achievements, surpassedTarget: surpassedTarget)
     }
 }
 

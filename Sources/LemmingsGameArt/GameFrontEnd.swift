@@ -125,7 +125,8 @@ public struct GameFrontEnd {
         let headerIDs: Set<String> = ["settings", "whatsNew"]
         let footer = page.footer.filter { !headerIDs.contains($0.id) }
         let wide = boardWidth >= 600
-        let footerRows = wide ? 1 : Int(ceil(Double(footer.count) / 3))
+        let columns = wide ? max(1, footer.count) : min(width >= 380 ? 2 : 1, max(1, footer.count))
+        let footerRows = Int(ceil(Double(footer.count) / Double(columns)))
         let noticeHeight: CGFloat = page.subtitle.isEmpty ? 0 : 32
         let initialsHeight: CGFloat = wide || page.homeInitials.isEmpty ? 0 : 32
         let boardHeight = headerHeight + noticeHeight + CGFloat(page.rows.count) * (rowHeight + 5)
@@ -144,7 +145,6 @@ public struct GameFrontEnd {
         let initials = CGRect(x: x + inset, y: y, width: initialsWidth, height: wide ? 44 : initialsHeight)
         if !wide { y += initialsHeight }
         let gap: CGFloat = 12
-        let columns = wide ? max(1, footer.count) : min(3, max(1, footer.count))
         let start = x + inset + (wide && initialsWidth > 0 ? initialsWidth + gap : 0)
         let cell = (x + boardWidth - inset - start - CGFloat(columns - 1) * gap) / CGFloat(columns)
         // Keep the target order equal to Page.rows + Page.footer for UIKit and keyboard input.
@@ -155,8 +155,10 @@ public struct GameFrontEnd {
                                y: board.minY + 18, width: 44, height: 44)
             } else {
                 let index = footer.firstIndex(where: { $0.id == action.id })!
+                let alone = !wide && index == footer.count - 1 && index % columns == 0
                 frame = CGRect(x: start + CGFloat(index % columns) * (cell + gap),
-                               y: y + CGFloat(index / columns) * 52, width: cell, height: 44)
+                               y: y + CGFloat(index / columns) * 52,
+                               width: alone ? boardWidth - inset * 2 : cell, height: 44)
             }
             targets.append(Target(action: action, frame: frame))
         }

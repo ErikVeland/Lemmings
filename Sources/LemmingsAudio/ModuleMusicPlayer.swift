@@ -4,10 +4,8 @@ import NxlvKit
 
 /// Plays ProTracker modules through the system audio output.
 ///
-/// The render callback runs on the audio thread. All shared state sits behind
-/// one lock, and the callback holds it for the whole fill. Loading a module is
-/// rare and brief, so the two rarely contend. A real-time safe handoff would
-/// swap buffers without locking, which is worth doing if this ever glitches.
+/// A serial worker synthesises into four reusable PCM buffers. The audio engine
+/// consumes those buffers without taking the synthesis/control lock.
 public final class ModuleMusicPlayer: @unchecked Sendable {
   public init() {}
 
@@ -19,8 +17,22 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   private let mixEQ = AVAudioUnitEQ(numberOfBands: 1)
   private var gameplayPitch: Double = 0
   private var mixPitch: Double = 0
+  private var appliedPitch: Float?
   private let spatialMixer = AVAudioMixerNode()
-  private var sourceNode: AVAudioSourceNode?
+  private var sourceNode: AVAudioPlayerNode?
+  private let synthesisQueue = DispatchQueue(label: "Lemmings.module-pcm", qos: .userInteractive)
+  // Only the synthesis queue accesses these values.
+  private var bufferGeneration = 0
+  private let bufferClockLock = NSLock()
+  private var scheduledFrames: Int64 = 0
+  private let bufferedFrameCount = 1024
+  private final class PCMBuffer: @unchecked Sendable {
+    let value: AVAudioPCMBuffer
+    init(format: AVAudioFormat, frames: Int) {
+      value = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(frames))!
+      value.frameLength = AVAudioFrameCount(frames)
+    }
+  }
   private let lock = NSLock()
 
   // Guarded by `lock`.
@@ -78,17 +90,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     let format = AVAudioFormat(
       standardFormatWithSampleRate: sampleRate, channels: 2)!
 
-    let node = AVAudioSourceNode(format: format) { [weak self] _, _, frameCount, buffers in
-      let list = UnsafeMutableAudioBufferListPointer(buffers)
-      guard let self else {
-        for buffer in list {
-          memset(buffer.mData, 0, Int(buffer.mDataByteSize))
-        }
-        return noErr
-      }
-      self.fill(list, frames: Int(frameCount))
-      return noErr
-    }
+    let node = AVAudioPlayerNode()
 
     engine.attach(node)
     engine.attach(speedPitch)
@@ -127,6 +129,38 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     outputSuspended = false
     lock.unlock()
     isRunning = true
+    synthesisQueue.async { [weak self] in
+      guard let self else { return }
+      self.bufferGeneration += 1
+      self.bufferClockLock.lock(); self.scheduledFrames = 0; self.bufferClockLock.unlock()
+      let generation = self.bufferGeneration
+      for _ in 0..<4 {
+        let buffer = PCMBuffer(format: format, frames: self.bufferedFrameCount)
+        self.queueBuffer(buffer, node: node, generation: generation)
+      }
+      node.play()
+    }
+  }
+
+  /// Buffer completion runs outside the audio render callback. Refill on the worker.
+  private func queueBuffer(_ buffer: PCMBuffer, node: AVAudioPlayerNode, generation: Int) {
+    guard generation == bufferGeneration else { return }
+    fill(UnsafeMutableAudioBufferListPointer(buffer.value.mutableAudioBufferList), frames: bufferedFrameCount)
+    bufferClockLock.lock(); scheduledFrames += Int64(bufferedFrameCount); bufferClockLock.unlock()
+    node.scheduleBuffer(buffer.value, completionCallbackType: .dataConsumed) { [weak self] _ in
+      guard let self else { return }
+      self.synthesisQueue.async { [weak self] in
+        self?.queueBuffer(buffer, node: node, generation: generation)
+      }
+    }
+  }
+
+  /// Compensate the tracker/DJ clock for samples waiting in the player node.
+  private var bufferedSeconds: Double {
+    guard let node = sourceNode, isRunning else { return 0 }
+    bufferClockLock.lock(); let scheduled = scheduledFrames; bufferClockLock.unlock()
+    let played = node.lastRenderTime.flatMap { node.playerTime(forNodeTime: $0) }?.sampleTime ?? 0
+    return Double(max(0, scheduled - played)) / sampleRate
   }
 
   public func stop() {
@@ -134,6 +168,8 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     guard isRunning else { return }
     pauseWorkItem?.cancel()
     pauseWorkItem = nil
+    synthesisQueue.sync { bufferGeneration += 1 }
+    sourceNode?.stop()
     engine.stop()
     if let sourceNode { engine.detach(sourceNode) }
     engine.detach(speedPitch)
@@ -351,13 +387,13 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   }
 
   private func load(_ module: ProTrackerModule, url: URL) {
+    let prepared = ProTrackerEnhancedPlayer(module: module, sampleRate: sampleRate, enhancements: enhancements)
     lock.lock()
     loadedModule = module
     rhythmTarget = 0
     rhythmAmount = 0
     sourceFrames = 0
-    player = ProTrackerEnhancedPlayer(
-      module: module, sampleRate: sampleRate, enhancements: enhancements)
+    player = prepared
     interpolationPhase = 1
     loopTail = Array(repeating: (left: 0, right: 0), count: loopCrossfadeFrames)
     loopTailWriteIndex = 0
@@ -465,6 +501,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
 
   /// Tracker beat timing, including tempo commands on the opening row.
   public var beatInfo: (bpm: Double, delay: Double)? {
+    let buffered = bufferedSeconds
     lock.lock(); defer { lock.unlock() }
     guard let player else { return nil }
     var clock = player.player
@@ -472,11 +509,14 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
       _ = clock.nextSample()
       return (clock.musicalBPM * tempoScale, 0)
     }
-    return (clock.musicalBPM * tempoScale, clock.secondsUntilNextBeat / tempoScale)
+    let bpm = clock.musicalBPM * tempoScale
+    let delay = (clock.secondsUntilNextBeat / tempoScale + buffered).truncatingRemainder(dividingBy: 60 / bpm)
+    return (bpm, delay)
   }
   public var sourceSeconds: Double {
+    let buffered = bufferedSeconds
     lock.lock(); defer { lock.unlock() }
-    return Double(sourceFrames) / sampleRate
+    return max(0, Double(sourceFrames) / sampleRate - buffered * tempoScale)
   }
   /// Independent of the DJ bass swap and the user's normal music mix.
   public func setNukeAmount(_ value: Float) {
@@ -489,12 +529,19 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   /// Gameplay supplies a smoothed pitch in cents. Keep the tracker clock unchanged.
   public func setSpeedPitch(_ cents: Double) {
     gameplayPitch = min(1200 * log2(1.5), max(0, cents))
-    speedPitch.pitch = Float(gameplayPitch + mixPitch)
+    applyPitch()
   }
 
   public func setMixTempoRatio(_ ratio: Double) {
     mixPitch = -1200 * log2(min(1.08, max(0.92, ratio)))
-    speedPitch.pitch = Float(gameplayPitch + mixPitch)
+    applyPitch()
+  }
+
+  private func applyPitch() {
+    let value = Float(gameplayPitch + mixPitch)
+    guard appliedPitch.map({ abs(value - $0) >= 0.1 }) ?? true else { return }
+    speedPitch.pitch = value
+    appliedPitch = value
   }
 
   /// Sets module playback rate independently of the game clock.

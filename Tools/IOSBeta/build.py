@@ -65,6 +65,13 @@ def signing_capabilities(app, bundle_id):
     profile_id = allowed.get("application-identifier", "")
     if actual.get("com.apple.developer.game-center") is not True or allowed.get("com.apple.developer.game-center") is not True:
         raise ValueError("Game Center is missing from the signature or provisioning profile.")
+    cloud_container = "iCloud.academy.glasscode.lemmings"
+    for key, identifier in (("com.apple.developer.icloud-services", "CloudDocuments"),
+                            ("com.apple.developer.icloud-container-identifiers", cloud_container),
+                            ("com.apple.developer.ubiquity-container-identifiers", cloud_container)):
+        permitted = allowed.get(key, [])
+        if identifier not in actual.get(key, []) or (permitted != "*" and identifier not in permitted):
+            raise ValueError("Cloud progress requires the shared iCloud Documents container in the signature and profile.")
     if not app_id or not app_id.endswith("." + bundle_id) or (profile_id != app_id and profile_id != app_id.split(".")[0] + ".*"):
         raise ValueError("The signature and profile do not authorise this iOS bundle ID.")
     if actual.get("com.apple.developer.team-identifier") != allowed.get("com.apple.developer.team-identifier"):

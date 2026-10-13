@@ -139,7 +139,7 @@
 				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
-					100000000000000000000050 = {CreatedOnToolsVersion = 16.0; SystemCapabilities = { com.apple.GameCenter = { enabled = 1; }; }; };
+					100000000000000000000050 = {CreatedOnToolsVersion = 16.0; SystemCapabilities = { com.apple.GameCenter = { enabled = 1; }; com.apple.iCloud = { enabled = 1; }; }; };
 					100000000000000000000051 = {CreatedOnToolsVersion = 16.0; TestTargetID = 100000000000000000000050; };
 				};
 			};

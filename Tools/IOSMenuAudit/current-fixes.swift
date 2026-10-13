@@ -22,16 +22,26 @@ extension MenuAudit {
                              ("narrow-portrait", .init(width: 320, height: 548)),
                              ("narrow-landscape", .init(width: 568, height: 300)),
                              ("ipad-portrait", .init(width: 834, height: 1092)),
-                             ("ipad-landscape", .init(width: 1112, height: 814))] {
+                             ("ipad-landscape", .init(width: 1112, height: 814)),
+                             ("ipad-pro-9-7-portrait", .init(width: 768, height: 1024)),
+                             ("ipad-pro-12-9-portrait", .init(width: 1024, height: 1366)),
+                             ("portrait-safe-edge-region", .init(width: 390, height: 844)),
+                             ("portrait-playfield-region", .init(width: 390, height: 844))] {
+            let regions: [MobileReservedRegion] = name == "portrait-safe-edge-region"
+                ? [.init(kind: .occlusion, frame: .init(x: 160, y: 0, width: 70, height: 20))]
+                : name == "portrait-playfield-region"
+                ? [.init(kind: .occlusion, frame: .init(x: 0, y: 200, width: 20, height: 100))] : []
             let layout = MobileHUDLayout.make(container: size, safeArea: .init(top: 20, bottom: 20),
-                hasRate: true, skillCount: session.snapshot.skills.count, supportsRewind: true)
+                hasRate: true, skillCount: session.snapshot.skills.count, reservedRegions: regions,
+                supportsRewind: true)
+            if size.height > size.width, layout.portrait == nil { throw Failure.invalidTargets }
             let targets = MobileHUDRenderer.targets(layout: layout, snapshot: session.snapshot, selectedSkill: 0,
                 paused: true, speed: 1, endRunArmed: false)
             for (index, target) in targets.enumerated() {
                 guard target.inputFrame.width >= 44 - 0.001, target.inputFrame.height >= 44,
-                    cg(layout.interface.safeFrame).contains(target.inputFrame) else { throw Failure.invalidTargets }
+                    hudTargetFits(target, layout: layout), hudScrollTargetIsReachable(target, layout: layout) else { throw Failure.invalidTargets }
                 for other in targets.dropFirst(index + 1) {
-                    let overlap = target.inputFrame.intersection(other.inputFrame)
+                    let overlap = hudVisibleInputFrame(target, layout: layout).intersection(hudVisibleInputFrame(other, layout: layout))
                     guard overlap.isNull || overlap.width <= 0.001 || overlap.height <= 0.001 else { throw Failure.invalidTargets }
                 }
             }
@@ -51,13 +61,17 @@ extension MenuAudit {
             for effect in effects { LemmingSelectionRenderer.draw(effect, in: context) }
             context.restoreGState()
             let width = min(240, max(0, field.width - 16))
-            let panel = CGRect(x: field.maxX - width - 8, y: field.minY + 8, width: width,
+            let panel = CGRect(x: field.maxX - width - 8, y: field.minY + (layout.portrait != nil ? 56 : 8), width: width,
                 height: width * MobileReplaySkillArt.size.height / MobileReplaySkillArt.size.width)
             guard field.contains(panel), targets.allSatisfy({ !panel.intersects($0.inputFrame) }) else { throw Failure.invalidTargets }
             if layout.canPlay { MobileReplaySkillArt.draw(uses: uses, tick: 146, in: panel, typography: typography, context: context) }
             MobileHUDRenderer(layout: layout, snapshot: session.snapshot, selectedSkill: 0, paused: true, speed: 1, endRunArmed: false,
                 panelImage: session.panelFrame.flatMap(MobileBitmapRenderer.image), typography: typography, readOnly: true)
                 .draw(in: context, bounds: .init(x: 0, y: 0, width: size.width, height: size.height))
+            if let minimap = layout.minimapFrame {
+                GameMinimapArt.draw(in: context, bounds: minimap, image: image, visible: cg(viewport.visibleLevelRect),
+                    levelSize: CGSize(width: session.levelSize.width, height: session.levelSize.height), overlay: layout.portrait != nil)
+            }
             if !layout.canPlay {
                 let page = GameFrontEnd.Page(title: "Paused", footer: [.init("library", "Library", primary: true)])
                 let menu = GameFrontEnd.layout(page, width: size.width, minimumHeight: size.height)
@@ -66,11 +80,12 @@ extension MenuAudit {
             }
             let file = name + "-replay-rescue.png"
             try save(context: context, to: output.appendingPathComponent(file))
-            captures.append(["device": name, "file": file, "targets": targets.count, "rescueMasks": effects.count, "canPlay": layout.canPlay])
+            captures.append(["device": name, "file": file, "targets": targets.count, "rescueMasks": effects.count,
+                             "canPlay": layout.canPlay, "portrait": layout.portrait != nil])
         }
         try JSONSerialization.data(withJSONObject: ["captures": captures, "windows": "none", "audio": "muted",
             "replayPanelOverlapsControls": false, "physicalUIKitAcceptance": "pending"], options: [.prettyPrinted, .sortedKeys])
             .write(to: output.appendingPathComponent("current-fixes.json"))
-        print("PASS: six replay and rescue renders, control targets and reduced-effect gates.")
+        print("PASS: \(captures.count) replay and rescue renders, control targets and reduced-effect gates.")
     }
 }

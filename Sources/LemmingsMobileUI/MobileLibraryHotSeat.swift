@@ -49,21 +49,9 @@ extension MobileLibraryViewController {
 
     func hotSeatPage(subtitle: String) -> GameFrontEnd.Page {
         let roster = hotSeatRoster ?? MobileHotSeatRoster(host: profiles.activeID, players: hotSeat?.players ?? [])
-        var rows = profiles.players.map { player in
-            GameFrontEnd.Action("seat." + player.id, player.name, selected: roster.contains(player.id))
-        }
-        rows.append(.init("seatNew", "New player", enabled: profiles.players.count < MobileProfiles.maximum))
-        rows.append(.init("seatRule", "Turns: \(hotSeats.policy.title)"))
-        if !hotSeats.resumable(host: profiles.activeID).isEmpty {
-            rows.append(.init("seatSaved", "Saved Hot Seats"))
-        }
-        if hotSeat != nil {
-            rows.append(.init("seatRestart", confirmingRestart ? "Confirm new Hot Seat" : "New Hot Seat", selected: confirmingRestart))
-            rows.append(.init("seatSolo", "Return to solo"))
-        }
-        return .init(title: "Hot Seat", subtitle: subtitle, rows: rows,
-                     footer: [.init("settings", "Back"),
-                              .init("seatStart", "Choose a game", enabled: roster.canStart, primary: roster.canStart)])
+        return MobileCareerArt.hotSeat(profiles, subtitle: subtitle, roster: roster, policy: hotSeats.policy,
+            active: hotSeat != nil, hasSaved: !hotSeats.resumable(host: profiles.activeID).isEmpty,
+            confirmingRestart: confirmingRestart)
     }
 
     func savedHotSeatsPage(subtitle: String) -> GameFrontEnd.Page {
@@ -80,9 +68,13 @@ extension MobileLibraryViewController {
     func handleHotSeat(_ id: String) -> Bool {
         switch id {
         case "hotSeat":
-            if hotSeatRoster == nil { hotSeatRoster = MobileHotSeatRoster(host: profiles.activeID, players: hotSeat?.players ?? []) }
+            if route != .hotSeat && route != .hotSeats { hotSeatBackRoute = route }
             confirmingRestart = false
             navigate(.hotSeat)
+        case "seatBack":
+            hotSeatRoster = nil
+            confirmingRestart = false
+            navigate(hotSeatBackRoute)
         case "seatNew":
             newPlayer()
         case "seatRule":
@@ -96,11 +88,11 @@ extension MobileLibraryViewController {
             if !confirmingRestart { confirmingRestart = true; rebuild(); break }
             confirmingRestart = false
             _ = hotSeats.restart()
-            saveHotSeats()
+            guard saveHotSeats() else { rebuild(); break }
             leaveHotSeatPage()
         case "seatSolo":
             hotSeats.endSession()
-            saveHotSeats()
+            guard saveHotSeats() else { rebuild(); break }
             hotSeatRoster = nil
             activeRun = nil
             navigate(.home)
@@ -111,7 +103,7 @@ extension MobileLibraryViewController {
                 confirmingRestart = false
                 rebuild()
             } else if id.hasPrefix("seatResume."), hotSeats.resume(id: String(id.dropFirst(11))) != nil {
-                saveHotSeats()
+                guard saveHotSeats() else { rebuild(); return true }
                 hotSeatRoster = nil
                 leaveHotSeatPage()
             } else { return false }
@@ -127,7 +119,7 @@ extension MobileLibraryViewController {
         } else {
             guard hotSeats.start(roster: roster) != nil else { return }
         }
-        saveHotSeats()
+        guard saveHotSeats() else { rebuild(); return }
         leaveHotSeatPage()
     }
 

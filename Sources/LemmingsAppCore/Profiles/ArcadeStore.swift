@@ -39,6 +39,12 @@ import NxlvKit
     private let playlistDataRemover: (String) throws -> Void
     private let hooks: Hooks
     public var profilesAreWritable: Bool { canWrite }
+    public private(set) var progressRevision: UInt64 = 0
+    public var onProgressChanged: (@MainActor () -> Void)?
+    public func notifyProgressChanged() {
+        progressRevision &+= 1
+        onProgressChanged?()
+    }
 
     public func collectionsFile(profileID: String) -> URL {
         file.deletingLastPathComponent().appendingPathComponent("Level Collections", isDirectory: true)
@@ -111,6 +117,7 @@ import NxlvKit
         if let data = try? JSONEncoder().encode(history) {
             defaults.set(data, forKey: sessionKey(host: host) + ".history")
         }
+        notifyProgressChanged()
     }
     private func savedSessionHistory(host: String) -> [SavedHotSeat] {
         guard let data = defaults.data(forKey: sessionKey(host: host) + ".history") else { return [] }
@@ -121,6 +128,36 @@ import NxlvKit
             $0.id != hotSeatID && $0.host == records.activeProfileID
                 && $0.players.count >= 2 && Set($0.players).count == $0.players.count
                 && $0.players.contains($0.host) && $0.players.allSatisfy { records.profile($0) != nil }
+        }
+    }
+    /// Includes the current campaign without transferring the device's selected mode.
+    public var libraryHotSeats: [SavedHotSeat] {
+        records.profiles.flatMap { savedSessionHistory(host: $0.id) }
+    }
+    public func importLibraryHotSeats(_ incoming: [SavedHotSeat]) throws {
+        guard canWrite, storageError == nil else { throw SequelDataError.invalid("Local saves are not writable.") }
+        let encoder = JSONEncoder()
+        // Encode all histories before changing any preferences.
+        let histories = try records.profiles.map { profile -> (String, Data) in
+            var history = savedSessionHistory(host: profile.id)
+            for seat in incoming where seat.host == profile.id {
+                guard seat.players.count >= 2, Set(seat.players).count == seat.players.count,
+                    seat.players.contains(seat.host), seat.players.allSatisfy({ records.profile($0) != nil }),
+                    seat.turn.map({ seat.players.contains($0) }) ?? true else { throw SequelDataError.invalid("Invalid shared campaign.") }
+                history.removeAll { $0.id == seat.id }; history.append(seat)
+            }
+            history.sort { ($0.savedAt ?? .distantPast) > ($1.savedAt ?? .distantPast) }
+            return (sessionKey(host: profile.id) + ".history", try encoder.encode(history))
+        }
+        for (key, data) in histories { defaults.set(data, forKey: key) }
+        // The sync coordinator calls this only at a safe menu. Keep the current
+        // mode, but restore its next turn before another level can start.
+        if let id = hotSeatID, let seat = incoming.first(where: { $0.id == id }) {
+            sessionProfileIDs = seat.players; sessionTurnID = seat.turn
+            if let policy = seat.policy { defaults.set(policy.rawValue, forKey: Self.turnPolicyKey) }
+            let local = SavedHotSeat(id: id, host: seat.host, players: seat.players, turn: seat.turn,
+                active: true, savedAt: seat.savedAt, policy: seat.policy)
+            defaults.set(try encoder.encode(local), forKey: sessionKey(host: seat.host))
         }
     }
     @discardableResult public func resumeHotSeat(id: String) -> Bool {
@@ -319,8 +356,9 @@ import NxlvKit
     }
     private func removeSavedProgress(of id: String) {
         let prefix = "ArcadeProfile.\(id)."
+        let cloudProgress = "GameCenterProgress.cleared.\(id)."
         for (key, value) in defaults.dictionaryRepresentation() {
-            if key.hasPrefix(prefix) || (id == ArcadeProfile.legacyID && LegacySaveMigration.isProgress(key)) {
+            if key.hasPrefix(prefix) || key.hasPrefix(cloudProgress) || (id == ArcadeProfile.legacyID && (LegacySaveMigration.isProgress(key) || key == "LearningJourneyProgress")) {
                 defaults.removeObject(forKey: key)
             } else if key.hasPrefix("GameCenter.profile."), value as? String == id {
                 defaults.removeObject(forKey: key)
@@ -353,11 +391,46 @@ import NxlvKit
         do {
             try recordFile.save(records)
             storageError = nil
+            notifyProgressChanged()
         } catch {
             storageError = (error as? ArcadeRecordFile.Failure)?.errorDescription
                 ?? "Records were not saved. Check free space and folder access."
             if case ArcadeRecordFile.Failure.changedOnDisk = error { canWrite = false }
         }
+    }
+    @discardableResult public func mergeCloudRecords(_ incoming: ArcadeRecords, profileID: String) throws -> Bool {
+        guard canWrite, storageError == nil else { throw SequelDataError.invalid("Local records are not writable.") }
+        let previous = records
+        do {
+            try records.mergeCloudRecords(incoming, profileID: profileID)
+            guard records != previous else { return false }
+            save()
+            if let storageError { throw SequelDataError.invalid(storageError) }
+            return true
+        } catch { records = previous; throw error }
+    }
+    /// Commit the entire validated library once. A failed save rolls records back.
+    @discardableResult public func mergeLibraryPlayers(_ incoming: [(ArcadeProfile, ArcadeRecords)], deleted: Set<String>) throws -> Bool {
+        guard canWrite, storageError == nil else { throw SequelDataError.invalid("Local records are not writable.") }
+        let previous = records
+        do {
+            let active = records.activeProfileID
+            let retained = records.profiles.filter { !deleted.contains($0.id) }
+            var profiles = retained
+            for (profile, _) in incoming {
+                if let index = profiles.firstIndex(where: { $0.id == profile.id }) { profiles[index] = profile }
+                else { profiles.append(profile) }
+            }
+            guard !profiles.isEmpty, profiles.count <= 8 else { throw SequelDataError.invalid("A library can contain up to eight players.") }
+            // Add replacements before removing a deleted last local profile.
+            try records.importProfiles(profiles, activeID: profiles.contains(where: { $0.id == active }) ? active : profiles[0].id)
+            for id in deleted where records.profile(id) != nil { _ = records.removeProfile(id) }
+            for (profile, cloud) in incoming { try records.mergeCloudRecords(cloud, profileID: profile.id) }
+            guard records != previous else { return false }
+            save()
+            if let storageError { throw SequelDataError.invalid(storageError) }
+            return true
+        } catch { records = previous; throw error }
     }
     /// Spends one of the player's skips on a level. The skip counts only when
     /// the records save, so a failed save never moves the campaign.

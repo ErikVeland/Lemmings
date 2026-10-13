@@ -44,6 +44,7 @@ func require(_ value: Bool, _ message: String) throws {
   run.capture({ draws += 1; return frame }())
   run.discard()
   run.capture({ draws += 1; return frame }())
+  try require(run.captureProfile.frames == 1, "Capture profiler counted inactive frames")
   try require(draws == 1, "Inactive, failed, finishing or discarded runs still drew replay frames")
   print("PASS stalled encoding preserves input responsiveness, rejects partial movies and stops unused capture work")
 }
@@ -98,6 +99,14 @@ extension RunMovie {
     count += 1
   }
   try require(count == 51 && reader.status == .completed, "Movie dropped game ticks: \(count)")
+  let profile = recorder.encodingProfile
+  try require(profile.submittedFrames == 51 && profile.encodedFrames == 51 && profile.maximumOutstandingFrames <= 12,
+    "Encoding profiler lost frames or exceeded the bounded queue")
+  try require(profile.encodingSeconds > 0 && profile.admissionSeconds >= 0 && profile.writerWaitSeconds >= 0,
+    "Encoding profiler returned invalid timing")
+  print(String(format: "PROFILE replay encoder: %.3f ms/frame; queue admission %.3f ms/frame; writer wait %.3f ms/frame; peak queued %lld",
+    profile.encodingSeconds * 1000 / 51, profile.admissionSeconds * 1000 / 51,
+    profile.writerWaitSeconds * 1000 / 51, profile.maximumOutstandingFrames))
   let sound = try AVAudioFile(forReading: url)
   let buffer = AVAudioPCMBuffer(pcmFormat: sound.processingFormat, frameCapacity: 44100)!
   try sound.read(into: buffer)

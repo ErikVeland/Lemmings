@@ -239,8 +239,9 @@ public enum CRTShaders {
       }
 
       // Halation from the bloom passes.
-      float3 glow = bloom.sample(smp, uv).rgb;
-      color += glow * u.bloomAmount;
+      if (u.bloomAmount > 0) {
+          color += bloom.sample(smp, uv).rgb * u.bloomAmount;
+      }
 
       // Brightness-dependent gain and saturation match the limited drive of a
       // consumer tube without flattening the source palette.

@@ -777,6 +777,7 @@ import NxlvKit
     private func persist() {
         guard recordsCampaignProgress else { return }
         if let data = try? JSONEncoder().encode(campaign.progress) { UserDefaults.standard.set(data, forKey: progressKey) }
+        ArcadeStore.shared.notifyProgressChanged()
     }
     private func show(_ screen: Screen) {
         if onSequenceContinue != nil {
@@ -1071,7 +1072,7 @@ import NxlvKit
         var checkpoint = RunRecovery(engine: engine, profileID: arcadeProfileID, runID: arcadeRunID,
             dataSetID: "lemmings2", levelIndex: recoveryPractice?.choice ?? progress.level,
             levelFingerprint: fingerprint, initialStateHash: recoveryInitialHash, tick: game.tick,
-            events: [], stateHash: try L2RunRecovery.stateHash(game), usedRewind: usedRewind,
+            events: [], stateHash: "", usedRewind: usedRewind,
             nukeCount: nukeCount, rewindCount: 0, undoCount: undoCount, selectedSkill: selected,
             scrollX: Double(canvas.cameraX), scrollY: Double(canvas.cameraY))
         checkpoint.sourcePath = root.path
@@ -1084,16 +1085,18 @@ import NxlvKit
         let now = ProcessInfo.processInfo.systemUptime
         guard immediately || now - lastCheckpointTime >= 5 else { return }
         do {
-            guard let checkpoint = try makeCheckpoint(engine: RunRecovery.bundledEngine) else { return }
+            guard let game, let checkpoint = try makeCheckpoint(engine: RunRecovery.bundledEngine) else { return }
             lastCheckpointTime = now
-            recoveryStore.save(checkpoint, immediately: immediately && waitForDisk) { [weak self] error in self?.message = error }
+            recoveryStore.save(checkpoint, immediately: immediately && waitForDisk, coalescing: !immediately,
+                prepareStateHash: { try L2RunRecovery.stateHash(game) }) { [weak self] error in self?.message = error }
         } catch { message = error.localizedDescription }
     }
 
     func saveBeforeSessionChange() throws {
         guard recordsCampaignProgress else { return }
-        if let checkpoint = try makeCheckpoint(engine: RunRecovery.bundledEngine) {
-            recoveryStore.save(checkpoint, immediately: true) { [weak self] error in self?.message = error }
+        if let game, let checkpoint = try makeCheckpoint(engine: RunRecovery.bundledEngine) {
+            recoveryStore.save(checkpoint, immediately: true,
+                prepareStateHash: { try L2RunRecovery.stateHash(game) }) { [weak self] error in self?.message = error }
         }
         try recoveryStore.checkSaveSucceeded()
     }
@@ -1183,6 +1186,12 @@ import NxlvKit
         canvas.setAccessibilityLabel("Lemmings 2. \(game.configuration.skills[selected].name) selected. \(label). \(paused ? "Paused." : "Running.") \(game.isNuking ? "Nuke active." : "") \(game.released) released, \(game.saved) saved. \(deathCounterAccessibility). \(canvas.precisionStatus.accessibility). \(transport)")
     }
     private func update() {
+        let frameStarted = ProcessInfo.processInfo.systemUptime
+        defer {
+            if screen == .playing, !paused, game?.isComplete == false, !GameScreen.shared.isPresented {
+                MacFXPerformance.shared.recordCPU(ProcessInfo.processInfo.systemUptime - frameStarted)
+            }
+        }
         gameplayKeyboard?.refreshNavigationControl()
         canvas.navigationFrame = gameplayKeyboard?.navigationFrame(in: canvas)
         let now = ProcessInfo.processInfo.systemUptime
@@ -1190,6 +1199,7 @@ import NxlvKit
         let elapsed = min(0.25, now - lastTime); lastTime = now
         let playing = screen == .playing && !paused && game?.isComplete == false && !GameScreen.shared.isPresented
         speedControl.update(at: now, active: screen == .playing && game?.isComplete == false && !GameScreen.shared.isPresented)
+        canvas.advanceSelectionFade(at: now)
         let turn = ArcadeStore.shared.hotSeatIsActive ? ArcadeStore.shared.records.profile(arcadeProfileID) : nil
         canvas.turnBadge.show(initials: turn?.initials, portrait: turn.flatMap { ArcadeWindow.shared.arcadeView.portraitImage($0.portrait) })
         canvas.speedMultiplier = speedControl.multiplier
@@ -2339,6 +2349,14 @@ import NxlvKit
     private let speedTrails = SpeedTrails()
     private var hdrOverlay: ExplosionHDRView?
     private(set) var selectionEffect: LemmingSelectionEffect?
+    private var selectionFade = SelectionFade<Int>()
+    private var selectionOpacity: CGFloat = 1
+    private var selectionWasFading = false
+    func advanceSelectionFade(at now: Double) {
+        let fading = selectionFade.isFading(at: now)
+        if fading || selectionWasFading { needsDisplay = true }
+        selectionWasFading = fading
+    }
     private(set) var rescueAuras: [LemmingSelectionEffect] = []
     override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
@@ -2372,6 +2390,7 @@ import NxlvKit
     private var explosion: Lemmings2Explosion?
     func load(level: Lemmings2Level, style: Lemmings2Style, sprites bank: Lemmings2Sprites, intern: Lemmings2SpecialGraphics, explosion: Lemmings2Explosion, walker: Lemmings2Walker?, resetPresentation: Bool = true) throws {
         if resetPresentation {
+            selectionFade.reset()
             hdrOverlay?.clear()
             isFastForward = false
             speedTrails.reset()
@@ -2426,6 +2445,7 @@ import NxlvKit
         cameraY = min(cameraBounds.bottom, max(cameraBounds.top, CGFloat(level.screenY)))
     }
     func update(_ game: Lemmings2Runtime) {
+        if game.tick < (self.game?.tick ?? 0) { selectionFade.reset() }
         if terrainRevision != game.terrainRevision || game.tick < (self.game?.tick ?? 0) {
             terrain = image(width: game.configuration.width, height: game.configuration.height,
                             pixels: game.pixels, palette: game.configuration.palette, category: terrainCategory)
@@ -2469,8 +2489,17 @@ import NxlvKit
     }
     private func drawLemmings(_ game: Lemmings2Runtime, ghostsOnly: Bool) {
         let palette = game.configuration.palette
-        let selectedID = !ghostsOnly && !GameCursor.gameplaySuppressed
+        var selectedID = !ghostsOnly && !GameCursor.gameplaySuppressed
             ? assignmentHighlight.target ?? (pointerSelectionEnabled ? pointerTarget(slot: selectedSkillSlot) : nil) : nil
+        if !ghostsOnly {
+            if lemmingSelectionStyle == .modern, !GameCursor.gameplaySuppressed {
+                let now = ProcessInfo.processInfo.systemUptime
+                selectionFade.set(selectedID, at: now)
+                let selection = selectionFade.sample(at: now)
+                selectedID = selection?.value
+                selectionOpacity = selection?.opacity ?? 1
+            } else { selectionFade.reset() }
+        }
         var selectedSprite: (pixels: CGImage, rect: CGRect, mirrored: Bool)?
         for lem in game.lemmings where lem.active && lem.state != .trapped {
             let motion = ghostsOnly ? speedTrails.motion(actor: lem.id) : .zero
@@ -2758,6 +2787,7 @@ import NxlvKit
                 rect: precisionLens.display(selectedSprite.rect), clipRect: gameplayRect,
                 mirrored: selectedSprite.mirrored,
                 time: reduceMotion || reduceFlashes ? nil : Double(game.tick) / Lemmings2Runtime.ticksPerSecond)
+            selectionEffect?.opacity = selectionOpacity
         }
     }
     override func draw(_ dirtyRect: NSRect) {

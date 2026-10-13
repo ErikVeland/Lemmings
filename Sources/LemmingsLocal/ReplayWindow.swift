@@ -15,6 +15,13 @@ import UniformTypeIdentifiers
   private var recordCompletions: [Int: (Result<URL, ReplayMovieError>) -> Void] = [:]
   private var title = "Lemmings"
   var hasFrames = false
+  struct CaptureProfile {
+    var frames = 0
+    var compositionSeconds = 0.0
+    var submissionSeconds = 0.0
+    var maximumCompositionSeconds = 0.0
+  }
+  private(set) var captureProfile = CaptureProfile()
   #if PERFORMANCE_TESTS
   private(set) var capturedFrames = 0
   func performanceFile() async throws -> URL {
@@ -31,6 +38,7 @@ import UniformTypeIdentifiers
   var onDidReview: (() -> Void)?
 
   func begin(ticksPerSecond: Double, title: String) {
+    captureProfile = CaptureProfile()
     #if PERFORMANCE_TESTS
     capturedFrames = 0
     #endif
@@ -41,11 +49,18 @@ import UniformTypeIdentifiers
     self.title = title
   }
   func capture(_ image: @autoclosure () -> CGImage?) {
-    guard let recorder, !finishing, recorder.isAcceptingFrames, let image = image() else { return }
+    guard let recorder, !finishing, recorder.isAcceptingFrames else { return }
+    let started = ProcessInfo.processInfo.systemUptime
+    guard let image = image() else { return }
+    let composed = ProcessInfo.processInfo.systemUptime
+    captureProfile.frames += 1
+    captureProfile.compositionSeconds += composed - started
+    captureProfile.maximumCompositionSeconds = max(captureProfile.maximumCompositionSeconds, composed - started)
     #if PERFORMANCE_TESTS
     capturedFrames += 1
     #endif
     hasFrames = true; recorder.append(image)
+    captureProfile.submissionSeconds += ProcessInfo.processInfo.systemUptime - composed
   }
   func finish() {
     guard !finishing, let recorder else { return }

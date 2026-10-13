@@ -6,45 +6,6 @@ import NxlvKit
 import UIKit
 import UniformTypeIdentifiers
 
-struct MobileMenuPreview: Sendable {
-    let frame: MobilePixelFrame
-    let origin: MobilePoint
-    let snapshot: MobileGameSnapshot
-}
-
-/// Each prepared session transfers from the loader to the main thread once.
-/// Libraries retain assets and never retain the sessions they create.
-struct MobilePreparedLevel: @unchecked Sendable { let content: MobileLevelContent }
-
-actor MobileMenuPreviewLoader {
-    /// Each loader opens its own library, so previews never share state with the one being played.
-    private let makeLibrary: @Sendable () throws -> any MobileGameLibrary
-    private var library: (any MobileGameLibrary)?
-    private var frames: [Int: MobileMenuPreview] = [:]
-    init(makeLibrary: @escaping @Sendable () throws -> any MobileGameLibrary) { self.makeLibrary = makeLibrary }
-    func prepare(_ index: Int) throws -> MobilePreparedLevel {
-        try Task.checkCancellation()
-        let opened = try library ?? makeLibrary()
-        library = opened
-        let content = try opened.loadLevel(at: index)
-        try Task.checkCancellation()
-        return MobilePreparedLevel(content: content)
-    }
-    func load(_ index: Int) throws -> MobileMenuPreview {
-        try Task.checkCancellation()
-        if let cached = frames[index] { return cached }
-        let library = try self.library ?? makeLibrary()
-        self.library = library
-        let session = try library.loadLevel(at: index).session
-        let preview = MobileMenuPreview(frame: try session.render(highlight: nil),
-                                        origin: session.initialCameraOrigin, snapshot: session.snapshot)
-        try Task.checkCancellation()
-        if frames.count >= 6 { frames.removeAll() }
-        frames[index] = preview
-        return preview
-    }
-}
-
 @MainActor final class MobileLibraryViewController: UIViewController, UIDocumentPickerDelegate {
     enum Route: Equatable {
         case home, family(MobileFamily), levels, settings, settingsGroup(MobileSettingsGroup), controllerMappings, playInsights, soundtrack, data
@@ -77,6 +38,9 @@ actor MobileMenuPreviewLoader {
     /// The players on this device. Each has their own collections and progress.
     var profiles = MobileStorage.standard(profile: "_players").load(MobileProfiles.self, name: "players") ?? MobileProfiles()
     lazy var arcadeStore = ArcadeStore(storage: .current(), bundledProofs: nil)
+    private let cloudTransport = AppleGameProgressTransport()
+    private var cloudAuthentication: UIViewController?
+    lazy var cloudProgress = GameCenterProgressSync(store: arcadeStore, transport: cloudTransport)
     var collectionsBridge: MobileCollectionsBridge?
     var creatingPlayer = false
     var draftPortrait = 0
@@ -87,6 +51,7 @@ actor MobileMenuPreviewLoader {
     /// Set while the Players page keyboard edits a name, and while Shuffle all scans the packs.
     var renamingPlayer = false
     var hotSeats = MobileHotSeatStore.load(from: MobileStorage.standard(profile: "_players"))
+    var hotSeatBackRoute: Route = .players
     var hotSeatRoster: MobileHotSeatRoster?
     var confirmingRestart = false
     var shufflePool: (entries: [MobileFavourites.Entry], packs: Int)?
@@ -135,11 +100,19 @@ actor MobileMenuPreviewLoader {
         if pack == "release/lemmings", profiles.active.id == MobileProfiles.defaultID, hotSeat == nil {
             all.formUnion(defaults.array(forKey: "mobile.completed.Lemmings") as? [Int] ?? [])
         }
+        if hotSeat == nil, let pack {
+            all.formUnion(GameProgressPreferences.completed(pack: pack, profileID: profiles.activeID))
+        }
         return all
     }
 
     override var prefersStatusBarHidden: Bool { true }
     override var prefersHomeIndicatorAutoHidden: Bool { game != nil }
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        guard let previewLoader else { return }
+        Task { await previewLoader.releaseCaches() }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
@@ -202,10 +175,31 @@ actor MobileMenuPreviewLoader {
         beginWelcomeIfNeeded()
         measureMobileFanPacks()
         AnonymousTelemetry.shared.recordActiveDay()
+        cloudProgress.canImport = { [weak self] in self?.game == nil && self?.preparingLevel == false }
+        cloudProgress.captureExtra = { profileID in
+            let saved = MobileStorage.standard(profile: profileID).load(MobileLearningState.self, name: "learning")
+            return saved.map { .init(values: ["LearningJourneyProgress": .learning($0.progress)]) } ?? .init()
+        }
+        cloudProgress.onImported = { [weak self] in self?.rebuild() }
+        arcadeStore.onProgressChanged = { [weak self] in self?.cloudProgress.requestSync() }
+        cloudTransport.onChange = { [weak self] in self?.cloudProgress.requestSync() }
+        NotificationCenter.default.addObserver(self, selector: #selector(cloudForeground), name: UIApplication.didBecomeActiveNotification, object: nil)
+        cloudTransport.start { [weak self] controller in
+            self?.cloudAuthentication = controller
+            self?.presentCloudAuthentication()
+        }
     }
+    private func presentCloudAuthentication() {
+        guard game == nil, presentedViewController == nil, view.window != nil, let controller = cloudAuthentication else { return }
+        cloudAuthentication = nil
+        present(controller, animated: true)
+    }
+    @objc private func cloudForeground() { cloudProgress.requestSync(); presentCloudAuthentication() }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if game == nil { becomeFirstResponder() }
+        cloudProgress.requestSync()
+        presentCloudAuthentication()
     }
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         let handled = libraryInput.began(presses)
@@ -271,7 +265,7 @@ actor MobileMenuPreviewLoader {
             let initials = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") } ?? profiles.active.name
             canvas.page = MobileHomeArt.page(resume: resume,
                 journey: .init("journey", journeyTitle, enabled: catalogue != nil && journey != nil),
-                families: families, initials: initials, subtitle: subtitle)
+                families: families, initials: initials, subtitle: subtitle, collectionsAvailable: catalogue != nil)
             canvas.preview = nil
         case let .family(family):
             let all = catalogue?.packs(in: family) ?? []
@@ -409,13 +403,16 @@ actor MobileMenuPreviewLoader {
     }
 
     private func coverArtwork(_ index: Int) async -> CGImage? {
-        guard let loader = previewLoader, let preview = try? await loader.load(index),
+        guard let loader = previewLoader, let preview = try? await loader.load(index, settings: MobileSettings.load(from: .standard).classic),
               let image = MobileBitmapRenderer.image(preview.frame) else { return nil }
         let width = min(320, image.width)
         let x = max(0, min(image.width - width, Int(preview.origin.x)))
         return image.cropping(to: CGRect(x: x, y: 0, width: width, height: image.height))
     }
     func navigate(_ next: Route) {
+        if next == .hotSeat, hotSeatRoster == nil {
+            hotSeatRoster = MobileHotSeatRoster(host: profiles.activeID, players: hotSeat?.players ?? [])
+        }
         if next != .insightsToken {
             mobileInsights.field?.resignFirstResponder(); mobileInsights.field?.text = nil
             mobileInsights.field?.removeFromSuperview(); mobileInsights.field = nil; mobileInsights.token = ""
@@ -607,7 +604,7 @@ actor MobileMenuPreviewLoader {
         loading = true; rebuild()
         previewTask = Task {
             do {
-                let preview = try await previewLoader.load(index)
+                let preview = try await previewLoader.load(index, settings: MobileSettings.load(from: .standard).classic)
                 guard !Task.isCancelled, previewGeneration == generation, route == .levels else { return }
                 selectedIndex = index; selectedPreview = preview; loading = false
                 rebuild()
@@ -685,7 +682,8 @@ actor MobileMenuPreviewLoader {
         preparingLevel = true; loading = true; rebuild()
         previewTask = Task {
             do {
-                let prepared = try await previewLoader.prepare(index)
+                let prepared = try await previewLoader.prepare(index, settings: MobileSettings.load(from: .standard).classic,
+                    checkpoint: checkpoint, allowUnrelatedCheckpoint: restoringMatchingCheckpoint)
                 guard !Task.isCancelled, previewGeneration == generation else { return }
                 loading = false; preparingLevel = false
                 let matching = restoringMatchingCheckpoint && checkpoint?.levelIdentifier != prepared.content.session.levelIdentifier
@@ -710,7 +708,6 @@ actor MobileMenuPreviewLoader {
                       checkpoint.levelFingerprint == content.session.levelFingerprint else { throw MobileSessionError.changedLevel }
                 // A shared run resumes only in its own session, with the player who started it.
                 guard checkpointMatchesSession(checkpoint) else { throw MobileSessionError.changedLevel }
-                try content.session.restoreCheckpointPayload(checkpoint.payload)
                 if let owner = checkpoint.owner, hotSeat?.players.contains(owner) == true { handOver(to: owner) }
             }
             levelStarted(index)
@@ -774,6 +771,7 @@ actor MobileMenuPreviewLoader {
                 var completed = self.solvedLevels(for: pack); completed.insert(real)
                 UserDefaults.standard.set(completed.sorted(),
                                           forKey: self.progressKey(for: pack, fallback: self.library?.displayName ?? "classic"))
+                self.arcadeStore.notifyProgressChanged()
             }
             next.onExit = { [weak self] action in
                 guard let self else { return }
@@ -782,7 +780,7 @@ actor MobileMenuPreviewLoader {
                     self.previewTask?.cancel(); self.previewGeneration = UUID()
                     self.loading = false; self.preparingLevel = false
                     self.game?.willMove(toParent: nil); self.game?.view.removeFromSuperview(); self.game?.removeFromParent()
-                    self.game = nil; self.loadCheckpoint(); self.rebuild()
+                    self.game = nil; self.loadCheckpoint(); self.rebuild(); self.cloudProgress.requestSync(); self.presentCloudAuthentication()
                     self.setNeedsUpdateOfHomeIndicatorAutoHidden()
                 case .retry: self.startLevel(index, checkpoint: nil)
                 case .next:

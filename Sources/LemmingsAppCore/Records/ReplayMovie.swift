@@ -19,6 +19,15 @@ public enum ReplayStorage {
   }()
 }
 
+public struct ReplayEncodingProfile: Sendable {
+  public var submittedFrames: Int64 = 0
+  public var encodedFrames: Int64 = 0
+  public var admissionSeconds: Double = 0
+  public var encodingSeconds: Double = 0
+  public var writerWaitSeconds: Double = 0
+  public var maximumOutstandingFrames: Int64 = 0
+}
+
 /// Records game ticks on a serial encoder queue. Playback never touches the game.
 public final class ReplayMovieRecorder: @unchecked Sendable {
   public let url: URL
@@ -55,6 +64,11 @@ public final class ReplayMovieRecorder: @unchecked Sendable {
     return !discarded && !submissionClosed && storedFailure == nil
   }
   private let admission = DispatchSemaphore(value: 12)
+  private let profileLock = NSLock()
+  private var storedProfile = ReplayEncodingProfile()
+  public var encodingProfile: ReplayEncodingProfile {
+    profileLock.lock(); defer { profileLock.unlock() }; return storedProfile
+  }
   #if PERFORMANCE_TESTS
   var recordingFailure: String? { failure }
   private let metricLock = NSLock()
@@ -102,13 +116,19 @@ public final class ReplayMovieRecorder: @unchecked Sendable {
   /// Stop a stalled recording instead of blocking game input or dropping movie frames.
   public func append(_ image: CGImage) {
     guard isAcceptingFrames else { return }
-    #if PERFORMANCE_TESTS
     let waitingSince = ProcessInfo.processInfo.systemUptime
-    #endif
     let admitted = admission.wait(timeout: .now() + admissionTimeout) == .success
     #if PERFORMANCE_TESTS
     metricLock.lock(); admissionWait += ProcessInfo.processInfo.systemUptime - waitingSince; metricLock.unlock()
     #endif
+    profileLock.lock()
+    storedProfile.admissionSeconds += ProcessInfo.processInfo.systemUptime - waitingSince
+    if admitted {
+      storedProfile.submittedFrames += 1
+      storedProfile.maximumOutstandingFrames = max(storedProfile.maximumOutstandingFrames,
+        storedProfile.submittedFrames - storedProfile.encodedFrames)
+    }
+    profileLock.unlock()
     guard admitted else {
       failure = "Replay recording stopped because the encoder stalled."
       return
@@ -117,6 +137,13 @@ public final class ReplayMovieRecorder: @unchecked Sendable {
       defer { admission.signal() }
       guard !finished, failure == nil else { return }
       autoreleasepool {
+        let started = ProcessInfo.processInfo.systemUptime
+        defer {
+          profileLock.lock()
+          storedProfile.encodingSeconds += ProcessInfo.processInfo.systemUptime - started
+          storedProfile.encodedFrames = frameCount
+          profileLock.unlock()
+        }
         do {
           if writer == nil { try begin(image) }
           try write(image)
@@ -207,6 +234,10 @@ public final class ReplayMovieRecorder: @unchecked Sendable {
   }
 
   private func ready(_ input: AVAssetWriterInput) throws {
+    let started = ProcessInfo.processInfo.systemUptime
+    defer {
+      profileLock.lock(); storedProfile.writerWaitSeconds += ProcessInfo.processInfo.systemUptime - started; profileLock.unlock()
+    }
     let deadline = ProcessInfo.processInfo.systemUptime + 10
     while !input.isReadyForMoreMediaData {
       guard failure == nil, !isDiscarded, writer?.status == .writing, ProcessInfo.processInfo.systemUptime < deadline else {

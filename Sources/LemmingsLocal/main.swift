@@ -443,15 +443,18 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let now = ProcessInfo.processInfo.systemUptime
     guard immediately || now - lastCheckpointTime >= 5 else { return }
     var checkpoint: RunRecovery
+    var prepareStateHash: (@Sendable () throws -> String)?
     if let classic = session as? ClassicSession, let location = checkpointLocation {
+      let captured = classic.simulation
+      prepareStateHash = { ClassicDOSReplayRecorder.stateHash(of: captured) }
       checkpoint = RunRecovery(engine: recoveryEngine, profileID: arcadeProfileID, runID: arcadeRunID,
         dataSetID: location.dataSetID, levelIndex: location.levelIndex,
         levelFingerprint: fingerprint, initialStateHash: classic.initialStateHash, tick: classic.currentTick,
-        events: classic.recoveryEvents, stateHash: ClassicDOSReplayRecorder.stateHash(of: classic.simulation),
+        events: classic.recoveryEvents, stateHash: "",
         usedRewind: classic.usedRewind, nukeCount: classic.nukeCount, rewindCount: classic.rewindCount,
         undoCount: classic.undoCount, selectedSkill: panel.selectedSkillIndex,
         scrollX: playfield.viewport.scrollX, scrollY: playfield.viewport.scrollY)
-      checkpoint.classicState = classic.simulation
+      checkpoint.classicState = captured
       checkpoint.fan = checkpointFan
       if checkpointFan != nil {
         checkpoint.fanPackGraphics = fanPackGraphics
@@ -475,7 +478,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     lastCheckpointTime = now
     checkpoint.hotSeatID = arcadeHotSeatID
     checkpoint.fullQuest = launchMode == .quest
-    recoveryStore.save(checkpoint, immediately: immediately && waitForDisk) { [weak self] message in
+    recoveryStore.save(checkpoint, immediately: immediately && waitForDisk, coalescing: !immediately,
+      prepareStateHash: prepareStateHash) { [weak self] message in
       self?.setStatus("Run recovery save failed: " + message)
     }
   }
@@ -637,6 +641,69 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   func applicationWillTerminate(_ notification: Notification) { saveRunCheckpoint(immediately: true); ClassicRouteRecorder.flush() }
 
+  private let cloudTransport = AppleGameProgressTransport()
+  private var cloudProgress: GameCenterProgressSync?
+  private var cloudAuthentication: NSViewController?
+  private var cloudAuthenticationSheet: NSWindow?
+  private func presentCloudAuthentication() {
+    guard cloudCanImport, !preparingLaunch, window.attachedSheet == nil, let controller = cloudAuthentication else { return }
+    cloudAuthentication = nil
+    let sheet = NSWindow(contentViewController: controller)
+    cloudAuthenticationSheet = sheet
+    window.beginSheet(sheet)
+  }
+  private var cloudCanImport: Bool {
+    guard !sequelIsActive, phase != .playing else { return false }
+    switch flow?.screen {
+    case .title, .rankSelect, nil: return true
+    default: return false
+    }
+  }
+  private func startCloudProgress() {
+    let service = GameCenterProgressSync(store: ArcadeStore.shared, transport: cloudTransport)
+    cloudProgress = service
+    service.canImport = { [weak self] in self?.cloudCanImport == true }
+    service.captureExtra = { [weak self] profileID in
+      guard let self else { return .init() }
+      var extra = GameProgressPreferences()
+      for entry in self.dataSets {
+        guard let title = entry.set.title, !self.dataSetID(entry).contains(":source-") else { continue }
+        let key = ArcadeStore.progressKey("\(flowProgressKey).\(entry.set.identifierKey)", profileID: profileID)
+        guard let data = UserDefaults.standard.data(forKey: key),
+          let saved = try? JSONDecoder().decode(ClassicGameFlow.Progress.self, from: data) else { continue }
+        let passed = Set(saved.passed)
+        extra.addCompleted(entry.set.campaign.levels.enumerated().compactMap { index, level in
+          passed.contains("\(level.rank)#\(level.number - 1)") ? index : nil
+        }, pack: "release/" + title.rawValue)
+      }
+      return extra
+    }
+    service.onImported = { [weak self] in
+      guard let self else { return }
+      self.progress = UserDefaults.standard.data(forKey: ArcadeStore.shared.progressKey(progressKey))
+        .flatMap { try? ModernCampaignProgress(encoded: $0) } ?? self.progress
+      self.achievements = UserDefaults.standard.data(forKey: ArcadeStore.shared.progressKey(achievementProgressKey))
+        .flatMap { try? JSONDecoder().decode(ClassicAchievementProgress.self, from: $0) } ?? self.achievements
+      if self.dataSets.indices.contains(self.gamePicker.indexOfSelectedItem) {
+        let entry = self.dataSets[self.gamePicker.indexOfSelectedItem]
+        if let data = self.savedClassicProgressData(for: entry),
+          let saved = try? JSONDecoder().decode(ClassicGameFlow.Progress.self, from: data) {
+          self.flow?.restore(entry.set.migrateProgress(saved))
+        }
+      }
+      self.refreshSequelProgress(); self.rebuildLibrary(); self.renderScreen()
+    }
+    ArcadeStore.shared.onProgressChanged = { [weak service] in service?.requestSync() }
+    cloudTransport.onChange = { [weak self, weak service] in
+      if let sheet = self?.cloudAuthenticationSheet {
+        sheet.sheetParent?.endSheet(sheet); sheet.close(); self?.cloudAuthenticationSheet = nil
+      }
+      service?.requestSync()
+    }
+    cloudTransport.start { [weak self] controller in self?.cloudAuthentication = controller; self?.presentCloudAuthentication() }
+  }
+  func applicationDidBecomeActive(_ notification: Notification) { cloudProgress?.requestSync() }
+
   func applicationDidFinishLaunching(_ notification: Notification) {
     preparingLaunch = true
     wasExistingPlayer = UserDefaults.standard.bool(forKey: EffectsWelcome.choiceKey)
@@ -654,6 +721,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     migrateStandaloneSaves()
     buildMenu()
     buildInterface()
+    startCloudProgress()
     AnonymousTelemetry.shared.onCountsChanged = { [weak self] in self?.homeSavedCountsChanged() }
     traceLaunch("interface")
     installKeyboardShortcuts()
@@ -1049,8 +1117,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     return tube
   }
 
+  private var nativeFrame: CGImage?
+  private var nativeFrameKey: [UInt64] = []
   /// Draws the game at its own size for the tube to enlarge.
   private func composeNativeFrame() -> CGImage? {
+    let key = [playfield.presentationRevision, panel.presentationRevision]
+    if phase == .playing, key == nativeFrameKey, let nativeFrame { return nativeFrame }
     guard let playfieldRep = playfield.bitmapImageRepForCachingDisplay(in: playfield.bounds),
       let panelRep = panel.bitmapImageRepForCachingDisplay(in: panel.bounds)
     else { return nil }
@@ -1069,7 +1141,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
       context.draw(barImage, in: CGRect(x: 0, y: 0, width: 640, height: 80))
       context.draw(fieldImage, in: CGRect(x: 0, y: 80, width: 640, height: 320))
     }
-    return context.makeImage()
+    nativeFrame = context.makeImage()
+    nativeFrameKey = [playfield.presentationRevision, panel.presentationRevision]
+    return nativeFrame
   }
 
   /// Sends a click through the tube to whichever part it landed on.
@@ -1943,24 +2017,35 @@ let achievementProgressKey = "ClassicAchievementProgress"
     for entry: (set: ClassicDataSet, directory: URL)
   ) -> Data? {
     let store = UserDefaults.standard
+    func withCloud(_ data: Data?) -> Data? {
+      guard !ArcadeStore.shared.hotSeatIsActive, let title = entry.set.title,
+        !dataSetID(entry).contains(":source-") else { return data }
+      let completed = GameProgressPreferences.completed(pack: "release/" + title.rawValue,
+        profileID: ArcadeStore.shared.records.activeProfileID)
+      guard !completed.isEmpty else { return data }
+      let saved = data.flatMap { try? JSONDecoder().decode(ClassicGameFlow.Progress.self, from: $0) }
+      let merged = GameProgressPreferences.classicProgress(saved, completed: completed,
+        ranks: ClassicGameFlow(campaign: entry.set.campaign).ranks)
+      return (try? JSONEncoder().encode(merged)) ?? data
+    }
     let scoped = ArcadeStore.shared.progressKey(
       "\(flowProgressKey).\(dataSetID(entry))")
-    if let data = store.data(forKey: scoped) { return data }
+    if let data = store.data(forKey: scoped) { return withCloud(data) }
     let identifierKey = ArcadeStore.shared.progressKey(
       "\(flowProgressKey).\(entry.set.identifierKey)")
     if dataSetClaimCount(for: entry.set.identifierKey) == 1,
        let data = store.data(forKey: identifierKey) {
       store.set(data, forKey: scoped)
       store.removeObject(forKey: identifierKey)
-      return data
+      return withCloud(data)
     }
-    guard dataSetClaimCount(for: entry.set.legacyIdentifierKey) == 1 else { return nil }
+    guard dataSetClaimCount(for: entry.set.legacyIdentifierKey) == 1 else { return withCloud(nil) }
     let legacyKey = ArcadeStore.shared.progressKey(
       "\(flowProgressKey).\(entry.set.legacyIdentifierKey)")
-    guard let data = store.data(forKey: legacyKey) else { return nil }
+    guard let data = store.data(forKey: legacyKey) else { return withCloud(nil) }
     store.set(data, forKey: scoped)
     store.removeObject(forKey: legacyKey)
-    return data
+    return withCloud(data)
   }
 
   private func showLibraryWithoutClassicData(_ status: String) {
@@ -3450,12 +3535,22 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func playlistStore() throws -> LevelPlaylistStore {
     let profileID = ArcadeStore.shared.records.activeProfileID
-    if let cached = playlistStoreCache, cached.profileID == profileID {
-      return cached.store
-    }
-    let store = try LevelPlaylistStore(profileID: profileID)
-    playlistStoreCache = (profileID, store)
+    let store: LevelPlaylistStore
+    if let cached = playlistStoreCache, cached.profileID == profileID { store = cached.store }
+    else { store = try LevelPlaylistStore(profileID: profileID); playlistStoreCache = (profileID, store) }
+    try store.mergeLearningProgress(GameProgressPreferences.learning(profileID: profileID))
+    try saveCloudLearning(store)
     return store
+  }
+
+  private func saveCloudLearning(_ store: LevelPlaylistStore) throws {
+    guard let profileID = ArcadeStore.shared.records.profiles.first(where: {
+      LevelPlaylistStore.fileURL(profileID: $0.id) == store.file
+    })?.id else { return }
+    let before = GameProgressPreferences.learning(profileID: profileID)
+    guard GameProgressValue.mergeLearning(before, store.learningProgress) != before else { return }
+    try GameProgressPreferences.saveLearning(store.learningProgress, profileID: profileID)
+    ArcadeStore.shared.notifyProgressChanged()
   }
 
   private func playlistSourceRevision(
@@ -4328,6 +4423,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let playerID = arcade.playingProfileID
       guard arcade.profilesAreWritable, arcade.storageError == nil else { return }
       let advanced = try store.advanceLearningJourney(runID: run.id, won: false)
+      try saveCloudLearning(store)
       if arcade.hotSeatIsActive { _ = arcade.passSessionTurn(after: playerID) }
       if advanced { sequencePlaylistStore = store; startActiveSequence() }
       else { returnToLibrary(); try store.setActiveRun(nil); presentLearningJourney() }
@@ -5085,7 +5181,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func recordSequenceWin(completed identity: LevelCatalogueIdentity, runID: UUID, won: Bool) {
     guard won, let store = sequencePlaylistStore,
       store.activeRun?.source == .playlist(LearningJourney.playlistID) else { return }
-    do { try store.recordLearningWin(runID: runID, level: identity) }
+    do { try store.recordLearningWin(runID: runID, level: identity); try saveCloudLearning(store) }
     catch { setStatus("Could not save completed lesson: " + error.localizedDescription) }
   }
 
@@ -5101,6 +5197,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
             run.currentEntry.identity == identity else { return false }
       let learning = run.source == .playlist(LearningJourney.playlistID)
       let advanced = try (learning ? store.advanceLearningJourney(runID: runID, won: true) : store.advanceActiveRun())
+      if learning { try saveCloudLearning(store) }
       if advanced, store.activeRun != nil {
         // Keep the completed level visible while the next level prepares.
         // The commit path retires the previous engine once its replacement is ready.
@@ -6442,6 +6539,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   /// Saves progress for the game currently loaded.
   private func saveProgress() {
+    defer { ArcadeStore.shared.notifyProgressChanged() }
     guard !sequenceIsActive else { return }
     guard let flow, let key = loadedFlowProgressKey else { return }
     if let data = try? JSONEncoder().encode(flow.progress) {
@@ -6892,6 +6990,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func step(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
+    let frameStarted = ProcessInfo.processInfo.systemUptime
+    defer {
+      if !sequelIsActive, phase == .playing, !isPaused {
+        MacFXPerformance.shared.recordCPU(ProcessInfo.processInfo.systemUptime - frameStarted)
+      }
+    }
     gameplayKeyboard?.refreshNavigationControl()
     updateFailureMood(at: now)
     refreshTurnDisplay()
@@ -6906,6 +7010,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     panel.speedLabel = speedControl.panelLabel
     panel.variableSpeedEnabled = speedControl.variableEnabled
     playfield.speedMultiplier = speedControl.multiplier
+    playfield.advanceSelectionFade(at: now)
+    if cloudProgress?.state == .deferred, cloudCanImport { cloudProgress?.requestSync() }
+    if cloudAuthentication != nil { presentCloudAuthentication() }
     // Wait until the launch window has drawn. Capture before then can trap the
     // pointer in a window the player cannot see.
     if !sequelIsActive {
@@ -7201,6 +7308,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func recordCompletion(_ session: any GameSession) {
+    defer { ArcadeStore.shared.notifyProgressChanged() }
     guard currentNxlvURL == nil else { return }
     progress.record(
       levelIndex: picker.indexOfSelectedItem, saved: session.saved, required: session.required)

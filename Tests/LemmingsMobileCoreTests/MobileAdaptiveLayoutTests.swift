@@ -28,7 +28,14 @@ struct MobileAdaptiveLayoutTests {
                 }
                 #expect(layout.interface.controlFrames.count == (rate ? 2 : 0) + skills + 5)
                 let safe = layout.interface.safeFrame
-                for frame in layout.interface.controlFrames + [layout.interface.statusFrame] {
+                for (index, frame) in (layout.interface.controlFrames + [layout.interface.statusFrame]).enumerated() {
+                    let firstSkill = rate ? 2 : 0
+                    if let portrait = layout.portrait, (firstSkill..<(firstSkill + skills)).contains(index) {
+                        #expect(frame.minX >= portrait.skills.minX)
+                        #expect(frame.maxX <= portrait.skills.minX + portrait.skillContentWidth + 0.001)
+                        #expect(abs(frame.minY - Double(portrait.skills.minY)) < 0.001)
+                        continue
+                    }
                     #expect(safe.contains(.init(x: frame.minX, y: frame.minY)))
                     #expect(safe.contains(.init(x: frame.maxX, y: frame.maxY)))
                     #expect(regions.allSatisfy { !frame.intersects($0.frame) })
@@ -45,11 +52,11 @@ struct MobileAdaptiveLayoutTests {
         }
     }
 
-    @Test func wideIPadUsesOriginalPanelAndTinyViewsSuspend() {
+    @Test func wideIPadUsesTouchDeckAndTinyViewsSuspend() {
         let wide = MobileHUDLayout.make(container: .init(width: 1112, height: 834),
                                         safeArea: .init(top: 20, bottom: 20), hasRate: true, skillCount: 8)
-        #expect(wide.panel?.scale == 3)
-        #expect(wide.panel?.frame.width == 960)
+        #expect(wide.portrait != nil)
+        #expect(wide.interface.controlsFrame.width == 1112)
         #expect(wide.interface.controlFrames[13].height == 44)
         let tiny = MobileHUDLayout.make(container: .init(width: 280, height: 160), safeArea: .init(), hasRate: true, skillCount: 8)
         #expect(!tiny.canPlay)

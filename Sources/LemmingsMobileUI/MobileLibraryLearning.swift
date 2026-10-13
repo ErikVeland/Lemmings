@@ -10,6 +10,10 @@ extension MobileLibraryViewController {
     var learning: MobileLearningState {
         get {
             var saved = learningStorage.load(MobileLearningState.self, name: "learning") ?? .init()
+            if hotSeat == nil {
+                saved.progress = GameProgressValue.mergeLearning(saved.progress,
+                    GameProgressPreferences.learning(profileID: profiles.activeID))
+            }
             if let run = saved.run, let journey = bundledJourney {
                 do {
                     let migrated = try journey.migrating(run)
@@ -23,7 +27,7 @@ extension MobileLibraryViewController {
             return saved
         }
         set {
-            do { try learningStorage.save(newValue, name: "learning") }
+            do { try learningStorage.save(newValue, name: "learning"); arcadeStore.notifyProgressChanged() }
             catch { notice = error.localizedDescription }
         }
     }
@@ -118,6 +122,7 @@ extension MobileLibraryViewController {
     func recordLearningResult(_ snapshot: MobileGameSnapshot) throws {
         guard library is MobileJourneyLibrary else { return }
         var saved = learning; saved.record(won: snapshot.didWin); try learningStorage.save(saved, name: "learning")
+        arcadeStore.notifyProgressChanged()
     }
     func advanceLearningRun() throws -> Bool {
         var saved = learning

@@ -2,6 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>LemmingsCloudProgressEnabled</key><false/>
 	<key>HostedRankingsURL</key>
 	<string>https://glasscode.academy/lemmings-api/rankings</string>
 	<key>AnonymousTelemetryURL</key>

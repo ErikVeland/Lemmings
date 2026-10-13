@@ -3,7 +3,7 @@ import AppKit
 import NxlvKit
 
 /// Maps between level pixels and view points for a scrolled, zoomed playfield.
-struct Viewport {
+struct Viewport: Equatable {
   var scrollX = 0.0
   var scrollY = 0.0
   var zoom = 3.0
@@ -94,6 +94,12 @@ struct ReticleFeedback {
 }
 
 @MainActor final class PlayfieldView: NSView {
+  private(set) var presentationRevision: UInt64 = 0
+  override var needsDisplay: Bool {
+    get { super.needsDisplay }
+    set { if newValue { presentationRevision &+= 1 }; super.needsDisplay = newValue }
+  }
+
   var hdEffectsEnabled = true {
     didSet {
       if !hdEffectsEnabled {
@@ -134,6 +140,20 @@ struct ReticleFeedback {
   private var rewindCueTask: Task<Void, Never>?
   private var hdrOverlay: ExplosionHDRView?
   private(set) var selectionEffect: LemmingSelectionEffect?
+  private var selectionFade = SelectionFade<Int>()
+  private var selectionOpacity: CGFloat = 1
+  private var selectionWasFading = false
+  func advanceSelectionFade(at now: Double) {
+    let fading = selectionFade.isFading(at: now)
+    if fading || selectionWasFading {
+      if presentsHDR { needsDisplay = true }
+      else {
+        if let sample = selectionFade.sample(at: now) { selectionEffect?.opacity = sample.opacity }
+        else { selectionEffect = nil }
+      }
+    }
+    selectionWasFading = fading
+  }
   private(set) var rescueAuras: [LemmingSelectionEffect] = []
   private(set) var hdrFlashes: [ExplosionFlash] = []
   private var displayedHDRFlashes: [ExplosionFlash] {
@@ -247,8 +267,8 @@ struct ReticleFeedback {
   /// this in every frame, so ending a hot seat or passing the turn cannot leave
   /// a stale name on screen. It is passed in rather than read from the record
   /// store because this view is also compiled on its own by the draw tests.
-  var turnInitials: String?
-  var turnPortrait: Int?
+  var turnInitials: String? { didSet { if oldValue != turnInitials { needsDisplay = true } } }
+  var turnPortrait: Int? { didSet { if oldValue != turnPortrait { needsDisplay = true } } }
   private var turnSprite: NSImage?
   private var turnSpriteIndex: Int?
   /// Advanced by the run loop so the march animates while a menu is up.
@@ -256,11 +276,11 @@ struct ReticleFeedback {
   var phase: GamePhase = .playing {
     didSet {
       if phase != oldValue { reticleFeedback = ReticleFeedback(); assignedTarget = nil; displayedTarget = nil; cursorViewPoint = nil; overlayReplayLine = nil; overlayRetryLine = nil }
-      if phase != oldValue { window?.invalidateCursorRects(for: self) }
+      if phase != oldValue { needsDisplay = true; window?.invalidateCursorRects(for: self) }
     }
   }
   private let backgroundGlow = RescueBackgroundGlow()
-  var levelImage: CGImage?
+  var levelImage: CGImage? { didSet { if oldValue !== levelImage { needsDisplay = true } } }
   var imageScale = 1.0
   var macArtwork: ClassicMacArtwork? { didSet { invalidateSprites() } }
   /// Artwork for the menus, which outlives any level.
@@ -276,28 +296,42 @@ struct ReticleFeedback {
     }
   }
   private var macInterface: MacInterfaceRenderer? = GameMenuArtwork.renderer()
-  var macScene: ClassicMacScene? { didSet { sceneTick = nil } }
+  var macScene: ClassicMacScene? { didSet { invalidateClassicScene() } }
   var classicScene: ClassicRenderedLevel? {
-    didSet { sceneTick = nil }
+    didSet { invalidateClassicScene() }
   }
   var neoMacArtworkEnabled = false { didSet { sceneTick = nil; invalidateSprites() } }
   var neoScene: NxlvRenderedLevel? {
-    didSet { sceneTick = nil }
+    didSet { sceneTick = nil; needsDisplay = true }
   }
   private var sceneTick: Int?
+  private var sceneTerrainRevision: UInt64?
+  private var sceneTerrain: Data?
+  private func invalidateClassicScene() {
+    sceneTick = nil; sceneTerrainRevision = nil; sceneTerrain = nil; needsDisplay = true
+  }
   #if PERFORMANCE_TESTS
   var sceneRenderSeconds = 0.0
+  var terrainRenderCount = 0
   #endif
 
   private func refreshClassicScene() {
     guard let classicScene, let session = session as? ClassicSession,
-          sceneTick != session.currentTick else { return }
+          sceneTick != session.currentTick || sceneTerrainRevision != session.terrainRevision else { return }
     #if PERFORMANCE_TESTS
     let sceneStarted = ProcessInfo.processInfo.systemUptime
     defer { sceneRenderSeconds += ProcessInfo.processInfo.systemUptime - sceneStarted }
     #endif
-    let rgba = macScene?.rgba(simulation: session.simulation)
-      ?? ClassicSceneFrame.rgba(classicScene, simulation: session.simulation)
+    if sceneTerrain == nil || sceneTerrainRevision != session.terrainRevision {
+      sceneTerrain = macScene?.terrainFrame(terrain: session.simulation.terrain)
+        ?? ClassicSceneFrame.terrainRGBA(classicScene, terrain: session.simulation.terrain)
+      sceneTerrainRevision = session.terrainRevision
+      #if PERFORMANCE_TESTS
+      terrainRenderCount += 1
+      #endif
+    }
+    let rgba = macScene?.rgba(simulation: session.simulation, terrain: sceneTerrain)
+      ?? ClassicSceneFrame.rgba(classicScene, simulation: session.simulation, terrain: sceneTerrain)
     imageScale = macScene == nil ? 1 : 2
     let width = macScene?.width ?? classicScene.width
     let height = macScene?.height ?? classicScene.height
@@ -348,14 +382,14 @@ struct ReticleFeedback {
     sceneTick = session.currentTick
   }
   var session: (any GameSession)? {
-    didSet { if oldValue !== session { reticleFeedback = ReticleFeedback(); assignedTarget = nil; displayedTarget = nil; hdrBirths.removeAll(); hdrLastTick = 0; speedTrails.reset() } }
+    didSet { if oldValue !== session { invalidateClassicScene(); reticleFeedback = ReticleFeedback(); assignedTarget = nil; displayedTarget = nil; hdrBirths.removeAll(); hdrLastTick = 0; speedTrails.reset(); selectionFade.reset() } }
   }
-  var failureMoodAmount: CGFloat = 0
-  var completionGlowAmount: CGFloat = 0
+  var failureMoodAmount: CGFloat = 0 { didSet { if oldValue != failureMoodAmount { needsDisplay = true } } }
+  var completionGlowAmount: CGFloat = 0 { didSet { if oldValue != completionGlowAmount { needsDisplay = true } } }
   var assets: ClassicMainDATAssets?
   var neoSprites: NeoLemmixSpriteSet? { didSet { invalidateSprites() } }
   var palette: [ClassicRGBColor] = []
-  var viewport = Viewport()
+  var viewport = Viewport() { didSet { if oldValue != viewport { needsDisplay = true } } }
   private var precisionLens = AnimatedPrecisionZoomLens()
   private var precisionScroll = PrecisionZoomScrollGesture()
   private let precisionZoomAnimation = PrecisionZoomAnimation()
@@ -759,7 +793,7 @@ struct ReticleFeedback {
       && point.y >= y - box.top && point.y <= y + box.bottom
   }
 
-  func invalidateSprites() { spriteCache.removeAll(); spritePixels.removeAll() }
+  func invalidateSprites() { spriteCache.removeAll(); spritePixels.removeAll(); needsDisplay = true }
 
   // MARK: - Drawing
 
@@ -782,7 +816,7 @@ struct ReticleFeedback {
     updateSpeedTrails()
     hdrFlashes.removeAll(keepingCapacity:true)
     let tick = session?.currentTick ?? 0
-    if tick < hdrLastTick { hdrBirths.removeAll() }
+    if tick < hdrLastTick { hdrBirths.removeAll(); selectionFade.reset() }
     hdrLastTick = tick
     defer { hdrOverlay?.update(presentsHDR ? displayedHDRFlashes : []) }
     refreshClassicScene()
@@ -1242,6 +1276,13 @@ struct ReticleFeedback {
     let lemmings = session.lemmings
     selectionTargetID = phase == .playing && !GameCursor.gameplaySuppressed
       ? assignmentHighlight.target ?? pointerLemmingID : nil
+    if lemmingSelectionStyle == .modern, phase == .playing, !GameCursor.gameplaySuppressed {
+      let now = ProcessInfo.processInfo.systemUptime
+      selectionFade.set(selectionTargetID, at: now)
+      let selection = selectionFade.sample(at: now)
+      selectionTargetID = selection?.value
+      selectionOpacity = selection?.opacity ?? 1
+    } else { selectionFade.reset() }
     selectedSprite = nil
     if hdEffectsEnabled && !reduceMotion && isFastForward && phase == .playing {
       for lemming in lemmings { draw(lemming, ghostsOnly: true) }
@@ -1255,6 +1296,7 @@ struct ReticleFeedback {
       selectionEffect = LemmingSelectionEffect(sprite: selectedSprite.pixels,
         rect: precisionLens.display(selectedSprite.rect), clipRect: bounds,
         time: reduceMotion || reduceFlashes ? nil : Double(session.currentTick) / Double(session.ticksPerSecond))
+      selectionEffect?.opacity = selectionOpacity
     }
   }
 

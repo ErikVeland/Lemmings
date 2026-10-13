@@ -155,20 +155,20 @@ extension MobileGameViewController {
         }
     }
 
-    func setSpeedInput(_ input: GameplaySpeed.Hold, held: Bool) {
+    func setSpeedInput(_ input: GameplaySpeed.Hold, held: Bool, allowTap: Bool = true) {
         let now = ProcessInfo.processInfo.systemUptime
-        inputSpeed.variableEnabled = MobileSettings.load(from: .standard).classic.variableSpeedEnabled
+        inputSpeed.variableEnabled = gameSettings.classic.variableSpeedEnabled
         if held {
             guard overlay.isHidden, lifecycle.isForeground, !lifecycle.isInterrupted else { return }
             if input == .key && !inputSpeed.variableEnabled { inputSpeed.tap(at: now) }
-            else { inputSpeed.press(input, at: now, tapEnabled: input != .controller || MobileSettings.load(from: .standard).classic.controllerTapSpeed) }
+            else { inputSpeed.press(input, at: now, tapEnabled: input != .controller || gameSettings.classic.controllerTapSpeed) }
         } else {
-            inputSpeed.release(input, at: now, allowTap: overlay.isHidden && lifecycle.isForeground && !lifecycle.isInterrupted)
+            inputSpeed.release(input, at: now, allowTap: allowTap && overlay.isHidden && lifecycle.isForeground && !lifecycle.isInterrupted)
         }
         updateInputSpeed(at: now)
     }
     func updateInputSpeed(at now: Double) {
-        inputSpeed.variableEnabled = MobileSettings.load(from: .standard).classic.variableSpeedEnabled
+        inputSpeed.variableEnabled = gameSettings.classic.variableSpeedEnabled
         if !overlay.isHidden || !lifecycle.isForeground || lifecycle.isInterrupted { inputSpeed.suspend(at: now) }
         inputSpeed.update(at: now)
         let changed = speed != inputSpeed.multiplier
@@ -195,6 +195,7 @@ extension MobileGameViewController {
                 }
                 self.leaveToLibrary()
             } else if library.handleSettings(id) {
+                self.gameSettings = library.mobileSettings
                 if id == "setting.speed" { self.inputSpeed.setCruise(Double(library.mobileSettings.fastSpeed)) }
                 self.session.applySettings(library.mobileSettings.classic)
                 self.renderCurrentFrame(force: true)
