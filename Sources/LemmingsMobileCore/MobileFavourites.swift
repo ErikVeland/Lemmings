@@ -139,6 +139,11 @@ public final class MobileListLibrary: MobileGameLibrary {
         return entries[entryIndices[index]].pack + "|" + entries[entryIndices[index]].level
     }
 
+    public func checkpointLevelIdentifier(at index: Int) throws -> String? {
+        guard let target = resolve(index) else { throw MobileSessionError.changedLevel }
+        return try target.library.checkpointLevelIdentifier(at: target.index)
+    }
+
     public func loadLevel(at index: Int) throws -> MobileLevelContent {
         guard let target = resolve(index) else { throw MobileSessionError.changedLevel }
         let content = try target.library.loadLevel(at: target.index)

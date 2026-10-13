@@ -12,7 +12,7 @@ import UIKit
     var onFavourite: ((Int) -> Void)?
     var onPlaylist: ((Int) -> Void)?
 
-    var playerName: String? { didSet { updateSubtitle() } }
+    var playerName: String? { didSet { if oldValue != playerName { updateSubtitle() } } }
     private let backdrop = MobileMenuBackdrop()
     private let titleLabel = MobilePixelLabel()
     private let subtitleLabel = MobilePixelLabel()
@@ -96,7 +96,7 @@ import UIKit
         guard levels.indices.contains(flow.selectedIndex) else { return }
         let level = levels[flow.selectedIndex]
         let rank = levels.filter { $0.rank == level.rank }
-        subtitleLabel.text = MobileTurnArt.subtitle("\(level.rank)  \(level.number)/\(rank.count)", playerName: playerName)
+        subtitleLabel.text = MobileTurnArt.subtitle("\(level.rank)  \(level.number)/\(rank.count)", playerName: playerName, role: .next)
     }
 
     private func moveRank(_ offset: Int) {

@@ -29,19 +29,24 @@ public struct MobileLearningResume: Sendable {
     public let seat: MobileHotSeat?
     public let owner: String
     public var scope: String { seat?.scope ?? owner }
+    public var resumeTitle: String {
+        guard let run = state.run else { return "Resume" }
+        let name = run.pool.id.hasPrefix("learning-") ? "journey run" : run.pool.summary
+        return "Resume \(name)  \(run.currentIndex + 1)/\(run.entries.count)"
+    }
 
     public static func find(owner: String, seats: MobileHotSeatStore,
-                            storage: (String) -> MobileStorage) -> Self? {
-        let candidates = [seats.current].compactMap { $0 }.filter { $0.host == owner }
-            + seats.resumable(host: owner)
-        let scopes: [(String, MobileHotSeat?)] = seats.current?.host == owner
+                            storage: (String) -> MobileStorage, journeyOnly: Bool = true) -> Self? {
+        let candidates = [seats.current].compactMap { $0 }.filter { $0.players.contains(owner) }
+            + seats.sharedSessions(player: owner)
+        let scopes: [(String, MobileHotSeat?)] = seats.current?.players.contains(owner) == true
             ? [(seats.current!.scope, seats.current)] + [(owner, nil)]
                 + candidates.filter { $0.id != seats.current?.id }.map { ($0.scope, $0) }
             : [(owner, nil)] + candidates.map { ($0.scope, $0) }
         for (scope, seat) in scopes {
             guard let state = storage(scope).load(MobileLearningState.self, name: "learning"),
-                  let run = state.run, run.source == .playlist(LearningJourney.playlistID),
-                  run.pool.id.hasPrefix("learning-") else { continue }
+                  let run = state.run else { continue }
+            if journeyOnly, !(run.source == .playlist(LearningJourney.playlistID) && run.pool.id.hasPrefix("learning-")) { continue }
             return Self(state: state, seat: seat, owner: owner)
         }
         return nil

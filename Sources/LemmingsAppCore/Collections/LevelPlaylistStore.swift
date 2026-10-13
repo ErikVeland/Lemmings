@@ -155,12 +155,30 @@ import NxlvKit
     public func importMobileCollections(playlists: [LevelPlaylist], favourites: [LevelPlaylistEntry],
                                         recents: [LevelPlaylistEntry], run: LevelSequenceRun?, hotSeatID: String? = nil) throws {
         let previous = document
+        let resumed = run.flatMap { resumableRun(id: $0.id) }
         document.playlists = playlists
         document.selectedPlaylistID = playlists.first?.id
         document.favourites = favourites
         document.recentlyPlayed = recents
+        func available(_ sequence: LevelSequenceRun) -> Bool {
+            if case let .playlist(id) = sequence.source { return playlists.contains { $0.id == id } }
+            return true
+        }
+        let endingID = run == nil
+            ? (document.activeRunHotSeatID == hotSeatID ? document.activeRun?.id : savedRuns.first { $0.hotSeatID == hotSeatID }?.run.id)
+            : nil
+        var archived = savedRuns.filter {
+            $0.run.id != run?.id && $0.run.id != endingID && available($0.run)
+        }
+        if let active = document.activeRun, active.id != run?.id, available(active),
+           run != nil || document.activeRunHotSeatID != hotSeatID {
+            archived.insert(SavedRun(run: active, hotSeatID: document.activeRunHotSeatID,
+                                    l2Progress: document.activeRunL2Progress), at: 0)
+        }
+        document.savedRuns = archived
         document.activeRun = run
         document.activeRunHotSeatID = run == nil ? nil : hotSeatID
+        document.activeRunL2Progress = resumed?.l2Progress
         do { document = try document.validated(); try save() }
         catch { document = previous; throw error }
     }

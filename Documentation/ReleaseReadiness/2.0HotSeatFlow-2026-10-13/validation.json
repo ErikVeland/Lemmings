@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-13",
+  "renderChecks": 95,
+  "tests": 37,
+  "testSuites": [
+    "MobileHotSeatTests",
+    "MobilePortraitHUDTests",
+    "MobileAdaptiveLayoutTests",
+    "MobileLearningTests",
+    "MobileCollectionsMigrationTests",
+    "MobileCheckpointOwnershipTests",
+    "MobileLevelPreparationTests"
+  ],
+  "unsignedIOSCompilation": "passed: Debug iphoneos arm64, CODE_SIGNING_ALLOWED=NO",
+  "rendering": "windowless Core Graphics; no test windows or focus changes",
+  "mechanicalAudio": "muted",
+  "sourceSHA256": {
+    "Sources/LemmingsAppCore/Collections/LevelPlaylistStore.swift": "3d50b76663e31359d93a8e55cd60ae9c2c8a0acd6adaa8f1ed87e00af89f2208",
+    "Sources/LemmingsGameArt/MobileTurnArt.swift": "2ca7b95dd881f35fdef3bd0bf43d7dab2b9e1c1b33de8a97a49ba9cb62a80d03",
+    "Sources/LemmingsMobileCore/MobileCollectionsBridge.swift": "4a0f8a3bbd6cfd5dc9689c0f1a93cd203fa33da8b6886248ee6c7a8313953c7b",
+    "Sources/LemmingsMobileCore/MobileFavourites.swift": "81d129cd422e8d3fe49bc145d3175879b37bca094be89fa597561a17c750c390",
+    "Sources/LemmingsMobileCore/MobileLearning.swift": "764d084422bb270ae06020c40ab31ab4ceaca2a79e01b8da267e43ea29b410c4",
+    "Sources/LemmingsMobileUI/MobileGameViewController.swift": "9b78a986387a3e8bf58fca0a8eda3e3e6de1a229c5854b8f536561270de5f137",
+    "Sources/LemmingsMobileUI/MobileLevelBrowserView.swift": "e30f6b04f518ea4c67e59ca4c34cd6c5b32dfc5dbcdc44583b92e8aecc3c6b9f",
+    "Sources/LemmingsMobileUI/MobileLibraryCollections.swift": "2b1753c27758dc58667f9d6730d9067f0654248cb8debb7280d6279ffbd7f88e",
+    "Sources/LemmingsMobileUI/MobileLibraryHotSeat.swift": "cafc3be11cb63d79d50ad365eec044cf09b40dc33be18bbe14dd56d251702368",
+    "Sources/LemmingsMobileUI/MobileLibraryLearning.swift": "b5e6ba5d890411ad2180d0aeb0dfa322bee93a5a6f27d150edb698eccdf75f4a",
+    "Sources/LemmingsMobileUI/MobileLibraryViewController.swift": "bb1a0fea5e955755370175a907c55f57d0466eef30a2a993a263261ea60d06ed",
+    "Sources/LemmingsMobileUI/MobileMenuCanvas.swift": "311f020ba6eb6c5e2921ce18076a616b2c88b4bb47457f554d45abf6e9ab7910",
+    "Sources/LemmingsMobileUI/MobileProfilePages.swift": "1a62747877df042411e79db6b4b67e391178a70d8c4db6f091cf57f34b1bdd59",
+    "Tests/LemmingsMobileCoreTests/MobileCollectionsMigrationTests.swift": "2d6be48ca9225d1d6d42abc11d1ec4878bf463c858c4170ec0eff64cb7aa18dc",
+    "Tests/LemmingsMobileCoreTests/MobileLearningTests.swift": "0b89c1c13d06bb8908899416af7bd5ff2b21be0c55bdbd4ce47773065d50357a",
+    "Tools/IOSMenuAudit/main.swift": "4803f5bd46d17e0e91e30a7d5e813d82a91f9108e618e9985fab7118b946774e",
+    "Tools/IOSMenuAudit/hot-seat-flow.swift": "1166c6a4ba1df4b93baa31056a1aaede58594b0e29195d3ff6f5364e62cfa948"
+  },
+  "limits": [
+    "UIKit taps and VoiceOver require device validation.",
+    "Lemmings 2 and Lemmings 3 remain unavailable in the iOS library.",
+    "The full 95 PNG captures are in the ignored .build/hot-seat-flow directory; representative images and identity sheets are retained here."
+  ]
+}

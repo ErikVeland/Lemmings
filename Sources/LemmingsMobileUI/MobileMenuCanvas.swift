@@ -7,7 +7,9 @@ import UIKit
 @MainActor final class MobileMenuCanvas: UIView {
     var page = GameFrontEnd.Page(title: "Lemmings") { didSet { rebuild() } }
     var playerName: String? { didSet { if oldValue != playerName { rebuild() } } }
-    private var displayedPage: GameFrontEnd.Page { MobileTurnArt.page(page, playerName: playerName) }
+    var playerRole = MobileTurnArt.Role.current { didSet { if oldValue != playerRole { rebuild() } } }
+    var sessionName: String? { didSet { if oldValue != sessionName { rebuild() } } }
+    private var displayedPage: GameFrontEnd.Page { MobileTurnArt.page(page, playerName: playerName, role: playerRole, sessionName: sessionName) }
     var preview: CGImage? { didSet { setNeedsDisplay() } }
     var resultStars: Int? { didSet { setNeedsDisplay() } }
     var revealedStars = 3 { didSet { setNeedsDisplay() } }
@@ -131,6 +133,7 @@ import UIKit
         let layout = pageLayout ?? GameFrontEnd.layout(page, width: bounds.width / scale, minimumHeight: bounds.height / scale)
         guard let typography = MobileGameArt.typography else {
             MobilePixelText.draw(page.title, in: layout.heading, palette: .green)
+            MobilePixelText.draw(page.subtitle, in: layout.subtitle)
             for target in layout.targets {
                 GameStoneArt.draw(in: context, frame: target.frame, selected: target.action.primary, pixel: 1)
                 MobilePixelText.draw(target.action.title, in: target.frame.insetBy(dx: 24, dy: 2))

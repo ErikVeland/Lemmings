@@ -247,6 +247,8 @@ import UniformTypeIdentifiers
         game?.view.frame = view.bounds
     }
     func rebuild() {
+        canvas.sessionName = hotSeat.map { $0.players.map(playerName).joined(separator: " vs ") }
+        canvas.playerRole = .next
         canvas.playerName = hotSeat.map { playerName($0.turn) }
         unfold.stop()
         let count = library?.levels.count ?? 0
@@ -254,15 +256,16 @@ import UniformTypeIdentifiers
         switch route {
         case .home:
             var resume: [GameFrontEnd.Action] = []
-            if catalogue != nil, let run = learning.run {
-                resume.append(.init("learningResume", "Resume journey  \(run.currentIndex + 1)/\(run.entries.count)"))
+            if catalogue != nil, let saved = resumableLearningRun {
+                let session = saved.seat?.id != hotSeat?.id ? saved.seat.map { " - " + $0.players.map(playerName).joined(separator: " vs ") } ?? " - " + profiles.active.name : ""
+                resume.append(.init("learningRunResume", saved.resumeTitle + session))
             }
             if catalogue != nil, let run = playlists.run {
                 resume.append(.init("runResume", "Resume \(run.name)  \(run.position + 1)/\(run.entries.count)"))
             }
             if let saved = pendingCheckpoint {
                 resume.append(checkpointMatchesSession(saved)
-                    ? .init("resume", "Resume - " + playerName(saved.owner ?? profiles.activeID))
+                    ? .init("resume", "Resume level - " + playerName(saved.owner ?? profiles.activeID))
                     : .init("seatOther", otherSessionTitle(for: saved)))
             }
             let families: [GameFrontEnd.Action] = MobileFamily.allCases.map { family in
@@ -693,7 +696,7 @@ import UniformTypeIdentifiers
             }
         }
     }
-    private func resumeSavedRun() {
+    func resumeSavedRun() {
         guard let checkpoint = pendingCheckpoint, checkpointMatchesSession(checkpoint) else { return }
         if let run = learning.run, let catalogue {
             let queue = MobileJourneyLibrary(entries: run.entries, name: run.pool.summary, catalogue: catalogue)
@@ -701,6 +704,14 @@ import UniformTypeIdentifiers
                 openLearningRun(checkpoint: checkpoint); return
             }
         }
+        if let run = playlists.run, let catalogue {
+            let queue = MobileListLibrary(entries: run.entries, name: run.name, catalogue: catalogue, lazy: true)
+            if (try? queue.checkpointLevelIdentifier(at: run.position)) == checkpoint.levelIdentifier {
+                openList(run.entries, name: run.name, back: .collections, run: run, position: run.position)
+                startLevel(run.position, checkpoint: checkpoint); return
+            }
+        }
+        activeRun = nil
         if let catalogue, let pack = catalogue.pack(forLevelIdentifier: checkpoint.levelIdentifier) {
             openPack(pack, back: .home, navigateToLevels: false)
         }

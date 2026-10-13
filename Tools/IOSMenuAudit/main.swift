@@ -9,8 +9,9 @@ import NxlvKit
     @MainActor static func main() async throws {
         let latestFixes = CommandLine.arguments.last == "--current-fixes"
         let hotSeat = CommandLine.arguments.last == "--hot-seat"
+        let hotSeatFlow = CommandLine.arguments.last == "--hot-seat-flow"
         let hotSeatHUD = CommandLine.arguments.last == "--hot-seat-hud"
-        guard CommandLine.arguments.count == (latestFixes || hotSeat || hotSeatHUD ? 5 : 4) else { throw Failure.invalidArguments }
+        guard CommandLine.arguments.count == (latestFixes || hotSeat || hotSeatHUD || hotSeatFlow ? 5 : 4) else { throw Failure.invalidArguments }
         let artwork = URL(fileURLWithPath: CommandLine.arguments[1])
         let content = URL(fileURLWithPath: CommandLine.arguments[2])
         let output = URL(fileURLWithPath: CommandLine.arguments[3])
@@ -21,6 +22,7 @@ import NxlvKit
         let library = try ClassicMobileLibrary(directory: content)
         guard try library.checkpointLevelIdentifier(at: 0) == library.loadLevel(at: 0).session.levelIdentifier
         else { throw Failure.invalidTargets }
+        if hotSeatFlow { try checkHotSeatFlow(typography: typography, output: output); return }
         if hotSeatHUD { try checkHotSeatHUD(library: library, typography: typography, output: output); return }
         if hotSeat { try checkHotSeat(typography: typography, portraits: GamePortraitArt(directory: artwork), output: output); return }
         if latestFixes { try await checkCurrentFixes(library: library, typography: typography, output: output); return }

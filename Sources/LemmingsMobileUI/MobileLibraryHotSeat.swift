@@ -97,7 +97,7 @@ extension MobileLibraryViewController {
             hotSeats.endSession()
             guard saveHotSeats() else { rebuild(); break }
             hotSeatRoster = nil
-            activeRun = nil
+            reloadPlayerData()
             navigate(.home)
         case "seatOther": resumeOtherSession()
         default:
@@ -113,15 +113,16 @@ extension MobileLibraryViewController {
         }
         return true
     }
-    private func resumeSharedSeat(_ id: String) -> Bool {
+    func resumeSharedSeat(_ id: String) -> Bool {
         let previousSeats = hotSeats, previousProfiles = profiles
-        guard let seat = hotSeats.resume(id: id) else { return false }
+        guard let seat = hotSeat?.id == id ? hotSeat : hotSeats.resume(id: id) else { return false }
         profiles.select(seat.host)
         guard saveProfiles(), saveHotSeats() else {
             hotSeats = previousSeats; profiles = previousProfiles
             _ = saveProfiles()
             return false
         }
+        reloadPlayerData()
         return true
     }
 
@@ -139,9 +140,8 @@ extension MobileLibraryViewController {
 
     private func leaveHotSeatPage() {
         hotSeatRoster = nil
-        activeRun = nil
         pendingCheckpoint = nil
-        loadCheckpoint()
+        reloadPlayerData()
         navigate(.home)
     }
 
@@ -149,8 +149,9 @@ extension MobileLibraryViewController {
     private func resumeOtherSession() {
         guard let checkpoint = pendingCheckpoint else { return }
         if let scope = checkpoint.scope, scope.hasPrefix("hotseat.") {
-            guard hotSeat?.scope == scope || hotSeats.resume(id: String(scope.dropFirst(8))) != nil else {
-                notice = "That Hot Seat is no longer saved."; rebuild(); return
+            guard resumeSharedSeat(String(scope.dropFirst(8))) else {
+                if notice.isEmpty { notice = "That Hot Seat is no longer saved." }
+                rebuild(); return
             }
         } else {
             hotSeats.endSession()
@@ -160,11 +161,11 @@ extension MobileLibraryViewController {
             }
             profiles.select(owner)
             guard saveProfiles() else { rebuild(); return }
-            reloadPlayerData()
         }
         guard saveHotSeats() else { rebuild(); return }
-        activeRun = nil
-        rebuild()
+        reloadPlayerData()
+        pendingCheckpoint = checkpoint
+        resumeSavedRun()
     }
 
     /// True when a saved level can resume in the session that is open now.

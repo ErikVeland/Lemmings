@@ -202,7 +202,7 @@ extension MobileLibraryViewController {
     func openList(_ entries: [MobileFavourites.Entry], name: String, back: Route, run: MobilePlaylistRun? = nil, position: Int = 0) {
         guard let catalogue else { return }
         // A long list shows its titles without opening every pack.
-        let lazy = entries.count > 100 && entries.allSatisfy { $0.title != nil }
+        let lazy = run != nil || (entries.count > 100 && entries.allSatisfy { $0.title != nil })
         let list = MobileListLibrary(entries: entries, name: name, catalogue: catalogue, lazy: lazy)
         guard !list.levels.isEmpty else { return }
         library = list
@@ -228,7 +228,18 @@ extension MobileLibraryViewController {
 
     func resumeRun() {
         guard let run = playlists.run else { return }
-        openList(run.entries, name: run.name, back: .collections, run: run, position: run.position)
+        let owner = profiles.activeID, scope = hotSeat?.scope
+        learningTask?.cancel()
+        learningTask = Task { [weak self] in
+            guard let self, let checkpointStore else { return }
+            do {
+                let checkpoint = try await checkpointStore.load(owner: owner, scope: scope)
+                guard !Task.isCancelled, profiles.activeID == owner, hotSeat?.scope == scope else { return }
+                let matching = checkpoint.flatMap { checkpointMatchesSession($0) ? $0 : nil }
+                openList(run.entries, name: run.name, back: .collections, run: run, position: run.position)
+                startLevel(run.position, checkpoint: matching, restoringMatchingCheckpoint: true)
+            } catch { notice = error.localizedDescription; rebuild() }
+        }
     }
 
     /// Records a level start in Recently played and moves a running playlist forward.

@@ -59,7 +59,7 @@ extension MobileLibraryViewController {
             collectionsBridge = try MobileCollectionsBridge(profileID: profiles.activeID)
             favourites = collectionsBridge!.favourites
             recents = collectionsBridge!.recents
-            playlists = collectionsBridge!.playlists
+            playlists = collectionsBridge!.playlists(hotSeatID: hotSeat?.id)
         } catch {
             collectionsBridge = nil
             favourites = MobileFavourites.load(from: storage, legacy: isDefault)
@@ -79,7 +79,7 @@ extension MobileLibraryViewController {
             try collectionsBridge.save(favourites: favourites, recents: recents, playlists: playlists, hotSeatID: hotSeat?.id)
         } catch {
             if let collectionsBridge {
-                favourites = collectionsBridge.favourites; recents = collectionsBridge.recents; playlists = collectionsBridge.playlists
+                favourites = collectionsBridge.favourites; recents = collectionsBridge.recents; playlists = collectionsBridge.playlists(hotSeatID: hotSeat?.id)
             }
             notice = error.localizedDescription
         }

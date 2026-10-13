@@ -29,12 +29,17 @@ import NxlvKit
 
     public var favourites: MobileFavourites { .init(entries: store.favourites.map(Self.mobileEntry)) }
     public var recents: MobileRecents { .init(entries: store.recentlyPlayed.map(Self.mobileEntry)) }
-    public var playlists: MobilePlaylistStore {
+    public var playlists: MobilePlaylistStore { playlists(hotSeatID: store.activeRunHotSeatID) }
+
+    public func playlists(hotSeatID: String?) -> MobilePlaylistStore {
         let lists = store.playlists.map { MobilePlaylist(id: $0.id, name: $0.name, entries: $0.entries.map(Self.mobileEntry)) }
-        let run = store.activeRun.map {
-            let source: UUID? = if case let .playlist(id) = $0.source { id } else { nil }
-            return MobilePlaylistRun(playlist: source, name: $0.pool.summary, entries: $0.entries.map(Self.mobileEntry),
-                                     position: $0.currentIndex, shuffled: $0.algorithm != nil, seed: $0.seed ?? 0)
+        let saved = store.activeRun.flatMap { store.activeRunHotSeatID == hotSeatID ? store.resumableRun(id: $0.id) : nil }
+            ?? store.savedRuns.first { $0.hotSeatID == hotSeatID }
+        let run = saved.map { saved in
+            let value = saved.run
+            let source: UUID? = if case let .playlist(id) = value.source { id } else { nil }
+            return MobilePlaylistRun(playlist: source, name: value.pool.summary, entries: value.entries.map(Self.mobileEntry),
+                                     position: value.currentIndex, shuffled: value.algorithm != nil, seed: value.seed ?? 0)
         }
         return MobilePlaylistStore(playlists: lists, run: run)
     }
@@ -45,7 +50,8 @@ import NxlvKit
             try LevelPlaylist(id: list.id, name: list.name, entries: Self.sharedEntries(list.entries))
         }
         let run = try playlists.run.map { value in
-            let old = store.activeRun
+            let old = (store.activeRunHotSeatID == hotSeatID ? store.activeRun : nil)
+                ?? store.savedRuns.first { $0.hotSeatID == hotSeatID }?.run
             let source: LevelSequenceSource = value.playlist.map(LevelSequenceSource.playlist) ?? .shuffleAll
             let same = old?.source == source && old?.pool.summary == value.name && old?.entries.map(Self.mobileEntry) == value.entries
             return try LevelSequenceRun(id: same ? old!.id : UUID(), source: source,

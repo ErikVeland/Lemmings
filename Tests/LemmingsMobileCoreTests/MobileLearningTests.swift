@@ -67,12 +67,41 @@ struct MobileLearningTests {
         #expect(found.seat == archived)
         #expect(found.seat?.turn == "guest")
         #expect(found.scope == archived.scope)
+        #expect(found.resumeTitle == "Resume journey run  2/3")
         #expect(seats == original)
-        #expect(MobileLearningResume.find(owner: "guest", seats: seats, storage: files) == nil)
+        #expect(MobileLearningResume.find(owner: "guest", seats: seats, storage: files)?.seat == archived)
         try files("host").save(state, name: "learning")
         #expect(MobileLearningResume.find(owner: "host", seats: seats, storage: files)?.seat == nil)
         try files(try #require(seats.current).scope).save(state, name: "learning")
         #expect(MobileLearningResume.find(owner: "host", seats: seats, storage: files)?.seat == seats.current)
+    }
+    @Test func progressionRecallUsesItsSavedScopeNameAndPosition() throws {
+        let temporary = try AppStorage.temporary(named: "progression-resume")
+        defer { temporary.removeTemporaryFiles() }
+        func files(_ scope: String) -> MobileStorage {
+            MobileStorage(directory: temporary.applicationSupport.appendingPathComponent(scope))
+        }
+        let storage = AppStorage(applicationSupport: temporary.applicationSupport,
+            resources: root.appendingPathComponent("Resources"), defaults: temporary.defaults)
+        let journey = try #require(LearningJourneyLibrary.journey(storage: storage))
+        var solo = MobileLearningState(), shared = MobileLearningState()
+        try solo.start(Array(journey.lessons.prefix(3).map(\.entry)), name: LearningJourney.title, poolID: journey.version)
+        try shared.start(Array(journey.lessons.prefix(4).map(\.entry)), name: "Easy to hard", poolID: "progression-v1", playlistID: UUID())
+        shared.advance(); shared.advance()
+        var seats = MobileHotSeatStore()
+        let started = seats.start(roster: .init(host: "eri", players: ["uva"]))
+        let seat = try #require(started)
+        try files("eri").save(solo, name: "learning")
+        try files(seat.scope).save(shared, name: "learning")
+        #expect(MobileLearningResume.find(owner: "eri", seats: seats, storage: files)?.state == solo)
+        let restored = try #require(MobileLearningResume.find(owner: "eri", seats: seats, storage: files, journeyOnly: false))
+        #expect(restored.seat == seat && restored.state == shared)
+        #expect(restored.state.run?.pool.summary == "Easy to hard")
+        #expect(restored.state.run?.currentIndex == 2)
+        #expect(restored.resumeTitle == "Resume Easy to hard  3/4")
+        seats.endSession()
+        #expect(MobileLearningResume.find(owner: "eri", seats: seats, storage: files, journeyOnly: false)?.seat == nil)
+        #expect(MobileLearningResume.find(owner: "uva", seats: seats, storage: files, journeyOnly: false)?.seat == seat)
     }
     @Test func pythonStagingUsesMacSourceRevision() throws {
         let temporary = try AppStorage.temporary(named: "revision")

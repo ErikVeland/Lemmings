@@ -37,6 +37,35 @@ import NxlvKit
         #expect(other.store.favourites.isEmpty && other.store.playlists.isEmpty)
     }
 
+    @Test func soloAndSharedQueuesRecallTheirOwnOrderPositionAndSeed() throws {
+        let storage = try AppStorage.temporary(named: "mobile-session-recall")
+        defer { storage.removeTemporaryFiles() }
+        let mobile = MobileStorage(directory: storage.applicationSupport.appendingPathComponent("Mobile/eri"))
+        let bridge = try MobileCollectionsBridge(profileID: "eri", appStorage: storage, mobileStorage: mobile)
+        let entries = (0..<4).map { MobileFavourites.Entry(pack: "release/lemmings", level: String($0), title: "Level \($0)") }
+        var solo = MobilePlaylistStore()
+        let created = solo.create(name: "My levels", entries: entries)
+        let id = try #require(created)
+        _ = solo.startRun(id, shuffle: true, seed: 1997); solo.advance(to: 2)
+        try bridge.save(favourites: .init(), recents: .init(), playlists: solo)
+        var shared = bridge.playlists(hotSeatID: "eri-vs-uva")
+        #expect(shared.run == nil)
+        _ = shared.startRun(id, shuffle: true, seed: 2026); shared.advance(to: 1)
+        try bridge.save(favourites: bridge.favourites, recents: bridge.recents, playlists: shared, hotSeatID: "eri-vs-uva")
+        let reopened = try MobileCollectionsBridge(profileID: "eri", appStorage: storage, mobileStorage: mobile)
+        #expect(reopened.playlists(hotSeatID: nil).run == solo.run)
+        #expect(reopened.playlists(hotSeatID: "eri-vs-uva").run == shared.run)
+        #expect(reopened.playlists(hotSeatID: "other").run == nil)
+        try reopened.save(favourites: reopened.favourites, recents: reopened.recents,
+            playlists: reopened.playlists(hotSeatID: nil))
+        #expect(reopened.playlists(hotSeatID: "eri-vs-uva").run == shared.run)
+        #expect(reopened.store.savedRuns.count == 1)
+        var finished = reopened.playlists(hotSeatID: "eri-vs-uva"); finished.endRun()
+        try reopened.save(favourites: reopened.favourites, recents: reopened.recents, playlists: finished, hotSeatID: "eri-vs-uva")
+        #expect(reopened.playlists(hotSeatID: nil).run == solo.run)
+        #expect(reopened.playlists(hotSeatID: "eri-vs-uva").run == nil)
+    }
+
     @Test func oldProfileDocumentKeepsItsIDAndDefaultPortrait() throws {
         let data = Data(#"{"players":[{"id":"default","name":"Player 1"},{"id":"same-initials","name":"Player 1"}],"activeID":"same-initials"}"#.utf8)
         let profiles = try JSONDecoder().decode(MobileProfiles.self, from: data)

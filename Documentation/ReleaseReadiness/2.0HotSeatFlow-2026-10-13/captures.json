@@ -1,0 +1,1712 @@
+[
+  {
+    "file" : "iphone-narrow-solo-pause.png",
+    "heading" : [
+      34,
+      32,
+      252,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      252,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 1,
+    "title" : "Paused"
+  },
+  {
+    "file" : "iphone-narrow-ready-host.png",
+    "heading" : [
+      34,
+      32,
+      252,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      252,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 1,
+    "title" : "LEM"
+  },
+  {
+    "file" : "iphone-narrow-ready-guest.png",
+    "heading" : [
+      34,
+      32,
+      252,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      252,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 1,
+    "title" : "AB"
+  },
+  {
+    "file" : "iphone-narrow-restored-ready.png",
+    "heading" : [
+      34,
+      32,
+      252,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      252,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 1,
+    "title" : "AB"
+  },
+  {
+    "file" : "iphone-narrow-paused-guest.png",
+    "heading" : [
+      34,
+      32,
+      252,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      252,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 2,
+    "title" : "Paused: AB"
+  },
+  {
+    "file" : "iphone-narrow-paused-host.png",
+    "heading" : [
+      34,
+      32,
+      252,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      252,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 2,
+    "title" : "Paused: LEM"
+  },
+  {
+    "file" : "iphone-narrow-loss.png",
+    "heading" : [
+      34,
+      32,
+      252,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      252,
+      28
+    ],
+    "subtitle" : "Played: AB  Fun 1  Just Dig!",
+    "targets" : 3,
+    "title" : "Try again"
+  },
+  {
+    "file" : "iphone-narrow-win-every-level.png",
+    "heading" : [
+      34,
+      32,
+      252,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      252,
+      28
+    ],
+    "subtitle" : "Played: AB  Fun 1  Just Dig!",
+    "targets" : 4,
+    "title" : "Level complete"
+  },
+  {
+    "file" : "iphone-narrow-hints.png",
+    "heading" : [
+      34,
+      32,
+      252,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      252,
+      28
+    ],
+    "subtitle" : "Turn: AB",
+    "targets" : 1,
+    "title" : "Hints"
+  },
+  {
+    "file" : "iphone-narrow-settings.png",
+    "heading" : [
+      34,
+      32,
+      252,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      252,
+      28
+    ],
+    "subtitle" : "Turn: AB",
+    "targets" : 2,
+    "title" : "Settings"
+  },
+  {
+    "file" : "iphone-narrow-save-error.png",
+    "heading" : [
+      34,
+      32,
+      252,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      252,
+      28
+    ],
+    "subtitle" : "Turn: AB",
+    "targets" : 1,
+    "title" : "Hot Seat was not saved"
+  },
+  {
+    "file" : "iphone-narrow-saved-shared-journey.png",
+    "heading" : [
+      76,
+      30,
+      168,
+      82
+    ],
+    "identity" : [
+      26,
+      118,
+      268,
+      32
+    ],
+    "subtitle" : "ERI vs UVA  Next: UVA",
+    "targets" : 9,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "iphone-narrow-saved-solo-journey.png",
+    "heading" : [
+      76,
+      30,
+      168,
+      82
+    ],
+    "identity" : [
+      26,
+      118,
+      268,
+      0
+    ],
+    "subtitle" : "",
+    "targets" : 9,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "iphone-narrow-saved-progression.png",
+    "heading" : [
+      76,
+      30,
+      168,
+      82
+    ],
+    "identity" : [
+      26,
+      118,
+      268,
+      32
+    ],
+    "subtitle" : "ERI vs UVA  Next: UVA",
+    "targets" : 9,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "iphone-narrow-saved-playlist.png",
+    "heading" : [
+      76,
+      30,
+      168,
+      82
+    ],
+    "identity" : [
+      26,
+      118,
+      268,
+      32
+    ],
+    "subtitle" : "ERI vs UVA  Next: UVA",
+    "targets" : 10,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "iphone-narrow-next-library.png",
+    "heading" : [
+      76,
+      31.5,
+      168,
+      82
+    ],
+    "identity" : [
+      26,
+      119.5,
+      268,
+      32
+    ],
+    "subtitle" : "LEM vs AB  Next: LEM",
+    "targets" : 8,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "iphone-narrow-level-selection.png",
+    "heading" : [
+      34,
+      32,
+      252,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      252,
+      28
+    ],
+    "subtitle" : "Next: LEM  Fun 1\/30",
+    "targets" : 2,
+    "title" : "Just Dig!"
+  },
+  {
+    "file" : "iphone-narrow-profiles.png",
+    "heading" : [
+      34,
+      32,
+      252,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      252,
+      28
+    ],
+    "subtitle" : "Next: LEM",
+    "targets" : 3,
+    "title" : "Players"
+  },
+  {
+    "file" : "iphone-narrow-hot-seat-setup.png",
+    "heading" : [
+      34,
+      32,
+      252,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      252,
+      28
+    ],
+    "subtitle" : "Next: LEM",
+    "targets" : 3,
+    "title" : "Hot Seat"
+  },
+  {
+    "file" : "iphone-portrait-solo-pause.png",
+    "heading" : [
+      34,
+      32,
+      322,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      322,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 1,
+    "title" : "Paused"
+  },
+  {
+    "file" : "iphone-portrait-ready-host.png",
+    "heading" : [
+      34,
+      32,
+      322,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      322,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 1,
+    "title" : "LEM"
+  },
+  {
+    "file" : "iphone-portrait-ready-guest.png",
+    "heading" : [
+      34,
+      32,
+      322,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      322,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 1,
+    "title" : "AB"
+  },
+  {
+    "file" : "iphone-portrait-restored-ready.png",
+    "heading" : [
+      34,
+      32,
+      322,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      322,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 1,
+    "title" : "AB"
+  },
+  {
+    "file" : "iphone-portrait-paused-guest.png",
+    "heading" : [
+      34,
+      32,
+      322,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      322,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 2,
+    "title" : "Paused: AB"
+  },
+  {
+    "file" : "iphone-portrait-paused-host.png",
+    "heading" : [
+      34,
+      32,
+      322,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      322,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 2,
+    "title" : "Paused: LEM"
+  },
+  {
+    "file" : "iphone-portrait-loss.png",
+    "heading" : [
+      34,
+      32,
+      322,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      322,
+      28
+    ],
+    "subtitle" : "Played: AB  Fun 1  Just Dig!",
+    "targets" : 3,
+    "title" : "Try again"
+  },
+  {
+    "file" : "iphone-portrait-win-every-level.png",
+    "heading" : [
+      34,
+      32,
+      322,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      322,
+      28
+    ],
+    "subtitle" : "Played: AB  Fun 1  Just Dig!",
+    "targets" : 4,
+    "title" : "Level complete"
+  },
+  {
+    "file" : "iphone-portrait-hints.png",
+    "heading" : [
+      34,
+      32,
+      322,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      322,
+      28
+    ],
+    "subtitle" : "Turn: AB",
+    "targets" : 1,
+    "title" : "Hints"
+  },
+  {
+    "file" : "iphone-portrait-settings.png",
+    "heading" : [
+      34,
+      32,
+      322,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      322,
+      28
+    ],
+    "subtitle" : "Turn: AB",
+    "targets" : 2,
+    "title" : "Settings"
+  },
+  {
+    "file" : "iphone-portrait-save-error.png",
+    "heading" : [
+      34,
+      32,
+      322,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      322,
+      28
+    ],
+    "subtitle" : "Turn: AB",
+    "targets" : 1,
+    "title" : "Hot Seat was not saved"
+  },
+  {
+    "file" : "iphone-portrait-saved-shared-journey.png",
+    "heading" : [
+      76,
+      140.5,
+      238,
+      82
+    ],
+    "identity" : [
+      26,
+      228.5,
+      338,
+      32
+    ],
+    "subtitle" : "ERI vs UVA  Next: UVA",
+    "targets" : 9,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "iphone-portrait-saved-solo-journey.png",
+    "heading" : [
+      76,
+      156.5,
+      238,
+      82
+    ],
+    "identity" : [
+      26,
+      244.5,
+      338,
+      0
+    ],
+    "subtitle" : "",
+    "targets" : 9,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "iphone-portrait-saved-progression.png",
+    "heading" : [
+      76,
+      140.5,
+      238,
+      82
+    ],
+    "identity" : [
+      26,
+      228.5,
+      338,
+      32
+    ],
+    "subtitle" : "ERI vs UVA  Next: UVA",
+    "targets" : 9,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "iphone-portrait-saved-playlist.png",
+    "heading" : [
+      76,
+      116,
+      238,
+      82
+    ],
+    "identity" : [
+      26,
+      204,
+      338,
+      32
+    ],
+    "subtitle" : "ERI vs UVA  Next: UVA",
+    "targets" : 10,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "iphone-portrait-next-library.png",
+    "heading" : [
+      76,
+      165,
+      238,
+      82
+    ],
+    "identity" : [
+      26,
+      253,
+      338,
+      32
+    ],
+    "subtitle" : "LEM vs AB  Next: LEM",
+    "targets" : 8,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "iphone-portrait-level-selection.png",
+    "heading" : [
+      34,
+      32,
+      322,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      322,
+      28
+    ],
+    "subtitle" : "Next: LEM  Fun 1\/30",
+    "targets" : 2,
+    "title" : "Just Dig!"
+  },
+  {
+    "file" : "iphone-portrait-profiles.png",
+    "heading" : [
+      34,
+      32,
+      322,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      322,
+      28
+    ],
+    "subtitle" : "Next: LEM",
+    "targets" : 3,
+    "title" : "Players"
+  },
+  {
+    "file" : "iphone-portrait-hot-seat-setup.png",
+    "heading" : [
+      34,
+      32,
+      322,
+      64
+    ],
+    "identity" : [
+      34,
+      104,
+      322,
+      28
+    ],
+    "subtitle" : "Next: LEM",
+    "targets" : 3,
+    "title" : "Hot Seat"
+  },
+  {
+    "file" : "iphone-landscape-solo-pause.png",
+    "heading" : [
+      52,
+      32,
+      652,
+      64
+    ],
+    "identity" : [
+      52,
+      104,
+      652,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 1,
+    "title" : "Paused"
+  },
+  {
+    "file" : "iphone-landscape-ready-host.png",
+    "heading" : [
+      52,
+      28,
+      652,
+      40
+    ],
+    "identity" : [
+      52,
+      70,
+      652,
+      24
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 1,
+    "title" : "LEM"
+  },
+  {
+    "file" : "iphone-landscape-ready-guest.png",
+    "heading" : [
+      52,
+      28,
+      652,
+      40
+    ],
+    "identity" : [
+      52,
+      70,
+      652,
+      24
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 1,
+    "title" : "AB"
+  },
+  {
+    "file" : "iphone-landscape-restored-ready.png",
+    "heading" : [
+      52,
+      28,
+      652,
+      40
+    ],
+    "identity" : [
+      52,
+      70,
+      652,
+      24
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 1,
+    "title" : "AB"
+  },
+  {
+    "file" : "iphone-landscape-paused-guest.png",
+    "heading" : [
+      52,
+      32,
+      652,
+      64
+    ],
+    "identity" : [
+      52,
+      104,
+      652,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 2,
+    "title" : "Paused: AB"
+  },
+  {
+    "file" : "iphone-landscape-paused-host.png",
+    "heading" : [
+      52,
+      32,
+      652,
+      64
+    ],
+    "identity" : [
+      52,
+      104,
+      652,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 2,
+    "title" : "Paused: LEM"
+  },
+  {
+    "file" : "iphone-landscape-loss.png",
+    "heading" : [
+      52,
+      28,
+      652,
+      40
+    ],
+    "identity" : [
+      52,
+      70,
+      652,
+      24
+    ],
+    "subtitle" : "Played: AB  Fun 1  Just Dig!",
+    "targets" : 3,
+    "title" : "Try again"
+  },
+  {
+    "file" : "iphone-landscape-win-every-level.png",
+    "heading" : [
+      52,
+      28,
+      652,
+      40
+    ],
+    "identity" : [
+      52,
+      70,
+      652,
+      24
+    ],
+    "subtitle" : "Played: AB  Fun 1  Just Dig!",
+    "targets" : 4,
+    "title" : "Level complete"
+  },
+  {
+    "file" : "iphone-landscape-hints.png",
+    "heading" : [
+      52,
+      32,
+      652,
+      64
+    ],
+    "identity" : [
+      52,
+      104,
+      652,
+      28
+    ],
+    "subtitle" : "Turn: AB",
+    "targets" : 1,
+    "title" : "Hints"
+  },
+  {
+    "file" : "iphone-landscape-settings.png",
+    "heading" : [
+      52,
+      32,
+      652,
+      64
+    ],
+    "identity" : [
+      52,
+      104,
+      652,
+      28
+    ],
+    "subtitle" : "Turn: AB",
+    "targets" : 2,
+    "title" : "Settings"
+  },
+  {
+    "file" : "iphone-landscape-save-error.png",
+    "heading" : [
+      52,
+      32,
+      652,
+      64
+    ],
+    "identity" : [
+      52,
+      104,
+      652,
+      28
+    ],
+    "subtitle" : "Turn: AB",
+    "targets" : 1,
+    "title" : "Hot Seat was not saved"
+  },
+  {
+    "file" : "iphone-landscape-saved-shared-journey.png",
+    "heading" : [
+      76,
+      30,
+      604,
+      92
+    ],
+    "identity" : [
+      32,
+      128,
+      692,
+      32
+    ],
+    "subtitle" : "ERI vs UVA  Next: UVA",
+    "targets" : 9,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "iphone-landscape-saved-solo-journey.png",
+    "heading" : [
+      76,
+      30,
+      604,
+      92
+    ],
+    "identity" : [
+      32,
+      128,
+      692,
+      0
+    ],
+    "subtitle" : "",
+    "targets" : 9,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "iphone-landscape-saved-progression.png",
+    "heading" : [
+      76,
+      30,
+      604,
+      92
+    ],
+    "identity" : [
+      32,
+      128,
+      692,
+      32
+    ],
+    "subtitle" : "ERI vs UVA  Next: UVA",
+    "targets" : 9,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "iphone-landscape-saved-playlist.png",
+    "heading" : [
+      76,
+      30,
+      604,
+      92
+    ],
+    "identity" : [
+      32,
+      128,
+      692,
+      32
+    ],
+    "subtitle" : "ERI vs UVA  Next: UVA",
+    "targets" : 10,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "iphone-landscape-next-library.png",
+    "heading" : [
+      76,
+      30,
+      604,
+      92
+    ],
+    "identity" : [
+      32,
+      128,
+      692,
+      32
+    ],
+    "subtitle" : "LEM vs AB  Next: LEM",
+    "targets" : 8,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "iphone-landscape-level-selection.png",
+    "heading" : [
+      52,
+      28,
+      652,
+      40
+    ],
+    "identity" : [
+      52,
+      70,
+      652,
+      24
+    ],
+    "subtitle" : "Next: LEM  Fun 1\/30",
+    "targets" : 2,
+    "title" : "Just Dig!"
+  },
+  {
+    "file" : "iphone-landscape-profiles.png",
+    "heading" : [
+      52,
+      32,
+      652,
+      64
+    ],
+    "identity" : [
+      52,
+      104,
+      652,
+      28
+    ],
+    "subtitle" : "Next: LEM",
+    "targets" : 3,
+    "title" : "Players"
+  },
+  {
+    "file" : "iphone-landscape-hot-seat-setup.png",
+    "heading" : [
+      52,
+      32,
+      652,
+      64
+    ],
+    "identity" : [
+      52,
+      104,
+      652,
+      28
+    ],
+    "subtitle" : "Next: LEM",
+    "targets" : 3,
+    "title" : "Hot Seat"
+  },
+  {
+    "file" : "ipad-portrait-solo-pause.png",
+    "heading" : [
+      52,
+      32,
+      730,
+      64
+    ],
+    "identity" : [
+      52,
+      104,
+      730,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 1,
+    "title" : "Paused"
+  },
+  {
+    "file" : "ipad-portrait-ready-host.png",
+    "heading" : [
+      52,
+      32,
+      730,
+      64
+    ],
+    "identity" : [
+      52,
+      104,
+      730,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 1,
+    "title" : "LEM"
+  },
+  {
+    "file" : "ipad-portrait-ready-guest.png",
+    "heading" : [
+      52,
+      32,
+      730,
+      64
+    ],
+    "identity" : [
+      52,
+      104,
+      730,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 1,
+    "title" : "AB"
+  },
+  {
+    "file" : "ipad-portrait-restored-ready.png",
+    "heading" : [
+      52,
+      32,
+      730,
+      64
+    ],
+    "identity" : [
+      52,
+      104,
+      730,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 1,
+    "title" : "AB"
+  },
+  {
+    "file" : "ipad-portrait-paused-guest.png",
+    "heading" : [
+      52,
+      32,
+      730,
+      64
+    ],
+    "identity" : [
+      52,
+      104,
+      730,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 2,
+    "title" : "Paused: AB"
+  },
+  {
+    "file" : "ipad-portrait-paused-host.png",
+    "heading" : [
+      52,
+      32,
+      730,
+      64
+    ],
+    "identity" : [
+      52,
+      104,
+      730,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 2,
+    "title" : "Paused: LEM"
+  },
+  {
+    "file" : "ipad-portrait-loss.png",
+    "heading" : [
+      52,
+      32,
+      730,
+      64
+    ],
+    "identity" : [
+      52,
+      104,
+      730,
+      28
+    ],
+    "subtitle" : "Played: AB  Fun 1  Just Dig!",
+    "targets" : 3,
+    "title" : "Try again"
+  },
+  {
+    "file" : "ipad-portrait-win-every-level.png",
+    "heading" : [
+      52,
+      32,
+      730,
+      64
+    ],
+    "identity" : [
+      52,
+      104,
+      730,
+      28
+    ],
+    "subtitle" : "Played: AB  Fun 1  Just Dig!",
+    "targets" : 4,
+    "title" : "Level complete"
+  },
+  {
+    "file" : "ipad-portrait-hints.png",
+    "heading" : [
+      52,
+      32,
+      730,
+      64
+    ],
+    "identity" : [
+      52,
+      104,
+      730,
+      28
+    ],
+    "subtitle" : "Turn: AB",
+    "targets" : 1,
+    "title" : "Hints"
+  },
+  {
+    "file" : "ipad-portrait-settings.png",
+    "heading" : [
+      52,
+      32,
+      730,
+      64
+    ],
+    "identity" : [
+      52,
+      104,
+      730,
+      28
+    ],
+    "subtitle" : "Turn: AB",
+    "targets" : 2,
+    "title" : "Settings"
+  },
+  {
+    "file" : "ipad-portrait-save-error.png",
+    "heading" : [
+      52,
+      32,
+      730,
+      64
+    ],
+    "identity" : [
+      52,
+      104,
+      730,
+      28
+    ],
+    "subtitle" : "Turn: AB",
+    "targets" : 1,
+    "title" : "Hot Seat was not saved"
+  },
+  {
+    "file" : "ipad-portrait-saved-shared-journey.png",
+    "heading" : [
+      76,
+      342,
+      682,
+      92
+    ],
+    "identity" : [
+      32,
+      440,
+      770,
+      32
+    ],
+    "subtitle" : "ERI vs UVA  Next: UVA",
+    "targets" : 9,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "ipad-portrait-saved-solo-journey.png",
+    "heading" : [
+      76,
+      358,
+      682,
+      92
+    ],
+    "identity" : [
+      32,
+      456,
+      770,
+      0
+    ],
+    "subtitle" : "",
+    "targets" : 9,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "ipad-portrait-saved-progression.png",
+    "heading" : [
+      76,
+      342,
+      682,
+      92
+    ],
+    "identity" : [
+      32,
+      440,
+      770,
+      32
+    ],
+    "subtitle" : "ERI vs UVA  Next: UVA",
+    "targets" : 9,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "ipad-portrait-saved-playlist.png",
+    "heading" : [
+      76,
+      317.5,
+      682,
+      92
+    ],
+    "identity" : [
+      32,
+      415.5,
+      770,
+      32
+    ],
+    "subtitle" : "ERI vs UVA  Next: UVA",
+    "targets" : 10,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "ipad-portrait-next-library.png",
+    "heading" : [
+      76,
+      366.5,
+      682,
+      92
+    ],
+    "identity" : [
+      32,
+      464.5,
+      770,
+      32
+    ],
+    "subtitle" : "LEM vs AB  Next: LEM",
+    "targets" : 8,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "ipad-portrait-level-selection.png",
+    "heading" : [
+      52,
+      32,
+      730,
+      64
+    ],
+    "identity" : [
+      52,
+      104,
+      730,
+      28
+    ],
+    "subtitle" : "Next: LEM  Fun 1\/30",
+    "targets" : 2,
+    "title" : "Just Dig!"
+  },
+  {
+    "file" : "ipad-portrait-profiles.png",
+    "heading" : [
+      52,
+      32,
+      730,
+      64
+    ],
+    "identity" : [
+      52,
+      104,
+      730,
+      28
+    ],
+    "subtitle" : "Next: LEM",
+    "targets" : 3,
+    "title" : "Players"
+  },
+  {
+    "file" : "ipad-portrait-hot-seat-setup.png",
+    "heading" : [
+      52,
+      32,
+      730,
+      64
+    ],
+    "identity" : [
+      52,
+      104,
+      730,
+      28
+    ],
+    "subtitle" : "Next: LEM",
+    "targets" : 3,
+    "title" : "Hot Seat"
+  },
+  {
+    "file" : "ipad-landscape-solo-pause.png",
+    "heading" : [
+      60,
+      32,
+      992,
+      64
+    ],
+    "identity" : [
+      60,
+      104,
+      992,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 1,
+    "title" : "Paused"
+  },
+  {
+    "file" : "ipad-landscape-ready-host.png",
+    "heading" : [
+      60,
+      32,
+      992,
+      64
+    ],
+    "identity" : [
+      60,
+      104,
+      992,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 1,
+    "title" : "LEM"
+  },
+  {
+    "file" : "ipad-landscape-ready-guest.png",
+    "heading" : [
+      60,
+      32,
+      992,
+      64
+    ],
+    "identity" : [
+      60,
+      104,
+      992,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 1,
+    "title" : "AB"
+  },
+  {
+    "file" : "ipad-landscape-restored-ready.png",
+    "heading" : [
+      60,
+      32,
+      992,
+      64
+    ],
+    "identity" : [
+      60,
+      104,
+      992,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 1,
+    "title" : "AB"
+  },
+  {
+    "file" : "ipad-landscape-paused-guest.png",
+    "heading" : [
+      60,
+      32,
+      992,
+      64
+    ],
+    "identity" : [
+      60,
+      104,
+      992,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 2,
+    "title" : "Paused: AB"
+  },
+  {
+    "file" : "ipad-landscape-paused-host.png",
+    "heading" : [
+      60,
+      32,
+      992,
+      64
+    ],
+    "identity" : [
+      60,
+      104,
+      992,
+      28
+    ],
+    "subtitle" : "Fun 1  Just Dig!",
+    "targets" : 2,
+    "title" : "Paused: LEM"
+  },
+  {
+    "file" : "ipad-landscape-loss.png",
+    "heading" : [
+      60,
+      32,
+      992,
+      64
+    ],
+    "identity" : [
+      60,
+      104,
+      992,
+      28
+    ],
+    "subtitle" : "Played: AB  Fun 1  Just Dig!",
+    "targets" : 3,
+    "title" : "Try again"
+  },
+  {
+    "file" : "ipad-landscape-win-every-level.png",
+    "heading" : [
+      60,
+      32,
+      992,
+      64
+    ],
+    "identity" : [
+      60,
+      104,
+      992,
+      28
+    ],
+    "subtitle" : "Played: AB  Fun 1  Just Dig!",
+    "targets" : 4,
+    "title" : "Level complete"
+  },
+  {
+    "file" : "ipad-landscape-hints.png",
+    "heading" : [
+      60,
+      32,
+      992,
+      64
+    ],
+    "identity" : [
+      60,
+      104,
+      992,
+      28
+    ],
+    "subtitle" : "Turn: AB",
+    "targets" : 1,
+    "title" : "Hints"
+  },
+  {
+    "file" : "ipad-landscape-settings.png",
+    "heading" : [
+      60,
+      32,
+      992,
+      64
+    ],
+    "identity" : [
+      60,
+      104,
+      992,
+      28
+    ],
+    "subtitle" : "Turn: AB",
+    "targets" : 2,
+    "title" : "Settings"
+  },
+  {
+    "file" : "ipad-landscape-save-error.png",
+    "heading" : [
+      60,
+      32,
+      992,
+      64
+    ],
+    "identity" : [
+      60,
+      104,
+      992,
+      28
+    ],
+    "subtitle" : "Turn: AB",
+    "targets" : 1,
+    "title" : "Hot Seat was not saved"
+  },
+  {
+    "file" : "ipad-landscape-saved-shared-journey.png",
+    "heading" : [
+      168,
+      203,
+      776,
+      92
+    ],
+    "identity" : [
+      124,
+      301,
+      864,
+      32
+    ],
+    "subtitle" : "ERI vs UVA  Next: UVA",
+    "targets" : 9,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "ipad-landscape-saved-solo-journey.png",
+    "heading" : [
+      168,
+      219,
+      776,
+      92
+    ],
+    "identity" : [
+      124,
+      317,
+      864,
+      0
+    ],
+    "subtitle" : "",
+    "targets" : 9,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "ipad-landscape-saved-progression.png",
+    "heading" : [
+      168,
+      203,
+      776,
+      92
+    ],
+    "identity" : [
+      124,
+      301,
+      864,
+      32
+    ],
+    "subtitle" : "ERI vs UVA  Next: UVA",
+    "targets" : 9,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "ipad-landscape-saved-playlist.png",
+    "heading" : [
+      168,
+      178.5,
+      776,
+      92
+    ],
+    "identity" : [
+      124,
+      276.5,
+      864,
+      32
+    ],
+    "subtitle" : "ERI vs UVA  Next: UVA",
+    "targets" : 10,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "ipad-landscape-next-library.png",
+    "heading" : [
+      168,
+      227.5,
+      776,
+      92
+    ],
+    "identity" : [
+      124,
+      325.5,
+      864,
+      32
+    ],
+    "subtitle" : "LEM vs AB  Next: LEM",
+    "targets" : 8,
+    "title" : "Lemmings"
+  },
+  {
+    "file" : "ipad-landscape-level-selection.png",
+    "heading" : [
+      60,
+      32,
+      992,
+      64
+    ],
+    "identity" : [
+      60,
+      104,
+      992,
+      28
+    ],
+    "subtitle" : "Next: LEM  Fun 1\/30",
+    "targets" : 2,
+    "title" : "Just Dig!"
+  },
+  {
+    "file" : "ipad-landscape-profiles.png",
+    "heading" : [
+      60,
+      32,
+      992,
+      64
+    ],
+    "identity" : [
+      60,
+      104,
+      992,
+      28
+    ],
+    "subtitle" : "Next: LEM",
+    "targets" : 3,
+    "title" : "Players"
+  },
+  {
+    "file" : "ipad-landscape-hot-seat-setup.png",
+    "heading" : [
+      60,
+      32,
+      992,
+      64
+    ],
+    "identity" : [
+      60,
+      104,
+      992,
+      28
+    ],
+    "subtitle" : "Next: LEM",
+    "targets" : 3,
+    "title" : "Hot Seat"
+  }
+]

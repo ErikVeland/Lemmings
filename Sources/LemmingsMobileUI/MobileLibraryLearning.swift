@@ -36,6 +36,10 @@ extension MobileLibraryViewController {
         MobileLearningResume.find(owner: profiles.activeID, seats: hotSeats, storage: MobileStorage.standard)
     }
 
+    var resumableLearningRun: MobileLearningResume? {
+        MobileLearningResume.find(owner: profiles.activeID, seats: hotSeats, storage: MobileStorage.standard, journeyOnly: false)
+    }
+
     func learningPage(subtitle: String) -> GameFrontEnd.Page {
         guard let journey = bundledJourney else { return .init(title: "Journey", details: ["Journey is unavailable"], footer: [.init("home", "Back")]) }
         let saved = learning
@@ -65,6 +69,7 @@ extension MobileLibraryViewController {
         switch id {
         case "journey": navigate(.journey)
         case "learningResume": resumeLearningJourney()
+        case "learningRunResume": resumeLearningJourney(journeyOnly: false)
         case "learningStart", "learningRevisit":
             if id == "learningStart", resumableLearningJourney != nil { resumeLearningJourney(); return true }
             guard let journey = bundledJourney else { return true }
@@ -84,13 +89,13 @@ extension MobileLibraryViewController {
         }
         return true
     }
-    func resumeLearningJourney() {
-        guard let saved = resumableLearningJourney, saved.owner == profiles.activeID else { return }
+    func resumeLearningJourney(journeyOnly: Bool = true) {
+        guard let saved = journeyOnly ? resumableLearningJourney : resumableLearningRun, saved.owner == profiles.activeID else { return }
         if let seat = saved.seat {
             guard seat.players.allSatisfy({ id in profiles.players.contains { $0.id == id } }) else {
                 notice = "A saved player is unavailable"; rebuild(); return
             }
-            if hotSeat?.id != seat.id { guard hotSeats.resume(id: seat.id) != nil else { return } }
+            guard resumeSharedSeat(seat.id) else { rebuild(); return }
         } else { hotSeats.endSession() }
         guard saveHotSeats() else { rebuild(); return }
         hotSeatRoster = nil; activeRun = nil
@@ -102,8 +107,9 @@ extension MobileLibraryViewController {
             do {
                 let checkpoint = try await checkpointStore.load(owner: owner, scope: scope)
                 guard !Task.isCancelled, profiles.activeID == owner, hotSeat?.scope == scope else { return }
+                let matching = checkpoint.flatMap { checkpointMatchesSession($0) ? $0 : nil }
                 openLearningRun()
-                if let run = learning.run { startLevel(run.currentIndex, checkpoint: checkpoint, restoringMatchingCheckpoint: true) }
+                if let run = learning.run { startLevel(run.currentIndex, checkpoint: matching, restoringMatchingCheckpoint: true) }
             } catch { notice = error.localizedDescription; rebuild() }
         }
     }

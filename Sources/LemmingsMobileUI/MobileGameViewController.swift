@@ -730,7 +730,7 @@ struct MobileGameTurn {
         if !snapshot.didWin, onSkipLevel != nil {
             actions.append(("SKIP LEVEL", { [weak self] in
                 guard let self, !self.transitionInFlight, self.onSkipLevel?() == true else { return }
-                self.finish(.next)
+                self.finish(.next, handingTo: self.turn?.choices(false).first?.choice.player)
             }))
         }
         if let data = try? session.replayDocument() {
@@ -1093,6 +1093,7 @@ struct MobileGameTurn {
         let snapshot = session.snapshot
         let ready = playState.phase == .ready
         let completed = results
+        overlayCanvas.playerRole = completed ? .result : ready ? .next : .current
         let details: [String]
         if ready {
             details = ["\(snapshot.total) Lemmings   Save \(snapshot.required)",

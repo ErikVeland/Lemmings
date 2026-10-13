@@ -485,3 +485,21 @@ tests, and the unsigned arm64 iOS compilation pass. Rendered status states
 were inspected. See [validation evidence](ReleaseReadiness/2.0HotSeatHUD-2026-10-13/README.md).
 Physical UIKit input and VoiceOver still need device validation. L2 and L3
 remain unavailable in the iOS library.
+
+
+## 13 October Hot Seat flow and saved-run recall
+
+Pause names the attempt owner. Hints and settings keep that identity visible,
+and results name both the player who played and the recipient of each action.
+Ready remains paused. Home shows the session roster and waiting player above
+the Resume controls; gameplay keeps the name-only HUD row.
+
+Home and Resume use the same saved journey or progression selection. Saved
+Hot Seats reload their host's collections. Solo and shared playlists retain
+separate queues, positions and shuffle seeds, and Resume restores a matching
+checkpoint and its owner. Failed turn saves block handover. Skip passes the turn.
+
+The 95 windowless render/target checks, 37 muted background tests and unsigned
+arm64 iOS build pass. See [flow and recall evidence](ReleaseReadiness/2.0HotSeatFlow-2026-10-13/README.md).
+Physical UIKit/VoiceOver checks remain outstanding. L2 and L3 remain unavailable
+in the iOS library; their existing Mac handovers are unchanged.
