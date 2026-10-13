@@ -1,0 +1,29 @@
+{
+  "sourceCommit": "3ba689eaf21979833fcfa97d2beac1babfaabc36",
+  "assets": [
+    {
+      "name": "UltimateLemmings-1.9.6-build81.zip",
+      "size": 2046920368,
+      "sha256": "81acbfa3d44d4aa4124513474a59aee768fa212c2172a258ff92990d2c8c6d63",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v1.9.6/UltimateLemmings-1.9.6-build81.zip",
+      "remoteDigestVerified": true,
+      "zipResponseVerified": true
+    },
+    {
+      "name": "UltimateLemmings-1.9.6-build81-slim.zip",
+      "size": 262864075,
+      "sha256": "e9cd46f48c1dda55b2678c1c2710efa4672f07d9221aece8fb8cb9dbd42b4416",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v1.9.6/UltimateLemmings-1.9.6-build81-slim.zip",
+      "remoteDigestVerified": true,
+      "zipResponseVerified": true
+    }
+  ],
+  "deltaRemoteDigestVerified": true,
+  "releaseNotesVerified": true,
+  "rawFeedVerified": true,
+  "rawFeedURL": "https://raw.githubusercontent.com/ErikVeland/Lemmings/main/appcast.xml",
+  "releaseURL": "https://github.com/ErikVeland/Lemmings/releases/tag/v1.9.6",
+  "publishedAt": "2026-10-13T16:52:21Z",
+  "remoteTagVerified": true,
+  "mainFeedVerified": true
+}

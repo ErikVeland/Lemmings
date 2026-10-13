@@ -1,0 +1,213 @@
+﻿2026-10-13T15:35:30.2490620Z Current runner version: '2.337.0'
+2026-10-13T15:35:30.2506730Z ##[group]Runner Image Provisioner
+2026-10-13T15:35:30.2507260Z Hosted Compute Agent
+2026-10-13T15:35:30.2507630Z Version: 20260828.587
+2026-10-13T15:35:30.2508030Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+2026-10-13T15:35:30.2508500Z Build Date: 2026-08-28T16:44:25Z
+2026-10-13T15:35:30.2508930Z Worker ID: {ff3c9d5b-e52a-41e1-b252-c6586f33e822}
+2026-10-13T15:35:30.2509430Z Azure Region: westus
+2026-10-13T15:35:30.2509830Z ##[endgroup]
+2026-10-13T15:35:30.2510720Z ##[group]Operating System
+2026-10-13T15:35:30.2511110Z macOS
+2026-10-13T15:35:30.2511430Z 15.7.9
+2026-10-13T15:35:30.2511750Z 24G830
+2026-10-13T15:35:30.2512070Z ##[endgroup]
+2026-10-13T15:35:30.2512450Z ##[group]Runner Image
+2026-10-13T15:35:30.2512820Z Image: macos-15-arm64
+2026-10-13T15:35:30.2513250Z Version: 20260907.0337.1
+2026-10-13T15:35:30.2514150Z Included Software: https://github.com/actions/runner-images/blob/macos-15-arm64/20260907.0337/images/macos/macos-15-arm64-Readme.md
+2026-10-13T15:35:30.2515200Z Image Release: https://github.com/actions/runner-images/releases/tag/macos-15-arm64%2F20260907.0337
+2026-10-13T15:35:30.2515930Z ##[endgroup]
+2026-10-13T15:35:30.2516730Z ##[group]GITHUB_TOKEN Permissions
+2026-10-13T15:35:30.2517840Z Contents: read
+2026-10-13T15:35:30.2518220Z Metadata: read
+2026-10-13T15:35:30.2518590Z ##[endgroup]
+2026-10-13T15:35:30.2519980Z Secret source: Actions
+2026-10-13T15:35:30.2520610Z Cache mode: write
+2026-10-13T15:35:30.2521150Z Prepare workflow directory
+2026-10-13T15:35:30.2831740Z Prepare all required actions
+2026-10-13T15:35:30.2882750Z Getting action download info
+2026-10-13T15:35:30.4417110Z Download action repository 'actions/checkout@v5' (SHA:fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09)
+2026-10-13T15:35:30.8688260Z Complete job name: Source gate
+2026-10-13T15:35:30.9319230Z ##[group]Run actions/checkout@v5
+2026-10-13T15:35:30.9319830Z with:
+2026-10-13T15:35:30.9320180Z   repository: ErikVeland/Lemmings
+2026-10-13T15:35:30.9322920Z   token: ***
+2026-10-13T15:35:30.9323280Z   ssh-strict: true
+2026-10-13T15:35:30.9323610Z   ssh-user: git
+2026-10-13T15:35:30.9323950Z   persist-credentials: true
+2026-10-13T15:35:30.9324320Z   clean: true
+2026-10-13T15:35:30.9324660Z   sparse-checkout-cone-mode: true
+2026-10-13T15:35:30.9325040Z   fetch-depth: 1
+2026-10-13T15:35:30.9325370Z   fetch-tags: false
+2026-10-13T15:35:30.9325700Z   show-progress: true
+2026-10-13T15:35:30.9326040Z   lfs: false
+2026-10-13T15:35:30.9326360Z   submodules: false
+2026-10-13T15:35:30.9326700Z   set-safe-directory: true
+2026-10-13T15:35:30.9327090Z   allow-unsafe-pr-checkout: false
+2026-10-13T15:35:30.9327620Z env:
+2026-10-13T15:35:30.9327950Z   LEMMINGS_TEST_AUDIO: muted
+2026-10-13T15:35:30.9328330Z   LEMMINGS_TEST_WINDOWS: offscreen
+2026-10-13T15:35:30.9328720Z ##[endgroup]
+2026-10-13T15:35:31.3077180Z Syncing repository: ErikVeland/Lemmings
+2026-10-13T15:35:31.3081360Z ##[group]Getting Git version info
+2026-10-13T15:35:31.3083040Z Working directory is '/Users/runner/work/Lemmings/Lemmings'
+2026-10-13T15:35:31.3084690Z [command]/opt/homebrew/bin/git version
+2026-10-13T15:35:31.3842830Z git version 2.55.0
+2026-10-13T15:35:31.3855600Z ##[endgroup]
+2026-10-13T15:35:31.3866960Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/239ad9db-0a1b-43c8-af69-352f57e87888/.gitconfig'
+2026-10-13T15:35:31.3873540Z Temporarily overriding HOME='/Users/runner/work/_temp/239ad9db-0a1b-43c8-af69-352f57e87888' before making global git config changes
+2026-10-13T15:35:31.3876410Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-13T15:35:31.3878770Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/Lemmings/Lemmings
+2026-10-13T15:35:31.4013040Z Deleting the contents of '/Users/runner/work/Lemmings/Lemmings'
+2026-10-13T15:35:31.4019030Z ##[group]Initializing the repository
+2026-10-13T15:35:31.4021120Z [command]/opt/homebrew/bin/git init /Users/runner/work/Lemmings/Lemmings
+2026-10-13T15:35:31.4270440Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-13T15:35:31.4272180Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-13T15:35:31.4274530Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-13T15:35:31.4286200Z hint: call:
+2026-10-13T15:35:31.4287410Z hint:
+2026-10-13T15:35:31.4289940Z hint: 	git config --global init.defaultBranch <name>
+2026-10-13T15:35:31.4290640Z hint:
+2026-10-13T15:35:31.4291190Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-13T15:35:31.4292050Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-13T15:35:31.4292680Z hint:
+2026-10-13T15:35:31.4293210Z hint: 	git branch -m <name>
+2026-10-13T15:35:31.4293760Z hint:
+2026-10-13T15:35:31.4294450Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-13T15:35:31.4295540Z Initialized empty Git repository in /Users/runner/work/Lemmings/Lemmings/.git/
+2026-10-13T15:35:31.4297330Z [command]/opt/homebrew/bin/git remote add origin https://github.com/ErikVeland/Lemmings
+2026-10-13T15:35:31.4415200Z ##[endgroup]
+2026-10-13T15:35:31.4416010Z ##[group]Disabling automatic garbage collection
+2026-10-13T15:35:31.4416660Z [command]/opt/homebrew/bin/git config --local gc.auto 0
+2026-10-13T15:35:31.4491010Z ##[endgroup]
+2026-10-13T15:35:31.4491970Z ##[group]Setting up auth
+2026-10-13T15:35:31.4496250Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-13T15:35:31.4566010Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-13T15:35:31.5773140Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-13T15:35:31.5859720Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-13T15:35:31.6752260Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-13T15:35:31.6815210Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-13T15:35:31.7876890Z [command]/opt/homebrew/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-13T15:35:31.7949910Z ##[endgroup]
+2026-10-13T15:35:31.7951050Z ##[group]Fetching the repository
+2026-10-13T15:35:31.7956690Z [command]/opt/homebrew/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +3ba689eaf21979833fcfa97d2beac1babfaabc36:refs/remotes/origin/main
+2026-10-13T15:35:36.8286120Z From https://github.com/ErikVeland/Lemmings
+2026-10-13T15:35:36.8305330Z  * [new ref]         3ba689eaf21979833fcfa97d2beac1babfaabc36 -> origin/main
+2026-10-13T15:35:36.8321380Z ##[endgroup]
+2026-10-13T15:35:36.8325710Z ##[group]Determining the checkout info
+2026-10-13T15:35:36.8330120Z ##[endgroup]
+2026-10-13T15:35:36.8338090Z [command]/opt/homebrew/bin/git sparse-checkout disable
+2026-10-13T15:35:36.8493470Z [command]/opt/homebrew/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-13T15:35:36.8638860Z ##[group]Checking out the ref
+2026-10-13T15:35:36.8642060Z [command]/opt/homebrew/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-13T15:35:37.9469160Z Updating files:  82% (4528/5464)
+2026-10-13T15:35:37.9526470Z Updating files:  83% (4536/5464)
+2026-10-13T15:35:37.9573290Z Updating files:  84% (4590/5464)
+2026-10-13T15:35:37.9630890Z Updating files:  85% (4645/5464)
+2026-10-13T15:35:37.9678910Z Updating files:  86% (4700/5464)
+2026-10-13T15:35:37.9747310Z Updating files:  87% (4754/5464)
+2026-10-13T15:35:37.9829440Z Updating files:  88% (4809/5464)
+2026-10-13T15:35:37.9970150Z Updating files:  89% (4863/5464)
+2026-10-13T15:35:37.9971110Z Updating files:  90% (4918/5464)
+2026-10-13T15:35:38.0021190Z Updating files:  91% (4973/5464)
+2026-10-13T15:35:38.0072620Z Updating files:  92% (5027/5464)
+2026-10-13T15:35:38.0144620Z Updating files:  93% (5082/5464)
+2026-10-13T15:35:38.0183070Z Updating files:  94% (5137/5464)
+2026-10-13T15:35:38.0218560Z Updating files:  95% (5191/5464)
+2026-10-13T15:35:38.0281090Z Updating files:  96% (5246/5464)
+2026-10-13T15:35:38.0339440Z Updating files:  97% (5301/5464)
+2026-10-13T15:35:38.0411950Z Updating files:  98% (5355/5464)
+2026-10-13T15:35:38.0808780Z Updating files:  99% (5410/5464)
+2026-10-13T15:35:38.0809360Z Updating files: 100% (5464/5464)
+2026-10-13T15:35:38.0809790Z Updating files: 100% (5464/5464), done.
+2026-10-13T15:35:38.0904720Z Switched to a new branch 'main'
+2026-10-13T15:35:38.0917470Z branch 'main' set up to track 'origin/main'.
+2026-10-13T15:35:38.0938820Z ##[endgroup]
+2026-10-13T15:35:38.1103410Z [command]/opt/homebrew/bin/git log -1 --format=%H
+2026-10-13T15:35:38.1194510Z 3ba689eaf21979833fcfa97d2beac1babfaabc36
+2026-10-13T15:35:38.1557870Z ##[group]Run sudo xcode-select -s /Applications/Xcode_16.4.app
+2026-10-13T15:35:38.1558490Z [36;1msudo xcode-select -s /Applications/Xcode_16.4.app[0m
+2026-10-13T15:35:38.1606320Z shell: /bin/bash -e {0}
+2026-10-13T15:35:38.1606620Z env:
+2026-10-13T15:35:38.1606830Z   LEMMINGS_TEST_AUDIO: muted
+2026-10-13T15:35:38.1607220Z   LEMMINGS_TEST_WINDOWS: offscreen
+2026-10-13T15:35:38.1607510Z ##[endgroup]
+2026-10-13T15:35:38.2765940Z ##[group]Run zsh Scripts/check-1.5-neolemmix.sh
+2026-10-13T15:35:38.2766460Z [36;1mzsh Scripts/check-1.5-neolemmix.sh[0m
+2026-10-13T15:35:38.2798770Z shell: /bin/bash -e {0}
+2026-10-13T15:35:38.2799130Z env:
+2026-10-13T15:35:38.2799470Z   LEMMINGS_TEST_AUDIO: muted
+2026-10-13T15:35:38.2799810Z   LEMMINGS_TEST_WINDOWS: offscreen
+2026-10-13T15:35:38.2800130Z ##[endgroup]
+2026-10-13T15:35:40.0514650Z Oracle contract: NeoLemmix Community Edition 1.2.0 at 38d0449f87501798e78ac668a9494848f4aa9649
+2026-10-13T15:35:52.0033200Z NXLV style resolver tests passed.
+2026-10-13T15:37:48.3006880Z NXLV renderer tests passed: transforms, terrain flags, masks, groups, resize, clipping, live terrain layers, and PNG safety.
+2026-10-13T15:39:27.2083750Z PASS rules and spawn timing
+2026-10-13T15:39:27.2084950Z PASS multiple entrance order
+2026-10-13T15:39:27.2088150Z PASS CE lemming render order
+2026-10-13T15:39:27.2096290Z PASS preplaced traits and core movement
+2026-10-13T15:39:27.2097400Z PASS permanent skills
+2026-10-13T15:39:27.2098890Z PASS walker, jumper, and shimmier
+2026-10-13T15:39:27.2099310Z PASS blocker and constructive skills
+2026-10-13T15:39:27.2099740Z PASS destructive skills and materials
+2026-10-13T15:39:27.2100220Z PASS bomber and stoner
+2026-10-13T15:39:27.2100660Z PASS swimming and hazards
+2026-10-13T15:39:27.2101010Z PASS NXLV adapter
+2026-10-13T15:39:27.2101560Z PASS gadget lemming caps
+2026-10-13T15:39:27.2102780Z PASS disarmer
+2026-10-13T15:39:27.2118350Z PASS cloner
+2026-10-13T15:39:27.2118880Z PASS fencer
+2026-10-13T15:39:27.2119160Z PASS laserer
+2026-10-13T15:39:27.2119630Z PASS unsupported skill diagnostics
+2026-10-13T15:39:27.2120070Z PASS replay order and inventory
+2026-10-13T15:39:27.2120440Z PASS splat pad landing
+2026-10-13T15:39:27.2120840Z PASS skill pickup
+2026-10-13T15:39:27.2121180Z PASS triggered animations and secondaries
+2026-10-13T15:39:27.2121640Z PASS locked exits and buttons
+2026-10-13T15:39:27.2121990Z PASS force fields and splitter
+2026-10-13T15:39:27.2122720Z PASS teleporter
+2026-10-13T15:39:27.2123110Z PASS updraft and zombie infection
+2026-10-13T15:39:27.2123470Z PASS state changers
+2026-10-13T15:39:27.2124330Z PASS portals
+2026-10-13T15:39:27.2124930Z PASS Codable continuation
+2026-10-13T15:39:27.2125460Z PASS nuke and completion
+2026-10-13T15:39:27.2126040Z NeoLemmix simulation tests passed: 29 groups, 21 implemented skills, 0 explicit unsupported skills.
+2026-10-13T15:41:13.1208450Z PASS current CE replay metadata and command decoding
+2026-10-13T15:41:13.1228840Z PASS all 21 current replay skills and spawn-interval aliases
+2026-10-13T15:41:13.1229300Z PASS source replay direction aliases
+2026-10-13T15:41:13.1229620Z PASS legacy replay index fallback with source state checks
+2026-10-13T15:41:13.1230090Z PASS source-frame timing, CE command order and replay state checks
+2026-10-13T15:41:13.1230440Z PASS malformed and legacy replay diagnostics
+2026-10-13T15:41:13.1230760Z NeoLemmix replay tests passed.
+2026-10-13T15:42:58.9126010Z PASS parse — 'End to end' 200x100
+2026-10-13T15:42:58.9131110Z PASS resolve — 3 assets
+2026-10-13T15:42:58.9133140Z PASS render — 200x100, 1600 solid pixels, 2 gadgets
+2026-10-13T15:42:58.9136960Z PASS all current skills configure; unsupported gadgets are rejected before gameplay
+2026-10-13T15:42:58.9140090Z PASS configure — 1 entrance(s), 1 exit zone(s)
+2026-10-13T15:42:58.9141830Z      entrance at 24,52
+2026-10-13T15:42:58.9142990Z      exit zone x 152..164 y 70..76
+2026-10-13T15:42:58.9143600Z      sample lemmings: #0 at 152,70 removed active=false | #1 at 152,70 removed active=false | #2 at 152,70 removed active=false
+2026-10-13T15:42:58.9146130Z PASS simulate — released 10, saved 10, tick 673
+2026-10-13T15:42:58.9146830Z NeoLemmix end-to-end tests passed.
+2026-10-13T15:48:05.2712370Z PASS NeoLemmix sprite resolution, geometry, state recolouring, action coverage, and Macintosh-scale recreation
+2026-10-13T15:48:05.3257710Z PASS parser, style, renderer, simulation, replay-import, end-to-end and native sprite source gates
+2026-10-13T15:48:05.3265990Z OPEN CE level corpus gate: rerun with --ce-root PATH --require-ce-corpus
+2026-10-13T15:48:05.3266870Z OPEN reference replay corpus and native replay-result comparison
+2026-10-13T15:48:05.3571640Z Post job cleanup.
+2026-10-13T15:48:05.7341980Z [command]/opt/homebrew/bin/git version
+2026-10-13T15:48:05.7577230Z git version 2.55.0
+2026-10-13T15:48:05.7599690Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/34d59d60-f67f-44c7-b0a1-75c8db30ca5d/.gitconfig'
+2026-10-13T15:48:05.7606980Z Temporarily overriding HOME='/Users/runner/work/_temp/34d59d60-f67f-44c7-b0a1-75c8db30ca5d' before making global git config changes
+2026-10-13T15:48:05.7607840Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-13T15:48:05.7610390Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/Lemmings/Lemmings
+2026-10-13T15:48:05.7834050Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-13T15:48:05.7868130Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-13T15:48:05.9189630Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-13T15:48:05.9251110Z http.https://github.com/.extraheader
+2026-10-13T15:48:05.9259640Z [command]/opt/homebrew/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-13T15:48:05.9337430Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-13T15:48:06.0081800Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-13T15:48:06.0139410Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-13T15:48:06.1413220Z Cleaning up orphan processes
+

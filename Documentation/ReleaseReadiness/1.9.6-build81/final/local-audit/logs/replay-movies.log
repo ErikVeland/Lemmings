@@ -1,0 +1,7 @@
+/Users/veland/Lemmings/.build/release-1.9.6/source/.build/replay-movie-tests/main.swift:4:8: error: compiling for macOS 12.3, but module 'LemmingsAppCore' has a minimum deployment target of macOS 27.2.0: /Users/veland/Lemmings/.build/release-1.9.6/source/.build/release-audit-final/library/modules/LemmingsAppCore.swiftmodule
+  2 | import AppKit
+  3 | @preconcurrency import AVFoundation
+  4 | import LemmingsAppCore
+    |        `- error: compiling for macOS 12.3, but module 'LemmingsAppCore' has a minimum deployment target of macOS 27.2.0: /Users/veland/Lemmings/.build/release-1.9.6/source/.build/release-audit-final/library/modules/LemmingsAppCore.swiftmodule
+  5 | import NxlvKit
+  6 | import UniformTypeIdentifiers

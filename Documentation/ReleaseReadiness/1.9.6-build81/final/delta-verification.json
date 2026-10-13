@@ -1,0 +1,18 @@
+{
+  "version": "1.9.6",
+  "build": 81,
+  "deltaFrom": 79,
+  "delta": {
+    "name": "UltimateLemmings-build81-from79.delta",
+    "bytes": 4944134,
+    "sha256": "c7e7101a5f4f57acf0e4c2f39df992c37840b4c660e03fd542cd600474c44e60",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/v1.9.6/UltimateLemmings-build81-from79.delta",
+    "edSignature": "l1F6RZjxDgRnaH81V0inDYUag2aALxbwiEgs5pdMlP91+QUiiL2jitVLcFsS4nFwArgmJh1yMALXD7NvEfT2Bg=="
+  },
+  "signatureVerified": true,
+  "patchedPayloadMatchesShippingApp": true,
+  "payloadFilesChecked": 14719,
+  "musicFilesChecked": 649,
+  "publishedItemsPreserved": 11,
+  "fullArchiveBytes": 2046920368
+}

@@ -1,0 +1,24 @@
+Sources/LemmingsLocal/ReleaseWelcome.swift:47:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+45 |         scroll.hasHorizontalScroller = false
+46 |         scroll.drawsBackground = false
+47 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+48 |         scroll.scrollerStyle = .overlay
+49 |         scroll.setAccessibilityLabel("Release notes")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+UI test windows: offscreen; audio: muted
+*** Terminating app due to uncaught exception 'com.apple.coreaudio.avfaudio', reason: 'required condition is false: comp != nullptr'
+*** First throw call stack:
+(
+	0   CoreFoundation                      0x0000000195f897b0 __exceptionPreprocess + 176
+	1   libobjc.A.dylib                     0x0000000191be465c objc_exception_throw + 88
+	2   CoreFoundation                      0x0000000195f896a0 +[NSException exceptionWithName:reason:userInfo:] + 0
+	3   AVFAudio                            0x00000001c5b2ce18 _ZN17AUInterfaceBaseV3C2ERK25AudioComponentDescriptionP23ComponentInstanceRecord + 1692
+	4   AVFAudio                            0x00000001c5bf1ea8 _ZN15AVAudioNodeImplC2EP23ComponentInstanceRecordRK25AudioComponentDescription13ENodeInternal + 116
+	5   AVFAudio                            0x00000001c5b8f008 -[AVAudioUnitEQ initWithNumberOfBands:] + 116
+	6   libLemmingsAudio.dylib              0x000000010290163c $s13LemmingsAudio17ModuleMusicPlayerCACycfc + 260
+	7   Views                               0x00000001022666f4 $s5Views19Lemmings2PlayWindowC4root8recovery9selection16sequenceProgress15expectedLevelID0J14SourceRevision015recordsCampaignI00J14RecoveryEngineAC10Foundation3URLV_15LemmingsAppCore03RunQ0VSgAC0	8   Views                               0x000000010225cae8 main + 2884
+	9   dyld                                0x0000000191c80d7c start + 6652
+)
+libc++abi: terminating due to uncaught exception of type NSException

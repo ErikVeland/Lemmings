@@ -1,0 +1,116 @@
+{
+  "run": 38426710456,
+  "sourceCommit": "3ba689eaf21979833fcfa97d2beac1babfaabc36",
+  "reason": "The iPhone job remained queued without a runner for over 15 minutes. Cancelled only the isolated release workflow and requested a single-job retry. Previously successful source and iPad jobs are retained here.",
+  "previous": {
+    "jobs": [
+      {
+        "id": 115397913006,
+        "name": "Source gate",
+        "status": "completed",
+        "conclusion": "success",
+        "run_id": 38426710456,
+        "logs_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Select Xcode",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Test core and build Debug and Release apps",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Post Run actions/checkout@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          }
+        ]
+      },
+      {
+        "id": 115407001970,
+        "name": "Layout and lifecycle (iPhone)",
+        "status": "queued",
+        "conclusion": null,
+        "run_id": 38426710456,
+        "logs_url": null,
+        "steps": null
+      },
+      {
+        "id": 115407002071,
+        "name": "Layout and lifecycle (iPad)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_id": 38426710456,
+        "logs_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Select Xcode",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Choose a simulator",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Run iOS layout and lifecycle tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Post Run actions/checkout@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          }
+        ]
+      }
+    ]
+  }
+}

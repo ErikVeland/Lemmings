@@ -1,0 +1,26 @@
+{
+  "releaseCommit": "3ba689eaf21979833fcfa97d2beac1babfaabc36",
+  "macBuildStartCommit": "d07e9c8e89db8bbc01a9e11b5e8e4f7763a0d81b",
+  "iosArchiveCommit": "602700c06d957ab56b4b54aaa9660abb105dfdde",
+  "macChangedFiles": [
+    "Apps/UltimateLemmingsIOS/UITests/MobileCoreIOSSmokeTests.swift",
+    "Documentation/ReleaseReadiness/2.0DeviceBeta.md",
+    "Scripts/run-fan-library-tests.sh",
+    "Scripts/run-replay-movie-tests.sh",
+    "Sources/LemmingsMobileUI/MobileReservedRegions.swift",
+    "Tests/AppIntegrationTests/checks.swift",
+    "Tests/ReleaseReadinessTests/test_ios_beta_build.py",
+    "Tests/SequelMacArtworkAppTests/checks.swift",
+    "Tools/IOSBeta/build.py"
+  ],
+  "iosChangedFiles": [
+    "Apps/UltimateLemmingsIOS/UITests/MobileCoreIOSSmokeTests.swift",
+    "Scripts/run-fan-library-tests.sh",
+    "Scripts/run-replay-movie-tests.sh",
+    "Tests/AppIntegrationTests/checks.swift",
+    "Tests/SequelMacArtworkAppTests/checks.swift"
+  ],
+  "macProductionInputChanges": [],
+  "iosProductionInputChanges": [],
+  "reason": "iOS compatibility and archive validation changed after Mac compilation. The final commit changes only test fixtures and local test scripts. The archived iOS app target does not compile UITests. Production compiler and bundle inputs match the final release commit. Original archive evidence and source manifests remain unchanged."
+}
