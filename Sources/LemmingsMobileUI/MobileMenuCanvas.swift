@@ -64,11 +64,11 @@ import UIKit
     }
     private func rebuild() {
         onPageChanged?()
-        let actions = page.rows + page.footer
+        let actions = page.rows + page.orderedFooter
         focusedID = actions.first(where: { $0.primary && $0.enabled })?.id
         highlighted = focusedID
         targets.forEach { $0.removeFromSuperview() }
-        targets = (page.rows + page.footer).map { action in
+        targets = (page.rows + page.orderedFooter).map { action in
             let button = UIButton(type: .custom)
             button.accessibilityLabel = action.title
             button.accessibilityIdentifier = "menu." + action.id
@@ -88,7 +88,7 @@ import UIKit
         setNeedsDisplay()
     }
     func moveFocus(_ offset: Int) {
-        let enabled = (page.rows + page.footer).filter(\.enabled)
+        let enabled = (page.rows + page.orderedFooter).filter(\.enabled)
         guard !enabled.isEmpty else { return }
         let current = enabled.firstIndex { $0.id == focusedID }
         let index = current.map { ($0 + offset + enabled.count) % enabled.count } ?? 0
@@ -102,7 +102,7 @@ import UIKit
         setNeedsDisplay()
     }
     func activateFocused() {
-        let actions = page.rows + page.footer
+        let actions = page.rows + page.orderedFooter
         guard let action = actions.first(where: { $0.id == focusedID && $0.enabled })
                 ?? actions.first(where: { $0.primary && $0.enabled }) else { return }
         onAction?(action.id)

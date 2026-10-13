@@ -2389,7 +2389,9 @@ import NxlvKit
         hdrOverlay?.setSuperSpeed(active,
             in: CGRect(x:origin.x,y:origin.y,width:visibleWidth*zoom,height:192*zoom),immediate:!active, multiplier: speedMultiplier)
     }
+    private var explosionTimeline = PixelExplosionTimeline()
     func flashExplosions(_ game: Lemmings2Runtime) {
+        explosionTimeline.update(tick: game.tick, bursts: PixelExplosion.lemmings2(game))
         guard hdEffectsEnabled, !reduceFlashes else { return }
         let points = game.blastFlashes.map { (x: $0.x + 17, y: $0.y + 20) }
             + game.lemmings.filter { $0.state == .exploding && $0.age == 16 }.map { (x: $0.x, y: $0.y - 6) }
@@ -2406,6 +2408,7 @@ import NxlvKit
     private var explosion: Lemmings2Explosion?
     func load(level: Lemmings2Level, style: Lemmings2Style, sprites bank: Lemmings2Sprites, intern: Lemmings2SpecialGraphics, explosion: Lemmings2Explosion, walker: Lemmings2Walker?, resetPresentation: Bool = true) throws {
         if resetPresentation {
+            explosionTimeline.reset()
             selectionFade.reset()
             hdrOverlay?.clear()
             isFastForward = false
@@ -2461,6 +2464,7 @@ import NxlvKit
         cameraY = min(cameraBounds.bottom, max(cameraBounds.top, CGFloat(level.screenY)))
     }
     func update(_ game: Lemmings2Runtime) {
+        explosionTimeline.update(tick: game.tick, bursts: PixelExplosion.lemmings2(game))
         if game.tick < (self.game?.tick ?? 0) { selectionFade.reset() }
         if terrainRevision != game.terrainRevision || game.tick < (self.game?.tick ?? 0) {
             terrain = image(width: game.configuration.width, height: game.configuration.height,
@@ -2710,6 +2714,7 @@ import NxlvKit
             case .shrugging:
                 name = "LM7B"; offsetX = lem.direction > 0 ? -9 : -8; offsetY = -13; phase = lem.age % 8
             case .exploding:
+                if ghostsOnly { continue }
                 if lem.age >= 16 {
                     if lem.age == 16, let flash = sprites["EXPLOSION"]?.first {
                         drawImage(flash.image,x:CGFloat(lem.x-13+flash.x),y:CGFloat(lem.y-14+flash.y))
@@ -2990,6 +2995,14 @@ import NxlvKit
             ExplosionHDR.drawCore(at: CGPoint(x: origin.x + (CGFloat(burst.x) - cameraX) * zoom,
                 y: origin.y + (CGFloat(burst.y) - cameraY) * zoom * 1.2),
                 pixel: CGSize(width: zoom, height: zoom * 1.2), phase: burst.phase)
+        }
+        // The bomber already draws its authored 52-frame point sequence above.
+        // Other blast sources use the same shared pixel presentation as Classic/L3.
+        for burst in explosionTimeline.bursts where burst.id < 0 {
+            ExplosionHDR.drawSpray(burst, at: game.tick,
+                origin: CGPoint(x: origin.x + (CGFloat(burst.x) - cameraX) * zoom,
+                    y: origin.y + (CGFloat(burst.y) - cameraY) * zoom * 1.2),
+                pixel: CGSize(width: zoom, height: zoom * 1.2))
         }
         NSGraphicsContext.restoreGraphicsState()
     }

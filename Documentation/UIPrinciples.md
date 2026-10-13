@@ -14,6 +14,11 @@ sentences. Apply this to new UI and changes to existing UI.
   unearned stars are outlined. An unknown target uses a question mark.
 - Keep one primary action per screen. Give it a stronger outline and a directional
   marker. Selection has an underline; keyboard focus has its own outline.
+- Put forward game actions (Start, Play, Ready, Next, Continue and Resume) at the
+  bottom of a vertical group or the right edge of its last row. Put Back, Cancel
+  and secondary navigation before them. Keep drawing, input and accessibility
+  order consistent. Use Apple's Human Interface Guidelines for platform controls.
+  System alerts retain Apple's platform-specific ordering and safe default focus.
 - Keep quantities and player identity visible. They explain the current situation.
 - Keep concise names for actions without a familiar symbol. Do not replace a clear
   action name with an invented icon or an initial.
@@ -496,11 +501,24 @@ slice of recent effects when available. Rapid taps replace the previous cue.
 Honour mute, sound volume and suspended output, and exclude rewind audio from
 its own history. Mobile shares this sound; the sprite echoes are Mac-only.
 
+Music scratches backwards through recent stereo PCM for 180 ms, with the shared
+vinyl braking curve. Recordings, native mixed MOD samples and every audible
+Adaptive DJ layer use this path across Classic, Lemmings 2 and Lemmings 3 on Mac
+and mobile. Rapid taps continue the same reverse groove; held rewind extends
+it without stacking copies. Keep the current music volume and DJ mix gains.
+Mute, zero volume, suspension and track changes cancel the scratch. Rewind
+keeps gameplay paused; forward playback retains the existing vinyl spin-up.
+The groove holds at most 12 seconds of recent audio. It supplies transport
+feedback and does not seek the song or tracker timeline to the gameplay tick.
+
 Offscreen, muted native checks cover immediate direction, repeat replacement,
 paused expiry, forward cancellation, actual Classic/L2/L3 bitmap renders,
 solid sprite preservation, timeline targets and gaps, and reduced-effects
 settings. Offline audio checks cover silent history, finite samples, short
 endpoints, reversed history, 2,400 requests, mute and output suspension.
+Music checks cover sample direction, stereo, rapid-tap continuation, real
+recording and MOD output, parked engines, retained pause, vinyl spin-up and
+Adaptive DJ layer gains. All automated audio checks stay offscreen and muted.
 The full Mac source typechecks. Sequel seeks retain their existing replay
 reconstruction cost. Audible feel, physical HDR/CRT display output,
 sequel attachment poses and mobile appearance remain for manual validation.

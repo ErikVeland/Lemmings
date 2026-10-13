@@ -1,8 +1,23 @@
 import CoreGraphics
 import Foundation
+import NxlvKit
 
 /// The original hot core and HDR mask used by the native playfield.
 public enum ExplosionGlow {
+    public static func drawSpray(_ burst: PixelExplosion, at tick: Int, origin: CGPoint,
+        pixel: CGSize, context: CGContext) {
+        guard pixel.width > 0, pixel.height > 0 else { return }
+        context.saveGState()
+        defer { context.restoreGState() }
+        context.setShouldAntialias(false)
+        for dot in ExplosionPixelSpray.pixels(for: burst, at: tick) {
+            context.setFillColor(CGColor(srgbRed: Double(dot.red) / 255,
+                green: Double(dot.green) / 255, blue: Double(dot.blue) / 255, alpha: 1))
+            context.fill(CGRect(x: floor(origin.x + CGFloat(dot.x - burst.x) * pixel.width),
+                y: floor(origin.y + CGFloat(dot.y - burst.y) * pixel.height),
+                width: pixel.width, height: pixel.height))
+        }
+    }
     public struct Flash {
         public let rect: CGRect
         public let strength: Float

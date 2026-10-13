@@ -14,6 +14,7 @@ private func check(_ value: @autoclosure () -> Bool, _ message: String) throws {
     }
     @MainActor static func run() throws {
         let root = URL(fileURLWithPath: CommandLine.arguments[1])
+        try verifyExplosionPixelRendering(root: root)
         try verifyAdaptiveFXPolicy()
         try verifyMacFXRendering(root: root)
         try verifyReplayCaptureReuse()

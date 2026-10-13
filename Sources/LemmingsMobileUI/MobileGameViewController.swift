@@ -90,6 +90,7 @@ struct MobileGameTurn {
     private var lastPlayfieldFrame: CGRect?
     private let observers = MobileNotificationObserverBag()
     private let audio = MobileAudioSessionController()
+    private var readyCuePending = false
     let effects = MobileEffects()
     private let nowPlaying = MobileNowPlayingView()
     private let replaySkillInfo = MobileReplaySkillView()
@@ -201,8 +202,7 @@ struct MobileGameTurn {
                 self?.applyLifecycle(.audioInterruptionEnded)
             }
         }
-        try? audio.prepare()
-        effects.prepare()
+        audio.prepare()
         observeSystemState()
         startDisplayLink()
         updatePerformanceBudget()
@@ -536,6 +536,7 @@ struct MobileGameTurn {
             latestFrame = frame
             playfieldView.renderScale = session.renderScale
             playfieldView.explosions = session.explosions
+            playfieldView.bombCountdowns = session.bombCountdowns
             playfieldView.selectionPoint = highlightedTarget?.point
             playfieldView.cursorPoint = previewPoint.map { playfieldView.gameViewport.levelPoint(fromView: $0) }
             playfieldView.cursorIcon = session.skillCursorFrame(control: selectedControl).flatMap(MobileBitmapRenderer.image)
@@ -593,8 +594,8 @@ struct MobileGameTurn {
         hud.cancelHeldControls()
         setRewindHeld(false)
         effects.suspend()
-        audio.suspend()
         MobileMusic.shared.suspend()
+        audio.suspend()
     }
 
     private func pauseGameplayAudio() {
@@ -605,11 +606,18 @@ struct MobileGameTurn {
 
     /// Reactivates the session, then starts this level's tune or lifts its pause.
     private func resumeAudio() {
-        effects.resume()
-        try? audio.resume()
-        MobileMusic.shared.play(identifier: session.levelIdentifier, index: session.levelIndex, title: summary.title,
-                                attemptID: runID, context: musicContext)
-        MobileMusic.shared.resume()
+        audio.resume { [weak self] succeeded in
+            guard let self, succeeded, self.lifecycle.isForeground, !self.lifecycle.isInterrupted else { return }
+            self.effects.prepare()
+            self.effects.resume()
+            if self.readyCuePending && !self.paused {
+                self.readyCuePending = false
+                self.effects.ready()
+            }
+            MobileMusic.shared.play(identifier: self.session.levelIdentifier, index: self.session.levelIndex,
+                                    title: self.summary.title, attemptID: self.runID, context: self.musicContext)
+            MobileMusic.shared.resume()
+        }
     }
 
     func pausePlay(showControls: Bool) {
@@ -654,7 +662,7 @@ struct MobileGameTurn {
         guard hudLayout(insets: view.safeAreaInsets).canPlay, !session.snapshot.isComplete,
               playState.resume(isForeground: lifecycle.isForeground, isInterrupted: lifecycle.isInterrupted) else { return }
         if wasReady {
-            effects.ready()
+            readyCuePending = true
             if freshStart { countdown.arm(); countdownLabel.text = "3"; countdownLabel.isHidden = false }
         }
         let needsLifecycleResume = lifecycle.requiresPlayerResume
@@ -965,7 +973,7 @@ struct MobileGameTurn {
             case .suspendAudio:
                 suspendAudio()
             case .prepareAudio:
-                try? audio.prepare()
+                audio.prepare()
                 renderCurrentFrame(force: true)
             case .resumeAudio:
                 resumeAudio()

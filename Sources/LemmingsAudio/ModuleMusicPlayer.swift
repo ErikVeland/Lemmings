@@ -54,6 +54,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   private var currentFrame: (left: Float, right: Float) = (0, 0)
   private var nextFrame: (left: Float, right: Float) = (0, 0)
   private var outputSuspended = false
+  private var rewindBufferedFrames = 0
   private var pauseFadeFrames = 0
   private var rhythmAmount = 0.0
   private var rhythmTarget = 0.0
@@ -92,6 +93,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
 
   public func start() throws {
     guard !isRunning else { return }
+    rewindAudio.setRecording(true)
     let format = AVAudioFormat(
       standardFormatWithSampleRate: sampleRate, channels: 2)!
 
@@ -177,6 +179,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
 
   public func stop() {
     cancelRewind()
+    rewindAudio.setRecording(false)
     rewindAudio.cancel(clearHistory: true)
     resetVinyl()
     guard isRunning else { return }
@@ -209,6 +212,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   public func suspendOutput(rhythmOnly: Bool = false) {
     cancelRewind()
     guard isRunning else { return }
+    let queuedFrames = min(bufferedFrameCount * 4, Int(bufferedSeconds * sampleRate))
     lock.lock()
     if rhythmOnly, player?.hasRhythm == true {
       pauseWorkItem?.cancel()
@@ -222,6 +226,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     guard !outputSuspended else { lock.unlock(); return }
     pauseWorkItem?.cancel()
     outputSuspended = true
+    rewindBufferedFrames = queuedFrames
     pauseFadeFrames = Int(sampleRate * vinylStopSeconds)
     spinUpFrames = 0
     lock.unlock()
@@ -416,6 +421,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   }
 
   private func load(_ module: ProTrackerModule, url: URL) {
+    cancelRewind()
     let prepared = ProTrackerEnhancedPlayer(module: module, sampleRate: sampleRate, enhancements: enhancements)
     lock.lock()
     rewindAudio.cancel(clearHistory: true)
@@ -523,7 +529,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
 
   public func cancelRewind() {
     rewindAudio.cancel()
-    spatialMixer.outputVolume = muted ? 0 : 1
+    spatialMixer.outputVolume = muted || volume == 0 ? 0 : 1
     if Thread.isMainThread {
       MainActor.assumeIsolated { rewindTask?.cancel(); rewindTask = nil }
     }
@@ -531,8 +537,12 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
 
   /// Scratches recent mixed tracker samples without replaying the tracker on the UI thread.
   @MainActor public func playRewind() {
+    let queuedFrames = min(bufferedFrameCount * 4, Int(bufferedSeconds * sampleRate))
+    // A parked player has no render clock. Retain the queue offset measured
+    // before the pause instead of treating its whole lifetime as queued audio.
+    let skip = lock.withLock { outputSuspended ? rewindBufferedFrames : queuedFrames }
     guard isRunning, !muted, volume > 0,
-      rewindAudio.trigger(skipping: Int(bufferedSeconds * sampleRate)) else { return }
+      rewindAudio.trigger(skipping: skip) else { return }
     spatialMixer.outputVolume = 0
     do { if !engine.isRunning { try engine.start() } }
     catch { rewindAudio.cancel(); spatialMixer.outputVolume = muted ? 0 : 1; return }
@@ -556,6 +566,8 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     level = min(1, max(0, value))
     rewindAudio.setGain(Float(level))
     lock.unlock()
+    if value <= 0 { cancelRewind() }
+    else if !rewindAudio.isRewinding { spatialMixer.outputVolume = muted ? 0 : 1 }
   }
 
   /// Tracker beat timing, including tempo commands on the opening row.
@@ -616,7 +628,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     if muted { rewindAudio.cancel() }
     lock.unlock()
     // Silence already queued samples and the effect tail immediately.
-    spatialMixer.outputVolume = muted ? 0 : 1
+    spatialMixer.outputVolume = muted || volume == 0 || rewindAudio.isRewinding ? 0 : 1
   }
 
   public var muted: Bool {

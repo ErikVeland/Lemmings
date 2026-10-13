@@ -26,6 +26,14 @@ public struct GameFrontEnd {
         public var rows: [Action]
         public var details: [String]
         public var footer: [Action]
+        /// Forward actions finish the footer, including when the grid wraps.
+        /// A confirmation's safe default stays in its leading position.
+        public var orderedFooter: [Action] {
+            func forward(_ action: Action) -> Bool {
+                action.primary && !["BACK", "CANCEL"].contains(action.title.uppercased())
+            }
+            return footer.filter { !forward($0) } + footer.filter(forward)
+        }
         public var preview: Bool
         public var footerColumns: Int?
         public init(title: String, subtitle: String = "", home: Bool = false,
@@ -103,7 +111,7 @@ public struct GameFrontEnd {
         let height = max(minimumHeight, y + CGFloat(rows) * 60 + 36)
         y = max(y + 12, height - CGFloat(rows) * 60 - 24)
         let cell = (boardWidth - 40 - CGFloat(columns - 1) * 12) / CGFloat(columns)
-        for (index, action) in page.footer.enumerated() {
+        for (index, action) in page.orderedFooter.enumerated() {
             // A lone action in the last row takes the whole row.
             let alone = columns > 1 && index == page.footer.count - 1 && index % columns == 0
             targets.append(Target(action: action, frame: CGRect(x: x + 20 + CGFloat(index % columns) * (cell + 12),
@@ -123,7 +131,7 @@ public struct GameFrontEnd {
         let headerHeight: CGFloat = width < 600 ? 106 : 116
         let rowHeight: CGFloat = 44
         let headerIDs: Set<String> = ["settings", "whatsNew"]
-        let footer = page.footer.filter { !headerIDs.contains($0.id) }
+        let footer = page.orderedFooter.filter { !headerIDs.contains($0.id) }
         let wide = boardWidth >= 600
         let columns = wide ? max(1, footer.count) : min(width >= 380 ? 2 : 1, max(1, footer.count))
         let footerRows = Int(ceil(Double(footer.count) / Double(columns)))
@@ -147,8 +155,8 @@ public struct GameFrontEnd {
         let gap: CGFloat = 12
         let start = x + inset + (wide && initialsWidth > 0 ? initialsWidth + gap : 0)
         let cell = (x + boardWidth - inset - start - CGFloat(columns - 1) * gap) / CGFloat(columns)
-        // Keep the target order equal to Page.rows + Page.footer for UIKit and keyboard input.
-        for action in page.footer {
+        // Keep the target order equal to Page.rows + Page.orderedFooter for UIKit and keyboard input.
+        for action in page.orderedFooter {
             let frame: CGRect
             if headerIDs.contains(action.id) {
                 frame = CGRect(x: action.id == "settings" ? board.maxX - inset - 44 : board.minX + inset,

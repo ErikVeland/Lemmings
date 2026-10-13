@@ -818,7 +818,7 @@ struct ReticleFeedback {
       hdrOverlay?.setRescueAuras(presentsHDR ? rescueAuras : [])
       if phase == .playing { startCountdown.draw(in: bounds) }
       if lemmingSelectionStyle == .obvious, phase == .playing, !GameCursor.gameplaySuppressed,
-         let id = assignmentHighlight.target, let lem = session?.lemmings.first(where: { $0.id == id }) {
+         let id = assignmentHighlight.target, let lem = session?.lemmings.first(where: { $0.id == id && Self.canHighlight($0) }) {
         LemmingSelectionGlow.draw(at: precisionLens.display(viewport.viewPoint(fromLevel: CGPoint(x: lem.x, y: lem.y - 6))),
           scale: viewport.zoom, tint: .systemYellow, animated: !reduceMotion && !reduceFlashes)
       }
@@ -1305,6 +1305,12 @@ struct ReticleFeedback {
       selectedID: assignmentHighlight.target,
       highlightedID: pointerLemmingID)
     for lemming in solidLemmings { draw(lemming) }
+    for lem in lemmings where lem.pose == .explosion {
+      let burst = PixelExplosion(id: lem.id, birthTick: session.currentTick - lem.animationFrame, x: lem.x, y: lem.y - 6)
+      ExplosionHDR.drawSpray(burst, at: session.currentTick,
+        origin: viewport.viewPoint(fromLevel: CGPoint(x: burst.x, y: burst.y)),
+        pixel: CGSize(width: viewport.zoom, height: viewport.zoom))
+    }
     if lemmingSelectionStyle == .modern, let selectedSprite {
       selectionEffect = LemmingSelectionEffect(sprite: selectedSprite.pixels,
         rect: precisionLens.display(selectedSprite.rect), clipRect: bounds,
@@ -1332,10 +1338,10 @@ struct ReticleFeedback {
 
   /// Four opaque ticks, then an immediate cut. The engine's longer explosion
   /// state still controls terrain damage and removal timing.
-  static func bombPopIsVisible(tick: Int) -> Bool { (0..<4).contains(tick) }
+  static func bombPopIsVisible(tick: Int) -> Bool { ExplosionPixelSpray.popIsVisible(age: tick, enhanced: true, singleFrameArtwork: false) }
 
-  private func bombPop(_ rect: CGRect, tick: Int) -> (rect: CGRect, alpha: CGFloat) {
-    (rect, !hdEffectsEnabled || Self.bombPopIsVisible(tick: tick) ? 1 : 0)
+  private func bombPop(_ rect: CGRect, tick: Int, singleFrameArtwork: Bool = true) -> (rect: CGRect, alpha: CGFloat) {
+    (rect, ExplosionPixelSpray.popIsVisible(age: tick, enhanced: hdEffectsEnabled, singleFrameArtwork: singleFrameArtwork) ? 1 : 0)
   }
 
   /// A white-hot core followed by a yellow tick.
@@ -1378,7 +1384,7 @@ struct ReticleFeedback {
         height: frame.image.size.height * viewport.zoom
       )
       var fraction: CGFloat = 1
-      if action == .exploding { (rect, fraction) = bombPop(rect, tick: lemming.animationFrame) }
+      if action == .exploding { (rect, fraction) = bombPop(rect, tick: lemming.animationFrame, singleFrameArtwork: false) }
       guard rect.intersects(bounds), fraction > 0.01 else { return }
       if ghostsOnly {
         speedTrails.drawBehind(actor: lemming.id, sprite: frame.image, in: rect, motion: motion,
@@ -1386,8 +1392,8 @@ struct ReticleFeedback {
         return
       }
       drawSprite(frame.image, key: key, in: rect, alpha: fraction)
-      captureSelectionSprite(for: lemming.id, key: key, sprite: frame.image, in: rect)
-      drawAssignmentPulse(for: lemming.id, key: key, sprite: frame.image, in: rect)
+      captureSelectionSprite(for: lemming, key: key, sprite: frame.image, in: rect)
+      drawAssignmentPulse(for: lemming, key: key, sprite: frame.image, in: rect)
       if action == .exploding { drawBombCore(in: rect, tick: lemming.animationFrame, actor: lemming.id) }
       if let countdown = lemming.countdown { drawCountdown(countdown, above: rect) }
       return
@@ -1426,8 +1432,8 @@ struct ReticleFeedback {
           return
         }
         drawSprite(sprite, key: key, in: rect, alpha: fraction)
-        captureSelectionSprite(for: lemming.id, key: key, sprite: sprite, in: rect)
-        drawAssignmentPulse(for: lemming.id, key: key, sprite: sprite, in: rect)
+        captureSelectionSprite(for: lemming, key: key, sprite: sprite, in: rect)
+        drawAssignmentPulse(for: lemming, key: key, sprite: sprite, in: rect)
         if pose == .explosion { drawBombCore(in: rect, tick: lemming.animationFrame, actor:lemming.id) }
         if let countdown = lemming.countdown { drawCountdown(countdown, above: rect) }
         return
@@ -1461,8 +1467,8 @@ struct ReticleFeedback {
       return
     }
     drawSprite(sprite, key: key, in: rect, alpha: fraction)
-    captureSelectionSprite(for: lemming.id, key: key, sprite: sprite, in: rect)
-    drawAssignmentPulse(for: lemming.id, key: key, sprite: sprite, in: rect)
+    captureSelectionSprite(for: lemming, key: key, sprite: sprite, in: rect)
+    drawAssignmentPulse(for: lemming, key: key, sprite: sprite, in: rect)
     if pose == .explosion { drawBombCore(in: rect, tick: lemming.animationFrame, actor:lemming.id) }
 
     if let countdown = lemming.countdown {
@@ -1470,7 +1476,9 @@ struct ReticleFeedback {
     }
   }
 
-  private func drawAssignmentPulse(for id: Int, key: String, sprite: NSImage, in rect: CGRect) {
+  private func drawAssignmentPulse(for lem: SessionLemming, key: String, sprite: NSImage, in rect: CGRect) {
+    guard Self.canHighlight(lem) else { return }
+    let id = lem.id
     guard assignmentPulse.target == id,
           let pixels = spritePixels[key] ?? sprite.cgImage(forProposedRect: nil, context: nil, hints: nil)
     else { return }
@@ -1478,7 +1486,16 @@ struct ReticleFeedback {
       reduceMotion: reduceMotion, reduceFlashes: reduceFlashes)
   }
 
-  private func captureSelectionSprite(for id: Int, key: String, sprite: NSImage, in rect: CGRect) {
+  private static func canHighlight(_ lem: SessionLemming) -> Bool {
+    switch lem.pose {
+    case .explosion, .splatting, .drowning, .frying, .exiting: return false
+    default: return true
+    }
+  }
+
+  private func captureSelectionSprite(for lem: SessionLemming, key: String, sprite: NSImage, in rect: CGRect) {
+    guard Self.canHighlight(lem) else { return }
+    let id = lem.id
     let glowing = completionGlowAmount > 0 && hdEffectsEnabled && !reduceFlashes
     guard selectionTargetID == id || glowing,
           let pixels = spritePixels[key] ?? sprite.cgImage(forProposedRect: nil, context: nil, hints: nil)
@@ -1533,7 +1550,7 @@ struct ReticleFeedback {
         strength: 0.45, expiresAt: expires, tint: .green))
     }
 
-    if lemmingSelectionStyle == .obvious, target != nil, assignmentHighlight.target == nil {
+    if lemmingSelectionStyle == .obvious, let target, Self.canHighlight(target), assignmentHighlight.target == nil {
       LemmingSelectionGlow.draw(at: targetPoint, scale: viewport.zoom,
         tint: color, animated: !reduceMotion && !reduceFlashes)
     }

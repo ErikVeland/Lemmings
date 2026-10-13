@@ -102,11 +102,38 @@ public final class ClassicMobileSession: MobileGameSession {
     private var cachedPanelFrame: MobilePixelFrame?
     public var renderScale: Double { nativeScene == nil ? 1 : 2 }
     public var activeLemmingCount: Int { simulation.activeCount }
-    public var explosions: [MobileExplosion] {
-        simulation.lemmings.filter { $0.action == .exploding && (0..<2).contains($0.animationFrame) }.compactMap { lemming in
-            guard let sprite = spriteHighlight(lemming) else { return nil }
-            return .init(id: lemming.id, birthTick: simulation.tickCount - lemming.animationFrame, rect: sprite.rect, phase: lemming.animationFrame)
+    public var bombCountdowns: [MobileBombCountdown] {
+        simulation.lemmings.filter(\.isActive).compactMap { lemming in
+            guard let ticks = lemming.bomberCountdown, let assets else { return nil }
+            let pose = Self.pose(for: lemming.action)
+            let direction: ClassicSpriteDirection = lemming.direction == .left ? .left : .right
+            guard let animation = assets.animation(for: pose, direction: direction)
+                ?? assets.animation(for: pose, direction: .none), !animation.frames.isEmpty else { return nil }
+            let anchor: MobilePoint
+            if nativeScene != nil, let sprite = nativeArtwork?.lemming(pose: pose,
+                left: lemming.direction == .left, tick: lemming.animationFrame) {
+                anchor = .init(x: Double(lemming.foot.x + animation.offsetX) + Double(sprite.x) / 2 + Double(sprite.width) / 4,
+                    y: Double(lemming.foot.y + animation.offsetY) + Double(sprite.y) / 2)
+            } else {
+                let sprite = animation.frames[abs(lemming.animationFrame) % animation.frames.count]
+                anchor = .init(x: Double(lemming.foot.x + animation.offsetX) + Double(sprite.width) / 2,
+                    y: Double(lemming.foot.y + animation.offsetY))
+            }
+            return .init(id: lemming.id,
+                seconds: max(1, (ticks + ClassicDOSRules.ticksPerSecond - 1) / ClassicDOSRules.ticksPerSecond), anchor: anchor)
         }
+    }
+    public var explosions: [MobileExplosion] {
+        simulation.lemmings.filter { $0.action == .exploding && $0.animationFrame < ExplosionPixelSpray.lifetime }
+            .map { lemming in
+                let burst = PixelExplosion(id: lemming.id, birthTick: simulation.tickCount - lemming.animationFrame,
+                    x: lemming.foot.x, y: lemming.foot.y - 6)
+                guard lemming.animationFrame < 2, let sprite = spriteHighlight(lemming) else {
+                    return MobileExplosion(burst, at: simulation.tickCount)
+                }
+                return .init(id: burst.id, birthTick: burst.birthTick, rect: sprite.rect,
+                    phase: lemming.animationFrame, sprayOrigin: .init(x: Double(burst.x), y: Double(burst.y)))
+            }
     }
     public var allNukeExplosionsPlayed: Bool { simulation.lemmings.allSatisfy { !$0.isActive || $0.action == .exploding || $0.action == .exiting } }
     public var nukeRemainingTicks: Int? { simulation.lemmings.filter(\.isActive).compactMap(\.bomberCountdown).min() }
@@ -129,13 +156,13 @@ public final class ClassicMobileSession: MobileGameSession {
     private var settings: ClassicSettings?
     public private(set) var selectionSprite: MobileSpriteHighlight?
     public func spriteHighlight(for actor: Int) -> MobileSpriteHighlight? {
-        simulation.lemmings.first(where: { $0.id == actor && $0.isActive }).flatMap(spriteHighlight)
+        simulation.lemmings.first(where: { $0.id == actor && Self.canHighlight($0) }).flatMap(spriteHighlight)
     }
     public var rescueSprites: [MobileSpriteHighlight] {
         guard settings?.hdEffectsEnabled == true, settings?.reduceFlashes != true,
               RescueCelebration.isSecured(saved: snapshot.saved, required: snapshot.required,
                   isComplete: snapshot.isComplete, didWin: snapshot.didWin) else { return [] }
-        return simulation.lemmings.filter(\.isActive).compactMap(spriteHighlight)
+        return simulation.lemmings.filter(Self.canHighlight).compactMap(spriteHighlight)
     }
     public private(set) var assignmentSprite: MobileSpriteHighlight?
     public var assignmentProgress: Double? {
@@ -307,7 +334,7 @@ public final class ClassicMobileSession: MobileGameSession {
     public func targetCandidates(for control: Int) -> [MobileTargetCandidate] {
         guard ClassicSkill.allCases.indices.contains(control) else { return [] }
         let skill = ClassicSkill.allCases[control]
-        return simulation.lemmings.filter(\.isActive).map { lemming in
+        return simulation.lemmings.filter(Self.canHighlight).map { lemming in
             var probe = simulation
             let result = probe.assign(skill, to: lemming.id)
             let state: MobileAssignmentState
@@ -381,11 +408,12 @@ public final class ClassicMobileSession: MobileGameSession {
             ?? ClassicSceneFrame.rgba(renderedLevel, simulation: simulation, terrain: terrainFrame))
         if let assets, palette.count >= 8 {
             for lemming in simulation.lemmings where lemming.isActive {
+                if lemming.action == .exploding,
+                   !ExplosionPixelSpray.popIsVisible(age: lemming.animationFrame,
+                       enhanced: settings?.hdEffectsEnabled != false, singleFrameArtwork: true) { continue }
                 if nativeScene != nil, let sprite = spriteHighlight(lemming) {
                     Self.composite([UInt8](sprite.frame.rgba), sourceWidth: sprite.frame.width, sourceHeight: sprite.frame.height,
                         atX: Int(sprite.rect.x * 2), y: Int(sprite.rect.y * 2), into: &pixels, width: width, height: height)
-                    Self.drawCountdown(lemming, assets: assets, top: sprite.rect.y, scale: scale,
-                        into: &pixels, width: width, height: height)
                 } else {
                     Self.draw(lemming, assets: assets, palette: palette, backpacks: settings?.showClassicSkillBackpacks == true, into: &pixels,
                           width: width, height: height)
@@ -394,13 +422,13 @@ public final class ClassicMobileSession: MobileGameSession {
         }
         selectionSprite = nil
         if let highlight, settings?.lemmingSelectionStyle == .modern,
-           let lemming = simulation.lemmings.first(where: { $0.id == highlight.id }) {
+           let lemming = simulation.lemmings.first(where: { $0.id == highlight.id && Self.canHighlight($0) }) {
             selectionSprite = spriteHighlight(lemming)
         }
         assignmentSprite = assignmentProgress == nil ? nil : assignmentID.flatMap { id in
-            simulation.lemmings.first(where: { $0.id == id }).flatMap(spriteHighlight)
+            simulation.lemmings.first(where: { $0.id == id && Self.canHighlight($0) }).flatMap(spriteHighlight)
         }
-        if let highlight {
+        if let highlight, simulation.lemmings.contains(where: { $0.id == highlight.id && Self.canHighlight($0) }) {
             Self.drawReticle(highlight, into: &pixels, width: width, height: height, scale: scale)
         }
         if settings?.colorDepth == .amigaOCS {
@@ -648,6 +676,14 @@ public final class ClassicMobileSession: MobileGameSession {
             time: reduced ? nil : Double(simulation.tickCount) / ticksPerSecond)
     }
 
+    private static func canHighlight(_ lemming: ClassicDOSLemming) -> Bool {
+        guard lemming.isActive else { return false }
+        switch lemming.action {
+        case .exploding, .splatting, .drowning, .vaporizing, .exiting: return false
+        default: return true
+        }
+    }
+
     private static func isPerforming(_ skill: ClassicSkill, lemming: ClassicDOSLemming) -> Bool {
         switch skill {
         case .bomber: return lemming.bomberCountdown != nil
@@ -711,19 +747,6 @@ public final class ClassicMobileSession: MobileGameSession {
             width: width,
             height: height
         )
-        drawCountdown(lemming, assets: assets, top: Double(lemming.foot.y + animation.offsetY), scale: 1,
-            into: &destination, width: width, height: height)
-    }
-
-    /// Bombs and nukes share the engine fuse and the supplied white pixel digits.
-    private static func drawCountdown(_ lemming: ClassicDOSLemming, assets: ClassicMainDATAssets,
-        top: Double, scale: Int, into destination: inout [UInt8], width: Int, height: Int) {
-        guard let countdown = lemming.bomberCountdown else { return }
-        let seconds = max(1, (countdown + ClassicDOSRules.ticksPerSecond - 1) / ClassicDOSRules.ticksPerSecond)
-        guard let glyph = assets.countdownGlyphs.first(where: { $0.digit == min(9, seconds) })?.bitmap else { return }
-        drawMonochrome(glyph, atX: (lemming.foot.x - glyph.width / 2) * scale,
-            y: Int(top * Double(scale)) - (glyph.height + 1) * scale, scale: scale,
-            into: &destination, width: width, height: height)
     }
 
     private static func backpackPixels(_ source: Data, width: Int, height: Int,
@@ -805,33 +828,6 @@ public final class ClassicMobileSession: MobileGameSession {
                         )
                     }
                     destination[dst + 3] = 255
-                }
-            }
-        }
-    }
-
-    private static func drawMonochrome(
-        _ bitmap: ClassicMonochromeBitmap,
-        atX originX: Int,
-        y originY: Int,
-        scale: Int = 1,
-        into destination: inout [UInt8],
-        width: Int,
-        height: Int
-    ) {
-        for y in 0..<bitmap.height {
-            for x in 0..<bitmap.width where bitmap.isSet(x: x, y: y) {
-                for dy in 0..<scale {
-                    for dx in 0..<scale {
-                        let px = originX + x * scale + dx
-                        let py = originY + y * scale + dy
-                        guard (0..<width).contains(px), (0..<height).contains(py) else { continue }
-                        let offset = (py * width + px) * 4
-                        destination[offset] = 255
-                        destination[offset + 1] = 255
-                        destination[offset + 2] = 255
-                        destination[offset + 3] = 255
-                    }
                 }
             }
         }

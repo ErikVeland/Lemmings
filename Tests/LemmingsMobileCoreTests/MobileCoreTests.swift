@@ -326,6 +326,14 @@ struct MobileCoreTests {
             #expect(state.pauseForPlanning() == true)
             let tick = session.snapshot.tick
             let target = try #require(session.targetCandidates(for: control).first(where: { $0.assignment == .eligible }))
+            let viewport = MobileViewport(levelSize: session.levelSize, viewSize: session.levelSize, zoom: 1)
+            let pointer = viewport.viewPoint(fromLevel: target.point)
+            let hovered = MobileTargetSelector.select(candidates: [target], touch: pointer, viewport: viewport,
+                favourApproaching: false, input: .precision)
+            #expect(hovered?.id == target.id && hovered?.state == .eligible)
+            if session.engineIdentifier != "classic-dos" {
+                #expect(target.pointerBounds == MobileRect(x: -9, y: -12, width: 18, height: 24))
+            }
             #expect(state.canEdit && session.assign(control: control, to: target.id))
             #expect(session.snapshot.tick == tick)
             #expect(state.isPaused)

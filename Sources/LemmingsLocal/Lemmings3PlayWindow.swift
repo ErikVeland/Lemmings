@@ -1608,6 +1608,7 @@ import NxlvKit
     }
     private(set) var rescueAuras: [LemmingSelectionEffect] = []
     private var lastBlastTick = -1
+    private var explosionTimeline = PixelExplosionTimeline()
     override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
         if window != nil, hdrOverlay == nil {
@@ -1623,6 +1624,7 @@ import NxlvKit
         hdrOverlay?.setSuperSpeed(active,in:playfieldRect,immediate:!active, multiplier: speedMultiplier)
     }
     func flashExplosions(_ game: Lemmings3Runtime) {
+        explosionTimeline.update(tick: game.tick, bursts: PixelExplosion.lemmings3(game))
         guard hdEffectsEnabled, !reduceFlashes else { return }
         guard game.tick != lastBlastTick else { return }
         lastBlastTick = game.tick
@@ -1641,7 +1643,10 @@ import NxlvKit
         didSet {
             if game == nil || oldValue == nil || (game?.tick ?? 0) < (oldValue?.tick ?? 0) {
                 selectionFade.reset()
+                explosionTimeline.reset()
+                lastBlastTick = -1
             }
+            if let game { explosionTimeline.update(tick: game.tick, bursts: PixelExplosion.lemmings3(game)) }
             updateSpeedTrails()
         }
     }
@@ -2132,21 +2137,17 @@ import NxlvKit
                 y: origin.y + (CGFloat(item.y - 14) - cameraY) * zoom), palette: .green)
         }
         for blast in game.blasts {
-            if hdEffectsEnabled && !reduceFlashes {
+            if !reduceFlashes {
                 ExplosionHDR.drawCore(at: CGPoint(x: origin.x + (CGFloat(blast.x) - cameraX) * zoom,
                     y: origin.y + (CGFloat(blast.y) - cameraY) * zoom),
                     pixel: CGSize(width: zoom, height: zoom), phase: game.tick - blast.tick)
             }
-            let rect = NSRect(x: origin.x + (CGFloat(blast.x - 20) - cameraX) * zoom,
-                y: origin.y + (CGFloat(blast.y - 20) - cameraY) * zoom, width: 40 * zoom, height: 40 * zoom)
-            if SequelArtworkPreference.enabled, let ring = SequelEffectArtwork.blastRingImage {
-                ring.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1,
-                    respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
-            } else {
-                NSColor.orange.setStroke()
-                let ring = NSBezierPath(ovalIn: rect)
-                ring.lineWidth = 2; ring.stroke()
-            }
+        }
+        for burst in explosionTimeline.bursts {
+            ExplosionHDR.drawSpray(burst, at: game.tick,
+                origin: CGPoint(x: origin.x + (CGFloat(burst.x) - cameraX) * zoom,
+                    y: origin.y + (CGFloat(burst.y) - cameraY) * zoom),
+                pixel: CGSize(width: zoom, height: zoom))
         }
         for shot in game.fireballs {
             let rect = NSRect(x: origin.x + (CGFloat(shot.x - 3) - cameraX) * zoom,

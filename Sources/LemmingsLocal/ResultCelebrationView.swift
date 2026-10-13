@@ -101,7 +101,7 @@ import NxlvKit
             }
             GameStar.draw(at: CGPoint(x: 820, y: 417), earned: saved, size: 2)
         }
-        resultActions(y: 453)
+        resultActions()
         let maximum = run.level.conditions.map { ArcadeStore.shared.records.trolley.maximum(conditions: $0, assisted: run.assisted) } ?? TrolleyMaximum()
         let awardText = c.newAwards.map { "New career award: \($0.award.title). \($0.award.detail)" }.joined(separator: " ")
         setAccessibilityLabel("\(player.initials)'s attempt. \(outcome). \(run.level.title). \(rescueSummary(run, maximum: maximum)) \(resultStatus.map { $0 + " " } ?? "")\(c.goals.stars) of 3 stars this run. Time: \(Self.time(run.seconds)). Fastest clear: \(best.map(Self.time) ?? "No record"). Level best: \(c.bestStars) stars. \(c.nextGoal) \(c.recordMessage). New level awards: \(c.levelAwards.map(\.title).joined(separator: ", ")). \(awardText) Career: \(c.career.stars) stars, plus \(c.addedStars). \(precisionRewardText(c)) \(c.nextCareerGoal.map { $0.award.title + ": " + $0.status + ". " + $0.next } ?? "") Local Most Saved: \(c.ranks.first?.label ?? "No record"). Enter: \(primaryResultTitle). R retries. N retries as the next session player. P opens Hot Seat setup. Worldwide opens community leaderboards. V opens replay. B opens records. A opens achievements. G opens level goals. C opens career progress. D opens details. Escape returns."

@@ -440,3 +440,30 @@ packages: after reusing cached Sparkle, Xcode still required a manifest cache
 outside the writable sandbox. Device inspection timed out in CoreDeviceService.
 These checks do not establish the cause on the reported device: its model,
 window geometry and runtime layout remain unconfirmed.
+
+## 13 October precision hover selection
+
+Mouse, trackpad and Pencil targeting use the Mac engines' level-space pick boxes.
+Classic uses its narrow sprite box. L2 and L3 retain their native 9-by-12-pixel
+half extents around their targeting centres. These boxes follow zoom and pixel
+aspect. Finger taps keep their screen-space allowance and touch loupe.
+
+Every camera change refreshes the target, including scrolling, minimap movement,
+zoom and controller pan while paused. Hover retains its screen position and
+recomputes the CRT input projection. Mouse-wheel and trackpad scrolling use a
+scroll-only pan recognizer that can run alongside hover. Pencil contact can move
+the target before release without panning or using the finger allowance.
+Ready, interruption and result screens retain their existing input boundaries.
+
+Validation: ten focused, muted, headless tests pass. They cover paused camera
+movement, five zoom scales, pixel aspect, pick boundaries, empty terrain,
+letterboxing, Pencil adjustment, finger panning, bitmap camera alignment and
+planning assignments in all three engines. The arm64 iOS UI target compiles.
+Three windowless Classic bitmap/selection captures were inspected at one fixed
+simulation tick: first target, a different target after scrolling, and no target.
+Logs and captures remain in ignored `.build/precision-selection-*` paths.
+
+Native UIKit dispatch, physical Pencil hover, simultaneous trackpad hover and
+scrolling, and curved CRT input still need an iPad check. L2/L3 tests cover their
+shared session adapters and native pick bounds. Their iOS campaigns and renderers
+remain deferred, so these checks do not establish playable sequel parity.

@@ -2,6 +2,40 @@
 import AVFAudio
 import Foundation
 
+/// Blocking configuration and the pre-iOS 27 API run on this actor's executor.
+private actor MobileAudioSessionWorker {
+    static let shared = MobileAudioSessionWorker()
+
+    func perform(_ operation: MobileAudioSessionOperation) async throws {
+        let session = AVAudioSession.sharedInstance()
+        switch operation {
+        case .prepare:
+            try prepare(session)
+        case .resume:
+            try prepare(session)
+            if #available(iOS 27.0, *) {
+                guard try await session.activate() else { throw ActivationError.notActivated }
+            } else {
+                try session.setActive(true)
+            }
+        case .suspend:
+            if #available(iOS 27.0, *) {
+                _ = try await session.deactivate(options: [.notifyOthersOnDeactivation])
+            } else {
+                try session.setActive(false, options: [.notifyOthersOnDeactivation])
+            }
+        }
+    }
+
+    private enum ActivationError: Error { case notActivated }
+
+    private func prepare(_ session: AVAudioSession) throws {
+        try session.setCategory(.ambient, mode: .default, options: [])
+        // Give tracker synthesis and effects one 1,024-frame buffer at 44.1 kHz.
+        try session.setPreferredIOBufferDuration(1024.0 / 44100.0)
+    }
+}
+
 final class MobileNotificationObserverBag: @unchecked Sendable {
     private var observers: [NSObjectProtocol] = []
 
@@ -25,8 +59,12 @@ final class MobileNotificationObserverBag: @unchecked Sendable {
 
     var onEvent: ((Event) -> Void)?
     private let observers = MobileNotificationObserverBag()
+    private let requests: MobileAudioSessionRequests
 
     init() {
+        requests = MobileAudioSessionRequests(queue: .shared) {
+            try await MobileAudioSessionWorker.shared.perform($0)
+        }
         let centre = NotificationCenter.default
         observers.append(centre.addObserver(
             forName: AVAudioSession.interruptionNotification,
@@ -50,30 +88,23 @@ final class MobileNotificationObserverBag: @unchecked Sendable {
             queue: .main
         ) { [weak self] _ in
             MainActor.assumeIsolated {
-                try? self?.prepare()
+                // Invalidate any activation in flight and wait for the player's Resume.
+                self?.onEvent?(.interruptionBegan)
                 self?.onEvent?(.interruptionEnded)
             }
         })
     }
 
-    func prepare() throws {
-        let session = AVAudioSession.sharedInstance()
-        try session.setCategory(.ambient, mode: .default, options: [])
-        // Give tracker synthesis and effects one 1,024-frame buffer at 44.1 kHz.
-        try session.setPreferredIOBufferDuration(1024.0 / 44100.0)
+    func prepare() {
+        requests.prepare()
     }
 
-    func resume() throws {
-        let session = AVAudioSession.sharedInstance()
-        try session.setCategory(.ambient, mode: .default, options: [])
-        try session.setActive(true)
+    func resume(completion: @escaping @MainActor (Bool) -> Void) {
+        requests.resume(completion: completion)
     }
 
     func suspend() {
-        try? AVAudioSession.sharedInstance().setActive(
-            false,
-            options: [.notifyOthersOnDeactivation]
-        )
+        requests.suspend()
     }
 
     private func handleInterruption(_ raw: UInt?) {

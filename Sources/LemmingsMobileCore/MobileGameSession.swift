@@ -48,13 +48,30 @@ public struct MobileCheckpointPayload: Sendable {
     public func encode() throws -> Data { try encodeValue() }
 }
 
+public struct MobileBombCountdown: Equatable, Sendable {
+    public let id: Int
+    public let seconds: Int
+    /// Centre of the sprite's top edge, in level coordinates.
+    public let anchor: MobilePoint
+    public init(id: Int, seconds: Int, anchor: MobilePoint) {
+        self.id = id; self.seconds = seconds; self.anchor = anchor
+    }
+}
+
 public struct MobileExplosion: Sendable {
     public let id: Int
     public let birthTick: Int
     public let rect: MobileRect
     public let phase: Int
-    public init(id: Int, birthTick: Int, rect: MobileRect, phase: Int) {
+    public let sprayOrigin: MobilePoint
+    public init(id: Int, birthTick: Int, rect: MobileRect, phase: Int, sprayOrigin: MobilePoint? = nil) {
         self.id = id; self.birthTick = birthTick; self.rect = rect; self.phase = phase
+        self.sprayOrigin = sprayOrigin ?? .init(x: rect.x + rect.width / 2, y: rect.y + rect.height / 2)
+    }
+    public init(_ burst: PixelExplosion, at tick: Int) {
+        self.init(id: burst.id, birthTick: burst.birthTick,
+            rect: .init(x: Double(burst.x - 3), y: Double(burst.y - 3), width: 6, height: 6),
+            phase: tick - burst.birthTick)
     }
 }
 
@@ -166,6 +183,7 @@ public protocol MobileGameSession: AnyObject {
     var nukeRemainingTicks: Int? { get }
     var allNukeExplosionsPlayed: Bool { get }
     var explosions: [MobileExplosion] { get }
+    var bombCountdowns: [MobileBombCountdown] { get }
     var selectionSprite: MobileSpriteHighlight? { get }
     func spriteHighlight(for actor: Int) -> MobileSpriteHighlight?
     var rescueSprites: [MobileSpriteHighlight] { get }
@@ -216,6 +234,7 @@ public extension MobileGameSession {
     var nukeRemainingTicks: Int? { nil }
     var allNukeExplosionsPlayed: Bool { snapshot.isComplete }
     var explosions: [MobileExplosion] { [] }
+    var bombCountdowns: [MobileBombCountdown] { [] }
     var entrancePoint: MobilePoint { initialCameraOrigin }
     var goalPoint: MobilePoint { MobilePoint(x: levelSize.width, y: levelSize.height / 2) }
     var supportsRewind: Bool { false }

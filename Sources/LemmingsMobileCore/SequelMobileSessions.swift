@@ -30,6 +30,11 @@ public final class Lemmings2MobileSession: MobileGameSession {
     private let initial: Lemmings2Runtime
     private let renderer: Lemmings2MobileRenderer?
     private var runtime: Lemmings2Runtime
+    private var explosionTimeline = PixelExplosionTimeline()
+    public var explosions: [MobileExplosion] {
+        explosionTimeline.update(tick: runtime.tick, bursts: PixelExplosion.lemmings2(runtime))
+        return explosionTimeline.bursts.map { MobileExplosion($0, at: runtime.tick) }
+    }
     private var beforeEndRun: Lemmings2Runtime?
     private var inputs: [Input] = []
 
@@ -79,6 +84,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
 
     public func tick() {
         runtime.step()
+        explosionTimeline.update(tick: runtime.tick, bursts: PixelExplosion.lemmings2(runtime))
         _ = runtime.drainSoundEvents()
         if !runtime.isNuking { beforeEndRun = nil }
     }
@@ -119,6 +125,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
     public func undoEndRun() -> Bool {
         guard let beforeEndRun else { return false }
         runtime = beforeEndRun
+        explosionTimeline.reset()
         self.beforeEndRun = nil
         if case .endRun = inputs.last { inputs.removeLast() }
         return true
@@ -178,6 +185,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
             throw MobileSessionError.invalidCheckpoint
         }
         runtime = restored
+        explosionTimeline.reset()
         inputs = checkpoint.inputs
         beforeEndRun = restoredBeforeEndRun
     }
@@ -215,6 +223,11 @@ public final class Lemmings3MobileSession: MobileGameSession {
     private let initial: Lemmings3Runtime
     private let renderer: Lemmings3MobileRenderer?
     private var runtime: Lemmings3Runtime
+    private var explosionTimeline = PixelExplosionTimeline()
+    public var explosions: [MobileExplosion] {
+        explosionTimeline.update(tick: runtime.tick, bursts: PixelExplosion.lemmings3(runtime))
+        return explosionTimeline.bursts.map { MobileExplosion($0, at: runtime.tick) }
+    }
     private var inputs: [Input] = []
 
     public init(
@@ -263,6 +276,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
 
     public func tick() {
         runtime.step()
+        explosionTimeline.update(tick: runtime.tick, bursts: PixelExplosion.lemmings3(runtime))
     }
 
     public func targetCandidates(for control: Int) -> [MobileTargetCandidate] {
@@ -346,6 +360,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
             throw MobileSessionError.invalidCheckpoint
         }
         runtime = restored
+        explosionTimeline.reset()
         inputs = checkpoint.inputs
     }
 

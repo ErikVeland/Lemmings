@@ -144,6 +144,8 @@ Validation completed locally:
 - Eight service checks cover authenticated reads/deletion, conditional writes,
   independent device slots, retry safety, expiry, one-use links, bounds and
   backup restoration.
+- Fifteen existing-store and mobile Hot Seat checks cover saved-file round trips,
+  participant access, imported turn rules and preservation of the selected mode.
 - Mac sources and the arm64 iOS `LemmingsMobileUI` target compile. No simulator,
   foreground test window, audible test or public release build was used.
 

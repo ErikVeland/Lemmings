@@ -40,10 +40,34 @@ and expanding ring. With the cinematic option disabled, the original short
 pixel explosion and local HDR highlights remain in place. Flat mode uses a
 transparent overlay for those highlights. CRT mode uses its existing source
 mask. These local highlights retain their original SDR fallback. Turning off
-HD effects removes the cinematic blast and local highlights, and restores the
-original classic sprite explosion animation.
+HD effects removes the cinematic blast and local highlights. The classic pop
+stays opaque for four game ticks, then disappears. The source art has a single
+pop frame; it no longer repeats throughout the engine's 51-tick cleanup state.
+
+## Pixel debris and mobile parity
+
+Classic on Mac and iOS uses the same deterministic pixel spray. It lasts up to
+16 game ticks and draws opaque, square pixels in both Modern and Old school
+settings. It follows the game clock, camera and pixel aspect; pausing holds the
+debris and rewinding restores its earlier positions. Selection, assignment and
+rescue outlines exclude exploding actors. The iOS local core also stops drawing
+when its brief light pulse expires, including while paused.
+
+Lemmings 2 retains its original 52-frame, 80-point bomber animation. Its other
+blast sources use the shared spray. Lemmings 3 uses the shared spray in place of
+the static placeholder blast ring. Mobile adapters for both sequels expose
+blast positions and retain debris between rendered frames during fast forward.
+Their full mobile gameplay renderers remain unavailable; these adapters provide
+the effects path when a renderer is supplied. No new Apple TV gameplay target
+is added by this change.
 
 ## Validation
+
+- `MobileExplosionParityTests` checks bombs and nukes with DOS, Macintosh and
+  Amiga art, HD effects on and off, the pop cutoff, selection exclusion and rewind.
+- `ExplosionPixelSprayTests` checks deterministic motion, fast-forward retention
+  and removal of future bursts on rewind. The Mac rendering suite checks square,
+  opaque debris pixels and complete expiry, with PNG previews.
 
 - `Scripts/run-explosion-hdr-tests.sh` renders the actual Metal shaders to
   FP16 textures and reads their pixels back. It checks visible SDR exposure,

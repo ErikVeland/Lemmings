@@ -152,8 +152,56 @@ extension ModuleMusicPlayer {
         print("PASS real MOD samples, parked rewind output, volume, mute, suspension, retained pause and vinyl spin-up")
     }
 }
+extension MusicFileDeck {
+    @MainActor fileprivate func prepareRewindRoutingCheck(_ groove: AVAudioPCMBuffer) throws {
+        try engine.enableManualRenderingMode(.offline, format: groove.format, maximumFrameCount: 1024)
+        play()
+        rewindAudio.record(groove)
+    }
+    fileprivate var scratchActive: Bool { rewindAudio.isRewinding }
+    @MainActor fileprivate func scratchEnergy() throws -> Double {
+        let output = stereoBuffer(1024)
+        _ = try engine.renderOffline(1024, to: output)
+        return energy(output)
+    }
+}
+extension DJDeck {
+    @MainActor fileprivate func prepareRewindRoutingCheck(_ groove: AVAudioPCMBuffer) throws { try recording!.prepareRewindRoutingCheck(groove) }
+    fileprivate var scratchActive: Bool { recording!.scratchActive }
+    @MainActor fileprivate func scratchEnergy() throws -> Double { try recording!.scratchEnergy() }
+}
+extension AdaptiveDJPlayer {
+    @MainActor fileprivate static func checkRewindRouting() throws {
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("dj-rewind-\(UUID().uuidString).wav")
+        defer { try? FileManager.default.removeItem(at: url) }
+        let groove = stereoBuffer(44100)
+        for i in 0..<44100 { groove.floatChannelData![0][i] = 0.25; groove.floatChannelData![1][i] = -0.125 }
+        do { let file = try AVAudioFile(forWriting: url, settings: groove.format.settings); try file.write(from: groove) }
+        let dj = AdaptiveDJPlayer()
+        let a = DJDeck(url)!, b = DJDeck(url)!, silent = DJDeck(url)!
+        dj.deckA = a; dj.deckB = b; dj.carryDecks = [silent]
+        defer { dj.stop() }
+        dj.setGain(0.8, for: a); dj.setGain(0.2, for: b); dj.setGain(0, for: silent)
+        dj.setVolume(0.7)
+        for deck in [a, b, silent] { try deck.prepareRewindRoutingCheck(groove) }
+        dj.playRewind()
+        try assertMusicRewind(a.scratchActive && b.scratchActive && !silent.scratchActive,
+            "DJ rewind missed an audible layer or woke a silent deck")
+        let aEnergy = try a.scratchEnergy(), bEnergy = try b.scratchEnergy()
+        try assertMusicRewind(aEnergy > 1 && abs(aEnergy / bEnergy - 4) < 0.01,
+            "DJ rewind changed the current mix gains")
+        dj.setMuted(true); dj.playRewind()
+        try assertMusicRewind(!a.scratchActive && !b.scratchActive, "Muted DJ restarted a scratch")
+        dj.setMuted(false); dj.setVolume(0); dj.playRewind()
+        try assertMusicRewind(!a.scratchActive && !b.scratchActive, "Zero DJ volume restarted a scratch")
+        dj.setVolume(0.7); dj.playRewind(); dj.suspendOutput()
+        try assertMusicRewind(!a.scratchActive && !b.scratchActive, "DJ suspension retained its scratches")
+        print("PASS Adaptive DJ audible-layer routing, exact mix gains, silent decks, mute, zero volume and suspension")
+    }
+}
 let application = NSApplication.shared
 application.setActivationPolicy(.accessory)
 try checkReverseGroove()
 try MusicFileDeck.checkRecordingRewind()
 try ModuleMusicPlayer().checkModuleRewind()
+try AdaptiveDJPlayer.checkRewindRouting()

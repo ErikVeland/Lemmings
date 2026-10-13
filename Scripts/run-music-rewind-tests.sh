@@ -13,7 +13,8 @@ swiftc -swift-version 6 -target "$target" -parse-as-library -module-cache-path "
   -o "$build_dir/libNxlvKit.dylib" Sources/NxlvKit/*.swift
 cat Sources/LemmingsAudio/MusicRewindBuffer.swift Sources/LemmingsAudio/MusicFileDeck.swift \
   Sources/LemmingsAudio/ModuleMusicPlayer.swift Sources/LemmingsAudio/VinylRamp.swift \
-  Sources/LemmingsAudio/SoundtrackPlayer.swift Sources/LemmingsAudio/MusicLibrary.swift Tests/MusicRewindTests/checks.swift > "$build_dir/main.swift"
+  Sources/LemmingsAudio/SoundtrackPlayer.swift Sources/LemmingsAudio/MusicLibrary.swift \
+  Sources/LemmingsAudio/AdaptiveDJPlayer.swift Tests/MusicRewindTests/checks.swift > "$build_dir/main.swift"
 swiftc -swift-version 6 -warnings-as-errors -target "$target" -module-cache-path "$build_dir/ModuleCache" \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit -Xlinker -rpath -Xlinker "$build_dir" \
   -framework AVFoundation -framework AppKit "$build_dir/main.swift" -o "$build_dir/checks"

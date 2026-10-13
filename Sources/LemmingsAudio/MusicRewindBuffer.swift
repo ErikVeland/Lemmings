@@ -38,7 +38,9 @@ final class MusicRewindBuffer: @unchecked Sendable {
   }
 
   func record(left sourceLeft: UnsafePointer<Float>, right sourceRight: UnsafePointer<Float>, frames: Int) {
-    lock.lock(); defer { lock.unlock() }
+    // History is optional. Never delay the forward audio for a scratch control.
+    guard lock.try() else { return }
+    defer { lock.unlock() }
     guard recording, remaining == 0 else { return }
     for index in 0..<frames {
       let slot = Int(written % Int64(left.count))
@@ -78,7 +80,17 @@ final class MusicRewindBuffer: @unchecked Sendable {
   }
 
   func render(_ buffers: UnsafeMutableAudioBufferListPointer, frames: Int) {
-    lock.lock(); defer { lock.unlock() }
+    // This source runs even when no scratch is playing. It must not wait for
+    // the recorder or a UI command on the device's render thread.
+    guard lock.try() else {
+      for buffer in buffers { memset(buffer.mData, 0, Int(buffer.mDataByteSize)) }
+      return
+    }
+    defer { lock.unlock() }
+    guard remaining > 0 else {
+      for buffer in buffers { memset(buffer.mData, 0, Int(buffer.mDataByteSize)) }
+      return
+    }
     let oldest = max(0, written - Int64(left.count))
     for index in 0..<frames {
       var l: Float = 0, r: Float = 0

@@ -78,6 +78,7 @@ public final class MusicFileDeck {
     get { masterVolume }
     set {
       masterVolume = min(1, max(0, newValue))
+      if masterVolume == 0 { cancelRewind() }
       applyOutputVolume()
     }
   }
@@ -180,7 +181,7 @@ public final class MusicFileDeck {
     engine.attach(reverse)
     engine.connect(reverse, to: outputMixer, fromBus: 0, toBus: 1, format: format)
     rewindNode = reverse
-    player.installTap(onBus: 0, bufferSize: 1024, format: format) { buffer, _ in history.record(buffer) }
+    player.installTap(onBus: 0, bufferSize: 1024, format: format) { @Sendable buffer, _ in history.record(buffer) }
     engine.connect(outputMixer, to: engine.mainMixerNode, format: format)
 
     // Music stays stereo. Positional effects use a separate environment node.

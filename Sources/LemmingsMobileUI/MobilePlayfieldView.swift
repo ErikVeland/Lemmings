@@ -51,6 +51,8 @@ import UIKit
     var assignmentProgress: Double?
     var renderScale = 1.0
     var explosions: [MobileExplosion] = []
+    var bombCountdowns: [MobileBombCountdown] = []
+    private let bombCountdownView = MobileBombCountdownView()
     private var explosionBirths: [Int: (tick: Int, expires: Double)] = [:]
     private let decoration = MobilePlayfieldDecoration()
     private let failureMood = FailureMoodTransition()
@@ -75,6 +77,7 @@ import UIKit
         contentMode = .redraw
         isMultipleTouchEnabled = true
         if let tube { addSubview(tube) }
+        addSubview(bombCountdownView)
         decoration.isUserInteractionEnabled = false
         decoration.accessibilityElementsHidden = true
         decoration.isOpaque = false
@@ -103,7 +106,7 @@ import UIKit
 
         isAccessibilityElement = true
         accessibilityLabel = "Game playfield"
-        accessibilityHint = "Tap a lemming to assign the selected skill. Drag to pan. Pinch to zoom."
+        accessibilityHint = "Tap a lemming to assign the selected skill. Drag a finger to pan. Pinch to zoom."
         accessibilityTraits = .allowsDirectInteraction
     }
 
@@ -195,10 +198,12 @@ import UIKit
         guard let image = MobileBitmapRenderer.image(frame) else { throw MobileSessionError.frameUnavailable }
         bitmap = image
         let now = ProcessInfo.processInfo.systemUptime
+        let liveIDs = Set(explosions.map(\.id))
+        explosionBirths = explosionBirths.filter { liveIDs.contains($0.key) }
         if !displaySettings.hdEffectsEnabled || displaySettings.reduceFlashes { explosionBirths.removeAll(); hdr?.clear() }
         else {
             var fresh: [CGRect] = []
-            for explosion in explosions where explosionBirths[explosion.id]?.tick != explosion.birthTick {
+            for explosion in explosions where (0..<2).contains(explosion.phase) && explosionBirths[explosion.id]?.tick != explosion.birthTick {
                 explosionBirths[explosion.id] = (explosion.birthTick, now + 0.14)
                 let rect = explosion.rect
                 guard gameViewport.visibleLevelRect.contains(.init(x: rect.x + rect.width / 2, y: rect.y + rect.height / 2)) else { continue }
@@ -216,6 +221,7 @@ import UIKit
     func purgeBitmap() {
         hdr?.clear(); explosionBirths.removeAll()
         bitmap = nil
+        updateBombCountdowns()
         tube?.isHidden = true
         setNeedsDisplay()
     }
@@ -264,6 +270,7 @@ import UIKit
     }
 
     private func updateTube() {
+        updateBombCountdowns()
         guard let tube else { return }
         tube.frame = bounds
         tube.isHidden = displaySettings.display == .flat || bitmap == nil
@@ -293,6 +300,13 @@ import UIKit
         tube.selection = selectionEffect(viewport: viewport)
         tube.rescueAuras = rescueEffects(viewport: viewport)
         tube.update(image: image, settings: displaySettings, flashMask: ExplosionGlow.textureMask(width: width, height: height, flashes: flashes))
+    }
+
+    private func updateBombCountdowns() {
+        bombCountdownView.frame = bounds
+        let curved = displaySettings.display != .flat && tube != nil && bitmap != nil
+        bombCountdownView.update(bitmap == nil ? [] : bombCountdowns, viewport: gameViewport,
+            project: curved ? { [weak self] point in self?.tube?.outputViewPoint(point) ?? point } : nil)
     }
 
     private func drawObviousSelection(viewport: MobileViewport, context: CGContext) {
@@ -327,18 +341,31 @@ import UIKit
     }
 
     private func drawExplosionCores(viewport: MobileViewport, context: CGContext) -> [ExplosionGlow.Flash] {
+        context.saveGState()
+        context.clip(to: CGRect(x: viewport.contentFrame.x, y: viewport.contentFrame.y,
+            width: viewport.contentFrame.width, height: viewport.contentFrame.height))
+        defer { context.restoreGState() }
+        let pixel = CGSize(width: viewport.zoom * viewport.pixelAspect, height: viewport.zoom)
+        for explosion in explosions {
+            let origin = explosion.sprayOrigin
+            let point = viewport.viewPoint(fromLevel: origin)
+            let burst = PixelExplosion(id: explosion.id, birthTick: explosion.birthTick,
+                x: Int(origin.x), y: Int(origin.y))
+            ExplosionGlow.drawSpray(burst, at: explosion.birthTick + explosion.phase,
+                origin: CGPoint(x: point.x, y: point.y), pixel: pixel, context: context)
+        }
         guard displaySettings.hdEffectsEnabled, !displaySettings.reduceFlashes else { explosionBirths.removeAll(); return [] }
         let now = ProcessInfo.processInfo.systemUptime
         var flashes: [ExplosionGlow.Flash] = []
-        for explosion in explosions {
+        for explosion in explosions where (0..<2).contains(explosion.phase) {
             let sprite = explosion.rect
             let point = viewport.viewPoint(fromLevel: .init(x: sprite.x + sprite.width / 2, y: sprite.y + sprite.height / 2))
             let pixel = max(1, floor(viewport.zoom))
-            ExplosionGlow.drawCore(at: CGPoint(x: point.x, y: point.y), pixel: CGSize(width: pixel * viewport.pixelAspect, height: pixel), phase: explosion.phase, context: context)
             if explosionBirths[explosion.id]?.tick != explosion.birthTick {
                 explosionBirths[explosion.id] = (explosion.birthTick, now + 0.14)
             }
             guard (explosionBirths[explosion.id]?.expires ?? 0) > now else { continue }
+            ExplosionGlow.drawCore(at: CGPoint(x: point.x, y: point.y), pixel: CGSize(width: pixel * viewport.pixelAspect, height: pixel), phase: explosion.phase, context: context)
             let x = floor(point.x / pixel) * pixel, y = floor(point.y / pixel) * pixel
             let strength: Float = explosion.phase == 0 ? 1 : 0.5
             flashes.append(.init(rect: CGRect(x: x - 3 * pixel, y: y - pixel, width: 6 * pixel, height: 2 * pixel), strength: strength))

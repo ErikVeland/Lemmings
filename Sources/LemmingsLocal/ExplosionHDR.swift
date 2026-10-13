@@ -3,6 +3,7 @@ import AppKit
 import Metal
 import QuartzCore
 import LemmingsGameArt
+import NxlvKit
 
 struct ExplosionFlash: Equatable {
   let rect: CGRect
@@ -16,6 +17,11 @@ struct ExplosionFlash: Equatable {
 }
 
 enum ExplosionHDR {
+  @MainActor static func drawSpray(_ burst: PixelExplosion, at tick: Int, origin: CGPoint, pixel: CGSize) {
+    guard let context = NSGraphicsContext.current?.cgContext else { return }
+    ExplosionGlow.drawSpray(burst, at: tick, origin: origin, pixel: pixel, context: context)
+  }
+
   /// A hot centre and orange shoulders keep the burst vivid on SDR screens too.
   @MainActor static func drawCore(at point: CGPoint, pixel: CGSize, phase: Int) {
     guard (0..<2).contains(phase), pixel.width > 0, pixel.height > 0 else { return }

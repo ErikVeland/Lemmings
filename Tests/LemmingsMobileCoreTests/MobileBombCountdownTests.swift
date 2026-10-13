@@ -59,6 +59,7 @@ struct MobileBombCountdownTests {
                     #expect(game.assign(control: bomber, to: target.id))
                 }
                 let checkpoint = try game.checkpointPayload()
+                let initialCountdowns = game.bombCountdowns
                 let initialFrame = try game.render(highlight: nil)
                 var digits: Set<Int> = []
                 var lastFrame = initialFrame
@@ -68,24 +69,13 @@ struct MobileBombCountdownTests {
                     let frame = try game.render(highlight: nil)
                     lastFrame = frame
                     let sprite = try #require(game.spriteHighlight(for: lemming.id))
-                    let glyph = try #require(assets.countdownGlyphs.first(where: { $0.digit == digit })).bitmap
-                    let scale = Int(game.renderScale)
-                    let x = (lemming.foot.x - glyph.width / 2) * scale
-                    let y = Int(sprite.rect.y * Double(scale)) - (glyph.height + 1) * scale
-                    var changed = 0
-                    for gy in 0..<(glyph.height * scale) {
-                        for gx in 0..<(glyph.width * scale) {
-                            let offset = ((y + gy) * frame.width + x + gx) * 4
-                            let actual = frame.rgba[offset..<(offset + 4)]
-                            if glyph.isSet(x: gx / scale, y: gy / scale) {
-                                #expect(Array(actual) == [255, 255, 255, 255])
-                                if actual != baseline.rgba[offset..<(offset + 4)] { changed += 1 }
-                            } else {
-                                #expect(actual == baseline.rgba[offset..<(offset + 4)])
-                            }
-                        }
-                    }
-                    #expect(changed > 0)
+                    let countdown = try #require(game.bombCountdowns.first)
+                    #expect(countdown.id == lemming.id)
+                    #expect(countdown.seconds == digit)
+                    #expect(abs(countdown.anchor.x - (sprite.rect.x + sprite.rect.width / 2)) < 0.001)
+                    #expect(countdown.anchor.y == sprite.rect.y)
+                    // Digits are supplied separately and do not enlarge the scene pixels.
+                    #expect(frame.width == rendered.width * Int(game.renderScale))
                     if digits.insert(digit).inserted {
                         try capture(frame, game: game, target: lemming,
                             name: "\(graphics)-\(nuke ? "nuke" : "bomb")-\(digit)")
@@ -96,6 +86,7 @@ struct MobileBombCountdownTests {
                 let finished = try game.render(highlight: nil)
                 let lemming = try #require(game.finalSimulation.lemmings.first)
                 #expect(lemming.bomberCountdown == nil)
+                #expect(game.bombCountdowns.isEmpty)
                 // The upper digit area returns to the original scenery at Oh No.
                 let sprite = try #require(game.spriteHighlight(for: lemming.id))
                 let scale = Int(game.renderScale)
@@ -108,11 +99,14 @@ struct MobileBombCountdownTests {
                 }
                 #expect(game.rewind(seconds: 1 / game.ticksPerSecond))
                 #expect(game.finalSimulation.lemmings.first?.bomberCountdown == 1)
+                #expect(game.bombCountdowns.first?.seconds == 1)
                 #expect(try game.render(highlight: nil) == lastFrame)
                 try game.restoreCheckpointPayload(checkpoint)
+                #expect(game.bombCountdowns == initialCountdowns)
                 #expect(try game.render(highlight: nil) == initialFrame)
                 if nuke {
                     #expect(game.undoEndRun())
+                    #expect(game.bombCountdowns.isEmpty)
                     #expect(try game.render(highlight: nil) == baseline)
                 }
             }
