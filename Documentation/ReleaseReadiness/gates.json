@@ -135,7 +135,7 @@
     "scopes": [
       "all"
     ],
-    "progress": "10 October: the mobile prototype has basic pause, speed, retry and one saved run. It has audio-session lifecycle handling, but no connected soundtrack/effects playback, controller routing, hints, rewind or Hot Seat flow. 14 October: Classic, L2 and L3 share the mobile HUD rewind/step actions. Sequel sessions now support deterministic rewind and backward/forward stepping, record rewind assistance, and restore those counters from checkpoints. Hints, full Hot Seat rosters and handovers, original music/effects/media, controller routing and cross-device acceptance remain open."
+    "progress": "10 October: the mobile prototype has basic pause, speed, retry and one saved run. It has audio-session lifecycle handling, but no connected soundtrack/effects playback, controller routing, hints, rewind or Hot Seat flow. 14 October: Classic, L2 and L3 share the mobile HUD rewind/step actions. Sequel sessions now support deterministic rewind and backward/forward stepping, record rewind assistance, and restore those counters from checkpoints. Hints, full Hot Seat rosters and handovers, original music/effects/media, controller routing and cross-device acceptance remain open. NeoLemmix mobile sessions now reconstruct rewind and single-step navigation from recorded skill, spawn-rate and nuke inputs; the checkpoint preserves rewind and undo assistance counters."
   },
   {
     "area": "iPhone Duo adaptive layouts and live-session continuity",

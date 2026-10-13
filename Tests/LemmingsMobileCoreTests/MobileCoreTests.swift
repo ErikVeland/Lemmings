@@ -834,6 +834,14 @@ struct MobileCoreTests {
     }
 
     @Test func neoLemmixSessionRestoresCheckpointAndReportsCompletionOnce() throws {
+        struct LegacyCheckpoint: Codable {
+            var version = 1
+            let levelFingerprint: String
+            let simulation: NeoLemmixSimulation
+            let simulationBeforeNuke: NeoLemmixSimulation?
+            let requestedSpawnInterval: Int?
+        }
+
         var terrain = try NeoLemmixTerrain(width: 64, height: 32)
         for x in 0..<64 { terrain.setSolid(true, x: x, y: 20) }
         let configuration = try NeoLemmixConfiguration(
@@ -845,6 +853,29 @@ struct MobileCoreTests {
             skills: [.builder: .infinite]
         )
         let initial = try NeoLemmixSimulation(terrain: terrain, configuration: configuration)
+        var legacyState = initial
+        for _ in 0..<7 { _ = legacyState.tick() }
+        let legacySession = NeoLemmixMobileSession(
+            simulation: initial,
+            controls: [.builder],
+            engineFingerprint: "neo-fixture-engine",
+            levelIdentifier: "neo/fixture/1",
+            levelIndex: 0,
+            levelFingerprint: "neo-fixture-level"
+        )
+        try legacySession.restoreCheckpointPayload(JSONEncoder().encode(LegacyCheckpoint(
+            levelFingerprint: "neo-fixture-level",
+            simulation: legacyState,
+            simulationBeforeNuke: nil,
+            requestedSpawnInterval: nil
+        )))
+        #expect(legacySession.snapshot.tick == 7)
+        for _ in 0..<5 { legacySession.tick() }
+        let legacyRewindTarget = legacySession.snapshot
+        for _ in 0..<2 { legacySession.tick() }
+        #expect(legacySession.rewind(seconds: 2 / legacySession.ticksPerSecond))
+        #expect(legacySession.snapshot == legacyRewindTarget)
+
         var completions = 0
         let session = NeoLemmixMobileSession(
             simulation: initial,
@@ -877,6 +908,26 @@ struct MobileCoreTests {
         )
         try restored.restoreCheckpointPayload(payload)
         #expect(restored.snapshot == expected)
+        #expect(restored.supportsRewind)
+        for _ in 0..<20 { restored.tick() }
+        #expect(restored.rewind(seconds: 20 / restored.ticksPerSecond))
+        #expect(restored.snapshot == expected)
+        #expect(restored.usedRewind)
+        #expect(restored.stepBackward())
+        #expect(restored.stepForward())
+        #expect(restored.snapshot == expected)
+        let rewindPayload = try restored.checkpointPayload()
+        let rewindRestored = NeoLemmixMobileSession(
+            simulation: initial,
+            controls: [.builder],
+            engineFingerprint: "neo-fixture-engine",
+            levelIdentifier: "neo/fixture/1",
+            levelIndex: 0,
+            levelFingerprint: "neo-fixture-level"
+        )
+        try rewindRestored.restoreCheckpointPayload(rewindPayload)
+        #expect(rewindRestored.usedRewind)
+        #expect(rewindRestored.rewindCount == restored.rewindCount)
 
         #expect(session.beginEndRun())
         for _ in 0..<5 { session.tick() }
@@ -891,9 +942,12 @@ struct MobileCoreTests {
         )
         try restoredNuke.restoreCheckpointPayload(nukePayload)
         #expect(restoredNuke.snapshot.isEndingRun)
+        #expect(restoredNuke.nukeCount == 1)
         #expect(restoredNuke.undoEndRun())
         #expect(session.undoEndRun())
         #expect(!session.snapshot.isEndingRun)
+        #expect(session.usedRewind)
+        #expect(session.undoCount == 1)
         #expect(session.beginEndRun())
         for _ in 0..<5_000 where !session.snapshot.isComplete { session.tick() }
         #expect(session.snapshot.isComplete)
