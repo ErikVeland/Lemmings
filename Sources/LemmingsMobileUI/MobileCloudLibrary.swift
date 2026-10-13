@@ -3,9 +3,11 @@ import LemmingsAppCore
 import LemmingsMobileCore
 import NxlvKit
 import UIKit
+import UniformTypeIdentifiers
 
 extension MobileLibraryViewController {
     func configureLibraryCloud() {
+        cloudProgress.isEnabled = { [weak self] in self?.libraryCloud.enabled == true }
         libraryCloud.canImport = { [weak self] in
             guard let self else { return false }
             return game == nil && !preparingCloudLevel && !renamingPlayer && nameDraft == nil
@@ -16,9 +18,12 @@ extension MobileLibraryViewController {
         }
         libraryCloud.captureSeats = { [weak self] in
             guard let self else { return [] }
-            return (hotSeats.saved + (hotSeats.current.map { [$0] } ?? [])).map {
-                .init(id: $0.id, host: $0.host, players: $0.players, turn: $0.turn, active: false,
-                      savedAt: $0.savedAt, policy: $0.policy == .everyLevel ? .everyLevel : .atFirstFail)
+            let current: [MobileHotSeat] = hotSeats.current.map { [$0] } ?? []
+            let seats: [MobileHotSeat] = hotSeats.saved + current
+            return seats.map { seat -> ArcadeStore.SavedHotSeat in
+                let policy: ArcadeStore.TurnPolicy = seat.policy == .everyLevel ? .everyLevel : .atFirstFail
+                return ArcadeStore.SavedHotSeat(id: seat.id, host: seat.host, players: seat.players,
+                    turn: seat.turn, active: false, savedAt: seat.savedAt, policy: policy)
             }
         }
         libraryCloud.importSeats = { [weak self] sessions in
@@ -45,17 +50,35 @@ extension MobileLibraryViewController {
         libraryCloud.start()
     }
     func handleCloudSync(_ id: String) -> Bool {
-        if id == "cloudSaves" { syncCode = nil; syncDraft = nil; syncMessage = ""; navigate(.cloudSaves); return true }
+        if id == "cloudSaves" { syncBackRoute = route; syncCode = nil; syncDraft = nil; syncMessage = ""; navigate(.cloudSaves); return true }
         guard route == .cloudSaves, id.hasPrefix("sync") else { return false }
         guard (canvas.page.rows + canvas.page.footer).contains(where: { $0.id == id && $0.enabled }) else { return true }
         syncMessage = ""
         switch id {
-        case "syncBack": navigate(.players)
+        case "syncBack": navigate(syncBackRoute)
         case "syncToggle": libraryCloud.enabled.toggle()
         case "syncCancel": syncCode = nil; syncDraft = nil; searchField.resignFirstResponder()
         case "syncEnterCode": syncDraft = ""; searchField.text = ""; searchField.becomeFirstResponder()
         case "syncCodeField": searchField.becomeFirstResponder()
         case "syncCopy": UIPasteboard.general.string = syncCode; syncMessage = "Copied"
+        case "syncExportKey":
+            do {
+                importingSyncKey = false
+                let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+                try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+                let url = folder.appendingPathComponent("Ultimate Lemmings Recovery.lemmingssync")
+                try libraryCloud.recoveryData().write(to: url, options: .atomic)
+                syncRecoveryExport = url
+                let picker = UIDocumentPickerViewController(forExporting: [url], asCopy: true)
+                picker.delegate = self
+                syncMessage = "Keep the recovery key private."
+                present(picker, animated: true)
+            } catch { syncMessage = error.localizedDescription }
+        case "syncImportKey":
+            importingSyncKey = true
+            let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.data], asCopy: true)
+            picker.delegate = self; picker.allowsMultipleSelection = false
+            present(picker, animated: true)
         case "syncNow", "syncMakeLink", "syncJoin":
             syncBusy = true; searchField.resignFirstResponder()
             Task { [weak self] in
@@ -70,6 +93,16 @@ extension MobileLibraryViewController {
         default: break
         }
         rebuild(); return true
+    }
+    func importCloudRecoveryKey(_ source: URL) {
+        let accessed = source.startAccessingSecurityScopedResource()
+        defer { if accessed { source.stopAccessingSecurityScopedResource() } }
+        do {
+            let size = try source.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? 16385
+            guard size <= 16384 else { throw CocoaError(.fileReadCorruptFile) }
+            try libraryCloud.restoreRecoveryData(Data(contentsOf: source))
+            Task { [weak self] in await self?.libraryCloud.syncNow(); self?.rebuild() }
+        } catch { syncMessage = error.localizedDescription; rebuild() }
     }
 }
 #endif

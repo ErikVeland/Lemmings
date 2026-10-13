@@ -91,6 +91,17 @@ enum ExplosionHDR {
                    Float((rect.midY - self.bounds.minY) / self.bounds.height))
     }
   }
+  func limitedExplosionSamples(now: TimeInterval, limit: Int) -> [SIMD4<Float>] {
+    guard limit > 0 else { return [] }
+    let all = explosionSamples(now: now)
+    var samples = Array(all.suffix(limit))
+    // Keep the exposure burst when reducing decorative bursts.
+    if let exposure = all.first(where: { $0.w > 0 }), !samples.contains(exposure) {
+      if samples.count == limit { samples.removeFirst() }
+      samples.insert(exposure, at: 0)
+    }
+    return samples
+  }
   private var expiration: Task<Void,Never>?
   private var lastPresented = -Double.infinity
   private var timeline = NuclearExplosionTimeline()
@@ -274,12 +285,13 @@ enum ExplosionHDR {
           bounds.width > 0, bounds.height > 0, !isHidden else { return }
     // Opt in while idle, so the display has headroom ready for the short pop.
     surface.wantsExtendedDynamicRangeContent = screen.maximumPotentialExtendedDynamicRangeColorComponentValue > 1
+    MacFXPerformance.shared.configureDisplay(screen)
     let quality = MacFXPerformance.shared.presentation
     guard now - lastPresented >= 1 / quality.effectHz else { return }
-    let scale = quality.overlayRenderScale(width: bounds.width, height: bounds.height,
-                                          nativeScale: window?.backingScaleFactor ?? 1)
+    let scale = CGFloat(quality.overlayRenderScale(width: Double(bounds.width), height: Double(bounds.height),
+                                          nativeScale: Double(window?.backingScaleFactor ?? 1)))
     surface.contentsScale = scale
-    surface.drawableSize = CGSize(width:bounds.width*scale,height:bounds.height*scale)
+    surface.drawableSize = CGSize(width: max(1, floor(bounds.width * scale)), height: max(1, floor(bounds.height * scale)))
     let width = Int(ceil(bounds.width)), height = Int(ceil(bounds.height))
     // Reuse an unchanged mask. Submitted masks remain immutable on the GPU.
     if !currentFlashes.isEmpty && (maskIsDirty || texture == nil) {
@@ -318,13 +330,7 @@ enum ExplosionHDR {
       encoder.setFragmentBytes(&uniforms,length:MemoryLayout<SuperSpeedUniforms>.stride,index:0)
       encoder.drawPrimitives(type:.triangleStrip,vertexStart:0,vertexCount:4)
     }
-    let allSamples = explosionSamples(now: now)
-    // Retain the exposure burst, then the most recent decorative bursts.
-    var samples = Array(allSamples.suffix(quality.explosionLimit))
-    if let exposure = allSamples.first(where: { $0.w > 0 }), !samples.contains(exposure) {
-      if samples.count == quality.explosionLimit { samples.removeFirst() }
-      samples.insert(exposure, at: 0)
-    }
+    let samples = limitedExplosionSamples(now: now, limit: quality.explosionLimit)
     if let nuclearPipeline, !samples.isEmpty {
       var uniforms = NuclearExplosionUniforms(size: SIMD2(Float(bounds.width),Float(bounds.height)),
         headroom: headroom, count: UInt32(samples.count))
@@ -353,7 +359,7 @@ enum ExplosionHDR {
 
   override func draw(_ dirtyRect: NSRect) {
     guard surface == nil else { return }
-    let samples = explosionSamples(now: ProcessInfo.processInfo.systemUptime).suffix(MacFXPerformance.shared.presentation.explosionLimit)
+    let samples = limitedExplosionSamples(now: ProcessInfo.processInfo.systemUptime, limit: MacFXPerformance.shared.presentation.explosionLimit)
     NSGraphicsContext.saveGraphicsState()
     defer { NSGraphicsContext.restoreGraphicsState() }
     bounds.clip()

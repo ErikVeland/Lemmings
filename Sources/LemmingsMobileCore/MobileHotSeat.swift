@@ -130,7 +130,7 @@ public struct MobileHotSeatRoster: Equatable, Sendable {
 
 /// The running session and the earlier ones the host can resume.
 public struct MobileHotSeatStore: Codable, Equatable, Sendable {
-    public static let historyLimit = 20
+    public static let historyLimit = 200
 
     public private(set) var current: MobileHotSeat?
     public private(set) var saved: [MobileHotSeat] = []
@@ -178,6 +178,7 @@ public struct MobileHotSeatStore: Codable, Equatable, Sendable {
 
     /// Sessions the host can resume, newest first.
     public func resumable(host: String) -> [MobileHotSeat] { saved.filter { $0.host == host } }
+    public func sharedSessions(player: String) -> [MobileHotSeat] { saved.filter { $0.players.contains(player) } }
 
     @discardableResult
     public mutating func resume(id: String) -> MobileHotSeat? {
@@ -198,7 +199,7 @@ public struct MobileHotSeatStore: Codable, Equatable, Sendable {
     /// Imports safe-menu cloud sessions without selecting a different campaign.
     public mutating func importCloudSessions(_ sessions: [MobileHotSeat]) {
         for seat in sessions {
-            if current?.id == seat.id { current = seat }
+            if current?.id == seat.id { current = seat; policy = seat.policy }
             else {
                 saved.removeAll { $0.id == seat.id }; saved.append(seat)
             }

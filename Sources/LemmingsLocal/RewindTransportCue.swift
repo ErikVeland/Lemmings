@@ -12,7 +12,7 @@ import AppKit
     guard originTick > currentTick else { return }
 
     let delta = originTick - currentTick
-    GameTypography.annotation("REWIND  -\(delta) TICKS", at: origin, palette: .blue)
+    GameTypography.annotation("<< REWIND  -\(delta) TICKS", at: origin, palette: .blue)
 
     let railOrigin = CGPoint(x: origin.x, y: origin.y + 11 * scale)
     let railWidth = 112 * scale

@@ -1,5 +1,6 @@
 import CryptoKit
 import Foundation
+import LocalAuthentication
 import NxlvKit
 import Security
 
@@ -24,6 +25,7 @@ import Security
     private var etags: [String: String] = [:]
     private var hashes: [String: Set<Data>] = [:]
     private static let service = "academy.glasscode.lemmings.cloud-library-v2"
+    public var available: Bool { enabled }
     public init(defaults: UserDefaults = .standard, endpoint: URL? = nil) {
         self.defaults = defaults
         self.endpoint = endpoint ?? (Bundle.main.object(forInfoDictionaryKey: "CloudLibraryURL") as? String).flatMap(URL.init(string:))
@@ -33,9 +35,10 @@ import Security
         enabled = ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] != "muted"
     }
     public func credentials() throws -> [CloudLibraryIdentity] {
+        let context = LAContext(); context.interactionNotAllowed = true
         let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: Self.service, kSecAttrAccount as String: "library",
-            kSecReturnData as String: true]
+            kSecReturnData as String: true, kSecUseAuthenticationContext as String: context]
         var result: CFTypeRef?
         let status = SecItemCopyMatching(query as CFDictionary, &result)
         if status == errSecItemNotFound { return [] }
@@ -46,11 +49,13 @@ import Security
     public func storeCredentials(_ identities: [CloudLibraryIdentity]) throws {
         try Self.validate(identities)
         let data = try JSONEncoder().encode(identities)
+        let context = LAContext(); context.interactionNotAllowed = true
         let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: Self.service, kSecAttrAccount as String: "library"]
+            kSecAttrService as String: Self.service, kSecAttrAccount as String: "library",
+            kSecUseAuthenticationContext as String: context]
         let update = SecItemUpdate(query as CFDictionary, [kSecValueData as String: data] as CFDictionary)
         if update == errSecItemNotFound {
-            var entry = query; entry[kSecValueData as String] = data
+            var entry = query; entry.removeValue(forKey: kSecUseAuthenticationContext as String); entry[kSecValueData as String] = data
             entry[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
             guard SecItemAdd(entry as CFDictionary, nil) == errSecSuccess else { throw SequelDataError.invalid("The library key could not be saved.") }
         } else if update != errSecSuccess { throw SequelDataError.invalid("The library key could not be saved.") }
@@ -99,7 +104,7 @@ import Security
                         if identities.isEmpty { identities = [CloudLibraryIdentity()] }
                         let toWrite = identities
                         try await Task.detached(priority: .utility) {
-                            for identity in toWrite {
+                            for identity in toWrite where !found.contains(where: { $0.id == identity.id }) {
                                 try Self.write(try JSONEncoder().encode(identity), at: cloudRoot.appendingPathComponent("identity-\(identity.id).json"))
                             }
                         }.value
@@ -269,24 +274,27 @@ import Security
         try Self.validate(identities)
         let alphabet = Array("ABCDEFGHJKLMNPQRSTUVWXYZ23456789")
         let bytes = SymmetricKey(size: .bits128).withUnsafeBytes { Array($0) }
-        // 12 random characters give about 59 bits. The server never sees the code.
+        // Twelve random characters give 60 bits. Domain-separated hashes prevent
+        // the server's lookup digest from decrypting the transferred private key.
         let code = String(bytes.prefix(12).map { alphabet[Int($0) % alphabet.count] })
-        let digest = SHA256.hash(data: Data(code.utf8))
-        let sealed = try AES.GCM.seal(JSONEncoder().encode(identities), using: SymmetricKey(data: Data(digest))).combined!
+        let digest = Self.linkLookup(code)
+        let sealed = try AES.GCM.seal(JSONEncoder().encode(identities), using: Self.linkKey(code)).combined!
         let payload = try JSONEncoder().encode(Link(code: digest.map { String(format: "%02x", $0) }.joined(), payload: sealed.base64EncodedString()))
         _ = try await request("/v1/links", method: "POST", body: payload)
         return code
     }
     private struct Link: Codable { let code: String; let payload: String }
+    nonisolated static func linkLookup(_ code: String) -> SHA256.Digest { SHA256.hash(data: Data(("UL-Link-Lookup-v1:" + code).utf8)) }
+    nonisolated static func linkKey(_ code: String) -> SymmetricKey { SymmetricKey(data: SHA256.hash(data: Data(("UL-Link-Key-v1:" + code).utf8))) }
     public static func cleanCode(_ input: String) -> String { input.uppercased().filter { $0.isASCII && ($0.isLetter || $0.isNumber) } }
     public func redeemLink(_ input: String) async throws -> [CloudLibraryIdentity] {
         let code = Self.cleanCode(input)
         guard code.count == 12 else { throw SequelDataError.invalid("Enter the 12-character code.") }
-        let digest = SHA256.hash(data: Data(code.utf8))
+        let digest = Self.linkLookup(code)
         let (data, _) = try await request("/v1/links/" + digest.map { String(format: "%02x", $0) }.joined(), method: "POST")
         let link = try JSONDecoder().decode(Link.self, from: data)
         guard let sealed = Data(base64Encoded: link.payload), sealed.count <= 16384 else { throw SequelDataError.invalid("Invalid device link.") }
-        let opened = try AES.GCM.open(.init(combined: sealed), using: SymmetricKey(data: Data(digest)))
+        let opened = try AES.GCM.open(.init(combined: sealed), using: Self.linkKey(code))
         let identities = try JSONDecoder().decode([CloudLibraryIdentity].self, from: opened)
         try Self.validate(identities); guard !identities.isEmpty else { throw SequelDataError.invalid("The library key is missing.") }
         return identities

@@ -77,6 +77,7 @@ public enum MobileSettingsArt {
                     toggle("flashes", "Reduce flashes", c.reduceFlashes)]
         case .privacy:
             rows = [toggle("telemetry", "Anonymous telemetry", sharing, enabled: sharingAvailable),
+                    .init("cloudSaves", "Cloud saves"),
                     .init("playInsights", "Play Insights")]
         }
         return .init(title: group.title, rows: rows, footer: [.init("settings", "Back")])

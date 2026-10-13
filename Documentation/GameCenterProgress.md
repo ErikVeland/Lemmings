@@ -1,4 +1,9 @@
-# Cross-device progress
+# Game Center solo progress bridge
+
+The complete player-library service is documented in [Cloud saves](CloudProgress.md).
+It adds profiles, portraits and shared Hot Seat campaigns with direct iCloud and
+an encrypted hosted fallback. The exclusions below apply to the Game Center
+archive, rather than the complete library service.
 
 Mac and iOS share a GameKit saved-game archive in
 `iCloud.academy.glasscode.lemmings`. This is private progress storage, separate

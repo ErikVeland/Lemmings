@@ -73,6 +73,27 @@ and renderers remain deferred. Their Mac cache fixes do not establish an iOS por
 See [current verification](ReleaseReadiness/2.0IOSCurrent-2026-10-13/README.md)
 and [iOS Game Center preparation](GameCenterSetup.md#ios-20-preparation).
 
+## 13 October bomb and nuke countdowns
+
+Classic iOS draws the supplied white 5–4–3–2–1 digits above each lemming for
+both assigned bombs and nukes. DOS uses the original glyph size. Macintosh and
+Amiga artwork use doubled pixel glyphs above the current sprite. All paths use
+the simulation's remaining fuse ticks, so pause, rewind, checkpoint restore and
+nuke undo preserve the countdown. The digits remain in the playfield bitmap for
+flat, CRT, magnified and replay rendering. They add no input surface.
+
+The muted headless regression checks every fuse tick across six combinations
+of artwork and bomb/nuke assignment. It verifies each digit's pixels, removal
+when the fuse ends, rewind, checkpoint restore and nuke undo. Thirty exported
+renders were inspected. Thirteen existing artwork, camera and touch-deck checks
+pass, and the arm64 iOS core typechecks. Physical-device gameplay and CRT
+acceptance remain pending.
+
+Lemmings 2 uses its native `bombTicks` and `COUNTDOWN` sprites on Mac. Lemmings 3
+shows remaining fuse time above thrown explosives and ends runs with abort,
+without a nuke countdown. Both sequel iOS renderers and campaigns remain
+owner-deferred. This Classic fix does not establish playable sequel parity.
+
 ## 13 October touch controls and camera
 
 Fresh runs and retries centre the first entrance and fit the level height to the

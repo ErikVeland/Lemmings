@@ -62,7 +62,9 @@ not queue an early click. Honour the reduced-flash setting.
 
 Use the shipped green and blue bitmap fonts for all interface text, including
 in-game notices. Classic lemming explosion countdowns use white, bold system
-digits for crisp, readable numbers above each lemming. Use large green lettering for page titles,
+digits for crisp, readable numbers above each lemming on Mac. The iOS bitmap
+renderer reuses the supplied white countdown glyphs at the artwork's pixel scale
+for DOS, Macintosh and Amiga graphics. Use large green lettering for page titles,
 small green lettering for section headings and selected or primary actions,
 and small blue lettering for body text, quantities and secondary actions.
 Keep each row of peer controls at the same face and scale. Do not size individual
@@ -477,3 +479,28 @@ bounds draw overhead with changing scene-image identities. GPU checks verify
 the reduced sprite aura and idle cleanup. Sustained speed and physical HDR
 appearance remain manual. Offscreen focus-dependent checks remain skipped.
 See the 1.9.4 distribution evidence for measured speed and remaining limits.
+
+## Rewind feedback
+
+Successful Mac rewinds, including one-tick Command-Z, add a 160 ms impulse of
+sharp sprite echoes in Classic, Lemmings 2 and Lemmings 3. Echoes trail toward
+the future positions just left behind. Reuse the speed-trail cache, crowd limits,
+mirrored artwork and whole-pixel sampling. Keep every solid lemming above the
+echoes. Do not capture the whole playfield or add an input surface. Repeated
+taps replace the impulse, and forward play clears it. HD effects off, reduced
+motion or reduced flashes suppress the echoes. Keep the shared rewind badge.
+
+The shared sound player adds a centred 115 ms tape zip with a rubbery pitch
+rebound, including when recent gameplay was silent. Mix in a quiet reversed
+slice of recent effects when available. Rapid taps replace the previous cue.
+Honour mute, sound volume and suspended output, and exclude rewind audio from
+its own history. Mobile shares this sound; the sprite echoes are Mac-only.
+
+Offscreen, muted native checks cover immediate direction, repeat replacement,
+paused expiry, forward cancellation, actual Classic/L2/L3 bitmap renders,
+solid sprite preservation, timeline targets and gaps, and reduced-effects
+settings. Offline audio checks cover silent history, finite samples, short
+endpoints, reversed history, 2,400 requests, mute and output suspension.
+The full Mac source typechecks. Sequel seeks retain their existing replay
+reconstruction cost. Audible feel, physical HDR/CRT display output,
+sequel attachment poses and mobile appearance remain for manual validation.

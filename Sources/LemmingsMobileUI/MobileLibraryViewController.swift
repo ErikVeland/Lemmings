@@ -44,9 +44,12 @@ import UniformTypeIdentifiers
     let libraryCloudTransport = AppleCloudLibraryTransport()
     lazy var libraryCloud = CloudLibrarySync(store: arcadeStore, transport: libraryCloudTransport)
     var syncCode: String?
+    var syncBackRoute: Route = .players
     var syncDraft: String?
     var syncMessage = ""
     var syncBusy = false
+    var importingSyncKey = false
+    var syncRecoveryExport: URL?
     var collectionsBridge: MobileCollectionsBridge?
     var creatingPlayer = false
     var draftPortrait = 0
@@ -651,6 +654,11 @@ import UniformTypeIdentifiers
         present(picker, animated: true)
     }
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        if route == .cloudSaves {
+            if importingSyncKey, let source = urls.first { importingSyncKey = false; importCloudRecoveryKey(source) }
+            if let exported = syncRecoveryExport { try? FileManager.default.removeItem(at: exported); syncRecoveryExport = nil }
+            return
+        }
         guard let source = urls.first, let store else { return }
         loading = true; rebuild()
         let accessed = source.startAccessingSecurityScopedResource()
@@ -663,6 +671,10 @@ import UniformTypeIdentifiers
             case let .failure(error): notice = error.localizedDescription; rebuild()
             }
         }
+    }
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+        importingSyncKey = false
+        if let exported = syncRecoveryExport { try? FileManager.default.removeItem(at: exported); syncRecoveryExport = nil }
     }
     func loadCheckpoint() {
         guard let checkpointStore else { return }

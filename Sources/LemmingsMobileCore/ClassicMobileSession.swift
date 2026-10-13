@@ -384,6 +384,8 @@ public final class ClassicMobileSession: MobileGameSession {
                 if nativeScene != nil, let sprite = spriteHighlight(lemming) {
                     Self.composite([UInt8](sprite.frame.rgba), sourceWidth: sprite.frame.width, sourceHeight: sprite.frame.height,
                         atX: Int(sprite.rect.x * 2), y: Int(sprite.rect.y * 2), into: &pixels, width: width, height: height)
+                    Self.drawCountdown(lemming, assets: assets, top: sprite.rect.y, scale: scale,
+                        into: &pixels, width: width, height: height)
                 } else {
                     Self.draw(lemming, assets: assets, palette: palette, backpacks: settings?.showClassicSkillBackpacks == true, into: &pixels,
                           width: width, height: height)
@@ -709,19 +711,19 @@ public final class ClassicMobileSession: MobileGameSession {
             width: width,
             height: height
         )
-        if let countdown = lemming.bomberCountdown {
-            let seconds = max(1, (countdown + ClassicDOSRules.ticksPerSecond - 1) / ClassicDOSRules.ticksPerSecond)
-            if let glyph = assets.countdownGlyphs.first(where: { $0.digit == min(9, seconds) })?.bitmap {
-                drawMonochrome(
-                    glyph,
-                    atX: lemming.foot.x - glyph.width / 2,
-                    y: lemming.foot.y + animation.offsetY - glyph.height - 1,
-                    into: &destination,
-                    width: width,
-                    height: height
-                )
-            }
-        }
+        drawCountdown(lemming, assets: assets, top: Double(lemming.foot.y + animation.offsetY), scale: 1,
+            into: &destination, width: width, height: height)
+    }
+
+    /// Bombs and nukes share the engine fuse and the supplied white pixel digits.
+    private static func drawCountdown(_ lemming: ClassicDOSLemming, assets: ClassicMainDATAssets,
+        top: Double, scale: Int, into destination: inout [UInt8], width: Int, height: Int) {
+        guard let countdown = lemming.bomberCountdown else { return }
+        let seconds = max(1, (countdown + ClassicDOSRules.ticksPerSecond - 1) / ClassicDOSRules.ticksPerSecond)
+        guard let glyph = assets.countdownGlyphs.first(where: { $0.digit == min(9, seconds) })?.bitmap else { return }
+        drawMonochrome(glyph, atX: (lemming.foot.x - glyph.width / 2) * scale,
+            y: Int(top * Double(scale)) - (glyph.height + 1) * scale, scale: scale,
+            into: &destination, width: width, height: height)
     }
 
     private static func backpackPixels(_ source: Data, width: Int, height: Int,
@@ -812,20 +814,25 @@ public final class ClassicMobileSession: MobileGameSession {
         _ bitmap: ClassicMonochromeBitmap,
         atX originX: Int,
         y originY: Int,
+        scale: Int = 1,
         into destination: inout [UInt8],
         width: Int,
         height: Int
     ) {
         for y in 0..<bitmap.height {
             for x in 0..<bitmap.width where bitmap.isSet(x: x, y: y) {
-                let px = originX + x
-                let py = originY + y
-                guard (0..<width).contains(px), (0..<height).contains(py) else { continue }
-                let offset = (py * width + px) * 4
-                destination[offset] = 255
-                destination[offset + 1] = 255
-                destination[offset + 2] = 255
-                destination[offset + 3] = 255
+                for dy in 0..<scale {
+                    for dx in 0..<scale {
+                        let px = originX + x * scale + dx
+                        let py = originY + y * scale + dy
+                        guard (0..<width).contains(px), (0..<height).contains(py) else { continue }
+                        let offset = (py * width + px) * 4
+                        destination[offset] = 255
+                        destination[offset + 1] = 255
+                        destination[offset + 2] = 255
+                        destination[offset + 3] = 255
+                    }
+                }
             }
         }
     }

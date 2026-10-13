@@ -15,6 +15,8 @@ public struct MobileTargetCandidate: Codable, Equatable, Sendable {
     public let isBuilding: Bool
     public let isBlocking: Bool
     public let hasTool: Bool
+    /// Level-space pick bounds relative to the candidate's sprite centre.
+    public let pointerBounds: MobileRect?
 
     public init(
         id: Int,
@@ -23,7 +25,8 @@ public struct MobileTargetCandidate: Codable, Equatable, Sendable {
         assignment: MobileAssignmentState,
         isBuilding: Bool = false,
         isBlocking: Bool = false,
-        hasTool: Bool = false
+        hasTool: Bool = false,
+        pointerBounds: MobileRect? = nil
     ) {
         self.id = id
         self.point = point
@@ -32,7 +35,13 @@ public struct MobileTargetCandidate: Codable, Equatable, Sendable {
         self.isBuilding = isBuilding
         self.isBlocking = isBlocking
         self.hasTool = hasTool
+        self.pointerBounds = pointerBounds
     }
+}
+
+public enum MobileTargetInput: Equatable, Sendable {
+    case touch
+    case precision
 }
 
 public enum MobileTargetPreference: Equatable, Sendable {
@@ -55,22 +64,31 @@ public struct MobileTargetSelection: Codable, Equatable, Sendable {
 }
 
 public enum MobileTargetSelector {
-    /// Picks a stable target in screen-space, so the touch allowance does not
-    /// grow when the player zooms in or shrink when they zoom out.
+    /// Fingers use a screen-space allowance. Precision input uses each game's
+    /// level-space pick box, which follows zoom and pixel aspect.
     public static func select(
         candidates: [MobileTargetCandidate],
         touch: MobilePoint,
         viewport: MobileViewport,
         radius: Double = 26,
         preference: MobileTargetPreference = .assignable,
-        favourApproaching: Bool = true
+        favourApproaching: Bool = true,
+        input: MobileTargetInput = .touch
     ) -> MobileTargetSelection? {
         guard radius > 0, radius.isFinite else { return nil }
+        guard viewport.contentFrame.contains(touch) else { return nil }
+        let levelPoint = viewport.levelPoint(fromView: touch)
         let projected = candidates.compactMap { candidate -> (MobileTargetCandidate, Double)? in
             let viewPoint = viewport.viewPoint(fromLevel: candidate.point)
             let dx = viewPoint.x - touch.x
             let dy = viewPoint.y - touch.y
             let distance = dx * dx + dy * dy
+            if input == .precision {
+                // Classic's Mac pick box extends 14 pixels above the foot and 5 below it.
+                let box = candidate.pointerBounds ?? MobileRect(x: -6, y: -9, width: 12, height: 19)
+                let relative = MobilePoint(x: levelPoint.x - candidate.point.x, y: levelPoint.y - candidate.point.y)
+                return box.contains(relative) ? (candidate, distance) : nil
+            }
             return distance <= radius * radius ? (candidate, distance) : nil
         }
         guard !projected.isEmpty else { return nil }

@@ -17,6 +17,8 @@ import NxlvKit
     private let defaults: UserDefaults
     private let transport: any CloudLibraryTransport
     private let stateFile: URL
+    private let enabledKey: String
+    private let defaultEnabled: Bool
     private var identities: [CloudLibraryIdentity]
     private var saved = LocalState()
     private var running = false
@@ -34,7 +36,9 @@ import NxlvKit
                 identities: [CloudLibraryIdentity] = []) {
         self.store = store; defaults = storage.defaults; self.transport = transport
         self.identities = identities
-        stateFile = storage.applicationSupport.appendingPathComponent("Cloud Library/local-state-v2.json")
+        defaultEnabled = !storage.isPreviewBuild && !storage.isIntegrationTestBuild
+        enabledKey = storage.isPreviewBuild ? "CloudLibrary.preview.enabled" : "CloudLibrary.enabled"
+        stateFile = storage.applicationSupport.appendingPathComponent("\(storage.isPreviewBuild ? "Cloud Library Preview" : "Cloud Library")/local-state-v2.json")
         if let data = try? Data(contentsOf: stateFile) {
             do { saved = try JSONDecoder().decode(LocalState.self, from: data); try saved.archive.validate() }
             catch { stateReadFailed = true; state = .failed("Cloud sync state could not be read. Existing saves were kept.") }
@@ -46,14 +50,14 @@ import NxlvKit
         case .syncing: "Syncing"
         case .synced: "Synced"
         case .pending: "Saved on this device"
-        case .offline: "Offline - saved on this device"
+        case .offline: "Offline"
         case .paused: "Cloud saves paused"
         case .failed(let message): message
         }
     }
     public var enabled: Bool {
-        get { defaults.object(forKey: "CloudLibrary.enabled") as? Bool ?? true }
-        set { defaults.set(newValue, forKey: "CloudLibrary.enabled"); if newValue { requestSync() } else { setState(.paused) } }
+        get { defaults.object(forKey: enabledKey) as? Bool ?? defaultEnabled }
+        set { defaults.set(newValue, forKey: enabledKey); if newValue { requestSync() } else { setState(.paused) } }
     }
     public var providerNames: String {
         (transport as? AppleCloudLibraryTransport)?.providers.sorted().joined(separator: " + ") ?? "Cloud"
@@ -134,10 +138,15 @@ import NxlvKit
             local.archive.seats[seat.id] = branches.filter { $0.revision != value.revision && !value.ancestors.contains($0.revision) } + [value]
         }
         local.archive.seats = local.archive.seats.filter { $0.value.allSatisfy { seat in seat.players.allSatisfy { local.archive.players[$0] != nil } } }
+        if local.archive.primary == nil || local.archive.players[local.archive.primary!] == nil {
+            local.archive.primary = local.mapping[store.records.mainProfileID].flatMap { local.archive.players[$0] == nil ? nil : $0 }
+                ?? local.archive.players.keys.sorted().first
+        }
         try local.archive.validate(); return local
     }
     public func syncNow() async {
         guard enabled else { setState(.paused); return }
+        if let apple = transport as? AppleCloudLibraryTransport, !apple.available { setState(.offline); return }
         guard !running else { requested = true; return }
         guard !stateReadFailed else { return }
         running = true; defer { running = false }
@@ -166,7 +175,7 @@ import NxlvKit
             // local progress gets its own identity and is never matched by initials.
             if base.mapping.isEmpty, store.records.profiles.count == 1, store.records.runs.isEmpty,
                 store.records.statistics.isEmpty, store.records.trolley.starts.isEmpty,
-                let first = remote.players.keys.sorted().first {
+                let first = remote.primary ?? remote.players.keys.sorted().first {
                 let profile = store.records.mainProfileID
                 let localProgress = GameProgressPreferences.capture(defaults: defaults, profileID: profile, profileIDs: [profile])
                 let extra = try captureExtra(profile, nil)
@@ -265,6 +274,28 @@ import NxlvKit
         let linked = try await apple.redeemLink(code)
         var combined = identities.isEmpty ? try apple.credentials() : identities
         for identity in linked where !combined.contains(where: { $0.id == identity.id }) { combined.append(identity) }
+        try apple.storeCredentials(combined); identities = combined
+        requestSync()
+    }
+    /// A portable private key restores an account-free library after losing a device.
+    public func recoveryData() throws -> Data {
+        let keys = identities.isEmpty ? try (transport as? AppleCloudLibraryTransport)?.credentials() ?? [] : identities
+        guard !keys.isEmpty else { throw SequelDataError.invalid("Sync this library before saving its recovery key.") }
+        return try JSONEncoder().encode(keys)
+    }
+    public func restoreRecoveryData(_ data: Data) throws {
+        guard canImport(), let apple = transport as? AppleCloudLibraryTransport, data.count <= 16384 else {
+            throw SequelDataError.invalid("Return to the library to restore a recovery key.")
+        }
+        let keys = try JSONDecoder().decode([CloudLibraryIdentity].self, from: data)
+        guard !keys.isEmpty else { throw SequelDataError.invalid("The recovery key is empty.") }
+        var combined = identities.isEmpty ? try apple.credentials() : identities
+        for key in keys {
+            try key.validate()
+            if let existing = combined.first(where: { $0.id == key.id }) {
+                guard existing == key else { throw SequelDataError.invalid("The recovery keys conflict.") }
+            } else { combined.append(key) }
+        }
         try apple.storeCredentials(combined); identities = combined
         requestSync()
     }

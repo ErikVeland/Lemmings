@@ -67,7 +67,7 @@ import UIKit
         if let playing, !playing.hasSuffix("|" + soundtrack) { stop() }
         module.setEnhancements(c.musicStyle == .modern ? .modern : .faithful)
         dj.setEnhancements(c.musicStyle == .modern ? .modern : .faithful)
-        let volume = c.musicVolume * (rewinding ? 0.22 : 1)
+        let volume = c.musicVolume
         module.setVolume(volume); recordings.setVolume(volume); dj.setVolume(volume)
         module.setMuted(!isEnabled || isTestAudioMuted)
         recordings.setMuted(!isEnabled || isTestAudioMuted)
@@ -154,7 +154,7 @@ import UIKit
         onTrackChange?(title, soundtrack)
     }
 
-    /// Pause and speed use the same processing as the Mac, with an independent rewind duck.
+    /// Pause, speed and reverse scratches use the shared Mac transports.
     func setGameplayState(paused: Bool, speed: Double, rewinding: Bool = false) {
         let changed = self.paused != paused || self.rewinding != rewinding
         self.paused = paused; self.speed = speed; self.rewinding = rewinding
@@ -203,6 +203,10 @@ import UIKit
         } else {
             try? module.resumeOutput(); recordings.resumeOutput(); dj.resumeOutput()
         }
+    }
+    func playRewind() {
+        guard !inactive, isEnabled, !isTestAudioMuted else { return }
+        module.playRewind(); recordings.playRewind(); dj.playRewind()
     }
     func vinylStop() { module.vinylStop(); recordings.vinylStop(); dj.vinylStop(); playing = nil }
     func suspend() { inactive = true; applyOutputState() }

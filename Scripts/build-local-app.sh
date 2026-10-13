@@ -96,6 +96,7 @@ else
   lipo -create "${executable_inputs[@]}" -output "$contents_dir/MacOS/LemmingsLocal"
 fi
 cp "$project_dir/Resources/Info.plist" "$contents_dir/Info.plist"
+cp "$project_dir/Apps/UltimateLemmingsIOS/PrivacyInfo.xcprivacy" "$contents_dir/Resources/PrivacyInfo.xcprivacy"
 if [[ -n "${LEMMINGS_TELEMETRY_URL:-}" ]]; then
   /usr/libexec/PlistBuddy -c "Set :AnonymousTelemetryURL $LEMMINGS_TELEMETRY_URL" "$contents_dir/Info.plist"
 fi

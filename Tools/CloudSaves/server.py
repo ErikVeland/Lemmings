@@ -30,9 +30,11 @@ class Store:
         self.clock = clock
         self.lock = threading.RLock()
         self.db = sqlite3.connect(path, check_same_thread=False)
+        self.path = Path(path)
         self.db.execute("PRAGMA journal_mode=WAL")
         self.db.execute("PRAGMA foreign_keys=ON")
         self.db.execute("PRAGMA busy_timeout=5000")
+        self.db.execute("PRAGMA max_page_count=550000")
         self.db.executescript("""
         CREATE TABLE IF NOT EXISTS vaults(id TEXT PRIMARY KEY, token TEXT NOT NULL, created REAL NOT NULL);
         CREATE TABLE IF NOT EXISTS saves(vault TEXT REFERENCES vaults(id) ON DELETE CASCADE,
@@ -96,6 +98,9 @@ class Store:
                     return etag
                 raise Rejected(412, "The save changed. Fetch and merge again")
             used = self.db.execute("SELECT COALESCE(SUM(length(data)),0) FROM saves").fetchone()[0]
+            vault_used = self.db.execute("SELECT COALESCE(SUM(length(data)),0) FROM saves WHERE vault=?", (vault,)).fetchone()[0]
+            if vault_used - (previous[1] if previous else 0) + len(data) > 64 * 1024 * 1024:
+                raise Rejected(507, "Library storage limit reached")
             if used - (previous[1] if previous else 0) + len(data) > MAX_STORAGE:
                 raise Rejected(507, "Cloud capacity reached")
             self.db.execute("INSERT INTO saves VALUES(?,?,?,?,?) ON CONFLICT(vault,device) DO UPDATE SET data=excluded.data,etag=excluded.etag,updated=excluded.updated",
@@ -133,19 +138,55 @@ class Store:
             self.authorize(vault, token)
             self.db.execute("DELETE FROM vaults WHERE id=?", (vault,))
 
+    def backup(self):
+        """SQLite's online backup API keeps three daily encrypted snapshots."""
+        folder = self.path.parent / "backups"
+        folder.mkdir(mode=0o700, exist_ok=True)
+        day = time.strftime('%Y-%m-%d', time.gmtime(self.clock()))
+        target = folder / (day + '.sqlite3')
+        if target.exists():
+            return
+        temporary = target.with_suffix('.pending')
+        with sqlite3.connect(self.path) as source, sqlite3.connect(temporary) as destination:
+            source.backup(destination, pages=256, sleep=0.01)
+        temporary.replace(target)
+        for old in sorted(folder.glob('*.sqlite3'), reverse=True)[3:]:
+            old.unlink()
+
 
 class Server(ThreadingHTTPServer):
     daemon_threads = True
+    request_queue_size = 16
     def __init__(self, address, store):
         super().__init__(address, Handler)
         self.store = store
         self.rate_lock = threading.Lock()
         self.requests = deque()
+        self.slots = threading.BoundedSemaphore(12)
+
+    def process_request(self, request, client_address):
+        if not self.slots.acquire(blocking=False):
+            self.shutdown_request(request)
+            return
+        try:
+            super().process_request(request, client_address)
+        except Exception:
+            self.slots.release()
+            raise
+
+    def process_request_thread(self, request, client_address):
+        try:
+            super().process_request_thread(request, client_address)
+        finally:
+            self.slots.release()
 
 
 class Handler(BaseHTTPRequestHandler):
     server_version = "PrivateSaves/2"
     protocol_version = "HTTP/1.1"
+    def setup(self):
+        super().setup()
+        self.connection.settimeout(20)
     def log_message(self, *_):
         pass
 
@@ -181,9 +222,10 @@ class Handler(BaseHTTPRequestHandler):
             now = time.monotonic()
             while self.server.requests and self.server.requests[0] <= now - 60:
                 self.server.requests.popleft()
-            if len(self.server.requests) >= 1200:
+            if path.startswith('/v1/links') and len(self.server.requests) >= 1200:
                 raise Rejected(429, "Try again later")
-            self.server.requests.append(now)
+            if path.startswith('/v1/links'):
+                self.server.requests.append(now)
         if path == "/v1/health" and self.command == "GET":
             return self.send(200, {"version": 2, "status": "ok"})
         if path == "/v1/links" and self.command == "POST":
@@ -232,4 +274,11 @@ if __name__ == "__main__":
     parser.add_argument("--port", type=int, default=8798)
     args = parser.parse_args()
     args.data.mkdir(parents=True, exist_ok=True, mode=0o700)
-    Server(("127.0.0.1", args.port), Store(args.data / "cloud-saves.sqlite3")).serve_forever()
+    store = Store(args.data / "cloud-saves.sqlite3")
+    def backups():
+        while True:
+            try: store.backup()
+            except (OSError, sqlite3.Error): pass
+            time.sleep(86400)
+    threading.Thread(target=backups, daemon=True).start()
+    Server(("127.0.0.1", args.port), store).serve_forever()

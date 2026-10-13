@@ -8,7 +8,7 @@ export SWIFTPM_MODULECACHE_OVERRIDE="$build_dir/ModuleCache"
 cd "$project_dir"
 swift build --target NxlvKit --disable-sandbox --disable-automatic-resolution
 products="$(swift build --show-bin-path --disable-sandbox --disable-automatic-resolution)"
-cat Sources/LemmingsAudio/MusicFileDeck.swift Sources/LemmingsAudio/ModuleMusicPlayer.swift Sources/LemmingsAudio/VinylRamp.swift \
+cat Sources/LemmingsAudio/MusicRewindBuffer.swift Sources/LemmingsAudio/MusicFileDeck.swift Sources/LemmingsAudio/ModuleMusicPlayer.swift Sources/LemmingsAudio/VinylRamp.swift \
     Sources/LemmingsAudio/SoundEffectPlayer.swift Tests/AudioPerformanceTests/main.swift > "$build_dir/main.swift"
 swiftc -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos12.3" -I "$products" \
     -module-cache-path "$build_dir/ModuleCache" "$build_dir/main.swift" "$products/NxlvKit.o" \
@@ -21,7 +21,7 @@ swiftc -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos12.3
     -framework AVFoundation -o "$build_dir/spatial-tests"
 if [[ "${1:-}" != "--compile-only" ]]; then python3 Tools/UITestRunner/run.py "$build_dir/spatial-tests"; fi
 cat Sources/LemmingsAudio/AdaptiveDJPlayer.swift Sources/LemmingsAudio/MusicLibrary.swift \
-    Sources/LemmingsAudio/MusicFileDeck.swift Sources/LemmingsAudio/ModuleMusicPlayer.swift \
+    Sources/LemmingsAudio/MusicRewindBuffer.swift Sources/LemmingsAudio/MusicFileDeck.swift Sources/LemmingsAudio/ModuleMusicPlayer.swift \
     Sources/LemmingsAudio/SoundtrackPlayer.swift Sources/LemmingsAudio/VinylRamp.swift \
     Tests/AdaptiveDJPlaybackTests/main.swift > "$build_dir/main.swift"
 swiftc -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos12.3" -I "$products" \

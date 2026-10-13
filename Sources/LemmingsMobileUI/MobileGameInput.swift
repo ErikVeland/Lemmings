@@ -80,20 +80,27 @@ extension MobileGameViewController {
         adapter.onBoost = { [weak self] in self?.setSpeedInput(.controller, held: $0) }
         adapter.onSpeedKey = { [weak self] in self?.setSpeedInput(.key, held: $0) }
         adapter.onPan = { [weak self] dx, dy in self?.panInput(dx: dx, dy: dy) }
-        playfieldView.onHover = { [weak self] in self?.aim(at: $0) }
+        playfieldView.onHover = { [weak self] in self?.aim(at: $0, hover: true) }
         return adapter
     }
 
-    func aim(at point: MobilePoint?) {
-        guard overlay.isHidden, playState.canEdit else { return }
+    func aim(at point: MobilePoint?, hover: Bool = false) {
+        guard overlay.isHidden, playState.canEdit, lifecycle.isForeground, !lifecycle.isInterrupted else { return }
+        hoverAimActive = hover
+        previewInput = .precision
         previewPoint = point
         highlightedTarget = point.flatMap { self.target(at: $0) }
         renderCurrentFrame(force: true)
     }
+    func restoreHoverAim() {
+        hoverAimActive = true
+        previewInput = .precision
+        previewPoint = playfieldView.hoverInputPoint
+        highlightedTarget = previewPoint.flatMap(target)
+    }
     func panInput(dx: Double, dy: Double) {
         playfieldView.stopAutomaticFitting()
         playfieldView.gameViewport.pan(viewDelta: MobilePoint(x: -dx, y: -dy))
-        renderCurrentFrame(force: true)
     }
 
     func performCommand(_ command: GameplayCommand) {
@@ -126,7 +133,6 @@ extension MobileGameViewController {
             let scale = abs(viewport.zoom - requested) < 0.01 ? viewport.fittedGameplayZoom : requested
             playfieldView.gameViewport.magnify(by: scale / viewport.zoom,
                 around: MobilePoint(x: playfieldView.bounds.midX, y: playfieldView.bounds.midY))
-            renderCurrentFrame(force: true)
         case .pan(let x, let y): panInput(dx: Double(x) * 40, dy: Double(y) * 40)
         case .centre(let entrance):
             let point = entrance ? session.entrancePoint : session.goalPoint
@@ -135,7 +141,6 @@ extension MobileGameViewController {
                                           y: point.y - viewport.visibleLevelSize.height / 2)
             viewport.resize(viewport.viewSize)
             playfieldView.gameViewport = viewport
-            renderCurrentFrame(force: true)
         case .focusUnassigned(let direction):
             let candidates = session.targetCandidates(for: selectedControl).filter { $0.assignment == .eligible }.sorted { $0.id < $1.id }
             guard !candidates.isEmpty else { return }

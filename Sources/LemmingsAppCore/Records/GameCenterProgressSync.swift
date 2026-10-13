@@ -53,6 +53,7 @@ public struct GameProgressArchive: Codable, Equatable, Sendable {
     public var onChange: (@MainActor () -> Void)?
     public var onImported: (@MainActor () -> Void)?
     public var canImport: @MainActor () -> Bool = { true }
+    public var isEnabled: @MainActor () -> Bool = { true }
     public var captureExtra: @MainActor (String) -> GameProgressPreferences = { _ in .init() }
     private let store: ArcadeStore
     private let defaults: UserDefaults
@@ -72,7 +73,7 @@ public struct GameProgressArchive: Codable, Equatable, Sendable {
     public static func fileName(owner: String) -> String { "ultimate-lemmings-progress-v1-" + owner }
 
     public func requestSync() {
-        guard !importing, transport.available else { return }
+        guard !importing, transport.available, isEnabled() else { return }
         pending = true
         retry?.cancel(); retry = nil
         guard work == nil, !synchronizing else { return }
@@ -89,6 +90,7 @@ public struct GameProgressArchive: Codable, Equatable, Sendable {
         }
     }
     public func syncNow() async {
+        guard isEnabled() else { return }
         guard !synchronizing else { pending = true; return }
         synchronizing = true
         defer {
@@ -104,6 +106,7 @@ public struct GameProgressArchive: Codable, Equatable, Sendable {
             setState(.syncing)
             let name = Self.fileName(owner: owner)
             let remote = try await transport.load(name: name)
+            guard isEnabled() else { return }
             guard transport.accountID == accountID, store.records.profile(profileID) != nil else { setState(.offline); return }
             let revision = store.progressRevision
             let records = store.records
@@ -118,6 +121,7 @@ public struct GameProgressArchive: Codable, Equatable, Sendable {
             guard transport.accountID == accountID, store.records.profile(profileID) != nil else { setState(.offline); return }
             guard store.progressRevision == revision else { pending = true; return }
             let safe = canImport()
+            guard isEnabled() else { return }
             if safe {
                 importing = true
                 defer { importing = false }

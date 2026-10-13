@@ -1048,105 +1048,6 @@
       ]
     },
     {
-      "comparisons": [
-        {
-          "distance": 1.4365,
-          "position": 10.0,
-          "reference": "Gentle/Only_floaters_can_survive_this.nxlv"
-        },
-        {
-          "distance": 2.6604,
-          "position": 35.0,
-          "reference": "Gentle/Builders_will_help_you_here.nxlv"
-        },
-        {
-          "distance": 3.2731,
-          "position": 130.0,
-          "reference": "Gentle/Careless_clicking_costs_lives.nxlv"
-        },
-        {
-          "distance": 3.3637,
-          "position": 20.0,
-          "reference": "Gentle/Now_use_miners_and_climbers.nxlv"
-        },
-        {
-          "distance": 3.6025,
-          "position": 515.0,
-          "reference": "Manic/Down_the_tube.nxlv"
-        }
-      ],
-      "context": {
-        "allowedLosses": 64,
-        "assignments": 10,
-        "completionSeconds": 66.3529411764706,
-        "discoveryDifficulty": "unknown from replay",
-        "exhaustedUsedSkills": [],
-        "initialHatchIntervalSeconds": 1.6470588235294117,
-        "jobChanges": 0,
-        "narrowActions": 0,
-        "peakAssignmentsInTwoSeconds": 2,
-        "population": 80,
-        "probedAssignments": 10,
-        "remainingSeconds": 233.64705882352942,
-        "replayRevision": "SHA256 digest: 216776a08372254298e2a13b0af3040a116c2c1987dc005a781163bb9149eefb",
-        "required": 16,
-        "rescueFraction": 0.2,
-        "savedAboveRequirement": 54,
-        "spareUsedSkills": {
-          "bomber": 20
-        },
-        "spatialToleranceMeasured": false,
-        "startingReleaseRate": 50,
-        "timingProbeComplete": false,
-        "usedSkills": {
-          "bomber": 10
-        },
-        "workers": 10
-      },
-      "identity": {
-        "engine": "classic",
-        "levelID": "Ji Hoon Heaven 2.DAT#8",
-        "packID": "fan:lldb-547"
-      },
-      "lesson": "Practise: Bomber",
-      "level": "Stop, Block and Blow",
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"Ji Hoon Heaven 2.DAT#8\", \"packID\": \"fan:lldb-547\"}",
-      "placement": {
-        "basis": "solutionEstimate",
-        "lower": 0,
-        "position": 45.0,
-        "reference": "Gentle/Only_floaters_can_survive_this.nxlv",
-        "replayRevision": "SHA256 digest: 216776a08372254298e2a13b0af3040a116c2c1987dc005a781163bb9149eefb",
-        "sourceRevision": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 190.0
-      },
-      "purpose": "Community-ordered practice with an exact native winning witness",
-      "reference": {
-        "author": "Amiga Lemmings",
-        "number": 2,
-        "ordinal": 2,
-        "population": 10,
-        "rank": "Gentle",
-        "rankIndex": 0,
-        "reference": "Gentle/Only_floaters_can_survive_this.nxlv",
-        "required": 1,
-        "sha256": "1fb5e5170922ad0b3a3f70163e1f83bbb046b50167f08a5e51520a08d9a2487a",
-        "skills": {
-          "floater": 10
-        },
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "spawnInterval": 28,
-        "timeLimitSeconds": null,
-        "title": "Only floaters can survive this"
-      },
-      "risks": [
-        "incomplete timing probes",
-        "spatial tolerance unmeasured"
-      ],
-      "variantDifferences": []
-    },
-    {
       "comparisons": [],
       "context": {
         "allowedLosses": 25,
@@ -11980,6 +11881,106 @@
         "spatial tolerance unmeasured",
         "witness exhausts at least one used skill",
         "four or more assignments within two seconds"
+      ],
+      "variantDifferences": []
+    },
+    {
+      "comparisons": [
+        {
+          "distance": 1.4365,
+          "position": 10.0,
+          "reference": "Gentle/Only_floaters_can_survive_this.nxlv"
+        },
+        {
+          "distance": 2.6604,
+          "position": 35.0,
+          "reference": "Gentle/Builders_will_help_you_here.nxlv"
+        },
+        {
+          "distance": 3.2731,
+          "position": 130.0,
+          "reference": "Gentle/Careless_clicking_costs_lives.nxlv"
+        },
+        {
+          "distance": 3.3637,
+          "position": 20.0,
+          "reference": "Gentle/Now_use_miners_and_climbers.nxlv"
+        },
+        {
+          "distance": 3.6025,
+          "position": 515.0,
+          "reference": "Manic/Down_the_tube.nxlv"
+        }
+      ],
+      "context": {
+        "allowedLosses": 64,
+        "assignments": 10,
+        "completionSeconds": 66.3529411764706,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [],
+        "initialHatchIntervalSeconds": 1.6470588235294117,
+        "jobChanges": 0,
+        "narrowActions": 0,
+        "peakAssignmentsInTwoSeconds": 2,
+        "population": 80,
+        "probedAssignments": 10,
+        "remainingSeconds": 233.64705882352942,
+        "replayRevision": "SHA256 digest: 216776a08372254298e2a13b0af3040a116c2c1987dc005a781163bb9149eefb",
+        "required": 16,
+        "rescueFraction": 0.2,
+        "savedAboveRequirement": 54,
+        "spareUsedSkills": {
+          "bomber": 20
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 50,
+        "timingProbeComplete": false,
+        "usedSkills": {
+          "bomber": 10
+        },
+        "workers": 10
+      },
+      "identity": {
+        "engine": "classic",
+        "levelID": "Ji Hoon Heaven 2.DAT#8",
+        "packID": "fan:lldb-547"
+      },
+      "lesson": "Practise: Bomber",
+      "level": "Stop, Block and Blow",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"Ji Hoon Heaven 2.DAT#8\", \"packID\": \"fan:lldb-547\"}",
+      "placement": {
+        "adjustment": "User playtest 2026-10-13: Stop, Block and Blow belongs late in Intermediate, not at lesson 13.",
+        "basis": "solutionEstimate",
+        "lower": 320.0,
+        "position": 342.5,
+        "reference": "Gentle/Only_floaters_can_survive_this.nxlv",
+        "replayRevision": "SHA256 digest: 216776a08372254298e2a13b0af3040a116c2c1987dc005a781163bb9149eefb",
+        "sourceRevision": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 355.0
+      },
+      "purpose": "Community-ordered practice with an exact native winning witness",
+      "reference": {
+        "author": "Amiga Lemmings",
+        "number": 2,
+        "ordinal": 2,
+        "population": 10,
+        "rank": "Gentle",
+        "rankIndex": 0,
+        "reference": "Gentle/Only_floaters_can_survive_this.nxlv",
+        "required": 1,
+        "sha256": "1fb5e5170922ad0b3a3f70163e1f83bbb046b50167f08a5e51520a08d9a2487a",
+        "skills": {
+          "floater": 10
+        },
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "spawnInterval": 28,
+        "timeLimitSeconds": null,
+        "title": "Only floaters can survive this"
+      },
+      "risks": [
+        "incomplete timing probes",
+        "spatial tolerance unmeasured"
       ],
       "variantDifferences": []
     },

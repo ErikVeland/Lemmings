@@ -51779,14 +51779,15 @@
     },
     "pack": "Ji Hoons Lemmings Remake Heaven",
     "placement": {
+      "adjustment": "User playtest 2026-10-13: Stop, Block and Blow belongs late in Intermediate, not at lesson 13.",
       "basis": "solutionEstimate",
-      "lower": 0,
-      "position": 45.0,
+      "lower": 320.0,
+      "position": 342.5,
       "reference": "Gentle/Only_floaters_can_survive_this.nxlv",
       "replayRevision": "SHA256 digest: 216776a08372254298e2a13b0af3040a116c2c1987dc005a781163bb9149eefb",
       "sourceRevision": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 190.0
+      "upper": 355.0
     },
     "risks": [
       "incomplete timing probes",

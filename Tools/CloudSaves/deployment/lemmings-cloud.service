@@ -1,0 +1,34 @@
+[Unit]
+Description=Ultimate Lemmings private encrypted cloud saves
+After=network.target
+
+[Service]
+Type=simple
+DynamicUser=yes
+StateDirectory=lemmings-cloud
+StateDirectoryMode=0700
+WorkingDirectory=/opt/lemmings-cloud
+ExecStart=/usr/bin/python3 -B /opt/lemmings-cloud/server.py --data /var/lib/lemmings-cloud --port 8798
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+RestrictAddressFamilies=AF_INET AF_UNIX
+IPAddressDeny=any
+IPAddressAllow=localhost
+MemoryMax=192M
+CPUQuota=35%
+TasksMax=64
+LimitNOFILE=128
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

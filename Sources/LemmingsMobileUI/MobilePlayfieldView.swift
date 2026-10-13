@@ -15,11 +15,20 @@ import UIKit
         didSet {
             setNeedsDisplay()
             updateTube()
+            if gameViewport != oldValue { onViewportChanged?(gameViewport) }
         }
     }
 
     private var router = MobileTouchRouter()
     private var activeTouchID: Int?
+    private var rawHoverPoint: CGPoint?
+    private(set) var touchInput: MobileTargetInput = .touch
+    var hasActiveTouch: Bool { activeTouchID != nil }
+    var hoverInputPoint: MobilePoint? {
+        guard let raw = rawHoverPoint, acceptsInput(at: raw) else { return nil }
+        let point = inputPoint(raw)
+        return MobilePoint(x: point.x, y: point.y)
+    }
     private var automaticallyFitsViewport: Bool
     private let initialCameraFocus: MobilePoint?
     private var bitmap: CGImage?
@@ -81,7 +90,15 @@ import UIKit
         let pinch = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
         pinch.delegate = self
         addGestureRecognizer(pinch)
-        addGestureRecognizer(UIHoverGestureRecognizer(target: self, action: #selector(handleHover(_:))))
+        let hover = UIHoverGestureRecognizer(target: self, action: #selector(handleHover(_:)))
+        hover.delegate = self
+        addGestureRecognizer(hover)
+        let scroll = UIPanGestureRecognizer(target: self, action: #selector(handleScroll(_:)))
+        scroll.allowedScrollTypesMask = .all
+        scroll.allowedTouchTypes = []
+        scroll.cancelsTouchesInView = false
+        scroll.delegate = self
+        addGestureRecognizer(scroll)
         addInteraction(UIPointerInteraction(delegate: self))
 
         isAccessibilityElement = true
@@ -93,11 +110,35 @@ import UIKit
     required init(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
 
     @objc private func handleHover(_ gesture: UIHoverGestureRecognizer) {
-        if gesture.state == .ended || gesture.state == .cancelled { onHover?(nil); return }
-        let raw = gesture.location(in: self)
-        let point = inputPoint(raw)
-        guard !blockedInputFrames.contains(where: { $0.contains(raw) }) else { onHover?(nil); return }
-        onHover?(MobilePoint(x: point.x, y: point.y))
+        switch gesture.state {
+        case .began, .changed: rawHoverPoint = gesture.location(in: self)
+        case .ended, .cancelled, .failed: rawHoverPoint = nil
+        default: return
+        }
+        if !hasActiveTouch { onHover?(hoverInputPoint) }
+    }
+
+    private func acceptsInput(at point: CGPoint) -> Bool {
+        bounds.contains(point) && !blockedInputFrames.contains(where: { $0.contains(point) })
+    }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith other: UIGestureRecognizer) -> Bool {
+        gestureRecognizer is UIHoverGestureRecognizer || other is UIHoverGestureRecognizer
+    }
+
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        acceptsInput(at: gestureRecognizer.location(in: self))
+    }
+
+    @objc private func handleScroll(_ gesture: UIPanGestureRecognizer) {
+        guard gesture.state == .began || gesture.state == .changed else { return }
+        let delta = gesture.translation(in: self)
+        gesture.setTranslation(.zero, in: self)
+        // The pointer stays at its screen position as the camera moves beneath it.
+        if acceptsInput(at: gesture.location(in: self)) {
+            rawHoverPoint = gesture.location(in: self)
+        }
+        onTouchEffects?([.pan(MobilePoint(x: delta.x, y: delta.y))])
     }
     func pointerInteraction(_ interaction: UIPointerInteraction, styleFor region: UIPointerRegion) -> UIPointerStyle? {
         let path = UIBezierPath()
@@ -220,7 +261,6 @@ import UIKit
         }
         updateTube()
         setNeedsDisplay()
-        onViewportChanged?(gameViewport)
     }
 
     private func updateTube() {
@@ -355,14 +395,16 @@ import UIKit
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard activeTouchID == nil, let touch = touches.first else { return }
         let initial = touch.location(in: self)
-        guard !blockedInputFrames.contains(where: { $0.contains(initial) }) else { return }
+        guard acceptsInput(at: initial) else { return }
         let id = ObjectIdentifier(touch).hashValue
         activeTouchID = id
+        touchInput = touch.type == .direct ? .touch : .precision
         let point = inputPoint(touch.location(in: self))
         onTouchEffects?(router.began(
             id: id,
             at: MobilePoint(x: point.x, y: point.y),
-            time: touch.timestamp
+            time: touch.timestamp,
+            allowsPanning: touch.type != .pencil
         ))
     }
 
@@ -378,7 +420,7 @@ import UIKit
               let touch = touches.first(where: { ObjectIdentifier($0).hashValue == id }) else { return }
         activeTouchID = nil
         let point = inputPoint(touch.location(in: self))
-        guard !blockedInputFrames.contains(where: { $0.contains(touch.location(in: self)) }) else {
+        guard acceptsInput(at: touch.location(in: self)) else {
             onTouchEffects?(router.cancel())
             return
         }
@@ -407,7 +449,6 @@ import UIKit
             around: MobilePoint(x: anchor.x, y: anchor.y)
         )
         recognizer.scale = 1
-        onViewportChanged?(gameViewport)
         setNeedsDisplay()
     }
 }

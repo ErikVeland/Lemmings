@@ -10,6 +10,7 @@ import LemmingsGameArt
   private struct TrailKey: Hashable {
     let direction: Int, pixelX: Int, pixelY: Int, tier: Int, echoes: Int
     let mirrored: Bool
+    let sharp: Bool
     var motion: CGVector {
       let angle = CGFloat(direction) * .pi / 8
       let dx = cos(angle), dy = sin(angle)
@@ -47,12 +48,47 @@ import LemmingsGameArt
   private var clip = CGRect.zero
   private var occupiedCells: UInt64 = 0
   private var lastTick: Int?
+  private var rewindOrigin: [Int: Actor] = [:]
+  private var rewindUntil: TimeInterval = 0
+  private var rewindExpiry: Task<Void, Never>?
+  var isRewinding: Bool { ProcessInfo.processInfo.systemUptime < rewindUntil }
+
+  /// Capture positions, without rendering or copying the playfield.
+  func prepareRewind(actors: [Actor]) {
+    rewindOrigin = Dictionary(uniqueKeysWithValues: actors.map { ($0.id, $0) })
+  }
+
+  /// A fresh impulse replaces the previous one, including during rapid key repeats.
+  func finishRewind(tick: Int, actors: [Actor], redraw: @escaping @MainActor () -> Void) {
+    let origin = rewindOrigin
+    reset()
+    lastTick = tick
+    for actor in actors {
+      guard let previous = origin[actor.id] else { continue }
+      let delta = CGVector(dx: actor.position.x - previous.position.x,
+                           dy: actor.position.y - previous.position.y)
+      guard delta != .zero else { continue }
+      currentPositions[actor.id] = MotionSample(actor: actor, steps: [], motion: delta,
+        direction: Self.direction(for: delta, retaining: nil))
+    }
+    rewindUntil = ProcessInfo.processInfo.systemUptime + 0.16
+    rewindExpiry = Task { [weak self] in
+      try? await Task.sleep(nanoseconds: 160_000_000)
+      guard !Task.isCancelled else { return }
+      self?.reset()
+      redraw()
+    }
+  }
   private var currentPositions: [Int: MotionSample] = [:]
   private(set) var drawnTrailCount = 0
 
   init() { sprites.countLimit = 128; sprites.totalCostLimit = 32 * 1024 * 1024 }
 
   func reset() {
+    rewindExpiry?.cancel()
+    rewindExpiry = nil
+    rewindUntil = 0
+    rewindOrigin.removeAll(keepingCapacity: true)
     drawingContext = nil
     occupiedCells = 0
     drawnTrailCount = 0
@@ -63,6 +99,8 @@ import LemmingsGameArt
   /// Sample once per game tick, independently of live redraws and movie capture.
   func update(tick: Int, enabled: Bool, actors: [Actor]) {
     guard enabled else { reset(); return }
+    if isRewinding && tick == lastTick { return }
+    if rewindUntil > 0 { reset() }
     if let lastTick, tick < lastTick || tick - lastTick > 8 { reset() }
     if tick == lastTick {
       if actors.count == currentPositions.count,
@@ -156,7 +194,8 @@ import LemmingsGameArt
     }
     // Sixteen cached angles retain slopes without generating a texture for every velocity.
     let direction = currentPositions[actor]?.direction ?? Self.direction(for: motion, retaining: nil)
-    let speed = min(10, max(2, multiplier))
+    let sharp = isRewinding
+    let speed = sharp ? 3 : min(10, max(2, multiplier))
     let upper = Self.tiers.firstIndex(where: { $0 >= speed }) ?? 3
     let lower = max(0, upper - 1)
     let blend = upper == lower ? 1 : (speed - Self.tiers[lower]) / (Self.tiers[upper] - Self.tiers[lower])
@@ -169,7 +208,7 @@ import LemmingsGameArt
       let key = TrailKey(direction: direction,
         pixelX: max(1, Int((pixelSize.width * CGFloat(cached.source.width) / rect.width).rounded())),
         pixelY: max(1, Int((pixelSize.height * CGFloat(cached.source.height) / rect.height).rounded())),
-        tier: tier, echoes: MacFXPerformance.shared.presentation.trailEchoLimit, mirrored: mirrored)
+        tier: tier, echoes: MacFXPerformance.shared.presentation.trailEchoLimit, mirrored: mirrored, sharp: sharp)
       let trail: TrailImage
       if let existing = cached.images[key] { trail = existing }
       else {
@@ -202,7 +241,7 @@ import LemmingsGameArt
   private static func makeTrail(source: CGImage, key: TrailKey) -> TrailImage? {
     let motion = key.motion
     let dx = motion.dx * CGFloat(key.pixelX), dy = motion.dy * CGFloat(key.pixelY)
-    let distances = Array(Self.distances[key.tier].prefix(key.echoes))
+    let distances = Array((key.sharp ? [CGFloat(3), 8, 14] : Self.distances[key.tier]).prefix(key.echoes))
     let reach = distances.last! + 2 + CGFloat(key.tier)
     let paddingX = CGFloat(key.pixelX) * 5, paddingY = CGFloat(key.pixelY) * 5
     let width = source.width + Int(ceil(abs(dx) * reach) + 2 * paddingX)
@@ -213,17 +252,20 @@ import LemmingsGameArt
     context.translateBy(x: 0, y: CGFloat(height))
     context.scaleBy(x: 1, y: -1)
     context.setBlendMode(.plusLighter)
-    context.interpolationQuality = .low
+    context.interpolationQuality = key.sharp ? .none : .low
     let origin = CGPoint(x: ceil(max(0, dx) * reach) + paddingX, y: ceil(max(0, dy) * reach) + paddingY)
     func echo(distance: CGFloat, stretch: CGFloat, alpha: CGFloat, offset: CGPoint) {
-      let rect = CGRect(x: origin.x - dx * distance - max(0, dx * stretch) + offset.x,
+      var rect = CGRect(x: origin.x - dx * distance - max(0, dx * stretch) + offset.x,
         y: origin.y - dy * distance - max(0, dy * stretch) + offset.y,
         width: CGFloat(source.width) + abs(dx * stretch),
         height: CGFloat(source.height) + abs(dy * stretch))
+      if key.sharp { rect.origin.x = rect.origin.x.rounded(); rect.origin.y = rect.origin.y.rounded() }
       context.saveGState()
       context.setAlpha(alpha)
-      context.setShadow(offset: .zero, blur: CGFloat(max(key.pixelX, key.pixelY)) * 0.7,
-        color: CGColor(red: 0.1, green: 0.7, blue: 1, alpha: 0.65))
+      if !key.sharp {
+        context.setShadow(offset: .zero, blur: CGFloat(max(key.pixelX, key.pixelY)) * 0.7,
+          color: CGColor(red: 0.1, green: 0.7, blue: 1, alpha: 0.65))
+      }
       context.translateBy(x: key.mirrored ? rect.maxX : rect.minX, y: rect.maxY)
       context.scaleBy(x: key.mirrored ? -1 : 1, y: -1)
       context.draw(source, in: CGRect(origin: .zero, size: rect.size))
@@ -234,7 +276,11 @@ import LemmingsGameArt
     let samples: [(CGFloat, CGFloat)] = [(-1, 0.25), (0, 0.5), (1, 0.25)]
     let farAlpha: CGFloat = [0.18, 0.13, 0.09, 0.055][key.tier]
     for (index, distance) in distances.enumerated().reversed() {
-      let progress = CGFloat(index) / CGFloat(distances.count - 1)
+      let progress = CGFloat(index) / CGFloat(max(1, distances.count - 1))
+      if key.sharp {
+        echo(distance: distance, stretch: 0, alpha: [CGFloat(0.65), 0.38, 0.18][index], offset: .zero)
+        continue
+      }
       let blur = 0.25 + progress * (0.5 + CGFloat(key.tier) * 0.5)
       let alpha = 0.46 * pow(farAlpha / 0.46, progress)
       let stretch = 0.5 + progress * (1.5 + CGFloat(key.tier))

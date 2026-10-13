@@ -240,6 +240,7 @@ import NxlvKit
   }
 
   public func suspendOutput(rhythmOnly: Bool = false) {
+    player?.cancelRewind()
     guard !outputSuspended || pauseUsesRhythm != rhythmOnly else { return }
     if !outputSuspended { resumeAfterSleep = isPlaying }
     outputSuspended = true
@@ -264,6 +265,8 @@ import NxlvKit
     volume = Float(min(1, max(0, value)))
     player?.volume = muted ? 0 : volume
   }
+
+  public func playRewind() { player?.playRewind() }
 
   public func setPlaybackRate(_ value: Double) {
     playbackRate = Float(min(1, max(0.5, value)))

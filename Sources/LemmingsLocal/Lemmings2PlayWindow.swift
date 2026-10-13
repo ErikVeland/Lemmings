@@ -147,7 +147,6 @@ import NxlvKit
     private var forwardTimer: Timer?
     private var forwardHeld = false
     private var timelineTransport: TimelineKeyTransport?
-    private var rewindAudioDucked = false
     private var rewindOriginState: Lemmings2Runtime?
     private var rewindOriginInputs: [L2RunRecovery.Input] = []
     private var rewindOriginNukeCount = 0
@@ -1342,7 +1341,6 @@ import NxlvKit
         captureRewindOrigin()
         rewindHeld = true
         rewindTimer?.invalidate()
-        setRewindAudioDucked(true)
         rewindTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 15.0, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated {
                 guard let self, self.rewind(seconds: 0.20) else { self?.endContinuousRewind(); return }
@@ -1355,7 +1353,6 @@ import NxlvKit
         rewindHeld = false
         rewindTimer?.invalidate()
         rewindTimer = nil
-        setRewindAudioDucked(false)
     }
     private var canStepForward: Bool {
         guard screen == .playing, let game, let origin = rewindOriginState else { return false }
@@ -1365,7 +1362,6 @@ import NxlvKit
         guard canStepForward, !forwardHeld else { return false }
         forwardHeld = true
         forwardTimer?.invalidate()
-        setRewindAudioDucked(true)
         forwardTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 15.0, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated {
                 guard let self, self.stepForward(seconds: 0.20) else { self?.endContinuousStepForward(); return }
@@ -1381,7 +1377,6 @@ import NxlvKit
         forwardHeld = false
         forwardTimer?.invalidate()
         forwardTimer = nil
-        setRewindAudioDucked(false)
     }
 
     private func makeTimelineTransport(for window: NSWindow) -> TimelineKeyTransport {
@@ -1403,11 +1398,10 @@ import NxlvKit
         rewindOriginState = nil
         rewindOriginInputs = []
     }
-    private func setRewindAudioDucked(_ active: Bool) {
-        guard rewindAudioDucked != active else { return }
-        rewindAudioDucked = active
-        music.setVolume(active ? audioSettings.musicVolume * 0.18 : audioSettings.musicVolume)
+    private func playRewindMusic() {
+      music.playRewind(); dj.playRewind()
     }
+
     private func captureRewindOrigin() {
         guard rewindOriginState == nil, let game else { return }
         rewindOriginState = game
@@ -1434,22 +1428,23 @@ import NxlvKit
         let target = max(0, current.tick - Int((seconds * Lemmings2Runtime.ticksPerSecond).rounded()))
         guard target < current.tick else { return false }
         let prefix = recoveryInputs.prefix { $0.tick <= target }
-        setRewindAudioDucked(true)
+        canvas.prepareRewindEffects()
         do { game = try L2RunRecovery.replay(initial: initial, inputs: Array(prefix), through: target) }
         catch {
             message = "Could not rewind this run: \(error)"
-            if !rewindHeld { setRewindAudioDucked(false) }
+
             return false
         }
+        canvas.finishRewindEffects(game!)
         recoveryInputs = Array(prefix)
         lastFanInput = nil; lastAimInput = nil; beforeNuke = nil
         nukeCount = recoveryInputs.reduce(into: 0) { count, input in
             if case .nuke = input.action { count += 1 }
         }
         usedRewind = true; paused = true; accumulator = 0; updateUserMusicPause()
-        assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); sounds.silence(); sounds.playRewindScrub()
+        assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); sounds.silence(); sounds.playRewindScrub(); playRewindMusic()
         refreshGame(); saveCheckpoint(immediately: true)
-        if !rewindHeld { setRewindAudioDucked(false) }
+
         return true
     }
     @discardableResult
@@ -1459,11 +1454,10 @@ import NxlvKit
         let target = min(origin.tick, current.tick + Int((seconds * Lemmings2Runtime.ticksPerSecond).rounded()))
         guard target > current.tick else { return false }
         let prefix = rewindOriginInputs.prefix { $0.tick <= target }
-        setRewindAudioDucked(true)
         do { game = try L2RunRecovery.replay(initial: initial, inputs: Array(prefix), through: target) }
         catch {
             message = "Could not move forward through this run: \(error)"
-            if !forwardHeld { setRewindAudioDucked(false) }
+
             return false
         }
         recoveryInputs = Array(prefix)
@@ -1472,9 +1466,9 @@ import NxlvKit
             if case .nuke = input.action { count += 1 }
         }
         usedRewind = true; paused = true; accumulator = 0; updateUserMusicPause()
-        assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); sounds.silence(); sounds.playRewindScrub()
+        assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); sounds.silence()
         refreshGame(); saveCheckpoint(immediately: true)
-        if !forwardHeld { setRewindAudioDucked(false) }
+
         return true
     }
     private func startIntroduction() {
@@ -2320,9 +2314,31 @@ import NxlvKit
         }
     }
     var reduceFlashes = false {
-        didSet { if reduceFlashes { hdrOverlay?.clearExplosions() }; needsDisplay = true }
+        didSet {
+            if reduceFlashes {
+                hdrOverlay?.clearExplosions()
+                if speedTrails.isRewinding { speedTrails.reset() }
+            }
+            needsDisplay = true
+        }
     }
     private var usesSpeedEffects: Bool { hdEffectsEnabled && !reduceMotion && isFastForward }
+    private var usesTrails: Bool {
+        hdEffectsEnabled && !reduceMotion && (isFastForward || (!reduceFlashes && speedTrails.isRewinding))
+    }
+    private func rewindActors(_ game: Lemmings2Runtime?) -> [SpeedTrails.Actor] {
+        (game?.lemmings ?? []).filter { $0.active }.map {
+            .init(id: $0.id, position: CGPoint(x: $0.x, y: $0.y), movement: $0.state.rawValue)
+        }
+    }
+    func prepareRewindEffects() { speedTrails.prepareRewind(actors: rewindActors(game)) }
+    func finishRewindEffects(_ restored: Lemmings2Runtime) {
+        guard hdEffectsEnabled, !reduceMotion, !reduceFlashes else { return }
+        speedTrails.finishRewind(tick: restored.tick, actors: rewindActors(restored)) { [weak self] in
+            self?.needsDisplay = true
+        }
+        needsDisplay = true
+    }
     var speedMultiplier: Double = 3 { didSet { speedTrails.multiplier = speedMultiplier; syncSpeedEffects() } }
     let turnBadge = TurnBadgeView()
     override init(frame: NSRect) {
@@ -2473,6 +2489,11 @@ import NxlvKit
         bitmapCache.draw(image, in: rect, mirrored: mirrored)
     }
     private func updateSpeedTrails() {
+        if speedTrails.isRewinding {
+            speedTrails.update(tick: game?.tick ?? 0,
+                enabled: hdEffectsEnabled && !reduceMotion && !reduceFlashes, actors: [])
+            if speedTrails.isRewinding { return }
+        }
         let actors: [SpeedTrails.Actor] = usesSpeedEffects ? (game?.lemmings ?? []).compactMap { lem in
             guard lem.active else { return nil }
             switch lem.state {
@@ -2854,7 +2875,7 @@ import NxlvKit
         updateSpeedTrails()
         NSColor.black.setFill(); bounds.fill()
         guard let game, let terrain else { return }
-        speedTrails.draw(enabled: usesSpeedEffects,
+        speedTrails.draw(enabled: usesTrails,
             in: NSRect(x: origin.x, y: origin.y, width: visibleWidth * zoom, height: 192 * zoom)) {
             drawWorld(game, terrain: terrain)
         }
@@ -2889,7 +2910,7 @@ import NxlvKit
         NSBezierPath(rect: NSRect(x: origin.x, y: origin.y, width: visibleWidth * zoom, height: 192 * zoom)).addClip()
         precisionLens.applyToCurrentGraphicsContext()
         drawBackgroundImage(terrain, x: 0, y: 0)
-        if usesSpeedEffects { drawLemmings(game, ghostsOnly: true) }
+        if usesTrails { drawLemmings(game, ghostsOnly: true) }
         for object in objects where !object.frames.isEmpty {
             let machine = game.machines.first { $0.id == object.id }
             let movement = machine.map { object.special ? $0.displacement : 0 } ?? 0

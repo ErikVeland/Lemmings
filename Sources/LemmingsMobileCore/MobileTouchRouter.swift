@@ -15,6 +15,7 @@ public struct MobileTouchRouter: Sendable {
         let start: MobilePoint
         var current: MobilePoint
         var isPanning: Bool
+        let allowsPanning: Bool
     }
 
     public var movementThreshold: Double
@@ -26,10 +27,10 @@ public struct MobileTouchRouter: Sendable {
         self.maximumTapDuration = max(0.1, maximumTapDuration)
     }
 
-    public mutating func began(id: Int, at point: MobilePoint, time: Double) -> [MobileTouchEffect] {
+    public mutating func began(id: Int, at point: MobilePoint, time: Double, allowsPanning: Bool = true) -> [MobileTouchEffect] {
         var effects: [MobileTouchEffect] = []
         if active != nil { effects.append(.cancelPreview) }
-        active = ActiveTouch(id: id, beganAt: time, start: point, current: point, isPanning: false)
+        active = ActiveTouch(id: id, beganAt: time, start: point, current: point, isPanning: false, allowsPanning: allowsPanning)
         effects.append(.preview(point))
         return effects
     }
@@ -40,7 +41,7 @@ public struct MobileTouchRouter: Sendable {
         let dy = point.y - touch.start.y
         let distance = hypot(dx, dy)
         var effects: [MobileTouchEffect] = []
-        if !touch.isPanning, distance > movementThreshold {
+        if touch.allowsPanning, !touch.isPanning, distance > movementThreshold {
             touch.isPanning = true
             effects.append(.cancelPreview)
         }
@@ -58,7 +59,7 @@ public struct MobileTouchRouter: Sendable {
         guard let touch = active, touch.id == id else { return [] }
         active = nil
         guard !touch.isPanning,
-              hypot(point.x - touch.start.x, point.y - touch.start.y) <= movementThreshold,
+              (!touch.allowsPanning || hypot(point.x - touch.start.x, point.y - touch.start.y) <= movementThreshold),
               time - touch.beganAt <= maximumTapDuration else {
             return [.cancelPreview]
         }

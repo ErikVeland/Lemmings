@@ -104,6 +104,23 @@ struct MobileHotSeatTests {
         #expect(store.saved.isEmpty)
     }
 
+    @Test func cloudImportKeepsSoloModeAndLetsEitherParticipantResume() throws {
+        var store = MobileHotSeatStore()
+        var shared = try #require(MobileHotSeat(host: "a", players: ["b"], policy: .atFirstFail))
+        shared.pass(to: "b")
+        store.importCloudSessions([shared])
+        #expect(store.current == nil)
+        #expect(store.sharedSessions(player: "b").map(\.id) == [shared.id])
+        #expect(store.sharedSessions(player: "c").isEmpty)
+        _ = try required(store.resume(id: shared.id))
+        #expect(store.current?.turn == "b" && store.policy == .atFirstFail)
+        shared.policy = .everyLevel; shared.pass(to: "a")
+        store.importCloudSessions([shared])
+        #expect(store.current?.turn == "a" && store.policy == .everyLevel)
+        let other = try #require(MobileHotSeat(host: "a", players: ["c"]))
+        store.importCloudSessions([other])
+        #expect(store.current?.id == shared.id)
+    }
     @Test func oldCheckpointsDecodeWithoutAScope() throws {
         let envelope = MobileCheckpointEnvelope(runID: UUID(), engine: "e", engineFingerprint: "f", levelIdentifier: "l",
                                                 levelIndex: 0, levelFingerprint: "g", tick: 0, selectedControl: 0,

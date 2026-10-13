@@ -8,6 +8,7 @@ import LemmingsGameArt
     static let shared = MacFXPerformance()
     private var budget: AdaptiveFXPerformance
     private var lastPoll = -Double.infinity
+    private var displayFramesPerSecond: Double = 60
     #if PERFORMANCE_TESTS
     var overrideQuality: FXQuality?
     #endif
@@ -33,9 +34,17 @@ import LemmingsGameArt
         switch process.thermalState {
         case .serious, .critical: pressure = .minimal
         case .fair: pressure = .balanced
-        default: pressure = process.isLowPowerModeEnabled ? .balanced : .full
+        case .nominal: pressure = process.isLowPowerModeEnabled ? .balanced : .full
+        @unknown default: pressure = .minimal
         }
-        budget.setPressure(ceiling: pressure, framesPerSecond: process.isLowPowerModeEnabled ? 30 : 60, now: now)
+        budget.setPressure(ceiling: pressure,
+                           framesPerSecond: min(displayFramesPerSecond, process.isLowPowerModeEnabled ? 30 : 60), now: now)
+    }
+    func configureDisplay(_ screen: NSScreen) {
+        let rate = Double(max(1, min(60, screen.maximumFramesPerSecond)))
+        guard rate != displayFramesPerSecond else { return }
+        displayFramesPerSecond = rate; lastPoll = -.infinity
+        poll()
     }
     func recordCPU(_ seconds: Double) {
         poll()

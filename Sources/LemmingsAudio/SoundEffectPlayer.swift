@@ -461,31 +461,52 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     recentEffectTimes.removeAll(keepingCapacity: true)
   }
 
-  /// Plays a short reversed slice of recent effects while the run is scrubbed.
-  /// This gives rewind the character of a tape transport without changing the
-  /// original effect samples or adding a new game sound.
+  /// A short tape zip and rubbery pitch kick make even silent rewinds audible.
+  /// Replace the previous cue so repeated taps do not build a louder chorus.
   public func playRewindScrub() {
     lock.lock()
     defer { lock.unlock() }
-    guard !isMuted, !outputSuspended, let latest = latestRecentSample else { return }
-    var samples: [Float] = []
-    samples.reserveCapacity(11_025)
-    for offset in 0..<11_025 {
-      let position = latest - Int64(offset)
-      let slot = Int((position % Int64(recentSampleLimit) + Int64(recentSampleLimit)) % Int64(recentSampleLimit))
-      guard recentSamplePositions[slot] == position else { break }
-      samples.append(max(-1, min(1, recentSamples[slot])))
+    guard !isMuted, !outputSuspended else { return }
+    var samples = Self.rewindCue
+    if let latest = latestRecentSample {
+      for offset in samples.indices {
+        let position = latest - Int64(offset * 2)
+        let slot = Int((position % Int64(recentSampleLimit) + Int64(recentSampleLimit)) % Int64(recentSampleLimit))
+        guard recentSamplePositions[slot] == position else { break }
+        let envelope = Float(sin(.pi * Double(offset) / Double(samples.count)))
+        samples[offset] += max(-1, min(1, recentSamples[slot])) * 0.18 * envelope
+      }
     }
-    guard !samples.isEmpty else { return }
-    let scrubs = voices.indices.filter { voices[$0].isActive && voices[$0].rewindSequence != nil }
-    let oldest = scrubs.min { voices[$0].rewindSequence! < voices[$1].rewindSequence! }
-    let index = scrubs.count >= 4 ? oldest! :
-      (voices.firstIndex { !$0.isActive } ?? oldest ?? voices.startIndex)
+    let previous = voices.indices.first { voices[$0].isActive && voices[$0].rewindSequence != nil }
+    for index in voices.indices where voices[index].rewindSequence != nil { voices[index].isActive = false }
+    let index = previous ?? voices.firstIndex { !$0.isActive } ?? voices.startIndex
     rewindSequence &+= 1
     voices[index] = Voice(samples: samples, position: 0, increment: 1, isActive: true,
-      rewindSequence: rewindSequence)
+      gain: 0.55, rewindSequence: rewindSequence)
     if spatialMixers.indices.contains(index) { spatialMixers[index].position = AVAudio3DPoint(x: 0, y: 0, z: -1) }
+    onPlay?(samples, sampleRate, Float(level) * 0.55)
   }
+
+  private static let rewindCue: [Float] = {
+    let rate = 44_100.0
+    let count = Int(rate * 0.115)
+    var phase = 0.0
+    var noise: UInt32 = 0x1E77_1A65
+    return (0..<count).map { index in
+      let t = Double(index) / rate
+      let progress = Double(index) / Double(count - 1)
+      // Two tight, falling chirps finish with a small spring-like pitch rebound.
+      let frequency = t < 0.065 ? 1_650 * pow(0.19, t / 0.065)
+        : 240 + 260 * exp(-(t - 0.065) * 45) * cos((t - 0.065) * 95)
+      phase += 2 * .pi * frequency / rate
+      noise = noise &* 1_664_525 &+ 1_013_904_223
+      let hiss = Double(noise >> 8) / Double(0xFF_FFFF) * 2 - 1
+      let attack = min(1, t / 0.002)
+      let release = min(1, (0.115 - t) / 0.012)
+      let envelope = attack * release * pow(1 - progress, 0.65)
+      return Float((sin(phase) * 0.48 + sin(phase * 2) * 0.10 + hiss * 0.08) * envelope)
+    }
+  }()
 
   /// Turns a stereo position into a pair of channel gains.
   ///

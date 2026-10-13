@@ -132,7 +132,6 @@ struct ReticleFeedback {
   var speedMultiplier: Double = 3 { didSet { speedTrails.multiplier = speedMultiplier } }
   var isFastForward = false
   private let speedTrails = SpeedTrails()
-  private var rewindGhost: CGImage?
   private var rewindCueStartedAt: TimeInterval?
   private var rewindCueUntil: TimeInterval = 0
   private var rewindOriginTick = 0
@@ -503,13 +502,8 @@ struct ReticleFeedback {
   private var cursorViewPoint: CGPoint?
   private var trackingArea: NSTrackingArea?
 
-  /// Captures the visible state before a rewind starts.
+  /// Starts the shared timeline badge without capturing the whole playfield.
   func beginRewindCue(at tick: Int) {
-    rewindGhost = nil
-    if let bitmap = bitmapImageRepForCachingDisplay(in: bounds) {
-      cacheDisplay(in: bounds, to: bitmap)
-      rewindGhost = bitmap.cgImage
-    }
     rewindOriginTick = tick
     rewindCurrentTick = tick
     rewindCueStartedAt = ProcessInfo.processInfo.systemUptime
@@ -518,17 +512,36 @@ struct ReticleFeedback {
     scheduleRewindCueRedraw()
   }
 
+  /// Captures actor positions before seeking through history.
+  func prepareRewindEffects() {
+    speedTrails.prepareRewind(actors: rewindActors)
+  }
+
+  private var rewindActors: [SpeedTrails.Actor] {
+    (session?.lemmings ?? []).map {
+      .init(id: $0.id, position: CGPoint(x: $0.x, y: $0.y), movement: $0.pose.rawValue)
+    }
+  }
+
+  private var usesTrails: Bool {
+    hdEffectsEnabled && !reduceMotion && phase == .playing
+      && (isFastForward || (!reduceFlashes && speedTrails.isRewinding))
+  }
+
   /// Updates the transport cue after a deterministic history seek.
   func updateRewindCue(at tick: Int) {
+    if tick < rewindCurrentTick, hdEffectsEnabled, !reduceMotion, !reduceFlashes {
+      speedTrails.finishRewind(tick: tick, actors: rewindActors) { [weak self] in self?.needsDisplay = true }
+    }
     rewindCurrentTick = tick
     needsDisplay = true
   }
 
-  /// Leaves the origin ghost on screen briefly, then fades it away.
+  /// Holds the rewind badge for the same brief interval as the sprite echoes.
   func endRewindCue() {
     guard rewindCueStartedAt != nil else { return }
     rewindCueStartedAt = nil
-    rewindCueUntil = ProcessInfo.processInfo.systemUptime + 0.35
+    rewindCueUntil = ProcessInfo.processInfo.systemUptime + 0.16
     needsDisplay = true
     scheduleRewindCueRedraw()
   }
@@ -857,7 +870,7 @@ struct ReticleFeedback {
         NSBezierPath(rect: bounds).addClip()
         precisionLens.applyToCurrentGraphicsContext()
         drawLevel(levelImage)
-        speedTrails.draw(enabled: hdEffectsEnabled && !reduceMotion && isFastForward && phase == .playing, in: bounds) { drawLemmings() }
+        speedTrails.draw(enabled: usesTrails, in: bounds) { drawLemmings() }
         NSGraphicsContext.restoreGraphicsState()
       }
       if let context = NSGraphicsContext.current?.cgContext {
@@ -1284,7 +1297,7 @@ struct ReticleFeedback {
       selectionOpacity = selection?.opacity ?? 1
     } else { selectionFade.reset() }
     selectedSprite = nil
-    if hdEffectsEnabled && !reduceMotion && isFastForward && phase == .playing {
+    if usesTrails {
       for lemming in lemmings { draw(lemming, ghostsOnly: true) }
     }
     // Every solid lemming and its labels cover every ghost, including neighbours.
@@ -1301,7 +1314,12 @@ struct ReticleFeedback {
   }
 
   func updateSpeedTrails() {
-    let enabled = hdEffectsEnabled && !reduceMotion && isFastForward && phase == .playing
+    if speedTrails.isRewinding {
+      speedTrails.update(tick: session?.currentTick ?? 0,
+        enabled: hdEffectsEnabled && !reduceMotion && !reduceFlashes && phase == .playing, actors: [])
+      if speedTrails.isRewinding { return }
+    }
+    let enabled = usesTrails
     let actors: [SpeedTrails.Actor] = enabled ? (session?.lemmings ?? []).compactMap { lemming in
       switch lemming.pose {
       case .walking, .jumping, .postClimb, .falling, .umbrellaOpening, .floating, .climbing:
@@ -1564,30 +1582,7 @@ struct ReticleFeedback {
 
   private func drawRewindCue() {
     let now = ProcessInfo.processInfo.systemUptime
-    guard let ghost = rewindGhost,
-          rewindCueStartedAt != nil || now < rewindCueUntil else {
-      if rewindCueStartedAt == nil { rewindGhost = nil }
-      return
-    }
-    let fading = rewindCueStartedAt == nil
-    let fade = fading ? CGFloat(max(0, rewindCueUntil - now) / 0.35) : 1
-    let elapsed = CGFloat(now - (rewindCueStartedAt ?? now))
-    let sweep = reduceMotion ? 0 : floor((elapsed * 18).truncatingRemainder(dividingBy: 8))
-    let context = NSGraphicsContext.current?.cgContext
-    context?.saveGState()
-    if let context {
-      context.clip(to: CGRect(origin: viewport.contentOffset, size: viewport.visibleSize))
-      context.setAlpha(0.10 * fade)
-      context.interpolationQuality = .none
-      context.draw(ghost, in: bounds.offsetBy(dx: -sweep, dy: 0))
-      if !reduceMotion {
-        context.setAlpha(0.07 * fade)
-        context.setFillColor(NSColor.systemBlue.cgColor)
-        context.fill(CGRect(x: viewport.contentOffset.x + sweep,
-          y: viewport.contentOffset.y, width: max(1, viewport.zoom), height: viewport.visibleSize.height))
-      }
-    }
-    context?.restoreGState()
+    guard rewindCueStartedAt != nil || now < rewindCueUntil else { return }
     let badgeScale: CGFloat = bounds.width >= 960 ? 2 : 1
     let badgeOffset = precisionStatus.isEmpty ? 0 : precisionStatus.size(scale: badgeScale).height + 4
     RewindTransportCue.draw(

@@ -471,43 +471,6 @@
     },
     {
       "concepts": [
-        "bomber"
-      ],
-      "demand": 45.0,
-      "entry": {
-        "catalogueRevision": "1.2-runtime-v2",
-        "id": "9E5892E9-C02B-DF4E-4A05-B0488F049D48",
-        "identity": {
-          "engine": "classic",
-          "levelID": "Ji Hoon Heaven 2.DAT#8",
-          "packID": "fan:lldb-547"
-        },
-        "levelNameSnapshot": "Stop, Block and Blow",
-        "levelNumberSnapshot": 19,
-        "packNameSnapshot": "Ji Hoons Lemmings Remake Heaven",
-        "sourceRevision": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971"
-      },
-      "focus": "Practise: Bomber",
-      "intrinsicDemand": 86.00035257282727,
-      "introduced": [],
-      "needsSupport": true,
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"Ji Hoon Heaven 2.DAT#8\", \"packID\": \"fan:lldb-547\"}",
-      "placement": {
-        "basis": "solutionEstimate",
-        "lower": 0,
-        "position": 45.0,
-        "reference": "Gentle/Only_floaters_can_survive_this.nxlv",
-        "replayRevision": "SHA256 digest: 216776a08372254298e2a13b0af3040a116c2c1987dc005a781163bb9149eefb",
-        "sourceRevision": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 190.0
-      },
-      "preparationGaps": [],
-      "score": 86.00035257282727,
-      "stage": "Fun"
-    },
-    {
-      "concepts": [
         "basher"
       ],
       "demand": 50.0,
@@ -4578,6 +4541,44 @@
       },
       "preparationGaps": [],
       "score": 543.9179997423345,
+      "stage": "Intermediate"
+    },
+    {
+      "concepts": [
+        "bomber"
+      ],
+      "demand": 342.5,
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "9E5892E9-C02B-DF4E-4A05-B0488F049D48",
+        "identity": {
+          "engine": "classic",
+          "levelID": "Ji Hoon Heaven 2.DAT#8",
+          "packID": "fan:lldb-547"
+        },
+        "levelNameSnapshot": "Stop, Block and Blow",
+        "levelNumberSnapshot": 19,
+        "packNameSnapshot": "Ji Hoons Lemmings Remake Heaven",
+        "sourceRevision": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971"
+      },
+      "focus": "Practise: Bomber",
+      "intrinsicDemand": 86.00035257282727,
+      "introduced": [],
+      "needsSupport": true,
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"Ji Hoon Heaven 2.DAT#8\", \"packID\": \"fan:lldb-547\"}",
+      "placement": {
+        "adjustment": "User playtest 2026-10-13: Stop, Block and Blow belongs late in Intermediate, not at lesson 13.",
+        "basis": "solutionEstimate",
+        "lower": 320.0,
+        "position": 342.5,
+        "reference": "Gentle/Only_floaters_can_survive_this.nxlv",
+        "replayRevision": "SHA256 digest: 216776a08372254298e2a13b0af3040a116c2c1987dc005a781163bb9149eefb",
+        "sourceRevision": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 355.0
+      },
+      "preparationGaps": [],
+      "score": 86.00035257282727,
       "stage": "Intermediate"
     },
     {
@@ -11588,5 +11589,5 @@
     }
   ],
   "placementPolicy": "redux-calibrated-2",
-  "version": "learning-18"
+  "version": "learning-19"
 }

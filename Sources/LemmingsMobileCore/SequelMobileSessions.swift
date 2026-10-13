@@ -91,7 +91,8 @@ public final class Lemmings2MobileSession: MobileGameSession {
                 point: MobilePoint(x: Double(lemming.x), y: Double(lemming.y - 5)),
                 direction: lemming.direction,
                 assignment: runtime.canAssign(slot: control, to: lemming.id) ? .eligible : .unavailable,
-                isBuilding: lemming.state == .building
+                isBuilding: lemming.state == .building,
+                pointerBounds: MobileRect(x: -9, y: -12, width: 18, height: 24)
             )
         }
     }
@@ -275,7 +276,8 @@ public final class Lemmings3MobileSession: MobileGameSession {
                 direction: lemming.direction,
                 assignment: probe.assign(action, to: lemming.id) ? .eligible : .unavailable,
                 isBuilding: lemming.state == .building,
-                hasTool: lemming.tool != nil
+                hasTool: lemming.tool != nil,
+                pointerBounds: MobileRect(x: -9, y: -12, width: 18, height: 24)
             )
         }
     }

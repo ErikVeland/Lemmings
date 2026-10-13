@@ -2,10 +2,11 @@
 import AppKit
 import LemmingsAppCore
 import LemmingsGameArt
+import UniformTypeIdentifiers
 
 @MainActor final class CloudLibraryView: NSView, GameDialogCustomNavigation {
     let sync: CloudLibrarySync
-    private let typography = Bundle.main.resourceURL.flatMap { GameMenuTypography(directory: $0.appendingPathComponent("MacArtwork/lemmings")) }
+    private let typography: GameMenuTypography?
     private let accessible = GameAccessibleElements()
     private var code: String?
     private var draft: String?
@@ -20,7 +21,11 @@ import LemmingsGameArt
     var pageLayout: GameFrontEnd.Layout { GameFrontEnd.layout(page, width: bounds.width, minimumHeight: bounds.height) }
     override var isFlipped: Bool { true }
     override var acceptsFirstResponder: Bool { true }
-    init(sync: CloudLibrarySync) { self.sync = sync; super.init(frame: CGRect(x: 0, y: 0, width: 1120, height: 720)) }
+    init(sync: CloudLibrarySync, typography: GameMenuTypography? = nil) {
+        self.sync = sync
+        self.typography = typography ?? Bundle.main.resourceURL.flatMap { GameMenuTypography(directory: $0.appendingPathComponent("MacArtwork/lemmings")) }
+        super.init(frame: CGRect(x: 0, y: 0, width: 1120, height: 720))
+    }
     required init?(coder: NSCoder) { nil }
     override func draw(_ dirtyRect: NSRect) {
         guard let context = NSGraphicsContext.current?.cgContext, let typography else { return }
@@ -83,6 +88,34 @@ import LemmingsGameArt
         case "syncCodeField": focus = id
         case "syncCopy":
             NSPasteboard.general.clearContents(); NSPasteboard.general.setString(code ?? "", forType: .string); message = "Copied"
+        case "syncExportKey", "syncImportKey":
+            guard let window else { break }
+            busy = true
+            Task { [weak self] in
+                guard let self else { return }
+                do {
+                    if id == "syncExportKey" {
+                        let data = try sync.recoveryData()
+                        let panel = NSSavePanel(); panel.nameFieldStringValue = "Ultimate Lemmings Recovery.lemmingssync"
+                        panel.message = "Keep this recovery key private. It grants access to every profile and Hot Seat in your library."
+                        let response: NSApplication.ModalResponse = await withCheckedContinuation { continuation in
+                            panel.beginSheetModal(for: window) { continuation.resume(returning: $0) }
+                        }
+                        if response == .OK, let url = panel.url { try data.write(to: url, options: .atomic); message = "Recovery key saved" }
+                    } else {
+                        let panel = NSOpenPanel(); panel.canChooseDirectories = false; panel.allowsMultipleSelection = false
+                        let response: NSApplication.ModalResponse = await withCheckedContinuation { continuation in
+                            panel.beginSheetModal(for: window) { continuation.resume(returning: $0) }
+                        }
+                        if response == .OK, let url = panel.url {
+                            let size = try url.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? 16385
+                            guard size <= 16384 else { throw CocoaError(.fileReadCorruptFile) }
+                            try sync.restoreRecoveryData(Data(contentsOf: url)); await sync.syncNow()
+                        }
+                    }
+                } catch { message = error.localizedDescription }
+                busy = false; needsDisplay = true
+            }
         case "syncNow", "syncMakeLink", "syncJoin":
             busy = true
             Task { [weak self] in

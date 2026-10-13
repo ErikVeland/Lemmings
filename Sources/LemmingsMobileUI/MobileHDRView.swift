@@ -81,9 +81,9 @@ import UIKit
         let budget = MobileDevicePerformance.presentation
         if let lastPaint, now - lastPaint < 1.0 / budget.effectHz { return }
         lastPaint = now
-        let scale = budget.overlayRenderScale(width: bounds.width, height: bounds.height,
-                                             nativeScale: min(2, window?.screen.scale ?? 1))
-        drawableSize = CGSize(width: max(1, bounds.width * scale), height: max(1, bounds.height * scale))
+        let scale = CGFloat(budget.overlayRenderScale(width: Double(bounds.width), height: Double(bounds.height),
+                                                     nativeScale: Double(min(2, window?.screen.scale ?? 1))))
+        drawableSize = CGSize(width: max(1, floor(bounds.width * scale)), height: max(1, floor(bounds.height * scale)))
         (layer as? CAMetalLayer)?.wantsExtendedDynamicRangeContent = (window?.screen.potentialEDRHeadroom ?? 1) > 1
         setNeedsDisplay()
     }

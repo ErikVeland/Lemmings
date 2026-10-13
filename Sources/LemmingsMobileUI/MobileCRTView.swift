@@ -210,7 +210,7 @@ import UIKit
                 encoder.endEncoding()
             }
         }
-        buffer.addCompletedHandler { completed in
+        buffer.addCompletedHandler { [weak self] completed in
             let seconds = max(0, completed.gpuEndTime - completed.gpuStartTime)
             let succeeded = completed.status == .completed
             Task { @MainActor [weak self] in

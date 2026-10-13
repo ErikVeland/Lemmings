@@ -43,6 +43,9 @@ public final class MusicFileDeck {
   private let reverb = AVAudioUnitReverb()
   private let spatialMixer = AVAudioMixerNode()
   private let outputMixer = AVAudioMixerNode()
+  private lazy var rewindAudio = MusicRewindBuffer(sampleRate: file.processingFormat.sampleRate)
+  private var rewindTask: Task<Void, Never>?
+  private var rewindNode: AVAudioSourceNode?
   private let file: AVAudioFile
   private let repeats: Bool
   private let originalMix: Bool
@@ -171,7 +174,13 @@ public final class MusicFileDeck {
     engine.connect(sourceMixer, to: nukeEQ, format: format)
     engine.connect(nukeEQ, to: reverb, format: format)
     engine.connect(reverb, to: spatialMixer, format: format)
-    engine.connect(spatialMixer, to: outputMixer, format: format)
+    engine.connect(spatialMixer, to: outputMixer, fromBus: 0, toBus: 0, format: format)
+    let history = rewindAudio
+    let reverse = history.source(format: format)
+    engine.attach(reverse)
+    engine.connect(reverse, to: outputMixer, fromBus: 0, toBus: 1, format: format)
+    rewindNode = reverse
+    player.installTap(onBus: 0, bufferSize: 1024, format: format) { buffer, _ in history.record(buffer) }
     engine.connect(outputMixer, to: engine.mainMixerNode, format: format)
 
     // Music stays stereo. Positional effects use a separate environment node.
@@ -205,6 +214,8 @@ public final class MusicFileDeck {
   }
 
   public func play() {
+    cancelRewind()
+    rewindAudio.setRecording(true)
     setRhythmMode(false)
     // A deck held for its next beat was not playing when paused. Play still
     // starts it, as it did before the spin-up.
@@ -265,12 +276,14 @@ public final class MusicFileDeck {
 
   /// A vinyl stop slows the source, lets the reverb ring out, then parks the engine.
   public func suspendOutput(rhythmOnly: Bool = false) {
+    cancelRewind()
     if rhythmOnly, rhythmBuffer != nil, started {
       if outputSuspended { resumeOutput() }
       setRhythmMode(true)
       return
     }
     guard started, !outputSuspended else { return }
+    rewindAudio.setRecording(false)
     outputSuspended = true
     resumeAfterSuspend = player.isPlaying
     fadeTask?.cancel()
@@ -293,6 +306,10 @@ public final class MusicFileDeck {
       if self.resumeAfterSuspend { self.player.pause() }
       do { try await Task.sleep(nanoseconds: UInt64(Turntable.tailSeconds * 1_000_000_000)) } catch { return }
       guard !Task.isCancelled, self.outputSuspended else { return }
+      while self.rewindAudio.isRewinding {
+        do { try await Task.sleep(nanoseconds: 20_000_000) } catch { return }
+        guard !Task.isCancelled, self.outputSuspended else { return }
+      }
       self.engine.pause()
       self.reverb.wetDryMix = self.restingWet
       self.varispeed.rate = max(0.25, self.requestedRate * self.vinyl.rate)
@@ -300,6 +317,8 @@ public final class MusicFileDeck {
   }
 
   public func resumeOutput() {
+    cancelRewind()
+    rewindAudio.setRecording(true)
     setRhythmMode(false)
     guard outputSuspended else { return }
     fadeTask?.cancel()
@@ -332,10 +351,13 @@ public final class MusicFileDeck {
 
   public func setMuted(_ muted: Bool) {
     self.muted = muted
+    if muted { cancelRewind() }
     applyOutputVolume()
   }
 
   public func stop() {
+    cancelRewind(clearHistory: true)
+    rewindAudio.setRecording(false)
     rhythmTask?.cancel(); rhythmTask = nil; rhythmMode = false
     if rhythmBuffer != nil { rhythmPlayer.stop() }
     musicLayer.outputVolume = 1; rhythmLayer.outputVolume = 0
@@ -348,6 +370,27 @@ public final class MusicFileDeck {
     player.stop()
     engine.stop()
     started = false
+  }
+
+  /// Pull the current recording backwards, including when gameplay is paused.
+  public func playRewind() {
+    guard started, !muted, masterVolume > 0, rewindAudio.trigger() else { return }
+    spatialMixer.outputVolume = 0
+    do { if !engine.isRunning { try engine.start() } }
+    catch { cancelRewind(); return }
+    rewindTask?.cancel()
+    rewindTask = Task { @MainActor [weak self] in
+      do { try await Task.sleep(nanoseconds: 200_000_000) } catch { return }
+      guard let self else { return }
+      self.cancelRewind()
+      if self.outputSuspended && !self.player.isPlaying { self.engine.pause() }
+    }
+  }
+
+  public func cancelRewind(clearHistory: Bool = false) {
+    rewindTask?.cancel(); rewindTask = nil
+    rewindAudio.cancel(clearHistory: clearHistory)
+    spatialMixer.outputVolume = 1
   }
 
   private func setRhythmMode(_ enabled: Bool) {

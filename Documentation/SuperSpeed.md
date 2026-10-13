@@ -84,7 +84,9 @@ Direction is sampled from world positions on each game tick. A three-tick motion
 history smooths pixel steps on slopes. A small angle tolerance stops cached
 trail directions from alternating on shallow slopes. Reversals and changes between walking,
 falling and climbing start a fresh direction immediately. Stops, teleports,
-rewinds and removed actors clear their motion history. Skill changes between
+rewinds and removed actors clear their motion history. Successful rewinds add a
+separate 160 ms impulse of sharp reverse echoes, as described in
+[Rewind feedback](UIPrinciples.md#rewind-feedback). Skill changes between
 ticks also clear the old wake.
 
 Live frames and replay captures read the same direction for a tick. Extra

@@ -401,6 +401,7 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
   }
 
   private func encode(_ slot: FrameSlot, target: MTLTexture, buffer: MTLCommandBuffer, headroom: Float? = nil) {
+    if let screen = window?.screen { MacFXPerformance.shared.configureDisplay(screen) }
     guard let device, let sourceTexture = slot.source, let flashTexture = slot.flash,
       let bright = brightPipeline, let blurH = blurHPipeline, let blurV = blurVPipeline,
       let composite = compositePipeline else { return }
@@ -506,9 +507,9 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
 
   #if PERFORMANCE_TESTS
   /// Exercise the shipping passes without a visible window or drawable.
-  func renderForTesting(size: CGSize, headroom: Float = 1) -> MTLTexture? {
-    guard let device, let queue else { return nil }
-    let slot = slots[0]
+  func renderForTesting(size: CGSize, headroom: Float = 1, slotIndex: Int = 0) -> MTLTexture? {
+    guard let device, let queue, slots.indices.contains(slotIndex) else { return nil }
+    let slot = slots[slotIndex]
     guard !slot.busy, prepare(slot), let command = queue.makeCommandBuffer() else { return nil }
     let descriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba16Float,
       width: Int(size.width), height: Int(size.height), mipmapped: false)

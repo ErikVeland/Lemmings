@@ -70,6 +70,8 @@ import NxlvKit
     recording?.setVinyl(rate: rate, gain: gain)
     module?.applyVinyl(rate: rate, gain: gain)
   }
+  func cancelRewind() { recording?.cancelRewind(); module?.cancelRewind() }
+  func playRewind() { recording?.playRewind(); module?.playRewind() }
   func pause(rhythmOnly: Bool = false) { recording?.suspendOutput(rhythmOnly: rhythmOnly); module?.suspendOutput(rhythmOnly: rhythmOnly) }
   func stop() { recording?.stop(); module?.stop() }
 }
@@ -520,6 +522,12 @@ import NxlvKit
     allDecks.forEach { $0.setEnhancements(value) }
   }
 
+  /// Scratch every audible layer of the current mix at its existing gain.
+  public func playRewind() {
+    guard !isMuted, masterVolume > 0 else { return }
+    allDecks.filter { $0.mixGain > 0 }.forEach { $0.playRewind() }
+  }
+
   public func setPlaybackRate(_ value: Double) {
     playbackRate = Float(min(1, max(0.5, value)))
     allDecks.forEach { $0.setBaseRate(playbackRate) }
@@ -783,6 +791,7 @@ import NxlvKit
   }
 
   public func suspendOutput(rhythmOnly: Bool = false) {
+    allDecks.forEach { $0.cancelRewind() }
     guard !outputSuspended || rhythmOnly != pauseUsesRhythm else { return }
     if !outputSuspended {
       suspendedAtUptime = ProcessInfo.processInfo.systemUptime

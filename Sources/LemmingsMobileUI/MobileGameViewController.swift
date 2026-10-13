@@ -79,6 +79,8 @@ struct MobileGameTurn {
     var lastAssignmentControl: Int?
     var lastInputAssignment: MobileTargetSelection?
     var previewPoint: MobilePoint?
+    var previewInput: MobileTargetInput = .touch
+    var hoverAimActive = false
     var highlightedTarget: MobileTargetSelection?
     private var lastRenderedTick = -1
     private var lastCheckpointTick = -1
@@ -189,7 +191,7 @@ struct MobileGameTurn {
             if let frame = self.latestFrame {
                 self.hud.updateMinimap(frame: frame, visible: viewport.visibleLevelRect, levelSize: self.session.levelSize)
             }
-            self.renderCurrentFrame(force: false)
+            self.renderCurrentFrame(force: true)
         }
         audio.onEvent = { [weak self] event in
             switch event {
@@ -342,8 +344,10 @@ struct MobileGameTurn {
             guard lifecycle.isForeground, !lifecycle.isInterrupted, overlay.isHidden else { setRewindHeld(false); return }
             if link.timestamp - lastRewindTime >= 0.08 {
                 lastRewindTime = link.timestamp
-                _ = session.rewind(seconds: 0.4)
-                effects.update(session: session, viewport: playfieldView.gameViewport, rewinding: true)
+                if session.rewind(seconds: 0.4) {
+                    MobileMusic.shared.playRewind()
+                    effects.update(session: session, viewport: playfieldView.gameViewport, rewinding: true)
+                }
                 clock.suspend()
                 renderCurrentFrame(force: true)
                 updateHUD()
@@ -361,7 +365,6 @@ struct MobileGameTurn {
             session.tick()
             effects.update(session: session, viewport: playfieldView.gameViewport)
         }
-        if let previewPoint { highlightedTarget = target(at: previewPoint) }
         renderCurrentFrame(force: true)
         updateHUD()
         if session.snapshot.isComplete {
@@ -415,8 +418,8 @@ struct MobileGameTurn {
             if session.isReadOnly { completionPresented = false }
             pauseForPlanning()
             playfieldView.cancelInteraction()
-            if action == .rewind { _ = session.rewind(seconds: 2) }
-            else { _ = session.stepBackward() }
+            let rewound = action == .rewind ? session.rewind(seconds: 2) : session.stepBackward()
+            if rewound { MobileMusic.shared.playRewind() }
             clock.suspend()
             highlightedTarget = nil
             previewPoint = nil
@@ -457,11 +460,14 @@ struct MobileGameTurn {
         for effect in touchEffects {
             switch effect {
             case let .preview(point), let .movePreview(point):
+                hoverAimActive = false
+                previewInput = playfieldView.touchInput
                 previewPoint = point
                 highlightedTarget = target(at: point)
                 needsFrame = true
             case let .commit(point):
-                previewPoint = nil
+                previewInput = playfieldView.touchInput
+                previewPoint = previewInput == .precision ? point : nil
                 if let selection = target(at: point), selection.state == .eligible {
                     let accepted = session.assign(control: selectedControl, to: selection.id)
                     effects.assignment(accepted: accepted)
@@ -473,14 +479,13 @@ struct MobileGameTurn {
                 }
                 needsFrame = true
             case let .pan(delta):
-                previewPoint = nil
-                highlightedTarget = nil
+                restoreHoverAim()
                 playfieldView.stopAutomaticFitting()
+                let oldViewport = playfieldView.gameViewport
                 playfieldView.gameViewport.pan(viewDelta: delta)
-                needsFrame = true
+                needsFrame = playfieldView.gameViewport == oldViewport
             case .cancelPreview:
-                previewPoint = nil
-                highlightedTarget = nil
+                restoreHoverAim()
                 needsFrame = true
             }
         }
@@ -503,7 +508,8 @@ struct MobileGameTurn {
             viewport: playfieldView.gameViewport,
             radius: 30,
             preference: preference,
-            favourApproaching: settings.favorApproachingLemmings
+            favourApproaching: settings.favorApproachingLemmings,
+            input: previewInput
         )
     }
 
@@ -514,12 +520,16 @@ struct MobileGameTurn {
         viewport.clamp()
         playfieldView.stopAutomaticFitting()
         playfieldView.gameViewport = viewport
-        renderCurrentFrame(force: true)
     }
 
     func renderCurrentFrame(force: Bool) {
         let tick = session.snapshot.tick
         guard force || tick != lastRenderedTick else { return }
+        if overlay.isHidden, playState.canEdit {
+            if hoverAimActive { previewPoint = playfieldView.hoverInputPoint }
+            if let previewPoint { highlightedTarget = target(at: previewPoint) }
+            else if hoverAimActive { highlightedTarget = nil }
+        }
         if tick < lastRenderedTick { selectionFade.reset(); playfieldView.resetTransientEffects() }
         do {
             let frame = try session.render(highlight: highlightedTarget)
@@ -553,7 +563,7 @@ struct MobileGameTurn {
             }
             hud.updateMinimap(frame: frame, visible: playfieldView.gameViewport.visibleLevelRect,
                               levelSize: session.levelSize)
-            if let point = previewPoint, let target = highlightedTarget {
+            if previewInput == .touch, let point = previewPoint, let target = highlightedTarget {
                 let finger = playfieldView.convert(CGPoint(x: point.x, y: point.y), to: view)
                 let field = playfieldView.frame
                 let free = MobileDisplayRegions.freeFrames(
@@ -606,6 +616,7 @@ struct MobileGameTurn {
         hud.cancelHeldControls()
         playState.suspend()
         playfieldView.cancelInteraction()
+        hoverAimActive = false
         previewPoint = nil
         highlightedTarget = nil
         touchLoupe.isHidden = true
@@ -630,8 +641,7 @@ struct MobileGameTurn {
         countdownLabel.isHidden = true
         guard playState.pauseForPlanning() else { return }
         playfieldView.cancelInteraction()
-        previewPoint = nil
-        highlightedTarget = nil
+        restoreHoverAim()
         touchLoupe.isHidden = true
         clock.suspend()
         pauseGameplayAudio()
@@ -985,14 +995,15 @@ struct MobileGameTurn {
             reduceFlashes: UIAccessibility.isReduceMotionEnabled,
             constrainedDevice: MobileDevicePerformance.constrained
         )
-        MobileDevicePerformance.update(framesPerSecond: budget.framesPerSecond)
+        let framesPerSecond = min(budget.framesPerSecond, view.window?.screen.maximumFramesPerSecond ?? 60)
+        MobileDevicePerformance.update(framesPerSecond: framesPerSecond)
         displayLink?.preferredFrameRateRange = CAFrameRateRange(
-            minimum: Float(min(20, budget.framesPerSecond)),
-            maximum: Float(budget.framesPerSecond),
-            preferred: Float(budget.framesPerSecond)
+            minimum: Float(min(20, framesPerSecond)),
+            maximum: Float(framesPerSecond),
+            preferred: Float(framesPerSecond)
         )
         let speedCatchUp = Int(ceil(
-            session.ticksPerSecond * speed / Double(max(1, budget.framesPerSecond)) * 2
+            session.ticksPerSecond * speed / Double(max(1, framesPerSecond)) * 2
         ))
         clock.maximumCatchUpTicks = max(budget.maximumCatchUpTicks, speedCatchUp)
     }
@@ -1052,7 +1063,7 @@ struct MobileGameTurn {
             guard session.supportsRewind, overlay.isHidden, playState.canEdit,
                   lifecycle.isForeground, !lifecycle.isInterrupted else { return }
             pauseForPlanning()
-            _ = session.rewind(seconds: 2)
+            if session.rewind(seconds: 2) { MobileMusic.shared.playRewind() }
             lastRewindTime = ProcessInfo.processInfo.systemUptime
             renderCurrentFrame(force: true)
         }

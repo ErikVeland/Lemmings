@@ -20,6 +20,11 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   private var appliedPitch: Float?
   private let spatialMixer = AVAudioMixerNode()
   private var sourceNode: AVAudioPlayerNode?
+  private let rewindAudio = MusicRewindBuffer()
+  private var rewindNode: AVAudioSourceNode?
+  @MainActor private var rewindTask: Task<Void, Never>?
+  private var rewindLeft = [Float](repeating: 0, count: 1024)
+  private var rewindRight = [Float](repeating: 0, count: 1024)
   private let synthesisQueue = DispatchQueue(label: "Lemmings.module-pcm", qos: .userInteractive)
   // Only the synthesis queue accesses these values.
   private var bufferGeneration = 0
@@ -112,11 +117,17 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     engine.connect(mixEQ, to: nukeEQ, format: format)
     engine.connect(nukeEQ, to: reverb, format: format)
     engine.connect(reverb, to: spatialMixer, format: format)
-    engine.connect(spatialMixer, to: engine.mainMixerNode, format: format)
+    engine.connect(spatialMixer, to: engine.mainMixerNode, fromBus: 0, toBus: 0, format: format)
+    let reverse = rewindAudio.source(format: format)
+    engine.attach(reverse)
+    engine.connect(reverse, to: engine.mainMixerNode, fromBus: 0, toBus: 1, format: format)
+    rewindNode = reverse
     sourceNode = node
     do {
       try engine.start()
     } catch {
+      engine.detach(reverse)
+      rewindNode = nil
       engine.detach(node)
       engine.detach(speedPitch)
       engine.detach(spatialMixer)
@@ -165,6 +176,8 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   }
 
   public func stop() {
+    cancelRewind()
+    rewindAudio.cancel(clearHistory: true)
     resetVinyl()
     guard isRunning else { return }
     pauseWorkItem?.cancel()
@@ -179,6 +192,8 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     engine.detach(mixEQ)
     engine.detach(nukeEQ)
     sourceNode = nil
+    if let rewindNode { engine.detach(rewindNode) }
+    rewindNode = nil
     lock.lock()
     outputSuspended = false
     pauseFadeFrames = 0
@@ -192,6 +207,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
 
   /// Keep native percussion, or slow the source into a short vinyl stop.
   public func suspendOutput(rhythmOnly: Bool = false) {
+    cancelRewind()
     guard isRunning else { return }
     lock.lock()
     if rhythmOnly, player?.hasRhythm == true {
@@ -216,13 +232,14 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
       self.lock.lock()
       let shouldPause = self.outputSuspended
       self.lock.unlock()
-      if shouldPause { self.engine.pause(); self.reverb.wetDryMix = 0 }
+      if shouldPause && !self.rewindAudio.isRewinding { self.engine.pause(); self.reverb.wetDryMix = 0 }
     }
     pauseWorkItem = work
     DispatchQueue.main.asyncAfter(deadline: .now() + vinylStopSeconds + vinylTailSeconds, execute: work)
   }
 
   public func resumeOutput() throws {
+    cancelRewind()
     guard isRunning else { return }
     pauseWorkItem?.cancel()
     pauseWorkItem = nil
@@ -249,6 +266,10 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
       return
     }
 
+    if frames > rewindLeft.count {
+      rewindLeft = .init(repeating: 0, count: frames)
+      rewindRight = .init(repeating: 0, count: frames)
+    }
     if interpolationPhase >= 1 {
       currentFrame = nextSourceFrameLocked()
       nextFrame = nextSourceFrameLocked()
@@ -276,8 +297,15 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
       } else {
         frame = (left: 0, right: 0)
       }
+      rewindLeft[index] = frame.left
+      rewindRight[index] = frame.right
       left?[index] = frame.left * Float(level) * gain * vinylGain
       right?[index] = frame.right * Float(level) * gain * vinylGain
+    }
+    if !outputSuspended {
+      rewindLeft.withUnsafeBufferPointer { l in rewindRight.withUnsafeBufferPointer { r in
+        rewindAudio.record(left: l.baseAddress!, right: r.baseAddress!, frames: frames)
+      } }
     }
   }
 
@@ -390,6 +418,8 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   private func load(_ module: ProTrackerModule, url: URL) {
     let prepared = ProTrackerEnhancedPlayer(module: module, sampleRate: sampleRate, enhancements: enhancements)
     lock.lock()
+    rewindAudio.cancel(clearHistory: true)
+    spatialMixer.outputVolume = isMuted ? 0 : 1
     loadedModule = module
     rhythmTarget = 0
     rhythmAmount = 0
@@ -491,12 +521,40 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     applyVinyl(rate: 1, gain: 1)
   }
 
+  public func cancelRewind() {
+    rewindAudio.cancel()
+    spatialMixer.outputVolume = muted ? 0 : 1
+    if Thread.isMainThread {
+      MainActor.assumeIsolated { rewindTask?.cancel(); rewindTask = nil }
+    }
+  }
+
+  /// Scratches recent mixed tracker samples without replaying the tracker on the UI thread.
+  @MainActor public func playRewind() {
+    guard isRunning, !muted, volume > 0,
+      rewindAudio.trigger(skipping: Int(bufferedSeconds * sampleRate)) else { return }
+    spatialMixer.outputVolume = 0
+    do { if !engine.isRunning { try engine.start() } }
+    catch { rewindAudio.cancel(); spatialMixer.outputVolume = muted ? 0 : 1; return }
+    rewindTask?.cancel()
+    rewindTask = Task { @MainActor [weak self] in
+      do { try await Task.sleep(nanoseconds: 200_000_000) } catch { return }
+      guard let self else { return }
+      self.rewindAudio.cancel()
+      self.spatialMixer.outputVolume = self.muted ? 0 : 1
+      let park = self.lock.withLock { self.outputSuspended && self.pauseFadeFrames == 0 }
+      if park { self.engine.pause() }
+      self.rewindTask = nil
+    }
+  }
+
   // MARK: - Controls
 
   /// Sets the output level, from silent to full.
   public func setVolume(_ value: Double) {
     lock.lock()
     level = min(1, max(0, value))
+    rewindAudio.setGain(Float(level))
     lock.unlock()
   }
 
@@ -555,6 +613,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   public func setMuted(_ muted: Bool) {
     lock.lock()
     isMuted = muted
+    if muted { rewindAudio.cancel() }
     lock.unlock()
     // Silence already queued samples and the effect tail immediately.
     spatialMixer.outputVolume = muted ? 0 : 1

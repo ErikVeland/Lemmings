@@ -76,6 +76,17 @@ class CloudTests(unittest.TestCase):
         self.store.delete(self.vault, self.token)
         self.assertEqual(self.store.db.execute("SELECT COUNT(*) FROM saves").fetchone()[0], 0)
 
+    def test_online_backups_round_trip_and_keep_three_days(self):
+        import sqlite3
+        self.store.write(self.vault, self.device, self.token, self.data, "*")
+        for day in range(5):
+            self.now = 1700000000 + day * 86400
+            self.store.backup()
+        backups = sorted(self.store.path.parent.joinpath('backups').glob('*.sqlite3'))
+        self.assertEqual(len(backups), 3)
+        with sqlite3.connect(backups[-1]) as recovered:
+            self.assertEqual(recovered.execute('SELECT data FROM saves').fetchone()[0], self.data)
+
     def test_http_contract_and_no_public_save_access(self):
         server = Server(("127.0.0.1", 0), self.store)
         thread = threading.Thread(target=server.serve_forever, daemon=True)
@@ -89,6 +100,7 @@ class CloudTests(unittest.TestCase):
             with self.assertRaises(urllib.error.HTTPError) as denied:
                 urllib.request.urlopen(url)
             self.assertEqual(denied.exception.code, 401)
+            denied.exception.close()
             request = urllib.request.Request(url, headers={"Authorization": "Bearer " + self.token})
             with urllib.request.urlopen(request) as response:
                 self.assertEqual(json.load(response)["devices"], [self.device])

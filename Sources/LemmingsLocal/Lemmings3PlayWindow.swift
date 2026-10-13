@@ -135,7 +135,6 @@ import NxlvKit
     private var forwardTimer: Timer?
     private var forwardHeld = false
     private var timelineTransport: TimelineKeyTransport?
-    private var rewindAudioDucked = false
     private var rewindOriginState: Lemmings3Runtime?
     private var rewindOriginInputs: [L3RunRecovery.Input] = []
     private var rewindOriginAssignments: [String: Int] = [:]
@@ -822,7 +821,6 @@ import NxlvKit
         captureRewindOrigin()
         rewindHeld = true
         rewindTimer?.invalidate()
-        setRewindAudioDucked(true)
         rewindTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 15.0, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated {
                 guard let self, self.rewind(seconds: 0.20) else { self?.endContinuousRewind(); return }
@@ -835,7 +833,6 @@ import NxlvKit
         rewindHeld = false
         rewindTimer?.invalidate()
         rewindTimer = nil
-        setRewindAudioDucked(false)
     }
     private var canStepForward: Bool {
         game.tick < (rewindOriginState?.tick ?? game.tick) && !rewindHeld
@@ -844,7 +841,6 @@ import NxlvKit
         guard canStepForward, !forwardHeld else { return false }
         forwardHeld = true
         forwardTimer?.invalidate()
-        setRewindAudioDucked(true)
         forwardTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 15.0, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated {
                 guard let self, self.stepForward(seconds: 0.20) else { self?.endContinuousStepForward(); return }
@@ -860,7 +856,6 @@ import NxlvKit
         forwardHeld = false
         forwardTimer?.invalidate()
         forwardTimer = nil
-        setRewindAudioDucked(false)
     }
 
     private func makeTimelineTransport(for window: NSWindow) -> TimelineKeyTransport {
@@ -882,12 +877,10 @@ import NxlvKit
         rewindOriginState = nil
         rewindOriginInputs = []
     }
-    private func setRewindAudioDucked(_ active: Bool) {
-        guard rewindAudioDucked != active else { return }
-        rewindAudioDucked = active
-        music.setVolume(Double(active ? musicGain * 0.18 : musicGain))
-        dj.setVolume(Double(active ? musicGain * 0.18 : musicGain))
+    private func playRewindMusic() {
+      music.playRewind(); dj.playRewind()
     }
+
     private func captureRewindOrigin() {
         guard rewindOriginState == nil else { return }
         rewindOriginState = game; rewindOriginInputs = recoveryInputs
@@ -911,22 +904,23 @@ import NxlvKit
         let target = max(0, game.tick - Int((seconds * Lemmings3Runtime.ticksPerSecond).rounded()))
         guard target < game.tick else { return false }
         let prefix = recoveryInputs.prefix { $0.tick <= target }
-        setRewindAudioDucked(true)
+        canvas.prepareRewindEffects()
         do {
             game = try L3RunRecovery.replay(initial: initial, inputs: Array(prefix), through: target)
             try rebuildReplayStatistics(Array(prefix))
         } catch {
             message = "Could not rewind this run: \(error)"
-            if !rewindHeld { setRewindAudioDucked(false) }
+
             return false
         }
+        canvas.finishRewindEffects(game)
         recoveryInputs = Array(prefix)
         usedRewind = true
         paused = true; accumulator = 0; pendingTool = nil; canvas.directionPoint = nil
         updateUserMusicPause()
-        assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); warningSound.silence(); warningSound.playRewindScrub()
+        assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); warningSound.silence(); warningSound.playRewindScrub(); playRewindMusic()
         refresh(); saveCheckpoint(immediately: true)
-        if !rewindHeld { setRewindAudioDucked(false) }
+
         return true
     }
     @discardableResult
@@ -935,21 +929,20 @@ import NxlvKit
         let target = min(origin.tick, game.tick + Int((seconds * Lemmings3Runtime.ticksPerSecond).rounded()))
         guard target > game.tick else { return false }
         let prefix = rewindOriginInputs.prefix { $0.tick <= target }
-        setRewindAudioDucked(true)
         do {
             game = try L3RunRecovery.replay(initial: initial, inputs: Array(prefix), through: target)
             try rebuildReplayStatistics(Array(prefix))
         } catch {
             message = "Could not move forward through this run: \(error)"
-            if !forwardHeld { setRewindAudioDucked(false) }
+
             return false
         }
         recoveryInputs = Array(prefix)
         paused = true; accumulator = 0; pendingTool = nil; canvas.directionPoint = nil
         updateUserMusicPause()
-        assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); warningSound.silence(); warningSound.playRewindScrub()
+        assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); warningSound.silence()
         refresh(); saveCheckpoint(immediately: true)
-        if !forwardHeld { setRewindAudioDucked(false) }
+
         return true
     }
     private func rebuildReplayStatistics(_ inputs: [L3RunRecovery.Input]) throws {
@@ -1562,9 +1555,31 @@ import NxlvKit
         }
     }
     var reduceFlashes = false {
-        didSet { if reduceFlashes { hdrOverlay?.clearExplosions() }; needsDisplay = true }
+        didSet {
+            if reduceFlashes {
+                hdrOverlay?.clearExplosions()
+                if speedTrails.isRewinding { speedTrails.reset() }
+            }
+            needsDisplay = true
+        }
     }
     private var usesSpeedEffects: Bool { hdEffectsEnabled && !reduceMotion && isFastForward }
+    private var usesTrails: Bool {
+        hdEffectsEnabled && !reduceMotion && (isFastForward || (!reduceFlashes && speedTrails.isRewinding))
+    }
+    private func rewindActors(_ game: Lemmings3Runtime?) -> [SpeedTrails.Actor] {
+        (game?.lemmings ?? []).filter { $0.active }.map {
+            .init(id: $0.id, position: CGPoint(x: $0.x, y: $0.y), movement: $0.state.rawValue)
+        }
+    }
+    func prepareRewindEffects() { speedTrails.prepareRewind(actors: rewindActors(game)) }
+    func finishRewindEffects(_ restored: Lemmings3Runtime) {
+        guard hdEffectsEnabled, !reduceMotion, !reduceFlashes else { return }
+        speedTrails.finishRewind(tick: restored.tick, actors: rewindActors(restored)) { [weak self] in
+            self?.needsDisplay = true
+        }
+        needsDisplay = true
+    }
     var speedMultiplier: Double = 3 { didSet { speedTrails.multiplier = speedMultiplier; syncSpeedEffects() } }
     let turnBadge = TurnBadgeView()
     override init(frame: NSRect) {
@@ -1928,6 +1943,11 @@ import NxlvKit
             width: image.size.width * zoom, height: image.size.height * zoom))
     }
     private func updateSpeedTrails() {
+        if speedTrails.isRewinding {
+            speedTrails.update(tick: game?.tick ?? 0,
+                enabled: hdEffectsEnabled && !reduceMotion && !reduceFlashes, actors: [])
+            if speedTrails.isRewinding { return }
+        }
         let enabled = usesSpeedEffects && menuRows == nil
         let actors: [SpeedTrails.Actor] = enabled ? (game?.lemmings ?? []).compactMap { lem in
             guard lem.active else { return nil }
@@ -1986,7 +2006,7 @@ import NxlvKit
         updateSpeedTrails()
         NSColor.black.setFill(); bounds.fill()
         guard let game, let terrain else { return }
-        speedTrails.draw(enabled: usesSpeedEffects && menuRows == nil, in: playfieldRect) {
+        speedTrails.draw(enabled: usesTrails && menuRows == nil, in: playfieldRect) {
             drawWorld(game, terrain: terrain)
         }
         if let context = NSGraphicsContext.current?.cgContext {
@@ -2090,7 +2110,7 @@ import NxlvKit
             }
         }
         if let foreground { drawBackgroundImage(foreground, x: 0, y: 0) }
-        if usesSpeedEffects { drawLemmings(game, ghostsOnly: true) }
+        if usesTrails { drawLemmings(game, ghostsOnly: true) }
         for pickup in game.pickups where pickup.quantity > 0 {
             if let frame = pickupImages[pickup.tool.rawValue] { drawImage(frame, x: CGFloat(pickup.x), y: CGFloat(pickup.y)) }
         }

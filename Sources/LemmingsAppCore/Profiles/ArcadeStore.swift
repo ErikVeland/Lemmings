@@ -100,6 +100,11 @@ import NxlvKit
         public let active: Bool
         public var savedAt: Date?
         public var policy: TurnPolicy?
+        public init(id: String, host: String, players: [String], turn: String?, active: Bool,
+                    savedAt: Date? = nil, policy: TurnPolicy? = nil) {
+            self.id = id; self.host = host; self.players = players; self.turn = turn
+            self.active = active; self.savedAt = savedAt; self.policy = policy
+        }
     }
     public private(set) var hotSeatID: String?
     private var hotSeatHostID: String?
@@ -124,11 +129,11 @@ import NxlvKit
         return (try? JSONDecoder().decode([SavedHotSeat].self, from: data)) ?? []
     }
     public var savedHotSeats: [SavedHotSeat] {
-        savedSessionHistory(host: records.activeProfileID).filter {
-            $0.id != hotSeatID && $0.host == records.activeProfileID
+        libraryHotSeats.filter {
+            $0.id != hotSeatID && $0.players.contains(records.activeProfileID)
                 && $0.players.count >= 2 && Set($0.players).count == $0.players.count
                 && $0.players.contains($0.host) && $0.players.allSatisfy { records.profile($0) != nil }
-        }
+        }.sorted { ($0.savedAt ?? .distantPast) > ($1.savedAt ?? .distantPast) }
     }
     /// Includes the current campaign without transferring the device's selected mode.
     public var libraryHotSeats: [SavedHotSeat] {
@@ -150,6 +155,17 @@ import NxlvKit
             return (sessionKey(host: profile.id) + ".history", try encoder.encode(history))
         }
         for (key, data) in histories { defaults.set(data, forKey: key) }
+        for profile in records.profiles where hotSeatHostID != profile.id {
+            let key = sessionKey(host: profile.id)
+            let previous = defaults.data(forKey: key).flatMap { try? JSONDecoder().decode(SavedHotSeat.self, from: $0) }
+            let chosen = incoming.first(where: { $0.id == previous?.id })
+                ?? (previous == nil ? incoming.filter { $0.host == profile.id }.max { ($0.savedAt ?? .distantPast) < ($1.savedAt ?? .distantPast) } : nil)
+            if let chosen {
+                let inactive = SavedHotSeat(id: chosen.id, host: chosen.host, players: chosen.players,
+                    turn: chosen.turn, active: false, savedAt: chosen.savedAt, policy: chosen.policy)
+                defaults.set(try encoder.encode(inactive), forKey: key)
+            }
+        }
         // The sync coordinator calls this only at a safe menu. Keep the current
         // mode, but restore its next turn before another level can start.
         if let id = hotSeatID, let seat = incoming.first(where: { $0.id == id }) {
@@ -165,6 +181,11 @@ import NxlvKit
         if id == hotSeatID { return true }
         guard let saved = savedHotSeats.first(where: { $0.id == id }) else { return false }
         persistSession(active: false)
+        if records.activeProfileID != saved.host {
+            let before = records
+            records.selectProfile(saved.host); save()
+            if storageError != nil { records = before; return false }
+        }
         hotSeatID = saved.id; hotSeatHostID = saved.host; sessionProfileIDs = saved.players
         sessionTurnID = saved.turn.flatMap { saved.players.contains($0) ? $0 : nil }
         if let policy = saved.policy { turnPolicy = policy }
@@ -195,6 +216,7 @@ import NxlvKit
     public func prepareHotSeat() {
         guard sessionProfileIDs.count < 2, records.profiles.count >= 2 else { return }
         if restoreSession(activeOnly: false) { persistSession(); return }
+        if let saved = savedHotSeats.first, resumeHotSeat(id: saved.id) { return }
         let host = records.activeProfileID
         let guest = records.profiles.map(\.id).first { $0 != host }
         sessionProfileIDs = [host] + (guest.map { [$0] } ?? [])

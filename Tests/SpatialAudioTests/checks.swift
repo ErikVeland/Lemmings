@@ -120,6 +120,13 @@ print("PASS camera geometry at zoomed, standard and wide aspect ratios, elevatio
 
 extension SoundEffectPlayer {
   func checkRewindFeedbackAndPolyphony() {
+    playRewindScrub()
+    let cue = voices.first(where: { $0.isActive })!.samples
+    precondition(cue.count == Int(44_100 * 0.115) && cue.contains { abs($0) > 0.1 },
+      "A silent history must still produce the short rewind cue")
+    precondition(cue.allSatisfy { $0.isFinite && abs($0) < 1 }
+      && abs(cue.first!) < 0.001 && abs(cue.last!) < 0.001,
+      "Rewind cue has an invalid sample or a clicking endpoint")
     latestRecentSample = 3
     for index in 0..<4 {
       recentSamplePositions[index] = Int64(index)
@@ -127,26 +134,28 @@ extension SoundEffectPlayer {
     }
     let original = recentSamples
     playRewindScrub()
-    precondition(voices.first(where: { $0.isActive })!.samples == [0.4, 0.3, 0.2, 0.1],
-      "Rewind did not reverse the original effect samples")
-    let buffer = AVAudioPCMBuffer(pcmFormat: AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 1)!, frameCapacity: 8)!
-    for frames in [4, 8] {
-      buffer.frameLength = AVAudioFrameCount(frames)
-      for _ in 0..<100 {
-        for _ in 0..<12 { playRewindScrub() }
-        let active = voices.indices.filter { voices[$0].isActive }
-        precondition(active.count <= 4, "Rewind exceeded four voices")
-        var sum = [Float](repeating: 0, count: frames)
-        for index in active {
-          fillVoice(index, buffers: UnsafeMutableAudioBufferListPointer(buffer.mutableAudioBufferList), frames: frames, sampleTime: 0)
-          for i in 0..<frames { sum[i] += buffer.floatChannelData![0][i] }
-        }
-        precondition(sum.allSatisfy { abs($0) <= 0.241 }, "Rewind overlaps gained volume")
-        precondition(recentSamples == original && latestRecentSample == 3,
-          "Rewind audio fed back into its own history")
+    let mixed = voices.first(where: { $0.isActive })!.samples
+    precondition(mixed[1] > cue[1] && mixed[2] == cue[2],
+      "Rewind lost its double-speed reversed history layer")
+    let buffer = AVAudioPCMBuffer(pcmFormat: AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 1)!, frameCapacity: 512)!
+    buffer.frameLength = 512
+    for _ in 0..<200 {
+      for _ in 0..<12 { playRewindScrub() }
+      let active = voices.indices.filter { voices[$0].isActive }
+      precondition(active.count == 1, "Rapid rewind taps stacked cues")
+      for index in active {
+        fillVoice(index, buffers: UnsafeMutableAudioBufferListPointer(buffer.mutableAudioBufferList), frames: 512, sampleTime: 0)
+        precondition((0..<512).allSatisfy { abs(buffer.floatChannelData![0][$0]) < 0.4 },
+          "Rewind exceeded its mix budget")
       }
+      precondition(recentSamples == original && latestRecentSample == 3,
+        "Rewind audio fed back into its own history")
     }
-    print("PASS reversed rewind samples, four-voice cap, normalized overlaps at buffer boundaries and mid-buffer, no feedback after 2400 requests")
+    setMuted(true); playRewindScrub()
+    precondition(!voices.contains { $0.isActive }, "Muted rewind started a voice")
+    setMuted(false); outputSuspended = true; playRewindScrub()
+    precondition(!voices.contains { $0.isActive }, "Suspended output queued a rewind")
+    print("PASS silent-history rewind, finite 115 ms cue, reversed history, one-voice repeat cap, mute and suspension after 2400 requests")
   }
 }
 SoundEffectPlayer().checkRewindFeedbackAndPolyphony()

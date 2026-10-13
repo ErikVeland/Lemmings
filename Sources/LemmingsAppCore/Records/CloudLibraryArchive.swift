@@ -18,8 +18,8 @@ public struct CloudLibraryIdentity: Codable, Equatable, Sendable {
         SymmetricKey(size: .bits256).withUnsafeBytes { Data($0) }
     }
     public func validate() throws {
-        guard version == 1, UUID(uuidString: id) != nil, key.count == 32,
-              token.count == 64, token.allSatisfy({ $0.isHexDigit && $0.isASCII }) else {
+        guard version == 1, UUID(uuidString: id)?.uuidString.lowercased() == id, key.count == 32,
+              token.count == 64, token == token.lowercased(), token.allSatisfy({ $0.isHexDigit && $0.isASCII }) else {
             throw SequelDataError.invalid("The library key is invalid.")
         }
     }
@@ -85,8 +85,9 @@ public struct CloudLibraryArchive: Codable, Equatable, Sendable {
     public var players: [String: Player]
     public var deleted: Set<String>
     public var seats: [String: [Seat]]
-    public init(players: [String: Player] = [:], deleted: Set<String> = [], seats: [String: [Seat]] = [:]) {
-        version = 2; self.players = players; self.deleted = deleted; self.seats = seats
+    public var primary: String?
+    public init(players: [String: Player] = [:], deleted: Set<String> = [], seats: [String: [Seat]] = [:], primary: String? = nil) {
+        version = 2; self.players = players; self.deleted = deleted; self.seats = seats; self.primary = primary
     }
     public var counter: UInt64 {
         max(players.values.map(\.stamp.counter).max() ?? 0, seats.values.flatMap { $0 }.map(\.stamp.counter).max() ?? 0)
@@ -95,6 +96,7 @@ public struct CloudLibraryArchive: Codable, Equatable, Sendable {
         guard version == 2, players.count <= 8, deleted.count <= 10_000, seats.count <= 200 else {
             throw SequelDataError.invalid("This library needs a newer app or exceeds its limits.")
         }
+        guard primary.map({ players[$0] != nil }) ?? true else { throw SequelDataError.invalid("The primary cloud player is missing.") }
         for id in deleted { guard UUID(uuidString: id) != nil else { throw SequelDataError.invalid("Invalid removed player.") } }
         for (id, player) in players {
             guard UUID(uuidString: id) != nil, player.profile.id == id, !deleted.contains(id),
@@ -134,6 +136,8 @@ public struct CloudLibraryArchive: Codable, Equatable, Sendable {
             result.players[id] = local
         }
         result.players = result.players.filter { !result.deleted.contains($0.key) }
+        result.primary = [primary, incoming.primary].compactMap { $0 }.filter { result.players[$0] != nil }.min()
+            ?? result.players.keys.sorted().first
         for (id, remote) in incoming.seats {
             var branches = result.seats[id] ?? []
             for seat in remote {

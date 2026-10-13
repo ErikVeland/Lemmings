@@ -13,6 +13,7 @@ swiftc -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos12.3
 # Keep signal checks beside the private audio graph, without exposing test APIs.
 cat "$project_dir/Sources/LemmingsAudio/AdaptiveDJPlayer.swift" \
   "$project_dir/Sources/LemmingsAudio/MusicLibrary.swift" \
+  "$project_dir/Sources/LemmingsAudio/MusicRewindBuffer.swift" \
   "$project_dir/Sources/LemmingsAudio/MusicFileDeck.swift" \
   "$project_dir/Sources/LemmingsAudio/ModuleMusicPlayer.swift" \
   "$project_dir/Sources/LemmingsAudio/SoundtrackPlayer.swift" \

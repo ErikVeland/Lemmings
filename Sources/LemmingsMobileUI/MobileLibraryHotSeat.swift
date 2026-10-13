@@ -50,12 +50,12 @@ extension MobileLibraryViewController {
     func hotSeatPage(subtitle: String) -> GameFrontEnd.Page {
         let roster = hotSeatRoster ?? MobileHotSeatRoster(host: profiles.activeID, players: hotSeat?.players ?? [])
         return MobileCareerArt.hotSeat(profiles, subtitle: subtitle, roster: roster, policy: hotSeats.policy,
-            active: hotSeat != nil, hasSaved: !hotSeats.resumable(host: profiles.activeID).isEmpty,
+            active: hotSeat != nil, hasSaved: !hotSeats.sharedSessions(player: profiles.activeID).isEmpty,
             confirmingRestart: confirmingRestart)
     }
 
     func savedHotSeatsPage(subtitle: String) -> GameFrontEnd.Page {
-        let rows = hotSeats.resumable(host: profiles.activeID).map { seat -> GameFrontEnd.Action in
+        let rows = hotSeats.sharedSessions(player: profiles.activeID).map { seat -> GameFrontEnd.Action in
             let names = seat.players.map { String(playerName($0).prefix(6)) }.joined(separator: " ")
             return .init("seatResume." + seat.id, names)
         }
@@ -69,6 +69,9 @@ extension MobileLibraryViewController {
         switch id {
         case "hotSeat":
             if route != .hotSeat && route != .hotSeats { hotSeatBackRoute = route }
+            if hotSeat == nil, let saved = hotSeats.sharedSessions(player: profiles.activeID).first {
+                guard resumeSharedSeat(saved.id) else { rebuild(); return true }
+            }
             confirmingRestart = false
             navigate(.hotSeat)
         case "seatBack":
@@ -102,11 +105,22 @@ extension MobileLibraryViewController {
                 hotSeatRoster?.toggle(key)
                 confirmingRestart = false
                 rebuild()
-            } else if id.hasPrefix("seatResume."), hotSeats.resume(id: String(id.dropFirst(11))) != nil {
-                guard saveHotSeats() else { rebuild(); return true }
+            } else if id.hasPrefix("seatResume.") {
+                guard resumeSharedSeat(String(id.dropFirst(11))) else { rebuild(); return true }
                 hotSeatRoster = nil
                 leaveHotSeatPage()
             } else { return false }
+        }
+        return true
+    }
+    private func resumeSharedSeat(_ id: String) -> Bool {
+        let previousSeats = hotSeats, previousProfiles = profiles
+        guard let seat = hotSeats.resume(id: id) else { return false }
+        profiles.select(seat.host)
+        guard saveProfiles(), saveHotSeats() else {
+            hotSeats = previousSeats; profiles = previousProfiles
+            _ = saveProfiles()
+            return false
         }
         return true
     }
