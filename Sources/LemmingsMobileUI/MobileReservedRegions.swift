@@ -4,6 +4,7 @@ import UIKit
 
 @MainActor enum MobileSystemRegions {
     static func read(in view: UIView) -> [MobileReservedRegion] {
+        #if compiler(>=6.3)
         if #available(iOS 27.1, *) {
             return [UIView.ReservedRegion.Kind.division, .occlusion].flatMap { kind in
                 view.reservedRegions(kind: kind).filter(\.isActive).map { region in
@@ -13,6 +14,7 @@ import UIKit
                 }
             }
         }
+        #endif
         return []
     }
 
