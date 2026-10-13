@@ -18,6 +18,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
     }
 
     private let storage: MobileStorage
+    private let soundBank: Lemmings3SoundBank?
     private let progressLock = NSRecursiveLock()
     private let panelLock = NSLock()
     private var panelFrames: [Int: MobilePixelFrame] = [:]
@@ -35,6 +36,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
     public init(directory: URL, storage: MobileStorage) throws {
         self.directory = directory
         self.storage = storage
+        soundBank = try? Lemmings3SoundBank(root: directory)
         savedProgress = storage.load(SavedProgress.self, name: "lemmings3-campaign") ?? SavedProgress()
         levels = try Lemmings3ClassicCampaign.Tribe.allCases.flatMap { tribe in
             let campaign = try Lemmings3ClassicCampaign(root: directory, tribe: tribe)
@@ -129,7 +131,8 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
         let session = Lemmings3MobileSession(runtime: runtime,
             engineFingerprint: Self.engineFingerprint,
             levelIdentifier: "lemmings3/\(fingerprint)", levelIndex: index,
-            levelFingerprint: fingerprint, panelFrame: panel, renderer: renderer.render) { [weak self] completed in
+            levelFingerprint: fingerprint, panelFrame: panel, renderer: renderer.render,
+            soundBank: soundBank) { [weak self] completed in
                 self?.record(completed, at: localIndex, tribe: tribe)
             }
         return MobileLevelContent(summary: levels[index], session: session)

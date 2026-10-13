@@ -34,6 +34,8 @@ public final class Lemmings2MobileSession: MobileGameSession {
     private let initial: Lemmings2Runtime
     private let renderer: Lemmings2MobileRenderer?
     private var runtime: Lemmings2Runtime
+    public let soundBank: Lemmings2SoundBank?
+    private var soundRequests: [Lemmings2SoundRequest] = []
     private var explosionTimeline = PixelExplosionTimeline()
     public var explosions: [MobileExplosion] {
         explosionTimeline.update(tick: runtime.tick, bursts: PixelExplosion.lemmings2(runtime))
@@ -55,6 +57,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
         levelIndex: Int,
         levelFingerprint: String,
         renderer: Lemmings2MobileRenderer? = nil,
+        soundBank: Lemmings2SoundBank? = nil,
         onCompletion: ((Lemmings2Runtime) -> Void)? = nil
     ) {
         initial = runtime
@@ -64,6 +67,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
         self.levelIndex = levelIndex
         self.levelFingerprint = levelFingerprint
         self.renderer = renderer
+        self.soundBank = soundBank
         self.onCompletion = onCompletion
         levelSize = MobileSize(
             width: Double(runtime.configuration.width),
@@ -102,8 +106,8 @@ public final class Lemmings2MobileSession: MobileGameSession {
 
     public func tick() {
         runtime.step()
+        appendSoundRequests(runtime.drainSoundEvents())
         explosionTimeline.update(tick: runtime.tick, bursts: PixelExplosion.lemmings2(runtime))
-        _ = runtime.drainSoundEvents()
         if runtime.isComplete, !didNotifyCompletion {
             didNotifyCompletion = true
             onCompletion?(runtime)
@@ -128,8 +132,19 @@ public final class Lemmings2MobileSession: MobileGameSession {
     @discardableResult
     public func assign(control: Int, to target: Int) -> Bool {
         guard runtime.assign(slot: control, to: target) else { return false }
+        _ = runtime.drainSoundEvents()
         inputs.append(.assign(tick: runtime.tick, control: control, target: target))
         return true
+    }
+
+    public func drainLemmings2SoundRequests() -> [Lemmings2SoundRequest] {
+        defer { soundRequests.removeAll(keepingCapacity: true) }
+        return soundRequests
+    }
+
+    private func appendSoundRequests(_ requests: [Lemmings2SoundRequest]) {
+        soundRequests += requests
+        if soundRequests.count > 256 { soundRequests.removeFirst(soundRequests.count - 256) }
     }
 
     public func adjustReleaseRate(by delta: Int) -> Bool { false }
@@ -139,6 +154,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
         guard !runtime.isComplete, !runtime.isNuking, beforeEndRun == nil else { return false }
         beforeEndRun = runtime
         runtime.nuke()
+        appendSoundRequests(runtime.drainSoundEvents())
         inputs.append(.endRun(tick: runtime.tick))
         nukeCount += 1
         return true
@@ -148,6 +164,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
     public func undoEndRun() -> Bool {
         guard let beforeEndRun else { return false }
         runtime = beforeEndRun
+        soundRequests.removeAll(keepingCapacity: true)
         explosionTimeline.reset()
         self.beforeEndRun = nil
         if case .endRun = inputs.last { inputs.removeLast() }
@@ -183,6 +200,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
         guard checkpoint.initialFingerprint == levelFingerprint else { throw MobileSessionError.changedLevel }
         let (restored, restoredBeforeEndRun) = try replay(inputs: checkpoint.inputs, through: checkpoint.tick)
         runtime = restored
+        soundRequests.removeAll(keepingCapacity: true)
         explosionTimeline.reset()
         didNotifyCompletion = false
         inputs = checkpoint.inputs
@@ -200,12 +218,14 @@ public final class Lemmings2MobileSession: MobileGameSession {
         guard seconds.isFinite, seconds >= 0 else { return false }
         let distance = Int(min(Double(runtime.tick), (seconds * ticksPerSecond).rounded()))
         guard distance > 0 else { return false }
+        soundRequests.removeAll(keepingCapacity: true)
         return move(to: runtime.tick - distance)
     }
 
     @discardableResult
     public func stepBackward() -> Bool {
-        move(to: runtime.tick - 1)
+        soundRequests.removeAll(keepingCapacity: true)
+        return move(to: runtime.tick - 1)
     }
 
     @discardableResult
@@ -304,6 +324,8 @@ public final class Lemmings3MobileSession: MobileGameSession {
     private let initial: Lemmings3Runtime
     private let renderer: Lemmings3MobileRenderer?
     private var runtime: Lemmings3Runtime
+    public let soundBank: Lemmings3SoundBank?
+    private var soundCues: [PositionedSoundCue] = []
     private var explosionTimeline = PixelExplosionTimeline()
     public var explosions: [MobileExplosion] {
         explosionTimeline.update(tick: runtime.tick, bursts: PixelExplosion.lemmings3(runtime))
@@ -323,6 +345,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         levelFingerprint: String,
         panelFrame: MobilePixelFrame? = nil,
         renderer: Lemmings3MobileRenderer? = nil,
+        soundBank: Lemmings3SoundBank? = nil,
         onCompletion: ((Lemmings3Runtime) -> Void)? = nil
     ) {
         initial = runtime
@@ -333,6 +356,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         self.levelFingerprint = levelFingerprint
         self.panelFrame = panelFrame
         self.renderer = renderer
+        self.soundBank = soundBank
         self.onCompletion = onCompletion
         levelSize = MobileSize(
             width: Double(runtime.configuration.width),
@@ -368,7 +392,9 @@ public final class Lemmings3MobileSession: MobileGameSession {
     }
 
     public func tick() {
+        let before = Lemmings3SoundCue.Snapshot(runtime)
         runtime.step()
+        soundCues += Lemmings3SoundCue.positionedCues(before: before, after: .init(runtime))
         explosionTimeline.update(tick: runtime.tick, bursts: PixelExplosion.lemmings3(runtime))
         if runtime.isComplete, !didNotifyCompletion {
             didNotifyCompletion = true
@@ -397,9 +423,17 @@ public final class Lemmings3MobileSession: MobileGameSession {
     public func assign(control: Int, to target: Int) -> Bool {
         guard Lemmings3Runtime.Action.allCases.indices.contains(control) else { return false }
         let action = Lemmings3Runtime.Action.allCases[control]
+        let before = Lemmings3SoundCue.Snapshot(runtime)
         guard runtime.assign(action, to: target) else { return false }
+        soundCues += Lemmings3SoundCue.positionedCues(before: before, after: .init(runtime))
+        soundCues.removeAll { $0.effect == .assignSkill }
         inputs.append(Input(tick: runtime.tick, action: action.rawValue, target: target))
         return true
+    }
+
+    public func drainSoundCues() -> [PositionedSoundCue] {
+        defer { soundCues.removeAll(keepingCapacity: true) }
+        return soundCues
     }
 
     public func adjustReleaseRate(by delta: Int) -> Bool { false }
@@ -407,8 +441,10 @@ public final class Lemmings3MobileSession: MobileGameSession {
     @discardableResult
     public func beginEndRun() -> Bool {
         guard !runtime.isComplete else { return false }
+        let before = Lemmings3SoundCue.Snapshot(runtime)
         inputs.append(Input(tick: runtime.tick, action: "abort", target: nil))
         runtime.abort()
+        soundCues += Lemmings3SoundCue.positionedCues(before: before, after: .init(runtime))
         return true
     }
 
@@ -440,6 +476,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         guard checkpoint.initialFingerprint == levelFingerprint else { throw MobileSessionError.changedLevel }
         let restored = try replay(inputs: checkpoint.inputs, through: checkpoint.tick)
         runtime = restored
+        soundCues.removeAll(keepingCapacity: true)
         explosionTimeline.reset()
         inputs = checkpoint.inputs
         didNotifyCompletion = false
@@ -452,11 +489,15 @@ public final class Lemmings3MobileSession: MobileGameSession {
         guard seconds.isFinite, seconds >= 0 else { return false }
         let distance = Int(min(Double(runtime.tick), (seconds * ticksPerSecond).rounded()))
         guard distance > 0 else { return false }
+        soundCues.removeAll(keepingCapacity: true)
         return move(to: runtime.tick - distance)
     }
 
     @discardableResult
-    public func stepBackward() -> Bool { move(to: runtime.tick - 1) }
+    public func stepBackward() -> Bool {
+        soundCues.removeAll(keepingCapacity: true)
+        return move(to: runtime.tick - 1)
+    }
 
     @discardableResult
     public func stepForward() -> Bool {

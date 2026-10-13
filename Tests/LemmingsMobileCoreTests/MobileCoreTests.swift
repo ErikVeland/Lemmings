@@ -370,6 +370,35 @@ struct MobileCoreTests {
         }
     }
 
+    @Test @MainActor func sequelSessionsDeliverSoundEventsWithoutReplayNoise() throws {
+        let l2 = Lemmings2MobileSession(runtime: try Self.lemmings2Runtime(),
+            engineFingerprint: "l2-audio", levelIdentifier: "l2/audio", levelIndex: 0,
+            levelFingerprint: "l2-audio-level")
+        var l2Played = false
+        for _ in 0..<120 where !l2Played {
+            l2.tick()
+            l2Played = !l2.drainLemmings2SoundRequests().isEmpty
+        }
+        #expect(l2Played)
+        for _ in 0..<20 { l2.tick() }
+        #expect(l2.rewind(seconds: 5 / l2.ticksPerSecond))
+        #expect(l2.drainLemmings2SoundRequests().isEmpty)
+
+        let l3 = Lemmings3MobileSession(runtime: try Self.lemmings3Runtime(),
+            engineFingerprint: "l3-audio", levelIdentifier: "l3/audio", levelIndex: 0,
+            levelFingerprint: "l3-audio-level")
+        var l3Cues: [PositionedSoundCue] = []
+        for _ in 0..<120 where l3Cues.isEmpty {
+            l3.tick()
+            l3Cues = l3.drainSoundCues()
+        }
+        #expect(l3Cues.contains { $0.effect == .doorOpen || $0.effect == .letsGo })
+
+        for _ in 0..<20 { l3.tick() }
+        #expect(l3.rewind(seconds: 5 / l3.ticksPerSecond))
+        #expect(l3.drainSoundCues().isEmpty)
+    }
+
     @Test func thermalPolicyNeverChangesSimulationRules() {
         let nominal = MobileThermalPolicy.budget(
             for: .nominal,

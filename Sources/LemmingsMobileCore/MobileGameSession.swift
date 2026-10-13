@@ -211,6 +211,7 @@ public protocol MobileGameSession: AnyObject {
     func applySettings(_ settings: ClassicSettings)
 
     func drainSoundCues() -> [PositionedSoundCue]
+    func drainLemmings2SoundRequests() -> [Lemmings2SoundRequest]
 
     func tick()
     func targetCandidates(for control: Int) -> [MobileTargetCandidate]
@@ -254,6 +255,7 @@ public extension MobileGameSession {
     func skillCursorFrame(control: Int) -> MobilePixelFrame? { nil }
     func applySettings(_ settings: ClassicSettings) {}
     func drainSoundCues() -> [PositionedSoundCue] { [] }
+    func drainLemmings2SoundRequests() -> [Lemmings2SoundRequest] { [] }
     var initialCameraOrigin: MobilePoint { MobilePoint(x: 0, y: 0) }
     var panelFrame: MobilePixelFrame? { nil }
     var selectionSprite: MobileSpriteHighlight? { nil }
