@@ -7,8 +7,19 @@ final class MobileCoreIOSSmokeTests: XCTestCase {
             let layout = MobileHUDLayout.make(container: size, safeArea: MobileInsets(top: 20),
                 hasRate: true, skillCount: 8, supportsRewind: true)
             XCTAssertNotNil(layout.portrait)
-            XCTAssertEqual(layout.interface.controlsFrame.height, 130)
-            XCTAssertEqual(layout.interface.playfieldFrame.height, size.height - 150)
+            XCTAssertEqual(layout.interface.controlsFrame.height, 176)
+            XCTAssertEqual(layout.interface.statusFrame.height, 44)
+            XCTAssertEqual(layout.interface.playfieldFrame.minY, 64)
+            XCTAssertEqual(layout.interface.playfieldFrame.height, size.height - 240)
+            XCTAssertEqual(layout.interface.playfieldFrame.maxY, layout.interface.controlsFrame.minY)
+            XCTAssertEqual(layout.interface.controlsFrame.maxY, size.height)
+            XCTAssertEqual(layout.portrait?.skills.height, 80)
+            XCTAssertEqual(layout.portrait?.minimap.height, 44)
+            XCTAssertTrue(layout.interface.controlFrames.allSatisfy {
+                $0.width >= 44 && $0.height >= 44
+                    && $0.minX >= 0 && $0.maxX <= size.width
+                    && $0.minY >= 20 && $0.maxY <= size.height
+            })
             XCTAssertEqual(layout.interface.controlFrames.last?.width, 44)
         }
     }

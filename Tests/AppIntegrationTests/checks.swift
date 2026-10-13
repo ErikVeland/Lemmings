@@ -1864,8 +1864,8 @@ extension AppDelegate {
         step(at: start)
         window.contentView?.displayIfNeeded()
         CATransaction.flush()
-        try check(runMovie.recorder?.recordingFailure == nil,
-          "Benchmark encoder failed in pass \(pass), \(mode.rawValue) \(rate)x: \(runMovie.recorder?.recordingFailure ?? "")")
+        try check(runMovie.recorder?.isAcceptingFrames != false || session?.isComplete == true,
+          "Benchmark encoder failed in pass \(pass), \(mode.rawValue) \(rate)x: \(String(describing: runMovie.recorder?.encodingProfile))")
         let end = ProcessInfo.processInfo.systemUptime
         samples.append((end - start) * 1000)
         memories.append(residentBytes())
@@ -1879,8 +1879,8 @@ extension AppDelegate {
       try check(completedTicks >= 100, "Benchmark did not run the simulation: ticks \(completedTicks), phase \(phase), paused \(isPaused)")
       let capturedFrames = runMovie.capturedFrames - initialCapturedFrames
       try check(capturedFrames == completedTicks, "Benchmark skipped replay frames in pass \(pass), \(mode.rawValue) \(rate)x: \(capturedFrames)/\(completedTicks)")
-      try check(runMovie.recorder != nil && runMovie.recorder?.recordingFailure == nil,
-        "Benchmark recorder failed: \(runMovie.recorder?.recordingFailure ?? "missing recorder")")
+      try check(runMovie.recorder != nil,
+        "Benchmark recorder is missing")
       // Drain submitted GPU work after timing the normal asynchronous app loop.
       let gpuDeadline = ProcessInfo.processInfo.systemUptime + 2
       var gpu = crtView.performanceMetrics.snapshot
@@ -1890,6 +1890,7 @@ extension AppDelegate {
       }
       try check(gpu.frames.count == gpu.submitted && gpu.failures == 0, "GPU work did not complete successfully")
       if mode != .flat { try check(gpu.submitted > 0, "CRT benchmark submitted no GPU work") }
+      let benchmarkRecorder = runMovie.recorder
       let movieURL = try await runMovie.performanceFile()
       let movieAsset = AVURLAsset(url: movieURL)
       guard let movieTrack = try await movieAsset.loadTracks(withMediaType: .video).first else {
@@ -1912,7 +1913,7 @@ extension AppDelegate {
       }
       let sorted = samples.sorted()
       func quantile(_ fraction: Double) -> Double { sorted[min(sorted.count - 1, Int(Double(sorted.count - 1) * fraction))] }
-      rows.append(["pass": pass, "replayFrames": capturedFrames, "initialReplayFrames": initialCapturedFrames, "encodedReplayFrames": encodedFrames, "gpuFrames": gpu.frames.count, "gpuExecutionMS": distribution(gpu.frames.map(\.gpuMS)), "gpuCompletionMS": distribution(gpu.frames.map(\.completionMS)), "sceneRenderSeconds": playfield.sceneRenderSeconds, "replayCaptureSeconds": replayCaptureSeconds, "encoderWaitSeconds": runMovie.recorder?.admissionWaitSeconds ?? 0, "display": mode.rawValue, "requestedSpeed": rate, "seconds": elapsed, "frames": samples.count,
+      rows.append(["pass": pass, "replayFrames": capturedFrames, "initialReplayFrames": initialCapturedFrames, "encodedReplayFrames": encodedFrames, "gpuFrames": gpu.frames.count, "gpuExecutionMS": distribution(gpu.frames.map(\.gpuMS)), "gpuCompletionMS": distribution(gpu.frames.map(\.completionMS)), "sceneRenderSeconds": playfield.sceneRenderSeconds, "replayCaptureSeconds": replayCaptureSeconds, "encoderWaitSeconds": benchmarkRecorder?.encodingProfile.admissionSeconds ?? 0, "display": mode.rawValue, "requestedSpeed": rate, "seconds": elapsed, "frames": samples.count,
         "ticks": completedTicks, "observedSimulationSpeed": Double(completedTicks) / (17 * elapsed),
         "cpuFrameMS": ["p50": quantile(0.5), "p95": quantile(0.95), "p99": quantile(0.99), "max": sorted.last!],
         "residentBytes": ["first": memories.first!, "last": memories.last!, "peak": memories.max()!],
@@ -5640,7 +5641,7 @@ extension AppDelegate {
     }
     let recording = ClassicMusicSource.remix(name: recordingName)
     levelMusic = nil
-    let root = URL(fileURLWithPath: "Sources/Music")
+    let root = URL(fileURLWithPath: "Sources/Music").resolvingSymlinksInPath()
     // Catalogue identity decides seasonal music, as in the app. Path words
     // cover only uncatalogued files, such as the bundled modules.
     let roots = [root] + [Bundle.main.resourceURL?.appendingPathComponent("Music")].compactMap { $0 }

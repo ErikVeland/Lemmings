@@ -12,7 +12,10 @@ swiftc -O -swift-version 6 -target "$(uname -m)-apple-macos12.3" -parse-as-libra
   -Xlinker -install_name -Xlinker @rpath/libNxlvKit.dylib \
   -o "$build_dir/libNxlvKit.dylib" Sources/NxlvKit/*.swift
 fi
-if [[ ! -f "$library_dir/modules/LemmingsAppCore.swiftmodule" ]]; then
+if [[ ! -f "$library_dir/modules/LemmingsAppCore.swiftmodule"
+   || ! -f "$library_dir/modules/LemmingsMobileCore.swiftmodule"
+   || ! -f "$library_dir/modules/LemmingsGameArt.swiftmodule"
+   || ! -f "$library_dir/modules/LemmingsAudio.swiftmodule" ]]; then
   zsh "$project_dir/Scripts/build-shared-modules.sh" "$library_dir/modules" "$library_dir" "$(uname -m)-apple-macos12.3" -O
 fi
 sources=(Sources/LemmingsLocal/*.swift)

@@ -1088,6 +1088,7 @@ extension Lemmings2PlayWindow {
         guard var checkpoint = try makeCheckpoint(engine: "recovery-test") else {
             throw SequelDataError.invalid("Practice did not produce a checkpoint")
         }
+        checkpoint.stateHash = try L2RunRecovery.stateHash(game!)
         let starts = ArcadeStore.shared.records.trolley.starts.count
         let folder = FileManager.default.temporaryDirectory.appendingPathComponent("practice-recovery-\(UUID())")
         defer { try? FileManager.default.removeItem(at: folder) }
