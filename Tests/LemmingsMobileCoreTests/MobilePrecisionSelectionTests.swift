@@ -25,7 +25,9 @@ struct MobilePrecisionSelectionTests {
     @Test(arguments: [0.75, 1.0, 2.0, 4.0, 12.0])
     func precisionBoundsFollowZoomAndPixelAspect(zoom: Double) {
         let viewport = MobileViewport(levelSize: .init(width: 640, height: 160),
-                                      viewSize: .init(width: 320, height: 160), zoom: zoom, pixelAspect: 1.2)
+                                      viewSize: .init(width: 320, height: 320),
+                                      origin: .init(x: 80 - 320 / (zoom * 1.2) / 2, y: 60 - 320 / zoom / 2),
+                                      zoom: zoom, pixelAspect: 1.2)
         // Test one candidate to keep skill eligibility from choosing a neighbour.
         func selection(x: Double, y: Double) -> MobileTargetSelection? {
             MobileTargetSelector.select(candidates: [candidates[0]],

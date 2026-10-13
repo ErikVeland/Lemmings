@@ -1,0 +1,159 @@
+import AppKit
+import AVFoundation
+import Foundation
+import NxlvKit
+
+struct MusicRewindFailure: Error { let message: String }
+func assertMusicRewind(_ value: Bool, _ message: String) throws {
+    if !value { throw MusicRewindFailure(message: message) }
+}
+func stereoBuffer(_ frames: Int) -> AVAudioPCMBuffer {
+    let result = AVAudioPCMBuffer(pcmFormat: AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 2)!, frameCapacity: AVAudioFrameCount(frames))!
+    result.frameLength = AVAudioFrameCount(frames)
+    return result
+}
+func energy(_ buffer: AVAudioPCMBuffer) -> Double {
+    (0..<Int(buffer.frameLength)).reduce(0) { $0 + abs(Double(buffer.floatChannelData![0][$1])) }
+}
+extension MusicRewindBuffer {
+    fileprivate var capturedFrames: Int64 { lock.lock(); defer { lock.unlock() }; return written }
+    fileprivate var cursor: Double { lock.lock(); defer { lock.unlock() }; return readHead }
+}
+func checkReverseGroove() throws {
+    let history = MusicRewindBuffer()
+    try assertMusicRewind(!history.trigger(), "Empty history produced a pretend music rewind")
+    let source = stereoBuffer(44100)
+    for i in 0..<44100 {
+        source.floatChannelData![0][i] = Float(i) / 44100
+        source.floatChannelData![1][i] = -Float(i) / 88200
+    }
+    history.record(source)
+    let count = history.capturedFrames
+    try assertMusicRewind(history.trigger(), "A recorded groove could not reverse")
+    let reverse = stereoBuffer(1024)
+    history.render(UnsafeMutableAudioBufferListPointer(reverse.mutableAudioBufferList), frames: 1024)
+    for i in 200..<1024 {
+        let l = reverse.floatChannelData![0][i], r = reverse.floatChannelData![1][i]
+        try assertMusicRewind(l > 0 && abs(l / -2 - r) < 0.00001, "Rewind lost its stereo channels")
+        try assertMusicRewind(l < reverse.floatChannelData![0][i - 1], "Music samples travelled forwards")
+    }
+    history.record(source)
+    try assertMusicRewind(history.capturedFrames == count, "Reverse audio fed back into the groove")
+    let cursor = history.cursor
+    history.cancel()
+    try assertMusicRewind(history.trigger() && history.cursor == cursor, "Rapid taps restarted the same music fragment")
+    for _ in 0..<10 { history.render(UnsafeMutableAudioBufferListPointer(reverse.mutableAudioBufferList), frames: 1024) }
+    try assertMusicRewind(!history.isRewinding && energy(reverse) == 0, "Reverse impulse did not reach silence")
+    history.cancel(clearHistory: true)
+    try assertMusicRewind(!history.trigger(), "A new track retained the previous groove")
+    print("PASS backwards PCM, stereo, rapid-tap continuation, no self-feedback, bounded impulse and track reset")
+}
+
+extension SoundtrackPlayer {
+    @MainActor fileprivate func installRewindTestDeck(_ deck: MusicFileDeck) { player = deck }
+}
+extension MusicFileDeck {
+    @MainActor fileprivate static func checkRecordingRewind() throws {
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("music-rewind-\(UUID().uuidString).wav")
+        defer { try? FileManager.default.removeItem(at: url) }
+        let source = stereoBuffer(44100 * 3)
+        for i in 0..<Int(source.frameLength) {
+            let value = Float(sin(Double(i) * 2 * .pi * (240 + Double(i) / 1800) / 44100)) * 0.3
+            source.floatChannelData![0][i] = value
+            source.floatChannelData![1][i] = value * -0.5
+        }
+        do { let file = try AVAudioFile(forWriting: url, settings: source.format.settings); try file.write(from: source) }
+        let deck = MusicFileDeck(url: url, originalMix: true)!
+        deck.equaliser.bypass = true; deck.reverb.wetDryMix = 0
+        try deck.engine.enableManualRenderingMode(.offline, format: source.format, maximumFrameCount: 1024)
+        deck.play()
+        RunLoop.current.run(until: Date().addingTimeInterval(0.15))
+        let output = stereoBuffer(1024)
+        for _ in 0..<40 { _ = try deck.engine.renderOffline(1024, to: output) }
+        RunLoop.current.run(until: Date().addingTimeInterval(0.05))
+        try assertMusicRewind(deck.rewindAudio.capturedFrames > 4096, "The recording tap did not capture real soundtrack PCM")
+        deck.suspendOutput()
+        RunLoop.current.run(until: Date().addingTimeInterval(1.8))
+        try assertMusicRewind(!deck.engine.isRunning, "Paused recording did not park")
+        let soundtrack = SoundtrackPlayer()
+        soundtrack.installRewindTestDeck(deck)
+        soundtrack.playRewind()
+        try assertMusicRewind(deck.engine.isRunning && deck.spatialMixer.outputVolume == 0,
+            "Rewind failed to wake a parked recording or left its forward mix audible")
+        var reverseEnergy = 0.0
+        for _ in 0..<6 {
+            _ = try deck.engine.renderOffline(1024, to: output)
+            reverseEnergy += energy(output)
+        }
+        try assertMusicRewind(reverseEnergy > 1, "The recording rewind was silent")
+        deck.setMuted(true)
+        for _ in 0..<4 { _ = try deck.engine.renderOffline(1024, to: output) }
+        try assertMusicRewind(energy(output) == 0, "Mute leaked reversed recording audio")
+        deck.setMuted(false)
+        deck.playRewind(); deck.suspendOutput()
+        try assertMusicRewind(!deck.rewindAudio.isRewinding, "Suspension retained the recording scratch")
+        deck.playRewind()
+        RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+        try assertMusicRewind(!deck.engine.isRunning && !deck.player.isPlaying, "A rewind unpaused normal recording playback")
+        deck.resumeOutput()
+        RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+        try assertMusicRewind(deck.engine.isRunning && deck.player.isPlaying && deck.varispeed.rate == 1,
+            "Rewind broke the normal vinyl spin-up")
+        deck.stop()
+        try assertMusicRewind(!deck.rewindAudio.trigger(), "Stopped recording retained rewind audio")
+        print("PASS real recording PCM, soundtrack routing, parked rewind output, mute, suspension, retained pause and vinyl spin-up")
+    }
+}
+
+func rewindModule() throws -> ProTrackerModule {
+    var bytes = [UInt8](repeating: 0, count: 1084 + 1024 + 64)
+    bytes[950] = 1
+    for (i, value) in "M.K.".utf8.enumerated() { bytes[1080 + i] = value }
+    bytes[43] = 32; bytes[45] = 64; bytes[49] = 32
+    bytes[1084] = 1; bytes[1085] = 172; bytes[1086] = 16
+    for i in 0..<64 { bytes[2108 + i] = UInt8(bitPattern: i < 32 ? 100 : -100) }
+    return try ProTrackerModule(data: Data(bytes))
+}
+extension ModuleMusicPlayer {
+    @MainActor fileprivate func checkModuleRewind() throws {
+        load(try rewindModule(), url: URL(fileURLWithPath: "/tmp/music-rewind.mod"))
+        let output = stereoBuffer(1024)
+        try engine.enableManualRenderingMode(.offline, format: output.format, maximumFrameCount: 1024)
+        defer { stop(); engine.disableManualRenderingMode() }
+        try start(); synthesisQueue.sync {}
+        for _ in 0..<40 {
+            _ = try engine.renderOffline(1024, to: output)
+            synthesisQueue.sync {}
+        }
+        try assertMusicRewind(rewindAudio.capturedFrames > 4096, "The MOD mixer did not capture its own samples")
+        suspendOutput()
+        for _ in 0..<32 { _ = try engine.renderOffline(1024, to: output); synthesisQueue.sync {} }
+        RunLoop.current.run(until: Date().addingTimeInterval(1.8))
+        try assertMusicRewind(!engine.isRunning, "Paused MOD output did not park")
+        playRewind()
+        try assertMusicRewind(engine.isRunning && spatialMixer.outputVolume == 0,
+            "MOD rewind failed to wake parked output or retained the forward mix")
+        var reverseEnergy = 0.0
+        for _ in 0..<6 { _ = try engine.renderOffline(1024, to: output); reverseEnergy += energy(output); synthesisQueue.sync {} }
+        try assertMusicRewind(reverseEnergy > 1, "The MOD scratch was silent")
+        setVolume(0); playRewind()
+        for _ in 0..<4 { _ = try engine.renderOffline(1024, to: output); synthesisQueue.sync {} }
+        try assertMusicRewind(energy(output) == 0, "Zero music volume leaked reversed MOD audio")
+        setVolume(0.7); playRewind(); setMuted(true)
+        for _ in 0..<4 { _ = try engine.renderOffline(1024, to: output); synthesisQueue.sync {} }
+        try assertMusicRewind(energy(output) == 0 && !rewindAudio.isRewinding, "Mute leaked a MOD scratch")
+        setMuted(false); playRewind(); suspendOutput()
+        try assertMusicRewind(!rewindAudio.isRewinding, "Suspension retained the MOD scratch")
+        playRewind()
+        RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+        try assertMusicRewind(!engine.isRunning && outputSuspended, "A MOD rewind resumed forward playback")
+        try resumeOutput()
+        try assertMusicRewind(spinUpFrames > 0 && engine.isRunning, "MOD rewind bypassed the normal vinyl spin-up")
+        print("PASS real MOD samples, parked rewind output, volume, mute, suspension, retained pause and vinyl spin-up")
+    }
+}
+let application = NSApplication.shared
+application.setActivationPolicy(.accessory)
+try checkReverseGroove()
+try MusicFileDeck.checkRecordingRewind()
+try ModuleMusicPlayer().checkModuleRewind()

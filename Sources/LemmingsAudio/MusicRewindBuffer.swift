@@ -71,7 +71,8 @@ final class MusicRewindBuffer: @unchecked Sendable {
   func source(format: AVAudioFormat) -> AVAudioSourceNode {
     AVAudioSourceNode(format: format) { [weak self] _, _, frames, output in
       let buffers = UnsafeMutableAudioBufferListPointer(output)
-      self?.render(buffers, frames: Int(frames))
+      if let self { self.render(buffers, frames: Int(frames)) }
+      else { for buffer in buffers { memset(buffer.mData, 0, Int(buffer.mDataByteSize)) } }
       return noErr
     }
   }
