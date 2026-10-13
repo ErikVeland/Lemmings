@@ -1664,7 +1664,13 @@ import NxlvKit
         case .map:
             entries = tribePoints.enumerated().map { index, point in (Lemmings2Campaign.tribeNames[index], CGRect(x: point.0 - 5, y: point.1 - 5, width: 10, height: 10)) }
         case .practice:
-            entries = (1...51).compactMap { id in Lemmings2Runtime.Skill(rawValue: id).map { ($0.name, CGRect(x: 4 + (id - 1) % 13 * 24, y: 28 + (id - 1) / 13 * 20, width: 24, height: 20)) } }
+            entries = (1...51).compactMap { id -> (String, CGRect)? in
+                guard let skill = Lemmings2Runtime.Skill(rawValue: id) else { return nil }
+                let column = (id - 1) % 13
+                let row = (id - 1) / 13
+                let rect = CGRect(x: 4 + column * 24, y: 28 + row * 20, width: 24, height: 20)
+                return (skill.name, rect)
+            }
             for (index, tribe) in Lemmings2Practice.tribes.enumerated() { entries.append((Lemmings2Campaign.tribeNames[tribe], CGRect(x: index * 80, y: 133, width: 80, height: 36))) }
             if practiceSkills.count == 8 { entries.append(("Start practice", CGRect(x: 100, y: 180, width: 120, height: 18))) }
         case .load, .save:

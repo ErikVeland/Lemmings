@@ -43,8 +43,8 @@ import NxlvKit
                 if row.actionReplay == true && (1...10).contains(row.rank) {
                     link("Play replay >", CGRect(x: 780, y: y - 5, width: 270, height: 40), alignment: .left) { [weak self] in
                         service.playbackActions(row, conditions: self?.level?.conditions) { [weak self] replay, title in
-                            guard let self, boardScope == .worldwide, level?.conditions == replay.conditions else { return }
-                            LeaderboardReplayWindow.open(replay, context: ArcadeWindow.shared.actionReplayContext?(), owner: window, title: title)
+                            guard let self, self.boardScope == .worldwide, self.level?.conditions == replay.conditions else { return }
+                            LeaderboardReplayWindow.open(replay, context: ArcadeWindow.shared.actionReplayContext?(), owner: self.window, title: title)
                         }
                     }
                 } else { text("-", 780, y, 270, alpha: 0.5) }
