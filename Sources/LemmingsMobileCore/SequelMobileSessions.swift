@@ -17,6 +17,10 @@ public final class Lemmings2MobileSession: MobileGameSession {
         let initialFingerprint: String
         let tick: Int
         let inputs: [Input]
+        var rewindCount: Int? = nil
+        var usedRewind: Bool? = nil
+        var nukeCount: Int? = nil
+        var undoCount: Int? = nil
     }
 
     public let engineIdentifier = "lemmings2"
@@ -39,6 +43,10 @@ public final class Lemmings2MobileSession: MobileGameSession {
     private var inputs: [Input] = []
     private let onCompletion: ((Lemmings2Runtime) -> Void)?
     private var didNotifyCompletion = false
+    public private(set) var rewindCount = 0
+    public private(set) var usedRewind = false
+    public private(set) var nukeCount = 0
+    public private(set) var undoCount = 0
 
     public init(
         runtime: Lemmings2Runtime,
@@ -72,6 +80,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
     public var assignedSkillCount: Int {
         inputs.filter { if case .assign = $0 { return true }; return false }.count
     }
+    public var supportsRewind: Bool { true }
 
     public var snapshot: MobileGameSnapshot {
         MobileGameSnapshot(
@@ -131,6 +140,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
         beforeEndRun = runtime
         runtime.nuke()
         inputs.append(.endRun(tick: runtime.tick))
+        nukeCount += 1
         return true
     }
 
@@ -141,6 +151,8 @@ public final class Lemmings2MobileSession: MobileGameSession {
         explosionTimeline.reset()
         self.beforeEndRun = nil
         if case .endRun = inputs.last { inputs.removeLast() }
+        usedRewind = true
+        undoCount += 1
         return true
     }
 
@@ -157,7 +169,11 @@ public final class Lemmings2MobileSession: MobileGameSession {
         MobileCheckpointPayload(Checkpoint(
             initialFingerprint: levelFingerprint,
             tick: runtime.tick,
-            inputs: inputs
+            inputs: inputs,
+            rewindCount: rewindCount,
+            usedRewind: usedRewind,
+            nukeCount: nukeCount,
+            undoCount: undoCount
         ))
     }
 
@@ -165,43 +181,91 @@ public final class Lemmings2MobileSession: MobileGameSession {
         let checkpoint = try JSONDecoder().decode(Checkpoint.self, from: data)
         guard checkpoint.version == 1 else { throw MobileCheckpointError.version }
         guard checkpoint.initialFingerprint == levelFingerprint else { throw MobileSessionError.changedLevel }
-        var restored = initial
-        var restoredBeforeEndRun: Lemmings2Runtime?
-        for input in checkpoint.inputs {
-            let inputTick: Int
-            switch input {
-            case let .assign(tick, _, _), let .endRun(tick): inputTick = tick
-            }
-            while restored.tick < inputTick, !restored.isComplete {
-                restored.step()
-                _ = restored.drainSoundEvents()
-            }
-            guard restored.tick == inputTick, !restored.isComplete else {
-                throw MobileSessionError.invalidCheckpoint
-            }
-            switch input {
-            case let .assign(_, control, target):
-                guard restored.assign(slot: control, to: target) else {
-                    throw MobileSessionError.invalidCheckpoint
-                }
-            case .endRun:
-                guard !restored.isNuking else { throw MobileSessionError.invalidCheckpoint }
-                restoredBeforeEndRun = restored
-                restored.nuke()
-            }
-        }
-        while restored.tick < checkpoint.tick, !restored.isComplete {
-            restored.step()
-            _ = restored.drainSoundEvents()
-        }
-        guard restored.tick == checkpoint.tick, !restored.isComplete else {
-            throw MobileSessionError.invalidCheckpoint
-        }
+        let (restored, restoredBeforeEndRun) = try replay(inputs: checkpoint.inputs, through: checkpoint.tick)
         runtime = restored
         explosionTimeline.reset()
         didNotifyCompletion = false
         inputs = checkpoint.inputs
         beforeEndRun = restoredBeforeEndRun
+        rewindCount = checkpoint.rewindCount ?? 0
+        usedRewind = checkpoint.usedRewind ?? false
+        nukeCount = checkpoint.nukeCount ?? checkpoint.inputs.reduce(into: 0) { count, input in
+            if case .endRun = input { count += 1 }
+        }
+        undoCount = checkpoint.undoCount ?? 0
+    }
+
+    @discardableResult
+    public func rewind(seconds: Double) -> Bool {
+        guard seconds.isFinite, seconds >= 0 else { return false }
+        let distance = Int(min(Double(runtime.tick), (seconds * ticksPerSecond).rounded()))
+        guard distance > 0 else { return false }
+        return move(to: runtime.tick - distance)
+    }
+
+    @discardableResult
+    public func stepBackward() -> Bool {
+        move(to: runtime.tick - 1)
+    }
+
+    @discardableResult
+    public func stepForward() -> Bool {
+        guard !runtime.isComplete else { return false }
+        tick()
+        return true
+    }
+
+    public func resumeFromCurrentTick() {}
+
+    private func move(to tick: Int) -> Bool {
+        guard tick >= 0, tick < runtime.tick else { return false }
+        do {
+            let retainedInputs = inputs.filter { inputTick($0) <= tick }
+            let (restored, restoredBeforeEndRun) = try replay(inputs: retainedInputs, through: tick)
+            runtime = restored
+            inputs = retainedInputs
+            beforeEndRun = restoredBeforeEndRun
+            explosionTimeline.reset()
+            didNotifyCompletion = false
+            usedRewind = true
+            rewindCount += 1
+            return true
+        } catch {
+            return false
+        }
+    }
+
+    private func replay(inputs: [Input], through tick: Int) throws -> (Lemmings2Runtime, Lemmings2Runtime?) {
+        var restored = initial
+        var restoredBeforeEndRun: Lemmings2Runtime?
+        var inputIndex = 0
+        while restored.tick <= tick {
+            while inputIndex < inputs.count, inputTick(inputs[inputIndex]) == restored.tick {
+                switch inputs[inputIndex] {
+                case let .assign(_, control, target):
+                    guard restored.assign(slot: control, to: target) else { throw MobileSessionError.invalidCheckpoint }
+                case .endRun:
+                    guard !restored.isNuking else { throw MobileSessionError.invalidCheckpoint }
+                    restoredBeforeEndRun = restored
+                    restored.nuke()
+                }
+                inputIndex += 1
+            }
+            if restored.tick == tick { break }
+            guard !restored.isComplete else { throw MobileSessionError.invalidCheckpoint }
+            restored.step()
+            _ = restored.drainSoundEvents()
+        }
+        guard restored.tick == tick, inputIndex == inputs.count, !restored.isComplete else {
+            throw MobileSessionError.invalidCheckpoint
+        }
+        return (restored, restoredBeforeEndRun)
+    }
+
+    private func inputTick(_ input: Input) -> Int {
+        switch input {
+        case let .assign(tick, _, _), let .endRun(tick): tick
+        }
     }
 
     public func releaseTransientResources() {}
@@ -224,6 +288,8 @@ public final class Lemmings3MobileSession: MobileGameSession {
         let initialFingerprint: String
         let tick: Int
         let inputs: [Input]
+        var rewindCount: Int? = nil
+        var usedRewind: Bool? = nil
     }
 
     public let engineIdentifier = "lemmings3"
@@ -245,6 +311,8 @@ public final class Lemmings3MobileSession: MobileGameSession {
     private var inputs: [Input] = []
     private let onCompletion: ((Lemmings3Runtime) -> Void)?
     private var didNotifyCompletion = false
+    public private(set) var rewindCount = 0
+    public private(set) var usedRewind = false
 
     public init(
         runtime: Lemmings3Runtime,
@@ -276,6 +344,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
 
     public var activeLemmingCount: Int { runtime.lemmings.filter(\.active).count }
     public var assignedSkillCount: Int { inputs.filter { $0.action != "abort" }.count }
+    public var supportsRewind: Bool { true }
 
     public var snapshot: MobileGameSnapshot {
         MobileGameSnapshot(
@@ -356,7 +425,9 @@ public final class Lemmings3MobileSession: MobileGameSession {
         return MobileCheckpointPayload(Checkpoint(
             initialFingerprint: levelFingerprint,
             tick: runtime.tick,
-            inputs: inputs
+            inputs: inputs,
+            rewindCount: rewindCount,
+            usedRewind: usedRewind
         ))
     }
 
@@ -364,30 +435,77 @@ public final class Lemmings3MobileSession: MobileGameSession {
         let checkpoint = try JSONDecoder().decode(Checkpoint.self, from: data)
         guard checkpoint.version == 1 else { throw MobileCheckpointError.version }
         guard checkpoint.initialFingerprint == levelFingerprint else { throw MobileSessionError.changedLevel }
-        var restored = initial
-        for input in checkpoint.inputs {
-            while restored.tick < input.tick, !restored.isComplete { restored.step() }
-            guard restored.tick == input.tick, !restored.isComplete else {
-                throw MobileSessionError.invalidCheckpoint
-            }
-            if input.action == "abort" {
-                restored.abort()
-            } else if let action = Lemmings3Runtime.Action(rawValue: input.action),
-                      let target = input.target,
-                      restored.assign(action, to: target) {
-                continue
-            } else {
-                throw MobileSessionError.invalidCheckpoint
-            }
-        }
-        while restored.tick < checkpoint.tick, !restored.isComplete { restored.step() }
-        guard restored.tick == checkpoint.tick, !restored.isComplete else {
-            throw MobileSessionError.invalidCheckpoint
-        }
+        let restored = try replay(inputs: checkpoint.inputs, through: checkpoint.tick)
         runtime = restored
         explosionTimeline.reset()
         inputs = checkpoint.inputs
         didNotifyCompletion = false
+        rewindCount = checkpoint.rewindCount ?? 0
+        usedRewind = checkpoint.usedRewind ?? false
+    }
+
+    @discardableResult
+    public func rewind(seconds: Double) -> Bool {
+        guard seconds.isFinite, seconds >= 0 else { return false }
+        let distance = Int(min(Double(runtime.tick), (seconds * ticksPerSecond).rounded()))
+        guard distance > 0 else { return false }
+        return move(to: runtime.tick - distance)
+    }
+
+    @discardableResult
+    public func stepBackward() -> Bool { move(to: runtime.tick - 1) }
+
+    @discardableResult
+    public func stepForward() -> Bool {
+        guard !runtime.isComplete else { return false }
+        tick()
+        return true
+    }
+
+    public func resumeFromCurrentTick() {}
+
+    private func move(to tick: Int) -> Bool {
+        guard tick >= 0, tick < runtime.tick else { return false }
+        do {
+            let retainedInputs = inputs.filter { $0.tick <= tick }
+            let restored = try replay(inputs: retainedInputs, through: tick)
+            runtime = restored
+            inputs = retainedInputs
+            explosionTimeline.reset()
+            didNotifyCompletion = false
+            usedRewind = true
+            rewindCount += 1
+            return true
+        } catch {
+            return false
+        }
+    }
+
+    private func replay(inputs: [Input], through tick: Int) throws -> Lemmings3Runtime {
+        var restored = initial
+        var inputIndex = 0
+        while restored.tick <= tick {
+            while inputIndex < inputs.count, inputs[inputIndex].tick == restored.tick {
+                let input = inputs[inputIndex]
+                if input.action == "abort" {
+                    restored.abort()
+                } else if let action = Lemmings3Runtime.Action(rawValue: input.action),
+                          let target = input.target,
+                          restored.assign(action, to: target) {
+                    // The input is now part of the reconstructed timeline.
+                } else {
+                    throw MobileSessionError.invalidCheckpoint
+                }
+                inputIndex += 1
+            }
+            if restored.tick == tick { break }
+            guard !restored.isComplete else { throw MobileSessionError.invalidCheckpoint }
+            restored.step()
+        }
+        guard restored.tick == tick, inputIndex == inputs.count, !restored.isComplete else {
+            throw MobileSessionError.invalidCheckpoint
+        }
+        return restored
     }
 
     public func releaseTransientResources() {}

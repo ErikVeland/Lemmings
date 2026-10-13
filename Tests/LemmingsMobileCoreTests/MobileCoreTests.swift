@@ -704,6 +704,28 @@ struct MobileCoreTests {
         try l2Restored.restoreCheckpointPayload(l2Payload)
         #expect(l2Restored.snapshot == l2Expected)
 
+        #expect(l2Restored.supportsRewind)
+        for _ in 0..<5 { l2Restored.tick() }
+        let l2RewindTarget = l2Restored.snapshot
+        for _ in 0..<20 { l2Restored.tick() }
+        #expect(l2Restored.rewind(seconds: 20 / l2Restored.ticksPerSecond))
+        #expect(l2Restored.snapshot == l2RewindTarget)
+        #expect(l2Restored.usedRewind)
+        #expect(l2Restored.stepBackward())
+        #expect(l2Restored.stepForward())
+        #expect(l2Restored.snapshot == l2RewindTarget)
+        let l2RewindCheckpoint = try l2Restored.checkpointPayload()
+        let l2RewindRestored = Lemmings2MobileSession(
+            runtime: l2Initial,
+            engineFingerprint: "l2-fixture-engine",
+            levelIdentifier: "l2/fixture/1",
+            levelIndex: 0,
+            levelFingerprint: "l2-fixture-level"
+        )
+        try l2RewindRestored.restoreCheckpointPayload(l2RewindCheckpoint)
+        #expect(l2RewindRestored.usedRewind)
+        #expect(l2RewindRestored.rewindCount == l2Restored.rewindCount)
+
         #expect(l2.beginEndRun())
         for _ in 0..<3 { l2.tick() }
         let endingPayload = try l2.checkpointPayload()
@@ -716,8 +738,11 @@ struct MobileCoreTests {
         )
         try endingRestored.restoreCheckpointPayload(endingPayload)
         #expect(endingRestored.snapshot.isEndingRun)
+        #expect(endingRestored.nukeCount == 1)
         #expect(endingRestored.undoEndRun())
         #expect(!endingRestored.snapshot.isEndingRun)
+        #expect(endingRestored.usedRewind)
+        #expect(endingRestored.undoCount == 1)
 
         let l3Initial = try Self.lemmings3Runtime()
         let l3 = Lemmings3MobileSession(
@@ -746,6 +771,28 @@ struct MobileCoreTests {
         )
         try l3Restored.restoreCheckpointPayload(l3Payload)
         #expect(l3Restored.snapshot == l3Expected)
+
+        #expect(l3Restored.supportsRewind)
+        for _ in 0..<5 { l3Restored.tick() }
+        let l3RewindTarget = l3Restored.snapshot
+        for _ in 0..<20 { l3Restored.tick() }
+        #expect(l3Restored.rewind(seconds: 20 / l3Restored.ticksPerSecond))
+        #expect(l3Restored.snapshot == l3RewindTarget)
+        #expect(l3Restored.usedRewind)
+        #expect(l3Restored.stepBackward())
+        #expect(l3Restored.stepForward())
+        #expect(l3Restored.snapshot == l3RewindTarget)
+        let l3RewindCheckpoint = try l3Restored.checkpointPayload()
+        let l3RewindRestored = Lemmings3MobileSession(
+            runtime: l3Initial,
+            engineFingerprint: "l3-fixture-engine",
+            levelIdentifier: "l3/fixture/1",
+            levelIndex: 0,
+            levelFingerprint: "l3-fixture-level"
+        )
+        try l3RewindRestored.restoreCheckpointPayload(l3RewindCheckpoint)
+        #expect(l3RewindRestored.usedRewind)
+        #expect(l3RewindRestored.rewindCount == l3Restored.rewindCount)
     }
 
     @Test @MainActor func lemmings2CompletionIsReportedOnceForCampaignPersistence() throws {

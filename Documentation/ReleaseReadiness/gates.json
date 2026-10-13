@@ -125,17 +125,17 @@
     "scopes": [
       "all"
     ],
-    "progress": "10 October: the shell now uses shared MobileGameLibrary, MobileLevelSummary and MobileLevelContent contracts. Classic is the only connected loader. L2/L3 session and synthetic checkpoint adapters exist, but no mobile content factories, renderers or campaign flows are connected. No three-game mobile journey is certified."
+    "progress": "10 October: the shell now uses shared MobileGameLibrary, MobileLevelSummary and MobileLevelContent contracts. Classic is the only connected loader. L2/L3 session and synthetic checkpoint adapters exist, but no mobile content factories, renderers or campaign flows are connected. No three-game mobile journey is certified. 14 October: L2 and L3 player libraries, native scene renderers, campaign progress and checkpoint routes now connect to the shared iOS level flow. L3 import rejects missing or truncated creature banks before installation. Focused session checks now cover replay-backed rewind, single-step back/forward and persisted assistance counters for L2 and L3. LemmingsMobileCore builds for the arm64 iOS 16 Simulator target. Real commercial content, exact source parity, full journey recovery and device acceptance remain open; the current UI build and simulator services could not be verified on this host."
   },
   {
     "area": "iOS shared QoL, Hot Seat, audio and controller input",
     "priority": "P0",
-    "status": "not-implemented",
+    "status": "partial",
     "exitCriteria": "Deliver shared hints, rewind/step, targeting, settings, retry/continue, saved-run navigation, full Hot Seat rosters, turn ownership and paused handovers across all three engines. Preserve engine-specific support limits. Connect original music, effects, supported L3 voices/media and controller-only library-to-results journeys. Pause on interruptions and active-controller disconnect. Keep mechanical tests headless and muted.",
     "scopes": [
       "all"
     ],
-    "progress": "10 October: the mobile prototype has basic pause, speed, retry and one saved run. It has audio-session lifecycle handling, but no connected soundtrack/effects playback, controller routing, hints, rewind or Hot Seat flow."
+    "progress": "10 October: the mobile prototype has basic pause, speed, retry and one saved run. It has audio-session lifecycle handling, but no connected soundtrack/effects playback, controller routing, hints, rewind or Hot Seat flow. 14 October: Classic, L2 and L3 share the mobile HUD rewind/step actions. Sequel sessions now support deterministic rewind and backward/forward stepping, record rewind assistance, and restore those counters from checkpoints. Hints, full Hot Seat rosters and handovers, original music/effects/media, controller routing and cross-device acceptance remain open."
   },
   {
     "area": "iPhone Duo adaptive layouts and live-session continuity",
