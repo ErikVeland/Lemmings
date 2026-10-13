@@ -2,7 +2,7 @@
 import AVFAudio
 import Foundation
 
-/// Blocking configuration and the pre-iOS 27 API run on this actor's executor.
+/// Blocking audio-session configuration runs on this actor's executor.
 private actor MobileAudioSessionWorker {
     static let shared = MobileAudioSessionWorker()
 
@@ -13,21 +13,11 @@ private actor MobileAudioSessionWorker {
             try prepare(session)
         case .resume:
             try prepare(session)
-            if #available(iOS 27.0, *) {
-                guard try await session.activate() else { throw ActivationError.notActivated }
-            } else {
-                try session.setActive(true)
-            }
+            try session.setActive(true)
         case .suspend:
-            if #available(iOS 27.0, *) {
-                _ = try await session.deactivate(options: [.notifyOthersOnDeactivation])
-            } else {
-                try session.setActive(false, options: [.notifyOthersOnDeactivation])
-            }
+            try session.setActive(false, options: [.notifyOthersOnDeactivation])
         }
     }
-
-    private enum ActivationError: Error { case notActivated }
 
     private func prepare(_ session: AVAudioSession) throws {
         try session.setCategory(.ambient, mode: .default, options: [])
