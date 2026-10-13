@@ -232,14 +232,38 @@ public struct MobileContentStore: Sendable {
             for tool in Lemmings3Runtime.Tool.allCases {
                 _ = try style.permanent.image(object: tool.sourceIdentifier, palette: style.palette)
             }
+            var validatedCreatureKinds = Set<Lemmings3Runtime.Creature.Kind>()
             for level in campaign.levels {
                 let permanent = try Lemmings3Objects(data: Data(contentsOf: directory.appendingPathComponent(
                     String(format: "LEVELS/PERM%03d.OBS", level.permanentObjectsReference))))
                 let temporary = try Lemmings3Objects(data: Data(contentsOf: directory.appendingPathComponent(
                     String(format: "LEVELS/TEMP%03d.OBS", level.temporaryObjectsReference))))
                 _ = try Lemmings3Scene(level: level, style: style, permanent: permanent, temporary: temporary)
-                _ = try Lemmings3Runtime(level: level, style: style, permanent: permanent,
-                                         temporary: temporary, total: 20)
+                let runtime = try Lemmings3Runtime(level: level, style: style, permanent: permanent,
+                                                   temporary: temporary, total: 20)
+                let newCreatureKinds = Set(runtime.creatures.map(\.kind)).subtracting(validatedCreatureKinds)
+                try validateLemmings3CreatureSpriteBanks(directory: directory,
+                    kinds: newCreatureKinds, palette: style.palette)
+                validatedCreatureKinds.formUnion(newCreatureKinds)
+            }
+        }
+    }
+
+    static func validateLemmings3CreatureSpriteBanks(
+        directory: URL,
+        kinds: Set<Lemmings3Runtime.Creature.Kind>,
+        palette: [UInt8]
+    ) throws {
+        for kind in kinds {
+            let prefix = String(format: "GRAPHICS/CREAT%03d", (kind.rawValue - 10008) / 2)
+            let bank = try Lemmings3Sprites(
+                index: Data(contentsOf: directory.appendingPathComponent(prefix + ".IND")),
+                commands: Data(contentsOf: directory.appendingPathComponent(prefix + ".CMP")))
+            _ = try Lemmings3Sprites.palette(
+                Data(contentsOf: directory.appendingPathComponent(prefix + ".PAL")), over: palette)
+            guard bank.animations.count >= 2,
+                  bank.animations.prefix(2).allSatisfy({ !$0.frames.isEmpty }) else {
+                throw MobileContentStoreError.invalidData(.lemmings3)
             }
         }
     }

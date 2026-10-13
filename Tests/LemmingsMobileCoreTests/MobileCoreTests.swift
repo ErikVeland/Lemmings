@@ -589,6 +589,32 @@ struct MobileCoreTests {
         #expect(NeoLemmixMobileSupport.requiredAnimationNames.contains("drowner"))
     }
 
+    @Test func lemmings3ImportValidatesCreatureSpriteBanksBeforeInstall() throws {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent("MobileL3CreatureBank-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let graphics = root.appendingPathComponent("GRAPHICS", isDirectory: true)
+        try FileManager.default.createDirectory(at: graphics, withIntermediateDirectories: true)
+        let prefix = graphics.appendingPathComponent("CREAT002")
+        try Data([2, 0, 1, 0, 2, 0, 2, 0, 1, 0, 2, 0])
+            .write(to: prefix.appendingPathExtension("IND"))
+        try Data(repeating: 255, count: 16).write(to: prefix.appendingPathExtension("CMP"))
+        try Data(repeating: 0, count: 96).write(to: prefix.appendingPathExtension("PAL"))
+        let palette = [UInt8](repeating: 0, count: 1024)
+
+        try MobileContentStore.validateLemmings3CreatureSpriteBanks(
+            directory: root, kinds: [.mole], palette: palette)
+
+        try Data(repeating: 255, count: 4).write(to: prefix.appendingPathExtension("CMP"))
+        do {
+            try MobileContentStore.validateLemmings3CreatureSpriteBanks(
+                directory: root, kinds: [.mole], palette: palette)
+            Issue.record("A truncated creature sprite bank passed import validation.")
+        } catch {
+            #expect(error is SequelDataError)
+        }
+    }
+
     @Test func classicJumpingRisesAcrossTheRemainingStepPixel() throws {
         let width = 96
         let height = 64
