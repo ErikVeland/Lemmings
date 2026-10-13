@@ -21,6 +21,8 @@ import UIKit
     var isActive: () -> Bool = { true }
     private var bindings = ControllerBindings()
     private var pressedKeys: Set<UIKeyboardHIDUsage> = []
+    private var controllerConnection = MobileControllerConnection()
+    private var activeController: GCController?
     private var context: ObjectIdentifier?
     private var lastPoll = 0.0
 
@@ -29,8 +31,31 @@ import UIKit
     /// A page transition primes from the held state before it accepts another press.
     func poll(context newContext: ObjectIdentifier?, at now: Double) {
         if context != newContext { context = newContext; reset() }
-        guard isActive(), settings().controllerEnabled,
-              let pad = GCController.controllers().first?.extendedGamepad else { reset(); return }
+        guard isActive(), settings().controllerEnabled else {
+            reset()
+            activeController = nil
+            controllerConnection.reset()
+            return
+        }
+        let controllers = GCController.controllers().filter { $0.extendedGamepad != nil }
+        if let activeController,
+           !controllers.contains(where: { $0 === activeController }) {
+            self.activeController = nil
+            let shouldPause = controllerConnection.update(isConnected: false, isMenu: isMenu())
+            reset()
+            if shouldPause { onCommand?(.pause) }
+            return
+        }
+        guard let controller = activeController ?? controllers.first,
+              let pad = controller.extendedGamepad else {
+            let shouldPause = controllerConnection.update(isConnected: false, isMenu: isMenu())
+            activeController = nil
+            reset()
+            if shouldPause { onCommand?(.pause) }
+            return
+        }
+        activeController = controller
+        _ = controllerConnection.update(isConnected: true, isMenu: isMenu())
         let elapsed = min(0.05, max(0, lastPoll == 0 ? 0 : now - lastPoll))
         lastPoll = now
         var pressed = Set<ControllerBindings.Button>()
