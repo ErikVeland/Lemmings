@@ -242,46 +242,36 @@ actor MobileMenuPreviewLoader {
         let subtitle = loading ? "Loading..." : notice
         switch route {
         case .home:
-            var rows: [GameFrontEnd.Action] = []
-            rows.append(.init("players", "Player: " + profiles.active.name, portrait: profiles.active.portrait))
-            rows.append(.init("records", "Records"))
-            rows.append(.init("achievements", "Achievements"))
-            if let hot = hotSeat {
-                rows.append(.init("hotSeat", "Hot Seat: \(playerName(hot.turn))"))
-            }
-            if let saved = pendingCheckpoint {
-                if checkpointMatchesSession(saved) { rows.append(.init("resume", "Resume saved run", primary: true)) }
-                else { rows.append(.init("seatOther", otherSessionTitle(for: saved), primary: true)) }
+            var resume: [GameFrontEnd.Action] = []
+            if catalogue != nil, let run = learning.run {
+                resume.append(.init("learningResume", "Resume journey  \(run.currentIndex + 1)/\(run.entries.count)"))
             }
             if catalogue != nil, let run = playlists.run {
-                rows.append(.init("runResume", "Resume \(run.name)  \(run.position + 1)/\(run.entries.count)",
-                                  primary: pendingCheckpoint == nil))
+                resume.append(.init("runResume", "Resume \(run.name)  \(run.position + 1)/\(run.entries.count)"))
             }
-            if let catalogue {
-                for family in catalogue.families {
-                    let packs = catalogue.packs(in: family)
-                    var title = family.title
-                    if packs.count == 1, let pack = packs.first, let total = pack.levelCount {
-                        title += "  \(solvedLevels(for: pack.id).count)/\(total)"
-                    } else {
-                        title += "  \(packs.count)"
-                    }
-                    rows.append(.init("family." + family.rawValue, title,
-                                      primary: pendingCheckpoint == nil && playlists.run == nil && family == catalogue.families.first))
+            if let saved = pendingCheckpoint {
+                resume.append(checkpointMatchesSession(saved)
+                    ? .init("resume", "Resume - " + playerName(saved.owner ?? profiles.activeID))
+                    : .init("seatOther", otherSessionTitle(for: saved)))
+            }
+            let families: [GameFrontEnd.Action] = MobileFamily.allCases.map { family in
+                let packs = catalogue?.packs(in: family) ?? []
+                if catalogue == nil, family == .classic {
+                    return .init("classic", "Classic Lemmings  \(solved.count)/\(count)", enabled: count > 0)
                 }
-            } else {
-                rows.append(.init("classic", "Lemmings  \(solved.count)/\(count)", enabled: count > 0,
-                                  primary: pendingCheckpoint == nil && count > 0))
-            }
-            if catalogue != nil {
-                rows.append(.init("journey", "Journey", enabled: bundledJourney != nil))
-                if learning.run != nil { rows.append(.init("learningResume", "Resume journey")) }
-                rows.append(.init("collections", "Collections"))
-            }
-            rows.append(.init("l2", "Lemmings 2 - Unavailable", enabled: false))
-            rows.append(.init("l3", "Lemmings 3 - Unavailable", enabled: false))
-            canvas.page = .init(title: "Lemmings", subtitle: subtitle, home: true, rows: rows,
-                                footer: [.init("settings", "Settings"), .init("whatsNew", "What's New"), .init("data", "Game Data")])
+                let total = packs.reduce(0) { $0 + ($1.levelCount ?? 0) }
+                let passed = packs.reduce(0) { $0 + solvedLevels(for: $1.id).count }
+                let title = family.title + (packs.isEmpty ? " - No data" : "  \(passed)/\(total)")
+                return .init("family." + family.rawValue, title, enabled: !packs.isEmpty)
+            } + [.init("neolemmix", "NeoLemmix - Unavailable", enabled: false),
+                 .init("l2", "Lemmings 2 - Unavailable", enabled: false),
+                 .init("l3", "Lemmings 3 - Unavailable", enabled: false)]
+            let journey = bundledJourney
+            let journeyTitle = LearningJourney.title + "  \(journey.map { learning.progress.solvedCount(in: $0) } ?? 0)/\(journey?.lessons.count ?? 0)"
+            let initials = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") } ?? profiles.active.name
+            canvas.page = MobileHomeArt.page(resume: resume,
+                journey: .init("journey", journeyTitle, enabled: catalogue != nil && journey != nil),
+                families: families, initials: initials, subtitle: subtitle)
             canvas.preview = nil
         case let .family(family):
             let all = catalogue?.packs(in: family) ?? []

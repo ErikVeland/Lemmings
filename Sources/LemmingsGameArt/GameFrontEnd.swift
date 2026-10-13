@@ -22,6 +22,7 @@ public struct GameFrontEnd {
         public var title: String
         public var subtitle: String
         public var home: Bool
+        public var homeInitials: String
         public var rows: [Action]
         public var details: [String]
         public var footer: [Action]
@@ -29,10 +30,11 @@ public struct GameFrontEnd {
         public var footerColumns: Int?
         public init(title: String, subtitle: String = "", home: Bool = false,
                     rows: [Action] = [], details: [String] = [], footer: [Action] = [], preview: Bool = false,
-                    footerColumns: Int? = nil) {
+                    footerColumns: Int? = nil, homeInitials: String = "") {
             self.title = title; self.subtitle = subtitle; self.home = home
             self.rows = rows; self.details = details; self.footer = footer; self.preview = preview
             self.footerColumns = footerColumns
+            self.homeInitials = homeInitials
         }
     }
     public struct Target: Equatable {
@@ -47,12 +49,14 @@ public struct GameFrontEnd {
         public let preview: CGRect
         public let details: [CGRect]
         public let targets: [Target]
+        public var initials: CGRect = .zero
         public func action(at point: CGPoint) -> String? {
             targets.first { $0.action.enabled && $0.frame.contains(point) }?.action.id
         }
     }
 
     public static func layout(_ page: Page, width: CGFloat, minimumHeight: CGFloat) -> Layout {
+        if page.home { return homeLayout(page, width: width, minimumHeight: minimumHeight) }
         let width = max(280, width)
         let inset: CGFloat = width < 600 ? 14 : 32
         let boardWidth = min(1032, width - inset * 2)
@@ -111,6 +115,55 @@ public struct GameFrontEnd {
                       details: details, targets: targets)
     }
 
+    private static func homeLayout(_ page: Page, width: CGFloat, minimumHeight: CGFloat) -> Layout {
+        let width = max(280, width)
+        let boardWidth = min(900, width - 28)
+        let x = (width - boardWidth) / 2
+        let inset: CGFloat = width < 600 ? 12 : 18
+        let headerHeight: CGFloat = width < 600 ? 106 : 116
+        let rowHeight: CGFloat = 44
+        let headerIDs: Set<String> = ["settings", "whatsNew"]
+        let footer = page.footer.filter { !headerIDs.contains($0.id) }
+        let wide = boardWidth >= 600
+        let footerRows = wide ? 1 : Int(ceil(Double(footer.count) / 3))
+        let noticeHeight: CGFloat = page.subtitle.isEmpty ? 0 : 32
+        let initialsHeight: CGFloat = wide || page.homeInitials.isEmpty ? 0 : 32
+        let boardHeight = headerHeight + noticeHeight + CGFloat(page.rows.count) * (rowHeight + 5)
+            + initialsHeight + CGFloat(footerRows) * 52 + 48
+        let height = max(minimumHeight, boardHeight + 24)
+        let board = CGRect(x: x, y: max(12, (height - boardHeight) / 2), width: boardWidth, height: boardHeight)
+        let heading = CGRect(x: x + 62, y: board.minY + 18, width: boardWidth - 124, height: headerHeight - 24)
+        let subtitle = CGRect(x: x + inset, y: board.minY + headerHeight, width: boardWidth - inset * 2, height: noticeHeight)
+        var y = subtitle.maxY + 12
+        var targets: [Target] = page.rows.map { action in
+            defer { y += rowHeight + 5 }
+            return Target(action: action, frame: CGRect(x: x + inset, y: y, width: boardWidth - inset * 2, height: rowHeight))
+        }
+        y += 12
+        let initialsWidth: CGFloat = page.homeInitials.isEmpty ? 0 : wide ? min(200, max(64, CGFloat(page.homeInitials.count) * 8 + 12)) : boardWidth - inset * 2
+        let initials = CGRect(x: x + inset, y: y, width: initialsWidth, height: wide ? 44 : initialsHeight)
+        if !wide { y += initialsHeight }
+        let gap: CGFloat = 12
+        let columns = wide ? max(1, footer.count) : min(3, max(1, footer.count))
+        let start = x + inset + (wide && initialsWidth > 0 ? initialsWidth + gap : 0)
+        let cell = (x + boardWidth - inset - start - CGFloat(columns - 1) * gap) / CGFloat(columns)
+        // Keep the target order equal to Page.rows + Page.footer for UIKit and keyboard input.
+        for action in page.footer {
+            let frame: CGRect
+            if headerIDs.contains(action.id) {
+                frame = CGRect(x: action.id == "settings" ? board.maxX - inset - 44 : board.minX + inset,
+                               y: board.minY + 18, width: 44, height: 44)
+            } else {
+                let index = footer.firstIndex(where: { $0.id == action.id })!
+                frame = CGRect(x: start + CGFloat(index % columns) * (cell + gap),
+                               y: y + CGFloat(index / columns) * 52, width: cell, height: 44)
+            }
+            targets.append(Target(action: action, frame: frame))
+        }
+        return Layout(size: CGSize(width: width, height: height), board: board, heading: heading,
+                      subtitle: subtitle, preview: .zero, details: [], targets: targets, initials: initials)
+    }
+
     public static func draw(_ page: Page, layout: Layout, typography: GameMenuTypography,
                             preview: CGImage? = nil, previewSource: CGRect? = nil,
                             highlighted: String? = nil, portraits: GamePortraitArt? = nil, in context: CGContext) {
@@ -126,6 +179,9 @@ public struct GameFrontEnd {
             heading(page.title, box: layout.heading, typography: typography, context: context)
         }
         line(page.subtitle, box: layout.subtitle, typography: typography, context: context)
+        if page.home, !page.homeInitials.isEmpty {
+            line(page.homeInitials, box: layout.initials, typography: typography, palette: .green, context: context)
+        }
         if page.preview {
             GameStoneArt.draw(in: context, frame: layout.preview, selected: true, pixel: 2)
             if let preview {
@@ -149,6 +205,21 @@ public struct GameFrontEnd {
                     : CGColor(gray: 0.29, alpha: 1))
                 context.setLineWidth(chosen ? 2 : 1)
                 context.stroke(target.frame.insetBy(dx: 1, dy: 1))
+            } else if page.home, ["settings", "whatsNew"].contains(action.id) {
+                GameStoneArt.draw(in: context, frame: target.frame, selected: chosen, pixel: 1)
+                let glyph: PanelGlyphArt = action.id == "settings" ? .settings : .download
+                let well = GameStoneArt.well(target.frame, pixel: 1).insetBy(dx: 2, dy: 2)
+                let scale = glyph.scale(fitting: well.size)
+                if let image = glyph.cgImage(scale: scale) {
+                    drawImage(image, fittedIn: well, context: context)
+                }
+                continue
+            } else if page.home {
+                context.setFillColor(chosen ? CGColor(srgbRed: 0.06, green: 0.16, blue: 0.035, alpha: 1) : CGColor(gray: 0.025, alpha: 1))
+                context.fill(target.frame)
+                context.setStrokeColor(chosen ? CGColor(srgbRed: 0.48, green: 0.80, blue: 0.24, alpha: 1) : CGColor(gray: 0.35, alpha: 1))
+                context.setLineWidth(1)
+                context.stroke(target.frame.insetBy(dx: 0.5, dy: 0.5))
             } else {
                 GameStoneArt.draw(in: context, frame: target.frame, selected: chosen, pixel: 1)
             }
@@ -157,7 +228,7 @@ public struct GameFrontEnd {
                 context.fill(CGRect(x: target.frame.minX + 8, y: target.frame.maxY - 6,
                                     width: target.frame.width - 16, height: 3))
             }
-            if action.primary, action.enabled {
+            if action.primary, action.enabled, !page.home {
                 context.setFillColor(CGColor(srgbRed: 0.48, green: 0.80, blue: 0.24, alpha: 1))
                 context.beginPath()
                 context.move(to: CGPoint(x: target.frame.minX + 10, y: target.frame.midY - 5))

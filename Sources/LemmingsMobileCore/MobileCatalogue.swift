@@ -11,10 +11,10 @@ public enum MobileFamily: String, CaseIterable, Codable, Sendable {
 
     public var title: String {
         switch self {
-        case .classic: return "Lemmings"
+        case .classic: return "Classic Lemmings"
         case .ohNo: return "Oh No! More Lemmings"
         case .holiday: return "Holiday Lemmings"
-        case .ohYes: return "Oh Yes! More Lemmings!"
+        case .ohYes: return "Oh Yes! More Lemmings"
         case .fan: return "Fan Lemmings"
         }
     }

@@ -12,7 +12,7 @@ public enum MobileSettingsArt {
     public static func groups() -> GameFrontEnd.Page {
         .init(title: "Settings", rows: MobileSettingsGroup.allCases.map {
             .init("settingsGroup." + $0.rawValue, $0.title)
-        }, footer: [.init("home", "Back")])
+        } + [.init("data", "Game Data")], footer: [.init("home", "Back")])
     }
 
     public static func page(_ group: MobileSettingsGroup, settings: MobileSettings,

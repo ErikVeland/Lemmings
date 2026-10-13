@@ -145,7 +145,7 @@ public enum MobileHUDAction: Equatable, Sendable {
                 if let icon = skillIcons[safe: index] ?? nil { drawNativeSkill(item, icon: icon, context: context, pixel: panel.bevel) }
                 else if readOnly { context.setFillColor(CGColor(gray: 0, alpha: 0.65)); context.fill(item.frame) }
             case .releaseRate:
-                if readOnly { context.setFillColor(CGColor(gray: 0, alpha: 0.65)); context.fill(item.frame) }
+                drawRateButton(item, frame: item.frame, pixel: panel.bevel, context: context)
             }
         }
         drawCounts(panel, context: context)
@@ -247,7 +247,11 @@ public enum MobileHUDAction: Equatable, Sendable {
         else { selected = false }
 
         switch item.action {
-        case .releaseRate, .skill:
+        case .releaseRate:
+            let socket = CGRect(x: frame.minX, y: frame.minY + 18, width: frame.width, height: frame.height - 18)
+            drawRateButton(item, frame: socket, pixel: 1, context: context)
+            drawCompactCount(item, in: frame, context: context)
+        case .skill:
             drawStoneSocket(frame, selected: false, pixel: 1, context: context)
             let scale = layout.compactScale
             let well = GameStoneArt.well(frame, pixel: 1)
@@ -316,6 +320,15 @@ public enum MobileHUDAction: Equatable, Sendable {
     }
 
     // MARK: - Shared pieces
+
+    private func drawRateButton(_ item: Item, frame: CGRect, pixel: CGFloat, context: CGContext) {
+        guard case let .releaseRate(delta) = item.action else { return }
+        drawStoneSocket(frame, selected: false, pixel: pixel, context: context)
+        context.saveGState()
+        context.setAlpha(readOnly ? 0.35 : 1)
+        drawGameLabel(delta < 0 ? "-" : "+", in: GameStoneArt.well(frame, pixel: pixel), context: context)
+        context.restoreGState()
+    }
 
     private func drawStoneSocket(_ frame: CGRect, selected: Bool, pixel: CGFloat, context: CGContext) {
         GameStoneArt.drawSocket(in: context, frame: frame, selected: selected, pixel: pixel)

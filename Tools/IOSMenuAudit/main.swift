@@ -23,17 +23,27 @@ import NxlvKit
         guard let image = MobileBitmapRenderer.image(bitmap) else { throw Failure.missingArtwork }
         let previewSource = CGRect(x: session.initialCameraOrigin.x, y: 0, width: 320, height: 160)
         typealias Action = GameFrontEnd.Action
-        let homeRows: [Action] = [.init("classic", "Lemmings  0/120", primary: true),
-                                 .init("l2", "Lemmings 2 - Unavailable", enabled: false),
-                                 .init("l3", "Lemmings 3 - Unavailable", enabled: false)]
-        let footer: [Action] = [.init("settings", "Settings"), .init("data", "Game Data")]
+        let homeFamilies: [Action] = [.init("family.classic", "Classic Lemmings  0/120"),
+            .init("family.ohNo", "Oh No! More Lemmings  0/100"),
+            .init("family.holiday", "Holiday Lemmings  0/72"),
+            .init("family.ohYes", "Oh Yes! More Lemmings  0/60"),
+            .init("family.fan", "Fan Lemmings  0/15000"),
+            .init("neolemmix", "NeoLemmix - Unavailable", enabled: false),
+            .init("l2", "Lemmings 2 - Unavailable", enabled: false),
+            .init("l3", "Lemmings 3 - Unavailable", enabled: false)]
+        let journey = Action("journey", LearningJourney.title + "  0/120")
+        let home = MobileHomeArt.page(journey: journey, families: homeFamilies, initials: "LEM")
+        let resumedHome = MobileHomeArt.page(resume: [.init("resume", "Resume - AB v CD")],
+            journey: journey, families: homeFamilies, initials: "AB v CD")
+        guard home.rows.map(\.id) == ["journey", "family.classic", "family.ohNo", "family.holiday",
+            "family.ohYes", "family.fan", "neolemmix", "l2", "l3", "collections"],
+            home.footer.map(\.id) == ["players", "records", "playlists", "settings", "whatsNew"]
+            else { throw Failure.invalidTargets }
         var pages: [(String, GameFrontEnd.Page)] = [
             ("long-title", .init(title: library.levels.max(by: { $0.title.count < $1.title.count })!.title,
                                 subtitle: "Mayhem", footer: [.init("home", "Back"), .init("play", "Play again", primary: true)], preview: true)),
-            ("home", .init(title: "Lemmings", home: true, rows: homeRows, footer: footer)),
-            ("resume", .init(title: "Lemmings", home: true,
-                             rows: [.init("resume", "Resume saved run", primary: true)] + homeRows.map {
-                                .init($0.id, $0.title, enabled: $0.enabled) }, footer: footer)),
+            ("home", home),
+            ("resume", resumedHome),
             ("levels", .init(title: "Just Dig!", subtitle: "Fun 1/30", details: ["10 Lemmings   Save 10", "Time 5:00"],
                              footer: [.init("rankPrevious", "< Rank"), .init("rankNext", "Rank >"),
                                       .init("previous", "< Level", enabled: false), .init("next", "Level >"),
@@ -83,6 +93,13 @@ import NxlvKit
                           CGRect(origin: .zero, size: layout.size).contains(target.frame),
                           layout.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)) == (target.action.enabled ? target.action.id : nil)
                     else { throw Failure.invalidTargets }
+                }
+                if page.home {
+                    let settings = layout.targets.first { $0.action.id == "settings" }!.frame
+                    let first = layout.targets.first!.frame
+                    let profiles = layout.targets.first { $0.action.id == "players" }!.frame
+                    guard settings.maxY <= first.minY, profiles.minY >= layout.targets[page.rows.count - 1].frame.maxY,
+                          layout.heading.intersection(settings).isNull else { throw Failure.invalidTargets }
                 }
                 guard layout.action(at: CGPoint(x: layout.board.minX + 1, y: layout.board.midY)) == nil else { throw Failure.invalidTargets }
                 for (index, target) in layout.targets.enumerated() {

@@ -44,7 +44,7 @@ public enum MobileCareerArt {
         return .init(title: "Records", subtitle: subtitle.isEmpty ? profileName : subtitle,
             rows: levels.map { .init("record." + ($0.assisted ? "assisted|" : "direct|") + $0.level.boardID,
                                     $0.level.title + ($0.assisted ? "  Rewind" : "")) },
-            details: levels.isEmpty ? ["No records"] : [], footer: [.init("home", "Back"), .init("worldwide", "Worldwide")], footerColumns: 1)
+            details: levels.isEmpty ? ["No records"] : [], footer: [.init("home", "Back"), .init("achievements", "Achievements"), .init("worldwide", "Worldwide")], footerColumns: 1)
     }
 
     public static func recordLevelPage(_ key: String, records: ArcadeRecords, profileID: String, profileName: String, subtitle: String) -> GameFrontEnd.Page {
