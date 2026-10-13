@@ -73,7 +73,7 @@ private func testHeldAndLoopedSoundsAreNotHits() throws {
 /// Loads a real module that names a drum, so the tuning is built from data the
 /// game actually ships rather than from something invented here.
 private func moduleNamingADrum() -> (ProTrackerModule, Int)? {
-    let root = URL(fileURLWithPath: "Sources/Music", isDirectory: true)
+    let root = URL(fileURLWithPath: "Sources/Music", isDirectory: true).resolvingSymlinksInPath()
     let walker = FileManager.default.enumerator(at: root, includingPropertiesForKeys: nil)
     for case let url as URL in walker ?? FileManager.DirectoryEnumerator()
     where url.pathExtension.lowercased() == "mod" {

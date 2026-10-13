@@ -44,6 +44,8 @@ import UIKit
     private typealias Item = MobileHUDRenderer.Item
     var onRewindHold: ((Bool) -> Void)?
     private var readOnly = false
+    var playerName: String?
+    private let playerIdentity = UIView()
     var onAction: ((MobileHUDAction) -> Void)?
     /// A touch on the map, as a point in level pixels.
     var onMinimap: ((CGPoint) -> Void)?
@@ -68,6 +70,11 @@ import UIKit
         backgroundColor = .clear
         isOpaque = false
         isAccessibilityElement = false
+        playerIdentity.isAccessibilityElement = true
+        playerIdentity.accessibilityTraits = .staticText
+        playerIdentity.isUserInteractionEnabled = false
+        playerIdentity.isHidden = true
+        addSubview(playerIdentity)
         let touch = UILongPressGestureRecognizer(target: self, action: #selector(minimapTouched(_:)))
         touch.minimumPressDuration = 0
         minimapView.addGestureRecognizer(touch)
@@ -116,6 +123,10 @@ import UIKit
     ) {
         self.readOnly = readOnly
         self.layout = layout
+        let identityFrame = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: playerName != nil).player
+        playerIdentity.frame = identityFrame ?? .zero
+        playerIdentity.isHidden = identityFrame == nil
+        playerIdentity.accessibilityLabel = playerName.map { "Current player: " + $0 }
         self.snapshot = snapshot
         let previousSkill = self.selectedSkill
         self.selectedSkill = selectedSkill
@@ -184,7 +195,7 @@ import UIKit
         guard let layout, let snapshot else { return nil }
         return MobileHUDRenderer(layout: layout, snapshot: snapshot, selectedSkill: selectedSkill,
                           paused: paused, speed: speed, endRunArmed: endRunArmed,
-                          panelImage: panelImage, typography: MobileGameArt.typography, counterStyle: counterStyle, skillIcons: skillIcons, readOnly: readOnly)
+                          panelImage: panelImage, typography: MobileGameArt.typography, counterStyle: counterStyle, skillIcons: skillIcons, readOnly: readOnly, playerName: playerName)
     }
 
     private func rebuildButtons() {

@@ -64,7 +64,13 @@ private struct SavedGameHandles: @unchecked Sendable { let games: [GKSavedGame] 
         guard let owner = accountID else { throw URLError(.userAuthenticationRequired) }
         let saved = versions[name] ?? []
         if saved.count > 1 {
-            _ = try await GKLocalPlayer.local.resolveConflictingSavedGames(saved, with: data)
+            // Keep GameKit handles on the main actor. Only completion crosses its callback queue.
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+                GKLocalPlayer.local.resolveConflictingSavedGames(saved, with: data) { _, error in
+                    if let error { continuation.resume(throwing: error) }
+                    else { continuation.resume() }
+                }
+            }
         } else { _ = try await GKLocalPlayer.local.saveGameData(data, withName: name) }
         guard accountID == owner else { throw URLError(.cancelled) }
         conflicts[name] = nil; versions[name] = nil

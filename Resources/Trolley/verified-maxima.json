@@ -1,7 +1,7 @@
 {
-  "engineSourceFingerprint": "d0d2ddf11c89bc40b74692253f9404d33bdf593f87e4897c0040e04d663aecbf",
+  "engineSourceFingerprint": "dd04e1a0accef72ae39672f1191326d56fa372e7260f77c3c67219da875ec145",
   "exhaustive": false,
-  "generatedAt": "2026-10-12T08:48:34Z",
+  "generatedAt": "2026-10-13T12:31:08Z",
   "levels": [
     {
       "bestSaved": 10,
@@ -26632,7 +26632,7 @@
         "released": 10,
         "retainedReserves": 10,
         "saved": 10,
-        "sha256": "2f777269583e3c8aca34a75e1b3be59d4be5db1e96379469040a5b2798a797cf",
+        "sha256": "f365012fa133a7ccb6c3b2667a2cecdfe025fa431c5f364f90ad7e8d7bb2a9f6",
         "ticks": 2040
       }
     },
@@ -26722,7 +26722,7 @@
         "released": 10,
         "retainedReserves": 10,
         "saved": 10,
-        "sha256": "455f5541a1d06deba1684f19b922ae09fefca0cfb0fa105a3ada9fd8f79db854",
+        "sha256": "22baf59db240b2c0e8d2309ffa8eada4661985d42d9d0bd3c0515d62c94b9132",
         "ticks": 2328
       }
     },
@@ -26772,6 +26772,141 @@
       }
     },
     {
+      "bestSaved": 12,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "17ab2b1c30ba7b11d7b307c398b3e443956a5aa65b45dd9abfebdc589080da22:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "26",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
+      "gameID": "lemmings3",
+      "lossesInBestSolution": 0,
+      "notes": [
+        "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
+      ],
+      "number": 26,
+      "population": 22,
+      "rank": "Classic",
+      "required": 1,
+      "status": "REPLAY_RECORD",
+      "testedCandidates": 1,
+      "title": "Classic 26",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings3-26.json",
+        "released": 12,
+        "retainedReserves": 10,
+        "saved": 12,
+        "sha256": "2f321f9c1f35b5c168e28e615ac87f643041e3eaf7f8ca016ad29644b3bdf997",
+        "ticks": 3740
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "839fa256eec5d8f9a59c48b40731578cc29d5fab99ff97115c350a02f2d4c780:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "27",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "40",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 340
+      },
+      "gameID": "lemmings3",
+      "lossesInBestSolution": 11,
+      "notes": [
+        "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
+      ],
+      "number": 27,
+      "population": 22,
+      "rank": "Classic",
+      "required": 1,
+      "status": "REPLAY_RECORD",
+      "testedCandidates": 1,
+      "title": "Classic 27",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 11,
+        "path": "witnesses/lemmings3-27.json",
+        "released": 12,
+        "retainedReserves": 10,
+        "saved": 1,
+        "sha256": "592cdcf938012aba38603ef42db19fd84d72ce7c4e2eeedf94008c23d9ad63e7",
+        "ticks": 7820
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "5befc0d948229f6a5c27ef8d42eec7cc626d24fe39649a08e376912b7588749f:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "28",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
+      "gameID": "lemmings3",
+      "lossesInBestSolution": 11,
+      "notes": [
+        "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
+      ],
+      "number": 28,
+      "population": 22,
+      "rank": "Classic",
+      "required": 1,
+      "status": "REPLAY_RECORD",
+      "testedCandidates": 1,
+      "title": "Classic 28",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 11,
+        "path": "witnesses/lemmings3-28.json",
+        "released": 12,
+        "retainedReserves": 10,
+        "saved": 1,
+        "sha256": "8e54f68e5ead3764485a83a69d59388881bcbea603db09b28c09f6b7c116b8c7",
+        "ticks": 9660
+      }
+    },
+    {
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings3",
@@ -26814,6 +26949,51 @@
         "saved": 1,
         "sha256": "c3873a4f64b8a2f74cf014e7baa54dabb645b25911e0773490bb507beb3c6fd4",
         "ticks": 288
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "83838e25bb2516094fd4791988c396b16362888cd7350eb34c24966207b243e0:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "30",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
+      "gameID": "lemmings3",
+      "lossesInBestSolution": 11,
+      "notes": [
+        "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
+      ],
+      "number": 30,
+      "population": 22,
+      "rank": "Classic",
+      "required": 1,
+      "status": "REPLAY_RECORD",
+      "testedCandidates": 1,
+      "title": "Classic 30",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 11,
+        "path": "witnesses/lemmings3-30.json",
+        "released": 12,
+        "retainedReserves": 10,
+        "saved": 1,
+        "sha256": "2f970f1751ad3c28f92a1d334119e7c80aa44d8399291b3cfdd51fa9285fd151",
+        "ticks": 9660
       }
     },
     {
@@ -27262,7 +27442,7 @@
         "released": 11,
         "retainedReserves": 10,
         "saved": 10,
-        "sha256": "eb1b099bb8c526a11c7aa0acccb141d86c662ae4041a52082450c80141cf5349",
+        "sha256": "41d6f73139134a50be5297c76c4ef6913e3f9e857d53f2c95bad525ec8c24591",
         "ticks": 6900
       }
     },
@@ -27855,6 +28035,51 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings3",
+        "levelFingerprint": "4c6459be8889e1ed67f05b21614e9c47a4fd8289ccf8244ab08af5c624595cc1:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "224",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 360
+      },
+      "gameID": "lemmings3",
+      "lossesInBestSolution": 10,
+      "notes": [
+        "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
+      ],
+      "number": 24,
+      "population": 20,
+      "rank": "Egyptian",
+      "required": 1,
+      "status": "REPLAY_RECORD",
+      "testedCandidates": 1,
+      "title": "Egyptian 24",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 10,
+        "path": "witnesses/lemmings3-224.json",
+        "released": 11,
+        "retainedReserves": 9,
+        "saved": 1,
+        "sha256": "53f21bde75f66d707c8c1b14e7fd49c256acb68ab08b69bc9a0fc0fb97486d28",
+        "ticks": 8280
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings3",
         "levelFingerprint": "e9446df4909532bd028ed70294e594ecdc1f78fd9abcab5159124051a27ad1af:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
         "levelID": "225",
         "modifiers": {
@@ -27939,6 +28164,51 @@
         "saved": 10,
         "sha256": "ed3d287eef84a4392f9ef2ce2e654f38b5fc2e39312b9925d68c926d67416602",
         "ticks": 2737
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "aa08964aa0a91c3f6b8c61eef9e5afaa50d18470a2397492e896d162deb762d4:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "227",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "40",
+          "releaseInterval": "103",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 180
+      },
+      "gameID": "lemmings3",
+      "lossesInBestSolution": 11,
+      "notes": [
+        "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
+      ],
+      "number": 27,
+      "population": 21,
+      "rank": "Egyptian",
+      "required": 1,
+      "status": "REPLAY_RECORD",
+      "testedCandidates": 1,
+      "title": "Egyptian 27",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 11,
+        "path": "witnesses/lemmings3-227.json",
+        "released": 12,
+        "retainedReserves": 9,
+        "saved": 1,
+        "sha256": "a37797632f1df89583c29e7e0e4f4e15ac7f33499f4898693be45c8f80abea9d",
+        "ticks": 1099
       }
     },
     {
@@ -28212,7 +28482,7 @@
       }
     },
     {
-      "bestSaved": 11,
+      "bestSaved": 12,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "948577d46b436beba4fd73275a7d10ef2f9533a9c64c04eeb5e04bad73c9655a:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -28233,7 +28503,7 @@
         "timeLimitSeconds": 300
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 1,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -28247,13 +28517,13 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 1,
+        "lost": 0,
         "path": "witnesses/lemmings3-104.json",
         "released": 12,
         "retainedReserves": 10,
-        "saved": 11,
-        "sha256": "366d10ef0fa2078e61554dfd3695d745f78d0e7b882c75454c1b5fd0b5328252",
-        "ticks": 6900
+        "saved": 12,
+        "sha256": "f3fdfd5232e52441c743a13f2302e15f6b3a6ee33c014f3243948aa624f4222d",
+        "ticks": 834
       }
     },
     {
@@ -28392,7 +28662,7 @@
       }
     },
     {
-      "bestSaved": 1,
+      "bestSaved": 10,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "0ce2317ff01990c6072fc502fdc1ff0f89f46b6eefab68941b8fe9aa3e987496:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -28413,7 +28683,7 @@
         "timeLimitSeconds": 420
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 19,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -28427,17 +28697,17 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 19,
+        "lost": 0,
         "path": "witnesses/lemmings3-108.json",
-        "released": 20,
-        "retainedReserves": 0,
-        "saved": 1,
-        "sha256": "28a105aba72b39beaa07b8a30896a2a079ce0527e93d717adcdfad227a0cd19f",
-        "ticks": 1221
+        "released": 10,
+        "retainedReserves": 10,
+        "saved": 10,
+        "sha256": "d55bc637746588625a30013c9d89e054204937dab232613c98d0ac3f78fb3ade",
+        "ticks": 1411
       }
     },
     {
-      "bestSaved": 1,
+      "bestSaved": 11,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "ba2d44e965e07fb8e023cb8ed90dff0b5fbeec11901f6f2a7379c57cdd51d873:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -28458,7 +28728,7 @@
         "timeLimitSeconds": 180
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 11,
+      "lossesInBestSolution": 1,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -28472,13 +28742,13 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 11,
+        "lost": 1,
         "path": "witnesses/lemmings3-109.json",
         "released": 12,
         "retainedReserves": 10,
-        "saved": 1,
-        "sha256": "464d30ef13f983916b7a778fdc96cb93805aabeb845f362b60b546bc9284425a",
-        "ticks": 4140
+        "saved": 11,
+        "sha256": "50e801e978b7d3b41e99f64b96fc70ec0c32b41042d13104a43ab970fdf24d03",
+        "ticks": 700
       }
     },
     {
@@ -28503,7 +28773,7 @@
         "timeLimitSeconds": 240
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 3,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -28517,13 +28787,13 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 3,
+        "lost": 0,
         "path": "witnesses/lemmings3-110.json",
-        "released": 14,
-        "retainedReserves": 7,
+        "released": 11,
+        "retainedReserves": 10,
         "saved": 11,
-        "sha256": "4362f43a4df1eb8ce2017df877d6347bb938f1ca5b46d63a4e3bbdd2b39d835b",
-        "ticks": 1492
+        "sha256": "45b98ded7f3b164589aac04e381a46829ee005db34c9c4c61db0a163e075c7f2",
+        "ticks": 1175
       }
     },
     {
@@ -28707,7 +28977,7 @@
       }
     },
     {
-      "bestSaved": 1,
+      "bestSaved": 12,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "973fb4edd55977ce4fa330f0c0bbbeb801e36dc4c27510c6211d699590ce5058:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -28728,7 +28998,7 @@
         "timeLimitSeconds": 140
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 11,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -28742,17 +29012,17 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 11,
+        "lost": 0,
         "path": "witnesses/lemmings3-115.json",
         "released": 12,
         "retainedReserves": 10,
-        "saved": 1,
-        "sha256": "03130bd2a1209947eee37110358365e1d1dd3e1b8ef01533fb089758f651bd70",
-        "ticks": 3220
+        "saved": 12,
+        "sha256": "5681b49e57ef8be2b1df7fe7926b2b283d88fbbdd32c0e7f98a2a51fbc853555",
+        "ticks": 869
       }
     },
     {
-      "bestSaved": 8,
+      "bestSaved": 12,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "e4640f75cff369a7e5126efcbc5add9e486ce7a2558448e173c5ec0043d15594:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -28773,7 +29043,7 @@
         "timeLimitSeconds": 180
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 14,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -28787,17 +29057,17 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 14,
+        "lost": 0,
         "path": "witnesses/lemmings3-116.json",
-        "released": 22,
-        "retainedReserves": 0,
-        "saved": 8,
-        "sha256": "1566fe53fe3661b0305970b88baf111242de4efff268d91986b63ab57fccae28",
-        "ticks": 4140
+        "released": 12,
+        "retainedReserves": 10,
+        "saved": 12,
+        "sha256": "98d378c693a972977ef7ba75b8b7f6f9655a2a2ac7af7d5d06d407228d31e532",
+        "ticks": 1268
       }
     },
     {
-      "bestSaved": 1,
+      "bestSaved": 10,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "1977f1a9ddb5c5bb051d621f6dc3482f013cb04f9d4c9168a0e77726ca07b597:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -28818,7 +29088,7 @@
         "timeLimitSeconds": 280
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 19,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -28832,17 +29102,17 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 19,
+        "lost": 0,
         "path": "witnesses/lemmings3-117.json",
-        "released": 20,
-        "retainedReserves": 0,
-        "saved": 1,
-        "sha256": "87ef8c3ee0adee1434c71762fcd5b3b19f06513bd59e5a0bb885bfaee3b74bbc",
-        "ticks": 1155
+        "released": 10,
+        "retainedReserves": 10,
+        "saved": 10,
+        "sha256": "739c218672478cb8e3febf9b3084bf81589b903f3c27fbc6cc75536fb74d57bb",
+        "ticks": 1600
       }
     },
     {
-      "bestSaved": 2,
+      "bestSaved": 18,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "ff9300c43df94afddd88ade8128aa0724e282ed3c8c65e98ff96074ba765536f:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -28863,7 +29133,7 @@
         "timeLimitSeconds": 150
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 16,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -28877,13 +29147,13 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 16,
+        "lost": 0,
         "path": "witnesses/lemmings3-118.json",
         "released": 18,
         "retainedReserves": 10,
-        "saved": 2,
-        "sha256": "65525ef3485a9fd739b6ed7cc5f9f8b6651ebff6d456c66bff9ffff142faebdd",
-        "ticks": 3450
+        "saved": 18,
+        "sha256": "d2c4f10f29e9dca8655883bcb7ebd50f2b984c16037d6c01e7357dc8c77cdc33",
+        "ticks": 2898
       }
     },
     {
@@ -28932,7 +29202,7 @@
       }
     },
     {
-      "bestSaved": 3,
+      "bestSaved": 11,
       "conditions": {
         "gameID": "lemmings3",
         "levelFingerprint": "90eb410079211deb6585acb76c10294b54c3b333fd4a0e9bed8e110ba05562e3:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
@@ -28953,7 +29223,7 @@
         "timeLimitSeconds": 240
       },
       "gameID": "lemmings3",
-      "lossesInBestSolution": 18,
+      "lossesInBestSolution": 0,
       "notes": [
         "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
       ],
@@ -28967,13 +29237,463 @@
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 18,
+        "lost": 0,
         "path": "witnesses/lemmings3-120.json",
+        "released": 11,
+        "retainedReserves": 10,
+        "saved": 11,
+        "sha256": "e8d2b21cb66c8123dbd6dba69e9ee417f705178949dadf4722a926b8c4cf4dc8",
+        "ticks": 1515
+      }
+    },
+    {
+      "bestSaved": 2,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "9a652da9d3805bcdc5e1c60496a47760bbe5ae3034791a7d35a21465e2f87b49:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "121",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "40",
+          "releaseInterval": "20",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 360
+      },
+      "gameID": "lemmings3",
+      "lossesInBestSolution": 9,
+      "notes": [
+        "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
+      ],
+      "number": 21,
+      "population": 21,
+      "rank": "Shadow",
+      "required": 1,
+      "status": "REPLAY_RECORD",
+      "testedCandidates": 1,
+      "title": "Shadow 21",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 9,
+        "path": "witnesses/lemmings3-121.json",
+        "released": 11,
+        "retainedReserves": 10,
+        "saved": 2,
+        "sha256": "1b1d43ac9becbbf0e9bb70e979232c18c0ac274ded39b4040479b0c60fe9dabc",
+        "ticks": 8280
+      }
+    },
+    {
+      "bestSaved": 11,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "978f568995447b283a6dcc0a189c1136beb63de37426bcd66c178b2cac82cad9:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "122",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "40",
+          "releaseInterval": "20",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 60
+      },
+      "gameID": "lemmings3",
+      "lossesInBestSolution": 3,
+      "notes": [
+        "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
+      ],
+      "number": 22,
+      "population": 21,
+      "rank": "Shadow",
+      "required": 1,
+      "status": "REPLAY_RECORD",
+      "testedCandidates": 1,
+      "title": "Shadow 22",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 3,
+        "path": "witnesses/lemmings3-122.json",
+        "released": 14,
+        "retainedReserves": 7,
+        "saved": 11,
+        "sha256": "efdf1ac4952b62a37398bd50f06bbc9736b872b5731f0ba6a92f1c8bb525e7ce",
+        "ticks": 2096
+      }
+    },
+    {
+      "bestSaved": 4,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "fe46b40480d3efb87c4c178269323258a6db5022e1a617f9babd8f3600e7ccce:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "123",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "40",
+          "releaseInterval": "20",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 360
+      },
+      "gameID": "lemmings3",
+      "lossesInBestSolution": 14,
+      "notes": [
+        "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
+      ],
+      "number": 23,
+      "population": 21,
+      "rank": "Shadow",
+      "required": 1,
+      "status": "REPLAY_RECORD",
+      "testedCandidates": 1,
+      "title": "Shadow 23",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 14,
+        "path": "witnesses/lemmings3-123.json",
+        "released": 18,
+        "retainedReserves": 3,
+        "saved": 4,
+        "sha256": "311dff8820636ab45e7060f6a4b8575528ec7342dadc8820c85d74fb3ad1bb05",
+        "ticks": 8280
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "021f76f59fb445cd171ec7a345359f4526b1dc0f0fbc53c4a0fb11b557a0afa6:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "124",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 240
+      },
+      "gameID": "lemmings3",
+      "lossesInBestSolution": 10,
+      "notes": [
+        "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
+      ],
+      "number": 24,
+      "population": 21,
+      "rank": "Shadow",
+      "required": 1,
+      "status": "REPLAY_RECORD",
+      "testedCandidates": 1,
+      "title": "Shadow 24",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 10,
+        "path": "witnesses/lemmings3-124.json",
+        "released": 11,
+        "retainedReserves": 10,
+        "saved": 1,
+        "sha256": "044c642cc1e10ff22b0d08e25daaf78f639c20a716bb622b520bd7d02f0d0a1b",
+        "ticks": 5520
+      }
+    },
+    {
+      "bestSaved": 3,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "5c11bc7c2d2f1cb8196a80203fbed1c3ce0a3443fcbb435148be66af57e6d5bb:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "125",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 240
+      },
+      "gameID": "lemmings3",
+      "lossesInBestSolution": 9,
+      "notes": [
+        "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
+      ],
+      "number": 25,
+      "population": 22,
+      "rank": "Shadow",
+      "required": 1,
+      "status": "REPLAY_RECORD",
+      "testedCandidates": 1,
+      "title": "Shadow 25",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 9,
+        "path": "witnesses/lemmings3-125.json",
+        "released": 12,
+        "retainedReserves": 10,
+        "saved": 3,
+        "sha256": "7ddf69596fc752fa45561f85d7c02081f8c8ca6c04018f4f60f8b6386d17dc3c",
+        "ticks": 5520
+      }
+    },
+    {
+      "bestSaved": 2,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "125566a9579b208db9ab94f8a8c052d52c478776af2ff57417f42dba9db30f01:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "126",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
+      "gameID": "lemmings3",
+      "lossesInBestSolution": 9,
+      "notes": [
+        "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
+      ],
+      "number": 26,
+      "population": 21,
+      "rank": "Shadow",
+      "required": 1,
+      "status": "REPLAY_RECORD",
+      "testedCandidates": 1,
+      "title": "Shadow 26",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 9,
+        "path": "witnesses/lemmings3-126.json",
+        "released": 11,
+        "retainedReserves": 10,
+        "saved": 2,
+        "sha256": "34508abd5f72115d94bbe430a5da5c4c7de251a73ae76876bd5a6818f5ea5d32",
+        "ticks": 9660
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "f3be69f7b14f00b5e281cb9711019be134140de9ee22f95d306742ea47ac371e:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "127",
+        "modifiers": {
+          "extras": "0",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 20,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 420
+      },
+      "gameID": "lemmings3",
+      "lossesInBestSolution": 9,
+      "notes": [
+        "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
+      ],
+      "number": 27,
+      "population": 20,
+      "rank": "Shadow",
+      "required": 1,
+      "status": "REPLAY_RECORD",
+      "testedCandidates": 1,
+      "title": "Shadow 27",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 9,
+        "path": "witnesses/lemmings3-127.json",
+        "released": 10,
+        "retainedReserves": 10,
+        "saved": 1,
+        "sha256": "134b2549fcbafe133c1ce158704e8a115d01b7c6f918e60130abeb638c7b9fa6",
+        "ticks": 9660
+      }
+    },
+    {
+      "bestSaved": 10,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "c1ac1e180d3b70139ea7924b547d5518bfc736b55d81271aae3c1f64468b95b5:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "128",
+        "modifiers": {
+          "extras": "2",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 22,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 240
+      },
+      "gameID": "lemmings3",
+      "lossesInBestSolution": 2,
+      "notes": [
+        "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
+      ],
+      "number": 28,
+      "population": 22,
+      "rank": "Shadow",
+      "required": 1,
+      "status": "REPLAY_RECORD",
+      "testedCandidates": 1,
+      "title": "Shadow 28",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 2,
+        "path": "witnesses/lemmings3-128.json",
+        "released": 12,
+        "retainedReserves": 10,
+        "saved": 10,
+        "sha256": "35ddbd055579634c6302acb12c177fabbf8d9bc4bafa1ed07221d8e0ff872407",
+        "ticks": 5520
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "84085a4f5ed4ca98ce6139b957b38216ddfb64b01b952f0082f1c65b98d2867a:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "129",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "51",
+          "releaseInterval": "44",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 300
+      },
+      "gameID": "lemmings3",
+      "lossesInBestSolution": 20,
+      "notes": [
+        "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
+      ],
+      "number": 29,
+      "population": 21,
+      "rank": "Shadow",
+      "required": 1,
+      "status": "REPLAY_RECORD",
+      "testedCandidates": 1,
+      "title": "Shadow 29",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 20,
+        "path": "witnesses/lemmings3-129.json",
         "released": 21,
         "retainedReserves": 0,
-        "saved": 3,
-        "sha256": "d7cfd4a101c86c4b15d0a4501548639101c0179d6269e5231d002f9c3f550463",
-        "ticks": 5520
+        "saved": 1,
+        "sha256": "004064baf3db682efe848ab9522c90d185556de7a621bcb3907d53c0756a7267",
+        "ticks": 8280
+      }
+    },
+    {
+      "bestSaved": 2,
+      "conditions": {
+        "gameID": "lemmings3",
+        "levelFingerprint": "d3b95e192c8491769d3a49ba85c9227b3a43eeda335cbf32d186872af91866c8:bd15add79b7e121297e584730fead5286335ed54cede3c8e78e473427fc5c41e",
+        "levelID": "130",
+        "modifiers": {
+          "extras": "1",
+          "releaseDelay": "46",
+          "releaseInterval": "23",
+          "reserves": "20"
+        },
+        "packID": "chronicles",
+        "physicsMode": "l3-native-preview-v1",
+        "population": 21,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "l3-native-preview-v1",
+        "startingSkills": {},
+        "timeLimitSeconds": 360
+      },
+      "gameID": "lemmings3",
+      "lossesInBestSolution": 10,
+      "notes": [
+        "Chronicles retains unreleased reserves. Population minus saved must not be labelled necessary sacrifices. Fixed-input fixtures are replayed twice. Uncovered levels receive a no-input check."
+      ],
+      "number": 30,
+      "population": 21,
+      "rank": "Shadow",
+      "required": 1,
+      "status": "REPLAY_RECORD",
+      "testedCandidates": 1,
+      "title": "Shadow 30",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 10,
+        "path": "witnesses/lemmings3-130.json",
+        "released": 12,
+        "retainedReserves": 9,
+        "saved": 2,
+        "sha256": "8574b8acefc3be6160c4126aa010952c34328f82be792284a6a410e10cf70e76",
+        "ticks": 8280
       }
     },
     {

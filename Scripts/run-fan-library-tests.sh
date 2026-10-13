@@ -11,7 +11,12 @@ if [[ -z "${FAN_TEST_LIBRARY_DIR:-}" ]]; then
     -Xlinker -install_name -Xlinker @rpath/libNxlvKit.dylib \
     -o "$library_dir/libNxlvKit.dylib" "$project_dir"/Sources/NxlvKit/*.swift
 fi
-swiftc -O -swift-version 6 -I "$library_dir/modules" -L "$library_dir" -lNxlvKit \
+swiftc -O -swift-version 6 -parse-as-library -emit-module -emit-library \
+  -I "$library_dir/modules" -L "$library_dir" -lNxlvKit \
+  -module-name LemmingsAppCore -emit-module-path "$library_dir/modules/LemmingsAppCore.swiftmodule" \
+  -Xlinker -install_name -Xlinker @rpath/libLemmingsAppCore.dylib \
+  -o "$library_dir/libLemmingsAppCore.dylib" "$project_dir"/Sources/LemmingsAppCore/**/*.swift
+swiftc -O -swift-version 6 -I "$library_dir/modules" -L "$library_dir" -lNxlvKit -lLemmingsAppCore \
   -Xlinker -rpath -Xlinker "$library_dir" -o "$build_dir/Tests" \
   "$project_dir/Tests/FanLevelLibraryTests/main.swift" \
   "$project_dir/Tests/FanLevelLibraryTests/ArtworkAudit.swift" \

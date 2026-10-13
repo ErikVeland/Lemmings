@@ -38,17 +38,19 @@ public enum MobileHUDAction: Equatable, Sendable {
     private let endRunArmed: Bool
     private let skillIcons: [CGImage?]
     private let readOnly: Bool
+    private let playerName: String?
     private let counterStyle: ClassicCounterStyle
     private let panelImage: CGImage?
     private let typography: GameMenuTypography?
     private let items: [Item]
 
     public init(layout: MobileHUDLayout, snapshot: MobileGameSnapshot, selectedSkill: Int,
-                paused: Bool, speed: Double, endRunArmed: Bool, panelImage: CGImage?, typography: GameMenuTypography?, counterStyle: ClassicCounterStyle = .game, skillIcons: [CGImage?] = [], readOnly: Bool = false) {
+                paused: Bool, speed: Double, endRunArmed: Bool, panelImage: CGImage?, typography: GameMenuTypography?, counterStyle: ClassicCounterStyle = .game, skillIcons: [CGImage?] = [], readOnly: Bool = false, playerName: String? = nil) {
         self.layout = layout; self.snapshot = snapshot; self.selectedSkill = selectedSkill
         self.paused = paused; self.speed = speed; self.endRunArmed = endRunArmed
         self.skillIcons = skillIcons
         self.readOnly = readOnly
+        self.playerName = playerName
         self.counterStyle = counterStyle
         self.panelImage = panelImage; self.typography = typography
         items = Self.targets(layout: layout, snapshot: snapshot, selectedSkill: selectedSkill,
@@ -147,7 +149,12 @@ public enum MobileHUDAction: Equatable, Sendable {
                 for item in items { drawCell(item, context: context) }
             }
         }
-        drawStatus(in: statusFrame, panelMode: layout.panel != nil, context: context)
+        let frames = Self.statusFrames(layout: layout, hasPlayer: playerName != nil)
+        if let playerName, let player = frames.player {
+            GamePixelTypography.draw("Hot Seat: " + playerName, in: player.insetBy(dx: 6, dy: 1), context: context,
+                typography: typography, palette: .green, maximumScale: 1)
+        }
+        drawStatus(in: frames.counters, panelMode: layout.panel != nil, context: context)
     }
 
     public func drawSkills(in context: CGContext, clipped: Bool = true) {
@@ -438,6 +445,21 @@ public enum MobileHUDAction: Equatable, Sendable {
         }
     }
 
+    /// Player identity and counters share the opaque HUD strip, away from gameplay input.
+    public static func statusFrames(layout: MobileHUDLayout, hasPlayer: Bool) -> (player: CGRect?, counters: CGRect) {
+        var frame = cgRect(layout.interface.statusFrame)
+        if layout.panel != nil {
+            // The final navigation targets sit to the right of the status strip.
+            // Use layout geometry because the actual skill count varies by engine.
+            let navigationCount = layout.supportsRewind ? 4 : 2
+            let navigationX = layout.interface.controlFrames.suffix(navigationCount).first?.x ?? frame.maxX
+            frame.size.width = max(0, navigationX - frame.minX - 4)
+        }
+        guard hasPlayer, frame.height >= 40 else { return (nil, frame) }
+        return (CGRect(x: frame.minX, y: frame.minY, width: frame.width, height: 20),
+                CGRect(x: frame.minX, y: frame.minY + 20, width: frame.width, height: frame.height - 20))
+    }
+
     private func drawStatus(in frame: CGRect, panelMode: Bool, context: CGContext) {
         let time: String
         if let remaining = snapshot.remainingSeconds {
@@ -450,10 +472,7 @@ public enum MobileHUDAction: Equatable, Sendable {
             drawGameLabel(status.replacingOccurrences(of: "  ", with: " "), in: frame.insetBy(dx: 4, dy: 2), context: context)
             return
         }
-        let available = panelMode
-            ? CGRect(x: frame.minX, y: frame.minY,
-                     width: max(0, (items.first { $0.action == .rewind || $0.action == .step }?.frame.minX ?? frame.maxX) - frame.minX - 4), height: frame.height)
-            : frame
+        let available = frame
         let inset = panelMode ? CGFloat(8) : 6
         GamePixelTypography.draw(status, in: available.insetBy(dx: inset, dy: 2), context: context, typography: typography,
                              palette: snapshot.didWin ? .green : .blue, maximumScale: 1,

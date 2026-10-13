@@ -40,7 +40,8 @@ public struct MobileHUDLayout: Equatable, Sendable {
     public static let rowHeight: CGFloat = 44
 
     public static func make(container: MobileSize, safeArea: MobileInsets, hasRate: Bool, skillCount: Int,
-                            reservedRegions: [MobileReservedRegion] = [], supportsRewind: Bool = false) -> MobileHUDLayout {
+                            reservedRegions: [MobileReservedRegion] = [], supportsRewind: Bool = false,
+                            hasPlayer: Bool = false) -> MobileHUDLayout {
         let controlCount = (hasRate ? 2 : 0) + max(0, skillCount) + (supportsRewind ? 7 : 5)
         let base = MobileLayoutEngine.make(container: container, safeArea: safeArea, controlCount: 0)
         let safe = base.safeFrame
@@ -66,7 +67,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
         // At 3×, the original sockets also meet the 44-point touch minimum.
         guard hasRate, skillCount == 8, let bank, scale >= 3,
               bank.height >= panelHeight * scale + rowHeight + 120 else {
-            return compact(base: base, controlCount: controlCount, regions: reservedRegions, supportsRewind: supportsRewind)
+            return compact(base: base, controlCount: controlCount, regions: reservedRegions, supportsRewind: supportsRewind, hasPlayer: hasPlayer)
         }
         let row = MobileRect(x: bank.minX, y: bank.maxY - rowHeight, width: bank.width, height: rowHeight)
         let panelFrame = CGRect(
@@ -251,8 +252,9 @@ public struct MobileHUDLayout: Equatable, Sendable {
     }
 
     private static func compact(base: MobileInterfaceLayout, controlCount: Int,
-                                regions: [MobileReservedRegion], supportsRewind: Bool) -> MobileHUDLayout {
+                                regions: [MobileReservedRegion], supportsRewind: Bool, hasPlayer: Bool) -> MobileHUDLayout {
         let safe = base.safeFrame
+        let statusHeight: CGFloat = hasPlayer ? 44 : 26
         let horizontal = horizontalDivision(in: safe, regions: regions)
         let deckSafe = horizontal.map {
             MobileRect(x: safe.x, y: $0.frame.maxY, width: safe.width, height: safe.maxY - $0.frame.maxY)
@@ -282,8 +284,8 @@ public struct MobileHUDLayout: Equatable, Sendable {
             let rows = (slots.last?.row ?? 0) + 1
             let controlsHeight = CGFloat(rows) * cellHeight + CGFloat(rows - 1) * gap
             let top = bank.maxY - controlsHeight
-            guard top - 26 >= bank.minY else { continue }
-            let playBottom = horizontal?.frame.minY ?? (top - 26)
+            guard top - statusHeight >= bank.minY else { continue }
+            let playBottom = horizontal?.frame.minY ?? (top - statusHeight)
             guard playBottom - safe.minY >= 88 else { continue }
             let frames = slots.map { slot in
                 MobileRect(x: bank.minX + CGFloat(slot.column) * (cellWidth + gap),
@@ -293,7 +295,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
             candidates.append(MobileInterfaceLayout(
                 orientation: base.orientation, safeFrame: safe,
                 playfieldFrame: MobileRect(x: safe.minX, y: safe.minY, width: safe.width, height: playBottom - safe.minY),
-                statusFrame: MobileRect(x: bank.minX, y: top - 26, width: bank.width, height: 26),
+                statusFrame: MobileRect(x: bank.minX, y: top - statusHeight, width: bank.width, height: statusHeight),
                 controlsFrame: MobileRect(x: bank.minX, y: top, width: bank.width, height: controlsHeight),
                 controlFrames: frames))
         }

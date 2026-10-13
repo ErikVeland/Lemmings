@@ -561,11 +561,11 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Classic 23: Classic 23 | 23 | 1 | 12 | — | — | [Observed](witnesses/lemmings3-23.json) |
 | Classic 24: Classic 24 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-24.json) |
 | Classic 25: Classic 25 | 22 | 1 | 12 | — | — | [Observed](witnesses/lemmings3-25.json) |
-| Classic 26: Classic 26 | 22 | 1 | — | — | — | No witness collected |
-| Classic 27: Classic 27 | 22 | 1 | — | — | — | No witness collected |
-| Classic 28: Classic 28 | 22 | 1 | — | — | — | No witness collected |
+| Classic 26: Classic 26 | 22 | 1 | 12 | — | — | [Observed](witnesses/lemmings3-26.json) |
+| Classic 27: Classic 27 | 22 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-27.json) |
+| Classic 28: Classic 28 | 22 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-28.json) |
 | Classic 29: Classic 29 | 22 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-29.json) |
-| Classic 30: Classic 30 | 22 | 1 | — | — | — | No witness collected |
+| Classic 30: Classic 30 | 22 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-30.json) |
 | Egyptian 1: Egyptian 1 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-201.json) |
 | Egyptian 2: Egyptian 2 | 22 | 1 | 12 | — | — | [Observed](witnesses/lemmings3-202.json) |
 | Egyptian 3: Egyptian 3 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-203.json) |
@@ -589,43 +589,43 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Egyptian 21: Egyptian 21 | 21 | 1 | 2 | — | — | [Observed](witnesses/lemmings3-221.json) |
 | Egyptian 22: Egyptian 22 | 21 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-222.json) |
 | Egyptian 23: Egyptian 23 | 22 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-223.json) |
-| Egyptian 24: Egyptian 24 | 20 | 1 | — | — | — | No witness collected |
+| Egyptian 24: Egyptian 24 | 20 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-224.json) |
 | Egyptian 25: Egyptian 25 | 23 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-225.json) |
 | Egyptian 26: Egyptian 26 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-226.json) |
-| Egyptian 27: Egyptian 27 | 21 | 1 | — | — | — | No witness collected |
+| Egyptian 27: Egyptian 27 | 21 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-227.json) |
 | Egyptian 28: Egyptian 28 | 24 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-228.json) |
 | Egyptian 29: Egyptian 29 | 22 | 1 | 2 | — | — | [Observed](witnesses/lemmings3-229.json) |
 | Egyptian 30: Egyptian 30 | 26 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-230.json) |
 | Shadow 1: Shadow 1 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-101.json) |
 | Shadow 2: Shadow 2 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-102.json) |
 | Shadow 3: Shadow 3 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-103.json) |
-| Shadow 4: Shadow 4 | 22 | 1 | 11 | — | — | [Observed](witnesses/lemmings3-104.json) |
+| Shadow 4: Shadow 4 | 22 | 1 | 12 | — | — | [Observed](witnesses/lemmings3-104.json) |
 | Shadow 5: Shadow 5 | 21 | 1 | 11 | — | — | [Observed](witnesses/lemmings3-105.json) |
 | Shadow 6: Shadow 6 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-106.json) |
 | Shadow 7: Shadow 7 | 21 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-107.json) |
-| Shadow 8: Shadow 8 | 20 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-108.json) |
-| Shadow 9: Shadow 9 | 22 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-109.json) |
+| Shadow 8: Shadow 8 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-108.json) |
+| Shadow 9: Shadow 9 | 22 | 1 | 11 | — | — | [Observed](witnesses/lemmings3-109.json) |
 | Shadow 10: Shadow 10 | 21 | 1 | 11 | — | — | [Observed](witnesses/lemmings3-110.json) |
 | Shadow 11: Shadow 11 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-111.json) |
 | Shadow 12: Shadow 12 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-112.json) |
 | Shadow 13: Shadow 13 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-113.json) |
 | Shadow 14: Shadow 14 | 21 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-114.json) |
-| Shadow 15: Shadow 15 | 22 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-115.json) |
-| Shadow 16: Shadow 16 | 22 | 1 | 8 | — | — | [Observed](witnesses/lemmings3-116.json) |
-| Shadow 17: Shadow 17 | 20 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-117.json) |
-| Shadow 18: Shadow 18 | 28 | 1 | 2 | — | — | [Observed](witnesses/lemmings3-118.json) |
+| Shadow 15: Shadow 15 | 22 | 1 | 12 | — | — | [Observed](witnesses/lemmings3-115.json) |
+| Shadow 16: Shadow 16 | 22 | 1 | 12 | — | — | [Observed](witnesses/lemmings3-116.json) |
+| Shadow 17: Shadow 17 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-117.json) |
+| Shadow 18: Shadow 18 | 28 | 1 | 18 | — | — | [Observed](witnesses/lemmings3-118.json) |
 | Shadow 19: Shadow 19 | 24 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-119.json) |
-| Shadow 20: Shadow 20 | 21 | 1 | 3 | — | — | [Observed](witnesses/lemmings3-120.json) |
-| Shadow 21: Shadow 21 | 21 | 1 | — | — | — | No witness collected |
-| Shadow 22: Shadow 22 | 21 | 1 | — | — | — | No witness collected |
-| Shadow 23: Shadow 23 | 21 | 1 | — | — | — | No witness collected |
-| Shadow 24: Shadow 24 | 21 | 1 | — | — | — | No witness collected |
-| Shadow 25: Shadow 25 | 22 | 1 | — | — | — | No witness collected |
-| Shadow 26: Shadow 26 | 21 | 1 | — | — | — | No witness collected |
-| Shadow 27: Shadow 27 | 20 | 1 | — | — | — | No witness collected |
-| Shadow 28: Shadow 28 | 22 | 1 | — | — | — | No witness collected |
-| Shadow 29: Shadow 29 | 21 | 1 | — | — | — | No witness collected |
-| Shadow 30: Shadow 30 | 21 | 1 | — | — | — | No witness collected |
+| Shadow 20: Shadow 20 | 21 | 1 | 11 | — | — | [Observed](witnesses/lemmings3-120.json) |
+| Shadow 21: Shadow 21 | 21 | 1 | 2 | — | — | [Observed](witnesses/lemmings3-121.json) |
+| Shadow 22: Shadow 22 | 21 | 1 | 11 | — | — | [Observed](witnesses/lemmings3-122.json) |
+| Shadow 23: Shadow 23 | 21 | 1 | 4 | — | — | [Observed](witnesses/lemmings3-123.json) |
+| Shadow 24: Shadow 24 | 21 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-124.json) |
+| Shadow 25: Shadow 25 | 22 | 1 | 3 | — | — | [Observed](witnesses/lemmings3-125.json) |
+| Shadow 26: Shadow 26 | 21 | 1 | 2 | — | — | [Observed](witnesses/lemmings3-126.json) |
+| Shadow 27: Shadow 27 | 20 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-127.json) |
+| Shadow 28: Shadow 28 | 22 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-128.json) |
+| Shadow 29: Shadow 29 | 21 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-129.json) |
+| Shadow 30: Shadow 30 | 21 | 1 | 2 | — | — | [Observed](witnesses/lemmings3-130.json) |
 
 ## Holiday Lemmings 1994
 

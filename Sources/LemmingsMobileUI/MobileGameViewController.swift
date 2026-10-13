@@ -50,7 +50,6 @@ struct MobileGameTurn {
     var recordRunID: UUID { runID }
     var musicContext = MobileMusicContext()
     private let turn: MobileGameTurn?
-    private let turnBadge = MobilePixelLabel()
 
     let playfieldView: MobilePlayfieldView
     let hud = MobileHUDView()
@@ -160,14 +159,7 @@ struct MobileGameTurn {
             guard let self, !self.paused, !self.session.snapshot.isComplete, self.overlay.isHidden else { return }
             self.nowPlaying.show(title: title, soundtrack: soundtrack)
         }
-        if let turn {
-            turnBadge.text = turn.ownerName.uppercased()
-            turnBadge.palette = .green
-            turnBadge.alignment = .left
-            turnBadge.maximumScale = 2
-            turnBadge.isUserInteractionEnabled = false
-            view.addSubview(turnBadge)
-        }
+        hud.playerName = turn?.ownerName
         playfieldView.displaySettings = gameSettings.classic
         configureOverlay()
 
@@ -287,10 +279,6 @@ struct MobileGameTurn {
         replaySkillInfo.frame = CGRect(x: playfieldView.frame.maxX - replayWidth - 8, y: playfieldView.frame.minY + (layout.portrait != nil ? 56 : 8),
             width: replayWidth, height: replayWidth * MobileReplaySkillArt.size.height / MobileReplaySkillArt.size.width)
         hud.frame = view.bounds
-        if turn != nil {
-            let field = playfieldView.frame
-            turnBadge.frame = CGRect(x: field.minX + 6, y: field.minY + (layout.portrait != nil ? 34 : 4), width: min(field.width - 12, 220), height: 20)
-        }
         updateHUD(layout: layout)
         overlay.frame = view.bounds
         layoutOverlay()
@@ -381,7 +369,8 @@ struct MobileGameTurn {
             hasRate: session.snapshot.releaseRate != nil,
             skillCount: session.snapshot.skills.count,
             reservedRegions: MobileSystemRegions.read(in: view),
-            supportsRewind: session.supportsRewind
+            supportsRewind: session.supportsRewind,
+            hasPlayer: turn != nil
         )
     }
 

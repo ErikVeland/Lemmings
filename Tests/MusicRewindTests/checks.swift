@@ -82,7 +82,8 @@ extension MusicFileDeck {
             "Rewind failed to wake a parked recording or left its forward mix audible")
         var reverseEnergy = 0.0
         for _ in 0..<6 {
-            _ = try deck.engine.renderOffline(1024, to: output)
+            let status = try deck.engine.renderOffline(1024, to: output)
+            print("Rewind render: \(status.rawValue), frames=\(output.frameLength), energy=\(energy(output)), active=\(deck.rewindAudio.isRewinding)")
             reverseEnergy += energy(output)
         }
         try assertMusicRewind(reverseEnergy > 1, "The recording rewind was silent")
