@@ -69,6 +69,11 @@ final class MobileCoreIOSSmokeTests: XCTestCase {
         app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
         app.launch()
 
+        for identifier in ["menu.welcomeOriginal", "menu.welcomeContinue", "menu.telemetryNo"] {
+            let welcomeAction = app.buttons[identifier]
+            if welcomeAction.waitForExistence(timeout: 2) { welcomeAction.tap() }
+        }
+
         let classicImport = app.buttons["menu.import.classic"]
         if !classicImport.waitForExistence(timeout: 2) {
             let settings = app.buttons["menu.settings"]
