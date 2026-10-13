@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-14",
+  "renderChecks": 32,
+  "rendering": "windowless Core Graphics",
+  "mechanicalAudio": "muted",
+  "visibleIdentity": "Turn: <attempt owner>",
+  "sourceSHA256": {
+    "Sources/LemmingsGameArt/MobileHUDRenderer.swift": "78cd622d823dfcb9e2a758065c3a9a62c7b0bde79ca2b6f1ab276cdbb68b50d7",
+    "Sources/LemmingsGameArt/MobileTurnArt.swift": "2ca7b95dd881f35fdef3bd0bf43d7dab2b9e1c1b33de8a97a49ba9cb62a80d03",
+    "Sources/LemmingsMobileUI/MobileHUDView.swift": "990f61357ebdb71479d8c53abe6f81f2aad301dc84f1eb191fccfe9c96373d82",
+    "Tools/IOSMenuAudit/hot-seat-hud.swift": "51cdc6ce3a61f4418c7be6a0477efbbdf2afc22b6c829c8064ccfa32e59e008f"
+  },
+  "unsignedIOSCompilation": "passed: Debug iphoneos arm64, CODE_SIGNING_ALLOWED=NO",
+  "limits": [
+    "Physical UIKit input and VoiceOver not exercised",
+    "Playable L2/L3 campaigns unavailable in the iOS library"
+  ]
+}

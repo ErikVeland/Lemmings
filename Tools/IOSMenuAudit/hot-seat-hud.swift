@@ -22,8 +22,8 @@ extension MenuAudit {
         ]
         var captures: [[String: Any]] = []
         for (pose, size, insets, regions) in poses {
-            for (state, name, paused) in [("solo", nil as String?, false), ("host", "LEM", false),
-                                         ("guest", "AB", false), ("paused-guest", "AB", true)] {
+            for (state, name, paused) in [("solo", nil as String?, false), ("host", "ERI", false),
+                                         ("guest", "UVA", false), ("paused-guest", "UVA", true)] {
                 let layout = MobileHUDLayout.make(container: size, safeArea: insets, hasRate: true,
                     skillCount: session.snapshot.skills.count, reservedRegions: regions, supportsRewind: true,
                     hasPlayer: name != nil)
@@ -45,7 +45,9 @@ extension MenuAudit {
                         guard !player.intersects(visible), !frames.counters.intersects(visible) else { throw Failure.invalidTargets }
                     }
                 }
+                let identityText = MobileTurnArt.subtitle("", playerName: name)
                 if let player = frames.player {
+                    guard typography.width(of: GameMenuTypography.menuText(identityText), face: .small, scale: 1) <= player.width - 12 else { throw Failure.invalidTargets }
                     guard cg(layout.interface.safeFrame).contains(player), !player.intersects(frames.counters),
                           !player.intersects(cg(layout.interface.playfieldFrame)),
                           regions.allSatisfy({ !player.intersects(cg($0.frame)) }) else { throw Failure.invalidTargets }
@@ -71,7 +73,7 @@ extension MenuAudit {
                 }
                 let file = pose + "-" + state + ".png"
                 try save(context: context, to: output.appendingPathComponent(file))
-                captures.append(["file": file, "player": name ?? "solo", "paused": paused,
+                captures.append(["file": file, "player": name ?? "solo", "identityText": identityText, "paused": paused,
                     "layout": layout.panel != nil ? "panel" : layout.portrait != nil ? "two-rows" : "compact",
                     "targets": targets.count,
                     "status": [frames.counters.minX, frames.counters.minY, frames.counters.width, frames.counters.height],

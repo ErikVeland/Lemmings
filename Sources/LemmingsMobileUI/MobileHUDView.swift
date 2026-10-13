@@ -126,7 +126,7 @@ import UIKit
         let identityFrame = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: playerName != nil).player
         playerIdentity.frame = identityFrame ?? .zero
         playerIdentity.isHidden = identityFrame == nil
-        playerIdentity.accessibilityLabel = playerName.map { "Current player: " + $0 }
+        playerIdentity.accessibilityLabel = playerName.map { "Current turn: " + $0 }
         self.snapshot = snapshot
         let previousSkill = self.selectedSkill
         self.selectedSkill = selectedSkill

@@ -503,3 +503,12 @@ The 95 windowless render/target checks, 37 muted background tests and unsigned
 arm64 iOS build pass. See [flow and recall evidence](ReleaseReadiness/2.0HotSeatFlow-2026-10-13/README.md).
 Physical UIKit/VoiceOver checks remain outstanding. L2 and L3 remain unavailable
 in the iOS library; their existing Mac handovers are unchanged.
+
+
+## 14 October explicit in-play turn
+
+Gameplay now labels its persistent green identity row `Turn: ERI` instead of
+showing only the name. This distinguishes the current attempt from `Next: ERI`
+on selection and handover pages. VoiceOver says “Current turn” and the full name.
+All 32 windowless render/target checks pass, including caption width and all
+adaptive layouts. See [turn-label evidence](ReleaseReadiness/2.0HotSeatTurn-2026-10-14/README.md).
