@@ -471,3 +471,17 @@ Native UIKit dispatch, physical Pencil hover, simultaneous trackpad hover and
 scrolling, and curved CRT input still need an iPad check. L2/L3 tests cover their
 shared session adapters and native pick bounds. Their iOS campaigns and renderers
 remain deferred, so these checks do not establish playable sequel parity.
+
+## 13 October in-play Hot Seat identity
+
+Hot Seat keeps `Hot Seat: <player>` in a dedicated green bitmap row above the
+HUD counters. Identity stays clear of terrain, notices and input targets.
+It uses the attempt owner and has a full-name VoiceOver label. Solo play keeps
+its existing HUD. Compact layouts reserve a second status row during Hot Seat.
+Ready handovers remain paused.
+
+All 32 windowless, muted render/target checks, 24 existing Hot Seat and layout
+tests, and the unsigned arm64 iOS compilation pass. Rendered status states
+were inspected. See [validation evidence](ReleaseReadiness/2.0HotSeatHUD-2026-10-13/README.md).
+Physical UIKit input and VoiceOver still need device validation. L2 and L3
+remain unavailable in the iOS library.

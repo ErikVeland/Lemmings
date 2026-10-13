@@ -1,0 +1,586 @@
+[
+  {
+    "file" : "iphone-portrait-solo.png",
+    "identity" : [
+
+    ],
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "solo",
+    "status" : [
+      0,
+      59,
+      342,
+      44
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-portrait-host.png",
+    "identity" : [
+      0,
+      59,
+      342,
+      20
+    ],
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "LEM",
+    "status" : [
+      0,
+      79,
+      342,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-portrait-guest.png",
+    "identity" : [
+      0,
+      59,
+      342,
+      20
+    ],
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "AB",
+    "status" : [
+      0,
+      79,
+      342,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-portrait-paused-guest.png",
+    "identity" : [
+      0,
+      59,
+      342,
+      20
+    ],
+    "layout" : "two-rows",
+    "paused" : true,
+    "player" : "AB",
+    "status" : [
+      0,
+      79,
+      342,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-landscape-solo.png",
+    "identity" : [
+
+    ],
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "solo",
+    "status" : [
+      59,
+      0,
+      678,
+      44
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-landscape-host.png",
+    "identity" : [
+      59,
+      0,
+      678,
+      20
+    ],
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "LEM",
+    "status" : [
+      59,
+      20,
+      678,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-landscape-guest.png",
+    "identity" : [
+      59,
+      0,
+      678,
+      20
+    ],
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "AB",
+    "status" : [
+      59,
+      20,
+      678,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-landscape-paused-guest.png",
+    "identity" : [
+      59,
+      0,
+      678,
+      20
+    ],
+    "layout" : "two-rows",
+    "paused" : true,
+    "player" : "AB",
+    "status" : [
+      59,
+      20,
+      678,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-narrow-solo.png",
+    "identity" : [
+
+    ],
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "solo",
+    "status" : [
+      0,
+      20,
+      272,
+      44
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-narrow-host.png",
+    "identity" : [
+      0,
+      20,
+      272,
+      20
+    ],
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "LEM",
+    "status" : [
+      0,
+      40,
+      272,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-narrow-guest.png",
+    "identity" : [
+      0,
+      20,
+      272,
+      20
+    ],
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "AB",
+    "status" : [
+      0,
+      40,
+      272,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "iphone-narrow-paused-guest.png",
+    "identity" : [
+      0,
+      20,
+      272,
+      20
+    ],
+    "layout" : "two-rows",
+    "paused" : true,
+    "player" : "AB",
+    "status" : [
+      0,
+      40,
+      272,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "compact-solo.png",
+    "identity" : [
+
+    ],
+    "layout" : "compact",
+    "paused" : false,
+    "player" : "solo",
+    "status" : [
+      0,
+      228,
+      280,
+      26
+    ],
+    "targets" : 19
+  },
+  {
+    "file" : "compact-host.png",
+    "identity" : [
+      0,
+      210,
+      280,
+      20
+    ],
+    "layout" : "compact",
+    "paused" : false,
+    "player" : "LEM",
+    "status" : [
+      0,
+      230,
+      280,
+      24
+    ],
+    "targets" : 19
+  },
+  {
+    "file" : "compact-guest.png",
+    "identity" : [
+      0,
+      210,
+      280,
+      20
+    ],
+    "layout" : "compact",
+    "paused" : false,
+    "player" : "AB",
+    "status" : [
+      0,
+      230,
+      280,
+      24
+    ],
+    "targets" : 19
+  },
+  {
+    "file" : "compact-paused-guest.png",
+    "identity" : [
+      0,
+      210,
+      280,
+      20
+    ],
+    "layout" : "compact",
+    "paused" : true,
+    "player" : "AB",
+    "status" : [
+      0,
+      230,
+      280,
+      24
+    ],
+    "targets" : 19
+  },
+  {
+    "file" : "ipad-portrait-solo.png",
+    "identity" : [
+
+    ],
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "solo",
+    "status" : [
+      0,
+      20,
+      720,
+      44
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "ipad-portrait-host.png",
+    "identity" : [
+      0,
+      20,
+      720,
+      20
+    ],
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "LEM",
+    "status" : [
+      0,
+      40,
+      720,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "ipad-portrait-guest.png",
+    "identity" : [
+      0,
+      20,
+      720,
+      20
+    ],
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "AB",
+    "status" : [
+      0,
+      40,
+      720,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "ipad-portrait-paused-guest.png",
+    "identity" : [
+      0,
+      20,
+      720,
+      20
+    ],
+    "layout" : "two-rows",
+    "paused" : true,
+    "player" : "AB",
+    "status" : [
+      0,
+      40,
+      720,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "ipad-landscape-solo.png",
+    "identity" : [
+
+    ],
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "solo",
+    "status" : [
+      0,
+      20,
+      976,
+      44
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "ipad-landscape-host.png",
+    "identity" : [
+      0,
+      20,
+      976,
+      20
+    ],
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "LEM",
+    "status" : [
+      0,
+      40,
+      976,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "ipad-landscape-guest.png",
+    "identity" : [
+      0,
+      20,
+      976,
+      20
+    ],
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "AB",
+    "status" : [
+      0,
+      40,
+      976,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "ipad-landscape-paused-guest.png",
+    "identity" : [
+      0,
+      20,
+      976,
+      20
+    ],
+    "layout" : "two-rows",
+    "paused" : true,
+    "player" : "AB",
+    "status" : [
+      0,
+      40,
+      976,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "divided-solo.png",
+    "identity" : [
+
+    ],
+    "layout" : "panel",
+    "paused" : false,
+    "player" : "solo",
+    "status" : [
+      0,
+      770,
+      916,
+      44
+    ],
+    "targets" : 19
+  },
+  {
+    "file" : "divided-host.png",
+    "identity" : [
+      0,
+      770,
+      916,
+      20
+    ],
+    "layout" : "panel",
+    "paused" : false,
+    "player" : "LEM",
+    "status" : [
+      0,
+      790,
+      916,
+      24
+    ],
+    "targets" : 19
+  },
+  {
+    "file" : "divided-guest.png",
+    "identity" : [
+      0,
+      770,
+      916,
+      20
+    ],
+    "layout" : "panel",
+    "paused" : false,
+    "player" : "AB",
+    "status" : [
+      0,
+      790,
+      916,
+      24
+    ],
+    "targets" : 19
+  },
+  {
+    "file" : "divided-paused-guest.png",
+    "identity" : [
+      0,
+      770,
+      916,
+      20
+    ],
+    "layout" : "panel",
+    "paused" : true,
+    "player" : "AB",
+    "status" : [
+      0,
+      790,
+      916,
+      24
+    ],
+    "targets" : 19
+  },
+  {
+    "file" : "occluded-solo.png",
+    "identity" : [
+
+    ],
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "solo",
+    "status" : [
+      0,
+      59,
+      342,
+      44
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "occluded-host.png",
+    "identity" : [
+      0,
+      59,
+      342,
+      20
+    ],
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "LEM",
+    "status" : [
+      0,
+      79,
+      342,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "occluded-guest.png",
+    "identity" : [
+      0,
+      59,
+      342,
+      20
+    ],
+    "layout" : "two-rows",
+    "paused" : false,
+    "player" : "AB",
+    "status" : [
+      0,
+      79,
+      342,
+      24
+    ],
+    "targets" : 17
+  },
+  {
+    "file" : "occluded-paused-guest.png",
+    "identity" : [
+      0,
+      59,
+      342,
+      20
+    ],
+    "layout" : "two-rows",
+    "paused" : true,
+    "player" : "AB",
+    "status" : [
+      0,
+      79,
+      342,
+      24
+    ],
+    "targets" : 17
+  }
+]

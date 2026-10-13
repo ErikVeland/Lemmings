@@ -1134,7 +1134,7 @@ extension AppDelegate {
     try check(sequencePlayingIdentity == nil && view.mode == .hotSeat && store.hotSeatID == sharedID && store.playingProfileID == host,
       "Hot Seat setup did not return safely to the library")
     try render("hot-seat-setup")
-    print("PASS result Hot Seat confirmation/cancellation/saved exit and P shortcut; shared Classic/L2/L3 community navigation, loading/empty/offline states, legacy records, provider selection, account-free browsing and return targets")
+    print("PASS Classic/L2/L3 primary result placement and mouse targets across solo/Hot Seat success, partial success, failure and Try Later; Hot Seat confirmation/cancellation/saved exit and P shortcut; shared community navigation, loading/empty/offline states, legacy records, provider selection, account-free browsing and return targets")
   }
 
   fileprivate func testHotSeatBoundaries() throws {

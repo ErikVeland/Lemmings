@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-13",
+  "renderChecks": 32,
+  "existingTests": 24,
+  "testSuites": [
+    "MobileHotSeatTests",
+    "MobilePortraitHUDTests",
+    "MobileAdaptiveLayoutTests"
+  ],
+  "unsignedIOSCompilation": "passed: Debug iphoneos arm64, CODE_SIGNING_ALLOWED=NO",
+  "mechanicalAudio": "muted",
+  "rendering": "windowless Core Graphics",
+  "sourceSHA256": {
+    "Sources/LemmingsGameArt/MobileHUDRenderer.swift": "658a6201872f2678289ee0581b6e55c283663ef1c9c4d982c353ce50ee5a3489",
+    "Sources/LemmingsMobileCore/MobileHUDLayout.swift": "30b49ee1b43ae56231da2a3d23731db24f85b0056ab0951e68a23547d00fa463",
+    "Sources/LemmingsMobileUI/MobileGameViewController.swift": "548b872828938aba8ccd7c1768d8934d951eff8733b589ef6d0e1a60303dd47b",
+    "Sources/LemmingsMobileUI/MobileHUDView.swift": "12b0b9d3ac211269c299e47c0603f5d0307d7db8f62bf67cf41595f52d630100",
+    "Tools/IOSMenuAudit/main.swift": "85de38b9f5522baf49962400525db767e924144b1bcc18cbcea4434e68d7a806",
+    "Tools/IOSMenuAudit/hot-seat-hud.swift": "9f88e3dfc5046501ea8b1c7e8ae46c668fdc2c4399448e8dde5241a99a4d5689"
+  },
+  "limits": [
+    "Physical UIKit taps and VoiceOver not exercised",
+    "Lemmings 2 and Lemmings 3 remain unavailable in the iOS library"
+  ]
+}
