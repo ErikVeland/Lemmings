@@ -21,6 +21,7 @@ public struct MobileTouchRouter: Sendable {
     public var movementThreshold: Double
     public var maximumTapDuration: Double
     private var active: ActiveTouch?
+    private var rejectingTouchesUntilReset = false
 
     public init(movementThreshold: Double = 10, maximumTapDuration: Double = .infinity) {
         self.movementThreshold = max(1, movementThreshold)
@@ -28,11 +29,10 @@ public struct MobileTouchRouter: Sendable {
     }
 
     public mutating func began(id: Int, at point: MobilePoint, time: Double, allowsPanning: Bool = true) -> [MobileTouchEffect] {
-        var effects: [MobileTouchEffect] = []
-        if active != nil { effects.append(.cancelPreview) }
+        guard !rejectingTouchesUntilReset else { return [] }
+        guard active == nil else { return cancelForMultiTouch() }
         active = ActiveTouch(id: id, beganAt: time, start: point, current: point, isPanning: false, allowsPanning: allowsPanning)
-        effects.append(.preview(point))
-        return effects
+        return [.preview(point)]
     }
 
     public mutating func moved(id: Int, to point: MobilePoint) -> [MobileTouchEffect] {
@@ -56,6 +56,7 @@ public struct MobileTouchRouter: Sendable {
     }
 
     public mutating func ended(id: Int, at point: MobilePoint, time: Double) -> [MobileTouchEffect] {
+        guard !rejectingTouchesUntilReset else { return [] }
         guard let touch = active, touch.id == id else { return [] }
         active = nil
         guard !touch.isPanning,
@@ -70,5 +71,22 @@ public struct MobileTouchRouter: Sendable {
         guard active != nil else { return [] }
         active = nil
         return [.cancelPreview]
+    }
+
+    /**
+     * Cancels a pending tap and rejects input until the current touch sequence ends.
+     */
+    public mutating func cancelForMultiTouch() -> [MobileTouchEffect] {
+        let hadActiveTouch = active != nil
+        active = nil
+        rejectingTouchesUntilReset = true
+        return hadActiveTouch ? [.cancelPreview] : []
+    }
+
+    /**
+     * Allows input after the view confirms that all contacts have lifted.
+     */
+    public mutating func resetAfterAllTouchesEnded() {
+        rejectingTouchesUntilReset = false
     }
 }
