@@ -41,6 +41,34 @@ struct MobilePlayerContentImportTests {
                 #expect(resumed.snapshot == session.snapshot)
             }
         }
+
+        let witnessURL = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("Lemmings2CompletionTests/Fixtures/beach-01.json")
+        let witness = try JSONDecoder().decode(Lemmings2ReplayWitness.self,
+                                                from: Data(contentsOf: witnessURL))
+        let beach = sourceCampaign.levels[10]
+        #expect(witness.levelSHA256 == beach.fingerprint)
+        let styleURL = installed.appendingPathComponent("STYLES/BEACH.DAT")
+        let style = try Lemmings2Style(data: Data(contentsOf: styleURL))
+        let masks = try Lemmings2TerrainMasks(root: installed)
+        var runtime = try Lemmings2Runtime(level: beach, style: style, masks: masks,
+                                            total: witness.population)
+        var cursor = Lemmings2InputCursor()
+        while !runtime.isComplete && runtime.tick <= witness.expectedTicks {
+            try cursor.apply(inputsAt: &runtime, inputs: witness.inputs,
+                             pointers: witness.pointers ?? [])
+            runtime.step()
+        }
+        #expect(cursor.command == witness.inputs.count)
+        #expect(cursor.pointer == (witness.pointers ?? []).count)
+        #expect(runtime.didWin)
+        #expect(runtime.saved == witness.expectedSaved)
+        #expect(runtime.tick == witness.expectedTicks)
+
+        library.record(runtime, at: 10)
+        let reopened = try #require(try store.loadLemmings2Library(storage: progressStorage))
+        #expect(reopened.currentLevelIndex == 11)
     }
 
     @Test(.enabled(if: ProcessInfo.processInfo.environment["LEMMINGS_MOBILE_L3_DATA"] != nil))

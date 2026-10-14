@@ -130,7 +130,7 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
         return loaded
     }
 
-    private func record(_ runtime: Lemmings2Runtime, at index: Int) {
+    func record(_ runtime: Lemmings2Runtime, at index: Int) {
         guard levels.indices.contains(index) else { return }
         campaignLock.lock()
         defer { campaignLock.unlock() }
@@ -138,7 +138,10 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
         do {
             var proposed = campaign
             try proposed.select(tribe: index / 10, level: index % 10)
-            guard proposed.record(runtime), proposed.progress != campaign.progress else { return }
+            let accepted = proposed.level < 9
+                ? proposed.advance(after: runtime)
+                : proposed.record(runtime)
+            guard accepted, proposed.progress != campaign.progress else { return }
             try storage.save(proposed.progress, name: "lemmings2-campaign")
             campaign = proposed
         } catch {
