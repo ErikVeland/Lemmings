@@ -19,6 +19,8 @@ import UIKit
     var onPlaylist: ((Int) -> Void)?
 
     var playerName: String? { didSet { if oldValue != playerName { updateSubtitle() } } }
+    var statusText = "" { didSet { if oldValue != statusText { updateSubtitle(); setNeedsLayout() } } }
+    var isLoading = false { didSet { play.isEnabled = !isLoading } }
     private let backdrop = MobileMenuBackdrop()
     private let titleLabel = MobilePixelLabel()
     private let subtitleLabel = MobilePixelLabel()
@@ -61,12 +63,12 @@ import UIKit
             self.onPlaylist?(self.levels[self.flow.selectedIndex].index)
         }
         play.onPress = { [weak self] in
-            guard let self, self.levels.indices.contains(self.flow.selectedIndex) else { return }
+            guard let self, !self.isLoading, self.levels.indices.contains(self.flow.selectedIndex) else { return }
             self.onPlay?(self.levels[self.flow.selectedIndex].index)
         }
         flow.onSelectionChanged = { [weak self] index in self?.selectionChanged(index) }
         flow.onActivate = { [weak self] index in
-            guard let self, self.levels.indices.contains(index) else { return }
+            guard let self, !self.isLoading, self.levels.indices.contains(index) else { return }
             self.onPlay?(self.levels[index].index)
         }
         [backdrop, titleLabel, subtitleLabel, flow, back, rankPrevious, rankNext, favourite, playlist, play].forEach(addSubview)
@@ -108,7 +110,8 @@ import UIKit
         guard levels.indices.contains(flow.selectedIndex) else { return }
         let level = levels[flow.selectedIndex]
         let rank = levels.filter { $0.rank == level.rank }
-        subtitleLabel.text = MobileTurnArt.subtitle(L10n.text("\(level.sourceLabel)\n\(level.rank == level.packName ? L10n.text("Level") : level.rank)  \(level.number)/\(rank.count)"), playerName: playerName, role: .next)
+        let subtitle = level.selectionSubtitle(rankCount: rank.count, status: statusText)
+        subtitleLabel.text = MobileTurnArt.subtitle(subtitle, playerName: playerName, role: .next)
     }
 
     private func moveRank(_ offset: Int) {

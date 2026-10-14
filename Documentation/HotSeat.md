@@ -74,8 +74,9 @@ levels needed for that level's population. L3 playlists start without inherited
 campaign completions. Neither action overwrites the saved campaign.
 
 Previous playlist positions stay in **Playlists** as **Resume solo** or
-**Resume Hot Seat**. A playlist resumes at the start of its saved level. Campaign
-attempts keep their full checkpoint. Shared playlists use the same result and
+**Resume Hot Seat**. A playlist restores its matching saved attempt, including its selected action
+and camera, and stays paused. Older saved playlists without a checkpoint start
+at their saved level. Campaign attempts keep their full checkpoint. Shared playlists use the same result and
 turn rules across Classic, L2 and L3. Each newly loaded shared level waits for
 **Ready** before play.
 

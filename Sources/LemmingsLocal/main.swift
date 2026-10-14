@@ -430,11 +430,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var fanHolidayStyles = true
   private var checkpointSourceURL: URL?
   private var checkpointLocation: (dataSetID: String, levelIndex: Int)?
+  private var arcadeSequenceRecovery: SequenceRunRecovery?
+  private var sequenceRecoveryFailed = false
 
   private var recoveryEngine: String { RunRecovery.bundledEngine }
 
   private func saveRunCheckpoint(immediately: Bool = false, waitForDisk: Bool = true) {
-    guard !sequenceIsActive else { return }
+    guard !sequenceRecoveryFailed else { return }
     if let nativeL2Window { nativeL2Window.saveCheckpoint(immediately: immediately, waitForDisk: waitForDisk); return }
     if let nativeL3Window { nativeL3Window.saveCheckpoint(immediately: immediately, waitForDisk: waitForDisk); return }
     let atBriefing: Bool
@@ -479,6 +481,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     } else { return }
     lastCheckpointTime = now
     checkpoint.hotSeatID = arcadeHotSeatID
+    checkpoint.sequence = arcadeSequenceRecovery
     checkpoint.fullQuest = launchMode == .quest
     recoveryStore.save(checkpoint, immediately: immediately && waitForDisk, coalescing: !immediately,
       prepareStateHash: prepareStateHash) { [weak self] message in
@@ -1469,6 +1472,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   @discardableResult
   private func openNativeL2(_ root: URL? = nil, recovered: Lemmings2PlayWindow? = nil,
+                            recovery: RunRecovery? = nil,
                             selection: Lemmings2PlayWindow.LevelSelection? = nil,
                             expectedLevelID: String? = nil,
                             expectedSourceRevision: String? = nil,
@@ -1479,6 +1483,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let selectedRoot = try root ?? BundledGameResources.lemmings2()
       let next = try recovered ?? Lemmings2PlayWindow(
         root: selectedRoot,
+        recovery: recovery,
         selection: selection,
         sequenceProgress: sequenceRunID == nil ? nil : sequencePlaylistStore?.activeRunL2Progress[
           Lemmings2PlayWindow.playlistProgressID(root: selectedRoot)],
@@ -1488,6 +1493,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       if !sequelIsActive { classicContent = window.contentView }
       suspendCurrentEngine()
       nativeL2Window = next
+      sequenceRecoveryFailed = false
       activeTitle = .lemmings2TheTribes
       next.onReturnToLibrary = { [weak self] in self?.returnToLibrary() }
       next.onProgressChanged = { [weak self] in self?.refreshSequelProgress() }
@@ -1495,6 +1501,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       next.onShowSettings = { [weak self] in self?.showSettings() }
       if let sequenceRunID, let sequenceIdentity {
         next.recordsCampaignProgress = false
+        next.sequenceRecovery = sequencePlaylistStore?.activeRun.flatMap {
+          $0.id == sequenceRunID && $0.currentEntry.identity == sequenceIdentity
+            ? SequenceRunRecovery(runID: $0.id, entry: $0.currentEntry) : nil
+        }
         next.onSequenceResult = { [weak self] won in
           self?.recordSequenceWin(completed: sequenceIdentity, runID: sequenceRunID, won: won)
         }
@@ -1532,6 +1542,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   @discardableResult
   private func openNativeL3(_ root: URL? = nil, recovered: Lemmings3PlayWindow? = nil,
+                            recovery: RunRecovery? = nil,
                             selection: Lemmings3PlayWindow.LevelSelection? = nil,
                             expectedLevelID: String? = nil,
                             expectedSourceRevision: String? = nil,
@@ -1541,6 +1552,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     do {
       let next = try recovered ?? Lemmings3PlayWindow(
         root: root ?? BundledGameResources.lemmings3(),
+        recovery: recovery,
         selection: selection,
         expectedLevelID: expectedLevelID,
         expectedSourceRevision: expectedSourceRevision,
@@ -1548,6 +1560,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       if !sequelIsActive { classicContent = window.contentView }
       suspendCurrentEngine()
       nativeL3Window = next
+      sequenceRecoveryFailed = false
       activeTitle = .lemmings3TheChronicles
       next.onReturnToLibrary = { [weak self] in self?.returnToLibrary() }
       next.onProgressChanged = { [weak self] in self?.refreshSequelProgress() }
@@ -1555,6 +1568,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       next.onShowSettings = { [weak self] in self?.showSettings() }
       if let sequenceRunID, let sequenceIdentity {
         next.recordsCampaignProgress = false
+        next.sequenceRecovery = sequencePlaylistStore?.activeRun.flatMap {
+          $0.id == sequenceRunID && $0.currentEntry.identity == sequenceIdentity
+            ? SequenceRunRecovery(runID: $0.id, entry: $0.currentEntry) : nil
+        }
         next.onSequenceResult = { [weak self] won in
           self?.recordSequenceWin(completed: sequenceIdentity, runID: sequenceRunID, won: won)
         }
@@ -1640,7 +1657,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     launchChoice = 0
     handoverRetry = nil
     let wasSequenceActive = sequenceIsActive
-    if !wasSequenceActive { saveRunCheckpoint(immediately: true) }
+    saveRunCheckpoint(immediately: true)
     sequenceLaunchRunID = nil
     setSequencePlayingIdentity(nil)
     GameScreen.shared.dismissAll()
@@ -4444,6 +4461,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let lesson = journey.lessons.first { $0.entry.identity == next?.identity }
       let page = LearningJourneyMenu.hub(next: lesson, solved: progress.solvedCount(in: journey),
         total: journey.lessons.count, later: progress.revisit(in: journey).count, resume: savedJourney != nil,
+        restoresCheckpoint: savedJourney.flatMap {
+          try? sequenceCheckpoint(for: $0.run, hotSeatID: $0.hotSeatID)
+        } != nil,
         play: { [weak self] in
           guard let self, self.playlistStoreCache?.store === store else { return }
           if let savedJourney {
@@ -5201,7 +5221,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       switch playlistResolution(for: run.currentEntry) {
       case .available, .locked:
         sequencePlaylistStore = store
-        startBrowserLevel(run.currentEntry.identity, sequenceRunID: run.id)
+        let checkpoint = try sequenceCheckpoint(for: run, hotSeatID: store.activeRunHotSeatID)
+        startBrowserLevel(run.currentEntry.identity, sequenceRunID: run.id, recovery: checkpoint)
       case .unavailable:
         playMusicForCurrentLevel()
         presentInvalidSequenceEntry(run, reason: L10n.text("is not available"))
@@ -5215,6 +5236,50 @@ let achievementProgressKey = "ClassicAchievementProgress"
     } catch {
       playMusicForCurrentLevel()
       GameScreen.shared.message(L10n.text("Run unavailable"), detail: error.localizedDescription)
+    }
+  }
+
+  private func sequenceCheckpoint(for run: LevelSequenceRun, hotSeatID: String?) throws -> RunRecovery? {
+    try recoveryStore.latest(profileID: ArcadeStore.shared.playingProfileID, hotSeatID: hotSeatID,
+      sequence: SequenceRunRecovery(runID: run.id, entry: run.currentEntry))
+  }
+
+  private func restoreSequenceCheckpoint(_ checkpoint: RunRecovery?) {
+    guard let checkpoint else { return }
+    do {
+      _ = try checkpoint.validated()
+      guard checkpoint.sequence == arcadeSequenceRecovery,
+        checkpoint.profileID == arcadeProfileID, checkpoint.hotSeatID == arcadeHotSeatID,
+        checkpoint.levelFingerprint == arcadeLevel?.conditions?.levelFingerprint else {
+        throw RunRecoveryError.differentGame
+      }
+      restoringCheckpoint = true
+      defer { restoringCheckpoint = false }
+      if phase == .briefing {
+        if fanPlaying { _ = advanceFanPlay() } else { advancePhase() }
+      }
+      if let classic = session as? ClassicSession { try classic.restore(checkpoint) }
+      else if let neo = session as? NeoLemmixSession { try neo.restore(checkpoint) }
+      else { throw RunRecoveryError.invalid }
+      arcadeRunID = checkpoint.runID
+      runMovie.discard()
+      PrecisionZoomController.shared.start(attemptID: arcadeRunID, profileID: arcadeProfileID)
+      syncPrecisionZoom()
+      panel.selectedSkillIndex = checkpoint.selectedSkill
+      if let session {
+        playfield.viewport.scrollX = max(0, min(checkpoint.scrollX, Double(session.levelWidth)))
+        playfield.viewport.scrollY = max(0, min(checkpoint.scrollY, Double(session.levelHeight)))
+      }
+      playfield.startCountdown.cancel()
+      isPaused = true; panel.isPaused = true; accumulator = 0; lastStepTime = nil
+      lastCheckpointTime = 0
+      applyUserMusicPause(); effects.silence()
+      syncPanelViewport(); updateStatus()
+      playfield.needsDisplay = true; panel.needsDisplay = true
+    } catch {
+      sequenceRecoveryFailed = true
+      isPaused = true; panel.isPaused = true; playfield.startCountdown.cancel()
+      GameScreen.shared.message(L10n.text("Cannot restore run"), detail: error.localizedDescription)
     }
   }
 
@@ -5429,7 +5494,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func startBrowserLevel(
     _ identity: LevelCatalogueIdentity,
-    sequenceRunID: UUID? = nil
+    sequenceRunID: UUID? = nil,
+    recovery: RunRecovery? = nil
   ) {
     if let sequenceRunID {
       let sequenceStore = sequencePlaylistStore ?? (try? playlistStore())
@@ -5491,7 +5557,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
           directory: dataSetDirectory, portArtworkFamily: portArtworkFamily)
         commitClassicBrowserLevel(identity: identity, entry: entry, dataSetDirectory: dataSetDirectory,
           browserDataSet: browserDataSet, dataSetIndex: dataSetIndex, levelIndex: levelIndex,
-          preparedArtwork: prepared, sequenceRunID: sequenceRunID)
+          preparedArtwork: prepared, sequenceRunID: sequenceRunID, recovery: recovery)
         return
       }
       let launchID = beginBackgroundLevelLaunch()
@@ -5522,7 +5588,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
               dataSetIndex: dataSetIndex,
               levelIndex: levelIndex,
               preparedArtwork: prepared,
-              sequenceRunID: sequenceRunID)
+              sequenceRunID: sequenceRunID,
+              recovery: recovery)
           }
         }
       }
@@ -5562,7 +5629,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
               fanEntry: fanEntry,
               archiveFingerprint: archiveFingerprint,
               prepared: prepared,
-              sequenceRunID: sequenceRunID)
+              sequenceRunID: sequenceRunID,
+              recovery: recovery)
           }
         }
       }
@@ -5599,6 +5667,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         if let sequenceRunID {
           setSequencePlayingIdentity(identity)
           clearSequenceLaunch(sequenceRunID)
+          restoreSequenceCheckpoint(recovery)
           presentSequenceHandover()
         } else {
           setSequencePlayingIdentity(nil)
@@ -5614,6 +5683,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       saveRunCheckpoint(immediately: true)
       if openNativeL2(
         root,
+        recovery: recovery,
         selection: selection,
         expectedLevelID: expectedLevelID,
         expectedSourceRevision: sourceRevision,
@@ -5636,6 +5706,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       saveRunCheckpoint(immediately: true)
       if openNativeL3(
         root,
+        recovery: recovery,
         selection: selection,
         expectedLevelID: expectedLevelID,
         expectedSourceRevision: sourceRevision,
@@ -5677,7 +5748,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     dataSetIndex: Int,
     levelIndex: Int,
     preparedArtwork: PreparedClassicArtwork,
-    sequenceRunID: UUID?
+    sequenceRunID: UUID?,
+    recovery: RunRecovery? = nil
   ) {
     guard levelCatalogue.resolve(identity) == entry,
           dataSets.indices.contains(dataSetIndex),
@@ -5725,6 +5797,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       clearSequenceLaunch(sequenceRunID)
     }
     levelChanged()
+    restoreSequenceCheckpoint(recovery)
     if sequenceRunID != nil { presentSequenceHandover() }
   }
 
@@ -5740,7 +5813,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     fanEntry: FanLevelLibrary.Entry,
     archiveFingerprint: String,
     prepared: PreparedFanLevel,
-    sequenceRunID: UUID?
+    sequenceRunID: UUID?,
+    recovery: RunRecovery? = nil
   ) {
     guard levelCatalogue.resolve(identity) == entry,
           case let .fan(currentPack, currentEntry, currentFingerprint)? = levelBrowserRoutes[identity],
@@ -5780,7 +5854,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       setSequencePlayingIdentity(nil)
       launchMode = previousLaunchMode
       playMusicForCurrentLevel()
-    } else if sequenceRunID != nil { presentSequenceHandover() }
+    } else {
+      restoreSequenceCheckpoint(recovery)
+      if sequenceRunID != nil { presentSequenceHandover() }
+    }
   }
 
   // MARK: - Unofficial levels
@@ -5861,7 +5938,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let name = savedSequence.source == .playlist(LearningJourney.playlistID) ? L10n.text("JOURNEY") : L10n.text("SESSION")
       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
         profileID: ArcadeStore.shared.records.activeProfileID)
-      items.append(HomeMenuItem(title: L10n.text("CONTINUE \(name) - \(players)"),
+      let restoresCheckpoint = (try? sequenceCheckpoint(for: savedSequence, hotSeatID: ArcadeStore.shared.hotSeatID)) != nil
+      items.append(HomeMenuItem(title: restoresCheckpoint
+        ? L10n.text("RESUME \(name) - \(players)") : L10n.text("CONTINUE \(name) - \(players)"),
         action: .resumeSequence))
     }
     if menuRecovery != nil {
@@ -6540,6 +6619,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
     hintMap = playfield.levelImage
     let previousAttemptID = arcadeRunID
     arcadeRunID = UUID(); arcadeProfileID = ArcadeStore.shared.playingProfileID; arcadeHotSeatID = ArcadeStore.shared.hotSeatID; arcadeReport = nil
+    sequenceRecoveryFailed = false
+    arcadeSequenceRecovery = sequencePlaylistStore?.activeRun.flatMap {
+      $0.currentEntry.identity == sequencePlayingIdentity
+        ? SequenceRunRecovery(runID: $0.id, entry: $0.currentEntry) : nil
+    }
     refreshPlayerControls()
     LevelHintWindow.shared.rebindSolution(session: new as? ClassicSession, owner: window, runID: arcadeRunID,
       ownerKey: solutionRetentionKey, pause: { [weak self, weak new] in

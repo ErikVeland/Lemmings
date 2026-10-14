@@ -519,8 +519,10 @@ import NxlvKit
     public func solutionTargetIsPending(for conditions: TrolleyConditions) -> Bool {
         pendingSolutionTargets.contains(conditions.fingerprint)
     }
+    /// Allows play for every engine. Only levels with ranking conditions create a Trolley start.
     @discardableResult public func beginAttempt(id: UUID, profileID: String, level: ArcadeLevel, previousID: UUID?) -> Bool {
-        guard canWrite, let conditions = level.conditions else { return false }
+        guard canWrite else { return false }
+        guard let conditions = level.conditions else { return true }
         let previous = records
         acceptBundledProof(for: conditions)
         let prior = records.trolley.starts.first { $0.id == previousID && $0.profileID == profileID && $0.conditions == conditions }

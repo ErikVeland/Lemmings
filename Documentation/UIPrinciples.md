@@ -583,9 +583,11 @@ validated level identity match. Keep standalone Classic, Lemmings 2, Lemmings 3
 and NeoLemmix checkpoints independently accessible. Journey's home count means
 levels solved and is labelled Solved; do not repeat queue position on Resume.
 
-Mac currently continues its saved queue from a level start rather than restoring
-a checkpoint through that action. Label it Continue journey/session and retain
-Resume level for the saved attempt. The normal TV app now shares the iOS
+Mac journeys and playlists save checkpoints with their queue, exact entry,
+content revision, player and Hot Seat identity. Resume journey/session restores
+the matching attempt, selected action and camera while keeping play paused.
+Retain Continue journey/session when an older saved queue has no matching
+checkpoint. Keep Resume level for independently saved attempts. The normal TV app now shares the iOS
 journey/session and checkpoint destination rules. Sequel entries require the same
 compatible imported data, and journeys currently accept Classic entries. Do not hide a
 checkpoint based only on a title, counter or player name.
@@ -660,9 +662,9 @@ landscape height enlarges the main logo and separates groups, without stretching
 the gaps inside the library grid.
 
 Resume journey returns to a saved journey. Resume level opens an independently
-saved attempt. Journey map opens the progression hub. Mac retains Continue
-journey because it advances its saved queue from a level start. These labels
-retain each platform's saved ownership and paused readiness flow.
+saved attempt. Journey map opens the progression hub. Mac uses Resume
+journey when its matching checkpoint exists and Continue journey otherwise.
+These labels retain each platform's saved ownership and paused readiness flow.
 
 Player names and titles remain green across Home, turn headers, player setup,
 record names, cover browsing and replay identity. Interface captions, counts,

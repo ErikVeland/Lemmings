@@ -31,6 +31,7 @@ import NxlvKit
      * Controls whether this run can update campaign, recovery, replay and verified records.
      */
     var recordsCampaignProgress = true
+    var sequenceRecovery: SequenceRunRecovery?
     private var usesSharedWindow = false
 
     /// Attach the engine after loading succeeds, so a failed load leaves the current game intact.
@@ -520,6 +521,13 @@ import NxlvKit
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     #if APP_INTEGRATION_TESTS
+    func testRecoveryAdvance(ticks: Int) {
+        timer?.invalidate(); timer = nil
+        if screen == .briefing { startLevel() }
+        canvas.startCountdown.cancel(); selected = 1
+        for _ in 0..<ticks { singleStep() }
+    }
+
     func testLeaderboardContext() -> LeaderboardReplayContext? {
         timer?.invalidate(); timer = nil; prepareBriefing(); startLevel(); canvas.startCountdown.cancel()
         return leaderboardReplayContext()
@@ -1158,10 +1166,11 @@ import NxlvKit
         checkpoint.sourcePath = root.path
         checkpoint.l2 = L2RunRecovery(progress: progress, inputs: recoveryInputs, practice: recoveryPractice)
         checkpoint.hotSeatID = arcadeHotSeatID
+        checkpoint.sequence = sequenceRecovery
         return checkpoint
     }
     func saveCheckpoint(immediately: Bool = false, waitForDisk: Bool = true) {
-        guard recordsCampaignProgress else { return }
+        guard recordsCampaignProgress || sequenceRecovery != nil else { return }
         let now = ProcessInfo.processInfo.systemUptime
         guard immediately || now - lastCheckpointTime >= 5 else { return }
         do {
@@ -1173,7 +1182,7 @@ import NxlvKit
     }
 
     func saveBeforeSessionChange() throws {
-        guard recordsCampaignProgress else { return }
+        guard recordsCampaignProgress || sequenceRecovery != nil else { return }
         if let game, let checkpoint = try makeCheckpoint(engine: RunRecovery.bundledEngine) {
             recoveryStore.save(checkpoint, immediately: true,
                 prepareStateHash: { try L2RunRecovery.stateHash(game) }) { [weak self] error in self?.message = error }
@@ -1381,7 +1390,7 @@ import NxlvKit
             PrecisionZoomController.shared.finish(attemptID: arcadeRunID, didWin: game.didWin)
             syncPrecisionZoom()
             dj.updateTelemetry(.init(totalCount: game.configuration.total, savedCount: game.saved, requiredCount: 1, didWin: game.didWin, isComplete: true))
-            if recordsCampaignProgress {
+            if recordsCampaignProgress || sequenceRecovery != nil {
                 do { try recoveryStore.clear(arcadeRunID) } catch { message = error.localizedDescription }
             }
             runMovie.finish()

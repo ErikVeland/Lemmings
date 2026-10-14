@@ -1,5 +1,6 @@
 import Foundation
 import Darwin
+import NxlvKit
 
 func check(_ condition: @autoclosure () throws -> Bool, _ message: String) throws {
     guard try condition() else { fatalError(message) }
@@ -146,6 +147,41 @@ try check(try RunRecoveryFile(url: olderURL).header()?.savedAt == olderRun.saved
 try store.clear(olderRun.runID)
 try check(try store.latest(profileID: "player")?.runID == newerRun.runID, "Cleared run stayed in Resume")
 print("PASS store chooses the newest run from cached headers and follows outside writes")
+
+let entry = try LevelPlaylistEntry(identity: .init(engine: .classic, packID: "classic", levelID: "1"),
+    catalogueRevision: "catalogue", sourceRevision: "source", packNameSnapshot: "Classic",
+    levelNameSnapshot: "Just dig!", levelNumberSnapshot: 1)
+let sequence = SequenceRunRecovery(runID: UUID(), entry: entry)
+var journey = run(tick: 30, savedAt: 500)
+journey.sequence = sequence
+store.save(journey, immediately: true) { fatalError($0) }
+try check(try store.latest(profileID: "player")?.runID == newerRun.runID,
+    "Journey checkpoint hid the independent saved level")
+try check(try store.latest(profileID: "player", sequence: sequence)?.runID == journey.runID,
+    "Journey checkpoint did not survive the file round trip")
+try check(try store.latest(profileID: "player", sequence: sequence)?.tick == 30,
+    "Cached journey lookup lost its tick")
+try check(try store.latest(profileID: "player", sequence: .init(runID: UUID(), entry: entry)) == nil,
+    "A different journey borrowed the checkpoint")
+let changed = try LevelPlaylistEntry(id: entry.id, identity: entry.identity,
+    catalogueRevision: entry.catalogueRevision, sourceRevision: "changed", packNameSnapshot: "Classic",
+    levelNameSnapshot: "Just dig!", levelNumberSnapshot: 1)
+try check(try store.latest(profileID: "player", sequence: .init(runID: sequence.runID, entry: changed)) == nil,
+    "Changed content borrowed the checkpoint")
+try check(try store.latest(profileID: "other", sequence: sequence) == nil,
+    "Another player borrowed the checkpoint")
+var shared = run(tick: 40, savedAt: 600)
+shared.sequence = sequence; shared.hotSeatID = "seat"
+store.save(shared, immediately: true) { fatalError($0) }
+try check(try store.latest(profileID: "player", sequence: sequence)?.runID == journey.runID,
+    "A Hot Seat replaced the solo checkpoint")
+try check(try store.latest(profileID: "player", hotSeatID: "seat", sequence: sequence)?.runID == shared.runID,
+    "Hot Seat lookup lost its checkpoint")
+try check(try store.latest(profileID: "player", hotSeatID: "another-seat", sequence: sequence) == nil,
+    "Another Hot Seat borrowed the checkpoint")
+try check(try JSONDecoder().decode(RunRecovery.self, from: JSONEncoder().encode(recovery)).sequence == nil,
+    "Legacy recovery did not retain its standalone scope")
+print("PASS exact journey/content identity, player and Hot Seat isolation, cached lookup and independent legacy saves")
 
 for trial in 0..<10 {
     let directory = root.appendingPathComponent("process-\(trial)")

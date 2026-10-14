@@ -9,6 +9,7 @@ public struct RunRecovery: Codable, Sendable {
     public let profileID: String
     public var hotSeatID: String? = nil
     public var fullQuest: Bool? = nil
+    public var sequence: SequenceRunRecovery? = nil
     public var fanPackGraphics: Bool? = nil
     public var fanTextSteel: Bool? = nil
     public var fanLocalStyles: Bool? = nil
@@ -108,6 +109,15 @@ public struct RunRecovery: Codable, Sendable {
     }
 }
 
+/// Identifies the saved queue and exact content used by this attempt.
+public struct SequenceRunRecovery: Codable, Equatable, Sendable {
+    public let runID: UUID
+    public let entry: LevelPlaylistEntry
+    public init(runID: UUID, entry: LevelPlaylistEntry) {
+        self.runID = runID; self.entry = entry
+    }
+}
+
 public struct FanRunRecovery: Codable, Sendable {
     public struct Entry: Codable, Sendable {
         public let file: String
@@ -164,6 +174,7 @@ public final class RunRecoveryFile {
     public struct Header: Decodable, Sendable {
         public let profileID: String
         public var hotSeatID: String? = nil
+        public var sequence: SequenceRunRecovery? = nil
         public var savedAt = Date()
     }
     private func verifiedPayload(_ data: Data) throws -> Data? {
@@ -427,7 +438,7 @@ public final class RunRecoveryStore: @unchecked Sendable {
             let header: RunRecoveryFile.Header?
             if let quick = reads.header(for: id) { header = quick }
             else {
-                do { header = try loadRun(id).map { RunRecoveryFile.Header(profileID: $0.profileID, hotSeatID: $0.hotSeatID, savedAt: $0.savedAt) } }
+                do { header = try loadRun(id).map { RunRecoveryFile.Header(profileID: $0.profileID, hotSeatID: $0.hotSeatID, sequence: $0.sequence, savedAt: $0.savedAt) } }
                 catch { result[id] = .failure(error); continue }
             }
             result[id] = .success(header)
@@ -437,7 +448,8 @@ public final class RunRecoveryStore: @unchecked Sendable {
         return result
     }
     /// Chooses the newest run from cached headers, then fully loads only that run.
-    public func latest(profileID: String, hotSeatID: String? = nil) throws -> RunRecovery? {
+    public func latest(profileID: String, hotSeatID: String? = nil,
+                       sequence: SequenceRunRecovery? = nil) throws -> RunRecovery? {
         try queue.sync {
             var candidates: [(id: UUID, savedAt: Date)] = []
             var firstError: Error?
@@ -445,7 +457,8 @@ public final class RunRecoveryStore: @unchecked Sendable {
             for (id, read) in headers(ids, stamps: listed) {
                 switch read {
                 case .success(let header):
-                    guard let header, header.profileID == profileID, header.hotSeatID == hotSeatID else { continue }
+                    guard let header, header.profileID == profileID, header.hotSeatID == hotSeatID,
+                      header.sequence == sequence else { continue }
                     candidates.append((id, header.savedAt))
                 case .failure(let error): if firstError == nil { firstError = error }
                 }
@@ -453,11 +466,14 @@ public final class RunRecoveryStore: @unchecked Sendable {
             for candidate in candidates.sorted(by: { $0.savedAt > $1.savedAt }) {
                 let current = stamp(candidate.id)
                 if let loadedRun, loadedRun.id == candidate.id, let current, loadedRun.stamp == current,
-                   files[candidate.id] != nil { return loadedRun.value }
+                   files[candidate.id] != nil {
+                    if loadedRun.value.sequence == sequence { return loadedRun.value }
+                    continue
+                }
                 do {
                     guard let value = try loadRun(candidate.id), value.profileID == profileID, value.hotSeatID == hotSeatID else { continue }
                     if let settled = stamp(candidate.id), settled == current { loadedRun = (candidate.id, settled, value) }
-                    return value
+                    if value.sequence == sequence { return value }
                 } catch { if firstError == nil { firstError = error } }
             }
             if let firstError { throw firstError }

@@ -19,6 +19,12 @@ public struct MobileLevelSummary: Codable, Equatable, Sendable {
     public var locationLabel: String { "\(rank == packName ? "Level" : rank) \(number)" }
     public var caption: String { [sourceLabel, locationLabel].filter { !$0.isEmpty }.joined(separator: "\n") }
 
+    /// Phone and carousel pages show preparation status in the same briefing slot.
+    public func selectionSubtitle(rankCount: Int, status: String = "") -> String {
+        if !status.isEmpty { return status }
+        return sourceLabel + L10n.text("\n\(rank == packName ? L10n.text("Level") : rank)  \(number)/\(rankCount)")
+    }
+
     private enum CodingKeys: String, CodingKey { case index, rank, number, title, origin, packName }
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
