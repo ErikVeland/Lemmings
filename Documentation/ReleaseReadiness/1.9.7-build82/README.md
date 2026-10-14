@@ -1,6 +1,6 @@
-# macOS 1.9.7 build 82 candidate
+# macOS 1.9.7 build 82 release
 
-Status: local checks complete. The owner explicitly approved uploading 1.9.7 and its bundled game/music assets to Apple on 15 October 2026, then publishing the release and update feed on GitHub. Developer ID signing and notarisation are in progress. Public release remains pending.
+Status: [1.9.7 build 82 is public](https://github.com/ErikVeland/Lemmings/releases/tag/v1.9.7). Both universal packages have Developer ID signatures, accepted Apple notarisation tickets and stapled tickets. Quarantined archive extractions pass Gatekeeper. The signed full update, signed delta from build 81 and live automatic-update feed are verified. The owner explicitly approved uploading the bundled game/music assets to Apple and publishing on GitHub on 15 October 2026.
 
 Release source: `94c11e613b128a1b19aa4fc84efc0cf52237fe0b`. The universal optimised executable and every project framework contain Apple silicon and Intel slices, targeting macOS 12.3. The final controller correction resets an active speed boost before Pause. The Mac controller path is shared by Classic, The Tribes and Chronicles. Mobile already applies its reset before pause.
 
@@ -12,6 +12,10 @@ All 149 replay-engine files match the retained proof snapshot. All 613 rescue wi
 
 The raw audit used fresh encoder outputs. Final packaging preserves all 649 Music files and 32 MacMusic files byte-for-byte from the verified 1.9.6 release. All 422 recording input records and playback parameters match, and packaging/preparation source is unchanged. The final audio matrix passes. `soundtrack-preservation.json` records this difference from the raw audit inputs. The final executable uses unchanged shared modules and a controller override byte-identical to the committed source. `production-source-equivalence.json` records the build start and final source inputs.
 
-The full and slim local ZIPs pass integrity and size checks. Their SHA-256 digests are in `local-packages.json`. The full app retains all 495 soundtrack versions. The slim app contains 54 essential versions and offers optional libraries. These local archives have ad-hoc signatures and are not public notarised downloads.
+The final full and slim ZIPs pass integrity and size checks. `publication.json` records both public sizes, SHA-256 digests, matching GitHub asset digests, download responses and Apple submission IDs. The full app retains all 495 soundtrack versions. The slim app contains 54 essential versions and offers optional libraries. `local-packages.json` preserves the earlier ad-hoc candidate hashes; it is not the public package receipt.
 
 Physical controller and VoiceOver journeys, audible listening, foreground shipping-app launch, minimum-OS/Intel hardware, HDR display output and live cross-device synchronisation remain manual gaps. No automated test takes focus or changes system volume. Classic and The Tribes remain Complete. Chronicles and NeoLemmix remain Beta. The release publishes macOS only.
+
+The delta applies to the notarised 1.9.6 build 81 app and reproduces every file and link in the final full 1.9.7 app. The delta and full archive Ed25519 signatures verify against the public key in the shipping app. The patched app passes signature verification and Gatekeeper. Existing feed entries retain their enclosure attributes and release descriptions. `delta-verification.json`, `publication-preflight.log2` and `publication-final.log` retain these checks.
+
+The final app, both public archives, release notes and receipts are copied to Downloads. `downloads-final.json` records signature, ticket, Gatekeeper and archive-hash checks on that copy.

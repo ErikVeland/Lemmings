@@ -15,11 +15,11 @@ before distributing a build.
 
 ## Download
 
-Download [1.9.6 build 81](https://github.com/ErikVeland/Lemmings/releases/tag/v1.9.6),
-the current public release. Installed copies update automatically. The macOS
-[1.9.7 build 82 candidate](Documentation/ReleaseReadiness/1.9.7-build82/README.md)
-is built and locally verified. The owner has approved Apple and GitHub uploads; notarisation is in progress.
-Read the [1.9.7 candidate notes](Documentation/ReleaseNotes-1.9.7-build82.md) and
+Download [1.9.7 build 82](https://github.com/ErikVeland/Lemmings/releases/tag/v1.9.7),
+the current signed and notarised macOS release for Apple silicon and Intel.
+Installed copies update automatically. Read the
+[1.9.7 notes](Documentation/ReleaseNotes-1.9.7-build82.md),
+[release evidence](Documentation/ReleaseReadiness/1.9.7-build82/README.md) and
 the [tester guide](Documentation/BetaTesting.md).
 
 [Collections](Documentation/LevelCollections.md) keeps each player's favourite

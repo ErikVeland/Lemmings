@@ -1,0 +1,31 @@
+PASS 294 proofs, 319 rescue records, and replay hashes
+PASS universal macOS 12.3 package, hosted endpoint, current proofs/hints/journey, full music and optional Game Center
+PASS unchanged Music 649 files
+PASS unchanged MacMusic 32 files
+main: 54 versions, 5.6 MB
+Processing: /Users/veland/Lemmings/.build/release-1.9.7-current/standard/Ultimate Lemmings.app
+Processing: /Users/veland/Lemmings/.build/release-1.9.7-current/standard/Ultimate Lemmings.app
+The staple and validate action worked!
+Processing: /Users/veland/Lemmings/.build/release-1.9.7-current/standard/Ultimate Lemmings.app
+The validate action worked!
+/Users/veland/Lemmings/.build/release-1.9.7-current/verify-standard/Ultimate Lemmings.app: valid on disk
+/Users/veland/Lemmings/.build/release-1.9.7-current/verify-standard/Ultimate Lemmings.app: satisfies its Designated Requirement
+Processing: /Users/veland/Lemmings/.build/release-1.9.7-current/verify-standard/Ultimate Lemmings.app
+The validate action worked!
+/Users/veland/Lemmings/.build/release-1.9.7-current/verify-standard/Ultimate Lemmings.app: accepted
+source=Notarized Developer ID
+origin=Developer ID Application: Erik Veland (54WU29TRTY)
+PASS archive integrity and size: UltimateLemmings-1.9.7-build82.zip 2052997956
+Processing: /Users/veland/Lemmings/.build/release-1.9.7-current/slim/Ultimate Lemmings.app
+Processing: /Users/veland/Lemmings/.build/release-1.9.7-current/slim/Ultimate Lemmings.app
+The staple and validate action worked!
+Processing: /Users/veland/Lemmings/.build/release-1.9.7-current/slim/Ultimate Lemmings.app
+The validate action worked!
+/Users/veland/Lemmings/.build/release-1.9.7-current/verify-slim/Ultimate Lemmings.app: valid on disk
+/Users/veland/Lemmings/.build/release-1.9.7-current/verify-slim/Ultimate Lemmings.app: satisfies its Designated Requirement
+Processing: /Users/veland/Lemmings/.build/release-1.9.7-current/verify-slim/Ultimate Lemmings.app
+The validate action worked!
+/Users/veland/Lemmings/.build/release-1.9.7-current/verify-slim/Ultimate Lemmings.app: accepted
+source=Notarized Developer ID
+origin=Developer ID Application: Erik Veland (54WU29TRTY)
+PASS archive integrity and size: UltimateLemmings-1.9.7-build82-slim.zip 268941801

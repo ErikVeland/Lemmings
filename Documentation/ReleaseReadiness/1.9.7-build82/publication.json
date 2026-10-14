@@ -1,0 +1,49 @@
+{
+  "version": "1.9.7",
+  "build": 82,
+  "sourceCommit": "94c11e613b128a1b19aa4fc84efc0cf52237fe0b",
+  "universal": true,
+  "developerIDSigning": true,
+  "notarised": true,
+  "notaries": {
+    "standard": {
+      "message": "Processing complete",
+      "status": "Accepted",
+      "id": "94e8f2c7-6e98-4e6a-800f-e8f6560f8ddb"
+    },
+    "slim": {
+      "id": "8426e773-7aff-4cc7-b353-3e3fba82d699",
+      "message": "Processing complete",
+      "status": "Accepted"
+    }
+  },
+  "assets": [
+    {
+      "name": "UltimateLemmings-1.9.7-build82.zip",
+      "size": 2052997956,
+      "sha256": "8e518090d30fc87d233671b873a104d7f2a4451070dd2693a90f76f215c92e08",
+      "path": "/Users/veland/Lemmings/.build/release-1.9.7-current/updates/UltimateLemmings-1.9.7-build82.zip",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v1.9.7/UltimateLemmings-1.9.7-build82.zip",
+      "remoteDigestVerified": true,
+      "zipResponseVerified": true
+    },
+    {
+      "name": "UltimateLemmings-1.9.7-build82-slim.zip",
+      "size": 268941801,
+      "sha256": "0635b726c5ff50da91a1c870b9a6760037bef454d7c9fba5ec5d62abe78a4189",
+      "path": "/Users/veland/Lemmings/.build/release-1.9.7-current/downloads/UltimateLemmings-1.9.7-build82-slim.zip",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v1.9.7/UltimateLemmings-1.9.7-build82-slim.zip",
+      "remoteDigestVerified": true,
+      "zipResponseVerified": true
+    }
+  ],
+  "authorisation": "Owner explicitly approved uploading 1.9.7 and its bundled game/music assets to Apple, then publishing the release and update feed on GitHub on 2026-10-15.",
+  "deltaRemoteDigestVerified": true,
+  "releaseNotesVerified": true,
+  "rawFeedVerified": true,
+  "rawFeedURL": "https://raw.githubusercontent.com/ErikVeland/Lemmings/main/appcast.xml",
+  "releaseURL": "https://github.com/ErikVeland/Lemmings/releases/tag/v1.9.7",
+  "publishedAt": "2026-10-14T23:33:34Z",
+  "remoteTagVerified": true,
+  "mainFeedVerified": true
+}
