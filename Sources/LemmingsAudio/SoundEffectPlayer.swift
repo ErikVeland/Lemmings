@@ -54,7 +54,9 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   private var recentSamplePositions: [Int64]
   private var latestRecentSample: Int64?
   private var rewindHistoryHead = 0.0
+  private var rewindSliceHead = 0.0
   private var rewindHistoryAnchor: Int64?
+  private var lastRewindTrigger = -Double.infinity
   private var rewindSequence: UInt64 = 0
   private var rewindRenderStart: Int64?
   private var recentRenderPrepared = false
@@ -200,7 +202,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     rewindRenderedVoices[index] = true
     // Clear the history once per block, rather than for every silent spatial source.
     // Scrub-only renders retain their history and never record their own output.
-    if voice.rewindSequence == nil, !recentRenderPrepared {
+    if rewindRenderCount == 0, voice.rewindSequence == nil, !recentRenderPrepared {
       for frame in 0..<frames {
         let position = start + Int64(frame)
         let slot = Int((position % Int64(recentSampleLimit) + Int64(recentSampleLimit)) % Int64(recentSampleLimit))
@@ -218,6 +220,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     for frame in 0..<frames {
       var sample: Float = 0
       var sourceSample: Float = 0
+      var historySample: Float = 0
       if !isMuted && voice.isActive {
         let position = Int(voice.position)
         if position >= voice.samples.count && voice.rescueLayers.isEmpty { voice.isActive = false }
@@ -225,6 +228,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
           let next = min(position + 1, voice.samples.count - 1)
           sourceSample = voice.samples[position] + (voice.samples[next] - voice.samples[position]) * Float(voice.position - Double(position))
           sample = sourceSample * Float(level) * voice.gain * voice.distanceGain * rewindGain
+          historySample = sourceSample * voice.gain * voice.distanceGain
           voice.position += voice.increment
         }
         for index in voice.rescueLayers.indices {
@@ -236,6 +240,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
             * Float(voice.rescueLayers[index].position - Double(position))
           sourceSample += layerSample
           sample += layerSample * Float(level) * voice.rescueLayers[index].gain * voice.rescueLayers[index].distanceGain
+          historySample += layerSample * voice.rescueLayers[index].gain * voice.rescueLayers[index].distanceGain
           voice.rescueLayers[index].position += voice.rescueLayers[index].increment
         }
         voice.rescueLayers.removeAll { $0.position >= Double($0.samples.count) }
@@ -243,10 +248,13 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       for buffer in buffers { buffer.mData?.assumingMemoryBound(to: Float.self)[frame] = sample }
 
       // Rewind output must never feed the history it will reverse next.
-      guard voice.rewindSequence == nil else { continue }
+      guard rewindRenderCount == 0, voice.rewindSequence == nil else { continue }
       let position = start + Int64(frame)
       let slot = Int((position % Int64(recentSampleLimit) + Int64(recentSampleLimit)) % Int64(recentSampleLimit))
-      recentSamples[slot] += sourceSample
+      recentSamples[slot] += historySample
+    }
+    if voice.rewindSequence != nil {
+      rewindHistoryHead = rewindSliceHead - VinylBackspin.distance(frames: voice.position, sampleRate: sampleRate)
     }
     voices[index] = voice
   }
@@ -479,7 +487,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     recentEffectTimes.removeAll(keepingCapacity: true)
   }
 
-  /// Reverse captured effects with a soft envelope. Silent history stays silent.
+  /// Backspin the captured effect mix with a falling pitch and soft envelope.
   /// Repeated requests continue the active groove without stacking voices.
   public func playRewindScrub() {
     lock.lock()
@@ -488,21 +496,25 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     guard !isMuted, !outputSuspended else { return }
     let previous = voices.indices.first { voices[$0].isActive && voices[$0].rewindSequence != nil }
     guard let latest = latestRecentSample else { return }
+    let now = ProcessInfo.processInfo.systemUptime
     let head: Double
-    if let previous, rewindHistoryAnchor == latest {
-      head = rewindHistoryHead - voices[previous].position * 1.4
+    if rewindHistoryAnchor == latest, now - lastRewindTrigger <= VinylBackspin.settleSeconds {
+      head = rewindHistoryHead
     } else { head = Double(latest) }
     for index in voices.indices where voices[index].rewindSequence != nil { voices[index].isActive = false }
-    let count = Int(sampleRate * 0.18)
+    let count = Int(sampleRate * VinylBackspin.seconds)
     var samples = [Float](repeating: 0, count: count)
     var foundHistory = false
     for offset in samples.indices {
-      let position = Int64(head - Double(offset) * 1.4)
+      let cursor = head - VinylBackspin.distance(frames: Double(offset), sampleRate: sampleRate)
+      guard cursor >= 0 else { break }
+      let position = Int64(cursor)
       let slot = Int((position % Int64(recentSampleLimit) + Int64(recentSampleLimit)) % Int64(recentSampleLimit))
-      guard position >= 0, recentSamplePositions[slot] == position else { break }
-      let envelope = Float(min(1, Double(offset) / (sampleRate * 0.012),
-        Double(count - 1 - offset) / (sampleRate * 0.030)))
-      samples[offset] = max(-1, min(1, recentSamples[slot])) * envelope
+      guard recentSamplePositions[slot] == position else { break }
+      let nextSlot = (slot + 1) % recentSampleLimit
+      let next = recentSamplePositions[nextSlot] == position + 1 ? recentSamples[nextSlot] : recentSamples[slot]
+      let value = recentSamples[slot] + (next - recentSamples[slot]) * Float(cursor - Double(position))
+      samples[offset] = value * VinylBackspin.sample(frame: Double(offset), sampleRate: sampleRate).gain
       foundHistory = foundHistory || samples[offset] != 0
     }
     guard foundHistory else { return }
@@ -511,8 +523,12 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       let fade = min(end + 1, Int(sampleRate * 0.030))
       for offset in 0..<fade { samples[end - offset] *= Float(offset) / Float(fade) }
     }
+    // Preserve the mix shape when a large chorus exceeds the mono headroom.
+    let peak = samples.reduce(Float(1)) { max($0, abs($1)) }
+    if peak > 1 { for offset in samples.indices { samples[offset] /= peak } }
     let index = previous ?? voices.firstIndex { !$0.isActive } ?? voices.startIndex
-    rewindHistoryHead = head; rewindHistoryAnchor = latest
+    rewindHistoryHead = head; rewindSliceHead = head; rewindHistoryAnchor = latest
+    lastRewindTrigger = now
     rewindSequence &+= 1
     voices[index] = Voice(samples: samples, position: 0, increment: 1, isActive: true,
       gain: 0.4, rewindSequence: rewindSequence)

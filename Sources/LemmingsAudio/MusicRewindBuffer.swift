@@ -102,8 +102,9 @@ final class MusicRewindBuffer: @unchecked Sendable {
         let upper = Int(min(written - 1, position + 1) % Int64(left.count))
         let fraction = Float(readHead - Double(position))
         let vinyl = VinylBackspin.sample(frame: Double(total - remaining), sampleRate: sampleRate)
-        let attack = VinylBackspin.sample(frame: Double(attackFrames), sampleRate: sampleRate).gain
-        let envelope = min(vinyl.gain, attack) * gain
+        let attack = VinylBackspin.sample(frame: min(Double(attackFrames), sampleRate * 0.020), sampleRate: sampleRate).gain
+        let historyFade = Float(min(1, max(0, (readHead - Double(oldest)) / (sampleRate * 0.020 * vinyl.rate))))
+        let envelope = min(vinyl.gain, attack, historyFade) * gain
         l = (left[lower] + (left[upper] - left[lower]) * fraction) * envelope
         r = (right[lower] + (right[upper] - right[lower]) * fraction) * envelope
         readHead -= vinyl.rate
