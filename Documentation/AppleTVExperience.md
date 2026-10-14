@@ -31,11 +31,83 @@ actor ID; crossing neighbours cannot steal the target. A missing or offscreen
 locked actor stays unavailable until deliberate aiming or selection.
 
 Siri Remote aims through its directional pad and assigns with Click. Play/Pause
-opens pause; Back opens the pause menu. Game controllers use aim/pan sticks,
-shoulders for skills and the shared modifier actions. Settings supports button
+toggles planning/play; Back opens the pause menu. Game controllers use aim/pan sticks,
+shoulders for skills and a TV action layer over the shared commands. Settings supports button
 remapping, stick swapping, TV aim sensitivity and dead zone. The pause Game
 controls page gives remote users skills, targeting, camera/zoom, speed, step,
 rewind, applicable rate controls, retry and end/undo actions.
+
+The TV default layout uses PlayStation names with their Xbox equivalents:
+
+| Input | Action |
+| --- | --- |
+| Cross / A | Assign selected skill |
+| Circle / B | Existing Back/reset-speed action |
+| Square / X | Pause/play without opening the menu |
+| Triangle / Y | Nuke/undo where supported, with the existing arming rule |
+| L1/R1 or LB/RB | Previous/next skill |
+| L2/LT | Hold rewind |
+| R2/RT | Resume planning/rewind pause, tap fast-forward, hold temporary variable-speed boost |
+| D-pad left/right | Minimum/maximum release rate where supported |
+| D-pad up/down | Increase/decrease release rate where supported |
+| Options / Menu | Open/close pause menu |
+| L3/R3 | Entrance/goal |
+| DualSense touchpad click | DJ shuffle |
+| Create / View | Tap for controls help, hold for extra actions |
+
+Create/View plus Cross repeats the last assignment. Circle focuses the last
+assignment. D-pad up/down selects the previous/next eligible actor. L1/R1 steps
+back/forward. D-pad left/right decreases/increases speed. Triangle opens hints,
+Options retries, Square resets speed, R3 opens settings, and L3 shuffles music. Zoom/precision and
+Lemmings 2 Fan mode remain on Game controls. Resume occupies its bottom-right
+footer. Ready handovers still require the Ready action.
+
+L2 leaves play paused when released. A fresh R2 press resumes from that point
+and takes over even if L2 is still held. Release and press L2 again to rewind.
+R2 also resumes an ordinary planning pause. Ready, interruption and menu screens
+retain their explicit resume action.
+
+Controller mappings, enablement, tap-speed and stick swapping belong to the
+current player's profile. Aim sensitivity, dead zone and adaptive trigger feedback
+also have separate TV profile preferences. Accessibility keeps UI size, song
+notices, reduced motion and reduced flashes with that player. Settings pages,
+native session input and Hot Seat turns resolve the same owner. Existing device
+preferences seed each profile once. Personal edits retain the legacy baseline
+for players who have not yet opened settings. Other device preferences remain
+shared. These profile preferences currently persist locally in UserDefaults.
+
+Audio settings offer DJ shuffle: Same track or All tracks. The default keeps the
+composition and chooses another available recording or arrangement. All tracks
+includes documented gameplay themes across the installed catalogue, including
+seasonal themes. Both modes exclude the current recording, unavailable files,
+unverified identities and menu/result cues. Touchpad click and Create/View + L3
+request the existing beat-matched crossfade during play. They do not change the
+saved soundtrack choice, journey position or gameplay timeline. Muted music,
+planning, handover and interruption states cannot start a shuffle.
+
+TV settings offer Adaptive triggers. On a detected DualSense, R2 resistance
+rises with the variable-speed tier. The effect clears on menus, pause,
+interruption, disconnect, disabled feedback and remapping R2 away from speed.
+Tests suppress trigger effects. This uses Apple's
+[adaptive trigger API](https://developer.apple.com/documentation/gamecontroller/gcdualsenseadaptivetrigger),
+with physical Bluetooth/firmware acceptance still open. The controller also
+exposes touchpad tracking, motion, and optional haptics/light/battery capabilities
+through [Game Controller](https://developer.apple.com/documentation/gamecontroller/gccontroller).
+This change implements touchpad click for shuffle and trigger resistance; it does not add
+motion aiming or controller rumble patterns.
+
+TV controller polling reads game settings once per sample. Cursor/camera input
+defers full rendering until the display frame finishes simulation, reuses one
+candidate query per render, and skips the hidden reticle count. CRT GPU pressure
+can reduce only the playfield drawable scale while menus/HUD retain native
+resolution. The engine clock and physics ticks remain unchanged. Actual Apple
+TV frame-time improvement has not been measured on hardware.
+
+Before assignment, TV refreshes the target for the actual selected/repeated
+skill. Successful assignment, rewind and deliberate camera movement clear stale
+actor locks. A lost locked actor still cannot silently redirect an assignment
+to a neighbour. The reported intermittent Classic failure remains subject to
+device confirmation after these changes.
 
 The L2 pause page offers Fan/Skill mode. Assignment toggles blowing at the aim
 point. Aim movement moves an active fan. Skill selection, planning and lifecycle

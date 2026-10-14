@@ -25,7 +25,7 @@ import UIKit
     required init?(coder: NSCoder) { nil }
 
     func show(title: String, soundtrack: String) {
-        let settings = MobileSettings.load(from: .standard).classic
+        let settings = MobileSettings.current(from: .standard).classic
         guard settings.showSongInfo else { hide(); return }
         let reduceMotion = UIAccessibility.isReduceMotionEnabled || settings.reduceMotion
         dismissal?.cancel()
@@ -65,7 +65,7 @@ import UIKit
             while !Task.isCancelled {
                 guard let self, self.generation == token, let card = self.card, !card.pages.isEmpty else { return }
                 let elapsed = ProcessInfo.processInfo.systemUptime - self.shownAt
-                let reduceMotion = UIAccessibility.isReduceMotionEnabled || MobileSettings.load(from: .standard).classic.reduceMotion
+                let reduceMotion = UIAccessibility.isReduceMotionEnabled || MobileSettings.current(from: .standard).classic.reduceMotion
                 let fadeDuration: TimeInterval = reduceMotion ? 0 : 0.5
                 let dismissAt = card.duration - fadeDuration
                 if elapsed >= dismissAt {

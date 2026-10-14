@@ -62,6 +62,43 @@ names wrap in the shipped bitmap font. This panel accepts no input. TV uses
 2x lettering. Exported replay movies include the same identity above the
 playfield, preserving the complete gameplay image.
 
+## Retained solution views across Mac, iOS and tvOS
+
+After the first confirmed reveal, Your game and Solution share a stone selector.
+The live attempt and replay retain separate simulations, cameras, selections and
+speeds. Every switch pauses both views. Play or Resume is a separate action.
+Returning from the solution goes directly to the game, without reopening Hints.
+Ready handovers still require Ready. Switching does not retire a checkpoint,
+record a result, pass a turn or replace the attempt owner.
+
+The same player's retry retains the replay position. A different level or player
+clears it. Mac retention checks the initial simulation, player/session identity
+and game window. Mobile retention checks the engine, level identity/fingerprint
+and solo or Hot Seat owner/scope. These views are retained in memory, not restored
+after closing the app. The original spoiler confirmation remains required.
+
+Mac supports Control-Tab to switch views, Escape or controller Back to return,
+and Control-Left/Right for move navigation. Touch uses the selector and stone
+Previous move/Next move controls over the replay playfield. TV uses the same
+selector, direct remote Back, and focused move actions on the pause page.
+Held activation cannot accept a new TV page before neutral input.
+
+Classic also offers Ghost solution beneath the live selector after reveal.
+The checkbox shows solution sprites at the live tick, behind real lemmings.
+It follows pause, speed, stepping and rewind without changing the retained replay
+position or Hot Seat owner. Toggle changes preserve the current pause/Ready state.
+See [Ghost solution](GhostSolution.md) for scope and validation.
+
+Move navigation uses successful skill assignments. Multiple uses at one tick
+form one stop. Failed commands, rate changes and end-run commands are excluded.
+The first and last move disable the outward action. Seeking stays paused,
+reconstructs stock and skill-use counts, and leaves the live checkpoint intact.
+
+Verified solutions currently cover Classic, including matching fan lessons.
+Lemmings 2 and 3 retain general coaching and do not have verified solution data
+in the current hint route. NeoLemmix and recorded movie playback retain their
+existing capabilities. They do not gain an invented solution or move timeline.
+
 ## Validation
 
 14 October 2026:
@@ -98,3 +135,25 @@ Restart and replay follow-up, 14 October 2026:
   package using the current shared sources and original test files.
 - Native UIKit scrolling, VoiceOver, Siri Remote focus, physical restart journeys
   and movie playback remain manual device checks.
+
+Retained-solution validation, 14 October 2026:
+
+- 16 focused background tests pass for successful move boundaries, rejected
+  commands, replay seek/count reconstruction, unchanged live checkpoints,
+  Hot Seat state and fresh retry preparation.
+- 40 windowless game/solution renders and target checks pass across phone,
+  iPad and TV sizes, plus four touch move-button widths. Selected modes,
+  disabled directions and representative images were inspected.
+- Native Mac checks pass offscreen and muted at 1120x720 and 800x600. They
+  exercise repeated switching, retained camera/tick, direct controller return,
+  paused simulations, actual Hot Seat ownership, unchanged records after reveal,
+  same-player retry retention and different-owner invalidation. Native button
+  bounds and hit targets pass, and the rendered pages were inspected.
+- Shared iOS/tvOS modules compile against their arm64 SDKs. Physical UIKit
+  focus, VoiceOver, hardware shortcuts and Ready handovers remain device checks.
+- AppKit registration aborts under the workspace sandbox. The Mac runtime check
+  used the same offscreen/muted runner with process-registration access and a
+  temporary Hot Seat store. The existing standalone Mac test build script omits
+  TV-core dependencies required by current shared artwork. Validation used an
+  isolated dependency build and the current production sources with the focused
+  test method. No foreground window, audible playback or release audit was used.

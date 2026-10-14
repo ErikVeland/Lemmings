@@ -17,14 +17,14 @@ import UIKit
     private var isTestAudioMuted: Bool { ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] == "muted" }
 
     func prepare() {
-        let settings = MobileSettings.load(from: .standard).classic
+        let settings = MobileSettings.current(from: .standard).classic
         player.setMuted(isTestAudioMuted || settings.sound == .silent)
         player.setVolume(settings.soundVolume)
         player.setBottomFallSounds(settings.bottomFallSounds)
         guard !isTestAudioMuted else { return }
         if source != settings.sound {
             let root = Bundle.main.resourceURL
-            let amiga = root?.appendingPathComponent("Ports/amiga_extracted/lemmings")
+            let amiga = BundledGameResources.amigaSoundDirectory()
             let supplements = root?.appendingPathComponent("Sounds")
             switch settings.sound {
             case .macintoshResources:
@@ -63,7 +63,7 @@ import UIKit
                 player.loadNeoLemmixSounds(
                     names: Set(neoLemmix.gadgetSounds.values),
                     soundDirectory: soundDirectory,
-                    amigaDirectory: resources?.appendingPathComponent("Ports/amiga_extracted/lemmings"),
+                    amigaDirectory: BundledGameResources.amigaSoundDirectory(),
                     fallbackSoundDirectory: resources?.appendingPathComponent("NeoLemmix/sound")
                 )
                 loadedNeoLemmixSoundIdentity = identity
@@ -81,7 +81,7 @@ import UIKit
         }
     }
     func ready() { guard !isTestAudioMuted else { return }; prepare(); player.play(.ready) }
-    func assignment(accepted: Bool) { guard !isTestAudioMuted else { return }; player.play(accepted ? .assignSkill : .actionRejected) }
+    func rejectedAssignment() { guard !isTestAudioMuted else { return }; player.play(.actionRejected) }
     func releaseRate(_ rate: Int) { guard !isTestAudioMuted else { return }; player.playReleaseRate(rate) }
     func result(won: Bool) {
         guard !isTestAudioMuted, !resultPlayed else { return }
@@ -101,7 +101,7 @@ import UIKit
     func stop() { player.stop() }
 
     private func play(_ requests: [Lemmings2SoundRequest], bank: Lemmings2SoundBank?) {
-        let bottomFallSounds = MobileSettings.load(from: .standard).classic.bottomFallSounds
+        let bottomFallSounds = MobileSettings.current(from: .standard).classic.bottomFallSounds
         var seen = Set<String>()
         for request in requests {
             if let effect = request.supplementalEffect {

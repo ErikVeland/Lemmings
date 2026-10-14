@@ -1,9 +1,22 @@
 """Small malformed-input and format checks for the build-time Mac decoder."""
 import struct
 import unittest
-from prepare import decode_bank, unpack
+from prepare import backpack_guide, decode_bank, unpack
 
 class DecoderTests(unittest.TestCase):
+    def test_backpack_guide_tracks_origins_and_protects_foreground(self):
+        pixels=bytearray(8*12*4)
+        pixels[(0*8+2)*4:(0*8+2)*4+4]=bytes([0,255,0,255])
+        for y in range(6,12):
+            for x in range(2,6):pixels[(y*8+x)*4:(y*8+x)*4+4]=bytes([0,0,255,255])
+        colour=(3,3,8,12,pixels)
+        mono=(1,1,8,12,bytes(8*12*4))
+        guide=backpack_guide(colour,mono)
+        self.assertEqual((guide['top'],guide['left'],guide['right']),(8,4,7))
+        self.assertEqual(guide['foreground'],[20])
+        self.assertIsNone(backpack_guide(None,mono))
+        self.assertIsNone(backpack_guide(mono,mono))
+
     def test_overlapping_lzss_copy(self):
         self.assertEqual(unpack(bytes([4, 65, 66, 0x30, 1]), 8), b'ABABABAB')
 

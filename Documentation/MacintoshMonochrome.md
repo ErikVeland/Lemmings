@@ -31,9 +31,17 @@ existing colour option. Their edition-specific graphics are not established.
 
 Menu lettering and shared stone controls retain the shipped colour interface.
 The selection, pointer and optional HD effects retain their selected settings.
-The colour-based backpack detector is unavailable for monochrome sprites, so
-these sprites retain their original appearance. This choice does not change the
-saved backpack preference.
+The existing **Show skill backpacks** preference also applies to monochrome
+sprites. Climbers use diagonal dithering, Floaters use horizontal stripes, and
+lemmings with both skills use a checker pattern. All marker pixels remain black
+or white. Preparation records torso anchors and foreground masks from each
+matching colour frame, aligned by the authored frame origins. The shared Mac
+and mobile renderer uses these guides to keep hair, faces and hands in front.
+It mirrors the pack with the pose, including the reversed body under an umbrella.
+The sprite cache, selection and speed trails use the decorated sprite. Death and
+exit poses omit the marker. Disabling the preference restores the source pixels.
+Older decoded banks without guides still load and need preparation again to
+show monochrome backpacks.
 
 Lemmings 2 and Lemmings 3 keep their separate native and reconstructed 2×
 artwork options. No original 1-bit sequel banks have been identified in the
@@ -56,6 +64,11 @@ terrain styles and special pictures, construction pixels, saved preferences,
 live source changes, digging, rewind and checkpoints. Native checks capture the
 Settings choice and playfield offscreen and verify the choice's mouse target.
 They write captures to `.build/mac-monochrome-captures`.
+
+Backpack checks cover all poses and both directions in the four artwork
+families, distinct patterns, foreground preservation, binary pixels, the saved
+toggle, cache isolation, mobile checkpoint restoration and unchanged input
+targets. The native check also exports a pattern comparison as `backpacks.png`.
 
 An original-machine comparison, mobile device rendering and a full sweep of
 all animation poses in gameplay remain separate validation.

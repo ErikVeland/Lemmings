@@ -96,6 +96,31 @@ def decode_bank(bank,palette,version):
         frames.append((ox,oy,w,h,pixels))
     return frames
 
+def backpack_guide(colour, mono):
+    """Locate the torso and foreground without changing monochrome source pixels."""
+    if colour is None:
+        return None
+    cx,cy,w,h,rgba=colour
+    mx,my,mw,mh,_=mono
+    body=[];foreground=[];hair_top=h
+    for y in range(h):
+        for x in range(w):
+            r,g,b,a=rgba[(y*w+x)*4:(y*w+x+1)*4]
+            if not a:continue
+            hair=g>100 and g>r*2 and g>b*2
+            if hair:hair_top=min(hair_top,y)
+            if (b>128 and b>r*2 and b>g*2) or (r>128 and r>g*2 and r>b*2):body.append((x,y))
+            if hair or (r>180 and g>150 and b>130) or (r>220 and g>120 and b<70):
+                px,py=x+cx-mx,y+cy-my
+                if 0<=px<mw and 0<=py<mh:foreground.append(py*mw+px)
+    torso=[p for p in body if p[1]>=hair_top+6] or body
+    if not torso:return None
+    top=min(y for x,y in torso)
+    shoulders=[x for x,y in torso if y<top+4]
+    return dict(top=top+cy-my,left=min(shoulders)+cx-mx,right=max(shoulders)+cx-mx,
+                foreground=foreground)
+
+
 def export(source,app,output,version,monochrome=False):
     output.mkdir(parents=True,exist_ok=True)
     application=resources((source/(app+'.rsrc')).read_bytes())
@@ -105,6 +130,12 @@ def export(source,app,output,version,monochrome=False):
         index,r,g,b=struct.unpack_from('>HHHH',clut,off)
         palette[index]=(r>>8,g>>8,b>>8,255)
     graphics_name='BW Graphics' if monochrome else 'Graphics'
+    colour_sprites=[]
+    if monochrome:
+        record=next(d for t,i,n,d in resources((source/'Graphics.rsrc').read_bytes()) if t=='SHPD' and i==1400)
+        offset,csize,size=struct.unpack('>III',record)
+        data=(source/'Graphics.data').read_bytes()[offset:offset+(csize or size)]
+        colour_sprites=decode_bank(unpack(data,size) if csize else data,palette,version)
     graphics=(source/(graphics_name+'.data')).read_bytes(); banks={}; names={}
     for typ,bank_id,name,record in resources((source/(graphics_name+'.rsrc')).read_bytes()):
         if typ!='SHPD':continue
@@ -121,7 +152,11 @@ def export(source,app,output,version,monochrome=False):
             if frame is None:bank_meta.append(None);continue
             ox,oy,w,h,rgba=frame;filename=f'{bank_id}-{index}.rgba'
             (output/filename).write_bytes(rgba)
-            bank_meta.append(dict(x=ox,y=oy,width=w,height=h,file=filename))
+            metadata=dict(x=ox,y=oy,width=w,height=h,file=filename)
+            if monochrome and bank_id==1400 and index<len(colour_sprites):
+                guide=backpack_guide(colour_sprites[index],frame)
+                if guide is not None:metadata['backpackGuide']=guide
+            bank_meta.append(metadata)
         banks[str(bank_id)]=bank_meta;names[str(bank_id)]=name
     definitions={}
     for typ,style,name,data in resources((source/'Levels.rsrc').read_bytes()):

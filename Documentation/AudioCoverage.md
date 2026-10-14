@@ -135,6 +135,18 @@ uses the same sound preference instead of the system alert beep. Global Ready
 and final-seconds warning cues stay centred. Timer warnings have a distinct
 sound from the builder's final-brick warnings.
 
+Mobile and TV retain successful assignment sounds between simulation ticks.
+Touch, pointer, keyboard, controller and repeated assignments drain the same
+session cues immediately, including assignments during planning pause. Classic
+keeps its positioned assignment event, L2 keeps the original skill-specific
+sample request, and L3 requests its acknowledgement or bomb warning. Touch
+does not add a second acknowledgement. Failed actions cannot emit a success
+cue, and checkpoint restoration clears pending presentation sounds.
+The shared bank lookup accepts both mobile's `Ports/amiga_extracted/lemmings`
+and TV's `Sounds/Amiga`, so the TV frontend can load its packaged original
+assignment sample. Muted regression checks cover both bundle layouts and all
+three sessions. Physical-device listening remains unverified.
+
 Results keep their short rising star notes. An established rescue, skill or
 fastest-clear personal best, or a newly earned gold or legendary award, adds a
 small pitch ornament inside the final existing note. It adds no note, duration

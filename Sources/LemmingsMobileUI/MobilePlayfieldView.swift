@@ -10,11 +10,12 @@ import UIKit
     var blockedInputFrames: [CGRect] = []
     var onTouchEffects: (([MobileTouchEffect]) -> Void)?
     var onViewportChanged: ((MobileViewport) -> Void)?
+    var deferFrameUpdates = false
 
     var gameViewport: MobileViewport {
         didSet {
             setNeedsDisplay()
-            updateTube()
+            if !deferFrameUpdates { updateTube() }
             if gameViewport != oldValue { onViewportChanged?(gameViewport) }
         }
     }
@@ -71,7 +72,7 @@ import UIKit
     }
     var failed = false { didSet { failureMood.set(active: failed, animated: !motionReduced) } }
     private var motionReduced: Bool { displaySettings.reduceMotion || UIAccessibility.isReduceMotionEnabled }
-    var displaySettings = MobileSettings.load(from: .standard).classic { didSet { updateTube() } }
+    var displaySettings = MobileSettings.current(from: .standard).classic { didSet { updateTube() } }
 
     init(viewport: MobileViewport, automaticallyFitsViewport: Bool = true, initialCameraFocus: MobilePoint? = nil) {
         gameViewport = viewport

@@ -71,7 +71,11 @@ import UIKit
         input.onPan = { [weak self] dx, dy in self?.game?.pan(dx: dx, dy: dy) }
         input.onAction = { [weak self] in self?.controllerAction($0) }
         input.onDisconnect = { [weak self] in self?.interrupt() }
-        playfield.onAssign = { [weak self] in _ = self?.game?.assign(); self?.playfield.refresh() }
+        playfield.onAssign = { [weak self] in
+            guard let self, let game = self.game else { return }
+            if game.assign() { self.audio.update(game) }
+            self.playfield.refresh()
+        }
         playfield.onCycle = { [weak self] in self?.game?.cycleTarget($0); self?.playfield.refresh() }
         playfield.onPause = { [weak self] in self?.showDeck() }
         playfield.onRenderFailure = { [weak self] message in
@@ -347,8 +351,8 @@ import UIKit
             return
         }
         switch action {
-        case .assign: _ = game.assign()
-        case .repeatAssignment: _ = game.assign(repeatLast: true)
+        case .assign: if game.assign() { audio.update(game) }
+        case .repeatAssignment: if game.assign(repeatLast: true) { audio.update(game) }
         case .cycle(let delta): game.cycleSkill(delta); if game.play.isPaused { audio.pause() }
         case .focusUnassigned(let delta): game.cycleTarget(delta)
         case .focusLast: game.focusLast()

@@ -76,6 +76,7 @@ public enum MobileSettingsArt {
                     toggle("fall", "Fall sounds", c.bottomFallSounds),
                     choice("soundtrackChoice", "Soundtrack", settings.soundtrack),
                     toggle("djOther", "DJ uses other soundtracks", c.djIncludesOtherSoundtracks),
+                    choice("djShuffleScope", "DJ shuffle", settings.djShuffleScope.title),
                     .init("soundtrack", "Soundtrack libraries")]
         case .accessibility:
             rows = [choice("uiSize", "UI size", c.interfaceSize.title),
@@ -90,15 +91,30 @@ public enum MobileSettingsArt {
         return .init(title: group.title, rows: rows, footer: [.init("settings", "Back")])
     }
 
-    public static func controllerMappings(_ settings: MobileSettings) -> GameFrontEnd.Page {
+    public static func controllerMappings(_ settings: MobileSettings, television: Bool = false) -> GameFrontEnd.Page {
         .init(title: "Remap buttons", rows: ControllerBindings.Button.allCases.map { button in
             let role = settings.classic.controllerMappings[button.rawValue].flatMap(ControllerBindings.Button.init(rawValue:)) ?? button
-            return .init("mapping." + button.rawValue, buttonTitle(button) + ": " + roleTitle(role))
+            return .init("mapping." + button.rawValue, buttonTitle(button, television: television) + ": " + roleTitle(role, television: television))
         }, footer: [.init("mappingReset", "Reset"), .init("settingsGroup.controller", "Back")])
     }
 
-    private static func buttonTitle(_ button: ControllerBindings.Button) -> String {
-        switch button {
+    private static func buttonTitle(_ button: ControllerBindings.Button, television: Bool = false) -> String {
+        if television {
+            switch button {
+            case .a: return "Cross / A"
+            case .b: return "Circle / B"
+            case .x: return "Square / X"
+            case .y: return "Triangle / Y"
+            case .leftShoulder: return "L1 / LB"
+            case .rightShoulder: return "R1 / RB"
+            case .leftTrigger: return "L2 / LT"
+            case .rightTrigger: return "R2 / RT"
+            case .menu: return "Options / Menu"
+            case .options: return "Create / View"
+            default: break
+            }
+        }
+        return switch button {
         case .a, .b, .x, .y: button.rawValue.uppercased()
         case .leftShoulder: "LB"
         case .rightShoulder: "RB"
@@ -114,8 +130,17 @@ public enum MobileSettingsArt {
         case .rightStick: "R3"
         }
     }
-    private static func roleTitle(_ button: ControllerBindings.Button) -> String {
-        switch button {
+    private static func roleTitle(_ button: ControllerBindings.Button, television: Bool = false) -> String {
+        if television && button == .leftTrigger { return "Rewind" }
+        if television && button == .rightTrigger { return "Resume / fast-forward" }
+        if television && button == .options { return "Help / extra actions" }
+        if television && button == .b { return "Back / reset speed" }
+        if television && button == .x { return "Pause / play" }
+        if television && button == .y { return "Nuke / undo" }
+        if television && button == .left { return "Minimum release rate" }
+        if television && button == .right { return "Maximum release rate" }
+        if television && button == .menu { return "Menu" }
+        return switch button {
         case .a: "Assign"
         case .b: "Cancel"
         case .x: "Repeat skill"

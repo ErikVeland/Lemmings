@@ -59,7 +59,7 @@ import UIKit
     #endif
 
     private func interfaceScale(width: CGFloat, viewportHeight: CGFloat? = nil) -> CGFloat {
-        let setting = MobileSettings.load(from: .standard).classic.interfaceSize
+        let setting = MobileSettings.current(from: .standard).classic.interfaceSize
         let height = viewportHeight ?? (superview as? UIScrollView)?.bounds.height ?? bounds.height
         #if os(tvOS)
         return page.pause != nil ? MobilePauseArt.interfaceScale(setting, width: width, height: height, television: true)

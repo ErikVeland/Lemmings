@@ -9,6 +9,7 @@ public struct ClassicMacArtwork: Sendable {
         public let width: Int
         public let height: Int
         public let rgba: Data
+        public var backpackGuide: ClassicMonochromeBackpack.Guide? = nil
     }
     public struct ObjectSequence: Codable, Sendable {
         public let first: Int
@@ -18,6 +19,7 @@ public struct ClassicMacArtwork: Sendable {
     private struct FrameRecord: Decodable {
         let x: Int, y: Int, width: Int, height: Int
         let file: String
+        let backpackGuide: ClassicMonochromeBackpack.Guide?
     }
     private struct Manifest: Decodable {
         let version: Int
@@ -52,8 +54,17 @@ public struct ClassicMacArtwork: Sendable {
                 guard data.count == record.width * record.height * 4 else {
                     throw SequelDataError.invalid("Truncated Mac graphics frame.")
                 }
+                if let guide = record.backpackGuide {
+                    guard (0..<record.height).contains(guide.top),
+                        (-record.width...record.width).contains(guide.left),
+                        (guide.left...record.width * 2).contains(guide.right),
+                        guide.foreground.count <= record.width * record.height,
+                        guide.foreground.allSatisfy({ (0..<record.width * record.height).contains($0) }) else {
+                        throw SequelDataError.invalid("Invalid Mac backpack guide.")
+                    }
+                }
                 return Frame(x: record.x, y: record.y, width: record.width,
-                    height: record.height, rgba: data)
+                    height: record.height, rgba: data, backpackGuide: record.backpackGuide)
             }
         }
         self.monochrome = manifest.monochrome ?? false

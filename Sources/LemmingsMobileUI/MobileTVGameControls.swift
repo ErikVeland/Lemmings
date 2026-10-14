@@ -6,6 +6,12 @@ import NxlvKit
 import UIKit
 
 extension MobileGameViewController {
+    func refreshTVTarget(control: Int) {
+        if tvTargetLock.id != nil {
+            highlightedTarget = tvTargetLock.resolve(candidates: session.targetCandidates(for: control),
+                visible: playfieldView.gameViewport.visibleLevelRect)
+        } else { highlightedTarget = previewPoint.flatMap { target(at: $0, control: control) } }
+    }
     /// Every touch HUD action also has a focused remote action.
     func showTVControls() {
         pausePlay(showControls: false)
@@ -43,6 +49,7 @@ extension MobileGameViewController {
             ("SLOWER", { [weak self] in self?.tvCommand(.speedStep(-1)) }),
             ("FASTER", { [weak self] in self?.tvCommand(.speedStep(1)) }),
         ]
+        commands.append(("RESUME", { [weak self] in self?.resumeSelectedView() }))
         if snapshot.releaseRate != nil && !session.isReadOnly {
             commands += [
                 ("RATE -", { [weak self] in self?.tvCommand(.rate(-1)) }),
@@ -105,10 +112,12 @@ extension MobileGameViewController {
     private func tvPage(title: String, actions: [(String, () -> Void)]) {
         showCustomOverlay(title: title, details: [], actions: actions)
         // Shared pages scroll their rows; the primary forward action remains in the footer.
-        overlayCanvas.page.rows = Array(overlayCanvas.page.footer.dropFirst()).map {
+        let resume = overlayCanvas.page.footer.first { $0.title == "RESUME" }
+        overlayCanvas.page.rows = Array(overlayCanvas.page.footer.dropFirst()).filter { $0.id != resume?.id }.map {
             .init($0.id, $0.title, enabled: $0.enabled, primary: false)
         }
         overlayCanvas.page.footer = Array(overlayCanvas.page.footer.prefix(1))
+        if var resume { resume.primary = true; overlayCanvas.page.footer.append(resume) }
         view.setNeedsLayout()
         view.layoutIfNeeded()
         setNeedsFocusUpdate()

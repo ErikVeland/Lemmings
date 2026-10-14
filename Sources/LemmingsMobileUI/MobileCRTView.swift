@@ -67,8 +67,15 @@ import UIKit
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        let scale = MobileDevicePerformance.constrained ? CGFloat(1) : (window?.screen.scale ?? contentScaleFactor)
-        drawableSize = CGSize(width: max(1, bounds.width * scale), height: max(1, bounds.height * scale))
+        updateDrawableBudget()
+    }
+    private func updateDrawableBudget() {
+        var scale = MobileDevicePerformance.constrained ? CGFloat(1) : (window?.screen.scale ?? contentScaleFactor)
+        #if os(tvOS)
+        scale = MobileDevicePerformance.presentation.televisionPlayfieldScale(nativeScale: Double(scale))
+        #endif
+        let size = CGSize(width: max(1, bounds.width * scale), height: max(1, bounds.height * scale))
+        if drawableSize != size { drawableSize = size }
     }
 
     func update(context: CGContext, settings: ClassicSettings, flashes: [ExplosionGlow.Flash]) {
@@ -191,6 +198,7 @@ import UIKit
         let drawStarted = ProcessInfo.processInfo.systemUptime
         defer { MobileDevicePerformance.recordCPU(ProcessInfo.processInfo.systemUptime - drawStarted, source: "crt") }
         guard outstandingSubmissions < 3 else { submissionDeferred = true; return }
+        updateDrawableBudget()
         guard let device, let slot = currentSlot, let drawable = currentDrawable,
               let buffer = commands.makeCommandBuffer() else { return }
         submissionDeferred = false

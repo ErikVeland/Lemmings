@@ -1,0 +1,57 @@
+import Foundation
+
+/// Personal input and accessibility choices overlay shared device settings.
+public struct PlayerControlSettings: Codable, Equatable, Sendable {
+    public var controllerEnabled: Bool
+    public var controllerTapSpeed: Bool
+    public var controllerSwapSticks: Bool
+    public var controllerMappings: [String: String]
+    public var interfaceSize: ClassicInterfaceSize
+    public var reduceMotion: Bool
+    public var reduceFlashes: Bool
+    public var showSongInfo: Bool
+    public var fadeMenuButton: Bool
+
+    public init(_ settings: ClassicSettings) {
+        controllerEnabled = settings.controllerEnabled
+        controllerTapSpeed = settings.controllerTapSpeed
+        controllerSwapSticks = settings.controllerSwapSticks
+        controllerMappings = ControllerBindings.validatedMapping(settings.controllerMappings)
+        interfaceSize = settings.interfaceSize
+        reduceMotion = settings.reduceMotion
+        reduceFlashes = settings.reduceFlashes
+        showSongInfo = settings.showSongInfo
+        fadeMenuButton = settings.fadeMenuButton
+    }
+
+    public func applying(to settings: ClassicSettings) -> ClassicSettings {
+        var value = settings
+        value.controllerEnabled = controllerEnabled
+        value.controllerTapSpeed = controllerTapSpeed
+        value.controllerSwapSticks = controllerSwapSticks
+        value.controllerMappings = ControllerBindings.validatedMapping(controllerMappings)
+        value.interfaceSize = interfaceSize
+        value.reduceMotion = reduceMotion
+        value.reduceFlashes = reduceFlashes
+        value.showSongInfo = showSongInfo
+        value.fadeMenuButton = fadeMenuButton
+        return value
+    }
+
+    public static func defaultsKey(profileID: String) -> String {
+        "PlayerControls.v1." + Data(profileID.utf8).base64EncodedString()
+    }
+
+    /// Retain the legacy baseline so an unvisited player cannot inherit another player's edits.
+    public static func load(from defaults: UserDefaults, profileID: String, legacy: ClassicSettings) -> Self {
+        if let data = defaults.data(forKey: defaultsKey(profileID: profileID)),
+           let value = try? JSONDecoder().decode(Self.self, from: data) { return value }
+        let value = Self(legacy)
+        value.save(to: defaults, profileID: profileID)
+        return value
+    }
+
+    public func save(to defaults: UserDefaults, profileID: String) {
+        if let data = try? JSONEncoder().encode(self) { defaults.set(data, forKey: Self.defaultsKey(profileID: profileID)) }
+    }
+}

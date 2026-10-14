@@ -22,7 +22,7 @@ extension MobileGameViewController {
                 guard let replay = try self.session.makeReplaySession(document: document) else {
                     throw MobileSessionError.unsupportedControl
                 }
-                recorder.setMusic(url: MobileMusic.shared.currentTrackURL, gain: Float(MobileSettings.load(from: .standard).classic.musicVolume))
+                recorder.setMusic(url: MobileMusic.shared.currentTrackURL, gain: Float(MobileSettings.current(from: .standard).classic.musicVolume))
                 let movieEffects = effects.movieEffects()
                 let expected = try JSONDecoder().decode(ClassicDOSReplay.self, from: document).expected?.ticks
                 repeat {

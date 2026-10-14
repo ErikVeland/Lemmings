@@ -2653,7 +2653,6 @@ extension AppDelegate {
     let run = arcadeRunID, owner = arcadeProfileID, seat = arcadeHotSeatID
     try check(seat != nil && owner == host, "Retained-solution test did not start a shared attempt")
     let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]
-    let records = try encoder.encode(ArcadeStore.shared.records)
     func button(_ title: String, in view: NSView) -> NSButton? {
       if let button = view as? NSButton, button.title == title { return button }
       return view.subviews.compactMap { button(title, in: $0) }.first
@@ -2670,6 +2669,7 @@ extension AppDelegate {
     let replay = LevelHintWindow.shared.solutionWindow!
     try check(replay.paused && isPaused && replay.playback.session.currentTick == 0,
       "Entering a solution started either simulation")
+    let switchingRecords = try encoder.encode(ArcadeStore.shared.records)
     replay.seekMove(1)
     let first = replay.playback.session.currentTick
     try check(first == replay.moveNavigation.ticks.first && replay.paused, "Next move did not reach the first successful use while paused")
@@ -2694,9 +2694,12 @@ extension AppDelegate {
       replay.advance()
       try check(replay.playback.session.currentTick == retainedTick, "A hidden replay kept advancing")
     }
-    try check(ClassicDOSReplayRecorder.stateHash(of: live.simulation) == liveHash && arcadeRunID == run
-      && arcadeProfileID == owner && arcadeHotSeatID == seat && (try encoder.encode(ArcadeStore.shared.records)) == records,
-      "Solution switching changed the attempt, owner, turn or records")
+    try check(ClassicDOSReplayRecorder.stateHash(of: live.simulation) == liveHash,
+      "Solution switching changed the live simulation at tick \(live.currentTick)")
+    try check(arcadeRunID == run, "Solution switching replaced the attempt")
+    try check(arcadeProfileID == owner && arcadeHotSeatID == seat, "Solution switching changed the owner or Hot Seat")
+    try check((try encoder.encode(ArcadeStore.shared.records)) == switchingRecords,
+      "Repeated solution switching changed records after the initial reveal")
     LevelHintWindow.shared.selectSolutionMode(.solution)
     replay.seekMove(-1)
     try check(replay.playback.session.currentTick == first && replay.paused, "Previous move did not retain a paused solution")
@@ -2706,6 +2709,7 @@ extension AppDelegate {
       replay.page.frame.size = size; replay.page.needsLayout = true; replay.page.layoutSubtreeIfNeeded()
       func checkTargets(_ view: NSView) throws {
         for child in view.subviews {
+          if child.isHidden { continue }
           if let control = child as? NSButton {
             let rect = control.convert(control.bounds, to: replay.page)
             try check(replay.page.bounds.contains(rect), "Replay target leaves the page: \(control.title)")
@@ -2721,20 +2725,74 @@ extension AppDelegate {
       try bitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent("solution-\(Int(size.width)).png"))
     }
     LevelHintWindow.shared.selectSolutionMode(.game)
+    let ghostToggle = try { () throws -> NSButton in
+      guard let root = window.contentView, let toggle = button("Ghost solution", in: root) else {
+        throw IntegrationFailure(message: "The live solution selector has no ghost toggle")
+      }
+      return toggle
+    }()
+    window.contentView?.layoutSubtreeIfNeeded()
+    try check(ghostToggle.bounds.height >= 44 && ghostToggle.bounds.width >= 44, "Ghost toggle is too small")
+    let ghostTarget = ghostToggle.convert(ghostToggle.bounds, to: window.contentView!)
+    let ghostHit = window.contentView!.hitTest(CGPoint(x: ghostTarget.midX, y: ghostTarget.midY))
+    try check(ghostHit === ghostToggle || ghostHit?.isDescendant(of: ghostToggle) == true, "Ghost toggle is blocked")
+    ghostToggle.performClick(nil)
+    try check(playfield.ghostSolutionEnabled && isPaused && replay.paused, "Ghost toggle changed a pause state")
+    playfield.phase = .playing
+    for _ in 0..<first + 60 { live.tick() }
+    func captureGhost(_ enabled: Bool) -> Data {
+      playfield.ghostSolutionEnabled = enabled
+      playfield.needsDisplay = true
+      let bitmap = playfield.bitmapImageRepForCachingDisplay(in: playfield.bounds)!
+      playfield.cacheDisplay(in: playfield.bounds, to: bitmap)
+      return bitmap.representation(using: .png, properties: [:])!
+    }
+    let plainFrame = captureGhost(false), ghostFrame = captureGhost(true)
+    try check(plainFrame != ghostFrame && playfield.solutionGhost?.simulation.tickCount == live.currentTick,
+      "Ghost sprites were not drawn at the live tick")
+    let ghostOutput = URL(fileURLWithPath: ".build/ghost-mac-renders")
+    try FileManager.default.createDirectory(at: ghostOutput, withIntermediateDirectories: true)
+    try plainFrame.write(to: ghostOutput.appendingPathComponent("live.png"))
+    try ghostFrame.write(to: ghostOutput.appendingPathComponent("ghost.png"))
+    let selector = ghostToggle.superview!
+    let selectorBitmap = selector.bitmapImageRepForCachingDisplay(in: selector.bounds)!
+    selector.cacheDisplay(in: selector.bounds, to: selectorBitmap)
+    try selectorBitmap.representation(using: .png, properties: [:])!.write(to: ghostOutput.appendingPathComponent("toggle-on.png"))
+    let ghostLiveHash = ClassicDOSReplayRecorder.stateHash(of: live.simulation)
+    ghostToggle.performClick(nil)
+    try check(!playfield.ghostSolutionEnabled && isPaused, "Turning the ghost off resumed the game")
+    isPaused = false
+    ghostToggle.performClick(nil)
+    try check(playfield.ghostSolutionEnabled && !isPaused, "Turning the ghost on paused a running game")
+    LevelHintWindow.shared.selectSolutionMode(.solution)
+    try check(isPaused && replay.paused && replay.playback.session.currentTick == first,
+      "Ghost playback moved the retained study cursor or resumed either view")
+    LevelHintWindow.shared.selectSolutionMode(.game)
+    try check(ClassicDOSReplayRecorder.stateHash(of: live.simulation) == ghostLiveHash && arcadeRunID == run
+      && arcadeProfileID == owner && arcadeHotSeatID == seat, "Ghost toggles changed the live attempt or Hot Seat owner")
+    _ = live.rewind(seconds: 1)
+    _ = captureGhost(true)
+    try check(playfield.solutionGhost?.simulation.tickCount == live.currentTick, "Ghost did not follow live rewind")
     let oldRun = arcadeRunID
     loadLevel(at: 0)
     try check(arcadeRunID != oldRun && LevelHintWindow.shared.solutionWindow === replay
       && LevelHintWindow.shared.hasSolution(for: arcadeRunID) && replay.paused,
       "Retry did not retain the same player's paused solution")
     let newLive = session as! ClassicSession
+    let readyPhase = phase
+    ghostToggle.performClick(nil)
+    try check(phase == readyPhase && newLive.currentTick == 0 && replay.paused,
+      "Ghost toggle started the retried Hot Seat handover")
+    ghostToggle.performClick(nil)
     LevelHintWindow.shared.selectSolutionMode(.solution)
     try check(isPaused && replay.paused && newLive.currentTick == 0, "Retained solution started the retried attempt")
     LevelHintWindow.shared.selectSolutionMode(.game)
     LevelHintWindow.shared.rebindSolution(session: newLive, owner: window, runID: UUID(), ownerKey: "different-player",
       pause: {})
-    try check(LevelHintWindow.shared.solutionWindow == nil, "A new player inherited another player's solution")
+    try check(LevelHintWindow.shared.solutionWindow == nil && playfield.solutionGhost == nil && !playfield.ghostSolutionEnabled,
+      "A new player inherited another player's solution or ghost")
     LevelHintWindow.shared.clearSolution()
-    print("PASS retained solution ticks, camera, paused switches, move navigation, controller return, ownership, records and native targets")
+    print("PASS ghost toggle, sprite overlay, rewind, retained study cursor, Hot Seat readiness; retained solution ticks, camera, paused switches, move navigation, controller return, ownership, records and native targets")
   }
 
   fileprivate func testLevelHints() async throws {
@@ -2820,6 +2878,7 @@ extension AppDelegate {
       try bitmap.representation(using: .png, properties: [:])!.write(to: directory.appendingPathComponent(name + ".png"))
     }
     for mode in [ClassicDisplayMode.flat, .monitor] {
+      LevelHintWindow.shared.clearSolution()
       settings.display = mode; phase = .playing; isPaused = false; applyDisplayMode()
       let before = current.currentTick, skills = current.skillAssignments
       showLevelHints()

@@ -6500,7 +6500,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let previousAttemptID = arcadeRunID
     arcadeRunID = UUID(); arcadeProfileID = ArcadeStore.shared.playingProfileID; arcadeHotSeatID = ArcadeStore.shared.hotSeatID; arcadeReport = nil
     LevelHintWindow.shared.rebindSolution(session: new as? ClassicSession, owner: window, runID: arcadeRunID,
-      ownerKey: "\(arcadeProfileID)|\(arcadeHotSeatID ?? "")", pause: { [weak self, weak new] in
+      ownerKey: solutionRetentionKey, pause: { [weak self, weak new] in
         guard let self, let new else { return }
         self.pauseLiveForSolution(new)
       })
@@ -8191,7 +8191,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     screenFlash.clear(); pointerCapture.reset(); panel.needsDisplay = true
     LevelHintWindow.shared.show(deck, image: hintMap, owner: window,
       solutionSession: session as? ClassicSession, solutionSource: playfield, solutionEffects: effects,
-      runID: arcadeRunID, ownerKey: "\(arcadeProfileID)|\(arcadeHotSeatID ?? "")", pauseForSolution: { [weak self, weak session] in
+      runID: arcadeRunID, ownerKey: solutionRetentionKey, pauseForSolution: { [weak self, weak session] in
         guard let self, let session, self.session === session else { return }
         self.pauseLiveForSolution(session)
       }) { [weak self, weak session] in
@@ -8208,6 +8208,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     isPaused = true; panel.isPaused = true; accumulator = 0
     playfield.startCountdown.cancel(); speedControl.cancelInput(); pointerCapture.reset()
     lastStepTime = nil; panel.needsDisplay = true
+  }
+
+  private var solutionRetentionKey: String {
+    [arcadeProfileID, arcadeHotSeatID ?? "", checkpointLocation.map { "\($0.0)|\($0.1)" } ?? "",
+      checkpointSourceURL?.standardizedFileURL.path ?? "", checkpointFan.map { String($0.index) } ?? ""]
+      .joined(separator: "|")
   }
 
   @objc private func showKeyboardCommands() {

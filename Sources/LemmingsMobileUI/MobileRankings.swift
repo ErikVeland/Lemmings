@@ -199,7 +199,8 @@ extension MobileLibraryViewController {
                 }.value
                 guard let session = try classic.makeReplaySession(document: document) else { throw MobileSessionError.invalidCheckpoint }
                 let store = MobileCheckpointStore(url: FileManager.default.temporaryDirectory.appendingPathComponent("leaderboard-replay-" + UUID().uuidString))
-                let player = MobileGameViewController(summary: content.summary, session: session, checkpointStore: store, restoredCheckpoint: nil)
+                let player = MobileGameViewController(summary: content.summary, session: session, checkpointStore: store, restoredCheckpoint: nil,
+                    settingsProfileID: settingsProfileID)
                 player.modalPresentationStyle = .fullScreen
                 present(player, animated: false)
             } catch { notice = error.localizedDescription; rebuild() }

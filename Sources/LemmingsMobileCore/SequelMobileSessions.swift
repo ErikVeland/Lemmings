@@ -158,7 +158,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
     @discardableResult
     public func assign(control: Int, to target: Int) -> Bool {
         guard runtime.assign(slot: control, to: target) else { return false }
-        _ = runtime.drainSoundEvents()
+        appendSoundRequests(runtime.drainSoundEvents())
         inputs.append(.assign(tick: runtime.tick, control: control, target: target))
         return true
     }
@@ -474,10 +474,14 @@ public final class Lemmings3MobileSession: MobileGameSession {
     public func assign(control: Int, to target: Int) -> Bool {
         guard Lemmings3Runtime.Action.allCases.indices.contains(control) else { return false }
         let action = Lemmings3Runtime.Action.allCases[control]
+        let lemming = runtime.lemmings.first { $0.id == target }
         let before = Lemmings3SoundCue.Snapshot(runtime)
         guard runtime.assign(action, to: target) else { return false }
+        if let lemming {
+            soundCues.append(.init(action == .use && lemming.tool == .bomb ? .ohNo : .assignSkill,
+                at: .init(x: Double(lemming.x), y: Double(lemming.y))))
+        }
         soundCues += Lemmings3SoundCue.positionedCues(before: before, after: .init(runtime))
-        soundCues.removeAll { $0.effect == .assignSkill }
         inputs.append(Input(tick: runtime.tick, action: action.rawValue, target: target, direction: nil))
         return true
     }
@@ -488,10 +492,14 @@ public final class Lemmings3MobileSession: MobileGameSession {
     @discardableResult
     public func useTool(direction: Lemmings3Runtime.Direction, to target: Int) -> Bool {
         guard !runtime.isComplete else { return false }
+        let lemming = runtime.lemmings.first { $0.id == target }
         let before = Lemmings3SoundCue.Snapshot(runtime)
         guard runtime.useTool(to: target, direction: direction) else { return false }
+        if let lemming {
+            soundCues.append(.init(lemming.tool == .bomb ? .ohNo : .assignSkill,
+                at: .init(x: Double(lemming.x), y: Double(lemming.y))))
+        }
         soundCues += Lemmings3SoundCue.positionedCues(before: before, after: .init(runtime))
-        soundCues.removeAll { $0.effect == .assignSkill }
         inputs.append(Input(tick: runtime.tick, action: Lemmings3Runtime.Action.use.rawValue,
                             target: target, direction: direction.rawValue))
         return true

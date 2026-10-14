@@ -6,6 +6,8 @@ import UIKit
 extension MobileLibraryViewController {
     func makeLibraryInput() -> MobileInputAdapter {
         let adapter = MobileInputAdapter()
+        adapter.settings = { [weak self] in self?.mobileSettings.classic ?? MobileSettings().classic }
+        adapter.settingsProfileID = { [weak self] in self?.settingsProfileID ?? MobileProfiles.defaultID }
         #if os(tvOS)
         canvas.requiresNeutralActivation = true
         adapter.onMenuNeutral = { [weak self] in self?.canvas.armTVActivation() }

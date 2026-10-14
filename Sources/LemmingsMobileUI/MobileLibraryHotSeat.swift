@@ -47,7 +47,10 @@ extension MobileLibraryViewController {
         guard arcadeStore.storageError == nil, var seat = hotSeat else { return false }
         seat.pass(to: player)
         hotSeats.update(seat)
-        return saveHotSeats()
+        guard saveHotSeats() else { return false }
+        MobileSettings.activateProfile(seat.turn, in: .standard)
+        libraryInput.reset()
+        return true
     }
 
     // MARK: - Pages

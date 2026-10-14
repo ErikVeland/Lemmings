@@ -13,13 +13,14 @@ import NxlvKit
     @MainActor static func main() async throws {
         let hierarchy = CommandLine.arguments.last == "--hierarchy"
         let pause = CommandLine.arguments.last == "--pause"
+        let ghostSolution = CommandLine.arguments.last == "--ghost-solution"
         let solutionSwitch = CommandLine.arguments.last == "--solution-switch"
         let skillPause = CommandLine.arguments.last == "--skill-pause"
         let latestFixes = ["--current-fixes", "--rescue-budget"].contains(CommandLine.arguments.last ?? "")
         let hotSeat = CommandLine.arguments.last == "--hot-seat"
         let hotSeatFlow = CommandLine.arguments.last == "--hot-seat-flow"
         let hotSeatHUD = CommandLine.arguments.last == "--hot-seat-hud"
-        guard CommandLine.arguments.count == (hierarchy || pause || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow ? 5 : 4) else { throw Failure.invalidArguments }
+        guard CommandLine.arguments.count == (hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow ? 5 : 4) else { throw Failure.invalidArguments }
         let artwork = URL(fileURLWithPath: CommandLine.arguments[1])
         let content = URL(fileURLWithPath: CommandLine.arguments[2])
         let output = URL(fileURLWithPath: CommandLine.arguments[3])
@@ -33,6 +34,8 @@ import NxlvKit
         else { throw invalidTargets(line: #line) }
         if hierarchy { try checkHierarchy(library: library, typography: typography, output: output); return }
         if pause { try checkPause(library: library, typography: typography, output: output); return }
+        if ghostSolution { try checkGhostSolution(library: library, typography: typography,
+            resources: artwork.deletingLastPathComponent().deletingLastPathComponent(), output: output); return }
         if solutionSwitch { try checkSolutionSwitch(library: library, typography: typography,
             resources: artwork.deletingLastPathComponent().deletingLastPathComponent(), output: output); return }
         if hotSeatFlow { try await checkHotSeatFlow(typography: typography, output: output); return }

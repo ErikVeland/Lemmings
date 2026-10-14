@@ -21,7 +21,7 @@ import NxlvKit
                 self?.onInterruption?(type == AVAudioSession.InterruptionType.began.rawValue)
             }
         }
-        if let root = Bundle.main.resourceURL?.appendingPathComponent("Sounds/Amiga") {
+        if let root = BundledGameResources.amigaSoundDirectory() {
             _ = try? effects.loadAmigaSounds(directory: root, supplementDirectory: Bundle.main.resourceURL?.appendingPathComponent("Sounds"))
         }
     }
@@ -46,7 +46,7 @@ import NxlvKit
         }
         try? music.resumeOutput()
     }
-    func pause() { music.suspendOutput(); effects.suspendOutput() }
+    func pause() { music.suspendOutput(); effects.silence() }
     func stop() { music.stop(); effects.stop(); runID = nil }
     func update(_ game: TVGameExperience) {
         let cues = game.session.drainSoundCues()

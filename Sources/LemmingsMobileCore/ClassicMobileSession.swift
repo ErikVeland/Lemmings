@@ -147,6 +147,7 @@ public final class ClassicMobileSession: MobileGameSession {
     private var replayInitial: ClassicDOSSimulation
     private var soundCues: [PositionedSoundCue] = []
     private var playbackSkillHistory: [MobileReplaySkillUse] = []
+    private var playbackAssignedSkills: [String: Int] = [:]
     private var playbackReplay: ClassicDOSReplay?
     public private(set) var replayMoveNavigation = ReplayMoveNavigation(ticks: [])
     private var playbackEvents: [Int: [ClassicDOSReplayEvent]] = [:]
@@ -174,12 +175,16 @@ public final class ClassicMobileSession: MobileGameSession {
     }
     private var assignmentID: Int?
     private var assignmentTick: Int?
-    public var assignedSkillCount: Int { history.appliedCommands.filter { if case .assign = $0.action { return true }; return false }.count }
+    public var assignedSkillCount: Int {
+        if isReadOnly { return playbackAssignedSkills.values.reduce(0, +) }
+        return history.appliedCommands.filter { if case .assign = $0.action { return true }; return false }.count
+    }
     public var replaySkillUses: [MobileReplaySkillUse] {
         guard isReadOnly else { return [] }
         return Array(playbackSkillHistory.suffix(3))
     }
     public var assignedSkills: [String: Int] {
+        if isReadOnly { return playbackAssignedSkills }
         var counts: [String: Int] = [:]
         for command in history.appliedCommands {
             if case let .assign(_, skill) = command.action { counts[skill.rawValue, default: 0] += 1 }
@@ -366,7 +371,11 @@ public final class ClassicMobileSession: MobileGameSession {
     public func assign(control: Int, to target: Int) -> Bool {
         guard !isReadOnly, ClassicSkill.allCases.indices.contains(control) else { return false }
         let accepted = history.assign(ClassicSkill.allCases[control], to: target) == .assigned
-        if accepted { assignmentID = target; assignmentTick = simulation.tickCount }
+        if accepted {
+            assignmentID = target; assignmentTick = simulation.tickCount
+            soundCues += ClassicSoundCue.positionedCues(for: simulation.lastTickEvents,
+                lemmings: simulation.lemmings, entrances: simulation.configuration.entrances)
+        }
         return accepted
     }
 
@@ -399,6 +408,45 @@ public final class ClassicMobileSession: MobileGameSession {
         return true
     }
 
+    private var ghostReplay: ClassicDOSReplay?
+    private var solutionGhost: ClassicSolutionGhost?
+    private var ghostFrames: [String: SolutionGhostPixels] = [:]
+    public var ghostSolutionEnabled = false
+    public var hasGhostSolution: Bool { solutionGhost != nil }
+    public var ghostSolutionTick: Int? { solutionGhost?.simulation.tickCount }
+
+    /// Install only after the player has revealed the verified full solution.
+    @discardableResult public func installGhostSolution(_ replay: ClassicDOSReplay) -> Bool {
+        guard !isReadOnly, let ghost = ClassicSolutionGhost(initial: levelInitial, replay: replay) else { return false }
+        solutionGhost = ghost
+        ghostReplay = replay
+        ghostSolutionEnabled = false
+        ghostFrames.removeAll()
+        return true
+    }
+
+    public func inheritGhostSolution(from previous: ClassicMobileSession) {
+        guard let replay = previous.ghostReplay, installGhostSolution(replay) else { return }
+        ghostSolutionEnabled = previous.ghostSolutionEnabled
+    }
+
+    private func drawSolutionGhost(into pixels: inout [UInt8], width: Int, height: Int, scale: Int) {
+        guard ghostSolutionEnabled, solutionGhost != nil else { return }
+        solutionGhost?.synchronise(to: simulation.tickCount)
+        guard let ghost = solutionGhost else { return }
+        for lemming in ghost.simulation.lemmings where lemming.isActive {
+            guard let sprite = spriteHighlight(lemming) else { continue }
+            let frame = ghostFrames[sprite.cacheKey] ?? SolutionGhostPixels(rgba: sprite.frame.rgba,
+                width: sprite.frame.width, height: sprite.frame.height, pixelScale: scale)
+            if ghostFrames.count >= 512 { ghostFrames.removeAll(keepingCapacity: true) }
+            ghostFrames[sprite.cacheKey] = frame
+            Self.composite([UInt8](frame.rgba), sourceWidth: frame.width, sourceHeight: frame.height,
+                atX: Int(sprite.rect.x * Double(scale)) - frame.padding,
+                y: Int(sprite.rect.y * Double(scale)) - frame.padding,
+                into: &pixels, width: width, height: height)
+        }
+    }
+
     public func render(highlight: MobileTargetSelection?) throws -> MobilePixelFrame {
         guard let renderedLevel else { throw MobileSessionError.frameUnavailable }
         let scale = nativeScene == nil ? 1 : 2
@@ -409,6 +457,7 @@ public final class ClassicMobileSession: MobileGameSession {
         }
         var pixels = [UInt8](nativeScene?.rgba(simulation: simulation, terrain: terrainFrame)
             ?? ClassicSceneFrame.rgba(renderedLevel, simulation: simulation, terrain: terrainFrame))
+        drawSolutionGhost(into: &pixels, width: width, height: height, scale: scale)
         if let assets, palette.count >= 8 {
             for lemming in simulation.lemmings where lemming.isActive {
                 if lemming.action == .exploding,
@@ -561,6 +610,7 @@ public final class ClassicMobileSession: MobileGameSession {
     private func resetReplay() {
         terrainFrame = nil
         playbackSkillHistory.removeAll(keepingCapacity: true)
+        playbackAssignedSkills.removeAll(keepingCapacity: true)
         var initial = replayInitial
         for event in playbackReplay?.events ?? [] where event.afterTick != true {
             if case let .assign(id, skill) = event.action {
@@ -580,6 +630,7 @@ public final class ClassicMobileSession: MobileGameSession {
     }
 
     private func recordReplaySkill(_ skill: ClassicSkill) {
+        playbackAssignedSkills[skill.rawValue, default: 0] += 1
         playbackSkillHistory.append(.init(tick: simulation.tickCount, name: skill.rawValue.capitalized))
         if playbackSkillHistory.count > 3 { playbackSkillHistory.removeFirst() }
     }
@@ -589,6 +640,8 @@ public final class ClassicMobileSession: MobileGameSession {
         case let .assign(id, skill):
             if history.assign(skill, to: id) == .assigned {
                 recordReplaySkill(skill)
+                soundCues += ClassicSoundCue.positionedCues(for: simulation.lastTickEvents,
+                    lemmings: simulation.lemmings, entrances: simulation.configuration.entrances)
             }
         case let .releaseRate(value): history.setReleaseRate(value)
         case .nuke: history.beginNuke()
@@ -610,6 +663,7 @@ public final class ClassicMobileSession: MobileGameSession {
     public func applySettings(_ settings: ClassicSettings) {
         let changed = self.settings?.graphics != settings.graphics
         self.settings = settings
+        ghostFrames.removeAll(keepingCapacity: true)
         guard changed else { return }
         terrainFrame = nil
         nativeScene = nil; nativeArtwork = nil
@@ -645,7 +699,7 @@ public final class ClassicMobileSession: MobileGameSession {
         return soundCues
     }
 
-    public func releaseTransientResources() { terrainFrame = nil; cachedPanelFrame = nil }
+    public func releaseTransientResources() { terrainFrame = nil; cachedPanelFrame = nil; ghostFrames.removeAll() }
 
     private func spriteHighlight(_ lemming: ClassicDOSLemming) -> MobileSpriteHighlight? {
         guard let assets, palette.count >= 8 else { return nil }
@@ -655,7 +709,12 @@ public final class ClassicMobileSession: MobileGameSession {
             ?? assets.animation(for: pose, direction: .none), !animation.frames.isEmpty else { return nil }
         let index = abs(lemming.animationFrame) % animation.frames.count
         let frame = animation.frames[index]
-        if nativeScene != nil, let native = nativeArtwork?.lemming(pose: pose, left: lemming.direction == .left, tick: lemming.animationFrame) {
+        if nativeScene != nil, var native = nativeArtwork?.lemming(pose: pose, left: lemming.direction == .left, tick: lemming.animationFrame) {
+            if nativeArtwork?.monochrome == true, settings?.showClassicSkillBackpacks == true {
+                native = ClassicMonochromeBackpack.render(native,
+                    kind: .assigned(climber: lemming.hasClimber, floater: lemming.hasFloater),
+                    pose: pose, left: lemming.direction == .left)
+            }
             let pack = settings?.showClassicSkillBackpacks == true && nativeArtwork?.monochrome != true
                 ? Self.backpackPixels(native.rgba, width: native.width, height: native.height, lemming: lemming, pose: pose, scale: 2)
                 : (pixels: [UInt8](native.rgba), width: native.width, padding: 0)

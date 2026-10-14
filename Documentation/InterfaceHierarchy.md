@@ -55,6 +55,10 @@ verify fixed message footers, mouse targets, keyboard order and replay/movie ret
 actions. The shared menu/result flows serve Classic, Lemmings 2 and Lemmings 3.
 iOS/tvOS source compilation passes. Physical touch/controller acceptance and live
 sequel result/Ready screens remain manual validation gaps.
+The latest offscreen AppKit composite capture omitted some stone controls even
+though native geometry and activation checks passed. Shared bitmap footer captures
+verify the column layouts. Full shipping-app message compositing still needs a
+manual check; no foreground test was launched.
 
 Reproduce captures with the `LemmingsMobileMenuAudit` executable using `--hierarchy`
 and `--pause`. Run native checks through `Tools/UITestRunner/run.py`, including

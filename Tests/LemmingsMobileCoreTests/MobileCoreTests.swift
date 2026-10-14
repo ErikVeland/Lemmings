@@ -405,16 +405,38 @@ struct MobileCoreTests {
             if session.engineIdentifier != "classic-dos" {
                 #expect(target.pointerBounds == MobileRect(x: -9, y: -12, width: 18, height: 24))
             }
+            _ = session.drainSoundCues()
+            _ = (session as? Lemmings2MobileSession)?.drainLemmings2SoundRequests()
             #expect(state.canEdit && session.assign(control: control, to: target.id))
             #expect(session.assignedSkillCount == 1)
             #expect(session.snapshot.tick == tick)
             #expect(state.isPaused)
+            if let tribes = session as? Lemmings2MobileSession {
+                let requests = tribes.drainLemmings2SoundRequests()
+                #expect(requests.count == 1)
+                #expect(requests.first?.sample == Lemmings2SoundRequest.assignment(skill: .jumper, tribe: 0).sample)
+                #expect(requests.first?.point != nil)
+                #expect(tribes.drainLemmings2SoundRequests().isEmpty)
+            } else {
+                let cues = session.drainSoundCues()
+                #expect(cues.map(\.effect) == [.assignSkill])
+                #expect(cues.first?.point != nil)
+                #expect(session.drainSoundCues().isEmpty)
+            }
+            #expect(!session.assign(control: control, to: -1))
+            #expect(session.drainSoundCues().isEmpty)
+            #expect((session as? Lemmings2MobileSession)?.drainLemmings2SoundRequests().isEmpty != false)
             let payload = try session.checkpointPayload()
             let assigned = session.snapshot
             session.tick()
             #expect(session.snapshot.tick == tick + 1)
+            #expect(!session.drainSoundCues().contains { $0.effect == .assignSkill })
+            #expect((session as? Lemmings2MobileSession)?.drainLemmings2SoundRequests()
+                .contains { $0.sample == Lemmings2SoundRequest.assignment(skill: .jumper, tribe: 0).sample } != true)
             try session.restoreCheckpointPayload(payload)
             #expect(session.snapshot == assigned)
+            #expect(session.drainSoundCues().isEmpty)
+            #expect((session as? Lemmings2MobileSession)?.drainLemmings2SoundRequests().isEmpty != false)
         }
     }
 
@@ -751,6 +773,35 @@ struct MobileCoreTests {
         #expect(restored.levelFingerprint == session.levelFingerprint)
     }
 
+    @Test @MainActor func classicSolutionSeekingRetainsMovesAndLeavesTheLiveCheckpointUntouched() throws {
+        let terrain = try Self.classicSimulation().terrain
+        let initial = try ClassicDOSSimulation(terrain: terrain, configuration: .init(totalLemmings: 5,
+            requiredToSave: 1, timeLimitTicks: 1000, initialReleaseRate: 50, entrances: [.init(x: 20, y: 20)],
+            initialSkills: [.climber: 5, .floater: 5], maximumX: 159, maximumY: 79))
+        let live = ClassicMobileSession(simulation: initial, levelIdentifier: "retained/1", levelIndex: 0)
+        let checkpoint = try JSONSerialization.jsonObject(with: live.checkpointPayload()) as! NSDictionary
+        var probe = initial
+        while probe.lemmings.isEmpty, probe.tickCount < 100 { probe.tick() }
+        let id = try #require(probe.lemmings.first?.id), first = probe.tickCount, second = first + 2
+        let document = ClassicDOSReplay(rank: "Test", number: 1, title: "Retained solution",
+            initialStateHash: ClassicDOSReplayRecorder.stateHash(of: initial), events: [
+                .init(tick: first, action: .assign(lemmingID: id, skill: .climber), afterTick: true),
+                .init(tick: first + 1, action: .assign(lemmingID: 9999, skill: .floater), afterTick: true),
+                .init(tick: second, action: .assign(lemmingID: id, skill: .floater)),
+            ])
+        let replay = try #require(try live.makeReplaySession(document: JSONEncoder().encode(document)))
+        #expect(replay.isReadOnly && !live.isReadOnly)
+        #expect(replay.replayMoveNavigation.ticks == [first, second])
+        for _ in 0..<3 {
+            #expect(replay.seekReplay(to: second) && replay.assignedSkillCount == 2)
+            #expect(replay.seekReplay(to: first) && replay.assignedSkillCount == 1)
+            #expect(replay.replaySkillUses.last?.tick == first)
+            #expect(replay.seekReplay(to: 0) && replay.assignedSkillCount == 0)
+        }
+        #expect(!live.seekReplay(to: second))
+        #expect(checkpoint.isEqual(try JSONSerialization.jsonObject(with: live.checkpointPayload())))
+    }
+
     @Test @MainActor func sequelSessionsReplayTheirInputCheckpoints() async throws {
         let l2Initial = try Self.lemmings2Runtime()
         let l2 = Lemmings2MobileSession(
@@ -908,9 +959,15 @@ struct MobileCoreTests {
 
         let upward = makeSession()
         upward.tick()
+        _ = upward.drainSoundCues()
         #expect(upward.targetCandidates(for: 3).first?.assignment == .eligible)
         #expect(!upward.useTool(direction: .down, to: 0))
+        #expect(upward.drainSoundCues().isEmpty)
         #expect(upward.useTool(direction: .up, to: 0))
+        let toolCues = upward.drainSoundCues()
+        #expect(toolCues.map(\.effect) == [.assignSkill])
+        #expect(toolCues.first?.point != nil)
+        #expect(upward.drainSoundCues().isEmpty)
         for _ in 0..<40 { upward.tick() }
         let upwardFrame = try upward.render(highlight: nil)
         let checkpoint = try upward.checkpointPayload()

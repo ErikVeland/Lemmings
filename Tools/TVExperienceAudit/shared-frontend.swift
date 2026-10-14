@@ -3,6 +3,7 @@ import Foundation
 import LemmingsAppCore
 import LemmingsGameArt
 import LemmingsMobileCore
+import LemmingsTVCore
 import NxlvKit
 
 extension TVExperienceAudit {
@@ -13,7 +14,8 @@ extension TVExperienceAudit {
         typealias Action = GameFrontEnd.Action
         var profiles = MobileProfiles()
         _ = profiles.add(name: "Guest player", id: "guest")
-        let players = MobileCareerArt.players(profiles, subtitle: "", canDelete: true)
+        var players = MobileCareerArt.players(profiles, subtitle: "", canDelete: true)
+        players.rows.append(.init("cloudSaves", "Cloud saves"))
         guard players.rows.contains(where: { $0.id == "playerRename" && $0.enabled }),
               !players.footer.contains(where: { $0.id == "playerRename" }) else {
             throw Failure.invalid("Profile editing must be reachable in the player list")
@@ -53,9 +55,33 @@ extension TVExperienceAudit {
             ("retry", .init(title: "Retry level?", footer: [.init("cancel", "Cancel"), .init("retry", "Retry", primary: true)])),
             ("transport", .init(title: "Game controls", rows: [.init("skills", "Skills"), .init("camera", "Camera"),
                                   .init("forward", "Step forward"), .init("backward", "Step back"), .init("rewind", "Rewind"),
-                                  .init("faster", "Faster"), .init("slower", "Slower"), .init("end", "End run")], footer: [.init("back", "Back")])),
+                                  .init("faster", "Faster"), .init("slower", "Slower"), .init("end", "End run")],
+                                  footer: [.init("back", "Back"), .init("resume", "Resume", primary: true)])),
             ("transfer", .init(title: "Import files", details: ["Open this address on another device:", "http://192.168.1.12:50000/0123456789abcdef0123456789abcdef"], footer: [.init("back", "Back")])),
         ]
+        pages.append(("controller-mappings", MobileSettingsArt.controllerMappings(.init(), television: true)))
+        var personalSettings = MobileSettings()
+        personalSettings.classic.controllerSwapSticks = true
+        personalSettings.classic.controllerTapSpeed = false
+        personalSettings.classic.reduceMotion = true
+        personalSettings.classic.reduceFlashes = true
+        personalSettings.classic.showSongInfo = false
+        personalSettings.djShuffleScope = .allTracks
+        pages.append(("player-controller", MobileSettingsArt.page(.controller, settings: personalSettings)))
+        pages.append(("player-accessibility", MobileSettingsArt.page(.accessibility, settings: personalSettings)))
+        pages.append(("dj-shuffle-all", MobileSettingsArt.page(.audio, settings: personalSettings)))
+        pages.append(("controller-help", .init(title: "Controls", details: TVControllerBindings.help.components(separatedBy: "\n"),
+            footer: [.init("back", "Back")])))
+        pages.append(("controller-triggers", .init(title: "Controller", rows: [
+            .init("setting.tvTriggerFeedback", "Adaptive triggers", selected: true),
+            .init("setting.tvAim", "Aim sensitivity: 100%"),
+            .init("setting.tvDeadZone", "Stick dead zone: 15%")], footer: [.init("back", "Back")])))
+        let nativeBudget = FXPresentationBudget(cpuQuality: .full, gpuQuality: .full)
+        let pressuredBudget = FXPresentationBudget(cpuQuality: .full, gpuQuality: .balanced)
+        guard nativeBudget.televisionPlayfieldScale(nativeScale: 2) == 2,
+              pressuredBudget.televisionPlayfieldScale(nativeScale: 2) == 1 else {
+            throw Failure.invalid("TV pressure must reduce CRT pixel cost without changing menu scale")
+        }
         for group in MobileSettingsGroup.allCases {
             pages.append(("settings-" + group.rawValue, MobileSettingsArt.page(group, settings: .init(), displayAvailable: true)))
         }

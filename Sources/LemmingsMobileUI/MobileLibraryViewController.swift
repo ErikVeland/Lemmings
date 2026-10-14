@@ -416,7 +416,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         case let .settingsGroup(group):
             canvas.page = settingsPage(group); canvas.preview = nil
         case .controllerMappings:
-            canvas.page = MobileSettingsArt.controllerMappings(mobileSettings); canvas.preview = nil
+            canvas.page = controllerMappingsPage(); canvas.preview = nil
         case .playInsights:
             canvas.page = insightsDashboardPage(); canvas.preview = nil
         case .hotSeat:
@@ -496,7 +496,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
 
     private func coverArtwork(_ index: Int) async -> CGImage? {
-        guard let loader = previewLoader, let preview = try? await loader.load(index, settings: MobileSettings.load(from: .standard).classic),
+        guard let loader = previewLoader, let preview = try? await loader.load(index, settings: mobileSettings.classic),
               let image = MobileBitmapRenderer.image(preview.frame) else { return nil }
         let width = min(320, image.width)
         let x = max(0, min(image.width - width, Int(preview.origin.x)))
@@ -703,7 +703,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
     func canSelectJourneyLevel(_ index: Int) -> Bool {
         guard library is MobileJourneyLibrary, let run = learning.run else { return true }
-        return index <= run.currentIndex || MobileSettings.load(from: .standard).classic.unlockAllClassicLevels
+        return index <= run.currentIndex || mobileSettings.classic.unlockAllClassicLevels
     }
     func selectLevel(_ index: Int) {
         guard canSelectJourneyLevel(index) else { return }
@@ -713,7 +713,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         loading = true; rebuild()
         previewTask = Task {
             do {
-                let preview = try await previewLoader.load(index, settings: MobileSettings.load(from: .standard).classic)
+                let preview = try await previewLoader.load(index, settings: mobileSettings.classic)
                 guard !Task.isCancelled, previewGeneration == generation, route == .levels else { return }
                 selectedIndex = index; selectedPreview = preview; loading = false
                 rebuild()
@@ -946,7 +946,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         preparingLevel = true; loading = true; rebuild()
         previewTask = Task {
             do {
-                let prepared = try await previewLoader.prepare(index, settings: MobileSettings.load(from: .standard).classic,
+                let prepared = try await previewLoader.prepare(index, settings: mobileSettings.classic,
                     checkpoint: checkpoint, allowUnrelatedCheckpoint: restoringMatchingCheckpoint)
                 guard !Task.isCancelled, previewGeneration == generation else { return }
                 loading = false; preparingLevel = false
@@ -991,7 +991,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             let inRun = activeRun != nil || inLearning
             let next = MobileGameViewController(summary: content.summary, session: content.session,
                                                checkpointStore: checkpointStore, restoredCheckpoint: checkpoint,
-                                               turn: currentTurn())
+                                               turn: currentTurn(), settingsProfileID: checkpoint?.owner ?? settingsProfileID)
             let journeyMusic = inLearning && self.learning.run?.pool.id.hasPrefix("learning-") == true
             var sourceTitles = library.levels.map(\.title)
             if let queue = library as? MobileJourneyLibrary, let origin = try? queue.origin(of: index) { sourceTitles = origin.library.levels.map(\.title) }

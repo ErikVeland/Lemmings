@@ -7,21 +7,30 @@ import NxlvKit
 import UIKit
 
 extension MobileLibraryViewController {
+    var settingsProfileID: String { hotSeat?.turn ?? profiles.activeID }
     var mobileSettings: MobileSettings {
-        get { MobileSettings.load(from: .standard) }
-        set { newValue.save(to: .standard) }
+        get { MobileSettings.load(from: .standard, profileID: settingsProfileID) }
+        set { newValue.save(to: .standard, profileID: settingsProfileID) }
     }
 
     func settingsGroupsPage() -> GameFrontEnd.Page { MobileSettingsArt.groups() }
+    func controllerMappingsPage() -> GameFrontEnd.Page {
+        #if os(tvOS)
+        MobileSettingsArt.controllerMappings(mobileSettings, television: true)
+        #else
+        MobileSettingsArt.controllerMappings(mobileSettings)
+        #endif
+    }
     func settingsPage(_ group: MobileSettingsGroup) -> GameFrontEnd.Page {
         var page = MobileSettingsArt.page(group, settings: mobileSettings,
                                sharing: AnonymousTelemetry.shared.sharesCounts,
                                sharingAvailable: AnonymousTelemetry.shared.sharingAvailable, displayAvailable: true)
         #if os(tvOS)
         if group == .controller {
-            let input = TVPreferences.inputPreferences(from: .standard)
+            let input = TVPreferences.inputPreferences(from: .standard, profileID: settingsProfileID)
             page.rows += [.init("setting.tvAim", "Aim sensitivity: \(Int(input.aimSensitivity * 100))%"),
-                          .init("setting.tvDeadZone", "Stick dead zone: \(Int(input.deadZone * 100))%")]
+                          .init("setting.tvDeadZone", "Stick dead zone: \(Int(input.deadZone * 100))%"),
+                          .init("setting.tvTriggerFeedback", "Adaptive triggers", selected: input.triggerFeedback != false)]
         }
         #endif
         return page
@@ -36,11 +45,12 @@ extension MobileLibraryViewController {
     /// Each row changes one choice. Individual gameplay edits retain the Custom preset.
     func handleSettings(_ id: String) -> Bool {
         #if os(tvOS)
-        if id == "setting.tvAim" || id == "setting.tvDeadZone" {
-            var input = TVPreferences.inputPreferences(from: .standard)
+        if id == "setting.tvAim" || id == "setting.tvDeadZone" || id == "setting.tvTriggerFeedback" {
+            var input = TVPreferences.inputPreferences(from: .standard, profileID: settingsProfileID)
             if id == "setting.tvAim" { input.aimSensitivity = input.aimSensitivity >= 2 ? 0.5 : input.aimSensitivity + 0.25 }
-            else { input.deadZone = input.deadZone >= 0.349 ? 0.05 : input.deadZone + 0.05 }
-            input.saveInputPreferences(to: .standard)
+            else if id == "setting.tvDeadZone" { input.deadZone = input.deadZone >= 0.349 ? 0.05 : input.deadZone + 0.05 }
+            else { input.triggerFeedback = !(input.triggerFeedback ?? true) }
+            input.saveInputPreferences(to: .standard, profileID: settingsProfileID)
             rebuild(); return true
         }
         #endif
@@ -102,6 +112,7 @@ extension MobileLibraryViewController {
                 settings.soundtrack = cycle(settings.soundtrack, MobileMusic.shared.soundtrackNames)
                 settings.classic.music = settings.soundtrack == "Adaptive DJ" ? .adaptiveDJ : .amigaModules
             case "djOther": settings.classic.djIncludesOtherSoundtracks.toggle()
+            case "djShuffleScope": settings.djShuffleScope = cycle(settings.djShuffleScope, SoundtrackCatalogue.ShuffleScope.allCases)
             case "uiSize": settings.classic.interfaceSize = cycle(settings.classic.interfaceSize, ClassicInterfaceSize.allCases)
             case "songInfo": settings.classic.showSongInfo.toggle()
             case "motion": settings.classic.reduceMotion.toggle()
@@ -114,7 +125,7 @@ extension MobileLibraryViewController {
             }
         } else { return false }
         mobileSettings = settings
-        MobileMusic.shared.applySettings()
+        MobileMusic.shared.applySettings(profileID: settingsProfileID)
         rebuild()
         return true
     }

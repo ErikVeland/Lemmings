@@ -1,0 +1,38 @@
+import Foundation
+import Testing
+@testable import NxlvKit
+
+struct PlayerControlSettingsTests {
+    @Test func profileChoicesOverlayOnlyInputAndAccessibility() {
+        var personal = ClassicSettings()
+        personal.controllerEnabled = false
+        personal.controllerTapSpeed = false
+        personal.controllerSwapSticks = true
+        personal.controllerMappings = ControllerBindings.swapping([:], physical: .a, role: .y)
+        personal.interfaceSize = .extraLarge
+        personal.reduceMotion = true
+        personal.reduceFlashes = true
+        personal.showSongInfo = false
+        personal.fadeMenuButton = false
+        var device = ClassicSettings()
+        device.musicVolume = 0.3
+        device.graphics = .amiga
+        let applied = PlayerControlSettings(personal).applying(to: device)
+        #expect(PlayerControlSettings(applied) == PlayerControlSettings(personal))
+        #expect(applied.musicVolume == 0.3 && applied.graphics == .amiga)
+    }
+
+    @Test func profilesRetainIndependentChoicesAndLegacyDefaults() {
+        let suite = "PlayerControls.\(UUID())"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let legacy = ClassicSettings(reduceFlashes: true)
+        var first = PlayerControlSettings.load(from: defaults, profileID: "first", legacy: legacy)
+        first.controllerSwapSticks = true
+        first.save(to: defaults, profileID: "first")
+        let second = PlayerControlSettings.load(from: defaults, profileID: "second", legacy: legacy)
+        #expect(second.reduceFlashes && !second.controllerSwapSticks)
+        #expect(PlayerControlSettings.load(from: defaults, profileID: "first", legacy: .init()) == first)
+        #expect(PlayerControlSettings.defaultsKey(profileID: "a.b") != PlayerControlSettings.defaultsKey(profileID: "a"))
+    }
+}

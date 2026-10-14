@@ -15,9 +15,16 @@ import UIKit
     var onPan: ((Double, Double) -> Void)?
     var onMenuScroll: ((Double) -> Void)?
     var onBoost: ((Bool) -> Void)?
+    var onRewindHeld: ((Bool) -> Void)?
+    var onMenuPause: (() -> Void)?
+    var onGameMenu: (() -> Void)?
+    var onDJShuffle: (() -> Void)?
+    var settingsProfileID: () -> String = { MobileProfiles.defaultID }
+    var controllerSpeed: () -> Double = { 1 }
+    var triggerFeedbackEnabled: () -> Bool = { true }
     var onSpeedKey: ((Bool) -> Void)?
     var onMenuNeutral: (() -> Void)?
-    var settings: () -> ClassicSettings = { MobileSettings.load(from: .standard).classic }
+    var settings: () -> ClassicSettings = { MobileSettings.current(from: .standard).classic }
     var isMenu: () -> Bool = { false }
     var isActive: () -> Bool = { true }
     #if os(tvOS)
@@ -31,7 +38,7 @@ import UIKit
     private var lastPoll = 0.0
 
     func reset() {
-        onBoost?(false); onSpeedKey?(false); bindings.reset(); pressedKeys.removeAll(); lastPoll = 0
+        onBoost?(false); onRewindHeld?(false); onSpeedKey?(false); bindings.reset(); pressedKeys.removeAll(); lastPoll = 0
         #if os(tvOS)
         tvInput.reset()
         #endif

@@ -439,6 +439,9 @@ struct ReticleFeedback {
   private var overlayLineRects: [CGRect] = []
 
   private var spriteCache: [String: NSImage] = [:]
+  var solutionGhost: ClassicSolutionGhost?
+  var ghostSolutionEnabled = false { didSet { needsDisplay = true } }
+  private var ghostPixels: [String: CGImage] = [:]
   private var spritePixels: [String: CGImage] = [:]
   private var selectionTargetID: Int?
   private var selectedSprite: (pixels: CGImage, rect: CGRect)?
@@ -806,7 +809,7 @@ struct ReticleFeedback {
       && point.y >= y - box.top && point.y <= y + box.bottom
   }
 
-  func invalidateSprites() { spriteCache.removeAll(); spritePixels.removeAll(); needsDisplay = true }
+  func invalidateSprites() { spriteCache.removeAll(); spritePixels.removeAll(); ghostPixels.removeAll(); needsDisplay = true }
 
   // MARK: - Drawing
 
@@ -870,6 +873,7 @@ struct ReticleFeedback {
         NSBezierPath(rect: bounds).addClip()
         precisionLens.applyToCurrentGraphicsContext()
         drawLevel(levelImage)
+        drawSolutionGhost()
         speedTrails.draw(enabled: usesTrails, in: bounds) { drawLemmings() }
         NSGraphicsContext.restoreGraphicsState()
       }
@@ -1284,6 +1288,44 @@ struct ReticleFeedback {
     drawPixels(pixels, in: rect, alpha: alpha)
   }
 
+  private func drawSolutionGhost() {
+    guard ghostSolutionEnabled, let session = session as? ClassicSession, solutionGhost != nil else { return }
+    solutionGhost?.synchronise(to: session.currentTick)
+    guard let ghost = solutionGhost else { return }
+    for lemming in ghost.simulation.lemmings where lemming.isActive {
+      draw(SessionLemming(id: lemming.id, x: lemming.foot.x, y: lemming.foot.y,
+        pose: spritePose(for: lemming.action), facingLeft: lemming.direction == .left,
+        animationFrame: lemming.animationFrame, countdown: nil,
+        hasClimber: lemming.hasClimber, hasFloater: lemming.hasFloater), solutionGhost: true)
+    }
+  }
+
+  private func drawGhostSprite(_ sprite: NSImage, key: String, in rect: CGRect) {
+    guard let image = spritePixels[key] ?? sprite.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return }
+    if spritePixels.count < 1500 { spritePixels[key] = image }
+    let scale = max(1, Int((CGFloat(image.width) * CGFloat(viewport.zoom) / rect.width).rounded()))
+    let padding = CGFloat(scale)
+    if ghostPixels[key] == nil {
+      guard let context = CGContext(data: nil, width: image.width, height: image.height,
+        bitsPerComponent: 8, bytesPerRow: image.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+        bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue), let data = context.data else { return }
+      context.draw(image, in: CGRect(x: 0, y: 0, width: image.width, height: image.height))
+      let frame = SolutionGhostPixels(rgba: Data(bytes: data, count: image.width * image.height * 4),
+        width: image.width, height: image.height, pixelScale: scale)
+      guard let provider = CGDataProvider(data: frame.rgba as CFData),
+        let ghost = CGImage(width: frame.width, height: frame.height, bitsPerComponent: 8, bitsPerPixel: 32,
+          bytesPerRow: frame.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+          bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider,
+          decode: nil, shouldInterpolate: false, intent: .defaultIntent) else { return }
+      if ghostPixels.count >= 512 { ghostPixels.removeAll(keepingCapacity: true) }
+      ghostPixels[key] = ghost
+    }
+    guard let ghost = ghostPixels[key] else { return }
+    let dx = rect.width / CGFloat(image.width) * padding
+    let dy = rect.height / CGFloat(image.height) * padding
+    drawPixels(ghost, in: rect.insetBy(dx: -dx, dy: -dy))
+  }
+
   private func drawLemmings() {
     guard let session else { return }
     let lemmings = session.lemmings
@@ -1362,7 +1404,7 @@ struct ReticleFeedback {
     }
   }
 
-  private func draw(_ lemming: SessionLemming, ghostsOnly: Bool = false) {
+  private func draw(_ lemming: SessionLemming, ghostsOnly: Bool = false, solutionGhost: Bool = false) {
     let motion = ghostsOnly ? speedTrails.motion(actor: lemming.id) : .zero
     if ghostsOnly && motion == .zero { return }
     if let action = lemming.neoAction, let neoSprites,
@@ -1402,9 +1444,9 @@ struct ReticleFeedback {
     guard let assets, !palette.isEmpty else { return }
     let direction: ClassicSpriteDirection = lemming.facingLeft ? .left : .right
     let pose = lemming.pose
-    let backpack = showClassicSkillBackpacks && macArtwork?.monochrome != true ? ClassicSkillBackpack.kind(for: lemming) : nil
+    let backpack = showClassicSkillBackpacks ? ClassicSkillBackpack.kind(for: lemming) : nil
     let backpackKey = backpack.map { "-pack-\($0.rawValue)" } ?? ""
-    let backpackPadding = backpack == nil ? 0.0 : 2.0
+    let backpackPadding = backpack == nil || macArtwork?.monochrome == true ? 0.0 : 2.0
     guard
       let animation = assets.animation(for: pose, direction: direction)
         ?? assets.animation(for: pose, direction: .none),
@@ -1412,14 +1454,23 @@ struct ReticleFeedback {
     else { return }
 
     if let frame = macArtwork?.lemming(pose: pose, left: lemming.facingLeft, tick: lemming.animationFrame) {
+      let monochrome = macArtwork?.monochrome == true
       let key = "mac-\(pose.rawValue)-\(direction.rawValue)-\(lemming.animationFrame)\(backpackKey)"
-      let sprite = spriteCache[key] ?? (backpack == nil ? frame.makeNSImage() :
-        ClassicSkillBackpack.image(rgba: frame.rgba, width: frame.width, height: frame.height,
-          pixelScale: 2, pose: pose, left: lemming.facingLeft, kind: backpack))
+      let sprite = spriteCache[key] ?? {
+        if monochrome {
+          return ClassicMonochromeBackpack.render(frame,
+            kind: backpack.flatMap { ClassicMonochromeBackpack.Kind(rawValue: $0.rawValue) },
+            pose: pose, left: lemming.facingLeft).makeNSImage()
+        }
+        return backpack == nil ? frame.makeNSImage() :
+          ClassicSkillBackpack.image(rgba: frame.rgba, width: frame.width, height: frame.height,
+            pixelScale: 2, pose: pose, left: lemming.facingLeft, kind: backpack)
+      }()
       if let sprite {
         if spriteCache.count < 1500 { spriteCache[key] = sprite }
+        let padding = monochrome ? Double(sprite.size.width - CGFloat(frame.width)) / 4 : backpackPadding
         let origin = viewport.viewPoint(fromLevel: CGPoint(
-          x: Double(lemming.x + animation.offsetX) + Double(frame.x) / 2 - backpackPadding,
+          x: Double(lemming.x + animation.offsetX) + Double(frame.x) / 2 - padding,
           y: Double(lemming.y + animation.offsetY) + Double(frame.y) / 2))
         var rect = CGRect(x: origin.x, y: origin.y,
           width: sprite.size.width * viewport.zoom / 2, height: sprite.size.height * viewport.zoom / 2)
@@ -1431,6 +1482,7 @@ struct ReticleFeedback {
             pixelSize: CGSize(width: viewport.zoom, height: viewport.zoom))
           return
         }
+        if solutionGhost { drawGhostSprite(sprite, key: key, in: rect); return }
         drawSprite(sprite, key: key, in: rect, alpha: fraction)
         captureSelectionSprite(for: lemming, key: key, sprite: sprite, in: rect)
         drawAssignmentPulse(for: lemming, key: key, sprite: sprite, in: rect)
@@ -1466,6 +1518,7 @@ struct ReticleFeedback {
         pixelSize: CGSize(width: viewport.zoom, height: viewport.zoom))
       return
     }
+    if solutionGhost { drawGhostSprite(sprite, key: key, in: rect); return }
     drawSprite(sprite, key: key, in: rect, alpha: fraction)
     captureSelectionSprite(for: lemming, key: key, sprite: sprite, in: rect)
     drawAssignmentPulse(for: lemming, key: key, sprite: sprite, in: rect)

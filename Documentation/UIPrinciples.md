@@ -128,6 +128,10 @@ facing direction in PC and Mac artwork, with hair and hands in front. Include
 the pack in the sprite used for selection, speed trails and CRT rendering.
 Remove it during death and exit animations. These markers apply to Classic;
 NeoLemmix and the sequel artwork retain their own skill presentation.
+Macintosh 1-bit sprites use diagonal dithering for Climber, horizontal stripes
+for Floater and a checker pattern for both. Use the matching colour frame's
+anatomy to place the marker and preserve foreground pixels. Keep every marker
+pixel black or white and use the same backpack preference and input targets.
 
 Gameplay settings offer None, Obvious and Modern selection effects. None adds no
 selection highlight. Obvious restores the game-scale coloured halo and overhead
@@ -303,6 +307,21 @@ following. Zoom has no gameplay charge or saved-profile cost.
 These controls apply to simulated Classic solution replays. Recorded movies from
 Classic, L2 and L3 contain their original camera view and cannot track individual
 lemmings. A simulation replay format for the sequels remains separate work.
+
+After a confirmed solution reveal, use the shared Your game / Solution stone
+selector. Retain each view's simulation, camera and transport state. Switches
+pause both views, and Back returns directly to the game. Play remains explicit.
+Keep the attempt owner and Ready handover. The same player's retry can retain
+the replay; a different level or owner clears it. Previous move and Next move
+seek to successful assignments while paused. Disable unavailable directions
+and preserve the live attempt, checkpoint and records. See [pause and replay
+behaviour](MobilePauseScreen.md) for platform inputs and engine limits.
+
+Classic adds a default-off Ghost solution checkbox beneath the live selector
+after the confirmed reveal. Use the current sprite silhouettes with a sharp
+translucent outline, behind the real lemmings. Follow live simulation ticks and
+rewinds without moving the retained study replay. Toggling preserves pause and
+Ready states. See [Ghost solution](GhostSolution.md) for ownership and validation.
 
 The curated journey excludes known hidden-exit puzzles and unsuitable introductory
 lessons in `Resources/Progression/exclusions.json`. Original campaigns and fan packs

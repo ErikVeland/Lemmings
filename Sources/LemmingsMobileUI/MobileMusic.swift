@@ -23,7 +23,9 @@ import UIKit
     private let nukeMood = NukeMusicSweep()
     private var lastTrack: URL?
     private var lastPitchCents: Double?
-    private var cachedSettings = MobileSettings.load(from: .standard)
+    private var cachedSettings = MobileSettings.current(from: .standard)
+    private var profileID = MobileProfiles.defaultID
+    private var compositionID: String?
     private(set) var currentTrackTitle: String?
     private(set) var currentSoundtrackName: String?
     var onTrackChange: ((String, String) -> Void)?
@@ -50,21 +52,26 @@ import UIKit
         set {
             var value = settings; value.soundtrack = newValue
             value.classic.music = newValue == "Adaptive DJ" ? .adaptiveDJ : .amigaModules
-            value.save(to: .standard)
+            value.save(to: .standard, profileID: profileID)
             cachedSettings = value
             stop()
         }
     }
     var isEnabled: Bool {
         get { settings.musicEnabled }
-        set { var value = settings; value.musicEnabled = newValue; value.save(to: .standard); applySettings() }
+        set { var value = settings; value.musicEnabled = newValue; value.save(to: .standard, profileID: profileID); applySettings() }
     }
     func cycleSoundtrack() {
         let names = soundtrackNames
         soundtrack = names[((names.firstIndex(of: soundtrack) ?? 0) + 1) % names.count]
     }
-    func applySettings() {
-        cachedSettings = MobileSettings.load(from: .standard)
+    func selectProfile(_ id: String) {
+        profileID = id
+        applySettings()
+    }
+    func applySettings(profileID: String? = nil) {
+        if let profileID { self.profileID = profileID }
+        cachedSettings = MobileSettings.load(from: .standard, profileID: self.profileID)
         let c = settings.classic
         if let playing, !playing.hasSuffix("|" + soundtrack) { stop() }
         module.setEnhancements(c.musicStyle == .modern ? .modern : .faithful)
@@ -85,12 +92,17 @@ import UIKit
         lastPitchCents = nil
         let position = context.scorePosition ?? index
         let tune = MobileMusicAssignment.tune(identifier: identifier, index: position, title: title)
+        compositionID = tune.game + "." + tune.track.lowercased()
         let cycle = MobileMusicAssignment.cycle(tune: tune, index: position, titles: context.titles, isFan: context.isFan)
         let source = moduleURL(tune)
         if let root = musicRoot {
             var pools = SoundtrackPlayer.djSoundtracks(at: root,
-                includeOtherSoundtracks: settings.classic.djIncludesOtherSoundtracks,
+                includeOtherSoundtracks: true,
                 seasonal: SoundtrackPlayer.isSeasonal(tune.folder))
+            for (name, tracks) in SoundtrackPlayer.djSoundtracks(at: root, includeOtherSoundtracks: true,
+                seasonal: !SoundtrackPlayer.isSeasonal(tune.folder)) {
+                pools[name, default: []].append(contentsOf: tracks)
+            }
             if let source { pools["Original", default: []].append(source) }
             dj.load(soundtracks: pools, catalogueRoot: root)
             dj.setCelebrationAlternates(settings.classic.djIncludesOtherSoundtracks)
@@ -124,6 +136,11 @@ import UIKit
             playing = key; announce(source, soundtrack: "Original")
             applyOutputState()
         } catch { playing = nil }
+    }
+
+    @discardableResult func shuffle(scope: SoundtrackCatalogue.ShuffleScope) -> Bool {
+        guard isEnabled, !isTestAudioMuted, usingDJ, !paused, !inactive, !resultComplete else { return false }
+        return dj.shuffle(scope: scope, fallbackTrackID: compositionID)
     }
 
     private func moduleURL(_ tune: MobileMusicAssignment.Tune) -> URL? {

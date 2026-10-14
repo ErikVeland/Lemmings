@@ -42,6 +42,16 @@ public enum BundledGameResources {
         return FileManager.default.fileExists(atPath: image.path) ? image : nil
     }
 
+    /// Mobile and TV builds package the original banks in different folders.
+    public static func amigaSoundDirectory(in bundle: Bundle = .main) -> URL? {
+        for path in ["Ports/amiga_extracted/lemmings", "Sounds/Amiga"] {
+            if let root = try? directory(path, requiring: ["basicfx", "fullfx"], in: bundle) {
+                return root
+            }
+        }
+        return nil
+    }
+
     private static func directory(_ path: String, requiring files: [String], in bundle: Bundle) throws -> URL {
         guard let resources = bundle.resourceURL else {
             throw SequelDataError.invalid("This app has no embedded game resources. Rebuild the app with its game data.")

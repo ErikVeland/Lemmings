@@ -12,14 +12,22 @@ public struct TVPreferences: Codable, Equatable, Sendable {
     public var musicEnabled = true
     public var effectsEnabled = true
     public var mappings: [String: String] = [:]
+    public var triggerFeedback: Bool? = nil
     public init() {}
 
     public static let inputDefaultsKey = "tv.inputPreferences.v1"
-    public static func inputPreferences(from defaults: UserDefaults) -> TVPreferences {
-        defaults.data(forKey: inputDefaultsKey).flatMap { try? JSONDecoder().decode(Self.self, from: $0) }?.validated ?? .init()
+    public static func inputPreferences(from defaults: UserDefaults, profileID: String? = nil) -> TVPreferences {
+        let key = inputKey(profileID)
+        if let data = defaults.data(forKey: key), let value = try? JSONDecoder().decode(Self.self, from: data) { return value.validated }
+        let legacy = defaults.data(forKey: inputDefaultsKey).flatMap { try? JSONDecoder().decode(Self.self, from: $0) }?.validated ?? .init()
+        if profileID != nil { legacy.saveInputPreferences(to: defaults, profileID: profileID) }
+        return legacy
     }
-    public func saveInputPreferences(to defaults: UserDefaults) {
-        if let data = try? JSONEncoder().encode(validated) { defaults.set(data, forKey: Self.inputDefaultsKey) }
+    public static func inputKey(_ profileID: String?) -> String {
+        profileID.map { inputDefaultsKey + ".player." + Data($0.utf8).base64EncodedString() } ?? inputDefaultsKey
+    }
+    public func saveInputPreferences(to defaults: UserDefaults, profileID: String? = nil) {
+        if let data = try? JSONEncoder().encode(validated) { defaults.set(data, forKey: Self.inputKey(profileID)) }
     }
 
     public var validated: TVPreferences {

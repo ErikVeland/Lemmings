@@ -39,17 +39,22 @@ extension MenuAudit {
                            .init("play", session.snapshot.isComplete ? "Replay" : "Play", primary: true)]
                     let selectorScale: CGFloat = pose == "tv" ? 2 : 1
                     let selectorWidth = min(viewport.width - 16, 320 * selectorScale)
-                    let selector = CGRect(x: (viewport.width - selectorWidth) / 2, y: 8, width: selectorWidth, height: 48 * selectorScale)
+                    let selectorHeight: CGFloat = mode == .game ? 100 : 48
+                    let selector = CGRect(x: (viewport.width - selectorWidth) / 2, y: 8, width: selectorWidth, height: selectorHeight * selectorScale)
+                    let switchFrame = CGRect(x: selector.minX, y: selector.minY, width: selector.width, height: 48 * selectorScale)
                     let bodyHeight = viewport.height - selector.maxY - 8
                     let scale = MobilePauseArt.interfaceScale(.standard, width: viewport.width, height: bodyHeight, television: pose == "tv")
                     let page = MobilePauseArt.page(summary, actions: actions)
                     let base = GameFrontEnd.layout(page, width: viewport.width / scale, minimumHeight: bodyHeight / scale)
                     let layout = MobilePauseArt.pinningFooter(base, viewport: CGRect(x: 0, y: 0, width: viewport.width / scale, height: bodyHeight / scale))
-                    for (value, frame) in zip(SolutionReplayMode.allCases, SolutionSwitchArt.frames(in: selector)) {
+                    for (value, frame) in zip(SolutionReplayMode.allCases, SolutionSwitchArt.frames(in: switchFrame)) {
                         guard frame.height >= 44, frame.width >= 44,
-                              SolutionSwitchArt.mode(at: CGPoint(x: frame.midX, y: frame.midY), in: selector) == value,
+                              SolutionSwitchArt.mode(at: CGPoint(x: frame.midX, y: frame.midY), in: switchFrame) == value,
                               typography.width(of: value == .game ? "Your game" : "Solution", face: .small, scale: 1) <= frame.width - 16 else { throw invalidTargets(line: #line) }
                     }
+                    let selectorBounds = CGRect(x: 0, y: 0, width: selector.width / selectorScale, height: 48)
+                    guard SolutionSwitchArt.mode(at: CGPoint(x: selectorBounds.midX, y: selectorBounds.midY), in: selectorBounds) == nil
+                    else { throw invalidTargets(line: #line) }
                     for target in layout.targets {
                         guard GameTextLayout.height(target.action.title, width: target.frame.width - (target.action.primary ? 48 : 24)) <= target.frame.height - 8,
                               layout.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)) == (target.action.enabled ? target.action.id : nil)
@@ -62,6 +67,11 @@ extension MenuAudit {
                     context.saveGState()
                     context.translateBy(x: selector.minX, y: selector.minY); context.scaleBy(x: selectorScale, y: selectorScale)
                     SolutionSwitchArt.draw(mode: mode, in: CGRect(x: 0, y: 0, width: selector.width / selectorScale, height: 48), typography: typography, context: context)
+                    if mode == .game {
+                        let ghostFrame = CGRect(x: 0, y: 56, width: selector.width / selectorScale, height: 44)
+                        guard typography.width(of: "Ghost solution", face: .small, scale: 1) <= ghostFrame.width - 52 else { throw invalidTargets(line: #line) }
+                        GhostSolutionArt.draw(enabled: index % 2 == 1, in: ghostFrame, typography: typography, context: context)
+                    }
                     context.restoreGState()
                     context.translateBy(x: 0, y: selector.maxY + 8); context.scaleBy(x: scale, y: scale)
                     let frame = MobileBitmapRenderer.image(try session.render(highlight: nil))
@@ -76,6 +86,23 @@ extension MenuAudit {
         }
         guard live.snapshot == liveState, live.snapshot.tick == 0 else { throw invalidTargets(line: #line) }
         guard checkpoint.isEqual(try JSONSerialization.jsonObject(with: live.checkpointPayload())) else { throw invalidTargets(line: #line) }
+        for width: CGFloat in [280, 304, 374, 600] {
+            let size = CGSize(width: width, height: ReplayMoveArt.height(width: width))
+            guard SolutionSwitchArt.frames(in: CGRect(origin: .zero, size: size)).allSatisfy({
+                GameTextLayout.height("Previous move", width: $0.width - 16) <= $0.height - 12
+                    && $0.height >= 44 && $0.width >= 44
+            }) else { throw invalidTargets(line: #line) }
+            guard let context = CGContext(data: nil, width: Int(size.width), height: Int(size.height), bitsPerComponent: 8,
+                bytesPerRow: Int(size.width) * 4, space: CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { throw Failure.missingArtwork }
+            context.translateBy(x: 0, y: size.height); context.scaleBy(x: 1, y: -1)
+            ReplayMoveArt.draw(previous: false, next: true, in: CGRect(origin: .zero, size: size), typography: typography, context: context)
+            guard let image = context.makeImage(), let destination = CGImageDestinationCreateWithURL(
+                output.appendingPathComponent("move-buttons-\(Int(width)).png") as CFURL, "public.png" as CFString, 1, nil)
+            else { throw Failure.missingArtwork }
+            CGImageDestinationAddImage(destination, image, nil)
+            guard CGImageDestinationFinalize(destination) else { throw Failure.missingArtwork }
+        }
         print("PASS \(renders) game/solution renders and targets; replay boundaries, successful moves and unchanged live attempt.")
     }
 }

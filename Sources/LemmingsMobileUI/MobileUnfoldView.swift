@@ -25,7 +25,7 @@ import UIKit
 
     func play(in region: CGRect) {
         stop()
-        guard !UIAccessibility.isReduceMotionEnabled, !MobileSettings.load(from: .standard).classic.reduceMotion,
+        guard !UIAccessibility.isReduceMotionEnabled, !MobileSettings.current(from: .standard).classic.reduceMotion,
               let art = Self.artwork, region.width >= 280, region.height >= 88 else { return }
         frame = superview?.bounds ?? .zero
         let start = art.frame(in: region, progress: 0), end = art.frame(in: region, progress: 1)

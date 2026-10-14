@@ -2,6 +2,10 @@ import Foundation
 
 /// Composition identity is separate from its port, source fidelity and arrangement.
 public struct SoundtrackCatalogue: Codable, Sendable {
+    public enum ShuffleScope: String, Codable, CaseIterable, Sendable {
+        case sameTrack, allTracks
+        public var title: String { self == .sameTrack ? "Same track" : "All tracks" }
+    }
     public struct Variant: Codable, Equatable, Sendable {
         public let id: String
         public let path: String
@@ -51,6 +55,16 @@ public struct SoundtrackCatalogue: Codable, Sendable {
             if let variant = track.variants.first(where: { $0.path == path }) { return (track, variant) }
         }
         return nil
+    }
+
+    /// Manual shuffle uses playable themes and excludes the current recording and source-only files.
+    public func shuffleCandidates(currentPath: String, scope: ShuffleScope, availablePaths: Set<String>, fallbackTrackID: String? = nil) -> [Variant] {
+        let currentID = entry(path: currentPath)?.track.id ?? fallbackTrackID
+        return tracks.filter {
+            ["level", "special", "seasonal"].contains($0.role) && (scope == .allTracks || $0.id == currentID)
+        }.flatMap(\.variants).filter {
+            $0.path != currentPath && $0.confidence == "documented" && availablePaths.contains($0.path)
+        }.sorted { $0.id < $1.id }
     }
 
     /// First occurrence uses the original preferred port. Later score cycles visit

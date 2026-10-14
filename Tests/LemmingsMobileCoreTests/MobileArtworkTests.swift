@@ -13,7 +13,15 @@ struct MobileArtworkTests {
         let ground = try ClassicGroundSet.load(style: level.groundStyle, from: directory)
         let assets = try ClassicMainDATAssets.load(from: directory)
         let rendered = try ClassicLevelRenderer.render(level, groundSet: ground, specialGraphic: nil)
-        let simulation = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets)
+        let initial = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets)
+        let config = initial.configuration
+        let simulation = try ClassicDOSSimulation(terrain: initial.terrain,
+            configuration: .init(totalLemmings: config.totalLemmings, requiredToSave: config.requiredToSave,
+                timeLimitTicks: config.timeLimitTicks, initialReleaseRate: config.initialReleaseRate,
+                entrances: config.entrances, triggers: config.triggers,
+                initialSkills: Dictionary(uniqueKeysWithValues: ClassicSkill.allCases.map { ($0, 20) }),
+                maximumX: config.maximumX, maximumY: config.maximumY, mechanics: config.mechanics),
+            destructionMasks: initial.comparisonDestructionMasks)
         let palette = try ClassicLemmingPalette.inLevelVGA(terrainPalette: ground.terrainPalette)
         let bundle = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: bundle, withIntermediateDirectories: true)
@@ -46,6 +54,32 @@ struct MobileArtworkTests {
             }
             #expect(ClassicDOSReplayRecorder.stateHash(of: game.finalSimulation) == ClassicDOSReplayRecorder.stateHash(of: simulation))
             for _ in 0..<60 { game.tick() }
+            if source == .macintoshMonochrome {
+                let checkpoint = try game.checkpointPayload()
+                let target = try #require(game.targetCandidates(for: 0).first)
+                let original = try game.render(highlight: nil)
+                var patterns = Set<Data>()
+                for (climber, floater) in [(true, false), (false, true), (true, true)] {
+                    try game.restoreCheckpointPayload(checkpoint)
+                    if climber { #expect(game.assign(control: 0, to: target.id)) }
+                    if floater { #expect(game.assign(control: 1, to: target.id)) }
+                    let marked = try game.render(highlight: nil)
+                    #expect(marked != original)
+                    patterns.insert(marked.rgba)
+                    let state = ClassicDOSReplayRecorder.stateHash(of: game.finalSimulation)
+                    settings.showClassicSkillBackpacks = false
+                    game.applySettings(settings)
+                    #expect(try game.render(highlight: nil) == original)
+                    #expect(ClassicDOSReplayRecorder.stateHash(of: game.finalSimulation) == state)
+                    #expect(game.targetCandidates(for: 0).contains { $0.id == target.id && $0.point == target.point })
+                    settings.showClassicSkillBackpacks = true
+                    game.applySettings(settings)
+                    #expect(try game.render(highlight: nil) == marked)
+                }
+                #expect(patterns.count == 3)
+                try game.restoreCheckpointPayload(checkpoint)
+                #expect(try game.render(highlight: nil) == original)
+            }
             let target = try #require(game.targetCandidates(for: 0).first)
             _ = try game.render(highlight: .init(id: target.id, point: target.point, state: target.assignment))
             #expect(game.skillCursorFrame(control: 0) != nil)

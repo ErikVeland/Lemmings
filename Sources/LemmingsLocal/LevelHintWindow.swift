@@ -15,6 +15,7 @@ import NxlvKit
     private var retainedOwnerKey = ""
     private weak var retainedOwner: NSWindow?
     private var pauseGame: (() -> Void)?
+    private weak var ghostSource: PlayfieldView?
     private var gameSelector: SolutionSwitchView?
     private var switchMonitor: Any?
     func hasSolution(for runID: UUID) -> Bool { retainedRunID == runID && solutionWindow != nil }
@@ -22,10 +23,17 @@ import NxlvKit
     func clearSolution() {
         if let replay = solutionWindow, GameScreen.shared.contains(replay.page) { GameScreen.shared.dismiss(replay.page) }
         solutionWindow?.stop(); solutionWindow = nil
+        ghostSource?.solutionGhost = nil; ghostSource?.ghostSolutionEnabled = false; ghostSource = nil
         gameSelector?.removeFromSuperview(); gameSelector = nil
         retainedRunID = nil; retainedOwner = nil; pauseGame = nil
         retainedOwnerKey = ""
         if let switchMonitor { NSEvent.removeMonitor(switchMonitor) }; switchMonitor = nil
+    }
+
+    func toggleGhostSolution() {
+        guard let source = ghostSource, source.solutionGhost != nil else { return }
+        source.ghostSolutionEnabled.toggle()
+        gameSelector?.ghostEnabled = source.ghostSolutionEnabled
     }
 
     func selectSolutionMode(_ mode: SolutionReplayMode) {
@@ -54,14 +62,18 @@ import NxlvKit
         replay.suspend()
     }
 
-    private func retain(_ replay: SolutionReplayWindow, owner: NSWindow, runID: UUID?, ownerKey: String, pause: @escaping () -> Void) {
+    private func retain(_ replay: SolutionReplayWindow, source: PlayfieldView, owner: NSWindow, runID: UUID?, ownerKey: String, pause: @escaping () -> Void) {
         solutionWindow = replay; retainedOwner = owner; retainedRunID = runID; pauseGame = pause
         retainedOwnerKey = ownerKey
+        ghostSource = source
+        source.solutionGhost = ClassicSolutionGhost(initial: replay.playback.solution.initial, replay: replay.playback.solution.replay)
+        source.ghostSolutionEnabled = false
         replay.onReturnToGame = { [weak self] in self?.selectSolutionMode(.game) }
         if let root = owner.contentView {
-            let selector = SolutionSwitchView(frame: CGRect(x: max(8, (root.bounds.width - 320) / 2), y: root.isFlipped ? 8 : max(0, root.bounds.height - 56), width: 320, height: 48))
+            let selector = SolutionSwitchView(frame: CGRect(x: max(8, (root.bounds.width - 320) / 2), y: root.isFlipped ? 8 : max(0, root.bounds.height - 108), width: 320, height: 100))
             selector.autoresizingMask = [.minXMargin, .maxXMargin, root.isFlipped ? .maxYMargin : .minYMargin]
             selector.onSelect = { [weak self] mode in self?.selectSolutionMode(mode) }
+            selector.onToggleGhost = { [weak self] in self?.toggleGhostSolution() }
             root.addSubview(selector, positioned: .above, relativeTo: nil)
             gameSelector = selector
         }
@@ -128,7 +140,7 @@ import NxlvKit
                     GameScreen.shared.dismiss(warning)
                     let replay = SolutionReplayWindow(solution: solution, source: solutionSource,
                         width: solutionSession.levelWidth, height: solutionSession.levelHeight, effects: solutionEffects)
-                    self.retain(replay, owner: owner, runID: runID, ownerKey: ownerKey, pause: pauseForSolution)
+                    self.retain(replay, source: solutionSource, owner: owner, runID: runID, ownerKey: ownerKey, pause: pauseForSolution)
                     self.selectSolutionMode(.solution)
                 }
                 confirm.keyEquivalent = ""

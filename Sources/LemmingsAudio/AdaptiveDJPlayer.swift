@@ -556,6 +556,21 @@ import NxlvKit
     return (url.deletingLastPathComponent().lastPathComponent, url)
   }
 
+  /// A manual change uses the same beat-matched mix as an automatic transition.
+  @discardableResult
+  public func shuffle(scope: SoundtrackCatalogue.ShuffleScope, fallbackTrackID: String? = nil) -> Bool {
+    guard !isMuted, !outputSuspended, !vinylHeld, !vinylStopping, activeDeck != nil,
+          let currentURL, let catalogue else { return false }
+    let candidates = catalogue.shuffleCandidates(currentPath: relativePath(currentURL) ?? "",
+      scope: scope, availablePaths: availablePaths, fallbackTrackID: fallbackTrackID)
+    for variant in candidates.shuffled() {
+      guard let destination = availableURLs[variant.path], destination.standardizedFileURL != currentURL.standardizedFileURL,
+            FileManager.default.isReadableFile(atPath: destination.path) else { continue }
+      if crossfade(seconds: Fade.phrase, destination: destination) { return true }
+    }
+    return false
+  }
+
   /// Brings the next track up as the current one goes down.
   ///
   /// The two curves are equal power rather than linear, so the middle of the

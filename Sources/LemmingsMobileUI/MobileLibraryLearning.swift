@@ -59,7 +59,7 @@ extension MobileLibraryViewController {
         }
         let unseen = saved.progress.unseen(in: journey), revisit = saved.progress.revisit(in: journey)
         footer.append(.init("learningStart", "Continue journey  \(saved.progress.solvedCount(in: journey))/\(journey.lessons.count)",
-                            enabled: !unseen.isEmpty || MobileSettings.load(from: .standard).classic.unlockAllClassicLevels, primary: resumableLearningJourney == nil))
+                            enabled: !unseen.isEmpty || MobileSettings.current(from: .standard).classic.unlockAllClassicLevels, primary: resumableLearningJourney == nil))
         let rows: [GameFrontEnd.Action] = [
             .init("learningBrowse", "Choose level", enabled: resumableLearningJourney != nil),
             .init("learningRevisit", "Revisit  \(revisit.count)", enabled: !revisit.isEmpty),
@@ -86,7 +86,7 @@ extension MobileLibraryViewController {
             if id == "learningStart", resumableLearningJourney != nil { resumeLearningJourney(browse: true); return true }
             guard let journey = bundledJourney else { return true }
             let entries = id == "learningStart"
-                ? (MobileSettings.load(from: .standard).classic.unlockAllClassicLevels ? journey.lessons.map(\.entry) : learning.progress.unseen(in: journey))
+                ? (MobileSettings.current(from: .standard).classic.unlockAllClassicLevels ? journey.lessons.map(\.entry) : learning.progress.unseen(in: journey))
                 : learning.progress.revisit(in: journey)
             do {
                 var saved = learning
@@ -122,7 +122,7 @@ extension MobileLibraryViewController {
                 let checkpoint = try await checkpointStore.load(owner: owner, scope: scope)
                 guard !Task.isCancelled, profiles.activeID == owner, hotSeat?.scope == scope else { return }
                 let matching = checkpoint.flatMap { checkpointMatchesSession($0) ? $0 : nil }
-                if browse, MobileSettings.load(from: .standard).classic.unlockAllClassicLevels,
+                if browse, MobileSettings.current(from: .standard).classic.unlockAllClassicLevels,
                    let journey = bundledJourney, let current = learning.run,
                    current.pool.id.hasPrefix("learning-"),
                    let position = journey.lessons.firstIndex(where: { $0.entry.identity == current.currentEntry.identity }) {

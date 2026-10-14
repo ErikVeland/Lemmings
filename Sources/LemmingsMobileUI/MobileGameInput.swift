@@ -3,6 +3,7 @@ import LemmingsAppCore
 import LemmingsMobileCore
 import LemmingsGameArt
 import NxlvKit
+import LemmingsTVCore
 import UIKit
 
 extension MobileGameViewController {
@@ -63,6 +64,24 @@ extension MobileGameViewController {
 
     func makeInputAdapter() -> MobileInputAdapter {
         let adapter = MobileInputAdapter()
+        adapter.settings = { [weak self] in self?.gameSettings.classic ?? ClassicSettings() }
+        adapter.settingsProfileID = { [weak self] in self?.settingsProfileID ?? MobileProfiles.defaultID }
+        adapter.onDJShuffle = { [weak self] in self?.shuffleMusic() }
+        adapter.controllerSpeed = { [weak self] in self?.inputSpeed.target ?? 1 }
+        adapter.triggerFeedbackEnabled = { [weak self] in self?.playState.phase == .running && self?.gameSettings.classic.reduceMotion != true }
+        adapter.onRewindHeld = { [weak self] in self?.setRewindHeld($0) }
+        adapter.onMenuPause = { [weak self] in
+            guard let self else { return }
+            if self.isChoosingToolDirection { self.performCommand(.pause); return }
+            if !self.overlay.isHidden, self.overlayCanvas.page.pause != nil, self.playState.phase != .ready { self.resumeSelectedView() }
+        }
+        adapter.onGameMenu = { [weak self] in
+            guard let self else { return }
+            if self.session.isReadOnly, self.hasSolutionPair { self.selectSolutionMode(.game); return }
+            if self.overlay.isHidden { self.handle(.menu) }
+            else if self.overlayCanvas.page.pause != nil { self.resumeSelectedView() }
+            else { self.overlayCanvas.goBack() }
+        }
         #if os(tvOS)
         overlayCanvas.requiresNeutralActivation = true
         adapter.onMenuNeutral = { [weak self] in
@@ -76,7 +95,8 @@ extension MobileGameViewController {
         adapter.onMenuMove = { [weak self] in self?.moveSolutionMenuFocus($0) }
         adapter.onMenuActivate = { [weak self] in
             guard let self else { return }
-            if let mode = self.solutionSelector.focusedMode { self.solutionSelector.activate(mode) }
+            if self.solutionSelector.focusedGhost { self.solutionSelector.activateGhost() }
+            else if let mode = self.solutionSelector.focusedMode { self.solutionSelector.activate(mode) }
             else { self.overlayCanvas.activateFocused() }
         }
         adapter.onMenuBack = { [weak self] in
@@ -96,7 +116,7 @@ extension MobileGameViewController {
         }
         overlayCanvas.onPageChanged = { [weak adapter] in adapter?.reset() }
         adapter.onMenuScroll = { [weak self] in self?.overlayCanvas.scrollInput(delta: $0) }
-        adapter.onBoost = { [weak self] in self?.setSpeedInput(.controller, held: $0) }
+        adapter.onBoost = { [weak self] in self?.setControllerSpeedInput(held: $0) }
         adapter.onSpeedKey = { [weak self] in self?.setSpeedInput(.key, held: $0) }
         adapter.onPan = { [weak self] dx, dy in self?.panInput(dx: dx, dy: dy) }
         playfieldView.onHover = { [weak self] in self?.aim(at: $0, hover: true) }
@@ -108,7 +128,7 @@ extension MobileGameViewController {
         hoverAimActive = hover
         previewInput = .precision
         previewPoint = point
-        highlightedTarget = point.flatMap { self.target(at: $0) }
+        if !pollingController { highlightedTarget = point.flatMap { self.target(at: $0) } }
         if fanMode, (session as? Lemmings2MobileSession)?.isFanActive == true { updateFan(at: point, active: true) }
         renderCurrentFrame(force: true)
     }
@@ -119,6 +139,9 @@ extension MobileGameViewController {
         highlightedTarget = previewPoint.flatMap(target)
     }
     func panInput(dx: Double, dy: Double) {
+        #if os(tvOS)
+        tvTargetLock.clear()
+        #endif
         playfieldView.stopAutomaticFitting()
         playfieldView.gameViewport.pan(viewDelta: MobilePoint(x: -dx, y: -dy))
     }
@@ -133,11 +156,7 @@ extension MobileGameViewController {
         if command == .speedReset, session.isReadOnly, hasSolutionPair { selectSolutionMode(.game); return }
         switch command {
         case .pause:
-            #if os(tvOS)
-            pausePlay(showControls: true)
-            #else
             handle(.pause)
-            #endif
         case .library: leaveToLibrary()
         case .hints: pauseForPlanning(); showHints()
         case .help: pauseForPlanning(); showControlsHelp()
@@ -146,7 +165,9 @@ extension MobileGameViewController {
         case .step(let direction):
             pauseForPlanning(); handle(direction < 0 ? .stepBackward : .step)
         case .retry: showRestartLevel()
-        case .endRun: handle(.endRun)
+        case .endRun:
+            guard !session.isReadOnly else { return }
+            handle(.endRun)
         case .skill(let index): handle(.skill(index))
         case .cycle(let delta):
             let count = session.snapshot.skills.count
@@ -191,16 +212,26 @@ extension MobileGameViewController {
             }
         case .assign, .repeatAssignment:
             guard !session.isReadOnly, playState.canEdit else { return }
+            let control = command == .repeatAssignment ? (lastAssignmentControl ?? selectedControl) : selectedControl
+            #if os(tvOS)
+            refreshTVTarget(control: control)
+            #endif
             if fanMode, let tribes = session as? Lemmings2MobileSession {
                 updateFan(at: nil, active: !tribes.isFanActive)
                 renderCurrentFrame(force: true); updateHUD()
                 return
             }
-            let control = command == .repeatAssignment ? (lastAssignmentControl ?? selectedControl) : selectedControl
             if let selection = highlightedTarget,
-               !beginL3ToolDirectionSelection(control: control, target: selection.id, selection: selection),
-               session.assign(control: control, to: selection.id) {
+               !beginL3ToolDirectionSelection(control: control, target: selection.id, selection: selection) {
+                guard session.assign(control: control, to: selection.id) else {
+                    effects.rejectedAssignment()
+                    return
+                }
                 lastInputAssignment = selection; lastAssignmentControl = control
+                effects.update(session: session, viewport: playfieldView.gameViewport)
+                #if os(tvOS)
+                tvTargetLock.clear()
+                #endif
                 renderCurrentFrame(force: true); updateHUD()
             }
         }
@@ -209,20 +240,40 @@ extension MobileGameViewController {
     private func moveSolutionMenuFocus(_ delta: Int) {
         guard hasSolutionPair else { overlayCanvas.moveFocus(delta); return }
         let actions = (overlayCanvas.page.rows + overlayCanvas.page.orderedFooter).filter(\.enabled)
-        let current = solutionSelector.focusedMode.map { $0 == .game ? 0 : 1 }
-            ?? (actions.firstIndex(where: { $0.id == overlayCanvas.focusedID }).map { $0 + 2 } ?? 2)
-        let next = (current + delta + actions.count + 2) % (actions.count + 2)
-        if next < 2 {
-            solutionSelector.focusedMode = next == 0 ? .game : .solution
+        let selectorCount = solutionSelector.showsGhost ? 3 : 2
+        let current = solutionSelector.focusedIndex
+            ?? (actions.firstIndex(where: { $0.id == overlayCanvas.focusedID }).map { $0 + selectorCount } ?? selectorCount)
+        let next = (current + delta + actions.count + selectorCount) % (actions.count + selectorCount)
+        if next < selectorCount {
+            solutionSelector.focusedIndex = next
             #if os(tvOS)
             setNeedsFocusUpdate(); updateFocusIfNeeded()
             #endif
             solutionSelector.setNeedsDisplay()
         } else {
-            solutionSelector.focusedMode = nil
+            solutionSelector.focusedIndex = nil
             let index = actions.firstIndex(where: { $0.id == overlayCanvas.focusedID }) ?? 0
-            overlayCanvas.moveFocus(next - 2 - index)
+            overlayCanvas.moveFocus(next - selectorCount - index)
         }
+    }
+
+    func setControllerSpeedInput(held: Bool) {
+        #if os(tvOS)
+        if held {
+            guard overlay.isHidden, playState.canEdit, lifecycle.isForeground, !lifecycle.isInterrupted else { return }
+            if playState.phase == .planning {
+                setRewindHeld(false)
+                resumePlay()
+                guard playState.phase == .running, overlay.isHidden else { return }
+            }
+        }
+        #endif
+        setSpeedInput(.controller, held: held)
+    }
+
+    func shuffleMusic() {
+        guard overlay.isHidden, playState.phase == .running, lifecycle.isForeground, !lifecycle.isInterrupted else { return }
+        _ = MobileMusic.shared.shuffle(scope: gameSettings.djShuffleScope)
     }
 
     func setSpeedInput(_ input: GameplaySpeed.Hold, held: Bool, allowTap: Bool = true) {
@@ -250,7 +301,7 @@ extension MobileGameViewController {
     func showInGameSettings(_ group: MobileSettingsGroup? = nil, mappings: Bool = false) {
         guard let library = parent as? MobileLibraryViewController else { return }
         showCustomOverlay(title: "Settings", details: [], actions: [])
-        overlayCanvas.page = mappings ? MobileSettingsArt.controllerMappings(library.mobileSettings)
+        overlayCanvas.page = mappings ? library.controllerMappingsPage()
             : group.map { library.settingsPage($0) } ?? MobileSettingsArt.groups()
         overlayCanvas.onAction = { [weak self, weak library] id in
             guard let self, let library else { return }
@@ -279,10 +330,7 @@ extension MobileGameViewController {
 
     func showControlsHelp() {
         #if os(tvOS)
-        let help = ["Siri Remote", "Ring / swipe: Aim", "Click: Assign skill / toggle fan", "Play/Pause: Pause", "Back: Pause menu",
-                    "Game controller", "Left stick: Aim   Right stick: Camera", "A: Assign   X: Repeat   Y: Last assignment",
-                    "LB / RB: Skills   D-pad left / right: Lemmings", "Menu: Pause   LT + buttons: More controls",
-                    "Pause > Game controls: Skills, camera and transport"]
+        let help = TVControllerBindings.help.components(separatedBy: "\n")
         #else
         let help = GameplayCommands.help
         #endif

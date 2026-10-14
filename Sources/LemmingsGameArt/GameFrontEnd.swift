@@ -298,7 +298,8 @@ public struct GameFrontEnd {
         let rowIDs = Set(page.rows.map(\.id))
         for target in layout.targets {
             let action = target.action
-            let chosen = action.enabled && (action.primary || action.selected || highlighted == action.id)
+            let chosen = action.enabled && (action.primary || action.selected)
+            let focused = action.enabled && highlighted == action.id
             if page.home, rowIDs.contains(action.id) {
                 // The home screen uses the same dark rows and green selection as the Mac title overlay.
                 context.setFillColor(chosen ? CGColor(srgbRed: 0.18, green: 0.27, blue: 0.12, alpha: 1)
@@ -316,6 +317,7 @@ public struct GameFrontEnd {
                 if let image = glyph.cgImage(scale: scale) {
                     drawImage(image, fittedIn: well, context: context)
                 }
+                if focused { drawFocus(target.frame, in: context) }
                 continue
             } else if page.home {
                 context.setFillColor(chosen ? CGColor(srgbRed: 0.06, green: 0.16, blue: 0.035, alpha: 1) : CGColor(gray: 0.025, alpha: 1))
@@ -331,6 +333,7 @@ public struct GameFrontEnd {
                 context.fill(CGRect(x: target.frame.minX + 8, y: target.frame.maxY - 6,
                                     width: target.frame.width - 16, height: 3))
             }
+            if focused { drawFocus(target.frame, in: context) }
             if action.primary, action.enabled, !page.home {
                 context.setFillColor(CGColor(srgbRed: 0.48, green: 0.80, blue: 0.24, alpha: 1))
                 context.beginPath()
@@ -348,6 +351,12 @@ public struct GameFrontEnd {
             actionLabel(action.title, box: caption, typography: typography,
                         palette: chosen ? .green : .blue, alpha: action.enabled ? 1 : 0.45, context: context)
         }
+    }
+
+    private static func drawFocus(_ frame: CGRect, in context: CGContext) {
+        context.setStrokeColor(CGColor(gray: 1, alpha: 1))
+        context.setLineWidth(1)
+        context.stroke(frame.insetBy(dx: 2.5, dy: 2.5))
     }
 
     private static func actionLabel(_ text: String, box: CGRect, typography: GameMenuTypography,

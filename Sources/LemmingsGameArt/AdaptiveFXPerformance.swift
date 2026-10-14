@@ -40,6 +40,11 @@ public struct FXPresentationBudget: Sendable {
     public var trailLimit: Int { cpuQuality.trailLimit }
     public var trailEchoLimit: Int { cpuQuality.trailEchoLimit }
     public var explosionLimit: Int { gpuQuality.explosionLimit }
+    /// TV keeps native menu/HUD lettering while reducing a pressured CRT surface.
+    public func televisionPlayfieldScale(nativeScale: Double) -> Double {
+        guard nativeScale.isFinite, nativeScale > 0 else { return 1 }
+        return gpuQuality == .full ? nativeScale : min(1, nativeScale)
+    }
 
     public init(cpuQuality: FXQuality, gpuQuality: FXQuality, framesPerSecond: Double = 60,
                 maximumOverlayPixels: Int = 8_388_608) {

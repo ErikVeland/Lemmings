@@ -4,6 +4,28 @@ import NxlvKit
 @testable import LemmingsMobileCore
 
 struct MobileSettingsTests {
+    @Test func playerInputAndAccessibilityStaySeparateWhileDeviceSettingsRemainShared() {
+        let store = defaults()
+        var legacy = MobileSettings()
+        legacy.classic.reduceFlashes = true
+        legacy.save(to: store)
+        var first = MobileSettings.load(from: store, profileID: "first")
+        first.classic.controllerSwapSticks = true
+        first.classic.interfaceSize = .extraLarge
+        first.classic.reduceMotion = true
+        first.classic.showSongInfo = false
+        first.classic.musicVolume = 0.3
+        first.djShuffleScope = .allTracks
+        first.save(to: store, profileID: "first")
+        let second = MobileSettings.load(from: store, profileID: "second")
+        #expect(!second.classic.controllerSwapSticks && !second.classic.reduceMotion && second.classic.showSongInfo)
+        #expect(second.classic.reduceFlashes && second.classic.musicVolume == 0.3)
+        MobileSettings.activateProfile("first", in: store)
+        #expect(MobileSettings.current(from: store) == first)
+        MobileSettings.activateProfile("second", in: store)
+        #expect(MobileSettings.current(from: store) == second)
+        #expect(MobileSettings.load(from: store).classic.interfaceSize == legacy.classic.interfaceSize)
+    }
     private func defaults() -> UserDefaults { UserDefaults(suiteName: "MobileSettingsTests.\(UUID())")! }
 
     @Test func testTutorialCountsTenAutomaticPausesAcrossLaunches() {

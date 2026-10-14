@@ -2,6 +2,7 @@
 import LemmingsAppCore
 import LemmingsGameArt
 import LemmingsMobileCore
+import LemmingsTVCore
 import NxlvKit
 import UIKit
 
@@ -54,6 +55,9 @@ extension MobileLibraryViewController {
     }
 
     func reloadPlayerData() {
+        MobileSettings.activateProfile(settingsProfileID, in: .standard)
+        libraryInput.reset()
+        MobileMusic.shared.selectProfile(settingsProfileID)
         let isDefault = profiles.active.id == MobileProfiles.defaultID
         do {
             collectionsBridge = try MobileCollectionsBridge(profileID: profiles.activeID)
@@ -162,6 +166,10 @@ extension MobileLibraryViewController {
             notice = arcadeStore.storageError ?? "Player was not deleted."; rebuild(); return
         }
         removeFromHotSeats(removed)
+        UserDefaults.standard.removeObject(forKey: PlayerControlSettings.defaultsKey(profileID: removed))
+        #if os(tvOS)
+        UserDefaults.standard.removeObject(forKey: LemmingsTVCore.TVPreferences.inputKey(removed))
+        #endif
         do { try FileManager.default.removeItem(at: MobileStorage.standard(profile: removed).directory) }
         catch { notice = error.localizedDescription }
         reloadPlayerData(); navigate(.players)
