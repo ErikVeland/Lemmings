@@ -2631,6 +2631,18 @@ extension AppDelegate {
 
   fileprivate func testRetainedSolutionSwitching() async throws {
     GameScreen.shared.dismissAll(); LevelHintWindow.shared.clearSolution()
+    let previousStore = ArcadeStore.shared
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent("retained-solution-\(UUID().uuidString)")
+    let store = ArcadeStore(file: directory.appendingPathComponent("records.json"), bundledProofs: nil)
+    ArcadeStore.shared = store
+    defer {
+      GameScreen.shared.dismissAll(); LevelHintWindow.shared.clearSolution()
+      store.endHotSeat(); ArcadeStore.shared = previousStore
+      try? FileManager.default.removeItem(at: directory)
+    }
+    let host = store.records.activeProfileID
+    let guest = store.addProfile(initials: "PAL", portrait: 2)!
+    store.selectProfile(host); store.toggleSessionProfile(guest.id)
     if window == nil { buildInterface() }
     settings.music = .silent; loadContent()
     gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
@@ -2639,6 +2651,7 @@ extension AppDelegate {
     let live = session as! ClassicSession
     let liveHash = ClassicDOSReplayRecorder.stateHash(of: live.simulation)
     let run = arcadeRunID, owner = arcadeProfileID, seat = arcadeHotSeatID
+    try check(seat != nil && owner == host, "Retained-solution test did not start a shared attempt")
     let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]
     let records = try encoder.encode(ArcadeStore.shared.records)
     func button(_ title: String, in view: NSView) -> NSButton? {

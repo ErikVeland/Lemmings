@@ -36,9 +36,11 @@ struct MobileArtworkTests {
             if source == .macintoshMonochrome {
                 #expect(art.monochrome)
                 let pixels = [UInt8](frame.rgba)
-                let binary = stride(from: 0, to: pixels.count, by: 4).allSatisfy { p in
-                    pixels[p + 3] == 0 || (pixels[p] == pixels[p + 1] && pixels[p] == pixels[p + 2]
-                        && (pixels[p] == 0 || pixels[p] == 255))
+                let binary = stride(from: 0, to: pixels.count, by: 4).allSatisfy { p -> Bool in
+                    if pixels[p + 3] == 0 { return true }
+                    let value: UInt8 = pixels[p]
+                    guard value == 0 || value == 255 else { return false }
+                    return value == pixels[p + 1] && value == pixels[p + 2]
                 }
                 #expect(binary)
             }
