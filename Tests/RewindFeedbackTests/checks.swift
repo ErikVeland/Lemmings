@@ -100,11 +100,12 @@ private final class RewindPreviewSession: GameSession {
     let plain = try rewindShot(view, "classic-plain")
     try checkRewind(rewound != plain, "Classic Cmd-Z had no reverse echoes")
     let effect = NSBitmapImageRep(data: rewound)!, normal = NSBitmapImageRep(data: plain)!
+    let captureScale = CGFloat(effect.pixelsWide) / view.bounds.width
     var extras = 0
-    for y in 80..<230 { for x in 0..<effect.pixelsWide {
+    for y in Int(80 * captureScale)..<Int(230 * captureScale) { for x in 0..<effect.pixelsWide {
         let a = effect.colorAt(x: x, y: y)!, b = normal.colorAt(x: x, y: y)!
         if b.brightnessComponent > 0 { try checkRewind(a == b, "A rewind ghost changed a solid sprite pixel") }
-        else if a.brightnessComponent > 0 { extras += 1; try checkRewind(x > 320, "Rewind echo pointed away from the future position") }
+        else if a.brightnessComponent > 0 { extras += 1; try checkRewind(CGFloat(x) > 320 * captureScale, "Rewind echo pointed away from the future position") }
     } }
     try checkRewind(extras > 0, "Classic sprite echo mask was empty")
     print("PASS Classic rendered one-tick reverse echoes, sharp solid sprites and HD opt-out")

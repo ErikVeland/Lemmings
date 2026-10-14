@@ -101,14 +101,28 @@ private final class PreparationLibrary: MobileGameLibrary {
 private final class PreparationGate: @unchecked Sendable {
     private let lock = NSLock()
     private var entered = false
+    private var waiters: [CheckedContinuation<Void, Never>] = []
     let release = DispatchSemaphore(value: 0)
     func block() {
-        lock.withLock { entered = true }
-        // Bound a failed test without leaving its content worker stuck.
-        _ = release.wait(timeout: .now() + 5)
+        let ready = lock.withLock {
+            entered = true
+            let ready = waiters
+            waiters.removeAll()
+            return ready
+        }
+        for waiter in ready { waiter.resume() }
+        // Allow the parent to run when the shared CI suite saturates its executor.
+        #expect(release.wait(timeout: .now() + 30) == .success)
     }
     func waitUntilEntered() async {
-        while !lock.withLock({ entered }) { await Task.yield() }
+        await withCheckedContinuation { continuation in
+            let ready = lock.withLock {
+                if entered { return true }
+                waiters.append(continuation)
+                return false
+            }
+            if ready { continuation.resume() }
+        }
     }
 }
 
