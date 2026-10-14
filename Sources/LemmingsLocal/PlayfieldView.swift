@@ -961,7 +961,8 @@ struct ReticleFeedback {
     let rows = overlayLines.enumerated().map { index, title in
       var action = GameFrontEnd.Action((index < overlayHomeLeadingCount ? "home." : "family.") + String(index), title,
         primary: index == overlayHighlight, selected: index == overlayHighlight, gameLogo: overlayHomeLogos[index])
-      action.titleRuns = action.gameLogo == nil ? GameSemanticText.title(title) : [.init(title, .green)]
+      action.titleRuns = index < overlayHomeLeadingCount - 1 ? GameSemanticText.resume(title)
+        : action.gameLogo == nil ? GameSemanticText.title(title) : [.init(title, .blue)]
       return action
     }
     var footer: [GameFrontEnd.Action] = [.init("players", L10n.text("Profiles")), .init("records", L10n.text("Records")), .init("playlists", L10n.text("Collections / Playlists"))]
@@ -1051,7 +1052,7 @@ struct ReticleFeedback {
       highlighted: hovered, in: context)
     context.restoreGState()
     if let overlaySavedCounts {
-      drawMenuGameText(overlaySavedCounts, in: overlaySavedCountsFrame(overlayLayout()), face: .small, scale: 1, palette: .green)
+      drawMenuGameText(overlaySavedCounts, in: overlaySavedCountsFrame(overlayLayout()), face: .small, scale: 1, palette: .blue)
     }
     if overlayShowsLemmings { drawMarchingLemmings() }
   }
@@ -1263,7 +1264,7 @@ struct ReticleFeedback {
     }
     if let overlaySavedCounts {
       drawMenuGameText(overlaySavedCounts, in: overlaySavedCountsFrame(layout),
-        face: .small, scale: max(1, Int(scale)), palette: .green)
+        face: .small, scale: max(1, Int(scale)), palette: .blue)
       y += 40 * scale
     }
     if let retryTitle = overlayHandoverRetryTitle {
@@ -1854,7 +1855,7 @@ struct ReticleFeedback {
         hints: [.interpolation: NSImageInterpolation.none.rawValue])
     }
     drawMenuGameText(initials, in: CGRect(x: badge.minX + spriteWidth + 9 * scale,
-      y: badge.minY, width: textWidth, height: height), face: .small, scale: Int(scale))
+      y: badge.minY, width: textWidth, height: height), face: .small, scale: Int(scale), palette: .green)
     NSGraphicsContext.restoreGraphicsState()
   }
 

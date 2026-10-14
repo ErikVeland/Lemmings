@@ -23,7 +23,10 @@ public enum MobileTurnArt {
                 identified.subtitle = sessionName + "  " + identified.subtitle
             }
             let prefix = role == .next ? L10n.text("Next: ") : role == .result ? L10n.text("Played: ") : L10n.text("Turn: ")
-            identified.subtitleRuns = (page.home ? sessionName.map { GameSemanticText.players($0) + [.init("  ", .blue)] } : nil ?? nil) ?? []
+            identified.subtitleRuns = []
+            if page.home, let sessionName {
+                identified.subtitleRuns += GameSemanticText.players(sessionName) + [.init("  ", .blue)]
+            }
             identified.subtitleRuns += [.init(prefix, .blue), .init(playerName, .green), .init(page.subtitle.isEmpty ? "" : "  " + page.subtitle, .blue)]
         }
         return identified

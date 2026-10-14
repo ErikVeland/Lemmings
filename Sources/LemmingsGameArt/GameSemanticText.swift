@@ -16,6 +16,11 @@ public enum GameSemanticText {
         }
     }
 
+    public static func resume(_ text: String) -> [GameFrontEnd.TextRun] {
+        guard let separator = text.range(of: " - ") else { return [.init(text, .blue)] }
+        return [.init(String(text[..<separator.upperBound]), .blue)] + players(String(text[separator.upperBound...]))
+    }
+
     public static func draw(_ runs: [GameFrontEnd.TextRun], in box: CGRect, typography: GameMenuTypography,
                             face: GameMenuTypography.Face = .small, scale: Int = 1,
                             alpha: CGFloat = 1, context: CGContext) {

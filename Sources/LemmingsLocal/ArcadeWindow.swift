@@ -111,13 +111,14 @@ import NxlvKit
 
 /// Results lead with the rescue. Records and details are separate game pages.
 @MainActor final class ArcadeView: NSView, GameDialogCustomNavigation {
-    enum Mode { case result, profiles, records, awards, details, goals, career, hotSeat }
+    enum Mode { case result, profiles, records, awards, details, goals, career, hotSeat, achievement }
     enum BoardScope { case level, career, worldwide }
     var mode = Mode.records { didSet { if mode != oldValue { keyboardButton = nil } } }
     var report: ArcadeReport? {
         didSet {
             finishCelebration()
             highlightedAwards = []; focusedNewAward = nil; featuredAwardIndex = 0; careerPage = 0
+            achievementDetails = []; achievementDetailIndex = 0
             // Focus is an index into buttons rebuilt per layout; a new result starts on its primary action.
             keyboardButton = nil
             celebration = report.map { TrolleyCelebration(report: $0, history: ArcadeStore.shared.records.trolley) }
@@ -149,6 +150,9 @@ import NxlvKit
     var highlightedAwards: Set<TrolleyAchievement> = []
     var focusedNewAward: TrolleyAchievement?
     var affinityPopover: NSPopover?
+    var achievementDetails: [(title: String, detail: String)] = []
+    var achievementDetailIndex = 0
+    var achievementHints: [(label: String, rect: CGRect, title: String, detail: String)] = []
     var awardsPerPage: Int { 4 }
     var awardPageCount: Int {
         let count = level?.conditions == nil ? careerAwards.count
@@ -250,6 +254,12 @@ import NxlvKit
     private var accessibleText: [(String, CGRect)] = []
     private var primaryButtonIndex: Int?
     private var keyboardButton: Int?
+    func registerAchievementTarget(_ title: String, rect: CGRect, action: @escaping () -> Void) {
+        buttons.append((title, rect, action))
+    }
+    func registerAchievementText(_ value: String, rect: CGRect) {
+        accessibleText.append((value, rect))
+    }
     override func isAccessibilityElement() -> Bool { true }
     override func accessibilityRole() -> NSAccessibility.Role? { .group }
     override func accessibilityChildren() -> [Any]? {
@@ -262,6 +272,7 @@ import NxlvKit
             if name.hasPrefix("player-"), !name.hasPrefix("player-new"), let profile = ArcadeStore.shared.records.profile(String(name.dropFirst(7))) { name = L10n.text("Select player \(profile.initials)") }
             if name.hasPrefix("portrait-"), let index = Int(name.dropFirst(9)), ArcadeProfile.portraitNames.indices.contains(index) { name = L10n.text("Portrait: \(ArcadeProfile.portraitNames[index])") }
             let element = accessibleElements.element(id: "button-\(index)", owner: self, label: name, frame: mapped(item.1), press: item.2)
+            element.setAccessibilityHelp(achievementHints.first { $0.label == item.0 }?.detail)
             element.onFocus = { [weak self] in self?.keyboardButton = index; self?.needsDisplay = true }
             return element
         }
@@ -277,7 +288,7 @@ import NxlvKit
         }
         return result
     }
-    private var hover: String?
+    var hover: String?
     private var tracking: NSTrackingArea?
     override var isFlipped: Bool { true }
     override var acceptsFirstResponder: Bool { true }
@@ -300,7 +311,7 @@ import NxlvKit
     private var scale: CGFloat { GamePageLayout.scale(in: bounds.size) }
     private var offset: CGPoint { CGPoint(x: (bounds.width - 1120 * scale) / 2, y: (bounds.height - (mode == .result ? 604 : 720) * scale) / 2) }
     override func draw(_ dirtyRect: NSRect) {
-        NSColor.black.setFill(); bounds.fill(); buttons = []; primaryButtonIndex = nil; accessibleText = []
+        NSColor.black.setFill(); bounds.fill(); buttons = []; primaryButtonIndex = nil; accessibleText = []; achievementHints = []
         if let background {
             let image = NSImage(cgImage: background, size: CGSize(width: background.width, height: background.height))
             let fit = max(bounds.width / image.size.width, bounds.height / image.size.height)
@@ -326,6 +337,7 @@ import NxlvKit
         case .details: drawDetails()
         case .goals: drawLevelGoals()
         case .career: drawCareerProgress()
+        case .achievement: drawAchievementExplanation()
         }
         if let error = ArcadeStore.shared.storageError {
             text(error, 64, mode == .result ? 583 : 695, 814, height: 20)
@@ -352,6 +364,7 @@ import NxlvKit
             let outline = NSBezierPath(rect: buttons[keyboardButton].1.insetBy(dx: -2, dy: -2))
             outline.lineWidth = 2; outline.stroke()
         }
+        drawAchievementHover()
         NSGraphicsContext.restoreGraphicsState()
     }
     func text(_ value: String, _ x: CGFloat, _ y: CGFloat, _ width: CGFloat,
@@ -400,7 +413,7 @@ import NxlvKit
         }
         let caption = CGRect(x: rect.minX + 12, y: rect.midY - 10, width: rect.width - 24, height: 20)
         if let font {
-            font.menuLine(label, in: caption, face: .small, alpha: enabled ? 1 : 0.45, palette: chosen ? .green : .blue)
+            font.menuLine(label, in: caption, face: .small, alpha: enabled ? 1 : 0.45, palette: .blue)
         } else { GamePixelText.draw(label, in: caption) }
         if enabled {
             if primary { primaryButtonIndex = buttons.count }
@@ -408,7 +421,7 @@ import NxlvKit
         }
     }
     func link(_ label: String, _ rect: CGRect, alpha: CGFloat = 1, alignment: NSTextAlignment = .center, palette: MacInterfaceRenderer.Palette = .blue, action: @escaping () -> Void) {
-        text(label, rect.minX, rect.midY - 9, rect.width, alignment: alignment, alpha: hover == label ? 1 : alpha, palette: hover == label ? .green : palette)
+        text(label, rect.minX, rect.midY - 9, rect.width, alignment: alignment, alpha: hover == label ? 1 : alpha, palette: palette)
         if hover == label {
             NSColor(calibratedWhite: 0.6, alpha: 1).setFill()
             CGRect(x: rect.minX + 8, y: rect.maxY - 3, width: rect.width - 16, height: 1).fill()
@@ -780,7 +793,7 @@ import NxlvKit
                 GameStyle.fill(rect, NSColor(calibratedWhite: 0.22, alpha: 1))
                 GameStyle.fill(CGRect(x: rect.minX, y: rect.maxY - 3, width: rect.width, height: 3), GameStyle.accent)
             }
-            link(L10n.text("+ New player"), rect, palette: isNewProfile ? .green : .blue) { [weak self] in
+            link(L10n.text("+ New player"), rect, palette: .blue) { [weak self] in
                 self?.startNewProfile(returnToHotSeat: self?.profilesReturnToHotSeat ?? false)
             }
         }

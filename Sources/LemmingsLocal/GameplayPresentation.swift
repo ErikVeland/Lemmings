@@ -447,7 +447,7 @@ struct PrecisionZoomStatus: Equatable {
                 operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
         }
         GamePixelText.draw(initials, in: CGRect(x: portrait == nil ? 4 : 36, y: 4,
-            width: bounds.width - (portrait == nil ? 8 : 40), height: 24))
+            width: bounds.width - (portrait == nil ? 8 : 40), height: 24), palette: .green)
     }
 }
 

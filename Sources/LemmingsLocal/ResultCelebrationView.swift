@@ -76,8 +76,20 @@ import NxlvKit
             let size: CGFloat = stamp ? 9 : 8
             drawStar(at: CGPoint(x: 466 + CGFloat(index * 166) - (stamp ? 5 : 0), y: 149 - (stamp ? 4 : 0)),
                      earned: index < c.goals.stars && index < revealedStars, size: size)
+            let goal: (String, String)
+            switch index {
+            case 0: goal = (L10n.text("Target met"), L10n.text("Rescue \(run.level.required) lemmings and clear the level."))
+            case 1: goal = (L10n.text("Extra rescue"), L10n.text("Save \(c.goals.extraSaved) lemmings and clear the level to earn the second star."))
+            default: goal = (L10n.text("Three-star rescue"), c.goals.fullSaved.map {
+                L10n.text("Save \($0) lemmings and clear the level to earn the third star.")
+            } ?? L10n.text("The maximum rescue target for this level is not established yet."))
+            }
+            achievementTarget(goal.0, detail: goal.1,
+                              in: CGRect(x: 460 + CGFloat(index * 166), y: 143, width: 100, height: 92)) { [weak self] in
+                self?.showResultAchievement([(goal.0, goal.1)])
+            }
             if index == 2 && c.goals.stars < 3 && c.goals.fullSaved == nil {
-                link("?", CGRect(x: 798 + 3 * size, y: 149 + 2 * size, width: 5 * size, height: 5 * size)) { [weak self] in self?.page(.goals) }
+                text("?", 798 + 3 * size, 149 + 2 * size, 5 * size, alignment: .center, height: 5 * size)
             }
         }
         if let resultStatus { text(resultStatus, 80, 253, 960, alignment: .center) }
@@ -113,8 +125,14 @@ import NxlvKit
         text(c.recordMessage, 96, 323, 418, height: 24)
         let newGoals = c.levelAwards.filter { $0 != .firstClear }
         let names = newGoals.first.map { $0.title.capitalized + (newGoals.count > 1 ? " (+\(newGoals.count - 1))" : "") } ?? ""
-        link(names.isEmpty ? L10n.text("Level goals and bests >") : L10n.text("NEW: \(names) >"),
-             CGRect(x: 96, y: 356, width: 418, height: 32), alignment: .left) { [weak self] in self?.page(.goals) }
+        let rect = CGRect(x: 96, y: 356, width: 418, height: 32)
+        if let award = newGoals.first {
+            achievementLink(L10n.text("NEW: \(names) >"), in: rect, title: award.title, detail: award.detail) { [weak self] in
+                self?.showResultAchievement(newGoals.map { ($0.title, $0.detail) })
+            }
+        } else {
+            link(L10n.text("Level goals and bests >"), rect, alignment: .left) { [weak self] in self?.page(.goals) }
+        }
     }
     private func drawResultCareerCard(_ c: TrolleyCelebration) {
         GameStyle.fill(CGRect(x: 566, y: 285, width: 474, height: 116), GameStyle.gold.withAlphaComponent(0.09))
@@ -132,12 +150,14 @@ import NxlvKit
             if !new.isEmpty {
                 link("\(new.count) NEW \(new.count == 1 ? L10n.text("AWARD") : L10n.text("AWARDS")) >", CGRect(x: 582, y: 360, width: 442, height: 30), alignment: .left) { [weak self] in self?.showNewAwards() }
             } else if let next = c.nextCareerGoal {
-                link(next.award.title + " >", CGRect(x: 582, y: 360, width: 442, height: 30), alignment: .left) { [weak self] in self?.showAchievement(next.award) }
+                resultCareerAwardLink(next.award, in: CGRect(x: 582, y: 360, width: 442, height: 30))
             }
         } else if !new.isEmpty {
             let selected = new[featuredAwardIndex % new.count]
-            link(L10n.text("NEW: \(selected.award.title) >"), CGRect(x: 582, y: 320, width: 442, height: 30), alignment: .left) { [weak self] in
-                self?.highlightedAwards = Set(new.map(\.award)); self?.showAchievement(selected.award)
+            achievementLink(L10n.text("NEW: \(selected.award.title) >"), in: CGRect(x: 582, y: 320, width: 442, height: 30),
+                            title: selected.award.title, detail: selected.award.detail) { [weak self] in
+                let ordered = [selected] + new.filter { $0.award != selected.award }
+                self?.showResultAchievement(ordered.map { ($0.award.title, $0.award.detail) })
             }
             link("\(new.count) new \(new.count == 1 ? "award" : "awards") >", CGRect(x: 582, y: 360, width: 266, height: 30), alignment: .left) { [weak self] in self?.showNewAwards() }
             if new.count > 1 {
@@ -146,10 +166,15 @@ import NxlvKit
                 }
             }
         } else if let next = c.nextCareerGoal {
-            link(next.award.title + " >", CGRect(x: 582, y: 321, width: 442, height: 30), alignment: .left) { [weak self] in self?.showAchievement(next.award) }
+            resultCareerAwardLink(next.award, in: CGRect(x: 582, y: 321, width: 442, height: 30))
             text(next.status, 582, 360, 442, height: 22)
             progressBar(value: next.after.value, goal: next.after.goal, in: CGRect(x: 582, y: 391, width: 442, height: 4))
         } else { text(L10n.text("All career milestones earned!"), 582, 338, 442) }
+    }
+    private func resultCareerAwardLink(_ award: TrolleyAchievement, in rect: CGRect) {
+        achievementLink(award.title + " >", in: rect, title: award.title, detail: award.detail) { [weak self] in
+            self?.showResultAchievement([(award.title, award.detail)])
+        }
     }
     private func precisionRewardText(_ c: TrolleyCelebration) -> String {
         guard let report, ArcadeStore.shared.storageError == nil,

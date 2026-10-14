@@ -33,6 +33,8 @@ public struct ClassicMacUserInterface: Sendable {
         /// nothing and still advances one cell.
         public let glyphs: [ClassicMacArtwork.Frame?]
 
+        private let extendedGlyphs: [Character: ClassicMacArtwork.Frame]
+
         init?(frames: [ClassicMacArtwork.Frame?]) {
             let first = Int(Font.firstCharacter.value)
             let last = Int(Font.lastCharacter.value)
@@ -45,6 +47,10 @@ public struct ClassicMacUserInterface: Sendable {
             cellHeight = present.map { $0.y + $0.height }.max() ?? 0
             guard cellWidth > 0, cellHeight > 0 else { return nil }
             glyphs = printable
+            let originals = Dictionary(uniqueKeysWithValues: printable.enumerated().compactMap { index, frame in
+                frame.map { (Character(String(Unicode.Scalar(first + index)!)), $0) }
+            })
+            extendedGlyphs = BitmapLatinGlyphs.extending(originals, cellWidth: cellWidth, cellHeight: cellHeight)
         }
 
         /// The glyph for a character, or nil when the set does not cover it.
@@ -52,21 +58,16 @@ public struct ClassicMacUserInterface: Sendable {
         /// A character outside the set advances a cell and draws nothing, so a
         /// stray dash or ellipsis leaves a gap instead of breaking the line.
         public func glyph(for character: Character) -> ClassicMacArtwork.Frame? {
-            guard let scalar = character.unicodeScalars.first,
-                character.unicodeScalars.count == 1,
-                scalar >= Font.firstCharacter, scalar <= Font.lastCharacter
-            else { return nil }
-            return glyphs[Int(scalar.value) - Int(Font.firstCharacter.value)]
+            if let scalar = character.unicodeScalars.first, character.unicodeScalars.count == 1,
+               scalar >= Font.firstCharacter, scalar <= Font.lastCharacter {
+                return glyphs[Int(scalar.value) - Int(Font.firstCharacter.value)]
+            }
+            return extendedGlyphs[character]
         }
 
         /// Whether the set covers every character in the text.
         public func covers(_ text: String) -> Bool {
-            text.allSatisfy { character in
-                guard let scalar = character.unicodeScalars.first,
-                    character.unicodeScalars.count == 1
-                else { return false }
-                return scalar >= Font.firstCharacter && scalar <= Font.lastCharacter
-            }
+            text.allSatisfy { $0 == " " || glyph(for: $0) != nil }
         }
 
         /// The width of a line, in Macintosh pixels, at a whole-number scale.
@@ -75,6 +76,17 @@ public struct ClassicMacUserInterface: Sendable {
         }
 
         public func height(scale: Int = 1) -> Int { cellHeight * scale }
+
+        /// Accent overhang is included while ASCII retains its original line box.
+        public func verticalBounds(of text: String) -> (top: Int, bottom: Int) {
+            let frames = text.compactMap { glyph(for: $0) }
+            return (min(0, frames.map(\.y).min() ?? 0),
+                    max(cellHeight, frames.map { $0.y + $0.height }.max() ?? cellHeight))
+        }
+        public func height(of text: String, scale: Int = 1) -> Int {
+            let bounds = verticalBounds(of: text)
+            return (bounds.bottom - bounds.top) * scale
+        }
     }
 
     public let fonts: [Face: Font]

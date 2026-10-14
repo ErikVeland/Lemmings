@@ -23,6 +23,17 @@ import UIKit
     var stampedStar: Int? { didSet { setNeedsDisplay() } }
     var previewSource: CGRect? { didSet { setNeedsDisplay() } }
     var onAction: ((String) -> Void)?
+    var actionHelp: [String: String] = [:] {
+        didSet {
+            for button in targets {
+                let id = button.accessibilityIdentifier?.replacingOccurrences(of: "menu.", with: "") ?? ""
+                button.accessibilityHint = actionHelp[id]
+            }
+            if actionHelp[hoveredActionID ?? ""] == nil { hoveredActionID = nil }
+            setNeedsDisplay()
+        }
+    }
+    private(set) var hoveredActionID: String?
     var onPageChanged: (() -> Void)?
     private var targets: [UIButton] = []
     private var highlighted: String?
@@ -40,8 +51,21 @@ import UIKit
         backgroundColor = .black
         isOpaque = true
         contentMode = .redraw
+        #if os(iOS)
+        addGestureRecognizer(UIHoverGestureRecognizer(target: self, action: #selector(hoverHelp(_:))))
+        #endif
     }
     required init?(coder: NSCoder) { nil }
+
+    #if os(iOS)
+    @objc private func hoverHelp(_ gesture: UIHoverGestureRecognizer) {
+        let point = gesture.location(in: self)
+        hoveredActionID = [.began, .changed].contains(gesture.state) ? targets.first {
+            $0.isEnabled && $0.frame.contains(point)
+        }?.accessibilityIdentifier?.replacingOccurrences(of: "menu.", with: "") : nil
+        setNeedsDisplay()
+    }
+    #endif
 
     #if os(tvOS)
     override var preferredFocusEnvironments: [any UIFocusEnvironment] {
@@ -133,6 +157,7 @@ import UIKit
             let identifier = "menu." + action.id
             let button = existing[identifier] ?? MobileFocusButton(type: .custom)
             button.accessibilityLabel = action.title
+            button.accessibilityHint = actionHelp[action.id]
             button.accessibilityIdentifier = identifier
             button.accessibilityTraits = action.selected ? [.button, .selected] : .button
             button.isEnabled = action.enabled
@@ -226,7 +251,21 @@ import UIKit
                     earned: index < resultStars && index < revealedStars, size: pixel + (stamp ? 0.4 : 0), context: context)
             }
         }
-
+        if let id = hoveredActionID, let detail = actionHelp[id],
+           let target = layout.targets.first(where: { $0.action.id == id }) {
+            let visible = (superview as? UIScrollView).map {
+                CGRect(origin: $0.contentOffset, size: $0.bounds.size).applying(CGAffineTransform(scaleX: 1 / scale, y: 1 / scale))
+            } ?? CGRect(origin: .zero, size: layout.size)
+            let width = min(680, visible.width - 24)
+            let height = GameTextLayout.height(detail, width: width - 48) + 48
+            let above = target.frame.minY - height - 8
+            let y = above >= visible.minY + 8 ? above : target.frame.maxY + 8
+            let frame = CGRect(x: visible.midX - width / 2, y: y, width: width, height: height)
+            GameStoneArt.draw(in: context, frame: frame, selected: false, pixel: 2)
+            context.setFillColor(CGColor(gray: 0, alpha: 1))
+            context.fill(frame.insetBy(dx: 8, dy: 8))
+            GameTextLayout.draw(detail, in: frame.insetBy(dx: 24, dy: 24), typography: typography, context: context)
+        }
     }
 }
 #endif

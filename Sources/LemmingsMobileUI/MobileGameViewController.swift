@@ -79,6 +79,7 @@ struct MobileGameTurn {
         guard !awards.isEmpty else { return }
         achievementIndex %= awards.count
         func update() {
+            overlayCanvas.actionHelp = ["resultAward": awards[achievementIndex].detail]
             overlayCanvas.page.rows = [.init("resultAward", awards[achievementIndex].title + "  (\(achievementIndex + 1)/\(awards.count))")]
         }
         update()
@@ -89,7 +90,9 @@ struct MobileGameTurn {
                 do { try await Task.sleep(for: .seconds(4)) } catch { return }
                 guard let self, !self.overlay.isHidden, self.overlayCanvas.page.result else { return }
                 guard self.lifecycle.isForeground, !self.lifecycle.isInterrupted else { continue }
+                guard self.overlayCanvas.hoveredActionID != "resultAward" else { continue }
                 self.achievementIndex = (self.achievementIndex + 1) % awards.count
+                self.overlayCanvas.actionHelp = ["resultAward": awards[self.achievementIndex].detail]
                 self.overlayCanvas.page.rows = [.init("resultAward", awards[self.achievementIndex].title + "  (\(self.achievementIndex + 1)/\(awards.count))")]
                 self.layoutOverlay()
             }
@@ -1667,9 +1670,11 @@ struct MobileGameTurn {
         hud.cancelHeldControls()
         nowPlaying.hide()
         achievementTask?.cancel(); achievementTask = nil
+        overlayCanvas.actionHelp = [:]
         if !results { celebrationTask?.cancel(); celebrationTask = nil }
         overlayCanvas.resultStars = results ? onResultAwards?().stars : nil
         overlayCanvas.onAction = { [weak self] id in
+            if id == "resultAward" { self?.showResultAchievement(); return }
             guard let self, let index = Int(id), self.overlayActions.indices.contains(index) else { return }
             self.overlayActions[index]()
         }
