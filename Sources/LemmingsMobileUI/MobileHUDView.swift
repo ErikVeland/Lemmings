@@ -48,6 +48,7 @@ import UIKit
     var playerName: String?
     var playerPortrait: CGImage?
     private let playerIdentity = UIView()
+    private let toolDirectionPicker = MobileToolDirectionPickerView()
     private let rateValueTap = UITapGestureRecognizer()
     var onAction: ((MobileHUDAction) -> Void)?
     var onToolDirection: ((Lemmings3Runtime.Direction?) -> Void)?
