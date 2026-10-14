@@ -5,8 +5,17 @@ import NxlvKit
 
 /// A level portrait, rescue ledger and music sleeve, drawn with the shipped lettering.
 public enum MobilePauseArt {
+    /// Landscape keeps the action shelf within the viewport at large lettering settings.
+    public static func interfaceScale(_ size: ClassicInterfaceSize, width: CGFloat, height: CGFloat,
+                                      television: Bool = false) -> CGFloat {
+        let preferred = MobileSettingsArt.interfaceScale(size, width: width, television: television)
+        guard width > height else { return preferred }
+        if television { return min(preferred, max(1, floor(min(width / 560, height / 240)))) }
+        return min(preferred, max(1, min(width / 560, height / 240)))
+    }
+
     public static func page(_ summary: MobilePauseSummary, actions: [GameFrontEnd.Action]) -> GameFrontEnd.Page {
-        var page = GameFrontEnd.Page(title: "Paused", subtitle: summary.level.caption,
+        var page = GameFrontEnd.Page(title: summary.isReplay ? "Replay" : "Paused", subtitle: summary.level.caption,
             details: [summary.level.title, summary.status, summary.rescueText]
                 + summary.fields.map(\.text)
                 + [summary.playDetails] + summary.supplies.map { $0.label + " left: " + $0.value }
@@ -70,16 +79,22 @@ public enum MobilePauseArt {
             y += height + 4
         }
         y += 20
-        let footerColumns = inner < 252 ? 1 : compact && inner >= 640 ? 4 : 2
-        let rows = Int(ceil(Double(page.footer.count) / Double(footerColumns)))
-        let height = max(minimumHeight, y + CGFloat(rows) * 56 + 26)
-        y = max(y, height - CGFloat(rows) * 56 - 26)
-        var targets: [GameFrontEnd.Target] = []
+        let desiredColumns = inner < 252 ? 1 : compact && inner >= 640 ? 4 : 2
+        let widestAction = page.footer.map { CGFloat(GameMenuTypography.menuText($0.title).count) * 12 + ($0.primary ? 48 : 24) }.max() ?? 44
+        let grid = GameFooterGrid(actions: page.orderedFooter,
+            columns: min(desiredColumns, max(1, Int((inner + 12) / (widestAction + 12)))),
+            spanSingleAction: true, alignTrailing: false)
+        let footerColumns = grid.columns
+        let rows = grid.rows
         let footerWidth = floor((inner - CGFloat(footerColumns - 1) * 12) / CGFloat(footerColumns))
-        for (index, action) in page.orderedFooter.enumerated() {
-            let alone = index == page.footer.count - 1 && index % footerColumns == 0
-            targets.append(.init(action: action, frame: CGRect(x: left + CGFloat(index % footerColumns) * (footerWidth + 12),
-                y: y + CGFloat(index / footerColumns) * 56, width: alone ? inner : footerWidth, height: 48)))
+        let footerHeight = max(48, page.footer.map { GameTextLayout.height($0.title, width: footerWidth - ($0.primary ? 48 : 24)) + 8 }.max() ?? 48)
+        let pitch = footerHeight + 8
+        let height = max(minimumHeight, y + CGFloat(rows) * pitch + 26)
+        y = max(y, height - CGFloat(rows) * pitch - 26)
+        var targets: [GameFrontEnd.Target] = []
+        for slot in grid.slots {
+            targets.append(.init(action: slot.action, frame: CGRect(x: left + CGFloat(slot.column) * (footerWidth + 12),
+                y: y + CGFloat(slot.row) * pitch, width: footerWidth * CGFloat(slot.span) + CGFloat(slot.span - 1) * 12, height: footerHeight)))
         }
         return .init(size: CGSize(width: width, height: height),
             board: CGRect(x: x, y: 16, width: boardWidth, height: height - 32),

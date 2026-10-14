@@ -13,12 +13,13 @@ import NxlvKit
     @MainActor static func main() async throws {
         let hierarchy = CommandLine.arguments.last == "--hierarchy"
         let pause = CommandLine.arguments.last == "--pause"
+        let solutionSwitch = CommandLine.arguments.last == "--solution-switch"
         let skillPause = CommandLine.arguments.last == "--skill-pause"
         let latestFixes = ["--current-fixes", "--rescue-budget"].contains(CommandLine.arguments.last ?? "")
         let hotSeat = CommandLine.arguments.last == "--hot-seat"
         let hotSeatFlow = CommandLine.arguments.last == "--hot-seat-flow"
         let hotSeatHUD = CommandLine.arguments.last == "--hot-seat-hud"
-        guard CommandLine.arguments.count == (hierarchy || pause || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow ? 5 : 4) else { throw Failure.invalidArguments }
+        guard CommandLine.arguments.count == (hierarchy || pause || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow ? 5 : 4) else { throw Failure.invalidArguments }
         let artwork = URL(fileURLWithPath: CommandLine.arguments[1])
         let content = URL(fileURLWithPath: CommandLine.arguments[2])
         let output = URL(fileURLWithPath: CommandLine.arguments[3])
@@ -32,6 +33,8 @@ import NxlvKit
         else { throw invalidTargets(line: #line) }
         if hierarchy { try checkHierarchy(library: library, typography: typography, output: output); return }
         if pause { try checkPause(library: library, typography: typography, output: output); return }
+        if solutionSwitch { try checkSolutionSwitch(library: library, typography: typography,
+            resources: artwork.deletingLastPathComponent().deletingLastPathComponent(), output: output); return }
         if hotSeatFlow { try await checkHotSeatFlow(typography: typography, output: output); return }
         if hotSeatHUD { try checkHotSeatHUD(library: library, typography: typography, portraits: GamePortraitArt(directory: artwork), output: output); return }
         if hotSeat { try checkHotSeat(typography: typography, portraits: GamePortraitArt(directory: artwork), output: output); return }
@@ -133,8 +136,8 @@ import NxlvKit
                         && page.footer.contains($0.action)
                 }) {
                     guard layout.targets.allSatisfy({ $0.frame.maxY <= primary.frame.maxY }),
-                          abs(primary.frame.maxX - (layout.board.maxX - 20)) < 0.01,
-                          layout.targets.map(\.action) == page.rows + page.orderedFooter
+                          abs(primary.frame.maxX - (layout.board.maxX - (page.result || page.pause != nil ? 16 : 20))) < 1.01,
+                          footerNavigationIsValid(page, layout: layout)
                     else { throw Failure.invalidTargets }
                 }
                 for target in layout.targets {

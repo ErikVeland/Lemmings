@@ -98,6 +98,7 @@ import LemmingsGameArt
         guard event.window === window, window.attachedSheet == nil, let current = pages.last else { return false }
         return keyboardNavigation.handle(event, in: current.view, window: window) {
             if let page = current.view as? GameMenuPage { page.onBack?() }
+            else if let replay = current.view as? SolutionReplayPage, let back = replay.onReturnToGame { back() }
             else { self.dismiss(current.view) }
         }
     }
@@ -346,7 +347,6 @@ import LemmingsGameArt
     }
     func setDetail(_ detail: String) {
         canvas.detail = detail; canvas.isMessage = true; canvas.needsDisplay = true
-        back.frame = CGRect(x: 440, y: 466, width: 240, height: 48)
         canvas.setAccessibilityLabel(canvas.title + ". " + detail)
     }
     var backTitle: String {
@@ -355,10 +355,7 @@ import LemmingsGameArt
     }
     @discardableResult func addPrimaryAction(_ title: String, action: @escaping () -> Void) -> NSButton {
         let button = GameActionButton(title: title, onPress: action)
-        if canvas.isMessage {
-            back.frame = CGRect(x: 176, y: 466, width: 240, height: 48)
-            button.frame = CGRect(x: 574, y: 466, width: 370, height: 48)
-        } else { button.frame = CGRect(x: 688, y: 634, width: 368, height: 48) }
+        button.frame = CGRect(x: 688, y: 634, width: 368, height: 48)
         canvas.addSubview(button)
         primaryAction = button
         return button
@@ -432,7 +429,7 @@ import LemmingsGameArt
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     override func draw(_ dirtyRect: NSRect) {
-        let panel = isMessage ? CGRect(x: 144, y: 170, width: 832, height: 376) : CGRect(x: 44, y: 20, width: 1032, height: 676)
+        let panel = CGRect(x: 44, y: 20, width: 1032, height: 676)
         GameStyle.fill(panel, NSColor.black.withAlphaComponent(0.94))
         GameMenuFrame.draw(panel)
         let headingWidth: CGFloat = isMessage ? 768 : 928

@@ -26,6 +26,13 @@ The same source labels cover Classic, NeoLemmix, Lemmings 2 and Lemmings 3 catal
 entries. Reduced-motion lists retain native controls. The change does not alter
 turn ownership, engine controls or the paused Ready handover.
 
+Footer grids reserve bottom-left for Back, Cancel, Library or Close and
+bottom-right for the primary forward action. Other actions use the rows above
+and remaining slots. Back keeps its corner when actions change or become
+unavailable. UIKit binds targets by action ID. Keyboard/controller traversal
+and accessibility follow the rendered order. Mac messages use the normal
+footer positions, and return controls lead movie, replay and result rows.
+
 ## Validation
 
 - The iOS UI target compiles for arm64 iOS 16.
@@ -41,6 +48,13 @@ turn ownership, engine controls or the paused Ready handover.
   identities, fan archive identities, curated journey sources and mixed/lazy lists.
 - Physical UIKit acceptance and live sequel briefing screens remain manual checks.
   Automated checks use the offscreen runner with all audio muted.
+
+Footer regression checks cover changing action counts and columns, return labels,
+disabled controls, results, home pages and pinned pause shelves. Native Mac checks
+verify fixed message footers, mouse targets, keyboard order and replay/movie return
+actions. The shared menu/result flows serve Classic, Lemmings 2 and Lemmings 3.
+iOS/tvOS source compilation passes. Physical touch/controller acceptance and live
+sequel result/Ready screens remain manual validation gaps.
 
 Reproduce captures with the `LemmingsMobileMenuAudit` executable using `--hierarchy`
 and `--pause`. Run native checks through `Tools/UITestRunner/run.py`, including

@@ -28,6 +28,7 @@ public enum LearningRouteSafety {
         case "classic|lemmings-LEVEL-120|11:Fun:12:0:7": return 237.5
         case "classic|lemmings-LEVEL-120|58:Tricky:29:2:0": return 257.5
         case "classic|lemmings-LEVEL-120|26:Fun:27:4:6": return 287.5
+        case "classic|lemmings-LEVEL-120|59:Tricky:30:1:7": return 377.5
         default: break
         }
         let state = String(assetsRevision.prefix(64))

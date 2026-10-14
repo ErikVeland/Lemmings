@@ -23,11 +23,11 @@ public enum MobileCareerArt {
         var rows = profiles.players.map {
             GameFrontEnd.Action("player." + $0.id, $0.name, selected: $0.id == profiles.activeID, portrait: $0.portrait)
         }
+        rows.append(.init("playerRename", "Edit: " + profiles.active.name))
         rows.append(.init("playerNew", "New player", enabled: profiles.players.count < MobileProfiles.maximum))
         rows.append(.init("hotSeat", hotSeatTurn.map { "Hot Seat: " + $0 } ?? "Hot Seat"))
         return .init(title: "Players", subtitle: subtitle, rows: rows,
-            footer: [.init("playerRename", "Edit"),
-                     .init("playerDelete", confirmingDelete ? "Confirm delete" : "Delete",
+            footer: [.init("playerDelete", confirmingDelete ? "Confirm delete" : "Delete",
                            enabled: canDelete, selected: confirmingDelete), .init("home", "Back")])
     }
 
@@ -36,7 +36,7 @@ public enum MobileCareerArt {
                                confirmingRestart: Bool = false) -> GameFrontEnd.Page {
         var rows = profiles.players.map { player in
             GameFrontEnd.Action("seat." + player.id, player.name + (player.id == roster.host ? "  Host" : ""),
-                                selected: roster.contains(player.id), portrait: player.portrait)
+                                enabled: player.id != roster.host, selected: roster.contains(player.id), portrait: player.portrait)
         }
         rows.append(.init("seatNew", "New player", enabled: profiles.players.count < MobileProfiles.maximum,
                           primary: profiles.players.count < MobileHotSeat.minimumPlayers))

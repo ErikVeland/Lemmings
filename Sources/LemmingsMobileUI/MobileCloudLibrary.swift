@@ -46,6 +46,7 @@ extension MobileLibraryViewController {
             profiles.importCloudProfiles(records.profiles.map { .init(id: $0.id, name: $0.initials, portrait: $0.portrait) }, active: records.activeProfileID)
             do { try MobileStorage.standard(profile: "_players").save(profiles, name: "players") }
             catch { notice = error.localizedDescription }
+            reloadPlayerData()
             rebuild()
         }
         libraryCloud.onChange = { [weak self] in if self?.route == .cloudSaves { self?.rebuild() } }

@@ -41,13 +41,21 @@ turn rule. Sync never switches a device into Hot Seat by itself.
 
 ## Providers and credentials
 
-`CloudLibrarySync` uses two independent providers through
+`CloudLibrarySync` uses independent providers through
 `AppleCloudLibraryTransport`:
 
+- CloudKit private records in `iCloud.academy.glasscode.lemmings` share library
+  keys and encrypted device snapshots across Mac, iOS and Apple TV. The custom
+  `ULPrivateLibraryV2` zone uses fixed record names, bounded device manifests and
+  atomic conditional writes. It does not require query indexes. Conflicts retry
+  against the current manifest, so concurrent devices retain their own slots.
 - iCloud Documents in `iCloud.academy.glasscode.lemmings` automatically discovers
   private library identities and encrypted snapshots. This requires an entitled
   and provisioned app with iCloud Drive available. Each device writes immutable
   content-addressed snapshots and retains its latest two generations.
+  Mac and iOS retain this provider for existing saves. Their next successful
+  CloudKit sync also publishes the existing keys and merged library there.
+  Apple TV does not use the document-file provider.
 - The HTTPS service at `https://glasscode.academy/lemmings-api/cloud` stores
   encrypted snapshots when iCloud is unavailable and links devices on different
   Apple accounts. A provider failure leaves the other provider usable.
@@ -56,10 +64,12 @@ The existing [Game Center progress service](GameCenterProgress.md) remains an
 additional bridge for the signed-in player's solo progress. It does not own
 other local players or shared campaigns. The Cloud saves switch pauses both
 services. Developer ID Mac builds can use the hosted library without Game Center.
+GameKit's `GKSavedGame` API is unavailable on tvOS. TV uses the shared library
+providers for progress. Cloud-library snapshots still exclude mid-level checkpoints.
 
 Each library has a random UUID, a 256-bit bearer credential and a 256-bit AES-GCM
 encryption key. Keys stay in the device Keychain and the private iCloud identity
-file. Each device has a random installation UUID. The hosted service stores only
+file or private CloudKit key record. Each device has a random installation UUID. The hosted service stores only
 the hash of the bearer credential, opaque ciphertext, device slots and update
 times. It has no player names, email addresses or game results in plaintext.
 Device-link credentials are encrypted with a key derived from the code; the
@@ -143,6 +153,27 @@ download. The authenticated API can delete a vault; an in-app whole-library
 remote deletion control is not yet implemented.
 
 ## Deployment and validation — 13 October 2026
+
+### TV follow-up — 14 October 2026
+
+The hosted `/v1/health` endpoint returned HTTP 404. No service was deployed.
+CloudKit support is now in source for all three platforms. The TV/iOS entitlement
+files request CloudKit in the shared container. Mac signing enables it only when
+the selected provisioning profile permits it. Unsigned Mac builds leave it off.
+
+Before live acceptance, enable CloudKit for each app identifier, refresh the
+profiles, and deploy the `ULPrivateLibrary` record type to the production container.
+Its fields are `keys` (Bytes), `devices` (String List) and `snapshot` (Asset).
+Development schema creation, production schema deployment, signed installations
+and physical account/propagation tests have not been performed. These are release
+gates, not results established by local compilation.
+
+Twenty-one local cloud checks pass, including four new fake-database CloudKit
+checks for discovery, legacy keys, concurrent identity/device writes, encrypted
+assets and preservation of unreadable data. All TV SDK modules compile. The
+cloud page now reports unavailable providers alongside successful providers.
+
+### Earlier deployment record
 
 The hosted endpoint is configured in both app plists. Its deployment package is
 prepared locally; the service has **not been uploaded or deployed**. Automatic

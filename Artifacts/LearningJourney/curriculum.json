@@ -2982,104 +2982,6 @@
     {
       "comparisons": [],
       "context": {
-        "allowedLosses": 8,
-        "assignments": 24,
-        "completionSeconds": 185.64705882352942,
-        "discoveryDifficulty": "unknown from replay",
-        "exhaustedUsedSkills": [
-          "builder"
-        ],
-        "initialHatchIntervalSeconds": 2.5294117647058822,
-        "jobChanges": 11,
-        "narrowActions": 0,
-        "peakAssignmentsInTwoSeconds": 4,
-        "population": 80,
-        "probedAssignments": 10,
-        "remainingSeconds": 54.35294117647059,
-        "replayRevision": "46645bfbf549d42cb6d1e3ce30ac9010b2cc15ed7465643d10deb197e2c43b1e",
-        "required": 72,
-        "rescueFraction": 0.9,
-        "savedAboveRequirement": 8,
-        "spareUsedSkills": {
-          "blocker": 9,
-          "builder": 0,
-          "climber": 6,
-          "digger": 9,
-          "floater": 6,
-          "miner": 6
-        },
-        "spatialToleranceMeasured": false,
-        "startingReleaseRate": 20,
-        "timingProbeComplete": false,
-        "usedSkills": {
-          "blocker": 1,
-          "builder": 10,
-          "climber": 4,
-          "digger": 1,
-          "floater": 4,
-          "miner": 4
-        },
-        "workers": 6
-      },
-      "identity": {
-        "engine": "classic",
-        "levelID": "59:Tricky:30:1:7",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "lesson": "Practise: Blocker + Builder",
-      "level": "The Crankshaft",
-      "objective": "community:Gentle/The_Crankshaft.nxlv",
-      "placement": {
-        "basis": "reduxClassicCounterpart",
-        "lower": 115.0,
-        "position": 125.0,
-        "reference": "Gentle/The_Crankshaft.nxlv",
-        "replayRevision": "46645bfbf549d42cb6d1e3ce30ac9010b2cc15ed7465643d10deb197e2c43b1e",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 135.0
-      },
-      "purpose": "Community-ordered practice with an exact native winning witness",
-      "reference": {
-        "author": "Amiga Lemmings",
-        "number": 25,
-        "ordinal": 25,
-        "population": 50,
-        "rank": "Gentle",
-        "rankIndex": 0,
-        "reference": "Gentle/The_Crankshaft.nxlv",
-        "required": 50,
-        "sha256": "7a12edbb2d9158ce065662b3ea1731455a0e0d0172dcd046b94a85729ab547f9",
-        "skills": {
-          "blocker": 10,
-          "bomber": 10,
-          "builder": 10,
-          "climber": 10,
-          "digger": 10,
-          "floater": 10,
-          "miner": 10
-        },
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "spawnInterval": 43,
-        "timeLimitSeconds": null,
-        "title": "The Crankshaft"
-      },
-      "risks": [
-        "incomplete timing probes",
-        "spatial tolerance unmeasured",
-        "witness exhausts at least one used skill",
-        "four or more assignments within two seconds"
-      ],
-      "variantDifferences": [
-        "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-        "different population",
-        "different rescue fraction",
-        "Classic retains a time limit"
-      ]
-    },
-    {
-      "comparisons": [],
-      "context": {
         "allowedLosses": 64,
         "assignments": 12,
         "completionSeconds": 118.70588235294117,
@@ -12820,6 +12722,105 @@
         "four or more assignments within two seconds"
       ],
       "variantDifferences": []
+    },
+    {
+      "comparisons": [],
+      "context": {
+        "allowedLosses": 8,
+        "assignments": 24,
+        "completionSeconds": 185.64705882352942,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [
+          "builder"
+        ],
+        "initialHatchIntervalSeconds": 2.5294117647058822,
+        "jobChanges": 11,
+        "narrowActions": 0,
+        "peakAssignmentsInTwoSeconds": 4,
+        "population": 80,
+        "probedAssignments": 10,
+        "remainingSeconds": 54.35294117647059,
+        "replayRevision": "46645bfbf549d42cb6d1e3ce30ac9010b2cc15ed7465643d10deb197e2c43b1e",
+        "required": 72,
+        "rescueFraction": 0.9,
+        "savedAboveRequirement": 8,
+        "spareUsedSkills": {
+          "blocker": 9,
+          "builder": 0,
+          "climber": 6,
+          "digger": 9,
+          "floater": 6,
+          "miner": 6
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 20,
+        "timingProbeComplete": false,
+        "usedSkills": {
+          "blocker": 1,
+          "builder": 10,
+          "climber": 4,
+          "digger": 1,
+          "floater": 4,
+          "miner": 4
+        },
+        "workers": 6
+      },
+      "identity": {
+        "engine": "classic",
+        "levelID": "59:Tricky:30:1:7",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "lesson": "Practise: Blocker + Builder",
+      "level": "The Crankshaft",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"59:Tricky:30:1:7\", \"packID\": \"lemmings-LEVEL-120\"}",
+      "placement": {
+        "adjustment": "User playtest 2026-10-14: The Crankshaft is too early in Fun; move to Difficult after more combination practice.",
+        "basis": "userPlaytest",
+        "lower": 370.0,
+        "position": 377.5,
+        "reference": "Gentle/The_Crankshaft.nxlv",
+        "replayRevision": "46645bfbf549d42cb6d1e3ce30ac9010b2cc15ed7465643d10deb197e2c43b1e",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 385.0
+      },
+      "purpose": "Community-ordered practice with an exact native winning witness",
+      "reference": {
+        "author": "Amiga Lemmings",
+        "number": 25,
+        "ordinal": 25,
+        "population": 50,
+        "rank": "Gentle",
+        "rankIndex": 0,
+        "reference": "Gentle/The_Crankshaft.nxlv",
+        "required": 50,
+        "sha256": "7a12edbb2d9158ce065662b3ea1731455a0e0d0172dcd046b94a85729ab547f9",
+        "skills": {
+          "blocker": 10,
+          "bomber": 10,
+          "builder": 10,
+          "climber": 10,
+          "digger": 10,
+          "floater": 10,
+          "miner": 10
+        },
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "spawnInterval": 43,
+        "timeLimitSeconds": null,
+        "title": "The Crankshaft"
+      },
+      "risks": [
+        "incomplete timing probes",
+        "spatial tolerance unmeasured",
+        "witness exhausts at least one used skill",
+        "four or more assignments within two seconds"
+      ],
+      "variantDifferences": [
+        "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+        "different population",
+        "different rescue fraction",
+        "Classic retains a time limit"
+      ]
     },
     {
       "comparisons": [

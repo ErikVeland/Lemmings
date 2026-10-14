@@ -6,7 +6,12 @@ import UIKit
 
 /// The artwork and UIKit targets share one layout, including disabled controls.
 @MainActor final class MobileMenuCanvas: UIView {
-    var page = GameFrontEnd.Page(title: "Lemmings") { didSet { rebuild() } }
+    var page = GameFrontEnd.Page(title: "Lemmings") {
+        didSet {
+            if oldValue.title != page.title { focusedID = nil }
+            rebuild()
+        }
+    }
     var playerName: String? { didSet { if oldValue != playerName { rebuild() } } }
     var playerRole = MobileTurnArt.Role.current { didSet { if oldValue != playerRole { rebuild() } } }
     var sessionName: String? { didSet { if oldValue != sessionName { rebuild() } } }
@@ -53,15 +58,19 @@ import UIKit
     }
     #endif
 
-    private func interfaceScale(width: CGFloat) -> CGFloat {
+    private func interfaceScale(width: CGFloat, viewportHeight: CGFloat? = nil) -> CGFloat {
+        let setting = MobileSettings.load(from: .standard).classic.interfaceSize
+        let height = viewportHeight ?? (superview as? UIScrollView)?.bounds.height ?? bounds.height
         #if os(tvOS)
-        return MobileSettingsArt.interfaceScale(MobileSettings.load(from: .standard).classic.interfaceSize, width: width, television: true)
+        return page.pause != nil ? MobilePauseArt.interfaceScale(setting, width: width, height: height, television: true)
+            : MobileSettingsArt.interfaceScale(setting, width: width, television: true)
         #else
-        return MobileSettingsArt.interfaceScale(MobileSettings.load(from: .standard).classic.interfaceSize, width: width)
+        return page.pause != nil ? MobilePauseArt.interfaceScale(setting, width: width, height: height)
+            : MobileSettingsArt.interfaceScale(setting, width: width)
         #endif
     }
     func size(width: CGFloat, minimumHeight: CGFloat) -> CGSize {
-        let scale = interfaceScale(width: width)
+        let scale = interfaceScale(width: width, viewportHeight: minimumHeight)
         let size = GameFrontEnd.layout(displayedPage, width: width / scale, minimumHeight: minimumHeight / scale).size
         return CGSize(width: size.width * scale, height: size.height * scale)
     }
@@ -77,7 +86,14 @@ import UIKit
                 width: scroll.bounds.width / scale, height: scroll.bounds.height / scale))
         }
         pageLayout = layout
-        for (button, target) in zip(targets, layout.targets) { button.frame = target.frame.applying(transform) }
+        let buttons = Dictionary(uniqueKeysWithValues: targets.compactMap { button in
+            button.accessibilityIdentifier.map { ($0, button) }
+        })
+        targets = layout.targets.compactMap { target in
+            guard let button = buttons["menu." + target.action.id] else { return nil }
+            button.frame = target.frame.applying(transform)
+            return button
+        }
         var elements: [Any] = []
         for (text, frame) in [(page.title, layout.heading), (page.subtitle, layout.subtitle)] + Array(zip(page.details, layout.details)) where !text.isEmpty {
             let element = UIAccessibilityElement(accessibilityContainer: self)
@@ -97,22 +113,29 @@ import UIKit
         setNeedsDisplay()
     }
     private func rebuild() {
+        pageLayout = nil
         tvActivation.reset()
         onPageChanged?()
         let actions = page.rows + page.orderedFooter
-        if !page.result || !actions.contains(where: { $0.id == focusedID && $0.enabled }) {
+        if !actions.contains(where: { $0.id == focusedID && $0.enabled }) {
             focusedID = actions.first(where: { $0.enabled && $0.title.uppercased() == "CANCEL" })?.id
                 ?? actions.first(where: { $0.primary && $0.enabled })?.id
                 ?? actions.first(where: \.enabled)?.id
         }
         highlighted = focusedID
-        targets.forEach { $0.removeFromSuperview() }
+        let existing = Dictionary(uniqueKeysWithValues: targets.compactMap { button in
+            button.accessibilityIdentifier.map { ($0, button) }
+        })
+        let retained = Set(actions.map { "menu." + $0.id })
+        targets.filter { !retained.contains($0.accessibilityIdentifier ?? "") }.forEach { $0.removeFromSuperview() }
         targets = (page.rows + page.orderedFooter).map { action in
-            let button = MobileFocusButton(type: .custom)
+            let identifier = "menu." + action.id
+            let button = existing[identifier] ?? MobileFocusButton(type: .custom)
             button.accessibilityLabel = action.title
-            button.accessibilityIdentifier = "menu." + action.id
+            button.accessibilityIdentifier = identifier
             button.accessibilityTraits = action.selected ? [.button, .selected] : .button
             button.isEnabled = action.enabled
+            if existing[identifier] != nil { return button }
             button.addAction(UIAction { [weak self] _ in
                 guard let self else { return }
                 #if os(tvOS)
@@ -136,7 +159,7 @@ import UIKit
         #endif
     }
     func moveFocus(_ offset: Int) {
-        let enabled = (page.rows + page.orderedFooter).filter(\.enabled)
+        let enabled = (pageLayout?.targets.map(\.action) ?? (page.rows + page.orderedFooter)).filter(\.enabled)
         guard !enabled.isEmpty else { return }
         let current = enabled.firstIndex { $0.id == focusedID }
         let index = current.map { ($0 + offset + enabled.count) % enabled.count } ?? 0
@@ -166,7 +189,7 @@ import UIKit
         scroll.setContentOffset(CGPoint(x: scroll.contentOffset.x, y: min(maximum, max(minimum, scroll.contentOffset.y + delta))), animated: false)
     }
     func goBack() {
-        if let action = page.footer.last(where: { $0.enabled && ["BACK", "CANCEL", "LIBRARY"].contains($0.title.uppercased()) }) {
+        if let action = page.footer.last(where: { $0.enabled && $0.isBackNavigation }) {
             onAction?(action.id)
         }
     }

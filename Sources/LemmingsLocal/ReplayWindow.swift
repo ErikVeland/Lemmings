@@ -321,8 +321,8 @@ import UniformTypeIdentifiers
   private var scrub = CGRect.zero
   private var keyboardIndex: Int? = 1
   private let accessibleElements = GameAccessibleElements()
-  private var choices: [(Action, String)] { [(.play, playing ? "Pause" : "Play"), (.restart, "Restart"),
-      (.slower, "Slower"), (.faster, "Faster"), (.save, "Save movie"), (.close, "Back")] }
+  private var choices: [(Action, String)] { [(.close, "Back"), (.restart, "Restart"),
+      (.slower, "Slower"), (.faster, "Faster"), (.save, "Save movie"), (.play, playing ? "Pause" : "Play")] }
   private func layoutControls() {
     scrub = CGRect(x: 24, y: 49, width: bounds.width - 48, height: 7)
     let width = (bounds.width - 48) / 6

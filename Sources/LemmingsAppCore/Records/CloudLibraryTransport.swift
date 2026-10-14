@@ -26,6 +26,9 @@ import Security
     private var readable: [String: Set<String>] = [:]
     private var etags: [String: String] = [:]
     private var hashes: [String: Set<Data>] = [:]
+    private lazy var cloudKit = CloudKitLibraryStore(defaults: defaults)
+    private var cloudKitReady = false
+    private var cloudKitEnabled: Bool { Bundle.main.object(forInfoDictionaryKey: "CloudLibraryCloudKitEnabled") as? Bool == true }
     private static let service = "academy.glasscode.lemmings.cloud-library-v2"
 #if os(tvOS)
     private static let containerIdentifier = "iCloud.academy.glasscode.lemmings"
@@ -85,8 +88,9 @@ import Security
     }
     public func discover(_ local: [CloudLibraryIdentity]) async throws -> [CloudLibraryIdentity] {
         guard enabled else { throw URLError(.notConnectedToInternet) }
-        providers = []; issues = []; readable = [:]; root = nil
+        providers = []; issues = []; readable = [:]; root = nil; cloudKitReady = false
         var identities = local
+        #if !os(tvOS)
         account = try currentAccount()
         if let account {
             if let bound = defaults.data(forKey: "CloudLibrary.iCloudOwner"), bound != account {
@@ -122,13 +126,23 @@ import Security
                         }.value
                         try checkAccount()
                         defaults.set(account, forKey: "CloudLibrary.iCloudOwner")
-                        providers.insert("iCloud")
+                        providers.insert("iCloud Drive")
                     } catch {
                         root = nil; issues.append("iCloud unavailable")
                         // A malformed identity must not be replaced or published.
                         if error is DecodingError || error is SequelDataError { throw error }
                     }
                 } else { issues.append("iCloud unavailable") }
+            }
+        }
+        #endif
+        if cloudKitEnabled {
+            do {
+                identities = try await cloudKit.discover(identities)
+                cloudKitReady = true
+            } catch {
+                issues.append("iCloud unavailable")
+                if error is DecodingError || error is SequelDataError { throw error }
             }
         }
         if identities.isEmpty { identities = [CloudLibraryIdentity()] }
@@ -186,6 +200,14 @@ import Security
     public func load(_ identity: CloudLibraryIdentity) async throws -> [Data] {
         var data: [Data] = [], success = Set<String>()
         hashes[identity.id + "iCloud"] = []; hashes[identity.id + "Cloud"] = []
+        hashes[identity.id + "CloudKit"] = []
+        if cloudKitReady {
+            do {
+                let cloud = try await cloudKit.load(identity)
+                data += cloud; success.insert("CloudKit"); providers.insert("iCloud")
+                hashes[identity.id + "CloudKit"] = Set(cloud.map { Data(SHA256.hash(data: $0)) })
+            } catch { issues.append("iCloud saves unavailable") }
+        }
         if let root {
             do {
                 try checkAccount()
@@ -229,6 +251,13 @@ import Security
         let sealed = try identity.seal(data)
         let contentHash = Data(SHA256.hash(data: data))
         var saved = false
+        if readable[identity.id]?.contains("CloudKit") == true {
+            if hashes[identity.id + "CloudKit"]?.contains(contentHash) == true { saved = true }
+            else {
+                do { try await cloudKit.save(data, identity: identity, device: device); saved = true }
+                catch { issues.append("iCloud upload pending") }
+            }
+        }
         if readable[identity.id]?.contains("iCloud") == true, let root {
             if hashes[identity.id + "iCloud"]?.contains(contentHash) == true { saved = true }
             else {

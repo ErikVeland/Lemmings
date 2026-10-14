@@ -5,6 +5,21 @@ import LemmingsMobileCore
 import NxlvKit
 
 extension MenuAudit {
+    static func footerNavigationIsValid(_ page: GameFrontEnd.Page, layout: GameFrontEnd.Layout) -> Bool {
+        let footer = layout.targets.filter { page.footer.contains($0.action) }
+        guard Set(footer.map { $0.action.id }) == Set(page.footer.map(\.id)) else { return false }
+        let ordered = footer.sorted { $0.frame.minY == $1.frame.minY ? $0.frame.minX < $1.frame.minX : $0.frame.minY < $1.frame.minY }
+        guard footer.map(\.action) == ordered.map(\.action) else { return false }
+        if let back = footer.first(where: { $0.action.isBackNavigation }) {
+            guard back.frame.minX == footer.map({ $0.frame.minX }).min(),
+                  back.frame.maxY == footer.map({ $0.frame.maxY }).max() else { return false }
+        }
+        if let forward = footer.last(where: { $0.action.primary && !$0.action.isBackNavigation }) {
+            guard forward.frame.maxX == footer.map({ $0.frame.maxX }).max(),
+                  forward.frame.maxY == footer.map({ $0.frame.maxY }).max() else { return false }
+        }
+        return true
+    }
     @MainActor static func checkHierarchy(library: ClassicMobileLibrary, typography: GameMenuTypography, output: URL) throws {
         let content = try library.loadLevel(at: 26)
         let image = MobileBitmapRenderer.image(try content.session.render(highlight: nil))
@@ -37,7 +52,7 @@ extension MenuAudit {
                               GameTextLayout.height(page.subtitle, width: layout.subtitle.width) <= layout.subtitle.height,
                               layout.heading.maxY <= layout.subtitle.minY,
                               layout.details.count == page.details.count,
-                              layout.targets.map(\.action) == page.rows + page.orderedFooter else { throw Failure.invalidTargets }
+                              footerNavigationIsValid(page, layout: layout) else { throw Failure.invalidTargets }
                         for (index, text) in page.details.enumerated() {
                             let box = layout.details[index]
                             guard layout.board.contains(box), GameTextLayout.height(text, width: box.width, face: page.detailTitles.contains(index) ? .large : .small) <= box.height,

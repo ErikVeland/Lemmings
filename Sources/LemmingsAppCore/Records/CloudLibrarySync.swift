@@ -60,7 +60,9 @@ import NxlvKit
         set { defaults.set(newValue, forKey: enabledKey); if newValue { requestSync() } else { setState(.paused) } }
     }
     public var providerNames: String {
-        (transport as? AppleCloudLibraryTransport)?.providers.sorted().joined(separator: " + ") ?? "Cloud"
+        guard let apple = transport as? AppleCloudLibraryTransport else { return "Cloud" }
+        return ([apple.providers.sorted().joined(separator: " + ")] + Array(Set(apple.issues)).sorted())
+            .filter { !$0.isEmpty }.joined(separator: "\n")
     }
     public func start() {
         guard ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] != "muted" else { return }

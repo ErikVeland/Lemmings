@@ -469,7 +469,7 @@ import NxlvKit
         if let next = nextSessionPlayer {
             let canHandOver = ArcadeStore.shared.profilesAreWritable && ArcadeStore.shared.storageError == nil
             // The four-button loss row narrows this button, so each row draws its own.
-            if cleared || availableSkips == 0 {
+            if cleared {
                 button("Retry as \(player.initials)", CGRect(x: 64, y: y, width: 330, height: 48)) { [weak self] in self?.onRetry?() }
             }
             if cleared {
@@ -478,24 +478,25 @@ import NxlvKit
                 button("\(continueTitle): \(owner.initials)", CGRect(x: 726, y: y, width: 330, height: 48), primary: true,
                        enabled: handsOverAfterClear == nil || canHandOver) { [weak self] in self?.continueAsNextProfile() }
             } else if availableSkips > 0 {
-                button("Retry as \(player.initials)", CGRect(x: 64, y: y, width: 220, height: 48)) { [weak self] in self?.onRetry?() }
-                button(skipTitle, CGRect(x: 312, y: y, width: 240, height: 48), enabled: canHandOver) { [weak self] in self?.skipLevel() }
-                button("Back to library", CGRect(x: 566, y: y, width: 226, height: 48)) { [weak self] in
+                button("Back to library", CGRect(x: 64, y: y, width: 226, height: 48)) { [weak self] in
                     if let prepare = ArcadeWindow.shared.prepareSession { _ = prepare() } else { self?.onClose?() }
                 }
+                button("Retry as \(player.initials)", CGRect(x: 308, y: y, width: 220, height: 48)) { [weak self] in self?.onRetry?() }
+                button(skipTitle, CGRect(x: 546, y: y, width: 240, height: 48), enabled: canHandOver) { [weak self] in self?.skipLevel() }
                 button("Retry as \(next.initials)", CGRect(x: 806, y: y, width: 250, height: 48), primary: true,
                        enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
             } else {
-                button("Back to library", CGRect(x: 412, y: y, width: 296, height: 48)) { [weak self] in
+                button("Back to library", CGRect(x: 64, y: y, width: 296, height: 48)) { [weak self] in
                     if let prepare = ArcadeWindow.shared.prepareSession { _ = prepare() } else { self?.onClose?() }
                 }
+                button("Retry as \(player.initials)", CGRect(x: 378, y: y, width: 330, height: 48)) { [weak self] in self?.onRetry?() }
                 button("Retry as \(next.initials)", CGRect(x: 726, y: y, width: 330, height: 48), primary: true,
                        enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
             }
         } else if availableSkips > 0 {
-            button("Back", CGRect(x: 128, y: y, width: 204, height: 48)) { [weak self] in self?.onClose?() }
-            button(skipTitle, CGRect(x: 352, y: y, width: 290, height: 48)) { [weak self] in self?.skipLevel() }
-            button(primaryResultTitle, CGRect(x: 662, y: y, width: 330, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
+            button("Back", CGRect(x: 64, y: y, width: 256, height: 48)) { [weak self] in self?.onClose?() }
+            button(skipTitle, CGRect(x: 338, y: y, width: 330, height: 48)) { [weak self] in self?.skipLevel() }
+            button(primaryResultTitle, CGRect(x: 688, y: y, width: 368, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
         } else {
             button(cleared ? "Retry" : "Back", CGRect(x: 64, y: y, width: 256, height: 48)) { [weak self] in
                 guard let self else { return }

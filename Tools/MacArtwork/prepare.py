@@ -50,6 +50,24 @@ def png_rgba(path):
     assert len(rgba)==width*height*4
     return width,height,rgba
 
+def decode_mono(bank, offset, width, height):
+    """Decode Presage mask/image word pairs, including word-aligned padding."""
+    width = (width + 15) & ~15
+    size = width // 16 * height * 4
+    if offset + size > len(bank):
+        raise ValueError('Truncated monochrome SHPD frame')
+    pixels = bytearray(width * height * 4)
+    for word in range(width // 16 * height):
+        mask, image = struct.unpack_from('>HH', bank, offset + word * 4)
+        for bit in range(16):
+            if mask & (0x8000 >> bit):
+                continue
+            value = 0 if image & (0x8000 >> bit) else 255
+            dest = (word * 16 + bit) * 4
+            pixels[dest:dest + 4] = bytes((value, value, value, 255))
+    return width, pixels
+
+
 def decode_bank(bank,palette,version):
     end=U32(bank,0)
     if not end:return None
@@ -62,6 +80,10 @@ def decode_bank(bank,palette,version):
         ox,oy,w,h=struct.unpack_from('>hhHH',bank,offset)
         if w*h>4_000_000:raise ValueError('Invalid SHPD dimensions')
         if not w or not h:frames.append(None);continue
+        if palette is None:
+            w,pixels=decode_mono(bank,offset+8,w,h)
+            frames.append((ox,oy,w,h,pixels))
+            continue
         pixels=bytearray(w*h*4);dest=0;pos=offset+8
         while dest<w*h:
             cmd=bank[pos];pos+=1;count=(cmd&127)+1
@@ -74,7 +96,7 @@ def decode_bank(bank,palette,version):
         frames.append((ox,oy,w,h,pixels))
     return frames
 
-def export(source,app,output,version):
+def export(source,app,output,version,monochrome=False):
     output.mkdir(parents=True,exist_ok=True)
     application=resources((source/(app+'.rsrc')).read_bytes())
     clut=next(d for t,i,n,d in application if t=='clut' and i==1000)
@@ -82,13 +104,14 @@ def export(source,app,output,version):
     for off in range(8,len(clut),8):
         index,r,g,b=struct.unpack_from('>HHHH',clut,off)
         palette[index]=(r>>8,g>>8,b>>8,255)
-    graphics=(source/'Graphics.data').read_bytes(); banks={}; names={}
-    for typ,bank_id,name,record in resources((source/'Graphics.rsrc').read_bytes()):
+    graphics_name='BW Graphics' if monochrome else 'Graphics'
+    graphics=(source/(graphics_name+'.data')).read_bytes(); banks={}; names={}
+    for typ,bank_id,name,record in resources((source/(graphics_name+'.rsrc')).read_bytes()):
         if typ!='SHPD':continue
         offset,csize,size=struct.unpack('>III',record)
         bank=unpack(graphics[offset:offset+csize],size) if csize else graphics[offset:offset+size]
         assert len(bank)==size
-        frames=decode_bank(bank,palette,version)
+        frames=decode_bank(bank,None if monochrome else palette,version)
         if frames is None:
             with tempfile.TemporaryDirectory() as temp:
                 pict=pathlib.Path(temp)/'image.pict';pict.write_bytes(bytes(512)+bank)
@@ -104,15 +127,15 @@ def export(source,app,output,version):
     for typ,style,name,data in resources((source/'Levels.rsrc').read_bytes()):
         if typ=='OBJD':
             definitions[str(style)]=[dict(first=U16(data,p+2),count=U16(data,p+4),base=U16(data,p+6)) for p in range(0,len(data),26)]
-    manifest=dict(version=version,banks=banks,names=names,objects=definitions)
+    manifest=dict(version=version,monochrome=monochrome,banks=banks,names=names,objects=definitions)
     (output/'manifest.json').write_text(json.dumps(manifest,separators=(',',':')))
     print(f'Mac artwork: {output.name}, {sum(len(x) for x in banks.values())} frames')
 
 def copy_forks(source,dest,app):
     dest.mkdir(parents=True,exist_ok=True)
-    for name in ['Graphics','Levels',app]:
+    for name in ['Graphics','BW Graphics','Levels',app]:
         path=source/name
-        if name=='Graphics':(dest/'Graphics.data').write_bytes(path.read_bytes())
+        if name in ['Graphics','BW Graphics']:(dest/(name+'.data')).write_bytes(path.read_bytes())
         (dest/(name+'.rsrc')).write_bytes(pathlib.Path(str(path)+'/..namedfork/rsrc').read_bytes())
 
 def prepare(project,output):
@@ -135,12 +158,17 @@ def prepare(project,output):
     copy_forks(project/"Sources/Ports/mac_extracted/Holiday_Lem93_94/Extras/X-Mas Demo '92",xmas,'Xmas Lemmings')
     for name,source,app,version in [('lemmings',original,'Lemmings',1),('ohno',onml,'Oh No! More Lemmings',2),('holiday',holiday,'Holiday Lemmings 1994',2),('xmas',xmas,'Xmas Lemmings',1)]:
         export(source,app,output/name,version)
+        export(source,app,output/"monochrome"/name,version,monochrome=True)
     # Xmas '92 retains the brick bank used by Xmas '91, but its Levels file
     # contains only the snow definitions. The Holiday installer preserves the
     # matching 104-frame brick object table.
     path=output/'xmas/manifest.json'
     manifest=json.loads(path.read_text())
     holiday_manifest=json.loads((output/'holiday/manifest.json').read_text())
+    manifest['objects']['0']=holiday_manifest['objects']['0']
+    path.write_text(json.dumps(manifest,separators=(',',':')))
+    path=output/'monochrome/xmas/manifest.json'
+    manifest=json.loads(path.read_text())
     manifest['objects']['0']=holiday_manifest['objects']['0']
     path.write_text(json.dumps(manifest,separators=(',',':')))
 

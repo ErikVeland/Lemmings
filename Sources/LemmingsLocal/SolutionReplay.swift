@@ -4,6 +4,7 @@ import CryptoKit
 import LemmingsAppCore
 import LemmingsAudio
 import NxlvKit
+import LemmingsGameArt
 
 /// Playback owns its simulation and never calls the campaign, saves or result handlers.
 @MainActor final class SolutionPlayback {
@@ -80,13 +81,17 @@ import NxlvKit
     let field = PlayfieldView(frame: .zero)
     let speedControl = GameSpeedControl()
     let effects: SoundEffectPlayer?
+    let selector = SolutionSwitchView(frame: .zero)
+    var onReturnToGame: (() -> Void)?
+    let moveNavigation: ReplayMoveNavigation
     var onSoundCues: (([PositionedSoundCue]) -> Void)?
     private let marker = SolutionMarker(frame: .zero)
     private let status = HintBitmapText()
     private let skillPanel = ReplaySkillPanel(frame: .zero)
     private var timer: Timer?
     private var monitor: Any?
-    private var paused = false
+    private(set) var paused = false
+    private var hasPresented = false
     private var tickCredit = 0.0
     private var assignmentUntil = 0.0
     private var followedID: Int?
@@ -100,10 +105,13 @@ import NxlvKit
     private weak var speedButton: NSButton?
     private weak var trackingButton: NSButton?
     private weak var zoomButton: NSButton?
+    private weak var previousMoveButton: NSButton?
+    private weak var nextMoveButton: NSButton?
 
     init(solution: VerifiedSolution, source: PlayfieldView, width: Int, height: Int, effects: SoundEffectPlayer? = nil) {
         self.effects = effects?.replayPlayer()
         playback = SolutionPlayback(solution, width: width, height: height)
+        moveNavigation = .classic(initial: solution.initial, replay: solution.replay)
         field.classicScene = source.classicScene; field.macScene = source.macScene
         field.macArtwork = source.macArtwork; field.assets = source.assets; field.palette = source.palette
         field.levelImage = source.levelImage; field.imageScale = source.imageScale
@@ -113,6 +121,10 @@ import NxlvKit
         marker.field = field
         page.setAccessibilityLabel("Solution replay: " + solution.replay.title)
         page.addSubview(field); page.addSubview(marker); page.addSubview(status); page.addSubview(skillPanel)
+        selector.mode = .solution
+        selector.onSelect = { [weak self] mode in if mode == .game { self?.close() } }
+        page.addSubview(selector)
+        page.onReturnToGame = { [weak self] in self?.close() }
         func button(_ title: String, _ help: String, primary: Bool = false, speed: Bool = false, action: @escaping () -> Void) -> GameActionButton {
             let value: GameActionButton = speed
                 ? SolutionSpeedButton(title: title, primary: primary, onPress: action)
@@ -121,7 +133,9 @@ import NxlvKit
             value.setAccessibilityLabel(help); value.toolTip = help
             page.addSubview(value); buttons.append(value); return value
         }
-        _ = button("Hints", "Back to hints. Escape.") { [weak self] in self?.close() }
+        _ = button("Back to game", "Back to your paused game. Escape.") { [weak self] in self?.close() }
+        previousMoveButton = button("Previous move", "Previous successful skill use. Control-Left.") { [weak self] in self?.seekMove(-1) }
+        nextMoveButton = button("Next move", "Next successful skill use. Control-Right.") { [weak self] in self?.seekMove(1) }
         _ = button("Back 1s", "Rewind one second.") { [weak self] in self?.seek(-ClassicDOSRules.ticksPerSecond) }
         _ = button("Step +1", "Advance one tick.") { [weak self] in self?.seek(1) }
         transport = button("Pause", "Play or pause. Space or P.", primary: true) { [weak self] in self?.togglePause() }
@@ -162,17 +176,22 @@ import NxlvKit
         let scale = max(1, min(2, size.width / 1120, size.height / 720))
         let gap = 6.0 * scale, margin = 8.0 * scale
         let rowHeight = 38.0 * scale
-        let columns = max(1, min(7, Int(size.width / (140 * scale))))
+        let columns = max(2, min(5, Int(size.width / (190 * scale))))
         let rows = (buttons.count + columns - 1) / columns
-        field.frame = CGRect(x: 0, y: 30 * scale, width: size.width, height: max(1, size.height - 42 * scale - Double(rows) * (rowHeight + gap)))
+        selector.frame = CGRect(x: max(margin, (size.width - 320 * scale) / 2), y: 8 * scale, width: 320 * scale, height: 48 * scale)
+        selector.bounds.size = SolutionSwitchArt.size
+        field.frame = CGRect(x: 0, y: 90 * scale, width: size.width, height: max(1, size.height - 102 * scale - Double(rows) * (rowHeight + gap)))
         marker.frame = field.frame
         layoutSkillPanel(scale: scale)
-        status.frame = CGRect(x: margin, y: 2 * scale, width: size.width - 2 * margin, height: 26 * scale)
+        status.frame = CGRect(x: margin, y: 60 * scale, width: size.width - 2 * margin, height: 26 * scale)
         status.bounds.size = CGSize(width: status.frame.width / scale, height: 26)
         let width = (size.width - 2 * margin - Double(columns - 1) * gap) / Double(columns)
-        for (index, button) in buttons.enumerated() {
-            button.frame = CGRect(x: margin + Double(index % columns) * (width + gap),
-                y: field.frame.maxY + 8 * scale + Double(index / columns) * (rowHeight + gap), width: width, height: rowHeight)
+        let actions = buttons.enumerated().map { GameFrontEnd.Action(String($0.offset), $0.offset == 0 ? "Back" : $0.element.title, primary: $0.element === transport) }
+        let grid = GameFooterGrid(actions: actions, columns: columns)
+        for slot in grid.slots {
+            let button = buttons[Int(slot.action.id)!]
+            button.frame = CGRect(x: margin + Double(slot.column) * (width + gap),
+                y: field.frame.maxY + 8 * scale + Double(slot.row) * (rowHeight + gap), width: width, height: rowHeight)
             button.bounds.size = CGSize(width: width / scale, height: rowHeight / scale)
         }
         let center = field.viewport.levelPoint(from: CGPoint(x: field.bounds.midX, y: field.bounds.midY))
@@ -182,9 +201,11 @@ import NxlvKit
     }
 
     func show(owner: NSWindow) {
+        suspend()
         guard GameScreen.shared.present(page, owner: owner, focus: page, onDismiss: { [weak self] in self?.stop() }) else { return }
         try? effects?.start()
-        centre(entrance: true); automaticTracking = true; refresh()
+        if !hasPresented { centre(entrance: true); automaticTracking = true; hasPresented = true }
+        refresh()
         monitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .keyUp, .flagsChanged]) { [weak self, weak owner] event in
             guard let self, event.window === owner, owner?.isKeyWindow == true,
                   GameScreen.shared.controllerPage(in: owner!) === self.page else { return event }
@@ -196,12 +217,26 @@ import NxlvKit
     }
 
     func stop() {
+        suspend()
         effects?.stop()
         timer?.invalidate(); timer = nil
         if let monitor { NSEvent.removeMonitor(monitor) }; monitor = nil
         speedControl.cancelInput(); pressedF = false
     }
-    private func close() { GameScreen.shared.dismiss(page) }
+    func suspend() {
+        paused = true; tickCredit = 0
+        speedControl.cancelInput(); pressedF = false
+        effects?.silence()
+        refresh()
+    }
+    private func close() {
+        suspend()
+        if let onReturnToGame { onReturnToGame() } else { GameScreen.shared.dismiss(page) }
+    }
+    func seekMove(_ direction: Int) {
+        guard let tick = moveNavigation.target(from: playback.session.currentTick, direction: direction) else { return }
+        seek(tick - playback.session.currentTick)
+    }
     private func togglePause() {
         if playback.session.isComplete {
             playback = SolutionPlayback(playback.solution, width: playback.session.levelWidth, height: playback.session.levelHeight)
@@ -290,6 +325,12 @@ import NxlvKit
     private func setZoom(_ factor: Double) { zoomFactor = factor; layout(); updateTracking(); refresh() }
 
     @discardableResult func handleKey(_ event: NSEvent) -> Bool {
+        if event.type == .keyDown, event.modifierFlags.intersection([.command, .control, .option, .shift]) == .control {
+            if event.keyCode == 123 || event.keyCode == 124 {
+                if !event.isARepeat { seekMove(event.keyCode == 123 ? -1 : 1) }
+                return true
+            }
+        }
         if event.type == .keyUp, event.keyCode == 3, pressedF {
             pressedF = false; speedControl.release(.key, at: event.timestamp); return true
         }
@@ -344,6 +385,8 @@ import NxlvKit
             if ProcessInfo.processInfo.systemUptime > assignmentUntil { marker.point = nil }
         }
         transport?.title = playback.session.isComplete ? "Replay" : paused ? "Play" : "Pause"
+        previousMoveButton?.isEnabled = moveNavigation.target(from: playback.session.currentTick, direction: -1) != nil
+        nextMoveButton?.isEnabled = moveNavigation.target(from: playback.session.currentTick, direction: 1) != nil
         speedButton?.title = speedControl.label
         trackingButton?.title = automaticTracking ? "Follow: on" : followedID != nil ? "Tracking" : "Free view"
         zoomButton?.title = "Zoom \(Int(zoomFactor))×"
@@ -353,13 +396,16 @@ import NxlvKit
 }
 
 @MainActor final class SolutionReplayPage: NSView, GameFullWindowPage {
+    var onReturnToGame: (() -> Void)?
     var onLayout: (() -> Void)?
     var onKey: ((NSEvent) -> Bool)?
     override var isFlipped: Bool { true }
     override var acceptsFirstResponder: Bool { true }
     override func layout() { super.layout(); onLayout?() }
     override func draw(_ dirtyRect: NSRect) { NSColor.black.setFill(); bounds.fill() }
-    override func cancelOperation(_ sender: Any?) { GameScreen.shared.dismiss(self) }
+    override func cancelOperation(_ sender: Any?) {
+        if let onReturnToGame { onReturnToGame() } else { GameScreen.shared.dismiss(self) }
+    }
     override func keyDown(with event: NSEvent) { if onKey?(event) != true { super.keyDown(with: event) } }
 }
 

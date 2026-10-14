@@ -21,11 +21,13 @@ public struct ClassicMacArtwork: Sendable {
     }
     private struct Manifest: Decodable {
         let version: Int
+        let monochrome: Bool?
         let banks: [String: [FrameRecord?]]
         let objects: [String: [ObjectSequence]]
         let names: [String: String]?
     }
     public let version: Int
+    public let monochrome: Bool
     public let banks: [Int: [Frame?]]
     public let objects: [Int: [ObjectSequence]]
     let family: String
@@ -54,6 +56,7 @@ public struct ClassicMacArtwork: Sendable {
                     height: record.height, rgba: data)
             }
         }
+        self.monochrome = manifest.monochrome ?? false
         self.version = manifest.version
         self.family = directory.lastPathComponent.lowercased()
         self.banks = banks
@@ -186,9 +189,12 @@ public struct ClassicMacScene: Sendable {
             if !macAvailable {
                 if objectFrames[object.placement.id] == nil {
                     objectFrames[object.placement.id] = try object.rgbaFrames.map {
-                        reconstructUnmatched
+                        let frame = reconstructUnmatched
                             ? try Self.reconstructedObject($0, graphic: object.graphic)
                             : Self.doubled($0, width: object.graphic.width, height: object.graphic.height)
+                        return artwork.monochrome ? ClassicMacArtwork.Frame(x: frame.x, y: frame.y,
+                            width: frame.width, height: frame.height,
+                            rgba: Self.monochromeRGBA(frame.rgba, width: frame.width)) : frame
                     }
                 }
                 reconstructedObjects[position] = objectFrames[object.placement.id]
@@ -244,7 +250,7 @@ public struct ClassicMacScene: Sendable {
                 y: tile.y * 2 + ((artwork.version == 1 && tile.draw.isUpsideDown) ? 0 : frame.y),
                 flipped: tile.draw.isUpsideDown, erase: tile.draw.isErase, behind: tile.draw.noOverwrite)
         }
-        terrainRGBA = Data(pixels)
+        terrainRGBA = artwork.monochrome ? Self.monochromeRGBA(Data(pixels), width: width) : Data(pixels)
     }
 
     public func terrainFrame(terrain: ClassicDOSTerrain) -> Data {
@@ -260,7 +266,10 @@ public struct ClassicMacScene: Sendable {
             for dy in 0..<2 { for dx in 0..<2 {
                 let p = ((y + dy) * width + x + dx) * 4
                 if solid[i] == 0 { pixels[p + 3] = 0 }
-                else { pixels[p] = 240; pixels[p+1] = 208; pixels[p+2] = 96; pixels[p+3] = 255 }
+                else {
+                    let colour: (UInt8, UInt8, UInt8) = artwork.monochrome ? (255, 255, 255) : (240, 208, 96)
+                    pixels[p] = colour.0; pixels[p+1] = colour.1; pixels[p+2] = colour.2; pixels[p+3] = 255
+                }
             } }
         }
         return pixels
@@ -313,6 +322,21 @@ public struct ClassicMacScene: Sendable {
                 flipped: placement.draw.isUpsideDown, behind: placement.draw.noOverwrite,
                 onlyTerrain: placement.draw.onlyOverwrite, solid: solid,
                 visualTerrain: isLiquid ? visualTerrain : nil)
+        }
+        return Data(pixels)
+    }
+
+    /// Dithers fallback pixels while retaining every source alpha value.
+    public static func monochromeRGBA(_ rgba: Data, width: Int) -> Data {
+        guard width > 0 else { return rgba }
+        var pixels = [UInt8](rgba)
+        let thresholds = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5]
+        for i in 0..<(pixels.count / 4) where pixels[i * 4 + 3] != 0 {
+            let p = i * 4
+            let luminance = (Int(pixels[p]) * 299 + Int(pixels[p + 1]) * 587 + Int(pixels[p + 2]) * 114) / 1000
+            let threshold = thresholds[((i / width) % 4) * 4 + i % width % 4] * 16 + 8
+            let value: UInt8 = luminance > threshold ? 255 : 0
+            pixels[p] = value; pixels[p + 1] = value; pixels[p + 2] = value
         }
         return Data(pixels)
     }

@@ -107,6 +107,9 @@ extension MobileLibraryViewController {
         case "seatOther": resumeOtherSession()
         default:
             if id.hasPrefix("seat."), case let key = String(id.dropFirst(5)), profiles.players.contains(where: { $0.id == key }) {
+                if hotSeatRoster == nil {
+                    hotSeatRoster = MobileHotSeatRoster(host: profiles.activeID, players: defaultHotSeatPlayers)
+                }
                 hotSeatRoster?.toggle(key)
                 confirmingRestart = false
                 rebuild()

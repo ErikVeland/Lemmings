@@ -29,17 +29,33 @@ shell. That diagnostic path is not the normal application or the parity baseline
 | Records/services | Shared records, achievements, community boards, Game Center adapter, telemetry consent and Play Insights. TV declares the Game Center entitlement. | TV App Store Connect/provisioning, production boards, account consent and live service journeys. No production account settings were changed. |
 | Settings | Shared groups, presets, graphics, display/effects, accessibility, soundtrack and controller remapping. TV retains sensitivity/dead-zone choices. Standard/Large/Extra Large use distinct whole-pixel menu scales. New TV preferences select continuous skill changes. | Physical runtime effects, long menus and accessible focus. |
 | Audio | Shared Adaptive DJ, soundtrack selection/downloads, native sound banks, track notices, pause/speed/rewind and interruption rules. | Audible comparison needs an explicit request. Engine/data limits remain shared with iOS. |
-| Recovery/cloud | Shared owner/session-scoped checkpoints and session navigation. Legacy TV profiles, portraits, solo/shared completion, rosters, exact turns, preferences and the surviving checkpoint migrate once. Old data is retained, and an existing shared run is not overwritten. Shared cloud-library/recovery-code routes are available; TV transfers recovery keys over LAN. | Live cloud linking and purge recovery. Cloud library sync does not back up complete checkpoint payloads or all local collection files. Durable full Resume after TV cache eviction is still an implementation gap. |
+| Recovery/cloud | Shared owner/session-scoped checkpoints and session navigation. Legacy TV profiles, portraits, solo/shared completion, rosters, exact turns, preferences and the surviving checkpoint migrate once. Old data is retained, and an existing shared run is not overwritten. Shared cloud-library/recovery-code routes are available; TV transfers recovery keys over LAN. | Live cloud linking and purge recovery. Cloud library sync does not back up complete checkpoint payloads or all local collection files. TV adds an explicit off-device save backup/restore adapter; transfer and purge recovery need physical acceptance. |
 | Accessibility/lifecycle | Shared accessible action names, interruption pause and explicit Resume. TV uses native focus over the same bitmap targets. Large transfer pages scroll to keep Back reachable. | Physical VoiceOver, system keyboard, background/termination/reconnect and sofa readability. |
 
 ## Storage and migration boundaries
+
+The 14 October profile/cloud follow-up moves Edit into the player list, retains
+native focus targets during redraws, and marks the Hot Seat host as locked.
+Guests can be deselected before Choose a game starts or continues a session.
+All engines use this shared roster flow. Shared cloud progress now has a CloudKit
+adapter for TV, Mac and iOS. GameKit saved games are unavailable on TV. CloudKit
+provisioning, production schema deployment and physical device sync remain open.
+See [cloud progress](../../Documentation/CloudProgress.md) for the setup limits.
 
 TV uses Caches for larger local files, including content, collections, records,
 journeys, soundtrack downloads and checkpoints. Small profile/Hot Seat metadata
 is retained in UserDefaults, with a bounded document size. tvOS may evict cached
 files. A recovery key links cloud library progress; it does not restore every
-local file or a mid-level checkpoint. Do not promise durable or cross-device
-mid-level Resume until that gap is implemented and tested.
+local file or a mid-level checkpoint. Cloud saves also offers Back up TV saves
+and Restore TV saves. The bounded `.lemmingstv` archive includes checkpoint JSON,
+player/session metadata, collections, playlists, learning state, native campaign
+records and applicable preferences. It excludes commercial data, soundtrack
+files, exported movies and service credentials. Restore stages files, focuses
+Cancel in its confirmation, retains the previous folders and recreates stores
+only after the transaction succeeds. Backups are explicit and must be downloaded
+to another device. They are not an automatic cloud checkpoint service. Reimport
+compatible player-owned game data if TV evicts it before resuming. Do not promise
+automatic or cross-device mid-level Resume without separate validation.
 
 The old `tv.localState` defaults and original checkpoint files are retained.
 Migration markers advance only after successful migration. A completed migrated

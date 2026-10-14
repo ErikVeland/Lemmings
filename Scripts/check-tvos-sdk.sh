@@ -1,7 +1,7 @@
 #!/bin/zsh
 set -euo pipefail
 project_dir="${0:A:h:h}"
-build_dir="$project_dir/.build/tv-sdk"
+build_dir="${TV_SDK_BUILD_DIR:-$project_dir/.build/tv-sdk}"
 mkdir -p "$build_dir/ModuleCache"
 rm -rf "$build_dir/Modules"
 mkdir -p "$build_dir/Modules"

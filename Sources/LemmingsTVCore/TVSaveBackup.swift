@@ -34,10 +34,25 @@ public struct TVSaveBackup: Codable, Sendable {
               files.values.reduce(0, { $0 + $1.count }) + preferences.values.reduce(0, { $0 + $1.count }) <= Self.maximumBytes else {
             throw CocoaError(.fileReadCorruptFile)
         }
-        for data in preferences.values {
-            _ = try PropertyListSerialization.propertyList(from: data, format: nil)
+        for (key, data) in preferences {
+            guard let wrapper = try PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any],
+                  let value = wrapper["value"] else { throw CocoaError(.fileReadCorruptFile) }
+            if key == "tv.mobile.players.players" {
+                guard let profileData = value as? Data else { throw CocoaError(.fileReadCorruptFile) }
+                try Self.validateProfiles(profileData)
+            }
+        }
+        for path in ["Mobile/_players/players.json", "Mobile/_players/players.json.bak"] {
+            if let data = files[path] { try Self.validateProfiles(data) }
         }
         return self
+    }
+
+    private static func validateProfiles(_ data: Data) throws {
+        let profiles = try JSONDecoder().decode(MobileProfiles.self, from: data)
+        let ids = Set(profiles.players.map(\.id))
+        guard !ids.isEmpty, ids.count == profiles.players.count, ids.count <= MobileProfiles.maximum,
+              ids.contains(profiles.activeID) else { throw CocoaError(.fileReadCorruptFile) }
     }
 
     public func encoded() throws -> Data {
@@ -74,7 +89,8 @@ public struct TVSaveBackup: Codable, Sendable {
                 let values = try url.resourceValues(forKeys: [.isRegularFileKey, .isSymbolicLinkKey, .fileSizeKey])
                 guard values.isSymbolicLink != true else { throw CocoaError(.fileReadCorruptFile) }
                 guard values.isRegularFile == true else { continue }
-                let path = String(url.path.dropFirst(root.path.count + 1))
+                // Foundation may enumerate /private/var for a root expressed as /var.
+                let path = namespace + "/" + url.pathComponents.suffix(enumerator.level).joined(separator: "/")
                 guard allowedFile(path) else { continue }
                 guard (values.fileSize ?? maximumBytes + 1) <= maximumBytes else { throw MobileCheckpointError.tooLarge }
                 files[path] = try Data(contentsOf: url)

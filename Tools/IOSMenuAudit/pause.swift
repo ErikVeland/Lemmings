@@ -20,9 +20,10 @@ extension MenuAudit {
                              ("landscape", CGSize(width: 756, height: 369)),
                              ("narrow-landscape", CGSize(width: 568, height: 300)),
                              ("ipad", CGSize(width: 834, height: 1092)),
-                             ("ipad-landscape", CGSize(width: 1112, height: 814))] {
+                             ("ipad-landscape", CGSize(width: 1112, height: 814)),
+                             ("tv", CGSize(width: 1920, height: 1080))] {
             for interface in ClassicInterfaceSize.allCases {
-                let scale = MobileSettingsArt.interfaceScale(interface, width: size.width)
+                let scale = MobilePauseArt.interfaceScale(interface, width: size.width, height: size.height, television: pose == "tv")
                 let logicalSize = CGSize(width: size.width / scale, height: size.height / scale)
                 for (state, saved, active, ending, replay) in states {
                     let info = MobilePauseSummary(level: .init(index: 94, rank: "Lemmings", number: 95, title: content.summary.title, origin: .official, packName: "Lemmings"),
@@ -36,32 +37,37 @@ extension MenuAudit {
                         audio: state == "ending" ? "Music off   /   SFX off" : "Music: beat only   /   SFX 90%")
                     let footer: [GameFrontEnd.Action] = replay
                         ? [.init("back", "Back"), .init("resume", "Resume", primary: true)]
-                        : [.init("library", "Library"), .init("hint", "Hint"), .init("controls", "Controls"), .init("resume", "Resume", primary: true)]
+                        : [.init("library", "Library"), .init("restart", "Restart level"),
+                           .init("controls", "Game controls"), .init("resume", "Resume", primary: true)]
                     let page = MobileTurnArt.page(MobilePauseArt.page(info, actions: footer), playerName: replay ? nil : "ERI")
                     let base = GameFrontEnd.layout(page, width: logicalSize.width, minimumHeight: logicalSize.height)
+                    guard replay ? page.title == "Replay" : page.title.hasPrefix("Paused"),
+                          page.subtitle.contains("95"), page.details.contains(info.level.title),
+                          page.details.contains("Lost: \(info.lost)"), page.details.contains(info.track),
+                          replay || page.footer.contains(where: { $0.id == "restart" }) else { throw invalidTargets(line: #line) }
                     guard base.details.count == page.details.count,
                           base.details.allSatisfy({ base.board.contains($0) }),
-                          base.details.last!.maxY + 8 < base.targets.first!.frame.minY else { throw Failure.invalidTargets }
+                          base.details.last!.maxY + 8 < base.targets.first!.frame.minY else { throw invalidTargets(line: #line) }
                     let countWidth = max(28, CGFloat(info.supplies.map { $0.value.count }.max() ?? 0) * 12)
                     for (index, stock) in info.supplies.enumerated() {
                         guard typography.width(of: stock.label, face: .small, scale: 1) <= base.details[12 + index].width - countWidth - 4
-                        else { throw Failure.invalidTargets }
+                        else { throw invalidTargets(line: #line) }
                     }
                     for offset in [CGFloat(0), max(0, base.size.height - logicalSize.height)] {
                         let viewport = CGRect(x: 0, y: offset, width: logicalSize.width, height: logicalSize.height)
                         let layout = MobilePauseArt.pinningFooter(base, viewport: viewport)
                         guard layout.targets.last?.action.id == "resume",
                               layout.targets.filter({ $0.action.primary }).count == 1,
-                              layout.targets.map(\.action) == page.orderedFooter,
+                              footerNavigationIsValid(page, layout: layout),
                               layout.targets.allSatisfy({ viewport.contains($0.frame) && $0.frame.height >= 44 && $0.frame.width >= 44 })
-                        else { throw Failure.invalidTargets }
+                        else { throw invalidTargets(line: #line) }
                         for (index, target) in layout.targets.enumerated() {
                             guard typography.width(of: target.action.title, face: .small, scale: 1)
-                                <= target.frame.width - (target.action.primary ? 48 : 24) else { throw Failure.invalidTargets }
+                                <= target.frame.width - (target.action.primary ? 48 : 24) else { throw invalidTargets(line: #line) }
                             guard layout.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)) == target.action.id,
-                                  layout.targets.dropFirst(index + 1).allSatisfy({ !$0.frame.intersects(target.frame) }) else { throw Failure.invalidTargets }
+                                  layout.targets.dropFirst(index + 1).allSatisfy({ !$0.frame.intersects(target.frame) }) else { throw invalidTargets(line: #line) }
                         }
-                        guard layout.action(at: CGPoint(x: layout.board.minX + 2, y: viewport.midY)) == nil else { throw Failure.invalidTargets }
+                        guard layout.action(at: CGPoint(x: layout.board.minX + 2, y: viewport.midY)) == nil else { throw invalidTargets(line: #line) }
                         guard let context = CGContext(data: nil, width: Int(size.width), height: Int(size.height), bitsPerComponent: 8,
                             bytesPerRow: Int(size.width) * 4, space: CGColorSpaceCreateDeviceRGB(),
                             bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { throw Failure.missingArtwork }
@@ -86,5 +92,46 @@ extension MenuAudit {
             "targetsValidated": true, "pinnedResume": true], options: [.prettyPrinted, .sortedKeys])
             .write(to: output.appendingPathComponent("pause-report.json"))
         print("PASS: \(captures.count) pause renders, scrolling and pinned targets; six rescue states, phone and iPad.")
+        for width: CGFloat in [280, 390, 600, 960] {
+            var confirmation = GameFrontEnd.Page(title: "Restart level?", details: ["Journey 34", "The Crankshaft"],
+                footer: [.init("cancel", "Cancel"), .init("restart", "Restart level", primary: true)], footerColumns: 1)
+            confirmation.detailTitles = [1]
+            let confirmationLayout = GameFrontEnd.layout(confirmation, width: width, minimumHeight: 300)
+            guard confirmationLayout.targets.count == 2,
+                  confirmationLayout.targets.last?.action.id == "restart",
+                  confirmationLayout.targets.allSatisfy({
+                      typography.width(of: $0.action.title, face: .small, scale: 1)
+                          <= $0.frame.width - ($0.action.primary ? 48 : 24)
+                          && confirmationLayout.action(at: CGPoint(x: $0.frame.midX, y: $0.frame.midY)) == $0.action.id
+                  }) else { throw invalidTargets(line: #line) }
+            guard let confirmationContext = CGContext(data: nil, width: Int(confirmationLayout.size.width),
+                height: Int(confirmationLayout.size.height), bitsPerComponent: 8,
+                bytesPerRow: Int(confirmationLayout.size.width) * 4, space: CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { throw Failure.missingArtwork }
+            confirmationContext.translateBy(x: 0, y: confirmationLayout.size.height); confirmationContext.scaleBy(x: 1, y: -1)
+            GameFrontEnd.draw(confirmation, layout: confirmationLayout, typography: typography, in: confirmationContext)
+            guard let confirmationImage = confirmationContext.makeImage(), let confirmationDestination = CGImageDestinationCreateWithURL(
+                output.appendingPathComponent("restart-confirm-\(Int(width)).png") as CFURL, "public.png" as CFString, 1, nil)
+            else { throw Failure.missingArtwork }
+            CGImageDestinationAddImage(confirmationDestination, confirmationImage, nil)
+            guard CGImageDestinationFinalize(confirmationDestination) else { throw Failure.missingArtwork }
+            let level = MobileLevelSummary(index: 33, rank: "Journey", number: 34,
+                title: "The Crankshaft and a long level name that must retain its complete ending")
+            let size = MobileReplayTitleArt.size(level: level, width: width)
+            guard size.height >= 68,
+                  GameTextLayout.lines(level.title, width: width - 24).joined(separator: " ") == level.title.uppercased()
+            else { throw invalidTargets(line: #line) }
+            guard let context = CGContext(data: nil, width: Int(size.width), height: Int(size.height), bitsPerComponent: 8,
+                bytesPerRow: Int(size.width) * 4, space: CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { throw Failure.missingArtwork }
+            context.translateBy(x: 0, y: size.height); context.scaleBy(x: 1, y: -1)
+            MobileReplayTitleArt.draw(level: level, in: CGRect(origin: .zero, size: size), typography: typography, context: context)
+            guard let image = context.makeImage(), let destination = CGImageDestinationCreateWithURL(
+                output.appendingPathComponent("replay-title-\(Int(width)).png") as CFURL, "public.png" as CFString, 1, nil)
+            else { throw Failure.missingArtwork }
+            CGImageDestinationAddImage(destination, image, nil)
+            guard CGImageDestinationFinalize(destination) else { throw Failure.missingArtwork }
+        }
+        print("PASS: replay number and full wrapped title at four widths.")
     }
 }

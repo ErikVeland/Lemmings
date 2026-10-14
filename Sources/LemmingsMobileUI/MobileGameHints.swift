@@ -23,6 +23,7 @@ private actor MobileTeachingLoader {
 
 extension MobileGameViewController {
     func showHints(stage: Int = 0) {
+        guard !session.isReadOnly else { pausePlay(showControls: true); return }
         pauseForPlanning()
         showCustomOverlay(title: "Hints", details: ["Loading..."], actions: [("BACK", { [weak self] in self?.pausePlay(showControls: true) })])
         let request = UUID(); hintRequestID = request
@@ -43,11 +44,12 @@ extension MobileGameViewController {
         if index + 1 < deck.stages.count { actions.append(("NEXT HINT", { [weak self] in self?.showHints(stage: index + 1) })) }
         if let solution {
             actions.append(("WATCH SOLUTION", { [weak self] in
+                if self?.hasSolutionPair == true { self?.selectSolutionMode(.solution); return }
                 self?.showCustomOverlay(title: "Watch solution?", details: [], actions: [
                     ("CANCEL", { [weak self] in self?.showHints(stage: index) }),
                     ("WATCH", { [weak self] in
                         guard let data = try? JSONEncoder().encode(solution.replay) else { return }
-                        self?.showReplay(document: data)
+                        self?.showReplay(document: data, solution: true)
                     })])
             }))
         }

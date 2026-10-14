@@ -284,6 +284,7 @@ import NxlvKit
             }
         }
         keyboard.active = { [weak self] in self?.screen == .playing && self?.game?.isComplete == false }
+        keyboard.musicDisplayArea = { [weak self] in self?.canvas.gameplayRect }
         keyboard.playingTrack = { [weak self] in
             guard let self, self.audioSettings.music != .silent else { return nil }
             let url = self.dj.currentURL ?? (self.music.isRunning ? self.music.currentURL : nil)
@@ -2194,7 +2195,7 @@ import NxlvKit
         addCursorRect(bounds, cursor: NSCursor.arrow)
         if !gameplayRect.isEmpty { addCursorRect(gameplayRect, cursor: GameCursor.gameplayCursor) }
     }
-    private var gameplayRect: CGRect {
+    var gameplayRect: CGRect {
         CGRect(x: origin.x, y: origin.y, width: visibleWidth * zoom, height: 160 * zoom * 1.2)
     }
     func updateSelection(slot: Int, fan: Bool, palette: [UInt8], skillFrame: Lemmings2SpriteFrame? = nil) -> String? {

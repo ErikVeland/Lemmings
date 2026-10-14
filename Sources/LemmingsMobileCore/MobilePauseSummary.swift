@@ -24,6 +24,7 @@ public struct MobilePauseSummary: Equatable, Sendable {
     public let soundtrack: String
     public let track: String
     public let audio: String
+    public let isReplay: Bool
     public var rescueText: String { "Saved \(saved) / \(required) required" }
 
     public init(level: MobileLevelSummary, snapshot: MobileGameSnapshot, activeCount: Int,
@@ -31,6 +32,7 @@ public struct MobilePauseSummary: Equatable, Sendable {
                 supportsRewind: Bool, usedRewind: Bool, isReplay: Bool,
                 soundtrack: String, track: String?, audio: String) {
         self.level = level
+        self.isReplay = isReplay
         total = max(0, snapshot.total)
         saved = min(total, max(0, snapshot.saved))
         required = max(0, snapshot.required)

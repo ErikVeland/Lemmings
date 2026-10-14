@@ -1402,7 +1402,7 @@ struct ReticleFeedback {
     guard let assets, !palette.isEmpty else { return }
     let direction: ClassicSpriteDirection = lemming.facingLeft ? .left : .right
     let pose = lemming.pose
-    let backpack = showClassicSkillBackpacks ? ClassicSkillBackpack.kind(for: lemming) : nil
+    let backpack = showClassicSkillBackpacks && macArtwork?.monochrome != true ? ClassicSkillBackpack.kind(for: lemming) : nil
     let backpackKey = backpack.map { "-pack-\($0.rawValue)" } ?? ""
     let backpackPadding = backpack == nil ? 0.0 : 2.0
     guard

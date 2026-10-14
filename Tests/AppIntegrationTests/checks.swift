@@ -2629,6 +2629,101 @@ extension AppDelegate {
     print("PASS bundled completion targets, result gating, assisted parity, stale replay rejection and three-star scoring")
   }
 
+  fileprivate func testRetainedSolutionSwitching() async throws {
+    GameScreen.shared.dismissAll(); LevelHintWindow.shared.clearSolution()
+    if window == nil { buildInterface() }
+    settings.music = .silent; loadContent()
+    gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
+    selectDataSet(); loadLevel(at: 0)
+    phase = .playing; playfield.startCountdown.cancel(); isPaused = false
+    let live = session as! ClassicSession
+    let liveHash = ClassicDOSReplayRecorder.stateHash(of: live.simulation)
+    let run = arcadeRunID, owner = arcadeProfileID, seat = arcadeHotSeatID
+    let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]
+    let records = try encoder.encode(ArcadeStore.shared.records)
+    func button(_ title: String, in view: NSView) -> NSButton? {
+      if let button = view as? NSButton, button.title == title { return button }
+      return view.subviews.compactMap { button(title, in: $0) }.first
+    }
+    showLevelHints()
+    let hints = LevelHintWindow.shared.page!
+    for _ in 0..<2 { (hints.controllerInitialControl as! NSButton).performClick(nil) }
+    let reveal = hints.controllerInitialControl as! NSButton
+    for _ in 0..<200 where !reveal.isEnabled { try await Task.sleep(nanoseconds: 50_000_000) }
+    try check(reveal.isEnabled && reveal.title == "Show solution replay", "Solution fixture was not verified")
+    reveal.performClick(nil)
+    let warning = GameScreen.shared.controllerPage(in: window)!
+    button("Show full solution", in: warning)!.performClick(nil)
+    let replay = LevelHintWindow.shared.solutionWindow!
+    try check(replay.paused && isPaused && replay.playback.session.currentTick == 0,
+      "Entering a solution started either simulation")
+    replay.seekMove(1)
+    let first = replay.playback.session.currentTick
+    try check(first == replay.moveNavigation.ticks.first && replay.paused, "Next move did not reach the first successful use while paused")
+    button("Zoom 1×", in: replay.page)!.performClick(nil)
+    button("Goal", in: replay.page)!.performClick(nil)
+    let camera = replay.field.viewport
+    button("Play", in: replay.page)!.performClick(nil)
+    replay.advance()
+    let retainedTick = replay.playback.session.currentTick
+    replay.page.cancelOperation(nil)
+    try check(isPaused && !GameScreen.shared.isPresented && replay.paused,
+      "Direct return resumed a simulation or returned through hints")
+    for _ in 0..<3 {
+      LevelHintWindow.shared.selectSolutionMode(.solution)
+      try check(LevelHintWindow.shared.solutionWindow === replay && replay.paused
+        && replay.playback.session.currentTick == retainedTick, "Switching recreated or advanced the solution")
+      try check(replay.field.viewport.zoom == camera.zoom && replay.field.viewport.scrollX == camera.scrollX,
+        "Switching reset the replay camera")
+      let controller = ControllerMenuNavigator()
+      _ = controller.handle(.cancel, in: replay.page)
+      try check(isPaused && replay.paused && !GameScreen.shared.isPresented, "Controller Back did not return to the paused game")
+      replay.advance()
+      try check(replay.playback.session.currentTick == retainedTick, "A hidden replay kept advancing")
+    }
+    try check(ClassicDOSReplayRecorder.stateHash(of: live.simulation) == liveHash && arcadeRunID == run
+      && arcadeProfileID == owner && arcadeHotSeatID == seat && (try encoder.encode(ArcadeStore.shared.records)) == records,
+      "Solution switching changed the attempt, owner, turn or records")
+    LevelHintWindow.shared.selectSolutionMode(.solution)
+    replay.seekMove(-1)
+    try check(replay.playback.session.currentTick == first && replay.paused, "Previous move did not retain a paused solution")
+    let output = URL(fileURLWithPath: ".build/solution-switch-mac-renders")
+    try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+    for size in [CGSize(width: 1120, height: 720), CGSize(width: 800, height: 600)] {
+      replay.page.frame.size = size; replay.page.needsLayout = true; replay.page.layoutSubtreeIfNeeded()
+      func checkTargets(_ view: NSView) throws {
+        for child in view.subviews {
+          if let control = child as? NSButton {
+            let rect = control.convert(control.bounds, to: replay.page)
+            try check(replay.page.bounds.contains(rect), "Replay target leaves the page: \(control.title)")
+            let hit = replay.page.hitTest(CGPoint(x: rect.midX, y: rect.midY))
+            try check(hit === control || hit?.isDescendant(of: control) == true, "Replay target is blocked: \(control.title)")
+          } else { try checkTargets(child) }
+        }
+      }
+      try checkTargets(replay.page)
+      replay.page.needsDisplay = true
+      let bitmap = replay.page.bitmapImageRepForCachingDisplay(in: replay.page.bounds)!
+      replay.page.cacheDisplay(in: replay.page.bounds, to: bitmap)
+      try bitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent("solution-\(Int(size.width)).png"))
+    }
+    LevelHintWindow.shared.selectSolutionMode(.game)
+    let oldRun = arcadeRunID
+    loadLevel(at: 0)
+    try check(arcadeRunID != oldRun && LevelHintWindow.shared.solutionWindow === replay
+      && LevelHintWindow.shared.hasSolution(for: arcadeRunID) && replay.paused,
+      "Retry did not retain the same player's paused solution")
+    let newLive = session as! ClassicSession
+    LevelHintWindow.shared.selectSolutionMode(.solution)
+    try check(isPaused && replay.paused && newLive.currentTick == 0, "Retained solution started the retried attempt")
+    LevelHintWindow.shared.selectSolutionMode(.game)
+    LevelHintWindow.shared.rebindSolution(session: newLive, owner: window, runID: UUID(), ownerKey: "different-player",
+      pause: {})
+    try check(LevelHintWindow.shared.solutionWindow == nil, "A new player inherited another player's solution")
+    LevelHintWindow.shared.clearSolution()
+    print("PASS retained solution ticks, camera, paused switches, move navigation, controller return, ownership, records and native targets")
+  }
+
   fileprivate func testLevelHints() async throws {
     GameScreen.shared.dismissAll()
     settings.music = .silent
@@ -2780,12 +2875,13 @@ extension AppDelegate {
           "Journey migration changed a saved or shared run owner or position")
       }
       let expected = ghost.playback.solution.replay.expected!
+      button("Play", in: ghost.page)!.performClick(nil)
       for _ in 0..<min(338, expected.ticks) { ghost.advance() }
       try capture(ghost.page, name: "solution-playing-\(mode)")
       button("Pause", in: ghost.page)!.performClick(nil)
       try check(ghost.page.bounds.size == window.contentView!.bounds.size,
         "Replay did not fill the game window")
-      try check(ghost.field.frame.width == ghost.page.bounds.width && ghost.field.frame.height > ghost.page.bounds.height * 0.65,
+      try check(ghost.field.frame.width == ghost.page.bounds.width && ghost.field.frame.height > ghost.page.bounds.height * 0.5,
         "Replay retained its small menu canvas")
       for target in [2.0, 3, 5, 10] {
         button("Speed +", in: ghost.page)!.performClick(nil)
@@ -2865,12 +2961,8 @@ extension AppDelegate {
         && (try recordsEncoder.encode(ArcadeStore.shared.records)) == savedRecords,
         "Ghost changed run ownership, saved records or shared progress")
       ghost.page.cancelOperation(nil)
-      try check(isPaused && GameScreen.shared.controllerPage(in: window) === page, "Closing ghost lost the paused hints")
-      try verifyText(page, stage: level.deck.stages[2])
-      try capture(page, name: "opening-\(mode)")
-      page.cancelOperation(nil)
-      try check(!isPaused && !GameScreen.shared.isPresented && LevelHintWindow.shared.page == nil,
-        "Closing hints did not restore gameplay")
+      try check(isPaused && !GameScreen.shared.isPresented && LevelHintWindow.shared.page == nil,
+        "Solution did not return directly to the paused game")
       isPaused = true; showLevelHints()
       try check(LevelHintWindow.shared.revealedTier == 0, "Reopening exposed previously revealed spoilers")
       GameScreen.shared.dismissAll()
@@ -7005,6 +7097,8 @@ Task { @MainActor in
     #elseif RELEASE_NOTES_TESTS
     try await subject.testSequelReleaseStatus()
     try subject.testScrollableReleaseNotes()
+    #elseif SOLUTION_SWITCH_TESTS
+    try await subject.testRetainedSolutionSwitching()
     #elseif SOLUTION_AUDIO_TESTS
     try subject.testSolutionReplaySounds()
     #elseif AUDIO_JOY_TESTS
@@ -8656,24 +8750,26 @@ extension AppDelegate {
     try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent("track-\(width).png"))
     try check(notice.accessibilityLabel()?.contains(metadata.title) == true && notice.accessibilityLabel()?.contains(metadata.soundtrack) == true,
       "Now Playing omitted accessible song/source names")
-    keyboard.refreshNavigationControl(at: 104.25)
-    try check(abs(notice.artworkOpacity - 0.5) < 0.01, "Now Playing did not fade after four seconds")
-    keyboard.refreshNavigationControl(at: 105)
+    let creditEnd = 100 + notice.displayDuration
+    keyboard.refreshNavigationControl(at: creditEnd - 0.25)
+    try check(abs(notice.artworkOpacity - 0.5) < 0.01, "Now Playing did not fade after its reading period")
+    keyboard.refreshNavigationControl(at: creditEnd + 0.5)
     try check(notice.isHidden, "Now Playing remained visible")
-    keyboard.refreshNavigationControl(at: 106)
+    keyboard.refreshNavigationControl(at: creditEnd + 1.5)
     try check(notice.isHidden, "The same track repeatedly reopened its notice")
-    selected = remixed; keyboard.refreshNavigationControl(at: 107)
+    selected = remixed; keyboard.refreshNavigationControl(at: creditEnd + 2.5)
     try check(!notice.isHidden && notice.track == remixed, "Changing soundtrack did not replace the notice")
-    keyboard.showSongInfo = { false }; keyboard.refreshNavigationControl(at: 107.1)
+    keyboard.showSongInfo = { false }; keyboard.refreshNavigationControl(at: creditEnd + 2.6)
     try check(notice.isHidden && notice.track == nil && !notice.isAccessibilityElement(),
       "Disabled song info retained a notice or accessible stale title")
-    keyboard.showSongInfo = { true }; keyboard.refreshNavigationControl(at: 107.2)
+    keyboard.showSongInfo = { true }; keyboard.refreshNavigationControl(at: creditEnd + 2.7)
     try check(!notice.isHidden && notice.artworkOpacity == 0, "Enabling song info missed the gentle fade-in")
-    keyboard.navigationReduceMotion = { true }; keyboard.refreshNavigationControl(at: 111.25)
+    let renewedEnd = creditEnd + 2.7 + notice.displayDuration
+    keyboard.navigationReduceMotion = { true }; keyboard.refreshNavigationControl(at: renewedEnd - 0.45)
     try check(!notice.isHidden && notice.artworkOpacity == 1, "Reduced motion animated the notice")
-    keyboard.refreshNavigationControl(at: 112)
+    keyboard.refreshNavigationControl(at: renewedEnd + 0.3)
     try check(notice.isHidden, "Reduced motion prevented expiry")
-    selected = nil; keyboard.refreshNavigationControl(at: 113)
+    selected = nil; keyboard.refreshNavigationControl(at: renewedEnd + 1.3)
     try check(notice.isHidden && notice.track == nil, "Silent music retained a stale title")
     keyboard.navigationReduceMotion = { false }
   }

@@ -59,8 +59,15 @@ achievements cannot be reconstructed from completion marks alone.
 Small roster/session metadata uses UserDefaults. Larger files use TV Caches and
 can be purged. Shared cloud-library linking/recovery routes synchronise their
 supported progress and records. They do not yet back up complete checkpoint and
-collection files. Durable full Resume after cache eviction remains an open
-implementation requirement. Apple's [TV storage guidance](https://developer.apple.com/library/archive/documentation/General/Conceptual/AppleTV_PG/iCloudStorage.html)
+collection files. Cloud saves now offers Back up TV saves and Restore TV saves
+as an off-device file equivalent. The `.lemmingstv` archive keeps checkpoint,
+collection, playlist, learning, campaign and roster JSON plus applicable
+preferences. Restore stages files and retains the previous folders. The archive
+is bounded to 64 MiB and excludes game content, soundtracks, exported movies and
+credentials. Players must download a backup before eviction and reimport
+compatible game content when necessary. This is an explicit file backup,
+not an automatic cloud checkpoint service. Physical purge/restore acceptance
+remains open. Apple's [TV storage guidance](https://developer.apple.com/library/archive/documentation/General/Conceptual/AppleTV_PG/iCloudStorage.html)
 explains the need for off-device recovery.
 
 ## File transfer and services

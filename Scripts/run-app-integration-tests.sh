@@ -47,6 +47,7 @@ if [[ "${TEST_SCOPE:-all}" == updates ]]; then test_flags+=(-D UPDATE_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == collections ]]; then test_flags+=(-D COLLECTION_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == release-notes ]]; then test_flags+=(-D RELEASE_NOTES_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == solution-audio ]]; then test_flags+=(-D SOLUTION_AUDIO_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == solution-switch ]]; then test_flags+=(-D SOLUTION_SWITCH_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == audio-joy ]]; then test_flags+=(-D AUDIO_JOY_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == pack-navigation ]]; then test_flags+=(-D PACK_NAVIGATION_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == consolidation ]]; then test_flags+=(-D CONSOLIDATION_TESTS); fi

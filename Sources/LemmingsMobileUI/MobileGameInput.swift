@@ -65,14 +65,25 @@ extension MobileGameViewController {
         let adapter = MobileInputAdapter()
         #if os(tvOS)
         overlayCanvas.requiresNeutralActivation = true
-        adapter.onMenuNeutral = { [weak self] in self?.overlayCanvas.armTVActivation() }
+        adapter.onMenuNeutral = { [weak self] in
+            self?.overlayCanvas.armTVActivation()
+            self?.solutionSelector.observeNeutral()
+        }
         #endif
         adapter.isActive = { [weak self] in self?.lifecycle.isForeground == true && self?.lifecycle.isInterrupted == false }
         adapter.isMenu = { [weak self] in self?.overlay.isHidden == false || self?.isChoosingToolDirection == true }
         adapter.onCommand = { [weak self] in self?.performCommand($0) }
-        adapter.onMenuMove = { [weak self] in self?.overlayCanvas.moveFocus($0) }
-        adapter.onMenuActivate = { [weak self] in self?.overlayCanvas.activateFocused() }
-        adapter.onMenuBack = { [weak self] in self?.overlayCanvas.goBack() }
+        adapter.onMenuMove = { [weak self] in self?.moveSolutionMenuFocus($0) }
+        adapter.onMenuActivate = { [weak self] in
+            guard let self else { return }
+            if let mode = self.solutionSelector.focusedMode { self.solutionSelector.activate(mode) }
+            else { self.overlayCanvas.activateFocused() }
+        }
+        adapter.onMenuBack = { [weak self] in
+            guard let self else { return }
+            if self.session.isReadOnly, self.hasSolutionPair { self.selectSolutionMode(.game) }
+            else { self.overlayCanvas.goBack() }
+        }
         adapter.onAim = { [weak self] dx, dy in
             guard let self else { return }
             #if os(tvOS)
@@ -119,6 +130,7 @@ extension MobileGameViewController {
             tvCameraMode = false; pausePlay(showControls: true); return
         }
         #endif
+        if command == .speedReset, session.isReadOnly, hasSolutionPair { selectSolutionMode(.game); return }
         switch command {
         case .pause:
             #if os(tvOS)
@@ -133,7 +145,7 @@ extension MobileGameViewController {
         case .rewind: handle(.rewind)
         case .step(let direction):
             pauseForPlanning(); handle(direction < 0 ? .stepBackward : .step)
-        case .retry: pausePlay(showControls: false); onExit?(.retry)
+        case .retry: showRestartLevel()
         case .endRun: handle(.endRun)
         case .skill(let index): handle(.skill(index))
         case .cycle(let delta):
@@ -191,6 +203,25 @@ extension MobileGameViewController {
                 lastInputAssignment = selection; lastAssignmentControl = control
                 renderCurrentFrame(force: true); updateHUD()
             }
+        }
+    }
+
+    private func moveSolutionMenuFocus(_ delta: Int) {
+        guard hasSolutionPair else { overlayCanvas.moveFocus(delta); return }
+        let actions = (overlayCanvas.page.rows + overlayCanvas.page.orderedFooter).filter(\.enabled)
+        let current = solutionSelector.focusedMode.map { $0 == .game ? 0 : 1 }
+            ?? (actions.firstIndex(where: { $0.id == overlayCanvas.focusedID }).map { $0 + 2 } ?? 2)
+        let next = (current + delta + actions.count + 2) % (actions.count + 2)
+        if next < 2 {
+            solutionSelector.focusedMode = next == 0 ? .game : .solution
+            #if os(tvOS)
+            setNeedsFocusUpdate(); updateFocusIfNeeded()
+            #endif
+            solutionSelector.setNeedsDisplay()
+        } else {
+            solutionSelector.focusedMode = nil
+            let index = actions.firstIndex(where: { $0.id == overlayCanvas.focusedID }) ?? 0
+            overlayCanvas.moveFocus(next - 2 - index)
         }
     }
 

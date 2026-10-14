@@ -11,12 +11,78 @@ import NxlvKit
     private(set) var revealedTier = 0
     private(set) var solutionWindow: SolutionReplayWindow?
     private var verification: Task<Void, Never>?
+    private var retainedRunID: UUID?
+    private var retainedOwnerKey = ""
+    private weak var retainedOwner: NSWindow?
+    private var pauseGame: (() -> Void)?
+    private var gameSelector: SolutionSwitchView?
+    private var switchMonitor: Any?
+    func hasSolution(for runID: UUID) -> Bool { retainedRunID == runID && solutionWindow != nil }
+
+    func clearSolution() {
+        if let replay = solutionWindow, GameScreen.shared.contains(replay.page) { GameScreen.shared.dismiss(replay.page) }
+        solutionWindow?.stop(); solutionWindow = nil
+        gameSelector?.removeFromSuperview(); gameSelector = nil
+        retainedRunID = nil; retainedOwner = nil; pauseGame = nil
+        retainedOwnerKey = ""
+        if let switchMonitor { NSEvent.removeMonitor(switchMonitor) }; switchMonitor = nil
+    }
+
+    func selectSolutionMode(_ mode: SolutionReplayMode) {
+        guard let replay = solutionWindow, let owner = retainedOwner else { return }
+        if mode == .solution, GameScreen.shared.contains(replay.page) { return }
+        if mode == .game, !GameScreen.shared.contains(replay.page), page == nil { return }
+        pauseGame?()
+        replay.suspend()
+        if mode == .game {
+            GameScreen.shared.dismiss(replay.page)
+            if let page { GameScreen.shared.dismiss(page) }
+            pauseGame?()
+            gameSelector?.mode = .game
+        } else if !GameScreen.shared.contains(replay.page) {
+            if let page { GameScreen.shared.dismiss(page) }
+            replay.show(owner: owner)
+        }
+    }
+
+    func rebindSolution(session: ClassicSession?, owner: NSWindow, runID: UUID, ownerKey: String, pause: @escaping () -> Void) {
+        guard let replay = solutionWindow else { return }
+        guard let session, retainedOwner === owner, retainedOwnerKey == ownerKey,
+              ClassicDOSReplayRecorder.stateHash(of: session.initialSimulation)
+                == ClassicDOSReplayRecorder.stateHash(of: replay.playback.solution.initial) else { clearSolution(); return }
+        retainedRunID = runID; pauseGame = pause
+        replay.suspend()
+    }
+
+    private func retain(_ replay: SolutionReplayWindow, owner: NSWindow, runID: UUID?, ownerKey: String, pause: @escaping () -> Void) {
+        solutionWindow = replay; retainedOwner = owner; retainedRunID = runID; pauseGame = pause
+        retainedOwnerKey = ownerKey
+        replay.onReturnToGame = { [weak self] in self?.selectSolutionMode(.game) }
+        if let root = owner.contentView {
+            let selector = SolutionSwitchView(frame: CGRect(x: max(8, (root.bounds.width - 320) / 2), y: root.isFlipped ? 8 : max(0, root.bounds.height - 56), width: 320, height: 48))
+            selector.autoresizingMask = [.minXMargin, .maxXMargin, root.isFlipped ? .maxYMargin : .minYMargin]
+            selector.onSelect = { [weak self] mode in self?.selectSolutionMode(mode) }
+            root.addSubview(selector, positioned: .above, relativeTo: nil)
+            gameSelector = selector
+        }
+        switchMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self, weak owner] event in
+            guard let self, let owner, event.window === owner, owner.isKeyWindow,
+                  !(owner.firstResponder is NSTextView),
+                  event.modifierFlags.intersection([.command, .control, .option, .shift]) == .control,
+                  event.keyCode == 48,
+                  !GameScreen.shared.isPresented || GameScreen.shared.controllerPage(in: owner) === self.solutionWindow?.page else { return event }
+            if !event.isARepeat { self.selectSolutionMode(GameScreen.shared.contains(replay.page) ? .game : .solution) }
+            return nil
+        }
+    }
 
     func show(_ deck: LevelHintDeck, image: CGImage? = nil, owner: NSWindow,
               solutionSession: ClassicSession? = nil, solutionSource: PlayfieldView? = nil,
               solutionEffects: SoundEffectPlayer? = nil,
+              runID: UUID? = nil, ownerKey: String = "", pauseForSolution: @escaping () -> Void = {},
               onDismiss: @escaping () -> Void = {}) {
         guard page == nil, !deck.stages.isEmpty else { return }
+        if retainedRunID != runID || solutionSession == nil { clearSolution() }
         let page = GameMenuPage(title: "Level hints", subtitle: deck.title)
         page.backTitle = "Back to game"
         let content = LevelHintContent(deck: deck, image: image)
@@ -50,6 +116,7 @@ import NxlvKit
                 content?.tier = self.revealedTier
                 refreshAction()
             } else if let solution, let solutionSource, let solutionSession {
+                if self.solutionWindow != nil { self.selectSolutionMode(.solution); return }
                 let warning = GameMenuPage(title: "Reveal full solution?")
                 warning.setDetail("This shows the winning moves from start to finish. Your attempt stays paused.")
                 warning.backTitle = "Keep trying"
@@ -61,8 +128,8 @@ import NxlvKit
                     GameScreen.shared.dismiss(warning)
                     let replay = SolutionReplayWindow(solution: solution, source: solutionSource,
                         width: solutionSession.levelWidth, height: solutionSession.levelHeight, effects: solutionEffects)
-                    self.solutionWindow = replay
-                    replay.show(owner: owner)
+                    self.retain(replay, owner: owner, runID: runID, ownerKey: ownerKey, pause: pauseForSolution)
+                    self.selectSolutionMode(.solution)
                 }
                 confirm.keyEquivalent = ""
                 warning.preferControllerControl(warning.controllerBackButton)
@@ -97,7 +164,6 @@ import NxlvKit
         self.page = page
         let close = { [weak self] in
             self?.verification?.cancel(); self?.verification = nil
-            self?.solutionWindow?.stop(); self?.solutionWindow = nil
             self?.page = nil; onDismiss()
         }
         if !GameScreen.shared.present(page, owner: owner, focus: content, onDismiss: close) { close() }

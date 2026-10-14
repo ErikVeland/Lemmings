@@ -12,6 +12,10 @@ public struct GameFrontEnd {
         public var primary: Bool
         public var selected: Bool
         public var portrait: Int?
+        public var isBackNavigation: Bool {
+            let label = title.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+            return ["BACK", "CANCEL", "LIBRARY", "CLOSE"].contains(label) || label.hasPrefix("BACK ")
+        }
         public init(_ id: String, _ title: String, enabled: Bool = true,
                     primary: Bool = false, selected: Bool = false, portrait: Int? = nil) {
             self.id = id; self.title = title; self.enabled = enabled
@@ -33,9 +37,10 @@ public struct GameFrontEnd {
         /// A confirmation's safe default stays in its leading position.
         public var orderedFooter: [Action] {
             func forward(_ action: Action) -> Bool {
-                action.primary && !["BACK", "CANCEL"].contains(action.title.uppercased())
+                action.primary && !action.isBackNavigation
             }
-            return footer.filter { !forward($0) } + footer.filter(forward)
+            return footer.filter(\.isBackNavigation)
+                + footer.filter { !$0.isBackNavigation && !forward($0) } + footer.filter(forward)
         }
         public var preview: Bool
         public var pause: MobilePauseSummary? = nil
@@ -76,6 +81,8 @@ public struct GameFrontEnd {
         let inset: CGFloat = width < 600 ? 14 : 32
         let boardWidth = min(1032, width - inset * 2)
         let x = (width - boardWidth) / 2
+        let footerGrid = GameFooterGrid(actions: page.orderedFooter,
+            columns: page.footerColumns ?? (boardWidth >= 620 ? 3 : 2), spanSingleAction: true)
         // A short, wide screen puts the preview beside its details so the actions stay in view.
         let compact = page.preview && minimumHeight < 520 && width > minimumHeight * 1.3
         let titleScale = boardWidth >= 620 ? 2 : 1
@@ -92,7 +99,7 @@ public struct GameFrontEnd {
         var preview = CGRect.zero
         var details: [CGRect] = []
         if compact {
-            let footerRows = Int(ceil(Double(page.footer.count) / Double(max(1, min(page.footerColumns ?? 3, max(1, page.footer.count))))))
+            let footerRows = footerGrid.rows
             let room = max(80, minimumHeight - y - CGFloat(footerRows) * 60 - 36)
             let previewWidth = min((boardWidth - 40) * 0.55, room * 2)
             preview = CGRect(x: x + 20, y: y, width: previewWidth, height: previewWidth / 2)
@@ -118,20 +125,16 @@ public struct GameFrontEnd {
                 y += height + 6
             }
         }
-        let columns = max(1, min(page.footerColumns ?? (boardWidth >= 620 ? 3 : 2), max(1, page.footer.count)))
-        let rows = Int(ceil(Double(page.footer.count) / Double(columns)))
+        let columns = footerGrid.columns
+        let rows = footerGrid.rows
         let cell = (boardWidth - 40 - CGFloat(columns - 1) * 12) / CGFloat(columns)
         let footerHeight = max(48, page.footer.map { GameTextLayout.height($0.title, width: cell - ($0.primary ? 48 : 24)) + 8 }.max() ?? 48)
         let footerPitch = footerHeight + 12
         let height = max(minimumHeight, y + CGFloat(rows) * footerPitch + 36)
         y = max(y + 12, height - CGFloat(rows) * footerPitch - 24)
-        let lastRowCount = page.footer.count % columns
-        for (index, action) in page.orderedFooter.enumerated() {
-            // A lone action in the last row takes the whole row.
-            let alone = columns > 1 && index == page.footer.count - 1 && index % columns == 0
-            let trailingOffset = lastRowCount > 1 && index / columns == rows - 1 ? columns - lastRowCount : 0
-            targets.append(Target(action: action, frame: CGRect(x: x + 20 + CGFloat(index % columns + trailingOffset) * (cell + 12),
-                y: y + CGFloat(index / columns) * footerPitch, width: alone ? boardWidth - 40 : cell, height: footerHeight)))
+        for slot in footerGrid.slots {
+            targets.append(Target(action: slot.action, frame: CGRect(x: x + 20 + CGFloat(slot.column) * (cell + 12),
+                y: y + CGFloat(slot.row) * footerPitch, width: cell * CGFloat(slot.span) + CGFloat(slot.span - 1) * 12, height: footerHeight)))
         }
         return Layout(size: CGSize(width: width, height: height),
                       board: CGRect(x: x, y: 16, width: boardWidth, height: height - 32),
@@ -146,7 +149,8 @@ public struct GameFrontEnd {
         let columns = 2
         let headerIDs: Set<String> = ["settings", "whatsNew"]
         let footer = page.orderedFooter.filter { !headerIDs.contains($0.id) }
-        let footerColumns = 2
+        let footerGrid = GameFooterGrid(actions: footer, columns: 2, spanSingleAction: true, alignTrailing: false)
+        let footerColumns = footerGrid.columns
         let footerCell = (inner - CGFloat(footerColumns - 1) * gap) / CGFloat(footerColumns)
         let heading = CGRect(x: x + 62, y: 22, width: boardWidth - 124, height: 44)
         let subtitle = CGRect(x: x + 12, y: 70, width: inner,
@@ -175,19 +179,19 @@ public struct GameFrontEnd {
         let initials = CGRect(x: x + 12, y: y, width: inner, height: page.homeInitials.isEmpty ? 0 : 22)
         y = initials.maxY + 8
         let footerHeight = max(44, footer.map { GameTextLayout.height($0.title, width: footerCell - 24) + 8 }.max() ?? 44)
-        let footerRows = Int(ceil(Double(footer.count) / Double(footerColumns)))
+        let footerRows = footerGrid.rows
         let contentHeight = y + CGFloat(footerRows) * (footerHeight + gap) + 12
         let height = max(minimumHeight, contentHeight)
         let offset = max(0, (height - contentHeight) / 2)
-        for action in page.orderedFooter {
+        for action in page.orderedFooter.filter({ headerIDs.contains($0.id) }) + footerGrid.slots.map(\.action) {
             let frame: CGRect
             if headerIDs.contains(action.id) {
                 frame = CGRect(x: action.id == "settings" ? x + boardWidth - 56 : x + 12, y: 22, width: 44, height: 44)
             } else {
-                let index = footer.firstIndex(where: { $0.id == action.id }) ?? 0
-                frame = CGRect(x: x + 12 + CGFloat(index % footerColumns) * (footerCell + gap),
-                    y: y + CGFloat(index / footerColumns) * (footerHeight + gap),
-                    width: action.id == "collections" ? inner : footerCell, height: footerHeight)
+                let slot = footerGrid.slots.first { $0.action.id == action.id }!
+                frame = CGRect(x: x + 12 + CGFloat(slot.column) * (footerCell + gap),
+                    y: y + CGFloat(slot.row) * (footerHeight + gap),
+                    width: footerCell * CGFloat(slot.span) + CGFloat(slot.span - 1) * gap, height: footerHeight)
             }
             targets.append(Target(action: action, frame: frame))
         }
@@ -208,10 +212,11 @@ public struct GameFrontEnd {
         let heading = CGRect(x: x + inset, y: 24, width: inner, height: max(32, headingHeight))
         let subtitle = CGRect(x: x + inset, y: heading.maxY + 4, width: inner,
                               height: GameTextLayout.height(page.subtitle, width: inner))
-        let columns = width >= 600 ? 3 : 2
+        let footerGrid = GameFooterGrid(actions: page.orderedFooter, columns: width >= 600 ? 3 : 2)
+        let columns = footerGrid.columns
         let cell = (inner - CGFloat(columns - 1) * gap) / CGFloat(columns)
         let footerHeight = max(44, page.footer.map { GameTextLayout.height($0.title, width: cell - 48) + 8 }.max() ?? 44)
-        let footerRows = Int(ceil(Double(page.footer.count) / Double(columns)))
+        let footerRows = footerGrid.rows
         let actionsHeight = CGFloat(footerRows) * (footerHeight + gap)
         let sideBySide = width >= 600
         let detailWidth = sideBySide ? (inner - gap) * 0.52 : inner
@@ -240,12 +245,9 @@ public struct GameFrontEnd {
         let height = max(minimumHeight, contentHeight)
         let offset = max(0, (height - contentHeight) / 2)
         let footerY = y
-        let remainder = page.footer.count % columns
-        for (index, action) in page.orderedFooter.enumerated() {
-            let finalRow = index / columns == footerRows - 1
-            let offset = finalRow && remainder > 0 ? columns - remainder : 0
-            targets.append(Target(action: action, frame: CGRect(x: x + inset + CGFloat(index % columns + offset) * (cell + gap),
-                y: footerY + CGFloat(index / columns) * (footerHeight + gap), width: cell, height: footerHeight)))
+        for slot in footerGrid.slots {
+            targets.append(Target(action: slot.action, frame: CGRect(x: x + inset + CGFloat(slot.column) * (cell + gap),
+                y: footerY + CGFloat(slot.row) * (footerHeight + gap), width: cell, height: footerHeight)))
         }
         return Layout(size: CGSize(width: width, height: height),
                       board: CGRect(x: x, y: 12 + offset, width: boardWidth, height: contentHeight - 24),

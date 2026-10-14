@@ -1186,48 +1186,6 @@
     },
     {
       "concepts": [
-        "blocker",
-        "builder",
-        "climber",
-        "digger",
-        "floater",
-        "miner"
-      ],
-      "demand": 125.0,
-      "entry": {
-        "catalogueRevision": "1.2-runtime-v2",
-        "id": "50D67459-8226-188F-40C5-4B13032752F0",
-        "identity": {
-          "engine": "classic",
-          "levelID": "59:Tricky:30:1:7",
-          "packID": "lemmings-LEVEL-120"
-        },
-        "levelNameSnapshot": "The Crankshaft",
-        "levelNumberSnapshot": 60,
-        "packNameSnapshot": "Lemmings",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
-      },
-      "focus": "Practise: Blocker + Builder",
-      "intrinsicDemand": 537.2543697478992,
-      "introduced": [],
-      "needsSupport": false,
-      "objective": "community:Gentle/The_Crankshaft.nxlv",
-      "placement": {
-        "basis": "reduxClassicCounterpart",
-        "lower": 115.0,
-        "position": 125.0,
-        "reference": "Gentle/The_Crankshaft.nxlv",
-        "replayRevision": "46645bfbf549d42cb6d1e3ce30ac9010b2cc15ed7465643d10deb197e2c43b1e",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 135.0
-      },
-      "preparationGaps": [],
-      "score": 537.2543697478992,
-      "stage": "Fun"
-    },
-    {
-      "concepts": [
         "basher",
         "builder"
       ],
@@ -4902,6 +4860,49 @@
       },
       "preparationGaps": [],
       "score": 543.2056414922657,
+      "stage": "Difficult"
+    },
+    {
+      "concepts": [
+        "blocker",
+        "builder",
+        "climber",
+        "digger",
+        "floater",
+        "miner"
+      ],
+      "demand": 377.5,
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "50D67459-8226-188F-40C5-4B13032752F0",
+        "identity": {
+          "engine": "classic",
+          "levelID": "59:Tricky:30:1:7",
+          "packID": "lemmings-LEVEL-120"
+        },
+        "levelNameSnapshot": "The Crankshaft",
+        "levelNumberSnapshot": 60,
+        "packNameSnapshot": "Lemmings",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
+      },
+      "focus": "Practise: Blocker + Builder",
+      "intrinsicDemand": 537.2543697478992,
+      "introduced": [],
+      "needsSupport": false,
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"59:Tricky:30:1:7\", \"packID\": \"lemmings-LEVEL-120\"}",
+      "placement": {
+        "adjustment": "User playtest 2026-10-14: The Crankshaft is too early in Fun; move to Difficult after more combination practice.",
+        "basis": "userPlaytest",
+        "lower": 370.0,
+        "position": 377.5,
+        "reference": "Gentle/The_Crankshaft.nxlv",
+        "replayRevision": "46645bfbf549d42cb6d1e3ce30ac9010b2cc15ed7465643d10deb197e2c43b1e",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 385.0
+      },
+      "preparationGaps": [],
+      "score": 537.2543697478992,
       "stage": "Difficult"
     },
     {
@@ -11592,5 +11593,5 @@
     }
   ],
   "placementPolicy": "redux-calibrated-2",
-  "version": "learning-21"
+  "version": "learning-22"
 }

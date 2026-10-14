@@ -77,7 +77,7 @@ extension MobileLibraryViewController {
             case "controllerTap": settings.classic.controllerTapSpeed.toggle()
             case "controllerSwap": settings.classic.controllerSwapSticks.toggle()
             case "machine", "artwork":
-                settings.classic.graphics = cycle(settings.classic.graphics, [.dosVGA, .amiga, .macintosh])
+                settings.classic.graphics = cycle(settings.classic.graphics, [.dosVGA, .amiga, .macintosh, .macintoshMonochrome])
                 if key == "machine" {
                     settings.classic.colorDepth = settings.classic.graphics == .amiga ? .amigaOCS : .full
                     settings.classic.musicStyle = settings.classic.graphics == .amiga ? .faithful : .modern

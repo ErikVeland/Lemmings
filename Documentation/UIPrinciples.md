@@ -15,8 +15,12 @@ sentences. Apply this to new UI and changes to existing UI.
 - Keep one primary action per screen. Give it a stronger outline and a directional
   marker. Selection has an underline; keyboard focus has its own outline.
 - Put forward game actions (Start, Play, Ready, Next, Continue and Resume) at the
-  bottom of a vertical group or the right edge of its last row. Put Back, Cancel
-  and secondary navigation before them. Keep drawing, input and accessibility
+  bottom of a vertical group or the right edge of its last row. Back stays furthest
+  left, at the bottom-left of a multi-row action group. Reserve that slot for
+  Back, Cancel, Library or Close navigation and keep the primary forward action
+  at bottom-right. Secondary actions fill the rows above and remaining slots.
+  Back must not become centred or move right when actions are added or removed.
+  Keep drawing, input and accessibility
   order consistent. Use Apple's Human Interface Guidelines for platform controls.
   System alerts retain Apple's platform-specific ordering and safe default focus.
 - Keep quantities and player identity visible. They explain the current situation.
@@ -433,16 +437,27 @@ progression or Hot Seat ownership. Standalone files fall back to saved boards.
 
 Classic, Lemmings 2 and Lemmings 3 share a brief Now Playing notice when the
 actual track file changes. Use the catalogue song title and soundtrack name,
-with the source folder as a fallback for user files. Keep both rows in the
-existing green/blue bitmap fonts and stone artwork. The notice accepts no pointer
-input. Fade it in gently over 0.35 seconds. Keep its four-second display period,
-then fade out for half a second. Reduced motion keeps it steady until expiry.
+with the source folder as a fallback for user files. Use a lower-left broadcast
+credit box above the HUD: a black stone-framed backing, a green pixel accent,
+a prominent green song title and smaller blue soundtrack credits. Wrap complete
+titles at word boundaries at fixed bitmap sizes. On narrow or shallow playfields,
+show successive credit pages rather than truncate text or cover the controls.
+The notice accepts no pointer input. Fade it in gently over 0.35 seconds. Short
+credits retain four seconds plus a half-second fade. Longer credits receive more
+reading time. Reduced motion keeps it steady until expiry.
 Accessibility offers Show song info. Turning it off hides the notice and its
 accessible title immediately, across all three Mac engines. Both new options
 default on and survive presets and saved settings. Do not repeat the notice for
 the same track or show it on results or handovers. Silent music clears it.
-The iOS source shares Show song info and the short fade-in. Its Menu control
+The iOS/tvOS source shares this renderer, Show song info and the short fade-in. Its Menu control
 remains visible and does not use the Mac's fading preference.
+
+Offscreen music-card checks cover complete wrapped credits, narrow/shallow credit
+pages, reading time, fades, same-track expiry after resize, reduced motion,
+playfield containment and Menu hit targets in flipped and unflipped Mac views.
+Bitmap captures use shipped lettering at Mac, phone, tablet and TV sizes.
+iOS and tvOS SDK source compilation passes. Composited Mac CRT placement and
+physical touch/controller and television readability remain manual checks.
 
 ## Replay skill information
 

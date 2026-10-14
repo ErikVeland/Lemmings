@@ -1,5 +1,8 @@
 # Macintosh sound and counters — 1.9
 
+The Classic artwork selector also supports the supplied
+[Macintosh 1-bit artwork](MacintoshMonochrome.md).
+
 The 1.9 release adds **Macintosh (original)** to Settings → Audio
 and **Original Macintosh** to Settings → Graphics → Counters. Existing
 preferences keep their current counter style. Counter and soundtrack choices

@@ -29,7 +29,7 @@ extension MobileGameViewController {
                     guard !cancelled.cancelled else { return }
                     let frame = try replay.render(highlight: nil)
                     guard let bitmap = MobileBitmapRenderer.image(frame),
-                          let image = Self.movieFrame(bitmap, viewport: viewport, renderScale: replay.renderScale) else {
+                          let image = Self.movieFrame(bitmap, viewport: viewport, renderScale: replay.renderScale, level: self.summary) else {
                         throw MobileSessionError.invalidFrame
                     }
                     movieEffects.record(session: replay, viewport: viewport, into: recorder)
@@ -72,18 +72,24 @@ extension MobileGameViewController {
         }
     }
 
-    private static func movieFrame(_ image: CGImage, viewport: MobileViewport, renderScale: Double) -> CGImage? {
+    private static func movieFrame(_ image: CGImage, viewport: MobileViewport, renderScale: Double, level: MobileLevelSummary) -> CGImage? {
         let visible = viewport.visibleLevelRect
         let source = CGRect(x: visible.x * renderScale, y: visible.y * renderScale, width: visible.width * renderScale, height: visible.height * renderScale)
             .intersection(CGRect(x: 0, y: 0, width: image.width, height: image.height))
         guard !source.isEmpty, let crop = image.cropping(to: source) else { return nil }
         let width = 960
         let height = max(2, Int(Double(width) * source.height / source.width / viewport.pixelAspect) / 2 * 2)
-        guard let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8,
+        let titleSize = MobileReplayTitleArt.size(level: level, width: CGFloat(width))
+        let movieHeight = height + Int(titleSize.height)
+        guard let context = CGContext(data: nil, width: width, height: movieHeight, bitsPerComponent: 8,
             bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
             bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return nil }
         context.interpolationQuality = .none
         context.draw(crop, in: CGRect(x: 0, y: 0, width: width, height: height))
+        context.translateBy(x: 0, y: CGFloat(movieHeight))
+        context.scaleBy(x: 1, y: -1)
+        MobileReplayTitleArt.draw(level: level, in: CGRect(origin: .zero, size: titleSize),
+            typography: MobileGameArt.typography, context: context)
         return context.makeImage()
     }
 }

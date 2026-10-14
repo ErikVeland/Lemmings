@@ -327,6 +327,7 @@ import NxlvKit
             guard let self else { return false }
             return self.canvas.menuRows == nil && !self.game.isComplete
         }
+        keyboard.musicDisplayArea = { [weak self] in self?.canvas.playfieldRect }
         keyboard.playingTrack = { [weak self] in
             guard let self, self.audioSettings.music != .silent else { return nil }
             let url = self.dj.currentURL ?? (self.music.isRunning ? self.music.currentURL : nil)

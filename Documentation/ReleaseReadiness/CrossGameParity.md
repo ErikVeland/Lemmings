@@ -5,6 +5,12 @@ Lemmings 3. A new feature must be checked in all three. Shared controls and
 result pages define the behaviour. Engine limitations must remain explicit.
 This requirement is also recorded in `AGENTS.md`.
 
+The table below reflects the current source. The earlier pass notes remain
+historical evidence. Mobile and TV now share the frontend and native session
+adapters; their device acceptance is tracked in the [mobile gate](2.0ReleaseGate-2026-10-14.md)
+and [TV parity gate](../../Apps/UltimateLemmingsTV/IOSParity.md). Headless core
+checks cannot close those platform gates.
+
 | Behaviour | Classic | L2 | L3 |
 | --- | --- | --- | --- |
 | Shared speed controls, held ramp, latched speed and quick reset | Yes | Yes | Yes |
@@ -21,7 +27,7 @@ This requirement is also recorded in `AGENTS.md`.
 | Paused Hot Seat retry | Yes | Yes | Yes |
 | New-level handover | Briefing | Briefing | Paused play |
 | Forward single step | Yes | Yes, added in this pass | Yes |
-| Rewind/backward step | Classic DOS history | Not implemented | Not implemented |
+| Rewind/backward step | Native history | Input replay reconstruction | Input replay reconstruction |
 | Release rate keys (− / +, double-tap for minimum / maximum) | Yes, also fan levels and NeoLemmix | No release rate in L2 | No release rate in L3 |
 | N nuke toggle, press again to undo | Yes, X remains an alias | Yes, no double-click needed from the key | No nuke in L3 |
 | Tiered hints | Checked hints and general coaching | General coaching | General coaching |
@@ -56,8 +62,9 @@ This requirement is also recorded in `AGENTS.md`.
 
 ## Remaining limits
 
-L2 and L3 do not yet have a verified solution playback path or full rewind
-history. Their hints must not claim to be checked winning solutions. The new
+L2 and L3 now reconstruct earlier ticks from recorded inputs for rewind,
+backward step and checkpoints. Their verified-solution and media playback
+capabilities remain engine-specific. Their hints must not claim to be checked winning solutions. The
 Classic solution viewer must not be reused with sequel data without engine-specific
 input timing and outcome validation.
 

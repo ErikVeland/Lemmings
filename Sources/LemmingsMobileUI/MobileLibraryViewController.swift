@@ -428,15 +428,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 enabled: libraryCloud.enabled, busy: syncBusy || libraryCloud.state == .syncing,
                 code: syncCode, draft: syncDraft, message: syncMessage); canvas.preview = nil
             #if os(tvOS)
-            if tvBackupDraft != nil {
-                canvas.page = .init(title: "Restore TV saves?", footer: [.init("syncTVRestoreCancel", "Cancel"),
-                    .init("syncTVRestoreConfirm", "Restore", primary: true)])
-            } else if syncCode != nil {
-                canvas.page.footer.removeAll { $0.id == "syncCopy" }
-            } else if syncDraft == nil {
-                canvas.page.rows += [.init("syncTVBackup", "Back up TV saves", enabled: !syncBusy),
-                                     .init("syncTVRestore", "Restore TV saves", enabled: !syncBusy)]
-            }
+            canvas.page = TVSharedMenuArt.cloud(canvas.page, restoring: tvBackupDraft != nil,
+                hasCode: syncCode != nil, enteringCode: syncDraft != nil, busy: syncBusy)
             #endif
         case .records:
             canvas.page = recordsPage(subtitle: subtitle); canvas.preview = nil
@@ -525,6 +518,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if nameDraft != nil, !{ if case .playlist = next { return true }; return next == .players }() { nameDraft = nil; renamingPlayer = false; searchField.text = searchQuery }
         confirmingDelete = false
         previewTask?.cancel(); previewGeneration = UUID(); loading = false; preparingLevel = false
+        if route != next { canvas.focusedID = nil }
         route = next; notice = ""
         libraryInput.reset()
         if game == nil { becomeFirstResponder() }
@@ -1080,6 +1074,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 }
             }
             let previous = game
+            if let previous { next.inheritSolution(from: previous) }
             addChild(next); next.view.frame = view.bounds
             next.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             view.addSubview(next.view); next.didMove(toParent: self)

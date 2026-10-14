@@ -182,7 +182,6 @@ import NxlvKit
         try Data([1, 2, 3]).write(to: gameData)
         defaults.set(Data([7]), forKey: "CloudLibrary.credentials")
         let backup = try TVSaveBackup.capture(root: saveRoot, defaults: defaults)
-        if backup.files["iOS/Checkpoints/current.json"] != savedBytes { print("Backup fixture paths:", backup.files.keys.sorted(), "root:", saveRoot.path) }
         try check(backup.files["iOS/Checkpoints/current.json"] == savedBytes, "TV backup includes exact save bytes")
         try check(!backup.files.keys.contains(where: { $0.contains("Game Data") }), "TV backup excludes commercial content")
         try check(backup.preferences["CloudLibrary.credentials"] == nil, "TV backup excludes service credentials")
@@ -200,6 +199,11 @@ import NxlvKit
             throw Failure.check("TV backup replaced service credentials")
         } catch let error as CocoaError where error.code == .fileReadCorruptFile { count += 1 }
         let bootstrapDefaults = UserDefaults(suiteName: suite + ".bootstrap")!
+        do {
+            let emptyPlayers = Data("{\"players\":[],\"activeID\":\"default\"}".utf8)
+            _ = try TVSaveBackup(files: ["Mobile/_players/players.json": emptyPlayers], preferences: [:]).validated()
+            throw Failure.check("Empty TV profile archive accepted")
+        } catch let error as CocoaError where error.code == .fileReadCorruptFile { count += 1 }
         defer { bootstrapDefaults.removePersistentDomain(forName: suite + ".bootstrap") }
         bootstrapDefaults.set(legacyBytes, forKey: "tv.localState")
         let bootstrapDestination = MobileCheckpointStore(url: migrationRoot.appendingPathComponent("bootstrap/current.json"))

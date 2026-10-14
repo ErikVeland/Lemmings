@@ -49,7 +49,7 @@ def copy_into_app(source, destination):
     mac = Path(source).parent if source else ROOT / ".build/mac-artwork/export"
     amiga = Path(os.environ.get("IOS_AMIGA_ARTWORK_DIR", ROOT / ".build/amiga-artwork/export"))
     for kind, root in (("MacArtwork", mac), ("AmigaArtwork", amiga)):
-        for family in FAMILIES:
+        for family in (*FAMILIES, *("monochrome/" + family for family in FAMILIES)):
             copy_family(root / family, destination.parent.parent / kind / family)
 
 

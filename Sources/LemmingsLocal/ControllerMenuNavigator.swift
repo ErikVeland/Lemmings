@@ -16,6 +16,7 @@ import NxlvKit
         if action == .cancel || action == .pause {
             reset()
             if let page = view as? GameMenuPage { page.onBack?() }
+            else if let replay = view as? SolutionReplayPage, let back = replay.onReturnToGame { back() }
             else if let sheet {
                 let cancel = controls(in: view).compactMap { $0 as? NSButton }.first {
                     $0.keyEquivalent == "\u{1b}" || ["Cancel", "Close", "Resume", "Back"].contains($0.title)

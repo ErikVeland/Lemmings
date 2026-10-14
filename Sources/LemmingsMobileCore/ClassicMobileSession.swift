@@ -148,6 +148,7 @@ public final class ClassicMobileSession: MobileGameSession {
     private var soundCues: [PositionedSoundCue] = []
     private var playbackSkillHistory: [MobileReplaySkillUse] = []
     private var playbackReplay: ClassicDOSReplay?
+    public private(set) var replayMoveNavigation = ReplayMoveNavigation(ticks: [])
     private var playbackEvents: [Int: [ClassicDOSReplayEvent]] = [:]
     private var playbackEndTick: Int?
     public private(set) var nukeCount = 0
@@ -552,6 +553,7 @@ public final class ClassicMobileSession: MobileGameSession {
         result.playbackReplay = replay
         result.playbackEvents = Dictionary(grouping: replay.events, by: \.tick)
         result.playbackEndTick = replay.expected?.ticks
+        result.replayMoveNavigation = .classic(initial: start, replay: replay)
         result.resetReplay()
         return result
     }
@@ -569,8 +571,8 @@ public final class ClassicMobileSession: MobileGameSession {
         for event in playbackEvents[initial.tickCount] ?? [] { applyReplayAction(event.action) }
     }
 
-    private func seekReplay(to target: Int) -> Bool {
-        guard target >= replayInitial.tickCount, target <= (playbackEndTick ?? Int.max) else { return false }
+    public func seekReplay(to target: Int) -> Bool {
+        guard isReadOnly, target >= replayInitial.tickCount, target <= (playbackEndTick ?? Int.max) else { return false }
         if target < simulation.tickCount { resetReplay() }
         while simulation.tickCount < target, !simulation.isComplete { tick() }
         soundCues.removeAll(keepingCapacity: true)
@@ -611,19 +613,20 @@ public final class ClassicMobileSession: MobileGameSession {
         guard changed else { return }
         terrainFrame = nil
         nativeScene = nil; nativeArtwork = nil
-        guard [.macintosh, .amiga].contains(settings.graphics), let authoredLevel, let renderedLevel,
+        guard [.macintosh, .macintoshMonochrome, .amiga].contains(settings.graphics), let authoredLevel, let renderedLevel,
               let artworkFamily, let artworkRoot else { return }
         if settings.graphics == .amiga, let artworkMatch {
             guard (artworkMatch.share(of: authoredLevel) ?? 1) >= 0.5,
                 authoredLevel.specialStyle == 0 || artworkMatch.special else { return }
         }
-        let source = settings.graphics == .amiga ? "AmigaArtwork" : "MacArtwork"
+        let source = settings.graphics == .amiga ? "AmigaArtwork"
+            : settings.graphics == .macintoshMonochrome ? "MacArtwork/monochrome" : "MacArtwork"
         let directory = artworkRoot.appendingPathComponent(source).appendingPathComponent(artworkFamily)
         let art = try? (artworkRoot == Bundle.main.resourceURL
             ? ClassicMobileArtworkCache.shared.load(directory) : ClassicMacArtwork(directory: directory))
         guard let art,
               let scene = try? ClassicMacScene(level: authoredLevel, rendered: renderedLevel, artwork: art,
-                  groundSet: ground, match: artworkMatch, reconstructUnmatched: settings.graphics == .macintosh) else { return }
+                  groundSet: ground, match: artworkMatch, reconstructUnmatched: settings.graphics != .amiga) else { return }
         nativeArtwork = art; nativeScene = scene
     }
 
@@ -653,7 +656,7 @@ public final class ClassicMobileSession: MobileGameSession {
         let index = abs(lemming.animationFrame) % animation.frames.count
         let frame = animation.frames[index]
         if nativeScene != nil, let native = nativeArtwork?.lemming(pose: pose, left: lemming.direction == .left, tick: lemming.animationFrame) {
-            let pack = settings?.showClassicSkillBackpacks == true
+            let pack = settings?.showClassicSkillBackpacks == true && nativeArtwork?.monochrome != true
                 ? Self.backpackPixels(native.rgba, width: native.width, height: native.height, lemming: lemming, pose: pose, scale: 2)
                 : (pixels: [UInt8](native.rgba), width: native.width, padding: 0)
             guard let bitmap = try? MobilePixelFrame(width: pack.width, height: native.height, rgba: Data(pack.pixels)) else { return nil }

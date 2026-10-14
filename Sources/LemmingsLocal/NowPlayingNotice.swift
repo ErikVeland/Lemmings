@@ -1,6 +1,7 @@
 #if os(macOS)
 import AppKit
 import LemmingsAudio
+import LemmingsGameArt
 import NxlvKit
 
 struct PlayingTrack: Equatable {
@@ -51,10 +52,18 @@ struct PlayingTrack: Equatable {
     private(set) var artworkOpacity: CGFloat = 1
     private var shownAt: TimeInterval = 0
     private var currentURL: URL?
+    private var expired = false
+    private var card: MusicTitleCard.Layout?
+    private var cardConstraint = CGSize.zero
+    private var elapsed: TimeInterval = 0
+    private weak var fontRenderer: MacInterfaceRenderer?
+    private var typography: GameMenuTypography?
+    var displayDuration: TimeInterval { card?.duration ?? 4.5 }
     override var isFlipped: Bool { true }
     override func hitTest(_ point: NSPoint) -> NSView? { nil }
 
-    func update(track next: PlayingTrack?, at now: TimeInterval, visible: Bool, reduceMotion: Bool, enabled: Bool = true) {
+    func update(track next: PlayingTrack?, at now: TimeInterval, visible: Bool, reduceMotion: Bool, enabled: Bool = true,
+                area: CGRect? = nil, flipped: Bool = true) {
         guard enabled else {
             currentURL = nil; track = nil; isHidden = true; artworkOpacity = 0
             setAccessibilityElement(false)
@@ -65,15 +74,28 @@ struct PlayingTrack: Equatable {
             if next == nil { currentURL = nil; track = nil }
             return
         }
+        if let area {
+            let constraint = CGSize(width: max(0, area.width - 24), height: max(0, min(area.height - 24, area.height * 0.45)))
+            if track != next || cardConstraint != constraint {
+                card = MusicTitleCard.layout(title: next.title, soundtrack: next.soundtrack,
+                    maximumWidth: constraint.width, maximumHeight: constraint.height)
+                cardConstraint = constraint
+            }
+            frame = MusicTitleCard.frame(size: card?.size ?? .zero, in: area, flipped: flipped)
+        } else if track != next || card == nil {
+            card = MusicTitleCard.layout(title: next.title, soundtrack: next.soundtrack,
+                maximumWidth: bounds.width, maximumHeight: max(54, bounds.height))
+        }
         if currentURL != next.url {
-            currentURL = next.url; track = next; shownAt = now
+            currentURL = next.url; track = next; shownAt = now; expired = false
             setAccessibilityElement(true); setAccessibilityRole(.group)
             setAccessibilityLabel(next.title + ". " + next.soundtrack)
         }
-        let elapsed = now - shownAt
-        isHidden = elapsed >= 4.5
+        elapsed = now - shownAt
+        if elapsed >= displayDuration { expired = true }
+        isHidden = expired || card?.pages.isEmpty != false
         let fadeIn = min(1, max(0, elapsed / 0.35))
-        let fadeOut = min(1, max(0, (4.5 - elapsed) / 0.5))
+        let fadeOut = min(1, max(0, (displayDuration - elapsed) / 0.5))
         let progress = min(fadeIn, fadeOut)
         artworkOpacity = reduceMotion ? 1 : CGFloat(progress * progress * (3 - 2 * progress))
         needsDisplay = !isHidden
@@ -81,13 +103,16 @@ struct PlayingTrack: Equatable {
     }
 
     override func draw(_ dirtyRect: NSRect) {
-        guard let track, artworkOpacity > 0, let context = NSGraphicsContext.current?.cgContext else { return }
+        guard let card, artworkOpacity > 0, let context = NSGraphicsContext.current?.cgContext else { return }
+        let renderer = GameMenuArtwork.renderer()
+        if fontRenderer !== renderer {
+            fontRenderer = renderer
+            typography = renderer.map { GameMenuTypography(interface: $0.interface) }
+        }
         context.saveGState()
         context.setAlpha(artworkOpacity)
         context.beginTransparencyLayer(auxiliaryInfo: nil)
-        GameStoneButton.draw(bounds, selected: false, pixel: 1)
-        GameControlText.draw(track.title, in: CGRect(x: 12, y: 5, width: bounds.width - 24, height: 24), role: .heading)
-        GameControlText.draw(track.soundtrack, in: CGRect(x: 12, y: 30, width: bounds.width - 24, height: 24))
+        MusicTitleCard.draw(card, elapsed: elapsed, typography: typography, in: context)
         context.endTransparencyLayer()
         context.restoreGState()
     }

@@ -3,17 +3,48 @@ import Testing
 @testable import NxlvKit
 
 struct LearningJourneyTests {
+    @Test func crankshaftMovesToDifficultAndDefersPendingAttemptsWithoutLosingHistory() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let journey = try JSONDecoder().decode(LearningJourney.self,
+            from: Data(contentsOf: root.appendingPathComponent("Resources/Progression/learning.json"))).validated()
+        let index = try #require(journey.lessons.firstIndex {
+            $0.entry.identity.packID == "lemmings-LEVEL-120" && $0.entry.identity.levelID == "59:Tricky:30:1:7"
+        })
+        let lesson = journey.lessons[index]
+        #expect(index == 125 && lesson.stage == .difficult && lesson.demand == 377.5)
+        #expect(lesson.placement?.basis == "userPlaytest")
+        #expect(lesson.demand == LearningRouteSafety.minimumDemand(for: lesson.entry))
+        var previous = journey.lessons.map(\.entry)
+        let moved = previous.remove(at: index)
+        previous.insert(moved, at: 33)
+        for current in [0, 32, 33, 34, 125, 200, 294] {
+            let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+                pool: .init(id: "learning-21", summary: "Previous journey"), entries: previous, currentIndex: current)
+            let migrated = try #require(try journey.migrating(run))
+            #expect(migrated.id == run.id && migrated.currentIndex == current)
+            #expect(migrated.seed == run.seed && migrated.createdAt == run.createdAt)
+            #expect(Array(migrated.entries.prefix(current)) == Array(previous.prefix(current)))
+            #expect(migrated.entries.count == 295 && Set(migrated.entries.map(\.identity)).count == 295)
+            if current == 33 {
+                #expect(migrated.currentEntry == previous[34])
+                #expect(migrated.entries.firstIndex { $0.identity == moved.identity } == index)
+            } else { #expect(migrated.currentEntry == run.currentEntry) }
+            #expect(try journey.migrating(migrated) == migrated)
+        }
+    }
+
     @Test func patienceAndRainbowIslandMoveLaterAndSavedQueuesKeepEveryVisit() throws {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
             .deletingLastPathComponent().deletingLastPathComponent()
         let journey = try JSONDecoder().decode(LearningJourney.self,
             from: Data(contentsOf: root.appendingPathComponent("Resources/Progression/learning.json"))).validated()
-        let patience = journey.lessons[71]
-        let rainbow = journey.lessons[79]
+        let patience = journey.lessons[70]
+        let rainbow = journey.lessons[78]
         #expect(patience.entry.levelNameSnapshot == "Patience" && patience.stage == .intermediate)
         #expect(rainbow.entry.levelNameSnapshot == "Rainbow Island" && rainbow.stage == .intermediate)
-        #expect(journey.lessons[70].entry.levelNameSnapshot == "Plethora of Presents")
-        #expect(journey.lessons[78].entry.levelNameSnapshot == "Get Up There")
+        #expect(journey.lessons[69].entry.levelNameSnapshot == "Plethora of Presents")
+        #expect(journey.lessons[77].entry.levelNameSnapshot == "Get Up There")
         for lesson in [patience, rainbow] {
             #expect(lesson.placement?.basis == "userPlaytest")
             #expect(lesson.demand == LearningRouteSafety.minimumDemand(for: lesson.entry))
@@ -53,7 +84,7 @@ struct LearningJourneyTests {
             $0.entry.identity.packID == "lemmings-LEVEL-120" && $0.entry.identity.levelID == "26:Fun:27:4:6"
         })
         let lesson = journey.lessons[index]
-        #expect(index == 94 && lesson.stage == .intermediate && lesson.demand == 287.5)
+        #expect(index == 93 && lesson.stage == .intermediate && lesson.demand == 287.5)
         #expect(lesson.placement?.basis == "userPlaytest")
         var previous = journey.lessons.map(\.entry)
         let moved = previous.remove(at: index)
@@ -81,7 +112,7 @@ struct LearningJourneyTests {
         let index = try #require(journey.lessons.firstIndex { $0.entry.identity.packID == "fan:lldb-547"
             && $0.entry.identity.levelID == "Ji Hoon Heaven 2.DAT#8" })
         let lesson = journey.lessons[index]
-        #expect(index == 117 && lesson.stage == .intermediate)
+        #expect(index == 116 && lesson.stage == .intermediate)
         #expect(journey.lessons[index - 1].entry.levelNameSnapshot == "Sudenly lemming")
         #expect(lesson.entry.levelNameSnapshot == "Stop, Block and Blow")
         #expect(lesson.demand == 342.5 && lesson.concepts == ["bomber"])

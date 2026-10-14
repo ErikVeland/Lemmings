@@ -1,5 +1,12 @@
 # iPad Feature Parity Implementation Plan
 
+> Historical implementation checklist. The current source coverage is recorded in
+> [iOS interface parity](IOSInterfaceParity.md) and the
+> [2.0 release gate](ReleaseReadiness/2.0ReleaseGate-2026-10-14.md).
+> Earlier unchecked implementation tasks are not a current feature inventory.
+> Apple TV now uses the shared frontend; its adaptations and acceptance are in
+> [TV parity](../Apps/UltimateLemmingsTV/IOSParity.md).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Give the iPad app the same feature set as the Mac app for the Classic engine family, NeoLemmix excepted, with shared code and no lost saves.

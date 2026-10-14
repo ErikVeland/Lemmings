@@ -22,17 +22,26 @@ struct MobileArtworkTests {
         try FileManager.default.createSymbolicLink(at: bundle.appendingPathComponent("AmigaArtwork"), withDestinationURL: Self.root.appendingPathComponent(".build/amiga-artwork/export"))
         let game = ClassicMobileSession(simulation: simulation, renderedLevel: rendered, assets: assets, palette: palette,
             levelIdentifier: "fixture", levelIndex: 0, authoredLevel: level, ground: ground, artworkFamily: "lemmings", artworkRoot: bundle)
-        for (source, kind) in [(ClassicGraphicsSource.macintosh, "MacArtwork"), (.amiga, "AmigaArtwork")] {
+        for (source, kind) in [(ClassicGraphicsSource.macintosh, "MacArtwork"), (.amiga, "AmigaArtwork"), (.macintoshMonochrome, "MacArtwork/monochrome")] {
             var settings = ClassicSettings(); settings.graphics = source; settings.colorDepth = .full
             game.applySettings(settings)
             let art = try ClassicMacArtwork(directory: bundle.appendingPathComponent(kind + "/lemmings"))
             let scene = try ClassicMacScene(level: level, rendered: rendered, artwork: art, groundSet: ground,
-                reconstructUnmatched: source == .macintosh)
+                reconstructUnmatched: source != .amiga)
             let frame = try game.render(highlight: nil)
             #expect(frame.width == rendered.width * 2)
             #expect(frame.height == rendered.height * 2)
             #expect(frame.rgba == scene.rgba(simulation: simulation))
             #expect(game.renderScale == 2)
+            if source == .macintoshMonochrome {
+                #expect(art.monochrome)
+                let pixels = [UInt8](frame.rgba)
+                let binary = stride(from: 0, to: pixels.count, by: 4).allSatisfy { p in
+                    pixels[p + 3] == 0 || (pixels[p] == pixels[p + 1] && pixels[p] == pixels[p + 2]
+                        && (pixels[p] == 0 || pixels[p] == 255))
+                }
+                #expect(binary)
+            }
             #expect(ClassicDOSReplayRecorder.stateHash(of: game.finalSimulation) == ClassicDOSReplayRecorder.stateHash(of: simulation))
             for _ in 0..<60 { game.tick() }
             let target = try #require(game.targetCandidates(for: 0).first)

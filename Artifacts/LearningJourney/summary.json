@@ -9,10 +9,10 @@
   "pendingReview": 1627,
   "placementPolicy": "redux-calibrated-2",
   "stages": {
-    "Difficult": 94,
+    "Difficult": 95,
     "Expert": 78,
-    "Fun": 53,
+    "Fun": 52,
     "Intermediate": 70
   },
-  "version": "learning-21"
+  "version": "learning-22"
 }

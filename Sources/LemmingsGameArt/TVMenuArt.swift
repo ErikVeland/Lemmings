@@ -23,11 +23,11 @@ public enum TVMenuArt {
         var targets = page.rows.enumerated().map { index, action in
             Target(action: action, frame: CGRect(x: x, y: 130 + CGFloat(index) * (page.preview ? 88 : 54), width: width, height: page.preview ? 82 : 46))
         }
-        let footer = page.orderedFooter
+        let grid = GameFooterGrid(actions: page.orderedFooter, columns: page.footer.count)
         let gap: CGFloat = 12
-        let cell = (784 - CGFloat(max(0, footer.count - 1)) * gap) / CGFloat(max(1, footer.count))
-        targets += footer.enumerated().map { index, action in
-            Target(action: action, frame: CGRect(x: 40 + CGFloat(index) * (cell + gap), y: 406, width: cell, height: 48))
+        let cell = (784 - CGFloat(grid.columns - 1) * gap) / CGFloat(grid.columns)
+        targets += grid.slots.map { slot in
+            Target(action: slot.action, frame: CGRect(x: 40 + CGFloat(slot.column) * (cell + gap), y: 406, width: cell, height: 48))
         }
         let details = page.details.enumerated().map { index, _ in
             CGRect(x: page.preview ? 40 : 60, y: (page.preview ? 346 : 138) + CGFloat(index) * (page.preview ? 28 : 30),

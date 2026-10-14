@@ -39,7 +39,7 @@ def source_manifest():
     mac = Path(os.environ.get("IOS_MAC_ARTWORK_DIR", ROOT / ".build/mac-artwork/export/lemmings")).parent
     amiga = Path(os.environ.get("IOS_AMIGA_ARTWORK_DIR", ROOT / ".build/amiga-artwork/export"))
     for kind, artwork_root in (("MacArtworkInput", mac), ("AmigaArtworkInput", amiga)):
-        for family in FAMILIES:
+        for family in (*FAMILIES, *("monochrome/" + family for family in FAMILIES)):
             for path in inputs(artwork_root / family):
                 result[f"{kind}/{family}/{path.name}"] = digest(path)
     return result

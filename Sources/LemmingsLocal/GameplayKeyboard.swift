@@ -99,6 +99,8 @@ import NxlvKit
     var mainMenu: (() -> Void)?
     var navigationAvailable: () -> Bool = { true }
     var playingTrack: () -> PlayingTrack? = { nil }
+    /// The rendered playfield in the content view's coordinates, excluding the HUD.
+    var musicDisplayArea: () -> CGRect? = { nil }
     private let nowPlayingNotice = NowPlayingNotice(frame: .zero)
     var navigationReduceMotion: () -> Bool = { NSWorkspace.shared.accessibilityDisplayShouldReduceMotion }
     var showSongInfo: () -> Bool = { true }
@@ -120,11 +122,10 @@ import NxlvKit
     func refreshNavigationControl(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
         guard let root = window?.contentView else { return }
         if nowPlayingNotice.superview !== root { nowPlayingNotice.removeFromSuperview(); root.addSubview(nowPlayingNotice) }
-        nowPlayingNotice.frame = CGRect(x: 12, y: root.isFlipped ? 36 : max(0, root.bounds.maxY - 96),
-            width: max(1, min(600, root.bounds.width - 136)), height: 60)
         nowPlayingNotice.update(track: playingTrack(), at: now,
             visible: active() && ownsController() && !GameScreen.shared.isPresented && window?.attachedSheet == nil,
-            reduceMotion: navigationReduceMotion(), enabled: showSongInfo())
+            reduceMotion: navigationReduceMotion(), enabled: showSongInfo(),
+            area: (musicDisplayArea() ?? root.bounds).intersection(root.bounds), flipped: root.isFlipped)
         let visible = mainMenu != nil && ownsController() && navigationAvailable()
             && window?.attachedSheet == nil && !GameScreen.shared.isPresented
         guard visible else { navigationButton.isHidden = true; navigationButton.resetAppearance(); return }
@@ -146,6 +147,7 @@ import NxlvKit
     var hints: (() -> Void)?
     var settings: (() -> Void)?
     var retry: (() -> Void)?
+    var openRetainedSolution: () -> Bool = { false }
     var precisionZoom: ((PrecisionZoomKind) -> Void)?
     var rewind: (() -> Void)?
     var controllerRewindHeld: (Bool) -> Void = { _ in }
@@ -340,7 +342,7 @@ import NxlvKit
         case .rate(1): menuKey("up")
         case .rate: menuKey("down")
         case .retry: retry?()
-        case .hints: hints?()
+        case .hints: if !openRetainedSolution() { hints?() }
         case .settings: settings?()
         case .help: showHelp()
         default: break
@@ -355,7 +357,7 @@ import NxlvKit
             else { speedControl?.cancelInput(); escape() }
         case .pause: togglePause()
         case .help: showHelp()
-        case .hints: hints?()
+        case .hints: if !openRetainedSolution() { hints?() }
         case .settings: settings?()
         case .retry: retry?()
         case .rewind: rewind?()

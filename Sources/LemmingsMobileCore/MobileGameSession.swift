@@ -190,6 +190,8 @@ public protocol MobileGameSession: AnyObject {
     var assignmentSprite: MobileSpriteHighlight? { get }
     var assignmentProgress: Double? { get }
     var replaySkillUses: [MobileReplaySkillUse] { get }
+    var replayMoveNavigation: ReplayMoveNavigation { get }
+    @discardableResult func seekReplay(to tick: Int) -> Bool
 
     var entrancePoint: MobilePoint { get }
     var goalPoint: MobilePoint { get }
@@ -267,6 +269,8 @@ public extension MobileGameSession {
     var rescueSprites: [MobileSpriteHighlight] { [] }
     var assignmentSprite: MobileSpriteHighlight? { nil }
     var replaySkillUses: [MobileReplaySkillUse] { [] }
+    var replayMoveNavigation: ReplayMoveNavigation { .init(ticks: []) }
+    func seekReplay(to tick: Int) -> Bool { false }
     var assignmentProgress: Double? { nil }
     func spriteHighlight(for actor: Int) -> MobileSpriteHighlight? { nil }
     func releaseTransientResources() {}

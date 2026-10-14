@@ -13,6 +13,20 @@ extension TVExperienceAudit {
         typealias Action = GameFrontEnd.Action
         var profiles = MobileProfiles()
         _ = profiles.add(name: "Guest player", id: "guest")
+        let players = MobileCareerArt.players(profiles, subtitle: "", canDelete: true)
+        guard players.rows.contains(where: { $0.id == "playerRename" && $0.enabled }),
+              !players.footer.contains(where: { $0.id == "playerRename" }) else {
+            throw Failure.invalid("Profile editing must be reachable in the player list")
+        }
+        var roster = MobileHotSeatRoster(host: "default", players: ["guest"])
+        roster.toggle("guest")
+        let deselected = MobileCareerArt.hotSeat(profiles, subtitle: "", roster: roster,
+            policy: .everyLevel, active: false, hasSaved: false)
+        guard deselected.rows.contains(where: { $0.id == "seat.guest" && !$0.selected && $0.enabled }),
+              deselected.rows.contains(where: { $0.id == "seat.default" && $0.selected && !$0.enabled }),
+              deselected.footer.contains(where: { $0.id == "seatStart" && !$0.enabled }) else {
+            throw Failure.invalid("Guest deselection and the locked host must match their targets")
+        }
         let home = MobileHomeArt.page(resume: [.init("resume", "Resume level - Player 1")],
             journey: .init("journey", "Journey  29/295 solved"),
             families: [.init("classic", "Classic Lemmings"), .init("ohNo", "Oh No! More Lemmings"),
@@ -21,7 +35,11 @@ extension TVExperienceAudit {
                        .init("l2", "Lemmings 2"), .init("l3", "Lemmings 3 Preview")], initials: "P1")
         var pages: [(String, GameFrontEnd.Page)] = [
             ("home", home), ("settings", MobileSettingsArt.groups()),
-            ("players", MobileCareerArt.players(profiles, subtitle: "")),
+            ("players", players),
+            ("edit-player", MobileCareerArt.players(profiles, subtitle: "", draft: "LEM", portrait: 6)),
+            ("new-player", MobileCareerArt.players(profiles, subtitle: "", draft: "", creating: true, portrait: 1)),
+            ("delete-player", MobileCareerArt.players(profiles, subtitle: "", canDelete: true, confirmingDelete: true)),
+            ("hot-seat-deselected", deselected),
             ("hot-seat", MobileCareerArt.hotSeat(profiles, subtitle: "", roster: .init(host: "default", players: ["guest"]),
                                                policy: .atFirstFail, active: true, hasSaved: true)),
             ("records-empty", MobileCareerArt.recordsPage(records: .init(), profileID: "default", profileName: "Player 1", subtitle: "")),
@@ -41,6 +59,9 @@ extension TVExperienceAudit {
         for group in MobileSettingsGroup.allCases {
             pages.append(("settings-" + group.rawValue, MobileSettingsArt.page(group, settings: .init(), displayAvailable: true)))
         }
+        let cloud = CloudSyncArt.page(status: "Cloud saves", providers: "", enabled: false)
+        pages.append(("save-backup", TVSharedMenuArt.cloud(cloud, restoring: false, hasCode: false, enteringCode: false, busy: false)))
+        pages.append(("save-restore", TVSharedMenuArt.cloud(cloud, restoring: true, hasCode: false, enteringCode: false, busy: false)))
         let content = try library.loadLevel(at: 0)
         let summary = MobilePauseSummary(level: content.summary, snapshot: content.session.snapshot,
             activeCount: 0, ticksPerSecond: content.session.ticksPerSecond, speed: 1, assignedSkills: 0,
@@ -49,8 +70,11 @@ extension TVExperienceAudit {
         pages.append(("pause", MobilePauseArt.page(summary, actions: [.init("resume", "Resume", primary: true), .init("library", "Library")])))
         var captures = 0
         for size in ClassicInterfaceSize.allCases {
-            let scale = MobileSettingsArt.interfaceScale(size, width: 1728, television: true)
             for (name, page) in pages {
+                let scale = page.pause != nil
+                    ? MobilePauseArt.interfaceScale(size, width: 1728, height: 960, television: true)
+                    : MobileSettingsArt.interfaceScale(size, width: 1728, television: true)
+                guard scale == floor(scale) else { throw Failure.invalid("Fractional TV artwork scale") }
                 let layout = GameFrontEnd.layout(page, width: 1728 / scale, minimumHeight: 960 / scale)
                 let context = try context(width: 1728, height: Int(ceil(layout.size.height * scale)))
                 context.scaleBy(x: scale, y: scale)

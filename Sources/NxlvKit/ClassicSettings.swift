@@ -15,6 +15,7 @@ public enum ClassicGraphicsSource: Equatable, Codable, Sendable {
     case dosVGA
     case amiga
     case macintosh
+    case macintoshMonochrome
     /// A folder of replacement artwork the player supplied.
     case custom(name: String)
 
@@ -23,6 +24,7 @@ public enum ClassicGraphicsSource: Equatable, Codable, Sendable {
         case .dosVGA: return "DOS (VGA)"
         case .amiga: return "Amiga"
         case .macintosh: return "Macintosh"
+        case .macintoshMonochrome: return "Macintosh (1-bit)"
         case let .custom(name): return name
         }
     }
@@ -521,10 +523,12 @@ public struct ClassicSettingsOptions: Sendable {
         remixFolders: [String] = [],
         customGraphics: [String] = [],
         hasSoundtracks: Bool = false,
-        hasMacintoshMusic: Bool = false
+        hasMacintoshMusic: Bool = false,
+        hasMacintoshMonochromeArtwork: Bool = false
     ) -> ClassicSettingsOptions {
         var graphics: [ClassicGraphicsSource] = []
         if hasMacintoshDisk { graphics.append(.macintosh) }
+        if hasMacintoshMonochromeArtwork { graphics.append(.macintoshMonochrome) }
         if hasAmigaDisk { graphics.append(.amiga) }
         if hasDOSData { graphics.append(.dosVGA) }
         graphics.append(contentsOf: customGraphics.map { .custom(name: $0) })

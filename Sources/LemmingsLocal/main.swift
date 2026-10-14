@@ -1227,7 +1227,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       moduleCount: music.library.count,
       remixFolders: soundtrackLibrary.keys.sorted(),
       hasSoundtracks: dj.hasTracks,
-      hasMacintoshMusic: macintoshMusic != nil)
+      hasMacintoshMusic: macintoshMusic != nil,
+      hasMacintoshMonochromeArtwork: Bundle.main.resourceURL.map { FileManager.default.fileExists(atPath: $0.appendingPathComponent("MacArtwork/monochrome/lemmings/manifest.json").path) } == true)
   }
 
   @objc private func showSettings() {
@@ -1420,6 +1421,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func suspendCurrentEngine(savesProgress: Bool = true, preservingMusic: Bool = false) {
+    LevelHintWindow.shared.clearSolution()
     panel.handlePointerUp()
     playfield.clearPointer()
     if savesProgress { saveProgress() }
@@ -1603,6 +1605,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   @objc private func returnToLibrary() {
+    LevelHintWindow.shared.clearSolution()
     prepareLibrary(preservingMusic: false)
   }
 
@@ -2620,10 +2623,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
     artworkLevel = level
     artworkGroundOverride = groundOverride
     artworkSpecialOverride = specialOverride
-    guard [.macintosh, .amiga].contains(activeGraphics),
+    guard [.macintosh, .macintoshMonochrome, .amiga].contains(activeGraphics),
       groundOverride != nil || dataSets.indices.contains(gamePicker.indexOfSelectedItem),
       let resources = Bundle.main.resourceURL else { return }
-    let source = activeGraphics == .amiga ? "AmigaArtwork" : "MacArtwork"
+    let source = activeGraphics == .amiga ? "AmigaArtwork"
+      : activeGraphics == .macintoshMonochrome ? "MacArtwork/monochrome" : "MacArtwork"
     let root = resources.appendingPathComponent(source)
     let family: String
     let fanMatch = groundOverride.flatMap {
@@ -2652,7 +2656,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
       playfield.macArtwork = art
       panel.macArtwork = art
-      panel.usesMacStyleControls = activeGraphics == .macintosh
+      panel.usesMacStyleControls = activeGraphics != .amiga
       if activeGraphics == .amiga, groundOverride != nil {
         guard let fanMatch, (fanMatch.pieces.share(of: level) ?? 1) >= 0.5,
           level.specialStyle == 0 || fanMatch.pieces.special else { return }
@@ -2661,7 +2665,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       guard groundOverride == nil || fanMatch != nil else { return }
       playfield.macScene = try ClassicMacScene(level: level, rendered: rendered, artwork: art,
         groundSet: groundOverride ?? grounds[level.groundStyle], match: fanMatch?.pieces,
-        reconstructUnmatched: activeGraphics == .macintosh)
+        reconstructUnmatched: activeGraphics != .amiga)
     } catch {
       setStatus("\(settings.graphics.displayName) artwork unavailable for this level: \(error)")
     }
@@ -6495,6 +6499,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
     hintMap = playfield.levelImage
     let previousAttemptID = arcadeRunID
     arcadeRunID = UUID(); arcadeProfileID = ArcadeStore.shared.playingProfileID; arcadeHotSeatID = ArcadeStore.shared.hotSeatID; arcadeReport = nil
+    LevelHintWindow.shared.rebindSolution(session: new as? ClassicSession, owner: window, runID: arcadeRunID,
+      ownerKey: "\(arcadeProfileID)|\(arcadeHotSeatID ?? "")", pause: { [weak self, weak new] in
+        guard let self, let new else { return }
+        self.pauseLiveForSolution(new)
+      })
     if !restoringCheckpoint {
       PrecisionZoomController.shared.start(attemptID: arcadeRunID, profileID: arcadeProfileID)
       syncPrecisionZoom()
@@ -8181,12 +8190,24 @@ let achievementProgressKey = "ClassicAchievementProgress"
     isPaused = true; panel.isPaused = true; accumulator = 0
     screenFlash.clear(); pointerCapture.reset(); panel.needsDisplay = true
     LevelHintWindow.shared.show(deck, image: hintMap, owner: window,
-      solutionSession: session as? ClassicSession, solutionSource: playfield, solutionEffects: effects) { [weak self, weak session] in
+      solutionSession: session as? ClassicSession, solutionSource: playfield, solutionEffects: effects,
+      runID: arcadeRunID, ownerKey: "\(arcadeProfileID)|\(arcadeHotSeatID ?? "")", pauseForSolution: { [weak self, weak session] in
+        guard let self, let session, self.session === session else { return }
+        self.pauseLiveForSolution(session)
+      }) { [weak self, weak session] in
       guard let self, let session, self.session === session else { return }
-      self.isPaused = wasPaused || self.gameplayKeyboard?.interruptionCount != interruption
+      self.isPaused = wasPaused || LevelHintWindow.shared.hasSolution(for: self.arcadeRunID)
+        || self.gameplayKeyboard?.interruptionCount != interruption
       self.panel.isPaused = self.isPaused
       self.accumulator = 0; self.lastStepTime = nil; self.panel.needsDisplay = true
     }
+  }
+
+  private func pauseLiveForSolution(_ expected: any GameSession) {
+    guard session === expected else { return }
+    isPaused = true; panel.isPaused = true; accumulator = 0
+    playfield.startCountdown.cancel(); speedControl.cancelInput(); pointerCapture.reset()
+    lastStepTime = nil; panel.needsDisplay = true
   }
 
   @objc private func showKeyboardCommands() {
@@ -8254,6 +8275,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let keyboard = GameplayKeyboard(window: window)
     gameplayKeyboard = keyboard
     keyboard.hints = { [weak self] in self?.showLevelHints() }
+    keyboard.openRetainedSolution = { [weak self] in
+      guard let self, !GameScreen.shared.isPresented, LevelHintWindow.shared.hasSolution(for: self.arcadeRunID) else { return false }
+      LevelHintWindow.shared.selectSolutionMode(.solution)
+      return true
+    }
     keyboard.settings = { [weak self] in self?.showSettings() }
     keyboard.pauseOnInterruption = { [weak self] in self?.settings.pauseOnInterruption ?? true }
     keyboard.onInterruption = { [weak self] in self?.interruptGameplay() }
@@ -8293,6 +8319,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
     keyboard.active = { [weak self] in
       guard let self else { return false }
       return self.phase == .playing && !GameScreen.shared.isPresented && !self.sequelIsActive && self.session?.isComplete == false
+    }
+    keyboard.musicDisplayArea = { [weak self] in
+      guard let self, let root = self.window.contentView else { return nil }
+      if self.tubeIsActive {
+        let height = root.bounds.height * 0.8
+        return CGRect(x: root.bounds.minX, y: root.isFlipped ? root.bounds.minY : root.bounds.maxY - height,
+          width: root.bounds.width, height: height)
+      }
+      return root.convert(self.playfield.bounds, from: self.playfield)
     }
     keyboard.playingTrack = { [weak self] in
       guard let self, self.settings.music != .silent else { return nil }

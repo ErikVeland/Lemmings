@@ -60,7 +60,7 @@ extension AVAudioPlayer: OriginalMovieAudio {}
         playbackButton.onPress = { [weak self] in self?.togglePause() }
         backButton.onPress = { [weak self] in self?.close() }
         if returnsToGameWhenFinished { backButton.title = "Skip" }
-        addSubview(playbackButton); addSubview(backButton)
+        addSubview(backButton); addSubview(playbackButton)
         setAccessibilityElement(true)
         setAccessibilityRole(.group)
         setAccessibilityLabel("Original Lemmings 3 movie")
@@ -106,8 +106,8 @@ extension AVAudioPlayer: OriginalMovieAudio {}
     }
     override func layout() {
         super.layout()
-        playbackButton.frame = CGRect(x: bounds.midX - 184, y: bounds.height - 44, width: 174, height: 36)
-        backButton.frame = CGRect(x: bounds.midX + 10, y: bounds.height - 44, width: 174, height: 36)
+        backButton.frame = CGRect(x: 12, y: bounds.height - 44, width: 174, height: 36)
+        playbackButton.frame = CGRect(x: bounds.maxX - 186, y: bounds.height - 44, width: 174, height: 36)
     }
 
     func advance(seconds: Double) {

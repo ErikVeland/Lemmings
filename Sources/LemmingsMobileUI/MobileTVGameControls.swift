@@ -55,7 +55,8 @@ extension MobileGameViewController {
         }
         if !session.isReadOnly {
             commands += [
-                ("RETRY", { [weak self] in self?.showTVRetry() }),
+                ("HINT", { [weak self] in self?.onHints?() }),
+                ("RESTART LEVEL", { [weak self] in self?.showRestartLevel() }),
                 (snapshot.isEndingRun ? "UNDO END RUN" : "END RUN", { [weak self] in self?.showTVEndRun() }),
             ]
         }
@@ -85,13 +86,6 @@ extension MobileGameViewController {
             ("ENTRANCE", { [weak self] in self?.tvCommand(.centre(true), stayInPlay: true) }),
             ("EXIT", { [weak self] in self?.tvCommand(.centre(false), stayInPlay: true) }),
             ("MOVE CAMERA", { [weak self] in self?.tvPlanning(); self?.tvCameraMode = true }),
-        ])
-    }
-
-    private func showTVRetry() {
-        tvPage(title: "Retry level?", actions: [
-            ("CANCEL", { [weak self] in self?.showTVControls() }),
-            ("RETRY", { [weak self] in self?.tvCommand(.retry, stayInPlay: true) }),
         ])
     }
 
