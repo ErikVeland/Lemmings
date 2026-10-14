@@ -193,6 +193,9 @@ import UIKit
 
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         guard isUserInteractionEnabled, !isHidden, alpha > 0.01 else { return nil }
+        if !toolDirectionPicker.isHidden, toolDirectionPicker.frame.contains(point) {
+            return toolDirectionPicker.hitTest(convert(point, to: toolDirectionPicker), with: event)
+        }
         if !readOnly, layout?.portrait?.rateValue?.contains(point) == true { return self }
         // Each speed action has a separate target inside the shared speed socket.
         if !minimapView.isHidden, minimapView.frame.contains(point) {
