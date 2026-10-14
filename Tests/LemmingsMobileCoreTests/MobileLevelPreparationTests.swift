@@ -3,7 +3,7 @@ import NxlvKit
 import Testing
 @testable import LemmingsMobileCore
 
-@Suite struct MobileLevelPreparationTests {
+@Suite(.serialized) struct MobileLevelPreparationTests {
     @MainActor @Test func libraryOpeningRunsOffUIThread() async throws {
         let loader = MobileLibraryLoader()
         let opened = try await loader.open {
@@ -16,7 +16,7 @@ import Testing
     @Test func cancelledLibraryOpeningDoesNotTransferStaleContent() async throws {
         let gate = PreparationGate()
         let loader = MobileLibraryLoader()
-        let task = Task {
+        let task = Task.detached {
             try await loader.open {
                 gate.block()
                 return PreparationLibrary()
@@ -33,9 +33,9 @@ import Testing
         let loader = MobileMenuPreviewLoader { PreparationLibrary(onLoad: { index in
             if index == 0 { gate.block() }
         }) }
-        let obsolete = Task { try await loader.load(0) }
+        let obsolete = Task.detached { try await loader.load(0) }
         await gate.waitUntilEntered()
-        let neighbour = Task { try await loader.load(1) }
+        let neighbour = Task.detached { try await loader.load(1) }
         obsolete.cancel()
         neighbour.cancel()
         gate.release.signal()
