@@ -184,13 +184,14 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
     public func makeSession(runtime: Lemmings2Runtime, engineFingerprint: String,
                             levelIdentifier: String, levelIndex: Int,
                             levelFingerprint: String,
+                            soundBank: Lemmings2SoundBank? = nil,
                             onCompletion: ((Lemmings2Runtime) -> Void)? = nil) -> Lemmings2MobileSession {
         Lemmings2MobileSession(runtime: runtime, engineFingerprint: engineFingerprint,
                               levelIdentifier: levelIdentifier, levelIndex: levelIndex,
                               levelFingerprint: levelFingerprint,
                               renderer: { [self] runtime, highlight in
             try render(runtime, highlight: highlight)
-        }, onCompletion: onCompletion)
+        }, soundBank: soundBank, onCompletion: onCompletion)
     }
 
     private struct Pose {

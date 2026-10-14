@@ -107,6 +107,7 @@ final class NeoLemmixMobileLibrary: MobileGameLibrary {
         let sprites = try NeoLemmixMobileSpriteSet(stylesRootURL: entry.stylesRoot, themeStyle: level.themeStyle)
         let renderer = NeoLemmixMobileSceneRenderer(renderedLevel: rendered, sprites: sprites,
                                                    stylesRootURL: entry.stylesRoot)
+        let gadgetSounds = NeoLemmixSoundCue.gadgetSounds(for: rendered.gadgets, resolution: resolution)
         let fingerprint = try Self.fingerprint(levelData: data, resolution: resolution)
         let identifier = entry.identifier
         progressLock.lock()
@@ -121,7 +122,9 @@ final class NeoLemmixMobileLibrary: MobileGameLibrary {
         }
         let session = NeoLemmixMobileSession(simulation: simulation, controls: controls,
             engineFingerprint: Self.engineFingerprint, levelIdentifier: identifier,
-            levelIndex: index, levelFingerprint: fingerprint, renderer: renderer.render) { [weak self] result in
+            levelIndex: index, levelFingerprint: fingerprint, renderer: renderer.render,
+            gadgetSounds: gadgetSounds,
+            soundDirectory: entry.stylesRoot.deletingLastPathComponent().appendingPathComponent("sound")) { [weak self] result in
                 self?.record(result, key: identifier, at: index)
             }
         return MobileLevelContent(summary: entry.summary, session: session)

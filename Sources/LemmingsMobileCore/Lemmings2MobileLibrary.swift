@@ -25,6 +25,7 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
         let masks: Lemmings2TerrainMasks
         let walker: Lemmings2Walker?
         let explosion: Lemmings2Explosion
+        let soundBank: Lemmings2SoundBank?
 
         init(root: URL) throws {
             sprites = try Lemmings2Sprites(data: Data(contentsOf: root.appendingPathComponent("VLEMMS.DAT")))
@@ -33,6 +34,8 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
             walker = (try? Data(contentsOf: root.appendingPathComponent("WALKER.DAT")))
                 .flatMap { try? Lemmings2Walker(data: $0) }
             explosion = try Lemmings2Explosion(root: root)
+            soundBank = (try? Data(contentsOf: root.appendingPathComponent("MUSIC/SBLAST.VOC")))
+                .flatMap { try? Lemmings2SoundBank(data: $0) }
         }
     }
 
@@ -112,7 +115,7 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
         let session = renderer.makeSession(runtime: runtime,
             engineFingerprint: Self.engineFingerprint,
             levelIdentifier: identifier, levelIndex: index,
-            levelFingerprint: selectedLevel.fingerprint) { [weak self] completedRuntime in
+            levelFingerprint: selectedLevel.fingerprint, soundBank: assets.soundBank) { [weak self] completedRuntime in
                 self?.record(completedRuntime, at: index)
             }
         return MobileLevelContent(summary: levels[index], session: session)

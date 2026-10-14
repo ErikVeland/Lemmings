@@ -5,7 +5,7 @@ import LemmingsMobileCore
 
 struct NeoLemmixMobileDataTests {
     @Test(.enabled(if: ProcessInfo.processInfo.environment["LEMMINGS_MOBILE_NEOLEMMIX_DATA"] != nil))
-    func opensRendersAndRestoresPlayerOwnedNeoLemmixLevels() throws {
+    func opensRendersAndRestoresEverySupportedPlayerOwnedNeoLemmixLevel() throws {
         let sourcePath = try #require(ProcessInfo.processInfo.environment["LEMMINGS_MOBILE_NEOLEMMIX_DATA"])
         let source = URL(fileURLWithPath: sourcePath, isDirectory: true)
         let root = FileManager.default.temporaryDirectory
@@ -19,8 +19,7 @@ struct NeoLemmixMobileDataTests {
             storage: MobileStorage(directory: root.appendingPathComponent("Progress", isDirectory: true)))
         #expect(!library.levels.isEmpty)
 
-        let indices = Set([0, library.levels.count / 2, library.levels.count - 1]).sorted()
-        for index in indices {
+        for index in library.levels.indices {
             let session = try library.loadLevel(at: index).session
             let frame = try session.render(highlight: nil)
             #expect(frame.width > 0)
