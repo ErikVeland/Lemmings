@@ -238,7 +238,6 @@ public final class SoundEffectPlayer: @unchecked Sendable {
           let layerSample = voice.rescueLayers[index].samples[position]
             + (voice.rescueLayers[index].samples[next] - voice.rescueLayers[index].samples[position])
             * Float(voice.rescueLayers[index].position - Double(position))
-          sourceSample += layerSample
           sample += layerSample * Float(level) * voice.rescueLayers[index].gain * voice.rescueLayers[index].distanceGain
           historySample += layerSample * voice.rescueLayers[index].gain * voice.rescueLayers[index].distanceGain
           voice.rescueLayers[index].position += voice.rescueLayers[index].increment

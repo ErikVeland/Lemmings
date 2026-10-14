@@ -105,7 +105,7 @@ extension SoundEffectPlayer {
         voices[3] = Voice(samples: [Float](repeating: 0.2, count: 1024), isActive: true)
         // Silent sources before and after active sources must not erase the mixed history.
         for index in voices.indices { fillVoice(index, buffers: buffers, frames: 1024, sampleTime: 1024) }
-        precondition((1024..<2048).allSatisfy { abs(recentSamples[$0] - 0.3) < 0.00001 })
+        precondition((1024..<2048).allSatisfy { abs(recentSamples[$0] - 0.18) < 0.00001 })
         silence()
         let begin = DispatchTime.now().uptimeNanoseconds
         for block in 0..<100 {

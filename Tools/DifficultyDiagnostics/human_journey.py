@@ -344,7 +344,10 @@ def build(pool, witnesses, resources, reference, reviews):
                             else 'needs human discovery/variant review', 'context': context,
                         'risks': risks(context) + variant_holds.get(ident, [])
                             + ([] if row['official'] else ['short or simple-looking solutions can hide difficult discovery']),
-                        'diagnosticEstimate': {'position': value, 'lower': lower, 'upper': upper,
+                        'diagnosticEstimate': {'position': value, 'lower': lower,
+                            'upper': upper if row['official'] else 1000,
+                            'meaning': 'Official route comparison with unknown discovery' if row['official'] else
+                                'Execution comparison only; a replay cannot bound fan puzzle discovery difficulty',
                             'eligibleForGoldenPath': row['official'] and not seasonal(row)},
                         'comparisons': [{'reference': a['reference']['reference'], 'level': a['row']['entry']['levelNameSnapshot'],
                                          'ordinal': a['reference']['ordinal'], 'executionDistance': round(distance(context, a['context']), 3)}
@@ -559,7 +562,7 @@ def report(manifest, plan, pending, transitions):
         'Unreviewed fan estimates never enter the golden path',
         'Seasonal levels need exact human difficulty review',
         'Reviewed fan bridges stay inside a real gap without introducing unpractised skills',
-        'No fabricated precision, rank floors, cumulative clamps or application-pattern deduplication',
+        'No fabricated human reviews or score clamps; official variant floors remain editorial',
         'Adjacent reference gaps are checked without changing any placement score'],
         'limits': plan['limits']})
     lines = ['# Oh My! All Lemmings! progression', '',

@@ -42,9 +42,9 @@ public enum VinylBackspin {
     private static let initialRate = 2.4
     private static let finalRate = 0.12
 
-    public static func sample(frame: Double, sampleRate: Double) -> (rate: Double, gain: Float) {
+    public static func sample(frame: Double, sampleRate: Double, attackFrame: Double? = nil) -> (rate: Double, gain: Float) {
         let progress = min(1, max(0, frame / (sampleRate * seconds)))
-        let attack = min(1, max(0, frame / (sampleRate * 0.020)))
+        let attack = min(1, max(0, (attackFrame ?? frame) / (sampleRate * 0.020)))
         let release = min(1, max(0, (sampleRate * seconds - 1 - frame) / (sampleRate * 0.090)))
         let edge = min(attack, release)
         return (initialRate + (finalRate - initialRate) * progress,

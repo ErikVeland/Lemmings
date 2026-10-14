@@ -130,7 +130,7 @@ extension SoundEffectPlayer {
     let original = recentSamples
     playRewindScrub()
     let mixed = voices.first(where: { $0.isActive })!.samples
-    precondition(mixed.count == Int(44_100 * 0.18) && mixed[600] > mixed[700],
+    precondition(mixed.count == Int(44_100 * VinylBackspin.seconds) && mixed[1000] > mixed[1100],
       "Rewind did not travel backwards through real history")
     precondition(mixed.allSatisfy { $0.isFinite && abs($0) <= 0.3 }
       && mixed.first == 0 && mixed.last == 0, "Rewind had invalid samples or clicking endpoints")
@@ -140,7 +140,7 @@ extension SoundEffectPlayer {
       for _ in 0..<12 { playRewindScrub() }
       let active = voices.indices.filter { voices[$0].isActive }
       precondition(active.count <= 1, "Rapid rewind taps stacked cues")
-      for index in active {
+      for index in active.isEmpty ? [] : Array(voices.indices) {
         fillVoice(index, buffers: UnsafeMutableAudioBufferListPointer(buffer.mutableAudioBufferList), frames: 512, sampleTime: 0)
         precondition((0..<512).allSatisfy { abs(buffer.floatChannelData![0][$0]) < 0.4 },
           "Rewind exceeded its mix budget")
@@ -152,10 +152,44 @@ extension SoundEffectPlayer {
     precondition(!voices.contains { $0.isActive }, "Muted rewind started a voice")
     setMuted(false); outputSuspended = true; playRewindScrub()
     precondition(!voices.contains { $0.isActive }, "Suspended output queued a rewind")
-    print("PASS silent-history silence, finite 180 ms reverse, reversed history, one-voice repeat cap, mute and suspension after 2400 requests")
+    print("PASS silent-history silence, 480 ms backspin, reversed history, idle-source capture isolation, one-voice repeat cap, mute and suspension after 2400 requests")
+  }
+
+  func checkCapturedMixAndContinuation() {
+    let buffer = AVAudioPCMBuffer(pcmFormat: AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 1)!, frameCapacity: 512)!
+    buffer.frameLength = 512
+    let buffers = UnsafeMutableAudioBufferListPointer(buffer.mutableAudioBufferList)
+    voices[0] = Voice(samples: [Float](repeating: 0.4, count: 44_100), isActive: true, gain: 0.5, distanceGain: 0.25)
+    voices[1] = Voice(samples: [Float](repeating: 0.2, count: 44_100), isActive: true, gain: 0.25)
+    setVolume(0.5)
+    for block in 0..<80 {
+      for index in voices.indices { fillVoice(index, buffers: buffers, frames: 512, sampleTime: Double(block * 512)) }
+    }
+    precondition(abs(recentSamples[40_000] - 0.1) < 0.00001,
+      "Captured mix ignored effect gains or applied master volume twice")
+    silence(); playRewindScrub()
+    let index = voices.firstIndex(where: { $0.isActive })!
+    let head = rewindHistoryHead
+    fillVoice(index, buffers: buffers, frames: 512, sampleTime: 40_960)
+    let cursor = rewindHistoryHead
+    precondition(cursor < head, "Backspin did not advance the history cursor")
+    silence(); playRewindScrub()
+    precondition(rewindSliceHead == cursor, "Sequel silence restarted the same backspin fragment")
+    silence()
+    latestRecentSample = 44_099
+    for offset in 0..<44_100 {
+      recentSamplePositions[offset] = Int64(offset)
+      recentSamples[offset] = Float(offset) / 44_100 * 4
+    }
+    playRewindScrub()
+    let samples = voices.first(where: { $0.isActive })!.samples
+    precondition(samples.allSatisfy { abs($0) <= 1 } && samples[1000] > samples[2000],
+      "A loud captured mix clipped flat instead of retaining its shape")
+    print("PASS captured voice/distance gains, single master volume, sequel scrub continuation and proportional chorus headroom")
   }
 }
 SoundEffectPlayer().checkRewindFeedbackAndPolyphony()
+SoundEffectPlayer(voiceCount: 4).checkCapturedMixAndContinuation()
 
 extension SoundEffectPlayer {
   func checkJoyMixPolicy() {

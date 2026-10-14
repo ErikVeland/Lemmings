@@ -3,15 +3,18 @@ set -euo pipefail
 project_dir="${0:A:h:h}"
 cd "$project_dir"
 swift build --target NxlvKit
+swift build --target LemmingsAppCore
 product_dir="$(swift build --show-bin-path)"
 build_dir="$project_dir/.build/learning-journey"
 mkdir -p "$build_dir"
 if [[ -f "$product_dir/NxlvKit.o" ]]; then
   module_dir="$product_dir"
   objects=("$product_dir/NxlvKit.o")
+  revision_objects=("$product_dir/LemmingsAppCore.o")
 else
   module_dir="$product_dir/Modules"
   objects=("$product_dir"/NxlvKit.build/*.o)
+  revision_objects=("$product_dir/LemmingsAppCore.build/ClassicSourceRevision.swift.o")
 fi
 swiftc -swift-version 6 -I "$module_dir" "${objects[@]}" \
   "$project_dir/Tools/DifficultyDiagnostics/LearningJourney.swift" \
@@ -22,7 +25,7 @@ LEARNING_EXPORT_POOL=1 "$build_dir/LearningJourneyTool" "$project_dir/Artifacts/
   "$project_dir/Artifacts/LearningJourney/scenarios.json"
 
 resources="${1:-$project_dir/.build/local/Ultimate Lemmings.app/Contents/Resources}"
-swiftc -O -swift-version 6 -I "$module_dir" "${objects[@]}" \
+swiftc -O -swift-version 6 -I "$module_dir" "${objects[@]}" "${revision_objects[@]}" \
   "$project_dir/Sources/NxlvKit/InterfaceLocalisation.swift" \
   "$project_dir/Tools/DifficultyDiagnostics/JourneyResources/main.swift" \
   "$project_dir/Sources/LemmingsLocal/GameAssetCache.swift" \
@@ -33,7 +36,7 @@ swiftc -O -swift-version 6 -I "$module_dir" "${objects[@]}" \
 python3 "$project_dir/Tools/DifficultyDiagnostics/human_journey.py"
 
 # A level count or stored win flag is not a proof. Re-run every selected route.
-swiftc -O -swift-version 6 -I "$module_dir" "${objects[@]}" \
+swiftc -O -swift-version 6 -I "$module_dir" "${objects[@]}" "${revision_objects[@]}" \
   "$project_dir/Sources/NxlvKit/InterfaceLocalisation.swift" \
   "$project_dir/Tools/DifficultyDiagnostics/JourneyReplays/main.swift" \
   "$project_dir/Sources/LemmingsLocal/GameAssetCache.swift" \

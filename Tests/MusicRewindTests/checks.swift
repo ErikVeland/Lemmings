@@ -32,7 +32,7 @@ func checkReverseGroove() throws {
     try assertMusicRewind(history.trigger(), "A recorded groove could not reverse")
     let reverse = stereoBuffer(1024)
     history.render(UnsafeMutableAudioBufferListPointer(reverse.mutableAudioBufferList), frames: 1024)
-    for i in 400..<1024 {
+    for i in 900..<1024 {
         let l = reverse.floatChannelData![0][i], r = reverse.floatChannelData![1][i]
         try assertMusicRewind(l > 0 && abs(l / -2 - r) < 0.00001, "Rewind lost its stereo channels")
         try assertMusicRewind(l < reverse.floatChannelData![0][i - 1], "Music samples travelled forwards")
@@ -42,11 +42,45 @@ func checkReverseGroove() throws {
     let cursor = history.cursor
     history.cancel()
     try assertMusicRewind(history.trigger() && history.cursor == cursor, "Rapid taps restarted the same music fragment")
-    for _ in 0..<10 { history.render(UnsafeMutableAudioBufferListPointer(reverse.mutableAudioBufferList), frames: 1024) }
+    for _ in 0..<24 { history.render(UnsafeMutableAudioBufferListPointer(reverse.mutableAudioBufferList), frames: 1024) }
     try assertMusicRewind(!history.isRewinding && energy(reverse) == 0, "Reverse impulse did not reach silence")
     history.cancel(clearHistory: true)
     try assertMusicRewind(!history.trigger(), "A new track retained the previous groove")
     print("PASS backwards PCM, stereo, rapid-tap continuation, no self-feedback, bounded impulse and track reset")
+}
+
+func checkBackspinPitchAndEdges() throws {
+    for rate in [44_100.0, 48_000.0] {
+        let format = AVAudioFormat(standardFormatWithSampleRate: rate, channels: 2)!
+        let source = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(rate))!
+        source.frameLength = source.frameCapacity
+        for i in 0..<Int(source.frameLength) {
+            let tone = Float(sin(Double(i) * 2 * .pi * 440 / rate)) * 0.3
+            source.floatChannelData![0][i] = tone
+            source.floatChannelData![1][i] = -tone * 0.5
+        }
+        let history = MusicRewindBuffer(sampleRate: rate)
+        history.record(source)
+        try assertMusicRewind(history.trigger(), "Tone history could not backspin")
+        let count = Int(rate * VinylBackspin.seconds)
+        let output = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(count + 1))!
+        output.frameLength = output.frameCapacity
+        history.render(UnsafeMutableAudioBufferListPointer(output.mutableAudioBufferList), frames: count + 1)
+        let samples = output.floatChannelData![0]!
+        func crossings(_ start: Double, _ end: Double) -> Int {
+            (Int(rate * start)..<Int(rate * end)).filter { samples[$0] * samples[$0 + 1] < 0 }.count
+        }
+        try assertMusicRewind(crossings(0.03, 0.13) > 2 * crossings(0.30, 0.40),
+            "Backspin pitch did not fall from a fast reverse to a slow stop")
+        try assertMusicRewind(samples[0] == 0 && samples[count - 1] == 0 && samples[count] == 0,
+            "Backspin clicked at an endpoint")
+        try assertMusicRewind((0..<count).allSatisfy { samples[$0].isFinite && abs(samples[$0]) <= 0.3 },
+            "Backspin introduced an invalid or boosted sample")
+        try assertMusicRewind((1..<Int(rate * 0.010)).allSatisfy { abs(samples[$0] - samples[$0 - 1]) < 0.025 },
+            "Backspin started with a sharp transient")
+        try assertMusicRewind(!history.isRewinding, "Backspin continued after its stop")
+    }
+    print("PASS 480 ms backspin, falling source pitch, soft endpoints and bounded attack at 44.1 and 48 kHz")
 }
 
 extension SoundtrackPlayer {
@@ -98,10 +132,10 @@ extension MusicFileDeck {
         deck.playRewind(); deck.suspendOutput()
         try assertMusicRewind(!deck.rewindAudio.isRewinding, "Suspension retained the recording scratch")
         deck.playRewind()
-        RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+        RunLoop.current.run(until: Date().addingTimeInterval(VinylBackspin.settleSeconds + 0.08))
         try assertMusicRewind(!deck.engine.isRunning && !deck.player.isPlaying, "A rewind unpaused normal recording playback")
         deck.resumeOutput()
-        RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+        RunLoop.current.run(until: Date().addingTimeInterval(VinylBackspin.settleSeconds + 0.08))
         try assertMusicRewind(deck.engine.isRunning && deck.player.isPlaying && deck.varispeed.rate == 1,
             "Rewind broke the normal vinyl spin-up")
         deck.stop()
@@ -150,7 +184,7 @@ extension ModuleMusicPlayer {
         setMuted(false); playRewind(); suspendOutput()
         try assertMusicRewind(!rewindAudio.isRewinding, "Suspension retained the MOD scratch")
         playRewind()
-        RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+        RunLoop.current.run(until: Date().addingTimeInterval(VinylBackspin.settleSeconds + 0.08))
         try assertMusicRewind(!engine.isRunning && outputSuspended, "A MOD rewind resumed forward playback")
         try resumeOutput()
         try assertMusicRewind(spinUpFrames > 0 && engine.isRunning, "MOD rewind bypassed the normal vinyl spin-up")
@@ -207,6 +241,7 @@ extension AdaptiveDJPlayer {
 let application = NSApplication.shared
 application.setActivationPolicy(.accessory)
 try checkReverseGroove()
+try checkBackspinPitchAndEdges()
 try MusicFileDeck.checkRecordingRewind()
 try ModuleMusicPlayer().checkModuleRewind()
 try AdaptiveDJPlayer.checkRewindRouting()
