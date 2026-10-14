@@ -12,6 +12,7 @@ import UIKit
     private var suspended = false
     private var source: ClassicSoundSource?
     private var resultPlayed = false
+    private var loadedNeoLemmixSoundIdentity: String?
     private var isTestAudioMuted: Bool { ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] == "muted" }
 
     func prepare() {
@@ -52,6 +53,21 @@ import UIKit
         let rect = viewport.visibleLevelRect
         player.setViewport(.init(x: rect.x, y: rect.y, width: rect.width, height: rect.height))
         player.setNukeActive(session.snapshot.isEndingRun)
+        if let neoLemmix = session as? NeoLemmixMobileSession,
+           let soundDirectory = neoLemmix.soundDirectory {
+            let identity = [neoLemmix.levelFingerprint, soundDirectory.path,
+                            neoLemmix.gadgetSounds.values.sorted().joined(separator: ",")].joined(separator: "|")
+            if loadedNeoLemmixSoundIdentity != identity {
+                let resources = Bundle.main.resourceURL
+                player.loadNeoLemmixSounds(
+                    names: Set(neoLemmix.gadgetSounds.values),
+                    soundDirectory: soundDirectory,
+                    amigaDirectory: resources?.appendingPathComponent("Ports/amiga_extracted/lemmings"),
+                    fallbackSoundDirectory: resources?.appendingPathComponent("NeoLemmix/sound")
+                )
+                loadedNeoLemmixSoundIdentity = identity
+            }
+        }
         if rewinding {
             player.playRewindScrub()
         } else if let l2Session {

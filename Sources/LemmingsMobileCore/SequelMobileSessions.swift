@@ -593,6 +593,8 @@ public final class NeoLemmixMobileSession: MobileGameSession {
     public let levelFingerprint: String
     public let levelSize: MobileSize
     public let ticksPerSecond = Double(NeoLemmixRules.ticksPerSecond)
+    public let gadgetSounds: [Int: String]
+    public let soundDirectory: URL?
 
     private let initial: NeoLemmixSimulation
     private let controls: [NeoLemmixSkill]
@@ -605,6 +607,7 @@ public final class NeoLemmixMobileSession: MobileGameSession {
     private var simulationBeforeNuke: NeoLemmixSimulation?
     private var requestedSpawnInterval: Int?
     private var inputs: [Input] = []
+    private var soundCues: [PositionedSoundCue] = []
     private var didNotifyCompletion = false
     public private(set) var rewindCount = 0
     public private(set) var usedRewind = false
@@ -614,6 +617,7 @@ public final class NeoLemmixMobileSession: MobileGameSession {
     public init(simulation: NeoLemmixSimulation, controls: [NeoLemmixSkill],
                 engineFingerprint: String, levelIdentifier: String, levelIndex: Int,
                 levelFingerprint: String, renderer: NeoLemmixMobileRenderer? = nil,
+                gadgetSounds: [Int: String] = [:], soundDirectory: URL? = nil,
                 onCompletion: ((NeoLemmixSimulation) -> Void)? = nil) {
         initial = simulation
         historyBase = simulation
@@ -626,6 +630,8 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         self.levelIndex = levelIndex
         self.levelFingerprint = levelFingerprint
         self.renderer = renderer
+        self.gadgetSounds = gadgetSounds
+        self.soundDirectory = soundDirectory
         self.onCompletion = onCompletion
         levelSize = MobileSize(width: Double(simulation.terrain.width), height: Double(simulation.terrain.height))
     }
@@ -659,7 +665,8 @@ public final class NeoLemmixMobileSession: MobileGameSession {
     }
 
     public func tick() {
-        _ = simulation.tick()
+        let events = simulation.tick()
+        appendSoundCues(for: events)
         requestedSpawnInterval = simulation.snapshot().spawnInterval
         if simulation.isComplete, !didNotifyCompletion {
             didNotifyCompletion = true
@@ -691,8 +698,25 @@ public final class NeoLemmixMobileSession: MobileGameSession {
               simulationBeforeNuke == nil else { return false }
         let skill = controls[control]
         guard simulation.assign(skill: skill, to: target).wasAssigned else { return false }
+        appendSoundCues(for: simulation.lastTickEvents)
         inputs.append(.assign(tick: simulation.tickCount, skill: skill, target: target))
         return true
+    }
+
+    public func drainSoundCues() -> [PositionedSoundCue] {
+        defer { soundCues.removeAll(keepingCapacity: true) }
+        return soundCues
+    }
+
+    private func appendSoundCues(for events: [NeoLemmixEvent]) {
+        soundCues += NeoLemmixSoundCue.positionedCues(
+            for: events,
+            lemmings: simulation.lemmings,
+            entrances: simulation.configuration.entrances,
+            zones: simulation.configuration.zones,
+            gadgetSounds: gadgetSounds
+        )
+        if soundCues.count > 256 { soundCues.removeFirst(soundCues.count - 256) }
     }
 
     @discardableResult
@@ -722,6 +746,7 @@ public final class NeoLemmixMobileSession: MobileGameSession {
     @discardableResult
     public func undoEndRun() -> Bool {
         guard let simulationBeforeNuke, !simulation.isComplete else { return false }
+        soundCues.removeAll(keepingCapacity: true)
         let restoredRequestedInterval = inputs.reversed().compactMap { input -> Int? in
             if case let .spawnInterval(_, value) = input { return value }
             return nil
@@ -814,6 +839,7 @@ public final class NeoLemmixMobileSession: MobileGameSession {
             requestedSpawnInterval = checkpoint.requestedSpawnInterval ?? checkpoint.simulation.snapshot().spawnInterval
         }
         didNotifyCompletion = false
+        soundCues.removeAll(keepingCapacity: true)
         rewindCount = checkpoint.rewindCount ?? 0
         usedRewind = checkpoint.usedRewind ?? false
         nukeCount = checkpoint.nukeCount ?? (checkpoint.simulationBeforeNuke == nil ? 0 : 1)
@@ -826,12 +852,14 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         let currentTick = simulation.snapshot().tickCount
         let distance = Int(min(Double(currentTick - historyBase.tickCount), (seconds * ticksPerSecond).rounded()))
         guard distance > 0 else { return false }
+        soundCues.removeAll(keepingCapacity: true)
         return move(to: currentTick - distance)
     }
 
     @discardableResult
     public func stepBackward() -> Bool {
-        move(to: simulation.snapshot().tickCount - 1)
+        soundCues.removeAll(keepingCapacity: true)
+        return move(to: simulation.snapshot().tickCount - 1)
     }
 
     @discardableResult

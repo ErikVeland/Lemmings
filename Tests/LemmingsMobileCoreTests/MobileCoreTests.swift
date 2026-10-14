@@ -985,6 +985,44 @@ struct MobileCoreTests {
         #expect(completions == 1)
     }
 
+    @Test func neoLemmixMobileSessionDeliversAndClearsSoundCues() throws {
+        var terrain = try NeoLemmixTerrain(width: 64, height: 32)
+        for x in 0..<64 { terrain.setSolid(true, x: x, y: 20) }
+        let configuration = try NeoLemmixConfiguration(
+            totalLemmings: 1,
+            requiredToSave: 0,
+            spawnInterval: 30,
+            entranceOpenTick: 1,
+            entrances: [.init(id: 0, position: .init(x: 10, y: 20))],
+            preplacedLemmings: [.init(position: .init(x: 20, y: 20))],
+            skills: [.builder: .infinite]
+        )
+        let simulation = try NeoLemmixSimulation(terrain: terrain, configuration: configuration)
+        let session = NeoLemmixMobileSession(
+            simulation: simulation,
+            controls: [.builder],
+            engineFingerprint: "neo-audio-engine",
+            levelIdentifier: "neo/audio/1",
+            levelIndex: 0,
+            levelFingerprint: "neo-audio-level",
+            gadgetSounds: [0: "test/trap"]
+        )
+
+        session.tick()
+        #expect(session.drainSoundCues().map(\.effect) == [.doorOpen, .letsGo])
+        let target = try #require(session.targetCandidates(for: 0).first)
+        #expect(session.assign(control: 0, to: target.id))
+        #expect(session.drainSoundCues().map(\.effect) == [.assignSkill])
+
+        session.tick()
+        #expect(session.rewind(seconds: 1 / session.ticksPerSecond))
+        #expect(session.drainSoundCues().isEmpty)
+        #expect(session.beginEndRun())
+        session.tick()
+        #expect(session.undoEndRun())
+        #expect(session.drainSoundCues().isEmpty)
+    }
+
     private func checkpoint(tick: Int, payload: Data,
                             runID: UUID = UUID(uuidString: "00000000-0000-0000-0000-000000000001")!,
                             engine: String = "classic-dos") -> MobileCheckpointEnvelope {
