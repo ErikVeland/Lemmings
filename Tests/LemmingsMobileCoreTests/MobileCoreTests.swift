@@ -1,3 +1,4 @@
+import Darwin
 import Foundation
 import NxlvKit
 import Testing
@@ -611,6 +612,20 @@ struct MobileCoreTests {
             Issue.record("An import containing a symbolic link was committed.")
         } catch let error as MobileContentStoreError {
             #expect(error == .symbolicLink)
+        }
+
+        let special = temporary.appendingPathComponent("Special", isDirectory: true)
+        try manager.createDirectory(at: special, withIntermediateDirectories: true)
+        let pipe = special.appendingPathComponent("named-pipe")
+        let pipeResult = pipe.path.withCString { Darwin.mkfifo($0, 0o600) }
+        #expect(pipeResult == 0)
+        do {
+            try linkStore.install(directory: special)
+            Issue.record("An import containing a named pipe was committed.")
+        } catch let error as MobileContentStoreError {
+            #expect(error == .unsupportedEntry)
+            #expect(try Data(contentsOf: store.gameDataDirectory.appendingPathComponent("marker.dat"))
+                == Data("accepted".utf8))
         }
     }
 

@@ -313,6 +313,8 @@ public struct MobileContentStore: Sendable {
                 )
                 let copiedBytes = try Self.copyFile(at: item, to: destination, maximumBytes: copyLimit)
                 try budget.recordCopy(copiedBytes)
+            } else {
+                throw MobileContentStoreError.unsupportedEntry
             }
         }
 
@@ -548,6 +550,7 @@ public enum MobileContentStoreError: Error, LocalizedError, Equatable {
     case notDirectory
     case unreadable
     case symbolicLink
+    case unsupportedEntry
     case tooLarge
     case tooManyEntries
     case validatorUnavailable(MobileGameDataKind)
@@ -555,13 +558,14 @@ public enum MobileContentStoreError: Error, LocalizedError, Equatable {
 
     public var errorDescription: String? {
         switch self {
-        case .notDirectory: return L10n.text("Choose a folder that contains the original game data.")
-        case .unreadable: return L10n.text("The selected game-data folder could not be read safely.")
-        case .symbolicLink: return L10n.text("Remove symbolic links from the game-data folder.")
-        case .tooLarge: return L10n.text("The selected folder is larger than 2 GB.")
-        case .tooManyEntries: return L10n.text("The selected folder contains too many items.")
-        case let .validatorUnavailable(kind): return L10n.text("The \(kind.displayTitle) data validator is not available.")
-        case let .invalidData(kind): return L10n.text("The selected \(kind.displayTitle) data is incomplete or invalid.")
+        case .notDirectory: return "Choose a folder that contains the original game data."
+        case .unreadable: return "The selected game-data folder could not be read safely."
+        case .symbolicLink: return "Remove symbolic links from the game-data folder."
+        case .unsupportedEntry: return "The selected folder contains an unsupported item. Remove it and try again."
+        case .tooLarge: return "The selected folder is larger than 2 GB."
+        case .tooManyEntries: return "The selected folder contains too many items."
+        case let .validatorUnavailable(kind): return "The \(kind.displayTitle) data validator is not available."
+        case let .invalidData(kind): return "The selected \(kind.displayTitle) data is incomplete or invalid."
         }
     }
 }
