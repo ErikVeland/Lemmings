@@ -366,7 +366,7 @@ public struct Lemmings2Runtime: Sendable {
         let skills = try practiceSkills ?? level.skills.map { slot -> Skill in
             if slot.count == 0 { return .unused }
             guard let skill = Skill(rawValue: slot.identifier) else {
-                throw SequelDataError.invalid(L10n.text(L10n.text("Skill \(slot.identifier) is not yet supported by the native preview.")))
+                throw SequelDataError.invalid(L10n.text("Skill \(slot.identifier) is not yet supported by the native preview."))
             }
             return skill
         }

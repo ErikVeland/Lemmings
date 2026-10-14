@@ -8,7 +8,7 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
     public static let engineFingerprint = "lemmings2-mobile-runtime-v1"
 
     public let directory: URL
-    public let displayName = L10n.text(L10n.text("Lemmings 2"))
+    public let displayName = L10n.text("Lemmings 2")
     public let levels: [MobileLevelSummary]
     private let levelFingerprints: [String]
 

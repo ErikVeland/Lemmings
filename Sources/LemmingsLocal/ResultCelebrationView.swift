@@ -66,7 +66,7 @@ import NxlvKit
     }
     func drawCelebratedResult(_ report: ArcadeReport) {
         guard let c = celebration else { return }
-        let run = report.run, outcome = run.qualifies ? L10n.text(L10n.text("LEVEL COMPLETE")) : L10n.text(L10n.text("TRY AGAIN"))
+        let run = report.run, outcome = run.qualifies ? L10n.text("LEVEL COMPLETE") : L10n.text("TRY AGAIN")
         title(outcome, x: 80, y: 46, width: 960, height: 40)
         text("\(player.initials)'s attempt - " + run.level.title + (run.assisted ? L10n.text(" - Rewinds used") : ""), 80, 96, 960, alignment: .center, alpha: 0.75)
         title("\(run.saved)/\(run.population)", x: 80, y: 145, width: 270, height: 60)
@@ -111,7 +111,7 @@ import NxlvKit
     private func drawResultLevelCard(_ c: TrolleyCelebration) {
         let rect = CGRect(x: 80, y: 285, width: 466, height: 116)
         GameStyle.fill(rect, GameStyle.accent.withAlphaComponent(0.065))
-        text(L10n.text(L10n.text("THIS LEVEL")), 96, 296, 418, height: 22, alpha: 0.85, palette: .green)
+        text(L10n.text("THIS LEVEL"), 96, 296, 418, height: 22, alpha: 0.85, palette: .green)
         text(c.recordMessage, 96, 323, 418, height: 24)
         let newGoals = c.levelAwards.filter { $0 != .firstClear }
         let names = newGoals.first.map { $0.title.capitalized + (newGoals.count > 1 ? " (+\(newGoals.count - 1))" : "") } ?? ""
@@ -122,7 +122,7 @@ import NxlvKit
         GameStyle.fill(CGRect(x: 566, y: 285, width: 474, height: 116), GameStyle.gold.withAlphaComponent(0.09))
         let new = c.newAwards
         let earnedSkip = report?.earnedLevelSkip == true
-        link("\(report?.run.assisted == true ? L10n.text(L10n.text("REWIND CAREER")) : L10n.text("CAREER"))  \(c.career.stars) STARS" + (c.addedStars > 0 ? "  (+\(c.addedStars))" : "") + " >",
+        link("\(report?.run.assisted == true ? L10n.text("REWIND CAREER") : L10n.text("CAREER"))  \(c.career.stars) STARS" + (c.addedStars > 0 ? "  (+\(c.addedStars))" : "") + " >",
              CGRect(x: 582, y: 292, width: earnedSkip ? 300 : 442, height: 30), alignment: .left, palette: .green) { [weak self] in self?.page(.career) }
         // A skip is earned once, so the result shows it once.
         if earnedSkip {

@@ -49,7 +49,7 @@ import NxlvKit
         case .idle: L10n.text("Cloud saves")
         case .syncing: L10n.text("Syncing")
         case .synced: L10n.text("Synced")
-        case .pending: L10n.text(L10n.text("Saved on this device"))
+        case .pending: L10n.text("Saved on this device")
         case .offline: L10n.text("Offline")
         case .paused: L10n.text("Cloud saves paused")
         case .failed(let message): message

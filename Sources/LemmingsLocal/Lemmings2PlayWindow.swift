@@ -1625,7 +1625,7 @@ import NxlvKit
                 field.update(game)
                 if let image = try? panel.render(skills: game.configuration.skills.map(\.rawValue), supplies: game.supplies,
                     selected: 0, saved: game.saved, remaining: game.lemmings.filter(\.active).count,
-                    seconds: game.remainingSeconds, label: L10n.text(L10n.text("REPLAY")), palette: Lemmings2Panel.palette(over: game.configuration.palette, phase: game.tick / 4), highlightedControls: []) {
+                    seconds: game.remainingSeconds, label: L10n.text("REPLAY"), palette: Lemmings2Panel.palette(over: game.configuration.palette, phase: game.tick / 4), highlightedControls: []) {
                     field.setPanel(image)
                 }
             })
@@ -2117,7 +2117,7 @@ import NxlvKit
     override func accessibilityChildren() -> [Any]? {
         guard !readOnlyReplay else { return [] }
         guard let game else { return [] }
-        let names = game.configuration.skills.map(\.name) + [L10n.text(L10n.text("Pause")), L10n.text(L10n.text("End run")), L10n.text(L10n.text("Fan")), L10n.text(L10n.text("Fast-forward"))]
+        let names = game.configuration.skills.map(\.name) + [L10n.text("Pause"), L10n.text("End run"), L10n.text("Fan"), L10n.text("Fast-forward")]
         var children: [Any] = turnBadge.isHidden ? [] : [turnBadge]
         for slot in 0..<12 {
             let x = slot < 8 ? slot * 32 : 256 + (slot % 2) * 32
@@ -2125,7 +2125,7 @@ import NxlvKit
             let height = slot < 8 ? 40 : 20
             let frame = CGRect(x: panelX + CGFloat(x) * zoom, y: origin.y + CGFloat(y) * zoom * 1.2, width: 32 * zoom, height: CGFloat(height) * zoom * 1.2)
             let label = game.supplies.indices.contains(slot)
-                ? L10n.text("\(names[slot]), \(game.supplies[slot]) remaining") + (slot == selectedSkillSlot ? L10n.text(L10n.text(", selected")) : "")
+                ? L10n.text("\(names[slot]), \(game.supplies[slot]) remaining") + (slot == selectedSkillSlot ? L10n.text(", selected") : "")
                 : names[slot]
             children.append(accessibleElements.element(id: L10n.text("panel-\(slot)"), owner: self, label: label, frame: frame) { [weak self] in
                 let time = ProcessInfo.processInfo.systemUptime
@@ -2135,7 +2135,7 @@ import NxlvKit
         }
         if variableSpeedEnabled {
             for direction in [-1, 1] {
-                children.append(accessibleElements.element(id: L10n.text("speed-\(direction)"), owner: self, label: direction < 0 ? L10n.text(L10n.text("Decrease fast speed")) : L10n.text(L10n.text("Increase fast speed")), frame: speedRect) { [weak self] in self?.onSpeedStep?(direction, ProcessInfo.processInfo.systemUptime) })
+                children.append(accessibleElements.element(id: L10n.text("speed-\(direction)"), owner: self, label: direction < 0 ? L10n.text("Decrease fast speed") : L10n.text("Increase fast speed"), frame: speedRect) { [weak self] in self?.onSpeedStep?(direction, ProcessInfo.processInfo.systemUptime) })
             }
         }
         layoutTimeline()
@@ -2266,35 +2266,35 @@ import NxlvKit
                     case .superFlying: label = L10n.text("SUPERLEM")
                     case .arching: label = L10n.text("ARCHER")
                     case .skiing, .skiingAir: label = L10n.text("SKIER")
-                    case .poleVaulting, .poleShrugging: label = L10n.text(L10n.text("POLE VAULTER"))
-                    case .magnoBooting: label = L10n.text(L10n.text("MAGNO BOOTER"))
+                    case .poleVaulting, .poleShrugging: label = L10n.text("POLE VAULTER")
+                    case .magnoBooting: label = L10n.text("MAGNO BOOTER")
                     case .throwing: label = L10n.text("THROWER")
                     case .spearing: label = L10n.text("SPEARER")
-                    case .carpetFlying: label = L10n.text(L10n.text("MAGIC CARPET"))
+                    case .carpetFlying: label = L10n.text("MAGIC CARPET")
                     case .surfing: label = L10n.text("SURFER")
                     case .sliding: label = L10n.text("SLIDER")
                     case .hanging, .climbingTransfer: label = L10n.text("HANGING")
                     case .skating: label = L10n.text("SKATER")
                     case .slipping, .iceRecovering: label = L10n.text("SLIPPING")
                     case .twisting: label = L10n.text("TWISTER")
-                    case .jetPacking: label = L10n.text(L10n.text("JET PACK"))
+                    case .jetPacking: label = L10n.text("JET PACK")
                     case .rolling, .rollingAir: label = L10n.text("ROLLER")
                     case .shimmyJump, .shimming: label = L10n.text("SHIMMIER")
                     case .diving: label = L10n.text("DIVER")
                     case .drowning: label = L10n.text("DROWNING")
                     case .kayaking, .kayakPacking: label = L10n.text("KAYAKER")
-                    case .flyingIcarus: label = L10n.text(L10n.text("ICARUS WINGS"))
-                    case .hangGliding: label = L10n.text(L10n.text("HANG GLIDER"))
+                    case .flyingIcarus: label = L10n.text("ICARUS WINGS")
+                    case .hangGliding: label = L10n.text("HANG GLIDER")
                     case .roping: label = L10n.text("ROPER")
                     case .firingBazooka: label = L10n.text("BAZOOKA")
                     case .firingMortar: label = L10n.text("MORTAR")
-                    case .rockClimbing: label = L10n.text(L10n.text("ROCK CLIMBER"))
+                    case .rockClimbing: label = L10n.text("ROCK CLIMBER")
                     case .hoisting: label = L10n.text("HOISTER")
                     case .planting: label = L10n.text("PLANTER")
                     case .ballooning: label = L10n.text("BALLOONER")
                     case .filling: label = L10n.text("FILLER")
-                    case .sandPouring: label = L10n.text(L10n.text("SAND POURER"))
-                    case .gluePouring: label = L10n.text(L10n.text("GLUE POURER"))
+                    case .sandPouring: label = L10n.text("SAND POURER")
+                    case .gluePouring: label = L10n.text("GLUE POURER")
                     case .attracting: label = L10n.text("ATTRACTOR")
                     case .dancing: label = L10n.text("DANCER")
                     case .parachuting: label = L10n.text("PARACHUTER")
@@ -2315,9 +2315,9 @@ import NxlvKit
                     case .stomping: label = L10n.text("STOMPER")
                     case .scooping: label = L10n.text("SCOOPER")
                     case .fencing: label = L10n.text("FENCER")
-                    case .clubBashing: label = L10n.text(L10n.text("CLUB BASHER"))
-                    case .lasering: label = L10n.text(L10n.text("LASER BLASTER"))
-                    case .flaming: label = L10n.text(L10n.text("FLAME THROWER"))
+                    case .clubBashing: label = L10n.text("CLUB BASHER")
+                    case .lasering: label = L10n.text("LASER BLASTER")
+                    case .flaming: label = L10n.text("FLAME THROWER")
                     case .blocking: label = L10n.text("BLOCKER")
                     case .stacking: label = L10n.text("STACKER")
                     case .platforming: label = L10n.text("PLATFORMER")

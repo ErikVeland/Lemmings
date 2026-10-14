@@ -41,7 +41,7 @@ import NxlvKit
         rewindFilter()
         let entries = ArcadeStore.shared.records.trolley.leaderboard(conditions: conditions, assisted: assisted, board: trolleyBoard)
         text(L10n.text("PLAYER"), 181, 272, 96)
-        text([.fastestClear, .fastestAllSaved].contains(trolleyBoard) ? L10n.text("REPLAY") : L10n.text(L10n.text("PLAY STYLE")), 280, 272, 304)
+        text([.fastestClear, .fastestAllSaved].contains(trolleyBoard) ? L10n.text("REPLAY") : L10n.text("PLAY STYLE"), 280, 272, 304)
         text(L10n.text("RESULT"), 589, 272, 220)
         text(L10n.text("SKILLS"), 821, 272, 86, alignment: .right)
         text(L10n.text("TIME"), 925, 272, 119, alignment: .right)

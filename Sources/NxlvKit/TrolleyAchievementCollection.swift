@@ -9,7 +9,7 @@ public struct TrolleyAchievementProgress: Equatable, Sendable {
     public let value: Int
     public let goal: Int
     public let earned: Bool
-    public var label: String { earned ? L10n.text(L10n.text("Earned")) : value >= goal ? L10n.text(L10n.text("Ready to claim")) : "\(value)/\(goal)" }
+    public var label: String { earned ? L10n.text("Earned") : value >= goal ? L10n.text("Ready to claim") : "\(value)/\(goal)" }
 }
 
 extension TrolleyAchievement {

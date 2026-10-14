@@ -1097,7 +1097,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
                 fraction: alpha, respectFlipped: true,
                 hints: [.interpolation: NSImageInterpolation.none.rawValue])
         } else if artworkFailed {
-            GamePixelText.draw(L10n.text(L10n.text("PREVIEW UNAVAILABLE")), in: frame.insetBy(dx: 8, dy: 8), maxScale: 1)
+            GamePixelText.draw(L10n.text("PREVIEW UNAVAILABLE"), in: frame.insetBy(dx: 8, dy: 8), maxScale: 1)
         }
         NSColor(calibratedWhite: 0.72, alpha: alpha).setStroke()
         let border = NSBezierPath(rect: frame.insetBy(dx: 0.5, dy: 0.5))

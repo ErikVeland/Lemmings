@@ -177,7 +177,7 @@ extension MobileLibraryViewController {
         let entry = MobileFavourites.Entry(pack: identity.pack, level: identity.level, title: library?.levels[selectedIndex].title)
         let added = playlists.add(entry, to: id)
         savePlaylists()
-        notice = added ? L10n.text("ADDED") : L10n.text(L10n.text("ALREADY IN PLAYLIST"))
+        notice = added ? L10n.text("ADDED") : L10n.text("ALREADY IN PLAYLIST")
         navigate(.levels)
         notice = ""
         rebuild()

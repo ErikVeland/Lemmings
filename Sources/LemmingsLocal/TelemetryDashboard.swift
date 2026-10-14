@@ -164,9 +164,9 @@ import NxlvKit
             .reduce(0) { $0 + $1.count }
         card(L10n.text("OPTED-IN INSTALLS"), shared ? summary.optedInInstalls.map(String.init) ?? "N/A" : "N/A",
              x: 0, y: 338, in: page.body)
-        card(L10n.text(L10n.text("LEVEL STARTS")), String(starts), x: 252, y: 338, in: page.body)
+        card(L10n.text("LEVEL STARTS"), String(starts), x: 252, y: 338, in: page.body)
         card(L10n.text("WINS / FAILS"), "\(wins) / \(fails)", x: 504, y: 338, in: page.body)
-        card(L10n.text(L10n.text("ALL MUSIC CHOSEN")), String(summary.total(.allSoundtracksSelected)), x: 756, y: 338, in: page.body)
+        card(L10n.text("ALL MUSIC CHOSEN"), String(summary.total(.allSoundtracksSelected)), x: 756, y: 338, in: page.body)
         label(L10n.text("ACTIVE TODAY  \(shared ? String(activeToday) : "N/A")    SOLO  \(solo)    HOT SEAT  \(hotSeat)    MUSIC FINISHED  \(summary.total(.allSoundtracksDownloaded))"),
               x: 0, y: 287, width: 992, role: .heading, in: page.body)
         label(L10n.text("LEVELS WITH THE MOST FAILED OR UNFINISHED STARTS"), x: 0, y: 240,

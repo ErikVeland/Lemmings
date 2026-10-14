@@ -19,9 +19,9 @@ public enum MusicFormat: String, Codable, Sendable {
 
     public var label: String {
         switch self {
-        case .protrackerModule: return L10n.text(L10n.text("ProTracker modules"))
-        case .midiWithSamples: return L10n.text(L10n.text("MIDI with sampled instruments"))
-        case .adlibFM: return L10n.text(L10n.text("Ad-Lib FM"))
+        case .protrackerModule: return L10n.text("ProTracker modules")
+        case .midiWithSamples: return L10n.text("MIDI with sampled instruments")
+        case .adlibFM: return L10n.text("Ad-Lib FM")
         case .none: return L10n.text("silent")
         }
     }
@@ -35,9 +35,9 @@ public enum SoundFormat: String, Codable, Sendable {
 
     public var label: String {
         switch self {
-        case .macResourceSounds: return L10n.text(L10n.text("Macintosh sound resources"))
-        case .sampleBank: return L10n.text(L10n.text("sample bank"))
-        case .adlibFM: return L10n.text(L10n.text("Ad-Lib FM"))
+        case .macResourceSounds: return L10n.text("Macintosh sound resources")
+        case .sampleBank: return L10n.text("sample bank")
+        case .adlibFM: return L10n.text("Ad-Lib FM")
         case .none: return L10n.text("silent")
         }
     }

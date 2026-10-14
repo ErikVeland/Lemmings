@@ -6,7 +6,7 @@ import NxlvKit
 public enum MobileCareerArt {
     private static func sourceLabel(_ level: ArcadeLevel) -> String {
         guard let conditions = level.conditions else { return "" }
-        if conditions.gameID == L10n.text("fan") || conditions.gameID == L10n.text("neolemmix") { return L10n.text(L10n.text("Fan-made")) }
+        if conditions.gameID == L10n.text("fan") || conditions.gameID == L10n.text("neolemmix") { return L10n.text("Fan-made") }
         return ClassicTitle(rawValue: conditions.gameID) == nil ? "" : L10n.text("Official")
     }
 

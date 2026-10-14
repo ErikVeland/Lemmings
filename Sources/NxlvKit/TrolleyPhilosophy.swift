@@ -7,11 +7,11 @@ public enum TrolleyTitle: String, Codable, CaseIterable, Sendable {
     case absolutist, lastLemming, pyrrhicVictor, trolleyOperator, falsifier
     public var title: String {
         switch self {
-        case .falsifier: L10n.text(L10n.text("The Falsifier"))
-        case .absolutist: L10n.text(L10n.text("The Absolutist"))
-        case .lastLemming: L10n.text(L10n.text("One Lemming left behind"))
-        case .pyrrhicVictor: L10n.text(L10n.text("The Pyrrhic Victor"))
-        case .trolleyOperator: L10n.text(L10n.text("The Trolley Operator"))
+        case .falsifier: L10n.text("The Falsifier")
+        case .absolutist: L10n.text("The Absolutist")
+        case .lastLemming: L10n.text("One Lemming left behind")
+        case .pyrrhicVictor: L10n.text("The Pyrrhic Victor")
+        case .trolleyOperator: L10n.text("The Trolley Operator")
         }
     }
 }
