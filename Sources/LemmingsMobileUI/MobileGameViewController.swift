@@ -264,6 +264,7 @@ struct MobileGameTurn {
             }
         }
         hud.onAction = { [weak self] action in self?.handle(action) }
+        hud.onToolDirection = { [weak self] direction in self?.completeL3ToolDirection(direction) }
         hud.onRateDoubleTap = { [weak self] wasMaximum in
             self?.handle(.releaseRate(wasMaximum ? -99 : 99))
         }
@@ -573,6 +574,7 @@ struct MobileGameTurn {
             effects.assignment(accepted: false)
             return true
         }
+        view.bringSubviewToFront(hud)
         return true
     }
 
@@ -582,6 +584,7 @@ struct MobileGameTurn {
         guard let direction else {
             self.pendingL3Use = nil
             hud.hideToolDirectionPicker()
+            restoreGameplayOverlayOrder()
             updateHUD()
             return
         }
@@ -590,6 +593,7 @@ struct MobileGameTurn {
         guard accepted else { return }
         self.pendingL3Use = nil
         hud.hideToolDirectionPicker()
+        restoreGameplayOverlayOrder()
         lastInputAssignment = pendingL3Use.selection
         lastAssignmentControl = pendingL3Use.control
         highlightedTarget = pendingL3Use.selection
@@ -603,6 +607,14 @@ struct MobileGameTurn {
         guard pendingL3Use != nil else { return }
         pendingL3Use = nil
         hud.hideToolDirectionPicker()
+        restoreGameplayOverlayOrder()
+    }
+
+    private func restoreGameplayOverlayOrder() {
+        view.bringSubviewToFront(touchLoupe)
+        view.bringSubviewToFront(nowPlaying)
+        view.bringSubviewToFront(replaySkillInfo)
+        view.bringSubviewToFront(countdownLabel)
     }
 
     private func handle(_ touchEffects: [MobileTouchEffect]) {
