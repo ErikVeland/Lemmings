@@ -557,7 +557,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     catch { rewindAudio.cancel(); spatialMixer.outputVolume = muted ? 0 : 1; return }
     rewindTask?.cancel()
     rewindTask = Task { @MainActor [weak self] in
-      do { try await Task.sleep(nanoseconds: 200_000_000) } catch { return }
+      do { try await Task.sleep(nanoseconds: UInt64(VinylBackspin.settleSeconds * 1_000_000_000)) } catch { return }
       guard let self else { return }
       self.rewindAudio.cancel()
       self.spatialMixer.outputVolume = self.muted ? 0 : 1

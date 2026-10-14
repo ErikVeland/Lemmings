@@ -86,8 +86,12 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
         let temporary = try Lemmings3Objects(data: Data(contentsOf: objectURL(level.temporaryObjectsReference, temporary: true)))
         let scene = try Lemmings3Scene(level: level, style: style, permanent: permanent, temporary: temporary)
         try Task.checkCancellation()
-        let sprites = art.sprites
-        let actorPalette = art.palette
+        let graphicsPrefix = String(format: "GRAPHICS/TRIBE%03d", tribe.spriteStyle)
+        let sprites = try Lemmings3Sprites(
+            index: Data(contentsOf: directory.appendingPathComponent(graphicsPrefix + ".IND")),
+            commands: Data(contentsOf: directory.appendingPathComponent(graphicsPrefix + ".CMP")))
+        let actorPalette = try Lemmings3Sprites.palette(
+            Data(contentsOf: directory.appendingPathComponent(graphicsPrefix + ".PAL")), over: style.palette)
         try Task.checkCancellation()
 
         progressLock.lock()

@@ -33,3 +33,28 @@ public enum VinylMotion {
         }
     }
 }
+
+/// A hand throws the record backwards, then lets it slow to a stop.
+/// Music and captured game effects use the same pitch sweep and soft edges.
+public enum VinylBackspin {
+    public static let seconds = 0.48
+    public static let settleSeconds = seconds + 0.04
+    private static let initialRate = 2.4
+    private static let finalRate = 0.12
+
+    public static func sample(frame: Double, sampleRate: Double) -> (rate: Double, gain: Float) {
+        let progress = min(1, max(0, frame / (sampleRate * seconds)))
+        let attack = min(1, max(0, frame / (sampleRate * 0.020)))
+        let release = min(1, max(0, (sampleRate * seconds - 1 - frame) / (sampleRate * 0.090)))
+        let edge = min(attack, release)
+        return (initialRate + (finalRate - initialRate) * progress,
+                Float(0.5 - 0.5 * cos(.pi * edge)))
+    }
+
+    /// Distance through the source after the given number of output frames.
+    public static func distance(frames: Double, sampleRate: Double) -> Double {
+        let count = max(0, frames)
+        return initialRate * count - (initialRate - finalRate) * count * max(0, count - 1)
+            / (2 * sampleRate * seconds)
+    }
+}

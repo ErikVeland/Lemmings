@@ -401,15 +401,20 @@ extension Lemmings2PlayWindow {
         try assertArtwork(replaySize == CGSize(width: 640, height: 480),
                           "The first L2 replay must use the attached game view's aspect ratio")
         print("PASS first-run L2 replay dimensions match the attached game view")
+        GameScreen.shared.dismissAll()
         for wasPaused in [false, true] {
+            canvas.startCountdown.cancel()
             paused = wasPaused
+            let interruptions = gameplayKeyboard?.interruptionCount
             let tick = game!.tick
             gameplayKeyboard?.controllerAction(.hints)
             try assertArtwork(paused && LevelHintWindow.shared.page != nil, "L2 hints failed to pause")
             lastTime -= 0.1; update()
             try assertArtwork(game!.tick == tick, "L2 ran behind hints")
             GameScreen.shared.dismissAll()
-            try assertArtwork(paused == wasPaused, "L2 hints changed the previous pause state")
+            let interrupted = gameplayKeyboard?.interruptionCount != interruptions
+            print("L2 hint restore: before=\(wasPaused), after=\(paused), interruptions=\(String(describing: interruptions))->\(String(describing: gameplayKeyboard?.interruptionCount))")
+            try assertArtwork(paused == (wasPaused || interrupted), "L2 hints failed to restore pause or retain an interruption pause")
         }
         print("PASS attached L2 hints pause and restore both running and paused games")
         paused = false
@@ -589,15 +594,20 @@ extension Lemmings3PlayWindow {
         try assertArtwork(canvas.menuRows != nil && game.tick == menuTick, "L3 ran behind its native menu")
         menuAction(0)
         try assertArtwork(canvas.menuRows == nil, "L3 native menu could not resume")
+        GameScreen.shared.dismissAll()
         for wasPaused in [false, true] {
+            canvas.startCountdown.cancel()
             paused = wasPaused
+            let interruptions = gameplayKeyboard?.interruptionCount
             let tick = game.tick
             gameplayKeyboard?.controllerAction(.hints)
             try assertArtwork(paused && LevelHintWindow.shared.page != nil, "L3 hints failed to pause")
             lastTime -= 0.1; update()
             try assertArtwork(game.tick == tick, "L3 ran behind hints")
             GameScreen.shared.dismissAll()
-            try assertArtwork(paused == wasPaused, "L3 hints changed the previous pause state")
+            let interrupted = gameplayKeyboard?.interruptionCount != interruptions
+            print("L3 hint restore: before=\(wasPaused), after=\(paused), interruptions=\(String(describing: interruptions))->\(String(describing: gameplayKeyboard?.interruptionCount))")
+            try assertArtwork(paused == (wasPaused || interrupted), "L3 hints failed to restore pause or retain an interruption pause")
         }
         print("PASS L3 hints pause and restore both running and paused games")
         paused = false

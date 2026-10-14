@@ -7985,10 +7985,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         try? await Task.sleep(nanoseconds: 33_333_333)
         guard !Task.isCancelled else { return }
         let now = ProcessInfo.processInfo.systemUptime
-        if self.isPaused { last = now; continue }
-        if self.dj.isPlaying {
-          elapsed += now - last
-        } else if self.music.isOutputRunning || self.soundtrack.isPlaying {
+        if !self.dj.isPlaying && (self.music.isOutputRunning || self.soundtrack.isPlaying) {
           self.finishDJToLegacyMusicHandoff()
           self.startedMusicIdentity = nil
           let runID = self.arcadeRunID
@@ -8006,6 +8003,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
           }
           return
         }
+        if self.isPaused { last = now; continue }
+        if self.dj.isPlaying { elapsed += now - last }
         last = now
         self.legacyMusicHandoffPosition = min(1, elapsed / duration)
         self.applyLegacyMusicHandoffLevels()
@@ -8274,13 +8273,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
       runID: arcadeRunID, ownerKey: solutionRetentionKey, pauseForSolution: { [weak self, weak session] in
         guard let self, let session, self.session === session else { return }
         self.pauseLiveForSolution(session)
-      }) { [weak self, weak session] in
+      }, onDismiss: { [weak self, weak session] in
       guard let self, let session, self.session === session else { return }
       self.isPaused = wasPaused || LevelHintWindow.shared.hasSolution(for: self.arcadeRunID)
         || self.gameplayKeyboard?.interruptionCount != interruption
       self.panel.isPaused = self.isPaused
       self.accumulator = 0; self.lastStepTime = nil; self.panel.needsDisplay = true
-    }
+    })
   }
 
   private func pauseLiveForSolution(_ expected: any GameSession) {

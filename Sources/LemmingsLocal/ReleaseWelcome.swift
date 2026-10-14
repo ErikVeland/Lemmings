@@ -9,14 +9,15 @@ import NxlvKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "1.9.6"
-    static let subtitle = L10n.text("Shared fixes and smoother music")
+    static let notesVersion = "1.9.7"
+    static let subtitle = L10n.text("Ghost solutions, clearer controls and bitmap lettering")
     static let sections = [
-        (L10n.text("Smoother music"), L10n.text("Recorded music uses bounded decoding, smooth loop seams and peak protection after effects. Mono and stereo recordings share the same output format.")),
-        (L10n.text("Pixel effects"), L10n.text("Bombs scatter crisp pixel debris and show bitmap countdowns. Dying, exiting and exploding lemmings no longer keep selection outlines.")),
-        (L10n.text("Responsive rewind"), L10n.text("Rewind scratches backwards through recent music and effects. Repeated requests reuse buffers. Modern Mac effects add brief sprite echoes.")),
-        (L10n.text("Shared controls and saves"), L10n.text("Profiles, records, playlists, recovery and Hot Seat share code with iPhone and iPad. Saved runs and handovers wait for Ready. Primary actions stay last in navigation order.")),
-        (L10n.text("Compatibility"), L10n.text("Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. The Tribes remains Complete. Chronicles and NeoLemmix remain Beta. The companion iOS beta remains 2.0."))
+        (L10n.text("Ghost solutions"), L10n.text("Classic can overlay a recorded solution as blue lemming silhouettes. The optional overlay follows play, pause and rewind without changing your attempt.")),
+        (L10n.text("Controls and help"), L10n.text("Keyboard help follows the active game and settings. In-game annotations identify controls. Hot Seat retries and handovers wait for Ready across Classic, The Tribes and Chronicles.")),
+        (L10n.text("Saves and records"), L10n.text("Matching profiles recover newer shared progress, including Hot Seat journeys. Result help explains awards. Live cross-device sync still needs device verification.")),
+        (L10n.text("Bitmap lettering"), L10n.text("Original bitmap fonts retain accented Western Latin letters in menus, names and sequel panels. Localisation groundwork is included. The interface remains English.")),
+        (L10n.text("Music recovery"), L10n.text("If an incoming journey track stops, the outgoing track returns to full volume while the game remains paused.")),
+        (L10n.text("Compatibility"), L10n.text("Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. The Tribes remains Complete. Chronicles and NeoLemmix remain Beta."))
     ]
     private let defaults: UserDefaults
     private let build: Int

@@ -7,7 +7,7 @@ import NxlvKit
 /// normal music transport is parked, without decoding on the audio callback.
 final class MusicRewindBuffer: @unchecked Sendable {
   static let seconds = 12.0
-  static let impulseSeconds = 0.18
+  static let impulseSeconds = VinylBackspin.seconds
   private let lock = NSLock()
   let sampleRate: Double
   private var left: [Float]
@@ -55,7 +55,7 @@ final class MusicRewindBuffer: @unchecked Sendable {
     lock.lock(); defer { lock.unlock() }
     guard written > 1 else { return false }
     let now = ProcessInfo.processInfo.systemUptime
-    if remaining == 0 && (now - lastTrigger > 0.3 || anchorWritten != written || readHead < Double(max(0, written - Int64(left.count)))) {
+    if remaining == 0 && (now - lastTrigger > VinylBackspin.settleSeconds || anchorWritten != written || readHead < Double(max(0, written - Int64(left.count)))) {
       readHead = Double(max(max(0, written - Int64(left.count)), written - 1 - Int64(max(0, frames))))
     }
     anchorWritten = written
@@ -101,13 +101,12 @@ final class MusicRewindBuffer: @unchecked Sendable {
         let lower = Int(position % Int64(left.count))
         let upper = Int(min(written - 1, position + 1) % Int64(left.count))
         let fraction = Float(readHead - Double(position))
-        let progress = 1 - Double(remaining) / Double(max(1, total))
-        let vinyl = VinylMotion.sample(.stop, progress: progress * 0.8)
-        let envelope = Float(min(1, Double(attackFrames) / (sampleRate * 0.008),
-          Double(remaining) / (sampleRate * 0.020))) * gain
+        let vinyl = VinylBackspin.sample(frame: Double(total - remaining), sampleRate: sampleRate)
+        let attack = VinylBackspin.sample(frame: Double(attackFrames), sampleRate: sampleRate).gain
+        let envelope = min(vinyl.gain, attack) * gain
         l = (left[lower] + (left[upper] - left[lower]) * fraction) * envelope
         r = (right[lower] + (right[upper] - right[lower]) * fraction) * envelope
-        readHead -= 1.6 * vinyl.rate
+        readHead -= vinyl.rate
         attackFrames += 1
         remaining -= 1
       } else { remaining = 0 }

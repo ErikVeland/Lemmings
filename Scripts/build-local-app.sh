@@ -41,7 +41,7 @@ sparkle_framework="$(SPARKLE_FRAMEWORK_PATH="${SPARKLE_FRAMEWORK_PATH:-}" \
   zsh "$project_dir/Scripts/ensure-sparkle.sh")"
 sparkle_framework_dir="${sparkle_framework:h}"
 
-shared_modules=(LemmingsMobileCore LemmingsGameArt LemmingsAudio LemmingsAppCore)
+shared_modules=(LemmingsMobileCore LemmingsGameArt LemmingsAudio LemmingsAppCore LemmingsTVCore)
 library_inputs=()
 executable_inputs=()
 for architecture in "${architectures[@]}"; do
