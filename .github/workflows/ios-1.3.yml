@@ -7,6 +7,7 @@ on:
       - main
       - codex/1.3b
       - codex/1.5
+      - codex/ios-2.0-release-gates
   workflow_dispatch:
 
 permissions:
