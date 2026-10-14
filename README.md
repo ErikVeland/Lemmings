@@ -108,9 +108,12 @@ The runner applies this policy to test processes only. Packaged-app launch smoke
 tests require `LEMMINGS_TEST_WINDOWS=foreground` because they exercise the signed
 app's real launch and full-screen presentation.
 
-The iOS source target supports iOS 16 or later. Its first player-facing slice
-imports a player-owned Classic DOS folder through the system document picker.
-It does not package commercial game data.
+The iOS source target supports iOS 16 or later. The 2.0 source supports
+player-owned Classic, Lemmings 2, Lemmings 3 and supported NeoLemmix imports
+through the system document picker. It does not package commercial game data.
+The signed build 12 remains Classic-only. See the
+[2.0 release gate](Documentation/ReleaseReadiness/2.0ReleaseGate-2026-10-14.md)
+for current source evidence and open device and distribution checks.
 
 ## Build and run
 
