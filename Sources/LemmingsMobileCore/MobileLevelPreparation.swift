@@ -1,6 +1,17 @@
 import Foundation
 import NxlvKit
 
+private final class MobilePreparationCancellation: @unchecked Sendable {
+    private let lock = NSLock()
+    private var cancelled = false
+    func cancel() { lock.lock(); cancelled = true; lock.unlock() }
+    func check() throws {
+        lock.lock(); let value = cancelled; lock.unlock()
+        if value { throw CancellationError() }
+        try Task.checkCancellation()
+    }
+}
+
 /// Transfers a newly opened library from its worker to the menu once.
 /// The worker does not retain or use the library after returning it.
 public struct MobileOpenedLibrary: @unchecked Sendable {
@@ -10,10 +21,18 @@ public struct MobileOpenedLibrary: @unchecked Sendable {
 public actor MobileLibraryLoader {
     public init() {}
 
-    public func open(_ makeLibrary: @Sendable () throws -> (any MobileGameLibrary)?) throws -> MobileOpenedLibrary {
-        try Task.checkCancellation()
+    public nonisolated func open(_ makeLibrary: @escaping @Sendable () throws -> (any MobileGameLibrary)?) async throws -> MobileOpenedLibrary {
+        let cancellation = MobilePreparationCancellation()
+        return try await withTaskCancellationHandler {
+            try await openOnWorker(makeLibrary, cancellation: cancellation)
+        } onCancel: { cancellation.cancel() }
+    }
+
+    private func openOnWorker(_ makeLibrary: @Sendable () throws -> (any MobileGameLibrary)?,
+                              cancellation: MobilePreparationCancellation) throws -> MobileOpenedLibrary {
+        try cancellation.check()
         let library = try makeLibrary()
-        try Task.checkCancellation()
+        try cancellation.check()
         return MobileOpenedLibrary(library: library)
     }
 }
@@ -39,17 +58,27 @@ public actor MobileMenuPreviewLoader {
 
     public init(makeLibrary: @escaping @Sendable () throws -> any MobileGameLibrary) { self.makeLibrary = makeLibrary }
 
-    public func prepare(_ index: Int, settings: ClassicSettings = .init(),
+    public nonisolated func prepare(_ index: Int, settings: ClassicSettings = .init(),
                         checkpoint: MobileCheckpointEnvelope? = nil,
-                        allowUnrelatedCheckpoint: Bool = false) throws -> MobilePreparedLevel {
-        try Task.checkCancellation()
+                        allowUnrelatedCheckpoint: Bool = false) async throws -> MobilePreparedLevel {
+        let cancellation = MobilePreparationCancellation()
+        return try await withTaskCancellationHandler {
+            try await prepareOnWorker(index, settings: settings, checkpoint: checkpoint,
+                allowUnrelatedCheckpoint: allowUnrelatedCheckpoint, cancellation: cancellation)
+        } onCancel: { cancellation.cancel() }
+    }
+
+    private func prepareOnWorker(_ index: Int, settings: ClassicSettings,
+                        checkpoint: MobileCheckpointEnvelope?, allowUnrelatedCheckpoint: Bool,
+                        cancellation: MobilePreparationCancellation) throws -> MobilePreparedLevel {
+        try cancellation.check()
         let opened = try library ?? makeLibrary()
         library = opened
-        try Task.checkCancellation()
+        try cancellation.check()
         let content = try prepared.removeValue(forKey: index) ?? opened.loadLevel(at: index)
-        try Task.checkCancellation()
+        try cancellation.check()
         content.session.applySettings(settings)
-        try Task.checkCancellation()
+        try cancellation.check()
         if let checkpoint, !allowUnrelatedCheckpoint || checkpoint.levelIdentifier == content.session.levelIdentifier {
             guard checkpoint.engine == content.session.engineIdentifier,
                   checkpoint.engineFingerprint == content.session.engineFingerprint,
@@ -57,25 +86,33 @@ public actor MobileMenuPreviewLoader {
                   checkpoint.levelFingerprint == content.session.levelFingerprint else { throw MobileSessionError.changedLevel }
             try content.session.restoreCheckpointPayload(checkpoint.payload)
         }
-        try Task.checkCancellation()
+        try cancellation.check()
         return MobilePreparedLevel(content: content)
     }
 
-    public func load(_ index: Int, settings: ClassicSettings = .init()) throws -> MobileMenuPreview {
-        try Task.checkCancellation()
+    public nonisolated func load(_ index: Int, settings: ClassicSettings = .init()) async throws -> MobileMenuPreview {
+        let cancellation = MobilePreparationCancellation()
+        return try await withTaskCancellationHandler {
+            try await loadOnWorker(index, settings: settings, cancellation: cancellation)
+        } onCancel: { cancellation.cancel() }
+    }
+
+    private func loadOnWorker(_ index: Int, settings: ClassicSettings,
+                              cancellation: MobilePreparationCancellation) throws -> MobileMenuPreview {
+        try cancellation.check()
         if let cached = frames[index] { return cached }
         let opened = try library ?? makeLibrary()
         library = opened
-        try Task.checkCancellation()
+        try cancellation.check()
         let content = try opened.loadLevel(at: index)
-        try Task.checkCancellation()
+        try cancellation.check()
         let session = content.session
         let preview = MobileMenuPreview(frame: try session.render(highlight: nil),
                                         origin: session.initialCameraOrigin, snapshot: session.snapshot)
-        try Task.checkCancellation()
+        try cancellation.check()
         // The preview keeps its existing source pixels. Prepare gameplay artwork on this worker.
         session.applySettings(settings)
-        try Task.checkCancellation()
+        try cancellation.check()
         recent.removeAll { $0 == index }; recent.append(index)
         prepared[index] = content
         frames[index] = preview
