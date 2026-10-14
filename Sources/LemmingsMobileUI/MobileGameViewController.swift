@@ -413,7 +413,6 @@ struct MobileGameTurn {
         playfieldView.blockedInputFrames = layout.reservedRegions.map { playfieldView.convert(Self.cgRect($0.frame), from: view) }
         layoutSolutionSelector()
         layoutReplayMoves()
-        nowPlaying.position(in: playfieldView.frame)
         replayTitle.position(in: playfieldView.frame)
         if hasSolutionPair { replayTitle.frame.origin.y = max(replayTitle.frame.minY, solutionSelector.frame.maxY + 8) }
         if session.isReadOnly, layout.portrait != nil { replayTitle.frame.origin.y += 48 }
@@ -421,6 +420,16 @@ struct MobileGameTurn {
         let replayWidth = min(MobileReplaySkillArt.size.width, max(0, playfieldView.frame.width - 16))
         replaySkillInfo.frame = CGRect(x: playfieldView.frame.maxX - replayWidth - 8, y: session.isReadOnly ? replayTitle.frame.maxY + 8 : playfieldView.frame.minY + (layout.portrait != nil ? 56 : 8),
             width: replayWidth, height: replayWidth * MobileReplaySkillArt.size.height / MobileReplaySkillArt.size.width)
+        var musicArea = playfieldView.frame
+        if session.isReadOnly || hasSolutionPair {
+            let top = min(musicArea.maxY, max(musicArea.minY, replayTitle.frame.maxY + 8))
+            musicArea.size.height = musicArea.maxY - top
+            musicArea.origin.y = top
+        }
+        if session.isReadOnly {
+            musicArea.size.width = max(0, replaySkillInfo.frame.minX - musicArea.minX - 8)
+        }
+        nowPlaying.position(in: musicArea)
         hud.frame = view.bounds
         updateHUD(layout: layout)
         overlay.frame = view.bounds

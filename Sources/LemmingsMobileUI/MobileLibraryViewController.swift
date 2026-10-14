@@ -42,13 +42,13 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     override var canBecomeFirstResponder: Bool { game == nil && !searchField.isFirstResponder && mobileInsights.field?.isFirstResponder != true }
     private var store: MobileContentStore?
     private var hasLemmings2Data: Bool {
-        store.map { FileManager.default.fileExists(atPath: $0.dataDirectory(for: .lemmings2).path) } ?? false
+        store?.resolvedDataDirectory(for: .lemmings2) != nil
     }
     private var hasLemmings3Data: Bool {
-        store.map { FileManager.default.fileExists(atPath: $0.dataDirectory(for: .lemmings3).path) } ?? false
+        store?.resolvedDataDirectory(for: .lemmings3) != nil
     }
     private var hasNeoLemmixData: Bool {
-        store.map { FileManager.default.fileExists(atPath: $0.dataDirectory(for: .neoLemmix).path) } ?? false
+        store?.resolvedDataDirectory(for: .neoLemmix) != nil
     }
     private var selectedImportKind: MobileGameDataKind = .classic
     var checkpointStore: MobileCheckpointStore?
@@ -803,8 +803,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 navigate(.data)
                 return
             }
-            let directory = store.dataDirectory(for: .neoLemmix)
-            guard FileManager.default.fileExists(atPath: directory.path) else {
+            guard let directory = store.resolvedDataDirectory(for: .neoLemmix) else {
                 navigate(.data)
                 return
             }

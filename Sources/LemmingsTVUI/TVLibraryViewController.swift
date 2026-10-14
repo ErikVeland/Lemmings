@@ -351,6 +351,7 @@ import UIKit
             return
         }
         switch action {
+        case .djShuffle: break // The diagnostic shell has no DJ. The shared frontend handles this command.
         case .assign: if game.assign() { audio.update(game) }
         case .repeatAssignment: if game.assign(repeatLast: true) { audio.update(game) }
         case .cycle(let delta): game.cycleSkill(delta); if game.play.isPaused { audio.pause() }

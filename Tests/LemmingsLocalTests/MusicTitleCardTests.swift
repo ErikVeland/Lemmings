@@ -47,7 +47,7 @@ final class MusicTitleCardTests: XCTestCase {
         XCTAssertTrue(MusicTitleCard.layout(title: title, soundtrack: source, maximumWidth: 40, maximumHeight: 40).pages.isEmpty)
     }
 
-    func testShortCreditsRetainTheirDisplayTimeAndLowerCorner() {
+    func testShortCreditsRetainTheirDisplayTimeAndUpperCorner() {
         let layout = MusicTitleCard.layout(title: "Intro", soundtrack: "Lemmings - Amiga", maximumWidth: 600, maximumHeight: 180)
         XCTAssertEqual(layout.pages.count, 1)
         XCTAssertEqual(layout.duration, 4.5)
@@ -56,7 +56,7 @@ final class MusicTitleCardTests: XCTestCase {
             let frame = MusicTitleCard.frame(size: layout.size, in: area, flipped: flipped)
             XCTAssertTrue(area.contains(frame))
             XCTAssertEqual(frame.minX, area.minX + 12)
-            XCTAssertEqual(flipped ? frame.maxY : frame.minY, flipped ? area.maxY - 12 : area.minY + 12)
+            XCTAssertEqual(flipped ? frame.minY : frame.maxY, flipped ? area.minY + 12 : area.maxY - 12)
         }
     }
 
@@ -104,13 +104,13 @@ final class MusicTitleCardTests: XCTestCase {
 
     @MainActor func testKeyboardPlacesCreditsInsidePlayfieldAndKeepsMenuClickable() throws {
         _ = NSApplication.shared
-        for flipped in [false, true] {
-            let window = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 900, height: 620),
+        for (width, flipped) in [CGFloat(600), 900].flatMap({ width in [false, true].map { (width, $0) } }) {
+            let window = NSWindow(contentRect: CGRect(x: 0, y: 0, width: width, height: 620),
                                   styleMask: [.titled], backing: .buffered, defer: false)
             window.isReleasedWhenClosed = false
-            let root = MusicCardCanvas(frame: CGRect(x: 0, y: 0, width: 900, height: 620))
+            let root = MusicCardCanvas(frame: CGRect(x: 0, y: 0, width: width, height: 620))
             root.usesFlippedCoordinates = flipped; window.contentView = root
-            let area = CGRect(x: 0, y: flipped ? 0 : 200, width: 900, height: 420)
+            let area = CGRect(x: 0, y: flipped ? 0 : 200, width: width, height: 420)
             let keyboard = GameplayKeyboard(window: window)
             defer { keyboard.removeNavigationControl(); window.close() }
             keyboard.active = { true }; keyboard.ownsController = { true }
@@ -132,6 +132,7 @@ final class MusicTitleCardTests: XCTestCase {
     func testRenderedCreditsAtMacPhoneTabletAndTVSizes() throws {
         guard let directory = ProcessInfo.processInfo.environment["LEMMINGS_TEST_MENU_ARTWORK"],
               let output = ProcessInfo.processInfo.environment["LEMMINGS_MUSIC_CARD_CAPTURES"] else { return }
+        try FileManager.default.createDirectory(at: URL(fileURLWithPath: output), withIntermediateDirectories: true)
         let typography = try XCTUnwrap(GameMenuTypography(directory: URL(fileURLWithPath: directory)))
         for (device, width, height) in [("mac", CGFloat(600), CGFloat(210)), ("phone", 300, 140),
                                        ("landscape-phone", 480, 80), ("tablet", 560, 180), ("tv", 600, 210)] {

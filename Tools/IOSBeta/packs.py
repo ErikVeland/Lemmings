@@ -5,6 +5,7 @@ from pathlib import Path
 import shutil
 
 from ports import stage
+from games import copy_into_app as copy_games, is_source_gate
 
 ROOT = Path(__file__).resolve().parents[2]
 PACKS = ROOT / "Content/LevelPacks"
@@ -13,6 +14,12 @@ PACKS = ROOT / "Content/LevelPacks"
 def copy_into_app(app_resources):
     if app_resources.suffix != ".app":
         raise ValueError("Catalogue data can only be copied into an app bundle.")
+    localisation = app_resources / "Localization.bundle"
+    if localisation.is_symlink():
+        raise ValueError("Localisation destination must not be a link.")
+    if localisation.exists():
+        shutil.rmtree(localisation)
+    shutil.copytree(ROOT / "Sources/NxlvKit/Resources/Localization.bundle", localisation)
     ports = app_resources / "Ports"
     packs = app_resources / "LevelPacks"
     for target in (ports, packs):
@@ -20,10 +27,16 @@ def copy_into_app(app_resources):
             raise ValueError("Catalogue destination must not be a link.")
         if target.exists():
             shutil.rmtree(target)
+    source_gate = is_source_gate()
     try:
         stage(ports)
-    except ValueError:
-        return
+    except (ValueError, FileNotFoundError):
+        if not source_gate:
+            raise
+        print("SKIP Classic catalogue data in the unsigned source-only gate.")
+    copy_games(app_resources, source_gate=source_gate)
+    if not (PACKS / "packs.json").is_file() and not source_gate:
+        raise ValueError("Missing embedded fan level packs in Content/LevelPacks.")
     if PACKS.is_dir():
         packs.mkdir()
         for path in sorted(PACKS.iterdir()):

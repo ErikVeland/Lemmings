@@ -24,6 +24,11 @@ sentences. Apply this to new UI and changes to existing UI.
   order consistent. Use Apple's Human Interface Guidelines for platform controls.
   System alerts retain Apple's platform-specific ordering and safe default focus.
 - Keep quantities and player identity visible. They explain the current situation.
+- Use one column for portrait phone Home. Use wider grids where the screen has
+  room for readable peer actions. A lone action in a mobile grid row spans the
+  row. Do not leave an empty button slot beside it.
+- Put music notices at the playfield's upper-left corner. Reserve room for
+  navigation and replay overlays, and keep the notice outside the HUD.
 - Keep concise names for actions without a familiar symbol. Do not replace a clear
   action name with an invented icon or an initial.
 - Put criteria, records, award descriptions and instructions on their relevant
@@ -456,8 +461,8 @@ progression or Hot Seat ownership. Standalone files fall back to saved boards.
 
 Classic, Lemmings 2 and Lemmings 3 share a brief Now Playing notice when the
 actual track file changes. Use the catalogue song title and soundtrack name,
-with the source folder as a fallback for user files. Use a lower-left broadcast
-credit box above the HUD: a black stone-framed backing, a green pixel accent,
+with the source folder as a fallback for user files. Use an upper-left broadcast
+credit box inside the playfield: a black stone-framed backing, a green pixel accent,
 a prominent green song title and smaller blue soundtrack credits. Wrap complete
 titles at word boundaries at fixed bitmap sizes. On narrow or shallow playfields,
 show successive credit pages rather than truncate text or cover the controls.
@@ -609,3 +614,45 @@ target. Selected HUD skills retain their outlines and add the same inner glow.
 Offscreen muted checks cover native Classic/L2/L3 icons, stock semantics, invalid
 indices and edge placement. iOS and tvOS SDK source compilation passed; physical
 controller/touch and television readability still require manual validation.
+
+## iPad landscape home
+
+Wide tablet home menus place the moss cap and stone base at the menu area's
+top and bottom edges. Use spare height to enlarge the original bitmap logo and
+space the action rows. Keep touch targets and lettering at the selected interface
+size. Compact panes retain scrolling when the content cannot fit.
+
+Windowless, muted checks cover 84 home states across three interface sizes,
+including saved runs, loading, disabled actions, tablet landscape and portrait,
+split view and phones. Bitmap renders and shared input bounds were inspected.
+The shared artwork module compiles for iOS. Physical UIKit touch and VoiceOver
+still need device validation. The wider menu
+audit stops at a stale result inset assertion: it expects 16 points while the
+current result layout uses 20.
+
+## Device menu layouts
+
+Portrait phone Home uses a full-width list for libraries, saved runs and footer
+actions. Landscape phones and tablets use paired rows. A final lone library or
+footer action spans the complete row, including action shelves with Back and a
+primary forward action. Keep Back left and the paired forward action right.
+
+Mac Home reuses the shared bitmap menu layout. Saved play and Journey lead the
+library group. Put player identity above the footer actions and retain saved
+counts and marching lemmings beneath the menu. Larger windows give the logo and
+rows more space. Compact windows scroll without shrinking the lettering.
+Mouse targets, accessibility frames, arrow-key movement and keyboard activation
+follow the same geometry. Keyboard navigation reaches the footer and corner
+controls and scrolls the focused target into view.
+
+The shared music notice occupies the upper-left playfield corner across Classic,
+Lemmings 2 and Lemmings 3. On Mac, reserve the Menu control's width. Mobile
+replays reserve their title and skill panels. Preserve wrapped credit pages,
+fades, settings and input pass-through.
+
+Offscreen, muted validation passes 14 focused tests, with 60 native Mac menu
+captures and 135 mobile home renders. Checks cover mouse activation, keyboard
+movement and activation, compact scrolling, visible accessibility bounds,
+single-column phones, odd library counts, footer navigation and complete music
+credits. iOS SDK modules compile. Physical touch, VoiceOver navigation and
+composited CRT display appearance remain manual checks.

@@ -47,6 +47,7 @@ import NxlvKit
   private var favorBuildersCheck: NSButton?
   private var levelSelectionPopUp: NSPopUpButton?
   private var controllerCheck: NSButton?
+  private var djShuffleScopePopUp: NSPopUpButton?
   private var controllerTapCheck: NSButton?
   private var controllerSwapCheck: NSButton?
   private var controllerRemapButton: NSButton?
@@ -462,6 +463,11 @@ import NxlvKit
     controllerRemapButton?.isEnabled = settings.controllerEnabled; changed()
   }
   @objc private func controllerTapChanged(_ sender: NSButton) { settings.controllerTapSpeed = sender.state == .on; changed() }
+  @objc private func djShuffleScopeChanged(_ sender: NSPopUpButton) {
+    guard SoundtrackCatalogue.ShuffleScope.allCases.indices.contains(sender.indexOfSelectedItem) else { return }
+    settings.djShuffleScope = SoundtrackCatalogue.ShuffleScope.allCases[sender.indexOfSelectedItem]
+    changed()
+  }
   @objc private func controllerSwapChanged(_ sender: NSButton) { settings.controllerSwapSticks = sender.state == .on; changed() }
   private func applyExperiencePreset(modern: Bool) {
     settings.applyExperiencePreset(modern: modern)
@@ -620,13 +626,17 @@ import NxlvKit
     let mixes = GameCheckButton(title: "Include L2, L3 and other ports", target: self, action: #selector(djSoundtracksChanged))
     mixes.state = settings.djIncludesOtherSoundtracks ? .on : .off
     djSoundtracksCheck = mixes
+    let shuffleScope = popUp(#selector(djShuffleScopeChanged))
+    shuffleScope.addItems(withTitles: SoundtrackCatalogue.ShuffleScope.allCases.map(\.title))
+    shuffleScope.selectItem(at: SoundtrackCatalogue.ShuffleScope.allCases.firstIndex(of: settings.djShuffleScope) ?? 0)
+    djShuffleScopePopUp = shuffleScope
     let folders = GameButton(title: "Download soundtracks", target: self, action: #selector(openMusicLibraries))
     let beat = GameCheckButton(title: "Keep the rhythm", target: self, action: #selector(pauseBeatChanged))
     beat.setAccessibilityLabel("Pause: Keep the rhythm")
     beat.state = settings.pauseMusicBeatOnly ? .on : .off
     pauseBeatCheck = beat
     return groupedPane([
-      ("Music", [("Soundtrack", music), ("Style", style), ("Volume", musicLevel), ("Shuffle", shuffle), ("DJ Mix", mixes)]),
+      ("Music", [("Soundtrack", music), ("Style", style), ("Volume", musicLevel), ("Shuffle", shuffle), ("DJ Mix", mixes), ("DJ shuffle", shuffleScope)]),
       ("Sound effects", [("Source", sound), ("Volume", soundLevel)]),
       ("Playback behaviour", [("Pause", beat), ("Bottom Falls", falls)]),
       ("", [("", folders)]),
@@ -720,6 +730,7 @@ import NxlvKit
     favorBuildersCheck?.state = settings.favorBuilders ? .on : .off
     levelSelectionPopUp?.selectItem(at: settings.unlockAllClassicLevels ? 1 : 0)
     controllerCheck?.state = settings.controllerEnabled ? .on : .off
+    djShuffleScopePopUp?.selectItem(at: SoundtrackCatalogue.ShuffleScope.allCases.firstIndex(of: settings.djShuffleScope) ?? 0)
     controllerTapCheck?.state = settings.controllerTapSpeed ? .on : .off
     controllerSwapCheck?.state = settings.controllerSwapSticks ? .on : .off
     controllerRemapButton?.isEnabled = settings.controllerEnabled
@@ -801,6 +812,7 @@ import NxlvKit
     applied.confinePointer = settings.confinePointer
     applied.fullScreenHDRFlashes = settings.fullScreenHDRFlashes
     applied.djIncludesOtherSoundtracks = settings.djIncludesOtherSoundtracks
+    applied.djShuffleScope = settings.djShuffleScope
     settings = applied
     rebuildSources()
     presetPopUp?.selectItem(at: index + 1)

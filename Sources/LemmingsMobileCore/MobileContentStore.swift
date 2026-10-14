@@ -73,6 +73,30 @@ public struct MobileContentStore: Sendable {
             : root.appendingPathComponent(kind.directoryName, isDirectory: true)
     }
 
+    /// Imported content takes precedence. Bundled content stays in the read-only app.
+    public func resolvedDataDirectory(
+        for kind: MobileGameDataKind,
+        bundledResources: URL? = Bundle.main.resourceURL
+    ) -> URL? {
+        let manager = FileManager.default
+        func exists(_ directory: URL) -> Bool {
+            var isDirectory: ObjCBool = false
+            return manager.fileExists(atPath: directory.path, isDirectory: &isDirectory) && isDirectory.boolValue
+        }
+        let installed = dataDirectory(for: kind)
+        if exists(installed) { return installed }
+        let path: String
+        switch kind {
+        case .classic: path = "BetaGameData"
+        case .lemmings2: path = "Ports/Lemm2"
+        case .lemmings3: path = "Ports/LEM3CD"
+        case .neoLemmix: path = "NeoLemmix"
+        }
+        guard let bundled = bundledResources?.appendingPathComponent(path, isDirectory: true),
+              exists(bundled) else { return nil }
+        return bundled
+    }
+
     public init(fileManager: FileManager = .default) throws {
         let applicationSupport = try fileManager.url(
             for: MobileStorage.localDirectory,
@@ -108,15 +132,17 @@ public struct MobileContentStore: Sendable {
         return try ClassicMobileLibrary(directory: bundledDirectory)
     }
 
-    public func loadLemmings2Library(storage: MobileStorage) throws -> Lemmings2MobileLibrary? {
-        let directory = dataDirectory(for: .lemmings2)
-        guard FileManager.default.fileExists(atPath: directory.path) else { return nil }
+    public func loadLemmings2Library(
+        storage: MobileStorage, bundledResources: URL? = Bundle.main.resourceURL
+    ) throws -> Lemmings2MobileLibrary? {
+        guard let directory = resolvedDataDirectory(for: .lemmings2, bundledResources: bundledResources) else { return nil }
         return try Lemmings2MobileLibrary(directory: directory, storage: storage)
     }
 
-    public func loadLemmings3Library(storage: MobileStorage) throws -> Lemmings3MobileLibrary? {
-        let directory = dataDirectory(for: .lemmings3)
-        guard FileManager.default.fileExists(atPath: directory.path) else { return nil }
+    public func loadLemmings3Library(
+        storage: MobileStorage, bundledResources: URL? = Bundle.main.resourceURL
+    ) throws -> Lemmings3MobileLibrary? {
+        guard let directory = resolvedDataDirectory(for: .lemmings3, bundledResources: bundledResources) else { return nil }
         return try Lemmings3MobileLibrary(directory: directory, storage: storage)
     }
 

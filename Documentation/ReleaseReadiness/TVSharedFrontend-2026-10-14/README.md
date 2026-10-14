@@ -145,11 +145,51 @@ controller choices and updated help. Logs are `.build/tv-player-shuffle-tests.lo
 
 The native muted playback probe initially could not instantiate Core Audio EQ
 components in the sandbox. The same offscreen check passed with system component
-access, including same-track/all-track selection, crossfade retargeting, mute and
-suspension boundaries. See `.build/tv-player-shuffle-playback-run.log` and
+access, including same-track/all-track selection, crossfade retargeting and
+completion on one deck, mute and suspension boundaries. See `.build/tv-player-shuffle-playback-run.log` and
 `Tests/ManualDJShuffleTests/main.swift`. No audible or foreground fallback was used.
 Physical controller delivery, full device Hot Seat journeys and listening
 acceptance remain open.
+
+### Mac and regular iOS parity
+
+Mac now persists the same controller/accessibility fields per player and reloads
+them on profile selection and Hot Seat attempts. Its Audio page offers the same
+shuffle scope. Ordinary Classic/L2/L3 sources can enter the DJ player without
+changing the saved soundtrack. Native L2/L3 share a paused, equal-power legacy
+handoff. Classic reuses its existing legacy handoff and freezes it during pause.
+
+J triggers shuffle on Mac/iOS keyboards. Two-finger tap provides the iOS touch
+shortcut within the playfield. VoiceOver has a DJ shuffle custom action, and the
+touch gesture yields while VoiceOver runs. Mac/iOS controller shortcuts use
+L2/LT + L3 or DualSense touchpad click. TV retains Create/View + L3. Help records
+the shortcuts. No persistent game control was added.
+
+The Mac arm64 target and both iOS/TV SDK source gates pass. The offscreen, muted
+focused suite passes 37 checks, including the native Mac scope picker, input
+targets, controller dispatch and paused handoff gains. Two further multi-touch
+checks verify that overlapping contacts cannot commit assignments and that
+selection returns after all contacts lift. Reviewed Mac captures show Same track
+and All tracks with the shipped bitmap lettering. Logs are
+`.build/dj-parity-mac-build.log`, `.build/dj-parity-sdk/iphonesimulator.log`,
+`.build/dj-parity-sdk/appletvsimulator.log`, `.build/dj-parity-tests.log` and
+`.build/dj-parity-touch-tests.log`. Captures are in `.build/dj-parity-ui`.
+
+The shared phone/tablet renderer passed 18 settings/help captures with target
+geometry checks at all three text sizes. Visual review includes the largest
+phone shortcut guide and tablet All tracks setting. See
+`.build/dj-parity-mobile-render.log` and `.build/dj-parity-mobile-render/captures`.
+These full-content images do not establish native touch or VoiceOver delivery.
+
+The muted native audio probe also passes ordinary-source handoff selection in
+Classic, Lemmings 2 and Lemmings 3, alongside same/all-track mixing, retargeting,
+single-deck completion, mute and suspension. It used the same offscreen runner
+with system Core Audio component access. See `.build/dj-parity-native-audio.log`.
+
+Physical J/controller/gesture delivery, VoiceOver navigation and listening remain
+manual device checks. The same-track option requires a confirmed catalogue
+identity and an installed alternate; unidentified/exclusive source themes cannot
+be safely substituted with a guessed composition.
 
 No foreground Simulator, physical device or audible test was launched.
 Native UIKit focus/activation, system keyboard, VoiceOver, Siri Remote generations,

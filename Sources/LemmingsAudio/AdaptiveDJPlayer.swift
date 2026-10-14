@@ -571,6 +571,21 @@ import NxlvKit
     return false
   }
 
+  /// The caller fades its existing legacy player into this deck without changing preferences.
+  @discardableResult
+  public func shuffle(from source: URL, scope: SoundtrackCatalogue.ShuffleScope, identity: String,
+                      fallbackTrackID: String? = nil) -> Bool {
+    guard !isMuted, !outputSuspended, !vinylHeld, !vinylStopping, let catalogue else { return false }
+    if activeDeck != nil { return shuffle(scope: scope, fallbackTrackID: fallbackTrackID) }
+    let candidates = catalogue.shuffleCandidates(currentPath: relativePath(source) ?? "",
+      scope: scope, availablePaths: availablePaths, fallbackTrackID: fallbackTrackID)
+    for variant in candidates.shuffled() {
+      guard let url = availableURLs[variant.path], url.resolvingSymlinksInPath() != source.resolvingSymlinksInPath() else { continue }
+      if startLevel(url: url, identity: identity + ":shuffle:" + UUID().uuidString) { return true }
+    }
+    return false
+  }
+
   /// Brings the next track up as the current one goes down.
   ///
   /// The two curves are equal power rather than linear, so the middle of the
@@ -835,16 +850,31 @@ import NxlvKit
     suspendedAtUptime = nil
     outputSuspended = false
     pauseUsesRhythm = false
+    if let pending = pendingLevel {
+      pendingLevel = nil
+      // Select from silence before resuming any outgoing track.
+      let canonicalURL = pending.url.resolvingSymlinksInPath().standardizedFileURL
+      let resumable = [resumeDeckA ? deckA : nil, resumeDeckB ? deckB : nil].compactMap { $0 } + resumeCarry
+      let continuing = resumable.first {
+        $0.url.resolvingSymlinksInPath().standardizedFileURL == canonicalURL
+      }
+      resumeDeckA = false
+      resumeDeckB = false
+      resumeCarry = []
+      if let continuing {
+        keepPlaying(continuing)
+        continuing.play()
+      }
+      startLevel(url: pending.url, identity: pending.identity)
+      return
+    }
     if resumeDeckA { deckA?.play() }
     if resumeDeckB { deckB?.play() }
     resumeCarry.forEach { _ = $0.play() }
     resumeDeckA = false
     resumeDeckB = false
     resumeCarry = []
-    if let pending = pendingLevel {
-      pendingLevel = nil
-      startLevel(url: pending.url, identity: pending.identity)
-    } else if let destination = interruptedDestination, !interruptedLevelEntry {
+    if let destination = interruptedDestination, !interruptedLevelEntry {
       // Rhythm playback and vinyl stops advance the decks differently. Plan
       // again from the audible deck's current grid when play resumes.
       fadeTask?.cancel()

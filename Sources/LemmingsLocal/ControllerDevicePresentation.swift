@@ -64,6 +64,8 @@ import NxlvKit
             "\(modifier) + \(physical(.menu)): retry",
             "\(modifier) + \(physical(.a)): end run / undo nuke",
             "\(modifier) + \(physical(.options)): settings",
+            "\(modifier) + \(physical(.leftStick)): DJ shuffle",
+            "DualSense touchpad click: DJ shuffle",
             "Menus always use standard controls: D-pad selects, \(name(.a)) confirms, \(name(.b)) returns.",
             "Shoulder buttons change tabs. Right stick scrolls. Release buttons when changing pages."
         ]).filter { !$0.isEmpty }.joined(separator: "\n")

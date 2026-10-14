@@ -18,6 +18,7 @@ import NxlvKit
     private var boostStartedAt = 0.0
     private var boostCanTap = false
     private var receivedInput = false
+    private var touchpadClick = ControllerButtonEdge()
 
     init(keyboard: GameplayKeyboard, pollsAutomatically: Bool = true) {
         self.keyboard = keyboard
@@ -42,6 +43,7 @@ import NxlvKit
         receivedInput = false
         keyboard?.controllerRewindHeld(false)
         bindings.reset(); device = nil; context = nil; wasActive = false
+        touchpadClick.reset()
     }
     private func poll() {
         let now = ProcessInfo.processInfo.systemUptime
@@ -54,7 +56,7 @@ import NxlvKit
         }
         let identity = ObjectIdentifier(controller)
         let playing = keyboard.controllerPlaying
-        if identity != device { stopBoost(at: now); bindings.reset() }
+        if identity != device { stopBoost(at: now); bindings.reset(); touchpadClick.reset() }
         device = identity
         var pressed: Set<ControllerBindings.Button> = []
         let buttons: [(ControllerBindings.Button, GCControllerButtonInput?)] = [
@@ -66,6 +68,8 @@ import NxlvKit
             (.up,pad.dpad.up), (.down,pad.dpad.down), (.left,pad.dpad.left), (.right,pad.dpad.right)]
         for (key, button) in buttons where button?.isPressed == true { pressed.insert(key) }
         processButtons(pressed, at: now, playing: playing)
+        if touchpadClick.update(pressed: (pad as? GCDualSenseGamepad)?.touchpadButton.isPressed == true,
+            active: keyboard.controllerPlaying) { keyboard.controllerAction(.djShuffle) }
         func axis(_ value: Float) -> Double {
             let magnitude = abs(Double(value))
             return magnitude > 0.18 ? (magnitude - 0.18) / 0.82 * (value < 0 ? -1 : 1) : 0
@@ -87,6 +91,7 @@ import NxlvKit
         let mapping = playing ? ControllerBindings.validatedMapping(keyboard.controllerMappings()) : [:]
         if playing != wasActive || context != keyboard.controllerContext || mapping != previousMapping {
             stopBoost(at: now); bindings.reset()
+            touchpadClick.reset()
         }
         previousMapping = mapping
         let pressed = ControllerBindings.remap(pressed, using: mapping)

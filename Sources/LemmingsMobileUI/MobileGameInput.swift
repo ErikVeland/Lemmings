@@ -31,6 +31,7 @@ extension MobileGameViewController {
             case .rewind: title = "Rewind"
             case .retry: title = "Retry"
             case .endRun: title = "End run / undo"
+            case .djShuffle: title = "DJ shuffle"
             case .skill(let index): title = "Skill \(index + 1)"
             case .step(let direction): title = direction < 0 ? "Step back" : "Step forward"
             case .cycle(let direction): title = direction < 0 ? "Previous skill" : "Next skill"
@@ -67,6 +68,7 @@ extension MobileGameViewController {
         adapter.settings = { [weak self] in self?.gameSettings.classic ?? ClassicSettings() }
         adapter.settingsProfileID = { [weak self] in self?.settingsProfileID ?? MobileProfiles.defaultID }
         adapter.onDJShuffle = { [weak self] in self?.shuffleMusic() }
+        playfieldView.onDJShuffle = { [weak self] in self?.shuffleMusic() ?? false }
         adapter.controllerSpeed = { [weak self] in self?.inputSpeed.target ?? 1 }
         adapter.triggerFeedbackEnabled = { [weak self] in self?.playState.phase == .running && self?.gameSettings.classic.reduceMotion != true }
         adapter.onRewindHeld = { [weak self] in self?.setRewindHeld($0) }
@@ -161,6 +163,7 @@ extension MobileGameViewController {
         case .hints: pauseForPlanning(); showHints()
         case .help: pauseForPlanning(); showControlsHelp()
         case .settings: pauseForPlanning(); showInGameSettings()
+        case .djShuffle: shuffleMusic()
         case .rewind: handle(.rewind)
         case .step(let direction):
             pauseForPlanning(); handle(direction < 0 ? .stepBackward : .step)
@@ -271,9 +274,9 @@ extension MobileGameViewController {
         setSpeedInput(.controller, held: held)
     }
 
-    func shuffleMusic() {
-        guard overlay.isHidden, playState.phase == .running, lifecycle.isForeground, !lifecycle.isInterrupted else { return }
-        _ = MobileMusic.shared.shuffle(scope: gameSettings.djShuffleScope)
+    @discardableResult func shuffleMusic() -> Bool {
+        guard overlay.isHidden, playState.phase == .running, lifecycle.isForeground, !lifecycle.isInterrupted else { return false }
+        return MobileMusic.shared.shuffle(scope: gameSettings.djShuffleScope)
     }
 
     func setSpeedInput(_ input: GameplaySpeed.Hold, held: Bool, allowTap: Bool = true) {
@@ -332,7 +335,7 @@ extension MobileGameViewController {
         #if os(tvOS)
         let help = TVControllerBindings.help.components(separatedBy: "\n")
         #else
-        let help = GameplayCommands.help
+        let help = GameplayCommands.help + ["Two-finger tap on the playfield: DJ shuffle", "L2 / LT + L3: DJ shuffle", "DualSense touchpad click: DJ shuffle"]
         #endif
         showCustomOverlay(title: "Controls", details: help,
                           actions: [("BACK", { [weak self] in self?.pausePlay(showControls: true) })])

@@ -36,9 +36,11 @@ import UIKit
     private var activeController: GCController?
     private var context: ObjectIdentifier?
     private var lastPoll = 0.0
+    private var touchpadClick = ControllerButtonEdge()
 
     func reset() {
         onBoost?(false); onRewindHeld?(false); onSpeedKey?(false); bindings.reset(); pressedKeys.removeAll(); lastPoll = 0
+        touchpadClick.reset()
         #if os(tvOS)
         tvInput.reset()
         #endif
@@ -77,6 +79,8 @@ import UIKit
         _ = controllerConnection.update(isConnected: true, isMenu: isMenu())
         let elapsed = min(0.05, max(0, lastPoll == 0 ? 0 : now - lastPoll))
         lastPoll = now
+        let touchpad = (pad as? GCDualSenseGamepad)?.touchpadButton.isPressed == true
+        if touchpadClick.update(pressed: touchpad, active: !isMenu()) { onDJShuffle?() }
         var pressed = Set<ControllerBindings.Button>()
         let buttons: [(ControllerBindings.Button, GCControllerButtonInput?)] = [
             (.a, pad.buttonA), (.b, pad.buttonB), (.x, pad.buttonX), (.y, pad.buttonY),
@@ -135,6 +139,7 @@ import UIKit
         case .boost(let held): onBoost?(held)
         case .endRun: onCommand?(.endRun)
         case .settings: onCommand?(.settings)
+        case .djShuffle: onDJShuffle?()
         }
     }
 

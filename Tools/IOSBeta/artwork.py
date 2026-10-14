@@ -45,6 +45,9 @@ def copy_family(source, destination):
 def copy_into_app(source, destination):
     if destination.name != "lemmings" or destination.parent.name != "MacArtwork" or destination.parent.parent.suffix != ".app":
         raise ValueError("Mac artwork can only be copied into an app bundle.")
+    menu_art = destination.parent.parent / "MenuArtwork"
+    menu_art.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(ROOT / "Resources/MenuArtwork/ultimate.png", menu_art / "ultimate.png")
     # The Xcode option remains a single-family path; siblings carry the other releases.
     mac = Path(source).parent if source else ROOT / ".build/mac-artwork/export"
     amiga = Path(os.environ.get("IOS_AMIGA_ARTWORK_DIR", ROOT / ".build/amiga-artwork/export"))

@@ -2,7 +2,7 @@ import Foundation
 
 /// Platform adapters share commands while retaining their native event delivery.
 public enum GameplayCommand: Equatable, Sendable {
-    case pause, library, hints, help, settings, rewind, retry, endRun
+    case pause, library, hints, help, settings, rewind, retry, endRun, djShuffle
     case step(Int), skill(Int), cycle(Int), focusUnassigned(Int), focusLast, assign, repeatAssignment
     case centre(Bool), rate(Int), speed, speedStep(Int), speedReset, zoom(Bool), pan(Int, Int)
 }
@@ -26,6 +26,7 @@ public enum GameplayCommands {
             .init("h"): .centre(true), .init("home"): .centre(true),
             .init("g"): .centre(false), .init("end"): .centre(false),
             .init("f"): .speed, .init("n"): .endRun,
+            .init("j"): .djShuffle,
             .init("r"): .rewind, .init("r", shift: true): .retry,
             .init(","): .step(-1), .init("."): .step(1),
             .init("z", command: true): .step(-1),
@@ -51,6 +52,7 @@ public enum GameplayCommands {
         "Space / P: Pause", "1-8: Skill", "Tab: Next skill", "Shift+Tab: Previous skill",
         "F: Fast speed", "R: Rewind", ", / .: Step back / forward", "Shift+R: Retry",
         "Command+Z: Step back",
+        "J: DJ shuffle",
         "H / Home: Entrance", "G / End: Goal", "Arrow keys: Pan", "Z / Shift+Z: Zoom",
         "[ / ]: Unassigned lemming", "Return: Repeat assignment", "N: End run / undo",
         "/ / I / F1: Hints", "?: Controls", "Escape / Q: Library",

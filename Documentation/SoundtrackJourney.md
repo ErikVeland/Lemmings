@@ -6,6 +6,42 @@ The hierarchy is **game → role → track → port → source quality → origi
 
 `Resources/Music/catalogue.json` is the tracked catalogue. `Sources/Music/catalogue.json` is its local runtime copy. Each version records its source path, port, source quality, arrangement, identity evidence and available credits. The game never equates tunes by file number or substring alone when a catalogue entry exists.
 
+## Manual DJ shuffle
+
+Audio settings offer Same track (the default) and All tracks on Mac, iOS and TV.
+Same track selects another available version of the current composition. All
+tracks selects documented gameplay themes across installed games and seasonal
+libraries. Neither mode changes the saved soundtrack, campaign position or turn
+owner. Menu/result cues, unverified identities, unavailable files and the current
+recording stay outside the candidate set. An unidentified or exclusive recording
+continues unchanged when it has no confirmed same-track alternate.
+
+| Platform/input | Shortcut |
+| --- | --- |
+| Mac or iOS keyboard | J |
+| iOS touch | Two-finger tap within the playfield |
+| iOS VoiceOver | DJ shuffle custom action on the playfield |
+| Mac/iOS gamepad | L2/LT + L3 |
+| DualSense on Mac/iOS/TV | Touchpad click |
+| TV gamepad | Create/View + L3 |
+
+The shortcuts appear in Controls help and add no persistent HUD button. The iOS
+gesture excludes HUD targets and yields to VoiceOver. Existing multi-touch
+cancellation prevents a shuffle tap from committing a skill assignment. Pinch
+and pan retain their existing recognition paths.
+
+Ordinary Mac music fades into the shared DJ player through an equal-power
+handoff. Later DJ changes use its existing beat-matched transitions. Both native
+sequels share the handoff helper, including paused progression and live volume.
+Mute, planning, Ready, result and interruption boundaries cannot start a shuffle.
+Retry/new-level routing returns to the saved soundtrack choice.
+
+Controller and accessibility settings now persist locally per player on Mac and
+the shared iOS/TV frontend. Profiles seed their choices from the legacy device
+baseline. Hot Seat reloads the incoming owner's controls and accessibility.
+Other device preferences remain shared. This does not add cloud transfer of
+these personal preferences.
+
 ## Default DJ journey
 
 - The first occurrence of each tune uses its Amiga module, when installed. The shared Modern/Faithful setting applies to DJ modules and direct playback. This is not a claim of bit-perfect hardware output.
@@ -14,7 +50,7 @@ The hierarchy is **game → role → track → port → source quality → origi
 - Lemmings 2 advances the tribe's version with its level index. Lemmings 3 advances each tribe tune after its local tune rotation repeats. These are score cycles within a campaign, not a counter of completed playthroughs.
 - Selection depends on the campaign position and installed catalogue. Retries, direct level selection, saved-level reopening and Hot Seat handovers choose the same version. Attempts and wall-clock time do not advance the journey. Adding or removing versions can change future selections.
 - Turning off other soundtracks retains the first version of the assigned tune in all three engines. Missing variants fall back within the same identity; missing catalogue data uses the assigned module.
-- Ordinary gameplay, danger and nuking do not replace a tune. Meeting the rescue target permits one lift to an available version of the same composition. That theme keeps looping through results. Paused handovers keep pending selections silent until playback resumes.
+- Ordinary gameplay, danger and nuking do not replace a tune. Meeting the rescue target permits one lift to an available version of the same composition. That theme keeps looping through results. Paused handovers keep pending selections silent until playback resumes. A new selection after silence starts directly, without resuming the outgoing track for a crossfade. Resuming the same selection keeps its playback position.
 
 The existing Amiga composition rotation remains the Classic score policy. Artwork selection does not imply a new platform's historical tune order. Exact native port sequencing remains a separate audit.
 

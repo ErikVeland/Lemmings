@@ -9,6 +9,8 @@ struct GameplayCommandsTests {
         #expect(GameplayCommands.command(key: "/", shift: true) == .help)
         #expect(GameplayCommands.command(key: "return") == .repeatAssignment)
         #expect(GameplayCommands.command(key: "q") == .library)
+        #expect(GameplayCommands.command(key: "j") == .djShuffle)
+        #expect(GameplayCommands.command(key: "j", command: true) == nil)
     }
     @Test func testSkillAndShiftBindingsRemainDistinct() {
         for index in 0..<8 { #expect(GameplayCommands.command(key: String(index + 1)) == .skill(index)) }

@@ -39,6 +39,10 @@ public struct GameFooterGrid {
             placed.append(Slot(action: action, row: slot / columns, column: slot % columns, span: 1))
             slot += 1
         }
-        slots = placed.sorted { $0.row == $1.row ? $0.column < $1.column : $0.row < $1.row }
+        slots = placed.map { item in
+            let alone = spanSingleAction && placed.filter { $0.row == item.row }.count == 1
+            return Slot(action: item.action, row: item.row, column: alone ? 0 : item.column,
+                span: alone ? columns : item.span)
+        }.sorted { $0.row == $1.row ? $0.column < $1.column : $0.row < $1.row }
     }
 }

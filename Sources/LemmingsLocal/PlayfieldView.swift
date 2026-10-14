@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import LemmingsGameArt
 import NxlvKit
 
 /// Maps between level pixels and view points for a scrolled, zoomed playfield.
@@ -191,18 +192,20 @@ struct ReticleFeedback {
       return [accessibleElements.element(id: "status", owner: owner, label: text, frame: transform(bounds))]
     }
     var items: [Any] = []
+    func visibleFrame(_ frame: CGRect) -> CGRect { usesHomeLayout ? frame.intersection(homeViewport) : frame }
     if let overlayTitle { items.append(accessibleElements.element(id: "title", owner: owner, label: overlayTitle, frame: transform(bounds))) }
-    if let rect = overlaySettingsButtonFrame() {
+    if let rect = overlaySettingsButtonFrame().map(visibleFrame), !rect.isEmpty {
       items.append(accessibleElements.element(
         id: "settings", owner: owner, label: "Settings", frame: transform(rect)
       ) { [weak self] in self?.onSettings?() })
     }
-    if let rect = overlayUpdateButtonFrame(), let label = overlayAvailableUpdate {
+    if let rect = overlayUpdateButtonFrame().map(visibleFrame), !rect.isEmpty, let label = overlayAvailableUpdate {
       items.append(accessibleElements.element(id: "update", owner: owner,
         label: label + ". Show update and release notes", frame: transform(rect)) { [weak self] in self?.onUpdate?() })
     }
     for (index, line) in overlayLines.enumerated() {
-      let rect = overlayLineRects.indices.contains(index) ? overlayLineRects[index] : bounds
+      let rect = visibleFrame(overlayLineRects.indices.contains(index) ? overlayLineRects[index] : bounds)
+      if rect.isEmpty { continue }
       let actionable = overlayHighlight != nil || overlayRetryLine == index || overlayReplayLine == index
       let action: (() -> Void)? = actionable ? { [weak self] in
         guard let self else { return }
@@ -211,6 +214,14 @@ struct ReticleFeedback {
         else { self.onSelectOverlayLine?(index) }
       } : nil
       items.append(accessibleElements.element(id: "line-\(index)", owner: owner, label: line, frame: transform(rect), press: action))
+    }
+    if usesHomeLayout, let initials = overlayProfileInitials {
+      let home = homeOverlay()
+      let rect = visibleFrame(homeFrame(home.layout.initials, scale: home.scale))
+      if !rect.isEmpty {
+        items.append(accessibleElements.element(id: "home-players", owner: owner,
+          label: "Active players: " + initials, frame: transform(rect)))
+      }
     }
     if let overlaySavedCounts {
       items.append(accessibleElements.element(id: "saved-counts", owner: owner,
@@ -224,6 +235,8 @@ struct ReticleFeedback {
       items.append(accessibleElements.element(id: "handover-retry", owner: owner, label: title, frame: transform(rect)) { [weak self] in self?.onHandoverRetry?() })
     }
     for (index, rect) in overlayFooterButtons.enumerated() {
+      let rect = visibleFrame(rect)
+      if rect.isEmpty { continue }
       items.append(accessibleElements.element(id: "footer-\(index)", owner: owner, label: ["Player profiles", "Records", "Playlists"][index], frame: transform(rect)) { [weak self] in
         self?.activateFooterButton(index)
       })
@@ -231,13 +244,20 @@ struct ReticleFeedback {
     return items
   }
   var overlayTitle: String? {
-    didSet { overlayTurnInitials = nil; overlayHandoverRetryTitle = nil }
+    didSet {
+      overlayTurnInitials = nil; overlayHandoverRetryTitle = nil
+      if overlayTitle != "LEMMINGS" { homeScrollOffset = 0; homePreviousSelection = nil }
+    }
   }
   var overlayTurnInitials: String?
   var overlayHandoverRetryTitle: String?
   var onHandoverRetry: (() -> Void)?
   private var handoverButtons: [CGRect] = []
   var overlayLines: [String] = []
+  var overlayHomeLeadingCount = 1
+  private var homeScrollOffset: CGFloat = 0
+  private var homePreviousSelection: Int?
+  private var homePreviousViewport = CGSize.zero
   var overlaySavedCounts: String?
   var overlayFooter: String? { didSet { overlayProfileInitials = nil } }
   var overlayProfileInitials: String?
@@ -608,6 +628,7 @@ struct ReticleFeedback {
   /// Takes a click position directly.
   func handleClick(at point: CGPoint) {
     guard phase == .playing else {
+      if usesHomeLayout, !homeViewport.contains(point) { return }
       if let rect = overlayUpdateButtonFrame(), rect.contains(point) {
         onUpdate?()
         return
@@ -697,6 +718,13 @@ struct ReticleFeedback {
   }
 
   func handleScroll(_ event: NSEvent, at point: CGPoint?, pansVertically: Bool = true) {
+    if usesHomeLayout {
+      let home = homeOverlay()
+      homeScrollOffset = min(max(0, home.layout.size.height * home.scale - homeViewport.height),
+        max(0, homeScrollOffset - event.scrollingDeltaY))
+      needsDisplay = true
+      return
+    }
     if phase == .playing, session?.isComplete == false, let point, bounds.contains(point) {
       switch precisionScroll.handle(event) {
       case .zoom(let action): onPrecisionScroll?(action, point); return
@@ -923,6 +951,108 @@ struct ReticleFeedback {
     let board: CGRect
   }
 
+  private var usesHomeLayout: Bool { overlayTitle == "LEMMINGS" && overlayProfileInitials != nil && macInterface != nil }
+  private var homeViewport: CGRect {
+    CGRect(x: 0, y: 0, width: bounds.width,
+      height: max(1, bounds.height - (overlayShowsLemmings ? 64 : 0) - (overlaySavedCounts == nil ? 0 : 40)))
+  }
+  private func homeOverlay() -> (page: GameFrontEnd.Page, layout: GameFrontEnd.Layout, scale: CGFloat) {
+    let rows = overlayLines.enumerated().map { index, title in
+      GameFrontEnd.Action((index < overlayHomeLeadingCount ? "home." : "family.") + String(index), title,
+        primary: index == overlayHighlight, selected: index == overlayHighlight)
+    }
+    var footer: [GameFrontEnd.Action] = [.init("players", "Profiles"), .init("records", "Records"), .init("playlists", "Playlists")]
+    if overlayShowsSettingsButton { footer.append(.init("settings", "Settings")) }
+    if overlayAvailableUpdate != nil, overlayShowsSettingsButton { footer.append(.init("whatsNew", "Update")) }
+    for index in footer.indices { footer[index].selected = overlayHighlight == rows.count + index }
+    let page = GameFrontEnd.Page(title: "Lemmings", home: true, rows: rows, footer: footer,
+      footerColumns: bounds.width >= 900 ? 3 : 2, homeInitials: overlayProfileInitials ?? "")
+    let scale = max(1, floor(min(bounds.width / 1100, homeViewport.height / 700)))
+    return (page, GameFrontEnd.layout(page, width: bounds.width / scale, minimumHeight: homeViewport.height / scale), scale)
+  }
+  private func homeFrame(_ frame: CGRect, scale: CGFloat) -> CGRect {
+    frame.applying(CGAffineTransform(scaleX: scale, y: scale)).offsetBy(dx: 0, dy: -homeScrollOffset)
+  }
+  var homeActionCount: Int { usesHomeLayout ? homeOverlay().layout.targets.count : overlayLines.count }
+  func activateHomeSelection(_ index: Int) -> Bool {
+    guard usesHomeLayout else { return false }
+    let home = homeOverlay()
+    let footerIndex = index - home.page.rows.count
+    guard home.page.footer.indices.contains(footerIndex) else { return false }
+    switch home.page.footer[footerIndex].id {
+    case "players": onProfiles?()
+    case "records": onRecords?()
+    case "playlists": onPlaylists?()
+    case "settings": onSettings?()
+    case "whatsNew": onUpdate?()
+    default: return false
+    }
+    return true
+  }
+  func homeSelection(from index: Int, direction: String) -> Int? {
+    guard usesHomeLayout else { return nil }
+    let home = homeOverlay()
+    let rows = (home.page.rows + home.page.footer).compactMap { row in home.layout.targets.first { $0.action.id == row.id } }
+    guard rows.indices.contains(index) else { return nil }
+    let current = rows[index].frame
+    let candidates = rows.indices.filter { candidate in
+      let frame = rows[candidate].frame
+      switch direction {
+      case "left": return frame.minY == current.minY && frame.midX < current.midX
+      case "right": return frame.minY == current.minY && frame.midX > current.midX
+      case "up": return frame.minY < current.minY
+      case "down": return frame.minY > current.minY
+      default: return false
+      }
+    }
+    return candidates.min { left, right in
+      let a = rows[left].frame, b = rows[right].frame
+      if direction == "up" || direction == "down", a.minY != b.minY {
+        return abs(a.minY - current.minY) < abs(b.minY - current.minY)
+      }
+      return abs(a.midX - current.midX) < abs(b.midX - current.midX)
+    } ?? index
+  }
+  private func drawHomeOverlay() {
+    guard let macInterface, let context = NSGraphicsContext.current?.cgContext else { return }
+    let home = homeOverlay()
+    homeScrollOffset = min(max(0, home.layout.size.height * home.scale - homeViewport.height), max(0, homeScrollOffset))
+    if homePreviousSelection != overlayHighlight || homePreviousViewport != homeViewport.size,
+       let index = overlayHighlight, (home.page.rows + home.page.footer).indices.contains(index),
+       let target = home.layout.targets.first(where: { $0.action.id == (home.page.rows + home.page.footer)[index].id }) {
+      let frame = homeFrame(target.frame, scale: home.scale)
+      if frame.minY < 8 { homeScrollOffset = max(0, homeScrollOffset + frame.minY - 8) }
+      if frame.maxY > homeViewport.maxY - 8 { homeScrollOffset += frame.maxY - homeViewport.maxY + 8 }
+    }
+    homePreviousSelection = overlayHighlight
+    homePreviousViewport = homeViewport.size
+    homeScrollOffset = min(max(0, home.layout.size.height * home.scale - homeViewport.height), max(0, homeScrollOffset))
+    overlayLineRects = home.page.rows.compactMap { row in
+      home.layout.targets.first { $0.action.id == row.id }.map { homeFrame($0.frame, scale: home.scale) }
+    }
+    overlayFooterButtons = ["players", "records", "playlists"].compactMap { id in
+      home.layout.targets.first { $0.action.id == id }.map { homeFrame($0.frame, scale: home.scale) }
+    }
+    let hovered = cursorViewPoint.flatMap { point in
+      home.layout.targets.first { homeFrame($0.frame, scale: home.scale).contains(point) }?.action.id
+    } ?? overlayHighlight.flatMap { index in
+      let actions = home.page.rows + home.page.footer
+      return actions.indices.contains(index) ? actions[index].id : nil
+    }
+    NSColor.black.setFill(); bounds.fill()
+    context.saveGState()
+    context.clip(to: homeViewport)
+    context.translateBy(x: 0, y: -homeScrollOffset)
+    context.scaleBy(x: home.scale, y: home.scale)
+    GameFrontEnd.draw(home.page, layout: home.layout, typography: GameMenuTypography(interface: macInterface.interface),
+      highlighted: hovered, in: context)
+    context.restoreGState()
+    if let overlaySavedCounts {
+      drawMenuGameText(overlaySavedCounts, in: overlaySavedCountsFrame(overlayLayout()), face: .small, scale: 1, palette: .green)
+    }
+    if overlayShowsLemmings { drawMarchingLemmings() }
+  }
+
   private func overlayLayout() -> OverlayLayout {
     let showsLogo = overlayTitle == "LEMMINGS" && macInterface?.interface.logo != nil
     let headerUnits: CGFloat = showsLogo ? 116 : 62
@@ -965,7 +1095,8 @@ struct ReticleFeedback {
   }
 
   private func overlaySavedCountsFrame(_ layout: OverlayLayout) -> CGRect {
-    CGRect(x: layout.board.minX + 20 * layout.scale,
+    if usesHomeLayout { return CGRect(x: 24, y: homeViewport.maxY + 4, width: bounds.width - 48, height: 32) }
+    return CGRect(x: layout.board.minX + 20 * layout.scale,
       y: layout.board.minY + 23 * layout.scale + layout.headerHeight
         + layout.rowHeights.reduce(0, +),
       width: layout.board.width - 40 * layout.scale, height: 32 * layout.scale)
@@ -973,6 +1104,10 @@ struct ReticleFeedback {
 
   private func overlaySettingsButtonFrame(_ layout: OverlayLayout? = nil) -> CGRect? {
     guard overlayShowsSettingsButton else { return nil }
+    if usesHomeLayout {
+      let home = homeOverlay()
+      return home.layout.targets.first { $0.action.id == "settings" }.map { homeFrame($0.frame, scale: home.scale) }
+    }
     let layout = layout ?? overlayLayout()
     let side = max(44, 48 * layout.scale)
     return CGRect(
@@ -984,6 +1119,10 @@ struct ReticleFeedback {
 
   private func overlayUpdateButtonFrame(_ layout: OverlayLayout? = nil) -> CGRect? {
     guard overlayAvailableUpdate != nil, overlayShowsSettingsButton else { return nil }
+    if usesHomeLayout {
+      let home = homeOverlay()
+      return home.layout.targets.first { $0.action.id == "whatsNew" }.map { homeFrame($0.frame, scale: home.scale) }
+    }
     let layout = layout ?? overlayLayout()
     let side = max(44, 48 * layout.scale)
     return CGRect(x: layout.board.minX + 18 * layout.scale, y: layout.board.minY + 18 * layout.scale,
@@ -994,6 +1133,7 @@ struct ReticleFeedback {
     overlayLineRects = []
     overlayFooterButtons = []
     handoverButtons = []
+    if usesHomeLayout { drawHomeOverlay(); return }
     NSColor.black.withAlphaComponent(0.42).setFill()
     bounds.fill()
     let showsLogo = overlayTitle == "LEMMINGS" && macInterface?.interface.logo != nil

@@ -49,13 +49,11 @@ public enum TVMenuArt {
         context.setShouldAntialias(false)
         context.setFillColor(CGColor(gray: 0, alpha: 1)); context.fill(CGRect(origin: .zero, size: size))
         GameMenuFrameArt.draw(in: context, board: layout.board)
-        if page.home, let logo = typography?.interface.logo,
-           let provider = CGDataProvider(data: logo.rgba as CFData),
-           let image = CGImage(width: logo.width, height: logo.height, bitsPerComponent: 8, bitsPerPixel: 32,
-                bytesPerRow: logo.width * 4, space: CGColorSpaceCreateDeviceRGB(),
-                bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider,
-                decode: nil, shouldInterpolate: false, intent: .defaultIntent) {
-            fitted(image, in: layout.heading, context: context)
+        if page.home, let image = typography?.menuLogo {
+            let frame = GameMenuLogo.frame(canvasSize: CGSize(width: image.width, height: image.height),
+                originalWidth: CGFloat(typography?.interface.logo?.width ?? image.width),
+                in: layout.heading, wholeNumberScale: false)
+            GameStoneArt.drawImage(image, in: frame, context: context)
         } else { text(page.title, box: layout.heading, title: true, green: true, typography: typography, context: context) }
         text(page.subtitle, box: layout.subtitle, typography: typography, context: context)
         if page.preview {

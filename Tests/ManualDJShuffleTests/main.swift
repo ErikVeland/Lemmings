@@ -35,7 +35,23 @@ import NxlvKit
         try require(!player.isCrossfading && player.currentURL == destination && player.playingDeckCount == 1,
             "The retargeted mix did not settle on one deck")
         player.stop()
+        let paths = Set(catalogue.tracks.flatMap(\.variants).map(\.path))
+        for game in ["classic.cancan", "lemmings2.medieval", "lemmings3.classic1"] {
+            let legacy = AdaptiveDJPlayer()
+            legacy.load(soundtracks: pools, catalogueRoot: root)
+            legacy.setVolume(0)
+            let originalVariant = try unwrap(catalogue.select(trackID: game, cycle: 0, availablePaths: paths))
+            let source = root.appendingPathComponent(originalVariant.path)
+            try require(legacy.shuffle(from: source, scope: .sameTrack, identity: game, fallbackTrackID: game),
+                "Ordinary soundtrack could not enter manual DJ: " + game)
+            let selected = try unwrap(legacy.currentURL)
+            let selectedPath = SoundtrackPlayer.cataloguePath(selected, root: root) ?? ""
+            try require(selected != source && catalogue.entry(path: selectedPath)?.track.id == game,
+                "Legacy handoff changed composition or repeated its source: " + game)
+            legacy.stop()
+        }
         print("PASS manual same-track/all-track crossfades, current-recording exclusion, mute and suspended-output boundaries")
+        print("PASS ordinary-source handoff into manual DJ for Classic, Lemmings 2 and Lemmings 3")
     }
     static func unwrap<T>(_ value: T?) throws -> T {
         guard let value else { throw Failure.invalid("No current recording") }

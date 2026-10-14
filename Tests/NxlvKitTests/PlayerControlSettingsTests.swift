@@ -3,6 +3,14 @@ import Testing
 @testable import NxlvKit
 
 struct PlayerControlSettingsTests {
+    @Test func macShuffleScopeDefaultsAndSurvivesSavedSettingsAndPresets() throws {
+        var value = try JSONDecoder().decode(ClassicSettings.self, from: Data("{}".utf8))
+        #expect(value.djShuffleScope == .sameTrack)
+        value.djShuffleScope = .allTracks
+        value.applyExperiencePreset(modern: false)
+        value.applyExperiencePreset(modern: true)
+        #expect(try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(value)).djShuffleScope == .allTracks)
+    }
     @Test func profileChoicesOverlayOnlyInputAndAccessibility() {
         var personal = ClassicSettings()
         personal.controllerEnabled = false

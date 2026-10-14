@@ -53,7 +53,7 @@ public struct TVControllerBindings {
             actions.append(.settings)
         }
         if optionsArmed, pressed.contains(.options), pressed.contains(.leftStick), !previous.contains(.leftStick) {
-            actions.removeAll { $0 == .centre(true) }
+            actions.removeAll { $0 == .djShuffle }
             shuffleRequested = true
         }
         if previous.contains(.options), !pressed.contains(.options) {

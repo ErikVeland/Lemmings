@@ -32,7 +32,7 @@ def source_manifest():
               if p.is_file() and p.suffix in (".swift", ".plist", ".xcprivacy", ".pbxproj", ".xcscheme", ".png", ".json", ".resolved", ".entitlements")
               and "xcuserdata" not in p.parts]
     from content import PARITY_RESOURCES
-    for name in PARITY_RESOURCES:
+    for name in (*PARITY_RESOURCES, "MenuArtwork"):
         files += [p for p in (ROOT / "Resources" / name).rglob("*") if p.is_file()]
     result = {str(p.relative_to(ROOT)): digest(p) for p in sorted(set(files))}
     from artwork import FAMILIES, inputs
@@ -225,8 +225,8 @@ def main():
     env["CLANG_MODULE_CACHE_PATH"] = str(output / "module-cache")
     env["SWIFTPM_MODULECACHE_OVERRIDE"] = str(output / "module-cache")
     record = {
-        "startedUTC": datetime.now(timezone.utc).isoformat(), "scope": "Classic first device beta",
-        "launchScope": ["Classic", "Lemmings 2", "Lemmings 3"],
+        "startedUTC": datetime.now(timezone.utc).isoformat(), "scope": "Mobile candidate with Mac game content",
+        "launchScope": ["Classic", "Lemmings 2", "Lemmings 3", "NeoLemmix Preview"],
         "status": "preparing", "signed": False, "exported": False, "uploaded": False,
         "physicalDeviceAcceptance": "pending", "team": args.team, "build": args.build,
         "musicScope": music_scope,

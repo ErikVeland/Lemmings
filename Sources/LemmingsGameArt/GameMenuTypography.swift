@@ -12,10 +12,12 @@ public final class GameMenuTypography {
     public typealias Face = ClassicMacUserInterface.Face
 
     public let interface: ClassicMacUserInterface
+    public let menuLogo: CGImage?
     private var glyphs: [String: CGImage] = [:]
 
     public init(interface: ClassicMacUserInterface) {
         self.interface = interface
+        menuLogo = interface.logo.flatMap { GameMenuLogo.image(for: $0) }
     }
 
     /// Reads the bundled `MacArtwork/lemmings` banks, or nil when they are absent.

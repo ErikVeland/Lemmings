@@ -20,7 +20,8 @@ import NxlvKit
         let hotSeat = CommandLine.arguments.last == "--hot-seat"
         let hotSeatFlow = CommandLine.arguments.last == "--hot-seat-flow"
         let hotSeatHUD = CommandLine.arguments.last == "--hot-seat-hud"
-        guard CommandLine.arguments.count == (hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow ? 5 : 4) else { throw Failure.invalidArguments }
+        let bundledGames = CommandLine.arguments.last == "--bundled-games"
+        guard CommandLine.arguments.count == (hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames ? 5 : 4) else { throw Failure.invalidArguments }
         let artwork = URL(fileURLWithPath: CommandLine.arguments[1])
         let content = URL(fileURLWithPath: CommandLine.arguments[2])
         let output = URL(fileURLWithPath: CommandLine.arguments[3])
@@ -114,8 +115,20 @@ import NxlvKit
         pages += try careerPages()
         let portraits = GamePortraitArt(directory: artwork)
         guard (0..<8).allSatisfy({ portraits?.image($0) != nil }) else { throw Failure.missingArtwork }
+        if bundledGames {
+            let missingFamilies = homeFamilies.map { action -> Action in
+                switch action.id {
+                case "l2": .init(action.id, "Import Lemmings 2 data")
+                case "l3": .init(action.id, "Import Lemmings 3 data")
+                case "neolemmix": .init(action.id, "Import NeoLemmix data")
+                default: action
+                }
+            }
+            pages = [("bundled-home", home),
+                     ("missing-home", MobileHomeArt.page(journey: journey, families: missingFamilies, initials: "LEM"))]
+        }
         var evidence: [[String: Any]] = []
-        for (device, size) in [("ipad-8-portrait", CGSize(width: 810, height: 1040)),
+        let devices = [("ipad-8-portrait", CGSize(width: 810, height: 1040)),
                                ("ipad-8-landscape", CGSize(width: 1080, height: 770)),
                                ("ipad-8-large", CGSize(width: 720, height: 513)),
                                ("ipad-portrait", CGSize(width: 834, height: 1092)),
@@ -123,7 +136,9 @@ import NxlvKit
                                ("iphone-portrait", CGSize(width: 390, height: 763)),
                                ("iphone-landscape", CGSize(width: 756, height: 369)),
                                ("iphone-narrow-portrait", CGSize(width: 320, height: 548)),
-                               ("iphone-narrow-landscape", CGSize(width: 568, height: 300))] {
+                       ("iphone-narrow-landscape", CGSize(width: 568, height: 300))]
+            + (bundledGames ? [("tv", CGSize(width: 1920, height: 1080))] : [])
+        for (device, size) in devices {
             for (state, page) in pages {
                 let layout = GameFrontEnd.layout(page, width: size.width, minimumHeight: size.height)
                 if device.hasPrefix("ipad"), page.home || page.result {
@@ -181,6 +196,12 @@ import NxlvKit
                                  "needsVerticalScroll": layout.size.height > size.height, "file": file.lastPathComponent,
                                  "minimumTouchExtent": 44, "disabledAndGapTargetsBlocked": true])
             }
+        }
+        if bundledGames {
+            try JSONSerialization.data(withJSONObject: evidence, options: [.prettyPrinted, .sortedKeys])
+                .write(to: output.appendingPathComponent("report.json"), options: .atomic)
+            print("PASS: \(evidence.count) bundled/missing home renders and input targets; windowless and muted.")
+            return
         }
         let adaptive = try auditAdaptive(session: session, typography: typography, artwork: artwork, output: output)
         let nativeHUD = try auditNativeArtwork(library: library, typography: typography, artwork: artwork, output: output)

@@ -95,6 +95,7 @@ import NxlvKit
     var focusUnassigned: (Int) -> Void = { _ in }
     var focusLast: () -> Void = {}
     var repeatAssignment: () -> Void = {}
+    var djShuffle: (() -> Void)?
     var escape: () -> Void = {}
     var mainMenu: (() -> Void)?
     var navigationAvailable: () -> Bool = { true }
@@ -121,21 +122,26 @@ import NxlvKit
     }
     func refreshNavigationControl(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
         guard let root = window?.contentView else { return }
+        let visible = mainMenu != nil && ownsController() && navigationAvailable()
+            && window?.attachedSheet == nil && !GameScreen.shared.isPresented
+        let menuFrame = CGRect(x: max(0, root.bounds.maxX - 100),
+            y: root.isFlipped ? 36 : max(0, root.bounds.maxY - 80), width: 88, height: 44)
+        var noticeArea = (musicDisplayArea() ?? root.bounds).intersection(root.bounds)
+        if visible, noticeArea.intersects(menuFrame) {
+            noticeArea.size.width = max(0, min(noticeArea.maxX, menuFrame.minX - 8) - noticeArea.minX)
+        }
         if nowPlayingNotice.superview !== root { nowPlayingNotice.removeFromSuperview(); root.addSubview(nowPlayingNotice) }
         nowPlayingNotice.update(track: playingTrack(), at: now,
             visible: active() && ownsController() && !GameScreen.shared.isPresented && window?.attachedSheet == nil,
             reduceMotion: navigationReduceMotion(), enabled: showSongInfo(),
-            area: (musicDisplayArea() ?? root.bounds).intersection(root.bounds), flipped: root.isFlipped)
-        let visible = mainMenu != nil && ownsController() && navigationAvailable()
-            && window?.attachedSheet == nil && !GameScreen.shared.isPresented
+            area: noticeArea, flipped: root.isFlipped)
         guard visible else { navigationButton.isHidden = true; navigationButton.resetAppearance(); return }
         if navigationButton.superview !== root {
             navigationButton.removeFromSuperview()
             root.addSubview(navigationButton)
             navigationButton.resetAppearance()
         }
-        navigationButton.frame = CGRect(x: max(0, root.bounds.maxX - 100),
-            y: root.isFlipped ? 36 : max(0, root.bounds.maxY - 80), width: 88, height: 44)
+        navigationButton.frame = menuFrame
         navigationButton.isHidden = false
         navigationButton.updateAppearance(at: now, autoHide: active() && fadeMenuButton(), reduceMotion: navigationReduceMotion())
     }
@@ -223,6 +229,10 @@ import NxlvKit
         // Handle pause before AppKit sends Space to the focused control or canvas.
         let sharedCommand = GameplayCommands.command(key: event.keyCode == 122 ? "f1" : (event.charactersIgnoringModifiers ?? ""),
             shift: event.modifierFlags.contains(.shift))
+        if sharedCommand == .djShuffle, let djShuffle {
+            if !event.isARepeat { djShuffle() }
+            return nil
+        }
         if sharedCommand == .pause || event.keyCode == 49 {
             if !event.isARepeat { togglePause() }
             return nil
@@ -344,6 +354,7 @@ import NxlvKit
         case .retry: retry?()
         case .hints: if !openRetainedSolution() { hints?() }
         case .settings: settings?()
+        case .djShuffle: break
         case .help: showHelp()
         default: break
         }
@@ -359,6 +370,7 @@ import NxlvKit
         case .help: showHelp()
         case .hints: if !openRetainedSolution() { hints?() }
         case .settings: settings?()
+        case .djShuffle: djShuffle?()
         case .retry: retry?()
         case .rewind: rewind?()
         case let .step(direction): step?(direction)
@@ -381,6 +393,7 @@ import NxlvKit
             sections.append("Tab / Shift-Tab: next / previous available skill\nH / Home: centre entrance\n" + goal + "\n[ / ]: previous / next unassigned lemming\n\\: focus last assignment\nReturn: repeat last skill")
         } else { sections.append("Modern keyboard shortcuts are off. Number keys select skills.") }
         if step != nil { sections.append("⌘Z: rewind one tick") }
+        if djShuffle != nil { sections.append("J: DJ shuffle") }
         sections.append("Escape / Q: save run and return to library\n?: controls help")
         if hints != nil { sections.append("Slash / I / F1: level goals and tiered hints") }
         if rate != nil {

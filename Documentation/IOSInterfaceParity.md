@@ -9,11 +9,21 @@ boundaries. A Classic device beta does not establish three-game parity.
 
 The 14 October source also connects L2/L3 native libraries, renderers, campaign
 records and checkpoints, plus supported NeoLemmix Preview import/playback.
-Compatible player-owned data enables these entries. Journey generation currently
+Bundled Mac game data or compatible player-owned imports enable these entries. Journey generation currently
 accepts Classic entries. The normal Apple TV app now uses this same frontend,
 with TV focus, remote/controller and LAN file-transfer adaptations. See the
 [TV parity register](../Apps/UltimateLemmingsTV/IOSParity.md) for implementation
 and acceptance boundaries.
+
+Both Xcode targets use `Tools/IOSBeta/packs.py` to bundle the shared Classic and
+fan catalogue, `Ports/Lemm2`, `Ports/LEM3CD` and `Content/NeoLemmix`. Debug and
+Release builds include the sequel levels, native artwork and sounds. L2 extracts
+the same native walker and explosion data as macOS. NeoLemmix includes the same
+prepared packs, styles and verified stock sounds. Imported data takes precedence
+over bundled data, without copying bundled files into local storage. Only the
+explicit unsigned `IOS_SOURCE_GATE_ONLY=1` gate may omit unavailable local content.
+Normal builds fail when required content is missing. This packaging also applies
+to App Store candidates. Signed-device and physical-play acceptance remain open.
 
 The dated increments below are historical evidence. Later source changes
 supersede their earlier statements that sequels, collections or audio are absent.

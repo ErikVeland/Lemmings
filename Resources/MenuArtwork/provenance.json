@@ -1,0 +1,27 @@
+{
+  "asset": "ultimate.png",
+  "tool": "Built-in image_gen",
+  "purpose": "Transparent Ultimate lettering for the shared Macintosh menu logo.",
+  "paletteReference": {
+    "green": [
+      "#008040",
+      "#007020",
+      "#006010",
+      "#005000"
+    ],
+    "originalOutline": "#B0B000"
+  },
+  "placement": {
+    "referenceLogoWidth": 629,
+    "padding": "Derived from the rotated badge bounds",
+    "letteringWidth": 242,
+    "additionalUpwardTiltDegrees": 8,
+    "opticalAnchor": {"stalkX": 55, "fromLogoTop": 50, "wordWidthFraction": 0.59},
+    "role": "Badge with ima across the original upper-left L",
+    "menuAnchor": "Centre the original Lemmings mark, excluding the badge overhang"
+  },
+  "prompts": [
+    "Use case: compositing. Asset type: transparent bitmap lettering overlay for the original high-resolution Macintosh Lemmings menu logo.\nInput image 1 is a palette and illustration reference ONLY. Produce ONLY the added word, not the original logo.\nText verbatim: \"Ultimate\" (capital U, then lowercase l t i m a t e), spelled exactly once.\nCreate hand-lettered rounded yellow tube lettering, extruded 3D, reminiscent of a 1950s ice cream parlour poster. A friendly connected bold script with open, legible counters, gently tilted about 8 degrees counterclockwise so the word rises to the right. Buttery yellow front faces (#E8CF38), restrained pale yellow upper-left highlights (#F2E16A), darker mustard extrusion (#B0B000) that directly reuses the logo's authored outline colour, and dark green shadow/edge (#005000). It must feel painted for the original graphic, with short down-right extrusion, slight stippled bitmap texture, no smooth modern plastic or neon. Match the reference's limited-palette green (#008040, #007020, #006010, #005000) in the narrow green edge and shadow; don't alter those hues.\nThe word will sit above the upper-left third of the reference logo, as part of a single mark. Make the word about 3.3 times as wide as its height, with small transparent margins. Rounded tubular strokes, sturdy at a small menu size. No underline, no swash beyond the word, no additional illustration, no badge or sign backing. Absolutely no Lemmings lettering or characters. Genuine transparent background.",
+    "Use case: precise-object-edit. Edit target: the supplied transparent yellow \"Ultimate\" lettering. Preserve the word exactly, its spelling, shape, tilt, tube extrusion, stippled texture, palette, green edges, composition and transparent background. Add ONLY three small blingy four-point sparkle stars at key shine points: on the upper-left highlight of the capital U, near the high highlight on the tall l, and near the upper-right highlight of the final e. Think hand-airbrushed 1970s custom van art: sharp long vertical and shorter horizontal rays, pale warm cream centres, yellow outer tips, with very restrained tiny glints. Stars should be a modest accent that stays legible at small menu size. Keep them anchored to letter highlights, not floating ornaments. No large glow, no haze, no new background, no extra text or objects. Preserve the transparent alpha."
+  ]
+}

@@ -31,6 +31,7 @@ import NxlvKit
   enum Palette: String { case blue, green }
 
   let interface: ClassicMacUserInterface
+  private let menuLogo: NSImage?
   private var counterSocket: NSImage?
   private var counterImages: [Int: NSImage] = [:]
   private var cache: [String: NSImage] = [:]
@@ -81,6 +82,9 @@ import NxlvKit
 
   init(interface: ClassicMacUserInterface) {
     self.interface = interface
+    menuLogo = interface.logo.flatMap { GameMenuLogo.image(for: $0) }.map {
+      NSImage(cgImage: $0, size: CGSize(width: $0.width, height: $0.height))
+    }
   }
 
   func font(_ face: ClassicMacUserInterface.Face) -> ClassicMacUserInterface.Font? {
@@ -190,23 +194,22 @@ import NxlvKit
   func drawLogo(
     centerX: CGFloat, top: CGFloat, maximumWidth: CGFloat, maximumHeight: CGFloat
   ) -> CGFloat {
-    guard let logo = interface.logo, let image = image(for: logo, key: "logo"),
-      logo.width > 0, logo.height > 0
+    guard let image = menuLogo, image.size.width > 0, image.size.height > 0
     else { return 0 }
-    let fit = min(maximumWidth / CGFloat(logo.width), maximumHeight / CGFloat(logo.height))
-    // Below one, the logo has to shrink, and a whole number is not available.
-    let factor = fit >= 1 ? CGFloat(max(1, Int(fit))) : fit
-    let size = CGSize(width: CGFloat(logo.width) * factor, height: CGFloat(logo.height) * factor)
+    let frame = GameMenuLogo.frame(canvasSize: image.size,
+      originalWidth: CGFloat(interface.logo?.width ?? Int(image.size.width)),
+      in: CGRect(x: centerX - maximumWidth / 2, y: top, width: maximumWidth, height: maximumHeight),
+      topAligned: true)
     image.draw(
-      in: CGRect(x: centerX - size.width / 2, y: top, width: size.width, height: size.height),
+      in: frame,
       from: .zero, operation: .sourceOver, fraction: 1,
       respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
-    return size.height
+    return frame.height
   }
 
   var logoAspect: CGFloat? {
-    guard let logo = interface.logo, logo.width > 0 else { return nil }
-    return CGFloat(logo.height) / CGFloat(logo.width)
+    guard let image = menuLogo, image.size.width > 0 else { return nil }
+    return image.size.height / image.size.width
   }
 
   static func menuText(_ value: String) -> String { GameMenuTypography.menuText(value) }

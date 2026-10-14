@@ -33,7 +33,8 @@ let package = Package(
                           swiftSettings: [.unsafeFlags(["-parse-as-library"])]),
         .target(
             name: "NxlvKit",
-            path: "Sources/NxlvKit"
+            path: "Sources/NxlvKit",
+            resources: [.copy("Resources/Localization.bundle")]
         ),
         .target(
             name: "LemmingsAudio",
@@ -66,7 +67,7 @@ let package = Package(
             name: "LemmingsMobileBetaTool",
             dependencies: ["LemmingsMobileCore", "NxlvKit"],
             path: "Tools/IOSBeta",
-            exclude: ["content.py", "build.py", "install.py", "artwork.py", "ports.py", "packs.py", "music.py", "game_center.py", "__pycache__"],
+            exclude: ["content.py", "build.py", "install.py", "artwork.py", "ports.py", "packs.py", "games.py", "music.py", "game_center.py", "__pycache__"],
             sources: ["validate-content.swift"]
         ),
         .executableTarget(

@@ -221,6 +221,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public var confinePointer: Bool
     public var fullScreenHDRFlashes: Bool
     public var djIncludesOtherSoundtracks: Bool
+    public var djShuffleScope: SoundtrackCatalogue.ShuffleScope
 
     // Audio
     public var music: ClassicMusicSource
@@ -284,7 +285,8 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         bottomFallSounds: Bool = true,
         shuffleGraphics: Bool = false,
         shuffleMusic: Bool = false,
-        unlockAllClassicLevels: Bool = false
+        unlockAllClassicLevels: Bool = false,
+        djShuffleScope: SoundtrackCatalogue.ShuffleScope = .sameTrack
     ) {
         self.graphics = graphics
         self.colorDepth = colorDepth
@@ -318,6 +320,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         self.confinePointer = confinePointer
         self.fullScreenHDRFlashes = fullScreenHDRFlashes
         self.djIncludesOtherSoundtracks = djIncludesOtherSoundtracks
+        self.djShuffleScope = djShuffleScope
         self.music = music
         self.musicStyle = musicStyle
         self.musicVolume = musicVolume
@@ -394,6 +397,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         confinePointer = try values.decodeIfPresent(Bool.self, forKey: .confinePointer) ?? fallback.confinePointer
         fullScreenHDRFlashes = try values.decodeIfPresent(Bool.self, forKey: .fullScreenHDRFlashes) ?? fallback.fullScreenHDRFlashes
         djIncludesOtherSoundtracks = try values.decodeIfPresent(Bool.self, forKey: .djIncludesOtherSoundtracks) ?? fallback.djIncludesOtherSoundtracks
+        djShuffleScope = try values.decodeIfPresent(SoundtrackCatalogue.ShuffleScope.self, forKey: .djShuffleScope) ?? .sameTrack
         music = source(.music, fallback.music)
         musicStyle = try values.decodeIfPresent(
             ClassicMusicStyle.self, forKey: .musicStyle) ?? fallback.musicStyle

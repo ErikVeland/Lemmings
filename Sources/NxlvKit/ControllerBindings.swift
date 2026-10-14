@@ -4,7 +4,7 @@ public struct ControllerBindings {
     public enum Action: Equatable, Sendable {
         case assign, repeatAssignment, cancel, pause, help, focusLast, focusUnassigned(Int), cycle(Int)
         case rate(Int), centre(Bool), speedStep(Int), speedReset, boost(Bool)
-        case hints, settings, retry, rewind, step(Int), endRun
+        case hints, settings, retry, rewind, step(Int), endRun, djShuffle
     }
     /// Only permutations are accepted, so no action becomes unreachable.
     public static func validatedMapping(_ value: [String: String]) -> [String: String] {
@@ -70,7 +70,7 @@ public struct ControllerBindings {
             case .right: actions.append(extra && !inMenu ? .speedStep(1) : .focusUnassigned(1))
             case .up: actions.append(extra && !inMenu ? .centre(true) : .rate(1))
             case .down: actions.append(extra && !inMenu ? .centre(false) : .rate(-1))
-            case .leftStick: actions.append(.centre(true))
+            case .leftStick: actions.append(extra && !inMenu ? .djShuffle : .centre(true))
             case .rightStick: actions.append(.centre(false))
             case .rightTrigger: actions.append(.boost(true))
             case .leftTrigger: break
@@ -95,6 +95,7 @@ public struct ControllerBindings {
     Hold LT + LB / RB: step back / forward where supported
     Hold LT + B: rewind where supported • LT + Menu: retry
     Hold LT + A: end run / undo nuke • LT + View / Options: settings
+    Hold LT + L3: DJ shuffle • DualSense touchpad click: DJ shuffle
     Menus: D-pad selects or adjusts, A confirms, B returns, LB / RB changes tabs
     Right stick scrolls long pages. Release buttons before using a new page.
     """

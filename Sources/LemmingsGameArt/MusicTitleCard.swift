@@ -70,7 +70,7 @@ public enum MusicTitleCard {
     }
 
     public static func frame(size: CGSize, in area: CGRect, flipped: Bool = true, margin: CGFloat = 12) -> CGRect {
-        CGRect(x: floor(area.minX + margin), y: floor(flipped ? area.maxY - margin - size.height : area.minY + margin),
+        CGRect(x: floor(area.minX + margin), y: floor(flipped ? area.minY + margin : area.maxY - margin - size.height),
                width: size.width, height: size.height)
     }
 

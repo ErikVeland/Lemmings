@@ -4,7 +4,7 @@ import LemmingsMobileCore
 import NxlvKit
 
 /**
- * Opens supported levels from player-imported NeoLemmix CE packs.
+ * Opens supported levels from bundled or player-imported NeoLemmix CE packs.
  */
 final class NeoLemmixMobileLibrary: MobileGameLibrary {
     private struct Entry {

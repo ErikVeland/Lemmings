@@ -188,6 +188,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private let effectsWelcome = EffectsWelcome()
   private var settingsWindow: SettingsWindow?
   private var settings = ClassicSettings()
+  private var settingsProfileID: String?
   private var audioMuted = false
   private var audioIsSleeping = false
   private var previousDepth = ClassicColorDepth.full
@@ -721,7 +722,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     library.onImported = service.onImported
     library.onChange = { [weak self] in self?.libraryCloudView?.needsDisplay = true }
     ArcadeWindow.shared.arcadeView.onCloudSaves = { [weak self] in self?.showCloudSaves() }
-    ArcadeStore.shared.onProgressChanged = { [weak service, weak library] in
+    ArcadeStore.shared.onProgressChanged = { [weak self, weak service, weak library] in
+      self?.refreshPlayerControls()
       library?.requestSync()
       if library?.enabled == true { service?.requestSync() }
     }
@@ -1232,6 +1234,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   @objc private func showSettings() {
+    refreshPlayerControls()
     let options = settingsOptions()
     if settingsWindow == nil {
       let created = SettingsWindow(settings: settings, options: options)
@@ -1262,9 +1265,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     settings = updated
     GameAccessibility.interfaceSize = settings.interfaceSize
     GameScreen.shared.reattach()
-    if let data = try? JSONEncoder().encode(updated) {
+    let baseline = UserDefaults.standard.data(forKey: settingsKey).flatMap { try? JSONDecoder().decode(ClassicSettings.self, from: $0) } ?? ClassicSettings()
+    let deviceSettings = PlayerControlSettings(baseline).applying(to: updated)
+    if let data = try? JSONEncoder().encode(deviceSettings) {
       UserDefaults.standard.set(data, forKey: settingsKey)
     }
+    PlayerControlSettings(updated).save(to: .standard, profileID: settingsProfileID ?? ArcadeStore.shared.playingProfileID)
 
     if djPoolChanged { reloadDJLibrary() }
     if classicUnlockChanged {
@@ -1338,6 +1344,17 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
+  private func refreshPlayerControls() {
+    guard settingsProfileID != nil else { return }
+    let owner = ArcadeStore.shared.playingProfileID
+    guard settingsProfileID != owner else { return }
+    let baseline = UserDefaults.standard.data(forKey: settingsKey).flatMap { try? JSONDecoder().decode(ClassicSettings.self, from: $0) } ?? ClassicSettings()
+    let updated = PlayerControlSettings.load(from: .standard, profileID: owner, legacy: baseline).applying(to: settings)
+    settingsProfileID = owner
+    apply(updated)
+    settingsWindow?.update(options: settingsOptions(), settings: settings)
+  }
+
   private func restoreSettings() {
     audioMuted = UserDefaults.standard.bool(forKey: "AudioMuted")
     if let data = UserDefaults.standard.data(forKey: settingsKey),
@@ -1346,6 +1363,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     } else if UserDefaults.standard.bool(forKey: musicPresetKey) {
       settings.musicStyle = .modern
     }
+    let owner = ArcadeStore.shared.playingProfileID
+    settingsProfileID = owner
+    settings = PlayerControlSettings.load(from: .standard, profileID: owner, legacy: settings).applying(to: settings)
     GameAccessibility.interfaceSize = settings.interfaceSize
     previousDepth = settings.colorDepth
     speedControl.variableEnabled = settings.modernControlsEnabled && settings.variableSpeedEnabled
@@ -6499,6 +6519,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     hintMap = playfield.levelImage
     let previousAttemptID = arcadeRunID
     arcadeRunID = UUID(); arcadeProfileID = ArcadeStore.shared.playingProfileID; arcadeHotSeatID = ArcadeStore.shared.hotSeatID; arcadeReport = nil
+    refreshPlayerControls()
     LevelHintWindow.shared.rebindSolution(session: new as? ClassicSession, owner: window, runID: arcadeRunID,
       ownerKey: solutionRetentionKey, pause: { [weak self, weak new] in
         guard let self, let new else { return }
@@ -6565,7 +6586,6 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.startCountdown.cancel()
     if !restoringCheckpoint { playfield.startCountdown.arm() }
     userPausedMusic = false
-    try? music.resumeOutput(); soundtrack.resumeOutput(); dj.resumeOutput()
     isPaused = playfield.startCountdown.isActive
     panel.isPaused = isPaused
     isFastForward = false
@@ -6589,6 +6609,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     syncPanelViewport()
     updateStatus()
     playMusicForCurrentLevel()
+    try? music.resumeOutput(); soundtrack.resumeOutput(); dj.resumeOutput()
   }
 
   // MARK: - The game shell
@@ -6667,15 +6688,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
       playfield.overlayTitle = "LEMMINGS"
       menuRecovery = try? recoveryStore.latest(profileID: ArcadeStore.shared.playingProfileID, hotSeatID: ArcadeStore.shared.hotSeatID)
       let homeItems = homeMenuItems()
+      playfield.overlayHomeLeadingCount = homeItems.firstIndex { if case .browse = $0.action { return true }; return false } ?? homeItems.count
       playfield.overlayLines = homeItems.map(\.title)
-      launchChoice = max(0, min(launchChoice, homeItems.count - 1))
-      playfield.overlayHighlight = launchChoice
       playfield.overlayFooter = nil
       // A hot seat names everyone in turn order, so the menu shows who is playing
       // rather than only whose campaign it is.
       playfield.overlayProfileInitials = ArcadeStore.shared.hotSeatIsActive
         ? ArcadeStore.shared.sessionProfiles.map(\.initials).joined(separator: " v ")
         : ArcadeStore.shared.records.activeProfile.initials
+      launchChoice = max(0, min(launchChoice, playfield.homeActionCount - 1))
+      playfield.overlayHighlight = launchChoice
       showHomeSavedCounts()
       refreshHomeSavedCountsIfNeeded()
 
@@ -6852,6 +6874,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         return
       }
       let homeItems = homeMenuItems()
+      if playfield.activateHomeSelection(launchChoice) { return }
       guard homeItems.indices.contains(launchChoice) else { return }
       switch homeItems[launchChoice].action {
       case .resumeSequence:
@@ -6926,6 +6949,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
     current.cancelQuit()
     flow = current
     renderScreen()
+  }
+
+  private func moveMenuChoice(_ direction: String) {
+    if flow?.screen == .title, fanScreen == .off, !fanPlaying,
+       let index = playfield.homeSelection(from: launchChoice, direction: direction) {
+      launchChoice = index
+      renderScreen()
+      return
+    }
+    moveRankChoice(direction == "up" || direction == "left" ? -1 : 1)
   }
 
   private func moveRankChoice(_ delta: Int) {
@@ -7654,6 +7687,24 @@ let achievementProgressKey = "ClassicAchievementProgress"
       includeOtherSoundtracks: settings.djIncludesOtherSoundtracks, seasonal: seasonalMusic), catalogueRoot: root)
   }
 
+  private func shuffleMusic() {
+    guard phase == .playing, session?.isComplete == false, !isPaused, !audioMuted,
+          !userPausedMusic, settings.music != .silent, settings.musicVolume > 0,
+          NSApp.isActive, !GameScreen.shared.isPresented else { return }
+    guard let root = Bundle.main.resourceURL?.appendingPathComponent("Music") else { return }
+    var pools = SoundtrackPlayer.djSoundtracks(at: root, seasonal: false)
+    for (name, urls) in SoundtrackPlayer.djSoundtracks(at: root, seasonal: true) { pools[name, default: []].append(contentsOf: urls) }
+    dj.load(soundtracks: pools, catalogueRoot: root)
+    if dj.isPlaying { _ = dj.shuffle(scope: settings.djShuffleScope); return }
+    guard let source = soundtrack.isPlaying ? soundtrack.currentURL : music.currentURL else { return }
+    let game = seasonalMusic ? "holiday" : musicTitle == .ohNoMoreLemmings ? "ohno" : "classic"
+    dj.setVolume(0)
+    if dj.shuffle(from: source, scope: settings.djShuffleScope, identity: arcadeRunID.uuidString,
+        fallbackTrackID: game + "." + source.deletingPathExtension().lastPathComponent.lowercased()) {
+      fadeLegacyMusicIntoDJ()
+    } else { dj.setVolume(settings.musicVolume) }
+  }
+
   /// Describes the level to the mix, so it can decide when to move.
   private func djTelemetry(_ session: any GameSession) -> AdaptiveDJEngine.Telemetry {
     AdaptiveDJEngine.Telemetry(
@@ -7907,6 +7958,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         try? await Task.sleep(nanoseconds: 33_333_333)
         guard !Task.isCancelled else { return }
         let now = ProcessInfo.processInfo.systemUptime
+        if self.isPaused { last = now; continue }
         if self.dj.isPlaying {
           elapsed += now - last
         } else if self.music.isOutputRunning || self.soundtrack.isPlaying {
@@ -8146,6 +8198,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       },
       afterSwitch: { [weak self] in
         guard let self else { return }
+        self.refreshPlayerControls()
         self.progress = UserDefaults.standard.data(forKey: ArcadeStore.shared.progressKey(progressKey))
           .flatMap { try? ModernCampaignProgress(encoded: $0) } ?? ModernCampaignProgress()
         self.achievements = UserDefaults.standard.data(forKey: ArcadeStore.shared.progressKey(achievementProgressKey))
@@ -8287,6 +8340,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return true
     }
     keyboard.settings = { [weak self] in self?.showSettings() }
+    keyboard.djShuffle = { [weak self] in self?.shuffleMusic() }
     keyboard.pauseOnInterruption = { [weak self] in self?.settings.pauseOnInterruption ?? true }
     keyboard.onInterruption = { [weak self] in self?.interruptGameplay() }
     keyboard.controllerEnabled = { [weak self] in self?.settings.controllerEnabled ?? false }
@@ -8315,8 +8369,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       guard let self else { return }
       switch key {
       case "\r": self.advancePhase()
-      case "up", "left": self.moveRankChoice(-1)
-      case "down", "right": self.moveRankChoice(1)
+      case "up", "left", "down", "right": self.moveMenuChoice(key)
       case "\u{1b}":
         if !self.retreatFanScreen() { self.returnToLibrary() }
       default: break
@@ -8542,10 +8595,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let scrollStep = 24.0
     switch event.keyCode {
     case 123:
+      if self.flow?.screen == .title, self.fanScreen == .off { self.moveMenuChoice("left"); return nil }
       if event.modifierFlags.contains(.shift) { self.stepBackward() }
       else { self.scrollBy(-scrollStep) }
       return nil
     case 124:
+      if self.flow?.screen == .title, self.fanScreen == .off { self.moveMenuChoice("right"); return nil }
       if event.modifierFlags.contains(.shift) { self.stepForward() }
       else { self.scrollBy(scrollStep) }
       return nil
@@ -8565,8 +8620,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     // Screen keys come first, so they are not eaten by gameplay bindings.
     if let screen = self.flow?.screen, !screen.isPlaying {
       switch event.keyCode {
-      case 125: self.moveRankChoice(1); return nil     // down
-      case 126: self.moveRankChoice(-1); return nil    // up
+      case 125: self.moveMenuChoice("down"); return nil
+      case 126: self.moveMenuChoice("up"); return nil
       case 36, 76: self.advancePhase(); return nil     // return, enter
       case 53:                                          // escape
         if self.retreatFanScreen() { return nil }

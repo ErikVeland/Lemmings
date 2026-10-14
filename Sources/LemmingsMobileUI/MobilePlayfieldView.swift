@@ -25,6 +25,7 @@ import UIKit
     private var trackedTouchIDs = Set<ObjectIdentifier>()
     private var ignoresTouchSequenceUntilLift = false
     private var pinchGestureActive = false
+    var onDJShuffle: (() -> Bool)?
     private var rawHoverPoint: CGPoint?
     private(set) var touchInput: MobileTargetInput = .touch
     var hasActiveTouch: Bool { activeTouchID != nil }
@@ -84,6 +85,13 @@ import UIKit
         contentMode = .redraw
         #if os(iOS)
         isMultipleTouchEnabled = true
+        let shuffle = UITapGestureRecognizer(target: self, action: #selector(shuffleTapped(_:)))
+        shuffle.numberOfTouchesRequired = 2
+        shuffle.delegate = self
+        addGestureRecognizer(shuffle)
+        accessibilityCustomActions = [UIAccessibilityCustomAction(name: "DJ shuffle") { [weak self] _ in
+            self?.onDJShuffle?() ?? false
+        }]
         #endif
         if let tube { addSubview(tube) }
         addSubview(bombCountdownView)
@@ -124,6 +132,14 @@ import UIKit
     required init(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
 
     #if os(iOS)
+    @objc private func shuffleTapped(_ gesture: UITapGestureRecognizer) {
+        guard gesture.state == .ended, !UIAccessibility.isVoiceOverRunning else { return }
+        cancelInteraction()
+        _ = onDJShuffle?()
+    }
+    #endif
+
+    #if os(iOS)
     @objc private func handleHover(_ gesture: UIHoverGestureRecognizer) {
         switch gesture.state {
         case .began, .changed: rawHoverPoint = gesture.location(in: self)
@@ -147,7 +163,11 @@ import UIKit
     }
 
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        acceptsInput(at: gestureRecognizer.location(in: self))
+        #if os(iOS)
+        if let tap = gestureRecognizer as? UITapGestureRecognizer, tap.numberOfTouchesRequired == 2,
+           UIAccessibility.isVoiceOverRunning { return false }
+        #endif
+        return acceptsInput(at: gestureRecognizer.location(in: self))
     }
 
     @objc private func handleScroll(_ gesture: UIPanGestureRecognizer) {

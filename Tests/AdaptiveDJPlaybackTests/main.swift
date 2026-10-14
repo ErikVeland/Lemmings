@@ -554,6 +554,9 @@ extension AdaptiveDJPlayer {
   player.startLevel(url: assigned, identity: "retry")
   try require(player.playingDeckCount == 0, "New level bypassed suspension")
   player.resumeOutput()
+  try require(player.currentURL == assigned && player.playingDeckCount == 1
+      && !player.isCrossfading && player.activeDeckForTest?.mixGain == 1,
+    "Retry resumed an outgoing track from silence to crossfade into its selection")
   RunLoop.current.run(until: Date().addingTimeInterval(2.9))
   try require(player.currentURL == assigned && player.playingDeckCount == 1, "Retry did not finish on the assigned single deck")
   player.updateTelemetry(.init(didWin: false, isComplete: true))
@@ -583,6 +586,37 @@ extension AdaptiveDJPlayer {
   try require(player.currentURL == legacyCelebration, "The legacy handoff repeated its celebration")
   player.stop()
   try require(!player.isPlaying, "the mix kept playing after stop")
+  for (game, firstPath, nextPath) in [
+    ("classic", "lemmings_music_mod/cancan.mod", "lemmings_music_mod/doggie.mod"),
+    ("lemmings2", "lemmings_2_music_mod_tsyu/medieval.mod", "lemmings_2_music_mod_tsyu/egyptian.mod"),
+    ("lemmings3", "lemmings_3_music_mod_tsyu/CLASSIC1.mod", "lemmings_3_music_mod_tsyu/CLASSIC2.mod")
+  ] {
+    let first = root.appendingPathComponent(firstPath)
+    let next = root.appendingPathComponent(nextPath)
+    try require(player.startLevel(url: first, identity: game + ":before-pause"), "Paused handover fixture did not start")
+    let outgoing = player.activeDeckForTest
+    player.suspendOutput()
+    try require(player.startLevel(url: next, identity: game + ":after-pause")
+        && player.playingDeckCount == 0, "\(game) selection bypassed silence")
+    player.resumeOutput()
+    try require(player.currentURL == next && player.playingDeckCount == 1
+        && !player.isCrossfading && player.activeDeckForTest?.mixGain == 1
+        && outgoing?.isPlaying == false,
+      "\(game) resumed the outgoing track to mix from silence")
+    let continuing = player.activeDeckForTest
+    let hold = player.openingHoldForTest
+    RunLoop.current.run(until: Date().addingTimeInterval(0.12))
+    player.suspendOutput()
+    let sourcePosition = continuing?.sourceSeconds ?? 0
+    try require(player.startLevel(url: next, identity: game + ":same-after-pause"), "Same paused tune was rejected")
+    player.resumeOutput()
+    try require(player.activeDeckForTest === continuing && !player.isCrossfading
+        && player.playingDeckCount == 1 && player.openingHoldForTest == hold
+        && (continuing?.sourceSeconds ?? 0) >= sourcePosition,
+      "\(game) restarted its same paused selection or renewed its opening hold")
+    player.stop()
+  }
+  print("PASS direct track selection after silence and same-track resume in Classic, L2 and L3")
   let invalid = FileManager.default.temporaryDirectory.appendingPathComponent("invalid-dj-\(UUID().uuidString).mod")
   try Data("Not a module".utf8).write(to: invalid)
   defer { try? FileManager.default.removeItem(at: invalid) }

@@ -21,7 +21,10 @@ for required in LEVELS/LEVEL000.DAT STYLES/CLASSIC.DAT VLEMMS.DAT MASKS.DAT INTE
     exit 1
   fi
 done
+rsync -a --delete "$project_dir/Sources/NxlvKit/Resources/Localization.bundle" "$resources_dir/"
 mkdir -p "$resources_dir/Ports" "$resources_dir/Music"
+mkdir -p "$resources_dir/MenuArtwork"
+cp "$project_dir/Resources/MenuArtwork/ultimate.png" "$resources_dir/MenuArtwork/ultimate.png"
 mkdir -p "$resources_dir/Hints"
 cp "$project_dir/Resources/Hints/classic.json" "$resources_dir/Hints/classic.json"
 cp "$project_dir/Resources/Hints/solutions.json" "$resources_dir/Hints/solutions.json"

@@ -19,7 +19,7 @@ struct ControllerBindingsTests {
         let chords: [(ControllerBindings.Button, ControllerBindings.Action)] = [
             (.a, .endRun), (.b, .rewind), (.x, .speedReset), (.y, .hints),
             (.menu, .retry), (.options, .settings), (.leftShoulder, .step(-1)), (.rightShoulder, .step(1)),
-            (.left, .speedStep(-1)), (.right, .speedStep(1)), (.up, .centre(true)), (.down, .centre(false))
+            (.left, .speedStep(-1)), (.right, .speedStep(1)), (.up, .centre(true)), (.down, .centre(false)), (.leftStick, .djShuffle)
         ]
         for (button, expected) in chords {
             var bindings = ControllerBindings()
@@ -34,6 +34,24 @@ struct ControllerBindingsTests {
             var bindings = ControllerBindings(); _ = bindings.update(pressed: [])
             #expect(bindings.update(pressed: [.leftTrigger, button], inMenu: true) == [expected])
         }
+    }
+
+    @Test func touchpadRequiresReleaseAcrossMenusAndPlayerChanges() {
+        var edge = ControllerButtonEdge()
+        func check(_ pressed: Bool, active: Bool, expected: Bool) {
+            let actual = edge.update(pressed: pressed, active: active)
+            #expect(actual == expected)
+        }
+        check(true, active: true, expected: false)
+        check(false, active: true, expected: false)
+        check(true, active: true, expected: true)
+        check(true, active: true, expected: false)
+        check(true, active: false, expected: false)
+        check(true, active: true, expected: false)
+        _ = edge.update(pressed: false, active: true)
+        check(true, active: true, expected: true)
+        edge.reset()
+        check(true, active: true, expected: false)
     }
 
     @Test func triggerMatchesFTapHoldAndRapidExit() {

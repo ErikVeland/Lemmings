@@ -97,6 +97,8 @@ import NxlvKit
     private let warningSound = SoundEffectPlayer()
     private let music = ModuleMusicPlayer()
     private let dj = AdaptiveDJPlayer()
+    private let manualDJHandoff = LegacyDJCrossfade()
+    private var settingsProfileID: String?
     private let failureMood = FailureMoodTransition()
     private let completionGlow = RescueCelebrationTransition()
     private var musicGain: Float = 0.8
@@ -421,6 +423,7 @@ import NxlvKit
         }
         keyboard.hints = { [weak self] in self?.showLevelHints() }
         keyboard.settings = { [weak self] in self?.onShowSettings?() }
+        keyboard.djShuffle = { [weak self] in self?.shuffleMusic() }
         keyboard.pauseOnInterruption = { [weak self] in self?.audioSettings.pauseOnInterruption ?? true }
         keyboard.onInterruption = { [weak self] in self?.interruptGameplay() }
         keyboard.controllerEnabled = { [weak self] in self?.audioSettings.controllerEnabled ?? false }
@@ -683,6 +686,7 @@ import NxlvKit
     }
     func windowWillClose(_ notification: Notification) { stop() }
     func stop() {
+        manualDJHandoff.cancel()
         gameplayKeyboard?.removeNavigationControl()
         saveCheckpoint(immediately: true)
         canvas.capturePointer(active: false)
@@ -753,7 +757,43 @@ import NxlvKit
         canvas.favorBuilders = settings.favorBuilders
     }
 
+    private func refreshPlayerControls() {
+        let owner = ArcadeStore.shared.playingProfileID
+        guard settingsProfileID != owner else { return }
+        settingsProfileID = owner
+        let baseline = UserDefaults.standard.data(forKey: "ClassicSettings").flatMap { try? JSONDecoder().decode(ClassicSettings.self, from: $0) } ?? ClassicSettings()
+        let updated = PlayerControlSettings.load(from: .standard, profileID: owner, legacy: baseline).applying(to: audioSettings)
+        GameAccessibility.interfaceSize = updated.interfaceSize
+        if audioConfigured { setAudioSettings(updated, muted: movieMusicMuted) }
+        else { audioSettings = updated }
+    }
+
+    private func shuffleMusic() {
+        guard canvas.menuRows == nil, !paused, !game.isComplete, !userPausedMusic, !movieMusicMuted,
+              !music.muted, audioSettings.music != .silent, audioSettings.musicVolume > 0,
+              NSApp.isActive, !GameScreen.shared.isPresented else { return }
+        guard let root = Bundle.main.resourceURL?.appendingPathComponent("Music") else { return }
+        var pools = SoundtrackPlayer.djSoundtracks(at: root, seasonal: false)
+        for (name, urls) in SoundtrackPlayer.djSoundtracks(at: root, seasonal: true) { pools[name, default: []].append(contentsOf: urls) }
+        dj.load(soundtracks: pools, catalogueRoot: root)
+        if dj.isPlaying { _ = dj.shuffle(scope: audioSettings.djShuffleScope); return }
+        guard let source = music.currentURL else { return }
+        dj.setVolume(0)
+        guard dj.shuffle(from: source, scope: audioSettings.djShuffleScope, identity: arcadeRunID.uuidString,
+            fallbackTrackID: "lemmings3." + source.deletingPathExtension().lastPathComponent.lowercased()) else {
+            dj.setVolume(audioSettings.musicVolume); return
+        }
+        manualDJHandoff.start(volume: { [weak self] in self?.audioSettings.musicVolume ?? 0 },
+            suspended: { [weak self] in self?.paused != false || !NSApp.isActive },
+            legacyGain: { [weak self] in self?.music.setVolume($0) },
+            incomingGain: { [weak self] in self?.dj.setVolume($0) },
+            stopLegacy: { [weak self] in self?.music.stop() })
+    }
+
     private func playLevelMusic() {
+        manualDJHandoff.cancel()
+        music.setVolume(audioSettings.musicVolume)
+        dj.setVolume(audioSettings.musicVolume)
         guard audioConfigured else { return }
         let prefix: String
         switch campaign.tribe {
@@ -1252,6 +1292,7 @@ import NxlvKit
         warningSound.silence()
         let previousAttemptID = arcadeRunID
         arcadeRunID = UUID(); arcadeProfileID = ArcadeStore.shared.playingProfileID; arcadeHotSeatID = ArcadeStore.shared.hotSeatID
+        refreshPlayerControls()
         usedRewind = false
         PrecisionZoomController.shared.start(attemptID: arcadeRunID, profileID: arcadeProfileID)
         syncPrecisionZoom()
@@ -1264,8 +1305,9 @@ import NxlvKit
                 level: arcadeLevel, previousID: previousAttemptID)
         }
         runMovie.begin(ticksPerSecond: Lemmings3Runtime.ticksPerSecond, title: "Lemmings 3 - \(campaign.tribe.title) \(campaign.index + 1)")
-        userPausedMusic = false; try? music.resumeOutput(); dj.resumeOutput()
+        userPausedMusic = false
         playLevelMusic()
+        try? music.resumeOutput(); dj.resumeOutput()
         runMovie.onWillReview = { [weak self] in self?.suspendAudioOutput() }
         runMovie.onDidReview = { [weak self] in try? self?.resumeAudioOutput() }
         if let recorder = runMovie.recorder {
