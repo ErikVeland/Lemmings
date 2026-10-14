@@ -243,6 +243,7 @@ struct MobileGameTurn {
             }
         }
         hud.onAction = { [weak self] action in self?.handle(action) }
+        hud.onToolDirection = { [weak self] direction in self?.completeL3ToolDirection(direction) }
         hud.onRateDoubleTap = { [weak self] wasMaximum in
             self?.handle(.releaseRate(wasMaximum ? -99 : 99))
         }
