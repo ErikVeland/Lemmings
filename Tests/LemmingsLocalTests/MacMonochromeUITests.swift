@@ -30,7 +30,7 @@ final class MacMonochromeUITests: XCTestCase {
             let page = SettingsWindow(settings: ClassicSettings(), options: options)
             page.show()
             let host = try XCTUnwrap(window.contentView)
-            func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap(descendants) }
+            @MainActor func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap(descendants) }
             host.layoutSubtreeIfNeeded()
             let tab = try XCTUnwrap(descendants(host).compactMap { $0 as? GameTabButton }
                 .first { $0.title.lowercased() == "graphics" })
