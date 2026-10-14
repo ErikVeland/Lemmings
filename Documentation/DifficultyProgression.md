@@ -2,6 +2,26 @@
 
 ## Meaning and scope
 
+The golden path uses an official-heavy selection with no fixed level-count quota.
+Redux supplies the official reference order. Unmatched mainline official variants
+use a cautious upper estimate and retail-rank floor. Measured replay scores stay
+unchanged. Fan bridges need an exact human solution review, comparable reference
+bounds and a real gap between official lessons. Machine estimates alone cannot
+admit fan or NeoLemmix puzzles. Simple artwork and short replays can conceal hard
+discovery or a tricky intended solution.
+
+Xmas and Holiday levels require an exact human difficulty review before admission.
+Seasonal ranks and matching Redux titles do not certify beginner suitability.
+The owner-confirmed Cellbash practice and official Macintosh port counterpart
+remain explicit exceptions. Reported official walls retain their later placements.
+Older saved journeys remove unvisited retired levels while keeping past visits,
+completed records, run identity and player or Hot Seat ownership. The path uses
+Classic mechanics. Lemmings 2 and Lemmings 3 retain their own campaigns and queues.
+
+Current selection and evidence are in `Artifacts/LearningJourney`. Reproduce the
+selection with `python3 Tools/DifficultyDiagnostics/human_journey.py` and check
+tracked outputs with `--check`. Native replay checks still require bundled assets.
+
 The complete Classic replacement playlist and its per-level audit are in
 `Artifacts/ClassicProgression`. This later audit includes the compressed Classic
 fan archives, all official Classic campaigns, and the port-exclusive campaign.

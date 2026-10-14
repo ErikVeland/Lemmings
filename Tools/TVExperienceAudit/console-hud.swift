@@ -25,6 +25,10 @@ extension TVExperienceAudit {
                 let console = MobileHUDLayout.make(container: size, safeArea: .init(), hasRate: snapshot.releaseRate != nil,
                     skillCount: snapshot.skills.count, supportsRewind: session.supportsRewind,
                     hasPlayer: true, engineIdentifier: session.engineIdentifier, showsMenuButton: false)
+                let status = MobileHUDRenderer.statusFrames(layout: console, hasPlayer: true)
+                guard status.player?.isEmpty == false, !status.counters.isEmpty else {
+                    throw Failure.invalid("Console HUD lost player or counters: " + session.engineIdentifier)
+                }
                 for paused in [false, true] {
                     let touchItems = MobileHUDRenderer.targets(layout: touch, snapshot: snapshot, selectedSkill: 0,
                         paused: paused, speed: 1, endRunArmed: false)
@@ -35,10 +39,19 @@ extension TVExperienceAudit {
                           console.interface.controlFrames.count == touch.interface.controlFrames.count - 1 else {
                         throw Failure.invalid("Console HUD menu or remaining actions differ: " + session.engineIdentifier)
                     }
+                    // UIKit clips scrolled skills to the visible bank before hit testing.
+                    let visibleFrames = items.map { item -> CGRect in
+                        if case .skill = item.action, let bank = console.portrait?.skills {
+                            return item.inputFrame.intersection(bank)
+                        }
+                        return item.inputFrame
+                    }
                     for (index, item) in items.enumerated() {
+                        let visible = visibleFrames[index]
+                        if visible.isNull || visible.isEmpty { continue }
                         guard item.inputFrame.width >= 44, item.inputFrame.height >= 44,
-                              CGRect(x: 0, y: 0, width: size.width, height: size.height).contains(item.inputFrame),
-                              !items.dropFirst(index + 1).contains(where: { item.inputFrame.intersects($0.inputFrame) }) else {
+                              CGRect(x: 0, y: 0, width: size.width, height: size.height).contains(visible),
+                              !visibleFrames.dropFirst(index + 1).contains(where: { visible.intersects($0) }) else {
                             throw Failure.invalid("Console HUD input bounds: \(session.engineIdentifier) \(size.width) \(item.action) \(item.inputFrame)")
                         }
                     }

@@ -27,10 +27,9 @@ struct DifficultyTests {
         let measured = DifficultyProfile(key: .init(identity: entry.identity, levelRevision: "v1"), confidence: .high,
             components: .init(techniqueBurden: 100))
         let reported = ProgressionCandidate(entry: entry, profile: measured, isOfficial: true)
-        let solo = try candidate("solo", score: 100)
+        let solo = try candidate("solo", score: 100, concepts: ["builder"])
         for policy in ProgressionPolicy.allCases {
             var config = ProgressionConfiguration(); config.technique = "builder"
-            if policy == .techniqueCurriculum { continue }
             let result = try ProgressionGenerator.generate(candidates: [reported, solo], policy: policy, configuration: config)
             #expect(result.entries.map(\.identity) == [solo.entry.identity])
         }
@@ -38,6 +37,9 @@ struct DifficultyTests {
             entries: [entry, solo.entry])
         let cleaned = try #require(try old.removingMultiplayerLevels())
         #expect(cleaned.id == old.id && cleaned.currentEntry == solo.entry && cleaned.entries.count == 1)
+        let trailing = try LevelSequenceRun(source: old.source, pool: old.pool,
+            entries: [solo.entry, entry], currentIndex: 1)
+        #expect(try trailing.removingMultiplayerLevels() == nil)
         let unknown = DifficultyProfile(key: key("unknownFan"), confidence: .low, components: .init())
         let fanEntry = try LevelPlaylistEntry(identity: unknown.key.identity, catalogueRevision: "test", sourceRevision: "v1",
             packNameSnapshot: "Fan", levelNameSnapshot: "Unknown", levelNumberSnapshot: 1)

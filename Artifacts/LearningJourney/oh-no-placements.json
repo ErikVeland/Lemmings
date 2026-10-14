@@ -7,161 +7,456 @@
   {
     "level": "Get a little extra help",
     "objective": "community:Gentle/Get_a_little_extra_help.nxlv",
-    "step": 12
+    "step": 10
   },
   {
     "level": "Downwardly Mobile Lemmings",
     "objective": "community:Gentle/Downwardly_Mobile_Lemmings.nxlv",
-    "step": 13
+    "step": 11
   },
   {
     "level": "PoP YoR ToP!!!",
     "objective": "community:Quirky/PoP_YoR_ToP!!!.nxlv",
-    "step": 49
+    "step": 19
   },
   {
     "level": "Just A Quicky",
     "objective": "community:Quirky/Just_a_Quicky.nxlv",
-    "step": 53
+    "step": 21
+  },
+  {
+    "level": "Intsy-Wintsy...Lemming?",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"5:Tame:6:10:5\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 23
+  },
+  {
+    "level": "New Lemmings On The Block",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"9:Tame:10:11:1\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 24
+  },
+  {
+    "level": "Citizen Lemming",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"11:Tame:12:11:3\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 25
+  },
+  {
+    "level": "Lemmings For Presidents!",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"17:Tame:18:12:1\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 26
   },
   {
     "level": "DON`T PANIC",
     "objective": "community:Quirky/DON'T_PANIC.nxlv",
-    "step": 68
+    "step": 28
   },
   {
     "level": "Meeting Adjourned",
     "objective": "community:Quirky/Meeting_Adjourned.nxlv",
-    "step": 69
+    "step": 29
   },
   {
     "level": "Take care, Sweetie",
     "objective": "community:Quirky/Take_care,_Sweetie.nxlv",
-    "step": 95
+    "step": 36
   },
   {
     "level": "Flow Control",
     "objective": "community:Zany/Flow_Control.nxlv",
-    "step": 124
+    "step": 45
+  },
+  {
+    "level": "Honey, I Saved The Lemmings",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"16:Tame:17:12:0\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 47
   },
   {
     "level": "KEEP ON TRUCKING",
     "objective": "community:Zany/KEEP_ON_TRUCKING.nxlv",
-    "step": 142
+    "step": 48
   },
   {
     "level": "Dolly Dimple",
     "objective": "community:Zany/Dolly_Dimple.nxlv",
-    "step": 144
+    "step": 50
   },
   {
     "level": "Mutiny On The Bounty",
     "objective": "community:Zany/Mutiny_on_the_Bounty.nxlv",
-    "step": 145
+    "step": 51
   },
   {
     "level": "SNOW JOKE",
     "objective": "community:Zany/SNOW_JOKE.nxlv",
-    "step": 146
+    "step": 52
   },
   {
     "level": "ONWARD AND UPWARD",
     "objective": "community:Zany/ONWARD_AND_UPWARD.nxlv",
-    "step": 147
+    "step": 54
   },
   {
     "level": "Across The Gap",
     "objective": "community:Zany/Across_the_Gap.nxlv",
-    "step": 155
+    "step": 57
   },
   {
     "level": "Got anything....Lemmingy???",
     "objective": "community:Zany/Got_anything..._Lemmingy___.nxlv",
-    "step": 165
+    "step": 63
   },
   {
     "level": "The Lemming Funhouse",
     "objective": "community:Manic/The_Lemming_Funhouse.nxlv",
-    "step": 167
+    "step": 64
   },
   {
     "level": "Synchronised Lemming",
     "objective": "community:Manic/Synchronised_Lemming.nxlv",
-    "step": 177
+    "step": 67
   },
   {
     "level": "Chill out!",
     "objective": "community:Manic/Chill_out!.nxlv",
-    "step": 180
+    "step": 69
   },
   {
     "level": "Down the tube",
     "objective": "community:Manic/Down_the_tube.nxlv",
-    "step": 181
+    "step": 70
   },
   {
     "level": "AAAAAARRRRRRGGGGGGHHHHHH!!!!!!",
     "objective": "community:Manic/AAAAAARRRRRRGGGGGGHHHHHH!!!!!!.nxlv",
-    "step": 184
+    "step": 72
   },
   {
     "level": "ROCKY VI",
     "objective": "community:Manic/ROCKY_VI.nxlv",
-    "step": 187
+    "step": 73
+  },
+  {
+    "level": "Thunder-Lemmings are go!",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"12:Tame:13:11:4\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 76
   },
   {
     "level": "THE SILENCE OF THE LEMMINGS",
     "objective": "community:Manic/THE_SILENCE_OF_THE_LEMMINGS.nxlv",
-    "step": 201
+    "step": 84
+  },
+  {
+    "level": "Lemming Friendly",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"31:Crazy:12:6:7\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 91
+  },
+  {
+    "level": "The Chain with no name",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"56:Wild:17:6:3\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 92
+  },
+  {
+    "level": "Dr Lemminggood",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"57:Wild:18:6:5\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 93
+  },
+  {
+    "level": "Oh No! It`s the 4TH DIMENSION!",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"63:Wicked:4:9:1\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 94
+  },
+  {
+    "level": "Last Lemming To Lemmingcentral",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"66:Wicked:7:6:1\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 95
   },
   {
     "level": "The race against cliches",
     "objective": "community:Manic/The_race_against_cliches.nxlv",
-    "step": 218
+    "step": 96
+  },
+  {
+    "level": "It`s all a matter of timing",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"91:Havoc:12:0:0\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 97
+  },
+  {
+    "level": "PoP TiL YoU DrOp!",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"65:Wicked:6:9:4\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 100
+  },
+  {
+    "level": "Almost Nearly Virtual Reality",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"72:Wicked:13:6:0\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 101
   },
   {
     "level": "Temple of Love",
     "objective": "community:Manic/Temple_of_Love.nxlv",
-    "step": 232
+    "step": 102
+  },
+  {
+    "level": "Custom built for Lemmings",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"19:Tame:20:12:3\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 105
+  },
+  {
+    "level": "Quote: \"That`s a good level\"",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"20:Crazy:1:0:1\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 106
+  },
+  {
+    "level": "Now get out of that!",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"85:Havoc:6:2:3\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 107
+  },
+  {
+    "level": "Have an ice day",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"94:Havoc:15:1:3\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 112
   },
   {
     "level": "There`s madness in the method",
     "objective": "community:Lunatic/There's_madness_in_the_method.nxlv",
-    "step": 239
+    "step": 114
+  },
+  {
+    "level": "You Take the High Road",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"46:Wild:7:8:6\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 115
+  },
+  {
+    "level": "Many Lemmings make level work",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"22:Crazy:3:1:4\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 117
+  },
+  {
+    "level": "The Lemming Learning Curve",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"73:Wicked:14:6:2\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 119
   },
   {
     "level": "Lemming about town",
     "objective": "community:Lunatic/Lemming_about_town.nxlv",
-    "step": 247
+    "step": 120
+  },
+  {
+    "level": "NO PROBLEM",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"37:Crazy:18:3:7\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 122
   },
   {
     "level": "Be more than just a number",
     "objective": "community:Lunatic/Be_more_than_just_a_number.nxlv",
-    "step": 251
+    "step": 124
+  },
+  {
+    "level": "Higgledy Piggledy",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"49:Wild:10:2:5\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 126
+  },
+  {
+    "level": "Gone With The Lemming",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"15:Tame:16:11:7\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 128
+  },
+  {
+    "level": "LeMming ToMato KetchUp fAcilitY",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"60:Wicked:1:9:6\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 130
+  },
+  {
+    "level": "Dangerzone",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"7:Tame:8:10:7\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 131
+  },
+  {
+    "level": "Inroducing SUPERLEMMING",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"61:Wicked:2:4:6\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 133
+  },
+  {
+    "level": "With Compliments",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"10:Tame:11:11:2\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 135
+  },
+  {
+    "level": "Rent-a-Lemming",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"1:Tame:2:10:1\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 136
+  },
+  {
+    "level": "How on Earth?",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"68:Wicked:9:1:2\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 138
   },
   {
     "level": "Creature Discomforts",
     "objective": "community:Lunatic/Creature_Discomforts.nxlv",
-    "step": 262
+    "step": 142
+  },
+  {
+    "level": "Lemming Express",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"23:Crazy:4:2:0\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 143
+  },
+  {
+    "level": "Undercover Lemming",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"2:Tame:3:10:2\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 145
+  },
+  {
+    "level": "No Problemming!",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"30:Crazy:11:5:7\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 146
+  },
+  {
+    "level": "It`s a trade off",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"32:Crazy:13:0:4\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 147
+  },
+  {
+    "level": "A TOWERING PROBLEM",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"67:Wicked:8:0:6\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 150
+  },
+  {
+    "level": "Five Alive",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"75:Wicked:16:8:1\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 151
   },
   {
     "level": "Scaling the Heights",
     "objective": "community:Lunatic/Scaling_the_Heights.nxlv",
-    "step": 269
+    "step": 153
+  },
+  {
+    "level": "DIGGING FOR VICTORY",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"36:Crazy:17:3:4\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 154
+  },
+  {
+    "level": "Ice Ice Lemming",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"39:Crazy:20:6:4\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 157
+  },
+  {
+    "level": "Ice Station Lemming",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"48:Wild:9:2:2\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 158
+  },
+  {
+    "level": "Not just a pretty Lemming",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"14:Tame:15:11:6\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 165
+  },
+  {
+    "level": "Lemming Productions Present...",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"18:Tame:19:12:2\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 166
+  },
+  {
+    "level": "Who`s That Lemming",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"6:Tame:7:10:6\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 169
+  },
+  {
+    "level": "And now this...",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"8:Tame:9:11:0\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 171
+  },
+  {
+    "level": "Down And Out Lemmings",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"0:Tame:1:10:0\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 172
+  },
+  {
+    "level": "LOoK BeFoRe YoU LeAp!",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"99:Havoc:20:9:5\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 175
+  },
+  {
+    "level": "Lemming Hotel",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"41:Wild:2:7:0\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 176
+  },
+  {
+    "level": "And now, the end is near...",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"26:Crazy:7:3:1\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 179
   },
   {
     "level": "Lemmings in a situation",
     "objective": "community:Lunatic/Lemmings_in_a_situation.nxlv",
-    "step": 280
+    "step": 181
+  },
+  {
+    "level": "24 hour Lemathon",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"24:Crazy:5:2:1\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 202
+  },
+  {
+    "level": "Lemmingdelica",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"58:Wild:19:6:6\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 205
+  },
+  {
+    "level": "Suicidal Tendencies",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"71:Wicked:12:5:5\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 207
+  },
+  {
+    "level": "Lemming Rhythms",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"42:Wild:3:7:1\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 208
+  },
+  {
+    "level": "It`s a tight fit!",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"47:Wild:8:0:7\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 209
+  },
+  {
+    "level": "ROCKY ROAD",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"70:Wicked:11:4:1\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 210
+  },
+  {
+    "level": "HIGHLAND FLING",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"92:Havoc:13:4:5\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 211
+  },
+  {
+    "level": "The Stack",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"25:Crazy:6:3:0\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 213
+  },
+  {
+    "level": "It`s the price you have to pay",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"82:Havoc:3:3:2\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 214
   },
   {
     "level": "Time waits for no Lemming",
     "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"33:Crazy:14:1:5\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-    "step": 294
+    "step": 215
   },
   {
     "level": "This Corrosion",
     "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"62:Wicked:3:9:0\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-    "step": 295
+    "step": 216
+  },
+  {
+    "level": "Lemming Head",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"44:Wild:5:7:3\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 217
+  },
+  {
+    "level": "SPAM,SPAM,SPAM,EGG AND LEMMING",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"74:Wicked:15:7:7\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 220
+  },
+  {
+    "level": "Welcome to the party, pal!",
+    "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"90:Havoc:11:0:2\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+    "step": 224
   }
 ]

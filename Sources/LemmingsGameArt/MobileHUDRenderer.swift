@@ -521,9 +521,11 @@ public enum MobileHUDAction: Equatable, Sendable {
         if layout.panel != nil {
             // The final navigation targets sit to the right of the status strip.
             // Use layout geometry because the actual skill count varies by engine.
-            let navigationCount = layout.supportsRewind ? 4 : 2
-            let navigationX = layout.interface.controlFrames.suffix(navigationCount).first?.x ?? frame.maxX
-            frame.size.width = max(0, navigationX - frame.minX - 4)
+            let navigationCount = (layout.supportsRewind ? 3 : 1) + (layout.showsMenuButton ? 1 : 0)
+            if let navigation = layout.interface.controlFrames.suffix(navigationCount).first,
+               navigation.minY < frame.maxY, navigation.maxY > frame.minY {
+                frame.size.width = max(0, navigation.minX - frame.minX - 4)
+            }
         }
         guard hasPlayer, frame.height >= 40 else { return (nil, frame) }
         return (CGRect(x: frame.minX, y: frame.minY, width: frame.width, height: 20),

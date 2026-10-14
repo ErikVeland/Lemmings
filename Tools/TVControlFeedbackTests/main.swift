@@ -17,7 +17,8 @@ import NxlvKit
         let typography = GameMenuTypography(directory: root.appendingPathComponent(".build/mac-artwork/export/lemmings"))
         let libraries: [(String, any MobileGameLibrary)] = [("classic", classic), ("l2", l2), ("l3", l3)]
         for (name, library) in libraries {
-            let session = try library.loadLevel(at: 0).session
+            let content = try library.loadLevel(at: 0)
+            let session = content.session
             for _ in 0..<140 where !session.snapshot.isComplete { session.tick() }
             let snapshot = session.snapshot
             let layout = MobileHUDLayout.make(container: .init(width: 1280, height: 720), safeArea: .init(),
@@ -58,7 +59,36 @@ import NxlvKit
                 CGImageDestinationAddImage(destination, context.makeImage()!, nil)
                 precondition(CGImageDestinationFinalize(destination))
             }
+            if let typography {
+                let info = MobilePauseSummary(level: content.summary, snapshot: snapshot,
+                    activeCount: session.activeLemmingCount, ticksPerSecond: session.ticksPerSecond,
+                    speed: 1, assignedSkills: session.assignedSkillCount, supportsRewind: session.supportsRewind,
+                    usedRewind: session.usedRewind, isReplay: false, soundtrack: "Amiga", track: "Original soundtrack", audio: "Music paused")
+                let page = MobilePauseArt.page(info, actions: [.init("resume", "Resume", primary: true),
+                    .init("library", "Library"), .init("restart", "Restart level"),
+                    .init("controls", "Game controls"), .init("settings", "Settings")])
+                for size in [CGSize(width: 1280, height: 720), CGSize(width: 844, height: 390)] {
+                    let base = GameFrontEnd.layout(page, width: size.width, minimumHeight: size.height)
+                    let viewport = CGRect(origin: .zero, size: size)
+                    let menu = MobilePauseArt.pinningFooter(base, viewport: viewport)
+                    precondition(menu.targets.contains { $0.action.id == "settings" })
+                    for (index, target) in menu.targets.enumerated() {
+                        precondition(viewport.contains(target.frame) && target.frame.height >= 44)
+                        precondition(menu.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)) == target.action.id)
+                        for other in menu.targets.dropFirst(index + 1) { precondition(!target.frame.intersects(other.frame)) }
+                    }
+                    let context = CGContext(data: nil, width: Int(size.width), height: Int(size.height), bitsPerComponent: 8,
+                        bytesPerRow: Int(size.width) * 4, space: CGColorSpaceCreateDeviceRGB(),
+                        bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+                    context.translateBy(x: 0, y: size.height); context.scaleBy(x: 1, y: -1)
+                    GameFrontEnd.draw(page, layout: menu, typography: typography, in: context)
+                    let file = output.appendingPathComponent(name + "-menu-\(Int(size.width)).png")
+                    let destination = CGImageDestinationCreateWithURL(file as CFURL, "public.png" as CFString, 1, nil)!
+                    CGImageDestinationAddImage(destination, context.makeImage()!, nil)
+                    precondition(CGImageDestinationFinalize(destination))
+                }
+            }
         }
-        print("PASS six native Classic/L2/L3 HUD renders, visible pointer states, skill input bounds and pause/menu targets")
+        print("PASS twelve Classic/L2/L3 HUD/pause renders, pointer states, skill targets and direct Settings targets")
     }
 }

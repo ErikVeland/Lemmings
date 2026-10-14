@@ -465,8 +465,9 @@ Accessibility offers Show song info. Turning it off hides the notice and its
 accessible title immediately, across all three Mac engines. Both new options
 default on and survive presets and saved settings. Do not repeat the notice for
 the same track or show it on results or handovers. Silent music clears it.
-The iOS/tvOS source shares this renderer, Show song info and the short fade-in. Its Menu control
-remains visible and does not use the Mac's fading preference.
+The iOS/tvOS source shares this renderer, Show song info and the short fade-in.
+iOS keeps its Menu control visible without the Mac's fading preference. TV omits
+the on-screen Menu control and uses Siri Remote Back or controller Options/Menu.
 
 Offscreen music-card checks cover complete wrapped credits, narrow/shallow credit
 pages, reading time, fades, same-track expiry after resize, reduced motion,

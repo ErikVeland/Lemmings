@@ -397,6 +397,7 @@ public struct LevelSequenceRun: Codable, Equatable, Sendable, Identifiable {
         guard solo.count != entries.count else { return self }
         guard !solo.isEmpty else { return nil }
         let preceding = entries.prefix(currentIndex).filter { LearningJourney.isSinglePlayer($0) }.count
+        guard preceding < solo.count else { return nil }
         return try Self(id: id, source: source, pool: pool, entries: solo,
             currentIndex: min(preceding, solo.count - 1), seed: seed, algorithm: algorithm, createdAt: createdAt)
     }

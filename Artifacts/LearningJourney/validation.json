@@ -2,10 +2,13 @@
   "checks": [
     "Exact source revisions and native winning replay identities required",
     "Redux file hashes and community order pinned",
-    "Full 295-level size; solution estimates are distinguished from human reviews",
+    "At least 80% official levels; no fixed-size padding",
+    "Unreviewed fan estimates never enter the golden path",
+    "Seasonal levels need exact human difficulty review",
+    "Reviewed fan bridges stay inside a real gap without introducing unpractised skills",
     "No fabricated precision, rank floors, cumulative clamps or application-pattern deduplication",
     "Adjacent reference gaps are checked without changing any placement score"
   ],
   "limits": "Redux ordinal positions are not equal human-difficulty units. Classic counterparts differ from Redux. A replay proves a route, not novice discovery. Solution comparisons are estimated grades, not claims of human review.",
-  "policy": "redux-calibrated-2"
+  "policy": "redux-calibrated-3"
 }

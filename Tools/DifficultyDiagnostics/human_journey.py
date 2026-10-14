@@ -240,9 +240,23 @@ def seasonal(row):
 
 def official_rank_floor(row):
     # Retail rank is a conservative floor for unmatched official variants.
-    rank = (row['profile'].get('sourceRank') or '').lower()
+    rank = (row['profile'].get('sourceRank') or '').lower().split(' ')[0]
     return {'fun': 0, 'tame': 0, 'tricky': 180, 'crazy': 600, 'taxing': 360,
             'wild': 600, 'wicked': 600, 'mayhem': 600, 'havoc': 600}.get(rank, 360)
+
+
+def fills_reviewed_gap(item, selected):
+    """Admit a fan bridge only inside a real gap, within its reviewed bounds."""
+    official = sorted((r for r in selected if r['row']['official']),
+                      key=lambda r: r['placement']['position'])
+    placement = item['placement']
+    return any(right['placement']['position'] - left['placement']['position'] > 10
+               and left['placement']['position'] <= placement['lower']
+               and placement['upper'] <= right['placement']['position']
+               and set(item['context']['usedSkills']) <= set().union(
+                   *(set(r['context']['usedSkills']) for r in official
+                     if r['placement']['position'] <= left['placement']['position']))
+               for left, right in zip(official, official[1:]))
 
 
 def build(pool, witnesses, resources, reference, reviews):
@@ -252,12 +266,11 @@ def build(pool, witnesses, resources, reference, reviews):
     resource_by_id = {key(r): r for r in resources}
     exclusions = read(ROOT / 'Resources/Progression/exclusions.json')
     excluded = {key(r) for r in exclusions}
-    replacements = {key(r): r['replaceAtPosition'] for r in exclusions if 'replaceAtPosition' in r}
-    nuke_free = {key(r) for r in exclusions if r.get('requiresNukeFreeSolution')}
     references = {r['reference']: r for r in reference}
     rejected = {(key(r), r['sourceRevision'], r['replayRevision']) for r in read(OUT / 'replay-rejections.json')}
     by_title = collections.defaultdict(list)
     contexts, candidates, pending, selected, variant_holds = {}, {}, [], [], {}
+    reviewed_bridges = []
     for row in pool:
         ident = key(row)
         witness = witnesses.get(row['profile']['key']['replayRevision']) or witnesses.get(row.get('initialHash'))
@@ -316,14 +329,13 @@ def build(pool, witnesses, resources, reference, reviews):
         if review_approved(review, row, context, references):
             lower, upper = references[review['afterReference']], references[review['beforeReference']]
             value = (lower['ordinal'] + upper['ordinal']) * 2.5
-            selected.append({'row': row, 'context': context, 'reference': lower,
-                             'placement': {'basis': 'reviewedFan', 'reference': lower['reference'],
+            reviewed_bridges.append({'row': row, 'context': context, 'reference': lower,
+                             'placement': {'basis': 'reviewedVariant' if row['official'] else 'reviewedFan', 'reference': lower['reference'],
                                            'sourceURL': review['sourceURL'], 'position': value,
                                            'lower': lower['ordinal'] * 5, 'upper': upper['ordinal'] * 5,
                                            'sourceRevision': row['entry']['sourceRevision'],
                                            'replayRevision': context['replayRevision']},
                              'variantDifferences': [], 'review': review})
-            continue
         nearest = sorted(anchor_rows, key=lambda a: (distance(context, a['context']), a['reference']['ordinal']))[:3]
         value, lower, upper, neighbours = estimate(context, anchor_rows)
         pending.append({'identity': row['entry']['identity'], 'sourceRevision': row['entry']['sourceRevision'],
@@ -398,6 +410,9 @@ def build(pool, witnesses, resources, reference, reviews):
             value, lower, upper, neighbours = estimate(context, anchor_rows)
             lower = min(lower, max(0, value - calibration_deviation))
             upper = max(upper, min(1000, value + calibration_deviation))
+            assert row['official'] and not seasonal(row), 'Unreviewed fan additions cannot enter the golden path'
+            value = max(upper, official_rank_floor(row))
+            upper = max(upper, value)
             reference = neighbours[0]['reference']
         placement = {'basis': addition['basis'], 'reference': reference['reference'],
             'sourceURL': SOURCE, 'position': value, 'lower': lower, 'upper': upper,
@@ -413,12 +428,6 @@ def build(pool, witnesses, resources, reference, reviews):
                 if addition['basis'] == 'reduxPortCounterpart' else 'included with an estimated grade; human review still needed',
             'context': context, 'risks': risks(context) + item['variantDifferences'],
             'comparisons': item['comparisons'], 'placement': placement})
-    admitted = {key(item['row']): item for item in selected}
-    for row in pending:
-        if key(row) in admitted:
-            if admitted[key(row)]['placement']['basis'] != 'reduxPortCounterpart':
-                row['status'] = 'included with an estimated grade; human review still needed'
-            row['placement'] = admitted[key(row)]['placement']
     calibration = []
     for anchor in anchor_rows:
         predicted, _, _, _ = estimate(anchor['context'], [a for a in anchor_rows if a is not anchor])
@@ -428,7 +437,7 @@ def build(pool, witnesses, resources, reference, reviews):
     # claim that the full human discovery-review checklist has been completed.
     cellbash = next({'row': row, 'context': contexts[key(row)], 'placement': {},
                      'variantDifferences': [], 'reference': {}} for row in candidates.values()
-                    if item['row']['entry']['identity'] == {
+                    if row['entry']['identity'] == {
                         'engine': 'classic', 'packID': 'fan:lldb-547',
                         'levelID': 'Ji Hoon Heaven 1.DAT#5'})
     assert cellbash['row']['entry']['sourceRevision'] == '8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971'
@@ -469,6 +478,20 @@ def build(pool, witnesses, resources, reference, reviews):
             value = max(report['minimumDemand'], item['placement']['position'])
             item['placement'].update(basis='userPlaytest', position=value, lower=value, upper=value,
                 adjustment=report['reason'])
+    for item in reviewed_bridges:
+        if item['row']['official'] or fills_reviewed_gap(item, selected):
+            selected = [r for r in selected if key(r['row']) != key(item['row'])] + [item]
+    assert sum(item['row']['official'] for item in selected) >= .8 * len(selected), 'The golden path must remain official-heavy'
+    assert not any(not item['row']['official'] and item['placement']['basis'] == 'solutionEstimate' for item in selected)
+    admitted = {key(item['row']): item for item in selected}
+    for row in pending:
+        if key(row) in admitted:
+            item = admitted[key(row)]
+            row['status'] = 'included with exact human review' if item['placement']['basis'] in ['reviewedFan', 'reviewedVariant'] else (
+                'included from owner playtest' if item['placement']['basis'] == 'userPlaytest' else
+                'included with port counterpart evidence; human variant review still needed' if item['placement']['basis'] == 'reduxPortCounterpart' else
+                'included official variant with cautious estimated placement; human review still needed')
+            row['placement'] = item['placement']
     selected.sort(key=lambda r: (r['placement']['position'], key(r['row'])))
     assert selected and selected[0]['reference']['ordinal'] == 1, 'The tutorial opening must not silently disappear'
     lessons, curriculum, transitions = [], [], []
@@ -532,26 +555,26 @@ def report(manifest, plan, pending, transitions):
     write(OUT / 'validation.json', {'policy': POLICY, 'checks': [
         'Exact source revisions and native winning replay identities required',
         'Redux file hashes and community order pinned',
-        'Full 295-level size; solution estimates are distinguished from human reviews',
+        'At least 80% official levels; no fixed-size padding',
+        'Unreviewed fan estimates never enter the golden path',
+        'Seasonal levels need exact human difficulty review',
+        'Reviewed fan bridges stay inside a real gap without introducing unpractised skills',
         'No fabricated precision, rank floors, cumulative clamps or application-pattern deduplication',
         'Adjacent reference gaps are checked without changing any placement score'],
         'limits': plan['limits']})
     lines = ['# Oh My! All Lemmings! progression', '',
-        f"{len(lessons)} curated Classic-mechanics levels: a full journey with official lessons and fan levels.", '',
-        f"[Redux's community order]({SOURCE}) supplies the reference spine. The remaining official and fan levels are placed by comparisons with five reference solutions. Actual assignments, worker changes, skill combinations, bursts of input, timing evidence and resource pressure inform those comparisons.", '',
-        'Resource pressure uses the skills actually spent and the route’s rescue margin. Release cadence is considered alongside input density. High rescue percentages, rapid release rates and large inventories never assign a grade by themselves. All selected levels have an exact-version winning replay. Explicit unsuitable-level exclusions remain in force. Estimated additions need an initial-state visibility audit and exclude mostly concealed exits or traps. This pixel-visibility check does not prove that the route or all visual information is obvious.', '',
-        'The first seven reference tutorials retain their relative order. Cellbash follows Just dig! as lesson 2, based on the owner’s single-basher playtest. Come back! moves to Intermediate after the owner’s two-bomber bridge playtest; its stored witness uses two bombers and does not certify that bridge route. Repeated practice is retained. Selection targets coverage across the curve, limits repeated fan packs and avoids long repetitive witnesses. Estimated beginner additions cannot have measured narrow timing, more than three skill types, multiple worker role changes, or an exhausted combination with no rescue margin. It does not raise or lower grades to make adjacent numbers look smooth. The production generator fails if it cannot supply all 295 levels. The two promised 1.8.2 additions are mandatory and retain exact native witnesses. Port counterparts use the Redux position with recorded conversion differences; they do not claim human variant review.', '',
-        "Let's be careful out there moves from lesson 32 to later Intermediate combination practice after the owner's 2026-10-14 playtest. The retail route needs more planning than its Gentle Redux counterpart. Its source and exact winning witness stay unchanged. Saved queues defer this level while preserving visits and ownership.", '',
-        "The Crankshaft moves from the early Fun lessons to Difficult after the owner's 2026-10-14 playtest at lesson 34. Its retail route needs established worker coordination. Its source and winning witness stay unchanged, and saved queues defer pending attempts while retaining visits and ownership.", '',
-        "Patience and Rainbow Island move from lessons 30 and 33 into Intermediate after the owner's 2026-10-14 feedback. They follow more combination practice. Their source and exact winning witnesses stay unchanged. Saved queues defer these levels while preserving visits and ownership. These placements are editorial corrections, not measured human difficulty scores.", '',
-        'Stop, Block and Blow, the snow bomber level from Ji Hoons Lemmings Remake Heaven, moves from lesson 13 to late Intermediate after the owner’s 2026-10-13 playtest. Its exact source and winning witness stay unchanged. The new position is an editorial correction, not a measured human difficulty score.', '',
-        'The owner’s reported Time waits for no Lemming and This Corrosion routes are the final two Expert lessons. route-safety.json records the exact official and fan variants, including matching initial states. These routes have a late-Expert placement floor. This is an editorial decision from the owner’s playtest, not proof that every possible solution needs an engine quirk. Explicit engine-quirk concepts also receive this floor. Other fan levels still need route review.', '',
-        '## Estimated grades and review', '',
-        'A solutionEstimate is an estimate of solving demands against the references, not a human-reviewed difficulty label. Its lower and upper bounds include disagreement among comparable solutions and at least the median held-out calibration error. They are uncertainty ranges, not confidence intervals. Unknown discovery and incomplete timing tests add uncertainty. A named, exact-version human review can replace that estimate. human-review-queue.json includes both selected estimates and reserves; inclusion is explicitly recorded.', '',
-        'For human review, record an ordinary completion, what had to be discovered, hints used, execution retries and whether spare resources offered recovery. Compare nearby reference levels played by the same person. Hidden-information checks remain a human-review requirement. No human observations are fabricated.', '',
-        'The curriculum records leave-one-reference-out error. That diagnostic measures how imperfectly route features recover community order. It is not proof of a smooth novice experience. Classic and Redux have different physics, time limits and sometimes different skill or rescue budgets.', '',
+        f"{len(lessons)} Classic-mechanics lessons: {summary['official']} official levels and {summary['fan']} entries from fan archives.", '',
+        f"[Redux's community order]({SOURCE}) supplies the official reference spine. Mainline official levels take priority. Unmatched official variants use the cautious upper estimate and a retail-rank floor. Original measured replay scores remain unchanged.", '',
+        'The path has no level-count quota. Unreviewed fan and NeoLemmix levels remain in the review queue, even when their artwork or winning replay looks easy. A short solution cannot establish how hard the trick is to discover. Reviewed fan bridges must fit between nearby official lessons, stay within their human-reviewed difficulty bounds and use previously practised skills. They fill real gaps rather than add variety.', '',
+        'Xmas and Holiday levels are withheld unless an exact-version human difficulty review supports their placement. Seasonal rank names, visual simplicity and Redux title counterparts do not establish suitability in Classic physics.', '',
+        'Cellbash remains lesson 2 from the owner’s single-basher playtest. Going their separate ways is the official Macintosh exclusive delivered through a Classic fan archive. Its Redux counterpart and conversion differences are recorded. Neither exception authorises unrelated fan estimates.', '',
+        'The owner’s reported walls remain deferred: Patience and Rainbow Island to Intermediate, Let’s be careful out there to later Intermediate, and The Crankshaft to Difficult. Time waits for no Lemming and This Corrosion retain their late-Expert floors. Come back! and Stop, Block and Blow are withheld with other unreviewed fan routes.', '',
+        '## Evidence limits', '',
+        'Every lesson requires exact source resources and a matching winning replay. A native win proves one route, not novice discovery or the easiest solution. Official estimates remain uncertain. The curriculum records leave-one-reference-out calibration error and variant differences. These diagnostics do not certify a smooth human difficulty curve.', '',
+        'For fan or seasonal review, record the exact source and replay revisions, an ordinary human completion, discovery notes, hints, retries and recovery resources. Compare nearby reference levels played by the same person. Do not infer a human review from machine analysis.', '',
         '## Saved journeys', '',
-        'Older built-in queues migrate to this full path. Completed or visited entries remain history, ownership and progress stay intact, and the remaining queue follows the current order. Custom playlists and newer saved versions are unchanged.', '',
+        'Older built-in queues migrate to the current path. Past visits, completed records, ownership and run identity remain intact. Unvisited retired fan and seasonal entries leave the queue. Reported official walls move to their later positions. Custom playlists and newer saved versions remain unchanged.', '',
+        'The bundled path uses Classic mechanics. Lemmings 2 and Lemmings 3 keep their existing campaigns and saved queues. Direct NeoLemmix playlist routing remains unsupported. No untested bridge is substituted for that gap.', '',
         'Regenerate with `zsh Scripts/generate-learning-journey.sh BUNDLED_RESOURCES`. Check with `python3 Tools/DifficultyDiagnostics/human_journey.py --check`.', '',
         '## Current order', '', '| Step | Comparison reference | Level | Stage | Evidence |', '| ---: | --- | --- | --- | --- |']
     for i, (lesson, goal) in enumerate(zip(lessons, plan['lessons']), 1):

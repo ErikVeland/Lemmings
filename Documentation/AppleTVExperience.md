@@ -24,6 +24,14 @@ Menus use native TV focus. Carousel left/right selects a level and Select opens
 it. Back returns through the shared navigation. The system keyboard supplies
 search, player names, playlist names and cloud linking codes.
 
+Gameplay has no on-screen hamburger or Menu button on TV. Siri Remote Back and
+controller Options/Menu open the pause menu. The shared HUD omits both the bitmap
+button and its input/accessibility target in Classic, Lemmings 2 and Lemmings 3.
+Muted, offscreen checks cover 18 active/paused HUD renders at 1920, 1280 and
+640-point widths, remaining action targets, scroll-bank clipping and visible
+player/counter regions. The tvOS SDK modules and app entry point compile.
+Native remote focus and physical controller delivery remain device checks.
+
 Gameplay uses the shared controller bindings. One device owns the attempt
 through pause menus until it disconnects or the attempt ends. Page changes
 require neutral Select before another activation. Controller cycling locks an
