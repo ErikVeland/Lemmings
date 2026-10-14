@@ -3,6 +3,24 @@ import Testing
 @testable import LemmingsMobileCore
 
 struct MobileContentImportLimitTests {
+    @Test func reportedFileSizeIsNotCountedAgainAfterCopy() throws {
+        var budget = MobileContentImportBudget(maximumBytes: 200)
+
+        #expect(try budget.copyLimit(forReportedFileSize: 80) == 200)
+        try budget.recordCopy(80)
+        #expect(try budget.copyLimit(forReportedFileSize: 80) == 120)
+        try budget.recordCopy(80)
+        #expect(budget.copiedBytes == 160)
+        #expect(budget.remainingBytes == 40)
+
+        do {
+            _ = try budget.copyLimit(forReportedFileSize: 41)
+            Issue.record("A file above the remaining aggregate import budget was accepted.")
+        } catch let error as MobileContentStoreError {
+            #expect(error == .tooLarge)
+        }
+    }
+
     @Test func importEntryCountStopsAtTheConfiguredLimit() throws {
         try MobileContentStore.validateImportEntryCount(MobileContentStore.maximumImportEntries)
 

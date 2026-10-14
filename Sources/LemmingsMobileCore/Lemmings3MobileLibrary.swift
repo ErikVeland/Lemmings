@@ -11,6 +11,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
     public let directory: URL
     public let displayName = "Lemmings 3: Chronicles"
     public let levels: [MobileLevelSummary]
+    private let contentFingerprint: String
 
     private struct SavedProgress: Codable {
         var currentTribe = 1
@@ -36,6 +37,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
     public init(directory: URL, storage: MobileStorage) throws {
         self.directory = directory
         self.storage = storage
+        contentFingerprint = try MobileContentFingerprint.digest(directory: directory)
         soundBank = try? Lemmings3SoundBank(root: directory)
         savedProgress = storage.load(SavedProgress.self, name: "lemmings3-campaign") ?? SavedProgress()
         levels = try Lemmings3ClassicCampaign.Tribe.allCases.flatMap { tribe in
@@ -51,12 +53,16 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
 
     public func levelKey(at index: Int) -> String {
         guard levels.indices.contains(index), let data = try? levelData(at: index) else { return "" }
-        return "lemmings3/\(Self.digest(data))"
+        let fingerprint = MobileContentFingerprint.levelFingerprint(
+            content: contentFingerprint, level: Self.digest(data))
+        return "lemmings3/\(fingerprint)"
     }
 
     public func checkpointLevelIdentifier(at index: Int) throws -> String? {
         guard levels.indices.contains(index) else { throw MobileSessionError.changedLevel }
-        return "lemmings3/\(Self.digest(try levelData(at: index)))"
+        let fingerprint = MobileContentFingerprint.levelFingerprint(
+            content: contentFingerprint, level: Self.digest(try levelData(at: index)))
+        return "lemmings3/\(fingerprint)"
     }
 
     public func loadLevel(at index: Int) throws -> MobileLevelContent {
@@ -127,7 +133,8 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
                                                        sprites: sprites, palette: actorPalette,
                                                        creatureBanks: creatureBanks,
                                                        animatedObjects: animatedObjects)
-        let fingerprint = Self.digest(level.rawData)
+        let fingerprint = MobileContentFingerprint.levelFingerprint(
+            content: contentFingerprint, level: Self.digest(level.rawData))
         let session = Lemmings3MobileSession(runtime: runtime,
             engineFingerprint: Self.engineFingerprint,
             levelIdentifier: "lemmings3/\(fingerprint)", levelIndex: index,

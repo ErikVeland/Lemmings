@@ -7,8 +7,10 @@ import UIKit
 public enum LemmingsMobileApplication {
     @MainActor public static func makeRootViewController() -> UIViewController {
 #if DEBUG
-        if ProcessInfo.processInfo.arguments.contains("--ui-test-l3-direction-picker") {
-            return MobileDirectionPickerUITestHarness.make()
+        if ProcessInfo.processInfo.arguments.contains("--ui-test-l3-direction-picker")
+            || ProcessInfo.processInfo.arguments.contains("--ui-test-accessible-targeting")
+            || ProcessInfo.processInfo.arguments.contains("--ui-test-accessible-assignment") {
+            return MobileInteractionUITestHarness.make()
         }
 #endif
         #if os(tvOS)
@@ -20,7 +22,7 @@ public enum LemmingsMobileApplication {
 }
 
 #if DEBUG
-@MainActor private enum MobileDirectionPickerUITestHarness {
+@MainActor private enum MobileInteractionUITestHarness {
     static func make() -> UIViewController {
         do {
             let width = 128
@@ -85,7 +87,15 @@ public enum LemmingsMobileApplication {
                 .appendingPathComponent("L3DirectionPicker-\(UUID().uuidString).json"))
             let game = MobileGameViewController(summary: summary, session: session,
                 checkpointStore: checkpoint, restoredCheckpoint: nil)
-            return MobileDirectionPickerTestHostController(game: game, selection: selection, control: control)
+            return MobileInteractionTestHostController(
+                game: game,
+                selection: selection,
+                control: control,
+                opensDirectionPicker: ProcessInfo.processInfo.arguments.contains("--ui-test-l3-direction-picker"),
+                checksAccessibleTargeting: ProcessInfo.processInfo.arguments.contains("--ui-test-accessible-targeting")
+                    || ProcessInfo.processInfo.arguments.contains("--ui-test-accessible-assignment"),
+                assignsAccessibly: ProcessInfo.processInfo.arguments.contains("--ui-test-accessible-assignment")
+            )
         } catch {
             preconditionFailure("Could not build the Lemmings 3 direction-picker test level: \(error)")
         }
@@ -134,16 +144,23 @@ public enum LemmingsMobileApplication {
     }
 }
 
-@MainActor private final class MobileDirectionPickerTestHostController: UIViewController {
+@MainActor private final class MobileInteractionTestHostController: UIViewController {
     private let game: MobileGameViewController
     private let selection: MobileTargetSelection
     private let control: Int
+    private let opensDirectionPicker: Bool
+    private let checksAccessibleTargeting: Bool
+    private let assignsAccessibly: Bool
     private var presentedPicker = false
 
-    init(game: MobileGameViewController, selection: MobileTargetSelection, control: Int) {
+    init(game: MobileGameViewController, selection: MobileTargetSelection, control: Int,
+         opensDirectionPicker: Bool, checksAccessibleTargeting: Bool, assignsAccessibly: Bool) {
         self.game = game
         self.selection = selection
         self.control = control
+        self.opensDirectionPicker = opensDirectionPicker
+        self.checksAccessibleTargeting = checksAccessibleTargeting
+        self.assignsAccessibly = assignsAccessibly
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -168,7 +185,23 @@ public enum LemmingsMobileApplication {
         guard !presentedPicker else { return }
         presentedPicker = true
         game.resumePlay()
-        _ = game.beginL3ToolDirectionSelection(control: control, target: selection.id, selection: selection)
+        if opensDirectionPicker {
+            _ = game.beginL3ToolDirectionSelection(control: control, target: selection.id, selection: selection)
+        } else {
+            game.performCommand(.skill(control))
+            if checksAccessibleTargeting {
+                guard game.moveAccessibleTarget(1) else {
+                    preconditionFailure("The L3 accessible target action must select an eligible lemming.")
+                }
+                let actionNames = Set(game.playfieldView.accessibilityCustomActions?.map(\.name) ?? [])
+                guard actionNames.contains("Next eligible lemming"), actionNames.contains("Assign Use") else {
+                    preconditionFailure("The L3 playfield must expose target and assignment accessibility actions.")
+                }
+                if assignsAccessibly && !game.assignAccessibleTarget() {
+                    preconditionFailure("The L3 accessible assignment action must start the tool direction picker.")
+                }
+            }
+        }
     }
 }
 #endif
