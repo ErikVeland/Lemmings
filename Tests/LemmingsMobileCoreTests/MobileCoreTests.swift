@@ -268,6 +268,29 @@ struct MobileCoreTests {
         ])
     }
 
+    @Test func touchRouterRejectsMultiTouchUntilAllContactsLift() {
+        var router = MobileTouchRouter()
+        let point = MobilePoint(x: 20, y: 20)
+        #expect(router.began(id: 1, at: point, time: 1) == [.preview(point)])
+        #expect(router.cancelForMultiTouch() == [.cancelPreview])
+        #expect(router.began(id: 2, at: point, time: 1.1).isEmpty)
+        #expect(router.ended(id: 1, at: point, time: 1.2).isEmpty)
+        #expect(router.ended(id: 2, at: point, time: 1.3).isEmpty)
+
+        router.resetAfterAllTouchesEnded()
+        #expect(router.began(id: 3, at: point, time: 2) == [.preview(point)])
+        #expect(router.ended(id: 3, at: point, time: 2.1) == [.commit(point)])
+    }
+
+    @Test func overlappingTouchDefensivelyRejectsBothAssignments() {
+        var router = MobileTouchRouter()
+        let first = MobilePoint(x: 20, y: 20)
+        let second = MobilePoint(x: 40, y: 20)
+        #expect(router.began(id: 1, at: first, time: 1) == [.preview(first)])
+        #expect(router.began(id: 2, at: second, time: 1.1) == [.cancelPreview])
+        #expect(router.ended(id: 2, at: second, time: 1.2).isEmpty)
+    }
+
     @Test func lifecycleSavesOnceAndRequiresExplicitResume() {
         var state = MobileLifecycleState()
         let inactive = state.handle(.becameInactive)

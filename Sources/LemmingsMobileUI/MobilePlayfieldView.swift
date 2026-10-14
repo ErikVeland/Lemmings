@@ -20,7 +20,10 @@ import UIKit
     }
 
     private var router = MobileTouchRouter()
-    private var activeTouchID: Int?
+    private var activeTouchID: ObjectIdentifier?
+    private var trackedTouchIDs = Set<ObjectIdentifier>()
+    private var ignoresTouchSequenceUntilLift = false
+    private var pinchGestureActive = false
     private var rawHoverPoint: CGPoint?
     private(set) var touchInput: MobileTargetInput = .touch
     var hasActiveTouch: Bool { activeTouchID != nil }
@@ -434,11 +437,20 @@ import UIKit
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard activeTouchID == nil, let touch = touches.first else { return }
+        trackedTouchIDs.formUnion(touches.map(ObjectIdentifier.init))
+        guard !ignoresTouchSequenceUntilLift else { return }
+        guard trackedTouchIDs.count == 1, activeTouchID == nil, let touch = touches.first else {
+            ignoresTouchSequenceUntilLift = true
+            activeTouchID = nil
+            let effects = router.cancelForMultiTouch()
+            if !effects.isEmpty { onTouchEffects?(effects) }
+            return
+        }
         let initial = touch.location(in: self)
         guard acceptsInput(at: initial) else { return }
-        let id = ObjectIdentifier(touch).hashValue
-        activeTouchID = id
+        let touchID = ObjectIdentifier(touch)
+        let id = touchID.hashValue
+        activeTouchID = touchID
         touchInput = touch.type == .direct ? .touch : .precision
         let point = inputPoint(touch.location(in: self))
         onTouchEffects?(router.began(
@@ -450,15 +462,20 @@ import UIKit
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let id = activeTouchID,
-              let touch = touches.first(where: { ObjectIdentifier($0).hashValue == id }) else { return }
+        guard let touchID = activeTouchID,
+              let touch = touches.first(where: { ObjectIdentifier($0) == touchID }) else { return }
         let point = inputPoint(touch.location(in: self))
-        onTouchEffects?(router.moved(id: id, to: MobilePoint(x: point.x, y: point.y)))
+        onTouchEffects?(router.moved(id: touchID.hashValue, to: MobilePoint(x: point.x, y: point.y)))
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let id = activeTouchID,
-              let touch = touches.first(where: { ObjectIdentifier($0).hashValue == id }) else { return }
+        trackedTouchIDs.subtract(touches.map(ObjectIdentifier.init))
+        if ignoresTouchSequenceUntilLift {
+            resetTouchSequenceIfNeeded()
+            return
+        }
+        guard let touchID = activeTouchID,
+              let touch = touches.first(where: { ObjectIdentifier($0) == touchID }) else { return }
         activeTouchID = nil
         let point = inputPoint(touch.location(in: self))
         guard acceptsInput(at: touch.location(in: self)) else {
@@ -466,32 +483,52 @@ import UIKit
             return
         }
         onTouchEffects?(router.ended(
-            id: id,
+            id: touchID.hashValue,
             at: MobilePoint(x: point.x, y: point.y),
             time: touch.timestamp
         ))
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        activeTouchID = nil
+        trackedTouchIDs.subtract(touches.map(ObjectIdentifier.init))
+        if ignoresTouchSequenceUntilLift {
+            resetTouchSequenceIfNeeded()
+            return
+        }
+        guard let activeTouchID,
+              touches.contains(where: { ObjectIdentifier($0) == activeTouchID }) else { return }
+        self.activeTouchID = nil
         onTouchEffects?(router.cancel())
+    }
+
+    private func resetTouchSequenceIfNeeded() {
+        guard trackedTouchIDs.isEmpty, !pinchGestureActive else { return }
+        ignoresTouchSequenceUntilLift = false
+        router.resetAfterAllTouchesEnded()
     }
 
     #if os(iOS)
     @objc private func handlePinch(_ recognizer: UIPinchGestureRecognizer) {
         if recognizer.state == .began {
+            pinchGestureActive = true
             automaticallyFitsViewport = false
+            ignoresTouchSequenceUntilLift = true
             activeTouchID = nil
-            onTouchEffects?(router.cancel())
+            let effects = router.cancelForMultiTouch()
+            if !effects.isEmpty { onTouchEffects?(effects) }
         }
-        guard recognizer.state == .began || recognizer.state == .changed else { return }
-        let anchor = inputPoint(recognizer.location(in: self))
-        gameViewport.magnify(
-            by: recognizer.scale,
-            around: MobilePoint(x: anchor.x, y: anchor.y)
-        )
-        recognizer.scale = 1
-        setNeedsDisplay()
+        if recognizer.state == .began || recognizer.state == .changed {
+            let anchor = inputPoint(recognizer.location(in: self))
+            gameViewport.magnify(
+                by: recognizer.scale,
+                around: MobilePoint(x: anchor.x, y: anchor.y)
+            )
+            recognizer.scale = 1
+            setNeedsDisplay()
+        } else if recognizer.state == .ended || recognizer.state == .cancelled || recognizer.state == .failed {
+            pinchGestureActive = false
+            resetTouchSequenceIfNeeded()
+        }
     }
     #endif
 }
