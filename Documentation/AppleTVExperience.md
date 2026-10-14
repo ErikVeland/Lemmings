@@ -12,6 +12,31 @@ Content entries require the same compatible data as iOS. Learning journeys
 currently accept Classic entries. Native engine fidelity and device acceptance
 remain separate gates.
 
+## Build identity and changes
+
+Home shows the installed version, build number and local build date. The TV
+target bundles `BuildInfo.json` in its final build phase, before signing. Each
+invocation gets its own identity, so a local rebuild can show its changes even
+when its version and build number are reused. The current target is 2.0 build 2.
+
+The Latest build page opens once for each installed identity, before first-run
+play-style selection. Continue acknowledges it in device defaults. Opening the
+page alone does not. What's New on Home reopens the same bundled notes. The
+notice retains the background library/checkpoint load and does not start a game
+or change saved-run ownership. All three game engines share this frontend.
+
+Keep `Apps/UltimateLemmingsTV/BuildChanges.json` current with the changes since
+the previous distributed build. These are authored notes, not generated Git
+commit messages. Build identity describes the installed app and does not check
+App Store or TestFlight availability.
+
+Headless checks cover acknowledgement, legacy seen-build defaults, repeated
+launches and local rebuilds with reused build numbers. Windowless, muted renders
+check Home, Latest build and missing-note fallback at the three TV interface
+sizes, with idle/focused states and shared input bounds. TV SDK compilation and
+the unsigned arm64 TV Simulator app build pass. Physical remote focus, scrolling,
+VoiceOver and first-launch delivery still require a device check.
+
 ## Presentation and input
 
 The app uses the shared bitmap fonts, portraits, stone controls, native game

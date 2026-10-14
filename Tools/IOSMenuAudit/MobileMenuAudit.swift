@@ -21,7 +21,8 @@ import NxlvKit
         let hotSeatFlow = CommandLine.arguments.last == "--hot-seat-flow"
         let hotSeatHUD = CommandLine.arguments.last == "--hot-seat-hud"
         let bundledGames = CommandLine.arguments.last == "--bundled-games"
-        guard CommandLine.arguments.count == (hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames ? 5 : 4) else { throw Failure.invalidArguments }
+        let buildChanges = CommandLine.arguments.last == "--build-changes"
+        guard CommandLine.arguments.count == (hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges ? 5 : 4) else { throw Failure.invalidArguments }
         let artwork = URL(fileURLWithPath: CommandLine.arguments[1])
         let content = URL(fileURLWithPath: CommandLine.arguments[2])
         let output = URL(fileURLWithPath: CommandLine.arguments[3])
@@ -29,6 +30,7 @@ import NxlvKit
         guard let typography = GameMenuTypography(directory: artwork),
               typography.interface.logo != nil,
               typography.font(.small) != nil, typography.font(.large) != nil else { throw Failure.missingArtwork }
+        if buildChanges { try checkBuildChanges(typography: typography, manifest: content, output: output); return }
         if skillPause { try checkSkillPause(typography: typography, output: output); return }
         let library = try ClassicMobileLibrary(directory: content)
         guard try library.checkpointLevelIdentifier(at: 0) == library.loadLevel(at: 0).session.levelIdentifier

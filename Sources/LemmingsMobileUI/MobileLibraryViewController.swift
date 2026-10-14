@@ -31,6 +31,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     let browser = MobileLevelBrowserView()
     var browserShown = false
     var route = Route.home
+    #if os(tvOS)
+    let tvBuildInfo = MobileBuildInfo.current()
+    #endif
     var mobileInsights = MobileInsightsState()
     var fanCountsTask: Task<Void, Never>?
     var fanCountGeneration = UUID()
@@ -347,9 +350,14 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             let journey = bundledJourney
             let journeyTitle = L10n.text("Journey map  \(journey.map { learning.progress.solvedCount(in: $0) } ?? 0)/\(journey?.lessons.count ?? 0) solved")
             let initials = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") } ?? profiles.active.name
+            #if os(tvOS)
+            let homeSubtitle = [tvBuildInfo.label, tvBuildInfo.dateLabel, subtitle].filter { !$0.isEmpty }.joined(separator: "\n")
+            #else
+            let homeSubtitle = subtitle
+            #endif
             canvas.page = MobileHomeArt.page(resume: resume,
                 journey: .init("journey", journeyTitle, enabled: catalogue != nil && journey != nil),
-                families: families, initials: initials, subtitle: subtitle, collectionsAvailable: catalogue != nil)
+                families: families, initials: initials, subtitle: homeSubtitle, collectionsAvailable: catalogue != nil)
             canvas.preview = nil
         case let .family(family):
             let all = catalogue?.packs(in: family) ?? []
@@ -507,6 +515,14 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         return image.cropping(to: CGRect(x: x, y: 0, width: width, height: image.height))
     }
     func navigate(_ next: Route) {
+        #if os(tvOS)
+        // The launch notice must not cancel the library and saved-run load beneath it.
+        let welcomeRoutes: [Route] = [.home, .whatsNew, .effectsWelcome, .telemetryConsent]
+        let preserveWelcomeLoad = library == nil && libraryTask != nil
+            && welcomeRoutes.contains(route) && welcomeRoutes.contains(next)
+        #else
+        let preserveWelcomeLoad = false
+        #endif
         if next == .hotSeat, hotSeatRoster == nil {
             hotSeatRoster = MobileHotSeatRoster(host: profiles.activeID, players: defaultHotSeatPlayers)
         }
@@ -518,12 +534,16 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             mobileInsights.task?.cancel(); mobileInsights.loading = false
         }
         learningTask?.cancel(); learningPreparing = false
-        libraryTask?.cancel(); libraryTask = nil; libraryGeneration = UUID()
+        if !preserveWelcomeLoad {
+            libraryTask?.cancel(); libraryTask = nil; libraryGeneration = UUID()
+        }
         if next != .shuffleAll { shuffleTask?.cancel(); shuffleTask = nil; shuffleScanning = false }
         searchField.resignFirstResponder()
         if nameDraft != nil, !{ if case .playlist = next { return true }; return next == .players }() { nameDraft = nil; renamingPlayer = false; creatingPlayer = false; editingPlayerID = nil; searchField.text = searchQuery }
         confirmingDelete = false
-        stopMenuPreviews(); previewGeneration = UUID(); loading = false; preparingLevel = false
+        stopMenuPreviews(); previewGeneration = UUID()
+        if !preserveWelcomeLoad { loading = false }
+        preparingLevel = false
         if route != next { canvas.focusedID = nil }
         route = next; notice = ""
         libraryInput.reset()

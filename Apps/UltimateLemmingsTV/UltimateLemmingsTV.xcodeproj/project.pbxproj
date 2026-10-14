@@ -75,6 +75,7 @@
 				100000000000000000000046 /* Level catalogue */,
 				100000000000000000000047 /* Soundtracks */,
 				100000000000000000000048 /* Sound effects */,
+				100000000000000000000049 /* Build changes */,
 			);
 			buildRules = (
 			);
@@ -214,6 +215,18 @@
 			shellPath = /bin/sh;
 			shellScript = "python3 \"$SRCROOT/../../Tools/TVAssets/sounds.py\" --source \"${TV_AMIGA_SOUND_DIR:-$SRCROOT/../../Sources/Ports/amiga_extracted/lemmings}\" --app \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH\"\n";
 		};
+		100000000000000000000049 /* Build changes */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = ();
+			inputPaths = ();
+			name = "Build changes";
+			outputPaths = ();
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "python3 \"$SRCROOT/../../Tools/TVAssets/build_info.py\" --changes \"$SRCROOT/BuildChanges.json\" --app \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH\" --version \"$MARKETING_VERSION\" --build \"$CURRENT_PROJECT_VERSION\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -266,7 +279,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = UltimateLemmingsTV.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 54WU29TRTY;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -293,7 +306,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = UltimateLemmingsTV.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 54WU29TRTY;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = NO;
