@@ -48,9 +48,17 @@ or their result screens across Classic, fan packs, NeoLemmix, Lemmings 2 and 3.
 - [Automatic update evidence](Documentation/AutomaticUpdates.md) — release checks and records.
 
 The recorded iPhone/iPad 1.3 source and Simulator gates pass for their exact
-commits. The current mobile prototype exposes Classic only. Sequel rendering,
-content loading, campaigns, shared QoL, Hot Seat, audio and controller support
-remain required for 2.0, alongside Duo, physical-device and distribution gates.
+commits. The 2.0 source connects Classic, Lemmings 2, Lemmings 3 and supported
+NeoLemmix packs to mobile libraries and sessions. L2 and L3 have native scene
+renderers, campaign records and checkpoint routes. NeoLemmix import validates
+styles, sprites, rendering and supported simulation features. The exact main
+commit `c7305724` passes the Xcode 27.2 source gate, the Mac workflow and the
+NeoLemmix gate. Its iPhone and iPad layout and lifecycle tests pass. Local
+Xcode 26.6 lacks the iOS 27 APIs used by the full app,
+and CoreSimulatorService cannot provide a local runtime. Real-data parity,
+physical-device and accessibility acceptance, audio, controller, Duo and
+distribution gates remain open. See the
+[2.0 release gate](Documentation/ReleaseReadiness/2.0ReleaseGate-2026-10-14.md).
 The macOS 1.9 release marks Lemmings 2: The Tribes Complete and Lemmings 3:
 Chronicles Beta. Classic content remains the completed reference engine. The bundled corpus contains
 6,020 Classic-format fan levels in 535 packs; this is not a claim of NeoLemmix
@@ -100,9 +108,12 @@ The runner applies this policy to test processes only. Packaged-app launch smoke
 tests require `LEMMINGS_TEST_WINDOWS=foreground` because they exercise the signed
 app's real launch and full-screen presentation.
 
-The iOS source target supports iOS 16 or later. Its first player-facing slice
-imports a player-owned Classic DOS folder through the system document picker.
-It does not package commercial game data.
+The iOS source target supports iOS 16 or later. The 2.0 source supports
+player-owned Classic, Lemmings 2, Lemmings 3 and supported NeoLemmix imports
+through the system document picker. It does not package commercial game data.
+The signed build 12 remains Classic-only. See the
+[2.0 release gate](Documentation/ReleaseReadiness/2.0ReleaseGate-2026-10-14.md)
+for current source evidence and open device and distribution checks.
 
 ## Build and run
 

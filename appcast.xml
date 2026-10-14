@@ -3,6 +3,38 @@
     <channel>
         <title>Ultimate Lemmings</title>
         <item>
+            <title>1.9.6</title>
+            <pubDate>Wed, 14 Oct 2026 01:18:57 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>81</sparkle:version>
+            <sparkle:shortVersionString>1.9.6</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>This release brings the current shared engine, artwork, saves and audio fixes to macOS. The companion iPhone and iPad beta is version 2.0, build 13, and uses the same release source.</p>
+<h3>All platforms</h3>
+<ul><li>Bombs scatter crisp pixel debris and show bitmap countdown digits. Explosion artwork ends after its brief animation.</li><li>Selection uses a steady white outline and green halo. Dying, exiting and exploding lemmings no longer retain selection or rescue outlines.</li><li>Rewind scratches backwards through recent music and effects. Repeated requests reuse bounded audio buffers.</li><li>Recorded music decodes in bounded queues. Short loops blend their seams, and peak protection follows the effects mix.</li><li>Shared rendering budgets reduce added-effects work while simulation keeps its authored tick rate. Terrain and panel caches avoid unchanged bitmap conversions.</li><li>Profiles, records, recovery, playlists and Hot Seat use shared modules. Saved runs and handovers stay paused until the player is ready.</li><li>Golden Path moves “Let’s be careful out there” later in the journey. Saved journeys preserve visited levels and player ownership.</li></ul>
+<h3>macOS</h3>
+<p>The Mac build includes Classic, The Tribes, Chronicles and NeoLemmix. The Tribes remains Complete. Chronicles and NeoLemmix remain Beta.</p>
+<p>Fresh starts and retries have a short 3–2–1 countdown. Rewinds add brief sprite echoes when modern effects are enabled. Profiles and result pages keep the primary action last in their navigation order.</p>
+<p>The Cloud saves page supports linked private libraries and recovery keys. Local saves remain available. Chronicles retains 90 standalone winning routes out of 90. This does not establish a complete chained campaign or remove its Beta status.</p>
+<p>The universal Mac app supports Apple silicon and Intel on macOS 12.3 or later. The slim download includes essential music and offers optional soundtrack libraries. Automatic updates retain the full soundtrack.</p>
+<h3>iPhone and iPad — 2.0 beta</h3>
+<p>The beta plays the Classic family, Holiday packs, Oh Yes! More Lemmings! and installed fan packs. It includes profiles, favourites, recent levels, playlists, journeys, records and Hot Seat.</p>
+<p>Portrait and landscape controls use the shared stone artwork and bitmap symbols. Mouse, trackpad and Pencil targeting use level-space pick boxes. Camera movement refreshes targeting while paused. Hot Seat identifies the player through Ready, play, pause, results and handover. The player's portrait and green name sit above the HUD counters during play. Skip and restored runs preserve the saved turn. Collections places Resume beside Back as the primary action.</p>
+<p>The pause screen shows the level preview, rescue target, remaining lemmings, skills, time and current music. Resume stays in a fixed position while the details scroll.</p>
+<p>Music, replay history, calmer rescue effects, recovery and saved-journey fixes follow the shared Mac source. The companion private beta includes all 495 soundtrack versions. Local builds now include them by default. Slim builds offer optional soundtrack libraries in Settings; downloads require the app to remain in the foreground.</p>
+<p>The display adapts to sustained load and avoids repeated bitmap conversion. Gameplay keeps its authored tick rate. Sustained performance on older iPads remains a device acceptance check.</p>
+<p>Lemmings 2, Lemmings 3 and NeoLemmix remain unavailable to play on iOS. Game Center runtime availability remains disabled until Apple-side configuration is verified. TestFlight delivery and Beta App Review are separate from public App Store publication.</p>
+<h3>Validation scope</h3>
+<p>CI checks shared regressions, the universal Mac executable, iOS Debug and Release simulator builds, the unsigned Release device build, and iPhone/iPad layout and lifecycle contracts. Distribution tooling checks signatures, provisioning, content manifests and update metadata.</p>
+<p>Local automated checks use offscreen windows and muted audio. Release evidence records each result against the frozen source. Physical input, audible listening, foreground shipping-app launch, HDR appearance, minimum-OS hardware and sustained device performance remain manual validation gaps.</p>
+<p class="meta">Build: 81<br>Release commit: 3ba689eaf21979833fcfa97d2beac1babfaabc36<br>Release base: v1.9.4</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.6/UltimateLemmings-1.9.6-build81.zip" length="2046920368" type="application/octet-stream" sparkle:edSignature="4YsPpm768us1nI7GcpxtmalWwEemuaVOeXXRgmZg7kcy+uDWpNimOvPr6Q91SKR7OChTzuYfG1fXoLmOrC+UDg=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.6/UltimateLemmings-build81-from79.delta" sparkle:deltaFrom="79" length="4944134" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="l1F6RZjxDgRnaH81V0inDYUag2aALxbwiEgs5pdMlP91+QUiiL2jitVLcFsS4nFwArgmJh1yMALXD7NvEfT2Bg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>1.9.4</title>
             <pubDate>Tue, 13 Oct 2026 03:52:48 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>

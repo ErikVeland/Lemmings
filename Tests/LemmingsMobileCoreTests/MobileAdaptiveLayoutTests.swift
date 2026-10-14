@@ -8,6 +8,12 @@ struct MobileAdaptiveLayoutTests {
             (.init(width: 390, height: 844), []),
             (.init(width: 834, height: 1112), []),
             (.init(width: 1112, height: 834), []),
+            (.init(width: 330, height: 460), []),
+            (.init(width: 650, height: 465), []),
+            (.init(width: 650, height: 465), [
+                .init(kind: .division, frame: .init(x: 318, y: 0, width: 14, height: 465)),
+                .init(kind: .occlusion, frame: .init(x: 600, y: 415, width: 50, height: 50)),
+            ]),
             (.init(width: 1194, height: 834), [.init(kind: .division, frame: .init(x: 589, y: 0, width: 16, height: 834))]),
             (.init(width: 1194, height: 834), [.init(kind: .division, frame: .init(x: 0, y: 405, width: 1194, height: 24))]),
             (.init(width: 1194, height: 834), [
@@ -61,6 +67,45 @@ struct MobileAdaptiveLayoutTests {
         let tiny = MobileHUDLayout.make(container: .init(width: 280, height: 160), safeArea: .init(), hasRate: true, skillCount: 8)
         #expect(!tiny.canPlay)
         #expect(tiny.interface.controlFrames.isEmpty)
+    }
+
+    @Test func lemmings3KeepsItsNativePanelAndTouchTargetsOnWideScreens() {
+        let layout = MobileHUDLayout.make(
+            container: .init(width: 1112, height: 834),
+            safeArea: .init(top: 20, bottom: 20),
+            hasRate: false,
+            skillCount: 5,
+            supportsRewind: true,
+            engineIdentifier: "lemmings3"
+        )
+
+        #expect(layout.canPlay)
+        #expect(layout.panel?.style == .lemmings3)
+        #expect(layout.panel?.scale == 3)
+        #expect(layout.minimapFrame == nil)
+        #expect(layout.interface.controlFrames.count == 12)
+        #expect(layout.interface.playfieldFrame.height >= 88)
+        #expect(layout.interface.controlFrames.allSatisfy { $0.width >= 44 && $0.height >= 44 })
+        #expect(layout.reservedRegions.allSatisfy { region in
+            layout.interface.controlFrames.allSatisfy { !$0.intersects(region.frame) }
+        })
+    }
+
+    @Test func lemmings3UsesAdaptiveControlsWhenTheNativePanelCannotFit() {
+        let layout = MobileHUDLayout.make(
+            container: .init(width: 1194, height: 834),
+            safeArea: .init(top: 20, bottom: 20),
+            hasRate: false,
+            skillCount: 5,
+            reservedRegions: [.init(kind: .division, frame: .init(x: 589, y: 0, width: 16, height: 834))],
+            engineIdentifier: "lemmings3"
+        )
+
+        #expect(layout.canPlay)
+        #expect(layout.panel == nil)
+        #expect(layout.interface.controlFrames.count == 10)
+        #expect(layout.interface.controlFrames.allSatisfy { $0.width >= 44 && $0.height >= 44 })
+        #expect(layout.interface.controlFrames.allSatisfy { !$0.intersects(.init(x: 589, y: 0, width: 16, height: 834)) })
     }
 
     @Test func menusStayClearOfDivisionAndOcclusionWhileScrolling() {

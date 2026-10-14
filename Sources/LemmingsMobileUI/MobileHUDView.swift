@@ -50,6 +50,7 @@ import UIKit
     private let playerIdentity = UIView()
     private let rateValueTap = UITapGestureRecognizer()
     var onAction: ((MobileHUDAction) -> Void)?
+    var onToolDirection: ((Lemmings3Runtime.Direction?) -> Void)?
     /// A touch on the map, as a point in level pixels.
     var onMinimap: ((CGPoint) -> Void)?
     private let minimapView = MobileMinimapView()
@@ -82,6 +83,8 @@ import UIKit
         playerIdentity.isUserInteractionEnabled = false
         playerIdentity.isHidden = true
         addSubview(playerIdentity)
+        addSubview(toolDirectionPicker)
+        toolDirectionPicker.onChoice = { [weak self] direction in self?.onToolDirection?(direction) }
         let touch = UILongPressGestureRecognizer(target: self, action: #selector(minimapTouched(_:)))
         touch.minimumPressDuration = 0
         minimapView.addGestureRecognizer(touch)
@@ -274,6 +277,21 @@ import UIKit
         rateValueTap.isEnabled = true
     }
 
+    @discardableResult
+    func showToolDirectionPicker(frames: [MobilePixelFrame], target: CGPoint, playfield: CGRect) -> Bool {
+        let bounds = MobileRect(x: playfield.minX, y: playfield.minY,
+                                width: playfield.width, height: playfield.height)
+        guard let frame = MobileDirectionPickerLayout.frame(
+            centredAt: MobilePoint(x: target.x, y: target.y), within: bounds
+        ) else { return false }
+        toolDirectionPicker.present(frames: frames,
+            frame: CGRect(x: frame.x, y: frame.y, width: frame.width, height: frame.height))
+        bringSubviewToFront(toolDirectionPicker)
+        return true
+    }
+
+    func hideToolDirectionPicker() { toolDirectionPicker.dismiss() }
+
     private func isEnabled(_ action: MobileHUDAction) -> Bool {
         switch action {
         case .skill, .releaseRate, .endRun: return !readOnly
@@ -302,6 +320,114 @@ import UIKit
             shouldInterpolate: false,
             intent: .defaultIntent
         )
+    }
+}
+
+@MainActor private final class MobileToolDirectionPickerView: UIView {
+    private struct Cell {
+        let direction: Lemmings3Runtime.Direction?
+        let frameIndex: Int?
+        let label: String
+    }
+
+    private static let cells: [Cell] = MobileDirectionPickerLayout.gridDirections.map { direction in
+        guard let direction else {
+            return Cell(direction: nil, frameIndex: nil, label: "Cancel tool direction")
+        }
+        let label: String
+        switch direction {
+        case .upLeft: label = "Up-left"
+        case .up: label = "Up"
+        case .upRight: label = "Up-right"
+        case .left: label = "Left"
+        case .right: label = "Right"
+        case .downLeft: label = "Down-left"
+        case .down: label = "Down"
+        case .downRight: label = "Down-right"
+        }
+        return Cell(direction: direction, frameIndex: MobileDirectionPickerLayout.frameIndex(for: direction), label: label)
+    }
+
+    var onChoice: ((Lemmings3Runtime.Direction?) -> Void)?
+    private var buttons: [UIButton] = []
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = UIColor.black.withAlphaComponent(0.92)
+        layer.borderWidth = 2
+        layer.borderColor = UIColor(red: 0.25, green: 0.9, blue: 0.35, alpha: 1).cgColor
+        isHidden = true
+        isAccessibilityElement = false
+        accessibilityViewIsModal = false
+    }
+
+    required init?(coder: NSCoder) { nil }
+
+    func present(frames: [MobilePixelFrame], frame: CGRect) {
+        guard frames.count == 8 else { return }
+        buttons.forEach { $0.removeFromSuperview() }
+        buttons.removeAll(keepingCapacity: true)
+        let extent = CGFloat(MobileDirectionPickerLayout.cellExtent)
+        self.frame = frame
+        for (index, cell) in Self.cells.enumerated() {
+            let button = UIButton(type: .custom)
+            button.frame = CGRect(x: CGFloat(index % 3) * extent,
+                                  y: CGFloat(index / 3) * extent,
+                                  width: extent, height: extent)
+            button.backgroundColor = .clear
+            button.accessibilityLabel = cell.label
+            button.accessibilityTraits = .button
+            button.accessibilityIdentifier = "game.l3.direction.\(cell.direction.map { $0.rawValue.lowercased() } ?? "cancel")"
+            if let frameIndex = cell.frameIndex,
+               let image = MobileBitmapRenderer.image(frames[frameIndex]) {
+                button.setImage(UIImage(cgImage: image), for: .normal)
+                button.imageEdgeInsets = UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6)
+                button.imageView?.contentMode = .scaleAspectFit
+                button.imageView?.layer.magnificationFilter = .nearest
+            } else {
+                button.setImage(Self.cancelImage(), for: .normal)
+                button.imageEdgeInsets = UIEdgeInsets(top: 14, left: 14, bottom: 14, right: 14)
+                button.imageView?.layer.magnificationFilter = .nearest
+            }
+            button.addAction(UIAction { [weak self] _ in self?.onChoice?(cell.direction) },
+                             for: .touchUpInside)
+            addSubview(button)
+            buttons.append(button)
+        }
+        accessibilityLabel = "Choose Lemmings 3 tool direction"
+        accessibilityViewIsModal = true
+        isHidden = false
+        UIAccessibility.post(notification: .screenChanged, argument: buttons.first)
+    }
+
+    func dismiss() {
+        guard !isHidden else { return }
+        isHidden = true
+        buttons.forEach { $0.removeFromSuperview() }
+        buttons.removeAll(keepingCapacity: true)
+        accessibilityViewIsModal = false
+    }
+
+    private static func cancelImage() -> UIImage? {
+        let size = 8
+        var rgba = [UInt8](repeating: 0, count: size * size * 4)
+        for point in 1...6 {
+            for x in [point, size - point - 1] {
+                let index = (point * size + x) * 4
+                rgba[index] = 255
+                rgba[index + 1] = 74
+                rgba[index + 2] = 48
+                rgba[index + 3] = 255
+            }
+        }
+        guard let provider = CGDataProvider(data: Data(rgba) as CFData),
+              let image = CGImage(width: size, height: size, bitsPerComponent: 8,
+                  bitsPerPixel: 32, bytesPerRow: size * 4,
+                  space: CGColorSpaceCreateDeviceRGB(),
+                  bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
+                  provider: provider, decode: nil, shouldInterpolate: false,
+                  intent: .defaultIntent) else { return nil }
+        return UIImage(cgImage: image)
     }
 }
 

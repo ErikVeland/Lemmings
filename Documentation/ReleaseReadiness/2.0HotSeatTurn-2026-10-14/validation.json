@@ -16,7 +16,7 @@
   "unsignedIOSCompilation": "passed: Debug iphoneos arm64, CODE_SIGNING_ALLOWED=NO",
   "limits": [
     "Physical UIKit input and VoiceOver not exercised",
-    "Playable L2/L3 campaigns unavailable in the iOS library"
+    "The render audit did not exercise playable L2/L3 campaigns or commercial content"
   ],
   "portraitChoices": 8,
   "sourceState": "Tested working tree, including concurrent work in shared files"

@@ -63,4 +63,90 @@ final class MobileCoreIOSSmokeTests: XCTestCase {
         XCTAssertTrue(lifecycle.handle(.becameActive).contains(.showResumeControl))
         XCTAssertTrue(lifecycle.isPaused)
     }
+
+    @MainActor func testGameDataOffersSeparateImportRoutes() {
+        let app = XCUIApplication()
+        app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
+        app.launch()
+
+        for identifier in ["menu.welcomeOriginal", "menu.welcomeContinue", "menu.telemetryNo"] {
+            let welcomeAction = app.buttons[identifier]
+            if welcomeAction.waitForExistence(timeout: 2) { welcomeAction.tap() }
+        }
+
+        let classicImport = app.buttons["menu.import.classic"]
+        if !classicImport.waitForExistence(timeout: 2) {
+            let settings = app.buttons["menu.settings"]
+            XCTAssertTrue(settings.waitForExistence(timeout: 5))
+            settings.tap()
+            let data = app.buttons["menu.data"]
+            XCTAssertTrue(data.waitForExistence(timeout: 5))
+            data.tap()
+        }
+
+        for game in ["classic", "lemmings2", "lemmings3", "neoLemmix"] {
+            let button = app.buttons["menu.import.\(game)"]
+            XCTAssertTrue(button.waitForExistence(timeout: 5), "Missing import route for \(game)")
+            XCTAssertTrue(button.isHittable, "Import route for \(game) must be reachable")
+            XCTAssertGreaterThanOrEqual(button.frame.width, 44)
+            XCTAssertGreaterThanOrEqual(button.frame.height, 44)
+        }
+    }
+
+    @MainActor func testLemmings3DirectionPickerHasReachableAccessibleTargets() {
+        let app = XCUIApplication()
+        app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
+        app.launchArguments.append("--ui-test-l3-direction-picker")
+        app.launch()
+
+        let directions = [
+            ("upleft", "Up-left"), ("up", "Up"), ("upright", "Up-right"),
+            ("left", "Left"), ("right", "Right"),
+            ("downleft", "Down-left"), ("down", "Down"), ("downright", "Down-right"),
+            ("cancel", "Cancel tool direction")
+        ]
+        for (identifier, label) in directions {
+            let button = app.buttons["game.l3.direction.\(identifier)"]
+            XCTAssertTrue(button.waitForExistence(timeout: 5), "Missing L3 direction target \(identifier)")
+            XCTAssertTrue(button.isHittable, "L3 direction target \(identifier) must be reachable")
+            XCTAssertGreaterThanOrEqual(button.frame.width, 44)
+            XCTAssertGreaterThanOrEqual(button.frame.height, 44)
+            XCTAssertEqual(button.label, label)
+        }
+
+        let down = app.buttons["game.l3.direction.down"]
+        let screenshot = XCTAttachment(screenshot: app.screenshot())
+        screenshot.name = "L3 Direction Picker"
+        screenshot.lifetime = .keepAlways
+        add(screenshot)
+        down.tap()
+        XCTAssertTrue(down.waitForExistence(timeout: 2), "An invalid tool direction must keep the picker open")
+
+        let cancel = app.buttons["game.l3.direction.cancel"]
+        cancel.tap()
+        XCTAssertFalse(cancel.waitForExistence(timeout: 1), "Cancel must close the direction picker")
+
+        app.terminate()
+        app.launch()
+        let up = app.buttons["game.l3.direction.up"]
+        XCTAssertTrue(up.waitForExistence(timeout: 5))
+        up.tap()
+        XCTAssertFalse(up.waitForExistence(timeout: 1), "An accepted tool direction must close the picker")
+    }
+
+    @MainActor func testLemmings3DirectionPickerCancelsAfterRotation() {
+        let device = XCUIDevice.shared
+        let originalOrientation = device.orientation
+        defer { device.orientation = originalOrientation }
+
+        let app = XCUIApplication()
+        app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
+        app.launchArguments.append("--ui-test-l3-direction-picker")
+        app.launch()
+
+        let up = app.buttons["game.l3.direction.up"]
+        XCTAssertTrue(up.waitForExistence(timeout: 5))
+        device.orientation = .landscapeLeft
+        XCTAssertFalse(up.waitForExistence(timeout: 2), "A layout change must close a picker anchored to the old playfield")
+    }
 }
