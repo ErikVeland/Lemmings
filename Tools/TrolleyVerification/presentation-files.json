@@ -14,5 +14,8 @@
   "RescueCelebration.swift",
   "LearningJourney.swift",
   "LearningRouteSafety.swift",
-  "ProgressionPlaylist.swift"
+  "ProgressionPlaylist.swift",
+  "DeviceEffectResources.swift",
+  "LevelPlaylist.swift",
+  "SoundtrackCatalogue.swift"
 ]

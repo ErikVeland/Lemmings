@@ -1,5 +1,5 @@
 {
-  "previousFingerprint": "591dd08a3c6aa918771b080669ec332c18d2808a20b6664f47a34e96752ebdf4",
+  "previousFingerprint": "02e6ef0908a3853afb580764cf20cccbbe8051e94f4fa82eb18d8c8b2d58cae7",
   "previousExclusions": [
     "AdaptiveDJDirector.swift",
     "AssignmentFocus.swift",
@@ -7,41 +7,52 @@
     "ClassicSettings.swift",
     "ControllerBindings.swift",
     "GameplaySpeed.swift",
+    "LearningJourney.swift",
+    "LearningRouteSafety.swift",
     "Lemmings2Controls.swift",
     "MusicLibraryCatalogue.swift",
     "MusicRhythmCatalogue.swift",
     "ProTrackerEnhancements.swift",
+    "ProgressionPlaylist.swift",
     "RescueCelebration.swift",
     "SkillShortcuts.swift",
     "VinylMotion.swift"
   ],
-  "physicsFingerprint": "d0d2ddf11c89bc40b74692253f9404d33bdf593f87e4897c0040e04d663aecbf",
-  "unchangedEngineFiles": 133,
+  "physicsFingerprint": "a5ad17961c01c4e925b76ae49a0adf7dda5709cd66be06497b0b8a9bc8c560fd",
+  "unchangedEngineFiles": 149,
   "excludedPresentationFiles": [
     "AdaptiveDJDirector.swift",
     "AssignmentFocus.swift",
     "ClassicMacArtwork.swift",
     "ClassicSettings.swift",
     "ControllerBindings.swift",
+    "DeviceEffectResources.swift",
     "GameplaySpeed.swift",
     "LearningJourney.swift",
     "LearningRouteSafety.swift",
     "Lemmings2Controls.swift",
+    "LevelPlaylist.swift",
     "MusicLibraryCatalogue.swift",
     "MusicRhythmCatalogue.swift",
     "ProTrackerEnhancements.swift",
     "ProgressionPlaylist.swift",
     "RescueCelebration.swift",
     "SkillShortcuts.swift",
+    "SoundtrackCatalogue.swift",
     "VinylMotion.swift"
   ],
   "changedPresentationFiles": [
+    "AdaptiveDJDirector.swift",
+    "ControllerBindings.swift",
+    "DeviceEffectResources.swift",
     "LearningJourney.swift",
-    "LearningRouteSafety.swift",
+    "LevelPlaylist.swift",
     "ProgressionPlaylist.swift",
-    "RescueCelebration.swift"
+    "RescueCelebration.swift",
+    "SoundtrackCatalogue.swift",
+    "VinylMotion.swift"
   ],
-  "witnesses": 597,
+  "witnesses": 613,
   "witnessHashesValidated": true,
-  "verifiedSourceSnapshot": "/Users/veland/Lemmings/.build/release-1.9.3/source/.build/release-1.9.3/audit/source"
+  "verifiedSourceSnapshot": "/Users/veland/Lemmings/.build/release-1.9.7/source/Sources/NxlvKit"
 }
