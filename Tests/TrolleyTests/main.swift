@@ -480,6 +480,42 @@ func testEngineFamilies() throws {
     key("\r", code: 36); try clickButton("Try again")
     try require(retries == 4 && continues == beforeFailure, "Failure primary mouse and Enter must retry")
     view.report = report; try shot("last-lemming")
+    let beforeAchievementHelp = continues
+    for game in ["lemmings", "lemmings2", "lemmings3"] {
+        view.mode = .result
+        view.report = store.record(run(60, c: conditions(game: game)))
+        try shot("achievement-\(game)-result")
+        for name in ["Target met", "Extra rescue", "Three-star rescue"] {
+            guard let hint = view.achievementHints.first(where: { $0.label == name }) else {
+                throw SequelDataError.invalid("Missing star help target: \(game) \(name)")
+            }
+            try require(hint.rect.width >= 88 && hint.rect.height >= 88 && !hint.detail.isEmpty,
+                        "Star help has an incomplete target or explanation")
+            let element = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
+                .first { $0.accessibilityRole() == .button && $0.accessibilityLabel() == name }!
+            let frame = element.accessibilityFrame()
+            let point = window.convertPoint(fromScreen: CGPoint(x: frame.midX, y: frame.midY))
+            view.mouseMoved(with: NSEvent.mouseEvent(with: .mouseMoved, location: point, modifierFlags: [], timestamp: 0,
+                windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: 0, pressure: 0)!)
+            try require(view.hover == name && view.mode == .result, "Hover help navigated away from the result")
+            try shot("achievement-\(game)-\(name)-hover")
+            try clickButton(name)
+            try shot("achievement-\(game)-\(name)-detail", size: CGSize(width: 640, height: 400))
+            try require(view.mode == .achievement && view.accessibilityLabel()?.contains(hint.detail) == true,
+                        "Selecting a star did not explain its rescue target")
+            try clickButton("Back to result")
+            try shot("achievement-\(game)-back")
+        }
+        if let hint = view.achievementHints.first(where: { $0.label.hasPrefix("NEW:") }) {
+            try clickButton(hint.label)
+            try shot("achievement-\(game)-award-detail")
+            try require(view.mode == .achievement && view.accessibilityLabel()?.contains(hint.detail) == true,
+                        "Named award did not open its own explanation")
+            try clickButton("Back to result")
+        }
+    }
+    try require(continues == beforeAchievementHelp, "Achievement help advanced gameplay")
+    view.mode = .result; view.report = report; try shot("last-lemming")
     let newAwards = Set(report.trolley!.attempt.achievements)
     try require(newAwards.count > 1, "New-award navigation needs a result with several awards")
     func hasAwardHighlight(_ name: String) -> Bool {
