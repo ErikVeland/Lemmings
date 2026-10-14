@@ -57,6 +57,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   private var rewindSliceHead = 0.0
   private var rewindHistoryAnchor: Int64?
   private var lastRewindTrigger = -Double.infinity
+  private var lastRewindSample: Float = 0
   private var rewindSequence: UInt64 = 0
   private var rewindRenderStart: Int64?
   private var recentRenderPrepared = false
@@ -245,6 +246,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
         voice.rescueLayers.removeAll { $0.position >= Double($0.samples.count) }
       }
       for buffer in buffers { buffer.mData?.assumingMemoryBound(to: Float.self)[frame] = sample }
+      if voice.rewindSequence != nil { lastRewindSample = sourceSample }
 
       // Rewind output must never feed the history it will reverse next.
       guard rewindRenderCount == 0, voice.rewindSequence == nil else { continue }
@@ -496,14 +498,16 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     let previous = voices.indices.first { voices[$0].isActive && voices[$0].rewindSequence != nil }
     guard let latest = latestRecentSample else { return }
     let now = ProcessInfo.processInfo.systemUptime
+    let continuing = rewindHistoryAnchor == latest && now - lastRewindTrigger <= VinylBackspin.settleSeconds
     let head: Double
-    if rewindHistoryAnchor == latest, now - lastRewindTrigger <= VinylBackspin.settleSeconds {
+    if continuing {
       head = rewindHistoryHead
     } else { head = Double(latest) }
     for index in voices.indices where voices[index].rewindSequence != nil { voices[index].isActive = false }
     let count = Int(sampleRate * VinylBackspin.seconds)
     var samples = [Float](repeating: 0, count: count)
     var foundHistory = false
+    var peak: Float = 1
     for offset in samples.indices {
       let cursor = head - VinylBackspin.distance(frames: Double(offset), sampleRate: sampleRate)
       guard cursor >= 0 else { break }
@@ -513,6 +517,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       let nextSlot = (slot + 1) % recentSampleLimit
       let next = recentSamplePositions[nextSlot] == position + 1 ? recentSamples[nextSlot] : recentSamples[slot]
       let value = recentSamples[slot] + (next - recentSamples[slot]) * Float(cursor - Double(position))
+      peak = max(peak, abs(value))
       samples[offset] = value * VinylBackspin.sample(frame: Double(offset), sampleRate: sampleRate).gain
       foundHistory = foundHistory || samples[offset] != 0
     }
@@ -523,8 +528,14 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       for offset in 0..<fade { samples[end - offset] *= Float(offset) / Float(fade) }
     }
     // Preserve the mix shape when a large chorus exceeds the mono headroom.
-    let peak = samples.reduce(Float(1)) { max($0, abs($1)) }
     if peak > 1 { for offset in samples.indices { samples[offset] /= peak } }
+    if continuing {
+      // Carry the last output into the new attack instead of cutting to zero.
+      for offset in 0..<min(samples.count, Int(sampleRate * 0.020)) {
+        let attack = VinylBackspin.sample(frame: Double(offset), sampleRate: sampleRate).gain
+        samples[offset] += lastRewindSample * (1 - attack)
+      }
+    } else { lastRewindSample = 0 }
     let index = previous ?? voices.firstIndex { !$0.isActive } ?? voices.startIndex
     rewindHistoryHead = head; rewindSliceHead = head; rewindHistoryAnchor = latest
     lastRewindTrigger = now

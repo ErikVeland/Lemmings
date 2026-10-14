@@ -66,7 +66,7 @@ func checkBackspinPitchAndEdges() throws {
         let output = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(count + 1))!
         output.frameLength = output.frameCapacity
         history.render(UnsafeMutableAudioBufferListPointer(output.mutableAudioBufferList), frames: count + 1)
-        let samples = output.floatChannelData![0]!
+        let samples = output.floatChannelData![0]
         func crossings(_ start: Double, _ end: Double) -> Int {
             (Int(rate * start)..<Int(rate * end)).filter { samples[$0] * samples[$0 + 1] < 0 }.count
         }

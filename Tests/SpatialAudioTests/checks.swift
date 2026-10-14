@@ -172,9 +172,12 @@ extension SoundEffectPlayer {
     let head = rewindHistoryHead
     fillVoice(index, buffers: buffers, frames: 512, sampleTime: 40_960)
     let cursor = rewindHistoryHead
+    let tail = lastRewindSample
     precondition(cursor < head, "Backspin did not advance the history cursor")
     silence(); playRewindScrub()
     precondition(rewindSliceHead == cursor, "Sequel silence restarted the same backspin fragment")
+    precondition(voices.first(where: { $0.isActive })!.samples.first == tail,
+      "Repeated backspin cut its waveform to zero")
     silence()
     latestRecentSample = 44_099
     for offset in 0..<44_100 {
@@ -185,7 +188,19 @@ extension SoundEffectPlayer {
     let samples = voices.first(where: { $0.isActive })!.samples
     precondition(samples.allSatisfy { abs($0) <= 1 } && samples[1000] > samples[2000],
       "A loud captured mix clipped flat instead of retaining its shape")
-    print("PASS captured voice/distance gains, single master volume, sequel scrub continuation and proportional chorus headroom")
+    silence()
+    lastRewindTrigger = -.infinity
+    for offset in 0..<44_100 {
+      recentSamples[offset] = Float(sin(Double(offset) * 2 * .pi * 440 / 44_100)) * 0.3
+    }
+    playRewindScrub()
+    let tone = voices.first(where: { $0.isActive })!.samples
+    func crossings(_ start: Double, _ end: Double) -> Int {
+      (Int(44_100 * start)..<Int(44_100 * end)).filter { tone[$0] * tone[$0 + 1] < 0 }.count
+    }
+    precondition(crossings(0.03, 0.13) > 2 * crossings(0.30, 0.40),
+      "Effect backspin did not lower the pitch of captured sound")
+    print("PASS captured voice/distance gains, single master volume, sequel scrub continuation, proportional chorus headroom and falling effect pitch")
   }
 }
 SoundEffectPlayer().checkRewindFeedbackAndPolyphony()

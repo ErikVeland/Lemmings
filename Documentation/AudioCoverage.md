@@ -46,6 +46,12 @@ short ALAC loops at mono 48 kHz, abrupt joins, boosted output peaks, and restart
 Tracker checks cover a 140 ms synthesis stall and contended rewind callbacks.
 Muted checks also cover parked scratches, volume, suspension, spin-up and
 Adaptive DJ reverse routing. Reverse audio bypasses the forward effects.
+Rewind backspins captured music and game effects over 480 ms. Both use the
+same falling pitch, a 20 ms soft attack and a 90 ms fade. Effects retain voice
+and distance gains, with proportional attenuation for crowded mixes. Repeated
+scrubs continue through history without stacking voices or cutting to zero.
+Muted PCM checks cover the pitch fall, endpoints and attack at 44.1 and 48 kHz,
+effect mix gains, sequel silence between scrubs and idle-source capture isolation.
 The full DJ suite passes one-shot completion, pitch and tempo, nuke filters,
 Classic and sequel track assignment, retry stability and suspended crossfades.
 Both shared audio modules compile for macOS 12.3 and iOS 16 or later.
