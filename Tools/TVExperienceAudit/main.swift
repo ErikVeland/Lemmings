@@ -27,7 +27,7 @@ import NxlvKit
         let renderScale = game.session.renderScale
         let preview = previewScene?.cropping(to: CGRect(x: visible.x * renderScale, y: visible.y * renderScale, width: visible.width * renderScale, height: visible.height * renderScale).integral)
         let pages: [(String, GameFrontEnd.Page)] = [
-            ("home", .init(title: "Ultimate Lemmings", subtitle: "Player 1", home: true, rows: [.init("hotseat", "Hot Seat"), .init("players", "Players"), .init("settings", "Settings"), .init("play", "Play")], footer: [.init("resume", "Resume - Player 1", primary: true)])),
+            ("home", .init(title: "Ultimate Lemmings", subtitle: "Player 1", home: true, rows: [.init("hotseat", "Hot Seat"), .init("players", "Players"), .init("settings", "Settings"), .init("play", "Play")], footer: [.init("resume", "Resume level - Player 1", primary: true)])),
             ("games", .init(title: "Choose a game", rows: [.init("classic", "Lemmings", primary: true), .init("l2", "Lemmings 2", enabled: false), .init("l3", "Lemmings 3", enabled: false)], footer: [.init("back", "Back")])),
             ("ranks", .init(title: "Lemmings", rows: [.init("fun", "Fun"), .init("tricky", "Tricky"), .init("taxing", "Taxing"), .init("mayhem", "Mayhem")], footer: [.init("back", "Back"), .init("previous", "<", enabled: false), .init("more", ">", enabled: false)])),
             ("levels", .init(title: "Fun", subtitle: "1-4 / 30", rows: [.init("level.0", "1 - Just dig!", selected: true), .init("level.1", "2 - Only floaters can survive this"), .init("level.2", "3 - Tailor made for blockers"), .init("level.3", "4 - Now use miners and climbers")], footer: [.init("back", "Back"), .init("previous", "<", enabled: false), .init("more", ">")])),
@@ -99,6 +99,7 @@ import NxlvKit
         let data = try JSONSerialization.data(withJSONObject: ["menuCaptures": records, "playfieldCaptures": 6, "nativeRenderScale": game.session.renderScale, "scope": "Shared shipping bitmap renderers and target geometry; no UIKit event or physical TV acceptance"], options: [.prettyPrinted, .sortedKeys])
         try data.write(to: output.appendingPathComponent("captures.json"), options: .atomic)
         print("PASS \(records.count) TV menu renders and target layouts, 6 native gameplay renders")
+        try checkSharedFrontend(typography: typography, portraits: portraits, library: library, root: root)
     }
     static func context(width: Int, height: Int) throws -> CGContext {
         guard let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: width * 4,

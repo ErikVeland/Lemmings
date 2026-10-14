@@ -43,7 +43,7 @@ public enum ClassicSceneFrame {
                 ClassicLiquidFill.draw(source: source, sourceWidth: graphic.width,
                     sourceHeight: graphic.height, x: placement.x, y: placement.y,
                     into: &pixels, width: level.width, height: level.height,
-                    solid: solid, scale: 1)
+                    solid: solid, scale: 1, minimumBottom: placement.y + graphic.height)
             }
             for y in 0..<graphic.height {
                 let targetY = placement.y + y
@@ -88,7 +88,7 @@ public enum ClassicSceneFrame {
 enum ClassicLiquidFill {
     static func draw(source: [UInt8], sourceWidth: Int, sourceHeight: Int,
         x: Int, y: Int, into pixels: inout [UInt8], width: Int, height: Int,
-        solid: [UInt8], scale: Int) {
+        solid: [UInt8], scale: Int, minimumBottom: Int? = nil, visualTerrain: Data? = nil) {
         guard sourceWidth > 0, sourceHeight > 0,
               source.count == sourceWidth * sourceHeight * 4 else { return }
         // Use the dominant colour in the lowest opaque row, below the wave highlights.
@@ -108,11 +108,25 @@ enum ClassicLiquidFill {
         let left = max(0, x), right = min(width, x + sourceWidth)
         let top = max(0, y + bottom + 1)
         guard left < right, top < height else { return }
+        // Macintosh liquid follows the rendered terrain's individual pixels, including
+        // digging and construction. Collision cells remain untouched.
+        func occupied(_ row: Int, _ column: Int) -> Bool {
+            if let visualTerrain { return visualTerrain[(row * width + column) * 4 + 3] != 0 }
+            return solid[(row / scale) * (width / scale) + column / scale] != 0
+        }
         for column in left..<right {
             for row in max(0, y)..<height {
                 let p = (row * width + column) * 4
-                // A floor separates this pool from any empty cavity beneath it.
-                if solid[(row / scale) * (width / scale) + column / scale] != 0 { break }
+                let terrain = occupied(row, column)
+                // Short Macintosh wave sprites still represent the entire authored liquid tile.
+                // A bridge inside that tile masks water; it must not truncate the body below it.
+                if terrain {
+                    if let minimumBottom, row < minimumBottom { continue }
+                    break
+                }
+                // Beyond the authored tile, a floor still seals cavities underneath the pool.
+                if let minimumBottom, row == minimumBottom, row > 0,
+                   occupied(row - 1, column) { break }
                 guard row >= top, pixels[p + 3] == 0 else { continue }
                 pixels[p] = UInt8((colour >> 16) & 255)
                 pixels[p + 1] = UInt8((colour >> 8) & 255)

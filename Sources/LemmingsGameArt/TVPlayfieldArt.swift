@@ -56,16 +56,13 @@ import LemmingsTVCore
             context.move(to: CGPoint(x: point.x - 6, y: point.y - 6)); context.addLine(to: CGPoint(x: point.x + 6, y: point.y + 6))
             context.move(to: CGPoint(x: point.x + 6, y: point.y - 6)); context.addLine(to: CGPoint(x: point.x - 6, y: point.y + 6)); context.strokePath()
         }
-        if let skillImage, game.session.snapshot.skills.indices.contains(game.selectedControl) {
-            let scale = max(1, floor(min(36 / CGFloat(skillImage.width), 36 / CGFloat(skillImage.height))))
-            let size = CGSize(width: CGFloat(skillImage.width) * scale, height: CGFloat(skillImage.height) * scale)
-            let x = max(0, min(game.viewport.viewSize.width - size.width, point.x + 26))
-            let y = max(0, min(game.viewport.viewSize.height - size.height, point.y + 26))
+        if game.session.snapshot.skills.indices.contains(game.selectedControl) {
             let skill = game.session.snapshot.skills[game.selectedControl]
-            if skill.count == 0 && !skill.isUnlimited {
-                GamePixelTypography.draw("X", in: CGRect(x: x, y: y, width: 36, height: 36), context: context,
-                    typography: nil, maximumScale: 4, bitmapOnly: true, color: CGColor(srgbRed: 1, green: 0.2, blue: 0.2, alpha: 1))
-            } else { GameStoneArt.drawImage(skillImage, in: CGRect(x: x, y: y, width: size.width, height: size.height), context: context) }
+            let remaining = game.session.skillCursorRemaining(control: game.selectedControl, target: game.target?.id)
+            SkillPointerBadge.draw(icon: skillImage, name: skill.name,
+                count: remaining.map(String.init) ?? (skill.isUnlimited && game.session.engineIdentifier != "lemmings3" ? "*" : nil), at: point,
+                within: CGRect(x: 0, y: 0, width: game.viewport.viewSize.width, height: game.viewport.viewSize.height),
+                scale: 2, context: context)
         }
         if let target = game.target {
             let projected = game.viewport.viewPoint(fromLevel: target.point)
@@ -95,6 +92,7 @@ import LemmingsTVCore
             let skill = snapshot.skills[index]
             let box = CGRect(x: CGFloat(index - start) * cell, y: y, width: cell - 8, height: 132)
             GameStoneArt.draw(in: context, frame: box, selected: index == game.selectedControl, pixel: 2)
+            if index == game.selectedControl { SkillPointerBadge.innerGlow(in: box.insetBy(dx: 4, dy: 4), context: context) }
             if let icon = game.session.skillCursorFrame(control: index).flatMap(MobileBitmapRenderer.image) {
                 let iconScale = max(1, floor(min(44 / CGFloat(icon.width), 44 / CGFloat(icon.height))))
                 let size = CGSize(width: CGFloat(icon.width) * iconScale, height: CGFloat(icon.height) * iconScale)

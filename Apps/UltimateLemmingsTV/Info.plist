@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CloudLibraryURL</key>
+	<string>https://glasscode.academy/lemmings-api/cloud</string>
+	<key>HostedRankingsURL</key>
+	<string>https://glasscode.academy/lemmings-api/rankings</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Transfer your game data, recovery keys and replay movies between Apple TV and your other devices.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en_AU</string>
 	<key>CFBundleDisplayName</key>
@@ -20,10 +26,33 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>GCRequiresControllerUserInteraction</key>
+	<false/>
+	<key>GCSupportedGameControllers</key>
+	<array>
+		<dict>
+			<key>ProfileName</key>
+			<string>ExtendedGamepad</string>
+		</dict>
+		<dict>
+			<key>ProfileName</key>
+			<string>MicroGamepad</string>
+		</dict>
+		<dict>
+			<key>ProfileName</key>
+			<string>DirectionalGamepad</string>
+		</dict>
+	</array>
+	<key>GCSupportsControllerUserInteraction</key>
+	<true/>
+	<key>GCSupportsMultipleMicroGamepads</key>
+	<true/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Transfer your game data, replay movies and recovery keys between Apple TV and another device on your local network.</string>
 	<key>MinimumOSVersion</key>
 	<string>$(TVOS_DEPLOYMENT_TARGET)</string>
 	<key>UIApplicationSceneManifest</key>
@@ -50,26 +79,5 @@
 		<key>UIColorName</key>
 		<string></string>
 	</dict>
-	<key>GCSupportedGameControllers</key>
-	<array>
-		<dict>
-			<key>ProfileName</key>
-			<string>ExtendedGamepad</string>
-		</dict>
-		<dict>
-			<key>ProfileName</key>
-			<string>MicroGamepad</string>
-		</dict>
-		<dict>
-			<key>ProfileName</key>
-			<string>DirectionalGamepad</string>
-		</dict>
-	</array>
-	<key>GCSupportsMultipleMicroGamepads</key>
-	<true/>
-	<key>GCSupportsControllerUserInteraction</key>
-	<true/>
-	<key>GCRequiresControllerUserInteraction</key>
-	<false/>
 </dict>
 </plist>

@@ -144,7 +144,6 @@ public struct GameFrontEnd {
         let boardWidth = min(1100, width - 24), x = (width - boardWidth) / 2
         let inner = boardWidth - 24, gap: CGFloat = 4
         let columns = 2
-        let cell = (inner - CGFloat(columns - 1) * gap) / CGFloat(columns)
         let headerIDs: Set<String> = ["settings", "whatsNew"]
         let footer = page.orderedFooter.filter { !headerIDs.contains($0.id) }
         let footerColumns = 2
@@ -160,12 +159,15 @@ public struct GameFrontEnd {
         // Saved play and Journey lead; game libraries form their own two-column group.
         for (section, range) in [0..<gameStart, gameStart..<page.rows.count].enumerated() {
             if section == 1, gameStart > 0, !range.isEmpty { y += 8 }
-            for start in stride(from: range.lowerBound, to: range.upperBound, by: columns) {
-                let group = page.rows[start..<min(start + columns, range.upperBound)]
-                let rowHeight = max(44, group.map { GameTextLayout.height($0.title, width: cell - 48) + 8 }.max() ?? 44)
+            let sectionColumns = section == 0 && range.count == 3 && width >= 600 ? 3 : columns
+            let sectionCell = (inner - CGFloat(sectionColumns - 1) * gap) / CGFloat(sectionColumns)
+            for start in stride(from: range.lowerBound, to: range.upperBound, by: sectionColumns) {
+                let group = page.rows[start..<min(start + sectionColumns, range.upperBound)]
+                let actionWidth = section == 0 && group.count == 1 ? inner : sectionCell
+                let rowHeight = max(44, group.map { GameTextLayout.height($0.title, width: actionWidth - 48) + 8 }.max() ?? 44)
                 for (column, action) in group.enumerated() {
-                    targets.append(Target(action: action, frame: CGRect(x: x + 12 + CGFloat(column) * (cell + gap),
-                        y: y, width: cell, height: rowHeight)))
+                    targets.append(Target(action: action, frame: CGRect(x: x + 12 + CGFloat(column) * (sectionCell + gap),
+                        y: y, width: actionWidth, height: rowHeight)))
                 }
                 y += rowHeight + gap
             }

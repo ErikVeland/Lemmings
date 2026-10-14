@@ -1,4 +1,4 @@
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import LemmingsAppCore
 import LemmingsGameArt
 import LemmingsMobileCore
@@ -44,6 +44,12 @@ extension MobileGameViewController {
                     guard let self, !cancelled.cancelled else { return }
                     switch result {
                     case let .success(url):
+                        #if os(tvOS)
+                        MobileTVFileTransfer.exportFile(url, from: self) { [weak self] in
+                            try? FileManager.default.removeItem(at: url)
+                            self?.returnToResult()
+                        }
+                        #else
                         let sheet = UIActivityViewController(activityItems: [url], applicationActivities: nil)
                         sheet.popoverPresentationController?.sourceView = self.view
                         sheet.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 1, height: 1)
@@ -51,6 +57,7 @@ extension MobileGameViewController {
                             self?.returnToResult()
                         }
                         self.present(sheet, animated: true)
+                        #endif
                     case let .failure(error):
                         self.showCustomOverlay(title: error.localizedDescription, details: [], actions: [
                             ("TRY AGAIN", { [weak self] in self?.shareReplayMovie(document: document) }),

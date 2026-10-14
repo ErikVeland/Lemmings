@@ -1,4 +1,4 @@
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import GameController
 import LemmingsAppCore
 import LemmingsMobileCore
@@ -16,9 +16,13 @@ import UIKit
     var onMenuScroll: ((Double) -> Void)?
     var onBoost: ((Bool) -> Void)?
     var onSpeedKey: ((Bool) -> Void)?
+    var onMenuNeutral: (() -> Void)?
     var settings: () -> ClassicSettings = { MobileSettings.load(from: .standard).classic }
     var isMenu: () -> Bool = { false }
     var isActive: () -> Bool = { true }
+    #if os(tvOS)
+    private lazy var tvInput = MobileTVControllerInput(adapter: self)
+    #endif
     private var bindings = ControllerBindings()
     private var pressedKeys: Set<UIKeyboardHIDUsage> = []
     private var controllerConnection = MobileControllerConnection()
@@ -26,11 +30,19 @@ import UIKit
     private var context: ObjectIdentifier?
     private var lastPoll = 0.0
 
-    func reset() { onBoost?(false); onSpeedKey?(false); bindings.reset(); pressedKeys.removeAll(); lastPoll = 0 }
+    func reset() {
+        onBoost?(false); onSpeedKey?(false); bindings.reset(); pressedKeys.removeAll(); lastPoll = 0
+        #if os(tvOS)
+        tvInput.reset()
+        #endif
+    }
 
     /// A page transition primes from the held state before it accepts another press.
     func poll(context newContext: ObjectIdentifier?, at now: Double) {
         if context != newContext { context = newContext; reset() }
+        #if os(tvOS)
+        tvInput.poll(at: now)
+        #else
         guard isActive(), settings().controllerEnabled else {
             reset()
             activeController = nil
@@ -82,9 +94,10 @@ import UIKit
                 onPan?(Double(right.xAxis.value) * elapsed * 500, -Double(right.yAxis.value) * elapsed * 500)
             }
         }
+        #endif
     }
 
-    private func perform(_ action: ControllerBindings.Action) {
+    func perform(_ action: ControllerBindings.Action) {
         if isMenu() {
             switch action {
             case .assign: onMenuActivate?()

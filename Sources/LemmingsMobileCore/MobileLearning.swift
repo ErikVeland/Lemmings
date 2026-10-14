@@ -38,8 +38,8 @@ public struct MobileLearningResume: Sendable {
     public var scope: String { seat?.scope ?? owner }
     public var resumeTitle: String {
         guard let run = state.run else { return "Resume" }
-        let name = run.pool.id.hasPrefix("learning-") ? "journey run" : run.pool.summary
-        return "Resume \(name)  \(run.currentIndex + 1)/\(run.entries.count)"
+        if run.pool.id.hasPrefix("learning-") { return "Resume journey" }
+        return "Resume \(run.pool.summary)  \(run.currentIndex + 1)/\(run.entries.count)"
     }
 
     public static func find(owner: String, seats: MobileHotSeatStore,

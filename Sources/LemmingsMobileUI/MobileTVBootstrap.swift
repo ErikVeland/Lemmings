@@ -1,0 +1,62 @@
+#if os(tvOS)
+import LemmingsGameArt
+import LemmingsMobileCore
+import LemmingsTVCore
+import UIKit
+
+@MainActor final class MobileTVBootstrap: UIViewController {
+    private let canvas = MobileMenuCanvas()
+    private let scrollView = UIScrollView()
+    private var content: UIViewController?
+    private var migrating = false
+    override var preferredFocusEnvironments: [any UIFocusEnvironment] { content.map { [$0] } ?? [canvas] }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .black
+        view.addSubview(scrollView)
+        scrollView.addSubview(canvas)
+        canvas.onAction = { [weak self] _ in self?.migrate() }
+        migrate()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        scrollView.frame = MobileSystemRegions.menuFrame(in: view)
+        let size = canvas.size(width: scrollView.bounds.width, minimumHeight: scrollView.bounds.height)
+        canvas.frame = CGRect(origin: .zero, size: size)
+        scrollView.contentSize = size
+        content?.view.frame = view.bounds
+    }
+
+    private func migrate() {
+        guard !migrating else { return }
+        migrating = true
+        canvas.page = .init(title: "Lemmings", subtitle: "Loading...")
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                let store = try MobileContentStore()
+                let old = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+                    .appendingPathComponent("UltimateLemmings/TV/Checkpoints/current.json")
+                try await TVMobileMigration.migrate(defaults: .standard, players: .standard(profile: "_players"),
+                    legacyCheckpoint: MobileCheckpointStore(url: old),
+                    destination: MobileCheckpointStore(url: store.checkpointURL))
+                let library = MobileLibraryViewController()
+                addChild(library)
+                library.view.frame = view.bounds
+                view.addSubview(library.view)
+                library.didMove(toParent: self)
+                content = library
+                canvas.isHidden = true
+                setNeedsFocusUpdate()
+                updateFocusIfNeeded()
+            } catch {
+                canvas.page = .init(title: "Saved data could not be opened", details: [error.localizedDescription],
+                                    footer: [.init("retry", "Retry", primary: true)])
+            }
+            migrating = false
+        }
+    }
+}
+#endif

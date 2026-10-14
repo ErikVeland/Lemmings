@@ -1,4 +1,4 @@
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import NxlvKit
 import LemmingsGameArt
 import LemmingsMobileCore
@@ -48,6 +48,7 @@ import UIKit
     var playerName: String?
     var playerPortrait: CGImage?
     private let playerIdentity = UIView()
+    private let toolDirectionPicker = MobileToolDirectionPickerView()
     private let rateValueTap = UITapGestureRecognizer()
     var onAction: ((MobileHUDAction) -> Void)?
     var onToolDirection: ((Lemmings3Runtime.Direction?) -> Void)?
@@ -370,7 +371,7 @@ import UIKit
         let extent = CGFloat(MobileDirectionPickerLayout.cellExtent)
         self.frame = frame
         for (index, cell) in Self.cells.enumerated() {
-            let button = UIButton(type: .custom)
+            let button = MobileFocusButton(type: .custom)
             button.frame = CGRect(x: CGFloat(index % 3) * extent,
                                   y: CGFloat(index / 3) * extent,
                                   width: extent, height: extent)
@@ -390,13 +391,15 @@ import UIKit
                 button.imageView?.layer.magnificationFilter = .nearest
             }
             button.addAction(UIAction { [weak self] _ in self?.onChoice?(cell.direction) },
-                             for: .touchUpInside)
+                             for: .gameActivation)
             addSubview(button)
             buttons.append(button)
         }
         accessibilityLabel = "Choose Lemmings 3 tool direction"
         accessibilityViewIsModal = true
         isHidden = false
+        setNeedsFocusUpdate()
+        updateFocusIfNeeded()
         UIAccessibility.post(notification: .screenChanged, argument: buttons.first)
     }
 
@@ -449,6 +452,9 @@ import UIKit
 }
 
 @MainActor private final class MobileHUDButton: UIButton {
+    #if os(tvOS)
+    override var canBecomeFocused: Bool { false }
+    #endif
     var onEffect: ((MobileHUDPress.Effect) -> Void)?
     var onAccessiblePress: (() -> Void)?
     private var press: MobileHUDPress

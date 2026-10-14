@@ -1,4 +1,4 @@
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import Foundation
 import LemmingsMobileCore
 import NxlvKit
@@ -11,7 +11,11 @@ public enum LemmingsMobileApplication {
             return MobileDirectionPickerUITestHarness.make()
         }
 #endif
+        #if os(tvOS)
+        return MobileTVBootstrap()
+        #else
         return MobileLibraryViewController()
+        #endif
     }
 }
 

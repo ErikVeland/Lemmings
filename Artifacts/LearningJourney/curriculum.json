@@ -2764,100 +2764,6 @@
       ]
     },
     {
-      "comparisons": [],
-      "context": {
-        "allowedLosses": 40,
-        "assignments": 25,
-        "completionSeconds": 225.41176470588235,
-        "discoveryDifficulty": "unknown from replay",
-        "exhaustedUsedSkills": [],
-        "initialHatchIntervalSeconds": 0.23529411764705882,
-        "jobChanges": 7,
-        "narrowActions": 0,
-        "peakAssignmentsInTwoSeconds": 3,
-        "population": 80,
-        "probedAssignments": 10,
-        "remainingSeconds": 74.58823529411765,
-        "replayRevision": "0f73dffc1645bae22f86166a8a65d138c1faf3a09daba8a9954a8512018850fb",
-        "required": 40,
-        "rescueFraction": 0.5,
-        "savedAboveRequirement": 40,
-        "spareUsedSkills": {
-          "blocker": 19,
-          "builder": 1,
-          "climber": 18,
-          "digger": 19,
-          "floater": 19,
-          "miner": 19
-        },
-        "spatialToleranceMeasured": false,
-        "startingReleaseRate": 99,
-        "timingProbeComplete": false,
-        "usedSkills": {
-          "blocker": 1,
-          "builder": 19,
-          "climber": 2,
-          "digger": 1,
-          "floater": 1,
-          "miner": 1
-        },
-        "workers": 10
-      },
-      "identity": {
-        "engine": "classic",
-        "levelID": "11:Fun:12:0:7",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "lesson": "Practise: Blocker + Builder",
-      "level": "Patience",
-      "objective": "community:Gentle/Patience.nxlv",
-      "placement": {
-        "basis": "reduxClassicCounterpart",
-        "lower": 90.0,
-        "position": 100.0,
-        "reference": "Gentle/Patience.nxlv",
-        "replayRevision": "0f73dffc1645bae22f86166a8a65d138c1faf3a09daba8a9954a8512018850fb",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 110.0
-      },
-      "purpose": "Community-ordered practice with an exact native winning witness",
-      "reference": {
-        "author": "Amiga Lemmings",
-        "number": 20,
-        "ordinal": 20,
-        "population": 80,
-        "rank": "Gentle",
-        "rankIndex": 0,
-        "reference": "Gentle/Patience.nxlv",
-        "required": 40,
-        "sha256": "01fe2933fc0c283fc24865652c9809f5430a880330083ecbec10554786a59268",
-        "skills": {
-          "basher": 10,
-          "blocker": 10,
-          "bomber": 10,
-          "builder": 20,
-          "climber": 10,
-          "digger": 10,
-          "floater": 10,
-          "miner": 10
-        },
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "spawnInterval": 4,
-        "timeLimitSeconds": null,
-        "title": "Patience"
-      },
-      "risks": [
-        "incomplete timing probes",
-        "spatial tolerance unmeasured"
-      ],
-      "variantDifferences": [
-        "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-        "different skill inventory",
-        "Classic retains a time limit"
-      ]
-    },
-    {
       "comparisons": [
         {
           "distance": 1.9028,
@@ -3072,98 +2978,6 @@
         "spatial tolerance unmeasured"
       ],
       "variantDifferences": []
-    },
-    {
-      "comparisons": [],
-      "context": {
-        "allowedLosses": 1,
-        "assignments": 12,
-        "completionSeconds": 164.64705882352942,
-        "discoveryDifficulty": "unknown from replay",
-        "exhaustedUsedSkills": [
-          "builder"
-        ],
-        "initialHatchIntervalSeconds": 1.0588235294117647,
-        "jobChanges": 1,
-        "narrowActions": 0,
-        "peakAssignmentsInTwoSeconds": 1,
-        "population": 80,
-        "probedAssignments": 10,
-        "remainingSeconds": 75.3529411764706,
-        "replayRevision": "289466ebcf51b23ac8617701a6fbe48d8a52fce49a7d9dab7a8b5fd7b6838883",
-        "required": 79,
-        "rescueFraction": 0.9875,
-        "savedAboveRequirement": 1,
-        "spareUsedSkills": {
-          "basher": 9,
-          "blocker": 9,
-          "builder": 0
-        },
-        "spatialToleranceMeasured": false,
-        "startingReleaseRate": 70,
-        "timingProbeComplete": false,
-        "usedSkills": {
-          "basher": 1,
-          "blocker": 1,
-          "builder": 10
-        },
-        "workers": 6
-      },
-      "identity": {
-        "engine": "classic",
-        "levelID": "58:Tricky:29:2:0",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "lesson": "Practise: Basher + Blocker",
-      "level": "Rainbow Island",
-      "objective": "community:Gentle/Rainbow_Island.nxlv",
-      "placement": {
-        "basis": "reduxClassicCounterpart",
-        "lower": 110.0,
-        "position": 120.0,
-        "reference": "Gentle/Rainbow_Island.nxlv",
-        "replayRevision": "289466ebcf51b23ac8617701a6fbe48d8a52fce49a7d9dab7a8b5fd7b6838883",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 130.0
-      },
-      "purpose": "Community-ordered practice with an exact native winning witness",
-      "reference": {
-        "author": "Amiga Lemmings",
-        "number": 24,
-        "ordinal": 24,
-        "population": 30,
-        "rank": "Gentle",
-        "rankIndex": 0,
-        "reference": "Gentle/Rainbow_Island.nxlv",
-        "required": 29,
-        "sha256": "8a70feb4700dbe4f7c24082bf4a70467dd152263a94ef3eaea41dec1a03a82f6",
-        "skills": {
-          "basher": 10,
-          "blocker": 10,
-          "bomber": 10,
-          "builder": 10,
-          "climber": 10,
-          "digger": 10,
-          "floater": 10,
-          "miner": 10
-        },
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "spawnInterval": 18,
-        "timeLimitSeconds": null,
-        "title": "Rainbow Island"
-      },
-      "risks": [
-        "incomplete timing probes",
-        "spatial tolerance unmeasured",
-        "witness exhausts at least one used skill"
-      ],
-      "variantDifferences": [
-        "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-        "different population",
-        "different rescue fraction",
-        "Classic retains a time limit"
-      ]
     },
     {
       "comparisons": [],
@@ -7204,6 +7018,101 @@
     {
       "comparisons": [],
       "context": {
+        "allowedLosses": 40,
+        "assignments": 25,
+        "completionSeconds": 225.41176470588235,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [],
+        "initialHatchIntervalSeconds": 0.23529411764705882,
+        "jobChanges": 7,
+        "narrowActions": 0,
+        "peakAssignmentsInTwoSeconds": 3,
+        "population": 80,
+        "probedAssignments": 10,
+        "remainingSeconds": 74.58823529411765,
+        "replayRevision": "0f73dffc1645bae22f86166a8a65d138c1faf3a09daba8a9954a8512018850fb",
+        "required": 40,
+        "rescueFraction": 0.5,
+        "savedAboveRequirement": 40,
+        "spareUsedSkills": {
+          "blocker": 19,
+          "builder": 1,
+          "climber": 18,
+          "digger": 19,
+          "floater": 19,
+          "miner": 19
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 99,
+        "timingProbeComplete": false,
+        "usedSkills": {
+          "blocker": 1,
+          "builder": 19,
+          "climber": 2,
+          "digger": 1,
+          "floater": 1,
+          "miner": 1
+        },
+        "workers": 10
+      },
+      "identity": {
+        "engine": "classic",
+        "levelID": "11:Fun:12:0:7",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "lesson": "Practise: Blocker + Builder",
+      "level": "Patience",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"11:Fun:12:0:7\", \"packID\": \"lemmings-LEVEL-120\"}",
+      "placement": {
+        "adjustment": "User playtest 2026-10-14: Patience is too early in Fun; move to Intermediate after more combination practice.",
+        "basis": "userPlaytest",
+        "lower": 230.0,
+        "position": 237.5,
+        "reference": "Gentle/Patience.nxlv",
+        "replayRevision": "0f73dffc1645bae22f86166a8a65d138c1faf3a09daba8a9954a8512018850fb",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 245.0
+      },
+      "purpose": "Community-ordered practice with an exact native winning witness",
+      "reference": {
+        "author": "Amiga Lemmings",
+        "number": 20,
+        "ordinal": 20,
+        "population": 80,
+        "rank": "Gentle",
+        "rankIndex": 0,
+        "reference": "Gentle/Patience.nxlv",
+        "required": 40,
+        "sha256": "01fe2933fc0c283fc24865652c9809f5430a880330083ecbec10554786a59268",
+        "skills": {
+          "basher": 10,
+          "blocker": 10,
+          "bomber": 10,
+          "builder": 20,
+          "climber": 10,
+          "digger": 10,
+          "floater": 10,
+          "miner": 10
+        },
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "spawnInterval": 4,
+        "timeLimitSeconds": null,
+        "title": "Patience"
+      },
+      "risks": [
+        "incomplete timing probes",
+        "spatial tolerance unmeasured"
+      ],
+      "variantDifferences": [
+        "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+        "different skill inventory",
+        "Classic retains a time limit"
+      ]
+    },
+    {
+      "comparisons": [],
+      "context": {
         "allowedLosses": 0,
         "assignments": 19,
         "completionSeconds": 214.1764705882353,
@@ -7926,6 +7835,99 @@
         "spatial tolerance unmeasured"
       ],
       "variantDifferences": []
+    },
+    {
+      "comparisons": [],
+      "context": {
+        "allowedLosses": 1,
+        "assignments": 12,
+        "completionSeconds": 164.64705882352942,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [
+          "builder"
+        ],
+        "initialHatchIntervalSeconds": 1.0588235294117647,
+        "jobChanges": 1,
+        "narrowActions": 0,
+        "peakAssignmentsInTwoSeconds": 1,
+        "population": 80,
+        "probedAssignments": 10,
+        "remainingSeconds": 75.3529411764706,
+        "replayRevision": "289466ebcf51b23ac8617701a6fbe48d8a52fce49a7d9dab7a8b5fd7b6838883",
+        "required": 79,
+        "rescueFraction": 0.9875,
+        "savedAboveRequirement": 1,
+        "spareUsedSkills": {
+          "basher": 9,
+          "blocker": 9,
+          "builder": 0
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 70,
+        "timingProbeComplete": false,
+        "usedSkills": {
+          "basher": 1,
+          "blocker": 1,
+          "builder": 10
+        },
+        "workers": 6
+      },
+      "identity": {
+        "engine": "classic",
+        "levelID": "58:Tricky:29:2:0",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "lesson": "Practise: Basher + Blocker",
+      "level": "Rainbow Island",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"58:Tricky:29:2:0\", \"packID\": \"lemmings-LEVEL-120\"}",
+      "placement": {
+        "adjustment": "User playtest 2026-10-14: Rainbow Island is too early in Fun; move to Intermediate after more combination practice.",
+        "basis": "userPlaytest",
+        "lower": 250.0,
+        "position": 257.5,
+        "reference": "Gentle/Rainbow_Island.nxlv",
+        "replayRevision": "289466ebcf51b23ac8617701a6fbe48d8a52fce49a7d9dab7a8b5fd7b6838883",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 265.0
+      },
+      "purpose": "Community-ordered practice with an exact native winning witness",
+      "reference": {
+        "author": "Amiga Lemmings",
+        "number": 24,
+        "ordinal": 24,
+        "population": 30,
+        "rank": "Gentle",
+        "rankIndex": 0,
+        "reference": "Gentle/Rainbow_Island.nxlv",
+        "required": 29,
+        "sha256": "8a70feb4700dbe4f7c24082bf4a70467dd152263a94ef3eaea41dec1a03a82f6",
+        "skills": {
+          "basher": 10,
+          "blocker": 10,
+          "bomber": 10,
+          "builder": 10,
+          "climber": 10,
+          "digger": 10,
+          "floater": 10,
+          "miner": 10
+        },
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "spawnInterval": 18,
+        "timeLimitSeconds": null,
+        "title": "Rainbow Island"
+      },
+      "risks": [
+        "incomplete timing probes",
+        "spatial tolerance unmeasured",
+        "witness exhausts at least one used skill"
+      ],
+      "variantDifferences": [
+        "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+        "different population",
+        "different rescue fraction",
+        "Classic retains a time limit"
+      ]
     },
     {
       "comparisons": [],

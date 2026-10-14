@@ -7,14 +7,34 @@ import Foundation
 /// inspection instead of deleting it.
 public struct MobileStorage: Sendable {
     public let directory: URL
+    private let defaultsKey: String?
 
-    public init(directory: URL) { self.directory = directory }
+    public init(directory: URL) { self.directory = directory; defaultsKey = nil }
+
+    private init(directory: URL, defaultsKey: String?) {
+        self.directory = directory; self.defaultsKey = defaultsKey
+    }
+
+    public static var localDirectory: FileManager.SearchPathDirectory {
+        #if os(tvOS)
+        .cachesDirectory
+        #else
+        .applicationSupportDirectory
+        #endif
+    }
 
     /// The folder for one player's collections.
     public static func standard(profile: String) -> MobileStorage {
-        let base = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+        let base = FileManager.default.urls(for: localDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("Ultimate Lemmings/Mobile", isDirectory: true)
-        return MobileStorage(directory: base.appendingPathComponent(profile, isDirectory: true))
+        #if os(tvOS)
+        let key: String? = profile == "_players" ? "tv.mobile.players" : nil
+        #else
+        let key: String? = nil
+        #endif
+        let unsafe = profile.isEmpty || profile == "." || profile == ".." || profile.contains("/") || profile.contains("\\") || profile.contains("\0")
+        let component = unsafe ? "encoded-" + Data(profile.utf8).base64EncodedString().replacingOccurrences(of: "/", with: "_") : profile
+        return MobileStorage(directory: base.appendingPathComponent(component, isDirectory: true), defaultsKey: key)
     }
 
     private func main(_ name: String) -> URL { directory.appendingPathComponent(name + ".json") }
@@ -25,6 +45,8 @@ public struct MobileStorage: Sendable {
     }
 
     public func load<T: Codable>(_ type: T.Type, name: String) -> T? {
+        if let defaultsKey, let data = UserDefaults.standard.data(forKey: defaultsKey + "." + name),
+           let value = try? JSONDecoder().decode(type, from: data) { return value }
         let fileManager = FileManager.default
         if let value = decode(type, at: main(name)) { return value }
         // A main file that exists but does not decode is kept for inspection.
@@ -39,11 +61,16 @@ public struct MobileStorage: Sendable {
         let fileManager = FileManager.default
         try fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
         let data = try JSONEncoder().encode(value)
+        // Keep only the small roster/session metadata in TV defaults. Large saves stay in caches.
+        if let defaultsKey {
+            guard data.count <= 128 * 1_024 else { throw CocoaError(.fileWriteOutOfSpace) }
+        }
         // Keep the previous copy only when it is itself valid.
         if let previous = try? Data(contentsOf: main(name)), (try? JSONDecoder().decode(T.self, from: previous)) != nil {
             try previous.write(to: backup(name), options: .atomic)
         }
         try data.write(to: main(name), options: .atomic)
+        if let defaultsKey { UserDefaults.standard.set(data, forKey: defaultsKey + "." + name) }
     }
 
     /// Reads a document, importing an older copy from app defaults the first time.

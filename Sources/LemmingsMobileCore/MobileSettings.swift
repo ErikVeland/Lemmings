@@ -45,7 +45,12 @@ public struct MobileSettings: Codable, Equatable, Sendable {
     public static func load(from defaults: UserDefaults) -> MobileSettings {
         if let data = defaults.data(forKey: defaultsKey),
            let saved = try? JSONDecoder().decode(Self.self, from: data) { return saved }
-        let migrated = Self(pauseToAssign: !defaults.bool(forKey: "mobile.continuousSkillSelection"),
+        #if os(tvOS)
+        let planning = false
+        #else
+        let planning = !defaults.bool(forKey: "mobile.continuousSkillSelection")
+        #endif
+        let migrated = Self(pauseToAssign: planning,
                             fastSpeed: defaults.integer(forKey: "mobile.fastSpeed"),
                             musicEnabled: defaults.object(forKey: "mobile.music") as? Bool ?? true,
                             soundtrack: defaults.string(forKey: "mobile.soundtrack") ?? "Original")

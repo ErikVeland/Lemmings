@@ -1,4 +1,4 @@
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import LemmingsGameArt
 import UIKit
 
@@ -44,13 +44,15 @@ import UIKit
         super.init(frame: frame)
         backgroundColor = .clear
         clipsToBounds = false
+        #if os(iOS)
         let pan = UIPanGestureRecognizer(target: self, action: #selector(panned(_:)))
         addGestureRecognizer(pan)
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapped(_:))))
+        #endif
         isAccessibilityElement = true
         accessibilityLabel = "Level selector"
         accessibilityTraits = .adjustable
-        if #available(iOS 17.0, *) {
+        if #available(iOS 17.0, tvOS 17.0, *) {
             registerForTraitChanges([UITraitDisplayScale.self]) { (view: MobileCoverFlowView, _) in
                 view.rendered.removeAll()
                 view.layoutCards()
@@ -60,10 +62,28 @@ import UIKit
 
     required init?(coder: NSCoder) { nil }
 
+    #if os(tvOS)
+    override var canBecomeFocused: Bool { !titles.isEmpty }
+    override func didUpdateFocus(in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
+        super.didUpdateFocus(in: context, with: coordinator)
+        layer.borderWidth = isFocused ? 2 : 0
+        layer.borderColor = UIColor.white.cgColor
+    }
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        if presses.contains(where: { $0.type == .leftArrow }) { select(selectedIndex - 1, animated: false); return }
+        if presses.contains(where: { $0.type == .rightArrow }) { select(selectedIndex + 1, animated: false); return }
+        super.pressesBegan(presses, with: event)
+    }
+    override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        if presses.contains(where: { $0.type == .select }) { onActivate?(selectedIndex); return }
+        super.pressesEnded(presses, with: event)
+    }
+    #endif
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         // iOS 16 predates targeted trait registration.
-        if #available(iOS 17.0, *) { return }
+        if #available(iOS 17.0, tvOS 17.0, *) { return }
         guard previousTraitCollection?.displayScale != traitCollection.displayScale else { return }
         rendered.removeAll()
         layoutCards()

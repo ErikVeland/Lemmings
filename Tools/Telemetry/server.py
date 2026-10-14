@@ -18,7 +18,8 @@ from urllib.parse import parse_qs, urlsplit
 
 LEVEL_EVENTS = {"level_start", "level_win", "level_fail", "level_abandon"}
 SAVED_EVENT = "lemmings_saved"
-SIMPLE_EVENTS = {"active_day", "all_soundtracks_selected", "all_soundtracks_downloaded"}
+INSTALLATION_EVENT = "installation_opt_in"
+SIMPLE_EVENTS = {"active_day", INSTALLATION_EVENT, "all_soundtracks_selected", "all_soundtracks_downloaded"}
 CLASSIC_GAMES = {
     "lemmings": 120,
     "ohNoMoreLemmings": 100,
@@ -74,7 +75,7 @@ def validate_event(value: object) -> tuple[str, str, str, str, int]:
 
 
 class CountStore:
-    """Store daily aggregates and one lifetime saved total, without identifiers."""
+    """Store daily aggregates and lifetime totals, without identifiers."""
 
     def __init__(self, path: Path):
         self.path = path
@@ -117,11 +118,11 @@ class CountStore:
                 ON CONFLICT (day, event, game, level, mode)
                 DO UPDATE SET count = count + excluded.count
             """, (today.isoformat(), kind, game, level, mode, amount))
-            if kind == SAVED_EVENT:
+            if kind in {SAVED_EVENT, INSTALLATION_EVENT}:
                 db.execute("""
                     INSERT INTO lifetime_totals (name, count) VALUES (?, ?)
                     ON CONFLICT (name) DO UPDATE SET count = count + excluded.count
-                """, (SAVED_EVENT, amount))
+                """, (kind, amount))
 
     def saved_total(self) -> int:
         with self.connect() as db:
@@ -141,8 +142,11 @@ class CountStore:
                 GROUP BY shown_day, event, game, level, mode
                 ORDER BY shown_day, event, game, level, mode
             """, (cutoff,)).fetchall()
+            installs = db.execute("SELECT count FROM lifetime_totals WHERE name = ?",
+                                  (INSTALLATION_EVENT,)).fetchone()
         return {
             "days": days,
+            "optedInInstalls": installs[0] if installs else 0,
             "counts": [
                 {"day": day or None, "event": event, "game": game or None,
                  "level": level or None, "mode": mode or None, "count": count}

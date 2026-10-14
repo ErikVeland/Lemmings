@@ -1,18 +1,29 @@
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import LemmingsAppCore
 import LemmingsGameArt
 import LemmingsMobileCore
+import LemmingsTVCore
 import NxlvKit
 import UIKit
 import UniformTypeIdentifiers
 
-@MainActor final class MobileLibraryViewController: UIViewController, UIDocumentPickerDelegate {
+#if os(iOS)
+extension MobileLibraryViewController: UIDocumentPickerDelegate {}
+#endif
+
+@MainActor final class MobileLibraryViewController: UIViewController {
     enum Route: Equatable {
         case home, family(MobileFamily), levels, settings, settingsGroup(MobileSettingsGroup), controllerMappings, playInsights, soundtrack, data
         case whatsNew, effectsWelcome, telemetryConsent, insightsToken, insightsClear
         case journey, progression, techniques, rankings
         case collections, playlists, playlist(UUID), addToPlaylist, players, cloudSaves, shuffleAll, hotSeat, hotSeats, records, achievements, recordLevel(String)
     }
+    #if os(tvOS)
+    override var preferredFocusEnvironments: [any UIFocusEnvironment] {
+        if let game { return [game] }
+        return browserShown ? [browser] : [canvas]
+    }
+    #endif
     private let scrollView = UIScrollView()
     let canvas = MobileMenuCanvas()
     private let unfold = MobileUnfoldView()
@@ -48,9 +59,11 @@ import UniformTypeIdentifiers
     /// The players on this device. Each has their own collections and progress.
     var profiles = MobileStorage.standard(profile: "_players").load(MobileProfiles.self, name: "players") ?? MobileProfiles()
     lazy var arcadeStore = ArcadeStore(storage: .current(), bundledProofs: nil)
+    #if os(iOS)
     private let cloudTransport = AppleGameProgressTransport()
     private var cloudAuthentication: UIViewController?
     lazy var cloudProgress = GameCenterProgressSync(store: arcadeStore, transport: cloudTransport)
+    #endif
     let libraryCloudTransport = AppleCloudLibraryTransport()
     lazy var libraryCloud = CloudLibrarySync(store: arcadeStore, transport: libraryCloudTransport)
     var syncCode: String?
@@ -60,6 +73,9 @@ import UniformTypeIdentifiers
     var syncBusy = false
     var importingSyncKey = false
     var syncRecoveryExport: URL?
+    #if os(tvOS)
+    var tvBackupDraft: TVSaveBackup?
+    #endif
     var collectionsBridge: MobileCollectionsBridge?
     var creatingPlayer = false
     var draftPortrait = 0
@@ -126,8 +142,10 @@ import UniformTypeIdentifiers
         return all
     }
 
+    #if os(iOS)
     override var prefersStatusBarHidden: Bool { true }
     override var prefersHomeIndicatorAutoHidden: Bool { game != nil }
+    #endif
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         guard let previewLoader else { return }
@@ -158,12 +176,14 @@ import UniformTypeIdentifiers
         browser.artworkLoader = { [weak self] index in await self?.coverArtwork(index) }
         view.addSubview(browser)
         view.addSubview(unfold)
+        #if os(iOS)
         for direction in [UISwipeGestureRecognizer.Direction.left, .right] {
             let swipe = UISwipeGestureRecognizer(target: self, action: #selector(swiped(_:)))
             swipe.direction = direction
             swipe.cancelsTouchesInView = false
             canvas.addGestureRecognizer(swipe)
         }
+        #endif
         _ = saveProfiles()
         reloadPlayerData()
         catalogue = Self.makeCatalogue()
@@ -173,7 +193,9 @@ import UniformTypeIdentifiers
         searchField.autocorrectionType = .no
         searchField.spellCheckingType = .no
         searchField.textContentType = nil
+        #if os(iOS)
         if #available(iOS 17.0, *) { searchField.inlinePredictionType = .no }
+        #endif
         searchField.autocapitalizationType = .none
         searchField.returnKeyType = .done
         searchField.alpha = 0.01
@@ -196,38 +218,59 @@ import UniformTypeIdentifiers
         beginWelcomeIfNeeded()
         measureMobileFanPacks()
         AnonymousTelemetry.shared.recordActiveDay()
+        #if os(iOS)
         cloudProgress.canImport = { [weak self] in self?.game == nil && self?.preparingLevel == false }
         cloudProgress.captureExtra = { profileID in
             let saved = MobileStorage.standard(profile: profileID).load(MobileLearningState.self, name: "learning")
             return saved.map { .init(values: ["LearningJourneyProgress": .learning($0.progress)]) } ?? .init()
         }
         cloudProgress.onImported = { [weak self] in self?.rebuild() }
+        #endif
         configureLibraryCloud()
         arcadeStore.onProgressChanged = { [weak self] in
             self?.libraryCloud.requestSync()
+            #if os(iOS)
             if self?.libraryCloud.enabled == true { self?.cloudProgress.requestSync() }
+            #endif
         }
-        cloudTransport.onChange = { [weak self] in self?.cloudProgress.requestSync() }
         NotificationCenter.default.addObserver(self, selector: #selector(cloudForeground), name: UIApplication.didBecomeActiveNotification, object: nil)
+        #if os(iOS)
+        cloudTransport.onChange = { [weak self] in self?.cloudProgress.requestSync() }
         cloudTransport.start { [weak self] controller in
             self?.cloudAuthentication = controller
             self?.presentCloudAuthentication()
         }
+        #endif
     }
     private func presentCloudAuthentication() {
+        #if os(iOS)
         guard game == nil, presentedViewController == nil, view.window != nil, let controller = cloudAuthentication else { return }
         cloudAuthentication = nil
         present(controller, animated: true)
+        #endif
     }
-    @objc private func cloudForeground() { libraryCloud.requestSync(); if libraryCloud.enabled { cloudProgress.requestSync(); presentCloudAuthentication() } }
+    @objc private func cloudForeground() {
+        libraryCloud.requestSync()
+        #if os(iOS)
+        if libraryCloud.enabled { cloudProgress.requestSync(); presentCloudAuthentication() }
+        #endif
+    }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if game == nil { becomeFirstResponder() }
+        #if os(iOS)
         cloudProgress.requestSync()
+        #endif
         libraryCloud.requestSync()
         presentCloudAuthentication()
     }
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        #if os(tvOS)
+        if game == nil, presentedViewController == nil, presses.contains(where: { $0.type == .menu }), route != .home {
+            if browserShown { navigate(levelsBackRoute) } else { canvas.goBack() }
+            return
+        }
+        #endif
         let handled = libraryInput.began(presses)
         super.pressesBegan(presses.subtracting(handled), with: event)
     }
@@ -273,7 +316,7 @@ import UniformTypeIdentifiers
             if catalogue != nil, let run = playlists.run {
                 resume.append(.init("runResume", "Resume \(run.name)  \(run.position + 1)/\(run.entries.count)"))
             }
-            if let saved = pendingCheckpoint {
+            if let saved = pendingCheckpoint, !checkpointResumesLearningRun(saved) {
                 resume.append(checkpointMatchesSession(saved)
                     ? .init("resume", "Resume level - " + playerName(saved.owner ?? profiles.activeID))
                     : .init("seatOther", otherSessionTitle(for: saved)))
@@ -291,7 +334,7 @@ import UniformTypeIdentifiers
                  .init("l2", hasLemmings2Data ? "Lemmings 2  120 levels" : "Import Lemmings 2 data"),
                  .init("l3", hasLemmings3Data ? "Lemmings 3 Preview  90 levels" : "Import Lemmings 3 data", enabled: true)]
             let journey = bundledJourney
-            let journeyTitle = "Journey  \(journey.map { learning.progress.solvedCount(in: $0) } ?? 0)/\(journey?.lessons.count ?? 0)"
+            let journeyTitle = "Journey  \(journey.map { learning.progress.solvedCount(in: $0) } ?? 0)/\(journey?.lessons.count ?? 0) solved"
             let initials = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") } ?? profiles.active.name
             canvas.page = MobileHomeArt.page(resume: resume,
                 journey: .init("journey", journeyTitle, enabled: catalogue != nil && journey != nil),
@@ -384,6 +427,17 @@ import UniformTypeIdentifiers
             canvas.page = CloudSyncArt.page(status: libraryCloud.status, providers: libraryCloud.providerNames,
                 enabled: libraryCloud.enabled, busy: syncBusy || libraryCloud.state == .syncing,
                 code: syncCode, draft: syncDraft, message: syncMessage); canvas.preview = nil
+            #if os(tvOS)
+            if tvBackupDraft != nil {
+                canvas.page = .init(title: "Restore TV saves?", footer: [.init("syncTVRestoreCancel", "Cancel"),
+                    .init("syncTVRestoreConfirm", "Restore", primary: true)])
+            } else if syncCode != nil {
+                canvas.page.footer.removeAll { $0.id == "syncCopy" }
+            } else if syncDraft == nil {
+                canvas.page.rows += [.init("syncTVBackup", "Back up TV saves", enabled: !syncBusy),
+                                     .init("syncTVRestore", "Restore TV saves", enabled: !syncBusy)]
+            }
+            #endif
         case .records:
             canvas.page = recordsPage(subtitle: subtitle); canvas.preview = nil
         case .achievements:
@@ -583,7 +637,7 @@ import UniformTypeIdentifiers
         let existing = catalogue.packs(in: .fan).compactMap { pack -> URL? in
             if case let .fan(file) = pack.source { return file } else { return nil }
         }
-        guard let support = try? FileManager.default.url(for: .applicationSupportDirectory, in: .userDomainMask,
+        guard let support = try? FileManager.default.url(for: MobileStorage.localDirectory, in: .userDomainMask,
                                                          appropriateFor: nil, create: true) else { return }
         let destination = support.appendingPathComponent("Fan Levels", isDirectory: true)
         Task {
@@ -606,7 +660,7 @@ import UniformTypeIdentifiers
         let ports = resources.appendingPathComponent("Ports", isDirectory: true)
         guard FileManager.default.fileExists(atPath: ports.path) else { return nil }
         var fan = [resources.appendingPathComponent("LevelPacks", isDirectory: true)]
-        if let support = try? FileManager.default.url(for: .applicationSupportDirectory, in: .userDomainMask,
+        if let support = try? FileManager.default.url(for: MobileStorage.localDirectory, in: .userDomainMask,
                                                       appropriateFor: nil, create: false) {
             fan.append(support.appendingPathComponent("Fan Levels", isDirectory: true))
         }
@@ -797,22 +851,37 @@ import UniformTypeIdentifiers
     }
     private func chooseGameData(for kind: MobileGameDataKind) {
         selectedImportKind = kind
+        #if os(tvOS)
+        MobileTVFileTransfer.importFiles(from: self, directory: true) { [weak self] url in self?.receiveGameData(url) }
+        #else
         let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.folder], asCopy: false)
         picker.delegate = self; picker.allowsMultipleSelection = false
         present(picker, animated: true)
+        #endif
     }
+    #if os(iOS)
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         if route == .cloudSaves {
             if importingSyncKey, let source = urls.first { importingSyncKey = false; importCloudRecoveryKey(source) }
             if let exported = syncRecoveryExport { try? FileManager.default.removeItem(at: exported); syncRecoveryExport = nil }
             return
         }
-        guard let source = urls.first, let store else { return }
+        guard let source = urls.first else { return }
+        receiveGameData(source)
+    }
+    #endif
+    func receiveGameData(_ source: URL) {
+        guard let store else { return }
         let kind = selectedImportKind
         loading = true; rebuild()
         let accessed = source.startAccessingSecurityScopedResource()
         Task {
-            defer { if accessed { source.stopAccessingSecurityScopedResource() } }
+            defer {
+                if accessed { source.stopAccessingSecurityScopedResource() }
+                #if os(tvOS)
+                MobileTVFileTransfer.removeImportedFiles(source)
+                #endif
+            }
             let result = await Task.detached(priority: .userInitiated) {
                 Result { try store.install(directory: source, for: kind) }
             }.value
@@ -823,10 +892,12 @@ import UniformTypeIdentifiers
             }
         }
     }
+    #if os(iOS)
     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
         importingSyncKey = false
         if let exported = syncRecoveryExport { try? FileManager.default.removeItem(at: exported); syncRecoveryExport = nil }
     }
+    #endif
     func loadCheckpoint() {
         pendingCheckpoint = nil
         guard let checkpointStore else { return }
@@ -857,11 +928,8 @@ import UniformTypeIdentifiers
             openNeoLemmix(at: checkpoint.levelIndex, checkpoint: checkpoint)
             return
         }
-        if let run = learning.run, let catalogue {
-            let queue = MobileJourneyLibrary(entries: run.entries, name: run.pool.summary, catalogue: catalogue)
-            if (try? queue.checkpointLevelIdentifier(at: run.currentIndex)) == checkpoint.levelIdentifier {
-                openLearningRun(checkpoint: checkpoint); return
-            }
+        if checkpointResumesLearningRun(checkpoint) {
+            openLearningRun(checkpoint: checkpoint); return
         }
         if let run = playlists.run, let catalogue {
             let queue = MobileListLibrary(entries: run.entries, name: run.name, catalogue: catalogue, lazy: true)
@@ -993,8 +1061,11 @@ import UniformTypeIdentifiers
                     self.previewTask?.cancel(); self.previewGeneration = UUID()
                     self.loading = false; self.preparingLevel = false
                     self.game?.willMove(toParent: nil); self.game?.view.removeFromSuperview(); self.game?.removeFromParent()
-                    self.game = nil; self.loadCheckpoint(); self.rebuild(); self.cloudProgress.requestSync(); self.presentCloudAuthentication()
+                    self.game = nil; self.loadCheckpoint(); self.rebuild(); self.presentCloudAuthentication()
+                    #if os(iOS)
+                    self.cloudProgress.requestSync()
                     self.setNeedsUpdateOfHomeIndicatorAutoHidden()
+                    #endif
                 case .retry: self.startLevel(index, checkpoint: nil)
                 case .next:
                     if inLearning {
@@ -1014,7 +1085,9 @@ import UniformTypeIdentifiers
             view.addSubview(next.view); next.didMove(toParent: self)
             game = next; syncPages()
             previous?.willMove(toParent: nil); previous?.view.removeFromSuperview(); previous?.removeFromParent()
+            #if os(iOS)
             setNeedsUpdateOfHomeIndicatorAutoHidden()
+            #endif
         } catch {
             if let game { game.showPreparationError(error.localizedDescription) }
             else { notice = error.localizedDescription; rebuild() }

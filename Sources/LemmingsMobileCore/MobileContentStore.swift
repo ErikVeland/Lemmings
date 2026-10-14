@@ -75,7 +75,7 @@ public struct MobileContentStore: Sendable {
 
     public init(fileManager: FileManager = .default) throws {
         let applicationSupport = try fileManager.url(
-            for: .applicationSupportDirectory,
+            for: MobileStorage.localDirectory,
             in: .userDomainMask,
             appropriateFor: nil,
             create: true

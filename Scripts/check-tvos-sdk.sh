@@ -7,11 +7,11 @@ rm -rf "$build_dir/Modules"
 mkdir -p "$build_dir/Modules"
 rm -rf "$build_dir/Sources"
 mkdir -p "$build_dir/Sources"
-for module in NxlvKit LemmingsAppCore LemmingsMobileCore LemmingsAudio LemmingsTVCore LemmingsGameArt LemmingsTVUI; do
+for module in NxlvKit LemmingsAppCore LemmingsMobileCore LemmingsAudio LemmingsTVCore LemmingsGameArt LemmingsMobileUI LemmingsTVUI; do
     cp -R "$project_dir/Sources/$module" "$build_dir/Sources/$module"
 done
 sdk="$(xcrun --sdk appletvsimulator --show-sdk-path)"
-for module in NxlvKit LemmingsAppCore LemmingsMobileCore LemmingsAudio LemmingsTVCore LemmingsGameArt LemmingsTVUI; do
+for module in NxlvKit LemmingsAppCore LemmingsMobileCore LemmingsAudio LemmingsTVCore LemmingsGameArt LemmingsMobileUI LemmingsTVUI; do
     mkdir -p "$build_dir/Modules/$module.swiftmodule"
     local_sources=("${(@f)$(rg --files "$build_dir/Sources/$module" -g '*.swift')}")
     swiftc -swift-version 6 -parse-as-library -target arm64-apple-tvos16.0-simulator -sdk "$sdk" \

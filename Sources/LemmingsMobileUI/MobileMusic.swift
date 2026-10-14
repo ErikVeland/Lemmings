@@ -1,4 +1,4 @@
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import LemmingsAudio
 import LemmingsMobileCore
 import NxlvKit
@@ -149,14 +149,28 @@ import UIKit
     }
     private func announce(_ url: URL?, soundtrack: String) {
         guard let url else { return }
-        currentSoundtrackName = soundtrack
         guard url != lastTrack else { return }
         lastTrack = url
-        let title = musicRoot.flatMap { root in
-            SoundtrackPlayer.cataloguePath(url, root: root).flatMap { SoundtrackCatalogue.load(at: root)?.entry(path: $0)?.track.title }
-        } ?? url.deletingPathExtension().lastPathComponent
+        let path = musicRoot.flatMap { SoundtrackPlayer.cataloguePath(url, root: $0) }
+        let entry = musicRoot.flatMap { root in
+            path.flatMap { SoundtrackCatalogue.load(at: root)?.entry(path: $0) }
+        }
+        let title = entry?.track.title ?? url.deletingPathExtension().lastPathComponent
+        // The composition can stay the same when its celebratory arrangement starts.
+        // Identify the recording, rather than repeating the soundtrack preference.
+        let library = path.flatMap { path in
+            MusicLibrary.catalogue(at: musicRoot)?.packs.first { pack in
+                pack.files.contains { $0.path == "Music/" + path }
+            }?.title
+        }
+        let source = library ?? entry.map {
+            $0.variant.remix == "original"
+                ? ($0.variant.port == "amiga" ? "Amiga" : $0.variant.port.uppercased())
+                : $0.variant.remix.replacingOccurrences(of: "-", with: " ").capitalized
+        } ?? soundtrack
         currentTrackTitle = title
-        onTrackChange?(title, soundtrack)
+        currentSoundtrackName = source
+        onTrackChange?(title, source)
     }
 
     /// Pause, speed and reverse scratches use the shared Mac transports.

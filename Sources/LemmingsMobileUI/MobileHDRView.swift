@@ -1,4 +1,4 @@
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import LemmingsGameArt
 import LemmingsMobileCore
 import MetalKit
@@ -75,7 +75,9 @@ import UIKit
         isHidden = !active
         if !active {
             flashTexture = nil
+#if os(iOS)
             (layer as? CAMetalLayer)?.wantsExtendedDynamicRangeContent = false
+#endif
             return
         }
         let budget = MobileDevicePerformance.presentation
@@ -88,7 +90,9 @@ import UIKit
         let renderScale = min(scale, sqrt(pixelLimit / max(1, bounds.width * bounds.height)))
         let size = CGSize(width: max(1, floor(bounds.width * renderScale)), height: max(1, floor(bounds.height * renderScale)))
         if drawableSize != size { drawableSize = size }
+#if os(iOS)
         (layer as? CAMetalLayer)?.wantsExtendedDynamicRangeContent = (window?.screen.potentialEDRHeadroom ?? 1) > 1
+#endif
         setNeedsDisplay()
     }
 
@@ -96,7 +100,9 @@ import UIKit
         speed = SuperSpeedTimeline(); pops.clear(); cores.removeAll()
         flashTexture = nil; lastTime = nil; lastPaint = nil; motionTime = 0
         isHidden = true
+#if os(iOS)
         (layer as? CAMetalLayer)?.wantsExtendedDynamicRangeContent = false
+#endif
     }
 
     override func draw(_ rect: CGRect) {

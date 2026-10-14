@@ -1,4 +1,4 @@
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import LemmingsGameArt
 import UIKit
 
@@ -68,13 +68,27 @@ import UIKit
         isAccessibilityElement = true
         accessibilityTraits = .button
         contentMode = .redraw
-        addTarget(self, action: #selector(pressed), for: .touchUpInside)
+        addTarget(self, action: #selector(pressed), for: .gameActivation)
         backgroundColor = .clear
     }
 
     required init?(coder: NSCoder) { nil }
 
     @objc private func pressed() { onPress?() }
+
+    #if os(tvOS)
+    override var canBecomeFocused: Bool { isEnabled && !isHidden }
+    override func didUpdateFocus(in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
+        super.didUpdateFocus(in: context, with: coordinator)
+        layer.borderWidth = isFocused ? 2 : 0
+        layer.borderColor = UIColor.white.cgColor
+        setNeedsDisplay()
+    }
+    override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        if isFocused && isEnabled && presses.contains(where: { $0.type == .select }) { onPress?(); return }
+        super.pressesEnded(presses, with: event)
+    }
+    #endif
 
     override var isHighlighted: Bool {
         didSet { setNeedsDisplay() }

@@ -543,3 +543,35 @@ Adaptive DJ layer gains. All automated audio checks stay offscreen and muted.
 The full Mac source typechecks. Sequel seeks retain their existing replay
 reconstruction cost. Audible feel, physical HDR/CRT display output,
 sequel attachment poses and mobile appearance remain for manual validation.
+
+## Home resume actions across platforms
+
+Offer one shortcut per distinct saved destination. On iOS, Resume journey restores
+its matching checkpoint; omit Resume level only when the current session and
+validated level identity match. Keep standalone Classic, Lemmings 2, Lemmings 3
+and NeoLemmix checkpoints independently accessible. Journey's home count means
+levels solved and is labelled Solved; do not repeat queue position on Resume.
+
+Mac currently continues its saved queue from a level start rather than restoring
+a checkpoint through that action. Label it Continue journey/session and retain
+Resume level for the saved attempt. The normal TV app now shares the iOS
+journey/session and checkpoint destination rules. Sequel entries require the same
+compatible imported data, and journeys currently accept Classic entries. Do not hide a
+checkpoint based only on a title, counter or player name.
+
+## Mobile and TV skill feedback
+
+Touch/controller aiming and TV use the shared SkillPointerBadge renderer: native
+selected-skill artwork, remaining supply, a dark backing and a restrained green
+inner glow. Keep the icon visible at zero stock and show a warning-coloured zero.
+Unlimited Classic skills use the existing star marker. Lemmings 3 actions have no
+shared supply; Use displays the targeted lemming's carried-tool uses. Other L3
+actions omit the counter. L2 uses the original skill tiles without their empty
+padding; L3 uses its original action-panel tiles. Missing artwork falls back to
+the complete action name. Existing iOS None/1x/2x settings remain respected.
+
+The badge stays within the playfield, away from the aim point, and adds no input
+target. Selected HUD skills retain their outlines and add the same inner glow.
+Offscreen muted checks cover native Classic/L2/L3 icons, stock semantics, invalid
+indices and edge placement. iOS and tvOS SDK source compilation passed; physical
+controller/touch and television readability still require manual validation.

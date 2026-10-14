@@ -1,7 +1,8 @@
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import LemmingsAppCore
 import LemmingsGameArt
 import LemmingsMobileCore
+import LemmingsTVCore
 import NxlvKit
 import UIKit
 
@@ -13,9 +14,17 @@ extension MobileLibraryViewController {
 
     func settingsGroupsPage() -> GameFrontEnd.Page { MobileSettingsArt.groups() }
     func settingsPage(_ group: MobileSettingsGroup) -> GameFrontEnd.Page {
-        MobileSettingsArt.page(group, settings: mobileSettings,
+        var page = MobileSettingsArt.page(group, settings: mobileSettings,
                                sharing: AnonymousTelemetry.shared.sharesCounts,
-                               sharingAvailable: AnonymousTelemetry.shared.sharingAvailable)
+                               sharingAvailable: AnonymousTelemetry.shared.sharingAvailable, displayAvailable: true)
+        #if os(tvOS)
+        if group == .controller {
+            let input = TVPreferences.inputPreferences(from: .standard)
+            page.rows += [.init("setting.tvAim", "Aim sensitivity: \(Int(input.aimSensitivity * 100))%"),
+                          .init("setting.tvDeadZone", "Stick dead zone: \(Int(input.deadZone * 100))%")]
+        }
+        #endif
+        return page
     }
     func insightsPage() -> GameFrontEnd.Page {
         let summary = AnonymousTelemetry.shared.localSummary()
@@ -26,6 +35,15 @@ extension MobileLibraryViewController {
 
     /// Each row changes one choice. Individual gameplay edits retain the Custom preset.
     func handleSettings(_ id: String) -> Bool {
+        #if os(tvOS)
+        if id == "setting.tvAim" || id == "setting.tvDeadZone" {
+            var input = TVPreferences.inputPreferences(from: .standard)
+            if id == "setting.tvAim" { input.aimSensitivity = input.aimSensitivity >= 2 ? 0.5 : input.aimSensitivity + 0.25 }
+            else { input.deadZone = input.deadZone >= 0.349 ? 0.05 : input.deadZone + 0.05 }
+            input.saveInputPreferences(to: .standard)
+            rebuild(); return true
+        }
+        #endif
         if id.hasPrefix("settingsGroup."), let group = MobileSettingsGroup(rawValue: String(id.dropFirst(14))) {
             navigate(.settingsGroup(group)); return true
         }

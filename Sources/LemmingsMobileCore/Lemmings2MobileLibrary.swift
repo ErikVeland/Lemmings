@@ -26,8 +26,10 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
         let walker: Lemmings2Walker?
         let explosion: Lemmings2Explosion
         let soundBank: Lemmings2SoundBank?
+        let panel: Lemmings2Panel?
 
         init(root: URL) throws {
+            panel = try? Lemmings2Panel(root: root)
             sprites = try Lemmings2Sprites(data: Data(contentsOf: root.appendingPathComponent("VLEMMS.DAT")))
             intern = try Lemmings2SpecialGraphics(data: Data(contentsOf: root.appendingPathComponent("INTERN.DAT")))
             masks = try Lemmings2TerrainMasks(root: root)
@@ -118,6 +120,23 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
             levelFingerprint: selectedLevel.fingerprint, soundBank: assets.soundBank) { [weak self] completedRuntime in
                 self?.record(completedRuntime, at: index)
             }
+        session.skillCursorFrames = runtime.configuration.skills.map { skill in
+            guard let panel = assets.panel, panel.skills.indices.contains(skill.rawValue - 1) else { return nil }
+            let frame = panel.skills[skill.rawValue - 1]
+            let palette = Lemmings2Panel.palette(over: runtime.configuration.palette)
+            var rgba = [UInt8](repeating: 0, count: frame.width * frame.height * 4)
+            Lemmings2MobileSceneRenderer.composite(frame, palette: palette, atX: 0, y: 0,
+                width: frame.width, height: frame.height, into: &rgba)
+            guard let image = try? MobilePixelFrame(width: frame.width, height: frame.height, rgba: Data(rgba)) else { return nil }
+            // Panel sprites include empty padding; fit the actual skill art beside the pointer.
+            let visible = frame.opaque.indices.filter { frame.opaque[$0] }
+            guard let left = visible.map({ $0 % frame.width }).min(),
+                  let right = visible.map({ $0 % frame.width }).max(),
+                  let top = visible.map({ $0 / frame.width }).min(),
+                  let bottom = visible.map({ $0 / frame.width }).max() else { return nil }
+            return try? image.cropped(around: .init(x: Double(left + right + 1) / 2, y: Double(top + bottom + 1) / 2),
+                width: right - left + 1, height: bottom - top + 1)
+        }
         return MobileLevelContent(summary: levels[index], session: session)
     }
 

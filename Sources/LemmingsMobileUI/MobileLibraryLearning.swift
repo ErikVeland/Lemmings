@@ -1,4 +1,4 @@
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import LemmingsAppCore
 import LemmingsGameArt
 import LemmingsMobileCore
@@ -37,6 +37,17 @@ extension MobileLibraryViewController {
     var resumableLearningRun: MobileLearningResume? {
         MobileLearningResume.find(owner: profiles.activeID, seats: hotSeats, storage: MobileStorage.standard,
                                   journeyOnly: false, currentSessionOnly: true)
+    }
+
+    /// Hide a level shortcut only when the journey action restores that same checkpoint.
+    /// Unknown or unsupported engine identities keep their independent Resume action.
+    func checkpointResumesLearningRun(_ checkpoint: MobileCheckpointEnvelope) -> Bool {
+        guard checkpointMatchesSession(checkpoint), checkpoint.engine == "classic-dos",
+              let saved = resumableLearningRun, let run = saved.state.run,
+              let catalogue else { return false }
+        let queue = MobileJourneyLibrary(entries: run.entries, name: run.pool.summary, catalogue: catalogue)
+        guard let identifier = try? queue.checkpointLevelIdentifier(at: run.currentIndex) else { return false }
+        return identifier == checkpoint.levelIdentifier
     }
 
     func learningPage(subtitle: String) -> GameFrontEnd.Page {

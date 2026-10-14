@@ -1110,48 +1110,6 @@
     },
     {
       "concepts": [
-        "blocker",
-        "builder",
-        "climber",
-        "digger",
-        "floater",
-        "miner"
-      ],
-      "demand": 100.0,
-      "entry": {
-        "catalogueRevision": "1.2-runtime-v2",
-        "id": "F7ABC0E3-A1A5-C863-2F95-21F6FCCD83F2",
-        "identity": {
-          "engine": "classic",
-          "levelID": "11:Fun:12:0:7",
-          "packID": "lemmings-LEVEL-120"
-        },
-        "levelNameSnapshot": "Patience",
-        "levelNumberSnapshot": 12,
-        "packNameSnapshot": "Lemmings",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
-      },
-      "focus": "Practise: Blocker + Builder",
-      "intrinsicDemand": 421.9826262841691,
-      "introduced": [],
-      "needsSupport": false,
-      "objective": "community:Gentle/Patience.nxlv",
-      "placement": {
-        "basis": "reduxClassicCounterpart",
-        "lower": 90.0,
-        "position": 100.0,
-        "reference": "Gentle/Patience.nxlv",
-        "replayRevision": "0f73dffc1645bae22f86166a8a65d138c1faf3a09daba8a9954a8512018850fb",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 110.0
-      },
-      "preparationGaps": [],
-      "score": 421.9826262841691,
-      "stage": "Fun"
-    },
-    {
-      "concepts": [
         "builder",
         "miner"
       ],
@@ -1224,45 +1182,6 @@
       },
       "preparationGaps": [],
       "score": 136.41503796779958,
-      "stage": "Fun"
-    },
-    {
-      "concepts": [
-        "basher",
-        "blocker",
-        "builder"
-      ],
-      "demand": 120.0,
-      "entry": {
-        "catalogueRevision": "1.2-runtime-v2",
-        "id": "2893D56F-182A-8CA8-2600-230307847745",
-        "identity": {
-          "engine": "classic",
-          "levelID": "58:Tricky:29:2:0",
-          "packID": "lemmings-LEVEL-120"
-        },
-        "levelNameSnapshot": "Rainbow Island",
-        "levelNumberSnapshot": 59,
-        "packNameSnapshot": "Lemmings",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
-      },
-      "focus": "Practise: Basher + Blocker",
-      "intrinsicDemand": 301.04710203236306,
-      "introduced": [],
-      "needsSupport": false,
-      "objective": "community:Gentle/Rainbow_Island.nxlv",
-      "placement": {
-        "basis": "reduxClassicCounterpart",
-        "lower": 110.0,
-        "position": 120.0,
-        "reference": "Gentle/Rainbow_Island.nxlv",
-        "replayRevision": "289466ebcf51b23ac8617701a6fbe48d8a52fce49a7d9dab7a8b5fd7b6838883",
-        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 130.0
-      },
-      "preparationGaps": [],
-      "score": 301.04710203236306,
       "stage": "Fun"
     },
     {
@@ -2802,6 +2721,49 @@
     },
     {
       "concepts": [
+        "blocker",
+        "builder",
+        "climber",
+        "digger",
+        "floater",
+        "miner"
+      ],
+      "demand": 237.5,
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "F7ABC0E3-A1A5-C863-2F95-21F6FCCD83F2",
+        "identity": {
+          "engine": "classic",
+          "levelID": "11:Fun:12:0:7",
+          "packID": "lemmings-LEVEL-120"
+        },
+        "levelNameSnapshot": "Patience",
+        "levelNumberSnapshot": 12,
+        "packNameSnapshot": "Lemmings",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
+      },
+      "focus": "Practise: Blocker + Builder",
+      "intrinsicDemand": 421.9826262841691,
+      "introduced": [],
+      "needsSupport": false,
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"11:Fun:12:0:7\", \"packID\": \"lemmings-LEVEL-120\"}",
+      "placement": {
+        "adjustment": "User playtest 2026-10-14: Patience is too early in Fun; move to Intermediate after more combination practice.",
+        "basis": "userPlaytest",
+        "lower": 230.0,
+        "position": 237.5,
+        "reference": "Gentle/Patience.nxlv",
+        "replayRevision": "0f73dffc1645bae22f86166a8a65d138c1faf3a09daba8a9954a8512018850fb",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 245.0
+      },
+      "preparationGaps": [],
+      "score": 421.9826262841691,
+      "stage": "Intermediate"
+    },
+    {
+      "concepts": [
         "builder",
         "digger",
         "miner"
@@ -3064,6 +3026,46 @@
       },
       "preparationGaps": [],
       "score": 113.65676916779638,
+      "stage": "Intermediate"
+    },
+    {
+      "concepts": [
+        "basher",
+        "blocker",
+        "builder"
+      ],
+      "demand": 257.5,
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "2893D56F-182A-8CA8-2600-230307847745",
+        "identity": {
+          "engine": "classic",
+          "levelID": "58:Tricky:29:2:0",
+          "packID": "lemmings-LEVEL-120"
+        },
+        "levelNameSnapshot": "Rainbow Island",
+        "levelNumberSnapshot": 59,
+        "packNameSnapshot": "Lemmings",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
+      },
+      "focus": "Practise: Basher + Blocker",
+      "intrinsicDemand": 301.04710203236306,
+      "introduced": [],
+      "needsSupport": false,
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"58:Tricky:29:2:0\", \"packID\": \"lemmings-LEVEL-120\"}",
+      "placement": {
+        "adjustment": "User playtest 2026-10-14: Rainbow Island is too early in Fun; move to Intermediate after more combination practice.",
+        "basis": "userPlaytest",
+        "lower": 250.0,
+        "position": 257.5,
+        "reference": "Gentle/Rainbow_Island.nxlv",
+        "replayRevision": "289466ebcf51b23ac8617701a6fbe48d8a52fce49a7d9dab7a8b5fd7b6838883",
+        "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 265.0
+      },
+      "preparationGaps": [],
+      "score": 301.04710203236306,
       "stage": "Intermediate"
     },
     {
@@ -11590,5 +11592,5 @@
     }
   ],
   "placementPolicy": "redux-calibrated-2",
-  "version": "learning-20"
+  "version": "learning-21"
 }

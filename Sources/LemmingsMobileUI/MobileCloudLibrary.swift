@@ -1,4 +1,4 @@
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import LemmingsAppCore
 import LemmingsMobileCore
 import NxlvKit
@@ -7,7 +7,9 @@ import UniformTypeIdentifiers
 
 extension MobileLibraryViewController {
     func configureLibraryCloud() {
+        #if os(iOS)
         cloudProgress.isEnabled = { [weak self] in self?.libraryCloud.enabled == true }
+        #endif
         libraryCloud.canImport = { [weak self] in
             guard let self else { return false }
             return game == nil && !preparingCloudLevel && !renamingPlayer && nameDraft == nil
@@ -53,6 +55,9 @@ extension MobileLibraryViewController {
         if id == "cloudSaves" { syncBackRoute = route; syncCode = nil; syncDraft = nil; syncMessage = ""; navigate(.cloudSaves); return true }
         guard route == .cloudSaves, id.hasPrefix("sync") else { return false }
         guard (canvas.page.rows + canvas.page.footer).contains(where: { $0.id == id && $0.enabled }) else { return true }
+        #if os(tvOS)
+        if handleTVSaveBackup(id) { return true }
+        #endif
         syncMessage = ""
         switch id {
         case "syncBack": navigate(syncBackRoute)
@@ -60,7 +65,12 @@ extension MobileLibraryViewController {
         case "syncCancel": syncCode = nil; syncDraft = nil; searchField.resignFirstResponder()
         case "syncEnterCode": syncDraft = ""; searchField.text = ""; searchField.becomeFirstResponder()
         case "syncCodeField": searchField.becomeFirstResponder()
-        case "syncCopy": UIPasteboard.general.string = syncCode; syncMessage = "Copied"
+        case "syncCopy":
+            #if os(iOS)
+            UIPasteboard.general.string = syncCode; syncMessage = "Copied"
+            #else
+            syncMessage = syncCode ?? ""
+            #endif
         case "syncExportKey":
             do {
                 importingSyncKey = false
@@ -69,16 +79,27 @@ extension MobileLibraryViewController {
                 let url = folder.appendingPathComponent("Ultimate Lemmings Recovery.lemmingssync")
                 try libraryCloud.recoveryData().write(to: url, options: .atomic)
                 syncRecoveryExport = url
+                #if os(tvOS)
+                MobileTVFileTransfer.exportFile(url, from: self) { [weak self] in
+                    try? FileManager.default.removeItem(at: folder)
+                    self?.syncRecoveryExport = nil
+                }
+                #else
                 let picker = UIDocumentPickerViewController(forExporting: [url], asCopy: true)
                 picker.delegate = self
                 syncMessage = "Keep the recovery key private."
                 present(picker, animated: true)
+                #endif
             } catch { syncMessage = error.localizedDescription }
         case "syncImportKey":
             importingSyncKey = true
+            #if os(tvOS)
+            MobileTVFileTransfer.importFiles(from: self, directory: false) { [weak self] in self?.importCloudRecoveryKey($0) }
+            #else
             let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.data], asCopy: true)
             picker.delegate = self; picker.allowsMultipleSelection = false
             present(picker, animated: true)
+            #endif
         case "syncNow", "syncMakeLink", "syncJoin":
             syncBusy = true; searchField.resignFirstResponder()
             Task { [weak self] in
@@ -96,7 +117,12 @@ extension MobileLibraryViewController {
     }
     func importCloudRecoveryKey(_ source: URL) {
         let accessed = source.startAccessingSecurityScopedResource()
-        defer { if accessed { source.stopAccessingSecurityScopedResource() } }
+        defer {
+            if accessed { source.stopAccessingSecurityScopedResource() }
+            #if os(tvOS)
+            MobileTVFileTransfer.removeImportedFiles(source)
+            #endif
+        }
         do {
             let size = try source.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? 16385
             guard size <= 16384 else { throw CocoaError(.fileReadCorruptFile) }

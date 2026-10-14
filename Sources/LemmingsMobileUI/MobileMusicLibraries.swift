@@ -1,6 +1,7 @@
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import Foundation
 import LemmingsAppCore
+import LemmingsMobileCore
 import NxlvKit
 
 /// The optional soundtrack libraries: what exists, what is installed, and what is downloading.
@@ -9,7 +10,7 @@ import NxlvKit
 
     /// Same place the Mac keeps them, so one set of paths describes both apps.
     static var directory: URL {
-        FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+        FileManager.default.urls(for: MobileStorage.localDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("Ultimate Lemmings/MusicLibraries", isDirectory: true)
     }
 

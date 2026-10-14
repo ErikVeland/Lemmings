@@ -57,11 +57,11 @@ let package = Package(
         ),
         .target(
             name: "LemmingsMobileUI",
-            dependencies: ["LemmingsAppCore", "LemmingsAudio", "LemmingsGameArt", "LemmingsMobileCore", "NxlvKit"],
+            dependencies: ["LemmingsAppCore", "LemmingsAudio", "LemmingsGameArt", "LemmingsMobileCore", "LemmingsTVCore", "NxlvKit"],
             path: "Sources/LemmingsMobileUI"
         ),
         .target(name: "LemmingsTVCore", dependencies: ["LemmingsMobileCore", "NxlvKit"], path: "Sources/LemmingsTVCore"),
-        .target(name: "LemmingsTVUI", dependencies: ["LemmingsTVCore", "LemmingsMobileCore", "LemmingsGameArt", "LemmingsAudio", "NxlvKit"], path: "Sources/LemmingsTVUI"),
+        .target(name: "LemmingsTVUI", dependencies: ["LemmingsTVCore", "LemmingsMobileUI", "LemmingsMobileCore", "LemmingsGameArt", "LemmingsAudio", "NxlvKit"], path: "Sources/LemmingsTVUI"),
         .executableTarget(
             name: "LemmingsMobileBetaTool",
             dependencies: ["LemmingsMobileCore", "NxlvKit"],
@@ -109,6 +109,11 @@ let package = Package(
             name: "LemmingsMobileUITests",
             dependencies: ["LemmingsMobileCore", "LemmingsMobileUI"],
             path: "Tests/LemmingsMobileUITests"
+        ),
+        .testTarget(
+            name: "LemmingsTVCoreTests",
+            dependencies: ["LemmingsTVCore", "LemmingsMobileCore"],
+            path: "Tests/LemmingsTVCoreTests"
         )
     ]
 )

@@ -139,6 +139,16 @@ public struct MobileHotSeatStore: Codable, Equatable, Sendable {
 
     public init() {}
 
+    /// Keeps legacy TV sessions and their current turn during the shared-frontend upgrade.
+    public mutating func importLegacySessions(_ sessions: [MobileHotSeat], activeScope: String?) {
+        for seat in sessions.sorted(by: { $0.savedAt > $1.savedAt }) {
+            guard current?.id != seat.id, !saved.contains(where: { $0.id == seat.id }) else { continue }
+            if current == nil, seat.scope == activeScope { current = seat; policy = seat.policy }
+            else { saved.append(seat) }
+        }
+        saved.sort { $0.savedAt > $1.savedAt }
+    }
+
     private static let name = "hotseat"
 
     public static func load(from storage: MobileStorage) -> MobileHotSeatStore {

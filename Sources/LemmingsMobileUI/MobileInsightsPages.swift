@@ -1,4 +1,4 @@
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import LemmingsAppCore
 import LemmingsGameArt
 import UIKit
@@ -15,11 +15,12 @@ import UIKit
 extension MobileLibraryViewController {
     func insightsDashboardPage() -> GameFrontEnd.Page {
         let summary = mobileInsights.summary ?? AnonymousTelemetry.shared.localSummary()
-        let counts = ["starts": summary.total(.levelStart), "wins": summary.total(.levelWin),
+        var counts = ["starts": summary.total(.levelStart), "wins": summary.total(.levelWin),
                       "fails": summary.total(.levelFail), "abandoned": summary.total(.levelAbandon),
                       "saved": summary.total(.lemmingsSaved), "solo": summary.total(.levelStart, mode: "solo"),
                       "hotSeat": summary.total(.levelStart, mode: "hot_seat"),
                       "music": summary.total(.allSoundtracksSelected), "downloads": summary.total(.allSoundtracksDownloaded)]
+        counts["installs"] = mobileInsights.summary?.optedInInstalls
         return MobileInformationArt.insights(counts: counts, shared: mobileInsights.summary != nil,
             days: mobileInsights.days, sharingAvailable: AnonymousTelemetry.shared.sharingAvailable,
             loading: mobileInsights.loading, notice: notice)

@@ -26,6 +26,11 @@ class TelemetryTests(unittest.TestCase):
                          ("level_start", "lemmings2", "practice", "hot_seat", 1))
         saved = dict(good, event="lemmings_saved", amount=23)
         self.assertEqual(validate_event(saved), ("lemmings_saved", "lemmings", "level-54", "hot_seat", 23))
+        registration = {"v": 1, "event": "installation_opt_in", "game": None, "level": None, "mode": None}
+        self.assertEqual(validate_event(registration), ("installation_opt_in", "", "", "", 1))
+        for extra in [{"deviceID": "private"}, {"amount": 2}, {"game": "lemmings"}]:
+            with self.assertRaises(ValueError):
+                validate_event(dict(registration, **extra))
         for bad in [
             dict(good, playerID="someone"),
             dict(good, level="Private level name"),
@@ -79,6 +84,19 @@ class TelemetryTests(unittest.TestCase):
         with sqlite3.connect(self.store.path) as db:
             self.assertEqual(db.execute("SELECT COUNT(*) FROM counts").fetchone()[0], 3)
 
+    def test_opted_in_install_total_is_lifetime_and_private(self):
+        self.assertEqual(self.store.summary(7)["optedInInstalls"], 0)
+        self.store.add(("installation_opt_in", "", "", "", 1))
+        self.store.add(("installation_opt_in", "", "", "", 1))
+        old_day = (datetime.now(timezone.utc).date() - timedelta(days=91)).isoformat()
+        with sqlite3.connect(self.store.path) as db:
+            db.execute("UPDATE counts SET day = ?", (old_day,))
+        for days in [7, 30]:
+            summary = self.store.summary(days)
+            self.assertEqual(summary["optedInInstalls"], 2)
+            self.assertEqual(summary["counts"], [])
+        self.assertEqual(self.store.saved_total(), 0)
+
     def test_http_auth_and_validation(self):
         token = "a" * 32
         server = TelemetryServer(("127.0.0.1", 0), self.store, token)
@@ -91,13 +109,19 @@ class TelemetryTests(unittest.TestCase):
             connection.request("POST", "/v1/event", json.dumps(payload),
                                {"Content-Type": "application/json"})
             self.assertEqual(connection.getresponse().status, 204)
+            registration = {"v": 1, "event": "installation_opt_in", "game": None, "level": None, "mode": None}
+            connection.request("POST", "/v1/event", json.dumps(registration),
+                               {"Content-Type": "application/json"})
+            self.assertEqual(connection.getresponse().status, 204)
             connection.request("GET", "/v1/dashboard?days=30")
             self.assertEqual(connection.getresponse().status, 401)
             connection.request("GET", "/v1/dashboard?days=30",
                                headers={"Authorization": "Bearer " + token})
             response = connection.getresponse()
             self.assertEqual(response.status, 200)
-            self.assertEqual(json.loads(response.read())["counts"][0]["count"], 1)
+            summary = json.loads(response.read())
+            self.assertEqual(summary["counts"][0]["count"], 1)
+            self.assertEqual(summary["optedInInstalls"], 1)
             connection.request("GET", "/v1/saved")
             response = connection.getresponse()
             self.assertEqual(response.status, 200)

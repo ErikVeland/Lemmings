@@ -14,6 +14,14 @@ public struct TVPreferences: Codable, Equatable, Sendable {
     public var mappings: [String: String] = [:]
     public init() {}
 
+    public static let inputDefaultsKey = "tv.inputPreferences.v1"
+    public static func inputPreferences(from defaults: UserDefaults) -> TVPreferences {
+        defaults.data(forKey: inputDefaultsKey).flatMap { try? JSONDecoder().decode(Self.self, from: $0) }?.validated ?? .init()
+    }
+    public func saveInputPreferences(to defaults: UserDefaults) {
+        if let data = try? JSONEncoder().encode(validated) { defaults.set(data, forKey: Self.inputDefaultsKey) }
+    }
+
     public var validated: TVPreferences {
         var copy = self
         copy.aimSensitivity = aimSensitivity.isFinite ? min(2, max(0.5, aimSensitivity)) : 1

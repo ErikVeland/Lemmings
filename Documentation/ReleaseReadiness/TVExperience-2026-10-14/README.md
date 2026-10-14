@@ -1,5 +1,10 @@
 # Apple TV development validation — 14 October 2026
 
+**Historical frontend evidence.** The normal TV entry point now opens the shared
+iOS frontend. This record's original menu fixtures and 94 checks do not establish
+its parity. See [current shared frontend evidence](../TVSharedFrontend-2026-10-14/README.md)
+and [the current parity gate](../../../Apps/UltimateLemmingsTV/IOSParity.md).
+
 The native Classic TV development flow builds for arm64 tvOS Simulator.
 These checks cover shared gameplay state, shipping bitmap renderers and input
 target geometry. They do not establish physical Apple TV acceptance.

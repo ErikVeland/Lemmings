@@ -3,6 +3,47 @@ import Testing
 @testable import NxlvKit
 
 struct LearningJourneyTests {
+    @Test func patienceAndRainbowIslandMoveLaterAndSavedQueuesKeepEveryVisit() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let journey = try JSONDecoder().decode(LearningJourney.self,
+            from: Data(contentsOf: root.appendingPathComponent("Resources/Progression/learning.json"))).validated()
+        let patience = journey.lessons[71]
+        let rainbow = journey.lessons[79]
+        #expect(patience.entry.levelNameSnapshot == "Patience" && patience.stage == .intermediate)
+        #expect(rainbow.entry.levelNameSnapshot == "Rainbow Island" && rainbow.stage == .intermediate)
+        #expect(journey.lessons[70].entry.levelNameSnapshot == "Plethora of Presents")
+        #expect(journey.lessons[78].entry.levelNameSnapshot == "Get Up There")
+        for lesson in [patience, rainbow] {
+            #expect(lesson.placement?.basis == "userPlaytest")
+            #expect(lesson.demand == LearningRouteSafety.minimumDemand(for: lesson.entry))
+        }
+        var previous = journey.lessons.map(\.entry).filter {
+            $0.identity != patience.entry.identity && $0.identity != rainbow.entry.identity
+        }
+        previous.insert(patience.entry, at: 29)
+        previous.insert(rainbow.entry, at: 32)
+        for current in [0, 28, 29, 30, 31, 32, 33, 71, 79, 200, 294] {
+            let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+                pool: .init(id: "learning-20", summary: "Previous journey"), entries: previous,
+                currentIndex: current)
+            let migrated = try #require(try journey.migrating(run))
+            #expect(migrated.pool.id == LearningJourney.version)
+            #expect(migrated.id == run.id && migrated.currentIndex == current)
+            #expect(migrated.seed == run.seed && migrated.createdAt == run.createdAt)
+            #expect(Array(migrated.entries.prefix(current)) == Array(previous.prefix(current)))
+            #expect(migrated.entries.count == 295 && Set(migrated.entries.map(\.identity)).count == 295)
+            if current == 29 || current == 32 {
+                #expect(migrated.currentEntry == previous[current + 1])
+                let visited = Set(previous.prefix(current).map(\.identity))
+                #expect(Array(migrated.entries.dropFirst(current)) == journey.lessons.map(\.entry).filter {
+                    !visited.contains($0.identity)
+                })
+            } else { #expect(migrated.currentEntry == run.currentEntry) }
+            #expect(try journey.migrating(migrated) == migrated)
+        }
+    }
+
     @Test func carefulRetailRouteMovesToIntermediateAndDefersTheCurrentSavedAttempt() throws {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
             .deletingLastPathComponent().deletingLastPathComponent()

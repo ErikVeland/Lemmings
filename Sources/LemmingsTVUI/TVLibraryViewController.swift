@@ -145,7 +145,7 @@ import UIKit
             page.rows = [.init("hotseat", "Hot Seat"), .init("players", "Players"), .init("settings", "Settings")]
             if let checkpoint {
                 page.rows.append(.init("games", "Play"))
-                page.footer = [.init("restore", "Resume - " + player(checkpoint.owner ?? MobileProfiles.defaultID).name, primary: true)]
+                page.footer = [.init("restore", "Resume level - " + player(checkpoint.owner ?? MobileProfiles.defaultID).name, primary: true)]
             } else {
                 page.footer = [.init("games", "Play", primary: true)]
             }

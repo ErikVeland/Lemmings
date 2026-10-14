@@ -26,7 +26,7 @@ import NxlvKit
             game.selectSkill(0); _ = game.assign(); game.step(); _ = game.advance(at: 10)
             try check(game.awaitsFirstStart && game.play.phase == .ready && content.session.snapshot.tick == tick, "Fresh Ready blocks input in engine \(index)")
             try check(game.capabilities.releaseRate == (index == 0), "Rate capability \(index)")
-            try check(game.capabilities.rewind == (index == 0), "Rewind capability \(index)")
+            try check(game.capabilities.rewind, "Shared rewind capability \(index)")
             try check(game.capabilities.nuke == (index != 2), "Nuke capability \(index)")
             try check(game.capabilities.carriedTools == (index == 2), "Native tools capability \(index)")
             try check(game.resume(), "Explicit Ready starts \(index)")
@@ -103,6 +103,111 @@ import NxlvKit
         try check(crowdGame.target == nil && !crowdGame.assign() && crowd.assigned == [1], "Lost target cannot assign to neighbour")
         crowdGame.cycleTarget(1)
         try check(crowdGame.target?.id == 2 && crowdGame.assign(), "Deliberate cycling selects next survivor")
+        var activation = TVActivationGate()
+        try check(!activation.consume(), "New page rejects held Select")
+        activation.observeNeutral()
+        try check(activation.consume() && !activation.consume(), "One neutral period permits one activation")
+        activation.observeNeutral(); activation.reset()
+        try check(!activation.consume(), "Ready handover requires fresh neutral input")
+        var lock = TVTargetLock()
+        lock.select(1)
+        let view = MobileRect(x: 0, y: 0, width: 100, height: 80)
+        crowd.positions = [1: .init(x: 42, y: 40), 2: .init(x: 40, y: 40)]
+        try check(lock.resolve(candidates: crowd.targetCandidates(for: 0), visible: view)?.id == 1, "Shared frontend lock follows the selected actor through a crossing")
+        crowd.positions.removeValue(forKey: 1)
+        try check(lock.resolve(candidates: crowd.targetCandidates(for: 0), visible: view) == nil && lock.id == 1, "Shared frontend cannot retarget a missing actor")
+        crowd.positions[1] = .init(x: 200, y: 40)
+        try check(lock.resolve(candidates: crowd.targetCandidates(for: 0), visible: view) == nil, "Shared frontend cannot assign offscreen locked actors")
+        lock.clear()
+        try check(lock.id == nil, "Deliberate aiming releases the actor lock")
+
+        let migrationRoot = FileManager.default.temporaryDirectory.appendingPathComponent("TVMigration-" + UUID().uuidString)
+        let suite = "TVMigration." + UUID().uuidString
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite); try? FileManager.default.removeItem(at: migrationRoot) }
+        let playerStorage = MobileStorage(directory: migrationRoot.appendingPathComponent("players"))
+        var legacy = TVLocalState()
+        _ = legacy.profiles.add(name: "Guest", id: "guest"); legacy.profiles.setPortrait("guest", to: 6)
+        legacy.profiles.select("guest")
+        let oldSeat = MobileHotSeat(host: "default", players: ["default", "guest"], id: "old-seat")!
+        legacy.seats[oldSeat.scope] = oldSeat; legacy.activeSeatScope = oldSeat.scope
+        legacy.completed["classic:solo.guest"] = [1, 3]
+        legacy.completed["classic:" + oldSeat.scope] = [2]
+        legacy.preferences.planningOnSkillChange = true
+        let legacyBytes = try JSONEncoder().encode(legacy)
+        defaults.set(legacyBytes, forKey: "tv.localState")
+        defaults.set([4], forKey: "mobile.completed.release/lemmings.guest")
+        try TVFrontendMigration.migrateMetadata(defaults: defaults, storage: playerStorage)
+        let migratedProfiles = playerStorage.load(MobileProfiles.self, name: "players")
+        try check(migratedProfiles?.activeID == "guest" && migratedProfiles?.active.portrait == 6, "Migration retains profile ID, selection and portrait")
+        let migratedSeats = MobileHotSeatStore.load(from: playerStorage)
+        try check(migratedSeats.current == oldSeat, "Migration keeps active roster and exact turn")
+        try check(Set(defaults.array(forKey: "mobile.completed.release/lemmings.guest") as? [Int] ?? []) == [1, 3, 4], "Migration merges solo progress")
+        try check(defaults.array(forKey: "mobile.completed.release/lemmings." + oldSeat.scope) as? [Int] == [2], "Migration keeps shared progress separate")
+        try check(MobileSettings.load(from: defaults).pauseToAssign, "Migration retains explicit planning preference")
+        try check(defaults.data(forKey: "tv.localState") == legacyBytes, "Migration retains old state for downgrade")
+        defaults.set([8], forKey: "mobile.completed.release/lemmings.guest")
+        try TVFrontendMigration.migrateMetadata(defaults: defaults, storage: playerStorage)
+        try check(defaults.array(forKey: "mobile.completed.release/lemmings.guest") as? [Int] == [8], "Migration does not reimport retired progress")
+        let legacyCheckpoint = MobileCheckpointStore(url: migrationRoot.appendingPathComponent("old/current.json"))
+        let migratedCheckpoint = MobileCheckpointStore(url: migrationRoot.appendingPathComponent("new/current.json"))
+        try await legacyCheckpoint.save(value)
+        try await TVFrontendMigration.migrateCheckpoint(defaults: defaults, source: legacyCheckpoint, destination: migratedCheckpoint)
+        let imported = try await migratedCheckpoint.load(owner: "guest", scope: value.scope)
+        try check(imported == value, "Migration keeps checkpoint tick, engine, owner and scope")
+        try await migratedCheckpoint.retire(runID: value.runID)
+        try await TVFrontendMigration.migrateCheckpoint(defaults: defaults, source: legacyCheckpoint, destination: migratedCheckpoint)
+        let noResurrection = try await migratedCheckpoint.load()
+        try check(noResurrection == nil, "Legacy checkpoint cannot resurrect after migration")
+
+        let tribes = try factories[1]().session as! Lemmings2MobileSession
+        tribes.setFan(at: .init(x: 40, y: 50), active: true)
+        for _ in 0..<5 { tribes.tick() }
+        let blowing = try tribes.checkpointPayload()
+        let restoredTribes = try factories[1]().session as! Lemmings2MobileSession
+        try restoredTribes.restoreCheckpointPayload(blowing)
+        try check(restoredTribes.isFanActive && restoredTribes.snapshot == tribes.snapshot, "L2 checkpoint retains active fan input")
+        tribes.setFan(at: .init(x: 40, y: 50), active: false)
+        tribes.tick()
+        try check(!tribes.isFanActive, "Planning releases native fan input")
+        _ = tribes.rewind(seconds: 2 / tribes.ticksPerSecond)
+        try check(tribes.isFanActive, "Rewind restores fan input at the earlier tick")
+        let saveRoot = migrationRoot.appendingPathComponent("backup-source")
+        let scopedFile = saveRoot.appendingPathComponent("iOS/Checkpoints/current.json")
+        try FileManager.default.createDirectory(at: scopedFile.deletingLastPathComponent(), withIntermediateDirectories: true)
+        let savedBytes = Data("checkpoint fixture".utf8)
+        try savedBytes.write(to: scopedFile)
+        let gameData = saveRoot.appendingPathComponent("iOS/Game Data/LEVEL.DAT")
+        try FileManager.default.createDirectory(at: gameData.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try Data([1, 2, 3]).write(to: gameData)
+        defaults.set(Data([7]), forKey: "CloudLibrary.credentials")
+        let backup = try TVSaveBackup.capture(root: saveRoot, defaults: defaults)
+        if backup.files["iOS/Checkpoints/current.json"] != savedBytes { print("Backup fixture paths:", backup.files.keys.sorted(), "root:", saveRoot.path) }
+        try check(backup.files["iOS/Checkpoints/current.json"] == savedBytes, "TV backup includes exact save bytes")
+        try check(!backup.files.keys.contains(where: { $0.contains("Game Data") }), "TV backup excludes commercial content")
+        try check(backup.preferences["CloudLibrary.credentials"] == nil, "TV backup excludes service credentials")
+        let restoredBackup = try TVSaveBackup.decode(backup.encoded())
+        let restoreRoot = migrationRoot.appendingPathComponent("backup-destination")
+        try restoredBackup.restore(root: restoreRoot, defaults: defaults)
+        let restoredBytes = try Data(contentsOf: restoreRoot.appendingPathComponent("iOS/Checkpoints/current.json"))
+        try check(restoredBytes == savedBytes, "Off-device TV backup restores exact saves after cache eviction")
+        do {
+            _ = try TVSaveBackup(files: ["Mobile/../../outside.json": savedBytes], preferences: [:]).validated()
+            throw Failure.check("Unsafe TV backup path accepted")
+        } catch let error as CocoaError where error.code == .fileReadCorruptFile { count += 1 }
+        do {
+            _ = try TVSaveBackup(files: [:], preferences: ["CloudLibrary.credentials": Data()]).validated()
+            throw Failure.check("TV backup replaced service credentials")
+        } catch let error as CocoaError where error.code == .fileReadCorruptFile { count += 1 }
+        let bootstrapDefaults = UserDefaults(suiteName: suite + ".bootstrap")!
+        defer { bootstrapDefaults.removePersistentDomain(forName: suite + ".bootstrap") }
+        bootstrapDefaults.set(legacyBytes, forKey: "tv.localState")
+        let bootstrapDestination = MobileCheckpointStore(url: migrationRoot.appendingPathComponent("bootstrap/current.json"))
+        try await TVMobileMigration.migrate(defaults: bootstrapDefaults,
+            players: MobileStorage(directory: migrationRoot.appendingPathComponent("bootstrap-players")),
+            legacyCheckpoint: legacyCheckpoint, destination: bootstrapDestination)
+        let bootstrapped = try await bootstrapDestination.load()
+        try check(bootstrapped == value && bootstrapDefaults.bool(forKey: TVMobileMigration.completionKey), "Bootstrap completes migration before opening the shared library")
         print("PASS \(count) TV experience checks across Classic, native L2 and native L3 sessions")
     }
     static func l2() throws -> Lemmings2Runtime {

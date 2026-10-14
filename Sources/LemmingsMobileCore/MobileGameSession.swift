@@ -208,6 +208,7 @@ public protocol MobileGameSession: AnyObject {
     func replayDocument() throws -> Data?
     func makeReplaySession(document: Data) throws -> (any MobileGameSession)?
     func skillCursorFrame(control: Int) -> MobilePixelFrame?
+    func skillCursorRemaining(control: Int, target: Int?) -> Int?
     func applySettings(_ settings: ClassicSettings)
 
     func drainSoundCues() -> [PositionedSoundCue]
@@ -253,6 +254,10 @@ public extension MobileGameSession {
     func replayDocument() throws -> Data? { nil }
     func makeReplaySession(document: Data) throws -> (any MobileGameSession)? { nil }
     func skillCursorFrame(control: Int) -> MobilePixelFrame? { nil }
+    func skillCursorRemaining(control: Int, target: Int?) -> Int? {
+        guard snapshot.skills.indices.contains(control), !snapshot.skills[control].isUnlimited else { return nil }
+        return snapshot.skills[control].count
+    }
     func applySettings(_ settings: ClassicSettings) {}
     func drainSoundCues() -> [PositionedSoundCue] { [] }
     func drainLemmings2SoundRequests() -> [Lemmings2SoundRequest] { [] }

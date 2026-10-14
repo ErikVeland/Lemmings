@@ -24,7 +24,7 @@ import NxlvKit
         heading.frame = CGRect(x: 0, y: 360, width: 992, height: 34)
         page.body.addSubview(heading)
         let details = [
-            "Send daily use, level results and lemmings saved.",
+            "Send opted-in installs, daily use, results and lemmings saved.",
             "Include solo or Hot Seat and all-soundtrack download choices.",
             "No names, IDs, pack names or replays are sent.",
             "The shared saved total stays until the service resets it.",
@@ -117,17 +117,18 @@ import NxlvKit
         field.placeholderString = "Access token"
         field.setAccessibilityLabel("Dashboard access token")
         alert.accessoryView = field
+        alert.window.initialFirstResponder = field
         alert.addButton(withTitle: "Load")
         alert.addButton(withTitle: "Cancel")
         alert.beginSheetModal(for: owner) { [weak self] choice in
-            guard choice == .alertFirstButtonReturn, let self else { return }
             let token = field.stringValue
             field.stringValue = ""
+            guard choice == .alertFirstButtonReturn, let self else { return }
             self.loadShared(token: token)
         }
     }
 
-    private func loadShared(token: String) {
+    func loadShared(token: String) {
         notice = "Loading shared counts…"
         summary = .init(days: days, counts: [])
         shared = false
@@ -141,7 +142,7 @@ import NxlvKit
                 summary = loaded
                 shared = true
                 daysButton?.isEnabled = true
-                notice = "Opted-in installations, not unique people. Last \(days) days."
+                notice = "Installs: all-time. Activity: last \(days) days. Opted-in devices only."
             } catch {
                 notice = "Could not load shared counts. Check the token and service."
             }
@@ -161,11 +162,12 @@ import NxlvKit
         let today = Self.utcDay()
         let activeToday = counts.filter { $0.event == AnonymousTelemetryEvent.Kind.activeDay.rawValue && $0.day == today }
             .reduce(0) { $0 + $1.count }
-        card("INSTALLS TODAY", shared ? String(activeToday) : "N/A", x: 0, y: 338, in: page.body)
+        card("OPTED-IN INSTALLS", shared ? summary.optedInInstalls.map(String.init) ?? "N/A" : "N/A",
+             x: 0, y: 338, in: page.body)
         card("LEVEL STARTS", String(starts), x: 252, y: 338, in: page.body)
         card("WINS / FAILS", "\(wins) / \(fails)", x: 504, y: 338, in: page.body)
         card("ALL MUSIC CHOSEN", String(summary.total(.allSoundtracksSelected)), x: 756, y: 338, in: page.body)
-        label("SOLO  \(solo)       HOT SEAT  \(hotSeat)       MUSIC FINISHED  \(summary.total(.allSoundtracksDownloaded))",
+        label("ACTIVE TODAY  \(shared ? String(activeToday) : "N/A")    SOLO  \(solo)    HOT SEAT  \(hotSeat)    MUSIC FINISHED  \(summary.total(.allSoundtracksDownloaded))",
               x: 0, y: 287, width: 992, role: .heading, in: page.body)
         label("LEVELS WITH THE MOST FAILED OR UNFINISHED STARTS", x: 0, y: 240,
               width: 992, role: .heading, in: page.body)

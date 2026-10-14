@@ -492,35 +492,17 @@
     ]
   },
   {
-    "demand": 100.0,
-    "level": "Patience",
+    "demand": 110.0,
+    "level": "5 miles if you love Lemmings",
     "newSkills": [],
-    "rawReplayScore": 421.9826262841691,
-    "rawReplayScoreChange": 219.14882726456128,
-    "referenceStep": 3.0,
+    "rawReplayScore": 154.07184510225667,
+    "rawReplayScoreChange": -48.76195391735115,
+    "referenceStep": 5.0,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
     "step": 30,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different skill inventory",
-      "Classic retains a time limit"
-    ]
-  },
-  {
-    "demand": 110.0,
-    "level": "5 miles if you love Lemmings",
-    "newSkills": [],
-    "rawReplayScore": 154.07184510225667,
-    "rawReplayScoreChange": -267.9107811819124,
-    "referenceStep": 2.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured"
-    ],
-    "step": 31,
     "variantDifferences": []
   },
   {
@@ -534,43 +516,23 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 32,
+    "step": 31,
     "variantDifferences": []
-  },
-  {
-    "demand": 120.0,
-    "level": "Rainbow Island",
-    "newSkills": [],
-    "rawReplayScore": 301.04710203236306,
-    "rawReplayScoreChange": 164.63206406456348,
-    "referenceStep": 2.0,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 33,
-    "variantDifferences": [
-      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
-      "different population",
-      "different rescue fraction",
-      "Classic retains a time limit"
-    ]
   },
   {
     "demand": 125.0,
     "level": "The Crankshaft",
     "newSkills": [],
     "rawReplayScore": 537.2543697478992,
-    "rawReplayScoreChange": 236.20726771553615,
-    "referenceStep": 1.0,
+    "rawReplayScoreChange": 400.83933178009966,
+    "referenceStep": 3.0,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 34,
+    "step": 32,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -589,7 +551,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 35,
+    "step": 33,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -610,7 +572,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 36,
+    "step": 34,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -631,7 +593,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 37,
+    "step": 35,
     "variantDifferences": []
   },
   {
@@ -647,7 +609,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 38,
+    "step": 36,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -666,7 +628,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 39,
+    "step": 37,
     "variantDifferences": []
   },
   {
@@ -680,7 +642,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 40,
+    "step": 38,
     "variantDifferences": []
   },
   {
@@ -694,7 +656,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 41,
+    "step": 39,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -715,7 +677,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 42,
+    "step": 40,
     "variantDifferences": []
   },
   {
@@ -729,7 +691,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 43,
+    "step": 41,
     "variantDifferences": []
   },
   {
@@ -743,7 +705,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 44,
+    "step": 42,
     "variantDifferences": []
   },
   {
@@ -757,7 +719,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 45,
+    "step": 43,
     "variantDifferences": []
   },
   {
@@ -771,7 +733,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 46,
+    "step": 44,
     "variantDifferences": []
   },
   {
@@ -785,7 +747,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 47,
+    "step": 45,
     "variantDifferences": []
   },
   {
@@ -800,7 +762,7 @@
       "spatial tolerance unmeasured",
       "four or more assignments within two seconds"
     ],
-    "step": 48,
+    "step": 46,
     "variantDifferences": []
   },
   {
@@ -815,7 +777,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 49,
+    "step": 47,
     "variantDifferences": []
   },
   {
@@ -830,7 +792,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 50,
+    "step": 48,
     "variantDifferences": []
   },
   {
@@ -845,7 +807,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 51,
+    "step": 49,
     "variantDifferences": [
       "Bundled Classic conversion of the Macintosh exclusive, rather than the original Macintosh engine.",
       "Classic conversion retains a four-minute time limit; Redux has no time limit."
@@ -863,7 +825,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 52,
+    "step": 50,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different rescue fraction",
@@ -883,7 +845,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 53,
+    "step": 51,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "Classic retains a time limit"
@@ -901,7 +863,7 @@
       "spatial tolerance unmeasured",
       "four or more assignments within two seconds"
     ],
-    "step": 54,
+    "step": 52,
     "variantDifferences": []
   },
   {
@@ -916,7 +878,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 55,
+    "step": 53,
     "variantDifferences": []
   },
   {
@@ -931,7 +893,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 56,
+    "step": 54,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -950,7 +912,7 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 57,
+    "step": 55,
     "variantDifferences": []
   },
   {
@@ -965,7 +927,7 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 58,
+    "step": 56,
     "variantDifferences": []
   },
   {
@@ -979,7 +941,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 59,
+    "step": 57,
     "variantDifferences": []
   },
   {
@@ -993,7 +955,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 60,
+    "step": 58,
     "variantDifferences": []
   },
   {
@@ -1007,7 +969,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 61,
+    "step": 59,
     "variantDifferences": []
   },
   {
@@ -1021,7 +983,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 62,
+    "step": 60,
     "variantDifferences": []
   },
   {
@@ -1036,7 +998,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 63,
+    "step": 61,
     "variantDifferences": []
   },
   {
@@ -1050,7 +1012,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 64,
+    "step": 62,
     "variantDifferences": []
   },
   {
@@ -1064,7 +1026,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 65,
+    "step": 63,
     "variantDifferences": []
   },
   {
@@ -1080,7 +1042,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 66,
+    "step": 64,
     "variantDifferences": []
   },
   {
@@ -1095,7 +1057,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 67,
+    "step": 65,
     "variantDifferences": []
   },
   {
@@ -1111,7 +1073,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 68,
+    "step": 66,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -1129,7 +1091,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 69,
+    "step": 67,
     "variantDifferences": []
   },
   {
@@ -1146,7 +1108,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 70,
+    "step": 68,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "Classic retains a time limit",
@@ -1166,7 +1128,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 71,
+    "step": 69,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -1185,7 +1147,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 72,
+    "step": 70,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -1204,7 +1166,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 73,
+    "step": 71,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -1213,19 +1175,37 @@
     ]
   },
   {
+    "demand": 237.5,
+    "level": "Patience",
+    "newSkills": [],
+    "rawReplayScore": 421.9826262841691,
+    "rawReplayScoreChange": 185.0336798781723,
+    "referenceStep": 0.5,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured"
+    ],
+    "step": 72,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different skill inventory",
+      "Classic retains a time limit"
+    ]
+  },
+  {
     "demand": 250.0,
     "level": "One way or another",
     "newSkills": [],
     "rawReplayScore": 397.0893627450981,
-    "rawReplayScoreChange": 160.14041633910128,
-    "referenceStep": 3.0,
+    "rawReplayScoreChange": -24.89326353907103,
+    "referenceStep": 2.5,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 74,
+    "step": 73,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -1244,7 +1224,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 75,
+    "step": 74,
     "variantDifferences": []
   },
   {
@@ -1259,7 +1239,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 76,
+    "step": 75,
     "variantDifferences": []
   },
   {
@@ -1273,7 +1253,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 77,
+    "step": 76,
     "variantDifferences": []
   },
   {
@@ -1287,7 +1267,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 78,
+    "step": 77,
     "variantDifferences": []
   },
   {
@@ -1301,7 +1281,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 79,
+    "step": 78,
     "variantDifferences": []
   },
   {
@@ -1315,16 +1295,36 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 80,
+    "step": 79,
     "variantDifferences": []
+  },
+  {
+    "demand": 257.5,
+    "level": "Rainbow Island",
+    "newSkills": [],
+    "rawReplayScore": 301.04710203236306,
+    "rawReplayScoreChange": 187.3903328645667,
+    "referenceStep": 0.5,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 80,
+    "variantDifferences": [
+      "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
+      "different population",
+      "different rescue fraction",
+      "Classic retains a time limit"
+    ]
   },
   {
     "demand": 260.0,
     "level": "Perseverance",
     "newSkills": [],
     "rawReplayScore": 320.7689088450411,
-    "rawReplayScoreChange": 207.11213967724473,
-    "referenceStep": 1.0,
+    "rawReplayScoreChange": 19.72180681267804,
+    "referenceStep": 0.5,
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",

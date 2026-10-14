@@ -28,7 +28,7 @@ if [[ -f "$project_dir/Tools/TVExperienceAudit/main.swift" ]]; then
 PLIST
     ln -sfn "$project_dir/.build/mac-artwork/export/lemmings" "$audit_contents/Resources/MacArtwork/lemmings"
     swiftc -swift-version 6 -parse-as-library -module-cache-path "$build_dir/ModuleCache" -I "$build_dir/frozen/Modules" \
-        "$project_dir/Tools/TVExperienceAudit/main.swift" "$build_dir"/frozen/{NxlvKit,LemmingsAppCore,LemmingsMobileCore,LemmingsTVCore,LemmingsGameArt}.build/*.swift.o -o "$audit_contents/MacOS/audit"
+        "$project_dir"/Tools/TVExperienceAudit/*.swift "$build_dir"/frozen/{NxlvKit,LemmingsAppCore,LemmingsMobileCore,LemmingsTVCore,LemmingsGameArt}.build/*.swift.o -o "$audit_contents/MacOS/audit"
     LEMMINGS_TEST_WINDOWS=offscreen LEMMINGS_TEST_AUDIO=muted python3 "$project_dir/Tools/UITestRunner/run.py" "$audit_contents/MacOS/audit" "$project_dir"
 fi
 if [[ "${TV_EXPORT_ASSETS:-0}" = 1 ]]; then

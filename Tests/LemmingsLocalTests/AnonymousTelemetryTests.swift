@@ -3,6 +3,7 @@ import AppKit
 import Foundation
 @testable import LemmingsAppCore
 import NxlvKit
+import LemmingsGameArt
 import XCTest
 @testable import LemmingsLocal
 
@@ -10,9 +11,11 @@ import XCTest
     var requests: [URLRequest] = []
     var responseStatus = 204
     var responseData = Data()
+    var failure: URLError?
 
     func data(for request: URLRequest) async throws -> (Data, URLResponse) {
         requests.append(request)
+        if let failure { throw failure }
         let response = HTTPURLResponse(url: request.url!, statusCode: responseStatus,
                                        httpVersion: "HTTP/1.1", headerFields: nil)!
         return (responseData, response)
@@ -118,16 +121,97 @@ final class AnonymousTelemetryTests: XCTestCase {
         XCTAssertTrue(transport.requests.isEmpty)
         telemetry.setSharing(true)
         telemetry.start(level, hotSeat: false, attemptID: UUID())
-        for _ in 0..<10 where transport.requests.count < 2 { await Task.yield() }
-        XCTAssertEqual(transport.requests.count, 2)
+        for _ in 0..<20 where transport.requests.count < 3 { await Task.yield() }
+        XCTAssertEqual(transport.requests.count, 3)
         let bodies = try transport.requests.map { try XCTUnwrap($0.httpBody) }
         let messages = try bodies.map { try XCTUnwrap(JSONSerialization.jsonObject(with: $0) as? [String: Any]) }
-        XCTAssertEqual(Set(messages.compactMap { $0["event"] as? String }), ["active_day", "level_start"])
+        XCTAssertEqual(Set(messages.compactMap { $0["event"] as? String }), ["installation_opt_in", "active_day", "level_start"])
         XCTAssertFalse(String(describing: messages).contains("private-pack"))
         telemetry.setSharing(false)
         telemetry.start(level, hotSeat: false, attemptID: UUID())
         await Task.yield()
-        XCTAssertEqual(transport.requests.count, 2)
+        XCTAssertEqual(transport.requests.count, 3)
+    }
+
+    @MainActor func testOptInCountsInstallationWithoutGameplayAndPersistsAcrossRelaunch() async throws {
+        let suite = UUID().uuidString
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let transport = FakeTelemetryTransport()
+        let endpoint = URL(string: "https://counts.example.org")!
+        let telemetry = AnonymousTelemetry(defaults: defaults, endpoint: endpoint, transport: transport)
+        telemetry.setSharing(true)
+        telemetry.recordActiveDay()
+        for _ in 0..<20 { await Task.yield() }
+        XCTAssertEqual(telemetry.localSummary().total(.installationOptIn), 1)
+        XCTAssertEqual(telemetry.localSummary().total(.levelStart), 0)
+        telemetry.setSharing(false)
+        telemetry.setSharing(true)
+        telemetry.clearLocalCounts()
+        let relaunched = AnonymousTelemetry(defaults: defaults, endpoint: endpoint, transport: transport)
+        relaunched.recordActiveDay()
+        for _ in 0..<20 { await Task.yield() }
+        let events = try transport.requests.map { request in
+            try XCTUnwrap(JSONSerialization.jsonObject(with: XCTUnwrap(request.httpBody)) as? [String: Any])
+        }
+        XCTAssertEqual(events.filter { $0["event"] as? String == "installation_opt_in" }.count, 1)
+        let registration = try XCTUnwrap(events.first { $0["event"] as? String == "installation_opt_in" })
+        XCTAssertEqual(Set(registration.keys), ["v", "event", "game", "level", "mode"])
+        XCTAssertTrue(registration["game"] is NSNull)
+        XCTAssertTrue(registration["level"] is NSNull)
+        XCTAssertTrue(registration["mode"] is NSNull)
+    }
+
+    @MainActor func testExistingOptInRegistersEvenIfActiveDayWasAlreadyCounted() async {
+        let suite = UUID().uuidString
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        defaults.set(true, forKey: AnonymousTelemetry.consentKey)
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.dateFormat = "yyyy-MM-dd"
+        defaults.set(formatter.string(from: Date()), forKey: "AnonymousTelemetryActiveDayV1")
+        let transport = FakeTelemetryTransport()
+        let telemetry = AnonymousTelemetry(defaults: defaults,
+            endpoint: URL(string: "https://counts.example.org")!, transport: transport)
+        telemetry.recordActiveDay()
+        for _ in 0..<20 { await Task.yield() }
+        XCTAssertEqual(telemetry.localSummary().total(.installationOptIn), 1)
+        XCTAssertEqual(telemetry.localSummary().total(.activeDay), 0)
+        XCTAssertEqual(transport.requests.count, 1)
+    }
+
+    @MainActor func testUnacknowledgedRegistrationRetriesAfterRelaunch() async {
+        for offline in [false, true] {
+            let suite = UUID().uuidString
+            let defaults = UserDefaults(suiteName: suite)!
+            defer { defaults.removePersistentDomain(forName: suite) }
+            let transport = FakeTelemetryTransport()
+            transport.responseStatus = 503
+            transport.failure = offline ? URLError(.notConnectedToInternet) : nil
+            let endpoint = URL(string: "https://counts.example.org")!
+            let telemetry = AnonymousTelemetry(defaults: defaults, endpoint: endpoint, transport: transport)
+            telemetry.setSharing(true)
+            for _ in 0..<20 { await Task.yield() }
+            telemetry.setSharing(false)
+            transport.requests.removeAll()
+            telemetry.recordActiveDay()
+            for _ in 0..<20 { await Task.yield() }
+            XCTAssertTrue(transport.requests.isEmpty)
+            transport.responseStatus = 204
+            transport.failure = nil
+            defaults.set(true, forKey: AnonymousTelemetry.consentKey)
+            let relaunched = AnonymousTelemetry(defaults: defaults, endpoint: endpoint, transport: transport)
+            relaunched.recordActiveDay()
+            relaunched.recordActiveDay()
+            for _ in 0..<20 { await Task.yield() }
+            XCTAssertEqual(transport.requests.count, 1)
+            XCTAssertEqual(relaunched.localSummary().total(.installationOptIn), 1)
+            relaunched.recordActiveDay()
+            for _ in 0..<20 { await Task.yield() }
+            XCTAssertEqual(transport.requests.count, 1)
+        }
     }
 
     @MainActor func testPlainHTTPIsNeverEnabled() {
@@ -174,7 +258,7 @@ final class AnonymousTelemetryTests: XCTestCase {
             XCTFail("A declined player must not contact the count service")
         } catch { XCTAssertTrue(transport.requests.isEmpty) }
         telemetry.setSharing(true)
-        for _ in 0..<10 where transport.requests.isEmpty { await Task.yield() }
+        for _ in 0..<20 where transport.requests.count < 2 { await Task.yield() }
         transport.requests.removeAll()
         let total = try await telemetry.publicSavedTotal()
         XCTAssertEqual(total, 12_345)
@@ -198,7 +282,7 @@ final class AnonymousTelemetryTests: XCTestCase {
         let telemetry = AnonymousTelemetry(defaults: defaults,
             endpoint: URL(string: "https://counts.example.org")!, transport: transport)
         telemetry.setSharing(true)
-        for _ in 0..<10 where transport.requests.isEmpty { await Task.yield() }
+        for _ in 0..<20 where transport.requests.count < 2 { await Task.yield() }
         transport.requests.removeAll()
         let level = makeLevel(game: "lemmings", levelID: "level-0", packID: "private-pack")
         let attempt = UUID()
@@ -282,12 +366,16 @@ final class AnonymousTelemetryTests: XCTestCase {
             endpoint: URL(string: "https://counts.example.org")!, transport: transport)
         let summary = try await telemetry.sharedSummary(token: "test-owner-token", days: 7)
         XCTAssertEqual(summary.total(.levelFail), 3)
+        XCTAssertNil(summary.optedInInstalls)
         let request = try XCTUnwrap(transport.requests.first)
         XCTAssertEqual(request.url?.path, "/v1/dashboard")
         XCTAssertEqual(URLComponents(url: try XCTUnwrap(request.url), resolvingAgainstBaseURL: false)?
             .queryItems?.first?.value, "7")
         XCTAssertEqual(request.value(forHTTPHeaderField: "Authorization"), "Bearer test-owner-token")
         XCTAssertNil(request.httpBody)
+        transport.responseData = Data("{\"days\":7,\"counts\":[],\"optedInInstalls\":42}".utf8)
+        let currentSummary = try await telemetry.sharedSummary(token: "test-owner-token", days: 7)
+        XCTAssertEqual(currentSummary.optedInInstalls, 42)
     }
 
     @MainActor func testDashboardRendersAndButtonsHaveTargets() throws {
@@ -326,6 +414,97 @@ final class AnonymousTelemetryTests: XCTestCase {
             page.displayIgnoringOpacity(page.bounds, in: NSGraphicsContext(bitmapImageRep: bitmap)!)
             try XCTUnwrap(bitmap.representation(using: .png, properties: [:]))
                 .write(to: URL(fileURLWithPath: path))
+        }
+    }
+
+    @MainActor func testSharedDashboardShowsLifetimeInstallsAndDailyActivity() async throws {
+        _ = NSApplication.shared
+        let suite = UUID().uuidString
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let transport = FakeTelemetryTransport()
+        transport.responseStatus = 200
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.dateFormat = "yyyy-MM-dd"
+        transport.responseData = Data("""
+            {"days":30,"optedInInstalls":12345,"counts":[
+            {"day":"\(formatter.string(from: Date()))","event":"active_day","game":null,"level":null,"mode":null,"count":23}]}
+            """.utf8)
+        let dashboard = TelemetryDashboard(telemetry: AnonymousTelemetry(defaults: defaults,
+            endpoint: URL(string: "https://counts.example.org")!, transport: transport))
+        let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1120, height: 720),
+                              styleMask: [.titled], backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
+        window.contentView = NSView(frame: NSRect(x: 0, y: 0, width: 1120, height: 720))
+        GameScreen.shared.gameWindow = window
+        defer { GameScreen.shared.dismissAll(); GameScreen.shared.gameWindow = nil; window.close() }
+        dashboard.show(owner: window)
+        let page = try XCTUnwrap(GameScreen.shared.controllerPage(in: window) as? GameMenuPage)
+        func views(in root: NSView) -> [NSView] { [root] + root.subviews.flatMap(views) }
+        dashboard.loadShared(token: "test-owner-token")
+        for _ in 0..<20 {
+            if views(in: page).compactMap({ $0 as? GameLabel }).contains(where: { $0.stringValue == "12345" }) { break }
+            try await Task.sleep(nanoseconds: 10_000_000)
+        }
+        page.layoutSubtreeIfNeeded()
+        let labels = views(in: page).compactMap { $0 as? GameLabel }
+        XCTAssertTrue(labels.contains { $0.stringValue == "OPTED-IN INSTALLS" })
+        XCTAssertTrue(labels.contains { $0.stringValue == "12345" })
+        XCTAssertTrue(labels.contains { $0.stringValue.contains("ACTIVE TODAY  23") })
+        for control in views(in: page).compactMap({ $0 as? NSButton }) where control.isEnabled {
+            let rect = control.convert(control.bounds, to: page)
+            XCTAssertTrue(page.bounds.contains(rect))
+            let hit = page.hitTest(NSPoint(x: rect.midX, y: rect.midY))
+            XCTAssertTrue(hit === control || hit?.isDescendant(of: control) == true)
+        }
+        if let path = ProcessInfo.processInfo.environment["LEMMINGS_TELEMETRY_SHARED_SCREENSHOT"] {
+            func capture() throws {
+                let bitmap = try XCTUnwrap(page.bitmapImageRepForCachingDisplay(in: page.bounds))
+                page.displayIgnoringOpacity(page.bounds, in: NSGraphicsContext(bitmapImageRep: bitmap)!)
+                try XCTUnwrap(bitmap.representation(using: .png, properties: [:]))
+                    .write(to: URL(fileURLWithPath: path))
+            }
+            if let directory = ProcessInfo.processInfo.environment["LEMMINGS_TEST_MENU_ARTWORK"],
+               let interface = ClassicMacUserInterface(artwork: try ClassicMacArtwork(directory: URL(fileURLWithPath: directory))) {
+                try GameMenuArtwork.withRenderer(MacInterfaceRenderer(interface: interface), capture)
+            } else { try capture() }
+        }
+    }
+
+    @MainActor func testMobileDashboardShowsLifetimeCountAndUnavailableStates() throws {
+        let states: [(String, Bool, [String: Int], String)] = [
+            ("shared", true, ["installs": 12345, "starts": 120], "12345"),
+            ("local", false, ["installs": 12345], "N/A"),
+            ("older-service", true, [:], "N/A"),
+        ]
+        for (state, shared, counts, value) in states {
+            let page = MobileInformationArt.insights(counts: counts, shared: shared, days: 7, sharingAvailable: true)
+            XCTAssertEqual(page.rows.first?.title, "Opted-in installs (all-time): " + value)
+            XCTAssertFalse(try XCTUnwrap(page.rows.first).enabled)
+            for (device, size) in [("phone", CGSize(width: 390, height: 844)),
+                                   ("tablet", CGSize(width: 1024, height: 768)),
+                                   ("tv", CGSize(width: 1920, height: 1080))] {
+                let layout = GameFrontEnd.layout(page, width: size.width, minimumHeight: size.height)
+                for target in layout.targets {
+                    XCTAssertTrue(CGRect(origin: .zero, size: layout.size).contains(target.frame))
+                    XCTAssertEqual(layout.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)),
+                                   target.action.enabled ? target.action.id : nil)
+                }
+                if let directory = ProcessInfo.processInfo.environment["LEMMINGS_TEST_MENU_ARTWORK"],
+                   let output = ProcessInfo.processInfo.environment["LEMMINGS_TELEMETRY_MOBILE_CAPTURES"] {
+                    let typography = try XCTUnwrap(GameMenuTypography(directory: URL(fileURLWithPath: directory)))
+                    let context = try XCTUnwrap(CGContext(data: nil, width: Int(layout.size.width), height: Int(layout.size.height),
+                        bitsPerComponent: 8, bytesPerRow: Int(layout.size.width) * 4, space: CGColorSpaceCreateDeviceRGB(),
+                        bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+                    context.translateBy(x: 0, y: layout.size.height); context.scaleBy(x: 1, y: -1)
+                    GameFrontEnd.draw(page, layout: layout, typography: typography, in: context)
+                    let bitmap = NSBitmapImageRep(cgImage: try XCTUnwrap(context.makeImage()))
+                    try XCTUnwrap(bitmap.representation(using: .png, properties: [:]))
+                        .write(to: URL(fileURLWithPath: output).appendingPathComponent("\(device)-\(state).png"))
+                }
+            }
         }
     }
 

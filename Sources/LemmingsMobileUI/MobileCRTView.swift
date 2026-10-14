@@ -1,4 +1,4 @@
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import LemmingsGameArt
 import LemmingsMobileCore
 import MetalKit
@@ -182,7 +182,9 @@ import UIKit
         uniform.colorLevels = tubeSettings.colorLevels
         uniform.hdrHeadroom = settings.hdEffectsEnabled && !MobileDevicePerformance.constrained
             ? Float(max(1, min(8, window?.screen.currentEDRHeadroom ?? 1))) : 1
+#if os(iOS)
         (layer as? CAMetalLayer)?.wantsExtendedDynamicRangeContent = settings.hdEffectsEnabled && uniform.hdrHeadroom > 1
+#endif
     }
 
     override func draw(_ rect: CGRect) {

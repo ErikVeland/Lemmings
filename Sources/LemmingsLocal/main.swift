@@ -1002,6 +1002,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     levelsMenu = levels
     fileMenu.autoenablesItems = false
 
+    let editMenu = addMenu("Edit")
+    TextEditingMenu.populate(editMenu)
+
     let viewMenu = addMenu("View")
     _ = add(viewMenu, "Zoom In", #selector(zoomIn), "+")
     _ = add(viewMenu, "Zoom Out", #selector(zoomOut), "-")
@@ -5815,7 +5818,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let name = savedSequence.source == .playlist(LearningJourney.playlistID) ? "JOURNEY" : "SESSION"
       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
         profileID: ArcadeStore.shared.records.activeProfileID)
-      items.append(HomeMenuItem(title: "RESUME " + name + " - " + players,
+      items.append(HomeMenuItem(title: "CONTINUE " + name + " - " + players,
         action: .resumeSequence))
     }
     if menuRecovery != nil {
@@ -5825,7 +5828,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       items.append(HomeMenuItem(title: (savedSequence == nil ? "RESUME - " : "RESUME LEVEL - ") + initials, action: .resume))
     }
     items.append(HomeMenuItem(
-      title: "\(Self.allLemmingsMenuTitle)  \(LearningJourneyLibrary.journey.flatMap { journey in try? playlistStore().learningProgress.solvedCount(in: journey) } ?? 0)/\(LearningJourneyLibrary.journey?.lessons.count ?? 0)",
+      title: "\(Self.allLemmingsMenuTitle)  \(LearningJourneyLibrary.journey.flatMap { journey in try? playlistStore().learningProgress.solvedCount(in: journey) } ?? 0)/\(LearningJourneyLibrary.journey?.lessons.count ?? 0) SOLVED",
       action: .fullQuest))
     items += HomeContentFamily.allCases.map {
       HomeMenuItem(title: homeContentRow($0), action: .browse($0))

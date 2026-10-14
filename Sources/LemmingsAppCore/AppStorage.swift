@@ -42,7 +42,12 @@ public struct AppStorage: @unchecked Sendable {
 
     /// The real locations of the running app.
     public static func current(bundle: Bundle = .main) -> AppStorage {
-        let support = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+        #if os(tvOS)
+        let directory: FileManager.SearchPathDirectory = .cachesDirectory
+        #else
+        let directory: FileManager.SearchPathDirectory = .applicationSupportDirectory
+        #endif
+        let support = FileManager.default.urls(for: directory, in: .userDomainMask)[0]
         let identifier = bundle.bundleIdentifier ?? ""
         return AppStorage(applicationSupport: support.appendingPathComponent(folderName),
                           resources: bundle.resourceURL ?? bundle.bundleURL,

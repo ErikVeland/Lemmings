@@ -5,12 +5,25 @@ features across Classic, Lemmings 2 and Lemmings 3. Touch layout may adapt the
 presentation, but it must not silently drop actions or bypass player-ready
 boundaries. A Classic device beta does not establish three-game parity.
 
-## Current Classic port source
+## Current shared frontend source
 
-The 13 October source implements the Classic scope in the
-[iPad feature parity plan](IPadFeatureParityPlan.md). Lemmings 2 and Lemmings 3
-mobile campaigns and renderers remain owner-deferred. NeoLemmix remains a
-separate engine decision. These exclusions do not establish three-game parity.
+The 14 October source also connects L2/L3 native libraries, renderers, campaign
+records and checkpoints, plus supported NeoLemmix Preview import/playback.
+Compatible player-owned data enables these entries. Journey generation currently
+accepts Classic entries. The normal Apple TV app now uses this same frontend,
+with TV focus, remote/controller and LAN file-transfer adaptations. See the
+[TV parity register](../Apps/UltimateLemmingsTV/IOSParity.md) for implementation
+and acceptance boundaries.
+
+The dated increments below are historical evidence. Later source changes
+supersede their earlier statements that sequels, collections or audio are absent.
+Source coverage does not close physical-device, native-focus, service, audio,
+engine-fidelity or release-package gates.
+
+The shared Classic frontend implements the scope in the
+[iPad feature parity plan](IPadFeatureParityPlan.md). The current
+[2.0 release gate](ReleaseReadiness/2.0ReleaseGate-2026-10-14.md) records the
+subsequent sequel and supported NeoLemmix source work and its remaining limits.
 
 | Feature | Current source |
 | --- | --- |
@@ -569,7 +582,8 @@ campaigns remain unavailable. See [pause behaviour and validation](MobilePauseSc
 
 ## Compact iPad menus and bounded effects
 
-Home uses a centered grid, with an extra column on short tablet layouts. Results
+Home uses two centered columns, separating journey/resume actions from game libraries.
+Collections and Playlists share a full-width bottom entry below Profiles and Records. Results
 place the snapshot beside rescue/time statistics and keep the action grid together.
 New time records include their time. A single tappable award slot cycles through
 earned achievements and record notices; its detail page has Back and Next Award.
@@ -593,9 +607,17 @@ its authored limits. L2/L3 adapters expose no release-rate control.
 Mobile audio uses 12 spatial voices and at most three concurrent rescue sounds
 on pre-Apple7 GPUs, versus 24 and six on newer GPUs. Desktop defaults are unchanged.
 Overlapping rescue silhouettes share one glow, with at most two on older devices.
-Older devices omit scenery glow and cap speed-effect rendering at 180,000 pixels
-and 20 Hz. Newer devices cap the soft overlay at 720,000 pixels. These limits do
-not alter simulation rules, rescue counts or the sharp game image.
+Older devices omit scenery glow and the full-screen speed shader. Other soft effects
+are capped at 180,000 pixels and 20 Hz; newer devices cap the overlay at 720,000 pixels.
+Fast-forward drains accumulated sound cues once per displayed frame. These limits
+do not alter simulation rules, rescue counts or the sharp game image.
+
+Touch speed holds retain the reached tier on release; the next tap resets to 1x.
+Cancelled holds restore the prior speed. Keyboard and controller behaviour is unchanged.
+Mobile soundtrack choices now share rescue-target transitions without waiting for the
+opening section. The title card identifies the actual recording/arrangement. Transitions
+still require an available higher-energy variant and alternate soundtracks enabled;
+the existing all-rescued-level exception remains.
 
 Validation: the iOS Xcode build and 36 focused headless tests pass, covering saved
 journey selection/ownership, Hot Seat, frame pacing, rate double taps, holds,
@@ -609,6 +631,17 @@ The broader `--current-fixes` bitmap check fails its existing replay-panel
 containment/overlap assertion in `Tools/IOSMenuAudit/current-fixes.swift`; the
 focused `--rescue-budget` check passes. Physical UIKit gestures, VoiceOver,
 sustained iPad 8 frame rate and audible sound balance remain manual checks.
-Classic, L2 and L3 use the shared mobile effects/results paths, but L2/L3 campaigns
-remain unavailable in the iOS library and journeys currently accept Classic entries.
-Hot Seat handovers still wait at Ready.
+Classic, L2 and L3 use the shared mobile effects/results paths. The merged mobile
+campaign work now supplies L2/L3 libraries and native renderers plus NeoLemmix
+import/playback (still labelled Preview); entries open after importing compatible
+player-owned data. Journeys currently accept Classic entries. Hot Seat handovers
+still wait at Ready. See the current release gate for device and full-pack validation gaps.
+
+Classic liquid bodies now cover their authored tile depth behind overlapping
+bridges and crystal terrain, even when Macintosh artwork supplies only a short
+wave sprite. Terrain below the tile still seals the pool; collision masks are unchanged.
+The asset-backed regression checks 219,806 body pixels across all five original
+campaign styles and exports You Live and Lem for visual inspection. Synthetic
+checks cover water/lava/acid colours, bridge supports, tile bounds and floors at
+1x and 2x. The iOS build passes. These checks do not assert liquid-art parity for
+the separately rendered L2, L3 or NeoLemmix engines.

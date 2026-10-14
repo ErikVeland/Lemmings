@@ -16,7 +16,7 @@ public enum MobileInformationArt {
               footer: [.init("welcomeContinue", "Continue", primary: true)])
     }
     public static func telemetryConsent() -> GameFrontEnd.Page {
-        .init(title: "Share play counts?", details: ["Daily use", "Level results", "Saved lemmings",
+        .init(title: "Share play counts?", details: ["Opted-in installs", "Daily use", "Level results", "Saved lemmings",
               "Solo / Hot Seat", "Soundtrack use", "No names or IDs", "No pack names", "No replays", "Service sees IP"],
               footer: [.init("telemetryNo", "Not now"), .init("telemetryYes", "Share counts", primary: true)])
     }
@@ -26,10 +26,12 @@ public enum MobileInformationArt {
                      ("abandoned", "Unfinished"), ("saved", "Lemmings saved"),
                      ("solo", "Solo starts"), ("hotSeat", "Hot Seat starts"),
                      ("music", "All music chosen"), ("downloads", "Music downloaded")]
+        let installs = shared ? counts["installs"].map(String.init) ?? "N/A" : "N/A"
+        let rows: [GameFrontEnd.Action] = [.init("count.installs", "Opted-in installs (all-time): " + installs, enabled: false)]
+            + names.map { key, title in .init("count." + key, "\(title): \(counts[key, default: 0])", enabled: false) }
         return .init(title: "Play Insights", subtitle: !notice.isEmpty ? notice : loading ? "Loading..." :
-            shared ? "Shared: \(days) days" : "This device", rows: names.map { key, title in
-                .init("count." + key, "\(title): \(counts[key, default: 0])", enabled: false)
-            }, footer: [.init("insightsLocal", "This device", selected: !shared),
+            shared ? "Shared: \(days) days" : "This device", rows: rows,
+            footer: [.init("insightsLocal", "This device", selected: !shared),
                      .init("insightsDays", "Last \(days) days", enabled: sharingAvailable),
                      .init("insightsShared", "Load shared", enabled: sharingAvailable && !loading),
                      .init("insightsClear", "Clear local counts"), .init("settingsGroup.privacy", "Back")])

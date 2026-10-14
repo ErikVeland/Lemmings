@@ -10,6 +10,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
     private enum Input: Codable, Sendable {
         case assign(tick: Int, control: Int, target: Int)
         case endRun(tick: Int)
+        case fan(tick: Int, x: Int, y: Int, active: Bool)
     }
 
     private struct Checkpoint: Codable, Sendable {
@@ -30,6 +31,11 @@ public final class Lemmings2MobileSession: MobileGameSession {
     public let levelFingerprint: String
     public let levelSize: MobileSize
     public let ticksPerSecond = Lemmings2Runtime.ticksPerSecond
+
+    public var skillCursorFrames: [MobilePixelFrame?] = []
+    public func skillCursorFrame(control: Int) -> MobilePixelFrame? {
+        skillCursorFrames.indices.contains(control) ? skillCursorFrames[control] : nil
+    }
 
     private let initial: Lemmings2Runtime
     private let renderer: Lemmings2MobileRenderer?
@@ -85,6 +91,26 @@ public final class Lemmings2MobileSession: MobileGameSession {
         inputs.filter { if case .assign = $0 { return true }; return false }.count
     }
     public var supportsRewind: Bool { true }
+
+    public var isFanActive: Bool {
+        for input in inputs.reversed() {
+            if case let .fan(_, _, _, active) = input { return active }
+        }
+        return false
+    }
+
+    /// Fan input belongs to the native replay, so checkpoints and rewinds keep its physics.
+    public func setFan(at point: MobilePoint, active: Bool) {
+        guard !runtime.isComplete, !runtime.isNuking || !active,
+              point.x.isFinite, point.y.isFinite else { return }
+        let x = Int(min(levelSize.width - 1, max(0, point.x)))
+        let y = Int(min(levelSize.height - 1, max(0, point.y)))
+        if let previous = inputs.last, case let .fan(_, oldX, oldY, oldActive) = previous,
+           oldActive == active, (!active || (oldX == x && oldY == y)) { return }
+        if !active && !isFanActive { return }
+        runtime.setFan(x: x, y: y, active: active)
+        inputs.append(.fan(tick: runtime.tick, x: x, y: y, active: active))
+    }
 
     public var snapshot: MobileGameSnapshot {
         MobileGameSnapshot(
@@ -268,6 +294,8 @@ public final class Lemmings2MobileSession: MobileGameSession {
                     guard !restored.isNuking else { throw MobileSessionError.invalidCheckpoint }
                     restoredBeforeEndRun = restored
                     restored.nuke()
+                case let .fan(_, x, y, active):
+                    restored.setFan(x: x, y: y, active: active)
                 }
                 inputIndex += 1
             }
@@ -284,7 +312,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
 
     private func inputTick(_ input: Input) -> Int {
         switch input {
-        case let .assign(tick, _, _), let .endRun(tick): tick
+        case let .assign(tick, _, _), let .endRun(tick), let .fan(tick, _, _, _): tick
         }
     }
 
@@ -322,6 +350,16 @@ public final class Lemmings3MobileSession: MobileGameSession {
     public let ticksPerSecond = Lemmings3Runtime.ticksPerSecond
     public let panelFrame: MobilePixelFrame?
     public let directionPickerFrames: [MobilePixelFrame]
+
+    public func skillCursorFrame(control: Int) -> MobilePixelFrame? {
+        guard (0..<5).contains(control), let panelFrame else { return nil }
+        return try? panelFrame.cropped(around: .init(x: Double(control * 35) + 17.5, y: 20), width: 35, height: 40)
+    }
+    public func skillCursorRemaining(control: Int, target: Int?) -> Int? {
+        guard Lemmings3Runtime.Action.allCases.indices.contains(control),
+              Lemmings3Runtime.Action.allCases[control] == .use, let target else { return nil }
+        return runtime.lemmings.first { $0.id == target && $0.active }?.quantity
+    }
 
     private let initial: Lemmings3Runtime
     private let renderer: Lemmings3MobileRenderer?

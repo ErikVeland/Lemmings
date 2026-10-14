@@ -1,129 +1,103 @@
 # Apple TV experience
 
-Ultimate Lemmings has a native tvOS app target for playing from the sofa with a
-Siri Remote or game controller. Classic has a playable development flow. The
-shared controls also run against the native Lemmings 2 and Lemmings 3 sessions.
-Their TV campaign libraries and complete renderers remain release gates.
+The native tvOS app now opens the same frontend as iOS. The TV entry point calls
+`LemmingsMobileApplication`; the shared library and game controllers provide the
+features. TV adapts focus, remote/controller input and file transfer. It does not
+maintain a smaller product menu or separate progression implementation.
 
-## Presentation
+The current source exposes the shared official/fan libraries, player-owned
+L2/L3 and supported NeoLemmix Preview imports, learning and hints, collections,
+profiles, Hot Seat, records, replay, settings, soundtrack and service pages.
+Content entries require the same compatible data as iOS. Learning journeys
+currently accept Classic entries. Native engine fidelity and device acceptance
+remain separate gates.
 
-The TV interface uses the shipped Macintosh lettering, portraits and stone
-controls. UIKit supplies focus, activation and accessibility over the exact
-bitmap control rectangles. Focus has a white outline, selection has an
-underline, and the primary action has a green rim and forward marker.
-Disabled actions remain visible and dimmed.
+## Presentation and input
 
-Menus reserve space around their edges for focus outlines and cropped TV edges.
-Controls use whole pixel scales. Large menu text preserves the same lettering
-across peer actions. Result buttons separate the action from the incoming
-player's name when large text needs more room.
+The app uses the shared bitmap fonts, portraits, stone controls, native game
+renderers, HUD, pause overview and result pages. Native UIKit focus supplies a
+white outline over the exact bitmap action targets. Standard, Large and Extra
+Large menu sizes use 2x, 3x and 4x whole-pixel scales. Long pages scroll. Pause
+keeps Resume pinned. Transfer pages also scroll so Back remains reachable.
 
-The library opens by game, rank and level. A briefing frames the playable area
-and shows the native rescue requirement and time limit. Start or Ready begins
-the shared 3–2–1 countdown. Saved runs wait at Resume and skip the fresh countdown.
-Pause or single-step cancels automatic start. App interruptions hold it.
+Menus use native TV focus. Carousel left/right selects a level and Select opens
+it. Back returns through the shared navigation. The system keyboard supplies
+search, player names, playlist names and cloud linking codes.
 
-The playfield has a compact skill strip, a larger selected skill name, rescue
-and time counters, player identity and a minimap. Native Macintosh gameplay
-artwork is the default. The level's own renderer and assignment rules remain
-authoritative.
+Gameplay uses the shared controller bindings. One device owns the attempt
+through pause menus until it disconnects or the attempt ends. Page changes
+require neutral Select before another activation. Controller cycling locks an
+actor ID; crossing neighbours cannot steal the target. A missing or offscreen
+locked actor stays unavailable until deliberate aiming or selection.
 
-## Controls
+Siri Remote aims through its directional pad and assigns with Click. Play/Pause
+opens pause; Back opens the pause menu. Game controllers use aim/pan sticks,
+shoulders for skills and the shared modifier actions. Settings supports button
+remapping, stick swapping, TV aim sensitivity and dead zone. The pause Game
+controls page gives remote users skills, targeting, camera/zoom, speed, step,
+rewind, applicable rate controls, retry and end/undo actions.
 
-Menus use native tvOS focus. Gameplay uses the existing console bindings.
-One physical device owns gameplay until the attempt ends or the controller
-disconnects. Held buttons cannot accept a new page or assign on a handover.
+The L2 pause page offers Fan/Skill mode. Assignment toggles blowing at the aim
+point. Aim movement moves an active fan. Skill selection, planning and lifecycle
+interruption release it. Fan events belong to the native input history and
+survive checkpoints and rewind. L3 uses the shared eight-direction tool picker.
+L2 and L3 do not expose release rate. L3 ends attempts without a nuke.
 
-| Input | Gameplay action |
-| --- | --- |
-| Left stick or remote directions | Aim with a dead zone and a curve for fine movement |
-| Right stick | Pan the camera |
-| Primary controller button or remote click | Assign the selected native skill or action |
-| Shoulders | Previous or next available skill |
-| D-pad left and right | Cycle eligible lemmings |
-| Secondary face buttons | Repeat the last skill or focus the last assignment |
-| Menu or remote Play/Pause | Pause, or resume after planning |
-| Remote Back | Open the paused controls |
+## Shared players and recovery
 
-The shared extended-controller modifier bindings retain speed, stepping,
-rewind, retry and end-run actions. See [Controller QoL](ControllerQoL.md).
-Stick swapping and aim sensitivity are available in Settings. Pause on skill
-change is optional and off by default.
+Profiles, collections, records and solo progress retain shared mobile ownership.
+Hot Seat shares its roster, house rule, history and campaign scope with iOS.
+Every incoming turn waits at Ready, and failed saves block turn changes.
 
-Cycling locks the chosen actor ID. A crossing lemming cannot replace it.
-If that actor disappears or leaves the view, assignment stays unavailable
-until the player aims again or chooses another actor.
+The upgrade imports the old TV profiles, portraits, selected player, completion
+marks, sessions, exact turns and applicable preferences. It imports the surviving
+checkpoint with its engine, tick, camera, owner and scope intact. It retains the
+old data, respects existing shared saves and never recreates a retired run.
+Unknown source progress stays in the original document. Historical scores or
+achievements cannot be reconstructed from completion marks alone.
 
-The pause menu gives remote users access to skills, target cycling, camera
-movement, entrance and exit, speed, stepping, supported rewind and release
-rate, retry and end-run actions. Choosing a skill returns to a paused playfield.
-Camera adjustment cannot assign a skill. Destructive actions focus Cancel.
-An active nuke changes its action to Undo nuke.
+Small roster/session metadata uses UserDefaults. Larger files use TV Caches and
+can be purged. Shared cloud-library linking/recovery routes synchronise their
+supported progress and records. They do not yet back up complete checkpoint and
+collection files. Durable full Resume after cache eviction remains an open
+implementation requirement. Apple's [TV storage guidance](https://developer.apple.com/library/archive/documentation/General/Conceptual/AppleTV_PG/iCloudStorage.html)
+explains the need for off-device recovery.
 
-## Players and recovery
+## File transfer and services
 
-Profiles use the shared player IDs and portraits. The native TV keyboard edits
-names. Hot Seat results name the next player, and every incoming turn waits
-for Ready. The shared house rule currently uses Every level.
+TV replaces the iOS document picker/share sheet with a temporary, token-protected
+LAN transfer page. Another device uploads a game folder or recovery key, or
+downloads a replay movie/key. Uploads stream into staging. The shared validators
+install valid content. Cancellation closes connections and cleans staging.
+The app declares its local-network purpose. Physical permission, transfer,
+cancellation and recovery journeys remain unverified.
 
-Each checkpoint retains the run ID, native engine and level fingerprints,
-simulation tick, selected control, camera, solo owner and Hot Seat scope.
-Encoding happens on a worker after the live state is captured. Checkpoints
-save periodically, on pause and when returning to the library.
+Game Center uses the shared adapter and a TV entitlement. Production app/board
+configuration and signing still need validation. Shared community rankings,
+consent, Play Insights and soundtrack downloads retain their iOS behaviour.
+Audio uses the shared music director and native sound banks. Automated checks
+remain silent; listening acceptance requires a separate explicit request.
 
-A new attempt saves before it replaces the previous turn. Completed and
-replaced runs retire so late writes cannot restore them. App inactivity,
-audio interruption and loss of the active controller pause play. Recovery
-requires an explicit Resume.
+## Build and validation
 
-Profile and turn metadata use UserDefaults. Native run payloads use Caches,
-which tvOS can purge. Durable cloud recovery must be added before the app
-promises persistent or cross-device Resume. Apple describes these storage
-constraints in [Explore tvOS development](https://developer.apple.com/videos/play/wwdc2023/10256/).
+Open `Apps/UltimateLemmingsTV/UltimateLemmingsTV.xcodeproj` and build the
+`UltimateLemmingsTV` scheme. Classic development content uses
+`TV_LOCAL_CLASSIC_DATA_DIR`; packaged content uses `TV_BETA_CONTENT_DIR`.
+The shared catalogue packager adds available official/fan content. Imported
+sequel and NeoLemmix data use the same staging and validation as iOS.
+Artwork uses `TV_MAC_ARTWORK_DIR`, effects use `TV_AMIGA_SOUND_DIR`, and soundtrack
+scope uses `TV_MUSIC_SCOPE` (main by default; full includes optional libraries).
 
-## Engine support
+`Scripts/check-tvos-sdk.sh` compiles all shared dependencies, including
+`LemmingsMobileUI`, then checks the TV application entry point.
+`Scripts/check-tv-experience.sh` runs native checks through the offscreen, muted
+runner and checks both historical and shared frontend bitmap states/targets.
+The historical explicit-source TV controller remains available for diagnostic
+fixtures; it is not the normal app frontend.
 
-| Feature | Classic | Lemmings 2 | Lemmings 3 |
-| --- | --- | --- | --- |
-| Native tick, assignment, checkpoint and Ready gates | Implemented | Core checks pass | Core checks pass |
-| Default TV campaign and gameplay artwork | Implemented | Library and renderer pending | Library and renderer pending |
-| Release rate | Native | Unavailable in native session | Unavailable in native session |
-| Rewind and backward step | Native history | Unavailable in native session | Unavailable in native session |
-| End attempt | Nuke and undo | Native nuke | Native end attempt, no nuke |
-| Extra native controls | Classic skills | Fan controls need TV integration | Carried tools and directions need TV integration |
-
-The application can register each native library through `TVLibrarySource`.
-Unregistered games are disabled in the game picker. Core fixture checks do
-not establish complete sequel campaigns or visual acceptance.
-
-## Development and release gates
-
-Open `Apps/UltimateLemmingsTV/UltimateLemmingsTV.xcodeproj` and select the
-`UltimateLemmingsTV` scheme. Debug builds use the local Classic development
-data. Distribution content uses `TV_BETA_CONTENT_DIR`. Artwork and original
-sound banks use `TV_MAC_ARTWORK_DIR` and `TV_AMIGA_SOUND_DIR`.
-Soundtrack packaging defaults to the main catalogue. `TV_MUSIC_SCOPE=full`
-opts into the larger catalogue.
-
-Run `Scripts/check-tv-experience.sh` for the shared core and rendered-state
-checks. It uses the offscreen, muted native test runner. Set
-`TV_EXPORT_ASSETS=1` to regenerate the layered app icons and static Top Shelf
-artwork from native pixels. `Scripts/check-tvos-sdk.sh` compiles a frozen
-source snapshot against the tvOS Simulator SDK.
-
-The current evidence is in [TV validation](ReleaseReadiness/TVExperience-2026-10-14/README.md).
-Before release, complete physical Siri Remote and controller trials, sofa
-readability checks, VoiceOver and system keyboard checks, 1080p and 4K frame
-timing, memory and thermal tests, and signed device installation. Native
-UIKit focus events still need automation. Device-specific button prompts,
-the remapping editor, teaching flows, broader saved-session navigation,
-dynamic Top Shelf Resume and durable cloud recovery remain follow-up work.
-Resume currently shows the latest checkpoint's owner. A full saved-session
-history and Hot Seat roster summary still need TV pages. The controller's
-Hints shortcut opens Controls until the shared learning flow reaches tvOS.
-
-Apple's [focus guidance](https://developer.apple.com/documentation/uikit/adding-user-focusable-elements-to-a-tvos-app),
-[controller guidance](https://developer.apple.com/videos/play/wwdc2021/10081/)
-and [layered asset format](https://developer.apple.com/library/archive/documentation/Xcode/Reference/xcode_ref-Asset_Catalog_Format/BrandAssetsType.html)
-govern the platform integration. The game's [UI principles](UIPrinciples.md)
-govern the rendered controls.
+[Current parity register](../Apps/UltimateLemmingsTV/IOSParity.md) distinguishes
+implemented routes from unverified behaviour. [Shared frontend evidence](ReleaseReadiness/TVSharedFrontend-2026-10-14/README.md)
+records current checks. [Original TV evidence](ReleaseReadiness/TVExperience-2026-10-14/README.md)
+remains historical. Native UIKit focus, physical remote/controller/VoiceOver,
+signed installation, live services, 1080p/4K timing, memory, thermal behaviour,
+audio and purge recovery are still acceptance requirements.

@@ -207,6 +207,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         drawCounts(panel, context: context)
         drawSkillLabels(panel, context: context)
         if let item = items.first(where: { $0.action == .skill(selectedSkill) }) {
+            SkillPointerBadge.innerGlow(in: item.frame.insetBy(dx: 3, dy: 3), context: context)
             outline(item.frame, context: context)
         }
     }
@@ -218,6 +219,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         for item in items {
             switch item.action {
             case let .skill(index) where index == selectedSkill:
+                SkillPointerBadge.innerGlow(in: item.frame.insetBy(dx: 3, dy: 3), context: context)
                 outline(item.frame, context: context)
             case .pause where paused:
                 outline(item.frame, context: context)
@@ -373,7 +375,10 @@ public enum MobileHUDAction: Equatable, Sendable {
             }
             context.restoreGState()
             drawCompactCount(item, in: frame, context: context)
-            if selected { outline(frame, context: context) }
+            if selected {
+                SkillPointerBadge.innerGlow(in: well, context: context)
+                outline(frame, context: context)
+            }
         case .pause, .endRun:
             drawGlyphButton(item, context: context, pixel: 1)
         case .speed:

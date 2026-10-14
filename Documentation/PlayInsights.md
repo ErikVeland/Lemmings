@@ -9,6 +9,15 @@ is unavailable; it does not mean zero.
 
 ## What is counted
 
+- **Opted-in installs:** the lifetime number of installation registrations
+  received by the service. Opting in registers immediately, even without starting
+  a level. An existing opted-in installation registers when it next opens an
+  updated app. A local flag prevents repeat registrations after launches,
+  profile changes, clearing local counts or turning sharing off and on.
+  Unacknowledged registrations retry on a later launch or activity while sharing
+  remains enabled. This counts installations, not individual people, and includes
+  registrations from Classic, Lemmings 2 and Lemmings 3 through the same code.
+  It does not reconstruct earlier installs that never run the updated app.
 - **Active installs today:** opted-in installations that opened or started a
   level on the current UTC day. Each installation sends at most one active-day
   event per day. This is not a count of people online now or of unique people.
@@ -39,7 +48,12 @@ local display; it does not delete totals already sent to the service.
 Counts are best effort. An offline or interrupted request can be lost. The
 home totals are all-time, but the local total includes attempts made before
 consent while the global total includes only successful uploads. The dashboard's
-shared view covers 7 or 30 days. Do not use these counts as exact unique-player,
+shared activity view covers 7 or 30 days. The opted-in install total is all-time
+and stays the same when the activity period changes. An older collector shows
+this total as **N/A** until it is updated. Resetting app preferences can register
+an installation again. A lost acknowledgement can also cause a duplicate on
+retry because the service stores no identifier for deduplication. Do not use
+these counts as exact total-install, unique-player,
 concurrent-player or completion-rate figures.
 
 ## Consent and privacy
@@ -50,8 +64,9 @@ Turning sharing off cancels pending uploads and prevents new uploads. No earlier
 service totals can be removed for one person because the service has no
 identifier that could find them.
 
-The collector stores daily aggregate rows and one lifetime rescued total. It
-has no request or IP-address column and disables its own HTTP access log. The
+The collector stores daily aggregate rows and lifetime rescued and opted-in
+installation totals. It has no request or IP-address column and disables its
+own HTTP access log. The
 public `/v1/saved` route returns only that total; it does not expose the private
 dashboard or level breakdown. Changes to a public total can still reveal an
 individual session when few people are playing. Even so, the HTTPS endpoint and
@@ -75,7 +90,10 @@ the network. Get privacy and security review before public collection.
    database directory must be writable only by the service account. The service
    listens on `127.0.0.1`. Back up and protect the database as aggregate usage
    data. It prunes daily rows older than 90 days on event or dashboard access.
-   The lifetime saved total remains until the service owner resets it.
+   The lifetime saved and opted-in install totals remain until the service owner
+   resets them. Update the collector before distributing an app that sends
+   installation registrations. The existing database adds the new total without
+   requiring player or device identifiers.
 4. Build the app with `LEMMINGS_TELEMETRY_URL=https://your-https-hostname
    zsh Scripts/build-local-app.sh`. The build adds the URL to `Info.plist`.
    Check that each release variant uses the same current source and contains the
@@ -98,6 +116,12 @@ dashboard as a product signal, not a financial or audit record.
 
 Run `python3 -m unittest discover -s Tools/Telemetry -v` for collector schema,
 aggregation and access-control tests. Run the `AnonymousTelemetryTests` SwiftPM
-filter for event encoding, local count and duplicate-result checks. A successful
-source build or these tests do not validate an actual HTTPS deployment, rendered
-Mac pages or gameplay with commercial data.
+filter for event encoding, local count and duplicate-result checks. Source builds
+and collector tests do not validate an actual HTTPS deployment or gameplay with
+commercial data.
+
+Installation-registration tests cover opt-in without gameplay, existing opt-ins,
+repeat consent, relaunches, opt-out and failed delivery. Offscreen checks render
+the Mac dashboard and the shared phone, tablet and TV bitmap layouts, including
+an unavailable total from an older collector. Native iOS/tvOS device acceptance
+and delivery to a deployed HTTPS collector remain separate checks.

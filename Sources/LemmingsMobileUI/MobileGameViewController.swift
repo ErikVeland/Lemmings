@@ -1,8 +1,9 @@
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import LemmingsAppCore
 import NxlvKit
 import LemmingsGameArt
 import LemmingsMobileCore
+import LemmingsTVCore
 import UIKit
 
 @MainActor enum MobileGameExitAction {
@@ -138,9 +139,25 @@ struct MobileGameTurn {
     var previewInput: MobileTargetInput = .touch
     var hoverAimActive = false
     var highlightedTarget: MobileTargetSelection?
+    var fanMode = false
+
+    func updateFan(at point: MobilePoint?, active: Bool) {
+        guard let tribes = session as? Lemmings2MobileSession else { return }
+        let aim = point ?? previewPoint ?? MobilePoint(x: playfieldView.bounds.midX, y: playfieldView.bounds.midY)
+        tribes.setFan(at: playfieldView.gameViewport.levelPoint(fromView: aim), active: active)
+    }
     private var lastRenderedTick = -1
     private var lastCheckpointTick = -1
     private var endRunArmedUntil = 0.0
+    var isChoosingToolDirection: Bool { pendingL3Use != nil }
+    #if os(tvOS)
+    var tvCameraMode = false
+    var tvTargetLock = TVTargetLock()
+    override var preferredFocusEnvironments: [any UIFocusEnvironment] {
+        if !overlay.isHidden { return [overlayCanvas] }
+        return isChoosingToolDirection ? [hud] : [playfieldView]
+    }
+    #endif
     private var pendingL3Use: (target: Int, control: Int, selection: MobileTargetSelection)?
     private var selectionFade = SelectionFade<Int>()
     private var completionPresented = false
@@ -190,13 +207,17 @@ struct MobileGameTurn {
         )
         playfieldView = MobilePlayfieldView(viewport: viewport, automaticallyFitsViewport: camera == nil, initialCameraFocus: session.entrancePoint)
         super.init(nibName: nil, bundle: nil)
+        #if os(iOS)
         modalPresentationCapturesStatusBarAppearance = true
+        #endif
     }
 
     required init?(coder: NSCoder) { nil }
 
+    #if os(iOS)
     override var prefersStatusBarHidden: Bool { true }
     override var prefersHomeIndicatorAutoHidden: Bool { true }
+    #endif
     override var keyCommands: [UIKeyCommand]? { gameplayKeyCommands }
 
     override func viewDidLoad() {
@@ -285,6 +306,15 @@ struct MobileGameTurn {
     }
 
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        #if os(tvOS)
+        if presses.contains(where: { $0.type == .menu }) {
+            if isChoosingToolDirection { completeL3ToolDirection(nil) }
+            else if !overlay.isHidden { overlayCanvas.goBack() }
+            else { pausePlay(showControls: true) }
+            return
+        }
+        if overlay.isHidden && !isChoosingToolDirection && presses.allSatisfy({ $0.key == nil }) { return }
+        #endif
         let handled = inputAdapter.began(presses)
         super.pressesBegan(presses.subtracting(handled), with: event)
     }
@@ -461,6 +491,7 @@ struct MobileGameTurn {
             saveCheckpoint(reason: .periodic)
         case let .skill(index):
             guard session.snapshot.skills.indices.contains(index) else { return }
+            updateFan(at: nil, active: false); fanMode = false
             selectedControl = index
             if gameSettings.pauseToAssign {
                 let wasRunning = !paused
@@ -588,6 +619,12 @@ struct MobileGameTurn {
                 highlightedTarget = target(at: point)
                 needsFrame = true
             case let .commit(point):
+                if fanMode {
+                    previewPoint = point
+                    updateFan(at: point, active: (session as? Lemmings2MobileSession)?.isFanActive != true)
+                    needsFrame = true
+                    continue
+                }
                 previewInput = playfieldView.touchInput
                 previewPoint = previewInput == .precision ? point : nil
                 if let selection = target(at: point), selection.state == .eligible {
@@ -652,8 +689,17 @@ struct MobileGameTurn {
         guard force || tick != lastRenderedTick else { return }
         if overlay.isHidden, playState.canEdit {
             if hoverAimActive { previewPoint = playfieldView.hoverInputPoint }
+            #if os(tvOS)
+            if tvTargetLock.id != nil {
+                highlightedTarget = tvTargetLock.resolve(candidates: session.targetCandidates(for: selectedControl),
+                                                        visible: playfieldView.gameViewport.visibleLevelRect)
+                if let highlightedTarget { previewPoint = playfieldView.gameViewport.viewPoint(fromLevel: highlightedTarget.point) }
+            } else if let previewPoint { highlightedTarget = target(at: previewPoint) }
+            else if hoverAimActive { highlightedTarget = nil }
+            #else
             if let previewPoint { highlightedTarget = target(at: previewPoint) }
             else if hoverAimActive { highlightedTarget = nil }
+            #endif
         }
         if tick < lastRenderedTick { selectionFade.reset(); playfieldView.resetTransientEffects() }
         do {
@@ -665,7 +711,12 @@ struct MobileGameTurn {
             playfieldView.selectionPoint = highlightedTarget?.point
             playfieldView.cursorPoint = previewPoint.map { playfieldView.gameViewport.levelPoint(fromView: $0) }
             playfieldView.cursorIcon = session.skillCursorFrame(control: selectedControl).flatMap(MobileBitmapRenderer.image)
-            playfieldView.cursorRemaining = session.snapshot.skills.indices.contains(selectedControl) ? session.snapshot.skills[selectedControl].count : nil
+            let cursorSkill = session.snapshot.skills.indices.contains(selectedControl) ? session.snapshot.skills[selectedControl] : nil
+            playfieldView.cursorSkillName = cursorSkill?.name ?? ""
+            if fanMode { playfieldView.cursorIcon = nil; playfieldView.cursorSkillName = "Fan" }
+            playfieldView.cursorRemaining = session.skillCursorRemaining(control: selectedControl, target: highlightedTarget?.id)
+            if fanMode { playfieldView.cursorRemaining = nil }
+            playfieldView.cursorUnlimited = session.engineIdentifier != "lemmings3" && cursorSkill?.isUnlimited == true && playfieldView.cursorRemaining == nil
             if let point = playfieldView.cursorPoint {
                 playfieldView.cursorCount = session.targetCandidates(for: selectedControl).filter { abs($0.point.x - point.x) <= 8 && abs($0.point.y - point.y) <= 8 }.count
             } else { playfieldView.cursorCount = nil }
@@ -747,6 +798,7 @@ struct MobileGameTurn {
     }
 
     func pausePlay(showControls: Bool) {
+        updateFan(at: nil, active: false)
         hud.cancelHeldControls()
         playState.suspend()
         playfieldView.cancelInteraction()
@@ -758,6 +810,23 @@ struct MobileGameTurn {
         pauseGameplayAudio()
         updateHUD()
         guard showControls else { return }
+        #if os(tvOS)
+        tvCameraMode = false
+        showOverlay(title: "PAUSED", actions: [
+            ("RESUME", { [weak self] in self?.resumePlay() }),
+            (session.isReadOnly ? "BACK" : "LIBRARY", { [weak self] in self?.leaveToLibrary() }),
+        ] + (session.isReadOnly ? [] : [
+            ("HINT", { [weak self] in self?.onHints?() }),
+        ]) + [("GAME CONTROLS", { [weak self] in self?.showTVControls() })])
+        #else
+        var platformActions: [(String, () -> Void)] = []
+        if session is Lemmings2MobileSession, !session.isReadOnly {
+            platformActions.append((fanMode ? "SKILL MODE" : "FAN", { [weak self] in
+                guard let self else { return }
+                self.fanMode.toggle()
+                self.resumePlay()
+            }))
+        }
         showOverlay(
             title: "PAUSED",
             actions: [
@@ -766,11 +835,13 @@ struct MobileGameTurn {
             ] + (session.isReadOnly ? [] : [
                 ("HINT", { [weak self] in self?.onHints?() }),
                 ("CONTROLS", { [weak self] in self?.onControlsHelp?() }),
-            ])
+            ]) + platformActions
         )
+        #endif
     }
 
     func pauseForPlanning() {
+        updateFan(at: nil, active: false)
         countdown.cancel()
         countdownLabel.isHidden = true
         guard playState.pauseForPlanning() else { return }
@@ -1103,6 +1174,7 @@ struct MobileGameTurn {
         for effect in effects {
             switch effect {
             case .pauseSimulation:
+                updateFan(at: nil, active: false)
                 playState.suspend()
                 clock.suspend()
             case .resumeSimulation:
@@ -1168,7 +1240,7 @@ struct MobileGameTurn {
         MobileMusic.shared.setGameplayState(paused: paused, speed: speed, rewinding: rewindHeld)
         let resolved = layout ?? lastHUDLayout ?? hudLayout(insets: view.safeAreaInsets)
         if hudArtworkSource != gameSettings.classic.graphics {
-            hud.skillIcons = session.renderScale > 1 ? session.snapshot.skills.indices.map { session.skillCursorFrame(control: $0).flatMap(MobileBitmapRenderer.image) } : []
+            hud.skillIcons = session.snapshot.skills.indices.map { session.skillCursorFrame(control: $0).flatMap(MobileBitmapRenderer.image) }
             hudArtworkSource = gameSettings.classic.graphics
         }
         hud.counterStyle = gameSettings.classic.counterStyle
@@ -1299,6 +1371,12 @@ struct MobileGameTurn {
             overlayCanvas.page = MobilePauseArt.page(pauseSummary(), actions: overlayCanvas.page.footer)
         }
         overlay.bounces = !isPause
+        #if os(tvOS)
+        // The overview has one Back target, so arrows scroll its noninteractive
+        // statistics directly. Action menus retain normal directional focus.
+        overlay.directionalPressGestureRecognizer.isEnabled = isPause && actions.count == 1
+        overlay.panGestureRecognizer.isEnabled = isPause && actions.count == 1
+        #endif
         overlay.setContentOffset(.zero, animated: false)
         if let frame = latestFrame {
             overlayCanvas.preview = MobileBitmapRenderer.image(frame)
@@ -1323,6 +1401,10 @@ struct MobileGameTurn {
             overlay.layer.removeAllAnimations()
             overlay.alpha = 1
         }
+        #if os(tvOS)
+        setNeedsFocusUpdate()
+        updateFocusIfNeeded()
+        #endif
         UIAccessibility.post(notification: .screenChanged, argument: overlayCanvas)
     }
 

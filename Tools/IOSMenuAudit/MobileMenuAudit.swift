@@ -49,7 +49,7 @@ import NxlvKit
             .init("neolemmix", "NeoLemmix Preview"),
             .init("l2", "Lemmings 2  120 levels"),
             .init("l3", "Lemmings 3 Preview  90 levels")]
-        let journey = Action("journey", LearningJourney.title + "  0/120")
+        let journey = Action("journey", "Journey  29/295 solved")
         let home = MobileHomeArt.page(journey: journey, families: homeFamilies, initials: "LEM")
         let resumedHome = MobileHomeArt.page(resume: [.init("resume", "Resume - AB v CD")],
             journey: journey, families: homeFamilies, initials: "AB v CD")
@@ -61,6 +61,10 @@ import NxlvKit
             ("long-title", .init(title: library.levels.max(by: { $0.title.count < $1.title.count })!.title,
                                 subtitle: "Mayhem", footer: [.init("home", "Back"), .init("play", "Play again", primary: true)], preview: true)),
             ("home", home),
+            ("journey-resume", MobileHomeArt.page(resume: [.init("learningRunResume", "Resume journey")],
+                journey: journey, families: homeFamilies, initials: "UVA")),
+            ("journey-separate-level", MobileHomeArt.page(resume: [.init("learningRunResume", "Resume journey"),
+                .init("resume", "Resume level - UVA")], journey: journey, families: homeFamilies, initials: "UVA")),
             ("resume", resumedHome),
             ("levels", .init(title: "Just Dig!", subtitle: "Fun 1/30", details: ["10 Lemmings   Save 10", "Time 5:00"],
                              footer: [.init("rankPrevious", "< Rank"), .init("rankNext", "Rank >"),

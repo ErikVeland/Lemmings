@@ -95,7 +95,7 @@ struct MobileLearningTests {
         #expect(found.seat == archived)
         #expect(found.seat?.turn == "guest")
         #expect(found.scope == archived.scope)
-        #expect(found.resumeTitle == "Resume journey run  2/3")
+        #expect(found.resumeTitle == "Resume journey")
         #expect(seats == original)
         #expect(MobileLearningResume.find(owner: "guest", seats: seats, storage: files)?.seat == archived)
         try files("host").save(state, name: "learning")

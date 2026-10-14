@@ -1,6 +1,7 @@
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import LemmingsGameArt
 import LemmingsMobileCore
+import LemmingsTVCore
 import UIKit
 
 /// The artwork and UIKit targets share one layout, including disabled controls.
@@ -21,6 +22,9 @@ import UIKit
     private var highlighted: String?
     var focusedID: String?
     private var pageLayout: GameFrontEnd.Layout?
+    var requiresNeutralActivation = false
+    private var tvActivation = TVActivationGate()
+    func armTVActivation() { tvActivation.observeNeutral() }
     private static let portraits = Bundle.main.resourceURL.flatMap {
         GamePortraitArt(directory: $0.appendingPathComponent("MacArtwork/lemmings"))
     }
@@ -33,8 +37,28 @@ import UIKit
     }
     required init?(coder: NSCoder) { nil }
 
+    #if os(tvOS)
+    override var preferredFocusEnvironments: [any UIFocusEnvironment] {
+        let preferred = targets.first { $0.isEnabled && $0.accessibilityIdentifier == "menu." + (focusedID ?? "") }
+        return preferred.map { [$0] } ?? Array(targets.filter(\.isEnabled).prefix(1))
+    }
+
+    override func didUpdateFocus(in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
+        super.didUpdateFocus(in: context, with: coordinator)
+        guard let button = context.nextFocusedView as? UIButton, targets.contains(button) else { return }
+        focusedID = button.accessibilityIdentifier?.replacingOccurrences(of: "menu.", with: "")
+        highlighted = focusedID
+        (superview as? UIScrollView)?.scrollRectToVisible(button.frame.insetBy(dx: 0, dy: -8), animated: false)
+        setNeedsDisplay()
+    }
+    #endif
+
     private func interfaceScale(width: CGFloat) -> CGFloat {
-        MobileSettingsArt.interfaceScale(MobileSettings.load(from: .standard).classic.interfaceSize, width: width)
+        #if os(tvOS)
+        return MobileSettingsArt.interfaceScale(MobileSettings.load(from: .standard).classic.interfaceSize, width: width, television: true)
+        #else
+        return MobileSettingsArt.interfaceScale(MobileSettings.load(from: .standard).classic.interfaceSize, width: width)
+        #endif
     }
     func size(width: CGFloat, minimumHeight: CGFloat) -> CGSize {
         let scale = interfaceScale(width: width)
@@ -73,20 +97,29 @@ import UIKit
         setNeedsDisplay()
     }
     private func rebuild() {
+        tvActivation.reset()
         onPageChanged?()
         let actions = page.rows + page.orderedFooter
         if !page.result || !actions.contains(where: { $0.id == focusedID && $0.enabled }) {
-            focusedID = actions.first(where: { $0.primary && $0.enabled })?.id
+            focusedID = actions.first(where: { $0.enabled && $0.title.uppercased() == "CANCEL" })?.id
+                ?? actions.first(where: { $0.primary && $0.enabled })?.id
+                ?? actions.first(where: \.enabled)?.id
         }
         highlighted = focusedID
         targets.forEach { $0.removeFromSuperview() }
         targets = (page.rows + page.orderedFooter).map { action in
-            let button = UIButton(type: .custom)
+            let button = MobileFocusButton(type: .custom)
             button.accessibilityLabel = action.title
             button.accessibilityIdentifier = "menu." + action.id
             button.accessibilityTraits = action.selected ? [.button, .selected] : .button
             button.isEnabled = action.enabled
-            button.addAction(UIAction { [weak self] _ in self?.onAction?(action.id) }, for: .touchUpInside)
+            button.addAction(UIAction { [weak self] _ in
+                guard let self else { return }
+                #if os(tvOS)
+                guard !self.requiresNeutralActivation || self.tvActivation.consume() else { return }
+                #endif
+                self.onAction?(action.id)
+            }, for: .gameActivation)
             button.addAction(UIAction { [weak self] _ in
                 self?.highlighted = action.id; self?.setNeedsDisplay()
             }, for: .touchDown)
@@ -98,6 +131,9 @@ import UIKit
         }
         setNeedsLayout()
         setNeedsDisplay()
+        #if os(tvOS)
+        setNeedsFocusUpdate()
+        #endif
     }
     func moveFocus(_ offset: Int) {
         let enabled = (page.rows + page.orderedFooter).filter(\.enabled)
@@ -110,6 +146,10 @@ import UIKit
            let target = targets.first(where: { $0.accessibilityIdentifier == "menu." + focusedID! }) {
             scroll.scrollRectToVisible(target.frame.insetBy(dx: 0, dy: -8), animated: false)
         }
+        #if os(tvOS)
+        setNeedsFocusUpdate()
+        updateFocusIfNeeded()
+        #endif
         UIAccessibility.post(notification: .layoutChanged, argument: targets.first { $0.accessibilityIdentifier == "menu." + focusedID! })
         setNeedsDisplay()
     }

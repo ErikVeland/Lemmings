@@ -10,8 +10,11 @@ public enum MobileSettingsArt {
               footer: [.init("1", "Keep pausing"), .init("0", "Turn off", primary: true)], footerColumns: 1)
     }
     /// Compact panes retain a full-width canvas when the requested lettering size cannot fit.
-    public static func interfaceScale(_ size: ClassicInterfaceSize, width: CGFloat) -> CGFloat {
-        min(CGFloat(size.scale), max(1, width / 280))
+    public static func interfaceScale(_ size: ClassicInterfaceSize, width: CGFloat, television: Bool = false) -> CGFloat {
+        if television {
+            switch size { case .standard: return 2; case .large: return 3; case .extraLarge: return 4 }
+        }
+        return min(CGFloat(size.scale), max(1, width / 280))
     }
     public static func groups() -> GameFrontEnd.Page {
         .init(title: "Settings", rows: MobileSettingsGroup.allCases.map {

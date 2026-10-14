@@ -1,4 +1,4 @@
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import LemmingsAppCore
 import LemmingsMobileCore
 import UIKit
@@ -6,6 +6,10 @@ import UIKit
 extension MobileLibraryViewController {
     func makeLibraryInput() -> MobileInputAdapter {
         let adapter = MobileInputAdapter()
+        #if os(tvOS)
+        canvas.requiresNeutralActivation = true
+        adapter.onMenuNeutral = { [weak self] in self?.canvas.armTVActivation() }
+        #endif
         adapter.isMenu = { true }
         adapter.isActive = { [weak self] in
             guard let self else { return false }

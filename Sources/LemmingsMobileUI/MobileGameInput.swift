@@ -1,4 +1,4 @@
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import LemmingsAppCore
 import LemmingsMobileCore
 import LemmingsGameArt
@@ -63,14 +63,22 @@ extension MobileGameViewController {
 
     func makeInputAdapter() -> MobileInputAdapter {
         let adapter = MobileInputAdapter()
+        #if os(tvOS)
+        overlayCanvas.requiresNeutralActivation = true
+        adapter.onMenuNeutral = { [weak self] in self?.overlayCanvas.armTVActivation() }
+        #endif
         adapter.isActive = { [weak self] in self?.lifecycle.isForeground == true && self?.lifecycle.isInterrupted == false }
-        adapter.isMenu = { [weak self] in self?.overlay.isHidden == false }
+        adapter.isMenu = { [weak self] in self?.overlay.isHidden == false || self?.isChoosingToolDirection == true }
         adapter.onCommand = { [weak self] in self?.performCommand($0) }
         adapter.onMenuMove = { [weak self] in self?.overlayCanvas.moveFocus($0) }
         adapter.onMenuActivate = { [weak self] in self?.overlayCanvas.activateFocused() }
         adapter.onMenuBack = { [weak self] in self?.overlayCanvas.goBack() }
         adapter.onAim = { [weak self] dx, dy in
             guard let self else { return }
+            #if os(tvOS)
+            if self.tvCameraMode { self.panInput(dx: dx, dy: dy); return }
+            self.tvTargetLock.clear()
+            #endif
             let centre = self.previewPoint ?? MobilePoint(x: self.playfieldView.bounds.midX, y: self.playfieldView.bounds.midY)
             self.aim(at: MobilePoint(x: min(self.playfieldView.bounds.width, max(0, centre.x + dx)),
                                    y: min(self.playfieldView.bounds.height, max(0, centre.y + dy))))
@@ -90,6 +98,7 @@ extension MobileGameViewController {
         previewInput = .precision
         previewPoint = point
         highlightedTarget = point.flatMap { self.target(at: $0) }
+        if fanMode, (session as? Lemmings2MobileSession)?.isFanActive == true { updateFan(at: point, active: true) }
         renderCurrentFrame(force: true)
     }
     func restoreHoverAim() {
@@ -105,8 +114,18 @@ extension MobileGameViewController {
 
     func performCommand(_ command: GameplayCommand) {
         guard overlay.isHidden, lifecycle.isForeground, !lifecycle.isInterrupted else { return }
+        #if os(tvOS)
+        if tvCameraMode && [.assign, .pause, .speedReset].contains(command) {
+            tvCameraMode = false; pausePlay(showControls: true); return
+        }
+        #endif
         switch command {
-        case .pause: handle(.pause)
+        case .pause:
+            #if os(tvOS)
+            pausePlay(showControls: true)
+            #else
+            handle(.pause)
+            #endif
         case .library: leaveToLibrary()
         case .hints: pauseForPlanning(); showHints()
         case .help: pauseForPlanning(); showControlsHelp()
@@ -148,10 +167,23 @@ extension MobileGameViewController {
             let candidate = candidates[(current + direction + candidates.count) % candidates.count]
             let point = playfieldView.gameViewport.viewPoint(fromLevel: candidate.point)
             aim(at: point)
+            #if os(tvOS)
+            tvTargetLock.select(candidate.id)
+            #endif
         case .focusLast:
-            if let point = lastInputAssignment?.point { aim(at: playfieldView.gameViewport.viewPoint(fromLevel: point)) }
+            if let previous = lastInputAssignment {
+                aim(at: playfieldView.gameViewport.viewPoint(fromLevel: previous.point))
+                #if os(tvOS)
+                tvTargetLock.select(previous.id)
+                #endif
+            }
         case .assign, .repeatAssignment:
             guard !session.isReadOnly, playState.canEdit else { return }
+            if fanMode, let tribes = session as? Lemmings2MobileSession {
+                updateFan(at: nil, active: !tribes.isFanActive)
+                renderCurrentFrame(force: true); updateHUD()
+                return
+            }
             let control = command == .repeatAssignment ? (lastAssignmentControl ?? selectedControl) : selectedControl
             if let selection = highlightedTarget,
                !beginL3ToolDirectionSelection(control: control, target: selection.id, selection: selection),
@@ -215,7 +247,15 @@ extension MobileGameViewController {
     }
 
     func showControlsHelp() {
-        showCustomOverlay(title: "Controls", details: GameplayCommands.help,
+        #if os(tvOS)
+        let help = ["Siri Remote", "Ring / swipe: Aim", "Click: Assign skill / toggle fan", "Play/Pause: Pause", "Back: Pause menu",
+                    "Game controller", "Left stick: Aim   Right stick: Camera", "A: Assign   X: Repeat   Y: Last assignment",
+                    "LB / RB: Skills   D-pad left / right: Lemmings", "Menu: Pause   LT + buttons: More controls",
+                    "Pause > Game controls: Skills, camera and transport"]
+        #else
+        let help = GameplayCommands.help
+        #endif
+        showCustomOverlay(title: "Controls", details: help,
                           actions: [("BACK", { [weak self] in self?.pausePlay(showControls: true) })])
     }
 }

@@ -1,11 +1,11 @@
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import LemmingsAudio
 import LemmingsGameArt
 import NxlvKit
 import LemmingsMobileCore
 import UIKit
 
-@MainActor final class MobilePlayfieldView: UIView, UIGestureRecognizerDelegate, UIPointerInteractionDelegate {
+@MainActor final class MobilePlayfieldView: UIView, UIGestureRecognizerDelegate {
     var onHover: ((MobilePoint?) -> Void)?
     var blockedInputFrames: [CGRect] = []
     var onTouchEffects: (([MobileTouchEffect]) -> Void)?
@@ -44,6 +44,8 @@ import UIKit
     var cursorPoint: MobilePoint?
     var cursorIcon: CGImage?
     var cursorCount: Int?
+    var cursorSkillName = ""
+    var cursorUnlimited = false
     var cursorRemaining: Int?
     var selectionSprite: MobileSpriteHighlight?
     var selectionOpacity: CGFloat = 1
@@ -76,7 +78,9 @@ import UIKit
         backgroundColor = .black
         isOpaque = true
         contentMode = .redraw
+        #if os(iOS)
         isMultipleTouchEnabled = true
+        #endif
         if let tube { addSubview(tube) }
         addSubview(bombCountdownView)
         decoration.isUserInteractionEnabled = false
@@ -91,6 +95,7 @@ import UIKit
             self.setNeedsDisplay(); self.updateTube()
         }
 
+        #if os(iOS)
         let pinch = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
         pinch.delegate = self
         addGestureRecognizer(pinch)
@@ -104,6 +109,7 @@ import UIKit
         scroll.delegate = self
         addGestureRecognizer(scroll)
         addInteraction(UIPointerInteraction(delegate: self))
+        #endif
 
         isAccessibilityElement = true
         accessibilityLabel = "Game playfield"
@@ -113,6 +119,7 @@ import UIKit
 
     required init(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
 
+    #if os(iOS)
     @objc private func handleHover(_ gesture: UIHoverGestureRecognizer) {
         switch gesture.state {
         case .began, .changed: rawHoverPoint = gesture.location(in: self)
@@ -122,12 +129,17 @@ import UIKit
         if !hasActiveTouch { onHover?(hoverInputPoint) }
     }
 
+    #endif
     private func acceptsInput(at point: CGPoint) -> Bool {
         bounds.contains(point) && !blockedInputFrames.contains(where: { $0.contains(point) })
     }
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith other: UIGestureRecognizer) -> Bool {
+        #if os(iOS)
         gestureRecognizer is UIHoverGestureRecognizer || other is UIHoverGestureRecognizer
+        #else
+        false
+        #endif
     }
 
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -144,6 +156,7 @@ import UIKit
         }
         onTouchEffects?([.pan(MobilePoint(x: delta.x, y: delta.y))])
     }
+    #if os(iOS)
     func pointerInteraction(_ interaction: UIPointerInteraction, styleFor region: UIPointerRegion) -> UIPointerStyle? {
         let path = UIBezierPath()
         for (x, y, dx, dy) in [(-10.0, -10.0, 1.0, 1.0), (10, -10, -1, 1), (-10, 10, 1, -1), (10, 10, -1, -1)] {
@@ -153,6 +166,7 @@ import UIKit
         return UIPointerStyle(shape: .path(path))
     }
 
+    #endif
     func advanceVisualEffects() {
         let now = ProcessInfo.processInfo.systemUptime
         if explosionBirths.values.contains(where: { $0.expires > 0 && $0.expires <= now }) {
@@ -322,16 +336,15 @@ import UIKit
         let sourceFactor = viewport.zoom / max(0.1, gameViewport.zoom)
         let size = displaySettings.skillCursorIconSize
         let scale = (size == .two ? 2.0 : 1.0) * sourceFactor
-        let height = 7 * scale
+        let height = 14 * scale
         let gap = 18 * sourceFactor
-        let maxX = viewport.viewSize.width, maxY = viewport.viewSize.height
-        let width = cursorIcon.map { max(1, floor(height * Double($0.width) / Double($0.height))) } ?? height
-        let rect = CGRect(x: min(max(0, point.x + gap), max(0, maxX - width)),
-            y: min(max(0, point.y + gap), max(0, maxY - height)), width: width, height: height)
+        var rect = CGRect(x: point.x + gap, y: point.y + gap, width: height, height: height)
         if size != .none {
-            if cursorRemaining == 0 {
-                GamePixelTypography.draw("X", in: rect, context: context, typography: nil, palette: .warning, maximumScale: scale, bitmapOnly: true)
-            } else if let cursorIcon { GameStoneArt.drawImage(cursorIcon, in: rect, context: context) }
+            rect = SkillPointerBadge.draw(icon: cursorIcon, name: cursorSkillName,
+                count: cursorUnlimited ? "*" : cursorRemaining.map(String.init),
+                at: CGPoint(x: point.x, y: point.y),
+                within: CGRect(x: 0, y: 0, width: viewport.viewSize.width, height: viewport.viewSize.height),
+                scale: scale, context: context)
         }
         if displaySettings.showReticleCount, let cursorCount {
             let countWidth = Double(String(cursorCount).count * 6) * scale
@@ -464,6 +477,7 @@ import UIKit
         onTouchEffects?(router.cancel())
     }
 
+    #if os(iOS)
     @objc private func handlePinch(_ recognizer: UIPinchGestureRecognizer) {
         if recognizer.state == .began {
             automaticallyFitsViewport = false
@@ -479,7 +493,11 @@ import UIKit
         recognizer.scale = 1
         setNeedsDisplay()
     }
+    #endif
 }
+#if os(iOS)
+extension MobilePlayfieldView: UIPointerInteractionDelegate {}
+#endif
 @MainActor private final class MobilePlayfieldDecoration: UIView {
     var failureAmount: CGFloat = 0 { didSet { setNeedsDisplay() } }
     var rescueAmount: CGFloat = 0 { didSet { setNeedsDisplay() } }

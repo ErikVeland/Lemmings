@@ -26,6 +26,7 @@ import NxlvKit
  */
 public struct AnonymousTelemetryEvent: Encodable, Equatable, Sendable {
     public enum Kind: String, Codable, Sendable {
+        case installationOptIn = "installation_opt_in"
         case activeDay = "active_day"
         case levelStart = "level_start"
         case levelWin = "level_win"
@@ -80,7 +81,11 @@ public struct AnonymousTelemetryCount: Codable, Sendable {
 public struct AnonymousTelemetrySummary: Codable, Sendable {
     public let days: Int
     public let counts: [AnonymousTelemetryCount]
-    public init(days: Int, counts: [AnonymousTelemetryCount]) { self.days = days; self.counts = counts }
+    /// Lifetime registrations. Nil means the collector does not support this count.
+    public let optedInInstalls: Int?
+    public init(days: Int, counts: [AnonymousTelemetryCount], optedInInstalls: Int? = nil) {
+        self.days = days; self.counts = counts; self.optedInInstalls = optedInInstalls
+    }
 
     public func total(_ event: AnonymousTelemetryEvent.Kind, mode: String? = nil) -> Int {
         counts.filter { $0.event == event.rawValue && (mode == nil || $0.mode == mode) }
@@ -116,6 +121,8 @@ public struct AnonymousTelemetrySummary: Codable, Sendable {
     public static let decidedKey = "AnonymousTelemetryDecisionV1"
     private static let countsKey = "AnonymousTelemetryCountsV1"
     private static let activeDayKey = "AnonymousTelemetryActiveDayV1"
+    private static let installationRecordedKey = "AnonymousTelemetryInstallationRecordedV1"
+    private static let installationDeliveredKey = "AnonymousTelemetryInstallationDeliveredV1"
     private static let soundtrackSelectedKey = "AnonymousTelemetryAllSoundtracksSelectedV1"
     private static let soundtrackDownloadedKey = "AnonymousTelemetryAllSoundtracksDownloadedV1"
 
@@ -136,6 +143,7 @@ public struct AnonymousTelemetrySummary: Codable, Sendable {
     private var active: Attempt?
     private var finishedAttempts = Set<UUID>()
     private var uploads: [UUID: Task<Void, Never>] = [:]
+    private var installationUploadID: UUID?
     public var onCountsChanged: (() -> Void)?
 
     /// A nil `defaults` uses `storage.defaults`. A nil `endpoint` uses the Info.plist value of `storage.bundle`.
@@ -163,6 +171,7 @@ public struct AnonymousTelemetrySummary: Codable, Sendable {
         if !enabled {
             uploads.values.forEach { $0.cancel() }
             uploads.removeAll()
+            installationUploadID = nil
         }
         if enabled { recordActiveDay() }
         if sharesCounts != wasSharing { onCountsChanged?() }
@@ -175,10 +184,24 @@ public struct AnonymousTelemetrySummary: Codable, Sendable {
 
     public func recordActiveDay() {
         guard sharesCounts else { return }
+        recordInstallationOptIn()
         let day = Self.utcDay()
         guard defaults.string(forKey: Self.activeDayKey) != day else { return }
         defaults.set(day, forKey: Self.activeDayKey)
         record(.init(.activeDay))
+    }
+
+    private func recordInstallationOptIn() {
+        guard !defaults.bool(forKey: Self.installationDeliveredKey), installationUploadID == nil else { return }
+        let event = AnonymousTelemetryEvent(.installationOptIn)
+        if !defaults.bool(forKey: Self.installationRecordedKey) {
+            defaults.set(true, forKey: Self.installationRecordedKey)
+            recordLocal(event)
+        }
+        // Keep unacknowledged registrations pending for the next launch or activity.
+        installationUploadID = upload(event) { [weak self] in
+            self?.defaults.set(true, forKey: Self.installationDeliveredKey)
+        }
     }
 
     public func start(_ level: ArcadeLevel, hotSeat: Bool, attemptID: UUID) {
@@ -270,14 +293,23 @@ public struct AnonymousTelemetrySummary: Codable, Sendable {
     }
 
     private func record(_ event: AnonymousTelemetryEvent) {
+        recordLocal(event)
+        _ = upload(event)
+    }
+
+    private func recordLocal(_ event: AnonymousTelemetryEvent) {
         let key = [event.event.rawValue, event.game ?? "", event.level ?? "", event.mode ?? ""].joined(separator: "|")
         var counts = defaults.dictionary(forKey: Self.countsKey) as? [String: Int] ?? [:]
         let increment = event.amount ?? 1
         let (updated, overflow) = counts[key, default: 0].addingReportingOverflow(increment)
         counts[key] = overflow ? Int.max : updated
         defaults.set(counts, forKey: Self.countsKey)
+    }
+
+    @discardableResult private func upload(_ event: AnonymousTelemetryEvent,
+                                          onSuccess: (@MainActor () -> Void)? = nil) -> UUID? {
         guard sharesCounts, let endpoint,
-              let body = try? JSONEncoder().encode(event) else { return }
+              let body = try? JSONEncoder().encode(event) else { return nil }
         var request = URLRequest(url: endpoint.appendingPathComponent("v1/event"))
         request.httpMethod = "POST"
         request.httpBody = body
@@ -286,10 +318,17 @@ public struct AnonymousTelemetrySummary: Codable, Sendable {
         let id = UUID()
         uploads[id] = Task { [weak self, transport] in
             guard let self else { return }
-            defer { self.uploads[id] = nil }
+            defer {
+                self.uploads[id] = nil
+                if self.installationUploadID == id { self.installationUploadID = nil }
+            }
             guard !Task.isCancelled, self.sharesCounts else { return }
-            _ = try? await transport.data(for: request)
+            guard let (_, response) = try? await transport.data(for: request),
+                  let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode),
+                  !Task.isCancelled, self.sharesCounts else { return }
+            onSuccess?()
         }
+        return id
     }
 
     private static func safeLevel(_ level: ArcadeLevel, hotSeat: Bool) -> Level? {

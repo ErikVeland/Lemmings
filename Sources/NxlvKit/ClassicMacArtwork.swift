@@ -269,7 +269,8 @@ public struct ClassicMacScene: Sendable {
     public func rgba(simulation: ClassicDOSSimulation, terrain: Data? = nil) -> Data {
         let solid = [UInt8](simulation.terrain.solidMask)
         guard solid.count == level.solidMask.count else { return terrainRGBA }
-        var pixels = terrain.map { [UInt8]($0) } ?? terrainPixels(solid: solid)
+        let visualTerrain = terrain ?? Data(terrainPixels(solid: solid))
+        var pixels = [UInt8](visualTerrain)
         var triggerIndex = 0
         for (position, object) in level.objects.enumerated() {
             let placement = object.placement, graphic = object.graphic
@@ -299,17 +300,19 @@ public struct ClassicMacScene: Sendable {
                 guard let mac = artwork.frame(1600 + style, seq.base + index) else { continue }
                 frame = mac
             }
-            if graphic.triggerEffect == ClassicDOSObjectEffect.water.rawValue,
-               !placement.draw.isUpsideDown, !placement.draw.onlyOverwrite {
+            let isLiquid = graphic.triggerEffect == ClassicDOSObjectEffect.water.rawValue
+            if isLiquid, !placement.draw.isUpsideDown, !placement.draw.onlyOverwrite {
                 ClassicLiquidFill.draw(source: [UInt8](frame.rgba), sourceWidth: frame.width,
                     sourceHeight: frame.height, x: placement.x * 2 + frame.x,
                     y: placement.y * 2 + frame.y, into: &pixels, width: width,
-                    height: height, solid: solid, scale: 2)
+                    height: height, solid: solid, scale: 2,
+                    minimumBottom: (placement.y + graphic.height) * 2, visualTerrain: visualTerrain)
             }
             Self.blit(frame, into: &pixels, width: width, height: height,
                 x: placement.x * 2 + frame.x, y: placement.y * 2 + frame.y,
                 flipped: placement.draw.isUpsideDown, behind: placement.draw.noOverwrite,
-                onlyTerrain: placement.draw.onlyOverwrite, solid: solid)
+                onlyTerrain: placement.draw.onlyOverwrite, solid: solid,
+                visualTerrain: isLiquid ? visualTerrain : nil)
         }
         return Data(pixels)
     }
@@ -400,7 +403,8 @@ public struct ClassicMacScene: Sendable {
 
     private static func blit(_ frame: ClassicMacArtwork.Frame, into pixels: inout [UInt8],
         width: Int, height: Int, x: Int, y: Int, flipped: Bool = false, erase: Bool = false,
-        behind: Bool = false, onlyTerrain: Bool = false, solid: [UInt8]? = nil) {
+        behind: Bool = false, onlyTerrain: Bool = false, solid: [UInt8]? = nil,
+        visualTerrain: Data? = nil) {
         let source = [UInt8](frame.rgba)
         let x0 = max(0, -x), y0 = max(0, -y)
         let x1 = min(frame.width, width - x), y1 = min(frame.height, height - y)
@@ -411,8 +415,14 @@ public struct ClassicMacScene: Sendable {
                 let s = (sy * frame.width + col) * 4
                 guard source[s+3] != 0 else { continue }
                 let d = ((y + row) * width + x + col) * 4
-                let occupied = solid.map { $0[((y + row) / 2) * (width / 2) + (x + col) / 2] != 0 }
-                    ?? (pixels[d+3] != 0)
+                let occupied: Bool
+                if let visualTerrain {
+                    occupied = visualTerrain[d + 3] != 0
+                } else if let solid {
+                    occupied = solid[((y + row) / 2) * (width / 2) + (x + col) / 2] != 0
+                } else {
+                    occupied = pixels[d + 3] != 0
+                }
                 if behind && occupied { continue }
                 if onlyTerrain && !occupied { continue }
                 if erase { pixels[d+3] = 0 }

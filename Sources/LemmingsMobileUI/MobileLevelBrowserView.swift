@@ -1,4 +1,4 @@
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import LemmingsMobileCore
 import LemmingsGameArt
 import UIKit
@@ -23,6 +23,9 @@ import UIKit
     private let favourite = MobilePixelButton()
     private let playlist = MobilePixelButton()
     private let play = MobilePixelButton()
+    #if os(tvOS)
+    override var preferredFocusEnvironments: [any UIFocusEnvironment] { [flow] }
+    #endif
     private var levels: [MobileLevelSummary] = []
     private var hasRanks = true
 
