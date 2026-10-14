@@ -41,7 +41,7 @@ import NxlvKit
             GamePixelText.draw(state == .mixed ? "-" : "X", in: socket.insetBy(dx: 5, dy: 5))
         }
         let caption = isCheck ? CGRect(x: 28, y: 0, width: bounds.width - 28, height: bounds.height) : bounds.insetBy(dx: 8, dy: 2)
-        GameControlText.draw(title, in: caption, alignment: isCheck ? .left : .center, enabled: isEnabled, role: selected ? .heading : .body)
+        GameControlText.draw(title, in: caption, alignment: isCheck ? .left : .center, enabled: isEnabled, role: .body)
         GameControlText.focus(self)
     }
 }
@@ -118,7 +118,7 @@ import NxlvKit
         GameStoneButton.draw(bounds, selected: isHighlighted, pixel: 1)
         GameStar.draw(at: CGPoint(x: 10, y: bounds.midY - 11), earned: state == .on, size: 2)
         GameControlText.draw(title, in: CGRect(x: 40, y: 0, width: bounds.width - 46, height: bounds.height),
-                             enabled: isEnabled, role: state == .on ? .heading : .body)
+                             enabled: isEnabled, role: .body)
         GameControlText.focus(self)
     }
     func showSaved(_ saved: Bool) {

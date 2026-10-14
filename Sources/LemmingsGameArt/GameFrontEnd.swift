@@ -6,6 +6,11 @@ import LemmingsMobileCore
 /// Shared bitmap pages. UIKit supplies input over these exact drawing rectangles.
 public struct GameFrontEnd {
     public enum GameLogo: String, Equatable, Sendable { case lemmings2, lemmings3 }
+    public struct TextRun: Equatable, Sendable {
+        public var text: String
+        public var palette: GameMenuTypography.Palette
+        public init(_ text: String, _ palette: GameMenuTypography.Palette) { self.text = text; self.palette = palette }
+    }
     public struct Action: Equatable, Sendable {
         public var id: String
         public var title: String
@@ -15,6 +20,7 @@ public struct GameFrontEnd {
         public var portrait: Int?
         public var backNavigation: Bool?
         public var gameLogo: GameLogo?
+        public var titleRuns: [TextRun] = []
         public var isBackNavigation: Bool {
             if let backNavigation { return backNavigation }
             if ["back", "cancel", "library", "close", "home"].contains(id) { return true }
@@ -36,6 +42,8 @@ public struct GameFrontEnd {
         public var subtitle: String
         public var home: Bool
         public var homeInitials: String
+        public var subtitleRuns: [TextRun] = []
+        public var titleRuns: [TextRun] = []
         public var rows: [Action]
         public var details: [String]
         public var footer: [Action]
@@ -304,12 +312,19 @@ public struct GameFrontEnd {
             let frame = GameMenuLogo.frame(canvasSize: size,
                 originalWidth: typography.interface.logo.map { CGFloat($0.width) } ?? size.width, in: layout.heading)
             GameStoneArt.drawImage(image, in: frame, context: context)
+        } else if !page.titleRuns.isEmpty {
+            GameSemanticText.draw(page.titleRuns, in: layout.heading, typography: typography, face: .large,
+                scale: layout.heading.width >= 580 && layout.heading.height >= 52 ? 2 : 1, context: context)
         } else {
             heading(page.title, box: layout.heading, typography: typography, context: context)
         }
-        if page.pause == nil { GameTextLayout.draw(page.subtitle, in: layout.subtitle, typography: typography, context: context) }
+        if page.pause == nil {
+            if !page.subtitleRuns.isEmpty {
+                GameSemanticText.draw(page.subtitleRuns, in: layout.subtitle, typography: typography, context: context)
+            } else { GameTextLayout.draw(page.subtitle, in: layout.subtitle, typography: typography, context: context) }
+        }
         if page.home, !page.homeInitials.isEmpty {
-            line(page.homeInitials, box: layout.initials, typography: typography, palette: .green, context: context)
+            GameSemanticText.draw(GameSemanticText.players(page.homeInitials), in: layout.initials, typography: typography, context: context)
         }
         if page.pause != nil {
             MobilePauseArt.draw(page, layout: layout, typography: typography, preview: preview, previewSource: previewSource, in: context)
@@ -371,13 +386,6 @@ public struct GameFrontEnd {
                                     width: target.frame.width - 16, height: 3))
             }
             if focused { drawFocus(target.frame, in: context) }
-            if page.home, let game = action.gameLogo, let image = typography.homeLogos.image(game) {
-                context.saveGState()
-                context.setAlpha(action.enabled ? 1 : 0.45)
-                drawImage(image, fittedIn: target.frame.insetBy(dx: 24, dy: 8), context: context)
-                context.restoreGState()
-                continue
-            }
             if action.primary, action.enabled {
                 context.setFillColor(CGColor(srgbRed: 0.48, green: 0.80, blue: 0.24, alpha: 1))
                 context.beginPath()
@@ -386,14 +394,29 @@ public struct GameFrontEnd {
                 context.addLine(to: CGPoint(x: target.frame.minX + 10, y: target.frame.midY + 5))
                 context.closePath(); context.fillPath()
             }
+            if page.home, let game = action.gameLogo, let image = typography.homeLogos.image(game) {
+                context.saveGState()
+                context.setAlpha(action.enabled ? 1 : 0.45)
+                drawImage(image, fittedIn: target.frame.insetBy(dx: 24, dy: 8), context: context)
+                context.restoreGState()
+                continue
+            }
             if let portrait = action.portrait {
                 portraits?.draw(portrait, in: CGRect(x: target.frame.minX + 12,
                     y: target.frame.minY + 7, width: 30, height: 36), context: context)
             }
             var caption = target.frame.insetBy(dx: action.primary ? 24 : 12, dy: 2)
             if action.portrait != nil { caption.origin.x += 36; caption.size.width -= 36 }
-            actionLabel(action.title, box: caption, typography: typography,
-                        palette: chosen ? .green : .blue, alpha: action.enabled ? 1 : 0.45, context: context)
+            if page.home {
+                let runs = action.titleRuns.isEmpty ? [TextRun(action.title, rowIDs.contains(action.id) ? .green : .blue)] : action.titleRuns
+                GameSemanticText.draw(runs, in: caption, typography: typography, alpha: action.enabled ? 1 : 0.45, context: context)
+            } else if !action.titleRuns.isEmpty {
+                GameSemanticText.draw(action.titleRuns, in: caption, typography: typography,
+                    alpha: action.enabled ? 1 : 0.45, context: context)
+            } else {
+                actionLabel(action.title, box: caption, typography: typography,
+                    palette: action.portrait == nil ? .blue : .green, alpha: action.enabled ? 1 : 0.45, context: context)
+            }
         }
     }
 

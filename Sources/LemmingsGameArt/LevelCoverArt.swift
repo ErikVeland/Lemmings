@@ -77,7 +77,7 @@ public enum LevelCoverArt {
             if artwork == nil {
                 let height = GameTextLayout.height(title, width: content.width)
                 if height <= content.height {
-                    GameTextLayout.draw(title, in: content, typography: typography, palette: selected ? .green : .blue, context: context)
+                    GameTextLayout.draw(title, in: content, typography: typography, palette: .green, context: context)
                 }
             }
         }

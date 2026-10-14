@@ -56,7 +56,9 @@ public enum TVMenuArt {
                 in: layout.heading, wholeNumberScale: false)
             GameStoneArt.drawImage(image, in: frame, context: context)
         } else { text(page.title, box: layout.heading, title: true, green: true, typography: typography, context: context) }
-        text(page.subtitle, box: layout.subtitle, typography: typography, context: context)
+        if let typography, !page.subtitleRuns.isEmpty {
+            GameSemanticText.draw(page.subtitleRuns, in: layout.subtitle, typography: typography, context: context)
+        } else { text(page.subtitle, box: layout.subtitle, typography: typography, context: context) }
         if page.preview {
             GameStoneArt.draw(in: context, frame: layout.preview, selected: false, pixel: 2)
             if let preview { fitted(preview, in: layout.preview.insetBy(dx: 10, dy: 10), context: context) }
@@ -82,16 +84,23 @@ public enum TVMenuArt {
             let inset: CGFloat = action.portrait == nil ? 32 : 52
             let box = CGRect(x: target.frame.minX + inset, y: target.frame.minY + 5,
                 width: target.frame.width - inset - 32, height: target.frame.height - 10)
-            if page.preview, textScale > 1, let separator = action.title.range(of: " - ") {
+            if let game = action.gameLogo, let image = typography?.homeLogos.image(game) {
+                context.saveGState(); context.setAlpha(action.enabled ? 1 : 0.45)
+                fitted(image, in: target.frame.insetBy(dx: 24, dy: 8), context: context)
+                context.restoreGState()
+            } else if let typography, !action.titleRuns.isEmpty {
+                GameSemanticText.draw(action.titleRuns, in: box, typography: typography,
+                    alpha: action.enabled ? 1 : 0.45, context: context)
+            } else if page.preview, textScale > 1, let separator = action.title.range(of: " - ") {
                 // The action and owner have distinct hierarchy, with uniform lettering for peer rows.
                 text(String(action.title[..<separator.lowerBound]), box: CGRect(x: box.minX, y: box.minY, width: box.width, height: 38),
-                     green: action.primary || action.selected || focused == action.id, enabled: action.enabled,
+                     green: false, enabled: action.enabled,
                      typography: typography, textScale: textScale, context: context)
                 text(String(action.title[separator.upperBound...]), box: CGRect(x: box.minX, y: box.maxY - 28, width: box.width, height: 28),
-                     green: action.primary || action.selected || focused == action.id, enabled: action.enabled,
+                     green: true, enabled: action.enabled,
                      typography: typography, context: context)
             } else { text(action.title, box: box,
-                green: action.primary || action.selected || focused == action.id,
+                green: action.portrait != nil,
                 enabled: action.enabled, typography: typography, textScale: textScale, context: context) }
         }
     }

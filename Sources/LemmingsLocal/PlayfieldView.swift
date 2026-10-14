@@ -959,8 +959,10 @@ struct ReticleFeedback {
   }
   private func homeOverlay() -> (page: GameFrontEnd.Page, layout: GameFrontEnd.Layout, scale: CGFloat) {
     let rows = overlayLines.enumerated().map { index, title in
-      GameFrontEnd.Action((index < overlayHomeLeadingCount ? "home." : "family.") + String(index), title,
+      var action = GameFrontEnd.Action((index < overlayHomeLeadingCount ? "home." : "family.") + String(index), title,
         primary: index == overlayHighlight, selected: index == overlayHighlight, gameLogo: overlayHomeLogos[index])
+      action.titleRuns = action.gameLogo == nil ? GameSemanticText.title(title) : [.init(title, .green)]
+      return action
     }
     var footer: [GameFrontEnd.Action] = [.init("players", L10n.text("Profiles")), .init("records", L10n.text("Records")), .init("playlists", L10n.text("Collections / Playlists"))]
     if overlayShowsSettingsButton { footer.append(.init("settings", L10n.text("Settings"))) }

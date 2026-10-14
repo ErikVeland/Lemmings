@@ -59,6 +59,9 @@ It does not prove coverage of all computed text or imported game content.
 Create each chosen language's `.lproj` directory in the same bundle. Keep English
 keys stable and translate values. Both Mac bundle scripts and the shared iOS/TV
 asset packager copy this bundle. SwiftPM copies it as an NxlvKit resource.
+When enabling a language, declare it in each app's `CFBundleLocalizations`
+metadata so the system can offer per-app language selection. List only languages
+that have passed their font, artwork and interface checks.
 System preferred languages select the bundle at app startup. Unsupported
 languages use English. Incomplete language packs use English for missing keys.
 

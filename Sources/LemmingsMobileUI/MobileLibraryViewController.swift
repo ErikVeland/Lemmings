@@ -300,7 +300,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         game?.view.frame = view.bounds
     }
     func rebuild() {
-        canvas.sessionName = hotSeat.map { $0.players.map(playerName).joined(separator: " vs ") }
+        canvas.sessionName = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") }
         canvas.playerRole = .next
         canvas.playerName = hotSeat.map { playerName($0.turn) }
         unfold.stop()

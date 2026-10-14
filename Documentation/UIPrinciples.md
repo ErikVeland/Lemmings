@@ -656,3 +656,14 @@ movement and activation, compact scrolling, visible accessibility bounds,
 single-column phones, odd library counts, footer navigation and complete music
 credits. iOS SDK modules compile. Physical touch, VoiceOver navigation and
 composited CRT display appearance remain manual checks.
+
+## Localisation
+
+Resolve app-authored captions and accessibility messages through the shared
+`L10n` catalogue before measuring text or placing input targets. Keep complete
+sentences together and use plural rules for count-dependent wording. Keep
+save keys, action IDs, artwork names and keyboard bindings separate from
+translated captions. Preserve player names and original content titles.
+Check expanded text with the shipped bitmap renderers and unchanged input
+semantics. Font scripts and text baked into original artwork need explicit
+language validation. See [Interface localisation](Localisation.md).

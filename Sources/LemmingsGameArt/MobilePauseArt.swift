@@ -132,7 +132,7 @@ public enum MobilePauseArt {
             context.interpolationQuality = .none
             GameStoneArt.drawImage(image, in: frame, context: context)
         }
-        text(summary.status, box: boxes[1], palette: .green, typography: typography, context: context)
+        text(summary.status, box: boxes[1], palette: .blue, typography: typography, context: context)
         let progress = boxes[2]
         text(summary.rescueText, box: CGRect(x: progress.minX, y: progress.minY, width: progress.width, height: progress.height - 18),
              typography: typography, context: context)
@@ -149,7 +149,7 @@ public enum MobilePauseArt {
             text(field.label, box: CGRect(x: box.minX + 6, y: box.minY + 3, width: box.width - 12, height: 18),
                  typography: typography, context: context)
             text(field.value, box: CGRect(x: box.minX + 6, y: box.minY + 23, width: box.width - 12, height: 22),
-                 palette: .green, typography: typography, context: context)
+                 palette: .blue, typography: typography, context: context)
         }
         text(summary.playDetails, box: boxes[11], typography: typography, context: context)
         let stockValueWidth = max(28, CGFloat(summary.supplies.map { $0.value.count }.max() ?? 0) * 12)
@@ -158,7 +158,7 @@ public enum MobilePauseArt {
             text(stock.label, box: CGRect(x: box.minX, y: box.minY, width: box.width - stockValueWidth - 4, height: box.height),
                  typography: typography, context: context)
             text(stock.value, box: CGRect(x: box.maxX - stockValueWidth, y: box.minY, width: stockValueWidth, height: box.height),
-                 palette: .green, typography: typography, context: context)
+                 palette: .blue, typography: typography, context: context)
         }
         let musicStart = 12 + summary.supplies.count
         let music = boxes[musicStart].union(boxes[musicStart + 2]).insetBy(dx: -12, dy: -8)
