@@ -1815,7 +1815,7 @@ struct MobileGameTurn {
         #if os(tvOS)
         // The overview has one Back target, so arrows scroll its noninteractive
         // statistics directly. Action menus retain normal directional focus.
-        overlay.directionalPressGestureRecognizer.isEnabled = isPause && actions.count == 1
+        overlay.panGestureRecognizer.allowedTouchTypes = [NSNumber(value: UITouch.TouchType.indirect.rawValue)]
         overlay.panGestureRecognizer.isEnabled = isPause && actions.count == 1
         #endif
         overlay.setContentOffset(.zero, animated: false)

@@ -391,10 +391,6 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 return [L10n.text("\(s.total) Lemmings   Save \(s.required)"),
                         s.remainingSeconds.map { L10n.text("Time \($0 / 60):\(String(format: "%02d", $0 % 60))") } ?? L10n.text("No time limit")]
             } ?? []
-            let collectionActions: [GameFrontEnd.Action] = favouriteIdentity(selectedIndex) == nil ? [] : [
-                .init("favourite", L10n.text("Favourite"), selected: isFavourite(selectedIndex)),
-                .init("addPlaylist", L10n.text("Playlist"), enabled: catalogue != nil),
-            ]
             canvas.page = .init(title: level.title,
                                 subtitle: loading ? L10n.text("Loading...") : level.sourceLabel + L10n.text("\n\(level.rank == level.packName ? L10n.text("Level") : level.rank)  \(level.number)/\(rank.count)"),
                                 details: stats,

@@ -62,7 +62,7 @@ public struct MobileStorage: Sendable {
         try fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
         let data = try JSONEncoder().encode(value)
         // Keep only the small roster/session metadata in TV defaults. Large saves stay in caches.
-        if let defaultsKey {
+        if defaultsKey != nil {
             guard data.count <= 128 * 1_024 else { throw CocoaError(.fileWriteOutOfSpace) }
         }
         // Keep the previous copy only when it is itself valid.

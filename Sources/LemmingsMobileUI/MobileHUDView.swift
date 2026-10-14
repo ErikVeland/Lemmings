@@ -395,17 +395,18 @@ import UIKit
             button.accessibilityLabel = cell.label
             button.accessibilityTraits = .button
             button.accessibilityIdentifier = "game.l3.direction.\(cell.direction.map { $0.rawValue.lowercased() } ?? "cancel")"
+            var configuration = UIButton.Configuration.plain()
             if let frameIndex = cell.frameIndex,
                let image = MobileBitmapRenderer.image(frames[frameIndex]) {
-                button.setImage(UIImage(cgImage: image), for: .normal)
-                button.imageEdgeInsets = UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6)
-                button.imageView?.contentMode = .scaleAspectFit
-                button.imageView?.layer.magnificationFilter = .nearest
+                configuration.image = UIImage(cgImage: image).withRenderingMode(.alwaysOriginal)
+                configuration.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 6, bottom: 6, trailing: 6)
             } else {
-                button.setImage(Self.cancelImage(), for: .normal)
-                button.imageEdgeInsets = UIEdgeInsets(top: 14, left: 14, bottom: 14, right: 14)
-                button.imageView?.layer.magnificationFilter = .nearest
+                configuration.image = Self.cancelImage()?.withRenderingMode(.alwaysOriginal)
+                configuration.contentInsets = NSDirectionalEdgeInsets(top: 14, leading: 14, bottom: 14, trailing: 14)
             }
+            button.configuration = configuration
+            button.imageView?.contentMode = .scaleAspectFit
+            button.imageView?.layer.magnificationFilter = .nearest
             button.addAction(UIAction { [weak self] _ in self?.onChoice?(cell.direction) },
                              for: .gameActivation)
             addSubview(button)

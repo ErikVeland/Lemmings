@@ -353,7 +353,7 @@ import Darwin
                   current.pointee.ifa_flags & UInt32(IFF_LOOPBACK) == 0 else { continue }
             var name = [CChar](repeating: 0, count: Int(NI_MAXHOST))
             if getnameinfo(address, socklen_t(address.pointee.sa_len), &name, socklen_t(name.count), nil, 0, NI_NUMERICHOST) == 0 {
-                return String(cString: name)
+                return String(decoding: name.prefix { $0 != 0 }.map { UInt8(bitPattern: $0) }, as: UTF8.self)
             }
         }
         return nil

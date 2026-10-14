@@ -206,7 +206,7 @@ import UIKit
     }
 
     private func render(_ card: CALayer, index: Int, state: RenderState) {
-        let format = UIGraphicsImageRendererFormat.default()
+        let format = UIGraphicsImageRendererFormat.preferred()
         format.opaque = false
         format.scale = state.displayScale
         let image = UIGraphicsImageRenderer(size: state.size, format: format).image { context in
