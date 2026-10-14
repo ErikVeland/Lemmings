@@ -44,14 +44,14 @@ import NxlvKit
         packs = MusicLibrary.catalogue()?.packs.sorted { $0.title < $1.title } ?? []
         if task == nil { selected = Set(packs.filter { !bundled($0) && !MusicLibrary.isInstalled($0, in: directory) }.map(\.id)) }
         rows = [:]; rowStates = [:]
-        let page = GameMenuPage(title: "Download soundtracks")
-        page.backTitle = welcome ? "Not now" : "Back"
+        let page = GameMenuPage(title: L10n.text("Download soundtracks"))
+        page.backTitle = welcome ? L10n.text("Not now") : L10n.text("Back")
         page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
-        let included = GameLabel(labelWithString: "Original soundtracks included")
+        let included = GameLabel(labelWithString: L10n.text("Original soundtracks included"))
         included.role = .heading
         included.frame = CGRect(x: 0, y: 426, width: 992, height: 32)
         page.body.addSubview(included)
-        let all = GameCheckButton(title: "All extra soundtracks", target: self, action: #selector(toggleAll))
+        let all = GameCheckButton(title: L10n.text("All extra soundtracks"), target: self, action: #selector(toggleAll))
         all.allowsMixedState = true
         all.frame = CGRect(x: 0, y: 382, width: 650, height: 32)
         page.body.addSubview(all); self.all = all
@@ -62,7 +62,7 @@ import NxlvKit
             let y = CGFloat((packs.count - index - 1) * 44)
             let row = GameCheckButton(title: pack.title, target: self, action: #selector(toggleLibrary(_:)))
             row.tag = index; row.frame = CGRect(x: 0, y: y + 4, width: 600, height: 36)
-            row.setAccessibilityLabel("\(pack.title), \(pack.trackCount) tracks, \(size(pack.bytes))")
+            row.setAccessibilityLabel(L10n.text("\(pack.title), \(pack.trackCount) tracks, \(size(pack.bytes))"))
             let state = GameLabel(labelWithString: "")
             state.frame = CGRect(x: 612, y: y + 4, width: 330, height: 36)
             state.alignment = .right
@@ -77,16 +77,16 @@ import NxlvKit
         page.body.addSubview(summary); self.summary = summary
         let meter = GameProgressIndicator(frame: CGRect(x: 0, y: 50, width: 992, height: 16))
         meter.isIndeterminate = false; meter.minValue = 0; meter.maxValue = 1
-        meter.setAccessibilityLabel("Soundtrack download progress")
+        meter.setAccessibilityLabel(L10n.text("Soundtrack download progress"))
         page.body.addSubview(meter); self.meter = meter
         let status = GameLabel(labelWithString: "")
         status.frame = CGRect(x: 0, y: 0, width: 992, height: 44); status.cell?.wraps = true
         page.body.addSubview(status); self.status = status
-        action = page.addPrimaryAction("Download") { [weak self] in self?.download() }
-        cancel = page.addSecondaryAction("Cancel") { [weak self] in self?.task?.cancel() }
-        cancel?.setAccessibilityLabel("Cancel download")
-        remove = page.addSecondaryAction("Manage", at: 1) { [weak self] in self?.manageInstalled() }
-        remove?.setAccessibilityLabel("Manage installed soundtracks")
+        action = page.addPrimaryAction(L10n.text("Download")) { [weak self] in self?.download() }
+        cancel = page.addSecondaryAction(L10n.text("Cancel")) { [weak self] in self?.task?.cancel() }
+        cancel?.setAccessibilityLabel(L10n.text("Cancel download"))
+        remove = page.addSecondaryAction(L10n.text("Manage"), at: 1) { [weak self] in self?.manageInstalled() }
+        remove?.setAccessibilityLabel(L10n.text("Manage installed soundtracks"))
         self.page = page; refresh()
         GameScreen.shared.present(page, owner: window, onDismiss: { [weak self] in self?.page = nil; onDismiss?() })
     }
@@ -116,21 +116,21 @@ import NxlvKit
             let included = bundled(pack), installed = MusicLibrary.isInstalled(pack, in: directory)
             rows[pack.id]?.isEnabled = !included && !installed && !busy
             rows[pack.id]?.state = included || installed || selected.contains(pack.id) ? .on : .off
-            rowStates[pack.id]?.stringValue = included ? "Included" : installed ? "Installed"
-                : activePack == pack.id ? "Downloading" : busy && selected.contains(pack.id) ? "Queued" : size(pack.bytes)
+            rowStates[pack.id]?.stringValue = included ? L10n.text("Included") : installed ? L10n.text("Installed")
+                : activePack == pack.id ? L10n.text("Downloading") : busy && selected.contains(pack.id) ? L10n.text("Queued") : size(pack.bytes)
         }
         all?.isEnabled = !busy && !missing.isEmpty
         all?.state = !missing.isEmpty && pending.count == missing.count ? .on : pending.isEmpty ? .off : .mixed
-        summary?.stringValue = busy ? "\(packs.first { $0.id == activePack }?.title ?? "Soundtracks")  \(size(completedBytes + Int64(progress * Double(packs.first { $0.id == activePack }?.bytes ?? 0)))) / \(size(queueBytes))"
-            : missing.isEmpty ? "All soundtracks installed" : "\(pending.count) libraries selected    \(size(pending.reduce(0) { $0 + $1.bytes }))"
-        action?.title = busy ? "Downloading" : failure == nil ? "Download" : "Retry"
+        summary?.stringValue = busy ? "\(packs.first { $0.id == activePack }?.title ?? L10n.text("Soundtracks"))  \(size(completedBytes + Int64(progress * Double(packs.first { $0.id == activePack }?.bytes ?? 0)))) / \(size(queueBytes))"
+            : missing.isEmpty ? L10n.text("All soundtracks installed") : L10n.text("\(pending.count) libraries selected    \(size(pending.reduce(0) { $0 + $1.bytes }))")
+        action?.title = busy ? L10n.text("Downloading") : failure == nil ? L10n.text("Download") : L10n.text("Retry")
         action?.isEnabled = !busy && !pending.isEmpty
         cancel?.isHidden = !busy
         remove?.isHidden = busy || !packs.contains { !bundled($0) && MusicLibrary.isInstalled($0, in: directory) }
         meter?.isHidden = !busy
         meter?.doubleValue = queueBytes > 0 ? Double(completedBytes + Int64(progress * Double(packs.first { $0.id == activePack }?.bytes ?? 0))) / Double(queueBytes) : 0
-        status?.stringValue = failure ?? (busy && progress >= 1 ? "Verifying" : "")
-        if welcome { page?.backTitle = busy || missing.isEmpty ? "Continue" : "Not now" }
+        status?.stringValue = failure ?? (busy && progress >= 1 ? L10n.text("Verifying") : "")
+        if welcome { page?.backTitle = busy || missing.isEmpty ? L10n.text("Continue") : L10n.text("Not now") }
         page?.needsDisplay = true
     }
     private func download() {
@@ -163,13 +163,13 @@ import NxlvKit
         }
     }
     private func manageInstalled() {
-        let page = GameMenuPage(title: "Installed soundtracks")
+        let page = GameMenuPage(title: L10n.text("Installed soundtracks"))
         let scroll = NSScrollView(frame: page.body.bounds)
         scroll.autoresizingMask = [.width, .height]; scroll.hasVerticalScroller = true; scroll.drawsBackground = false
         let installed = packs.filter { !bundled($0) && MusicLibrary.isInstalled($0, in: directory) }
         let list = NSView(frame: CGRect(x: 0, y: 0, width: 960, height: CGFloat(installed.count * 52)))
         for (index, pack) in installed.enumerated() {
-            let button = GameActionButton(title: "Remove \(pack.title)", primary: false)
+            let button = GameActionButton(title: L10n.text("Remove \(pack.title)"), primary: false)
             button.frame = CGRect(x: 0, y: CGFloat((installed.count - index - 1) * 52), width: 940, height: 44)
             button.onPress = { [weak self, weak page] in
                 guard let self else { return }

@@ -20,7 +20,7 @@ public struct GameProgressArchive: Codable, Equatable, Sendable {
     }
     public func validate(owner: String) throws {
         guard version == 1, self.owner == owner, records.profiles.map(\.id) == [ArcadeRecords.cloudProfileID] else {
-            throw SequelDataError.invalid("This cloud save belongs to another player or a newer app version.")
+            throw SequelDataError.invalid(L10n.text("This cloud save belongs to another player or a newer app version."))
         }
         _ = try records.validated()
         guard Set(records.runs.map(\.id)).count == records.runs.count,
@@ -28,7 +28,7 @@ public struct GameProgressArchive: Codable, Equatable, Sendable {
                 (key.hasSuffix("|\(ArcadeRecords.cloudProfileID)|true") || key.hasSuffix("|\(ArcadeRecords.cloudProfileID)|false"))
                     && [stats.attempts, stats.clears, stats.zeroSaved, stats.allSaved].allSatisfy { (0...1_000_000_000).contains($0) }
                     && stats.clears <= stats.attempts && stats.zeroSaved <= stats.attempts && stats.allSaved <= stats.attempts
-            }) else { throw SequelDataError.invalid("Invalid cloud record counts.") }
+            }) else { throw SequelDataError.invalid(L10n.text("Invalid cloud record counts.")) }
         try preferences.validate()
     }
     public mutating func merge(_ incoming: Self) throws {
@@ -38,7 +38,7 @@ public struct GameProgressArchive: Codable, Equatable, Sendable {
         try preferences.merge(incoming.preferences)
     }
     public static func decode(_ data: Data, owner: String) throws -> Self {
-        guard data.count <= 32 * 1024 * 1024 else { throw SequelDataError.invalid("The cloud save is too large.") }
+        guard data.count <= 32 * 1024 * 1024 else { throw SequelDataError.invalid(L10n.text("The cloud save is too large.")) }
         let archive = try JSONDecoder().decode(Self.self, from: data)
         try archive.validate(owner: owner)
         return archive
@@ -102,7 +102,7 @@ public struct GameProgressArchive: Codable, Equatable, Sendable {
         let owner = Self.ownerKey(accountID)
         do {
             let profileID = try linkedProfile(owner: owner)
-            guard store.profilesAreWritable, store.storageError == nil else { throw SequelDataError.invalid("Local records are not writable.") }
+            guard store.profilesAreWritable, store.storageError == nil else { throw SequelDataError.invalid(L10n.text("Local records are not writable.")) }
             setState(.syncing)
             let name = Self.fileName(owner: owner)
             let remote = try await transport.load(name: name)
@@ -132,7 +132,7 @@ public struct GameProgressArchive: Codable, Equatable, Sendable {
             let upload = try await Task.detached(priority: .utility) { () -> Data? in
                 if remote.count == 1, try GameProgressArchive.decode(remote[0], owner: owner) == merged { return nil }
                 let data = try JSONEncoder().encode(merged)
-                guard data.count <= 32 * 1024 * 1024 else { throw SequelDataError.invalid("The cloud save is too large.") }
+                guard data.count <= 32 * 1024 * 1024 else { throw SequelDataError.invalid(L10n.text("The cloud save is too large.")) }
                 return data
             }.value
             guard transport.accountID == accountID, store.records.profile(profileID) != nil else { setState(.offline); return }
@@ -156,13 +156,13 @@ public struct GameProgressArchive: Codable, Equatable, Sendable {
     private func linkedProfile(owner: String) throws -> String {
         let binding = "GameCenterProgress.profile." + owner
         if let id = defaults.string(forKey: binding) {
-            guard store.records.profile(id) != nil else { throw SequelDataError.invalid("The linked local player was removed.") }
+            guard store.records.profile(id) != nil else { throw SequelDataError.invalid(L10n.text("The linked local player was removed.")) }
             return id
         }
         let id = store.records.mainProfileID
         let ownership = "GameCenterProgress.owner." + id
         if let previous = defaults.string(forKey: ownership), previous != owner {
-            throw SequelDataError.invalid("This player's progress is linked to another Game Center account.")
+            throw SequelDataError.invalid(L10n.text("This player's progress is linked to another Game Center account."))
         }
         defaults.set(owner, forKey: ownership)
         defaults.set(id, forKey: binding)

@@ -278,7 +278,7 @@ public enum NxlvParser {
                     diagnostics.append(NxlvDiagnostic(
                         severity: .warning,
                         code: .invalidSectionMarker,
-                        message: "A section marker has no keyword.",
+                        message: L10n.text("A section marker has no keyword."),
                         line: lineNumber
                     ))
                     continue
@@ -291,7 +291,7 @@ public enum NxlvParser {
                         diagnostics.append(NxlvDiagnostic(
                             severity: .warning,
                             code: .unexpectedEnd,
-                            message: "The document contains an unmatched $END.",
+                            message: L10n.text("The document contains an unmatched $END."),
                             line: lineNumber
                         ))
                     }
@@ -328,7 +328,7 @@ public enum NxlvParser {
             diagnostics.append(NxlvDiagnostic(
                 severity: .warning,
                 code: .unterminatedSection,
-                message: "Section $\(section.originalKeyword) has no matching $END.",
+                message: L10n.text("Section $\(section.originalKeyword) has no matching $END."),
                 line: section.openingLine
             ))
         }

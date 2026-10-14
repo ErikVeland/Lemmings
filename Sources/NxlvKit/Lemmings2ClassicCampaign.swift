@@ -23,19 +23,19 @@ public struct Lemmings2ClassicCampaign: Sendable {
     public mutating func restore(_ progress: Progress) throws {
         guard progress.version == 3, entries.indices.contains(progress.index), (1...60).contains(progress.population),
               progress.completed.allSatisfy({ entries.indices.contains($0.key) && (1...60).contains($0.value) }) else {
-            throw SequelDataError.invalid("Invalid Classic preview progress.")
+            throw SequelDataError.invalid(L10n.text("Invalid Classic preview progress."))
         }
         index = progress.index; population = progress.population; completed = progress.completed
     }
 
     public init(root: URL, startingAt: Int = 0) throws {
         guard (0..<10).contains(startingAt) else {
-            throw SequelDataError.invalid("Choose a Classic level from 1 to 10.")
+            throw SequelDataError.invalid(L10n.text("Choose a Classic level from 1 to 10."))
         }
         entries = try (0..<10).map { number in
             let path = String(format: "LEVELS/LEVEL%03d.DAT", number)
             let level = try Lemmings2Level(data: Data(contentsOf: root.appendingPathComponent(path)))
-            guard level.style == 0 else { throw SequelDataError.invalid("Unexpected tribe in the Classic sequence.") }
+            guard level.style == 0 else { throw SequelDataError.invalid(L10n.text("Unexpected tribe in the Classic sequence.")) }
             return Entry(number: number, level: level)
         }
         index = startingAt

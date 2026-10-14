@@ -10,15 +10,15 @@ public enum FanLevelError: Error, Equatable, CustomStringConvertible {
     public var description: String {
         switch self {
         case let .wrongSize(bytes):
-            return "A .lvl level is 2048 bytes. This one is \(bytes)."
+            return L10n.text("A .lvl level is 2048 bytes. This one is \(bytes).")
         case let .missingField(name):
-            return "The level description has no \(name) field."
+            return L10n.text("The level description has no \(name) field.")
         case let .invalidField(name):
-            return "The level description has an invalid \(name) field."
+            return L10n.text("The level description has an invalid \(name) field.")
         case let .tooMuchTerrain(count):
-            return "A level holds at most 400 terrain pieces. This one lists \(count)."
+            return L10n.text("A level holds at most 400 terrain pieces. This one lists \(count).")
         case let .tooManyObjects(count):
-            return "A level holds at most 32 objects. This one lists \(count)."
+            return L10n.text("A level holds at most 32 objects. This one lists \(count).")
         }
     }
 }

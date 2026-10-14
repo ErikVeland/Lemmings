@@ -14,21 +14,21 @@ public enum LevelPlaylistError: Error, Equatable, LocalizedError, Sendable {
     public var errorDescription: String? {
         switch self {
         case .invalidEntry:
-            "The saved level reference is invalid."
+            L10n.text("The saved level reference is invalid.")
         case .invalidName:
-            "The playlist name is invalid."
+            L10n.text("The playlist name is invalid.")
         case .duplicateEntry:
-            "The playlist already contains this level."
+            L10n.text("The playlist already contains this level.")
         case .tooManyEntries:
-            "The playlist contains too many levels."
+            L10n.text("The playlist contains too many levels.")
         case .invalidIndex:
-            "The playlist position is invalid."
+            L10n.text("The playlist position is invalid.")
         case .invalidPool:
-            "The level pool is invalid."
+            L10n.text("The level pool is invalid.")
         case .emptyPool:
-            "The level pool has no eligible levels."
+            L10n.text("The level pool has no eligible levels.")
         case .invalidSequence:
-            "The saved level sequence is invalid."
+            L10n.text("The saved level sequence is invalid.")
         }
     }
 }

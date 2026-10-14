@@ -23,29 +23,29 @@ extension MobileGameViewController {
             }
             let title: String
             switch command {
-            case .pause: title = "Pause / resume"
-            case .library: title = "Library"
-            case .hints: title = "Hints"
-            case .help: title = "Controls"
-            case .settings: title = "Settings"
-            case .rewind: title = "Rewind"
-            case .retry: title = "Retry"
-            case .endRun: title = "End run / undo"
-            case .djShuffle: title = "DJ shuffle"
-            case .skill(let index): title = "Skill \(index + 1)"
-            case .step(let direction): title = direction < 0 ? "Step back" : "Step forward"
-            case .cycle(let direction): title = direction < 0 ? "Previous skill" : "Next skill"
-            case .focusUnassigned(let direction): title = direction < 0 ? "Previous unassigned lemming" : "Next unassigned lemming"
-            case .focusLast: title = "Focus last assignment"
-            case .assign: title = "Assign skill"
-            case .repeatAssignment: title = "Repeat last skill"
-            case .centre(let entrance): title = entrance ? "Entrance" : "Exit"
-            case .rate(let direction): title = direction < 0 ? "Decrease release rate" : "Increase release rate"
-            case .speed: title = "Fast speed"
-            case .speedStep(let direction): title = direction < 0 ? "Decrease speed" : "Increase speed"
-            case .speedReset: title = "Reset speed"
-            case .zoom(let superzoom): title = superzoom ? "Superzoom" : "Zoom"
-            case .pan: title = "Pan"
+            case .pause: title = L10n.text("Pause / resume")
+            case .library: title = L10n.text("Library")
+            case .hints: title = L10n.text("Hints")
+            case .help: title = L10n.text("Controls")
+            case .settings: title = L10n.text("Settings")
+            case .rewind: title = L10n.text("Rewind")
+            case .retry: title = L10n.text("Retry")
+            case .endRun: title = L10n.text("End run / undo")
+            case .djShuffle: title = L10n.text("DJ shuffle")
+            case .skill(let index): title = L10n.text("Skill \(index + 1)")
+            case .step(let direction): title = direction < 0 ? L10n.text("Step back") : L10n.text("Step forward")
+            case .cycle(let direction): title = direction < 0 ? L10n.text("Previous skill") : L10n.text("Next skill")
+            case .focusUnassigned(let direction): title = direction < 0 ? L10n.text("Previous unassigned lemming") : L10n.text("Next unassigned lemming")
+            case .focusLast: title = L10n.text("Focus last assignment")
+            case .assign: title = L10n.text("Assign skill")
+            case .repeatAssignment: title = L10n.text("Repeat last skill")
+            case .centre(let entrance): title = entrance ? L10n.text("Entrance") : L10n.text("Exit")
+            case .rate(let direction): title = direction < 0 ? L10n.text("Decrease release rate") : L10n.text("Increase release rate")
+            case .speed: title = L10n.text("Fast speed")
+            case .speedStep(let direction): title = direction < 0 ? L10n.text("Decrease speed") : L10n.text("Increase speed")
+            case .speedReset: title = L10n.text("Reset speed")
+            case .zoom(let superzoom): title = superzoom ? L10n.text("Superzoom") : L10n.text("Zoom")
+            case .pan: title = L10n.text("Pan")
             }
             var modifiers: UIKeyModifierFlags = chord.shift ? .shift : []
             if chord.command { modifiers.insert(.command) }
@@ -303,7 +303,7 @@ extension MobileGameViewController {
     }
     func showInGameSettings(_ group: MobileSettingsGroup? = nil, mappings: Bool = false) {
         guard let library = parent as? MobileLibraryViewController else { return }
-        showCustomOverlay(title: "Settings", details: [], actions: [])
+        showCustomOverlay(title: L10n.text("Settings"), details: [], actions: [])
         overlayCanvas.page = mappings ? library.controllerMappingsPage()
             : group.map { library.settingsPage($0) } ?? MobileSettingsArt.groups()
         overlayCanvas.onAction = { [weak self, weak library] id in
@@ -335,10 +335,10 @@ extension MobileGameViewController {
         #if os(tvOS)
         let help = TVControllerBindings.help.components(separatedBy: "\n")
         #else
-        let help = GameplayCommands.help + ["Two-finger tap on the playfield: DJ shuffle", "L2 / LT + L3: DJ shuffle", "DualSense touchpad click: DJ shuffle"]
+        let help = GameplayCommands.help + [L10n.text("Two-finger tap on the playfield: DJ shuffle"), L10n.text("L2 / LT + L3: DJ shuffle"), L10n.text("DualSense touchpad click: DJ shuffle")]
         #endif
-        showCustomOverlay(title: "Controls", details: help,
-                          actions: [("BACK", { [weak self] in self?.pausePlay(showControls: true) })])
+        showCustomOverlay(title: L10n.text("Controls"), details: help,
+                          actions: [(L10n.text("BACK"), { [weak self] in self?.pausePlay(showControls: true) })])
     }
 }
 #endif

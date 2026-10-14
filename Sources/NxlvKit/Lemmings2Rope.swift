@@ -17,7 +17,7 @@ public struct Lemmings2Rope: Sendable {
     public init(owner: Int, x: Int, y: Int, targetX: Int, targetY: Int) throws {
         var dx = targetX-x, dy = targetY-y
         guard abs(dx) <= 8192, abs(dy) <= 8192 else {
-            throw SequelDataError.invalid("Rope aim exceeds the level bounds.")
+            throw SequelDataError.invalid(L10n.text("Rope aim exceeds the level bounds."))
         }
         // PROCESS a762 extends short aims before launching the hook.
         var length = max(abs(dx),abs(targetY-x))

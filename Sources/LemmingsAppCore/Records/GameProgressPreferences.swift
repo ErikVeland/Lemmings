@@ -54,11 +54,11 @@ public enum GameProgressValue: Codable, Equatable, Sendable {
             let selected = (a.tribe, a.level) >= (b.tribe, b.level) ? a : b
             return .tribes(.init(tribe: selected.tribe, level: selected.level, results: results, skipped: skipped))
         case let (.chronicles(a), .chronicles(b)):
-            guard (a.tribe ?? .classic) == (b.tribe ?? .classic) else { throw SequelDataError.invalid("Cloud tribes do not match.") }
+            guard (a.tribe ?? .classic) == (b.tribe ?? .classic) else { throw SequelDataError.invalid(L10n.text("Cloud tribes do not match.")) }
             let selected = (a.index, a.population) >= (b.index, b.population) ? a : b
             return .chronicles(.init(index: selected.index, population: selected.population,
                 completed: a.completed.merging(b.completed, uniquingKeysWith: max), tribe: selected.tribe))
-        default: throw SequelDataError.invalid("The cloud progress format does not match.")
+        default: throw SequelDataError.invalid(L10n.text("The cloud progress format does not match."))
         }
     }
     public static func mergeLearning(_ a: LearningJourneyProgress, _ b: LearningJourneyProgress) -> LearningJourneyProgress {
@@ -147,9 +147,9 @@ public struct GameProgressPreferences: Codable, Equatable, Sendable {
         }
     }
     public func validate() throws {
-        guard values.count <= 10_000 else { throw SequelDataError.invalid("The cloud progress is too large.") }
+        guard values.count <= 10_000 else { throw SequelDataError.invalid(L10n.text("The cloud progress is too large.")) }
         for (key, value) in values {
-            guard key.count <= 512, !key.contains("\0") else { throw SequelDataError.invalid("Invalid cloud progress key.") }
+            guard key.count <= 512, !key.contains("\0") else { throw SequelDataError.invalid(L10n.text("Invalid cloud progress key.")) }
             let valid: Bool
             switch value {
             case .completed(let indices): valid = key.hasPrefix("cleared/") && !key.contains(".hotseat.") && indices.allSatisfy { (0..<1_000_000).contains($0) }
@@ -172,7 +172,7 @@ public struct GameProgressPreferences: Codable, Equatable, Sendable {
                     && (1...1_000_000).contains(progress.population)
                     && progress.completed.allSatisfy { (0..<30).contains($0.key) && (1...1_000_000).contains($0.value) }
             }
-            guard valid else { throw SequelDataError.invalid("Unsupported cloud progress key.") }
+            guard valid else { throw SequelDataError.invalid(L10n.text("Unsupported cloud progress key.")) }
         }
     }
     @MainActor public func apply(defaults: UserDefaults, profileID: String, sessionID: String? = nil) throws {

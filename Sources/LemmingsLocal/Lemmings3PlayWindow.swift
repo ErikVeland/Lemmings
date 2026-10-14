@@ -27,7 +27,7 @@ import NxlvKit
      * Handles Continue for a level sequence. The argument reports whether the level was won.
      */
     var onSequenceContinue: ((Bool) -> Bool)?
-    var sequenceContinueTitle = "Next level"
+    var sequenceContinueTitle = L10n.text("Next level")
     /**
      * Controls whether this run can update campaign, recovery, replay and verified records.
      */
@@ -91,7 +91,7 @@ import NxlvKit
             modifiers: ["releaseInterval": String(c.releaseInterval), "releaseDelay": String(c.releaseDelay),
                         "reserves": String(c.total), "extras": String(c.extras.count)])
         return ArcadeLevel(id: "l3:" + hash, title: "\(campaign.tribe.title) \(campaign.index + 1)",
-            game: "Lemmings 3", rules: "L3 native beta v1",
+            game: L10n.text("Lemmings 3"), rules: L10n.text("L3 native beta v1"),
             total: c.total + c.extras.count, required: 1, conditions: conditions)
     }
     private let warningSound = SoundEffectPlayer()
@@ -131,7 +131,7 @@ import NxlvKit
     private var timer: Timer?
     private var lastTime = ProcessInfo.processInfo.systemUptime
     private var accumulator = 0.0
-    private var message = "Choose an action, then click a lemming. Walker turns or releases a blocker."
+    private var message = L10n.text("Choose an action, then click a lemming. Walker turns or releases a blocker.")
     private var rewindTimer: Timer?
     private var rewindHeld = false
     private var forwardTimer: Timer?
@@ -167,7 +167,7 @@ import NxlvKit
             } catch { return String(describing: error) }
         }
         if availability[sequence.index] != nil {
-            guard let available = availability.firstIndex(where: { $0 == nil }) else { throw SequelDataError.invalid("No supported levels in the \(tribe.title) tribe yet.") }
+            guard let available = availability.firstIndex(where: { $0 == nil }) else { throw SequelDataError.invalid(L10n.text("No supported levels in the \(tribe.title) tribe yet.")) }
             try sequence.select(available)
         }
         let prefix = String(format: "GRAPHICS/TRIBE%03d", tribe.spriteStyle)
@@ -189,13 +189,13 @@ import NxlvKit
         }
         if let expectedSourceRevision {
             guard let selection else {
-                throw SequelDataError.invalid("The selected Lemmings 3 level is no longer available.")
+                throw SequelDataError.invalid(L10n.text("The selected Lemmings 3 level is no longer available."))
             }
             let source = LevelPreviewSource.lemmings3(
                 root: root, selection: selection, expectedLevelID: expectedLevelID ?? "")
             guard try source.sourceRevision() == expectedSourceRevision else {
                 throw SequelDataError.invalid(
-                    "The selected Lemmings 3 level data changed. Open Level Select and choose it again.")
+                    L10n.text("The selected Lemmings 3 level data changed. Open Level Select and choose it again."))
             }
         }
         dataRoot = root
@@ -214,13 +214,13 @@ import NxlvKit
         if recovery == nil, let selection {
             guard session.availability.indices.contains(selection.level),
                   session.availability[selection.level] == nil else {
-                throw SequelDataError.invalid("This Lemmings 3 level is not available.")
+                throw SequelDataError.invalid(L10n.text("This Lemmings 3 level is not available."))
             }
             let currentLevelID = SHA256.hash(data: sequence.levels[selection.level].rawData)
                 .map { String(format: "%02x", $0) }.joined()
             guard expectedLevelID == nil || currentLevelID == expectedLevelID else {
                 throw SequelDataError.invalid(
-                    "The selected Lemmings 3 level changed. Open Level Select and choose it again.")
+                    L10n.text("The selected Lemmings 3 level changed. Open Level Select and choose it again."))
             }
             try sequence.select(selection.level)
         }
@@ -264,7 +264,7 @@ import NxlvKit
             self.warningSound.setViewport(self.canvas.soundViewport)
         }
 
-        window.title = "Lemmings 3 — \(campaign.tribe.title) \(campaign.index + 1) — Beta"
+        window.title = L10n.text("Lemmings 3 — \(campaign.tribe.title) \(campaign.index + 1) — Beta")
         window.delegate = self; window.isReleasedWhenClosed = false
         window.minSize = NSSize(width: 850, height: 540)
         NotificationCenter.default.addObserver(self, selector: #selector(artworkChanged),
@@ -352,7 +352,7 @@ import NxlvKit
         keyboard.focusUnassigned = { [weak self] direction in
             guard let self, self.pendingTool == nil else { return }
             guard let id = self.assignmentFocus.next(activeIDs: self.game.lemmings.filter(\.active).map(\.id), direction: direction) else {
-                self.message = "No unassigned lemmings"; self.canvas.assignmentHighlight.showNotice(self.message); self.refresh(); return
+                self.message = L10n.text("No unassigned lemmings"); self.canvas.assignmentHighlight.showNotice(self.message); self.refresh(); return
             }
             self.canvas.focusLemming(id)
         }
@@ -412,14 +412,14 @@ import NxlvKit
         keyboard.skillNames = { Array(Lemmings3Panel.names.prefix(5)) }
         keyboard.help = { [weak self] in
             let names = Array(Lemmings3Panel.names.prefix(5))
-            return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + "\n\nSpace: pause\nR: retry\nHold , / <: scrub backward\nHold . / >: scrub forward after rewind\nTap , / .: step one tick\nZ: 2× Zoom at cursor\nScroll up / down: Zoom on / off at cursor\nShift-Z: 2× Superzoom at cursor, 0.5× time\nPress Z or Shift-Z again to switch off; each start spends one use\nEarn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels"
+            return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + L10n.text("\n\nSpace: pause\nR: retry\nHold , / <: scrub backward\nHold . / >: scrub forward after rewind\nTap , / .: step one tick\nZ: 2× Zoom at cursor\nScroll up / down: Zoom on / off at cursor\nShift-Z: 2× Superzoom at cursor, 0.5× time\nPress Z or Shift-Z again to switch off; each start spends one use\nEarn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels")
         }
         keyboard.contextCommands = {
-            [KeyboardCommand(keys: "Arrow keys", action: "Pan the level", group: "Camera"),
-             KeyboardCommand(keys: "V / S", action: "Review / save replay after a result", group: "Menus & results"),
-             KeyboardCommand(keys: "Return / Space", action: "Activate selected menu choice", group: "Menus & results"),
-             KeyboardCommand(keys: ", / LT + B", action: "Rewind the current run", group: "Gameplay"),
-             KeyboardCommand(keys: ", / .", action: "Step one tick; hold to scrub; release to pause", group: "Gameplay")]
+            [KeyboardCommand(keys: L10n.text("Arrow keys"), action: L10n.text("Pan the level"), group: L10n.text("Camera")),
+             KeyboardCommand(keys: L10n.text("V / S"), action: L10n.text("Review / save replay after a result"), group: L10n.text("Menus & results")),
+             KeyboardCommand(keys: L10n.text("Return / Space"), action: L10n.text("Activate selected menu choice"), group: L10n.text("Menus & results")),
+             KeyboardCommand(keys: ", / LT + B", action: L10n.text("Rewind the current run"), group: L10n.text("Gameplay")),
+             KeyboardCommand(keys: ", / .", action: L10n.text("Step one tick; hold to scrub; release to pause"), group: L10n.text("Gameplay"))]
         }
         keyboard.hints = { [weak self] in self?.showLevelHints() }
         keyboard.settings = { [weak self] in self?.onShowSettings?() }
@@ -469,7 +469,7 @@ import NxlvKit
             canvas.restoreCamera(x: CGFloat(recovery.scrollX), y: CGFloat(recovery.scrollY))
             arcadeLevelSnapshot = arcadeLevel
             recordCollectionVisit()
-            message = "Saved run restored. Press Space when you are ready."
+            message = L10n.text("Saved run restored. Press Space when you are ready.")
         } else {
             beginReplay()
             if !ArcadeStore.shared.hotSeatIsActive { canvas.startCountdown.arm() }
@@ -497,37 +497,37 @@ import NxlvKit
             total: 1, releaseInterval: 1, releaseDelay: 0, timeLimit: won ? 20 : 1)
         var fixture = try Lemmings3Runtime(configuration: configuration)
         for _ in 0..<1000 where !fixture.isComplete { fixture.step() }
-        try validateMusicRouting(fixture.isComplete && (fixture.saved > 0) == won, "L3 completion fixture failed")
+        try validateMusicRouting(fixture.isComplete && (fixture.saved > 0) == won, L10n.text("L3 completion fixture failed"))
         game = fixture; arcadeLevelSnapshot = rewardFixtureLevel("lemmings3"); arcadeReport = nil; arcadeRunID = UUID()
         recorded = false; refresh()
-        try validateMusicRouting(ArcadeStore.shared.records.trolley.attempts.contains { $0.id == arcadeRunID }, "L3 sequence result did not persist career stars")
+        try validateMusicRouting(ArcadeStore.shared.records.trolley.attempts.contains { $0.id == arcadeRunID }, L10n.text("L3 sequence result did not persist career stars"))
         completionGlow.advance(at: ProcessInfo.processInfo.systemUptime + 0.7)
-        try validateMusicRouting(canvas.completionGlowAmount == (won ? 1 : 0), "L3 result celebration state is wrong")
+        try validateMusicRouting(canvas.completionGlowAmount == (won ? 1 : 0), L10n.text("L3 result celebration state is wrong"))
         try validateCompletionGlow(canvas, name: "lemmings3-\(won)") { self.canvas.completionGlowAmount = $0 }
         canvas.completionGlowAmount = won ? 1 : 0
     }
     func testCollectionVisitAndRetry() throws {
         timer?.invalidate()
         guard let entry = LevelCollections.entry(attemptID: arcadeRunID), entry.identity.engine == .lemmings3,
-              paused else { throw SequelDataError.invalid("L3 did not record its paused start") }
+              paused else { throw SequelDataError.invalid(L10n.text("L3 did not record its paused start")) }
         restart()
         guard LevelCollections.entry(attemptID: arcadeRunID)?.identity == entry.identity,
               paused, speedControl.multiplier == 1 else {
-            throw SequelDataError.invalid("L3 retry lost its collection identity or pause")
+            throw SequelDataError.invalid(L10n.text("L3 retry lost its collection identity or pause"))
         }
-        print("PASS native L3 visit and paused retry")
+        print(L10n.text("PASS native L3 visit and paused retry"))
     }
     func testInitialMusicRouting() throws {
         timer?.invalidate()
-        try validateMusicRouting(!music.isRunning && !dj.isPlaying, "L3 played music before audio configuration")
+        try validateMusicRouting(!music.isRunning && !dj.isPlaying, L10n.text("L3 played music before audio configuration"))
         var settings = ClassicSettings()
         settings.music = .adaptiveDJ; settings.musicVolume = 0; settings.soundVolume = 0
         setAudioSettings(settings, muted: true)
-        try validateMusicRouting(dj.isPlaying && dj.currentURL != nil, "L3 did not select its level music")
+        try validateMusicRouting(dj.isPlaying && dj.currentURL != nil, L10n.text("L3 did not select its level music"))
         let track = dj.currentURL
         playLevelMusic()
         try validateMusicRouting(dj.currentURL == track && !dj.isCrossfading,
-            "L3 repeated a handover track selection")
+            L10n.text("L3 repeated a handover track selection"))
     }
 
     static func testHasEarnedEnding(root: URL) -> Bool { hasEarnedEnding(root: root) }
@@ -554,7 +554,7 @@ import NxlvKit
 
     func testOpenEnding(afterDismiss: @escaping () -> Void) -> OriginalMoviePlayer? {
         playOriginalMovie(.ending, returnsToGameWhenFinished: true,
-            automaticExitDestination: "the library", afterDismiss: afterDismiss)
+            automaticExitDestination: L10n.text("the library"), afterDismiss: afterDismiss)
         return originalMovie
     }
 
@@ -618,7 +618,7 @@ import NxlvKit
     nonisolated static func browserLevels(root: URL, progressData: [Int: Data]) throws -> [BrowserLevel] {
         var result: [BrowserLevel] = []
         guard let rootRevision = FanLevelLibrary.directoryFingerprint(root) else {
-            throw SequelDataError.invalid("The Lemmings 3 game data could not be verified.")
+            throw SequelDataError.invalid(L10n.text("The Lemmings 3 game data could not be verified."))
         }
         let cacheKey = root.standardizedFileURL.path + ":" + rootRevision
         if let cached = browserCache.value(for: cacheKey) { return cached }
@@ -797,9 +797,9 @@ import NxlvKit
         guard audioConfigured else { return }
         let prefix: String
         switch campaign.tribe {
-        case .classic: prefix = "CLASSIC"
-        case .shadow: prefix = "SHADOW"
-        case .egyptian: prefix = "EGYPT"
+        case .classic: prefix = L10n.text("CLASSIC")
+        case .shadow: prefix = L10n.text("SHADOW")
+        case .egyptian: prefix = L10n.text("EGYPT")
         }
         let tracks = music.library.filter { $0.lastPathComponent.uppercased().hasPrefix(prefix) }
         guard !tracks.isEmpty else { return }
@@ -820,7 +820,7 @@ import NxlvKit
     @objc private func toggleArtwork() { SequelArtworkPreference.setEnabled(!SequelArtworkPreference.enabled) }
     @objc private func artworkChanged() {
         do { try canvas.refreshArtwork() }
-        catch { message = "Artwork could not be loaded: \(error)" }
+        catch { message = L10n.text("Artwork could not be loaded: \(error)") }
         refresh()
     }
     static func savedCompletion(root: URL) -> Int {
@@ -950,7 +950,7 @@ import NxlvKit
             game = try L3RunRecovery.replay(initial: initial, inputs: Array(prefix), through: target)
             try rebuildReplayStatistics(Array(prefix))
         } catch {
-            message = "Could not rewind this run: \(error)"
+            message = L10n.text("Could not rewind this run: \(error)")
 
             return false
         }
@@ -974,7 +974,7 @@ import NxlvKit
             game = try L3RunRecovery.replay(initial: initial, inputs: Array(prefix), through: target)
             try rebuildReplayStatistics(Array(prefix))
         } catch {
-            message = "Could not move forward through this run: \(error)"
+            message = L10n.text("Could not move forward through this run: \(error)")
 
             return false
         }
@@ -1006,9 +1006,9 @@ import NxlvKit
     @objc private func toggleFast() { speedControl.tap(); refresh() }
     @objc private func confirmEndRun() {
         guard !game.isComplete, !GameScreen.shared.isPresented else { return }
-        GameScreen.shared.confirm("End this run?",
-            detail: "Active lemmings will be lost. Rescued lemmings and reserves will be retained. You can retry the level.",
-            actionTitle: "End run", owner: window) { [weak self] in
+        GameScreen.shared.confirm(L10n.text("End this run?"),
+            detail: L10n.text("Active lemmings will be lost. Rescued lemmings and reserves will be retained. You can retry the level."),
+            actionTitle: L10n.text("End run"), owner: window) { [weak self] in
                 guard let self else { return }
                 self.game.abort(); self.paused = true; self.accumulator = 0; self.refresh()
             }
@@ -1024,7 +1024,7 @@ import NxlvKit
     @objc private func restart() {
         saveCheckpoint(immediately: true, waitForDisk: false)
         speedControl.newLevel()
-        canvas.menuRows = nil; pendingTool = nil; manualCarrierID = nil; canvas.directionPoint = nil; initial = freshInitial; game = initial; beginReplay(); recorded = false; playsEndingAfterThisResult = false; canvas.startCountdown.arm(); paused = true; accumulator = 0; canvas.resetCamera(campaign.levels[campaign.index]); message = "Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera."; refresh() }
+        canvas.menuRows = nil; pendingTool = nil; manualCarrierID = nil; canvas.directionPoint = nil; initial = freshInitial; game = initial; beginReplay(); recorded = false; playsEndingAfterThisResult = false; canvas.startCountdown.arm(); paused = true; accumulator = 0; canvas.resetCamera(campaign.levels[campaign.index]); message = L10n.text("Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera."); refresh() }
     private func save() {
         guard recordsCampaignProgress else { return }
         if let data = try? JSONEncoder().encode(campaign.progress) {
@@ -1051,7 +1051,7 @@ import NxlvKit
                 UserDefaults.standard.set(tribe.rawValue, forKey: ArcadeStore.shared.progressKey(
                     "nativeL3SelectedTribe.v1." + Self.storageIdentity(dataRoot)))
             }
-            window?.title = "Lemmings 3 — \(tribe.title) \(campaign.index + 1) — Beta"
+            window?.title = L10n.text("Lemmings 3 — \(tribe.title) \(campaign.index + 1) — Beta")
             restart()
         } catch {
             message = String(describing: error); refresh()
@@ -1068,7 +1068,7 @@ import NxlvKit
         if playsEndingAfterThisResult {
             playsEndingAfterThisResult = false
             playOriginalMovie(.ending, returnsToGameWhenFinished: true,
-                automaticExitDestination: usesSharedWindow ? "the library" : "the menu") { [weak self] in
+                automaticExitDestination: usesSharedWindow ? L10n.text("the library") : L10n.text("the menu")) { [weak self] in
                 guard let self else { return }
                 if let onCampaignCompleted = self.onCampaignCompleted { onCampaignCompleted() }
                 else if self.usesSharedWindow { self.onReturnToLibrary?() }
@@ -1088,7 +1088,7 @@ import NxlvKit
         let scene = try Lemmings3Scene(level: level, style: style, permanent: perm, temporary: temp)
         try canvas.load(scene: scene, style: style, permanent: perm, temporary: temp, sprites: sprites, root: dataRoot, terrainStyle: level.style)
         campaign = proposed; initial = replacement; freshInitial = replacement; save()
-        window?.title = "Lemmings 3 — \(campaign.tribe.title) \(campaign.index + 1) — Beta"
+        window?.title = L10n.text("Lemmings 3 — \(campaign.tribe.title) \(campaign.index + 1) — Beta")
         restart()
     }
     private func assign(x: Int, y: Int) {
@@ -1127,29 +1127,29 @@ import NxlvKit
         } else {
             warningSound.play(.actionRejected, at: GameplaySoundPoint(x: Double(lem.x), y: Double(lem.y)))
         }
-        message = accepted ? "\(action.rawValue.capitalized) assigned to lemming \(id + 1)." : "That lemming cannot use this action now."
+        message = accepted ? L10n.text("\(action.rawValue.capitalized) assigned to lemming \(id + 1).") : L10n.text("That lemming cannot use this action now.")
         refresh()
     }
     func playReadySound() { warningSound.play(.ready) }
     private func showGameMenu() {
         pendingTool = nil; canvas.directionPoint = nil
         if canvas.menuRows != nil { canvas.menuRows = nil; canvas.needsDisplay = true; return }
-        canvas.menuNotice = "EXPERIMENTAL GAMEPLAY"
+        canvas.menuNotice = L10n.text(L10n.text("EXPERIMENTAL GAMEPLAY"))
         menuTribe = campaign.tribe.rawValue - 1; menuLevel = campaign.index
         rebuildMenu()
     }
     private func rebuildMenu() {
         if onSequenceContinue != nil {
-            canvas.menuRows = ["RESUME", "RETRY LEVEL",
-                SequelArtworkPreference.enabled ? "ARTWORK  MAC STYLE" : "ARTWORK  ORIGINAL PC",
-                "ORIGINAL MOVIES", "BACK TO LIBRARY"]
+            canvas.menuRows = [L10n.text("RESUME"), L10n.text(L10n.text("RETRY LEVEL")),
+                SequelArtworkPreference.enabled ? L10n.text(L10n.text("ARTWORK  MAC STYLE")) : L10n.text(L10n.text("ARTWORK  ORIGINAL PC")),
+                L10n.text(L10n.text("ORIGINAL MOVIES")), L10n.text(L10n.text("BACK TO LIBRARY"))]
             canvas.needsDisplay = true
             return
         }
         let tribe = Lemmings3ClassicCampaign.Tribe.allCases[menuTribe]
-        canvas.menuRows = ["RESUME", "RETRY LEVEL", "TRIBE  " + tribe.title.uppercased(),
-            "PREVIOUS LEVEL", "NEXT LEVEL", "PLAY LEVEL \(menuLevel + 1)",
-            SequelArtworkPreference.enabled ? "ARTWORK  MAC STYLE" : "ARTWORK  ORIGINAL PC", "ORIGINAL MOVIES", "BACK TO LIBRARY"]
+        canvas.menuRows = [L10n.text("RESUME"), L10n.text(L10n.text("RETRY LEVEL")), L10n.text(L10n.text("TRIBE  ")) + tribe.title.uppercased(),
+            L10n.text(L10n.text("PREVIOUS LEVEL")), L10n.text(L10n.text("NEXT LEVEL")), L10n.text("PLAY LEVEL \(menuLevel + 1)"),
+            SequelArtworkPreference.enabled ? L10n.text(L10n.text("ARTWORK  MAC STYLE")) : L10n.text(L10n.text("ARTWORK  ORIGINAL PC")), L10n.text(L10n.text("ORIGINAL MOVIES")), L10n.text(L10n.text("BACK TO LIBRARY"))]
         canvas.needsDisplay = true
     }
     private func menuAction(_ row: Int) {
@@ -1175,11 +1175,11 @@ import NxlvKit
             let selectedTribe = Lemmings3ClassicCampaign.Tribe.allCases[menuTribe]
             if let session = try? Self.session(root: dataRoot, tribe: selectedTribe,
               restoresCampaignProgress: recordsCampaignProgress), session.availability[menuLevel] != nil {
-                canvas.menuNotice = "LEVEL NOT AVAILABLE"; rebuildMenu(); return
+                canvas.menuNotice = L10n.text(L10n.text("LEVEL NOT AVAILABLE")); rebuildMenu(); return
             }
             if menuTribe != campaign.tribe.rawValue - 1 { chooseTribe() }
             else if availability[menuLevel] == nil { chooseLevel() }
-            else { canvas.menuNotice = "LEVEL NOT AVAILABLE"; rebuildMenu() }
+            else { canvas.menuNotice = L10n.text(L10n.text("LEVEL NOT AVAILABLE")); rebuildMenu() }
         case 6: toggleArtwork(); rebuildMenu()
         case 7: showOriginalMovies()
         case 8: canvas.menuRows = nil; close()
@@ -1188,7 +1188,7 @@ import NxlvKit
         canvas.needsDisplay = true
     }
     private func showOriginalMovies() {
-        let page = GameMenuPage(title: "Original movies", subtitle: "Lemmings 3")
+        let page = GameMenuPage(title: L10n.text("Original movies"), subtitle: L10n.text("Lemmings 3"))
         page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
         for (index, movie) in OriginalMoviePlayer.Movie.allCases.enumerated() {
             page.addListAction(movie.title, at: index) { [weak self] in self?.playOriginalMovie(movie) }
@@ -1197,7 +1197,7 @@ import NxlvKit
     }
     private func playOriginalMovie(_ movie: OriginalMoviePlayer.Movie,
                                    returnsToGameWhenFinished: Bool = false,
-                                   automaticExitDestination: String = "the game",
+                                   automaticExitDestination: String = L10n.text("the game"),
                                    afterDismiss: (() -> Void)? = nil) {
         do {
             var soundtrack: AVAudioPlayer?
@@ -1222,13 +1222,13 @@ import NxlvKit
             if !player.present(owner: window) {
                 originalMovie = nil; try? resumeAudioOutput()
                 if !returnsToGameWhenFinished {
-                    message = "The movie could not open in the game window."
+                    message = L10n.text("The movie could not open in the game window.")
                 }
                 afterDismiss?()
             }
         } catch {
             if !returnsToGameWhenFinished {
-                GameScreen.shared.message("Original movie", detail: String(describing: error))
+                GameScreen.shared.message(L10n.text("Original movie"), detail: String(describing: error))
             }
             afterDismiss?()
         }
@@ -1279,7 +1279,7 @@ import NxlvKit
                let entry = try? LevelPlaylistEntry(identity: .init(engine: .lemmings3,
                  packID: "chronicles-\(campaign.tribe.rawValue)", levelID: "\(campaign.index):\(levelID)"),
                  catalogueRevision: LevelCollections.catalogueRevision, sourceRevision: revision,
-                 packNameSnapshot: "The Chronicles - \(campaign.tribe.title)",
+                 packNameSnapshot: L10n.text("The Chronicles - \(campaign.tribe.title)"),
                  levelNameSnapshot: "\(campaign.tribe.title) \(campaign.index + 1)", levelNumberSnapshot: campaign.index + 1) {
                 LevelCollections.record(entry, profileID: arcadeProfileID, attemptID: arcadeRunID)
             }
@@ -1304,7 +1304,7 @@ import NxlvKit
             ArcadeStore.shared.beginAttempt(id: arcadeRunID, profileID: arcadeProfileID,
                 level: arcadeLevel, previousID: previousAttemptID)
         }
-        runMovie.begin(ticksPerSecond: Lemmings3Runtime.ticksPerSecond, title: "Lemmings 3 - \(campaign.tribe.title) \(campaign.index + 1)")
+        runMovie.begin(ticksPerSecond: Lemmings3Runtime.ticksPerSecond, title: L10n.text("Lemmings 3 - \(campaign.tribe.title) \(campaign.index + 1)"))
         userPausedMusic = false
         playLevelMusic()
         try? music.resumeOutput(); dj.resumeOutput()
@@ -1319,8 +1319,8 @@ import NxlvKit
         let wallet = PrecisionZoomController.shared
         guard wallet.toggle(kind) else {
             message = wallet.storageError ?? (kind == .zoom
-                ? "No Zoom uses. Earn one for every 3 no-Rewind career stars."
-                : "No Superzoom uses. Earn one for every 3 no-Rewind three-star levels.")
+                ? L10n.text("No Zoom uses. Earn one for every 3 no-Rewind career stars.")
+                : L10n.text("No Superzoom uses. Earn one for every 3 no-Rewind three-star levels."))
             canvas.assignmentHighlight.showNotice(message)
             refresh()
             return
@@ -1337,7 +1337,7 @@ import NxlvKit
             syncPrecisionZoom(at: point)
             refresh()
         case .unavailable:
-            message = wallet.storageError ?? "No Zoom uses. Earn one for every 3 no-Rewind career stars."
+            message = wallet.storageError ?? L10n.text("No Zoom uses. Earn one for every 3 no-Rewind career stars.")
             canvas.assignmentHighlight.showNotice(message)
             refresh()
         case .unchanged: break
@@ -1414,7 +1414,7 @@ import NxlvKit
             rewardVolumeProvider: { [weak self] in self?.warningSound.effectiveVolume ?? 0 },
             continueHandlesHandover: onSequenceContinue != nil,
             skip: canSkipLevel ? { [weak self] in self?.skipLevel() } : nil,
-            status: needsTribeSurvivors ? "Need 50 survivors to complete this tribe." : nil,
+            status: needsTribeSurvivors ? L10n.text("Need 50 survivors to complete this tribe.") : nil,
             menu: { [weak self] in self?.gameplayKeyboard?.mainMenu?() })
     }
     /// Level skips apply to a failed campaign level, not playlists.
@@ -1436,10 +1436,10 @@ import NxlvKit
             && game.survivors < Lemmings3ClassicCampaign.requiredTribeSurvivors
     }
     private var resultContinueTitle: String {
-        if onSequenceContinue != nil { return game.saved == 0 ? "Retry level" : sequenceContinueTitle }
-        if needsTribeSurvivors { return "Choose level" }
-        if canAdvance { return playsEndingAfterThisResult ? "Continue" : "Next level" }
-        return usesSharedWindow ? "Back to library" : "Choose level"
+        if onSequenceContinue != nil { return game.saved == 0 ? L10n.text("Retry level") : sequenceContinueTitle }
+        if needsTribeSurvivors { return L10n.text("Choose level") }
+        if canAdvance { return playsEndingAfterThisResult ? L10n.text("Continue") : L10n.text("Next level") }
+        return usesSharedWindow ? L10n.text("Back to library") : L10n.text("Choose level")
     }
     private func continueArcadeResult() {
         if onSequenceContinue != nil, game.saved == 0 {
@@ -1477,7 +1477,7 @@ import NxlvKit
         checkpoint.hotSeatID = arcadeHotSeatID
         recoveryStore.save(checkpoint, immediately: immediately && waitForDisk, coalescing: !immediately,
             prepareStateHash: { L3RunRecovery.stateHash(captured) }) { [weak self] error in
-            self?.message = "Run recovery save failed: " + error
+            self?.message = L10n.text("Run recovery save failed: ") + error
         }
     }
 
@@ -1549,10 +1549,10 @@ import NxlvKit
             || (availability.indices.contains(campaign.index + 1) && availability[campaign.index + 1] == nil))
         canvas.selectedAction = selected; canvas.manualCarrierID = manualCarrierID; canvas.paused = paused; canvas.fast = fast
         canvas.updateSkillBadge()
-        let transport = rewindOriginState.map { "Rewind active, \($0.tick - game.tick) ticks back. Hold full stop scrubs forward. Escape cancels." } ?? ""
+        let transport = rewindOriginState.map { L10n.text("Rewind active, \($0.tick - game.tick) ticks back. Hold full stop scrubs forward. Escape cancels.") } ?? ""
         canvas.rewindOriginTick = rewindOriginState?.tick
         canvas.rewindCurrentTick = game.tick
-        canvas.setAccessibilityLabel("Lemmings 3. \(campaign.tribe.title) level \(campaign.index + 1). \(game.saved) saved, \(game.reserve) in reserve, \(game.remainingSeconds) seconds. \(deathCounter.accessibility). Selected \(Lemmings3Panel.names[selected]). \(message) \(canvas.precisionStatus.accessibility). Space pauses. F changes speed. Z or scroll up zooms. Scroll down switches Zoom off. Shift-Z superzooms. \(transport) Escape returns to the main menu. Double-click End Run to finish.")
+        canvas.setAccessibilityLabel(L10n.text("Lemmings 3. \(campaign.tribe.title) level \(campaign.index + 1). \(game.saved) saved, \(game.reserve) in reserve, \(game.remainingSeconds) seconds. \(deathCounter.accessibility). Selected \(Lemmings3Panel.names[selected]). \(message) \(canvas.precisionStatus.accessibility). Space pauses. F changes speed. Z or scroll up zooms. Scroll down switches Zoom off. Shift-Z superzooms. \(transport) Escape returns to the main menu. Double-click End Run to finish."))
         let turn = ArcadeStore.shared.hotSeatIsActive ? ArcadeStore.shared.records.profile(arcadeProfileID) : nil
         canvas.turnBadge.show(initials: turn?.initials, portrait: turn.flatMap { ArcadeWindow.shared.arcadeView.portraitImage($0.portrait) })
         canvas.speedMultiplier = speedControl.multiplier
@@ -1706,7 +1706,7 @@ import NxlvKit
         func rect(_ r: CGRect) -> CGRect { CGRect(x: screenOrigin.x + r.minX * zoom, y: screenOrigin.y + r.minY * zoom, width: r.width * zoom, height: r.height * zoom) }
         if let rows = menuRows {
             return rows.enumerated().map { index, title in
-                accessibleElements.element(id: "menu-\(index)", owner: self, label: title,
+                accessibleElements.element(id: L10n.text("menu-\(index)"), owner: self, label: title,
                     frame: rect(CGRect(x: 32, y: 39 + index * 16, width: 256, height: 16))) { [weak self] in self?.onMenuRow?(index) }
             }
         }
@@ -1714,23 +1714,23 @@ import NxlvKit
             return Lemmings3Runtime.Direction.allCases.map { direction in
                 let area = directionPickerRect
                 let button = CGRect(x: area.minX + CGFloat(direction.dx + 1) * 14, y: area.minY + CGFloat(direction.dy + 1) * 14, width: 14, height: 14)
-                return accessibleElements.element(id: "direction-" + direction.rawValue, owner: self, label: "Direction " + direction.rawValue, frame: rect(button)) { [weak self] in self?.onDirection?(direction) }
+                return accessibleElements.element(id: L10n.text("direction-") + direction.rawValue, owner: self, label: L10n.text(L10n.text("Direction ")) + direction.rawValue, frame: rect(button)) { [weak self] in self?.onDirection?(direction) }
             }
         }
         var children: [Any] = []
         if !turnBadge.isHidden { children.append(turnBadge) }
         for slot in [0, 1, 2, 3, 4, 6, 7, 8] {
-            let title = slot == 6 ? (fast ? "Return to normal speed" : "Start fast-forward") : slot == 7 ? (paused ? "Resume" : "Pause") : Lemmings3Panel.names[slot]
-            children.append(accessibleElements.element(id: "panel-\(slot)", owner: self, label: title,
+            let title = slot == 6 ? (fast ? L10n.text(L10n.text("Return to normal speed")) : L10n.text(L10n.text("Start fast-forward"))) : slot == 7 ? (paused ? L10n.text(L10n.text("Resume")) : L10n.text(L10n.text("Pause"))) : Lemmings3Panel.names[slot]
+            children.append(accessibleElements.element(id: L10n.text("panel-\(slot)"), owner: self, label: title,
                 frame: rect(CGRect(x: Lemmings3Panel.edges[slot], y: 172, width: Lemmings3Panel.edges[slot + 1] - Lemmings3Panel.edges[slot], height: 40))) { [weak self] in self?.onPanel?(slot, slot == 8 ? 2 : 1) })
         }
         if variableSpeedEnabled {
             for direction in [-1, 1] {
-                children.append(accessibleElements.element(id: "speed-\(direction)", owner: self,
-                    label: direction < 0 ? "Decrease fast speed" : "Increase fast speed", frame: rect(CGRect(x: direction < 0 ? 214 : 241, y: 172, width: 8, height: 40))) { [weak self] in self?.onSpeedStep?(direction, ProcessInfo.processInfo.systemUptime) })
+                children.append(accessibleElements.element(id: L10n.text("speed-\(direction)"), owner: self,
+                    label: direction < 0 ? L10n.text(L10n.text("Decrease fast speed")) : L10n.text(L10n.text("Increase fast speed")), frame: rect(CGRect(x: direction < 0 ? 214 : 241, y: 172, width: 8, height: 40))) { [weak self] in self?.onSpeedStep?(direction, ProcessInfo.processInfo.systemUptime) })
             }
         }
-        children.append(accessibleElements.element(id: "menu", owner: self, label: "Game menu", frame: rect(CGRect(x: 280, y: 0, width: 40, height: 12))) { [weak self] in self?.onMenu?() })
+        children.append(accessibleElements.element(id: L10n.text("menu"), owner: self, label: L10n.text(L10n.text("Game menu")), frame: rect(CGRect(x: 280, y: 0, width: 40, height: 12))) { [weak self] in self?.onMenu?() })
         layoutTimeline()
         return children + timeline.accessibleControls(owner: self)
     }
@@ -1758,7 +1758,7 @@ import NxlvKit
             if menuRows != nil { NSCursor.arrow.set() }
         }
     }
-    var menuNotice = "EXPERIMENTAL GAMEPLAY"
+    var menuNotice = L10n.text(L10n.text("EXPERIMENTAL GAMEPLAY"))
     var directionPoint: CGPoint?
     private var pointerPosition: CGPoint?
     private var controllerPointer: CGPoint?
@@ -2114,11 +2114,11 @@ import NxlvKit
                 selectedSprite = (pixels, spriteRect)
             }
             if lem.charmedBy != nil {
-                GameTypography.annotation("Charmed", at: NSPoint(x: origin.x + (CGFloat(lem.x - 8) - cameraX) * zoom,
+                GameTypography.annotation(L10n.text("Charmed"), at: NSPoint(x: origin.x + (CGFloat(lem.x - 8) - cameraX) * zoom,
                     y: origin.y + (CGFloat(lem.y - 30) - cameraY) * zoom), palette: .green)
             }
             if let tool = lem.tool ?? lem.mobilityTool {
-                let label = lem.tool == nil ? "\(tool.label) \((lem.mobilityTicks + 22) / 23)s" : "\(tool.label)\(lem.quantity)"
+                let label = lem.tool == nil ? L10n.text("\(tool.label) \((lem.mobilityTicks + 22) / 23)s") : "\(tool.label)\(lem.quantity)"
                 GameTypography.annotation(label, at: NSPoint(x: origin.x + (CGFloat(lem.x - 4) - cameraX) * zoom, y: origin.y + (CGFloat(lem.y - 23) - cameraY) * zoom), palette: .blue)
             }
         }
@@ -2364,9 +2364,9 @@ import NxlvKit
         let transform = NSAffineTransform(); transform.translateX(by: screenOrigin.x, yBy: screenOrigin.y); transform.scale(by: zoom); transform.concat()
         NSGraphicsContext.current?.imageInterpolation = .none
         NSColor.black.setFill(); CGRect(x: 0, y: 0, width: 320, height: 12).fill()
-        let status = "OUT \(game.released) SAVE \(game.saved) LEFT \(game.reserve) LOST \(game.lost)"
+        let status = L10n.text("OUT \(game.released) SAVE \(game.saved) LEFT \(game.reserve) LOST \(game.lost)")
         art.text(menuRows == nil ? status + " " + deathCountdownText : status, x: 2, y: 3, scale: 0.65)
-        if !readOnlyReplay { art.text("MENU", x: 286, y: 3, scale: 0.8) }
+        if !readOnlyReplay { art.text(L10n.text("MENU"), x: 286, y: 3, scale: 0.8) }
         art.normal.draw(in: CGRect(x: 0, y: 172, width: 320, height: 40), from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
         for slot in readOnlyReplay ? [] : [selectedAction] + (fast ? [6] : []) + (paused ? [7] : []) {
             let left = CGFloat(Lemmings3Panel.edges[slot]), width = CGFloat(Lemmings3Panel.edges[slot + 1]) - left
@@ -2417,7 +2417,7 @@ import NxlvKit
         }
         if let rows = menuRows {
             NSColor.black.withAlphaComponent(0.86).setFill(); CGRect(x: 22, y: 16, width: 276, height: 184).fill()
-            art.text("LEMMINGS 3", x: 112, y: 23)
+            art.text(L10n.text("LEMMINGS 3"), x: 112, y: 23)
             for (index, row) in rows.enumerated() {
                 if index == menuSelection { NSColor(calibratedWhite: 0.22, alpha: 1).setFill(); CGRect(x: 30, y: 38 + index * 16, width: 260, height: 15).fill() }
                 art.text(row, x: 39, y: CGFloat(42 + index * 16))

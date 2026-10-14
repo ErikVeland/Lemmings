@@ -3,7 +3,7 @@ import Foundation
 public enum DifficultyGrade: Int, Codable, CaseIterable, Sendable {
     case beginner = 1, easy, moderate, tricky, challenging, hard, veryHard, expert, extreme, master
     public var name: String {
-        ["Beginner", "Easy", "Moderate", "Tricky", "Challenging", "Hard", "Very Hard", "Expert", "Extreme", "Master"][rawValue - 1]
+        [L10n.text("Beginner"), L10n.text("Easy"), L10n.text("Moderate"), L10n.text("Tricky"), L10n.text("Challenging"), L10n.text("Hard"), L10n.text("Very Hard"), L10n.text("Expert"), L10n.text("Extreme"), L10n.text("Master")][rawValue - 1]
     }
     public init(score: Double) {
         self = Self(rawValue: min(10, max(1, Int((score.isFinite ? score : 0).clampedDifficulty / 100) + 1)))!

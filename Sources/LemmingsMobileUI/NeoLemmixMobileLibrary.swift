@@ -24,7 +24,7 @@ final class NeoLemmixMobileLibrary: MobileGameLibrary {
 
     static let engineFingerprint = "neolemmix-mobile-runtime-v1"
     let directory: URL
-    let displayName = "NeoLemmix"
+    let displayName = L10n.text(L10n.text("NeoLemmix"))
     let levels: [MobileLevelSummary]
     private let entries: [Entry]
     private let storage: MobileStorage
@@ -51,7 +51,7 @@ final class NeoLemmixMobileLibrary: MobileGameLibrary {
             for (index, level) in resolvedPack.pack.levels.enumerated() {
                 guard let stylesRoot = resolvedPack.stylesRoot(for: level) else { continue }
                 let group = level.groups.last ?? resolvedPack.pack.title
-                let title = level.title.isEmpty ? "Level \(index + 1)" : level.title
+                let title = level.title.isEmpty ? L10n.text(L10n.text("Level \(index + 1)")) : level.title
                 let summary = MobileLevelSummary(index: entries.count, rank: group,
                     number: index + 1, title: title)
                 entries.append(Entry(pack: resolvedPack.pack, level: level,
@@ -174,13 +174,13 @@ private enum NeoLemmixMobileLibraryError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case .noSupportedLevels:
-            "The imported NeoLemmix folder has no levels with resolved styles."
+            L10n.text("The imported NeoLemmix folder has no levels with resolved styles.")
         case let .incompleteStyles(level):
-            "NeoLemmix styles for \(level) are incomplete."
+            L10n.text("NeoLemmix styles for \(level) are incomplete.")
         case let .unsupportedLevel(level):
-            "\(level) uses a feature that is not supported in this NeoLemmix build."
+            L10n.text("\(level) uses a feature that is not supported in this NeoLemmix build.")
         case let .progressSave(reason):
-            "NeoLemmix progress could not be saved: \(reason)"
+            L10n.text("NeoLemmix progress could not be saved: \(reason)")
         }
     }
 }

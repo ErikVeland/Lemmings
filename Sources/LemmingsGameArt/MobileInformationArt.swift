@@ -1,48 +1,49 @@
 import Foundation
+import NxlvKit
 
 /// The information pages share their bitmap layout with the headless capture tool.
 public enum MobileInformationArt {
     public static func effectsWelcome() -> GameFrontEnd.Page {
-        var page = GameFrontEnd.Page(title: "Choose your play style", details: ["Modern", "Aiming aids", "Variable speed",
-                                                        "Old school", "Original inputs", "Classic effects"],
-              footer: [.init("welcomeOriginal", "Old school"), .init("welcomeModern", "Modern", primary: true)])
+        var page = GameFrontEnd.Page(title: L10n.text("Choose your play style"), details: [L10n.text("Modern"), L10n.text("Aiming aids"), L10n.text("Variable speed"),
+                                                        L10n.text("Old school"), L10n.text("Original inputs"), L10n.text("Classic effects")],
+              footer: [.init("welcomeOriginal", L10n.text("Old school")), .init("welcomeModern", L10n.text("Modern"), primary: true)])
         page.detailHeadings = [0, 3]
         return page
     }
     public static func whatsNew(version: String) -> GameFrontEnd.Page {
-        .init(title: "What's new in " + version,
-              details: ["Classic + fans", "Hot Seat player HUD", "Bomb countdowns", "Smooth music loops",
-                        "Rewind scratch", "Portrait controls", "Pointer targeting", "Shared saves/replays"],
-              footer: [.init("welcomeContinue", "Continue", primary: true)])
+        .init(title: L10n.text("What's new in ") + version,
+              details: [L10n.text("Classic + fans"), L10n.text("Hot Seat player HUD"), L10n.text("Bomb countdowns"), L10n.text("Smooth music loops"),
+                        L10n.text("Rewind scratch"), L10n.text("Portrait controls"), L10n.text("Pointer targeting"), L10n.text("Shared saves/replays")],
+              footer: [.init("welcomeContinue", L10n.text("Continue"), primary: true)])
     }
     public static func telemetryConsent() -> GameFrontEnd.Page {
-        .init(title: "Share play counts?", details: ["Opted-in installs", "Daily use", "Level results", "Saved lemmings",
-              "Solo / Hot Seat", "Soundtrack use", "No names or IDs", "No pack names", "No replays", "Service sees IP"],
-              footer: [.init("telemetryNo", "Not now"), .init("telemetryYes", "Share counts", primary: true)])
+        .init(title: L10n.text("Share play counts?"), details: [L10n.text("Opted-in installs"), L10n.text("Daily use"), L10n.text("Level results"), L10n.text("Saved lemmings"),
+              L10n.text("Solo / Hot Seat"), L10n.text("Soundtrack use"), L10n.text("No names or IDs"), L10n.text("No pack names"), L10n.text("No replays"), L10n.text("Service sees IP")],
+              footer: [.init("telemetryNo", L10n.text("Not now")), .init("telemetryYes", L10n.text("Share counts"), primary: true)])
     }
     public static func insights(counts: [String: Int], shared: Bool, days: Int,
                                 sharingAvailable: Bool, loading: Bool = false, notice: String = "") -> GameFrontEnd.Page {
-        let names = [("starts", "Level starts"), ("wins", "Wins"), ("fails", "Fails"),
-                     ("abandoned", "Unfinished"), ("saved", "Lemmings saved"),
-                     ("solo", "Solo starts"), ("hotSeat", "Hot Seat starts"),
-                     ("music", "All music chosen"), ("downloads", "Music downloaded")]
+        let names = [("starts", L10n.text("Level starts")), ("wins", L10n.text("Wins")), ("fails", L10n.text("Fails")),
+                     ("abandoned", L10n.text("Unfinished")), ("saved", L10n.text("Lemmings saved")),
+                     ("solo", L10n.text("Solo starts")), ("hotSeat", L10n.text("Hot Seat starts")),
+                     ("music", L10n.text("All music chosen")), ("downloads", L10n.text("Music downloaded"))]
         let installs = shared ? counts["installs"].map(String.init) ?? "N/A" : "N/A"
-        let rows: [GameFrontEnd.Action] = [.init("count.installs", "Opted-in installs (all-time): " + installs, enabled: false)]
+        let rows: [GameFrontEnd.Action] = [.init("count.installs", L10n.text("Opted-in installs (all-time): ") + installs, enabled: false)]
             + names.map { key, title in .init("count." + key, "\(title): \(counts[key, default: 0])", enabled: false) }
-        return .init(title: "Play Insights", subtitle: !notice.isEmpty ? notice : loading ? "Loading..." :
-            shared ? "Shared: \(days) days" : "This device", rows: rows,
-            footer: [.init("insightsLocal", "This device", selected: !shared),
-                     .init("insightsDays", "Last \(days) days", enabled: sharingAvailable),
-                     .init("insightsShared", "Load shared", enabled: sharingAvailable && !loading),
-                     .init("insightsClear", "Clear local counts"), .init("settingsGroup.privacy", "Back")])
+        return .init(title: L10n.text("Play Insights"), subtitle: !notice.isEmpty ? notice : loading ? L10n.text("Loading...") :
+            shared ? L10n.text("Shared: \(days) days") : L10n.text("This device"), rows: rows,
+            footer: [.init("insightsLocal", L10n.text("This device"), selected: !shared),
+                     .init("insightsDays", L10n.text("Last \(days) days"), enabled: sharingAvailable),
+                     .init("insightsShared", L10n.text("Load shared"), enabled: sharingAvailable && !loading),
+                     .init("insightsClear", L10n.text("Clear local counts")), .init("settingsGroup.privacy", L10n.text("Back"))])
     }
     public static func insightsToken(length: Int) -> GameFrontEnd.Page {
-        .init(title: "Shared play counts", rows: [.init("insightsTokenEdit", "Access token: " +
+        .init(title: L10n.text("Shared play counts"), rows: [.init("insightsTokenEdit", L10n.text("Access token: ") +
             String(repeating: "*", count: min(16, max(0, length))))],
-              footer: [.init("playInsights", "Cancel"), .init("insightsLoad", "Load", enabled: length > 0, primary: true)])
+              footer: [.init("playInsights", L10n.text("Cancel")), .init("insightsLoad", L10n.text("Load"), enabled: length > 0, primary: true)])
     }
     public static func insightsClear() -> GameFrontEnd.Page {
-        .init(title: "Clear this device's counts?", footer: [.init("playInsights", "Cancel", primary: true),
-                                                             .init("insightsClearConfirm", "Clear counts")])
+        .init(title: L10n.text("Clear this device's counts?"), footer: [.init("playInsights", L10n.text("Cancel"), primary: true),
+                                                             .init("insightsClearConfirm", L10n.text("Clear counts"))])
     }
 }

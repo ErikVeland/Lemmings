@@ -69,7 +69,7 @@ public extension LevelMusicSelection {
         if name == key { return true }
         let aliases = ["awesome": "awesome", "beastii": "shadow of the beast ii",
             "tim1": "rainbow islands", "tim2": "smile if you love lemmings",
-            "tim3": "lend a helping hand", "tim4": "postcard from lemmingland",
+            "tim3": L10n.text("lend a helping hand"), "tim4": "postcard from lemmingland",
             "tim5": "mind the step", "tim6": "dance of the reed flutes",
             "tim7": "turkish march", "tim8": "dance of the little swans",
             "tim9": "london bridge", "tim10": "forest green"]

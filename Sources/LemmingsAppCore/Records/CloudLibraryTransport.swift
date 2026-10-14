@@ -55,7 +55,7 @@ import Security
         var result: CFTypeRef?
         let status = SecItemCopyMatching(query as CFDictionary, &result)
         if status == errSecItemNotFound { return [] }
-        guard status == errSecSuccess, let data = result as? Data else { throw SequelDataError.invalid("Unlock this device to access cloud saves.") }
+        guard status == errSecSuccess, let data = result as? Data else { throw SequelDataError.invalid(L10n.text("Unlock this device to access cloud saves.")) }
         let identities = try JSONDecoder().decode([CloudLibraryIdentity].self, from: data)
         try Self.validate(identities); return identities
     }
@@ -72,11 +72,11 @@ import Security
         if update == errSecItemNotFound {
             var entry = query; entry.removeValue(forKey: kSecUseAuthenticationContext as String); entry[kSecValueData as String] = data
             entry[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
-            guard SecItemAdd(entry as CFDictionary, nil) == errSecSuccess else { throw SequelDataError.invalid("The library key could not be saved.") }
-        } else if update != errSecSuccess { throw SequelDataError.invalid("The library key could not be saved.") }
+            guard SecItemAdd(entry as CFDictionary, nil) == errSecSuccess else { throw SequelDataError.invalid(L10n.text("The library key could not be saved.")) }
+        } else if update != errSecSuccess { throw SequelDataError.invalid(L10n.text("The library key could not be saved.")) }
     }
     private static func validate(_ identities: [CloudLibraryIdentity]) throws {
-        guard identities.count <= 16, Set(identities.map(\.id)).count == identities.count else { throw SequelDataError.invalid("Too many linked libraries.") }
+        guard identities.count <= 16, Set(identities.map(\.id)).count == identities.count else { throw SequelDataError.invalid(L10n.text("Too many linked libraries.")) }
         for identity in identities { try identity.validate() }
     }
     private func currentAccount() throws -> Data? {
@@ -84,7 +84,7 @@ import Security
         return try NSKeyedArchiver.archivedData(withRootObject: token, requiringSecureCoding: false)
     }
     private func checkAccount() throws {
-        guard try currentAccount() == account else { throw SequelDataError.invalid("The iCloud account changed. Existing saves were kept.") }
+        guard try currentAccount() == account else { throw SequelDataError.invalid(L10n.text("The iCloud account changed. Existing saves were kept.")) }
     }
     public func discover(_ local: [CloudLibraryIdentity]) async throws -> [CloudLibraryIdentity] {
         guard enabled else { throw URLError(.notConnectedToInternet) }
@@ -111,7 +111,7 @@ import Security
                         try checkAccount()
                         for identity in found {
                             if let previous = identities.first(where: { $0.id == identity.id }) {
-                                guard previous == identity else { throw SequelDataError.invalid("The library keys conflict.") }
+                                guard previous == identity else { throw SequelDataError.invalid(L10n.text("The library keys conflict.")) }
                             } else { identities.append(identity) }
                         }
                         try Self.validate(identities)
@@ -153,12 +153,12 @@ import Security
         guard FileManager.default.fileExists(atPath: root.path) else { return [] }
         let files = try Self.files(at: root)
             .filter { $0.lastPathComponent.hasPrefix("identity-") && $0.pathExtension == "json" }
-        guard files.count <= 16 else { throw SequelDataError.invalid("Too many iCloud libraries.") }
+        guard files.count <= 16 else { throw SequelDataError.invalid(L10n.text("Too many iCloud libraries.")) }
         return try files.map { file in
             let data = try read(at: file, limit: 4096)
             let identity = try JSONDecoder().decode(CloudLibraryIdentity.self, from: data)
             try identity.validate()
-            guard file.lastPathComponent == "identity-\(identity.id).json" else { throw SequelDataError.invalid("Invalid iCloud library identity.") }
+            guard file.lastPathComponent == "identity-\(identity.id).json" else { throw SequelDataError.invalid(L10n.text("Invalid iCloud library identity.")) }
             return identity
         }
     }
@@ -179,7 +179,7 @@ import Security
         coordinator.coordinate(readingItemAt: url, options: .withoutChanges, error: &coordinationError) { file in
             result = Result {
                 let size = try file.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? limit + 1
-                guard size <= limit else { throw SequelDataError.invalid("The cloud save is too large.") }
+                guard size <= limit else { throw SequelDataError.invalid(L10n.text("The cloud save is too large.")) }
                 return try Data(contentsOf: file)
             }
         }
@@ -215,7 +215,7 @@ import Security
                 let cloud = try await Task.detached(priority: .utility) {
                     guard FileManager.default.fileExists(atPath: folder.path) else { return [Data]() }
                     let files = try Self.files(at: folder).filter { $0.pathExtension == "save" }
-                    guard files.count <= 256 else { throw SequelDataError.invalid("Too many iCloud saves.") }
+                    guard files.count <= 256 else { throw SequelDataError.invalid(L10n.text("Too many iCloud saves.")) }
                     return try files.map { try identity.open(Self.read(at: $0, limit: CloudLibraryArchive.maximumBytes + 28)) }
                 }.value
                 // Decode every version before marking this provider writable.
@@ -231,7 +231,7 @@ import Security
                 if status != 404 {
                     struct Manifest: Decodable { let devices: [String] }
                     let manifest = try JSONDecoder().decode(Manifest.self, from: body)
-                    guard manifest.devices.count <= 32, manifest.devices.allSatisfy({ UUID(uuidString: $0) != nil }) else { throw SequelDataError.invalid("Invalid cloud device list.") }
+                    guard manifest.devices.count <= 32, manifest.devices.allSatisfy({ UUID(uuidString: $0) != nil }) else { throw SequelDataError.invalid(L10n.text("Invalid cloud device list.")) }
                     for device in manifest.devices {
                         let (sealed, _) = try await request("/v1/vaults/\(identity.id)/devices/\(device)", token: identity.token)
                         let opened = try identity.open(sealed)
@@ -304,7 +304,7 @@ import Security
         if method == "PUT" { request.setValue(etags[path] ?? "*", forHTTPHeaderField: "If-Match") }
         let (data, response) = try await network.data(for: request)
         guard let response = response as? HTTPURLResponse, (200..<300).contains(response.statusCode) || (allowMissing && response.statusCode == 404) else { throw URLError(.badServerResponse) }
-        guard data.count <= CloudLibraryArchive.maximumBytes + 28 else { throw SequelDataError.invalid("The cloud response is too large.") }
+        guard data.count <= CloudLibraryArchive.maximumBytes + 28 else { throw SequelDataError.invalid(L10n.text("The cloud response is too large.")) }
         if method == "GET", path.contains("/devices/"), response.statusCode == 200 {
             guard let etag = response.value(forHTTPHeaderField: "ETag"), etag.count == 64 else { throw URLError(.badServerResponse) }
             etags[path] = etag
@@ -330,14 +330,14 @@ import Security
     public static func cleanCode(_ input: String) -> String { input.uppercased().filter { $0.isASCII && ($0.isLetter || $0.isNumber) } }
     public func redeemLink(_ input: String) async throws -> [CloudLibraryIdentity] {
         let code = Self.cleanCode(input)
-        guard code.count == 12 else { throw SequelDataError.invalid("Enter the 12-character code.") }
+        guard code.count == 12 else { throw SequelDataError.invalid(L10n.text("Enter the 12-character code.")) }
         let digest = Self.linkLookup(code)
         let (data, _) = try await request("/v1/links/" + digest.map { String(format: "%02x", $0) }.joined(), method: "POST")
         let link = try JSONDecoder().decode(Link.self, from: data)
         guard let sealed = Data(base64Encoded: link.payload), sealed.count <= 16384 else { throw SequelDataError.invalid("Invalid device link.") }
         let opened = try AES.GCM.open(.init(combined: sealed), using: Self.linkKey(code))
         let identities = try JSONDecoder().decode([CloudLibraryIdentity].self, from: opened)
-        try Self.validate(identities); guard !identities.isEmpty else { throw SequelDataError.invalid("The library key is missing.") }
+        try Self.validate(identities); guard !identities.isEmpty else { throw SequelDataError.invalid(L10n.text("The library key is missing.")) }
         return identities
     }
 }

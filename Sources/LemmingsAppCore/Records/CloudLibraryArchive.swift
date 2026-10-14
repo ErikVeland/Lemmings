@@ -20,7 +20,7 @@ public struct CloudLibraryIdentity: Codable, Equatable, Sendable {
     public func validate() throws {
         guard version == 1, UUID(uuidString: id)?.uuidString.lowercased() == id, key.count == 32,
               token.count == 64, token == token.lowercased(), token.allSatisfy({ $0.isHexDigit && $0.isASCII }) else {
-            throw SequelDataError.invalid("The library key is invalid.")
+            throw SequelDataError.invalid(L10n.text("The library key is invalid."))
         }
     }
     public func seal(_ data: Data) throws -> Data {
@@ -29,7 +29,7 @@ public struct CloudLibraryIdentity: Codable, Equatable, Sendable {
     }
     public func open(_ data: Data) throws -> Data {
         try validate()
-        guard data.count <= CloudLibraryArchive.maximumBytes + 28 else { throw SequelDataError.invalid("The cloud save is too large.") }
+        guard data.count <= CloudLibraryArchive.maximumBytes + 28 else { throw SequelDataError.invalid(L10n.text("The cloud save is too large.")) }
         return try AES.GCM.open(.init(combined: data), using: SymmetricKey(data: key), authenticating: Data(id.utf8))
     }
 }
@@ -98,9 +98,9 @@ public struct CloudLibraryArchive: Codable, Equatable, Sendable {
     }
     public func validate() throws {
         guard version == 2, players.count <= 8, deleted.count <= 10_000, seats.count <= 200 else {
-            throw SequelDataError.invalid("This library needs a newer app or exceeds its limits.")
+            throw SequelDataError.invalid(L10n.text("This library needs a newer app or exceeds its limits."))
         }
-        guard primary.map({ players[$0] != nil }) ?? true else { throw SequelDataError.invalid("The primary cloud player is missing.") }
+        guard primary.map({ players[$0] != nil }) ?? true else { throw SequelDataError.invalid(L10n.text("The primary cloud player is missing.")) }
         for id in deleted { guard UUID(uuidString: id) != nil else { throw SequelDataError.invalid("Invalid removed player.") } }
         for (id, player) in players {
             guard UUID(uuidString: id) != nil, player.profile.id == id, !deleted.contains(id),
@@ -108,7 +108,7 @@ public struct CloudLibraryArchive: Codable, Equatable, Sendable {
                 UUID(uuidString: player.stamp.device) != nil else { throw SequelDataError.invalid("Invalid cloud player.") }
             guard (player.sourceProfileIDs?.count ?? 0) <= 64,
                 (player.sourceProfileIDs ?? []).allSatisfy({ UUID(uuidString: $0)?.uuidString.lowercased() == $0 }) else {
-                throw SequelDataError.invalid("Invalid source player identity.")
+                throw SequelDataError.invalid(L10n.text("Invalid source player identity."))
             }
             _ = try player.records.validated()
             // The existing per-player archive validation also checks event and statistics ownership.
@@ -123,7 +123,7 @@ public struct CloudLibraryArchive: Codable, Equatable, Sendable {
                     (2...8).contains(seat.players.count), Set(seat.players).count == seat.players.count,
                     seat.players.contains(seat.host), seat.players.contains(seat.turn),
                     seat.players.allSatisfy({ players[$0] != nil }), seat.stamp.counter < UInt64.max,
-                    UUID(uuidString: seat.stamp.device) != nil else { throw SequelDataError.invalid("Invalid shared campaign owner.") }
+                    UUID(uuidString: seat.stamp.device) != nil else { throw SequelDataError.invalid(L10n.text("Invalid shared campaign owner.")) }
                 try seat.progress.validate()
             }
         }
@@ -150,7 +150,7 @@ public struct CloudLibraryArchive: Codable, Equatable, Sendable {
             local.sourceProfileIDs = sources.isEmpty ? nil : sources
             if local.stamp < player.stamp { local.profile = player.profile; local.stamp = player.stamp }
             else if local.stamp == player.stamp && local.profile != player.profile {
-                throw SequelDataError.invalid("Cloud player edits conflict.")
+                throw SequelDataError.invalid(L10n.text("Cloud player edits conflict."))
             }
             result.players[id] = local
         }
@@ -161,7 +161,7 @@ public struct CloudLibraryArchive: Codable, Equatable, Sendable {
             var branches = result.seats[id] ?? []
             for seat in remote {
                 if let same = branches.first(where: { $0.revision == seat.revision }) {
-                    guard same == seat else { throw SequelDataError.invalid("Shared campaign revisions conflict.") }
+                    guard same == seat else { throw SequelDataError.invalid(L10n.text("Shared campaign revisions conflict.")) }
                 } else { branches.append(seat) }
             }
             let ancestors = branches.reduce(into: Set<String>()) { $0.formUnion($1.ancestors) }
@@ -174,11 +174,11 @@ public struct CloudLibraryArchive: Codable, Equatable, Sendable {
         try validate()
         let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]
         let data = try encoder.encode(self)
-        guard data.count <= Self.maximumBytes else { throw SequelDataError.invalid("The cloud save is too large.") }
+        guard data.count <= Self.maximumBytes else { throw SequelDataError.invalid(L10n.text("The cloud save is too large.")) }
         return data
     }
     public static func decode(_ data: Data) throws -> Self {
-        guard data.count <= maximumBytes else { throw SequelDataError.invalid("The cloud save is too large.") }
+        guard data.count <= maximumBytes else { throw SequelDataError.invalid(L10n.text("The cloud save is too large.")) }
         let value = try JSONDecoder().decode(Self.self, from: data); try value.validate(); return value
     }
 }

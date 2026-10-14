@@ -24,15 +24,15 @@ public enum ClassicTitle: String, CaseIterable, Codable, Sendable {
 
     public var displayName: String {
         switch self {
-        case .lemmings: return "Lemmings"
-        case .xmasLemmings1991: return "Xmas Lemmings 1991"
-        case .ohNoMoreLemmings: return "Oh No! More Lemmings"
-        case .xmasLemmings1992: return "Xmas Lemmings 1992"
-        case .lemmings2TheTribes: return "Lemmings 2: The Tribes"
-        case .holidayLemmings1993: return "Holiday Lemmings 1993"
-        case .ohYesMoreLemmings: return "Oh Yes! More Lemmings!"
-        case .lemmings3TheChronicles: return "Lemmings 3: The Chronicles"
-        case .holidayLemmings1994: return "Holiday Lemmings 1994"
+        case .lemmings: return L10n.text(L10n.text("Lemmings"))
+        case .xmasLemmings1991: return L10n.text(L10n.text("Xmas Lemmings 1991"))
+        case .ohNoMoreLemmings: return L10n.text(L10n.text("Oh No! More Lemmings"))
+        case .xmasLemmings1992: return L10n.text(L10n.text("Xmas Lemmings 1992"))
+        case .lemmings2TheTribes: return L10n.text(L10n.text("Lemmings 2: The Tribes"))
+        case .holidayLemmings1993: return L10n.text(L10n.text("Holiday Lemmings 1993"))
+        case .ohYesMoreLemmings: return L10n.text(L10n.text("Oh Yes! More Lemmings!"))
+        case .lemmings3TheChronicles: return L10n.text(L10n.text("Lemmings 3: The Chronicles"))
+        case .holidayLemmings1994: return L10n.text(L10n.text("Holiday Lemmings 1994"))
         }
     }
 
@@ -81,19 +81,19 @@ public enum ClassicTitle: String, CaseIterable, Codable, Sendable {
     ///
     /// Havoc ends the climb. It is the hardest rank either campaign offers.
     public static let classicQuest: [ClassicQuestStage] = [
-        .init(title: .lemmings, rank: "Fun", levels: 30),
-        .init(title: .ohNoMoreLemmings, rank: "Tame", levels: 20),
+        .init(title: .lemmings, rank: L10n.text("Fun"), levels: 30),
+        .init(title: .ohNoMoreLemmings, rank: L10n.text("Tame"), levels: 20),
         .init(title: .xmasLemmings1991, rank: nil, levels: 4),
         .init(title: .xmasLemmings1992, rank: nil, levels: 4),
-        .init(title: .lemmings, rank: "Tricky", levels: 30),
-        .init(title: .ohNoMoreLemmings, rank: "Crazy", levels: 20),
+        .init(title: .lemmings, rank: L10n.text("Tricky"), levels: 30),
+        .init(title: .ohNoMoreLemmings, rank: L10n.text("Crazy"), levels: 20),
         .init(title: .holidayLemmings1993, rank: nil, levels: 32),
-        .init(title: .lemmings, rank: "Taxing", levels: 30),
-        .init(title: .ohNoMoreLemmings, rank: "Wild", levels: 20),
+        .init(title: .lemmings, rank: L10n.text("Taxing"), levels: 30),
+        .init(title: .ohNoMoreLemmings, rank: L10n.text("Wild"), levels: 20),
         .init(title: .holidayLemmings1994, rank: nil, levels: 32),
-        .init(title: .lemmings, rank: "Mayhem", levels: 30),
-        .init(title: .ohNoMoreLemmings, rank: "Wicked", levels: 20),
-        .init(title: .ohNoMoreLemmings, rank: "Havoc", levels: 20),
+        .init(title: .lemmings, rank: L10n.text("Mayhem"), levels: 30),
+        .init(title: .ohNoMoreLemmings, rank: L10n.text("Wicked"), levels: 20),
+        .init(title: .ohNoMoreLemmings, rank: L10n.text("Havoc"), levels: 20),
     ]
 
     /// Every level the classic climb covers. Oh Yes! is a conversion of levels
@@ -225,7 +225,7 @@ public struct ClassicSaga: Sendable {
     public func summary() -> String {
         let progress = completion
         let names = chapters.map(\.title.displayName).joined(separator: " → ")
-        return "\(progress.passed)/\(progress.total) across \(chapters.count) titles: \(names)"
+        return L10n.text("\(progress.passed)/\(progress.total) across \(chapters.count) titles: \(names)")
     }
 }
 
@@ -273,7 +273,7 @@ extension ClassicSaga {
         let overall = completion
         var entries = [ClassicLaunchEntry(
             mode: .fullQuest,
-            title: "Oh My! ALL Lemmings!",
+            title: L10n.text("Oh My! ALL Lemmings!"),
             passed: overall.passed,
             total: overall.total)]
 

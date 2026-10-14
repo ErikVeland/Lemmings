@@ -8,13 +8,13 @@ public struct Lemmings2Ark: Sendable {
 
     public init(data: Data) throws {
         let bytes = [UInt8](data)
-        guard bytes.count > 768 else { throw SequelDataError.invalid("Truncated L2 ark animation.") }
+        guard bytes.count > 768 else { throw SequelDataError.invalid(L10n.text("Truncated L2 ark animation.")) }
         var palette = [UInt8](repeating:255,count:1024)
         for i in 0..<768 { palette[i/3*4+i%3] = UInt8(Int(bytes[i]&63)*255/63) }
         self.palette = palette
         var cursor = 768
         func byte() throws -> Int {
-            guard cursor < bytes.count else { throw SequelDataError.invalid("Truncated L2 ark frame.") }
+            guard cursor < bytes.count else { throw SequelDataError.invalid(L10n.text("Truncated L2 ark frame.")) }
             defer { cursor += 1 }; return Int(bytes[cursor])
         }
         var frames: [[UInt8]] = [], previous = [UInt8](repeating:0,count:64000)
@@ -33,7 +33,7 @@ public struct Lemmings2Ark: Sendable {
                         else if length < 0xc000 { count = length-0x8000; mode = 2 }
                         else { count = length-0xc000; mode = 1 }
                     } else { count = command-128; mode = 0 }
-                    guard count > 0, count <= 16000-offset else { throw SequelDataError.invalid("Invalid L2 ark frame run.") }
+                    guard count > 0, count <= 16000-offset else { throw SequelDataError.invalid(L10n.text("Invalid L2 ark frame run.")) }
                     if mode == 1 {
                         let colour = UInt8(try byte())
                         for pixel in offset..<(offset+count) { frame[pixel*4+plane] = colour }
@@ -45,7 +45,7 @@ public struct Lemmings2Ark: Sendable {
             }
             frames.append(frame); previous = frame
         }
-        guard cursor == bytes.count else { throw SequelDataError.invalid("Unexpected data after L2 ark animation.") }
+        guard cursor == bytes.count else { throw SequelDataError.invalid(L10n.text("Unexpected data after L2 ark animation.")) }
         self.frames = frames
     }
 }

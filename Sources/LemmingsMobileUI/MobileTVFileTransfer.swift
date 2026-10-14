@@ -1,5 +1,6 @@
 #if os(tvOS)
 import Foundation
+import NxlvKit
 import LemmingsGameArt
 import LemmingsMobileCore
 @preconcurrency import Network
@@ -12,7 +13,7 @@ import Darwin
     private let canvas = MobileMenuCanvas()
     private let scrollView = UIScrollView()
     private let token = UUID().uuidString.replacingOccurrences(of: "-", with: "")
-    private let staging = FileManager.default.temporaryDirectory.appendingPathComponent("TVTransfer-" + UUID().uuidString)
+    private let staging = FileManager.default.temporaryDirectory.appendingPathComponent(L10n.text("TVTransfer-") + UUID().uuidString)
     private let directory: Bool
     private let importName: String
     private let exportURL: URL?
@@ -31,7 +32,7 @@ import Darwin
         var folder = source.standardizedFileURL
         while folder.path != temporary.path && folder.path != "/" {
             if folder.deletingLastPathComponent().path == temporary.path,
-               folder.lastPathComponent.hasPrefix("TVTransfer-") {
+               folder.lastPathComponent.hasPrefix(L10n.text("TVTransfer-")) {
                 try? FileManager.default.removeItem(at: folder)
                 return
             }
@@ -39,7 +40,7 @@ import Darwin
         }
     }
 
-    static func importFiles(from presenter: UIViewController, directory: Bool, name: String = "recovery key", completion: @escaping (URL) -> Void) {
+    static func importFiles(from presenter: UIViewController, directory: Bool, name: String = L10n.text("recovery key"), completion: @escaping (URL) -> Void) {
         presenter.present(MobileTVFileTransfer(directory: directory, exportURL: nil, importName: name, completion: completion), animated: true)
     }
 
@@ -51,7 +52,7 @@ import Darwin
 
     private var onClose: (() -> Void)?
 
-    private init(directory: Bool, exportURL: URL?, importName: String = "recovery key", completion: ((URL) -> Void)?) {
+    private init(directory: Bool, exportURL: URL?, importName: String = L10n.text("recovery key"), completion: ((URL) -> Void)?) {
         self.directory = directory
         self.importName = importName
         self.exportURL = exportURL
@@ -69,7 +70,7 @@ import Darwin
         view.addSubview(scrollView)
         scrollView.addSubview(canvas)
         canvas.onAction = { [weak self] _ in self?.close() }
-        show(address: "Starting transfer")
+        show(address: L10n.text("Starting transfer"))
         do {
             try FileManager.default.createDirectory(at: staging, withIntermediateDirectories: true)
             let listener = try NWListener(using: .tcp, on: .any)
@@ -80,7 +81,7 @@ import Darwin
                     switch state {
                     case .ready:
                         guard let port = self.listener?.port, let address = Self.localAddress() else {
-                            self.show(address: "Connect Apple TV to your local network")
+                            self.show(address: L10n.text("Connect Apple TV to your local network"))
                             return
                         }
                         self.show(address: "http://\(address):\(port)/\(self.token)")
@@ -126,9 +127,9 @@ import Darwin
     }
 
     private func show(address: String) {
-        var page = GameFrontEnd.Page(title: exportURL == nil ? "Import files" : "Export file")
-        page.details = ["Open this address on another device:", address]
-        page.footer = [.init("back", "Back")]
+        var page = GameFrontEnd.Page(title: exportURL == nil ? L10n.text("Import files") : L10n.text("Export file"))
+        page.details = [L10n.text("Open this address on another device:"), address]
+        page.footer = [.init("back", L10n.text("Back"))]
         canvas.page = page
     }
 
@@ -160,7 +161,7 @@ import Darwin
                     if error != nil || complete { self.finish(connection, request); return }
                     self.receive(connection, request)
                 } catch {
-                    self.reply("400 Bad Request", body: Data(error.localizedDescription.utf8), connection, request)
+                    self.reply(L10n.text("400 Bad Request"), body: Data(error.localizedDescription.utf8), connection, request)
                 }
             }
         }
@@ -180,7 +181,7 @@ import Darwin
             guard start.count == 3, let decoded = String(start[1]).removingPercentEncoding,
                   decoded == "/\(token)" || decoded.hasPrefix("/\(token)/") else {
                 request.remaining = 0
-                reply("404 Not Found", body: Data(), connection, request)
+                reply(L10n.text("404 Not Found"), body: Data(), connection, request)
                 return
             }
             request.path = String(decoded.dropFirst(token.count + 1))
@@ -198,21 +199,21 @@ import Darwin
             let body = Data(request.header[end.upperBound...])
             request.header.removeAll()
             request.remaining = length
-            if start[0] == "GET" {
+            if start[0] == L10n.text("GET") {
                 request.remaining = 0
                 if request.path == "/download", let exportURL { sendFile(exportURL, connection, request) }
                 else if request.path.isEmpty || request.path == "/" {
-                    reply("200 OK", body: Data(webPage.utf8), connection, request, type: "text/html; charset=utf-8")
-                } else { reply("404 Not Found", body: Data(), connection, request) }
+                    reply("200 OK", body: Data(webPage.utf8), connection, request, type: L10n.text("text/html; charset=utf-8"))
+                } else { reply(L10n.text("404 Not Found"), body: Data(), connection, request) }
                 return
             }
-            guard start[0] == "POST", exportURL == nil, !committed else { throw URLError(.unsupportedURL) }
+            guard start[0] == L10n.text("POST"), exportURL == nil, !committed else { throw URLError(.unsupportedURL) }
             if request.path == "/commit" {
                 guard length == 0, activeUploads == 0, !files.isEmpty,
                       directory || files.count == 1 else { throw URLError(.badServerResponse) }
                 committed = true
                 let result = directory ? staging : staging.appendingPathComponent(files.first ?? "")
-                reply("200 OK", body: Data("Imported".utf8), connection, request) { [weak self] in
+                reply("200 OK", body: Data(L10n.text("Imported").utf8), connection, request) { [weak self] in
                     guard let self else { return }
                     self.dismiss(animated: true) { [completion = self.completion] in completion?(result) }
                 }
@@ -256,7 +257,7 @@ import Darwin
     private func reply(_ status: String, body: Data, _ connection: NWConnection, _ request: Request,
                        type: String = "text/plain", onComplete: (@MainActor @Sendable () -> Void)? = nil) {
         request.remaining = 0
-        let header = "HTTP/1.1 \(status)\r\nContent-Type: \(type)\r\nContent-Length: \(body.count)\r\nConnection: close\r\nCache-Control: no-store\r\nX-Content-Type-Options: nosniff\r\n\r\n"
+        let header = L10n.text("HTTP/1.1 \(status)\r\nContent-Type: \(type)\r\nContent-Length: \(body.count)\r\nConnection: close\r\nCache-Control: no-store\r\nX-Content-Type-Options: nosniff\r\n\r\n")
         connection.send(content: Data(header.utf8) + body, completion: .contentProcessed { [weak self] _ in
             Task { @MainActor in
                 self?.finish(connection, request)
@@ -278,7 +279,7 @@ import Darwin
                     self?.sendChunk(connection, request)
                 }
             })
-        } catch { reply("404 Not Found", body: Data(), connection, request) }
+        } catch { reply(L10n.text("404 Not Found"), body: Data(), connection, request) }
     }
 
     private func sendChunk(_ connection: NWConnection, _ request: Request) {
@@ -311,12 +312,12 @@ import Darwin
 
     private var webPage: String {
         if exportURL != nil {
-            return "<!doctype html><meta name=\"viewport\" content=\"width=device-width\"><title>Ultimate Lemmings</title><h1>Export file</h1><a href=\"/\(token)/download\">Download</a>"
+            return L10n.text("<!doctype html><meta name=\"viewport\" content=\"width=device-width\"><title>Ultimate Lemmings</title><h1>Export file</h1><a href=\"/\(token)/download\">Download</a>")
         }
-        return """
+        return L10n.text("""
         <!doctype html><meta name="viewport" content="width=device-width">
-        <title>Ultimate Lemmings</title><h1>Import \(directory ? "game folder" : importName)</h1>
-        <input id="files" type="file" \(directory ? "webkitdirectory multiple" : "")>
+        <title>Ultimate Lemmings</title><h1>Import \(directory ? L10n.text("game folder") : importName)</h1>
+        <input id="files" type="file" \(directory ? L10n.text("webkitdirectory multiple") : "")>
         <button id="send">Import</button><p id="status"></p>
         <script>
         const button = document.getElementById('send'), status = document.getElementById('status');
@@ -338,7 +339,7 @@ import Darwin
           button.disabled = false;
         };
         </script>
-        """
+        """)
     }
 
     private static func localAddress() -> String? {

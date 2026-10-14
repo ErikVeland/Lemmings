@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import NxlvKit
 
 /// Bitmap views with their own virtual controls retain their internal focus loop.
 @MainActor protocol GameDialogCustomNavigation: AnyObject {}
@@ -105,7 +106,7 @@ import AppKit
         }
         let defaultButton = (root as? GameMenuPage)?.controllerInitialControl as? NSButton
             ?? window.defaultButtonCell?.controlView as? NSButton
-            ?? choices.compactMap { $0 as? NSButton }.first(where: { ["Close", "Close (Esc)", "Back", "Resume", "Cancel"].contains($0.title) })
+            ?? choices.compactMap { $0 as? NSButton }.first(where: { [L10n.text("Close"), L10n.text("Close (Esc)"), L10n.text("Back"), L10n.text("Resume"), L10n.text("Cancel")].contains($0.title) })
         if [36, 76].contains(event.keyCode), (!editing || editor?.isFieldEditor == true),
            let button = defaultButton,
            button.isEnabled, !button.isHiddenOrHasHiddenAncestor {

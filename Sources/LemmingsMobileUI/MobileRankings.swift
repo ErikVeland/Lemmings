@@ -110,7 +110,7 @@ extension MobileLibraryViewController {
         var rows: [GameFrontEnd.Action] = []
         if community {
             rows.append(.init("rankCategory", rankings.category.title, enabled: !busy))
-            rows.append(.init("rankShare", "Share records", enabled: rankings.community.endpoint != nil,
+            rows.append(.init("rankShare", L10n.text("Share records"), enabled: rankings.community.endpoint != nil,
                               selected: rankings.community.sharing(profiles.activeID)))
             for entry in rankings.community.board?.entries ?? [] {
                 rows.append(.init("rankReplay.\(entry.rank)", "#\(entry.rank)  \(entry.name)  " + rankings.category.score(entry.score),
@@ -119,9 +119,9 @@ extension MobileLibraryViewController {
         } else {
             if let config = rankings.gameCenter.configuration {
                 let level = config.levels.first { $0.conditions == rankings.conditions }
-                let choices: [(String, String?)] = [("Career stars", config.starsID), ("Levels cleared", config.clearsID),
-                    ("Three-star levels", config.perfectID), ("This level", level?.leaderboardID),
-                    ("Fastest clear", level?.fastestClearID), ("Fastest 100%", level?.fastestAllSavedID)]
+                let choices: [(String, String?)] = [(L10n.text("Career stars"), config.starsID), (L10n.text("Levels cleared"), config.clearsID),
+                    (L10n.text("Three-star levels"), config.perfectID), (L10n.text("This level"), level?.leaderboardID),
+                    (L10n.text("Fastest clear"), level?.fastestClearID), (L10n.text("Fastest 100%"), level?.fastestAllSavedID)]
                 for (title, boardID) in choices {
                     rows.append(.init("rankBoard." + (boardID ?? title), title,
                         enabled: boardID != nil && rankings.gameCenter.available && !busy,
@@ -138,7 +138,7 @@ extension MobileLibraryViewController {
         }
         let loaded = community ? rankings.community.board != nil : rankings.gameCenter.board != nil
         let empty = community ? rankings.community.board?.entries.isEmpty == true : rankings.gameCenter.board?.entries.isEmpty == true
-        let status = busy ? "" : empty ? "No scores" : loaded ? "" : community ? rankings.community.status : rankings.gameCenter.status
+        let status = busy ? "" : empty ? L10n.text("No scores") : loaded ? "" : community ? rankings.community.status : rankings.gameCenter.status
         return MobileCareerArt.rankings(community: community, subtitle: subtitle, busy: busy,
             status: status, rows: rows, connected: rankings.gameCenter.account != nil,
             available: community ? rankings.community.endpoint != nil : rankings.gameCenter.available)

@@ -79,10 +79,10 @@ public enum LemmingsMobileApplication {
             session.tick()
             let control = requireUseControl()
             guard let candidate = session.targetCandidates(for: control).first(where: { $0.assignment == .eligible }) else {
-                preconditionFailure("The synthetic Lemmings 3 level must include an eligible tool holder.")
+                preconditionFailure(L10n.text("The synthetic Lemmings 3 level must include an eligible tool holder."))
             }
             let selection = MobileTargetSelection(id: candidate.id, point: candidate.point, state: candidate.assignment)
-            let summary = MobileLevelSummary(index: 0, rank: "UI TEST", number: 1, title: "L3 direction")
+            let summary = MobileLevelSummary(index: 0, rank: L10n.text(L10n.text("UI TEST")), number: 1, title: L10n.text("L3 direction"))
             let checkpoint = MobileCheckpointStore(url: FileManager.default.temporaryDirectory
                 .appendingPathComponent("L3DirectionPicker-\(UUID().uuidString).json"))
             let game = MobileGameViewController(summary: summary, session: session,
@@ -97,13 +97,13 @@ public enum LemmingsMobileApplication {
                 assignsAccessibly: ProcessInfo.processInfo.arguments.contains("--ui-test-accessible-assignment")
             )
         } catch {
-            preconditionFailure("Could not build the Lemmings 3 direction-picker test level: \(error)")
+            preconditionFailure(L10n.text("Could not build the Lemmings 3 direction-picker test level: \(error)"))
         }
     }
 
     private static func requireUseControl() -> Int {
         guard let index = Lemmings3Runtime.Action.allCases.firstIndex(of: .use) else {
-            preconditionFailure("Lemmings 3 must define its native Use control.")
+            preconditionFailure(L10n.text("Lemmings 3 must define its native Use control."))
         }
         return index
     }

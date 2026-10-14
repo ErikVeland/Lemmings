@@ -1,5 +1,6 @@
 #if os(macOS)
 import Foundation
+import NxlvKit
 
 /// Checks the public catalogue without delaying the library or changing a running pack.
 actor FanLevelUpdates {
@@ -14,8 +15,8 @@ actor FanLevelUpdates {
     var counts: [String: Int] = [:]
     var unavailable = false
     var status: String {
-      if added > 0 { return "\(added) NEW \(added == 1 ? "PACK" : "PACKS")" + (unavailable ? " · CHECK INCOMPLETE" : "") }
-      return unavailable ? "OFFLINE COLLECTION READY · CHECK UNAVAILABLE" : "COLLECTION UP TO DATE"
+      if added > 0 { return L10n.text("\(added) NEW \(added == 1 ? L10n.text("PACK") : L10n.text("PACKS"))") + (unavailable ? L10n.text(" · CHECK INCOMPLETE") : "") }
+      return unavailable ? L10n.text(L10n.text("OFFLINE COLLECTION READY · CHECK UNAVAILABLE")) : L10n.text(L10n.text("COLLECTION UP TO DATE"))
     }
   }
   enum Failure: Error { case response, tooLarge, invalidCatalogue, invalidArchive }
@@ -28,7 +29,7 @@ actor FanLevelUpdates {
 
   static func fetch(_ url: URL, limit: Int) async throws -> Data {
     var request = URLRequest(url: url, cachePolicy: .reloadRevalidatingCacheData, timeoutInterval: 20)
-    request.setValue("UltimateLemmings/0.1 (fan-pack updates; sequential requests)", forHTTPHeaderField: "User-Agent")
+    request.setValue(L10n.text("UltimateLemmings/0.1 (fan-pack updates; sequential requests)"), forHTTPHeaderField: L10n.text("User-Agent"))
     let (bytes, response) = try await URLSession.shared.bytes(for: request)
     guard let http = response as? HTTPURLResponse, http.statusCode == 200,
       response.url?.scheme == "https", response.url?.host == "lldb.camanis.net" else { throw Failure.response }

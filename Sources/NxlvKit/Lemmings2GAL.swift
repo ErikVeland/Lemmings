@@ -38,7 +38,7 @@ public struct Lemmings2GAL {
 
     public init(script: Data, bank: Lemmings2FrontEnd.Bank, background: [UInt8], font: Lemmings2FrontEndFont, initialPalette: [UInt8]? = nil, initialMemory: [Int:Int] = [:]) throws {
         guard script.count >= 9, script.count <= 65536, background.count == 64000,
-              !bank.palettes.isEmpty, initialPalette == nil || initialPalette?.count == 1024 else { throw SequelDataError.invalid("Invalid L2 animation scene.") }
+              !bank.palettes.isEmpty, initialPalette == nil || initialPalette?.count == 1024 else { throw SequelDataError.invalid(L10n.text("Invalid L2 animation scene.")) }
         self.script = SequelBinary(script); self.bank = bank; self.font = font
         memory = initialMemory.mapValues { $0 & 65535 }
         self.background = background; savedBackground = background; pixels = background
@@ -69,7 +69,7 @@ public struct Lemmings2GAL {
                 guard processes[index].state == 4 else { continue }
                 repeat {
                     budget -= 1
-                    guard budget >= 0 else { throw SequelDataError.invalid("L2 animation exceeded its command limit.") }
+                    guard budget >= 0 else { throw SequelDataError.invalid(L10n.text("L2 animation exceeded its command limit.")) }
                     try execute(index)
                 } while atomic
             }
@@ -106,42 +106,42 @@ public struct Lemmings2GAL {
         case 10: process.registers[register] = (process.registers[left]*process.registers[right])&65535
         case 11:
             let divisor = signed(process.registers[right])
-            guard divisor != 0 else { throw SequelDataError.invalid("L2 animation divided by zero.") }
+            guard divisor != 0 else { throw SequelDataError.invalid(L10n.text("L2 animation divided by zero.")) }
             process.registers[register] = (signed(process.registers[left])/divisor)&65535
         case 12:
             var end = process.pc+1
             while end < script.count && script.bytes[end] != 0 { end += 1 }
-            guard end < script.count else { throw SequelDataError.invalid("Unterminated L2 animation callback.") }
+            guard end < script.count else { throw SequelDataError.invalid(L10n.text("Unterminated L2 animation callback.")) }
             let callback = String(decoding:script.bytes[(process.pc+1)..<end],as:UTF8.self)
             if callback == "introplayfx" {
                 if let sample = memory[0], (0..<79).contains(sample) { soundSamples.append(sample) }
             } else if callback == "fanfare" {
                 let medal = memory[0] ?? 0
-                guard (0..<4).contains(medal) else { throw SequelDataError.invalid("Invalid L2 award medal.") }
+                guard (0..<4).contains(medal) else { throw SequelDataError.invalid(L10n.text("Invalid L2 award medal.")) }
                 soundSamples.append([50,53,52,51][medal])
-            } else { throw SequelDataError.invalid("Unsupported L2 animation callback.") }
+            } else { throw SequelDataError.invalid(L10n.text("Unsupported L2 animation callback.")) }
             process.pc = end
         case 15:
             switch register {
             case 0: process.pc += signed(value)
             case 1:
-                guard process.stack.count < 5 else { throw SequelDataError.invalid("L2 animation call stack overflow.") }
+                guard process.stack.count < 5 else { throw SequelDataError.invalid(L10n.text("L2 animation call stack overflow.")) }
                 process.stack.append(process.pc); process.pc += signed(value)
             case 2: if process.comparison == 0 { process.pc += signed(value) }
             case 3: if process.comparison < 0 { process.pc += signed(value) }
             case 4: if process.comparison > 0 { process.pc += signed(value) }
             case 5:
                 guard let child = processes.indices.first(where:{$0 > index && processes[$0].state == 0}) else {
-                    throw SequelDataError.invalid("Too many L2 animation processes.")
+                    throw SequelDataError.invalid(L10n.text("Too many L2 animation processes."))
                 }
                 processes[child].pc = try script.u16(process.pc+signed(value)+3)
                 processes[child].state = 4
             case 6:
-                guard a < 32, b < 32 else { throw SequelDataError.invalid("Invalid L2 animation drawing order.") }
+                guard a < 32, b < 32 else { throw SequelDataError.invalid(L10n.text("Invalid L2 animation drawing order.")) }
                 if let old = order.firstIndex(of:a) { order[old] = -1 }
                 if order[b] != -1 {
                     guard let hole = (b..<32).first(where:{order[$0] == -1}) else {
-                        throw SequelDataError.invalid("L2 animation drawing order overflow.")
+                        throw SequelDataError.invalid(L10n.text("L2 animation drawing order overflow."))
                     }
                     for target in stride(from:hole,to:b,by:-1) { order[target] = order[target-1] }
                 }
@@ -187,11 +187,11 @@ public struct Lemmings2GAL {
                     case 0xf4: process.wait = b; process.state = 1
                     case 0xf5: bob.type = 0; bob.identifier = b; bob.frame = -1; bob.visible = 1
                     case 0xf9:
-                        guard b < 32 else { throw SequelDataError.invalid("Invalid L2 animation process.") }
+                        guard b < 32 else { throw SequelDataError.invalid(L10n.text("Invalid L2 animation process.")) }
                         if b == index && process.state == 2 { process.state = 4 }
                         else if processes[b].state == 2 { processes[b].state = 4 }
                     case 0xfa:
-                        guard b < 32 else { throw SequelDataError.invalid("Invalid L2 animation process.") }
+                        guard b < 32 else { throw SequelDataError.invalid(L10n.text("Invalid L2 animation process.")) }
                         if b == index { process.state = 0 } else { processes[b].state = 0 }
                     case 0xfb: interval = b
                     case 0xfc: process.registers[b >> 4] = memory[process.registers[b & 15]] ?? 0
@@ -211,7 +211,7 @@ public struct Lemmings2GAL {
                         case 0xf4: break
                         case 0xf5: process.state = 2
                         case 0xf6:
-                            guard let caller = process.stack.popLast() else { throw SequelDataError.invalid("L2 animation return without a call.") }
+                            guard let caller = process.stack.popLast() else { throw SequelDataError.invalid(L10n.text("L2 animation return without a call.")) }
                             process.pc = caller
                         case 0xf7: bob.mode = 2
                         case 0xf8: break
@@ -222,14 +222,14 @@ public struct Lemmings2GAL {
                         case 0xfd: if bob.visible == 2 { bob.visible = 1 }
                         case 0xfe: bob.visible = 0
                         case 0xff: process.state = 0; atomic = false
-                        default: throw SequelDataError.invalid("Unsupported L2 animation register command.")
+                        default: throw SequelDataError.invalid(L10n.text("Unsupported L2 animation register command."))
                         }
-                    default: throw SequelDataError.invalid("Unsupported L2 animation extended command.")
+                    default: throw SequelDataError.invalid(L10n.text("Unsupported L2 animation extended command."))
                     }
                 }
-            default: throw SequelDataError.invalid("Unsupported L2 animation scene command.")
+            default: throw SequelDataError.invalid(L10n.text("Unsupported L2 animation scene command."))
             }
-        default: throw SequelDataError.invalid("Unsupported L2 animation command.")
+        default: throw SequelDataError.invalid(L10n.text("Unsupported L2 animation command."))
         }
         if bob.visible != 0 && bob.type != 3 {
             bob.x = signed(process.registers[14]); bob.y = signed(process.registers[15])
@@ -242,7 +242,7 @@ public struct Lemmings2GAL {
         guard bob.visible != 0 else { return }
         if bob.type == 3 {
             if bob.palette >= 0 {
-                guard bank.palettes.indices.contains(bob.palette) else { throw SequelDataError.invalid("Invalid L2 animation palette.") }
+                guard bank.palettes.indices.contains(bob.palette) else { throw SequelDataError.invalid(L10n.text("Invalid L2 animation palette.")) }
                 paletteTarget = bank.palettes[bob.palette]; bob.palette = -1
             }
             var changed = false
@@ -258,7 +258,7 @@ public struct Lemmings2GAL {
         }
         if bob.type == 0 {
             guard bank.sprites.indices.contains(bob.identifier), !bank.sprites[bob.identifier].isEmpty else {
-                throw SequelDataError.invalid("Invalid L2 animation sprite.")
+                throw SequelDataError.invalid(L10n.text("Invalid L2 animation sprite."))
             }
             let frames = bank.sprites[bob.identifier]
             if bob.frame < 0 { bob.frame = 0 }
@@ -267,7 +267,7 @@ public struct Lemmings2GAL {
             paint(frame.pixels.map{ $0 &+ UInt8(bob.colourOffset) },opaque:frame.opaque,width:frame.width,height:frame.height,
                   x:bob.x+frame.x,y:bob.y+frame.y,mode:bob.mode)
         } else if bob.type == 1 {
-            guard bank.strings.indices.contains(bob.identifier) else { throw SequelDataError.invalid("Invalid L2 animation text.") }
+            guard bank.strings.indices.contains(bob.identifier) else { throw SequelDataError.invalid(L10n.text("Invalid L2 animation text.")) }
             var lines: [String] = []
             for paragraph in bank.strings[bob.identifier].split(separator:"\r",omittingEmptySubsequences:false) {
                 guard let layout = textLayout, layout.width > 0 else { lines.append(String(paragraph)); continue }

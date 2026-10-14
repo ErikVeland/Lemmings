@@ -153,15 +153,15 @@ public enum MobileSessionError: Error, LocalizedError, Equatable {
     public var errorDescription: String? {
         switch self {
         case .invalidFrame:
-            return "The game produced an invalid image."
+            return L10n.text("The game produced an invalid image.")
         case .frameUnavailable:
-            return "This game has no mobile renderer."
+            return L10n.text("This game has no mobile renderer.")
         case .invalidCheckpoint:
-            return "The saved run could not be verified."
+            return L10n.text("The saved run could not be verified.")
         case .changedLevel:
-            return "The saved run belongs to different level data."
+            return L10n.text("The saved run belongs to different level data.")
         case .unsupportedControl:
-            return "This control is not available in the current game."
+            return L10n.text("This control is not available in the current game.")
         }
     }
 }

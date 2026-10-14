@@ -18,10 +18,10 @@ public enum ClassicADFError: Error, Equatable, CustomStringConvertible {
 
     public var description: String {
         switch self {
-        case .notAmigaDisk: return "the image does not start with an Amiga filesystem"
-        case let .wrongSize(count): return "the image is \(count) bytes, which is not a floppy"
-        case let .fileNotFound(name): return "no file named \(name) on the disk"
-        case let .corruptChain(name): return "the block chain for \(name) does not hold together"
+        case .notAmigaDisk: return L10n.text("the image does not start with an Amiga filesystem")
+        case let .wrongSize(count): return L10n.text("the image is \(count) bytes, which is not a floppy")
+        case let .fileNotFound(name): return L10n.text("no file named \(name) on the disk")
+        case let .corruptChain(name): return L10n.text("the block chain for \(name) does not hold together")
         }
     }
 }

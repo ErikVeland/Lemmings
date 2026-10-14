@@ -9,7 +9,7 @@ public struct TrolleyAchievementProgress: Equatable, Sendable {
     public let value: Int
     public let goal: Int
     public let earned: Bool
-    public var label: String { earned ? "Earned" : value >= goal ? "Ready to claim" : "\(value)/\(goal)" }
+    public var label: String { earned ? L10n.text(L10n.text("Earned")) : value >= goal ? L10n.text(L10n.text("Ready to claim")) : "\(value)/\(goal)" }
 }
 
 extension TrolleyAchievement {
@@ -30,36 +30,36 @@ extension TrolleyAchievement {
         }
     }
     static let collection: [Self: Definition] = [
-        .bentham: .init("The Greater Sum", "Clear a level as Jeremy Bentham, with an evidenced trade-off.", .philosophy, .gold, philosopher: "bentham"),
-        .mill: .init("A Mill-ion Reasons", "Clear a level with the John Stuart Mill play style.", .philosophy, philosopher: "mill"),
-        .kant: .init("Kant Touch This", "Clear a level with the Immanuel Kant play style.", .philosophy, .silver, philosopher: "kant"),
-        .singer: .init("Small Budget, Big Heart", "Clear a level with the Peter Singer play style.", .philosophy, .silver, philosopher: "singer"),
-        .aristotle: .init("The Golden Mean", "Clear a level with the Aristotle play style.", .philosophy, philosopher: "aristotle"),
-        .epicurus: .init("Do Not Disturb", "Clear a level with the Epicurus play style.", .philosophy, philosopher: "epicurus"),
-        .hobbes: .init("Order from Chaos", "Clear a level with the Thomas Hobbes play style.", .philosophy, philosopher: "hobbes"),
-        .sartre: .init("No Exit? Watch Me", "Clear as Jean-Paul Sartre, with an evidenced unconventional route.", .philosophy, .gold, philosopher: "sartre"),
-        .absurdist: .init("Somehow, That Worked", "Clear a level with The Absurdist play style.", .philosophy, .silver, philosopher: "absurdist"),
-        .humanist: .init("People, Not Percentages", "Clear a level with The Humanist play style.", .philosophy, philosopher: "humanist"),
-        .bureaucrat: .init("Form 27B/6", "Clear a level with The Bureaucrat play style.", .philosophy, philosopher: "bureaucrat"),
-        .operator: .init("Mind the Points", "Clear as The Trolley Operator, with an evidenced rescue trade-off.", .philosophy, .gold, philosopher: "trolley_operator"),
-        .traveller: .init("Still Thinking", "Clear a level with The Fellow Traveller play style.", .philosophy, philosopher: "fellow_traveller"),
-        .rescueRival: .init("Room for One More", "Take Most Saved from another local player by rescuing more.", .rivalries, .silver),
-        .potentialRival: .init("Raising the Bar", "Beat your rescue percentage against the same established target.", .rivalries, .bronze),
-        .recordMatched: .init("Target Acquired", "Match an established rescue target in a successful clear.", .rivalries, .silver),
-        .economist: .init("Occam's Razor", "Beat your best clear's skill count without saving fewer.", .rivalries, .silver),
-        .signatureMove: .init("One-Track Mind", "Clear with one skill type and at least five assignments.", .rivalries, .bronze),
-        .publicGood: .init("The More the Merrier", "Save at least 20 more than required in one successful clear.", .rivalries, .silver),
-        .cleanSweep: .init("Clean Sweep", "Match the target and take Clean Rescue from another local player.", .rivalries, .gold),
-        .tripleCrown: .init("The Triple Crown", "Take Most Saved, Least Skills and Clean Rescue from rivals in one clear.", .rivalries, .legendary),
-        .comeback: .init("The Last Word", "Win a direct retry of your failed attempt.", .mastery, .bronze),
-        .secondThoughts: .init("Second Thoughts", "Retry a clear: save more, or match it with fewer skills or less time.", .mastery, .silver),
-        .targetApprentice: .init("A Sound Argument", "Match rescue targets on 3 distinct levels.", .mastery, .silver, goal: 3),
-        .targetScholar: .init("Beyond Reasonable Doubt", "Match rescue targets on 10 distinct levels.", .mastery, .gold, goal: 10),
-        .targetSage: .init("The Grand Thesis", "Match rescue targets on 30 distinct levels.", .mastery, .legendary, goal: 30),
-        .greatDebate: .init("The Great Debate", "Clear levels with 5 different philosophical affinities.", .mastery, .silver, goal: 5),
-        .philosopherKing: .init("The Philosopher King", "Clear levels with 10 different philosophical affinities.", .mastery, .legendary, goal: 10),
-        .schoolOfThought: .init("School of Thought", "Earn the same play style on 5 distinct cleared levels.", .mastery, .gold, goal: 5),
-        .unbrokenArgument: .init("An Unbroken Argument", "Match targets on 5 distinct levels in consecutive attempts, without rewind.", .mastery, .legendary, goal: 5)
+        .bentham: .init("The Greater Sum", L10n.text("Clear a level as Jeremy Bentham, with an evidenced trade-off."), .philosophy, .gold, philosopher: "bentham"),
+        .mill: .init("A Mill-ion Reasons", L10n.text("Clear a level with the John Stuart Mill play style."), .philosophy, philosopher: "mill"),
+        .kant: .init("Kant Touch This", L10n.text("Clear a level with the Immanuel Kant play style."), .philosophy, .silver, philosopher: "kant"),
+        .singer: .init(L10n.text("Small Budget, Big Heart"), L10n.text("Clear a level with the Peter Singer play style."), .philosophy, .silver, philosopher: "singer"),
+        .aristotle: .init("The Golden Mean", L10n.text("Clear a level with the Aristotle play style."), .philosophy, philosopher: "aristotle"),
+        .epicurus: .init("Do Not Disturb", L10n.text("Clear a level with the Epicurus play style."), .philosophy, philosopher: "epicurus"),
+        .hobbes: .init("Order from Chaos", L10n.text("Clear a level with the Thomas Hobbes play style."), .philosophy, philosopher: "hobbes"),
+        .sartre: .init(L10n.text("No Exit? Watch Me"), L10n.text("Clear as Jean-Paul Sartre, with an evidenced unconventional route."), .philosophy, .gold, philosopher: "sartre"),
+        .absurdist: .init("Somehow, That Worked", L10n.text("Clear a level with The Absurdist play style."), .philosophy, .silver, philosopher: "absurdist"),
+        .humanist: .init("People, Not Percentages", L10n.text("Clear a level with The Humanist play style."), .philosophy, philosopher: "humanist"),
+        .bureaucrat: .init("Form 27B/6", L10n.text("Clear a level with The Bureaucrat play style."), .philosophy, philosopher: "bureaucrat"),
+        .operator: .init("Mind the Points", L10n.text("Clear as The Trolley Operator, with an evidenced rescue trade-off."), .philosophy, .gold, philosopher: "trolley_operator"),
+        .traveller: .init("Still Thinking", L10n.text("Clear a level with The Fellow Traveller play style."), .philosophy, philosopher: "fellow_traveller"),
+        .rescueRival: .init(L10n.text("Room for One More"), L10n.text("Take Most Saved from another local player by rescuing more."), .rivalries, .silver),
+        .potentialRival: .init("Raising the Bar", L10n.text("Beat your rescue percentage against the same established target."), .rivalries, .bronze),
+        .recordMatched: .init("Target Acquired", L10n.text("Match an established rescue target in a successful clear."), .rivalries, .silver),
+        .economist: .init("Occam's Razor", L10n.text("Beat your best clear's skill count without saving fewer."), .rivalries, .silver),
+        .signatureMove: .init("One-Track Mind", L10n.text("Clear with one skill type and at least five assignments."), .rivalries, .bronze),
+        .publicGood: .init(L10n.text("The More the Merrier"), L10n.text("Save at least 20 more than required in one successful clear."), .rivalries, .silver),
+        .cleanSweep: .init("Clean Sweep", L10n.text("Match the target and take Clean Rescue from another local player."), .rivalries, .gold),
+        .tripleCrown: .init("The Triple Crown", L10n.text("Take Most Saved, Least Skills and Clean Rescue from rivals in one clear."), .rivalries, .legendary),
+        .comeback: .init("The Last Word", L10n.text("Win a direct retry of your failed attempt."), .mastery, .bronze),
+        .secondThoughts: .init("Second Thoughts", L10n.text("Retry a clear: save more, or match it with fewer skills or less time."), .mastery, .silver),
+        .targetApprentice: .init("A Sound Argument", L10n.text("Match rescue targets on 3 distinct levels."), .mastery, .silver, goal: 3),
+        .targetScholar: .init("Beyond Reasonable Doubt", L10n.text("Match rescue targets on 10 distinct levels."), .mastery, .gold, goal: 10),
+        .targetSage: .init("The Grand Thesis", L10n.text("Match rescue targets on 30 distinct levels."), .mastery, .legendary, goal: 30),
+        .greatDebate: .init("The Great Debate", L10n.text("Clear levels with 5 different philosophical affinities."), .mastery, .silver, goal: 5),
+        .philosopherKing: .init("The Philosopher King", L10n.text("Clear levels with 10 different philosophical affinities."), .mastery, .legendary, goal: 10),
+        .schoolOfThought: .init("School of Thought", L10n.text("Earn the same play style on 5 distinct cleared levels."), .mastery, .gold, goal: 5),
+        .unbrokenArgument: .init("An Unbroken Argument", L10n.text("Match targets on 5 distinct levels in consecutive attempts, without rewind."), .mastery, .legendary, goal: 5)
     ]
     public var group: TrolleyAchievementGroup { self == .falsifier ? .philosophy : Self.collection[self]?.group ?? .rescue }
     public var tier: TrolleyAchievementTier {

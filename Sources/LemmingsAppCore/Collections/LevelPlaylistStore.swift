@@ -21,19 +21,19 @@ import NxlvKit
         public var errorDescription: String? {
             switch self {
             case .unsupportedVersion:
-                "Playlists need a different app version. Existing files were preserved."
+                L10n.text("Playlists need a different app version. Existing files were preserved.")
             case .changedOnDisk:
-                "Playlists changed in another app. Close and reopen this app."
+                L10n.text("Playlists changed in another app. Close and reopen this app.")
             case .busy:
-                "Another app is saving playlists. Try again after it finishes."
+                L10n.text("Another app is saving playlists. Try again after it finishes.")
             case .tooManyPlaylists:
-                "The player has reached the playlist limit."
+                L10n.text("The player has reached the playlist limit.")
             case .missingPlaylist:
-                "The selected playlist is no longer available."
+                L10n.text("The selected playlist is no longer available.")
             case .duplicatePlaylist:
-                "A playlist with this identity already exists."
+                L10n.text("A playlist with this identity already exists.")
             case .invalidDocument:
-                "The playlist file contains invalid data. Existing files were preserved."
+                L10n.text("The playlist file contains invalid data. Existing files were preserved.")
             }
         }
     }

@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import NxlvKit
 import LemmingsAppCore
 
 /// A level supplies its shipped renderer and an independent starting simulation.
@@ -37,15 +38,15 @@ import LemmingsAppCore
             let b = GameActionButton(title: text, primary: primary, onPress: action)
             buttons.append(b); page.addSubview(b); return b
         }
-        _ = button("Back") { [weak self] in self?.close() }
-        _ = button("Restart") { [weak self] in self?.seek(0) }
-        _ = button("Back 1s") { [weak self] in guard let self else { return }; seek(cursor.state.tick - Int(cursor.state.ticksPerSecond)) }
-        play = button("Play", primary: true) { [weak self] in self?.toggle() }
-        _ = button("Step +1") { [weak self] in guard let self else { return }; seek(cursor.state.tick + 1) }
-        _ = button("Ahead 1s") { [weak self] in guard let self else { return }; seek(cursor.state.tick + Int(cursor.state.ticksPerSecond)) }
-        _ = button("Speed 1x") { [weak self] in
+        _ = button(L10n.text("Back")) { [weak self] in self?.close() }
+        _ = button(L10n.text("Restart")) { [weak self] in self?.seek(0) }
+        _ = button(L10n.text("Back 1s")) { [weak self] in guard let self else { return }; seek(cursor.state.tick - Int(cursor.state.ticksPerSecond)) }
+        play = button(L10n.text("Play"), primary: true) { [weak self] in self?.toggle() }
+        _ = button(L10n.text("Step +1")) { [weak self] in guard let self else { return }; seek(cursor.state.tick + 1) }
+        _ = button(L10n.text("Ahead 1s")) { [weak self] in guard let self else { return }; seek(cursor.state.tick + Int(cursor.state.ticksPerSecond)) }
+        _ = button(L10n.text("Speed 1x")) { [weak self] in
             guard let self else { return }; speed = speed == 1 ? 2 : speed == 2 ? 5 : 1
-            buttons.last?.title = "Speed \(speed)x"
+            buttons.last?.title = L10n.text("Speed \(speed)x")
         }
         page.onLayout = { [weak self] in self?.layout() }
         page.onKey = { [weak self] event in
@@ -90,12 +91,12 @@ import LemmingsAppCore
             while credit >= 1, cursor.state.tick < cursor.replay.ticks { try cursor.step(); credit -= 1 }
             if cursor.state.tick == cursor.replay.ticks { paused = true; credit = 0 }
             refresh()
-        } catch { paused = true; status.stringValue = "Replay unavailable" }
+        } catch { paused = true; status.stringValue = L10n.text("Replay unavailable") }
     }
     func seek(_ tick: Int) {
         paused = true; credit = 0
         do { try cursor.seek(to: tick); refresh() }
-        catch { status.stringValue = "Replay unavailable" }
+        catch { status.stringValue = L10n.text("Replay unavailable") }
     }
     private func toggle() {
         if cursor.state.tick == cursor.replay.ticks { seek(0) }
@@ -110,13 +111,13 @@ import LemmingsAppCore
     private func refresh() {
         skillPanel.update(stocks: ReplaySkillPresentation.stocks(cursor.state),
             uses: cursor.skillUses.suffix(3).map { .init(tick: $0.tick, name: $0.name) },
-            tick: cursor.state.tick, title: cursor.state.engine == "lemmings3" ? "TOOLS HELD" : "LEFT")
+            tick: cursor.state.tick, title: cursor.state.engine == "lemmings3" ? L10n.text(L10n.text("TOOLS HELD")) : L10n.text("LEFT"))
         layoutSkillPanel()
         render(cursor.state); field.needsDisplay = true
-        field.setAccessibilityLabel("Action replay. \(cursor.state.saved) of \(cursor.state.population) saved. Tick \(cursor.state.tick) of \(cursor.replay.ticks).")
+        field.setAccessibilityLabel(L10n.text("Action replay. \(cursor.state.saved) of \(cursor.state.population) saved. Tick \(cursor.state.tick) of \(cursor.replay.ticks)."))
         status.stringValue = title + "   " + "\(ArcadeView.time(Double(cursor.state.tick) / cursor.state.ticksPerSecond)) / \(ArcadeView.time(Double(cursor.replay.ticks) / cursor.state.ticksPerSecond))"
-        play?.title = paused ? "Play" : "Pause"
-        play?.setAccessibilityLabel(paused ? "Play action replay" : "Pause action replay")
+        play?.title = paused ? L10n.text("Play") : L10n.text("Pause")
+        play?.setAccessibilityLabel(paused ? L10n.text("Play action replay") : L10n.text("Pause action replay"))
     }
     func close() { GameScreen.shared.dismiss(page) }
     private func stop() {
@@ -126,7 +127,7 @@ import LemmingsAppCore
     }
     static func open(_ replay: LeaderboardActionReplay, context: LeaderboardReplayContext?, owner: NSWindow?, title: String) {
         guard let context, let owner, context.conditions == replay.conditions.fingerprint else {
-            GameScreen.shared.message("Replay unavailable", detail: "Open this level with its original game data to watch the action replay."); return
+            GameScreen.shared.message(L10n.text("Replay unavailable"), detail: L10n.text("Open this level with its original game data to watch the action replay.")); return
         }
         let ticket = UUID(); requestID = ticket
         let sourcePage = GameScreen.shared.controllerPage(in: owner)
@@ -139,7 +140,7 @@ import LemmingsAppCore
                 current = controller; controller.show(owner: owner, resume: context.suspend())
             } catch {
                 guard requestID == ticket, GameScreen.shared.controllerPage(in: owner) === sourcePage else { return }
-                GameScreen.shared.message("Replay unavailable", detail: "The actions do not reproduce this run with the installed engine and level data.")
+                GameScreen.shared.message(L10n.text("Replay unavailable"), detail: L10n.text("The actions do not reproduce this run with the installed engine and level data."))
             }
         }
     }

@@ -63,31 +63,31 @@ public enum MobileHUDAction: Equatable, Sendable {
                                paused: Bool, speed: Double, endRunArmed: Bool) -> [Item] {
         var descriptors: [(MobileHUDAction, Int?, String)] = []
         if let rate = snapshot.releaseRate {
-            descriptors.append((.releaseRate(-1), 0, "Decrease release rate, currently \(rate)"))
-            descriptors.append((.releaseRate(1), 1, "Increase release rate, currently \(rate)"))
+            descriptors.append((.releaseRate(-1), 0, L10n.text("Decrease release rate, currently \(rate)")))
+            descriptors.append((.releaseRate(1), 1, L10n.text("Increase release rate, currently \(rate)")))
         }
         for (index, skill) in snapshot.skills.enumerated() {
-            let amount = skill.isUnlimited ? "unlimited" : "\(skill.count) remaining"
-            let selected = index == selectedSkill ? ", selected" : ""
+            let amount = skill.isUnlimited ? "unlimited" : L10n.text("\(skill.count) remaining")
+            let selected = index == selectedSkill ? L10n.text(", selected") : ""
             descriptors.append((.skill(index), index + 2, "\(skill.name), \(amount)\(selected)"))
         }
-        descriptors.append((.pause, 10, paused ? "Resume" : "Pause"))
+        descriptors.append((.pause, 10, paused ? L10n.text("Resume") : L10n.text("Pause")))
         let endRunLabel = snapshot.isEndingRun
-            ? "Undo end run"
-            : (endRunArmed ? "Confirm end run" : "End run")
+            ? L10n.text("Undo end run")
+            : (endRunArmed ? L10n.text("Confirm end run") : L10n.text("End run"))
         descriptors.append((.endRun, 11, endRunLabel))
-        descriptors.append((.speed, nil, "Game speed \(Self.speedLabel(speed)), tap to toggle, hold to accelerate"))
+        descriptors.append((.speed, nil, L10n.text("Game speed \(Self.speedLabel(speed)), tap to toggle, hold to accelerate")))
         if layout.supportsRewind {
-            descriptors.append((.rewind, nil, "Rewind two seconds"))
-            descriptors.append((.stepBackward, nil, "Step backward one tick"))
+            descriptors.append((.rewind, nil, L10n.text("Rewind two seconds")))
+            descriptors.append((.stepBackward, nil, L10n.text("Step backward one tick")))
         }
-        descriptors.append((.step, nil, "Advance one tick"))
-        descriptors.append((.menu, nil, "Menu"))
+        descriptors.append((.step, nil, L10n.text("Advance one tick")))
+        descriptors.append((.menu, nil, L10n.text("Menu")))
 
         if layout.portrait != nil {
             descriptors = descriptors.map { action, cell, label in
-                (action, cell, action == .pause ? label + ", hold for pause menu" :
-                    action == .endRun ? label + (snapshot.isEndingRun ? ", tap or hold" : ", tap twice or hold") : label)
+                (action, cell, action == .pause ? label + L10n.text(", hold for pause menu") :
+                    action == .endRun ? label + (snapshot.isEndingRun ? L10n.text(", tap or hold") : L10n.text(", tap twice or hold")) : label)
             }
         }
         var items = zip(descriptors, layout.interface.controlFrames).map { descriptor, frame in
@@ -103,18 +103,18 @@ public enum MobileHUDAction: Equatable, Sendable {
         }
         if layout.speedArrows.count == 2 {
             items.append(Item(action: .speedStep(-1), frame: layout.speedArrows[0], sourceCell: nil,
-                              accessibilityLabel: "Slower", speedInputFrame: nil))
+                              accessibilityLabel: L10n.text("Slower"), speedInputFrame: nil))
             items.append(Item(action: .speedStep(1), frame: layout.speedArrows[1], sourceCell: nil,
-                              accessibilityLabel: "Faster", speedInputFrame: nil))
+                              accessibilityLabel: L10n.text("Faster"), speedInputFrame: nil))
         }
         return items
     }
 
     private static let shortNames = [
-        "walker": "WALK", "jumper": "JUMP", "shimmier": "SHIM", "slider": "SLIDE", "climber": "CLIMB",
-        "swimmer": "SWIM", "floater": "FLOAT", "glider": "GLIDE", "disarmer": "DISARM", "bomber": "BOMB",
-        "stoner": "STONE", "blocker": "BLOCK", "platformer": "PLAT", "builder": "BUILD", "stacker": "STACK",
-        "laserer": "LASER", "basher": "BASH", "fencer": "FENCE", "miner": "MINE", "digger": "DIG", "cloner": "CLONE",
+        "walker": L10n.text("WALK"), "jumper": L10n.text("JUMP"), "shimmier": L10n.text("SHIM"), "slider": L10n.text("SLIDE"), "climber": L10n.text("CLIMB"),
+        "swimmer": L10n.text("SWIM"), "floater": L10n.text("FLOAT"), "glider": L10n.text("GLIDE"), "disarmer": L10n.text("DISARM"), "bomber": L10n.text("BOMB"),
+        "stoner": L10n.text("STONE"), "blocker": L10n.text("BLOCK"), "platformer": L10n.text("PLAT"), "builder": L10n.text("BUILD"), "stacker": L10n.text("STACK"),
+        "laserer": L10n.text("LASER"), "basher": L10n.text("BASH"), "fencer": L10n.text("FENCE"), "miner": L10n.text("MINE"), "digger": L10n.text("DIG"), "cloner": L10n.text("CLONE"),
     ]
 
     public func draw(in context: CGContext, bounds: CGRect, includeSkills: Bool = true, includeTicks: Bool = true) {
@@ -322,7 +322,7 @@ public enum MobileHUDAction: Equatable, Sendable {
                 GameStoneArt.drawImage(glyph.image, in: CGRect(x: floor(frame.midX - glyph.size.width / 2),
                     y: floor(frame.midY - glyph.size.height / 2), width: glyph.size.width, height: glyph.size.height), context: context)
             }
-            GamePixelTypography.draw("HOLD", in: CGRect(x: frame.minX + 4, y: frame.maxY - 16,
+            GamePixelTypography.draw(L10n.text("HOLD"), in: CGRect(x: frame.minX + 4, y: frame.maxY - 16,
                 width: frame.width - 8, height: 10), context: context, typography: typography,
                 palette: active ? .green : .blue, maximumScale: 1, bitmapOnly: true)
             return
@@ -479,7 +479,7 @@ public enum MobileHUDAction: Equatable, Sendable {
     private func drawTextButton(_ item: Item, context: CGContext) {
         let enabled = item.action != .step || paused
         GameStoneArt.draw(in: context, frame: item.frame, selected: false, pixel: 1)
-        let title = item.action == .step ? "STEP" : "MENU"
+        let title = item.action == .step ? L10n.text("STEP") : L10n.text("MENU")
         GamePixelTypography.draw(title, in: item.frame.insetBy(dx: 8, dy: 2), context: context, typography: typography, palette: .blue, alpha: enabled ? 1 : 0.45)
     }
 
@@ -537,7 +537,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         } else {
             time = "--:--"
         }
-        let status = "OUT \(snapshot.released)  HOME \(snapshot.saved)/\(snapshot.required)  \(time)"
+        let status = L10n.text("OUT \(snapshot.released)  HOME \(snapshot.saved)/\(snapshot.required)  \(time)")
         if layout.portrait != nil {
             drawGameLabel(status.replacingOccurrences(of: "  ", with: " "), in: frame.insetBy(dx: 4, dy: 2), context: context)
             return

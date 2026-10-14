@@ -11,12 +11,12 @@ import NxlvKit
     }
 
     func rescueSummary(_ run: ArcadeRun, maximum: TrolleyMaximum) -> String {
-        "Rescued: \(run.saved). Required: \(run.level.required). "
-        + (maximum.isRescueTarget ? "\(maximum.status == .verified ? "Best possible" : "Best known"): \(maximum.value.map(String.init) ?? "unknown")." : "Maximum rescue unknown.")
+        L10n.text("Rescued: \(run.saved). Required: \(run.level.required). ")
+        + (maximum.isRescueTarget ? "\(maximum.status == .verified ? L10n.text("Best possible") : L10n.text("Best known")): \(maximum.value.map(String.init) ?? "unknown")." : L10n.text("Maximum rescue unknown."))
     }
     func drawRescueTargets(_ run: ArcadeRun, maximum: TrolleyMaximum) {
-        text("Required  \(run.level.required)", 248, 350, 280, alignment: .center, alpha: 0.8)
-        let target = maximum.isRescueTarget ? "\(maximum.status == .verified ? "Best possible" : "Best known")  \(maximum.value.map(String.init) ?? "?")" : "Maximum unknown"
+        text(L10n.text("Required  \(run.level.required)"), 248, 350, 280, alignment: .center, alpha: 0.8)
+        let target = maximum.isRescueTarget ? "\(maximum.status == .verified ? L10n.text("Best possible") : L10n.text("Best known"))  \(maximum.value.map(String.init) ?? "?")" : L10n.text("Maximum unknown")
         text(target, 552, 350, 320, alignment: .center, alpha: 0.8)
     }
     func drawGameResult(_ report: ArcadeReport) {
@@ -24,11 +24,11 @@ import NxlvKit
     }
 
     func drawTrolleyRecords(_ conditions: TrolleyConditions) {
-        header(level?.title ?? "The Trolley"); tabs(); boardScopeLinks()
+        header(level?.title ?? L10n.text("The Trolley")); tabs(); boardScopeLinks()
         let target = ArcadeStore.shared.records.trolley.maximum(conditions: conditions, assisted: assisted)
-        let boardTitle = target.status == .record && trolleyBoard == .zeroAvoidableLosses ? "Record matched" : trolleyBoard.title
+        let boardTitle = target.status == .record && trolleyBoard == .zeroAvoidableLosses ? L10n.text("Record matched") : trolleyBoard.title
         let ordering = target.status == .record && [.rescuePotential, .zeroAvoidableLosses, .cleanRescue].contains(trolleyBoard)
-            ? "Best-known target: \(target.value ?? 0) saved. Fewest skills, then fastest time."
+            ? L10n.text("Best-known target: \(target.value ?? 0) saved. Fewest skills, then fastest time.")
             : trolleyBoard.ordering
         let categories = TrolleyBoard.allCases, index = categories.firstIndex(of: trolleyBoard) ?? 0
         button("‹", CGRect(x: 64, y: 212, width: 66, height: 44)) { [weak self] in
@@ -40,11 +40,11 @@ import NxlvKit
         }
         rewindFilter()
         let entries = ArcadeStore.shared.records.trolley.leaderboard(conditions: conditions, assisted: assisted, board: trolleyBoard)
-        text("PLAYER", 181, 272, 96)
-        text([.fastestClear, .fastestAllSaved].contains(trolleyBoard) ? "REPLAY" : "PLAY STYLE", 280, 272, 304)
-        text("RESULT", 589, 272, 220)
-        text("SKILLS", 821, 272, 86, alignment: .right)
-        text("TIME", 925, 272, 119, alignment: .right)
+        text(L10n.text("PLAYER"), 181, 272, 96)
+        text([.fastestClear, .fastestAllSaved].contains(trolleyBoard) ? L10n.text("REPLAY") : L10n.text(L10n.text("PLAY STYLE")), 280, 272, 304)
+        text(L10n.text("RESULT"), 589, 272, 220)
+        text(L10n.text("SKILLS"), 821, 272, 86, alignment: .right)
+        text(L10n.text("TIME"), 925, 272, 119, alignment: .right)
         for (index, attempt) in entries.prefix(5).enumerated() {
             let run = attempt.run, y = CGFloat(301 + index * 50)
             GameStyle.fill(CGRect(x: 64, y: y, width: 992, height: 49), run.profileID == player.id ? NSColor(calibratedWhite: 0.16, alpha: 1) : NSColor.clear)
@@ -52,34 +52,34 @@ import NxlvKit
             rowText("\(index + 1)", x: 79, width: 38, row: row)
             let profile = ArcadeStore.shared.records.profile(run.profileID)
             drawPortrait(profile?.portrait ?? 0, in: CGRect(x: 130, y: y + 4, width: 33, height: 38))
-            rowText(profile?.initials ?? "LEM", x: 181, width: 72, row: row)
+            rowText(profile?.initials ?? L10n.text("LEM"), x: 181, width: 72, row: row)
             if [.fastestClear, .fastestAllSaved].contains(trolleyBoard) {
                 if let url = ArcadeStore.shared.replayURL(attemptID: attempt.id) {
-                    link("Play replay >", CGRect(x: 280, y: y + 3, width: 304, height: 44), alignment: .left) { [weak self] in
+                    link(L10n.text("Play replay >"), CGRect(x: 280, y: y + 3, width: 304, height: 44), alignment: .left) { [weak self] in
                         if let review = self?.onStoredReplay { review(url, run.level.title) }
                         else { ReplayMovieWindow.shared.open(url, title: run.level.title, save: false) }
                     }
-                } else { rowText("Unavailable", x: 280, width: 304, row: row) }
+                } else { rowText(L10n.text("Unavailable"), x: 280, width: 304, row: row) }
             } else {
                 affinityLink(attempt.philosophy.primaryID, in: CGRect(x: 280, y: y + 3, width: 304, height: 44), alignment: .left)
             }
             let score: String
             switch trolleyBoard {
             case .rescuePotential: score = String(format: "%.1f%%", (attempt.metrics.rescuePotential ?? 0) * 100)
-            case .moralSurplus: score = "+\(attempt.metrics.moralSurplus) extra"
+            case .moralSurplus: score = L10n.text("+\(attempt.metrics.moralSurplus) extra")
             case .mostUsedSkill: score = run.mostUsedSkill.lowercased()
-            default: score = "\(run.saved) saved"
+            default: score = L10n.text("\(run.saved) saved")
             }
             rowText(score, x: 589, width: 220, row: row)
             rowText("\(run.skillCount)", x: 821, width: 86, row: row, alignment: .right)
             rowText(Self.time(run.seconds), x: 925, width: 119, row: row, alignment: .right)
         }
         if entries.isEmpty {
-            text("No records", 64, 337, 992, alignment: .center)
+            text(L10n.text("No records"), 64, 337, 992, alignment: .center)
         }
         if let trophy = TrolleyAchievement.forBoard(trolleyBoard) {
             let progress = trophy.progress(attempts: ArcadeStore.shared.records.trolley.attempts, profileID: player.id)
-            link("Award: \(trophy.title) - \(progress.label)  >", CGRect(x: 64, y: 549, width: 992, height: 36)) { [weak self] in
+            link(L10n.text("Award: \(trophy.title) - \(progress.label)  >"), CGRect(x: 64, y: 549, width: 992, height: 36)) { [weak self] in
                 self?.showAchievement(trophy)
             }
         }
@@ -112,7 +112,7 @@ import NxlvKit
         page(.awards)
     }
     func drawTrolleyAwards() {
-        header("Achievements", subtitle: "All levels"); tabs()
+        header(L10n.text("Achievements"), subtitle: L10n.text("All levels")); tabs()
         let attempts = ArcadeStore.shared.records.trolley.attempts
         let earned = ArcadeStore.shared.records.careerAchievements(profileID: player.id)
         let local = awardGroup == .rescue ? careerAwards.map {
@@ -121,8 +121,8 @@ import NxlvKit
         let awards = offeredAwards
         let progress = awards.map { $0.progress(attempts: attempts, profileID: player.id) }
         let entries = local + zip(awards, progress).map { ($0.0.title, $0.0.detail, $0.1.earned) }
-        let annotations = local.map { $0.2 ? "Earned" : "" } + zip(awards, progress).map {
-            highlightedAwards.contains($0.0) ? "NEW - \($0.1.label)" : $0.1.label
+        let annotations = local.map { $0.2 ? L10n.text("Earned") : "" } + zip(awards, progress).map {
+            highlightedAwards.contains($0.0) ? L10n.text("NEW - \($0.1.label)") : $0.1.label
         }
         let highlighted = Set(awards.enumerated().compactMap { highlightedAwards.contains($0.element) ? local.count + $0.offset : nil })
         link("\(awardGroup.rawValue)  >", CGRect(x: 64, y: 209, width: 300, height: 38)) { [weak self] in
@@ -131,18 +131,18 @@ import NxlvKit
             self.awardGroup = groups[(index + 1) % groups.count]; self.awardPage = 0; self.needsDisplay = true
         }
         let newAwards = orderedHighlightedAwards
-        text("\(entries.filter { $0.2 }.count)/\(entries.count) earned", 384, 216, newAwards.count > 1 ? 210 : 465)
+        text(L10n.text("\(entries.filter { $0.2 }.count)/\(entries.count) earned"), 384, 216, newAwards.count > 1 ? 210 : 465)
         if newAwards.count > 1 {
             let next = ((focusedNewAward.flatMap { newAwards.firstIndex(of: $0) } ?? -1) + 1) % newAwards.count
-            link("Next new \(next + 1)/\(newAwards.count) >", CGRect(x: 612, y: 209, width: 236, height: 38)) { [weak self] in
+            link(L10n.text("Next new \(next + 1)/\(newAwards.count) >"), CGRect(x: 612, y: 209, width: 236, height: 38)) { [weak self] in
                 self?.showAchievement(newAwards[next])
             }
         }
         drawAwardEntries(entries, annotations: annotations, affinities: local.map { _ in nil } + awards.map(\.philosopherID), highlighted: highlighted)
         drawAwardGroupLinks()
         pageFooter()
-        setAccessibilityLabel("\(awardGroup.rawValue) achievements across all levels. Left and right change pages. Up and down or 1 to 4 change collections, and the collection names at the bottom of the page select them directly. "
-            + (newAwards.isEmpty ? "" : "New awards from this run are highlighted. \(newAwards.count > 1 ? "Next new moves to the next new award. " : "")")
+        setAccessibilityLabel(L10n.text("\(awardGroup.rawValue) achievements across all levels. Left and right change pages. Up and down or 1 to 4 change collections, and the collection names at the bottom of the page select them directly. ")
+            + (newAwards.isEmpty ? "" : L10n.text("New awards from this run are highlighted. \(newAwards.count > 1 ? L10n.text("Next new moves to the next new award. ") : "")"))
             + entries.enumerated().map { "\(annotations[$0.offset]): \($0.element.0). \($0.element.1)" }.joined(separator: " "))
     }
 
@@ -172,7 +172,7 @@ import NxlvKit
 
     func drawAwardEntries(_ entries: [(String, String, Bool)], annotations: [String] = [], affinities: [String?] = [], highlighted: Set<Int> = []) {
         let pages = awardPageCount, current = awardPage % pages
-        link("More  \(current + 1)/\(pages)  ›", CGRect(x: 873, y: 209, width: 183, height: 38)) { [weak self] in
+        link(L10n.text("More  \(current + 1)/\(pages)  ›"), CGRect(x: 873, y: 209, width: 183, height: 38)) { [weak self] in
             self?.awardPage = (current + 1) % pages; self?.needsDisplay = true
         }
         for (index, entry) in entries.dropFirst(current * awardsPerPage).prefix(awardsPerPage).enumerated() {
@@ -199,25 +199,25 @@ import NxlvKit
     }
 
     func drawTrolleyDetails(_ conditions: TrolleyConditions) {
-        header(level?.title ?? "The Trolley"); tabs()
+        header(level?.title ?? L10n.text("The Trolley")); tabs()
         let runAssisted = report?.run.assisted ?? assisted
         let history = ArcadeStore.shared.records.trolley, key = conditions.comparisonID(assisted: runAssisted)
         let stored = report?.trolley?.attempt ?? history.attempts.last { $0.comparisonID == key && $0.run.profileID == player.id }
         let attempt = stored.map { $0.assessed(using: history.maximum(conditions: conditions, assisted: runAssisted)) }
         let personal = history.personal(profileID: player.id, comparisonID: key)
         let maximum = attempt?.maximum ?? history.maximum(conditions: conditions, assisted: runAssisted)
-        text("This run", 64, 222, 480)
+        text(L10n.text("This run"), 64, 222, 480)
         var rows: [(String, String)] = [
-            ("Rescued", attempt.map { String($0.run.saved) } ?? "-"),
-            ("Lost", attempt.map { String($0.metrics.lost) } ?? "-"),
-            ("Skills used", attempt.map { String($0.run.skillCount) } ?? "-"),
-            ("Time", attempt.map { Self.time($0.run.seconds) } ?? "-")]
+            (L10n.text("Rescued"), attempt.map { String($0.run.saved) } ?? "-"),
+            (L10n.text("Lost"), attempt.map { String($0.metrics.lost) } ?? "-"),
+            (L10n.text("Skills used"), attempt.map { String($0.run.skillCount) } ?? "-"),
+            (L10n.text("Time"), attempt.map { Self.time($0.run.seconds) } ?? "-")]
         if let attempt {
             if attempt.metrics.unreleased > 0 { rows.append((conditions.gameID == "lemmings3" ? "In reserve" : "Still in hatch", String(attempt.metrics.unreleased))) }
             if let telemetry = attempt.run.telemetry {
-                if telemetry.nukeCount > 0 { rows.append(("Nukes", String(telemetry.nukeCount))) }
-                if telemetry.rewindCount > 0 { rows.append(("Rewinds", String(telemetry.rewindCount))) }
-                if telemetry.undoCount > 0 { rows.append(("Undos", String(telemetry.undoCount))) }
+                if telemetry.nukeCount > 0 { rows.append((L10n.text("Nukes"), String(telemetry.nukeCount))) }
+                if telemetry.rewindCount > 0 { rows.append((L10n.text("Rewinds"), String(telemetry.rewindCount))) }
+                if telemetry.undoCount > 0 { rows.append((L10n.text("Undos"), String(telemetry.undoCount))) }
             }
         }
         for (index, row) in rows.enumerated() {
@@ -225,14 +225,14 @@ import NxlvKit
             text(row.0, 64, y, 266)
             text(row.1, 344, y, 248, palette: .green)
         }
-        text("This level", 654, 222, 402)
+        text(L10n.text("This level"), 654, 222, 402)
         let clears = history.attempts.filter { $0.comparisonID == key && $0.run.profileID == player.id && $0.run.qualifies }.count
         let levelRows: [(String, String)] = [
-            ("Required", String(conditions.rescueRequirement)),
-            (maximum.status == .verified ? "Best possible" : maximum.status == .record ? "Best known" : "Maximum", maximum.isRescueTarget ? maximum.value.map(String.init) ?? "Unknown" : "Unknown"),
-            ("Personal best", personal.bestSaved.map(String.init) ?? "-"),
-            ("Attempts", String(personal.attempts)),
-            ("Clears", String(clears))]
+            (L10n.text("Required"), String(conditions.rescueRequirement)),
+            (maximum.status == .verified ? L10n.text("Best possible") : maximum.status == .record ? L10n.text("Best known") : L10n.text("Maximum"), maximum.isRescueTarget ? maximum.value.map(String.init) ?? L10n.text("Unknown") : L10n.text("Unknown")),
+            (L10n.text("Personal best"), personal.bestSaved.map(String.init) ?? "-"),
+            (L10n.text("Attempts"), String(personal.attempts)),
+            (L10n.text("Clears"), String(clears))]
         for (index, row) in levelRows.enumerated() {
             let y = CGFloat(270 + index * 34)
             text(row.0, 654, y, 248)

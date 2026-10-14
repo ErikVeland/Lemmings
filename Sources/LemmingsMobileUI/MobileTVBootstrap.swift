@@ -1,5 +1,6 @@
 #if os(tvOS)
 import LemmingsGameArt
+import NxlvKit
 import LemmingsMobileCore
 import LemmingsTVCore
 import UIKit
@@ -32,7 +33,7 @@ import UIKit
     private func migrate() {
         guard !migrating else { return }
         migrating = true
-        canvas.page = .init(title: "Lemmings", subtitle: "Loading...")
+        canvas.page = .init(title: L10n.text("Lemmings"), subtitle: L10n.text("Loading..."))
         Task { [weak self] in
             guard let self else { return }
             do {
@@ -52,8 +53,8 @@ import UIKit
                 setNeedsFocusUpdate()
                 updateFocusIfNeeded()
             } catch {
-                canvas.page = .init(title: "Saved data could not be opened", details: [error.localizedDescription],
-                                    footer: [.init("retry", "Retry", primary: true)])
+                canvas.page = .init(title: L10n.text("Saved data could not be opened"), details: [error.localizedDescription],
+                                    footer: [.init("retry", L10n.text("Retry"), primary: true)])
             }
             migrating = false
         }

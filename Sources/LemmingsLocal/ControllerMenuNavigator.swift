@@ -19,7 +19,7 @@ import NxlvKit
             else if let replay = view as? SolutionReplayPage, let back = replay.onReturnToGame { back() }
             else if let sheet {
                 let cancel = controls(in: view).compactMap { $0 as? NSButton }.first {
-                    $0.keyEquivalent == "\u{1b}" || ["Cancel", "Close", "Resume", "Back"].contains($0.title)
+                    $0.keyEquivalent == "\u{1b}" || [L10n.text("Cancel"), L10n.text("Close"), L10n.text("Resume"), L10n.text("Back")].contains($0.title)
                 }
                 if let cancel { activate(cancel) } else { sheet.sheetParent?.endSheet(sheet, returnCode: .cancel) }
             }
@@ -38,7 +38,7 @@ import NxlvKit
                     choices.first(where: { $0 === candidate })
                 }
                 ?? choices.first(where: { ($0 as? NSButton)?.keyEquivalent == "\r" })
-                ?? choices.first(where: { ["Close", "Cancel"].contains(($0 as? NSButton)?.title ?? "") })
+                ?? choices.first(where: { [L10n.text("Close"), L10n.text("Cancel")].contains(($0 as? NSButton)?.title ?? "") })
                 ?? choices.first
         }
         switch action {

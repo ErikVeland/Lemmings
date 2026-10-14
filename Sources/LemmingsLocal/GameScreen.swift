@@ -10,13 +10,13 @@ import LemmingsGameArt
         super.init(frame: frame)
         setAccessibilityElement(true)
         setAccessibilityRole(.staticText)
-        setAccessibilityLabel("Loading")
+        setAccessibilityLabel(L10n.text("Loading"))
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     override func hitTest(_ point: NSPoint) -> NSView? { nil }
     override func draw(_ dirtyRect: NSRect) {
         GameStyle.fill(bounds, .black)
-        GameControlText.draw("Loading...", in: bounds.insetBy(dx: 8, dy: 2), alignment: .center, role: .heading)
+        GameControlText.draw(L10n.text("Loading..."), in: bounds.insetBy(dx: 8, dy: 2), alignment: .center, role: .heading)
     }
 }
 
@@ -90,7 +90,7 @@ import LemmingsGameArt
         if let sheet = window.attachedSheet, event.window === sheet, !(sheet is NSSavePanel), let root = sheet.contentView {
             return keyboardNavigation.handle(event, in: root, window: sheet) {
                 let buttons = self.keyboardNavigation.controls(in: root).compactMap { $0 as? NSButton }
-                if let cancel = buttons.first(where: { $0.keyEquivalent == "\u{1b}" || ["Cancel", "Close", "Resume", "Back"].contains($0.title) }) {
+                if let cancel = buttons.first(where: { $0.keyEquivalent == "\u{1b}" || [L10n.text("Cancel"), L10n.text("Close"), L10n.text("Resume"), L10n.text("Back")].contains($0.title) }) {
                     cancel.performClick(nil)
                 } else { sheet.cancelOperation(nil) }
             }
@@ -250,7 +250,7 @@ import LemmingsGameArt
         setAccessibilityElement(true)
         setAccessibilityRole(.group)
         setAccessibilitySubrole(.dialog)
-        setAccessibilityLabel(page.accessibilityLabel() ?? "Game dialog")
+        setAccessibilityLabel(page.accessibilityLabel() ?? L10n.text("Game dialog"))
         setAccessibilityChildren([page])
         page.autoresizingMask = []
     }
@@ -293,7 +293,7 @@ import LemmingsGameArt
     var onHorizontalNavigation: ((Int) -> Void)?
     let body = NSView()
     private let canvas: GameMenuCanvas
-    private let back = GameActionButton(title: "Back", primary: false)
+    private let back = GameActionButton(title: L10n.text("Back"), primary: false)
     var controllerBackButton: NSButton { back }
     private weak var preferredControllerControl: NSControl?
     private weak var primaryAction: NSButton?

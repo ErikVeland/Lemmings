@@ -713,7 +713,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
         action = #selector(invoke)
         setButtonType(.momentaryPushIn)
         setAccessibilityLabel(item.accessibilityName)
-        setAccessibilityHelp(selected ? "Selected item" : "Select this item")
+        setAccessibilityHelp(selected ? L10n.text("Selected item") : L10n.text("Select this item"))
         setAccessibilitySelected(selected)
     }
 
@@ -873,7 +873,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
     override func accessibilityValue() -> Any? { selected ? 1 : 0 }
 
     override func accessibilityValueDescription() -> String? {
-        selected ? "Selected" : "Not selected"
+        selected ? L10n.text("Selected") : L10n.text("Not selected")
     }
 
     func update(item: LevelCoverFlowItem, selected: Bool) {
@@ -888,8 +888,8 @@ struct LevelCoverFlowItem: Equatable, Sendable {
         setAccessibilityLabel(item.accessibilityName)
         setAccessibilitySelected(selected)
         setAccessibilityHelp(item.isAvailable
-            ? selected ? "Selected item" : "Select this item"
-            : item.availability == .locked ? "Locked item" : "Unavailable item")
+            ? selected ? L10n.text("Selected item") : L10n.text("Select this item")
+            : item.availability == .locked ? L10n.text("Locked item") : L10n.text("Unavailable item"))
         if selectionChanged, selected, window != nil {
             NSAccessibility.post(element: self, notification: .valueChanged)
         }
@@ -1097,7 +1097,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
                 fraction: alpha, respectFlipped: true,
                 hints: [.interpolation: NSImageInterpolation.none.rawValue])
         } else if artworkFailed {
-            GamePixelText.draw("PREVIEW UNAVAILABLE", in: frame.insetBy(dx: 8, dy: 8), maxScale: 1)
+            GamePixelText.draw(L10n.text(L10n.text("PREVIEW UNAVAILABLE")), in: frame.insetBy(dx: 8, dy: 8), maxScale: 1)
         }
         NSColor(calibratedWhite: 0.72, alpha: alpha).setStroke()
         let border = NSBezierPath(rect: frame.insetBy(dx: 0.5, dy: 0.5))

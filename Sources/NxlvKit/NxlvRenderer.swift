@@ -681,7 +681,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .invalidLevelDimensions,
-        "The level dimensions must be from 1 through \(limits.maximumLevelDimension)."
+        L10n.text("The level dimensions must be from 1 through \(limits.maximumLevelDimension).")
       )
       return nil
     }
@@ -692,7 +692,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .levelPixelLimitExceeded,
-        "The level exceeds the \(limits.maximumLevelPixels)-pixel render limit."
+        L10n.text("The level exceeds the \(limits.maximumLevelPixels)-pixel render limit.")
       )
       return nil
     }
@@ -704,19 +704,19 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .terrainGroupLimitExceeded,
-        "The level exceeds the \(limits.maximumTerrainGroups)-group render limit."
+        L10n.text("The level exceeds the \(limits.maximumTerrainGroups)-group render limit.")
       )
       return false
     }
     var count = level.terrainPieces.count
     guard let withGadgets = checkedSum(count, level.gadgets.count) else {
-      append(.error, .placementLimitExceeded, "The level placement count overflows.")
+      append(.error, .placementLimitExceeded, L10n.text("The level placement count overflows."))
       return false
     }
     count = withGadgets
     for group in level.terrainGroups {
       guard let next = checkedSum(count, group.terrain.count) else {
-        append(.error, .placementLimitExceeded, "The level placement count overflows.")
+        append(.error, .placementLimitExceeded, L10n.text("The level placement count overflows."))
         return false
       }
       count = next
@@ -725,7 +725,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .placementLimitExceeded,
-        "The level exceeds the \(limits.maximumPlacements)-placement render limit."
+        L10n.text("The level exceeds the \(limits.maximumPlacements)-placement render limit.")
       )
       return false
     }
@@ -745,7 +745,7 @@ private struct NxlvRenderEngine {
         append(
           .error,
           .duplicateResolvedAsset,
-          "The style resolution contains duplicate assets for '\(asset.reference.style):\(asset.reference.piece ?? "")'.",
+          L10n.text("The style resolution contains duplicate assets for '\(asset.reference.style):\(asset.reference.piece ?? "")'."),
           line: asset.reference.sourceLine
         )
       } else if !ambiguousAssets.contains(key) {
@@ -768,7 +768,7 @@ private struct NxlvRenderEngine {
         append(
           .error,
           .unnamedTerrainGroup,
-          "A terrain group has no NAME field.",
+          L10n.text("A terrain group has no NAME field."),
           line: group.source.openingLine
         )
         continue
@@ -778,7 +778,7 @@ private struct NxlvRenderEngine {
         append(
           .error,
           .duplicateTerrainGroup,
-          "Terrain group '\(name)' is defined more than once.",
+          L10n.text("Terrain group '\(name)' is defined more than once."),
           line: group.source.openingLine
         )
         continue
@@ -803,7 +803,7 @@ private struct NxlvRenderEngine {
         append(
           .error,
           .invalidPlacement,
-          "A piece in terrain group '\(name)' has no valid X or Y coordinate.",
+          L10n.text("A piece in terrain group '\(name)' has no valid X or Y coordinate."),
           line: placement.source.openingLine
         )
         continue
@@ -821,7 +821,7 @@ private struct NxlvRenderEngine {
           append(
             .error,
             .invalidPlacement,
-            "A piece in terrain group '\(name)' has coordinates outside the supported integer range.",
+            L10n.text("A piece in terrain group '\(name)' has coordinates outside the supported integer range."),
             line: placement.source.openingLine
           )
           return nil
@@ -835,7 +835,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .mixedTerrainGroupMaterial,
-        "Terrain group '\(name)' mixes steel and non-steel pieces.",
+        L10n.text("Terrain group '\(name)' mixes steel and non-steel pieces."),
         line: group.source.openingLine
       )
       return nil
@@ -844,7 +844,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .emptyTerrainGroup,
-        "Terrain group '\(name)' has no renderable pieces.",
+        L10n.text("Terrain group '\(name)' has no renderable pieces."),
         line: group.source.openingLine
       )
       return nil
@@ -857,7 +857,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .terrainGroupPixelLimitExceeded,
-        "Terrain group '\(name)' exceeds the \(limits.maximumTerrainGroupPixels)-pixel limit.",
+        L10n.text("Terrain group '\(name)' exceeds the \(limits.maximumTerrainGroupPixels)-pixel limit."),
         line: group.source.openingLine
       )
       return nil
@@ -878,7 +878,7 @@ private struct NxlvRenderEngine {
         append(
           .error,
           .invalidPlacement,
-          "A piece in terrain group '\(name)' cannot be normalized safely.",
+          L10n.text("A piece in terrain group '\(name)' cannot be normalized safely."),
           line: item.placement.source.openingLine
         )
         continue
@@ -973,7 +973,7 @@ private struct NxlvRenderEngine {
         append(
           .error,
           .invalidPlacement,
-          "A terrain piece has no valid X or Y coordinate.",
+          L10n.text("A terrain piece has no valid X or Y coordinate."),
           line: placement.source.openingLine
         )
         continue
@@ -985,7 +985,7 @@ private struct NxlvRenderEngine {
         append(
           .error,
           .invalidPlacement,
-          "A terrain piece has coordinates outside the supported integer range.",
+          L10n.text("A terrain piece has coordinates outside the supported integer range."),
           line: placement.source.openingLine
         )
         continue
@@ -994,7 +994,7 @@ private struct NxlvRenderEngine {
         append(
           .warning,
           .conflictingTerrainFlags,
-          "An ERASE terrain piece also uses NO_OVERWRITE and cannot erase existing terrain.",
+          L10n.text("An ERASE terrain piece also uses NO_OVERWRITE and cannot erase existing terrain."),
           line: placement.source.openingLine
         )
       }
@@ -1017,7 +1017,7 @@ private struct NxlvRenderEngine {
         append(
           .error,
           .invalidPlacement,
-          "A gadget has no valid X or Y coordinate.",
+          L10n.text("A gadget has no valid X or Y coordinate."),
           line: gadget.source.openingLine
         )
         continue
@@ -1033,7 +1033,7 @@ private struct NxlvRenderEngine {
         append(
           .error,
           .invalidPlacement,
-          "Gadget '\(style):\(piece)' has coordinates outside the supported integer range.",
+          L10n.text("Gadget '\(style):\(piece)' has coordinates outside the supported integer range."),
           line: gadget.source.openingLine
         )
         continue
@@ -1329,7 +1329,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .invalidPlacement,
-        "A terrain piece has no STYLE or PIECE value.",
+        L10n.text("A terrain piece has no STYLE or PIECE value."),
         line: placement.source.openingLine
       )
       return nil
@@ -1346,8 +1346,8 @@ private struct NxlvRenderEngine {
           .error,
           isForward ? .forwardTerrainGroupReference : .missingTerrainGroup,
           isForward
-            ? "Terrain group '\(piece)' is used before it is defined."
-            : "Terrain group '\(piece)' is not defined.",
+            ? L10n.text("Terrain group '\(piece)' is used before it is defined.")
+            : L10n.text("Terrain group '\(piece)' is not defined."),
           line: placement.source.openingLine
         )
         return nil
@@ -1356,7 +1356,7 @@ private struct NxlvRenderEngine {
         append(
           .error,
           .unsupportedResize,
-          "Terrain group '\(piece)' cannot use WIDTH or HEIGHT.",
+          L10n.text("Terrain group '\(piece)' cannot use WIDTH or HEIGHT."),
           line: placement.source.openingLine
         )
         return nil
@@ -1418,7 +1418,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .invalidPlacement,
-        "A gadget has no STYLE or PIECE value.",
+        L10n.text("A gadget has no STYLE or PIECE value."),
         line: gadget.source.openingLine
       )
       return nil
@@ -1435,7 +1435,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .missingResolvedAsset,
-        "Object '\(style):\(piece)' has no resolved metadata.",
+        L10n.text("Object '\(style):\(piece)' has no resolved metadata."),
         line: gadget.source.openingLine
       )
       return nil
@@ -1444,7 +1444,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .missingResolvedAsset,
-        "Object '\(style):\(piece)' has no resolved primary animation graphic.",
+        L10n.text("Object '\(style):\(piece)' has no resolved primary animation graphic."),
         line: gadget.source.openingLine
       )
       return nil
@@ -1465,7 +1465,7 @@ private struct NxlvRenderEngine {
             piece: piece,
             asset: asset,
             line: gadget.source.openingLine,
-            description: "pickup eraser for object '\(style):\(piece)'"
+            description: L10n.text("pickup eraser for object '\(style):\(piece)'")
           )
         }
         guard let generated = NeoLemmixPickupGraphics.make(
@@ -1478,7 +1478,7 @@ private struct NxlvRenderEngine {
           append(
             .error,
             .missingResolvedAsset,
-            "Object '\(style):\(piece)' could not generate its CE pickup skill artwork.",
+            L10n.text("Object '\(style):\(piece)' could not generate its CE pickup skill artwork."),
             line: gadget.source.openingLine
           )
           return nil
@@ -1496,7 +1496,7 @@ private struct NxlvRenderEngine {
           append(
             .error,
             .invalidPlacement,
-            "Object '\(style):\(piece)' has an invalid generated animation size.",
+            L10n.text("Object '\(style):\(piece)' has an invalid generated animation size."),
             line: gadget.source.openingLine
           )
           return nil
@@ -1512,7 +1512,7 @@ private struct NxlvRenderEngine {
         append(
           .error,
           .missingResolvedAsset,
-          "Object '\(style):\(piece)' does not have exactly one resolved primary animation graphic.",
+          L10n.text("Object '\(style):\(piece)' does not have exactly one resolved primary animation graphic."),
           line: gadget.source.openingLine
         )
         return nil
@@ -1588,14 +1588,14 @@ private struct NxlvRenderEngine {
         piece: piece,
         asset: asset,
         line: gadget.source.openingLine,
-        description: "secondary animation for object '\(style):\(piece)'"
+        description: L10n.text("secondary animation for object '\(style):\(piece)'")
       ) else { return nil }
       let secondaryInitial = initialAnimationFrameIndex(
         animation: secondary,
         effect: .none,
         frameCount: decoded.count,
         line: gadget.source.openingLine,
-        description: "secondary animation for object '\(style):\(piece)'"
+        description: L10n.text("secondary animation for object '\(style):\(piece)'")
       )
       let widthDelta = primaryUntransformedWidth - sourceFrames[initialFrame].width
       let heightDelta = primaryUntransformedHeight - sourceFrames[initialFrame].height
@@ -1614,7 +1614,7 @@ private struct NxlvRenderEngine {
           defaultHeight: nil,
           margins: secondary.nineSlice,
           line: gadget.source.openingLine,
-          description: "secondary animation for object '\(style):\(piece)'"
+          description: L10n.text("secondary animation for object '\(style):\(piece)'")
         ) else { return nil }
         secondaryFrames.append(transformed(
           resizedFrame,
@@ -1715,7 +1715,7 @@ private struct NxlvRenderEngine {
     let frameCount = animation.frames ?? 1
     guard frameCount > 0 else {
       append(
-        .error, .invalidAnimationStrip, "The \(description) frame count is not positive.",
+        .error, .invalidAnimationStrip, L10n.text("The \(description) frame count is not positive."),
         line: line)
       return nil
     }
@@ -1725,7 +1725,7 @@ private struct NxlvRenderEngine {
       guard strip.width >= frameCount else {
         append(
           .error, .invalidAnimationStrip,
-          "The \(description) horizontal strip is too short for its frame count.", line: line)
+          L10n.text("The \(description) horizontal strip is too short for its frame count."), line: line)
         return nil
       }
       frameWidth = strip.width / frameCount
@@ -1733,14 +1733,14 @@ private struct NxlvRenderEngine {
       if !strip.width.isMultiple(of: frameCount) {
         append(
           .warning, .invalidAnimationStrip,
-          "The \(description) horizontal strip has remainder pixels; integer frame division was used.",
+          L10n.text("The \(description) horizontal strip has remainder pixels; integer frame division was used."),
           line: line)
       }
     } else {
       guard strip.height >= frameCount else {
         append(
           .error, .invalidAnimationStrip,
-          "The \(description) vertical strip is too short for its frame count.", line: line)
+          L10n.text("The \(description) vertical strip is too short for its frame count."), line: line)
         return nil
       }
       frameWidth = strip.width
@@ -1748,13 +1748,13 @@ private struct NxlvRenderEngine {
       if !strip.height.isMultiple(of: frameCount) {
         append(
           .warning, .invalidAnimationStrip,
-          "The \(description) vertical strip has remainder pixels; integer frame division was used.",
+          L10n.text("The \(description) vertical strip has remainder pixels; integer frame division was used."),
           line: line)
       }
     }
     guard frameWidth > 0, frameHeight > 0 else {
       append(
-        .error, .invalidAnimationStrip, "The \(description) contains an empty frame.", line: line)
+        .error, .invalidAnimationStrip, L10n.text("The \(description) contains an empty frame."), line: line)
       return nil
     }
 
@@ -1780,7 +1780,7 @@ private struct NxlvRenderEngine {
       let width = animation.declaredWidth ?? 1
       let height = animation.declaredHeight ?? 1
       guard width > 0, height > 0 else {
-        append(.error, .invalidPlacement, "The \(description) has an invalid generated size.", line: line)
+        append(.error, .invalidPlacement, L10n.text("The \(description) has an invalid generated size."), line: line)
         return nil
       }
       return Array(repeating: PixelPlane(width: width, height: height), count: frameCount)
@@ -1793,7 +1793,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .missingResolvedAsset,
-        "The \(description) does not have exactly one resolved graphic.",
+        L10n.text("The \(description) does not have exactly one resolved graphic."),
         line: line
       )
       return nil
@@ -1869,7 +1869,7 @@ private struct NxlvRenderEngine {
         append(
           .warning,
           .invalidAnimationStrip,
-          "The \(description) INITIAL_FRAME is outside its animation strip and was clamped.",
+          L10n.text("The \(description) INITIAL_FRAME is outside its animation strip and was clamped."),
           line: line
         )
       }
@@ -1911,7 +1911,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .missingResolvedAsset,
-        "No resolved \(kind.rawValue) asset exists for '\(style):\(piece)'.",
+        L10n.text("No resolved \(kind.rawValue) asset exists for '\(style):\(piece)'."),
         line: line
       )
       return nil
@@ -1929,7 +1929,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .unsafeGraphicPath,
-        "A graphic path escapes its resolved style directory.",
+        L10n.text("A graphic path escapes its resolved style directory."),
         line: asset.reference.sourceLine,
         path: url.path
       )
@@ -1944,21 +1944,21 @@ private struct NxlvRenderEngine {
       ])
       guard values.isRegularFile == true else {
         append(
-          .error, .unreadableGraphic, "The graphic is not a regular file.", path: standardized.path)
+          .error, .unreadableGraphic, L10n.text("The graphic is not a regular file."), path: standardized.path)
         return nil
       }
       if let fileSize = values.fileSize, fileSize > limits.maximumGraphicFileBytes {
         append(
           .error,
           .graphicFileTooLarge,
-          "The graphic exceeds the \(limits.maximumGraphicFileBytes)-byte file limit.",
+          L10n.text("The graphic exceeds the \(limits.maximumGraphicFileBytes)-byte file limit."),
           path: standardized.path
         )
         return nil
       }
     } catch {
       append(
-        .error, .unreadableGraphic, "The graphic file attributes cannot be read.",
+        .error, .unreadableGraphic, L10n.text("The graphic file attributes cannot be read."),
         path: standardized.path)
       return nil
     }
@@ -1967,14 +1967,14 @@ private struct NxlvRenderEngine {
     do {
       data = try Data(contentsOf: standardized, options: [.mappedIfSafe])
     } catch {
-      append(.error, .unreadableGraphic, "The graphic cannot be read.", path: standardized.path)
+      append(.error, .unreadableGraphic, L10n.text("The graphic cannot be read."), path: standardized.path)
       return nil
     }
     guard data.count <= limits.maximumGraphicFileBytes else {
       append(
         .error,
         .graphicFileTooLarge,
-        "The graphic exceeds the \(limits.maximumGraphicFileBytes)-byte file limit.",
+        L10n.text("The graphic exceeds the \(limits.maximumGraphicFileBytes)-byte file limit."),
         path: standardized.path
       )
       return nil
@@ -1985,13 +1985,13 @@ private struct NxlvRenderEngine {
         [kCGImageSourceShouldCache: false] as CFDictionary
       )
     else {
-      append(.error, .malformedPNG, "ImageIO cannot open the PNG graphic.", path: standardized.path)
+      append(.error, .malformedPNG, L10n.text("ImageIO cannot open the PNG graphic."), path: standardized.path)
       return nil
     }
     guard let type = CGImageSourceGetType(source),
       UTType(type as String)?.conforms(to: .png) == true
     else {
-      append(.error, .nonPNGGraphic, "The graphic data is not PNG.", path: standardized.path)
+      append(.error, .nonPNGGraphic, L10n.text("The graphic data is not PNG."), path: standardized.path)
       return nil
     }
     guard CGImageSourceGetCount(source) == 1,
@@ -2006,7 +2006,7 @@ private struct NxlvRenderEngine {
       height > 0
     else {
       append(
-        .error, .malformedPNG, "The PNG has no valid image dimensions.", path: standardized.path)
+        .error, .malformedPNG, L10n.text("The PNG has no valid image dimensions."), path: standardized.path)
       return nil
     }
     guard width <= limits.maximumGraphicDimension,
@@ -2015,7 +2015,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .graphicDimensionLimitExceeded,
-        "The PNG exceeds the \(limits.maximumGraphicDimension)-pixel dimension limit.",
+        L10n.text("The PNG exceeds the \(limits.maximumGraphicDimension)-pixel dimension limit."),
         path: standardized.path
       )
       return nil
@@ -2027,7 +2027,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .graphicPixelLimitExceeded,
-        "The PNG exceeds the \(limits.maximumGraphicPixels)-pixel decode limit.",
+        L10n.text("The PNG exceeds the \(limits.maximumGraphicPixels)-pixel decode limit."),
         path: standardized.path
       )
       return nil
@@ -2038,7 +2038,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .graphicPixelLimitExceeded,
-        "Decoded graphics exceed the \(limits.maximumDecodedGraphicPixels)-pixel aggregate limit.",
+        L10n.text("Decoded graphics exceed the \(limits.maximumDecodedGraphicPixels)-pixel aggregate limit."),
         path: standardized.path
       )
       return nil
@@ -2055,7 +2055,7 @@ private struct NxlvRenderEngine {
       ), image.width == width, image.height == height
     else {
       append(
-        .error, .malformedPNG, "ImageIO cannot decode the PNG graphic.", path: standardized.path)
+        .error, .malformedPNG, L10n.text("ImageIO cannot decode the PNG graphic."), path: standardized.path)
       return nil
     }
 
@@ -2082,7 +2082,7 @@ private struct NxlvRenderEngine {
     }
     guard decoded else {
       append(
-        .error, .malformedPNG, "A bitmap context cannot decode the PNG graphic.",
+        .error, .malformedPNG, L10n.text("A bitmap context cannot decode the PNG graphic."),
         path: standardized.path)
       return nil
     }
@@ -2167,7 +2167,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .graphicPixelLimitExceeded,
-        "The resized \(description) exceeds the \(limits.maximumGraphicPixels)-pixel limit.",
+        L10n.text("The resized \(description) exceeds the \(limits.maximumGraphicPixels)-pixel limit."),
         line: line
       )
       return nil
@@ -2231,7 +2231,7 @@ private struct NxlvRenderEngine {
         append(
           .warning,
           .unsupportedResize,
-          "The \(description) ignores \(axisName) because its metadata does not enable that resize axis.",
+          L10n.text("The \(description) ignores \(axisName) because its metadata does not enable that resize axis."),
           line: line
         )
       }
@@ -2242,7 +2242,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .invalidResize,
-        "The \(description) has an invalid \(axisName) value.",
+        L10n.text("The \(description) has an invalid \(axisName) value."),
         line: line
       )
       return nil
@@ -2269,7 +2269,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .invalidNineSlice,
-        "The \(description) has invalid \(axisName) nine-slice margins.",
+        L10n.text("The \(description) has invalid \(axisName) nine-slice margins."),
         line: line
       )
       return nil
@@ -2294,7 +2294,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .invalidNineSlice,
-        "The \(description) has invalid \(axisName) nine-slice margins.",
+        L10n.text("The \(description) has invalid \(axisName) nine-slice margins."),
         line: line
       )
       return nil
@@ -2407,7 +2407,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .invalidPlacement,
-        "The \(description) has a negative trigger dimension.",
+        L10n.text("The \(description) has a negative trigger dimension."),
         line: line
       )
       return
@@ -2417,7 +2417,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .invalidPlacement,
-        "The \(description) trigger area exceeds the supported integer range.",
+        L10n.text("The \(description) trigger area exceeds the supported integer range."),
         line: line
       )
       return
@@ -2782,7 +2782,7 @@ private struct NxlvRenderEngine {
       append(
         .error,
         .missingResolvedAsset,
-        "The \(description) does not have exactly one resolved graphic.",
+        L10n.text("The \(description) does not have exactly one resolved graphic."),
         line: line
       )
       return nil

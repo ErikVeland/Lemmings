@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import NxlvKit
 
 /// The same timeline buttons and hit regions serve all three game panels.
 @MainActor final class TimelinePanelControls {
@@ -7,10 +8,10 @@ import AppKit
         case rewind, backward, forward, hints
         var label: String {
             switch self {
-            case .rewind: return "Rewind two seconds"
-            case .backward: return "Step backward one tick"
-            case .forward: return "Step forward one tick"
-            case .hints: return "Level hints (H)"
+            case .rewind: return L10n.text(L10n.text("Rewind two seconds"))
+            case .backward: return L10n.text(L10n.text("Step backward one tick"))
+            case .forward: return L10n.text(L10n.text("Step forward one tick"))
+            case .hints: return L10n.text(L10n.text("Level hints (H)"))
             }
         }
         var glyph: PanelGlyph? {
@@ -46,7 +47,7 @@ import AppKit
             } else {
                 NSGraphicsContext.saveGraphicsState()
                 NSGraphicsContext.current?.cgContext.setAlpha(alpha)
-                GamePixelText.draw("HINT", in: box.insetBy(dx: 4, dy: 4), maxScale: 2)
+                GamePixelText.draw(L10n.text("HINT"), in: box.insetBy(dx: 4, dy: 4), maxScale: 2)
                 NSGraphicsContext.restoreGraphicsState()
             }
         }

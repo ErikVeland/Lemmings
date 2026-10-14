@@ -1,4 +1,5 @@
 import Foundation
+import NxlvKit
 import LemmingsMobileCore
 
 /// Each engine supplies its native library; the television shell has no Classic-only routes.
@@ -10,7 +11,7 @@ public struct TVLibrarySource: Sendable {
         self.id = id; self.title = title; self.makeLibrary = makeLibrary
     }
     public static func classic(directory: URL) -> TVLibrarySource {
-        .init(id: "classic", title: "Lemmings", makeLibrary: { try ClassicMobileLibrary(directory: directory) })
+        .init(id: "classic", title: L10n.text("Lemmings"), makeLibrary: { try ClassicMobileLibrary(directory: directory) })
     }
 }
 

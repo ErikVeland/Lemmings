@@ -36,11 +36,11 @@ public enum ArcadeBoard: String, Codable, CaseIterable, Sendable {
     case rescue, efficiency, allSaved, fastestClear, fastestAllSaved
     public var title: String {
         switch self {
-        case .rescue: "MOST SAVED"
-        case .efficiency: "FEWEST SKILLS"
-        case .allSaved: "100% CLUB"
-        case .fastestClear: "FASTEST CLEAR"
-        case .fastestAllSaved: "FASTEST 100%"
+        case .rescue: L10n.text(L10n.text("MOST SAVED"))
+        case .efficiency: L10n.text(L10n.text("FEWEST SKILLS"))
+        case .allSaved: L10n.text("100% CLUB")
+        case .fastestClear: L10n.text(L10n.text("FASTEST CLEAR"))
+        case .fastestAllSaved: L10n.text(L10n.text("FASTEST 100%"))
         }
     }
 }
@@ -49,22 +49,22 @@ public enum ArcadeLevelAchievement: String, Codable, CaseIterable, Sendable {
     case firstClear, allHome, noSkills, oneSkill, betterRescue, fewerSkills
     public var title: String {
         switch self {
-        case .firstClear: "TARGET MET"
-        case .allHome: "EVERYONE HOME"
-        case .noSkills: "HANDS OFF"
-        case .oneSkill: "ONE TRICK"
-        case .betterRescue: "ONE MORE HOME"
-        case .fewerSkills: "LESS IS MORE"
+        case .firstClear: L10n.text(L10n.text("TARGET MET"))
+        case .allHome: L10n.text(L10n.text("EVERYONE HOME"))
+        case .noSkills: L10n.text(L10n.text("HANDS OFF"))
+        case .oneSkill: L10n.text(L10n.text("ONE TRICK"))
+        case .betterRescue: L10n.text(L10n.text("ONE MORE HOME"))
+        case .fewerSkills: L10n.text(L10n.text("LESS IS MORE"))
         }
     }
     public var detail: String {
         switch self {
         case .firstClear: "Clear a level."
-        case .allHome: "Rescue every lemming in a level."
-        case .noSkills: "Clear a level without assigning a skill."
-        case .oneSkill: "Clear a level using one skill type."
-        case .betterRescue: "Improve your best rescue count."
-        case .fewerSkills: "Match or beat your best rescue with fewer skills."
+        case .allHome: L10n.text("Rescue every lemming in a level.")
+        case .noSkills: L10n.text("Clear a level without assigning a skill.")
+        case .oneSkill: L10n.text("Clear a level using one skill type.")
+        case .betterRescue: L10n.text("Improve your best rescue count.")
+        case .fewerSkills: L10n.text("Match or beat your best rescue with fewer skills.")
         }
     }
 }
@@ -162,7 +162,7 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         let oldVersion = try c.decode(Int.self, forKey: .version)
-        guard (1...2).contains(oldVersion) else { throw SequelDataError.invalid("Unsupported arcade records version.") }
+        guard (1...2).contains(oldVersion) else { throw SequelDataError.invalid(L10n.text("Unsupported arcade records version.")) }
         profiles = try c.decode([ArcadeProfile].self, forKey: .profiles)
         activeProfileID = try c.decode(String.self, forKey: .activeProfileID)
         runs = try c.decode([ArcadeRun].self, forKey: .runs)
@@ -192,14 +192,14 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
         guard !imported.isEmpty, imported.count <= 8,
               Set(imported.map(\.id)).count == imported.count,
               imported.allSatisfy({ !$0.id.isEmpty }), imported.contains(where: { $0.id == activeID }) else {
-            throw SequelDataError.invalid("The player identities are invalid.")
+            throw SequelDataError.invalid(L10n.text("The player identities are invalid."))
         }
         let pristine = profiles.count == 1 && profiles[0].id == ArcadeProfile.legacyID
             && runs.isEmpty && statistics.isEmpty && trolley.attempts.isEmpty
         if pristine { profiles = imported }
         else {
             let missing = imported.filter { profile($0.id) == nil }
-            guard profiles.count + missing.count <= 8 else { throw SequelDataError.invalid("The player limit was reached.") }
+            guard profiles.count + missing.count <= 8 else { throw SequelDataError.invalid(L10n.text("The player limit was reached.")) }
             profiles.append(contentsOf: missing)
             for value in imported { updateProfile(value.id, initials: value.initials, portrait: value.portrait) }
         }
@@ -332,7 +332,7 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
 
     /// Export one player's records without device identities or replay file paths.
     public func cloudRecords(profileID: String) throws -> Self {
-        guard profile(profileID) != nil else { throw SequelDataError.invalid("The player no longer exists.") }
+        guard profile(profileID) != nil else { throw SequelDataError.invalid(L10n.text("The player no longer exists.")) }
         var copy = self
         copy.profiles = [ArcadeProfile(id: Self.cloudProfileID, initials: "LEM")]
         copy.activeProfileID = Self.cloudProfileID
@@ -361,7 +361,7 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
     private mutating func mergeCloudRecordsInPlace(_ incoming: Self, profileID: String) throws {
         _ = try incoming.validated()
         guard incoming.profiles.map(\.id) == [Self.cloudProfileID], profile(profileID) != nil else {
-            throw SequelDataError.invalid("The cloud player is invalid.")
+            throw SequelDataError.invalid(L10n.text("The cloud player is invalid."))
         }
         let localEvents = Self.cloudEventCounts(trolley.attempts)
         let remoteEvents = Self.cloudEventCounts(incoming.trolley.attempts)
@@ -371,7 +371,7 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
         for run in incoming.runs {
             let mapped = run.cloudOwned(by: profileID)
             if let previous = knownRuns[mapped.id] {
-                guard previous == mapped else { throw SequelDataError.invalid("Saved result identities conflict.") }
+                guard previous == mapped else { throw SequelDataError.invalid(L10n.text("Saved result identities conflict.")) }
             } else { runs.append(mapped); knownRuns[mapped.id] = mapped }
         }
         for (key, remote) in incoming.statistics {

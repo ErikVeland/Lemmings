@@ -64,7 +64,7 @@ public struct TVControllerBindings {
         previous = pressed
         return actions
     }
-    public static let help = """
+    public static let help = L10n.text("""
     Left stick: aim • Right stick: pan
     Cross / A: assign • Circle / B: reset speed, then pause
     Square / X: pause / play • Triangle / Y: nuke / undo, where supported
@@ -87,5 +87,5 @@ public struct TVControllerBindings {
     Hold Create / View + L3: DJ shuffle
     Menus: D-pad moves, Cross / A selects, Circle / B returns
     Siri Remote: centre assigns, Play/Pause pauses or plays, Back opens pause
-    """
+    """)
 }

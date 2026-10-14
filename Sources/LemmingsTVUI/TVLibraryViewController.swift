@@ -139,30 +139,30 @@ import UIKit
         menu.isHidden = false; playfield.isHidden = true
         menu.textScale = local.preferences.textScale
         menu.preferredActionID = nil
-        var page = GameFrontEnd.Page(title: "Ultimate Lemmings")
-        let back = GameFrontEnd.Action("back", "Back")
+        var page = GameFrontEnd.Page(title: L10n.text("Ultimate Lemmings"))
+        let back = GameFrontEnd.Action("back", L10n.text("Back"))
         let name = game.map { player($0.owner).name } ?? local.profiles.active.name
         switch destination {
         case .home:
             page.home = true
             page.subtitle = local.profiles.active.name
-            page.rows = [.init("hotseat", "Hot Seat"), .init("players", "Players"), .init("settings", "Settings")]
+            page.rows = [.init("hotseat", L10n.text("Hot Seat")), .init("players", L10n.text("Players")), .init("settings", L10n.text("Settings"))]
             if let checkpoint {
-                page.rows.append(.init("games", "Play"))
-                page.footer = [.init("restore", "Resume level - " + player(checkpoint.owner ?? MobileProfiles.defaultID).name, primary: true)]
+                page.rows.append(.init("games", L10n.text("Play")))
+                page.footer = [.init("restore", L10n.text("Resume level - ") + player(checkpoint.owner ?? MobileProfiles.defaultID).name, primary: true)]
             } else {
-                page.footer = [.init("games", "Play", primary: true)]
+                page.footer = [.init("games", L10n.text("Play"), primary: true)]
             }
         case .games:
-            page.title = "Choose a game"
+            page.title = L10n.text("Choose a game")
             page.rows = ["classic", "lemmings2", "lemmings3"].map { id in
-                .init("source." + id, id == "classic" ? "Lemmings" : id == "lemmings2" ? "Lemmings 2" : "Lemmings 3",
+                .init("source." + id, id == "classic" ? L10n.text("Lemmings") : id == "lemmings2" ? L10n.text("Lemmings 2") : L10n.text("Lemmings 3"),
                     enabled: sources.contains(where: { $0.id == id }), primary: id == "classic")
             }
-            page.subtitle = sources.isEmpty ? "Game data unavailable" : ""
+            page.subtitle = sources.isEmpty ? L10n.text("Game data unavailable") : ""
             page.footer = [back]
         case .ranks:
-            page.title = source?.title ?? "Levels"
+            page.title = source?.title ?? L10n.text("Levels")
             page.rows = ranks.enumerated().dropFirst(pageOffset).prefix(4).map { .init("rank.\($0.offset)", $0.element) }
             page.footer = [back, .init("previous", "<", enabled: pageOffset > 0), .init("more", ">", enabled: pageOffset + 4 < ranks.count)]
         case .levels:
@@ -180,91 +180,91 @@ import UIKit
             page.preview = true
             let snapshot = game.session.snapshot
             page.details = ["\(snapshot.total) LEMMINGS  /  SAVE \(snapshot.required)", snapshot.remainingSeconds.map { "\($0 / 60) MINUTES" } ?? ""]
-            page.rows = [.init("ready", game.awaitsFirstStart ? (seat == nil ? "Start" : "Ready") : "Resume", primary: true, portrait: player(game.owner).portrait)]
+            page.rows = [.init("ready", game.awaitsFirstStart ? (seat == nil ? L10n.text("Start") : L10n.text("Ready")) : L10n.text("Resume"), primary: true, portrait: player(game.owner).portrait)]
             page.footer = [back]
         case .deck:
-            page.title = "Paused"; page.subtitle = name
-            page.rows = [.init("skills", "Skills"), .init("targets", "Lemmings"), .init("camera", "Camera"), .init("transport", "Time and actions"), .init("help", "Controls")]
-            page.footer = [.init("library", "Library"), .init("retryConfirm", "Retry"), .init("resume", "Resume", primary: true)]
+            page.title = L10n.text("Paused"); page.subtitle = name
+            page.rows = [.init("skills", L10n.text("Skills")), .init("targets", L10n.text("Lemmings")), .init("camera", L10n.text("Camera")), .init("transport", L10n.text("Time and actions")), .init("help", L10n.text("Controls"))]
+            page.footer = [.init("library", L10n.text("Library")), .init("retryConfirm", L10n.text("Retry")), .init("resume", L10n.text("Resume"), primary: true)]
         case .skills:
             guard let game else { return }
             menu.preferredActionID = "skill.\(game.selectedControl)"
-            page.title = game.capabilities.carriedTools ? "Actions and tools" : "Skills"
+            page.title = game.capabilities.carriedTools ? L10n.text("Actions and tools") : L10n.text("Skills")
             page.rows = game.session.snapshot.skills.enumerated().dropFirst(pageOffset).prefix(4).map { index, skill in
                 .init("skill.\(index)", "\(skill.name)  \(skill.isUnlimited ? "*" : String(skill.count))", enabled: skill.count > 0 || skill.isUnlimited, selected: index == game.selectedControl)
             }
             page.footer = [back, .init("previousSkills", "<", enabled: pageOffset > 0), .init("moreSkills", ">", enabled: pageOffset + 4 < game.session.snapshot.skills.count)]
         case .camera:
-            page.title = "Camera"
+            page.title = L10n.text("Camera")
             menu.preferredActionID = "zoom.\(game?.cameraMode.rawValue ?? 1)"
-            page.rows = [.init("zoom.0", "Overview", selected: game?.cameraMode == .overview), .init("zoom.1", "Play", selected: game?.cameraMode == .play),
-                .init("zoom.2", "Precision", selected: game?.cameraMode == .precision), .init("entrance", "Entrance"), .init("goal", "Exit")]
-            page.footer = [back, .init("pan", "Move camera", primary: true)]
+            page.rows = [.init("zoom.0", L10n.text("Overview"), selected: game?.cameraMode == .overview), .init("zoom.1", L10n.text("Play"), selected: game?.cameraMode == .play),
+                .init("zoom.2", L10n.text("Precision"), selected: game?.cameraMode == .precision), .init("entrance", L10n.text("Entrance")), .init("goal", L10n.text("Exit"))]
+            page.footer = [back, .init("pan", L10n.text("Move camera"), primary: true)]
         case .targets:
-            page.title = "Lemmings"
-            page.rows = [.init("target.previous", "Previous eligible lemming"), .init("target.next", "Next eligible lemming", primary: true), .init("target.last", "Last assignment", enabled: game?.lastAssignment != nil)]
+            page.title = L10n.text("Lemmings")
+            page.rows = [.init("target.previous", L10n.text("Previous eligible lemming")), .init("target.next", L10n.text("Next eligible lemming"), primary: true), .init("target.last", L10n.text("Last assignment"), enabled: game?.lastAssignment != nil)]
             page.footer = [back]
         case .transport:
             guard let game else { return }
-            page.title = "Time and actions"
-            page.rows = [.init("step", "Step forward"), .init("stepBack", "Step back", enabled: game.capabilities.rewind), .init("rewind", "Rewind", enabled: game.capabilities.rewind),
-                .init("speed", "Speed \(Int(game.speed))X"), .init("endConfirm", game.session.snapshot.isEndingRun ? "Undo nuke" : game.capabilities.nuke ? "Nuke" : "End attempt")]
+            page.title = L10n.text("Time and actions")
+            page.rows = [.init("step", L10n.text("Step forward")), .init("stepBack", L10n.text("Step back"), enabled: game.capabilities.rewind), .init("rewind", L10n.text("Rewind"), enabled: game.capabilities.rewind),
+                .init("speed", L10n.text("Speed \(Int(game.speed))X")), .init("endConfirm", game.session.snapshot.isEndingRun ? L10n.text("Undo nuke") : game.capabilities.nuke ? L10n.text("Nuke") : L10n.text("End attempt"))]
             page.footer = [back]
-            if game.capabilities.releaseRate { page.footer += [.init("rateDown", "Rate -"), .init("rateUp", "Rate +")] }
+            if game.capabilities.releaseRate { page.footer += [.init("rateDown", L10n.text("Rate -")), .init("rateUp", L10n.text("Rate +"))] }
         case .settings:
-            page.title = "Settings"
-            page.rows = [.init("planning", "Pause on skill change", selected: local.preferences.planningOnSkillChange), .init("sensitivity", "Aim \(String(format: "%.1f", local.preferences.aimSensitivity))"),
-                .init("text", "Large menu text", selected: local.preferences.textScale > 1), .init("swap", "Swap sticks", selected: local.preferences.swapSticks), .init("audio", "Audio")]
+            page.title = L10n.text("Settings")
+            page.rows = [.init("planning", L10n.text("Pause on skill change"), selected: local.preferences.planningOnSkillChange), .init("sensitivity", L10n.text("Aim \(String(format: "%.1f", local.preferences.aimSensitivity))")),
+                .init("text", L10n.text("Large menu text"), selected: local.preferences.textScale > 1), .init("swap", L10n.text("Swap sticks"), selected: local.preferences.swapSticks), .init("audio", L10n.text("Audio"))]
             page.footer = [back]
         case .audio:
-            page.title = "Audio"
-            page.rows = [.init("music", "Music", selected: local.preferences.musicEnabled), .init("effects", "Sound effects", selected: local.preferences.effectsEnabled)]
+            page.title = L10n.text("Audio")
+            page.rows = [.init("music", L10n.text("Music"), selected: local.preferences.musicEnabled), .init("effects", L10n.text("Sound effects"), selected: local.preferences.effectsEnabled)]
             page.footer = [back]
         case .players:
-            page.title = "Players"
+            page.title = L10n.text("Players")
             page.rows = local.profiles.players.dropFirst(rosterOffset).prefix(4).map { .init("player." + $0.id, $0.name, selected: $0.id == local.profiles.activeID, portrait: $0.portrait) }
-            page.footer = [back, .init("playerMore", ">", enabled: local.profiles.players.count > 4), .init("addPlayer", "Add player", enabled: local.profiles.players.count < MobileProfiles.maximum, primary: true)]
+            page.footer = [back, .init("playerMore", ">", enabled: local.profiles.players.count > 4), .init("addPlayer", L10n.text("Add player"), enabled: local.profiles.players.count < MobileProfiles.maximum, primary: true)]
         case .player:
             let profile = player(editingPlayerID)
             page.title = profile.name
-            page.rows = [.init("renamePlayer", "Name"), .init("portrait", "Portrait", portrait: profile.portrait), .init("usePlayer", "Choose player", primary: true)]
+            page.rows = [.init("renamePlayer", L10n.text("Name")), .init("portrait", L10n.text("Portrait"), portrait: profile.portrait), .init("usePlayer", L10n.text("Choose player"), primary: true)]
             page.footer = [back]
         case .roster:
-            page.title = "Hot Seat"
+            page.title = L10n.text("Hot Seat")
             page.rows = local.profiles.players.dropFirst(rosterOffset).prefix(4).map { .init("roster." + $0.id, $0.name, enabled: $0.id != roster?.host, selected: roster?.contains($0.id) ?? false, portrait: $0.portrait) }
-            page.footer = [back, .init("rosterMore", ">", enabled: local.profiles.players.count > 4), .init("startSeat", "Continue", enabled: roster?.canStart ?? false, primary: true)]
+            page.footer = [back, .init("rosterMore", ">", enabled: local.profiles.players.count > 4), .init("startSeat", L10n.text("Continue"), enabled: roster?.canStart ?? false, primary: true)]
         case .help:
-            page.title = "Controls"
-            page.details = ["LEFT STICK: AIM  /  RIGHT STICK: CAMERA", "SHOULDERS: SKILLS  /  D-PAD: TARGETS", "PRIMARY BUTTON: ASSIGN  /  MENU: PAUSE", "REMOTE: MOVE, CLICK TO ASSIGN", "PLAY/PAUSE: PAUSE  /  BACK: CONTROLS", "SKILL CHANGES CAN PAUSE FOR PLANNING", "CAMERA, STEP AND SPEED: PAUSED CONTROLS"]
+            page.title = L10n.text("Controls")
+            page.details = [L10n.text("LEFT STICK: AIM  /  RIGHT STICK: CAMERA"), L10n.text("SHOULDERS: SKILLS  /  D-PAD: TARGETS"), L10n.text("PRIMARY BUTTON: ASSIGN  /  MENU: PAUSE"), L10n.text("REMOTE: MOVE, CLICK TO ASSIGN"), L10n.text("PLAY/PAUSE: PAUSE  /  BACK: CONTROLS"), L10n.text(L10n.text("SKILL CHANGES CAN PAUSE FOR PLANNING")), L10n.text("CAMERA, STEP AND SPEED: PAUSED CONTROLS")]
             page.footer = [back]
         case .results:
             guard let game else { return }
-            page.title = game.session.snapshot.didWin ? "Level complete" : "Try again"
+            page.title = game.session.snapshot.didWin ? L10n.text("Level complete") : L10n.text("Try again")
             page.subtitle = name
             page.preview = true
             page.details = ["\(game.session.snapshot.saved) / \(game.session.snapshot.total) RESCUED"]
             if let seat {
                 page.rows = seat.choices(didWin: game.session.snapshot.didWin).map { choice in
                     .init((choice.kind == .next ? "next." : "retry.") + choice.player,
-                        (choice.kind == .next ? "Next - " : "Retry - ") + player(choice.player).name,
+                        (choice.kind == .next ? L10n.text("Next - ") : L10n.text("Retry - ")) + player(choice.player).name,
                         enabled: choice.kind != .next || selectedLevel + 1 < levels.count, primary: choice.primary, portrait: player(choice.player).portrait)
                 }
             } else {
-                page.rows = [.init("next", "Next", enabled: game.session.snapshot.didWin && selectedLevel + 1 < levels.count, primary: game.session.snapshot.didWin && selectedLevel + 1 < levels.count), .init("retry", "Retry", primary: !game.session.snapshot.didWin || selectedLevel + 1 == levels.count)]
+                page.rows = [.init("next", L10n.text("Next"), enabled: game.session.snapshot.didWin && selectedLevel + 1 < levels.count, primary: game.session.snapshot.didWin && selectedLevel + 1 < levels.count), .init("retry", L10n.text("Retry"), primary: !game.session.snapshot.didWin || selectedLevel + 1 == levels.count)]
             }
             if !page.rows.contains(where: { $0.primary && $0.enabled }), let first = page.rows.firstIndex(where: \.enabled) {
                 for index in page.rows.indices { page.rows[index].primary = index == first }
             }
             page.rows = page.rows.filter { !$0.primary } + page.rows.filter(\.primary)
-            page.footer = [.init("library", "Library")]
+            page.footer = [.init("library", L10n.text("Library"))]
         case .confirmRetry, .confirmEnd:
-            page.title = destination == .confirmRetry ? "Retry level?" : "End attempt?"
-            page.footer = [.init("cancel", "Cancel", primary: true), .init(destination == .confirmRetry ? "retry" : "end", destination == .confirmRetry ? "Retry" : "End attempt")]
+            page.title = destination == .confirmRetry ? L10n.text("Retry level?") : L10n.text("End attempt?")
+            page.footer = [.init("cancel", L10n.text("Cancel"), primary: true), .init(destination == .confirmRetry ? "retry" : "end", destination == .confirmRetry ? L10n.text("Retry") : L10n.text("End attempt"))]
         case .error:
-            page.title = "Unable to continue"; page.details = wrapped(errorMessage, columns: 44)
+            page.title = L10n.text("Unable to continue"); page.details = wrapped(errorMessage, columns: 44)
             page.footer = [back]
         }
-        if busy { page.subtitle = "Loading" }
+        if busy { page.subtitle = L10n.text("Loading") }
         menu.preview = preview; menu.page = page
         setNeedsFocusUpdate(); updateFocusIfNeeded()
     }
@@ -447,7 +447,7 @@ import UIKit
     private func restore() {
         guard let checkpoint else { return }
         guard let key = local.checkpointSources[checkpoint.runID.uuidString], let source = sources.first(where: { $0.id == key }) else {
-            fail(NSError(domain: "TVLibrary", code: 1, userInfo: [NSLocalizedDescriptionKey: "The saved game's library is unavailable."]), back: .home); return
+            fail(NSError(domain: "TVLibrary", code: 1, userInfo: [NSLocalizedDescriptionKey: L10n.text("The saved game's library is unavailable.")]), back: .home); return
         }
         cancelPreparation(); busy = true; show(.home)
         let token = generation
@@ -563,10 +563,10 @@ import UIKit
     }
     private func renamePlayer() {
         let id = editingPlayerID
-        let alert = UIAlertController(title: "Player name", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: L10n.text("Player name"), message: nil, preferredStyle: .alert)
         alert.addTextField { [weak self] field in field.text = self?.player(id).name; field.autocapitalizationType = .words }
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        let save = UIAlertAction(title: "Save", style: .default) { [weak self, weak alert] _ in
+        alert.addAction(UIAlertAction(title: L10n.text("Cancel"), style: .cancel))
+        let save = UIAlertAction(title: L10n.text("Save"), style: .default) { [weak self, weak alert] _ in
             guard let self, let name = alert?.textFields?.first?.text else { return }
             self.local.profiles.rename(id, to: name); self.persist(); self.show(.player)
         }

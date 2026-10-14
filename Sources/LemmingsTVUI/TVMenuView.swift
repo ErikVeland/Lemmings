@@ -1,5 +1,6 @@
 #if os(tvOS)
 import LemmingsGameArt
+import NxlvKit
 import UIKit
 
 @MainActor enum TVArtwork {
@@ -10,7 +11,7 @@ import UIKit
 
 /// Focusable native targets sit over the same rectangles used by the bitmap renderer.
 @MainActor final class TVMenuView: UIView {
-    var page = GameFrontEnd.Page(title: "Ultimate Lemmings") { didSet { rebuild() } }
+    var page = GameFrontEnd.Page(title: L10n.text("Ultimate Lemmings")) { didSet { rebuild() } }
     var preview: CGImage? { didSet { setNeedsDisplay() } }
     var textScale: CGFloat = 1 { didSet { setNeedsDisplay() } }
     var onAction: ((String) -> Void)?
@@ -49,8 +50,8 @@ import UIKit
         buttons = TVMenuArt.layout(page).targets.map { target in
             let button = UIButton(type: .custom)
             switch target.action.id {
-            case "previous", "previousSkills": button.accessibilityLabel = "Previous page"
-            case "more", "moreSkills", "playerMore", "rosterMore": button.accessibilityLabel = "Next page"
+            case "previous", "previousSkills": button.accessibilityLabel = L10n.text("Previous page")
+            case "more", "moreSkills", "playerMore", "rosterMore": button.accessibilityLabel = L10n.text("Next page")
             default: button.accessibilityLabel = target.action.title.replacingOccurrences(of: "*", with: "unlimited")
             }
             button.accessibilityIdentifier = "tv.menu." + target.action.id

@@ -9,13 +9,13 @@ public enum AmigaSoundBankError: Error, Equatable, CustomStringConvertible {
     public var description: String {
         switch self {
         case let .notIFF(offset):
-            return "Expected an IFF FORM at byte \(offset)."
+            return L10n.text("Expected an IFF FORM at byte \(offset).")
         case let .notEightSVX(offset, form):
-            return "The FORM at byte \(offset) is \(form), not 8SVX."
+            return L10n.text("The FORM at byte \(offset) is \(form), not 8SVX.")
         case let .truncatedChunk(offset, tag, declared, available):
-            return "Chunk \(tag) at byte \(offset) declares \(declared) bytes, but only \(available) remain."
+            return L10n.text("Chunk \(tag) at byte \(offset) declares \(declared) bytes, but only \(available) remain.")
         case let .missingBody(name):
-            return "The sample \(name ?? "with no name") holds no BODY chunk."
+            return L10n.text("The sample \(name ?? L10n.text("with no name")) holds no BODY chunk.")
         }
     }
 }

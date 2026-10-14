@@ -15,7 +15,7 @@ public struct Lemmings3Sprites: Sendable {
     public let animations: [Animation]
     /// Sprite palettes replace the low 32 VGA entries without changing terrain colors.
     public static func palette(_ data: Data, over base: [UInt8]) throws -> [UInt8] {
-        guard data.count == 96, base.count == 1024 else { throw SequelDataError.invalid("Invalid L3 sprite palette.") }
+        guard data.count == 96, base.count == 1024 else { throw SequelDataError.invalid(L10n.text("Invalid L3 sprite palette.")) }
         let bytes = Array(data)
         var colours = base
         for index in 0..<32 {
@@ -29,7 +29,7 @@ public struct Lemmings3Sprites: Sendable {
         let info = SequelBinary(index)
         let code = SequelBinary(commands)
         guard info.count.isMultiple(of: 6) else {
-            throw SequelDataError.invalid("L3 sprite index contains a partial record.")
+            throw SequelDataError.invalid(L10n.text("L3 sprite index contains a partial record."))
         }
         var cursor = 0
         var budget = 16 * 1024 * 1024
@@ -40,7 +40,7 @@ public struct Lemmings3Sprites: Sendable {
             let count = try info.u16(offset + 4)
             guard width > 0, height > 0, width <= 4096, height <= 4096,
                   count <= 4096, width * height * count <= budget else {
-                throw SequelDataError.invalid("L3 sprite dimensions exceed the decode limit.")
+                throw SequelDataError.invalid(L10n.text("L3 sprite dimensions exceed the decode limit."))
             }
             budget -= width * height * count
             var frames: [Frame] = []
@@ -65,7 +65,7 @@ public struct Lemmings3Sprites: Sendable {
                                 for value in values {
                                     let px = x * 4 + plane
                                     guard y < height, px < width else {
-                                        throw SequelDataError.invalid("L3 sprite command writes outside its frame.")
+                                        throw SequelDataError.invalid(L10n.text("L3 sprite command writes outside its frame."))
                                     }
                                     pixels[y * width + px] = value
                                     opaque[y * width + px] = true
@@ -73,10 +73,10 @@ public struct Lemmings3Sprites: Sendable {
                                 }
                             case 9...14: x += operation - 8
                             default:
-                                throw SequelDataError.invalid("Unsupported L3 sprite command \(command).")
+                                throw SequelDataError.invalid(L10n.text("Unsupported L3 sprite command \(command)."))
                             }
                             guard y <= height, x <= (width + 3) / 4 else {
-                                throw SequelDataError.invalid("L3 sprite cursor leaves its frame.")
+                                throw SequelDataError.invalid(L10n.text("L3 sprite cursor leaves its frame."))
                             }
                         }
                     }
@@ -86,7 +86,7 @@ public struct Lemmings3Sprites: Sendable {
             result.append(Animation(width: width, height: height, frames: frames))
         }
         guard cursor == code.count else {
-            throw SequelDataError.invalid("Trailing L3 sprite commands.")
+            throw SequelDataError.invalid(L10n.text("Trailing L3 sprite commands."))
         }
         animations = result
     }

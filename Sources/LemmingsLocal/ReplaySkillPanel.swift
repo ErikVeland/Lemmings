@@ -17,7 +17,7 @@ struct ReplaySkillUse {
     private var stocks: [ReplaySkillStock] = []
     private var uses: [ReplaySkillUse] = []
     private var tick = 0
-    private var stockTitle = "LEFT"
+    private var stockTitle = L10n.text("LEFT")
     override var isFlipped: Bool { true }
     override func hitTest(_ point: NSPoint) -> NSView? { nil }
     private func textWidth(_ text: String) -> CGFloat {
@@ -36,12 +36,12 @@ struct ReplaySkillUse {
         let historyWidth = (uses.map { textWidth($0.name) }.max() ?? 0) + tickWidth + 42
         return CGSize(width: max(300, stockWidth, historyWidth), height: CGFloat(58 + rows * 18 + 3 * 18))
     }
-    func update(stocks: [ReplaySkillStock], uses: [ReplaySkillUse], tick: Int, title: String = "LEFT") {
+    func update(stocks: [ReplaySkillStock], uses: [ReplaySkillUse], tick: Int, title: String = L10n.text(L10n.text("LEFT"))) {
         self.stocks = stocks; self.uses = Array(uses.suffix(3)); self.tick = tick; stockTitle = title
         setAccessibilityElement(true)
         setAccessibilityRole(.group)
-        setAccessibilityLabel("Tick \(tick). \(title): " + stocks.map { "\($0.name) \($0.count)" }.joined(separator: ", ")
-            + ". Skills used: " + self.uses.map { "\($0.name) at tick \($0.tick)" }.joined(separator: ", "))
+        setAccessibilityLabel(L10n.text("Tick \(tick). \(title): ") + stocks.map { "\($0.name) \($0.count)" }.joined(separator: ", ")
+            + ". Skills used: " + self.uses.map { L10n.text("\($0.name) at tick \($0.tick)") }.joined(separator: ", "))
         needsDisplay = true
     }
     override func draw(_ dirtyRect: NSRect) {
@@ -51,7 +51,7 @@ struct ReplaySkillUse {
         let width = inner.width / CGFloat(columns)
         let rows = max(1, (stocks.count + columns - 1) / columns)
         if stocks.isEmpty {
-            GameControlText.draw("NONE", in: CGRect(x: inner.minX, y: inner.minY + 18, width: inner.width, height: 18))
+            GameControlText.draw(L10n.text("NONE"), in: CGRect(x: inner.minX, y: inner.minY + 18, width: inner.width, height: 18))
         }
         for (index, stock) in stocks.enumerated() {
             let row = CGRect(x: inner.minX + CGFloat(index % columns) * width,
@@ -60,7 +60,7 @@ struct ReplaySkillUse {
             GameControlText.draw(stock.count, in: CGRect(x: row.maxX - countWidth, y: row.minY, width: countWidth, height: 18), alignment: .right, enabled: stock.count != "0")
         }
         let historyY = inner.minY + 24 + CGFloat(rows) * 18
-        GameControlText.draw("USED @ TICK", in: CGRect(x: inner.minX, y: historyY, width: inner.width, height: 18), role: .heading)
+        GameControlText.draw(L10n.text("USED @ TICK"), in: CGRect(x: inner.minX, y: historyY, width: inner.width, height: 18), role: .heading)
         for (index, use) in uses.enumerated() {
             let row = CGRect(x: inner.minX, y: historyY + 18 + CGFloat(index) * 18, width: inner.width, height: 18)
             let current = use.tick == tick
@@ -80,7 +80,7 @@ struct ReplaySkillUse {
             }
         case .neolemmix(let game):
             return NeoLemmixSkill.allCases.filter { game.configuration.skills[$0] != nil }.map {
-                .init(name: $0.rawValue.capitalized, count: game.skills[$0]?.availableCount.map { String($0) } ?? "INF")
+                .init(name: $0.rawValue.capitalized, count: game.skills[$0]?.availableCount.map { String($0) } ?? L10n.text("INF"))
             }
         case .lemmings2(let game):
             return game.configuration.skills.enumerated().map { index, skill in

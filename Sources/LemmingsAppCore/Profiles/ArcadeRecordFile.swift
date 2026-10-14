@@ -10,9 +10,9 @@ public final class ArcadeRecordFile {
         case busy
         public var errorDescription: String? {
             switch self {
-            case .unsupportedVersion: return "Records need a different app version. Existing files were preserved."
-            case .changedOnDisk: return "Records changed in another app. Close and reopen this app."
-            case .busy: return "Another app is saving records. Try again after it finishes."
+            case .unsupportedVersion: return L10n.text("Records need a different app version. Existing files were preserved.")
+            case .changedOnDisk: return L10n.text("Records changed in another app. Close and reopen this app.")
+            case .busy: return L10n.text("Another app is saving records. Try again after it finishes.")
             }
         }
     }

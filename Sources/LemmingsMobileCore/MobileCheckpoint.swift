@@ -1,4 +1,5 @@
 import CryptoKit
+import NxlvKit
 import Foundation
 
 public struct MobileCameraState: Codable, Equatable, Sendable {
@@ -87,11 +88,11 @@ public enum MobileCheckpointError: Error, LocalizedError, Equatable {
     public var errorDescription: String? {
         switch self {
         case .invalid:
-            return "The saved run could not be verified. Its backup was preserved."
+            return L10n.text("The saved run could not be verified. Its backup was preserved.")
         case .version:
-            return "This saved run needs a different app version."
+            return L10n.text("This saved run needs a different app version.")
         case .tooLarge:
-            return "The saved run is too large to open safely."
+            return L10n.text("The saved run is too large to open safely.")
         }
     }
 }

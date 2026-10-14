@@ -1,12 +1,13 @@
 #if os(iOS) || os(tvOS)
 import LemmingsGameArt
+import NxlvKit
 import LemmingsMobileCore
 import LemmingsTVCore
 import UIKit
 
 /// The artwork and UIKit targets share one layout, including disabled controls.
 @MainActor final class MobileMenuCanvas: UIView {
-    var page = GameFrontEnd.Page(title: "Lemmings") {
+    var page = GameFrontEnd.Page(title: L10n.text("Lemmings")) {
         didSet {
             if oldValue.title != page.title { focusedID = nil }
             rebuild()
@@ -104,7 +105,7 @@ import UIKit
         }
         if page.home, !page.homeInitials.isEmpty {
             let element = UIAccessibilityElement(accessibilityContainer: self)
-            element.accessibilityLabel = "Active players: " + page.homeInitials
+            element.accessibilityLabel = L10n.text("Active players: ") + page.homeInitials
             element.accessibilityTraits = .staticText
             element.accessibilityFrameInContainerSpace = layout.initials.applying(transform)
             elements.append(element)
@@ -118,7 +119,7 @@ import UIKit
         onPageChanged?()
         let actions = page.rows + page.orderedFooter
         if !actions.contains(where: { $0.id == focusedID && $0.enabled }) {
-            focusedID = actions.first(where: { $0.enabled && $0.title.uppercased() == "CANCEL" })?.id
+            focusedID = actions.first(where: { $0.enabled && $0.title.uppercased() == L10n.text("CANCEL") })?.id
                 ?? actions.first(where: { $0.primary && $0.enabled })?.id
                 ?? actions.first(where: \.enabled)?.id
         }

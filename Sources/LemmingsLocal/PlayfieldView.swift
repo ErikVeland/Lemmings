@@ -196,7 +196,7 @@ struct ReticleFeedback {
     if let overlayTitle { items.append(accessibleElements.element(id: "title", owner: owner, label: overlayTitle, frame: transform(bounds))) }
     if let rect = overlaySettingsButtonFrame().map(visibleFrame), !rect.isEmpty {
       items.append(accessibleElements.element(
-        id: "settings", owner: owner, label: "Settings", frame: transform(rect)
+        id: "settings", owner: owner, label: L10n.text("Settings"), frame: transform(rect)
       ) { [weak self] in self?.onSettings?() })
     }
     if let rect = overlayUpdateButtonFrame().map(visibleFrame), !rect.isEmpty, let label = overlayAvailableUpdate {
@@ -220,7 +220,7 @@ struct ReticleFeedback {
       let rect = visibleFrame(homeFrame(home.layout.initials, scale: home.scale))
       if !rect.isEmpty {
         items.append(accessibleElements.element(id: "home-players", owner: owner,
-          label: "Active players: " + initials, frame: transform(rect)))
+          label: L10n.text("Active players: ") + initials, frame: transform(rect)))
       }
     }
     if let overlaySavedCounts {
@@ -229,7 +229,7 @@ struct ReticleFeedback {
     }
     if overlayHighlight == nil {
       let rect = handoverButtons.count == 2 && overlayHandoverRetryTitle != nil ? handoverButtons[1] : bounds
-      items.append(accessibleElements.element(id: "continue", owner: owner, label: overlayHandoverRetryTitle == nil ? "Continue" : "Begin level", frame: transform(rect)) { [weak self] in self?.onAdvancePhase?() })
+      items.append(accessibleElements.element(id: "continue", owner: owner, label: overlayHandoverRetryTitle == nil ? L10n.text("Continue") : L10n.text("Begin level"), frame: transform(rect)) { [weak self] in self?.onAdvancePhase?() })
     }
     if let title = overlayHandoverRetryTitle, let rect = handoverButtons.first {
       items.append(accessibleElements.element(id: "handover-retry", owner: owner, label: title, frame: transform(rect)) { [weak self] in self?.onHandoverRetry?() })
@@ -237,7 +237,7 @@ struct ReticleFeedback {
     for (index, rect) in overlayFooterButtons.enumerated() {
       let rect = visibleFrame(rect)
       if rect.isEmpty { continue }
-      items.append(accessibleElements.element(id: "footer-\(index)", owner: owner, label: ["Player profiles", "Records", "Playlists"][index], frame: transform(rect)) { [weak self] in
+      items.append(accessibleElements.element(id: "footer-\(index)", owner: owner, label: [L10n.text("Player profiles"), L10n.text("Records"), L10n.text("Playlists")][index], frame: transform(rect)) { [weak self] in
         self?.activateFooterButton(index)
       })
     }
@@ -246,7 +246,7 @@ struct ReticleFeedback {
   var overlayTitle: String? {
     didSet {
       overlayTurnInitials = nil; overlayHandoverRetryTitle = nil
-      if overlayTitle != "LEMMINGS" { homeScrollOffset = 0; homePreviousSelection = nil }
+      if overlayTitle != L10n.text("LEMMINGS") { homeScrollOffset = 0; homePreviousSelection = nil }
     }
   }
   var overlayTurnInitials: String?
@@ -951,7 +951,7 @@ struct ReticleFeedback {
     let board: CGRect
   }
 
-  private var usesHomeLayout: Bool { overlayTitle == "LEMMINGS" && overlayProfileInitials != nil && macInterface != nil }
+  private var usesHomeLayout: Bool { overlayTitle == L10n.text("LEMMINGS") && overlayProfileInitials != nil && macInterface != nil }
   private var homeViewport: CGRect {
     CGRect(x: 0, y: 0, width: bounds.width,
       height: max(1, bounds.height - (overlayShowsLemmings ? 64 : 0) - (overlaySavedCounts == nil ? 0 : 40)))
@@ -961,11 +961,11 @@ struct ReticleFeedback {
       GameFrontEnd.Action((index < overlayHomeLeadingCount ? "home." : "family.") + String(index), title,
         primary: index == overlayHighlight, selected: index == overlayHighlight)
     }
-    var footer: [GameFrontEnd.Action] = [.init("players", "Profiles"), .init("records", "Records"), .init("playlists", "Playlists")]
-    if overlayShowsSettingsButton { footer.append(.init("settings", "Settings")) }
-    if overlayAvailableUpdate != nil, overlayShowsSettingsButton { footer.append(.init("whatsNew", "Update")) }
+    var footer: [GameFrontEnd.Action] = [.init("players", L10n.text("Profiles")), .init("records", L10n.text("Records")), .init("playlists", L10n.text("Playlists"))]
+    if overlayShowsSettingsButton { footer.append(.init("settings", L10n.text("Settings"))) }
+    if overlayAvailableUpdate != nil, overlayShowsSettingsButton { footer.append(.init("whatsNew", L10n.text("Update"))) }
     for index in footer.indices { footer[index].selected = overlayHighlight == rows.count + index }
-    let page = GameFrontEnd.Page(title: "Lemmings", home: true, rows: rows, footer: footer,
+    let page = GameFrontEnd.Page(title: L10n.text("Lemmings"), home: true, rows: rows, footer: footer,
       footerColumns: bounds.width >= 900 ? 3 : 2, homeInitials: overlayProfileInitials ?? "")
     let scale = max(1, floor(min(bounds.width / 1100, homeViewport.height / 700)))
     return (page, GameFrontEnd.layout(page, width: bounds.width / scale, minimumHeight: homeViewport.height / scale), scale)
@@ -1054,7 +1054,7 @@ struct ReticleFeedback {
   }
 
   private func overlayLayout() -> OverlayLayout {
-    let showsLogo = overlayTitle == "LEMMINGS" && macInterface?.interface.logo != nil
+    let showsLogo = overlayTitle == L10n.text("LEMMINGS") && macInterface?.interface.logo != nil
     let headerUnits: CGFloat = showsLogo ? 116 : 62
     let marchHeight: CGFloat = overlayShowsLemmings ? 64 : 0
     let savedCountUnits: CGFloat = overlaySavedCounts == nil ? 0 : 40
@@ -1065,7 +1065,7 @@ struct ReticleFeedback {
     func heights(at scale: CGFloat, width: CGFloat) -> [CGFloat] {
       let columns = max(1, Int(width - 64 * scale) / (font?.cellWidth ?? 6))
       return overlayLines.map { line in
-        let rows = overlayProfileInitials != nil && line.hasPrefix("RESUME")
+        let rows = overlayProfileInitials != nil && line.hasPrefix(L10n.text("RESUME"))
           ? MacInterfaceRenderer.menuLines(line, columns: columns).count : 1
         return rows > 1 ? max(42 * scale, CGFloat(rows * (font?.cellHeight ?? 7)) + 12 * scale) : 42 * scale
       }
@@ -1136,7 +1136,7 @@ struct ReticleFeedback {
     if usesHomeLayout { drawHomeOverlay(); return }
     NSColor.black.withAlphaComponent(0.42).setFill()
     bounds.fill()
-    let showsLogo = overlayTitle == "LEMMINGS" && macInterface?.interface.logo != nil
+    let showsLogo = overlayTitle == L10n.text("LEMMINGS") && macInterface?.interface.logo != nil
     let layout = overlayLayout()
     let scale = layout.scale
     let rowHeight = layout.rowHeight
@@ -1270,7 +1270,7 @@ struct ReticleFeedback {
       let retryWidth = (footer.width - gap) * 0.64
       handoverButtons = [CGRect(x: footer.minX, y: footer.minY, width: retryWidth, height: footer.height),
         CGRect(x: footer.minX + retryWidth + gap, y: footer.minY, width: footer.width - retryWidth - gap, height: footer.height)]
-      for (index, label) in [retryTitle, "Begin level"].enumerated() {
+      for (index, label) in [retryTitle, L10n.text("Begin level")].enumerated() {
         let rect = handoverButtons[index]
         GameStoneButton.draw(rect, selected: index == 1, pixel: max(1, floor(scale)))
         drawMenuGameText(label, in: rect.insetBy(dx: 10 * scale, dy: 6 * scale), face: .small,
@@ -1281,7 +1281,7 @@ struct ReticleFeedback {
         width: board.width - 40 * scale, height: max(36, 48 * scale))
       let footerScale = max(1, Int(scale.rounded()))
       let gap: CGFloat = 12 * scale
-      let labels = ["PROFILES", "RECORDS", "PLAYLISTS"]
+      let labels = [L10n.text("PROFILES"), L10n.text("RECORDS"), L10n.text("PLAYLISTS")]
       let count = CGFloat(labels.count)
       // Let the roster grow while keeping each footer action readable.
       let cell = CGFloat((macInterface?.font(.small)?.cellWidth ?? 8) * footerScale)

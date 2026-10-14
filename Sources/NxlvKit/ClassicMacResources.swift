@@ -16,10 +16,10 @@ public enum ClassicMacError: Error, Equatable, CustomStringConvertible {
 
     public var description: String {
         switch self {
-        case .notHFS: return "the image does not begin with an HFS volume"
-        case let .truncated(what): return "the image ends part way through \(what)"
-        case let .noResourceFork(name): return "\(name) has no resource fork"
-        case let .fileNotFound(name): return "no file named \(name) on the volume"
+        case .notHFS: return L10n.text("the image does not begin with an HFS volume")
+        case let .truncated(what): return L10n.text("the image ends part way through \(what)")
+        case let .noResourceFork(name): return L10n.text("\(name) has no resource fork")
+        case let .fileNotFound(name): return L10n.text("no file named \(name) on the volume")
         }
     }
 }

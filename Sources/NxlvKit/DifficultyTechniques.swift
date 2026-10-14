@@ -36,24 +36,24 @@ public enum DifficultyTechniques {
     public static let definitions: [DifficultyTechniqueDefinition] =
         NeoLemmixSkill.allCases.map {
             DifficultyTechniqueDefinition(id: $0.rawValue, sophistication: 1, prerequisites: [],
-                evidenceRequirement: "Successful assignment in a winning replay. This proves use, not necessity.")
+                evidenceRequirement: L10n.text("Successful assignment in a winning replay. This proves use, not necessity."))
         } + [
             .init(id: "skill-cancellation", sophistication: 3, prerequisites: [],
-                  evidenceRequirement: "Assignment changes a worker from an active skill to another action."),
+                  evidenceRequirement: L10n.text("Assignment changes a worker from an active skill to another action.")),
             .init(id: "blocker-turnaround", sophistication: 3, prerequisites: ["blocker"],
-                  evidenceRequirement: "A walking lemming reverses within an active blocker's field."),
+                  evidenceRequirement: L10n.text("A walking lemming reverses within an active blocker's field.")),
             .init(id: "multiple-worker-coordination", sophistication: 3, prerequisites: [],
-                  evidenceRequirement: "Two assigned workers execute skills in the same simulation frame."),
+                  evidenceRequirement: L10n.text("Two assigned workers execute skills in the same simulation frame.")),
             .init(id: "release-rate-manipulation", sophistication: 2, prerequisites: [],
-                  evidenceRequirement: "Simulation reports a spawn interval change."),
+                  evidenceRequirement: L10n.text("Simulation reports a spawn interval change.")),
             .init(id: "pickup-skill-interaction", sophistication: 2, prerequisites: [],
-                  evidenceRequirement: "Simulation reports skill pickup; dependency is not inferred."),
+                  evidenceRequirement: L10n.text("Simulation reports skill pickup; dependency is not inferred.")),
             .init(id: "button-interaction", sophistication: 2, prerequisites: [],
-                  evidenceRequirement: "Simulation reports a pressed unlock button."),
+                  evidenceRequirement: L10n.text("Simulation reports a pressed unlock button.")),
             .init(id: "trap-disarming", sophistication: 2, prerequisites: ["disarmer"],
-                  evidenceRequirement: "Simulation reports a disarmed trap."),
+                  evidenceRequirement: L10n.text("Simulation reports a disarmed trap.")),
             .init(id: "teleporter-interaction", sophistication: 2, prerequisites: [],
-                  evidenceRequirement: "An assigned or unassigned lemming enters teleporting state.")
+                  evidenceRequirement: L10n.text("An assigned or unassigned lemming enters teleporting state."))
         ]
     public static func detect(_ evidence: DifficultySolutionEvidence) -> [String] {
         let used = Set(evidence.assignments.map(\.skill)).union(evidence.observedConcepts)
@@ -107,8 +107,8 @@ public enum DifficultyScorer {
                 deductionComplexityProxy: min(DifficultyCalibration.priorDeductionCeiling, choice * DifficultyCalibration.priorDeductionChoice + Double(metadata.interactingSystems) * DifficultyCalibration.priorDeductionSystem)
                     + (metadata.rankCalibration?.clampedDifficulty ?? 0) * DifficultyCalibration.metadataCalibrationWeight)
             return DifficultyProfile(key: key, confidence: .low, components: components,
-                explanation: ["Estimate from resources and object structure; no validated solution.",
-                              "Precision, required techniques and human deduction are unknown."]
+                explanation: [L10n.text("Estimate from resources and object structure; no validated solution."),
+                              L10n.text("Precision, required techniques and human deduction are unknown.")]
                     + (metadata.rank.map { ["Source rank: \($0)."] } ?? []), sourceRank: metadata.rank)
         }
         let assignments = solution.assignments.sorted { $0.frame < $1.frame }
@@ -161,10 +161,10 @@ public enum DifficultyScorer {
             detectedTechniques: concepts,
             prerequisiteConcepts: DifficultyTechniques.definitions.filter { concepts.contains($0.id) }.flatMap(\.prerequisites),
             precision: precision,
-            explanation: ["\(skills) used skill types; \(workers) assigned workers; \(dependentChanges) same-worker skill changes.",
-                          "Maximum concurrent worker regions: \(solution.maximumConcurrentRegions).",
-                          "Timing probes: \(precision?.runCount ?? 0). Untested alternatives remain unknown.",
-                          "Deduction is a conservative proxy. Observed techniques are not proof of necessity."]
+            explanation: [L10n.text("\(skills) used skill types; \(workers) assigned workers; \(dependentChanges) same-worker skill changes."),
+                          L10n.text("Maximum concurrent worker regions: \(solution.maximumConcurrentRegions)."),
+                          L10n.text("Timing probes: \(precision?.runCount ?? 0). Untested alternatives remain unknown."),
+                          L10n.text("Deduction is a conservative proxy. Observed techniques are not proof of necessity.")]
                 + (metadata.rank.map { ["Source rank: \($0)."] } ?? []), sourceRank: metadata.rank)
     }
 }

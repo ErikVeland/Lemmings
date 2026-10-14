@@ -57,8 +57,8 @@ import NxlvKit
         public var title: String { rawValue }
         public var detail: String {
             switch self {
-            case .everyLevel: return "The turn passes when a level ends, won or lost."
-            case .atFirstFail: return "A player keeps going until they lose a level."
+            case .everyLevel: return L10n.text("The turn passes when a level ends, won or lost.")
+            case .atFirstFail: return L10n.text("A player keeps going until they lose a level.")
             }
         }
     }
@@ -140,7 +140,7 @@ import NxlvKit
         records.profiles.flatMap { savedSessionHistory(host: $0.id) }
     }
     public func importLibraryHotSeats(_ incoming: [SavedHotSeat]) throws {
-        guard canWrite, storageError == nil else { throw SequelDataError.invalid("Local saves are not writable.") }
+        guard canWrite, storageError == nil else { throw SequelDataError.invalid(L10n.text("Local saves are not writable.")) }
         let encoder = JSONEncoder()
         // Encode all histories before changing any preferences.
         let histories = try records.profiles.map { profile -> (String, Data) in
@@ -269,11 +269,11 @@ import NxlvKit
         do {
             if let loaded = try recordFile.load() { records = loaded }
             if recordFile.recovered {
-                storageNotice = "Records recovered from backup. Recent results may be missing."
+                storageNotice = L10n.text("Records recovered from backup. Recent results may be missing.")
             }
         } catch {
             storageError = (error as? ArcadeRecordFile.Failure)?.errorDescription
-                ?? "Records could not be read. Existing files have been preserved."
+                ?? L10n.text("Records could not be read. Existing files have been preserved.")
             canWrite = false
         }
         _ = restoreSession(activeOnly: true)
@@ -291,12 +291,12 @@ import NxlvKit
         do {
             records = try reopened.load() ?? ArcadeRecords()
             recordFile = reopened; canWrite = true; storageError = nil
-            storageNotice = reopened.recovered ? "Records recovered from backup. Recent results may be missing." : nil
+            storageNotice = reopened.recovered ? L10n.text("Records recovered from backup. Recent results may be missing.") : nil
             adoptBundledProofs()
             return true
         } catch {
             storageError = (error as? ArcadeRecordFile.Failure)?.errorDescription
-                ?? "Records could not be read. Existing files have been preserved."
+                ?? L10n.text("Records could not be read. Existing files have been preserved.")
             return false
         }
     }
@@ -311,7 +311,7 @@ import NxlvKit
                     .appendingPathComponent("\(url.lastPathComponent).set-aside-\(stamp)"))
             }
         } catch {
-            storageError = "Records could not be moved aside. Check folder access."
+            storageError = L10n.text("Records could not be moved aside. Check folder access.")
             return false
         }
         endHotSeat()
@@ -360,7 +360,7 @@ import NxlvKit
                     try FileManager.default.removeItem(at: url)
                 }
                 return nil
-            } catch { return "Player deleted. Some saved files could not be removed: " + error.localizedDescription }
+            } catch { return L10n.text("Player deleted. Some saved files could not be removed: ") + error.localizedDescription }
         }
         if backgroundCleanup {
             Task { [weak self] in
@@ -371,9 +371,9 @@ import NxlvKit
         hooks.profileSettingsRemoved(id)
         removeSavedProgress(of: id)
         do { try playlistDataRemover(id) }
-        catch { storageNotice = "Player deleted. Some playlists could not be removed: " + error.localizedDescription }
+        catch { storageNotice = L10n.text("Player deleted. Some playlists could not be removed: ") + error.localizedDescription }
         do { try LevelPlaylistStore.removeDataChecked(at: collectionsFile(profileID: id)) }
-        catch { storageNotice = "Player deleted. Some collections could not be removed: " + error.localizedDescription }
+        catch { storageNotice = L10n.text("Player deleted. Some collections could not be removed: ") + error.localizedDescription }
         return true
     }
     private func removeSavedProgress(of id: String) {
@@ -416,12 +416,12 @@ import NxlvKit
             notifyProgressChanged()
         } catch {
             storageError = (error as? ArcadeRecordFile.Failure)?.errorDescription
-                ?? "Records were not saved. Check free space and folder access."
+                ?? L10n.text("Records were not saved. Check free space and folder access.")
             if case ArcadeRecordFile.Failure.changedOnDisk = error { canWrite = false }
         }
     }
     @discardableResult public func mergeCloudRecords(_ incoming: ArcadeRecords, profileID: String) throws -> Bool {
-        guard canWrite, storageError == nil else { throw SequelDataError.invalid("Local records are not writable.") }
+        guard canWrite, storageError == nil else { throw SequelDataError.invalid(L10n.text("Local records are not writable.")) }
         let previous = records
         do {
             try records.mergeCloudRecords(incoming, profileID: profileID)
@@ -433,7 +433,7 @@ import NxlvKit
     }
     /// Commit the entire validated library once. A failed save rolls records back.
     @discardableResult public func mergeLibraryPlayers(_ incoming: [(ArcadeProfile, ArcadeRecords)], deleted: Set<String>) throws -> Bool {
-        guard canWrite, storageError == nil else { throw SequelDataError.invalid("Local records are not writable.") }
+        guard canWrite, storageError == nil else { throw SequelDataError.invalid(L10n.text("Local records are not writable.")) }
         let previous = records
         do {
             let active = records.activeProfileID
@@ -443,7 +443,7 @@ import NxlvKit
                 if let index = profiles.firstIndex(where: { $0.id == profile.id }) { profiles[index] = profile }
                 else { profiles.append(profile) }
             }
-            guard !profiles.isEmpty, profiles.count <= 8 else { throw SequelDataError.invalid("A library can contain up to eight players.") }
+            guard !profiles.isEmpty, profiles.count <= 8 else { throw SequelDataError.invalid(L10n.text("A library can contain up to eight players.")) }
             // Add replacements before removing a deleted last local profile.
             try records.importProfiles(profiles, activeID: profiles.contains(where: { $0.id == active }) ? active : profiles[0].id)
             for id in deleted where records.profile(id) != nil { _ = records.removeProfile(id) }

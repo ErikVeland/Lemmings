@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import NxlvKit
 
 /// Local notes also appear after an update installs without an update alert.
 @MainActor final class ReleaseWelcome {
@@ -7,13 +8,13 @@ import AppKit
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
     static let notesVersion = "1.9.6"
-    static let subtitle = "Shared fixes and smoother music"
+    static let subtitle = L10n.text("Shared fixes and smoother music")
     static let sections = [
-        ("Smoother music", "Recorded music uses bounded decoding, smooth loop seams and peak protection after effects. Mono and stereo recordings share the same output format."),
-        ("Pixel effects", "Bombs scatter crisp pixel debris and show bitmap countdowns. Dying, exiting and exploding lemmings no longer keep selection outlines."),
-        ("Responsive rewind", "Rewind scratches backwards through recent music and effects. Repeated requests reuse buffers. Modern Mac effects add brief sprite echoes."),
-        ("Shared controls and saves", "Profiles, records, playlists, recovery and Hot Seat share code with iPhone and iPad. Saved runs and handovers wait for Ready. Primary actions stay last in navigation order."),
-        ("Compatibility", "Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. The Tribes remains Complete. Chronicles and NeoLemmix remain Beta. The companion iOS beta remains 2.0.")
+        (L10n.text("Smoother music"), L10n.text("Recorded music uses bounded decoding, smooth loop seams and peak protection after effects. Mono and stereo recordings share the same output format.")),
+        (L10n.text("Pixel effects"), L10n.text("Bombs scatter crisp pixel debris and show bitmap countdowns. Dying, exiting and exploding lemmings no longer keep selection outlines.")),
+        (L10n.text("Responsive rewind"), L10n.text("Rewind scratches backwards through recent music and effects. Repeated requests reuse buffers. Modern Mac effects add brief sprite echoes.")),
+        (L10n.text("Shared controls and saves"), L10n.text("Profiles, records, playlists, recovery and Hot Seat share code with iPhone and iPad. Saved runs and handovers wait for Ready. Primary actions stay last in navigation order.")),
+        (L10n.text("Compatibility"), L10n.text("Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. The Tribes remains Complete. Chronicles and NeoLemmix remain Beta. The companion iOS beta remains 2.0."))
     ]
     private let defaults: UserDefaults
     private let build: Int
@@ -21,8 +22,8 @@ import AppKit
     private var page: GameMenuPage?
 
     init(defaults: UserDefaults = .standard,
-        build: Int = Int(Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "0") ?? 0,
-        version: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ReleaseWelcome.notesVersion) {
+        build: Int = Int(Bundle.main.object(forInfoDictionaryKey: L10n.text("CFBundleVersion")) as? String ?? "0") ?? 0,
+        version: String = Bundle.main.object(forInfoDictionaryKey: L10n.text("CFBundleShortVersionString")) as? String ?? ReleaseWelcome.notesVersion) {
         self.defaults = defaults; self.build = build; self.version = version
     }
     func showIfNeeded(in window: NSWindow, existingPlayer: Bool, completion: @escaping () -> Void) {
@@ -38,7 +39,7 @@ import AppKit
     }
     func show(in window: NSWindow, completion: @escaping () -> Void = {}) {
         if let page, GameScreen.shared.contains(page) { GameScreen.shared.present(page, owner: window); return }
-        let page = GameMenuPage(title: "What's new in \(version)", subtitle: Self.subtitle)
+        let page = GameMenuPage(title: L10n.text("What's new in \(version)"), subtitle: Self.subtitle)
         let scroll = NSScrollView(frame: page.body.bounds)
         scroll.autoresizingMask = [.width, .height]
         scroll.hasVerticalScroller = true
@@ -46,7 +47,7 @@ import AppKit
         scroll.drawsBackground = false
         scroll.contentView.copiesOnScroll = false
         scroll.scrollerStyle = .overlay
-        scroll.setAccessibilityLabel("Release notes")
+        scroll.setAccessibilityLabel(L10n.text("Release notes"))
         let document = NSView()
         let width = page.body.bounds.width - 32
         var rows: [(GameLabel, GameLabel, CGFloat)] = []
@@ -78,7 +79,7 @@ import AppKit
         }
         page.controllerBackButton.isHidden = true
         page.onBack = close
-        page.addPrimaryAction("Continue", action: close)
+        page.addPrimaryAction(L10n.text("Continue"), action: close)
         self.page = page
         GameScreen.shared.present(page, owner: window)
     }

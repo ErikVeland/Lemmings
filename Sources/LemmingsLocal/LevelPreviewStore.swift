@@ -321,11 +321,11 @@ private enum LevelPreviewError: LocalizedError, Sendable {
     var errorDescription: String? {
         switch self {
         case .contentChanged:
-            "The selected level data changed. Open Level Select and choose it again."
+            L10n.text("The selected level data changed. Open Level Select and choose it again.")
         case .levelUnavailable:
-            "The selected level is not available."
+            L10n.text("The selected level is not available.")
         case .invalidBitmap:
-            "The level renderer returned invalid bitmap data."
+            L10n.text("The level renderer returned invalid bitmap data.")
         }
     }
 }
@@ -448,17 +448,17 @@ private enum LevelPreviewRenderer {
             return try fingerprint(files: [
                 Dependency("level", levelURL, data: levelData),
                 Dependency("style-permanent-objects", styles.appendingPathComponent(
-                    String(format: "PERM%03d.OBJ", style))),
+                    String(format: L10n.text("PERM%03d.OBJ"), style))),
                 Dependency("style-permanent-frames", styles.appendingPathComponent(
-                    String(format: "PERM%03d.FRL", style))),
+                    String(format: L10n.text("PERM%03d.FRL"), style))),
                 Dependency("style-permanent-blocks", styles.appendingPathComponent(
-                    String(format: "PERM%03d.BLK", style))),
+                    String(format: L10n.text("PERM%03d.BLK"), style))),
                 Dependency("style-temporary-objects", styles.appendingPathComponent(
-                    String(format: "TEMP%03d.OBJ", style))),
+                    String(format: L10n.text("TEMP%03d.OBJ"), style))),
                 Dependency("style-temporary-frames", styles.appendingPathComponent(
-                    String(format: "TEMP%03d.FRL", style))),
+                    String(format: L10n.text("TEMP%03d.FRL"), style))),
                 Dependency("style-temporary-blocks", styles.appendingPathComponent(
-                    String(format: "TEMP%03d.BLK", style))),
+                    String(format: L10n.text("TEMP%03d.BLK"), style))),
                 Dependency("style-palette", styles.appendingPathComponent(
                     String(format: "DATA%03d.PAL", style))),
                 Dependency("tribe-palette", root.appendingPathComponent(

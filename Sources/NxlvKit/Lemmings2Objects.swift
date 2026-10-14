@@ -32,7 +32,7 @@ public struct Lemmings2Objects: Sendable {
         var animations: [Int: [Lemmings2SpriteFrame]] = [:]
         for (index, placed) in level.objects.enumerated() where placed.identifier != 65535 {
             guard style.objects.indices.contains(placed.identifier) else {
-                throw SequelDataError.invalid("Unknown native L2 object.")
+                throw SequelDataError.invalid(L10n.text("Unknown native L2 object."))
             }
             let object = style.objects[placed.identifier]
             // Terrain decoding removes one 16-pixel column and two 8-pixel rows.
@@ -50,7 +50,7 @@ public struct Lemmings2Objects: Sendable {
                 let columns = repeatedX ? placed.parameter1 + 1 : 1
                 let rows = repeatedY ? placed.parameter2 + 1 : 1
                 guard columns <= 256, rows <= 256, columns * rows <= 4096, result.count + columns * rows <= 16384 else {
-                    throw SequelDataError.invalid("Native L2 object extension exceeds the safety limit.")
+                    throw SequelDataError.invalid(L10n.text("Native L2 object extension exceeds the safety limit."))
                 }
                 let frames: [Lemmings2SpriteFrame]
                 if c.graphicsFlags & 0x80 != 0 { frames = [] }

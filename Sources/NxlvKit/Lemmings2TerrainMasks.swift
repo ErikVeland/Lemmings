@@ -29,7 +29,7 @@ public struct Lemmings2TerrainMasks: Sendable {
         let intern = try Lemmings2SpecialGraphics(data: Data(contentsOf: root.appendingPathComponent("INTERN.DAT")))
         func single(_ bank: Lemmings2SpecialGraphics, _ index: Int) throws -> Lemmings2SpriteFrame {
             let frames = try bank.animation(index)
-            guard frames.count == 1 else { throw SequelDataError.invalid("Invalid L2 single-frame terrain mask.") }
+            guard frames.count == 1 else { throw SequelDataError.invalid(L10n.text("Invalid L2 single-frame terrain mask.")) }
             return frames[0]
         }
         try self.init(digger: single(masks, 7), basher: masks.animation(5), miner: masks.animation(2),
@@ -46,12 +46,12 @@ public struct Lemmings2TerrainMasks: Sendable {
                 fencer: [Lemmings2SpriteFrame] = [], clubBasher: [Lemmings2SpriteFrame] = [], laser: [Lemmings2SpriteFrame] = [],
                 flame: [Lemmings2SpriteFrame] = [], blast: Lemmings2SpriteFrame? = nil, plant: [Lemmings2SpriteFrame] = [], twister: Lemmings2SpriteFrame? = nil, stone: [Lemmings2SpriteFrame] = [], spear: [Lemmings2SpriteFrame] = [], arrow: [Lemmings2SpriteFrame] = [], ropeHook: [Lemmings2SpriteFrame] = []) throws {
         guard basher.count == 8, miner.count == 4, stacker.count == 2 else {
-            throw SequelDataError.invalid("Invalid L2 terrain mask count.")
+            throw SequelDataError.invalid(L10n.text("Invalid L2 terrain mask count."))
         }
         guard (ropeHook.isEmpty || ropeHook.count == 32), (arrow.isEmpty || arrow.count == 32), (stone.isEmpty || stone.count == 4), (spear.isEmpty || spear.count == 16), (plant.isEmpty || plant.count == 8), (scooper.isEmpty || scooper.count == 12), (fencer.isEmpty || fencer.count == 2),
               (clubBasher.isEmpty || clubBasher.count == 14), (laser.isEmpty || laser.count == 1),
               (flame.isEmpty || flame.count == 2) else {
-            throw SequelDataError.invalid("Invalid L2 tribe digging mask count.")
+            throw SequelDataError.invalid(L10n.text("Invalid L2 tribe digging mask count."))
         }
         var frames = [digger, exploder, brick, platformer]
         frames.append(contentsOf: basher)
@@ -74,7 +74,7 @@ public struct Lemmings2TerrainMasks: Sendable {
             guard frame.width > 0, frame.height > 0, frame.width <= 256, frame.height <= 256,
                   frame.pixels.count == frame.width * frame.height, frame.opaque.count == frame.pixels.count,
                   (-256...256).contains(frame.x), (-256...256).contains(frame.y) else {
-                throw SequelDataError.invalid("Invalid L2 terrain mask dimensions.")
+                throw SequelDataError.invalid(L10n.text("Invalid L2 terrain mask dimensions."))
             }
         }
         self.digger = digger; self.basher = basher; self.miner = miner

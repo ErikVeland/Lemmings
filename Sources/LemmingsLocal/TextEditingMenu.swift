@@ -1,14 +1,15 @@
 #if os(macOS)
 import AppKit
+import NxlvKit
 
 /// Routes standard editing commands to the active text field, including secure fields.
 @MainActor enum TextEditingMenu {
     static func populate(_ menu: NSMenu) {
         let commands: [(String, Selector, String)] = [
-            ("Cut", #selector(NSText.cut(_:)), "x"),
-            ("Copy", #selector(NSText.copy(_:)), "c"),
-            ("Paste", #selector(NSText.paste(_:)), "v"),
-            ("Select All", #selector(NSText.selectAll(_:)), "a"),
+            (L10n.text("Cut"), #selector(NSText.cut(_:)), "x"),
+            (L10n.text("Copy"), #selector(NSText.copy(_:)), "c"),
+            (L10n.text("Paste"), #selector(NSText.paste(_:)), "v"),
+            (L10n.text("Select All"), #selector(NSText.selectAll(_:)), "a"),
         ]
         for (title, action, key) in commands {
             let item = NSMenuItem(title: title, action: action, keyEquivalent: key)

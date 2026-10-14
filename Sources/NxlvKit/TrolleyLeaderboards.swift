@@ -4,28 +4,28 @@ public enum TrolleyBoard: String, Codable, CaseIterable, Sendable {
     case mostSaved, rescuePotential, zeroAvoidableLosses, leastSkills, mostUsedSkill, moralSurplus, cleanRescue, fastestClear, fastestAllSaved
     public var title: String {
         switch self {
-        case .fastestClear: "Fastest clear"
-        case .fastestAllSaved: "Fastest 100%"
-        case .mostSaved: "Most saved"
-        case .rescuePotential: "Rescue potential"
-        case .zeroAvoidableLosses: "Zero avoidable losses"
-        case .leastSkills: "Least skills"
-        case .mostUsedSkill: "Most used skill"
-        case .moralSurplus: "Moral surplus"
-        case .cleanRescue: "Clean rescue"
+        case .fastestClear: L10n.text(L10n.text("Fastest clear"))
+        case .fastestAllSaved: L10n.text(L10n.text("Fastest 100%"))
+        case .mostSaved: L10n.text(L10n.text("Most saved"))
+        case .rescuePotential: L10n.text(L10n.text("Rescue potential"))
+        case .zeroAvoidableLosses: L10n.text(L10n.text("Zero avoidable losses"))
+        case .leastSkills: L10n.text(L10n.text("Least skills"))
+        case .mostUsedSkill: L10n.text(L10n.text("Most used skill"))
+        case .moralSurplus: L10n.text(L10n.text("Moral surplus"))
+        case .cleanRescue: L10n.text(L10n.text("Clean rescue"))
         }
     }
     public var ordering: String {
         switch self {
-        case .fastestClear: "Successful clears, fastest simulation time first."
-        case .fastestAllSaved: "Everyone rescued, fastest simulation time first."
-        case .mostSaved: "Most rescued, then fewest skills and fastest time."
-        case .rescuePotential: "Verified potential, then most saved, fewest skills and fastest time."
-        case .zeroAvoidableLosses: "Verified perfect rescues, then most saved, fewest skills and fastest time."
-        case .leastSkills: "Successful clears, fewest skills, then most saved and fastest time."
-        case .mostUsedSkill: "Highest count of one skill, then most saved, fewest skills and fastest time."
-        case .moralSurplus: "Largest surplus, then most saved, fewest skills and fastest time."
-        case .cleanRescue: "Verified rescues: most saved, fewest avoidable losses, fewest skills and fastest time."
+        case .fastestClear: L10n.text("Successful clears, fastest simulation time first.")
+        case .fastestAllSaved: L10n.text("Everyone rescued, fastest simulation time first.")
+        case .mostSaved: L10n.text("Most rescued, then fewest skills and fastest time.")
+        case .rescuePotential: L10n.text("Verified potential, then most saved, fewest skills and fastest time.")
+        case .zeroAvoidableLosses: L10n.text("Verified perfect rescues, then most saved, fewest skills and fastest time.")
+        case .leastSkills: L10n.text("Successful clears, fewest skills, then most saved and fastest time.")
+        case .mostUsedSkill: L10n.text("Highest count of one skill, then most saved, fewest skills and fastest time.")
+        case .moralSurplus: L10n.text("Largest surplus, then most saved, fewest skills and fastest time.")
+        case .cleanRescue: L10n.text("Verified rescues: most saved, fewest avoidable losses, fewest skills and fastest time.")
         }
     }
 }
@@ -131,21 +131,21 @@ public struct TrolleyRetryTarget: Codable, Equatable, Sendable {
         let saved = attempt.run.saved, maximum = attempt.maximum
         let ceiling = attempt.run.level.conditions?.maximumPopulation
         if maximum.isRescueTarget, let value = maximum.value, saved < value {
-            if saved == value - 1 { return .init(label: "Save one more", detail: "One Lemming left behind. Bring home \(value).", targetSaved: value) }
-            return .init(label: "Reach 100%", detail: "Save \(value - saved) more to reach the \(maximum.status == .record ? "best-known rescue" : "verified maximum") of \(value).", targetSaved: value)
+            if saved == value - 1 { return .init(label: L10n.text("Save one more"), detail: L10n.text("One Lemming left behind. Bring home \(value)."), targetSaved: value) }
+            return .init(label: L10n.text("Reach 100%"), detail: L10n.text("Save \(value - saved) more to reach the \(maximum.status == .record ? "best-known rescue" : "verified maximum") of \(value)."), targetSaved: value)
         }
         if let previousBest, saved < previousBest {
-            return .init(label: "Match your best", detail: "Bring \(previousBest - saved) more home to match your best.", targetSaved: previousBest)
+            return .init(label: L10n.text("Match your best"), detail: L10n.text("Bring \(previousBest - saved) more home to match your best."), targetSaved: previousBest)
         }
         if let localBest, saved < localBest {
             let target = min(ceiling ?? (localBest + 1), localBest + 1)
-            return .init(label: target > localBest ? "Beat local best" : "Match local best", detail: "Local best: \(localBest). Aim for \(target).", targetSaved: target)
+            return .init(label: target > localBest ? "Beat local best" : "Match local best", detail: L10n.text("Local best: \(localBest). Aim for \(target)."), targetSaved: target)
         }
         if !maximum.isRescueTarget, ceiling == nil || saved < ceiling! {
-            return .init(label: "Save one more", detail: "Best known is \(maximum.value ?? saved). Can you improve it?", targetSaved: saved + 1)
+            return .init(label: L10n.text("Save one more"), detail: L10n.text("Best known is \(maximum.value ?? saved). Can you improve it?"), targetSaved: saved + 1)
         }
-        return .init(label: "Find a better way", detail: attempt.run.skillCount > 0
-            ? "Match this rescue with fewer than \(attempt.run.skillCount) skills." : "Match this rescue in less time.", targetSaved: saved)
+        return .init(label: L10n.text("Find a better way"), detail: attempt.run.skillCount > 0
+            ? L10n.text("Match this rescue with fewer than \(attempt.run.skillCount) skills.") : L10n.text("Match this rescue in less time."), targetSaved: saved)
     }
 }
 

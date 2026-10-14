@@ -123,7 +123,7 @@ public final class GameMenuTypography {
             .replacingOccurrences(of: "“", with: "\"").replacingOccurrences(of: "”", with: "\"")
             .replacingOccurrences(of: "·", with: "*").replacingOccurrences(of: "•", with: "*")
             .replacingOccurrences(of: "→", with: "->").replacingOccurrences(of: "←", with: "<-")
-            .replacingOccurrences(of: "×", with: "X").replacingOccurrences(of: "↵", with: "ENTER")
+            .replacingOccurrences(of: "×", with: "X").replacingOccurrences(of: "↵", with: L10n.text("ENTER"))
             .replacingOccurrences(of: "‹", with: "<").replacingOccurrences(of: "›", with: ">")
         return String(plain.map { $0.isASCII || $0 == "💀" ? $0 : "?" })
     }

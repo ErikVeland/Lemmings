@@ -1,4 +1,5 @@
 import Foundation
+import NxlvKit
 
 /// A frozen overview of the attempt, shared by every mobile engine.
 public struct MobilePauseSummary: Equatable, Sendable {
@@ -25,7 +26,7 @@ public struct MobilePauseSummary: Equatable, Sendable {
     public let track: String
     public let audio: String
     public let isReplay: Bool
-    public var rescueText: String { "Saved \(saved) / \(required) required" }
+    public var rescueText: String { L10n.text("Saved \(saved) / \(required) required") }
 
     public init(level: MobileLevelSummary, snapshot: MobileGameSnapshot, activeCount: Int,
                 ticksPerSecond: Double, speed: Double, assignedSkills: Int,
@@ -44,7 +45,7 @@ public struct MobilePauseSummary: Equatable, Sendable {
         goalReachable = saved + active + waiting >= required
         if snapshot.isComplete { status = snapshot.didWin ? "Level complete" : "Level ended" }
         else if snapshot.isEndingRun { status = "Ending the run" }
-        else if !goalReachable { status = "Rescue target out of reach" }
+        else if !goalReachable { status = L10n.text("Rescue target out of reach") }
         else if saved >= required { status = "Rescue target reached" }
         else { status = isReplay ? "Replay paused" : "Rescue in progress" }
         func time(_ seconds: Int) -> String {
@@ -61,7 +62,7 @@ public struct MobilePauseSummary: Equatable, Sendable {
                   Field("Release", snapshot.releaseRate.map(String.init) ?? "Fixed")]
         let rewind = isReplay ? "Replay" : supportsRewind ? (usedRewind ? "Rewind used" : "No rewind used") : "Rewind unavailable"
         supplies = snapshot.skills.filter { !$0.isUnlimited }.map { Field($0.name, "\(max(0, $0.count))") }
-        playDetails = "\(total) lemmings   /   \(max(0, assignedSkills)) skills used   /   \(rewind)"
+        playDetails = L10n.text("\(total) lemmings   /   \(max(0, assignedSkills)) skills used   /   \(rewind)")
         self.soundtrack = soundtrack
         self.track = track ?? "No track playing"
         self.audio = audio

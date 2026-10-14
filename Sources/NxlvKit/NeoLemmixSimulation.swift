@@ -11,11 +11,11 @@ public enum NeoLemmixSimulationError: Error, Equatable, Sendable, CustomStringCo
     public var description: String {
         switch self {
         case let .invalidDimensions(width, height):
-            "The simulation dimensions are invalid: \(width) by \(height)."
+            L10n.text("The simulation dimensions are invalid: \(width) by \(height).")
         case let .invalidMask(name, expected, actual):
-            "The \(name) mask has \(actual) bytes. It needs \(expected) bytes."
+            L10n.text("The \(name) mask has \(actual) bytes. It needs \(expected) bytes.")
         case let .invalidOneWayValue(index, value):
-            "The one-way mask has invalid value \(value) at index \(index)."
+            L10n.text("The one-way mask has invalid value \(value) at index \(index).")
         case let .invalidConfiguration(message):
             message
         }
@@ -635,51 +635,51 @@ public struct NeoLemmixConfiguration: Codable, Equatable, Sendable {
     ) throws {
         guard totalLemmings >= 0 else {
             throw NeoLemmixSimulationError.invalidConfiguration(
-                "The total lemming count cannot be negative."
+                L10n.text("The total lemming count cannot be negative.")
             )
         }
         guard requiredToSave >= 0 else {
             throw NeoLemmixSimulationError.invalidConfiguration(
-                "The save requirement cannot be negative."
+                L10n.text("The save requirement cannot be negative.")
             )
         }
         guard preplacedLemmings.count <= totalLemmings else {
             throw NeoLemmixSimulationError.invalidConfiguration(
-                "The preplaced lemming count exceeds the total lemming count."
+                L10n.text("The preplaced lemming count exceeds the total lemming count.")
             )
         }
         if totalLemmings > preplacedLemmings.count && entrances.isEmpty {
             throw NeoLemmixSimulationError.invalidConfiguration(
-                "The level needs an entrance for the lemmings that are not preplaced."
+                L10n.text("The level needs an entrance for the lemmings that are not preplaced.")
             )
         }
         guard Set(entrances.map(\.id)).count == entrances.count else {
             throw NeoLemmixSimulationError.invalidConfiguration(
-                "Entrance IDs must be unique."
+                L10n.text("Entrance IDs must be unique.")
             )
         }
         guard Set(zones.map(\.id)).count == zones.count else {
             throw NeoLemmixSimulationError.invalidConfiguration(
-                "Zone IDs must be unique."
+                L10n.text("Zone IDs must be unique.")
             )
         }
         guard zones.allSatisfy({ $0.bounds.width > 0 && $0.bounds.height > 0 }) else {
             throw NeoLemmixSimulationError.invalidConfiguration(
-                "Each zone must have a positive width and height."
+                L10n.text("Each zone must have a positive width and height.")
             )
         }
         guard zones.allSatisfy({
             $0.effect != .pickupSkill || ($0.skill != nil && ($0.skillCount ?? 0) > 0)
         }) else {
             throw NeoLemmixSimulationError.invalidConfiguration(
-                "Each skill pickup needs a known skill and a positive count."
+                L10n.text("Each skill pickup needs a known skill and a positive count.")
             )
         }
         for teleporter in zones where teleporter.effect == .teleporter {
             guard let pairing = teleporter.pairing,
                   zones.contains(where: { $0.effect == .receiver && $0.pairing == pairing }) else {
                 throw NeoLemmixSimulationError.invalidConfiguration(
-                    "Each teleporter needs a paired receiver."
+                    L10n.text("Each teleporter needs a paired receiver.")
                 )
             }
         }
@@ -689,7 +689,7 @@ public struct NeoLemmixConfiguration: Codable, Equatable, Sendable {
                       $0.id != portal.id && $0.effect == .portal && $0.pairing == pairing
                   }) else {
                 throw NeoLemmixSimulationError.invalidConfiguration(
-                    "Each portal needs a paired portal."
+                    L10n.text("Each portal needs a paired portal.")
                 )
             }
         }
@@ -698,23 +698,23 @@ public struct NeoLemmixConfiguration: Codable, Equatable, Sendable {
            entrances.allSatisfy({ $0.lemmingLimit != nil }),
            entrances.compactMap(\.lemmingLimit).reduce(0, +) < lemmingsToSpawn {
             throw NeoLemmixSimulationError.invalidConfiguration(
-                "The entrance limits cannot release all non-preplaced lemmings."
+                L10n.text("The entrance limits cannot release all non-preplaced lemmings.")
             )
         }
         if let timeLimitTicks, timeLimitTicks < 0 {
             throw NeoLemmixSimulationError.invalidConfiguration(
-                "The time limit cannot be negative."
+                L10n.text("The time limit cannot be negative.")
             )
         }
         guard entranceOpenTick >= 0, firstSpawnDelay >= 0 else {
             throw NeoLemmixSimulationError.invalidConfiguration(
-                "The entrance timing cannot be negative."
+                L10n.text("The entrance timing cannot be negative.")
             )
         }
         for (skill, supply) in skills {
             if case let .finite(count) = supply, count < 0 {
                 throw NeoLemmixSimulationError.invalidConfiguration(
-                    "The \(skill.rawValue) skill count cannot be negative."
+                    L10n.text("The \(skill.rawValue) skill count cannot be negative.")
                 )
             }
         }
@@ -772,7 +772,7 @@ public struct NeoLemmixConfiguration: Codable, Equatable, Sendable {
         let unsupported = NeoLemmixRules.unsupportedFeatures(level: level, renderedLevel: renderedLevel)
         guard unsupported.isEmpty else {
             throw NeoLemmixSimulationError.invalidConfiguration(
-                "This level needs NeoLemmix features that are not yet supported: " + unsupported.joined(separator: ", ") + ".")
+                L10n.text("This level needs NeoLemmix features that are not yet supported: ") + unsupported.joined(separator: ", ") + ".")
         }
         var sourceGadgets = level.gadgets
         var entrances: [NeoLemmixEntrance] = []
@@ -873,7 +873,7 @@ public struct NeoLemmixConfiguration: Codable, Equatable, Sendable {
             case .pickupSkill:
                 guard let skill = source?.skillType else {
                     throw NeoLemmixSimulationError.invalidConfiguration(
-                        "A skill pickup has no known skill."
+                        L10n.text("A skill pickup has no known skill.")
                     )
                 }
                 zones.append(NeoLemmixZone(
@@ -927,7 +927,7 @@ public struct NeoLemmixConfiguration: Codable, Equatable, Sendable {
             case .addSkill:
                 guard let skill = source?.skillType else {
                     throw NeoLemmixSimulationError.invalidConfiguration(
-                        "A skill-adder object has no known permanent skill."
+                        L10n.text("A skill-adder object has no known permanent skill.")
                     )
                 }
                 zones.append(NeoLemmixZone(
@@ -1301,13 +1301,13 @@ public struct NeoLemmixSimulation: Codable, Equatable, Sendable {
         for entrance in configuration.entrances where
             !terrain.contains(x: entrance.position.x, y: entrance.position.y) {
             throw NeoLemmixSimulationError.invalidConfiguration(
-                "Entrance \(entrance.id) is outside the simulation terrain."
+                L10n.text("Entrance \(entrance.id) is outside the simulation terrain.")
             )
         }
         for lemming in configuration.preplacedLemmings where
             !terrain.contains(x: lemming.position.x, y: lemming.position.y) {
             throw NeoLemmixSimulationError.invalidConfiguration(
-                "A preplaced lemming is outside the simulation terrain."
+                L10n.text("A preplaced lemming is outside the simulation terrain.")
             )
         }
         self.configuration = configuration

@@ -26,7 +26,7 @@ import NxlvKit
      * Handles Continue for a level sequence. The argument reports whether the level was won.
      */
     var onSequenceContinue: ((Bool) -> Bool)?
-    var sequenceContinueTitle = "Next level"
+    var sequenceContinueTitle = L10n.text("Next level")
     /**
      * Controls whether this run can update campaign, recovery, replay and verified records.
      */
@@ -127,7 +127,7 @@ import NxlvKit
             modifiers: ["practice": String(c.isPractice), "releaseInterval": String(c.releaseInterval),
                         "firstReleaseTick": String(c.firstReleaseTick), "goldRequirement": String(max(1, c.total - level.allowedLossesForGold))])
         return ArcadeLevel(id: "l2:" + level.fingerprint, title: level.title,
-            game: "Lemmings 2 - " + Lemmings2Campaign.tribeNames[level.style], rules: rules,
+            game: L10n.text("Lemmings 2 - ") + Lemmings2Campaign.tribeNames[level.style], rules: rules,
             total: c.total, required: 1, conditions: conditions)
     }
     private var fanSelected = false
@@ -176,13 +176,13 @@ import NxlvKit
         }
         if let expectedSourceRevision {
             guard let selection else {
-                throw SequelDataError.invalid("The selected Lemmings 2 level is no longer available.")
+                throw SequelDataError.invalid(L10n.text("The selected Lemmings 2 level is no longer available."))
             }
             let source = LevelPreviewSource.lemmings2(
                 root: root, selection: selection, expectedLevelID: expectedLevelID ?? "")
             guard try source.sourceRevision() == expectedSourceRevision else {
                 throw SequelDataError.invalid(
-                    "The selected Lemmings 2 level data changed. Open Level Select and choose it again.")
+                    L10n.text("The selected Lemmings 2 level data changed. Open Level Select and choose it again."))
             }
         }
         self.root = root
@@ -208,7 +208,7 @@ import NxlvKit
             guard campaign.levels.indices.contains(index),
                   expectedLevelID == nil || campaign.levels[index].fingerprint == expectedLevelID else {
                 throw SequelDataError.invalid(
-                    "The selected Lemmings 2 level changed. Open Level Select and choose it again.")
+                    L10n.text("The selected Lemmings 2 level changed. Open Level Select and choose it again."))
             }
             try campaign.select(tribe: selection.tribe, level: selection.level)
         }
@@ -235,7 +235,7 @@ import NxlvKit
         }
         NotificationCenter.default.addObserver(self, selector: #selector(artworkChanged),
             name: SequelArtworkPreference.changed, object: nil)
-        window.title = "Lemmings 2 — The Tribes"
+        window.title = L10n.text("Lemmings 2 — The Tribes")
         window.delegate = self
         window.isReleasedWhenClosed = false
         window.minSize = NSSize(width: 640, height: 502)
@@ -314,8 +314,8 @@ import NxlvKit
         keyboard.focusUnassigned = { [weak self] direction in
             guard let self, let game = self.game else { return }
             guard let id = self.assignmentFocus.next(activeIDs: game.lemmings.filter(\.active).map(\.id), direction: direction) else {
-                self.canvas.setAccessibilityLabel("No unassigned lemmings")
-                self.canvas.showFocusNotice("No unassigned lemmings"); return
+                self.canvas.setAccessibilityLabel(L10n.text("No unassigned lemmings"))
+                self.canvas.showFocusNotice(L10n.text("No unassigned lemmings")); return
             }
             self.canvas.focusLemming(id)
         }
@@ -377,20 +377,20 @@ import NxlvKit
         keyboard.skillNames = { [weak self] in self?.game?.configuration.skills.map(\.name) ?? [] }
         keyboard.help = { [weak self] in
             let names = self?.game?.configuration.skills.map(\.name) ?? []
-            return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + "\n\nSpace / P: pause\nR: retry\nHold , / <: scrub backward\nHold . / >: scrub forward after rewind\nTap , / .: step one tick\nZ: 2× Zoom at cursor\nScroll up / down: Zoom on / off at cursor\nShift-Z: 2× Superzoom at cursor, 0.5× time\nPress Z or Shift-Z again to switch off; each start spends one use\nEarn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels"
+            return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + L10n.text("\n\nSpace / P: pause\nR: retry\nHold , / <: scrub backward\nHold . / >: scrub forward after rewind\nTap , / .: step one tick\nZ: 2× Zoom at cursor\nScroll up / down: Zoom on / off at cursor\nShift-Z: 2× Superzoom at cursor, 0.5× time\nPress Z or Shift-Z again to switch off; each start spends one use\nEarn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels")
         }
         keyboard.contextCommands = {
-            [KeyboardCommand(keys: "Arrow keys", action: "Pan the level", group: "Camera"),
-             KeyboardCommand(keys: "V / S", action: "Review / save replay after a result", group: "Menus & results"),
-             KeyboardCommand(keys: "Return / Space", action: "Activate selected menu choice", group: "Menus & results"),
-             KeyboardCommand(keys: ", / LT + B", action: "Rewind the current run", group: "Gameplay"),
-             KeyboardCommand(keys: ", / .", action: "Step one tick; hold to scrub; release to pause", group: "Gameplay"),
-             KeyboardCommand(keys: "P / M / I", action: "From L2 menu: practice / tribe map / introduction", group: "Menus & results"),
-             KeyboardCommand(keys: "1–4", action: "Choose practice level", group: "L2 practice"),
-             KeyboardCommand(keys: "Arrow keys", action: "Choose practice skill", group: "L2 practice"),
-             KeyboardCommand(keys: "Space / Return", action: "Toggle practice skill / start practice", group: "L2 practice"),
-             KeyboardCommand(keys: "← / →", action: "Choose tribe on map", group: "Menus & results"),
-             KeyboardCommand(keys: "R / B", action: "After a result: retry / records", group: "Menus & results")]
+            [KeyboardCommand(keys: L10n.text("Arrow keys"), action: L10n.text("Pan the level"), group: L10n.text("Camera")),
+             KeyboardCommand(keys: L10n.text("V / S"), action: L10n.text("Review / save replay after a result"), group: L10n.text("Menus & results")),
+             KeyboardCommand(keys: L10n.text("Return / Space"), action: L10n.text("Activate selected menu choice"), group: L10n.text("Menus & results")),
+             KeyboardCommand(keys: ", / LT + B", action: L10n.text("Rewind the current run"), group: L10n.text("Gameplay")),
+             KeyboardCommand(keys: ", / .", action: L10n.text("Step one tick; hold to scrub; release to pause"), group: L10n.text("Gameplay")),
+             KeyboardCommand(keys: L10n.text("P / M / I"), action: L10n.text("From L2 menu: practice / tribe map / introduction"), group: L10n.text("Menus & results")),
+             KeyboardCommand(keys: "1–4", action: L10n.text("Choose practice level"), group: L10n.text("L2 practice")),
+             KeyboardCommand(keys: L10n.text("Arrow keys"), action: L10n.text("Choose practice skill"), group: L10n.text("L2 practice")),
+             KeyboardCommand(keys: L10n.text("Space / Return"), action: L10n.text("Toggle practice skill / start practice"), group: L10n.text("L2 practice")),
+             KeyboardCommand(keys: "← / →", action: L10n.text("Choose tribe on map"), group: L10n.text("Menus & results")),
+             KeyboardCommand(keys: L10n.text("R / B"), action: L10n.text("After a result: retry / records"), group: L10n.text("Menus & results"))]
         }
         keyboard.hints = { [weak self] in self?.showLevelHints() }
         keyboard.settings = { [weak self] in self?.onShowSettings?() }
@@ -417,8 +417,8 @@ import NxlvKit
             guard let self else { return }
             let nuke = Lemmings2Control.nuke.rawValue
             if self.beforeNuke != nil { self.panelAction(nuke); return }
-            GameScreen.shared.confirm("End this run?", detail: "Start the nuke countdown for the remaining lemmings.",
-                actionTitle: "Start nuke", owner: self.window) { [weak self] in
+            GameScreen.shared.confirm(L10n.text("End this run?"), detail: L10n.text("Start the nuke countdown for the remaining lemmings."),
+                actionTitle: L10n.text("Start nuke"), owner: self.window) { [weak self] in
                 guard let self else { return }
                 let now = ProcessInfo.processInfo.systemUptime
                 self.nukeGesture.reset(); self.panelAction(nuke, time: now); self.panelAction(nuke, time: now + 0.01)
@@ -499,13 +499,13 @@ import NxlvKit
             total: 1, timeLimit: 1, releaseInterval: 1, terrainMasks: masks, firstReleaseTick: 1)
         var fixture = try Lemmings2Runtime(configuration: configuration)
         for _ in 0..<100 where !fixture.isComplete { fixture.step() }
-        try validateMusicRouting(fixture.isComplete && fixture.didWin == won, "L2 completion fixture failed")
+        try validateMusicRouting(fixture.isComplete && fixture.didWin == won, L10n.text("L2 completion fixture failed"))
         game = fixture; arcadeLevelSnapshot = rewardFixtureLevel("lemmings2"); arcadeReport = nil; arcadeRunID = UUID()
         finishIfComplete(fixture)
-        try validateMusicRouting(ArcadeStore.shared.records.trolley.attempts.contains { $0.id == arcadeRunID }, "L2 sequence result did not persist career stars")
+        try validateMusicRouting(ArcadeStore.shared.records.trolley.attempts.contains { $0.id == arcadeRunID }, L10n.text("L2 sequence result did not persist career stars"))
         refreshGame()
         completionGlow.advance(at: ProcessInfo.processInfo.systemUptime + 0.7)
-        try validateMusicRouting(canvas.completionGlowAmount == (won ? 1 : 0), "L2 result celebration state is wrong")
+        try validateMusicRouting(canvas.completionGlowAmount == (won ? 1 : 0), L10n.text("L2 result celebration state is wrong"))
         try validateCompletionGlow(canvas, name: "lemmings2-\(won)") { self.canvas.completionGlowAmount = $0 }
         canvas.completionGlowAmount = won ? 1 : 0
     }
@@ -513,27 +513,27 @@ import NxlvKit
         timer?.invalidate()
         startLevel()
         guard let entry = LevelCollections.entry(attemptID: arcadeRunID), entry.identity.engine == .lemmings2,
-              paused else { throw SequelDataError.invalid("L2 did not record its paused start") }
+              paused else { throw SequelDataError.invalid(L10n.text("L2 did not record its paused start")) }
         restart()
         guard LevelCollections.entry(attemptID: arcadeRunID)?.identity == entry.identity,
               paused, speedControl.multiplier == 1 else {
-            throw SequelDataError.invalid("L2 retry lost its collection identity or pause")
+            throw SequelDataError.invalid(L10n.text("L2 retry lost its collection identity or pause"))
         }
-        print("PASS native L2 visit and paused retry")
+        print(L10n.text("PASS native L2 visit and paused retry"))
     }
     func testInitialMusicRouting() throws {
         timer?.invalidate()
-        try validateMusicRouting(!music.isRunning && !dj.isPlaying, "L2 played music before audio configuration")
+        try validateMusicRouting(!music.isRunning && !dj.isPlaying, L10n.text("L2 played music before audio configuration"))
         var settings = ClassicSettings()
         settings.music = .adaptiveDJ; settings.musicVolume = 0; settings.soundVolume = 0
         setAudioSettings(settings, muted: true)
         try validateMusicRouting(dj.isPlaying && dj.currentURL != nil &&
             dj.currentURL?.lastPathComponent.lowercased().contains("maintune") == false,
-            "L2 selected menu music during a level handover")
+            L10n.text("L2 selected menu music during a level handover"))
         let track = dj.currentURL
         playTribeMusic()
         try validateMusicRouting(dj.currentURL == track && !dj.isCrossfading,
-            "L2 repeated a handover track selection")
+            L10n.text("L2 repeated a handover track selection"))
     }
 
     func testPauseKeyboard() throws {
@@ -601,7 +601,7 @@ import NxlvKit
     }
     @objc private func artworkChanged() {
         do { try canvas.refreshArtwork() }
-        catch { message = "Artwork could not be loaded: \(error)" }
+        catch { message = L10n.text("Artwork could not be loaded: \(error)") }
         if screen == .briefing { prepareBriefing() }
         if screen == .playing { refreshGame() }
         front.needsDisplay = true
@@ -668,7 +668,7 @@ import NxlvKit
         sounds.setMuted(muted || settings.sound == .silent || UserDefaults.standard.bool(forKey: progressKey + ".soundsMuted"))
         if musicChanged {
             if screen == .playing || screen == .briefing || screen == .results { playTribeMusic() }
-            else { playMusic("Maintune") }
+            else { playMusic(L10n.text("Maintune")) }
         }
         if userPausedMusic && paused { updateUserMusicPause() }
     }
@@ -696,7 +696,7 @@ import NxlvKit
     nonisolated static func browserLevels(root: URL, progressData: Data?) throws -> [BrowserLevel] {
         try Task.checkCancellation()
         guard let rootRevision = FanLevelLibrary.directoryFingerprint(root) else {
-            throw SequelDataError.invalid("The Lemmings 2 game data could not be verified.")
+            throw SequelDataError.invalid(L10n.text("The Lemmings 2 game data could not be verified."))
         }
         let cacheKey = root.standardizedFileURL.path + ":" + rootRevision
         var campaign: Lemmings2Campaign
@@ -824,7 +824,7 @@ import NxlvKit
             switch screen {
             case .map, .practice, .load, .save:
                 explain(
-                    "Return to the library before choosing another level or saved game.",
+                    L10n.text("Return to the library before choosing another level or saved game."),
                     returnTo: self.screen)
                 return
             default: break
@@ -835,7 +835,7 @@ import NxlvKit
         if screen == .talisman {
             do { award = try Lemmings2Award(root:root,assets:assets,campaign:campaign,
                                           newPiece:self.screen == .results && game?.didWin == true) }
-            catch { message = "Could not show the talisman: \(error)"; previousScreen = .map; show(.message); return }
+            catch { message = L10n.text("Could not show the talisman: \(error)"); previousScreen = .map; show(.message); return }
         }
         if screen == .practice { practiceLevel = nil; game = nil; initial = nil }
         nukeGesture.reset()
@@ -856,7 +856,7 @@ import NxlvKit
         let view: NSView = screen == .playing ? canvas : front
         window?.contentView = view; window?.makeFirstResponder(view)
         front.needsDisplay = true
-        if screen == .menu { playMusic("Maintune") }
+        if screen == .menu { playMusic(L10n.text("Maintune")) }
     }
     private func explain(_ text: String, returnTo: Screen) {
         message = text; previousScreen = returnTo; show(.message)
@@ -870,7 +870,7 @@ import NxlvKit
             let left = max(0, level.minimumScreenX), top = max(0, level.minimumScreenY)
             let width = min(terrain.image.width - left, level.maximumScreenX + 320 - left)
             let height = min(terrain.image.height - top, level.maximumScreenY + 160 - top)
-            guard width > 0, height > 0 else { throw SequelDataError.invalid("Invalid level camera bounds.") }
+            guard width > 0, height > 0 else { throw SequelDataError.invalid(L10n.text("Invalid level camera bounds.")) }
             var pixels: [UInt8] = []
             pixels.reserveCapacity(width * height)
             for y in 0..<height {
@@ -932,7 +932,7 @@ import NxlvKit
                let entry = try? LevelPlaylistEntry(identity: .init(engine: .lemmings2,
                  packID: "tribes-\(campaign.tribe)", levelID: "\(campaign.level):\(level.fingerprint)"),
                  catalogueRevision: LevelCollections.catalogueRevision, sourceRevision: revision,
-                 packNameSnapshot: "The Tribes - \(Lemmings2Campaign.tribeNames[campaign.tribe])",
+                 packNameSnapshot: L10n.text("The Tribes - \(Lemmings2Campaign.tribeNames[campaign.tribe])"),
                  levelNameSnapshot: level.title, levelNumberSnapshot: campaign.level + 1) {
                 LevelCollections.record(entry, profileID: arcadeProfileID, attemptID: arcadeRunID)
             }
@@ -958,7 +958,7 @@ import NxlvKit
         if let arcadeLevel { AnonymousTelemetry.shared.start(arcadeLevel, hotSeat: arcadeHotSeatID != nil, attemptID: arcadeRunID) }
         if recordsCampaignProgress, let arcadeLevel { ArcadeStore.shared.beginAttempt(id: arcadeRunID, profileID: arcadeProfileID,
             level: arcadeLevel, previousID: previousAttemptID) }
-        runMovie.begin(ticksPerSecond: Lemmings2Runtime.ticksPerSecond, title: "Lemmings 2 - " + level.title)
+        runMovie.begin(ticksPerSecond: Lemmings2Runtime.ticksPerSecond, title: L10n.text("Lemmings 2 - ") + level.title)
         runMovie.onWillReview = { [weak self] in self?.suspendAudioOutput() }
         runMovie.onDidReview = { [weak self] in try? self?.resumeAudioOutput() }
         if let recorder = runMovie.recorder {
@@ -974,8 +974,8 @@ import NxlvKit
         let wallet = PrecisionZoomController.shared
         guard wallet.toggle(kind) else {
             message = wallet.storageError ?? (kind == .zoom
-                ? "No Zoom uses. Earn one for every 3 no-Rewind career stars."
-                : "No Superzoom uses. Earn one for every 3 no-Rewind three-star levels.")
+                ? L10n.text("No Zoom uses. Earn one for every 3 no-Rewind career stars.")
+                : L10n.text("No Superzoom uses. Earn one for every 3 no-Rewind three-star levels."))
             canvas.showFocusNotice(message)
             return
         }
@@ -991,7 +991,7 @@ import NxlvKit
             syncPrecisionZoom(at: point)
             refreshGame()
         case .unavailable:
-            message = wallet.storageError ?? "No Zoom uses. Earn one for every 3 no-Rewind career stars."
+            message = wallet.storageError ?? L10n.text("No Zoom uses. Earn one for every 3 no-Rewind career stars.")
             canvas.showFocusNotice(message)
         case .unchanged: break
         }
@@ -1215,7 +1215,7 @@ import NxlvKit
         if fanSelected { controls.insert(.fan) }
         let armed = nukeGesture.armedAt.map { ProcessInfo.processInfo.systemUptime - $0 <= NSEvent.doubleClickInterval } ?? false
         if armed || game.isNuking { controls.insert(.nuke) }
-        let label = game.isNuking || armed ? "NUKE" : fanSelected ? "FAN" : hover ?? (fastForward ? "SPEED " + speedControl.label.replacingOccurrences(of: "×", with: "X") : game.configuration.skills[selected].name)
+        let label = game.isNuking || armed ? L10n.text("NUKE") : fanSelected ? L10n.text("FAN") : hover ?? (fastForward ? L10n.text("SPEED ") + speedControl.label.replacingOccurrences(of: "×", with: "X") : game.configuration.skills[selected].name)
         canvas.rewindOriginTick = rewindOriginState?.tick
         canvas.rewindCurrentTick = game.tick
         if let rendered = try? assets.panel.render(skills: game.configuration.skills.map(\.rawValue), supplies: game.supplies,
@@ -1224,9 +1224,9 @@ import NxlvKit
             canvas.setPanel(rendered)
         }
         canvas.toolTip = nil
-        let transport = rewindOriginState.map { "Rewind active, \($0.tick - game.tick) ticks back. Hold full stop scrubs forward. Escape cancels." } ?? ""
+        let transport = rewindOriginState.map { L10n.text("Rewind active, \($0.tick - game.tick) ticks back. Hold full stop scrubs forward. Escape cancels.") } ?? ""
         let deathCounterAccessibility = screen == .playing ? deathCounter.accessibility : ""
-        canvas.setAccessibilityLabel("Lemmings 2. \(game.configuration.skills[selected].name) selected. \(label). \(paused ? "Paused." : "Running.") \(game.isNuking ? "Nuke active." : "") \(game.released) released, \(game.saved) saved. \(deathCounterAccessibility). \(canvas.precisionStatus.accessibility). \(transport)")
+        canvas.setAccessibilityLabel("Lemmings 2. \(game.configuration.skills[selected].name) selected. \(label). \(paused ? L10n.text("Paused.") : L10n.text("Running.")) \(game.isNuking ? L10n.text("Nuke active.") : "") \(game.released) released, \(game.saved) saved. \(deathCounterAccessibility). \(canvas.precisionStatus.accessibility). \(transport)")
     }
     private func update() {
         let frameStarted = ProcessInfo.processInfo.systemUptime
@@ -1265,7 +1265,7 @@ import NxlvKit
                 self.introduction = introduction
                 if introduction.isComplete { show(.menu) }
                 else { front.needsDisplay = true }
-            } catch { explain("Could not play the introduction: \(error)",returnTo:.menu) }
+            } catch { explain(L10n.text("Could not play the introduction: \(error)"),returnTo:.menu) }
             return
         }
         if screen == .talisman, var award {
@@ -1276,7 +1276,7 @@ import NxlvKit
                     sounds.play(award.animation.soundSamples.compactMap { Lemmings2SoundRequest.introduction(sample:$0) })
                 }
                 self.award = award; front.needsDisplay = true
-            } catch { explain("Could not animate the talisman: \(error)",returnTo:.map) }
+            } catch { explain(L10n.text("Could not animate the talisman: \(error)"),returnTo:.map) }
             return
         }
         if screen == .ending, var ending {
@@ -1290,7 +1290,7 @@ import NxlvKit
                     if campaign.canLaunchArk, let onCampaignCompleted { onCampaignCompleted() }
                     else { show(.map) }
                 } else { front.needsDisplay = true }
-            } catch { explain("Could not play the ending: \(error)",returnTo:.map) }
+            } catch { explain(L10n.text("Could not play the ending: \(error)"),returnTo:.map) }
             return
         }
         if screen != .playing {
@@ -1475,7 +1475,7 @@ import NxlvKit
         canvas.prepareRewindEffects()
         do { game = try L2RunRecovery.replay(initial: initial, inputs: Array(prefix), through: target) }
         catch {
-            message = "Could not rewind this run: \(error)"
+            message = L10n.text("Could not rewind this run: \(error)")
 
             return false
         }
@@ -1500,7 +1500,7 @@ import NxlvKit
         let prefix = rewindOriginInputs.prefix { $0.tick <= target }
         do { game = try L2RunRecovery.replay(initial: initial, inputs: Array(prefix), through: target) }
         catch {
-            message = "Could not move forward through this run: \(error)"
+            message = L10n.text("Could not move forward through this run: \(error)")
 
             return false
         }
@@ -1519,7 +1519,7 @@ import NxlvKit
         do {
             introduction = try Lemmings2Introduction(root:root,font:assets.font)
             music.suspendOutput(); show(.intro)
-        } catch { explain("Could not load the introduction: \(error)",returnTo:.menu) }
+        } catch { explain(L10n.text("Could not load the introduction: \(error)"),returnTo:.menu) }
     }
     private func key(_ key: String) {
         if screen == .results {
@@ -1581,7 +1581,7 @@ import NxlvKit
         guard practiceLevel == nil else { return }
         guard onSequenceContinue == nil else {
             explain(
-                "Return to the library before choosing another level.",
+                L10n.text("Return to the library before choosing another level."),
                 returnTo: .briefing)
             return
         }
@@ -1625,7 +1625,7 @@ import NxlvKit
                 field.update(game)
                 if let image = try? panel.render(skills: game.configuration.skills.map(\.rawValue), supplies: game.supplies,
                     selected: 0, saved: game.saved, remaining: game.lemmings.filter(\.active).count,
-                    seconds: game.remainingSeconds, label: "REPLAY", palette: Lemmings2Panel.palette(over: game.configuration.palette, phase: game.tick / 4), highlightedControls: []) {
+                    seconds: game.remainingSeconds, label: L10n.text(L10n.text("REPLAY")), palette: Lemmings2Panel.palette(over: game.configuration.palette, phase: game.tick / 4), highlightedControls: []) {
                     field.setPanel(image)
                 }
             })
@@ -1678,9 +1678,9 @@ import NxlvKit
         persist(); prepareBriefing()
     }
     private var resultContinueTitle: String {
-        if practiceLevel != nil { return "Practice levels" }
-        if onSequenceContinue != nil { return game?.didWin == false ? "Retry level" : sequenceContinueTitle }
-        return campaign.level == 9 ? "Continue" : "Next level"
+        if practiceLevel != nil { return L10n.text("Practice levels") }
+        if onSequenceContinue != nil { return game?.didWin == false ? L10n.text("Retry level") : sequenceContinueTitle }
+        return campaign.level == 9 ? L10n.text("Continue") : L10n.text("Next level")
     }
     // Region centres follow the original map artwork; the nearest tribe owns
     // the intervening land. The ark has its own hit region at the top.
@@ -1702,9 +1702,9 @@ import NxlvKit
         var entries: [(String, CGRect)] = []
         switch screen {
         case .menu:
-            entries = [("Play", CGRect(x: 10, y: 125, width: 70, height: 22)), ("Choose tribe", CGRect(x: 10, y: 150, width: 70, height: 22)), ("Preferences", CGRect(x: 10, y: 175, width: 70, height: 22)),
-                ("Load game", CGRect(x: 240, y: 125, width: 70, height: 22)), ("Save game", CGRect(x: 240, y: 150, width: 70, height: 22)), ("Return to library", CGRect(x: 240, y: 175, width: 70, height: 22)),
-                ("Introduction", CGRect(x: 120, y: 150, width: 70, height: 22)), ("Practice", CGRect(x: 100, y: 175, width: 110, height: 22))]
+            entries = [(L10n.text("Play"), CGRect(x: 10, y: 125, width: 70, height: 22)), (L10n.text("Choose tribe"), CGRect(x: 10, y: 150, width: 70, height: 22)), (L10n.text("Preferences"), CGRect(x: 10, y: 175, width: 70, height: 22)),
+                (L10n.text("Load game"), CGRect(x: 240, y: 125, width: 70, height: 22)), (L10n.text("Save game"), CGRect(x: 240, y: 150, width: 70, height: 22)), (L10n.text("Return to library"), CGRect(x: 240, y: 175, width: 70, height: 22)),
+                (L10n.text("Introduction"), CGRect(x: 120, y: 150, width: 70, height: 22)), (L10n.text("Practice"), CGRect(x: 100, y: 175, width: 110, height: 22))]
         case .map:
             entries = tribePoints.enumerated().map { index, point in (Lemmings2Campaign.tribeNames[index], CGRect(x: point.0 - 5, y: point.1 - 5, width: 10, height: 10)) }
         case .practice:
@@ -1716,14 +1716,14 @@ import NxlvKit
                 return (skill.name, rect)
             }
             for (index, tribe) in Lemmings2Practice.tribes.enumerated() { entries.append((Lemmings2Campaign.tribeNames[tribe], CGRect(x: index * 80, y: 133, width: 80, height: 36))) }
-            if practiceSkills.count == 8 { entries.append(("Start practice", CGRect(x: 100, y: 180, width: 120, height: 18))) }
+            if practiceSkills.count == 8 { entries.append((L10n.text("Start practice"), CGRect(x: 100, y: 180, width: 120, height: 18))) }
         case .load, .save:
-            entries = (0..<8).map { ("Slot \($0 + 1)", CGRect(x: 20, y: 40 + $0 * 16, width: 280, height: 16)) }
-            entries += [(screen == .load ? "Load selected slot" : "Save to selected slot", CGRect(x: 10, y: 180, width: 140, height: 18)), ("Cancel", CGRect(x: 170, y: 180, width: 140, height: 18))]
+            entries = (0..<8).map { (L10n.text("Slot \($0 + 1)"), CGRect(x: 20, y: 40 + $0 * 16, width: 280, height: 16)) }
+            entries += [(screen == .load ? L10n.text("Load selected slot") : L10n.text("Save to selected slot"), CGRect(x: 10, y: 180, width: 140, height: 18)), (L10n.text("Cancel"), CGRect(x: 170, y: 180, width: 140, height: 18))]
         case .preferences:
-            entries = [("Toggle music", CGRect(x: 20, y: 110, width: 135, height: 24)), ("Toggle sounds", CGRect(x: 160, y: 110, width: 135, height: 24)), ("Toggle enhanced artwork", CGRect(x: 20, y: 148, width: 280, height: 24)), ("Back", CGRect(x: 20, y: 180, width: 280, height: 18))]
+            entries = [(L10n.text("Toggle music"), CGRect(x: 20, y: 110, width: 135, height: 24)), (L10n.text("Toggle sounds"), CGRect(x: 160, y: 110, width: 135, height: 24)), (L10n.text("Toggle enhanced artwork"), CGRect(x: 20, y: 148, width: 280, height: 24)), (L10n.text("Back"), CGRect(x: 20, y: 180, width: 280, height: 18))]
         case .playing: break
-        default: entries = [("Continue", CGRect(x: 100, y: 180, width: 120, height: 18))]
+        default: entries = [(L10n.text("Continue"), CGRect(x: 100, y: 180, width: 120, height: 18))]
         }
         let current = screen
         return entries.map { title, rect in (title, rect, { [weak self] in
@@ -1799,7 +1799,7 @@ import NxlvKit
                         try campaign.restore(JSONDecoder().decode(Lemmings2Campaign.Progress.self, from: data))
                         game = nil; initial = nil; practiceLevel = nil
                         persist(); prepareBriefing()
-                    } catch { explain("This saved game cannot be loaded.", returnTo: .load) }
+                    } catch { explain(L10n.text("This saved game cannot be loaded."), returnTo: .load) }
                 }
             } else if (40..<168).contains(y) { selectedSlot = (y - 40) / 16; front.needsDisplay = true }
         case .talisman:
@@ -1807,7 +1807,7 @@ import NxlvKit
                 do {
                     ending = try Lemmings2Ending(root:root,assets:assets,golden:campaign.canLaunchArk)
                     playMusic("endtune"); show(.ending)
-                } catch { explain("Could not load the ending: \(error)",returnTo:.map) }
+                } catch { explain(L10n.text("Could not load the ending: \(error)"),returnTo:.map) }
             }
             else { show(.map) }
         case .ending:
@@ -1832,15 +1832,15 @@ import NxlvKit
             front.text(string, font: assets.font, palette: palette(name), x: centered ? x - assets.font.width(string) / 2 : x, y: y)
         }
         switch screen {
-        case .menu: picture("MENU", palette("MENU"))
+        case .menu: picture(L10n.text("MENU"), palette(L10n.text("MENU")))
         case .practice:
-            picture("ROCKWALL",palette("PRACTICE"))
-            text("Select 8 skills to practice",160,8,"PRACTICE",centered:true)
+            picture(L10n.text("ROCKWALL"),palette(L10n.text("PRACTICE")))
+            text(L10n.text("Select 8 skills to practice"),160,8,L10n.text("PRACTICE"),centered:true)
             for id in 1...51 {
                 let x = 4+(id-1)%13*24, y = 28+(id-1)/13*20
-                let f = bank("PRACTICE").sprites[3][id-1]
+                let f = bank(L10n.text("PRACTICE")).sprites[3][id-1]
                 let scale = min(1,min(22/CGFloat(f.width),18/CGFloat(f.height)))
-                let image = front.makeImage(f.pixels,width:f.width,height:f.height,palette:palette("PRACTICE"),opaque:f.opaque)
+                let image = front.makeImage(f.pixels,width:f.width,height:f.height,palette:palette(L10n.text("PRACTICE")),opaque:f.opaque)
                 image.draw(in:NSRect(x:CGFloat(x)+(24-CGFloat(f.width)*scale)/2,
                     y:CGFloat(y)+(18-CGFloat(f.height)*scale)/2,width:CGFloat(f.width)*scale,height:CGFloat(f.height)*scale),
                     from:.zero,operation:.sourceOver,fraction:1,respectFlipped:true,
@@ -1848,7 +1848,7 @@ import NxlvKit
                 if let skill = Lemmings2Runtime.Skill(rawValue:id), let order = practiceSkills.firstIndex(of:skill) {
                     NSColor.black.withAlphaComponent(0.85).setFill()
                     NSRect(x:x+15,y:y+9,width:9,height:10).fill()
-                    text(String(order+1),x+16,y+9,"PRACTICE")
+                    text(String(order+1),x+16,y+9,L10n.text("PRACTICE"))
                     NSColor.yellow.setStroke()
                     let outline = NSBezierPath(rect:NSRect(x:x,y:y,width:24,height:18))
                     outline.lineWidth = 0.5; outline.stroke()
@@ -1859,8 +1859,8 @@ import NxlvKit
                     outline.lineWidth = 0.5; outline.stroke()
                 }
             }
-            let label = hoverPracticeSkill.flatMap(Lemmings2Runtime.Skill.init(rawValue:))?.name ?? "\(practiceSkills.count) of 8 selected"
-            text(label,160,112,"PRACTICE",centered:true)
+            let label = hoverPracticeSkill.flatMap(Lemmings2Runtime.Skill.init(rawValue:))?.name ?? L10n.text("\(practiceSkills.count) of 8 selected")
+            text(label,160,112,L10n.text("PRACTICE"),centered:true)
             for (choice,tribe) in Lemmings2Practice.tribes.enumerated() {
                 let f = bank("INFO").sprites[8+tribe][0]
                 let portrait = front.makeImage(f.pixels,width:f.width,height:f.height,
@@ -1869,25 +1869,25 @@ import NxlvKit
                     from:NSRect(x:96,y:0,width:64,height:48),operation:.sourceOver,fraction:1,
                     respectFlipped:true,hints:[.interpolation:NSImageInterpolation.none.rawValue])
                 if choice == practiceChoice {
-                    sprite("PRACTICE",6,choice*80+24,135,frame:frontTicks/6)
-                    text("*",choice*80+14,144,"PRACTICE")
+                    sprite(L10n.text("PRACTICE"),6,choice*80+24,135,frame:frontTicks/6)
+                    text("*",choice*80+14,144,L10n.text("PRACTICE"))
                 }
             }
-            text(Lemmings2Campaign.tribeNames[Lemmings2Practice.tribes[practiceChoice]],160,168,"PRACTICE",centered:true)
-            text(practiceSkills.count == 8 ? "Click or Return to practise" : "Choose eight different skills",160,186,"PRACTICE",centered:true)
+            text(Lemmings2Campaign.tribeNames[Lemmings2Practice.tribes[practiceChoice]],160,168,L10n.text("PRACTICE"),centered:true)
+            text(practiceSkills.count == 8 ? L10n.text("Click or Return to practise") : L10n.text("Choose eight different skills"),160,186,L10n.text("PRACTICE"),centered:true)
         case .map:
-            picture("MAP", palette("MAP"))
+            picture(L10n.text("MAP"), palette(L10n.text("MAP")))
             for (id, x, y) in [(2,232,59),(4,117,144),(3,288,141),(5,44,151),(6,47,104)] {
-                sprite("MAP", id, x, y, frame: frontTicks / 6)
+                sprite(L10n.text("MAP"), id, x, y, frame: frontTicks / 6)
             }
-            text(Lemmings2Campaign.tribeNames[hoverTribe ?? campaign.tribe], 165, 183, "MAP", centered: true)
+            text(Lemmings2Campaign.tribeNames[hoverTribe ?? campaign.tribe], 165, 183, L10n.text("MAP"), centered: true)
         case .intro:
             if let introduction {
                 front.draw(introduction.animation.pixels,width:320,height:200,
                            palette:introduction.animation.palette,x:0,y:0)
             }
         case .briefing:
-            picture("ROCKWALL", palette("INFO"))
+            picture(L10n.text("ROCKWALL"), palette("INFO"))
             // INFO.GAL uses the left 140 pixels for eight 25-pixel skill rows.
             for i in 0..<8 {
                 let skill = practiceLevel != nil ? practiceSkills[i].rawValue : level.skills[i].identifier
@@ -1906,46 +1906,46 @@ import NxlvKit
             }
             if practiceLevel == nil && campaign.level > 0 { sprite("INFO", 5, 152, 127) }
             if practiceLevel == nil && campaign.level < campaign.unlockedLevel(in: campaign.tribe) { sprite("INFO", 4, 279, 127) }
-            front.fittedText(practiceLevel != nil ? "Practice" : "\(Lemmings2Campaign.tribeNames[campaign.tribe]) \(campaign.level + 1)",
+            front.fittedText(practiceLevel != nil ? L10n.text("Practice") : "\(Lemmings2Campaign.tribeNames[campaign.tribe]) \(campaign.level + 1)",
                              font: assets.font, palette: palette("INFO"),
                              rect: NSRect(x: 145, y: 135, width: 173, height: 13))
             front.fittedText(level.title, font: assets.font, palette: palette("INFO"),
                              rect: NSRect(x: 145, y: 150, width: 173, height: 24))
-            text("\(practiceLevel != nil ? 60 : campaign.population) Lemmings", 231, 176, centered: true)
+            text(L10n.text("\(practiceLevel != nil ? 60 : campaign.population) Lemmings"), 231, 176, centered: true)
             text(String(format: "TIME %d:%02d", level.timeLimitSeconds / 60, level.timeLimitSeconds % 60), 231, 187, centered: true)
         case .results:
-            picture("ROCKWALL", palette("MEDALS"))
+            picture(L10n.text("ROCKWALL"), palette(L10n.text("MEDALS")))
             if let game {
                 let medal = Lemmings2Campaign.medal(saved: game.saved, total: game.configuration.total, allowedLosses: level.allowedLossesForGold)
-                sprite("MEDALS", 2, 30, 25)
+                sprite(L10n.text("MEDALS"), 2, 30, 25)
                 if medal != .none {
                     let locations = [(0,0),(43,64),(85,54),(64,44)]
                     let p = locations[medal.rawValue]
-                    sprite("MEDALS", medal == .gold ? 3 : medal == .silver ? 4 : 5, p.0, p.1, frame: min(20, frontTicks / 4))
+                    sprite(L10n.text("MEDALS"), medal == .gold ? 3 : medal == .silver ? 4 : 5, p.0, p.1, frame: min(20, frontTicks / 4))
                 }
-                text("You saved \(game.saved) lemmings", 160, 8, "MEDALS", centered: true)
-                text(medal == .none ? "Oh dear!" : medal.name + " medal", 220, 42, "MEDALS", centered: true)
-                front.wrappedText(game.didWin ? "Click to continue. Your survivors will go on to the next level."
-                    : bank("MEDALS").strings[4], font: assets.font, palette: palette("MEDALS"), x: 135, y: 70, width: 170)
-                text("V Replay  S Save movie", 160, 153, "MEDALS", centered: true)
-                text("Retry", 35, 182, "MEDALS", centered: true)
-                text("Continue", 160, 182, "MEDALS", centered: true)
-                text("Menu", 285, 182, "MEDALS", centered: true)
+                text(L10n.text("You saved \(game.saved) lemmings"), 160, 8, L10n.text("MEDALS"), centered: true)
+                text(medal == .none ? L10n.text("Oh dear!") : medal.name + " medal", 220, 42, L10n.text("MEDALS"), centered: true)
+                front.wrappedText(game.didWin ? L10n.text("Click to continue. Your survivors will go on to the next level.")
+                    : bank(L10n.text("MEDALS")).strings[4], font: assets.font, palette: palette(L10n.text("MEDALS")), x: 135, y: 70, width: 170)
+                text(L10n.text("V Replay  S Save movie"), 160, 153, L10n.text("MEDALS"), centered: true)
+                text(L10n.text("Retry"), 35, 182, L10n.text("MEDALS"), centered: true)
+                text(L10n.text("Continue"), 160, 182, L10n.text("MEDALS"), centered: true)
+                text(L10n.text("Menu"), 285, 182, L10n.text("MEDALS"), centered: true)
             }
         case .preferences:
-            picture("ROCKWALL", palette("PREFS"))
-            text("Control Method", 160, 24, "PREFS", centered: true)
-            text("Mouse", 160, 44, "PREFS", centered: true)
-            text("Music", 52, 124, "PREFS")
-            sprite("PREFS", music.muted ? 5 : 6, 38, 114)
-            text("Sound FX", 189, 124, "PREFS")
-            sprite("PREFS", sounds.muted ? 5 : 6, 175, 114)
-            text(SequelArtworkPreference.enabled ? "Artwork: Macintosh-style 2x" : "Artwork: Original PC",
-                 160, 154, "PREFS", centered: true)
-            text("OK", 160, 184, "PREFS", centered: true)
+            picture(L10n.text("ROCKWALL"), palette(L10n.text("PREFS")))
+            text(L10n.text("Control Method"), 160, 24, L10n.text("PREFS"), centered: true)
+            text(L10n.text("Mouse"), 160, 44, L10n.text("PREFS"), centered: true)
+            text(L10n.text("Music"), 52, 124, L10n.text("PREFS"))
+            sprite(L10n.text("PREFS"), music.muted ? 5 : 6, 38, 114)
+            text(L10n.text("Sound FX"), 189, 124, L10n.text("PREFS"))
+            sprite(L10n.text("PREFS"), sounds.muted ? 5 : 6, 175, 114)
+            text(SequelArtworkPreference.enabled ? L10n.text("Artwork: Macintosh-style 2x") : L10n.text("Artwork: Original PC"),
+                 160, 154, L10n.text("PREFS"), centered: true)
+            text("OK", 160, 184, L10n.text("PREFS"), centered: true)
         case .load, .save:
-            picture("ROCKWALL", palette("LOAD"))
-            text(screen == .save ? "Save Game" : "Select a game to load", 160, 12, "LOAD", centered: true)
+            picture(L10n.text("ROCKWALL"), palette(L10n.text("LOAD")))
+            text(screen == .save ? L10n.text("Save Game") : L10n.text("Select a game to load"), 160, 12, L10n.text("LOAD"), centered: true)
             for i in 0..<8 {
                 let key = progressKey + ".slot.\(i)"
                 let data = UserDefaults.standard.data(forKey: key)
@@ -1955,25 +1955,25 @@ import NxlvKit
                     do { try checked.restore(progress); return progress }
                     catch { return nil }
                 }
-                let name = saved.map { "\(Lemmings2Campaign.tribeNames[$0.tribe]) - Level \($0.level + 1)" }
-                    ?? (data == nil ? "<Unsaved Position>" : "<Invalid saved game>")
-                text("\(i == selectedSlot ? ">" : " ") \(i + 1). \(name)", 34, 40 + i * 16, "LOAD")
+                let name = saved.map { L10n.text("\(Lemmings2Campaign.tribeNames[$0.tribe]) - Level \($0.level + 1)") }
+                    ?? (data == nil ? L10n.text("<Unsaved Position>") : L10n.text("<Invalid saved game>"))
+                text("\(i == selectedSlot ? ">" : " ") \(i + 1). \(name)", 34, 40 + i * 16, L10n.text("LOAD"))
             }
-            text(screen == .save ? "Save" : "Load", 80, 184, "LOAD", centered: true)
-            text("Cancel", 240, 184, "LOAD", centered: true)
+            text(screen == .save ? L10n.text("Save") : L10n.text("Load"), 80, 184, L10n.text("LOAD"), centered: true)
+            text(L10n.text("Cancel"), 240, 184, L10n.text("LOAD"), centered: true)
         case .talisman:
             if let award {
                 front.draw(award.animation.pixels,width:320,height:200,palette:award.animation.palette,x:0,y:0)
-                if frontTicks > 120 { text("Click to continue",160,184,"AWARD",centered:true) }
+                if frontTicks > 120 { text(L10n.text("Click to continue"),160,184,L10n.text("AWARD"),centered:true) }
             }
         case .ending:
             if let ending {
                 front.draw(ending.pixels,width:320,height:200,palette:ending.palette,x:0,y:0)
             }
         case .message:
-            picture("ROCKWALL", palette("INFO"))
+            picture(L10n.text("ROCKWALL"), palette("INFO"))
             front.wrappedText(message, font: assets.font, palette: palette("INFO"), x: 24, y: 55, width: 272)
-            text("Click to return", 160, 182, centered: true)
+            text(L10n.text("Click to return"), 160, 182, centered: true)
         case .playing: break
         }
     }
@@ -1994,7 +1994,7 @@ import NxlvKit
     override func accessibilityRole() -> NSAccessibility.Role? { .group }
     override func accessibilityChildren() -> [Any]? {
         (turnBadge.isHidden ? [] : [turnBadge] as [Any]) + (menuActions?() ?? []).enumerated().map { index, item in
-            accessibleElements.element(id: "action-\(index)", owner: self, label: item.0,
+            accessibleElements.element(id: L10n.text("action-\(index)"), owner: self, label: item.0,
                 frame: CGRect(x: origin.x + item.1.minX * zoom, y: origin.y + item.1.minY * zoom * 1.2, width: item.1.width * zoom, height: item.1.height * zoom * 1.2), press: item.2)
         }
     }
@@ -2117,7 +2117,7 @@ import NxlvKit
     override func accessibilityChildren() -> [Any]? {
         guard !readOnlyReplay else { return [] }
         guard let game else { return [] }
-        let names = game.configuration.skills.map(\.name) + ["Pause", "End run", "Fan", "Fast-forward"]
+        let names = game.configuration.skills.map(\.name) + [L10n.text(L10n.text("Pause")), L10n.text(L10n.text("End run")), L10n.text(L10n.text("Fan")), L10n.text(L10n.text("Fast-forward"))]
         var children: [Any] = turnBadge.isHidden ? [] : [turnBadge]
         for slot in 0..<12 {
             let x = slot < 8 ? slot * 32 : 256 + (slot % 2) * 32
@@ -2125,9 +2125,9 @@ import NxlvKit
             let height = slot < 8 ? 40 : 20
             let frame = CGRect(x: panelX + CGFloat(x) * zoom, y: origin.y + CGFloat(y) * zoom * 1.2, width: 32 * zoom, height: CGFloat(height) * zoom * 1.2)
             let label = game.supplies.indices.contains(slot)
-                ? "\(names[slot]), \(game.supplies[slot]) remaining" + (slot == selectedSkillSlot ? ", selected" : "")
+                ? L10n.text("\(names[slot]), \(game.supplies[slot]) remaining") + (slot == selectedSkillSlot ? L10n.text(L10n.text(", selected")) : "")
                 : names[slot]
-            children.append(accessibleElements.element(id: "panel-\(slot)", owner: self, label: label, frame: frame) { [weak self] in
+            children.append(accessibleElements.element(id: L10n.text("panel-\(slot)"), owner: self, label: label, frame: frame) { [weak self] in
                 let time = ProcessInfo.processInfo.systemUptime
                 self?.onPanel?(slot, 1, time)
                 if slot == 9 { self?.onPanel?(slot, 2, time + 0.01) }
@@ -2135,7 +2135,7 @@ import NxlvKit
         }
         if variableSpeedEnabled {
             for direction in [-1, 1] {
-                children.append(accessibleElements.element(id: "speed-\(direction)", owner: self, label: direction < 0 ? "Decrease fast speed" : "Increase fast speed", frame: speedRect) { [weak self] in self?.onSpeedStep?(direction, ProcessInfo.processInfo.systemUptime) })
+                children.append(accessibleElements.element(id: L10n.text("speed-\(direction)"), owner: self, label: direction < 0 ? L10n.text(L10n.text("Decrease fast speed")) : L10n.text(L10n.text("Increase fast speed")), frame: speedRect) { [weak self] in self?.onSpeedStep?(direction, ProcessInfo.processInfo.systemUptime) })
             }
         }
         layoutTimeline()
@@ -2255,74 +2255,74 @@ import NxlvKit
                 if !fan, let target = game.target(slot: slot, x: Int(x + cameraX), y: Int(y + cameraY), preferApproaching: favorApproachingLemmings,
             preferBombBlockers: favorBombBlockers, preferBuilders: favorBuilders) {
                     switch target.state {
-                    case .walking: label = "WALKER"
-                    case .running: label = "RUNNER"
-                    case .teleporting: label = "TELEPORTER"
-                    case .switchingValve: label = "VALVE"
+                    case .walking: label = L10n.text("WALKER")
+                    case .running: label = L10n.text("RUNNER")
+                    case .teleporting: label = L10n.text("TELEPORTER")
+                    case .switchingValve: label = L10n.text("VALVE")
                     case .trapDying: label = nil
-                    case .cannonLoading, .cannonFlying: label = "CANNON"
-                    case .catapultLoading: label = "CATAPULT"
-                    case .chainRiding: label = "CHAIN"
-                    case .superFlying: label = "SUPERLEM"
-                    case .arching: label = "ARCHER"
-                    case .skiing, .skiingAir: label = "SKIER"
-                    case .poleVaulting, .poleShrugging: label = "POLE VAULTER"
-                    case .magnoBooting: label = "MAGNO BOOTER"
-                    case .throwing: label = "THROWER"
-                    case .spearing: label = "SPEARER"
-                    case .carpetFlying: label = "MAGIC CARPET"
-                    case .surfing: label = "SURFER"
-                    case .sliding: label = "SLIDER"
-                    case .hanging, .climbingTransfer: label = "HANGING"
-                    case .skating: label = "SKATER"
-                    case .slipping, .iceRecovering: label = "SLIPPING"
-                    case .twisting: label = "TWISTER"
-                    case .jetPacking: label = "JET PACK"
-                    case .rolling, .rollingAir: label = "ROLLER"
-                    case .shimmyJump, .shimming: label = "SHIMMIER"
-                    case .diving: label = "DIVER"
-                    case .drowning: label = "DROWNING"
-                    case .kayaking, .kayakPacking: label = "KAYAKER"
-                    case .flyingIcarus: label = "ICARUS WINGS"
-                    case .hangGliding: label = "HANG GLIDER"
-                    case .roping: label = "ROPER"
-                    case .firingBazooka: label = "BAZOOKA"
-                    case .firingMortar: label = "MORTAR"
-                    case .rockClimbing: label = "ROCK CLIMBER"
-                    case .hoisting: label = "HOISTER"
-                    case .planting: label = "PLANTER"
-                    case .ballooning: label = "BALLOONER"
-                    case .filling: label = "FILLER"
-                    case .sandPouring: label = "SAND POURER"
-                    case .gluePouring: label = "GLUE POURER"
-                    case .attracting: label = "ATTRACTOR"
-                    case .dancing: label = "DANCER"
-                    case .parachuting: label = "PARACHUTER"
-                    case .swimming, .leavingWater: label = "SWIMMER"
-                    case .blastBombing: label = "BOMBER"
-                    case .jumping: label = "JUMPER"
-                    case .hopping, .hopPreparing: label = "HOPPER"
-                    case .tumbling: label = "FALLER"
-                    case .stunned: label = "STUNNED"
+                    case .cannonLoading, .cannonFlying: label = L10n.text("CANNON")
+                    case .catapultLoading: label = L10n.text("CATAPULT")
+                    case .chainRiding: label = L10n.text("CHAIN")
+                    case .superFlying: label = L10n.text("SUPERLEM")
+                    case .arching: label = L10n.text("ARCHER")
+                    case .skiing, .skiingAir: label = L10n.text("SKIER")
+                    case .poleVaulting, .poleShrugging: label = L10n.text(L10n.text("POLE VAULTER"))
+                    case .magnoBooting: label = L10n.text(L10n.text("MAGNO BOOTER"))
+                    case .throwing: label = L10n.text("THROWER")
+                    case .spearing: label = L10n.text("SPEARER")
+                    case .carpetFlying: label = L10n.text(L10n.text("MAGIC CARPET"))
+                    case .surfing: label = L10n.text("SURFER")
+                    case .sliding: label = L10n.text("SLIDER")
+                    case .hanging, .climbingTransfer: label = L10n.text("HANGING")
+                    case .skating: label = L10n.text("SKATER")
+                    case .slipping, .iceRecovering: label = L10n.text("SLIPPING")
+                    case .twisting: label = L10n.text("TWISTER")
+                    case .jetPacking: label = L10n.text(L10n.text("JET PACK"))
+                    case .rolling, .rollingAir: label = L10n.text("ROLLER")
+                    case .shimmyJump, .shimming: label = L10n.text("SHIMMIER")
+                    case .diving: label = L10n.text("DIVER")
+                    case .drowning: label = L10n.text("DROWNING")
+                    case .kayaking, .kayakPacking: label = L10n.text("KAYAKER")
+                    case .flyingIcarus: label = L10n.text(L10n.text("ICARUS WINGS"))
+                    case .hangGliding: label = L10n.text(L10n.text("HANG GLIDER"))
+                    case .roping: label = L10n.text("ROPER")
+                    case .firingBazooka: label = L10n.text("BAZOOKA")
+                    case .firingMortar: label = L10n.text("MORTAR")
+                    case .rockClimbing: label = L10n.text(L10n.text("ROCK CLIMBER"))
+                    case .hoisting: label = L10n.text("HOISTER")
+                    case .planting: label = L10n.text("PLANTER")
+                    case .ballooning: label = L10n.text("BALLOONER")
+                    case .filling: label = L10n.text("FILLER")
+                    case .sandPouring: label = L10n.text(L10n.text("SAND POURER"))
+                    case .gluePouring: label = L10n.text(L10n.text("GLUE POURER"))
+                    case .attracting: label = L10n.text("ATTRACTOR")
+                    case .dancing: label = L10n.text("DANCER")
+                    case .parachuting: label = L10n.text("PARACHUTER")
+                    case .swimming, .leavingWater: label = L10n.text("SWIMMER")
+                    case .blastBombing: label = L10n.text("BOMBER")
+                    case .jumping: label = L10n.text("JUMPER")
+                    case .hopping, .hopPreparing: label = L10n.text("HOPPER")
+                    case .tumbling: label = L10n.text("FALLER")
+                    case .stunned: label = L10n.text("STUNNED")
                     case .trapped: label = nil
-                    case .falling: label = "FALLER"
-                    case .floating: label = "FLOATER"
-                    case .climbing: label = "CLIMBER"
-                    case .building: label = "BUILDER"
-                    case .bashing: label = "BASHER"
-                    case .mining: label = "MINER"
-                    case .digging: label = "DIGGER"
-                    case .stomping: label = "STOMPER"
-                    case .scooping: label = "SCOOPER"
-                    case .fencing: label = "FENCER"
-                    case .clubBashing: label = "CLUB BASHER"
-                    case .lasering: label = "LASER BLASTER"
-                    case .flaming: label = "FLAME THROWER"
-                    case .blocking: label = "BLOCKER"
-                    case .stacking: label = "STACKER"
-                    case .platforming: label = "PLATFORMER"
-                    case .exploding: label = "BOMBER"
-                    default: label = "LEMMING"
+                    case .falling: label = L10n.text("FALLER")
+                    case .floating: label = L10n.text("FLOATER")
+                    case .climbing: label = L10n.text("CLIMBER")
+                    case .building: label = L10n.text("BUILDER")
+                    case .bashing: label = L10n.text("BASHER")
+                    case .mining: label = L10n.text("MINER")
+                    case .digging: label = L10n.text("DIGGER")
+                    case .stomping: label = L10n.text("STOMPER")
+                    case .scooping: label = L10n.text("SCOOPER")
+                    case .fencing: label = L10n.text("FENCER")
+                    case .clubBashing: label = L10n.text(L10n.text("CLUB BASHER"))
+                    case .lasering: label = L10n.text(L10n.text("LASER BLASTER"))
+                    case .flaming: label = L10n.text(L10n.text("FLAME THROWER"))
+                    case .blocking: label = L10n.text("BLOCKER")
+                    case .stacking: label = L10n.text("STACKER")
+                    case .platforming: label = L10n.text("PLATFORMER")
+                    case .exploding: label = L10n.text("BOMBER")
+                    default: label = L10n.text("LEMMING")
                     }
                 }
             }
@@ -2481,20 +2481,20 @@ import NxlvKit
                 (image(width: frame.width, height: frame.height, pixels: frame.pixels, palette: style.palette, opaque: frame.opaque), frame.x, frame.y)
             }
         }
-        for (name,index) in [("LASER",16),("FLAME",17),("ROCKET",8),("JET",22),("STONE",7),("SPEAR",6),("ARROW",2),("CHAIN",5),("HOOK",11),("SMOKE",21),("EXPLOSION",10),("COUNTDOWN",15)] {
+        for (name,index) in [(L10n.text("LASER"),16),(L10n.text("FLAME"),17),(L10n.text("ROCKET"),8),(L10n.text("JET"),22),(L10n.text("STONE"),7),(L10n.text("SPEAR"),6),(L10n.text("ARROW"),2),(L10n.text("CHAIN"),5),(L10n.text("HOOK"),11),(L10n.text("SMOKE"),21),(L10n.text("EXPLOSION"),10),(L10n.text("COUNTDOWN"),15)] {
             sprites[name] = try intern.animation(index).map { frame in
                 (image(width:frame.width,height:frame.height,pixels:frame.pixels,palette:style.palette,opaque:frame.opaque,category:.mechanical),frame.x,frame.y)
             }
         }
         if let walker {
-            sprites["WALKER"] = walker.frames.map { frame in
+            sprites[L10n.text("WALKER")] = walker.frames.map { frame in
                 (image(width:frame.width,height:frame.height,pixels:frame.pixels,palette:style.palette,opaque:frame.opaque,category:.lemmings2Walker),frame.x,frame.y)
             }
         }
-        sprites["BALLOON"] = try intern.animation(0).map { frame in
+        sprites[L10n.text("BALLOON")] = try intern.animation(0).map { frame in
             (image(width:frame.width,height:frame.height,pixels:frame.pixels,palette:style.palette,opaque:frame.opaque,category:.mechanical),frame.x,frame.y)
         }
-        sprites["PARACHUTE"] = try intern.animation(19).map { frame in
+        sprites[L10n.text("PARACHUTE")] = try intern.animation(19).map { frame in
             (image(width:frame.width,height:frame.height,pixels:frame.pixels,palette:style.palette,opaque:frame.opaque,category:.mechanical),frame.x,frame.y)
         }
         for part in resolved.parts where !part.frames.isEmpty {
@@ -2587,7 +2587,7 @@ import NxlvKit
             // anchor. Cropped frames must not move the feet between frames.
             switch lem.state {
             case .walking where sprites["WALKER"] != nil:
-                name = "WALKER"; offsetX = -2; offsetY = -10
+                name = L10n.text("WALKER"); offsetX = -2; offsetY = -10
                 phase = Lemmings2Walker.phase(x:lem.x,direction:lem.direction); directional = false
             case .exiting:
                 let tribe = game.configuration.tribe
@@ -2766,7 +2766,7 @@ import NxlvKit
             case .exploding:
                 if ghostsOnly { continue }
                 if lem.age >= 16 {
-                    if lem.age == 16, let flash = sprites["EXPLOSION"]?.first {
+                    if lem.age == 16, let flash = sprites[L10n.text("EXPLOSION")]?.first {
                         drawImage(flash.image,x:CGFloat(lem.x-13+flash.x),y:CGFloat(lem.y-14+flash.y))
                     } else if let frames = explosion?.frames, frames.indices.contains(lem.age-17) {
                         for point in frames[lem.age-17] {
@@ -2819,40 +2819,40 @@ import NxlvKit
             if selectedID == lem.id, let pixels {
                 selectedSprite = (pixels, spriteRect, mirrored)
             }
-            if let ticks = lem.bombTicks, let numbers = sprites["COUNTDOWN"], numbers.indices.contains(ticks >> 4) {
+            if let ticks = lem.bombTicks, let numbers = sprites[L10n.text("COUNTDOWN")], numbers.indices.contains(ticks >> 4) {
                 let number = numbers[ticks >> 4]
                 let x = [.walking,.running,.falling].contains(lem.state) ? -8 : offsetX
                 drawImage(number.image,x:CGFloat(lem.x+x+number.x),y:CGFloat(lem.y+offsetY-7+number.y))
             }
             if let held = lem.heldProjectile,
-               let frames = sprites[held.kind == .spear ? "SPEAR" : "STONE"], frames.indices.contains(held.frame) {
+               let frames = sprites[held.kind == .spear ? L10n.text("SPEAR") : L10n.text("STONE")], frames.indices.contains(held.frame) {
                 let part = frames[held.frame], offset = held.kind == .spear ? 7 : 0
                 drawImage(part.image,x:CGFloat(held.x-offset+part.x),y:CGFloat(held.y-offset+part.y))
             }
-            if lem.state == .jetPacking, let jet = sprites["JET"], !jet.isEmpty {
+            if lem.state == .jetPacking, let jet = sprites[L10n.text("JET")], !jet.isEmpty {
                 let part = jet[lem.age % jet.count]
                 drawImage(part.image,x:CGFloat(lem.x-7+part.x),y:CGFloat(lem.y-2+part.y))
             }
-            if lem.state == .lasering, let beam = sprites["LASER"], !beam.isEmpty, lem.work >= 0 {
+            if lem.state == .lasering, let beam = sprites[L10n.text("LASER")], !beam.isEmpty, lem.work >= 0 {
                 let part = beam[lem.age % beam.count]
                 for segment in 0...lem.work {
                     drawImage(part.image,x:CGFloat(lem.x-8+2*lem.direction+part.x),
                               y:CGFloat(lem.y-17-segment*8+part.y))
                 }
             }
-            if lem.state == .flaming, let flame = sprites["FLAME"], flame.count == 8 {
+            if lem.state == .flaming, let flame = sprites[L10n.text("FLAME")], flame.count == 8 {
                 let part = flame[lem.age % 4 + (lem.direction < 0 ? 4 : 0)]
                 drawImage(part.image,x:CGFloat(lem.x-(lem.direction < 0 ? 32 : 0)+part.x),y:CGFloat(lem.y-12+part.y))
             }
-            if lem.state == .ballooning, let balloon = sprites["BALLOON"], !balloon.isEmpty {
+            if lem.state == .ballooning, let balloon = sprites[L10n.text("BALLOON")], !balloon.isEmpty {
                 let part = balloon[min(6,lem.age) % balloon.count]
                 drawImage(part.image,x:CGFloat(lem.x-7+part.x),y:CGFloat(lem.y-min(32,25+lem.age)+part.y))
             }
-            if lem.state == .parachuting, let canopy = sprites["PARACHUTE"], !canopy.isEmpty {
+            if lem.state == .parachuting, let canopy = sprites[L10n.text("PARACHUTE")], !canopy.isEmpty {
                 let part = canopy[lem.age % canopy.count]
                 drawImage(part.image,x:CGFloat(lem.x-8+part.x),y:CGFloat(lem.y-17+part.y))
             }
-            if let ticks = lem.bombTicks, sprites["COUNTDOWN"] == nil {
+            if let ticks = lem.bombTicks, sprites[L10n.text("COUNTDOWN")] == nil {
                 let text = String(max(1, (ticks + 14) / 15))
                 GameTypography.annotation(text, at: NSPoint(x: origin.x + (CGFloat(lem.x) - cameraX) * zoom,
                     y: origin.y + (CGFloat(lem.y - 16) - cameraY) * zoom * 1.2), palette: .blue)
@@ -2976,27 +2976,27 @@ import NxlvKit
             let sprite = object.frames[frame]
             drawBackgroundImage(sprite.image, x: CGFloat(object.x + movement + sprite.x), y: CGFloat(object.y + sprite.y))
         }
-        if let smoke = sprites["SMOKE"] {
+        if let smoke = sprites[L10n.text("SMOKE")] {
             for machine in game.machines where machine.kind == .cannon && machine.delay > 0 && smoke.count == 8 {
                 let puff = smoke[machine.delay & 7]
                 drawImage(puff.image,x:CGFloat(machine.x+1+puff.x),y:CGFloat(machine.y+14+puff.y))
             }
         }
-        if let links = sprites["CHAIN"] {
+        if let links = sprites[L10n.text("CHAIN")] {
             for chain in game.chains { for link in chain.links where links.indices.contains(link.frame) {
                 let part = links[link.frame]
                 drawImage(part.image,x:CGFloat(link.x+part.x),y:CGFloat(link.y+part.y))
             } }
         }
         for shot in game.projectiles {
-            let name = shot.kind == .arrow ? "ARROW" : shot.kind == .stone ? "STONE" : shot.kind == .spear ? "SPEAR" : "ROCKET"
+            let name = shot.kind == .arrow ? L10n.text("ARROW") : shot.kind == .stone ? L10n.text("STONE") : shot.kind == .spear ? L10n.text("SPEAR") : L10n.text("ROCKET")
             if let frames = sprites[name], frames.indices.contains(shot.frame) {
                 let part = frames[shot.frame]
                 let offset = shot.kind == .stone ? 0 : (shot.kind == .spear || shot.kind == .arrow) ? 7 : 1
                 drawImage(part.image,x:CGFloat(shot.x-offset+part.x),y:CGFloat(shot.y-offset+part.y))
             }
         }
-        if let flash = sprites["EXPLOSION"]?.first {
+        if let flash = sprites[L10n.text("EXPLOSION")]?.first {
             for point in game.blastFlashes {
                 drawImage(flash.image,x:CGFloat(point.x+flash.x),y:CGFloat(point.y+flash.y))
             }
@@ -3017,7 +3017,7 @@ import NxlvKit
         }
         NSColor(red:CGFloat(palette[12])/255,green:CGFloat(palette[13])/255,blue:CGFloat(palette[14])/255,alpha:1).setFill()
         if let rope = game.rope {
-            if let frames = sprites["HOOK"], frames.indices.contains(rope.frame) {
+            if let frames = sprites[L10n.text("HOOK")], frames.indices.contains(rope.frame) {
                 let hook = frames[rope.frame]
                 drawImage(hook.image,x:CGFloat(rope.x-7+hook.x),y:CGFloat(rope.y-7+hook.y))
             }

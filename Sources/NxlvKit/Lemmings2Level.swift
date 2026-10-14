@@ -45,11 +45,11 @@ public struct Lemmings2Level: Sendable {
     public init(data: Data) throws {
         let form = try Lemmings2Form(data: data)
         guard form.type == "L2LV" else {
-            throw SequelDataError.invalid("Expected an L2LV level, found \(form.type).")
+            throw SequelDataError.invalid(L10n.text("Expected an L2LV level, found \(form.type)."))
         }
         let header = SequelBinary(try form.requiredSection("L2LH"))
         guard header.count >= 74 else {
-            throw SequelDataError.invalid("The L2LH level header is truncated.")
+            throw SequelDataError.invalid(L10n.text("The L2LH level header is truncated."))
         }
         container = form
         fingerprint = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
@@ -67,7 +67,7 @@ public struct Lemmings2Level: Sendable {
         maximumScreenY = try header.u16(64)
         guard minimumScreenX <= maximumScreenX, minimumScreenY <= maximumScreenY,
               maximumScreenX <= 4096, maximumScreenY <= 4096 else {
-            throw SequelDataError.invalid("Invalid L2 camera bounds.")
+            throw SequelDataError.invalid(L10n.text("Invalid L2 camera bounds."))
         }
         allowedLossesForGold = try header.u16(66)
         releaseRate = Int(Int16(bitPattern: UInt16(try header.u16(68))))
@@ -77,12 +77,12 @@ public struct Lemmings2Level: Sendable {
         let arrangement = try map.u16(2)
         let columns = [80, 64, 50, 40, 32, 24, 20]
         guard columns.indices.contains(arrangement) else {
-            throw SequelDataError.invalid("Unknown Lemmings 2 tile arrangement \(arrangement).")
+            throw SequelDataError.invalid(L10n.text("Unknown Lemmings 2 tile arrangement \(arrangement)."))
         }
         tileColumns = columns[arrangement]
         let terrain = SequelBinary(try form.requiredSection("L2MP"))
         guard terrain.count.isMultiple(of: 4) else {
-            throw SequelDataError.invalid("L2MP contains a partial terrain record.")
+            throw SequelDataError.invalid(L10n.text("L2MP contains a partial terrain record."))
         }
         tiles = stride(from: 0, to: terrain.count, by: 4).map { offset in
             let modifier = (Int(terrain.bytes[offset]) << 8) | Int(terrain.bytes[offset + 1])
@@ -91,7 +91,7 @@ public struct Lemmings2Level: Sendable {
         }
         let objectData = SequelBinary(try form.requiredSection("L2BO"))
         guard objectData.count.isMultiple(of: 10) else {
-            throw SequelDataError.invalid("L2BO contains a partial object record.")
+            throw SequelDataError.invalid(L10n.text("L2BO contains a partial object record."))
         }
         objects = try stride(from: 0, to: objectData.count, by: 10).map { offset in
             Object(identifier: try objectData.u16(offset),

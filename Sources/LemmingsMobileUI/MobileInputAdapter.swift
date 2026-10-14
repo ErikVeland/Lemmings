@@ -184,16 +184,16 @@ import UIKit
     }
     private static func name(_ key: UIKey) -> String {
         switch key.keyCode {
-        case .keyboardEscape: "escape"
-        case .keyboardReturnOrEnter, .keypadEnter: "return"
-        case .keyboardTab: "tab"
-        case .keyboardHome: "home"
-        case .keyboardEnd: "end"
-        case .keyboardLeftArrow: "left"
-        case .keyboardRightArrow: "right"
-        case .keyboardUpArrow: "up"
-        case .keyboardDownArrow: "down"
-        case .keyboardF1: "f1"
+        case .keyboardEscape: L10n.text("escape")
+        case .keyboardReturnOrEnter, .keypadEnter: L10n.text("return")
+        case .keyboardTab: L10n.text("tab")
+        case .keyboardHome: L10n.text("home")
+        case .keyboardEnd: L10n.text("end")
+        case .keyboardLeftArrow: L10n.text("left")
+        case .keyboardRightArrow: L10n.text("right")
+        case .keyboardUpArrow: L10n.text("up")
+        case .keyboardDownArrow: L10n.text("down")
+        case .keyboardF1: L10n.text("f1")
         default: key.charactersIgnoringModifiers.lowercased()
         }
     }

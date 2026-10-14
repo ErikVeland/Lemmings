@@ -130,7 +130,7 @@ public final class ReplayMovieRecorder: @unchecked Sendable {
     }
     profileLock.unlock()
     guard admitted else {
-      failure = "Replay recording stopped because the encoder stalled."
+      failure = L10n.text("Replay recording stopped because the encoder stalled.")
       return
     }
     queue.async { [self] in
@@ -173,7 +173,7 @@ public final class ReplayMovieRecorder: @unchecked Sendable {
       finished = true
       guard let writer, frameCount > 0, failure == nil else {
         if writer?.status == .writing { writer?.cancelWriting() }
-        let error = ReplayMovieError.message(failure ?? "This run has no replay frames yet.")
+        let error = ReplayMovieError.message(failure ?? L10n.text("This run has no replay frames yet."))
         Task { @MainActor in completion(.failure(error)) }
         return
       }
@@ -181,7 +181,7 @@ public final class ReplayMovieRecorder: @unchecked Sendable {
       video?.markAsFinished(); audioFile = nil
       writer.finishWriting { [self] in
         guard self.writer?.status == .completed else {
-          let error = ReplayMovieError.message(self.writer?.error?.localizedDescription ?? "The replay could not be saved.")
+          let error = ReplayMovieError.message(self.writer?.error?.localizedDescription ?? L10n.text("The replay could not be saved."))
           Task { @MainActor in completion(.failure(error)) }
           return
         }
@@ -210,7 +210,7 @@ public final class ReplayMovieRecorder: @unchecked Sendable {
 
   private func begin(_ image: CGImage) throws {
     let width = image.width / 2 * 2, height = image.height / 2 * 2
-    guard width > 0, height > 0 else { throw ReplayMovieError.message("The replay frame is empty.") }
+    guard width > 0, height > 0 else { throw ReplayMovieError.message(L10n.text("The replay frame is empty.")) }
     size = CGSize(width: width, height: height)
     let made = try AVAssetWriter(outputURL: videoURL, fileType: .mp4)
     let input = AVAssetWriterInput(mediaType: .video, outputSettings: [
@@ -218,7 +218,7 @@ public final class ReplayMovieRecorder: @unchecked Sendable {
       AVVideoCompressionPropertiesKey: [AVVideoAverageBitRateKey: 3_000_000,
         AVVideoMaxKeyFrameIntervalKey: Int(ticksPerSecond / 1000), AVVideoAllowFrameReorderingKey: false]])
     input.expectsMediaDataInRealTime = false
-    guard made.canAdd(input) else { throw ReplayMovieError.message("Movie encoding is unavailable.") }
+    guard made.canAdd(input) else { throw ReplayMovieError.message(L10n.text("Movie encoding is unavailable.")) }
     made.add(input)
     audioFile = try AVAudioFile(forWriting: audioURL, settings: [
       AVFormatIDKey: kAudioFormatMPEG4AAC, AVSampleRateKey: 44100,
@@ -228,7 +228,7 @@ public final class ReplayMovieRecorder: @unchecked Sendable {
       kCVPixelBufferWidthKey as String: width, kCVPixelBufferHeightKey as String: height,
       kCVPixelBufferCGImageCompatibilityKey as String: true,
       kCVPixelBufferCGBitmapContextCompatibilityKey as String: true])
-    guard made.startWriting() else { throw ReplayMovieError.message(made.error?.localizedDescription ?? "Movie writing could not start.") }
+    guard made.startWriting() else { throw ReplayMovieError.message(made.error?.localizedDescription ?? L10n.text("Movie writing could not start.")) }
     made.startSession(atSourceTime: .zero)
     writer = made; video = input
   }
@@ -241,7 +241,7 @@ public final class ReplayMovieRecorder: @unchecked Sendable {
     let deadline = ProcessInfo.processInfo.systemUptime + 10
     while !input.isReadyForMoreMediaData {
       guard failure == nil, !isDiscarded, writer?.status == .writing, ProcessInfo.processInfo.systemUptime < deadline else {
-        throw ReplayMovieError.message(failure ?? writer?.error?.localizedDescription ?? "The movie encoder stopped responding.")
+        throw ReplayMovieError.message(failure ?? writer?.error?.localizedDescription ?? L10n.text("The movie encoder stopped responding."))
       }
       Thread.sleep(forTimeInterval: 0.002)
     }
@@ -250,29 +250,29 @@ public final class ReplayMovieRecorder: @unchecked Sendable {
 
   private func write(_ image: CGImage) throws {
     guard let video, let audioFile, let adaptor, let pool = adaptor.pixelBufferPool else {
-      throw ReplayMovieError.message("The movie encoder has no frame buffer.")
+      throw ReplayMovieError.message(L10n.text("The movie encoder has no frame buffer."))
     }
     try ready(video)
     var pixelBuffer: CVPixelBuffer?
     guard CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pool, &pixelBuffer) == kCVReturnSuccess,
-      let pixelBuffer else { throw ReplayMovieError.message("The replay frame could not be allocated.") }
+      let pixelBuffer else { throw ReplayMovieError.message(L10n.text("The replay frame could not be allocated.")) }
     CVPixelBufferLockBaseAddress(pixelBuffer, [])
     guard let context = CGContext(data: CVPixelBufferGetBaseAddress(pixelBuffer), width: Int(size.width),
       height: Int(size.height), bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(pixelBuffer),
       space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.noneSkipFirst.rawValue) else {
       CVPixelBufferUnlockBaseAddress(pixelBuffer, [])
-      throw ReplayMovieError.message("The replay frame could not be drawn.")
+      throw ReplayMovieError.message(L10n.text("The replay frame could not be drawn."))
     }
     context.interpolationQuality = .none
     context.draw(image, in: CGRect(origin: .zero, size: size))
     CVPixelBufferUnlockBaseAddress(pixelBuffer, [])
     guard adaptor.append(pixelBuffer, withPresentationTime: CMTime(value: frameCount * 1000, timescale: ticksPerSecond)) else {
-      throw ReplayMovieError.message(writer?.error?.localizedDescription ?? "A replay frame could not be encoded.")
+      throw ReplayMovieError.message(writer?.error?.localizedDescription ?? L10n.text("A replay frame could not be encoded."))
     }
     let end = (frameCount + 1) * 44100 * 1000 / Int64(ticksPerSecond)
     let count = Int(end - audioFrames)
     guard let buffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: AVAudioFrameCount(count)),
-      let channels = buffer.floatChannelData else { throw ReplayMovieError.message("Replay audio could not be buffered.") }
+      let channels = buffer.floatChannelData else { throw ReplayMovieError.message(L10n.text("Replay audio could not be buffered.")) }
     buffer.frameLength = AVAudioFrameCount(count)
     if sounds.isEmpty && music == nil && oldMusic == nil {
       channels[0].update(repeating: 0, count: count)
@@ -313,19 +313,19 @@ public final class ReplayMovieRecorder: @unchecked Sendable {
     for (asset, type) in [(picture, AVMediaType.video), (sound, AVMediaType.audio)] {
       guard let source = try await asset.loadTracks(withMediaType: type).first,
         let track = composition.addMutableTrack(withMediaType: type, preferredTrackID: kCMPersistentTrackID_Invalid) else {
-        throw ReplayMovieError.message("The replay is missing a media track.")
+        throw ReplayMovieError.message(L10n.text("The replay is missing a media track."))
       }
       let sourceDuration = try await asset.load(.duration)
       try track.insertTimeRange(CMTimeRange(start: .zero, duration: CMTimeMinimum(duration, sourceDuration)), of: source, at: .zero)
     }
     guard let exporter = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetPassthrough) else {
-      throw ReplayMovieError.message("The replay could not be assembled.")
+      throw ReplayMovieError.message(L10n.text("The replay could not be assembled."))
     }
     exporter.outputURL = destination; exporter.outputFileType = .mp4
     await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
       exporter.exportAsynchronously { continuation.resume() }
     }
-    guard exporter.status == .completed else { throw ReplayMovieError.message(exporter.error?.localizedDescription ?? "The replay could not be assembled.") }
+    guard exporter.status == .completed else { throw ReplayMovieError.message(exporter.error?.localizedDescription ?? L10n.text("The replay could not be assembled.")) }
   }
 
 }

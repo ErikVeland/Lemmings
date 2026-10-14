@@ -29,15 +29,15 @@ import NxlvKit
         if let name = element(button)?.localizedName, !name.isEmpty { return name }
         switch button {
         case .a, .b, .x, .y: return button.rawValue.uppercased()
-        case .leftShoulder: return "LB / left shoulder"
-        case .rightShoulder: return "RB / right shoulder"
-        case .leftTrigger: return "LT / left trigger"
-        case .rightTrigger: return "RT / right trigger"
-        case .menu: return "Menu"
-        case .options: return "View / Options"
-        case .leftStick: return "Left stick click"
-        case .rightStick: return "Right stick click"
-        case .up, .down, .left, .right: return "D-pad " + button.rawValue
+        case .leftShoulder: return L10n.text(L10n.text("LB / left shoulder"))
+        case .rightShoulder: return L10n.text(L10n.text("RB / right shoulder"))
+        case .leftTrigger: return L10n.text(L10n.text("LT / left trigger"))
+        case .rightTrigger: return L10n.text(L10n.text("RT / right trigger"))
+        case .menu: return L10n.text(L10n.text("Menu"))
+        case .options: return L10n.text(L10n.text("View / Options"))
+        case .leftStick: return L10n.text(L10n.text("Left stick click"))
+        case .rightStick: return L10n.text(L10n.text("Right stick click"))
+        case .up, .down, .left, .right: return L10n.text(L10n.text("D-pad ")) + button.rawValue
         }
     }
     static func help(mapping: [String: String], variableSpeed: Bool = true, tapSpeed: Bool = true,
@@ -46,28 +46,28 @@ import NxlvKit
         func physical(_ role: ControllerBindings.Button) -> String {
             name(ControllerBindings.Button.allCases.first { (mapping[$0.rawValue] ?? $0.rawValue) == role.rawValue }!)
         }
-        let device = GCController.controllers().first(where: { $0.extendedGamepad != nil })?.vendorName ?? "Extended gamepad"
+        let device = GCController.controllers().first(where: { $0.extendedGamepad != nil })?.vendorName ?? L10n.text("Extended gamepad")
         let rows = ControllerBindings.Button.allCases.map { button in
             let action = button == .rightTrigger
-                ? ((tapSpeed ? "Tap: toggle fast-forward; " : "") + (variableSpeed ? "hold: ramp up; release: previous speed" : "hold: fixed fast-forward"))
+                ? ((tapSpeed ? L10n.text("Tap: toggle fast-forward; ") : "") + (variableSpeed ? L10n.text("hold: ramp up; release: previous speed") : L10n.text("hold: fixed fast-forward")))
                 : ControllerBindings.roleName(button)
             return "\(physical(button)): \(action)"
         }
         let modifier = physical(.leftTrigger)
-        return ([device, "Sticks: aim and pan, following the Swap sticks setting."] + rows + [
-            hints ? "\(modifier) + \(physical(.y)): level hints" : "",
-            "\(modifier) + \(physical(.x)): reset speed",
-            variableSpeed ? "\(modifier) + \(physical(.left)) / \(physical(.right)): decrease / increase speed" : "",
-            "\(modifier) + \(physical(.up)) / \(physical(.down)): entrance / exit",
-            stepping ? "\(modifier) + \(physical(.leftShoulder)) / \(physical(.rightShoulder)): step back / forward where supported" : "",
-            rewind ? "\(modifier) + \(physical(.b)): rewind" : "",
-            "\(modifier) + \(physical(.menu)): retry",
-            "\(modifier) + \(physical(.a)): end run / undo nuke",
-            "\(modifier) + \(physical(.options)): settings",
-            "\(modifier) + \(physical(.leftStick)): DJ shuffle",
-            "DualSense touchpad click: DJ shuffle",
-            "Menus always use standard controls: D-pad selects, \(name(.a)) confirms, \(name(.b)) returns.",
-            "Shoulder buttons change tabs. Right stick scrolls. Release buttons when changing pages."
+        return ([device, L10n.text("Sticks: aim and pan, following the Swap sticks setting.")] + rows + [
+            hints ? L10n.text("\(modifier) + \(physical(.y)): level hints") : "",
+            L10n.text("\(modifier) + \(physical(.x)): reset speed"),
+            variableSpeed ? L10n.text("\(modifier) + \(physical(.left)) / \(physical(.right)): decrease / increase speed") : "",
+            L10n.text("\(modifier) + \(physical(.up)) / \(physical(.down)): entrance / exit"),
+            stepping ? L10n.text("\(modifier) + \(physical(.leftShoulder)) / \(physical(.rightShoulder)): step back / forward where supported") : "",
+            rewind ? L10n.text("\(modifier) + \(physical(.b)): rewind") : "",
+            L10n.text("\(modifier) + \(physical(.menu)): retry"),
+            L10n.text("\(modifier) + \(physical(.a)): end run / undo nuke"),
+            L10n.text("\(modifier) + \(physical(.options)): settings"),
+            L10n.text("\(modifier) + \(physical(.leftStick)): DJ shuffle"),
+            L10n.text("DualSense touchpad click: DJ shuffle"),
+            L10n.text("Menus always use standard controls: D-pad selects, \(name(.a)) confirms, \(name(.b)) returns."),
+            L10n.text("Shoulder buttons change tabs. Right stick scrolls. Release buttons when changing pages.")
         ]).filter { !$0.isEmpty }.joined(separator: "\n")
     }
 }

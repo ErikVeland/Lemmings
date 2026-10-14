@@ -15,7 +15,7 @@ public struct Lemmings2FrontEnd: Sendable {
             let entries = try Self.entries(form.requiredSection("L2PD"), index: form.requiredSection("L2PI"))
             palettes = try entries.map { bytes in
                 guard bytes.count <= 768, bytes.count.isMultiple(of: 3) else {
-                    throw SequelDataError.invalid("Invalid L2 front-end palette.")
+                    throw SequelDataError.invalid(L10n.text("Invalid L2 front-end palette."))
                 }
                 var rgba = [UInt8](repeating: 0, count: 1024)
                 for i in 0..<256 { rgba[i * 4 + 3] = 255 }
@@ -25,7 +25,7 @@ public struct Lemmings2FrontEnd: Sendable {
                 return rgba
             }
             strings = try Self.entries(form.requiredSection("L2TM"), index: form.requiredSection("L2TI")).map { bytes in
-                guard bytes.last == 0 else { throw SequelDataError.invalid("Unterminated L2 front-end text.") }
+                guard bytes.last == 0 else { throw SequelDataError.invalid(L10n.text("Unterminated L2 front-end text.")) }
                 return String(decoding: bytes.dropLast(), as: UTF8.self)
             }
         }
@@ -41,11 +41,11 @@ public struct Lemmings2FrontEnd: Sendable {
             }
             let padded = cursor % 2 == 1 && r.count == cursor + 1 && r.bytes[cursor] == 0
             guard cursor == r.count || padded, indices.count == 2 + (try indices.u16(0)) * 2 else {
-                throw SequelDataError.invalid("Invalid L2 front-end entry table.")
+                throw SequelDataError.invalid(L10n.text("Invalid L2 front-end entry table."))
             }
             return try (0..<(try indices.u16(0))).map {
                 guard let entry = entries[try indices.u16(2 + $0 * 2)] else {
-                    throw SequelDataError.invalid("Invalid L2 front-end entry pointer.")
+                    throw SequelDataError.invalid(L10n.text("Invalid L2 front-end entry pointer."))
                 }
                 return entry
             }
@@ -78,7 +78,7 @@ public struct Lemmings2FrontEnd: Sendable {
     /// Four VGA byte planes, not Amiga bit planes.
     static func planar(_ data: Data, width: Int, height: Int) throws -> [UInt8] {
         guard width > 0, width.isMultiple(of: 4), height > 0, width * height == data.count else {
-            throw SequelDataError.invalid("Invalid L2 planar picture size.")
+            throw SequelDataError.invalid(L10n.text("Invalid L2 planar picture size."))
         }
         let bytes = [UInt8](data), planeSize = width * height / 4
         var pixels = [UInt8](repeating: 0, count: bytes.count)
@@ -94,7 +94,7 @@ public struct Lemmings2FrontEndFont: Sendable {
         8,9,9,8,10,9,8,8,9,5,7,9,8,10,10,9,9,9,9,7,7,9,9,10,8,9,8,5,8,5,6,7,
         3,9,8,8,8,8,6,8,8,4,5,8,5,9,8,8,8,9,8,8,6,8,8,9,8,8,8]
     public init(data: Data) throws {
-        guard data.count == 17952 else { throw SequelDataError.invalid("Invalid L2 front-end font size.") }
+        guard data.count == 17952 else { throw SequelDataError.invalid(L10n.text("Invalid L2 front-end font size.")) }
         let r = SequelBinary(data)
         glyphs = try (0..<102).map { try Lemmings2FrontEnd.planar(Data(r.slice($0 * 176, 176)), width: 16, height: 11) }
     }
@@ -151,7 +151,7 @@ public struct Lemmings2Panel: Sendable {
         let r = SequelBinary(data)
         let starts = try (0..<count).map { try r.u16($0 * 2) }
         guard starts.first == count * 2, zip(starts, starts.dropFirst()).allSatisfy({ $0 < $1 }) else {
-            throw SequelDataError.invalid("Invalid L2 panel sprite table.")
+            throw SequelDataError.invalid(L10n.text("Invalid L2 panel sprite table."))
         }
         return try starts.enumerated().map { index, start in
             let end = index + 1 < count ? starts[index + 1] : r.count
@@ -168,7 +168,7 @@ public struct Lemmings2Panel: Sendable {
                        highlightedControls: Set<Lemmings2Control> = []) throws -> SequelIndexedImage {
         guard identifiers.count == 8, supplies.count == 8, (0..<12).contains(selected), palette.count == 1024,
               identifiers.allSatisfy({ (0...51).contains($0) }), supplies.allSatisfy({ (0...99).contains($0) }) else {
-            throw SequelDataError.invalid("Invalid L2 panel state.")
+            throw SequelDataError.invalid(L10n.text("Invalid L2 panel state."))
         }
         var pixels = [UInt8](repeating: Self.backgroundIndex, count: 320 * 40)
         func put(_ source: [UInt8], width: Int, x: Int, y: Int, mask: [Bool]? = nil) {

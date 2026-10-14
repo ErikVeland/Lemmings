@@ -1,5 +1,6 @@
 #if os(iOS) || os(tvOS)
 import LemmingsGameArt
+import NxlvKit
 import UIKit
 
 @MainActor final class MobileReplayMoveView: UIView {
@@ -8,7 +9,7 @@ import UIKit
     override init(frame: CGRect) {
         super.init(frame: frame)
         isOpaque = false
-        for (index, title) in ["Previous move", "Next move"].enumerated() {
+        for (index, title) in [L10n.text("Previous move"), L10n.text("Next move")].enumerated() {
             let button = MobileFocusButton(type: .custom)
             button.accessibilityLabel = title
             button.accessibilityIdentifier = "solutionMove." + String(index)

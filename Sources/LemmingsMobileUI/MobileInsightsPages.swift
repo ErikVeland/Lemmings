@@ -1,5 +1,6 @@
 #if os(iOS) || os(tvOS)
 import LemmingsAppCore
+import NxlvKit
 import LemmingsGameArt
 import UIKit
 
@@ -50,7 +51,7 @@ extension MobileLibraryViewController {
                     self.mobileInsights.summary = summary
                 } catch {
                     guard !Task.isCancelled, let self else { return }
-                    self.notice = "Check the access token and service."
+                    self.notice = L10n.text("Check the access token and service.")
                 }
                 self?.mobileInsights.loading = false; self?.rebuild()
             }
@@ -62,7 +63,7 @@ extension MobileLibraryViewController {
         if let field = mobileInsights.field { field.becomeFirstResponder(); return }
         let field = UITextField()
         field.isSecureTextEntry = true; field.autocapitalizationType = .none; field.autocorrectionType = .no
-        field.returnKeyType = .go; field.accessibilityLabel = "Dashboard access token"
+        field.returnKeyType = .go; field.accessibilityLabel = L10n.text("Dashboard access token")
         field.frame = CGRect(x: -100, y: -100, width: 10, height: 10); field.alpha = 0.01
         field.addAction(UIAction { [weak self, weak field] _ in
             guard let self else { return }

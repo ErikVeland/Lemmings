@@ -12,7 +12,7 @@ public struct Lemmings2Practice: Sendable {
     public static func runtime(level: Lemmings2Level, style: Lemmings2Style,
                                masks: Lemmings2TerrainMasks, skills: [Lemmings2Runtime.Skill]) throws -> Lemmings2Runtime {
         guard skills.count == 8, Set(skills).count == 8, !skills.contains(.unused), tribes.contains(level.style) else {
-            throw SequelDataError.invalid("Select eight different skills for practice.")
+            throw SequelDataError.invalid(L10n.text("Select eight different skills for practice."))
         }
         return try .init(level:level,style:style,masks:masks,total:60,practiceSkills:skills)
     }

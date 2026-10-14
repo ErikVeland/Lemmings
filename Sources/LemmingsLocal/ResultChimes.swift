@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import NxlvKit
 import LemmingsAudio
 
 /// Three short rising notes, prepared once and played only on the result page.
@@ -28,7 +29,7 @@ import LemmingsAudio
                 var little = value.littleEndian
                 withUnsafeBytes(of: &little) { data.append(contentsOf: $0) }
             }
-            bytes("RIFF"); word(UInt32(36 + samples.count * 2)); bytes("WAVEfmt ")
+            bytes(L10n.text("RIFF")); word(UInt32(36 + samples.count * 2)); bytes(L10n.text("WAVEfmt "))
             word(UInt32(16)); word(UInt16(1)); word(UInt16(1)); word(UInt32(22050))
             word(UInt32(44100)); word(UInt16(2)); word(UInt16(16)); bytes("data"); word(UInt32(samples.count * 2))
             samples.forEach { word($0) }

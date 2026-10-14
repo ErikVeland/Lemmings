@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import NxlvKit
 
 /// Help stays inside the game canvas, so it never opens a window or takes focus.
 @MainActor final class GameSettingsHelp {
@@ -120,7 +121,7 @@ import AppKit
         setAccessibilityRole(.group)
         setAccessibilityLabel(title)
         if pinned {
-            let button = GameActionButton(title: "Close", primary: false) { [weak self] in self?.onClose?() }
+            let button = GameActionButton(title: L10n.text("Close"), primary: false) { [weak self] in self?.onClose?() }
             close = button; addSubview(button)
         }
     }

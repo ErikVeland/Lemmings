@@ -6,7 +6,7 @@ import NxlvKit
 @MainActor enum SequelArtworkPreference {
     // Start the default-on release enabled, including installs with the old opt-in setting.
     static let key = "SequelMacArtworkEnabledV2"
-    static let changed = Notification.Name("SequelMacArtworkChanged")
+    static let changed = Notification.Name(L10n.text("SequelMacArtworkChanged"))
     static var enabled: Bool { UserDefaults.standard.object(forKey: key) as? Bool ?? true }
     static func setEnabled(_ enabled: Bool) {
         UserDefaults.standard.set(enabled, forKey: key)
@@ -70,7 +70,7 @@ import NxlvKit
                 bitsPerPixel: 32, bytesPerRow: frame.width*4, space: CGColorSpaceCreateDeviceRGB(),
                 bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider,
                 decode: nil, shouldInterpolate: false, intent: .defaultIntent) else {
-            throw SequelDataError.invalid("Cannot create sequel artwork.")
+            throw SequelDataError.invalid(L10n.text("Cannot create sequel artwork."))
         }
         let image = NSImage(cgImage: cg, size: NSSize(width: width, height: height))
         cache.setObject(image, forKey: key, cost: frame.rgba.count)

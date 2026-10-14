@@ -24,14 +24,14 @@ import NxlvKit
                     if let dialog = controller as? (NSViewController & GKViewController) {
                         if !GKDialogController.shared().present(dialog) {
                             completion(.failure(NSError(domain: "GameCenter", code: 3,
-                                userInfo: [NSLocalizedDescriptionKey: "Game Center sign-in could not open. Try again."])))
+                                userInfo: [NSLocalizedDescriptionKey: L10n.text("Game Center sign-in could not open. Try again.")])))
                         }
                     } else if let window {
                         let sheet = NSWindow(contentViewController: controller)
                         self.authenticationSheet = sheet; window.beginSheet(sheet)
                     } else {
                         completion(.failure(NSError(domain: "GameCenter", code: 3,
-                            userInfo: [NSLocalizedDescriptionKey: "Open Game Center from the game window to sign in."])))
+                            userInfo: [NSLocalizedDescriptionKey: L10n.text("Open Game Center from the game window to sign in.")])))
                     }
                 } else {
                     if let sheet = self.authenticationSheet {
@@ -39,7 +39,7 @@ import NxlvKit
                     }
                     if let account = self.account { completion(.success(account)) }
                     else { completion(.failure(error ?? NSError(domain: "GameCenter", code: 1,
-                        userInfo: [NSLocalizedDescriptionKey: "Sign in to Game Center to view worldwide scores."]))) }
+                        userInfo: [NSLocalizedDescriptionKey: L10n.text("Sign in to Game Center to view worldwide scores.")]))) }
                 }
             }
         }
@@ -50,7 +50,7 @@ import NxlvKit
     func load(_ boardID: String) async throws -> WorldwideBoard {
         let boards = try await GKLeaderboard.loadLeaderboards(IDs: [boardID])
         guard let board = boards.first else { throw NSError(domain: "GameCenter", code: 2,
-            userInfo: [NSLocalizedDescriptionKey: "This worldwide board is not available yet."]) }
+            userInfo: [NSLocalizedDescriptionKey: L10n.text("This worldwide board is not available yet.")]) }
         let (personal, entries, count) = try await board.loadEntries(for: .global, timeScope: .allTime, range: NSRange(location: 1, length: 5))
         func entry(_ e: GKLeaderboard.Entry) -> WorldwideEntry { .init(rank: e.rank, name: e.player.displayName, score: e.score) }
         return .init(entries: entries.map(entry), personal: personal.map(entry), players: count)
@@ -107,12 +107,12 @@ import NxlvKit
         }
     }
     func drawGameCenterBoard() {
-        header("Worldwide leaderboard"); tabs(); boardScopeLinks()
+        header(L10n.text("Worldwide leaderboard")); tabs(); boardScopeLinks()
         let service = GameCenterScores.shared, config = service.configuration
         let selected = service.boardID ?? config?.starsID
         let rankedLevel = config?.levels.first { $0.conditions == level?.conditions }
         let levelID = rankedLevel?.leaderboardID
-        let choices = [("Career stars", config?.starsID), ("Cleared", config?.clearsID), ("Three-star", config?.perfectID), ("This level", levelID), ("Fastest clear", rankedLevel?.fastestClearID), ("Fastest 100%", rankedLevel?.fastestAllSavedID)]
+        let choices = [(L10n.text("Career stars"), config?.starsID), (L10n.text("Cleared"), config?.clearsID), (L10n.text("Three-star"), config?.perfectID), (L10n.text("This level"), levelID), (L10n.text("Fastest clear"), rankedLevel?.fastestClearID), (L10n.text("Fastest 100%"), rankedLevel?.fastestAllSavedID)]
         for (index, item) in choices.enumerated() {
             button(item.0, CGRect(x: 80 + (index % 3) * 326, y: 201 + (index / 3) * 46, width: 308, height: 40), selected: item.1 == selected, enabled: item.1 != nil && service.available && !service.busy) { [weak self] in
                 guard let self, let id = item.1 else { return }
@@ -128,30 +128,30 @@ import NxlvKit
                 text("#\(entry.rank)", 80, y, 100); text(entry.name, 216, y, 594)
                 text(scoreLabel(entry.score), 856, y, 184, alignment: .right)
             }
-            if board.entries.isEmpty { text("Be the first to set a score.", 80, 308, 960) }
-            let personal = board.personal.map { "Your rank: #\($0.rank) of \(board.players) - \(scoreLabel($0.score))" } ?? "No worldwide score yet."
+            if board.entries.isEmpty { text(L10n.text("Be the first to set a score."), 80, 308, 960) }
+            let personal = board.personal.map { L10n.text("Your rank: #\($0.rank) of \(board.players) - \(scoreLabel($0.score))") } ?? L10n.text("No worldwide score yet.")
             text(personal, 80, 521, 960, palette: .green)
         } else {
             paragraph(service.status, CGRect(x: 80, y: 310, width: 960, height: 72))
         }
         if service.board != nil { text(service.status, 80, 564, 960, height: 30, alpha: 0.8) }
-        text("Ranked catalogue: \(config?.levels.count ?? 0) configurations. Rewinds excluded.", 80, 604, 960, height: 24, alpha: 0.7)
+        text(L10n.text("Ranked catalogue: \(config?.levels.count ?? 0) configurations. Rewinds excluded."), 80, 604, 960, height: 24, alpha: 0.7)
         if service.available, let config {
             if service.account != nil {
-                button("Open Game Center", CGRect(x: 332, y: 634, width: 316, height: 48)) { [weak self] in
+                button(L10n.text("Open Game Center"), CGRect(x: 332, y: 634, width: 316, height: 48)) { [weak self] in
                     GameCenterDashboard.shared.show(boardID: selected ?? config.starsID, window: self?.window)
                 }
             }
-            button(service.busy ? "Connecting..." : service.account == nil ? "Connect Game Center" : "Retry sync", CGRect(x: 672, y: 634, width: 368, height: 48), enabled: !service.busy) { [weak self] in
+            button(service.busy ? L10n.text("Connecting...") : service.account == nil ? L10n.text("Connect Game Center") : L10n.text("Retry sync"), CGRect(x: 672, y: 634, width: 368, height: 48), enabled: !service.busy) { [weak self] in
                 guard let self else { return }
                 service.connect(profileID: self.player.id, window: self.window, boardID: selected ?? config.starsID, history: ArcadeStore.shared.records.trolley)
             }
         }
         pageFooter()
-        let entries = service.board?.entries.map { "Rank \($0.rank). \($0.name). \($0.score)." }.joined(separator: " ") ?? ""
-        let personal = service.board?.personal.map { " Your rank: \($0.rank). Your score: \($0.score)." } ?? ""
-        let summary = "Worldwide Game Center leaderboard. \(service.status) " + entries + personal
-        setAccessibilityLabel(summary + " Ranked catalogue only, without rewinds.")
+        let entries = service.board?.entries.map { L10n.text("Rank \($0.rank). \($0.name). \($0.score).") }.joined(separator: " ") ?? ""
+        let personal = service.board?.personal.map { L10n.text(" Your rank: \($0.rank). Your score: \($0.score).") } ?? ""
+        let summary = L10n.text("Worldwide Game Center leaderboard. \(service.status) ") + entries + personal
+        setAccessibilityLabel(summary + L10n.text(" Ranked catalogue only, without rewinds."))
     }
 }
 #endif

@@ -11,12 +11,12 @@ public enum ZipArchiveError: Error, Equatable, CustomStringConvertible {
 
     public var description: String {
         switch self {
-        case .notAnArchive: return "The file is not a ZIP archive."
-        case let .unsupported(reason): return "Unsupported ZIP feature: \(reason)."
-        case let .corrupt(reason): return "The ZIP archive is damaged: \(reason)."
-        case let .missing(name): return "The archive has no member named \(name)."
-        case let .ambiguous(name): return "The archive has more than one member named \(name)."
-        case let .tooLarge(name): return "The archive member \(name) is too large."
+        case .notAnArchive: return L10n.text("The file is not a ZIP archive.")
+        case let .unsupported(reason): return L10n.text("Unsupported ZIP feature: \(reason).")
+        case let .corrupt(reason): return L10n.text("The ZIP archive is damaged: \(reason).")
+        case let .missing(name): return L10n.text("The archive has no member named \(name).")
+        case let .ambiguous(name): return L10n.text("The archive has more than one member named \(name).")
+        case let .tooLarge(name): return L10n.text("The archive member \(name) is too large.")
         }
     }
 }
@@ -121,7 +121,7 @@ public struct ZipArchive: Sendable {
         guard member.uncompressedSize <= Self.maximumMemberSize else { throw ZipArchiveError.tooLarge(member.name) }
         let local = member.localHeaderOffset
         guard local >= 0, local + 30 <= data.count, Self.u32(data, local) == 0x0403_4B50 else {
-            throw ZipArchiveError.corrupt("local header of \(member.name)")
+            throw ZipArchiveError.corrupt(L10n.text("local header of \(member.name)"))
         }
         let start = local + 30 + Int(Self.u16(data, local + 26)) + Int(Self.u16(data, local + 28))
         guard start >= 0, start + member.compressedSize <= data.count else {
@@ -151,7 +151,7 @@ public struct ZipArchive: Sendable {
         guard member.uncompressedSize <= limit else { throw ZipArchiveError.tooLarge(member.name) }
         let local = member.localHeaderOffset
         guard local >= 0, local + 30 <= data.count, Self.u32(data, local) == 0x0403_4B50 else {
-            throw ZipArchiveError.corrupt("local header of \(member.name)")
+            throw ZipArchiveError.corrupt(L10n.text("local header of \(member.name)"))
         }
         let start = local + 30 + Int(Self.u16(data, local + 26)) + Int(Self.u16(data, local + 28))
         guard start >= 0, start + member.compressedSize <= data.count else {

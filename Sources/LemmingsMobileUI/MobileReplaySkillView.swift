@@ -1,5 +1,6 @@
 #if os(iOS) || os(tvOS)
 import LemmingsGameArt
+import NxlvKit
 import LemmingsMobileCore
 import UIKit
 
@@ -17,7 +18,7 @@ import UIKit
         isHidden = !visible || uses.isEmpty
         guard self.uses != uses || self.tick != tick else { return }
         self.uses = uses; self.tick = tick
-        accessibilityLabel = "Skills used: " + uses.map { "\($0.name) at tick \($0.tick)" }.joined(separator: ", ")
+        accessibilityLabel = L10n.text("Skills used: ") + uses.map { L10n.text("\($0.name) at tick \($0.tick)") }.joined(separator: ", ")
         setNeedsDisplay()
     }
     override func draw(_ rect: CGRect) {

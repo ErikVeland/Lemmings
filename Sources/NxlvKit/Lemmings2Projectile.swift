@@ -46,7 +46,7 @@ public struct Lemmings2Projectile: Sendable {
     }
     public init(kind: Kind, x: Int, y: Int, velocityX: Int, velocityY: Int) throws {
         guard (-8...8).contains(velocityX), (-8...8).contains(velocityY) else {
-            throw SequelDataError.invalid("Invalid L2 projectile launch velocity.")
+            throw SequelDataError.invalid(L10n.text("Invalid L2 projectile launch velocity."))
         }
         self.kind = kind
         fixedX = Int16(truncatingIfNeeded:x*8); fixedY = Int16(truncatingIfNeeded:y*8)
@@ -56,7 +56,7 @@ public struct Lemmings2Projectile: Sendable {
     public static func aimedArrow(x:Int,y:Int,targetX:Int,targetY:Int) throws -> Self {
         let dx = targetX-x, dy = targetY-y
         guard max(abs(dx),abs(dy)) >= 16, abs(dx) <= 8192, abs(dy) <= 8192 else {
-            throw SequelDataError.invalid("Aim the arrow farther away.")
+            throw SequelDataError.invalid(L10n.text("Aim the arrow farther away."))
         }
         // PROCESS a7ae–a865: integer length, angle correction and signed shifts.
         let length = Int(Double(dx*dx+dy*dy).squareRoot())

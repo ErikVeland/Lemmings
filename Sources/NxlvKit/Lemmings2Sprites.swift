@@ -20,19 +20,19 @@ enum Lemmings2SpriteCommands {
     static func decode(_ r: SequelBinary, width: Int, height: Int, planes: [Int],
                        within bounds: Range<Int>) throws -> (pixels: [UInt8], opaque: [Bool]) {
         guard width > 0, height > 0, width <= 1024, height <= 1024, planes.count == 4 else {
-            throw SequelDataError.invalid("Invalid L2 sprite dimensions or plane count.")
+            throw SequelDataError.invalid(L10n.text("Invalid L2 sprite dimensions or plane count."))
         }
         var pixels = [UInt8](repeating: 0, count: width * height)
         var opaque = [Bool](repeating: false, count: width * height)
         for plane in 0..<4 {
             var cursor = planes[plane]
             guard bounds.contains(cursor) else {
-                throw SequelDataError.invalid("L2 sprite plane is outside its command data.")
+                throw SequelDataError.invalid(L10n.text("L2 sprite plane is outside its command data."))
             }
             var column = 0, row = 0
             while true {
                 guard cursor < bounds.upperBound else {
-                    throw SequelDataError.invalid("Unterminated L2 sprite plane.")
+                    throw SequelDataError.invalid(L10n.text("Unterminated L2 sprite plane."))
                 }
                 let command = try r.slice(cursor, 1)[0]
                 cursor += 1
@@ -48,14 +48,14 @@ enum Lemmings2SpriteCommands {
                 else if low < 8 { literal += low }
                 else { skipAfter = low - 8 }
                 guard literal <= bounds.upperBound - cursor else {
-                    throw SequelDataError.invalid("Truncated L2 sprite pixels.")
+                    throw SequelDataError.invalid(L10n.text("Truncated L2 sprite pixels."))
                 }
                 let values = try r.slice(cursor, literal)
                 cursor += literal
                 for value in values {
                     let px = column * 4 + plane
                     guard row < height, px < width else {
-                        throw SequelDataError.invalid("L2 sprite pixel exceeds its frame.")
+                        throw SequelDataError.invalid(L10n.text("L2 sprite pixel exceeds its frame."))
                     }
                     pixels[row * width + px] = value
                     opaque[row * width + px] = true
@@ -64,7 +64,7 @@ enum Lemmings2SpriteCommands {
                 column += skipAfter
                 if newline { column = 0; row += 1 }
                 guard row <= height, column <= (width + 3) / 4 else {
-                    throw SequelDataError.invalid("L2 sprite cursor leaves its frame.")
+                    throw SequelDataError.invalid(L10n.text("L2 sprite cursor leaves its frame."))
                 }
             }
         }
@@ -79,13 +79,13 @@ public struct Lemmings2Sprites: Sendable {
     public init(data: Data) throws {
         let form = try Lemmings2Form(data: data)
         guard form.type == "L2VL" else {
-            throw SequelDataError.invalid("Expected L2VL sprite data, found \(form.type).")
+            throw SequelDataError.invalid(L10n.text("Expected L2VL sprite data, found \(form.type)."))
         }
         var result: [String: [Lemmings2SpriteFrame]] = [:]
         var budget = 16 * 1024 * 1024
         for section in form.sections where section.identifier.hasPrefix("LM") {
             guard result[section.identifier] == nil else {
-                throw SequelDataError.invalid("Duplicate L2 sprite animation.")
+                throw SequelDataError.invalid(L10n.text("Duplicate L2 sprite animation."))
             }
             let r = SequelBinary(section.data)
             let count = try r.u16(0)
@@ -95,18 +95,18 @@ public struct Lemmings2Sprites: Sendable {
             for index in 0..<count {
                 let start = try r.u16(2 + index * 2)
                 guard start >= tableEnd else {
-                    throw SequelDataError.invalid("L2 sprite frame overlaps its pointer table.")
+                    throw SequelDataError.invalid(L10n.text("L2 sprite frame overlaps its pointer table."))
                 }
                 let x = Int(Int16(bitPattern: UInt16(try r.u16(start))))
                 let y = Int(Int16(bitPattern: UInt16(try r.u16(start + 2))))
                 guard try r.u16(start + 4) == start + 6 else {
-                    throw SequelDataError.invalid("L2 sprite size pointer does not match its frame.")
+                    throw SequelDataError.invalid(L10n.text("L2 sprite size pointer does not match its frame."))
                 }
                 let width = try r.u16(start + 6)
                 let height = try r.u16(start + 8)
                 guard width > 0, height > 0, width <= 1024, height <= 1024,
                       width * height <= budget else {
-                    throw SequelDataError.invalid("L2 sprite dimensions exceed the decode limit.")
+                    throw SequelDataError.invalid(L10n.text("L2 sprite dimensions exceed the decode limit."))
                 }
                 budget -= width * height
                 let planes = try (0..<4).map { try r.u16(start + 10 + $0 * 2) }
@@ -117,7 +117,7 @@ public struct Lemmings2Sprites: Sendable {
             }
             result[section.identifier] = frames
         }
-        guard !result.isEmpty else { throw SequelDataError.invalid("No L2 lemming animations found.") }
+        guard !result.isEmpty else { throw SequelDataError.invalid(L10n.text("No L2 lemming animations found.")) }
         animations = result
     }
 }

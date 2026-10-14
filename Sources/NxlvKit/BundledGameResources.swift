@@ -54,13 +54,13 @@ public enum BundledGameResources {
 
     private static func directory(_ path: String, requiring files: [String], in bundle: Bundle) throws -> URL {
         guard let resources = bundle.resourceURL else {
-            throw SequelDataError.invalid("This app has no embedded game resources. Rebuild the app with its game data.")
+            throw SequelDataError.invalid(L10n.text("This app has no embedded game resources. Rebuild the app with its game data."))
         }
         let root = resources.appendingPathComponent(path, isDirectory: true)
         var isDirectory: ObjCBool = false
         guard FileManager.default.fileExists(atPath: root.path, isDirectory: &isDirectory), isDirectory.boolValue,
               files.allSatisfy({ FileManager.default.fileExists(atPath: root.appendingPathComponent($0).path) }) else {
-            throw SequelDataError.invalid("The app is missing embedded game data (\(path)). Rebuild the app with its game data.")
+            throw SequelDataError.invalid(L10n.text("The app is missing embedded game data (\(path)). Rebuild the app with its game data."))
         }
         return root
     }

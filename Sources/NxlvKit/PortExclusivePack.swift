@@ -26,7 +26,7 @@ import Foundation
 /// A source is added here when its levels load with terrain, not when its name
 /// is known.
 public enum PortExclusivePack {
-    public static let name = "Oh Yes! More Lemmings!"
+    public static let name = L10n.text(L10n.text("Oh Yes! More Lemmings!"))
 
     /// A group of levels within the pack, shown together and in this order.
     public struct Rank: Sendable {
@@ -42,7 +42,7 @@ public enum PortExclusivePack {
     /// level records unchanged and select the source release for each rank.
     public static func artworkDirectory(for entry: ClassicCampaignLevel, portsRoot: URL) -> URL {
         if entry.rank == "Mega Drive Sunsoft" { return portsRoot.appendingPathComponent(sunsoftFolder, isDirectory: true) }
-        let release: ClassicStyleResolver.Release = entry.rank == "Oh No! More Lemmings Versus"
+        let release: ClassicStyleResolver.Release = entry.rank == L10n.text("Oh No! More Lemmings Versus")
             ? .ohNoMore : .lemmings
         return portsRoot.appendingPathComponent(release.folders[0], isDirectory: true)
     }

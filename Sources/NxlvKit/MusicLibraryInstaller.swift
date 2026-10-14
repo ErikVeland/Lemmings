@@ -58,10 +58,10 @@ public actor MusicLibraryInstaller {
         case download, corrupt, archive, busy
         public var errorDescription: String? {
             switch self {
-            case .download: return "The soundtrack download is unavailable. Try again later."
-            case .corrupt: return "The soundtrack download could not be verified."
-            case .archive: return "The soundtrack library contains unexpected files."
-            case .busy: return "This soundtrack library is already downloading."
+            case .download: return L10n.text("The soundtrack download is unavailable. Try again later.")
+            case .corrupt: return L10n.text("The soundtrack download could not be verified.")
+            case .archive: return L10n.text("The soundtrack library contains unexpected files.")
+            case .busy: return L10n.text("This soundtrack library is already downloading.")
             }
         }
     }

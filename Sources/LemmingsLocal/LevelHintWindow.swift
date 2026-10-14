@@ -95,17 +95,17 @@ import NxlvKit
               onDismiss: @escaping () -> Void = {}) {
         guard page == nil, !deck.stages.isEmpty else { return }
         if retainedRunID != runID || solutionSession == nil { clearSolution() }
-        let page = GameMenuPage(title: "Level hints", subtitle: deck.title)
-        page.backTitle = "Back to game"
+        let page = GameMenuPage(title: L10n.text("Level hints"), subtitle: deck.title)
+        page.backTitle = L10n.text("Back to game")
         let content = LevelHintContent(deck: deck, image: image)
         content.frame = page.body.bounds
         content.autoresizingMask = [.width, .height]
         page.body.addSubview(content)
         revealedTier = 0
-        let previous = page.addSecondaryAction("Previous") {}
-        previous.setAccessibilityLabel("Previous hint")
+        let previous = page.addSecondaryAction(L10n.text("Previous")) {}
+        previous.setAccessibilityLabel(L10n.text("Previous hint"))
         previous.isEnabled = false
-        let next = page.addPrimaryAction(deck.checked ? "Reveal the approach" : "Make a small plan") {}
+        let next = page.addPrimaryAction(deck.checked ? L10n.text("Reveal the approach") : L10n.text("Make a small plan")) {}
         // No Return shortcut: repeated help keys must not uncover another tier.
         next.keyEquivalent = ""
         var solution: VerifiedSolution?
@@ -115,9 +115,9 @@ import NxlvKit
             previous?.isEnabled = self.revealedTier > 0
             previous?.needsDisplay = true
             let final = self.revealedTier + 1 >= deck.stages.count
-            next.title = final ? (solution != nil ? "Show solution replay" : checking ? "Checking solution..." : "All hints revealed")
-                : self.revealedTier == 1 ? (deck.checked ? "Reveal opening moves" : "Show practice tips")
-                : (deck.checked ? "Reveal the approach" : "Make a small plan")
+            next.title = final ? (solution != nil ? L10n.text("Show solution replay") : checking ? L10n.text("Checking solution...") : L10n.text("All hints revealed"))
+                : self.revealedTier == 1 ? (deck.checked ? L10n.text("Reveal opening moves") : L10n.text("Show practice tips"))
+                : (deck.checked ? L10n.text("Reveal the approach") : L10n.text("Make a small plan"))
             next.isEnabled = !final || solution != nil
             next.needsDisplay = true
         }
@@ -129,11 +129,11 @@ import NxlvKit
                 refreshAction()
             } else if let solution, let solutionSource, let solutionSession {
                 if self.solutionWindow != nil { self.selectSolutionMode(.solution); return }
-                let warning = GameMenuPage(title: "Reveal full solution?")
-                warning.setDetail("This shows the winning moves from start to finish. Your attempt stays paused.")
-                warning.backTitle = "Keep trying"
+                let warning = GameMenuPage(title: L10n.text("Reveal full solution?"))
+                warning.setDetail(L10n.text("This shows the winning moves from start to finish. Your attempt stays paused."))
+                warning.backTitle = L10n.text("Keep trying")
                 warning.onBack = { [weak warning] in if let warning { GameScreen.shared.dismiss(warning) } }
-                let confirm = warning.addPrimaryAction("Show full solution") { [weak self, weak warning] in
+                let confirm = warning.addPrimaryAction(L10n.text("Show full solution")) { [weak self, weak warning] in
                     // A double-click on the last hint must not accept the spoiler prompt.
                     if let event = NSApp.currentEvent, [.leftMouseDown, .leftMouseUp].contains(event.type), event.clickCount > 1 { return }
                     guard let self, let warning else { return }
@@ -238,16 +238,16 @@ import NxlvKit
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     private func refresh() {
         let stage = deck.stages[tier]
-        progress.stringValue = "HINT \(tier + 1) OF \(deck.stages.count)"
+        progress.stringValue = L10n.text("HINT \(tier + 1) OF \(deck.stages.count)")
         heading.stringValue = stage.title
         prose.stringValue = stage.body
         note.stringValue = deck.checked
-            ? (tier == 2 ? "Match the direction and adjust crowd spacing. Release rate, timing and your current terrain can change the opening." : "No moves are made for you. Reveal another hint only when you want more detail.")
-            : "General coaching for this level."
+            ? (tier == 2 ? L10n.text("Match the direction and adjust crowd spacing. Release rate, timing and your current terrain can change the opening.") : L10n.text("No moves are made for you. Reveal another hint only when you want more detail."))
+            : L10n.text("General coaching for this level.")
         setAccessibilityElement(true)
         setAccessibilityRole(.group)
-        setAccessibilityLabel("Hint text")
-        setAccessibilityHelp("Left and right arrows change hints. Up and down arrows scroll the text.")
+        setAccessibilityLabel(L10n.text("Hint text"))
+        setAccessibilityHelp(L10n.text("Left and right arrows change hints. Up and down arrows scroll the text."))
         resetScroll = true
         needsLayout = true; needsDisplay = true
         NSAccessibility.post(element: heading, notification: .valueChanged)

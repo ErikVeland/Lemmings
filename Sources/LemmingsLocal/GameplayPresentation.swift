@@ -372,14 +372,14 @@ struct PrecisionZoomStatus: Equatable {
 
   var accessibility: String {
     guard !isEmpty else { return "" }
-    let state = active.map { $0 == .zoom ? "Zoom active" : "Superzoom active" } ?? "Zoom off"
-    return "Zoom, \(zoom) remaining. Superzoom, \(superzoom) remaining. \(state)"
+    let state = active.map { $0 == .zoom ? L10n.text("Zoom active") : L10n.text("Superzoom active") } ?? L10n.text("Zoom off")
+    return L10n.text("Zoom, \(zoom) remaining. Superzoom, \(superzoom) remaining. \(state)")
   }
 
   func size(scale: CGFloat = 1) -> CGSize {
     guard !isEmpty else { return .zero }
     let scale = max(1, floor(scale))
-    let longest = max("z - \(zoom)".count, "Z - \(superzoom)".count)
+    let longest = max(L10n.text("z - \(zoom)").count, L10n.text("Z - \(superzoom)").count)
     return CGSize(width: CGFloat(longest) * 6 * scale + 8 * scale,
                   height: 24 * scale)
   }
@@ -388,8 +388,8 @@ struct PrecisionZoomStatus: Equatable {
   func draw(at origin: CGPoint, scale: CGFloat = 1) -> CGSize {
     guard !isEmpty else { return .zero }
     let scale = max(1, floor(scale))
-    let rows = [("z - \(zoom)", PrecisionZoomKind.zoom),
-                ("Z - \(superzoom)", PrecisionZoomKind.superzoom)]
+    let rows = [(L10n.text("z - \(zoom)"), PrecisionZoomKind.zoom),
+                (L10n.text("Z - \(superzoom)"), PrecisionZoomKind.superzoom)]
     let badgeSize = size(scale: scale)
     let width = badgeSize.width
     let rowHeight = 11 * scale
@@ -429,7 +429,7 @@ struct PrecisionZoomStatus: Equatable {
         guard self.initials != initials || self.portrait !== portrait else { return }
         self.initials = initials; self.portrait = portrait
         isHidden = initials == nil
-        setAccessibilityLabel(initials.map { "\($0)'s turn" })
+        setAccessibilityLabel(initials.map { L10n.text("\($0)'s turn") })
         needsDisplay = true
         NSAccessibility.post(element: self, notification: .valueChanged)
     }

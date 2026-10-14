@@ -29,13 +29,13 @@ public enum HostedCategory: String, CaseIterable {
     case fastestClear, fastestAllSaved, mostSaved, leastSkills, stars, clears, perfect
     public var title: String {
         switch self {
-        case .fastestClear: "Fastest clear"
-        case .fastestAllSaved: "Fastest 100%"
-        case .mostSaved: "Most saved"
-        case .leastSkills: "Least skills"
-        case .stars: "Career stars"
-        case .clears: "Levels cleared"
-        case .perfect: "Three-star levels"
+        case .fastestClear: L10n.text(L10n.text("Fastest clear"))
+        case .fastestAllSaved: L10n.text(L10n.text("Fastest 100%"))
+        case .mostSaved: L10n.text(L10n.text("Most saved"))
+        case .leastSkills: L10n.text(L10n.text("Least skills"))
+        case .stars: L10n.text(L10n.text("Career stars"))
+        case .clears: L10n.text(L10n.text("Levels cleared"))
+        case .perfect: L10n.text(L10n.text("Three-star levels"))
         }
     }
     public var career: Bool { [.stars, .clears, .perfect].contains(self) }
@@ -174,7 +174,7 @@ public enum HostedCategory: String, CaseIterable {
         requestID = UUID(); let ticket = requestID
         board = nil; busy = true; status = "Loading..."; onChange?()
         retryRemovals()
-        guard category.career || conditions != nil else { busy = false; status = "Select a level first."; onChange?(); return }
+        guard category.career || conditions != nil else { busy = false; status = L10n.text("Select a level first."); onChange?(); return }
         Task { [weak self] in
             guard let self else { return }
             do {
@@ -186,7 +186,7 @@ public enum HostedCategory: String, CaseIterable {
                 board = loaded; status = "Community records"
             } catch {
                 guard ticket == requestID else { return }
-                status = "Offline. Local records are saved."
+                status = L10n.text("Offline. Local records are saved.")
             }
             busy = false; onChange?()
         }
@@ -231,8 +231,8 @@ public enum HostedCategory: String, CaseIterable {
                             try checked(response, allowingConflict: true); actions.insert(run.id)
                         } catch { replayFailure = true; break }
                     }
-                    syncStatus = replayFailure ? "Scores shared. Some replays remain local." : "Records shared"; onChange?()
-                } catch { syncStatus = "Sync incomplete. Retry to share local records."; onChange?() }
+                    syncStatus = replayFailure ? L10n.text("Scores shared. Some replays remain local.") : "Records shared"; onChange?()
+                } catch { syncStatus = L10n.text("Sync incomplete. Retry to share local records."); onChange?() }
             }
         }
     }
@@ -260,7 +260,7 @@ public enum HostedCategory: String, CaseIterable {
                     defaults.set(false, forKey: "HostedRankings.hasShared." + profile)
                     removals.remove(profile)
                     submitted = []; actions = []; board = nil; status = "Shared records removed"
-                } catch { status = "Removal queued. Retry when connected." }
+                } catch { status = L10n.text("Removal queued. Retry when connected.") }
             }
         }
     }
@@ -283,8 +283,8 @@ public enum HostedCategory: String, CaseIterable {
                 let replay = try JSONDecoder().decode(LeaderboardActionReplay.self, from: data)
                 try replay.validateStructure()
                 guard replay.runID == id, replay.conditions == conditions else { throw RunRecoveryError.differentGame }
-                opened(replay, "\(entry.name) - worldwide replay"); status = "Community records"
-            } catch { status = "Replay unavailable. Retry when connected." }
+                opened(replay, L10n.text("\(entry.name) - worldwide replay")); status = "Community records"
+            } catch { status = L10n.text("Replay unavailable. Retry when connected.") }
         }
     }
     public func playback(_ entry: HostedBoard.Entry, opened: @escaping (URL, String) -> Void) {
@@ -298,8 +298,8 @@ public enum HostedCategory: String, CaseIterable {
                 try checked(response)
                 guard response.mimeType == "video/mp4", let size = try file.resourceValues(forKeys: [.fileSizeKey]).fileSize,
                       size > 0, size <= Self.movieLimit else { throw URLError(.dataLengthExceedsMaximum) }
-                opened(file, "\(entry.name) - worldwide replay"); status = "Community records"
-            } catch { status = "Replay unavailable. Retry when connected." }
+                opened(file, L10n.text("\(entry.name) - worldwide replay")); status = "Community records"
+            } catch { status = L10n.text("Replay unavailable. Retry when connected.") }
         }
     }
 }

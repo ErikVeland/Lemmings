@@ -51,11 +51,11 @@ public enum ProTrackerError: Error, Equatable, CustomStringConvertible {
 
     public var description: String {
         switch self {
-        case let .tooShort(count): return "module is only \(count) bytes"
-        case let .unknownFormat(tag): return "unknown module tag '\(tag)'"
-        case let .badPatternCount(count): return "implausible pattern count \(count)"
+        case let .tooShort(count): return L10n.text("module is only \(count) bytes")
+        case let .unknownFormat(tag): return L10n.text("unknown module tag '\(tag)'")
+        case let .badPatternCount(count): return L10n.text("implausible pattern count \(count)")
         case let .truncatedPatterns(expected, available):
-            return "pattern data needs \(expected) bytes, file has \(available)"
+            return L10n.text("pattern data needs \(expected) bytes, file has \(available)")
         }
     }
 }

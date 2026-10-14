@@ -31,7 +31,7 @@ public struct Lemmings3Runtime: Sendable {
             }
         }
         public var initialQuantity: Int { self == .bricks || self == .spade || self == .shimmy || self == .sucker ? 8 : (self == .grenade ? 4 : 1) }
-        public var label: String { switch self { case .bricks: "B"; case .bomb: "BO"; case .spade: "D"; case .shimmy: "SH"; case .sucker: "CL"; case .umbrella: "U"; case .hadoken: "H"; case .grenade: "G"; case .swimmer: "S"; case .clock: "C" } }
+        public var label: String { switch self { case .bricks: L10n.text("B"); case .bomb: L10n.text("BO"); case .spade: L10n.text("D"); case .shimmy: L10n.text("SH"); case .sucker: L10n.text("CL"); case .umbrella: L10n.text("U"); case .hadoken: L10n.text("H"); case .grenade: L10n.text("G"); case .swimmer: L10n.text("S"); case .clock: L10n.text("C") } }
     }
     public enum Direction: String, CaseIterable, Sendable {
         case upLeft, up, upRight, left, right, downLeft, down, downRight
@@ -211,7 +211,7 @@ public struct Lemmings3Runtime: Sendable {
               c.pickups.allSatisfy({ $0.id >= 0 && $0.id < 1_000_000 && $0.quantity > 0 && $0.quantity <= 1000 && $0.x >= 0 && $0.y >= 0 && $0.x + 8 <= c.width && $0.y + 8 <= c.height }),
               c.extras.allSatisfy({ [-1, 1].contains($0.direction) && $0.x >= 0 && $0.x < c.width && $0.y >= 0 && $0.y < c.height }),
               !c.exits.isEmpty, c.exits.allSatisfy({ $0.x >= 0 && $0.y >= 0 && $0.x + 8 <= c.width && $0.y + 2 <= c.height }) else {
-            throw SequelDataError.invalid("Invalid Chronicles simulation configuration.")
+            throw SequelDataError.invalid(L10n.text("Invalid Chronicles simulation configuration."))
         }
         configuration = c
         attributes = c.attributes; pickups = c.pickups
@@ -238,7 +238,7 @@ public struct Lemmings3Runtime: Sendable {
         var creatures: [Creature] = []
         for (index, placed) in permanent.placements.enumerated() {
             guard let definition = style.permanent.objects[placed.identifier] else {
-                throw SequelDataError.invalid("Missing Chronicles object definition.")
+                throw SequelDataError.invalid(L10n.text("Missing Chronicles object definition."))
             }
             if let tool = Tool(sourceIdentifier: placed.identifier) {
                 pickups.append(.init(id: index, tool: tool, x: placed.x, y: placed.y)); continue
@@ -254,7 +254,7 @@ public struct Lemmings3Runtime: Sendable {
             }
             if (0x4002...0x400a).contains(definition.flags) {
                 guard definition.animationMode == 1, definition.animationStartFrame == 1, definition.frameCount > 1 else {
-                    throw SequelDataError.invalid("Unsupported Chronicles trap animation cycle.")
+                    throw SequelDataError.invalid(L10n.text("Unsupported Chronicles trap animation cycle."))
                 }
                 let tags = try style.permanent.attributes(object: placed.identifier)
                 let cells = tags.enumerated().compactMap { cell, tag -> Point? in
@@ -266,7 +266,7 @@ public struct Lemmings3Runtime: Sendable {
                     cyclePause: definition.animationCyclePause)); continue
             }
             guard [0, 0x1000, 0x1800, 0x0402, 0x4001].contains(definition.flags), placed.identifier < 5000 else {
-                throw SequelDataError.invalid("Unsupported Chronicles object \(placed.identifier) (flags \(definition.flags)).")
+                throw SequelDataError.invalid(L10n.text("Unsupported Chronicles object \(placed.identifier) (flags \(definition.flags))."))
             }
             let tags = try style.permanent.attributes(object: placed.identifier)
             for (index, tag) in tags.enumerated() {
@@ -280,9 +280,9 @@ public struct Lemmings3Runtime: Sendable {
         }
         // DOS captures of Shadow 5/10/16 and Egyptian 19 start at the last placed hatch.
         entrances.reverse()
-        guard let entrance = entrances.first else { throw SequelDataError.invalid("Missing Chronicles entrance trigger.") }
-        guard extras.count == level.extraLemmings else { throw SequelDataError.invalid("Chronicles extra-lemming count does not match its placements.") }
-        guard creatures.count == level.enemyCount else { throw SequelDataError.invalid("Chronicles creature count does not match its placements.") }
+        guard let entrance = entrances.first else { throw SequelDataError.invalid(L10n.text("Missing Chronicles entrance trigger.")) }
+        guard extras.count == level.extraLemmings else { throw SequelDataError.invalid(L10n.text("Chronicles extra-lemming count does not match its placements.")) }
+        guard creatures.count == level.enemyCount else { throw SequelDataError.invalid(L10n.text("Chronicles creature count does not match its placements.")) }
         try self.init(configuration: .init(width: level.width, height: level.height, attributes: scene.attributes,
             entrance: entrance, exits: exits, total: total, releaseInterval: level.releaseRate,
             releaseDelay: level.releaseDelay, timeLimit: level.timeLimitSeconds, pickups: pickups, extras: extras,

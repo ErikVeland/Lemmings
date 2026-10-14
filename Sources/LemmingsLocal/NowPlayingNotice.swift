@@ -25,7 +25,7 @@ struct PlayingTrack: Equatable {
             let name = url.deletingPathExtension().lastPathComponent
             let title = catalogue?.track(id: gameID + "." + name)?.title ?? name.capitalized
             let game = family == "ohno" ? "Oh No! More Lemmings" : family == "xmas" ? "Holiday Lemmings" : "Lemmings"
-            let value = PlayingTrack(url: url, title: title, soundtrack: game + " - Macintosh (original)")
+            let value = PlayingTrack(url: url, title: title, soundtrack: game + L10n.text(" - Macintosh (original)"))
             cached[url] = value
             return value
         }
@@ -36,9 +36,9 @@ struct PlayingTrack: Equatable {
             pack.files.contains { $0.path == "Music/" + path }
         }?.title }
         let games = ["classic": "Lemmings", "lemmings": "Lemmings", "lemmings2": "Lemmings 2", "lemmings3": "Lemmings 3",
-                     "ohno": "Oh No! More Lemmings", "holiday": "Holiday Lemmings"]
+                     "ohno": L10n.text("Oh No! More Lemmings"), "holiday": "Holiday Lemmings"]
         let game = entry.map { games[$0.track.game] ?? $0.track.game.capitalized }
-        let source = library ?? entry.map { $0.variant.port == "amiga" ? "Amiga" : $0.variant.port.uppercased() }
+        let source = library ?? entry.map { $0.variant.port == "amiga" ? L10n.text("Amiga") : $0.variant.port.uppercased() }
             ?? url.deletingLastPathComponent().lastPathComponent.replacingOccurrences(of: "_", with: " ")
         let value = PlayingTrack(url: url, title: title, soundtrack: game.map { $0 + " - " + source } ?? source)
         cached[url] = value

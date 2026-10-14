@@ -16,13 +16,13 @@ import NxlvKit
     current = progress
     let previous = page
     let wasVisible = previous.map { GameScreen.shared.contains($0) } ?? false
-    let page = GameMenuPage(title: "Your rescue story", subtitle: "Campaign achievements · \(ArcadeStore.shared.records.activeProfile.initials)")
+    let page = GameMenuPage(title: L10n.text("Your rescue story"), subtitle: L10n.text("Campaign achievements · \(ArcadeStore.shared.records.activeProfile.initials)"))
     page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
     self.page = page
     let root = page.body
     let earned = ClassicAchievement.catalog.filter { progress.isUnlocked($0.id) }.count
-    let title = label("Your rescue story", size: 26, weight: .bold)
-    let subtitle = label("\(earned) of \(ClassicAchievement.catalog.count) achievements earned", size: 14)
+    let title = label(L10n.text("Your rescue story"), size: 26, weight: .bold)
+    let subtitle = label(L10n.text("\(earned) of \(ClassicAchievement.catalog.count) achievements earned"), size: 14)
     let trophy = symbol(earned: true, size: 44)
     let heading = NSStackView(views: [trophy, stack([title, subtitle], spacing: 5)])
     heading.spacing = 18
@@ -30,10 +30,10 @@ import NxlvKit
     meter.isIndeterminate = false
     meter.maxValue = Double(ClassicAchievement.catalog.count)
     meter.doubleValue = Double(earned)
-    meter.setAccessibilityLabel("Achievements earned")
+    meter.setAccessibilityLabel(L10n.text("Achievements earned"))
     let hint = label(earned == ClassicAchievement.catalog.count
-      ? "Every achievement earned. What a rescue!"
-      : "Play levels in order to work towards the next trophy.", size: 12)
+      ? L10n.text("Every achievement earned. What a rescue!")
+      : L10n.text("Play levels in order to work towards the next trophy."), size: 12)
     let header = stack([heading, meter, hint], spacing: 12)
     let scroll = NSScrollView()
     scroll.hasVerticalScroller = true
@@ -112,7 +112,7 @@ import NxlvKit
     view.earned = earned
     view.setAccessibilityElement(true)
     view.setAccessibilityRole(.image)
-    view.setAccessibilityLabel(earned ? "Earned" : "Not yet earned")
+    view.setAccessibilityLabel(earned ? L10n.text("Earned") : L10n.text("Not yet earned"))
     view.widthAnchor.constraint(equalToConstant: size + 8).isActive = true
     view.heightAnchor.constraint(equalToConstant: size + 8).isActive = true
     return view

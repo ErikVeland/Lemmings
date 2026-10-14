@@ -22,7 +22,7 @@ public enum SolutionSwitchArt {
                 context.setFillColor(CGColor(srgbRed: 0.48, green: 0.80, blue: 0.24, alpha: 1))
                 context.fill(CGRect(x: frame.minX + 8, y: frame.maxY - 5, width: frame.width - 16, height: 2))
             }
-            GamePixelTypography.draw(value == .game ? "Your game" : "Solution", in: frame.insetBy(dx: 8, dy: 4),
+            GamePixelTypography.draw(value == .game ? L10n.text("Your game") : L10n.text("Solution"), in: frame.insetBy(dx: 8, dy: 4),
                 context: context, typography: typography, palette: value == mode ? .green : .blue, maximumScale: 1)
         }
     }

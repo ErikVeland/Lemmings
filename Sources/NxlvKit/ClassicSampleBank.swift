@@ -41,9 +41,9 @@ public struct ClassicSampleBank: Sendable {
 
         public var description: String {
             switch self {
-            case .emptyIndex: return "the index file is empty"
+            case .emptyIndex: return L10n.text("the index file is empty")
             case let .malformedIndex(count):
-                return "the index is \(count) bytes, which is not a whole number of entries"
+                return L10n.text("the index is \(count) bytes, which is not a whole number of entries")
             }
         }
     }

@@ -1,4 +1,5 @@
 import CoreGraphics
+import NxlvKit
 
 /// The whole checkbox row is one target, on every platform.
 public enum GhostSolutionArt {
@@ -18,7 +19,7 @@ public enum GhostSolutionArt {
             context.addLine(to: CGPoint(x: box.maxX - 4, y: box.minY + 5))
             context.strokePath()
         }
-        GamePixelTypography.draw("Ghost solution", in: CGRect(x: rect.minX + 44, y: rect.minY,
+        GamePixelTypography.draw(L10n.text("Ghost solution"), in: CGRect(x: rect.minX + 44, y: rect.minY,
             width: rect.width - 52, height: rect.height), context: context, typography: typography,
             palette: enabled ? .green : .blue, maximumScale: 1)
     }

@@ -105,9 +105,9 @@ public enum ClassicLevelError: Error, Equatable, CustomStringConvertible {
     public var description: String {
         switch self {
         case let .invalidSize(actual, minimum):
-            return "A classic level must contain at least \(minimum) bytes; found \(actual)."
+            return L10n.text("A classic level must contain at least \(minimum) bytes; found \(actual).")
         case let .invalidRecordSize(actual, expected):
-            return "An unpacked classic LVL file must contain exactly \(expected) bytes; found \(actual)."
+            return L10n.text("An unpacked classic LVL file must contain exactly \(expected) bytes; found \(actual).")
         }
     }
 }

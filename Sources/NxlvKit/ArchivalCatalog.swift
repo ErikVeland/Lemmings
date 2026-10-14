@@ -42,88 +42,88 @@ public struct ArchivalCatalog: Sendable {
             name: "Commodore Amiga 500 / 1000 / 2000",
             releaseYear: 1991,
             developer: "DMA Design",
-            audioHardware: "Paula 8364 4-Channel 8-Bit PCM / MOD",
-            displayChipset: "OCS / ECS 32-Color 3-Plane / 4-Plane",
+            audioHardware: L10n.text("Paula 8364 4-Channel 8-Bit PCM / MOD"),
+            displayChipset: L10n.text("OCS / ECS 32-Color 3-Plane / 4-Plane"),
             exclusiveLevelCount: 20,
-            notes: "Original lead platform. Includes iconic digitised voice samples and 2-Player split-screen."
+            notes: L10n.text("Original lead platform. Includes iconic digitised voice samples and 2-Player split-screen.")
         ),
         PlatformInfo(
             id: "dos_vga",
             name: "PC Compatible (DOS VGA)",
             releaseYear: 1991,
-            developer: "DMA Design / Psygnosis",
-            audioHardware: "OPL2 YM3812 / Sound Blaster / Tandy",
-            displayChipset: "VGA 320x200 256-Color (VGASPEC)",
+            developer: L10n.text("DMA Design / Psygnosis"),
+            audioHardware: L10n.text("OPL2 YM3812 / Sound Blaster / Tandy"),
+            displayChipset: L10n.text("VGA 320x200 256-Color (VGASPEC)"),
             exclusiveLevelCount: 0,
-            notes: "Canonical 17 Hz logic tick accumulator engine. Standard DOS campaign of 120 levels."
+            notes: L10n.text("Canonical 17 Hz logic tick accumulator engine. Standard DOS campaign of 120 levels.")
         ),
         PlatformInfo(
             id: "dos_ega",
             name: "PC Compatible (DOS EGA / CGA)",
             releaseYear: 1991,
-            developer: "DMA Design / Psygnosis",
-            audioHardware: "PC Speaker / AdLib FM",
-            displayChipset: "EGA 16-Color / CGA 4-Color",
+            developer: L10n.text("DMA Design / Psygnosis"),
+            audioHardware: L10n.text("PC Speaker / AdLib FM"),
+            displayChipset: L10n.text("EGA 16-Color / CGA 4-Color"),
             exclusiveLevelCount: 0,
-            notes: "Retro 16-color and 4-color paletted modes."
+            notes: L10n.text("Retro 16-color and 4-color paletted modes.")
         ),
         PlatformInfo(
             id: "macintosh",
             name: "Apple Macintosh (Classic Mac OS)",
             releaseYear: 1992,
-            developer: "Presage Software / Psygnosis",
-            audioHardware: "Macintosh Sound Manager 22 kHz PCM",
-            displayChipset: "Mac 2× High-Resolution (512x342 / 640x480)",
+            developer: L10n.text("Presage Software / Psygnosis"),
+            audioHardware: L10n.text("Macintosh Sound Manager 22 kHz PCM"),
+            displayChipset: L10n.text("Mac 2× High-Resolution (512x342 / 640x480)"),
             exclusiveLevelCount: 0,
-            notes: "Crisp retina-class 2× graphics, high-res fonts, Mac UI panel, and festive Xmas sprites."
+            notes: L10n.text("Crisp retina-class 2× graphics, high-res fonts, Mac UI panel, and festive Xmas sprites.")
         ),
         PlatformInfo(
             id: "snes",
             name: "Super Nintendo Entertainment System (SNES)",
             releaseYear: 1992,
-            developer: "Sunsoft / DMA Design",
-            audioHardware: "Sony SPC700 16-Bit ADPCM Synth",
-            displayChipset: "SNES Mode 2 / Mode 7 Special",
+            developer: L10n.text("Sunsoft / DMA Design"),
+            audioHardware: L10n.text("Sony SPC700 16-Bit ADPCM Synth"),
+            displayChipset: L10n.text("SNES Mode 2 / Mode 7 Special"),
             exclusiveLevelCount: 5,
-            notes: "Features 5 exclusive Sunsoft Special levels and custom Hiroyuki Masuno SPC soundtrack."
+            notes: L10n.text("Features 5 exclusive Sunsoft Special levels and custom Hiroyuki Masuno SPC soundtrack.")
         ),
         PlatformInfo(
             id: "genesis",
             name: "Sega Genesis / Mega Drive",
             releaseYear: 1992,
-            developer: "Sunsoft / Probe Software",
-            audioHardware: "Yamaha YM2612 6-Channel FM",
-            displayChipset: "Sega VDP 64-Color 320x224",
+            developer: L10n.text("Sunsoft / Probe Software"),
+            audioHardware: L10n.text("Yamaha YM2612 6-Channel FM"),
+            displayChipset: L10n.text("Sega VDP 64-Color 320x224"),
             exclusiveLevelCount: 60,
-            notes: "Features 60 exclusive levels (Presenter rating 1–30 + bonus levels) and Matt Furniss FM tracks."
+            notes: L10n.text("Features 60 exclusive levels (Presenter rating 1–30 + bonus levels) and Matt Furniss FM tracks.")
         ),
         PlatformInfo(
             id: "arcade",
             name: "Arcade (Data East / Sega Arcade)",
             releaseYear: 1992,
-            developer: "Data East / Sega",
-            audioHardware: "Yamaha YM2151 FM + OKI ADPCM Voice",
-            displayChipset: "Arcade RGB Video Board 320x240",
+            developer: L10n.text("Data East / Sega"),
+            audioHardware: L10n.text("Yamaha YM2151 FM + OKI ADPCM Voice"),
+            displayChipset: L10n.text("Arcade RGB Video Board 320x240"),
             exclusiveLevelCount: 10,
-            notes: "Features arcade single-player stages, 2-Player Co-Op mode, countdown timers, and high-score screens."
+            notes: L10n.text("Features arcade single-player stages, 2-Player Co-Op mode, countdown timers, and high-score screens.")
         ),
         PlatformInfo(
             id: "atari_st",
             name: "Atari ST / STE",
             releaseYear: 1991,
             developer: "DMA Design",
-            audioHardware: "Yamaha YM2149 3-Voice SSG",
-            displayChipset: "Atari ST 16-Color Palette",
+            audioHardware: L10n.text("Yamaha YM2149 3-Voice SSG"),
+            displayChipset: L10n.text("Atari ST 16-Color Palette"),
             exclusiveLevelCount: 0,
-            notes: "Custom Atari ST chiptune music arrangements by Tim Wright."
+            notes: L10n.text("Custom Atari ST chiptune music arrangements by Tim Wright.")
         ),
         PlatformInfo(
             id: "archimedes",
             name: "Acorn Archimedes",
             releaseYear: 1992,
             developer: "Krisalis Software",
-            audioHardware: "VIDC1 8-Channel 8-Bit Stereo Direct Sound",
-            displayChipset: "ARM VIDC 256-Color 50 Hz",
+            audioHardware: L10n.text("VIDC1 8-Channel 8-Bit Stereo Direct Sound"),
+            displayChipset: L10n.text("ARM VIDC 256-Color 50 Hz"),
             exclusiveLevelCount: 4,
             notes: "32-bit ARM RISC native build featuring 4 Archimedes-exclusive levels."
         ),
@@ -133,7 +133,7 @@ public struct ArchivalCatalog: Sendable {
             releaseYear: 1992,
             developer: "Probe Software",
             audioHardware: "SN76489 4-Channel PSG",
-            displayChipset: "VDP 32-Color 256x192 / 160x144",
+            displayChipset: L10n.text("VDP 32-Color 256x192 / 160x144"),
             exclusiveLevelCount: 0,
             notes: "8-bit chiptune soundtrack by Matt Furniss and compact handheld level variations."
         ),
@@ -142,20 +142,20 @@ public struct ArchivalCatalog: Sendable {
             name: "Nintendo Game Boy / Game Boy Color",
             releaseYear: 1992,
             developer: "Ocean Software",
-            audioHardware: "Game Boy PAPU 4-Channel Audio",
-            displayChipset: "Monochrome 4-Shade LCD 160x144",
+            audioHardware: L10n.text("Game Boy PAPU 4-Channel Audio"),
+            displayChipset: L10n.text("Monochrome 4-Shade LCD 160x144"),
             exclusiveLevelCount: 0,
-            notes: "Tailored compact handheld level maps and chiptune audio."
+            notes: L10n.text("Tailored compact handheld level maps and chiptune audio.")
         ),
         PlatformInfo(
             id: "c64",
             name: "Commodore 64",
             releaseYear: 1993,
             developer: "Alligator / Psygnosis",
-            audioHardware: "MOS 6581 / 8580 SID 3-Voice Synth",
-            displayChipset: "VIC-II 16-Color Multicolor 160x200",
+            audioHardware: L10n.text("MOS 6581 / 8580 SID 3-Voice Synth"),
+            displayChipset: L10n.text("VIC-II 16-Color Multicolor 160x200"),
             exclusiveLevelCount: 0,
-            notes: "Classic C64 SID chiptune music and VIC-II sprite graphics."
+            notes: L10n.text("Classic C64 SID chiptune music and VIC-II sprite graphics.")
         ),
         PlatformInfo(
             id: "spectrum",
@@ -163,7 +163,7 @@ public struct ArchivalCatalog: Sendable {
             releaseYear: 1992,
             developer: "Target Software",
             audioHardware: "AY-3-8912 3-Channel Chiptune",
-            displayChipset: "Spectrum 8-Color / CPC Mode 0 16-Color",
+            displayChipset: L10n.text("Spectrum 8-Color / CPC Mode 0 16-Color"),
             exclusiveLevelCount: 0,
             notes: "8-bit microcomputer port with authentic AY sound."
         ),
@@ -171,31 +171,31 @@ public struct ArchivalCatalog: Sendable {
             id: "pce_cd",
             name: "PC Engine CD / TurboGrafx-CD",
             releaseYear: 1992,
-            developer: "Hudson Soft / Sunsoft",
-            audioHardware: "Redbook CD-Audio + HuC6280 PSG",
+            developer: L10n.text("Hudson Soft / Sunsoft"),
+            audioHardware: L10n.text("Redbook CD-Audio + HuC6280 PSG"),
             displayChipset: "HuC6270 512-Color Video",
             exclusiveLevelCount: 0,
-            notes: "Full studio CD-Audio arranged soundtrack and animated intro sequences."
+            notes: L10n.text("Full studio CD-Audio arranged soundtrack and animated intro sequences.")
         ),
         PlatformInfo(
             id: "threedo_ps1",
             name: "3DO Interactive Multiplayer / PlayStation",
             releaseYear: 1994,
             developer: "Psygnosis",
-            audioHardware: "Redbook CD-Audio 44.1 kHz Stereo",
+            audioHardware: L10n.text("Redbook CD-Audio 44.1 kHz Stereo"),
             displayChipset: "32-Bit Framebuffer High-Res",
             exclusiveLevelCount: 0,
-            notes: "High-fidelity CD Audio and FMV cinematic cutscenes."
+            notes: L10n.text("High-fidelity CD Audio and FMV cinematic cutscenes.")
         ),
         PlatformInfo(
             id: "neolemmix",
             name: "NeoLemmix Community Engine",
             releaseYear: 2014,
             developer: "NeoLemmix Community",
-            audioHardware: "Digital Sound Bank (WAV/FLAC)",
+            audioHardware: L10n.text("Digital Sound Bank (WAV/FLAC)"),
             displayChipset: "Vector/Raster Style Packs",
             exclusiveLevelCount: 1000,
-            notes: "Modern open level format (.nxlv) and custom style pack support."
+            notes: L10n.text("Modern open level format (.nxlv) and custom style pack support.")
         ),
     ]
 

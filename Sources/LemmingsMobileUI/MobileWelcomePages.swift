@@ -6,8 +6,8 @@ import NxlvKit
 import UIKit
 
 extension MobileLibraryViewController {
-    private var mobileBuild: Int { Int(Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "0") ?? 0 }
-    private var mobileVersion: String { Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "2.0" }
+    private var mobileBuild: Int { Int(Bundle.main.object(forInfoDictionaryKey: L10n.text("CFBundleVersion")) as? String ?? "0") ?? 0 }
+    private var mobileVersion: String { Bundle.main.object(forInfoDictionaryKey: L10n.text("CFBundleShortVersionString")) as? String ?? "2.0" }
 
     func beginWelcomeIfNeeded() {
         guard game == nil else { return }

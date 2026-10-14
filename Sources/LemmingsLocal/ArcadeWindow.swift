@@ -22,7 +22,7 @@ import NxlvKit
         GameScreen.shared.present(arcadeView, owner: owner)
     }
     func showResult(_ report: ArcadeReport, owner: NSWindow? = nil, retry: @escaping () -> Void,
-                    next: @escaping () -> Void, replay: @escaping (Bool) -> Void, storedReplay: ((URL, String) -> Void)? = nil, continueTitle: String = "Next level", background: CGImage? = nil, rewardVolume: Double = 0,
+                    next: @escaping () -> Void, replay: @escaping (Bool) -> Void, storedReplay: ((URL, String) -> Void)? = nil, continueTitle: String = L10n.text("Next level"), background: CGImage? = nil, rewardVolume: Double = 0,
                     rewardVolumeProvider: (() -> Double)? = nil,
                     continueHandlesHandover: Bool = false, skip: (() -> Void)? = nil,
                     later: (() -> Void)? = nil, hints: (() -> Void)? = nil,
@@ -75,14 +75,14 @@ import NxlvKit
     func showSavedSessions(owner: NSWindow?) {
         let store = ArcadeStore.shared
         let sessions = store.savedHotSeats
-        let page = GameMenuPage(title: "Saved Hot Seats")
+        let page = GameMenuPage(title: L10n.text("Saved Hot Seats"))
         let carousel = LevelCoverFlowView(frame: page.body.bounds)
         carousel.autoresizingMask = [.width, .height]
         page.body.addSubview(carousel)
-        let resume = page.addPrimaryAction("Resume") { [weak self, weak page, weak carousel] in
+        let resume = page.addPrimaryAction(L10n.text("Resume")) { [weak self, weak page, weak carousel] in
             guard let self, let page, let id = carousel?.selectedItem?.id else { return }
             guard store === ArcadeStore.shared, store.resumeHotSeat(id: id) else {
-                GameScreen.shared.message("Session not resumed", detail: store.storageError ?? "This session is no longer available.")
+                GameScreen.shared.message(L10n.text("Session not resumed"), detail: store.storageError ?? L10n.text("This session is no longer available."))
                 return
             }
             GameScreen.shared.dismiss(page)
@@ -92,8 +92,8 @@ import NxlvKit
         resume.isEnabled = !sessions.isEmpty
         carousel.configure(items: sessions.map { saved in
             LevelCoverFlowItem(id: saved.id, title: saved.players.compactMap { store.records.profile($0)?.initials }.joined(separator: " + "),
-                subtitle: "Next turn: " + (store.records.profile(saved.turn ?? saved.host)?.initials ?? "LEM"),
-                detail: saved.savedAt.map { $0.formatted(date: .abbreviated, time: .shortened) } ?? "Shared campaign")
+                subtitle: L10n.text("Next turn: ") + (store.records.profile(saved.turn ?? saved.host)?.initials ?? L10n.text("LEM")),
+                detail: saved.savedAt.map { $0.formatted(date: .abbreviated, time: .shortened) } ?? L10n.text("Shared campaign"))
         }, reduceMotion: NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
         carousel.onStart = { [weak resume] _ in resume?.performClick(nil) }
         page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
@@ -179,7 +179,7 @@ import NxlvKit
     var onClose: (() -> Void)?
     var onMenu: (() -> Void)?
     var onCloudSaves: (() -> Void)?
-    var continueTitle = "Next level"
+    var continueTitle = L10n.text("Next level")
     var resultStatus: String?
     var continueHandlesHandover = false
     var cleared: Bool { report?.run.qualifies == true }
@@ -192,14 +192,14 @@ import NxlvKit
     var retryOwner: ArcadeProfile? { cleared ? player : nextSessionPlayer }
     var primaryResultTitle: String {
         if cleared { return handsOverAfterClear.map { "\(continueTitle): \($0.initials)" } ?? continueTitle }
-        return nextSessionPlayer.map { "Retry as \($0.initials)" } ?? "Try again"
+        return nextSessionPlayer.map { L10n.text("Retry as \($0.initials)") } ?? L10n.text("Try again")
     }
     func showHandover(_ next: ArcadeProfile, owner: NSWindow?) {
         guard let owner else { return }
-        let page = GameMenuPage(title: "\(next.initials)'s turn", subtitle: "PASS THE CONTROLS")
+        let page = GameMenuPage(title: L10n.text("\(next.initials)'s turn"), subtitle: L10n.text(L10n.text("PASS THE CONTROLS")))
         page.controllerBackButton.isHidden = true
-        page.setDetail("The game will wait. Give the controls to \(next.initials), then choose Ready.")
-        page.addPrimaryAction("Ready, \(next.initials)") { [weak self, weak page] in
+        page.setDetail(L10n.text("The game will wait. Give the controls to \(next.initials), then choose Ready."))
+        page.addPrimaryAction(L10n.text("Ready, \(next.initials)")) { [weak self, weak page] in
             guard let page, GameScreen.shared.contains(page) else { return }
             GameScreen.shared.dismiss(page)
             self?.onReadySound?()
@@ -225,7 +225,7 @@ import NxlvKit
         guard !cleared, onSkip != nil else { return 0 }
         return ArcadeStore.shared.records.levelSkips(profileID: player.id).available
     }
-    var skipTitle: String { nextSessionPlayer.map { _ in "Skip as \(player.initials) (\(availableSkips))" } ?? "Skip level (\(availableSkips))" }
+    var skipTitle: String { nextSessionPlayer.map { _ in L10n.text("Skip as \(player.initials) (\(availableSkips))") } ?? L10n.text("Skip level (\(availableSkips))") }
     /// The owner pays. In Hot Seat a skip passes the turn, as a loss does.
     func skipLevel() {
         guard availableSkips > 0, let level = report?.run.level else { return }
@@ -238,7 +238,7 @@ import NxlvKit
     }
     func performDefaultResultAction() { if cleared { continueAsNextProfile() } else if nextSessionPlayer != nil { retryAsNextProfile() } else { onRetry?() } }
     private(set) var selectedProfileID: String?
-    private(set) var initials = "LEM"
+    private(set) var initials = L10n.text("LEM")
     private(set) var portrait = 0
     private var replaceInitials = true
     private var artwork: ClassicMacArtwork?
@@ -255,18 +255,18 @@ import NxlvKit
     override func accessibilityChildren() -> [Any]? {
         func mapped(_ rect: CGRect) -> CGRect { CGRect(x: offset.x + rect.minX * scale, y: offset.y + rect.minY * scale, width: rect.width * scale, height: rect.height * scale) }
         var result: [Any] = accessibleText.enumerated().map { index, item in
-            accessibleElements.element(id: "text-\(index)", owner: self, label: item.0, frame: mapped(item.1))
+            accessibleElements.element(id: L10n.text("text-\(index)"), owner: self, label: item.0, frame: mapped(item.1))
         }
         result += buttons.enumerated().map { index, item in
             var name = item.0
-            if name.hasPrefix("player-"), !name.hasPrefix("player-new"), let profile = ArcadeStore.shared.records.profile(String(name.dropFirst(7))) { name = "Select player " + profile.initials }
-            if name.hasPrefix("portrait-"), let index = Int(name.dropFirst(9)), ArcadeProfile.portraitNames.indices.contains(index) { name = "Portrait: " + ArcadeProfile.portraitNames[index] }
-            let element = accessibleElements.element(id: "button-\(index)", owner: self, label: name, frame: mapped(item.1), press: item.2)
+            if name.hasPrefix(L10n.text("player-")), !name.hasPrefix(L10n.text("player-new")), let profile = ArcadeStore.shared.records.profile(String(name.dropFirst(7))) { name = L10n.text(L10n.text("Select player ")) + profile.initials }
+            if name.hasPrefix(L10n.text("portrait-")), let index = Int(name.dropFirst(9)), ArcadeProfile.portraitNames.indices.contains(index) { name = L10n.text("Portrait: ") + ArcadeProfile.portraitNames[index] }
+            let element = accessibleElements.element(id: L10n.text("button-\(index)"), owner: self, label: name, frame: mapped(item.1), press: item.2)
             element.onFocus = { [weak self] in self?.keyboardButton = index; self?.needsDisplay = true }
             return element
         }
         if mode == .profiles {
-            let field = accessibleElements.element(id: "initials", owner: self, label: "Player initials", frame: mapped(CGRect(x: 564, y: 204, width: 430, height: 60)))
+            let field = accessibleElements.element(id: L10n.text("initials"), owner: self, label: L10n.text(L10n.text("Player initials")), frame: mapped(CGRect(x: 564, y: 204, width: 430, height: 60)))
             field.setAccessibilityRole(.textField)
             field.readValue = { [weak self] in self?.initials ?? "" }
             field.writeValue = { [weak self] value in
@@ -331,21 +331,21 @@ import NxlvKit
             text(error, 64, mode == .result ? 583 : 695, 814, height: 20)
             let rect = CGRect(x: 886, y: mode == .result ? 578 : 688, width: 170, height: mode == .result ? 26 : 30)
             if ArcadeStore.shared.profilesAreWritable {
-                button("Retry save", rect) { [weak self] in
+                button(L10n.text("Retry save"), rect) { [weak self] in
                     guard let self else { return }
                     if self.mode == .profiles { self.saveEdits() }
                     else { ArcadeStore.shared.save() }
                     self.needsDisplay = true
                 }
             } else {
-                button("Fix records", rect) { [weak self] in self?.fixRecords() }
+                button(L10n.text("Fix records"), rect) { [weak self] in self?.fixRecords() }
             }
         } else if let notice = ArcadeStore.shared.storageNotice {
             text(notice, 64, mode == .result ? 583 : 695, 980, height: 20)
         }
         setAccessibilityHelp(ArcadeStore.shared.storageError ?? ArcadeStore.shared.storageNotice)
         if keyboardButton == nil || !buttons.indices.contains(keyboardButton!) {
-            keyboardButton = primaryButtonIndex ?? buttons.firstIndex(where: { $0.0.hasPrefix("Back") || $0.0 == "Close" }) ?? (buttons.isEmpty ? nil : 0)
+            keyboardButton = primaryButtonIndex ?? buttons.firstIndex(where: { $0.0.hasPrefix(L10n.text("Back")) || $0.0 == L10n.text("Close") }) ?? (buttons.isEmpty ? nil : 0)
         }
         if let keyboardButton, buttons.indices.contains(keyboardButton) {
             NSColor.systemYellow.setStroke()
@@ -416,11 +416,11 @@ import NxlvKit
         buttons.append((label, rect, action))
     }
     func rewindFilter(y: CGFloat = 212) {
-        text("Rewinds", 786, y - 21, 270, alignment: .center, alpha: 0.7)
-        button("Unused", CGRect(x: 786, y: y, width: 135, height: 44), selected: !assisted) { [weak self] in
+        text(L10n.text("Rewinds"), 786, y - 21, 270, alignment: .center, alpha: 0.7)
+        button(L10n.text("Unused"), CGRect(x: 786, y: y, width: 135, height: 44), selected: !assisted) { [weak self] in
             self?.assisted = false; self?.hostedPage = 0; self?.refreshHostedBoard(); self?.needsDisplay = true
         }
-        button("Used", CGRect(x: 921, y: y, width: 135, height: 44), selected: assisted) { [weak self] in
+        button(L10n.text("Used"), CGRect(x: 921, y: y, width: 135, height: 44), selected: assisted) { [weak self] in
             self?.assisted = true; self?.hostedPage = 0; self?.refreshHostedBoard(); self?.needsDisplay = true
         }
     }
@@ -449,56 +449,56 @@ import NxlvKit
     func resultActions(y: CGFloat = 505) {
         if !cleared, onLater != nil {
             if nextSessionPlayer != nil {
-                button("Retry as \(player.initials)", CGRect(x: 64, y: y, width: 250, height: 48)) { [weak self] in self?.onRetry?() }
-                button("Hints", CGRect(x: 332, y: y, width: 168, height: 48)) { [weak self] in self?.onHints?() }
-                button("Try later", CGRect(x: 518, y: y, width: 230, height: 48)) { [weak self] in self?.onLater?() }
+                button(L10n.text("Retry as \(player.initials)"), CGRect(x: 64, y: y, width: 250, height: 48)) { [weak self] in self?.onRetry?() }
+                button(L10n.text("Hints"), CGRect(x: 332, y: y, width: 168, height: 48)) { [weak self] in self?.onHints?() }
+                button(L10n.text("Try later"), CGRect(x: 518, y: y, width: 230, height: 48)) { [weak self] in self?.onLater?() }
                 button(primaryResultTitle, CGRect(x: 766, y: y, width: 290, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
             } else {
-                button("Back", CGRect(x: 64, y: y, width: 192, height: 48)) { [weak self] in self?.onClose?() }
-                button("Hints", CGRect(x: 274, y: y, width: 208, height: 48)) { [weak self] in self?.onHints?() }
-                button("Try later", CGRect(x: 500, y: y, width: 248, height: 48)) { [weak self] in self?.onLater?() }
+                button(L10n.text("Back"), CGRect(x: 64, y: y, width: 192, height: 48)) { [weak self] in self?.onClose?() }
+                button(L10n.text("Hints"), CGRect(x: 274, y: y, width: 208, height: 48)) { [weak self] in self?.onHints?() }
+                button(L10n.text("Try later"), CGRect(x: 500, y: y, width: 248, height: 48)) { [weak self] in self?.onLater?() }
                 button(primaryResultTitle, CGRect(x: 766, y: y, width: 290, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
             }
             return
         }
-        link("Replay", CGRect(x: 64, y: y - 52, width: 110, height: 36), alpha: 0.8) { [weak self] in self?.onReplay?(false) }
-        link("Records", CGRect(x: 190, y: y - 52, width: 140, height: 36), alpha: 0.8) { [weak self] in self?.page(.records) }
-        link("Details", CGRect(x: 350, y: y - 52, width: 140, height: 36), alpha: 0.8) { [weak self] in self?.page(.details) }
-        link("Hot Seat", CGRect(x: 510, y: y - 52, width: 140, height: 36), alpha: 0.8) { [weak self] in self?.openSession() }
-        link("Worldwide", CGRect(x: 668, y: y - 52, width: 180, height: 36), alpha: 0.8) { [weak self] in self?.openWorldwideBoard() }
+        link(L10n.text("Replay"), CGRect(x: 64, y: y - 52, width: 110, height: 36), alpha: 0.8) { [weak self] in self?.onReplay?(false) }
+        link(L10n.text("Records"), CGRect(x: 190, y: y - 52, width: 140, height: 36), alpha: 0.8) { [weak self] in self?.page(.records) }
+        link(L10n.text("Details"), CGRect(x: 350, y: y - 52, width: 140, height: 36), alpha: 0.8) { [weak self] in self?.page(.details) }
+        link(L10n.text("Hot Seat"), CGRect(x: 510, y: y - 52, width: 140, height: 36), alpha: 0.8) { [weak self] in self?.openSession() }
+        link(L10n.text("Worldwide"), CGRect(x: 668, y: y - 52, width: 180, height: 36), alpha: 0.8) { [weak self] in self?.openWorldwideBoard() }
         if let next = nextSessionPlayer {
             let canHandOver = ArcadeStore.shared.profilesAreWritable && ArcadeStore.shared.storageError == nil
             // The four-button loss row narrows this button, so each row draws its own.
             if cleared {
-                button("Retry as \(player.initials)", CGRect(x: 64, y: y, width: 330, height: 48)) { [weak self] in self?.onRetry?() }
+                button(L10n.text("Retry as \(player.initials)"), CGRect(x: 64, y: y, width: 330, height: 48)) { [weak self] in self?.onRetry?() }
             }
             if cleared {
                 let owner = handsOverAfterClear ?? player
-                button("Retry as \(next.initials)", CGRect(x: 412, y: y, width: 296, height: 48), enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
+                button(L10n.text("Retry as \(next.initials)"), CGRect(x: 412, y: y, width: 296, height: 48), enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
                 button("\(continueTitle): \(owner.initials)", CGRect(x: 726, y: y, width: 330, height: 48), primary: true,
                        enabled: handsOverAfterClear == nil || canHandOver) { [weak self] in self?.continueAsNextProfile() }
             } else if availableSkips > 0 {
-                button("Back to library", CGRect(x: 64, y: y, width: 226, height: 48)) { [weak self] in
+                button(L10n.text("Back to library"), CGRect(x: 64, y: y, width: 226, height: 48)) { [weak self] in
                     if let prepare = ArcadeWindow.shared.prepareSession { _ = prepare() } else { self?.onClose?() }
                 }
-                button("Retry as \(player.initials)", CGRect(x: 308, y: y, width: 220, height: 48)) { [weak self] in self?.onRetry?() }
+                button(L10n.text("Retry as \(player.initials)"), CGRect(x: 308, y: y, width: 220, height: 48)) { [weak self] in self?.onRetry?() }
                 button(skipTitle, CGRect(x: 546, y: y, width: 240, height: 48), enabled: canHandOver) { [weak self] in self?.skipLevel() }
-                button("Retry as \(next.initials)", CGRect(x: 806, y: y, width: 250, height: 48), primary: true,
+                button(L10n.text("Retry as \(next.initials)"), CGRect(x: 806, y: y, width: 250, height: 48), primary: true,
                        enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
             } else {
-                button("Back to library", CGRect(x: 64, y: y, width: 296, height: 48)) { [weak self] in
+                button(L10n.text("Back to library"), CGRect(x: 64, y: y, width: 296, height: 48)) { [weak self] in
                     if let prepare = ArcadeWindow.shared.prepareSession { _ = prepare() } else { self?.onClose?() }
                 }
-                button("Retry as \(player.initials)", CGRect(x: 378, y: y, width: 330, height: 48)) { [weak self] in self?.onRetry?() }
-                button("Retry as \(next.initials)", CGRect(x: 726, y: y, width: 330, height: 48), primary: true,
+                button(L10n.text("Retry as \(player.initials)"), CGRect(x: 378, y: y, width: 330, height: 48)) { [weak self] in self?.onRetry?() }
+                button(L10n.text("Retry as \(next.initials)"), CGRect(x: 726, y: y, width: 330, height: 48), primary: true,
                        enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
             }
         } else if availableSkips > 0 {
-            button("Back", CGRect(x: 64, y: y, width: 256, height: 48)) { [weak self] in self?.onClose?() }
+            button(L10n.text("Back"), CGRect(x: 64, y: y, width: 256, height: 48)) { [weak self] in self?.onClose?() }
             button(skipTitle, CGRect(x: 338, y: y, width: 330, height: 48)) { [weak self] in self?.skipLevel() }
             button(primaryResultTitle, CGRect(x: 688, y: y, width: 368, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
         } else {
-            button(cleared ? "Retry" : "Back", CGRect(x: 64, y: y, width: 256, height: 48)) { [weak self] in
+            button(cleared ? L10n.text("Retry") : L10n.text("Back"), CGRect(x: 64, y: y, width: 256, height: 48)) { [weak self] in
                 guard let self else { return }
                 if self.cleared { self.onRetry?() } else { self.onClose?() }
             }
@@ -511,7 +511,7 @@ import NxlvKit
     }
     func header(_ heading: String, subtitle: String? = nil) {
         title(heading, x: 96, y: 48, width: 928, height: 40)
-        text(subtitle ?? level?.game ?? "Ultimate Lemmings", 96, 106, 928, alignment: .center)
+        text(subtitle ?? level?.game ?? L10n.text("Ultimate Lemmings"), 96, 106, 928, alignment: .center)
     }
     func page(_ next: Mode) { finishCelebration(); affinityPopover?.close(); mode = next; hover = nil; needsDisplay = true }
     private func back() {
@@ -522,15 +522,15 @@ import NxlvKit
         else { onClose?() }
     }
     func pageFooter() {
-        button(report == nil ? "Back" : "Back to result", CGRect(x: 64, y: 634, width: 240, height: 48)) { [weak self] in self?.back() }
+        button(report == nil ? L10n.text("Back") : L10n.text("Back to result"), CGRect(x: 64, y: 634, width: 240, height: 48)) { [weak self] in self?.back() }
         if report == nil && mode == .records && boardScope == .level {
             let index = recordLevels.firstIndex { $0.boardID == level?.boardID }
-            button("< Previous level", CGRect(x: 544, y: 634, width: 244, height: 48), enabled: index.map { $0 > 0 } ?? false) { [weak self] in self?.changeLevel(-1) }
-            button("Next level >", CGRect(x: 812, y: 634, width: 244, height: 48), enabled: index.map { $0 + 1 < recordLevels.count } ?? false) { [weak self] in self?.changeLevel(1) }
+            button(L10n.text("< Previous level"), CGRect(x: 544, y: 634, width: 244, height: 48), enabled: index.map { $0 > 0 } ?? false) { [weak self] in self?.changeLevel(-1) }
+            button(L10n.text("Next level >"), CGRect(x: 812, y: 634, width: 244, height: 48), enabled: index.map { $0 + 1 < recordLevels.count } ?? false) { [weak self] in self?.changeLevel(1) }
         }
     }
     func tabs() {
-        let items: [(Mode, String)] = [(.records, "Leaderboards"), (.awards, "Achievements"), (.details, "Run details")]
+        let items: [(Mode, String)] = [(.records, L10n.text("Leaderboards")), (.awards, L10n.text("Achievements")), (.details, L10n.text("Run details"))]
         let gap: CGFloat = 16
         let width = (1056 - 64 - gap * CGFloat(items.count - 1)) / CGFloat(items.count)
         for (index, item) in items.enumerated() {
@@ -540,7 +540,7 @@ import NxlvKit
     private func drawResult() {
         guard let report else { page(.records); return }
         drawGameResult(report)
-        if let onMenu { button("Menu", CGRect(x: 940, y: 38, width: 116, height: 44), action: onMenu) }
+        if let onMenu { button(L10n.text("Menu"), CGRect(x: 940, y: 38, width: 116, height: 44), action: onMenu) }
     }
     func portraitImage(_ index: Int) -> NSImage? {
         if let cached = portraits[index] { return cached }
@@ -590,8 +590,8 @@ import NxlvKit
         guard canSwitch, let id = selectedProfileID, id != store.records.activeProfileID else { return }
         if store.hotSeatIsActive {
             let sessionID = store.hotSeatID
-            GameScreen.shared.confirm("Switch player?", detail: "Your Hot Seat stays saved. Continue with this player's solo progress.",
-                actionTitle: "Play as \(initials)", owner: window) { [weak self] in
+            GameScreen.shared.confirm(L10n.text("Switch player?"), detail: L10n.text("Your Hot Seat stays saved. Continue with this player's solo progress."),
+                actionTitle: L10n.text("Play as \(initials)"), owner: window) { [weak self] in
                     guard let self, store === ArcadeStore.shared, store.hotSeatID == sessionID,
                           self.selectedProfileID == id else { return }
                     self.switchToSelectedProfile(id, store: store)
@@ -600,23 +600,23 @@ import NxlvKit
     }
     private func switchToSelectedProfile(_ id: String, store: ArcadeStore) {
         do { try beforeSwitch?() }
-        catch { GameScreen.shared.message("Cannot switch player", detail: error.localizedDescription); return }
-        guard store.saveProfile(id: id, initials: initials.isEmpty ? store.records.profile(id)?.initials ?? "LEM" : initials,
+        catch { GameScreen.shared.message(L10n.text("Cannot switch player"), detail: error.localizedDescription); return }
+        guard store.saveProfile(id: id, initials: initials.isEmpty ? store.records.profile(id)?.initials ?? L10n.text("LEM") : initials,
                                 portrait: portrait, select: true) != nil else {
-            GameScreen.shared.message("Cannot switch player", detail: store.storageError ?? "The player is no longer available.")
+            GameScreen.shared.message(L10n.text("Cannot switch player"), detail: store.storageError ?? L10n.text("The player is no longer available."))
             return
         }
         afterSwitch?()
         onClose?()
     }
     var profilePrimaryTitle: String {
-        if isNewProfile { return "Add player" }
-        if canSwitch, selectedProfileID != ArcadeStore.shared.records.activeProfileID { return "Play as \(initials.isEmpty ? "LEM" : initials)" }
-        return "Done"
+        if isNewProfile { return L10n.text("Add player") }
+        if canSwitch, selectedProfileID != ArcadeStore.shared.records.activeProfileID { return L10n.text("Play as \(initials.isEmpty ? L10n.text("LEM") : initials)") }
+        return L10n.text("Done")
     }
     func performProfilePrimaryAction() {
         if isNewProfile { addNewProfile() }
-        else if profilePrimaryTitle == "Done" {
+        else if profilePrimaryTitle == L10n.text("Done") {
             guard ArcadeStore.shared.storageError == nil else { needsDisplay = true; return }
             closeProfiles()
         } else { playAsSelected() }
@@ -634,9 +634,9 @@ import NxlvKit
         let store = ArcadeStore.shared
         guard let id = selectedProfileID, let profile = store.records.profile(id),
               store.canDeleteProfile(id, runInProgress: runInProgress) else { return }
-        GameScreen.shared.confirm("Delete \(profile.initials)?",
-            detail: "This removes \(profile.initials)'s progress, saved runs, scores and achievements. You cannot undo this.",
-            actionTitle: "Delete \(profile.initials)", owner: window) { [weak self] in self?.deleteProfile(id) }
+        GameScreen.shared.confirm(L10n.text("Delete \(profile.initials)?"),
+            detail: L10n.text("This removes \(profile.initials)'s progress, saved runs, scores and achievements. You cannot undo this."),
+            actionTitle: L10n.text("Delete \(profile.initials)"), owner: window) { [weak self] in self?.deleteProfile(id) }
     }
     func deleteProfile(_ id: String) {
         let store = ArcadeStore.shared
@@ -644,7 +644,7 @@ import NxlvKit
         let switching = id == store.records.activeProfileID
         if switching {
             do { try beforeSwitch?() }
-            catch { GameScreen.shared.message("Cannot delete player", detail: error.localizedDescription); return }
+            catch { GameScreen.shared.message(L10n.text("Cannot delete player"), detail: error.localizedDescription); return }
         }
         let deleted = store.deleteProfile(id, backgroundCleanup: true)
         if switching && deleted { afterSwitch?() }
@@ -657,14 +657,14 @@ import NxlvKit
             if mode == .profiles { selectProfile(store.records.activeProfile) }
             afterSwitch?(); needsDisplay = true; return
         }
-        GameScreen.shared.confirm("Records cannot be read",
-            detail: (store.storageError ?? "") + " Start new records to save again. The unreadable files stay in the records folder.",
-            actionTitle: "Start new records", owner: window) { [weak self] in
+        GameScreen.shared.confirm(L10n.text("Records cannot be read"),
+            detail: (store.storageError ?? "") + L10n.text(" Start new records to save again. The unreadable files stay in the records folder."),
+            actionTitle: L10n.text("Start new records"), owner: window) { [weak self] in
                 guard let self else { return }
                 if store.startNewRecords() {
                     self.selectProfile(store.records.activeProfile)
                     self.afterSwitch?()
-                } else { GameScreen.shared.message("Cannot start new records", detail: store.storageError ?? "") }
+                } else { GameScreen.shared.message(L10n.text("Cannot start new records"), detail: store.storageError ?? "") }
                 self.needsDisplay = true
             }
     }
@@ -676,7 +676,7 @@ import NxlvKit
     func closeSession() { if let previous = sessionReturnMode { page(previous) } else { onClose?() } }
     private func drawSession() {
         let store = ArcadeStore.shared
-        header("Hot Seat", subtitle: "TAKE TURNS ON THIS MAC")
+        header(L10n.text("Hot Seat"), subtitle: L10n.text(L10n.text("TAKE TURNS ON THIS MAC")))
         let players = store.records.profiles
         let slots = players.count + (players.count < 8 ? 1 : 0)
         for (index, profile) in players.enumerated() {
@@ -684,17 +684,17 @@ import NxlvKit
             let chosen = turn != nil
             let rect = CGRect(x: 64 + (index % 2) * 506, y: 150 + (index / 2) * 70, width: 486, height: 58)
             let host = profile.id == store.records.activeProfileID
-            let label = "\(index + 1). \(profile.initials)" + (turn.map { "  Turn \($0 + 1)" } ?? "") + (host ? "  Host" : "")
+            let label = "\(index + 1). \(profile.initials)" + (turn.map { L10n.text("  Turn \($0 + 1)") } ?? "") + (host ? "  Host" : "")
             button(label, rect, selected: chosen) { [weak self] in self?.changeSessionPlayer(profile.id) }
         }
         let needsPlayer = players.count < 2
         if players.count < 8 {
             let index = players.count
             let rect = CGRect(x: 64 + (index % 2) * 506, y: 150 + (index / 2) * 70, width: 486, height: 58)
-            button("+ New player", rect, primary: needsPlayer) { [weak self] in self?.startNewProfile(returnToHotSeat: true) }
+            button(L10n.text("+ New player"), rect, primary: needsPlayer) { [weak self] in self?.startNewProfile(returnToHotSeat: true) }
         }
         var y = 150 + CGFloat((slots + 1) / 2) * 70 + 16
-        text("Pass the turn", 64, y + 10, 300, palette: .green)
+        text(L10n.text("Pass the turn"), 64, y + 10, 300, palette: .green)
         for (index, policy) in ArcadeStore.TurnPolicy.allCases.enumerated() {
             button(policy.title, CGRect(x: 370 + CGFloat(index) * 348, y: y, width: 336, height: 44),
                    selected: store.turnPolicy == policy) { [weak self] in
@@ -705,25 +705,25 @@ import NxlvKit
         if y + 30 <= 620 { text(store.turnPolicy.detail, 370, y, 686, alpha: 0.8); y += 36 }
         if y + 30 <= 620 {
             if store.hotSeatIsActive {
-                text("Next turn: \(store.records.profile(store.playingProfileID)?.initials ?? "LEM")", 64, y, 992, palette: .green)
+                text(L10n.text("Next turn: \(store.records.profile(store.playingProfileID)?.initials ?? L10n.text("LEM"))"), 64, y, 992, palette: .green)
             } else if !needsPlayer {
-                text("Choose a second player", 64, y, 992, palette: .green)
+                text(L10n.text("Choose a second player"), 64, y, 992, palette: .green)
             }
         }
-        button("Return to solo", CGRect(x: 64, y: 634, width: 220, height: 48)) { [weak self] in self?.confirmReturnToSolo() }
+        button(L10n.text("Return to solo"), CGRect(x: 64, y: 634, width: 220, height: 48)) { [weak self] in self?.confirmReturnToSolo() }
         if store.hotSeatIsActive {
-            button("New Hot Seat", CGRect(x: 300, y: 634, width: 236, height: 48)) { [weak self] in self?.confirmNewHotSeat() }
+            button(L10n.text("New Hot Seat"), CGRect(x: 300, y: 634, width: 236, height: 48)) { [weak self] in self?.confirmNewHotSeat() }
         }
         if !store.savedHotSeats.isEmpty {
-            button("Saved Hot Seats", CGRect(x: 552, y: 634, width: 240, height: 48)) { [weak self] in
+            button(L10n.text("Saved Hot Seats"), CGRect(x: 552, y: 634, width: 240, height: 48)) { [weak self] in
                 ArcadeWindow.shared.showSavedSessions(owner: self?.window)
             }
         }
-        button("Choose a game", CGRect(x: 808, y: 634, width: 248, height: 48), primary: !needsPlayer,
+        button(L10n.text("Choose a game"), CGRect(x: 808, y: 634, width: 248, height: 48), primary: !needsPlayer,
                enabled: store.hotSeatIsActive) { [weak self] in self?.closeSession() }
-        setAccessibilityLabel("Hot seat. " + store.sessionProfiles.map(\.initials).joined(separator: ", ")
+        setAccessibilityLabel(L10n.text("Hot seat. ") + store.sessionProfiles.map(\.initials).joined(separator: ", ")
             + ". Pass the turn \(store.turnPolicy.title). \(store.turnPolicy.detail)"
-            + " Number keys add or remove players. N adds a new player. Choose a game continues this shared campaign. New Hot Seat starts from the beginning.")
+            + L10n.text(" Number keys add or remove players. N adds a new player. Choose a game continues this shared campaign. New Hot Seat starts from the beginning."))
     }
     func changeSessionPlayer(_ id: String) {
         let store = ArcadeStore.shared
@@ -740,8 +740,8 @@ import NxlvKit
             requestReturnToSolo()
             return
         }
-        GameScreen.shared.confirm("Leave Hot Seat?", detail: "Your shared campaign stays saved for later.",
-            actionTitle: "Return to solo", owner: window) { [weak self] in
+        GameScreen.shared.confirm(L10n.text("Leave Hot Seat?"), detail: L10n.text("Your shared campaign stays saved for later."),
+            actionTitle: L10n.text("Return to solo"), owner: window) { [weak self] in
                 ArcadeStore.shared.endHotSeat()
                 self?.closeSession()
             }
@@ -749,13 +749,13 @@ import NxlvKit
     func confirmNewHotSeat() {
         let store = ArcadeStore.shared
         let previousSession = store.hotSeatID
-        GameScreen.shared.confirm("Start a new Hot Seat?",
-            detail: "Start with these players. Your current Hot Seat will stay saved.",
-            actionTitle: "Start new Hot Seat", owner: window) { [weak self] in
+        GameScreen.shared.confirm(L10n.text("Start a new Hot Seat?"),
+            detail: L10n.text("Start with these players. Your current Hot Seat will stay saved."),
+            actionTitle: L10n.text("Start new Hot Seat"), owner: window) { [weak self] in
                 guard store === ArcadeStore.shared, store.hotSeatID == previousSession,
                       store.startNewHotSeat() else {
-                    GameScreen.shared.message("Cannot start Hot Seat", detail: store.storageError
-                        ?? "Choose at least two players, then try again.")
+                    GameScreen.shared.message(L10n.text("Cannot start Hot Seat"), detail: store.storageError
+                        ?? L10n.text("Choose at least two players, then try again."))
                     return
                 }
                 self?.closeSession()
@@ -764,7 +764,7 @@ import NxlvKit
     private func drawProfiles() {
         let store = ArcadeStore.shared
         let records = store.records
-        header("Players", subtitle: isNewProfile ? "NEW PLAYER" : "PLAYER SELECT")
+        header(L10n.text("Players"), subtitle: isNewProfile ? L10n.text(L10n.text("NEW PLAYER")) : L10n.text(L10n.text("PLAYER SELECT")))
         for (index, profile) in records.profiles.enumerated() {
             let rect = CGRect(x: 64, y: 160 + index * 46, width: 264, height: 40)
             let selected = profile.id == selectedProfileID
@@ -772,8 +772,8 @@ import NxlvKit
             if selected { GameStyle.fill(CGRect(x: rect.minX, y: rect.maxY - 3, width: rect.width, height: 3), GameStyle.accent) }
             drawPortrait(profile.portrait, in: CGRect(x: 73, y: rect.minY + 3, width: 30, height: 34))
             rowText(profile.initials, x: 119, width: 94, row: rect)
-            if profile.id == store.playingProfileID { rowText("Playing", x: 216, width: 104, row: rect) }
-            else if profile.id == records.activeProfileID { rowText("Host", x: 216, width: 104, row: rect) }
+            if profile.id == store.playingProfileID { rowText(L10n.text("Playing"), x: 216, width: 104, row: rect) }
+            else if profile.id == records.activeProfileID { rowText(L10n.text("Host"), x: 216, width: 104, row: rect) }
             buttons.append(("player-" + profile.id, rect, { [weak self] in self?.selectProfile(profile) }))
         }
         if records.profiles.count < 8 {
@@ -782,13 +782,13 @@ import NxlvKit
                 GameStyle.fill(rect, NSColor(calibratedWhite: 0.22, alpha: 1))
                 GameStyle.fill(CGRect(x: rect.minX, y: rect.maxY - 3, width: rect.width, height: 3), GameStyle.accent)
             }
-            link("+ New player", rect, palette: isNewProfile ? .green : .blue) { [weak self] in
+            link(L10n.text("+ New player"), rect, palette: isNewProfile ? .green : .blue) { [weak self] in
                 self?.startNewProfile(returnToHotSeat: self?.profilesReturnToHotSeat ?? false)
             }
         }
         GameStyle.fill(CGRect(x: 364, y: 158, width: 1, height: 440), GameStyle.muted.withAlphaComponent(0.2))
         drawPortrait(portrait, in: CGRect(x: 417, y: 153, width: 108, height: 136))
-        text("INITIALS", 564, 167, 440)
+        text(L10n.text("INITIALS"), 564, 167, 440)
         title(initials.padding(toLength: 3, withPad: "_", startingAt: 0), x: 564, y: 204, width: 430, height: 60)
         for index in 0..<8 {
             let rect = CGRect(x: 418 + index % 4 * 160, y: 318 + index / 4 * 124, width: 144, height: 110)
@@ -800,16 +800,16 @@ import NxlvKit
                 self?.portrait = index; self?.saveEdits(); self?.needsDisplay = true
             }))
         }
-        button("Back", CGRect(x: 64, y: 627, width: 200, height: 55)) { [weak self] in self?.closeProfiles() }
+        button(L10n.text("Back"), CGRect(x: 64, y: 627, width: 200, height: 55)) { [weak self] in self?.closeProfiles() }
         if onCloudSaves != nil {
-            button("Cloud saves", CGRect(x: 418, y: 574, width: 638, height: 38)) { [weak self] in self?.onCloudSaves?() }
+            button(L10n.text("Cloud saves"), CGRect(x: 418, y: 574, width: 638, height: 38)) { [weak self] in self?.onCloudSaves?() }
         }
         if let id = selectedProfileID {
-            button("Delete", CGRect(x: 280, y: 627, width: 200, height: 55),
+            button(L10n.text("Delete"), CGRect(x: 280, y: 627, width: 200, height: 55),
                    enabled: store.canDeleteProfile(id, runInProgress: runInProgress)) { [weak self] in self?.confirmDeleteSelectedProfile() }
         }
         if !profilesReturnToHotSeat {
-            let sessionTitle = store.hotSeatIsActive ? "Return to solo" : "Hot Seat"
+            let sessionTitle = store.hotSeatIsActive ? L10n.text("Return to solo") : L10n.text("Hot Seat")
             button(sessionTitle, CGRect(x: 496, y: 627, width: 224, height: 55),
                    enabled: canSwitch || store.hotSeatIsActive) { [weak self] in
                 if store.hotSeatIsActive { self?.confirmReturnToSolo() }
@@ -818,16 +818,16 @@ import NxlvKit
         }
         button(profilePrimaryTitle, CGRect(x: 736, y: 627, width: 320, height: 55), primary: true,
                enabled: store.profilesAreWritable) { [weak self] in self?.performProfilePrimaryAction() }
-        setAccessibilityLabel("Players. \(records.profiles.map(\.initials).joined(separator: ", ")). Type initials. Arrow keys choose a portrait. Changes save automatically. Enter: \(profilePrimaryTitle). Escape goes back.")
+        setAccessibilityLabel(L10n.text("Players. \(records.profiles.map(\.initials).joined(separator: ", ")). Type initials. Arrow keys choose a portrait. Changes save automatically. Enter: \(profilePrimaryTitle). Escape goes back."))
     }
     private func drawRecords() {
         if boardScope == .career { drawCareerBoard(); return }
         if boardScope == .worldwide { drawWorldwideBoard(); return }
         if let conditions = level?.conditions { drawTrolleyRecords(conditions); return }
-        header(level?.title ?? "Level records"); tabs(); boardScopeLinks()
+        header(level?.title ?? L10n.text("Level records")); tabs(); boardScopeLinks()
         guard let level else {
-            text("Your first rescue starts the story.", 64, 293, 992)
-            text("Play a level to set a record.", 64, 346, 992)
+            text(L10n.text("Your first rescue starts the story."), 64, 293, 992)
+            text(L10n.text("Play a level to set a record."), 64, 346, 992)
             pageFooter(); return
         }
         let categories = ArcadeBoard.allCases, index = categories.firstIndex(of: board) ?? 0
@@ -839,13 +839,13 @@ import NxlvKit
             self?.board = categories[(index + 1) % categories.count]; self?.needsDisplay = true
         }
         rewindFilter()
-        text("PLAYER", 113, 276, 295)
-        text("RESCUED", 493, 276, 240)
-        text("SKILLS", 793, 276, 95)
-        text("TIME", 918, 276, 140)
+        text(L10n.text("PLAYER"), 113, 276, 295)
+        text(L10n.text("RESCUED"), 493, 276, 240)
+        text(L10n.text("SKILLS"), 793, 276, 95)
+        text(L10n.text("TIME"), 918, 276, 140)
         let entries = ArcadeStore.shared.records.leaderboard(level: level, board: board, assisted: assisted)
         if entries.isEmpty {
-            text("No records", 64, 368, 992, alignment: .center)
+            text(L10n.text("No records"), 64, 368, 992, alignment: .center)
         }
         for (index, run) in entries.prefix(5).enumerated() {
             let y = CGFloat(307 + index * 53)
@@ -865,37 +865,37 @@ import NxlvKit
     }
     private func drawAwards() {
         if level?.conditions != nil { drawTrolleyAwards(); return }
-        header("Achievements", subtitle: "All levels"); tabs()
+        header(L10n.text("Achievements"), subtitle: L10n.text("All levels")); tabs()
         let earned = ArcadeStore.shared.records.careerAchievements(profileID: player.id)
-        text("\(careerAwards.filter(earned.contains).count) / \(careerAwards.count) earned", 64, 216, 768)
+        text(L10n.text("\(careerAwards.filter(earned.contains).count) / \(careerAwards.count) earned"), 64, 216, 768)
         drawAwardEntries(careerAwards.map { ($0.title, $0.detail, earned.contains($0)) })
         pageFooter()
         setAccessibilityLabel("Achievements across all levels. " + careerAwards.map {
-            "\(earned.contains($0) ? "Earned" : "Locked"): \($0.title). \($0.detail)"
+            "\(earned.contains($0) ? L10n.text("Earned") : L10n.text("Locked")): \($0.title). \($0.detail)"
         }.joined(separator: " "))
     }
     private func drawDetails() {
         if let conditions = level?.conditions { drawTrolleyDetails(conditions); return }
-        header(level?.title ?? "Run details"); tabs()
+        header(level?.title ?? L10n.text("Run details")); tabs()
         guard let level else { pageFooter(); return }
         let records = ArcadeStore.shared.records
         let run = report?.run ?? records.runs.last { $0.level.boardID == level.boardID && $0.profileID == player.id && $0.assisted == assisted }
         let stats = records.stats(level: level, profileID: player.id, assisted: assisted)
         let best = records.leaderboard(level: level, board: .rescue, assisted: assisted).first
-        text("This run", 64, 221, 480, palette: .green)
-        let rows: [(String, String)] = [("Rescued", run.map { String($0.saved) } ?? "-"),
-                    ("Not rescued", run.map { String($0.population - $0.saved) } ?? "-"),
-                    ("Skills used", run.map { String($0.skillCount) } ?? "-"),
-                    ("Time", run.map { Self.time($0.seconds) } ?? "-")]
+        text(L10n.text("This run"), 64, 221, 480, palette: .green)
+        let rows: [(String, String)] = [(L10n.text("Rescued"), run.map { String($0.saved) } ?? "-"),
+                    (L10n.text("Not rescued"), run.map { String($0.population - $0.saved) } ?? "-"),
+                    (L10n.text("Skills used"), run.map { String($0.skillCount) } ?? "-"),
+                    (L10n.text("Time"), run.map { Self.time($0.seconds) } ?? "-")]
         for (index, row) in rows.enumerated() {
             let y = CGFloat(270 + index * 34)
             text(row.0, 64, y, 245, palette: .green)
             text(row.1, 344, y, 248)
         }
-        text("This level", 654, 221, 402, palette: .green)
-        let levelRows = [("Required", String(level.required)),
-                         ("Best known", best.map { String($0.saved) } ?? "Unknown"),
-                         ("Attempts", String(stats.attempts)), ("Clears", String(stats.clears))]
+        text(L10n.text("This level"), 654, 221, 402, palette: .green)
+        let levelRows = [(L10n.text("Required"), String(level.required)),
+                         (L10n.text("Best known"), best.map { String($0.saved) } ?? L10n.text("Unknown")),
+                         (L10n.text("Attempts"), String(stats.attempts)), (L10n.text("Clears"), String(stats.clears))]
         for (index, row) in levelRows.enumerated() {
             let y = CGFloat(270 + index * 34)
             text(row.0, 654, y, 248, palette: .green)

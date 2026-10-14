@@ -25,7 +25,7 @@ extension MobileGameViewController {
     func showHints(stage: Int = 0) {
         guard !session.isReadOnly else { pausePlay(showControls: true); return }
         pauseForPlanning()
-        showCustomOverlay(title: "Hints", details: ["Loading..."], actions: [("BACK", { [weak self] in self?.pausePlay(showControls: true) })])
+        showCustomOverlay(title: L10n.text("Hints"), details: [L10n.text("Loading...")], actions: [(L10n.text("BACK"), { [weak self] in self?.pausePlay(showControls: true) })])
         let request = UUID(); hintRequestID = request
         let initial = (session as? ClassicMobileSession)?.initialSimulation
         let title = summary.title, skills = session.snapshot.skills.filter { $0.count != 0 }.map(\.name)
@@ -40,20 +40,20 @@ extension MobileGameViewController {
         let index = min(max(0, stage), deck.stages.count - 1)
         let hint = deck.stages[index]
         var actions: [(String, () -> Void)] = []
-        if index > 0 { actions.append(("PREVIOUS", { [weak self] in self?.showHints(stage: index - 1) })) }
-        if index + 1 < deck.stages.count { actions.append(("NEXT HINT", { [weak self] in self?.showHints(stage: index + 1) })) }
+        if index > 0 { actions.append((L10n.text("PREVIOUS"), { [weak self] in self?.showHints(stage: index - 1) })) }
+        if index + 1 < deck.stages.count { actions.append((L10n.text(L10n.text("NEXT HINT")), { [weak self] in self?.showHints(stage: index + 1) })) }
         if let solution {
-            actions.append(("WATCH SOLUTION", { [weak self] in
+            actions.append((L10n.text(L10n.text("WATCH SOLUTION")), { [weak self] in
                 if self?.hasSolutionPair == true { self?.selectSolutionMode(.solution); return }
-                self?.showCustomOverlay(title: "Watch solution?", details: [], actions: [
-                    ("CANCEL", { [weak self] in self?.showHints(stage: index) }),
-                    ("WATCH", { [weak self] in
+                self?.showCustomOverlay(title: L10n.text("Watch solution?"), details: [], actions: [
+                    (L10n.text("CANCEL"), { [weak self] in self?.showHints(stage: index) }),
+                    (L10n.text("WATCH"), { [weak self] in
                         guard let data = try? JSONEncoder().encode(solution.replay) else { return }
                         self?.showReplay(document: data, solution: true)
                     })])
             }))
         }
-        actions.append(("BACK", { [weak self] in self?.pausePlay(showControls: true) }))
+        actions.append((L10n.text("BACK"), { [weak self] in self?.pausePlay(showControls: true) }))
         let width = max(24, min(68, Int(view.bounds.width / 8) - 10))
         showCustomOverlay(title: hint.title, details: Self.wrapHint(hint.body, columns: width), actions: actions)
     }

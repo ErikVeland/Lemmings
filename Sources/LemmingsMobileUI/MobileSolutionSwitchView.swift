@@ -27,12 +27,12 @@ import UIKit
         backgroundColor = .black
         for value in SolutionReplayMode.allCases {
             let button = MobileFocusButton(type: .custom)
-            button.accessibilityLabel = value == .game ? "Your game" : "Solution"
+            button.accessibilityLabel = value == .game ? L10n.text("Your game") : L10n.text("Solution")
             button.accessibilityIdentifier = "solutionSwitch." + value.rawValue
             button.addAction(UIAction { [weak self] _ in self?.activate(value) }, for: .gameActivation)
             addSubview(button); buttons.append(button)
         }
-        ghostButton.accessibilityLabel = "Ghost solution"
+        ghostButton.accessibilityLabel = L10n.text("Ghost solution")
         ghostButton.accessibilityIdentifier = "solutionSwitch.ghost"
         ghostButton.addAction(UIAction { [weak self] _ in self?.activateGhost() }, for: .gameActivation)
         addSubview(ghostButton)
@@ -55,7 +55,7 @@ import UIKit
         onToggleGhost?()
     }
     private func updateSelection() {
-        ghostButton.accessibilityValue = ghostEnabled ? "On" : "Off"
+        ghostButton.accessibilityValue = ghostEnabled ? "On" : L10n.text("Off")
         ghostButton.accessibilityTraits = ghostEnabled ? [.button, .selected] : .button
         for (value, button) in zip(SolutionReplayMode.allCases, buttons) {
             button.accessibilityTraits = value == mode ? [.button, .selected] : .button

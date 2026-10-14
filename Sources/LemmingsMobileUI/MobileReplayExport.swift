@@ -11,7 +11,7 @@ extension MobileGameViewController {
         let recorder = ReplayMovieRecorder(ticksPerSecond: session.ticksPerSecond)
         let viewport = playfieldView.gameViewport
         let cancelled = MobileReplayExportCancellation()
-        showCustomOverlay(title: "Replay movie", details: [], actions: [("CANCEL", { [weak self] in
+        showCustomOverlay(title: L10n.text("Replay movie"), details: [], actions: [(L10n.text("CANCEL"), { [weak self] in
             cancelled.cancelled = true
             recorder.discard()
             self?.returnToResult()
@@ -60,14 +60,14 @@ extension MobileGameViewController {
                         #endif
                     case let .failure(error):
                         self.showCustomOverlay(title: error.localizedDescription, details: [], actions: [
-                            ("TRY AGAIN", { [weak self] in self?.shareReplayMovie(document: document) }),
-                            ("LIBRARY", { [weak self] in self?.leaveToLibrary() }),
+                            (L10n.text(L10n.text("TRY AGAIN")), { [weak self] in self?.shareReplayMovie(document: document) }),
+                            (L10n.text("LIBRARY"), { [weak self] in self?.leaveToLibrary() }),
                         ])
                     }
                 }
             } catch {
                 recorder.discard()
-                self.showCustomOverlay(title: error.localizedDescription, details: [], actions: [("LIBRARY", { [weak self] in self?.leaveToLibrary() })])
+                self.showCustomOverlay(title: error.localizedDescription, details: [], actions: [(L10n.text("LIBRARY"), { [weak self] in self?.leaveToLibrary() })])
             }
         }
     }

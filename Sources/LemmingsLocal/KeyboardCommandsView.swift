@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import NxlvKit
 
 struct KeyboardCommand {
     let keys: String
@@ -19,17 +20,17 @@ struct KeyboardCommand {
     init(commands: [KeyboardCommand], modern: Bool) {
         self.commands = commands
         super.init(frame: NSRect(x: 0, y: 0, width: 780, height: 450))
-        let intro = GameLabel(wrappingLabelWithString: "Esc  •  Save and return to the main menu     Space  •  Pause     F  •  Fast-forward\n" + (modern ? "Number keys select skills by position. Letter bindings follow the current level." : "Modern shortcuts are off. Use number keys for skills; enable modern controls in Settings."))
-        search.placeholderString = "Find a key or command, e.g. rewind, Shift, builder"
-        search.setAccessibilityLabel("Search keyboard commands")
+        let intro = GameLabel(wrappingLabelWithString: L10n.text("Esc  •  Save and return to the main menu     Space  •  Pause     F  •  Fast-forward\n") + (modern ? L10n.text("Number keys select skills by position. Letter bindings follow the current level.") : L10n.text("Modern shortcuts are off. Use number keys for skills; enable modern controls in Settings.")))
+        search.placeholderString = L10n.text("Find a key or command, e.g. rewind, Shift, builder")
+        search.setAccessibilityLabel(L10n.text("Search keyboard commands"))
         search.delegate = self
-        category.addItems(withTitles: ["All commands"] + Array(Set(commands.map(\.group))).sorted())
+        category.addItems(withTitles: [L10n.text("All commands")] + Array(Set(commands.map(\.group))).sorted())
         category.target = self; category.action = #selector(filterChanged)
-        category.setAccessibilityLabel("Command category")
+        category.setAccessibilityLabel(L10n.text("Command category"))
         let scroll = NSScrollView()
         scroll.hasVerticalScroller = true
         scroll.borderType = .noBorder
-        for (identifier, title, width) in [("keys", "Keys", 185.0), ("action", "Command", 385.0), ("group", "Where", 180.0)] {
+        for (identifier, title, width) in [("keys", L10n.text("Keys"), 185.0), ("action", L10n.text("Command"), 385.0), ("group", L10n.text("Where"), 180.0)] {
             let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(identifier))
             column.headerCell = GameTableHeaderCell(textCell: title); column.title = title; column.width = width
             table.addTableColumn(column)
@@ -39,7 +40,7 @@ struct KeyboardCommand {
         table.backgroundColor = .black
         table.columnAutoresizingStyle = .lastColumnOnlyAutoresizingStyle
         table.dataSource = self; table.delegate = self
-        table.setAccessibilityLabel("Keyboard commands")
+        table.setAccessibilityLabel(L10n.text("Keyboard commands"))
         scroll.documentView = table
         for view in [intro, search, category, scroll, count] {
             view.translatesAutoresizingMaskIntoConstraints = false; addSubview(view)
@@ -63,7 +64,7 @@ struct KeyboardCommand {
             (query.isEmpty || "\(row.keys) \(row.action) \(row.group)".localizedCaseInsensitiveContains(query))
         }
         table.reloadData()
-        count.stringValue = filtered.isEmpty ? "No matching commands. Try another word or choose All commands." : "\(filtered.count) commands • Shortcuts apply in the context shown. Esc closes this guide."
+        count.stringValue = filtered.isEmpty ? L10n.text("No matching commands. Try another word or choose All commands.") : L10n.text("\(filtered.count) commands • Shortcuts apply in the context shown. Esc closes this guide.")
     }
     func numberOfRows(in tableView: NSTableView) -> Int { filtered.count }
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {

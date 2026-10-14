@@ -5,7 +5,7 @@ public struct Lemmings3ClassicCampaign: Sendable {
     public static let requiredTribeSurvivors = 50
     public enum Tribe: Int, CaseIterable, Codable, Sendable {
         case classic = 1, shadow = 2, egyptian = 3
-        public var title: String { switch self { case .classic: "Classic"; case .shadow: "Shadow"; case .egyptian: "Egyptian" } }
+        public var title: String { switch self { case .classic: L10n.text(L10n.text("Classic")); case .shadow: L10n.text(L10n.text("Shadow")); case .egyptian: L10n.text(L10n.text("Egyptian")) } }
         public var firstLevel: Int { (rawValue - 1) * 100 + 1 }
         public var spriteStyle: Int { switch self { case .classic: 4; case .shadow: 10; case .egyptian: 5 } }
     }
@@ -36,7 +36,7 @@ public struct Lemmings3ClassicCampaign: Sendable {
         self.tribe = tribe
         levels = try (tribe.firstLevel..<(tribe.firstLevel + 30)).map { number in
             let level = try Lemmings3Level(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/LEVEL%03d.DAT", number))))
-            guard level.style == tribe.rawValue, level.lemmingStyle == tribe.spriteStyle else { throw SequelDataError.invalid("Unexpected style in the Chronicles \(tribe.title) sequence.") }
+            guard level.style == tribe.rawValue, level.lemmingStyle == tribe.spriteStyle else { throw SequelDataError.invalid(L10n.text("Unexpected style in the Chronicles \(tribe.title) sequence.")) }
             return level
         }
     }
@@ -44,7 +44,7 @@ public struct Lemmings3ClassicCampaign: Sendable {
         guard progress.version == 1, (progress.tribe ?? .classic) == tribe, levels.indices.contains(progress.index),
               (1...maximumPopulation(before: progress.index)).contains(progress.population),
               progress.completed.allSatisfy({ levels.indices.contains($0.key) && (1...maximumPopulation(before: $0.key + 1)).contains($0.value) }) else {
-            throw SequelDataError.invalid("Invalid Chronicles preview progress.")
+            throw SequelDataError.invalid(L10n.text("Invalid Chronicles preview progress."))
         }
         index = progress.index; population = progress.population; completed = progress.completed
     }

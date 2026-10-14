@@ -1,5 +1,6 @@
 #if canImport(CoreGraphics) && canImport(CoreImage)
 import CoreGraphics
+import NxlvKit
 import CoreImage
 import Foundation
 
@@ -98,7 +99,7 @@ import Foundation
         let padding = ceil(radius * 3)
         let size = CGSize(width: crop.width * sampling, height: crop.height * sampling)
         let extent = CGRect(origin: .zero, size: size).insetBy(dx: -padding, dy: -padding)
-        guard let output = matrix.outputImage?.applyingFilter("CIGaussianBlur", parameters: [kCIInputRadiusKey: radius]),
+        guard let output = matrix.outputImage?.applyingFilter(L10n.text("CIGaussianBlur"), parameters: [kCIInputRadiusKey: radius]),
               let glow = renderer.context.createCGImage(output, from: extent, format: .RGBA8,
                 colorSpace: CGColorSpaceCreateDeviceRGB()) else { return nil }
         return Frame(source: image, glow: glow, expansion: CGSize(width: padding / size.width, height: padding / size.height),

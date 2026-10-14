@@ -42,7 +42,7 @@ public struct GameCenterAccount: Equatable, Sendable {
     }
     public private(set) var boardID: String?
     public private(set) var previousRank: Int?
-    public private(set) var status = "Connect Game Center to compare worldwide."
+    public private(set) var status = L10n.text(L10n.text("Connect Game Center to compare worldwide."))
     public private(set) var busy = false
     public var onChange: (() -> Void)?
     public var available: Bool { configuration?.enabled == true && configuration?.isValid == true }
@@ -61,12 +61,12 @@ public struct GameCenterAccount: Equatable, Sendable {
         self.configuration = configuration ?? Bundle.main.url(forResource: "leaderboards", withExtension: "json", subdirectory: "GameCenter")
             .flatMap { try? Data(contentsOf: $0) }.flatMap { try? JSONDecoder().decode(TrolleyOnlineConfiguration.self, from: $0) }
         self.transport = transport; self.defaults = defaults
-        if !available { status = "Worldwide rankings are not enabled in this build. Local records are saved." }
+        if !available { status = L10n.text("Worldwide rankings are not enabled in this build. Local records are saved.") }
     }
     public func connect(profileID: String, boardID: String, history: TrolleyHistory) {
         guard available, !busy else { onChange?(); return }
         let request = UUID(); authenticationRequest = request
-        busy = true; status = "Connecting to Game Center..."; onChange?()
+        busy = true; status = L10n.text("Connecting to Game Center..."); onChange?()
         transport.authenticate() { [weak self] result in
             guard let self else { return }
             guard self.authenticationRequest == request else { return }
@@ -89,15 +89,15 @@ public struct GameCenterAccount: Equatable, Sendable {
         self.boardID = boardID; loadedBoard = nil; busy = false
         guard available, let account else {
             authenticationRequest = nil
-            status = available ? "Connect Game Center to compare worldwide."
-                : "Worldwide rankings are not enabled in this build. Local records are saved."
+            status = available ? L10n.text("Connect Game Center to compare worldwide.")
+                : L10n.text("Worldwide rankings are not enabled in this build. Local records are saved.")
             onChange?(); return
         }
         let ticket = generation
         let linked = linkedProfileID == profileID
         busy = true
-        status = linked ? "Syncing your saved records..."
-            : "Viewing worldwide scores. \(linkedProfileInitials ?? "The main profile") holds this Mac's worldwide place. This player keeps local records."
+        status = linked ? L10n.text("Syncing your saved records...")
+            : L10n.text("Viewing worldwide scores. \(linkedProfileInitials ?? "The main profile") holds this Mac's worldwide place. This player keeps local records.")
         onChange?()
         operation = Task { @MainActor [weak self] in
             guard let self else { return }
@@ -106,7 +106,7 @@ public struct GameCenterAccount: Equatable, Sendable {
                     self.busy = false
                     if self.account?.id != account.id {
                         self.loadedBoard = nil
-                        self.status = "Game Center account changed. Your local records are saved."
+                        self.status = L10n.text("Game Center account changed. Your local records are saved.")
                     }
                     self.onChange?()
                 }
@@ -131,11 +131,11 @@ public struct GameCenterAccount: Equatable, Sendable {
                 guard !Task.isCancelled, self.generation == ticket, self.account?.id == account.id else { return }
                 self.loadedBoard = loaded
                 self.boardAccountID = account.id
-                self.status = syncFailed ? "Scores are saved locally. Retry to finish syncing."
-                    : linked ? "Connected as \(account.name). Records synced." : "Viewing as \(account.name). Scores belong to a different local player."
+                self.status = syncFailed ? L10n.text("Scores are saved locally. Retry to finish syncing.")
+                    : linked ? L10n.text("Connected as \(account.name). Records synced.") : L10n.text("Viewing as \(account.name). Scores belong to a different local player.")
             } catch {
                 guard self.generation == ticket else { return }
-                self.status = "Game Center is unavailable. Your records are saved. Retry when connected."
+                self.status = L10n.text("Game Center is unavailable. Your records are saved. Retry when connected.")
             }
             self.busy = false; self.onChange?()
         }

@@ -23,21 +23,21 @@ public enum ClassicDATError: Error, Equatable, CustomStringConvertible {
     public var description: String {
         switch self {
         case let .truncatedHeader(offset):
-            return "Truncated DAT section header at byte \(offset)."
+            return L10n.text("Truncated DAT section header at byte \(offset).")
         case let .invalidHeader(offset, compressedSize, decompressedSize):
-            return "Invalid DAT section header at byte \(offset) (compressed: \(compressedSize), decompressed: \(decompressedSize))."
+            return L10n.text("Invalid DAT section header at byte \(offset) (compressed: \(compressedSize), decompressed: \(decompressedSize)).")
         case let .truncatedSection(offset, expectedEnd, fileSize):
-            return "DAT section at byte \(offset) ends at \(expectedEnd), beyond file size \(fileSize)."
+            return L10n.text("DAT section at byte \(offset) ends at \(expectedEnd), beyond file size \(fileSize).")
         case let .invalidBitCount(offset, value):
-            return "DAT section at byte \(offset) has invalid initial bit count \(value)."
+            return L10n.text("DAT section at byte \(offset) has invalid initial bit count \(value).")
         case let .corruptBitstream(offset):
-            return "DAT section at byte \(offset) has a truncated bitstream."
+            return L10n.text("DAT section at byte \(offset) has a truncated bitstream.")
         case let .invalidBackReference(offset, source, outputSize):
-            return "DAT section at byte \(offset) has invalid back-reference \(source) for output size \(outputSize)."
+            return L10n.text("DAT section at byte \(offset) has invalid back-reference \(source) for output size \(outputSize).")
         case let .outputOverflow(offset):
-            return "DAT section at byte \(offset) writes beyond its declared output size."
+            return L10n.text("DAT section at byte \(offset) writes beyond its declared output size.")
         case let .checksumMismatch(offset):
-            return "DAT section at byte \(offset) failed its XOR checksum."
+            return L10n.text("DAT section at byte \(offset) failed its XOR checksum.")
         }
     }
 }

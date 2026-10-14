@@ -137,12 +137,12 @@ public enum RunRecoveryError: Error, LocalizedError {
     case version, invalid, changed, busy, differentGame, differentSession
     public var errorDescription: String? {
         switch self {
-        case .version: return "This saved run needs a different app version. Its files were preserved."
-        case .invalid: return "The saved run could not be verified. Its files were preserved."
-        case .changed: return "The saved run changed in another app. Reopen the game before saving again."
-        case .busy: return "Another app is saving this run. Try again."
-        case .differentGame: return "The saved run uses different game data or rules. Its files were preserved."
-        case .differentSession: return "This run belongs to another player or Hot Seat. Resume that session first. Its files were preserved."
+        case .version: return L10n.text("This saved run needs a different app version. Its files were preserved.")
+        case .invalid: return L10n.text("The saved run could not be verified. Its files were preserved.")
+        case .changed: return L10n.text("The saved run changed in another app. Reopen the game before saving again.")
+        case .busy: return L10n.text("Another app is saving this run. Try again.")
+        case .differentGame: return L10n.text("The saved run uses different game data or rules. Its files were preserved.")
+        case .differentSession: return L10n.text("This run belongs to another player or Hot Seat. Resume that session first. Its files were preserved.")
         }
     }
 }

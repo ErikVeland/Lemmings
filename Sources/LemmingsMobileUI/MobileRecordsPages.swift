@@ -47,11 +47,11 @@ extension MobileLibraryViewController {
         default:
             if id.hasPrefix("record.") { navigate(.recordLevel(String(id.dropFirst(7)))) }
             else if id.hasPrefix("award."), let award = ArcadeLevelAchievement(rawValue: String(id.dropFirst(6))) {
-                canvas.page = .init(title: award.title, details: [award.detail], footer: [.init("achievements", "Back")])
+                canvas.page = .init(title: award.title, details: [award.detail], footer: [.init("achievements", L10n.text("Back"))])
             } else if id.hasPrefix("careerAward."), let award = TrolleyAchievement(rawValue: String(id.dropFirst(12))) {
-                canvas.page = .init(title: award.title, details: [award.detail], footer: [.init("achievements", "Back")])
+                canvas.page = .init(title: award.title, details: [award.detail], footer: [.init("achievements", L10n.text("Back"))])
             } else if id.hasPrefix("campaignAward."), let award = ClassicAchievement.catalog.first(where: { $0.id.rawValue == String(id.dropFirst(14)) }) {
-                canvas.page = .init(title: award.title, details: [award.detail], footer: [.init("achievements", "Back")])
+                canvas.page = .init(title: award.title, details: [award.detail], footer: [.init("achievements", L10n.text("Back"))])
             } else { return false }
         }
         return true
@@ -67,7 +67,7 @@ extension MobileLibraryViewController {
         }.map(\.seconds).min()
         let campaignBefore = mobileCampaignProgress(profileID: run.profileID).unlocked
         guard let report = arcadeStore.record(run) else {
-            return ([], arcadeStore.storageError ?? "Records were not saved. Retry the save before continuing.")
+            return ([], arcadeStore.storageError ?? L10n.text("Records were not saved. Retry the save before continuing."))
         }
         let celebration = TrolleyCelebration(report: report, history: arcadeStore.records.trolley)
         if MobileResultAwardsCache.values.count > 128 { MobileResultAwardsCache.values.removeAll() }
@@ -76,10 +76,10 @@ extension MobileLibraryViewController {
         let campaignAfter = mobileCampaignProgress(profileID: run.profileID).unlocked
         var details = report.earned.map(\.title) + celebration.newAwards.map { $0.award.title }
         details += ClassicAchievement.catalog.filter { campaignAfter.contains($0.id) && !campaignBefore.contains($0.id) }.map(\.title)
-        if report.newRescueBest { details.insert("New rescue record", at: 0) }
-        if report.newSkillBest { details.append("New skill record") }
-        if run.qualifies, bestTime.map({ run.seconds < $0 }) ?? true { details.append("New time record  \(Int(run.seconds) / 60):\(String(format: "%05.2f", run.seconds.truncatingRemainder(dividingBy: 60)))") }
-        if report.earnedLevelSkip { details.append("Level skip earned") }
+        if report.newRescueBest { details.insert(L10n.text("New rescue record"), at: 0) }
+        if report.newSkillBest { details.append(L10n.text("New skill record")) }
+        if run.qualifies, bestTime.map({ run.seconds < $0 }) ?? true { details.append(L10n.text("New time record  \(Int(run.seconds) / 60):\(String(format: "%05.2f", run.seconds.truncatingRemainder(dividingBy: 60)))")) }
+        if report.earnedLevelSkip { details.append(L10n.text("Level skip earned")) }
         if let classic = session as? ClassicMobileSession {
             do {
                 if let data = try classic.replayDocument() {

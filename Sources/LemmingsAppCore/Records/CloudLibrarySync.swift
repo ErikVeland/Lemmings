@@ -41,17 +41,17 @@ import NxlvKit
         stateFile = storage.applicationSupport.appendingPathComponent("\(storage.isPreviewBuild ? "Cloud Library Preview" : "Cloud Library")/local-state-v2.json")
         if let data = try? Data(contentsOf: stateFile) {
             do { saved = try JSONDecoder().decode(LocalState.self, from: data); try saved.archive.validate() }
-            catch { stateReadFailed = true; state = .failed("Cloud sync state could not be read. Existing saves were kept.") }
+            catch { stateReadFailed = true; state = .failed(L10n.text("Cloud sync state could not be read. Existing saves were kept.")) }
         }
     }
     public var status: String {
         switch state {
-        case .idle: "Cloud saves"
-        case .syncing: "Syncing"
-        case .synced: "Synced"
-        case .pending: "Saved on this device"
-        case .offline: "Offline"
-        case .paused: "Cloud saves paused"
+        case .idle: L10n.text("Cloud saves")
+        case .syncing: L10n.text("Syncing")
+        case .synced: L10n.text("Synced")
+        case .pending: L10n.text(L10n.text("Saved on this device"))
+        case .offline: L10n.text("Offline")
+        case .paused: L10n.text("Cloud saves paused")
         case .failed(let message): message
         }
     }
@@ -285,7 +285,7 @@ import NxlvKit
                 let destination = branch.revision == chosen.revision ? id : branch.branchID
                 if destination != id, local.archive.seats[destination] != nil { continue }
                 let reverse = Dictionary(local.mapping.map { ($0.value, $0.key) }, uniquingKeysWith: { a, _ in a })
-                guard let host = reverse[branch.host], let turn = reverse[branch.turn] else { throw SequelDataError.invalid("The shared campaign players are missing.") }
+                guard let host = reverse[branch.host], let turn = reverse[branch.turn] else { throw SequelDataError.invalid(L10n.text("The shared campaign players are missing.")) }
                 try branch.progress.apply(defaults: defaults, profileID: host, sessionID: destination)
                 seats.append(.init(id: destination, host: host, players: branch.players.compactMap { reverse[$0] }, turn: turn,
                     active: false, savedAt: branch.savedAt, policy: branch.everyLevel ? .everyLevel : .atFirstFail))
@@ -302,11 +302,11 @@ import NxlvKit
     public func makeLink() async throws -> String {
         await syncNow()
         guard enabled, state == .synced || state == .pending, let apple = transport as? AppleCloudLibraryTransport,
-            apple.providers.contains("Cloud"), !apple.issues.contains(where: { $0.hasPrefix("Cloud") }) else { throw SequelDataError.invalid("Connect to the internet to link a device.") }
+            apple.providers.contains("Cloud"), !apple.issues.contains(where: { $0.hasPrefix("Cloud") }) else { throw SequelDataError.invalid(L10n.text("Connect to the internet to link a device.")) }
         return try await apple.makeLink(identities)
     }
     public func join(_ code: String) async throws {
-        guard canImport(), let apple = transport as? AppleCloudLibraryTransport else { throw SequelDataError.invalid("Return to the library before linking devices.") }
+        guard canImport(), let apple = transport as? AppleCloudLibraryTransport else { throw SequelDataError.invalid(L10n.text("Return to the library before linking devices.")) }
         let linked = try await apple.redeemLink(code)
         var combined = identities.isEmpty ? try apple.credentials() : identities
         for identity in linked where !combined.contains(where: { $0.id == identity.id }) { combined.append(identity) }
@@ -316,20 +316,20 @@ import NxlvKit
     /// A portable private key restores an account-free library after losing a device.
     public func recoveryData() throws -> Data {
         let keys = identities.isEmpty ? try (transport as? AppleCloudLibraryTransport)?.credentials() ?? [] : identities
-        guard !keys.isEmpty else { throw SequelDataError.invalid("Sync this library before saving its recovery key.") }
+        guard !keys.isEmpty else { throw SequelDataError.invalid(L10n.text("Sync this library before saving its recovery key.")) }
         return try JSONEncoder().encode(keys)
     }
     public func restoreRecoveryData(_ data: Data) throws {
         guard canImport(), let apple = transport as? AppleCloudLibraryTransport, data.count <= 16384 else {
-            throw SequelDataError.invalid("Return to the library to restore a recovery key.")
+            throw SequelDataError.invalid(L10n.text("Return to the library to restore a recovery key."))
         }
         let keys = try JSONDecoder().decode([CloudLibraryIdentity].self, from: data)
-        guard !keys.isEmpty else { throw SequelDataError.invalid("The recovery key is empty.") }
+        guard !keys.isEmpty else { throw SequelDataError.invalid(L10n.text("The recovery key is empty.")) }
         var combined = identities.isEmpty ? try apple.credentials() : identities
         for key in keys {
             try key.validate()
             if let existing = combined.first(where: { $0.id == key.id }) {
-                guard existing == key else { throw SequelDataError.invalid("The recovery keys conflict.") }
+                guard existing == key else { throw SequelDataError.invalid(L10n.text("The recovery keys conflict.")) }
             } else { combined.append(key) }
         }
         try apple.storeCredentials(combined); identities = combined

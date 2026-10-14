@@ -219,7 +219,7 @@ public struct NxrpReplayPlayback: Codable, Equatable, Sendable {
                 let assignment = preview.assign(skill: skill, to: lemmingID)
                 guard assignment.wasAssigned || !validatesRecordedState else {
                     guard case let .rejected(_, _, reason) = assignment else {
-                        preconditionFailure("A non-assigned result must contain a rejection reason.")
+                        preconditionFailure(L10n.text("A non-assigned result must contain a rejection reason."))
                     }
                     throw NxrpReplayPlaybackError.assignmentRejected(
                         sequence: item.sequence,

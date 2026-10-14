@@ -32,44 +32,44 @@ public struct ClassicAchievement: Equatable, Sendable {
 public extension ClassicAchievement {
     static let catalog: [ClassicAchievement] = [
         ClassicAchievement(
-            id: .firstRescue, title: "The First Step",
-            detail: "Pass your first level."),
+            id: .firstRescue, title: L10n.text("The First Step"),
+            detail: L10n.text("Pass your first level.")),
         ClassicAchievement(
-            id: .lemmingsComplete, title: "The Original",
-            detail: "Pass every Lemmings level in order."),
+            id: .lemmingsComplete, title: L10n.text("The Original"),
+            detail: L10n.text("Pass every Lemmings level in order.")),
         ClassicAchievement(
-            id: .xmas1991Complete, title: "A 1991 Christmas",
-            detail: "Pass every Xmas Lemmings 1991 level in order."),
+            id: .xmas1991Complete, title: L10n.text("A 1991 Christmas"),
+            detail: L10n.text("Pass every Xmas Lemmings 1991 level in order.")),
         ClassicAchievement(
-            id: .ohNoComplete, title: "Oh No! No More",
-            detail: "Pass every Oh No! More Lemmings level in order."),
+            id: .ohNoComplete, title: L10n.text("Oh No! No More"),
+            detail: L10n.text("Pass every Oh No! More Lemmings level in order.")),
         ClassicAchievement(
-            id: .xmas1992Complete, title: "A 1992 Christmas",
-            detail: "Pass every Xmas Lemmings 1992 level in order."),
+            id: .xmas1992Complete, title: L10n.text("A 1992 Christmas"),
+            detail: L10n.text("Pass every Xmas Lemmings 1992 level in order.")),
         ClassicAchievement(
-            id: .lemmings2Complete, title: "Twelve Tribes",
-            detail: "Pass every Lemmings 2 level in order."),
+            id: .lemmings2Complete, title: L10n.text("Twelve Tribes"),
+            detail: L10n.text("Pass every Lemmings 2 level in order.")),
         ClassicAchievement(
-            id: .holiday1993Complete, title: "Holiday 1993",
-            detail: "Pass every Holiday Lemmings 1993 level in order."),
+            id: .holiday1993Complete, title: L10n.text("Holiday 1993"),
+            detail: L10n.text("Pass every Holiday Lemmings 1993 level in order.")),
         ClassicAchievement(
-            id: .ohYesMoreLemmingsComplete, title: "Collector",
-            detail: "Pass every level the other machines kept to themselves."),
+            id: .ohYesMoreLemmingsComplete, title: L10n.text("Collector"),
+            detail: L10n.text("Pass every level the other machines kept to themselves.")),
         ClassicAchievement(
-            id: .lemmings3Complete, title: "A New World",
-            detail: "Pass every Lemmings 3 level in order."),
+            id: .lemmings3Complete, title: L10n.text("A New World"),
+            detail: L10n.text("Pass every Lemmings 3 level in order.")),
         ClassicAchievement(
-            id: .holiday1994Complete, title: "Holiday 1994",
-            detail: "Pass every Holiday Lemmings 1994 level in order."),
+            id: .holiday1994Complete, title: L10n.text("Holiday 1994"),
+            detail: L10n.text("Pass every Holiday Lemmings 1994 level in order.")),
         ClassicAchievement(
-            id: .festiveComplete, title: "Festive Season",
-            detail: "Pass all four festive releases."),
+            id: .festiveComplete, title: L10n.text("Festive Season"),
+            detail: L10n.text("Pass all four festive releases.")),
         ClassicAchievement(
-            id: .trilogyComplete, title: "The Trilogy",
-            detail: "Complete Lemmings, Lemmings 2, and Lemmings 3."),
+            id: .trilogyComplete, title: L10n.text("The Trilogy"),
+            detail: L10n.text("Complete Lemmings, Lemmings 2, and Lemmings 3.")),
         ClassicAchievement(
-            id: .fullCanonComplete, title: "Master of Lemmings",
-            detail: "Complete the entire series from start to finish."),
+            id: .fullCanonComplete, title: L10n.text("Master of Lemmings"),
+            detail: L10n.text("Complete the entire series from start to finish.")),
     ]
 }
 

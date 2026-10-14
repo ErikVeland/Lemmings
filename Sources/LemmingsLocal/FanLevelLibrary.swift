@@ -506,7 +506,7 @@ enum FanLevelLibrary {
       throw NSError(
         domain: "FanLevelLibrary",
         code: 3,
-        userInfo: [NSLocalizedDescriptionKey: "The fan level archive could not be verified."])
+        userInfo: [NSLocalizedDescriptionKey: L10n.text("The fan level archive could not be verified.")])
     }
     try Task.checkCancellation()
     let listing = shellResult(["/usr/bin/unzip", "-Z1", pack.path])
@@ -514,7 +514,7 @@ enum FanLevelLibrary {
       throw NSError(
         domain: "FanLevelLibrary",
         code: 4,
-        userInfo: [NSLocalizedDescriptionKey: "The fan level archive could not be listed."])
+        userInfo: [NSLocalizedDescriptionKey: L10n.text("The fan level archive could not be listed.")])
     }
     return entries(in: pack, names: listing.output
       .split(separator: "\n").map(String.init).sorted())
@@ -585,7 +585,7 @@ enum FanLevelLibrary {
     guard entry.section == nil, entry.file.lowercased().hasSuffix(".ini"),
           let raw = contents(of: entry.file, in: pack),
           !(raw.count == ClassicLevel.recordSize && raw.prefix(32).contains(0)) else {
-      throw FanLevelError.invalidField("text canvas")
+      throw FanLevelError.invalidField(L10n.text("text canvas"))
     }
     let text = String(data: raw, encoding: .utf8)
       ?? (String(data: raw, encoding: .isoLatin1) ?? String(decoding: raw, as: UTF8.self))
@@ -601,7 +601,7 @@ enum FanLevelLibrary {
           let slots = mappings[member], slots.count == count,
           Set(slots).count == slots.count, slots.allSatisfy({ (0..<10_000).contains($0) }) else {
       throw NSError(domain: "FanLevelLibrary", code: 2,
-                    userInfo: [NSLocalizedDescriptionKey: "Invalid archived level slot mapping."])
+                    userInfo: [NSLocalizedDescriptionKey: L10n.text("Invalid archived level slot mapping.")])
     }
     return slots
   }
@@ -675,7 +675,7 @@ enum FanLevelLibrary {
                         pack: URL? = nil, entry: Entry? = nil, useLocalStyles: Bool = true, useHolidayStyles: Bool = true) throws -> ClassicGroundSet {
     let names = ["dirt", "fire", "marble", "pillar", "crystal", "brick", "rock", "snow", "bubble", "xmas"]
     let named = styleName?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-    let name = named ?? (names.indices.contains(level.groundStyle) ? names[level.groundStyle] : "slot \(level.groundStyle)")
+    let name = named ?? (names.indices.contains(level.groundStyle) ? names[level.groundStyle] : L10n.text("slot \(level.groundStyle)"))
     let directory: URL, index: Int
     if named == nil, useLocalStyles, let pack, let local = localStyleDirectory(in: pack, includeHoliday: useHolidayStyles),
        local != "holiday_native_1994" || level.groundStyle == 2 {
@@ -685,7 +685,7 @@ enum FanLevelLibrary {
     } else {
       switch ClassicStyleResolver(portsRoot: portsRoot).resolve(styleNamed: name == "special" ? "dirt" : name) {
       case let .found(root, slot), let .packSupplied(root, slot): directory = root; index = slot
-      default: throw NSError(domain: "FanLevelLibrary", code: 1, userInfo: [NSLocalizedDescriptionKey: "Unsupported or missing fan graphics style: \(name)"])
+      default: throw NSError(domain: "FanLevelLibrary", code: 1, userInfo: [NSLocalizedDescriptionKey: L10n.text("Unsupported or missing fan graphics style: \(name)")])
       }
     }
     if let pack, let entry {
@@ -838,7 +838,7 @@ enum FanLevelLibrary {
     let files = graphicArchiveIndex.files(in: pack)
     for candidate in candidates {
       let matches = files.filter { $0.lowercased() == candidate.lowercased() }
-      guard matches.count <= 1 else { throw ClassicGraphicsError.missingFile("Unambiguous " + candidate) }
+      guard matches.count <= 1 else { throw ClassicGraphicsError.missingFile(L10n.text("Unambiguous ") + candidate) }
       if let path = matches.first {
         guard let data = contents(of: path, in: pack) else { throw ClassicGraphicsError.missingFile(path) }
         return data

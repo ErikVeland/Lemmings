@@ -94,13 +94,13 @@ public enum ClassicDOSReplayError: Error, Equatable, CustomStringConvertible {
     public var description: String {
         switch self {
         case let .initialStateMismatch(expected, actual):
-            return "initial state hash mismatch: expected \(expected), got \(actual)"
+            return L10n.text("initial state hash mismatch: expected \(expected), got \(actual)")
         case let .outcomeMismatch(field, expected, actual):
-            return "replay \(field) mismatch: expected \(expected), got \(actual)"
+            return L10n.text("replay \(field) mismatch: expected \(expected), got \(actual)")
         case let .tickLimitReached(limit):
-            return "replay did not complete within \(limit) ticks"
+            return L10n.text("replay did not complete within \(limit) ticks")
         case let .commandRejected(tick, lemmingID, skill):
-            return "engine refused to queue \(skill.rawValue) for lemming \(lemmingID) at tick \(tick)"
+            return L10n.text("engine refused to queue \(skill.rawValue) for lemming \(lemmingID) at tick \(tick)")
         }
     }
 }

@@ -44,7 +44,7 @@ public struct Lemmings2Style: Sendable {
     public func animation(_ identifier: Int) throws -> [SequelIndexedImage] {
         let index = SequelBinary(try container.requiredSection("L2BI"))
         guard identifier >= 0, identifier < (try index.u16(0)) else {
-            throw SequelDataError.invalid("Unknown L2 animation \(identifier).")
+            throw SequelDataError.invalid(L10n.text("Unknown L2 animation \(identifier)."))
         }
         let animations = SequelBinary(try container.requiredSection("L2BA"))
         let offset = try index.u16(2 + identifier * 2) + 2
@@ -53,7 +53,7 @@ public struct Lemmings2Style: Sendable {
         let rows = try animations.u16(offset + 4)
         guard columns > 0, rows > 0, columns * rows <= 4096, count <= 1024,
             count * columns * rows * 128 <= 16 * 1024 * 1024 else {
-            throw SequelDataError.invalid("Invalid L2 animation dimensions or frame count.")
+            throw SequelDataError.invalid(L10n.text("Invalid L2 animation dimensions or frame count."))
         }
         let frames = SequelBinary(try container.requiredSection("L2BF"))
         var offsets: [Int: Int] = [:]
@@ -69,17 +69,17 @@ public struct Lemmings2Style: Sendable {
         return try (0..<count).map { frame in
             let reference = try animations.u16(offset + 6 + frame * 2)
             guard let start = offsets[reference] else {
-                throw SequelDataError.invalid("Unknown L2 frame offset \(reference).")
+                throw SequelDataError.invalid(L10n.text("Unknown L2 frame offset \(reference)."))
             }
             guard try frames.u16(start - 2) == columns * rows * 2 else {
-                throw SequelDataError.invalid("L2 frame size does not match its dimensions.")
+                throw SequelDataError.invalid(L10n.text("L2 frame size does not match its dimensions."))
             }
             let width = columns * 16
             var pixels = Array(repeating: UInt8(0), count: width * rows * 8)
             for tile in 0..<(columns * rows) {
                 let blockID = try frames.u16(start + tile * 2)
                 guard tiles.indices.contains(blockID) else {
-                    throw SequelDataError.invalid("L2 animation references missing tile \(blockID).")
+                    throw SequelDataError.invalid(L10n.text("L2 animation references missing tile \(blockID)."))
                 }
                 for y in 0..<8 {
                     for x in 0..<16 {
@@ -94,13 +94,13 @@ public struct Lemmings2Style: Sendable {
     public init(data: Data) throws {
         let form = try Lemmings2Form(data: data)
         guard form.type == "L2VG" else {
-            throw SequelDataError.invalid("Expected an L2VG style, found \(form.type).")
+            throw SequelDataError.invalid(L10n.text("Expected an L2VG style, found \(form.type)."))
         }
         container = form
         let colors = SequelBinary(try form.requiredSection("L2CL"))
         let channels = try colors.slice(2, 384)
         guard channels.allSatisfy({ $0 <= 63 }) else {
-            throw SequelDataError.invalid("L2CL contains an invalid six-bit colour.")
+            throw SequelDataError.invalid(L10n.text("L2CL contains an invalid six-bit colour."))
         }
         var rgba = Array(repeating: UInt8(0), count: 1024)
         for index in 0..<128 {
@@ -113,7 +113,7 @@ public struct Lemmings2Style: Sendable {
         let blocks = SequelBinary(try form.requiredSection("L2BL"))
         let count = try blocks.u16(0)
         guard blocks.count == 2 + count * 128 else {
-            throw SequelDataError.invalid("L2BL tile count does not match its length.")
+            throw SequelDataError.invalid(L10n.text("L2BL tile count does not match its length."))
         }
         tiles = (0..<count).map { index in
             var pixels = Array(repeating: UInt8(0), count: 128)
@@ -146,7 +146,7 @@ public struct Lemmings2Style: Sendable {
                 sound: try header.u16(18), components: components))
         }
         guard cursor == definitions.count else {
-            throw SequelDataError.invalid("L2OB object count does not match its length.")
+            throw SequelDataError.invalid(L10n.text("L2OB object count does not match its length."))
         }
         objects = result
     }
@@ -168,11 +168,11 @@ public struct Lemmings2Terrain: Sendable {
             for column in 0..<columns {
                 let record = (row + 2) * (columns + 2) + column + 1
                 guard level.tiles.indices.contains(record) else {
-                    throw SequelDataError.invalid("L2MP is too short for its tile arrangement.")
+                    throw SequelDataError.invalid(L10n.text("L2MP is too short for its tile arrangement."))
                 }
                 let tile = level.tiles[record]
                 guard style.tiles.indices.contains(tile.identifier) else {
-                    throw SequelDataError.invalid("L2MP references missing tile \(tile.identifier).")
+                    throw SequelDataError.invalid(L10n.text("L2MP references missing tile \(tile.identifier)."))
                 }
                 let block = style.tiles[tile.identifier]
                 for y in 0..<8 {

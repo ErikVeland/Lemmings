@@ -66,11 +66,11 @@ import NxlvKit
     }
     func drawCelebratedResult(_ report: ArcadeReport) {
         guard let c = celebration else { return }
-        let run = report.run, outcome = run.qualifies ? "LEVEL COMPLETE" : "TRY AGAIN"
+        let run = report.run, outcome = run.qualifies ? L10n.text(L10n.text("LEVEL COMPLETE")) : L10n.text(L10n.text("TRY AGAIN"))
         title(outcome, x: 80, y: 46, width: 960, height: 40)
-        text("\(player.initials)'s attempt - " + run.level.title + (run.assisted ? " - Rewinds used" : ""), 80, 96, 960, alignment: .center, alpha: 0.75)
+        text("\(player.initials)'s attempt - " + run.level.title + (run.assisted ? L10n.text(" - Rewinds used") : ""), 80, 96, 960, alignment: .center, alpha: 0.75)
         title("\(run.saved)/\(run.population)", x: 80, y: 145, width: 270, height: 60)
-        text("RESCUED", 80, 208, 270, alignment: .center)
+        text(L10n.text("RESCUED"), 80, 208, 270, alignment: .center)
         for index in 0..<3 {
             let stamp = stampedStar == index + 1
             let size: CGFloat = stamp ? 9 : 8
@@ -89,13 +89,13 @@ import NxlvKit
                 .first { $0.run.profileID == run.profileID }?.run.seconds
         } ?? ArcadeStore.shared.records.leaderboard(level: run.level, board: .fastestClear, assisted: run.assisted)
             .first { $0.profileID == run.profileID }?.seconds
-        link("Time " + Self.time(run.seconds) + "   Best " + (best.map(Self.time) ?? "--") + "  >",
+        link(L10n.text("Time ") + Self.time(run.seconds) + "   Best " + (best.map(Self.time) ?? "--") + "  >",
              CGRect(x: 80, y: 409, width: 720, height: 34), alignment: .left) { [weak self] in
             self?.trolleyBoard = .fastestClear; self?.board = .fastestClear; self?.boardScope = .level; self?.page(.records)
         }
         if let entry = LevelCollections.entry(attemptID: run.id) {
             let saved = LevelCollections.isFavourite(entry, profileID: run.profileID)
-            button(saved ? "Unfavourite" : "Favourite", CGRect(x: 808, y: 409, width: 232, height: 34), selected: saved) { [weak self] in
+            button(saved ? L10n.text("Unfavourite") : L10n.text("Favourite"), CGRect(x: 808, y: 409, width: 232, height: 34), selected: saved) { [weak self] in
                 LevelCollections.toggle(entry, profileID: run.profileID, owner: self?.window)
                 self?.needsDisplay = true
             }
@@ -103,26 +103,26 @@ import NxlvKit
         }
         resultActions()
         let maximum = run.level.conditions.map { ArcadeStore.shared.records.trolley.maximum(conditions: $0, assisted: run.assisted) } ?? TrolleyMaximum()
-        let awardText = c.newAwards.map { "New career award: \($0.award.title). \($0.award.detail)" }.joined(separator: " ")
-        setAccessibilityLabel("\(player.initials)'s attempt. \(outcome). \(run.level.title). \(rescueSummary(run, maximum: maximum)) \(resultStatus.map { $0 + " " } ?? "")\(c.goals.stars) of 3 stars this run. Time: \(Self.time(run.seconds)). Fastest clear: \(best.map(Self.time) ?? "No record"). Level best: \(c.bestStars) stars. \(c.nextGoal) \(c.recordMessage). New level awards: \(c.levelAwards.map(\.title).joined(separator: ", ")). \(awardText) Career: \(c.career.stars) stars, plus \(c.addedStars). \(precisionRewardText(c)) \(c.nextCareerGoal.map { $0.award.title + ": " + $0.status + ". " + $0.next } ?? "") Local Most Saved: \(c.ranks.first?.label ?? "No record"). Enter: \(primaryResultTitle). R retries. N retries as the next session player. P opens Hot Seat setup. Worldwide opens community leaderboards. V opens replay. B opens records. A opens achievements. G opens level goals. C opens career progress. D opens details. Escape returns."
-            + (report.earnedLevelSkip ? " Earned a level skip." : "")
-            + (availableSkips > 0 ? " \(skipTitle). K skips this level." : ""))
+        let awardText = c.newAwards.map { L10n.text("New career award: \($0.award.title). \($0.award.detail)") }.joined(separator: " ")
+        setAccessibilityLabel(L10n.text("\(player.initials)'s attempt. \(outcome). \(run.level.title). \(rescueSummary(run, maximum: maximum)) \(resultStatus.map { $0 + " " } ?? "")\(c.goals.stars) of 3 stars this run. Time: \(Self.time(run.seconds)). Fastest clear: \(best.map(Self.time) ?? L10n.text("No record")). Level best: \(c.bestStars) stars. \(c.nextGoal) \(c.recordMessage). New level awards: \(c.levelAwards.map(\.title).joined(separator: ", ")). \(awardText) Career: \(c.career.stars) stars, plus \(c.addedStars). \(precisionRewardText(c)) \(c.nextCareerGoal.map { $0.award.title + ": " + $0.status + ". " + $0.next } ?? "") Local Most Saved: \(c.ranks.first?.label ?? L10n.text("No record")). Enter: \(primaryResultTitle). R retries. N retries as the next session player. P opens Hot Seat setup. Worldwide opens community leaderboards. V opens replay. B opens records. A opens achievements. G opens level goals. C opens career progress. D opens details. Escape returns.")
+            + (report.earnedLevelSkip ? L10n.text(" Earned a level skip.") : "")
+            + (availableSkips > 0 ? L10n.text(" \(skipTitle). K skips this level.") : ""))
     }
     private func drawResultLevelCard(_ c: TrolleyCelebration) {
         let rect = CGRect(x: 80, y: 285, width: 466, height: 116)
         GameStyle.fill(rect, GameStyle.accent.withAlphaComponent(0.065))
-        text("THIS LEVEL", 96, 296, 418, height: 22, alpha: 0.85, palette: .green)
+        text(L10n.text(L10n.text("THIS LEVEL")), 96, 296, 418, height: 22, alpha: 0.85, palette: .green)
         text(c.recordMessage, 96, 323, 418, height: 24)
         let newGoals = c.levelAwards.filter { $0 != .firstClear }
         let names = newGoals.first.map { $0.title.capitalized + (newGoals.count > 1 ? " (+\(newGoals.count - 1))" : "") } ?? ""
-        link(names.isEmpty ? "Level goals and bests >" : "NEW: \(names) >",
+        link(names.isEmpty ? L10n.text("Level goals and bests >") : L10n.text("NEW: \(names) >"),
              CGRect(x: 96, y: 356, width: 418, height: 32), alignment: .left) { [weak self] in self?.page(.goals) }
     }
     private func drawResultCareerCard(_ c: TrolleyCelebration) {
         GameStyle.fill(CGRect(x: 566, y: 285, width: 474, height: 116), GameStyle.gold.withAlphaComponent(0.09))
         let new = c.newAwards
         let earnedSkip = report?.earnedLevelSkip == true
-        link("\(report?.run.assisted == true ? "REWIND CAREER" : "CAREER")  \(c.career.stars) STARS" + (c.addedStars > 0 ? "  (+\(c.addedStars))" : "") + " >",
+        link("\(report?.run.assisted == true ? L10n.text(L10n.text("REWIND CAREER")) : L10n.text("CAREER"))  \(c.career.stars) STARS" + (c.addedStars > 0 ? "  (+\(c.addedStars))" : "") + " >",
              CGRect(x: 582, y: 292, width: earnedSkip ? 300 : 442, height: 30), alignment: .left, palette: .green) { [weak self] in self?.page(.career) }
         // A skip is earned once, so the result shows it once.
         if earnedSkip {
@@ -132,18 +132,18 @@ import NxlvKit
         if !rewards.isEmpty {
             text(rewards, 582, 320, 442, height: 30, palette: .green)
             if !new.isEmpty {
-                link("\(new.count) NEW \(new.count == 1 ? "AWARD" : "AWARDS") >", CGRect(x: 582, y: 360, width: 442, height: 30), alignment: .left) { [weak self] in self?.showNewAwards() }
+                link("\(new.count) NEW \(new.count == 1 ? L10n.text("AWARD") : L10n.text("AWARDS")) >", CGRect(x: 582, y: 360, width: 442, height: 30), alignment: .left) { [weak self] in self?.showNewAwards() }
             } else if let next = c.nextCareerGoal {
                 link(next.award.title + " >", CGRect(x: 582, y: 360, width: 442, height: 30), alignment: .left) { [weak self] in self?.showAchievement(next.award) }
             }
         } else if !new.isEmpty {
             let selected = new[featuredAwardIndex % new.count]
-            link("NEW: \(selected.award.title) >", CGRect(x: 582, y: 320, width: 442, height: 30), alignment: .left) { [weak self] in
+            link(L10n.text("NEW: \(selected.award.title) >"), CGRect(x: 582, y: 320, width: 442, height: 30), alignment: .left) { [weak self] in
                 self?.highlightedAwards = Set(new.map(\.award)); self?.showAchievement(selected.award)
             }
             link("\(new.count) new \(new.count == 1 ? "award" : "awards") >", CGRect(x: 582, y: 360, width: 266, height: 30), alignment: .left) { [weak self] in self?.showNewAwards() }
             if new.count > 1 {
-                link("\(featuredAwardIndex % new.count + 1)/\(new.count) Next >", CGRect(x: 861, y: 360, width: 163, height: 30)) { [weak self] in
+                link(L10n.text("\(featuredAwardIndex % new.count + 1)/\(new.count) Next >"), CGRect(x: 861, y: 360, width: 163, height: 30)) { [weak self] in
                     self?.featuredAwardIndex += 1; self?.needsDisplay = true
                 }
             }
@@ -151,7 +151,7 @@ import NxlvKit
             link(next.award.title + " >", CGRect(x: 582, y: 321, width: 442, height: 30), alignment: .left) { [weak self] in self?.showAchievement(next.award) }
             text(next.status, 582, 360, 442, height: 22)
             progressBar(value: next.after.value, goal: next.after.goal, in: CGRect(x: 582, y: 391, width: 442, height: 4))
-        } else { text("All career milestones earned!", 582, 338, 442) }
+        } else { text(L10n.text("All career milestones earned!"), 582, 338, 442) }
     }
     private func precisionRewardText(_ c: TrolleyCelebration) -> String {
         guard let report, ArcadeStore.shared.storageError == nil,
@@ -162,49 +162,49 @@ import NxlvKit
         return rewards.joined(separator: "   ")
     }
     func drawLevelGoals() {
-        header("Level goals", subtitle: level?.title); tabs()
+        header(L10n.text("Level goals"), subtitle: level?.title); tabs()
         guard let report, let c = celebration else {
-            text("Finish a level to see each goal and your progress.", 80, 270, 960); pageFooter(); return
+            text(L10n.text("Finish a level to see each goal and your progress."), 80, 270, 960); pageFooter(); return
         }
-        text("\(c.goals.stars)/3 this run   -   \(c.bestStars)/3 personal best", 80, 210, 960)
+        text(L10n.text("\(c.goals.stars)/3 this run   -   \(c.bestStars)/3 personal best"), 80, 210, 960)
         let previous = report.previousBest
         let run = report.run
         var rows: [(String, String, Bool)] = [
-            ("Target met", "Rescue \(run.level.required) and clear the level. Saved \(run.saved).", run.qualifies),
-            ("Extra rescue", "Save \(c.goals.extraSaved). \(max(0, c.goals.extraSaved - run.saved)) more to go.", c.goals.stars >= 2),
-            ("Three-star rescue", c.goals.fullSaved.map { "Save \($0). \(max(0, $0 - run.saved)) more to go." } ?? "No established target for this level yet.", c.goals.stars == 3),
-            ("One more home", previous.map { "Previous best \($0.saved). This run \(run.saved)." } ?? "This run sets your first rescue record.", previous.map { run.saved > $0.saved } ?? false),
-            ("Less is more", previous.map { "Match \($0.saved) rescued with fewer than \($0.skillCount) skills." } ?? "Set a first record, then improve its skill count.", report.newSkillBest),
-            ("One trick", "Clear with one skill type. This run used \(run.skills.count).", run.qualifies && run.skills.count == 1),
-            ("Everyone home", "Rescue all \(run.population) lemmings. Saved \(run.saved).", run.savedAll),
-            ("Hands off", run.skillCount == 0 && run.qualifies ? "Cleared without assigning a skill." : "No hands-off clear this run. This goal may not be possible here.", run.qualifies && run.skillCount == 0)
+            (L10n.text("Target met"), L10n.text("Rescue \(run.level.required) and clear the level. Saved \(run.saved)."), run.qualifies),
+            (L10n.text("Extra rescue"), L10n.text("Save \(c.goals.extraSaved). \(max(0, c.goals.extraSaved - run.saved)) more to go."), c.goals.stars >= 2),
+            (L10n.text("Three-star rescue"), c.goals.fullSaved.map { L10n.text("Save \($0). \(max(0, $0 - run.saved)) more to go.") } ?? L10n.text("No established target for this level yet."), c.goals.stars == 3),
+            (L10n.text("One more home"), previous.map { L10n.text("Previous best \($0.saved). This run \(run.saved).") } ?? L10n.text("This run sets your first rescue record."), previous.map { run.saved > $0.saved } ?? false),
+            (L10n.text("Less is more"), previous.map { L10n.text("Match \($0.saved) rescued with fewer than \($0.skillCount) skills.") } ?? L10n.text("Set a first record, then improve its skill count."), report.newSkillBest),
+            (L10n.text("One trick"), L10n.text("Clear with one skill type. This run used \(run.skills.count)."), run.qualifies && run.skills.count == 1),
+            (L10n.text("Everyone home"), L10n.text("Rescue all \(run.population) lemmings. Saved \(run.saved)."), run.savedAll),
+            (L10n.text("Hands off"), run.skillCount == 0 && run.qualifies ? L10n.text("Cleared without assigning a skill.") : L10n.text("No hands-off clear this run. This goal may not be possible here."), run.qualifies && run.skillCount == 0)
         ]
-        if !run.savedAll && c.goals.fullSaved != run.population { rows.removeAll { $0.0 == "Everyone home" } }
+        if !run.savedAll && c.goals.fullSaved != run.population { rows.removeAll { $0.0 == L10n.text("Everyone home") } }
         let handsOffKnown = ArcadeStore.shared.records.trolley.attempts.contains {
             $0.run.level.boardID == run.level.boardID && $0.run.qualifies && $0.run.skillCount == 0
         }
-        if !handsOffKnown { rows.removeAll { $0.0 == "Hands off" } }
+        if !handsOffKnown { rows.removeAll { $0.0 == L10n.text("Hands off") } }
         for (index, row) in rows.enumerated() {
             let y = CGFloat(252 + index * 44)
             drawStar(at: CGPoint(x: 82, y: y + 3), earned: row.2)
             let matches: [String: ArcadeLevelAchievement] = ["Target met": .firstClear, "One more home": .betterRescue,
-                "Less is more": .fewerSkills, "One trick": .oneSkill, "Everyone home": .allHome, "Hands off": .noSkills]
+                L10n.text("Less is more"): .fewerSkills, "One trick": .oneSkill, "Everyone home": .allHome, "Hands off": .noSkills]
             let isNew = matches[row.0].map { report.earned.contains($0) } ?? false
             text(row.0 + (isNew ? " - NEW AWARD" : row.2 ? " - MET" : ""), 130, y, 860, height: 24)
             text(row.1, 130, y + 23, 860, height: 22, alpha: 0.7)
         }
         pageFooter()
-        setAccessibilityLabel("This level. " + rows.map { $0.0 + ": " + ($0.2 ? "Met. " : "Not met. ") + $0.1 }.joined(separator: " "))
+        setAccessibilityLabel("This level. " + rows.map { $0.0 + ": " + ($0.2 ? L10n.text("Met. ") : L10n.text("Not met. ")) + $0.1 }.joined(separator: " "))
     }
     func drawCareerProgress() {
-        header("Career progress", subtitle: "Across all recorded levels"); tabs()
+        header(L10n.text("Career progress"), subtitle: L10n.text("Across all recorded levels")); tabs()
         let history = ArcadeStore.shared.records.trolley
         let score = celebration?.career ?? TrolleyCareerScore(profileID: player.id, attempts: history.attempts, assisted: assisted)
         let deltas = celebration?.awards ?? TrolleyAchievement.allCases.filter(\.isOffered).map { award in
             let progress = award.progress(attempts: history.attempts, profileID: player.id)
             return TrolleyAwardDelta(award: award, before: progress, after: progress, isNew: false)
         }
-        text("\(score.stars) stars   \(score.clearedLevels) cleared   \(score.threeStarLevels) three-star levels", 80, 212, assisted ? 960 : 640)
+        text(L10n.text("\(score.stars) stars   \(score.clearedLevels) cleared   \(score.threeStarLevels) three-star levels"), 80, 212, assisted ? 960 : 640)
         if !assisted { drawSkipBalance(ArcadeStore.shared.records.levelSkips(profileID: player.id)) }
         let milestones = deltas.filter { $0.after.goal > 1 }
         let pages = max(1, (milestones.count + 3) / 4)
@@ -215,16 +215,16 @@ import NxlvKit
             text(delta.after.earned ? delta.award.detail : delta.next, 80, y + 33, 960, height: 24, alpha: 0.75)
             progressBar(value: delta.after.value, goal: delta.after.goal, in: CGRect(x: 80, y: y + 61, width: 960, height: 5), earned: delta.after.earned)
         }
-        link("More \(careerPage % pages + 1)/\(pages) >", CGRect(x: 786, y: 574, width: 254, height: 34)) { [weak self] in self?.careerPage += 1; self?.needsDisplay = true }
-        link("Career leaderboard >", CGRect(x: 80, y: 574, width: 590, height: 34), alignment: .left) { [weak self] in self?.boardScope = .career; self?.page(.records) }
+        link(L10n.text("More \(careerPage % pages + 1)/\(pages) >"), CGRect(x: 786, y: 574, width: 254, height: 34)) { [weak self] in self?.careerPage += 1; self?.needsDisplay = true }
+        link(L10n.text("Career leaderboard >"), CGRect(x: 80, y: 574, width: 590, height: 34), alignment: .left) { [weak self] in self?.boardScope = .career; self?.page(.records) }
         pageFooter()
-        setAccessibilityLabel("Career progress. \(score.stars) stars, plus \(celebration?.addedStars ?? 0) this run. \(score.clearedLevels) distinct levels cleared. \(score.threeStarLevels) three-star levels. " + (assisted ? "" : { let skips = ArcadeStore.shared.records.levelSkips(profileID: player.id)
-            return "\(skips.available) level skips. \(skips.threeStarLevelsToNext) more three-star levels for the next. " }())
+        setAccessibilityLabel(L10n.text("Career progress. \(score.stars) stars, plus \(celebration?.addedStars ?? 0) this run. \(score.clearedLevels) distinct levels cleared. \(score.threeStarLevels) three-star levels. ") + (assisted ? "" : { let skips = ArcadeStore.shared.records.levelSkips(profileID: player.id)
+            return L10n.text("\(skips.available) level skips. \(skips.threeStarLevelsToNext) more three-star levels for the next. ") }())
             + milestones.map { $0.award.title + ": " + $0.status + ". " + $0.next }.joined(separator: " "))
     }
     /// Skips to spend, then filled and outlined pips for three-star levels toward the next one.
     private func drawSkipBalance(_ skips: LevelSkipBalance) {
-        text("SKIPS \(skips.available)", 740, 212, 180, alignment: .right, palette: .green)
+        text(L10n.text("SKIPS \(skips.available)"), 740, 212, 180, alignment: .right, palette: .green)
         let done = LevelSkipBalance.threeStarLevelsPerSkip - skips.threeStarLevelsToNext
         for index in 0..<LevelSkipBalance.threeStarLevelsPerSkip {
             let pip = CGRect(x: 940 + CGFloat(index) * 34, y: 216, width: 20, height: 20)
@@ -238,7 +238,7 @@ import NxlvKit
     func boardScopeLinks() {
         // This row replaces the generic game subtitle on leaderboard pages.
         GameStyle.fill(CGRect(x: 70, y: 100, width: 980, height: 34), .black)
-        for (index, item) in [(BoardScope.level, "This level"), (.career, "All levels"), (.worldwide, "Worldwide")].enumerated() {
+        for (index, item) in [(BoardScope.level, L10n.text("This level")), (.career, L10n.text("All levels")), (.worldwide, L10n.text("Worldwide"))].enumerated() {
             link(item.1 + (boardScope == item.0 ? " *" : " >"), CGRect(x: 170 + index * 260, y: 99, width: 250, height: 34), palette: boardScope == item.0 ? .green : .blue) { [weak self] in
                 guard let self else { return }
                 self.boardScope = item.0
@@ -247,25 +247,25 @@ import NxlvKit
         }
     }
     func drawCareerBoard() {
-        header("Career leaderboard"); tabs(); boardScopeLinks(); rewindFilter()
+        header(L10n.text("Career leaderboard")); tabs(); boardScopeLinks(); rewindFilter()
         let history = ArcadeStore.shared.records.trolley
         let attempts = history.attempts.map { a in a.assessed(using: history.maximum(conditions: a.run.level.conditions!, assisted: a.run.assisted)) }
         let rows = TrolleyCareerScore.rank(attempts: attempts, assisted: assisted)
-        text("Best stars per level, counted once", 80, 220, 680)
-        text("PLAYER", 174, 278, 260); text("STARS", 524, 278, 140)
-        text("CLEARED", 724, 278, 160); text("3-STAR", 924, 278, 120)
+        text(L10n.text("Best stars per level, counted once"), 80, 220, 680)
+        text(L10n.text("PLAYER"), 174, 278, 260); text(L10n.text("STARS"), 524, 278, 140)
+        text(L10n.text("CLEARED"), 724, 278, 160); text("3-STAR", 924, 278, 120)
         for (index, score) in rows.prefix(5).enumerated() {
             let y = CGFloat(321 + index * 47)
             GameStyle.fill(CGRect(x: 80, y: y - 5, width: 960, height: 44), score.profileID == player.id ? GameStyle.gold.withAlphaComponent(0.12) : .clear)
             let row = CGRect(x: 80, y: y - 5, width: 960, height: 44)
             rowText("\(index + 1)", x: 96, width: 60, row: row)
-            rowText(ArcadeStore.shared.records.profile(score.profileID)?.initials ?? "LEM", x: 174, width: 260, row: row)
+            rowText(ArcadeStore.shared.records.profile(score.profileID)?.initials ?? L10n.text("LEM"), x: 174, width: 260, row: row)
             rowText("\(score.stars)", x: 524, width: 140, row: row); rowText("\(score.clearedLevels)", x: 724, width: 160, row: row); rowText("\(score.threeStarLevels)", x: 924, width: 120, row: row)
         }
-        if rows.isEmpty { text("No completed attempts in this category yet.", 80, 340, 960) }
-        text("Local players on this Mac.", 80, 578, 960)
+        if rows.isEmpty { text(L10n.text("No completed attempts in this category yet."), 80, 340, 960) }
+        text(L10n.text("Local players on this Mac."), 80, 578, 960)
         pageFooter()
-        setAccessibilityLabel("Local career leaderboard. Rewinds \(assisted ? "used" : "unused"). Best stars per distinct level. " + rows.enumerated().map { "Rank \($0.offset + 1), \(ArcadeStore.shared.records.profile($0.element.profileID)?.initials ?? "LEM"), \($0.element.stars) stars." }.joined(separator: " "))
+        setAccessibilityLabel("Local career leaderboard. Rewinds \(assisted ? "used" : "unused"). Best stars per distinct level. " + rows.enumerated().map { L10n.text("Rank \($0.offset + 1), \(ArcadeStore.shared.records.profile($0.element.profileID)?.initials ?? L10n.text("LEM")), \($0.element.stars) stars.") }.joined(separator: " "))
     }
 }
 #endif

@@ -28,20 +28,20 @@ public struct Lemmings2Runtime: Sendable {
         public var name: String {
             switch self {
             case .unused: ""
-            case .bomber: "Exploder"
-            case .blastBomber: "Bomber"
-            case .clubBasher: "Club Basher"
-            case .laserBlaster: "Laser Blaster"
-            case .flameThrower: "Flame Thrower"
-            case .sandPourer: "Sand Pourer"
-            case .gluePourer: "Glue Pourer"
-            case .rockClimber: "Rock Climber"
-            case .poleVaulter: "Pole Vaulter"
-            case .magnoBooter: "Magno Booter"
-            case .magicCarpet: "Magic Carpet"
-            case .jetPack: "Jet Pack"
-            case .icarusWings: "Icarus Wings"
-            case .hangGlider: "Hang Glider"
+            case .bomber: L10n.text("Exploder")
+            case .blastBomber: L10n.text("Bomber")
+            case .clubBasher: L10n.text("Club Basher")
+            case .laserBlaster: L10n.text("Laser Blaster")
+            case .flameThrower: L10n.text("Flame Thrower")
+            case .sandPourer: L10n.text("Sand Pourer")
+            case .gluePourer: L10n.text("Glue Pourer")
+            case .rockClimber: L10n.text("Rock Climber")
+            case .poleVaulter: L10n.text("Pole Vaulter")
+            case .magnoBooter: L10n.text("Magno Booter")
+            case .magicCarpet: L10n.text("Magic Carpet")
+            case .jetPack: L10n.text("Jet Pack")
+            case .icarusWings: L10n.text("Icarus Wings")
+            case .hangGlider: L10n.text("Hang Glider")
             default: String(describing:self).capitalized
             }
         }
@@ -263,52 +263,52 @@ public struct Lemmings2Runtime: Sendable {
               c.firstReleaseTick > 0, c.firstReleaseTick <= 2000,
               c.entrance.x >= 0, c.entrance.x < c.width, c.entrance.y >= 0, c.entrance.y < c.height,
               (!c.exits.isEmpty || c.isPractice) else {
-            throw SequelDataError.invalid("Invalid native L2 runtime configuration.")
+            throw SequelDataError.invalid(L10n.text("Invalid native L2 runtime configuration."))
         }
         guard !c.skills.contains(.archer) || c.terrainMasks.arrow.count == 32,
               !c.skills.contains(.thrower) || c.terrainMasks.stone.count == 4,
               !c.skills.contains(.spearer) || c.terrainMasks.spear.count == 16 else {
-            throw SequelDataError.invalid("Missing native L2 thrown-object graphics.")
+            throw SequelDataError.invalid(L10n.text("Missing native L2 thrown-object graphics."))
         }
         guard !c.skills.contains(.twister) || c.terrainMasks.twister != nil else {
-            throw SequelDataError.invalid("Missing native L2 Twister mask.")
+            throw SequelDataError.invalid(L10n.text("Missing native L2 Twister mask."))
         }
         guard !c.skills.contains(.planter) || c.terrainMasks.plant.count == 8 else {
-            throw SequelDataError.invalid("The Planter terrain frames are required.")
+            throw SequelDataError.invalid(L10n.text("The Planter terrain frames are required."))
         }
         guard !c.skills.contains(where: { [.blastBomber, .bazooka, .mortar].contains($0) }) || c.terrainMasks.blast != nil else {
-            throw SequelDataError.invalid("The Bomber terrain mask is required.")
+            throw SequelDataError.invalid(L10n.text("The Bomber terrain mask is required."))
         }
         guard !c.skills.contains(.stomper) || c.terrainMasks.stomper != nil else {
-            throw SequelDataError.invalid("The Stomper terrain mask is required.")
+            throw SequelDataError.invalid(L10n.text("The Stomper terrain mask is required."))
         }
         guard !c.skills.contains(.scooper) || c.terrainMasks.scooper.count == 12,
               !c.skills.contains(.fencer) || c.terrainMasks.fencer.count == 2,
               !c.skills.contains(.clubBasher) || c.terrainMasks.clubBasher.count == 14,
               !c.skills.contains(.laserBlaster) || c.terrainMasks.laser.count == 1,
               !c.skills.contains(.flameThrower) || c.terrainMasks.flame.count == 2 else {
-            throw SequelDataError.invalid("Native terrain masks are required for the selected tribe skills.")
+            throw SequelDataError.invalid(L10n.text("Native terrain masks are required for the selected tribe skills."))
         }
         guard c.entrances.count <= 8, c.entrances.allSatisfy({
             $0.x >= 0 && $0.x < c.width && $0.y >= 0 && $0.y < c.height
-        }) else { throw SequelDataError.invalid("Invalid L2 entrance positions.") }
+        }) else { throw SequelDataError.invalid(L10n.text("Invalid L2 entrance positions.")) }
         guard Set(c.interactiveObjects.map(\.id)).count == c.interactiveObjects.count,
               c.interactiveObjects.allSatisfy({ $0.frameCount <= 1024 }) else {
-            throw SequelDataError.invalid("Invalid L2 interactive object configuration.")
+            throw SequelDataError.invalid(L10n.text("Invalid L2 interactive object configuration."))
         }
         machines = c.machines
         chains = c.chains
         for object in c.interactiveObjects where object.kind == .timedTrap { timedTraps[object.id] = .init() }
         guard c.interactiveObjects.filter({$0.kind == .teleporter || $0.kind == .valve}).allSatisfy({ object in
             c.interactiveObjects.contains { $0.id == object.linkedID && $0.kind == (object.kind == .valve ? .launcher : .teleporter) }
-        }) else { throw SequelDataError.invalid("An L2 valve or teleporter has no matching object.") }
+        }) else { throw SequelDataError.invalid(L10n.text("An L2 valve or teleporter has no matching object.")) }
         activeObjects = Set(c.interactiveObjects.filter(\.initiallyActive).map(\.id))
         configuration = c; pixels = c.pixels; solid = c.solid; supplies = c.supplies
     }
 
     /// Native campaign loader for the twelve tribes.
     public init(level: Lemmings2Level, style: Lemmings2Style, masks: Lemmings2TerrainMasks, total: Int = 60, allowExperimentalTribes: Bool = true, practiceSkills: [Skill]? = nil) throws {
-        guard level.style == 0 || allowExperimentalTribes else { throw SequelDataError.invalid("This caller has restricted native play to the Classic tribe.") }
+        guard level.style == 0 || allowExperimentalTribes else { throw SequelDataError.invalid(L10n.text("This caller has restricted native play to the Classic tribe.")) }
         let terrain = try Lemmings2Terrain(level: level, style: style)
         let objects = try Lemmings2Objects(level: level, style: style)
         var pixels = terrain.image.pixels, solid = terrain.solid
@@ -319,12 +319,12 @@ public struct Lemmings2Runtime: Sendable {
         guard entranceOffsets.indices.contains(level.style) else { throw SequelDataError.invalid("Unknown L2 tribe.") }
         let exits = objects.parts.filter { $0.type == 3 }.compactMap(\.trigger)
         guard exits.allSatisfy({ $0.x >= 0 && $0.y >= 0 && $0.x < terrain.image.width && $0.y < terrain.image.height }) else {
-            throw SequelDataError.invalid("This level has an exit outside the decoded terrain. Its lower map boundary is not resolved yet.")
+            throw SequelDataError.invalid(L10n.text("This level has an exit outside the decoded terrain. Its lower map boundary is not resolved yet."))
         }
         let hazards = objects.parts.filter { $0.type == 6 || $0.type == 11 }.compactMap(\.trigger)
         for placed in level.objects where placed.identifier != 65535 {
             guard style.objects.indices.contains(placed.identifier) else {
-                throw SequelDataError.invalid("Unknown native L2 object.")
+                throw SequelDataError.invalid(L10n.text("Unknown native L2 object."))
             }
             let object = style.objects[placed.identifier]
             switch object.type {
@@ -333,7 +333,7 @@ public struct Lemmings2Runtime: Sendable {
                 entrances.append(Rect(x: placed.x - 16 + offset.0, y: placed.y - 16 + offset.1, width: 1, height: 1))
             case 0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14: break
             default:
-                throw SequelDataError.invalid("Object type \(object.type) is not yet supported by the native preview.")
+                throw SequelDataError.invalid(L10n.text("Object type \(object.type) is not yet supported by the native preview."))
             }
         }
         // L2.RKO 18e8–19ad replaces map tiles with ordinary object graphics.
@@ -356,17 +356,17 @@ public struct Lemmings2Runtime: Sendable {
         for id in Set(objects.parts.filter{$0.type == 0}.map(\.objectIndex)).sorted() {
             let parts = objects.parts.filter{$0.objectIndex == id}
             let links = parts.filter{$0.component.graphicsFlags & 0xe0 == 0xe0 && $0.component.graphics == 5}
-            guard let first = links.first, chains.count < 5 else { throw SequelDataError.invalid("Invalid native L2 chain.") }
+            guard let first = links.first, chains.count < 5 else { throw SequelDataError.invalid(L10n.text("Invalid native L2 chain.")) }
             let controls = parts.filter{$0.component.interaction == 14}.map {
                 Rect(x:$0.x,y:$0.y,width:$0.frames.first?.width ?? 16,height:$0.frames.first?.height ?? 8)
             }
             chains.append(.init(id:id,x:first.x,y:first.y-12,count:links.count,controls:controls))
         }
-        guard let entrance = entrances.first else { throw SequelDataError.invalid("No entrance in the native L2 level.") }
+        guard let entrance = entrances.first else { throw SequelDataError.invalid(L10n.text("No entrance in the native L2 level.")) }
         let skills = try practiceSkills ?? level.skills.map { slot -> Skill in
             if slot.count == 0 { return .unused }
             guard let skill = Skill(rawValue: slot.identifier) else {
-                throw SequelDataError.invalid("Skill \(slot.identifier) is not yet supported by the native preview.")
+                throw SequelDataError.invalid(L10n.text(L10n.text("Skill \(slot.identifier) is not yet supported by the native preview.")))
             }
             return skill
         }
@@ -375,7 +375,7 @@ public struct Lemmings2Runtime: Sendable {
         // ten entrance frames (PROCESS 023b).
         let releaseInterval = 21 - level.releaseRate
         guard releaseInterval > 0, releaseInterval <= 1000 else {
-            throw SequelDataError.invalid("Invalid native L2 release rate.")
+            throw SequelDataError.invalid(L10n.text("Invalid native L2 release rate."))
         }
         try self.init(configuration: Configuration(width: terrain.image.width, height: terrain.image.height,
             pixels: pixels, solid: solid, palette: style.palette, entrance: entrance,

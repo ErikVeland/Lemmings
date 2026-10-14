@@ -299,10 +299,10 @@ private enum NeoLemmixMobileSpriteError: Error, LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case let .missingTheme(style): "The NeoLemmix theme \(style) could not be loaded."
-        case let .missingSpriteStyle(style): "The NeoLemmix lemming style \(style) could not be loaded."
-        case .missingAnimationMetadata: "The NeoLemmix lemming style has no animation metadata."
-        case let .missingAnimation(name): "The NeoLemmix lemming style has no \(name) animation."
+        case let .missingTheme(style): L10n.text("The NeoLemmix theme \(style) could not be loaded.")
+        case let .missingSpriteStyle(style): L10n.text("The NeoLemmix lemming style \(style) could not be loaded.")
+        case .missingAnimationMetadata: L10n.text("The NeoLemmix lemming style has no animation metadata.")
+        case let .missingAnimation(name): L10n.text("The NeoLemmix lemming style has no \(name) animation.")
         }
     }
 }

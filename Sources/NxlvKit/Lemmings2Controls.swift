@@ -57,7 +57,7 @@ public struct Lemmings2Pointers: Sendable {
     public let frames: [[UInt8]]
     public init(data: Data) throws {
         let decoded = try Lemmings2Compression.decode(data, maximumOutputSize: 4608)
-        guard decoded.count == 4608 else { throw SequelDataError.invalid("Invalid L2 pointer bank.") }
+        guard decoded.count == 4608 else { throw SequelDataError.invalid(L10n.text("Invalid L2 pointer bank.")) }
         let r = SequelBinary(decoded)
         frames = try (0..<18).map {
             try Lemmings2FrontEnd.planar(Data(r.slice($0 * 256, 256)), width: 16, height: 16)

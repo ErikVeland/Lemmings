@@ -23,10 +23,10 @@ public enum MobileGameDataKind: String, CaseIterable, Codable, Equatable, Sendab
 
     public var displayTitle: String {
         switch self {
-        case .classic: "Classic Lemmings"
-        case .lemmings2: "Lemmings 2"
-        case .lemmings3: "Lemmings 3"
-        case .neoLemmix: "NeoLemmix"
+        case .classic: L10n.text(L10n.text("Classic Lemmings"))
+        case .lemmings2: L10n.text(L10n.text("Lemmings 2"))
+        case .lemmings3: L10n.text(L10n.text("Lemmings 3"))
+        case .neoLemmix: L10n.text(L10n.text("NeoLemmix"))
         }
     }
 }
@@ -555,13 +555,13 @@ public enum MobileContentStoreError: Error, LocalizedError, Equatable {
 
     public var errorDescription: String? {
         switch self {
-        case .notDirectory: return "Choose a folder that contains the original game data."
-        case .unreadable: return "The selected game-data folder could not be read safely."
-        case .symbolicLink: return "Remove symbolic links from the game-data folder."
-        case .tooLarge: return "The selected folder is larger than 2 GB."
-        case .tooManyEntries: return "The selected folder contains too many items."
-        case let .validatorUnavailable(kind): return "The \(kind.displayTitle) data validator is not available."
-        case let .invalidData(kind): return "The selected \(kind.displayTitle) data is incomplete or invalid."
+        case .notDirectory: return L10n.text("Choose a folder that contains the original game data.")
+        case .unreadable: return L10n.text("The selected game-data folder could not be read safely.")
+        case .symbolicLink: return L10n.text("Remove symbolic links from the game-data folder.")
+        case .tooLarge: return L10n.text("The selected folder is larger than 2 GB.")
+        case .tooManyEntries: return L10n.text("The selected folder contains too many items.")
+        case let .validatorUnavailable(kind): return L10n.text("The \(kind.displayTitle) data validator is not available.")
+        case let .invalidData(kind): return L10n.text("The selected \(kind.displayTitle) data is incomplete or invalid.")
         }
     }
 }

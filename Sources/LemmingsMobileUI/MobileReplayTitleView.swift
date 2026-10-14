@@ -1,5 +1,6 @@
 #if os(iOS) || os(tvOS)
 import LemmingsGameArt
+import NxlvKit
 import LemmingsMobileCore
 import UIKit
 
@@ -14,7 +15,7 @@ import UIKit
     var level: MobileLevelSummary? {
         didSet {
             isHidden = level == nil
-            accessibilityLabel = level.map { "Replay, " + $0.locationLabel + ", " + $0.title }
+            accessibilityLabel = level.map { L10n.text("Replay, ") + $0.locationLabel + ", " + $0.title }
             setNeedsDisplay()
         }
     }

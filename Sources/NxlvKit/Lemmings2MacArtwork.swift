@@ -28,10 +28,10 @@ public struct SequelMacFrame: Equatable, Sendable {
               width * height <= 16 * 1024 * 1024, rgba.count == width * height * 4,
               (-65536...65536).contains(x), (-65536...65536).contains(y),
               sourcePalette == nil || sourcePalette?.count == 1024 else {
-            throw SequelDataError.invalid("Invalid sequel artwork frame.")
+            throw SequelDataError.invalid(L10n.text("Invalid sequel artwork frame."))
         }
         guard stride(from: 3, to: rgba.count, by: 4).allSatisfy({ rgba[$0] == 0 || rgba[$0] == 255 }) else {
-            throw SequelDataError.invalid("Sequel artwork requires binary transparency.")
+            throw SequelDataError.invalid(L10n.text("Sequel artwork requires binary transparency."))
         }
         self.width = width; self.height = height; self.x = x; self.y = y; self.rgba = rgba
         self.sourcePalette = sourcePalette
@@ -42,7 +42,7 @@ public struct SequelMacFrame: Equatable, Sendable {
         guard width > 0, height > 0, width <= 4096, height <= 4096,
               pixels.count == width * height, palette.count == 1024,
               opaque == nil || opaque?.count == pixels.count else {
-            throw SequelDataError.invalid("Invalid indexed sequel artwork frame.")
+            throw SequelDataError.invalid(L10n.text("Invalid indexed sequel artwork frame."))
         }
         var bytes = [UInt8](repeating: 0, count: pixels.count * 4)
         for i in pixels.indices where opaque?[i] ?? (palette[Int(pixels[i]) * 4 + 3] != 0) {
@@ -74,7 +74,7 @@ public enum SequelMacArtwork {
                                    edits: [PixelEdit] = []) throws -> SequelMacFrame {
         let w = source.width, h = source.height
         guard w <= 4096, h <= 4096, w * h <= 4 * 1024 * 1024 else {
-            throw SequelDataError.invalid("Sequel reconstruction exceeds the image limit.")
+            throw SequelDataError.invalid(L10n.text("Sequel reconstruction exceeds the image limit."))
         }
         let ruleCategory: SequelMacCategory = category == .lemmings2Walker ? .sprite : category
         let table = Lemmings2MacRuleTables.tables[ruleCategory] ?? [:]
@@ -165,11 +165,11 @@ public enum SequelMacArtwork {
         }
         for edit in edits {
             guard edit.x >= 0, edit.y >= 0, edit.x < w*2, edit.y < h*2 else {
-                throw SequelDataError.invalid("Artwork correction is outside its frame.")
+                throw SequelDataError.invalid(L10n.text("Artwork correction is outside its frame."))
             }
             let p = (edit.y*w*2+edit.x)*4
             guard output[p+3] == 255 else {
-                throw SequelDataError.invalid("Artwork correction would change transparency.")
+                throw SequelDataError.invalid(L10n.text("Artwork correction would change transparency."))
             }
             output[p] = edit.red; output[p+1] = edit.green; output[p+2] = edit.blue
         }

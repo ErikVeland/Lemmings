@@ -11,12 +11,12 @@ public enum NeoLemmixPackError: Error, Equatable, CustomStringConvertible, Local
 
     public var description: String {
         switch self {
-        case let .unreadable(path): "NeoLemmix pack data could not be read: \(path)"
-        case let .unsafePath(path): "NeoLemmix pack data contains an unsafe path: \(path)"
-        case let .malformedLevel(path): "NeoLemmix level could not be decoded: \(path)"
-        case let .duplicateLevelID(id): "NeoLemmix pack contains duplicate level ID \(id)."
-        case let .duplicatePackID(id): "NeoLemmix library contains duplicate pack ID \(id)."
-        case let .emptyPack(path): "NeoLemmix pack contains no levels: \(path)"
+        case let .unreadable(path): L10n.text("NeoLemmix pack data could not be read: \(path)")
+        case let .unsafePath(path): L10n.text("NeoLemmix pack data contains an unsafe path: \(path)")
+        case let .malformedLevel(path): L10n.text("NeoLemmix level could not be decoded: \(path)")
+        case let .duplicateLevelID(id): L10n.text("NeoLemmix pack contains duplicate level ID \(id).")
+        case let .duplicatePackID(id): L10n.text("NeoLemmix library contains duplicate pack ID \(id).")
+        case let .emptyPack(path): L10n.text("NeoLemmix pack contains no levels: \(path)")
         }
     }
 

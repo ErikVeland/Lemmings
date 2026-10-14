@@ -43,16 +43,16 @@ public struct ClassicMacArtwork: Sendable {
             from: Data(contentsOf: directory.appendingPathComponent("manifest.json")))
         var banks: [Int: [Frame?]] = [:]
         for (key, records) in manifest.banks {
-            guard let id = Int(key) else { throw SequelDataError.invalid("Invalid Mac graphics bank.") }
+            guard let id = Int(key) else { throw SequelDataError.invalid(L10n.text("Invalid Mac graphics bank.")) }
             banks[id] = try records.map { record in
                 guard let record else { return nil }
                 guard record.width > 0, record.height > 0, record.width <= 4096, record.height <= 4096,
                       !record.file.contains("/"), !record.file.contains("..") else {
-                    throw SequelDataError.invalid("Invalid Mac graphics frame.")
+                    throw SequelDataError.invalid(L10n.text("Invalid Mac graphics frame."))
                 }
                 let data = try Data(contentsOf: directory.appendingPathComponent(record.file))
                 guard data.count == record.width * record.height * 4 else {
-                    throw SequelDataError.invalid("Truncated Mac graphics frame.")
+                    throw SequelDataError.invalid(L10n.text("Truncated Mac graphics frame."))
                 }
                 if let guide = record.backpackGuide {
                     guard (0..<record.height).contains(guide.top),
@@ -60,7 +60,7 @@ public struct ClassicMacArtwork: Sendable {
                         (guide.left...record.width * 2).contains(guide.right),
                         guide.foreground.count <= record.width * record.height,
                         guide.foreground.allSatisfy({ (0..<record.width * record.height).contains($0) }) else {
-                        throw SequelDataError.invalid("Invalid Mac backpack guide.")
+                        throw SequelDataError.invalid(L10n.text("Invalid Mac backpack guide."))
                     }
                 }
                 return Frame(x: record.x, y: record.y, width: record.width,
@@ -255,7 +255,7 @@ public struct ClassicMacScene: Sendable {
                     }
                 }
                 frame = terrainFrames[tile.id]!
-            } else { throw SequelDataError.invalid("Missing Mac terrain piece \(tile.id).") }
+            } else { throw SequelDataError.invalid(L10n.text("Missing Mac terrain piece \(tile.id).")) }
             Self.blit(frame, into: &pixels, width: width, height: height,
                 x: tile.x * 2 + frame.x,
                 y: tile.y * 2 + ((artwork.version == 1 && tile.draw.isUpsideDown) ? 0 : frame.y),

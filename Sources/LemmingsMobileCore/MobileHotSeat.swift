@@ -1,4 +1,5 @@
 import Foundation
+import NxlvKit
 
 /// One shared campaign for two or more players on one device.
 ///
@@ -9,7 +10,7 @@ public struct MobileHotSeat: Codable, Equatable, Identifiable, Sendable {
         case everyLevel
         case atFirstFail
 
-        public var title: String { self == .everyLevel ? "Every level" : "At first fail" }
+        public var title: String { self == .everyLevel ? L10n.text(L10n.text("Every level")) : L10n.text(L10n.text("At first fail")) }
         public var other: TurnPolicy { self == .everyLevel ? .atFirstFail : .everyLevel }
     }
 
@@ -149,7 +150,7 @@ public struct MobileHotSeatStore: Codable, Equatable, Sendable {
         saved.sort { $0.savedAt > $1.savedAt }
     }
 
-    private static let name = "hotseat"
+    private static let name = L10n.text("hotseat")
 
     public static func load(from storage: MobileStorage) -> MobileHotSeatStore {
         storage.load(MobileHotSeatStore.self, name: name) ?? MobileHotSeatStore()

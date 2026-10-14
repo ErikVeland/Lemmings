@@ -8,29 +8,29 @@ public enum TrolleyAchievement: String, Codable, CaseIterable, Sendable {
     case comeback, secondThoughts, targetApprentice, targetScholar, targetSage, greatDebate, philosopherKing, schoolOfThought, unbrokenArgument
     public var title: String {
         switch self {
-        case .falsifier: "Karl Popper - The Falsifier"
-        case .noLemmingLeftBehind: "No Lemming left behind"
-        case .aboveAndBeyond: "Above and beyond"
-        case .trolleyProblem: "The Trolley Problem"
-        case .greaterGood: "The Greater Good"
-        case .oneMore: "One more"
-        case .perfectlyAdequate: "Perfectly adequate"
-        case .moralSurplus: "Moral surplus"
-        case .absoluteMaximum: "Absolute maximum"
+        case .falsifier: L10n.text(L10n.text("Karl Popper - The Falsifier"))
+        case .noLemmingLeftBehind: L10n.text(L10n.text("No Lemming left behind"))
+        case .aboveAndBeyond: L10n.text(L10n.text("Above and beyond"))
+        case .trolleyProblem: L10n.text(L10n.text("The Trolley Problem"))
+        case .greaterGood: L10n.text(L10n.text("The Greater Good"))
+        case .oneMore: L10n.text(L10n.text("One more"))
+        case .perfectlyAdequate: L10n.text(L10n.text("Perfectly adequate"))
+        case .moralSurplus: L10n.text(L10n.text("Moral surplus"))
+        case .absoluteMaximum: L10n.text(L10n.text("Absolute maximum"))
         default: Self.collection[self]!.title
         }
     }
     public var detail: String {
         switch self {
-        case .falsifier: "Clear a level with more rescued than its established rescue target."
-        case .noLemmingLeftBehind: "Match a verified maximum."
-        case .aboveAndBeyond: "Save at least 5 extra and 20% of the starting population beyond the requirement."
-        case .trolleyProblem: "Clear a level with verified unavoidable losses."
-        case .greaterGood: "Clear with a verified sacrifice enabling at least three times as many rescues."
-        case .oneMore: "Finish one below a verified maximum."
-        case .perfectlyAdequate: "Clear with exactly the required rescue count."
-        case .moralSurplus: "Save 100 extra Lemmings across recorded attempts."
-        case .absoluteMaximum: "Match verified maximums on 10 distinct levels."
+        case .falsifier: L10n.text("Clear a level with more rescued than its established rescue target.")
+        case .noLemmingLeftBehind: L10n.text("Match a verified maximum.")
+        case .aboveAndBeyond: L10n.text("Save at least 5 extra and 20% of the starting population beyond the requirement.")
+        case .trolleyProblem: L10n.text("Clear a level with verified unavoidable losses.")
+        case .greaterGood: L10n.text("Clear with a verified sacrifice enabling at least three times as many rescues.")
+        case .oneMore: L10n.text("Finish one below a verified maximum.")
+        case .perfectlyAdequate: L10n.text("Clear with exactly the required rescue count.")
+        case .moralSurplus: L10n.text("Save 100 extra Lemmings across recorded attempts.")
+        case .absoluteMaximum: L10n.text("Match verified maximums on 10 distinct levels.")
         default: Self.collection[self]!.detail
         }
     }
@@ -196,7 +196,7 @@ public struct TrolleyHistory: Codable, Equatable, Sendable {
                         a.philosophy.dimensions.values.allSatisfy({ $0.isFinite && (0...1).contains($0) }) else { return false }
                   return a.start.map { $0.id == a.id && $0.profileID == a.run.profileID && $0.conditions == a.run.level.conditions } ?? true
               }), replays.allSatisfy({ replay in attempts.contains { $0.id == replay.attemptID } }) else {
-            throw SequelDataError.invalid("Invalid Trolley attempt history. The saved file must be preserved.")
+            throw SequelDataError.invalid(L10n.text("Invalid Trolley attempt history. The saved file must be preserved."))
         }
         return self
     }
@@ -218,13 +218,13 @@ public struct TrolleyHistory: Codable, Equatable, Sendable {
         for start in incoming.starts where start.profileID == sourceID {
             let mapped = start.cloudOwned(by: destinationID)
             if let previous = knownStarts[mapped.id] {
-                guard previous == mapped else { throw SequelDataError.invalid("Saved attempt identities conflict.") }
+                guard previous == mapped else { throw SequelDataError.invalid(L10n.text("Saved attempt identities conflict.")) }
             } else { starts.append(mapped); knownStarts[mapped.id] = mapped }
         }
         for attempt in incoming.attempts where attempt.run.profileID == sourceID {
             let mapped = attempt.cloudOwned(by: destinationID)
             if let previous = knownAttempts[mapped.id] {
-                guard previous == mapped else { throw SequelDataError.invalid("Saved attempt identities conflict.") }
+                guard previous == mapped else { throw SequelDataError.invalid(L10n.text("Saved attempt identities conflict.")) }
             } else { attempts.append(mapped); knownAttempts[mapped.id] = mapped }
             var maximum = maxima[mapped.comparisonID] ?? TrolleyMaximumRecord()
             maximum.observe(mapped.run)

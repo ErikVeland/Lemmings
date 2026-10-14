@@ -302,7 +302,7 @@ final class ClassicSession: GameSession {
   var saved: Int { simulation.savedCount }
   var required: Int { simulation.configuration.requiredToSave }
   var rate: Int { simulation.releaseRate }
-  var rateLabel: String { "Rate" }
+  var rateLabel: String { L10n.text("Rate") }
   var remainingSeconds: Int? { simulation.remainingTimeSeconds }
   var isComplete: Bool { simulation.isComplete }
   var didWin: Bool { simulation.didWin }
@@ -347,7 +347,7 @@ final class ClassicSession: GameSession {
   }
 
   func assign(skillIndex: Int, to lemmingID: Int) -> String? {
-    guard ClassicSkill.allCases.indices.contains(skillIndex) else { return "no such skill" }
+    guard ClassicSkill.allCases.indices.contains(skillIndex) else { return L10n.text("no such skill") }
     let result = history.assign(ClassicSkill.allCases[skillIndex], to: lemmingID)
     // An assignment happens between ticks and produces its own events. Publish
     // them here, or the click that starts a digger would make no sound: the
@@ -552,7 +552,7 @@ final class NeoLemmixSession: GameSession {
   var saved: Int { simulation.savedCount }
   var required: Int { simulation.configuration.requiredToSave }
   var rate: Int { simulation.spawnInterval }
-  var rateLabel: String { "Interval" }
+  var rateLabel: String { L10n.text("Interval") }
   var remainingSeconds: Int? {
     simulation.remainingTimeTicks.map {
       ($0 + NeoLemmixRules.ticksPerSecond - 1) / NeoLemmixRules.ticksPerSecond
@@ -615,7 +615,7 @@ final class NeoLemmixSession: GameSession {
 
   func assign(skillIndex: Int, to lemmingID: Int) -> String? {
     lastPositionedCues = []
-    guard skillOrder.indices.contains(skillIndex) else { return "no such skill" }
+    guard skillOrder.indices.contains(skillIndex) else { return L10n.text("no such skill") }
     let result = simulation.assign(skill: skillOrder[skillIndex], to: lemmingID)
     updateSoundCues()
     if case let .rejected(_, _, reason) = result { return "\(reason)" }

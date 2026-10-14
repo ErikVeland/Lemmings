@@ -9,9 +9,9 @@ public enum MobileHomeArt {
         if let index = rows.firstIndex(where: { $0.enabled }) {
             for row in rows.indices { rows[row].primary = row == index }
         }
-        return .init(title: "Lemmings", subtitle: subtitle, home: true, rows: rows,
-            footer: [.init("players", "Profiles"), .init("records", "Records"),
-                     .init("collections", "Collections / Playlists", enabled: collectionsAvailable),
-                     .init("settings", "Settings"), .init("whatsNew", "What's New")], homeInitials: initials)
+        return .init(title: L10n.text("Lemmings"), subtitle: subtitle, home: true, rows: rows,
+            footer: [.init("players", L10n.text("Profiles")), .init("records", L10n.text("Records")),
+                     .init("collections", L10n.text("Collections / Playlists"), enabled: collectionsAvailable),
+                     .init("settings", L10n.text("Settings")), .init("whatsNew", L10n.text("What's New"))], homeInitials: initials)
     }
 }

@@ -14,7 +14,7 @@ extension MobileLibraryViewController {
         do { try storage.save(profiles, name: "players") }
         catch { notice = error.localizedDescription; return false }
         guard arcadeStore.importProfiles(imported, activeID: profiles.activeID) else {
-            notice = arcadeStore.storageError ?? "Players were not saved."
+            notice = arcadeStore.storageError ?? L10n.text("Players were not saved.")
             do { try storage.save(previous, name: "players") }
             catch { notice = error.localizedDescription }
             return false
@@ -26,7 +26,7 @@ extension MobileLibraryViewController {
         var page = MobileCareerArt.players(profiles, subtitle: subtitle, draft: renamingPlayer ? nameDraft : nil,
             creating: creatingPlayer, portrait: draftPortrait, canDelete: canDeleteActivePlayer,
             confirmingDelete: confirmingDelete, hotSeatTurn: hotSeat.map { playerName($0.turn) })
-        if !renamingPlayer { page.rows.append(.init("cloudSaves", "Cloud saves")) }
+        if !renamingPlayer { page.rows.append(.init("cloudSaves", L10n.text("Cloud saves"))) }
         return page
     }
 
@@ -146,7 +146,7 @@ extension MobileLibraryViewController {
                 let ownsSavedRun = try await checkpointStore.hasSavedSoloRun(owner: candidate)
                 guard candidate == profiles.activeID else { return }
                 if ownsSavedRun {
-                    loadCheckpoint(); notice = "Resume this player's saved run before deleting."; rebuild(); return
+                    loadCheckpoint(); notice = L10n.text("Resume this player's saved run before deleting."); rebuild(); return
                 }
                 deleteUnsavedActivePlayer()
             } catch { notice = error.localizedDescription; rebuild() }
@@ -163,7 +163,7 @@ extension MobileLibraryViewController {
         guard arcadeStore.deleteProfile(removed) else {
             profiles = previous
             _ = saveProfiles()
-            notice = arcadeStore.storageError ?? "Player was not deleted."; rebuild(); return
+            notice = arcadeStore.storageError ?? L10n.text("Player was not deleted."); rebuild(); return
         }
         removeFromHotSeats(removed)
         UserDefaults.standard.removeObject(forKey: PlayerControlSettings.defaultsKey(profileID: removed))

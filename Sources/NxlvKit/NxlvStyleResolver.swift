@@ -420,7 +420,7 @@ public enum NxlvStyleMetadataDecoder {
             decoder.append(
                 severity: .error,
                 code: .unknownObjectEffect,
-                message: "Unknown object effect '\(keyword)'.",
+                message: L10n.text("Unknown object effect '\(keyword)'."),
                 line: effectLine?.lineNumber
             )
         }
@@ -433,14 +433,14 @@ public enum NxlvStyleMetadataDecoder {
             decoder.append(
                 severity: .error,
                 code: .missingMetadataField,
-                message: "The object metadata has no $PRIMARY_ANIMATION section.",
+                message: L10n.text("The object metadata has no $PRIMARY_ANIMATION section."),
                 line: nil
             )
         } else if primarySections.count > 1 {
             decoder.append(
                 severity: .error,
                 code: .malformedMetadata,
-                message: "The object metadata has more than one $PRIMARY_ANIMATION section.",
+                message: L10n.text("The object metadata has more than one $PRIMARY_ANIMATION section."),
                 line: primarySections[1].openingLine
             )
         }
@@ -502,7 +502,7 @@ public enum NxlvStyleMetadataDecoder {
             decoder.append(
                 severity: .error,
                 code: .missingMetadataField,
-                message: "An object animation has no FRAMES field.",
+                message: L10n.text("An object animation has no FRAMES field."),
                 line: section.openingLine
             )
         }
@@ -518,7 +518,7 @@ public enum NxlvStyleMetadataDecoder {
                 decoder.append(
                     severity: .error,
                     code: .malformedMetadataInteger,
-                    message: "Invalid INITIAL_FRAME value '\(line.value)'.",
+                    message: L10n.text("Invalid INITIAL_FRAME value '\(line.value)'."),
                     line: line.lineNumber
                 )
                 initialFrame = nil
@@ -620,7 +620,7 @@ private struct MetadataValueDecoder {
             append(
                 severity: .error,
                 code: .malformedMetadataInteger,
-                message: "Invalid integer '\(line.value)' for \(line.originalKeyword).",
+                message: L10n.text("Invalid integer '\(line.value)' for \(line.originalKeyword)."),
                 line: line.lineNumber
             )
             return nil
@@ -636,7 +636,7 @@ private struct MetadataValueDecoder {
         append(
             severity: .error,
             code: .malformedMetadata,
-            message: "Invalid Boolean '\(line.value)' for \(line.originalKeyword).",
+            message: L10n.text("Invalid Boolean '\(line.value)' for \(line.originalKeyword)."),
             line: line.lineNumber
         )
         return nil
@@ -696,7 +696,7 @@ public extension NxlvLevel {
                 diagnostics.append(NxlvStyleDiagnostic(
                     severity: .error,
                     code: .missingStyleIdentifier,
-                    message: "A \(kind.rawValue) reference has no STYLE field.",
+                    message: L10n.text("A \(kind.rawValue) reference has no STYLE field."),
                     line: section.openingLine
                 ))
                 return
@@ -705,7 +705,7 @@ public extension NxlvLevel {
                 diagnostics.append(NxlvStyleDiagnostic(
                     severity: .error,
                     code: .missingPieceIdentifier,
-                    message: "A \(kind.rawValue) reference has no PIECE field.",
+                    message: L10n.text("A \(kind.rawValue) reference has no PIECE field."),
                     line: section.openingLine
                 ))
                 return
@@ -761,7 +761,7 @@ public extension NxlvLevel {
                 diagnostics.append(NxlvStyleDiagnostic(
                     severity: .error,
                     code: .malformedBackgroundIdentifier,
-                    message: "BACKGROUND must use the form STYLE:PIECE.",
+                    message: L10n.text("BACKGROUND must use the form STYLE:PIECE."),
                     line: document.lastLineRecord("background")?.lineNumber
                 ))
             }
@@ -981,7 +981,7 @@ private struct ResolutionEngine {
             diagnostics.append(NxlvStyleDiagnostic(
                 severity: .error,
                 code: .stylesRootUnavailable,
-                message: "The selected NeoLemmix styles root is not a directory.",
+                message: L10n.text("The selected NeoLemmix styles root is not a directory."),
                 path: requestedRootURL.path
             ))
             return NxlvStyleResolution(assets: [], diagnostics: diagnostics)
@@ -998,7 +998,7 @@ private struct ResolutionEngine {
                 diagnostics.append(NxlvStyleDiagnostic(
                     severity: .error,
                     code: .unsafeIdentifier,
-                    message: "The style reference contains an unsafe path component.",
+                    message: L10n.text("The style reference contains an unsafe path component."),
                     line: reference.sourceLine,
                     reference: reference
                 ))
@@ -1025,8 +1025,8 @@ private struct ResolutionEngine {
                 styleMatches,
                 missingCode: .missingStyle,
                 ambiguousCode: .ambiguousStyle,
-                missingMessage: "Style '\(resolvedReference.style)' is missing.",
-                ambiguousMessage: "Style '\(resolvedReference.style)' has multiple case-insensitive matches.",
+                missingMessage: L10n.text("Style '\(resolvedReference.style)' is missing."),
+                ambiguousMessage: L10n.text("Style '\(resolvedReference.style)' has multiple case-insensitive matches."),
                 reference: reference
             ) else { continue }
 
@@ -1145,7 +1145,7 @@ private struct ResolutionEngine {
             diagnostics.append(NxlvStyleDiagnostic(
                 severity: .error,
                 code: .aliasDepthExceeded,
-                message: "Alias resolution exceeded the \(maximumAliasDepth)-redirect limit.",
+                message: L10n.text("Alias resolution exceeded the \(maximumAliasDepth)-redirect limit."),
                 line: rule.sourceLine,
                 path: rule.path,
                 reference: reference
@@ -1158,7 +1158,7 @@ private struct ResolutionEngine {
             diagnostics.append(NxlvStyleDiagnostic(
                 severity: .error,
                 code: .aliasCycle,
-                message: "Alias resolution contains a cycle at '\(displayIdentifier(destination))'.",
+                message: L10n.text("Alias resolution contains a cycle at '\(displayIdentifier(destination))'."),
                 line: rule.sourceLine,
                 path: rule.path,
                 reference: reference
@@ -1193,7 +1193,7 @@ private struct ResolutionEngine {
             diagnostics.append(NxlvStyleDiagnostic(
                 severity: .error,
                 code: .ambiguousAlias,
-                message: "Alias '\(displayIdentifier(identifier))' has conflicting \(kind.sectionKeyword) redirects.",
+                message: L10n.text("Alias '\(displayIdentifier(identifier))' has conflicting \(kind.sectionKeyword) redirects."),
                 line: first.sourceLine,
                 path: first.path,
                 reference: reference
@@ -1220,7 +1220,7 @@ private struct ResolutionEngine {
             diagnostics.append(NxlvStyleDiagnostic(
                 severity: .error,
                 code: .ambiguousStyle,
-                message: "Style '\(style)' has multiple case-insensitive matches while loading aliases.",
+                message: L10n.text("Style '\(style)' has multiple case-insensitive matches while loading aliases."),
                 line: reference.sourceLine,
                 reference: reference
             ))
@@ -1239,7 +1239,7 @@ private struct ResolutionEngine {
             diagnostics.append(NxlvStyleDiagnostic(
                 severity: .error,
                 code: .ambiguousAliasFile,
-                message: "Style '\(style)' has multiple case-insensitive alias.nxmi files.",
+                message: L10n.text("Style '\(style)' has multiple case-insensitive alias.nxmi files."),
                 line: reference.sourceLine,
                 path: styleURL.path,
                 reference: reference
@@ -1288,7 +1288,7 @@ private struct ResolutionEngine {
             diagnostics.append(NxlvStyleDiagnostic(
                 severity: .error,
                 code: .missingAliasField,
-                message: "An alias $\(kind.sectionKeyword.uppercased()) section has no FROM field.",
+                message: L10n.text("An alias $\(kind.sectionKeyword.uppercased()) section has no FROM field."),
                 line: section.openingLine,
                 path: path,
                 reference: reference
@@ -1300,7 +1300,7 @@ private struct ResolutionEngine {
             diagnostics.append(NxlvStyleDiagnostic(
                 severity: .error,
                 code: .missingAliasField,
-                message: "An alias $\(kind.sectionKeyword.uppercased()) section has no TO field.",
+                message: L10n.text("An alias $\(kind.sectionKeyword.uppercased()) section has no TO field."),
                 line: section.openingLine,
                 path: path,
                 reference: reference
@@ -1365,7 +1365,7 @@ private struct ResolutionEngine {
                 diagnostics.append(NxlvStyleDiagnostic(
                     severity: .error,
                     code: .malformedAliasIdentifier,
-                    message: "Alias \(field) must use STYLE:PIECE or :PIECE for a \(kind.sectionKeyword) redirect.",
+                    message: L10n.text("Alias \(field) must use STYLE:PIECE or :PIECE for a \(kind.sectionKeyword) redirect."),
                     line: line,
                     path: path,
                     reference: reference
@@ -1381,7 +1381,7 @@ private struct ResolutionEngine {
                 diagnostics.append(NxlvStyleDiagnostic(
                     severity: .error,
                     code: .malformedAliasIdentifier,
-                    message: "Alias \(field) must contain one style identifier for a \(kind.sectionKeyword) redirect.",
+                    message: L10n.text("Alias \(field) must contain one style identifier for a \(kind.sectionKeyword) redirect."),
                     line: line,
                     path: path,
                     reference: reference
@@ -1396,7 +1396,7 @@ private struct ResolutionEngine {
             diagnostics.append(NxlvStyleDiagnostic(
                 severity: .error,
                 code: .unsafeIdentifier,
-                message: "Alias \(field) contains an unsafe path component.",
+                message: L10n.text("Alias \(field) contains an unsafe path component."),
                 line: line,
                 path: path,
                 reference: reference
@@ -1416,7 +1416,7 @@ private struct ResolutionEngine {
             diagnostics.append(NxlvStyleDiagnostic(
                 severity: .error,
                 code: .malformedAliasInteger,
-                message: "Invalid integer '\(line.value)' for \(line.originalKeyword).",
+                message: L10n.text("Invalid integer '\(line.value)' for \(line.originalKeyword)."),
                 line: line.lineNumber,
                 path: path,
                 reference: reference
@@ -1489,8 +1489,8 @@ private struct ResolutionEngine {
             matches,
             missingCode: .missingPieceMetadata,
             ambiguousCode: .ambiguousPieceMetadata,
-            missingMessage: "Style '\(resolvedReference.style)' has no theme metadata file.",
-            ambiguousMessage: "Style '\(resolvedReference.style)' has multiple theme metadata files.",
+            missingMessage: L10n.text("Style '\(resolvedReference.style)' has no theme metadata file."),
+            ambiguousMessage: L10n.text("Style '\(resolvedReference.style)' has multiple theme metadata files."),
             reference: requestedReference
         ) else { return nil }
 
@@ -1531,8 +1531,8 @@ private struct ResolutionEngine {
             graphics,
             missingCode: .missingPieceGraphic,
             ambiguousCode: .ambiguousPieceGraphic,
-            missingMessage: "Terrain graphic '\(resolvedReference.style):\(piece)' is missing.",
-            ambiguousMessage: "Terrain graphic '\(resolvedReference.style):\(piece)' is ambiguous.",
+            missingMessage: L10n.text("Terrain graphic '\(resolvedReference.style):\(piece)' is missing."),
+            ambiguousMessage: L10n.text("Terrain graphic '\(resolvedReference.style):\(piece)' is ambiguous."),
             reference: requestedReference
         ) else { return nil }
 
@@ -1551,7 +1551,7 @@ private struct ResolutionEngine {
             diagnostics.append(NxlvStyleDiagnostic(
                 severity: .error,
                 code: .ambiguousPieceMetadata,
-                message: "Terrain metadata '\(resolvedReference.style):\(piece)' is ambiguous.",
+                message: L10n.text("Terrain metadata '\(resolvedReference.style):\(piece)' is ambiguous."),
                 line: requestedReference.sourceLine,
                 reference: requestedReference
             ))
@@ -1610,8 +1610,8 @@ private struct ResolutionEngine {
             metadataMatches,
             missingCode: .missingPieceMetadata,
             ambiguousCode: .ambiguousPieceMetadata,
-            missingMessage: "Object metadata '\(resolvedReference.style):\(piece)' is missing.",
-            ambiguousMessage: "Object metadata '\(resolvedReference.style):\(piece)' is ambiguous.",
+            missingMessage: L10n.text("Object metadata '\(resolvedReference.style):\(piece)' is missing."),
+            ambiguousMessage: L10n.text("Object metadata '\(resolvedReference.style):\(piece)' is ambiguous."),
             reference: requestedReference
         ), let text = readMetadata(metadataURL, reference: requestedReference) else { return nil }
 
@@ -1649,7 +1649,7 @@ private struct ResolutionEngine {
                 diagnostics.append(NxlvStyleDiagnostic(
                     severity: .error,
                     code: .unsafeIdentifier,
-                    message: "Object animation '\(name)' contains an unsafe path component.",
+                    message: L10n.text("Object animation '\(name)' contains an unsafe path component."),
                     line: requestedReference.sourceLine,
                     path: metadataURL.path,
                     reference: requestedReference
@@ -1675,8 +1675,8 @@ private struct ResolutionEngine {
                 matches,
                 missingCode: .missingPieceGraphic,
                 ambiguousCode: .ambiguousPieceGraphic,
-                missingMessage: "Object animation graphic '\(baseName).png' is missing.",
-                ambiguousMessage: "Object animation graphic '\(baseName).png' is ambiguous.",
+                missingMessage: L10n.text("Object animation graphic '\(baseName).png' is missing."),
+                ambiguousMessage: L10n.text("Object animation graphic '\(baseName).png' is ambiguous."),
                 reference: requestedReference
             ) {
                 graphicURLs.append(graphicURL)
@@ -1722,8 +1722,8 @@ private struct ResolutionEngine {
             graphics,
             missingCode: .missingPieceGraphic,
             ambiguousCode: .ambiguousPieceGraphic,
-            missingMessage: "Background graphic '\(resolvedReference.style):\(piece)' is missing.",
-            ambiguousMessage: "Background graphic '\(resolvedReference.style):\(piece)' is ambiguous.",
+            missingMessage: L10n.text("Background graphic '\(resolvedReference.style):\(piece)' is missing."),
+            ambiguousMessage: L10n.text("Background graphic '\(resolvedReference.style):\(piece)' is ambiguous."),
             reference: requestedReference
         ) else { return nil }
 
@@ -1738,7 +1738,7 @@ private struct ResolutionEngine {
             diagnostics.append(NxlvStyleDiagnostic(
                 severity: .error,
                 code: .ambiguousPieceMetadata,
-                message: "Background metadata '\(resolvedReference.style):\(piece)' is ambiguous.",
+                message: L10n.text("Background metadata '\(resolvedReference.style):\(piece)' is ambiguous."),
                 line: requestedReference.sourceLine,
                 reference: requestedReference
             ))
@@ -1783,7 +1783,7 @@ private struct ResolutionEngine {
             diagnostics.append(NxlvStyleDiagnostic(
                 severity: .error,
                 code: .missingPieceGraphic,
-                message: "Lemming sprite set '\(resolvedReference.style)' has no PNG graphics.",
+                message: L10n.text("Lemming sprite set '\(resolvedReference.style)' has no PNG graphics."),
                 line: requestedReference.sourceLine,
                 reference: requestedReference
             ))
@@ -1797,7 +1797,7 @@ private struct ResolutionEngine {
             diagnostics.append(NxlvStyleDiagnostic(
                 severity: .error,
                 code: .ambiguousPieceGraphic,
-                message: "Lemming sprite '\(ambiguous[0].deletingPathExtension().lastPathComponent)' is ambiguous.",
+                message: L10n.text("Lemming sprite '\(ambiguous[0].deletingPathExtension().lastPathComponent)' is ambiguous."),
                 line: requestedReference.sourceLine,
                 path: directory.path,
                 reference: requestedReference
@@ -1815,7 +1815,7 @@ private struct ResolutionEngine {
             diagnostics.append(NxlvStyleDiagnostic(
                 severity: .error,
                 code: .ambiguousPieceMetadata,
-                message: "Lemming sprite set '\(resolvedReference.style)' has multiple scheme.nxmi files.",
+                message: L10n.text("Lemming sprite set '\(resolvedReference.style)' has multiple scheme.nxmi files."),
                 line: requestedReference.sourceLine,
                 path: directory.path,
                 reference: requestedReference
@@ -1846,8 +1846,8 @@ private struct ResolutionEngine {
             matches,
             missingCode: .missingAssetDirectory,
             ambiguousCode: .ambiguousAssetDirectory,
-            missingMessage: "Style '\(styleName)' has no \(name) directory.",
-            ambiguousMessage: "Style '\(styleName)' has multiple \(name) directories.",
+            missingMessage: L10n.text("Style '\(styleName)' has no \(name) directory."),
+            ambiguousMessage: L10n.text("Style '\(styleName)' has multiple \(name) directories."),
             reference: reference
         )
     }
@@ -1866,7 +1866,7 @@ private struct ResolutionEngine {
             diagnostics.append(NxlvStyleDiagnostic(
                 severity: .error,
                 code: .unreadableDirectory,
-                message: "Cannot read directory '\(directory.path)'.",
+                message: L10n.text("Cannot read directory '\(directory.path)'."),
                 line: reference?.sourceLine,
                 path: directory.path,
                 reference: reference
@@ -1980,7 +1980,7 @@ private struct ResolutionEngine {
                 diagnostics.append(NxlvStyleDiagnostic(
                     severity: .error,
                     code: .metadataTooLarge,
-                    message: "Metadata exceeds the \(maximumMetadataBytes)-byte limit.",
+                    message: L10n.text("Metadata exceeds the \(maximumMetadataBytes)-byte limit."),
                     line: reference.sourceLine,
                     path: url.path,
                     reference: reference
@@ -1996,7 +1996,7 @@ private struct ResolutionEngine {
             diagnostics.append(NxlvStyleDiagnostic(
                 severity: .error,
                 code: .invalidMetadataEncoding,
-                message: "Metadata is not valid UTF-8 or Windows-1252 text.",
+                message: L10n.text("Metadata is not valid UTF-8 or Windows-1252 text."),
                 line: reference.sourceLine,
                 path: url.path,
                 reference: reference
@@ -2005,7 +2005,7 @@ private struct ResolutionEngine {
             diagnostics.append(NxlvStyleDiagnostic(
                 severity: .error,
                 code: .unreadableMetadata,
-                message: "Cannot read metadata '\(url.path)'.",
+                message: L10n.text("Cannot read metadata '\(url.path)'."),
                 line: reference.sourceLine,
                 path: url.path,
                 reference: reference
@@ -2028,7 +2028,7 @@ private struct ResolutionEngine {
         NxlvStyleDiagnostic(
             severity: .error,
             code: .unsafeResolvedPath,
-            message: "A matching asset resolves outside the selected styles root.",
+            message: L10n.text("A matching asset resolves outside the selected styles root."),
             line: reference.sourceLine,
             path: url.path,
             reference: reference

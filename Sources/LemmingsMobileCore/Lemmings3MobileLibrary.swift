@@ -9,7 +9,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
     public static let engineFingerprint = "lemmings3-mobile-runtime-v1"
 
     public let directory: URL
-    public let displayName = "Lemmings 3: Chronicles"
+    public let displayName = L10n.text(L10n.text("Lemmings 3: Chronicles"))
     public let levels: [MobileLevelSummary]
     private let contentFingerprint: String
 
@@ -46,7 +46,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
                 MobileLevelSummary(index: (tribe.rawValue - 1) * 30 + index,
                     rank: tribe.title,
                     number: index + 1,
-                    title: "Level \(index + 1) • \(level.width)×\(level.height)")
+                    title: L10n.text("Level \(index + 1) • \(level.width)×\(level.height)"))
             }
         }
     }
@@ -201,7 +201,7 @@ public enum Lemmings3MobileLibraryError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case let .progressSave(reason): "Lemmings 3 progress could not be saved: \(reason)"
+        case let .progressSave(reason): L10n.text("Lemmings 3 progress could not be saved: \(reason)")
         }
     }
 }

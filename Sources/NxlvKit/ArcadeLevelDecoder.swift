@@ -53,7 +53,7 @@ public struct ArcadeLevelDecoder: Sendable {
         ),
         ArcadeLevelInfo(
             id: 2,
-            title: "Arcade Stage 2 - Co-Op Challenge",
+            title: L10n.text("Arcade Stage 2 - Co-Op Challenge"),
             rank: "Arcade Co-Op",
             isTwoPlayerCoOp: true,
             lemmingCount: 50,

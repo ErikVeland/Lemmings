@@ -85,7 +85,7 @@ public enum DifficultyLibrary {
                             }
                         }
                     } catch is CancellationError { throw CancellationError() }
-                    catch { failures.append("\(input.entry.levelNameSnapshot): replay analysis failed: \(error)") }
+                    catch { failures.append(L10n.text("\(input.entry.levelNameSnapshot): replay analysis failed: \(error)")) }
                 }
                 let profile: DifficultyProfile
                 if let measured { profile = measured }

@@ -4,11 +4,11 @@ public enum ProgressionPolicy: String, Codable, CaseIterable, Sendable {
     case smooth, originalPlus, lowPrecision, executionChallenge, techniqueCurriculum
     public var name: String {
         switch self {
-        case .smooth: "Smooth Progression"
-        case .originalPlus: "Original+ Progression"
-        case .lowPrecision: "Low Precision"
-        case .executionChallenge: "Execution Challenge"
-        case .techniqueCurriculum: "Technique Curriculum"
+        case .smooth: L10n.text("Smooth Progression")
+        case .originalPlus: L10n.text("Original+ Progression")
+        case .lowPrecision: L10n.text("Low Precision")
+        case .executionChallenge: L10n.text("Execution Challenge")
+        case .techniqueCurriculum: L10n.text("Technique Curriculum")
         }
     }
 }
@@ -170,10 +170,10 @@ public enum ProgressionGenerator {
             let candidate = selected.0
             let introduced = Set(candidate.profile.detectedTechniques).subtracting(learned).sorted()
             let reason = candidate.isOfficial ? "Official level retained."
-                : policy == .originalPlus && nextOfficial != nil ? "Community bridge before the next official level." : "Community level fills the next curriculum step."
+                : policy == .originalPlus && nextOfficial != nil ? L10n.text("Community bridge before the next official level.") : L10n.text("Community level fills the next curriculum step.")
             diagnostics.append(.init(identity: candidate.entry.identity, score: candidate.placementScore,
                                      transitionCost: selected.1, introducedConcepts: introduced, reason: reason))
-            if selected.1 > 250 { warnings.append("Large remaining transition to \(candidate.entry.levelNameSnapshot): \(Int(selected.1)).") }
+            if selected.1 > 250 { warnings.append(L10n.text("Large remaining transition to \(candidate.entry.levelNameSnapshot): \(Int(selected.1)).")) }
             chosen.append(candidate); learned.formUnion(candidate.profile.detectedTechniques)
             for concept in candidate.profile.detectedTechniques { exposures[concept, default: 0] += 1 }
             remaining.removeAll { $0.entry.identity == candidate.entry.identity }

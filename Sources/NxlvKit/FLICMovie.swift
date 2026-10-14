@@ -13,21 +13,21 @@ public enum FLICError: Error, Equatable, CustomStringConvertible {
     public var description: String {
         switch self {
         case let .truncatedHeader(size):
-            return "A FLIC file needs a 128 byte header, but this one is \(size) bytes."
+            return L10n.text("A FLIC file needs a 128 byte header, but this one is \(size) bytes.")
         case let .notFLIC(magic):
-            return "Expected the FLIC marker 0xAF11, but found \(String(format: "0x%04X", magic))."
+            return L10n.text("Expected the FLIC marker 0xAF11, but found \(String(format: "0x%04X", magic)).")
         case let .unsupportedDepth(depth):
-            return "This reader handles 8 bits per pixel. The file declares \(depth)."
+            return L10n.text("This reader handles 8 bits per pixel. The file declares \(depth).")
         case let .emptyFrameSize(frameIndex, offset):
-            return "Frame \(frameIndex) at byte \(offset) declares a size of zero."
+            return L10n.text("Frame \(frameIndex) at byte \(offset) declares a size of zero.")
         case let .truncatedChunk(frameIndex, offset, declared, available):
-            return "Frame \(frameIndex) at byte \(offset) declares \(declared) bytes, but only \(available) remain."
+            return L10n.text("Frame \(frameIndex) at byte \(offset) declares \(declared) bytes, but only \(available) remain.")
         case let .unsupportedChunk(frameIndex, type):
-            return "Frame \(frameIndex) holds chunk type \(type), which this reader does not handle."
+            return L10n.text("Frame \(frameIndex) holds chunk type \(type), which this reader does not handle.")
         case let .runsPastEndOfCanvas(frameIndex, type):
-            return "Chunk type \(type) in frame \(frameIndex) writes past the end of the picture."
+            return L10n.text("Chunk type \(type) in frame \(frameIndex) writes past the end of the picture.")
         case let .readPastEndOfChunk(frameIndex, type):
-            return "Chunk type \(type) in frame \(frameIndex) reads past its own end."
+            return L10n.text("Chunk type \(type) in frame \(frameIndex) reads past its own end.")
         }
     }
 }

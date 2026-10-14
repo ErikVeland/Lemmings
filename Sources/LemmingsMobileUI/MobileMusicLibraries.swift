@@ -72,7 +72,7 @@ import NxlvKit
                 self.allRequestedPacks = nil
             } catch {
                 self.allRequestedPacks = nil
-                self.failure = (error as? LocalizedError)?.errorDescription ?? "The download did not finish."
+                self.failure = (error as? LocalizedError)?.errorDescription ?? L10n.text("The download did not finish.")
             }
             self.progress[pack.id] = nil
             self.tasks[pack.id] = nil

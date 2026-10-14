@@ -12,7 +12,7 @@ public struct Lemmings2Explosion: Sendable {
     public init(data: Data) throws {
         let reader = SequelBinary(data)
         guard try reader.tag(0) == "L2EP", try reader.u16(4) == 52, try reader.u16(6) == 80,
-              reader.count == 8328 else { throw SequelDataError.invalid("Invalid L2 explosion animation.") }
+              reader.count == 8328 else { throw SequelDataError.invalid(L10n.text("Invalid L2 explosion animation.")) }
         frames = (0..<52).map { frame in
             var colour = 0
             return (0..<80).compactMap { point in
@@ -37,7 +37,7 @@ public struct Lemmings2Explosion: Sendable {
         for _ in 0..<(try reader.u16(0)) {
             let length = Int(try reader.slice(cursor,1)[0])
             guard length > 0, try reader.slice(cursor+length,1)[0] == 0 else {
-                throw SequelDataError.invalid("Invalid L2 overlay symbol.")
+                throw SequelDataError.invalid(L10n.text("Invalid L2 overlay symbol."))
             }
             cursor += length+1
         }
@@ -49,7 +49,7 @@ public struct Lemmings2Explosion: Sendable {
         }
         cursor += try reader.u32(4)+reader.u16(8)*3
         guard recognised, try reader.u16(10) >= 0x15c4+8320 else {
-            throw SequelDataError.invalid("Unrecognised L2 explosion animation layout.")
+            throw SequelDataError.invalid(L10n.text("Unrecognised L2 explosion animation layout."))
         }
         try self.init(data:Data(Array("L2EP".utf8)+[52,0,80,0]+reader.slice(cursor+0x15c4,8320)))
     }

@@ -51,7 +51,7 @@ public struct Lemmings2RailMachine: Sendable {
         try Set(parts.parts.filter { [1,7].contains($0.type) }.map(\.objectIndex)).sorted().map { id in
             let pieces = parts.parts.filter { $0.objectIndex == id }
             guard pieces.count >= 5, let first = pieces.first, let last = pieces.last else {
-                throw SequelDataError.invalid("Incomplete L2 rail machine.")
+                throw SequelDataError.invalid(L10n.text("Incomplete L2 rail machine."))
             }
             let cannon = first.type == 1, base = pieces[pieces.count-(cannon ? 1 : 2)]
             let control = cannon ? 0 : 3

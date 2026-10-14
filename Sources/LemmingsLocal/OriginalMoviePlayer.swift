@@ -18,11 +18,11 @@ extension AVAudioPlayer: OriginalMovieAudio {}
         case egyptian = "E-LEV10.FLI", ending = "THE-END.FLI"
         var title: String {
             switch self {
-            case .introduction: "Introduction"
-            case .classic: "Classic tribe movie"
-            case .shadow: "Shadow tribe movie"
-            case .egyptian: "Egyptian tribe movie"
-            case .ending: "Ending"
+            case .introduction: L10n.text(L10n.text("Introduction"))
+            case .classic: L10n.text(L10n.text("Classic tribe movie"))
+            case .shadow: L10n.text(L10n.text("Shadow tribe movie"))
+            case .egyptian: L10n.text(L10n.text("Egyptian tribe movie"))
+            case .ending: L10n.text(L10n.text("Ending"))
             }
         }
     }
@@ -38,19 +38,19 @@ extension AVAudioPlayer: OriginalMovieAudio {}
     private(set) var displayedFrames = 0
     private(set) var finished = false
     private(set) var failure: String?
-    private let playbackButton = GameActionButton(title: "Pause")
-    private let backButton = GameActionButton(title: "Back", primary: false)
+    private let playbackButton = GameActionButton(title: L10n.text("Pause"))
+    private let backButton = GameActionButton(title: L10n.text("Back"), primary: false)
     var onClose: (() -> Void)?
     override var acceptsFirstResponder: Bool { true }
     override var isFlipped: Bool { true }
 
     init(url: URL, soundtrack: (any OriginalMovieAudio)? = nil,
          returnsToGameWhenFinished: Bool = false,
-         automaticExitDestination: String = "the game") throws {
+         automaticExitDestination: String = L10n.text("the game")) throws {
         movie = try FLICMovie(contentsOf: url)
         guard movie.width > 0, movie.height > 0, movie.width <= 1920, movie.height <= 1080,
               movie.frameCount > 0, movie.frameOffsets.count >= movie.frameCount else {
-            throw SequelDataError.invalid("The original movie has invalid frame dimensions or missing frames.")
+            throw SequelDataError.invalid(L10n.text("The original movie has invalid frame dimensions or missing frames."))
         }
         self.soundtrack = soundtrack
         self.returnsToGameWhenFinished = returnsToGameWhenFinished
@@ -59,14 +59,14 @@ extension AVAudioPlayer: OriginalMovieAudio {}
         try readFrame()
         playbackButton.onPress = { [weak self] in self?.togglePause() }
         backButton.onPress = { [weak self] in self?.close() }
-        if returnsToGameWhenFinished { backButton.title = "Skip" }
+        if returnsToGameWhenFinished { backButton.title = L10n.text("Skip") }
         addSubview(backButton); addSubview(playbackButton)
         setAccessibilityElement(true)
         setAccessibilityRole(.group)
-        setAccessibilityLabel("Original Lemmings 3 movie")
+        setAccessibilityLabel(L10n.text("Original Lemmings 3 movie"))
         setAccessibilityHelp(returnsToGameWhenFinished
-            ? "Space pauses. Escape skips to \(automaticExitDestination)."
-            : "Space pauses. Escape returns to the movie list.")
+            ? L10n.text("Space pauses. Escape skips to \(automaticExitDestination).")
+            : L10n.text("Space pauses. Escape returns to the movie list."))
         updatePlaybackControls()
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -98,11 +98,11 @@ extension AVAudioPlayer: OriginalMovieAudio {}
         updatePlaybackControls(); needsDisplay = true
     }
     private func updatePlaybackControls() {
-        playbackButton.title = paused ? "Play" : "Pause"
+        playbackButton.title = paused ? L10n.text("Play") : L10n.text("Pause")
         playbackButton.isEnabled = !finished
         playbackButton.needsDisplay = true
         if finished, window?.firstResponder === playbackButton { window?.makeFirstResponder(backButton) }
-        setAccessibilityValue(failure ?? (finished ? "Movie ended" : paused ? "Paused" : "Playing"))
+        setAccessibilityValue(failure ?? (finished ? L10n.text("Movie ended") : paused ? L10n.text("Paused") : L10n.text("Playing")))
     }
     override func layout() {
         super.layout()
@@ -131,7 +131,7 @@ extension AVAudioPlayer: OriginalMovieAudio {}
     }
     private func readFrame() throws {
         guard let frame = try decoder.nextFrame() else {
-            throw SequelDataError.invalid("The original movie ended before its declared final frame.")
+            throw SequelDataError.invalid(L10n.text("The original movie ended before its declared final frame."))
         }
         let rgba = Data(frame.rgbaBytes())
         frameImage = CGImage(width: frame.width, height: frame.height, bitsPerComponent: 8,
@@ -150,7 +150,7 @@ extension AVAudioPlayer: OriginalMovieAudio {}
             NSImage(cgImage: frameImage, size: size).draw(in: rect, from: .zero, operation: .sourceOver,
                 fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
         }
-        if let status = failure ?? (finished ? "Movie ended" : nil) {
+        if let status = failure ?? (finished ? L10n.text("Movie ended") : nil) {
             GamePixelText.draw(MacInterfaceRenderer.menuText(status),
                 in: CGRect(x: 20, y: max(0, bounds.height - 72), width: max(0, bounds.width - 40), height: 24))
         }

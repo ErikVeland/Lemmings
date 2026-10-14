@@ -7,11 +7,11 @@ public enum TrolleyTitle: String, Codable, CaseIterable, Sendable {
     case absolutist, lastLemming, pyrrhicVictor, trolleyOperator, falsifier
     public var title: String {
         switch self {
-        case .falsifier: "The Falsifier"
-        case .absolutist: "The Absolutist"
-        case .lastLemming: "One Lemming left behind"
-        case .pyrrhicVictor: "The Pyrrhic Victor"
-        case .trolleyOperator: "The Trolley Operator"
+        case .falsifier: L10n.text(L10n.text("The Falsifier"))
+        case .absolutist: L10n.text(L10n.text("The Absolutist"))
+        case .lastLemming: L10n.text(L10n.text("One Lemming left behind"))
+        case .pyrrhicVictor: L10n.text(L10n.text("The Pyrrhic Victor"))
+        case .trolleyOperator: L10n.text(L10n.text("The Trolley Operator"))
         }
     }
 }
@@ -35,7 +35,7 @@ public struct TrolleyPhilosophy: Codable, Equatable, Sendable {
                     preservationBasis: preservationBasis, primaryID: "popper", secondaryID: primaryID,
                     affinityScores: scores, titles: titles + [.falsifier],
                     explanation: TrolleyAnalyser.archetype("popper").affinityDescription,
-                    contextualLine: "Previous record: \(target). New record: \(saved).")
+                    contextualLine: L10n.text("Previous record: \(target). New record: \(saved)."))
     }
 }
 
@@ -64,59 +64,59 @@ public struct TrolleyArchetype: Sendable {
 public enum TrolleyAnalyser {
     public static let version = 1
     public static let archetypes: [TrolleyArchetype] = [
-        .init(id: "bentham", name: "Jeremy Bentham", philosopher: "Jeremy Bentham", title: "The Classical Utilitarian",
-              interpretation: "Aggregate benefit, with an evidenced trade-off.",
+        .init(id: "bentham", name: "Jeremy Bentham", philosopher: "Jeremy Bentham", title: L10n.text("The Classical Utilitarian"),
+              interpretation: L10n.text("Aggregate benefit, with an evidenced trade-off."),
               targets: [.preservation: 0.85, .utility: 0.9, .sacrifice: 0.2], weights: [.preservation: 2, .utility: 3, .sacrifice: 2],
               minimums: ["causalBenefit": 1, "preservation": 0.7]),
-        .init(id: "mill", name: "John Stuart Mill", philosopher: "John Stuart Mill", title: "The Humane Utilitarian",
-              interpretation: "Consequentialist optimisation with a strong rescue outcome.",
+        .init(id: "mill", name: "John Stuart Mill", philosopher: "John Stuart Mill", title: L10n.text("The Humane Utilitarian"),
+              interpretation: L10n.text("Consequentialist optimisation with a strong rescue outcome."),
               targets: [.preservation: 1, .utility: 0.8, .duty: 0.85], weights: [.preservation: 4, .utility: 3, .duty: 1],
               minimums: ["preservation": 0.85, "utility": 0.55]),
-        .init(id: "kant", name: "Immanuel Kant", philosopher: "Immanuel Kant", title: "The Deontologist",
-              interpretation: "A duty-shaped result: individual preservation without destructive assignments.",
+        .init(id: "kant", name: "Immanuel Kant", philosopher: "Immanuel Kant", title: L10n.text("The Deontologist"),
+              interpretation: L10n.text("A duty-shaped result: individual preservation without destructive assignments."),
               targets: [.duty: 1, .preservation: 1, .intervention: 0.2], weights: [.duty: 5, .preservation: 2, .intervention: 1],
               minimums: ["verifiedPerfect": 1, "skills": 1, "duty": 0.9], maximums: ["destructive": 0, "nukes": 0]),
-        .init(id: "singer", name: "Peter Singer", philosopher: "Peter Singer", title: "The Effective Altruist",
-              interpretation: "Measurable rescue benefit per scarce resource.",
+        .init(id: "singer", name: "Peter Singer", philosopher: "Peter Singer", title: L10n.text("The Effective Altruist"),
+              interpretation: L10n.text("Measurable rescue benefit per scarce resource."),
               targets: [.preservation: 1, .utility: 1], weights: [.preservation: 3, .utility: 6],
               minimums: ["preservation": 0.95, "utility": 0.92, "scarceResourcesKnown": 1]),
-        .init(id: "aristotle", name: "Aristotle", philosopher: "Aristotle", title: "The Virtue Ethicist",
-              interpretation: "Balanced preservation, resource use and intervention in this solution.",
+        .init(id: "aristotle", name: "Aristotle", philosopher: "Aristotle", title: L10n.text("The Virtue Ethicist"),
+              interpretation: L10n.text("Balanced preservation, resource use and intervention in this solution."),
               targets: [.preservation: 0.9, .utility: 0.75, .duty: 0.75, .intervention: 0.25],
               weights: [.preservation: 3, .utility: 2, .duty: 2, .intervention: 1], minimums: ["preservation": 0.75, "utility": 0.4]),
-        .init(id: "epicurus", name: "Epicurus", philosopher: "Epicurus", title: "The Minimal Harm Strategist",
-              interpretation: "A strong result with little disturbance.",
+        .init(id: "epicurus", name: "Epicurus", philosopher: "Epicurus", title: L10n.text("The Minimal Harm Strategist"),
+              interpretation: L10n.text("A strong result with little disturbance."),
               targets: [.preservation: 0.95, .intervention: 0, .utility: 0.85], weights: [.preservation: 2, .intervention: 5, .utility: 1],
               minimums: ["preservation": 0.8], maximums: ["intervention": 0.15, "destructive": 0, "nukes": 0]),
-        .init(id: "hobbes", name: "Thomas Hobbes", philosopher: "Thomas Hobbes", title: "The Hard Pragmatist",
-              interpretation: "A secured clear amid substantial loss.",
+        .init(id: "hobbes", name: "Thomas Hobbes", philosopher: "Thomas Hobbes", title: L10n.text("The Hard Pragmatist"),
+              interpretation: L10n.text("A secured clear amid substantial loss."),
               targets: [.pragmatism: 0.8, .sacrifice: 0.5, .utility: 0.7], weights: [.pragmatism: 3, .sacrifice: 3, .utility: 1],
               minimums: ["passed": 1, "sacrifice": 0.25]),
-        .init(id: "sartre", name: "Jean-Paul Sartre", philosopher: "Jean-Paul Sartre", title: "The Existentialist",
-              interpretation: "A coherent solution with documented unconventional choices.",
+        .init(id: "sartre", name: "Jean-Paul Sartre", philosopher: "Jean-Paul Sartre", title: L10n.text("The Existentialist"),
+              interpretation: L10n.text("A coherent solution with documented unconventional choices."),
               targets: [.preservation: 0.8, .intervention: 0.6], weights: [.preservation: 2, .intervention: 2],
               minimums: ["unconventional": 1, "preservation": 0.5]),
-        .init(id: "absurdist", name: "The Absurdist", title: "An improbable resolution",
-              interpretation: "A valid clear through extreme intervention.",
+        .init(id: "absurdist", name: "The Absurdist", title: L10n.text("An improbable resolution"),
+              interpretation: L10n.text("A valid clear through extreme intervention."),
               targets: [.intervention: 1, .pragmatism: 0.5], weights: [.intervention: 5, .pragmatism: 1],
               minimums: ["passed": 1, "extremeIntervention": 1]),
-        .init(id: "humanist", name: "The Humanist", title: "Room for everyone",
-              interpretation: "Preservation well beyond the formal requirement.",
+        .init(id: "humanist", name: "The Humanist", title: L10n.text("Room for everyone"),
+              interpretation: L10n.text("Preservation well beyond the formal requirement."),
               targets: [.preservation: 1, .duty: 0.9], weights: [.preservation: 3, .duty: 4],
               minimums: ["preservation": 0.9, "surplusFraction": 0.4, "surplus": 3]),
-        .init(id: "bureaucrat", name: "The Bureaucrat", title: "Perfectly adequate",
-              interpretation: "The rescue requirement has been satisfied with precision.",
+        .init(id: "bureaucrat", name: "The Bureaucrat", title: L10n.text("Perfectly adequate"),
+              interpretation: L10n.text("The rescue requirement has been satisfied with precision."),
               targets: [.pragmatism: 1], weights: [.pragmatism: 5],
               minimums: ["passed": 1, "roomBeyondRequirement": 2], maximums: ["requirementDistance": 1]),
-        .init(id: "trolley_operator", name: "The Trolley Operator", title: "A documented trade-off",
-              interpretation: "An evidenced sacrifice enabled a larger rescue.",
+        .init(id: "trolley_operator", name: "The Trolley Operator", title: L10n.text("A documented trade-off"),
+              interpretation: L10n.text("An evidenced sacrifice enabled a larger rescue."),
               targets: [.utility: 0.85, .preservation: 0.9, .intervention: 0.5], weights: [.utility: 3, .preservation: 2, .intervention: 1],
               minimums: ["causalBenefit": 1, "passed": 1], achievementHooks: [.greaterGood]),
-        .init(id: "popper", name: "Karl Popper", philosopher: "Karl Popper", title: "The Falsifier",
-              interpretation: "A rescue that disproved the previous estimate.", targets: [:], weights: [:],
+        .init(id: "popper", name: "Karl Popper", philosopher: "Karl Popper", title: L10n.text("The Falsifier"),
+              interpretation: L10n.text("A rescue that disproved the previous estimate."), targets: [:], weights: [:],
               minimums: ["surpassedTarget": 1], achievementHooks: [.falsifier]),
-        .init(id: "fellow_traveller", name: "The Fellow Traveller", title: "An unfinished argument",
-              interpretation: "A recorded attempt, with room for a different solution.", targets: [:], weights: [:])
+        .init(id: "fellow_traveller", name: "The Fellow Traveller", title: L10n.text("An unfinished argument"),
+              interpretation: L10n.text("A recorded attempt, with room for a different solution."), targets: [:], weights: [:])
     ]
     public static func archetype(_ id: String) -> TrolleyArchetype { archetypes.first { $0.id == id } ?? archetypes.last! }
     private static func unit(_ n: Double) -> Double { max(0, min(1, n)) }
@@ -172,14 +172,14 @@ public enum TrolleyAnalyser {
         if causal && run.didWin { titles.append(.trolleyOperator) }
         let explanation = archetype(primary).affinityDescription
         let context: String
-        if titles.contains(.lastLemming) { context = "One below the maximum rescue." }
+        if titles.contains(.lastLemming) { context = L10n.text("One below the maximum rescue.") }
         else if metrics.unavoidableLosses ?? 0 > 0, metrics.avoidableLosses == 0 {
-            context = "\(metrics.unavoidableLosses!) " + (metrics.unavoidableLosses == 1 ? "loss was" : "losses were") + " unavoidable. None were avoidable."
-        } else if maximum.status == .record { context = "Best-known target: \(maximum.value ?? 0) saved; \(max(0, (maximum.value ?? 0) - run.saved)) below target. The minimum losses are not proved." }
+            context = "\(metrics.unavoidableLosses!) " + (metrics.unavoidableLosses == 1 ? "loss was" : "losses were") + L10n.text(" unavoidable. None were avoidable.")
+        } else if maximum.status == .record { context = L10n.text("Best-known target: \(maximum.value ?? 0) saved; \(max(0, (maximum.value ?? 0) - run.saved)) below target. The minimum losses are not proved.") }
         else if maximum.status == .observed { context = "Maximum rescue unknown." }
         else if maximum.status == .unknown { context = "Maximum rescue unknown." }
-        else if metrics.unreleased > 0 { context = "\(metrics.unreleased) were never released. Lost counts only those released." }
-        else { context = "\(metrics.lost) lost; \(metrics.avoidableLosses ?? 0) below the verified maximum." }
+        else if metrics.unreleased > 0 { context = L10n.text("\(metrics.unreleased) were never released. Lost counts only those released.") }
+        else { context = L10n.text("\(metrics.lost) lost; \(metrics.avoidableLosses ?? 0) below the verified maximum.") }
         return TrolleyPhilosophy(modelVersion: version, dimensions: dimensions, measuredDimensions: measured,
             preservationBasis: maximum.status == .verified ? "verified-maximum" : maximum.status == .record ? "best-known-record" : "population-lower-bound",
             primaryID: primary, secondaryID: ranked.dropFirst().first.flatMap { $0 == "fellow_traveller" ? nil : $0 },

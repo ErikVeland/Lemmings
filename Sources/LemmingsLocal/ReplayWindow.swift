@@ -13,7 +13,7 @@ import UniformTypeIdentifiers
   private var waiting: [(Result<URL, ReplayMovieError>) -> Void] = []
   private var generation = 0
   private var recordCompletions: [Int: (Result<URL, ReplayMovieError>) -> Void] = [:]
-  private var title = "Lemmings"
+  private var title = L10n.text(L10n.text("Lemmings"))
   var hasFrames = false
   struct CaptureProfile {
     var frames = 0
@@ -95,7 +95,7 @@ import UniformTypeIdentifiers
       case let .success(url):
         ReplayMovieWindow.shared.open(url, title: title, save: save, onOpen: self?.onWillReview, onClose: self?.onDidReview)
       case let .failure(error):
-        GameScreen.shared.message("Replay unavailable", detail: error.localizedDescription)
+        GameScreen.shared.message(L10n.text("Replay unavailable"), detail: error.localizedDescription)
       }
     }
     if let ready { show(ready) } else { waiting.append(show); finish() }
@@ -120,7 +120,7 @@ import UniformTypeIdentifiers
   private var surface: AVPlayerLayer?
   private var sourceURL: URL?
   private var ownedURL: URL?
-  private var movieTitle = "Lemmings"
+  private var movieTitle = L10n.text("Lemmings")
   private var timer: Timer?
   private var rateIndex = 2
   private var onClose: (() -> Void)?
@@ -152,7 +152,7 @@ import UniformTypeIdentifiers
     guard exportTask == nil else { GameScreen.shared.present(root, focus: bar); return }
     self.onClose?(); self.onClose = onClose
     onOpen?()
-    bar.note = "SPACE PLAY / PAUSE   - + SPEED   S SAVE MOVIE   ESC CLOSE"
+    bar.note = L10n.text("SPACE PLAY / PAUSE   - + SPEED   S SAVE MOVIE   ESC CLOSE")
     player.pause()
     if let ownedURL { try? FileManager.default.removeItem(at: ownedURL) }
     // Hold a separate copy while the player starts the next level.
@@ -221,7 +221,7 @@ import UniformTypeIdentifiers
     bar.caption = String(format: "REPLAY  %d:%02d / %d:%02d   SPEED %gX", seconds / 60, seconds % 60,
       Int(duration) / 60, Int(duration) % 60, playbackRate)
     bar.playing = player.rate != 0
-    if let exporter { bar.note = "SAVING MOVIE  \(Int(exporter.progress * 100))%   ESC TO CANCEL" }
+    if let exporter { bar.note = L10n.text("SAVING MOVIE  \(Int(exporter.progress * 100))%   ESC TO CANCEL") }
     bar.needsDisplay = true
   }
   private func saveMovie() {
@@ -230,7 +230,7 @@ import UniformTypeIdentifiers
     let panel = NSSavePanel()
     panel.allowedContentTypes = [.mpeg4Movie]
     panel.nameFieldStringValue = movieTitle.replacingOccurrences(of: "/", with: "-") + " Replay.mp4"
-    panel.message = "Save this replay at \(playbackRate)× speed, with music and sound effects."
+    panel.message = L10n.text("Save this replay at \(playbackRate)× speed, with music and sound effects.")
     panel.beginSheetModal(for: window) { [weak self] response in
       guard response == .OK, let destination = panel.url, let self else { return }
       let speed = self.playbackRate
@@ -247,18 +247,18 @@ import UniformTypeIdentifiers
           if FileManager.default.fileExists(atPath: destination.path) {
             _ = try FileManager.default.replaceItemAt(destination, withItemAt: temporary)
           } else { try FileManager.default.moveItem(at: temporary, to: destination) }
-          self.bar.note = "MOVIE SAVED"
-        } catch is CancellationError { self.bar.note = "SAVE CANCELLED" }
-        catch { self.bar.note = "SAVE FAILED"; self.showError(error) }
+          self.bar.note = L10n.text(L10n.text("MOVIE SAVED"))
+        } catch is CancellationError { self.bar.note = L10n.text(L10n.text("SAVE CANCELLED")) }
+        catch { self.bar.note = L10n.text(L10n.text("SAVE FAILED")); self.showError(error) }
       }
     }
   }
   static func export(source: URL, destination: URL, speed: Float,
     onStart: (AVAssetExportSession) -> Void = { _ in }) async throws {
-    guard speeds.contains(speed) else { throw ReplayMovieError.message("That replay speed is unavailable.") }
+    guard speeds.contains(speed) else { throw ReplayMovieError.message(L10n.text("That replay speed is unavailable.")) }
     let asset = AVURLAsset(url: source)
     let duration = try await asset.load(.duration)
-    guard duration.isNumeric, duration.seconds > 0 else { throw ReplayMovieError.message("The replay has no video.") }
+    guard duration.isNumeric, duration.seconds > 0 else { throw ReplayMovieError.message(L10n.text("The replay has no video.")) }
     let composition = AVMutableComposition()
     for media in [AVMediaType.video, .audio] {
       for sourceTrack in try await asset.loadTracks(withMediaType: media) {
@@ -267,10 +267,10 @@ import UniformTypeIdentifiers
         if media == .video { track.preferredTransform = try await sourceTrack.load(.preferredTransform) }
       }
     }
-    guard !composition.tracks(withMediaType: .video).isEmpty else { throw ReplayMovieError.message("The replay has no video track.") }
+    guard !composition.tracks(withMediaType: .video).isEmpty else { throw ReplayMovieError.message(L10n.text("The replay has no video track.")) }
     composition.scaleTimeRange(CMTimeRange(start: .zero, duration: duration), toDuration: CMTimeMultiplyByFloat64(duration, multiplier: 1 / Double(speed)))
     guard let exporter = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHighestQuality) else {
-      throw ReplayMovieError.message("Movie export is unavailable.")
+      throw ReplayMovieError.message(L10n.text("Movie export is unavailable."))
     }
     exporter.outputURL = destination; exporter.outputFileType = .mp4
     exporter.timeRange = CMTimeRange(start: .zero, duration: composition.duration)
@@ -281,14 +281,14 @@ import UniformTypeIdentifiers
       exporter.exportAsynchronously { continuation.resume() }
     }
     try Task.checkCancellation()
-    guard exporter.status == .completed else { throw ReplayMovieError.message(exporter.error?.localizedDescription ?? "Movie export failed.") }
+    guard exporter.status == .completed else { throw ReplayMovieError.message(exporter.error?.localizedDescription ?? L10n.text("Movie export failed.")) }
   }
   private func showError(_ error: Error) {
-    GameScreen.shared.message("Replay movie", detail: error.localizedDescription)
+    GameScreen.shared.message(L10n.text("Replay movie"), detail: error.localizedDescription)
   }
   func close() {
     if exportTask != nil {
-      exporter?.cancelExport(); exportTask?.cancel(); bar.note = "Save cancelled"; return
+      exporter?.cancelExport(); exportTask?.cancel(); bar.note = L10n.text("Save cancelled"); return
     }
     GameScreen.shared.dismiss(root)
   }
@@ -313,16 +313,16 @@ import UniformTypeIdentifiers
   var onAction: ((Action) -> Void)?
   var onSeek: ((Double) -> Void)?
   var fraction = 0.0
-  var caption = "REPLAY"
-  var movieTitle = "Replay"
-  var note = "SPACE PLAY / PAUSE   - + SPEED   S SAVE MOVIE   ESC CLOSE"
+  var caption = L10n.text("REPLAY")
+  var movieTitle = L10n.text("Replay")
+  var note = L10n.text("SPACE PLAY / PAUSE   - + SPEED   S SAVE MOVIE   ESC CLOSE")
   var playing = false
   private var buttons: [(Action, CGRect)] = []
   private var scrub = CGRect.zero
   private var keyboardIndex: Int? = 1
   private let accessibleElements = GameAccessibleElements()
-  private var choices: [(Action, String)] { [(.close, "Back"), (.restart, "Restart"),
-      (.slower, "Slower"), (.faster, "Faster"), (.save, "Save movie"), (.play, playing ? "Pause" : "Play")] }
+  private var choices: [(Action, String)] { [(.close, L10n.text("Back")), (.restart, L10n.text("Restart")),
+      (.slower, L10n.text("Slower")), (.faster, L10n.text("Faster")), (.save, L10n.text("Save movie")), (.play, playing ? L10n.text("Pause") : L10n.text("Play"))] }
   private func layoutControls() {
     scrub = CGRect(x: 24, y: 49, width: bounds.width - 48, height: 7)
     let width = (bounds.width - 48) / 6
@@ -334,7 +334,7 @@ import UniformTypeIdentifiers
   override func accessibilityRole() -> NSAccessibility.Role? { .group }
   override func accessibilityChildren() -> [Any]? {
     layoutControls()
-    let position = accessibleElements.element(id: "position", owner: self, label: "Replay position", frame: scrub.insetBy(dx: 0, dy: -7))
+    let position = accessibleElements.element(id: L10n.text("position"), owner: self, label: L10n.text(L10n.text("Replay position")), frame: scrub.insetBy(dx: 0, dy: -7))
     position.setAccessibilityRole(.slider)
     position.readNumber = { [weak self] in (self?.fraction ?? 0) * 100 }
     position.adjustValue = { [weak self] direction in
@@ -347,7 +347,7 @@ import UniformTypeIdentifiers
     position.setAccessibilityMinValue(0); position.setAccessibilityMaxValue(100)
     position.onFocus = { [weak self] in self?.keyboardIndex = 0; self?.needsDisplay = true }
     return [position] + buttons.enumerated().map { index, item in
-      let element = accessibleElements.element(id: "replay-\(index)", owner: self,
+      let element = accessibleElements.element(id: L10n.text("replay-\(index)"), owner: self,
         label: choices[index].1, frame: item.1) { [weak self] in self?.onAction?(item.0) }
       element.onFocus = { [weak self] in self?.keyboardIndex = index + 1; self?.needsDisplay = true }
       return element
@@ -360,7 +360,7 @@ import UniformTypeIdentifiers
        let artwork = try? ClassicMacArtwork(directory: url), let ui = ClassicMacUserInterface(artwork: artwork) {
       font = MacInterfaceRenderer(interface: ui)
     }
-    setAccessibilityLabel("Replay controls. Space plays or pauses. Minus and plus change speed. S saves a movie. Escape closes.")
+    setAccessibilityLabel(L10n.text("Replay controls. Space plays or pauses. Minus and plus change speed. S saves a movie. Escape closes."))
   }
   required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
   override var isFlipped: Bool { true }
@@ -374,7 +374,7 @@ import UniformTypeIdentifiers
     GameMenuFrame.draw(CGRect(x: 8, y: 3, width: bounds.width - 16, height: bounds.height - 3))
     let titleRect = CGRect(x: 24, y: 16, width: bounds.width * 0.53 - 24, height: 24)
     let timeRect = CGRect(x: bounds.width * 0.55, y: 16, width: bounds.width * 0.45 - 24, height: 24)
-    let timing = caption.replacingOccurrences(of: "REPLAY  ", with: "")
+    let timing = caption.replacingOccurrences(of: L10n.text("REPLAY  "), with: "")
     if let font {
       font.menuLine(movieTitle, in: titleRect, alignment: .left)
       font.menuLine(timing, in: timeRect, alignment: .right)

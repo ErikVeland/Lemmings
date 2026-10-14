@@ -39,7 +39,7 @@ import NxlvKit
 
     static func toggle(_ entry: LevelPlaylistEntry, profileID: String, owner: NSWindow?) {
         do { try store(profileID: profileID).toggleFavourite(entry) }
-        catch { GameScreen.shared.message("Favourite not saved", detail: error.localizedDescription) }
+        catch { GameScreen.shared.message(L10n.text("Favourite not saved"), detail: error.localizedDescription) }
     }
 }
 #endif

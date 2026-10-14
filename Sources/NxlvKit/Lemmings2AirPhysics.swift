@@ -15,7 +15,7 @@ public struct Lemmings2AirPhysics: Equatable, Sendable {
                 horizontalCountdown: Int8, verticalCountdown: Int8,
                 fallDistance: Int16 = 0) throws {
         guard (-9...8).contains(velocityY) else {
-            throw SequelDataError.invalid("L2 air velocity is outside the supported acceleration table.")
+            throw SequelDataError.invalid(L10n.text("L2 air velocity is outside the supported acceleration table."))
         }
         self.x = x
         self.y = y

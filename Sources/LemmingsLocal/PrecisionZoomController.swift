@@ -26,7 +26,7 @@ enum PrecisionZoomScrollOutcome: Equatable {
         suppliedEarnings = earnings
     }
 
-    private static func key(_ profileID: String) -> String { "PrecisionZoom.v1.\(profileID)" }
+    private static func key(_ profileID: String) -> String { L10n.text("PrecisionZoom.v1.\(profileID)") }
 
     private var earnings: PrecisionZoomEarnings {
         guard let profileID else { return .init(careerStars: 0, threeStarLevels: 0) }
@@ -41,7 +41,7 @@ enum PrecisionZoomScrollOutcome: Equatable {
             self.profileID = profileID
             if let data = defaults.data(forKey: Self.key(profileID)) {
                 do { ledger = try JSONDecoder().decode(PrecisionZoomLedger.self, from: data); storageError = nil }
-                catch { ledger = PrecisionZoomLedger(); storageError = "Could not read saved Zoom uses." }
+                catch { ledger = PrecisionZoomLedger(); storageError = L10n.text("Could not read saved Zoom uses.") }
             } else { ledger = PrecisionZoomLedger(); storageError = nil }
         }
         guard storageError == nil else { return }
@@ -80,7 +80,7 @@ enum PrecisionZoomScrollOutcome: Equatable {
     private func persist() {
         guard let profileID else { return }
         do { defaults.set(try JSONEncoder().encode(ledger), forKey: Self.key(profileID)) }
-        catch { storageError = "Could not save Zoom uses." }
+        catch { storageError = L10n.text("Could not save Zoom uses.") }
     }
 }
 #endif

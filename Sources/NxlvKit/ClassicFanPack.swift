@@ -343,7 +343,7 @@ public struct ClassicFanPack: Sendable {
           let mappings = try? JSONDecoder().decode([String: [Int]].self, from: raw),
           let slots = mappings[member], slots.count == count,
           Set(slots).count == slots.count, slots.allSatisfy({ (0..<10_000).contains($0) }) else {
-      throw FanLevelError.invalidField("archived level slot mapping")
+      throw FanLevelError.invalidField(L10n.text("archived level slot mapping"))
     }
     return slots
   }
@@ -398,7 +398,7 @@ public struct ClassicFanPack: Sendable {
     } else {
       switch ClassicStyleResolver(portsRoot: portsRoot).resolve(styleNamed: name == "special" ? "dirt" : name) {
       case let .found(root, slot), let .packSupplied(root, slot): directory = root; index = slot
-      default: throw FanLevelError.invalidField("Unsupported or missing fan graphics style: \(name)")
+      default: throw FanLevelError.invalidField(L10n.text("Unsupported or missing fan graphics style: \(name)"))
       }
     }
     let slot = named == nil ? level.groundStyle : index

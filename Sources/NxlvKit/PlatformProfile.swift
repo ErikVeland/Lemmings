@@ -19,10 +19,10 @@ public enum MusicFormat: String, Codable, Sendable {
 
     public var label: String {
         switch self {
-        case .protrackerModule: return "ProTracker modules"
-        case .midiWithSamples: return "MIDI with sampled instruments"
-        case .adlibFM: return "Ad-Lib FM"
-        case .none: return "silent"
+        case .protrackerModule: return L10n.text(L10n.text("ProTracker modules"))
+        case .midiWithSamples: return L10n.text(L10n.text("MIDI with sampled instruments"))
+        case .adlibFM: return L10n.text(L10n.text("Ad-Lib FM"))
+        case .none: return L10n.text("silent")
         }
     }
 }
@@ -35,10 +35,10 @@ public enum SoundFormat: String, Codable, Sendable {
 
     public var label: String {
         switch self {
-        case .macResourceSounds: return "Macintosh sound resources"
-        case .sampleBank: return "sample bank"
-        case .adlibFM: return "Ad-Lib FM"
-        case .none: return "silent"
+        case .macResourceSounds: return L10n.text(L10n.text("Macintosh sound resources"))
+        case .sampleBank: return L10n.text(L10n.text("sample bank"))
+        case .adlibFM: return L10n.text(L10n.text("Ad-Lib FM"))
+        case .none: return L10n.text("silent")
         }
     }
 }
@@ -106,7 +106,7 @@ public struct PlatformProfile: Codable, Equatable, Sendable {
         music: .adlibFM,
         sound: .adlibFM,
         tickRate: 17,
-        requires: ["a DOS data directory", "ADLIB.DAT"])
+        requires: [L10n.text("a DOS data directory"), "ADLIB.DAT"])
 
     /// A Macintosh, which drove a sharp monitor and used MIDI for music.
     public static let macintosh = PlatformProfile(
@@ -118,7 +118,7 @@ public struct PlatformProfile: Codable, Equatable, Sendable {
         music: .midiWithSamples,
         sound: .macResourceSounds,
         tickRate: 17,
-        requires: ["a Macintosh disk image"])
+        requires: [L10n.text("a Macintosh disk image")])
 
     /// Not a machine that existed. The best available part of each.
     ///
@@ -133,7 +133,7 @@ public struct PlatformProfile: Codable, Equatable, Sendable {
         music: .protrackerModule,
         sound: .macResourceSounds,
         tickRate: 17,
-        requires: ["Amiga module files", "a Macintosh disk image"])
+        requires: ["Amiga module files", L10n.text("a Macintosh disk image")])
 
     public static let all: [PlatformProfile] = [.amiga, .dosVGA, .macintosh, .modern]
 }

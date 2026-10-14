@@ -17,23 +17,23 @@ extension MobileGameViewController {
         pausePlay(showControls: false)
         let snapshot = session.snapshot
         var commands: [(String, () -> Void)] = [
-            ("BACK", { [weak self] in self?.pausePlay(showControls: true) }),
-            ("OVERVIEW", { [weak self] in
-                self?.showOverlay(title: "PAUSED", actions: [
-                    ("BACK", { [weak self] in self?.showTVControls() }),
+            (L10n.text("BACK"), { [weak self] in self?.pausePlay(showControls: true) }),
+            (L10n.text("OVERVIEW"), { [weak self] in
+                self?.showOverlay(title: L10n.text(L10n.text("PAUSED")), actions: [
+                    (L10n.text("BACK"), { [weak self] in self?.showTVControls() }),
                 ])
             }),
-            ("SETTINGS", { [weak self] in self?.showInGameSettings() }),
-            ("CONTROLS HELP", { [weak self] in self?.onControlsHelp?() }),
-            ("SKILLS", { [weak self] in self?.showTVSkills() }),
-            ("CAMERA", { [weak self] in self?.showTVCamera() }),
-            ("NEXT LEMMING", { [weak self] in self?.tvCommand(.focusUnassigned(1), stayInPlay: true) }),
-            ("PREVIOUS LEMMING", { [weak self] in self?.tvCommand(.focusUnassigned(-1), stayInPlay: true) }),
-            ("LAST ASSIGNMENT", { [weak self] in self?.tvCommand(.focusLast, stayInPlay: true) }),
-            ("STEP FORWARD", { [weak self] in self?.tvCommand(.step(1)) }),
+            (L10n.text("SETTINGS"), { [weak self] in self?.showInGameSettings() }),
+            (L10n.text(L10n.text("CONTROLS HELP")), { [weak self] in self?.onControlsHelp?() }),
+            (L10n.text("SKILLS"), { [weak self] in self?.showTVSkills() }),
+            (L10n.text("CAMERA"), { [weak self] in self?.showTVCamera() }),
+            (L10n.text(L10n.text("NEXT LEMMING")), { [weak self] in self?.tvCommand(.focusUnassigned(1), stayInPlay: true) }),
+            (L10n.text(L10n.text("PREVIOUS LEMMING")), { [weak self] in self?.tvCommand(.focusUnassigned(-1), stayInPlay: true) }),
+            (L10n.text(L10n.text("LAST ASSIGNMENT")), { [weak self] in self?.tvCommand(.focusLast, stayInPlay: true) }),
+            (L10n.text(L10n.text("STEP FORWARD")), { [weak self] in self?.tvCommand(.step(1)) }),
         ]
         if session is Lemmings2MobileSession, !session.isReadOnly {
-            commands.insert((fanMode ? "SKILL MODE" : "FAN", { [weak self] in
+            commands.insert((fanMode ? L10n.text(L10n.text("SKILL MODE")) : L10n.text("FAN"), { [weak self] in
                 guard let self else { return }
                 self.fanMode.toggle()
                 self.resumePlay()
@@ -41,20 +41,20 @@ extension MobileGameViewController {
         }
         if session.supportsRewind {
             commands += [
-                ("STEP BACK", { [weak self] in self?.tvCommand(.step(-1)) }),
-                ("REWIND", { [weak self] in self?.tvCommand(.rewind) }),
+                (L10n.text(L10n.text("STEP BACK")), { [weak self] in self?.tvCommand(.step(-1)) }),
+                (L10n.text("REWIND"), { [weak self] in self?.tvCommand(.rewind) }),
             ]
         }
         commands += [
-            ("SLOWER", { [weak self] in self?.tvCommand(.speedStep(-1)) }),
-            ("FASTER", { [weak self] in self?.tvCommand(.speedStep(1)) }),
+            (L10n.text("SLOWER"), { [weak self] in self?.tvCommand(.speedStep(-1)) }),
+            (L10n.text("FASTER"), { [weak self] in self?.tvCommand(.speedStep(1)) }),
         ]
-        commands.append(("RESUME", { [weak self] in self?.resumeSelectedView() }))
+        commands.append((L10n.text("RESUME"), { [weak self] in self?.resumeSelectedView() }))
         if snapshot.releaseRate != nil && !session.isReadOnly {
             commands += [
-                ("RATE -", { [weak self] in self?.tvCommand(.rate(-1)) }),
-                ("RATE +", { [weak self] in self?.tvCommand(.rate(1)) }),
-                ("MIN / MAX RATE", { [weak self] in
+                (L10n.text("RATE -"), { [weak self] in self?.tvCommand(.rate(-1)) }),
+                (L10n.text("RATE +"), { [weak self] in self?.tvCommand(.rate(1)) }),
+                (L10n.text("MIN / MAX RATE"), { [weak self] in
                     guard let self else { return }
                     self.tvCommand(.rate(self.session.snapshot.releaseRate == 99 ? -99 : 99))
                 }),
@@ -62,23 +62,23 @@ extension MobileGameViewController {
         }
         if !session.isReadOnly {
             commands += [
-                ("HINT", { [weak self] in self?.onHints?() }),
-                ("RESTART LEVEL", { [weak self] in self?.showRestartLevel() }),
-                (snapshot.isEndingRun ? "UNDO END RUN" : "END RUN", { [weak self] in self?.showTVEndRun() }),
+                (L10n.text("HINT"), { [weak self] in self?.onHints?() }),
+                (L10n.text(L10n.text("RESTART LEVEL")), { [weak self] in self?.showRestartLevel() }),
+                (snapshot.isEndingRun ? L10n.text(L10n.text("UNDO END RUN")) : L10n.text(L10n.text("END RUN")), { [weak self] in self?.showTVEndRun() }),
             ]
         }
-        tvPage(title: "Game controls", actions: commands)
+        tvPage(title: L10n.text("Game controls"), actions: commands)
     }
 
     private func showTVSkills() {
         let skills = session.snapshot.skills
-        let actions: [(String, () -> Void)] = [("BACK", { [weak self] in self?.showTVControls() })]
+        let actions: [(String, () -> Void)] = [(L10n.text("BACK"), { [weak self] in self?.showTVControls() })]
             + skills.enumerated().map { index, skill in
                 ("\(skill.name)  \(skill.isUnlimited ? "*" : String(skill.count))", { [weak self] in
                     self?.tvCommand(.skill(index), stayInPlay: true)
                 })
             }
-        tvPage(title: "Skills", actions: actions)
+        tvPage(title: L10n.text("Skills"), actions: actions)
         for index in skills.indices {
             overlayCanvas.page.rows[index].enabled = !session.isReadOnly && (skills[index].isUnlimited || skills[index].count > 0)
             overlayCanvas.page.rows[index].selected = index == selectedControl
@@ -86,21 +86,21 @@ extension MobileGameViewController {
     }
 
     private func showTVCamera() {
-        tvPage(title: "Camera", actions: [
-            ("BACK", { [weak self] in self?.showTVControls() }),
-            ("ZOOM", { [weak self] in self?.tvCommand(.zoom(false), stayInPlay: true) }),
-            ("PRECISION", { [weak self] in self?.tvCommand(.zoom(true), stayInPlay: true) }),
-            ("ENTRANCE", { [weak self] in self?.tvCommand(.centre(true), stayInPlay: true) }),
-            ("EXIT", { [weak self] in self?.tvCommand(.centre(false), stayInPlay: true) }),
-            ("MOVE CAMERA", { [weak self] in self?.tvPlanning(); self?.tvCameraMode = true }),
+        tvPage(title: L10n.text("Camera"), actions: [
+            (L10n.text("BACK"), { [weak self] in self?.showTVControls() }),
+            (L10n.text("ZOOM"), { [weak self] in self?.tvCommand(.zoom(false), stayInPlay: true) }),
+            (L10n.text("PRECISION"), { [weak self] in self?.tvCommand(.zoom(true), stayInPlay: true) }),
+            (L10n.text("ENTRANCE"), { [weak self] in self?.tvCommand(.centre(true), stayInPlay: true) }),
+            (L10n.text("EXIT"), { [weak self] in self?.tvCommand(.centre(false), stayInPlay: true) }),
+            (L10n.text(L10n.text("MOVE CAMERA")), { [weak self] in self?.tvPlanning(); self?.tvCameraMode = true }),
         ])
     }
 
     private func showTVEndRun() {
         if session.snapshot.isEndingRun { tvCommand(.endRun); return }
-        tvPage(title: "End run?", actions: [
-            ("CANCEL", { [weak self] in self?.showTVControls() }),
-            ("END RUN", { [weak self] in
+        tvPage(title: L10n.text("End run?"), actions: [
+            (L10n.text("CANCEL"), { [weak self] in self?.showTVControls() }),
+            (L10n.text(L10n.text("END RUN")), { [weak self] in
                 guard let self, self.tvPlanning() else { return }
                 _ = self.session.beginEndRun()
                 self.renderCurrentFrame(force: true)
@@ -112,7 +112,7 @@ extension MobileGameViewController {
     private func tvPage(title: String, actions: [(String, () -> Void)]) {
         showCustomOverlay(title: title, details: [], actions: actions)
         // Shared pages scroll their rows; the primary forward action remains in the footer.
-        let resume = overlayCanvas.page.footer.first { $0.title == "RESUME" }
+        let resume = overlayCanvas.page.footer.first { $0.title == L10n.text("RESUME") }
         overlayCanvas.page.rows = Array(overlayCanvas.page.footer.dropFirst()).filter { $0.id != resume?.id }.map {
             .init($0.id, $0.title, enabled: $0.enabled, primary: false)
         }

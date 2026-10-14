@@ -1,5 +1,6 @@
 #if os(tvOS)
 import LemmingsGameArt
+import NxlvKit
 import LemmingsMobileCore
 import LemmingsTVCore
 import UIKit
@@ -26,7 +27,7 @@ import UIKit
         super.init(frame: frame); backgroundColor = .black; isOpaque = true
         contentMode = .redraw
         isAccessibilityElement = true
-        accessibilityLabel = "Level playfield"
+        accessibilityLabel = L10n.text("Level playfield")
         accessibilityCustomActions = [
             UIAccessibilityCustomAction(name: "Assign selected skill", actionHandler: { [weak self] _ in self?.onAssign?(); return true }),
             UIAccessibilityCustomAction(name: "Next eligible lemming", actionHandler: { [weak self] _ in self?.onCycle?(1); return true }),
@@ -58,9 +59,9 @@ import UIKit
                 if renderError != message { renderError = message; onRenderFailure?(message) }
             }
         }
-        let skill = game.session.snapshot.skills.indices.contains(game.selectedControl) ? game.session.snapshot.skills[game.selectedControl].name : "No skill"
-        let status = game.target.map { "Lemming \($0.id), \($0.state == .eligible ? "eligible" : "unavailable")" } ?? "No target"
-        accessibilityValue = "\(ownerName). \(skill). \(status). \(game.session.snapshot.saved) rescued, \(game.session.snapshot.required) required. \(game.play.isPaused ? "Paused" : "Playing")."
+        let skill = game.session.snapshot.skills.indices.contains(game.selectedControl) ? game.session.snapshot.skills[game.selectedControl].name : L10n.text("No skill")
+        let status = game.target.map { "Lemming \($0.id), \($0.state == .eligible ? "eligible" : "unavailable")" } ?? L10n.text("No target")
+        accessibilityValue = L10n.text("\(ownerName). \(skill). \(status). \(game.session.snapshot.saved) rescued, \(game.session.snapshot.required) required. \(game.play.isPaused ? L10n.text("Paused") : L10n.text("Playing")).")
         setNeedsDisplay()
     }
 

@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import NxlvKit
 import LemmingsAppCore
 import LemmingsGameArt
 import UniformTypeIdentifiers
@@ -58,9 +59,9 @@ import UniformTypeIdentifiers
     override func accessibilityRole() -> NSAccessibility.Role? { .group }
     override func accessibilityChildren() -> [Any]? {
         let layout = pageLayout
-        var elements: [Any] = [accessible.element(id: "status", owner: self, label: page.subtitle, frame: layout.subtitle)]
+        var elements: [Any] = [accessible.element(id: L10n.text("status"), owner: self, label: page.subtitle, frame: layout.subtitle)]
         for (index, detail) in page.details.enumerated() {
-            elements.append(accessible.element(id: "detail-\(index)", owner: self, label: detail, frame: layout.details[index]))
+            elements.append(accessible.element(id: L10n.text("detail-\(index)"), owner: self, label: detail, frame: layout.details[index]))
         }
         for target in layout.targets {
             let id = target.action.id
@@ -68,7 +69,7 @@ import UniformTypeIdentifiers
                 press: target.action.enabled ? { [weak self] in self?.handle(id) } : nil)
             element.setAccessibilityEnabled(target.action.enabled)
             element.onFocus = { [weak self] in self?.focus = id; self?.needsDisplay = true }
-            if id == "syncCodeField" {
+            if id == L10n.text("syncCodeField") {
                 element.setAccessibilityRole(.textField)
                 element.readValue = { [weak self] in self?.draft ?? "" }
                 element.writeValue = { [weak self] value in self?.draft = String(AppleCloudLibraryTransport.cleanCode(value).prefix(12)); self?.needsDisplay = true }
@@ -87,7 +88,7 @@ import UniformTypeIdentifiers
         case "syncEnterCode": draft = ""; focus = "syncCodeField"
         case "syncCodeField": focus = id
         case "syncCopy":
-            NSPasteboard.general.clearContents(); NSPasteboard.general.setString(code ?? "", forType: .string); message = "Copied"
+            NSPasteboard.general.clearContents(); NSPasteboard.general.setString(code ?? "", forType: .string); message = L10n.text("Copied")
         case "syncExportKey", "syncImportKey":
             guard let window else { break }
             busy = true
@@ -97,11 +98,11 @@ import UniformTypeIdentifiers
                     if id == "syncExportKey" {
                         let data = try sync.recoveryData()
                         let panel = NSSavePanel(); panel.nameFieldStringValue = "Ultimate Lemmings Recovery.lemmingssync"
-                        panel.message = "Keep this recovery key private. It grants access to every profile and Hot Seat in your library."
+                        panel.message = L10n.text("Keep this recovery key private. It grants access to every profile and Hot Seat in your library.")
                         let response: NSApplication.ModalResponse = await withCheckedContinuation { continuation in
                             panel.beginSheetModal(for: window) { continuation.resume(returning: $0) }
                         }
-                        if response == .OK, let url = panel.url { try data.write(to: url, options: .atomic); message = "Recovery key saved" }
+                        if response == .OK, let url = panel.url { try data.write(to: url, options: .atomic); message = L10n.text("Recovery key saved") }
                     } else {
                         let panel = NSOpenPanel(); panel.canChooseDirectories = false; panel.allowsMultipleSelection = false
                         let response: NSApplication.ModalResponse = await withCheckedContinuation { continuation in

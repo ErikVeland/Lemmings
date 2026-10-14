@@ -1,5 +1,6 @@
 #if os(iOS) || os(tvOS)
 import LemmingsMobileCore
+import NxlvKit
 import LemmingsGameArt
 import UIKit
 
@@ -36,12 +37,12 @@ import UIKit
         titleLabel.face = .large
         titleLabel.wraps = true
         subtitleLabel.wraps = true
-        back.title = "BACK"
+        back.title = L10n.text("BACK")
         rankPrevious.title = "< RANK"
-        rankNext.title = "RANK >"
-        favourite.title = "FAVOURITE"
-        playlist.title = "PLAYLIST"
-        play.title = "PLAY"
+        rankNext.title = L10n.text("RANK >")
+        favourite.title = L10n.text("FAVOURITE")
+        playlist.title = L10n.text("PLAYLIST")
+        play.title = L10n.text("PLAY")
         play.isPrimary = true
         back.onPress = { [weak self] in self?.onBack?() }
         rankPrevious.onPress = { [weak self] in self?.moveRank(-1) }
@@ -102,7 +103,7 @@ import UIKit
         guard levels.indices.contains(flow.selectedIndex) else { return }
         let level = levels[flow.selectedIndex]
         let rank = levels.filter { $0.rank == level.rank }
-        subtitleLabel.text = MobileTurnArt.subtitle(level.sourceLabel + "\n\(level.rank == level.packName ? "Level" : level.rank)  \(level.number)/\(rank.count)", playerName: playerName, role: .next)
+        subtitleLabel.text = MobileTurnArt.subtitle(level.sourceLabel + L10n.text("\n\(level.rank == level.packName ? L10n.text("Level") : level.rank)  \(level.number)/\(rank.count)"), playerName: playerName, role: .next)
     }
 
     private func moveRank(_ offset: Int) {

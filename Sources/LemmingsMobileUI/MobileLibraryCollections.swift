@@ -11,61 +11,61 @@ extension MobileLibraryViewController {
 
     func collectionsPage(subtitle: String) -> GameFrontEnd.Page {
         let rows: [GameFrontEnd.Action] = [
-            .init("favourites", "Favourites  \(favourites.entries.count)", enabled: !favourites.entries.isEmpty),
-            .init("recents", "Recently played  \(recents.entries.count)", enabled: !recents.entries.isEmpty),
-            .init("playlists", "Playlists  \(playlists.playlists.count)"),
+            .init("favourites", L10n.text("Favourites  \(favourites.entries.count)"), enabled: !favourites.entries.isEmpty),
+            .init("recents", L10n.text("Recently played  \(recents.entries.count)"), enabled: !recents.entries.isEmpty),
+            .init("playlists", L10n.text("Playlists  \(playlists.playlists.count)")),
         ]
-        var footer = [GameFrontEnd.Action("home", "Back")]
+        var footer = [GameFrontEnd.Action("home", L10n.text("Back"))]
         if let run = playlists.run {
-            footer.append(.init("runResume", "Resume \(run.name)  \(run.position + 1)/\(run.entries.count)", primary: true))
+            footer.append(.init("runResume", L10n.text("Resume \(run.name)  \(run.position + 1)/\(run.entries.count)"), primary: true))
         }
-        return .init(title: "Collections", subtitle: subtitle, rows: rows, footer: footer)
+        return .init(title: L10n.text("Collections"), subtitle: subtitle, rows: rows, footer: footer)
     }
 
     func playlistsPage(subtitle: String) -> GameFrontEnd.Page {
         var rows = playlists.playlists.map { list in
             GameFrontEnd.Action("list." + list.id.uuidString, list.name + "  \(list.entries.count)")
         }
-        rows.append(.init("listNew", "New playlist"))
-        return .init(title: "Playlists", subtitle: subtitle, rows: rows, footer: [.init("collections", "Back")])
+        rows.append(.init("listNew", L10n.text("New playlist")))
+        return .init(title: L10n.text("Playlists"), subtitle: subtitle, rows: rows, footer: [.init("collections", L10n.text("Back"))])
     }
 
     func playlistPage(_ id: UUID, subtitle: String) -> GameFrontEnd.Page {
         guard let list = playlists.playlist(id) else { return playlistsPage(subtitle: subtitle) }
         if let draft = nameDraft {
-            return .init(title: "Rename", subtitle: subtitle,
-                         rows: [.init("nameField", "Name: " + draft.uppercased() + "_", selected: true)],
-                         footer: [.init("nameCancel", "Cancel"), .init("nameDone", "Done", primary: true)])
+            return .init(title: L10n.text("Rename"), subtitle: subtitle,
+                         rows: [.init("nameField", L10n.text("Name: ") + draft.uppercased() + "_", selected: true)],
+                         footer: [.init("nameCancel", L10n.text("Cancel")), .init("nameDone", L10n.text("Done"), primary: true)])
         }
         let shown = MobileListLibrary(entries: list.entries, name: list.name, catalogue: catalogue!)
         // Entries whose pack or level is gone stay listed, so the player can remove them.
         var titles = [Int: String]()
         for (offset, entryIndex) in shown.entryIndices.enumerated() { titles[entryIndex] = shown.levels[offset].title }
         let rows = list.entries.enumerated().map { index, entry -> GameFrontEnd.Action in
-            let title = titles[index].map { "\(index + 1)  " + $0 } ?? "\(index + 1)  Unavailable"
+            let title = titles[index].map { "\(index + 1)  " + $0 } ?? L10n.text("\(index + 1)  Unavailable")
             return .init("entry.\(index)", title, enabled: true, selected: playlistSelection == index)
         }
         let selected = playlistSelection
         let hasSelection = selected.map { list.entries.indices.contains($0) } ?? false
         let playable = !shown.levels.isEmpty && shown.levels.count == list.entries.count
         return .init(
-            title: list.name, subtitle: subtitle.isEmpty ? "\(list.entries.count) levels" : subtitle, rows: rows,
+            title: list.name, subtitle: subtitle.isEmpty ? L10n.text("\(list.entries.count) levels") : subtitle, rows: rows,
             footer: [
-                .init("listPlay", "Play", enabled: playable, primary: true),
-                .init("listShuffle", "Shuffle", enabled: playable && list.entries.count > 1),
+                .init("listPlay", L10n.text("Play"), enabled: playable, primary: true),
+                .init("listShuffle", L10n.text("Shuffle"), enabled: playable && list.entries.count > 1),
                 .init("entryUp", "Up", enabled: hasSelection && (selected ?? 0) > 0),
-                .init("entryDown", "Down", enabled: hasSelection && (selected ?? 0) + 1 < list.entries.count),
-                .init("entryRemove", "Remove", enabled: hasSelection),
-                .init("listRename", "Rename"),
-                .init("listDelete", confirmingDelete ? "Confirm delete" : "Delete", selected: confirmingDelete),
-                .init("playlists", "Back"),
+                .init("entryDown", L10n.text("Down"), enabled: hasSelection && (selected ?? 0) + 1 < list.entries.count),
+                .init("entryRemove", L10n.text("Remove"), enabled: hasSelection),
+                .init("listRename", L10n.text("Rename")),
+                .init("listDelete", confirmingDelete ? L10n.text("Confirm delete") : L10n.text("Delete"), selected: confirmingDelete),
+                .init("playlists", L10n.text("Back")),
             ])
     }
 
     func addToPlaylistPage(subtitle: String) -> GameFrontEnd.Page {
         var rows = playlists.playlists.map { GameFrontEnd.Action("add." + $0.id.uuidString, $0.name + "  \($0.entries.count)") }
-        rows.append(.init("addNew", "New playlist"))
-        return .init(title: "Add to playlist", subtitle: subtitle, rows: rows, footer: [.init("back", "Back")])
+        rows.append(.init("addNew", L10n.text("New playlist")))
+        return .init(title: L10n.text("Add to playlist"), subtitle: subtitle, rows: rows, footer: [.init("back", L10n.text("Back"))])
     }
 
     // MARK: - Actions
@@ -177,7 +177,7 @@ extension MobileLibraryViewController {
         let entry = MobileFavourites.Entry(pack: identity.pack, level: identity.level, title: library?.levels[selectedIndex].title)
         let added = playlists.add(entry, to: id)
         savePlaylists()
-        notice = added ? "ADDED" : "ALREADY IN PLAYLIST"
+        notice = added ? L10n.text("ADDED") : L10n.text(L10n.text("ALREADY IN PLAYLIST"))
         navigate(.levels)
         notice = ""
         rebuild()
@@ -190,7 +190,7 @@ extension MobileLibraryViewController {
             favouriteIdentity(index).map { MobileFavourites.Entry(pack: $0.pack, level: $0.level, title: library.levels[index].title) }
         }
         let picks = MobilePlaylistStore.random(10, from: pool, seed: UInt64.random(in: 0...UInt64.max))
-        let name = "Random 10 " + (currentPack?.title ?? "")
+        let name = L10n.text("Random 10 ") + (currentPack?.title ?? "")
         guard let created = playlists.create(name: name, entries: picks) else { return }
         savePlaylists()
         openPlaylist(created)
@@ -267,12 +267,12 @@ extension MobileLibraryViewController {
 
     func shuffleAllPage(subtitle: String) -> GameFrontEnd.Page {
         var details: [String] = []
-        if shuffleScanning { details = ["Counting levels..."] }
-        else if let pool = shufflePool { details = ["\(pool.entries.count) levels", "\(pool.packs) packs"] }
-        else { details = ["Fan levels are not available."] }
-        return .init(title: "Shuffle all", subtitle: subtitle, details: details,
-                     footer: [.init("fanBack", "Back"),
-                              .init("shuffleStart", "Start", enabled: !shuffleScanning && (shufflePool?.entries.isEmpty == false),
+        if shuffleScanning { details = [L10n.text("Counting levels...")] }
+        else if let pool = shufflePool { details = [L10n.text("\(pool.entries.count) levels"), L10n.text("\(pool.packs) packs")] }
+        else { details = [L10n.text("Fan levels are not available.")] }
+        return .init(title: L10n.text("Shuffle all"), subtitle: subtitle, details: details,
+                     footer: [.init("fanBack", L10n.text("Back")),
+                              .init("shuffleStart", L10n.text("Start"), enabled: !shuffleScanning && (shufflePool?.entries.isEmpty == false),
                                     primary: true)])
     }
 

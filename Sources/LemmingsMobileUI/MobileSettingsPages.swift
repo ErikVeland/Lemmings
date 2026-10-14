@@ -28,18 +28,18 @@ extension MobileLibraryViewController {
         #if os(tvOS)
         if group == .controller {
             let input = TVPreferences.inputPreferences(from: .standard, profileID: settingsProfileID)
-            page.rows += [.init("setting.tvAim", "Aim sensitivity: \(Int(input.aimSensitivity * 100))%"),
-                          .init("setting.tvDeadZone", "Stick dead zone: \(Int(input.deadZone * 100))%"),
-                          .init("setting.tvTriggerFeedback", "Adaptive triggers", selected: input.triggerFeedback != false)]
+            page.rows += [.init("setting.tvAim", L10n.text("Aim sensitivity: \(Int(input.aimSensitivity * 100))%")),
+                          .init("setting.tvDeadZone", L10n.text("Stick dead zone: \(Int(input.deadZone * 100))%")),
+                          .init("setting.tvTriggerFeedback", L10n.text("Adaptive triggers"), selected: input.triggerFeedback != false)]
         }
         #endif
         return page
     }
     func insightsPage() -> GameFrontEnd.Page {
         let summary = AnonymousTelemetry.shared.localSummary()
-        return .init(title: "Play Insights", details: ["Started: \(summary.total(.levelStart))",
-            "Won: \(summary.total(.levelWin))", "Saved: \(summary.total(.lemmingsSaved))"],
-                     footer: [.init("settingsGroup.privacy", "Back")])
+        return .init(title: L10n.text("Play Insights"), details: [L10n.text("Started: \(summary.total(.levelStart))"),
+            L10n.text("Won: \(summary.total(.levelWin))"), L10n.text("Saved: \(summary.total(.lemmingsSaved))")],
+                     footer: [.init("settingsGroup.privacy", L10n.text("Back"))])
     }
 
     /// Each row changes one choice. Individual gameplay edits retain the Custom preset.
@@ -110,7 +110,7 @@ extension MobileLibraryViewController {
             case "fall": settings.classic.bottomFallSounds.toggle()
             case "soundtrackChoice":
                 settings.soundtrack = cycle(settings.soundtrack, MobileMusic.shared.soundtrackNames)
-                settings.classic.music = settings.soundtrack == "Adaptive DJ" ? .adaptiveDJ : .amigaModules
+                settings.classic.music = settings.soundtrack == L10n.text("Adaptive DJ") ? .adaptiveDJ : .amigaModules
             case "djOther": settings.classic.djIncludesOtherSoundtracks.toggle()
             case "djShuffleScope": settings.djShuffleScope = cycle(settings.djShuffleScope, SoundtrackCatalogue.ShuffleScope.allCases)
             case "uiSize": settings.classic.interfaceSize = cycle(settings.classic.interfaceSize, ClassicInterfaceSize.allCases)

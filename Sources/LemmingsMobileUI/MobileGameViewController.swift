@@ -49,9 +49,9 @@ struct MobileGameTurn {
             if let award = TrolleyAchievement.allCases.first(where: { $0.title == title }) { return (title, award.detail) }
             if let award = ClassicAchievement.catalog.first(where: { $0.title == title }) { return (title, award.detail) }
             switch title {
-            case "New rescue record": return (title, "Your best rescue count on this level.")
-            case "New skill record": return (title, "Your fewest skills used to complete this level.")
-            case "Level skip earned": return (title, "A level skip is now available for a later attempt.")
+            case "New rescue record": return (title, L10n.text("Your best rescue count on this level."))
+            case "New skill record": return (title, L10n.text("Your fewest skills used to complete this level."))
+            case "Level skip earned": return (title, L10n.text("A level skip is now available for a later attempt."))
             default: return nil
             }
         }
@@ -62,9 +62,9 @@ struct MobileGameTurn {
         guard !awards.isEmpty else { return }
         achievementIndex %= awards.count
         let award = awards[achievementIndex]
-        var actions: [(String, () -> Void)] = [("BACK", { [weak self] in self?.returnToResult() })]
+        var actions: [(String, () -> Void)] = [(L10n.text("BACK"), { [weak self] in self?.returnToResult() })]
         if awards.count > 1 {
-            actions.append(("NEXT AWARD", { [weak self] in
+            actions.append((L10n.text(L10n.text("NEXT AWARD")), { [weak self] in
                 guard let self else { return }
                 self.achievementIndex = (self.achievementIndex + 1) % awards.count
                 self.showResultAchievement()
@@ -324,8 +324,8 @@ struct MobileGameTurn {
         showOverlay(
             title: summary.title,
             actions: [
-                (session.isReadOnly ? "PLAY" : (turn == nil ? "START" : "READY"), { [weak self] in self?.resumePlay() }),
-                (session.isReadOnly ? "BACK" : "LIBRARY", { [weak self] in self?.leaveToLibrary() }),
+                (session.isReadOnly ? L10n.text("PLAY") : (turn == nil ? L10n.text("START") : L10n.text("READY")), { [weak self] in self?.resumePlay() }),
+                (session.isReadOnly ? L10n.text("BACK") : L10n.text("LIBRARY"), { [weak self] in self?.leaveToLibrary() }),
             ]
         )
 
@@ -384,7 +384,7 @@ struct MobileGameTurn {
 #if DEBUG
         if lastHUDLayout != layout {
             let mode = layout.portrait != nil ? "portrait-two-rows" : layout.panel != nil ? "desktop-panel" : "compact-grid"
-            print("[MobileHUD] mode=\(mode) bounds=\(view.bounds) safeInsets=\(insets) controls=\(layout.interface.controlsFrame) reserved=\(layout.reservedRegions)")
+            print(L10n.text("[MobileHUD] mode=\(mode) bounds=\(view.bounds) safeInsets=\(insets) controls=\(layout.interface.controlsFrame) reserved=\(layout.reservedRegions)"))
         }
 #endif
         if let previous = lastHUDLayout, previous != layout {
@@ -401,13 +401,13 @@ struct MobileGameTurn {
             if !layoutSuspended {
                 layoutSuspended = true
                 pausePlay(showControls: false)
-                showOverlay(title: "Paused", actions: [("LIBRARY", { [weak self] in self?.leaveToLibrary() })])
+                showOverlay(title: L10n.text("Paused"), actions: [(L10n.text("LIBRARY"), { [weak self] in self?.leaveToLibrary() })])
             }
         } else if layoutSuspended {
             layoutSuspended = false
-            showOverlay(title: "Paused", actions: [
-                ("RESUME", { [weak self] in self?.resumePlay() }),
-                ("LIBRARY", { [weak self] in self?.leaveToLibrary() }),
+            showOverlay(title: L10n.text("Paused"), actions: [
+                (L10n.text("RESUME"), { [weak self] in self?.resumePlay() }),
+                (L10n.text("LIBRARY"), { [weak self] in self?.leaveToLibrary() }),
             ])
         }
         playfieldView.frame = Self.cgRect(layout.interface.playfieldFrame)
@@ -804,7 +804,7 @@ struct MobileGameTurn {
             playfieldView.cursorIcon = session.skillCursorFrame(control: selectedControl).flatMap(MobileBitmapRenderer.image)
             let cursorSkill = session.snapshot.skills.indices.contains(selectedControl) ? session.snapshot.skills[selectedControl] : nil
             playfieldView.cursorSkillName = cursorSkill?.name ?? ""
-            if fanMode { playfieldView.cursorIcon = nil; playfieldView.cursorSkillName = "Fan" }
+            if fanMode { playfieldView.cursorIcon = nil; playfieldView.cursorSkillName = L10n.text("Fan") }
             playfieldView.cursorRemaining = session.skillCursorRemaining(control: selectedControl, target: highlightedTarget?.id)
             if fanMode { playfieldView.cursorRemaining = nil }
             playfieldView.cursorUnlimited = session.engineIdentifier != "lemmings3" && cursorSkill?.isUnlimited == true && playfieldView.cursorRemaining == nil
@@ -852,7 +852,7 @@ struct MobileGameTurn {
             pausePlay(showControls: false)
             showOverlay(
                 title: error.localizedDescription,
-                actions: [("LIBRARY", { [weak self] in self?.leaveToLibrary() })]
+                actions: [(L10n.text("LIBRARY"), { [weak self] in self?.leaveToLibrary() })]
             )
         }
     }
@@ -904,21 +904,21 @@ struct MobileGameTurn {
         guard showControls else { return }
         #if os(tvOS)
         tvCameraMode = false
-        showOverlay(title: "PAUSED", actions: [
-            (session.isReadOnly ? (session.snapshot.isComplete ? "REPLAY" : "PLAY") : "RESUME", { [weak self] in self?.resumeSelectedView() }),
-            (session.isReadOnly ? "BACK" : "LIBRARY", { [weak self] in self?.leaveToLibrary() }),
+        showOverlay(title: L10n.text(L10n.text("PAUSED")), actions: [
+            (session.isReadOnly ? (session.snapshot.isComplete ? L10n.text("REPLAY") : L10n.text("PLAY")) : L10n.text("RESUME"), { [weak self] in self?.resumeSelectedView() }),
+            (session.isReadOnly ? L10n.text("BACK") : L10n.text("LIBRARY"), { [weak self] in self?.leaveToLibrary() }),
         ] + (session.isReadOnly ? [] : [
-            ("RESTART LEVEL", { [weak self] in self?.showRestartLevel() }),
-        ]) + [("GAME CONTROLS", { [weak self] in self?.showTVControls() })])
+            (L10n.text(L10n.text("RESTART LEVEL")), { [weak self] in self?.showRestartLevel() }),
+        ]) + [(L10n.text(L10n.text("GAME CONTROLS")), { [weak self] in self?.showTVControls() })])
         #else
         showOverlay(
-            title: "PAUSED",
+            title: L10n.text("PAUSED"),
             actions: [
-                (session.isReadOnly ? (session.snapshot.isComplete ? "REPLAY" : "PLAY") : "RESUME", { [weak self] in self?.resumeSelectedView() }),
-                (session.isReadOnly ? "BACK" : "LIBRARY", { [weak self] in self?.leaveToLibrary() }),
+                (session.isReadOnly ? (session.snapshot.isComplete ? L10n.text("REPLAY") : L10n.text("PLAY")) : L10n.text("RESUME"), { [weak self] in self?.resumeSelectedView() }),
+                (session.isReadOnly ? L10n.text("BACK") : L10n.text("LIBRARY"), { [weak self] in self?.leaveToLibrary() }),
             ] + (session.isReadOnly ? [] : [
-                ("RESTART LEVEL", { [weak self] in self?.showRestartLevel() }),
-                ("GAME CONTROLS", { [weak self] in self?.showPauseTools() }),
+                (L10n.text(L10n.text("RESTART LEVEL")), { [weak self] in self?.showRestartLevel() }),
+                (L10n.text(L10n.text("GAME CONTROLS")), { [weak self] in self?.showPauseTools() }),
             ])
         )
         #endif
@@ -926,36 +926,36 @@ struct MobileGameTurn {
             let previous = overlayActions.count
             overlayActions += [{ [weak self] in self?.seekSolutionMove(-1) }, { [weak self] in self?.seekSolutionMove(1) }]
             overlayCanvas.page.footer += [
-                .init(String(previous), "PREVIOUS MOVE", enabled: session.replayMoveNavigation.target(from: session.snapshot.tick, direction: -1) != nil),
-                .init(String(previous + 1), "NEXT MOVE", enabled: session.replayMoveNavigation.target(from: session.snapshot.tick, direction: 1) != nil),
+                .init(String(previous), L10n.text(L10n.text("PREVIOUS MOVE")), enabled: session.replayMoveNavigation.target(from: session.snapshot.tick, direction: -1) != nil),
+                .init(String(previous + 1), L10n.text(L10n.text("NEXT MOVE")), enabled: session.replayMoveNavigation.target(from: session.snapshot.tick, direction: 1) != nil),
             ]
         }
     }
 
     private func showPauseTools() {
         var actions: [(String, () -> Void)] = [
-            ("BACK", { [weak self] in self?.pausePlay(showControls: true) }),
-            ("HINT", { [weak self] in self?.onHints?() }),
-            ("CONTROLS HELP", { [weak self] in self?.onControlsHelp?() }),
-            ("SETTINGS", { [weak self] in self?.showInGameSettings() }),
+            (L10n.text("BACK"), { [weak self] in self?.pausePlay(showControls: true) }),
+            (L10n.text("HINT"), { [weak self] in self?.onHints?() }),
+            (L10n.text(L10n.text("CONTROLS HELP")), { [weak self] in self?.onControlsHelp?() }),
+            (L10n.text("SETTINGS"), { [weak self] in self?.showInGameSettings() }),
         ]
         if session is Lemmings2MobileSession {
-            actions.append((fanMode ? "SKILL MODE" : "FAN", { [weak self] in
+            actions.append((fanMode ? L10n.text(L10n.text("SKILL MODE")) : L10n.text("FAN"), { [weak self] in
                 guard let self else { return }
                 self.fanMode.toggle()
                 self.resumePlay()
             }))
         }
-        showCustomOverlay(title: "Game controls", details: [], actions: actions)
+        showCustomOverlay(title: L10n.text("Game controls"), details: [], actions: actions)
         overlayCanvas.page.footerColumns = 1
     }
 
     func showRestartLevel() {
         guard !session.isReadOnly else { return }
         pausePlay(showControls: false)
-        showCustomOverlay(title: "Restart level?", details: [summary.locationLabel, summary.title], actions: [
-            ("CANCEL", { [weak self] in self?.pausePlay(showControls: true) }),
-            ("RESTART LEVEL", { [weak self] in self?.finish(.retry) }),
+        showCustomOverlay(title: L10n.text("Restart level?"), details: [summary.locationLabel, summary.title], actions: [
+            (L10n.text("CANCEL"), { [weak self] in self?.pausePlay(showControls: true) }),
+            (L10n.text(L10n.text("RESTART LEVEL")), { [weak self] in self?.finish(.retry) }),
         ])
         overlayCanvas.page.footer[0].primary = false
         overlayCanvas.page.footer[1].primary = true
@@ -984,9 +984,9 @@ struct MobileGameTurn {
               lifecycle.isForeground, !lifecycle.isInterrupted else { return }
         // Let the tenth planning pause finish before asking on the player's next Play action.
         if !wasReady, !session.isReadOnly, gameSettings.shouldOfferSkillSelectionPauseChoice {
-            showOverlay(title: "Skill selection", actions: [
-                ("Turn off", { [weak self] in self?.chooseSkillSelectionPause(false) }),
-                ("Keep pausing", { [weak self] in self?.chooseSkillSelectionPause(true) }),
+            showOverlay(title: L10n.text("Skill selection"), actions: [
+                (L10n.text("Turn off"), { [weak self] in self?.chooseSkillSelectionPause(false) }),
+                (L10n.text("Keep pausing"), { [weak self] in self?.chooseSkillSelectionPause(true) }),
             ])
             overlayCanvas.page = MobileSettingsArt.skillSelectionPauseChoice()
             layoutOverlay()
@@ -1015,7 +1015,7 @@ struct MobileGameTurn {
         playfieldView.accessibilityElementsHidden = false
         hud.accessibilityElementsHidden = false
         updateHUD()
-        UIAccessibility.post(notification: .announcement, argument: "Game resumed")
+        UIAccessibility.post(notification: .announcement, argument: L10n.text("Game resumed"))
         view.setNeedsLayout()
     }
 
@@ -1046,8 +1046,8 @@ struct MobileGameTurn {
         effects.result(won: snapshot.didWin)
         onCompleted?(snapshot)
         let result = snapshot.didWin
-            ? "LEVEL COMPLETE\n\(snapshot.saved) SAVED"
-            : "LEVEL ENDED\n\(snapshot.saved) SAVED"
+            ? L10n.text("LEVEL COMPLETE\n\(snapshot.saved) SAVED")
+            : L10n.text("LEVEL ENDED\n\(snapshot.saved) SAVED")
         var actions: [(String, () -> Void)]
         if let turn {
             actions = turn.choices(snapshot.didWin).map { entry in
@@ -1057,37 +1057,37 @@ struct MobileGameTurn {
             }
             // The level is over, so the turn passes by the house rule even when the player leaves.
             let following = turn.choices(snapshot.didWin).first(where: { $0.choice.primary })?.choice.player
-            actions.append(("LIBRARY", { [weak self] in self?.finish(.library, handingTo: following) }))
+            actions.append((L10n.text("LIBRARY"), { [weak self] in self?.finish(.library, handingTo: following) }))
         } else if snapshot.didWin {
             actions = [
-                ("NEXT LEVEL", { [weak self] in self?.finish(.next) }),
-                ("RETRY", { [weak self] in self?.finish(.retry) }),
-                ("LIBRARY", { [weak self] in self?.finish(.library) }),
+                (L10n.text(L10n.text("NEXT LEVEL")), { [weak self] in self?.finish(.next) }),
+                (L10n.text("RETRY"), { [weak self] in self?.finish(.retry) }),
+                (L10n.text("LIBRARY"), { [weak self] in self?.finish(.library) }),
             ]
         } else {
             actions = [
-                ("RETRY", { [weak self] in self?.finish(.retry) }),
-                ("LIBRARY", { [weak self] in self?.finish(.library) }),
+                (L10n.text("RETRY"), { [weak self] in self?.finish(.retry) }),
+                (L10n.text("LIBRARY"), { [weak self] in self?.finish(.library) }),
             ]
         }
         if !snapshot.didWin, canDefer {
-            actions.append(("LATER", { [weak self] in
+            actions.append((L10n.text("LATER"), { [weak self] in
                 guard let self else { return }
                 self.finish(.next, handingTo: self.turn?.choices(false).first?.choice.player)
             }))
         }
         if !snapshot.didWin, onSkipLevel != nil {
-            actions.append(("SKIP LEVEL", { [weak self] in
+            actions.append((L10n.text(L10n.text("SKIP LEVEL")), { [weak self] in
                 guard let self, !self.transitionInFlight, self.onSkipLevel?() == true else { return }
                 self.finish(.next, handingTo: self.turn?.choices(false).first?.choice.player)
             }))
         }
         if let data = try? session.replayDocument() {
-            actions.append(("REVIEW", { [weak self] in self?.showReplay(document: data) }))
-            actions.append(("SHARE MOVIE", { [weak self] in self?.shareReplayMovie(document: data) }))
+            actions.append((L10n.text("REVIEW"), { [weak self] in self?.showReplay(document: data) }))
+            actions.append((L10n.text(L10n.text("SHARE MOVIE")), { [weak self] in self?.shareReplayMovie(document: data) }))
         }
         if recordSaveError != nil {
-            showOverlay(title: recordSaveError ?? "SAVE FAILED", actions: [("TRY AGAIN", { [weak self] in
+            showOverlay(title: recordSaveError ?? L10n.text(L10n.text("SAVE FAILED")), actions: [(L10n.text(L10n.text("TRY AGAIN")), { [weak self] in
                 guard let self else { return }
                 self.completionPresented = false
                 self.presentCompletion()
@@ -1124,7 +1124,7 @@ struct MobileGameTurn {
         guard recordSaveError == nil, !transitionInFlight else { return }
         if action == .retry { MobileMusic.shared.vinylStop() }
         if let player, onHandover?(player) == false {
-            showOverlay(title: "HOT SEAT WAS NOT SAVED", actions: [("TRY AGAIN", { [weak self] in self?.finish(action, handingTo: player) })])
+            showOverlay(title: L10n.text(L10n.text("HOT SEAT WAS NOT SAVED")), actions: [(L10n.text(L10n.text("TRY AGAIN")), { [weak self] in self?.finish(action, handingTo: player) })])
             return
         }
         transitionInFlight = true
@@ -1139,8 +1139,8 @@ struct MobileGameTurn {
                 onExit?(action)
             } catch {
                 resetTransition()
-                showCustomOverlay(title: "RUN WAS NOT CLOSED", details: [], actions: [
-                    ("TRY AGAIN", { [weak self] in self?.finish(action) }),
+                showCustomOverlay(title: L10n.text(L10n.text("RUN WAS NOT CLOSED")), details: [], actions: [
+                    (L10n.text(L10n.text("TRY AGAIN")), { [weak self] in self?.finish(action) }),
                 ])
             }
         }
@@ -1157,7 +1157,7 @@ struct MobileGameTurn {
             finish(.library)
             return
         }
-        showOverlay(title: "SAVING...", actions: [])
+        showOverlay(title: L10n.text("SAVING..."), actions: [])
         do {
             let encoding = try makeCheckpoint()
             let previousSave = checkpointSaveTask
@@ -1173,8 +1173,8 @@ struct MobileGameTurn {
                     showOverlay(
                         title: error.localizedDescription,
                         actions: [
-                            ("TRY AGAIN", { [weak self] in self?.leaveToLibrary() }),
-                            ("RESUME", { [weak self] in self?.resumePlay() }),
+                            (L10n.text(L10n.text("TRY AGAIN")), { [weak self] in self?.leaveToLibrary() }),
+                            (L10n.text("RESUME"), { [weak self] in self?.resumePlay() }),
                         ]
                     )
                 }
@@ -1182,7 +1182,7 @@ struct MobileGameTurn {
         } catch {
             displayLink?.isPaused = false
             showOverlay(title: error.localizedDescription,
-                        actions: [("RESUME", { [weak self] in self?.resumePlay() })])
+                        actions: [(L10n.text("RESUME"), { [weak self] in self?.resumePlay() })])
         }
     }
 
@@ -1197,7 +1197,7 @@ struct MobileGameTurn {
             lastCheckpointTick = session.snapshot.tick
             let backgroundTask: UIBackgroundTaskIdentifier
             if reason == .suspension || reason == .sceneDisconnect || reason == .audioInterruption {
-                backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "Save Lemmings run")
+                backgroundTask = UIApplication.shared.beginBackgroundTask(withName: L10n.text("Save Lemmings run"))
             } else {
                 backgroundTask = .invalid
             }
@@ -1485,7 +1485,7 @@ struct MobileGameTurn {
             present(player, animated: false)
         } catch {
             showOverlay(title: error.localizedDescription,
-                actions: [("BACK", { [weak self] in self?.pausePlay(showControls: true) })])
+                actions: [(L10n.text("BACK"), { [weak self] in self?.pausePlay(showControls: true) })])
         }
     }
 
@@ -1541,8 +1541,8 @@ struct MobileGameTurn {
             if game.solutionReturnReady {
                 game.playState = MobilePlayState()
                 game.showOverlay(title: game.summary.title, actions: [
-                    (game.turn == nil ? "START" : "READY", { [weak game] in game?.resumePlay() }),
-                    ("LIBRARY", { [weak game] in game?.leaveToLibrary() }),
+                    (game.turn == nil ? L10n.text("START") : L10n.text("READY"), { [weak game] in game?.resumePlay() }),
+                    (L10n.text("LIBRARY"), { [weak game] in game?.leaveToLibrary() }),
                 ])
             } else { game.pausePlay(showControls: true) }
             game.view.setNeedsLayout()
@@ -1639,16 +1639,16 @@ struct MobileGameTurn {
 
     func showPreparationError(_ message: String) {
         resetTransition()
-        showOverlay(title: message, actions: [("LIBRARY", { [weak self] in MobileMusic.shared.stop(); self?.onExit?(.library) })])
+        showOverlay(title: message, actions: [(L10n.text("LIBRARY"), { [weak self] in MobileMusic.shared.stop(); self?.onExit?(.library) })])
     }
 
     private func pauseSummary() -> MobilePauseSummary {
         let music = MobileMusic.shared
         let c = gameSettings.classic
-        let musicState = !music.isEnabled ? "Music off" : c.musicVolume == 0 ? "Music muted"
-            : lifecycle.isInterrupted || !lifecycle.isForeground ? "Audio suspended"
-            : c.pauseMusicBeatOnly ? "Music: beat only" : "Music paused"
-        let soundState = c.sound == .silent ? "SFX off" : c.soundVolume == 0 ? "SFX muted" : "SFX \(Int(c.soundVolume * 100))%"
+        let musicState = !music.isEnabled ? L10n.text("Music off") : c.musicVolume == 0 ? L10n.text("Music muted")
+            : lifecycle.isInterrupted || !lifecycle.isForeground ? L10n.text("Audio suspended")
+            : c.pauseMusicBeatOnly ? L10n.text("Music: beat only") : L10n.text("Music paused")
+        let soundState = c.sound == .silent ? L10n.text("SFX off") : c.soundVolume == 0 ? L10n.text("SFX muted") : L10n.text("SFX \(Int(c.soundVolume * 100))%")
         return MobilePauseSummary(level: summary, snapshot: session.snapshot,
             activeCount: session.activeLemmingCount, ticksPerSecond: session.ticksPerSecond,
             speed: speed, assignedSkills: session.assignedSkillCount, supportsRewind: session.supportsRewind,
@@ -1679,17 +1679,17 @@ struct MobileGameTurn {
         overlayCanvas.playerRole = completed ? .result : ready ? .next : .current
         let details: [String]
         if ready {
-            details = ["\(snapshot.total) Lemmings   Save \(snapshot.required)",
-                       snapshot.remainingSeconds.map { "Time \($0 / 60):\(String(format: "%02d", $0 % 60))" } ?? "No time limit"]
+            details = [L10n.text("\(snapshot.total) Lemmings   Save \(snapshot.required)"),
+                       snapshot.remainingSeconds.map { L10n.text("Time \($0 / 60):\(String(format: "%02d", $0 % 60))") } ?? L10n.text("No time limit")]
         } else if completed {
             let awards = Set(resultAchievements.map(\.title))
             let elapsed = Double(snapshot.tick) / session.ticksPerSecond
             let time = "\(Int(elapsed) / 60):\(String(format: "%05.2f", elapsed.truncatingRemainder(dividingBy: 60)))"
-            let recordTime = completionDetails.first { $0.hasPrefix("New time record") }
-            details = ["Saved \(snapshot.saved)/\(snapshot.total)   Goal \(snapshot.required)", recordTime ?? "Time " + time]
-                + completionDetails.filter { !awards.contains($0) && !$0.hasPrefix("New time record") }
+            let recordTime = completionDetails.first { $0.hasPrefix(L10n.text("New time record")) }
+            details = [L10n.text("Saved \(snapshot.saved)/\(snapshot.total)   Goal \(snapshot.required)"), recordTime ?? L10n.text("Time ") + time]
+                + completionDetails.filter { !awards.contains($0) && !$0.hasPrefix(L10n.text("New time record")) }
         } else { details = [] }
-        let heading = completed ? (snapshot.didWin ? "Level complete" : "Try again") : (ready ? (turn?.ownerName ?? title) : title)
+        let heading = completed ? (snapshot.didWin ? L10n.text("Level complete") : L10n.text("Try again")) : (ready ? (turn?.ownerName ?? title) : title)
         let subtitle = summary.caption
         let wasHidden = overlay.isHidden
         overlayCanvas.page = .init(title: heading, subtitle: subtitle,
@@ -1702,7 +1702,7 @@ struct MobileGameTurn {
             overlayCanvas.page.detailHeadings = [0]
             rotateResultAchievements()
         }
-        let isPause = !ready && !completed && title.uppercased() == "PAUSED"
+        let isPause = !ready && !completed && title.uppercased() == L10n.text("PAUSED")
         if isPause {
             overlayCanvas.page = MobilePauseArt.page(pauseSummary(), actions: overlayCanvas.page.footer)
         }

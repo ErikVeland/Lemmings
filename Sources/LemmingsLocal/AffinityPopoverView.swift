@@ -11,7 +11,7 @@ import NxlvKit
         self.affinity = affinity; self.font = font; self.forRun = forRun
         super.init(frame: CGRect(x: 0, y: 0, width: 480, height: 334))
         setAccessibilityElement(true)
-        setAccessibilityLabel("\(affinity.name). \(affinity.philosophySummary) \(forRun ? "This run" : "Play style"): \(affinity.affinityDescription)")
+        setAccessibilityLabel("\(affinity.name). \(affinity.philosophySummary) \(forRun ? L10n.text("This run") : L10n.text("Play style")): \(affinity.affinityDescription)")
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     override func draw(_ dirtyRect: NSRect) {
@@ -25,12 +25,12 @@ import NxlvKit
             let face: ClassicMacUserInterface.Face = font.width(of: MacInterfaceRenderer.menuText(affinity.name), face: .large, scale: 1) <= heading.width ? .large : .small
             font.menuLine(affinity.name, in: heading, face: face, alignment: .left, palette: .green)
             font.menuParagraph(affinity.philosophySummary, in: summary, alignment: .left)
-            font.menuLine(forRun ? "This run" : "Play style", in: label, alignment: .left, alpha: 0.7)
+            font.menuLine(forRun ? L10n.text("This run") : L10n.text("Play style"), in: label, alignment: .left, alpha: 0.7)
             font.menuParagraph(affinity.affinityDescription, in: reason, alignment: .left)
         } else {
             GamePixelText.draw(affinity.name, in: heading)
             GamePixelText.draw(affinity.philosophySummary, in: summary)
-            GamePixelText.draw(forRun ? "This run" : "Play style", in: label)
+            GamePixelText.draw(forRun ? L10n.text("This run") : L10n.text("Play style"), in: label)
             GamePixelText.draw(affinity.affinityDescription, in: reason)
         }
     }

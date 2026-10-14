@@ -45,19 +45,19 @@ public struct TrolleyAwardDelta: Equatable, Sendable {
     public var gained: Int { max(0, after.value - before.value) }
     public var remaining: Int { max(0, after.goal - after.value) }
     public var status: String {
-        if isNew { return "NEW AWARD" }
-        if after.earned { return "Earned" }
+        if isNew { return L10n.text("NEW AWARD") }
+        if after.earned { return L10n.text("Earned") }
         return "\(after.value)/\(after.goal)" + (gained > 0 ? " (+\(gained))" : "")
     }
     public var next: String {
         if after.earned { return award.detail }
         switch award {
-        case .moralSurplus: return "Save \(remaining) more above requirements."
-        case .greatDebate, .philosopherKing: return "Clear with \(remaining) more play styles."
-        case .schoolOfThought: return "Use one play style on \(remaining) more levels."
-        case .unbrokenArgument: return "Match targets on \(remaining) more consecutive levels."
-        case .absoluteMaximum: return "Match verified maxima on \(remaining) more levels."
-        default: return "Match rescue targets on \(remaining) more levels."
+        case .moralSurplus: return L10n.text("Save \(remaining) more above requirements.")
+        case .greatDebate, .philosopherKing: return L10n.text("Clear with \(remaining) more play styles.")
+        case .schoolOfThought: return L10n.text("Use one play style on \(remaining) more levels.")
+        case .unbrokenArgument: return L10n.text("Match targets on \(remaining) more consecutive levels.")
+        case .absoluteMaximum: return L10n.text("Match verified maxima on \(remaining) more levels.")
+        default: return L10n.text("Match rescue targets on \(remaining) more levels.")
         }
     }
 }
@@ -69,9 +69,9 @@ public struct TrolleyRankChange: Equatable, Sendable {
     public let players: Int
     public let improved: Bool
     public var label: String {
-        guard let after else { return "Clear the level to rank" }
-        if let before, after < before { return "#\(before) > #\(after) of \(players)" }
-        return "#\(after) of \(players)" + (improved && before != nil ? " - new best" : "")
+        guard let after else { return L10n.text(L10n.text("Clear the level to rank")) }
+        if let before, after < before { return L10n.text(L10n.text("#\(before) > #\(after) of \(players)")) }
+        return L10n.text("#\(after) of \(players)") + (improved && before != nil ? L10n.text(L10n.text(" - new best")) : "")
     }
 }
 
@@ -146,27 +146,27 @@ public struct TrolleyCelebration: Sendable {
         } else { ranks = [] }
         levelAwards = report.earned
         if report.newRescueBest, let previous = report.previousBest {
-            recordMessage = "NEW BEST! \(previous.saved) > \(run.saved) rescued"
+            recordMessage = L10n.text("NEW BEST! \(previous.saved) > \(run.saved) rescued")
         } else if report.newSkillBest {
-            recordMessage = "NEW SKILL RECORD! \(run.skillCount) skills"
+            recordMessage = L10n.text("NEW SKILL RECORD! \(run.skillCount) skills")
         } else if report.previousBest == nil && run.qualifies {
-            recordMessage = "FIRST CLEAR! Record set."
+            recordMessage = L10n.text("FIRST CLEAR! Record set.")
         } else {
-            recordMessage = "Best: \(bestStars)/3 stars, \(max(run.saved, report.previousBest?.saved ?? 0)) rescued"
+            recordMessage = L10n.text("Best: \(bestStars)/3 stars, \(max(run.saved, report.previousBest?.saved ?? 0)) rescued")
         }
         if !run.qualifies {
             nextGoal = run.saved < run.level.required
-                ? "\(run.level.required - run.saved) more to rescue for the first star."
-                : "Rescue count met. Complete the level to earn stars."
+                ? L10n.text("\(run.level.required - run.saved) more to rescue for the first star.")
+                : L10n.text("Rescue count met. Complete the level to earn stars.")
         } else if goals.stars == 3 {
-            nextGoal = "ALL THREE STARS! This level's rescue goals are met."
+            nextGoal = L10n.text("ALL THREE STARS! This level's rescue goals are met.")
         } else if goals.stars == 1 {
-            nextGoal = "\(max(0, goals.extraSaved - run.saved)) more to rescue for two stars."
+            nextGoal = L10n.text("\(max(0, goals.extraSaved - run.saved)) more to rescue for two stars.")
         } else if let full = goals.fullSaved {
             let gap = max(0, full - run.saved)
-            nextGoal = "\(gap == 1 ? "SO CLOSE! " : "")\(gap) more to rescue for three stars."
+            nextGoal = L10n.text("\(gap == 1 ? "SO CLOSE! " : "")\(gap) more to rescue for three stars.")
         } else {
-            nextGoal = "Third-star target unknown. Your clear still counts."
+            nextGoal = L10n.text("Third-star target unknown. Your clear still counts.")
         }
     }
 }

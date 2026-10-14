@@ -15,11 +15,11 @@ public enum MobilePauseArt {
     }
 
     public static func page(_ summary: MobilePauseSummary, actions: [GameFrontEnd.Action]) -> GameFrontEnd.Page {
-        var page = GameFrontEnd.Page(title: summary.isReplay ? "Replay" : "Paused", subtitle: summary.level.caption,
+        var page = GameFrontEnd.Page(title: summary.isReplay ? L10n.text("Replay") : L10n.text("Paused"), subtitle: summary.level.caption,
             details: [summary.level.title, summary.status, summary.rescueText]
                 + summary.fields.map(\.text)
                 + [summary.playDetails] + summary.supplies.map { $0.label + " left: " + $0.value }
-                + ["Soundtrack: " + summary.soundtrack, summary.track, summary.audio],
+                + [L10n.text("Soundtrack: ") + summary.soundtrack, summary.track, summary.audio],
             footer: actions, preview: true, footerColumns: 2)
         page.pause = summary
         return page

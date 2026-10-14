@@ -50,8 +50,8 @@ import NxlvKit
     func setFast(_ enabled: Bool) { state.setFast(enabled, at: ProcessInfo.processInfo.systemUptime); onChange() }
     var help: String {
         variableEnabled
-            ? "F / Speed: toggle fast-forward\nHold F: ramp up to 10×; release: keep speed\nHold Shift, Speed or RT: temporary boost; release: previous speed\nSpeed arrows or Shift+[ / Shift+]: apply 1×, 2×, 3×, 5× or 10×\nF or controller B: immediately return to 1×"
-            : "F / Speed: toggle fast-forward"
+            ? L10n.text("F / Speed: toggle fast-forward\nHold F: ramp up to 10×; release: keep speed\nHold Shift, Speed or RT: temporary boost; release: previous speed\nSpeed arrows or Shift+[ / Shift+]: apply 1×, 2×, 3×, 5× or 10×\nF or controller B: immediately return to 1×")
+            : L10n.text("F / Speed: toggle fast-forward")
     }
 }
 
@@ -108,9 +108,9 @@ import NxlvKit
     var fadeMenuButton: () -> Bool = { true }
     private lazy var navigationButton: GameplayMenuButton = {
         let button = GameplayMenuButton(frame: .zero)
-        button.title = "Menu"; button.target = self; button.action = #selector(openMainMenu)
-        button.setAccessibilityLabel("Save run and return to library")
-        button.toolTip = "Return to library (Esc or Q)"
+        button.title = L10n.text("Menu"); button.target = self; button.action = #selector(openMainMenu)
+        button.setAccessibilityLabel(L10n.text("Save run and return to library"))
+        button.toolTip = L10n.text("Return to library (Esc or Q)")
         return button
     }()
     @objc private func openMainMenu() { mainMenu?() }
@@ -389,23 +389,23 @@ import NxlvKit
         let speedHelp = (speedControl?.help ?? "").replacingOccurrences(of: " or RT", with: "").replacingOccurrences(of: "F or controller B", with: "F")
         var sections = [help(), speedHelp]
         if modern() {
-            let goal = selectGliderBeforeGoal == nil ? "G / End: centre goal" : "G: Glider, then goal\nEnd: centre goal"
-            sections.append("Tab / Shift-Tab: next / previous available skill\nH / Home: centre entrance\n" + goal + "\n[ / ]: previous / next unassigned lemming\n\\: focus last assignment\nReturn: repeat last skill")
-        } else { sections.append("Modern keyboard shortcuts are off. Number keys select skills.") }
-        if step != nil { sections.append("⌘Z: rewind one tick") }
-        if djShuffle != nil { sections.append("J: DJ shuffle") }
-        sections.append("Escape / Q: save run and return to library\n?: controls help")
-        if hints != nil { sections.append("Slash / I / F1: level goals and tiered hints") }
+            let goal = selectGliderBeforeGoal == nil ? L10n.text("G / End: centre goal") : L10n.text("G: Glider, then goal\nEnd: centre goal")
+            sections.append(L10n.text("Tab / Shift-Tab: next / previous available skill\nH / Home: centre entrance\n") + goal + L10n.text("\n[ / ]: previous / next unassigned lemming\n\\: focus last assignment\nReturn: repeat last skill"))
+        } else { sections.append(L10n.text("Modern keyboard shortcuts are off. Number keys select skills.")) }
+        if step != nil { sections.append(L10n.text("⌘Z: rewind one tick")) }
+        if djShuffle != nil { sections.append(L10n.text("J: DJ shuffle")) }
+        sections.append(L10n.text("Escape / Q: save run and return to library\n?: controls help"))
+        if hints != nil { sections.append(L10n.text("Slash / I / F1: level goals and tiered hints")) }
         if rate != nil {
             sections.append("− / +: release rate"
-                + (rateLimit != nil ? "\nDouble-tap − / +: minimum / maximum release rate" : ""))
+                + (rateLimit != nil ? L10n.text("\nDouble-tap − / +: minimum / maximum release rate") : ""))
         }
-        if nukeToggle != nil { sections.append("N: nuke; press again to undo the nuke") }
+        if nukeToggle != nil { sections.append(L10n.text("N: nuke; press again to undo the nuke")) }
         if controllerEnabled() {
             sections.append(ControllerDevicePresentation.help(mapping: controllerMappings(),
                 variableSpeed: speedControl?.variableEnabled == true, tapSpeed: controllerTapSpeed(),
                 rewind: rewind != nil, stepping: step != nil, hints: hints != nil))
-        } else { sections.append("Controller support is off. Enable it in Settings > Controller.") }
+        } else { sections.append(L10n.text("Controller support is off. Enable it in Settings > Controller.")) }
         return sections.filter { !$0.isEmpty }.joined(separator: "\n\n")
     }
     var commandRows: [KeyboardCommand] {
@@ -420,8 +420,8 @@ import NxlvKit
                    !keys.contains(initial.uppercased()) { keys.append(initial.uppercased()) }
             }
             let shared = modern() && cyclesSharedSkillLetters && shortcuts.initials[index].map { initial in shortcuts.initials.filter { $0 == initial }.count > 1 } == true
-            let detail = shared ? " (\(shortcuts.initials[index]!.uppercased()) cycles matching skills)" : ""
-            rows.append(KeyboardCommand(keys: keys.joined(separator: " / "), action: "Select \(names[index])" + detail, group: "Skills"))
+            let detail = shared ? L10n.text(" (\(shortcuts.initials[index]!.uppercased()) cycles matching skills)") : ""
+            rows.append(KeyboardCommand(keys: keys.joined(separator: " / "), action: L10n.text("Select \(names[index])") + detail, group: L10n.text("Skills")))
         }
         let controllerHeading = ControllerDevicePresentation.help(mapping: controllerMappings()).components(separatedBy: "\n").first
         var controllerSection = false
@@ -431,15 +431,15 @@ import NxlvKit
             let keys = String(line[..<colon])
             let action = String(line[line.index(after: colon)...]).trimmingCharacters(in: .whitespaces)
             let lower = line.lowercased()
-            let group = controllerSection ? "Controller"
-                : lower.contains("zoom") ? "Camera"
-                : ["speed", "fast-forward", "ramp", "1×"].contains(where: lower.contains) ? "Speed"
-                : ["skill", "assignment", "unassigned"].contains(where: lower.contains) ? "Skills"
-                : ["entrance", "centre goal", "Glider, then goal".lowercased()].contains(where: lower.contains) ? "Camera" : "Gameplay"
+            let group = controllerSection ? L10n.text("Controller")
+                : lower.contains("zoom") ? L10n.text("Camera")
+                : ["speed", "fast-forward", "ramp", "1×"].contains(where: lower.contains) ? L10n.text("Speed")
+                : ["skill", "assignment", "unassigned"].contains(where: lower.contains) ? L10n.text("Skills")
+                : ["entrance", L10n.text("centre goal"), L10n.text("Glider, then goal").lowercased()].contains(where: lower.contains) ? L10n.text("Camera") : L10n.text("Gameplay")
             rows.append(KeyboardCommand(keys: keys, action: action, group: group))
         }
         if speedControl?.variableEnabled == true {
-            rows.append(KeyboardCommand(keys: "Shift + \\ (|)", action: "Immediately return to normal speed (1×)", group: "Speed"))
+            rows.append(KeyboardCommand(keys: L10n.text("Shift + \\ (|)"), action: L10n.text("Immediately return to normal speed (1×)"), group: L10n.text("Speed")))
         }
         rows += contextCommands()
         func menuRows(_ menu: NSMenu) {
@@ -448,7 +448,7 @@ import NxlvKit
                 guard !item.keyEquivalent.isEmpty else { continue }
                 let flags = item.keyEquivalentModifierMask
                 let modifiers = (flags.contains(.control) ? "⌃" : "") + (flags.contains(.option) ? "⌥" : "") + (flags.contains(.shift) ? "⇧" : "") + (flags.contains(.command) ? "⌘" : "")
-                rows.append(KeyboardCommand(keys: modifiers + item.keyEquivalent.uppercased(), action: item.title, group: "App menus"))
+                rows.append(KeyboardCommand(keys: modifiers + item.keyEquivalent.uppercased(), action: item.title, group: L10n.text("App menus")))
             }
         }
         if let menu = NSApp.mainMenu { menuRows(menu) }
@@ -471,10 +471,10 @@ import NxlvKit
                 let label = element.accessibilityLabel() ?? ""
                 let key: String
                 if let index = names.firstIndex(where: { label == $0 || label.hasPrefix($0 + ",") }), index < 10 { key = String((index + 1) % 10) }
-                else if label == "Pause" || label == "Resume" { key = "Space" }
-                else if label.lowercased().contains("fast-forward") || label == "Return to normal speed" { key = "F" }
-                else if label == "Decrease release rate" { key = "−" }
-                else if label == "Increase release rate" { key = "+" }
+                else if label == L10n.text("Pause") || label == L10n.text("Resume") { key = "Space" }
+                else if label.lowercased().contains("fast-forward") || label == L10n.text("Return to normal speed") { key = "F" }
+                else if label == L10n.text("Decrease release rate") { key = "−" }
+                else if label == L10n.text("Increase release rate") { key = "+" }
                 else { return nil }
                 return (key, owner.convert(element.localFrame, to: view))
             }
@@ -494,13 +494,13 @@ import NxlvKit
         guard let window, window.attachedSheet == nil else { return }
         let resume = pauseForHelp()
         let alert = NSAlert()
-        alert.messageText = "Keyboard commands"
-        alert.informativeText = "Find a command by key, action or category. Your game pauses while this guide is open."
+        alert.messageText = L10n.text("Keyboard commands")
+        alert.informativeText = L10n.text("Find a command by key, action or category. Your game pauses while this guide is open.")
         let guide = KeyboardCommandsView(commands: commandRows, modern: modern())
         alert.accessoryView = guide
-        alert.addButton(withTitle: "Close").keyEquivalent = "\u{1b}"
+        alert.addButton(withTitle: L10n.text("Close")).keyEquivalent = "\u{1b}"
         alert.window.initialFirstResponder = guide.search
-        if hints != nil { alert.addButton(withTitle: "Level hints") }
+        if hints != nil { alert.addButton(withTitle: L10n.text("Level hints")) }
         alert.beginSheetModal(for: window) { [weak self] response in
             resume()
             if response == .alertSecondButtonReturn {

@@ -7,7 +7,7 @@ import NxlvKit
     var mode = SolutionReplayMode.game { didSet { buttons.forEach { $0.needsDisplay = true } } }
     var ghostEnabled = false { didSet { ghostButton.setAccessibilityValue(ghostEnabled ? 1 : 0); ghostButton.needsDisplay = true } }
     var onToggleGhost: (() -> Void)?
-    private let ghostButton = GhostSolutionButton(title: "Ghost solution", primary: false)
+    private let ghostButton = GhostSolutionButton(title: L10n.text("Ghost solution"), primary: false)
     private var switchFrame: CGRect { CGRect(x: 0, y: 0, width: bounds.width, height: 48) }
     var onSelect: ((SolutionReplayMode) -> Void)?
     private var buttons: [SolutionSegmentButton] = []
@@ -18,12 +18,12 @@ import NxlvKit
         ghostButton.owner = self
         ghostButton.onPress = { [weak self] in self?.onToggleGhost?() }
         ghostButton.setAccessibilityRole(.checkBox)
-        ghostButton.setAccessibilityLabel("Ghost solution")
+        ghostButton.setAccessibilityLabel(L10n.text("Ghost solution"))
         ghostButton.setAccessibilityValue(0)
         ghostButton.isHidden = frame.height < 100
         addSubview(ghostButton)
         for value in SolutionReplayMode.allCases {
-            let button = SolutionSegmentButton(title: value == .game ? "Your game" : "Solution", primary: false)
+            let button = SolutionSegmentButton(title: value == .game ? L10n.text("Your game") : L10n.text("Solution"), primary: false)
             button.owner = self
             button.onPress = { [weak self] in self?.onSelect?(value) }
             button.setAccessibilityLabel(button.title)
@@ -46,10 +46,10 @@ import NxlvKit
         guard let owner, let context = NSGraphicsContext.current?.cgContext else { return }
         context.saveGState()
         context.translateBy(x: -frame.minX, y: -frame.minY)
-        SolutionSwitchArt.draw(mode: owner.mode, focused: isHighlighted ? (title == "Your game" ? .game : .solution) : nil,
+        SolutionSwitchArt.draw(mode: owner.mode, focused: isHighlighted ? (title == L10n.text("Your game") ? .game : .solution) : nil,
             in: CGRect(x: 0, y: 0, width: owner.bounds.width, height: 48), typography: SolutionSwitchView.typography, context: context)
         context.restoreGState()
-        setAccessibilityValue(owner.mode == (title == "Your game" ? .game : .solution) ? "Selected" : "")
+        setAccessibilityValue(owner.mode == (title == L10n.text("Your game") ? .game : .solution) ? L10n.text("Selected") : "")
         GameControlText.focus(self)
     }
 }

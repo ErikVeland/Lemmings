@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import NxlvKit
 import LemmingsGameArt
 import Metal
 import QuartzCore
@@ -111,7 +112,7 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
   private func setUp() {
     wantsLayer = true
     guard let device = MTLCreateSystemDefaultDevice() else {
-      failureReason = "no Metal device"
+      failureReason = L10n.text("no Metal device")
       return
     }
     self.device = device

@@ -25,8 +25,8 @@ public enum AmigaVersusCampaign {
     }
 
     public static let sources: [Source] = [
-        Source(family: "lemmings", title: "Lemmings", records: 80..<100),
-        Source(family: "ohno", title: "Oh No! More Lemmings", records: 100..<110),
+        Source(family: "lemmings", title: L10n.text("Lemmings"), records: 80..<100),
+        Source(family: "ohno", title: L10n.text("Oh No! More Lemmings"), records: 100..<110),
     ]
 
     public struct Entry: Sendable {
@@ -43,9 +43,9 @@ public enum AmigaVersusCampaign {
         public var description: String {
             switch self {
             case let .noLevelFiles(family):
-                return "No level files were found for \(family)."
+                return L10n.text("No level files were found for \(family).")
             case let .recordOutOfRange(family, record, available):
-                return "\(family) has \(available) level records, so record \(record) is missing."
+                return L10n.text("\(family) has \(available) level records, so record \(record) is missing.")
             }
         }
     }

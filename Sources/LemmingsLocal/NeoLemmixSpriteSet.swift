@@ -12,11 +12,11 @@ enum NeoLemmixSpriteSetError: Error, LocalizedError {
 
   var errorDescription: String? {
     switch self {
-    case let .missingTheme(style): return "The NeoLemmix theme '\(style)' could not be loaded."
-    case let .missingLemmingStyle(style): return "The NeoLemmix lemming style '\(style)' could not be loaded."
-    case let .missingScheme(style): return "The NeoLemmix lemming style '\(style)' has no scheme.nxmi."
-    case let .missingAnimation(name): return "The NeoLemmix lemming style has no \(name) animation."
-    case let .invalidAnimation(name): return "The NeoLemmix \(name) animation has invalid frame geometry."
+    case let .missingTheme(style): return L10n.text("The NeoLemmix theme '\(style)' could not be loaded.")
+    case let .missingLemmingStyle(style): return L10n.text("The NeoLemmix lemming style '\(style)' could not be loaded.")
+    case let .missingScheme(style): return L10n.text("The NeoLemmix lemming style '\(style)' has no scheme.nxmi.")
+    case let .missingAnimation(name): return L10n.text("The NeoLemmix lemming style has no \(name) animation.")
+    case let .invalidAnimation(name): return L10n.text("The NeoLemmix \(name) animation has invalid frame geometry.")
     }
   }
 }

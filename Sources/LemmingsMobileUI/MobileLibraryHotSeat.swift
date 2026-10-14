@@ -1,5 +1,6 @@
 #if os(iOS) || os(tvOS)
 import LemmingsGameArt
+import NxlvKit
 import LemmingsMobileCore
 import UIKit
 
@@ -24,7 +25,7 @@ extension MobileLibraryViewController {
         }
     }
 
-    func playerName(_ id: String) -> String { profiles.players.first { $0.id == id }?.name ?? "Player" }
+    func playerName(_ id: String) -> String { profiles.players.first { $0.id == id }?.name ?? L10n.text("Player") }
 
     /// Names the player on a result button. The bitmap lettering is wide, so long names are clipped.
     private func short(_ id: String) -> String { String(playerName(id).prefix(9)) }
@@ -36,7 +37,7 @@ extension MobileLibraryViewController {
                               ownerPortrait: profiles.players.first { $0.id == seat.turn }?.portrait ?? 0) { [weak self] win in
             seat.choices(didWin: win).map { choice in
                 let name = self?.short(choice.player) ?? ""
-                let label = choice.kind == .next ? "Next: \(name)" : "Retry: \(name)"
+                let label = choice.kind == .next ? L10n.text("Next: \(name)") : L10n.text("Retry: \(name)")
                 return (label, choice)
             }
         }
@@ -67,7 +68,7 @@ extension MobileLibraryViewController {
             let names = seat.players.map { String(playerName($0).prefix(6)) }.joined(separator: " ")
             return .init("seatResume." + seat.id, names)
         }
-        return .init(title: "Saved Hot Seats", subtitle: subtitle, rows: rows, footer: [.init("hotSeat", "Back")])
+        return .init(title: L10n.text("Saved Hot Seats"), subtitle: subtitle, rows: rows, footer: [.init("hotSeat", L10n.text("Back"))])
     }
 
     // MARK: - Actions
@@ -161,14 +162,14 @@ extension MobileLibraryViewController {
         guard let checkpoint = pendingCheckpoint else { return }
         if let scope = checkpoint.scope, scope.hasPrefix("hotseat.") {
             guard resumeSharedSeat(String(scope.dropFirst(8))) else {
-                if notice.isEmpty { notice = "That Hot Seat is no longer saved." }
+                if notice.isEmpty { notice = L10n.text("That Hot Seat is no longer saved.") }
                 rebuild(); return
             }
         } else {
             hotSeats.endSession()
             let owner = checkpoint.owner ?? MobileProfiles.defaultID
             guard profiles.players.contains(where: { $0.id == owner }) else {
-                notice = "That player is no longer saved."; rebuild(); return
+                notice = L10n.text("That player is no longer saved."); rebuild(); return
             }
             profiles.select(owner)
             guard saveProfiles() else { rebuild(); return }
@@ -187,7 +188,7 @@ extension MobileLibraryViewController {
     }
 
     func otherSessionTitle(for checkpoint: MobileCheckpointEnvelope) -> String {
-        checkpoint.scope == nil ? "Resume solo run" : "Resume Hot Seat run"
+        checkpoint.scope == nil ? L10n.text("Resume solo run") : L10n.text("Resume Hot Seat run")
     }
 
     /// Players who were deleted leave the sessions they were in.

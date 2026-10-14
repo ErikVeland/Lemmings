@@ -17,19 +17,19 @@ import NxlvKit
 
     func showIfNeeded(in window: NSWindow, completion: @escaping () -> Void) {
         guard telemetry.endpoint != nil, !telemetry.consentDecided else { completion(); return }
-        let page = GameMenuPage(title: "Share play counts?", subtitle: "Your choice")
-        page.backTitle = "Not now"
-        let heading = GameLabel(labelWithString: "Help us find levels that need work")
+        let page = GameMenuPage(title: L10n.text("Share play counts?"), subtitle: L10n.text("Your choice"))
+        page.backTitle = L10n.text("Not now")
+        let heading = GameLabel(labelWithString: L10n.text("Help us find levels that need work"))
         heading.role = .heading
         heading.frame = CGRect(x: 0, y: 360, width: 992, height: 34)
         page.body.addSubview(heading)
         let details = [
-            "Send opted-in installs, daily use, results and lemmings saved.",
-            "Include solo or Hot Seat and all-soundtrack download choices.",
-            "No names, IDs, pack names or replays are sent.",
-            "The shared saved total stays until the service resets it.",
-            "The service sees your network address during delivery.",
-            "Change this in Settings > Privacy.",
+            L10n.text("Send opted-in installs, daily use, results and lemmings saved."),
+            L10n.text("Include solo or Hot Seat and all-soundtrack download choices."),
+            L10n.text("No names, IDs, pack names or replays are sent."),
+            L10n.text("The shared saved total stays until the service resets it."),
+            L10n.text("The service sees your network address during delivery."),
+            L10n.text("Change this in Settings > Privacy."),
         ]
         for (index, line) in details.enumerated() {
             let label = GameLabel(labelWithString: line)
@@ -44,7 +44,7 @@ import NxlvKit
             completion()
         }
         page.onBack = { choose(false) }
-        page.addPrimaryAction("Share counts") { choose(true) }
+        page.addPrimaryAction(L10n.text("Share counts")) { choose(true) }
         page.preferControllerControl(page.controllerBackButton)
         self.page = page
         GameScreen.shared.present(page, owner: window)
@@ -61,7 +61,7 @@ import NxlvKit
     private var summary: AnonymousTelemetrySummary
     private var shared = false
     private var days = 30
-    private var notice = "This Mac only. Shared counts need the owner access token."
+    private var notice = L10n.text("This Mac only. Shared counts need the owner access token.")
     private weak var daysButton: NSButton?
 
     init(telemetry: AnonymousTelemetry = .shared) {
@@ -75,27 +75,27 @@ import NxlvKit
         shared = false
         days = 30
         notice = telemetry.endpoint == nil
-            ? "This Mac only. No shared service is configured."
-            : "This Mac only. Shared counts need the owner access token."
-        let page = GameMenuPage(title: "Play insights", subtitle: "Aggregate counts")
+            ? L10n.text("This Mac only. No shared service is configured.")
+            : L10n.text("This Mac only. Shared counts need the owner access token.")
+        let page = GameMenuPage(title: L10n.text("Play insights"), subtitle: L10n.text("Aggregate counts"))
         page.onBack = { [weak self, weak page] in
             if let page { GameScreen.shared.dismiss(page) }
             self?.page = nil
         }
         if telemetry.endpoint != nil {
-            page.addPrimaryAction("Load shared") { [weak self] in self?.askForToken() }
-            page.addSecondaryAction("This Mac") { [weak self] in
+            page.addPrimaryAction(L10n.text("Load shared")) { [weak self] in self?.askForToken() }
+            page.addSecondaryAction(L10n.text("This Mac")) { [weak self] in
                 guard let self else { return }
                 self.summary = self.telemetry.localSummary()
                 self.shared = false
-                self.notice = "This Mac only. Shared counts need the owner access token."
+                self.notice = L10n.text("This Mac only. Shared counts need the owner access token.")
                 self.daysButton?.isEnabled = false
                 self.refresh()
             }
-            daysButton = page.addSecondaryAction("Last 30 days", at: 1) { [weak self] in
+            daysButton = page.addSecondaryAction(L10n.text("Last 30 days"), at: 1) { [weak self] in
                 guard let self else { return }
                 self.days = self.days == 30 ? 7 : 30
-                self.daysButton?.title = self.days == 30 ? "Last 30 days" : "Last 7 days"
+                self.daysButton?.title = self.days == 30 ? L10n.text("Last 30 days") : L10n.text("Last 7 days")
                 self.daysButton?.needsDisplay = true
                 if self.shared { self.askForToken() }
             }
@@ -111,15 +111,15 @@ import NxlvKit
     private func askForToken() {
         guard let owner = page?.window, telemetry.endpoint != nil else { return }
         let alert = NSAlert()
-        alert.messageText = "Load shared play counts"
-        alert.informativeText = "Enter the dashboard access token. The app does not save it."
+        alert.messageText = L10n.text("Load shared play counts")
+        alert.informativeText = L10n.text("Enter the dashboard access token. The app does not save it.")
         let field = NSSecureTextField(frame: CGRect(x: 0, y: 0, width: 340, height: 26))
-        field.placeholderString = "Access token"
-        field.setAccessibilityLabel("Dashboard access token")
+        field.placeholderString = L10n.text("Access token")
+        field.setAccessibilityLabel(L10n.text("Dashboard access token"))
         alert.accessoryView = field
         alert.window.initialFirstResponder = field
-        alert.addButton(withTitle: "Load")
-        alert.addButton(withTitle: "Cancel")
+        alert.addButton(withTitle: L10n.text("Load"))
+        alert.addButton(withTitle: L10n.text("Cancel"))
         alert.beginSheetModal(for: owner) { [weak self] choice in
             let token = field.stringValue
             field.stringValue = ""
@@ -129,7 +129,7 @@ import NxlvKit
     }
 
     func loadShared(token: String) {
-        notice = "Loading shared counts…"
+        notice = L10n.text("Loading shared counts…")
         summary = .init(days: days, counts: [])
         shared = false
         daysButton?.isEnabled = false
@@ -142,9 +142,9 @@ import NxlvKit
                 summary = loaded
                 shared = true
                 daysButton?.isEnabled = true
-                notice = "Installs: all-time. Activity: last \(days) days. Opted-in devices only."
+                notice = L10n.text("Installs: all-time. Activity: last \(days) days. Opted-in devices only.")
             } catch {
-                notice = "Could not load shared counts. Check the token and service."
+                notice = L10n.text("Could not load shared counts. Check the token and service.")
             }
             refresh()
         }
@@ -162,14 +162,14 @@ import NxlvKit
         let today = Self.utcDay()
         let activeToday = counts.filter { $0.event == AnonymousTelemetryEvent.Kind.activeDay.rawValue && $0.day == today }
             .reduce(0) { $0 + $1.count }
-        card("OPTED-IN INSTALLS", shared ? summary.optedInInstalls.map(String.init) ?? "N/A" : "N/A",
+        card(L10n.text("OPTED-IN INSTALLS"), shared ? summary.optedInInstalls.map(String.init) ?? "N/A" : "N/A",
              x: 0, y: 338, in: page.body)
-        card("LEVEL STARTS", String(starts), x: 252, y: 338, in: page.body)
-        card("WINS / FAILS", "\(wins) / \(fails)", x: 504, y: 338, in: page.body)
-        card("ALL MUSIC CHOSEN", String(summary.total(.allSoundtracksSelected)), x: 756, y: 338, in: page.body)
-        label("ACTIVE TODAY  \(shared ? String(activeToday) : "N/A")    SOLO  \(solo)    HOT SEAT  \(hotSeat)    MUSIC FINISHED  \(summary.total(.allSoundtracksDownloaded))",
+        card(L10n.text(L10n.text("LEVEL STARTS")), String(starts), x: 252, y: 338, in: page.body)
+        card(L10n.text("WINS / FAILS"), "\(wins) / \(fails)", x: 504, y: 338, in: page.body)
+        card(L10n.text(L10n.text("ALL MUSIC CHOSEN")), String(summary.total(.allSoundtracksSelected)), x: 756, y: 338, in: page.body)
+        label(L10n.text("ACTIVE TODAY  \(shared ? String(activeToday) : "N/A")    SOLO  \(solo)    HOT SEAT  \(hotSeat)    MUSIC FINISHED  \(summary.total(.allSoundtracksDownloaded))"),
               x: 0, y: 287, width: 992, role: .heading, in: page.body)
-        label("LEVELS WITH THE MOST FAILED OR UNFINISHED STARTS", x: 0, y: 240,
+        label(L10n.text("LEVELS WITH THE MOST FAILED OR UNFINISHED STARTS"), x: 0, y: 240,
               width: 992, role: .heading, in: page.body)
         let grouped = Dictionary(grouping: counts.filter { $0.game != nil && $0.level != nil },
                                  by: { ($0.game ?? "") + "|" + ($0.level ?? "") })
@@ -184,12 +184,12 @@ import NxlvKit
                 return a == b ? lhs.1 > rhs.1 : a > b
             }
         if levels.isEmpty {
-            label("No level starts yet", x: 0, y: 202, width: 992, in: page.body)
+            label(L10n.text("No level starts yet"), x: 0, y: 202, width: 992, in: page.body)
         }
         for (index, level) in levels.prefix(5).enumerated() {
             let y = CGFloat(202 - index * 39)
             label(Self.levelName(level.0), x: 0, y: y, width: 590, in: page.body)
-            label("\(level.1) starts   \(level.2) wins   \(level.3) fails", x: 594, y: y,
+            label(L10n.text("\(level.1) starts   \(level.2) wins   \(level.3) fails"), x: 594, y: y,
                   width: 398, in: page.body)
         }
         label(notice, x: 0, y: 0, width: 992, in: page.body)
@@ -216,12 +216,12 @@ import NxlvKit
 
     private static func levelName(_ key: String) -> String {
         let parts = key.split(separator: "|", maxSplits: 1).map(String.init)
-        guard parts.count == 2 else { return "Level" }
+        guard parts.count == 2 else { return L10n.text("Level") }
         let game = parts[0], level = parts[1]
-        if game == "fan" { return "Fan levels" }
-        if game == "lemmings2" { return "Lemmings 2 · \(level)" }
-        if game == "lemmings3" { return "Lemmings 3 · \(level)" }
-        return "\(ClassicTitle(rawValue: game)?.displayName ?? "Classic") · \(level)"
+        if game == "fan" { return L10n.text("Fan levels") }
+        if game == "lemmings2" { return L10n.text("Lemmings 2 · \(level)") }
+        if game == "lemmings3" { return L10n.text("Lemmings 3 · \(level)") }
+        return "\(ClassicTitle(rawValue: game)?.displayName ?? L10n.text("Classic")) · \(level)"
     }
 
     private static func utcDay() -> String {

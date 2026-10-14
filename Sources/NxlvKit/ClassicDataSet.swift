@@ -114,9 +114,9 @@ public struct ClassicDataSet: Sendable {
             levelFilePrefix: prefix)
         let titles = scanned.levels.map { $0.level.title }
         let title: ClassicTitle?
-        if titles == ["Merry Christmas Mr Lemming", "Christmas Bonus", "Time waits for no Lemming", "This Corrosion"] {
+        if titles == [L10n.text("Merry Christmas Mr Lemming"), "Christmas Bonus", L10n.text("Time waits for no Lemming"), "This Corrosion"] {
             title = .xmasLemmings1991
-        } else if titles == ["Jingle Lemming", "Happy Holidays Mr Lemming!", "A Lemming Holiday", "The North Poles"] {
+        } else if titles == ["Jingle Lemming", L10n.text("Happy Holidays Mr Lemming!"), "A Lemming Holiday", "The North Poles"] {
             title = .xmasLemmings1992
         } else {
             title = ClassicTitle.identify(levelPrefix: prefix, levelCount: scanned.levels.count,
@@ -130,7 +130,7 @@ public struct ClassicDataSet: Sendable {
             kind: definition == nil ? .scanned : .officialCampaign,
             title: title,
             name: title?.displayName
-                ?? (prefix == "DLVEL" ? "Oh No! More Lemmings" : directory.lastPathComponent),
+                ?? (prefix == "DLVEL" ? L10n.text("Oh No! More Lemmings") : directory.lastPathComponent),
             levelFilePrefix: prefix,
             campaign: campaign,
             groundStyles: groundStyles,

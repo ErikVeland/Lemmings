@@ -119,7 +119,7 @@ import LemmingsGameArt
         field.viewport = source.viewport
         field.viewport.levelSize = CGSize(width: width, height: height)
         marker.field = field
-        page.setAccessibilityLabel("Solution replay: " + solution.replay.title)
+        page.setAccessibilityLabel(L10n.text("Solution replay: ") + solution.replay.title)
         page.addSubview(field); page.addSubview(marker); page.addSubview(status); page.addSubview(skillPanel)
         selector.mode = .solution
         selector.onSelect = { [weak self] mode in if mode == .game { self?.close() } }
@@ -133,27 +133,27 @@ import LemmingsGameArt
             value.setAccessibilityLabel(help); value.toolTip = help
             page.addSubview(value); buttons.append(value); return value
         }
-        _ = button("Back to game", "Back to your paused game. Escape.") { [weak self] in self?.close() }
-        previousMoveButton = button("Previous move", "Previous successful skill use. Control-Left.") { [weak self] in self?.seekMove(-1) }
-        nextMoveButton = button("Next move", "Next successful skill use. Control-Right.") { [weak self] in self?.seekMove(1) }
-        _ = button("Back 1s", "Rewind one second.") { [weak self] in self?.seek(-ClassicDOSRules.ticksPerSecond) }
-        _ = button("Step +1", "Advance one tick.") { [weak self] in self?.seek(1) }
-        transport = button("Pause", "Play or pause. Space or P.", primary: true) { [weak self] in self?.togglePause() }
-        _ = button("Speed -", "Slower. Shift+[.") { [weak self] in self?.speedControl.step(-1, at: ProcessInfo.processInfo.systemUptime) }
-        speedButton = button("1×", "Toggle fast forward. Hold F to ramp speed. Hold Shift for a temporary boost.", speed: true) { [weak self] in self?.speedControl.tap() }
-        _ = button("Speed +", "Faster. Shift+].") { [weak self] in self?.speedControl.step(1, at: ProcessInfo.processInfo.systemUptime) }
-        _ = button("Home", "Centre entrance. H or Home.") { [weak self] in self?.centre(entrance: true) }
-        _ = button("Goal", "Centre exit. G or End.") { [weak self] in self?.centre(entrance: false) }
-        _ = button("Previous", "Track previous unassigned lemming. [.") { [weak self] in self?.focusUnassigned(-1) }
-        _ = button("Next", "Track next unassigned lemming. ].") { [weak self] in self?.focusUnassigned(1) }
-        _ = button("Last skill", "Track last assignment. Backslash.") { [weak self] in
+        _ = button(L10n.text("Back to game"), L10n.text("Back to your paused game. Escape.")) { [weak self] in self?.close() }
+        previousMoveButton = button(L10n.text("Previous move"), L10n.text("Previous successful skill use. Control-Left.")) { [weak self] in self?.seekMove(-1) }
+        nextMoveButton = button(L10n.text("Next move"), L10n.text("Next successful skill use. Control-Right.")) { [weak self] in self?.seekMove(1) }
+        _ = button(L10n.text("Back 1s"), L10n.text("Rewind one second.")) { [weak self] in self?.seek(-ClassicDOSRules.ticksPerSecond) }
+        _ = button(L10n.text("Step +1"), L10n.text("Advance one tick.")) { [weak self] in self?.seek(1) }
+        transport = button(L10n.text("Pause"), L10n.text("Play or pause. Space or P."), primary: true) { [weak self] in self?.togglePause() }
+        _ = button(L10n.text("Speed -"), L10n.text("Slower. Shift+[.")) { [weak self] in self?.speedControl.step(-1, at: ProcessInfo.processInfo.systemUptime) }
+        speedButton = button("1×", L10n.text("Toggle fast forward. Hold F to ramp speed. Hold Shift for a temporary boost."), speed: true) { [weak self] in self?.speedControl.tap() }
+        _ = button(L10n.text("Speed +"), L10n.text("Faster. Shift+].")) { [weak self] in self?.speedControl.step(1, at: ProcessInfo.processInfo.systemUptime) }
+        _ = button(L10n.text("Home"), L10n.text("Centre entrance. H or Home.")) { [weak self] in self?.centre(entrance: true) }
+        _ = button(L10n.text("Goal"), L10n.text("Centre exit. G or End.")) { [weak self] in self?.centre(entrance: false) }
+        _ = button(L10n.text("Previous"), L10n.text("Track previous unassigned lemming. [.")) { [weak self] in self?.focusUnassigned(-1) }
+        _ = button(L10n.text("Next"), L10n.text("Track next unassigned lemming. ].")) { [weak self] in self?.focusUnassigned(1) }
+        _ = button(L10n.text("Last skill"), L10n.text("Track last assignment. Backslash.")) { [weak self] in
             guard let self else { return }; self.follow(self.lastAssignedID)
         }
-        trackingButton = button("Follow: on", "Follow skill assignments automatically. Drag or scroll to use a free camera.") { [weak self] in
+        trackingButton = button(L10n.text("Follow: on"), L10n.text("Follow skill assignments automatically. Drag or scroll to use a free camera.")) { [weak self] in
             guard let self else { return }
             self.automaticTracking.toggle(); self.followedID = nil; self.refresh()
         }
-        zoomButton = button("Zoom 1×", "Zoom. Z: 2×. Shift+Z: 4×. Click to cycle.") { [weak self] in
+        zoomButton = button(L10n.text("Zoom 1×"), L10n.text("Zoom. Z: 2×. Shift+Z: 4×. Click to cycle.")) { [weak self] in
             guard let self else { return }; self.setZoom(self.zoomFactor == 1 ? 2 : self.zoomFactor == 2 ? 4 : 1)
         }
         speedControl.onChange = { [weak self] in self?.refresh() }
@@ -186,7 +186,7 @@ import LemmingsGameArt
         status.frame = CGRect(x: margin, y: 60 * scale, width: size.width - 2 * margin, height: 26 * scale)
         status.bounds.size = CGSize(width: status.frame.width / scale, height: 26)
         let width = (size.width - 2 * margin - Double(columns - 1) * gap) / Double(columns)
-        let actions = buttons.enumerated().map { GameFrontEnd.Action(String($0.offset), $0.offset == 0 ? "Back" : $0.element.title, primary: $0.element === transport) }
+        let actions = buttons.enumerated().map { GameFrontEnd.Action(String($0.offset), $0.offset == 0 ? L10n.text("Back") : $0.element.title, primary: $0.element === transport) }
         let grid = GameFooterGrid(actions: actions, columns: columns)
         for slot in grid.slots {
             let button = buttons[Int(slot.action.id)!]
@@ -379,17 +379,17 @@ import LemmingsGameArt
         effects?.setViewport(field.soundViewport)
         field.session = playback.session
         if playback.session.isComplete {
-            status.stringValue = "\(playback.session.simulation.savedCount) rescued"; marker.point = nil
+            status.stringValue = L10n.text("\(playback.session.simulation.savedCount) rescued"); marker.point = nil
         } else {
             status.stringValue = "\(playback.solution.replay.title)   \(playback.session.currentTick) / \(playback.solution.replay.expected?.ticks ?? 0)"
             if ProcessInfo.processInfo.systemUptime > assignmentUntil { marker.point = nil }
         }
-        transport?.title = playback.session.isComplete ? "Replay" : paused ? "Play" : "Pause"
+        transport?.title = playback.session.isComplete ? L10n.text("Replay") : paused ? L10n.text("Play") : L10n.text("Pause")
         previousMoveButton?.isEnabled = moveNavigation.target(from: playback.session.currentTick, direction: -1) != nil
         nextMoveButton?.isEnabled = moveNavigation.target(from: playback.session.currentTick, direction: 1) != nil
         speedButton?.title = speedControl.label
-        trackingButton?.title = automaticTracking ? "Follow: on" : followedID != nil ? "Tracking" : "Free view"
-        zoomButton?.title = "Zoom \(Int(zoomFactor))×"
+        trackingButton?.title = automaticTracking ? L10n.text("Follow: on") : followedID != nil ? L10n.text("Tracking") : L10n.text("Free view")
+        zoomButton?.title = L10n.text("Zoom \(Int(zoomFactor))×")
         buttons.forEach { $0.needsDisplay = true }
         field.needsDisplay = true; marker.needsDisplay = true
     }

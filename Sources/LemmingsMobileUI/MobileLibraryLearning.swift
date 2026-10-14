@@ -51,30 +51,30 @@ extension MobileLibraryViewController {
     }
 
     func learningPage(subtitle: String) -> GameFrontEnd.Page {
-        guard let journey = bundledJourney else { return .init(title: "Journey", details: ["Journey is unavailable"], footer: [.init("home", "Back")]) }
+        guard let journey = bundledJourney else { return .init(title: L10n.text("Journey"), details: [L10n.text("Journey is unavailable")], footer: [.init("home", L10n.text("Back"))]) }
         let saved = learning
-        var footer = [GameFrontEnd.Action("home", "Back")]
+        var footer = [GameFrontEnd.Action("home", L10n.text("Back"))]
         if let run = resumableLearningJourney?.state.run {
-            footer.append(.init("learningResume", "Resume  \(run.currentIndex + 1)/\(run.entries.count)", primary: true))
+            footer.append(.init("learningResume", L10n.text("Resume  \(run.currentIndex + 1)/\(run.entries.count)"), primary: true))
         }
         let unseen = saved.progress.unseen(in: journey), revisit = saved.progress.revisit(in: journey)
-        footer.append(.init("learningStart", "Continue journey  \(saved.progress.solvedCount(in: journey))/\(journey.lessons.count)",
+        footer.append(.init("learningStart", L10n.text("Continue journey  \(saved.progress.solvedCount(in: journey))/\(journey.lessons.count)"),
                             enabled: !unseen.isEmpty || MobileSettings.current(from: .standard).classic.unlockAllClassicLevels, primary: resumableLearningJourney == nil))
         let rows: [GameFrontEnd.Action] = [
-            .init("learningBrowse", "Choose level", enabled: resumableLearningJourney != nil),
-            .init("learningRevisit", "Revisit  \(revisit.count)", enabled: !revisit.isEmpty),
-            .init("progression", "Progression playlists")]
+            .init("learningBrowse", L10n.text("Choose level"), enabled: resumableLearningJourney != nil),
+            .init("learningRevisit", L10n.text("Revisit  \(revisit.count)"), enabled: !revisit.isEmpty),
+            .init("progression", L10n.text("Progression playlists"))]
         return .init(title: LearningJourney.title, subtitle: subtitle, rows: rows, footer: footer)
     }
     func progressionPage(subtitle: String) -> GameFrontEnd.Page {
-        .init(title: "Progression", subtitle: subtitle,
+        .init(title: L10n.text("Progression"), subtitle: subtitle,
               rows: ProgressionPolicy.allCases.map { .init("policy." + $0.rawValue, $0.name) },
-              footer: [.init("journey", "Back")])
+              footer: [.init("journey", L10n.text("Back"))])
     }
     func techniquePage(subtitle: String) -> GameFrontEnd.Page {
-        .init(title: "Techniques", subtitle: subtitle,
+        .init(title: L10n.text("Techniques"), subtitle: subtitle,
               rows: LevelHintDeck.jobs.keys.sorted().map { .init("technique." + $0, $0.capitalized) },
-              footer: [.init("progression", "Back")])
+              footer: [.init("progression", L10n.text("Back"))])
     }
     func handleLearning(_ id: String) -> Bool {
         switch id {
@@ -107,7 +107,7 @@ extension MobileLibraryViewController {
         guard let saved = journeyOnly ? resumableLearningJourney : resumableLearningRun, saved.owner == profiles.activeID else { return }
         if let seat = saved.seat {
             guard seat.players.allSatisfy({ id in profiles.players.contains { $0.id == id } }) else {
-                notice = "A saved player is unavailable"; rebuild(); return
+                notice = L10n.text("A saved player is unavailable"); rebuild(); return
             }
             guard resumeSharedSeat(seat.id) else { rebuild(); return }
         } else { hotSeats.endSession() }
@@ -165,7 +165,7 @@ extension MobileLibraryViewController {
     private func prepareProgression(policy: ProgressionPolicy, technique: String?) {
         guard bundledJourney != nil, !learningPreparing else { return }
         learningTask?.cancel()
-        learningPreparing = true; notice = "Loading..."; rebuild()
+        learningPreparing = true; notice = L10n.text("Loading..."); rebuild()
         guard let catalogue else { learningPreparing = false; return }
         let ports = catalogue.portsRoot, folders = catalogue.fanFolders
         learningTask = Task {

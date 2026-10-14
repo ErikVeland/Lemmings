@@ -247,31 +247,31 @@ public struct NeoLemmixFinalStateManifest: Codable, Equatable, Sendable {
             return ["unsupported manifest format"]
         }
         guard producer == "native" else {
-            return ["comparison input is not a native manifest"]
+            return [L10n.text("comparison input is not a native manifest")]
         }
         guard oracle.producer.hasPrefix("ce:") else {
-            return ["oracle manifest is not marked as CE-produced"]
+            return [L10n.text("oracle manifest is not marked as CE-produced")]
         }
         let nativeGroups = Dictionary(grouping: records, by: \.replaySHA256)
         let oracleGroups = Dictionary(grouping: oracle.records, by: \.replaySHA256)
         for hash in nativeGroups.keys.sorted() where nativeGroups[hash]?.count != 1 {
-            append("duplicate native replay \(hash)")
+            append(L10n.text("duplicate native replay \(hash)"))
         }
         for hash in oracleGroups.keys.sorted() where oracleGroups[hash]?.count != 1 {
-            append("duplicate oracle replay \(hash)")
+            append(L10n.text("duplicate oracle replay \(hash)"))
         }
         let nativeHashes = Set(nativeGroups.keys)
         let oracleHashes = Set(oracleGroups.keys)
         for hash in nativeHashes.subtracting(oracleHashes).sorted() {
-            append("oracle replay missing \(hash)")
+            append(L10n.text("oracle replay missing \(hash)"))
         }
         for hash in oracleHashes.subtracting(nativeHashes).sorted() {
-            append("unexpected oracle replay \(hash)")
+            append(L10n.text("unexpected oracle replay \(hash)"))
         }
         for hash in nativeHashes.intersection(oracleHashes).sorted() {
             guard nativeGroups[hash]?.count == 1, oracleGroups[hash]?.count == 1 else { continue }
             if nativeGroups[hash]![0] != oracleGroups[hash]![0] {
-                append("final state differs \(hash)")
+                append(L10n.text("final state differs \(hash)"))
             }
         }
         return issues

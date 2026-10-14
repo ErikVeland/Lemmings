@@ -1,4 +1,5 @@
 import Foundation
+import NxlvKit
 
 /// Platform adapters share commands while retaining their native event delivery.
 public enum GameplayCommand: Equatable, Sendable {
@@ -49,12 +50,12 @@ public enum GameplayCommands {
         return exact ?? bindings[KeyChord(key)]
     }
     public static let help = [
-        "Space / P: Pause", "1-8: Skill", "Tab: Next skill", "Shift+Tab: Previous skill",
-        "F: Fast speed", "R: Rewind", ", / .: Step back / forward", "Shift+R: Retry",
-        "Command+Z: Step back",
-        "J: DJ shuffle",
-        "H / Home: Entrance", "G / End: Goal", "Arrow keys: Pan", "Z / Shift+Z: Zoom",
-        "[ / ]: Unassigned lemming", "Return: Repeat assignment", "N: End run / undo",
-        "/ / I / F1: Hints", "?: Controls", "Escape / Q: Library",
+        L10n.text("Space / P: Pause"), "1-8: Skill", L10n.text("Tab: Next skill"), L10n.text("Shift+Tab: Previous skill"),
+        L10n.text("F: Fast speed"), L10n.text("R: Rewind"), L10n.text(", / .: Step back / forward"), L10n.text("Shift+R: Retry"),
+        L10n.text("Command+Z: Step back"),
+        L10n.text("J: DJ shuffle"),
+        L10n.text("H / Home: Entrance"), L10n.text("G / End: Goal"), L10n.text("Arrow keys: Pan"), L10n.text("Z / Shift+Z: Zoom"),
+        L10n.text("[ / ]: Unassigned lemming"), L10n.text("Return: Repeat assignment"), L10n.text("N: End run / undo"),
+        "/ / I / F1: Hints", L10n.text("?: Controls"), L10n.text("Escape / Q: Library"),
     ]
 }

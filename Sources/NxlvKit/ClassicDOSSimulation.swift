@@ -67,7 +67,7 @@ public enum ClassicDOSMechanics: String, Codable, Sendable {
              .holidayLemmings1993, .holidayLemmings1994:
             self = .ohNoMore
         case .ohYesMoreLemmings:
-            self = rank == "Oh No! More Lemmings Versus" ? .ohNoMore : .original
+            self = rank == L10n.text("Oh No! More Lemmings Versus") ? .ohNoMore : .original
         default:
             self = .original
         }
@@ -538,17 +538,17 @@ public enum ClassicDOSSimulationError: Error, Equatable, CustomStringConvertible
     public var description: String {
         switch self {
         case .noEntrances:
-            return "A DOS simulation requires at least one entrance."
+            return L10n.text("A DOS simulation requires at least one entrance.")
         case let .invalidTerrainSize(width, height):
-            return "The DOS terrain size \(width)x\(height) is invalid."
+            return L10n.text("The DOS terrain size \(width)x\(height) is invalid.")
         case let .invalidSolidMask(expected, actual):
-            return "The solid mask needs \(expected) bytes; found \(actual)."
+            return L10n.text("The solid mask needs \(expected) bytes; found \(actual).")
         case let .invalidSteelMask(expected, actual):
-            return "The steel mask needs \(expected) bytes; found \(actual)."
+            return L10n.text("The steel mask needs \(expected) bytes; found \(actual).")
         case let .invalidDestructionMask(width, height, bytes):
-            return "The \(width)x\(height) destruction mask has \(bytes) bytes."
+            return L10n.text("The \(width)x\(height) destruction mask has \(bytes) bytes.")
         case .invalidDestructionMaskSet:
-            return "The DOS destruction mask set has invalid frame counts or sizes."
+            return L10n.text("The DOS destruction mask set has invalid frame counts or sizes.")
         }
     }
 }

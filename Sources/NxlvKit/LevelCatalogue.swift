@@ -9,10 +9,10 @@ public enum LevelSourceEngine: String, Codable, CaseIterable, Sendable {
 
     public var displayName: String {
         switch self {
-        case .classic: "Classic"
-        case .neolemmix: "NeoLemmix"
-        case .lemmings2: "Lemmings 2"
-        case .lemmings3: "Lemmings 3"
+        case .classic: L10n.text(L10n.text("Classic"))
+        case .neolemmix: L10n.text(L10n.text("NeoLemmix"))
+        case .lemmings2: L10n.text(L10n.text("Lemmings 2"))
+        case .lemmings3: L10n.text(L10n.text("Lemmings 3"))
         }
     }
 }
@@ -38,9 +38,9 @@ public enum LevelAvailability: String, Codable, CaseIterable, Sendable {
 
     public var displayName: String {
         switch self {
-        case .available: "Available"
-        case .locked: "Locked"
-        case .unavailable: "Unavailable"
+        case .available: L10n.text(L10n.text("Available"))
+        case .locked: L10n.text(L10n.text("Locked"))
+        case .unavailable: L10n.text(L10n.text("Unavailable"))
         }
     }
 }

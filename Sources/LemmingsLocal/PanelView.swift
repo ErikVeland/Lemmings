@@ -88,14 +88,14 @@ enum PanelButton: Equatable {
     for (index, item) in buttonFrames.enumerated() {
       let label: String
       switch item.0 {
-      case .rateDown: label = session is NeoLemmixSession ? "Decrease spawn interval" : "Decrease release rate"
-      case .rateUp: label = session is NeoLemmixSession ? "Increase spawn interval" : "Increase release rate"
+      case .rateDown: label = session is NeoLemmixSession ? L10n.text("Decrease spawn interval") : L10n.text("Decrease release rate")
+      case .rateUp: label = session is NeoLemmixSession ? L10n.text("Increase spawn interval") : L10n.text("Increase release rate")
       case .skill(let skill):
         guard let value = session?.skills[safe: skill] else { continue }
-        label = "\(value.name), \(value.isInfinite ? "unlimited" : String(value.count)) remaining" + (selectedSkillIndex == skill ? ", selected" : "")
-      case .pause: label = isPaused ? "Resume" : "Pause"
-      case .nuke: label = session?.canUndoNuke == true ? "Undo end run" : "End run"
-      case .fastForward: label = isFastForward ? "Return to normal speed" : "Start fast-forward at " + speedChoiceLabel
+        label = L10n.text("\(value.name), \(value.isInfinite ? "unlimited" : String(value.count)) remaining") + (selectedSkillIndex == skill ? L10n.text(", selected") : "")
+      case .pause: label = isPaused ? L10n.text("Resume") : L10n.text("Pause")
+      case .nuke: label = session?.canUndoNuke == true ? L10n.text("Undo end run") : L10n.text("End run")
+      case .fastForward: label = isFastForward ? L10n.text("Return to normal speed") : L10n.text("Start fast-forward at ") + speedChoiceLabel
       }
       let action = item.0
       let element = accessibleElements.element(id: "button-\(index)", owner: owner, label: label, frame: transform(item.1)) { [weak self] in
@@ -110,7 +110,7 @@ enum PanelButton: Equatable {
           let rect = CGRect(x: direction < 0 ? item.1.minX : item.1.maxX - item.1.width * 0.22,
             y: item.1.minY, width: item.1.width * 0.22, height: item.1.height)
           result.append(accessibleElements.element(id: "speed-\(direction)", owner: owner,
-            label: direction < 0 ? "Decrease fast speed" : "Increase fast speed", frame: transform(rect)) { [weak self] in
+            label: direction < 0 ? L10n.text("Decrease fast speed") : L10n.text("Increase fast speed"), frame: transform(rect)) { [weak self] in
               self?.onSpeedStep?(direction, ProcessInfo.processInfo.systemUptime)
             })
         }
@@ -500,11 +500,11 @@ enum PanelButton: Equatable {
 
   private func drawSkillLabels() {
     guard panelScale >= 2 else { return }
-    let shortNames = ["walker": "WALK", "jumper": "JUMP", "shimmier": "SHIM", "slider": "SLIDE",
-      "climber": "CLIMB", "swimmer": "SWIM", "floater": "FLOAT", "glider": "GLIDE",
-      "disarmer": "DISARM", "bomber": "BOMB", "stoner": "STONE", "blocker": "BLOCK",
-      "platformer": "PLAT", "builder": "BUILD", "stacker": "STACK", "laserer": "LASER",
-      "basher": "BASH", "fencer": "FENCE", "miner": "MINE", "digger": "DIG", "cloner": "CLONE"]
+    let shortNames = ["walker": L10n.text("WALK"), "jumper": L10n.text("JUMP"), "shimmier": L10n.text("SHIM"), "slider": L10n.text("SLIDE"),
+      "climber": L10n.text("CLIMB"), "swimmer": L10n.text("SWIM"), "floater": L10n.text("FLOAT"), "glider": L10n.text("GLIDE"),
+      "disarmer": L10n.text("DISARM"), "bomber": L10n.text("BOMB"), "stoner": L10n.text("STONE"), "blocker": L10n.text("BLOCK"),
+      "platformer": L10n.text("PLAT"), "builder": L10n.text("BUILD"), "stacker": L10n.text("STACK"), "laserer": L10n.text("LASER"),
+      "basher": L10n.text("BASH"), "fencer": L10n.text("FENCE"), "miner": L10n.text("MINE"), "digger": L10n.text("DIG"), "cloner": L10n.text("CLONE")]
     let names = session?.skills.map { shortNames[$0.name.lowercased()] ?? $0.name.uppercased() } ?? []
     let labelWidth = buttonFrames.compactMap { button, frame -> CGFloat? in
       if case .skill = button { return max(0, frame.width - 2 * panelScale) }

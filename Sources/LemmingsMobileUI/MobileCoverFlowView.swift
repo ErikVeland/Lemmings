@@ -1,5 +1,6 @@
 #if os(iOS) || os(tvOS)
 import LemmingsGameArt
+import NxlvKit
 import UIKit
 
 /// A CoverFlow-style level selector, laid out and drawn like the Mac carousel.
@@ -50,7 +51,7 @@ import UIKit
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapped(_:))))
         #endif
         isAccessibilityElement = true
-        accessibilityLabel = "Level selector"
+        accessibilityLabel = L10n.text("Level selector")
         accessibilityTraits = .adjustable
         if #available(iOS 17.0, tvOS 17.0, *) {
             registerForTraitChanges([UITraitDisplayScale.self]) { (view: MobileCoverFlowView, _) in

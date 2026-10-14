@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import NxlvKit
 
 /// The real paused level remains visible beneath these annotations.
 @MainActor final class KeyboardOverlayView: NSView {
@@ -15,7 +16,7 @@ import AppKit
         super.init(frame: .zero)
         setAccessibilityElement(true)
         setAccessibilityRole(.group)
-        setAccessibilityLabel("Keyboard overlay. The level is paused. Escape closes the overlay.")
+        setAccessibilityLabel(L10n.text("Keyboard overlay. The level is paused. Escape closes the overlay."))
         func card(_ title: String, _ text: String, _ position: String) {
             let box = NSView()
             box.wantsLayer = true
@@ -33,19 +34,19 @@ import AppKit
             ])
             addSubview(box); cards.append((box, position))
         }
-        card("KEYBOARD", "ESC / ?  CLOSE", "title")
-        let camera = commands.filter { $0.group == "Camera" }.map { "\($0.keys)  \($0.action)" }.joined(separator: "\n")
-        card("LOOK AROUND", camera, "camera")
-        let variable = commands.contains { $0.keys.contains("Shift +") }
-        card("TIME & SPEED", "Space  Pause / resume\nF      Fast-forward / normal speed" + (variable ? "\nHold F  Ramp to 10×; release to keep\nHold Shift  Temporary boost\nShift+[ / ]  Decrease / increase speed\nShift+\\     Immediately return to 1×" : ""), "speed")
-        let skillRows = commands.filter { $0.group == "Skills" && $0.action.hasPrefix("Select ") }
-        let skills = skillRows.map { "\($0.keys)  \($0.action.replacingOccurrences(of: "Select ", with: "").components(separatedBy: " (")[0])" }.joined(separator: "   •   ")
-        card("SELECT A SKILL → CLICK A LEMMING", skills.isEmpty ? "Skill bindings appear when a level is loaded." : skills, "skills")
-        let focus = modern ? "[ / ]  Focus unassigned lemmings\n\\      Focus last assignment\nReturn Repeat last skill" : "Number keys select skills.\nModern letter and focus shortcuts are off."
-        card("ASSIGN & FOCUS", focus, "focus")
-        let actions = commands.filter { $0.group != "Controller" && ["R", "Z", ", / .", "X", "− / +"].contains($0.keys) }.map { "\($0.keys)  \($0.action)" }.joined(separator: "\n")
-        card("LEVEL CONTROLS", actions + "\nEsc  Save run and return to main menu\n     (after closing this overlay)", "actions")
-        for (title, action) in [("Close (Esc)", #selector(closeOverlay)), ("All commands", #selector(allCommands))] + (hints ? [("Level hints", #selector(levelHints))] : []) {
+        card(L10n.text("KEYBOARD"), L10n.text("ESC / ?  CLOSE"), "title")
+        let camera = commands.filter { $0.group == L10n.text("Camera") }.map { "\($0.keys)  \($0.action)" }.joined(separator: "\n")
+        card(L10n.text(L10n.text("LOOK AROUND")), camera, "camera")
+        let variable = commands.contains { $0.keys.contains(L10n.text("Shift +")) }
+        card(L10n.text("TIME & SPEED"), L10n.text("Space  Pause / resume\nF      Fast-forward / normal speed") + (variable ? L10n.text("\nHold F  Ramp to 10×; release to keep\nHold Shift  Temporary boost\nShift+[ / ]  Decrease / increase speed\nShift+\\     Immediately return to 1×") : ""), "speed")
+        let skillRows = commands.filter { $0.group == L10n.text("Skills") && $0.action.hasPrefix(L10n.text("Select ")) }
+        let skills = skillRows.map { "\($0.keys)  \($0.action.replacingOccurrences(of: L10n.text("Select "), with: "").components(separatedBy: " (")[0])" }.joined(separator: "   •   ")
+        card(L10n.text("SELECT A SKILL → CLICK A LEMMING"), skills.isEmpty ? L10n.text("Skill bindings appear when a level is loaded.") : skills, "skills")
+        let focus = modern ? L10n.text("[ / ]  Focus unassigned lemmings\n\\      Focus last assignment\nReturn Repeat last skill") : L10n.text("Number keys select skills.\nModern letter and focus shortcuts are off.")
+        card(L10n.text("ASSIGN & FOCUS"), focus, "focus")
+        let actions = commands.filter { $0.group != L10n.text("Controller") && ["R", "Z", ", / .", "X", "− / +"].contains($0.keys) }.map { "\($0.keys)  \($0.action)" }.joined(separator: "\n")
+        card(L10n.text(L10n.text("LEVEL CONTROLS")), actions + L10n.text("\nEsc  Save run and return to main menu\n     (after closing this overlay)"), "actions")
+        for (title, action) in [(L10n.text("Close (Esc)"), #selector(closeOverlay)), (L10n.text("All commands"), #selector(allCommands))] + (hints ? [(L10n.text("Level hints"), #selector(levelHints))] : []) {
             let button = GameButton(title: title, target: self, action: action)
             button.bezelStyle = .rounded
             if action == #selector(closeOverlay) { button.keyEquivalent = "\u{1b}" }

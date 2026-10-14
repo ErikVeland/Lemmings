@@ -13,7 +13,7 @@ public struct Lemmings3Scene: Sendable {
     public init(level: Lemmings3Level, style: Lemmings3Style,
                 permanent: Lemmings3Objects, temporary: Lemmings3Objects) throws {
         guard level.width * level.height <= 4 * 1024 * 1024 else {
-            throw SequelDataError.invalid("Chronicles scene exceeds the pixel limit.")
+            throw SequelDataError.invalid(L10n.text("Chronicles scene exceeds the pixel limit."))
         }
         // Egyptian scenery includes opaque blue sky around its artwork. Use
         // the same native palette colour in gaps and behind removed terrain.

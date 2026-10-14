@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import NxlvKit
 
 /// Game artwork supplies the visible controls; AppKit retains input and accessibility.
 @MainActor enum GameControlText {
@@ -105,9 +106,9 @@ import AppKit
     init(onPress: (() -> Void)? = nil) {
         self.onPress = onPress
         super.init(frame: .zero)
-        title = "Favourite"; target = self; action = #selector(invoke)
+        title = L10n.text("Favourite"); target = self; action = #selector(invoke)
         setButtonType(.momentaryPushIn)
-        setAccessibilityLabel("Favourite")
+        setAccessibilityLabel(L10n.text("Favourite"))
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     @objc private func invoke() { onPress?() }
@@ -120,7 +121,7 @@ import AppKit
     }
     func showSaved(_ saved: Bool) {
         state = saved ? .on : .off
-        setAccessibilityLabel(saved ? "Remove favourite" : "Add favourite")
+        setAccessibilityLabel(saved ? L10n.text("Remove favourite") : L10n.text("Add favourite"))
         setAccessibilityValue(saved ? 1 : 0)
         needsDisplay = true
     }
@@ -197,7 +198,7 @@ import AppKit
     }
     private func showChoices() {
         guard isEnabled, numberOfItems > 0, let window else { return }
-        let page = GameMenuPage(title: accessibilityLabel() ?? "Choose")
+        let page = GameMenuPage(title: accessibilityLabel() ?? L10n.text("Choose"))
         page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
         let scroll = NSScrollView(frame: page.body.bounds)
         scroll.autoresizingMask = [.width, .height]
@@ -233,7 +234,7 @@ import AppKit
         super.init(frame: frame)
         setAccessibilityElement(true)
         setAccessibilityRole(.group)
-        setAccessibilityLabel("Settings sections")
+        setAccessibilityLabel(L10n.text("Settings sections"))
         tabs.tabViewType = .noTabsNoBorder
         tabs.delegate = self
         addSubview(tabs)
@@ -341,7 +342,7 @@ import AppKit
     override var isFlipped: Bool { true }
     override func draw(_ dirtyRect: NSRect) {
         GameStoneButton.draw(bounds, selected: window?.firstResponder === currentEditor(), pixel: 1)
-        GameControlText.draw(stringValue.isEmpty ? (placeholderString ?? "Search") : stringValue,
+        GameControlText.draw(stringValue.isEmpty ? (placeholderString ?? L10n.text("Search")) : stringValue,
             in: bounds.insetBy(dx: 10, dy: 2))
     }
 }

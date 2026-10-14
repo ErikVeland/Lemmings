@@ -147,7 +147,7 @@ public struct NxlvDependencyScan: Sendable {
             NxlvDiagnostic(
                 severity: .warning,
                 code: .missingDependency,
-                message: "Missing \(dependency.kind.rawValue) dependency '\(dependency.identifier)'.",
+                message: L10n.text("Missing \(dependency.kind.rawValue) dependency '\(dependency.identifier)'."),
                 line: dependency.sourceLine
             )
         }

@@ -10,7 +10,7 @@ public struct Lemmings2Campaign: Sendable {
     public enum Medal: Int, Codable, Comparable, Sendable {
         case none, bronze, silver, gold
         public static func < (lhs: Self, rhs: Self) -> Bool { lhs.rawValue < rhs.rawValue }
-        public var name: String { ["None", "Bronze", "Silver", "Gold"][rawValue] }
+        public var name: String { [L10n.text("None"), L10n.text("Bronze"), L10n.text("Silver"), L10n.text("Gold")][rawValue] }
     }
     public struct Result: Codable, Equatable, Sendable {
         public let startingPopulation: Int
@@ -77,7 +77,7 @@ public struct Lemmings2Campaign: Sendable {
         levels = try (0..<120).map { number in
             let data = try Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/LEVEL%03d.DAT", number)))
             let level = try Lemmings2Level(data: data)
-            guard level.style == number / 10 else { throw SequelDataError.invalid("Unexpected L2 tribe ordering.") }
+            guard level.style == number / 10 else { throw SequelDataError.invalid(L10n.text("Unexpected L2 tribe ordering.")) }
             return level
         }
     }
@@ -93,7 +93,7 @@ public struct Lemmings2Campaign: Sendable {
         guard (0..<12).contains(tribe) else { throw SequelDataError.invalid("Unknown L2 tribe.") }
         let selected = level ?? unlockedLevel(in: tribe)
         guard (0...unlockedLevel(in: tribe)).contains(selected) else {
-            throw SequelDataError.invalid("Rescue lemmings from the preceding level first.")
+            throw SequelDataError.invalid(L10n.text("Rescue lemmings from the preceding level first."))
         }
         self.tribe = tribe; self.level = selected
     }
@@ -123,7 +123,7 @@ public struct Lemmings2Campaign: Sendable {
     }
     public mutating func restore(_ progress: Progress) throws {
         guard progress.version == 1, (0..<12).contains(progress.tribe), (0..<10).contains(progress.level) else {
-            throw SequelDataError.invalid("Invalid L2 campaign save version or selection.")
+            throw SequelDataError.invalid(L10n.text("Invalid L2 campaign save version or selection."))
         }
         let skipped = progress.skipped ?? [:]
         for (key, result) in progress.results {
@@ -132,13 +132,13 @@ public struct Lemmings2Campaign: Sendable {
                   result.medal == Self.medal(saved: result.saved, total: result.startingPopulation,
                                              allowedLosses: levels[key].allowedLossesForGold),
                   result.startingPopulation <= Self.population(entering: key, results: progress.results, skipped: skipped) else {
-                throw SequelDataError.invalid("Invalid or mismatched L2 campaign result.")
+                throw SequelDataError.invalid(L10n.text("Invalid or mismatched L2 campaign result."))
             }
         }
         for (key, carried) in skipped {
             guard levels.indices.contains(key), key % 10 != 9, (1...60).contains(carried),
                   carried <= Self.population(entering: key, results: progress.results, skipped: skipped) else {
-                throw SequelDataError.invalid("Invalid L2 skipped level.")
+                throw SequelDataError.invalid(L10n.text("Invalid L2 skipped level."))
             }
         }
         var proposed = self

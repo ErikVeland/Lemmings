@@ -1,5 +1,6 @@
 #if canImport(CoreGraphics)
 import CoreGraphics
+import NxlvKit
 import LemmingsMobileCore
 
 /// Remaining stock stays in the mobile HUD. The replay panel shows successful uses.
@@ -13,7 +14,7 @@ public enum MobileReplaySkillArt {
         context.translateBy(x: rect.minX, y: rect.minY)
         context.scaleBy(x: rect.width / size.width, y: rect.height / size.height)
         GameStoneArt.draw(in: context, frame: CGRect(origin: .zero, size: size), selected: false, pixel: 1)
-        GamePixelTypography.draw("USED @ TICK", in: CGRect(x: 8, y: 6, width: 224, height: 18),
+        GamePixelTypography.draw(L10n.text("USED @ TICK"), in: CGRect(x: 8, y: 6, width: 224, height: 18),
             context: context, typography: typography, palette: .green)
         for (index, use) in uses.suffix(3).enumerated() {
             let palette: GamePixelTypography.Palette = use.tick == tick ? .green : .blue

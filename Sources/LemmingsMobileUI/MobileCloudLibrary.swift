@@ -68,7 +68,7 @@ extension MobileLibraryViewController {
         case "syncCodeField": searchField.becomeFirstResponder()
         case "syncCopy":
             #if os(iOS)
-            UIPasteboard.general.string = syncCode; syncMessage = "Copied"
+            UIPasteboard.general.string = syncCode; syncMessage = L10n.text("Copied")
             #else
             syncMessage = syncCode ?? ""
             #endif
@@ -88,7 +88,7 @@ extension MobileLibraryViewController {
                 #else
                 let picker = UIDocumentPickerViewController(forExporting: [url], asCopy: true)
                 picker.delegate = self
-                syncMessage = "Keep the recovery key private."
+                syncMessage = L10n.text("Keep the recovery key private.")
                 present(picker, animated: true)
                 #endif
             } catch { syncMessage = error.localizedDescription }

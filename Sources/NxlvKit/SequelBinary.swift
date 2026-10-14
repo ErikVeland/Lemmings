@@ -16,7 +16,7 @@ struct SequelBinary {
     func slice(_ offset: Int, _ count: Int) throws -> [UInt8] {
         guard offset >= 0, count >= 0, offset <= bytes.count,
             count <= bytes.count - offset else {
-            throw SequelDataError.invalid("Truncated sequel data at byte \(offset).")
+            throw SequelDataError.invalid(L10n.text("Truncated sequel data at byte \(offset)."))
         }
         return Array(bytes[offset..<(offset + count)])
     }
@@ -41,18 +41,18 @@ struct SequelBinary {
 public enum Lemmings2Compression {
     public static func decode(_ data: Data, maximumOutputSize: Int = 64 * 1024 * 1024) throws -> Data {
         guard maximumOutputSize >= 0 else {
-            throw SequelDataError.invalid("The decompression limit must not be negative.")
+            throw SequelDataError.invalid(L10n.text("The decompression limit must not be negative."))
         }
         let reader = SequelBinary(data)
         guard data.starts(with: Array("GSCM".utf8)) else {
             guard data.count <= maximumOutputSize else {
-                throw SequelDataError.invalid("Uncompressed data exceeds the size limit.")
+                throw SequelDataError.invalid(L10n.text("Uncompressed data exceeds the size limit."))
             }
             return data
         }
         let size = try reader.u32(4)
         guard size <= maximumOutputSize else {
-            throw SequelDataError.invalid("GSCM output exceeds the size limit.")
+            throw SequelDataError.invalid(L10n.text("GSCM output exceeds the size limit."))
         }
         var output: [UInt8] = []
         var cursor = 8
@@ -75,7 +75,7 @@ public enum Lemmings2Compression {
                 let a = dictionary[Int(first[index])]
                 let b = dictionary[Int(second[index])]
                 guard lengths[a] <= maximumOutputSize - lengths[b] else {
-                    throw SequelDataError.invalid("GSCM symbol exceeds the size limit.")
+                    throw SequelDataError.invalid(L10n.text("GSCM symbol exceeds the size limit."))
                 }
                 dictionary[Int(symbols[index])] = lengths.count
                 pairs.append((a, b))
@@ -88,7 +88,7 @@ public enum Lemmings2Compression {
             for byte in encoded {
                 let node = dictionary[Int(byte)]
                 guard lengths[node] <= size - output.count else {
-                    throw SequelDataError.invalid("GSCM output exceeds its declared size.")
+                    throw SequelDataError.invalid(L10n.text("GSCM output exceeds its declared size."))
                 }
                 var stack = [node]
                 while let next = stack.popLast() {
@@ -103,7 +103,7 @@ public enum Lemmings2Compression {
             finished = last != 0
         }
         guard output.count == size, cursor == reader.count else {
-            throw SequelDataError.invalid("GSCM size or end-of-file mismatch.")
+            throw SequelDataError.invalid(L10n.text("GSCM size or end-of-file mismatch."))
         }
         return Data(output)
     }
@@ -122,7 +122,7 @@ public struct Lemmings2Form: Sendable {
         let reader = SequelBinary(try Lemmings2Compression.decode(data))
         guard try reader.tag(0) == "FORM",
             try reader.u32(4, bigEndian: true) == reader.count - 8 else {
-            throw SequelDataError.invalid("Invalid Lemmings 2 FORM header or length.")
+            throw SequelDataError.invalid(L10n.text("Invalid Lemmings 2 FORM header or length."))
         }
         type = try reader.tag(8)
         var result: [Section] = []
@@ -139,7 +139,7 @@ public struct Lemmings2Form: Sendable {
     public func requiredSection(_ identifier: String) throws -> Data {
         let matches = sections.filter { $0.identifier == identifier }
         guard matches.count == 1 else {
-            throw SequelDataError.invalid("Expected one \(identifier) section, found \(matches.count).")
+            throw SequelDataError.invalid(L10n.text("Expected one \(identifier) section, found \(matches.count)."))
         }
         return matches[0].data
     }

@@ -305,7 +305,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         canvas.playerName = hotSeat.map { playerName($0.turn) }
         unfold.stop()
         let count = library?.levels.count ?? 0
-        let subtitle = loading ? "Loading..." : notice
+        let subtitle = loading ? L10n.text("Loading...") : notice
         switch route {
         case .home:
             var resume: [GameFrontEnd.Action] = []
@@ -314,27 +314,27 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 resume.append(.init("learningRunResume", saved.resumeTitle + session))
             }
             if catalogue != nil, let run = playlists.run {
-                resume.append(.init("runResume", "Resume \(run.name)  \(run.position + 1)/\(run.entries.count)"))
+                resume.append(.init("runResume", L10n.text("Resume \(run.name)  \(run.position + 1)/\(run.entries.count)")))
             }
             if let saved = pendingCheckpoint, !checkpointResumesLearningRun(saved) {
                 resume.append(checkpointMatchesSession(saved)
-                    ? .init("resume", "Resume level - " + playerName(saved.owner ?? profiles.activeID))
+                    ? .init("resume", L10n.text("Resume level - ") + playerName(saved.owner ?? profiles.activeID))
                     : .init("seatOther", otherSessionTitle(for: saved)))
             }
             let families: [GameFrontEnd.Action] = MobileFamily.allCases.map { family in
                 let packs = catalogue?.packs(in: family) ?? []
                 if catalogue == nil, family == .classic {
-                    return .init("classic", "Classic Lemmings  \(solved.count)/\(count)", enabled: count > 0)
+                    return .init("classic", L10n.text("Classic Lemmings  \(solved.count)/\(count)"), enabled: count > 0)
                 }
                 let total = packs.reduce(0) { $0 + ($1.levelCount ?? 0) }
                 let passed = packs.reduce(0) { $0 + solvedLevels(for: $1.id).count }
-                let title = family.title + (packs.isEmpty ? " - No data" : "  \(passed)/\(total)")
+                let title = family.title + (packs.isEmpty ? L10n.text(" - No data") : "  \(passed)/\(total)")
                 return .init("family." + family.rawValue, title, enabled: !packs.isEmpty)
-            } + [.init("neolemmix", hasNeoLemmixData ? "NeoLemmix Preview" : "Import NeoLemmix data"),
-                 .init("l2", hasLemmings2Data ? "Lemmings 2  120 levels" : "Import Lemmings 2 data"),
-                 .init("l3", hasLemmings3Data ? "Lemmings 3 Preview  90 levels" : "Import Lemmings 3 data", enabled: true)]
+            } + [.init("neolemmix", hasNeoLemmixData ? L10n.text("NeoLemmix Preview") : L10n.text("Import NeoLemmix data")),
+                 .init("l2", hasLemmings2Data ? L10n.text("Lemmings 2  120 levels") : L10n.text("Import Lemmings 2 data")),
+                 .init("l3", hasLemmings3Data ? L10n.text("Lemmings 3 Preview  90 levels") : L10n.text("Import Lemmings 3 data"), enabled: true)]
             let journey = bundledJourney
-            let journeyTitle = "Journey  \(journey.map { learning.progress.solvedCount(in: $0) } ?? 0)/\(journey?.lessons.count ?? 0) solved"
+            let journeyTitle = L10n.text("Journey  \(journey.map { learning.progress.solvedCount(in: $0) } ?? 0)/\(journey?.lessons.count ?? 0) solved")
             let initials = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") } ?? profiles.active.name
             canvas.page = MobileHomeArt.page(resume: resume,
                 journey: .init("journey", journeyTitle, enabled: catalogue != nil && journey != nil),
@@ -348,18 +348,18 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             if family == .fan {
                 rows.append(.init("search", "Search: " + searchQuery.uppercased() + (searchField.isFirstResponder ? "_" : ""),
                                   selected: !query.isEmpty))
-                rows.append(.init("shuffleAll", "Shuffle all"))
+                rows.append(.init("shuffleAll", L10n.text("Shuffle all")))
             }
             rows += packs.map { pack in
                 .init("pack." + pack.id, pack.title + (pack.levelCount.map { "  \($0)" } ?? "") + solvedMark(pack))
             }
             if family == .fan {
-                rows.append(.init("fanUpdate", fanUpdating ? "Checking for new packs..." : "Check for new packs", enabled: !fanUpdating))
+                rows.append(.init("fanUpdate", fanUpdating ? L10n.text("Checking for new packs...") : L10n.text("Check for new packs"), enabled: !fanUpdating))
             }
-            let count = query.isEmpty ? "\(all.count) packs" : "\(packs.count)/\(all.count) packs"
+            let count = query.isEmpty ? L10n.text("\(all.count) packs") : L10n.text("\(packs.count)/\(all.count) packs")
             canvas.page = .init(title: family.title,
                                 subtitle: !subtitle.isEmpty ? subtitle : (fanUpdateStatus.isEmpty ? count : fanUpdateStatus),
-                                rows: rows, footer: [.init("home", "Back")])
+                                rows: rows, footer: [.init("home", L10n.text("Back"))])
             canvas.preview = nil
         case .levels:
             guard let library, library.levels.indices.contains(selectedIndex) else { route = .home; rebuild(); return }
@@ -369,24 +369,24 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             let ranksCount = library is MobileJourneyLibrary ? 1 : Set(library.levels.map(\.rank)).count
             let stats: [String] = selectedPreview.map {
                 let s = $0.snapshot
-                return ["\(s.total) Lemmings   Save \(s.required)",
-                        s.remainingSeconds.map { "Time \($0 / 60):\(String(format: "%02d", $0 % 60))" } ?? "No time limit"]
+                return [L10n.text("\(s.total) Lemmings   Save \(s.required)"),
+                        s.remainingSeconds.map { L10n.text("Time \($0 / 60):\(String(format: "%02d", $0 % 60))") } ?? L10n.text("No time limit")]
             } ?? []
             let collectionActions: [GameFrontEnd.Action] = favouriteIdentity(selectedIndex) == nil ? [] : [
-                .init("favourite", "Favourite", selected: isFavourite(selectedIndex)),
-                .init("addPlaylist", "Playlist", enabled: catalogue != nil),
+                .init("favourite", L10n.text("Favourite"), selected: isFavourite(selectedIndex)),
+                .init("addPlaylist", L10n.text("Playlist"), enabled: catalogue != nil),
             ]
             canvas.page = .init(title: level.title,
-                                subtitle: loading ? "Loading..." : level.sourceLabel + "\n\(level.rank == level.packName ? "Level" : level.rank)  \(level.number)/\(rank.count)",
+                                subtitle: loading ? L10n.text("Loading...") : level.sourceLabel + L10n.text("\n\(level.rank == level.packName ? L10n.text("Level") : level.rank)  \(level.number)/\(rank.count)"),
                                 details: stats,
-                                footer: (ranksCount > 1 ? [.init("rankPrevious", "< Rank"), .init("rankNext", "Rank >")] : [])
-                                    + [.init("previous", "< Level", enabled: rankIndex > 0),
-                                         .init("next", "Level >", enabled: rankIndex + 1 < rank.count && canSelectJourneyLevel(selectedIndex + 1)),
-                                         .init("favourite", "Favourite", selected: isFavourite(selectedIndex)),
-                                         .init("addPlaylist", "Playlist", enabled: catalogue != nil && favouriteIdentity(selectedIndex) != nil)]
-                                    + (currentPack != nil && activeRun == nil && library.levels.count > 1 ? [.init("random", "Random 10")] : [])
-                                    + [.init("back", "Back"),
-                                         .init("play", solved.contains(selectedIndex) ? "Play again" : "Play", enabled: !loading, primary: true)],
+                                footer: (ranksCount > 1 ? [.init("rankPrevious", L10n.text("< Rank")), .init("rankNext", L10n.text("Rank >"))] : [])
+                                    + [.init("previous", L10n.text("< Level"), enabled: rankIndex > 0),
+                                         .init("next", L10n.text("Level >"), enabled: rankIndex + 1 < rank.count && canSelectJourneyLevel(selectedIndex + 1)),
+                                         .init("favourite", L10n.text("Favourite"), selected: isFavourite(selectedIndex)),
+                                         .init("addPlaylist", L10n.text("Playlist"), enabled: catalogue != nil && favouriteIdentity(selectedIndex) != nil)]
+                                    + (currentPack != nil && activeRun == nil && library.levels.count > 1 ? [.init("random", L10n.text("Random 10"))] : [])
+                                    + [.init("back", L10n.text("Back")),
+                                         .init("play", solved.contains(selectedIndex) ? L10n.text("Play again") : L10n.text("Play"), enabled: !loading, primary: true)],
                                 preview: true, footerColumns: 2)
             if let preview = selectedPreview {
                 canvas.preview = MobileBitmapRenderer.image(preview.frame)
@@ -452,27 +452,27 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         case .soundtrack:
             let libraries = MobileMusicLibraries.shared
             let packs = libraries.catalogue?.packs ?? []
-            let status = libraries.failure ?? (libraries.isDownloading ? "Downloading..." : "\(packs.filter { libraries.isBundled($0) || libraries.isInstalled($0) }.count)/\(packs.count)")
-            canvas.page = .init(title: "Soundtrack", subtitle: status,
+            let status = libraries.failure ?? (libraries.isDownloading ? L10n.text("Downloading...") : "\(packs.filter { libraries.isBundled($0) || libraries.isInstalled($0) }.count)/\(packs.count)")
+            canvas.page = .init(title: L10n.text("Soundtrack"), subtitle: status,
                                 rows: packs.map { pack in
                                     let included = libraries.isBundled(pack)
                                     let percent = libraries.progress[pack.id].map { "  \(Int($0 * 100))%" }
                                     return .init("lib." + pack.id,
-                                                 pack.title + "  " + (included ? "Included" : (percent ?? MobileMusicLibraries.size(pack.bytes))),
+                                                 pack.title + "  " + (included ? L10n.text("Included") : (percent ?? MobileMusicLibraries.size(pack.bytes))),
                                                  enabled: !included, selected: included || libraries.isInstalled(pack))
                                 },
-                                footer: [.init("settingsGroup.audio", "Back")])
+                                footer: [.init("settingsGroup.audio", L10n.text("Back"))])
             canvas.preview = nil
         case .data:
-            canvas.page = .init(title: "Game Data", subtitle: subtitle,
+            canvas.page = .init(title: L10n.text("Game Data"), subtitle: subtitle,
                                 rows: MobileGameDataKind.allCases.map { kind in
                                     let installed = store.map { FileManager.default.fileExists(atPath: $0.dataDirectory(for: kind).path) } ?? false
-                                    let action = installed ? "Replace" : "Import"
+                                    let action = installed ? L10n.text("Replace") : L10n.text("Import")
                                     return .init("import." + kind.rawValue,
                                                  "\(action) \(kind.displayTitle)", enabled: !loading)
                                 },
-                                details: library.map { ["\($0.displayName)", "\($0.levels.count) levels"] } ?? [],
-                                footer: [.init("home", "Back")])
+                                details: library.map { ["\($0.displayName)", L10n.text("\($0.levels.count) levels")] } ?? [],
+                                footer: [.init("home", L10n.text("Back"))])
             canvas.preview = nil
         }
         canvas.previewSource = route == .levels ? canvas.previewSource : nil
@@ -816,7 +816,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             }
             if checkpoint != nil, restoredIndex == nil {
                 navigate(.home)
-                notice = "The saved NeoLemmix level is no longer available."
+                notice = L10n.text("The saved NeoLemmix level is no longer available.")
                 rebuild()
                 return
             }
@@ -1015,12 +1015,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 guard arcadeStore.beginAttempt(id: attemptID, profileID: ownerID, level: recordLevel,
                                                previousID: game?.recordRunID) else {
                     throw NSError(domain: "MobileRecords", code: 1, userInfo: [NSLocalizedDescriptionKey:
-                        arcadeStore.storageError ?? "The attempt was not saved."])
+                        arcadeStore.storageError ?? L10n.text("The attempt was not saved.")])
                 }
             }
             AnonymousTelemetry.shared.start(recordLevel, hotSeat: hotSeat != nil, attemptID: attemptID)
             next.onRecordCompletion = { [weak self, weak session = content.session] snapshot in
-                guard let self, let session else { return ([], "Records are not available.") }
+                guard let self, let session else { return ([], L10n.text("Records are not available.")) }
                 if inLearning {
                     do { try self.recordLearningResult(snapshot) }
                     catch { return ([], error.localizedDescription) }

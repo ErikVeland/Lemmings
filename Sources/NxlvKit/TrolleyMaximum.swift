@@ -13,7 +13,7 @@ public struct TrolleyMaximum: Codable, Equatable, Sendable {
     }
     public var isRescueTarget: Bool { status == .verified || status == .record }
     public var label: String {
-        switch status { case .unknown: "Maximum unknown"; case .record: "Best-known rescue"; case .observed: "Local best"; case .verified: "Verified maximum" }
+        switch status { case .unknown: L10n.text(L10n.text("Maximum unknown")); case .record: L10n.text(L10n.text("Best-known rescue")); case .observed: L10n.text(L10n.text("Local best")); case .verified: L10n.text(L10n.text("Verified maximum")) }
     }
     public func isValid(population: Int) -> Bool {
         if status == .unknown { return value == nil }
@@ -67,7 +67,7 @@ public struct TrolleyMaximumRecord: Codable, Equatable, Sendable {
     public mutating func acceptVerified(_ evidence: TrolleyMaximum, population: Int) throws {
         guard evidence.isRescueTarget, evidence.isValid(population: population),
               evidence.value! >= (highestObserved ?? 0) else {
-            throw SequelDataError.invalid("Maximum evidence is missing, incompatible, or below an observed rescue.")
+            throw SequelDataError.invalid(L10n.text("Maximum evidence is missing, incompatible, or below an observed rescue."))
         }
         if let verified, verified != evidence { supersededEvidence.append(verified) }
         verified = evidence

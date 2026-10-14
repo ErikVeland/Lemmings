@@ -65,7 +65,7 @@ import NxlvKit
     private func keys(_ record: CKRecord?) throws -> [CloudLibraryIdentity] {
         guard let record else { return [] }
         guard let data = record["keys"] as? Data, data.count <= 16384 else {
-            throw SequelDataError.invalid("The iCloud library keys could not be read. Existing saves were kept.")
+            throw SequelDataError.invalid(L10n.text("The iCloud library keys could not be read. Existing saves were kept."))
         }
         let identities = try JSONDecoder().decode([CloudLibraryIdentity].self, from: data)
         return try Self.merge([], identities)
@@ -75,11 +75,11 @@ import NxlvKit
         for key in local + remote {
             try key.validate()
             if let previous = result[key.id], previous != key {
-                throw SequelDataError.invalid("The library keys conflict. Existing saves were kept.")
+                throw SequelDataError.invalid(L10n.text("The library keys conflict. Existing saves were kept."))
             }
             result[key.id] = key
         }
-        guard result.count <= 16 else { throw SequelDataError.invalid("Too many linked libraries.") }
+        guard result.count <= 16 else { throw SequelDataError.invalid(L10n.text("Too many linked libraries.")) }
         return result.values.sorted { $0.id < $1.id }
     }
     func discover(_ local: [CloudLibraryIdentity]) async throws -> [CloudLibraryIdentity] {
@@ -101,7 +101,7 @@ import NxlvKit
         guard let record else { return [] }
         guard let devices = record["devices"] as? [String], devices.count <= 32,
               Set(devices).count == devices.count, devices.allSatisfy({ UUID(uuidString: $0) != nil }) else {
-            throw SequelDataError.invalid("Invalid iCloud device list. Existing saves were kept.")
+            throw SequelDataError.invalid(L10n.text("Invalid iCloud device list. Existing saves were kept."))
         }
         return devices
     }
@@ -111,10 +111,10 @@ import NxlvKit
         for device in try devices(manifest) {
             guard let record = try await read("save-" + identity.id + "-" + device),
                   let asset = record["snapshot"] as? CKAsset, let file = asset.fileURL else {
-                throw SequelDataError.invalid("An iCloud save could not be read. Existing saves were kept.")
+                throw SequelDataError.invalid(L10n.text("An iCloud save could not be read. Existing saves were kept."))
             }
             let size = try file.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? Int.max
-            guard size <= CloudLibraryArchive.maximumBytes + 28 else { throw SequelDataError.invalid("The cloud save is too large.") }
+            guard size <= CloudLibraryArchive.maximumBytes + 28 else { throw SequelDataError.invalid(L10n.text("The cloud save is too large.")) }
             let opened = try identity.open(Data(contentsOf: file))
             _ = try CloudLibraryArchive.decode(opened)
             data.append(opened)
@@ -133,7 +133,7 @@ import NxlvKit
             // A missing manifest is new. An existing malformed manifest must never be replaced.
             let members = try devices(existing)
             let merged = Array(Set(members + [device])).sorted()
-            guard merged.count <= 32 else { throw SequelDataError.invalid("Too many iCloud devices.") }
+            guard merged.count <= 32 else { throw SequelDataError.invalid(L10n.text("Too many iCloud devices.")) }
             manifest["devices"] = merged as NSArray
             let snapshot = try await read("save-" + identity.id + "-" + device)
                 ?? CKRecord(recordType: "ULPrivateLibrary", recordID: id("save-" + identity.id + "-" + device))

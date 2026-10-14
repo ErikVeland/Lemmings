@@ -24,14 +24,14 @@ public struct Lemmings3StyleBank: Sendable {
     public init(objects: Data, frames: Data, blocks: Data) throws {
         let definitions = SequelBinary(objects)
         guard definitions.count.isMultiple(of: 15), blocks.count.isMultiple(of: 16) else {
-            throw SequelDataError.invalid("Partial Chronicles object or graphics block record.")
+            throw SequelDataError.invalid(L10n.text("Partial Chronicles object or graphics block record."))
         }
         var result: [Int: Object] = [:]
         for offset in stride(from: 0, to: definitions.count, by: 15) {
             let record = try definitions.slice(offset, 15)
             let identifier = try definitions.u16(offset)
             guard result[identifier] == nil else {
-                throw SequelDataError.invalid("Duplicate Chronicles object ID \(identifier).")
+                throw SequelDataError.invalid(L10n.text("Duplicate Chronicles object ID \(identifier)."))
             }
             result[identifier] = Object(identifier: identifier,
                 flags: try definitions.u16(offset + 2), frameOffset: try definitions.u16(offset + 4),
@@ -52,7 +52,7 @@ public struct Lemmings3StyleBank: Sendable {
     /// not graphics. A zero pointer uses the object's uniform flags.
     public func attributes(object identifier: Int) throws -> [UInt16] {
         guard let object = objects[identifier], object.columns > 0, object.rows > 0 else {
-            throw SequelDataError.invalid("Invalid Chronicles attribute object.")
+            throw SequelDataError.invalid(L10n.text("Invalid Chronicles attribute object."))
         }
         let size = object.columns * object.rows
         var result = [UInt16](repeating: UInt16(object.flags), count: size)
@@ -62,7 +62,7 @@ public struct Lemmings3StyleBank: Sendable {
         let kind = try reader.slice(offset, 1)[0]
         let count = try reader.u16(offset + 1)
         guard (kind == 0 || kind == 1), count <= size else {
-            throw SequelDataError.invalid("Invalid Chronicles attribute grid.")
+            throw SequelDataError.invalid(L10n.text("Invalid Chronicles attribute grid."))
         }
         var cursor = kind == 0 ? try reader.u16(offset + 3) : offset + 3
         for index in 0..<count {
@@ -71,7 +71,7 @@ public struct Lemmings3StyleBank: Sendable {
                 let x = Int(try reader.slice(cursor, 1)[0])
                 let y = Int(try reader.slice(cursor + 1, 1)[0])
                 guard x < object.columns, y < object.rows else {
-                    throw SequelDataError.invalid("Chronicles attribute cell is outside its object.")
+                    throw SequelDataError.invalid(L10n.text("Chronicles attribute cell is outside its object."))
                 }
                 position = y * object.columns + x; cursor += 2
             }
@@ -85,7 +85,7 @@ public struct Lemmings3StyleBank: Sendable {
     public func image(object identifier: Int, frame: Int = 0, palette: [UInt8]) throws -> SequelIndexedImage {
         guard let object = objects[identifier], frame >= 0, frame < object.frameCount,
             object.columns > 0, object.rows > 0, palette.count == 1024 else {
-            throw SequelDataError.invalid("Invalid Chronicles object, frame, dimensions, or palette.")
+            throw SequelDataError.invalid(L10n.text("Invalid Chronicles object, frame, dimensions, or palette."))
         }
         let reader = SequelBinary(frameData)
         let width = object.columns * 8
@@ -97,11 +97,11 @@ public struct Lemmings3StyleBank: Sendable {
             let kind = try reader.slice(offset, 1)[0]
             let count = try reader.u16(offset + 1)
             guard kind == 0 || kind == 1 else {
-                throw SequelDataError.invalid("Unknown Chronicles frame encoding \(kind).")
+                throw SequelDataError.invalid(L10n.text("Unknown Chronicles frame encoding \(kind)."))
             }
             var cursor = kind == 0 ? try reader.u16(offset + 3) : offset + 3
             guard count <= object.columns * object.rows else {
-                throw SequelDataError.invalid("Chronicles frame exceeds its dimensions.")
+                throw SequelDataError.invalid(L10n.text("Chronicles frame exceeds its dimensions."))
             }
             for index in 0..<count {
                 let x: Int
@@ -118,7 +118,7 @@ public struct Lemmings3StyleBank: Sendable {
                 let block = try reader.u16(cursor)
                 cursor += 2
                 guard x < object.columns, y < object.rows, blocks.indices.contains(block) else {
-                    throw SequelDataError.invalid("Invalid Chronicles frame block or position.")
+                    throw SequelDataError.invalid(L10n.text("Invalid Chronicles frame block or position."))
                 }
                 for py in 0..<2 {
                     for px in 0..<8 {
@@ -137,7 +137,7 @@ public struct Lemmings3Style: Sendable {
     public let palette: [UInt8]
     public func constructionTile() throws -> SequelIndexedImage {
         let candidates = temporary.objects.values.filter { $0.columns == 1 && $0.rows == 4 && $0.flags == 0x2020 }
-        guard candidates.count == 1, let tile = candidates.first else { throw SequelDataError.invalid("Missing or ambiguous Chronicles construction tile.") }
+        guard candidates.count == 1, let tile = candidates.first else { throw SequelDataError.invalid(L10n.text("Missing or ambiguous Chronicles construction tile.")) }
         return try temporary.image(object: tile.identifier, palette: palette)
     }
 
@@ -149,18 +149,18 @@ public struct Lemmings3Style: Sendable {
         temporary = try Lemmings3StyleBank(objects: read("TEMP", "OBJ"), frames: read("TEMP", "FRL"), blocks: read("TEMP", "BLK"))
         let bytes = Array(try read("DATA", "PAL"))
         guard bytes.count == 208 * 3 else {
-            throw SequelDataError.invalid("Invalid Chronicles style palette.")
+            throw SequelDataError.invalid(L10n.text("Invalid Chronicles style palette."))
         }
         var colours = Array(repeating: UInt8(0), count: 1024)
         let defaultTribes = [1: 4, 2: 10, 3: 5]
         guard let tribe = lemmingStyle ?? defaultTribes[number] else {
-            throw SequelDataError.invalid("Unknown Chronicles tribe palette.")
+            throw SequelDataError.invalid(L10n.text("Unknown Chronicles tribe palette."))
         }
         let tribeURL = directory.deletingLastPathComponent().appendingPathComponent(
             String(format: "GRAPHICS/TRIBE%03d.PAL", tribe))
         let tribeColours = Array(try Data(contentsOf: tribeURL))
         guard tribeColours.count >= 96 else {
-            throw SequelDataError.invalid("Truncated Chronicles tribe palette.")
+            throw SequelDataError.invalid(L10n.text("Truncated Chronicles tribe palette."))
         }
         // The VGA DAC consumes the low six bits. Local CD palettes include
         // values with the upper two bits set, so retain that hardware rule.

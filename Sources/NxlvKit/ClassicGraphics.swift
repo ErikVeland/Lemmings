@@ -90,19 +90,19 @@ public enum ClassicGraphicsError: Error, Equatable, CustomStringConvertible {
     public var description: String {
         switch self {
         case let .invalidGroundSize(actual):
-            return "GROUNDxO.DAT must be exactly 1056 bytes; found \(actual)."
+            return L10n.text("GROUNDxO.DAT must be exactly 1056 bytes; found \(actual).")
         case let .invalidVGAGRSectionCount(actual):
-            return "VGAGRx.DAT must contain two sections; found \(actual)."
+            return L10n.text("VGAGRx.DAT must contain two sections; found \(actual).")
         case let .missingFile(file):
-            return "Required classic graphics file is missing: \(file)."
+            return L10n.text("Required classic graphics file is missing: \(file).")
         case let .outOfBounds(label, offset, required, available):
-            return "\(label) reads \(required) bytes at \(offset), beyond \(available) available bytes."
+            return L10n.text("\(label) reads \(required) bytes at \(offset), beyond \(available) available bytes.")
         case let .invalidGraphicSize(label, width, height):
-            return "\(label) has invalid size \(width)×\(height)."
+            return L10n.text("\(label) has invalid size \(width)×\(height).")
         case let .invalidTerrainPiece(id):
-            return "The level references missing terrain piece \(id)."
+            return L10n.text("The level references missing terrain piece \(id).")
         case let .malformedSpecialGraphic(message):
-            return "Malformed VGASPEC data: \(message)"
+            return L10n.text("Malformed VGASPEC data: \(message)")
         }
     }
 }
@@ -223,7 +223,7 @@ public struct ClassicGroundSet: Codable, Equatable, Sendable {
                 let frameOffset = imageOffset + frame * frameDataSize
                 let pixels = try Self.decodePlanarImage(
                     objectGraphics,
-                    label: "object \(id) frame \(frame)",
+                    label: L10n.text("object \(id) frame \(frame)"),
                     width: width,
                     height: height,
                     imageOffset: frameOffset,
@@ -276,8 +276,8 @@ public struct ClassicGroundSet: Codable, Equatable, Sendable {
         let pixelCount = width * height
         let bytesPerPlane = (pixelCount + 7) / 8
         let imageByteCount = bytesPerPlane * bitsPerPixel
-        try requireRange(data, label: "\(label) pixels", offset: imageOffset, count: imageByteCount)
-        try requireRange(data, label: "\(label) mask", offset: maskOffset, count: bytesPerPlane)
+        try requireRange(data, label: L10n.text("\(label) pixels"), offset: imageOffset, count: imageByteCount)
+        try requireRange(data, label: L10n.text("\(label) mask"), offset: maskOffset, count: bytesPerPlane)
 
         var pixels = [UInt8](repeating: 0, count: pixelCount)
         for plane in 0..<bitsPerPixel {
@@ -336,7 +336,7 @@ public struct ClassicSpecialGraphic: Codable, Equatable, Sendable {
     public init(archiveData: Data) throws {
         let sections = try ClassicDATArchive.decode(archiveData)
         guard sections.count == 1 else {
-            throw ClassicGraphicsError.malformedSpecialGraphic("expected one compressed section, found \(sections.count)")
+            throw ClassicGraphicsError.malformedSpecialGraphic(L10n.text("expected one compressed section, found \(sections.count)"))
         }
         try self.init(uncompressedData: sections[0].data)
     }
@@ -346,7 +346,7 @@ public struct ClassicSpecialGraphic: Codable, Equatable, Sendable {
     public init(uncompressedData: Data) throws {
         let bytes = [UInt8](uncompressedData)
         guard bytes.count >= 40 else {
-            throw ClassicGraphicsError.malformedSpecialGraphic("section is shorter than the 40-byte header")
+            throw ClassicGraphicsError.malformedSpecialGraphic(L10n.text("section is shorter than the 40-byte header"))
         }
         palette = (0..<8).map { index in
             let offset = index * 3
@@ -375,13 +375,13 @@ public struct ClassicSpecialGraphic: Codable, Equatable, Sendable {
                 } else if command <= 127 {
                     let count = Int(command) + 1
                     guard position + count <= bytes.count else {
-                        throw ClassicGraphicsError.malformedSpecialGraphic("literal PackBits run exceeds the section")
+                        throw ClassicGraphicsError.malformedSpecialGraphic(L10n.text("literal PackBits run exceeds the section"))
                     }
                     packedPlanes.append(contentsOf: bytes[position..<(position + count)])
                     position += count
                 } else {
                     guard position < bytes.count else {
-                        throw ClassicGraphicsError.malformedSpecialGraphic("repeat PackBits run has no value")
+                        throw ClassicGraphicsError.malformedSpecialGraphic(L10n.text("repeat PackBits run has no value"))
                     }
                     let count = 257 - Int(command)
                     packedPlanes.append(contentsOf: repeatElement(bytes[position], count: count))
@@ -389,7 +389,7 @@ public struct ClassicSpecialGraphic: Codable, Equatable, Sendable {
                 }
             }
             guard reachedEndMarker else {
-                throw ClassicGraphicsError.malformedSpecialGraphic("missing strip end marker")
+                throw ClassicGraphicsError.malformedSpecialGraphic(L10n.text("missing strip end marker"))
             }
 
             let stripWidth = 960
@@ -398,7 +398,7 @@ public struct ClassicSpecialGraphic: Codable, Equatable, Sendable {
             let bytesPerPlane = pixelCount / 8
             guard packedPlanes.count == bytesPerPlane * 3 else {
                 throw ClassicGraphicsError.malformedSpecialGraphic(
-                    "decoded strip has \(packedPlanes.count) bytes; expected \(bytesPerPlane * 3)"
+                    L10n.text("decoded strip has \(packedPlanes.count) bytes; expected \(bytesPerPlane * 3)")
                 )
             }
             var indexed = [UInt8](repeating: 0, count: pixelCount)
@@ -426,11 +426,11 @@ public struct ClassicSpecialGraphic: Codable, Equatable, Sendable {
             scanline += stripHeight
         }
         guard scanline == height else {
-            throw ClassicGraphicsError.malformedSpecialGraphic("decoded \(scanline) of \(height) scanlines")
+            throw ClassicGraphicsError.malformedSpecialGraphic(L10n.text("decoded \(scanline) of \(height) scanlines"))
         }
         guard position == bytes.count else {
             throw ClassicGraphicsError.malformedSpecialGraphic(
-                "section has \(bytes.count - position) trailing bytes after four strips"
+                L10n.text("section has \(bytes.count - position) trailing bytes after four strips")
             )
         }
         rgba = Data(outputRGBA)

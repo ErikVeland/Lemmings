@@ -178,7 +178,7 @@ enum PanelGlyph: String {
 
 /// Shared speed control geometry for flat, CRT and sequel panels.
 @MainActor enum SpeedPanelControls {
-    static let help = "Click speed to toggle. Hold to boost; release to return. Arrows apply 1×, 2×, 3×, 5× or 10× immediately."
+    static let help = L10n.text("Click speed to toggle. Hold to boost; release to return. Arrows apply 1×, 2×, 3×, 5× or 10× immediately.")
     static func part(at point: CGPoint, in rect: CGRect) -> Int? { SpeedPanelArt.part(at: point, in: rect) }
     /// `bevelPixel` sets only the stone bevel. The contents keep their layout pixel, so a
     /// panel can match its neighbouring sockets without moving the label or arrows.

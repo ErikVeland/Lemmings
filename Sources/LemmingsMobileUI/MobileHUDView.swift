@@ -21,7 +21,7 @@ import UIKit
         super.init(frame: frame)
         backgroundColor = .clear
         isAccessibilityElement = true
-        accessibilityLabel = "Level map"
+        accessibilityLabel = L10n.text("Level map")
         accessibilityTraits = .adjustable
     }
 
@@ -137,7 +137,7 @@ import UIKit
         let identityFrame = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: playerName != nil).player
         playerIdentity.frame = identityFrame ?? .zero
         playerIdentity.isHidden = identityFrame == nil
-        playerIdentity.accessibilityLabel = playerName.map { "Current turn: " + $0 }
+        playerIdentity.accessibilityLabel = playerName.map { L10n.text("Current turn: ") + $0 }
         self.snapshot = snapshot
         let previousSkill = self.selectedSkill
         self.selectedSkill = selectedSkill
@@ -260,7 +260,7 @@ import UIKit
             }
             button.onAccessiblePress = { [weak self] in self?.onAction?(item.action) }
             if case .releaseRate = item.action {
-                button.accessibilityHint = "Actions include minimum or maximum release rate."
+                button.accessibilityHint = L10n.text("Actions include minimum or maximum release rate.")
                 button.accessibilityCustomActions = [UIAccessibilityCustomAction(name: "Toggle minimum or maximum release rate") { [weak self] _ in
                     self?.onRateDoubleTap?(self?.snapshot?.releaseRate == 99); return true
                 }]
@@ -336,18 +336,18 @@ import UIKit
 
     private static let cells: [Cell] = MobileDirectionPickerLayout.gridDirections.map { direction in
         guard let direction else {
-            return Cell(direction: nil, frameIndex: nil, label: "Cancel tool direction")
+            return Cell(direction: nil, frameIndex: nil, label: L10n.text("Cancel tool direction"))
         }
         let label: String
         switch direction {
-        case .upLeft: label = "Up-left"
+        case .upLeft: label = L10n.text("Up-left")
         case .up: label = "Up"
-        case .upRight: label = "Up-right"
-        case .left: label = "Left"
-        case .right: label = "Right"
-        case .downLeft: label = "Down-left"
-        case .down: label = "Down"
-        case .downRight: label = "Down-right"
+        case .upRight: label = L10n.text("Up-right")
+        case .left: label = L10n.text("Left")
+        case .right: label = L10n.text("Right")
+        case .downLeft: label = L10n.text("Down-left")
+        case .down: label = L10n.text("Down")
+        case .downRight: label = L10n.text("Down-right")
         }
         return Cell(direction: direction, frameIndex: MobileDirectionPickerLayout.frameIndex(for: direction), label: label)
     }
@@ -398,7 +398,7 @@ import UIKit
             addSubview(button)
             buttons.append(button)
         }
-        accessibilityLabel = "Choose Lemmings 3 tool direction"
+        accessibilityLabel = L10n.text("Choose Lemmings 3 tool direction")
         accessibilityViewIsModal = true
         isHidden = false
         setNeedsFocusUpdate()

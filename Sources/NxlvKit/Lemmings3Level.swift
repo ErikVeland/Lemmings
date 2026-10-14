@@ -23,7 +23,7 @@ public struct Lemmings3Level: Sendable {
     public init(data: Data) throws {
         let reader = SequelBinary(data)
         guard reader.count >= 30 else {
-            throw SequelDataError.invalid("The Lemmings 3 level header is shorter than 30 bytes.")
+            throw SequelDataError.invalid(L10n.text("The Lemmings 3 level header is shorter than 30 bytes."))
         }
         rawData = data
         lemmingStyle = try reader.u16(0)
@@ -35,7 +35,7 @@ public struct Lemmings3Level: Sendable {
         width = try reader.u16(12)
         height = try reader.u16(14)
         guard width > 0, height > 0, width.isMultiple(of: 4), height.isMultiple(of: 4) else {
-            throw SequelDataError.invalid("Lemmings 3 dimensions must be positive multiples of four.")
+            throw SequelDataError.invalid(L10n.text("Lemmings 3 dimensions must be positive multiples of four."))
         }
         screenX = try reader.u16(16)
         screenY = try reader.u16(18)
@@ -60,7 +60,7 @@ public struct Lemmings3Objects: Sendable {
     public init(data: Data) throws {
         let reader = SequelBinary(data)
         guard reader.count.isMultiple(of: 6) else {
-            throw SequelDataError.invalid("Lemmings 3 object data contains a partial six-byte record.")
+            throw SequelDataError.invalid(L10n.text("Lemmings 3 object data contains a partial six-byte record."))
         }
         placements = try stride(from: 0, to: reader.count, by: 6).map { offset in
             Placement(identifier: try reader.u16(offset),

@@ -48,19 +48,19 @@ public enum ClassicMainDATError: Error, Equatable, CustomStringConvertible {
     public var description: String {
         switch self {
         case let .missingFile(file):
-            return "Required classic asset file is missing: \(file)."
+            return L10n.text("Required classic asset file is missing: \(file).")
         case let .insufficientSectionCount(minimum, actual):
             return "MAIN.DAT must contain at least \(minimum) sections; found \(actual)."
         case let .invalidBitmapSize(label, width, height):
-            return "\(label) has invalid size \(width)x\(height)."
+            return L10n.text("\(label) has invalid size \(width)x\(height).")
         case let .invalidBitsPerPixel(label, actual):
-            return "\(label) has unsupported \(actual)-bit planar pixels."
+            return L10n.text("\(label) has unsupported \(actual)-bit planar pixels.")
         case let .outOfBounds(section, label, offset, required, available):
             return "MAIN.DAT section \(section) \(label) reads \(required) bytes at \(offset), beyond \(available) available bytes."
         case let .paletteTooSmall(label, required, actual):
-            return "\(label) needs \(required) palette colors; found \(actual)."
+            return L10n.text("\(label) needs \(required) palette colors; found \(actual).")
         case let .invalidTerrainPaletteSize(actual):
-            return "A DOS terrain palette must contain eight colors; found \(actual)."
+            return L10n.text("A DOS terrain palette must contain eight colors; found \(actual).")
         }
     }
 }
@@ -319,23 +319,23 @@ public struct ClassicMainDATAssets: Codable, Equatable, Sendable {
         }
 
         let bashRight = try Self.decodeMonochromeFrames(
-            section1, section: 1, label: "right bash masks", sourceOffset: 0x0000,
+            section1, section: 1, label: L10n.text("right bash masks"), sourceOffset: 0x0000,
             frameCount: 4, width: 16, height: 10, offsetX: -8, offsetY: -10
         )
         let bashLeft = try Self.decodeMonochromeFrames(
-            section1, section: 1, label: "left bash masks", sourceOffset: 0x0050,
+            section1, section: 1, label: L10n.text("left bash masks"), sourceOffset: 0x0050,
             frameCount: 4, width: 16, height: 10, offsetX: -8, offsetY: -10
         )
         let mineRight = try Self.decodeMonochromeFrames(
-            section1, section: 1, label: "right mine masks", sourceOffset: 0x00A0,
+            section1, section: 1, label: L10n.text("right mine masks"), sourceOffset: 0x00A0,
             frameCount: 2, width: 16, height: 13, offsetX: -8, offsetY: -12
         )
         let mineLeft = try Self.decodeMonochromeFrames(
-            section1, section: 1, label: "left mine masks", sourceOffset: 0x00D4,
+            section1, section: 1, label: L10n.text("left mine masks"), sourceOffset: 0x00D4,
             frameCount: 2, width: 16, height: 13, offsetX: -8, offsetY: -12
         )
         let explosion = try Self.decodeMonochromeFrames(
-            section1, section: 1, label: "explosion mask", sourceOffset: 0x0108,
+            section1, section: 1, label: L10n.text("explosion mask"), sourceOffset: 0x0108,
             frameCount: 1, width: 16, height: 22, offsetX: -8, offsetY: -14
         )[0]
         destructionMasks = ClassicDestructionMasks(
@@ -347,7 +347,7 @@ public struct ClassicMainDATAssets: Codable, Equatable, Sendable {
         )
 
         let storedGlyphs = try Self.decodeMonochromeFrames(
-            section1, section: 1, label: "countdown glyphs", sourceOffset: 0x0134,
+            section1, section: 1, label: L10n.text("countdown glyphs"), sourceOffset: 0x0134,
             frameCount: 10, width: 8, height: 8, offsetX: -1, offsetY: -19
         )
         countdownGlyphs = storedGlyphs.enumerated().map { index, bitmap in

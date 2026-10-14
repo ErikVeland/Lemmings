@@ -99,7 +99,7 @@ public struct NxlvGadget: Sendable {
             decoder.append(
                 severity: .warning,
                 code: .invalidSkill,
-                message: "Unknown gadget skill '\(skill)'.",
+                message: L10n.text("Unknown gadget skill '\(skill)'."),
                 line: section.lastLineRecord("skill")?.lineNumber
             )
         }
@@ -114,7 +114,7 @@ public struct NxlvGadget: Sendable {
             decoder.append(
                 severity: .warning,
                 code: .invalidDirection,
-                message: "Unknown gadget direction '\(directionValue)'.",
+                message: L10n.text("Unknown gadget direction '\(directionValue)'."),
                 line: section.lastLineRecord("direction")?.lineNumber
             )
         }
@@ -150,7 +150,7 @@ public struct NxlvLemming: Sendable {
                 decoder.append(
                     severity: .warning,
                     code: .invalidDirection,
-                    message: "Unknown preplaced lemming direction '\(directionLine.value)'.",
+                    message: L10n.text("Unknown preplaced lemming direction '\(directionLine.value)'."),
                     line: directionLine.lineNumber
                 )
             }
@@ -200,7 +200,7 @@ public struct NxlvTalisman: Sendable {
                 decoder.append(
                     severity: .warning,
                     code: .invalidTalismanColor,
-                    message: "Unknown talisman color '\(colorLine.value)'.",
+                    message: L10n.text("Unknown talisman color '\(colorLine.value)'."),
                     line: colorLine.lineNumber
                 )
             }
@@ -252,7 +252,7 @@ public struct NxlvTalisman: Sendable {
                 decoder.append(
                     severity: .warning,
                     code: .invalidSkill,
-                    message: "Unknown USE_ONLY_SKILL value '\(onlySkillLine.value)'.",
+                    message: L10n.text("Unknown USE_ONLY_SKILL value '\(onlySkillLine.value)'."),
                     line: onlySkillLine.lineNumber
                 )
             }
@@ -338,7 +338,7 @@ public struct NxlvLevel: Sendable {
             decoder.append(
                 severity: .error,
                 code: .missingRequiredField,
-                message: "The level has no TITLE field.",
+                message: L10n.text("The level has no TITLE field."),
                 line: nil
             )
             return nil
@@ -442,7 +442,7 @@ public struct NxlvLevel: Sendable {
                 decoder.append(
                     severity: .warning,
                     code: .invalidSkill,
-                    message: "Unknown skill '\(line.originalKeyword)' in $SKILLSET.",
+                    message: L10n.text("Unknown skill '\(line.originalKeyword)' in $SKILLSET."),
                     line: line.lineNumber
                 )
                 continue
@@ -457,7 +457,7 @@ public struct NxlvLevel: Sendable {
                 decoder.append(
                     severity: .warning,
                     code: .invalidSkillQuantity,
-                    message: "Invalid quantity '\(line.value)' for \(skill.keyword).",
+                    message: L10n.text("Invalid quantity '\(line.value)' for \(skill.keyword)."),
                     line: line.lineNumber
                 )
             }
@@ -467,7 +467,7 @@ public struct NxlvLevel: Sendable {
             decoder.append(
                 severity: .warning,
                 code: .tooManySkillTypes,
-                message: "The skillset contains \(result.count) skill types; NeoLemmix supports at most 10.",
+                message: L10n.text("The skillset contains \(result.count) skill types; NeoLemmix supports at most 10."),
                 line: section.openingLine
             )
         }
@@ -577,7 +577,7 @@ fileprivate struct NxlvValueDecoder {
             append(
                 severity: .warning,
                 code: .malformedInteger,
-                message: "Invalid integer '\(line.value)' for \(context).",
+                message: L10n.text("Invalid integer '\(line.value)' for \(context)."),
                 line: line.lineNumber
             )
             return nil
@@ -595,7 +595,7 @@ fileprivate struct NxlvValueDecoder {
             append(
                 severity: .warning,
                 code: .malformedUnsignedInteger,
-                message: "Invalid unsigned integer '\(line.value)' for \(context).",
+                message: L10n.text("Invalid unsigned integer '\(line.value)' for \(context)."),
                 line: line.lineNumber
             )
             return nil
@@ -615,7 +615,7 @@ fileprivate struct NxlvValueDecoder {
         append(
             severity: .warning,
             code: .invalidTimeLimit,
-            message: "Invalid TIME_LIMIT value '\(line.value)'.",
+            message: L10n.text("Invalid TIME_LIMIT value '\(line.value)'."),
             line: line.lineNumber
         )
         return nil

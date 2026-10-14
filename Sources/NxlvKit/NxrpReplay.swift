@@ -152,12 +152,12 @@ public enum NxrpRecordedCheckIssue: Equatable, Sendable, CustomStringConvertible
 
     public var description: String {
         switch self {
-        case .missingLevelIdentity: "missing level ID or version"
-        case .missingCompletionFrame: "missing completion frame"
+        case .missingLevelIdentity: L10n.text("missing level ID or version")
+        case .missingCompletionFrame: L10n.text("missing completion frame")
         case let .missingAssignmentCheck(sequence):
-            "assignment \(sequence) lacks position or direction"
+            L10n.text("assignment \(sequence) lacks position or direction")
         case let .missingSpawnCheck(sequence):
-            "spawn interval \(sequence) lacks spawned count"
+            L10n.text("spawn interval \(sequence) lacks spawned count")
         }
     }
 }
@@ -207,7 +207,7 @@ public enum NxrpReplayDecoder {
             diagnostics.append(NxrpDiagnostic(
                 severity: .error,
                 code: .unsupportedLegacyFormat,
-                message: "The legacy NeoLemmix replay format is not supported."
+                message: L10n.text("The legacy NeoLemmix replay format is not supported.")
             ))
         }
 
@@ -222,7 +222,7 @@ public enum NxrpReplayDecoder {
                 diagnostics.append(NxrpDiagnostic(
                     severity: .error,
                     code: .malformedInteger,
-                    message: "\(record.originalKeyword) must be an integer.",
+                    message: L10n.text("\(record.originalKeyword) must be an integer."),
                     line: record.lineNumber
                 ))
                 return nil
@@ -231,7 +231,7 @@ public enum NxrpReplayDecoder {
                 diagnostics.append(NxrpDiagnostic(
                     severity: .error,
                     code: .invalidValue,
-                    message: "\(record.originalKeyword) must be at least \(minimum).",
+                    message: L10n.text("\(record.originalKeyword) must be at least \(minimum)."),
                     line: record.lineNumber
                 ))
                 return nil
@@ -245,7 +245,7 @@ public enum NxrpReplayDecoder {
                 diagnostics.append(NxrpDiagnostic(
                     severity: .error,
                     code: .malformedInteger,
-                    message: "\(record.originalKeyword) must be an unsigned decimal or hexadecimal integer.",
+                    message: L10n.text("\(record.originalKeyword) must be an unsigned decimal or hexadecimal integer."),
                     line: record.lineNumber
                 ))
                 return nil
@@ -295,7 +295,7 @@ public enum NxrpReplayDecoder {
                     diagnostics.append(NxrpDiagnostic(
                         severity: .error,
                         code: .invalidSkill,
-                        message: "ACTION names an unknown NeoLemmix skill.",
+                        message: L10n.text("ACTION names an unknown NeoLemmix skill."),
                         line: action.lineNumber
                     ))
                     continue
@@ -360,7 +360,7 @@ public enum NxrpReplayDecoder {
                 diagnostics.append(NxrpDiagnostic(
                     severity: .warning,
                     code: .unsupportedSection,
-                    message: "Replay section $\(section.originalKeyword) is not recognised.",
+                    message: L10n.text("Replay section $\(section.originalKeyword) is not recognised."),
                     line: section.openingLine
                 ))
                 continue
@@ -393,7 +393,7 @@ public enum NxrpReplayDecoder {
             diagnostics.append(NxrpDiagnostic(
                 severity: .error,
                 code: .malformedInteger,
-                message: "\(record.originalKeyword) must be an integer.",
+                message: L10n.text("\(record.originalKeyword) must be an integer."),
                 line: record.lineNumber
             ))
             return nil
@@ -402,7 +402,7 @@ public enum NxrpReplayDecoder {
             diagnostics.append(NxrpDiagnostic(
                 severity: .error,
                 code: .invalidValue,
-                message: "\(record.originalKeyword) must be at least \(minimum).",
+                message: L10n.text("\(record.originalKeyword) must be at least \(minimum)."),
                 line: record.lineNumber
             ))
             return nil
@@ -424,7 +424,7 @@ public enum NxrpReplayDecoder {
             diagnostics.append(NxrpDiagnostic(
                 severity: .error,
                 code: .invalidValue,
-                message: "LEM_DIR must start with L or R.",
+                message: L10n.text("LEM_DIR must start with L or R."),
                 line: record.lineNumber
             ))
             return nil
@@ -450,7 +450,7 @@ public enum NxrpReplayDecoder {
             diagnostics.append(NxrpDiagnostic(
                 severity: .error,
                 code: .malformedInteger,
-                message: "\(record.originalKeyword) must be an integer.",
+                message: L10n.text("\(record.originalKeyword) must be an integer."),
                 line: record.lineNumber
             ))
             return nil
@@ -459,7 +459,7 @@ public enum NxrpReplayDecoder {
             diagnostics.append(NxrpDiagnostic(
                 severity: .error,
                 code: .invalidValue,
-                message: "\(record.originalKeyword) must be at least \(minimum).",
+                message: L10n.text("\(record.originalKeyword) must be at least \(minimum)."),
                 line: record.lineNumber
             ))
             return nil

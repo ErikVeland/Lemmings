@@ -27,22 +27,22 @@ public struct ControllerBindings {
     }
     public static func roleName(_ button: Button) -> String {
         switch button {
-        case .a: return "Assign selected skill"
-        case .b: return "Reset speed / cancel / pause menu"
-        case .x: return "Repeat last assignment"
-        case .y: return "Focus last assignment"
-        case .leftShoulder: return "Previous skill"
-        case .rightShoulder: return "Next skill"
-        case .leftTrigger: return "Modifier for extra actions"
-        case .rightTrigger: return "Tap: toggle fast-forward; hold: temporary boost"
-        case .up: return "Increase release rate"
-        case .down: return "Decrease release rate"
-        case .left: return "Previous unassigned lemming"
-        case .right: return "Next unassigned lemming"
-        case .menu: return "Pause / resume"
-        case .options: return "Controls help"
-        case .leftStick: return "Centre on entrance"
-        case .rightStick: return "Centre on exit"
+        case .a: return L10n.text("Assign selected skill")
+        case .b: return L10n.text(L10n.text("Reset speed / cancel / pause menu"))
+        case .x: return L10n.text("Repeat last assignment")
+        case .y: return L10n.text("Focus last assignment")
+        case .leftShoulder: return L10n.text("Previous skill")
+        case .rightShoulder: return L10n.text("Next skill")
+        case .leftTrigger: return L10n.text(L10n.text("Modifier for extra actions"))
+        case .rightTrigger: return L10n.text(L10n.text("Tap: toggle fast-forward; hold: temporary boost"))
+        case .up: return L10n.text("Increase release rate")
+        case .down: return L10n.text("Decrease release rate")
+        case .left: return L10n.text("Previous unassigned lemming")
+        case .right: return L10n.text("Next unassigned lemming")
+        case .menu: return L10n.text("Pause / resume")
+        case .options: return L10n.text("Controls help")
+        case .leftStick: return L10n.text("Centre on entrance")
+        case .rightStick: return L10n.text("Centre on exit")
         }
     }
     private var previous: Set<Button> = []
@@ -78,7 +78,7 @@ public struct ControllerBindings {
         }
         return actions
     }
-    public static let help = """
+    public static let help = L10n.text("""
     Controller (Xbox-style button names)
     Left stick: aim • Right stick: pan camera
     A: assign selected skill • B: return to 1×, then cancel / pause menu
@@ -98,5 +98,5 @@ public struct ControllerBindings {
     Hold LT + L3: DJ shuffle • DualSense touchpad click: DJ shuffle
     Menus: D-pad selects or adjusts, A confirms, B returns, LB / RB changes tabs
     Right stick scrolls long pages. Release buttons before using a new page.
-    """
+    """)
 }

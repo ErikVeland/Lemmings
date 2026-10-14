@@ -8,7 +8,7 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
     public static let engineFingerprint = "lemmings2-mobile-runtime-v1"
 
     public let directory: URL
-    public let displayName = "Lemmings 2"
+    public let displayName = L10n.text(L10n.text("Lemmings 2"))
     public let levels: [MobileLevelSummary]
     private let levelFingerprints: [String]
 
@@ -178,7 +178,7 @@ public enum Lemmings2MobileLibraryError: Error, LocalizedError {
     public var errorDescription: String? {
         switch self {
         case let .progressSave(reason):
-            "Lemmings 2 progress could not be saved: \(reason)"
+            L10n.text("Lemmings 2 progress could not be saved: \(reason)")
         }
     }
 }
