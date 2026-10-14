@@ -7,6 +7,10 @@ import UIKit
 extension MobileLibraryViewController {
     var hotSeat: MobileHotSeat? { hotSeats.current }
 
+    var defaultHotSeatPlayers: [String] {
+        hotSeat?.players ?? [profiles.activeID] + profiles.players.filter { $0.id != profiles.activeID }.prefix(1).map(\.id)
+    }
+
     /// Appended to a progress key. A shared campaign has its own, apart from every solo player.
     var progressSuffix: String { hotSeat.map { "." + $0.scope } ?? profiles.suffix }
 
@@ -49,7 +53,7 @@ extension MobileLibraryViewController {
     // MARK: - Pages
 
     func hotSeatPage(subtitle: String) -> GameFrontEnd.Page {
-        let roster = hotSeatRoster ?? MobileHotSeatRoster(host: profiles.activeID, players: hotSeat?.players ?? [])
+        let roster = hotSeatRoster ?? MobileHotSeatRoster(host: profiles.activeID, players: defaultHotSeatPlayers)
         return MobileCareerArt.hotSeat(profiles, subtitle: subtitle, roster: roster, policy: hotSeats.policy,
             active: hotSeat != nil, hasSaved: !hotSeats.sharedSessions(player: profiles.activeID).isEmpty,
             confirmingRestart: confirmingRestart)

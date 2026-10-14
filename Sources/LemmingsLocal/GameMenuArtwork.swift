@@ -13,6 +13,14 @@ import NxlvKit
               let interface = ClassicMacUserInterface(artwork: artwork) else { return nil }
         return MacInterfaceRenderer(interface: interface)
     }()
-    static func renderer() -> MacInterfaceRenderer? { sharedRenderer }
+    private static var renderFixture: MacInterfaceRenderer?
+    static func renderer() -> MacInterfaceRenderer? { renderFixture ?? sharedRenderer }
+    /// Offscreen captures can supply the shipped artwork without an app bundle.
+    static func withRenderer<Result>(_ renderer: MacInterfaceRenderer, _ body: () throws -> Result) rethrows -> Result {
+        let previous = renderFixture
+        renderFixture = renderer
+        defer { renderFixture = previous }
+        return try body()
+    }
 }
 #endif

@@ -9,11 +9,11 @@ public struct LevelBrowserGeometry {
     /// Back, previous rank, next rank and Play, in that order, when `actionCount` is 4.
     public let actions: [CGRect]
 
-    public init(safe: CGRect, actionCount: Int = 4) {
+    public init(safe: CGRect, actionCount: Int = 4, titleText: String = "", subtitleText: String = "") {
         board = safe.insetBy(dx: 8, dy: 12)
         let left = board.minX + 16, width = board.width - 32
-        title = CGRect(x: left, y: board.minY + 14, width: width, height: 40)
-        subtitle = CGRect(x: left, y: title.maxY + 2, width: width, height: 22)
+        title = CGRect(x: left, y: board.minY + 14, width: width, height: max(40, GameTextLayout.height(titleText, width: width, face: .large)))
+        subtitle = CGRect(x: left, y: title.maxY + 2, width: width, height: max(22, GameTextLayout.height(subtitleText, width: width)))
         let height: CGFloat = 44
         let count = max(1, actionCount)
         let gaps = CGFloat(count - 1) * 12

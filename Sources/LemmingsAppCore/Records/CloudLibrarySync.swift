@@ -36,7 +36,7 @@ import NxlvKit
                 identities: [CloudLibraryIdentity] = []) {
         self.store = store; defaults = storage.defaults; self.transport = transport
         self.identities = identities
-        defaultEnabled = !storage.isPreviewBuild && !storage.isIntegrationTestBuild
+        defaultEnabled = !storage.isIntegrationTestBuild
         enabledKey = storage.isPreviewBuild ? "CloudLibrary.preview.enabled" : "CloudLibrary.enabled"
         stateFile = storage.applicationSupport.appendingPathComponent("\(storage.isPreviewBuild ? "Cloud Library Preview" : "Cloud Library")/local-state-v2.json")
         if let data = try? Data(contentsOf: stateFile) {
@@ -99,10 +99,14 @@ import NxlvKit
         let next = CloudLibraryArchive.Stamp(counter: base.archive.counter + 1, device: base.device)
         let localIDs = Set(store.records.profiles.map(\.id))
         for (id, global) in local.mapping where !localIDs.contains(id) {
+            local.archive.deleted.formUnion(local.archive.players[global]?.sourceProfileIDs ?? [])
             local.archive.deleted.insert(global); local.archive.players[global] = nil
         }
         for profile in store.records.profiles {
-            let global = local.mapping[profile.id] ?? UUID().uuidString.lowercased()
+            // UUID player identities survive copied saves and new testing builds.
+            // Legacy placeholders are installation-local, so they still need a mapping.
+            let global = local.mapping[profile.id] ?? UUID(uuidString: profile.id)?.uuidString.lowercased()
+                ?? UUID().uuidString.lowercased()
             local.mapping[profile.id] = global
             guard !local.archive.deleted.contains(global) else { continue }
             var progress = GameProgressPreferences.capture(defaults: defaults, profileID: profile.id, profileIDs: Array(localIDs))
@@ -111,6 +115,9 @@ import NxlvKit
             let previous = local.archive.players[global]
             var player = CloudLibraryArchive.Player(profile: metadata, records: try store.records.cloudRecords(profileID: profile.id),
                 progress: progress, stamp: previous?.profile == metadata ? previous!.stamp : next)
+            var sources = previous?.sourceProfileIDs ?? []
+            if let id = UUID(uuidString: profile.id)?.uuidString.lowercased() { sources.insert(id) }
+            player.sourceProfileIDs = sources.isEmpty ? nil : sources
             if let previous {
                 try player.records.mergeCloudRecords(previous.records, profileID: ArcadeRecords.cloudProfileID)
                 player.records = try player.records.cloudRecords(profileID: ArcadeRecords.cloudProfileID)
@@ -171,6 +178,24 @@ import NxlvKit
             guard !writable.isEmpty else { setState(.offline); return }
             guard enabled, revision == store.progressRevision else { requested = enabled; setState(enabled ? .pending : .paused); return }
             var base = saved
+            // Recover a copied player's identity before assigning a new one. A
+            // matching name is not evidence: only a portable ID or an immutable
+            // saved result identifies the same player across installations.
+            for profile in store.records.profiles where base.mapping[profile.id] == nil {
+                let portable = UUID(uuidString: profile.id)?.uuidString.lowercased()
+                if let portable, remote.players[portable] != nil || remote.deleted.contains(portable) {
+                    base.mapping[profile.id] = portable
+                    continue
+                }
+                if let portable {
+                    let sources = remote.players.filter { $0.value.sourceProfileIDs?.contains(portable) == true }
+                    if sources.count == 1 { base.mapping[profile.id] = sources.first!.key; continue }
+                }
+                let records = try store.records.cloudRecords(profileID: profile.id)
+                let results = Set(records.runs.map(\.id))
+                let matches = remote.players.filter { !results.isDisjoint(with: Set($0.value.records.runs.map(\.id))) }
+                if matches.count == 1 { base.mapping[profile.id] = matches.first!.key }
+            }
             // A fresh installation adopts the existing primary player. Existing
             // local progress gets its own identity and is never matched by initials.
             if base.mapping.isEmpty, store.records.profiles.count == 1, store.records.runs.isEmpty,
@@ -179,7 +204,7 @@ import NxlvKit
                 let profile = store.records.mainProfileID
                 let localProgress = GameProgressPreferences.capture(defaults: defaults, profileID: profile, profileIDs: [profile])
                 let extra = try captureExtra(profile, nil)
-                if localProgress.values.isEmpty && extra.values.isEmpty {
+                if !localProgress.hasRecordedProgress && !extra.hasRecordedProgress {
                     base.mapping[profile] = first
                     // Restore the remote portrait/name before capture to prevent
                     // default placeholder metadata replacing a restored identity.
@@ -188,6 +213,15 @@ import NxlvKit
                 }
             }
             var local = try capture(base)
+            // A copied Hot Seat can have its progress and roster but no local
+            // revision file. Reuse an identical revision instead of creating a fork.
+            for (id, branches) in local.archive.seats where saved.seatRevisions[id] == nil {
+                if let value = branches.last, let existing = remote.seats[id]?.filter({ $0.sameState(as: value) })
+                    .sorted(by: { $0.revision < $1.revision }).first {
+                    local.archive.seats[id] = branches.filter { $0.revision != value.revision } + [existing]
+                    local.seatRevisions[id] = existing.revision
+                }
+            }
             // Capture must not stamp a fresh placeholder over remote metadata.
             if saved.mapping.isEmpty, let first = base.mapping[store.records.mainProfileID], let restored = remote.players[first],
                 base.archive.players[first] != nil { local.archive.players[first]?.profile = restored.profile; local.archive.players[first]?.stamp = restored.stamp }

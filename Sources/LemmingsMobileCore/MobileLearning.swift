@@ -12,6 +12,13 @@ public struct MobileLearningState: Codable, Equatable, Sendable {
         run = try LevelSequenceRun(source: .playlist(playlistID),
             pool: LevelPool(id: poolID, summary: name), entries: entries)
     }
+    public mutating func select(_ index: Int) throws {
+        guard let current = run else { return }
+        run = try LevelSequenceRun(id: current.id, source: current.source, pool: current.pool,
+            entries: current.entries, currentIndex: index, seed: current.seed,
+            algorithm: current.algorithm, createdAt: current.createdAt)
+    }
+
     public mutating func record(won: Bool) {
         guard let run else { return }
         if run.pool.id.hasPrefix("learning-") { progress.record(run.currentEntry.identity, won: won) }
@@ -36,13 +43,15 @@ public struct MobileLearningResume: Sendable {
     }
 
     public static func find(owner: String, seats: MobileHotSeatStore,
-                            storage: (String) -> MobileStorage, journeyOnly: Bool = true) -> Self? {
+                            storage: (String) -> MobileStorage, journeyOnly: Bool = true,
+                            currentSessionOnly: Bool = false) -> Self? {
         let candidates = [seats.current].compactMap { $0 }.filter { $0.players.contains(owner) }
             + seats.sharedSessions(player: owner)
-        let scopes: [(String, MobileHotSeat?)] = seats.current?.players.contains(owner) == true
+        let allScopes: [(String, MobileHotSeat?)] = seats.current?.players.contains(owner) == true
             ? [(seats.current!.scope, seats.current)] + [(owner, nil)]
                 + candidates.filter { $0.id != seats.current?.id }.map { ($0.scope, $0) }
             : [(owner, nil)] + candidates.map { ($0.scope, $0) }
+        let scopes = currentSessionOnly ? Array(allScopes.prefix(1)) : allScopes
         for (scope, seat) in scopes {
             guard let state = storage(scope).load(MobileLearningState.self, name: "learning"),
                   let run = state.run else { continue }
@@ -65,7 +74,9 @@ public final class MobileJourneyLibrary: MobileGameLibrary {
         self.entries = entries; displayName = name; self.catalogue = catalogue
         levels = entries.enumerated().map {
             MobileLevelSummary(index: $0.offset, rank: $0.element.packNameSnapshot,
-                               number: $0.offset + 1, title: $0.element.levelNameSnapshot)
+                               number: $0.offset + 1, title: $0.element.levelNameSnapshot,
+                               origin: $0.element.identity.packID.hasPrefix("fan:") || $0.element.identity.engine == .neolemmix ? .fanMade : .official,
+                               packName: $0.element.packNameSnapshot)
         }
     }
     public func levelKey(at index: Int) -> String {

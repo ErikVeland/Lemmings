@@ -78,6 +78,15 @@ Keep each row of peer controls at the same face and scale. Do not size individua
 labels to fill their boxes. Use spacing and grouping to separate supporting
 text from headings. Preserve accessible names and input targets.
 
+Wrap level titles at word boundaries. Allocate the measured line height before
+placing metadata, previews or actions. Keep the title face and scale consistent
+for each screen size; do not shrink a long name or replace its ending with dots.
+Break an unbroken name only when a word exceeds the available width. Keep
+Official and Fan-made source labels separate from the level title and its status.
+Use the catalogue's source metadata, including in mixed journeys and collections.
+The selected carousel entry has a full title and source above its artwork.
+See [Interface hierarchy](InterfaceHierarchy.md) for implementation and validation.
+
 ## Gameplay pointer
 
 Gameplay settings offer Original and Modern cursor styles in all three games.
@@ -470,6 +479,16 @@ release audit. Automated tests were skipped for the local manual build. The exis
 and Resume controls are reused. Their captions and bounds were inspected in
 windowless exports. Native pointer dispatch and complete session round trips
 remain for manual validation.
+
+On iOS, Home offers saved levels and journey runs only from the selected solo
+player or Hot Seat. A missing shared checkpoint cannot fall back to a globally
+saved solo level or another Hot Seat. Clear the previous checkpoint action while
+the selected session loads. The Journey page retains its cross-session search.
+Ownership regressions cover Classic, Lemmings 2 and Lemmings 3 checkpoint envelopes
+and matching legacy global saves. Offscreen, muted bitmap checks cover selected
+Hot Seats with and without saved levels across five phone and tablet sizes.
+The iOS modules compile. Device navigation and native sequel checkpoint round
+trips remain for manual validation.
 
 ## 1.9.4 public validation
 

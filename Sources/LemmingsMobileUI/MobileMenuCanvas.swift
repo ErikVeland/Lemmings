@@ -75,7 +75,9 @@ import UIKit
     private func rebuild() {
         onPageChanged?()
         let actions = page.rows + page.orderedFooter
-        focusedID = actions.first(where: { $0.primary && $0.enabled })?.id
+        if !page.result || !actions.contains(where: { $0.id == focusedID && $0.enabled }) {
+            focusedID = actions.first(where: { $0.primary && $0.enabled })?.id
+        }
         highlighted = focusedID
         targets.forEach { $0.removeFromSuperview() }
         targets = (page.rows + page.orderedFooter).map { action in

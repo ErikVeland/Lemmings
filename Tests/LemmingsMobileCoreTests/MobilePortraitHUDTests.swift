@@ -4,6 +4,36 @@ import Testing
 @testable import LemmingsMobileCore
 
 struct MobilePortraitHUDTests {
+    @Test func releaseRateDoubleTapReplacesSecondStepAndDoesNotRepeat() {
+        var press = MobileHUDPress(.releaseRate)
+        let first = press.begin(at: 0)
+        #expect(first == [.activate])
+        _ = press.end(at: 0.05)
+        let second = press.begin(at: 0.15)
+        #expect(second == [.doubleTap])
+        let held = press.update(at: 0.8)
+        #expect(held.isEmpty)
+        _ = press.end(at: 0.9)
+        let next = press.begin(at: 1)
+        #expect(next == [.activate])
+        _ = press.end(at: 1.05)
+        let again = press.begin(at: 1.15)
+        #expect(again == [.doubleTap])
+    }
+
+    @Test func releaseRateHoldAndCancellationDoNotBecomeDoubleTaps() {
+        var press = MobileHUDPress(.releaseRate)
+        _ = press.begin(at: 0)
+        let repeated = press.update(at: 0.4)
+        #expect(repeated == [.activate])
+        _ = press.end(at: 0.45)
+        let afterHold = press.begin(at: 0.5)
+        #expect(afterHold == [.activate])
+        _ = press.end(at: 0.55, cancelled: true)
+        let afterCancel = press.begin(at: 0.6)
+        #expect(afterCancel == [.activate])
+    }
+
     @Test func originalIPadProKeepsTouchDeckOnRotation() throws {
         for size in [MobileSize(width: 768, height: 1024), .init(width: 1024, height: 1366)] {
             let portrait = MobileHUDLayout.make(container: size, safeArea: .init(top: 20),
@@ -141,7 +171,7 @@ struct MobilePortraitHUDTests {
         }
     }
 
-    @Test func speedTapAndHoldRestoreSelectedTierInBothModes() {
+    @Test func speedTouchHoldKeepsReachedTierAndNextTapResets() {
         for variable in [true, false] {
             var speed = GameplaySpeed()
             speed.variableEnabled = variable
@@ -152,8 +182,8 @@ struct MobilePortraitHUDTests {
                     case .activate: speed.tap(at: time)
                     case let .pedal(held, allowTap):
                         if held { speed.press(.mouse, at: time) }
-                        else { speed.release(.mouse, at: time, allowTap: allowTap) }
-                    case .hold: break
+                        else { speed.release(.mouse, at: time, allowTap: allowTap, retainReachedSpeed: allowTap) }
+                    case .hold, .doubleTap: break
                     }
                 }
             }
@@ -163,11 +193,12 @@ struct MobilePortraitHUDTests {
             deliver(press.begin(at: 1), at: 1)
             speed.update(at: 2)
             #expect(speed.target > 1)
+            let reached = speed.target
             deliver(press.end(at: 2), at: 2)
-            #expect(speed.target == (variable ? 2 : 3))
+            #expect(speed.target == reached)
             deliver(press.begin(at: 3), at: 3)
             deliver(press.end(at: 3.1, cancelled: true), at: 3.1)
-            #expect(!speed.isHeld && speed.target == (variable ? 2 : 3))
+            #expect(!speed.isHeld && speed.target == reached)
             deliver(press.begin(at: 4), at: 4)
             deliver(press.end(at: 4.1), at: 4.1)
             #expect(speed.target == 1)

@@ -77,6 +77,23 @@ public struct GameProgressPreferences: Codable, Equatable, Sendable {
     public var values: [String: GameProgressValue]
     public init(values: [String: GameProgressValue] = [:]) { self.values = values }
 
+    /// Empty defaults written by a new build do not establish a separate player.
+    public var hasRecordedProgress: Bool {
+        values.values.contains { value in
+            switch value {
+            case .completed(let indices): return !indices.isEmpty
+            case .learning(let progress): return !progress.completed.isEmpty || !progress.later.isEmpty
+            case .classic(let progress): return !progress.passed.isEmpty || progress.furthestReached.values.contains { $0 > 0 }
+            case .modern(let progress): return !progress.results.isEmpty
+            case .achievements(let progress):
+                return !progress.unlocked.isEmpty || progress.nextOrderedLevel.values.contains { $0 > 0 }
+                    || (progress.canonTitleIndex ?? 0) > 0 || (progress.canonLevelIndex ?? 0) > 0
+            case .tribes(let progress): return !progress.results.isEmpty || !(progress.skipped ?? [:]).isEmpty
+            case .chronicles(let progress): return progress.index > 0 || !progress.completed.isEmpty
+            }
+        }
+    }
+
     @MainActor public static func capture(defaults: UserDefaults, profileID: String, profileIDs: [String], sessionID: String? = nil) -> Self {
         var result = Self()
         let decoder = JSONDecoder()
@@ -178,8 +195,10 @@ public struct GameProgressPreferences: Codable, Equatable, Sendable {
             }
         }
     }
-    @MainActor public static func learning(profileID: String, defaults: UserDefaults = .standard) -> LearningJourneyProgress {
-        defaults.data(forKey: ArcadeStore.progressKey("LearningJourneyProgress", profileID: profileID))
+    @MainActor public static func learning(profileID: String, sessionID: String? = nil, defaults: UserDefaults = .standard) -> LearningJourneyProgress {
+        let key = sessionID.map { "HotSeat.\($0).LearningJourneyProgress" }
+            ?? ArcadeStore.progressKey("LearningJourneyProgress", profileID: profileID)
+        return defaults.data(forKey: key)
             .flatMap { try? JSONDecoder().decode(LearningJourneyProgress.self, from: $0) } ?? .init()
     }
     @MainActor public static func saveLearning(_ progress: LearningJourneyProgress, profileID: String, defaults: UserDefaults = .standard) throws {

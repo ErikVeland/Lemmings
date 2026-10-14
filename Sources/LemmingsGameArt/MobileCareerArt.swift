@@ -4,6 +4,12 @@ import NxlvKit
 
 /// Career pages use the same bitmap composition in the app and headless audit.
 public enum MobileCareerArt {
+    private static func sourceLabel(_ level: ArcadeLevel) -> String {
+        guard let conditions = level.conditions else { return "" }
+        if conditions.gameID == "fan" || conditions.gameID == "neolemmix" { return "Fan-made" }
+        return ClassicTitle(rawValue: conditions.gameID) == nil ? "" : "Official"
+    }
+
     public static func players(_ profiles: MobileProfiles, subtitle: String, draft: String? = nil,
                                creating: Bool = false, portrait: Int = 0,
                                canDelete: Bool = false, confirmingDelete: Bool = false,
@@ -40,7 +46,7 @@ public enum MobileCareerArt {
             rows.append(.init("seatRestart", confirmingRestart ? "Confirm new Hot Seat" : "New Hot Seat", selected: confirmingRestart))
             rows.append(.init("seatSolo", "Return to solo"))
         }
-        return .init(title: "Hot Seat", subtitle: subtitle, rows: rows,
+        return .init(title: "Hot Seat", subtitle: subtitle.isEmpty ? "Players: \(roster.players.count) / 2 minimum" : subtitle, rows: rows,
                      footer: [.init("seatBack", "Back"),
                               .init("seatStart", "Choose a game", enabled: roster.canStart, primary: roster.canStart)])
     }
@@ -65,7 +71,7 @@ public enum MobileCareerArt {
         }
         return .init(title: "Records", subtitle: subtitle.isEmpty ? profileName : subtitle,
             rows: levels.map { .init("record." + ($0.assisted ? "assisted|" : "direct|") + $0.level.boardID,
-                                    $0.level.title + ($0.assisted ? "  Rewind" : "")) },
+                                    $0.level.title + ($0.assisted ? "  Rewind" : "") + (sourceLabel($0.level).isEmpty ? "" : "\n" + sourceLabel($0.level))) },
             details: levels.isEmpty ? ["No records"] : [], footer: [.init("home", "Back"), .init("achievements", "Achievements"), .init("worldwide", "Worldwide")], footerColumns: 1)
     }
 
@@ -84,7 +90,7 @@ public enum MobileCareerArt {
             details.append("Maximum: " + (maximum.value.map(String.init) ?? "?"))
         } else { details.append("Maximum: " + (best == level.total ? String(level.total) : "?")) }
         let awards = stats.achievements.sorted { $0.rawValue < $1.rawValue }.map(\.title)
-        return .init(title: level.title, subtitle: subtitle.isEmpty ? profileName : subtitle,
+        return .init(title: level.title, subtitle: [subtitle.isEmpty ? profileName : subtitle, sourceLabel(level)].filter { !$0.isEmpty }.joined(separator: "\n"),
                      details: details + awards, footer: [.init("records", "Back")])
     }
 

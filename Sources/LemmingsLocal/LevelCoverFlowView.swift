@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import LemmingsGameArt
 import NxlvKit
 
 /// One card in the presentation layer. The typed catalogue remains the launch source.
@@ -345,9 +346,31 @@ struct LevelCoverFlowItem: Equatable, Sendable {
         return self
     }
 
+    var selectedTitleFrame: CGRect {
+        let width = max(1, bounds.width - 48)
+        let height = GameTextLayout.height(selectedItem?.title ?? "", width: width, face: .large)
+        return CGRect(x: 24, y: 4, width: width, height: height)
+    }
+    var selectedSourceFrame: CGRect {
+        let text = selectedItem.map { $0.subtitle + "\n" + $0.detail } ?? ""
+        return CGRect(x: 24, y: selectedTitleFrame.maxY + 4, width: max(1, bounds.width - 48),
+                      height: GameTextLayout.height(text, width: max(1, bounds.width - 48)))
+    }
+    private var stage: CGRect {
+        let top = selectedSourceFrame.maxY + 8
+        return CGRect(x: bounds.minX, y: top, width: bounds.width, height: max(1, bounds.maxY - top))
+    }
     override func draw(_ dirtyRect: NSRect) {
         NSColor.black.withAlphaComponent(0.35).setFill()
         bounds.fill()
+        guard let item = selectedItem else { return }
+        if let renderer = GameMenuArtwork.renderer() {
+            renderer.menuParagraph(item.title, in: selectedTitleFrame, face: .large, palette: .green)
+            renderer.menuParagraph(item.subtitle + "\n" + item.detail, in: selectedSourceFrame)
+        } else {
+            GamePixelText.draw(item.title, in: selectedTitleFrame, maxScale: 1, palette: .green)
+            GamePixelText.draw(item.subtitle + " " + item.detail, in: selectedSourceFrame, maxScale: 1)
+        }
     }
 
     private func rebuildCards(animated: Bool) {
@@ -365,7 +388,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
 
         let visible: [Int]
         if usesReducedMotionLayout {
-            let count = min(5, items.count)
+            let count = min(5, max(1, Int(stage.height / 84)), items.count)
             let start = min(max(0, selectedIndex - count / 2), items.count - count)
             visible = Array(start..<(start + count))
         } else {
@@ -404,6 +427,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
 
     override func layout() {
         super.layout()
+        needsDisplay = true
         if usesReducedMotionLayout { layoutList() }
         else { layoutCoverFlow(animated: animatesNextLayout) }
         animatesNextLayout = false
@@ -411,7 +435,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
 
     private func layoutCoverFlow(animated: Bool) {
         let centreWidth = min(320, bounds.width * 0.33)
-        let centreHeight = min(260, bounds.height * 0.70)
+        let centreHeight = min(260, stage.height * 0.62)
         applyStagePerspective(cameraDistance: centreWidth * 8 / 3)
         let centreX = bounds.midX - centreWidth / 2
         let nearPitch = centreWidth * 1.25 * cos(.pi / 8)
@@ -426,7 +450,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
                 + max(0, distance - 1) * outerPitch
             let frame = CGRect(
                 x: centreX + direction * spacing,
-                y: (bounds.height - centreHeight) / 2,
+                y: stage.minY + (stage.height - centreHeight) / 2,
                 width: centreWidth,
                 height: centreHeight)
             let sideProgress = min(distance, 1)
@@ -462,9 +486,9 @@ struct LevelCoverFlowItem: Equatable, Sendable {
     private func layoutList() {
         layer?.sublayerTransform = CATransform3DIdentity
         let gap: CGFloat = 8
-        let rowHeight = max(54, min(76, (bounds.height - gap * CGFloat(cards.count - 1)) / CGFloat(max(1, cards.count))))
+        let rowHeight = max(54, min(76, (stage.height - gap * CGFloat(cards.count - 1)) / CGFloat(max(1, cards.count))))
         let height = rowHeight * CGFloat(cards.count) + gap * CGFloat(max(0, cards.count - 1))
-        var y = max(0, (bounds.height - height) / 2)
+        var y = stage.minY + max(0, (stage.height - height) / 2)
         for card in cards {
             card.presentation = .list
             card.applyListLayout(frame: CGRect(
@@ -998,23 +1022,15 @@ struct LevelCoverFlowItem: Equatable, Sendable {
                 width: content.width * 0.57, height: content.height)
             let detail = CGRect(x: title.maxX + 8, y: content.minY,
                 width: content.maxX - title.maxX - 8, height: content.height)
-            renderer.menuLine(item.title, in: title, face: .small,
-                alignment: .left, alpha: alpha, palette: selected ? .green : .blue)
-            renderer.menuLine(item.subtitle + "  " + statusDetail, in: detail,
-                face: .small, alignment: .right, alpha: alpha, palette: .blue)
-        case .cover, .focused:
-            let titleHeight = presentation == .focused ? content.height * 0.56 : content.height * 0.68
-            renderer.menuParagraph(item.title, in: CGRect(x: content.minX, y: content.minY + 8,
-                width: content.width, height: titleHeight), alignment: .center,
-                face: presentation == .focused ? .large : .small,
+            renderer.menuParagraph(item.title, in: title, alignment: .left, face: .small,
                 palette: selected ? .green : .blue, alpha: alpha)
-            if presentation == .focused {
-                renderer.menuParagraph(item.subtitle + "\n" + statusDetail,
-                    in: CGRect(x: content.minX, y: content.minY + titleHeight + 12,
-                        width: content.width, height: content.height - titleHeight - 16),
-                    alignment: .center, face: .small, palette: .blue, alpha: alpha)
-            }
+            renderer.menuParagraph(item.subtitle + "  " + statusDetail, in: detail, alignment: .right,
+                face: .small, palette: .blue, alpha: alpha)
+        case .cover, .focused:
+            renderer.menuParagraph(item.title, in: content, alignment: .center,
+                face: .small, palette: selected ? .green : .blue, alpha: alpha)
         }
+
         drawAvailabilityMark(in: content)
         if drawsFocus { drawFocus(in: cardBounds) }
     }
@@ -1022,23 +1038,6 @@ struct LevelCoverFlowItem: Equatable, Sendable {
     private func drawArtworkCover(in content: CGRect, alpha: CGFloat) {
         let artworkFrame = coverArtworkFrame(in: content)
         drawArtwork(in: artworkFrame, alpha: alpha)
-        if presentation == .focused {
-            let label = CGRect(
-                x: artworkFrame.minX + 1,
-                y: artworkFrame.maxY - min(26, artworkFrame.height * 0.20),
-                width: artworkFrame.width - 2,
-                height: min(25, artworkFrame.height * 0.20))
-            NSColor.black.withAlphaComponent(0.58).setFill()
-            label.fill()
-            if let renderer = GameMenuArtwork.renderer() {
-                renderer.menuLine(item.title, in: label.insetBy(dx: 5, dy: 1),
-                    face: .small, alignment: .center,
-                    alpha: alpha, palette: selected ? .green : .blue)
-            } else {
-                GamePixelText.draw(item.title, in: label.insetBy(dx: 5, dy: 1), maxScale: 1,
-                    palette: selected ? .green : .blue)
-            }
-        }
     }
 
     private func coverArtworkFrame(in content: CGRect) -> CGRect {
@@ -1061,7 +1060,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
         let title = CGRect(
             x: thumbnail.maxX + 12,
             y: content.minY,
-            width: content.width * 0.42,
+            width: content.width * 0.55,
             height: content.height)
         let detail = CGRect(
             x: title.maxX + 8,
@@ -1069,10 +1068,10 @@ struct LevelCoverFlowItem: Equatable, Sendable {
             width: max(1, content.maxX - title.maxX - 8),
             height: content.height)
         if let renderer = GameMenuArtwork.renderer() {
-            renderer.menuLine(item.title, in: title, face: .small,
-                alignment: .left, alpha: alpha, palette: selected ? .green : .blue)
-            renderer.menuLine(item.subtitle + "  " + statusDetail, in: detail,
-                face: .small, alignment: .right, alpha: alpha, palette: .blue)
+            renderer.menuParagraph(item.title, in: title, alignment: .left, face: .small,
+                palette: selected ? .green : .blue, alpha: alpha)
+            renderer.menuParagraph(item.subtitle + "  " + statusDetail, in: detail, alignment: .right,
+                face: .small, palette: .blue, alpha: alpha)
         } else {
             GamePixelText.draw(item.title, in: title, maxScale: 1,
                 palette: selected ? .green : .blue)

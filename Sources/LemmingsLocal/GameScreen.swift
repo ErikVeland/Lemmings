@@ -1,6 +1,7 @@
 #if os(macOS)
 import AppKit
 import NxlvKit
+import LemmingsGameArt
 
 /// A status inside the current screen. Navigation keeps its existing input targets.
 @MainActor final class GameLoadingIndicator: NSView {
@@ -306,7 +307,7 @@ import NxlvKit
         setAccessibilityLabel(title)
         addSubview(canvas)
         appearance = NSAppearance(named: .darkAqua)
-        body.frame = CGRect(x: 64, y: 152, width: 992, height: 480)
+        body.frame = CGRect(x: 64, y: canvas.headerBottom, width: 992, height: max(120, 632 - canvas.headerBottom))
         canvas.addSubview(body)
         back.onPress = { [weak self] in self?.onBack?() }
         back.frame = CGRect(x: 64, y: 634, width: 240, height: 48)
@@ -414,6 +415,11 @@ import NxlvKit
 @MainActor private final class GameMenuCanvas: NSView {
     let title: String
     let subtitle: String
+    var headerBottom: CGFloat {
+        let headingHeight = max(40, GameTextLayout.height(title, width: 928, face: .large))
+        let subtitleHeight = max(24, GameTextLayout.height(subtitle, width: 928))
+        return max(152, 48 + headingHeight + 12 + subtitleHeight + 12)
+    }
     var detail = ""
     var isMessage = false
     private let font = GameMenuArtwork.renderer()
@@ -429,12 +435,14 @@ import NxlvKit
         let panel = isMessage ? CGRect(x: 144, y: 170, width: 832, height: 376) : CGRect(x: 44, y: 20, width: 1032, height: 676)
         GameStyle.fill(panel, NSColor.black.withAlphaComponent(0.94))
         GameMenuFrame.draw(panel)
-        let heading = isMessage ? CGRect(x: 176, y: 206, width: 768, height: 40) : CGRect(x: 96, y: 48, width: 928, height: 40)
-        let subheading = CGRect(x: 96, y: 106, width: 928, height: 42)
-        let explanation = CGRect(x: 176, y: 280, width: 768, height: 144)
+        let headingWidth: CGFloat = isMessage ? 768 : 928
+        let headingHeight = max(40, GameTextLayout.height(title, width: headingWidth, face: .large))
+        let heading = CGRect(x: isMessage ? 176 : 96, y: isMessage ? 206 : 48, width: headingWidth, height: headingHeight)
+        let subheading = CGRect(x: 96, y: heading.maxY + 12, width: 928, height: max(24, GameTextLayout.height(subtitle, width: 928)))
+        let explanationY = max(280, heading.maxY + 16)
+        let explanation = CGRect(x: 176, y: explanationY, width: 768, height: max(24, 424 - explanationY))
         if let font {
-            let scale = font.width(of: MacInterfaceRenderer.menuText(title), face: .large, scale: 2) <= heading.width ? 2 : 1
-            font.menuLine(title, in: heading, face: .large, scale: scale, palette: .green)
+            font.menuParagraph(title, in: heading, face: .large, palette: .green)
             font.menuParagraph(subtitle, in: subheading)
             font.menuParagraph(detail, in: explanation)
         } else {

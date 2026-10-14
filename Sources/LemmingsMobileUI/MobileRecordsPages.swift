@@ -78,7 +78,7 @@ extension MobileLibraryViewController {
         details += ClassicAchievement.catalog.filter { campaignAfter.contains($0.id) && !campaignBefore.contains($0.id) }.map(\.title)
         if report.newRescueBest { details.insert("New rescue record", at: 0) }
         if report.newSkillBest { details.append("New skill record") }
-        if run.qualifies, bestTime.map({ run.seconds < $0 }) ?? true { details.append("New time record") }
+        if run.qualifies, bestTime.map({ run.seconds < $0 }) ?? true { details.append("New time record  \(Int(run.seconds) / 60):\(String(format: "%05.2f", run.seconds.truncatingRemainder(dividingBy: 60)))") }
         if report.earnedLevelSkip { details.append("Level skip earned") }
         if let classic = session as? ClassicMobileSession {
             do {

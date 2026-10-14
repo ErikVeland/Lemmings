@@ -1,0 +1,44 @@
+{
+  "app": "/Users/veland/Lemmings/.build/release-1.9.6/source/.build/ios-beta/2.0-13-final/UltimateLemmingsIOS.xcarchive/Products/Applications/UltimateLemmingsIOS.app",
+  "archiveSigned": true,
+  "build": 13,
+  "bundleID": "academy.glasscode.lemmings.ios",
+  "contentFiles": 26,
+  "contentManifestSHA256": "012bada8669f71d193747064cad6db469184e2783acf1cdddea7142104f80da2",
+  "executableSHA256": "5f2c66998436e24d318e4c2874fe84b736b186c6601663255db277c4c3cb8629",
+  "exportExecutableSHA256": "42ba64083748649ed08b37129ab2e9d30094e015cddc23bb42dab630d1b5f805",
+  "exportMethod": "app-store-connect",
+  "exportSignatureVerified": true,
+  "exported": true,
+  "finishedUTC": "2026-10-13T14:58:03.339220+00:00",
+  "gameCenterAppleVerified": false,
+  "gameCenterEnabled": false,
+  "gitCommit": "602700c06d957ab56b4b54aaa9660abb105dfdde",
+  "installApp": "/Users/veland/Lemmings/.build/release-1.9.6/source/.build/ios-beta/2.0-13-final/Install/Payload/UltimateLemmingsIOS.app",
+  "ipa": "/Users/veland/Lemmings/.build/release-1.9.6/source/.build/ios-beta/2.0-13-final/Export/UltimateLemmingsIOS.ipa",
+  "ipaSHA256": "85cf42cf26fc2812c07a6a7f66744f92f30f2c9fab87bf96402fdd1717d2649c",
+  "launchScope": [
+    "Classic",
+    "Lemmings 2",
+    "Lemmings 3"
+  ],
+  "minimumOS": "16.0",
+  "musicScope": "full",
+  "physicalDeviceAcceptance": "pending",
+  "profileExpiresUTC": "2027-10-10T13:17:05Z",
+  "requestedDeviceIncluded": null,
+  "scope": "Classic first device beta",
+  "signed": true,
+  "startedUTC": "2026-10-13T14:52:34.884083+00:00",
+  "status": "signed archive and IPA exported",
+  "symbolUUIDs": [
+    [
+      "96C4C25A-8323-3C77-8663-3CF8122F3263",
+      "arm64"
+    ]
+  ],
+  "team": "54WU29TRTY",
+  "uploaded": false,
+  "version": "2.0",
+  "xcode": "Xcode 27.1\nBuild version 27A9275"
+}

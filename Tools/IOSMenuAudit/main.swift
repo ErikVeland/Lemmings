@@ -6,13 +6,19 @@ import LemmingsMobileCore
 import NxlvKit
 
 @main struct MenuAudit {
+    static func invalidTargets(line: Int) -> Failure {
+        FileHandle.standardError.write(Data("Invalid menu targets at line \(line)\n".utf8))
+        return .invalidTargets
+    }
     @MainActor static func main() async throws {
+        let hierarchy = CommandLine.arguments.last == "--hierarchy"
         let pause = CommandLine.arguments.last == "--pause"
-        let latestFixes = CommandLine.arguments.last == "--current-fixes"
+        let skillPause = CommandLine.arguments.last == "--skill-pause"
+        let latestFixes = ["--current-fixes", "--rescue-budget"].contains(CommandLine.arguments.last ?? "")
         let hotSeat = CommandLine.arguments.last == "--hot-seat"
         let hotSeatFlow = CommandLine.arguments.last == "--hot-seat-flow"
         let hotSeatHUD = CommandLine.arguments.last == "--hot-seat-hud"
-        guard CommandLine.arguments.count == (pause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow ? 5 : 4) else { throw Failure.invalidArguments }
+        guard CommandLine.arguments.count == (hierarchy || pause || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow ? 5 : 4) else { throw Failure.invalidArguments }
         let artwork = URL(fileURLWithPath: CommandLine.arguments[1])
         let content = URL(fileURLWithPath: CommandLine.arguments[2])
         let output = URL(fileURLWithPath: CommandLine.arguments[3])
@@ -20,11 +26,13 @@ import NxlvKit
         guard let typography = GameMenuTypography(directory: artwork),
               typography.interface.logo != nil,
               typography.font(.small) != nil, typography.font(.large) != nil else { throw Failure.missingArtwork }
+        if skillPause { try checkSkillPause(typography: typography, output: output); return }
         let library = try ClassicMobileLibrary(directory: content)
         guard try library.checkpointLevelIdentifier(at: 0) == library.loadLevel(at: 0).session.levelIdentifier
-        else { throw Failure.invalidTargets }
+        else { throw invalidTargets(line: #line) }
+        if hierarchy { try checkHierarchy(library: library, typography: typography, output: output); return }
         if pause { try checkPause(library: library, typography: typography, output: output); return }
-        if hotSeatFlow { try checkHotSeatFlow(typography: typography, output: output); return }
+        if hotSeatFlow { try await checkHotSeatFlow(typography: typography, output: output); return }
         if hotSeatHUD { try checkHotSeatHUD(library: library, typography: typography, portraits: GamePortraitArt(directory: artwork), output: output); return }
         if hotSeat { try checkHotSeat(typography: typography, portraits: GamePortraitArt(directory: artwork), output: output); return }
         if latestFixes { try await checkCurrentFixes(library: library, typography: typography, output: output); return }
@@ -41,13 +49,13 @@ import NxlvKit
             .init("neolemmix", "NeoLemmix - Unavailable", enabled: false),
             .init("l2", "Lemmings 2 - Unavailable", enabled: false),
             .init("l3", "Lemmings 3 - Unavailable", enabled: false)]
-        let journey = Action("journey", LearningJourney.title + "  0/120")
+        let journey = Action("journey", "Journey  0/120")
         let home = MobileHomeArt.page(journey: journey, families: homeFamilies, initials: "LEM")
         let resumedHome = MobileHomeArt.page(resume: [.init("resume", "Resume - AB v CD")],
             journey: journey, families: homeFamilies, initials: "AB v CD")
         guard home.rows.map(\.id) == ["journey", "family.classic", "family.ohNo", "family.holiday",
-            "family.ohYes", "family.fan", "neolemmix", "l2", "l3", "collections"],
-            home.footer.map(\.id) == ["players", "records", "playlists", "settings", "whatsNew"]
+            "family.ohYes", "family.fan", "neolemmix", "l2", "l3"],
+            home.footer.map(\.id) == ["players", "records", "collections", "settings", "whatsNew"]
             else { throw Failure.invalidTargets }
         var pages: [(String, GameFrontEnd.Page)] = [
             ("long-title", .init(title: library.levels.max(by: { $0.title.count < $1.title.count })!.title,
@@ -84,11 +92,23 @@ import NxlvKit
                   ("insights-shared", MobileInformationArt.insights(counts: insightCounts, shared: true, days: 7, sharingAvailable: true)),
                   ("insights-token", MobileInformationArt.insightsToken(length: 12)),
                   ("insights-clear", MobileInformationArt.insightsClear())]
+        for index in pages.indices where ["win", "loss"].contains(pages[index].0) { pages[index].1.result = true }
+        var crowdedResult = GameFrontEnd.Page(title: "Level complete", subtitle: "Played: ALICE  Fun 1",
+            rows: [.init("resultAward", "Every lemming counts  (1/8)")],
+            details: ["A long level title with room to breathe", "Saved 80/80   Goal 40", "New time record  2:13.42"],
+            footer: [.init("next", "Next: BOB", primary: true), .init("retry", "Retry: ALICE"),
+                     .init("retryNext", "Retry: BOB"), .init("library", "Library"),
+                     .init("review", "Review"), .init("share", "Share movie")], preview: true)
+        crowdedResult.result = true
+        pages.append(("result-all-awards", crowdedResult))
         pages += try careerPages()
         let portraits = GamePortraitArt(directory: artwork)
         guard (0..<8).allSatisfy({ portraits?.image($0) != nil }) else { throw Failure.missingArtwork }
         var evidence: [[String: Any]] = []
-        for (device, size) in [("ipad-portrait", CGSize(width: 834, height: 1092)),
+        for (device, size) in [("ipad-8-portrait", CGSize(width: 810, height: 1040)),
+                               ("ipad-8-landscape", CGSize(width: 1080, height: 770)),
+                               ("ipad-8-large", CGSize(width: 720, height: 513)),
+                               ("ipad-portrait", CGSize(width: 834, height: 1092)),
                                ("ipad-landscape", CGSize(width: 1112, height: 814)),
                                ("iphone-portrait", CGSize(width: 390, height: 763)),
                                ("iphone-landscape", CGSize(width: 756, height: 369)),
@@ -96,6 +116,12 @@ import NxlvKit
                                ("iphone-narrow-landscape", CGSize(width: 568, height: 300))] {
             for (state, page) in pages {
                 let layout = GameFrontEnd.layout(page, width: size.width, minimumHeight: size.height)
+                if device.hasPrefix("ipad"), page.home || page.result {
+                    guard layout.size.height <= size.height else {
+                        FileHandle.standardError.write(Data("\(device) \(state): content \(layout.size.height) exceeds \(size.height)\n".utf8))
+                        throw invalidTargets(line: #line)
+                    }
+                }
                 guard Set(layout.targets.map { $0.action.id }).count == layout.targets.count,
                       layout.targets.filter({ $0.action.primary && $0.action.enabled }).count <= 1 else { throw Failure.invalidTargets }
                 if !page.home, let primary = layout.targets.first(where: {
@@ -181,6 +207,15 @@ import NxlvKit
         guard campaign.isUnlocked(.firstRescue), !campaign.isUnlocked(.lemmingsComplete),
               MobileCareerArt.campaignProgress(records: records, profileID: "player-1",
                 levelCounts: [ClassicTitle.lemmings.rawValue: 120]).unlocked.isEmpty else { throw Failure.invalidTargets }
+        let fanConditions = TrolleyConditions(gameID: "fan", packID: "community", levelID: "fan-level-0",
+            levelFingerprint: String(repeating: "b", count: 64), rulesetVersion: "classic-dos-v1", physicsMode: "classic-dos-v1",
+            population: 10, rescueRequirement: 5, startingSkills: ["digger": 1], timeLimitSeconds: 300)
+        let fanLevel = ArcadeLevel(id: "fan-level-0", title: "A long fan-made level title that wraps", game: "Community", rules: "DOS", total: 10, required: 5, conditions: fanConditions)
+        var mixed = records
+        _ = mixed.record(.init(profileID: profiles.activeID, level: fanLevel, saved: 8, didWin: true, skills: [:], seconds: 15))
+        let fanRecord = MobileCareerArt.recordLevelPage("direct|" + fanLevel.boardID, records: mixed, profileID: profiles.activeID, profileName: "AB", subtitle: "")
+        let officialRecord = MobileCareerArt.recordLevelPage("direct|" + level.boardID, records: mixed, profileID: profiles.activeID, profileName: "AB", subtitle: "")
+        guard fanRecord.subtitle.contains("Fan-made"), officialRecord.subtitle.contains("Official") else { throw Failure.invalidTargets }
         typealias Action = GameFrontEnd.Action
         let communityRows: [Action] = [.init("rankCategory", "Career stars"), .init("rankShare", "Share records", selected: true)]
         let boards: [Action] = ["Career stars", "Levels cleared", "Three-star levels", "This level", "Fastest clear", "Fastest 100%"].enumerated().map {
@@ -193,6 +228,8 @@ import NxlvKit
             ("players-new", MobileCareerArt.players(profiles, subtitle: "", draft: "", creating: true, portrait: 7)),
             ("players-edit", MobileCareerArt.players(profiles, subtitle: "", draft: "AB", portrait: 3)),
             ("records-empty", MobileCareerArt.recordsPage(records: empty, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
+            ("records-fan", fanRecord),
+            ("records-mixed", MobileCareerArt.recordsPage(records: mixed, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
             ("records-levels", MobileCareerArt.recordsPage(records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
             ("records-direct", MobileCareerArt.recordLevelPage("direct|" + level.boardID, records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
             ("records-assisted", MobileCareerArt.recordLevelPage("assisted|" + level.boardID, records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "")),

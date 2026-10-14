@@ -6,7 +6,7 @@ import NxlvKit
 /// A level portrait, rescue ledger and music sleeve, drawn with the shipped lettering.
 public enum MobilePauseArt {
     public static func page(_ summary: MobilePauseSummary, actions: [GameFrontEnd.Action]) -> GameFrontEnd.Page {
-        var page = GameFrontEnd.Page(title: "Paused", subtitle: "\(summary.level.rank) \(summary.level.number)",
+        var page = GameFrontEnd.Page(title: "Paused", subtitle: summary.level.caption,
             details: [summary.level.title, summary.status, summary.rescueText]
                 + summary.fields.map(\.text)
                 + [summary.playDetails] + summary.supplies.map { $0.label + " left: " + $0.value }
@@ -29,7 +29,7 @@ public enum MobilePauseArt {
         let subtitle = CGRect(x: left, y: heading.maxY + 2, width: inner, height: max(compact ? 20 : 24, textHeight(page.subtitle, width: inner, lineHeight: 22)))
         var y = subtitle.maxY + 10
         var details: [CGRect] = []
-        let titleHeight = textHeight(page.details[0], width: inner, lineHeight: 24)
+        let titleHeight = GameTextLayout.height(page.details[0], width: inner, face: .large)
         details.append(CGRect(x: left, y: y, width: inner, height: titleHeight))
         y += titleHeight + 12
         let previewWidth = sideBySide ? floor(inner * 0.44) : inner
@@ -105,7 +105,7 @@ public enum MobilePauseArt {
         context.setShouldAntialias(false)
         let boxes = layout.details
         text(page.subtitle, box: layout.subtitle, typography: typography, context: context)
-        text(summary.level.title, box: boxes[0], palette: .green, typography: typography, context: context)
+        GameTextLayout.draw(summary.level.title, in: boxes[0], typography: typography, face: .large, palette: .green, context: context)
         GameStoneArt.draw(in: context, frame: layout.preview, selected: false, pixel: 2)
         if let preview {
             let image = previewSource.flatMap { preview.cropping(to: $0.integral) } ?? preview
@@ -156,23 +156,9 @@ public enum MobilePauseArt {
 
     // The small shipped font has twelve-point cells. Keep whole words and a fixed face size.
     private static func lines(_ text: String, width: CGFloat) -> [String] {
-        let columns = max(1, Int(width / 12))
-        var lines: [String] = []
-        var line = ""
-        var words: [String] = []
-        for part in GameMenuTypography.menuText(text).split(separator: " ") {
-            var word = String(part)
-            while word.count > columns { words.append(String(word.prefix(columns))); word = String(word.dropFirst(columns)) }
-            if !word.isEmpty { words.append(word) }
-        }
-        for word in words {
-            let next = line.isEmpty ? word : line + " " + word
-            if next.count > columns && !line.isEmpty { lines.append(line); line = String(word) }
-            else { line = next }
-        }
-        if !line.isEmpty { lines.append(line) }
-        return lines
+        GameTextLayout.lines(text, width: width)
     }
+
     private static func textHeight(_ text: String, width: CGFloat, lineHeight: CGFloat) -> CGFloat {
         CGFloat(max(1, lines(text, width: width).count)) * lineHeight
     }

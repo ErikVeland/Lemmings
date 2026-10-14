@@ -226,24 +226,7 @@ import NxlvKit
 
   /// Preserves explicit lines and splits long words without dropping characters.
   static func menuLines(_ value: String, columns: Int) -> [String] {
-    guard !value.isEmpty else { return [] }
-    let columns = max(1, columns)
-    return menuText(value).components(separatedBy: "\n").flatMap { paragraph -> [String] in
-      var lines: [String] = [], line = ""
-      for token in paragraph.split(whereSeparator: { $0.isWhitespace }) {
-        var word = String(token)
-        if !line.isEmpty && line.count + word.count + 1 > columns {
-          lines.append(line); line = ""
-        }
-        while word.count > columns {
-          lines.append(String(word.prefix(columns)))
-          word = String(word.dropFirst(columns))
-        }
-        line += (line.isEmpty ? "" : " ") + word
-      }
-      lines.append(line)
-      return lines
-    }
+    GameTextLayout.lines(value, width: CGFloat(max(1, columns) * 12))
   }
 
   func menuParagraph(_ value: String, in rect: CGRect, alignment: NSTextAlignment = .center,

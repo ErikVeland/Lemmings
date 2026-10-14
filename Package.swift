@@ -5,7 +5,8 @@ let package = Package(
     name: "LemmingsNativePort",
     platforms: [
         .macOS("12.3"),
-        .iOS(.v16)
+        .iOS(.v16),
+        .tvOS(.v16)
     ],
     products: [
         // Shared format, rendering, and simulation code.
@@ -16,6 +17,8 @@ let package = Package(
         // Stores and records that the Mac and iPad apps share.
         .library(name: "LemmingsAppCore", targets: ["LemmingsAppCore"]),
         .library(name: "LemmingsMobileUI", targets: ["LemmingsMobileUI"]),
+        .library(name: "LemmingsTVCore", targets: ["LemmingsTVCore"]),
+        .library(name: "LemmingsTVUI", targets: ["LemmingsTVUI"]),
         .executable(name: "LemmingsLocal", targets: ["LemmingsLocal"]),
         .executable(name: "LemmingsDataTool", targets: ["LemmingsDataTool"]),
         .executable(name: "LemmingsMobileBetaTool", targets: ["LemmingsMobileBetaTool"]),
@@ -39,7 +42,7 @@ let package = Package(
         ),
         .target(
             name: "LemmingsGameArt",
-            dependencies: ["NxlvKit", "LemmingsMobileCore"],
+            dependencies: ["NxlvKit", "LemmingsMobileCore", "LemmingsTVCore"],
             path: "Sources/LemmingsGameArt"
         ),
         .target(
@@ -57,6 +60,8 @@ let package = Package(
             dependencies: ["LemmingsAppCore", "LemmingsAudio", "LemmingsGameArt", "LemmingsMobileCore", "NxlvKit"],
             path: "Sources/LemmingsMobileUI"
         ),
+        .target(name: "LemmingsTVCore", dependencies: ["LemmingsMobileCore", "NxlvKit"], path: "Sources/LemmingsTVCore"),
+        .target(name: "LemmingsTVUI", dependencies: ["LemmingsTVCore", "LemmingsMobileCore", "LemmingsGameArt", "LemmingsAudio", "NxlvKit"], path: "Sources/LemmingsTVUI"),
         .executableTarget(
             name: "LemmingsMobileBetaTool",
             dependencies: ["LemmingsMobileCore", "NxlvKit"],

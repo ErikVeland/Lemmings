@@ -33,6 +33,8 @@ Portrait and landscape controls use the shared stone artwork and bitmap symbols.
 
 The pause screen shows the level preview, rescue target, remaining lemmings, skills, time and current music. Resume stays in a fixed position while the details scroll.
 
+Pause on skill selection helps new players plan their first ten uses. The next Play action offers Keep pausing or Turn off and saves the choice. Settings can change it at any time.
+
 Music, replay history, calmer rescue effects, recovery and saved-journey fixes follow the shared Mac source. The companion private beta includes all 495 soundtrack versions. Local builds now include them by default. Slim builds offer optional soundtrack libraries in Settings; downloads require the app to remain in the foreground.
 
 The display adapts to sustained load and avoids repeated bitmap conversion. Gameplay keeps its authored tick rate. Sustained performance on older iPads remains a device acceptance check.

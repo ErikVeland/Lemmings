@@ -281,7 +281,7 @@ import UniformTypeIdentifiers
                  .init("l2", "Lemmings 2 - Unavailable", enabled: false),
                  .init("l3", "Lemmings 3 - Unavailable", enabled: false)]
             let journey = bundledJourney
-            let journeyTitle = LearningJourney.title + "  \(journey.map { learning.progress.solvedCount(in: $0) } ?? 0)/\(journey?.lessons.count ?? 0)"
+            let journeyTitle = "Journey  \(journey.map { learning.progress.solvedCount(in: $0) } ?? 0)/\(journey?.lessons.count ?? 0)"
             let initials = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") } ?? profiles.active.name
             canvas.page = MobileHomeArt.page(resume: resume,
                 journey: .init("journey", journeyTitle, enabled: catalogue != nil && journey != nil),
@@ -311,7 +311,7 @@ import UniformTypeIdentifiers
         case .levels:
             guard let library, library.levels.indices.contains(selectedIndex) else { route = .home; rebuild(); return }
             let level = library.levels[selectedIndex]
-            let rank = library.levels.filter { $0.rank == level.rank }
+            let rank = library is MobileJourneyLibrary ? library.levels : library.levels.filter { $0.rank == level.rank }
             let rankIndex = rank.firstIndex(where: { $0.index == selectedIndex }) ?? 0
             let ranksCount = library is MobileJourneyLibrary ? 1 : Set(library.levels.map(\.rank)).count
             let stats: [String] = selectedPreview.map {
@@ -320,11 +320,11 @@ import UniformTypeIdentifiers
                         s.remainingSeconds.map { "Time \($0 / 60):\(String(format: "%02d", $0 % 60))" } ?? "No time limit"]
             } ?? []
             canvas.page = .init(title: level.title,
-                                subtitle: loading ? "Loading..." : "\(level.rank)  \(level.number)/\(rank.count)",
+                                subtitle: loading ? "Loading..." : level.sourceLabel + "\n\(level.rank == level.packName ? "Level" : level.rank)  \(level.number)/\(rank.count)",
                                 details: stats,
                                 footer: (ranksCount > 1 ? [.init("rankPrevious", "< Rank"), .init("rankNext", "Rank >")] : [])
-                                    + [.init("previous", "< Level", enabled: !(library is MobileJourneyLibrary) && rankIndex > 0),
-                                         .init("next", "Level >", enabled: !(library is MobileJourneyLibrary) && rankIndex + 1 < rank.count),
+                                    + [.init("previous", "< Level", enabled: rankIndex > 0),
+                                         .init("next", "Level >", enabled: rankIndex + 1 < rank.count && canSelectJourneyLevel(selectedIndex + 1)),
                                          .init("favourite", "Favourite", selected: isFavourite(selectedIndex)),
                                          .init("addPlaylist", "Playlist", enabled: catalogue != nil && favouriteIdentity(selectedIndex) != nil)]
                                     + (currentPack != nil && activeRun == nil && library.levels.count > 1 ? [.init("random", "Random 10")] : [])
@@ -417,13 +417,13 @@ import UniformTypeIdentifiers
     private func syncPages() {
         browser.playerName = hotSeat.map { playerName($0.turn) }
         let available = MobileSystemRegions.menuFrame(in: view)
-        let coverBrowser = available.width >= 600 && available.height >= 300 && !(library is MobileJourneyLibrary)
+        let coverBrowser = available.width >= 600 && available.height >= 300
         let show = game == nil && route == .levels && coverBrowser && library != nil
         scrollView.isHidden = game != nil || show
         browser.isHidden = !show
         if show, !browserShown, let library {
             browser.frame = view.bounds
-            browser.configure(levels: library.levels, selected: selectedIndex)
+            browser.configure(levels: library.levels.filter { canSelectJourneyLevel($0.index) }, selected: selectedIndex)
         }
         browserShown = show
     }
@@ -437,7 +437,7 @@ import UniformTypeIdentifiers
     }
     func navigate(_ next: Route) {
         if next == .hotSeat, hotSeatRoster == nil {
-            hotSeatRoster = MobileHotSeatRoster(host: profiles.activeID, players: hotSeat?.players ?? [])
+            hotSeatRoster = MobileHotSeatRoster(host: profiles.activeID, players: defaultHotSeatPlayers)
         }
         if next != .insightsToken {
             mobileInsights.field?.resignFirstResponder(); mobileInsights.field?.text = nil
@@ -612,7 +612,7 @@ import UniformTypeIdentifiers
         guard let library else { return }
         let index = selectedIndex + offset
         guard library.levels.indices.contains(index),
-              library.levels[index].rank == library.levels[selectedIndex].rank else { return }
+              (library is MobileJourneyLibrary || library.levels[index].rank == library.levels[selectedIndex].rank) else { return }
         selectLevel(index)
     }
     private func moveRank(_ offset: Int) {
@@ -623,8 +623,12 @@ import UniformTypeIdentifiers
         let next = (current + offset + ranks.count) % ranks.count
         if let level = library.levels.first(where: { $0.rank == ranks[next] }) { selectLevel(level.index) }
     }
+    func canSelectJourneyLevel(_ index: Int) -> Bool {
+        guard library is MobileJourneyLibrary, let run = learning.run else { return true }
+        return index <= run.currentIndex || MobileSettings.load(from: .standard).classic.unlockAllClassicLevels
+    }
     func selectLevel(_ index: Int) {
-        if library is MobileJourneyLibrary, let run = learning.run, index != run.currentIndex { return }
+        guard canSelectJourneyLevel(index) else { return }
         guard let previewLoader else { selectedIndex = index; rebuild(); return }
         previewTask?.cancel()
         let generation = UUID(); previewGeneration = generation
@@ -683,6 +687,7 @@ import UniformTypeIdentifiers
         if let exported = syncRecoveryExport { try? FileManager.default.removeItem(at: exported); syncRecoveryExport = nil }
     }
     func loadCheckpoint() {
+        pendingCheckpoint = nil
         guard let checkpointStore else { return }
         let owner = profiles.activeID, scope = hotSeat?.scope
         Task {
@@ -719,7 +724,7 @@ import UniformTypeIdentifiers
         startLevel(checkpoint.levelIndex, checkpoint: checkpoint)
     }
     func startLevel(_ index: Int, checkpoint: MobileCheckpointEnvelope?, restoringMatchingCheckpoint: Bool = false) {
-        guard !preparingLevel, let library, let checkpointStore else { return }
+        guard !preparingLevel, canSelectJourneyLevel(index), let library, let checkpointStore else { return }
         guard let previewLoader else { return }
         previewTask?.cancel()
         let generation = UUID(); previewGeneration = generation
@@ -732,6 +737,11 @@ import UniformTypeIdentifiers
                 loading = false; preparingLevel = false
                 let matching = restoringMatchingCheckpoint && checkpoint?.levelIdentifier != prepared.content.session.levelIdentifier
                     ? nil : checkpoint
+                if library is MobileJourneyLibrary {
+                    var saved = learning
+                    try saved.select(index)
+                    try learningStorage.save(saved, name: "learning")
+                }
                 presentPreparedLevel(index, checkpoint: matching, library: library,
                                      checkpointStore: checkpointStore, content: prepared.content)
             } catch {

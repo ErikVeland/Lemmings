@@ -31,6 +31,8 @@ import UIKit
         backgroundColor = .black
         titleLabel.palette = .green
         titleLabel.face = .large
+        titleLabel.wraps = true
+        subtitleLabel.wraps = true
         back.title = "BACK"
         rankPrevious.title = "< RANK"
         rankNext.title = "RANK >"
@@ -89,6 +91,7 @@ import UIKit
         let level = levels[position]
         titleLabel.text = level.title
         updateSubtitle()
+        setNeedsLayout()
         onSelect?(level.index)
     }
 
@@ -96,7 +99,7 @@ import UIKit
         guard levels.indices.contains(flow.selectedIndex) else { return }
         let level = levels[flow.selectedIndex]
         let rank = levels.filter { $0.rank == level.rank }
-        subtitleLabel.text = MobileTurnArt.subtitle("\(level.rank)  \(level.number)/\(rank.count)", playerName: playerName, role: .next)
+        subtitleLabel.text = MobileTurnArt.subtitle(level.sourceLabel + "\n\(level.rank == level.packName ? "Level" : level.rank)  \(level.number)/\(rank.count)", playerName: playerName, role: .next)
     }
 
     private func moveRank(_ offset: Int) {
@@ -116,7 +119,7 @@ import UIKit
         let buttons = hasRanks && wideRoom ? [back, rankPrevious, rankNext, favourite, playlist, play]
             : [back, favourite, playlist, play]
         for button in [rankPrevious, rankNext] { button.isHidden = !(hasRanks && wideRoom) }
-        let layout = LevelBrowserGeometry(safe: MobileSystemRegions.menuFrame(in: self), actionCount: buttons.count)
+        let layout = LevelBrowserGeometry(safe: MobileSystemRegions.menuFrame(in: self), actionCount: buttons.count, titleText: titleLabel.text, subtitleText: subtitleLabel.text)
         backdrop.frame = bounds
         backdrop.board = layout.board
         titleLabel.frame = layout.title

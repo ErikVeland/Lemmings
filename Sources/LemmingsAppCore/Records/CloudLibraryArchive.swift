@@ -49,8 +49,12 @@ public struct CloudLibraryArchive: Codable, Equatable, Sendable {
         public var records: ArcadeRecords
         public var progress: GameProgressPreferences
         public var stamp: Stamp
-        public init(profile: ArcadeProfile, records: ArcadeRecords, progress: GameProgressPreferences, stamp: Stamp) {
+        /// Original UUIDs retain identity when older builds assigned a cloud UUID.
+        public var sourceProfileIDs: Set<String>?
+        public init(profile: ArcadeProfile, records: ArcadeRecords, progress: GameProgressPreferences, stamp: Stamp,
+                    sourceProfileIDs: Set<String>? = nil) {
             self.profile = profile; self.records = records; self.progress = progress; self.stamp = stamp
+            self.sourceProfileIDs = sourceProfileIDs
         }
     }
     public struct Seat: Codable, Equatable, Sendable {
@@ -102,6 +106,10 @@ public struct CloudLibraryArchive: Codable, Equatable, Sendable {
             guard UUID(uuidString: id) != nil, player.profile.id == id, !deleted.contains(id),
                 player.records.profiles.map(\.id) == [ArcadeRecords.cloudProfileID], player.stamp.counter < UInt64.max,
                 UUID(uuidString: player.stamp.device) != nil else { throw SequelDataError.invalid("Invalid cloud player.") }
+            guard (player.sourceProfileIDs?.count ?? 0) <= 64,
+                (player.sourceProfileIDs ?? []).allSatisfy({ UUID(uuidString: $0)?.uuidString.lowercased() == $0 }) else {
+                throw SequelDataError.invalid("Invalid source player identity.")
+            }
             _ = try player.records.validated()
             // The existing per-player archive validation also checks event and statistics ownership.
             try GameProgressArchive(owner: id, records: player.records, preferences: player.progress).validate(owner: id)
@@ -124,11 +132,22 @@ public struct CloudLibraryArchive: Codable, Equatable, Sendable {
         try validate(); try incoming.validate()
         var result = self
         result.deleted.formUnion(incoming.deleted)
+        // A stale copied save can still use the original UUID of an older cloud
+        // identity. Deletion applies to those UUIDs as well as the cloud UUID.
+        for (id, player) in result.players.merging(incoming.players, uniquingKeysWith: { a, b in
+            var merged = a
+            merged.sourceProfileIDs = (a.sourceProfileIDs ?? []).union(b.sourceProfileIDs ?? [])
+            return merged
+        }) where result.deleted.contains(id) {
+            result.deleted.formUnion(player.sourceProfileIDs ?? [])
+        }
         for (id, player) in incoming.players where !result.deleted.contains(id) {
             guard var local = result.players[id] else { result.players[id] = player; continue }
             try local.records.mergeCloudRecords(player.records, profileID: ArcadeRecords.cloudProfileID)
             local.records = try local.records.cloudRecords(profileID: ArcadeRecords.cloudProfileID)
             try local.progress.merge(player.progress)
+            let sources = (local.sourceProfileIDs ?? []).union(player.sourceProfileIDs ?? [])
+            local.sourceProfileIDs = sources.isEmpty ? nil : sources
             if local.stamp < player.stamp { local.profile = player.profile; local.stamp = player.stamp }
             else if local.stamp == player.stamp && local.profile != player.profile {
                 throw SequelDataError.invalid("Cloud player edits conflict.")

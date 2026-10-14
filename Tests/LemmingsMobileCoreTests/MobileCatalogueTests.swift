@@ -99,6 +99,7 @@ struct MobileFavouritesTests {
         #expect(library.levels.count == 2)
         #expect(library.levels[0].title == classic.levels[5].title)
         #expect(library.levels[1].title == fan.levels[1].title)
+        #expect(library.levels[0].origin == .official && library.levels[1].origin == .fanMade)
         #expect(library.origin(of: 1)?.pack == fanPack.id && library.origin(of: 1)?.index == 1)
         for index in 0..<2 {
             let content = try library.loadLevel(at: index)
@@ -247,6 +248,7 @@ struct MobileShuffleAllTests {
         // The lazy library opens no pack until a level is played.
         let library = MobileListLibrary(entries: Array(run.entries.prefix(300)), name: "Shuffle all", catalogue: catalogue, lazy: true)
         #expect(library.levels.count == 300 && library.levels.allSatisfy { !$0.title.isEmpty })
+        #expect(library.levels.allSatisfy { $0.origin == .fanMade && !$0.packName.isEmpty })
         let content = try library.loadLevel(at: 7)
         _ = try content.session.render(highlight: nil)
         #expect(library.origin(of: 7) != nil)

@@ -168,7 +168,9 @@ extension MobileGameViewController {
             if input == .key && !inputSpeed.variableEnabled { inputSpeed.tap(at: now) }
             else { inputSpeed.press(input, at: now, tapEnabled: input != .controller || gameSettings.classic.controllerTapSpeed) }
         } else {
-            inputSpeed.release(input, at: now, allowTap: allowTap && overlay.isHidden && lifecycle.isForeground && !lifecycle.isInterrupted)
+            let validRelease = allowTap && overlay.isHidden && lifecycle.isForeground && !lifecycle.isInterrupted
+            inputSpeed.release(input, at: now, allowTap: validRelease,
+                               retainReachedSpeed: input == .mouse && validRelease)
         }
         updateInputSpeed(at: now)
     }

@@ -34,7 +34,7 @@ public final class ClassicFanMobileLibrary: MobileGameLibrary {
         entries = found
         let name = pack.displayName
         levels = found.enumerated().map { index, entry in
-            MobileLevelSummary(index: index, rank: name, number: index + 1, title: entry.label)
+            MobileLevelSummary(index: index, rank: name, number: index + 1, title: entry.label, origin: .fanMade, packName: name)
         }
     }
 

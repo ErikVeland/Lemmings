@@ -18,10 +18,38 @@ struct MobileLearningTests {
         #expect(library.levels.count == journey.lessons.count)
         let content = try library.loadLevel(at: 0)
         #expect(content.summary.title == "Just dig!")
+        #expect(content.summary.origin == .official)
+        #expect(!content.summary.packName.isEmpty)
+        let fanIndex = try #require(journey.lessons.firstIndex { $0.entry.identity.packID.hasPrefix("fan:") })
+        #expect(library.levels[fanIndex].origin == .fanMade)
         #expect(content.session.snapshot.tick == 0)
         #expect(content.session.snapshot.total == 10)
         #expect(content.session.snapshot.required == 1)
     }
+    @Test func selectingJourneyLevelPreservesQueueAndRecordsTheSelectedLesson() throws {
+        let temporary = try AppStorage.temporary(named: "journey-select")
+        defer { temporary.removeTemporaryFiles() }
+        let storage = AppStorage(applicationSupport: temporary.applicationSupport,
+            resources: root.appendingPathComponent("Resources"), defaults: temporary.defaults)
+        let journey = try #require(LearningJourneyLibrary.journey(storage: storage))
+        var learning = MobileLearningState()
+        try learning.start(Array(journey.lessons.prefix(3).map(\.entry)), name: LearningJourney.title, poolID: journey.version)
+        let original = try #require(learning.run)
+        try learning.select(2)
+        #expect(learning.run?.id == original.id)
+        #expect(learning.run?.entries == original.entries)
+        #expect(learning.run?.currentIndex == 2)
+        learning.record(won: true)
+        #expect(learning.progress.solvedCount(in: journey) == 1)
+        try learning.select(0)
+        let advanced = learning.advance()
+        #expect(advanced)
+        #expect(learning.run?.currentIndex == 1)
+        let beforeInvalid = learning
+        #expect(throws: (any Error).self) { try learning.select(99) }
+        #expect(learning == beforeInvalid)
+    }
+
     @Test func storedQueueKeepsOwnerScopePositionAndDeferrals() throws {
         let resources = root.appendingPathComponent("Resources")
         let temporary = try AppStorage.temporary(named: "journey-save")
@@ -102,6 +130,35 @@ struct MobileLearningTests {
         seats.endSession()
         #expect(MobileLearningResume.find(owner: "eri", seats: seats, storage: files, journeyOnly: false)?.seat == nil)
         #expect(MobileLearningResume.find(owner: "uva", seats: seats, storage: files, journeyOnly: false)?.seat == seat)
+    }
+    @Test func homeResumeStaysInTheSelectedSessionWhileJourneyCanFindOtherSaves() throws {
+        let temporary = try AppStorage.temporary(named: "home-seat-resume")
+        defer { temporary.removeTemporaryFiles() }
+        func files(_ scope: String) -> MobileStorage {
+            MobileStorage(directory: temporary.applicationSupport.appendingPathComponent(scope))
+        }
+        let storage = AppStorage(applicationSupport: temporary.applicationSupport,
+            resources: root.appendingPathComponent("Resources"), defaults: temporary.defaults)
+        let journey = try #require(LearningJourneyLibrary.journey(storage: storage))
+        var state = MobileLearningState()
+        try state.start(Array(journey.lessons.prefix(3).map(\.entry)), name: LearningJourney.title, poolID: journey.version)
+        try files("host").save(state, name: "learning")
+        var seats = MobileHotSeatStore()
+        let started = seats.start(roster: .init(host: "host", players: ["guest"]))
+        let selected = try #require(started)
+        #expect(MobileLearningResume.find(owner: "host", seats: seats, storage: files,
+            journeyOnly: false, currentSessionOnly: true) == nil)
+        #expect(MobileLearningResume.find(owner: "host", seats: seats, storage: files)?.seat == nil)
+        try files(selected.scope).save(state, name: "learning")
+        let found = try #require(MobileLearningResume.find(owner: "host", seats: seats, storage: files,
+            journeyOnly: false, currentSessionOnly: true))
+        #expect(found.seat == selected && found.state == state)
+        _ = seats.start(roster: .init(host: "host", players: ["other"]))
+        #expect(MobileLearningResume.find(owner: "host", seats: seats, storage: files,
+            journeyOnly: false, currentSessionOnly: true) == nil)
+        seats.endSession()
+        #expect(MobileLearningResume.find(owner: "host", seats: seats, storage: files,
+            journeyOnly: false, currentSessionOnly: true)?.seat == nil)
     }
     @Test func pythonStagingUsesMacSourceRevision() throws {
         let temporary = try AppStorage.temporary(named: "revision")

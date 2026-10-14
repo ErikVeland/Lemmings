@@ -1,0 +1,8 @@
+UI test windows: offscreen; audio: muted
+PASS L2 practice disk checkpoint, map/skills, pause, attempt identity, continuation and invalid metadata
+PASS L2 route recording replays to the played result: 60 saved in 3074 ticks, 24 events
+PASS L2 Escape exits directly to the main menu
+PASS L3 Escape exits directly to the main menu
+PASS 100% Settings stays at base point size in a large Retina window
+PASS L2 forward stepping, unsupported backward step, paused ownership and final result
+PASS L3 menu Resume preserves attempt and starts play

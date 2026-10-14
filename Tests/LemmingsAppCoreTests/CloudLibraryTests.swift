@@ -71,6 +71,132 @@ import Testing
         #expect(a.records.runs.filter { $0.profileID == a.records.mainProfileID }.count == 1)
         #expect(b.records.runs.filter { $0.profileID == b.records.mainProfileID }.count == 1)
     }
+    @Test func copiedPlayerIDsRestoreNewerProgressWithoutDuplicatingPlayers() async throws {
+        let aa = try AppStorage.temporary(named: "copied-a"), bb = try AppStorage.temporary(named: "copied-b")
+        defer { aa.removeTemporaryFiles(); bb.removeTemporaryFiles() }
+        let a = ArcadeStore(storage: aa, bundledProofs: nil), b = ArcadeStore(storage: bb, bundledProofs: nil)
+        let player = ArcadeProfile(initials: "TEST", portrait: 4)
+        #expect(a.importProfiles([player], activeID: player.id))
+        #expect(b.importProfiles([player], activeID: player.id))
+        let server = LibraryServer(), identity = CloudLibraryIdentity()
+        let sa = CloudLibrarySync(store: a, storage: aa, transport: LibraryTransport(server), identities: [identity])
+        let sb = CloudLibrarySync(store: b, storage: bb, transport: LibraryTransport(server), identities: [identity])
+        #expect(a.record(run(player.id, index: 0)) != nil)
+        await sa.syncNow(); await sb.syncNow()
+        #expect(b.records.profiles == [player])
+        #expect(b.records.runs.count == 1)
+        #expect(b.record(run(player.id, index: 1)) != nil)
+        await sb.syncNow(); await sa.syncNow()
+        #expect(a.records.profiles == [player] && a.records.runs.count == 2)
+        await sa.syncNow(); await sb.syncNow()
+        #expect(b.records.runs.count == 2)
+    }
+    @Test func originalPlayerUUIDFindsAnOlderCloudIdentityWithoutResultHistory() async throws {
+        let storage = try AppStorage.temporary(named: "older-cloud-id")
+        defer { storage.removeTemporaryFiles() }
+        let store = ArcadeStore(storage: storage, bundledProofs: nil)
+        let player = ArcadeProfile(initials: "TEST", portrait: 4)
+        #expect(store.importProfiles([player], activeID: player.id))
+        let global = UUID().uuidString.lowercased(), device = UUID().uuidString.lowercased()
+        let progress = GameProgressPreferences(values: ["cleared/release/lemmings": .completed([0, 1, 2])])
+        let cloud = CloudLibraryArchive.Player(profile: .init(id: global, initials: player.initials, portrait: player.portrait),
+            records: try ArcadeRecords().cloudRecords(profileID: ArcadeProfile.legacyID), progress: progress,
+            stamp: .init(counter: 9, device: device), sourceProfileIDs: [player.id.lowercased()])
+        let identity = CloudLibraryIdentity(), server = LibraryServer()
+        server.files[identity.id] = [device: try CloudLibraryArchive(players: [global: cloud], primary: global).encoded()]
+        let sync = CloudLibrarySync(store: store, storage: storage, transport: LibraryTransport(server), identities: [identity])
+        await sync.syncNow(); await sync.syncNow()
+        #expect(sync.state == .synced && store.records.profiles == [player])
+        #expect(GameProgressPreferences.completed(pack: "release/lemmings", profileID: player.id, defaults: storage.defaults) == [0, 1, 2])
+        let versions = try server.files[identity.id]!.values.map { try CloudLibraryArchive.decode($0) }
+        #expect(versions.allSatisfy { $0.players.count == 1 && $0.players[global] != nil })
+    }
+    @Test func copiedLegacyResultsRecoverIdentityAndIdenticalHotSeatRevision() async throws {
+        let aa = try AppStorage.temporary(named: "legacy-copy-a"), bb = try AppStorage.temporary(named: "legacy-copy-b")
+        defer { aa.removeTemporaryFiles(); bb.removeTemporaryFiles() }
+        let a = ArcadeStore(storage: aa, bundledProofs: nil), b = ArcadeStore(storage: bb, bundledProofs: nil)
+        _ = try #require(a.addProfile(initials: "GF", portrait: 7, select: false))
+        #expect(a.record(run(a.records.mainProfileID, index: 0)) != nil)
+        a.prepareHotSeat(); a.turnPolicy = .atFirstFail
+        #expect(a.passSessionTurn(after: a.records.mainProfileID))
+        let seat = try #require(a.hotSeatID)
+        let progress = GameProgressPreferences(values: ["cleared/release/lemmings": .completed([0]),
+            "nativeL2Campaign.v1.bundled": .tribes(.init(tribe: 0, level: 1, results: [0: .init(startingPopulation: 60, saved: 48, medal: .gold, levelFingerprint: "fixture")])),
+            "nativeL3ClassicPreview.v1.bundled": .chronicles(.init(index: 1, population: 28, completed: [0: 28], tribe: .classic))])
+        try progress.apply(defaults: aa.defaults, profileID: a.records.mainProfileID, sessionID: seat)
+        // Copy the records and session without copying the device sync file.
+        _ = try b.mergeLibraryPlayers(try a.records.profiles.map { ($0, try a.records.cloudRecords(profileID: $0.id)) }, deleted: [])
+        try b.importLibraryHotSeats(a.libraryHotSeats)
+        try progress.apply(defaults: bb.defaults, profileID: b.records.mainProfileID, sessionID: seat)
+        let server = LibraryServer(), identity = CloudLibraryIdentity()
+        let sa = CloudLibrarySync(store: a, storage: aa, transport: LibraryTransport(server), identities: [identity])
+        let sb = CloudLibrarySync(store: b, storage: bb, transport: LibraryTransport(server), identities: [identity])
+        await sa.syncNow(); await sb.syncNow(); await sa.syncNow()
+        #expect(sa.state == .synced && sb.state == .synced)
+        #expect(a.records.profiles.count == 2 && b.records.profiles.count == 2)
+        #expect(b.libraryHotSeats.map(\.id) == [seat])
+        // Advance the original campaign, then restore its descendant on the copy.
+        var advanced = progress; advanced.addCompleted([1], pack: "release/lemmings")
+        try advanced.apply(defaults: aa.defaults, profileID: a.records.mainProfileID, sessionID: seat)
+        await sa.syncNow(); await sb.syncNow(); await sa.syncNow(); await sb.syncNow()
+        #expect(b.libraryHotSeats.map(\.id) == [seat])
+        #expect(GameProgressPreferences.capture(defaults: bb.defaults, profileID: b.records.mainProfileID,
+            profileIDs: b.records.profiles.map(\.id), sessionID: seat) == advanced)
+        #expect(!b.hotSeatIsActive)
+        #expect(b.resumeHotSeat(id: seat))
+        #expect(b.playingProfile?.portrait == 7 && b.turnPolicy == .atFirstFail)
+    }
+    @Test func deletingAnOlderIdentityAlsoRemovesItsOriginalUUID() throws {
+        let global = UUID().uuidString.lowercased(), source = UUID().uuidString.lowercased()
+        let device = UUID().uuidString.lowercased()
+        let player = CloudLibraryArchive.Player(profile: .init(id: global, initials: "TEST"),
+            records: try ArcadeRecords().cloudRecords(profileID: ArcadeProfile.legacyID), progress: .init(),
+            stamp: .init(counter: 1, device: device), sourceProfileIDs: [source])
+        var archive = CloudLibraryArchive(players: [global: player], primary: global)
+        try archive.merge(.init(deleted: [global]))
+        #expect(archive.deleted == [global, source] && archive.players.isEmpty)
+        var copy = player; copy.profile = .init(id: source, initials: "TEST")
+        try archive.merge(.init(players: [source: copy], primary: source))
+        #expect(archive.players.isEmpty)
+    }
+    @Test func previewBuildRestoresLatestSharedLibraryByDefault() async throws {
+        let aa = try AppStorage.temporary(named: "preview-source"), bb = try AppStorage.temporary(named: "preview-destination")
+        defer { aa.removeTemporaryFiles(); bb.removeTemporaryFiles() }
+        let preview = AppStorage(applicationSupport: bb.applicationSupport, resources: bb.resources,
+            defaults: bb.defaults, isPreviewBuild: true)
+        let a = ArcadeStore(storage: aa, bundledProofs: nil), b = ArcadeStore(storage: preview, bundledProofs: nil)
+        #expect(a.record(run(a.records.mainProfileID, index: 0)) != nil)
+        let server = LibraryServer(), identity = CloudLibraryIdentity()
+        let sa = CloudLibrarySync(store: a, storage: aa, transport: LibraryTransport(server), identities: [identity])
+        let sb = CloudLibrarySync(store: b, storage: preview, transport: LibraryTransport(server), identities: [identity])
+        try GameProgressPreferences(values: ["cleared/release/lemmings": .completed([]),
+            "ClassicGameProgress": .classic(.init(furthestReached: ["Fun": 0], passed: []))])
+            .apply(defaults: bb.defaults, profileID: b.records.mainProfileID)
+        sb.captureExtra = { _, _ in .init(values: ["LearningJourneyProgress": .learning(.init())]) }
+        #expect(sb.enabled)
+        await sa.syncNow(); await sb.syncNow()
+        #expect(b.records.runs.count == 1 && b.records.profiles.count == 1)
+        let integration = AppStorage(applicationSupport: bb.applicationSupport, resources: bb.resources,
+            defaults: bb.defaults, isIntegrationTestBuild: true)
+        #expect(!CloudLibrarySync(store: b, storage: integration, transport: LibraryTransport(server)).enabled)
+        sb.enabled = false
+        #expect(!CloudLibrarySync(store: b, storage: preview, transport: LibraryTransport(server)).enabled)
+    }
+    @Test func sharedLearningProgressUsesItsSessionAndKeepsSoloSeparate() throws {
+        let storage = try AppStorage.temporary(named: "shared-learning")
+        defer { storage.removeTemporaryFiles() }
+        var solo = LearningJourneyProgress(), shared = LearningJourneyProgress()
+        let first = LevelCatalogueIdentity(engine: .classic, packID: "release/lemmings", levelID: "level-0")
+        let second = LevelCatalogueIdentity(engine: .classic, packID: "release/lemmings", levelID: "level-1")
+        solo.record(first, won: true); shared.record(second, won: true)
+        try GameProgressPreferences(values: ["LearningJourneyProgress": .learning(solo)])
+            .apply(defaults: storage.defaults, profileID: "default")
+        try GameProgressPreferences(values: ["LearningJourneyProgress": .learning(shared)])
+            .apply(defaults: storage.defaults, profileID: "default", sessionID: "seat")
+        #expect(GameProgressPreferences.learning(profileID: "default", defaults: storage.defaults) == solo)
+        #expect(GameProgressPreferences.learning(profileID: "default", sessionID: "seat", defaults: storage.defaults) == shared)
+        #expect(GameProgressPreferences.learning(profileID: "another-player", sessionID: "seat", defaults: storage.defaults) == shared)
+    }
     @Test func offlineResultsMergeOnReconnectAndRepeatedReceiptDoesNotDuplicateAttempts() async throws {
         let aa = try AppStorage.temporary(named: "offline-a"), bb = try AppStorage.temporary(named: "offline-b")
         defer { aa.removeTemporaryFiles(); bb.removeTemporaryFiles() }

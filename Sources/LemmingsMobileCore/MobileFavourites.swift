@@ -96,7 +96,9 @@ public final class MobileListLibrary: MobileGameLibrary {
                 found.append((entry.pack, -1))
                 sources.append(entryIndex)
                 summaries.append(MobileLevelSummary(index: summaries.count, rank: pack(entry.pack)?.title ?? entry.pack,
-                                                    number: summaries.count + 1, title: entry.title ?? "Level"))
+                                                    number: summaries.count + 1, title: entry.title ?? "Level",
+                                                    origin: pack(entry.pack).map { $0.family == .fan ? .fanMade : .official } ?? .unspecified,
+                                                    packName: pack(entry.pack)?.title ?? ""))
                 continue
             }
             if opened[entry.pack] == nil, let pack = pack(entry.pack),
@@ -107,7 +109,8 @@ public final class MobileListLibrary: MobileGameLibrary {
             found.append((entry.pack, index))
             sources.append(entryIndex)
             summaries.append(MobileLevelSummary(index: summaries.count, rank: title,
-                                                number: summaries.count + 1, title: library.levels[index].title))
+                                                number: summaries.count + 1, title: library.levels[index].title,
+                                                origin: library.levels[index].origin, packName: title))
         }
         resolved = found
         entryIndices = sources

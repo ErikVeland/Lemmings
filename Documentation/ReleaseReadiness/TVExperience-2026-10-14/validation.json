@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-14",
+  "milestone": "Native Classic Apple TV development flow",
+  "coreChecks": 94,
+  "menuRenders": 76,
+  "playfieldRenders": 6,
+  "testWindowMode": "offscreen",
+  "testAudio": "muted",
+  "build": {
+    "status": "passed",
+    "configuration": "Debug",
+    "platform": "tvOS Simulator",
+    "architecture": "arm64",
+    "minimumOS": "16.0",
+    "sdk": "27.2",
+    "signed": false,
+    "launched": false,
+    "product": ".build/tv-xcode/Build/Products/Debug-appletvsimulator/UltimateLemmingsTV.app"
+  },
+  "validationScope": "Native state checks, shipping bitmap renderers and target geometry",
+  "physicalTVValidated": false,
+  "uiKitFocusEventsValidated": false,
+  "runtimeAudioValidated": false,
+  "sequelCampaignsAvailable": false,
+  "durableCloudResumeAvailable": false,
+  "captureManifest": "captures.json",
+  "releaseGates": "README.md"
+}

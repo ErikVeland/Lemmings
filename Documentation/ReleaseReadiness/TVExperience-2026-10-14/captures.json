@@ -1,0 +1,539 @@
+{
+  "menuCaptures" : [
+    {
+      "capture" : "home-1x.png",
+      "largeText" : false,
+      "scale" : 1,
+      "state" : "home",
+      "targets" : 5
+    },
+    {
+      "capture" : "home-2x.png",
+      "largeText" : false,
+      "scale" : 2,
+      "state" : "home",
+      "targets" : 5
+    },
+    {
+      "capture" : "home-large-1x.png",
+      "largeText" : true,
+      "scale" : 1,
+      "state" : "home",
+      "targets" : 5
+    },
+    {
+      "capture" : "home-large-2x.png",
+      "largeText" : true,
+      "scale" : 2,
+      "state" : "home",
+      "targets" : 5
+    },
+    {
+      "capture" : "games-1x.png",
+      "largeText" : false,
+      "scale" : 1,
+      "state" : "games",
+      "targets" : 4
+    },
+    {
+      "capture" : "games-2x.png",
+      "largeText" : false,
+      "scale" : 2,
+      "state" : "games",
+      "targets" : 4
+    },
+    {
+      "capture" : "games-large-1x.png",
+      "largeText" : true,
+      "scale" : 1,
+      "state" : "games",
+      "targets" : 4
+    },
+    {
+      "capture" : "games-large-2x.png",
+      "largeText" : true,
+      "scale" : 2,
+      "state" : "games",
+      "targets" : 4
+    },
+    {
+      "capture" : "ranks-1x.png",
+      "largeText" : false,
+      "scale" : 1,
+      "state" : "ranks",
+      "targets" : 7
+    },
+    {
+      "capture" : "ranks-2x.png",
+      "largeText" : false,
+      "scale" : 2,
+      "state" : "ranks",
+      "targets" : 7
+    },
+    {
+      "capture" : "ranks-large-1x.png",
+      "largeText" : true,
+      "scale" : 1,
+      "state" : "ranks",
+      "targets" : 7
+    },
+    {
+      "capture" : "ranks-large-2x.png",
+      "largeText" : true,
+      "scale" : 2,
+      "state" : "ranks",
+      "targets" : 7
+    },
+    {
+      "capture" : "levels-1x.png",
+      "largeText" : false,
+      "scale" : 1,
+      "state" : "levels",
+      "targets" : 7
+    },
+    {
+      "capture" : "levels-2x.png",
+      "largeText" : false,
+      "scale" : 2,
+      "state" : "levels",
+      "targets" : 7
+    },
+    {
+      "capture" : "levels-large-1x.png",
+      "largeText" : true,
+      "scale" : 1,
+      "state" : "levels",
+      "targets" : 7
+    },
+    {
+      "capture" : "levels-large-2x.png",
+      "largeText" : true,
+      "scale" : 2,
+      "state" : "levels",
+      "targets" : 7
+    },
+    {
+      "capture" : "briefing-1x.png",
+      "largeText" : false,
+      "scale" : 1,
+      "state" : "briefing",
+      "targets" : 2
+    },
+    {
+      "capture" : "briefing-2x.png",
+      "largeText" : false,
+      "scale" : 2,
+      "state" : "briefing",
+      "targets" : 2
+    },
+    {
+      "capture" : "briefing-large-1x.png",
+      "largeText" : true,
+      "scale" : 1,
+      "state" : "briefing",
+      "targets" : 2
+    },
+    {
+      "capture" : "briefing-large-2x.png",
+      "largeText" : true,
+      "scale" : 2,
+      "state" : "briefing",
+      "targets" : 2
+    },
+    {
+      "capture" : "handover-1x.png",
+      "largeText" : false,
+      "scale" : 1,
+      "state" : "handover",
+      "targets" : 2
+    },
+    {
+      "capture" : "handover-2x.png",
+      "largeText" : false,
+      "scale" : 2,
+      "state" : "handover",
+      "targets" : 2
+    },
+    {
+      "capture" : "handover-large-1x.png",
+      "largeText" : true,
+      "scale" : 1,
+      "state" : "handover",
+      "targets" : 2
+    },
+    {
+      "capture" : "handover-large-2x.png",
+      "largeText" : true,
+      "scale" : 2,
+      "state" : "handover",
+      "targets" : 2
+    },
+    {
+      "capture" : "paused-1x.png",
+      "largeText" : false,
+      "scale" : 1,
+      "state" : "paused",
+      "targets" : 8
+    },
+    {
+      "capture" : "paused-2x.png",
+      "largeText" : false,
+      "scale" : 2,
+      "state" : "paused",
+      "targets" : 8
+    },
+    {
+      "capture" : "paused-large-1x.png",
+      "largeText" : true,
+      "scale" : 1,
+      "state" : "paused",
+      "targets" : 8
+    },
+    {
+      "capture" : "paused-large-2x.png",
+      "largeText" : true,
+      "scale" : 2,
+      "state" : "paused",
+      "targets" : 8
+    },
+    {
+      "capture" : "camera-1x.png",
+      "largeText" : false,
+      "scale" : 1,
+      "state" : "camera",
+      "targets" : 7
+    },
+    {
+      "capture" : "camera-2x.png",
+      "largeText" : false,
+      "scale" : 2,
+      "state" : "camera",
+      "targets" : 7
+    },
+    {
+      "capture" : "camera-large-1x.png",
+      "largeText" : true,
+      "scale" : 1,
+      "state" : "camera",
+      "targets" : 7
+    },
+    {
+      "capture" : "camera-large-2x.png",
+      "largeText" : true,
+      "scale" : 2,
+      "state" : "camera",
+      "targets" : 7
+    },
+    {
+      "capture" : "skills-1x.png",
+      "largeText" : false,
+      "scale" : 1,
+      "state" : "skills",
+      "targets" : 7
+    },
+    {
+      "capture" : "skills-2x.png",
+      "largeText" : false,
+      "scale" : 2,
+      "state" : "skills",
+      "targets" : 7
+    },
+    {
+      "capture" : "skills-large-1x.png",
+      "largeText" : true,
+      "scale" : 1,
+      "state" : "skills",
+      "targets" : 7
+    },
+    {
+      "capture" : "skills-large-2x.png",
+      "largeText" : true,
+      "scale" : 2,
+      "state" : "skills",
+      "targets" : 7
+    },
+    {
+      "capture" : "success-1x.png",
+      "largeText" : false,
+      "scale" : 1,
+      "state" : "success",
+      "targets" : 3
+    },
+    {
+      "capture" : "success-2x.png",
+      "largeText" : false,
+      "scale" : 2,
+      "state" : "success",
+      "targets" : 3
+    },
+    {
+      "capture" : "success-large-1x.png",
+      "largeText" : true,
+      "scale" : 1,
+      "state" : "success",
+      "targets" : 3
+    },
+    {
+      "capture" : "success-large-2x.png",
+      "largeText" : true,
+      "scale" : 2,
+      "state" : "success",
+      "targets" : 3
+    },
+    {
+      "capture" : "partial-success-1x.png",
+      "largeText" : false,
+      "scale" : 1,
+      "state" : "partial-success",
+      "targets" : 3
+    },
+    {
+      "capture" : "partial-success-2x.png",
+      "largeText" : false,
+      "scale" : 2,
+      "state" : "partial-success",
+      "targets" : 3
+    },
+    {
+      "capture" : "partial-success-large-1x.png",
+      "largeText" : true,
+      "scale" : 1,
+      "state" : "partial-success",
+      "targets" : 3
+    },
+    {
+      "capture" : "partial-success-large-2x.png",
+      "largeText" : true,
+      "scale" : 2,
+      "state" : "partial-success",
+      "targets" : 3
+    },
+    {
+      "capture" : "failure-1x.png",
+      "largeText" : false,
+      "scale" : 1,
+      "state" : "failure",
+      "targets" : 3
+    },
+    {
+      "capture" : "failure-2x.png",
+      "largeText" : false,
+      "scale" : 2,
+      "state" : "failure",
+      "targets" : 3
+    },
+    {
+      "capture" : "failure-large-1x.png",
+      "largeText" : true,
+      "scale" : 1,
+      "state" : "failure",
+      "targets" : 3
+    },
+    {
+      "capture" : "failure-large-2x.png",
+      "largeText" : true,
+      "scale" : 2,
+      "state" : "failure",
+      "targets" : 3
+    },
+    {
+      "capture" : "confirmation-1x.png",
+      "largeText" : false,
+      "scale" : 1,
+      "state" : "confirmation",
+      "targets" : 2
+    },
+    {
+      "capture" : "confirmation-2x.png",
+      "largeText" : false,
+      "scale" : 2,
+      "state" : "confirmation",
+      "targets" : 2
+    },
+    {
+      "capture" : "confirmation-large-1x.png",
+      "largeText" : true,
+      "scale" : 1,
+      "state" : "confirmation",
+      "targets" : 2
+    },
+    {
+      "capture" : "confirmation-large-2x.png",
+      "largeText" : true,
+      "scale" : 2,
+      "state" : "confirmation",
+      "targets" : 2
+    },
+    {
+      "capture" : "settings-1x.png",
+      "largeText" : false,
+      "scale" : 1,
+      "state" : "settings",
+      "targets" : 6
+    },
+    {
+      "capture" : "settings-2x.png",
+      "largeText" : false,
+      "scale" : 2,
+      "state" : "settings",
+      "targets" : 6
+    },
+    {
+      "capture" : "settings-large-1x.png",
+      "largeText" : true,
+      "scale" : 1,
+      "state" : "settings",
+      "targets" : 6
+    },
+    {
+      "capture" : "settings-large-2x.png",
+      "largeText" : true,
+      "scale" : 2,
+      "state" : "settings",
+      "targets" : 6
+    },
+    {
+      "capture" : "audio-1x.png",
+      "largeText" : false,
+      "scale" : 1,
+      "state" : "audio",
+      "targets" : 3
+    },
+    {
+      "capture" : "audio-2x.png",
+      "largeText" : false,
+      "scale" : 2,
+      "state" : "audio",
+      "targets" : 3
+    },
+    {
+      "capture" : "audio-large-1x.png",
+      "largeText" : true,
+      "scale" : 1,
+      "state" : "audio",
+      "targets" : 3
+    },
+    {
+      "capture" : "audio-large-2x.png",
+      "largeText" : true,
+      "scale" : 2,
+      "state" : "audio",
+      "targets" : 3
+    },
+    {
+      "capture" : "player-1x.png",
+      "largeText" : false,
+      "scale" : 1,
+      "state" : "player",
+      "targets" : 4
+    },
+    {
+      "capture" : "player-2x.png",
+      "largeText" : false,
+      "scale" : 2,
+      "state" : "player",
+      "targets" : 4
+    },
+    {
+      "capture" : "player-large-1x.png",
+      "largeText" : true,
+      "scale" : 1,
+      "state" : "player",
+      "targets" : 4
+    },
+    {
+      "capture" : "player-large-2x.png",
+      "largeText" : true,
+      "scale" : 2,
+      "state" : "player",
+      "targets" : 4
+    },
+    {
+      "capture" : "roster-1x.png",
+      "largeText" : false,
+      "scale" : 1,
+      "state" : "roster",
+      "targets" : 7
+    },
+    {
+      "capture" : "roster-2x.png",
+      "largeText" : false,
+      "scale" : 2,
+      "state" : "roster",
+      "targets" : 7
+    },
+    {
+      "capture" : "roster-large-1x.png",
+      "largeText" : true,
+      "scale" : 1,
+      "state" : "roster",
+      "targets" : 7
+    },
+    {
+      "capture" : "roster-large-2x.png",
+      "largeText" : true,
+      "scale" : 2,
+      "state" : "roster",
+      "targets" : 7
+    },
+    {
+      "capture" : "transport-1x.png",
+      "largeText" : false,
+      "scale" : 1,
+      "state" : "transport",
+      "targets" : 6
+    },
+    {
+      "capture" : "transport-2x.png",
+      "largeText" : false,
+      "scale" : 2,
+      "state" : "transport",
+      "targets" : 6
+    },
+    {
+      "capture" : "transport-large-1x.png",
+      "largeText" : true,
+      "scale" : 1,
+      "state" : "transport",
+      "targets" : 6
+    },
+    {
+      "capture" : "transport-large-2x.png",
+      "largeText" : true,
+      "scale" : 2,
+      "state" : "transport",
+      "targets" : 6
+    },
+    {
+      "capture" : "help-1x.png",
+      "largeText" : false,
+      "scale" : 1,
+      "state" : "help",
+      "targets" : 1
+    },
+    {
+      "capture" : "help-2x.png",
+      "largeText" : false,
+      "scale" : 2,
+      "state" : "help",
+      "targets" : 1
+    },
+    {
+      "capture" : "help-large-1x.png",
+      "largeText" : true,
+      "scale" : 1,
+      "state" : "help",
+      "targets" : 1
+    },
+    {
+      "capture" : "help-large-2x.png",
+      "largeText" : true,
+      "scale" : 2,
+      "state" : "help",
+      "targets" : 1
+    }
+  ],
+  "nativeRenderScale" : 2,
+  "playfieldCaptures" : 6,
+  "scope" : "Shared shipping bitmap renderers and target geometry; no UIKit event or physical TV acceptance"
+}

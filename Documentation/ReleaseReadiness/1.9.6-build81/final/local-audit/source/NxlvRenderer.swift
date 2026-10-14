@@ -1,0 +1,2832 @@
+import CoreGraphics
+import Foundation
+import ImageIO
+import UniformTypeIdentifiers
+
+public enum NxlvRenderDiagnosticSeverity: String, Sendable {
+  case warning
+  case error
+}
+
+public enum NxlvRenderDiagnosticCode: String, Sendable {
+  case invalidLevelDimensions
+  case levelPixelLimitExceeded
+  case placementLimitExceeded
+  case terrainGroupLimitExceeded
+  case duplicateResolvedAsset
+  case missingResolvedAsset
+  case unsafeGraphicPath
+  case unreadableGraphic
+  case graphicFileTooLarge
+  case nonPNGGraphic
+  case malformedPNG
+  case graphicDimensionLimitExceeded
+  case graphicPixelLimitExceeded
+  case invalidPlacement
+  case invalidResize
+  case unsupportedResize
+  case invalidNineSlice
+  case duplicateTerrainGroup
+  case unnamedTerrainGroup
+  case missingTerrainGroup
+  case forwardTerrainGroupReference
+  case emptyTerrainGroup
+  case mixedTerrainGroupMaterial
+  case terrainGroupPixelLimitExceeded
+  case conflictingTerrainFlags
+  case invalidAnimationStrip
+  case randomInitialFrame
+  case secondaryAnimationsOmitted
+  case unsupportedGadget
+}
+
+public struct NxlvRenderDiagnostic: Sendable, Equatable {
+  public let severity: NxlvRenderDiagnosticSeverity
+  public let code: NxlvRenderDiagnosticCode
+  public let message: String
+  public let line: Int?
+  public let path: String?
+
+  public init(
+    severity: NxlvRenderDiagnosticSeverity,
+    code: NxlvRenderDiagnosticCode,
+    message: String,
+    line: Int? = nil,
+    path: String? = nil
+  ) {
+    self.severity = severity
+    self.code = code
+    self.message = message
+    self.line = line
+    self.path = path
+  }
+}
+
+/// Values stored in `NxlvRenderedLevel.oneWayMask`.
+public enum NxlvOneWayDirection: UInt8, Sendable, CaseIterable {
+  case none = 0
+  case left = 1
+  case right = 2
+  case up = 3
+  case down = 4
+}
+
+public struct NxlvRendererLimits: Sendable, Equatable {
+  public var maximumLevelDimension: Int
+  public var maximumLevelPixels: Int
+  public var maximumGraphicDimension: Int
+  public var maximumGraphicPixels: Int
+  public var maximumGraphicFileBytes: Int
+  public var maximumTerrainGroupPixels: Int
+  public var maximumDecodedGraphicPixels: Int
+  public var maximumPlacements: Int
+  public var maximumTerrainGroups: Int
+
+  public init(
+    maximumLevelDimension: Int = 16_384,
+    maximumLevelPixels: Int = 8_388_608,
+    maximumGraphicDimension: Int = 8_192,
+    maximumGraphicPixels: Int = 16_777_216,
+    maximumGraphicFileBytes: Int = 67_108_864,
+    maximumTerrainGroupPixels: Int = 16_777_216,
+    maximumDecodedGraphicPixels: Int = 33_554_432,
+    maximumPlacements: Int = 100_000,
+    maximumTerrainGroups: Int = 4_096
+  ) {
+    self.maximumLevelDimension = max(1, maximumLevelDimension)
+    self.maximumLevelPixels = max(1, maximumLevelPixels)
+    self.maximumGraphicDimension = max(1, maximumGraphicDimension)
+    self.maximumGraphicPixels = max(1, maximumGraphicPixels)
+    self.maximumGraphicFileBytes = max(1, maximumGraphicFileBytes)
+    self.maximumTerrainGroupPixels = max(1, maximumTerrainGroupPixels)
+    self.maximumDecodedGraphicPixels = max(1, maximumDecodedGraphicPixels)
+    self.maximumPlacements = max(1, maximumPlacements)
+    self.maximumTerrainGroups = max(1, maximumTerrainGroups)
+  }
+}
+
+public struct NxlvRenderedGadget: Sendable, Equatable {
+  public let style: String
+  public let piece: String
+  public let effect: NxlvObjectEffect
+  public let x: Int
+  public let y: Int
+  public let width: Int
+  public let height: Int
+  public let triggerX: Int?
+  public let triggerY: Int?
+  public let triggerWidth: Int?
+  public let triggerHeight: Int?
+  public let animationFrames: Int
+  public let keyFrame: Int?
+  /// Retained, transformed primary-animation frames for live app rendering.
+  public let animationRGBA: [[UInt8]]
+  public let macAnimationRGBA: [[UInt8]]
+  public let initialAnimationFrame: Int
+  public let primaryZIndex: Int
+  /// Retained secondary layers that have no state triggers. Triggered layers
+  /// remain an explicit renderer limit until their CE state machine is wired.
+  public let secondaryAnimations: [NxlvRenderedGadgetAnimation]
+  public let noOverwrite: Bool
+  /// CE moving-background parameters. Zero speed means no translation.
+  public let backgroundSpeed: Int
+  public let backgroundAngle: Int
+  /// Whole-object origin used for CE border wrapping. Animation offsets are
+  /// retained separately in the layer coordinates above.
+  public let backgroundOriginX: Int
+  public let backgroundOriginY: Int
+
+  public init(
+    style: String,
+    piece: String,
+    effect: NxlvObjectEffect,
+    x: Int,
+    y: Int,
+    width: Int,
+    height: Int,
+    triggerX: Int?,
+    triggerY: Int?,
+    triggerWidth: Int?,
+    triggerHeight: Int?,
+    animationFrames: Int = 1,
+    keyFrame: Int? = nil,
+    animationRGBA: [[UInt8]] = [],
+    macAnimationRGBA: [[UInt8]] = [],
+    initialAnimationFrame: Int = 0,
+    primaryZIndex: Int = 1,
+    secondaryAnimations: [NxlvRenderedGadgetAnimation] = [],
+    noOverwrite: Bool = false,
+    backgroundSpeed: Int = 0,
+    backgroundAngle: Int = 0,
+    backgroundOriginX: Int? = nil,
+    backgroundOriginY: Int? = nil
+  ) {
+    self.style = style
+    self.piece = piece
+    self.effect = effect
+    self.x = x
+    self.y = y
+    self.width = width
+    self.height = height
+    self.triggerX = triggerX
+    self.triggerY = triggerY
+    self.triggerWidth = triggerWidth
+    self.triggerHeight = triggerHeight
+    self.animationFrames = max(1, animationFrames)
+    self.keyFrame = keyFrame
+    self.animationRGBA = animationRGBA
+    self.macAnimationRGBA = macAnimationRGBA
+    self.initialAnimationFrame = min(max(0, initialAnimationFrame), max(0, animationRGBA.count - 1))
+    self.primaryZIndex = primaryZIndex
+    self.secondaryAnimations = secondaryAnimations
+    self.noOverwrite = noOverwrite
+    self.backgroundSpeed = backgroundSpeed
+    self.backgroundAngle = ((backgroundAngle % 16) + 16) % 16
+    self.backgroundOriginX = backgroundOriginX ?? x
+    self.backgroundOriginY = backgroundOriginY ?? y
+  }
+}
+
+public typealias NxlvRenderedAnimationState = NxlvAnimationPlaybackState
+
+public struct NxlvRenderedAnimationTrigger: Codable, Sendable, Equatable {
+  public let condition: NxlvAnimationTriggerCondition
+  public let state: NxlvAnimationPlaybackState
+  public let isVisible: Bool
+
+  public init(
+    condition: NxlvAnimationTriggerCondition,
+    state: NxlvAnimationPlaybackState,
+    isVisible: Bool
+  ) {
+    self.condition = condition
+    self.state = state
+    self.isVisible = isVisible
+  }
+}
+
+public struct NxlvRenderedGadgetAnimation: Sendable, Equatable {
+  public let name: String?
+  public let x: Int
+  public let y: Int
+  public let width: Int
+  public let height: Int
+  public let zIndex: Int
+  public let framesRGBA: [[UInt8]]
+  public let macFramesRGBA: [[UInt8]]
+  public let initialFrame: Int
+  public let state: NxlvRenderedAnimationState
+  public let initiallyVisible: Bool
+  public let triggers: [NxlvRenderedAnimationTrigger]
+
+  public init(
+    name: String?,
+    x: Int,
+    y: Int,
+    width: Int,
+    height: Int,
+    zIndex: Int,
+    framesRGBA: [[UInt8]],
+    macFramesRGBA: [[UInt8]] = [],
+    initialFrame: Int,
+    state: NxlvRenderedAnimationState,
+    initiallyVisible: Bool = true,
+    triggers: [NxlvRenderedAnimationTrigger] = []
+  ) {
+    self.name = name
+    self.x = x
+    self.y = y
+    self.width = width
+    self.height = height
+    self.zIndex = zIndex
+    self.framesRGBA = framesRGBA
+    self.macFramesRGBA = macFramesRGBA
+    self.initialFrame = min(max(0, initialFrame), max(0, framesRGBA.count - 1))
+    self.state = state
+    self.initiallyVisible = initiallyVisible
+    self.triggers = triggers
+  }
+}
+
+public struct NxlvRenderedLevel: Sendable {
+  public let width: Int
+  public let height: Int
+  /// Top-to-bottom, left-to-right, non-premultiplied RGBA8 pixels.
+  public let rgba: [UInt8]
+  /// One byte per pixel. A nonzero byte is solid terrain.
+  public let solidMask: [UInt8]
+  /// One byte per pixel. A nonzero byte is steel terrain.
+  public let steelMask: [UInt8]
+  /// One byte per pixel. Values use `NxlvOneWayDirection`.
+  public let oneWayMask: [UInt8]
+  /// One byte per pixel. This is the terrain selected by the `ONE_WAY` flag.
+  public let oneWayEligibleMask: [UInt8]
+  /// One byte per pixel. A nonzero byte means the initial terrain pixel is
+  /// fully opaque, which controls CE constructive no-overwrite rendering.
+  public let terrainOpaqueMask: [UInt8]
+  public let gadgets: [NxlvRenderedGadget]
+  /// Optional source layers retained for live terrain compositing in the app.
+  public let backgroundRGBA: [UInt8]
+  /// Optional 2× background pixels, including static background objects.
+  public let macBackgroundRGBA: [UInt8]
+  public let terrainRGBA: [UInt8]
+  /// Optional 2× Macintosh display pixels. Never used to construct physics masks.
+  public let macTerrainRGBA: [UInt8]
+  public let foregroundRGBA: [UInt8]
+  public let macForegroundRGBA: [UInt8]
+  /// CE's theme MASK colour, used for newly constructed terrain.
+  public let constructiveRGBA: [UInt8]
+
+  public init(
+    width: Int,
+    height: Int,
+    rgba: [UInt8],
+    solidMask: [UInt8],
+    steelMask: [UInt8],
+    oneWayMask: [UInt8],
+    oneWayEligibleMask: [UInt8],
+    gadgets: [NxlvRenderedGadget],
+    terrainOpaqueMask: [UInt8] = [],
+    backgroundRGBA: [UInt8] = [],
+    macBackgroundRGBA: [UInt8] = [],
+    terrainRGBA: [UInt8] = [],
+    macTerrainRGBA: [UInt8] = [],
+    foregroundRGBA: [UInt8] = [],
+    macForegroundRGBA: [UInt8] = [],
+    constructiveRGBA: [UInt8] = [0xD0, 0xB0, 0x80, 0xFF]
+  ) {
+    self.width = width
+    self.height = height
+    self.rgba = rgba
+    self.solidMask = solidMask
+    self.steelMask = steelMask
+    self.oneWayMask = oneWayMask
+    self.oneWayEligibleMask = oneWayEligibleMask
+    self.terrainOpaqueMask = terrainOpaqueMask.count == solidMask.count
+      ? terrainOpaqueMask : solidMask
+    self.gadgets = gadgets
+    self.backgroundRGBA = backgroundRGBA
+    self.macBackgroundRGBA = macBackgroundRGBA
+    self.terrainRGBA = terrainRGBA
+    self.macTerrainRGBA = macTerrainRGBA
+    self.foregroundRGBA = foregroundRGBA
+    self.macForegroundRGBA = macForegroundRGBA
+    self.constructiveRGBA = constructiveRGBA
+  }
+}
+
+public struct NxlvRenderResult: Sendable {
+  public let renderedLevel: NxlvRenderedLevel?
+  public let diagnostics: [NxlvRenderDiagnostic]
+  public let styleDiagnostics: [NxlvStyleDiagnostic]
+
+  public var hasErrors: Bool {
+    diagnostics.contains { $0.severity == .error }
+      || styleDiagnostics.contains { $0.severity == .error }
+  }
+
+  public init(
+    renderedLevel: NxlvRenderedLevel?,
+    diagnostics: [NxlvRenderDiagnostic],
+    styleDiagnostics: [NxlvStyleDiagnostic]
+  ) {
+    self.renderedLevel = renderedLevel
+    self.diagnostics = diagnostics
+    self.styleDiagnostics = styleDiagnostics
+  }
+}
+
+/// A deterministic renderer for low-resolution NeoLemmix level graphics.
+public struct NxlvRenderer: Sendable {
+  public let limits: NxlvRendererLimits
+  public let retainsVisualLayers: Bool
+  public let macArtwork: NeoLemmixMacArtwork?
+
+  public init(
+    limits: NxlvRendererLimits = NxlvRendererLimits(),
+    retainsVisualLayers: Bool = false,
+    macArtwork: NeoLemmixMacArtwork? = nil
+  ) {
+    self.limits = limits
+    self.retainsVisualLayers = retainsVisualLayers
+    self.macArtwork = macArtwork
+  }
+
+  public func render(
+    level: NxlvLevel,
+    resolution: NxlvStyleResolution
+  ) -> NxlvRenderResult {
+    var engine = NxlvRenderEngine(
+      level: level,
+      resolution: resolution,
+      limits: limits,
+      retainsVisualLayers: retainsVisualLayers,
+      macArtwork: macArtwork
+    )
+    return engine.render()
+  }
+}
+
+private struct RenderAssetKey: Hashable {
+  let kind: NxlvStyleAssetKind
+  let style: String
+  let piece: String
+
+  init(kind: NxlvStyleAssetKind, style: String, piece: String?) {
+    self.kind = kind
+    self.style = Self.normalize(style)
+    self.piece = Self.normalize(piece ?? "")
+  }
+
+  private static func normalize(_ value: String) -> String {
+    value.precomposedStringWithCanonicalMapping.lowercased(
+      with: Locale(identifier: "en_US_POSIX")
+    )
+  }
+}
+
+private struct RGBA: Equatable {
+  var red: UInt8
+  var green: UInt8
+  var blue: UInt8
+  var alpha: UInt8
+
+  static let clear = RGBA(red: 0, green: 0, blue: 0, alpha: 0)
+}
+
+private struct PixelPlane {
+  let width: Int
+  let height: Int
+  var rgba: [UInt8]
+  var macRGBA: [UInt8] = []
+  var solid: [UInt8]
+  var steel: [UInt8]
+  var oneWayEligible: [UInt8]
+  var trigger: [UInt8]
+
+  init(
+    width: Int,
+    height: Int,
+    solid: Bool = false,
+    steel: Bool = false,
+    oneWayEligible: Bool = false,
+    trigger: Bool = false
+  ) {
+    self.width = width
+    self.height = height
+    let count = width * height
+    rgba = Array(repeating: 0, count: count * 4)
+    self.solid = solid ? Array(repeating: 0, count: count) : []
+    self.steel = steel ? Array(repeating: 0, count: count) : []
+    self.oneWayEligible = oneWayEligible ? Array(repeating: 0, count: count) : []
+    self.trigger = trigger ? Array(repeating: 0, count: count) : []
+  }
+
+  init(width: Int, height: Int, rgba: [UInt8]) {
+    self.width = width
+    self.height = height
+    self.rgba = rgba
+    solid = []
+    steel = []
+    oneWayEligible = []
+    trigger = []
+  }
+
+  func pixel(_ index: Int) -> RGBA {
+    let offset = index * 4
+    return RGBA(
+      red: rgba[offset],
+      green: rgba[offset + 1],
+      blue: rgba[offset + 2],
+      alpha: rgba[offset + 3]
+    )
+  }
+
+  mutating func setPixel(_ pixel: RGBA, at index: Int) {
+    let offset = index * 4
+    rgba[offset] = pixel.red
+    rgba[offset + 1] = pixel.green
+    rgba[offset + 2] = pixel.blue
+    rgba[offset + 3] = pixel.alpha
+  }
+
+  mutating func copyPixel(from source: PixelPlane, sourceIndex: Int, to destinationIndex: Int) {
+    setPixel(source.pixel(sourceIndex), at: destinationIndex)
+    if !source.macRGBA.isEmpty || !macRGBA.isEmpty {
+      ensureMacPixels()
+      for y in 0..<2 { for x in 0..<2 {
+        let s = ((sourceIndex / source.width * 2 + y) * source.width * 2 + sourceIndex % source.width * 2 + x) * 4
+        let d = ((destinationIndex / width * 2 + y) * width * 2 + destinationIndex % width * 2 + x) * 4
+        if source.macRGBA.isEmpty {
+          let p = sourceIndex * 4
+          macRGBA[d..<d + 4] = source.rgba[p..<p + 4]
+        } else { macRGBA[d..<d + 4] = source.macRGBA[s..<s + 4] }
+      } }
+    }
+    if !solid.isEmpty, !source.solid.isEmpty {
+      solid[destinationIndex] = source.solid[sourceIndex]
+    }
+    if !steel.isEmpty, !source.steel.isEmpty {
+      steel[destinationIndex] = source.steel[sourceIndex]
+    }
+    if !oneWayEligible.isEmpty, !source.oneWayEligible.isEmpty {
+      oneWayEligible[destinationIndex] = source.oneWayEligible[sourceIndex]
+    }
+    if !trigger.isEmpty, !source.trigger.isEmpty {
+      trigger[destinationIndex] = source.trigger[sourceIndex]
+    }
+  }
+
+  mutating func ensureMacPixels() {
+    if macRGBA.isEmpty { macRGBA = NeoLemmixMacArtwork.doubled(rgba, width: width, height: height) }
+  }
+
+  mutating func clearPixel(at index: Int) {
+    if !macRGBA.isEmpty {
+      for y in 0..<2 { for x in 0..<2 {
+        let d = ((index / width * 2 + y) * width * 2 + index % width * 2 + x) * 4
+        macRGBA[d..<d + 4] = [0, 0, 0, 0]
+      } }
+    }
+    setPixel(.clear, at: index)
+    if !solid.isEmpty { solid[index] = 0 }
+    if !steel.isEmpty { steel[index] = 0 }
+    if !oneWayEligible.isEmpty { oneWayEligible[index] = 0 }
+    if !trigger.isEmpty { trigger[index] = 0 }
+  }
+}
+
+private struct PreparedTerrain {
+  let plane: PixelPlane
+  let isSteel: Bool
+}
+
+private struct PreparedGadget {
+  let plane: PixelPlane
+  let frames: [PixelPlane]
+  let secondaryAnimations: [PreparedGadgetAnimation]
+  let initialFrame: Int
+  let triggerBounds: IntRect?
+  let effect: NxlvObjectEffect
+  let direction: NxlvOneWayDirection
+  let animationOffsetX: Int
+  let animationOffsetY: Int
+  let primaryZIndex: Int
+  let animationFrames: Int
+  let keyFrame: Int?
+}
+
+private struct PreparedGadgetAnimation {
+  let name: String?
+  let frames: [PixelPlane]
+  let initialFrame: Int
+  let offsetX: Int
+  let offsetY: Int
+  let zIndex: Int
+  let state: NxlvRenderedAnimationState
+  let initiallyVisible: Bool
+  let triggers: [NxlvRenderedAnimationTrigger]
+}
+
+private struct PreparedVisualLayer {
+  let plane: PixelPlane
+  let offsetX: Int
+  let offsetY: Int
+  let zIndex: Int
+  let order: Int
+}
+
+private struct PreparedGadgetPlacement {
+  let source: NxlvGadget
+  let prepared: PreparedGadget
+  let x: Int
+  let y: Int
+  let style: String
+  let piece: String
+}
+
+private struct GroupGraphic {
+  let plane: PixelPlane
+  let isSteel: Bool
+}
+
+private struct IntRect {
+  let x: Int
+  let y: Int
+  let width: Int
+  let height: Int
+
+}
+
+private struct NxlvRenderEngine {
+  let level: NxlvLevel
+  let resolution: NxlvStyleResolution
+  let limits: NxlvRendererLimits
+  let retainsVisualLayers: Bool
+  let macArtwork: NeoLemmixMacArtwork?
+
+  var diagnostics: [NxlvRenderDiagnostic] = []
+  var assets: [RenderAssetKey: NxlvResolvedStyleAsset] = [:]
+  var ambiguousAssets: Set<RenderAssetKey> = []
+  var decodedGraphics: [URL: PixelPlane] = [:]
+  var groups: [String: GroupGraphic] = [:]
+  var declaredGroupNames: Set<String> = []
+  var processedGroupNames: Set<String> = []
+  var decodedGraphicPixelCount = 0
+  var terrainGroupPixelCount = 0
+
+  mutating func render() -> NxlvRenderResult {
+    guard let pixelCount = validatedLevelPixelCount() else {
+      return NxlvRenderResult(
+        renderedLevel: nil,
+        diagnostics: diagnostics,
+        styleDiagnostics: resolution.diagnostics
+      )
+    }
+    guard validateStructureLimits() else {
+      return NxlvRenderResult(
+        renderedLevel: nil,
+        diagnostics: diagnostics,
+        styleDiagnostics: resolution.diagnostics
+      )
+    }
+
+    indexResolvedAssets()
+    indexDeclaredGroups()
+    buildTerrainGroups()
+
+    var backgroundLayer = PixelPlane(width: level.width, height: level.height)
+    var liveBackgroundLayer = PixelPlane(width: level.width, height: level.height)
+    var terrainLayer = PixelPlane(
+      width: level.width,
+      height: level.height,
+      solid: true,
+      steel: true,
+      oneWayEligible: true
+    )
+    var foregroundLayer = PixelPlane(width: level.width, height: level.height)
+    var oneWayMask = Array(repeating: UInt8(0), count: pixelCount)
+    var renderedGadgets: [NxlvRenderedGadget] = []
+    let preparedGadgets = prepareGadgets()
+
+    drawBackground(into: &backgroundLayer)
+    liveBackgroundLayer = backgroundLayer
+    drawBackgroundGadgets(
+      preparedGadgets,
+      initial: &backgroundLayer,
+      liveBase: &liveBackgroundLayer,
+      renderedGadgets: &renderedGadgets
+    )
+    drawTerrain(into: &terrainLayer)
+    drawForegroundGadgets(
+      preparedGadgets,
+      terrain: terrainLayer,
+      foreground: &foregroundLayer,
+      oneWayMask: &oneWayMask,
+      renderedGadgets: &renderedGadgets
+    )
+
+    var composite = backgroundLayer.rgba
+    compositeLayer(terrainLayer.rgba, over: &composite)
+    compositeLayer(foregroundLayer.rgba, over: &composite)
+
+    return NxlvRenderResult(
+      renderedLevel: NxlvRenderedLevel(
+        width: level.width,
+        height: level.height,
+        rgba: composite,
+        solidMask: terrainLayer.solid,
+        steelMask: terrainLayer.steel,
+        oneWayMask: oneWayMask,
+        oneWayEligibleMask: terrainLayer.oneWayEligible,
+        gadgets: renderedGadgets,
+        terrainOpaqueMask: stride(from: 3, to: terrainLayer.rgba.count, by: 4).map {
+          terrainLayer.rgba[$0] == 255 ? 1 : 0
+        },
+        backgroundRGBA: retainsVisualLayers ? liveBackgroundLayer.rgba : [],
+        macBackgroundRGBA: retainsVisualLayers ? liveBackgroundLayer.macRGBA : [],
+        terrainRGBA: retainsVisualLayers ? terrainLayer.rgba : [],
+        macTerrainRGBA: retainsVisualLayers ? terrainLayer.macRGBA : [],
+        foregroundRGBA: retainsVisualLayers ? foregroundLayer.rgba : [],
+        macForegroundRGBA: retainsVisualLayers ? foregroundLayer.macRGBA : [],
+        constructiveRGBA: themeMaskRGBA()
+      ),
+      diagnostics: diagnostics,
+      styleDiagnostics: resolution.diagnostics
+    )
+  }
+
+  private func themeMaskRGBA() -> [UInt8] {
+    guard let metadataURL = resolution.assets.first(where: {
+      $0.reference.kind == .theme
+    })?.metadataURL,
+      let text = try? String(contentsOf: metadataURL, encoding: .utf8),
+      let token = NxlvParser.parse(text).section("colors")?.trimmedLine("mask"),
+      let value = NxlvNumber.unsignedInteger(token), value <= 0xFF_FF_FF else {
+      return [0xD0, 0xB0, 0x80, 0xFF]
+    }
+    return [
+      UInt8((value >> 16) & 0xFF),
+      UInt8((value >> 8) & 0xFF),
+      UInt8(value & 0xFF),
+      0xFF,
+    ]
+  }
+
+  private mutating func validatedLevelPixelCount() -> Int? {
+    guard level.width > 0, level.height > 0,
+      level.width <= limits.maximumLevelDimension,
+      level.height <= limits.maximumLevelDimension
+    else {
+      append(
+        .error,
+        .invalidLevelDimensions,
+        "The level dimensions must be from 1 through \(limits.maximumLevelDimension)."
+      )
+      return nil
+    }
+    guard let count = checkedProduct(level.width, level.height),
+      count <= limits.maximumLevelPixels,
+      checkedProduct(count, 4) != nil
+    else {
+      append(
+        .error,
+        .levelPixelLimitExceeded,
+        "The level exceeds the \(limits.maximumLevelPixels)-pixel render limit."
+      )
+      return nil
+    }
+    return count
+  }
+
+  private mutating func validateStructureLimits() -> Bool {
+    guard level.terrainGroups.count <= limits.maximumTerrainGroups else {
+      append(
+        .error,
+        .terrainGroupLimitExceeded,
+        "The level exceeds the \(limits.maximumTerrainGroups)-group render limit."
+      )
+      return false
+    }
+    var count = level.terrainPieces.count
+    guard let withGadgets = checkedSum(count, level.gadgets.count) else {
+      append(.error, .placementLimitExceeded, "The level placement count overflows.")
+      return false
+    }
+    count = withGadgets
+    for group in level.terrainGroups {
+      guard let next = checkedSum(count, group.terrain.count) else {
+        append(.error, .placementLimitExceeded, "The level placement count overflows.")
+        return false
+      }
+      count = next
+    }
+    guard count <= limits.maximumPlacements else {
+      append(
+        .error,
+        .placementLimitExceeded,
+        "The level exceeds the \(limits.maximumPlacements)-placement render limit."
+      )
+      return false
+    }
+    return true
+  }
+
+  private mutating func indexResolvedAssets() {
+    for asset in resolution.assets {
+      let key = RenderAssetKey(
+        kind: asset.reference.kind,
+        style: asset.reference.style,
+        piece: asset.reference.piece
+      )
+      if assets[key] != nil {
+        ambiguousAssets.insert(key)
+        assets.removeValue(forKey: key)
+        append(
+          .error,
+          .duplicateResolvedAsset,
+          "The style resolution contains duplicate assets for '\(asset.reference.style):\(asset.reference.piece ?? "")'.",
+          line: asset.reference.sourceLine
+        )
+      } else if !ambiguousAssets.contains(key) {
+        assets[key] = asset
+      }
+    }
+  }
+
+  private mutating func indexDeclaredGroups() {
+    for group in level.terrainGroups {
+      guard let name = trimmed(group.name) else { continue }
+      declaredGroupNames.insert(normalize(name))
+    }
+  }
+
+  private mutating func buildTerrainGroups() {
+    var seen: Set<String> = []
+    for group in level.terrainGroups {
+      guard let name = trimmed(group.name) else {
+        append(
+          .error,
+          .unnamedTerrainGroup,
+          "A terrain group has no NAME field.",
+          line: group.source.openingLine
+        )
+        continue
+      }
+      let key = normalize(name)
+      guard seen.insert(key).inserted else {
+        append(
+          .error,
+          .duplicateTerrainGroup,
+          "Terrain group '\(name)' is defined more than once.",
+          line: group.source.openingLine
+        )
+        continue
+      }
+      if let graphic = buildTerrainGroup(group, name: name) {
+        groups[key] = graphic
+      }
+      processedGroupNames.insert(key)
+    }
+  }
+
+  private mutating func buildTerrainGroup(
+    _ group: NxlvTerrainGroup,
+    name: String
+  ) -> GroupGraphic? {
+    var items: [(placement: NxlvTerrainPlacement, prepared: PreparedTerrain)] = []
+    var materialKinds: Set<Bool> = []
+    var bounds: IntRect?
+
+    for placement in group.terrain {
+      guard let x = placement.x, let y = placement.y else {
+        append(
+          .error,
+          .invalidPlacement,
+          "A piece in terrain group '\(name)' has no valid X or Y coordinate.",
+          line: placement.source.openingLine
+        )
+        continue
+      }
+      guard let prepared = prepareTerrain(placement, withinGroup: name) else { continue }
+      if !placement.erase { materialKinds.insert(prepared.isSteel) }
+      if !placement.erase {
+        let itemBounds = IntRect(
+          x: x,
+          y: y,
+          width: prepared.plane.width,
+          height: prepared.plane.height
+        )
+        guard let updatedBounds = union(bounds, itemBounds) else {
+          append(
+            .error,
+            .invalidPlacement,
+            "A piece in terrain group '\(name)' has coordinates outside the supported integer range.",
+            line: placement.source.openingLine
+          )
+          return nil
+        }
+        bounds = updatedBounds
+      }
+      items.append((placement, prepared))
+    }
+
+    if materialKinds.count > 1 {
+      append(
+        .error,
+        .mixedTerrainGroupMaterial,
+        "Terrain group '\(name)' mixes steel and non-steel pieces.",
+        line: group.source.openingLine
+      )
+      return nil
+    }
+    guard let bounds, bounds.width > 0, bounds.height > 0 else {
+      append(
+        .error,
+        .emptyTerrainGroup,
+        "Terrain group '\(name)' has no renderable pieces.",
+        line: group.source.openingLine
+      )
+      return nil
+    }
+    guard let groupPixels = checkedProduct(bounds.width, bounds.height),
+      groupPixels <= limits.maximumTerrainGroupPixels,
+      let totalGroupPixels = checkedSum(terrainGroupPixelCount, groupPixels),
+      totalGroupPixels <= limits.maximumTerrainGroupPixels
+    else {
+      append(
+        .error,
+        .terrainGroupPixelLimitExceeded,
+        "Terrain group '\(name)' exceeds the \(limits.maximumTerrainGroupPixels)-pixel limit.",
+        line: group.source.openingLine
+      )
+      return nil
+    }
+    terrainGroupPixelCount = totalGroupPixels
+
+    var canvas = PixelPlane(
+      width: bounds.width,
+      height: bounds.height,
+      solid: true,
+      steel: true,
+      oneWayEligible: true
+    )
+    for item in items {
+      guard let x = checkedDifference(item.placement.x ?? 0, bounds.x),
+        let y = checkedDifference(item.placement.y ?? 0, bounds.y)
+      else {
+        append(
+          .error,
+          .invalidPlacement,
+          "A piece in terrain group '\(name)' cannot be normalized safely.",
+          line: item.placement.source.openingLine
+        )
+        continue
+      }
+      compositeTerrain(
+        item.prepared,
+        atX: x,
+        y: y,
+        noOverwrite: item.placement.noOverwrite,
+        erase: item.placement.erase,
+        oneWay: false,
+        into: &canvas
+      )
+    }
+    // NeoLemmix crops composite pieces after applying erasers. The placement
+    // coordinate refers to this cropped bitmap, not the uncropped union of
+    // source-piece rectangles.
+    let croppedCanvas: PixelPlane
+    if let opaque = opaqueBounds(of: canvas) {
+      croppedCanvas = cropped(canvas, rect: opaque)
+    } else {
+      croppedCanvas = PixelPlane(
+        width: 1,
+        height: 1,
+        solid: true,
+        steel: true,
+        oneWayEligible: true
+      )
+    }
+    return GroupGraphic(plane: croppedCanvas, isSteel: materialKinds.first ?? false)
+  }
+
+  private func opaqueBounds(of plane: PixelPlane) -> IntRect? {
+    var minimumX = plane.width
+    var minimumY = plane.height
+    var maximumX = -1
+    var maximumY = -1
+    for y in 0..<plane.height {
+      for x in 0..<plane.width where plane.rgba[(y * plane.width + x) * 4 + 3] > 0 {
+        minimumX = min(minimumX, x)
+        minimumY = min(minimumY, y)
+        maximumX = max(maximumX, x)
+        maximumY = max(maximumY, y)
+      }
+    }
+    guard maximumX >= minimumX, maximumY >= minimumY else { return nil }
+    return IntRect(
+      x: minimumX,
+      y: minimumY,
+      width: maximumX - minimumX + 1,
+      height: maximumY - minimumY + 1
+    )
+  }
+
+  private mutating func drawBackground(into canvas: inout PixelPlane) {
+    guard let identifier = trimmed(level.background) else { return }
+    let fields = identifier.split(separator: ":", omittingEmptySubsequences: false)
+    guard fields.count == 2 else { return }
+    let style = String(fields[0])
+    let piece = String(fields[1])
+    guard let asset = resolvedAsset(kind: .background, style: style, piece: piece, line: nil),
+      let url = uniqueGraphicURL(
+        for: asset,
+        description: "background '\(style):\(piece)'",
+        line: nil
+      ),
+      let graphic = decodeGraphic(url, asset: asset)
+    else { return }
+    guard graphic.width > 0, graphic.height > 0 else { return }
+
+    var y = 0
+    while y < canvas.height {
+      var x = 0
+      while x < canvas.width {
+        compositeVisual(
+          graphic,
+          atX: x,
+          y: y,
+          noOverwrite: false,
+          clipToSolid: nil,
+          into: &canvas
+        )
+        x += graphic.width
+      }
+      y += graphic.height
+    }
+  }
+
+  private mutating func drawTerrain(into canvas: inout PixelPlane) {
+    for placement in level.terrainPieces {
+      guard let x = placement.x, let y = placement.y else {
+        append(
+          .error,
+          .invalidPlacement,
+          "A terrain piece has no valid X or Y coordinate.",
+          line: placement.source.openingLine
+        )
+        continue
+      }
+      guard let prepared = prepareTerrain(placement, withinGroup: nil) else { continue }
+      guard checkedSum(x, prepared.plane.width) != nil,
+        checkedSum(y, prepared.plane.height) != nil
+      else {
+        append(
+          .error,
+          .invalidPlacement,
+          "A terrain piece has coordinates outside the supported integer range.",
+          line: placement.source.openingLine
+        )
+        continue
+      }
+      if placement.erase && placement.noOverwrite {
+        append(
+          .warning,
+          .conflictingTerrainFlags,
+          "An ERASE terrain piece also uses NO_OVERWRITE and cannot erase existing terrain.",
+          line: placement.source.openingLine
+        )
+      }
+      compositeTerrain(
+        prepared,
+        atX: x,
+        y: y,
+        noOverwrite: placement.noOverwrite,
+        erase: placement.erase,
+        oneWay: placement.oneWay,
+        into: &canvas
+      )
+    }
+  }
+
+  private mutating func prepareGadgets() -> [PreparedGadgetPlacement] {
+    var result: [PreparedGadgetPlacement] = []
+    for gadget in level.gadgets {
+      guard let x = gadget.x, let y = gadget.y else {
+        append(
+          .error,
+          .invalidPlacement,
+          "A gadget has no valid X or Y coordinate.",
+          line: gadget.source.openingLine
+        )
+        continue
+      }
+      guard let style = trimmed(gadget.style), let piece = trimmed(gadget.piece),
+        let prepared = prepareGadget(gadget)
+      else { continue }
+      guard let destinationX = checkedSum(x, prepared.animationOffsetX),
+        let destinationY = checkedSum(y, prepared.animationOffsetY),
+        checkedSum(destinationX, prepared.plane.width) != nil,
+        checkedSum(destinationY, prepared.plane.height) != nil
+      else {
+        append(
+          .error,
+          .invalidPlacement,
+          "Gadget '\(style):\(piece)' has coordinates outside the supported integer range.",
+          line: gadget.source.openingLine
+        )
+        continue
+      }
+      result.append(
+        PreparedGadgetPlacement(
+          source: gadget,
+          prepared: prepared,
+          x: destinationX,
+          y: destinationY,
+          style: style,
+          piece: piece
+        ))
+    }
+    return result
+  }
+
+  private mutating func drawBackgroundGadgets(
+    _ gadgets: [PreparedGadgetPlacement],
+    initial: inout PixelPlane,
+    liveBase: inout PixelPlane,
+    renderedGadgets: inout [NxlvRenderedGadget]
+  ) {
+    for item in gadgets where item.prepared.effect == .background {
+      let objectX = item.x - item.prepared.animationOffsetX
+      let objectY = item.y - item.prepared.animationOffsetY
+      for layer in staticVisualLayers(item.prepared) {
+        compositeVisual(
+          layer.plane,
+          atX: objectX + layer.offsetX,
+          y: objectY + layer.offsetY,
+          noOverwrite: item.source.noOverwrite,
+          clipToSolid: nil,
+          into: &initial
+        )
+      }
+      let isDynamic = (item.source.speed ?? 0) != 0
+        || item.prepared.frames.count > 1
+        || item.prepared.secondaryAnimations.contains { $0.frames.count > 1 }
+      guard isDynamic else {
+        for layer in staticVisualLayers(item.prepared) {
+          compositeVisual(
+            layer.plane,
+            atX: objectX + layer.offsetX,
+            y: objectY + layer.offsetY,
+            noOverwrite: item.source.noOverwrite,
+            clipToSolid: nil,
+            into: &liveBase
+          )
+        }
+        continue
+      }
+      renderedGadgets.append(NxlvRenderedGadget(
+        style: item.style,
+        piece: item.piece,
+        effect: .background,
+        x: item.x,
+        y: item.y,
+        width: item.prepared.plane.width,
+        height: item.prepared.plane.height,
+        triggerX: nil,
+        triggerY: nil,
+        triggerWidth: nil,
+        triggerHeight: nil,
+        animationFrames: item.prepared.animationFrames,
+        keyFrame: item.prepared.keyFrame,
+        animationRGBA: retainsVisualLayers ? item.prepared.frames.map(\.rgba) : [],
+        macAnimationRGBA: retainsVisualLayers ? item.prepared.frames.map(\.macRGBA) : [],
+        initialAnimationFrame: item.prepared.initialFrame,
+        primaryZIndex: item.prepared.primaryZIndex,
+        secondaryAnimations: retainsVisualLayers ? item.prepared.secondaryAnimations.map { animation in
+          NxlvRenderedGadgetAnimation(
+            name: animation.name,
+            x: objectX + animation.offsetX,
+            y: objectY + animation.offsetY,
+            width: animation.frames[0].width,
+            height: animation.frames[0].height,
+            zIndex: animation.zIndex,
+            framesRGBA: animation.frames.map(\.rgba),
+            macFramesRGBA: animation.frames.map(\.macRGBA),
+            initialFrame: animation.initialFrame,
+            state: animation.state,
+            initiallyVisible: animation.initiallyVisible,
+            triggers: animation.triggers
+          )
+        } : [],
+        noOverwrite: item.source.noOverwrite,
+        backgroundSpeed: item.source.speed ?? 0,
+        backgroundAngle: item.source.angle ?? 0,
+        backgroundOriginX: objectX,
+        backgroundOriginY: objectY
+      ))
+    }
+  }
+
+  private func staticVisualLayers(
+    _ prepared: PreparedGadget,
+    primaryFrame: Int? = nil
+  ) -> [PreparedVisualLayer] {
+    let primaryIndex = min(
+      max(0, primaryFrame ?? prepared.initialFrame),
+      prepared.frames.count - 1
+    )
+    var result = [PreparedVisualLayer(
+      plane: prepared.frames[primaryIndex],
+      offsetX: prepared.animationOffsetX,
+      offsetY: prepared.animationOffsetY,
+      zIndex: prepared.primaryZIndex,
+      order: 0
+    )]
+    for (index, animation) in prepared.secondaryAnimations.enumerated() {
+      guard animation.initiallyVisible else { continue }
+      let frame: Int
+      switch animation.state {
+      case .stop:
+        frame = 0
+      case .matchPrimary:
+        frame = primaryIndex % animation.frames.count
+      case .play, .pause, .loopToZero:
+        frame = animation.initialFrame
+      }
+      guard animation.frames.indices.contains(frame) else { continue }
+      result.append(PreparedVisualLayer(
+        plane: animation.frames[frame],
+        offsetX: animation.offsetX,
+        offsetY: animation.offsetY,
+        zIndex: animation.zIndex,
+        order: index + 1
+      ))
+    }
+    return result.sorted {
+      $0.zIndex == $1.zIndex ? $0.order < $1.order : $0.zIndex < $1.zIndex
+    }
+  }
+
+  private mutating func drawForegroundGadgets(
+    _ gadgets: [PreparedGadgetPlacement],
+    terrain: PixelPlane,
+    foreground: inout PixelPlane,
+    oneWayMask: inout [UInt8],
+    renderedGadgets: inout [NxlvRenderedGadget]
+  ) {
+    let hasButtons = gadgets.contains { $0.prepared.effect == .unlockButton }
+    for item in gadgets {
+      let gadget = item.source
+      let prepared = item.prepared
+      let style = item.style
+      let piece = item.piece
+      if prepared.effect == .background { continue }
+      let destinationX = item.x
+      let destinationY = item.y
+      let startsOpen = prepared.effect == .lockedExit && !hasButtons
+      let primaryFrame = startsOpen ? 0 : prepared.initialFrame
+      let objectX = destinationX - prepared.animationOffsetX
+      let objectY = destinationY - prepared.animationOffsetY
+      let directional = prepared.direction != .none
+      let clipMask: [UInt8]?
+      if directional {
+        clipMask = terrain.oneWayEligible
+      } else if prepared.effect == .paint || gadget.onlyOnTerrain {
+        clipMask = terrain.solid
+      } else {
+        clipMask = nil
+      }
+      let noOverwritePrior = foreground.rgba
+      for layer in staticVisualLayers(prepared, primaryFrame: primaryFrame) {
+        compositeVisual(
+          layer.plane,
+          atX: objectX + layer.offsetX,
+          y: objectY + layer.offsetY,
+          noOverwrite: gadget.noOverwrite,
+          noOverwriteAgainst: terrain.rgba,
+          noOverwritePrior: noOverwritePrior,
+          clipToSolid: clipMask,
+          into: &foreground
+        )
+      }
+      if directional {
+        applyOneWayDirection(
+          prepared,
+          atX: destinationX,
+          y: destinationY,
+          terrain: terrain,
+          oneWayMask: &oneWayMask
+        )
+      }
+
+      let triggerBounds: IntRect?
+      if let local = prepared.triggerBounds,
+         let triggerX = checkedSum(destinationX, local.x),
+         let triggerY = checkedSum(destinationY, local.y) {
+        triggerBounds = IntRect(
+          x: triggerX, y: triggerY, width: local.width, height: local.height)
+      } else {
+        triggerBounds = transformedTriggerBounds(
+          prepared.plane,
+          atX: destinationX,
+          y: destinationY
+        )
+      }
+      renderedGadgets.append(
+        NxlvRenderedGadget(
+          style: style,
+          piece: piece,
+          effect: prepared.effect,
+          x: destinationX,
+          y: destinationY,
+          width: prepared.plane.width,
+          height: prepared.plane.height,
+          triggerX: triggerBounds?.x,
+          triggerY: triggerBounds?.y,
+          triggerWidth: triggerBounds?.width,
+          triggerHeight: triggerBounds?.height,
+          animationFrames: prepared.animationFrames,
+          keyFrame: prepared.keyFrame,
+          animationRGBA: retainsVisualLayers ? prepared.frames.map {
+            clippedGadgetRGBA(
+              $0,
+              atX: destinationX,
+              y: destinationY,
+              clipToSolid: clipMask,
+              canvasWidth: terrain.width,
+              canvasHeight: terrain.height
+            )
+          } : [],
+          macAnimationRGBA: retainsVisualLayers ? prepared.frames.map {
+            clippedMacGadgetRGBA($0, atX: destinationX, y: destinationY, clipToSolid: clipMask,
+              canvasWidth: terrain.width, canvasHeight: terrain.height)
+          } : [],
+          initialAnimationFrame: startsOpen ? 0 : prepared.initialFrame,
+          primaryZIndex: prepared.primaryZIndex,
+          secondaryAnimations: retainsVisualLayers ? prepared.secondaryAnimations.map { animation in
+            NxlvRenderedGadgetAnimation(
+              name: animation.name,
+              x: objectX + animation.offsetX,
+              y: objectY + animation.offsetY,
+              width: animation.frames[0].width,
+              height: animation.frames[0].height,
+              zIndex: animation.zIndex,
+              framesRGBA: animation.frames.map {
+                clippedGadgetRGBA(
+                  $0,
+                  atX: objectX + animation.offsetX,
+                  y: objectY + animation.offsetY,
+                  clipToSolid: clipMask,
+                  canvasWidth: terrain.width,
+                  canvasHeight: terrain.height
+                )
+              },
+              macFramesRGBA: animation.frames.map {
+                clippedMacGadgetRGBA($0, atX: objectX + animation.offsetX, y: objectY + animation.offsetY,
+                  clipToSolid: clipMask, canvasWidth: terrain.width, canvasHeight: terrain.height)
+              },
+              initialFrame: animation.initialFrame,
+              state: animation.state,
+              initiallyVisible: animation.initiallyVisible,
+              triggers: animation.triggers
+            )
+          } : [],
+          noOverwrite: gadget.noOverwrite
+        ))
+    }
+  }
+
+  private func clippedGadgetRGBA(
+    _ source: PixelPlane,
+    atX destinationX: Int,
+    y destinationY: Int,
+    clipToSolid: [UInt8]?,
+    canvasWidth: Int,
+    canvasHeight: Int
+  ) -> [UInt8] {
+    guard let clipToSolid else { return source.rgba }
+    var rgba = source.rgba
+    for sourceY in 0..<source.height {
+      for sourceX in 0..<source.width {
+        let canvasX = destinationX + sourceX
+        let canvasY = destinationY + sourceY
+        let visible = canvasX >= 0 && canvasY >= 0
+          && canvasX < canvasWidth && canvasY < canvasHeight
+          && clipToSolid[canvasY * canvasWidth + canvasX] != 0
+        if !visible { rgba[(sourceY * source.width + sourceX) * 4 + 3] = 0 }
+      }
+    }
+    return rgba
+  }
+
+  private mutating func prepareTerrain(
+    _ placement: NxlvTerrainPlacement,
+    withinGroup groupName: String?
+  ) -> PreparedTerrain? {
+    guard let style = trimmed(placement.style), let piece = trimmed(placement.piece) else {
+      append(
+        .error,
+        .invalidPlacement,
+        "A terrain piece has no STYLE or PIECE value.",
+        line: placement.source.openingLine
+      )
+      return nil
+    }
+
+    if style.caseInsensitiveCompare("*GROUP") == .orderedSame {
+      let key = normalize(piece)
+      guard let group = groups[key] else {
+        let isForward =
+          groupName != nil
+          && declaredGroupNames.contains(key)
+          && !processedGroupNames.contains(key)
+        append(
+          .error,
+          isForward ? .forwardTerrainGroupReference : .missingTerrainGroup,
+          isForward
+            ? "Terrain group '\(piece)' is used before it is defined."
+            : "Terrain group '\(piece)' is not defined.",
+          line: placement.source.openingLine
+        )
+        return nil
+      }
+      if placement.width != nil || placement.height != nil {
+        append(
+          .error,
+          .unsupportedResize,
+          "Terrain group '\(piece)' cannot use WIDTH or HEIGHT.",
+          line: placement.source.openingLine
+        )
+        return nil
+      }
+      var plane = transformed(
+        group.plane,
+        rotate: placement.rotate,
+        flipHorizontal: placement.flipHorizontal,
+        flipVertical: placement.flipVertical
+      )
+      setTerrainMaterial(
+        in: &plane,
+        steel: group.isSteel,
+        oneWay: false
+      )
+      return PreparedTerrain(plane: plane, isSteel: group.isSteel)
+    }
+
+    guard
+      let asset = resolvedAsset(
+        kind: .terrain,
+        style: style,
+        piece: piece,
+        line: placement.source.openingLine
+      ),
+      let url = uniqueGraphicURL(
+        for: asset,
+        description: "terrain '\(style):\(piece)'",
+        line: placement.source.openingLine
+      ),
+      let decoded = decodeGraphic(url, asset: asset)
+    else { return nil }
+    let metadata = asset.terrainMetadata ?? emptyTerrainMetadata()
+    guard
+      let resized = resized(
+        decoded,
+        requestedWidth: placement.width,
+        requestedHeight: placement.height,
+        axes: metadata.resizeAxes,
+        defaultWidth: metadata.defaultWidth,
+        defaultHeight: metadata.defaultHeight,
+        margins: metadata.nineSlice,
+        line: placement.source.openingLine,
+        description: "terrain '\(style):\(piece)'"
+      )
+    else { return nil }
+    var plane = transformed(
+      resized,
+      rotate: placement.rotate,
+      flipHorizontal: placement.flipHorizontal,
+      flipVertical: placement.flipVertical
+    )
+    setTerrainMaterial(in: &plane, steel: metadata.isSteel, oneWay: false)
+    return PreparedTerrain(plane: plane, isSteel: metadata.isSteel)
+  }
+
+  private mutating func prepareGadget(_ gadget: NxlvGadget) -> PreparedGadget? {
+    guard let style = trimmed(gadget.style), let piece = trimmed(gadget.piece) else {
+      append(
+        .error,
+        .invalidPlacement,
+        "A gadget has no STYLE or PIECE value.",
+        line: gadget.source.openingLine
+      )
+      return nil
+    }
+    guard
+      let asset = resolvedAsset(
+        kind: .object,
+        style: style,
+        piece: piece,
+        line: gadget.source.openingLine
+      )
+    else { return nil }
+    guard let metadata = asset.objectMetadata else {
+      append(
+        .error,
+        .missingResolvedAsset,
+        "Object '\(style):\(piece)' has no resolved metadata.",
+        line: gadget.source.openingLine
+      )
+      return nil
+    }
+    guard let primaryIndex = metadata.animations.firstIndex(where: { $0.isPrimary }) else {
+      append(
+        .error,
+        .missingResolvedAsset,
+        "Object '\(style):\(piece)' has no resolved primary animation graphic.",
+        line: gadget.source.openingLine
+      )
+      return nil
+    }
+    let animation = metadata.animations[primaryIndex]
+    var sourceFrames: [PixelPlane]
+    var initialFrame = 0
+    if let generatedName = animation.name, generatedName.hasPrefix("*") {
+      if generatedName.caseInsensitiveCompare("*PICKUP") == .orderedSame,
+         let themeAsset = resolution.assets.first(where: { $0.reference.kind == .theme }),
+         let skill = gadget.skillType {
+        let eraserAnimation = metadata.animations.first {
+          $0.name?.caseInsensitiveCompare("skill_mask") == .orderedSame
+        }
+        let eraserFrames = eraserAnimation.flatMap {
+          decodedAnimationFrames(
+            $0,
+            piece: piece,
+            asset: asset,
+            line: gadget.source.openingLine,
+            description: "pickup eraser for object '\(style):\(piece)'"
+          )
+        }
+        guard let generated = NeoLemmixPickupGraphics.make(
+          themeAsset: themeAsset,
+          stylesRootURL: themeAsset.styleDirectoryURL.deletingLastPathComponent(),
+          eraseFrames: eraserFrames?.map(\.rgba),
+          eraseWidth: eraserFrames?.first?.width ?? 0,
+          eraseHeight: eraserFrames?.first?.height ?? 0
+        ) else {
+          append(
+            .error,
+            .missingResolvedAsset,
+            "Object '\(style):\(piece)' could not generate its CE pickup skill artwork.",
+            line: gadget.source.openingLine
+          )
+          return nil
+        }
+        sourceFrames = generated.framesRGBA.map {
+          PixelPlane(width: generated.width, height: generated.height, rgba: $0)
+        }
+        initialFrame = (NxlvSkill.allCases.firstIndex(of: skill) ?? 0) * 2 + 1
+      } else {
+        let width = animation.declaredWidth
+          ?? max(1, (metadata.triggerX ?? 0) + (metadata.triggerWidth ?? 1))
+        let height = animation.declaredHeight
+          ?? max(1, (metadata.triggerY ?? 0) + (metadata.triggerHeight ?? 1))
+        guard width > 0, height > 0 else {
+          append(
+            .error,
+            .invalidPlacement,
+            "Object '\(style):\(piece)' has an invalid generated animation size.",
+            line: gadget.source.openingLine
+          )
+          return nil
+        }
+        sourceFrames = [PixelPlane(width: width, height: height)]
+      }
+    } else {
+      let expectedBaseName = animation.name.map { "\(piece)_\($0)" } ?? piece
+      let primaryURLs = asset.graphicURLs.filter {
+        normalize($0.deletingPathExtension().lastPathComponent) == normalize(expectedBaseName)
+      }
+      guard primaryURLs.count == 1 else {
+        append(
+          .error,
+          .missingResolvedAsset,
+          "Object '\(style):\(piece)' does not have exactly one resolved primary animation graphic.",
+          line: gadget.source.openingLine
+        )
+        return nil
+      }
+      guard
+        let strip = decodeGraphic(primaryURLs[0], asset: asset),
+        let decodedFrames = animationFrames(
+          from: strip,
+          animation: animation,
+          line: gadget.source.openingLine,
+          description: "object '\(style):\(piece)'"
+        )
+      else { return nil }
+      sourceFrames = decodedFrames
+      initialFrame = initialAnimationFrameIndex(
+        animation: animation,
+        effect: metadata.effect,
+        frameCount: decodedFrames.count,
+        line: gadget.source.openingLine,
+        description: "object '\(style):\(piece)'"
+      )
+    }
+
+    sourceFrames = recreatedFrames(sourceFrames, asset: asset)
+
+    for index in sourceFrames.indices {
+      setTriggerMask(
+        in: &sourceFrames[index],
+        metadata: metadata,
+        line: gadget.source.openingLine,
+        description: "object '\(style):\(piece)'"
+      )
+    }
+    var frames: [PixelPlane] = []
+    for sourceFrame in sourceFrames {
+      guard let resizedFrame = resized(
+        sourceFrame,
+        requestedWidth: gadget.width,
+        requestedHeight: gadget.height,
+        axes: metadata.resizeAxes,
+        defaultWidth: metadata.defaultWidth,
+        defaultHeight: metadata.defaultHeight,
+        margins: animation.nineSlice,
+        line: gadget.source.openingLine,
+        description: "object '\(style):\(piece)'"
+      ) else { return nil }
+      frames.append(transformed(
+        resizedFrame,
+        rotate: gadget.rotate,
+        flipHorizontal: gadget.flipHorizontal,
+        flipVertical: gadget.flipVertical
+      ))
+    }
+    guard frames.indices.contains(initialFrame) else { return nil }
+    let plane = frames[initialFrame]
+    let primaryUntransformedWidth = gadget.rotate ? plane.height : plane.width
+    let primaryUntransformedHeight = gadget.rotate ? plane.width : plane.height
+    let primaryOffset = transformedAnimationOffset(
+      x: animation.offsetX,
+      y: animation.offsetY,
+      layerWidth: primaryUntransformedWidth,
+      layerHeight: primaryUntransformedHeight,
+      primaryWidth: primaryUntransformedWidth,
+      primaryHeight: primaryUntransformedHeight,
+      rotate: gadget.rotate,
+      flipHorizontal: gadget.flipHorizontal,
+      flipVertical: gadget.flipVertical
+    )
+    var secondaryAnimations: [PreparedGadgetAnimation] = []
+    for secondary in metadata.animations where !secondary.isPrimary {
+      guard let decoded = decodedAnimationFrames(
+        secondary,
+        piece: piece,
+        asset: asset,
+        line: gadget.source.openingLine,
+        description: "secondary animation for object '\(style):\(piece)'"
+      ) else { return nil }
+      let secondaryInitial = initialAnimationFrameIndex(
+        animation: secondary,
+        effect: .none,
+        frameCount: decoded.count,
+        line: gadget.source.openingLine,
+        description: "secondary animation for object '\(style):\(piece)'"
+      )
+      let widthDelta = primaryUntransformedWidth - sourceFrames[initialFrame].width
+      let heightDelta = primaryUntransformedHeight - sourceFrames[initialFrame].height
+      var secondaryFrames: [PixelPlane] = []
+      for sourceFrame in decoded {
+        let requestedWidth = metadata.resizeAxes.contains(.horizontal)
+          ? sourceFrame.width + widthDelta : nil
+        let requestedHeight = metadata.resizeAxes.contains(.vertical)
+          ? sourceFrame.height + heightDelta : nil
+        guard let resizedFrame = resized(
+          sourceFrame,
+          requestedWidth: requestedWidth,
+          requestedHeight: requestedHeight,
+          axes: metadata.resizeAxes,
+          defaultWidth: nil,
+          defaultHeight: nil,
+          margins: secondary.nineSlice,
+          line: gadget.source.openingLine,
+          description: "secondary animation for object '\(style):\(piece)'"
+        ) else { return nil }
+        secondaryFrames.append(transformed(
+          resizedFrame,
+          rotate: gadget.rotate,
+          flipHorizontal: gadget.flipHorizontal,
+          flipVertical: gadget.flipVertical
+        ))
+      }
+      guard let first = secondaryFrames.first else { return nil }
+      let untransformedWidth = gadget.rotate ? first.height : first.width
+      let untransformedHeight = gadget.rotate ? first.width : first.height
+      let offset = transformedAnimationOffset(
+        x: secondary.offsetX,
+        y: secondary.offsetY,
+        layerWidth: untransformedWidth,
+        layerHeight: untransformedHeight,
+        primaryWidth: primaryUntransformedWidth,
+        primaryHeight: primaryUntransformedHeight,
+        rotate: gadget.rotate,
+        flipHorizontal: gadget.flipHorizontal,
+        flipVertical: gadget.flipVertical
+      )
+      secondaryAnimations.append(PreparedGadgetAnimation(
+        name: secondary.name,
+        frames: secondaryFrames,
+        initialFrame: secondaryInitial,
+        offsetX: offset.x,
+        offsetY: offset.y,
+        zIndex: secondary.zIndex,
+        state: renderedAnimationState(secondary.initialState),
+        initiallyVisible: !secondary.startsHidden,
+        triggers: secondary.triggers.map {
+          NxlvRenderedAnimationTrigger(
+            condition: $0.condition,
+            state: $0.state,
+            isVisible: $0.isVisible
+          )
+        }
+      ))
+    }
+    let direction = transformedDirection(
+      direction(for: metadata.effect),
+      rotate: gadget.rotate,
+      flipHorizontal: gadget.flipHorizontal,
+      flipVertical: gadget.flipVertical
+    )
+    let triggerDirection = self.direction(for: metadata.effect)
+    var triggerWidth = metadata.triggerWidth
+      ?? (triggerDirection == .none ? 0 : sourceFrames[initialFrame].width)
+    var triggerHeight = metadata.triggerHeight
+      ?? (triggerDirection == .none ? 0 : sourceFrames[initialFrame].height)
+    if metadata.resizeAxes.contains(.horizontal) {
+      triggerWidth += plane.width - sourceFrames[initialFrame].width
+    }
+    if metadata.resizeAxes.contains(.vertical) {
+      triggerHeight += plane.height - sourceFrames[initialFrame].height
+    }
+    // CE keeps trigger geometry in the gadget's untransformed coordinate
+    // system. FLIP_HORIZONTAL changes physics direction and visual drawing,
+    // but it does not mirror the trigger rectangle. Animation offsets are
+    // visual-only as well.
+    let triggerBounds = triggerWidth > 0 && triggerHeight > 0 ? IntRect(
+      x: (metadata.triggerX ?? 0) - primaryOffset.x,
+      y: (metadata.triggerY ?? 0) - primaryOffset.y,
+      width: triggerWidth,
+      height: triggerHeight
+    ) : nil
+    let effect: NxlvObjectEffect
+    if gadget.flipHorizontal && metadata.effect == .forceLeft {
+      effect = .forceRight
+    } else if gadget.flipHorizontal && metadata.effect == .forceRight {
+      effect = .forceLeft
+    } else {
+      effect = metadata.effect
+    }
+    return PreparedGadget(
+      plane: plane,
+      frames: frames,
+      secondaryAnimations: secondaryAnimations,
+      initialFrame: initialFrame,
+      triggerBounds: triggerBounds,
+      effect: effect,
+      direction: direction,
+      animationOffsetX: primaryOffset.x,
+      animationOffsetY: primaryOffset.y,
+      primaryZIndex: animation.zIndex,
+      animationFrames: animation.frames ?? 1,
+      keyFrame: metadata.keyFrame
+    )
+  }
+
+  private mutating func animationFrames(
+    from strip: PixelPlane,
+    animation: NxlvObjectAnimationMetadata,
+    line: Int?,
+    description: String
+  ) -> [PixelPlane]? {
+    let frameCount = animation.frames ?? 1
+    guard frameCount > 0 else {
+      append(
+        .error, .invalidAnimationStrip, "The \(description) frame count is not positive.",
+        line: line)
+      return nil
+    }
+    let frameWidth: Int
+    let frameHeight: Int
+    if animation.usesHorizontalStrip {
+      guard strip.width >= frameCount else {
+        append(
+          .error, .invalidAnimationStrip,
+          "The \(description) horizontal strip is too short for its frame count.", line: line)
+        return nil
+      }
+      frameWidth = strip.width / frameCount
+      frameHeight = strip.height
+      if !strip.width.isMultiple(of: frameCount) {
+        append(
+          .warning, .invalidAnimationStrip,
+          "The \(description) horizontal strip has remainder pixels; integer frame division was used.",
+          line: line)
+      }
+    } else {
+      guard strip.height >= frameCount else {
+        append(
+          .error, .invalidAnimationStrip,
+          "The \(description) vertical strip is too short for its frame count.", line: line)
+        return nil
+      }
+      frameWidth = strip.width
+      frameHeight = strip.height / frameCount
+      if !strip.height.isMultiple(of: frameCount) {
+        append(
+          .warning, .invalidAnimationStrip,
+          "The \(description) vertical strip has remainder pixels; integer frame division was used.",
+          line: line)
+      }
+    }
+    guard frameWidth > 0, frameHeight > 0 else {
+      append(
+        .error, .invalidAnimationStrip, "The \(description) contains an empty frame.", line: line)
+      return nil
+    }
+
+    return (0..<frameCount).map { frame in
+      let originX = animation.usesHorizontalStrip ? frame * frameWidth : 0
+      let originY = animation.usesHorizontalStrip ? 0 : frame * frameHeight
+      return cropped(
+        strip,
+        rect: IntRect(x: originX, y: originY, width: frameWidth, height: frameHeight)
+      )
+    }
+  }
+
+  private mutating func decodedAnimationFrames(
+    _ animation: NxlvObjectAnimationMetadata,
+    piece: String,
+    asset: NxlvResolvedStyleAsset,
+    line: Int?,
+    description: String
+  ) -> [PixelPlane]? {
+    if let generatedName = animation.name, generatedName.hasPrefix("*") {
+      let frameCount = max(1, animation.frames ?? 1)
+      let width = animation.declaredWidth ?? 1
+      let height = animation.declaredHeight ?? 1
+      guard width > 0, height > 0 else {
+        append(.error, .invalidPlacement, "The \(description) has an invalid generated size.", line: line)
+        return nil
+      }
+      return Array(repeating: PixelPlane(width: width, height: height), count: frameCount)
+    }
+    let expectedBaseName = animation.name.map { "\(piece)_\($0)" } ?? piece
+    let urls = asset.graphicURLs.filter {
+      normalize($0.deletingPathExtension().lastPathComponent) == normalize(expectedBaseName)
+    }
+    guard urls.count == 1 else {
+      append(
+        .error,
+        .missingResolvedAsset,
+        "The \(description) does not have exactly one resolved graphic.",
+        line: line
+      )
+      return nil
+    }
+    guard let strip = decodeGraphic(urls[0], asset: asset),
+      let frames = animationFrames(from: strip, animation: animation, line: line, description: description)
+    else { return nil }
+    return recreatedFrames(frames, asset: asset)
+  }
+
+  private func recreatedFrames(_ frames: [PixelPlane], asset: NxlvResolvedStyleAsset) -> [PixelPlane] {
+    guard let macArtwork else { return frames }
+    return frames.map { source in
+      guard source.macRGBA.isEmpty else { return source }
+      var frame = source
+      frame.macRGBA = macArtwork.recreated(
+        asset: asset, width: frame.width, height: frame.height, rgba: frame.rgba
+      )
+      return frame
+    }
+  }
+
+  private func renderedAnimationState(_ value: String?) -> NxlvRenderedAnimationState {
+    switch value?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
+    case "pause": .pause
+    case "stop": .stop
+    case "looptozero": .loopToZero
+    case "matchphysics": .matchPrimary
+    default: .play
+    }
+  }
+
+  private func transformedAnimationOffset(
+    x sourceX: Int,
+    y sourceY: Int,
+    layerWidth sourceLayerWidth: Int,
+    layerHeight sourceLayerHeight: Int,
+    primaryWidth sourcePrimaryWidth: Int,
+    primaryHeight sourcePrimaryHeight: Int,
+    rotate: Bool,
+    flipHorizontal: Bool,
+    flipVertical: Bool
+  ) -> (x: Int, y: Int) {
+    var x = sourceX
+    var y = sourceY
+    var layerWidth = sourceLayerWidth
+    var layerHeight = sourceLayerHeight
+    var primaryWidth = sourcePrimaryWidth
+    var primaryHeight = sourcePrimaryHeight
+    if rotate {
+      let oldY = y
+      y = x
+      swap(&layerWidth, &layerHeight)
+      swap(&primaryWidth, &primaryHeight)
+      x = primaryWidth - oldY - layerWidth
+    }
+    if flipHorizontal { x = primaryWidth - x - layerWidth }
+    if flipVertical { y = primaryHeight - y - layerHeight }
+    return (x, y)
+  }
+
+  private mutating func initialAnimationFrameIndex(
+    animation: NxlvObjectAnimationMetadata,
+    effect: NxlvObjectEffect,
+    frameCount: Int,
+    line: Int?,
+    description: String
+  ) -> Int {
+    let selectedFrame: Int
+    switch animation.initialFrame {
+    case .index(let index):
+      if index < 0 || index >= frameCount {
+        append(
+          .warning,
+          .invalidAnimationStrip,
+          "The \(description) INITIAL_FRAME is outside its animation strip and was clamped.",
+          line: line
+        )
+      }
+      selectedFrame = min(max(0, index), frameCount - 1)
+    case .random:
+      // CE accepts any frame in the strip here. Use a stable distribution so
+      // repeated instances do not all start at frame zero and recovery or
+      // replay rendering does not change after a reload.
+      var hash: UInt64 = 14_695_981_039_346_656_037
+      for byte in "\(description)#\(line ?? 0)".utf8 {
+        hash = (hash ^ UInt64(byte)) &* 1_099_511_628_211
+      }
+      selectedFrame = Int(hash % UInt64(frameCount))
+    case nil:
+      selectedFrame = defaultInitialFrame(for: effect, frameCount: frameCount)
+    }
+
+    return selectedFrame
+  }
+
+  private func defaultInitialFrame(for effect: NxlvObjectEffect, frameCount: Int) -> Int {
+    guard frameCount > 1 else { return 0 }
+    switch effect {
+    case .entrance, .lockedExit, .unlockButton:
+      return 1
+    default:
+      return 0
+    }
+  }
+
+  private mutating func resolvedAsset(
+    kind: NxlvStyleAssetKind,
+    style: String,
+    piece: String,
+    line: Int?
+  ) -> NxlvResolvedStyleAsset? {
+    let key = RenderAssetKey(kind: kind, style: style, piece: piece)
+    guard !ambiguousAssets.contains(key), let asset = assets[key] else {
+      append(
+        .error,
+        .missingResolvedAsset,
+        "No resolved \(kind.rawValue) asset exists for '\(style):\(piece)'.",
+        line: line
+      )
+      return nil
+    }
+    return asset
+  }
+
+  private mutating func decodeGraphic(
+    _ url: URL,
+    asset: NxlvResolvedStyleAsset
+  ) -> PixelPlane? {
+    let standardized = url.standardizedFileURL.resolvingSymlinksInPath()
+    let styleRoot = asset.styleDirectoryURL.standardizedFileURL.resolvingSymlinksInPath()
+    guard url.isFileURL, isDescendant(standardized, of: styleRoot) else {
+      append(
+        .error,
+        .unsafeGraphicPath,
+        "A graphic path escapes its resolved style directory.",
+        line: asset.reference.sourceLine,
+        path: url.path
+      )
+      return nil
+    }
+    if let cached = decodedGraphics[standardized] { return cached }
+
+    do {
+      let values = try standardized.resourceValues(forKeys: [
+        .isRegularFileKey,
+        .fileSizeKey,
+      ])
+      guard values.isRegularFile == true else {
+        append(
+          .error, .unreadableGraphic, "The graphic is not a regular file.", path: standardized.path)
+        return nil
+      }
+      if let fileSize = values.fileSize, fileSize > limits.maximumGraphicFileBytes {
+        append(
+          .error,
+          .graphicFileTooLarge,
+          "The graphic exceeds the \(limits.maximumGraphicFileBytes)-byte file limit.",
+          path: standardized.path
+        )
+        return nil
+      }
+    } catch {
+      append(
+        .error, .unreadableGraphic, "The graphic file attributes cannot be read.",
+        path: standardized.path)
+      return nil
+    }
+
+    let data: Data
+    do {
+      data = try Data(contentsOf: standardized, options: [.mappedIfSafe])
+    } catch {
+      append(.error, .unreadableGraphic, "The graphic cannot be read.", path: standardized.path)
+      return nil
+    }
+    guard data.count <= limits.maximumGraphicFileBytes else {
+      append(
+        .error,
+        .graphicFileTooLarge,
+        "The graphic exceeds the \(limits.maximumGraphicFileBytes)-byte file limit.",
+        path: standardized.path
+      )
+      return nil
+    }
+    guard
+      let source = CGImageSourceCreateWithData(
+        data as CFData,
+        [kCGImageSourceShouldCache: false] as CFDictionary
+      )
+    else {
+      append(.error, .malformedPNG, "ImageIO cannot open the PNG graphic.", path: standardized.path)
+      return nil
+    }
+    guard let type = CGImageSourceGetType(source),
+      UTType(type as String)?.conforms(to: .png) == true
+    else {
+      append(.error, .nonPNGGraphic, "The graphic data is not PNG.", path: standardized.path)
+      return nil
+    }
+    guard CGImageSourceGetCount(source) == 1,
+      let properties = CGImageSourceCopyPropertiesAtIndex(
+        source,
+        0,
+        [kCGImageSourceShouldCache: false] as CFDictionary
+      ) as? [CFString: Any],
+      let width = integerProperty(properties[kCGImagePropertyPixelWidth]),
+      let height = integerProperty(properties[kCGImagePropertyPixelHeight]),
+      width > 0,
+      height > 0
+    else {
+      append(
+        .error, .malformedPNG, "The PNG has no valid image dimensions.", path: standardized.path)
+      return nil
+    }
+    guard width <= limits.maximumGraphicDimension,
+      height <= limits.maximumGraphicDimension
+    else {
+      append(
+        .error,
+        .graphicDimensionLimitExceeded,
+        "The PNG exceeds the \(limits.maximumGraphicDimension)-pixel dimension limit.",
+        path: standardized.path
+      )
+      return nil
+    }
+    guard let pixelCount = checkedProduct(width, height),
+      pixelCount <= limits.maximumGraphicPixels,
+      let byteCount = checkedProduct(pixelCount, 4)
+    else {
+      append(
+        .error,
+        .graphicPixelLimitExceeded,
+        "The PNG exceeds the \(limits.maximumGraphicPixels)-pixel decode limit.",
+        path: standardized.path
+      )
+      return nil
+    }
+    guard let totalDecodedPixels = checkedSum(decodedGraphicPixelCount, pixelCount),
+      totalDecodedPixels <= limits.maximumDecodedGraphicPixels
+    else {
+      append(
+        .error,
+        .graphicPixelLimitExceeded,
+        "Decoded graphics exceed the \(limits.maximumDecodedGraphicPixels)-pixel aggregate limit.",
+        path: standardized.path
+      )
+      return nil
+    }
+    guard
+      let image = CGImageSourceCreateImageAtIndex(
+        source,
+        0,
+        [
+          kCGImageSourceShouldCache: true,
+          kCGImageSourceShouldCacheImmediately: true,
+          kCGImageSourceShouldAllowFloat: false,
+        ] as CFDictionary
+      ), image.width == width, image.height == height
+    else {
+      append(
+        .error, .malformedPNG, "ImageIO cannot decode the PNG graphic.", path: standardized.path)
+      return nil
+    }
+
+    var bytes = Array(repeating: UInt8(0), count: byteCount)
+    let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) ?? CGColorSpaceCreateDeviceRGB()
+    let bitmapInfo =
+      CGBitmapInfo.byteOrder32Big.rawValue
+      | CGImageAlphaInfo.premultipliedLast.rawValue
+    let decoded = bytes.withUnsafeMutableBytes { storage -> Bool in
+      guard let baseAddress = storage.baseAddress,
+        let context = CGContext(
+          data: baseAddress,
+          width: width,
+          height: height,
+          bitsPerComponent: 8,
+          bytesPerRow: width * 4,
+          space: colorSpace,
+          bitmapInfo: bitmapInfo
+        )
+      else { return false }
+      context.setBlendMode(.copy)
+      context.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
+      return true
+    }
+    guard decoded else {
+      append(
+        .error, .malformedPNG, "A bitmap context cannot decode the PNG graphic.",
+        path: standardized.path)
+      return nil
+    }
+    unpremultiplyRGBA(&bytes)
+    var plane = PixelPlane(width: width, height: height, rgba: bytes)
+    if let macArtwork {
+      plane.macRGBA = macArtwork.replacement(
+        asset: asset, url: url, width: width, height: height, rgba: bytes
+      ) ?? (asset.resolvedReference.kind == .object ? [] : macArtwork.recreated(
+        asset: asset, width: width, height: height, rgba: bytes
+      ))
+    }
+    decodedGraphicPixelCount = totalDecodedPixels
+    decodedGraphics[standardized] = plane
+    return plane
+  }
+
+  private func integerProperty(_ value: Any?) -> Int? {
+    if let number = value as? NSNumber { return number.intValue }
+    return nil
+  }
+
+  private func isDescendant(_ child: URL, of directory: URL) -> Bool {
+    let root = directory.pathComponents
+    let candidate = child.pathComponents
+    guard candidate.count > root.count else { return false }
+    return candidate.prefix(root.count).elementsEqual(root)
+  }
+
+  private func unpremultiplyRGBA(_ bytes: inout [UInt8]) {
+    var offset = 0
+    while offset < bytes.count {
+      let alpha = Int(bytes[offset + 3])
+      if alpha == 0 {
+        bytes[offset] = 0
+        bytes[offset + 1] = 0
+        bytes[offset + 2] = 0
+      } else if alpha < 255 {
+        for channel in 0..<3 {
+          let value = (Int(bytes[offset + channel]) * 255 + alpha / 2) / alpha
+          bytes[offset + channel] = UInt8(min(255, value))
+        }
+      }
+      offset += 4
+    }
+  }
+
+  private mutating func resized(
+    _ source: PixelPlane,
+    requestedWidth: Int?,
+    requestedHeight: Int?,
+    axes: NxlvResizeAxes,
+    defaultWidth: Int?,
+    defaultHeight: Int?,
+    margins: NxlvNineSliceMargins,
+    line: Int?,
+    description: String
+  ) -> PixelPlane? {
+    let width = targetDimension(
+      requested: requestedWidth,
+      defaultValue: defaultWidth,
+      source: source.width,
+      isResizable: axes.contains(.horizontal),
+      axisName: "WIDTH",
+      line: line,
+      description: description
+    )
+    let height = targetDimension(
+      requested: requestedHeight,
+      defaultValue: defaultHeight,
+      source: source.height,
+      isResizable: axes.contains(.vertical),
+      axisName: "HEIGHT",
+      line: line,
+      description: description
+    )
+    guard let width, let height else { return nil }
+    if width == source.width, height == source.height { return source }
+    guard let count = checkedProduct(width, height),
+      count <= limits.maximumGraphicPixels
+    else {
+      append(
+        .error,
+        .graphicPixelLimitExceeded,
+        "The resized \(description) exceeds the \(limits.maximumGraphicPixels)-pixel limit.",
+        line: line
+      )
+      return nil
+    }
+    guard
+      let xMap = resizeMap(
+        sourceLength: source.width,
+        targetLength: width,
+        leading: margins.left,
+        trailing: margins.right,
+        enabled: axes.contains(.horizontal),
+        axisName: "horizontal",
+        line: line,
+        description: description
+      ),
+      let yMap = resizeMap(
+        sourceLength: source.height,
+        targetLength: height,
+        leading: margins.top,
+        trailing: margins.bottom,
+        enabled: axes.contains(.vertical),
+        axisName: "vertical",
+        line: line,
+        description: description
+      )
+    else { return nil }
+
+    var output = PixelPlane(
+      width: width,
+      height: height,
+      solid: !source.solid.isEmpty,
+      steel: !source.steel.isEmpty,
+      oneWayEligible: !source.oneWayEligible.isEmpty,
+      trigger: !source.trigger.isEmpty
+    )
+    for destinationY in 0..<height {
+      let sourceY = yMap[destinationY]
+      for destinationX in 0..<width {
+        let sourceX = xMap[destinationX]
+        output.copyPixel(
+          from: source,
+          sourceIndex: sourceY * source.width + sourceX,
+          to: destinationY * width + destinationX
+        )
+      }
+    }
+    return output
+  }
+
+  private mutating func targetDimension(
+    requested: Int?,
+    defaultValue: Int?,
+    source: Int,
+    isResizable: Bool,
+    axisName: String,
+    line: Int?,
+    description: String
+  ) -> Int? {
+    if !isResizable {
+      if let requested, requested != source {
+        append(
+          .warning,
+          .unsupportedResize,
+          "The \(description) ignores \(axisName) because its metadata does not enable that resize axis.",
+          line: line
+        )
+      }
+      return source
+    }
+    let result = requested ?? defaultValue ?? source
+    guard result > 0, result <= limits.maximumGraphicDimension else {
+      append(
+        .error,
+        .invalidResize,
+        "The \(description) has an invalid \(axisName) value.",
+        line: line
+      )
+      return nil
+    }
+    return result
+  }
+
+  private mutating func resizeMap(
+    sourceLength: Int,
+    targetLength: Int,
+    leading: Int?,
+    trailing: Int?,
+    enabled: Bool,
+    axisName: String,
+    line: Int?,
+    description: String
+  ) -> [Int]? {
+    guard enabled, sourceLength != targetLength else {
+      return Array(0..<sourceLength)
+    }
+    var leading = leading ?? 0
+    var trailing = trailing ?? 0
+    guard leading >= 0, trailing >= 0 else {
+      append(
+        .error,
+        .invalidNineSlice,
+        "The \(description) has invalid \(axisName) nine-slice margins.",
+        line: line
+      )
+      return nil
+    }
+    let overlap = leading + trailing - targetLength
+    if overlap > 0 {
+      leading -= overlap / 2
+      trailing -= overlap / 2
+      if !overlap.isMultiple(of: 2) {
+        if leading >= trailing { leading -= 1 } else { trailing -= 1 }
+      }
+      if leading < 0 {
+        trailing += leading
+        leading = 0
+      }
+      if trailing < 0 {
+        leading += trailing
+        trailing = 0
+      }
+    }
+    guard leading >= 0, trailing >= 0, leading + trailing < sourceLength else {
+      append(
+        .error,
+        .invalidNineSlice,
+        "The \(description) has invalid \(axisName) nine-slice margins.",
+        line: line
+      )
+      return nil
+    }
+    let centerLength = sourceLength - leading - trailing
+    return (0..<targetLength).map { destination in
+      if destination < leading { return destination }
+      if destination >= targetLength - trailing {
+        return sourceLength - (targetLength - destination)
+      }
+      return leading + ((destination - leading) % centerLength)
+    }
+  }
+
+  private func transformed(
+    _ source: PixelPlane,
+    rotate: Bool,
+    flipHorizontal: Bool,
+    flipVertical: Bool
+  ) -> PixelPlane {
+    let rotatedWidth = rotate ? source.height : source.width
+    let rotatedHeight = rotate ? source.width : source.height
+    var output = PixelPlane(
+      width: rotatedWidth,
+      height: rotatedHeight,
+      solid: !source.solid.isEmpty,
+      steel: !source.steel.isEmpty,
+      oneWayEligible: !source.oneWayEligible.isEmpty,
+      trigger: !source.trigger.isEmpty
+    )
+
+    for sourceY in 0..<source.height {
+      for sourceX in 0..<source.width {
+        var destinationX = rotate ? source.height - 1 - sourceY : sourceX
+        var destinationY = rotate ? sourceX : sourceY
+        if flipHorizontal { destinationX = rotatedWidth - 1 - destinationX }
+        if flipVertical { destinationY = rotatedHeight - 1 - destinationY }
+        output.copyPixel(
+          from: source,
+          sourceIndex: sourceY * source.width + sourceX,
+          to: destinationY * rotatedWidth + destinationX
+        )
+        if !source.macRGBA.isEmpty {
+          for sy in 0..<2 { for sx in 0..<2 {
+            var dx = rotate ? 1 - sy : sx, dy = rotate ? sx : sy
+            if flipHorizontal { dx = 1 - dx }
+            if flipVertical { dy = 1 - dy }
+            let from = ((sourceY * 2 + sy) * source.width * 2 + sourceX * 2 + sx) * 4
+            let to = ((destinationY * 2 + dy) * rotatedWidth * 2 + destinationX * 2 + dx) * 4
+            output.macRGBA[to..<to + 4] = source.macRGBA[from..<from + 4]
+          } }
+        }
+      }
+    }
+    return output
+  }
+
+  private func cropped(_ source: PixelPlane, rect: IntRect) -> PixelPlane {
+    var output = PixelPlane(
+      width: rect.width,
+      height: rect.height,
+      solid: !source.solid.isEmpty,
+      steel: !source.steel.isEmpty,
+      oneWayEligible: !source.oneWayEligible.isEmpty,
+      trigger: !source.trigger.isEmpty
+    )
+    for y in 0..<rect.height {
+      for x in 0..<rect.width {
+        output.copyPixel(
+          from: source,
+          sourceIndex: (rect.y + y) * source.width + rect.x + x,
+          to: y * rect.width + x
+        )
+      }
+    }
+    return output
+  }
+
+  private func setTerrainMaterial(
+    in plane: inout PixelPlane,
+    steel: Bool,
+    oneWay: Bool
+  ) {
+    let count = plane.width * plane.height
+    if plane.solid.isEmpty { plane.solid = Array(repeating: 0, count: count) }
+    if plane.steel.isEmpty { plane.steel = Array(repeating: 0, count: count) }
+    if plane.oneWayEligible.isEmpty {
+      plane.oneWayEligible = Array(repeating: 0, count: count)
+    }
+    for index in 0..<count {
+      let opaque = plane.rgba[index * 4 + 3] > 0
+      plane.solid[index] = opaque ? 1 : 0
+      plane.steel[index] = opaque && steel ? 1 : 0
+      plane.oneWayEligible[index] = opaque && oneWay && !steel ? 1 : 0
+    }
+  }
+
+  private mutating func setTriggerMask(
+    in plane: inout PixelPlane,
+    metadata: NxlvObjectMetadata,
+    line: Int?,
+    description: String
+  ) {
+    let direction = direction(for: metadata.effect)
+    let x = metadata.triggerX ?? 0
+    let y = metadata.triggerY ?? 0
+    let width = metadata.triggerWidth ?? (direction == .none ? 0 : plane.width)
+    let height = metadata.triggerHeight ?? (direction == .none ? 0 : plane.height)
+    guard width >= 0, height >= 0 else {
+      append(
+        .error,
+        .invalidPlacement,
+        "The \(description) has a negative trigger dimension.",
+        line: line
+      )
+      return
+    }
+    guard width > 0, height > 0 else { return }
+    guard let xEnd = checkedSum(x, width), let yEnd = checkedSum(y, height) else {
+      append(
+        .error,
+        .invalidPlacement,
+        "The \(description) trigger area exceeds the supported integer range.",
+        line: line
+      )
+      return
+    }
+    let minimumY = max(0, y)
+    let maximumY = min(plane.height, yEnd)
+    let minimumX = max(0, x)
+    let maximumX = min(plane.width, xEnd)
+    guard minimumX < maximumX, minimumY < maximumY else { return }
+    if plane.trigger.isEmpty {
+      plane.trigger = Array(repeating: 0, count: plane.width * plane.height)
+    }
+    for destinationY in minimumY..<maximumY {
+      for destinationX in minimumX..<maximumX {
+        plane.trigger[destinationY * plane.width + destinationX] = 1
+      }
+    }
+  }
+
+  private func clippedMacGadgetRGBA(_ plane: PixelPlane, atX x: Int, y: Int,
+    clipToSolid: [UInt8]?, canvasWidth: Int, canvasHeight: Int) -> [UInt8] {
+    guard !plane.macRGBA.isEmpty else { return [] }
+    var result = plane
+    if let mask = clipToSolid {
+      for py in 0..<plane.height { for px in 0..<plane.width {
+        let cx = x + px, cy = y + py
+        if cx < 0 || cy < 0 || cx >= canvasWidth || cy >= canvasHeight || mask[cy * canvasWidth + cx] == 0 {
+          result.clearPixel(at: py * plane.width + px)
+        }
+      } }
+    }
+    return result.macRGBA
+  }
+
+  private func compositeTerrain(
+    _ prepared: PreparedTerrain,
+    atX destinationX: Int,
+    y destinationY: Int,
+    noOverwrite: Bool,
+    erase: Bool,
+    oneWay: Bool,
+    into canvas: inout PixelPlane
+  ) {
+    let source = prepared.plane
+    let clip = clippedRanges(
+      sourceWidth: source.width,
+      sourceHeight: source.height,
+      destinationX: destinationX,
+      destinationY: destinationY,
+      canvasWidth: canvas.width,
+      canvasHeight: canvas.height
+    )
+    guard let clip else { return }
+    if !source.macRGBA.isEmpty { canvas.ensureMacPixels() }
+    for sourceY in clip.sourceY {
+      let canvasY = destinationY + sourceY
+      for sourceX in clip.sourceX {
+        let canvasX = destinationX + sourceX
+        let sourceIndex = sourceY * source.width + sourceX
+        guard source.rgba[sourceIndex * 4 + 3] > 0 else { continue }
+        let destinationIndex = canvasY * canvas.width + canvasX
+        if noOverwrite, canvas.solid[destinationIndex] != 0 { continue }
+        if erase {
+          canvas.clearPixel(at: destinationIndex)
+          continue
+        }
+        if !canvas.macRGBA.isEmpty {
+          for dy in 0..<2 { for dx in 0..<2 {
+            let d = ((canvasY * 2 + dy) * canvas.width * 2 + canvasX * 2 + dx) * 4
+            let a = ((sourceY * 2 + dy) * source.width * 2 + sourceX * 2 + dx) * 4
+            let pixel = source.macRGBA.isEmpty ? source.pixel(sourceIndex)
+              : RGBA(red: source.macRGBA[a], green: source.macRGBA[a + 1], blue: source.macRGBA[a + 2], alpha: source.macRGBA[a + 3])
+            let old = RGBA(red: canvas.macRGBA[d], green: canvas.macRGBA[d + 1], blue: canvas.macRGBA[d + 2], alpha: canvas.macRGBA[d + 3])
+            let result = sourceOver(pixel, old)
+            canvas.macRGBA[d..<d + 4] = [result.red, result.green, result.blue, result.alpha]
+          } }
+        }
+        canvas.setPixel(
+          sourceOver(source.pixel(sourceIndex), canvas.pixel(destinationIndex)),
+          at: destinationIndex
+        )
+        canvas.solid[destinationIndex] = 1
+        canvas.steel[destinationIndex] = prepared.isSteel ? 1 : 0
+        canvas.oneWayEligible[destinationIndex] = oneWay && !prepared.isSteel ? 1 : 0
+      }
+    }
+  }
+
+  private func compositeVisual(
+    _ source: PixelPlane,
+    atX destinationX: Int,
+    y destinationY: Int,
+    noOverwrite: Bool,
+    noOverwriteAgainst: [UInt8]? = nil,
+    noOverwritePrior: [UInt8]? = nil,
+    clipToSolid: [UInt8]?,
+    into canvas: inout PixelPlane
+  ) {
+    let clip = clippedRanges(
+      sourceWidth: source.width,
+      sourceHeight: source.height,
+      destinationX: destinationX,
+      destinationY: destinationY,
+      canvasWidth: canvas.width,
+      canvasHeight: canvas.height
+    )
+    guard let clip else { return }
+    if !source.macRGBA.isEmpty { canvas.ensureMacPixels() }
+    for sourceY in clip.sourceY {
+      let canvasY = destinationY + sourceY
+      for sourceX in clip.sourceX {
+        let canvasX = destinationX + sourceX
+        let sourceIndex = sourceY * source.width + sourceX
+        let sourcePixel = source.pixel(sourceIndex)
+        guard sourcePixel.alpha > 0 else { continue }
+        let destinationIndex = canvasY * canvas.width + canvasX
+        if let clipToSolid, clipToSolid[destinationIndex] == 0 { continue }
+        if noOverwrite {
+          let offset = destinationIndex * 4 + 3
+          let occupied = noOverwritePrior?[offset] ?? canvas.rgba[offset]
+          if occupied > 0 || (noOverwriteAgainst?[offset] ?? 0) > 0 { continue }
+        }
+        if !canvas.macRGBA.isEmpty {
+          for dy in 0..<2 { for dx in 0..<2 {
+            let destination = ((canvasY * 2 + dy) * canvas.width * 2 + canvasX * 2 + dx) * 4
+            let original = ((sourceY * 2 + dy) * source.width * 2 + sourceX * 2 + dx) * 4
+            let high = source.macRGBA.isEmpty ? sourcePixel
+              : RGBA(red: source.macRGBA[original], green: source.macRGBA[original + 1],
+                blue: source.macRGBA[original + 2], alpha: source.macRGBA[original + 3])
+            let old = RGBA(red: canvas.macRGBA[destination], green: canvas.macRGBA[destination + 1],
+              blue: canvas.macRGBA[destination + 2], alpha: canvas.macRGBA[destination + 3])
+            let merged = sourceOver(high, old)
+            canvas.macRGBA[destination..<destination + 4] = [
+              merged.red, merged.green, merged.blue, merged.alpha
+            ]
+          } }
+        }
+        canvas.setPixel(
+          sourceOver(sourcePixel, canvas.pixel(destinationIndex)),
+          at: destinationIndex
+        )
+      }
+    }
+  }
+
+  private func applyOneWayDirection(
+    _ prepared: PreparedGadget,
+    atX destinationX: Int,
+    y destinationY: Int,
+    terrain: PixelPlane,
+    oneWayMask: inout [UInt8]
+  ) {
+    let source = prepared.plane
+    let clip = clippedRanges(
+      sourceWidth: source.width,
+      sourceHeight: source.height,
+      destinationX: destinationX,
+      destinationY: destinationY,
+      canvasWidth: terrain.width,
+      canvasHeight: terrain.height
+    )
+    guard let clip else { return }
+    for sourceY in clip.sourceY {
+      let canvasY = destinationY + sourceY
+      for sourceX in clip.sourceX {
+        let sourceIndex = sourceY * source.width + sourceX
+        guard source.trigger[sourceIndex] != 0 else { continue }
+        let canvasX = destinationX + sourceX
+        let destinationIndex = canvasY * terrain.width + canvasX
+        guard terrain.solid[destinationIndex] != 0,
+          terrain.steel[destinationIndex] == 0,
+          terrain.oneWayEligible[destinationIndex] != 0
+        else { continue }
+        oneWayMask[destinationIndex] = prepared.direction.rawValue
+      }
+    }
+  }
+
+  private func transformedTriggerBounds(
+    _ plane: PixelPlane,
+    atX destinationX: Int,
+    y destinationY: Int
+  ) -> IntRect? {
+    guard !plane.trigger.isEmpty else { return nil }
+    var minimumX = Int.max
+    var minimumY = Int.max
+    var maximumX = Int.min
+    var maximumY = Int.min
+    for y in 0..<plane.height {
+      for x in 0..<plane.width where plane.trigger[y * plane.width + x] != 0 {
+        minimumX = min(minimumX, x)
+        minimumY = min(minimumY, y)
+        maximumX = max(maximumX, x)
+        maximumY = max(maximumY, y)
+      }
+    }
+    guard minimumX != Int.max else { return nil }
+    guard let x = checkedSum(destinationX, minimumX),
+      let y = checkedSum(destinationY, minimumY)
+    else { return nil }
+    return IntRect(
+      x: x,
+      y: y,
+      width: maximumX - minimumX + 1,
+      height: maximumY - minimumY + 1
+    )
+  }
+
+  private func compositeLayer(_ source: [UInt8], over destination: inout [UInt8]) {
+    var offset = 0
+    while offset < source.count {
+      let sourcePixel = RGBA(
+        red: source[offset],
+        green: source[offset + 1],
+        blue: source[offset + 2],
+        alpha: source[offset + 3]
+      )
+      if sourcePixel.alpha > 0 {
+        let destinationPixel = RGBA(
+          red: destination[offset],
+          green: destination[offset + 1],
+          blue: destination[offset + 2],
+          alpha: destination[offset + 3]
+        )
+        let result = sourceOver(sourcePixel, destinationPixel)
+        destination[offset] = result.red
+        destination[offset + 1] = result.green
+        destination[offset + 2] = result.blue
+        destination[offset + 3] = result.alpha
+      }
+      offset += 4
+    }
+  }
+
+  private func sourceOver(_ source: RGBA, _ destination: RGBA) -> RGBA {
+    if source.alpha == 0 { return destination }
+    if source.alpha == 255 || destination.alpha == 0 { return source }
+    let sourceAlpha = Int(source.alpha)
+    let destinationAlpha = Int(destination.alpha)
+    let inverseSourceAlpha = 255 - sourceAlpha
+    let alphaScale = sourceAlpha * 255 + destinationAlpha * inverseSourceAlpha
+    let outputAlpha = (alphaScale + 127) / 255
+
+    func channel(_ sourceValue: UInt8, _ destinationValue: UInt8) -> UInt8 {
+      let numerator =
+        Int(sourceValue) * sourceAlpha * 255
+        + Int(destinationValue) * destinationAlpha * inverseSourceAlpha
+      return UInt8(min(255, (numerator + alphaScale / 2) / alphaScale))
+    }
+    return RGBA(
+      red: channel(source.red, destination.red),
+      green: channel(source.green, destination.green),
+      blue: channel(source.blue, destination.blue),
+      alpha: UInt8(outputAlpha)
+    )
+  }
+
+  private func direction(for effect: NxlvObjectEffect) -> NxlvOneWayDirection {
+    switch effect {
+    case .oneWayLeft: .left
+    case .oneWayRight: .right
+    case .oneWayUp: .up
+    case .oneWayDown: .down
+    default: .none
+    }
+  }
+
+  private func transformedDirection(
+    _ initial: NxlvOneWayDirection,
+    rotate: Bool,
+    flipHorizontal: Bool,
+    flipVertical: Bool
+  ) -> NxlvOneWayDirection {
+    var result = initial
+    if rotate {
+      switch result {
+      case .left: result = .up
+      case .right: result = .down
+      case .up: result = .right
+      case .down: result = .left
+      case .none: break
+      }
+    }
+    if flipHorizontal {
+      if result == .left { result = .right } else if result == .right { result = .left }
+    }
+    if flipVertical {
+      if result == .up { result = .down } else if result == .down { result = .up }
+    }
+    return result
+  }
+
+  private func clippedRanges(
+    sourceWidth: Int,
+    sourceHeight: Int,
+    destinationX: Int,
+    destinationY: Int,
+    canvasWidth: Int,
+    canvasHeight: Int
+  ) -> (sourceX: Range<Int>, sourceY: Range<Int>)? {
+    guard let destinationMaximumX = checkedSum(destinationX, sourceWidth),
+      let destinationMaximumY = checkedSum(destinationY, sourceHeight)
+    else { return nil }
+    let overlapMinimumX = max(0, destinationX)
+    let overlapMinimumY = max(0, destinationY)
+    let overlapMaximumX = min(canvasWidth, destinationMaximumX)
+    let overlapMaximumY = min(canvasHeight, destinationMaximumY)
+    guard overlapMinimumX < overlapMaximumX,
+      overlapMinimumY < overlapMaximumY,
+      let sourceMinimumX = checkedDifference(overlapMinimumX, destinationX),
+      let sourceMinimumY = checkedDifference(overlapMinimumY, destinationY),
+      let sourceMaximumX = checkedDifference(overlapMaximumX, destinationX),
+      let sourceMaximumY = checkedDifference(overlapMaximumY, destinationY)
+    else { return nil }
+    return (sourceMinimumX..<sourceMaximumX, sourceMinimumY..<sourceMaximumY)
+  }
+
+  private func union(_ lhs: IntRect?, _ rhs: IntRect) -> IntRect? {
+    guard let rhsMaximumX = checkedSum(rhs.x, rhs.width),
+      let rhsMaximumY = checkedSum(rhs.y, rhs.height)
+    else { return nil }
+    guard let lhs else { return rhs }
+    guard let lhsMaximumX = checkedSum(lhs.x, lhs.width),
+      let lhsMaximumY = checkedSum(lhs.y, lhs.height)
+    else { return nil }
+    let minimumX = min(lhs.x, rhs.x)
+    let minimumY = min(lhs.y, rhs.y)
+    let maximumX = max(lhsMaximumX, rhsMaximumX)
+    let maximumY = max(lhsMaximumY, rhsMaximumY)
+    guard let width = checkedDifference(maximumX, minimumX),
+      let height = checkedDifference(maximumY, minimumY)
+    else { return nil }
+    return IntRect(
+      x: minimumX,
+      y: minimumY,
+      width: width,
+      height: height
+    )
+  }
+
+  private func checkedSum(_ lhs: Int, _ rhs: Int) -> Int? {
+    let result = lhs.addingReportingOverflow(rhs)
+    return result.overflow ? nil : result.partialValue
+  }
+
+  private func checkedDifference(_ lhs: Int, _ rhs: Int) -> Int? {
+    let result = lhs.subtractingReportingOverflow(rhs)
+    return result.overflow ? nil : result.partialValue
+  }
+
+  private func checkedProduct(_ lhs: Int, _ rhs: Int) -> Int? {
+    let result = lhs.multipliedReportingOverflow(by: rhs)
+    return result.overflow ? nil : result.partialValue
+  }
+
+  private mutating func uniqueGraphicURL(
+    for asset: NxlvResolvedStyleAsset,
+    description: String,
+    line: Int?
+  ) -> URL? {
+    guard asset.graphicURLs.count == 1 else {
+      append(
+        .error,
+        .missingResolvedAsset,
+        "The \(description) does not have exactly one resolved graphic.",
+        line: line
+      )
+      return nil
+    }
+    return asset.graphicURLs[0]
+  }
+
+  private func normalize(_ value: String) -> String {
+    value.precomposedStringWithCanonicalMapping.lowercased(
+      with: Locale(identifier: "en_US_POSIX")
+    )
+  }
+
+  private func trimmed(_ value: String?) -> String? {
+    guard let value else { return nil }
+    let result = value.trimmingCharacters(in: .whitespacesAndNewlines)
+    return result.isEmpty ? nil : result
+  }
+
+  private func emptyTerrainMetadata() -> NxlvTerrainMetadata {
+    NxlvTerrainMetadata(
+      isSteel: false,
+      isDeprecated: false,
+      resizeAxes: [],
+      nineSlice: NxlvNineSliceMargins(top: nil, left: nil, right: nil, bottom: nil),
+      defaultWidth: nil,
+      defaultHeight: nil
+    )
+  }
+
+  private mutating func append(
+    _ severity: NxlvRenderDiagnosticSeverity,
+    _ code: NxlvRenderDiagnosticCode,
+    _ message: String,
+    line: Int? = nil,
+    path: String? = nil
+  ) {
+    diagnostics.append(
+      NxlvRenderDiagnostic(
+        severity: severity,
+        code: code,
+        message: message,
+        line: line,
+        path: path
+      ))
+  }
+}

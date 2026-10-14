@@ -3388,7 +3388,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return LevelCoverFlowItem(
         id: entry.identity.levelID,
         title: entry.levelName,
-        subtitle: entry.packName + " / " + entry.identity.engine.displayName,
+        subtitle: entry.identity.originLabel + " / " + entry.packName + " / " + entry.identity.engine.displayName,
         detail: rating.map {
           "\($0) \(index + 1)/\(total)  \(entry.status.displayName)\(completion)"
         } ?? "Level \(entry.number)  \(entry.status.displayName)  \(index + 1)/\(total)\(completion)",
@@ -3538,7 +3538,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     carousel.configure(items: entries.map { entry in
       let resolution = playlistResolution(for: entry)
       return LevelCoverFlowItem(id: entry.id.uuidString, title: entry.levelNameSnapshot,
-        subtitle: entry.packNameSnapshot + " / " + entry.identity.engine.displayName,
+        subtitle: entry.identity.originLabel + " / " + entry.packNameSnapshot + " / " + entry.identity.engine.displayName,
         detail: "Level \(entry.levelNumberSnapshot)",
         isAvailable: resolution.canStart, artworkKey: levelPreviewRequests[entry.identity]?.artworkKey,
         availability: resolution.canStart ? .available : resolution.stateLabel == "Locked" ? .locked : .unavailable,
@@ -4038,14 +4038,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return LevelCoverFlowItem(
         id: saved.id.uuidString,
         title: current.levelName,
-        subtitle: current.packName + " / " + current.identity.engine.displayName,
+        subtitle: current.identity.originLabel + " / " + current.packName + " / " + current.identity.engine.displayName,
         detail: difficultyProfiles[current.identity].map { "\($0.confidence == .low ? "Estimate" : "Difficulty"): \($0.grade.name)  \(suffix)" } ?? "Level \(current.number)  \(suffix)",
         artworkKey: levelPreviewRequests[current.identity]?.artworkKey)
     case let .locked(current):
       return LevelCoverFlowItem(
         id: saved.id.uuidString,
         title: current.levelName,
-        subtitle: current.packName + " / " + current.identity.engine.displayName,
+        subtitle: current.identity.originLabel + " / " + current.packName + " / " + current.identity.engine.displayName,
         detail: "Locked  \(suffix)",
         artworkKey: levelPreviewRequests[current.identity]?.artworkKey,
         availability: .locked)
@@ -4053,7 +4053,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return LevelCoverFlowItem(
         id: saved.id.uuidString,
         title: current.levelName,
-        subtitle: current.packName + " / " + current.identity.engine.displayName,
+        subtitle: current.identity.originLabel + " / " + current.packName + " / " + current.identity.engine.displayName,
         detail: "Unavailable  \(suffix)",
         artworkKey: levelPreviewRequests[current.identity]?.artworkKey,
         availability: .unavailable)
@@ -4061,14 +4061,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return LevelCoverFlowItem(
         id: saved.id.uuidString,
         title: saved.levelNameSnapshot,
-        subtitle: saved.packNameSnapshot + " / " + saved.identity.engine.displayName,
+        subtitle: saved.identity.originLabel + " / " + saved.packNameSnapshot + " / " + saved.identity.engine.displayName,
         detail: "Changed - replace or remove  \(suffix)",
         availability: .unavailable)
     case .missing:
       return LevelCoverFlowItem(
         id: saved.id.uuidString,
         title: saved.levelNameSnapshot,
-        subtitle: saved.packNameSnapshot + " / " + saved.identity.engine.displayName,
+        subtitle: saved.identity.originLabel + " / " + saved.packNameSnapshot + " / " + saved.identity.engine.displayName,
         detail: "Missing - replace or remove  \(suffix)",
         availability: .unavailable)
     }
@@ -4727,7 +4727,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       LevelCoverFlowItem(
         id: entry.identity.levelID,
         title: entry.levelName,
-        subtitle: entry.packName + " / " + entry.identity.engine.displayName,
+        subtitle: entry.identity.originLabel + " / " + entry.packName + " / " + entry.identity.engine.displayName,
         detail: "Level \(entry.number)  \(index + 1)/\(pack.levels.count)",
         artworkKey: levelPreviewRequests[entry.identity]?.artworkKey,
         availability: entry.availability)

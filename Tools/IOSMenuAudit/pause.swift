@@ -25,7 +25,7 @@ extension MenuAudit {
                 let scale = MobileSettingsArt.interfaceScale(interface, width: size.width)
                 let logicalSize = CGSize(width: size.width / scale, height: size.height / scale)
                 for (state, saved, active, ending, replay) in states {
-                    let info = MobilePauseSummary(level: .init(index: 94, rank: "Lemmings", number: 95, title: content.summary.title),
+                    let info = MobilePauseSummary(level: .init(index: 94, rank: "Lemmings", number: 95, title: content.summary.title, origin: .official, packName: "Lemmings"),
                         snapshot: .init(tick: 510, released: saved == 60 ? 70 : 40, total: 80, saved: saved, required: 60,
                             remainingSeconds: state == "replay" ? nil : 157, releaseRate: 50, isComplete: false,
                             didWin: false, isEndingRun: ending, skills: session.snapshot.skills),

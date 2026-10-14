@@ -10,7 +10,9 @@ and Lemmings 3 use the same archive and merge coordinator.
 Cloud saves are on by default in normal builds. Local saves finish first. Play
 continues without connectivity, and saves retry when the app returns to the
 foreground, after local changes and every 30 seconds. Preview builds keep a
-separate local archive and have sync off by default.
+separate local archive and restore the shared cloud library by default. An
+existing choice to pause preview sync stays paused. Automated integration
+builds keep sync off, and muted mechanical tests never start Apple transports.
 
 Devices on the same iCloud account discover the library automatically. No
 Game Center login is required for this library. Different Apple accounts use
@@ -29,7 +31,11 @@ email address or password reset.
 Players remain separate even if their names match. A fresh installation restores
 the existing primary player. Two installations that already have independent
 progress retain both player identities when linked. There is no automatic
-name-based consolidation of those players. A participant can open a saved Hot
+name-based consolidation of those players. Copied UUID profiles retain the same
+cloud identity. Older cloud identities retain their original UUIDs, and copied
+legacy profiles can recover identity from a shared immutable result ID. Empty
+progress defaults do not stop a fresh testing build from restoring the primary
+player. A participant can open a saved Hot
 Seat hosted by another player; opening it restores its host, roster, turn and
 turn rule. Sync never switches a device into Hot Seat by itself.
 
@@ -72,7 +78,8 @@ and conditional updates; concurrent devices cannot overwrite each other's slots.
 Records and attempt events merge by immutable IDs. Completions and achievements
 merge by union. Profile metadata uses a deterministic logical clock. Profile
 deletion tombstones prevent an old offline device from restoring a deleted
-player. L2 keeps a coherent survivor chain per tribe; it never combines survivor
+player, including its original UUID when an older build assigned a cloud UUID.
+L2 keeps a coherent survivor chain per tribe; it never combines survivor
 counts from incompatible runs. L3 keeps the farther campaign cursor and best
 completed survivor counts. Legacy counters without event IDs use the larger
 observed count rather than guessing how many distinct attempts occurred.
@@ -81,6 +88,10 @@ A Hot Seat stores its roster, host, turn, rule and separate progress for all
 three games. Each revision records its ancestry. A newer descendant replaces
 its ancestor. Divergent offline revisions become separate saved campaigns with
 stable IDs. Subsequent progress on either campaign remains independent.
+When a copied save has no sync revision file, an identical Hot Seat state reuses
+the existing revision. It then receives later descendants without creating a
+duplicate campaign. Different states remain separate branches. iOS reads synced
+Hot Seat learning progress from the shared session rather than the solo profile.
 
 Imports wait for a safe library menu. Live levels, Ready screens, result
 handovers and native sequel sessions keep their current state. Sync cannot
@@ -97,6 +108,21 @@ Windows, Android and web clients are not included in this change. Sync does not
 add missing iOS L2/L3 gameplay presentation. The library supports eight players,
 200 shared campaigns and 32 simultaneous branches per campaign. Hosted storage
 allows 32 device slots, 8 MiB per snapshot and 64 MiB per library.
+
+## Profile restoration validation — 14 October 2026
+
+The local CI source gate passes 246 checks with muted audio and offscreen test
+settings. The arm64 iOS 16 `LemmingsMobileUI` target compiles. New regressions
+cover copied UUID players, original UUIDs from older cloud identities, copied
+legacy results, identical Hot Seat revisions, newer shared progress across
+Classic/L2/L3, shared learning isolation, preview restoration with empty defaults,
+and deletion of original identities. Existing offline-fork and safe-menu checks
+also pass. Logs are in `.build/profile-sync-source-gate.log` and
+`.build/profile-sync-ios.log`.
+
+These changes are source updates after the published 1.9.6 build 81. They are not
+in that app or the exported iOS build 13. Live iCloud propagation still requires
+device testing. Existing provider deployment and signing limits below apply.
 
 ## Service operations
 

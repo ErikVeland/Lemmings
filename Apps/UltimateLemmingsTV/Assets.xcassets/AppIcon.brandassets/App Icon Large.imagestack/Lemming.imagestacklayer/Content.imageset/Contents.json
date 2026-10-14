@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "Lemming-1x.png",
+      "idiom" : "tv",
+      "scale" : "1x"
+    }
+  ],
+  "info" : {
+    "author" : "academy.glasscode.lemmings.tvos",
+    "version" : 1
+  }
+}

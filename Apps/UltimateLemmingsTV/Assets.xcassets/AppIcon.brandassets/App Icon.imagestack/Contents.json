@@ -1,0 +1,17 @@
+{
+  "info" : {
+    "author" : "academy.glasscode.lemmings.tvos",
+    "version" : 1
+  },
+  "layers" : [
+    {
+      "filename" : "Logo.imagestacklayer"
+    },
+    {
+      "filename" : "Lemming.imagestacklayer"
+    },
+    {
+      "filename" : "Background.imagestacklayer"
+    }
+  ]
+}

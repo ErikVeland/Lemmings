@@ -5,6 +5,10 @@ import NxlvKit
 
 /// UIKit and the headless menu audit use the same settings pages and action identifiers.
 public enum MobileSettingsArt {
+    public static func skillSelectionPauseChoice() -> GameFrontEnd.Page {
+        .init(title: "Skill selection", subtitle: "Keep pausing?",
+              footer: [.init("1", "Keep pausing"), .init("0", "Turn off", primary: true)], footerColumns: 1)
+    }
     /// Compact panes retain a full-width canvas when the requested lettering size cannot fit.
     public static func interfaceScale(_ size: ClassicInterfaceSize, width: CGFloat) -> CGFloat {
         min(CGFloat(size.scale), max(1, width / 280))

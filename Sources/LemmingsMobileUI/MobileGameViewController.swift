@@ -39,6 +39,60 @@ struct MobileGameTurn {
     private var completionTitle = ""
     private var completionDetails: [String] = []
     private var recordSaveError: String?
+    private var achievementTask: Task<Void, Never>?
+    private var achievementIndex = 0
+    private var resultAchievements: [(title: String, detail: String)] {
+        completionDetails.compactMap { title in
+            if let award = ArcadeLevelAchievement.allCases.first(where: { $0.title == title }) { return (title, award.detail) }
+            if let award = TrolleyAchievement.allCases.first(where: { $0.title == title }) { return (title, award.detail) }
+            if let award = ClassicAchievement.catalog.first(where: { $0.title == title }) { return (title, award.detail) }
+            switch title {
+            case "New rescue record": return (title, "Your best rescue count on this level.")
+            case "New skill record": return (title, "Your fewest skills used to complete this level.")
+            case "Level skip earned": return (title, "A level skip is now available for a later attempt.")
+            default: return nil
+            }
+        }
+    }
+
+    private func showResultAchievement() {
+        let awards = resultAchievements
+        guard !awards.isEmpty else { return }
+        achievementIndex %= awards.count
+        let award = awards[achievementIndex]
+        var actions: [(String, () -> Void)] = [("BACK", { [weak self] in self?.returnToResult() })]
+        if awards.count > 1 {
+            actions.append(("NEXT AWARD", { [weak self] in
+                guard let self else { return }
+                self.achievementIndex = (self.achievementIndex + 1) % awards.count
+                self.showResultAchievement()
+            }))
+        }
+        showCustomOverlay(title: award.title, details: [award.detail], actions: actions)
+    }
+
+    private func rotateResultAchievements() {
+        achievementTask?.cancel()
+        let awards = resultAchievements
+        guard !awards.isEmpty else { return }
+        achievementIndex %= awards.count
+        func update() {
+            overlayCanvas.page.rows = [.init("resultAward", awards[achievementIndex].title + "  (\(achievementIndex + 1)/\(awards.count))")]
+        }
+        update()
+        guard awards.count > 1, !gameSettings.classic.reduceMotion, !UIAccessibility.isReduceMotionEnabled,
+              !UIAccessibility.isVoiceOverRunning else { return }
+        achievementTask = Task { @MainActor [weak self] in
+            while !Task.isCancelled {
+                do { try await Task.sleep(for: .seconds(4)) } catch { return }
+                guard let self, !self.overlay.isHidden, self.overlayCanvas.page.result else { return }
+                guard self.lifecycle.isForeground, !self.lifecycle.isInterrupted else { continue }
+                self.achievementIndex = (self.achievementIndex + 1) % awards.count
+                self.overlayCanvas.page.rows = [.init("resultAward", awards[self.achievementIndex].title + "  (\(self.achievementIndex + 1)/\(awards.count))")]
+                self.layoutOverlay()
+            }
+        }
+    }
     private var rewindHeld = false
     private var lastRewindTime = 0.0
     var onCompleted: ((MobileGameSnapshot) -> Void)?
@@ -188,6 +242,9 @@ struct MobileGameTurn {
             }
         }
         hud.onAction = { [weak self] action in self?.handle(action) }
+        hud.onRateDoubleTap = { [weak self] wasMaximum in
+            self?.handle(.releaseRate(wasMaximum ? -99 : 99))
+        }
         playfieldView.onTouchEffects = { [weak self] effects in self?.handle(effects) }
         hud.onMinimap = { [weak self] point in self?.scrollToLevelX(point.x) }
         playfieldView.onViewportChanged = { [weak self] viewport in
@@ -366,10 +423,9 @@ struct MobileGameTurn {
         guard !paused, !session.snapshot.isComplete else { return }
         let ticks = clock.advance(at: link.timestamp)
         guard ticks > 0 else { return }
-        for _ in 0..<ticks where !session.snapshot.isComplete {
-            session.tick()
-            effects.update(session: session, viewport: playfieldView.gameViewport)
-        }
+        for _ in 0..<ticks where !session.snapshot.isComplete { session.tick() }
+        // Catch-up ticks accumulate cues; spatial placement and scheduling run once per frame.
+        effects.update(session: session, viewport: playfieldView.gameViewport)
         renderCurrentFrame(force: true)
         updateHUD()
         if session.snapshot.isComplete {
@@ -402,7 +458,13 @@ struct MobileGameTurn {
         case let .skill(index):
             guard session.snapshot.skills.indices.contains(index) else { return }
             selectedControl = index
-            if gameSettings.pauseToAssign { pauseForPlanning() }
+            if gameSettings.pauseToAssign {
+                let wasRunning = !paused
+                pauseForPlanning()
+                let previous = gameSettings
+                gameSettings.recordSkillSelectionPause(wasRunning: wasRunning, isReadOnly: session.isReadOnly)
+                if gameSettings != previous { gameSettings.save(to: .standard) }
+            }
             highlightedTarget = previewPoint.flatMap(target)
             saveCheckpoint(reason: .periodic)
         case .pause:
@@ -667,6 +729,18 @@ struct MobileGameTurn {
     func resumePlay() {
         let wasReady = playState.phase == .ready
         guard hudLayout(insets: view.safeAreaInsets).canPlay, !session.snapshot.isComplete,
+              lifecycle.isForeground, !lifecycle.isInterrupted else { return }
+        // Let the tenth planning pause finish before asking on the player's next Play action.
+        if !wasReady, !session.isReadOnly, gameSettings.shouldOfferSkillSelectionPauseChoice {
+            showOverlay(title: "Skill selection", actions: [
+                ("Turn off", { [weak self] in self?.chooseSkillSelectionPause(false) }),
+                ("Keep pausing", { [weak self] in self?.chooseSkillSelectionPause(true) }),
+            ])
+            overlayCanvas.page = MobileSettingsArt.skillSelectionPauseChoice()
+            layoutOverlay()
+            return
+        }
+        guard
               playState.resume(isForeground: lifecycle.isForeground, isInterrupted: lifecycle.isInterrupted) else { return }
         if wasReady {
             readyCuePending = true
@@ -690,6 +764,12 @@ struct MobileGameTurn {
         hud.accessibilityElementsHidden = false
         updateHUD()
         UIAccessibility.post(notification: .announcement, argument: "Game resumed")
+    }
+
+    private func chooseSkillSelectionPause(_ enabled: Bool) {
+        gameSettings.chooseSkillSelectionPause(enabled)
+        gameSettings.save(to: .standard)
+        resumePlay()
     }
 
     private func presentCompletion() {
@@ -1052,6 +1132,7 @@ struct MobileGameTurn {
         overlay.accessibilityViewIsModal = true
         overlay.addSubview(overlayCanvas)
         overlayCanvas.onAction = { [weak self] id in
+            if id == "resultAward" { self?.showResultAchievement(); return }
             guard let self, let index = Int(id), self.overlayActions.indices.contains(index) else { return }
             self.overlayActions[index]()
         }
@@ -1117,6 +1198,7 @@ struct MobileGameTurn {
         playfieldView.selectionSprite = nil
         hud.cancelHeldControls()
         nowPlaying.hide()
+        achievementTask?.cancel(); achievementTask = nil
         if !results { celebrationTask?.cancel(); celebrationTask = nil }
         overlayCanvas.resultStars = results ? onResultAwards?().stars : nil
         overlayCanvas.onAction = { [weak self] id in
@@ -1133,15 +1215,26 @@ struct MobileGameTurn {
             details = ["\(snapshot.total) Lemmings   Save \(snapshot.required)",
                        snapshot.remainingSeconds.map { "Time \($0 / 60):\(String(format: "%02d", $0 % 60))" } ?? "No time limit"]
         } else if completed {
-            details = ["Saved \(snapshot.saved) of \(snapshot.total)", "Required \(snapshot.required)"] + completionDetails
+            let awards = Set(resultAchievements.map(\.title))
+            let elapsed = Double(snapshot.tick) / session.ticksPerSecond
+            let time = "\(Int(elapsed) / 60):\(String(format: "%05.2f", elapsed.truncatingRemainder(dividingBy: 60)))"
+            let recordTime = completionDetails.first { $0.hasPrefix("New time record") }
+            details = ["Saved \(snapshot.saved)/\(snapshot.total)   Goal \(snapshot.required)", recordTime ?? "Time " + time]
+                + completionDetails.filter { !awards.contains($0) && !$0.hasPrefix("New time record") }
         } else { details = [] }
         let heading = completed ? (snapshot.didWin ? "Level complete" : "Try again") : (ready ? (turn?.ownerName ?? title) : title)
-        let subtitle = ready && turn == nil ? "\(summary.rank) \(summary.number)" : "\(summary.rank) \(summary.number)  \(summary.title)"
+        let subtitle = summary.caption
         let wasHidden = overlay.isHidden
         overlayCanvas.page = .init(title: heading, subtitle: subtitle,
-                                   details: details,
+                                   details: (ready && turn == nil ? [] : [summary.title]) + details,
                                    footer: actions.enumerated().map { .init(String($0.offset), $0.element.0, primary: $0.offset == 0) },
                                    preview: ready || completed)
+        if !(ready && turn == nil) && !completed { overlayCanvas.page.detailTitles = [0] }
+        overlayCanvas.page.result = completed
+        if completed {
+            overlayCanvas.page.detailHeadings = [0]
+            rotateResultAchievements()
+        }
         let isPause = !ready && !completed && title.uppercased() == "PAUSED"
         if isPause {
             overlayCanvas.page = MobilePauseArt.page(pauseSummary(), actions: overlayCanvas.page.footer)

@@ -139,14 +139,16 @@ public actor MobileCheckpointStore {
         }
     }
 
-    /// Resume this owner or shared session first. Keep the global copy as a route to another saved session.
+    /// Loads only this solo owner or shared session, including matching legacy global saves.
     public func load(owner: String, scope: String?) async throws -> MobileCheckpointEnvelope? {
         let scoped = scopedURL(owner: owner, scope: scope)
         if FileManager.default.fileExists(atPath: scoped.path)
             || FileManager.default.fileExists(atPath: scoped.appendingPathExtension("backup").path) {
             return try await MobileCheckpointStore(url: scoped).load()
         }
-        return try load()
+        guard let saved = try load(), saved.scope == scope else { return nil }
+        if scope == nil, (saved.owner ?? MobileProfiles.defaultID) != owner { return nil }
+        return saved
     }
 
     public func save(_ envelope: MobileCheckpointEnvelope) throws {

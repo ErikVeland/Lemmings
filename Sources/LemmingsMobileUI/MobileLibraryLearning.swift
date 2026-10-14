@@ -10,10 +10,8 @@ extension MobileLibraryViewController {
     var learning: MobileLearningState {
         get {
             var saved = learningStorage.load(MobileLearningState.self, name: "learning") ?? .init()
-            if hotSeat == nil {
-                saved.progress = GameProgressValue.mergeLearning(saved.progress,
-                    GameProgressPreferences.learning(profileID: profiles.activeID))
-            }
+            saved.progress = GameProgressValue.mergeLearning(saved.progress,
+                GameProgressPreferences.learning(profileID: profiles.activeID, sessionID: hotSeat?.id))
             if let run = saved.run, let journey = bundledJourney {
                 do {
                     let migrated = try journey.migrating(run)
@@ -37,7 +35,8 @@ extension MobileLibraryViewController {
     }
 
     var resumableLearningRun: MobileLearningResume? {
-        MobileLearningResume.find(owner: profiles.activeID, seats: hotSeats, storage: MobileStorage.standard, journeyOnly: false)
+        MobileLearningResume.find(owner: profiles.activeID, seats: hotSeats, storage: MobileStorage.standard,
+                                  journeyOnly: false, currentSessionOnly: true)
     }
 
     func learningPage(subtitle: String) -> GameFrontEnd.Page {
@@ -49,8 +48,9 @@ extension MobileLibraryViewController {
         }
         let unseen = saved.progress.unseen(in: journey), revisit = saved.progress.revisit(in: journey)
         footer.append(.init("learningStart", "Continue journey  \(saved.progress.solvedCount(in: journey))/\(journey.lessons.count)",
-                            enabled: !unseen.isEmpty, primary: resumableLearningJourney == nil))
+                            enabled: !unseen.isEmpty || MobileSettings.load(from: .standard).classic.unlockAllClassicLevels, primary: resumableLearningJourney == nil))
         let rows: [GameFrontEnd.Action] = [
+            .init("learningBrowse", "Choose level", enabled: resumableLearningJourney != nil),
             .init("learningRevisit", "Revisit  \(revisit.count)", enabled: !revisit.isEmpty),
             .init("progression", "Progression playlists")]
         return .init(title: LearningJourney.title, subtitle: subtitle, rows: rows, footer: footer)
@@ -69,11 +69,14 @@ extension MobileLibraryViewController {
         switch id {
         case "journey": navigate(.journey)
         case "learningResume": resumeLearningJourney()
+        case "learningBrowse": resumeLearningJourney(browse: true)
         case "learningRunResume": resumeLearningJourney(journeyOnly: false)
         case "learningStart", "learningRevisit":
-            if id == "learningStart", resumableLearningJourney != nil { resumeLearningJourney(); return true }
+            if id == "learningStart", resumableLearningJourney != nil { resumeLearningJourney(browse: true); return true }
             guard let journey = bundledJourney else { return true }
-            let entries = id == "learningStart" ? learning.progress.unseen(in: journey) : learning.progress.revisit(in: journey)
+            let entries = id == "learningStart"
+                ? (MobileSettings.load(from: .standard).classic.unlockAllClassicLevels ? journey.lessons.map(\.entry) : learning.progress.unseen(in: journey))
+                : learning.progress.revisit(in: journey)
             do {
                 var saved = learning
                 try saved.start(entries, name: LearningJourney.title, poolID: journey.version)
@@ -89,7 +92,7 @@ extension MobileLibraryViewController {
         }
         return true
     }
-    func resumeLearningJourney(journeyOnly: Bool = true) {
+    func resumeLearningJourney(journeyOnly: Bool = true, browse: Bool = false) {
         guard let saved = journeyOnly ? resumableLearningJourney : resumableLearningRun, saved.owner == profiles.activeID else { return }
         if let seat = saved.seat {
             guard seat.players.allSatisfy({ id in profiles.players.contains { $0.id == id } }) else {
@@ -108,8 +111,17 @@ extension MobileLibraryViewController {
                 let checkpoint = try await checkpointStore.load(owner: owner, scope: scope)
                 guard !Task.isCancelled, profiles.activeID == owner, hotSeat?.scope == scope else { return }
                 let matching = checkpoint.flatMap { checkpointMatchesSession($0) ? $0 : nil }
+                if browse, MobileSettings.load(from: .standard).classic.unlockAllClassicLevels,
+                   let journey = bundledJourney, let current = learning.run,
+                   current.pool.id.hasPrefix("learning-"),
+                   let position = journey.lessons.firstIndex(where: { $0.entry.identity == current.currentEntry.identity }) {
+                    var expanded = learning
+                    expanded.run = try LevelSequenceRun(id: current.id, source: current.source, pool: current.pool,
+                        entries: journey.lessons.map(\.entry), currentIndex: position, createdAt: current.createdAt)
+                    try learningStorage.save(expanded, name: "learning")
+                }
                 openLearningRun()
-                if let run = learning.run { startLevel(run.currentIndex, checkpoint: matching, restoringMatchingCheckpoint: true) }
+                if !browse, let run = learning.run { startLevel(run.currentIndex, checkpoint: matching, restoringMatchingCheckpoint: true) }
             } catch { notice = error.localizedDescription; rebuild() }
         }
     }

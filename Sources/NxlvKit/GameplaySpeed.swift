@@ -110,9 +110,9 @@ public struct GameplaySpeed: Sendable {
         if !variableEnabled { changeTarget(legacyMultiplier, at: now, immediate: true) }
     }
 
-    public mutating func release(_ input: Hold, at now: TimeInterval, allowTap: Bool = true) {
+    public mutating func release(_ input: Hold, at now: TimeInterval, allowTap: Bool = true, retainReachedSpeed: Bool = false) {
         if ignored.remove(input) != nil { return }
-        if variableEnabled, input == .key, held.contains(input),
+        if variableEnabled, input == .key || retainReachedSpeed, held.contains(input),
            now - (holdStartedAt ?? now) >= Self.holdDelay {
             update(at: now)
             selected = target

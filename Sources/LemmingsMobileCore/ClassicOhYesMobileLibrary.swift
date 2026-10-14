@@ -22,7 +22,7 @@ public final class ClassicOhYesMobileLibrary: MobileGameLibrary {
         }
         dataSet = found
         levels = found.campaign.levels.enumerated().map { index, item in
-            MobileLevelSummary(index: index, rank: item.rank, number: item.number, title: item.level.title)
+            MobileLevelSummary(index: index, rank: item.rank, number: item.number, title: item.level.title, origin: .official, packName: found.name)
         }
     }
 

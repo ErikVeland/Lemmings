@@ -43,7 +43,7 @@ extension MobileLibraryViewController {
             let key = String(id.dropFirst(8))
             switch key {
             case "preset": settings.applyExperiencePreset(modern: settings.classic.experiencePreset != .modern)
-            case "planning": settings.pauseToAssign.toggle()
+            case "planning": settings.chooseSkillSelectionPause(!settings.pauseToAssign)
             case "speed": settings.fastSpeed = cycle(settings.fastSpeed, MobileSettings.fastSpeeds)
             case "variableSpeed": settings.classic.variableSpeedEnabled.toggle()
             case "interrupt": settings.classic.pauseOnInterruption.toggle()

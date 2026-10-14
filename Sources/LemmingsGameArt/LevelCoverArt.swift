@@ -25,7 +25,7 @@ public enum LevelCoverArt {
 
     public static func geometry(for stage: CGSize) -> Geometry {
         let width = min(320, stage.width * 0.33)
-        let height = min(260, stage.height * 0.70)
+        let height = min(260, stage.height * 0.62)
         return Geometry(
             cardSize: CGSize(width: width, height: height),
             cameraDistance: width * 8 / 3,
@@ -74,20 +74,14 @@ public enum LevelCoverArt {
         let frame = artworkFrame(in: content)
         drawArtwork(artwork, in: frame, context: context)
         if let typography {
-            if artwork != nil {
-                if selected {
-                    let label = CGRect(x: frame.minX + 1, y: frame.maxY - min(26, frame.height * 0.20),
-                                       width: frame.width - 2, height: min(25, frame.height * 0.20))
-                    context.setFillColor(CGColor(gray: 0, alpha: 0.58))
-                    context.fill(label)
-                    typography.menuLine(title, in: label.insetBy(dx: 5, dy: 1), context: context, face: .small,
-                                        alignment: .center, palette: .green)
+            if artwork == nil {
+                let height = GameTextLayout.height(title, width: content.width)
+                if height <= content.height {
+                    GameTextLayout.draw(title, in: content, typography: typography, palette: selected ? .green : .blue, context: context)
                 }
-            } else {
-                typography.menuLine(title, in: CGRect(x: content.minX, y: content.midY - 9, width: content.width, height: 18),
-                                    context: context, face: .small, alignment: .center, palette: selected ? .green : .blue)
             }
         }
+
         drawReflection(in: context, bounds: bounds, cover: cover, frame: frame, artwork: artwork, selected: selected)
     }
 

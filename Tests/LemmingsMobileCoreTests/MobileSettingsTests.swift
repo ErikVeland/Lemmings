@@ -6,6 +6,61 @@ import NxlvKit
 struct MobileSettingsTests {
     private func defaults() -> UserDefaults { UserDefaults(suiteName: "MobileSettingsTests.\(UUID())")! }
 
+    @Test func testTutorialCountsTenAutomaticPausesAcrossLaunches() {
+        let store = defaults()
+        var settings = MobileSettings.load(from: store)
+        #expect(settings.pauseToAssign)
+        for use in 1...10 {
+            settings.recordSkillSelectionPause(wasRunning: true, isReadOnly: false)
+            settings.save(to: store)
+            settings = MobileSettings.load(from: store)
+            #expect(settings.skillSelectionPauseCount == use)
+            #expect(settings.shouldOfferSkillSelectionPauseChoice == (use == 10))
+        }
+        settings.recordSkillSelectionPause(wasRunning: true, isReadOnly: false)
+        #expect(settings.skillSelectionPauseCount == 10)
+    }
+
+    @Test func testPlanningChangesAndReplaysDoNotSpendTutorialUses() {
+        var settings = MobileSettings()
+        for _ in 0..<20 {
+            settings.recordSkillSelectionPause(wasRunning: false, isReadOnly: false)
+            settings.recordSkillSelectionPause(wasRunning: true, isReadOnly: true)
+        }
+        #expect(settings.skillSelectionPauseCount == 0)
+        #expect(!settings.shouldOfferSkillSelectionPauseChoice)
+    }
+
+    @Test func testBothChoicesPersistAndNeverRepeatAfterPresets() {
+        for keep in [false, true] {
+            let store = defaults()
+            var settings = MobileSettings(skillSelectionPauseCount: 10)
+            settings.chooseSkillSelectionPause(keep)
+            settings.save(to: store)
+            settings = MobileSettings.load(from: store)
+            #expect(settings.pauseToAssign == keep)
+            #expect(!settings.shouldOfferSkillSelectionPauseChoice)
+            settings.applyExperiencePreset(modern: false)
+            settings.applyExperiencePreset(modern: true)
+            for _ in 0..<20 { settings.recordSkillSelectionPause(wasRunning: true, isReadOnly: false) }
+            #expect(settings.pauseToAssign == keep)
+            #expect(!settings.shouldOfferSkillSelectionPauseChoice)
+        }
+    }
+
+    @Test func testManualPreferenceEndsReminderAndLegacyOffStaysOff() throws {
+        var settings = MobileSettings()
+        settings.chooseSkillSelectionPause(false)
+        settings.chooseSkillSelectionPause(true)
+        for _ in 0..<20 { settings.recordSkillSelectionPause(wasRunning: true, isReadOnly: false) }
+        #expect(!settings.shouldOfferSkillSelectionPauseChoice)
+        let restored = try JSONDecoder().decode(MobileSettings.self, from: Data("{\"pauseToAssign\":false}".utf8))
+        #expect(!restored.pauseToAssign)
+        #expect(restored.skillSelectionPauseChoiceMade)
+        let olderDefault = try JSONDecoder().decode(MobileSettings.self, from: Data("{}".utf8))
+        #expect(olderDefault.pauseToAssign && olderDefault.skillSelectionPauseCount == 0)
+    }
+
     @Test func testLegacyKeysMigrate() {
         let store = defaults()
         store.set(true, forKey: "mobile.continuousSkillSelection")

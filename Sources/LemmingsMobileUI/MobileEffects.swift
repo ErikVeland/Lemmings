@@ -7,7 +7,8 @@ import UIKit
 
 /// Each game owns its effect voices, including simulation replays.
 @MainActor final class MobileEffects {
-    private let player = SoundEffectPlayer()
+    private let player = SoundEffectPlayer(voiceCount: MobileDevicePerformance.constrained ? 12 : 24,
+                                          rescueVoiceLimit: MobileDevicePerformance.constrained ? 3 : 6)
     private var prepared = false
     private var suspended = false
     private var source: ClassicSoundSource?

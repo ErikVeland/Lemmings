@@ -1,9 +1,28 @@
 #if os(macOS)
 import AVFoundation
 import XCTest
+import Testing
 @testable import LemmingsAudio
 import NxlvKit
 @testable import LemmingsLocal
+
+struct MobileRescueSoundBudgetTests {
+    @Test func rescueCrowdsStayBoundedAndResetAfterSilence() {
+        // Never start the audio engine: this verifies scheduling without audible output.
+        let player = SoundEffectPlayer(voiceCount: 12, rescueVoiceLimit: 3)
+        final class Capture: @unchecked Sendable { var count = 0 }
+        let capture = Capture()
+        player.onPlay = { _, _, _ in capture.count += 1 }
+        for _ in 0..<2_400 { player.play(.yippee) }
+        #expect(capture.count == 3)
+        player.silence()
+        player.play(.yippee)
+        #expect(capture.count == 4)
+        player.setMuted(true)
+        player.play(.yippee)
+        #expect(capture.count == 4)
+    }
+}
 
 final class NeoLemmixSoundTests: XCTestCase {
     private func makeSession(preplaced: Bool = true) throws -> NeoLemmixSession {

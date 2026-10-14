@@ -16,12 +16,13 @@ public final class ClassicMobileLibrary: MobileGameLibrary {
         self.directory = directory
         dataSet = try ClassicDataSet.detect(directory: directory)
         assets = try ClassicMainDATAssets.load(from: directory)
+        let packName = dataSet.name
         levels = dataSet.campaign.levels.enumerated().map { index, item in
             MobileLevelSummary(
                 index: index,
                 rank: item.rank,
                 number: item.number,
-                title: item.level.title
+                title: item.level.title, origin: .official, packName: packName
             )
         }
     }

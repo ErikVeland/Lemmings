@@ -1,7 +1,7 @@
 import CoreGraphics
 import CoreText
 import Foundation
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import UIKit
 #elseif os(macOS)
 import AppKit
@@ -22,7 +22,7 @@ import AppKit
         let line: CTLine
         if let cached = lines[seconds] { line = cached }
         else {
-            #if os(iOS)
+            #if os(iOS) || os(tvOS)
             let font = UIFont.monospacedDigitSystemFont(ofSize: size, weight: .bold)
             let colour = UIColor.white
             #else

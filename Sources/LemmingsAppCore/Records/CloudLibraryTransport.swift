@@ -1,6 +1,8 @@
 import CryptoKit
 import Foundation
+#if !os(tvOS)
 import LocalAuthentication
+#endif
 import NxlvKit
 import Security
 
@@ -25,6 +27,11 @@ import Security
     private var etags: [String: String] = [:]
     private var hashes: [String: Set<Data>] = [:]
     private static let service = "academy.glasscode.lemmings.cloud-library-v2"
+#if os(tvOS)
+    private static let containerIdentifier = "iCloud.academy.glasscode.lemmings"
+#else
+    private static let containerIdentifier = AppleGameProgressTransport.containerIdentifier
+#endif
     public var available: Bool { enabled }
     public init(defaults: UserDefaults = .standard, endpoint: URL? = nil) {
         self.defaults = defaults
@@ -35,10 +42,13 @@ import Security
         enabled = ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] != "muted"
     }
     public func credentials() throws -> [CloudLibraryIdentity] {
-        let context = LAContext(); context.interactionNotAllowed = true
-        let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
+        var query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: Self.service, kSecAttrAccount as String: "library",
-            kSecReturnData as String: true, kSecUseAuthenticationContext as String: context]
+            kSecReturnData as String: true]
+#if !os(tvOS)
+        let context = LAContext(); context.interactionNotAllowed = true
+        query[kSecUseAuthenticationContext as String] = context
+#endif
         var result: CFTypeRef?
         let status = SecItemCopyMatching(query as CFDictionary, &result)
         if status == errSecItemNotFound { return [] }
@@ -49,10 +59,12 @@ import Security
     public func storeCredentials(_ identities: [CloudLibraryIdentity]) throws {
         try Self.validate(identities)
         let data = try JSONEncoder().encode(identities)
+        var query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: Self.service, kSecAttrAccount as String: "library"]
+#if !os(tvOS)
         let context = LAContext(); context.interactionNotAllowed = true
-        let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: Self.service, kSecAttrAccount as String: "library",
-            kSecUseAuthenticationContext as String: context]
+        query[kSecUseAuthenticationContext as String] = context
+#endif
         let update = SecItemUpdate(query as CFDictionary, [kSecValueData as String: data] as CFDictionary)
         if update == errSecItemNotFound {
             var entry = query; entry.removeValue(forKey: kSecUseAuthenticationContext as String); entry[kSecValueData as String] = data
@@ -80,7 +92,7 @@ import Security
             if let bound = defaults.data(forKey: "CloudLibrary.iCloudOwner"), bound != account {
                 issues.append("iCloud account changed")
             } else {
-                let containerIdentifier = AppleGameProgressTransport.containerIdentifier
+                let containerIdentifier = Self.containerIdentifier
                 let url = await Task.detached(priority: .utility) {
                     FileManager.default.url(forUbiquityContainerIdentifier: containerIdentifier)
                 }.value

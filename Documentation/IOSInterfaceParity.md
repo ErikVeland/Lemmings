@@ -138,6 +138,19 @@ for 0.6 seconds to open the pause menu. VoiceOver retains a separate Pause menu
 action and names the speed pedal's tap and hold behaviour. Leaving a target,
 changing layouts, opening a menu or losing the window cancels held input.
 
+Pause on skill selection starts as an iOS tutorial aid. After ten skill selections
+pause a running game, the next Play action offers Keep pausing or Turn off.
+The choice persists and appears once. Skill changes during an existing pause and
+replays do not count. Choosing the setting directly also ends the reminder.
+Classic, Lemmings 2 and Lemmings 3 share this controller flow. Mobile sequel
+campaigns remain unavailable, so full device acceptance covers Classic only.
+Mac skill selection stays continuous; new tvOS preferences also use continuous play.
+
+Focused validation passes eight settings regressions, 27 windowless bitmap states
+with target and gap checks, and 74 muted, offscreen tvOS checks across Classic,
+Lemmings 2 and Lemmings 3. The arm64 iOS modules compile. Actual UIKit prompt
+activation, physical touch, keyboard and controller acceptance remain device checks.
+
 Validation: the unsigned iOS device build passes. Twenty-one focused, offscreen,
 muted checks pass for camera framing, entrance positions, rotation, Classic/L2/L3
 control sets, input timing, bitmap/touch alignment and worker-owned level preparation.
@@ -171,7 +184,7 @@ the renderer's exact target rectangles and retain accessibility names.
 | Title screen and resume | Original logo, bitmap fonts, selected row, saved-run action, Classic progress | Player/profile selection and all content families |
 | Level browser | Focused Classic preview, rank pairs, level pairs, swipe navigation, Play | Cover-flow cards, favourites, filters, locks and collection journeys |
 | Briefing and ready | Bitmap page, level totals and time, preview, explicit Start | Engine-specific L2/L3 briefings and campaigns |
-| Gameplay planning | Classic touch targeting, pan, anchored pinch, loupe, pause-on-skill default, step and explicit resume | Full Mac QoL and physical input acceptance across all engines |
+| Gameplay planning | Classic touch targeting, pan, anchored pinch, loupe, ten-use pause-on-skill tutorial with saved choice, step and explicit resume | Full Mac QoL and physical input acceptance across all engines |
 | Saved run | Shared validated checkpoint envelope, paused restore, run retirement | Complete cross-engine navigation and profile integration |
 | Retry and continue | Game child replacement keeps the front-end transition inside gameplay | L2/L3 campaign carry-over and final-level policies |
 | Results | Bitmap page, saved/required counts, next/retry/library | Mac celebrations, achievements, trophies, records and engine-specific outcomes |
@@ -536,3 +549,66 @@ existing green identity row. VoiceOver says “Current turn” and the full name
 All 80 windowless render/target checks pass, covering all eight profile portraits
 and adaptive layouts. The unsigned arm64 iOS build passes. See
 [player identity evidence](ReleaseReadiness/2.0HotSeatTurn-2026-10-14/README.md).
+
+## 14 October pause overview and journey correction
+
+Pause now shows the level and frozen playfield, rescue target, active/waiting/lost
+counts, further permitted losses, times, speed, release rate, skill stock,
+rewind use and actual soundtrack/track information. Resume stays pinned while
+the details scroll. The screen uses shared bitmap fonts and stone controls,
+with a reduced-motion-aware opening fade. Ready handovers retain their pause.
+
+Let's be careful out there moves from journey lesson 32 to Intermediate lesson
+95. The reproducible generator and saved-run migration retain this correction.
+
+All 26 focused muted tests, 216 windowless render/target checks and the arm64
+iOS UI compilation pass. Physical UIKit, VoiceOver and fade checks remain
+outstanding. L2/L3 native adapter counts pass headless checks; their iOS
+campaigns remain unavailable. See [pause behaviour and validation](MobilePauseScreen.md).
+
+
+## Compact iPad menus and bounded effects
+
+Home uses a centered grid, with an extra column on short tablet layouts. Results
+place the snapshot beside rescue/time statistics and keep the action grid together.
+New time records include their time. A single tappable award slot cycles through
+earned achievements and record notices; its detail page has Back and Next Award.
+Reduced motion and VoiceOver keep the slot still. Headless checks verify Home and
+results fit iPad 8 portrait, landscape and larger-lettering dimensions without
+scrolling, with nonoverlapping action targets.
+
+Journey Continue and Choose level open the shared browser. Unlock All expands a
+saved curated journey to all lessons while retaining the current lesson identity,
+owner and Hot Seat turn. Starting a chosen lesson saves its queue position.
+Hot Seat preselects the host and one other existing profile for a new roster; with
+only one profile, Add Player remains necessary. Existing sessions keep their roster.
+
+Double-tap either release-rate button, or the portrait numeric display, to toggle
+between 99 and the level's minimum. The first tap still changes one step, and held
+controls still repeat. The second tap uses the value before the first tap, so the
+decrease button also switches correctly from maximum to minimum. Cancellation
+clears pending double taps. Replays cannot change the rate; the engine retains
+its authored limits. L2/L3 adapters expose no release-rate control.
+
+Mobile audio uses 12 spatial voices and at most three concurrent rescue sounds
+on pre-Apple7 GPUs, versus 24 and six on newer GPUs. Desktop defaults are unchanged.
+Overlapping rescue silhouettes share one glow, with at most two on older devices.
+Older devices omit scenery glow and cap speed-effect rendering at 180,000 pixels
+and 20 Hz. Newer devices cap the soft overlay at 720,000 pixels. These limits do
+not alter simulation rules, rescue counts or the sharp game image.
+
+Validation: the iOS Xcode build and 36 focused headless tests pass, covering saved
+journey selection/ownership, Hot Seat, frame pacing, rate double taps, holds,
+cancellation and 2,400 rescue sound requests without starting an audio engine.
+The bitmap checker passes 423 pages, including explicit iPad no-scroll assertions,
+plus existing HUD/art checks. Ten focused rescue renders verify a 500-sprite stack
+requests one glow image. Final home, result and failure renders were inspected.
+All checks are windowless and muted.
+
+The broader `--current-fixes` bitmap check fails its existing replay-panel
+containment/overlap assertion in `Tools/IOSMenuAudit/current-fixes.swift`; the
+focused `--rescue-budget` check passes. Physical UIKit gestures, VoiceOver,
+sustained iPad 8 frame rate and audible sound balance remain manual checks.
+Classic, L2 and L3 use the shared mobile effects/results paths, but L2/L3 campaigns
+remain unavailable in the iOS library and journeys currently accept Classic entries.
+Hot Seat handovers still wait at Ready.

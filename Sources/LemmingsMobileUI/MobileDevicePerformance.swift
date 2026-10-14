@@ -17,7 +17,8 @@ import LemmingsGameArt
         profile.supportsEnhancedEffects && !ProcessInfo.processInfo.isLowPowerModeEnabled
             && ProcessInfo.processInfo.thermalState != .serious && ProcessInfo.processInfo.thermalState != .critical
     }
-    static var constrained: Bool { !profile.supportsEnhancedEffects }
+    // A12 iPads support the shaders, but cannot afford desktop-sized effects.
+    static let constrained = MTLCreateSystemDefaultDevice()?.supportsFamily(.apple7) != true
     static var cpuFrameCost: Double { adaptive.cpu.smoothedCost }
     static var gpuFrameCost: Double { adaptive.gpu.smoothedCost }
 

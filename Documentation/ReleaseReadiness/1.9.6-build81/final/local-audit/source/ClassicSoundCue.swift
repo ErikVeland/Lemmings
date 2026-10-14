@@ -1,0 +1,271 @@
+import Foundation
+
+/// A sound the game asks for, named by meaning rather than by bank position.
+///
+/// Keeping this separate from the sample bank means the engine never needs to
+/// know which index holds which recording. A data set supplies that mapping,
+/// so a different bank can be substituted without touching gameplay.
+public enum ClassicSoundEffect: String, CaseIterable, Codable, Sendable {
+    case levelStart
+    case doorOpen
+    case assignSkill
+    case ohNo
+    case explode
+    case splat
+    case fallOut
+    case drown
+    case vaporize
+    case exitLevel
+    case builderWarning
+    case hitSteel
+    case nuke
+    case yippee
+    case letsGo
+    case pop
+    case toolPickup
+    case clockPickup
+    case projectileLaunch
+    case trampolineBounce
+    case trapTrigger
+    case brickPlace
+    case waterEntry
+    case timerWarning
+    case actionRejected
+    case ready
+
+    public var isRescue: Bool { self == .exitLevel || self == .yippee }
+
+    /// Player actions and warnings remain clear when the crowd is noisy.
+    public var presentationPriority: Int {
+        switch self {
+        case .assignSkill, .builderWarning, .timerWarning, .actionRejected, .ready: return 3
+        case .exitLevel, .yippee, .toolPickup, .clockPickup: return 2
+        default: return 1
+        }
+    }
+
+    /// Rescue voices and useful warnings never share a repetition gate.
+    public var repetitionInterval: Double {
+        switch self {
+        case .actionRejected: return 0.18
+        case .splat, .fallOut, .drown, .vaporize, .trapTrigger: return 0.08
+        case .hitSteel, .brickPlace: return 0.06
+        default: return 0
+        }
+    }
+}
+
+/// Turns engine events into sound requests.
+public enum ClassicSoundCue {
+    /// Keep each event's origin until the presentation layer places its sound.
+    public static func positionedCues(for events: [ClassicDOSEvent],
+                                      lemmings: [ClassicDOSLemming], entrances: [ClassicDOSPoint]) -> [PositionedSoundCue] {
+        let positions = Dictionary(uniqueKeysWithValues: lemmings.map { ($0.id, GameplaySoundPoint(x: Double($0.foot.x), y: Double($0.foot.y))) })
+        return events.flatMap { event -> [PositionedSoundCue] in
+            let id: Int?
+            switch event {
+            case let .skillAssigned(lemmingID, _), let .saved(lemmingID), let .builderWarning(lemmingID),
+                 let .hitSteel(lemmingID), let .fellOut(lemmingID), let .actionChanged(lemmingID, _, _): id = lemmingID
+            case .entrancesOpened:
+                return entrances.flatMap { point in cues(for: [event]).map {
+                    PositionedSoundCue($0, at: GameplaySoundPoint(x: Double(point.x), y: Double(point.y)))
+                } }
+            default: id = nil
+            }
+            return cues(for: [event]).map { PositionedSoundCue($0, at: id.flatMap { positions[$0] }) }
+        }
+    }
+
+    /// Maps one tick's events to the sounds that tick should play.
+    ///
+    /// Ordinary duplicates are collapsed when several lemmings enter the same
+    /// state on one tick. Every rescue keeps its own celebration sounds.
+    public static func cues(for events: [ClassicDOSEvent]) -> [ClassicSoundEffect] {
+        var seen = Set<ClassicSoundEffect>()
+        var ordered: [ClassicSoundEffect] = []
+
+        func add(_ effect: ClassicSoundEffect) {
+            guard effect.isRescue || seen.insert(effect).inserted else { return }
+            ordered.append(effect)
+        }
+
+        for event in events {
+            switch event {
+            case .entrancesOpened:
+                add(.doorOpen)
+                add(.letsGo)
+            case .skillAssigned:
+                add(.assignSkill)
+            case .saved:
+                add(.exitLevel)
+                add(.yippee)
+            case .builderWarning:
+                add(.builderWarning)
+            case .hitSteel:
+                add(.hitSteel)
+            case .fellOut:
+                add(.fallOut)
+            case .nukeStarted:
+                add(.nuke)
+            case let .actionChanged(_, _, to):
+                switch to {
+                case .ohNo: add(.ohNo)
+                case .exploding: add(.explode)
+                case .splatting: add(.splat)
+                case .drowning: add(.drown)
+                case .vaporizing: add(.vaporize)
+                default: break
+                }
+            default:
+                break
+            }
+        }
+        return ordered
+    }
+}
+
+/// Which bank entry holds each sound.
+///
+/// The banks carry no names, so this has to be supplied. It is data rather
+/// than code so it can be corrected without a rebuild.
+public struct ClassicSoundMapping: Codable, Equatable, Sendable {
+    /// Bank index per effect. A missing entry means that sound is unavailable.
+    public var indices: [ClassicSoundEffect: Int]
+    /// Samples were recorded at one rate and played back faster, which is what
+    /// gives the voices their cartoon pitch.
+    public var recordedRate: Double
+    public var playbackRate: Double
+
+    /// The rate a Sound Blaster produced for a given time constant.
+    public static func soundBlasterRate(timeConstant: Int) -> Double {
+        let clamped = min(255, max(0, timeConstant))
+        return 1_000_000.0 / Double(256 - clamped)
+    }
+
+    /// The rate these effects were recorded at, about 11 kHz.
+    public static let recordedTimeConstant = 165
+    /// The rate they were played back at, about 21 kHz.
+    public static let playbackTimeConstant = 208
+
+    public init(
+        indices: [ClassicSoundEffect: Int] = [:],
+        recordedRate: Double = ClassicSoundMapping.soundBlasterRate(
+            timeConstant: ClassicSoundMapping.recordedTimeConstant),
+        playbackRate: Double = ClassicSoundMapping.soundBlasterRate(
+            timeConstant: ClassicSoundMapping.playbackTimeConstant)
+    ) {
+        self.indices = indices
+        self.recordedRate = recordedRate
+        self.playbackRate = playbackRate
+    }
+
+    /// How much faster a sample plays than it was recorded.
+    public var pitchRatio: Double {
+        guard recordedRate > 0 else { return 1 }
+        return playbackRate / recordedRate
+    }
+
+    public func index(for effect: ClassicSoundEffect) -> Int? { indices[effect] }
+    public var isComplete: Bool {
+        ClassicSoundEffect.allCases.allSatisfy { indices[$0] != nil }
+    }
+
+    /// Effects that still have no recording assigned.
+    public var missingEffects: [ClassicSoundEffect] {
+        ClassicSoundEffect.allCases.filter { indices[$0] == nil }
+    }
+}
+
+extension ClassicSoundMapping {
+    /// Binds effects to the names the Macintosh release uses.
+    public static let macintoshNames: [ClassicSoundEffect: String] = [
+        .levelStart: "LetsGo",
+        .doorOpen: "Door",
+        .assignSkill: "MousePress",
+        .ohNo: "OhNo",
+        .explode: "Explode",
+        .splat: "Splat",
+        .drown: "Splash",
+        .vaporize: "Fire",
+        .hitSteel: "Chink",
+        .exitLevel: "Ting",
+        .builderWarning: "Oing",
+        .nuke: "Die",
+        .fallOut: "Die",
+        .yippee: "Yippee",
+        .letsGo: "LetsGo",
+        .pop: "Pop",
+    ]
+
+    /// Binds effects to the names the Amiga sound banks actually use.
+    ///
+    /// These are read from `basicfx` and `fullfx` on the Amiga disk, not
+    /// invented. Several sounds in those banks carry an empty NAME chunk, so
+    /// they cannot be bound here and the effects that would need them are
+    /// absent: the game falls back to another source for those. An earlier
+    /// version of this table guessed at names such as "MousePress" and
+    /// "Splash", none of which exist in the files.
+    ///
+    /// Matching ignores case, because the banks mix `Splat` with `chink`.
+    public static let amigaVoiceNames: [ClassicSoundEffect: String] = [
+        .levelStart: "LetsGo",
+        .letsGo: "LetsGo",
+        .doorOpen: "Door2",
+        .assignSkill: "ChangeOpt2",
+        .ohNo: "OHNO1",
+        .splat: "Splat",
+        .hitSteel: "chink",
+        .builderWarning: "ting",
+        .drown: "water1",
+        .vaporize: "TenTonn",
+        .pop: "oing",
+    ]
+
+    /// Effects with no named Amiga sample behind them.
+    ///
+    /// The banks hold nine sounds with an empty name, and some of these
+    /// effects are certainly among them. They stay unbound until somebody
+    /// identifies them by ear, rather than being bound to a guess.
+    public static let amigaUnboundEffects: [ClassicSoundEffect] =
+        ClassicSoundEffect.allCases.filter { amigaVoiceNames[$0] == nil }
+
+    /// DOS Sound Blaster RAW sample mapping indices.
+    public static let dosSoundBlasterIndices: [ClassicSoundEffect: Int] = [
+        .doorOpen: 0,
+        .assignSkill: 1,
+        .ohNo: 2,
+        .explode: 3,
+        .splat: 4,
+        .drown: 5,
+        .vaporize: 6,
+        .hitSteel: 7,
+        .exitLevel: 8,
+        .builderWarning: 9,
+        .nuke: 10,
+    ]
+
+    /// SNES sound effect mapping indices.
+    public static let snesSoundIndices: [ClassicSoundEffect: Int] = [
+        .doorOpen: 0,
+        .assignSkill: 1,
+        .ohNo: 2,
+        .explode: 3,
+        .splat: 4,
+        .drown: 5,
+        .hitSteel: 6,
+        .exitLevel: 7,
+        .nuke: 8,
+    ]
+
+    /// Arcade sound effect mapping indices.
+    public static let arcadeSoundIndices: [ClassicSoundEffect: Int] = [
+        .doorOpen: 0,
+        .assignSkill: 1,
+        .ohNo: 2,
+        .explode: 3,
+        .splat: 4,
+        .hitSteel: 5,
+        .exitLevel: 6,
+        .nuke: 7,
+    ]
+}

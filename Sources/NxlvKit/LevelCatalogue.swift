@@ -50,6 +50,7 @@ public struct LevelCatalogueIdentity: Hashable, Codable, Sendable {
     public let engine: LevelSourceEngine
     public let packID: String
     public let levelID: String
+    public var originLabel: String { packID.hasPrefix("fan:") || packID.hasPrefix("lldb-") || packID.hasPrefix("file-") || engine == .neolemmix ? "Fan-made" : "Official" }
 
     public init(engine: LevelSourceEngine, packID: String, levelID: String) {
         self.engine = engine

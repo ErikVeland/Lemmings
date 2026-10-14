@@ -1,0 +1,13 @@
+{
+  "version": "2.0",
+  "build": 13,
+  "archiveCommit": "602700c06d957ab56b4b54aaa9660abb105dfdde",
+  "productionSourceEquivalentTo": "3ba689eaf21979833fcfa97d2beac1babfaabc36",
+  "ipaSHA256": "85cf42cf26fc2812c07a6a7f66744f92f30f2c9fab87bf96402fdd1717d2649c",
+  "ipaBytes": 1816674197,
+  "uploaded": false,
+  "uploadAttempted": false,
+  "status": "awaiting explicit App Store Connect upload approval",
+  "destination": "App Store Connect app 6822112090, TestFlight processing",
+  "reason": "Automatic approval review rejected transmission of the signed iOS app and bundled game/music assets to Apple without explicit payload/destination authorization."
+}

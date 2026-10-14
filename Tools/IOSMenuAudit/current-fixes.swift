@@ -34,15 +34,15 @@ extension MenuAudit {
             let layout = MobileHUDLayout.make(container: size, safeArea: .init(top: 20, bottom: 20),
                 hasRate: true, skillCount: session.snapshot.skills.count, reservedRegions: regions,
                 supportsRewind: true)
-            if size.height > size.width, layout.portrait == nil { throw Failure.invalidTargets }
+            if size.height > size.width, layout.portrait == nil { throw invalidTargets(line: #line) }
             let targets = MobileHUDRenderer.targets(layout: layout, snapshot: session.snapshot, selectedSkill: 0,
                 paused: true, speed: 1, endRunArmed: false)
             for (index, target) in targets.enumerated() {
                 guard target.inputFrame.width >= 44 - 0.001, target.inputFrame.height >= 44,
-                    hudTargetFits(target, layout: layout), hudScrollTargetIsReachable(target, layout: layout) else { throw Failure.invalidTargets }
+                    hudTargetFits(target, layout: layout), hudScrollTargetIsReachable(target, layout: layout) else { throw invalidTargets(line: #line) }
                 for other in targets.dropFirst(index + 1) {
                     let overlap = hudVisibleInputFrame(target, layout: layout).intersection(hudVisibleInputFrame(other, layout: layout))
-                    guard overlap.isNull || overlap.width <= 0.001 || overlap.height <= 0.001 else { throw Failure.invalidTargets }
+                    guard overlap.isNull || overlap.width <= 0.001 || overlap.height <= 0.001 else { throw invalidTargets(line: #line) }
                 }
             }
             let context = try bitmapContext(size: .init(width: size.width, height: size.height))
@@ -54,16 +54,29 @@ extension MenuAudit {
             let effects = MobileRescueArt.effects(sprites: [sprite], viewport: viewport, amount: 1, enabled: true) {
                 MobileBitmapRenderer.image($0.frame)
             }
+            var crowdImages = 0
+            let crowd = MobileRescueArt.effects(sprites: Array(repeating: sprite, count: 500),
+                viewport: viewport, amount: 1, enabled: true, maximumEffects: 2) {
+                    crowdImages += 1
+                    return MobileBitmapRenderer.image($0.frame)
+                }
+            guard crowd.count == 1, crowdImages == 1 else { throw invalidTargets(line: #line) }
             guard !effects.isEmpty,
                 MobileRescueArt.effects(sprites: [sprite], viewport: viewport, amount: 1, enabled: false, image: { _ in nil }).isEmpty,
                 MobileRescueArt.effects(sprites: [sprite], viewport: viewport, amount: 0, enabled: true, image: { _ in nil }).isEmpty
-                else { throw Failure.invalidTargets }
+                else { throw invalidTargets(line: #line) }
             for effect in effects { LemmingSelectionRenderer.draw(effect, in: context) }
             context.restoreGState()
+            if CommandLine.arguments.last == "--rescue-budget" {
+                let file = name + "-rescue-budget.png"
+                try save(context: context, to: output.appendingPathComponent(file))
+                captures.append(["device": name, "file": file, "crowd": 500, "glows": crowd.count, "images": crowdImages])
+                continue
+            }
             let width = min(240, max(0, field.width - 16))
             let panel = CGRect(x: field.maxX - width - 8, y: field.minY + (layout.portrait != nil ? 56 : 8), width: width,
                 height: width * MobileReplaySkillArt.size.height / MobileReplaySkillArt.size.width)
-            guard field.contains(panel), targets.allSatisfy({ !panel.intersects($0.inputFrame) }) else { throw Failure.invalidTargets }
+            guard field.contains(panel), targets.allSatisfy({ !panel.intersects($0.inputFrame) }) else { throw invalidTargets(line: #line) }
             if layout.canPlay { MobileReplaySkillArt.draw(uses: uses, tick: 146, in: panel, typography: typography, context: context) }
             MobileHUDRenderer(layout: layout, snapshot: session.snapshot, selectedSkill: 0, paused: true, speed: 1, endRunArmed: false,
                 panelImage: session.panelFrame.flatMap(MobileBitmapRenderer.image), typography: typography, readOnly: true)
@@ -75,7 +88,7 @@ extension MenuAudit {
             if !layout.canPlay {
                 let page = GameFrontEnd.Page(title: "Paused", footer: [.init("library", "Library", primary: true)])
                 let menu = GameFrontEnd.layout(page, width: size.width, minimumHeight: size.height)
-                guard menu.targets.allSatisfy({ $0.frame.width >= 44 && $0.frame.height >= 44 }) else { throw Failure.invalidTargets }
+                guard menu.targets.allSatisfy({ $0.frame.width >= 44 && $0.frame.height >= 44 }) else { throw invalidTargets(line: #line) }
                 GameFrontEnd.draw(page, layout: menu, typography: typography, in: context)
             }
             let file = name + "-replay-rescue.png"
@@ -86,6 +99,6 @@ extension MenuAudit {
         try JSONSerialization.data(withJSONObject: ["captures": captures, "windows": "none", "audio": "muted",
             "replayPanelOverlapsControls": false, "physicalUIKitAcceptance": "pending"], options: [.prettyPrinted, .sortedKeys])
             .write(to: output.appendingPathComponent("current-fixes.json"))
-        print("PASS: \(captures.count) replay and rescue renders, control targets and reduced-effect gates.")
+        print("PASS: \(captures.count) renders, rescue crowd bounds, control targets and reduced-effect gates.")
     }
 }

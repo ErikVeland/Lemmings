@@ -1,0 +1,83 @@
+/Users/veland/Lemmings/.build/release-1.9.6/source/Sources/LemmingsLocal/ReleaseWelcome.swift:47:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+45 |         scroll.hasHorizontalScroller = false
+46 |         scroll.drawsBackground = false
+47 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+48 |         scroll.scrollerStyle = .overlay
+49 |         scroll.setAccessibilityLabel("Release notes")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+/Users/veland/Lemmings/.build/release-1.9.6/source/.build/app-integration-tests-arm64/main.swift:6237:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 6235 |       openPanel.canChooseFiles = true
+ 6236 |       openPanel.canChooseDirectories = false
+ 6237 |       openPanel.allowedFileTypes = ["nxlv"]
+      |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 6238 |       openPanel.message = "Choose a NeoLemmix level file."
+ 6239 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/.build/release-1.9.6/source/.build/app-integration-tests-arm64/main.swift:7558:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 7556 |       openPanel.canChooseFiles = true
+ 7557 |       openPanel.canChooseDirectories = false
+ 7558 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+      |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 7559 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+ 7560 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/.build/release-1.9.6/source/.build/app-integration-tests-arm64/main.swift:8266:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+ 8264 |     keyboard.controllerRewindHeld = { [weak self] held in
+ 8265 |       guard let self else { return }
+ 8266 |       if held { self.beginContinuousRewind() }
+      |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+ 8267 |       else if self.rewindHeld { self.endContinuousRewind() }
+ 8268 |     }
+
+/Users/veland/Lemmings/.build/release-1.9.6/source/.build/app-integration-tests-arm64/main.swift:10665:38: error: value of type 'ReplayMovieRecorder' has no member 'recordingFailure'
+10663 |         window.contentView?.displayIfNeeded()
+10664 |         CATransaction.flush()
+10665 |         try check(runMovie.recorder?.recordingFailure == nil,
+      |                                      `- error: value of type 'ReplayMovieRecorder' has no member 'recordingFailure'
+10666 |           "Benchmark encoder failed in pass \(pass), \(mode.rawValue) \(rate)x: \(runMovie.recorder?.recordingFailure ?? "")")
+10667 |         let end = ProcessInfo.processInfo.systemUptime
+
+/Users/veland/Lemmings/.build/release-1.9.6/source/.build/app-integration-tests-arm64/main.swift:10666:102: error: value of type 'ReplayMovieRecorder' has no member 'recordingFailure'
+10664 |         CATransaction.flush()
+10665 |         try check(runMovie.recorder?.recordingFailure == nil,
+10666 |           "Benchmark encoder failed in pass \(pass), \(mode.rawValue) \(rate)x: \(runMovie.recorder?.recordingFailure ?? "")")
+      |                                                                                                      `- error: value of type 'ReplayMovieRecorder' has no member 'recordingFailure'
+10667 |         let end = ProcessInfo.processInfo.systemUptime
+10668 |         samples.append((end - start) * 1000)
+
+/Users/veland/Lemmings/.build/release-1.9.6/source/.build/app-integration-tests-arm64/main.swift:10680:64: error: value of type 'ReplayMovieRecorder' has no member 'recordingFailure'
+10678 |       let capturedFrames = runMovie.capturedFrames - initialCapturedFrames
+10679 |       try check(capturedFrames == completedTicks, "Benchmark skipped replay frames in pass \(pass), \(mode.rawValue) \(rate)x: \(capturedFrames)/\(completedTicks)")
+10680 |       try check(runMovie.recorder != nil && runMovie.recorder?.recordingFailure == nil,
+      |                                                                `- error: value of type 'ReplayMovieRecorder' has no member 'recordingFailure'
+10681 |         "Benchmark recorder failed: \(runMovie.recorder?.recordingFailure ?? "missing recorder")")
+10682 |       // Drain submitted GPU work after timing the normal asynchronous app loop.
+
+/Users/veland/Lemmings/.build/release-1.9.6/source/.build/app-integration-tests-arm64/main.swift:10681:58: error: value of type 'ReplayMovieRecorder' has no member 'recordingFailure'
+10679 |       try check(capturedFrames == completedTicks, "Benchmark skipped replay frames in pass \(pass), \(mode.rawValue) \(rate)x: \(capturedFrames)/\(completedTicks)")
+10680 |       try check(runMovie.recorder != nil && runMovie.recorder?.recordingFailure == nil,
+10681 |         "Benchmark recorder failed: \(runMovie.recorder?.recordingFailure ?? "missing recorder")")
+      |                                                          `- error: value of type 'ReplayMovieRecorder' has no member 'recordingFailure'
+10682 |       // Drain submitted GPU work after timing the normal asynchronous app loop.
+10683 |       let gpuDeadline = ProcessInfo.processInfo.systemUptime + 2
+
+/Users/veland/Lemmings/.build/release-1.9.6/source/.build/app-integration-tests-arm64/main.swift:10713:442: error: value of type 'ReplayMovieRecorder' has no member 'admissionWaitSeconds'
+10711 |       let sorted = samples.sorted()
+10712 |       func quantile(_ fraction: Double) -> Double { sorted[min(sorted.count - 1, Int(Double(sorted.count - 1) * fraction))] }
+10713 |       rows.append(["pass": pass, "replayFrames": capturedFrames, "initialReplayFrames": initialCapturedFrames, "encodedReplayFrames": encodedFrames, "gpuFrames": gpu.frames.count, "gpuExecutionMS": distribution(gpu.frames.map(\.gpuMS)), "gpuCompletionMS": distribution(gpu.frames.map(\.completionMS)), "sceneRenderSeconds": playfield.sceneRenderSeconds, "replayCaptureSeconds": replayCaptureSeconds, "encoderWaitSeconds": runMovie.recorder?.admissionWaitSeconds ?? 0, "display": mode.rawValue, "requestedSpeed": rate, "seconds": elapsed, "frames": samples.count,
+      |                                                                                                                                                                                                                                                                                                                                                                                                                                                          `- error: value of type 'ReplayMovieRecorder' has no member 'admissionWaitSeconds'
+10714 |         "ticks": completedTicks, "observedSimulationSpeed": Double(completedTicks) / (17 * elapsed),
+10715 |         "cpuFrameMS": ["p50": quantile(0.5), "p95": quantile(0.95), "p99": quantile(0.99), "max": sorted.last!],
+
+/Users/veland/Lemmings/.build/release-1.9.6/source/.build/app-integration-tests-arm64/main.swift:16655:14: warning: 'init(dictionary:)' is deprecated: Properties that depend on the system or application version are not supported when used with this initializer. The designated initializer is available in SUAppcastItem+Private.h. Please first explore other APIs or contact us to describe your use case. [#DeprecatedDeclaration]
+16653 |     && updates.responds(to: NSSelectorFromString("updater:didFinishUpdateCycleForUpdateCheck:error:")),
+16654 |     "Sparkle could not deliver session cleanup callbacks")
+16655 |   let item = SUAppcastItem(dictionary: ["enclosure": ["url": "https://example.invalid/update.zip",
+      |              `- warning: 'init(dictionary:)' is deprecated: Properties that depend on the system or application version are not supported when used with this initializer. The designated initializer is available in SUAppcastItem+Private.h. Please first explore other APIs or contact us to describe your use case. [#DeprecatedDeclaration]
+16656 |     "sparkle:version": "75", "sparkle:shortVersionString": "1.8.6"]])!
+16657 |   try check(updates.availableVersion == nil, "An unavailable update had a reminder")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>

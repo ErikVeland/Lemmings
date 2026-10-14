@@ -161,7 +161,7 @@ import UIKit
         }
         guard enhancedEffects else { hdr?.clear(); return }
         let content = gameViewport.contentFrame
-        hdr?.advance(at: now, multiplier: speedMultiplier, enabled: speedEffectsActive && !motionReduced,
+        hdr?.advance(at: now, multiplier: speedMultiplier, enabled: speedEffectsActive && !motionReduced && !MobileDevicePerformance.constrained,
             field: CGRect(x: content.x, y: content.y, width: content.width, height: content.height), project: { [weak self] centre in
                 guard let self else { return .zero }
                 let point = self.gameViewport.viewPoint(fromLevel: .init(x: Double(centre.x), y: Double(centre.y)))
@@ -175,7 +175,7 @@ import UIKit
     }
     func setSpeedEffects(multiplier: Double, active: Bool) {
         speedMultiplier = multiplier; speedEffectsActive = active
-        if active && multiplier > 1.01 && !motionReduced && enhancedEffects { prepareHDR() }
+        if active && multiplier > 1.01 && !motionReduced && enhancedEffects && !MobileDevicePerformance.constrained { prepareHDR() }
     }
     private func prepareHDR() {
         guard hdr == nil, !attemptedHDR, enhancedEffects else { return }
@@ -400,11 +400,12 @@ import UIKit
 
     private func rescueEffects(viewport: MobileViewport) -> [LemmingSelectionEffect] {
         MobileRescueArt.effects(sprites: rescueSprites, viewport: viewport, amount: completionGlow.amount,
-            enabled: displaySettings.hdEffectsEnabled && !displaySettings.reduceFlashes, image: spriteImage)
+            enabled: displaySettings.hdEffectsEnabled && !displaySettings.reduceFlashes,
+            maximumEffects: MobileDevicePerformance.constrained ? 2 : 8, image: spriteImage)
     }
 
     private func drawRescueBackground(_ image: CGImage, viewport: MobileViewport, context: CGContext) {
-        guard completionGlow.amount > 0 else { return }
+        guard completionGlow.amount > 0, !MobileDevicePerformance.constrained else { return }
         let content = viewport.contentFrame
         let sx = viewport.zoom * viewport.pixelAspect, sy = viewport.zoom
         context.saveGState()

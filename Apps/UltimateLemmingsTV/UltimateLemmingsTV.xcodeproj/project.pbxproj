@@ -1,0 +1,300 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		100000000000000000000001 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000011 /* AppDelegate.swift */; };
+		100000000000000000000002 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000013 /* PrivacyInfo.xcprivacy */; };
+		100000000000000000000003 /* LemmingsTVUI in Frameworks */ = {isa = PBXBuildFile; productRef = 100000000000000000000081 /* LemmingsTVUI */; };
+		100000000000000000000005 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000016 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		100000000000000000000010 /* UltimateLemmingsTV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UltimateLemmingsTV.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		100000000000000000000011 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		100000000000000000000012 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		100000000000000000000013 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		100000000000000000000016 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		100000000000000000000020 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (100000000000000000000003 /* LemmingsTVUI in Frameworks */,);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		100000000000000000000030 = {
+			isa = PBXGroup;
+			children = (
+				100000000000000000000031 /* UltimateLemmingsTV */,
+
+				100000000000000000000033 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		100000000000000000000031 /* UltimateLemmingsTV */ = {
+			isa = PBXGroup;
+			children = (
+				100000000000000000000011 /* AppDelegate.swift */,
+				100000000000000000000016 /* Assets.xcassets */,
+
+				100000000000000000000012 /* Info.plist */,
+				100000000000000000000013 /* PrivacyInfo.xcprivacy */,
+			);
+			path = .;
+			sourceTree = "<group>";
+		};
+		100000000000000000000033 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				100000000000000000000010 /* UltimateLemmingsTV.app */,
+
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		100000000000000000000050 /* UltimateLemmingsTV */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 100000000000000000000070 /* Build configuration list for PBXNativeTarget "UltimateLemmingsTV" */;
+			buildPhases = (
+				100000000000000000000040 /* Sources */,
+				100000000000000000000020 /* Frameworks */,
+				100000000000000000000042 /* Resources */,
+				100000000000000000000044 /* Beta content */,
+				100000000000000000000045 /* Mac artwork */,
+
+				100000000000000000000047 /* Soundtracks */,
+				100000000000000000000048 /* Sound effects */,
+			);
+			buildRules = ();
+			dependencies = ();
+			name = UltimateLemmingsTV;
+			packageProductDependencies = (100000000000000000000081 /* LemmingsTVUI */,);
+			productName = UltimateLemmingsTV;
+			productReference = 100000000000000000000010 /* UltimateLemmingsTV.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		100000000000000000000060 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					100000000000000000000050 = {CreatedOnToolsVersion = 16.0; SystemCapabilities = { com.apple.GameControllers = { enabled = 1; }; }; };
+				};
+			};
+			buildConfigurationList = 100000000000000000000072 /* Build configuration list for PBXProject "UltimateLemmingsTV" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (en, Base,);
+			mainGroup = 100000000000000000000030;
+			packageReferences = (100000000000000000000080 /* XCLocalSwiftPackageReference "../.." */,);
+			productRefGroup = 100000000000000000000033 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				100000000000000000000050 /* UltimateLemmingsTV */,
+
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		100000000000000000000042 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+
+				100000000000000000000002 /* PrivacyInfo.xcprivacy in Resources */,
+				100000000000000000000005 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		100000000000000000000044 /* Beta content */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = ();
+			inputPaths = ();
+			name = "Beta content";
+			outputPaths = ();
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "python3 \"$SRCROOT/../../Tools/IOSBeta/content.py\" copy --source \"${TV_BETA_CONTENT_DIR:-}\" --destination \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/BetaGameData\" --development-source \"${TV_LOCAL_CLASSIC_DATA_DIR:-}\"\n";
+		};
+		100000000000000000000045 /* Mac artwork */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = ();
+			inputPaths = ();
+			name = "Mac artwork";
+			outputPaths = ();
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "python3 \"$SRCROOT/../../Tools/IOSBeta/artwork.py\" --source \"${TV_MAC_ARTWORK_DIR:-$SRCROOT/../../.build/mac-artwork/export/lemmings}\" --destination \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/MacArtwork/lemmings\"\n";
+		};
+		100000000000000000000047 /* Soundtracks */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = ();
+			inputPaths = ();
+			name = "Soundtracks";
+			outputPaths = ();
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"${IOS_SOURCE_GATE_ONLY:-0}\" = 1 ] && [ \"$CODE_SIGNING_ALLOWED\" = NO ] && [ ! -d \"$SRCROOT/../../Sources/Music\" ]; then\n  echo \"SKIP soundtrack assets in the unsigned source-only gate.\"\nelse\n  python3 \"$SRCROOT/../../Tools/IOSBeta/music.py\" --app \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH\" --scope \"${TV_MUSIC_SCOPE:-main}\"\nfi\n";
+		};
+		100000000000000000000048 /* Sound effects */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = ();
+			inputPaths = ();
+			name = "Sound effects";
+			outputPaths = ();
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "python3 \"$SRCROOT/../../Tools/TVAssets/sounds.py\" --source \"${TV_AMIGA_SOUND_DIR:-$SRCROOT/../../Sources/Ports/amiga_extracted/lemmings}\" --app \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		100000000000000000000040 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (100000000000000000000001 /* AppDelegate.swift in Sources */,);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		100000000000000000000100 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {
+			ALWAYS_SEARCH_USER_PATHS = NO;
+			CLANG_ENABLE_MODULES = YES;
+			COPY_PHASE_STRIP = NO;
+			DEBUG_INFORMATION_FORMAT = dwarf;
+			ENABLE_TESTABILITY = YES;
+			GCC_C_LANGUAGE_STANDARD = gnu17;
+			GCC_OPTIMIZATION_LEVEL = 0;
+			MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+			ONLY_ACTIVE_ARCH = YES;
+			SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+			SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+		}; name = Debug; };
+		100000000000000000000101 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {
+			ALWAYS_SEARCH_USER_PATHS = NO;
+			CLANG_ENABLE_MODULES = YES;
+			DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+			ENABLE_NS_ASSERTIONS = NO;
+			GCC_C_LANGUAGE_STANDARD = gnu17;
+			MTL_ENABLE_DEBUG_INFO = NO;
+			SWIFT_COMPILATION_MODE = wholemodule;
+			SWIFT_OPTIMIZATION_LEVEL = "-O";
+			VALIDATE_PRODUCT = YES;
+		}; name = Release; };
+		100000000000000000000102 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {
+
+			CODE_SIGN_STYLE = Automatic;
+
+			ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+			CURRENT_PROJECT_VERSION = 1;
+			DEVELOPMENT_TEAM = 54WU29TRTY;
+			ENABLE_USER_SCRIPT_SANDBOXING = NO;
+			GENERATE_INFOPLIST_FILE = NO;
+			INFOPLIST_FILE = Info.plist;
+			TV_LOCAL_CLASSIC_DATA_DIR = "$(SRCROOT)/../../Sources/Ports/lemmings_dos_1991-07-30";
+			TVOS_DEPLOYMENT_TARGET = 16.0;
+			LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+			MARKETING_VERSION = 2.0;
+			PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.lemmings.tvos;
+			PRODUCT_NAME = "$(TARGET_NAME)";
+			SUPPORTED_PLATFORMS = "appletvos appletvsimulator";
+			SWIFT_EMIT_LOC_STRINGS = YES;
+			SWIFT_VERSION = 6.0;
+			TARGETED_DEVICE_FAMILY = "3";
+		}; name = Debug; };
+		100000000000000000000103 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {
+
+			CODE_SIGN_STYLE = Automatic;
+
+			ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+			CURRENT_PROJECT_VERSION = 1;
+			DEVELOPMENT_TEAM = 54WU29TRTY;
+			ENABLE_USER_SCRIPT_SANDBOXING = NO;
+			GENERATE_INFOPLIST_FILE = NO;
+			INFOPLIST_FILE = Info.plist;
+			TVOS_DEPLOYMENT_TARGET = 16.0;
+			LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+			MARKETING_VERSION = 2.0;
+			PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.lemmings.tvos;
+			PRODUCT_NAME = "$(TARGET_NAME)";
+			SUPPORTED_PLATFORMS = "appletvos appletvsimulator";
+			SWIFT_EMIT_LOC_STRINGS = YES;
+			SWIFT_VERSION = 6.0;
+			TARGETED_DEVICE_FAMILY = "3";
+		}; name = Release; };
+		100000000000000000000104 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {
+			CODE_SIGN_STYLE = Automatic;
+			GENERATE_INFOPLIST_FILE = YES;
+			TVOS_DEPLOYMENT_TARGET = 16.0;
+			PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.lemmings.tvos.uitests;
+			PRODUCT_NAME = "$(TARGET_NAME)";
+			SUPPORTED_PLATFORMS = "appletvos appletvsimulator";
+			SWIFT_VERSION = 6.0;
+			TARGETED_DEVICE_FAMILY = "3";
+			TEST_TARGET_NAME = UltimateLemmingsTV;
+		}; name = Debug; };
+		100000000000000000000105 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {
+			CODE_SIGN_STYLE = Automatic;
+			GENERATE_INFOPLIST_FILE = YES;
+			TVOS_DEPLOYMENT_TARGET = 16.0;
+			PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.lemmings.tvos.uitests;
+			PRODUCT_NAME = "$(TARGET_NAME)";
+			SUPPORTED_PLATFORMS = "appletvos appletvsimulator";
+			SWIFT_VERSION = 6.0;
+			TARGETED_DEVICE_FAMILY = "3";
+			TEST_TARGET_NAME = UltimateLemmingsTV;
+		}; name = Release; };
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		100000000000000000000070 /* Build configuration list for PBXNativeTarget "UltimateLemmingsTV" */ = {isa = XCConfigurationList; buildConfigurations = (100000000000000000000102 /* Debug */, 100000000000000000000103 /* Release */,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		100000000000000000000072 /* Build configuration list for PBXProject "UltimateLemmingsTV" */ = {isa = XCConfigurationList; buildConfigurations = (100000000000000000000100 /* Debug */, 100000000000000000000101 /* Release */,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		100000000000000000000080 /* XCLocalSwiftPackageReference "../.." */ = {isa = XCLocalSwiftPackageReference; relativePath = ../..; };
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		100000000000000000000081 /* LemmingsTVUI */ = {isa = XCSwiftPackageProductDependency; package = 100000000000000000000080 /* XCLocalSwiftPackageReference "../.." */; productName = LemmingsTVUI; };
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 100000000000000000000060 /* Project object */;
+}

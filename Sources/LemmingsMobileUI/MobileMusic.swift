@@ -87,7 +87,7 @@ import UIKit
         let tune = MobileMusicAssignment.tune(identifier: identifier, index: position, title: title)
         let cycle = MobileMusicAssignment.cycle(tune: tune, index: position, titles: context.titles, isFan: context.isFan)
         let source = moduleURL(tune)
-        if soundtrack == "Adaptive DJ" || context.isLearningJourney, let root = musicRoot {
+        if let root = musicRoot {
             var pools = SoundtrackPlayer.djSoundtracks(at: root,
                 includeOtherSoundtracks: settings.classic.djIncludesOtherSoundtracks,
                 seasonal: SoundtrackPlayer.isSeasonal(tune.folder))
@@ -185,7 +185,7 @@ import UIKit
         dj.updateTelemetry(.init(releasedCount: snapshot.released, totalCount: snapshot.total,
             savedCount: snapshot.saved, requiredCount: snapshot.required, releaseRate: snapshot.releaseRate ?? 50,
             remainingSeconds: snapshot.remainingSeconds, isNuking: snapshot.isEndingRun,
-            didWin: snapshot.didWin, isComplete: snapshot.isComplete))
+            didWin: snapshot.didWin, isComplete: snapshot.isComplete), waitForOpening: false)
     }
     func advance() {
         guard !inactive, !isTestAudioMuted else { return }

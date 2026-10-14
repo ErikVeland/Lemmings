@@ -3,9 +3,11 @@ import Foundation
 /// The information pages share their bitmap layout with the headless capture tool.
 public enum MobileInformationArt {
     public static func effectsWelcome() -> GameFrontEnd.Page {
-        .init(title: "Choose your play style", details: ["Modern:", "Aiming aids", "Variable speed",
-                                                        "Old school:", "Original inputs", "Classic effects"],
+        var page = GameFrontEnd.Page(title: "Choose your play style", details: ["Modern", "Aiming aids", "Variable speed",
+                                                        "Old school", "Original inputs", "Classic effects"],
               footer: [.init("welcomeOriginal", "Old school"), .init("welcomeModern", "Modern", primary: true)])
+        page.detailHeadings = [0, 3]
+        return page
     }
     public static func whatsNew(version: String) -> GameFrontEnd.Page {
         .init(title: "What's new in " + version,

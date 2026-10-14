@@ -1,0 +1,127 @@
+import CoreGraphics
+import Foundation
+import LemmingsMobileCore
+import LemmingsTVCore
+
+/// The shipping TV playfield renderer also supplies offscreen acceptance captures.
+@MainActor public final class TVPlayfieldArt {
+    public var ownerName = ""
+    public var ownerPortrait = 0
+    public var cameraAdjustment = false
+    private let typography: GameMenuTypography?
+    private let portraits: GamePortraitArt?
+    private var bounds = CGRect.zero
+    private var image: CGImage?
+    private var skillImage: CGImage?
+    private let countdown = BombCountdownRenderer()
+    public init(typography: GameMenuTypography? = nil, portraits: GamePortraitArt? = nil) {
+        self.typography = typography; self.portraits = portraits
+    }
+    public static func playBounds(in bounds: CGRect) -> CGRect {
+        CGRect(x: 0, y: 44, width: bounds.width, height: max(1, bounds.height - 184))
+    }
+    public func draw(game: TVGameExperience, image: CGImage?, skillImage: CGImage?, bounds: CGRect, in context: CGContext) {
+        self.bounds = bounds; self.image = image; self.skillImage = skillImage
+        context.saveGState(); defer { context.restoreGState() }
+        context.setFillColor(CGColor(gray: 0, alpha: 1)); context.fill(bounds)
+        let playBounds = Self.playBounds(in: bounds)
+        context.saveGState(); context.translateBy(x: playBounds.minX, y: playBounds.minY)
+        context.clip(to: CGRect(origin: .zero, size: playBounds.size))
+        if let image { MobileBitmapRenderer.draw(image, viewport: game.viewport, in: context) }
+        for fuse in game.session.bombCountdowns {
+            let anchor = game.viewport.viewPoint(fromLevel: fuse.anchor)
+            countdown.draw(seconds: fuse.seconds, above: CGPoint(x: anchor.x, y: anchor.y), zoom: game.viewport.zoom, in: context)
+        }
+        drawTarget(game, context: context)
+        if let number = game.startNumber {
+            let box = CGRect(x: playBounds.width / 2 - 60, y: playBounds.height / 2 - 60, width: 120, height: 120)
+            GameStoneArt.draw(in: context, frame: box, selected: false, pixel: 2)
+            TVMenuArt.text(String(number), box: box.insetBy(dx: 8, dy: 8), title: true, green: true,
+                           typography: typography, textScale: 1.25, context: context)
+        }
+        context.restoreGState()
+        drawHUD(game, context: context)
+    }
+    private func drawTarget(_ game: TVGameExperience, context: CGContext) {
+        guard game.canInteract else { return }
+        let pointer = game.pointer
+        let point = CGPoint(x: pointer.x, y: pointer.y)
+        let colour = game.target == nil ? CGColor(gray: 0.75, alpha: 1)
+            : game.target?.state == .eligible ? CGColor(srgbRed: 0.55, green: 1, blue: 0.4, alpha: 1)
+            : CGColor(srgbRed: 1, green: 0.8, blue: 0.15, alpha: 1)
+        context.setStrokeColor(CGColor(gray: 0, alpha: 1)); context.setLineWidth(7)
+        brackets(point, context: context)
+        context.setStrokeColor(colour); context.setLineWidth(3); brackets(point, context: context)
+        if game.target?.state == .unavailable || game.target?.state == .alreadyAssigned {
+            context.move(to: CGPoint(x: point.x - 6, y: point.y - 6)); context.addLine(to: CGPoint(x: point.x + 6, y: point.y + 6))
+            context.move(to: CGPoint(x: point.x + 6, y: point.y - 6)); context.addLine(to: CGPoint(x: point.x - 6, y: point.y + 6)); context.strokePath()
+        }
+        if let skillImage, game.session.snapshot.skills.indices.contains(game.selectedControl) {
+            let scale = max(1, floor(min(36 / CGFloat(skillImage.width), 36 / CGFloat(skillImage.height))))
+            let size = CGSize(width: CGFloat(skillImage.width) * scale, height: CGFloat(skillImage.height) * scale)
+            let x = max(0, min(game.viewport.viewSize.width - size.width, point.x + 26))
+            let y = max(0, min(game.viewport.viewSize.height - size.height, point.y + 26))
+            let skill = game.session.snapshot.skills[game.selectedControl]
+            if skill.count == 0 && !skill.isUnlimited {
+                GamePixelTypography.draw("X", in: CGRect(x: x, y: y, width: 36, height: 36), context: context,
+                    typography: nil, maximumScale: 4, bitmapOnly: true, color: CGColor(srgbRed: 1, green: 0.2, blue: 0.2, alpha: 1))
+            } else { GameStoneArt.drawImage(skillImage, in: CGRect(x: x, y: y, width: size.width, height: size.height), context: context) }
+        }
+        if let target = game.target {
+            let projected = game.viewport.viewPoint(fromLevel: target.point)
+            context.setStrokeColor(CGColor(gray: 1, alpha: 1)); context.setLineWidth(2)
+            context.stroke(CGRect(x: projected.x - 15, y: projected.y - 20, width: 30, height: 38))
+        }
+    }
+    private func brackets(_ point: CGPoint, context: CGContext) {
+        for (dx, dy) in [(-1.0, -1.0), (1.0, -1.0), (-1.0, 1.0), (1.0, 1.0)] {
+            context.move(to: CGPoint(x: point.x + dx * 12, y: point.y + dy * 22))
+            context.addLine(to: CGPoint(x: point.x + dx * 22, y: point.y + dy * 22))
+            context.addLine(to: CGPoint(x: point.x + dx * 22, y: point.y + dy * 12))
+        }
+        context.strokePath()
+    }
+
+    private func drawHUD(_ game: TVGameExperience, context: CGContext) {
+        let snapshot = game.session.snapshot
+        let y = bounds.height - 142
+        let skillCount = min(8, snapshot.skills.count)
+        let start = max(0, min(game.selectedControl - 3, snapshot.skills.count - skillCount))
+        let mapWidth: CGFloat = 230
+        let cell = (bounds.width - mapWidth - 28) / CGFloat(max(1, skillCount))
+        let widestName = snapshot.skills.map { typography?.width(of: $0.name, face: .small, scale: 2) ?? 0 }.max() ?? 0
+        let labelScale: CGFloat = widestName <= cell - 12 ? 1.25 : 1
+        for index in start..<(start + skillCount) {
+            let skill = snapshot.skills[index]
+            let box = CGRect(x: CGFloat(index - start) * cell, y: y, width: cell - 8, height: 132)
+            GameStoneArt.draw(in: context, frame: box, selected: index == game.selectedControl, pixel: 2)
+            if let icon = game.session.skillCursorFrame(control: index).flatMap(MobileBitmapRenderer.image) {
+                let iconScale = max(1, floor(min(44 / CGFloat(icon.width), 44 / CGFloat(icon.height))))
+                let size = CGSize(width: CGFloat(icon.width) * iconScale, height: CGFloat(icon.height) * iconScale)
+                GameStoneArt.drawImage(icon, in: CGRect(x: floor(box.midX - size.width / 2), y: floor(box.minY + 10 + (44 - size.height) / 2), width: size.width, height: size.height), context: context)
+            }
+            TVMenuArt.text(skill.isUnlimited ? "*" : String(skill.count), box: CGRect(x: box.minX + 8, y: box.minY + 56, width: box.width - 16, height: 32),
+                green: index == game.selectedControl, typography: typography, textScale: 1.25, context: context)
+            TVMenuArt.text(skill.name, box: CGRect(x: box.minX + 2, y: box.maxY - 42, width: box.width - 4, height: 38),
+                green: index == game.selectedControl, enabled: skill.count > 0 || skill.isUnlimited, typography: typography, textScale: labelScale, context: context)
+        }
+        let visible = game.viewport.visibleLevelRect
+        GameMinimapArt.draw(in: context, bounds: CGRect(x: bounds.width - mapWidth, y: y + 24, width: mapWidth, height: 64),
+            image: image, visible: CGRect(x: visible.x, y: visible.y, width: visible.width, height: visible.height),
+            levelSize: CGSize(width: game.session.levelSize.width, height: game.session.levelSize.height), overlay: true)
+        let time = snapshot.remainingSeconds.map { "\($0 / 60):\(String(format: "%02d", $0 % 60))" } ?? ""
+        let status = "\(snapshot.saved)/\(snapshot.required)  \(time)  \(Int(game.speed))X"
+        TVMenuArt.text(status, box: CGRect(x: bounds.width / 2 - 260, y: 2, width: 520, height: 34), typography: typography, textScale: 1.25, context: context)
+        portraits?.draw(ownerPortrait, in: CGRect(x: 0, y: 0, width: 38, height: 38), context: context)
+        TVMenuArt.text(ownerName, box: CGRect(x: 44, y: 2, width: bounds.width / 2 - 320, height: 34), green: true, typography: typography, textScale: 1.25, context: context)
+        if snapshot.skills.indices.contains(game.selectedControl) {
+            TVMenuArt.text(snapshot.skills[game.selectedControl].name, box: CGRect(x: bounds.width - 440, y: 2, width: 370, height: 34),
+                           green: true, typography: typography, textScale: 1.25, context: context)
+        }
+        if game.play.isPaused {
+            if let glyph = (cameraAdjustment ? PanelGlyphArt.menu : PanelGlyphArt.play).cgImage(scale: 2) {
+                GameStoneArt.drawImage(glyph, in: CGRect(x: bounds.width - 52, y: 6, width: 36, height: 28), context: context)
+            }
+        }
+    }
+}

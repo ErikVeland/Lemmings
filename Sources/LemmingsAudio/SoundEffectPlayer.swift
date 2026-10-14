@@ -64,7 +64,10 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   public private(set) var isRunning = false
   public private(set) var loadedEffects: [ClassicSoundEffect] = []
 
-  public init(voiceCount: Int = 64) {
+  private let rescueVoiceLimit: Int?
+
+  public init(voiceCount: Int = 64, rescueVoiceLimit: Int? = nil) {
+    self.rescueVoiceLimit = rescueVoiceLimit.map { max(1, $0) }
     voices = [Voice](repeating: Voice(), count: max(1, voiceCount))
     rewindRenderedVoices = [Bool](repeating: false, count: max(1, voiceCount))
     recentSamples = [Float](repeating: 0, count: recentSampleLimit)
@@ -627,6 +630,9 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   private func playLocked(samples: [Float], rate: Double, gain: Float, pan: Float, at point: GameplaySoundPoint?,
                           priority: Int = 1, rescue: Bool = false, releaseRate: Bool = false) {
     guard !isMuted, !outputSuspended, !samples.isEmpty, rate.isFinite, rate > 0 else { return }
+    // Mobile keeps the existing chorus audible, but never adds unbounded layers.
+    if rescue, let rescueVoiceLimit,
+       voices.reduce(0, { $0 + ($1.isActive && $1.isRescue ? 1 : 0) + $1.rescueLayers.count }) >= rescueVoiceLimit { return }
     let available = (releaseRate ? voices.firstIndex { $0.isReleaseRate } : nil)
       ?? voices.firstIndex { !$0.isActive }
     if rescue, available == nil {

@@ -38,7 +38,8 @@ import UIKit
     }
 }
 
-@MainActor final class MobileHUDView: UIView {
+@MainActor final class MobileHUDView: UIView, UIGestureRecognizerDelegate {
+    var onRateDoubleTap: ((Bool) -> Void)?
     var onSpeedHold: ((Bool, Bool) -> Void)?
     var onHold: ((MobileHUDAction) -> Void)?
     private typealias Item = MobileHUDRenderer.Item
@@ -47,6 +48,7 @@ import UIKit
     var playerName: String?
     var playerPortrait: CGImage?
     private let playerIdentity = UIView()
+    private let rateValueTap = UITapGestureRecognizer()
     var onAction: ((MobileHUDAction) -> Void)?
     /// A touch on the map, as a point in level pixels.
     var onMinimap: ((CGPoint) -> Void)?
@@ -71,6 +73,10 @@ import UIKit
         backgroundColor = .clear
         isOpaque = false
         isAccessibilityElement = false
+        rateValueTap.numberOfTapsRequired = 2
+        rateValueTap.delegate = self
+        rateValueTap.addTarget(self, action: #selector(toggleRateValue(_:)))
+        addGestureRecognizer(rateValueTap)
         playerIdentity.isAccessibilityElement = true
         playerIdentity.accessibilityTraits = .staticText
         playerIdentity.isUserInteractionEnabled = false
@@ -170,8 +176,20 @@ import UIKit
         skillCanvas.setNeedsDisplay()
     }
 
+    @objc private func toggleRateValue(_ gesture: UITapGestureRecognizer) {
+        guard gesture.state == .ended, !readOnly else { return }
+        onRateDoubleTap?(snapshot?.releaseRate == 99)
+    }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        guard gestureRecognizer === rateValueTap, !readOnly,
+              let frame = layout?.portrait?.rateValue else { return false }
+        return frame.contains(touch.location(in: self))
+    }
+
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         guard isUserInteractionEnabled, !isHidden, alpha > 0.01 else { return nil }
+        if !readOnly, layout?.portrait?.rateValue?.contains(point) == true { return self }
         // Each speed action has a separate target inside the shared speed socket.
         if !minimapView.isHidden, minimapView.frame.contains(point) {
             return minimapView
@@ -204,7 +222,8 @@ import UIKit
         buttons = items.map { item in
             let kind: MobileHUDPress.Kind
             switch item.action {
-            case .releaseRate, .speedStep: kind = .rate
+            case .releaseRate: kind = .releaseRate
+            case .speedStep: kind = .rate
             case .speed: kind = .speed
             case .rewind: kind = .rewind
             case .pause: kind = .pause
@@ -219,9 +238,13 @@ import UIKit
                 ? [.button, .selected]
                 : .button
             button.isEnabled = isEnabled(item.action)
+            var rateStartedAtMaximum = false
             button.onEffect = { [weak self] effect in
                 switch effect {
-                case .activate: self?.onAction?(item.action)
+                case .activate:
+                    if case .releaseRate = item.action { rateStartedAtMaximum = self?.snapshot?.releaseRate == 99 }
+                    self?.onAction?(item.action)
+                case .doubleTap: self?.onRateDoubleTap?(rateStartedAtMaximum)
                 case .hold: self?.onHold?(item.action)
                 case let .pedal(held, allowTap):
                     if item.action == .speed { self?.onSpeedHold?(held, allowTap) }
@@ -229,6 +252,12 @@ import UIKit
                 }
             }
             button.onAccessiblePress = { [weak self] in self?.onAction?(item.action) }
+            if case .releaseRate = item.action {
+                button.accessibilityHint = "Actions include minimum or maximum release rate."
+                button.accessibilityCustomActions = [UIAccessibilityCustomAction(name: "Toggle minimum or maximum release rate") { [weak self] _ in
+                    self?.onRateDoubleTap?(self?.snapshot?.releaseRate == 99); return true
+                }]
+            }
             if item.action == .pause {
                 button.accessibilityCustomActions = [UIAccessibilityCustomAction(name: "Pause menu") { [weak self] _ in
                     self?.onHold?(.pause); return true
@@ -239,7 +268,11 @@ import UIKit
         }
     }
 
-    func cancelHeldControls() { buttons.forEach { ($0 as? MobileHUDButton)?.cancelPress() } }
+    func cancelHeldControls() {
+        buttons.forEach { ($0 as? MobileHUDButton)?.cancelPress() }
+        rateValueTap.isEnabled = false
+        rateValueTap.isEnabled = true
+    }
 
     private func isEnabled(_ action: MobileHUDAction) -> Bool {
         switch action {
