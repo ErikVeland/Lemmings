@@ -13,6 +13,7 @@ Same-owner retries retain the choice. A different level or Hot Seat player clear
 
 ## Controls, help and presentation
 
+- Controller defaults use B for speed reset, pause and resume, X for speed reset, Y for end run or undo, and Menu for the game menu. Holding a speed boost does not skip the first reset to 1×.
 - Keyboard help follows the active engine and control settings. The searchable command reference and in-game annotations make available actions easier to find.
 - Closing sequel hints restores the previous pause state. An interruption keeps the game paused.
 - Classic, The Tribes and Chronicles keep Hot Seat retries, restored runs and handovers paused until the player is ready. Sequel playfields identify the current player.
