@@ -262,6 +262,7 @@ struct MobileGameTurn {
         }
 #endif
         if let previous = lastHUDLayout, previous != layout {
+            cancelPendingL3ToolDirection()
             hud.cancelHeldControls()
             playfieldView.cancelInteraction()
             previewPoint = nil
