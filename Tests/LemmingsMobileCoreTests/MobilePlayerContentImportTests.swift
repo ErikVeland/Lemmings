@@ -87,6 +87,9 @@ struct MobilePlayerContentImportTests {
         let checkpointIndices: Set<Int> = [0, 15, 29, 30, 45, 59, 60, 75, 89]
         for index in library.levels.indices {
             let session = try library.loadLevel(at: index).session
+            let chronicles = try #require(session as? Lemmings3MobileSession)
+            #expect(chronicles.directionPickerFrames.count == 8)
+            #expect(chronicles.directionPickerFrames.allSatisfy { $0.width == 16 && $0.height == 16 })
             let frame = try session.render(highlight: nil)
             #expect(frame.width > 0)
             #expect(frame.height > 0)

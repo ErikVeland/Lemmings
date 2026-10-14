@@ -131,7 +131,8 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
         let session = Lemmings3MobileSession(runtime: runtime,
             engineFingerprint: Self.engineFingerprint,
             levelIdentifier: "lemmings3/\(fingerprint)", levelIndex: index,
-            levelFingerprint: fingerprint, panelFrame: panel, renderer: renderer.render,
+            levelFingerprint: fingerprint, panelFrame: panel,
+            directionPickerFrames: try renderer.directionPickerFrames(), renderer: renderer.render,
             soundBank: soundBank) { [weak self] completed in
                 self?.record(completed, at: localIndex, tribe: tribe)
             }

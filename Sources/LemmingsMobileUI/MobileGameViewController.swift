@@ -87,6 +87,7 @@ struct MobileGameTurn {
     private var lastRenderedTick = -1
     private var lastCheckpointTick = -1
     private var endRunArmedUntil = 0.0
+    private var pendingL3Use: (target: Int, control: Int, selection: MobileTargetSelection)?
     private var selectionFade = SelectionFade<Int>()
     private var completionPresented = false
     private var lastPlayfieldFrame: CGRect?
@@ -188,6 +189,7 @@ struct MobileGameTurn {
             }
         }
         hud.onAction = { [weak self] action in self?.handle(action) }
+        hud.onToolDirection = { [weak self] direction in self?.completeL3ToolDirection(direction) }
         playfieldView.onTouchEffects = { [weak self] effects in self?.handle(effects) }
         hud.onMinimap = { [weak self] point in self?.scrollToLevelX(point.x) }
         playfieldView.onViewportChanged = { [weak self] viewport in
@@ -396,6 +398,7 @@ struct MobileGameTurn {
         guard overlay.isHidden, playState.canEdit,
               lifecycle.isForeground, !lifecycle.isInterrupted,
               !session.snapshot.isComplete || (session.isReadOnly && [.pause, .rewind, .stepBackward, .menu].contains(action)) else { return }
+        cancelPendingL3ToolDirection()
         switch action {
         case let .releaseRate(delta):
             if session.adjustReleaseRate(by: delta), let rate = session.snapshot.releaseRate { effects.releaseRate(rate) }
@@ -459,6 +462,56 @@ struct MobileGameTurn {
         updateHUD()
     }
 
+    @discardableResult
+    func beginL3ToolDirectionSelection(control: Int, target: Int,
+                                       selection: MobileTargetSelection) -> Bool {
+        guard let useIndex = Lemmings3Runtime.Action.allCases.firstIndex(of: .use),
+              control == useIndex,
+              let chronicles = session as? Lemmings3MobileSession,
+              chronicles.directionPickerFrames.count == 8 else { return false }
+        let point = playfieldView.gameViewport.viewPoint(fromLevel: selection.point)
+        let targetPoint = playfieldView.convert(CGPoint(x: point.x, y: point.y), to: hud)
+        let playfield = playfieldView.convert(playfieldView.bounds, to: hud)
+        pendingL3Use = (target, control, selection)
+        pauseForPlanning()
+        guard hud.showToolDirectionPicker(frames: chronicles.directionPickerFrames,
+            target: targetPoint, playfield: playfield) else {
+            pendingL3Use = nil
+            effects.assignment(accepted: false)
+            return true
+        }
+        return true
+    }
+
+    func completeL3ToolDirection(_ direction: Lemmings3Runtime.Direction?) {
+        guard let pendingL3Use,
+              let chronicles = session as? Lemmings3MobileSession else { return }
+        guard let direction else {
+            self.pendingL3Use = nil
+            hud.hideToolDirectionPicker()
+            updateHUD()
+            return
+        }
+        let accepted = chronicles.useTool(direction: direction, to: pendingL3Use.target)
+        effects.assignment(accepted: accepted)
+        guard accepted else { return }
+        self.pendingL3Use = nil
+        hud.hideToolDirectionPicker()
+        lastInputAssignment = pendingL3Use.selection
+        lastAssignmentControl = pendingL3Use.control
+        highlightedTarget = pendingL3Use.selection
+        effects.update(session: session, viewport: playfieldView.gameViewport)
+        saveCheckpoint(reason: .periodic)
+        renderCurrentFrame(force: true)
+        updateHUD()
+    }
+
+    func cancelPendingL3ToolDirection() {
+        guard pendingL3Use != nil else { return }
+        pendingL3Use = nil
+        hud.hideToolDirectionPicker()
+    }
+
     private func handle(_ touchEffects: [MobileTouchEffect]) {
         guard !session.isReadOnly, overlay.isHidden, playState.canEdit,
               lifecycle.isForeground, !lifecycle.isInterrupted,
@@ -476,11 +529,14 @@ struct MobileGameTurn {
                 previewInput = playfieldView.touchInput
                 previewPoint = previewInput == .precision ? point : nil
                 if let selection = target(at: point), selection.state == .eligible {
-                    let accepted = session.assign(control: selectedControl, to: selection.id)
-                    effects.assignment(accepted: accepted)
-                    if accepted { lastInputAssignment = selection; lastAssignmentControl = selectedControl }
+                    if !beginL3ToolDirectionSelection(control: selectedControl,
+                        target: selection.id, selection: selection) {
+                        let accepted = session.assign(control: selectedControl, to: selection.id)
+                        effects.assignment(accepted: accepted)
+                        if accepted { lastInputAssignment = selection; lastAssignmentControl = selectedControl }
+                        saveCheckpoint(reason: .periodic)
+                    }
                     highlightedTarget = selection
-                    saveCheckpoint(reason: .periodic)
                 } else {
                     highlightedTarget = target(at: point)
                 }
@@ -666,6 +722,7 @@ struct MobileGameTurn {
     }
 
     func resumePlay() {
+        cancelPendingL3ToolDirection()
         let wasReady = playState.phase == .ready
         guard hudLayout(insets: view.safeAreaInsets).canPlay, !session.snapshot.isComplete,
               playState.resume(isForeground: lifecycle.isForeground, isInterrupted: lifecycle.isInterrupted) else { return }
@@ -1113,6 +1170,7 @@ struct MobileGameTurn {
     }
 
     func showOverlay(title: String, actions: [(String, () -> Void)], results: Bool = false) {
+        cancelPendingL3ToolDirection()
         playfieldView.suspendVisualEffects()
         selectionFade.reset()
         playfieldView.selectionSprite = nil

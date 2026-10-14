@@ -301,6 +301,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         let tick: Int
         let action: String
         let target: Int?
+        var direction: String?
     }
 
     private struct Checkpoint: Codable, Sendable {
@@ -320,6 +321,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
     public let levelSize: MobileSize
     public let ticksPerSecond = Lemmings3Runtime.ticksPerSecond
     public let panelFrame: MobilePixelFrame?
+    public let directionPickerFrames: [MobilePixelFrame]
 
     private let initial: Lemmings3Runtime
     private let renderer: Lemmings3MobileRenderer?
@@ -344,6 +346,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         levelIndex: Int,
         levelFingerprint: String,
         panelFrame: MobilePixelFrame? = nil,
+        directionPickerFrames: [MobilePixelFrame] = [],
         renderer: Lemmings3MobileRenderer? = nil,
         soundBank: Lemmings3SoundBank? = nil,
         onCompletion: ((Lemmings3Runtime) -> Void)? = nil
@@ -355,6 +358,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         self.levelIndex = levelIndex
         self.levelFingerprint = levelFingerprint
         self.panelFrame = panelFrame
+        self.directionPickerFrames = directionPickerFrames
         self.renderer = renderer
         self.soundBank = soundBank
         self.onCompletion = onCompletion
@@ -406,12 +410,21 @@ public final class Lemmings3MobileSession: MobileGameSession {
         guard Lemmings3Runtime.Action.allCases.indices.contains(control) else { return [] }
         let action = Lemmings3Runtime.Action.allCases[control]
         return runtime.lemmings.filter(\.active).map { lemming in
-            var probe = runtime
+            let accepted: Bool
+            if action == .use {
+                accepted = Lemmings3Runtime.Direction.allCases.contains { direction in
+                    var probe = runtime
+                    return probe.useTool(to: lemming.id, direction: direction)
+                }
+            } else {
+                var probe = runtime
+                accepted = probe.assign(action, to: lemming.id)
+            }
             return MobileTargetCandidate(
                 id: lemming.id,
                 point: MobilePoint(x: Double(lemming.x), y: Double(lemming.y - 8)),
                 direction: lemming.direction,
-                assignment: probe.assign(action, to: lemming.id) ? .eligible : .unavailable,
+                assignment: accepted ? .eligible : .unavailable,
                 isBuilding: lemming.state == .building,
                 hasTool: lemming.tool != nil,
                 pointerBounds: MobileRect(x: -9, y: -12, width: 18, height: 24)
@@ -427,7 +440,22 @@ public final class Lemmings3MobileSession: MobileGameSession {
         guard runtime.assign(action, to: target) else { return false }
         soundCues += Lemmings3SoundCue.positionedCues(before: before, after: .init(runtime))
         soundCues.removeAll { $0.effect == .assignSkill }
-        inputs.append(Input(tick: runtime.tick, action: action.rawValue, target: target))
+        inputs.append(Input(tick: runtime.tick, action: action.rawValue, target: target, direction: nil))
+        return true
+    }
+
+    /**
+     * Uses the selected tool in a requested direction and records it for replay.
+     */
+    @discardableResult
+    public func useTool(direction: Lemmings3Runtime.Direction, to target: Int) -> Bool {
+        guard !runtime.isComplete else { return false }
+        let before = Lemmings3SoundCue.Snapshot(runtime)
+        guard runtime.useTool(to: target, direction: direction) else { return false }
+        soundCues += Lemmings3SoundCue.positionedCues(before: before, after: .init(runtime))
+        soundCues.removeAll { $0.effect == .assignSkill }
+        inputs.append(Input(tick: runtime.tick, action: Lemmings3Runtime.Action.use.rawValue,
+                            target: target, direction: direction.rawValue))
         return true
     }
 
@@ -533,6 +561,11 @@ public final class Lemmings3MobileSession: MobileGameSession {
                 let input = inputs[inputIndex]
                 if input.action == "abort" {
                     restored.abort()
+                } else if input.action == Lemmings3Runtime.Action.use.rawValue,
+                          let target = input.target,
+                          let rawDirection = input.direction,
+                          let direction = Lemmings3Runtime.Direction(rawValue: rawDirection) {
+                    _ = restored.useTool(to: target, direction: direction)
                 } else if let action = Lemmings3Runtime.Action(rawValue: input.action),
                           let target = input.target,
                           restored.assign(action, to: target) {

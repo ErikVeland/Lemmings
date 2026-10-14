@@ -102,6 +102,31 @@ struct MobileCoreTests {
         #expect(duoClosedRightToLeft.playfieldFrame.minX == duoClosedRightToLeft.controlsFrame.maxX)
     }
 
+    @Test func lemmings3DirectionPickerKeepsAllTouchTargetsInsidePlayfield() throws {
+        let directionFrames = MobileDirectionPickerLayout.gridDirections.compactMap {
+            $0.map(MobileDirectionPickerLayout.frameIndex(for:))
+        }
+        #expect(directionFrames == [7, 0, 1, 6, 2, 5, 4, 3])
+        #expect(MobileDirectionPickerLayout.gridDirections[4] == nil)
+
+        for (bounds, target) in [
+            (MobileRect(x: 0, y: 47, width: 390, height: 763), MobilePoint(x: 4, y: 52)),
+            (MobileRect(x: 44, y: 24, width: 756, height: 900), MobilePoint(x: 794, y: 914)),
+            (MobileRect(x: 0, y: 12, width: 220, height: 436), MobilePoint(x: 110, y: 230))
+        ] {
+            let frame = try #require(MobileDirectionPickerLayout.frame(centredAt: target, within: bounds))
+            #expect(frame.width == 132)
+            #expect(frame.height == 132)
+            #expect(frame.minX >= bounds.minX && frame.maxX <= bounds.maxX)
+            #expect(frame.minY >= bounds.minY && frame.maxY <= bounds.maxY)
+            #expect(MobileDirectionPickerLayout.cellExtent >= 44)
+        }
+        #expect(MobileDirectionPickerLayout.frame(
+            centredAt: MobilePoint(x: 0, y: 0),
+            within: MobileRect(x: 0, y: 0, width: 131, height: 200)
+        ) == nil)
+    }
+
     @Test func freshCameraFitsHeightAndCentresEntranceAcrossEngines() {
         for (level, aspect) in [(MobileSize(width: 1600, height: 160), 1.2),
                                 (.init(width: 1600, height: 320), 1.0),
@@ -822,6 +847,59 @@ struct MobileCoreTests {
         try l3RewindRestored.restoreCheckpointPayload(l3RewindCheckpoint)
         #expect(l3RewindRestored.usedRewind)
         #expect(l3RewindRestored.rewindCount == l3Restored.rewindCount)
+    }
+
+    @Test func lemmings3MobileDirectionalToolUseReplaysFromCheckpoint() throws {
+        let width = 128
+        let height = 64
+        var attributes = [UInt16](repeating: 0x1000, count: width * height)
+        for y in 48..<height {
+            for x in 0..<width { attributes[y * width + x] = 0x20 }
+        }
+        let runtime = try Lemmings3Runtime(configuration: .init(
+            width: width,
+            height: height,
+            attributes: attributes,
+            entrance: .init(x: 20, y: 40),
+            exits: [.init(x: 110, y: 46)],
+            total: 1,
+            releaseInterval: 20,
+            releaseDelay: 1_000,
+            pickups: [.init(id: 0, tool: .bricks, x: 20, y: 48)],
+            extras: [.init(x: 20, y: 48, direction: 1)]
+        ))
+        let renderer: Lemmings3MobileRenderer = { runtime, _ in
+            var rgba = [UInt8](repeating: 0, count: width * height * 4)
+            for index in runtime.terrainEdits.keys where (0..<width * height).contains(index) {
+                let offset = index * 4
+                rgba[offset] = 255
+                rgba[offset + 3] = 255
+            }
+            return try MobilePixelFrame(width: width, height: height, rgba: Data(rgba))
+        }
+        func makeSession() -> Lemmings3MobileSession {
+            Lemmings3MobileSession(runtime: runtime, engineFingerprint: "l3-direction",
+                levelIdentifier: "l3/direction", levelIndex: 0,
+                levelFingerprint: "l3-direction-level", renderer: renderer)
+        }
+
+        let upward = makeSession()
+        upward.tick()
+        #expect(upward.targetCandidates(for: 3).first?.assignment == .eligible)
+        #expect(!upward.useTool(direction: .down, to: 0))
+        #expect(upward.useTool(direction: .up, to: 0))
+        for _ in 0..<40 { upward.tick() }
+        let upwardFrame = try upward.render(highlight: nil)
+        let checkpoint = try upward.checkpointPayload()
+        let restored = makeSession()
+        try restored.restoreCheckpointPayload(checkpoint)
+        #expect(try restored.render(highlight: nil) == upwardFrame)
+
+        let rightward = makeSession()
+        rightward.tick()
+        #expect(rightward.useTool(direction: .right, to: 0))
+        for _ in 0..<40 { rightward.tick() }
+        #expect(try rightward.render(highlight: nil) != upwardFrame)
     }
 
     @Test @MainActor func lemmings2CompletionIsReportedOnceForCampaignPersistence() throws {

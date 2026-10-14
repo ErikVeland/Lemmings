@@ -153,7 +153,9 @@ extension MobileGameViewController {
         case .assign, .repeatAssignment:
             guard !session.isReadOnly, playState.canEdit else { return }
             let control = command == .repeatAssignment ? (lastAssignmentControl ?? selectedControl) : selectedControl
-            if let selection = highlightedTarget, session.assign(control: control, to: selection.id) {
+            if let selection = highlightedTarget,
+               !beginL3ToolDirectionSelection(control: control, target: selection.id, selection: selection),
+               session.assign(control: control, to: selection.id) {
                 lastInputAssignment = selection; lastAssignmentControl = control
                 renderCurrentFrame(force: true); updateHUD()
             }

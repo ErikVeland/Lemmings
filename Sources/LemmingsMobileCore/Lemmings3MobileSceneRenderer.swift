@@ -5,6 +5,8 @@ import NxlvKit
  * Draws the native Chronicles scene and animated lemmings into an RGBA frame.
  */
 public struct Lemmings3MobileSceneRenderer: Sendable {
+    public static let directionAnimationIndex = 91
+
     /** One indexed native trap animation at its level position. */
     public struct AnimatedObject: Sendable {
         /** One decoded trap frame with its source palette. */
@@ -99,6 +101,26 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
         }
         return try MobilePixelFrame(width: 320, height: 40,
                                     rgba: Data(expand(pixels, palette: palette)))
+    }
+
+    /** Returns the eight native arrow frames for the tool direction picker. */
+    public func directionPickerFrames() throws -> [MobilePixelFrame] {
+        guard animations.indices.contains(Self.directionAnimationIndex) else {
+            throw MobileSessionError.invalidFrame
+        }
+        let animation = animations[Self.directionAnimationIndex]
+        guard animation.width == 16, animation.height == 16, animation.frames.count == 8 else {
+            throw MobileSessionError.invalidFrame
+        }
+        return try animation.frames.map { frame in
+            guard frame.pixels.count == animation.width * animation.height,
+                  frame.opaque.count == frame.pixels.count else { throw MobileSessionError.invalidFrame }
+            var rgba = Self.expand(frame.pixels, palette: palette)
+            for index in frame.opaque.indices where !frame.opaque[index] {
+                rgba.replaceSubrange((index * 4)..<(index * 4 + 4), with: [0, 0, 0, 0])
+            }
+            return try MobilePixelFrame(width: animation.width, height: animation.height, rgba: Data(rgba))
+        }
     }
 
     public func render(_ runtime: Lemmings3Runtime, highlight: MobileTargetSelection?) throws -> MobilePixelFrame {
