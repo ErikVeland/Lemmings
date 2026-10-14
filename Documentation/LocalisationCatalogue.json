@@ -10301,6 +10301,12 @@
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1229"
     ]
   },
+  "Paused: ": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/MobileTurnArt.swift:19"
+    ]
+  },
   "Paused: {0}": {
     "kind": "text",
     "references": [

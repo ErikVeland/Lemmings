@@ -554,12 +554,12 @@ import NxlvKit
     flashes.isEnabled = settings.hdEffectsEnabled
     hdrFlashCheck = flashes
     tubeCaptions.removeAll()
-    var groups: [(String, [(String, NSView)])] = [
+    var sections: [(String, [(String, NSView)])] = [
       (L10n.text("Display"), [(L10n.text("Screen"), display), (L10n.text("Tube Strength"), intensity), (L10n.text("Pixel Width"), aspect), (L10n.text("Scaling"), integer)]),
       (L10n.text("Added effects"), [(L10n.text("Effects"), hdEffects), (L10n.text("Explosions"), flashes)]),
-     ]
-    if !videoIsConnected { groups.append((L10n.text("Availability"), [("", note)])) }
-    let content = groupedPane(groups)
+    ]
+    if !videoIsConnected { sections.append((L10n.text("Availability"), [("", note)])) }
+    let content = groupedPane(sections)
     refreshVideoControls()
     return content
   }

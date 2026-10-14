@@ -4842,6 +4842,9 @@
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:1229 */
 "Paused." = "Paused.";
 
+/* Sources/LemmingsGameArt/MobileTurnArt.swift:19 */
+"Paused: " = "Paused: ";
+
 /* Sources/LemmingsGameArt/MobileTurnArt.swift:18 */
 "Paused: {0}" = "Paused: {0}";
 
