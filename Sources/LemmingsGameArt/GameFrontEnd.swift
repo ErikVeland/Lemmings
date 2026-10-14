@@ -429,7 +429,7 @@ public struct GameFrontEnd {
     private static func actionLabel(_ text: String, box: CGRect, typography: GameMenuTypography,
                                     palette: GameMenuTypography.Palette, alpha: CGFloat, context: CGContext) {
         let lines = wrapped(GameMenuTypography.menuText(text), face: .small, width: box.width, typography: typography)
-        let height = max(1, typography.height(face: .small, scale: 1))
+        let height = max(1, typography.height(of: text, face: .small, scale: 1))
         let count = min(lines.count, Int(box.height / height))
         let top = box.midY - CGFloat(count) * height / 2
         for (index, value) in lines.prefix(count).enumerated() {
@@ -452,7 +452,7 @@ public struct GameFrontEnd {
                              face: GameMenuTypography.Face = .small, palette: GameMenuTypography.Palette = .blue,
                              alpha: CGFloat = 1, scale fixed: Int? = nil, context: CGContext) {
         let scale = fixed ?? (face == .large && typography.width(of: GameMenuTypography.menuText(text), face: face, scale: 2) <= box.width ? 2 : 1)
-        let height = typography.height(face: face, scale: scale)
+        let height = typography.height(of: text, face: face, scale: scale)
         typography.menuLine(text, in: CGRect(x: box.minX, y: box.midY - height / 2, width: box.width, height: height),
                             context: context, face: face, scale: scale, alpha: alpha, palette: palette)
     }

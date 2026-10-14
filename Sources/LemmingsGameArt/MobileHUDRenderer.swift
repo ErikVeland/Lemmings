@@ -295,13 +295,13 @@ public enum MobileHUDAction: Equatable, Sendable {
             context.fill(box)
             let fits = typography.map { typography in
                 typography.font(.small).map {
-                    $0.cellWidth * longest <= Int(box.width) && $0.cellHeight <= Int(box.height)
+                    $0.cellWidth * longest <= Int(box.width) && $0.height(of: names.joined()) <= Int(box.height)
                 } ?? false
             } ?? false
             if fits {
                 GamePixelTypography.draw(name, in: box, context: context, typography: typography, maximumScale: 1)
             } else {
-                let scale = max(1, min(3, floor(min(box.height / 7, box.width / CGFloat(longest * 6)))))
+                let scale = max(1, min(3, floor(min(box.height / CGFloat(GamePixelTypography.verticalBounds(of: names.joined()).bottom - GamePixelTypography.verticalBounds(of: names.joined()).top), box.width / CGFloat(longest * 6)))))
                 GamePixelTypography.draw(name, in: box, context: context, typography: typography, maximumScale: scale, bitmapOnly: true)
             }
         }
@@ -487,7 +487,7 @@ public enum MobileHUDAction: Equatable, Sendable {
     private func drawGameLabel(_ text: String, in box: CGRect, context: CGContext) {
         let plain = text.replacingOccurrences(of: "∞", with: "*")
         if let font = typography?.font(.small),
-           font.cellHeight <= Int(box.height), font.cellWidth * plain.count <= Int(box.width) {
+           font.height(of: GameMenuTypography.menuText(plain)) <= Int(box.height), font.cellWidth * plain.count <= Int(box.width) {
             GamePixelTypography.draw(plain, in: box, context: context, typography: typography, maximumScale: 1)
         } else {
             let scale = max(1, min(3, floor(min(box.height / 7, box.width / CGFloat(max(1, plain.count * 6))))))

@@ -6,6 +6,42 @@ import XCTest
 @testable import LemmingsLocal
 
 final class DeviceMenuLayoutTests: XCTestCase {
+    func testHomeLibrarySpacingSequelRowAndThreeColumnFooter() {
+        let libraries = (0..<6).map { GameFrontEnd.Action("family.\($0)", "Library \($0) 0/120") }
+            + [.init("l2", "Lemmings 2", gameLogo: .lemmings2), .init("l3", "Lemmings 3", gameLogo: .lemmings3)]
+        for size in [CGSize(width: 1194, height: 834), .init(width: 834, height: 1194), .init(width: 740, height: 430)] {
+            let page = MobileHomeArt.page(resume: [.init("journeyResume", "Resume journey"), .init("resume", "Resume level - UVA")],
+                journey: .init("journey", "Journey map 33/295 solved"), families: libraries, initials: "UVA v EKV")
+            let layout = GameFrontEnd.layout(page, width: size.width, minimumHeight: size.height)
+            XCTAssertTrue(page.rows.first { $0.id == "journey" }!.titleRuns.allSatisfy { $0.palette == .blue })
+            let grid = layout.targets.filter { $0.action.id.hasPrefix("family.") }
+            XCTAssertEqual(grid[1].frame.minX - grid[0].frame.maxX, 12, accuracy: 0.001)
+            XCTAssertEqual(grid[2].frame.minY - grid[0].frame.maxY, 12, accuracy: 0.001)
+            let sequels = layout.targets.filter { $0.action.gameLogo != nil }
+            XCTAssertEqual(sequels.count, 2)
+            XCTAssertTrue(sequels.allSatisfy { $0.frame.minY > grid.last!.frame.maxY && $0.frame.height == 112 })
+            let footer = layout.targets.filter { ["players", "records", "collections"].contains($0.action.id) }
+            XCTAssertEqual(footer.count, 3)
+            XCTAssertEqual(Set(footer.map { $0.frame.minY }).count, 1)
+            for target in layout.targets {
+                XCTAssertEqual(layout.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)), target.action.id)
+            }
+        }
+    }
+
+    func testPlayerTitleAndQuantityRolesDoNotDependOnSelection() {
+        let page = MobileTurnArt.page(.init(title: "Lemmings", home: true), playerName: "UVA", role: .next, sessionName: "UVA v EKV")
+        XCTAssertEqual(page.subtitleRuns.filter { $0.palette == .green }.map(\.text), ["UVA", "EKV", "UVA"])
+        XCTAssertTrue(page.subtitleRuns.contains { $0.text == " v " && $0.palette == .blue })
+        XCTAssertTrue(page.subtitleRuns.contains { $0.text.contains("Next:") && $0.palette == .blue })
+        let title = GameSemanticText.title("Classic Lemmings 0/120")
+        XCTAssertEqual(title.map(\.palette), [.green, .blue])
+        XCTAssertEqual(title.last?.text, "0/120")
+        XCTAssertEqual(GameSemanticText.resume("Resume level - AB2").last?.palette, .green)
+        XCTAssertEqual(GameSemanticText.named("UVA: next", name: "UVA").first?.palette, .green)
+        XCTAssertEqual(GameSemanticText.players("UVA VS EKV").map(\.text), ["UVA", " v ", "EKV"])
+    }
+
     func testPortraitPhoneHomeUsesFullWidthRowsAndOddTabletRowsSpanTheGrid() {
         for width: CGFloat in [320, 390, 430, 540, 834] {
             for count in 1...9 {

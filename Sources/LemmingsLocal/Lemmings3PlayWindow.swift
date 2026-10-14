@@ -2419,8 +2419,11 @@ import NxlvKit
             NSColor.black.withAlphaComponent(0.86).setFill(); CGRect(x: 22, y: 16, width: 276, height: 184).fill()
             art.text(L10n.text("LEMMINGS 3"), x: 112, y: 23)
             for (index, row) in rows.enumerated() {
-                if index == menuSelection { NSColor(calibratedWhite: 0.22, alpha: 1).setFill(); CGRect(x: 30, y: 38 + index * 16, width: 260, height: 15).fill() }
-                art.text(row, x: 39, y: CGFloat(42 + index * 16))
+                let text = BitmapLatinGlyphs.uppercase(row, locale: L10n.interface.locale)
+                let height = art.font.bitmap.height(of: text)
+                if index == menuSelection { NSColor(calibratedWhite: 0.22, alpha: 1).setFill(); CGRect(x: 30, y: 38 + index * 16, width: 260, height: max(15, height + 3)).fill() }
+                let top = height == 8 ? 42 : 39 + (16 - height) / 2
+                art.text(row, x: 39, y: CGFloat(top + index * 16))
             }
             art.text(menuNotice, x: 36, y: 182, scale: 0.75)
         }

@@ -84,10 +84,21 @@ struct MobileContentImportBudget {
  * Creates bounded, deterministic identities for installed player content.
  */
 enum MobileContentFingerprint {
+    private final class BundledDigests: @unchecked Sendable {
+        // NSCache synchronises reads and writes between content workers.
+        let values = NSCache<NSURL, NSString>()
+    }
+    private static let bundledDigests = BundledDigests()
     /**
      * Hashes each regular file in sorted path order without loading whole files into memory.
      */
     static func digest(directory: URL) throws -> String {
+        try Task.checkCancellation()
+        let bundled = Bundle.main.bundleURL.pathExtension == "app"
+            && Bundle.main.resourceURL.map {
+                directory.standardizedFileURL.path.hasPrefix($0.standardizedFileURL.path + "/")
+            } == true
+        if bundled, let cached = bundledDigests.values.object(forKey: directory as NSURL) { return cached as String }
         let manager = FileManager.default
         let root = directory.standardizedFileURL
         let rootPath = root.path.hasSuffix("/") ? root.path : root.path + "/"
@@ -101,6 +112,7 @@ enum MobileContentFingerprint {
         var entryCount = 0
         var reportedBytes: Int64 = 0
         for case let item as URL in walker {
+            try Task.checkCancellation()
             entryCount += 1
             try MobileContentStore.validateImportEntryCount(entryCount)
             let values = try item.resourceValues(forKeys: [
@@ -130,6 +142,7 @@ enum MobileContentFingerprint {
         var hasher = SHA256()
         var actualBytes: Int64 = 0
         for file in files {
+            try Task.checkCancellation()
             hasher.update(data: Data(file.path.utf8))
             hasher.update(data: Data([0]))
             hasher.update(data: Data(String(file.size).utf8))
@@ -143,6 +156,7 @@ enum MobileContentFingerprint {
             defer { try? handle.close() }
             var fileBytes: Int64 = 0
             while let chunk = try handle.read(upToCount: 1_048_576), !chunk.isEmpty {
+                try Task.checkCancellation()
                 let count = Int64(chunk.count)
                 guard count <= MobileContentStore.maximumImportBytes - actualBytes,
                       count <= file.size - fileBytes else {
@@ -154,7 +168,9 @@ enum MobileContentFingerprint {
             }
             guard fileBytes == file.size else { throw MobileContentStoreError.unreadable }
         }
-        return hasher.finalize().map { String(format: "%02x", $0) }.joined()
+        let digest = hasher.finalize().map { String(format: "%02x", $0) }.joined()
+        if bundled { bundledDigests.values.setObject(digest as NSString, forKey: directory as NSURL) }
+        return digest
     }
 
     /**

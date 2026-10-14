@@ -2,6 +2,11 @@ import NxlvKit
 
 /// Both result screens use the same star and final-note reward rules.
 public enum ResultAwards {
+    public static func explanation(for award: TrolleyAchievement) -> String {
+        guard award.group == .philosophy, let id = award.philosopherID else { return award.detail }
+        return award.detail + "\n" + TrolleyAnalyser.archetype(id).affinityDescription
+    }
+
     public static func ornament(report: ArcadeReport, celebration: TrolleyCelebration, history: TrolleyHistory) -> Bool {
         guard report.run.qualifies else { return false }
         let improved = report.previousBest != nil && (report.newRescueBest || report.newSkillBest)

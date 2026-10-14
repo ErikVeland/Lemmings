@@ -8,7 +8,7 @@ import NxlvKit
 @MainActor enum GameControlText {
     static func draw(_ text: String, in rect: CGRect, alignment: NSTextAlignment = .left, enabled: Bool = true, role: GameTypography.Role = .body) {
         if let renderer = GameMenuArtwork.renderer() {
-            let height = renderer.height(face: role.face, scale: 1)
+            let height = renderer.height(of: text, face: role.face, scale: 1)
             renderer.menuLine(text, in: CGRect(x: rect.minX, y: rect.midY - height / 2, width: rect.width, height: height),
                 face: role.face, alignment: alignment, alpha: enabled ? 1 : 0.45, palette: role.palette)
         } else { GamePixelText.draw(MacInterfaceRenderer.menuText(text), in: rect, maxScale: role == .title ? 3 : 1, palette: role.palette) }
@@ -30,7 +30,8 @@ import NxlvKit
     override func resignFirstResponder() -> Bool { needsDisplay = true; return super.resignFirstResponder() }
     override var intrinsicContentSize: NSSize {
         let width = GameMenuArtwork.renderer()?.width(of: MacInterfaceRenderer.menuText(title), face: .small, scale: 1) ?? CGFloat(title.count * 8)
-        return NSSize(width: width + (isCheck ? 32 : 24), height: max(28, super.intrinsicContentSize.height))
+        let height = GameMenuArtwork.renderer()?.height(of: title, face: .small, scale: 1) ?? 18
+        return NSSize(width: width + (isCheck ? 32 : 24), height: max(28, height + 4, super.intrinsicContentSize.height))
     }
     override var isFlipped: Bool { true }
     override func draw(_ dirtyRect: NSRect) {
@@ -88,7 +89,8 @@ import NxlvKit
         let natural = renderer.width(of: MacInterfaceRenderer.menuText(stringValue), face: role.face, scale: 1)
         let width = preferredMaxLayoutWidth > 0 ? preferredMaxLayoutWidth : bounds.width > 0 ? bounds.width : 600
         let lines = cell?.wraps == true ? MacInterfaceRenderer.menuLines(stringValue, columns: max(1, Int(width) / face.cellWidth)).count : 1
-        return NSSize(width: natural, height: CGFloat(max(1, lines) * (face.cellHeight + 6)))
+        let spacing = max(face.cellHeight + 6, face.height(of: MacInterfaceRenderer.menuText(stringValue)) + 2)
+        return NSSize(width: natural, height: CGFloat(max(1, lines) * spacing))
     }
     override func layout() {
         super.layout()
@@ -298,23 +300,31 @@ import NxlvKit
 /// AppKit keeps text input, selection and undo; only game glyphs are painted.
 @MainActor final class GameFieldEditor: NSTextView {
     private var cellWidth: CGFloat { CGFloat(GameMenuArtwork.renderer()?.font(.small)?.cellWidth ?? 8) }
-    private var cellHeight: CGFloat { CGFloat(GameMenuArtwork.renderer()?.font(.small)?.cellHeight ?? 14) }
-    private var textOrigin: CGPoint { CGPoint(x: textContainerOrigin.x, y: bounds.midY - cellHeight / 2) }
+    private var cellHeight: CGFloat { CGFloat(GameMenuArtwork.renderer()?.font(.small)?.height(of: MacInterfaceRenderer.menuText(string)) ?? 14) }
+    private var textOrigin: CGPoint {
+        let top = GameMenuArtwork.renderer()?.font(.small)?.verticalBounds(of: MacInterfaceRenderer.menuText(string)).top ?? 0
+        return CGPoint(x: textContainerOrigin.x, y: bounds.midY - cellHeight / 2 - CGFloat(top))
+    }
+    private func cellOffset(_ utf16Offset: Int) -> Int {
+        let prefix = (string as NSString).substring(to: min(utf16Offset, (string as NSString).length))
+        return prefix.count
+    }
     override func draw(_ dirtyRect: NSRect) {
         NSColor.black.setFill(); bounds.fill()
         let selection = selectedRange()
         if selection.length > 0 {
             NSColor(calibratedRed: 0.08, green: 0.22, blue: 0.12, alpha: 1).setFill()
-            CGRect(x: textOrigin.x + CGFloat(selection.location) * cellWidth, y: textOrigin.y,
-                width: CGFloat(selection.length) * cellWidth, height: cellHeight).fill()
+            let first = cellOffset(selection.location), last = cellOffset(NSMaxRange(selection))
+            CGRect(x: textOrigin.x + CGFloat(first) * cellWidth, y: bounds.midY - cellHeight / 2,
+                width: CGFloat(last - first) * cellWidth, height: cellHeight).fill()
         }
         GameTypography.annotation(string, at: textOrigin, palette: .blue)
     }
     override func drawInsertionPoint(in rect: NSRect, color: NSColor, turnedOn flag: Bool) {
         guard flag else { needsDisplay = true; return }
         NSColor.green.setFill()
-        CGRect(x: textOrigin.x + CGFloat(selectedRange().location) * cellWidth,
-            y: textOrigin.y, width: 1, height: cellHeight).fill()
+        CGRect(x: textOrigin.x + CGFloat(cellOffset(selectedRange().location)) * cellWidth,
+            y: bounds.midY - cellHeight / 2, width: 1, height: cellHeight).fill()
     }
     func prepare() {
         isFieldEditor = true; isRichText = false; drawsBackground = false

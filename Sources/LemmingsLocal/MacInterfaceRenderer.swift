@@ -110,6 +110,10 @@ import NxlvKit
     return CGFloat(font.height(scale: scale))
   }
 
+  func height(of text: String, face: ClassicMacUserInterface.Face, scale: Int) -> CGFloat {
+    CGFloat(font(face)?.height(of: Self.menuText(text), scale: scale) ?? 0)
+  }
+
   /// Draws a line with its top-left corner at the point. The view is flipped,
   /// so the text runs down and to the right from there.
   func draw(
@@ -224,7 +228,8 @@ import NxlvKit
     let line = plain.count <= columns ? plain : String(plain.prefix(max(0, columns - 3))) + String(repeating: ".", count: min(3, columns))
     let width = width(of: line, face: face, scale: scale)
     let x = alignment == .left ? rect.minX : alignment == .right ? rect.maxX - width : rect.midX - width / 2
-    draw(line, face: face, at: CGPoint(x: x.rounded(), y: rect.minY.rounded()), scale: scale, alpha: alpha, palette: palette)
+    let top = CGFloat(font.verticalBounds(of: line).top * scale)
+    draw(line, face: face, at: CGPoint(x: x.rounded(), y: (rect.minY - top).rounded()), scale: scale, alpha: alpha, palette: palette)
   }
 
   /// Preserves explicit lines and splits long words without dropping characters.
@@ -235,7 +240,8 @@ import NxlvKit
   func menuParagraph(_ value: String, in rect: CGRect, alignment: NSTextAlignment = .center,
     face: ClassicMacUserInterface.Face = .small, palette: Palette = .blue, alpha: CGFloat = 1) {
     guard let font = font(face) else { return }
-    let columns = max(1, Int(rect.width) / font.cellWidth), spacing = font.cellHeight + 6
+    let columns = max(1, Int(rect.width) / font.cellWidth)
+    let spacing = max(font.cellHeight + 6, font.height(of: Self.menuText(value)) + 2)
     let rows = max(0, Int(rect.height) / spacing)
     let lines = Self.menuLines(value, columns: columns)
     for (index, value) in lines.prefix(rows).enumerated() {

@@ -57,7 +57,7 @@ public enum MusicTitleCard {
         }
         for (text, face, palette, gap) in titleLines.map({ ($0, titleFace, GameMenuTypography.Palette.green, CGFloat(0)) })
             + sourceLines.enumerated().map({ ($0.element, .small, .blue, $0.offset == 0 ? CGFloat(8) : 0) }) {
-            let pitch: CGFloat = face == .large ? 26 : 24
+            let pitch = GameTextLayout.linePitch(text, face: face)
             let spacing = lines.isEmpty ? 0 : gap
             if y + spacing + pitch + 12 > maximumHeight, !lines.isEmpty { finish() }
             if !lines.isEmpty { y += gap }

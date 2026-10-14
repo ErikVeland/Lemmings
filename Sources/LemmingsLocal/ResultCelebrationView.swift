@@ -125,13 +125,13 @@ import NxlvKit
         text(c.recordMessage, 96, 323, 418, height: 24)
         let newGoals = c.levelAwards.filter { $0 != .firstClear }
         let names = newGoals.first.map { $0.title.capitalized + (newGoals.count > 1 ? " (+\(newGoals.count - 1))" : "") } ?? ""
-        let rect = CGRect(x: 96, y: 356, width: 418, height: 32)
+        let awardRect = CGRect(x: 96, y: 356, width: 418, height: 32)
         if let award = newGoals.first {
-            achievementLink(L10n.text("NEW: \(names) >"), in: rect, title: award.title, detail: award.detail) { [weak self] in
+            achievementLink(L10n.text("NEW: \(names) >"), in: awardRect, title: award.title, detail: award.detail) { [weak self] in
                 self?.showResultAchievement(newGoals.map { ($0.title, $0.detail) })
             }
         } else {
-            link(L10n.text("Level goals and bests >"), rect, alignment: .left) { [weak self] in self?.page(.goals) }
+            link(L10n.text("Level goals and bests >"), awardRect, alignment: .left) { [weak self] in self?.page(.goals) }
         }
     }
     private func drawResultCareerCard(_ c: TrolleyCelebration) {
@@ -155,9 +155,9 @@ import NxlvKit
         } else if !new.isEmpty {
             let selected = new[featuredAwardIndex % new.count]
             achievementLink(L10n.text("NEW: \(selected.award.title) >"), in: CGRect(x: 582, y: 320, width: 442, height: 30),
-                            title: selected.award.title, detail: selected.award.detail) { [weak self] in
+                            title: selected.award.title, detail: ResultAwards.explanation(for: selected.award)) { [weak self] in
                 let ordered = [selected] + new.filter { $0.award != selected.award }
-                self?.showResultAchievement(ordered.map { ($0.award.title, $0.award.detail) })
+                self?.showResultAchievement(ordered.map { ($0.award.title, ResultAwards.explanation(for: $0.award)) })
             }
             link("\(new.count) new \(new.count == 1 ? "award" : "awards") >", CGRect(x: 582, y: 360, width: 266, height: 30), alignment: .left) { [weak self] in self?.showNewAwards() }
             if new.count > 1 {
@@ -172,8 +172,9 @@ import NxlvKit
         } else { text(L10n.text("All career milestones earned!"), 582, 338, 442) }
     }
     private func resultCareerAwardLink(_ award: TrolleyAchievement, in rect: CGRect) {
-        achievementLink(award.title + " >", in: rect, title: award.title, detail: award.detail) { [weak self] in
-            self?.showResultAchievement([(award.title, award.detail)])
+        let detail = ResultAwards.explanation(for: award)
+        achievementLink(award.title + " >", in: rect, title: award.title, detail: detail) { [weak self] in
+            self?.showResultAchievement([(award.title, detail)])
         }
     }
     private func precisionRewardText(_ c: TrolleyCelebration) -> String {

@@ -34,6 +34,7 @@ public final class ClassicMobileLibrary: MobileGameLibrary {
     }
 
     public func loadLevel(at index: Int) throws -> MobileLevelContent {
+        try Task.checkCancellation()
         guard dataSet.campaign.levels.indices.contains(index) else {
             throw MobileSessionError.changedLevel
         }
@@ -223,10 +224,13 @@ public final class ClassicMobileSession: MobileGameSession {
         levelIndex: Int,
         artworkFamily: String? = nil, artworkMatch: ClassicMacPieceMatch? = nil
     ) throws -> MobileLevelContent {
+        try Task.checkCancellation()
         let rendered = try ClassicLevelRenderer.render(
             level, groundSet: ground, specialGraphic: special, objectSemantics: objectSemantics)
+        try Task.checkCancellation()
         let simulation = try ClassicDOSSimulation(
             level: level, renderedLevel: rendered, mainDATAssets: assets, mechanics: mechanics, clock: clock)
+        try Task.checkCancellation()
         let palette = try ClassicLemmingPalette.inLevelVGA(terrainPalette: ground.terrainPalette)
         return MobileLevelContent(
             summary: summary,

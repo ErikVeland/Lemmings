@@ -11,6 +11,8 @@ import NxlvKit
     let normal: NSImage
     let pressed: NSImage
     let glyphs: [NSImage]
+    let font: Lemmings3Font
+    private let extendedGlyphs: [Character: NSImage]
 
     init(root: URL, tribe: Int, renderer: SequelArtworkRenderer) throws {
         let folder = root.appendingPathComponent("GRAPHICS")
@@ -33,8 +35,7 @@ import NxlvKit
             return try renderer.image(width: 320, height: 40, pixels: pixels, palette: palette, category: .architectural)
         }
         normal = try panel(""); pressed = try panel("X")
-        let index = try read("FONT.DIN"), data = try read("FONT.DEL")
-        guard index.count == 136 else { throw SequelDataError.invalid(L10n.text("Invalid L3 font index.")) }
+        font = try Lemmings3Font(index: Data(read("FONT.DIN")), data: Data(read("FONT.DEL")))
         // Small glyphs use terrain palette slots in the original. Give menu text
         // stable light and shadow colours independent of the current terrain.
         for i in [132, 135] {
@@ -43,33 +44,40 @@ import NxlvKit
             palette[i * 4 + 2] = i == 132 ? 186 : 78
             palette[i * 4 + 3] = 255
         }
-        var offset = 0, decoded: [NSImage] = []
-        for i in 0..<68 {
-            let count = Int(index[i * 2]) | Int(index[i * 2 + 1]) << 8
-            guard count == (i < 30 ? 110 : 64), offset + count <= data.count else { throw SequelDataError.invalid(L10n.text("Invalid L3 font glyph.")) }
-            if i >= 30 {
-                // FONT rows are stored bottom-up; panel planes are top-down.
-                var pixels = [UInt8](repeating: 0, count: 64)
-                for y in 0..<8 { for x in 0..<8 { pixels[y * 8 + x] = data[offset + (7 - y) * 8 + x] } }
-                decoded.append(try renderer.image(width: 8, height: 8, pixels: pixels, palette: palette,
-                    opaque: pixels.map { $0 != 0 }, category: .architectural))
-            }
-            offset += count
+        glyphs = try font.glyphs.map { pixels in
+            try renderer.image(width: 8, height: 8, pixels: pixels, palette: palette,
+                opaque: pixels.map { $0 != 0 }, category: .architectural)
         }
-        guard offset == data.count else { throw SequelDataError.invalid(L10n.text("Trailing L3 font data.")) }
-        glyphs = decoded
+        var extended: [Character: NSImage] = [:]
+        for character in BitmapLatinGlyphs.characters + [Character("?")] {
+            guard let glyph = font.bitmap.glyph(for: character) else { continue }
+            extended[character] = try renderer.image(width: glyph.width, height: glyph.height, pixels: glyph.pixels,
+                palette: palette, opaque: glyph.opaque, category: .architectural)
+        }
+        extendedGlyphs = extended
     }
     func text(_ value: String, x: CGFloat, y: CGFloat, scale: CGFloat = 1) {
-        for (position, scalar) in value.uppercased().unicodeScalars.enumerated() {
-            let rect = CGRect(x: x + CGFloat(position) * 8 * scale, y: y, width: 8 * scale, height: 8 * scale)
-            if scalar == "💀" {
-                GamePixelText.draw("💀", in: rect, maxScale: scale, palette: .green)
+        let text = BitmapLatinGlyphs.uppercase(value, locale: L10n.interface.locale)
+        let top = font.bitmap.verticalBounds(of: text).top
+        var cursor = x
+        for character in text {
+            defer { cursor += CGFloat(font.bitmap.advance(for: character)) * scale }
+            if character == "💀" {
+                GamePixelText.draw("💀", in: CGRect(x: cursor, y: y, width: 8 * scale, height: 8 * scale), maxScale: scale, palette: .green)
                 continue
             }
-            let code = Int(scalar.value)
-            let index = (48...57).contains(code) ? code - 48 : (65...90).contains(code) ? code - 65 + 10 : 36
-            glyphs[index].draw(in: rect,
-                from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
+            if let code = character.asciiValue, character != "?" {
+                let index = (48...57).contains(code) ? Int(code) - 48 : (65...90).contains(code) ? Int(code) - 65 + 10 : character == "!" ? 37 : 36
+                glyphs[index].draw(in: CGRect(x: cursor, y: y - CGFloat(top) * scale, width: 8 * scale, height: 8 * scale),
+                    from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
+            } else if let glyph = font.bitmap.glyph(for: character), let image = extendedGlyphs[character] {
+                image.draw(in: CGRect(x: cursor + CGFloat(glyph.x) * scale, y: y + CGFloat(glyph.y - top) * scale,
+                    width: CGFloat(glyph.width) * scale, height: CGFloat(glyph.height) * scale),
+                    from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
+            } else if let image = extendedGlyphs["?"] {
+                image.draw(in: CGRect(x: cursor, y: y, width: 8 * scale, height: 8 * scale),
+                    from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
+            }
         }
     }
     static func slot(at x: CGFloat) -> Int? {

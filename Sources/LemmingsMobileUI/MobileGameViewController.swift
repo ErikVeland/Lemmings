@@ -46,14 +46,12 @@ struct MobileGameTurn {
     private var resultAchievements: [(title: String, detail: String)] {
         completionDetails.compactMap { title in
             if let award = ArcadeLevelAchievement.allCases.first(where: { $0.title == title }) { return (title, award.detail) }
-            if let award = TrolleyAchievement.allCases.first(where: { $0.title == title }) { return (title, award.detail) }
+            if let award = TrolleyAchievement.allCases.first(where: { $0.title == title }) { return (title, ResultAwards.explanation(for: award)) }
             if let award = ClassicAchievement.catalog.first(where: { $0.title == title }) { return (title, award.detail) }
-            switch title {
-            case "New rescue record": return (title, L10n.text("Your best rescue count on this level."))
-            case "New skill record": return (title, L10n.text("Your fewest skills used to complete this level."))
-            case "Level skip earned": return (title, L10n.text("A level skip is now available for a later attempt."))
-            default: return nil
-            }
+            if title == L10n.text("New rescue record") { return (title, L10n.text("Your best rescue count on this level.")) }
+            if title == L10n.text("New skill record") { return (title, L10n.text("Your fewest skills used to complete this level.")) }
+            if title == L10n.text("Level skip earned") { return (title, L10n.text("A level skip is now available for a later attempt.")) }
+            return nil
         }
     }
 

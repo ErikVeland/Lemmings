@@ -16,18 +16,17 @@ public enum MobileTurnArt {
         var identified = page
         if role == .current, (page.pause != nil || GameMenuTypography.menuText(page.title) == GameMenuTypography.menuText(L10n.text("Paused"))) {
             identified.title = L10n.text("Paused: \(playerName)")
-            identified.titleRuns = [.init(L10n.text("Paused: "), .blue), .init(playerName, .green)]
+            identified.titleRuns = GameSemanticText.named(identified.title, name: playerName)
         } else {
             identified.subtitle = subtitle(page.subtitle, playerName: playerName, role: role)
             if page.home, let sessionName, !sessionName.isEmpty {
                 identified.subtitle = sessionName + "  " + identified.subtitle
             }
-            let prefix = role == .next ? L10n.text("Next: ") : role == .result ? L10n.text("Played: ") : L10n.text("Turn: ")
             identified.subtitleRuns = []
             if page.home, let sessionName {
                 identified.subtitleRuns += GameSemanticText.players(sessionName) + [.init("  ", .blue)]
             }
-            identified.subtitleRuns += [.init(prefix, .blue), .init(playerName, .green), .init(page.subtitle.isEmpty ? "" : "  " + page.subtitle, .blue)]
+            identified.subtitleRuns += GameSemanticText.named(subtitle(page.subtitle, playerName: playerName, role: role), name: playerName)
         }
         return identified
     }

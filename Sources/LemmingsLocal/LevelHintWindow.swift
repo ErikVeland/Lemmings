@@ -326,7 +326,10 @@ import NxlvKit
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     private var cellWidth: Int { renderer?.font(face)?.cellWidth ?? 12 }
-    private var lineHeight: Int { (renderer?.font(face)?.cellHeight ?? 14) + 6 }
+    private var lineHeight: Int {
+        max((renderer?.font(face)?.cellHeight ?? 14) + 6,
+            (renderer?.font(face)?.height(of: MacInterfaceRenderer.menuText(stringValue)) ?? 14) + 2)
+    }
     func lines(width: CGFloat) -> [String] {
         MacInterfaceRenderer.menuLines(stringValue, columns: max(1, Int(width) / cellWidth))
     }

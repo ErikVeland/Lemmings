@@ -28,6 +28,18 @@ Catalogue baseline used optimized builds. The final Start/save checks used the i
 
 Cold work still exists: initial Classic content preparation measured 0.85–0.93 seconds, and the first Chronicles catalogue scan measured 0.48–0.69 seconds. The latter runs in the background during normal launch. New imports and changed archives must still be read and validated. No artificial delay was added, and the requested fresh-level countdown remains separate from loading.
 
+## iPad loading
+
+The mobile shell opens Classic packs, Lemmings 2, Lemmings 3, NeoLemmix and collection libraries on a content actor. Library construction includes file reads, campaign decoding and imported-content fingerprints. Results transfer to the menu only if the request is still current. Saved runs start after their library has opened.
+
+The wide carousel requests the selected preview before its two neighbours. Its three requests fit the prepared-session cache, so neighbouring covers do not evict the selected session before Play. Leaving the browser, changing its library or starting a level cancels its artwork tasks and stops its animation clock. Gameplay never requests menu previews.
+
+Play cancels fan counts, shuffle scans and progression preparation, then waits for those workers before presenting gameplay. Cancelled preview requests stop at decoding boundaries and cannot cache or publish stale sessions. Classic, Lemmings 2, Lemmings 3 and NeoLemmix all check cancellation during preparation. A decoder already inside one synchronous operation must return before cancellation takes effect.
+
+Bundled sequel fingerprints stay in a process cache because the app bundle is immutable. Imported directories are hashed again, so changed player content still invalidates saved runs. Hot Seat restoration prepares artwork with the saved owner's settings on the worker. It retains the existing paused handover.
+
+These changes have no physical-iPad timing measurement yet. Validate cold launch, carousel browsing, Play during preview loading, Retry, Continue and saved-run restoration on the device. Headless preparation tests cover off-main library construction, cancellation, bounded caches and checkpoint restoration.
+
 ## Validation
 
 Run the focused latency and route checks:

@@ -264,7 +264,7 @@ import UIKit
             GameStoneArt.draw(in: context, frame: frame, selected: false, pixel: 2)
             context.setFillColor(CGColor(gray: 0, alpha: 1))
             context.fill(frame.insetBy(dx: 8, dy: 8))
-            GameTextLayout.draw(detail, in: frame.insetBy(dx: 24, dy: 24), typography: typography, context: context)
+            GameTextLayout.draw(detail, in: frame.insetBy(dx: 24, dy: 24), typography: typography, alignment: .left, context: context)
         }
     }
 }

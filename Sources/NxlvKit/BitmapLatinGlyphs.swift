@@ -2,6 +2,7 @@ import Foundation
 
 /// Western Latin additions made from the current font's own pixels and colour ramp.
 public enum BitmapLatinGlyphs {
+    public enum Style: Sendable { case macintosh, sequelFrontEnd, sequelPanel }
     private typealias Frame = ClassicMacArtwork.Frame
     private struct Point: Hashable { let x: Int, y: Int }
     private static let accents: Set<UInt32> = [0x300, 0x301, 0x302, 0x303, 0x304, 0x306, 0x307, 0x308, 0x30A, 0x30B, 0x30C, 0x327, 0x328, 0x326]
@@ -27,6 +28,26 @@ public enum BitmapLatinGlyphs {
         }.joined().precomposedStringWithCanonicalMapping
     }
 
+    /// Extra space for the uppercase menu faces, without changing ASCII spacing.
+    public static func verticalPadding(in text: String) -> (above: Int, below: Int) {
+        var above = 0, below = 0
+        for character in text {
+            if character == "Ŋ" || character == "ŋ" { below = max(below, 3) }
+            guard let (_, marks) = decomposition(character) else { continue }
+            for mark in marks {
+                switch mark {
+                case 0x327, 0x328: below = max(below, 3)
+                case 0x326: below = max(below, 4)
+                case 0x30A: above = max(above, 6)
+                case 0x304: above = max(above, 2)
+                case 0x303, 0x306, 0x307, 0x308: above = max(above, 3)
+                default: above = max(above, 4)
+                }
+            }
+        }
+        return (above, below)
+    }
+
     private static func decomposition(_ character: Character) -> (Character, [UInt32])? {
         let scalars = Array(String(character).decomposedStringWithCanonicalMapping.unicodeScalars)
         guard scalars.count >= 2, let first = scalars.first,
@@ -36,16 +57,19 @@ public enum BitmapLatinGlyphs {
     }
 
     /// Existing glyphs are returned untouched. Added forms keep the same cell advance.
-    public static func extending(_ original: [Character: ClassicMacArtwork.Frame], cellWidth: Int, cellHeight: Int) -> [Character: ClassicMacArtwork.Frame] {
+    public static func extending(_ original: [Character: ClassicMacArtwork.Frame], cellWidth: Int, cellHeight: Int,
+                                 style: Style = .macintosh) -> [Character: ClassicMacArtwork.Frame] {
         guard cellWidth >= 5, cellHeight >= 7 else { return original }
-        let builder = Builder(original: original, width: cellWidth, height: cellHeight)
+        let builder = Builder(original: original, width: cellWidth, height: cellHeight, style: style)
         var result = original
         for character in characters where result[character] == nil {
             if let glyph = builder.specialGlyph(character) { result[character] = glyph }
         }
         for character in characters where result[character] == nil {
-            guard let (base, marks) = decomposition(character), var glyph = result[base] else { continue }
-            if base == "i" || base == "j" { glyph = builder.withoutDot(glyph) }
+            guard let (base, marks) = decomposition(character), var glyph = result[base] ?? builder.base(base) else { continue }
+            if base == "i" || base == "j" || (style == .sequelPanel && (base == "I" || base == "J")) {
+                glyph = builder.withoutDot(glyph)
+            }
             for mark in marks { glyph = builder.accent(mark, on: glyph) }
             result[character] = glyph
         }
@@ -70,13 +94,17 @@ public enum BitmapLatinGlyphs {
     private struct Builder {
         let original: [Character: Frame]
         let width: Int, height: Int
+        let style: Style
         var compact: Bool { width <= 6 }
+        var smallMarks: Bool { compact || style != .macintosh }
         var stroke: Int { width >= 16 ? 2 : 1 }
-        var outline: Int { compact ? 0 : 1 }
+        var outline: Int { compact || style == .sequelPanel ? 0 : 1 }
+        var shadow: Int { style == .sequelPanel ? 1 : outline }
         let ramp: [[UInt8]]
 
-        init(original: [Character: Frame], width: Int, height: Int) {
+        init(original: [Character: Frame], width: Int, height: Int, style: Style) {
             self.original = original; self.width = width; self.height = height
+            self.style = style
             var colours: [UInt32: Int] = [:]
             for character: Character in ["A", "E", "O", "S", "N"] {
                 guard let frame = original[character] else { continue }
@@ -95,6 +123,14 @@ public enum BitmapLatinGlyphs {
         static func light(_ rgb: UInt32) -> UInt32 {
             ((rgb >> 16) & 255) * 3 + ((rgb >> 8) & 255) * 6 + (rgb & 255)
         }
+        static func light(_ pixel: [UInt8]) -> UInt32 {
+            UInt32(pixel[0]) * 3 + UInt32(pixel[1]) * 6 + UInt32(pixel[2])
+        }
+        func joining(_ left: [UInt8]?, _ right: [UInt8]?) -> [UInt8]? {
+            guard let left else { return right }
+            guard let right else { return left }
+            return Self.light(left) >= Self.light(right) ? left : right
+        }
         func pixel(_ glyph: Frame, _ x: Int, _ y: Int) -> [UInt8]? {
             guard x >= glyph.x, y >= glyph.y, x < glyph.x + glyph.width, y < glyph.y + glyph.height else { return nil }
             let start = ((y - glyph.y) * glyph.width + x - glyph.x) * 4
@@ -105,8 +141,8 @@ public enum BitmapLatinGlyphs {
             guard !shape.isEmpty else { return glyph }
             let left = min(glyph.x, (shape.map(\.x).min() ?? 0) - outline)
             let top = min(glyph.y, (shape.map(\.y).min() ?? 0) - outline)
-            let right = max(glyph.x + glyph.width, (shape.map(\.x).max() ?? 0) + 1 + outline)
-            let bottom = max(glyph.y + glyph.height, (shape.map(\.y).max() ?? 0) + 1 + outline)
+            let right = max(glyph.x + glyph.width, (shape.map(\.x).max() ?? 0) + 1 + shadow)
+            let bottom = max(glyph.y + glyph.height, (shape.map(\.y).max() ?? 0) + 1 + shadow)
             let w = right - left, h = bottom - top
             var bytes = [UInt8](repeating: 0, count: w * h * 4)
             for y in top..<bottom { for x in left..<right {
@@ -115,11 +151,13 @@ public enum BitmapLatinGlyphs {
                 if shape.contains(p) {
                     let upperEdge = !shape.contains(Point(x: x - 1, y: y - 1))
                     let lowerEdge = !shape.contains(Point(x: x + 1, y: y + 1))
-                    let tone = compact ? 0 : upperEdge ? max(0, ramp.count - 2) : lowerEdge ? min(2, ramp.count - 1) : min(3, ramp.count - 1)
+                    let tone = style == .sequelPanel ? ramp.count - 1 : compact ? 0 : upperEdge ? max(0, ramp.count - 2) : lowerEdge ? min(2, ramp.count - 1) : min(3, ramp.count - 1)
                     colour = ramp[tone]
+                } else if colour == nil && style == .sequelPanel && shape.contains(Point(x: x - 1, y: y - 1)) {
+                    colour = ramp[0]
                 } else if colour == nil && outline > 0 && (-outline...outline).contains(where: { dy in
                     (-outline...outline).contains { dx in shape.contains(Point(x: x + dx, y: y + dy)) }
-                }) { colour = ramp[0] }
+                }) { colour = style == .sequelFrontEnd ? ramp[ramp.count - 1] : ramp[0] }
                 if let colour { bytes.replaceSubrange(((y - top) * w + x - left) * 4..<((y - top) * w + x - left) * 4 + 4, with: colour) }
             }}
             return Frame(x: left, y: top, width: w, height: h, rgba: Data(bytes))
@@ -141,27 +179,27 @@ public enum BitmapLatinGlyphs {
         func accent(_ code: UInt32, on glyph: Frame) -> Frame {
             let rows: [String]
             switch code {
-            case 0x300: rows = compact ? ["#.", ".#"] : ["##..", ".##.", "..##"]
-            case 0x301: rows = compact ? [".#", "#."] : ["..##", ".##.", "##.."]
-            case 0x302: rows = compact ? [".#.", "#.#"] : ["..#..", ".###.", "##.##"]
-            case 0x303: rows = compact ? [".#.#", "#.#."] : [".##..#", "#..##."]
-            case 0x304: rows = compact ? ["###"] : ["#####"]
-            case 0x306: rows = compact ? ["#.#", ".#."] : ["##.##", ".###."]
-            case 0x307: rows = compact ? ["#"] : ["##", "##"]
-            case 0x308: rows = compact ? ["#.#"] : ["##...##", "##...##"]
-            case 0x30A: rows = compact ? [".#.", "#.#", ".#."] : [".###.", "#...#", "#...#", "#...#", ".###."]
-            case 0x30B: rows = compact ? [".#.#", "#.#."] : ["..#..#", ".#..#.", "#..#.."]
-            case 0x30C: rows = compact ? ["#.#", ".#."] : ["##.##", ".###.", "..#.."]
-            case 0x327: rows = compact ? [".#", "#."] : [".#.", "..#", "##."]
-            case 0x328: rows = compact ? ["#.", ".#"] : [".#.", "#..", ".##"]
-            case 0x326: rows = compact ? ["#", "#"] : [".##", ".##", "##."]
+            case 0x300: rows = smallMarks ? ["#.", ".#"] : ["##..", ".##.", "..##"]
+            case 0x301: rows = smallMarks ? [".#", "#."] : ["..##", ".##.", "##.."]
+            case 0x302: rows = smallMarks ? [".#.", "#.#"] : ["..#..", ".###.", "##.##"]
+            case 0x303: rows = smallMarks ? [".#.#", "#.#."] : [".##..#", "#..##."]
+            case 0x304: rows = smallMarks ? ["###"] : ["#####"]
+            case 0x306: rows = smallMarks ? ["#.#", ".#."] : ["##.##", ".###."]
+            case 0x307: rows = smallMarks ? ["#"] : ["##", "##"]
+            case 0x308: rows = smallMarks ? ["#.#"] : ["##...##", "##...##"]
+            case 0x30A: rows = smallMarks && style != .sequelFrontEnd ? [".#.", "#.#", ".#."] : [".###.", "#...#", "#...#", "#...#", ".###."]
+            case 0x30B: rows = smallMarks ? [".#.#", "#.#."] : ["..#..#", ".#..#.", "#..#.."]
+            case 0x30C: rows = smallMarks ? ["#.#", ".#."] : ["##.##", ".###.", "..#.."]
+            case 0x327: rows = smallMarks ? [".#", "#."] : [".#.", "..#", "##."]
+            case 0x328: rows = smallMarks ? ["#.", ".#"] : [".#.", "#..", ".##"]
+            case 0x326: rows = smallMarks ? ["#", "#"] : [".##", ".##", "##."]
             default: return glyph
             }
             let markWidth = rows.map(\.count).max() ?? 1
             let below = [0x327, 0x328, 0x326].contains(code)
-            let centre = below && code == 0x328 ? width - markWidth - outline : topCentre(glyph) - markWidth / 2
-            let x = max(outline, min(width - markWidth - outline, centre))
-            let y = below ? glyph.y + glyph.height - (code == 0x326 ? 0 : 1) : glyph.y - rows.count - 1
+            let centre = below && code == 0x328 ? width - markWidth - shadow : topCentre(glyph) - markWidth / 2
+            let x = max(outline, min(width - markWidth - shadow, centre))
+            let y = below ? glyph.y + glyph.height - (code == 0x326 ? 0 : 1) : glyph.y - rows.count - (smallMarks ? 0 : 1)
             return render(glyph, adding: mask(rows, x: x, y: y))
         }
         func withoutDot(_ glyph: Frame) -> Frame {
@@ -169,15 +207,19 @@ public enum BitmapLatinGlyphs {
             for y in glyph.y + 1..<glyph.y + glyph.height / 2 {
                 if (glyph.x..<glyph.x + glyph.width).allSatisfy({ pixel(glyph, $0, y) == nil }) { gap = y; break }
             }
-            guard let gap else { return glyph }
+            if gap == nil && style == .sequelFrontEnd { gap = max(glyph.y, 3) }
+            guard let gap, gap + 1 < glyph.y + glyph.height else { return glyph }
             let drop = gap + 1 - glyph.y
             return Frame(x: glyph.x, y: glyph.y + drop, width: glyph.width, height: glyph.height - drop,
-                rgba: glyph.rgba.dropFirst(drop * glyph.width * 4))
+                rgba: Data(glyph.rgba.dropFirst(drop * glyph.width * 4)))
         }
         func base(_ character: Character) -> Frame? { original[character] ?? original[Character(String(character).uppercased())] }
         func slash(_ glyph: Frame, full: Bool = true) -> Frame {
-            let left = compact ? 0 : 2, right = full ? width - (compact ? 2 : 3) : width / 2
-            let top = glyph.y + (compact ? 1 : 2), bottom = glyph.y + glyph.height - (compact ? 2 : 3)
+            let extendsRim = full && style != .macintosh
+            let left = extendsRim ? max(0, glyph.x - 1) : compact ? 0 : 2
+            let right = extendsRim ? min(width - 1, glyph.x + glyph.width - 1) : full ? width - (compact ? 2 : 3) : width / 2
+            let top = extendsRim ? glyph.y - 1 : glyph.y + (compact ? 1 : 2)
+            let bottom = extendsRim ? glyph.y + glyph.height : glyph.y + glyph.height - (compact ? 2 : 3)
             var points = Set<Point>()
             for y in top...max(top, bottom) {
                 let x = right - (y - top) * max(1, right - left) / max(1, bottom - top)
@@ -199,7 +241,7 @@ public enum BitmapLatinGlyphs {
                 let left = x < aWidth ? pixel(a, a.x + x * a.width / aWidth, y) : nil
                 let right = (advance..<advance + bWidth).contains(x) ? pixel(b, b.x + (x - advance) * b.width / bWidth, y) : nil
                 // The shared stem joins the letters. An outline must not erase its face.
-                let selected = [left, right].compactMap { $0 }.max { Self.light(UInt32($0[0]) << 16 | UInt32($0[1]) << 8 | UInt32($0[2])) < Self.light(UInt32($1[0]) << 16 | UInt32($1[1]) << 8 | UInt32($1[2])) }
+                let selected = joining(left, right)
                 if let selected { bytes.replaceSubrange(((y - top) * width + x) * 4..<((y - top) * width + x) * 4 + 4, with: selected) }
             }}
             return Frame(x: 0, y: top, width: width, height: bottom - top, rgba: Data(bytes))
@@ -231,9 +273,32 @@ public enum BitmapLatinGlyphs {
                 guard let n = base(character == "Ŋ" ? "N" : "n") else { return nil }
                 return render(n, adding: mask(compact ? [".#", "#."] : ["..##", "..##", "###."], x: width - (compact ? 3 : 6), y: height - 1))
             case "ı": return base("i").map(withoutDot)
-            case "ſ": return base("f")
-            case "ĸ": return base("k")
-            case "ŉ": return base("n").map { accent(0x301, on: $0) }
+            case "ſ":
+                guard let f = base("f") else { return nil }
+                var bytes = [UInt8](f.rgba)
+                let stem = topCentre(f)
+                // Long S retains the ascender of f, but has no right crossbar.
+                for y in f.y + f.height / 3..<f.y + f.height * 2 / 3 {
+                    for x in max(f.x, stem + stroke)..<f.x + f.width {
+                        let i = ((y - f.y) * f.width + x - f.x) * 4
+                        bytes.replaceSubrange(i..<i + 4, with: [0, 0, 0, 0])
+                    }
+                }
+                return Frame(x: f.x, y: f.y, width: f.width, height: f.height, rgba: Data(bytes))
+            case "ĸ":
+                guard let k = base("k"), let n = base("n") else { return nil }
+                var bytes = [UInt8](repeating: 0, count: k.width * n.height * 4)
+                for y in 0..<n.height { for x in 0..<k.width {
+                    let sourceY = k.y + y * k.height / n.height
+                    if let p = pixel(k, k.x + x, sourceY) {
+                        let i = (y * k.width + x) * 4
+                        bytes.replaceSubrange(i..<i + 4, with: p)
+                    }
+                }}
+                return Frame(x: k.x, y: n.y, width: k.width, height: n.height, rgba: Data(bytes))
+            case "ŉ": return base("n").map {
+                render($0, adding: mask(compact ? ["#", "#"] : [".##", ".##", "##."], x: outline, y: $0.y - (compact ? 2 : 4)))
+            }
             case "ß", "ẞ": return sharpS(lowercase: character == "ß")
             case "¡", "¿":
                 guard let glyph = base(character == "¡" ? "!" : "?") else { return nil }
@@ -251,7 +316,7 @@ public enum BitmapLatinGlyphs {
             // An open upper bowl and a descending S distinguish sharp S from B.
             let rows = [".###.", "#...#", "#..#.", "#.#..", "#..#.", "#...#", "#.##."]
             let top = lowercase ? min(b.y, 2) : b.y
-            let w = compact ? 5 : width - 2 * outline
+            let w = compact ? 5 : width - 2 * outline - (style == .sequelPanel ? 1 : 0)
             let h = height - top - outline
             var shape = Set<Point>()
             for y in 0..<h { for x in 0..<w {

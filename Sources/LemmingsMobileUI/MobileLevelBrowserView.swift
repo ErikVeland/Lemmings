@@ -7,6 +7,11 @@ import UIKit
 /// The wide level page: a CoverFlow carousel with the Mac level browser's actions beneath it.
 @MainActor final class MobileLevelBrowserView: UIView {
     var artworkLoader: ((Int) async -> CGImage?)? { didSet { flow.artworkLoader = artworkLoader } }
+    var artworkLoadingEnabled: Bool {
+        get { flow.artworkLoadingEnabled }
+        set { flow.artworkLoadingEnabled = newValue }
+    }
+    func stopArtworkLoading() -> Task<Void, Never>? { flow.stopArtworkLoading() }
     var onBack: (() -> Void)?
     var onPlay: ((Int) -> Void)?
     var onSelect: ((Int) -> Void)?

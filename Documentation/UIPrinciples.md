@@ -81,8 +81,13 @@ these digits at the screen's native Retina resolution above the flat or curved
 playfield, with the Mac's font size relative to zoom. The touch magnifier uses
 the same native text. Countdown text follows the sprite and adds no input surface.
 Use large green lettering for page titles,
-small green lettering for section headings and selected or primary actions,
-and small blue lettering for body text, quantities and secondary actions.
+small green lettering for section headings and player names,
+and small blue lettering for controls, body text and quantities. Keep control
+captions blue when selected, primary, hovered or focused. Use borders,
+underlines and directional markers for those states. Mixed lines retain
+their roles: player initials are green, while v, Next:, counts and status text
+are blue. Game titles are green and level counts are blue. Reuse the semantic
+bitmap text renderer on Mac, iOS and TV, including player setup and replay pages.
 Keep each row of peer controls at the same face and scale. Do not size individual
 labels to fill their boxes. Use spacing and grouping to separate supporting
 text from headings. Preserve accessible names and input targets.
@@ -657,6 +662,38 @@ single-column phones, odd library counts, footer navigation and complete music
 credits. iOS SDK modules compile. Physical touch, VoiceOver navigation and
 composited CRT display appearance remain manual checks.
 
+## Home groups and semantic colours
+
+Wide Home pages keep saved play and Journey map in the leading group. The six
+Classic and fan libraries use equal horizontal and vertical gaps. Lemmings 2
+and Lemmings 3 occupy a separate row with their shipped title artwork and
+accessible game names. Profiles, Records and Collections / Playlists share one
+three-column footer. Portrait phones retain one column and scrolling. Spare
+landscape height enlarges the main logo and separates groups, without stretching
+the gaps inside the library grid.
+
+Resume journey returns to a saved journey. Resume level opens an independently
+saved attempt. Journey map opens the progression hub. Mac retains Continue
+journey because it advances its saved queue from a level start. These labels
+retain each platform's saved ownership and paused readiness flow.
+
+Player names and titles remain green across Home, turn headers, player setup,
+record names, cover browsing and replay identity. Interface captions, counts,
+status text, v and Next: remain blue. Selection uses its existing frame,
+underline and marker rather than changing caption colour. Original title logos
+keep their authored palettes. Semantic text runs preserve translated player
+caption order and keep numeric player initials green.
+
+Muted, offscreen checks pass for 57 menu renders across tablet, portrait phone,
+compact landscape and television-sized canvases, including selected and disabled
+states and Classic/L2/L3 identity pages. They check matching grid gaps, the
+three-button footer, sequel separation, action identities, target containment
+and non-overlapping hit regions. Five native control and badge captures check
+blue enabled/disabled and selected/unselected captions, accessible activation,
+and the shared green L2/L3 player badge. The Mac source build passes. Physical
+touch, controller focus on devices, VoiceOver and composited CRT output remain
+manual checks.
+
 ## Localisation
 
 Resolve app-authored captions and accessibility messages through the shared
@@ -664,6 +701,10 @@ Resolve app-authored captions and accessibility messages through the shared
 sentences together and use plural rules for count-dependent wording. Keep
 save keys, action IDs, artwork names and keyboard bindings separate from
 translated captions. Preserve player names and original content titles.
+Keep supported Western Latin accents and letters in the bitmap text. Measure
+the complete caption, including marks above and below the original cell, before
+centring it or allocating wrapped rows. Reuse `BitmapLatinGlyphs` and the shared
+text measurements instead of stripping accents or adding a system-font fallback.
 Check expanded text with the shipped bitmap renderers and unchanged input
 semantics. Font scripts and text baked into original artwork need explicit
 language validation. See [Interface localisation](Localisation.md).

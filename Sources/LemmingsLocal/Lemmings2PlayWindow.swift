@@ -1979,7 +1979,7 @@ import NxlvKit
     }
 }
 
-@MainActor private final class Lemmings2MenuCanvas: NSView {
+@MainActor final class Lemmings2MenuCanvas: NSView {
     let turnBadge = TurnBadgeView()
     private var turnHeader: CGFloat { turnBadge.isHidden ? 0 : 40 }
     override func layout() {
@@ -2035,18 +2035,21 @@ import NxlvKit
     }
     func text(_ text: String, font: Lemmings2FrontEndFont, palette: [UInt8], x: Int, y: Int) {
         var cursor = x
-        for byte in text.utf8 where (32..<123).contains(byte) {
-            let glyph = font.glyphs[Int(byte) - 32]
-            draw(glyph, width: 16, height: 11, palette: palette, x: cursor, y: y, opaque: glyph.map { $0 != 0 })
-            cursor += font.advances[Int(byte) - 32]
+        let top = font.bitmap.verticalBounds(of: text).top
+        for character in text {
+            defer { cursor += font.bitmap.advance(for: character) }
+            guard let glyph = font.bitmap.glyph(for: character) ?? font.bitmap.glyph(for: "?") else { continue }
+            draw(glyph.pixels, width: glyph.width, height: glyph.height, palette: palette,
+                 x: cursor + glyph.x, y: y + glyph.y - top, opaque: glyph.opaque)
         }
     }
     func wrappedText(_ text: String, font: Lemmings2FrontEndFont, palette: [UInt8], x: Int, y: Int, width: Int) {
         var line = "", row = y
+        let pitch = max(13, font.bitmap.height(of: text) + 2)
         for word in text.split(whereSeparator: { $0.isWhitespace }) {
             let next = line.isEmpty ? String(word) : line + " " + word
             if font.width(next) > width && !line.isEmpty {
-                self.text(line, font: font, palette: palette, x: x, y: row); row += 13; line = String(word)
+                self.text(line, font: font, palette: palette, x: x, y: row); row += pitch; line = String(word)
             } else { line = next }
         }
         self.text(line, font: font, palette: palette, x: x, y: row)
@@ -2062,14 +2065,15 @@ import NxlvKit
         if !line.isEmpty { lines.append(line) }
         guard !lines.isEmpty else { return }
         let width = max(1, lines.map(font.width).max() ?? 1)
-        let height = lines.count * 13 - 2
+        let pitch = max(13, font.bitmap.height(of: text) + 2)
+        let height = lines.count * pitch - 2
         let scale = min(1, rect.width / CGFloat(width), rect.height / CGFloat(height))
         NSGraphicsContext.saveGraphicsState()
         let transform = NSAffineTransform()
         transform.translateX(by: rect.midX, yBy: rect.minY)
         transform.scale(by: scale); transform.concat()
         for (row, line) in lines.enumerated() {
-            self.text(line, font: font, palette: palette, x: -font.width(line) / 2, y: row * 13)
+            self.text(line, font: font, palette: palette, x: -font.width(line) / 2, y: row * pitch)
         }
         NSGraphicsContext.restoreGraphicsState()
     }

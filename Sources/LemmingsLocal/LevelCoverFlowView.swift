@@ -992,7 +992,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
             if presentation == .list {
                 GamePixelText.draw(item.title, in: CGRect(
                     x: content.minX, y: content.minY,
-                    width: content.width * 0.55, height: content.height), maxScale: 1)
+                    width: content.width * 0.55, height: content.height), maxScale: 1, palette: .green)
                 GamePixelText.draw(item.subtitle + "  " + statusDetail, in: CGRect(
                     x: content.minX + content.width * 0.57, y: content.minY,
                     width: content.width * 0.43, height: content.height), maxScale: 1)
@@ -1000,7 +1000,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
                 GamePixelText.draw(item.title, in: CGRect(
                     x: content.minX, y: content.minY,
                     width: content.width, height: content.height * 0.55), maxScale: 2,
-                    palette: selected ? .green : .blue)
+                    palette: .green)
                 if presentation == .focused {
                     GamePixelText.draw(item.subtitle, in: CGRect(
                         x: content.minX, y: content.minY + content.height * 0.58,
@@ -1023,12 +1023,12 @@ struct LevelCoverFlowItem: Equatable, Sendable {
             let detail = CGRect(x: title.maxX + 8, y: content.minY,
                 width: content.maxX - title.maxX - 8, height: content.height)
             renderer.menuParagraph(item.title, in: title, alignment: .left, face: .small,
-                palette: selected ? .green : .blue, alpha: alpha)
+                palette: .green, alpha: alpha)
             renderer.menuParagraph(item.subtitle + "  " + statusDetail, in: detail, alignment: .right,
                 face: .small, palette: .blue, alpha: alpha)
         case .cover, .focused:
             renderer.menuParagraph(item.title, in: content, alignment: .center,
-                face: .small, palette: selected ? .green : .blue, alpha: alpha)
+                face: .small, palette: .green, alpha: alpha)
         }
 
         drawAvailabilityMark(in: content)
@@ -1069,12 +1069,12 @@ struct LevelCoverFlowItem: Equatable, Sendable {
             height: content.height)
         if let renderer = GameMenuArtwork.renderer() {
             renderer.menuParagraph(item.title, in: title, alignment: .left, face: .small,
-                palette: selected ? .green : .blue, alpha: alpha)
+                palette: .green, alpha: alpha)
             renderer.menuParagraph(item.subtitle + "  " + statusDetail, in: detail, alignment: .right,
                 face: .small, palette: .blue, alpha: alpha)
         } else {
             GamePixelText.draw(item.title, in: title, maxScale: 1,
-                palette: selected ? .green : .blue)
+                palette: .green)
             GamePixelText.draw(item.subtitle + "  " + statusDetail, in: detail, maxScale: 1)
         }
     }

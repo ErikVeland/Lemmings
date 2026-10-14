@@ -419,7 +419,7 @@ func testEngineFamilies() throws {
     let artwork = try ClassicMacArtwork(directory: URL(fileURLWithPath: ".build/local/Ultimate Lemmings.app/Contents/Resources/MacArtwork/lemmings"))
     let view = ArcadeView(frame: CGRect(x: 0, y: 0, width: 1120, height: 720)); view.useArtwork(artwork)
     let menuLabel = MacInterfaceRenderer.menuText("Lémmings — retry ×2 ↵")
-    try require(menuLabel == "LEMMINGS - RETRY X2 ENTER" && view.font?.font(.small)?.covers(menuLabel) == true,
+    try require(menuLabel == "LÉMMINGS - RETRY X2 ENTER" && view.font?.font(.small)?.covers(menuLabel) == true,
                 "Menu punctuation lost glyphs from the shipped bitmap font")
     let window = NSWindow(contentRect: view.frame, styleMask: [.titled, .resizable], backing: .buffered, defer: false)
     window.contentView = view
@@ -481,9 +481,13 @@ func testEngineFamilies() throws {
     try require(retries == 4 && continues == beforeFailure, "Failure primary mouse and Enter must retry")
     view.report = report; try shot("last-lemming")
     let beforeAchievementHelp = continues
+    let helpFile = root.appendingPathComponent("achievement-help-\(UUID().uuidString).json")
+    let helpStore = ArcadeStore(file: helpFile)
+    ArcadeStore.shared = helpStore
+    defer { try? FileManager.default.removeItem(at: helpFile) }
     for game in ["lemmings", "lemmings2", "lemmings3"] {
         view.mode = .result
-        view.report = store.record(run(60, c: conditions(game: game)))
+        view.report = helpStore.record(run(60, c: conditions(game: game)))
         try shot("achievement-\(game)-result")
         for name in ["Target met", "Extra rescue", "Three-star rescue"] {
             guard let hint = view.achievementHints.first(where: { $0.label == name }) else {
@@ -514,6 +518,24 @@ func testEngineFamilies() throws {
             try clickButton("Back to result")
         }
     }
+    view.report = helpStore.record(run(12, c: conditions(level: "unknown-help"), win: false))
+    view.mode = .result
+    try shot("achievement-failed-unknown")
+    try clickButton("Three-star rescue")
+    try shot("achievement-unknown-detail")
+    try require(view.accessibilityLabel()?.contains("not established yet") == true,
+                "Unknown star help invented a rescue target")
+    key(" ", code: 49)
+    try require(view.mode == .result, "Keyboard Back did not return from achievement help")
+    let helpAwards = TrolleyAchievement.allCases.filter(\.isOffered).prefix(2)
+    view.showResultAchievement(helpAwards.map { ($0.title, $0.detail) })
+    try shot("achievement-next-before")
+    key("\t", code: 48); key(" ", code: 49)
+    try shot("achievement-next-after")
+    try require(view.achievementDetailIndex == 1 && view.accessibilityLabel()?.contains(helpAwards.last!.detail) == true,
+                "Keyboard Next award did not change the explanation")
+    key("", code: 53)
+    ArcadeStore.shared = store
     try require(continues == beforeAchievementHelp, "Achievement help advanced gameplay")
     view.mode = .result; view.report = report; try shot("last-lemming")
     let newAwards = Set(report.trolley!.attempt.achievements)
