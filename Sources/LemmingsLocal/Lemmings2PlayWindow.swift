@@ -579,11 +579,11 @@ import NxlvKit
         let wasPaused = paused
         let interruption = gameplayKeyboard?.interruptionCount
         paused = true; accumulator = 0; releasePointerInput(); saveCheckpoint(immediately: true); refreshGame()
-        LevelHintWindow.shared.show(deck, owner: window) { [weak self] in
+        LevelHintWindow.shared.show(deck, owner: window, onDismiss: { [weak self] in
             guard let self else { return }
             self.paused = wasPaused || self.gameplayKeyboard?.interruptionCount != interruption
             self.accumulator = 0; self.lastTime = ProcessInfo.processInfo.systemUptime; self.refreshGame()
-        }
+        })
     }
     @objc private func windowLostFocus(_ notification: Notification) {
         guard let resigned = notification.object as? NSWindow, resigned === window else { return }

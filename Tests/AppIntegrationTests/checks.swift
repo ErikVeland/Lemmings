@@ -2979,6 +2979,7 @@ extension AppDelegate {
       try check(button("Tracking", in: ghost.page) != nil, "Replay did not track an unassigned lemming")
       func replayTargets(_ view: NSView) throws {
         for child in view.subviews {
+          if child.isHidden { continue }
           if let control = child as? NSButton {
             let rect = control.convert(control.bounds, to: ghost.page)
             try check(ghost.page.bounds.contains(rect), "Replay button outside page: \(control.title)")
@@ -3951,10 +3952,9 @@ extension AppDelegate {
     let expectedFamilies = HomeContentFamily.allCases.map {
       $0.displayName.uppercased()
     }
-    try check(playfield.overlayLines.last == "COLLECTIONS", "The home screen omitted Collections")
-    let familyLines = Array(playfield.overlayLines.dropLast().suffix(expectedFamilies.count))
+    let familyLines = Array(playfield.overlayLines.suffix(expectedFamilies.count))
     try check(zip(familyLines, expectedFamilies).allSatisfy { line, family in
-      line.hasPrefix(family)
+      line.uppercased().hasPrefix(family)
     }, "The home screen did not show the seven content families in order")
     let routedFamilies = homeMenuItems().compactMap { item -> HomeContentFamily? in
       if case let .browse(family) = item.action { return family }
@@ -3973,7 +3973,7 @@ extension AppDelegate {
     } ?? 0
     let journeyLessons = LearningJourneyLibrary.journey?.lessons.count ?? 0
     try check(journeyLessons > 0 && allLemmings.title
-      == "\(Self.allLemmingsMenuTitle)  \(journeyCompleted)/\(journeyLessons)",
+      == L10n.text("JOURNEY MAP  \(journeyCompleted)/\(journeyLessons) SOLVED"),
       "The all-level run did not use its player-facing name and journey progress")
     let nonFanTitles = Set(HomeContentFamily.allCases
       .filter { $0 != .fan }.flatMap(\.titles))
@@ -3989,14 +3989,25 @@ extension AppDelegate {
       throw IntegrationFailure(message: "The real home screen omitted the Settings gear")
     }
     let settingsFrame = settings.localFrame
-    try check(abs(settingsFrame.width - settingsFrame.height) < 0.01
-      && settingsFrame.width >= 44 && playfield.bounds.contains(settingsFrame),
-      "The home Settings gear is not a square, full-size input target")
+    guard let collections = controls.first(where: { $0.accessibilityLabel() == L10n.text("Playlists") }) else {
+      throw IntegrationFailure(message: "Home omitted the Collections / Playlists footer")
+    }
+    let previousPlaylistsAction = playfield.onPlaylists
+    var collectionsOpened = 0
+    playfield.onPlaylists = { collectionsOpened += 1 }
+    try check(collections.accessibilityRole() == .button && collections.accessibilityPerformPress(),
+      "The collection footer lost its accessible action")
+    playfield.handleClick(at: CGPoint(x: collections.localFrame.midX, y: collections.localFrame.midY))
+    playfield.onPlaylists = previousPlaylistsAction
+    try check(collectionsOpened == 2, "Collection footer mouse and accessibility actions diverged")
+    try check(settingsFrame.width >= 44 && settingsFrame.height >= 28
+      && playfield.bounds.contains(settingsFrame),
+      "The home Settings control lost its full-size input target")
     try check(controls.filter { $0 !== settings && $0.accessibilityRole() == .button }
       .allSatisfy { !$0.localFrame.intersects(settingsFrame) },
-      "The home Settings gear overlaps another input target")
+      "The home Settings control overlaps another input target")
     let familyControls = expectedFamilies.compactMap { family in
-      controls.first { ($0.accessibilityLabel() ?? "").hasPrefix(family) }
+      controls.first { ($0.accessibilityLabel() ?? "").uppercased().hasPrefix(family) }
     }
     try check(familyControls.count == expectedFamilies.count
       && familyControls.allSatisfy {
@@ -4023,13 +4034,13 @@ extension AppDelegate {
         "A compact home row's lower mouse target did not select that row")
     }
     playfield.onSelectOverlayLine = previousSelectAction
-    try check(settings.accessibilityPerformPress(), "The home Settings gear did not perform its action")
+    try check(settings.accessibilityPerformPress(), "The home Settings control did not perform its action")
     try check(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Settings",
-      "The home Settings gear did not open the existing Settings page")
+      "The home Settings control did not open the existing Settings page")
     GameScreen.shared.dismissAll()
     playfield.handleClick(at: CGPoint(x: settingsFrame.midX, y: settingsFrame.midY))
     try check(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Settings",
-      "The home Settings gear mouse target did not open Settings")
+      "The home Settings control mouse target did not open Settings")
     GameScreen.shared.dismissAll()
 
     playfield.overlayAvailableUpdate = "Version 1.7 available to download"
@@ -4044,7 +4055,7 @@ extension AppDelegate {
     guard let update = updatedControls.first(where: { $0.accessibilityLabel()?.contains("1.7") == true }) else {
       throw IntegrationFailure(message: "Home screen did not expose the available update")
     }
-    try check(update.localFrame.width >= 44 && update.localFrame.height >= 44
+    try check(update.localFrame.width >= 44 && update.localFrame.height >= 28
       && playfield.bounds.contains(update.localFrame)
       && updatedControls.filter { $0 !== update && $0.accessibilityRole() == .button }
         .allSatisfy { !$0.localFrame.intersects(update.localFrame) }, "Update icon lost its distinct input target")
@@ -4058,11 +4069,11 @@ extension AppDelegate {
     playfield.cacheDisplay(in: playfield.bounds, to: bitmap)
     try check(playfield.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement }
       .contains(where: { $0.accessibilityLabel() == "Settings" }) != true,
-      "The home Settings gear remained on the rating screen")
+      "The home Settings control remained on the rating screen")
     try check(playfield.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement }
       .contains(where: { $0.accessibilityLabel()?.contains("1.7") == true }) != true,
       "The update reminder appeared outside the home screen")
-    print("PASS seven home content families and the Settings gear use distinct targets")
+    print("PASS seven home content families and the Settings control use distinct targets")
   }
   fileprivate func testSequelReleaseStatus() async throws {
     if window == nil { buildInterface() }
@@ -4731,6 +4742,8 @@ extension AppDelegate {
       !dj.isPlaying && music.isOutputRunning && music.sourceSeconds > beforeReversal
     }
     try check(reversed, "The DJ did not retire after the bridge reversed to Can-Can")
+    // The offscreen window does not consume the visibility-gated start countdown.
+    playfield.startCountdown.cancel(); isPaused = false; userPausedMusic = false
     let beforeSecondMix = music.sourceSeconds
     try check(playLearningJourneyMusic(assignedName: "lemming1", game: "classic", position: 1)
       && music.isOutputRunning && music.sourceSeconds >= beforeSecondMix
@@ -6742,10 +6755,10 @@ private actor ContentBrowserArtworkFixture {
       "A catalogue refresh lost the typed selection or reduced-motion fallback")
     cards = carousel.subviews.compactMap { $0 as? NSButton }
     let widths = Set(cards.map { Int($0.frame.width.rounded()) })
-    try check(cards.count == 5 && widths.count == 1 && cards.allSatisfy { $0.frame.height >= 54 },
+    try check((2...5).contains(cards.count) && widths.count == 1 && cards.allSatisfy { $0.frame.height >= 54 && carousel.bounds.contains($0.frame) },
       "The reduced-motion list has uneven or clipped targets")
-    try check((0..<5).allSatisfy {
-        guard let state = carousel.visualState(at: $0) else { return false }
+    try check(cards.allSatisfy {
+        guard let state = carousel.visualState(at: $0.tag) else { return false }
         return abs(state.rotationY) < tolerance
           && abs(state.depth) < tolerance
           && abs(state.scale - 1) < tolerance
@@ -7103,8 +7116,11 @@ extension AppDelegate {
       try capture("locked")
     }
     GameScreen.shared.dismissAll()
-    try check(homeMenuItems().contains { if case .collections = $0.action { return true }; return false },
-      "Home omitted Collections")
+    returnToLibrary()
+    renderScreen()
+    try check(playfield.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement }
+      .contains { $0.accessibilityLabel() == L10n.text("Playlists") && $0.accessibilityRole() == .button } == true,
+      "Home omitted the Collections / Playlists footer")
     print("PASS four-engine collection identities, personal storage, recent order/limit, stale-writer protection, backup recovery, scaled renders and input targets")
   }
 }

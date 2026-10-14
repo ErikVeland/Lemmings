@@ -16,6 +16,7 @@ import NxlvKit
         (L10n.text("Controls and help"), L10n.text("Keyboard help follows the active game and settings. In-game annotations identify controls. Hot Seat retries and handovers wait for Ready across Classic, The Tribes and Chronicles.")),
         (L10n.text("Saves and records"), L10n.text("Matching profiles recover newer shared progress, including Hot Seat journeys. Result help explains awards. Live cross-device sync still needs device verification.")),
         (L10n.text("Bitmap lettering"), L10n.text("Original bitmap fonts retain accented Western Latin letters in menus, names and sequel panels. Localisation groundwork is included. The interface remains English.")),
+        (L10n.text("Music recovery"), L10n.text("If an incoming journey track stops, the outgoing track returns to full volume while the game remains paused.")),
         (L10n.text("Compatibility"), L10n.text("Universal macOS app for Apple silicon and Intel, macOS 12.3 or later. The Tribes remains Complete. Chronicles and NeoLemmix remain Beta."))
     ]
     private let defaults: UserDefaults
