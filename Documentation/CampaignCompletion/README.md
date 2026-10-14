@@ -3,7 +3,7 @@
 The manifest holds 322 fixed-input winning replays. These supplement the original
 [120-level DOS gate](../ClassicCompletion/README.md) and the existing L2 tests.
 
-| Campaign | Winning replays | Levels without a fixture |
+| Campaign | Fixture count and latest result | Open gaps |
 | --- | ---: | ---: |
 | Oh No! More Lemmings | 100/100 | 0 |
 | Xmas 1991 | 4/4 | 0 |
@@ -11,7 +11,7 @@ The manifest holds 322 fixed-input winning replays. These supplement the origina
 | Holiday 1993 | 32/32 | 0 |
 | Holiday 1994 | 32/32 | 0 |
 | Oh Yes! conversions | 60/60 | 0 |
-| Lemmings 3 | 90/90 | 0 |
+| Lemmings 3 | The strict rerun stops at Shadow 7. Egyptian 6 and Egyptian 13 still have no winning route under the current Mole patrol. | Repair affected standalone and carried routes. Then rerun all 90 standalone levels and the carried chains. |
 
 These counts come from the committed [fixture manifest](evidence.json).
 To confirm them, run `python3 Tools/CampaignCompletion/report.py --check`.
@@ -50,11 +50,22 @@ check the ending decision and movie handover. Player input, recovery, original
 engine parity and a played three-tribe finale need separate checks.
 
 The 13 October 2026 native gate passed all ninety standalone routes and all
-326 carried fixtures. All three thirty-level chains complete with fifty
-survivors: Classic 50, Shadow 50 and Egyptian 50. The strict campaign proof
-reports 90 carried results and no open chains. This closes the native route
-and survivor-count gate; original-engine parity, player input, recovery and
-release-candidate checks remain separate.
+326 carried fixtures. The 15 October Mole direction and patrol corrections
+invalidated route witnesses. The current manifest check passes. A refreshed
+Shadow 13 route now passes with ten saved and no losses. The strict route gate
+still stops at Shadow 7. Egyptian 6 and 13's old inputs no longer produce a
+win, and carried fixture `107-1.json` fails identity. Earlier route and
+survivor results do not close the current route gate.
+
+A 15 October follow-up searched Shadow 7 at its one-lemming carried population
+for 120 seconds from the start and for another 120 seconds from the accepted
+prefix of its old route. Neither search found a win. Egyptian 6 and Egyptian 13
+also had 120-second searches at the standalone population of 20; neither found
+a win. These bounded searches do not prove that the levels are impossible.
+The solver's new engine-refresh seed mode then ran another 120-second search on
+each of these three cases from a current-runtime prefix. It found no winning
+route. The mode checks the exact level-data hash and population, drops refused
+inputs from the prefix and double-replays any route it returns.
 
 `Tools/ClassicCompletion` and `Tools/Lemmings3Completion` can discover routes.
 After deliberately adding or improving a fixture, run
@@ -62,6 +73,13 @@ After deliberately adding or improving a fixture, run
 `zsh Scripts/verify-trolley-maxima.sh`. The rescue audit imports and verifies
 these fixtures, then stamps its results with the current engine fingerprint.
 Do not refresh the manifest to hide an unexplained regression.
+
+When an L3 engine change invalidates an input prefix, the solver accepts
+`--refresh-engine-seed` with `--seed FILE --seed-through TICK`. This mode still
+requires the same level-data hash and population. It rebases the starting state
+to the current runtime and drops refused prefix inputs; it does not reuse the
+old expected outcome. A new winning route must still pass the solver's two
+replays and the full completion gate.
 
 For the selected Classic release, use `--classic-only --require-all`. This checks
 all five additional Classic campaigns and reports every missing route. The
@@ -73,9 +91,19 @@ checks remain separate.
 25 Lemmings 3 routes come from the beam solver in
 [`Tools/Lemmings3Solver`](../../Tools/Lemmings3Solver). Run
 `zsh Scripts/solve-lemmings3-levels.sh missing --fewer-inputs-first --promote` to
-search the levels without a fixture. A second pass without `--fewer-inputs-first`
-ranks crowd distance first and finds different levels. The solver writes a route only after two
-replays agree, and the gate checks it again.
+search the levels without a fixture. The solver, runtime suite and completion
+gates use `Sources/Ports/LEM3CD` by default; set `L3_PORTS_ROOT` to another
+`LEM3CD` directory to run against installed bundle data. A second pass without
+`--fewer-inputs-first` ranks crowd distance first and finds different levels.
+The solver writes a route only after two replays agree, and the gate checks it
+again.
+
+For a same-level runtime change, pass `--refresh-engine` to
+`Scripts/derive-l3-carried-route.sh` with the same source and target population.
+The tool requires an unchanged level-data hash, reapplies the recorded inputs,
+and writes a candidate only when the current runtime completes a winning run
+that replays twice. Keep the source fixture and output candidate in separate
+files.
 
 The official Classic gate is complete: `zsh Scripts/verify-official-classic.sh`
 requires all 292 wins and runs the real session/recovery and progression checks.

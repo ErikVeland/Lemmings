@@ -100,6 +100,39 @@ zsh Scripts/solve-lemmings2-tribes.sh outdoor -- --from 4 --population 1 --seeds
 A seed must be for the same level. The solver starts from it at the population
 that the chain passes on, and it promotes a route only after two replays agree.
 
+## 15 October bounded ark follow-up
+
+A seeded search re-ran Classic 2 at 60 lemmings with a 1,024-candidate beam and
+a 180-second budget. It expanded 364,199 candidates and retained the existing
+13/60 Bronze result. It found no improved route. This search does not close the
+ark gate or prove that Classic 2 cannot save more lemmings.
+
+The retry used the recorded Classic 2 fixture as its seed:
+
+```sh
+zsh Scripts/solve-lemmings2-level.sh classic-02 \
+  --seed Tests/Lemmings2CompletionTests/Fixtures/classic-02.json \
+  --population 60 --beam 1024 --budget 180 \
+  --out .build/l2-solver/ark-attempt-classic
+```
+
+### Cavelems carry-over update
+
+A seeded Cavelems Level 1 search improved the standalone route from 52 to 59
+saved out of 60. Population-specific searches then found routes that save 36
+of 59 on Level 2, 17 of 36 on Level 3, 4 of 17 on Level 4 and 2 of 4 on Level
+5. The gate verified each promoted route twice. Existing later routes complete
+the ten-level chain, but the final result remains one survivor.
+
+A wider Level 3 search used a 4,096-candidate beam and a 360-second budget. It
+found no route better than 17 of 36. This search does not prove that the level
+has no higher-survivor route. Strict ark mode still fails because all twelve
+tribes finish with one survivor and a Bronze talisman.
+
+A 4,096-candidate, 360-second search for Cavelems Level 2 also found no route
+better than 36 of 59. The verified Level 1 and Level 2 witnesses remain the
+best routes found in these searches.
+
 ## Commands
 
 | Task | Command |

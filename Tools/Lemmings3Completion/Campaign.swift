@@ -90,7 +90,8 @@ private func verifyCarriedFixtures(root: URL, directory: URL) throws -> Int {
             throw SequelDataError.invalid("Usage: Lemmings3CampaignProof [--write | --require-all]")
         }
         let project = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
-        let root = project.appendingPathComponent("Sources/Ports/LEM3CD")
+        let root = URL(fileURLWithPath: ProcessInfo.processInfo.environment["L3_PORTS_ROOT"]
+            ?? project.appendingPathComponent("Sources/Ports/LEM3CD").path)
         let manifest = project.appendingPathComponent("Documentation/CampaignCompletion/l3-chain-evidence.json")
         let originalFixtures = project.appendingPathComponent("Tests/Lemmings3CompletionTests/Fixtures")
         let carriedFixtures = project.appendingPathComponent("Tests/Lemmings3CampaignTests/Fixtures")

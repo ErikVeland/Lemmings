@@ -32,11 +32,11 @@ class CoverageTests(unittest.TestCase):
         self.rows.append({"collection": "fan", "source": "test.zip/test.lvl#0", "status": "winning-replay",
                           "witness": "fixture.json", "initialHash": "fixture"})
 
-    def run_report(self):
+    def run_report(self, require_fan_routes=False):
         (self.output / "levels.jsonl").write_text("\n".join(map(json.dumps, self.rows)))
         (self.output / "packs.json").write_text(json.dumps(self.packs))
         with contextlib.redirect_stdout(io.StringIO()):
-            return report(self.root, self.output)
+            return report(self.root, self.output, require_fan_routes)
 
     def test_complete_fixture(self):
         self.assertTrue(self.run_report())
@@ -52,6 +52,12 @@ class CoverageTests(unittest.TestCase):
     def test_fan_level_needs_no_route(self):
         self.rows[-1] = {"collection": "fan", "source": "test.zip/test.lvl#0", "status": "rendered-and-smoke-tested-only"}
         self.assertTrue(self.run_report())
+
+    def test_bundled_fan_level_needs_a_route_in_strict_mode(self):
+        self.rows[-1] = {"collection": "fan", "source": "test.zip/test.lvl#0", "status": "rendered-and-smoke-tested-only"}
+        self.assertFalse(self.run_report(require_fan_routes=True))
+        blockers = json.loads((self.output / "blockers.json").read_text())
+        self.assertEqual([row["source"] for row in blockers], ["test.zip/test.lvl#0"])
 
     def test_fan_level_must_load(self):
         self.rows[-1] = {"collection": "fan", "source": "test.zip/test.lvl#0", "status": "load-or-render-failed"}

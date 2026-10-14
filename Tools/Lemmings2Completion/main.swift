@@ -5,6 +5,7 @@ import NxlvKit
 // fresh runtime through the shared witness, and both runs must agree.
 let args = CommandLine.arguments.dropFirst()
 let requireAll = args.contains("--require-all")
+let requireArk = args.contains("--require-ark")
 let rootPath = args.first { !$0.hasPrefix("--") } ?? "Sources/Ports/Lemm2"
 let root = URL(fileURLWithPath: rootPath)
 let fixtures = URL(fileURLWithPath: ProcessInfo.processInfo.environment["L2_COMPLETION_FIXTURES"]
@@ -24,8 +25,9 @@ for url in variantFiles where !FileManager.default.fileExists(atPath: fixtures.a
     exit(1)
 }
 var verifiedRoutes: [String: [Lemmings2ReplayWitness]] = [:]
+var verifiedResults: [String: [Int: Lemmings2Campaign.Result]] = [:]
 var variantCount = 0
-let campaign = try Lemmings2Campaign(root: root)
+var campaign = try Lemmings2Campaign(root: root)
 let masks = try Lemmings2TerrainMasks(root: root)
 var verified = 0
 var missing: [String] = []
@@ -59,6 +61,9 @@ for (index, level) in campaign.levels.enumerated() {
             exit(1)
         }
         verifiedRoutes[name, default: []].append(witness)
+        verifiedResults[name, default: [:]][witness.population] = .init(
+            startingPopulation: witness.population, saved: first.saved, medal: first.medal,
+            levelFingerprint: level.fingerprint)
         let carryOver = input == variant
         if carryOver { variantCount += 1 }
         print("PASS \(name)\(carryOver ? " carry-over" : ""): \(first.saved)/\(witness.population) \(first.medal.name) in \(first.ticks) ticks")
@@ -72,12 +77,16 @@ print("Verified carry-over variants: \(variantCount).")
 // before it. A route only proves the population it was recorded with, so the
 // chain uses equality, matching the runtime suite's carry-over check.
 var fullyChained = 0
+var campaignResults: [Int: Lemmings2Campaign.Result] = [:]
 for tribe in 0..<12 {
     let name = tribeName(tribe)
     var expected = 60, chained = 0
     for number in 1...10 {
         let key = String(format: "\(name)-%02d", number)
         guard let route = verifiedRoutes[key]?.first(where: { $0.population == expected }) else { break }
+        if let result = verifiedResults[key]?[expected] {
+            campaignResults[tribe * 10 + number - 1] = result
+        }
         chained += 1
         expected = route.expectedSaved
     }
@@ -85,8 +94,19 @@ for tribe in 0..<12 {
     print("CHAIN \(name): \(chained)/10 levels\(chained == 10 ? ", complete" : "")")
 }
 print("Tribes chained through all ten levels: \(fullyChained) of 12.")
-if requireAll && (!missing.isEmpty || fullyChained != 12) {
+try campaign.restore(.init(tribe: 0, level: 0, results: campaignResults))
+for tribe in 0..<12 {
+    let survivors = campaign.results[tribe * 10 + 9]?.saved ?? 0
+    print("ARK \(Lemmings2Campaign.tribeNames[tribe]): \(campaign.tribeMedal(tribe).name) talisman, \(survivors) survivors")
+}
+print("Golden talisman: \(campaign.hasGoldenTalisman ? "yes" : "no").")
+print("Ark prerequisites: \(campaign.canLaunchArk ? "pass" : "open").")
+if (requireAll || requireArk) && (!missing.isEmpty || fullyChained != 12) {
     print("MISSING \(missing.joined(separator: ", "))")
     print("Strict completion requires all twelve continuous tribe runs.")
+    exit(1)
+}
+if requireArk && !campaign.canLaunchArk {
+    print("Strict ark completion requires a golden talisman and at least 30 survivors from every tribe.")
     exit(1)
 }

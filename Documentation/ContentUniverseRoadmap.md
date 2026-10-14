@@ -3,22 +3,48 @@
 This document defines how Ultimate Lemmings expands beyond the current macOS
 release without showing unfinished work as completed content.
 
+## Bundled and imported scope
+
+The owner set this boundary on 15 October 2026:
+
+- **Bundled content is a finite commitment.** Freeze its exact levels, engine
+  versions, styles, artwork, audio and other required data in a hashed release
+  manifest. Every bundled engine must pass source-behaviour checks for its
+  advertised rules. Every bundled level must load, render, run and have a
+  verified winning replay. Campaign transitions, endings, saves and media that
+  the release presents must also pass their gates.
+- **Imported content remains open-ended.** The project does not promise support
+  for every existing or future pack. Each import must identify its source engine
+  and version, then report the highest gate it passes. Unknown or unsupported
+  features must not become a universal-compatibility claim.
+- A bundled item with an open gate remains a closure task. A content item does
+  not meet this policy because it only loads, renders or starts.
+- Distribution rights and complete source data are release gates. A required
+  style, asset or dependency that is not available in the bundle leaves that
+  content outside the ready set.
+
+The compatibility vocabulary below still applies to imported content. Bundled
+content must pass every gate through **Complete** before the release can claim
+full support for it.
+
 ## User-facing content rule
 
-The main game library shows only content that has passed its declared release
-gate.
+The main game library shows content with a clear status and its known limits.
+Bundled content must pass the full closure rule above. Imported content can
+remain Playable, Preview or Beta when the app states what it supports.
 
 - **Complete** content has a verified winning route for every advertised level.
-- **Playable** content loads, renders and runs, but does not claim full route
-  coverage. Community content can use this status when its limits are clear.
+- **Playable** imported content loads, renders and runs, but does not claim full
+  route coverage. Its limits must be clear.
 - **Preview** content carries an explicit early-development label.
 - **Beta** content carries its testing label in the library and records its
   remaining compatibility and campaign limits. L3 uses Beta in 1.9.
 - **Unverified** content does not appear in the normal library. It can remain
   available through an explicit import or developer test path.
 
-The application must not present an unverified engine as a completed release.
-It must show the source engine, content status and known limits before play.
+The application must not present an unverified imported engine as a completed
+release. It must show the source engine, content status and known limits before
+play.
 
 ## Release goals
 
@@ -108,31 +134,44 @@ The gate requires real packs and reference replays, not synthetic fixtures
 only. It includes styles, lemming sprites, all standard skills, terrain masks,
 gadgets, special effects, zombies, Superlemming, pack progress and recovery.
 
-Until this gate passes, NeoLemmix support remains Beta or Preview and stays out
-of the completed main library.
+The pinned 1.7 runnable gate passed for its 794-level corpus. The three bundled
+CE packs list 788 levels. These are different test scopes. Seventy-five bundled
+levels need community styles, and exact-version winning replay evidence covers
+158 levels. The runnable pass does not close the new bundle gate. See
+[release scope](ReleaseScope.md) for the remaining bundle work.
 
 The executable development plan is in the [1.7 NeoLemmix roadmap](1.7Roadmap.md).
 The source gate uses NeoLemmix Community Edition 1.2.0 at a pinned commit. It
-separates level import and rendering from runnable mechanics, and it has a
-strict mode that fails while any required mechanic remains unsupported. The
-current-format replay decoder is covered by synthetic tests. Real reference
-replays and native result comparison remain mandatory external evidence.
+checks real packs, reference replays, final state, visual captures, recovery and
+player-facing progress. See the [1.7 evidence](ReleaseReadiness/1.7NeoLemmixPreparation.md).
 
 ### 1.8 — Mac polish
 
-Ship clearer pixel rendering, NeoLemmix gameplay sound effects and reliable
-music recovery after a nuke. Include the verified L3 Brick pickup correction.
-Keep L2 and L3 labelled Preview and NeoLemmix labelled Beta. Validate the frozen
-candidate with muted offscreen app checks, retained replay checks, signing,
-notarisation and public download and update-feed verification. Full sequel
-completion is the separate 1.9 gate.
+The 1.8 Mac polish work is historical. Its distribution checks do not replace
+the bundled engine-closure gates adopted in October 2026.
 
 ### 1.9 — The Tribes complete, Chronicles Beta
 
 The owner approved L2 Complete and L3 Beta on 10 October 2026. L2 has all 120
-winning routes and twelve continuous tribe chains. L3 now has all 90 standalone
-wins and three 50-survivor chains. Original-engine parity, media and release
-checks remain open. See the [1.9 milestone evidence](ReleaseReadiness/1.9Milestone.md).
+winning routes and twelve continuous tribe chains. The prior L3 engine state
+passed all 90 standalone wins and three 50-survivor chains. The 15 October Mole
+direction and patrol corrections invalidated affected standalone and carried
+witnesses. The strict route gate stops at Shadow 7. Original-engine parity,
+route repair, media and release checks remain open. See the
+[1.9 milestone evidence](ReleaseReadiness/1.9Milestone.md).
+
+The 15 October strict L2 ending check replays all routes and carry-over variants,
+but each tribe chain ends with one survivor and a Bronze talisman. The golden
+talisman and 30-survivor ark conditions remain open.
+
+The 15 October L3 Mole direction and patrol corrections match the captured
+starting directions and no-input patrols in Shadow 7 and Egyptian 13. The
+strict route gate stops at Shadow 7. A refreshed Shadow 13 route now passes
+with ten saved and no losses. Egyptian 6 and 13 still have no winning route
+under the current Mole patrol, and carried fixture `107-1.json` fails initial
+state identity. The prior 90-route and campaign proof applies to the earlier
+engine state. Keep the L3 bundled gate open until the remaining witnesses pass
+again.
 
 Continue the separate validation work:
 
@@ -144,7 +183,8 @@ Continue the separate validation work:
 - keep recovery, replay identity and result records validated against the
   actual release candidate.
 
-The release labels do not certify these outstanding fidelity or ending claims.
+Winning-route completion does not close source-engine parity or the L2 ending.
+The current release labels do not certify those outstanding claims.
 
 ### 2.0 — full iOS release
 

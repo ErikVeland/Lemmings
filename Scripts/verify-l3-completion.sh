@@ -14,7 +14,11 @@ cd "$project_dir"
 swiftc -O -swift-version 6 -I "$library_dir/modules" -L "$library_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$library_dir" -o "$build_dir/Verify" \
   Tools/Lemmings3Completion/Replay.swift Tools/Lemmings3Completion/main.swift
+swiftc -O -swift-version 6 -I "$library_dir/modules" -L "$library_dir" -lNxlvKit \
+  -Xlinker -rpath -Xlinker "$library_dir" -o "$build_dir/Derive" \
+  Tools/Lemmings3Completion/Replay.swift Tools/Lemmings3Completion/Derive.swift
 python3 Tools/CampaignCompletion/report.py --check
+python3 Tests/Lemmings3CompletionTests/test_refresh.py "$build_dir/Verify" "$build_dir/Derive"
 failed=0
 "$build_dir/Verify" verify "$@" || failed=1
 python3 Tests/Lemmings3CompletionTests/test_gate.py "$build_dir/Verify" || failed=1

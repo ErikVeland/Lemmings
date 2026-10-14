@@ -1,0 +1,17 @@
+{
+  "events" : [
+
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 4,
+    "required" : 0,
+    "saved" : 1,
+    "stateHash" : "45d44d3d30f952d371f192bf43c4c70de16bdcdb09311047e509d61c210caaff",
+    "ticks" : 1022
+  },
+  "initialStateHash" : "c4e291171b885b5325effa73f2321d00ad4756966956275458f67199b59102ab",
+  "number" : 3,
+  "rank" : "fan:lldb-447",
+  "title" : "Test Timing"
+}

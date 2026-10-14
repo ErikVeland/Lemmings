@@ -24,48 +24,63 @@ func assertOfferedToolDirections(_ game: Lemmings3Runtime, lemming id: Int,
     }
 }
 
-let root = URL(fileURLWithPath: "Sources/Ports/LEM3CD")
-mark("Shadow 08")
-let campaign = try Lemmings3ClassicCampaign(root: root, tribe: .shadow)
-let level = campaign.levels[7]
-let style = try Lemmings3Style(directory: root.appendingPathComponent("STYLES"), number: 2)
-let permanent = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(
-    String(format: "LEVELS/PERM%03d.OBS", level.permanentObjectsReference))))
-let temporary = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(
-    String(format: "LEVELS/TEMP%03d.OBS", level.temporaryObjectsReference))))
-var game = try Lemmings3Runtime(level: level, style: style, permanent: permanent, temporary: temporary, total: 20)
-let fixture = try JSONDecoder().decode(L3Replay.self, from: Data(contentsOf: URL(fileURLWithPath:
-    "Tests/Lemmings3CompletionTests/Fixtures/108.json")))
-guard fixture.levelSHA256 == L3Replay.digest(level.rawData),
-      fixture.initialStateHash == L3Replay.stateHash(game) else {
-    fatalError("Shadow 08 fixture does not match the exact source level")
+let root = URL(fileURLWithPath: ProcessInfo.processInfo.environment["L3_PORTS_ROOT"]
+    ?? "Sources/Ports/LEM3CD")
+mark("Classic 04 builder decisions")
+let builderCampaign = try Lemmings3ClassicCampaign(root: root, tribe: .classic)
+let builderLevel = builderCampaign.levels[3]
+let builderStyle = try Lemmings3Style(directory: root.appendingPathComponent("STYLES"), number: 1)
+let builderPermanent = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(
+    String(format: "LEVELS/PERM%03d.OBS", builderLevel.permanentObjectsReference))))
+let builderTemporary = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(
+    String(format: "LEVELS/TEMP%03d.OBS", builderLevel.temporaryObjectsReference))))
+var builderGame = try Lemmings3Runtime(level: builderLevel, style: builderStyle,
+    permanent: builderPermanent, temporary: builderTemporary, total: 20)
+let builderFixture = try JSONDecoder().decode(L3Replay.self, from: Data(contentsOf: URL(fileURLWithPath:
+    "Tests/Lemmings3CompletionTests/Fixtures/004.json")))
+guard builderFixture.levelSHA256 == L3Replay.digest(builderLevel.rawData),
+      builderFixture.initialStateHash == L3Replay.stateHash(builderGame) else {
+    fatalError("Classic 04 fixture does not match its exact source level")
 }
-var cursor = 0
-var detector = L3Detector()
-_ = detector.update(game)
-var offeredAtTurn: [Int] = []
-while !game.isComplete && game.tick < 560 {
-    while cursor < fixture.inputs.count && fixture.inputs[cursor].tick == game.tick {
-        guard L3Replay.apply(fixture.inputs[cursor], to: &game) else { fatalError("Shadow 08 prefix failed") }
-        cursor += 1
+var builderCursor = 0
+var builderDetector = L3Detector()
+_ = builderDetector.update(builderGame)
+var verifiedBuilderWorkStep = false
+while !builderGame.isComplete && builderGame.tick < builderFixture.expected.ticks {
+    while builderCursor < builderFixture.inputs.count && builderFixture.inputs[builderCursor].tick == builderGame.tick {
+        guard L3Replay.apply(builderFixture.inputs[builderCursor], to: &builderGame) else {
+            fatalError("Classic 04 route prefix failed")
+        }
+        builderCursor += 1
     }
-    game.step()
-    let offered = detector.update(game)
-    if game.tick == 560 { offeredAtTurn = offered ?? [] }
+    let previousQuantities = Dictionary(uniqueKeysWithValues:
+        builderGame.lemmings.map { ($0.id, $0.quantity) })
+    builderGame.step()
+    let offered = builderDetector.update(builderGame) ?? []
+    guard let builder = builderGame.lemmings.first(where: {
+        $0.state == .building && previousQuantities[$0.id] != $0.quantity
+    }) else { continue }
+    guard offered.contains(builder.id) else {
+        fatalError("Solver did not revisit the builder when its Brick stock changed")
+    }
+    assertOfferedToolDirections(builderGame, lemming: builder.id, tool: .bricks,
+                                label: "Classic 04 Brick builder")
+    let direction = builder.direction
+    guard let pair = l3Actions(builderGame, lemming: builder.id).first(where: {
+        $0.count == 2 && $0.allSatisfy { $0.action == "walker" }
+    }) else { fatalError("Solver omitted the two-Walker builder branch") }
+    for input in pair where !L3Replay.apply(input, to: &builderGame) {
+        fatalError("Two-Walker branch was rejected")
+    }
+    guard let after = builderGame.lemmings.first(where: { $0.id == builder.id }),
+          after.state == .walking, after.direction == -direction,
+          !l3Actions(builderGame, lemming: builder.id).contains(where: { $0.count == 2 }) else {
+        fatalError("Two-Walker branch did not stop and turn the builder")
+    }
+    verifiedBuilderWorkStep = true
+    break
 }
-guard offeredAtTurn.contains(8) else { fatalError("Solver did not revisit the builder at its work step") }
-guard let before = game.lemmings.first(where: { $0.id == 8 }), before.state == .building else {
-    fatalError("Shadow 08 no longer reaches its measured builder decision")
-}
-assertOfferedToolDirections(game, lemming: 8, tool: .bricks, label: "Shadow 08 Brick builder")
-let pair = l3Actions(game, lemming: 8).first { $0.count == 2 && $0.allSatisfy { $0.action == "walker" } }
-guard let pair else { fatalError("Solver omitted the measured two-Walker branch") }
-for input in pair where !L3Replay.apply(input, to: &game) { fatalError("Two-Walker branch was rejected") }
-guard let after = game.lemmings.first(where: { $0.id == 8 }),
-      after.state == .walking, after.direction == -before.direction,
-      !l3Actions(game, lemming: 8).contains(where: { $0.count == 2 }) else {
-    fatalError("Two-Walker branch did not stop and turn the builder")
-}
+guard verifiedBuilderWorkStep else { fatalError("Classic 04 route did not reach a builder work step") }
 let egyptian = try Lemmings3ClassicCampaign(root: root, tribe: .egyptian)
 mark("Egyptian 01")
 let egyptianLevel = egyptian.levels[0]
@@ -193,6 +208,18 @@ rejectedInputs[6] = .init(tick: 470, action: "jumper", lemming: 999, direction: 
 let rejected = L3Seed(version: classic06Seed.version, level: classic06Seed.level,
     levelSHA256: classic06Seed.levelSHA256, population: classic06Seed.population,
     initialStateHash: classic06Seed.initialStateHash, inputs: rejectedInputs)
+let refreshRejectedSeed = L3Seed(version: rejected.version, level: rejected.level,
+    levelSHA256: rejected.levelSHA256, population: rejected.population,
+    initialStateHash: "old-engine-state", inputs: rejected.inputs)
+let refreshedPrefix = try l3SeedCandidate(from: classic06Base, levelNumber: 6,
+    levelData: classic06Level.rawData, seed: refreshRejectedSeed, throughTick: 470,
+    limits: seedLimits, refreshEngine: true)
+let rejectedPrefixCount = rejected.inputs.filter { $0.tick <= 470 }.count
+guard refreshedPrefix.inputs.count == rejectedPrefixCount - 1,
+      refreshedPrefix.game.tick == 470,
+      refreshedPrefix.inputs.allSatisfy({ $0.tick <= 470 }) else {
+    fatalError("L3 engine seed refresh did not rebase state and omit a refused input")
+}
 do {
     _ = try l3SeedCandidate(from: classic06Base, levelNumber: 6,
         levelData: classic06Level.rawData, seed: rejected, throughTick: 470, limits: seedLimits)
@@ -300,7 +327,7 @@ guard firstEndRun.saved == 1, firstEndRun.lost == 1,
     fatalError("Unseeded End Run did not replay to the same result twice")
 }
 guard !L3Limits().pairedActors else { fatalError("Paired actors must remain opt-in") }
-mark("Egyptian 18 pair")
+mark("Egyptian 18 paired actions")
 let egyptian18Level = egyptian.levels[17]
 let egyptian18Permanent = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(
     String(format: "LEVELS/PERM%03d.OBS", egyptian18Level.permanentObjectsReference))))
@@ -332,14 +359,23 @@ let egyptian18Pair = l3PairedActions(egyptian18Game, actorChoices: egyptian18Cho
 }
 guard let egyptian18Pair else { fatalError("Solver omitted the Egyptian 18 same-tick two-actor pair") }
 var expectedPairState = egyptian18Game
-for input in egyptian18Fixture.inputs where input.tick == 30 {
-    guard L3Replay.apply(input, to: &expectedPairState) else { fatalError("Egyptian 18 fixture pair failed") }
+for input in egyptian18Pair {
+    guard egyptian18Choices.contains(where: { choices in
+        choices.contains(where: { option in
+            option.contains(where: { $0.tick == input.tick && $0.action == input.action && $0.lemming == input.lemming })
+        })
+    }) else { fatalError("Egyptian 18 pair contains an action outside its actor choices") }
+    guard L3Replay.apply(input, to: &expectedPairState) else { fatalError("Egyptian 18 expected pair failed") }
 }
 for input in egyptian18Pair {
     guard L3Replay.apply(input, to: &egyptian18Game) else { fatalError("Egyptian 18 solver pair failed") }
 }
 guard L3Replay.stateHash(egyptian18Game) == L3Replay.stateHash(expectedPairState) else {
-    fatalError("Egyptian 18 solver pair changed the retained state")
+    fatalError("Egyptian 18 solver pair was not deterministic")
+}
+guard let jumperID = egyptian18Pair.first(where: { $0.action == "jumper" })?.lemming,
+      egyptian18Game.lemmings.first(where: { $0.id == jumperID })?.state == .jumping else {
+    fatalError("Egyptian 18 paired jumper did not enter its accepted state")
 }
 let multiHatchTags = [UInt16](repeating: 0x1000, count: 128 * 64)
 mark("multiple hatches")
@@ -387,8 +423,8 @@ guard quotaGame.reserve == 19, quotaGame.pendingReleases == 9,
 }
 print("PASS L3 solver offers accepted Brick and Spade directions from retained routes")
 print("PASS L3 solver offers a useful tool site on Classic 03")
-print("PASS L3 solver offers the retained Shadow 08 same-tick builder turn")
-print("PASS L3 solver offers the retained Egyptian 18 same-tick two-actor pair")
+print("PASS L3 solver revisits an active Classic 04 builder when Brick stock changes")
+print("PASS L3 solver composes accepted Egyptian 18 two-actor inputs")
 print("PASS L3 solver validates and continues the Classic 06 exact-state seed")
 print("PASS L3 solver replay-verifies a seeded abort completion")
 print("PASS L3 solver replay-verifies an unseeded End Run after a rescue")

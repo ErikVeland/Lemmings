@@ -445,14 +445,14 @@ do {
     }
     var mole = try moleGame(moleTags)
     for _ in 0..<12 { mole.step() }
-    try require(mole.assign(.blocker, to: 0), "L3 mole test keeps a lemming on its route")
-    for _ in 0..<100 { mole.step() }
-    try require(mole.creatures[0].x > 50 && mole.terrainEdits.values.contains(false) && mole.lost == 0, "L3 mole digs destructible terrain without attacking lemmings")
+    try require(mole.creatures[0].x < 50 && mole.terrainEdits.isEmpty && mole.lost == 0,
+        "L3 Mole patrol turns at destructible terrain without excavating it")
     var brickBarrier = moleTags
     for y in 28..<48 { for x in 50..<90 { brickBarrier[y * 128 + x] = 0x2020 } }
     var steeredMole = try moleGame(brickBarrier)
     for _ in 0..<8 { steeredMole.step() }
-    try require(steeredMole.creatures[0].digDirection == .down && steeredMole.terrainEdits.isEmpty, "L3 constructed bricks steer moles without being destroyed")
+    try require(steeredMole.creatures[0].direction == -1 && steeredMole.terrainEdits.isEmpty,
+        "L3 Mole turns at constructed bricks without destroying them")
     var stoneMole = try moleGame(moleTags, permanent: moleTags)
     for _ in 0..<32 { stoneMole.step() }
     try require(stoneMole.terrainEdits.isEmpty, "L3 mole preserves permanent terrain")
@@ -911,16 +911,30 @@ do {
                         "L3 Shadow 22 no-input hatch avoids the source-clear Buzzard corridor")
                 }
                 if tribe == .shadow && index == 6 {
+                    try require(run.creatures.contains { $0.kind == .mole && $0.direction == 1 && $0.digDirection == .right },
+                        "L3 Shadow 7 Mole starts in the source-captured rightward direction")
                     var corridor = try Lemmings3Runtime(level: candidate, style: tribeStyle,
                         permanent: perm, temporary: temp, total: 22)
-                    for _ in 0..<200 { corridor.step() }
-                    try require(corridor.creatures.contains { $0.kind == .mole && $0.x == 118 && $0.y == 112 &&
-                        $0.digDirection == .right } && corridor.attributes[104 * 320 + 110] == 0x20,
-                        "L3 Shadow 7 Mole turns at the intact left wall")
-                    for _ in 200..<3000 { corridor.step() }
-                    try require(corridor.creatures.contains { $0.kind == .mole && (116...204).contains($0.x) && $0.y == 112 } &&
+                    for _ in 0..<32 { corridor.step() }
+                    try require(corridor.creatures.contains { $0.kind == .mole && (188...208).contains($0.x) &&
+                        $0.y == 110 && $0.direction == 1 },
+                        "L3 Shadow 7 Mole reaches the captured right patrol position")
+                    for _ in 32..<96 { corridor.step() }
+                    try require(corridor.creatures.contains { $0.kind == .mole && (112...136).contains($0.x) &&
+                        $0.y == 110 && $0.direction == -1 },
+                        "L3 Shadow 7 Mole reaches the captured left patrol position")
+                    for _ in 96..<172 { corridor.step() }
+                    try require(corridor.creatures.contains { $0.kind == .mole && (188...208).contains($0.x) &&
+                        $0.y == 110 && $0.direction == -1 },
+                        "L3 Shadow 7 Mole returns to the captured right patrol position")
+                    for _ in 172..<3000 { corridor.step() }
+                    try require(corridor.creatures.contains { $0.kind == .mole && (116...208).contains($0.x) && $0.y == 110 } &&
                         corridor.attributes[104 * 320 + 110] == 0x20 && corridor.lost == 0,
                         "L3 Shadow 7 Mole patrols the DOS corridor without losing the hatch")
+                }
+                if tribe == .egyptian && index == 12 {
+                    try require(run.creatures.contains { $0.kind == .mole && $0.direction == -1 && $0.digDirection == .left },
+                        "L3 Egyptian 13 Mole starts in the source-captured leftward direction")
                 }
                 if tribe == .shadow && index == 17 {
                     try require(run.lemmings.count == 8 && [4, 5, 6].allSatisfy {

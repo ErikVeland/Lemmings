@@ -1,6 +1,6 @@
 # Lemmings 2 native interpreter: evidence and remaining work
 
-Status checked on 10 October 2026. All twelve tribes, 51 skills, 15 object types
+Status checked on 15 October 2026. All twelve tribes, 51 skills, 15 object types
 and four practice maps are enabled. The strict completion gate verified all 120
 winning routes and 70 carry-over variants twice, with continuous ten-level
 chains for all twelve tribes. The focused runtime check passed 52 synthetic
@@ -8,6 +8,11 @@ regression checks; this does not claim a fresh pass of the full data runtime sui
 See the [completion evidence](Lemmings2Completion/README.md) for the current
 route proof and validation limits. **Original-engine equivalence and release
 validation remain separate work.**
+
+On 15 October, the strict ark check replayed all 120 routes and 70 carry-over
+variants, then rejected the ending conditions. All twelve chains finish with
+one survivor and a Bronze talisman. None meets the golden-talisman and
+30-survivor requirements.
 
 ## Expansion corrections
 

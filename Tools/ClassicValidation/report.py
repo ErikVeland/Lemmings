@@ -8,7 +8,7 @@ import sys
 import zipfile
 
 
-def report(resources, output):
+def report(resources, output, require_fan_routes=False):
     library = resources / "LevelPacks"
     rows = [json.loads(line) for line in (output / "levels.jsonl").read_text().splitlines()]
     packs = json.loads((output / "packs.json").read_text())
@@ -64,25 +64,30 @@ def report(resources, output):
             failures.append("Incomplete or duplicate collection: " + collection)
     if any(row["status"] == "winning-replay" and (not row.get("witness") or not row.get("initialHash")) for row in rows):
         failures.append("Winning rows lack replay provenance")
-    # Classic 1.0 requires wins for official levels and conversions. Fan levels
-    # ship as community content: they must load and start, but need no route.
+    # Official levels and conversions always need winning routes. Fan routes
+    # became a bundled-closure requirement on 15 October 2026.
     required = [row for row in rows if row["collection"] != "fan"]
+    if require_fan_routes:
+        required.extend(row for row in rows if row["collection"] == "fan")
     unverified = sum(row["status"] != "winning-replay" for row in required)
     if unverified:
-        failures.append(f"{unverified} official or converted levels lack verified winning replays")
+        failures.append(f"{unverified} required levels lack verified winning replays")
     broken = sum(row["status"] == "load-or-render-failed" for row in rows if row["collection"] == "fan")
     if broken:
         failures.append(f"{broken} fan levels fail to load or render")
     result = {"passed": not failures, "failures": failures, "counts": counts,
               "packs": len(packs), "fanLevels": len(sources), "inventory": inventory}
     (output / "coverage.json").write_text(json.dumps(result, indent=2) + "\n")
-    (output / "blockers.json").write_text(json.dumps([row for row in rows if (row["status"] != "winning-replay" and row["collection"] != "fan")
+    (output / "blockers.json").write_text(json.dumps([row for row in rows if (row["status"] != "winning-replay" and (require_fan_routes or row["collection"] != "fan"))
                                                         or row["status"] == "load-or-render-failed"], indent=2) + "\n")
     print(json.dumps({key: value for key, value in result.items() if key != "inventory"}, indent=2))
     return not failures
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        sys.exit("Usage: report.py RESOURCES AUDIT_OUTPUT")
-    sys.exit(0 if report(Path(sys.argv[1]), Path(sys.argv[2])) else 1)
+    args = sys.argv[1:]
+    require_fan_routes = "--require-fan-routes" in args
+    args = [arg for arg in args if arg != "--require-fan-routes"]
+    if len(args) != 2:
+        sys.exit("Usage: report.py [--require-fan-routes] RESOURCES AUDIT_OUTPUT")
+    sys.exit(0 if report(Path(args[0]), Path(args[1]), require_fan_routes) else 1)

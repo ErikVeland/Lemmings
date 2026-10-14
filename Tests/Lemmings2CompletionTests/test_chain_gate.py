@@ -29,6 +29,9 @@ with tempfile.TemporaryDirectory(prefix='lemmings2-chain-gate-') as directory:
     strict = run('--require-all')
     assert strict.returncode != 0 and 'Strict completion requires all twelve continuous tribe runs.' in strict.stdout, strict.stdout + strict.stderr
     print('PASS incomplete campaign rejected in strict mode')
+    ark = run('--require-ark')
+    assert ark.returncode != 0 and 'Strict completion requires all twelve continuous tribe runs.' in ark.stdout, ark.stdout + ark.stderr
+    print('PASS incomplete campaign rejected in strict ark mode')
     for field, value in [('levelSHA256', '0' * 64), ('expectedSaved', 15), ('version', 99), ('population', 0)]:
         fields = json.loads(original)
         fields[field] = value

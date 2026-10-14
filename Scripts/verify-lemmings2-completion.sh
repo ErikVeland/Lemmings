@@ -1,6 +1,6 @@
 #!/bin/zsh
 # Replays every recorded Lemmings 2 route twice and checks the committed manifest.
-# Pass --require-all to require all levels and twelve continuous tribe runs.
+# Pass --require-all for all routes and chains, or --require-ark for ark prerequisites.
 set -euo pipefail
 project_dir="${0:A:h:h}"
 build_dir="$project_dir/.build/l2-completion"

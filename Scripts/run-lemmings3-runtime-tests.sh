@@ -2,6 +2,7 @@
 set -euo pipefail
 project_dir="${0:A:h:h}"
 build_dir="$project_dir/.build/l3-runtime-tests"
+ports_root="${L3_PORTS_ROOT:-$project_dir/Sources/Ports/LEM3CD}"
 mkdir -p "$build_dir/modules"
 swiftc -swift-version 6 -warnings-as-errors -parse-as-library \
   -emit-module -emit-library -module-name NxlvKit \
@@ -12,8 +13,8 @@ swiftc -swift-version 6 -warnings-as-errors \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$build_dir" \
   -o "$build_dir/RuntimeTests" "$project_dir/Tests/Lemmings3RuntimeTests/main.swift"
-if [[ -f "$project_dir/Sources/Ports/LEM3CD/LEVELS/LEVEL001.DAT" ]]; then
-  "$build_dir/RuntimeTests" "$project_dir/Sources/Ports/LEM3CD"
+if [[ -f "$ports_root/LEVELS/LEVEL001.DAT" ]]; then
+  "$build_dir/RuntimeTests" "$ports_root"
 else
   "$build_dir/RuntimeTests"
 fi

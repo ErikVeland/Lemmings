@@ -8,23 +8,47 @@ To play the complete saved sequence, set Settings → Gameplay → Level Select 
 
 ## Evidence and limits
 
-Audited 6374 levels: 352 official and 6022 fan levels. 6374 passed native loading, rendering and simulation construction.
+The bundled Classic library contains 535 packs and 6,020 fan levels. The
+October `all-levels.csv` is a broader discovered-content inventory with 6,374
+rows: 352 official levels and 6,022 fan levels. Its extra rows are
+`fan:lldb-595` levels `LEVELPAK.DAT#0` and `LEVELPAK.DAT#1`; that pack is not
+in the 535-pack bundle. `audit.json` profiles 6,372 rows: 352 official and
+6,020 fan levels. The two imported rows are outside the bundled closure gate.
 
-Confidence: 24 high, 682 medium, 5668 low. Winning replays were checked with a budget of ten timing perturbations each.
+The CSV confidence counts are 24 high, 682 medium and 5,668 low. The audit
+checked selected winning replays with a budget of ten timing perturbations
+each.
 
 25 selected fan bridges have metadata-only estimates. These are provisional placements, not demonstrated measures of human puzzle difficulty or proof that the levels are solvable.
 
-The inserted levels reduce the largest estimated score step in 19 official transitions. 10 selected fan levels have validated native winning replays.
+The inserted levels reduce the largest estimated score step in 19 official transitions. A current native audit against the bundled packs verifies winning routes for 2,399 of 6,020 fan levels. It tried matching historical witnesses and current winning candidates against current decoded levels; each tested witness ran twice. The remaining 3,621 levels have no verified winning replay: 3,600 have no matching winning candidate, and 21 candidate or historical replays fail. This is an open closure gate, not a claim that those levels are unsolvable.
+
+The audit now accepts a no-input replay for `0447-ccexplores-test-levels.zip/ccxtestlevels.dat#2`. The exact level wins with one of four lemmings saved because its rescue requirement is zero. The replay is in `verified-fan-replays` and the audit checks it twice.
 
 92 transitions still exceed a 100-point score increase. The installed corpus and available replay evidence do not support claiming every gap is closed.
 
 Fan copies with the same initial simulation hash as an official level are excluded. Repeated fan copies are excluded from selection. Official repeats remain because this playlist retains the complete campaigns.
 
-Scope: all Classic campaigns and Classic-format fan archives discovered by the existing app loaders. Standalone NeoLemmix levels and Lemmings 2/3 are outside this Classic playlist. The earlier NeoLemmix audit remains separate because those levels lack playable catalogue routes.
+Scope: the 535 Classic-format fan archives in the bundled `LevelPacks` library, plus separate discovered imports in the broader CSV. Standalone NeoLemmix levels and Lemmings 2/3 are outside this Classic playlist. Imported archives remain open-ended and are not part of bundled closure.
 
 Source: `.build/local/Ultimate Lemmings.app/Contents/Resources`, downloaded fan packs, bundled solutions and recorded Classic routes. The source snapshot manifest is `.build/classic-progression-audit/source-manifest.sha256`.
 
-Pack/decode failures: 0. Per-level load or replay issues: 9. See `failures.json` and `all-levels.csv`.
+The current bundled audit found no pack, decode, load or render failures. It
+found 21 replay failures. The nine older CSV issues remain saved-count
+mismatches in that historical artifact. The other 3,600 route gaps have no
+matching candidate witness.
+The [15 October bundle audit record](../../Documentation/ReleaseReadiness/ClassicFanBundleAudit-2026-10-15.json)
+freezes all 535 archive hashes and records the native route totals.
+
+Re-run the bundled closure audit with an app Resources directory that contains
+the exact `Ports` and `LevelPacks` directories:
+
+```sh
+zsh Scripts/run-classic-validation.sh "$APP_RESOURCES" "$OUTPUT_DIR" "$PWD" --require-fan-routes
+```
+
+The strict report requires a winning replay for every fan level. The audit
+hashes the pack archives and candidate-solutions input in its input manifest.
 
 ## Official coverage
 
@@ -42,7 +66,12 @@ Pack/decode failures: 0. Per-level load or replay issues: 9. See `failures.json`
 
 - `playlist.json`: native saved playlist, including catalogue revisions and source fingerprints.
 - `playlist.csv`: full order, grades' underlying scores and confidence.
-- `all-levels.csv` and `audit.json`: every audited level and its evidence.
+- `all-levels.csv`: the discovered levels, load status and replay issues. Its
+  two extra imported rows are not in the bundle.
+- `audit.json`: difficulty profiles for 6,372 rows: 352 official and 6,020
+  bundled fan levels. It does not provide complete winning-route evidence.
+- The current native audit report is generated under the selected output
+  directory. It records the 6,020 bundled route outcomes and archive hashes.
 - `selections.json`: graph-selection reasons and costs.
 - `gaps.json`: original jumps, inserted bridges and remaining jumps.
 

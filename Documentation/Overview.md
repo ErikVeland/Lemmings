@@ -26,34 +26,24 @@ A player can start with the original 1991 presentation and controls, or turn
 on the modern defaults, without changing a single level's rules or layout.
 Both paths run the same simulation and produce the same win.
 
-## What each release contains
+## Content status
 
-| Release | Levels | Proven routes | Status |
-| --- | ---: | ---: | --- |
-| Lemmings | 120 | 120 | Complete |
-| Oh No! More Lemmings | 100 | 100 | Complete |
-| Xmas Lemmings 1991 | 4 | 4 | Complete |
-| Xmas Lemmings 1992 | 4 | 4 | Complete |
-| Holiday Lemmings 1993 | 32 | 32 | Complete |
-| Holiday Lemmings 1994 | 32 | 32 | Complete |
-| **Official Classic total** | **292** | **292** | **Complete** |
-| Oh Yes! More Lemmings (conversions) | 60 | 60 | Complete |
-| **Classic release total** | **352** | **352** | **Complete** |
-| Lemmings 2: The Tribes | 120 | 120 | Complete |
-| Lemmings 3: The Chronicles | 90 | 74 | Beta |
+The official Classic and conversion routes pass at 352/352. L2 has routes for
+all 120 levels. The prior L3 engine state passed all 90 routes and all three
+linked campaigns. The 15 October Mole direction and patrol corrections
+invalidated affected standalone and carried witnesses. The strict route gate
+stops at Shadow 7. Shadow 13 now has a refreshed winning route; Egyptian 6 and
+13 still have no winning route under the current Mole patrol. L3 route closure
+remains open. See
+[release scope](ReleaseScope.md) for the current status.
 
-"Complete" means every level has a winning route, recorded once and
-reproduced by the current engine on every check. "Preview" means the game
-runs and is enjoyable, and its rules are not yet proven against the original
-engine. Both sequels play through their full campaigns with original
-artwork, music and interfaces. See [wording definitions](ReleaseScope.md#wording)
-for the full distinction, including "Playable."
-
-Beyond these eight official releases, the app also loads 6,020 Classic-format
-fan levels in 535 retained packs. The full corpus has load and render evidence;
-344 levels also have current winning witnesses. This corpus is separate from
-NeoLemmix `.nxlv` compatibility. Real NeoLemmix fan-pack coverage remains a
-1.7 gate and is not presented as completed content.
+The bundled Classic fan library contains 6,020 levels in 535 packs. The current
+native audit verifies 2,399 winning routes. A further 3,600 levels have no
+matching candidate, and 21 candidate or historical replay witnesses fail. The
+October CSV lists two imported `fan:lldb-595` levels outside the bundle.
+Imported packs remain open-ended. See [release scope](ReleaseScope.md) for the
+closure work.
+NeoLemmix uses a separate engine and its own style dependencies.
 
 ## What "modern" means here
 
@@ -107,13 +97,12 @@ what lets the release notes above be trusted rather than taken on faith.
 
 ## Where the project stands right now
 
-The official Classic campaign closed at 352/352 on 22 September 2026. The
-current public release is 1.7.1 build 54. The
-[1.7 distribution record](ReleaseReadiness/1.7Build53Distribution.md) covers the
-1.7.0 package, its gates and the live update feed. The 1.3 development milestone added
-an iPhone and iPad target. Its source and recorded Simulator gates pass.
-Physical-device, VoiceOver, thermal, signing and distribution evidence remain
-open before the planned 2.0 mobile release.
+The README lists 1.9.7 build 82 as the current public Mac release. The latest
+tracked distribution record found in this checkout is for 1.9.6 build 81, so
+build 82 still needs a linked publication record. The 2.0 source connects all
+three native games and supported NeoLemmix to mobile sessions. Its signed build
+12 contains Classic only. Real-data fidelity, full package, physical-device,
+accessibility and distribution gates remain open. See the [2.0 release gate](ReleaseReadiness/2.0ReleaseGate-2026-10-14.md).
 
 ## Roadmap
 
@@ -121,12 +110,10 @@ open before the planned 2.0 mobile release.
 libraries, level skips and saved sessions. 1.7.0 added the bundled NeoLemmix
 packs and the Oh My! All Lemmings! learning journey. 1.7.1 fixed journey sessions.
 
-**1.7: close NeoLemmix compatibility.** The source recognises NeoLemmix
-levels, styles and the current section-based replay format. The development
-gate uses a pinned Community Edition checkout and separates import/render
-failures from known unsupported mechanics. Fencer, Laserer, interactive
-gadgets, zombie infection, Superlemming and native reference-replay comparison
-remain open. See the [1.7 roadmap](1.7Roadmap.md).
+**1.7: NeoLemmix compatibility gate passed.** The pinned evidence covers 794
+levels, the 160-level Redux replay corpus, source final-state comparisons and
+selected live visual captures. The exact bundled set still needs its own hashed
+level-and-style inventory. See the [1.7 roadmap](1.7Roadmap.md).
 
 **1.8: Mac polish.** Sharper pixel rendering, NeoLemmix sound effects and
 reliable music recovery after a nuke. L2/L3 remain Preview and NeoLemmix Beta.
@@ -140,14 +127,11 @@ Original-engine fidelity, media and release-candidate checks remain open. The
 update also adds original Macintosh music and counters, Hot Seat Resume rosters
 and saved-run fixes.
 
-**2.0: full iOS release for iPad, iPhone and iPhone Duo.** Classic,
-Lemmings 2 and Lemmings 3 are all required at launch. The current UIKit/Metal
-prototype imports Classic data and provides touch targeting, pan/zoom,
-interruption checkpoints and thermal budgets. L2/L3 session adapters exist,
-but their mobile content loading, rendering and campaign flows remain open.
-Shared QoL, Hot Seat, audio and controller support also need mobile delivery.
-Duo must preserve the same run across closed, open and partially folded poses.
-See the [2.0 mobile roadmap](2.0Roadmap.md) for the delivery sequence and gates.
+**2.0: full iOS release for iPad, iPhone and iPhone Duo.** Source now connects
+Classic, L2, L3 and supported NeoLemmix packs to mobile libraries and sessions.
+Build 12 remains Classic-only. The 2.0 roadmap still has real-data, campaign,
+input, recovery, accessibility, Duo, device and distribution gates open. See
+the [2.0 mobile roadmap](2.0Roadmap.md).
 
 The historical iPhone/iPad Simulator matrix covers its recorded source commit.
 It does not certify the full three-game release. Final source, rendered UI,

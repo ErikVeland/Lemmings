@@ -1,20 +1,51 @@
 # Release scope
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-The public 1.9 build 75 release marks Lemmings 2: The Tribes **Complete** and
-Lemmings 3: Chronicles **Beta**, as approved by the owner on 10 October 2026.
-The signed, notarised downloads and live update feed passed publication checks.
-See the [distribution record](ReleaseReadiness/1.9Build75Distribution.md) and
-[1.9 notes](ReleaseNotes-1.9-build75.md).
-NeoLemmix remains Beta. The release adds original Macintosh music, release-rate
-pitch feedback, optional Macintosh counters, full Hot Seat Resume rosters and
-shared saved-run fixes. See [Macintosh fidelity](MacintoshFidelity.md).
+The README lists 1.9.7 build 82 as the current public Mac release. The latest
+tracked distribution record in this checkout is 1.9.6 build 81. The 1.9.7
+publication record is not present here, so this document does not claim that
+build 82 passed the distribution gates.
+
+The owner set a stricter bundled-content closure rule on 15 October 2026. Every
+bundled level needs a verified winning replay, and every bundled engine needs
+source-behaviour evidence for its advertised rules. See the [content roadmap](ContentUniverseRoadmap.md).
 
 Automated evidence supports the recorded native routes. Original-engine
 fidelity, high-survivor endings and hardware acceptance retain their recorded
 limits. See the [gate register](ReleaseReadiness/gates.json).
 
-The 1.9.4 build 79 macOS maintenance release is signed, notarised and public.
+## Bundled content closure
+
+On 15 October 2026, the owner set a stricter rule for bundled content. The
+release must freeze an exact content manifest. Every included level must load,
+render, run and have a verified winning replay. Each engine must also pass
+source-behaviour comparisons for its advertised rules. Campaign transitions,
+endings, media, saves and recovery must pass when the bundle exposes them.
+Imported content remains open-ended and uses per-engine, per-version support
+claims. See the [content roadmap](ContentUniverseRoadmap.md).
+
+| Bundled set | Current evidence | Open closure work |
+| --- | --- | --- |
+| Official Classic and Oh Yes! | 352/352 winning routes. | Tie the frozen bundle manifest to the source-engine evidence for each included variant. |
+| Classic fan packs | The bundle has 6,020 levels in 535 packs. Current native audit: 2,399 winning routes, 3,600 levels without a matching candidate and 21 candidate or historical replay failures. The two extra October CSV entries are imported `fan:lldb-595` levels outside the bundle. | Resolve the 3,621 route gaps, freeze and hash the release inventory, then close source-behaviour checks for bundled content. |
+| Lemmings 2 | 120/120 routes, 70 carry-over variants and twelve full chains pass. A new Cavelems sequence saves 59, 36, 17, 4, 2, 2, 1, 1, 1 and 1. All tribes end with one survivor and a Bronze talisman. | Raise each chain to 30 final survivors, verify the golden talisman ending and close source-engine comparisons. |
+| Lemmings 3 | The current shared Mole patrol passes focused runtime checks for captured starting directions, cadence and terrain turns. Shadow 13 now has a refreshed winning route. The strict route gate stops at Shadow 7; Egyptian 6 and 13 still have no winning route under the current Mole patrol. | Repair affected standalone and carried routes, then rerun all 90 standalone routes and the carried campaign gate. Close remaining source-engine parity, environmental effects, movie audio, story transitions, recovery and release checks. |
+| NeoLemmix CE | The pinned runnable gate passed 794 levels. The bundle lists 788 levels, but 75 lack bundled community styles. Exact-version winning replay evidence covers 158 levels. | Freeze a supported bundle manifest. Supply licensed styles or remove dependent levels, then prove a winning route for every included level and source behaviour for each advertised feature. |
+
+The table tracks engine and content closure. It does not certify a specific
+app archive. Release packaging, platform acceptance and distribution need their
+own records.
+
+The October CSV is a discovered-content inventory, not the bundle manifest. Its
+two `fan:lldb-595` levels (`LEVELPAK.DAT#0` and `LEVELPAK.DAT#1`) are imported
+and outside the 535-pack bundle. The nine saved-count mismatches are stale
+candidate replay records. Although the candidate archive labels matching
+inputs as wins, those labels are not proof: the strict native audit found 21
+candidate or historical replay witnesses that did not reproduce a win. The
+September 344-witness count is historical. The current audit raises verified
+bundled fan routes to 2,399 but does not close the remaining 3,621 levels.
+
+The 1.9.4 build 79 macOS maintenance release is a historical record.
 Its full updater, slim download and signed build-78 delta pass publication
 checks. It softens golden effects, caches gameplay rendering, restores saved
 Golden Path sessions, adds exact replay skill ticks and places identified
@@ -26,11 +57,11 @@ remain in force. See the
 ## iOS 2.0 launch scope
 
 On 10 October 2026, the owner confirmed a full iOS release for iPad, iPhone and
-iPhone Duo, including Classic, Lemmings 2 and Lemmings 3. The current
-Classic-only prototype does not satisfy this scope. All three games require
-native mobile rendering, content loading, campaign progression, recovery,
-audio, controller input, shared QoL and Hot Seat journeys. Duo support is a
-launch gate, including closed, open, partially folded and resized play.
+iPhone Duo, including Classic, Lemmings 2 and Lemmings 3. The source connects
+all three engines and supported NeoLemmix imports to mobile sessions. The signed
+build 12 remains Classic-only. A three-game candidate still needs native
+rendering, content, campaign, recovery, audio, controller, shared QoL and Hot
+Seat checks. Duo support is a launch gate, including folded and resized play.
 
 Keep the current game-completion claims and remaining fidelity limits.
 Mobile acceptance does not turn L3 Beta into Complete. Freeze distribution
@@ -117,12 +148,21 @@ DOS campaign levels. All 60 now have strictly verified winning evidence.
 
 ## Fan levels and conversions
 
-Fan levels must load and start for Classic 1.0. The owner removed the winning-route
-requirement for community content on 22 September 2026. The 6,020 retained bundled fan
-levels all load and render in the 22 September full-corpus check. There are 344
-current fan winning witnesses. A smoke check does not establish a playthrough.
-See [current Classic validation](ReleaseReadiness/ClassicValidation-current.md)
-for corpus evidence and the change in shared replay coverage.
+The 22 September record covers 6,020 retained bundled fan levels, with load and
+render evidence and 344 winning witnesses. This met the earlier community
+content rule. The current native audit verifies 2,399 bundled fan routes and
+does not meet the closure rule adopted on 15 October. The October audit
+artifact discovers two additional imported levels outside the bundle and has
+nine stale saved-count mismatches. The native audit reports 3,600 bundled
+levels without a winning route and 21 failed replay witnesses. Freeze and hash
+the exact bundle inventory, then close every bundled level route and
+source-behaviour gap. See [current Classic validation](ReleaseReadiness/ClassicValidation-current.md)
+and the [October audit](../Artifacts/ClassicProgression/README.md). The
+[15 October bundle audit record](ReleaseReadiness/ClassicFanBundleAudit-2026-10-15.json)
+captures every audited archive hash and its route totals.
+The current audit accepts `--require-fan-routes`; use it for bundled closure so
+the report fails when any bundled fan level lacks a winning replay. The
+default mode retains the historical load-and-render community check.
 The expanded Classic quest passes all 352 levels, including conversions, through
 the app session and recovery code. It checks 1,056 run restores, 352 progress
 resumes, six release transitions and the final quest result. Reproduce it with
@@ -135,10 +175,10 @@ See [the current campaign closure evidence](ReleaseReadiness/CampaignClosure-202
 
 ## Sequels
 
-| Release | Levels | Proven routes | Claim |
+| Release | Levels | Current route evidence | 1.9 claim |
 | --- | ---: | ---: | --- |
-| Lemmings 2: The Tribes | 120 | 120 | **Complete** |
-| Lemmings 3: The Chronicles | 90 | 90 | **Beta** |
+| Lemmings 2: The Tribes | 120 | 120/120 pass, 70 carry-over variants and 12 full chains pass | **Complete** |
+| Lemmings 3: The Chronicles | 90 | 90 retained fixtures from the prior engine state, current strict replay fails at Shadow 7 | **Beta (route gate open)** |
 
 The strict native L2 gate passes all 120 standalone routes, 70 carry-over variants
 and twelve continuous tribe chains. Every witness reproduces its win twice with
@@ -149,8 +189,10 @@ See [L2 completion evidence](Lemmings2Completion/README.md).
 
 The 13 October strict native L3 evidence records 90 of 90 standalone wins, 326
 carried fixtures replayed twice and all 90 linked campaign results. Classic,
-Shadow and Egyptian each finish with 50 survivors. Original DOS parity, media,
-release-candidate recovery and package validation remain open. See the
+Shadow and Egyptian each finish with 50 survivors on that engine state. The 15
+October Mole direction and patrol corrections invalidate route witnesses. The
+current strict rerun stops at Shadow 7. Route repair, original DOS parity,
+media, release-candidate recovery and package validation remain open. See the
 [campaign evidence](CampaignCompletion/README.md) and
 [sequel verification record](ReleaseReadiness/1.8SequelVerification.md).
 
@@ -158,11 +200,12 @@ Both play through their campaigns with original artwork, music and interfaces.
 Lemmings 3 keeps provisional rules in several areas, and its environmental
 effects, movie soundtracks and story transitions are incomplete.
 
-The owner approved these 1.9 release classifications on 10 October 2026.
-L2 meets the per-level winning-route definition of Complete. Its high-survivor
-ark ending and original-engine equivalence remain separate evidence gaps.
-L3 Beta keeps its sixteen missing standalone routes and open media, campaign
-and fidelity checks visible. The classifications do not close those gates.
+The owner approved these 1.9 release classifications on 10 October 2026. The
+current native evidence has all 120 L2 routes. L2's twelve chains end with one
+lemming, below the 30 needed per tribe for the golden-talisman ark ending. The
+prior L3 engine state passed all 90 routes and finished each chain with 50
+survivors. L3 route repair, source-engine fidelity, media and release checks
+remain open. These results do not close the bundled-engine gate.
 
 ## Existing iOS source baseline
 
@@ -172,12 +215,11 @@ deterministic Classic simulation as the Mac application and adds direct touch,
 pan, zoom, safe-area controls, interruption recovery and thermal presentation
 budgets.
 
-The 1.3 source milestone is development evidence, not a tested iPhone/iPad release.
-Lemmings 2 and Lemmings 3 have shared mobile session and checkpoint adapters,
-but no player-facing mobile import or renderer. Recorded Simulator checks pass
-for the 1.3 source commit. Physical-device, accessibility, signing and
-distribution gates remain open. See the
-[2.0 roadmap](2.0Roadmap.md).
+The 2.0 source connects Classic, L2, L3 and supported NeoLemmix imports to the
+mobile library and session flow. The signed build 12 contains Classic only.
+Real-data parity, full campaign runs, physical-device, accessibility, signing
+and distribution gates remain open. See the [2.0 roadmap](2.0Roadmap.md) and
+[release gate](ReleaseReadiness/2.0ReleaseGate-2026-10-14.md).
 
 ## Not in this release
 
@@ -189,8 +231,10 @@ release does not imply support for either platform group.
 
 - The `Oh My! ALL Lemmings!` run across the sequel campaigns remains outside the
   completed 352-level Classic campaign gate.
-- L2 is Complete and L3 is Beta for 1.9. Neither game has a missing level route.
-  L3 original-engine fidelity and release-candidate checks remain open.
+- L2 is Complete and L3 is Beta for 1.9. L2's strict route and chain gates
+  pass, but its ark ending remains open. L3 retains 90 old fixtures, but the
+  current strict route gate fails at Shadow 7. L3 route repair, original-engine
+  fidelity and release-candidate checks remain open.
 - Physical Intel, minimum macOS, HDR, multiple displays and high refresh rates
   are untested. Sustained 10x play is not established.
 - Scalable menus and VoiceOver navigation are implemented. Full VoiceOver

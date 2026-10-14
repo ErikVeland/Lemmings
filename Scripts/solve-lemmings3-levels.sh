@@ -2,7 +2,7 @@
 # Builds the Lemmings 3 route solver and searches the named levels.
 # Usage: zsh Scripts/solve-lemmings3-levels.sh <level number>... | missing [--budget SECONDS] [--beam N]
 #        [--fewer-inputs-first] [--population N] [--tool-site-cell PIXELS] [--paired-actors]
-#        [--seed FILE --seed-through TICK] [--promote] [--out DIR]
+#        [--seed FILE --seed-through TICK [--refresh-engine-seed]] [--promote] [--out DIR]
 # A route counts only after two replays agree. --promote writes it into
 # Tests/Lemmings3CompletionTests/Fixtures when it keeps more lemmings than the existing route.
 # Then run python3 Tools/CampaignCompletion/report.py and Scripts/verify-l3-completion.sh.

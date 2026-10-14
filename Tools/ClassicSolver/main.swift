@@ -57,14 +57,17 @@ func loadLevel(_ argument: String, _ index: Int) throws -> (ClassicDOSSimulation
         let root = URL(fileURLWithPath: resources)
         let entries = try FanLevelLibrary.validatedEntries(in: pack)
         let item: FanLevelLibrary.Entry
+        let selectedIndex: Int
         if let member = option("--member") {
-            let matches = entries.filter { "\($0.file)#\($0.section ?? -1)" == member }
+            let matches = entries.enumerated().filter { "\($0.element.file)#\($0.element.section ?? 0)" == member }
             guard matches.count == 1, let selected = matches.first else {
                 throw Failure(description: "fan member is missing or ambiguous: \(member)")
             }
-            item = selected
+            selectedIndex = selected.offset
+            item = selected.element
         } else {
             guard entries.indices.contains(index) else { throw Failure(description: "fan level index is out of range") }
+            selectedIndex = index
             item = entries[index]
         }
         let (level, style) = try FanLevelLibrary.level(item, in: pack,
@@ -95,7 +98,7 @@ func loadLevel(_ argument: String, _ index: Int) throws -> (ClassicDOSSimulation
             ? .ohNoMore : FanLevelLibrary.mechanics(for: pack, entry: item)
         let simulation = try ClassicDOSSimulation(level: level, renderedLevel: rendered,
             mainDATAssets: assets, mechanics: mechanics, clock: clock)
-        let entry = ClassicCampaignLevel.standalone(level, rank: "fan:" + FanLevelLibrary.catalogueID(pack), number: index + 1)
+        let entry = ClassicCampaignLevel.standalone(level, rank: "fan:" + FanLevelLibrary.catalogueID(pack), number: selectedIndex + 1)
         return (simulation, entry)
     }
     var campaign: ClassicCampaign, title: ClassicTitle?, root: URL, fallback: URL? = nil
@@ -424,7 +427,7 @@ func isBetterPartial(_ candidate: Candidate, than current: Candidate) -> Bool {
     if proposed.releasedCount != previous.releasedCount { return proposed.releasedCount > previous.releasedCount }
     return Score(current, field) < Score(candidate, field)
 }
-func consider(_ c: Candidate) {
+@MainActor func consider(_ c: Candidate) {
     if c.sim.tickCount < lastForcedTick { return }
     if c.sim.isComplete && c.sim.didWin, best.map({ Score($0, field) < Score(c, field) }) ?? true { best = c }
     if bestPartial.map({ isBetterPartial(c, than: $0) }) ?? true { bestPartial = c }

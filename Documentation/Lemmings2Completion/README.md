@@ -11,6 +11,15 @@ The strict native gate passed on 10 October 2026: 120 routes, 70 carry-over
 variants and all twelve continuous tribe chains. Every witness passed two fresh
 replays with matching saved counts, ticks and state hashes.
 
+The gate passed again on 15 October 2026 against the current checkout. Strict
+ark mode replayed all routes and chains, then failed the ending conditions.
+Each tribe chain ends with one survivor and a Bronze talisman. The evidence does
+not prove a golden talisman or an ark ending.
+
+A 15 October Cavelems route update now chains all ten levels from 60 lemmings.
+It records 59 saved on Level 1, then 36, 17, 4, 2, 2, 1, 1, 1 and 1. The
+strict route gate verifies the new routes twice. The ark gate remains open.
+
 | Tribe | Recorded routes | Levels that chain |
 | --- | ---: | ---: |
 | Classic | 10 | 10 |
@@ -54,9 +63,9 @@ A tribe chains through a level when that route starts with exactly the number th
 previous route saved. The table counts how many levels chain from the start of
 each tribe, without a break.
 
-All twelve tribes chain through all ten levels. These chains finish with one
-lemming. The ark ending requires a golden talisman and at least 30 survivors
-from each tribe, so it remains unproved.
+All twelve tribes chain through all ten levels. Each chain finishes with one
+lemming and a Bronze talisman. The ark ending requires a golden talisman and at
+least 30 survivors from each tribe, so it remains unproved.
 70 separate carry-over witnesses preserve the correct starting populations.
 The gate verifies every route and carry-over variant twice before it uses that
 route in a chain.
@@ -84,8 +93,15 @@ every route and prints the chain result for each tribe.
 zsh Scripts/verify-lemmings2-completion.sh --require-all
 ```
 
-Strict mode fails while any level has no recorded route or any tribe lacks a
-continuous ten-level chain. Independent level wins cannot close this gate.
+`--require-all` fails while any level has no recorded route or any tribe lacks
+a continuous ten-level chain. Independent level wins cannot close this gate.
+
+Use `--require-ark` to also require a golden talisman and at least 30 survivors
+from every tribe. This checks the ending prerequisites. Ending playback, media
+and original-engine parity retain separate checks.
+
+Run `zsh Scripts/verify-lemmings2-completion.sh --require-ark` to check those
+conditions with the bundled L2 data.
 
 ```sh
 zsh Scripts/verify-lemmings2-completion.sh --negative

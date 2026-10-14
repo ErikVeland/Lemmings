@@ -1,9 +1,9 @@
 #!/bin/zsh
-# Reuse a verified L3 route at a carried population, then replay the result twice.
-# Usage: zsh Scripts/derive-l3-carried-route.sh LEVEL POPULATION SOURCE_FIXTURE OUTPUT_CANDIDATE
+# Derive a carried L3 route or refresh a same-population route after engine changes.
+# Usage: zsh Scripts/derive-l3-carried-route.sh LEVEL POPULATION SOURCE_FIXTURE OUTPUT_CANDIDATE [--refresh-engine]
 set -euo pipefail
-if (( $# != 4 )); then
-  print -u2 'Usage: derive-l3-carried-route.sh LEVEL POPULATION SOURCE_FIXTURE OUTPUT_CANDIDATE'
+if (( $# != 4 && $# != 5 )) || { (( $# == 5 )) && [[ "$5" != --refresh-engine ]]; }; then
+  print -u2 'Usage: derive-l3-carried-route.sh LEVEL POPULATION SOURCE_FIXTURE OUTPUT_CANDIDATE [--refresh-engine]'
   exit 2
 fi
 project_dir="${0:A:h:h}"

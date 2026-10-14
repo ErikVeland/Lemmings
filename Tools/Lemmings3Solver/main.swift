@@ -2,7 +2,7 @@ import Foundation
 import NxlvKit
 
 // solver <level number>... | missing [--budget SECONDS] [--beam N] [--population N] [--tool-site-cell PIXELS]
-//        [--paired-actors] [--seed FILE --seed-through TICK] [--promote]
+//        [--paired-actors] [--seed FILE --seed-through TICK [--refresh-engine-seed]] [--promote]
 // Searches Lemmings 3 levels with the selected population. A route counts only after two replays agree.
 let arguments = Array(CommandLine.arguments.dropFirst())
 func option(_ name: String) -> String? {
@@ -37,7 +37,7 @@ if promoting && population != 20 {
     exit(2)
 }
 fewerInputsFirst = arguments.contains("--fewer-inputs-first")
-let root = URL(fileURLWithPath: "Sources/Ports/LEM3CD")
+let root = URL(fileURLWithPath: ProcessInfo.processInfo.environment["L3_PORTS_ROOT"] ?? "Sources/Ports/LEM3CD")
 let fixtures = URL(fileURLWithPath: "Tests/Lemmings3CompletionTests/Fixtures")
 let seedSuffix = arguments.contains("--seed") ? "-seeded" : ""
 let defaultOut = population == 20 ? ".build/l3-solver/candidates\(seedSuffix)" : ".build/l3-solver/candidates-pop\(population)\(seedSuffix)"
@@ -56,9 +56,10 @@ for argument in arguments {
 let missingOnly = arguments.contains("missing")
 let hasSeed = arguments.contains("--seed")
 let hasSeedThrough = arguments.contains("--seed-through")
+let refreshEngineSeed = arguments.contains("--refresh-engine-seed")
 let seed: L3Seed?
 let seedThrough: Int?
-if hasSeed || hasSeedThrough {
+if hasSeed || hasSeedThrough || refreshEngineSeed {
     guard hasSeed, hasSeedThrough, requested.count == 1, !missingOnly,
           let path = option("--seed"), !path.hasPrefix("--"),
           let tick = option("--seed-through").flatMap(Int.init), (0..<limits.maxTicks).contains(tick) else {
@@ -94,7 +95,8 @@ for tribe in Lemmings3ClassicCampaign.Tribe.allCases {
         if let seed, let seedThrough {
             do {
                 seeded = try l3SeedCandidate(from: base, levelNumber: number,
-                    levelData: level.rawData, seed: seed, throughTick: seedThrough, limits: limits)
+                    levelData: level.rawData, seed: seed, throughTick: seedThrough, limits: limits,
+                    refreshEngine: refreshEngineSeed)
             } catch {
                 fputs("--seed rejected for level \(number): \(error)\n", stderr)
                 exit(2)

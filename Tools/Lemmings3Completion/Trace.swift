@@ -10,7 +10,8 @@ struct L3GuideTraceCommand {
             throw SequelDataError.invalid("Usage: Trace <guide-prefix.json> --through <tick>.")
         }
         let seed = try JSONDecoder().decode(L3GuideSeed.self, from: Data(contentsOf: URL(fileURLWithPath: routePath)))
-        let root = URL(fileURLWithPath: "Sources/Ports/LEM3CD")
+        let root = URL(fileURLWithPath: ProcessInfo.processInfo.environment["L3_PORTS_ROOT"]
+            ?? "Sources/Ports/LEM3CD")
         guard let tribe = Lemmings3ClassicCampaign.Tribe.allCases.first(where: {
             ($0.firstLevel...($0.firstLevel + 29)).contains(seed.level)
         }) else {

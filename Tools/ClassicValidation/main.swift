@@ -36,6 +36,37 @@ for folder in ["Tests/ClassicDOSCompletionTests/Fixtures", "Tests/ClassicFamilyC
         witnesses[replay.initialStateHash, default: []].append((url.path.replacingOccurrences(of: fixtureRoot.path + "/", with: ""), replay))
     }
 }
+let candidateSolutions = fixtureRoot.appendingPathComponent("Artifacts/LearningJourney/candidate-solutions.json")
+if FileManager.default.fileExists(atPath: candidateSolutions.path) {
+    let candidates = try JSONDecoder().decode([String: ClassicDOSReplay].self, from: Data(contentsOf: candidateSolutions))
+    for (hash, replay) in candidates where replay.initialStateHash == hash && replay.expected?.didWin == true {
+        witnesses[hash, default: []].append(("Artifacts/LearningJourney/candidate-solutions.json#\(hash)", replay))
+    }
+}
+let additionalWitnessFiles = [
+    "Artifacts/ClassicProgression/verified-fan-replays.json",
+    "Artifacts/ClassicProgression/verified-fan-replays",
+    "Artifacts/DifficultyEvaluation/golems-phase-shift-replays",
+    "Artifacts/DifficultyEvaluation/golems-retimed-replays",
+]
+for relativePath in additionalWitnessFiles {
+    let source = fixtureRoot.appendingPathComponent(relativePath)
+    let files: [URL]
+    var isDirectory: ObjCBool = false
+    if FileManager.default.fileExists(atPath: source.path, isDirectory: &isDirectory), isDirectory.boolValue {
+        files = ((try? FileManager.default.contentsOfDirectory(at: source, includingPropertiesForKeys: nil)) ?? [])
+            .filter { $0.pathExtension == "json" && !$0.lastPathComponent.hasSuffix(".profile.json") }
+            .sorted { $0.lastPathComponent < $1.lastPathComponent }
+    } else {
+        files = FileManager.default.fileExists(atPath: source.path) ? [source] : []
+    }
+    for file in files {
+        guard let replay = try? JSONDecoder().decode(ClassicDOSReplay.self, from: Data(contentsOf: file)),
+              replay.expected?.didWin == true else { continue }
+        let witnessPath = isDirectory.boolValue ? relativePath + "/" + file.lastPathComponent : relativePath
+        witnesses[replay.initialStateHash, default: []].append((witnessPath, replay))
+    }
+}
 try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
 let destination = output.appendingPathComponent("levels.jsonl")
 FileManager.default.createFile(atPath: destination.path, contents: nil)
@@ -69,15 +100,31 @@ var specialCache: [String: ClassicSpecialGraphic] = [:]
                 specialCache[specialKey] = try FanLevelLibrary.specialGraphic(for: level, entry: entry, pack: pack, portsRoot: ports)
             } else { specialCache[specialKey] = try ClassicSpecialGraphic.load(index: level.specialStyle - 1, from: directory) }
         }
-        let rendered = try ClassicLevelRenderer.render(level, groundSet: groundCache[groundKey]!, specialGraphic: level.specialStyle == 0 ? nil : specialCache[specialKey])
-        let base = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assetCache[assetDirectory.path]!, mechanics: mechanics)
+        let ground = groundCache[groundKey]!
+        let objectSemantics: ClassicObjectSemantics = collection == "fan"
+            ? .forFanLevel(level, groundSet: ground) : .dos
+        let rendered = try ClassicLevelRenderer.render(level, groundSet: ground,
+            specialGraphic: level.specialStyle == 0 ? nil : specialCache[specialKey],
+            objectSemantics: objectSemantics)
+        let sourceMechanics: ClassicDOSMechanics
+        if collection == "fan", let pack, let entry {
+            sourceMechanics = FanLevelLibrary.mechanics(for: pack, entry: entry)
+        } else {
+            sourceMechanics = mechanics
+        }
+        let clock: ClassicDOSClock = collection == "fan" ? .golems : .dos
+        let base = try ClassicDOSSimulation(level: level, renderedLevel: rendered,
+            mainDATAssets: assetCache[assetDirectory.path]!, mechanics: sourceMechanics, clock: clock)
         let hash = ClassicDOSReplayRecorder.stateHash(of: base); row.initialHash = hash
         if let candidates = witnesses[hash] {
             var failures: [String] = []
             for (path, replay) in candidates {
                 do {
-                    let first = try ClassicDOSReplayPlayer.run(replay, simulation: base)
-                    let second = try ClassicDOSReplayPlayer.run(replay, simulation: base)
+                    let tickLimit = max(ClassicDOSReplayPlayer.defaultTickLimit,
+                        base.configuration.timeLimitTicks ?? 0,
+                        (replay.expected?.ticks ?? 0) + ClassicDOSRules.ticksPerSecond)
+                    let first = try ClassicDOSReplayPlayer.run(replay, simulation: base, tickLimit: tickLimit)
+                    let second = try ClassicDOSReplayPlayer.run(replay, simulation: base, tickLimit: tickLimit)
                     guard first.didWin && first == second else { throw NSError(domain: "ReplayDidNotWin", code: 1) }
                     row.status = "winning-replay"; row.witness = path; break
                 } catch { failures.append("\(path): \(error)") }

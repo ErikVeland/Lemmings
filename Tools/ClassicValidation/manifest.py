@@ -9,6 +9,12 @@ import sys
 project, resources, fixtures, output = map(Path, sys.argv[1:5])
 roots = [project / "Sources/NxlvKit", project / "Tools/ClassicValidation",
          project / "Sources/LemmingsLocal/FanLevelLibrary.swift",
+         project / "Sources/LemmingsAppCore/Collections/ClassicSourceRevision.swift",
+         project / "Artifacts/LearningJourney/candidate-solutions.json",
+         project / "Artifacts/ClassicProgression/verified-fan-replays.json",
+         project / "Artifacts/ClassicProgression/verified-fan-replays",
+         project / "Artifacts/DifficultyEvaluation/golems-phase-shift-replays",
+         project / "Artifacts/DifficultyEvaluation/golems-retimed-replays",
          project / "Scripts/run-classic-validation.sh", resources / "Ports",
          resources / "LevelPacks", fixtures / "Tests/ClassicDOSCompletionTests/Fixtures",
          fixtures / "Tests/ClassicFamilyCompletionTests/Fixtures"]

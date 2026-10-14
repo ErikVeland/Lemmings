@@ -247,9 +247,13 @@ public struct Lemmings3Runtime: Sendable {
                 extras.append(.init(x: placed.x + 8, y: placed.y + 16, direction: 1)); continue
             }
             if let kind = Creature.Kind(rawValue: placed.identifier / 2 * 2) {
+                // Source captures show Mole identifier parity uses the opposite starting direction.
+                let direction = kind == .mole
+                    ? (placed.identifier.isMultiple(of: 2) ? 1 : -1)
+                    : (placed.identifier.isMultiple(of: 2) ? -1 : 1)
                 creatures.append(.init(id: index, kind: kind,
                     x: placed.x + definition.columns * 4, y: placed.y + definition.rows * 2,
-                    direction: placed.identifier.isMultiple(of: 2) ? -1 : 1))
+                    direction: direction))
                 continue
             }
             if (0x4002...0x400a).contains(definition.flags) {
@@ -554,10 +558,10 @@ public struct Lemmings3Runtime: Sendable {
         for index in creatures.indices where creatures[index].alive {
             var creature = creatures[index]
             creature.age += 1; creature.cooldown = max(0, creature.cooldown - 1)
-            if creature.age % 2 == 0 {
-                if creature.kind == .mole {
-                    if creature.age % 8 == 0 { moveMole(&creature) }
-                } else if creature.kind == .buzzard {
+            if creature.kind == .mole {
+                if creature.age % 3 != 0 { moveMole(&creature) }
+            } else if creature.age % 2 == 0 {
+                if creature.kind == .buzzard {
                     let target = lemmings.filter { $0.active && ![.exiting, .drowning, .trapped].contains($0.state) }
                         .min { abs($0.x - creature.x) + abs($0.y - creature.y) < abs($1.x - creature.x) + abs($1.y - creature.y) }
                     if let target, abs(target.x - creature.x) + abs(target.y - creature.y) <= 160 {
@@ -610,40 +614,26 @@ public struct Lemmings3Runtime: Sendable {
         }
     }
     private mutating func moveMole(_ creature: inout Creature) {
-        // Dig masks, movement rate and clockwise steering are provisional.
-        let direction = creature.digDirection
-        let nx = creature.x + direction.dx * 2, ny = creature.y + direction.dy * 2
-        let cells = ((ny - 16)..<ny).flatMap { y in ((nx - 4)..<(nx + 4)).map { (x: $0, y: y) } }
-        let blocked = cells.contains { cell in
-            !inBounds(cell.x, cell.y) ||
-            configuration.backgroundAttributes[cell.y * configuration.width + cell.x] & 0x20 != 0 ||
-            attributes[cell.y * configuration.width + cell.x] & 0x2000 != 0
-        }
-        if configuration.sourceLevelReference == 107 && configuration.width == 320 &&
-            configuration.height == 288 && !blocked && direction.dy == 0 &&
-            cells.contains(where: { isSolid($0.x, $0.y) }) {
-            creature.digDirection = direction == .left ? .right : .left
-            creature.direction = creature.digDirection.dx
-            return
-        }
-        if blocked {
-            switch direction {
-            case .right: creature.digDirection = .down
-            case .down: creature.digDirection = .left
-            case .left: creature.digDirection = .up
-            default: creature.digDirection = .right
+        // Original captures show a horizontal patrol that turns when its body
+        // would overlap more solid terrain. Mole excavation remains unverified.
+        let direction = creature.direction
+        let nextX = creature.x + direction * 2
+        func overlap(at x: Int) -> Int {
+            var count = 0
+            for y in (creature.y - 16)..<creature.y {
+                for cellX in (x - 4)..<(x + 4) {
+                    if !inBounds(cellX, y) || isSolid(cellX, y) { count += 1 }
+                }
             }
-            if creature.digDirection.dx != 0 { creature.direction = creature.digDirection.dx }
+            return count
+        }
+        if overlap(at: nextX) > overlap(at: creature.x) {
+            creature.direction = -direction
+            creature.digDirection = direction > 0 ? .left : .right
             return
         }
-        if direction.dy == 0 && !isSolid(creature.x, creature.y) && !cells.contains(where: { isSolid($0.x, $0.y) }) {
-            creature.y += 2; return
-        }
-        for cell in cells where isSolid(cell.x, cell.y) {
-            let index = cell.y * configuration.width + cell.x
-            attributes[index] = configuration.backgroundAttributes[index]; terrainEdits[index] = false
-        }
-        creature.x = nx; creature.y = ny
+        creature.x = nextX
+        creature.digDirection = direction > 0 ? .right : .left
     }
     public mutating func step() {
         guard !isComplete else { return }

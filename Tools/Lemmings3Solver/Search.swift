@@ -41,11 +41,12 @@ struct L3Seed: Decodable {
 
 /// Applies a checked prefix while retaining the detector's history for the continuation.
 func l3SeedCandidate(from base: Lemmings3Runtime, levelNumber: Int, levelData: Data,
-                     seed: L3Seed, throughTick: Int, limits: L3Limits) throws -> L3Candidate {
+                     seed: L3Seed, throughTick: Int, limits: L3Limits,
+                     refreshEngine: Bool = false) throws -> L3Candidate {
     guard seed.version == 1, seed.level == levelNumber,
           seed.levelSHA256 == L3Replay.digest(levelData),
           seed.population == base.configuration.total,
-          seed.initialStateHash == L3Replay.stateHash(base) else {
+          refreshEngine || seed.initialStateHash == L3Replay.stateHash(base) else {
         throw SequelDataError.invalid("L3 seed source, population or initial state differs.")
     }
     guard (0..<limits.maxTicks).contains(throughTick), seed.inputs.count <= 100_000,
@@ -59,10 +60,11 @@ func l3SeedCandidate(from base: Lemmings3Runtime, levelNumber: Int, levelData: D
     while candidate.game.tick <= throughTick {
         while cursor < seed.inputs.count && seed.inputs[cursor].tick == candidate.game.tick {
             let input = seed.inputs[cursor]
-            guard L3Replay.apply(input, to: &candidate.game) else {
+            let accepted = L3Replay.apply(input, to: &candidate.game)
+            guard accepted || refreshEngine else {
                 throw SequelDataError.invalid("L3 seed input \(cursor) failed at tick \(candidate.game.tick).")
             }
-            candidate.inputs.append(input)
+            if accepted { candidate.inputs.append(input) }
             cursor += 1
         }
         if candidate.game.tick == throughTick { break }

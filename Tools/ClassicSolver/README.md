@@ -7,6 +7,8 @@ initial simulation hash.
 The number is the sequential entry in the whole archive. For packs with
 multiple source files, it is not the zero-based `#section` in a level identity.
 Run `--describe` and check the title before a targeted search.
+Use `--member FILE#0` for a single-level `.lvl` or `.ini` file. A member search
+records the member's archive ordinal in the replay metadata.
 
 `solve_fan_batch.py` reads an evidence audit, searches low-confidence playable
 fan levels, and records every attempt in `attempts.jsonl`. It skips attempts

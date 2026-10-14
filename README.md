@@ -59,12 +59,22 @@ and CoreSimulatorService cannot provide a local runtime. Real-data parity,
 physical-device and accessibility acceptance, audio, controller, Duo and
 distribution gates remain open. See the
 [2.0 release gate](Documentation/ReleaseReadiness/2.0ReleaseGate-2026-10-14.md).
-The macOS 1.9 release marks Lemmings 2: The Tribes Complete and Lemmings 3:
-Chronicles Beta. Classic content remains the completed reference engine. The bundled corpus contains
-6,020 Classic-format fan levels in 535 packs; this is not a claim of NeoLemmix
-fan-pack compatibility. NeoLemmix support remains Beta or Preview until its
-real-pack and reference-replay gates pass. Remaining sequel fidelity, high-survivor endings and L3 route coverage are
-tracked in the release evidence.
+The 1.9 release marks Lemmings 2: The Tribes Complete and Lemmings 3:
+Chronicles Beta. The native campaign gates record 120/120 L2 routes. The prior
+L3 engine state passed 90/90 routes and finished all three campaigns with 50
+survivors. The 15 October Mole direction and patrol corrections invalidated
+some L3 route witnesses. Shadow 13 now passes with a refreshed route. The
+strict route gate still stops at Shadow 7. Source parity, remaining route
+repair, L2's ark ending and L3 media remain open.
+
+The bundled Classic library contains 6,020 fan levels in 535 packs. The current
+native audit verifies 2,399 routes; 3,600 levels have no matching candidate and 21
+candidate or historical replays fail. The October CSV includes two additional
+imported levels outside that bundle. Imported content remains open-ended. The
+pinned NeoLemmix runnable gate passed 794 levels. The separate 788-level bundle has
+75 levels without bundled styles and exact-version winning replay evidence for
+158 levels. See [release scope](Documentation/ReleaseScope.md) for the current
+closure rule and status.
 
 ## Requirements
 

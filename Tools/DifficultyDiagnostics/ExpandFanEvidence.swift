@@ -143,7 +143,9 @@ struct GolemsObjectComparison: Codable {
         let rowIndex = Dictionary(uniqueKeysWithValues: rows.indices.map { (rows[$0].entry.identity, $0) })
         var attempts = 0, distinct = Set<String>(), failures: [String] = []
         var retimedWitnesses: [String: RetimedFanWitness] = [:]
-        let measuredPacks = Set(rows.filter { !$0.official && $0.profile.confidence != .low }.map { $0.entry.identity.packID })
+        let measuredPacks = Set(rows.filter {
+            !$0.official && (rebaseExpected || $0.profile.confidence != .low)
+        }.map { $0.entry.identity.packID })
         let onlyPack = ProcessInfo.processInfo.environment["FAN_ONLY_PACK"]
         let onlyPacks = ProcessInfo.processInfo.environment["FAN_ONLY_PACKS_FILE"].flatMap {
             try? String(contentsOfFile: $0, encoding: .utf8)
@@ -172,7 +174,9 @@ struct GolemsObjectComparison: Codable {
         for (packNumber, pack) in packs.enumerated() {
             for item in try FanLevelLibrary.validatedEntries(in: pack) {
                 let id = LevelCatalogueIdentity(engine: .classic, packID: "fan:" + FanLevelLibrary.catalogueID(pack), levelID: item.file + "#\(item.section ?? -1)")
-                guard let index = rowIndex[id], describeOnly || ((semanticsOnly || verifyOnly) ? rows[index].profile.confidence != .low : rows[index].profile.confidence == .low) else { continue }
+                guard let index = rowIndex[id], describeOnly || ((semanticsOnly || verifyOnly)
+                    ? (rebaseExpected || rows[index].profile.confidence != .low)
+                    : rows[index].profile.confidence == .low) else { continue }
                 do {
                     let (level, style) = try FanLevelLibrary.level(item, in: pack)
                     let ground = try FanLevelLibrary.groundSet(for: level, styleName: style, portsRoot: ports, pack: pack, entry: item)
@@ -222,7 +226,7 @@ struct GolemsObjectComparison: Codable {
                         let digest = SHA256.hash(data: try encoder.encode(replay)).description
                         let storedDigest = SHA256.hash(data: try encoder.encode(stored)).description
                         let replayRevision = rows[index].profile.key.replayRevision
-                        guard [digest, storedDigest].contains(where: {
+                        guard rebaseExpected || [digest, storedDigest].contains(where: {
                             replayRevision == $0 || replayRevision == String($0.dropFirst("SHA256 digest: ".count))
                         }) else {
                             throw NSError(domain: "Evidence", code: 1, userInfo: [NSLocalizedDescriptionKey:
