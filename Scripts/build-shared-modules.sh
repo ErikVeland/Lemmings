@@ -9,9 +9,10 @@ target="$3"
 shift 3
 compatibility=()
 [[ "$target" == x86_64-* ]] && compatibility=(-runtime-compatibility-version none)
-for shared_module in LemmingsAppCore LemmingsAudio LemmingsMobileCore; do
+for shared_module in LemmingsAppCore LemmingsAudio LemmingsMobileCore LemmingsTVCore; do
   dependencies=(-lNxlvKit)
   [[ "$shared_module" == LemmingsMobileCore ]] && dependencies+=(-lLemmingsAppCore)
+  [[ "$shared_module" == LemmingsTVCore ]] && dependencies+=(-lLemmingsAppCore -lLemmingsMobileCore)
   sources=("$project_dir"/Sources/$shared_module/**/*.swift(N))
   swiftc -swift-version 6 "${compatibility[@]}" "$@" -target "$target" -parse-as-library \
     -emit-module -emit-library -module-name "$shared_module" \
@@ -22,7 +23,7 @@ for shared_module in LemmingsAppCore LemmingsAudio LemmingsMobileCore; do
 done
 swiftc -swift-version 6 "${compatibility[@]}" "$@" -target "$target" -parse-as-library \
   -emit-module -emit-library -module-name LemmingsGameArt \
-  -I "$module_dir" -L "$library_dir" -lNxlvKit -lLemmingsAppCore -lLemmingsMobileCore \
+  -I "$module_dir" -L "$library_dir" -lNxlvKit -lLemmingsAppCore -lLemmingsMobileCore -lLemmingsTVCore \
   -emit-module-path "$module_dir/LemmingsGameArt.swiftmodule" \
   -Xlinker -install_name -Xlinker @rpath/libLemmingsGameArt.dylib \
   -o "$library_dir/libLemmingsGameArt.dylib" "$project_dir"/Sources/LemmingsGameArt/*.swift

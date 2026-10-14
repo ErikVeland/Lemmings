@@ -7414,6 +7414,8 @@ Task { @MainActor in
     try await subject.testLearningJourneyEntriesResolve()
     try await subject.testLearningJourneySessionsStart()
     try await subject.testPlaylistSessions()
+    try subject.testScrollableReleaseNotes()
+    try await subject.testRetainedSolutionSwitching()
     print("App integration tests passed.")
     #endif
     exit(0)
