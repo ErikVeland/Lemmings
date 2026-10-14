@@ -16,6 +16,7 @@ final class MusicRewindBuffer: @unchecked Sendable {
   private var readHead = 0.0
   private var remaining = 0
   private var total = 0
+  private var attackFrames = 0
   private var recording = true
   private var gain: Float = 1
   private var lastTrigger = -Double.infinity
@@ -59,6 +60,7 @@ final class MusicRewindBuffer: @unchecked Sendable {
     }
     anchorWritten = written
     lastTrigger = now
+    if remaining == 0 { attackFrames = 0 }
     total = Int(sampleRate * Self.impulseSeconds)
     remaining = total
     return true
@@ -101,11 +103,12 @@ final class MusicRewindBuffer: @unchecked Sendable {
         let fraction = Float(readHead - Double(position))
         let progress = 1 - Double(remaining) / Double(max(1, total))
         let vinyl = VinylMotion.sample(.stop, progress: progress * 0.8)
-        let envelope = Float(min(1, Double(total - remaining) / (sampleRate * 0.003),
+        let envelope = Float(min(1, Double(attackFrames) / (sampleRate * 0.008),
           Double(remaining) / (sampleRate * 0.020))) * gain
         l = (left[lower] + (left[upper] - left[lower]) * fraction) * envelope
         r = (right[lower] + (right[upper] - right[lower]) * fraction) * envelope
-        readHead -= 3.5 * vinyl.rate
+        readHead -= 1.6 * vinyl.rate
+        attackFrames += 1
         remaining -= 1
       } else { remaining = 0 }
       for channel in buffers.indices {

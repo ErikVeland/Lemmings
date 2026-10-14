@@ -50,8 +50,28 @@ import NxlvKit
                 "Legacy handoff changed composition or repeated its source: " + game)
             legacy.stop()
         }
+        let mainVariants = catalogue.tracks.filter { $0.game != "demo" }.flatMap(\.variants).filter {
+            $0.quality == "native-module" && FileManager.default.isReadableFile(atPath: root.appendingPathComponent($0.path).path)
+        }
+        let mainPools = ["Main": mainVariants.map { root.appendingPathComponent($0.path) }]
+        for game in ["classic.cancan", "lemmings2.medieval", "lemmings3.classic1"] {
+            let mainPlayer = AdaptiveDJPlayer()
+            mainPlayer.load(soundtracks: mainPools, catalogueRoot: root)
+            mainPlayer.setVolume(0)
+            let originalVariant = try unwrap(catalogue.select(trackID: game, cycle: 0,
+                availablePaths: Set(mainVariants.map(\.path))))
+            let source = root.appendingPathComponent(originalVariant.path)
+            try require(mainPlayer.startLevel(url: source, identity: "main:" + game), "Main-bundle source did not start: " + game)
+            try require(mainPlayer.shuffle(scope: .sameTrack), "Default shuffle did nothing with only main-bundle music: " + game)
+            let selected = try unwrap(mainPlayer.currentURL)
+            let selectedPath = SoundtrackPlayer.cataloguePath(selected, root: root) ?? ""
+            try require(selected != source && mainPlayer.isCrossfading && catalogue.entry(path: selectedPath)?.track.id != game,
+                "Main-bundle shuffle did not mix into another theme: " + game)
+            mainPlayer.stop()
+        }
         print("PASS manual same-track/all-track crossfades, current-recording exclusion, mute and suspended-output boundaries")
         print("PASS ordinary-source handoff into manual DJ for Classic, Lemmings 2 and Lemmings 3")
+        print("PASS default shuffle changes theme with main-bundle music in Classic, Lemmings 2 and Lemmings 3")
     }
     static func unwrap<T>(_ value: T?) throws -> T {
         guard let value else { throw Failure.invalid("No current recording") }

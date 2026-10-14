@@ -143,6 +143,7 @@ public final class MobileCatalogue {
         var pool: [MobileFavourites.Entry] = []
         var packs = 0
         for pack in self.packs(in: .fan) {
+            guard !Task.isCancelled else { break }
             guard case let .fan(file) = pack.source, let reader = try? ClassicFanPack(url: file) else { continue }
             let found = reader.entries()
             guard !found.isEmpty else { continue }

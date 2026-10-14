@@ -2,10 +2,15 @@
 import Foundation
 import Metal
 import LemmingsGameArt
+import NxlvKit
 
-/// Older GPUs and two-core iPads reserve more time for simulation and audio.
+/// Older GPUs and two-core devices reserve more time for simulation and audio.
 @MainActor enum MobileDevicePerformance {
+    #if os(tvOS)
+    static let profile = FXDeviceProfile.detect(device: MTLCreateSystemDefaultDevice(), mobile: true, television: true)
+    #else
     static let profile = FXDeviceProfile.detect(device: MTLCreateSystemDefaultDevice(), mobile: true)
+    #endif
     private static var adaptive = AdaptiveFXPerformance(profile: profile)
     private static var framesPerSecond: Double = constrained ? 30 : 60
     private static var lastPoll = -Double.infinity
@@ -14,7 +19,7 @@ import LemmingsGameArt
         return adaptive.presentation
     }
     static var enhancedEffectsAllowed: Bool {
-        profile.supportsEnhancedEffects && !ProcessInfo.processInfo.isLowPowerModeEnabled
+        presentation.enhancedEffectsAllowed && !ProcessInfo.processInfo.isLowPowerModeEnabled
             && ProcessInfo.processInfo.thermalState != .serious && ProcessInfo.processInfo.thermalState != .critical
     }
     // A12 iPads support the shaders, but cannot afford desktop-sized effects.
@@ -38,11 +43,17 @@ import LemmingsGameArt
         case .nominal: ceiling = process.isLowPowerModeEnabled ? .balanced : .full
         @unknown default: ceiling = .minimal
         }
-        adaptive.setPressure(ceiling: ceiling, framesPerSecond: framesPerSecond, now: now)
+        adaptive.setPressure(ceiling: ceiling, framesPerSecond: framesPerSecond, now: now,
+                             resources: DeviceEffectPressure.shared.snapshot())
+    }
+    static func memoryWarning() {
+        DeviceEffectPressure.shared.noteMemoryPressure()
+        refreshPressure(force: true)
     }
     static func recordCPU(_ seconds: Double, source: String) {
         refreshPressure()
         adaptive.recordCPU(seconds, source: source, now: ProcessInfo.processInfo.systemUptime)
+        DeviceEffectPressure.shared.setAudioQuality(adaptive.cpu.quality.rawValue)
     }
     static func recordGPU(_ seconds: Double, source: String) {
         refreshPressure()

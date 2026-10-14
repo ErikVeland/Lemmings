@@ -22,8 +22,16 @@ public enum GamePixelTypography {
         "*":[20,8,62,8,20], "%":[99,19,8,100,99], "(":[0,28,34,65,0],
         ")":[0,65,34,28,0], "'":[0,3,0,0,0], "!":[0,0,95,0,0],
         ",":[0,64,48,0,0], "<":[8,20,34,65,0], ">":[0,65,34,20,8],
-        "?":[2,1,81,9,6], "=":[20,20,20,20,20]
+        "?":[2,1,81,9,6], "=":[20,20,20,20,20],
+        "z":[0,68,100,84,76], "∞":[28,34,28,34,28], "💀":[14,123,63,123,14]
     ]
+
+    private static let glyphs = BitmapLatinGlyphs.monochrome(columns: columns)
+    public static func bitmapGlyph(for character: Character) -> ClassicMacArtwork.Frame? { glyphs[character] }
+    public static func verticalBounds(of text: String) -> (top: Int, bottom: Int) {
+        let frames = text.compactMap { glyphs[$0] }
+        return (min(0, frames.map(\.y).min() ?? 0), max(7, frames.map { $0.y + $0.height }.max() ?? 7))
+    }
 
     public enum Palette {
         case blue
@@ -58,9 +66,9 @@ public enum GamePixelTypography {
             let plain = GameMenuTypography.menuText(text)
             let doubled = face == .large
                 && typography.width(of: plain, face: face, scale: 2) <= rect.width
-                && typography.height(face: face, scale: 2) <= rect.height
+                && typography.height(of: plain, face: face, scale: 2) <= rect.height
             let scale = doubled ? 2 : 1
-            let height = typography.height(face: face, scale: scale)
+            let height = typography.height(of: plain, face: face, scale: scale)
             typography.menuLine(
                 text,
                 in: CGRect(x: rect.minX, y: rect.midY - height / 2, width: rect.width, height: height),
@@ -73,13 +81,15 @@ public enum GamePixelTypography {
             )
             return
         }
-        let plain = text.uppercased().replacingOccurrences(of: "×", with: "X")
+        let plain = BitmapLatinGlyphs.uppercase(text, locale: L10n.interface.locale).replacingOccurrences(of: "×", with: "X")
         let fittingColumns = max(0, Int((rect.width + 1) / 6))
         guard fittingColumns > 0 else { return }
         let normalized = plain.count <= fittingColumns ? plain
             : String(plain.prefix(max(0, fittingColumns - 3))) + String(repeating: ".", count: min(3, fittingColumns))
         let naturalWidth = max(1, normalized.count * 6 - 1)
-        let scale = max(1, min(maximumScale, floor(min(rect.height / 7, rect.width / CGFloat(naturalWidth)))))
+        let bounds = verticalBounds(of: normalized)
+        let height = CGFloat(bounds.bottom - bounds.top)
+        let scale = max(1, min(maximumScale, floor(min(rect.height / height, rect.width / CGFloat(naturalWidth)))))
         let drawnWidth = CGFloat(naturalWidth) * scale
         let start: CGFloat
         switch alignment {
@@ -87,19 +97,19 @@ public enum GamePixelTypography {
         case .right: start = rect.maxX - drawnWidth
         default: start = rect.midX - drawnWidth / 2
         }
-        let top = floor(rect.midY - 3.5 * scale)
+        let top = floor(rect.midY - height * scale / 2) - CGFloat(bounds.top) * scale
         context.saveGState()
         context.clip(to: rect)
         context.setShouldAntialias(false)
         context.setFillColor(color ?? palette.colour)
         context.setAlpha(alpha)
         for (index, character) in normalized.enumerated() {
-            guard let glyph = columns[character] else { continue }
-            for (x, column) in glyph.enumerated() {
-                for y in 0..<7 where column & (1 << y) != 0 {
+            guard let glyph = glyphs[character] else { continue }
+            for x in 0..<glyph.width {
+                for y in 0..<glyph.height where glyph.rgba[(y * glyph.width + x) * 4 + 3] != 0 {
                     context.fill(CGRect(
-                        x: start + CGFloat(index * 6 + x) * scale,
-                        y: top + CGFloat(y) * scale,
+                        x: start + CGFloat(index * 6 + glyph.x + x) * scale,
+                        y: top + CGFloat(glyph.y + y) * scale,
                         width: scale,
                         height: scale
                     ))

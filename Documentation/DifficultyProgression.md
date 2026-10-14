@@ -245,3 +245,19 @@ of ten probes is an audit configuration, not complete precision analysis.
 See `DifficultyProgressionAudit.md` for the local results and remaining release
 gaps. Passing tests does not establish human difficulty calibration, complete
 technique inference or NeoLemmix playlist/Hot Seat support.
+
+## Solo progression eligibility
+
+All generated policies reject competitive Versus and known two-player fan packs
+through the same eligibility rule as the teaching Journey. This includes
+There can be only one. A winning one-player replay cannot override that rule.
+Saved Mac sequence queues and mobile/TV learning queues remove competitive
+entries on load. A mixed queue advances to its next solo entry. Run identity,
+session ownership and completion records remain intact. An entirely competitive
+queue has no resumable solo run. New Mac sequence starts apply the same filter.
+Standalone source libraries retain their authored levels.
+
+Low-confidence fan estimates have a placement floor of 300 in generated solo
+progression. The measured score stays unchanged. Reviewed teaching lessons keep
+their authored placement. This floor is conservative and does not certify that
+a fan puzzle is suitable for beginners. Progression generation uses version 5.

@@ -41,9 +41,30 @@ import NxlvKit
             try check(game.resume(), "Player resumes after skill planning \(index)")
             _ = game.advance(at: 10); _ = game.advance(at: 10.2)
             try check(content.session.snapshot.tick > tick, "Native clock advances \(index)")
+            for _ in 0..<300 where content.session.targetCandidates(for: game.selectedControl).isEmpty {
+                content.session.tick()
+            }
+            guard let actor = content.session.targetCandidates(for: game.selectedControl).first else {
+                throw Failure.check("Missing paused targeting actor \(index)")
+            }
+            let aim = game.viewport.viewPoint(fromLevel: actor.point)
+            game.aim(dx: aim.x - game.pointer.x, dy: aim.y - game.pointer.y)
+            try check(game.target?.id == actor.id, "Stick aim selects the native actor \(index)")
+            let beforePause = game.pointer
             game.pause(); let pausedTick = content.session.snapshot.tick
+            try check(game.pointer == beforePause && game.target?.id == actor.id,
+                "Planning retains stick aim and its target \(index)")
+            game.aim(dx: 2, dy: 0)
+            try check(game.pointer.x == beforePause.x + 2 && game.target?.id == actor.id,
+                "First paused stick movement selects immediately \(index)")
+            try check(content.session.snapshot.tick == pausedTick && game.play.phase == .planning,
+                "Paused targeting does not advance the simulation \(index)")
             _ = game.advance(at: 80)
             try check(content.session.snapshot.tick == pausedTick, "Planning holds tick \(index)")
+            let pausedPointer = game.pointer
+            try check(game.resume() && game.pointer == pausedPointer && game.target?.id == actor.id,
+                "Resume keeps the paused pointer and target \(index)")
+            game.pause()
             game.step()
             try check(content.session.snapshot.tick == pausedTick + 1, "One forward step \(index)")
             game.setCamera(.precision)
@@ -95,9 +116,15 @@ import NxlvKit
         let crowdGame = try TVGameExperience(content: .init(summary: .init(index: 0, rank: "Test", number: 1, title: "Crossing"), session: crowd), owner: "host")
         _ = crowdGame.resume(); crowdGame.pause(); crowdGame.cycleTarget(1)
         try check(crowdGame.target?.id == 1, "Cycling chooses stable actor")
+        let lockedPointer = crowdGame.pointer
         crowd.positions = [1: .init(x: 42, y: 40), 2: .init(x: 40, y: 40)]
         crowdGame.refreshTarget()
         try check(crowdGame.target?.id == 1, "Crossing cannot steal locked target")
+        try check(crowdGame.pointer == lockedPointer && crowdGame.target?.point != crowdGame.viewport.levelPoint(fromView: lockedPointer),
+            "Actor tracking leaves the actual pointer at its input position")
+        try check(crowdGame.resume() && crowdGame.pointer == lockedPointer && crowdGame.target?.id == 1,
+            "Resume preserves a locked actor without moving the pointer")
+        crowdGame.pause()
         try check(crowdGame.assign() && crowd.assigned == [1], "Assignment reaches selected actor")
         crowd.positions.removeValue(forKey: 1); crowdGame.refreshTarget()
         try check(crowdGame.target == nil && !crowdGame.assign() && crowd.assigned == [1], "Lost target cannot assign to neighbour")

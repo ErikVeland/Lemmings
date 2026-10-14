@@ -479,12 +479,11 @@ import NxlvKit
   }
 
   /// Reaching the rescue target allows one musical transition.
-  public func updateTelemetry(_ telemetry: AdaptiveDJEngine.Telemetry, waitForOpening: Bool = true) {
-    guard isPlaying, let deck = activeDeck, let holdEnd = levelOpeningHoldEndSourceSeconds else { return }
-    // A completed win must celebrate even when the opening section is unfinished.
-    guard !waitForOpening || (telemetry.isComplete && telemetry.didWin) || deck.sourceSeconds >= holdEnd else { return }
+  public func updateTelemetry(_ telemetry: AdaptiveDJEngine.Telemetry) {
+    guard isPlaying, !outputSuspended else { return }
     guard let cue = director.cue(for: telemetry) else { return }
-    _ = crossfade(seconds: Fade.phrase, victory: cue.reason == .won, failure: cue.reason == .lost)
+    _ = crossfade(seconds: Fade.phrase, victory: cue.reason == .won, failure: cue.reason == .lost,
+                  immediate: cue.timing == .immediate)
   }
 
   // MARK: - Decks

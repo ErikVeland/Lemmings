@@ -31,10 +31,8 @@ public struct TVControllerBindings {
         if !pressed.contains(.options) {
             actions = actions.compactMap { action in
                 switch action {
-                case .repeatAssignment: return .pause
-                case .focusLast: return .endRun
                 case .focusUnassigned(let direction): return .rate(direction < 0 ? -99 : 99)
-                case .pause: menuRequested = true; return nil
+                case .cancel: menuRequested = true; return nil
                 default: return action
                 }
             }
@@ -49,7 +47,7 @@ public struct TVControllerBindings {
             }
         }
         if pressed.contains(.options), pressed.contains(.rightStick), !previous.contains(.rightStick) {
-            actions.removeAll { $0 == .centre(false) }
+            actions.removeAll { $0 == .centre(false) || $0 == .focusLast }
             actions.append(.settings)
         }
         if optionsArmed, pressed.contains(.options), pressed.contains(.leftStick), !previous.contains(.leftStick) {
@@ -66,10 +64,11 @@ public struct TVControllerBindings {
     }
     public static let help = L10n.text("""
     Left stick: aim • Right stick: pan
-    Cross / A: assign • Circle / B: reset speed, then pause
-    Square / X: pause / play • Triangle / Y: nuke / undo, where supported
+    Cross / A: select skill / assign • Circle / B: reset fast speed, then pause / play
+    Square / X: reset speed • Triangle / Y: nuke / undo, where supported
     L1 / R1: previous / next skill
-    L2 / LT: hold to rewind • R2 / RT: resume, tap fast-forward, hold boost
+    L2 / LT: tap step back, hold rewind • R2 / RT: tap step forward, hold scrub forward
+    At fast speed, either trigger resets to 1×. Release before using the timeline.
     Options / Menu: menu • DualSense touchpad click: DJ shuffle
     D-pad left / right: minimum / maximum release rate, where supported
     D-pad up / down: release rate, where supported

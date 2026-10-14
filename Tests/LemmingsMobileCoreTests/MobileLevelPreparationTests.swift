@@ -4,6 +4,47 @@ import Testing
 @testable import LemmingsMobileCore
 
 @Suite struct MobileLevelPreparationTests {
+    @MainActor @Test func libraryOpeningRunsOffUIThread() async throws {
+        let loader = MobileLibraryLoader()
+        let opened = try await loader.open {
+            #expect(!Thread.isMainThread)
+            return PreparationLibrary()
+        }
+        #expect(opened.library?.levels.count == 4)
+    }
+
+    @Test func cancelledLibraryOpeningDoesNotTransferStaleContent() async throws {
+        let gate = PreparationGate()
+        let loader = MobileLibraryLoader()
+        let task = Task {
+            try await loader.open {
+                gate.block()
+                return PreparationLibrary()
+            }
+        }
+        await gate.waitUntilEntered()
+        task.cancel()
+        gate.release.signal()
+        await #expect(throws: CancellationError.self) { try await task.value }
+    }
+
+    @Test func cancelledPreviewDoesNotCacheItsSessionOrDelayQueuedPlay() async throws {
+        let gate = PreparationGate()
+        let loader = MobileMenuPreviewLoader { PreparationLibrary(onLoad: { index in
+            if index == 0 { gate.block() }
+        }) }
+        let obsolete = Task { try await loader.load(0) }
+        await gate.waitUntilEntered()
+        let neighbour = Task { try await loader.load(1) }
+        obsolete.cancel()
+        neighbour.cancel()
+        gate.release.signal()
+        await #expect(throws: CancellationError.self) { try await obsolete.value }
+        await #expect(throws: CancellationError.self) { try await neighbour.value }
+        let playing = try await loader.prepare(1)
+        #expect((playing.content.session as? PreparationSession)?.serial == 2)
+    }
+
     @Test func previewTransfersPreparedSessionOnceAndRetryStartsFresh() async throws {
         let loader = MobileMenuPreviewLoader { PreparationLibrary() }
         let preview = try await loader.load(0)
@@ -48,9 +89,26 @@ private final class PreparationLibrary: MobileGameLibrary {
     let displayName = "Fixture"
     let levels = (0..<4).map { MobileLevelSummary(index: $0, rank: "Fixture", number: $0 + 1, title: "Level") }
     private var serial = 0
+    private let onLoad: @Sendable (Int) -> Void
+    init(onLoad: @escaping @Sendable (Int) -> Void = { _ in }) { self.onLoad = onLoad }
     func loadLevel(at index: Int) throws -> MobileLevelContent {
+        onLoad(index)
         serial += 1
         return .init(summary: levels[index], session: PreparationSession(index: index, serial: serial))
+    }
+}
+
+private final class PreparationGate: @unchecked Sendable {
+    private let lock = NSLock()
+    private var entered = false
+    let release = DispatchSemaphore(value: 0)
+    func block() {
+        lock.withLock { entered = true }
+        // Bound a failed test without leaving its content worker stuck.
+        _ = release.wait(timeout: .now() + 5)
+    }
+    func waitUntilEntered() async {
+        while !lock.withLock({ entered }) { await Task.yield() }
     }
 }
 

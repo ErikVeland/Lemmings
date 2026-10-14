@@ -53,6 +53,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
     public let reservedRegions: [MobileReservedRegion]
     public let supportsRewind: Bool
     public let isDiorama: Bool
+    public private(set) var showsMenuButton = true
 
     public static let panelWidth: CGFloat = 320
     public static let panelHeight: CGFloat = 40
@@ -60,7 +61,30 @@ public struct MobileHUDLayout: Equatable, Sendable {
 
     public static func make(container: MobileSize, safeArea: MobileInsets, hasRate: Bool, skillCount: Int,
                             reservedRegions: [MobileReservedRegion] = [], supportsRewind: Bool = false,
-                            hasPlayer: Bool = false, engineIdentifier: String = "classic") -> MobileHUDLayout {
+                            hasPlayer: Bool = false, engineIdentifier: String = "classic",
+                            showsMenuButton: Bool = true) -> MobileHUDLayout {
+        let layout = makeTouchLayout(container: container, safeArea: safeArea, hasRate: hasRate,
+            skillCount: skillCount, reservedRegions: reservedRegions, supportsRewind: supportsRewind,
+            hasPlayer: hasPlayer, engineIdentifier: engineIdentifier)
+        guard !showsMenuButton else { return layout }
+        let original = layout.interface
+        // Console navigation comes from Back or Options/Menu, with no HUD target.
+        let status = layout.portrait != nil
+            ? MobileRect(x: original.statusFrame.x, y: original.statusFrame.y,
+                         width: original.safeFrame.width, height: original.statusFrame.height)
+            : original.statusFrame
+        let interface = MobileInterfaceLayout(orientation: original.orientation, safeFrame: original.safeFrame,
+            playfieldFrame: original.playfieldFrame, statusFrame: status,
+            controlsFrame: original.controlsFrame, controlFrames: Array(original.controlFrames.dropLast()))
+        return MobileHUDLayout(portrait: layout.portrait, interface: interface, panel: layout.panel,
+            compactScale: layout.compactScale, speedArrows: layout.speedArrows,
+            reservedRegions: layout.reservedRegions, supportsRewind: layout.supportsRewind,
+            isDiorama: layout.isDiorama, showsMenuButton: false)
+    }
+
+    private static func makeTouchLayout(container: MobileSize, safeArea: MobileInsets, hasRate: Bool, skillCount: Int,
+                                       reservedRegions: [MobileReservedRegion], supportsRewind: Bool,
+                                       hasPlayer: Bool, engineIdentifier: String) -> MobileHUDLayout {
         let controlCount = (hasRate ? 2 : 0) + max(0, skillCount) + (supportsRewind ? 7 : 5)
         let base = MobileLayoutEngine.make(container: container, safeArea: safeArea, controlCount: 0)
         let safe = base.safeFrame

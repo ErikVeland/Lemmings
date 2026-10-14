@@ -71,7 +71,12 @@ extension MobileGameViewController {
         playfieldView.onDJShuffle = { [weak self] in self?.shuffleMusic() ?? false }
         adapter.controllerSpeed = { [weak self] in self?.inputSpeed.target ?? 1 }
         adapter.triggerFeedbackEnabled = { [weak self] in self?.playState.phase == .running && self?.gameSettings.classic.reduceMotion != true }
+        adapter.onForcedPause = { [weak self] in self?.pauseForPlanning() }
         adapter.onRewindHeld = { [weak self] in self?.setRewindHeld($0) }
+        #if os(tvOS)
+        adapter.onTimelinePark = { [weak self] in self?.pauseForPlanning() }
+        adapter.onForwardScrub = { [weak self] in self?.setTVForwardScrub($0) }
+        #endif
         adapter.onMenuPause = { [weak self] in
             guard let self else { return }
             if self.isChoosingToolDirection { self.performCommand(.pause); return }
@@ -110,11 +115,12 @@ extension MobileGameViewController {
             guard let self else { return }
             #if os(tvOS)
             if self.tvCameraMode { self.panInput(dx: dx, dy: dy); return }
-            self.tvTargetLock.clear()
-            #endif
+            self.moveTVPointer(dx: dx, dy: dy)
+            #else
             let centre = self.previewPoint ?? MobilePoint(x: self.playfieldView.bounds.midX, y: self.playfieldView.bounds.midY)
             self.aim(at: MobilePoint(x: min(self.playfieldView.bounds.width, max(0, centre.x + dx)),
                                    y: min(self.playfieldView.bounds.height, max(0, centre.y + dy))))
+            #endif
         }
         overlayCanvas.onPageChanged = { [weak adapter] in adapter?.reset() }
         adapter.onMenuScroll = { [weak self] in self?.overlayCanvas.scrollInput(delta: $0) }
@@ -130,15 +136,24 @@ extension MobileGameViewController {
         hoverAimActive = hover
         previewInput = .precision
         previewPoint = point
+        #if os(tvOS)
+        if point != nil { tvTargetLock.clear() }
+        if let point { tvPointerPoint = playfieldView.convert(playfieldView.controllerOutputPoint(CGPoint(x: point.x, y: point.y)), to: view) }
+        #endif
         if !pollingController { highlightedTarget = point.flatMap { self.target(at: $0) } }
         if fanMode, (session as? Lemmings2MobileSession)?.isFanActive == true { updateFan(at: point, active: true) }
         renderCurrentFrame(force: true)
     }
     func restoreHoverAim() {
+        #if os(tvOS)
+        hoverAimActive = false
+        ensureTVPointer()
+        #else
         hoverAimActive = true
         previewInput = .precision
         previewPoint = playfieldView.hoverInputPoint
         highlightedTarget = previewPoint.flatMap(target)
+        #endif
     }
     func panInput(dx: Double, dy: Double) {
         #if os(tvOS)
@@ -152,10 +167,13 @@ extension MobileGameViewController {
         guard overlay.isHidden, lifecycle.isForeground, !lifecycle.isInterrupted else { return }
         #if os(tvOS)
         if tvCameraMode && [.assign, .pause, .speedReset].contains(command) {
-            tvCameraMode = false; pausePlay(showControls: true); return
+            tvCameraMode = false
+            if command != .pause { return }
         }
         #endif
+        #if !os(tvOS)
         if command == .speedReset, session.isReadOnly, hasSolutionPair { selectSolutionMode(.game); return }
+        #endif
         switch command {
         case .pause:
             handle(.pause)
@@ -180,8 +198,8 @@ extension MobileGameViewController {
         case .speed: handle(.speed)
         case .speedStep(let delta): handle(.speedStep(delta))
         case .speedReset:
-            if speed == 1 && !inputSpeed.isHeld { pausePlay(showControls: true) }
-            else { inputSpeed.reset(at: ProcessInfo.processInfo.systemUptime); updateInputSpeed(at: ProcessInfo.processInfo.systemUptime) }
+            inputSpeed.reset(at: ProcessInfo.processInfo.systemUptime)
+            updateInputSpeed(at: ProcessInfo.processInfo.systemUptime)
         case .zoom(let superzoom):
             let viewport = playfieldView.gameViewport
             let requested = superzoom ? 4.0 : 2.0
@@ -205,16 +223,22 @@ extension MobileGameViewController {
             aim(at: point)
             #if os(tvOS)
             tvTargetLock.select(candidate.id)
+            renderCurrentFrame(force: true)
             #endif
         case .focusLast:
             if let previous = lastInputAssignment {
                 aim(at: playfieldView.gameViewport.viewPoint(fromLevel: previous.point))
                 #if os(tvOS)
                 tvTargetLock.select(previous.id)
+                renderCurrentFrame(force: true)
                 #endif
             }
         case .assign, .repeatAssignment:
-            guard !session.isReadOnly, playState.canEdit else { return }
+            guard playState.canEdit else { return }
+            #if os(tvOS)
+            if command == .assign, activateTVPointerControl() { return }
+            #endif
+            guard !session.isReadOnly else { return }
             let control = command == .repeatAssignment ? (lastAssignmentControl ?? selectedControl) : selectedControl
             #if os(tvOS)
             refreshTVTarget(control: control)
@@ -261,6 +285,15 @@ extension MobileGameViewController {
     }
 
     func setControllerSpeedInput(held: Bool) {
+        if held && speed > 1 {
+            performCommand(.speedReset)
+            controllerSpeedResetConsumed = true
+            return
+        }
+        if controllerSpeedResetConsumed {
+            if !held { controllerSpeedResetConsumed = false }
+            return
+        }
         #if os(tvOS)
         if held {
             guard overlay.isHidden, playState.canEdit, lifecycle.isForeground, !lifecycle.isInterrupted else { return }
@@ -301,10 +334,10 @@ extension MobileGameViewController {
         speed = inputSpeed.multiplier; clock.speed = speed
         if changed { updatePerformanceBudget(); updateHUD() }
     }
-    func showInGameSettings(_ group: MobileSettingsGroup? = nil, mappings: Bool = false) {
+    func showInGameSettings(_ group: MobileSettingsGroup? = nil, mappings: Bool = false, soundtrack: Bool = false, insights: Bool = false) {
         guard let library = parent as? MobileLibraryViewController else { return }
         showCustomOverlay(title: L10n.text("Settings"), details: [], actions: [])
-        overlayCanvas.page = mappings ? library.controllerMappingsPage()
+        overlayCanvas.page = soundtrack ? library.soundtrackPage() : insights ? library.insightsPage() : mappings ? library.controllerMappingsPage()
             : group.map { library.settingsPage($0) } ?? MobileSettingsArt.groups()
         overlayCanvas.onAction = { [weak self, weak library] id in
             guard let self, let library else { return }
@@ -312,14 +345,19 @@ extension MobileGameViewController {
             else if id == "settings" { self.showInGameSettings() }
             else if id.hasPrefix("settingsGroup."), let next = MobileSettingsGroup(rawValue: String(id.dropFirst(14))) { self.showInGameSettings(next) }
             else if id == "controllerMappings" { self.showInGameSettings(.controller, mappings: true) }
-            else if id == "soundtrack" || id == "playInsights" {
-                let route: MobileLibraryViewController.Route = id == "soundtrack" ? .soundtrack : .playInsights
-                let exit = self.onExit
-                self.onExit = { [weak library] action in
-                    exit?(action)
-                    if action == .library { library?.navigate(route) }
+            else if id == "soundtrack" {
+                MobileMusicLibraries.shared.onChange = { [weak self] in
+                    guard let self, !self.overlay.isHidden, self.overlayCanvas.page.title == L10n.text("Soundtrack") else { return }
+                    self.showInGameSettings(.audio, soundtrack: true)
                 }
-                self.leaveToLibrary()
+                self.showInGameSettings(.audio, soundtrack: true)
+            } else if id == "playInsights" { self.showInGameSettings(.privacy, insights: true)
+            } else if id.hasPrefix("lib."), let pack = MobileMusicLibraries.shared.catalogue?.packs.first(where: { $0.id == String(id.dropFirst(4)) }) {
+                let libraries = MobileMusicLibraries.shared
+                if libraries.progress[pack.id] != nil { libraries.cancel(pack) }
+                else if libraries.isInstalled(pack) { libraries.remove(pack) }
+                else { libraries.download(pack) }
+                self.showInGameSettings(.audio, soundtrack: true)
             } else if library.handleSettings(id) {
                 self.gameSettings = library.mobileSettings
                 if id == "setting.speed" { self.inputSpeed.setCruise(Double(library.mobileSettings.fastSpeed)) }

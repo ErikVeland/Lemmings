@@ -105,12 +105,17 @@ import NxlvKit
                 stopBoost(at: now); keyboard.controllerMenuAction(action); break
             }
             switch action {
-            case .speedReset, .speedStep, .cancel, .retry, .rewind, .step: stopBoost(at: now)
+            case .speedReset, .speedStep, .cancel, .pause, .retry, .rewind, .step: stopBoost(at: now)
             default: break
             }
             switch action {
             case let .boost(down):
                 if down {
+                    if keyboard.speedControl?.isFast == true {
+                        stopBoost(at: now)
+                        keyboard.speedControl?.reset(at: now)
+                        continue
+                    }
                     boostPrevious = keyboard.speedControl?.isFast ?? false
                     boostWasVariable = keyboard.speedControl?.variableEnabled == true
                     boostStartedAt = now; boostCanTap = keyboard.controllerTapSpeed()

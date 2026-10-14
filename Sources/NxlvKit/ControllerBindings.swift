@@ -28,9 +28,9 @@ public struct ControllerBindings {
     public static func roleName(_ button: Button) -> String {
         switch button {
         case .a: return L10n.text("Assign selected skill")
-        case .b: return L10n.text("Reset speed / cancel / pause menu")
-        case .x: return L10n.text("Repeat last assignment")
-        case .y: return L10n.text("Focus last assignment")
+        case .b: return L10n.text("Reset fast speed / pause / resume")
+        case .x: return L10n.text("Reset speed")
+        case .y: return L10n.text("End run / undo")
         case .leftShoulder: return L10n.text("Previous skill")
         case .rightShoulder: return L10n.text("Next skill")
         case .leftTrigger: return L10n.text("Modifier for extra actions")
@@ -39,7 +39,7 @@ public struct ControllerBindings {
         case .down: return L10n.text("Decrease release rate")
         case .left: return L10n.text("Previous unassigned lemming")
         case .right: return L10n.text("Next unassigned lemming")
-        case .menu: return L10n.text("Pause / resume")
+        case .menu: return L10n.text("Game menu")
         case .options: return L10n.text("Controls help")
         case .leftStick: return L10n.text("Centre on entrance")
         case .rightStick: return L10n.text("Centre on exit")
@@ -58,11 +58,11 @@ public struct ControllerBindings {
         // Fixed order makes simultaneous presses reproducible.
         for button in [Button.b, .menu, .options, .leftShoulder, .rightShoulder, .left, .right, .up, .down, .leftStick, .rightStick, .y, .x, .a, .rightTrigger] where pressed.contains(button) && !previous.contains(button) {
             switch button {
-            case .a: actions.append(extra && !inMenu ? .endRun : .assign)
-            case .b: actions.append(extra && !inMenu ? .rewind : .cancel)
-            case .x: actions.append(extra ? .speedReset : .repeatAssignment)
-            case .y: actions.append(extra ? .hints : .focusLast)
-            case .menu: actions.append(extra && !inMenu ? .retry : .pause)
+            case .a: actions.append(extra && !inMenu ? .repeatAssignment : .assign)
+            case .b: actions.append(extra && !inMenu ? .rewind : (inMenu ? .cancel : .pause))
+            case .x: actions.append(.speedReset)
+            case .y: actions.append(extra ? .hints : .endRun)
+            case .menu: actions.append(extra && !inMenu ? .retry : .cancel)
             case .options: actions.append(extra ? .settings : .help)
             case .leftShoulder: actions.append(extra && !inMenu ? .step(-1) : .cycle(-1))
             case .rightShoulder: actions.append(extra && !inMenu ? .step(1) : .cycle(1))
@@ -71,7 +71,7 @@ public struct ControllerBindings {
             case .up: actions.append(extra && !inMenu ? .centre(true) : .rate(1))
             case .down: actions.append(extra && !inMenu ? .centre(false) : .rate(-1))
             case .leftStick: actions.append(extra && !inMenu ? .djShuffle : .centre(true))
-            case .rightStick: actions.append(.centre(false))
+            case .rightStick: actions.append(extra && !inMenu ? .focusLast : .centre(false))
             case .rightTrigger: actions.append(.boost(true))
             case .leftTrigger: break
             }
@@ -81,20 +81,22 @@ public struct ControllerBindings {
     public static let help = L10n.text("""
     Controller (Xbox-style button names)
     Left stick: aim • Right stick: pan camera
-    A: assign selected skill • B: return to 1×, then cancel / pause menu
-    X: repeat last skill • Y: focus last assignment
+    A: assign selected skill • B: reset fast speed, then pause / resume
+    X: reset speed • Y: end run / undo
     LB / RB: previous / next available skill
     D-pad left / right: previous / next unassigned lemming
     D-pad up / down: increase / decrease release rate (where supported)
-    Tap RT: toggle fast-forward • Hold RT: ramp up; release: previous speed
-    B: immediately return to 1× • Menu: pause / resume
+    At fast speed, RT resets to 1×. Release before pressing it again.
+    Tap RT at 1×: toggle fast-forward • Hold RT: ramp up; release: previous speed
+    X: immediately return to 1× • Menu: game menu
     L3 / R3: entrance / exit • View / Options: help
     Hold LT + D-pad left / right: decrease / increase speed
     Hold LT + D-pad up / down: entrance / exit
     Hold LT + X: reset speed • Hold LT + Y: level hints
     Hold LT + LB / RB: step back / forward where supported
     Hold LT + B: rewind where supported • LT + Menu: retry
-    Hold LT + A: end run / undo nuke • LT + View / Options: settings
+    Hold LT + A: repeat last assignment • LT + View / Options: settings
+    Hold LT + R3: focus last assignment
     Hold LT + L3: DJ shuffle • DualSense touchpad click: DJ shuffle
     Menus: D-pad selects or adjusts, A confirms, B returns, LB / RB changes tabs
     Right stick scrolls long pages. Release buttons before using a new page.

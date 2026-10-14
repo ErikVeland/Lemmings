@@ -41,13 +41,15 @@ public struct ProgressionCandidate: Sendable {
         self.skillAssignmentCount = skillAssignmentCount
     }
     var placementScore: Double {
-        max(profile.overallScore, LearningRouteSafety.minimumDemand(for: entry,
+        // Unreviewed fan puzzles need a conservative placement, even with simple metadata.
+        let fanFloor = !isOfficial && profile.confidence == .low ? 300.0 : 0
+        return max(fanFloor, profile.overallScore, LearningRouteSafety.minimumDemand(for: entry,
             concepts: profile.detectedTechniques, assetsRevision: profile.key.assetsRevision))
     }
     var stableKey: String { [entry.identity.engine.rawValue, entry.identity.packID, entry.identity.levelID].joined(separator: "\u{0}") }
 }
 
-public enum ProgressionModel { public static let version = "progression-4" }
+public enum ProgressionModel { public static let version = "progression-5" }
 
 public struct ProgressionConfiguration: Codable, Equatable, Sendable {
     public var maximumLevels = 100
@@ -94,7 +96,7 @@ public enum ProgressionGenerator {
               configuration.materialCostDifference.isFinite, configuration.officialBonus.isFinite else {
             throw LevelPlaylistError.invalidPool
         }
-        var remaining = candidates.sorted { $0.stableKey < $1.stableKey }
+        var remaining = candidates.filter { LearningJourney.isSinglePlayer($0.entry, sourceRank: $0.profile.sourceRank) }.sorted { $0.stableKey < $1.stableKey }
         if policy == .techniqueCurriculum {
             guard let technique = configuration.technique, !technique.isEmpty else { throw LevelPlaylistError.invalidPool }
             remaining = remaining.filter { $0.profile.detectedTechniques.contains(technique)

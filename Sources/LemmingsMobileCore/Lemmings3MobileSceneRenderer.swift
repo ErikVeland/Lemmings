@@ -56,7 +56,7 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
     private let scene: Lemmings3Scene
     private let palette: [UInt8]
     private let animations: [Lemmings3Sprites.Animation]
-    private let brickPixels: [UInt8]
+    private let terrain: MobileEditedTerrain
     private let toolFrames: [Int: SequelIndexedImage]
     private let creatureBanks: [Lemmings3Runtime.Creature.Kind: CreatureBank]
     private let animatedObjects: [Int: AnimatedObject]
@@ -71,7 +71,14 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
         animations = sprites.animations
         self.creatureBanks = creatureBanks
         self.animatedObjects = Dictionary(uniqueKeysWithValues: animatedObjects.map { ($0.id, $0) })
-        brickPixels = try style.constructionTile().pixels
+        let bricks = try style.constructionTile().pixels
+        guard scene.image.width > 0, scene.image.height > 0,
+              scene.image.width <= Int.max / scene.image.height,
+              scene.image.pixels.count == scene.image.width * scene.image.height,
+              scene.background.pixels.count == scene.image.pixels.count,
+              bricks.count >= 64 else { throw MobileSessionError.invalidFrame }
+        terrain = MobileEditedTerrain(pixels: scene.image.pixels, background: scene.background.pixels,
+                                      palette: palette, bricks: bricks, width: scene.image.width)
         toolFrames = try Dictionary(uniqueKeysWithValues: Lemmings3Runtime.Tool.allCases.map { tool in
             (tool.rawValue, try style.permanent.image(object: tool.sourceIdentifier, palette: style.palette))
         })
@@ -128,16 +135,7 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
         let height = scene.image.height
         guard width > 0, height > 0, width <= Int.max / height,
               scene.image.pixels.count == width * height else { throw MobileSessionError.invalidFrame }
-        var pixels = scene.background.pixels
-        for index in pixels.indices where scene.image.pixels[index] != scene.background.pixels[index] {
-            pixels[index] = scene.image.pixels[index]
-        }
-        for (index, filled) in runtime.terrainEdits where pixels.indices.contains(index) {
-            pixels[index] = filled
-                ? brickPixels[(index / width % 8) * 8 + index % width % 8]
-                : scene.background.pixels[index]
-        }
-        var rgba = Self.expand(pixels, palette: palette)
+        var rgba = terrain.frame(edits: runtime.terrainEdits)
         for trap in runtime.configuration.traps {
             guard let object = animatedObjects[trap.id],
                   let frameIndex = Self.animatedFrameIndex(runtime.trapFrame(id: trap.id), count: object.frames.count),

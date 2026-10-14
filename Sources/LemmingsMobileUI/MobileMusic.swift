@@ -216,7 +216,7 @@ import UIKit
         dj.updateTelemetry(.init(releasedCount: snapshot.released, totalCount: snapshot.total,
             savedCount: snapshot.saved, requiredCount: snapshot.required, releaseRate: snapshot.releaseRate ?? 50,
             remainingSeconds: snapshot.remainingSeconds, isNuking: snapshot.isEndingRun,
-            didWin: snapshot.didWin, isComplete: snapshot.isComplete), waitForOpening: false)
+            didWin: snapshot.didWin, isComplete: snapshot.isComplete))
     }
     func advance() {
         guard !inactive, !isTestAudioMuted else { return }

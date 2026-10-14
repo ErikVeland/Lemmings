@@ -54,7 +54,6 @@ import UIKit
     var cursorRemaining: Int?
     var selectionSprite: MobileSpriteHighlight?
     var selectionOpacity: CGFloat = 1
-    var rescueSprites: [MobileSpriteHighlight] = []
     var assignmentSprite: MobileSpriteHighlight?
     var assignmentProgress: Double?
     var renderScale = 1.0
@@ -64,12 +63,14 @@ import UIKit
     private var explosionBirths: [Int: (tick: Int, expires: Double)] = [:]
     private let decoration = MobilePlayfieldDecoration()
     private let failureMood = FailureMoodTransition()
+    #if os(iOS)
     private let completionGlow = RescueCelebrationTransition()
-    private let backgroundGlow = RescueBackgroundGlow()
+    #endif
     func setRescueFeedback(saved: Int, required: Int, total: Int, isComplete: Bool, didWin: Bool) {
+        #if os(iOS)
         completionGlow.set(active: RescueCelebration.isSecured(saved: saved, required: required, isComplete: isComplete, didWin: didWin),
-            brief: RescueCelebration.requiresAll(required: required, total: total),
-            animated: !motionReduced && !displaySettings.reduceFlashes)
+            brief: RescueCelebration.requiresAll(required: required, total: total))
+        #endif
     }
     var failed = false { didSet { failureMood.set(active: failed, animated: !motionReduced) } }
     private var motionReduced: Bool { displaySettings.reduceMotion || UIAccessibility.isReduceMotionEnabled }
@@ -101,11 +102,12 @@ import UIKit
         decoration.backgroundColor = .clear
         addSubview(decoration)
         failureMood.onChange = { [weak self] value in self?.decoration.failureAmount = value }
+        #if os(iOS)
         completionGlow.onChange = { [weak self] value in
             guard let self else { return }
             self.decoration.rescueAmount = value
-            self.setNeedsDisplay(); self.updateTube()
         }
+        #endif
 
         #if os(iOS)
         let pinch = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
@@ -193,11 +195,14 @@ import UIKit
     #endif
     func advanceVisualEffects() {
         let now = ProcessInfo.processInfo.systemUptime
+        #if os(iOS)
+        completionGlow.advance(at: now)
+        #endif
         if explosionBirths.values.contains(where: { $0.expires > 0 && $0.expires <= now }) {
             for (id, value) in explosionBirths where value.expires > 0 && value.expires <= now { explosionBirths[id] = (value.tick, 0) }
             updateTube(); setNeedsDisplay()
         }
-        guard enhancedEffects else { hdr?.clear(); return }
+        guard enhancedEffects else { releaseHDR(); return }
         let content = gameViewport.contentFrame
         hdr?.advance(at: now, multiplier: speedMultiplier, enabled: speedEffectsActive && !motionReduced && !MobileDevicePerformance.constrained,
             field: CGRect(x: content.x, y: content.y, width: content.width, height: content.height), project: { [weak self] centre in
@@ -226,6 +231,13 @@ import UIKit
     }
     func suspendVisualEffects() { hdr?.clear(); speedEffectsActive = false }
     func resetTransientEffects() { hdr?.clear(); explosionBirths.removeAll() }
+    func releaseEffectResources() {
+        releaseHDR()
+        tube?.releaseEffectResources()
+    }
+    private func releaseHDR() {
+        hdr?.clear(); hdr?.removeFromSuperview(); hdr = nil; attemptedHDR = false
+    }
     func redrawSelection() {
         if let tube, !tube.isHidden, let tubeViewport {
             tube.selection = selectionEffect(viewport: tubeViewport)
@@ -236,6 +248,7 @@ import UIKit
     func update(frame: MobilePixelFrame) throws {
         guard let image = MobileBitmapRenderer.image(frame) else { throw MobileSessionError.frameUnavailable }
         bitmap = image
+        #if os(iOS)
         let now = ProcessInfo.processInfo.systemUptime
         let liveIDs = Set(explosions.map(\.id))
         explosionBirths = explosionBirths.filter { liveIDs.contains($0.key) }
@@ -253,6 +266,7 @@ import UIKit
                 hdr?.trigger(rects: fresh, cinematic: displaySettings.cinematicExplosionsEnabled, at: now)
             }
         }
+        #endif
         updateTube()
         setNeedsDisplay()
     }
@@ -279,8 +293,6 @@ import UIKit
         let drawStarted = ProcessInfo.processInfo.systemUptime
         defer { MobileDevicePerformance.recordCPU(ProcessInfo.processInfo.systemUptime - drawStarted, source: "bitmap") }
         MobileBitmapRenderer.draw(bitmap, viewport: gameViewport, in: context)
-        drawRescueBackground(bitmap, viewport: gameViewport, context: context)
-        for effect in rescueEffects(viewport: gameViewport) { LemmingSelectionRenderer.draw(effect, in: context) }
         drawObviousSelection(viewport: gameViewport, context: context)
         if let effect = selectionEffect(viewport: gameViewport) { LemmingSelectionRenderer.draw(effect, in: context) }
         if let sprite = assignmentSprite, let progress = assignmentProgress, let image = spriteImage(sprite) {
@@ -327,7 +339,6 @@ import UIKit
         context.translateBy(x: 0, y: CGFloat(height))
         context.scaleBy(x: 1, y: -1)
         MobileBitmapRenderer.draw(bitmap, viewport: viewport, in: context)
-        drawRescueBackground(bitmap, viewport: viewport, context: context)
         drawObviousSelection(viewport: viewport, context: context)
         if let sprite = assignmentSprite, let progress = assignmentProgress, let image = spriteImage(sprite) {
             SpriteAssignmentPulse.draw(sprite: image, in: spriteRect(sprite, viewport: viewport), context: context,
@@ -336,7 +347,6 @@ import UIKit
         let flashes = drawExplosionCores(viewport: viewport, context: context)
         drawCursorBadge(viewport: viewport, context: context)
         tube.selection = selectionEffect(viewport: viewport)
-        tube.rescueAuras = rescueEffects(viewport: viewport)
         tube.update(context: context, settings: displaySettings, flashes: flashes)
     }
 
@@ -391,6 +401,9 @@ import UIKit
             ExplosionGlow.drawSpray(burst, at: explosion.birthTick + explosion.phase,
                 origin: CGPoint(x: point.x, y: point.y), pixel: pixel, context: context)
         }
+        #if os(tvOS)
+        return []
+        #else
         guard displaySettings.hdEffectsEnabled, !displaySettings.reduceFlashes else { explosionBirths.removeAll(); return [] }
         let now = ProcessInfo.processInfo.systemUptime
         var flashes: [ExplosionGlow.Flash] = []
@@ -409,6 +422,7 @@ import UIKit
             flashes.append(.init(rect: CGRect(x: x - pixel, y: y - 3 * pixel, width: 2 * pixel, height: 6 * pixel), strength: strength))
         }
         return flashes
+        #endif
     }
 
     private func spriteImage(_ sprite: MobileSpriteHighlight) -> CGImage? {
@@ -435,22 +449,9 @@ import UIKit
         return effect
     }
 
-    private func rescueEffects(viewport: MobileViewport) -> [LemmingSelectionEffect] {
-        MobileRescueArt.effects(sprites: rescueSprites, viewport: viewport, amount: completionGlow.amount,
-            enabled: displaySettings.hdEffectsEnabled && !displaySettings.reduceFlashes,
-            maximumEffects: MobileDevicePerformance.constrained ? 2 : 8, image: spriteImage)
-    }
-
-    private func drawRescueBackground(_ image: CGImage, viewport: MobileViewport, context: CGContext) {
-        guard completionGlow.amount > 0, !MobileDevicePerformance.constrained else { return }
-        let content = viewport.contentFrame
-        let sx = viewport.zoom * viewport.pixelAspect, sy = viewport.zoom
-        context.saveGState()
-        defer { context.restoreGState() }
-        context.clip(to: CGRect(x: content.x, y: content.y, width: content.width, height: content.height))
-        backgroundGlow.draw(image, in: CGRect(x: content.x - viewport.origin.x * sx,
-            y: content.y - viewport.origin.y * sy, width: viewport.levelSize.width * sx,
-            height: viewport.levelSize.height * sy), amount: completionGlow.amount, context: context, slot: "scene")
+    func controllerInputPoint(_ point: CGPoint) -> CGPoint { inputPoint(point) }
+    func controllerOutputPoint(_ point: CGPoint) -> CGPoint {
+        tube?.isHidden == false ? (tube?.outputViewPoint(point) ?? point) : point
     }
 
     private func inputPoint(_ point: CGPoint) -> CGPoint {
@@ -561,7 +562,9 @@ extension MobilePlayfieldView: UIPointerInteractionDelegate {}
     var rescueAmount: CGFloat = 0 { didSet { setNeedsDisplay() } }
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
+        #if os(iOS)
         RescueCelebration.draw(in: bounds, amount: rescueAmount, context: context)
+        #endif
         guard failureAmount > 0 else { return }
         context.setBlendMode(.color)
         context.setFillColor(CGColor(gray: 0.28, alpha: 0.72 * failureAmount))

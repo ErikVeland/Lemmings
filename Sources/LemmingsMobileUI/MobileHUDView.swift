@@ -212,6 +212,19 @@ import UIKit
         return nil
     }
 
+    /// Controller activation uses the visible button bounds, including scrolled skills.
+    func pointerAction(at point: CGPoint) -> MobileHUDAction? {
+        guard bounds.contains(point), isUserInteractionEnabled else { return nil }
+        for (button, item) in zip(buttons, items) where button.isEnabled && !button.isHidden {
+            let local = button.convert(point, from: self)
+            if button.bounds.contains(local) {
+                if button.superview === skillCanvas && !skillScroll.frame.contains(point) { continue }
+                return item.action
+            }
+        }
+        return nil
+    }
+
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
         renderer()?.draw(in: context, bounds: bounds, includeSkills: layout?.portrait == nil, includeTicks: true)

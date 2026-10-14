@@ -23,6 +23,7 @@ import UIKit
     var stampedStar: Int? { didSet { setNeedsDisplay() } }
     var previewSource: CGRect? { didSet { setNeedsDisplay() } }
     var onAction: ((String) -> Void)?
+    var onHoldAction: ((String) -> Void)?
     var actionHelp: [String: String] = [:] {
         didSet {
             for button in targets {
@@ -161,6 +162,20 @@ import UIKit
             button.accessibilityIdentifier = identifier
             button.accessibilityTraits = action.selected ? [.button, .selected] : .button
             button.isEnabled = action.enabled
+            #if os(tvOS)
+            if let focusButton = button as? MobileFocusButton {
+                focusButton.onHold = action.id.hasPrefix("player.") ? { [weak self] in
+                    guard let self, !self.requiresNeutralActivation || self.tvActivation.consume() else { return }
+                    self.onHoldAction?(action.id)
+                } : nil
+                if focusButton.onHold != nil {
+                    button.accessibilityHint = L10n.text("Hold to edit player")
+                    button.accessibilityCustomActions = [UIAccessibilityCustomAction(name: L10n.text("Edit player")) { [weak self] _ in
+                        self?.onHoldAction?(action.id); return true
+                    }]
+                } else { button.accessibilityCustomActions = nil }
+            }
+            #endif
             if existing[identifier] != nil { return button }
             button.addAction(UIAction { [weak self] _ in
                 guard let self else { return }
@@ -200,6 +215,14 @@ import UIKit
         updateFocusIfNeeded()
         #endif
         UIAccessibility.post(notification: .layoutChanged, argument: targets.first { $0.accessibilityIdentifier == "menu." + focusedID! })
+        setNeedsDisplay()
+    }
+    func focusAction(_ id: String) {
+        guard (page.rows + page.orderedFooter).contains(where: { $0.id == id && $0.enabled }) else { return }
+        focusedID = id; highlighted = id
+        #if os(tvOS)
+        setNeedsFocusUpdate()
+        #endif
         setNeedsDisplay()
     }
     func activateFocused() {
@@ -264,7 +287,7 @@ import UIKit
             GameStoneArt.draw(in: context, frame: frame, selected: false, pixel: 2)
             context.setFillColor(CGColor(gray: 0, alpha: 1))
             context.fill(frame.insetBy(dx: 8, dy: 8))
-            GameTextLayout.draw(detail, in: frame.insetBy(dx: 24, dy: 24), typography: typography, context: context)
+            GameTextLayout.draw(detail, in: frame.insetBy(dx: 24, dy: 24), typography: typography, alignment: .left, context: context)
         }
     }
 }

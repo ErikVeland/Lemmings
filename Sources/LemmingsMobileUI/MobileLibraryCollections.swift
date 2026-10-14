@@ -81,6 +81,7 @@ extension MobileLibraryViewController {
         case "playerNew": newPlayer()
         case "playerRename": beginRenamingPlayer()
         case "playerDelete": deleteActivePlayer()
+        case "playerDeleteCancel": confirmingDelete = false; rebuild()
         case "playerPortrait": cyclePlayerPortrait()
         case "favourites": openList(favourites.entries, name: "Favourites", back: .collections)
         case "recents": openList(recents.entries, name: "Recently played", back: .collections)
@@ -199,25 +200,32 @@ extension MobileLibraryViewController {
     // MARK: - Lists and runs
 
     /// Opens a list of levels from any packs as the current library.
-    func openList(_ entries: [MobileFavourites.Entry], name: String, back: Route, run: MobilePlaylistRun? = nil, position: Int = 0) {
+    func openList(_ entries: [MobileFavourites.Entry], name: String, back: Route, run: MobilePlaylistRun? = nil, position: Int = 0,
+                  checkpoint: MobileCheckpointEnvelope? = nil, startImmediately: Bool = false,
+                  restoringMatchingCheckpoint: Bool = false) {
         guard let catalogue else { return }
         // A long list shows its titles without opening every pack.
         let lazy = run != nil || (entries.count > 100 && entries.allSatisfy { $0.title != nil })
-        let list = MobileListLibrary(entries: entries, name: name, catalogue: catalogue, lazy: lazy)
-        guard !list.levels.isEmpty else { return }
-        library = list
-        currentPack = nil
-        activeRun = run
         let ports = catalogue.portsRoot, fan = catalogue.fanFolders
-        previewLoader = MobileMenuPreviewLoader {
+        openLibrary({
             MobileListLibrary(entries: entries, name: name, catalogue: MobileCatalogue(portsRoot: ports, fanFolders: fan), lazy: lazy)
+        }) { [self] opened in
+            guard let list = opened as? MobileListLibrary, !list.levels.isEmpty else { rebuild(); return }
+            library = list
+            currentPack = nil
+            activeRun = run
+            previewLoader = MobileMenuPreviewLoader {
+                MobileListLibrary(entries: entries, name: name, catalogue: MobileCatalogue(portsRoot: ports, fanFolders: fan), lazy: lazy)
+            }
+            selectedIndex = min(position, list.levels.count - 1)
+            selectedPreview = nil
+            browserShown = false
+            levelsBackRoute = back
+            navigate(.levels)
+            if startImmediately {
+                startLevel(selectedIndex, checkpoint: checkpoint, restoringMatchingCheckpoint: restoringMatchingCheckpoint)
+            } else { selectLevel(selectedIndex) }
         }
-        selectedIndex = min(position, list.levels.count - 1)
-        selectedPreview = nil
-        browserShown = false
-        levelsBackRoute = back
-        navigate(.levels)
-        selectLevel(selectedIndex)
     }
 
     private func playPlaylist(shuffle: Bool) {
@@ -236,8 +244,8 @@ extension MobileLibraryViewController {
                 let checkpoint = try await checkpointStore.load(owner: owner, scope: scope)
                 guard !Task.isCancelled, profiles.activeID == owner, hotSeat?.scope == scope else { return }
                 let matching = checkpoint.flatMap { checkpointMatchesSession($0) ? $0 : nil }
-                openList(run.entries, name: run.name, back: .collections, run: run, position: run.position)
-                startLevel(run.position, checkpoint: matching, restoringMatchingCheckpoint: true)
+                openList(run.entries, name: run.name, back: .collections, run: run, position: run.position,
+                         checkpoint: matching, startImmediately: true, restoringMatchingCheckpoint: true)
             } catch { notice = error.localizedDescription; rebuild() }
         }
     }
@@ -283,10 +291,15 @@ extension MobileLibraryViewController {
         shufflePool = nil
         navigate(.shuffleAll)
         let ports = catalogue.portsRoot, folders = catalogue.fanFolders
-        Task {
-            let pool = await Task.detached(priority: .userInitiated) {
+        shuffleTask = Task {
+            let worker = Task.detached(priority: .utility) {
                 MobileCatalogue(portsRoot: ports, fanFolders: folders).fanPool()
-            }.value
+            }
+            let pool = await withTaskCancellationHandler {
+                await worker.value
+            } onCancel: { worker.cancel() }
+            guard !Task.isCancelled, game == nil else { return }
+            shuffleTask = nil
             shufflePool = pool
             shuffleScanning = false
             if route == .shuffleAll { rebuild() }

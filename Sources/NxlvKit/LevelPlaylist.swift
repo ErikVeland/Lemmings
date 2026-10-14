@@ -391,6 +391,16 @@ public struct LevelSequenceRun: Codable, Equatable, Sendable, Identifiable {
         self.createdAt = createdAt
     }
 
+    /// Remove competitive puzzles from saved solo queues without changing their owner or records.
+    public func removingMultiplayerLevels() throws -> Self? {
+        let solo = entries.filter { LearningJourney.isSinglePlayer($0) }
+        guard solo.count != entries.count else { return self }
+        guard !solo.isEmpty else { return nil }
+        let preceding = entries.prefix(currentIndex).filter { LearningJourney.isSinglePlayer($0) }.count
+        return try Self(id: id, source: source, pool: pool, entries: solo,
+            currentIndex: min(preceding, solo.count - 1), seed: seed, algorithm: algorithm, createdAt: createdAt)
+    }
+
     private enum CodingKeys: String, CodingKey {
         case id, source, pool, entries, currentIndex, seed, algorithm, createdAt
     }

@@ -197,7 +197,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"${IOS_SOURCE_GATE_ONLY:-0}\" = 1 ] && [ \"$CODE_SIGNING_ALLOWED\" = NO ] && [ ! -d \"$SRCROOT/../../Sources/Music\" ]; then\n  echo \"SKIP soundtrack assets in the unsigned source-only gate.\"\nelse\n  python3 \"$SRCROOT/../../Tools/IOSBeta/music.py\" --app \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH\" --scope \"${TV_MUSIC_SCOPE:-main}\"\nfi\n";
+			shellScript = "if [ \"${IOS_SOURCE_GATE_ONLY:-0}\" = 1 ] && [ \"$CODE_SIGNING_ALLOWED\" = NO ] && [ ! -d \"$SRCROOT/../../Sources/Music\" ]; then\n  echo \"SKIP soundtrack assets in the unsigned source-only gate.\"\nelse\n  python3 \"$SRCROOT/../../Tools/IOSBeta/music.py\" --app \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH\" --scope \"${TV_MUSIC_SCOPE:-full}\"\nfi\n";
 		};
 		100000000000000000000048 /* Sound effects */ = {
 			isa = PBXShellScriptBuildPhase;

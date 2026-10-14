@@ -22,6 +22,7 @@ import UIKit
     private var now = 0.0
     private var field = CGRect.zero
     private var project: ((SIMD2<Float>) -> CGPoint)?
+    private var outstandingSubmissions = 0
 
     init?(effects: Bool) {
         guard let device = MTLCreateSystemDefaultDevice(), let commands = device.makeCommandQueue(),
@@ -75,6 +76,8 @@ import UIKit
         isHidden = !active
         if !active {
             flashTexture = nil
+            releaseDrawables()
+            drawableSize = CGSize(width: 1, height: 1)
 #if os(iOS)
             (layer as? CAMetalLayer)?.wantsExtendedDynamicRangeContent = false
 #endif
@@ -99,6 +102,7 @@ import UIKit
     func clear() {
         speed = SuperSpeedTimeline(); pops.clear(); cores.removeAll()
         flashTexture = nil; lastTime = nil; lastPaint = nil; motionTime = 0
+        releaseDrawables(); drawableSize = CGSize(width: 1, height: 1)
         isHidden = true
 #if os(iOS)
         (layer as? CAMetalLayer)?.wantsExtendedDynamicRangeContent = false
@@ -106,7 +110,8 @@ import UIKit
     }
 
     override func draw(_ rect: CGRect) {
-        guard !isHidden, bounds.width > 0, bounds.height > 0, let project,
+        guard outstandingSubmissions == 0, MobileDevicePerformance.enhancedEffectsAllowed,
+              !isHidden, bounds.width > 0, bounds.height > 0, let project,
               let drawable = currentDrawable, let buffer = commands.makeCommandBuffer() else { return }
         let headroom = Float(min(8, max(1, window?.screen.currentEDRHeadroom ?? 1)))
         let pass = MTLRenderPassDescriptor()
@@ -140,12 +145,15 @@ import UIKit
             encoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
         }
         if !cores.isEmpty, headroom > 1, let device {
-            let width = max(1, min(512, Int(ceil(bounds.width))))
-            let scale = CGFloat(width) / bounds.width
-            let height = max(1, Int(ceil(bounds.height * scale)))
+            let pixelBudget = CGFloat(MobileDevicePerformance.presentation.maximumOverlayPixels)
+            let scale = min(1, 512 / bounds.width, sqrt(pixelBudget / bounds.width / bounds.height))
+            let width = max(1, Int(floor(bounds.width * scale)))
+            let height = max(1, Int(floor(bounds.height * scale)))
             let descriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rg8Unorm, width: width, height: height, mipmapped: false)
             descriptor.usage = .shaderRead
-            flashTexture = device.makeTexture(descriptor: descriptor)
+            if flashTexture?.width != width || flashTexture?.height != height {
+                flashTexture = device.makeTexture(descriptor: descriptor)
+            }
             let flashes = cores.map { core -> ExplosionGlow.Flash in
                 let centre = project(SIMD2(Float(core.rect.midX), Float(core.rect.midY)))
                 let corner = project(SIMD2(Float(core.rect.maxX), Float(core.rect.maxY)))
@@ -165,10 +173,14 @@ import UIKit
             }
         }
         encoder.endEncoding()
-        buffer.addCompletedHandler { completed in
-            guard completed.status == .completed else { return }
+        outstandingSubmissions += 1
+        buffer.addCompletedHandler { [weak self] completed in
             let seconds = max(0, completed.gpuEndTime - completed.gpuStartTime)
-            Task { @MainActor in MobileDevicePerformance.recordGPU(seconds, source: "effects") }
+            let succeeded = completed.status == .completed
+            Task { @MainActor in
+                self?.outstandingSubmissions = 0
+                if succeeded { MobileDevicePerformance.recordGPU(seconds, source: "effects") }
+            }
         }
         buffer.present(drawable); buffer.commit()
     }

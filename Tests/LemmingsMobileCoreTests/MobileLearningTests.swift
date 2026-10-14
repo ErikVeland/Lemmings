@@ -6,6 +6,18 @@ import Testing
 
 struct MobileLearningTests {
     private var root: URL { URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent() }
+    @Test func oldMobileJourneyDropsVersusLevelsAndKeepsItsRunIdentity() throws {
+        let journey = try #require(LearningJourneyLibrary.journey(storage: AppStorage(applicationSupport: root, resources: root.appendingPathComponent("Resources"), defaults: .standard)))
+        let solo = journey.lessons[0].entry
+        let versus = try LevelPlaylistEntry(identity: .init(engine: .classic, packID: "fan:lldb-404", levelID: "Genesis 2P 1.dat#0"),
+            catalogueRevision: "test", sourceRevision: "v1", packNameSnapshot: "Genesis 2P", levelNameSnapshot: "There can be only one", levelNumberSnapshot: 1)
+        var old = MobileLearningState()
+        old.run = try LevelSequenceRun(source: .playlist(UUID()), pool: .init(id: "progression-4", summary: "Solo"), entries: [versus, solo])
+        let restored = try JSONDecoder().decode(MobileLearningState.self, from: JSONEncoder().encode(old))
+        #expect(restored.run?.id == old.run?.id && restored.run?.currentEntry == solo)
+        #expect(restored.run?.entries.count == 1 && restored.progress == old.progress)
+    }
+
     @Test func curatedJourneyStartsWithoutScanningFuturePacks() throws {
         let resources = root.appendingPathComponent("Resources")
         let temporary = try AppStorage.temporary(named: "journey")

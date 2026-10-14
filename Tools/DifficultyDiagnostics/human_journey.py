@@ -19,10 +19,10 @@ REFERENCE = ROOT / 'Content/NeoLemmix/levels/Lemmings_Redux'
 SOURCE = 'https://www.lemmingsforums.net/index.php?topic=4374.0'
 RANKS = ['Gentle', 'Quirky', 'Zany', 'Manic', 'Lunatic']
 BASIC = {'climber', 'floater', 'bomber', 'blocker', 'builder', 'basher', 'miner', 'digger'}
-POLICY = 'redux-calibrated-2'
-VERSION = 'learning-22'
-BASE_TARGET = 292
-TARGET = 295
+POLICY = 'redux-calibrated-3'
+VERSION = 'learning-23'
+MAINLINE_PACKS = {'lemmings-LEVEL-120', 'ohNoMoreLemmings-DLVEL-100',
+                  'ohYesMoreLemmings-OHYES-60'}
 # An explicit counterpart with a changed title, not a fuzzy fan-level match.
 ALIASES = {'ataskforbombers': 'ataskforblockersandbombers'}
 
@@ -233,6 +233,18 @@ def stage(value):
     return 'Fun' if value < 180 else 'Intermediate' if value < 360 else 'Difficult' if value < 600 else 'Expert'
 
 
+def seasonal(row):
+    metadata = row['entry']['identity']['packID'] + ' ' + row['entry']['packNameSnapshot']
+    return bool(re.search(r'xmas|christmas|holiday', metadata, re.I))
+
+
+def official_rank_floor(row):
+    # Retail rank is a conservative floor for unmatched official variants.
+    rank = (row['profile'].get('sourceRank') or '').lower()
+    return {'fun': 0, 'tame': 0, 'tricky': 180, 'crazy': 600, 'taxing': 360,
+            'wild': 600, 'wicked': 600, 'mayhem': 600, 'havoc': 600}.get(rank, 360)
+
+
 def build(pool, witnesses, resources, reference, reviews):
     additions = read(OUT / 'required-additions.json')
     required = {key(r) for r in additions}
@@ -254,7 +266,7 @@ def build(pool, witnesses, resources, reference, reviews):
             pending.append({'identity': row['entry']['identity'], 'title': row['entry']['levelNameSnapshot'],
                             'status': 'exact native replay failed; retained in replay-rejections.json'})
             continue
-        if (ident in excluded and ident not in replacements) or not source or source['sourceRevision'] != row['entry']['sourceRevision'] or not valid_witness(row, witness):
+        if ident in excluded or not source or source['sourceRevision'] != row['entry']['sourceRevision'] or not valid_witness(row, witness):
             pending.append({'identity': row['entry']['identity'], 'title': row['entry']['levelNameSnapshot'],
                             'status': 'excluded or missing exact source/winning replay evidence'})
             continue
@@ -267,7 +279,7 @@ def build(pool, witnesses, resources, reference, reviews):
             required_candidates[ident] = (row, context)
             continue
         contexts[ident], candidates[ident] = context, row
-        if row['official']:
+        if row['official'] and not seasonal(row):
             by_title[normalized(row['entry']['levelNameSnapshot'])].append(row)
     matched = set()
     for anchor in reference:
@@ -301,7 +313,7 @@ def build(pool, witnesses, resources, reference, reviews):
         if ident in matched:
             continue
         context = contexts[ident]; review = reviewed.get(ident, {})
-        if not row['official'] and review_approved(review, row, context, references):
+        if review_approved(review, row, context, references):
             lower, upper = references[review['afterReference']], references[review['beforeReference']]
             value = (lower['ordinal'] + upper['ordinal']) * 2.5
             selected.append({'row': row, 'context': context, 'reference': lower,
@@ -313,21 +325,28 @@ def build(pool, witnesses, resources, reference, reviews):
                              'variantDifferences': [], 'review': review})
             continue
         nearest = sorted(anchor_rows, key=lambda a: (distance(context, a['context']), a['reference']['ordinal']))[:3]
+        value, lower, upper, neighbours = estimate(context, anchor_rows)
         pending.append({'identity': row['entry']['identity'], 'sourceRevision': row['entry']['sourceRevision'],
                         'title': row['entry']['levelNameSnapshot'], 'pack': row['entry']['packNameSnapshot'],
-                        'status': 'needs human discovery/variant review', 'context': context, 'risks': risks(context) + variant_holds.get(ident, []),
+                        'status': 'seasonal level withheld pending exact human difficulty review' if seasonal(row)
+                            else 'needs human discovery/variant review', 'context': context,
+                        'risks': risks(context) + variant_holds.get(ident, [])
+                            + ([] if row['official'] else ['short or simple-looking solutions can hide difficult discovery']),
+                        'diagnosticEstimate': {'position': value, 'lower': lower, 'upper': upper,
+                            'eligibleForGoldenPath': row['official'] and not seasonal(row)},
                         'comparisons': [{'reference': a['reference']['reference'], 'level': a['row']['entry']['levelNameSnapshot'],
                                          'ordinal': a['reference']['ordinal'], 'executionDistance': round(distance(context, a['context']), 3)}
                                         for a in nearest]})
-    # Keep the reference spine and fill the full campaign-length path. Placement
-    # estimates never change to fit a vacancy. Prefer close comparisons and pack
-    # variety when several candidates fill the same part of the progression.
+    # Mainline official levels form the path. A fixed size must never force
+    # unreviewed fan puzzles or seasonal levels into beginner practice.
     calibration_errors = sorted(abs(estimate(a['context'], [b for b in anchor_rows if b is not a])[0]
                                     - a['placement']['position']) for a in anchor_rows)
     calibration_deviation = calibration_errors[len(calibration_errors)//2]
     extras = []
     for ident, row in sorted(candidates.items()):
         if any(key(item['row']) == ident for item in selected): continue
+        if not row['official'] or row['entry']['identity']['packID'] not in MAINLINE_PACKS:
+            continue
         context = contexts[ident]
         visibility = resource_by_id[ident].get('interactiveVisibility')
         if visibility is None or not any(v['effect'] == 1 for v in visibility) or any(v['visibleFraction'] < .2 for v in visibility):
@@ -335,12 +354,16 @@ def build(pool, witnesses, resources, reference, reviews):
         if context['assignments'] > 40 or context['usedSkills'].get('builder', 0) > 24:
             continue  # Avoid padding the journey with long repetitive witnesses.
         value, lower, upper, neighbours = estimate(context, anchor_rows)
+        lower = min(lower, max(0, value - calibration_deviation))
+        upper = max(upper, min(1000, value + calibration_deviation))
+        # Unknown official variants use the cautious bound, never the easiest
+        # comparable replay. Keep the underlying measured score unchanged.
+        value = max(upper, official_rank_floor(row))
+        upper = max(upper, value)
         if value < 180 and (context['narrowActions'] or len(context['usedSkills']) > 3
                 or context['jobChanges'] > 1
                 or (len(context['usedSkills']) > 1 and context['exhaustedUsedSkills'] and context['savedAboveRequirement'] == 0)):
             continue  # Uncertain beginner placement needs a more forgiving route.
-        lower = min(lower, max(0, value - calibration_deviation))
-        upper = max(upper, min(1000, value + calibration_deviation))
         extras.append({'row': row, 'context': context, 'reference': neighbours[0]['reference'],
             'placement': {'basis': 'solutionEstimate', 'reference': neighbours[0]['reference']['reference'],
                 'sourceURL': SOURCE, 'position': value, 'lower': lower, 'upper': upper,
@@ -348,52 +371,10 @@ def build(pool, witnesses, resources, reference, reviews):
             'variantDifferences': variant_holds.get(ident, []),
             'comparisons': [{'reference': n['reference']['reference'], 'position': n['placement']['position'],
                 'distance': round(distance(context, n['context']), 4)} for n in neighbours]})
-    pack_counts = collections.Counter(item['row']['entry']['identity']['packID'] for item in selected)
-    slots = BASE_TARGET - len(selected)
-    for index in range(slots):
-        target = 40 + (760 * index / max(1, slots - 1))
-        used_titles = {normalized(item['row']['entry']['levelNameSnapshot']) for item in selected}
-        options = [item for item in extras if normalized(item['row']['entry']['levelNameSnapshot']) not in used_titles
-                   and (item['row']['official'] or pack_counts[item['row']['entry']['identity']['packID']] < 4)]
-        assert options, 'Insufficient verified candidates for the full journey; do not shorten it silently'
-        def selection_cost(item):
-            p = item['placement']; pack = item['row']['entry']['identity']['packID']
-            return (abs(p['position'] - target) + .18 * (p['upper'] - p['lower'])
-                    + 4 * pack_counts[pack] + 4 * len(risks(item['context'])), key(item['row']))
-        chosen = min(options, key=selection_cost)
-        extras.remove(chosen); selected.append(chosen)
-        pack_counts[chosen['row']['entry']['identity']['packID']] += 1
-    # Retain each retired slot during selection so removing one level cannot
-    # reshuffle the rest of the journey. Replace it before producing any output.
-    for retired, position in replacements.items():
-        slot = next(i for i, item in enumerate(selected) if key(item['row']) == retired)
-        assert selected[slot]['placement']['position'] == position
-        used_titles = {normalized(item['row']['entry']['levelNameSnapshot']) for item in selected}
-        def conventional_route(item):
-            if retired not in nuke_free: return True
-            row = item['row']
-            replay = witnesses.get(row['profile']['key']['replayRevision']) or witnesses[row['initialHash']]
-            return not any('nuke' in event['action'] for event in replay['events'])
-        options = [item for item in extras if key(item['row']) not in excluded
-                   and conventional_route(item)
-                   and normalized(item['row']['entry']['levelNameSnapshot']) not in used_titles
-                   and abs(item['placement']['position'] - position) <= 10
-                   and pack_counts[item['row']['entry']['identity']['packID']] < 4]
-        assert options, 'No verified replacement at the retired level difficulty'
-        chosen = min(options, key=lambda item: (
-            abs(item['placement']['position'] - position),
-            item['placement']['upper'] - item['placement']['lower'],
-            len(item['context']['usedSkills']), len(risks(item['context'])),
-            -item['context']['savedAboveRequirement'],
-            item['context']['assignments'], key(item['row'])))
-        extras.remove(chosen)
-        pack_counts[selected[slot]['row']['entry']['identity']['packID']] -= 1
-        pack_counts[chosen['row']['entry']['identity']['packID']] += 1
-        selected[slot] = chosen
+    selected.extend(extras)
     assert not any(key(item['row']) in excluded for item in selected)
-    # Preserve the existing selection, then insert the required additions.
-    # Required entries still need exact source resources and winning native routes.
-    assert len(required) == TARGET - BASE_TARGET
+    # Preserve the official port counterpart and promised official additions.
+    # These do not authorise other fan levels with matching titles.
     for addition in additions:
         ident = key(addition)
         assert ident in required_candidates, f'Missing exact evidence for required addition: {ident}'
@@ -432,7 +413,6 @@ def build(pool, witnesses, resources, reference, reviews):
                 if addition['basis'] == 'reduxPortCounterpart' else 'included with an estimated grade; human review still needed',
             'context': context, 'risks': risks(context) + item['variantDifferences'],
             'comparisons': item['comparisons'], 'placement': placement})
-    assert len(selected) == TARGET
     admitted = {key(item['row']): item for item in selected}
     for row in pending:
         if key(row) in admitted:
@@ -446,7 +426,8 @@ def build(pool, witnesses, resources, reference, reviews):
     # User playtest, 2026-10-11: Cellbash needs only one basher. Put it second,
     # immediately after Just Dig. This is a placement correction, not a
     # claim that the full human discovery-review checklist has been completed.
-    cellbash = next(item for item in selected
+    cellbash = next({'row': row, 'context': contexts[key(row)], 'placement': {},
+                     'variantDifferences': [], 'reference': {}} for row in candidates.values()
                     if item['row']['entry']['identity'] == {
                         'engine': 'classic', 'packID': 'fan:lldb-547',
                         'levelID': 'Ji Hoon Heaven 1.DAT#5'})
@@ -454,27 +435,12 @@ def build(pool, witnesses, resources, reference, reviews):
     assert set(cellbash['context']['usedSkills']) == {'basher'}
     after = references['Gentle/Just_dig!.nxlv']
     cellbash['reference'] = after
-    cellbash['placement'].update(position=7.5, lower=5.0, upper=10.0,
+    cellbash['placement'].update(basis='userPlaytest', sourceURL=SOURCE,
+        sourceRevision=cellbash['row']['entry']['sourceRevision'],
+        replayRevision=cellbash['context']['replayRevision'], position=7.5, lower=5.0, upper=10.0,
         reference=after['reference'],
         adjustment='User playtest 2026-10-11: single-basher practice as lesson 2, after Just Dig.')
-    # The owner found the two-bomber bridge route too early. Its inventory permits
-    # builders even though the stored witness uses only bombers.
-    comeback = next(item for item in selected if item['row']['entry']['identity'] == {
-        'engine': 'classic', 'packID': 'fan:lldb-327', 'levelID': 'JM01.DAT#7'})
-    assert comeback['row']['entry']['sourceRevision'] == '4ed40d2dad89484a0565b4fc472ba6db8a18a36f97c174cb4ea392eac14073c2'
-    after = references['Quirky/Exodus!.nxlv']
-    comeback['reference'] = after
-    comeback['placement'].update(position=207.5, lower=180.0, upper=355.0,
-        reference=after['reference'],
-        adjustment='User playtest 2026-10-11: two-bomber bridge route belongs in Intermediate, not the early Fun lessons.')
-    # User playtest, 2026-10-13: the snow bomber level is too early at lesson 13.
-    # Keep its exact witness and move the lesson near the end of Intermediate.
-    snow_bombers = next(item for item in selected if item['row']['entry']['identity'] == {
-        'engine': 'classic', 'packID': 'fan:lldb-547', 'levelID': 'Ji Hoon Heaven 2.DAT#8'})
-    assert snow_bombers['row']['entry']['sourceRevision'] == '8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971'
-    assert set(snow_bombers['context']['usedSkills']) == {'bomber'}
-    snow_bombers['placement'].update(position=342.5, lower=320.0, upper=355.0,
-        adjustment='User playtest 2026-10-13: Stop, Block and Blow belongs late in Intermediate, not at lesson 13.')
+    selected.append(cellbash)
     # The owner found the retail bridge route too tricky at journey lesson 32.
     # Keep its exact native witness, but defer it to established combination practice.
     careful = next(item for item in selected if item['row']['entry']['identity'] == {
@@ -532,11 +498,11 @@ def build(pool, witnesses, resources, reference, reviews):
                             'newSkills': new, 'risks': risks(context), 'variantDifferences': item['variantDifferences']})
         practiced.update(concepts)
     manifest = {'version': VERSION, 'placementPolicy': POLICY, 'lessons': lessons}
-    plan = {'version': 'curriculum-8', 'poolSize': len(pool), 'targetSize': TARGET,
+    plan = {'version': 'curriculum-9', 'poolSize': len(pool), 'targetSize': len(selected),
             'calibration': {'method': 'leave-one-reference-out', 'samples': len(calibration),
                 'medianAbsolutePositionError': sorted(calibration)[len(calibration)//2],
                 'meaning': 'Diagnostic error against community order; not a human playtest pass.'}, 'lessons': curriculum,
-            'selectionPolicy': '295 levels: existing 292-level selection, the required Macintosh and DOS additions, and the reported advanced lesson. Redux reference spine plus resource-aware solution comparisons, repeated practice and pack diversity. Estimated grades retain uncertainty. No score clamping.',
+            'selectionPolicy': 'Official mainline spine and cautious official reserves. Seasonal levels require exact human review. Fan bridges require exact human discovery review and comparable reference bounds. No level-count quota or unreviewed fan estimates.',
             'limits': 'Redux ordinal positions are not equal human-difficulty units. Classic counterparts differ from Redux. A replay proves a route, not novice discovery. Solution comparisons are estimated grades, not claims of human review.'}
     pending.sort(key=lambda r: key(r))
     return manifest, plan, pending, transitions

@@ -17,7 +17,7 @@ struct ControllerBindingsTests {
 
     @Test func everyQoLChordAndMenuLayer() {
         let chords: [(ControllerBindings.Button, ControllerBindings.Action)] = [
-            (.a, .endRun), (.b, .rewind), (.x, .speedReset), (.y, .hints),
+            (.a, .repeatAssignment), (.b, .rewind), (.x, .speedReset), (.y, .hints),
             (.menu, .retry), (.options, .settings), (.leftShoulder, .step(-1)), (.rightShoulder, .step(1)),
             (.left, .speedStep(-1)), (.right, .speedStep(1)), (.up, .centre(true)), (.down, .centre(false)), (.leftStick, .djShuffle)
         ]
@@ -33,6 +33,16 @@ struct ControllerBindingsTests {
         ] {
             var bindings = ControllerBindings(); _ = bindings.update(pressed: [])
             #expect(bindings.update(pressed: [.leftTrigger, button], inMenu: true) == [expected])
+        }
+    }
+
+    @Test func faceButtonsKeepTheMenuOnItsDedicatedButton() {
+        for (button, action): (ControllerBindings.Button, ControllerBindings.Action) in [
+            (.a, .assign), (.b, .pause), (.x, .speedReset), (.y, .endRun), (.menu, .cancel)
+        ] {
+            var bindings = ControllerBindings(); _ = bindings.update(pressed: [])
+            #expect(bindings.update(pressed: [button]) == [action])
+            #expect(bindings.update(pressed: [button]).isEmpty)
         }
     }
 
@@ -92,7 +102,7 @@ struct ControllerBindingsTests {
         #expect(bindings.update(pressed: [.a]) == [.assign])
         #expect(bindings.update(pressed: [.a]) == [])
         _ = bindings.update(pressed: [])
-        #expect(bindings.update(pressed: [.x]) == [.repeatAssignment])
+        #expect(bindings.update(pressed: [.x]) == [.speedReset])
         _ = bindings.update(pressed: [])
         #expect(bindings.update(pressed: [.right]) == [.focusUnassigned(1)])
         _ = bindings.update(pressed: [])

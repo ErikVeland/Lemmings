@@ -66,7 +66,7 @@ import NxlvKit
             let labels = card.subviews.compactMap { $0 as? NSTextField }
             return labels.reduce(CGFloat(43)) { total, label in
                 if let renderer = GameMenuArtwork.renderer(), let font = renderer.font(.small) {
-                    return total + CGFloat(MacInterfaceRenderer.menuLines(label.stringValue, columns: max(1, Int(width - 28) / font.cellWidth)).count * (font.cellHeight + 6))
+                    return total + CGFloat(MacInterfaceRenderer.menuLines(label.stringValue, columns: max(1, Int(width - 28) / font.cellWidth)).count * max(font.cellHeight + 6, font.height(of: MacInterfaceRenderer.menuText(label.stringValue)) + 2))
                 }
                 return total + label.intrinsicContentSize.height
             }

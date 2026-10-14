@@ -30,7 +30,6 @@ import UIKit
     private var bloomDirty = true
     private var bloomGamma: Float = .nan
     var selection: LemmingSelectionEffect?
-    var rescueAuras: [LemmingSelectionEffect] = []
     private var selectionRenderer: LemmingSelectionRenderer?
     private(set) var tubeSettings = CRTSettings.amiga1084
 
@@ -65,12 +64,19 @@ import UIKit
 
     required init(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
 
+    func releaseEffectResources() {
+        scratch.removeAll(); bloomDirty = true
+        releaseDrawables()
+        setNeedsDisplay()
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
         updateDrawableBudget()
     }
     private func updateDrawableBudget() {
         var scale = MobileDevicePerformance.constrained ? CGFloat(1) : (window?.screen.scale ?? contentScaleFactor)
+        if !MobileDevicePerformance.presentation.enhancedEffectsAllowed { scale = min(1, scale) }
         #if os(tvOS)
         scale = MobileDevicePerformance.presentation.televisionPlayfieldScale(nativeScale: Double(scale))
         #endif
@@ -204,9 +210,21 @@ import UIKit
         submissionDeferred = false
         let source = slot.source, flash = slot.flash
         let budget = MobileDevicePerformance.presentation
+        uniform.bloomAmount = budget.bloomAllowed ? tubeSettings.bloomAmount : 0
+        #if os(tvOS)
+        uniform.bloomAmount = budget.televisionBloomAllowed ? tubeSettings.bloomAmount : 0
+        #endif
+        if uniform.bloomAmount == 0 { scratch.removeAll(); bloomDirty = true }
+        if !budget.enhancedEffectsAllowed {
+            uniform.hdrHeadroom = 1
+            #if os(iOS)
+            (layer as? CAMetalLayer)?.wantsExtendedDynamicRangeContent = false
+            #endif
+        }
         if uniform.bloomAmount > 0 {
-            let width = max(1, Int(Double(source.width) * budget.bloomScale))
-            let height = max(1, Int(Double(source.height) * budget.bloomScale))
+            let scale = min(budget.bloomScale, sqrt(Double(budget.maximumOverlayPixels) / Double(source.width) / Double(source.height)))
+            let width = max(1, Int(Double(source.width) * scale))
+            let height = max(1, Int(Double(source.height) * scale))
             if scratch.count != 2 || scratch[0].width != width || scratch[0].height != height {
                 let descriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba16Float,
                     width: width, height: height, mipmapped: false)
@@ -237,7 +255,7 @@ import UIKit
             encoder.endEncoding()
         }
         if rebuildBloom { bloomDirty = false; bloomGamma = uniform.gamma }
-        if let selectionRenderer, selection != nil || !rescueAuras.isEmpty {
+        if let selectionRenderer, let selection {
             let pass = MTLRenderPassDescriptor()
             pass.colorAttachments[0].texture = drawable.texture
             pass.colorAttachments[0].loadAction = .load
@@ -245,10 +263,8 @@ import UIKit
             if let encoder = buffer.makeRenderCommandEncoder(descriptor: pass) {
                 let glass = SIMD4(tubeSettings.curvature, tubeSettings.curvatureY, tubeSettings.cornerRadius, tubeSettings.cornerSoftness)
                 let sourceSize = CGSize(width: source.width, height: source.height)
-                for effect in rescueAuras { selectionRenderer.encode(effect, sourceSize: sourceSize,
-                    outputSize: drawableSize, glass: glass, headroom: uniform.hdrHeadroom, into: encoder) }
-                if let selection { selectionRenderer.encode(selection,
-                    sourceSize: sourceSize, outputSize: drawableSize, glass: glass, into: encoder) }
+                selectionRenderer.encode(selection,
+                    sourceSize: sourceSize, outputSize: drawableSize, glass: glass, into: encoder)
                 encoder.endEncoding()
             }
         }

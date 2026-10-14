@@ -426,15 +426,19 @@ extension AdaptiveDJPlayer {
   player.load(soundtracks: soundtracks, catalogueRoot: root)
   try require(player.currentTrackName == opening, "Danger or library refresh changed level music")
 
-  // The rescue target waits for the selected opening; completion remains one-shot.
+  // Rescue feedback takes priority over the opening hold and bar alignment.
   var rescued = quiet
   rescued.savedCount = 5
+  player.suspendOutput()
   player.updateTelemetry(rescued)
   try require(player.currentURL == assigned && !player.rescueCueFiredForTest,
-    "A quick rescue cut off the selected tune")
-  player.expireOpeningHoldForTest()
+    "Paused output started the jubilant arrangement or consumed its cue")
+  player.resumeOutput()
   player.updateTelemetry(rescued)
-  try require(player.currentURL != assigned, "Quota did not move after the opening hold")
+  try require(player.currentURL != assigned && player.rescueCueFiredForTest,
+    "A quick rescue waited for the opening section instead of celebrating")
+  try require(player.incomingPlayingForTest && player.isCrossfading,
+    "The jubilant arrangement did not start its smooth fade immediately")
   let celebration = player.currentURL
   let catalogue = SoundtrackCatalogue.load(at: root)!
   let celebrationPath = SoundtrackPlayer.cataloguePath(celebration!, root: root)!
@@ -628,22 +632,25 @@ extension AdaptiveDJPlayer {
     ("lemmings3.classic1", "lemmings_3_music_mod_tsyu/CLASSIC1.mod")
   ] {
     let fallback = root.appendingPathComponent(modulePath)
-    player.startJourney(trackID: trackID, cycle: 0, identity: trackID + ":first", fallback: fallback)
-    try require(player.currentURL == fallback, "Sequel did not start authentically")
+    let started = player.startJourney(trackID: trackID, cycle: 0, identity: trackID + ":first", fallback: fallback)
+    try require(started && player.currentURL?.resolvingSymlinksInPath().standardizedFileURL == fallback.resolvingSymlinksInPath().standardizedFileURL,
+      "\(trackID) did not start authentically: started=\(started), selected=\(player.currentURL?.path ?? "none"), expected=\(fallback.path)")
     player.startJourney(trackID: trackID, cycle: 1, identity: trackID + ":later", fallback: fallback)
-    try require(player.currentURL != fallback, "Sequel did not select its alternate version")
+    try require(player.currentURL?.resolvingSymlinksInPath().standardizedFileURL != fallback.resolvingSymlinksInPath().standardizedFileURL,
+      "Sequel did not select its alternate version")
     let alternate = player.currentURL
     player.startJourney(trackID: trackID, cycle: 1, identity: trackID + ":retry", fallback: fallback)
     try require(player.currentURL == alternate, "Retry changed sequel arrangement")
     player.stop()
   }
   let mariarti = root.appendingPathComponent("Archimedes/14. Professor Mariarti (Archimedes).mp3")
-  try require(SoundtrackPlayer.recording(trackID: "classic.mariarti", root: root) == mariarti,
+  try require(SoundtrackPlayer.recording(trackID: "classic.mariarti", root: root)?.resolvingSymlinksInPath().standardizedFileURL == mariarti.resolvingSymlinksInPath().standardizedFileURL,
     "Recording-only special fallback missing")
   player.load(soundtracks: restricted, catalogueRoot: root)
   try require(player.startJourney(trackID: "classic.mariarti", cycle: 0, identity: "mariarti", includeAlternates: false),
     "Special requires a nonexistent Amiga module")
-  try require(player.currentURL == mariarti && player.isPlaying, "Special recording did not start")
+  try require(player.currentURL?.resolvingSymlinksInPath().standardizedFileURL == mariarti.resolvingSymlinksInPath().standardizedFileURL && player.isPlaying,
+    "Special recording did not start")
   player.stop()
   player.load(soundtracks: soundtracks, catalogueRoot: root)
   let sms = root.appendingPathComponent("Lemmings-SMS/Lemmings - 02 - Can-Can (Galop Infernal).m4a")

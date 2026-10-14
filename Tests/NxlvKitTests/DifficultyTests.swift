@@ -19,6 +19,33 @@ struct DifficultyTests {
         return value
     }
     let metadata = DifficultyMetadataEvidence(availableSkills: ["builder": 12], population: 10, rescueRequirement: 5)
+    @Test func versusPuzzlesNeverEnterSoloProgressionAndUnreviewedFansStayOutOfBeginnerPlacement() throws {
+        let entry = try LevelPlaylistEntry(identity: .init(engine: .classic,
+            packID: "ohYesMoreLemmings-OHYES-60", levelID: "0:Lemmings Versus:1:0:0"),
+            catalogueRevision: "test", sourceRevision: "v1", packNameSnapshot: "Oh Yes! More Lemmings!",
+            levelNameSnapshot: "There can be only one", levelNumberSnapshot: 1)
+        let measured = DifficultyProfile(key: .init(identity: entry.identity, levelRevision: "v1"), confidence: .high,
+            components: .init(techniqueBurden: 100))
+        let reported = ProgressionCandidate(entry: entry, profile: measured, isOfficial: true)
+        let solo = try candidate("solo", score: 100)
+        for policy in ProgressionPolicy.allCases {
+            var config = ProgressionConfiguration(); config.technique = "builder"
+            if policy == .techniqueCurriculum { continue }
+            let result = try ProgressionGenerator.generate(candidates: [reported, solo], policy: policy, configuration: config)
+            #expect(result.entries.map(\.identity) == [solo.entry.identity])
+        }
+        let old = try LevelSequenceRun(source: .playlist(UUID()), pool: .init(id: "progression-4", summary: "Solo"),
+            entries: [entry, solo.entry])
+        let cleaned = try #require(try old.removingMultiplayerLevels())
+        #expect(cleaned.id == old.id && cleaned.currentEntry == solo.entry && cleaned.entries.count == 1)
+        let unknown = DifficultyProfile(key: key("unknownFan"), confidence: .low, components: .init())
+        let fanEntry = try LevelPlaylistEntry(identity: unknown.key.identity, catalogueRevision: "test", sourceRevision: "v1",
+            packNameSnapshot: "Fan", levelNameSnapshot: "Unknown", levelNumberSnapshot: 1)
+        #expect(ProgressionCandidate(entry: fanEntry, profile: unknown, isOfficial: false).placementScore == 300)
+        #expect(ProgressionCandidate(entry: fanEntry, profile: unknown, isOfficial: true).placementScore == 0)
+        #expect(!LearningJourney.isSinglePlayer(entry))
+    }
+
     @Test func gradeBoundaries() {
         #expect(DifficultyGrade(score: -1) == .beginner)
         #expect(DifficultyGrade(score: 99.999) == .beginner)

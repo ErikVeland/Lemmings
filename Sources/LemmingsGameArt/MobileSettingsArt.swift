@@ -132,19 +132,19 @@ public enum MobileSettingsArt {
     }
     private static func roleTitle(_ button: ControllerBindings.Button, television: Bool = false) -> String {
         if television && button == .leftTrigger { return L10n.text("Rewind") }
-        if television && button == .rightTrigger { return L10n.text("Resume / fast-forward") }
+        if television && button == .rightTrigger { return L10n.text("Step forward / scrub") }
         if television && button == .options { return L10n.text("Help / extra actions") }
-        if television && button == .b { return L10n.text("Back / reset speed") }
-        if television && button == .x { return L10n.text("Pause / play") }
+        if television && button == .b { return L10n.text("Reset fast speed / pause / play") }
+        if television && button == .x { return L10n.text("Reset speed") }
         if television && button == .y { return L10n.text("Nuke / undo") }
         if television && button == .left { return L10n.text("Minimum release rate") }
         if television && button == .right { return L10n.text("Maximum release rate") }
         if television && button == .menu { return L10n.text("Menu") }
         return switch button {
         case .a: L10n.text("Assign")
-        case .b: L10n.text("Cancel")
-        case .x: L10n.text("Repeat skill")
-        case .y: L10n.text("Last assignment")
+        case .b: L10n.text("Pause / play")
+        case .x: L10n.text("Reset speed")
+        case .y: L10n.text("Nuke / undo")
         case .leftShoulder: L10n.text("Previous skill")
         case .rightShoulder: L10n.text("Next skill")
         case .leftTrigger: L10n.text("Extra actions")
@@ -153,7 +153,7 @@ public enum MobileSettingsArt {
         case .down: L10n.text("Decrease release rate")
         case .left: L10n.text("Previous unassigned")
         case .right: L10n.text("Next unassigned")
-        case .menu: L10n.text("Pause")
+        case .menu: L10n.text("Menu")
         case .options: L10n.text("Controls help")
         case .leftStick: L10n.text("Entrance")
         case .rightStick: L10n.text("Goal")

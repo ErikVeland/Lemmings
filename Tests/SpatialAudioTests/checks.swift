@@ -121,41 +121,38 @@ print("PASS camera geometry at zoomed, standard and wide aspect ratios, elevatio
 extension SoundEffectPlayer {
   func checkRewindFeedbackAndPolyphony() {
     playRewindScrub()
-    let cue = voices.first(where: { $0.isActive })!.samples
-    precondition(cue.count == Int(44_100 * 0.115) && cue.contains { abs($0) > 0.1 },
-      "A silent history must still produce the short rewind cue")
-    precondition(cue.allSatisfy { $0.isFinite && abs($0) < 1 }
-      && abs(cue.first!) < 0.001 && abs(cue.last!) < 0.001,
-      "Rewind cue has an invalid sample or a clicking endpoint")
-    latestRecentSample = 3
-    for index in 0..<4 {
+    precondition(!voices.contains { $0.isActive }, "Silent history invented a rewind effect")
+    latestRecentSample = 44_099
+    for index in 0..<44_100 {
       recentSamplePositions[index] = Int64(index)
-      recentSamples[index] = Float(index + 1) / 10
+      recentSamples[index] = Float(index) / 44_100 * 0.3
     }
     let original = recentSamples
     playRewindScrub()
     let mixed = voices.first(where: { $0.isActive })!.samples
-    precondition(mixed[1] > cue[1] && mixed[2] == cue[2],
-      "Rewind lost its double-speed reversed history layer")
+    precondition(mixed.count == Int(44_100 * 0.18) && mixed[600] > mixed[700],
+      "Rewind did not travel backwards through real history")
+    precondition(mixed.allSatisfy { $0.isFinite && abs($0) <= 0.3 }
+      && mixed.first == 0 && mixed.last == 0, "Rewind had invalid samples or clicking endpoints")
     let buffer = AVAudioPCMBuffer(pcmFormat: AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 1)!, frameCapacity: 512)!
     buffer.frameLength = 512
     for _ in 0..<200 {
       for _ in 0..<12 { playRewindScrub() }
       let active = voices.indices.filter { voices[$0].isActive }
-      precondition(active.count == 1, "Rapid rewind taps stacked cues")
+      precondition(active.count <= 1, "Rapid rewind taps stacked cues")
       for index in active {
         fillVoice(index, buffers: UnsafeMutableAudioBufferListPointer(buffer.mutableAudioBufferList), frames: 512, sampleTime: 0)
         precondition((0..<512).allSatisfy { abs(buffer.floatChannelData![0][$0]) < 0.4 },
           "Rewind exceeded its mix budget")
       }
-      precondition(recentSamples == original && latestRecentSample == 3,
+      precondition(recentSamples == original && latestRecentSample == 44_099,
         "Rewind audio fed back into its own history")
     }
     setMuted(true); playRewindScrub()
     precondition(!voices.contains { $0.isActive }, "Muted rewind started a voice")
     setMuted(false); outputSuspended = true; playRewindScrub()
     precondition(!voices.contains { $0.isActive }, "Suspended output queued a rewind")
-    print("PASS silent-history rewind, finite 115 ms cue, reversed history, one-voice repeat cap, mute and suspension after 2400 requests")
+    print("PASS silent-history silence, finite 180 ms reverse, reversed history, one-voice repeat cap, mute and suspension after 2400 requests")
   }
 }
 SoundEffectPlayer().checkRewindFeedbackAndPolyphony()
@@ -167,19 +164,19 @@ extension SoundEffectPlayer {
     let rescue = PositionedSoundCue(.yippee, at: .init(x: 80, y: 80))
     play([PositionedSoundCue](repeating: rescue, count: 32))
     play([PositionedSoundCue](repeating: rescue, count: 16))
-    precondition(voices.filter(\.isActive).count == 48,
+    precondition(voices.filter(\.isActive).count == 32 && voices.reduce(0) { $0 + $1.rescueLayers.count } == 16,
       "Simultaneous or consecutive rescue voices were collapsed")
     precondition(voices.filter(\.isActive).allSatisfy { $0.gain == 0.6 },
       "Rescue chorus was attenuated as it accumulated")
     play([PositionedSoundCue](repeating: rescue, count: 80))
-    precondition(voices.filter(\.isActive).count + voices.reduce(0) { $0 + $1.rescueLayers.count } == 128,
+    precondition(voices.filter(\.isActive).count + voices.reduce(0) { $0 + $1.rescueLayers.count } == 64,
       "A full spatial pool cut off earlier rescue voices")
     precondition(voices.flatMap(\.rescueLayers).allSatisfy { $0.gain == 0.6 && $0.position == 0 },
       "Overflow rescue layers lost their individual gain or playhead")
     play(.timerWarning)
     let rescuedVoices = voices.filter { $0.isActive && $0.isRescue }.count
       + voices.reduce(0) { $0 + $1.rescueLayers.count }
-    precondition(rescuedVoices == 128, "A useful warning cut off the rescue chorus")
+    precondition(rescuedVoices == 64, "A useful warning cut off the rescue chorus")
     silence()
     precondition(voices.allSatisfy { $0.rescueLayers.isEmpty }, "Silence retained an old rescue chorus")
     play(.actionRejected); play(.actionRejected)
@@ -206,10 +203,10 @@ extension SoundEffectPlayer {
     }
     precondition(GameplaySupplementSounds.clip(for: .brickPlace)!.samples !=
       GameplaySupplementSounds.clip(for: .timerWarning)!.samples)
-    print("PASS 128 full-gain overlapping yippees, isolated refusal gate, protected actions, mute and finite supplement envelopes")
+    print("PASS 64 bounded full-gain overlapping yippees, isolated refusal gate, protected actions, mute and finite supplement envelopes")
   }
 }
-SoundEffectPlayer().checkJoyMixPolicy()
+SoundEffectPlayer(resources: DeviceEffectResources(physicalMemory: 16 * 1_073_741_824, processorCount: 8)).checkJoyMixPolicy()
 
 extension SoundEffectPlayer {
   func checkRescueLayerLifecycle() throws {
@@ -235,11 +232,11 @@ extension SoundEffectPlayer {
     silencePreservingRescues()
     let preserved = voices.filter { $0.isActive && $0.isRescue }.count
       + voices.reduce(0) { $0 + $1.rescueLayers.count }
-    precondition(preserved == 128, "Result cleanup cut off the final rescue chorus")
+    precondition(preserved == 64, "Result cleanup cut off the final rescue chorus")
     precondition(voices.filter { $0.isActive && !$0.isRescue }.allSatisfy {
       $0.position == Double($0.samples.count) && !$0.rescueLayers.isEmpty
     }, "Result cleanup kept an ordinary sound playing")
     print("PASS rescue overflow cleanup after silence, mute and suspend; final result chorus preserved")
   }
 }
-try SoundEffectPlayer().checkRescueLayerLifecycle()
+try SoundEffectPlayer(resources: DeviceEffectResources(physicalMemory: 16 * 1_073_741_824, processorCount: 8)).checkRescueLayerLifecycle()

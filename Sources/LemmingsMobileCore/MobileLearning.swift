@@ -7,10 +7,17 @@ public struct MobileLearningState: Codable, Equatable, Sendable {
     public var progress = LearningJourneyProgress()
     public var run: LevelSequenceRun?
     public init() {}
+    private enum CodingKeys: String, CodingKey { case progress, run }
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        progress = try values.decode(LearningJourneyProgress.self, forKey: .progress)
+        run = try values.decodeIfPresent(LevelSequenceRun.self, forKey: .run)?.removingMultiplayerLevels()
+    }
+
     public mutating func start(_ entries: [LevelPlaylistEntry], name: String, poolID: String,
                                playlistID: UUID = LearningJourney.playlistID) throws {
         run = try LevelSequenceRun(source: .playlist(playlistID),
-            pool: LevelPool(id: poolID, summary: name), entries: entries)
+            pool: LevelPool(id: poolID, summary: name), entries: entries.filter { LearningJourney.isSinglePlayer($0) })
     }
     public mutating func select(_ index: Int) throws {
         guard let current = run else { return }

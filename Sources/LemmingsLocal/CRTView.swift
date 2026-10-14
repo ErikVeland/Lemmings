@@ -408,9 +408,12 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
     guard let device, let sourceTexture = slot.source, let flashTexture = slot.flash,
       let bright = brightPipeline, let blurH = blurHPipeline, let blurV = blurVPipeline,
       let composite = compositePipeline else { return }
-    let scale = MacFXPerformance.shared.presentation.bloomScale
+    let budget = MacFXPerformance.shared.presentation
+    let bloomAmount: Float = budget.bloomAllowed ? settings.bloomAmount : 0
+    let scale = min(budget.bloomScale, sqrt(Double(budget.maximumOverlayPixels) / max(1, Double(sourceSize.width * sourceSize.height))))
     let width = max(1, Int(sourceSize.width * scale)), height = max(1, Int(sourceSize.height * scale))
-    if settings.bloomAmount > 0, scratchA?.width != width || scratchA?.height != height {
+    if bloomAmount == 0 { scratchA = nil; scratchB = nil; bloomRevision = .max }
+    if bloomAmount > 0, scratchA?.width != width || scratchA?.height != height {
       let scratch = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba16Float,
         width: width, height: height, mipmapped: false)
       scratch.usage = [.shaderRead, .renderTarget]
@@ -420,7 +423,7 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
       textureAllocations += 2
       #endif
     }
-    guard settings.bloomAmount <= 0 || (scratchA != nil && scratchB != nil) else { return }
+    guard bloomAmount <= 0 || (scratchA != nil && scratchB != nil) else { return }
     let scratchA = scratchA ?? sourceTexture, scratchB = scratchB ?? sourceTexture
     var uniforms = CRTUniforms()
     uniforms.sourceSize = SIMD2(Float(sourceSize.width), Float(sourceSize.height))
@@ -438,7 +441,7 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
     uniforms.maskSize = settings.maskSize
     uniforms.maskDark = settings.maskDark
     uniforms.maskLight = settings.maskLight
-    uniforms.bloomAmount = settings.bloomAmount
+    uniforms.bloomAmount = bloomAmount
     uniforms.gamma = settings.gamma
     uniforms.brightness = settings.brightness
     uniforms.brightBoostDark = settings.brightBoostDark
@@ -449,8 +452,10 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
     uniforms.vignette = settings.vignette
     uniforms.pixelAspect = settings.pixelAspect
     uniforms.colorLevels = settings.colorLevels
-    uniforms.hdrHeadroom = headroom ?? ExplosionHDR.headroom(window?.screen?.maximumExtendedDynamicRangeColorComponentValue ?? 1)
-    metalLayer?.wantsExtendedDynamicRangeContent = (window?.screen?.maximumPotentialExtendedDynamicRangeColorComponentValue ?? 1) > 1
+    uniforms.hdrHeadroom = budget.enhancedEffectsAllowed
+      ? headroom ?? ExplosionHDR.headroom(window?.screen?.maximumExtendedDynamicRangeColorComponentValue ?? 1) : 1
+    metalLayer?.wantsExtendedDynamicRangeContent = budget.enhancedEffectsAllowed
+      && (window?.screen?.maximumPotentialExtendedDynamicRangeColorComponentValue ?? 1) > 1
 
     func pass(
       _ pipeline: MTLRenderPipelineState,
@@ -474,7 +479,7 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
     }
 
     // Halation: pull out the bright parts, then spread them.
-    if settings.bloomAmount > 0,
+    if bloomAmount > 0,
        bloomRevision != sourceRevision || bloomGamma != settings.gamma || bloomScale != scale {
       pass(bright, target: scratchA, textures: [sourceTexture])
       pass(blurH, target: scratchB, textures: [scratchA])
@@ -484,7 +489,7 @@ final class CRTPerformanceMetrics: @unchecked Sendable {
       bloomPasses += 3
       #endif
     }
-    pass(composite, target: target, textures: [sourceTexture, settings.bloomAmount > 0 ? scratchA : sourceTexture, flashTexture])
+    pass(composite, target: target, textures: [sourceTexture, bloomAmount > 0 ? scratchA : sourceTexture, flashTexture])
     // Selection is composited after the tube. Its neighbour samples are always
     // two physical output pixels apart, even on a Retina display or curved edge.
     if (!rescueAuras.isEmpty || (!GameCursor.gameplaySuppressed && selection != nil)), let selectionRenderer {

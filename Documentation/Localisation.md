@@ -71,10 +71,33 @@ languages use English. Incomplete language packs use English for missing keys.
 It keeps interpolated player data unchanged and works with the shipped fonts.
 Use it only in background, muted tests through `Tools/UITestRunner/run.py`.
 
-The bitmap fonts still fold accents and substitute unsupported characters.
-Full accented glyphs, other scripts and right-to-left layout need new pixel
-font assets and rendering work before those languages can ship. Preserve the
-complete translated Unicode message in accessibility text.
+The shared Macintosh menu faces and compact bitmap fallback now retain Western
+Latin letters. `BitmapLatinGlyphs` extends the shipped alphabet with Latin-1
+and Latin Extended-A letters, Romanian Ș/Ț, capital ẞ, and inverted ¡/¿.
+This includes Æ/æ, Ø/ø, Å/å, Œ/œ, Ð/ð, Þ/þ and Ł/ł. Added marks use the
+original colour ramp and bevel. The original ASCII glyphs and cell advances
+stay unchanged. Composed and combining forms render alike. Uppercase menus
+retain accents and use one cell for ẞ. Line measurements include accent and
+descender overhang; peer controls keep a shared face and scale.
+
+The original Lemmings 2 FONT.DAT front-end face and PANEL.DAT alphabet, and the
+Lemmings 3 FONT.DIN/FONT.DEL alphabet, cover the same Western Latin repertoire.
+`SequelBitmapFont` retains their original indexed pixels and advances. Added
+letters reuse each bank's shapes and shade indices. L2's front-end extensions
+retain its rim and proportional spacing. The panel extensions retain their
+compact shaded forms. L3's three large digit sets remain unchanged.
+The banks' original single-case lettering is retained for panel text.
+
+Text layout uses Unicode characters, so a combining accent does not create an
+extra column. Front-end and animation line spacing includes accent overhang.
+L2's fixed eight-pixel header fits the complete row on one pixel grid when marks
+need extra height. Its icons, counters and targets retain their original bounds.
+L3 menu text fits the existing row targets, including the selected background.
+Glyph extensions load beside the banks. They do not rewrite imported game files.
+
+Other scripts, Latin letters outside this repertoire and right-to-left layout
+remain unsupported. Preserve the complete translated Unicode message in
+accessibility text.
 
 Original menu pictures, story animations and lettering baked into imported
 artwork are not translated by the string catalogue. Lemmings 2 also has text
@@ -93,3 +116,15 @@ selected, focused, primary and disabled actions. Checks verify action centres,
 disabled targets, containment and Back ordering. These renders reuse the shipped
 bitmap art. Physical touch, VoiceOver and complete translated screen journeys
 remain device checks after the languages are chosen.
+
+`BitmapLatinGlyphTests` checks both original font banks byte for byte, the
+extended repertoire, Unicode equivalence and overhang measurements.
+`BitmapLatinRenderTests` generates `.build/latin-glyphs/western-latin.png`,
+shared control renders at phone/tablet/desktop widths and native Mac controls.
+It checks Unicode accessibility captions and activation targets. Run these
+through the muted offscreen test runner, like all other native UI tests.
+
+`SequelLatinFontTests` checks source pixels, palette indices, Western Latin
+coverage, combining forms, compact panel rows and original L2 introduction
+timing. `SequelLatinRenderTests` captures the three faces, L2 panel rows and
+native L2 text and accessibility targets in `.build/sequel-latin`.

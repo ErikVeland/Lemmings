@@ -14,11 +14,24 @@ extension TVExperienceAudit {
         typealias Action = GameFrontEnd.Action
         var profiles = MobileProfiles()
         _ = profiles.add(name: "Guest player", id: "guest")
-        var players = MobileCareerArt.players(profiles, subtitle: "", canDelete: true)
+        var players = MobileCareerArt.players(profiles, subtitle: "", canDelete: true, holdToEdit: true)
         players.rows.append(.init("cloudSaves", "Cloud saves"))
-        guard players.rows.contains(where: { $0.id == "playerRename" && $0.enabled }),
-              !players.footer.contains(where: { $0.id == "playerRename" }) else {
-            throw Failure.invalid("Profile editing must be reachable in the player list")
+        guard !players.rows.contains(where: { $0.id == "playerRename" }),
+              players.rows.contains(where: { $0.id == "player.guest" && $0.enabled }),
+              !players.footer.contains(where: { $0.id == "playerDelete" }) else {
+            throw Failure.invalid("TV profiles use held player targets and editor deletion")
+        }
+        let editor = MobileCareerArt.players(profiles, subtitle: "", draft: "LEM", portrait: 6, canDelete: true, editingPlayerID: "guest")
+        let lockedEditor = MobileCareerArt.players(profiles, subtitle: "", draft: "P1", portrait: 0)
+        let newPlayer = MobileCareerArt.players(profiles, subtitle: "", draft: "", creating: true, portrait: 1)
+        let deletePlayer = MobileCareerArt.players(profiles, subtitle: "", draft: "LEM", canDelete: true, confirmingDelete: true, editingPlayerID: "guest")
+        guard editor.rows.map(\.id) == ["nameField", "playerPortrait", "playerDelete"],
+              lockedEditor.rows.contains(where: { $0.id == "playerDelete" && !$0.enabled }),
+              newPlayer.rows.map(\.id) == ["nameField", "playerPortrait"],
+              deletePlayer.orderedFooter.first?.id == "playerDeleteCancel",
+              editor.subtitle == "Guest player", editor.subtitleRuns.contains(where: { $0.text == "Guest player" && $0.palette == .green }),
+              profiles.activeID == "default" else {
+            throw Failure.invalid("Profile editor, creation and safe deletion targets differ")
         }
         var roster = MobileHotSeatRoster(host: "default", players: ["guest"])
         roster.toggle("guest")
@@ -38,9 +51,8 @@ extension TVExperienceAudit {
         var pages: [(String, GameFrontEnd.Page)] = [
             ("home", home), ("settings", MobileSettingsArt.groups()),
             ("players", players),
-            ("edit-player", MobileCareerArt.players(profiles, subtitle: "", draft: "LEM", portrait: 6)),
-            ("new-player", MobileCareerArt.players(profiles, subtitle: "", draft: "", creating: true, portrait: 1)),
-            ("delete-player", MobileCareerArt.players(profiles, subtitle: "", canDelete: true, confirmingDelete: true)),
+            ("edit-player", editor), ("edit-player-delete-disabled", lockedEditor),
+            ("new-player", newPlayer), ("delete-player", deletePlayer),
             ("hot-seat-deselected", deselected),
             ("hot-seat", MobileCareerArt.hotSeat(profiles, subtitle: "", roster: .init(host: "default", players: ["guest"]),
                                                policy: .atFirstFail, active: true, hasSaved: true)),
@@ -77,10 +89,11 @@ extension TVExperienceAudit {
             .init("setting.tvAim", "Aim sensitivity: 100%"),
             .init("setting.tvDeadZone", "Stick dead zone: 15%")], footer: [.init("back", "Back")])))
         let nativeBudget = FXPresentationBudget(cpuQuality: .full, gpuQuality: .full)
-        let pressuredBudget = FXPresentationBudget(cpuQuality: .full, gpuQuality: .balanced)
-        guard nativeBudget.televisionPlayfieldScale(nativeScale: 2) == 2,
-              pressuredBudget.televisionPlayfieldScale(nativeScale: 2) == 1 else {
-            throw Failure.invalid("TV pressure must reduce CRT pixel cost without changing menu scale")
+        let pressuredBudget = FXPresentationBudget(cpuQuality: .full, gpuQuality: .minimal)
+        guard nativeBudget.televisionPlayfieldScale(nativeScale: 2) == 1,
+              pressuredBudget.televisionPlayfieldScale(nativeScale: 2) == 1,
+              nativeBudget.televisionBloomAllowed, !pressuredBudget.televisionBloomAllowed else {
+            throw Failure.invalid("TV must bound CRT pixel cost and drop bloom under pressure")
         }
         for group in MobileSettingsGroup.allCases {
             pages.append(("settings-" + group.rawValue, MobileSettingsArt.page(group, settings: .init(), displayAvailable: true)))
@@ -102,6 +115,9 @@ extension TVExperienceAudit {
                     : MobileSettingsArt.interfaceScale(size, width: 1728, television: true)
                 guard scale == floor(scale) else { throw Failure.invalid("Fractional TV artwork scale") }
                 let layout = GameFrontEnd.layout(page, width: 1728 / scale, minimumHeight: 960 / scale)
+                guard layout.targets.count == page.rows.count + page.footer.count else {
+                    throw Failure.invalid("Shared TV layout omitted actions: " + name)
+                }
                 let context = try context(width: 1728, height: Int(ceil(layout.size.height * scale)))
                 context.scaleBy(x: scale, y: scale)
                 GameFrontEnd.draw(page, layout: layout, typography: typography, preview: nil, previewSource: nil,
@@ -111,6 +127,14 @@ extension TVExperienceAudit {
                     guard target.frame.width * scale >= 44, target.frame.height * scale >= 44,
                           CGRect(origin: .zero, size: layout.size).contains(target.frame) else {
                         throw Failure.invalid("Shared TV target outside canvas: \(name)/\(target.action.id)")
+                    }
+                    if name.contains("player"), let bytes = context.data?.assumingMemoryBound(to: UInt8.self) {
+                        let x = Int((target.frame.minX + 10) * scale)
+                        let y = Int(target.frame.midY * scale)
+                        let offsets = [y, context.height - 1 - y].map { $0 * context.bytesPerRow + x * 4 }
+                        guard offsets.contains(where: { bytes[$0] > 8 || bytes[$0 + 1] > 8 || bytes[$0 + 2] > 8 }) else {
+                            throw Failure.invalid("Shared TV target was not drawn: \(name)/\(target.action.id)")
+                        }
                     }
                     for other in layout.targets.dropFirst(index + 1) where target.frame.intersects(other.frame) {
                         throw Failure.invalid("Shared TV targets overlap: \(name)/\(target.action.id)/\(other.action.id)")

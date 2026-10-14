@@ -15,13 +15,14 @@ extension MenuAudit {
             ("compact", .init(width: 280, height: 600), .init(top: 20, bottom: 20), []),
             ("ipad-portrait", .init(width: 768, height: 1024), .init(top: 20, bottom: 20), []),
             ("ipad-landscape", .init(width: 1024, height: 768), .init(top: 20, bottom: 20), []),
+            ("tv", .init(width: 1920, height: 1080), .init(top: 60, left: 90, bottom: 60, right: 90), []),
             ("divided", .init(width: 1112, height: 834), .init(top: 20, bottom: 20),
                 [.init(kind: .division, frame: .init(x: 0, y: 400, width: 1112, height: 20))]),
             ("occluded", .init(width: 390, height: 844), .init(top: 59, bottom: 34),
                 [.init(kind: .occlusion, frame: .init(x: 0, y: 200, width: 20, height: 100))])
         ]
         guard let portraits, (0..<8).allSatisfy({ portraits.image($0) != nil }) else { throw Failure.missingArtwork }
-        let states: [(String, String?, Bool, Int)] = [("solo", nil, false, 0), ("host", "ERI", false, 0),
+        let states: [(String, String?, Bool, Int)] = [("solo", "Player 1", false, 0), ("paused-solo", "Player 1", true, 0), ("host", "ERI", false, 0),
             ("guest", "UVA", false, 1), ("paused-guest", "UVA", true, 1)]
             + (2..<8).map { ("portrait-\($0)", "UVA", false, $0) }
         var captures: [[String: Any]] = []

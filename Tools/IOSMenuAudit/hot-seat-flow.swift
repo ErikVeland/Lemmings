@@ -18,7 +18,9 @@ extension MenuAudit {
         typealias State = (String, String?, MobileTurnArt.Role, GameFrontEnd.Page)
         let level = "Fun 1  Just Dig!"
         var states: [State] = [
-            ("solo-pause", nil, .current, .init(title: "Paused", subtitle: level, footer: [.init("resume", "Resume", primary: true)])),
+            ("solo-pause", "LEM", .current, .init(title: "Paused", subtitle: level, footer: [.init("resume", "Resume", primary: true)])),
+            ("solo-ready", "LEM", .next, .init(title: "Just Dig!", subtitle: "Fun 1", footer: [.init("start", "Start", primary: true)], preview: true)),
+            ("solo-result", "LEM", .result, .init(title: "Level complete", subtitle: level, footer: [.init("library", "Library"), .init("next", "Next level", primary: true)], preview: true)),
             ("ready-host", "LEM", .next, .init(title: "LEM", subtitle: level, footer: [.init("ready", "Ready", primary: true)], preview: true)),
             ("ready-guest", "AB", .next, .init(title: "AB", subtitle: level, footer: [.init("ready", "Ready", primary: true)], preview: true)),
             ("restored-ready", "AB", .next, .init(title: "AB", subtitle: level, footer: [.init("ready", "Ready", primary: true)], preview: true)),
@@ -30,7 +32,7 @@ extension MenuAudit {
             ("settings", "AB", .current, .init(title: "Settings", rows: [.init("audio", "Audio")], footer: [.init("back", "Back")])),
             ("save-error", "AB", .current, .init(title: "Hot Seat was not saved", footer: [.init("retry", "Try again", primary: true)])),
             ("saved-shared-journey", "UVA", .next, MobileHomeArt.page(resume: [.init("learningRunResume", "Resume journey run  4/120")], journey: .init("journey", "Learning Journey"), families: [.init("classic", "Classic Lemmings")], initials: "ERI vs UVA")),
-            ("saved-solo-journey", nil, .next, MobileHomeArt.page(resume: [.init("learningRunResume", "Resume journey run  2/120")], journey: .init("journey", "Learning Journey"), families: [.init("classic", "Classic Lemmings")], initials: "ERI")),
+            ("saved-solo-journey", "ERI", .next, MobileHomeArt.page(resume: [.init("learningRunResume", "Resume journey run  2/120")], journey: .init("journey", "Learning Journey"), families: [.init("classic", "Classic Lemmings")], initials: "ERI")),
             ("saved-progression", "UVA", .next, MobileHomeArt.page(resume: [.init("learningRunResume", "Resume Easy to hard  3/10")], journey: .init("journey", "Learning Journey"), families: [.init("classic", "Classic Lemmings")], initials: "ERI vs UVA")),
             ("saved-playlist", "UVA", .next, MobileHomeArt.page(resume: [.init("runResume", "Resume My levels  2/10"), .init("resume", "Resume level - UVA")], journey: .init("journey", "Learning Journey"), families: [.init("classic", "Classic Lemmings")], initials: "ERI vs UVA")),
             ("next-library", "LEM", .next, MobileHomeArt.page(journey: .init("journey", "Learning Journey"), families: [.init("classic", "Classic Lemmings")], initials: "LEM v AB")),
@@ -79,7 +81,7 @@ extension MenuAudit {
                     guard page.title.contains(owner) || page.subtitle.contains(owner) else { throw Failure.invalidTargets }
                     if state.hasPrefix("paused-") { guard page.title == "Paused: " + owner else { throw Failure.invalidTargets } }
                     if role == .result { guard page.subtitle.hasPrefix("Played: " + owner) else { throw Failure.invalidTargets } }
-                    if state.contains("ready") { guard page.title == owner, page.subtitle == original.subtitle else { throw Failure.invalidTargets } }
+                    if state.contains("ready"), !state.hasPrefix("solo-") { guard page.title == owner, page.subtitle == original.subtitle else { throw Failure.invalidTargets } }
                     if state == "next-library" { guard page.subtitle == "LEM vs AB  Next: LEM" else { throw Failure.invalidTargets } }
                 } else { guard page == original else { throw Failure.invalidTargets } }
                 if state == "saved-shared-journey" {

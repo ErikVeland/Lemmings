@@ -35,6 +35,21 @@ extension MobileLibraryViewController {
         #endif
         return page
     }
+    func soundtrackPage() -> GameFrontEnd.Page {
+            let libraries = MobileMusicLibraries.shared
+            let packs = libraries.catalogue?.packs ?? []
+            let status = libraries.failure ?? (libraries.isDownloading ? L10n.text("Downloading...") : "\(packs.filter { libraries.isBundled($0) || libraries.isInstalled($0) }.count)/\(packs.count)")
+            return .init(title: L10n.text("Soundtrack"), subtitle: status,
+                                rows: packs.map { pack in
+                                    let included = libraries.isBundled(pack)
+                                    let percent = libraries.progress[pack.id].map { "  \(Int($0 * 100))%" }
+                                    return .init("lib." + pack.id,
+                                                 pack.title + "  " + (included ? L10n.text("Included") : (percent ?? MobileMusicLibraries.size(pack.bytes))),
+                                                 enabled: !included, selected: included || libraries.isInstalled(pack))
+                                },
+                                footer: [.init("settingsGroup.audio", L10n.text("Back"))])
+    }
+
     func insightsPage() -> GameFrontEnd.Page {
         let summary = AnonymousTelemetry.shared.localSummary()
         return .init(title: L10n.text("Play Insights"), details: [L10n.text("Started: \(summary.total(.levelStart))"),

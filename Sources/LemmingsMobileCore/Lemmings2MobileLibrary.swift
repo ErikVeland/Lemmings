@@ -29,9 +29,12 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
         let panel: Lemmings2Panel?
 
         init(root: URL) throws {
+            try Task.checkCancellation()
             panel = try? Lemmings2Panel(root: root)
             sprites = try Lemmings2Sprites(data: Data(contentsOf: root.appendingPathComponent("VLEMMS.DAT")))
+            try Task.checkCancellation()
             intern = try Lemmings2SpecialGraphics(data: Data(contentsOf: root.appendingPathComponent("INTERN.DAT")))
+            try Task.checkCancellation()
             masks = try Lemmings2TerrainMasks(root: root)
             walker = (try? Data(contentsOf: root.appendingPathComponent("WALKER.DAT")))
                 .flatMap { try? Lemmings2Walker(data: $0) }
@@ -78,6 +81,7 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
     }
 
     public func loadLevel(at index: Int) throws -> MobileLevelContent {
+        try Task.checkCancellation()
         guard levels.indices.contains(index) else { throw MobileSessionError.changedLevel }
         let tribe = index / 10
         let levelNumber = index % 10
@@ -111,8 +115,10 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
         }
 
         let assets = try loadAssets()
+        try Task.checkCancellation()
         let runtime = try Lemmings2Runtime(level: selectedLevel, style: style,
                                            masks: assets.masks, total: population)
+        try Task.checkCancellation()
         let renderer = try Lemmings2MobileSceneRenderer(level: selectedLevel, style: style,
                                                         sprites: assets.sprites, intern: assets.intern,
                                                         walker: assets.walker, explosion: assets.explosion)

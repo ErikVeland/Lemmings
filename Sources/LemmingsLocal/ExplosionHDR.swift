@@ -80,6 +80,7 @@ enum ExplosionHDR {
   private var rescueAuras: [LemmingSelectionEffect] = []
   private var surface: CAMetalLayer?
   private var texture: MTLTexture?
+  private var outstandingSubmissions = 0
   private var flashes: [ExplosionFlash] = []
   private var worldFlashes: [ExplosionFlash] = []
   private var worldProjection: ((CGRect) -> CGRect?)?
@@ -264,6 +265,15 @@ enum ExplosionHDR {
 
   private func render() {
     let now = ProcessInfo.processInfo.systemUptime
+    let quality = MacFXPerformance.shared.presentation
+    guard quality.enhancedEffectsAllowed else {
+      isHidden = true; surface?.isHidden = true; texture = nil
+      surface?.wantsExtendedDynamicRangeContent = false
+      surface?.drawableSize = CGSize(width: 1, height: 1)
+      timeline.clear(); flashes.removeAll(); worldFlashes.removeAll()
+      lastPresented = -.infinity
+      return
+    }
     advanceSpeedMotion(at: now)
     timeline.expire(now: now)
     let hadWorldFlashes = !worldFlashes.isEmpty
@@ -283,29 +293,36 @@ enum ExplosionHDR {
     guard active else {
       lastPresented = -.infinity
       texture = nil
+      surface?.wantsExtendedDynamicRangeContent = false
+      surface?.drawableSize = CGSize(width: 1, height: 1)
       if surface == nil { needsDisplay = true }
       return
     }
     guard surface != nil else { needsDisplay = true; return }
     guard let gpu, let queue, let pipeline, let surface, let screen = window?.screen,
           bounds.width > 0, bounds.height > 0, !isHidden else { return }
-    // Opt in while idle, so the display has headroom ready for the short pop.
+    // Request display headroom only while the overlay has visible effects.
     surface.wantsExtendedDynamicRangeContent = screen.maximumPotentialExtendedDynamicRangeColorComponentValue > 1
     MacFXPerformance.shared.configureDisplay(screen)
-    let quality = MacFXPerformance.shared.presentation
-    guard now - lastPresented >= 1 / quality.effectHz else { return }
+    guard outstandingSubmissions < 2, now - lastPresented >= 1 / quality.effectHz else { return }
     let scale = CGFloat(quality.overlayRenderScale(width: Double(bounds.width), height: Double(bounds.height),
                                           nativeScale: Double(window?.backingScaleFactor ?? 1)))
     surface.contentsScale = scale
     surface.drawableSize = CGSize(width: max(1, floor(bounds.width * scale)), height: max(1, floor(bounds.height * scale)))
-    let width = Int(ceil(bounds.width)), height = Int(ceil(bounds.height))
+    let maskScale = min(scale, 1, sqrt(CGFloat(min(720_000, quality.maximumOverlayPixels)) / bounds.width / bounds.height))
+    let width = max(1, Int(floor(bounds.width * maskScale))), height = max(1, Int(floor(bounds.height * maskScale)))
     // Reuse an unchanged mask. Submitted masks remain immutable on the GPU.
-    if !currentFlashes.isEmpty && (maskIsDirty || texture == nil) {
+    if !currentFlashes.isEmpty && (maskIsDirty || texture?.width != width || texture?.height != height) {
       let descriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat:.rg8Unorm,width:width,height:height,mipmapped:false)
       descriptor.usage = .shaderRead
       texture = gpu.makeTexture(descriptor:descriptor)
       if let texture {
-        let mask = ExplosionHDR.textureMask(width:width,height:height,flashes:currentFlashes,now:now)
+        let scaledFlashes = currentFlashes.map {
+          ExplosionFlash(rect: CGRect(x: $0.rect.minX * maskScale, y: $0.rect.minY * maskScale,
+                                     width: $0.rect.width * maskScale, height: $0.rect.height * maskScale),
+                         strength: $0.strength, expiresAt: $0.expiresAt, tint: $0.tint)
+        }
+        let mask = ExplosionHDR.textureMask(width:width,height:height,flashes:scaledFlashes,now:now)
         mask.withUnsafeBytes { bytes in
           texture.replace(region:MTLRegionMake2D(0,0,width,height),mipmapLevel:0,withBytes:bytes.baseAddress!,bytesPerRow:width*2)
         }
@@ -351,9 +368,14 @@ enum ExplosionHDR {
       }
     }
     encoder.endEncoding()
-    command.addCompletedHandler { completed in
+    outstandingSubmissions += 1
+    command.addCompletedHandler { [weak self] completed in
       let seconds = max(0, completed.gpuEndTime - completed.gpuStartTime)
-      Task { @MainActor in MacFXPerformance.shared.recordGPU(seconds, source: "effects") }
+      let succeeded = completed.status == .completed
+      Task { @MainActor in
+        self?.outstandingSubmissions = max(0, (self?.outstandingSubmissions ?? 0) - 1)
+        if succeeded { MacFXPerformance.shared.recordGPU(seconds, source: "effects") }
+      }
     }
     lastPresented = now
     command.present(drawable)

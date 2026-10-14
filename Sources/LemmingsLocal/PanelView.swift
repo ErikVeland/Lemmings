@@ -1,6 +1,7 @@
 #if os(macOS)
 import AppKit
 import NxlvKit
+import LemmingsGameArt
 
 /// The buttons along the bottom of the classic screen.
 enum PanelButton: Equatable {
@@ -515,9 +516,10 @@ enum PanelButton: Equatable {
     let macScale: Int
     if let font = macInterface?.font(.small), names.allSatisfy({ font.covers($0) }) {
       macScale = min(Int(labelWidth) / max(1, font.cellWidth * longest),
-                     Int(labelHeight) / max(1, font.cellHeight))
+                     Int(labelHeight) / max(1, font.height(of: names.joined())))
     } else { macScale = 0 }
-    let pixelScale = max(1, min(3, floor(min(labelHeight / 7, labelWidth / CGFloat(longest * 6)))))
+    let pixelBounds = GamePixelTypography.verticalBounds(of: names.joined())
+    let pixelScale = max(1, min(3, floor(min(labelHeight / CGFloat(pixelBounds.bottom - pixelBounds.top), labelWidth / CGFloat(longest * 6)))))
     let shortcuts = SkillShortcuts(names: session?.skills.map(\.name) ?? [])
     for (button, frame) in buttonFrames {
       guard case let .skill(index) = button, let name = names[safe: index] else { continue }
@@ -688,7 +690,7 @@ enum PanelButton: Equatable {
   /// fit, so the caller can use the compact pixel face.
   /// Punctuation the character set does not carry, mapped to what it does.
   private func gameText(_ text: String) -> String {
-    text.uppercased()
+    BitmapLatinGlyphs.uppercase(text, locale: L10n.interface.locale)
       .replacingOccurrences(of: "—", with: "-")
       .replacingOccurrences(of: "–", with: "-")
       .replacingOccurrences(of: "’", with: "'")
@@ -708,17 +710,17 @@ enum PanelButton: Equatable {
     guard font.covers(upper) else { return false }
     let fit = min(
       Int(box.width) / max(1, font.cellWidth * max(1, upper.count)),
-      Int(box.height) / max(1, font.cellHeight))
+      Int(box.height) / max(1, font.height(of: upper)))
     let scale = wanted > 0 ? wanted : fit
     guard scale >= 1 else { return false }
+    let top = box.midY - CGFloat(font.height(of: upper, scale: scale)) / 2 - CGFloat(font.verticalBounds(of: upper).top * scale)
     macInterface.drawCentered(
-      upper, face: .small, centerX: box.midX,
-      top: box.midY - macInterface.height(face: .small, scale: scale) / 2, scale: scale)
+      upper, face: .small, centerX: box.midX, top: top, scale: scale)
     if let highlighted, let index = upper.firstIndex(of: highlighted) {
       let x = box.midX - macInterface.width(of: upper, face: .small, scale: scale) / 2
         + CGFloat(upper.distance(from: upper.startIndex, to: index) * font.cellWidth * scale)
       macInterface.draw(String(highlighted), face: .small,
-        at: CGPoint(x: x, y: box.midY - macInterface.height(face: .small, scale: scale) / 2),
+        at: CGPoint(x: x, y: top),
         scale: scale, palette: .green)
     }
     return true

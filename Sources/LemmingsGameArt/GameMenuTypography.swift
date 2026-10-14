@@ -71,6 +71,10 @@ public final class GameMenuTypography {
         CGFloat(font(face)?.height(scale: scale) ?? 0)
     }
 
+    public func height(of text: String, face: Face, scale: Int) -> CGFloat {
+        CGFloat(font(face)?.height(of: Self.menuText(text), scale: scale) ?? 0)
+    }
+
     /// Draws a line with its top-left corner at `origin`.
     public func draw(_ text: String, face: Face, at origin: CGPoint, scale: Int, in context: CGContext,
                      alpha: CGFloat = 1, palette: Palette = .blue) {
@@ -108,7 +112,8 @@ public final class GameMenuTypography {
         case .right: x = rect.maxX - width
         case .center: x = rect.midX - width / 2
         }
-        draw(line, face: face, at: CGPoint(x: x.rounded(), y: rect.minY.rounded()), scale: scale,
+        let top = CGFloat(font.verticalBounds(of: line).top * scale)
+        draw(line, face: face, at: CGPoint(x: x.rounded(), y: (rect.minY - top).rounded()), scale: scale,
              in: context, alpha: alpha, palette: palette)
     }
 
@@ -119,15 +124,15 @@ public final class GameMenuTypography {
     }
 
     public static func menuText(_ value: String) -> String {
-        let plain = value.folding(options: [.diacriticInsensitive, .widthInsensitive], locale: Locale(identifier: "en"))
-            .uppercased().replacingOccurrences(of: "—", with: "-").replacingOccurrences(of: "–", with: "-")
+        let plain = BitmapLatinGlyphs.uppercase(value.folding(options: [.widthInsensitive], locale: L10n.interface.locale), locale: L10n.interface.locale)
+            .replacingOccurrences(of: "—", with: "-").replacingOccurrences(of: "–", with: "-")
             .replacingOccurrences(of: "−", with: "-").replacingOccurrences(of: "’", with: "'")
             .replacingOccurrences(of: "“", with: "\"").replacingOccurrences(of: "”", with: "\"")
             .replacingOccurrences(of: "·", with: "*").replacingOccurrences(of: "•", with: "*")
             .replacingOccurrences(of: "→", with: "->").replacingOccurrences(of: "←", with: "<-")
             .replacingOccurrences(of: "×", with: "X").replacingOccurrences(of: "↵", with: L10n.text("ENTER"))
             .replacingOccurrences(of: "‹", with: "<").replacingOccurrences(of: "›", with: ">")
-        return String(plain.map { $0.isASCII || $0 == "💀" ? $0 : "?" })
+        return String(plain.map { BitmapLatinGlyphs.supports($0) || $0 == "💀" ? $0 : "?" })
     }
 
     private static func draw(_ image: CGImage, in rect: CGRect, context: CGContext) {

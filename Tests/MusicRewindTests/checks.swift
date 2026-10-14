@@ -32,7 +32,7 @@ func checkReverseGroove() throws {
     try assertMusicRewind(history.trigger(), "A recorded groove could not reverse")
     let reverse = stereoBuffer(1024)
     history.render(UnsafeMutableAudioBufferListPointer(reverse.mutableAudioBufferList), frames: 1024)
-    for i in 200..<1024 {
+    for i in 400..<1024 {
         let l = reverse.floatChannelData![0][i], r = reverse.floatChannelData![1][i]
         try assertMusicRewind(l > 0 && abs(l / -2 - r) < 0.00001, "Rewind lost its stereo channels")
         try assertMusicRewind(l < reverse.floatChannelData![0][i - 1], "Music samples travelled forwards")

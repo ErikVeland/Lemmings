@@ -67,11 +67,16 @@ public struct SoundtrackCatalogue: Codable, Sendable {
     /// Manual shuffle uses playable themes and excludes the current recording and source-only files.
     public func shuffleCandidates(currentPath: String, scope: ShuffleScope, availablePaths: Set<String>, fallbackTrackID: String? = nil) -> [Variant] {
         let currentID = entry(path: currentPath)?.track.id ?? fallbackTrackID
-        return tracks.filter {
-            ["level", "special", "seasonal"].contains($0.role) && (scope == .allTracks || $0.id == currentID)
-        }.flatMap(\.variants).filter {
+        let playable = tracks.filter { ["level", "special", "seasonal"].contains($0.role) }
+        let candidates = playable.flatMap(\.variants).filter {
             $0.path != currentPath && $0.confidence == "documented" && availablePaths.contains($0.path)
         }.sorted { $0.id < $1.id }
+        guard scope == .sameTrack else { return candidates }
+        guard let currentID else { return [] }
+        let versions = Set(playable.first { $0.id == currentID }?.variants.map(\.id) ?? [])
+        let sameTrack = candidates.filter { versions.contains($0.id) }
+        // The main bundle has one version per theme. A manual request must still change the music.
+        return sameTrack.isEmpty ? candidates : sameTrack
     }
 
     /// First occurrence uses the original preferred port. Later score cycles visit

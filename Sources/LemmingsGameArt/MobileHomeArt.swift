@@ -7,7 +7,7 @@ public enum MobileHomeArt {
                             subtitle: String = "", collectionsAvailable: Bool = true) -> GameFrontEnd.Page {
         var rows = resume + [journey] + families
         for index in rows.indices {
-            rows[index].titleRuns = index < resume.count ? GameSemanticText.resume(rows[index].title)
+            rows[index].titleRuns = index <= resume.count ? GameSemanticText.resume(rows[index].title)
                 : rows[index].gameLogo == nil ? GameSemanticText.title(rows[index].title) : [.init(rows[index].title, .blue)]
         }
         if let index = rows.firstIndex(where: { $0.enabled }) {

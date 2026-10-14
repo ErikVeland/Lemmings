@@ -299,7 +299,6 @@ struct ReticleFeedback {
       if phase != oldValue { needsDisplay = true; window?.invalidateCursorRects(for: self) }
     }
   }
-  private let backgroundGlow = RescueBackgroundGlow()
   var levelImage: CGImage? { didSet { if oldValue !== levelImage { needsDisplay = true } } }
   var imageScale = 1.0
   var macArtwork: ClassicMacArtwork? { didSet { invalidateSprites() } }
@@ -844,10 +843,7 @@ struct ReticleFeedback {
 
   override func draw(_ dirtyRect: NSRect) {
     selectionEffect = nil
-    rescueAuras.removeAll(keepingCapacity: true)
     defer {
-      for effect in rescueAuras { LemmingSelectionRenderer.draw(effect) }
-      hdrOverlay?.setRescueAuras(presentsHDR ? rescueAuras : [])
       if phase == .playing { startCountdown.draw(in: bounds) }
       if lemmingSelectionStyle == .obvious, phase == .playing, !GameCursor.gameplaySuppressed,
          let id = assignmentHighlight.target, let lem = session?.lemmings.first(where: { $0.id == id && Self.canHighlight($0) }) {
@@ -893,9 +889,6 @@ struct ReticleFeedback {
           width: width, height: CGFloat(levelImage.height))) {
           NSImage(cgImage: cropped, size: .zero).draw(in: bounds, from: .zero,
             operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
-          if let context = NSGraphicsContext.current?.cgContext {
-            backgroundGlow.draw(cropped, in: bounds, amount: completionGlowAmount, context: context, slot: "menu")
-          }
         }
       } else {
         NSGraphicsContext.saveGraphicsState()
@@ -961,7 +954,7 @@ struct ReticleFeedback {
     let rows = overlayLines.enumerated().map { index, title in
       var action = GameFrontEnd.Action((index < overlayHomeLeadingCount ? "home." : "family.") + String(index), title,
         primary: index == overlayHighlight, selected: index == overlayHighlight, gameLogo: overlayHomeLogos[index])
-      action.titleRuns = index < overlayHomeLeadingCount - 1 ? GameSemanticText.resume(title)
+      action.titleRuns = index < overlayHomeLeadingCount ? GameSemanticText.resume(title)
         : action.gameLogo == nil ? GameSemanticText.title(title) : [.init(title, .blue)]
       return action
     }
@@ -1164,10 +1157,11 @@ struct ReticleFeedback {
       var bestHeight = 0
       for face in [ClassicMacUserInterface.Face.large, .small] {
         guard let font = macInterface.font(face) else { continue }
-        let fit = min(Int(rowTextHeight) / font.cellHeight,
+        let textHeight = font.height(of: MacInterfaceRenderer.menuText(overlayLines.joined()))
+        let fit = min(Int(rowTextHeight) / textHeight,
           Int(rowTextWidth) / max(1, longest * font.cellWidth))
-        if fit >= 1, fit * font.cellHeight > bestHeight {
-          menuFace = face; menuScale = fit; bestHeight = fit * font.cellHeight
+        if fit >= 1, fit * textHeight > bestHeight {
+          menuFace = face; menuScale = fit; bestHeight = fit * textHeight
         }
       }
     }
@@ -1256,7 +1250,7 @@ struct ReticleFeedback {
         let start = row.midX - macInterface.width(of: value, face: menuFace, scale: menuScale) / 2
         let offset = CGFloat((value.count - name.count) * font.cellWidth * menuScale)
         macInterface.draw(name, face: menuFace,
-          at: CGPoint(x: start + offset, y: floor(row.midY - CGFloat(font.cellHeight * menuScale) / 2)),
+          at: CGPoint(x: start + offset, y: floor(row.midY - CGFloat(font.height(of: value, scale: menuScale)) / 2 - CGFloat(font.verticalBounds(of: value).top * menuScale))),
           scale: menuScale, palette: .green)
       }
       if index == 0, turnInitials != nil { drawTurnPortrait(in: row, scale: scale) }
@@ -1309,7 +1303,7 @@ struct ReticleFeedback {
           : NSColor(calibratedWhite: 0.35, alpha: 1)).setStroke()
         NSBezierPath(rect: rect.insetBy(dx: 0.5, dy: 0.5)).stroke()
         drawMenuGameText(label, in: rect, face: .small, scale: footerScale,
-          palette: hovered ? .green : .blue)
+          palette: .blue)
       }
     } else if let overlayFooter {
       let footer = CGRect(x: board.minX + 20 * scale, y: y + 12 * scale,
@@ -1327,7 +1321,7 @@ struct ReticleFeedback {
       GamePixelText.draw(MacInterfaceRenderer.menuText(text), in: rect)
       return
     }
-    let height = font.cellHeight * scale
+    let height = font.height(of: MacInterfaceRenderer.menuText(text), scale: scale)
     let columns = max(1, Int(rect.width) / (font.cellWidth * scale))
     let lines = wrap ? MacInterfaceRenderer.menuLines(text, columns: columns) : [text]
     let rows = max(1, Int(rect.height) / height)
@@ -1355,18 +1349,18 @@ struct ReticleFeedback {
   ) -> Bool {
     guard let macInterface else { return false }
     // The original menus are upper case throughout.
-    let normalized = text.uppercased()
+    let normalized = BitmapLatinGlyphs.uppercase(text, locale: L10n.interface.locale)
       .replacingOccurrences(of: "—", with: "-")
       .replacingOccurrences(of: "’", with: "'")
 
     for face in [ClassicMacUserInterface.Face.large, .small] {
       guard let font = macInterface.font(face), font.covers(normalized) else { continue }
       let wide = font.cellWidth * max(1, normalized.count)
-      let fit = min(Int(rect.height) / max(1, font.cellHeight), Int(rect.width) / max(1, wide))
+      let fit = min(Int(rect.height) / max(1, font.height(of: normalized)), Int(rect.width) / max(1, wide))
       guard fit >= minimumScale else { continue }
       macInterface.drawCentered(
         normalized, face: face, centerX: rect.midX,
-        top: rect.midY - macInterface.height(face: face, scale: fit) / 2, scale: fit, palette: .green)
+        top: rect.midY - CGFloat(font.height(of: normalized, scale: fit)) / 2 - CGFloat(font.verticalBounds(of: normalized).top * fit), scale: fit, palette: .green)
       return true
     }
     return false
@@ -1410,9 +1404,6 @@ struct ReticleFeedback {
       x: origin.x, y: origin.y,
       width: crop.width * viewport.zoom / imageScale, height: crop.height * viewport.zoom / imageScale)
     drawPixels(cropped, in: destination)
-    if let context = NSGraphicsContext.current?.cgContext {
-      backgroundGlow.draw(cropped, in: destination, amount: completionGlowAmount, context: context, slot: "scene")
-    }
   }
 
   private func drawPixels(_ image: CGImage, in rect: CGRect, alpha: CGFloat = 1) {
@@ -1693,16 +1684,10 @@ struct ReticleFeedback {
   private func captureSelectionSprite(for lem: SessionLemming, key: String, sprite: NSImage, in rect: CGRect) {
     guard Self.canHighlight(lem) else { return }
     let id = lem.id
-    let glowing = completionGlowAmount > 0 && hdEffectsEnabled && !reduceFlashes
-    guard selectionTargetID == id || glowing,
+    guard selectionTargetID == id,
           let pixels = spritePixels[key] ?? sprite.cgImage(forProposedRect: nil, context: nil, hints: nil)
     else { return }
-    if selectionTargetID == id { selectedSprite = (pixels, rect) }
-    if glowing {
-      var effect = LemmingSelectionEffect(sprite: pixels, rect: precisionLens.display(rect), clipRect: bounds)
-      effect.rescueAmount = completionGlowAmount
-      rescueAuras.append(effect)
-    }
+    selectedSprite = (pixels, rect)
   }
 
   private func drawCountdown(_ countdown: Int, above rect: CGRect) {

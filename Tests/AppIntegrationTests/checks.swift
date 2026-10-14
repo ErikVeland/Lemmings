@@ -3501,6 +3501,7 @@ extension AppDelegate {
   }
 
   fileprivate func testVariableSimulationClock() throws {
+    if window == nil { buildInterface() }
     GameScreen.shared.dismissAll()
     // A synthetic clock check must not record the preceding level's scene.
     runMovie.discard()
@@ -6402,7 +6403,7 @@ private actor ContentBrowserArtworkFixture {
     func requestCounts() -> [String: Int] { requests }
 }
 
-@MainActor private func testContentBrowser() async throws {
+@MainActor private func testContentBrowser(checksFullLayout: Bool = true) async throws {
     GameScreen.shared.dismissAll()
     let host = SpeedTestWindow(
         contentRect: CGRect(x: 0, y: 0, width: 1120, height: 720),
@@ -6499,6 +6500,22 @@ private actor ContentBrowserArtworkFixture {
     }
     carousel.configure(items: items, selectedID: "level-3", reduceMotion: false)
     GameScreen.shared.present(page, owner: host, focus: carousel)
+    func checkWorkerLifecycle() async throws {
+        let detachedKey = "detached-\(UUID().uuidString)"
+        carousel.removeFromSuperview()
+        carousel.configure(items: [.init(id: detachedKey, title: "Detached", subtitle: "Fixture", detail: "", artworkKey: detachedKey)],
+          selectedID: detachedKey, reduceMotion: true)
+        try await Task.sleep(nanoseconds: 10_000_000)
+        let detachedRequests = await artworkFixture.requestCounts()
+        try check(detachedRequests[detachedKey] == nil,
+          "A detached carousel started artwork work behind gameplay")
+        page.body.addSubview(carousel)
+        for _ in 0..<200 where carousel.visualState(at: 0)?.hasArtwork != true {
+          try await Task.sleep(nanoseconds: 5_000_000)
+        }
+        try check(carousel.visualState(at: 0)?.hasArtwork == true,
+          "Returning to the browser did not restart its selected preview")
+    }
     host.contentView?.layoutSubtreeIfNeeded()
     for _ in 0..<200 {
         if (0..<7).allSatisfy({ carousel.visualState(at: $0)?.hasArtwork == true }) { break }
@@ -6740,6 +6757,11 @@ private actor ContentBrowserArtworkFixture {
     try await capture("reduced-motion-list")
     try check(carousel.selectedItem?.id == "level-6" && carousel.usesReducedMotionLayout,
       "A catalogue refresh lost the typed selection or reduced-motion fallback")
+    if !checksFullLayout {
+      try await checkWorkerLifecycle()
+      print("PASS carousel pixels, selection, native input, reduced motion and detached worker cancellation")
+      return
+    }
     cards = carousel.subviews.compactMap { $0 as? NSButton }
     let widths = Set(cards.map { Int($0.frame.width.rounded()) })
     try check(cards.count == 5 && widths.count == 1 && cards.allSatisfy { $0.frame.height >= 54 },
@@ -6852,6 +6874,7 @@ private actor ContentBrowserArtworkFixture {
     _ = longListNavigator.handle(.assign, in: page)
     try check(selectedReducedMotionRowIsVisible(laterControllerCard.tag),
       "Reduced motion hid the selected row after controller navigation")
+    try await checkWorkerLifecycle()
     print("PASS typed CoverFlow selection, mouse, keyboard, controller, VoiceOver and reduced motion")
 }
 
@@ -7123,6 +7146,7 @@ Task { @MainActor in
     subject.prepareArcadeTests()
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
+    #if !FRAME_PERFORMANCE_TESTS
     #if !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
@@ -7132,6 +7156,7 @@ Task { @MainActor in
     #if !CONTENT_BROWSER_TESTS
     try await subject.testAccessibleMenusAndHelp()
     try testPointerAssignment()
+    #endif
     #endif
     #endif
     #if MAC_FIDELITY_TESTS
@@ -7336,6 +7361,27 @@ Task { @MainActor in
     try subject.testHandoverPreviousLevel()
     try await subject.testHotSeatJourneyRetry()
     print("Music integration tests passed.")
+    #elseif FRAME_PERFORMANCE_TESTS
+    try subject.testVariableSpeedInput()
+    try subject.testVariableSimulationClock()
+    do {
+      let native = try Lemmings2PlayWindow(root: BundledGameResources.lemmings2(), selection: .init(tribe: 0, level: 0))
+      defer { native.stop(); native.close() }
+      try native.testCollectionVisitAndRetry()
+    }
+    do {
+      let native = try Lemmings3PlayWindow(root: BundledGameResources.lemmings3(), selection: .init(tribe: .classic, level: 0))
+      defer { native.stop(); native.close() }
+      try native.testCollectionVisitAndRetry()
+    }
+    let cancelledPack = FileManager.default.temporaryDirectory.appendingPathComponent("cancelled-count-\(UUID().uuidString).zip")
+    FanLevelLibrary.Progress.measure([cancelledPack]) {}
+    FanLevelLibrary.Progress.cancelMeasurement()
+    try await Task.sleep(nanoseconds: 10_000_000)
+    try check(!FanLevelLibrary.Progress.isComplete(for: [cancelledPack]),
+      "A cancelled fan scan published a late count during gameplay")
+    try await testContentBrowser(checksFullLayout: false)
+    print("Frame clocks and browser worker lifecycle integration tests passed.")
     #elseif VARIABLE_SPEED_TESTS
     try subject.testVariableSpeedInput()
     try subject.testPrecisionZoomWallet()

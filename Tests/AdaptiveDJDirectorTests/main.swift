@@ -10,7 +10,7 @@ for saved in 0..<50 {
         remainingSeconds: 5, isNuking: true, didWin: true)
     require(director.cue(for: telemetry) == nil, "Transition before the actual rescue target")
 }
-require(director.cue(for: .init(savedCount: 50, requiredCount: 50)) == .init(reason: .won, timing: .atNextPhrase), "Rescue target did not allow a transition")
+require(director.cue(for: .init(savedCount: 50, requiredCount: 50)) == .init(reason: .won, timing: .immediate), "Rescue target did not prioritise the musical lift")
 let target = AdaptiveDJEngine.Telemetry(savedCount: 50, requiredCount: 50, didWin: true, isComplete: true)
 require(director.cue(for: target) == nil, "Completed win repeated the target transition")
 for _ in 0..<100 { require(director.cue(for: target) == nil, "Repeated victory transition") }
@@ -35,6 +35,17 @@ var changed = old; changed.djIncludesOtherSoundtracks = false; changed.fullScree
 let restored = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(changed))
 require(restored == changed, "New options did not persist")
 print("PASS rescue-target transitions, one transition per level, countdown beeps and settings migration")
+
+for count in [1, 10, 100] {
+    director.reset()
+    require(director.cue(for: .init(totalCount: count, savedCount: count - 1, requiredCount: count)) == nil,
+        "An all-rescued level celebrated before its target")
+    require(director.cue(for: .init(totalCount: count, savedCount: count, requiredCount: count))?.timing == .immediate,
+        "An all-rescued level suppressed jubilant music")
+    require(director.cue(for: .init(totalCount: count, savedCount: count, requiredCount: count,
+        didWin: true, isComplete: true)) == nil, "An all-rescued result repeated the musical lift")
+}
+print("PASS immediate musical lift for partial and all-rescued targets")
 
 director.reset()
 require(director.cue(for: .init(didWin: false, isComplete: true)) == nil, "A loss replaced the funeral track")

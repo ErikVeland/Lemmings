@@ -199,4 +199,10 @@ public struct MobileTickClock: Equatable, Sendable {
         lastTime = nil
         accumulator = 0
     }
+
+    /// Retains ticks admitted by the clock when the current frame exhausts its CPU budget.
+    public mutating func deferTicks(_ ticks: Int) {
+        guard ticks > 0 else { return }
+        accumulator += Double(ticks) / ticksPerSecond
+    }
 }

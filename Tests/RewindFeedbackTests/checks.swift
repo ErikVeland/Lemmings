@@ -162,6 +162,31 @@ extension Lemmings3Canvas { fileprivate var rewindIsActive: Bool { speedTrails.i
     try checkRewind(!l3view.rewindIsActive, "L3 reduced flashes started a rewind impulse")
     print("PASS L2 and L3 rendered one-tick rewind, timeline targets and gaps, HD opt-out, reduced motion and reduced flashes")
 }
+@MainActor func checkControllerResetPriority() throws {
+    let window = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 640, height: 480), styleMask: [.borderless], backing: .buffered, defer: false)
+    let keyboard = GameplayKeyboard(window: window)
+    let speed = GameSpeedControl()
+    keyboard.speedControl = speed
+    keyboard.active = { true }
+    keyboard.controllerEnabled = { true }
+    keyboard.ownsController = { true }
+    var pauses = 0
+    keyboard.togglePause = { pauses += 1 }
+    speed.setFast(true)
+    keyboard.controllerAction(.pause)
+    try checkRewind(!speed.isFast && pauses == 0, "Play/Pause paused before restoring 1x")
+    keyboard.controllerAction(.pause)
+    try checkRewind(pauses == 1, "Play/Pause did not pause at 1x")
+    let controller = GameplayController(keyboard: keyboard, pollsAutomatically: false)
+    controller.processButtons([], at: 0, playing: true)
+    speed.setFast(true)
+    controller.processButtons([.rightTrigger], at: 1, playing: true)
+    controller.processButtons([.rightTrigger], at: 2, playing: true)
+    controller.processButtons([], at: 3, playing: true)
+    try checkRewind(!speed.isFast && speed.target == 1, "Held R2 or its release undid the reset to 1x")
+    print("PASS shared Classic/L2/L3 controller reset priority, pause and held-trigger release")
+}
+try checkControllerResetPriority()
 try checkSharedRewind()
 try checkClassicRewind()
 try checkSequelRewinds()

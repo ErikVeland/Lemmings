@@ -19,7 +19,7 @@ public struct ClassicMacUserInterface: Sendable {
         case large = "Charset2"
     }
 
-    /// A monospaced character set, indexed from space.
+    /// A monospaced character set with Western Latin extensions.
     public struct Font: Sendable {
         /// The first character the set covers. Everything below it is control
         /// codes, which a menu never draws.
@@ -55,8 +55,9 @@ public struct ClassicMacUserInterface: Sendable {
 
         /// The glyph for a character, or nil when the set does not cover it.
         ///
-        /// A character outside the set advances a cell and draws nothing, so a
-        /// stray dash or ellipsis leaves a gap instead of breaking the line.
+        /// Canonically equivalent composed and combining forms share a glyph.
+        /// Unsupported characters advance one cell and draw nothing; menu text
+        /// normalisation substitutes a visible question mark for them.
         public func glyph(for character: Character) -> ClassicMacArtwork.Frame? {
             if let scalar = character.unicodeScalars.first, character.unicodeScalars.count == 1,
                scalar >= Font.firstCharacter, scalar <= Font.lastCharacter {

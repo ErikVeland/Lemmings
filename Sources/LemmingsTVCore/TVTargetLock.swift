@@ -11,4 +11,16 @@ public struct TVTargetLock: Sendable {
               visible.contains(candidate.point) else { return nil }
         return .init(id: id, point: candidate.point, state: candidate.assignment)
     }
+    /// Keep the displayed actor while it remains inside the same precision pick box.
+    public static func retain(_ selection: MobileTargetSelection?, at point: MobilePoint,
+                              candidates: [MobileTargetCandidate], viewport: MobileViewport) -> MobileTargetSelection? {
+        guard let selection, viewport.contentFrame.contains(point),
+              let candidate = candidates.first(where: { $0.id == selection.id }),
+              candidate.assignment == .eligible else { return nil }
+        let level = viewport.levelPoint(fromView: point)
+        let box = candidate.pointerBounds ?? .init(x: -6, y: -9, width: 12, height: 19)
+        guard box.contains(.init(x: level.x - candidate.point.x, y: level.y - candidate.point.y)) else { return nil }
+        return .init(id: candidate.id, point: candidate.point, state: candidate.assignment)
+    }
+
 }

@@ -7,8 +7,7 @@ Updated 13 October 2026.
 Adaptive presentation is a core benefit of Ultimate Lemmings. Each device should
 deliver the richest visual presentation it can sustain with responsive input,
 stable frame pacing and a suitable power budget. Apply this requirement to
-Classic, Lemmings 2 and Lemmings 3 on Mac, iPhone and iPad, and to the future
-Apple TV implementation.
+Classic, Lemmings 2 and Lemmings 3 on Mac, iPhone, iPad and Apple TV.
 
 Use hardware and software capabilities to select the initial budget. Use measured
 work to lower or raise quality during play. A hardware generation is a starting
@@ -87,8 +86,20 @@ These changes do not alter skill outcomes or recorded commands.
 
 L2/L3 mobile adapters still lack complete native sprite rendering, masks and
 explosion metadata. The shared policy is available to them, but it cannot create
-those missing visuals. There is no tvOS target yet. Apple TV needs its own adapter
-and physical-device acceptance before this benefit can be claimed there.
+those missing visuals.
+
+Apple TV uses the shared mobile adapter. Following reported completion-glow
+slowdown on 14 October, TV omits completion light and its timer, the extra speed
+and cinematic explosion surface, and added explosion flash cores. CRT starts at
+balanced quality, or minimal on two-core devices, with at most one drawable pixel
+per point. Menu/HUD artwork retains native resolution. Minimal CPU or GPU quality
+removes the three bloom passes and their scratch textures. A presentation target
+below 60 Hz also keeps bloom off. Sustained spare
+capacity permits bloom recovery. Physical TV timing and native rendered output
+still need device acceptance. Mac and iOS now use only a faint pixel border for
+rescue feedback, without scenery blur, crowd masks, HDR rescue light or a separate
+timer. Their other effects retain their existing budgets. The jubilant musical
+lift takes priority at the secured rescue target.
 
 ## Validation and next work
 

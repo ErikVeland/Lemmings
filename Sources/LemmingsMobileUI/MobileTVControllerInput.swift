@@ -10,11 +10,11 @@ import UIKit
     private var owner: GCController?
     private var lastMenuDevice: GCController?
     private var bindings = TVControllerBindings()
+    private var timeline = TVTimelineTransport()
     private var rewindHeld = false
     private var pausePressed = false
     private var menuPressed = false
-    private var touchpadPressed = false
-    private var touchpadArmed = false
+    private var touchpadClick = ControllerButtonEdge()
     private var preferenceKey: String?
     private var feedbackPad: GCDualSenseGamepad?
     private var feedbackTier: Double?
@@ -25,8 +25,9 @@ import UIKit
 
     init(adapter: MobileInputAdapter) { self.adapter = adapter }
     func reset() {
+        applyTimeline(timeline.reset())
         bindings.reset(); lastTime = 0
-        touchpadArmed = false
+        touchpadClick.reset()
         if rewindHeld { rewindHeld = false; adapter?.onRewindHeld?(false) }
         clearFeedback()
     }
@@ -53,12 +54,11 @@ import UIKit
         if let owner, !devices.contains(where: { $0 === owner }) {
             self.owner = nil
             reset()
-            if !adapter.isMenu() { adapter.onCommand?(.pause) }
+            if !adapter.isMenu() { adapter.onForcedPause?() }
             return
         }
         if adapter.isMenu() {
-            let pause = devices.contains { $0.extendedGamepad?.buttonX.isPressed == true
-                || $0.microGamepad?.buttonX.isPressed == true }
+            let pause = devices.contains { ControllerBindings.remap(pressed($0), using: settings.controllerMappings).contains(.b) }
             let menu = devices.contains { $0.extendedGamepad?.buttonMenu.isPressed == true }
             if menu && !menuPressed { adapter.onGameMenu?() }
             menuPressed = menu
@@ -83,24 +83,21 @@ import UIKit
             reset()
         }
         guard let owner else { return }
-        pausePressed = owner.extendedGamepad?.buttonX.isPressed == true
-            || owner.microGamepad?.buttonX.isPressed == true
+        pausePressed = ControllerBindings.remap(pressed(owner), using: settings.controllerMappings).contains(.b)
         menuPressed = owner.extendedGamepad?.buttonMenu.isPressed == true
-        let touchpad = (owner.extendedGamepad as? GCDualSenseGamepad)?.touchpadButton.isPressed == true
-        if !touchpad { touchpadArmed = true }
-        let shuffleTouchpad = touchpadArmed && touchpad && !touchpadPressed
-        touchpadPressed = touchpad
+        let shuffleTouchpad = touchpadClick.update(pressed: MobileInputAdapter.touchpadPressed(on: owner), active: true)
         owner.microGamepad?.allowsRotation = false
         owner.microGamepad?.reportsAbsoluteDpadValues = true
         let elapsed = min(0.05, max(0, lastTime == 0 ? 0 : time - lastTime))
         lastTime = time
-        let actions = bindings.update(pressed: ControllerBindings.remap(pressed(owner), using: settings.controllerMappings))
-        if rewindHeld != bindings.rewindHeld {
-            rewindHeld = bindings.rewindHeld; adapter.onRewindHeld?(rewindHeld)
-        }
+        let roles = ControllerBindings.remap(pressed(owner), using: settings.controllerMappings)
+        let actions = bindings.update(pressed: roles)
+        applyTimeline(timeline.update(pressed: roles, at: time, speed: adapter.controllerSpeed()))
         if bindings.menuRequested { adapter.onGameMenu?(); reset(); return }
         if bindings.shuffleRequested || shuffleTouchpad { adapter.onDJShuffle?() }
         for action in actions {
+            if case .boost = action { continue }
+            if action == .pause { applyTimeline(timeline.reset()) }
             adapter.perform(action)
             if adapter.isMenu() { reset(); return }
         }
@@ -117,6 +114,19 @@ import UIKit
         } else if let pad = owner.microGamepad {
             if abs(pad.dpad.xAxis.value) > Float(inputPreferences.deadZone) || abs(pad.dpad.yAxis.value) > Float(inputPreferences.deadZone) {
                 adapter.onAim?(velocity(pad.dpad.xAxis.value) * elapsed, -velocity(pad.dpad.yAxis.value) * elapsed)
+            }
+        }
+    }
+
+    private func applyTimeline(_ events: [TVTimelineTransport.Event]) {
+        for event in events {
+            switch event {
+            case .resetSpeed: adapter?.onCommand?(.speedReset)
+            case .park: adapter?.onTimelinePark?()
+            case .step(let direction): adapter?.onCommand?(.step(direction))
+            case .scrub(let direction, let held):
+                if direction < 0 { rewindHeld = held; adapter?.onRewindHeld?(held) }
+                else { adapter?.onForwardScrub?(held) }
             }
         }
     }
@@ -146,15 +156,15 @@ import UIKit
                 (.menu, pad.buttonMenu), (.options, pad.buttonOptions),
                 (.leftStick, pad.leftThumbstickButton), (.rightStick, pad.rightThumbstickButton)
             ]
-            var result = Set(inputs.compactMap { $0.1?.isPressed == true ? $0.0 : nil })
+            let result = Set(inputs.compactMap { $0.1?.isPressed == true ? $0.0 : nil })
             return result
         }
         guard let pad = controller.microGamepad else { return [] }
         let centre = controller.physicalInputProfile.buttons[GCInputDirectionalCenterButton] ?? pad.buttonA
         var result = Set<ControllerBindings.Button>()
         if centre.isPressed { result.insert(.a) }
-        if pad.buttonX.isPressed { result.insert(.x) }
-        if pad.buttonMenu.isPressed { result.insert(.b) }
+        if pad.buttonX.isPressed { result.insert(.b) }
+        if pad.buttonMenu.isPressed { result.insert(.menu) }
         return result
     }
 

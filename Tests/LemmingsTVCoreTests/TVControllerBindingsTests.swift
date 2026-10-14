@@ -85,7 +85,7 @@ struct TVControllerBindingsTests {
     }
     @Test func requestedFaceAndRateLayoutKeepsSelectBackAndSkills() {
         let actions: [(ControllerBindings.Button, ControllerBindings.Action)] = [
-            (.a, .assign), (.b, .cancel), (.x, .pause), (.y, .endRun),
+            (.a, .assign), (.b, .pause), (.x, .speedReset), (.y, .endRun),
             (.left, .rate(-99)), (.right, .rate(99)), (.up, .rate(1)), (.down, .rate(-1)),
             (.leftShoulder, .cycle(-1)), (.rightShoulder, .cycle(1))]
         for (button, action) in actions {
@@ -94,6 +94,46 @@ struct TVControllerBindingsTests {
             #expect(input.update(pressed: [button]).isEmpty)
         }
     }
+    @Test func shuttleTapsStepsHoldsParkAndHandoverRequiresNeutral() {
+        var transport = TVTimelineTransport()
+        #expect(transport.update(pressed: [.leftTrigger], at: 0).isEmpty)
+        #expect(transport.update(pressed: [.leftTrigger], at: 1).isEmpty)
+        #expect(transport.update(pressed: [], at: 2).isEmpty)
+        #expect(transport.update(pressed: [.leftTrigger], at: 3) == [.park])
+        #expect(transport.update(pressed: [], at: 3.1) == [.step(-1)])
+        #expect(transport.update(pressed: [.rightTrigger], at: 4) == [.park])
+        #expect(transport.update(pressed: [], at: 4.1) == [.step(1)])
+        #expect(transport.update(pressed: [.leftTrigger], at: 5) == [.park])
+        #expect(transport.update(pressed: [.leftTrigger], at: 5.3) == [.scrub(-1, true)])
+        #expect(transport.update(pressed: [.leftTrigger, .rightTrigger], at: 6) == [.scrub(-1, false), .park])
+        #expect(transport.update(pressed: [.leftTrigger, .rightTrigger], at: 6.3) == [.scrub(1, true)])
+        #expect(transport.update(pressed: [.leftTrigger], at: 7) == [.scrub(1, false)])
+        #expect(transport.update(pressed: [.leftTrigger], at: 8).isEmpty)
+        #expect(transport.update(pressed: [], at: 9).isEmpty)
+        #expect(transport.reset().isEmpty)
+    }
+
+    @Test func fastTriggerPressOnlyResetsSpeedAndRequiresReleaseBeforeScrubbing() {
+        for trigger in [ControllerBindings.Button.leftTrigger, .rightTrigger] {
+            var transport = TVTimelineTransport()
+            _ = transport.update(pressed: [], at: 0)
+            #expect(transport.update(pressed: [trigger], at: 1, speed: 3) == [.resetSpeed])
+            #expect(transport.update(pressed: [trigger], at: 2, speed: 1).isEmpty)
+            #expect(transport.update(pressed: [], at: 3).isEmpty)
+            #expect(transport.update(pressed: [trigger], at: 4) == [.park])
+        }
+    }
+
+    @Test func overlappingActorsRetainTheDisplayedTargetUntilItLeavesThePickBox() {
+        let viewport = MobileViewport(levelSize: .init(width: 160, height: 80), viewSize: .init(width: 160, height: 80), zoom: 1)
+        let actors = [MobileTargetCandidate(id: 1, point: .init(x: 40, y: 40), direction: 1, assignment: .eligible),
+                      MobileTargetCandidate(id: 2, point: .init(x: 41, y: 40), direction: -1, assignment: .eligible)]
+        let shown = MobileTargetSelection(id: 1, point: actors[0].point, state: .eligible)
+        #expect(TVTargetLock.retain(shown, at: .init(x: 41, y: 40), candidates: actors, viewport: viewport)?.id == 1)
+        #expect(TVTargetLock.retain(shown, at: .init(x: 55, y: 40), candidates: actors, viewport: viewport) == nil)
+        #expect(TVTargetLock.retain(shown, at: .init(x: 41, y: 40), candidates: [actors[1]], viewport: viewport) == nil)
+    }
+
     @Test func olderPreferencesRetainSensitivityAndEnableFeedback() throws {
         let legacy = Data("{\"planningOnSkillChange\":false,\"aimSensitivity\":1.5,\"deadZone\":0.2,\"textScale\":1,\"swapSticks\":false,\"musicEnabled\":true,\"effectsEnabled\":true,\"mappings\":{}}".utf8)
         let prefs = try JSONDecoder().decode(TVPreferences.self, from: legacy)

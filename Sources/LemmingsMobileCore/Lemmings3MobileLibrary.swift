@@ -23,6 +23,13 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
     private let progressLock = NSRecursiveLock()
     private let panelLock = NSLock()
     private var panelFrames: [Int: MobilePixelFrame] = [:]
+    private let artLock = NSLock()
+    private struct ArtBank {
+        let style: Lemmings3Style
+        let sprites: Lemmings3Sprites
+        let palette: [UInt8]
+    }
+    private var artBanks: [Int: ArtBank] = [:]
     private var savedProgress: SavedProgress
     private var progressFailure: String?
 
@@ -41,6 +48,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
         soundBank = try? Lemmings3SoundBank(root: directory)
         savedProgress = storage.load(SavedProgress.self, name: "lemmings3-campaign") ?? SavedProgress()
         levels = try Lemmings3ClassicCampaign.Tribe.allCases.flatMap { tribe in
+            try Task.checkCancellation()
             let campaign = try Lemmings3ClassicCampaign(root: directory, tribe: tribe)
             return campaign.levels.enumerated().map { index, level in
                 MobileLevelSummary(index: (tribe.rawValue - 1) * 30 + index,
@@ -66,21 +74,21 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
     }
 
     public func loadLevel(at index: Int) throws -> MobileLevelContent {
+        try Task.checkCancellation()
         guard levels.indices.contains(index) else { throw MobileSessionError.changedLevel }
         let tribe = Lemmings3ClassicCampaign.Tribe(rawValue: index / 30 + 1)!
         let localIndex = index % 30
         let level = try Lemmings3Level(data: levelData(at: index))
-        let style = try Lemmings3Style(directory: directory.appendingPathComponent("STYLES"), number: tribe.rawValue)
+        let art = try artBank(for: tribe)
+        let style = art.style
         let panel = try panelFrame(for: tribe.spriteStyle)
         let permanent = try Lemmings3Objects(data: Data(contentsOf: objectURL(level.permanentObjectsReference, temporary: false)))
         let temporary = try Lemmings3Objects(data: Data(contentsOf: objectURL(level.temporaryObjectsReference, temporary: true)))
         let scene = try Lemmings3Scene(level: level, style: style, permanent: permanent, temporary: temporary)
-        let graphicsPrefix = String(format: "GRAPHICS/TRIBE%03d", tribe.spriteStyle)
-        let sprites = try Lemmings3Sprites(
-            index: Data(contentsOf: directory.appendingPathComponent(graphicsPrefix + ".IND")),
-            commands: Data(contentsOf: directory.appendingPathComponent(graphicsPrefix + ".CMP")))
-        let actorPalette = try Lemmings3Sprites.palette(
-            Data(contentsOf: directory.appendingPathComponent(graphicsPrefix + ".PAL")), over: style.palette)
+        try Task.checkCancellation()
+        let sprites = art.sprites
+        let actorPalette = art.palette
+        try Task.checkCancellation()
 
         progressLock.lock()
         let loadedCampaign: Lemmings3ClassicCampaign
@@ -103,6 +111,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
                                            temporary: temporary, total: loadedCampaign.population)
         var creatureBanks: [Lemmings3Runtime.Creature.Kind: Lemmings3MobileSceneRenderer.CreatureBank] = [:]
         for kind in Set(runtime.creatures.map(\.kind)) {
+            try Task.checkCancellation()
             let prefix = String(format: "GRAPHICS/CREAT%03d", (kind.rawValue - 10008) / 2)
             let bank = try Lemmings3Sprites(
                 index: Data(contentsOf: directory.appendingPathComponent(prefix + ".IND")),
@@ -113,6 +122,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
         }
         var animatedFrames: [Int: [Lemmings3MobileSceneRenderer.AnimatedObject.Frame]] = [:]
         let animatedObjects = try permanent.placements.enumerated().compactMap { index, placement -> Lemmings3MobileSceneRenderer.AnimatedObject? in
+            try Task.checkCancellation()
             guard let definition = style.permanent.objects[placement.identifier],
                   (0x4002...0x400a).contains(definition.flags), definition.frameCount > 1 else { return nil }
             let frames: [Lemmings3MobileSceneRenderer.AnimatedObject.Frame]
@@ -120,6 +130,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
                 frames = cached
             } else {
                 frames = try (0..<definition.frameCount).map { frameIndex in
+                    try Task.checkCancellation()
                     let image = try style.permanent.image(object: placement.identifier, frame: frameIndex, palette: style.palette)
                     return try Lemmings3MobileSceneRenderer.AnimatedObject.Frame(
                         width: image.width, height: image.height, pixels: image.pixels, palette: image.palette)
@@ -176,6 +187,25 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
         let tribe = Lemmings3ClassicCampaign.Tribe(rawValue: index / 30 + 1)!
         return try Data(contentsOf: directory.appendingPathComponent(
             String(format: "LEVELS/LEVEL%03d.DAT", tribe.firstLevel + index % 30)))
+    }
+
+    private func artBank(for tribe: Lemmings3ClassicCampaign.Tribe) throws -> ArtBank {
+        artLock.lock()
+        defer { artLock.unlock() }
+        try Task.checkCancellation()
+        if let cached = artBanks[tribe.rawValue] { return cached }
+        let style = try Lemmings3Style(directory: directory.appendingPathComponent("STYLES"), number: tribe.rawValue)
+        try Task.checkCancellation()
+        let prefix = String(format: "GRAPHICS/TRIBE%03d", tribe.spriteStyle)
+        let sprites = try Lemmings3Sprites(index: Data(contentsOf: directory.appendingPathComponent(prefix + ".IND")),
+            commands: Data(contentsOf: directory.appendingPathComponent(prefix + ".CMP")))
+        let palette = try Lemmings3Sprites.palette(
+            Data(contentsOf: directory.appendingPathComponent(prefix + ".PAL")), over: style.palette)
+        try Task.checkCancellation()
+        let bank = ArtBank(style: style, sprites: sprites, palette: palette)
+        // A library has three tribes. Each decoded bank stays bound to this content revision.
+        artBanks[tribe.rawValue] = bank
+        return bank
     }
 
     private func panelFrame(for tribe: Int) throws -> MobilePixelFrame {

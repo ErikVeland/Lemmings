@@ -470,9 +470,10 @@ import LemmingsGameArt
         let chosen = isEnabled && (primary || isHighlighted)
         GameStoneButton.draw(bounds, selected: chosen, pixel: 1)
         GameControlText.focus(self)
-        let caption = CGRect(x: 12, y: bounds.midY - 10, width: bounds.width - 24, height: 20)
+        let height = max(20, renderer?.height(of: title, face: .small, scale: 1) ?? 20)
+        let caption = CGRect(x: 12, y: bounds.midY - height / 2, width: bounds.width - 24, height: height)
         if let renderer {
-            renderer.menuLine(title, in: caption, face: .small, alpha: isEnabled ? 1 : 0.45, palette: chosen ? .green : .blue)
+            renderer.menuLine(title, in: caption, face: .small, alpha: isEnabled ? 1 : 0.45, palette: .blue)
         } else { GamePixelText.draw(title, in: caption) }
     }
     @objc private func invoke() { onPress?() }

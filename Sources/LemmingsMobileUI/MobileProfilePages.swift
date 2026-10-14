@@ -23,17 +23,22 @@ extension MobileLibraryViewController {
     }
 
     func playersPage(subtitle: String) -> GameFrontEnd.Page {
+        #if os(tvOS)
+        let holdToEdit = true
+        #else
+        let holdToEdit = false
+        #endif
         var page = MobileCareerArt.players(profiles, subtitle: subtitle, draft: renamingPlayer ? nameDraft : nil,
             creating: creatingPlayer, portrait: draftPortrait, canDelete: canDeleteActivePlayer,
-            confirmingDelete: confirmingDelete, hotSeatTurn: hotSeat.map { playerName($0.turn) })
+            confirmingDelete: confirmingDelete, hotSeatTurn: hotSeat.map { playerName($0.turn) }, holdToEdit: holdToEdit,
+            editingPlayerID: editingPlayerID)
         if !renamingPlayer { page.rows.append(.init("cloudSaves", L10n.text("Cloud saves"))) }
         return page
     }
 
     var canDeleteActivePlayer: Bool {
-        let ownsCheckpoint = pendingCheckpoint?.owner == profiles.activeID
-            || (pendingCheckpoint != nil && pendingCheckpoint?.owner == nil && profiles.activeID == MobileProfiles.defaultID)
-        return !ownsCheckpoint && arcadeStore.canDeleteProfile(profiles.activeID, runInProgress: game != nil)
+        guard !creatingPlayer, let editingPlayerID else { return false }
+        return arcadeStore.canDeleteProfile(editingPlayerID, runInProgress: game != nil)
     }
 
     func switchPlayer(_ id: String) {
@@ -93,17 +98,26 @@ extension MobileLibraryViewController {
         guard profiles.players.count < MobileProfiles.maximum else { return }
         if route != .hotSeat { hotSeatRoster = nil }
         creatingPlayer = true; renamingPlayer = true
+        editingPlayerID = nil; confirmingDelete = false
         nameDraft = ""; draftPortrait = profiles.players.count % 8
         searchField.text = ""
         navigate(.players)
+        canvas.focusAction("nameField")
+        #if os(iOS)
         searchField.becomeFirstResponder()
+        #endif
     }
 
-    func beginRenamingPlayer() {
+    func beginRenamingPlayer(_ id: String? = nil) {
+        let candidate = id ?? profiles.activeID
+        guard let player = profiles.players.first(where: { $0.id == candidate }) else { return }
         creatingPlayer = false; renamingPlayer = true
-        nameDraft = arcadeStore.records.profile(profiles.activeID)?.initials ?? profiles.active.name
-        draftPortrait = profiles.active.portrait
-        searchField.text = nameDraft; rebuild(); searchField.becomeFirstResponder()
+        editingPlayerID = candidate; confirmingDelete = false
+        nameDraft = arcadeStore.records.profile(candidate)?.initials ?? player.name
+        draftPortrait = player.portrait
+        searchField.text = nameDraft
+        rebuild()
+        canvas.focusAction("nameField")
     }
 
     func cyclePlayerPortrait() { draftPortrait = (draftPortrait + 1) % 8; rebuild() }
@@ -125,54 +139,73 @@ extension MobileLibraryViewController {
                     profiles.setPortrait(id, to: draftPortrait)
                     hotSeatRoster?.toggle(id)
                 } else { profiles.select(id) }
-            } else { profiles.rename(profiles.activeID, to: initials) }
-            if !newGuest { profiles.setPortrait(profiles.activeID, to: draftPortrait) }
+            } else if let editingPlayerID {
+                profiles.rename(editingPlayerID, to: initials)
+                profiles.setPortrait(editingPlayerID, to: draftPortrait)
+            }
+            if creatingPlayer && !newGuest { profiles.setPortrait(profiles.activeID, to: draftPortrait) }
             guard saveProfiles() else { profiles = previous; hotSeatRoster = previousRoster; rebuild(); return }
             if creatingPlayer && !newGuest {
                 reloadPlayerData()
             }
         }
         renamingPlayer = false; creatingPlayer = false; nameDraft = nil
+        editingPlayerID = nil; confirmingDelete = false
+        searchField.resignFirstResponder()
         searchField.text = searchQuery
+        libraryCloud.requestSync()
         if newGuest { navigate(.hotSeat) } else { rebuild() }
     }
 
     func deleteActivePlayer() {
         guard canDeleteActivePlayer else { return }
-        let candidate = profiles.activeID
+        if !confirmingDelete { confirmingDelete = true; canvas.focusedID = "playerDeleteCancel"; rebuild(); return }
+        deleteEditedPlayer()
+    }
+
+    private func deleteEditedPlayer() {
+        guard canDeleteActivePlayer else { return }
+        guard confirmingDelete, let removed = editingPlayerID else { return }
+        let previous = profiles
+        let previousSeats = hotSeats
+        hotSeats.removePlayer(removed)
+        guard saveHotSeats() else { rebuild(); return }
+        profiles.delete(removed)
+        guard saveProfiles() else {
+            let error = notice
+            profiles = previous; hotSeats = previousSeats; _ = saveHotSeats()
+            notice = error; rebuild(); return
+        }
+        guard arcadeStore.deleteProfile(removed) else {
+            let error = arcadeStore.storageError ?? L10n.text("Player was not deleted.")
+            profiles = previous
+            _ = saveProfiles()
+            hotSeats = previousSeats; _ = saveHotSeats()
+            notice = error; rebuild(); return
+        }
+        hotSeatRoster = nil
+        renamingPlayer = false; creatingPlayer = false; nameDraft = nil; editingPlayerID = nil
+        searchField.resignFirstResponder(); searchField.text = searchQuery
         Task {
-            do {
-                guard let checkpointStore else { throw MobileCheckpointError.invalid }
-                let ownsSavedRun = try await checkpointStore.hasSavedSoloRun(owner: candidate)
-                guard candidate == profiles.activeID else { return }
-                if ownsSavedRun {
-                    loadCheckpoint(); notice = L10n.text("Resume this player's saved run before deleting."); rebuild(); return
-                }
-                deleteUnsavedActivePlayer()
-            } catch { notice = error.localizedDescription; rebuild() }
+            var cleanupError: String?
+            do { try await removePlayerFiles(removed) }
+            catch { cleanupError = error.localizedDescription }
+            reloadPlayerData(); navigate(.players)
+            if let cleanupError { notice = cleanupError; rebuild() }
+            libraryCloud.requestSync()
         }
     }
 
-    private func deleteUnsavedActivePlayer() {
-        guard canDeleteActivePlayer else { return }
-        if !confirmingDelete { confirmingDelete = true; rebuild(); return }
-        let removed = profiles.activeID
-        let previous = profiles
-        profiles.delete(removed)
-        guard saveProfiles() else { profiles = previous; rebuild(); return }
-        guard arcadeStore.deleteProfile(removed) else {
-            profiles = previous
-            _ = saveProfiles()
-            notice = arcadeStore.storageError ?? L10n.text("Player was not deleted."); rebuild(); return
-        }
-        removeFromHotSeats(removed)
-        UserDefaults.standard.removeObject(forKey: PlayerControlSettings.defaultsKey(profileID: removed))
+    /// Local and cloud deletions remove the same player-owned files and settings.
+    func removePlayerFiles(_ id: String) async throws {
+        UserDefaults.standard.removeObject(forKey: PlayerControlSettings.defaultsKey(profileID: id))
         #if os(tvOS)
-        UserDefaults.standard.removeObject(forKey: LemmingsTVCore.TVPreferences.inputKey(removed))
+        UserDefaults.standard.removeObject(forKey: LemmingsTVCore.TVPreferences.inputKey(id))
         #endif
-        do { try FileManager.default.removeItem(at: MobileStorage.standard(profile: removed).directory) }
-        catch { notice = error.localizedDescription }
-        reloadPlayerData(); navigate(.players)
+        guard let checkpointStore else { throw MobileCheckpointError.invalid }
+        try await checkpointStore.removeSoloRuns(owner: id)
+        let directory = MobileStorage.standard(profile: id).directory
+        if FileManager.default.fileExists(atPath: directory.path) { try FileManager.default.removeItem(at: directory) }
     }
 }
 #endif

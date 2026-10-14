@@ -7,6 +7,8 @@ import UIKit
 @MainActor final class MobileCoverFlowView: UIView {
     var titles: [String] = [] {
         didSet {
+            cancelArtwork()
+            artwork.removeAll()
             cards.values.forEach { $0.removeFromSuperlayer() }
             cards = [:]; rendered = [:]
             position = min(position, CGFloat(max(0, titles.count - 1))); target = position
@@ -14,6 +16,12 @@ import UIKit
         }
     }
     var artworkLoader: ((Int) async -> CGImage?)?
+    var artworkLoadingEnabled = false {
+        didSet {
+            if artworkLoadingEnabled { layoutCards() }
+            else { cancelArtwork(); link?.invalidate(); link = nil }
+        }
+    }
     var onSelectionChanged: ((Int) -> Void)?
     var onActivate: ((Int) -> Void)?
 
@@ -24,6 +32,8 @@ import UIKit
     private var rendered: [Int: RenderState] = [:]
     private var artwork: [Int: CGImage] = [:]
     private var artworkTasks: [Int: Task<Void, Never>] = [:]
+    private var artworkGeneration = UUID()
+    private var artworkDrain: Task<Void, Never>?
     nonisolated(unsafe) private var link: CADisplayLink?
     private var panStart: CGFloat = 0
     private var renderedSize = CGSize.zero
@@ -211,14 +221,47 @@ import UIKit
 
     // MARK: - Artwork
 
+    private func cancelArtwork() {
+        artworkGeneration = UUID()
+        drainArtwork(Array(artworkTasks.values))
+        artworkTasks.removeAll()
+    }
+
+    func stopArtworkLoading() -> Task<Void, Never>? {
+        artworkLoadingEnabled = false
+        return artworkDrain
+    }
+
+    private func drainArtwork(_ tasks: [Task<Void, Never>]) {
+        guard !tasks.isEmpty else { return }
+        tasks.forEach { $0.cancel() }
+        let previous = artworkDrain
+        artworkDrain = Task {
+            await previous?.value
+            for task in tasks { await task.value }
+        }
+    }
+
     private func requestArtwork(near centre: Int) {
-        for (index, task) in artworkTasks where abs(index - centre) > 4 { task.cancel(); artworkTasks[index] = nil }
+        guard artworkLoadingEnabled else { return }
         guard let artworkLoader else { return }
-        for index in max(0, centre - 2)...min(titles.count - 1, centre + 2)
+        let generation = artworkGeneration
+        // Queue the selected cover first so Play never waits behind distant levels.
+        let process = ProcessInfo.processInfo
+        let adjacent = !MobileDevicePerformance.constrained && !process.isLowPowerModeEnabled
+            && process.thermalState == .nominal
+        let indices = (adjacent ? [centre, centre - 1, centre + 1] : [centre])
+            .filter { titles.indices.contains($0) }
+        let allowed = Set(indices)
+        let obsolete = artworkTasks.filter { !allowed.contains($0.key) }
+        drainArtwork(Array(obsolete.values))
+        for index in obsolete.keys { artworkTasks[index] = nil }
+        for index in indices
         where artwork[index] == nil && artworkTasks[index] == nil {
             artworkTasks[index] = Task { [weak self] in
                 let image = await artworkLoader(index)
-                guard let self, !Task.isCancelled else { return }
+                guard let self, !Task.isCancelled, self.artworkLoadingEnabled,
+                      self.artworkGeneration == generation else { return }
                 self.artworkTasks[index] = nil
                 if let image { self.artwork[index] = image; self.layoutCards() }
             }

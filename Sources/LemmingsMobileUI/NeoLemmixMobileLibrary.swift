@@ -82,6 +82,7 @@ final class NeoLemmixMobileLibrary: MobileGameLibrary {
     }
 
     func loadLevel(at index: Int) throws -> MobileLevelContent {
+        try Task.checkCancellation()
         guard entries.indices.contains(index) else { throw MobileSessionError.changedLevel }
         let entry = entries[index]
         progressLock.lock()
@@ -96,8 +97,10 @@ final class NeoLemmixMobileLibrary: MobileGameLibrary {
             throw MobileSessionError.changedLevel
         }
         let resolution = NxlvStyleResolver(stylesRootURL: entry.stylesRoot).resolve(level: level)
+        try Task.checkCancellation()
         guard resolution.isComplete else { throw NeoLemmixMobileLibraryError.incompleteStyles(level.title) }
         let result = NxlvRenderer(retainsVisualLayers: true).render(level: level, resolution: resolution)
+        try Task.checkCancellation()
         guard let rendered = result.renderedLevel, !result.hasErrors,
               NeoLemmixRules.unsupportedFeatures(level: level, renderedLevel: rendered).isEmpty else {
             throw NeoLemmixMobileLibraryError.unsupportedLevel(level.title)

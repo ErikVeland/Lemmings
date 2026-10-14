@@ -114,7 +114,7 @@ public enum TVMenuArt {
         if let typography {
             let face: GameMenuTypography.Face = title ? .large : .small
             let scale = textScale > 1 ? 2 : 1
-            let height = typography.height(face: face, scale: scale)
+            let height = typography.height(of: value, face: face, scale: scale)
             typography.menuLine(value, in: CGRect(x: box.minX, y: floor(box.midY - height / 2), width: box.width, height: height),
                 context: context, face: face, scale: scale, alpha: enabled ? 1 : 0.4, palette: green ? .green : .blue)
         } else {

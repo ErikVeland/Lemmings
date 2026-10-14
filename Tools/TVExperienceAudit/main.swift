@@ -13,6 +13,10 @@ import NxlvKit
         let output = root.appendingPathComponent("Documentation/ReleaseReadiness/TVExperience-2026-10-14")
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
         guard let typography = GameMenuTypography(directory: root.appendingPathComponent(".build/mac-artwork/export/lemmings")) else { throw Failure.invalid("Missing shipped menu artwork") }
+        if CommandLine.arguments.contains("--console-hud") {
+            try checkConsoleHUD(typography: typography, root: root)
+            return
+        }
         let portraits = GamePortraitArt(directory: root.appendingPathComponent(".build/mac-artwork/export/lemmings"))
         let library = try ClassicMobileLibrary(directory: root.appendingPathComponent("Sources/Ports/lemmings_dos_1991-07-30"))
         let game = try TVGameExperience(content: library.loadLevel(at: 0), owner: "host")
@@ -100,6 +104,8 @@ import NxlvKit
         try data.write(to: output.appendingPathComponent("captures.json"), options: .atomic)
         print("PASS \(records.count) TV menu renders and target layouts, 6 native gameplay renders")
         try checkSharedFrontend(typography: typography, portraits: portraits, library: library, root: root)
+        try checkPointer(root: root)
+        try checkConsoleHUD(typography: typography, root: root)
     }
     static func context(width: Int, height: Int) throws -> CGContext {
         guard let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: width * 4,

@@ -112,9 +112,49 @@ extension SoundEffectPlayer {
             for index in voices.indices { fillVoice(index, buffers: buffers, frames: 1024, sampleTime: Double((block + 2) * 1024)) }
         }
         let elapsed = Double(DispatchTime.now().uptimeNanoseconds - begin) / 1_000_000 / 100
-        print("PASS 64 silent spatial sources and exact mixed rewind history; idle 1024-frame block: \(elapsed) ms (host debug build)")
+        print("PASS \(voices.count) silent spatial sources and exact mixed rewind history; idle 1024-frame block: \(elapsed) ms (host debug build)")
     }
 }
 
 try ModuleMusicPlayer().checkBufferedPlayback()
 SoundEffectPlayer().checkIdleWorkAndHistory()
+
+extension SoundEffectPlayer {
+    func checkResourceAdmission() {
+        let budget = fixedResources!
+        precondition(voices.count == budget.audioVoiceLimit)
+        library[.yippee] = [Float](repeating: 0.1, count: 44_100)
+        rates[.yippee] = 44_100
+        let cues = [PositionedSoundCue](repeating: .init(.yippee, at: .init(x: 80, y: 80)), count: 4_000)
+        play(cues)
+        func rescues() -> Int {
+            voices.reduce(0) { $0 + ($1.isActive && $1.isRescue ? 1 : 0) + $1.rescueLayers.count }
+        }
+        precondition(rescues() == budget.rescueVoiceLimit, "Rescue overflow escaped the device budget")
+        for _ in 0..<4_000 { play(samples: [0.1, 0.2], rate: 44_100) }
+        play(.timerWarning)
+        precondition(voices.filter(\.isActive).count <= budget.audioVoiceLimit)
+        precondition(rescues() <= budget.rescueVoiceLimit)
+        precondition(voices.contains { $0.isActive && $0.priority == ClassicSoundEffect.timerWarning.presentationPriority },
+                     "Stacked effects prevented a warning")
+        applyVoiceBudgetLocked(voiceLimit: 6, rescueLimit: 2)
+        precondition(voices.filter(\.isActive).count <= 6 && rescues() <= 2,
+                     "Pressure failed to trim existing sources and rescue layers")
+        precondition(voices.contains { $0.isActive && $0.priority == ClassicSoundEffect.timerWarning.presentationPriority },
+                     "Pressure trimmed the warning before decorative effects")
+        setVoiceLimit(6)
+        for _ in 0..<4_000 { play(samples: [0.1, 0.2], rate: 44_100) }
+        precondition(voices.filter(\.isActive).count <= 6, "Later sounds bypassed the reduced admission limit")
+        let replay = replayPlayer()
+        precondition(replay.requestedVoiceLimit == requestedVoiceLimit && replay.rescueVoiceLimit == rescueVoiceLimit,
+                     "Replay discarded the source device's audio budget")
+        silence()
+        precondition(voices.allSatisfy { !$0.isActive && $0.rescueLayers.isEmpty })
+    }
+}
+for gib in [2, 4, 8, 16] {
+    let resources = DeviceEffectResources(physicalMemory: UInt64(gib) * 1_073_741_824, processorCount: 8)
+    SoundEffectPlayer(resources: resources).checkResourceAdmission()
+    SoundEffectPlayer(resources: resources.underPressure(thermalLevel: 0, lowPower: false, memoryPressure: true)).checkResourceAdmission()
+}
+print("PASS bounded sources and rescue layers on 2/4/8/16 GiB devices, pressure trimming, warning priority and replay budgets")

@@ -202,6 +202,23 @@ public actor MobileCheckpointStore {
         }
     }
 
+    /// Deletes only this player's solo checkpoints, including older backup runs.
+    public func removeSoloRuns(owner: String) throws {
+        let scoped = scopedURL(owner: owner, scope: nil)
+        let paths = [url, backupURL, scoped, scoped.appendingPathExtension("backup")]
+        var owned: [(URL, UUID)] = []
+        for path in paths where FileManager.default.fileExists(atPath: path.path) {
+            let saved = try decode(read(path))
+            if saved.scope == nil, (saved.owner ?? MobileProfiles.defaultID) == owner {
+                owned.append((path, saved.runID))
+            }
+        }
+        for (path, runID) in owned {
+            retiredRuns.insert(runID)
+            try FileManager.default.removeItem(at: path)
+        }
+    }
+
     /// Late saves from a finished run cannot restore it or delete a newer run.
     public func retire(runID: UUID) throws {
         retiredRuns.insert(runID)

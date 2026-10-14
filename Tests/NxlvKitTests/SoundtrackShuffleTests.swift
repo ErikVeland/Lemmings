@@ -30,4 +30,13 @@ struct SoundtrackShuffleTests {
             availablePaths: ["current.mod", "alternate.mod", "tribe.mod", "chronicles.mod", "menu.mod"]).map(\.id) == ["alternate", "chronicles", "tribe"])
         #expect(catalogue.shuffleCandidates(currentPath: "current.mod", scope: .sameTrack, availablePaths: ["current.mod"]).isEmpty)
     }
+    @Test func mainBundleShuffleChangesMusicInAllThreeGames() throws {
+        let catalogue = try catalogue()
+        let available: Set<String> = ["current.mod", "tribe.mod", "chronicles.mod", "menu.mod", "guess.mod"]
+        for current in ["current.mod", "tribe.mod", "chronicles.mod"] {
+            let candidates = catalogue.shuffleCandidates(currentPath: current, scope: .sameTrack, availablePaths: available)
+            #expect(candidates.count == 2)
+            #expect(!candidates.contains { $0.path == current || $0.path == "menu.mod" || $0.path == "guess.mod" })
+        }
+    }
 }

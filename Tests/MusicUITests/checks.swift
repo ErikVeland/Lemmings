@@ -78,14 +78,28 @@ private func checkUI(_ value: Bool, _ message: String) throws {
     let inactive = try capture("inactive", amount: 0)
     try checkUI(effects().isEmpty, "\(name) had a rescue aura before meeting the target")
     let earned = try capture("earned", amount: 1)
-    try checkUI(effects().contains { $0.rect.intersects($0.clipRect) } && effects().allSatisfy { $0.rescueAmount == 1 },
-        "\(name) did not collect visible sprite masks for its golden aura")
-    try checkUI((inactive.dataProvider!.data! as Data) != (earned.dataProvider!.data! as Data), "\(name) glow was invisible")
+    try checkUI(effects().isEmpty, "\(name) created crowd glow for a secured rescue target")
+    let a = inactive.dataProvider!.data! as Data, b = earned.dataProvider!.data! as Data
+    let changed = stride(from: 0, to: a.count, by: 4).filter { a[$0..<$0 + 4] != b[$0..<$0 + 4] }.count
+    try checkUI(changed > 0 && Double(changed) / Double(a.count / 4) < 0.01,
+        "\(name) rescue cue changed more than a thin playfield border")
+    func drawCost(amount: CGFloat) -> Double {
+        set(amount, false)
+        let start = ProcessInfo.processInfo.systemUptime
+        for _ in 0..<32 {
+            _ = ReplayFrameCapture.image(size: view.bounds.size) { view.draw(view.bounds) }
+        }
+        return (ProcessInfo.processInfo.systemUptime - start) / 32
+    }
+    let baseline = drawCost(amount: 0), secured = drawCost(amount: 1)
+    try checkUI(secured < baseline * 1.3 + 0.001,
+        "\(name) rescue cue added sustained bitmap draw cost")
+    print(String(format: "MEASURE %@ bitmap capture: inactive %.3f ms, secured %.3f ms", name, baseline * 1_000, secured * 1_000))
     _ = try capture("reduced", amount: 1, reduced: true)
     try checkUI(effects().isEmpty, "\(name) kept bright sprite auras with reduced flashes")
     _ = try capture("reset", amount: 0)
     try checkUI(effects().isEmpty, "\(name) retained an aura after the glow expired")
-    print("PASS \(name) native golden aura: live sprite masks, reduced flashes, expiry and rendered states")
+    print("PASS \(name) faint rescue border, no crowd glow, reduced flashes and reset renders")
 }
 
 @MainActor private func checkClassicRescueAura() throws {

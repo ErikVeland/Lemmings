@@ -15,8 +15,8 @@ final class Lemmings2SoundPlayer: @unchecked Sendable {
         get { effects.onPlay }
         set { effects.onPlay = newValue }
     }
-    init(root: URL) throws {
-        bank = try Lemmings2SoundBank(data: Data(contentsOf: root.appendingPathComponent("MUSIC/SBLAST.VOC")))
+    init(root: URL, bank: Lemmings2SoundBank? = nil) throws {
+        self.bank = try bank ?? Lemmings2SoundBank(data: Data(contentsOf: root.appendingPathComponent("MUSIC/SBLAST.VOC")))
         effects.loadSupplementSounds(directory: Bundle.main.resourceURL?.appendingPathComponent("Sounds"))
     }
     func start() throws { try effects.start() }

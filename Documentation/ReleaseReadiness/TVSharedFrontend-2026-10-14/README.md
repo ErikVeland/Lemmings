@@ -151,6 +151,22 @@ completion on one deck, mute and suspension boundaries. See `.build/tv-player-sh
 Physical controller delivery, full device Hot Seat journeys and listening
 acceptance remain open.
 
+The touchpad follow-up found that the TV build selected `main` music while manual
+shuffle defaulted to Same track. Each bundled theme had only one version, so the
+selector returned no destination. TV now defaults to `full`, including all
+soundtrack libraries. Same track also falls back to another gameplay theme when
+no alternate version is installed. Touchpad input reads the named physical button
+with Sony-profile fallbacks and uses the shared release gate.
+
+Focused input/candidate checks and offscreen, muted playback passed for Classic,
+L2 and L3, including main-bundle fallback, alternate-version preference, current
+recording exclusion, suspension and crossfade completion. Logs are
+`.build/touchpad-shuffle-playback-run.log` and
+`.build/touchpad-shuffle-mobileui-recheck.log`. The shared TV UI SDK compilation
+passed after refreshing a source snapshot taken during other edits. The Xcode
+project passes plist validation. Physical touchpad delivery and a newly packaged
+full-music TV installation still need device acceptance.
+
 ### Mac and regular iOS parity
 
 Mac now persists the same controller/accessibility fields per player and reloads

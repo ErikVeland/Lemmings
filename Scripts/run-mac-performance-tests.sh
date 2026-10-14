@@ -15,5 +15,5 @@ swiftc -swift-version 6 -D PERFORMANCE_TESTS -parse-as-library \
   -F "$products" -framework Sparkle -Xlinker -rpath -Xlinker "$products" \
   -o "$build_dir/tests" "${sources[@]}" \
   "$project_dir"/Tests/MacPerformanceTests/*.swift \
-  "$products"/{NxlvKit,LemmingsAppCore,LemmingsAudio,LemmingsGameArt,LemmingsMobileCore}.build/*.swift.o
+  "$products"/{NxlvKit,LemmingsAppCore,LemmingsAudio,LemmingsGameArt,LemmingsMobileCore,LemmingsTVCore}.build/*.swift.o
 python3 "$project_dir/Tools/UITestRunner/run.py" "$build_dir/tests" "$project_dir"

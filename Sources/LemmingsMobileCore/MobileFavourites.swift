@@ -92,6 +92,7 @@ public final class MobileListLibrary: MobileGameLibrary {
             return looked
         }
         for (entryIndex, entry) in entries.enumerated() {
+            if Task.isCancelled { break }
             if lazy {
                 found.append((entry.pack, -1))
                 sources.append(entryIndex)

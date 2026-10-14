@@ -381,6 +381,7 @@ import NxlvKit
     }
 
     public func setActiveRun(_ run: LevelSequenceRun?) throws {
+        let run = try run?.removingMultiplayerLevels()
         if case let .playlist(playlistID)? = run?.source,
            !document.playlists.contains(where: { $0.id == playlistID }) {
             throw Failure.missingPlaylist
@@ -396,6 +397,7 @@ import NxlvKit
 
     /// Keep the previous sequence and its turn ownership when starting another session.
     public func startRun(_ run: LevelSequenceRun, hotSeatID: String?, l2Progress: [String: Data]? = nil) throws {
+        guard let run = try run.removingMultiplayerLevels() else { throw LevelPlaylistError.emptyPool }
         if case let .playlist(id) = run.source, playlist(id: id) == nil { throw Failure.missingPlaylist }
         let previous = document
         var saved = savedRuns.filter { $0.run.id != run.id }
@@ -430,7 +432,17 @@ import NxlvKit
         guard (1...Document.currentVersion).contains(header.version) else {
             throw Failure.unsupportedVersion
         }
-        return try decoder.decode(Document.self, from: data).validated()
+        var loaded = try decoder.decode(Document.self, from: data).validated()
+        loaded.activeRun = try loaded.activeRun?.removingMultiplayerLevels()
+        if loaded.activeRun == nil {
+            loaded.activeRunHotSeatID = nil
+            loaded.activeRunL2Progress = nil
+        }
+        loaded.savedRuns = try loaded.savedRuns?.compactMap { saved in
+            guard let run = try saved.run.removingMultiplayerLevels() else { return nil }
+            return SavedRun(run: run, hotSeatID: saved.hotSeatID, l2Progress: saved.l2Progress)
+        }
+        return try loaded.validated()
     }
 
     private func load() throws {

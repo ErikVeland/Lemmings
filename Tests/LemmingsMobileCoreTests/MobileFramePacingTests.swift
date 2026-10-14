@@ -2,6 +2,22 @@ import Testing
 @testable import LemmingsMobileCore
 
 struct MobileFramePacingTests {
+    @Test func exhaustedFrameDefersWholeTicksWithoutLosingTime() {
+        for rate in [17.0, 17.5, 23.0] {
+            var clock = MobileTickClock(ticksPerSecond: rate, speed: 8, maximumCatchUpTicks: 24)
+            _ = clock.advance(at: 0)
+            let admitted = clock.advance(at: 0.1)
+            clock.deferTicks(admitted - 1)
+            #expect(clock.advance(at: 0.1) == admitted - 1)
+            // The fractional tick also survives the frame boundary.
+            #expect(clock.advance(at: 0.2) + admitted == Int(rate * 8 * 0.2))
+            clock.deferTicks(2)
+            clock.suspend()
+            #expect(clock.advance(at: 10) == 0)
+            #expect(clock.advance(at: 10) == 0)
+        }
+    }
+
     @Test func missedDeadlinesReduceCadenceEvenWithCheapMeasuredWork() {
         var policy = MobileFramePacing()
         for frame in 0..<150 {

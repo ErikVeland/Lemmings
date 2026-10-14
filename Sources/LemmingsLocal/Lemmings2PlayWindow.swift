@@ -161,6 +161,47 @@ import NxlvKit
     private let progressKey: String
     private var level: Lemmings2Level { practiceLevel ?? campaign.current }
 
+    private struct DecodedAssets: Sendable {
+        let practice: Lemmings2Practice
+        let front: Lemmings2FrontEnd
+        let campaign: Lemmings2Campaign
+        let sprites: Lemmings2Sprites
+        let masks: Lemmings2TerrainMasks
+        let intern: Lemmings2SpecialGraphics
+        let explosion: Lemmings2Explosion
+        let walker: Lemmings2Walker?
+        let sound: Lemmings2SoundBank
+    }
+    nonisolated private static let decodedCache = GameAssetCache<DecodedAssets>(capacity: 2)
+
+    nonisolated private static func decodedAssets(root: URL) throws -> DecodedAssets {
+        try Task.checkCancellation()
+        let key = GameAssetCache<DecodedAssets>.bundledKey(root)
+        if let key, let cached = decodedCache.value(for: key) { return cached }
+        let practice = try Lemmings2Practice(root: root)
+        let front = try Lemmings2FrontEnd(root: root)
+        try Task.checkCancellation()
+        let campaign = try Lemmings2Campaign(root: root)
+        let sprites = try Lemmings2Sprites(data: Data(contentsOf: root.appendingPathComponent("VLEMMS.DAT")))
+        try Task.checkCancellation()
+        let masks = try Lemmings2TerrainMasks(root: root)
+        let intern = try Lemmings2SpecialGraphics(data: Data(contentsOf: root.appendingPathComponent("INTERN.DAT")))
+        let explosion = try Lemmings2Explosion(root: root)
+        let walker = (try? Data(contentsOf: root.appendingPathComponent("WALKER.DAT")))
+            .flatMap { try? Lemmings2Walker(data: $0) }
+        let sound = try Lemmings2SoundBank(data: Data(contentsOf: root.appendingPathComponent("MUSIC/SBLAST.VOC")))
+        try Task.checkCancellation()
+        let assets = DecodedAssets(practice: practice, front: front, campaign: campaign, sprites: sprites,
+            masks: masks, intern: intern, explosion: explosion, walker: walker, sound: sound)
+        if let key { decodedCache.insert(assets, for: key) }
+        return assets
+    }
+
+    nonisolated static func warmAssets(root: URL) throws {
+        guard GameAssetCache<DecodedAssets>.bundledKey(root) != nil else { return }
+        _ = try decodedAssets(root: root)
+    }
+
     init(root: URL, recovery: RunRecovery? = nil, selection: LevelSelection? = nil,
          sequenceProgress: Data? = nil,
          expectedLevelID: String? = nil,
@@ -186,15 +227,11 @@ import NxlvKit
             }
         }
         self.root = root
-        practice = try Lemmings2Practice(root:root)
-        assets = try Lemmings2FrontEnd(root: root)
-        sounds = try Lemmings2SoundPlayer(root: root)
-        campaign = try Lemmings2Campaign(root: root)
-        sprites = try Lemmings2Sprites(data: Data(contentsOf: root.appendingPathComponent("VLEMMS.DAT")))
-        masks = try Lemmings2TerrainMasks(root: root)
-        intern = try Lemmings2SpecialGraphics(data:Data(contentsOf:root.appendingPathComponent("INTERN.DAT")))
-        explosion = try Lemmings2Explosion(root:root)
-        walker = (try? Data(contentsOf:root.appendingPathComponent("WALKER.DAT"))).flatMap { try? Lemmings2Walker(data:$0) }
+        let decoded = try Self.decodedAssets(root: root)
+        practice = decoded.practice; assets = decoded.front
+        sounds = try Lemmings2SoundPlayer(root: root, bank: decoded.sound)
+        campaign = decoded.campaign; sprites = decoded.sprites; masks = decoded.masks
+        intern = decoded.intern; explosion = decoded.explosion; walker = decoded.walker
         self.recordsCampaignProgress = recordsCampaignProgress
         progressKey = Self.campaignProgressKey(root: root)
         if !recordsCampaignProgress, let sequenceProgress {
@@ -1183,7 +1220,7 @@ import NxlvKit
         completionGlow.set(active: (screen == .playing || screen == .results) &&
             RescueCelebration.isSecured(saved: game.saved, required: 1, isComplete: game.isComplete, didWin: game.didWin),
             brief: RescueCelebration.requiresAll(required: 1, total: game.configuration.total),
-            now: now, animated: !canvas.reduceMotion && !canvas.reduceFlashes)
+            now: now)
         failureMood.set(active: impossible, now: now)
         failureMusic.update(failed: impossible,
             isNuking: (screen == .playing || screen == .results) && game.isNuking,
@@ -1238,6 +1275,7 @@ import NxlvKit
         gameplayKeyboard?.refreshNavigationControl()
         canvas.navigationFrame = gameplayKeyboard?.navigationFrame(in: canvas)
         let now = ProcessInfo.processInfo.systemUptime
+        completionGlow.advance(at: now)
         nukeMood.advanceReturn(at: now)
         let elapsed = min(0.25, now - lastTime); lastTime = now
         let playing = screen == .playing && !paused && game?.isComplete == false && !GameScreen.shared.isPresented
@@ -1318,7 +1356,7 @@ import NxlvKit
             canvas.flashExplosions(game)
             self.game = game; refreshGame(); captureReplayFrame()
             dj.updateTelemetry(.init(totalCount: game.configuration.total, savedCount: game.saved, requiredCount: 1, isNuking: game.isNuking))
-            if speedControl.variableEnabled && speedControl.multiplier > 1 && ProcessInfo.processInfo.systemUptime >= inputDeadline { break }
+            if ProcessInfo.processInfo.systemUptime >= inputDeadline { break }
         }
         guard game.tick != previousTick else {
             if frontTicks.isMultiple(of: 4) { refreshGame() }
@@ -1979,7 +2017,7 @@ import NxlvKit
     }
 }
 
-@MainActor private final class Lemmings2MenuCanvas: NSView {
+@MainActor final class Lemmings2MenuCanvas: NSView {
     let turnBadge = TurnBadgeView()
     private var turnHeader: CGFloat { turnBadge.isHidden ? 0 : 40 }
     override func layout() {
@@ -2035,18 +2073,21 @@ import NxlvKit
     }
     func text(_ text: String, font: Lemmings2FrontEndFont, palette: [UInt8], x: Int, y: Int) {
         var cursor = x
-        for byte in text.utf8 where (32..<123).contains(byte) {
-            let glyph = font.glyphs[Int(byte) - 32]
-            draw(glyph, width: 16, height: 11, palette: palette, x: cursor, y: y, opaque: glyph.map { $0 != 0 })
-            cursor += font.advances[Int(byte) - 32]
+        let top = font.bitmap.verticalBounds(of: text).top
+        for character in text {
+            defer { cursor += font.bitmap.advance(for: character) }
+            guard let glyph = font.bitmap.glyph(for: character) ?? font.bitmap.glyph(for: "?") else { continue }
+            draw(glyph.pixels, width: glyph.width, height: glyph.height, palette: palette,
+                 x: cursor + glyph.x, y: y + glyph.y - top, opaque: glyph.opaque)
         }
     }
     func wrappedText(_ text: String, font: Lemmings2FrontEndFont, palette: [UInt8], x: Int, y: Int, width: Int) {
         var line = "", row = y
+        let pitch = max(13, font.bitmap.height(of: text) + 2)
         for word in text.split(whereSeparator: { $0.isWhitespace }) {
             let next = line.isEmpty ? String(word) : line + " " + word
             if font.width(next) > width && !line.isEmpty {
-                self.text(line, font: font, palette: palette, x: x, y: row); row += 13; line = String(word)
+                self.text(line, font: font, palette: palette, x: x, y: row); row += pitch; line = String(word)
             } else { line = next }
         }
         self.text(line, font: font, palette: palette, x: x, y: row)
@@ -2062,14 +2103,15 @@ import NxlvKit
         if !line.isEmpty { lines.append(line) }
         guard !lines.isEmpty else { return }
         let width = max(1, lines.map(font.width).max() ?? 1)
-        let height = lines.count * 13 - 2
+        let pitch = max(13, font.bitmap.height(of: text) + 2)
+        let height = lines.count * pitch - 2
         let scale = min(1, rect.width / CGFloat(width), rect.height / CGFloat(height))
         NSGraphicsContext.saveGraphicsState()
         let transform = NSAffineTransform()
         transform.translateX(by: rect.midX, yBy: rect.minY)
         transform.scale(by: scale); transform.concat()
         for (row, line) in lines.enumerated() {
-            self.text(line, font: font, palette: palette, x: -font.width(line) / 2, y: row * 13)
+            self.text(line, font: font, palette: palette, x: -font.width(line) / 2, y: row * pitch)
         }
         NSGraphicsContext.restoreGraphicsState()
     }
@@ -2178,7 +2220,6 @@ import NxlvKit
     private var terrain: NSImage?
     private var terrainRevision: Int?
     private let bitmapCache = GameplayBitmapCache()
-    private let backgroundGlow = RescueBackgroundGlow()
     private var panelSource: SequelIndexedImage?
     private var panel: NSImage?
     private var panelBackground = NSColor.black
@@ -2804,17 +2845,11 @@ import NxlvKit
             let spriteRect = CGRect(x: origin.x + (CGFloat(lem.x + offsetX + sprite.x) - cameraX) * zoom,
                 y: origin.y + (CGFloat(lem.y + offsetY + sprite.y) - cameraY) * zoom * 1.2,
                 width: sprite.image.size.width * zoom, height: sprite.image.size.height * zoom * 1.2)
-            let glowing = completionGlowAmount > 0 && hdEffectsEnabled && !reduceFlashes
-            let pixels = (glowing || assignmentPulse.target == lem.id || selectedID == lem.id)
+            let pixels = (assignmentPulse.target == lem.id || selectedID == lem.id)
                 ? sprite.image.cgImage(forProposedRect: nil, context: nil, hints: nil) : nil
             if assignmentPulse.target == lem.id, let pixels {
                 assignmentPulse.draw(sprite: pixels, in: spriteRect, scale: zoom,
                     reduceMotion: reduceMotion, reduceFlashes: reduceFlashes)
-            }
-            if glowing, let pixels {
-                var effect = LemmingSelectionEffect(sprite: pixels, rect: precisionLens.display(spriteRect), clipRect: gameplayRect, mirrored: mirrored)
-                effect.rescueAmount = completionGlowAmount
-                rescueAuras.append(effect)
             }
             if selectedID == lem.id, let pixels {
                 selectedSprite = (pixels, spriteRect, mirrored)
@@ -2868,10 +2903,7 @@ import NxlvKit
     }
     override func draw(_ dirtyRect: NSRect) {
         selectionEffect = nil
-        rescueAuras.removeAll(keepingCapacity: true)
         defer {
-            for effect in rescueAuras { LemmingSelectionRenderer.draw(effect) }
-            hdrOverlay?.setRescueAuras(rescueAuras)
             if let selectionEffect {
                 LemmingSelectionRenderer.draw(selectionEffect)
             }
@@ -2953,12 +2985,6 @@ import NxlvKit
     private var speedRect: CGRect { CGRect(x: panelX + 288 * zoom, y: origin.y + 216 * zoom, width: 32 * zoom, height: 24 * zoom) }
     private func drawBackgroundImage(_ image: NSImage, x: CGFloat, y: CGFloat) {
         drawImage(image, x: x, y: y)
-        let rect = CGRect(x: origin.x + (x - cameraX) * zoom, y: origin.y + (y - cameraY) * zoom * 1.2,
-            width: image.size.width * zoom, height: image.size.height * zoom * 1.2)
-        if let context = NSGraphicsContext.current?.cgContext, let pixels = bitmapCache.pixels(image) {
-            backgroundGlow.draw(pixels, in: rect, amount: completionGlowAmount, context: context,
-                slot: image === terrain ? "terrain" : nil)
-        }
     }
     private func drawWorld(_ game: Lemmings2Runtime, terrain: NSImage) {
         NSGraphicsContext.saveGraphicsState()

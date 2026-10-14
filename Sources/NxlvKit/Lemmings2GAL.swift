@@ -279,17 +279,20 @@ public struct Lemmings2GAL {
                 }
                 lines.append(line)
             }
+            let text = lines.joined()
+            let pitch = max(12, font.bitmap.height(of: text) + 1)
             for (row,line) in lines.enumerated() {
                 var x = bob.x+(textLayout?.x ?? 0)
                 if let layout = textLayout {
                     if layout.alignment == 5 { x += (layout.width-font.width(line))/2 }
                     else if layout.alignment == 6 { x += layout.width-font.width(line) }
                 }
-                for byte in line.utf8 where (32..<123).contains(byte) {
-                    let glyph = font.glyphs[Int(byte)-32]
-                    paint(glyph.map{$0 &+ fontColourOffset},opaque:glyph.map{$0 != 0},width:16,height:11,
-                          x:x,y:bob.y+(textLayout?.y ?? 0)+row*12,mode:bob.mode)
-                    x += font.advances[Int(byte)-32]
+                let top = font.bitmap.verticalBounds(of: line).top
+                for character in line {
+                    defer { x += font.bitmap.advance(for: character) }
+                    guard let glyph = font.bitmap.glyph(for: character) ?? font.bitmap.glyph(for: "?") else { continue }
+                    paint(glyph.pixels.map{$0 &+ fontColourOffset},opaque:glyph.opaque,width:glyph.width,height:glyph.height,
+                          x:x+glyph.x,y:bob.y+(textLayout?.y ?? 0)+row*pitch+glyph.y-top,mode:bob.mode)
                 }
             }
         }

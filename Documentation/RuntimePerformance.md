@@ -1,5 +1,69 @@
 # Runtime performance
 
+## Loading and frame budgets, 14 October 2026
+
+The shipping Mac, iOS and tvOS paths retain their authored simulation rates.
+All three Mac engines now limit catch-up work to the existing 12 ms input budget,
+including fixed-speed fast-forward. Unprocessed ticks remain in the accumulator.
+The shared iOS/tvOS controller uses a frame-rate-aware CPU deadline and returns
+unprocessed ticks to its clock. It still renders and services input each frame.
+This bounds catch-up batches. One synchronous simulation tick or render can
+still exceed a deadline on slow hardware.
+
+Lemmings 2 mobile rendering retains the expanded terrain pixels while source
+pixels and palette remain unchanged. Content comparisons also invalidate the
+cache after rewind, restoration or a different terrain branch. Compositing uses
+copy-on-write storage, so live actors cannot change the retained background.
+Lemmings 3 prepares its authored RGBA scene during loading and applies only its
+sparse terrain edits during rendering. Tests compare both paths with fresh
+conversion, including palette changes, construction, removal and rewind.
+Its mobile library also reuses decoded style, sprite and palette banks for each
+of its three tribes. Those banks stay bound to the library's content revision.
+
+The shared mobile controller reuses each frame's status snapshot and skips
+replay-only status work during live play. Chronicles retains its fixed skill
+labels. Active-population counts avoid temporary arrays. The hidden library
+input clock pauses during gameplay. Constrained, hot or low-power devices load
+the selected carousel cover without speculative neighbour requests.
+
+Mac catalogue warming stops when an engine enters gameplay. Cancelled warmers
+cannot publish late catalogues. Progression analysis propagates cancellation
+to its worker. Mac fan counts use a cancellable utility task and read their
+existing counts once per scan. Cancellation rejects queued progress callbacks.
+Counting resumes in the library. A detached Mac carousel cancels its pending artwork requests.
+Catalogue warming also prepares the installed Mac sequel banks. L2 retains its
+front-end, practice, campaign, sprite, mask and sound data. L3 retains each tribe's
+style, sprites and availability checks. Fresh sessions restore the current
+owner's progress after taking a copy of the decoded campaign. The caches never
+retain player progress, and mutable imported directories keep fresh decoding.
+The shared-module build script also includes TV core, which the current game-art
+module requires for headless Mac checks.
+
+An optimized local Apple Silicon microbenchmark uses 128 samples per size.
+It measures terrain preparation only, with no actors, textures, audio or display.
+At 1024 × 512, full palette conversion took about 0.45 ms and applying 128 sparse
+edits took about 0.028 ms. This is approximately 16 times less CPU work for that
+operation. Cached L2 conversion avoids the palette loop. Its later compositing
+copy and actor draws are outside this measurement. Evidence is in
+`.build/platform-terrain-benchmark.json`.
+
+These changes do not establish perfect frame rates across devices. Physical
+iPhone, iPad, Apple TV, older/Intel Mac, display-refresh and sustained thermal
+measurements remain necessary. AppKit image creation, unprepared cold starts and
+mutable Mac imports still have synchronous work in their construction path. The shared mobile level
+workers and cancellation checks are described in [loading performance](LoadingPerformance.md).
+
+The focused Mac checks run through the offscreen, muted runner with
+`TEST_SCOPE=frame-performance`. They pass real input and frame-clock checks,
+native L2/L3 starts and paused retries, cancelled fan counts, and carousel
+detachment/return. Fifty-eight focused mobile/TV tests pass, including real
+sequel loading, rendering and checkpoint restoration against the built iOS
+assets. The current-architecture Mac code and unsigned arm64 iOS/tvOS apps compile.
+The broader browser harness still has existing
+home-menu and fixed-row-count assertions that do not match the current menus.
+Those checks remain intact. The independent progression fixture also needs
+`.build/ios-ports/source-revisions.json` before its real-campaign check can run.
+
 Adaptive presentation is a core product requirement. The shared CPU/GPU budget
 now covers Mac and iOS effects. See [adaptive presentation](AdaptivePresentation.md)
 for capability discovery, quality curves, platform integration and validation gaps.
@@ -92,7 +156,7 @@ the retained playfield instead of composing the same world frame again.
 `Scripts/run-audio-performance-tests.sh` uses the muted, offscreen runner and
 offline audio rendering. Checks cover queued playback while the synthesis lock is
 held, refill, short module loops, crossfades, clocks, mute, restart, spatial output,
-rewind history, the 128-voice rescue chorus, DJ style and recording pitch/tempo.
+rewind history, the bounded rescue chorus, DJ style and recording pitch/tempo.
 Apple audio units need access outside the filesystem sandbox on this host. The
 first sandboxed run could not initialise them and is not counted as a pass.
 The local Apple silicon debug measurement for one idle 64-voice, 1,024-frame block
@@ -153,7 +217,7 @@ Reduce Motion and Reduce Flashes preferences still control which effects run.
 
 The sharp scene, physical selection outline, simulation clock and replay clocks
 retain their existing resolution and timing. The policy does not increase effect
-brightness. Golden rescue light retains its existing amount. When reducing nuke
+brightness. Rescue feedback now uses only the faint rim described below. When reducing nuke
 bursts, both Metal and software output retain the bounded exposure burst.
 
 The CRT view retains three source/flash texture slots and their CPU drawing
@@ -196,3 +260,93 @@ The Mac app builds. Physical older-Mac performance, sustained load, live thermal
 transitions and physical HDR brightness still need manual validation before a
 public release. This work does not run the public release audit or publish a
 version.
+
+## Rescue feedback, 14 October 2026
+
+Jubilant music now takes priority as soon as the rescue target is secured,
+including 100% rescue levels. The shared DJ player begins its 2.6-second fade
+immediately. It does not wait for the opening hold or bar alignment. Paused
+output defers the cue, and the alternate-soundtrack preference still applies.
+
+Classic, Lemmings 2 and Lemmings 3 no longer blur scenery or build golden sprite
+masks for rescue feedback. Their Mac and iOS playfields draw only one faint
+single-pixel rim at 10% opacity. TV retains no completion glow. The shared state
+uses the existing game clock, has no timer, and requests a redraw only on entry,
+reset or brief expiry. Mobile updates its decoration only, without rebuilding
+or uploading the CRT source for the rescue cue. All-rescued cues expire after
+1.5 seconds. Game rules, selection, assignment feedback and input targets retain
+their existing behaviour.
+
+Focused core checks cover one-shot music cues, 100% rescue, perimeter-only pixel
+changes, brief expiry, rewind reset and 1,000 repeated updates without redraws.
+Offscreen, muted Classic/L2/L3 canvas checks pass with less than 1% changed
+pixels and no crowd auras. The local debug bitmap-capture averages were
+0.60/0.61 ms for Classic, 3.74/3.17 ms for L2 and 4.55/4.49 ms for L3
+(inactive/secured, 32 captures per state). These are host CPU checks, not full
+frame rates. Muted playback checks pass for immediate rescue crossfades, paused
+output, cue reset, repeated results and all three engines' music selection and
+handover. Sequel fixture comparisons resolve symlinked app resources before
+comparing selected files. Mac, iOS and tvOS source compilation passes. Native
+canvas and muted playback checks are recorded in the local
+`.build/rescue-feedback` logs. Physical sustained frame timing and audible
+musical judgement remain separate device validation.
+
+## Device effect limits, 14 October 2026
+
+Classic, Lemmings 2 and Lemmings 3 share a memory-aware effects policy on Mac,
+iOS and tvOS. GPU support and measured CPU/GPU cost still apply. Physical RAM
+now sets a ceiling that fast frame samples cannot exceed.
+
+| Physical RAM | Maximum FX quality | Overlay pixels | Spatial sources | Rescue playheads |
+| --- | --- | ---: | ---: | ---: |
+| Up to 2 GiB | Minimal | 262,144 | 8 | 4 |
+| Over 2, up to 4 GiB | Balanced | 720,000 | 12 | 8 |
+| Over 4, up to 8 GiB | Full | 2,097,152 | 24 | 24 |
+| Over 8 GiB | Full | 8,388,608 | 32 | 64 |
+
+These are ceilings, not allocation targets. The GPU working-set budget can lower
+the pixel limit. Two-core devices admit at most eight spatial sources and four
+rescue playheads. Mobile retains its smaller existing rescue limits. Extra HDR
+speed and cinematic explosion surfaces are disabled on devices with at most
+4 GiB RAM. TV retains its existing limit of no extra HDR surface.
+
+One shared process monitor responds to memory warnings, thermal state and Low
+Power Mode. A memory warning holds the smaller budget for 60 seconds. It disables
+optional HDR/bloom and admits at most six spatial sources and two rescue
+playheads. Critical thermal state uses the same audio limits. Combined pressure
+always takes the strictest limit. Sustained CPU cost also reduces audio
+admission. FX recovery still requires measured spare capacity.
+
+Audio sources remain attached during gameplay. Pressure trims active voices and
+extra rescue layers without rebuilding the graph or changing saved settings.
+Actions and warnings take priority over decorative sounds. Replay players inherit
+the same device policy. This replaces the previous unbounded Mac rescue overflow.
+Music and game-event clocks retain their existing timing.
+
+Minimal FX quality releases bloom scratch textures and skips the bright/blur
+passes. Bloom and flash masks stay within pixel budgets. Idle mobile HDR views
+release drawables, and memory warnings remove their optional surface. Mobile
+admits one HDR submission at a time; Mac admits at most two. A busy effect surface
+skips a decorative update instead of adding work to the GPU queue. The mobile CRT
+surface stays at one pixel per point when enhanced effects are unavailable.
+Native HUD and menu lettering retain their scale. Selection and input mapping
+remain independent of bloom.
+
+Headless policy checks cover 2/4/8/16 GiB profiles, two-core limits, every combined
+thermal/power/memory state and delayed FX recovery. Muted offline mixer checks
+cover thousands of overlapping requests, finite voice/layer bounds, pressure
+trimming, protected warnings, rewind, replay budgets and rescue cleanup. Native
+Mac Metal checks verify bloom release/recreation, scene and selection pixels,
+and unchanged input targets. The quality-tier renders were inspected. The
+current-architecture Mac app and unsigned arm64 iOS/tvOS apps build successfully.
+Local evidence is in `.build/device-effects-policy.log`,
+`.build/device-effects-audio-final.log`, `.build/device-effects-mac-final.log`,
+`.build/device-effects-mac-build-final.log`, `.build/device-effects-ios-final.log`
+and `.build/device-effects-tv-final.log`. No visible test windows or audio were
+used.
+
+These checks establish policy and rendering behaviour. They do not establish
+the reported iPad bottleneck or guarantee a frame rate on physical devices.
+Sustained iPad/Mac/TV frame timing, real memory warnings and thermal transitions
+still need device profiling. Native UIKit/Metal output on iPad and TV was not
+run in a visible test window.

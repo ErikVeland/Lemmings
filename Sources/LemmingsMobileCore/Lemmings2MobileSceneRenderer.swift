@@ -5,6 +5,7 @@ import NxlvKit
  * Composites native L2 terrain, object and lemming pixels for the mobile view.
  */
 public struct Lemmings2MobileSceneRenderer: Sendable {
+    private let terrainCache = MobileIndexedTerrainCache()
     private let objects: Lemmings2Objects
     private let animations: [String: [Lemmings2SpriteFrame]]
     private let walker: Lemmings2Walker?
@@ -44,7 +45,7 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
             throw MobileSessionError.invalidFrame
         }
 
-        var rgba = Self.expand(runtime.pixels, palette: runtime.configuration.palette)
+        var rgba = terrainCache.frame(pixels: runtime.pixels, palette: runtime.configuration.palette)
         for part in objects.parts where !part.frames.isEmpty {
             let machine = runtime.machines.first(where: { $0.id == part.objectIndex })
             let movement = machine?.displacement ?? 0

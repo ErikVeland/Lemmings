@@ -24,7 +24,9 @@ import NxlvKit
 
     func achievementTextHeight(_ value: String, width: CGFloat, face: ClassicMacUserInterface.Face = .small) -> CGFloat {
         let cellWidth = font?.font(face)?.cellWidth ?? 12
-        let lineHeight = (font?.font(face)?.cellHeight ?? 16) + 6
+        let bitmap = font?.font(face)
+        let lineHeight = max((bitmap?.cellHeight ?? 16) + 6,
+                             (bitmap?.height(of: MacInterfaceRenderer.menuText(value)) ?? 16) + 2)
         return CGFloat(MacInterfaceRenderer.menuLines(value, columns: max(1, Int(width) / cellWidth)).count * lineHeight)
     }
 

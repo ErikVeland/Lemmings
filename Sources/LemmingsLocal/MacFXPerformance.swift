@@ -2,6 +2,7 @@
 import AppKit
 import Metal
 import LemmingsGameArt
+import NxlvKit
 
 /// One presentation policy covers Classic, NeoLemmix and both native sequels.
 @MainActor final class MacFXPerformance {
@@ -38,7 +39,8 @@ import LemmingsGameArt
         @unknown default: pressure = .minimal
         }
         budget.setPressure(ceiling: pressure,
-                           framesPerSecond: min(displayFramesPerSecond, process.isLowPowerModeEnabled ? 30 : 60), now: now)
+                           framesPerSecond: min(displayFramesPerSecond, process.isLowPowerModeEnabled ? 30 : 60), now: now,
+                           resources: DeviceEffectPressure.shared.snapshot())
     }
     func configureDisplay(_ screen: NSScreen) {
         let rate = Double(max(1, min(60, screen.maximumFramesPerSecond)))
@@ -50,6 +52,7 @@ import LemmingsGameArt
         poll()
         let now = ProcessInfo.processInfo.systemUptime
         budget.recordCPU(seconds, now: now)
+        DeviceEffectPressure.shared.setAudioQuality(budget.cpu.quality.rawValue)
     }
     func recordGPU(_ seconds: Double, source: String) {
         poll()

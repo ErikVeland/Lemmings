@@ -90,5 +90,95 @@ private func require(_ value: @autoclosure () -> Bool, _ message: String) throws
         try require(constrainedBudget.overlayRenderScale(width: 200, height: 100, nativeScale: 2) == 1,
                     "Small surfaces did not retain the available visual detail")
         print("PASS unsupported Metal, memory-derived pixel bounds and native scale")
+
+        for (gib, expectedQuality, expectedVoices) in [(2, FXQuality.minimal, 8), (4, .balanced, 12), (8, .full, 24), (16, .full, 32)] {
+            let resources = DeviceEffectResources(physicalMemory: UInt64(gib) * 1_073_741_824, processorCount: 8)
+            let profile = FXDeviceProfile(hasMetal: true, modernGPU: true, enhancedEffectsSupported: true,
+                                          processorCount: 8, recommendedWorkingSet: 8_589_934_592,
+                                          physicalMemory: UInt64(gib) * 1_073_741_824)
+            try require(profile.maximumQuality == expectedQuality && resources.audioVoiceLimit == expectedVoices,
+                        "Physical RAM did not constrain effect surfaces and audio sources")
+            var policy = AdaptiveFXPerformance(profile: profile)
+            for tick in 0..<1_800 { policy.recordCPU(0.001, now: Double(tick) / 60) }
+            try require(policy.presentation.quality.rawValue <= expectedQuality.rawValue,
+                        "Fast samples promoted effects beyond the memory ceiling")
+            let warning = resources.underPressure(thermalLevel: 0, lowPower: false, memoryPressure: true)
+            policy.setPressure(ceiling: .full, framesPerSecond: 60, now: 31, resources: warning)
+            try require(!policy.presentation.bloomAllowed && !policy.presentation.enhancedEffectsAllowed
+                        && policy.presentation.maximumOverlayPixels <= 262_144
+                        && warning.audioVoiceLimit == 6 && warning.rescueVoiceLimit == 2,
+                        "Memory pressure retained expensive surfaces or stacked sound layers")
+            policy.setPressure(ceiling: .full, framesPerSecond: 60, now: 32, resources: resources)
+            try require(policy.presentation.quality == .minimal, "Pressure relief restored effects without measured recovery")
+            let thermal = resources.underPressure(thermalLevel: 3, lowPower: false, memoryPressure: false)
+            let battery = resources.underPressure(thermalLevel: 0, lowPower: true, memoryPressure: false)
+            let cpuBound = resources.limitingAudio(toQuality: 0)
+            try require(thermal.audioVoiceLimit <= 6 && thermal.rescueVoiceLimit <= 2
+                        && !thermal.enhancedEffectsAllowed && battery.audioVoiceLimit <= 12
+                        && battery.rescueVoiceLimit <= 4 && !battery.enhancedEffectsAllowed,
+                        "Power and thermal policy did not constrain audio and HDR together")
+            try require(cpuBound.audioVoiceLimit <= 6 && cpuBound.rescueVoiceLimit <= 2
+                        && cpuBound.maximumOverlayPixels == resources.maximumOverlayPixels,
+                        "CPU audio limits changed unrelated GPU memory budgets")
+            for thermal in 0...3 {
+                for lowPower in [false, true] {
+                    for warning in [false, true] {
+                        let combined = resources.underPressure(thermalLevel: thermal, lowPower: lowPower, memoryPressure: warning)
+                        try require(combined.audioVoiceLimit <= [32, 16, 10, 6][thermal]
+                                    && combined.rescueVoiceLimit <= [64, 8, 4, 2][thermal],
+                                    "Combined pressure weakened a thermal audio limit")
+                    }
+                }
+            }
+        }
+        let twoCore = DeviceEffectResources(physicalMemory: 16 * 1_073_741_824, processorCount: 2)
+        try require(twoCore.audioVoiceLimit <= 8 && twoCore.rescueVoiceLimit <= 4 && !twoCore.enhancedEffectsAllowed,
+                    "Two-core devices retained a large rescue mix or HDR surface")
+        print("PASS 2/4/8/16 GiB memory ceilings, audio budgets, pressure release and conservative FX recovery")
+
+        let television = FXDeviceProfile(hasMetal: true, modernGPU: true, enhancedEffectsSupported: true,
+                                         processorCount: 6, recommendedWorkingSet: 1_073_741_824, television: true)
+        let olderTV = FXDeviceProfile(hasMetal: true, modernGPU: false, enhancedEffectsSupported: true,
+                                     processorCount: 2, recommendedWorkingSet: 33_554_432, television: true)
+        try require(television.initialQuality == .balanced && olderTV.initialQuality == .minimal,
+                    "TV must reserve capacity before effects have device measurements")
+        try require(!television.supportsEnhancedEffects && !olderTV.supportsEnhancedEffects && modern.supportsEnhancedEffects,
+                    "TV full-screen effects policy changed another platform or enabled the costly surface")
+        try require(television.maximumOverlayPixels <= 720_000, "TV allowed a desktop-sized soft overlay")
+        for quality in FXQuality.allCases {
+            let budget = FXPresentationBudget(cpuQuality: quality, gpuQuality: quality)
+            try require(budget.televisionPlayfieldScale(nativeScale: 2) == 1,
+                        "TV enabled a 4K floating-point playfield")
+            try require(budget.televisionPlayfieldScale(nativeScale: 1) == 1,
+                        "TV changed a 1080p playfield")
+        }
+        var tvPressure = AdaptiveFXPerformance(profile: television)
+        try require(tvPressure.presentation.televisionBloomAllowed, "TV lost balanced CRT bloom")
+        for tick in 0..<180 {
+            let now = Double(tick) / 60
+            tvPressure.recordCPU(0.002, now: now)
+            tvPressure.recordGPU(0.020, source: "crt", now: now)
+        }
+        try require(!tvPressure.presentation.televisionBloomAllowed,
+                    "TV retained bloom after sustained GPU pressure")
+        let cpuBoundTV = FXPresentationBudget(cpuQuality: .minimal, gpuQuality: .full)
+        try require(!cpuBoundTV.televisionBloomAllowed, "TV retained optional bloom during CPU pressure")
+        let reducedCadenceTV = FXPresentationBudget(cpuQuality: .full, gpuQuality: .full, framesPerSecond: 30)
+        try require(!reducedCadenceTV.televisionBloomAllowed, "TV restored bloom while presentation remained at 30 Hz")
+        for tick in 0..<600 {
+            let now = 3 + Double(tick) / 60
+            tvPressure.recordCPU(0.002, now: now)
+            tvPressure.recordGPU(0.002, source: "crt", now: now)
+        }
+        try require(!tvPressure.presentation.televisionBloomAllowed, "TV restored bloom before measured recovery")
+        for tick in 600..<960 {
+            let now = 3 + Double(tick) / 60
+            tvPressure.recordCPU(0.002, now: now)
+            tvPressure.recordGPU(0.002, source: "crt", now: now)
+        }
+        try require(tvPressure.presentation.televisionBloomAllowed, "TV could not recover affordable CRT bloom")
+        tvPressure.setPressure(ceiling: .minimal, framesPerSecond: 60, now: 20)
+        try require(!tvPressure.presentation.televisionBloomAllowed, "TV thermal pressure did not drop bloom immediately")
+        print("PASS TV conservative startup, disabled full-screen effects, 4K bounds, bloom removal and measured recovery")
     }
 }

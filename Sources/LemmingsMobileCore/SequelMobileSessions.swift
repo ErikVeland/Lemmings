@@ -86,7 +86,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
         return MobilePoint(x: Double(point.x), y: Double(point.y))
     }
 
-    public var activeLemmingCount: Int { runtime.lemmings.filter(\.active).count }
+    public var activeLemmingCount: Int { runtime.lemmings.reduce(0) { $0 + ($1.active ? 1 : 0) } }
     public var assignedSkillCount: Int {
         inputs.filter { if case .assign = $0 { return true }; return false }.count
     }
@@ -325,6 +325,9 @@ public typealias Lemmings3MobileRenderer = (
 ) throws -> MobilePixelFrame
 
 public final class Lemmings3MobileSession: MobileGameSession {
+    private let skillStates = Lemmings3Runtime.Action.allCases.map {
+        MobileSkillState(name: $0.rawValue.capitalized, count: 0, isUnlimited: true)
+    }
     private struct Input: Codable, Sendable {
         let tick: Int
         let action: String
@@ -411,7 +414,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         return MobilePoint(x: Double(point.x), y: Double(point.y))
     }
 
-    public var activeLemmingCount: Int { runtime.lemmings.filter(\.active).count }
+    public var activeLemmingCount: Int { runtime.lemmings.reduce(0) { $0 + ($1.active ? 1 : 0) } }
     public var assignedSkillCount: Int { inputs.filter { $0.action != "abort" }.count }
     public var supportsRewind: Bool { true }
 
@@ -427,9 +430,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
             isComplete: runtime.isComplete,
             didWin: runtime.isComplete && runtime.saved > 0,
             isEndingRun: false,
-            skills: Lemmings3Runtime.Action.allCases.map {
-                MobileSkillState(name: $0.rawValue.capitalized, count: 0, isUnlimited: true)
-            }
+            skills: skillStates
         )
     }
 

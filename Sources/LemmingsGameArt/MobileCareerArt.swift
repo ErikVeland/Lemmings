@@ -13,22 +13,36 @@ public enum MobileCareerArt {
     public static func players(_ profiles: MobileProfiles, subtitle: String, draft: String? = nil,
                                creating: Bool = false, portrait: Int = 0,
                                canDelete: Bool = false, confirmingDelete: Bool = false,
-                               hotSeatTurn: String? = nil) -> GameFrontEnd.Page {
+                               hotSeatTurn: String? = nil, holdToEdit: Bool = false,
+                               editingPlayerID: String? = nil) -> GameFrontEnd.Page {
         if let draft {
-            return .init(title: creating ? L10n.text("New player") : L10n.text("Edit player"), subtitle: subtitle,
-                rows: [.init("nameField", L10n.text("Initials: \(String(draft.uppercased().prefix(3)))_"), selected: true),
-                       .init("playerPortrait", ArcadeProfile.portraitNames[portrait], portrait: portrait)],
-                footer: [.init("nameCancel", L10n.text("Cancel")), .init("nameDone", L10n.text("Done"), primary: true)])
+            var page: GameFrontEnd.Page
+            if confirmingDelete && !creating {
+                page = .init(title: L10n.text("Delete player?"), subtitle: subtitle,
+                    details: [L10n.text("Deletes this player's records and saved progress on linked devices.")],
+                    footer: [.init("playerDeleteCancel", L10n.text("Cancel")),
+                             .init("playerDelete", L10n.text("Confirm delete"), enabled: canDelete)])
+            } else {
+                page = .init(title: creating ? L10n.text("New player") : L10n.text("Edit player"), subtitle: subtitle,
+                    rows: [.init("nameField", L10n.text("Initials: \(String(draft.uppercased().prefix(3)))_"), selected: true),
+                           .init("playerPortrait", ArcadeProfile.portraitNames[portrait], portrait: portrait)]
+                        + (creating ? [] : [.init("playerDelete", L10n.text("Delete"), enabled: canDelete)]),
+                    footer: [.init("nameCancel", L10n.text("Cancel")), .init("nameDone", L10n.text("Done"), primary: true)])
+            }
+            if !creating, let player = profiles.players.first(where: { $0.id == (editingPlayerID ?? profiles.activeID) }) {
+                page.subtitle = player.name + (subtitle.isEmpty ? "" : "\n" + subtitle)
+                page.subtitleRuns = GameSemanticText.named(page.subtitle, name: player.name)
+            }
+            return page
         }
         var rows = profiles.players.map {
             GameFrontEnd.Action("player." + $0.id, $0.name, selected: $0.id == profiles.activeID, portrait: $0.portrait)
         }
-        rows.append(.init("playerRename", L10n.text("Edit: \(profiles.active.name)")))
+        if !holdToEdit { rows.append(.init("playerRename", L10n.text("Edit: \(profiles.active.name)"))) }
         rows.append(.init("playerNew", L10n.text("New player"), enabled: profiles.players.count < MobileProfiles.maximum))
         rows.append(.init("hotSeat", hotSeatTurn.map { L10n.text("Hot Seat: \($0)") } ?? L10n.text("Hot Seat")))
         return .init(title: L10n.text("Players"), subtitle: subtitle, rows: rows,
-            footer: [.init("playerDelete", confirmingDelete ? L10n.text("Confirm delete") : L10n.text("Delete"),
-                           enabled: canDelete, selected: confirmingDelete), .init("home", L10n.text("Back"))])
+            footer: [.init("home", L10n.text("Back"))])
     }
 
     public static func hotSeat(_ profiles: MobileProfiles, subtitle: String, roster: MobileHotSeatRoster,

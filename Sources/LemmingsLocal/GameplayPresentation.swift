@@ -278,7 +278,7 @@ import LemmingsGameArt
     for (index, distance) in distances.enumerated().reversed() {
       let progress = CGFloat(index) / CGFloat(max(1, distances.count - 1))
       if key.sharp {
-        echo(distance: distance, stretch: 0, alpha: [CGFloat(0.65), 0.38, 0.18][index], offset: .zero)
+        echo(distance: distance, stretch: 0, alpha: [CGFloat(0.22), 0.12, 0.05][index], offset: .zero)
         continue
       }
       let blur = 0.25 + progress * (0.5 + CGFloat(key.tier) * 0.5)
@@ -305,34 +305,16 @@ import LemmingsGameArt
 
 /// A compact pixel face for installations without the Macintosh menu artwork.
 @MainActor enum GamePixelText {
-  private static let columns: [Character: [UInt8]] = [
-    "A":[126,9,9,9,126], "B":[127,73,73,73,54], "C":[62,65,65,65,34],
-    "D":[127,65,65,34,28], "E":[127,73,73,73,65], "F":[127,9,9,9,1],
-    "G":[62,65,73,73,122], "H":[127,8,8,8,127], "I":[0,65,127,65,0],
-    "J":[32,64,65,63,1], "K":[127,8,20,34,65], "L":[127,64,64,64,64],
-    "M":[127,2,12,2,127], "N":[127,4,8,16,127], "O":[62,65,65,65,62],
-    "P":[127,9,9,9,6], "Q":[62,65,81,33,94], "R":[127,9,25,41,70],
-    "S":[70,73,73,73,49], "T":[1,1,127,1,1], "U":[63,64,64,64,63],
-    "V":[31,32,64,32,31], "W":[63,64,56,64,63], "X":[99,20,8,20,99],
-    "Y":[3,4,120,4,3], "Z":[97,81,73,69,67], "z":[0,68,100,84,76],
-    "0":[62,81,73,69,62], "1":[0,66,127,64,0], "2":[98,81,73,73,70],
-    "3":[34,65,73,73,54], "4":[24,20,18,127,16], "5":[39,69,69,69,57],
-    "6":[60,74,73,73,48], "7":[1,113,9,5,3], "8":[54,73,73,73,54],
-    "9":[6,73,73,41,30], ":":[0,54,54,0,0], ".":[0,96,96,0,0],
-    "-" :[8,8,8,8,8], "+":[8,8,62,8,8], "/":[32,16,8,4,2],
-    "*" :[20,8,62,8,20], "%":[99,19,8,100,99], "(" :[0,28,34,65,0],
-    ")":[0,65,34,28,0], "'" :[0,3,0,0,0], "!" :[0,0,95,0,0],
-    ",":[0,64,48,0,0], "<":[8,20,34,65,0], ">":[0,65,34,20,8],
-    "∞" :[28,34,28,34,28], "💀":[14,123,63,123,14],
-    "?" :[2,1,81,9,6], "=" :[20,20,20,20,20]]
   static func draw(_ text: String, in rect: CGRect, maxScale: CGFloat = 3,
                    highlighted: Character? = nil, palette: MacInterfaceRenderer.Palette = .blue,
                    preservesCase: Bool = false, color: NSColor? = nil) {
     let source = text.replacingOccurrences(of: "×", with: "X")
-    let normalized = preservesCase ? source : source.uppercased()
-    let scale = max(1, min(maxScale, floor(min(rect.height / 7, rect.width / CGFloat(max(1, normalized.count * 6))))))
+    let normalized = preservesCase ? source.precomposedStringWithCanonicalMapping : BitmapLatinGlyphs.uppercase(source, locale: L10n.interface.locale)
+    let bounds = GamePixelTypography.verticalBounds(of: normalized)
+    let height = CGFloat(bounds.bottom - bounds.top)
+    let scale = max(1, min(maxScale, floor(min(rect.height / height, rect.width / CGFloat(max(1, normalized.count * 6))))))
     let start = floor(rect.midX - CGFloat(normalized.count * 6 - 1) * scale / 2)
-    let top = floor(rect.midY - 3.5 * scale)
+    let top = floor(rect.midY - height * scale / 2) - CGFloat(bounds.top) * scale
     let context = NSGraphicsContext.current?.cgContext
     context?.saveGState()
     context?.setShouldAntialias(false)
@@ -346,10 +328,11 @@ import LemmingsGameArt
           ? NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1)
           : NSColor(calibratedRed: 0.2, green: 0.5, blue: 1, alpha: 1)).setFill()
       }
-      for (x, column) in (columns[character] ?? []).enumerated() {
-        for y in 0..<7 where column & (1 << y) != 0 {
-          CGRect(x: start + CGFloat(index * 6 + x) * scale,
-            y: top + CGFloat(y) * scale, width: scale, height: scale).fill()
+      guard let glyph = GamePixelTypography.bitmapGlyph(for: character) else { continue }
+      for x in 0..<glyph.width {
+        for y in 0..<glyph.height where glyph.rgba[(y * glyph.width + x) * 4 + 3] != 0 {
+          CGRect(x: start + CGFloat(index * 6 + glyph.x + x) * scale,
+            y: top + CGFloat(glyph.y + y) * scale, width: scale, height: scale).fill()
         }
       }
     }

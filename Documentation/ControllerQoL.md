@@ -7,13 +7,13 @@ button positions.
 | Controller | Action |
 | --- | --- |
 | Left stick / right stick | Aim / pan camera |
-| A / B | Assign selected skill / return to 1×, then cancel or open pause |
-| X / Y | Repeat last successful skill / focus last assignment |
+| A / B | Assign selected skill / reset fast speed, then pause or play |
+| X / Y | Reset speed / nuke or undo where supported |
 | LB / RB | Previous / next available skill |
 | D-pad left / right | Previous / next unassigned lemming |
 | D-pad up / down | Increase / decrease release rate where supported |
 | Tap RT / hold RT | Toggle fast-forward / temporary speed boost |
-| Menu | Pause or resume |
+| Menu | Game menu |
 | View / Options | Show keyboard and controller help |
 
 The defaults include fast-forward toggles, temporary held boosts, quick exits, skill cycling,
@@ -131,3 +131,31 @@ briefing also identifies the incoming player, and its forward-step command handl
 completion through the normal results path. L3's in-game Resume action resumes
 the existing attempt directly. See [cross-game parity](ReleaseReadiness/CrossGameParity.md)
 for shared behaviour, engine-specific limits and validation status.
+
+## TV precision and transport
+
+Circle / B is the default pause/play button across Mac, iOS and TV. Square / X
+resets speed. Triangle / Y nukes or undoes the nuke where supported. Menu opens
+the game menu. At a speed above 1×, Play/Pause first resets speed and leaves play
+running. Release and press again to pause. R2 also consumes a fast-speed press
+as a reset. Its release cannot restore the previous fast speed.
+
+On TV, either trigger resets fast speed before a timeline action. At 1×, a
+trigger press parks play. Tap L2 / R2 to step backward / forward by one tick.
+Hold for 220 ms to scrub. Releasing leaves play paused. Circle resumes.
+Held input must return to neutral after a menu, handover or reset.
+
+TV draws an aim reticle independently of the skill badge. It can move through
+the playfield and HUD. Cross / A uses the same visible HUD button bounds to
+select a skill or activate a control. Precision picks retain the displayed
+eligible actor while it remains under the pointer. They do not prefer a moving
+neighbour merely because its direction changes. Deliberate actor cycling keeps
+its ID lock. A missing locked actor cannot silently select another actor.
+
+Settings is directly available on the shared mobile/TV pause page. Its
+soundtrack-library and Play Insights pages retain the paused attempt. Mac keeps
+its in-game Settings command. Classic, L2 and L3 share these input paths. L2/L3
+have no release-rate controls, and L3 has no nuke.
+
+Muted, offscreen validation and physical-device limits are recorded in
+[the playtester follow-up](PlaytesterControls.md).

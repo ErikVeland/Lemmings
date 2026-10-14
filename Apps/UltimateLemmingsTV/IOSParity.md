@@ -21,16 +21,35 @@ shell. That diagnostic path is not the normal application or the parity baseline
 | Browsing | Shared search, progress, source identity, previews, favourites and playlist actions. TV carousel supports focused left/right selection and Select. | UIKit focus delivery, system keyboard and large catalogues on TV. |
 | Learning and hints | Shared Journey, progression, techniques, saved-run lookup, actual progressive hints and matching verified Classic solutions. Hints no longer opens the old Controls deck. | Physical navigation and recovery. Journeys currently accept Classic entries, as on iOS. Sequel hints remain general coaching. |
 | Collections | Shared favourites, recents, editable playlists, random/shuffle and queue resume, with the same profile/Hot Seat scope. | Complete controller-only editing and resume journeys. |
-| Profiles and Hot Seat | Shared profile management, portraits, both house rules, saved sessions, restart, solo/shared switching, roster recall, attempt-owner records and paused Ready handovers. Save failures retain the transition screen. | Native focus, held-input transitions and physical cross-engine handovers. |
+| Profiles and Hot Seat | Shared profile editor and portraits. TV holds a player to edit without switching ownership. Keyboard opens from Initials. Editor deletion confirms before removing solo saves, backups, records and Hot Seat membership and requesting cloud sync. Both house rules, saved sessions, restart, solo/shared switching, roster recall, attempt-owner records and paused Ready handovers remain shared. Save failures retain the transition screen. | Native focus, held-input transitions, keyboard return, VoiceOver, live cloud deletion and physical cross-engine handovers. |
 | Gameplay | Shared Classic, L2, L3 and supported NeoLemmix sessions, retry/continue, end/undo, supported rate, speed, step and rewind. A TV Game controls page exposes touch HUD capabilities to the remote. L2 has shared fan mode; fan inputs replay in checkpoints and rewind. L3 uses the shared eight-direction tool picker. | Full native game journeys, controller/remote precision and engine fidelity. L2/L3 expose no release rate. L3 has no nuke. |
-| Targeting and ownership | TV retains its gameplay controller through pause menus. Deliberate actor cycling locks the actor ID until aiming or another deliberate selection. Missing/offscreen actors cannot silently retarget a neighbour. Held Select cannot accept a new page before neutral input. | Physical multi-controller and Siri Remote generations, including the virtual iPhone remote. |
+| Targeting and ownership | TV retains its gameplay controller through pause menus. Planning pauses retain gamepad aim and refresh targets while physics stays paused. Deliberate actor cycling locks the actor ID until aiming or another deliberate selection. Missing/offscreen actors cannot silently retarget a neighbour. Held Select cannot accept a new page before neutral input. | Physical paused-stick timing, multi-controller and Siri Remote generations, including the virtual iPhone remote. |
 | Pause/results | Shared frozen overview, counts, loss allowance, time, supplies, track identity, results, awards and named next actions. Resume remains pinned on the shared pause page. | UIKit scrolling/focus, result variants and VoiceOver. |
 | Replay | Shared supported recording, read-only playback, skill-use history and movie export. TV exports movies through the LAN transfer instead of a share sheet. | Physical playback, movie download and cancellation. Sequel verified-solution/movie capabilities remain bounded by the shared session APIs. |
 | Records/services | Shared records, achievements, community boards, Game Center adapter, telemetry consent and Play Insights. TV declares the Game Center entitlement. | TV App Store Connect/provisioning, production boards, account consent and live service journeys. No production account settings were changed. |
 | Settings | Shared groups, presets, graphics, display/effects, accessibility, soundtrack and controller remapping. TV retains sensitivity/dead-zone choices. Standard/Large/Extra Large use distinct whole-pixel menu scales. New TV preferences select continuous skill changes. | Physical runtime effects, long menus and accessible focus. |
-| Audio | Shared Adaptive DJ, soundtrack selection/downloads, native sound banks, track notices, pause/speed/rewind and interruption rules. | Audible comparison needs an explicit request. Engine/data limits remain shared with iOS. |
+| Audio | Shared Adaptive DJ, soundtrack selection/downloads, native sound banks, track notices, pause/speed/rewind and interruption rules. TV builds bundle all soundtrack libraries by default. | Audible comparison needs an explicit request. Engine/data limits remain shared with iOS. |
 | Recovery/cloud | Shared owner/session-scoped checkpoints and session navigation. Legacy TV profiles, portraits, solo/shared completion, rosters, exact turns, preferences and the surviving checkpoint migrate once. Old data is retained, and an existing shared run is not overwritten. Shared cloud-library/recovery-code routes are available; TV transfers recovery keys over LAN. | Live cloud linking and purge recovery. Cloud library sync does not back up complete checkpoint payloads or all local collection files. TV adds an explicit off-device save backup/restore adapter; transfer and purge recovery need physical acceptance. |
 | Accessibility/lifecycle | Shared accessible action names, interruption pause and explicit Resume. TV uses native focus over the same bitmap targets. Large transfer pages scroll to keep Back reachable. | Physical VoiceOver, system keyboard, background/termination/reconnect and sofa readability. |
+
+## TV effect budget
+
+The user's 14 October performance instruction removes completion glow on TV.
+The shared TV playfield creates no completion transition timer or scenery-glow
+renderer, and draws no golden border or rescued-sprite auras. It also disables
+the extra speed/cinematic explosion surface and added explosion flash cores.
+Original explosion spray, actor selection and assignment feedback remain.
+These presentation limits apply to Classic, L2 and L3 through the same controller.
+They do not change game rules, results, saved-run ownership or Ready handovers.
+
+TV starts at balanced CRT quality, or minimal on two-core devices. The playfield
+drawable stays at most one pixel per point. Menu/HUD lettering retains native
+scale. Minimal CPU/GPU quality disables the three CRT bloom passes and releases
+their scratch textures. Recovery requires measured spare capacity. Bloom also
+stays off while the presentation target is below 60 Hz. The focused
+headless policy checks cover startup, cost limits, pressure, recovery and thermal
+restriction. Physical TV frame timing and native UIKit/Metal rendered output
+remain open validation requirements.
 
 ## Storage and migration boundaries
 

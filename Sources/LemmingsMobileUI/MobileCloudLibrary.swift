@@ -43,9 +43,22 @@ extension MobileLibraryViewController {
         libraryCloud.onImported = { [weak self] in
             guard let self else { return }
             let records = arcadeStore.records
+            let removed = Set(profiles.players.map(\.id)).subtracting(records.profiles.map(\.id))
             profiles.importCloudProfiles(records.profiles.map { .init(id: $0.id, name: $0.initials, portrait: $0.portrait) }, active: records.activeProfileID)
             do { try MobileStorage.standard(profile: "_players").save(profiles, name: "players") }
             catch { notice = error.localizedDescription }
+            if !removed.isEmpty {
+                for id in removed { hotSeats.removePlayer(id) }
+                hotSeatRoster = nil
+                _ = saveHotSeats()
+                Task {
+                    for id in removed {
+                        do { try await removePlayerFiles(id) }
+                        catch { notice = error.localizedDescription }
+                    }
+                    loadCheckpoint(); rebuild()
+                }
+            }
             reloadPlayerData()
             rebuild()
         }

@@ -52,6 +52,8 @@ enum FanLevelLibrary {
   /// too slow to do while drawing a menu. Counts are therefore remembered once
   /// found, and the total on the front screen counts the packs measured so far.
   enum Progress {
+    @MainActor private static var measurement: Task<Void, Never>?
+    @MainActor private static var measurementGeneration = UUID()
     private static let passedKey = "FanLevelsPassed"
     private static let countsKey = "FanLevelCountsV2"
     private static let identifierVersion = "v2"
@@ -178,20 +180,32 @@ enum FanLevelLibrary {
     }
 
     /// Measures any pack not yet counted. Slow, so it runs off the main thread.
-    static func measure(
+    @MainActor static func measure(
       _ packs: [URL], onProgress: @escaping @MainActor @Sendable () -> Void
     ) {
-      DispatchQueue.global(qos: .utility).async {
-        for pack in packs where counts[countKey(pack)] == nil {
+      cancelMeasurement()
+      let generation = measurementGeneration
+      measurement = Task.detached(priority: .utility) {
+        let known = counts
+        for pack in packs where known[countKey(pack)] == nil {
+          guard !Task.isCancelled else { return }
           let total = entries(in: pack).count
-          DispatchQueue.main.async {
-            MainActor.assumeIsolated {
-              setCount(total, for: pack)
-              onProgress()
-            }
+          guard !Task.isCancelled else { return }
+          await MainActor.run {
+            guard measurementGeneration == generation else { return }
+            setCount(total, for: pack)
+            onProgress()
           }
         }
+        await MainActor.run {
+          if measurementGeneration == generation { measurement = nil }
+        }
       }
+    }
+
+    @MainActor static func cancelMeasurement() {
+      measurementGeneration = UUID()
+      measurement?.cancel(); measurement = nil
     }
   }
 

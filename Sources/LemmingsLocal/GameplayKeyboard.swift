@@ -366,7 +366,9 @@ import NxlvKit
         case .cancel:
             if speedControl?.isFast == true || speedControl?.state.isHeld == true { speedControl?.reset() }
             else { speedControl?.cancelInput(); escape() }
-        case .pause: togglePause()
+        case .pause:
+            if speedControl?.isFast == true || speedControl?.state.isHeld == true { speedControl?.reset() }
+            else { togglePause() }
         case .help: showHelp()
         case .hints: if !openRetainedSolution() { hints?() }
         case .settings: settings?()

@@ -89,6 +89,7 @@ public struct Lemmings2FrontEnd: Sendable {
 
 public struct Lemmings2FrontEndFont: Sendable {
     public let glyphs: [[UInt8]]
+    public let bitmap: SequelBitmapFont
     // Proportional advances used by the original GAL text layout.
     public let advances = [6,5,8,8,7,8,8,3,5,5,8,7,3,7,3,8,9,5,8,8,9,8,9,9,9,9,3,3,6,7,6,8,
         8,9,9,8,10,9,8,8,9,5,7,9,8,10,10,9,9,9,9,7,7,9,9,10,8,9,8,5,8,5,6,7,
@@ -97,9 +98,13 @@ public struct Lemmings2FrontEndFont: Sendable {
         guard data.count == 17952 else { throw SequelDataError.invalid(L10n.text("Invalid L2 front-end font size.")) }
         let r = SequelBinary(data)
         glyphs = try (0..<102).map { try Lemmings2FrontEnd.planar(Data(r.slice($0 * 176, 176)), width: 16, height: 11) }
+        let characters = (32..<123).map { Character(String(Unicode.Scalar($0)!)) }
+        bitmap = SequelBitmapFont(originals: Dictionary(uniqueKeysWithValues: zip(characters, glyphs)),
+            sourceWidth: 16, height: 11, advances: Dictionary(uniqueKeysWithValues: zip(characters, advances)),
+            transparent: 0, shades: [6, 7, 15], style: .sequelFrontEnd)
     }
     public func width(_ text: String) -> Int {
-        text.utf8.reduce(0) { $0 + ((32..<123).contains($1) ? advances[Int($1) - 32] : 6) }
+        bitmap.width(of: text)
     }
 }
 
@@ -125,6 +130,7 @@ public struct Lemmings2Panel: Sendable {
     public let controlTile: [UInt8]
     public let numberTile: [UInt8]
     public let glyphs: [[UInt8]]
+    public let font: SequelBitmapFont
     public let controls: [Lemmings2SpriteFrame]
     public let skills: [Lemmings2SpriteFrame]
 
@@ -140,6 +146,9 @@ public struct Lemmings2Panel: Sendable {
         glyphs = try (0..<59).map {
             try Lemmings2FrontEnd.planar(Data(r.slice(1600 + $0 * 64, 64)), width: 8, height: 8)
         }
+        let characters = (32...90).map { Character(String(Unicode.Scalar($0)!)) }
+        font = SequelBitmapFont(originals: Dictionary(uniqueKeysWithValues: zip(characters, glyphs)),
+            sourceWidth: 8, height: 8, transparent: Self.backgroundIndex, shades: [130, 131], style: .sequelPanel)
         numberTile = try Lemmings2FrontEnd.planar(Data(r.slice(0x1500, 144)), width: 16, height: 9)
         controls = try Self.rawSprites(Data(r.slice(0x1590, r.count - 0x1590)), count: 26)
         skills = try Self.rawSprites(Lemmings2Compression.decode(icons), count: 54)
@@ -181,9 +190,8 @@ public struct Lemmings2Panel: Sendable {
             put(frame.pixels, width: frame.width, x: x, y: y, mask: frame.opaque)
         }
         func text(_ string: String, _ x: Int, _ y: Int) {
-            for (i, byte) in string.uppercased().utf8.enumerated() where (32...90).contains(byte) {
-                put(glyphs[Int(byte) - 32], width: 8, x: x + i * 8, y: y)
-            }
+            let row = font.raster(BitmapLatinGlyphs.uppercase(string, locale: L10n.interface.locale), fittingHeight: 8)
+            put(row.pixels, width: row.width, x: x, y: y, mask: row.opaque)
         }
         for i in 0..<8 {
             put(skillTile, width: 32, x: i * 32, y: 9)

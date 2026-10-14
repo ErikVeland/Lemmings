@@ -87,4 +87,39 @@ struct MobileCheckpointOwnershipTests {
         #expect(rejected)
         #expect(try Data(contentsOf: url) == future)
     }
+
+    @Test(arguments: ["classic-dos", "lemmings2", "lemmings3"])
+    func deletingPlayerRemovesOlderSoloBackupsWithoutTouchingOtherSessions(engine: String) async throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("mobile-delete-player-" + UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let url = root.appendingPathComponent("current.json")
+        let store = MobileCheckpointStore(url: url)
+        let now = Date()
+        let older = envelope(owner: "guest", date: now, engine: engine)
+        let newest = envelope(owner: "guest", date: now.addingTimeInterval(1), engine: engine)
+        let other = envelope(owner: "host", date: now.addingTimeInterval(2), engine: engine)
+        let shared = envelope(owner: "guest", scope: "hotseat.team", date: now.addingTimeInterval(3), engine: engine)
+        for saved in [older, newest, other, shared] { try await store.save(saved) }
+        try await store.removeSoloRuns(owner: "guest")
+        let reopened = MobileCheckpointStore(url: url)
+        #expect(try await reopened.load(owner: "guest", scope: nil) == nil)
+        #expect(try await reopened.load(owner: "host", scope: nil) == other)
+        #expect(try await reopened.load(owner: "host", scope: "hotseat.team") == shared)
+        #expect(try await reopened.load() == shared)
+        // Neither the current nor older deleted run can return through a late save.
+        for saved in [older, newest] { try await store.save(saved) }
+        #expect(try await reopened.load(owner: "guest", scope: nil) == nil)
+    }
+
+    @Test func deletingDefaultPlayerRemovesOwnerlessLegacySaveAndGlobalBackup() async throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("mobile-delete-default-" + UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let url = root.appendingPathComponent("current.json")
+        let store = MobileCheckpointStore(url: url)
+        try await store.save(envelope(owner: nil))
+        try await store.removeSoloRuns(owner: "default")
+        #expect(try await store.load() == nil)
+        #expect(try await store.load(owner: "default", scope: nil) == nil)
+        #expect(try FileManager.default.contentsOfDirectory(atPath: root.path).isEmpty)
+    }
 }

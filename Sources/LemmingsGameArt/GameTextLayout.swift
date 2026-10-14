@@ -20,16 +20,22 @@ public enum GameTextLayout {
         }
     }
     public static func height(_ text: String, width: CGFloat, face: GameMenuTypography.Face = .small, scale: Int = 1) -> CGFloat {
-        CGFloat(lines(text, width: width, face: face, scale: scale).count) * CGFloat((face == .large ? 26 : 24) * scale)
+        CGFloat(lines(text, width: width, face: face, scale: scale).count) * linePitch(text, face: face, scale: scale)
+    }
+    public static func linePitch(_ text: String, face: GameMenuTypography.Face = .small, scale: Int = 1) -> CGFloat {
+        let padding = BitmapLatinGlyphs.verticalPadding(in: GameMenuTypography.menuText(text))
+        let cell = face == .large ? 20 : 18
+        return CGFloat(max(cell + 6, cell + padding.above + padding.below + 2) * scale)
     }
     public static func draw(_ text: String, in box: CGRect, typography: GameMenuTypography, face: GameMenuTypography.Face = .small,
                             scale: Int = 1, palette: GameMenuTypography.Palette = .blue,
                             alignment: GameMenuTypography.Alignment = .center, alpha: CGFloat = 1, context: CGContext) {
         let lines = lines(text, width: box.width, face: face, scale: scale)
-        let pitch = CGFloat((face == .large ? 26 : 24) * scale)
+        let pitch = linePitch(text, face: face, scale: scale)
         let top = box.midY - CGFloat(lines.count) * pitch / 2
         for (index, line) in lines.enumerated() {
-            typography.menuLine(line, in: CGRect(x: box.minX, y: top + CGFloat(index) * pitch + 3 * CGFloat(scale), width: box.width, height: pitch),
+            let height = typography.height(of: line, face: face, scale: scale)
+            typography.menuLine(line, in: CGRect(x: box.minX, y: top + CGFloat(index) * pitch + (pitch - height) / 2, width: box.width, height: height),
                                 context: context, face: face, scale: scale, alignment: alignment, alpha: alpha, palette: palette)
         }
     }

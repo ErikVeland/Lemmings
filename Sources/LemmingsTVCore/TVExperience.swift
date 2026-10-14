@@ -329,7 +329,7 @@ public struct TVGameCapabilities: Equatable, Sendable {
             guard let actor = candidates.first(where: { $0.id == lockedActor }),
                 viewport.visibleLevelRect.contains(actor.point) else { target = nil; return }
             target = .init(id: actor.id, point: actor.point, state: actor.assignment)
-            pointer = bounded(viewport.viewPoint(fromLevel: actor.point)); return
+            return
         }
         target = MobileTargetSelector.select(candidates: candidates, touch: pointer, viewport: viewport,
             radius: 36, input: .touch)

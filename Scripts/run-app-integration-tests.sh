@@ -69,6 +69,7 @@ if [[ "${TEST_SCOPE:-all}" == hot-seat ]]; then test_flags+=(-D HOT_SEAT_TESTS);
 if [[ "${TEST_SCOPE:-all}" == hd-effects ]]; then test_flags+=(-D HD_EFFECTS_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == variable-speed ]]; then test_flags+=(-D VARIABLE_SPEED_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == performance ]]; then test_flags+=(-D PERFORMANCE_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == frame-performance ]]; then test_flags+=(-D FRAME_PERFORMANCE_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == release-blockers ]]; then test_flags+=(-D RELEASE_BLOCKER_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == hints ]]; then test_flags+=(-D HINT_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == controller ]]; then test_flags+=(-D CONTROLLER_QOL_TESTS); fi

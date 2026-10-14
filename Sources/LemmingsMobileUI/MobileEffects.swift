@@ -96,6 +96,7 @@ import UIKit
     }
     func movieEffects() -> MobileMovieEffects { MobileMovieEffects(player: player.replayPlayer()) }
     func pause() { player.silence() }
+    func setVoiceLimit(_ count: Int) { player.setVoiceLimit(count) }
     func suspend() { suspended = true; player.suspendOutput() }
     func resume() { guard !isTestAudioMuted else { return }; suspended = false; try? player.resumeOutput() }
     func stop() { player.stop() }

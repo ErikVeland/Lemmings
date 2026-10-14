@@ -368,7 +368,7 @@ import UniformTypeIdentifiers
   override var acceptsFirstResponder: Bool { true }
   private func text(_ value: String, in rect: CGRect) {
     guard let font else { GamePixelText.draw(value, in: rect); return }
-    font.menuLine(value, in: CGRect(x: rect.minX + 8, y: rect.midY - 10, width: rect.width - 16, height: 20), palette: .green)
+    font.menuLine(value, in: CGRect(x: rect.minX + 8, y: rect.midY - 10, width: rect.width - 16, height: 20), palette: .blue)
   }
   override func draw(_ dirtyRect: NSRect) {
     GameStyle.fill(bounds, NSColor(calibratedWhite: 0.015, alpha: 1))

@@ -43,19 +43,11 @@ import LemmingsTVCore
         drawHUD(game, context: context)
     }
     private func drawTarget(_ game: TVGameExperience, context: CGContext) {
-        guard game.canInteract else { return }
+        guard game.play.canEdit else { return }
         let pointer = game.pointer
         let point = CGPoint(x: pointer.x, y: pointer.y)
-        let colour = game.target == nil ? CGColor(gray: 0.75, alpha: 1)
-            : game.target?.state == .eligible ? CGColor(srgbRed: 0.55, green: 1, blue: 0.4, alpha: 1)
-            : CGColor(srgbRed: 1, green: 0.8, blue: 0.15, alpha: 1)
-        context.setStrokeColor(CGColor(gray: 0, alpha: 1)); context.setLineWidth(7)
-        brackets(point, context: context)
-        context.setStrokeColor(colour); context.setLineWidth(3); brackets(point, context: context)
-        if game.target?.state == .unavailable || game.target?.state == .alreadyAssigned {
-            context.move(to: CGPoint(x: point.x - 6, y: point.y - 6)); context.addLine(to: CGPoint(x: point.x + 6, y: point.y + 6))
-            context.move(to: CGPoint(x: point.x + 6, y: point.y - 6)); context.addLine(to: CGPoint(x: point.x - 6, y: point.y + 6)); context.strokePath()
-        }
+        Self.drawAimPointer(at: point, eligible: game.target?.state == .eligible,
+                            occupied: game.target != nil, context: context)
         if game.session.snapshot.skills.indices.contains(game.selectedControl) {
             let skill = game.session.snapshot.skills[game.selectedControl]
             let remaining = game.session.skillCursorRemaining(control: game.selectedControl, target: game.target?.id)
@@ -70,13 +62,25 @@ import LemmingsTVCore
             context.stroke(CGRect(x: projected.x - 15, y: projected.y - 20, width: 30, height: 38))
         }
     }
-    private func brackets(_ point: CGPoint, context: CGContext) {
-        for (dx, dy) in [(-1.0, -1.0), (1.0, -1.0), (-1.0, 1.0), (1.0, 1.0)] {
-            context.move(to: CGPoint(x: point.x + dx * 12, y: point.y + dy * 22))
-            context.addLine(to: CGPoint(x: point.x + dx * 22, y: point.y + dy * 22))
-            context.addLine(to: CGPoint(x: point.x + dx * 22, y: point.y + dy * 12))
-        }
-        context.strokePath()
+    /// The TV pointer stays visible over both terrain and HUD targets.
+    public static func drawAimPointer(at point: CGPoint, eligible: Bool, occupied: Bool, context: CGContext) {
+        context.saveGState()
+        defer { context.restoreGState() }
+        context.setShouldAntialias(false)
+        let colour = eligible ? CGColor(srgbRed: 0.55, green: 1, blue: 0.4, alpha: 1)
+            : occupied ? CGColor(srgbRed: 1, green: 0.8, blue: 0.15, alpha: 1)
+            : CGColor(gray: 0.85, alpha: 1)
+        let frame = CGRect(x: floor(point.x) - 11, y: floor(point.y) - 11, width: 22, height: 22)
+        for left in [true, false] { for top in [true, false] {
+            let horizontal = CGRect(x: left ? frame.minX : frame.maxX - 7,
+                                    y: top ? frame.minY : frame.maxY - 2, width: 7, height: 2)
+            let vertical = CGRect(x: left ? frame.minX : frame.maxX - 2,
+                                  y: top ? frame.minY : frame.maxY - 7, width: 2, height: 7)
+            context.setFillColor(CGColor(gray: 0, alpha: 1))
+            context.fill(horizontal.insetBy(dx: -1, dy: -1)); context.fill(vertical.insetBy(dx: -1, dy: -1))
+            context.setFillColor(colour)
+            context.fill(horizontal); context.fill(vertical)
+        } }
     }
 
     private func drawHUD(_ game: TVGameExperience, context: CGContext) {

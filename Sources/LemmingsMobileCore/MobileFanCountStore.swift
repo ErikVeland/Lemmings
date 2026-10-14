@@ -23,6 +23,7 @@ public actor MobileFanCountStore {
         var result: [String: Int] = [:]
         var visited = Set<String>()
         for folder in fanFolders {
+            try Task.checkCancellation()
             let files = (try? FileManager.default.contentsOfDirectory(at: folder,
                 includingPropertiesForKeys: [.isRegularFileKey, .fileSizeKey, .contentModificationDateKey],
                 options: [.skipsHiddenFiles])) ?? []
@@ -38,7 +39,9 @@ public actor MobileFanCountStore {
                 if let cached, cached.bytes == bytes, cached.modified == date.timeIntervalSince1970 { count = cached.count }
                 else {
                     guard let pack = try? ClassicFanPack(url: url) else { continue }
+                    try Task.checkCancellation()
                     count = pack.entries().count
+                    try Task.checkCancellation()
                     measured[path] = Entry(bytes: bytes, modified: date.timeIntervalSince1970, count: count)
                     try save()
                 }
@@ -46,6 +49,7 @@ public actor MobileFanCountStore {
                 if result.count.isMultiple(of: 25) { await progress(result) }
             }
         }
+        try Task.checkCancellation()
         await progress(result)
         return result
     }

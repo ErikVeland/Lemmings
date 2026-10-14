@@ -378,6 +378,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var levelBrowserLoadTask: Task<Void, Never>?
   private var levelBrowserDiscoveryTask: Task<LevelBrowserDiscovery?, Never>?
   private var levelBrowserWarmTask: Task<LevelBrowserDiscovery?, Never>?
+  private var levelBrowserWarmGeneration = UUID()
   private var preparedLevelBrowserDiscovery: LevelBrowserDiscovery?
   private var levelBrowserFanLoadTask: Task<Void, Never>?
   private var levelBrowserFanDiscoveryTask: Task<LevelBrowserFanDiscovery?, Never>?
@@ -1442,6 +1443,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func suspendCurrentEngine(savesProgress: Bool = true, preservingMusic: Bool = false) {
+    stopMenuWorkForGameplay()
     LevelHintWindow.shared.clearSolution()
     panel.handlePointerUp()
     playfield.clearPointer()
@@ -1672,6 +1674,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     // monitor last time comes back to a flat picture.
     applyDisplayMode()
     renderScreen()
+    measureFanPacks()
     if resumeMusic { playMusicForCurrentLevel() }
     window.makeKeyAndOrderFront(nil)
   }
@@ -2827,13 +2830,17 @@ let achievementProgressKey = "ClassicAchievementProgress"
         guard !Task.isCancelled else { return nil }
         let neoLemmix = NeoLemmixLibrary.discover(neoLemmixSources)
         guard !Task.isCancelled else { return nil }
-        let lemmings2 = lemmings2Root.flatMap {
-          try? Lemmings2PlayWindow.browserLevels(
+        let lemmings2: [Lemmings2PlayWindow.BrowserLevel] = lemmings2Root.flatMap {
+          try? Lemmings2PlayWindow.warmAssets(root: $0)
+          guard !Task.isCancelled else { return nil }
+          return try? Lemmings2PlayWindow.browserLevels(
             root: $0, progressData: lemmings2Progress)
         } ?? []
         guard !Task.isCancelled else { return nil }
-        let lemmings3 = lemmings3Root.flatMap {
-          try? Lemmings3PlayWindow.browserLevels(
+        let lemmings3: [Lemmings3PlayWindow.BrowserLevel] = lemmings3Root.flatMap {
+          try? Lemmings3PlayWindow.warmAssets(root: $0)
+          guard !Task.isCancelled else { return nil }
+          return try? Lemmings3PlayWindow.browserLevels(
             root: $0, progressData: lemmings3Progress)
         } ?? []
         guard !Task.isCancelled else { return nil }
@@ -2849,12 +2856,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func warmLevelBrowserCatalogue() {
-    guard levelBrowserWarmTask == nil else { return }
+    guard levelBrowserWarmTask == nil, !sequelIsActive, phase != .playing else { return }
+    let generation = UUID(); levelBrowserWarmGeneration = generation
     let task = makeLevelBrowserDiscoveryTask()
     levelBrowserWarmTask = task
     Task { [weak self] in
       let discovery = await task.value
-      guard let self else { return }
+      guard let self, self.levelBrowserWarmGeneration == generation, !task.isCancelled else { return }
       self.levelBrowserWarmTask = nil
       if let discovery, discovery.classic.allSatisfy(\.isVerified) {
         self.preparedLevelBrowserDiscovery = discovery
@@ -2862,6 +2870,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
         if self.flow?.screen == .title { self.renderScreen() }
       }
     }
+  }
+
+  private func stopMenuWorkForGameplay() {
+    FanLevelLibrary.Progress.cancelMeasurement()
+    levelBrowserWarmGeneration = UUID()
+    levelBrowserWarmTask?.cancel(); levelBrowserWarmTask = nil
+    difficultyTask?.cancel(); difficultyTask = nil
   }
 
   private func presentPreparedLevelBrowser(_ discovery: LevelBrowserDiscovery, family: HomeContentFamily?,
@@ -4022,7 +4037,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     GameScreen.shared.present(page, owner: window)
     difficultyTask = Task { [weak self, weak page] in
       do {
-        let output = try await worker.value
+        let output = try await withTaskCancellationHandler {
+          try await worker.value
+        } onCancel: { worker.cancel() }
         try Task.checkCancellation()
         guard let self, let page, GameScreen.shared.contains(page),
               ArcadeStore.shared.playingProfileID == ownerProfileID else { return }
@@ -5901,6 +5918,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   /// Measures any unmeasured packs, refreshing the front screen as it goes.
   private func measureFanPacks() {
+    guard !sequelIsActive, phase != .playing else { return }
     let packs = fanPacks.isEmpty ? FanLevelLibrary.packs() : fanPacks
     guard !packs.isEmpty, !FanLevelLibrary.Progress.isComplete(for: packs) else { return }
     FanLevelLibrary.Progress.measure(packs) { [weak self] in
@@ -6188,6 +6206,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard fanPlaying else { return false }
     switch phase {
     case .briefing:
+      stopMenuWorkForGameplay()
       phase = .playing
       playfield.phase = .playing
       playfield.overlayTitle = nil
@@ -6476,6 +6495,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         NeoLemmixSession(
           simulation: simulation, width: rendered.width, height: rendered.height,
           gadgetSounds: gadgetSounds))
+      stopMenuWorkForGameplay()
       phase = .playing; playfield.phase = .playing
       if !restoringCheckpoint, let arcadeLevel {
         AnonymousTelemetry.shared.start(arcadeLevel, hotSeat: arcadeHotSeatID != nil,
@@ -6726,6 +6746,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       showBriefingOverlay()
 
     case .playing:
+      stopMenuWorkForGameplay()
       phase = .playing
       playfield.phase = .playing
       playfield.overlayTitle = nil
@@ -7157,7 +7178,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         playfield.viewport.viewSize = wanted.size
       }
       if let frame = composeNativeFrame() {
-        crtView.setSource(frame, flashes: playfield.hdrFlashes, selection: playfield.selectionEffect, rescueAuras: playfield.rescueAuras)
+        crtView.setSource(frame, flashes: playfield.hdrFlashes, selection: playfield.selectionEffect)
       }
     }
     effects.setViewport(playfield.soundViewport)
@@ -7192,7 +7213,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       captureReplayFrame()
       advanced = true
       if session.isComplete { break }
-      if speedControl.variableEnabled && speedControl.multiplier > 1 && ProcessInfo.processInfo.systemUptime >= inputDeadline { break }
+      if ProcessInfo.processInfo.systemUptime >= inputDeadline { break }
     }
     guard advanced else { return }
     saveRunCheckpoint()
@@ -7735,12 +7756,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func updateDJTelemetry(_ telemetry: AdaptiveDJEngine.Telemetry) {
     guard activeMusic != .silent, activeMusic == .adaptiveDJ || isLearningJourneyActive else { return }
     if isLearningJourneyActive, !dj.isPlaying,
-       !RescueCelebration.requiresAll(required: telemetry.requiredCount, total: telemetry.totalCount),
        RescueCelebration.isSecured(saved: telemetry.savedCount, required: telemetry.requiredCount,
                                   isComplete: telemetry.isComplete, didWin: telemetry.didWin) {
       let legacy = music.isOutputRunning ? music.currentURL : soundtrack.currentURL
-      let elapsed = music.isOutputRunning ? music.sourceSeconds : soundtrack.sourceSeconds
-      if let legacy, (telemetry.isComplete && telemetry.didWin) || elapsed >= 30,
+      if let legacy,
          dj.startCelebration(after: legacy, identity: arcadeRunID.uuidString) {
         dj.setVolume(0)
         fadeLegacyMusicIntoDJ()
@@ -8863,7 +8882,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       remainingTicks: session?.lemmings.compactMap(\.countdown).min(), allPopped: allPopped, now: now)
     effects.setNukeActive(nuking && session?.isComplete == false)
     guard phase == .playing || phase == .results, let session else {
-      completionGlow.set(active: false, now: now, animated: !settings.reduceMotion && !settings.reduceFlashes)
+      completionGlow.set(active: false, now: now)
       failureMood.set(active: false, now: now)
       failureMusic.update(failed: false, isNuking: false, allPopped: false, now: now)
       return
@@ -8871,8 +8890,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let failed = session.isComplete ? !session.didWin : !session.canStillReachRequirement
     completionGlow.set(active: RescueCelebration.isSecured(saved: session.saved, required: session.required,
       isComplete: session.isComplete, didWin: session.didWin),
-      brief: RescueCelebration.requiresAll(required: session.required, total: session.total), now: now,
-      animated: !settings.reduceMotion && !settings.reduceFlashes)
+      brief: RescueCelebration.requiresAll(required: session.required, total: session.total), now: now)
     failureMood.set(active: failed, now: now)
     failureMusic.update(failed: failed, isNuking: session.isNuking, allPopped: allPopped,
       remainingTicks: session.lemmings.compactMap(\.countdown).min(),

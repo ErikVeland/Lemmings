@@ -17,6 +17,9 @@ import UIKit
     var onBoost: ((Bool) -> Void)?
     var onRewindHeld: ((Bool) -> Void)?
     var onMenuPause: (() -> Void)?
+    var onForcedPause: (() -> Void)?
+    var onTimelinePark: (() -> Void)?
+    var onForwardScrub: ((Bool) -> Void)?
     var onGameMenu: (() -> Void)?
     var onDJShuffle: (() -> Void)?
     var settingsProfileID: () -> String = { MobileProfiles.defaultID }
@@ -64,7 +67,7 @@ import UIKit
             self.activeController = nil
             let shouldPause = controllerConnection.update(isConnected: false, isMenu: isMenu())
             reset()
-            if shouldPause { onCommand?(.pause) }
+            if shouldPause { onForcedPause?() }
             return
         }
         guard let controller = activeController ?? controllers.first,
@@ -72,14 +75,14 @@ import UIKit
             let shouldPause = controllerConnection.update(isConnected: false, isMenu: isMenu())
             activeController = nil
             reset()
-            if shouldPause { onCommand?(.pause) }
+            if shouldPause { onForcedPause?() }
             return
         }
         activeController = controller
         _ = controllerConnection.update(isConnected: true, isMenu: isMenu())
         let elapsed = min(0.05, max(0, lastPoll == 0 ? 0 : now - lastPoll))
         lastPoll = now
-        let touchpad = (pad as? GCDualSenseGamepad)?.touchpadButton.isPressed == true
+        let touchpad = Self.touchpadPressed(on: controller)
         if touchpadClick.update(pressed: touchpad, active: !isMenu()) { onDJShuffle?() }
         var pressed = Set<ControllerBindings.Button>()
         let buttons: [(ControllerBindings.Button, GCControllerButtonInput?)] = [
@@ -108,6 +111,15 @@ import UIKit
         #endif
     }
 
+    static func touchpadPressed(on controller: GCController) -> Bool {
+        if let button = controller.physicalInputProfile.buttons[GCInputDualShockTouchpadButton] {
+            return button.isPressed
+        }
+        if let pad = controller.extendedGamepad as? GCDualSenseGamepad { return pad.touchpadButton.isPressed }
+        if let pad = controller.extendedGamepad as? GCDualShockGamepad { return pad.touchpadButton.isPressed }
+        return false
+    }
+
     func perform(_ action: ControllerBindings.Action) {
         if isMenu() {
             switch action {
@@ -122,7 +134,7 @@ import UIKit
         switch action {
         case .assign: onCommand?(.assign)
         case .repeatAssignment: onCommand?(.repeatAssignment)
-        case .cancel: onCommand?(.speedReset)
+        case .cancel: onGameMenu?()
         case .pause: onCommand?(.pause)
         case .help: onCommand?(.help)
         case .hints: onCommand?(.hints)

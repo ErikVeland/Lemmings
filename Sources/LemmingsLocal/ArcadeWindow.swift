@@ -1,6 +1,7 @@
 #if os(macOS)
 import AppKit
 import LemmingsAppCore
+import LemmingsGameArt
 import NxlvKit
 
 @MainActor final class ArcadeWindow {
@@ -375,14 +376,14 @@ import NxlvKit
         else {
             NSGraphicsContext.saveGraphicsState()
             NSGraphicsContext.current?.cgContext.setAlpha(alpha)
-            GamePixelText.draw(value, in: rect)
+            GamePixelText.draw(value, in: rect, palette: palette)
             NSGraphicsContext.restoreGraphicsState()
         }
     }
     func rowText(_ value: String, x: CGFloat, width: CGFloat, row: CGRect,
-                 alignment: NSTextAlignment = .left) {
+                 alignment: NSTextAlignment = .left, palette: MacInterfaceRenderer.Palette = .blue) {
         let lineHeight = font?.height(face: .small, scale: 1) ?? 18
-        text(value, x, row.midY - lineHeight / 2, width, alignment: alignment, height: lineHeight)
+        text(value, x, row.midY - lineHeight / 2, width, alignment: alignment, height: lineHeight, palette: palette)
     }
     func title(_ value: String, x: CGFloat = 64, y: CGFloat, width: CGFloat = 992, height: CGFloat = 36) {
         let rect = CGRect(x: x, y: y, width: width, height: height)
@@ -390,10 +391,10 @@ import NxlvKit
         if let font {
             let scale = max(1, min(Int(height / 20), Int(width / max(1, font.width(of: MacInterfaceRenderer.menuText(value), face: .large, scale: 1)))))
             font.menuLine(value, in: rect, face: .large, scale: scale, palette: .green)
-        } else { GamePixelText.draw(value, in: rect) }
+        } else { GamePixelText.draw(value, in: rect, palette: .green) }
     }
     func button(_ label: String, _ rect: CGRect, primary: Bool = false, selected: Bool = false,
-        enabled: Bool = true, action: @escaping () -> Void) {
+        enabled: Bool = true, titleRuns: [GameFrontEnd.TextRun] = [], action: @escaping () -> Void) {
         let chosen = enabled && (primary || selected || hover == label)
         GameStyle.fill(rect, chosen ? NSColor(calibratedRed: 0.06, green: 0.16, blue: 0.035, alpha: 1) : NSColor(calibratedWhite: 0.025, alpha: 1))
         (chosen ? NSColor(calibratedRed: 0.48, green: 0.80, blue: 0.24, alpha: 1) : NSColor(calibratedWhite: 0.29, alpha: 1)).setStroke()
@@ -412,7 +413,10 @@ import NxlvKit
             arrow.close(); arrow.fill()
         }
         let caption = CGRect(x: rect.minX + 12, y: rect.midY - 10, width: rect.width - 24, height: 20)
-        if let font {
+        if let font, !titleRuns.isEmpty, let context = NSGraphicsContext.current?.cgContext {
+            GameSemanticText.draw(titleRuns, in: caption, typography: GameMenuTypography(interface: font.interface),
+                alpha: enabled ? 1 : 0.45, context: context)
+        } else if let font {
             font.menuLine(label, in: caption, face: .small, alpha: enabled ? 1 : 0.45, palette: .blue)
         } else { GamePixelText.draw(label, in: caption) }
         if enabled {
@@ -698,7 +702,9 @@ import NxlvKit
             let rect = CGRect(x: 64 + (index % 2) * 506, y: 150 + (index / 2) * 70, width: 486, height: 58)
             let host = profile.id == store.records.activeProfileID
             let label = "\(index + 1). \(profile.initials)" + (turn.map { L10n.text("  Turn \($0 + 1)") } ?? "") + (host ? "  Host" : "")
-            button(label, rect, selected: chosen) { [weak self] in self?.changeSessionPlayer(profile.id) }
+            let runs: [GameFrontEnd.TextRun] = [.init("\(index + 1). ", .blue), .init(profile.initials, .green),
+                .init((turn.map { L10n.text("  Turn \($0 + 1)") } ?? "") + (host ? "  Host" : ""), .blue)]
+            button(label, rect, selected: chosen, titleRuns: runs) { [weak self] in self?.changeSessionPlayer(profile.id) }
         }
         let needsPlayer = players.count < 2
         if players.count < 8 {
@@ -718,9 +724,15 @@ import NxlvKit
         if y + 30 <= 620 { text(store.turnPolicy.detail, 370, y, 686, alpha: 0.8); y += 36 }
         if y + 30 <= 620 {
             if store.hotSeatIsActive {
-                text(L10n.text("Next turn: \(store.records.profile(store.playingProfileID)?.initials ?? L10n.text("LEM"))"), 64, y, 992, palette: .green)
+                let name = store.records.profile(store.playingProfileID)?.initials ?? L10n.text("LEM")
+                if let font, let context = NSGraphicsContext.current?.cgContext {
+                    let runs = GameSemanticText.named(L10n.text("Next turn: \(name)"), name: name)
+                    GameSemanticText.draw(runs, in: CGRect(x: 64, y: y, width: 992, height: 36),
+                        typography: GameMenuTypography(interface: font.interface), alignment: .left, context: context)
+                    accessibleText.append((L10n.text("Next turn: \(name)"), CGRect(x: 64, y: y, width: 992, height: 36)))
+                } else { text(L10n.text("Next turn: \(name)"), 64, y, 992) }
             } else if !needsPlayer {
-                text(L10n.text("Choose a second player"), 64, y, 992, palette: .green)
+                text(L10n.text("Choose a second player"), 64, y, 992, palette: .blue)
             }
         }
         button(L10n.text("Return to solo"), CGRect(x: 64, y: 634, width: 220, height: 48)) { [weak self] in self?.confirmReturnToSolo() }
@@ -782,7 +794,7 @@ import NxlvKit
             GameStyle.fill(rect, selected ? NSColor(calibratedWhite: 0.22, alpha: 1) : .clear)
             if selected { GameStyle.fill(CGRect(x: rect.minX, y: rect.maxY - 3, width: rect.width, height: 3), GameStyle.accent) }
             drawPortrait(profile.portrait, in: CGRect(x: 73, y: rect.minY + 3, width: 30, height: 34))
-            rowText(profile.initials, x: 119, width: 94, row: rect)
+            rowText(profile.initials, x: 119, width: 94, row: rect, palette: .green)
             if profile.id == store.playingProfileID { rowText(L10n.text("Playing"), x: 216, width: 104, row: rect) }
             else if profile.id == records.activeProfileID { rowText(L10n.text("Host"), x: 216, width: 104, row: rect) }
             buttons.append(("player-" + profile.id, rect, { [weak self] in self?.selectProfile(profile) }))
@@ -866,7 +878,7 @@ import NxlvKit
             rowText("\(index + 1)", x: 78, width: 40, row: row)
             let owner = ArcadeStore.shared.records.profile(run.profileID)
             drawPortrait(owner?.portrait ?? 0, in: CGRect(x: 132, y: y + 4, width: 32, height: 39))
-            rowText(owner?.initials ?? "???", x: 187, width: 290, row: row)
+            rowText(owner?.initials ?? "???", x: 187, width: 290, row: row, palette: .green)
             rowText("\(run.saved)", x: 493, width: 240, row: row)
             rowText("\(run.skillCount)", x: 800, width: 90, row: row)
             rowText(Self.time(run.seconds), x: 918, width: 132, row: row)

@@ -62,9 +62,10 @@ import NxlvKit
             stepping ? L10n.text("\(modifier) + \(physical(.leftShoulder)) / \(physical(.rightShoulder)): step back / forward where supported") : "",
             rewind ? L10n.text("\(modifier) + \(physical(.b)): rewind") : "",
             L10n.text("\(modifier) + \(physical(.menu)): retry"),
-            L10n.text("\(modifier) + \(physical(.a)): end run / undo nuke"),
+            L10n.text("\(modifier) + \(physical(.a)): repeat last assignment"),
             L10n.text("\(modifier) + \(physical(.options)): settings"),
             L10n.text("\(modifier) + \(physical(.leftStick)): DJ shuffle"),
+            L10n.text("\(modifier) + \(physical(.rightStick)): focus last assignment"),
             L10n.text("DualSense touchpad click: DJ shuffle"),
             L10n.text("Menus always use standard controls: D-pad selects, \(name(.a)) confirms, \(name(.b)) returns."),
             L10n.text("Shoulder buttons change tabs. Right stick scrolls. Release buttons when changing pages.")

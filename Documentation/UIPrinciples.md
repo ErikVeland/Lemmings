@@ -41,6 +41,14 @@ sentences. Apply this to new UI and changes to existing UI.
   selected, focused and unavailable states. Check mouse and keyboard hit regions
   after changing layout. A successful compile does not establish usability.
 
+iOS and tvOS keep the player profile visible in solo and Hot Seat play. The HUD
+shows the profile portrait and green name above its counters. Solo uses the
+attempt's settings profile; Hot Seat uses the attempt owner. Menu headers,
+pause/results and level browsing retain the same identity. Classic, Lemmings 2
+and Lemmings 3 use the shared controller. Headless, muted checks cover 99 Classic
+HUD renders and 135 menu states with input-target geometry. Both mobile SDKs
+compile. Physical touch, remote focus and sequel gameplay remain device checks.
+
 The shared result panel and Classic HUD now apply these rules. The changes cover
 star states, compact result layout, primary/selected actions, transport icon
 changes and concise skill names beneath HUD counts. This is not a claim that every
@@ -81,8 +89,13 @@ these digits at the screen's native Retina resolution above the flat or curved
 playfield, with the Mac's font size relative to zoom. The touch magnifier uses
 the same native text. Countdown text follows the sprite and adds no input surface.
 Use large green lettering for page titles,
-small green lettering for section headings and selected or primary actions,
-and small blue lettering for body text, quantities and secondary actions.
+small green lettering for section headings and player names,
+and small blue lettering for controls, body text and quantities. Keep control
+captions blue when selected, primary, hovered or focused. Use borders,
+underlines and directional markers for those states. Mixed lines retain
+their roles: player initials are green, while v, Next:, counts and status text
+are blue. Game titles are green and level counts are blue. Reuse the semantic
+bitmap text renderer on Mac, iOS and TV, including player setup and replay pages.
 Keep each row of peer controls at the same face and scale. Do not size individual
 labels to fill their boxes. Use spacing and grouping to separate supporting
 text from headings. Preserve accessible names and input targets.
@@ -405,44 +418,23 @@ checked, but a separate NeoLemmix artwork render was not captured in this run.
 
 ## Rescue celebration
 
-Solved Mac playfields add a very faint golden haze to terrain and scenery in
-Classic, Lemmings 2 and Lemmings 3. Limit it to 5.5% opacity at SDR brightness.
-Keep original artwork sharp and draw the haze beneath lemmings and interface
-text. Empty space receives only the soft falloff near scenery edges. Use the
-existing fade, rewind reset and brief celebration for 100% rescue requirements.
-Windowless before-and-after exports of two Classic scenes were inspected.
-Sequel gameplay and mobile appearance remain for manual validation. Automated
-tests and public release audits were skipped for this local manual build.
+Securing the rescue target uses one faint, single-pixel golden border in Classic,
+Lemmings 2 and Lemmings 3 on Mac, iPhone and iPad. Keep its opacity at 10% and
+leave all interior game pixels unchanged. Do not blur scenery, light every
+lemming, build crowd masks or activate an HDR surface for rescue feedback.
+Apple TV retains no completion glow. Keep input and accessibility targets intact.
 
-Build background haze images off the main thread. Reuse dynamic scene haze for
-at least 0.25 seconds and limit its source width to 256 pixels. Keep fade opacity
-independent of that refresh rate. Bound each canvas cache to 32 entries and
-16 MiB, with at most two pending renders. Classic replaces its scene bitmap each
-tick, so image identity alone must not trigger a fresh blur on every frame.
-Both Mac sequels reuse decoded bitmap pixels for gameplay draws. Lemmings 2
-rebuilds its panel image only when its pixels or palette change. Artwork reloads
-clear that panel cache. Windowless exports retain normal and mirrored pixel
-orientation. Higher-speed gameplay remains for manual validation.
+The border is steady. Repeated target updates must not redraw it. All-rescued
+levels show it once for 1.5 seconds. Use the existing frame clock to expire it,
+with no separate timer. Rewind below the target and retry reset the state.
+Reduced motion and reduced flashes use the same steady cue.
 
-When the rescue target is secured, give Classic, Lemmings 2 and Lemmings 3 the
-same golden haze around their playfields and a soft golden aura around the
-rendered lemmings. Reuse their sprite masks and keep the original sprite pixels
-clear. The aura follows scrolling, precision zoom and mirrored artwork. HDR adds
-golden light to the SDR aura, bounded by the display's available headroom.
-Reduced flashes or disabled HD effects keep the steady rim and omit the bright
-sprite aura. Keep input targets unchanged. Rewind and retry clear the glow.
-Qualifying result panels use the same golden rim; failed results do not.
-
-Golden Path must retain Adaptive DJ's same-composition musical lift. A completed
-win can lift during the opening section so short lessons still celebrate.
-Levels requiring every lemming keep their current music. They get one brief
-glow: 0.35 seconds in, a short hold, and 0.65 seconds out, ending after 2.2 seconds.
-Reduced motion or reduced flashes show it steadily for 1.5 seconds. Do not
-repeat it while the rescue target remains secured. Other levels retain the
-steady glow and musical lift. Keep silent music, soundtrack preferences and
-paused handovers intact. The iPad source shares the music exception and brief
-glow timing. Its per-lemming golden aura and HDR output remain unvalidated;
-the mobile sequel renderers do not yet expose the shared sprite masks.
+Jubilant music is the primary feedback. Adaptive DJ and Golden Path lift to an
+available arrangement of the same composition as soon as the rescue target is
+secured, including 100% rescue levels. Start a smooth 2.6-second crossfade without
+waiting for the opening section or bar alignment. Do not repeat the transition
+on results. Keep silent music, alternate-soundtrack preferences and paused output
+intact. A missing compatible arrangement retains the current theme.
 
 Saved journey and playlist results contribute to the player’s career across all
 three engines. Result panels show each newly earned Zoom and Superzoom use in
@@ -538,16 +530,15 @@ skill ticks, compact and large render states, update discovery, song notices,
 completion callbacks, result actions, and paused Hot Seat handovers. Settings
 checks scroll each control into view before testing visibility and input.
 
-The scenery haze is a faint SDR effect built asynchronously. Pixel comparisons
-preserve empty black space and original artwork; a 1,000-frame bitmap check
-bounds draw overhead with changing scene-image identities. GPU checks verify
-the reduced sprite aura and idle cleanup. Sustained speed and physical HDR
-appearance remain manual. Offscreen focus-dependent checks remain skipped.
-See the 1.9.4 distribution evidence for measured speed and remaining limits.
+The earlier scenery haze and sprite aura passed local bitmap and GPU checks.
+They have since been removed from gameplay under the rescue-feedback policy
+above. Physical frame timing still requires device validation. Offscreen
+focus-dependent checks remain skipped. See the 1.9.4 distribution evidence for
+its historical measurements and remaining limits.
 
 ## Rewind feedback
 
-Successful Mac rewinds, including one-tick Command-Z, add a 160 ms impulse of
+Successful Mac rewinds, including one-tick Command-Z, add a restrained 160 ms impulse of
 sharp sprite echoes in Classic, Lemmings 2 and Lemmings 3. Echoes trail toward
 the future positions just left behind. Reuse the speed-trail cache, crowd limits,
 mirrored artwork and whole-pixel sampling. Keep every solid lemming above the
@@ -555,9 +546,9 @@ echoes. Do not capture the whole playfield or add an input surface. Repeated
 taps replace the impulse, and forward play clears it. HD effects off, reduced
 motion or reduced flashes suppress the echoes. Keep the shared rewind badge.
 
-The shared sound player adds a centred 115 ms tape zip with a rubbery pitch
-rebound, including when recent gameplay was silent. Mix in a quiet reversed
-slice of recent effects when available. Rapid taps replace the previous cue.
+The shared sound player reverses a quiet 180 ms slice of captured effects.
+Silent history stays silent. Smooth endpoints replace the synthetic tape zip
+and pitch rebound. Rapid requests continue the active groove without stacking voices.
 Honour mute, sound volume and suspended output, and exclude rewind audio from
 its own history. Mobile shares this sound; the sprite echoes are Mac-only.
 
@@ -657,6 +648,38 @@ single-column phones, odd library counts, footer navigation and complete music
 credits. iOS SDK modules compile. Physical touch, VoiceOver navigation and
 composited CRT display appearance remain manual checks.
 
+## Home groups and semantic colours
+
+Wide Home pages keep saved play and Journey map in the leading group. The six
+Classic and fan libraries use equal horizontal and vertical gaps. Lemmings 2
+and Lemmings 3 occupy a separate row with their shipped title artwork and
+accessible game names. Profiles, Records and Collections / Playlists share one
+three-column footer. Portrait phones retain one column and scrolling. Spare
+landscape height enlarges the main logo and separates groups, without stretching
+the gaps inside the library grid.
+
+Resume journey returns to a saved journey. Resume level opens an independently
+saved attempt. Journey map opens the progression hub. Mac retains Continue
+journey because it advances its saved queue from a level start. These labels
+retain each platform's saved ownership and paused readiness flow.
+
+Player names and titles remain green across Home, turn headers, player setup,
+record names, cover browsing and replay identity. Interface captions, counts,
+status text, v and Next: remain blue. Selection uses its existing frame,
+underline and marker rather than changing caption colour. Original title logos
+keep their authored palettes. Semantic text runs preserve translated player
+caption order and keep numeric player initials green.
+
+Muted, offscreen checks pass for 57 menu renders across tablet, portrait phone,
+compact landscape and television-sized canvases, including selected and disabled
+states and Classic/L2/L3 identity pages. They check matching grid gaps, the
+three-button footer, sequel separation, action identities, target containment
+and non-overlapping hit regions. Five native control and badge captures check
+blue enabled/disabled and selected/unselected captions, accessible activation,
+and the shared green L2/L3 player badge. The Mac source build passes. Physical
+touch, controller focus on devices, VoiceOver and composited CRT output remain
+manual checks.
+
 ## Localisation
 
 Resolve app-authored captions and accessibility messages through the shared
@@ -664,6 +687,20 @@ Resolve app-authored captions and accessibility messages through the shared
 sentences together and use plural rules for count-dependent wording. Keep
 save keys, action IDs, artwork names and keyboard bindings separate from
 translated captions. Preserve player names and original content titles.
+Keep supported Western Latin accents and letters in the bitmap text. Measure
+the complete caption, including marks above and below the original cell, before
+centring it or allocating wrapped rows. Reuse `BitmapLatinGlyphs` and the shared
+text measurements instead of stripping accents or adding a system-font fallback.
 Check expanded text with the shipped bitmap renderers and unchanged input
 semantics. Font scripts and text baked into original artwork need explicit
 language validation. See [Interface localisation](Localisation.md).
+
+## TV pointer and planning controls
+
+TV keeps the aim reticle visible during planning and rewind. The skill badge
+remains offset from the aim point. A root overlay carries the reticle over HUD
+controls and projects playfield input through the CRT mapping. It has no input
+surface. Cross activates the shared HUD button bounds. Keep the controller's
+Circle pause/play loop separate from Menu navigation. Fast play first returns
+to 1× before pause or timeline control. See [controller QoL](ControllerQoL.md)
+for trigger and engine limits.

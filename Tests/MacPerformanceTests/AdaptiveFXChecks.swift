@@ -107,6 +107,24 @@ func verifyAdaptiveFXPolicy() throws {
     view.updateEffects(flashes: [], selection: nil)
     let zero = try pixels(view.renderForTesting(size: size))
     try fxCheck(zero != first && view.bloomPasses == passes, "Zero bloom ran halation or retained its output")
+    let pressureView = CRTView(frame: view.frame)
+    pressureView.setSource(image, flashes: [])
+    let fullBloom = try pixels(pressureView.renderForTesting(size: size))
+    let fullPasses = pressureView.bloomPasses
+    let fullAllocations = pressureView.textureAllocations
+    MacFXPerformance.shared.overrideQuality = .minimal
+    let withoutBloom = try pixels(pressureView.renderForTesting(size: size))
+    try fxCheck(withoutBloom != fullBloom && pressureView.bloomPasses == fullPasses,
+                "Minimal quality retained bloom output or ran its passes")
+    let savedBloom = pressureView.settings.bloomAmount
+    pressureView.settings.bloomAmount = 0
+    try fxCheck(withoutBloom == pixels(pressureView.renderForTesting(size: size)),
+                "Pressure changed the sharp scene beyond disabling bloom")
+    pressureView.settings.bloomAmount = savedBloom
+    MacFXPerformance.shared.overrideQuality = .full
+    try fxCheck(fullBloom == pixels(pressureView.renderForTesting(size: size))
+                && pressureView.textureAllocations == fullAllocations + 2,
+                "Pressure failed to release bloom textures or recovery retained stale output")
     for quality in FXQuality.allCases {
         MacFXPerformance.shared.overrideQuality = quality
         try fxCheck(zero == pixels(view.renderForTesting(size: size)), "Adaptive FX altered the sharp base image")

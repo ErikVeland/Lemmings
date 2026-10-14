@@ -79,11 +79,19 @@ shared. These profile preferences currently persist locally in UserDefaults.
 Audio settings offer DJ shuffle: Same track or All tracks. The default keeps the
 composition and chooses another available recording or arrangement. All tracks
 includes documented gameplay themes across the installed catalogue, including
-seasonal themes. Both modes exclude the current recording, unavailable files,
+seasonal themes. If no alternate version is installed, Same track falls back to
+another available gameplay theme. The main TV bundle has only one version per
+theme, so a manual shuffle still changes the music in an explicit main-scope build.
+Normal TV builds bundle all soundtrack libraries, including alternate recordings
+and remixes, so Same track can select those versions immediately.
+Both modes exclude the current recording, unavailable files,
 unverified identities and menu/result cues. Touchpad click and Create/View + L3
 request the existing beat-matched crossfade during play. They do not change the
 saved soundtrack choice, journey position or gameplay timeline. Muted music,
 planning, handover and interruption states cannot start a shuffle.
+
+Touchpad polling reads the named physical button before falling back to Sony's
+controller profiles. It uses the shared release gate across menus and owner changes.
 
 TV settings offer Adaptive triggers. On a detected DualSense, R2 resistance
 rises with the variable-speed tier. The effect clears on menus, pause,
@@ -98,10 +106,41 @@ motion aiming or controller rumble patterns.
 
 TV controller polling reads game settings once per sample. Cursor/camera input
 defers full rendering until the display frame finishes simulation, reuses one
-candidate query per render, and skips the hidden reticle count. CRT GPU pressure
-can reduce only the playfield drawable scale while menus/HUD retain native
-resolution. The engine clock and physics ticks remain unchanged. Actual Apple
-TV frame-time improvement has not been measured on hardware.
+candidate query per render, and skips the hidden reticle count. The CRT playfield
+uses at most one render pixel per point while menus/HUD retain native resolution.
+The engine clock and physics ticks remain unchanged. Actual Apple TV frame-time
+improvement has not been measured on hardware.
+
+Planning pauses and pause menus retain the pointer position. Resume redraws it
+at that position immediately. The square corner reticule stays at the input
+position over terrain and HUD controls, including empty and unavailable targets.
+Camera movement and actor tracking do not move it. Deliberate actor selection
+places the pointer once, then the actor highlight follows the selected lemming.
+Stick movement releases the actor lock and refreshes targeting while paused.
+This shared path applies to Classic, Lemmings 2 and Lemmings 3. Headless engine
+checks cover paused movement, resume position, actor-lock retention and unchanged
+physics ticks. Eight bitmap checks verify centred square corners over empty,
+eligible, unavailable and HUD states at 1x/2x. The shared tvOS UI and app entry
+point compile against the TV SDK. Native UIKit/Game Controller delivery and
+physical TV timing still need device validation.
+
+Apple TV omits completion light: the golden border, scenery blur, rescued-sprite
+auras and their animation timer. It also omits the separate speed/cinematic
+explosion surface and extra explosion cores/flash masks. Original explosion
+spray, selection and assignment feedback remain. These limits apply through the
+shared playfield to Classic, Lemmings 2 and Lemmings 3.
+
+TV starts CRT effects at balanced quality, or minimal on two-core devices.
+Sustained CPU or GPU pressure lowers the shared budget. Minimal quality removes
+all three CRT bloom passes and their scratch textures. A presentation target
+below 60 Hz also disables bloom. Bloom returns only after measured recovery.
+Thermal limits also remove bloom immediately. This is a
+conservative TV presentation policy following reported completion-glow slowdown.
+It is not physical-device performance acceptance. iPhone, iPad and Mac now use
+only a faint pixel border for rescue feedback. Their other full-screen effect
+policies retain their existing budgets. Jubilant music starts its same-composition
+lift immediately when the rescue target is secured, subject to the player's
+alternate-soundtrack preference and available arrangements.
 
 Before assignment, TV refreshes the target for the actual selected/repeated
 skill. Successful assignment, rewind and deliberate camera movement clear stale
@@ -118,6 +157,22 @@ L2 and L3 do not expose release rate. L3 ends attempts without a nuke.
 ## Shared players and recovery
 
 Profiles, collections, records and solo progress retain shared mobile ownership.
+On Players, tap Select to switch players. Hold Select on a player to open Edit
+player without switching the current player or Hot Seat. New player and Edit
+player share the initials and portrait controls. Select Initials to open the
+system keyboard. Edit player also offers Delete with a separate confirmation.
+The last player and an owner of a running attempt cannot be deleted. Parked
+solo checkpoints do not block deletion. Confirmed deletion removes the player's
+solo checkpoints and backups, records, profile files and Hot Seat membership,
+then requests cloud sync. Cloud deletion markers prevent an offline device from
+restoring that player. VoiceOver offers an Edit player custom action.
+
+Headless checks cover editor, creation, confirmation and disabled deletion
+renders and target bounds at all three TV interface sizes. Checkpoint deletion
+cases cover Classic, Lemmings 2 and Lemmings 3 envelopes and legacy ownership.
+Physical Siri Remote/controller holds, keyboard return, VoiceOver activation
+and live cloud deletion still need device acceptance.
+
 Hot Seat shares its roster, house rule, history and campaign scope with iOS.
 Every incoming turn waits at Ready, and failed saves block turn changes.
 
@@ -165,7 +220,8 @@ Open `Apps/UltimateLemmingsTV/UltimateLemmingsTV.xcodeproj` and build the
 The shared catalogue packager adds available official/fan content. Imported
 sequel and NeoLemmix data use the same staging and validation as iOS.
 Artwork uses `TV_MAC_ARTWORK_DIR`, effects use `TV_AMIGA_SOUND_DIR`, and soundtrack
-scope uses `TV_MUSIC_SCOPE` (main by default; full includes optional libraries).
+scope uses `TV_MUSIC_SCOPE` (full by default, including all soundtrack libraries;
+main is an explicit smaller-bundle override).
 
 `Scripts/check-tvos-sdk.sh` compiles all shared dependencies, including
 `LemmingsMobileUI`, then checks the TV application entry point.

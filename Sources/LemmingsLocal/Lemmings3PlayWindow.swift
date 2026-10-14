@@ -147,33 +147,60 @@ import NxlvKit
         let style: Lemmings3Style, sprites: Lemmings3Sprites
         let availability: [String?], progressKey: String
     }
+    private struct DecodedAssets: Sendable {
+        let campaign: Lemmings3ClassicCampaign
+        let style: Lemmings3Style
+        let sprites: Lemmings3Sprites
+        let availability: [String?]
+    }
+    nonisolated private static let decodedCache = GameAssetCache<DecodedAssets>(capacity: 3)
+
+    nonisolated private static func decodedAssets(root: URL, tribe: Lemmings3ClassicCampaign.Tribe) throws -> DecodedAssets {
+        try Task.checkCancellation()
+        let key = GameAssetCache<DecodedAssets>.bundledKey(root).map { $0 + ":\(tribe.rawValue)" }
+        if let key, let cached = decodedCache.value(for: key) { return cached }
+        let campaign = try Lemmings3ClassicCampaign(root: root, tribe: tribe)
+        let style = try Lemmings3Style(directory: root.appendingPathComponent("STYLES"), number: tribe.rawValue)
+        let availability: [String?] = try campaign.levels.map { entry in
+            try Task.checkCancellation()
+            do {
+                let permanent = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/PERM%03d.OBS", entry.permanentObjectsReference))))
+                let temporary = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/TEMP%03d.OBS", entry.temporaryObjectsReference))))
+                _ = try Lemmings3Runtime(level: entry, style: style, permanent: permanent, temporary: temporary)
+                return nil
+            } catch { return String(describing: error) }
+        }
+        try Task.checkCancellation()
+        let prefix = String(format: "GRAPHICS/TRIBE%03d", tribe.spriteStyle)
+        let sprites = try Lemmings3Sprites(index: Data(contentsOf: root.appendingPathComponent(prefix + ".IND")),
+            commands: Data(contentsOf: root.appendingPathComponent(prefix + ".CMP")))
+        try Task.checkCancellation()
+        let assets = DecodedAssets(campaign: campaign, style: style, sprites: sprites, availability: availability)
+        if let key { decodedCache.insert(assets, for: key) }
+        return assets
+    }
+
+    nonisolated static func warmAssets(root: URL) throws {
+        guard GameAssetCache<DecodedAssets>.bundledKey(root) != nil else { return }
+        for tribe in Lemmings3ClassicCampaign.Tribe.allCases { _ = try decodedAssets(root: root, tribe: tribe) }
+    }
     private static func storageIdentity(_ root: URL) -> String {
         let bundled = (try? BundledGameResources.lemmings3())?.standardizedFileURL == root.standardizedFileURL
         return bundled ? "bundled" : root.standardizedFileURL.path
     }
     private static func session(root: URL, tribe: Lemmings3ClassicCampaign.Tribe,
       restoresCampaignProgress: Bool = true) throws -> Session {
-        var sequence = try Lemmings3ClassicCampaign(root: root, tribe: tribe)
+        let decoded = try decodedAssets(root: root, tribe: tribe)
+        var sequence = decoded.campaign
         let key = ArcadeStore.shared.progressKey("nativeL3\(tribe.title)Preview.v1." + storageIdentity(root))
         if restoresCampaignProgress, let data = UserDefaults.standard.data(forKey: key),
           let progress = try? JSONDecoder().decode(Lemmings3ClassicCampaign.Progress.self, from: data) { try? sequence.restore(progress) }
-        let decodedStyle = try Lemmings3Style(directory: root.appendingPathComponent("STYLES"), number: tribe.rawValue)
-        let availability: [String?] = sequence.levels.map { entry in
-            do {
-                let perm = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/PERM%03d.OBS", entry.permanentObjectsReference))))
-                let temp = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/TEMP%03d.OBS", entry.temporaryObjectsReference))))
-                _ = try Lemmings3Runtime(level: entry, style: decodedStyle, permanent: perm, temporary: temp)
-                return nil
-            } catch { return String(describing: error) }
-        }
+        let availability = decoded.availability
         if availability[sequence.index] != nil {
             guard let available = availability.firstIndex(where: { $0 == nil }) else { throw SequelDataError.invalid(L10n.text("No supported levels in the \(tribe.title) tribe yet.")) }
             try sequence.select(available)
         }
-        let prefix = String(format: "GRAPHICS/TRIBE%03d", tribe.spriteStyle)
-        let sprites = try Lemmings3Sprites(index: Data(contentsOf: root.appendingPathComponent(prefix + ".IND")),
-            commands: Data(contentsOf: root.appendingPathComponent(prefix + ".CMP")))
-        return Session(campaign: sequence, style: decodedStyle, sprites: sprites, availability: availability, progressKey: key)
+        return Session(campaign: sequence, style: decoded.style, sprites: decoded.sprites, availability: availability, progressKey: key)
     }
     init(root: URL, recovery: RunRecovery? = nil, selection: LevelSelection? = nil,
          expectedLevelID: String? = nil,
@@ -624,16 +651,18 @@ import NxlvKit
         if let cached = browserCache.value(for: cacheKey) { return cached }
         for tribe in Lemmings3ClassicCampaign.Tribe.allCases {
             try Task.checkCancellation()
-            var campaign = try Lemmings3ClassicCampaign(root: root, tribe: tribe)
+            let bankKey = GameAssetCache<DecodedAssets>.bundledKey(root).map { $0 + ":\(tribe.rawValue)" }
+            let bank = bankKey.flatMap { decodedCache.value(for: $0) }
+            var campaign = try bank?.campaign ?? Lemmings3ClassicCampaign(root: root, tribe: tribe)
             if let data = progressData[tribe.rawValue],
                let progress = try? JSONDecoder().decode(
                 Lemmings3ClassicCampaign.Progress.self, from: data) {
                 try? campaign.restore(progress)
             }
-            let style = try Lemmings3Style(
+            let style = try bank?.style ?? Lemmings3Style(
                 directory: root.appendingPathComponent("STYLES"), number: tribe.rawValue)
-            var availability: [Bool] = []
-            for entry in campaign.levels {
+            var availability: [Bool] = bank?.availability.map { $0 == nil } ?? []
+            for entry in bank == nil ? campaign.levels : [] {
                 try Task.checkCancellation()
                 guard let permanent = try? Lemmings3Objects(data: Data(contentsOf:
                         root.appendingPathComponent(String(format: "LEVELS/PERM%03d.OBS",
@@ -1243,6 +1272,7 @@ import NxlvKit
         gameplayKeyboard?.refreshNavigationControl()
         canvas.navigationFrame = gameplayKeyboard?.navigationFrame(in: canvas)
         let now = ProcessInfo.processInfo.systemUptime
+        completionGlow.advance(at: now)
         let elapsed = min(0.1, now - lastTime); lastTime = now
         let playing = !paused && !game.isComplete && !GameScreen.shared.isPresented && canvas.menuRows == nil && pendingTool == nil
         speedControl.update(at: now, active: !game.isComplete && !GameScreen.shared.isPresented && canvas.menuRows == nil && pendingTool == nil)
@@ -1266,7 +1296,7 @@ import NxlvKit
         let inputDeadline = ProcessInfo.processInfo.systemUptime + 0.012
         while accumulator >= 1 / Lemmings3Runtime.ticksPerSecond && !game.isComplete {
             accumulator -= 1 / Lemmings3Runtime.ticksPerSecond; advanceTick()
-            if speedControl.variableEnabled && speedControl.multiplier > 1 && ProcessInfo.processInfo.systemUptime >= inputDeadline { break }
+            if ProcessInfo.processInfo.systemUptime >= inputDeadline { break }
         }
         refresh()
     }
@@ -1511,8 +1541,7 @@ import NxlvKit
             unreleased: game.reserve, required: 1)
         completionGlow.set(active: RescueCelebration.isSecured(saved: game.saved, required: 1,
             isComplete: game.isComplete, didWin: game.saved > 0),
-            brief: RescueCelebration.requiresAll(required: 1, total: game.configuration.total),
-            animated: !canvas.reduceMotion && !canvas.reduceFlashes)
+            brief: RescueCelebration.requiresAll(required: 1, total: game.configuration.total))
         failureMood.set(active: impossible)
         let deathCounter = FailureMoodDecision.deathCounter(
             saved: game.saved, active: game.lemmings.filter(\.active).count,
@@ -1985,7 +2014,6 @@ import NxlvKit
         cameraY = CGFloat(min(max(0, mapHeight - 160), level.screenY))
     }
     private let bitmapCache = GameplayBitmapCache()
-    private let backgroundGlow = RescueBackgroundGlow()
     private func drawImage(_ image: NSImage, x: CGFloat, y: CGFloat) {
         bitmapCache.draw(image, in: CGRect(x: origin.x + (x - cameraX) * zoom, y: origin.y + (y - cameraY) * zoom,
             width: image.size.width * zoom, height: image.size.height * zoom))
@@ -2009,10 +2037,7 @@ import NxlvKit
     }
     override func draw(_ dirtyRect: NSRect) {
         selectionEffect = nil
-        rescueAuras.removeAll(keepingCapacity: true)
         defer {
-            for effect in rescueAuras { LemmingSelectionRenderer.draw(effect) }
-            hdrOverlay?.setRescueAuras(rescueAuras)
             if let selectionEffect {
                 LemmingSelectionRenderer.draw(selectionEffect)
             }
@@ -2098,17 +2123,11 @@ import NxlvKit
             let spriteRect = CGRect(x: origin.x + (CGFloat(lem.x) - sprite.size.width / 2 - cameraX) * zoom,
                 y: origin.y + (CGFloat(lem.y) - sprite.size.height - cameraY) * zoom,
                 width: sprite.size.width * zoom, height: sprite.size.height * zoom)
-            let glowing = completionGlowAmount > 0 && hdEffectsEnabled && !reduceFlashes
-            let pixels = (glowing || assignmentPulse.target == lem.id || selectedID == lem.id)
+            let pixels = (assignmentPulse.target == lem.id || selectedID == lem.id)
                 ? sprite.cgImage(forProposedRect: nil, context: nil, hints: nil) : nil
             if assignmentPulse.target == lem.id, let pixels {
                 assignmentPulse.draw(sprite: pixels, in: spriteRect, scale: zoom,
                     reduceMotion: reduceMotion, reduceFlashes: reduceFlashes)
-            }
-            if glowing, let pixels {
-                var effect = LemmingSelectionEffect(sprite: pixels, rect: precisionLens.display(spriteRect), clipRect: playfieldRect)
-                effect.rescueAmount = completionGlowAmount
-                rescueAuras.append(effect)
             }
             if selectedID == lem.id, let pixels {
                 selectedSprite = (pixels, spriteRect)
@@ -2131,12 +2150,6 @@ import NxlvKit
     }
     private func drawBackgroundImage(_ image: NSImage, x: CGFloat, y: CGFloat) {
         drawImage(image, x: x, y: y)
-        let rect = CGRect(x: origin.x + (x - cameraX) * zoom, y: origin.y + (y - cameraY) * zoom,
-            width: image.size.width * zoom, height: image.size.height * zoom)
-        if let context = NSGraphicsContext.current?.cgContext, let pixels = bitmapCache.pixels(image) {
-            backgroundGlow.draw(pixels, in: rect, amount: completionGlowAmount, context: context,
-                slot: image === terrain ? "terrain" : nil)
-        }
     }
     private func drawWorld(_ game: Lemmings3Runtime, terrain: NSImage) {
         NSGraphicsContext.saveGraphicsState()
@@ -2419,8 +2432,11 @@ import NxlvKit
             NSColor.black.withAlphaComponent(0.86).setFill(); CGRect(x: 22, y: 16, width: 276, height: 184).fill()
             art.text(L10n.text("LEMMINGS 3"), x: 112, y: 23)
             for (index, row) in rows.enumerated() {
-                if index == menuSelection { NSColor(calibratedWhite: 0.22, alpha: 1).setFill(); CGRect(x: 30, y: 38 + index * 16, width: 260, height: 15).fill() }
-                art.text(row, x: 39, y: CGFloat(42 + index * 16))
+                let text = BitmapLatinGlyphs.uppercase(row, locale: L10n.interface.locale)
+                let height = art.font.bitmap.height(of: text)
+                if index == menuSelection { NSColor(calibratedWhite: 0.22, alpha: 1).setFill(); CGRect(x: 30, y: 38 + index * 16, width: 260, height: max(15, height + 3)).fill() }
+                let top = height == 8 ? 42 : 39 + (16 - height) / 2
+                art.text(row, x: 39, y: CGFloat(top + index * 16))
             }
             art.text(menuNotice, x: 36, y: 182, scale: 0.75)
         }
