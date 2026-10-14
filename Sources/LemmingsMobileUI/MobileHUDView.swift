@@ -345,6 +345,7 @@ import UIKit
             button.backgroundColor = .clear
             button.accessibilityLabel = cell.label
             button.accessibilityTraits = .button
+            button.accessibilityIdentifier = "game.l3.direction.\(cell.direction.map { $0.rawValue.lowercased() } ?? "cancel")"
             if let frameIndex = cell.frameIndex,
                let image = MobileBitmapRenderer.image(frames[frameIndex]) {
                 button.setImage(UIImage(cgImage: image), for: .normal)
