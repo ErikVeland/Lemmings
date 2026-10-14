@@ -175,7 +175,8 @@ public struct MobileContentStore: Sendable {
                     at: destination.deletingLastPathComponent(),
                     withIntermediateDirectories: true
                 )
-                try manager.copyItem(at: item, to: destination)
+                let copiedBytes = try Self.copyFile(at: item, to: destination, maximumBytes: Self.maximumImportBytes - total)
+                total += copiedBytes
             }
         }
 
@@ -203,6 +204,35 @@ public struct MobileContentStore: Sendable {
 
     static func validateImportEntryCount(_ count: Int) throws {
         guard count <= maximumImportEntries else { throw MobileContentStoreError.tooManyEntries }
+    }
+
+    static func copyFile(at source: URL, to destination: URL, maximumBytes: Int64) throws -> Int64 {
+        guard maximumBytes >= 0 else { throw MobileContentStoreError.tooLarge }
+        guard FileManager.default.createFile(atPath: destination.path, contents: nil) else {
+            throw MobileContentStoreError.unreadable
+        }
+        let input = try FileHandle(forReadingFrom: source)
+        let output = try FileHandle(forWritingTo: destination)
+        var completed = false
+        defer {
+            try? input.close()
+            try? output.close()
+            if !completed { try? FileManager.default.removeItem(at: destination) }
+        }
+
+        var copiedBytes: Int64 = 0
+        while true {
+            let remaining = maximumBytes - copiedBytes
+            let requestSize = Int(min(1_048_576, remaining + 1))
+            let chunk = try input.read(upToCount: requestSize) ?? Data()
+            guard !chunk.isEmpty else {
+                completed = true
+                return copiedBytes
+            }
+            guard Int64(chunk.count) <= remaining else { throw MobileContentStoreError.tooLarge }
+            try output.write(contentsOf: chunk)
+            copiedBytes += Int64(chunk.count)
+        }
     }
 
     private static let defaultValidators: [MobileGameDataKind: MobileContentValidator] = [
