@@ -8,6 +8,12 @@ struct MobileAdaptiveLayoutTests {
             (.init(width: 390, height: 844), []),
             (.init(width: 834, height: 1112), []),
             (.init(width: 1112, height: 834), []),
+            (.init(width: 330, height: 460), []),
+            (.init(width: 650, height: 465), []),
+            (.init(width: 650, height: 465), [
+                .init(kind: .division, frame: .init(x: 318, y: 0, width: 14, height: 465)),
+                .init(kind: .occlusion, frame: .init(x: 600, y: 415, width: 50, height: 50)),
+            ]),
             (.init(width: 1194, height: 834), [.init(kind: .division, frame: .init(x: 589, y: 0, width: 16, height: 834))]),
             (.init(width: 1194, height: 834), [.init(kind: .division, frame: .init(x: 0, y: 405, width: 1194, height: 24))]),
             (.init(width: 1194, height: 834), [
