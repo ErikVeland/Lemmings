@@ -157,8 +157,11 @@ public struct MobileContentStore: Sendable {
         try manager.createDirectory(at: staging, withIntermediateDirectories: true)
         var committed = false
         defer {
-            if !committed { try? manager.removeItem(at: staging) }
-            try? manager.removeItem(at: backup)
+            if committed {
+                try? manager.removeItem(at: backup)
+            } else {
+                try? manager.removeItem(at: staging)
+            }
         }
 
         guard let walker = manager.enumerator(
