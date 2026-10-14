@@ -1,0 +1,8 @@
+{
+  "baseRelease": "v1.9.6",
+  "preservedShippingMusic": true,
+  "unchangedPackagingAndPreparationSource": true,
+  "matchingSourceAndPlaybackParameters": 422,
+  "rawAuditResourceDifference": "Only the Music folder. The raw audit checked fresh encoder outputs. Final packaging preserves the verified shipping Music folder, then checks every Music/MacMusic file hash and reruns the audio matrix.",
+  "reason": "Fresh encoding changed 359 playback hashes with identical source and playback parameters. Preserve the verified shipping recordings for unchanged inputs."
+}

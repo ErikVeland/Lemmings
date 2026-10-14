@@ -1,0 +1,66 @@
+/Users/veland/Lemmings/.build/release-1.9.7-current/source/Sources/LemmingsMobileCore/MobileStorage.swift:65:16: warning: value 'defaultsKey' was defined but never used; consider replacing with boolean test [#NoUsage]
+ 63 |         let data = try JSONEncoder().encode(value)
+ 64 |         // Keep only the small roster/session metadata in TV defaults. Large saves stay in caches.
+ 65 |         if let defaultsKey {
+    |                `- warning: value 'defaultsKey' was defined but never used; consider replacing with boolean test [#NoUsage]
+ 66 |             guard data.count <= 128 * 1_024 else { throw CocoaError(.fileWriteOutOfSpace) }
+ 67 |         }
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+/Users/veland/Lemmings/.build/release-1.9.7-current/source/Sources/LemmingsLocal/ReleaseWelcome.swift:51:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+49 |         scroll.hasHorizontalScroller = false
+50 |         scroll.drawsBackground = false
+51 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+52 |         scroll.scrollerStyle = .overlay
+53 |         scroll.setAccessibilityLabel(L10n.text("Release notes"))
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+/Users/veland/Lemmings/.build/release-1.9.7-current/source/.build/app-integration-tests-arm64/main.swift:6284:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 6282 |       openPanel.canChooseFiles = true
+ 6283 |       openPanel.canChooseDirectories = false
+ 6284 |       openPanel.allowedFileTypes = ["nxlv"]
+      |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 6285 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+ 6286 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/.build/release-1.9.7-current/source/.build/app-integration-tests-arm64/main.swift:7632:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 7630 |       openPanel.canChooseFiles = true
+ 7631 |       openPanel.canChooseDirectories = false
+ 7632 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+      |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 7633 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+ 7634 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/.build/release-1.9.7-current/source/.build/app-integration-tests-arm64/main.swift:8381:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+ 8379 |     keyboard.controllerRewindHeld = { [weak self] held in
+ 8380 |       guard let self else { return }
+ 8381 |       if held { self.beginContinuousRewind() }
+      |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+ 8382 |       else if self.rewindHeld { self.endContinuousRewind() }
+ 8383 |     }
+
+/Users/veland/Lemmings/.build/release-1.9.7-current/source/.build/app-integration-tests-arm64/main.swift:17010:14: warning: 'init(dictionary:)' is deprecated: Properties that depend on the system or application version are not supported when used with this initializer. The designated initializer is available in SUAppcastItem+Private.h. Please first explore other APIs or contact us to describe your use case. [#DeprecatedDeclaration]
+17008 |     && updates.responds(to: NSSelectorFromString("updater:didFinishUpdateCycleForUpdateCheck:error:")),
+17009 |     "Sparkle could not deliver session cleanup callbacks")
+17010 |   let item = SUAppcastItem(dictionary: ["enclosure": ["url": "https://example.invalid/update.zip",
+      |              `- warning: 'init(dictionary:)' is deprecated: Properties that depend on the system or application version are not supported when used with this initializer. The designated initializer is available in SUAppcastItem+Private.h. Please first explore other APIs or contact us to describe your use case. [#DeprecatedDeclaration]
+17011 |     "sparkle:version": "75", "sparkle:shortVersionString": "1.8.6"]])!
+17012 |   try check(updates.availableVersion == nil, "An unavailable update had a reminder")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+UI test windows: offscreen; audio: muted
+PASS unrecoverable-run failure mood decision
+PASS closing the main window preserves ownership for delayed screen refreshes
+PASS final single-step handles wins, losses, campaign and fan progress
+PASS first-launch HD/old-school choices, default action, live application, persistence and one-time presentation
+PASS seven home content families and the Settings control use distinct targets
+PASS home families filter the typed catalogue without changing release identities
+PASS context-aware help, scalable pages, accessible actions and turn badge
+PASS nearest eligible targeting, overlap, edge allowance, moving green target, exhausted skills and mutation-free Classic/fan probes
+PERFORMANCE pass 1/1 flat 1x
+PERFORMANCE pass 1/1 flat 10x
+PERFORMANCE pass 1/1 monitor 10x
+PERFORMANCE pass 1/1 television 10x
+PASS local frame timing and resident-memory measurements: /Users/veland/Lemmings/.build/release-1.9.7-current/source/.build/release-audit-final/performance.json

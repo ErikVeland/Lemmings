@@ -1,0 +1,8 @@
+UI test windows: offscreen; audio: muted
+PASS backwards PCM, stereo, rapid-tap continuation, no self-feedback, bounded impulse and track reset
+PASS 480 ms backspin, falling source pitch, soft endpoints and bounded attack at 44.1 and 48 kHz
+2026-10-15 00:34:29.414 music[96127:9261789] Audio files cannot be non-interleaved. Ignoring setting AVLinearPCMIsNonInterleaved YES.
+PASS real recording PCM, soundtrack routing, parked rewind output, mute, suspension, retained pause and vinyl spin-up
+PASS real MOD samples, parked rewind output, volume, mute, suspension, retained pause and vinyl spin-up
+2026-10-15 00:34:35.380 music[96127:9261789] Audio files cannot be non-interleaved. Ignoring setting AVLinearPCMIsNonInterleaved YES.
+PASS Adaptive DJ audible-layer routing, exact mix gains, silent decks, mute, zero volume and suspension

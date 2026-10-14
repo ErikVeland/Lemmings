@@ -1,0 +1,7 @@
+PASS oversized-primary recovery, preservation and subsequent save
+PASS invalid or missing backup preserves oversized primary
+PASS future-version protection
+PASS stale writer, busy lock and cleared-run protection
+PASS fan checkpoint queue bounds and archive-member validation
+PASS store chooses the newest run from cached headers and follows outside writes
+PASS ten abrupt process terminations during checkpoint writes, with verified recovery
