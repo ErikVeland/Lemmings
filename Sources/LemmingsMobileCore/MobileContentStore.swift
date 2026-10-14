@@ -1,3 +1,4 @@
+import CryptoKit
 import Foundation
 import ImageIO
 import NxlvKit
@@ -76,6 +77,92 @@ struct MobileContentImportBudget {
             throw MobileContentStoreError.tooLarge
         }
         copiedBytes += byteCount
+    }
+}
+
+/**
+ * Creates bounded, deterministic identities for installed player content.
+ */
+enum MobileContentFingerprint {
+    /**
+     * Hashes each regular file in sorted path order without loading whole files into memory.
+     */
+    static func digest(directory: URL) throws -> String {
+        let manager = FileManager.default
+        let root = directory.standardizedFileURL
+        let rootPath = root.path.hasSuffix("/") ? root.path : root.path + "/"
+        guard let walker = manager.enumerator(
+            at: root,
+            includingPropertiesForKeys: [.isDirectoryKey, .isRegularFileKey, .isSymbolicLinkKey, .fileSizeKey],
+            options: []
+        ) else { throw MobileContentStoreError.unreadable }
+
+        var files: [(path: String, url: URL, size: Int64)] = []
+        var entryCount = 0
+        var reportedBytes: Int64 = 0
+        for case let item as URL in walker {
+            entryCount += 1
+            try MobileContentStore.validateImportEntryCount(entryCount)
+            let values = try item.resourceValues(forKeys: [
+                .isDirectoryKey, .isRegularFileKey, .isSymbolicLinkKey, .fileSizeKey,
+            ])
+            guard values.isSymbolicLink != true,
+                  item.standardizedFileURL.path.hasPrefix(rootPath) else {
+                throw values.isSymbolicLink == true ? MobileContentStoreError.symbolicLink : .unreadable
+            }
+            if values.isRegularFile == true {
+                guard let fileSize = values.fileSize, fileSize >= 0 else {
+                    throw MobileContentStoreError.unreadable
+                }
+                let size = Int64(fileSize)
+                guard size <= MobileContentStore.maximumImportBytes - reportedBytes else {
+                    throw MobileContentStoreError.tooLarge
+                }
+                reportedBytes += size
+                let relativePath = String(item.standardizedFileURL.path.dropFirst(rootPath.count))
+                files.append((relativePath, item, size))
+            } else if values.isDirectory != true {
+                throw MobileContentStoreError.unreadable
+            }
+        }
+
+        files.sort { $0.path < $1.path }
+        var hasher = SHA256()
+        var actualBytes: Int64 = 0
+        for file in files {
+            hasher.update(data: Data(file.path.utf8))
+            hasher.update(data: Data([0]))
+            hasher.update(data: Data(String(file.size).utf8))
+            hasher.update(data: Data([0]))
+            let handle: FileHandle
+            do {
+                handle = try FileHandle(forReadingFrom: file.url)
+            } catch {
+                throw MobileContentStoreError.unreadable
+            }
+            defer { try? handle.close() }
+            var fileBytes: Int64 = 0
+            while let chunk = try handle.read(upToCount: 1_048_576), !chunk.isEmpty {
+                let count = Int64(chunk.count)
+                guard count <= MobileContentStore.maximumImportBytes - actualBytes,
+                      count <= file.size - fileBytes else {
+                    throw MobileContentStoreError.unreadable
+                }
+                actualBytes += count
+                fileBytes += count
+                hasher.update(data: chunk)
+            }
+            guard fileBytes == file.size else { throw MobileContentStoreError.unreadable }
+        }
+        return hasher.finalize().map { String(format: "%02x", $0) }.joined()
+    }
+
+    /**
+     * Binds a level revision to the imported files that define its behaviour and artwork.
+     */
+    static func levelFingerprint(content: String, level: String) -> String {
+        let data = Data((content + "\u{0}" + level).utf8)
+        return SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
     }
 }
 
