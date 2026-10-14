@@ -287,6 +287,8 @@ public struct MobileContentStore: Sendable {
                 )
                 let copiedBytes = try Self.copyFile(at: item, to: destination, maximumBytes: copyLimit)
                 try budget.recordCopy(copiedBytes)
+            } else {
+                throw MobileContentStoreError.unsupportedEntry
             }
         }
 
@@ -522,6 +524,7 @@ public enum MobileContentStoreError: Error, LocalizedError, Equatable {
     case notDirectory
     case unreadable
     case symbolicLink
+    case unsupportedEntry
     case tooLarge
     case tooManyEntries
     case validatorUnavailable(MobileGameDataKind)
@@ -532,6 +535,7 @@ public enum MobileContentStoreError: Error, LocalizedError, Equatable {
         case .notDirectory: return "Choose a folder that contains the original game data."
         case .unreadable: return "The selected game-data folder could not be read safely."
         case .symbolicLink: return "Remove symbolic links from the game-data folder."
+        case .unsupportedEntry: return "The selected folder contains an unsupported item. Remove it and try again."
         case .tooLarge: return "The selected folder is larger than 2 GB."
         case .tooManyEntries: return "The selected folder contains too many items."
         case let .validatorUnavailable(kind): return "The \(kind.displayTitle) data validator is not available."
