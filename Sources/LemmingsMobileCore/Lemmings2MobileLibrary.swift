@@ -50,12 +50,15 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
     public init(directory: URL, storage: MobileStorage) throws {
         self.directory = directory
         self.storage = storage
+        let contentFingerprint = try MobileContentFingerprint.digest(directory: directory)
         var campaign = try Lemmings2Campaign(root: directory)
         if let saved = storage.load(Lemmings2Campaign.Progress.self, name: "lemmings2-campaign") {
             try campaign.restore(saved)
         }
         self.campaign = campaign
-        levelFingerprints = campaign.levels.map(\.fingerprint)
+        levelFingerprints = campaign.levels.map {
+            MobileContentFingerprint.levelFingerprint(content: contentFingerprint, level: $0.fingerprint)
+        }
         levels = campaign.levels.enumerated().map { index, level in
             let tribe = index / 10
             return MobileLevelSummary(index: index,
@@ -113,11 +116,11 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
         let renderer = try Lemmings2MobileSceneRenderer(level: selectedLevel, style: style,
                                                         sprites: assets.sprites, intern: assets.intern,
                                                         walker: assets.walker, explosion: assets.explosion)
-        let identifier = "lemmings2/\(selectedLevel.fingerprint)"
+        let identifier = "lemmings2/\(levelFingerprints[index])"
         let session = renderer.makeSession(runtime: runtime,
             engineFingerprint: Self.engineFingerprint,
             levelIdentifier: identifier, levelIndex: index,
-            levelFingerprint: selectedLevel.fingerprint, soundBank: assets.soundBank) { [weak self] completedRuntime in
+            levelFingerprint: levelFingerprints[index], soundBank: assets.soundBank) { [weak self] completedRuntime in
                 self?.record(completedRuntime, at: index)
             }
         session.skillCursorFrames = runtime.configuration.skills.map { skill in

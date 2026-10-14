@@ -134,6 +134,32 @@ final class MobileCoreIOSSmokeTests: XCTestCase {
         XCTAssertFalse(up.waitForExistence(timeout: 1), "An accepted tool direction must close the picker")
     }
 
+    @MainActor func testLemmings3PlayfieldExposesAccessibleTargetAndSkillState() {
+        let app = XCUIApplication()
+        app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
+        app.launchArguments.append("--ui-test-accessible-targeting")
+        app.launch()
+
+        let playfield = app.descendants(matching: .any).matching(identifier: "game.playfield").firstMatch
+        XCTAssertTrue(playfield.waitForExistence(timeout: 5))
+        XCTAssertEqual(playfield.label, "Game playfield")
+        XCTAssertTrue((playfield.value as? String)?.contains("Eligible lemming 1 of 1") == true)
+        XCTAssertTrue((playfield.value as? String)?.contains("Skill: Use") == true)
+    }
+
+    @MainActor func testLemmings3AccessibleAssignmentOpensNativeDirectionPicker() {
+        let app = XCUIApplication()
+        app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
+        app.launchArguments.append("--ui-test-accessible-assignment")
+        app.launch()
+
+        let up = app.buttons["game.l3.direction.up"]
+        XCTAssertTrue(up.waitForExistence(timeout: 5))
+        XCTAssertTrue(up.isHittable)
+        XCTAssertGreaterThanOrEqual(up.frame.width, 44)
+        XCTAssertGreaterThanOrEqual(up.frame.height, 44)
+    }
+
     @MainActor func testLemmings3DirectionPickerCancelsAfterRotation() {
         let device = XCUIDevice.shared
         let originalOrientation = device.orientation

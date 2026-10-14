@@ -621,32 +621,41 @@ struct MobileCoreTests {
         defer { try? manager.removeItem(at: temporary) }
         let classic = temporary.appendingPathComponent("Classic", isDirectory: true)
         let sequel = temporary.appendingPathComponent("L2", isDirectory: true)
-        try manager.createDirectory(at: classic, withIntermediateDirectories: true)
-        try manager.createDirectory(at: sequel, withIntermediateDirectories: true)
-        try Data("classic".utf8).write(to: classic.appendingPathComponent("marker.dat"))
-        try Data("lemmings2".utf8).write(to: sequel.appendingPathComponent("marker.dat"))
-
-        let store = MobileContentStore(root: temporary.appendingPathComponent("Support")) { staged in
-            guard FileManager.default.fileExists(atPath: staged.appendingPathComponent("marker.dat").path) else {
-                throw ImportFixtureError.rejected
-            }
+        let chronicles = temporary.appendingPathComponent("L3", isDirectory: true)
+        let neoLemmix = temporary.appendingPathComponent("NeoLemmix", isDirectory: true)
+        let inputs: [(MobileGameDataKind, URL, String)] = [
+            (.classic, classic, "classic"),
+            (.lemmings2, sequel, "lemmings2"),
+            (.lemmings3, chronicles, "lemmings3"),
+            (.neoLemmix, neoLemmix, "neoLemmix"),
+        ]
+        for (_, directory, contents) in inputs {
+            try manager.createDirectory(at: directory, withIntermediateDirectories: true)
+            try Data(contents.utf8).write(to: directory.appendingPathComponent("marker.dat"))
         }
-        try store.install(directory: classic)
-        let sequelStore = MobileContentStore(root: temporary.appendingPathComponent("Support"), validators: [
-            .classic: { _ in },
-            .lemmings2: { staged in
-                guard try Data(contentsOf: staged.appendingPathComponent("marker.dat")) == Data("lemmings2".utf8) else {
+        func validator(_ expected: String) -> MobileContentValidator {
+            { staged in
+                guard try Data(contentsOf: staged.appendingPathComponent("marker.dat")) == Data(expected.utf8) else {
                     throw ImportFixtureError.rejected
                 }
-            },
-        ])
-        try sequelStore.install(directory: sequel, for: .lemmings2)
+            }
+        }
+        let support = temporary.appendingPathComponent("Support", isDirectory: true)
+        let store = MobileContentStore(root: support, validators: Dictionary(uniqueKeysWithValues: inputs.map {
+            ($0.0, validator($0.2))
+        }))
+        for (kind, directory, _) in inputs { try store.install(directory: directory, for: kind) }
 
-        #expect(try Data(contentsOf: store.gameDataDirectory.appendingPathComponent("marker.dat")) == Data("classic".utf8))
-        #expect(try Data(contentsOf: store.dataDirectory(for: .lemmings2).appendingPathComponent("marker.dat")) == Data("lemmings2".utf8))
-        #expect(store.dataDirectory(for: .lemmings2) != store.gameDataDirectory)
+        for (kind, _, contents) in inputs {
+            #expect(try Data(contentsOf: store.dataDirectory(for: kind).appendingPathComponent("marker.dat"))
+                == Data(contents.utf8))
+        }
+        #expect(Set(MobileGameDataKind.allCases.map(store.dataDirectory(for:))).count == MobileGameDataKind.allCases.count)
         try store.install(directory: classic)
-        #expect(try Data(contentsOf: store.dataDirectory(for: .lemmings2).appendingPathComponent("marker.dat")) == Data("lemmings2".utf8))
+        for (kind, _, contents) in inputs.dropFirst() {
+            #expect(try Data(contentsOf: store.dataDirectory(for: kind).appendingPathComponent("marker.dat"))
+                == Data(contents.utf8))
+        }
 
         let rejected = temporary.appendingPathComponent("Rejected L2", isDirectory: true)
         try manager.createDirectory(at: rejected, withIntermediateDirectories: true)
@@ -660,6 +669,8 @@ struct MobileCoreTests {
         } catch ImportFixtureError.rejected {
             #expect(try Data(contentsOf: store.gameDataDirectory.appendingPathComponent("marker.dat")) == Data("classic".utf8))
             #expect(try Data(contentsOf: store.dataDirectory(for: .lemmings2).appendingPathComponent("marker.dat")) == Data("lemmings2".utf8))
+            #expect(try Data(contentsOf: store.dataDirectory(for: .lemmings3).appendingPathComponent("marker.dat")) == Data("lemmings3".utf8))
+            #expect(try Data(contentsOf: store.dataDirectory(for: .neoLemmix).appendingPathComponent("marker.dat")) == Data("neoLemmix".utf8))
         }
     }
 

@@ -119,6 +119,7 @@ struct MobileGameTurn {
 
     private var lastHUDLayout: MobileHUDLayout?
     private var hudArtworkSource: ClassicGraphicsSource?
+    private var playfieldAccessibilityActionNames: [String]?
     private var layoutSuspended = false
     var selectedControl: Int
     var lifecycle = MobileLifecycleState()
@@ -1378,6 +1379,71 @@ struct MobileGameTurn {
             panel: session.panelFrame,
             readOnly: session.isReadOnly
         )
+        updatePlayfieldAccessibility()
+    }
+
+    /** Keeps non-visual target selection and assignment available to assistive input. */
+    private func updatePlayfieldAccessibility() {
+        let candidates = session.targetCandidates(for: selectedControl)
+            .filter { $0.assignment == .eligible }
+            .sorted { $0.id < $1.id }
+        let skillName = session.snapshot.skills.indices.contains(selectedControl)
+            ? session.snapshot.skills[selectedControl].name : "selected skill"
+        let selectedIndex = highlightedTarget.flatMap { selection in
+            candidates.firstIndex { $0.id == selection.id }
+        }
+        if let selectedIndex {
+            playfieldView.accessibilityValue = "Eligible lemming \(selectedIndex + 1) of \(candidates.count). Skill: \(skillName)."
+        } else {
+            playfieldView.accessibilityValue = "\(candidates.count) eligible lemmings. Skill: \(skillName)."
+        }
+
+        let canAssign = !session.isReadOnly && !session.snapshot.isComplete && playState.canEdit
+            && highlightedTarget.map { selection in
+                selection.state == .eligible && candidates.contains { $0.id == selection.id }
+            } == true
+        var actionNames = candidates.isEmpty ? [] : ["Previous eligible lemming", "Next eligible lemming"]
+        if canAssign { actionNames.append("Assign \(skillName)") }
+        guard actionNames != playfieldAccessibilityActionNames else { return }
+        playfieldAccessibilityActionNames = actionNames
+        var actions: [UIAccessibilityCustomAction] = []
+        if !candidates.isEmpty {
+            actions.append(UIAccessibilityCustomAction(name: "Previous eligible lemming") { [weak self] _ in
+                self?.moveAccessibleTarget(-1) ?? false
+            })
+            actions.append(UIAccessibilityCustomAction(name: "Next eligible lemming") { [weak self] _ in
+                self?.moveAccessibleTarget(1) ?? false
+            })
+        }
+        if canAssign {
+            actions.append(UIAccessibilityCustomAction(name: "Assign \(skillName)") { [weak self] _ in
+                self?.assignAccessibleTarget() ?? false
+            })
+        }
+        playfieldView.accessibilityCustomActions = actions.isEmpty ? nil : actions
+    }
+
+    /** Selects an eligible target and announces its position in the current skill's target list. */
+    func moveAccessibleTarget(_ direction: Int) -> Bool {
+        let candidates = session.targetCandidates(for: selectedControl).filter { $0.assignment == .eligible }
+        guard overlay.isHidden, playState.canEdit, lifecycle.isForeground, !lifecycle.isInterrupted,
+              !session.snapshot.isComplete, !candidates.isEmpty else { return false }
+        performCommand(.focusUnassigned(direction))
+        updatePlayfieldAccessibility()
+        UIAccessibility.post(notification: .announcement, argument: playfieldView.accessibilityValue)
+        return highlightedTarget?.state == .eligible
+    }
+
+    /** Runs the same typed assignment command as touch, keyboard and controller input. */
+    func assignAccessibleTarget() -> Bool {
+        guard !session.isReadOnly, !session.snapshot.isComplete, playState.canEdit,
+              lifecycle.isForeground, !lifecycle.isInterrupted,
+              let selection = highlightedTarget, selection.state == .eligible,
+              session.targetCandidates(for: selectedControl).contains(where: {
+                  $0.id == selection.id && $0.assignment == .eligible
+              }) else { return false }
+        performCommand(.assign)
+        return true
     }
 
     private func configureOverlay() {
