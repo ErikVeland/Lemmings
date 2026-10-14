@@ -1134,22 +1134,22 @@ import NxlvKit
     private func showGameMenu() {
         pendingTool = nil; canvas.directionPoint = nil
         if canvas.menuRows != nil { canvas.menuRows = nil; canvas.needsDisplay = true; return }
-        canvas.menuNotice = L10n.text(L10n.text("EXPERIMENTAL GAMEPLAY"))
+        canvas.menuNotice = L10n.text("EXPERIMENTAL GAMEPLAY")
         menuTribe = campaign.tribe.rawValue - 1; menuLevel = campaign.index
         rebuildMenu()
     }
     private func rebuildMenu() {
         if onSequenceContinue != nil {
-            canvas.menuRows = [L10n.text("RESUME"), L10n.text(L10n.text("RETRY LEVEL")),
-                SequelArtworkPreference.enabled ? L10n.text(L10n.text("ARTWORK  MAC STYLE")) : L10n.text(L10n.text("ARTWORK  ORIGINAL PC")),
-                L10n.text(L10n.text("ORIGINAL MOVIES")), L10n.text(L10n.text("BACK TO LIBRARY"))]
+            canvas.menuRows = [L10n.text("RESUME"), L10n.text("RETRY LEVEL"),
+                SequelArtworkPreference.enabled ? L10n.text("ARTWORK  MAC STYLE") : L10n.text("ARTWORK  ORIGINAL PC"),
+                L10n.text("ORIGINAL MOVIES"), L10n.text("BACK TO LIBRARY")]
             canvas.needsDisplay = true
             return
         }
         let tribe = Lemmings3ClassicCampaign.Tribe.allCases[menuTribe]
-        canvas.menuRows = [L10n.text("RESUME"), L10n.text(L10n.text("RETRY LEVEL")), L10n.text(L10n.text("TRIBE  ")) + tribe.title.uppercased(),
-            L10n.text(L10n.text("PREVIOUS LEVEL")), L10n.text(L10n.text("NEXT LEVEL")), L10n.text("PLAY LEVEL \(menuLevel + 1)"),
-            SequelArtworkPreference.enabled ? L10n.text(L10n.text("ARTWORK  MAC STYLE")) : L10n.text(L10n.text("ARTWORK  ORIGINAL PC")), L10n.text(L10n.text("ORIGINAL MOVIES")), L10n.text(L10n.text("BACK TO LIBRARY"))]
+        canvas.menuRows = [L10n.text("RESUME"), L10n.text("RETRY LEVEL"), L10n.text("TRIBE  ") + tribe.title.uppercased(),
+            L10n.text("PREVIOUS LEVEL"), L10n.text("NEXT LEVEL"), L10n.text("PLAY LEVEL \(menuLevel + 1)"),
+            SequelArtworkPreference.enabled ? L10n.text("ARTWORK  MAC STYLE") : L10n.text("ARTWORK  ORIGINAL PC"), L10n.text("ORIGINAL MOVIES"), L10n.text("BACK TO LIBRARY")]
         canvas.needsDisplay = true
     }
     private func menuAction(_ row: Int) {
@@ -1175,11 +1175,11 @@ import NxlvKit
             let selectedTribe = Lemmings3ClassicCampaign.Tribe.allCases[menuTribe]
             if let session = try? Self.session(root: dataRoot, tribe: selectedTribe,
               restoresCampaignProgress: recordsCampaignProgress), session.availability[menuLevel] != nil {
-                canvas.menuNotice = L10n.text(L10n.text("LEVEL NOT AVAILABLE")); rebuildMenu(); return
+                canvas.menuNotice = L10n.text("LEVEL NOT AVAILABLE"); rebuildMenu(); return
             }
             if menuTribe != campaign.tribe.rawValue - 1 { chooseTribe() }
             else if availability[menuLevel] == nil { chooseLevel() }
-            else { canvas.menuNotice = L10n.text(L10n.text("LEVEL NOT AVAILABLE")); rebuildMenu() }
+            else { canvas.menuNotice = L10n.text("LEVEL NOT AVAILABLE"); rebuildMenu() }
         case 6: toggleArtwork(); rebuildMenu()
         case 7: showOriginalMovies()
         case 8: canvas.menuRows = nil; close()
@@ -1714,23 +1714,23 @@ import NxlvKit
             return Lemmings3Runtime.Direction.allCases.map { direction in
                 let area = directionPickerRect
                 let button = CGRect(x: area.minX + CGFloat(direction.dx + 1) * 14, y: area.minY + CGFloat(direction.dy + 1) * 14, width: 14, height: 14)
-                return accessibleElements.element(id: L10n.text("direction-") + direction.rawValue, owner: self, label: L10n.text(L10n.text("Direction ")) + direction.rawValue, frame: rect(button)) { [weak self] in self?.onDirection?(direction) }
+                return accessibleElements.element(id: L10n.text("direction-") + direction.rawValue, owner: self, label: L10n.text("Direction ") + direction.rawValue, frame: rect(button)) { [weak self] in self?.onDirection?(direction) }
             }
         }
         var children: [Any] = []
         if !turnBadge.isHidden { children.append(turnBadge) }
         for slot in [0, 1, 2, 3, 4, 6, 7, 8] {
-            let title = slot == 6 ? (fast ? L10n.text(L10n.text("Return to normal speed")) : L10n.text(L10n.text("Start fast-forward"))) : slot == 7 ? (paused ? L10n.text(L10n.text("Resume")) : L10n.text(L10n.text("Pause"))) : Lemmings3Panel.names[slot]
+            let title = slot == 6 ? (fast ? L10n.text("Return to normal speed") : L10n.text("Start fast-forward")) : slot == 7 ? (paused ? L10n.text("Resume") : L10n.text("Pause")) : Lemmings3Panel.names[slot]
             children.append(accessibleElements.element(id: L10n.text("panel-\(slot)"), owner: self, label: title,
                 frame: rect(CGRect(x: Lemmings3Panel.edges[slot], y: 172, width: Lemmings3Panel.edges[slot + 1] - Lemmings3Panel.edges[slot], height: 40))) { [weak self] in self?.onPanel?(slot, slot == 8 ? 2 : 1) })
         }
         if variableSpeedEnabled {
             for direction in [-1, 1] {
                 children.append(accessibleElements.element(id: L10n.text("speed-\(direction)"), owner: self,
-                    label: direction < 0 ? L10n.text(L10n.text("Decrease fast speed")) : L10n.text(L10n.text("Increase fast speed")), frame: rect(CGRect(x: direction < 0 ? 214 : 241, y: 172, width: 8, height: 40))) { [weak self] in self?.onSpeedStep?(direction, ProcessInfo.processInfo.systemUptime) })
+                    label: direction < 0 ? L10n.text("Decrease fast speed") : L10n.text("Increase fast speed"), frame: rect(CGRect(x: direction < 0 ? 214 : 241, y: 172, width: 8, height: 40))) { [weak self] in self?.onSpeedStep?(direction, ProcessInfo.processInfo.systemUptime) })
             }
         }
-        children.append(accessibleElements.element(id: L10n.text("menu"), owner: self, label: L10n.text(L10n.text("Game menu")), frame: rect(CGRect(x: 280, y: 0, width: 40, height: 12))) { [weak self] in self?.onMenu?() })
+        children.append(accessibleElements.element(id: L10n.text("menu"), owner: self, label: L10n.text("Game menu"), frame: rect(CGRect(x: 280, y: 0, width: 40, height: 12))) { [weak self] in self?.onMenu?() })
         layoutTimeline()
         return children + timeline.accessibleControls(owner: self)
     }
@@ -1758,7 +1758,7 @@ import NxlvKit
             if menuRows != nil { NSCursor.arrow.set() }
         }
     }
-    var menuNotice = L10n.text(L10n.text("EXPERIMENTAL GAMEPLAY"))
+    var menuNotice = L10n.text("EXPERIMENTAL GAMEPLAY")
     var directionPoint: CGPoint?
     private var pointerPosition: CGPoint?
     private var controllerPointer: CGPoint?

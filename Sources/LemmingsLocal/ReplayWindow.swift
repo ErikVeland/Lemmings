@@ -13,7 +13,7 @@ import UniformTypeIdentifiers
   private var waiting: [(Result<URL, ReplayMovieError>) -> Void] = []
   private var generation = 0
   private var recordCompletions: [Int: (Result<URL, ReplayMovieError>) -> Void] = [:]
-  private var title = L10n.text(L10n.text("Lemmings"))
+  private var title = L10n.text("Lemmings")
   var hasFrames = false
   struct CaptureProfile {
     var frames = 0
@@ -247,9 +247,9 @@ import UniformTypeIdentifiers
           if FileManager.default.fileExists(atPath: destination.path) {
             _ = try FileManager.default.replaceItemAt(destination, withItemAt: temporary)
           } else { try FileManager.default.moveItem(at: temporary, to: destination) }
-          self.bar.note = L10n.text(L10n.text("MOVIE SAVED"))
-        } catch is CancellationError { self.bar.note = L10n.text(L10n.text("SAVE CANCELLED")) }
-        catch { self.bar.note = L10n.text(L10n.text("SAVE FAILED")); self.showError(error) }
+          self.bar.note = L10n.text("MOVIE SAVED")
+        } catch is CancellationError { self.bar.note = L10n.text("SAVE CANCELLED") }
+        catch { self.bar.note = L10n.text("SAVE FAILED"); self.showError(error) }
       }
     }
   }
@@ -334,7 +334,7 @@ import UniformTypeIdentifiers
   override func accessibilityRole() -> NSAccessibility.Role? { .group }
   override func accessibilityChildren() -> [Any]? {
     layoutControls()
-    let position = accessibleElements.element(id: L10n.text("position"), owner: self, label: L10n.text(L10n.text("Replay position")), frame: scrub.insetBy(dx: 0, dy: -7))
+    let position = accessibleElements.element(id: L10n.text("position"), owner: self, label: L10n.text("Replay position"), frame: scrub.insetBy(dx: 0, dy: -7))
     position.setAccessibilityRole(.slider)
     position.readNumber = { [weak self] in (self?.fraction ?? 0) * 100 }
     position.adjustValue = { [weak self] direction in

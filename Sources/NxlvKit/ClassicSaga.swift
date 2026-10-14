@@ -24,15 +24,15 @@ public enum ClassicTitle: String, CaseIterable, Codable, Sendable {
 
     public var displayName: String {
         switch self {
-        case .lemmings: return L10n.text(L10n.text("Lemmings"))
-        case .xmasLemmings1991: return L10n.text(L10n.text("Xmas Lemmings 1991"))
-        case .ohNoMoreLemmings: return L10n.text(L10n.text("Oh No! More Lemmings"))
-        case .xmasLemmings1992: return L10n.text(L10n.text("Xmas Lemmings 1992"))
-        case .lemmings2TheTribes: return L10n.text(L10n.text("Lemmings 2: The Tribes"))
-        case .holidayLemmings1993: return L10n.text(L10n.text("Holiday Lemmings 1993"))
-        case .ohYesMoreLemmings: return L10n.text(L10n.text("Oh Yes! More Lemmings!"))
-        case .lemmings3TheChronicles: return L10n.text(L10n.text("Lemmings 3: The Chronicles"))
-        case .holidayLemmings1994: return L10n.text(L10n.text("Holiday Lemmings 1994"))
+        case .lemmings: return L10n.text("Lemmings")
+        case .xmasLemmings1991: return L10n.text("Xmas Lemmings 1991")
+        case .ohNoMoreLemmings: return L10n.text("Oh No! More Lemmings")
+        case .xmasLemmings1992: return L10n.text("Xmas Lemmings 1992")
+        case .lemmings2TheTribes: return L10n.text("Lemmings 2: The Tribes")
+        case .holidayLemmings1993: return L10n.text("Holiday Lemmings 1993")
+        case .ohYesMoreLemmings: return L10n.text("Oh Yes! More Lemmings!")
+        case .lemmings3TheChronicles: return L10n.text("Lemmings 3: The Chronicles")
+        case .holidayLemmings1994: return L10n.text("Holiday Lemmings 1994")
         }
     }
 

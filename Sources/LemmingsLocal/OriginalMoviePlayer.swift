@@ -18,11 +18,11 @@ extension AVAudioPlayer: OriginalMovieAudio {}
         case egyptian = "E-LEV10.FLI", ending = "THE-END.FLI"
         var title: String {
             switch self {
-            case .introduction: L10n.text(L10n.text("Introduction"))
-            case .classic: L10n.text(L10n.text("Classic tribe movie"))
-            case .shadow: L10n.text(L10n.text("Shadow tribe movie"))
-            case .egyptian: L10n.text(L10n.text("Egyptian tribe movie"))
-            case .ending: L10n.text(L10n.text("Ending"))
+            case .introduction: L10n.text("Introduction")
+            case .classic: L10n.text("Classic tribe movie")
+            case .shadow: L10n.text("Shadow tribe movie")
+            case .egyptian: L10n.text("Egyptian tribe movie")
+            case .ending: L10n.text("Ending")
             }
         }
     }

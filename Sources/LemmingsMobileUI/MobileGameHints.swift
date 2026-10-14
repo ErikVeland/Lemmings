@@ -41,9 +41,9 @@ extension MobileGameViewController {
         let hint = deck.stages[index]
         var actions: [(String, () -> Void)] = []
         if index > 0 { actions.append((L10n.text("PREVIOUS"), { [weak self] in self?.showHints(stage: index - 1) })) }
-        if index + 1 < deck.stages.count { actions.append((L10n.text(L10n.text("NEXT HINT")), { [weak self] in self?.showHints(stage: index + 1) })) }
+        if index + 1 < deck.stages.count { actions.append((L10n.text("NEXT HINT"), { [weak self] in self?.showHints(stage: index + 1) })) }
         if let solution {
-            actions.append((L10n.text(L10n.text("WATCH SOLUTION")), { [weak self] in
+            actions.append((L10n.text("WATCH SOLUTION"), { [weak self] in
                 if self?.hasSolutionPair == true { self?.selectSolutionMode(.solution); return }
                 self?.showCustomOverlay(title: L10n.text("Watch solution?"), details: [], actions: [
                     (L10n.text("CANCEL"), { [weak self] in self?.showHints(stage: index) }),

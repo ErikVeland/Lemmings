@@ -60,7 +60,7 @@ extension MobileGameViewController {
                         #endif
                     case let .failure(error):
                         self.showCustomOverlay(title: error.localizedDescription, details: [], actions: [
-                            (L10n.text(L10n.text("TRY AGAIN")), { [weak self] in self?.shareReplayMovie(document: document) }),
+                            (L10n.text("TRY AGAIN"), { [weak self] in self?.shareReplayMovie(document: document) }),
                             (L10n.text("LIBRARY"), { [weak self] in self?.leaveToLibrary() }),
                         ])
                     }

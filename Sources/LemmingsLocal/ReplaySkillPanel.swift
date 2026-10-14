@@ -36,7 +36,7 @@ struct ReplaySkillUse {
         let historyWidth = (uses.map { textWidth($0.name) }.max() ?? 0) + tickWidth + 42
         return CGSize(width: max(300, stockWidth, historyWidth), height: CGFloat(58 + rows * 18 + 3 * 18))
     }
-    func update(stocks: [ReplaySkillStock], uses: [ReplaySkillUse], tick: Int, title: String = L10n.text(L10n.text("LEFT"))) {
+    func update(stocks: [ReplaySkillStock], uses: [ReplaySkillUse], tick: Int, title: String = L10n.text("LEFT")) {
         self.stocks = stocks; self.uses = Array(uses.suffix(3)); self.tick = tick; stockTitle = title
         setAccessibilityElement(true)
         setAccessibilityRole(.group)

@@ -4,7 +4,7 @@ import Foundation
 public struct SoundtrackCatalogue: Codable, Sendable {
     public enum ShuffleScope: String, Codable, CaseIterable, Sendable {
         case sameTrack, allTracks
-        public var title: String { self == .sameTrack ? L10n.text(L10n.text("Same track")) : L10n.text(L10n.text("All tracks")) }
+        public var title: String { self == .sameTrack ? L10n.text("Same track") : L10n.text("All tracks") }
     }
     public struct Variant: Codable, Equatable, Sendable {
         public let id: String

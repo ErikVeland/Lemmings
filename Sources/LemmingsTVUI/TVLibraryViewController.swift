@@ -235,7 +235,7 @@ import UIKit
             page.footer = [back, .init("rosterMore", ">", enabled: local.profiles.players.count > 4), .init("startSeat", L10n.text("Continue"), enabled: roster?.canStart ?? false, primary: true)]
         case .help:
             page.title = L10n.text("Controls")
-            page.details = [L10n.text("LEFT STICK: AIM  /  RIGHT STICK: CAMERA"), L10n.text("SHOULDERS: SKILLS  /  D-PAD: TARGETS"), L10n.text("PRIMARY BUTTON: ASSIGN  /  MENU: PAUSE"), L10n.text("REMOTE: MOVE, CLICK TO ASSIGN"), L10n.text("PLAY/PAUSE: PAUSE  /  BACK: CONTROLS"), L10n.text(L10n.text("SKILL CHANGES CAN PAUSE FOR PLANNING")), L10n.text("CAMERA, STEP AND SPEED: PAUSED CONTROLS")]
+            page.details = [L10n.text("LEFT STICK: AIM  /  RIGHT STICK: CAMERA"), L10n.text("SHOULDERS: SKILLS  /  D-PAD: TARGETS"), L10n.text("PRIMARY BUTTON: ASSIGN  /  MENU: PAUSE"), L10n.text("REMOTE: MOVE, CLICK TO ASSIGN"), L10n.text("PLAY/PAUSE: PAUSE  /  BACK: CONTROLS"), L10n.text("SKILL CHANGES CAN PAUSE FOR PLANNING"), L10n.text("CAMERA, STEP AND SPEED: PAUSED CONTROLS")]
             page.footer = [back]
         case .results:
             guard let game else { return }

@@ -122,14 +122,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
     var displayName: String {
       switch self {
-      case .classic: return L10n.text(L10n.text("Classic Lemmings"))
-      case .ohNo: return L10n.text(L10n.text("Oh No! More Lemmings"))
-      case .holiday: return L10n.text(L10n.text("Holiday Lemmings"))
-      case .ohYes: return L10n.text(L10n.text("Oh Yes! More Lemmings"))
-      case .fan: return L10n.text(L10n.text("Fan Lemmings"))
-      case .neolemmix: return L10n.text(L10n.text("NeoLemmix"))
-      case .lemmings2: return L10n.text(L10n.text("Lemmings 2"))
-      case .lemmings3: return L10n.text(L10n.text("Lemmings 3"))
+      case .classic: return L10n.text("Classic Lemmings")
+      case .ohNo: return L10n.text("Oh No! More Lemmings")
+      case .holiday: return L10n.text("Holiday Lemmings")
+      case .ohYes: return L10n.text("Oh Yes! More Lemmings")
+      case .fan: return L10n.text("Fan Lemmings")
+      case .neolemmix: return L10n.text("NeoLemmix")
+      case .lemmings2: return L10n.text("Lemmings 2")
+      case .lemmings3: return L10n.text("Lemmings 3")
       }
     }
 
@@ -235,7 +235,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private enum FanScreen { case off, packs, levels }
   private var fanScreen: FanScreen = .off
   private var fanPacks: [URL] = []
-  private var fanUpdateStatus = L10n.text(L10n.text("CHECKING FOR NEW PACKS"))
+  private var fanUpdateStatus = L10n.text("CHECKING FOR NEW PACKS")
   private var fanUpdateTask: Task<Void, Never>?
   private var fanEntries: [FanLevelLibrary.Entry] = []
   private var fanPack: URL?
@@ -1701,7 +1701,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       // The menu is set in the game's own fixed-width font, so a row holds
       // only a short note. One word says as much as a sentence here.
       let detail = title == .lemmings2TheTribes ? L10n.text("COMPLETE")
-        : title == .lemmings3TheChronicles ? L10n.text("BETA") : L10n.text(L10n.text("NO DATA"))
+        : title == .lemmings3TheChronicles ? L10n.text("BETA") : L10n.text("NO DATA")
       return .init(title: title, total: title.expectedLevelCount ?? 0,
         passed: sequelCompletion[title] ?? 0, available: available, detail: detail)
     })
@@ -5842,7 +5842,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let name = savedSequence.source == .playlist(LearningJourney.playlistID) ? L10n.text("JOURNEY") : L10n.text("SESSION")
       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
         profileID: ArcadeStore.shared.records.activeProfileID)
-      items.append(HomeMenuItem(title: L10n.text(L10n.text("CONTINUE ")) + name + " - " + players,
+      items.append(HomeMenuItem(title: L10n.text("CONTINUE ") + name + " - " + players,
         action: .resumeSequence))
     }
     if menuRecovery != nil {
@@ -5857,7 +5857,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     items += HomeContentFamily.allCases.map {
       HomeMenuItem(title: homeContentRow($0), action: .browse($0))
     }
-    items.append(HomeMenuItem(title: L10n.text(L10n.text("COLLECTIONS")), action: .collections))
+    items.append(HomeMenuItem(title: L10n.text("COLLECTIONS"), action: .collections))
     return items
   }
 
@@ -5974,7 +5974,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       // Two ways to take the whole pack, then the levels themselves.
       // A passed level keeps a mark, so a long pack shows what is left.
       let pack = fanPack
-      rows = [L10n.text(L10n.text("PLAY ALL")), L10n.text("SHUFFLE")] + fanEntries.map { entry in
+      rows = [L10n.text("PLAY ALL"), L10n.text("SHUFFLE")] + fanEntries.map { entry in
         let done = pack.map {
           FanLevelLibrary.Progress.hasPassed(pack: $0, label: entry.label)
         } ?? false
@@ -5985,7 +5985,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if rows.isEmpty {
       fanWindowStart = 0
       playfield.overlayTitle = heading
-      playfield.overlayLines = [L10n.text(L10n.text("NOTHING HERE"))]
+      playfield.overlayLines = [L10n.text("NOTHING HERE")]
       playfield.overlayHighlight = 0
     } else {
       // Keep the highlight near the middle of the window, so a long list
@@ -6167,11 +6167,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
     var lines = [L10n.text("SAVED \(session.saved) OF \(session.required)")]
     let more = currentNxlvURL != nil ? nextNeoPackIdentity != nil : fanQueueIndex + 1 < fanQueue.count
     if sequencePlayingIdentity != nil, !passed {
-      lines.append(L10n.text(L10n.text("ENTER TO RETRY LEVEL")))
+      lines.append(L10n.text("ENTER TO RETRY LEVEL"))
     } else {
-      lines.append(more ? L10n.text(L10n.text("ENTER FOR THE NEXT LEVEL")) : L10n.text(L10n.text("ENTER TO GO BACK")))
+      lines.append(more ? L10n.text("ENTER FOR THE NEXT LEVEL") : L10n.text("ENTER TO GO BACK"))
     }
-    playfield.overlayTitle = passed ? L10n.text(L10n.text("LEVEL COMPLETE")) : L10n.text(L10n.text("NOT THIS TIME"))
+    playfield.overlayTitle = passed ? L10n.text("LEVEL COMPLETE") : L10n.text("NOT THIS TIME")
     playfield.overlayLines = lines
     playfield.overlayHighlight = nil
     playfield.overlayReplayLine = playfield.overlayLines.count
@@ -6741,7 +6741,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       playfield.overlayReplayLine = 2
       playfield.overlayRetryLine = 3
       playfield.overlayFooter = passed
-        ? L10n.text(L10n.text("CLICK OR PRESS ENTER TO CONTINUE"))
+        ? L10n.text("CLICK OR PRESS ENTER TO CONTINUE")
         : L10n.text("Click or press Enter to try again")
 
     case let .rankComplete(rank):
@@ -6751,7 +6751,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let passed = flow.passedCount(inRank: rank)
       playfield.overlayTitle = passed == total ? L10n.text("\(rank) complete") : L10n.text("\(rank) run finished")
       playfield.overlayLines = [L10n.text("\(passed)/\(total) levels passed in this rating.")]
-      playfield.overlayFooter = L10n.text(L10n.text("CLICK OR PRESS ENTER TO CONTINUE"))
+      playfield.overlayFooter = L10n.text("CLICK OR PRESS ENTER TO CONTINUE")
 
     case .gameComplete:
       phase = .results
@@ -6762,10 +6762,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       if launchMode == .quest, let title = activeTitle,
          case let .title(next) = library.next(after: title, mode: launchMode) {
         playfield.overlayLines = [L10n.text("Every rating is finished."), L10n.text("Next: \(next.displayName)")]
-        playfield.overlayFooter = L10n.text(L10n.text("CLICK OR PRESS ENTER TO CONTINUE"))
+        playfield.overlayFooter = L10n.text("CLICK OR PRESS ENTER TO CONTINUE")
       } else {
         playfield.overlayLines = [L10n.text("Every rating is finished.")]
-        playfield.overlayFooter = L10n.text(L10n.text("CLICK OR PRESS ENTER FOR THE GAME LIBRARY"))
+        playfield.overlayFooter = L10n.text("CLICK OR PRESS ENTER FOR THE GAME LIBRARY")
       }
 
     case .quitConfirm:

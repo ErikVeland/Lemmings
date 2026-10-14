@@ -10,7 +10,7 @@ public struct MobileHotSeat: Codable, Equatable, Identifiable, Sendable {
         case everyLevel
         case atFirstFail
 
-        public var title: String { self == .everyLevel ? L10n.text(L10n.text("Every level")) : L10n.text(L10n.text("At first fail")) }
+        public var title: String { self == .everyLevel ? L10n.text("Every level") : L10n.text("At first fail") }
         public var other: TurnPolicy { self == .everyLevel ? .atFirstFail : .everyLevel }
     }
 

@@ -29,15 +29,15 @@ import NxlvKit
         if let name = element(button)?.localizedName, !name.isEmpty { return name }
         switch button {
         case .a, .b, .x, .y: return button.rawValue.uppercased()
-        case .leftShoulder: return L10n.text(L10n.text("LB / left shoulder"))
-        case .rightShoulder: return L10n.text(L10n.text("RB / right shoulder"))
-        case .leftTrigger: return L10n.text(L10n.text("LT / left trigger"))
-        case .rightTrigger: return L10n.text(L10n.text("RT / right trigger"))
-        case .menu: return L10n.text(L10n.text("Menu"))
-        case .options: return L10n.text(L10n.text("View / Options"))
-        case .leftStick: return L10n.text(L10n.text("Left stick click"))
-        case .rightStick: return L10n.text(L10n.text("Right stick click"))
-        case .up, .down, .left, .right: return L10n.text(L10n.text("D-pad ")) + button.rawValue
+        case .leftShoulder: return L10n.text("LB / left shoulder")
+        case .rightShoulder: return L10n.text("RB / right shoulder")
+        case .leftTrigger: return L10n.text("LT / left trigger")
+        case .rightTrigger: return L10n.text("RT / right trigger")
+        case .menu: return L10n.text("Menu")
+        case .options: return L10n.text("View / Options")
+        case .leftStick: return L10n.text("Left stick click")
+        case .rightStick: return L10n.text("Right stick click")
+        case .up, .down, .left, .right: return L10n.text("D-pad ") + button.rawValue
         }
     }
     static func help(mapping: [String: String], variableSpeed: Bool = true, tapSpeed: Bool = true,

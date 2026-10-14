@@ -11,11 +11,11 @@ public enum MobileFamily: String, CaseIterable, Codable, Sendable {
 
     public var title: String {
         switch self {
-        case .classic: return L10n.text(L10n.text("Classic Lemmings"))
-        case .ohNo: return L10n.text(L10n.text("Oh No! More Lemmings"))
-        case .holiday: return L10n.text(L10n.text("Holiday Lemmings"))
-        case .ohYes: return L10n.text(L10n.text("Oh Yes! More Lemmings"))
-        case .fan: return L10n.text(L10n.text("Fan Lemmings"))
+        case .classic: return L10n.text("Classic Lemmings")
+        case .ohNo: return L10n.text("Oh No! More Lemmings")
+        case .holiday: return L10n.text("Holiday Lemmings")
+        case .ohYes: return L10n.text("Oh Yes! More Lemmings")
+        case .fan: return L10n.text("Fan Lemmings")
         }
     }
 }

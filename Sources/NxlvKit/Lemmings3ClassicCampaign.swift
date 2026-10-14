@@ -5,7 +5,7 @@ public struct Lemmings3ClassicCampaign: Sendable {
     public static let requiredTribeSurvivors = 50
     public enum Tribe: Int, CaseIterable, Codable, Sendable {
         case classic = 1, shadow = 2, egyptian = 3
-        public var title: String { switch self { case .classic: L10n.text(L10n.text("Classic")); case .shadow: L10n.text(L10n.text("Shadow")); case .egyptian: L10n.text(L10n.text("Egyptian")) } }
+        public var title: String { switch self { case .classic: L10n.text("Classic"); case .shadow: L10n.text("Shadow"); case .egyptian: L10n.text("Egyptian") } }
         public var firstLevel: Int { (rawValue - 1) * 100 + 1 }
         public var spriteStyle: Int { switch self { case .classic: 4; case .shadow: 10; case .egyptian: 5 } }
     }

@@ -14,7 +14,7 @@ public struct GameFrontEnd {
         public var portrait: Int?
         public var isBackNavigation: Bool {
             let label = title.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-            return [L10n.text("BACK"), L10n.text("CANCEL"), L10n.text("LIBRARY"), L10n.text("CLOSE")].contains(label) || label.hasPrefix(L10n.text(L10n.text("BACK ")))
+            return [L10n.text("BACK"), L10n.text("CANCEL"), L10n.text("LIBRARY"), L10n.text("CLOSE")].contains(label) || label.hasPrefix(L10n.text("BACK "))
         }
         public init(_ id: String, _ title: String, enabled: Bool = true,
                     primary: Bool = false, selected: Bool = false, portrait: Int? = nil) {

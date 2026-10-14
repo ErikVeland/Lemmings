@@ -21,7 +21,7 @@ final class DJParityUITests: XCTestCase {
                 hasAmigaDisk: true, hasMacintoshDisk: true, moduleCount: 1))
             page.show()
             let host = try XCTUnwrap(window.contentView)
-            func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap(descendants) }
+            @MainActor func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap(descendants) }
             host.layoutSubtreeIfNeeded()
             let audio = try XCTUnwrap(descendants(host).compactMap { $0 as? GameTabButton }.first { $0.title == "Audio" })
             audio.performClick(nil)
