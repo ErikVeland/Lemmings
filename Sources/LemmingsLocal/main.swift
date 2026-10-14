@@ -3,6 +3,7 @@ import AppKit
 import AVFoundation
 import LemmingsAppCore
 import LemmingsAudio
+import LemmingsGameArt
 import NxlvKit
 import Sparkle
 
@@ -122,14 +123,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
     var displayName: String {
       switch self {
-      case .classic: return L10n.text(L10n.text("Classic Lemmings"))
-      case .ohNo: return L10n.text(L10n.text("Oh No! More Lemmings"))
-      case .holiday: return L10n.text(L10n.text("Holiday Lemmings"))
-      case .ohYes: return L10n.text(L10n.text("Oh Yes! More Lemmings"))
-      case .fan: return L10n.text(L10n.text("Fan Lemmings"))
-      case .neolemmix: return L10n.text(L10n.text("NeoLemmix"))
-      case .lemmings2: return L10n.text(L10n.text("Lemmings 2"))
-      case .lemmings3: return L10n.text(L10n.text("Lemmings 3"))
+      case .classic: return L10n.text("Classic Lemmings")
+      case .ohNo: return L10n.text("Oh No! More Lemmings")
+      case .holiday: return L10n.text("Holiday Lemmings")
+      case .ohYes: return L10n.text("Oh Yes! More Lemmings")
+      case .fan: return L10n.text("Fan Lemmings")
+      case .neolemmix: return L10n.text("NeoLemmix")
+      case .lemmings2: return L10n.text("Lemmings 2")
+      case .lemmings3: return L10n.text("Lemmings 3")
       }
     }
 
@@ -235,7 +236,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private enum FanScreen { case off, packs, levels }
   private var fanScreen: FanScreen = .off
   private var fanPacks: [URL] = []
-  private var fanUpdateStatus = L10n.text(L10n.text("CHECKING FOR NEW PACKS"))
+  private var fanUpdateStatus = L10n.text("CHECKING FOR NEW PACKS")
   private var fanUpdateTask: Task<Void, Never>?
   private var fanEntries: [FanLevelLibrary.Entry] = []
   private var fanPack: URL?
@@ -480,7 +481,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     checkpoint.fullQuest = launchMode == .quest
     recoveryStore.save(checkpoint, immediately: immediately && waitForDisk, coalescing: !immediately,
       prepareStateHash: prepareStateHash) { [weak self] message in
-      self?.setStatus(L10n.text("Run recovery save failed: ") + message)
+      self?.setStatus(L10n.text("Run recovery save failed: \(message)"))
     }
   }
 
@@ -762,7 +763,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     updates.onChange = { [weak self] in
       guard let self else { return }
       self.playfield.overlayAvailableUpdate = self.updates.availableVersion.map {
-        L10n.text("Version \($0) ") + (self.updates.isDownloaded ? L10n.text("ready to install") : L10n.text("available to download"))
+        L10n.text("Version \($0) \((self.updates.isDownloaded ? L10n.text("ready to install") : L10n.text("available to download")))")
       }
       self.playfield.needsDisplay = true
     }
@@ -916,20 +917,20 @@ let achievementProgressKey = "ClassicAchievementProgress"
     achievementsItem.keyEquivalentModifierMask = [.command, .shift]
     achievementsItem.target = self
     appMenu.addItem(achievementsItem)
-    let profiles = NSMenuItem(title: L10n.text("Player Profiles…"), action: #selector(showProfiles), keyEquivalent: L10n.text("p"))
+    let profiles = NSMenuItem(title: L10n.text("Player Profiles…"), action: #selector(showProfiles), keyEquivalent: "p")
     profiles.keyEquivalentModifierMask = [.command, .shift]; profiles.target = self; appMenu.addItem(profiles)
     let cloudSaves = NSMenuItem(title: L10n.text("Cloud Saves…"), action: #selector(showCloudSaves), keyEquivalent: "")
     cloudSaves.target = self; appMenu.addItem(cloudSaves)
     let hotSeat = NSMenuItem(title: L10n.text("Hot Seat…"), action: #selector(showHotSeat), keyEquivalent: "")
     hotSeat.target = self; appMenu.addItem(hotSeat)
-    let records = NSMenuItem(title: L10n.text("Level Records…"), action: #selector(showLevelRecords), keyEquivalent: L10n.text("b"))
+    let records = NSMenuItem(title: L10n.text("Level Records…"), action: #selector(showLevelRecords), keyEquivalent: "b")
     records.keyEquivalentModifierMask = [.command, .shift]; records.target = self; appMenu.addItem(records)
     let insights = NSMenuItem(title: L10n.text("Play Insights…"), action: #selector(showPlayInsights), keyEquivalent: "")
     insights.target = self; appMenu.addItem(insights)
-    let replay = NSMenuItem(title: L10n.text("Replay Last Game"), action: #selector(reviewLastGame), keyEquivalent: L10n.text("v"))
+    let replay = NSMenuItem(title: L10n.text("Replay Last Game"), action: #selector(reviewLastGame), keyEquivalent: "v")
     replay.keyEquivalentModifierMask = [.command, .shift]; replay.target = self
     appMenu.addItem(replay)
-    let openReplay = NSMenuItem(title: L10n.text("Open Replay Movie…"), action: #selector(openReplayMovie), keyEquivalent: L10n.text("o"))
+    let openReplay = NSMenuItem(title: L10n.text("Open Replay Movie…"), action: #selector(openReplayMovie), keyEquivalent: "o")
     openReplay.keyEquivalentModifierMask = [.command, .shift]; openReplay.target = self
     appMenu.addItem(openReplay)
     let nativeL2 = NSMenuItem(title: L10n.text("Play Lemmings 2…"), action: #selector(chooseNativeL2), keyEquivalent: "2")
@@ -1418,8 +1419,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   @objc private func showAbout() {
     let info = Bundle.main.infoDictionary ?? [:]
-    let version = info[L10n.text("CFBundleShortVersionString")] as? String ?? L10n.text("Unknown")
-    let build = info[L10n.text("CFBundleVersion")] as? String ?? L10n.text("Unknown")
+    let version = info["CFBundleShortVersionString"] as? String ?? L10n.text("Unknown")
+    let build = info["CFBundleVersion"] as? String ?? L10n.text("Unknown")
     GameScreen.shared.message(L10n.text("Ultimate Lemmings"), detail: L10n.text("Version \(version) · Build \(build)\nA rescue worth another try."))
   }
 
@@ -1701,7 +1702,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       // The menu is set in the game's own fixed-width font, so a row holds
       // only a short note. One word says as much as a sentence here.
       let detail = title == .lemmings2TheTribes ? L10n.text("COMPLETE")
-        : title == .lemmings3TheChronicles ? L10n.text("BETA") : L10n.text(L10n.text("NO DATA"))
+        : title == .lemmings3TheChronicles ? L10n.text("BETA") : L10n.text("NO DATA")
       return .init(title: title, total: title.expectedLevelCount ?? 0,
         passed: sequelCompletion[title] ?? 0, available: available, detail: detail)
     })
@@ -2296,7 +2297,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let selected = dataSets.indices.contains(gamePicker.indexOfSelectedItem)
       ? dataSets[gamePicker.indexOfSelectedItem].set.title : nil
     let family = selected.flatMap(macArtworkFamily(for:)) ?? "lemmings"
-    let key = L10n.text("MacArtwork/") + family
+    let key = "MacArtwork/" + family
     let art: ClassicMacArtwork
     if let cached = macArtworkCache[key] {
       art = cached
@@ -2538,7 +2539,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       styles: Set(levels.map { $0.level.groundStyle }).sorted(),
       specialIndices: Set(levels.map { $0.level.specialStyle - 1 }).filter { $0 >= 0 }.sorted(),
       fallbackDirectory: PortExclusivePack.fallbackArtworkDirectory(for: entry, portsRoot: portsRoot),
-      portArtworkFamily: entry.rank == L10n.text("Oh No! More Lemmings Versus") ? "ohno" : "lemmings")
+      portArtworkFamily: entry.rank == "Oh No! More Lemmings Versus" ? "ohno" : "lemmings")
   }
 
   private func preparePortArtwork(_ entry: ClassicCampaignLevel, dataSet: ClassicDataSet, portsRoot: URL) throws {
@@ -2646,8 +2647,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard [.macintosh, .macintoshMonochrome, .amiga].contains(activeGraphics),
       groundOverride != nil || dataSets.indices.contains(gamePicker.indexOfSelectedItem),
       let resources = Bundle.main.resourceURL else { return }
-    let source = activeGraphics == .amiga ? L10n.text("AmigaArtwork")
-      : activeGraphics == .macintoshMonochrome ? L10n.text("MacArtwork/monochrome") : L10n.text("MacArtwork")
+    let source = activeGraphics == .amiga ? "AmigaArtwork"
+      : activeGraphics == .macintoshMonochrome ? "MacArtwork/monochrome" : "MacArtwork"
     let root = resources.appendingPathComponent(source)
     let family: String
     let fanMatch = groundOverride.flatMap {
@@ -3131,7 +3132,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let count = invalidFanPack ? 0 : knownFanCount ?? pack.levels.count
       let levels = invalidFanPack ? L10n.text("Unavailable")
         : knownFanCount == nil && fanURL != nil
-          ? L10n.text("Levels") : count == 1 ? L10n.text("1 level") : L10n.text("\(count) levels")
+          ? L10n.text("Levels") : L10n.plural("count.levels", count: count, one: "%ld level", other: "%ld levels")
       let artworkKey = pack.levels.lazy.compactMap {
         self.levelPreviewRequests[$0.identity]?.artworkKey
       }.first
@@ -3601,7 +3602,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let source = dataSets[index], level = source.set.campaign.levels[levelIndex]
     guard let revision = FanLevelLibrary.classicSourceRevision(for: source.set.title, root: source.directory) else { return nil }
     let bundled = BundledGameResources.classicDirectories().contains { $0.resolvingSymlinksInPath() == source.directory.resolvingSymlinksInPath() }
-      || (source.set.title == .ohYesMoreLemmings && source.directory.lastPathComponent == L10n.text("Ports"))
+      || (source.set.title == .ohYesMoreLemmings && source.directory.lastPathComponent == "Ports")
     let packID = bundled ? source.set.identifierKey : "imported:" + revision + ":" + ArcadeStore.fingerprint(Data(source.directory.standardizedFileURL.path.utf8))
     return try? LevelPlaylistEntry(identity: .init(engine: .classic, packID: packID,
       levelID: "\(levelIndex):\(level.rank):\(level.number):\(level.archiveFile):\(level.archiveSection)"),
@@ -3811,6 +3812,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return
     }
     let page = GameMenuPage(title: L10n.text("Playlists"), subtitle: L10n.text("Saved level sequences"))
+    page.addSecondaryAction(L10n.text("Collections")) { [weak self] in self?.presentLevelCollections() }
     let carousel = LevelCoverFlowView(frame: page.body.bounds)
     carousel.autoresizingMask = [.width, .height]
     page.body.addSubview(carousel)
@@ -3877,7 +3879,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       LevelCoverFlowItem(
         id: "playlist:saved:\(playlist.id.uuidString)",
         title: playlist.name,
-        subtitle: playlist.entries.count == 1 ? L10n.text("1 level") : L10n.text("\(playlist.entries.count) levels"),
+        subtitle: L10n.plural("count.levels", count: playlist.entries.count, one: "%ld level", other: "%ld levels"),
         detail: L10n.text("Manual order"),
         artworkKey: playlist.entries.first.flatMap {
           levelPreviewRequests[$0.identity]?.artworkKey
@@ -4108,7 +4110,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     let page = GameMenuPage(
       title: playlist.name,
-      subtitle: playlist.entries.count == 1 ? L10n.text("1 level") : L10n.text("\(playlist.entries.count) levels"))
+      subtitle: L10n.plural("count.levels", count: playlist.entries.count, one: "%ld level", other: "%ld levels"))
     let carousel = LevelCoverFlowView(frame: CGRect(x: 0, y: 0, width: page.body.bounds.width, height: 360))
     carousel.autoresizingMask = [.width]
     page.body.addSubview(carousel)
@@ -5258,7 +5260,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard won, let store = sequencePlaylistStore,
       store.activeRun?.source == .playlist(LearningJourney.playlistID) else { return }
     do { try store.recordLearningWin(runID: runID, level: identity); try saveCloudLearning(store) }
-    catch { setStatus(L10n.text("Could not save completed lesson: ") + error.localizedDescription) }
+    catch { setStatus(L10n.text("Could not save completed lesson: \(error.localizedDescription)")) }
   }
 
   @discardableResult
@@ -5842,7 +5844,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let name = savedSequence.source == .playlist(LearningJourney.playlistID) ? L10n.text("JOURNEY") : L10n.text("SESSION")
       let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
         profileID: ArcadeStore.shared.records.activeProfileID)
-      items.append(HomeMenuItem(title: L10n.text(L10n.text("CONTINUE ")) + name + " - " + players,
+      items.append(HomeMenuItem(title: L10n.text("CONTINUE \(name) - \(players)"),
         action: .resumeSequence))
     }
     if menuRecovery != nil {
@@ -5852,12 +5854,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
       items.append(HomeMenuItem(title: (savedSequence == nil ? L10n.text("RESUME - ") : L10n.text("RESUME LEVEL - ")) + initials, action: .resume))
     }
     items.append(HomeMenuItem(
-      title: "\(Self.allLemmingsMenuTitle)  \(LearningJourneyLibrary.journey.flatMap { journey in try? playlistStore().learningProgress.solvedCount(in: journey) } ?? 0)/\(LearningJourneyLibrary.journey?.lessons.count ?? 0) SOLVED",
+      title: L10n.text("JOURNEY MAP  \(LearningJourneyLibrary.journey.flatMap { journey in try? playlistStore().learningProgress.solvedCount(in: journey) } ?? 0)/\(LearningJourneyLibrary.journey?.lessons.count ?? 0) SOLVED"),
       action: .fullQuest))
     items += HomeContentFamily.allCases.map {
-      HomeMenuItem(title: homeContentRow($0), action: .browse($0))
+      HomeMenuItem(title: [.lemmings2, .lemmings3].contains($0) ? $0.displayName : homeContentRow($0), action: .browse($0))
     }
-    items.append(HomeMenuItem(title: L10n.text(L10n.text("COLLECTIONS")), action: .collections))
     return items
   }
 
@@ -5974,7 +5975,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       // Two ways to take the whole pack, then the levels themselves.
       // A passed level keeps a mark, so a long pack shows what is left.
       let pack = fanPack
-      rows = [L10n.text(L10n.text("PLAY ALL")), L10n.text("SHUFFLE")] + fanEntries.map { entry in
+      rows = [L10n.text("PLAY ALL"), L10n.text("SHUFFLE")] + fanEntries.map { entry in
         let done = pack.map {
           FanLevelLibrary.Progress.hasPassed(pack: $0, label: entry.label)
         } ?? false
@@ -5985,7 +5986,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if rows.isEmpty {
       fanWindowStart = 0
       playfield.overlayTitle = heading
-      playfield.overlayLines = [L10n.text(L10n.text("NOTHING HERE"))]
+      playfield.overlayLines = [L10n.text("NOTHING HERE")]
       playfield.overlayHighlight = 0
     } else {
       // Keep the highlight near the middle of the window, so a long list
@@ -6167,11 +6168,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
     var lines = [L10n.text("SAVED \(session.saved) OF \(session.required)")]
     let more = currentNxlvURL != nil ? nextNeoPackIdentity != nil : fanQueueIndex + 1 < fanQueue.count
     if sequencePlayingIdentity != nil, !passed {
-      lines.append(L10n.text(L10n.text("ENTER TO RETRY LEVEL")))
+      lines.append(L10n.text("ENTER TO RETRY LEVEL"))
     } else {
-      lines.append(more ? L10n.text(L10n.text("ENTER FOR THE NEXT LEVEL")) : L10n.text(L10n.text("ENTER TO GO BACK")))
+      lines.append(more ? L10n.text("ENTER FOR THE NEXT LEVEL") : L10n.text("ENTER TO GO BACK"))
     }
-    playfield.overlayTitle = passed ? L10n.text(L10n.text("LEVEL COMPLETE")) : L10n.text(L10n.text("NOT THIS TIME"))
+    playfield.overlayTitle = passed ? L10n.text("LEVEL COMPLETE") : L10n.text("NOT THIS TIME")
     playfield.overlayLines = lines
     playfield.overlayHighlight = nil
     playfield.overlayReplayLine = playfield.overlayLines.count
@@ -6690,6 +6691,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let homeItems = homeMenuItems()
       playfield.overlayHomeLeadingCount = homeItems.firstIndex { if case .browse = $0.action { return true }; return false } ?? homeItems.count
       playfield.overlayLines = homeItems.map(\.title)
+      playfield.overlayHomeLogos = Dictionary(uniqueKeysWithValues: homeItems.enumerated().compactMap { index, item in
+        switch item.action {
+        case .browse(.lemmings2): return (index, GameFrontEnd.GameLogo.lemmings2)
+        case .browse(.lemmings3): return (index, GameFrontEnd.GameLogo.lemmings3)
+        default: return nil
+        }
+      })
       playfield.overlayFooter = nil
       // A hot seat names everyone in turn order, so the menu shows who is playing
       // rather than only whose campaign it is.
@@ -6741,7 +6749,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       playfield.overlayReplayLine = 2
       playfield.overlayRetryLine = 3
       playfield.overlayFooter = passed
-        ? L10n.text(L10n.text("CLICK OR PRESS ENTER TO CONTINUE"))
+        ? L10n.text("CLICK OR PRESS ENTER TO CONTINUE")
         : L10n.text("Click or press Enter to try again")
 
     case let .rankComplete(rank):
@@ -6751,7 +6759,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let passed = flow.passedCount(inRank: rank)
       playfield.overlayTitle = passed == total ? L10n.text("\(rank) complete") : L10n.text("\(rank) run finished")
       playfield.overlayLines = [L10n.text("\(passed)/\(total) levels passed in this rating.")]
-      playfield.overlayFooter = L10n.text(L10n.text("CLICK OR PRESS ENTER TO CONTINUE"))
+      playfield.overlayFooter = L10n.text("CLICK OR PRESS ENTER TO CONTINUE")
 
     case .gameComplete:
       phase = .results
@@ -6762,10 +6770,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       if launchMode == .quest, let title = activeTitle,
          case let .title(next) = library.next(after: title, mode: launchMode) {
         playfield.overlayLines = [L10n.text("Every rating is finished."), L10n.text("Next: \(next.displayName)")]
-        playfield.overlayFooter = L10n.text(L10n.text("CLICK OR PRESS ENTER TO CONTINUE"))
+        playfield.overlayFooter = L10n.text("CLICK OR PRESS ENTER TO CONTINUE")
       } else {
         playfield.overlayLines = [L10n.text("Every rating is finished.")]
-        playfield.overlayFooter = L10n.text(L10n.text("CLICK OR PRESS ENTER FOR THE GAME LIBRARY"))
+        playfield.overlayFooter = L10n.text("CLICK OR PRESS ENTER FOR THE GAME LIBRARY")
       }
 
     case .quitConfirm:
@@ -6822,7 +6830,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       L10n.text("Release rate \(session.rate)"),
     ]
     if let seconds = session.remainingSeconds {
-      lines.append(String(format: "Time %d:%02d", seconds / 60, seconds % 60))
+      lines.append(L10n.text("Time \(seconds / 60):\(String(format: "%02d", seconds % 60))"))
     }
     let title = campaign.flatMap { campaign -> String? in
       guard let index = flow.currentLevelIndex, index < campaign.levels.count else { return nil }
@@ -7314,7 +7322,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     updateDJTelemetry(session)
     let recordsPlayerArtifacts = sequencePlayingIdentity == nil
     runMovie.finish()
-    do { try recoveryStore.clear(arcadeRunID) } catch { setStatus(L10n.text("Could not clear completed checkpoint: ") + error.localizedDescription) }
+    do { try recoveryStore.clear(arcadeRunID) } catch { setStatus(L10n.text("Could not clear completed checkpoint: \(error.localizedDescription)")) }
     if let arcadeLevel {
       if recordsPlayerArtifacts,
          let classic = session as? ClassicSession, classic.didWin {
@@ -7323,7 +7331,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
           ? campaign?.levels[index] : nil
         ClassicRouteRecorder.record(session: classic, level: arcadeLevel,
           title: entry?.level.title.trimmingCharacters(in: .whitespaces) ?? arcadeLevel.title, rank: entry?.rank ?? L10n.text("Fan"), number: entry?.number ?? max(1, index + 1)) { [weak self] error in
-            self?.setStatus(L10n.text("Could not save the input route: ") + error)
+            self?.setStatus(L10n.text("Could not save the input route: \(error)"))
           }
       }
       let run = ArcadeRun(id: arcadeRunID, profileID: arcadeProfileID,
@@ -7442,9 +7450,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.deathCountdownAccessibilityText = deathCounter.accessibility
     parts.append(deathCounter.visible)
     if let seconds = session.remainingSeconds {
-      parts.append(String(format: "Time %d:%02d", seconds / 60, seconds % 60))
+      parts.append(L10n.text("Time \(seconds / 60):\(String(format: "%02d", seconds % 60))"))
     }
-    if isFastForward { parts.append(L10n.text("SPEED ") + speedControl.label.replacingOccurrences(of: "×", with: "X")) }
+    if isFastForward { parts.append(L10n.text("SPEED \(speedControl.label.replacingOccurrences(of: "×", with: "X"))")) }
     if session.isNuking { parts.append(L10n.text("NUKING")) }
     if session.isComplete {
       parts.append(session.didWin ? L10n.text("COMPLETE — press N") : L10n.text("FAILED — press R"))
@@ -8493,7 +8501,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     keyboard.help = { [weak self] in
       let names = self?.session?.skills.map(\.name) ?? []
-      return SkillShortcuts(names: names).hint(names: names, modern: self?.settings.modernControlsEnabled ?? true) + L10n.text("\n\nSpace / P: play or pause\nHold , / <: scrub backward\nHold . / >: scrub forward\nTap , / .: step one tick\nZ: 2× Zoom at cursor\nScroll up / down: Zoom on / off at cursor\nShift-Z: 2× Superzoom at cursor, 0.5× time\nPress Z or Shift-Z again to switch off; each start spends one use\nEarn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels\nX: nuke")
+      return L10n.text("\(SkillShortcuts(names: names).hint(names: names, modern: self?.settings.modernControlsEnabled ?? true))\n\nSpace / P: play or pause\nHold , / <: scrub backward\nHold . / >: scrub forward\nTap , / .: step one tick\nZ: 2× Zoom at cursor\nScroll up / down: Zoom on / off at cursor\nShift-Z: 2× Superzoom at cursor, 0.5× time\nPress Z or Shift-Z again to switch off; each start spends one use\nEarn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels\nX: nuke")
     }
     keyboard.pauseForHelp = { [weak self] in
       guard let self else { return {} }

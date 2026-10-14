@@ -19,7 +19,7 @@ public enum MobilePauseArt {
             details: [summary.level.title, summary.status, summary.rescueText]
                 + summary.fields.map(\.text)
                 + [summary.playDetails] + summary.supplies.map { $0.label + " left: " + $0.value }
-                + [L10n.text("Soundtrack: ") + summary.soundtrack, summary.track, summary.audio],
+                + [L10n.text("Soundtrack: \(summary.soundtrack)"), summary.track, summary.audio],
             footer: actions, preview: true, footerColumns: 2)
         page.pause = summary
         return page

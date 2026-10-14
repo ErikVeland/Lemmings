@@ -34,7 +34,7 @@ extension MobileLibraryViewController {
         guard let list = playlists.playlist(id) else { return playlistsPage(subtitle: subtitle) }
         if let draft = nameDraft {
             return .init(title: L10n.text("Rename"), subtitle: subtitle,
-                         rows: [.init("nameField", L10n.text("Name: ") + draft.uppercased() + "_", selected: true)],
+                         rows: [.init("nameField", L10n.text("Name: \(draft.uppercased())_"), selected: true)],
                          footer: [.init("nameCancel", L10n.text("Cancel")), .init("nameDone", L10n.text("Done"), primary: true)])
         }
         let shown = MobileListLibrary(entries: list.entries, name: list.name, catalogue: catalogue!)
@@ -49,7 +49,7 @@ extension MobileLibraryViewController {
         let hasSelection = selected.map { list.entries.indices.contains($0) } ?? false
         let playable = !shown.levels.isEmpty && shown.levels.count == list.entries.count
         return .init(
-            title: list.name, subtitle: subtitle.isEmpty ? L10n.text("\(list.entries.count) levels") : subtitle, rows: rows,
+            title: list.name, subtitle: subtitle.isEmpty ? L10n.plural("count.levels", count: list.entries.count, one: "%ld level", other: "%ld levels") : subtitle, rows: rows,
             footer: [
                 .init("listPlay", L10n.text("Play"), enabled: playable, primary: true),
                 .init("listShuffle", L10n.text("Shuffle"), enabled: playable && list.entries.count > 1),
@@ -177,7 +177,7 @@ extension MobileLibraryViewController {
         let entry = MobileFavourites.Entry(pack: identity.pack, level: identity.level, title: library?.levels[selectedIndex].title)
         let added = playlists.add(entry, to: id)
         savePlaylists()
-        notice = added ? L10n.text("ADDED") : L10n.text(L10n.text("ALREADY IN PLAYLIST"))
+        notice = added ? L10n.text("ADDED") : L10n.text("ALREADY IN PLAYLIST")
         navigate(.levels)
         notice = ""
         rebuild()
@@ -190,7 +190,7 @@ extension MobileLibraryViewController {
             favouriteIdentity(index).map { MobileFavourites.Entry(pack: $0.pack, level: $0.level, title: library.levels[index].title) }
         }
         let picks = MobilePlaylistStore.random(10, from: pool, seed: UInt64.random(in: 0...UInt64.max))
-        let name = L10n.text("Random 10 ") + (currentPack?.title ?? "")
+        let name = L10n.text("Random 10 \((currentPack?.title ?? ""))")
         guard let created = playlists.create(name: name, entries: picks) else { return }
         savePlaylists()
         openPlaylist(created)
@@ -268,7 +268,7 @@ extension MobileLibraryViewController {
     func shuffleAllPage(subtitle: String) -> GameFrontEnd.Page {
         var details: [String] = []
         if shuffleScanning { details = [L10n.text("Counting levels...")] }
-        else if let pool = shufflePool { details = [L10n.text("\(pool.entries.count) levels"), L10n.text("\(pool.packs) packs")] }
+        else if let pool = shufflePool { details = [L10n.plural("count.levels", count: pool.entries.count, one: "%ld level", other: "%ld levels"), L10n.plural("count.packs", count: pool.packs, one: "%ld pack", other: "%ld packs")] }
         else { details = [L10n.text("Fan levels are not available.")] }
         return .init(title: L10n.text("Shuffle all"), subtitle: subtitle, details: details,
                      footer: [.init("fanBack", L10n.text("Back")),

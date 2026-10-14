@@ -19,7 +19,7 @@ public actor FanPackUpdater {
         public var counts: [String: Int] = [:]
         public var unavailable = false
         public var status: String {
-            if added > 0 { return L10n.text("\(added) NEW \(added == 1 ? L10n.text("PACK") : L10n.text("PACKS"))") + (unavailable ? L10n.text(" · CHECK INCOMPLETE") : "") }
+            if added > 0 { return L10n.text("\(added) NEW \(added == 1 ? L10n.text("PACK") : L10n.text("PACKS"))\((unavailable ? L10n.text(" · CHECK INCOMPLETE") : ""))") }
             return unavailable ? L10n.text("OFFLINE COLLECTION READY · CHECK UNAVAILABLE") : L10n.text("COLLECTION UP TO DATE")
         }
         public init() {}

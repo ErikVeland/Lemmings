@@ -29,10 +29,10 @@ import UIKit
         isAccessibilityElement = true
         accessibilityLabel = L10n.text("Level playfield")
         accessibilityCustomActions = [
-            UIAccessibilityCustomAction(name: "Assign selected skill", actionHandler: { [weak self] _ in self?.onAssign?(); return true }),
-            UIAccessibilityCustomAction(name: "Next eligible lemming", actionHandler: { [weak self] _ in self?.onCycle?(1); return true }),
-            UIAccessibilityCustomAction(name: "Previous eligible lemming", actionHandler: { [weak self] _ in self?.onCycle?(-1); return true }),
-            UIAccessibilityCustomAction(name: "Pause and open controls", actionHandler: { [weak self] _ in self?.onPause?(); return true })
+            UIAccessibilityCustomAction(name: L10n.text("Assign selected skill"), actionHandler: { [weak self] _ in self?.onAssign?(); return true }),
+            UIAccessibilityCustomAction(name: L10n.text("Next eligible lemming"), actionHandler: { [weak self] _ in self?.onCycle?(1); return true }),
+            UIAccessibilityCustomAction(name: L10n.text("Previous eligible lemming"), actionHandler: { [weak self] _ in self?.onCycle?(-1); return true }),
+            UIAccessibilityCustomAction(name: L10n.text("Pause and open controls"), actionHandler: { [weak self] _ in self?.onPause?(); return true })
         ]
     }
     required init?(coder: NSCoder) { nil }

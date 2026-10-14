@@ -69,9 +69,9 @@ public struct TrolleyRankChange: Equatable, Sendable {
     public let players: Int
     public let improved: Bool
     public var label: String {
-        guard let after else { return L10n.text(L10n.text("Clear the level to rank")) }
-        if let before, after < before { return L10n.text(L10n.text("#\(before) > #\(after) of \(players)")) }
-        return L10n.text("#\(after) of \(players)") + (improved && before != nil ? L10n.text(L10n.text(" - new best")) : "")
+        guard let after else { return L10n.text("Clear the level to rank") }
+        if let before, after < before { return L10n.text("#\(before) > #\(after) of \(players)") }
+        return L10n.text("#\(after) of \(players)\((improved && before != nil ? L10n.text(" - new best") : ""))")
     }
 }
 

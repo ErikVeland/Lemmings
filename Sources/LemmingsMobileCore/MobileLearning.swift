@@ -38,7 +38,7 @@ public struct MobileLearningResume: Sendable {
     public var scope: String { seat?.scope ?? owner }
     public var resumeTitle: String {
         guard let run = state.run else { return L10n.text("Resume") }
-        if run.pool.id.hasPrefix(L10n.text("learning-")) { return L10n.text("Resume journey") }
+        if run.pool.id.hasPrefix("learning-") { return L10n.text("Resume journey") }
         return L10n.text("Resume \(run.pool.summary)  \(run.currentIndex + 1)/\(run.entries.count)")
     }
 

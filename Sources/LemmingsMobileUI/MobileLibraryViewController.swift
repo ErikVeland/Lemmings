@@ -318,7 +318,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             }
             if let saved = pendingCheckpoint, !checkpointResumesLearningRun(saved) {
                 resume.append(checkpointMatchesSession(saved)
-                    ? .init("resume", L10n.text("Resume level - ") + playerName(saved.owner ?? profiles.activeID))
+                    ? .init("resume", L10n.text("Resume level - \(playerName(saved.owner ?? profiles.activeID))"))
                     : .init("seatOther", otherSessionTitle(for: saved)))
             }
             let families: [GameFrontEnd.Action] = MobileFamily.allCases.map { family in
@@ -331,10 +331,10 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 let title = family.title + (packs.isEmpty ? L10n.text(" - No data") : "  \(passed)/\(total)")
                 return .init("family." + family.rawValue, title, enabled: !packs.isEmpty)
             } + [.init("neolemmix", hasNeoLemmixData ? L10n.text("NeoLemmix Preview") : L10n.text("Import NeoLemmix data")),
-                 .init("l2", hasLemmings2Data ? L10n.text("Lemmings 2  120 levels") : L10n.text("Import Lemmings 2 data")),
-                 .init("l3", hasLemmings3Data ? L10n.text("Lemmings 3 Preview  90 levels") : L10n.text("Import Lemmings 3 data"), enabled: true)]
+                 .init("l2", hasLemmings2Data ? L10n.text("Lemmings 2") : L10n.text("Import Lemmings 2 data"), gameLogo: .lemmings2),
+                 .init("l3", hasLemmings3Data ? L10n.text("Lemmings 3") : L10n.text("Import Lemmings 3 data"), enabled: true, gameLogo: .lemmings3)]
             let journey = bundledJourney
-            let journeyTitle = L10n.text("Journey  \(journey.map { learning.progress.solvedCount(in: $0) } ?? 0)/\(journey?.lessons.count ?? 0) solved")
+            let journeyTitle = L10n.text("Journey map  \(journey.map { learning.progress.solvedCount(in: $0) } ?? 0)/\(journey?.lessons.count ?? 0) solved")
             let initials = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") } ?? profiles.active.name
             canvas.page = MobileHomeArt.page(resume: resume,
                 journey: .init("journey", journeyTitle, enabled: catalogue != nil && journey != nil),
@@ -356,7 +356,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             if family == .fan {
                 rows.append(.init("fanUpdate", fanUpdating ? L10n.text("Checking for new packs...") : L10n.text("Check for new packs"), enabled: !fanUpdating))
             }
-            let count = query.isEmpty ? L10n.text("\(all.count) packs") : L10n.text("\(packs.count)/\(all.count) packs")
+            let count = query.isEmpty ? L10n.plural("count.packs", count: all.count, one: "%ld pack", other: "%ld packs") : L10n.text("\(packs.count)/\(all.count) packs")
             canvas.page = .init(title: family.title,
                                 subtitle: !subtitle.isEmpty ? subtitle : (fanUpdateStatus.isEmpty ? count : fanUpdateStatus),
                                 rows: rows, footer: [.init("home", L10n.text("Back"))])
@@ -471,7 +471,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                                     return .init("import." + kind.rawValue,
                                                  "\(action) \(kind.displayTitle)", enabled: !loading)
                                 },
-                                details: library.map { ["\($0.displayName)", L10n.text("\($0.levels.count) levels")] } ?? [],
+                                details: library.map { ["\($0.displayName)", L10n.plural("count.levels", count: $0.levels.count, one: "%ld level", other: "%ld levels")] } ?? [],
                                 footer: [.init("home", L10n.text("Back"))])
             canvas.preview = nil
         }

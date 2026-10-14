@@ -67,9 +67,9 @@ public enum MobileHUDAction: Equatable, Sendable {
             descriptors.append((.releaseRate(1), 1, L10n.text("Increase release rate, currently \(rate)")))
         }
         for (index, skill) in snapshot.skills.enumerated() {
-            let amount = skill.isUnlimited ? "unlimited" : L10n.text("\(skill.count) remaining")
+            let amount = skill.isUnlimited ? L10n.text("unlimited") : L10n.text("\(skill.count) remaining")
             let selected = index == selectedSkill ? L10n.text(", selected") : ""
-            descriptors.append((.skill(index), index + 2, "\(skill.name), \(amount)\(selected)"))
+            descriptors.append((.skill(index), index + 2, L10n.text("\(SkillVocabulary.title(skill.name)), \(amount)\(selected)")))
         }
         descriptors.append((.pause, 10, paused ? L10n.text("Resume") : L10n.text("Pause")))
         let endRunLabel = snapshot.isEndingRun
@@ -86,7 +86,7 @@ public enum MobileHUDAction: Equatable, Sendable {
 
         if layout.portrait != nil {
             descriptors = descriptors.map { action, cell, label in
-                (action, cell, action == .pause ? label + L10n.text(", hold for pause menu") :
+                (action, cell, action == .pause ? L10n.text("\(label), hold for pause menu") :
                     action == .endRun ? label + (snapshot.isEndingRun ? L10n.text(", tap or hold") : L10n.text(", tap twice or hold")) : label)
             }
         }
@@ -285,7 +285,7 @@ public enum MobileHUDAction: Equatable, Sendable {
     }
 
     private func drawSkillLabels(_ panel: MobilePanelMetrics, context: CGContext) {
-        let names = snapshot.skills.map { Self.shortNames[$0.name.lowercased()] ?? $0.name.uppercased() }
+        let names = snapshot.skills.map { Self.shortNames[$0.name.lowercased()] ?? SkillVocabulary.title($0.name).uppercased() }
         let longest = names.map(\.count).max() ?? 1
         for item in items {
             guard case let .skill(index) = item.action, let name = names[safe: index] else { continue }
@@ -407,7 +407,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         }
         drawGameLabel(value, in: CGRect(x: frame.minX + 4, y: frame.minY + 4, width: frame.width - 8, height: 14), context: context)
         if case let .skill(index) = item.action, let skill = snapshot.skills[safe: index] {
-            let name = Self.shortNames[skill.name.lowercased()] ?? skill.name.uppercased()
+            let name = Self.shortNames[skill.name.lowercased()] ?? SkillVocabulary.title(skill.name).uppercased()
             let label = CGRect(x: frame.minX + 3, y: frame.maxY - 14, width: frame.width - 6, height: 10)
             let scale = max(1, min(2, floor(min(label.height / 7, label.width / CGFloat(max(1, name.count * 6))))))
             GamePixelTypography.draw(name, in: label, context: context, typography: typography, maximumScale: scale, bitmapOnly: true)

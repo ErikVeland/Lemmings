@@ -2,6 +2,9 @@
   "asset": "ultimate.png",
   "tool": "Built-in image_gen",
   "purpose": "Transparent Ultimate lettering for the shared Macintosh menu logo.",
+  "renderResolutionScale": 2,
+  "originalSampling": "Nearest neighbour, preserving authored pixels and transparent eyes",
+  "badgeSampling": "Rendered at twice the previous resolution from the 750px source",
   "paletteReference": {
     "green": [
       "#008040",
@@ -15,7 +18,7 @@
     "referenceLogoWidth": 629,
     "padding": "Derived from the rotated badge bounds",
     "letteringWidth": 242,
-    "additionalUpwardTiltDegrees": 8,
+    "additionalUpwardTiltDegrees": 4,
     "opticalAnchor": {"stalkX": 55, "fromLogoTop": 50, "wordWidthFraction": 0.59},
     "role": "Badge with ima across the original upper-left L",
     "menuAnchor": "Centre the original Lemmings mark, excluding the badge overhang"

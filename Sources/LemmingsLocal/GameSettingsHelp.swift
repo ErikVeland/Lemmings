@@ -1,6 +1,8 @@
 #if os(macOS)
 import AppKit
+#if canImport(NxlvKit)
 import NxlvKit
+#endif
 
 /// Help stays inside the game canvas, so it never opens a window or takes focus.
 @MainActor final class GameSettingsHelp {

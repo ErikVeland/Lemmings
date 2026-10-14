@@ -1,6 +1,8 @@
 #if os(macOS)
 import AppKit
+#if canImport(NxlvKit)
 import NxlvKit
+#endif
 
 /// Offers the effects choice once, including on the first launch after an upgrade.
 @MainActor final class EffectsWelcome {

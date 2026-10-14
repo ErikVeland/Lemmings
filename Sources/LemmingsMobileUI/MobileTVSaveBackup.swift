@@ -19,7 +19,7 @@ extension MobileLibraryViewController {
                 do {
                     let preferences = try TVSaveBackup.capturePreferences(defaults: .standard)
                     let root = tvSaveRoot
-                    let folder = FileManager.default.temporaryDirectory.appendingPathComponent(L10n.text("TVBackup-") + UUID().uuidString)
+                    let folder = FileManager.default.temporaryDirectory.appendingPathComponent("TVBackup-\(UUID().uuidString)")
                     let file = try await Task.detached(priority: .utility) {
                         let saved = try TVSaveBackup.capture(root: root, preferences: preferences)
                         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)

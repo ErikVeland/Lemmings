@@ -67,7 +67,7 @@ public enum ClassicDOSMechanics: String, Codable, Sendable {
              .holidayLemmings1993, .holidayLemmings1994:
             self = .ohNoMore
         case .ohYesMoreLemmings:
-            self = rank == L10n.text("Oh No! More Lemmings Versus") ? .ohNoMore : .original
+            self = rank == "Oh No! More Lemmings Versus" ? .ohNoMore : .original
         default:
             self = .original
         }

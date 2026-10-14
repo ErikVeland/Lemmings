@@ -1,0 +1,67 @@
+[
+  {
+    "file": "Sources/LemmingsAppCore/Hints/ClassicRouteRecorder.swift",
+    "source": "academy.glasscode.lemmings.classic-routes",
+    "reason": "Stable identifier"
+  },
+  {
+    "file": "Sources/LemmingsAppCore/Records/ReplayMovie.swift",
+    "source": "academy.glasscode.lemmings.replay",
+    "reason": "Stable identifier"
+  },
+  {
+    "file": "Sources/LemmingsAppCore/Recovery/RunRecovery.swift",
+    "source": "academy.glasscode.lemmings.checkpoints",
+    "reason": "Stable identifier"
+  },
+  {
+    "file": "Sources/LemmingsLocal/main.swift",
+    "source": "playlist:new",
+    "reason": "Stable identifier"
+  },
+  {
+    "file": "Sources/LemmingsLocal/main.swift",
+    "source": "playlist:random",
+    "reason": "Stable identifier"
+  },
+  {
+    "file": "Sources/LemmingsLocal/main.swift",
+    "source": "playlist:shuffle-all",
+    "reason": "Stable identifier"
+  },
+  {
+    "file": "Sources/NxlvKit/ArcadeLevelDecoder.swift",
+    "source": "Arcade Stage 1",
+    "reason": "Original catalogue level title"
+  },
+  {
+    "file": "Sources/NxlvKit/GenesisLevelDecoder.swift",
+    "source": "Presenter {0}",
+    "reason": "Original catalogue level title"
+  },
+  {
+    "file": "Sources/NxlvKit/SNESLevelDecoder.swift",
+    "source": "Sunsoft Special 1",
+    "reason": "Original catalogue level title"
+  },
+  {
+    "file": "Sources/NxlvKit/SNESLevelDecoder.swift",
+    "source": "Sunsoft Special 2",
+    "reason": "Original catalogue level title"
+  },
+  {
+    "file": "Sources/NxlvKit/SNESLevelDecoder.swift",
+    "source": "Sunsoft Special 3",
+    "reason": "Original catalogue level title"
+  },
+  {
+    "file": "Sources/NxlvKit/SNESLevelDecoder.swift",
+    "source": "Sunsoft Special 4",
+    "reason": "Original catalogue level title"
+  },
+  {
+    "file": "Sources/NxlvKit/SNESLevelDecoder.swift",
+    "source": "Sunsoft Special 5",
+    "reason": "Original catalogue level title"
+  }
+]

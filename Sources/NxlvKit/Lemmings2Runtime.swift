@@ -28,20 +28,20 @@ public struct Lemmings2Runtime: Sendable {
         public var name: String {
             switch self {
             case .unused: ""
-            case .bomber: L10n.text("Exploder")
-            case .blastBomber: L10n.text("Bomber")
-            case .clubBasher: L10n.text("Club Basher")
-            case .laserBlaster: L10n.text("Laser Blaster")
-            case .flameThrower: L10n.text("Flame Thrower")
-            case .sandPourer: L10n.text("Sand Pourer")
-            case .gluePourer: L10n.text("Glue Pourer")
-            case .rockClimber: L10n.text("Rock Climber")
-            case .poleVaulter: L10n.text("Pole Vaulter")
-            case .magnoBooter: L10n.text("Magno Booter")
-            case .magicCarpet: L10n.text("Magic Carpet")
-            case .jetPack: L10n.text("Jet Pack")
-            case .icarusWings: L10n.text("Icarus Wings")
-            case .hangGlider: L10n.text("Hang Glider")
+            case .bomber: "Exploder"
+            case .blastBomber: "Bomber"
+            case .clubBasher: "Club Basher"
+            case .laserBlaster: "Laser Blaster"
+            case .flameThrower: "Flame Thrower"
+            case .sandPourer: "Sand Pourer"
+            case .gluePourer: "Glue Pourer"
+            case .rockClimber: "Rock Climber"
+            case .poleVaulter: "Pole Vaulter"
+            case .magnoBooter: "Magno Booter"
+            case .magicCarpet: "Magic Carpet"
+            case .jetPack: "Jet Pack"
+            case .icarusWings: "Icarus Wings"
+            case .hangGlider: "Hang Glider"
             default: String(describing:self).capitalized
             }
         }
@@ -366,7 +366,7 @@ public struct Lemmings2Runtime: Sendable {
         let skills = try practiceSkills ?? level.skills.map { slot -> Skill in
             if slot.count == 0 { return .unused }
             guard let skill = Skill(rawValue: slot.identifier) else {
-                throw SequelDataError.invalid(L10n.text(L10n.text("Skill \(slot.identifier) is not yet supported by the native preview.")))
+                throw SequelDataError.invalid(L10n.text("Skill \(slot.identifier) is not yet supported by the native preview."))
             }
             return skill
         }

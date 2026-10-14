@@ -1,6 +1,8 @@
 #if os(macOS)
 import AppKit
+#if canImport(NxlvKit)
 import NxlvKit
+#endif
 import LemmingsAppCore
 import LemmingsGameArt
 import UniformTypeIdentifiers
@@ -59,9 +61,9 @@ import UniformTypeIdentifiers
     override func accessibilityRole() -> NSAccessibility.Role? { .group }
     override func accessibilityChildren() -> [Any]? {
         let layout = pageLayout
-        var elements: [Any] = [accessible.element(id: L10n.text("status"), owner: self, label: page.subtitle, frame: layout.subtitle)]
+        var elements: [Any] = [accessible.element(id: "status", owner: self, label: page.subtitle, frame: layout.subtitle)]
         for (index, detail) in page.details.enumerated() {
-            elements.append(accessible.element(id: L10n.text("detail-\(index)"), owner: self, label: detail, frame: layout.details[index]))
+            elements.append(accessible.element(id: "detail-\(index)", owner: self, label: detail, frame: layout.details[index]))
         }
         for target in layout.targets {
             let id = target.action.id
@@ -69,7 +71,7 @@ import UniformTypeIdentifiers
                 press: target.action.enabled ? { [weak self] in self?.handle(id) } : nil)
             element.setAccessibilityEnabled(target.action.enabled)
             element.onFocus = { [weak self] in self?.focus = id; self?.needsDisplay = true }
-            if id == L10n.text("syncCodeField") {
+            if id == "syncCodeField" {
                 element.setAccessibilityRole(.textField)
                 element.readValue = { [weak self] in self?.draft ?? "" }
                 element.writeValue = { [weak self] value in self?.draft = String(AppleCloudLibraryTransport.cleanCode(value).prefix(12)); self?.needsDisplay = true }

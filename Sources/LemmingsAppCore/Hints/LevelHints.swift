@@ -16,20 +16,20 @@ public struct LevelHintCatalogue: Decodable, Sendable {
             let first = opening.first?.skill ?? ""
             let nudge = LevelHintDeck.nudges[first]
                 ?? L10n.text("Trace a path from the entrance to the exit. Check the landing places before changing the terrain.")
-            let openingSkills = opening.map { $0.skill.capitalized }.joined(separator: " → ")
+            let openingSkills = opening.map { SkillVocabulary.title($0.skill) }.joined(separator: " → ")
             let later = skillOrder.filter { skill in !opening.contains { $0.skill == skill } }
             var approach = opening.isEmpty
                 ? L10n.text("This checked route does not need a skill assignment. Watch where the lemmings walk before intervening.")
                 : L10n.text("One working route opens with:\n\(openingSkills)\n\n\(LevelHintDeck.jobs[first] ?? L10n.text("Watch the worker's direction before assigning a skill."))")
-            if !later.isEmpty { approach += L10n.text("\n\nKeep \(later.map { $0.capitalized }.joined(separator: ", ")) available for later.") }
+            if !later.isEmpty { approach += L10n.text("\n\nKeep \(later.map { SkillVocabulary.title($0) }.joined(separator: ", ")) available for later.") }
             var instructions: [String] = []
             for (index, move) in opening.enumerated() {
                 let worker: String
-                if index > 0, opening[index - 1].lemmingID == move.lemmingID { worker = "the same worker" }
-                else if move.lemmingID == 0 { worker = "the first lemming" }
-                else if move.lemmingID == 1 { worker = "the second lemming" }
+                if index > 0, opening[index - 1].lemmingID == move.lemmingID { worker = L10n.text("the same worker") }
+                else if move.lemmingID == 0 { worker = L10n.text("the first lemming") }
+                else if move.lemmingID == 1 { worker = L10n.text("the second lemming") }
                 else { worker = L10n.text("lemming \(move.lemmingID + 1) in the release order") }
-                instructions.append("\(index + 1). Give \(worker) \(move.skill.capitalized) at marker \(index + 1), facing \(move.facingLeft ? "left" : "right").")
+                instructions.append(L10n.text("\(index + 1). Give \(worker) \(SkillVocabulary.title(move.skill)) at marker \(index + 1), facing \(move.facingLeft ? L10n.text("left") : L10n.text("right"))."))
             }
             // Only the last rate at a tick affects the next simulation step.
             var effectiveRates: [Rate] = []
@@ -57,7 +57,7 @@ public struct LevelHintCatalogue: Decodable, Sendable {
             return LevelHintDeck(title: "\(rank) \(number) · \(title)", checked: true, stages: [
                 .init(title: L10n.text("A gentle nudge"), body: nudge),
                 .init(title: L10n.text("The approach"), body: approach),
-                .init(title: L10n.text("Opening moves"), body: L10n.text("Examples from the start of a winning route:\n\n") + openingText + rateContext,
+                .init(title: L10n.text("Opening moves"), body: L10n.text("Examples from the start of a winning route:\n\n\(openingText)\(rateContext)"),
                       moves: opening, width: width, height: height)
             ])
         }
@@ -120,14 +120,13 @@ public struct LevelHintDeck: Sendable {
     public static func practice(title: String, skills: [String], chronicles: Bool = false) -> Self {
         let available = skills.filter { jobs[$0.lowercased()] != nil }
         let tips = available.prefix(3).compactMap { jobs[$0.lowercased()] }.joined(separator: "\n\n")
+        let advice = tips.isEmpty ? L10n.text("Try one skill at normal speed, then pause and inspect the result. Watch where the worker lands and turns.") : tips
         return Self(title: title, checked: false, stages: [
             .init(title: L10n.text("A gentle nudge"), body: L10n.text("Pause and follow the route from the entrance to the exit. Find the first place a lemming cannot pass safely.")),
             .init(title: L10n.text("Make a small plan"), body: chronicles
                 ? L10n.text("Inspect the tools on the level. Decide which worker needs each tool, then prepare one part of the route at a time.")
                 : L10n.text("Match the first obstacle to an available skill. Check what happens after that skill finishes. Keep some supplies for the next obstacle.")),
-            .init(title: L10n.text("Try one idea"), body: (tips.isEmpty
-                ? L10n.text("Try one skill at normal speed, then pause and inspect the result. Watch where the worker lands and turns.")
-                : tips) + L10n.text("\n\nChange one part of your plan at a time when you retry."))
+            .init(title: L10n.text("Try one idea"), body: L10n.text("\(advice)\n\nChange one part of your plan at a time when you retry."))
         ])
     }
 }

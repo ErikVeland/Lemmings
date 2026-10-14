@@ -5,6 +5,7 @@ import NxlvKit
 /// Original Mode-X panel pixels and the shipped fixed-width FONT bank.
 @MainActor struct Lemmings3Panel {
     static let edges = [0, 35, 70, 105, 140, 175, 214, 249, 284, 320]
+    static let canonicalNames = ["Walker", "Blocker", "Jumper", "Use tool", "Drop tool", "Time remaining", "Fast forward", "Pause", "End run"]
     static let names = [L10n.text("Walker"), L10n.text("Blocker"), L10n.text("Jumper"), L10n.text("Use tool"), L10n.text("Drop tool"), L10n.text("Time remaining"), L10n.text("Fast forward"), L10n.text("Pause"), L10n.text("End run")]
     static let directionAnimation = 91
     let normal: NSImage

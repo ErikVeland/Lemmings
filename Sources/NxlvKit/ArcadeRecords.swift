@@ -36,11 +36,11 @@ public enum ArcadeBoard: String, Codable, CaseIterable, Sendable {
     case rescue, efficiency, allSaved, fastestClear, fastestAllSaved
     public var title: String {
         switch self {
-        case .rescue: L10n.text(L10n.text("MOST SAVED"))
-        case .efficiency: L10n.text(L10n.text("FEWEST SKILLS"))
+        case .rescue: L10n.text("MOST SAVED")
+        case .efficiency: L10n.text("FEWEST SKILLS")
         case .allSaved: L10n.text("100% CLUB")
-        case .fastestClear: L10n.text(L10n.text("FASTEST CLEAR"))
-        case .fastestAllSaved: L10n.text(L10n.text("FASTEST 100%"))
+        case .fastestClear: L10n.text("FASTEST CLEAR")
+        case .fastestAllSaved: L10n.text("FASTEST 100%")
         }
     }
 }
@@ -49,12 +49,12 @@ public enum ArcadeLevelAchievement: String, Codable, CaseIterable, Sendable {
     case firstClear, allHome, noSkills, oneSkill, betterRescue, fewerSkills
     public var title: String {
         switch self {
-        case .firstClear: L10n.text(L10n.text("TARGET MET"))
-        case .allHome: L10n.text(L10n.text("EVERYONE HOME"))
-        case .noSkills: L10n.text(L10n.text("HANDS OFF"))
-        case .oneSkill: L10n.text(L10n.text("ONE TRICK"))
-        case .betterRescue: L10n.text(L10n.text("ONE MORE HOME"))
-        case .fewerSkills: L10n.text(L10n.text("LESS IS MORE"))
+        case .firstClear: L10n.text("TARGET MET")
+        case .allHome: L10n.text("EVERYONE HOME")
+        case .noSkills: L10n.text("HANDS OFF")
+        case .oneSkill: L10n.text("ONE TRICK")
+        case .betterRescue: L10n.text("ONE MORE HOME")
+        case .fewerSkills: L10n.text("LESS IS MORE")
         }
     }
     public var detail: String {

@@ -1,6 +1,8 @@
 #if os(macOS)
 import AppKit
+#if canImport(NxlvKit)
 import NxlvKit
+#endif
 import LemmingsAudio
 
 /// Three short rising notes, prepared once and played only on the result page.

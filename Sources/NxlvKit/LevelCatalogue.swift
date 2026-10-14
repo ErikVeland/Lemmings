@@ -9,10 +9,10 @@ public enum LevelSourceEngine: String, Codable, CaseIterable, Sendable {
 
     public var displayName: String {
         switch self {
-        case .classic: L10n.text(L10n.text("Classic"))
-        case .neolemmix: L10n.text(L10n.text("NeoLemmix"))
-        case .lemmings2: L10n.text(L10n.text("Lemmings 2"))
-        case .lemmings3: L10n.text(L10n.text("Lemmings 3"))
+        case .classic: L10n.text("Classic")
+        case .neolemmix: L10n.text("NeoLemmix")
+        case .lemmings2: L10n.text("Lemmings 2")
+        case .lemmings3: L10n.text("Lemmings 3")
         }
     }
 }
@@ -25,7 +25,15 @@ public enum LevelContentStatus: String, Codable, CaseIterable, Sendable {
     case beta
     case unverified
 
-    public var displayName: String { rawValue.capitalized }
+    public var displayName: String {
+        switch self {
+        case .complete: L10n.text("Complete")
+        case .playable: L10n.text("Playable")
+        case .preview: L10n.text("Preview")
+        case .beta: L10n.text("Beta")
+        case .unverified: L10n.text("Unverified")
+        }
+    }
 }
 
 /// Why a catalogue entry can or cannot start.
@@ -38,9 +46,9 @@ public enum LevelAvailability: String, Codable, CaseIterable, Sendable {
 
     public var displayName: String {
         switch self {
-        case .available: L10n.text(L10n.text("Available"))
-        case .locked: L10n.text(L10n.text("Locked"))
-        case .unavailable: L10n.text(L10n.text("Unavailable"))
+        case .available: L10n.text("Available")
+        case .locked: L10n.text("Locked")
+        case .unavailable: L10n.text("Unavailable")
         }
     }
 }

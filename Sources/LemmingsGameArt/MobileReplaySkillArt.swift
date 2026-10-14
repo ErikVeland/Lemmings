@@ -21,7 +21,7 @@ public enum MobileReplaySkillArt {
             let y = CGFloat(26 + index * 18)
             GamePixelTypography.draw(String(use.tick), in: CGRect(x: 8, y: y, width: 72, height: 18),
                 context: context, typography: typography, palette: palette)
-            GamePixelTypography.draw(use.name, in: CGRect(x: 86, y: y, width: 146, height: 18),
+            GamePixelTypography.draw(SkillVocabulary.title(use.name), in: CGRect(x: 86, y: y, width: 146, height: 18),
                 context: context, typography: typography, palette: palette)
         }
     }

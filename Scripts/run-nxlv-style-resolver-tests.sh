@@ -6,6 +6,7 @@ build_dir="$project_dir/.build/nxlv-style-resolver-tests"
 mkdir -p "$build_dir/modules"
 
 swiftc -swift-version 6 -parse-as-library \
+  "$project_dir/Sources/NxlvKit/InterfaceLocalisation.swift" \
   -emit-module -emit-library \
   -module-name NxlvKit \
   -emit-module-path "$build_dir/modules/NxlvKit.swiftmodule" \

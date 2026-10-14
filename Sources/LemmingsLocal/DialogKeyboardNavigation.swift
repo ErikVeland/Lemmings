@@ -1,6 +1,10 @@
 #if os(macOS)
 import AppKit
+#if canImport(NxlvKit)
+#if canImport(NxlvKit)
 import NxlvKit
+#endif
+#endif
 
 /// Bitmap views with their own virtual controls retain their internal focus loop.
 @MainActor protocol GameDialogCustomNavigation: AnyObject {}

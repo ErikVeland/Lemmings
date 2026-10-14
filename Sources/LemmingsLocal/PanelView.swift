@@ -92,7 +92,7 @@ enum PanelButton: Equatable {
       case .rateUp: label = session is NeoLemmixSession ? L10n.text("Increase spawn interval") : L10n.text("Increase release rate")
       case .skill(let skill):
         guard let value = session?.skills[safe: skill] else { continue }
-        label = L10n.text("\(value.name), \(value.isInfinite ? "unlimited" : String(value.count)) remaining") + (selectedSkillIndex == skill ? L10n.text(", selected") : "")
+        label = L10n.text("\(SkillVocabulary.title(value.name)), \(value.isInfinite ? "unlimited" : String(value.count)) remaining\((selectedSkillIndex == skill ? L10n.text(", selected") : ""))")
       case .pause: label = isPaused ? L10n.text("Resume") : L10n.text("Pause")
       case .nuke: label = session?.canUndoNuke == true ? L10n.text("Undo end run") : L10n.text("End run")
       case .fastForward: label = isFastForward ? L10n.text("Return to normal speed") : L10n.text("Start fast-forward at ") + speedChoiceLabel
@@ -505,7 +505,7 @@ enum PanelButton: Equatable {
       "disarmer": L10n.text("DISARM"), "bomber": L10n.text("BOMB"), "stoner": L10n.text("STONE"), "blocker": L10n.text("BLOCK"),
       "platformer": L10n.text("PLAT"), "builder": L10n.text("BUILD"), "stacker": L10n.text("STACK"), "laserer": L10n.text("LASER"),
       "basher": L10n.text("BASH"), "fencer": L10n.text("FENCE"), "miner": L10n.text("MINE"), "digger": L10n.text("DIG"), "cloner": L10n.text("CLONE")]
-    let names = session?.skills.map { shortNames[$0.name.lowercased()] ?? $0.name.uppercased() } ?? []
+    let names = session?.skills.map { shortNames[$0.name.lowercased()] ?? SkillVocabulary.title($0.name).uppercased() } ?? []
     let labelWidth = buttonFrames.compactMap { button, frame -> CGFloat? in
       if case .skill = button { return max(0, frame.width - 2 * panelScale) }
       return nil
@@ -602,7 +602,7 @@ enum PanelButton: Equatable {
           respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
         NSGraphicsContext.restoreGraphicsState()
       } else {
-        drawGameLabel(skill.name, in: well)
+        drawGameLabel(SkillVocabulary.title(skill.name), in: well)
       }
       if selected {
         NSColor.white.setStroke()

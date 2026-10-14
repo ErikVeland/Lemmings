@@ -1,6 +1,8 @@
 #if os(macOS)
 import AppKit
+#if canImport(NxlvKit)
 import NxlvKit
+#endif
 
 /// Routes standard editing commands to the active text field, including secure fields.
 @MainActor enum TextEditingMenu {

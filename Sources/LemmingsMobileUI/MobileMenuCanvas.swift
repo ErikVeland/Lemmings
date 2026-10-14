@@ -105,7 +105,7 @@ import UIKit
         }
         if page.home, !page.homeInitials.isEmpty {
             let element = UIAccessibilityElement(accessibilityContainer: self)
-            element.accessibilityLabel = L10n.text("Active players: ") + page.homeInitials
+            element.accessibilityLabel = L10n.text("Active players: \(page.homeInitials)")
             element.accessibilityTraits = .staticText
             element.accessibilityFrameInContainerSpace = layout.initials.applying(transform)
             elements.append(element)
@@ -119,7 +119,7 @@ import UIKit
         onPageChanged?()
         let actions = page.rows + page.orderedFooter
         if !actions.contains(where: { $0.id == focusedID && $0.enabled }) {
-            focusedID = actions.first(where: { $0.enabled && $0.title.uppercased() == L10n.text("CANCEL") })?.id
+            focusedID = actions.first(where: { $0.enabled && $0.title.uppercased() == L10n.text("CANCEL").uppercased() })?.id
                 ?? actions.first(where: { $0.primary && $0.enabled })?.id
                 ?? actions.first(where: \.enabled)?.id
         }

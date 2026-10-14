@@ -7,7 +7,7 @@ public enum CloudSyncArt {
                             code: String? = nil, draft: String? = nil, message: String = "") -> GameFrontEnd.Page {
         if let draft {
             return .init(title: L10n.text("Link library"), subtitle: message,
-                rows: [.init("syncCodeField", L10n.text("Code: ") + grouped(draft) + "_", selected: true)],
+                rows: [.init("syncCodeField", L10n.text("Code: \(grouped(draft))_"), selected: true)],
                 details: [L10n.text("Shares your whole library."), L10n.text("Profiles and Hot Seats.")],
                 footer: [.init("syncCancel", L10n.text("Cancel")),
                          .init("syncJoin", L10n.text("Link library"), enabled: draft.count == 12 && !busy, primary: true)])

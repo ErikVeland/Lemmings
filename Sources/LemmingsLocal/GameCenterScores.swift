@@ -150,8 +150,8 @@ import NxlvKit
         pageFooter()
         let entries = service.board?.entries.map { L10n.text("Rank \($0.rank). \($0.name). \($0.score).") }.joined(separator: " ") ?? ""
         let personal = service.board?.personal.map { L10n.text(" Your rank: \($0.rank). Your score: \($0.score).") } ?? ""
-        let summary = L10n.text("Worldwide Game Center leaderboard. \(service.status) ") + entries + personal
-        setAccessibilityLabel(summary + L10n.text(" Ranked catalogue only, without rewinds."))
+        let summary = L10n.text("Worldwide Game Center leaderboard. \(service.status) \(entries)\(personal)")
+        setAccessibilityLabel(L10n.text("\(summary) Ranked catalogue only, without rewinds."))
     }
 }
 #endif

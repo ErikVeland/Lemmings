@@ -127,7 +127,7 @@ import NxlvKit
             modifiers: ["practice": String(c.isPractice), "releaseInterval": String(c.releaseInterval),
                         "firstReleaseTick": String(c.firstReleaseTick), "goldRequirement": String(max(1, c.total - level.allowedLossesForGold))])
         return ArcadeLevel(id: "l2:" + level.fingerprint, title: level.title,
-            game: L10n.text("Lemmings 2 - ") + Lemmings2Campaign.tribeNames[level.style], rules: rules,
+            game: L10n.text("Lemmings 2 - \(Lemmings2Campaign.tribeNames[level.style])"), rules: rules,
             total: c.total, required: 1, conditions: conditions)
     }
     private var fanSelected = false
@@ -377,7 +377,7 @@ import NxlvKit
         keyboard.skillNames = { [weak self] in self?.game?.configuration.skills.map(\.name) ?? [] }
         keyboard.help = { [weak self] in
             let names = self?.game?.configuration.skills.map(\.name) ?? []
-            return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + L10n.text("\n\nSpace / P: pause\nR: retry\nHold , / <: scrub backward\nHold . / >: scrub forward after rewind\nTap , / .: step one tick\nZ: 2× Zoom at cursor\nScroll up / down: Zoom on / off at cursor\nShift-Z: 2× Superzoom at cursor, 0.5× time\nPress Z or Shift-Z again to switch off; each start spends one use\nEarn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels")
+            return L10n.text("\(SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false))\n\nSpace / P: pause\nR: retry\nHold , / <: scrub backward\nHold . / >: scrub forward after rewind\nTap , / .: step one tick\nZ: 2× Zoom at cursor\nScroll up / down: Zoom on / off at cursor\nShift-Z: 2× Superzoom at cursor, 0.5× time\nPress Z or Shift-Z again to switch off; each start spends one use\nEarn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels")
         }
         keyboard.contextCommands = {
             [KeyboardCommand(keys: L10n.text("Arrow keys"), action: L10n.text("Pan the level"), group: L10n.text("Camera")),
@@ -958,7 +958,7 @@ import NxlvKit
         if let arcadeLevel { AnonymousTelemetry.shared.start(arcadeLevel, hotSeat: arcadeHotSeatID != nil, attemptID: arcadeRunID) }
         if recordsCampaignProgress, let arcadeLevel { ArcadeStore.shared.beginAttempt(id: arcadeRunID, profileID: arcadeProfileID,
             level: arcadeLevel, previousID: previousAttemptID) }
-        runMovie.begin(ticksPerSecond: Lemmings2Runtime.ticksPerSecond, title: L10n.text("Lemmings 2 - ") + level.title)
+        runMovie.begin(ticksPerSecond: Lemmings2Runtime.ticksPerSecond, title: L10n.text("Lemmings 2 - \(level.title)"))
         runMovie.onWillReview = { [weak self] in self?.suspendAudioOutput() }
         runMovie.onDidReview = { [weak self] in try? self?.resumeAudioOutput() }
         if let recorder = runMovie.recorder {
@@ -1215,7 +1215,7 @@ import NxlvKit
         if fanSelected { controls.insert(.fan) }
         let armed = nukeGesture.armedAt.map { ProcessInfo.processInfo.systemUptime - $0 <= NSEvent.doubleClickInterval } ?? false
         if armed || game.isNuking { controls.insert(.nuke) }
-        let label = game.isNuking || armed ? L10n.text("NUKE") : fanSelected ? L10n.text("FAN") : hover ?? (fastForward ? L10n.text("SPEED ") + speedControl.label.replacingOccurrences(of: "×", with: "X") : game.configuration.skills[selected].name)
+        let label = game.isNuking || armed ? L10n.text("NUKE") : fanSelected ? L10n.text("FAN") : hover ?? (fastForward ? L10n.text("SPEED \(speedControl.label.replacingOccurrences(of: "×", with: "X"))") : SkillVocabulary.title(game.configuration.skills[selected].name))
         canvas.rewindOriginTick = rewindOriginState?.tick
         canvas.rewindCurrentTick = game.tick
         if let rendered = try? assets.panel.render(skills: game.configuration.skills.map(\.rawValue), supplies: game.supplies,
@@ -1226,7 +1226,7 @@ import NxlvKit
         canvas.toolTip = nil
         let transport = rewindOriginState.map { L10n.text("Rewind active, \($0.tick - game.tick) ticks back. Hold full stop scrubs forward. Escape cancels.") } ?? ""
         let deathCounterAccessibility = screen == .playing ? deathCounter.accessibility : ""
-        canvas.setAccessibilityLabel("Lemmings 2. \(game.configuration.skills[selected].name) selected. \(label). \(paused ? L10n.text("Paused.") : L10n.text("Running.")) \(game.isNuking ? L10n.text("Nuke active.") : "") \(game.released) released, \(game.saved) saved. \(deathCounterAccessibility). \(canvas.precisionStatus.accessibility). \(transport)")
+        canvas.setAccessibilityLabel(L10n.text("Lemmings 2. \(SkillVocabulary.title(game.configuration.skills[selected].name)) selected. \(label). \(paused ? L10n.text("Paused.") : L10n.text("Running.")) \(game.isNuking ? L10n.text("Nuke active.") : "") \(game.released) released, \(game.saved) saved. \(deathCounterAccessibility). \(canvas.precisionStatus.accessibility). \(transport)"))
     }
     private func update() {
         let frameStarted = ProcessInfo.processInfo.systemUptime
@@ -1625,7 +1625,7 @@ import NxlvKit
                 field.update(game)
                 if let image = try? panel.render(skills: game.configuration.skills.map(\.rawValue), supplies: game.supplies,
                     selected: 0, saved: game.saved, remaining: game.lemmings.filter(\.active).count,
-                    seconds: game.remainingSeconds, label: L10n.text(L10n.text("REPLAY")), palette: Lemmings2Panel.palette(over: game.configuration.palette, phase: game.tick / 4), highlightedControls: []) {
+                    seconds: game.remainingSeconds, label: L10n.text("REPLAY"), palette: Lemmings2Panel.palette(over: game.configuration.palette, phase: game.tick / 4), highlightedControls: []) {
                     field.setPanel(image)
                 }
             })
@@ -1713,7 +1713,7 @@ import NxlvKit
                 let column = (id - 1) % 13
                 let row = (id - 1) / 13
                 let rect = CGRect(x: 4 + column * 24, y: 28 + row * 20, width: 24, height: 20)
-                return (skill.name, rect)
+                return (SkillVocabulary.title(skill.name), rect)
             }
             for (index, tribe) in Lemmings2Practice.tribes.enumerated() { entries.append((Lemmings2Campaign.tribeNames[tribe], CGRect(x: index * 80, y: 133, width: 80, height: 36))) }
             if practiceSkills.count == 8 { entries.append((L10n.text("Start practice"), CGRect(x: 100, y: 180, width: 120, height: 18))) }
@@ -1832,15 +1832,15 @@ import NxlvKit
             front.text(string, font: assets.font, palette: palette(name), x: centered ? x - assets.font.width(string) / 2 : x, y: y)
         }
         switch screen {
-        case .menu: picture(L10n.text("MENU"), palette(L10n.text("MENU")))
+        case .menu: picture("MENU", palette("MENU"))
         case .practice:
-            picture(L10n.text("ROCKWALL"),palette(L10n.text("PRACTICE")))
-            text(L10n.text("Select 8 skills to practice"),160,8,L10n.text("PRACTICE"),centered:true)
+            picture("ROCKWALL",palette("PRACTICE"))
+            text(L10n.text("Select 8 skills to practice"),160,8,"PRACTICE",centered:true)
             for id in 1...51 {
                 let x = 4+(id-1)%13*24, y = 28+(id-1)/13*20
-                let f = bank(L10n.text("PRACTICE")).sprites[3][id-1]
+                let f = bank("PRACTICE").sprites[3][id-1]
                 let scale = min(1,min(22/CGFloat(f.width),18/CGFloat(f.height)))
-                let image = front.makeImage(f.pixels,width:f.width,height:f.height,palette:palette(L10n.text("PRACTICE")),opaque:f.opaque)
+                let image = front.makeImage(f.pixels,width:f.width,height:f.height,palette:palette("PRACTICE"),opaque:f.opaque)
                 image.draw(in:NSRect(x:CGFloat(x)+(24-CGFloat(f.width)*scale)/2,
                     y:CGFloat(y)+(18-CGFloat(f.height)*scale)/2,width:CGFloat(f.width)*scale,height:CGFloat(f.height)*scale),
                     from:.zero,operation:.sourceOver,fraction:1,respectFlipped:true,
@@ -1848,7 +1848,7 @@ import NxlvKit
                 if let skill = Lemmings2Runtime.Skill(rawValue:id), let order = practiceSkills.firstIndex(of:skill) {
                     NSColor.black.withAlphaComponent(0.85).setFill()
                     NSRect(x:x+15,y:y+9,width:9,height:10).fill()
-                    text(String(order+1),x+16,y+9,L10n.text("PRACTICE"))
+                    text(String(order+1),x+16,y+9,"PRACTICE")
                     NSColor.yellow.setStroke()
                     let outline = NSBezierPath(rect:NSRect(x:x,y:y,width:24,height:18))
                     outline.lineWidth = 0.5; outline.stroke()
@@ -1860,7 +1860,7 @@ import NxlvKit
                 }
             }
             let label = hoverPracticeSkill.flatMap(Lemmings2Runtime.Skill.init(rawValue:))?.name ?? L10n.text("\(practiceSkills.count) of 8 selected")
-            text(label,160,112,L10n.text("PRACTICE"),centered:true)
+            text(label,160,112,"PRACTICE",centered:true)
             for (choice,tribe) in Lemmings2Practice.tribes.enumerated() {
                 let f = bank("INFO").sprites[8+tribe][0]
                 let portrait = front.makeImage(f.pixels,width:f.width,height:f.height,
@@ -1869,25 +1869,25 @@ import NxlvKit
                     from:NSRect(x:96,y:0,width:64,height:48),operation:.sourceOver,fraction:1,
                     respectFlipped:true,hints:[.interpolation:NSImageInterpolation.none.rawValue])
                 if choice == practiceChoice {
-                    sprite(L10n.text("PRACTICE"),6,choice*80+24,135,frame:frontTicks/6)
-                    text("*",choice*80+14,144,L10n.text("PRACTICE"))
+                    sprite("PRACTICE",6,choice*80+24,135,frame:frontTicks/6)
+                    text("*",choice*80+14,144,"PRACTICE")
                 }
             }
-            text(Lemmings2Campaign.tribeNames[Lemmings2Practice.tribes[practiceChoice]],160,168,L10n.text("PRACTICE"),centered:true)
-            text(practiceSkills.count == 8 ? L10n.text("Click or Return to practise") : L10n.text("Choose eight different skills"),160,186,L10n.text("PRACTICE"),centered:true)
+            text(Lemmings2Campaign.tribeNames[Lemmings2Practice.tribes[practiceChoice]],160,168,"PRACTICE",centered:true)
+            text(practiceSkills.count == 8 ? L10n.text("Click or Return to practise") : L10n.text("Choose eight different skills"),160,186,"PRACTICE",centered:true)
         case .map:
-            picture(L10n.text("MAP"), palette(L10n.text("MAP")))
+            picture("MAP", palette("MAP"))
             for (id, x, y) in [(2,232,59),(4,117,144),(3,288,141),(5,44,151),(6,47,104)] {
-                sprite(L10n.text("MAP"), id, x, y, frame: frontTicks / 6)
+                sprite("MAP", id, x, y, frame: frontTicks / 6)
             }
-            text(Lemmings2Campaign.tribeNames[hoverTribe ?? campaign.tribe], 165, 183, L10n.text("MAP"), centered: true)
+            text(Lemmings2Campaign.tribeNames[hoverTribe ?? campaign.tribe], 165, 183, "MAP", centered: true)
         case .intro:
             if let introduction {
                 front.draw(introduction.animation.pixels,width:320,height:200,
                            palette:introduction.animation.palette,x:0,y:0)
             }
         case .briefing:
-            picture(L10n.text("ROCKWALL"), palette("INFO"))
+            picture("ROCKWALL", palette("INFO"))
             // INFO.GAL uses the left 140 pixels for eight 25-pixel skill rows.
             for i in 0..<8 {
                 let skill = practiceLevel != nil ? practiceSkills[i].rawValue : level.skills[i].identifier
@@ -1912,40 +1912,40 @@ import NxlvKit
             front.fittedText(level.title, font: assets.font, palette: palette("INFO"),
                              rect: NSRect(x: 145, y: 150, width: 173, height: 24))
             text(L10n.text("\(practiceLevel != nil ? 60 : campaign.population) Lemmings"), 231, 176, centered: true)
-            text(String(format: "TIME %d:%02d", level.timeLimitSeconds / 60, level.timeLimitSeconds % 60), 231, 187, centered: true)
+            text(L10n.text("TIME \(level.timeLimitSeconds / 60):\(String(format: "%02d", level.timeLimitSeconds % 60))"), 231, 187, centered: true)
         case .results:
-            picture(L10n.text("ROCKWALL"), palette(L10n.text("MEDALS")))
+            picture("ROCKWALL", palette("MEDALS"))
             if let game {
                 let medal = Lemmings2Campaign.medal(saved: game.saved, total: game.configuration.total, allowedLosses: level.allowedLossesForGold)
-                sprite(L10n.text("MEDALS"), 2, 30, 25)
+                sprite("MEDALS", 2, 30, 25)
                 if medal != .none {
                     let locations = [(0,0),(43,64),(85,54),(64,44)]
                     let p = locations[medal.rawValue]
-                    sprite(L10n.text("MEDALS"), medal == .gold ? 3 : medal == .silver ? 4 : 5, p.0, p.1, frame: min(20, frontTicks / 4))
+                    sprite("MEDALS", medal == .gold ? 3 : medal == .silver ? 4 : 5, p.0, p.1, frame: min(20, frontTicks / 4))
                 }
-                text(L10n.text("You saved \(game.saved) lemmings"), 160, 8, L10n.text("MEDALS"), centered: true)
-                text(medal == .none ? L10n.text("Oh dear!") : medal.name + " medal", 220, 42, L10n.text("MEDALS"), centered: true)
+                text(L10n.text("You saved \(game.saved) lemmings"), 160, 8, "MEDALS", centered: true)
+                text(medal == .none ? L10n.text("Oh dear!") : L10n.text("\(medal.name) medal"), 220, 42, "MEDALS", centered: true)
                 front.wrappedText(game.didWin ? L10n.text("Click to continue. Your survivors will go on to the next level.")
-                    : bank(L10n.text("MEDALS")).strings[4], font: assets.font, palette: palette(L10n.text("MEDALS")), x: 135, y: 70, width: 170)
-                text(L10n.text("V Replay  S Save movie"), 160, 153, L10n.text("MEDALS"), centered: true)
-                text(L10n.text("Retry"), 35, 182, L10n.text("MEDALS"), centered: true)
-                text(L10n.text("Continue"), 160, 182, L10n.text("MEDALS"), centered: true)
-                text(L10n.text("Menu"), 285, 182, L10n.text("MEDALS"), centered: true)
+                    : bank("MEDALS").strings[4], font: assets.font, palette: palette("MEDALS"), x: 135, y: 70, width: 170)
+                text(L10n.text("V Replay  S Save movie"), 160, 153, "MEDALS", centered: true)
+                text(L10n.text("Retry"), 35, 182, "MEDALS", centered: true)
+                text(L10n.text("Continue"), 160, 182, "MEDALS", centered: true)
+                text(L10n.text("Menu"), 285, 182, "MEDALS", centered: true)
             }
         case .preferences:
-            picture(L10n.text("ROCKWALL"), palette(L10n.text("PREFS")))
-            text(L10n.text("Control Method"), 160, 24, L10n.text("PREFS"), centered: true)
-            text(L10n.text("Mouse"), 160, 44, L10n.text("PREFS"), centered: true)
-            text(L10n.text("Music"), 52, 124, L10n.text("PREFS"))
-            sprite(L10n.text("PREFS"), music.muted ? 5 : 6, 38, 114)
-            text(L10n.text("Sound FX"), 189, 124, L10n.text("PREFS"))
-            sprite(L10n.text("PREFS"), sounds.muted ? 5 : 6, 175, 114)
+            picture("ROCKWALL", palette("PREFS"))
+            text(L10n.text("Control Method"), 160, 24, "PREFS", centered: true)
+            text(L10n.text("Mouse"), 160, 44, "PREFS", centered: true)
+            text(L10n.text("Music"), 52, 124, "PREFS")
+            sprite("PREFS", music.muted ? 5 : 6, 38, 114)
+            text(L10n.text("Sound FX"), 189, 124, "PREFS")
+            sprite("PREFS", sounds.muted ? 5 : 6, 175, 114)
             text(SequelArtworkPreference.enabled ? L10n.text("Artwork: Macintosh-style 2x") : L10n.text("Artwork: Original PC"),
-                 160, 154, L10n.text("PREFS"), centered: true)
-            text("OK", 160, 184, L10n.text("PREFS"), centered: true)
+                 160, 154, "PREFS", centered: true)
+            text("OK", 160, 184, "PREFS", centered: true)
         case .load, .save:
-            picture(L10n.text("ROCKWALL"), palette(L10n.text("LOAD")))
-            text(screen == .save ? L10n.text("Save Game") : L10n.text("Select a game to load"), 160, 12, L10n.text("LOAD"), centered: true)
+            picture("ROCKWALL", palette("LOAD"))
+            text(screen == .save ? L10n.text("Save Game") : L10n.text("Select a game to load"), 160, 12, "LOAD", centered: true)
             for i in 0..<8 {
                 let key = progressKey + ".slot.\(i)"
                 let data = UserDefaults.standard.data(forKey: key)
@@ -1957,10 +1957,10 @@ import NxlvKit
                 }
                 let name = saved.map { L10n.text("\(Lemmings2Campaign.tribeNames[$0.tribe]) - Level \($0.level + 1)") }
                     ?? (data == nil ? L10n.text("<Unsaved Position>") : L10n.text("<Invalid saved game>"))
-                text("\(i == selectedSlot ? ">" : " ") \(i + 1). \(name)", 34, 40 + i * 16, L10n.text("LOAD"))
+                text("\(i == selectedSlot ? ">" : " ") \(i + 1). \(name)", 34, 40 + i * 16, "LOAD")
             }
-            text(screen == .save ? L10n.text("Save") : L10n.text("Load"), 80, 184, L10n.text("LOAD"), centered: true)
-            text(L10n.text("Cancel"), 240, 184, L10n.text("LOAD"), centered: true)
+            text(screen == .save ? L10n.text("Save") : L10n.text("Load"), 80, 184, "LOAD", centered: true)
+            text(L10n.text("Cancel"), 240, 184, "LOAD", centered: true)
         case .talisman:
             if let award {
                 front.draw(award.animation.pixels,width:320,height:200,palette:award.animation.palette,x:0,y:0)
@@ -1971,7 +1971,7 @@ import NxlvKit
                 front.draw(ending.pixels,width:320,height:200,palette:ending.palette,x:0,y:0)
             }
         case .message:
-            picture(L10n.text("ROCKWALL"), palette("INFO"))
+            picture("ROCKWALL", palette("INFO"))
             front.wrappedText(message, font: assets.font, palette: palette("INFO"), x: 24, y: 55, width: 272)
             text(L10n.text("Click to return"), 160, 182, centered: true)
         case .playing: break
@@ -1994,7 +1994,7 @@ import NxlvKit
     override func accessibilityRole() -> NSAccessibility.Role? { .group }
     override func accessibilityChildren() -> [Any]? {
         (turnBadge.isHidden ? [] : [turnBadge] as [Any]) + (menuActions?() ?? []).enumerated().map { index, item in
-            accessibleElements.element(id: L10n.text("action-\(index)"), owner: self, label: item.0,
+            accessibleElements.element(id: "action-\(index)", owner: self, label: item.0,
                 frame: CGRect(x: origin.x + item.1.minX * zoom, y: origin.y + item.1.minY * zoom * 1.2, width: item.1.width * zoom, height: item.1.height * zoom * 1.2), press: item.2)
         }
     }
@@ -2117,7 +2117,7 @@ import NxlvKit
     override func accessibilityChildren() -> [Any]? {
         guard !readOnlyReplay else { return [] }
         guard let game else { return [] }
-        let names = game.configuration.skills.map(\.name) + [L10n.text(L10n.text("Pause")), L10n.text(L10n.text("End run")), L10n.text(L10n.text("Fan")), L10n.text(L10n.text("Fast-forward"))]
+        let names = game.configuration.skills.map { SkillVocabulary.title($0.name) } + [L10n.text("Pause"), L10n.text("End run"), L10n.text("Fan"), L10n.text("Fast-forward")]
         var children: [Any] = turnBadge.isHidden ? [] : [turnBadge]
         for slot in 0..<12 {
             let x = slot < 8 ? slot * 32 : 256 + (slot % 2) * 32
@@ -2125,9 +2125,9 @@ import NxlvKit
             let height = slot < 8 ? 40 : 20
             let frame = CGRect(x: panelX + CGFloat(x) * zoom, y: origin.y + CGFloat(y) * zoom * 1.2, width: 32 * zoom, height: CGFloat(height) * zoom * 1.2)
             let label = game.supplies.indices.contains(slot)
-                ? L10n.text("\(names[slot]), \(game.supplies[slot]) remaining") + (slot == selectedSkillSlot ? L10n.text(L10n.text(", selected")) : "")
+                ? L10n.text("\(names[slot]), \(game.supplies[slot]) remaining\((slot == selectedSkillSlot ? L10n.text(", selected") : ""))")
                 : names[slot]
-            children.append(accessibleElements.element(id: L10n.text("panel-\(slot)"), owner: self, label: label, frame: frame) { [weak self] in
+            children.append(accessibleElements.element(id: "panel-\(slot)", owner: self, label: label, frame: frame) { [weak self] in
                 let time = ProcessInfo.processInfo.systemUptime
                 self?.onPanel?(slot, 1, time)
                 if slot == 9 { self?.onPanel?(slot, 2, time + 0.01) }
@@ -2135,7 +2135,7 @@ import NxlvKit
         }
         if variableSpeedEnabled {
             for direction in [-1, 1] {
-                children.append(accessibleElements.element(id: L10n.text("speed-\(direction)"), owner: self, label: direction < 0 ? L10n.text(L10n.text("Decrease fast speed")) : L10n.text(L10n.text("Increase fast speed")), frame: speedRect) { [weak self] in self?.onSpeedStep?(direction, ProcessInfo.processInfo.systemUptime) })
+                children.append(accessibleElements.element(id: "speed-\(direction)", owner: self, label: direction < 0 ? L10n.text("Decrease fast speed") : L10n.text("Increase fast speed"), frame: speedRect) { [weak self] in self?.onSpeedStep?(direction, ProcessInfo.processInfo.systemUptime) })
             }
         }
         layoutTimeline()
@@ -2266,35 +2266,35 @@ import NxlvKit
                     case .superFlying: label = L10n.text("SUPERLEM")
                     case .arching: label = L10n.text("ARCHER")
                     case .skiing, .skiingAir: label = L10n.text("SKIER")
-                    case .poleVaulting, .poleShrugging: label = L10n.text(L10n.text("POLE VAULTER"))
-                    case .magnoBooting: label = L10n.text(L10n.text("MAGNO BOOTER"))
+                    case .poleVaulting, .poleShrugging: label = L10n.text("POLE VAULTER")
+                    case .magnoBooting: label = L10n.text("MAGNO BOOTER")
                     case .throwing: label = L10n.text("THROWER")
                     case .spearing: label = L10n.text("SPEARER")
-                    case .carpetFlying: label = L10n.text(L10n.text("MAGIC CARPET"))
+                    case .carpetFlying: label = L10n.text("MAGIC CARPET")
                     case .surfing: label = L10n.text("SURFER")
                     case .sliding: label = L10n.text("SLIDER")
                     case .hanging, .climbingTransfer: label = L10n.text("HANGING")
                     case .skating: label = L10n.text("SKATER")
                     case .slipping, .iceRecovering: label = L10n.text("SLIPPING")
                     case .twisting: label = L10n.text("TWISTER")
-                    case .jetPacking: label = L10n.text(L10n.text("JET PACK"))
+                    case .jetPacking: label = L10n.text("JET PACK")
                     case .rolling, .rollingAir: label = L10n.text("ROLLER")
                     case .shimmyJump, .shimming: label = L10n.text("SHIMMIER")
                     case .diving: label = L10n.text("DIVER")
                     case .drowning: label = L10n.text("DROWNING")
                     case .kayaking, .kayakPacking: label = L10n.text("KAYAKER")
-                    case .flyingIcarus: label = L10n.text(L10n.text("ICARUS WINGS"))
-                    case .hangGliding: label = L10n.text(L10n.text("HANG GLIDER"))
+                    case .flyingIcarus: label = L10n.text("ICARUS WINGS")
+                    case .hangGliding: label = L10n.text("HANG GLIDER")
                     case .roping: label = L10n.text("ROPER")
                     case .firingBazooka: label = L10n.text("BAZOOKA")
                     case .firingMortar: label = L10n.text("MORTAR")
-                    case .rockClimbing: label = L10n.text(L10n.text("ROCK CLIMBER"))
+                    case .rockClimbing: label = L10n.text("ROCK CLIMBER")
                     case .hoisting: label = L10n.text("HOISTER")
                     case .planting: label = L10n.text("PLANTER")
                     case .ballooning: label = L10n.text("BALLOONER")
                     case .filling: label = L10n.text("FILLER")
-                    case .sandPouring: label = L10n.text(L10n.text("SAND POURER"))
-                    case .gluePouring: label = L10n.text(L10n.text("GLUE POURER"))
+                    case .sandPouring: label = L10n.text("SAND POURER")
+                    case .gluePouring: label = L10n.text("GLUE POURER")
                     case .attracting: label = L10n.text("ATTRACTOR")
                     case .dancing: label = L10n.text("DANCER")
                     case .parachuting: label = L10n.text("PARACHUTER")
@@ -2315,9 +2315,9 @@ import NxlvKit
                     case .stomping: label = L10n.text("STOMPER")
                     case .scooping: label = L10n.text("SCOOPER")
                     case .fencing: label = L10n.text("FENCER")
-                    case .clubBashing: label = L10n.text(L10n.text("CLUB BASHER"))
-                    case .lasering: label = L10n.text(L10n.text("LASER BLASTER"))
-                    case .flaming: label = L10n.text(L10n.text("FLAME THROWER"))
+                    case .clubBashing: label = L10n.text("CLUB BASHER")
+                    case .lasering: label = L10n.text("LASER BLASTER")
+                    case .flaming: label = L10n.text("FLAME THROWER")
                     case .blocking: label = L10n.text("BLOCKER")
                     case .stacking: label = L10n.text("STACKER")
                     case .platforming: label = L10n.text("PLATFORMER")
@@ -2487,14 +2487,14 @@ import NxlvKit
             }
         }
         if let walker {
-            sprites[L10n.text("WALKER")] = walker.frames.map { frame in
+            sprites["WALKER"] = walker.frames.map { frame in
                 (image(width:frame.width,height:frame.height,pixels:frame.pixels,palette:style.palette,opaque:frame.opaque,category:.lemmings2Walker),frame.x,frame.y)
             }
         }
-        sprites[L10n.text("BALLOON")] = try intern.animation(0).map { frame in
+        sprites["BALLOON"] = try intern.animation(0).map { frame in
             (image(width:frame.width,height:frame.height,pixels:frame.pixels,palette:style.palette,opaque:frame.opaque,category:.mechanical),frame.x,frame.y)
         }
-        sprites[L10n.text("PARACHUTE")] = try intern.animation(19).map { frame in
+        sprites["PARACHUTE"] = try intern.animation(19).map { frame in
             (image(width:frame.width,height:frame.height,pixels:frame.pixels,palette:style.palette,opaque:frame.opaque,category:.mechanical),frame.x,frame.y)
         }
         for part in resolved.parts where !part.frames.isEmpty {
@@ -2766,7 +2766,7 @@ import NxlvKit
             case .exploding:
                 if ghostsOnly { continue }
                 if lem.age >= 16 {
-                    if lem.age == 16, let flash = sprites[L10n.text("EXPLOSION")]?.first {
+                    if lem.age == 16, let flash = sprites["EXPLOSION"]?.first {
                         drawImage(flash.image,x:CGFloat(lem.x-13+flash.x),y:CGFloat(lem.y-14+flash.y))
                     } else if let frames = explosion?.frames, frames.indices.contains(lem.age-17) {
                         for point in frames[lem.age-17] {
@@ -2819,7 +2819,7 @@ import NxlvKit
             if selectedID == lem.id, let pixels {
                 selectedSprite = (pixels, spriteRect, mirrored)
             }
-            if let ticks = lem.bombTicks, let numbers = sprites[L10n.text("COUNTDOWN")], numbers.indices.contains(ticks >> 4) {
+            if let ticks = lem.bombTicks, let numbers = sprites["COUNTDOWN"], numbers.indices.contains(ticks >> 4) {
                 let number = numbers[ticks >> 4]
                 let x = [.walking,.running,.falling].contains(lem.state) ? -8 : offsetX
                 drawImage(number.image,x:CGFloat(lem.x+x+number.x),y:CGFloat(lem.y+offsetY-7+number.y))
@@ -2829,30 +2829,30 @@ import NxlvKit
                 let part = frames[held.frame], offset = held.kind == .spear ? 7 : 0
                 drawImage(part.image,x:CGFloat(held.x-offset+part.x),y:CGFloat(held.y-offset+part.y))
             }
-            if lem.state == .jetPacking, let jet = sprites[L10n.text("JET")], !jet.isEmpty {
+            if lem.state == .jetPacking, let jet = sprites["JET"], !jet.isEmpty {
                 let part = jet[lem.age % jet.count]
                 drawImage(part.image,x:CGFloat(lem.x-7+part.x),y:CGFloat(lem.y-2+part.y))
             }
-            if lem.state == .lasering, let beam = sprites[L10n.text("LASER")], !beam.isEmpty, lem.work >= 0 {
+            if lem.state == .lasering, let beam = sprites["LASER"], !beam.isEmpty, lem.work >= 0 {
                 let part = beam[lem.age % beam.count]
                 for segment in 0...lem.work {
                     drawImage(part.image,x:CGFloat(lem.x-8+2*lem.direction+part.x),
                               y:CGFloat(lem.y-17-segment*8+part.y))
                 }
             }
-            if lem.state == .flaming, let flame = sprites[L10n.text("FLAME")], flame.count == 8 {
+            if lem.state == .flaming, let flame = sprites["FLAME"], flame.count == 8 {
                 let part = flame[lem.age % 4 + (lem.direction < 0 ? 4 : 0)]
                 drawImage(part.image,x:CGFloat(lem.x-(lem.direction < 0 ? 32 : 0)+part.x),y:CGFloat(lem.y-12+part.y))
             }
-            if lem.state == .ballooning, let balloon = sprites[L10n.text("BALLOON")], !balloon.isEmpty {
+            if lem.state == .ballooning, let balloon = sprites["BALLOON"], !balloon.isEmpty {
                 let part = balloon[min(6,lem.age) % balloon.count]
                 drawImage(part.image,x:CGFloat(lem.x-7+part.x),y:CGFloat(lem.y-min(32,25+lem.age)+part.y))
             }
-            if lem.state == .parachuting, let canopy = sprites[L10n.text("PARACHUTE")], !canopy.isEmpty {
+            if lem.state == .parachuting, let canopy = sprites["PARACHUTE"], !canopy.isEmpty {
                 let part = canopy[lem.age % canopy.count]
                 drawImage(part.image,x:CGFloat(lem.x-8+part.x),y:CGFloat(lem.y-17+part.y))
             }
-            if let ticks = lem.bombTicks, sprites[L10n.text("COUNTDOWN")] == nil {
+            if let ticks = lem.bombTicks, sprites["COUNTDOWN"] == nil {
                 let text = String(max(1, (ticks + 14) / 15))
                 GameTypography.annotation(text, at: NSPoint(x: origin.x + (CGFloat(lem.x) - cameraX) * zoom,
                     y: origin.y + (CGFloat(lem.y - 16) - cameraY) * zoom * 1.2), palette: .blue)
@@ -2976,13 +2976,13 @@ import NxlvKit
             let sprite = object.frames[frame]
             drawBackgroundImage(sprite.image, x: CGFloat(object.x + movement + sprite.x), y: CGFloat(object.y + sprite.y))
         }
-        if let smoke = sprites[L10n.text("SMOKE")] {
+        if let smoke = sprites["SMOKE"] {
             for machine in game.machines where machine.kind == .cannon && machine.delay > 0 && smoke.count == 8 {
                 let puff = smoke[machine.delay & 7]
                 drawImage(puff.image,x:CGFloat(machine.x+1+puff.x),y:CGFloat(machine.y+14+puff.y))
             }
         }
-        if let links = sprites[L10n.text("CHAIN")] {
+        if let links = sprites["CHAIN"] {
             for chain in game.chains { for link in chain.links where links.indices.contains(link.frame) {
                 let part = links[link.frame]
                 drawImage(part.image,x:CGFloat(link.x+part.x),y:CGFloat(link.y+part.y))
@@ -2996,7 +2996,7 @@ import NxlvKit
                 drawImage(part.image,x:CGFloat(shot.x-offset+part.x),y:CGFloat(shot.y-offset+part.y))
             }
         }
-        if let flash = sprites[L10n.text("EXPLOSION")]?.first {
+        if let flash = sprites["EXPLOSION"]?.first {
             for point in game.blastFlashes {
                 drawImage(flash.image,x:CGFloat(point.x+flash.x),y:CGFloat(point.y+flash.y))
             }
@@ -3017,7 +3017,7 @@ import NxlvKit
         }
         NSColor(red:CGFloat(palette[12])/255,green:CGFloat(palette[13])/255,blue:CGFloat(palette[14])/255,alpha:1).setFill()
         if let rope = game.rope {
-            if let frames = sprites[L10n.text("HOOK")], frames.indices.contains(rope.frame) {
+            if let frames = sprites["HOOK"], frames.indices.contains(rope.frame) {
                 let hook = frames[rope.frame]
                 drawImage(hook.image,x:CGFloat(rope.x-7+hook.x),y:CGFloat(rope.y-7+hook.y))
             }

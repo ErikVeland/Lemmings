@@ -220,7 +220,7 @@ struct ReticleFeedback {
       let rect = visibleFrame(homeFrame(home.layout.initials, scale: home.scale))
       if !rect.isEmpty {
         items.append(accessibleElements.element(id: "home-players", owner: owner,
-          label: L10n.text("Active players: ") + initials, frame: transform(rect)))
+          label: L10n.text("Active players: \(initials)"), frame: transform(rect)))
       }
     }
     if let overlaySavedCounts {
@@ -255,6 +255,7 @@ struct ReticleFeedback {
   private var handoverButtons: [CGRect] = []
   var overlayLines: [String] = []
   var overlayHomeLeadingCount = 1
+  var overlayHomeLogos: [Int: GameFrontEnd.GameLogo] = [:]
   private var homeScrollOffset: CGFloat = 0
   private var homePreviousSelection: Int?
   private var homePreviousViewport = CGSize.zero
@@ -959,9 +960,9 @@ struct ReticleFeedback {
   private func homeOverlay() -> (page: GameFrontEnd.Page, layout: GameFrontEnd.Layout, scale: CGFloat) {
     let rows = overlayLines.enumerated().map { index, title in
       GameFrontEnd.Action((index < overlayHomeLeadingCount ? "home." : "family.") + String(index), title,
-        primary: index == overlayHighlight, selected: index == overlayHighlight)
+        primary: index == overlayHighlight, selected: index == overlayHighlight, gameLogo: overlayHomeLogos[index])
     }
-    var footer: [GameFrontEnd.Action] = [.init("players", L10n.text("Profiles")), .init("records", L10n.text("Records")), .init("playlists", L10n.text("Playlists"))]
+    var footer: [GameFrontEnd.Action] = [.init("players", L10n.text("Profiles")), .init("records", L10n.text("Records")), .init("playlists", L10n.text("Collections / Playlists"))]
     if overlayShowsSettingsButton { footer.append(.init("settings", L10n.text("Settings"))) }
     if overlayAvailableUpdate != nil, overlayShowsSettingsButton { footer.append(.init("whatsNew", L10n.text("Update"))) }
     for index in footer.indices { footer[index].selected = overlayHighlight == rows.count + index }

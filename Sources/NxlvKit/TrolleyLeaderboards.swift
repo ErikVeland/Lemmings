@@ -4,15 +4,15 @@ public enum TrolleyBoard: String, Codable, CaseIterable, Sendable {
     case mostSaved, rescuePotential, zeroAvoidableLosses, leastSkills, mostUsedSkill, moralSurplus, cleanRescue, fastestClear, fastestAllSaved
     public var title: String {
         switch self {
-        case .fastestClear: L10n.text(L10n.text("Fastest clear"))
-        case .fastestAllSaved: L10n.text(L10n.text("Fastest 100%"))
-        case .mostSaved: L10n.text(L10n.text("Most saved"))
-        case .rescuePotential: L10n.text(L10n.text("Rescue potential"))
-        case .zeroAvoidableLosses: L10n.text(L10n.text("Zero avoidable losses"))
-        case .leastSkills: L10n.text(L10n.text("Least skills"))
-        case .mostUsedSkill: L10n.text(L10n.text("Most used skill"))
-        case .moralSurplus: L10n.text(L10n.text("Moral surplus"))
-        case .cleanRescue: L10n.text(L10n.text("Clean rescue"))
+        case .fastestClear: L10n.text("Fastest clear")
+        case .fastestAllSaved: L10n.text("Fastest 100%")
+        case .mostSaved: L10n.text("Most saved")
+        case .rescuePotential: L10n.text("Rescue potential")
+        case .zeroAvoidableLosses: L10n.text("Zero avoidable losses")
+        case .leastSkills: L10n.text("Least skills")
+        case .mostUsedSkill: L10n.text("Most used skill")
+        case .moralSurplus: L10n.text("Moral surplus")
+        case .cleanRescue: L10n.text("Clean rescue")
         }
     }
     public var ordering: String {

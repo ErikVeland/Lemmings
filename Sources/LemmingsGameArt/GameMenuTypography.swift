@@ -13,11 +13,13 @@ public final class GameMenuTypography {
 
     public let interface: ClassicMacUserInterface
     public let menuLogo: CGImage?
+    public let homeLogos: GameHomeLogoArt
     private var glyphs: [String: CGImage] = [:]
 
-    public init(interface: ClassicMacUserInterface) {
+    public init(interface: ClassicMacUserInterface, homeLogos: GameHomeLogoArt = .bundled) {
         self.interface = interface
         menuLogo = interface.logo.flatMap { GameMenuLogo.image(for: $0) }
+        self.homeLogos = homeLogos
     }
 
     /// Reads the bundled `MacArtwork/lemmings` banks, or nil when they are absent.

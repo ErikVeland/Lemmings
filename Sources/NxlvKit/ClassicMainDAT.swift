@@ -94,7 +94,7 @@ public struct ClassicIndexedBitmap: Codable, Equatable, Sendable {
         }
         guard palette.count >= requiredColorCount else {
             throw ClassicMainDATError.paletteTooSmall(
-                label: "classic sprite",
+                label: L10n.text("classic sprite"),
                 required: requiredColorCount,
                 actual: palette.count
             )

@@ -1,6 +1,8 @@
 #if os(macOS)
 import AppKit
+#if canImport(NxlvKit)
 import NxlvKit
+#endif
 
 /// Local notes also appear after an update installs without an update alert.
 @MainActor final class ReleaseWelcome {
@@ -22,8 +24,8 @@ import NxlvKit
     private var page: GameMenuPage?
 
     init(defaults: UserDefaults = .standard,
-        build: Int = Int(Bundle.main.object(forInfoDictionaryKey: L10n.text("CFBundleVersion")) as? String ?? "0") ?? 0,
-        version: String = Bundle.main.object(forInfoDictionaryKey: L10n.text("CFBundleShortVersionString")) as? String ?? ReleaseWelcome.notesVersion) {
+        build: Int = Int(Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "0") ?? 0,
+        version: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ReleaseWelcome.notesVersion) {
         self.defaults = defaults; self.build = build; self.version = version
     }
     func showIfNeeded(in window: NSWindow, existingPlayer: Bool, completion: @escaping () -> Void) {

@@ -92,7 +92,7 @@ import NxlvKit
         resume.isEnabled = !sessions.isEmpty
         carousel.configure(items: sessions.map { saved in
             LevelCoverFlowItem(id: saved.id, title: saved.players.compactMap { store.records.profile($0)?.initials }.joined(separator: " + "),
-                subtitle: L10n.text("Next turn: ") + (store.records.profile(saved.turn ?? saved.host)?.initials ?? L10n.text("LEM")),
+                subtitle: L10n.text("Next turn: \((store.records.profile(saved.turn ?? saved.host)?.initials ?? L10n.text("LEM")))"),
                 detail: saved.savedAt.map { $0.formatted(date: .abbreviated, time: .shortened) } ?? L10n.text("Shared campaign"))
         }, reduceMotion: NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
         carousel.onStart = { [weak resume] _ in resume?.performClick(nil) }
@@ -196,7 +196,7 @@ import NxlvKit
     }
     func showHandover(_ next: ArcadeProfile, owner: NSWindow?) {
         guard let owner else { return }
-        let page = GameMenuPage(title: L10n.text("\(next.initials)'s turn"), subtitle: L10n.text(L10n.text("PASS THE CONTROLS")))
+        let page = GameMenuPage(title: L10n.text("\(next.initials)'s turn"), subtitle: L10n.text("PASS THE CONTROLS"))
         page.controllerBackButton.isHidden = true
         page.setDetail(L10n.text("The game will wait. Give the controls to \(next.initials), then choose Ready."))
         page.addPrimaryAction(L10n.text("Ready, \(next.initials)")) { [weak self, weak page] in
@@ -255,18 +255,18 @@ import NxlvKit
     override func accessibilityChildren() -> [Any]? {
         func mapped(_ rect: CGRect) -> CGRect { CGRect(x: offset.x + rect.minX * scale, y: offset.y + rect.minY * scale, width: rect.width * scale, height: rect.height * scale) }
         var result: [Any] = accessibleText.enumerated().map { index, item in
-            accessibleElements.element(id: L10n.text("text-\(index)"), owner: self, label: item.0, frame: mapped(item.1))
+            accessibleElements.element(id: "text-\(index)", owner: self, label: item.0, frame: mapped(item.1))
         }
         result += buttons.enumerated().map { index, item in
             var name = item.0
-            if name.hasPrefix(L10n.text("player-")), !name.hasPrefix(L10n.text("player-new")), let profile = ArcadeStore.shared.records.profile(String(name.dropFirst(7))) { name = L10n.text(L10n.text("Select player ")) + profile.initials }
-            if name.hasPrefix(L10n.text("portrait-")), let index = Int(name.dropFirst(9)), ArcadeProfile.portraitNames.indices.contains(index) { name = L10n.text("Portrait: ") + ArcadeProfile.portraitNames[index] }
-            let element = accessibleElements.element(id: L10n.text("button-\(index)"), owner: self, label: name, frame: mapped(item.1), press: item.2)
+            if name.hasPrefix("player-"), !name.hasPrefix("player-new"), let profile = ArcadeStore.shared.records.profile(String(name.dropFirst(7))) { name = L10n.text("Select player \(profile.initials)") }
+            if name.hasPrefix("portrait-"), let index = Int(name.dropFirst(9)), ArcadeProfile.portraitNames.indices.contains(index) { name = L10n.text("Portrait: \(ArcadeProfile.portraitNames[index])") }
+            let element = accessibleElements.element(id: "button-\(index)", owner: self, label: name, frame: mapped(item.1), press: item.2)
             element.onFocus = { [weak self] in self?.keyboardButton = index; self?.needsDisplay = true }
             return element
         }
         if mode == .profiles {
-            let field = accessibleElements.element(id: L10n.text("initials"), owner: self, label: L10n.text(L10n.text("Player initials")), frame: mapped(CGRect(x: 564, y: 204, width: 430, height: 60)))
+            let field = accessibleElements.element(id: "initials", owner: self, label: L10n.text("Player initials"), frame: mapped(CGRect(x: 564, y: 204, width: 430, height: 60)))
             field.setAccessibilityRole(.textField)
             field.readValue = { [weak self] in self?.initials ?? "" }
             field.writeValue = { [weak self] value in
@@ -658,7 +658,7 @@ import NxlvKit
             afterSwitch?(); needsDisplay = true; return
         }
         GameScreen.shared.confirm(L10n.text("Records cannot be read"),
-            detail: (store.storageError ?? "") + L10n.text(" Start new records to save again. The unreadable files stay in the records folder."),
+            detail: L10n.text("\((store.storageError ?? "")) Start new records to save again. The unreadable files stay in the records folder."),
             actionTitle: L10n.text("Start new records"), owner: window) { [weak self] in
                 guard let self else { return }
                 if store.startNewRecords() {
@@ -676,7 +676,7 @@ import NxlvKit
     func closeSession() { if let previous = sessionReturnMode { page(previous) } else { onClose?() } }
     private func drawSession() {
         let store = ArcadeStore.shared
-        header(L10n.text("Hot Seat"), subtitle: L10n.text(L10n.text("TAKE TURNS ON THIS MAC")))
+        header(L10n.text("Hot Seat"), subtitle: L10n.text("TAKE TURNS ON THIS MAC"))
         let players = store.records.profiles
         let slots = players.count + (players.count < 8 ? 1 : 0)
         for (index, profile) in players.enumerated() {
@@ -721,9 +721,7 @@ import NxlvKit
         }
         button(L10n.text("Choose a game"), CGRect(x: 808, y: 634, width: 248, height: 48), primary: !needsPlayer,
                enabled: store.hotSeatIsActive) { [weak self] in self?.closeSession() }
-        setAccessibilityLabel(L10n.text("Hot seat. ") + store.sessionProfiles.map(\.initials).joined(separator: ", ")
-            + ". Pass the turn \(store.turnPolicy.title). \(store.turnPolicy.detail)"
-            + L10n.text(" Number keys add or remove players. N adds a new player. Choose a game continues this shared campaign. New Hot Seat starts from the beginning."))
+        setAccessibilityLabel(L10n.text("Hot seat. \(store.sessionProfiles.map(\.initials).joined(separator: ", ")). Pass the turn \(store.turnPolicy.title). \(store.turnPolicy.detail) Number keys add or remove players. N adds a new player. Choose a game continues this shared campaign. New Hot Seat starts from the beginning."))
     }
     func changeSessionPlayer(_ id: String) {
         let store = ArcadeStore.shared
@@ -764,7 +762,7 @@ import NxlvKit
     private func drawProfiles() {
         let store = ArcadeStore.shared
         let records = store.records
-        header(L10n.text("Players"), subtitle: isNewProfile ? L10n.text(L10n.text("NEW PLAYER")) : L10n.text(L10n.text("PLAYER SELECT")))
+        header(L10n.text("Players"), subtitle: isNewProfile ? L10n.text("NEW PLAYER") : L10n.text("PLAYER SELECT"))
         for (index, profile) in records.profiles.enumerated() {
             let rect = CGRect(x: 64, y: 160 + index * 46, width: 264, height: 40)
             let selected = profile.id == selectedProfileID
@@ -861,7 +859,7 @@ import NxlvKit
             rowText(Self.time(run.seconds), x: 918, width: 132, row: row)
         }
         pageFooter()
-        setAccessibilityLabel("\(level.title). \(board.title). Rewinds: \(assisted ? "used" : "unused"). W switches the rewind filter. \(entries.count) local records. Escape returns. A opens achievements. D opens run details.")
+        setAccessibilityLabel(L10n.text("\(level.title). \(board.title). Rewinds: \(assisted ? "used" : "unused"). W switches the rewind filter. \(entries.count) local records. Escape returns. A opens achievements. D opens run details."))
     }
     private func drawAwards() {
         if level?.conditions != nil { drawTrolleyAwards(); return }

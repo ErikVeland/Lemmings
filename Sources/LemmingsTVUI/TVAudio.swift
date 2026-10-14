@@ -38,7 +38,7 @@ import NxlvKit
             runID = game.runID
             let tune = MobileMusicAssignment.tune(identifier: game.session.levelIdentifier,
                 index: game.session.levelIndex, title: game.content.summary.title)
-            if let root = Bundle.main.resourceURL?.appendingPathComponent(L10n.text("Music/") + tune.folder),
+            if let root = Bundle.main.resourceURL?.appendingPathComponent("Music/\(tune.folder)"),
                let urls = try? FileManager.default.contentsOfDirectory(at: root, includingPropertiesForKeys: nil),
                let url = urls.first(where: { $0.deletingPathExtension().lastPathComponent.lowercased() == tune.track.lowercased() }) {
                 _ = music.play(url: url)

@@ -772,7 +772,7 @@ public struct NeoLemmixConfiguration: Codable, Equatable, Sendable {
         let unsupported = NeoLemmixRules.unsupportedFeatures(level: level, renderedLevel: renderedLevel)
         guard unsupported.isEmpty else {
             throw NeoLemmixSimulationError.invalidConfiguration(
-                L10n.text("This level needs NeoLemmix features that are not yet supported: ") + unsupported.joined(separator: ", ") + ".")
+                L10n.text("This level needs NeoLemmix features that are not yet supported: \(unsupported.joined(separator: ", "))."))
         }
         var sourceGadgets = level.gadgets
         var entrances: [NeoLemmixEntrance] = []

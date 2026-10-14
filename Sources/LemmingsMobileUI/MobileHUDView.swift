@@ -137,7 +137,7 @@ import UIKit
         let identityFrame = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: playerName != nil).player
         playerIdentity.frame = identityFrame ?? .zero
         playerIdentity.isHidden = identityFrame == nil
-        playerIdentity.accessibilityLabel = playerName.map { L10n.text("Current turn: ") + $0 }
+        playerIdentity.accessibilityLabel = playerName.map { L10n.text("Current turn: \($0)") }
         self.snapshot = snapshot
         let previousSkill = self.selectedSkill
         self.selectedSkill = selectedSkill
@@ -261,12 +261,12 @@ import UIKit
             button.onAccessiblePress = { [weak self] in self?.onAction?(item.action) }
             if case .releaseRate = item.action {
                 button.accessibilityHint = L10n.text("Actions include minimum or maximum release rate.")
-                button.accessibilityCustomActions = [UIAccessibilityCustomAction(name: "Toggle minimum or maximum release rate") { [weak self] _ in
+                button.accessibilityCustomActions = [UIAccessibilityCustomAction(name: L10n.text("Toggle minimum or maximum release rate")) { [weak self] _ in
                     self?.onRateDoubleTap?(self?.snapshot?.releaseRate == 99); return true
                 }]
             }
             if item.action == .pause {
-                button.accessibilityCustomActions = [UIAccessibilityCustomAction(name: "Pause menu") { [weak self] _ in
+                button.accessibilityCustomActions = [UIAccessibilityCustomAction(name: L10n.text("Pause menu")) { [weak self] _ in
                     self?.onHold?(.pause); return true
                 }]
             }

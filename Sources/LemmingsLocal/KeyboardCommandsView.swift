@@ -1,6 +1,8 @@
 #if os(macOS)
 import AppKit
+#if canImport(NxlvKit)
 import NxlvKit
+#endif
 
 struct KeyboardCommand {
     let keys: String
@@ -20,7 +22,7 @@ struct KeyboardCommand {
     init(commands: [KeyboardCommand], modern: Bool) {
         self.commands = commands
         super.init(frame: NSRect(x: 0, y: 0, width: 780, height: 450))
-        let intro = GameLabel(wrappingLabelWithString: L10n.text("Esc  •  Save and return to the main menu     Space  •  Pause     F  •  Fast-forward\n") + (modern ? L10n.text("Number keys select skills by position. Letter bindings follow the current level.") : L10n.text("Modern shortcuts are off. Use number keys for skills; enable modern controls in Settings.")))
+        let intro = GameLabel(wrappingLabelWithString: L10n.text("Esc  •  Save and return to the main menu     Space  •  Pause     F  •  Fast-forward\n\((modern ? L10n.text("Number keys select skills by position. Letter bindings follow the current level.") : L10n.text("Modern shortcuts are off. Use number keys for skills; enable modern controls in Settings.")))"))
         search.placeholderString = L10n.text("Find a key or command, e.g. rewind, Shift, builder")
         search.setAccessibilityLabel(L10n.text("Search keyboard commands"))
         search.delegate = self

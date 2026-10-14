@@ -25,6 +25,7 @@ import NxlvKit
         for value in SolutionReplayMode.allCases {
             let button = SolutionSegmentButton(title: value == .game ? L10n.text("Your game") : L10n.text("Solution"), primary: false)
             button.owner = self
+            button.mode = value
             button.onPress = { [weak self] in self?.onSelect?(value) }
             button.setAccessibilityLabel(button.title)
             addSubview(button); buttons.append(button)
@@ -42,19 +43,21 @@ import NxlvKit
 
 @MainActor private final class SolutionSegmentButton: GameActionButton {
     weak var owner: SolutionSwitchView?
+    var mode: SolutionReplayMode = .game
     override func draw(_ dirtyRect: NSRect) {
         guard let owner, let context = NSGraphicsContext.current?.cgContext else { return }
         context.saveGState()
         context.translateBy(x: -frame.minX, y: -frame.minY)
-        SolutionSwitchArt.draw(mode: owner.mode, focused: isHighlighted ? (title == L10n.text("Your game") ? .game : .solution) : nil,
+        SolutionSwitchArt.draw(mode: owner.mode, focused: isHighlighted ? mode : nil,
             in: CGRect(x: 0, y: 0, width: owner.bounds.width, height: 48), typography: SolutionSwitchView.typography, context: context)
         context.restoreGState()
-        setAccessibilityValue(owner.mode == (title == L10n.text("Your game") ? .game : .solution) ? L10n.text("Selected") : "")
+        setAccessibilityValue(owner.mode == mode ? L10n.text("Selected") : "")
         GameControlText.focus(self)
     }
 }
 @MainActor private final class GhostSolutionButton: GameActionButton {
     weak var owner: SolutionSwitchView?
+    var mode: SolutionReplayMode = .game
     override func draw(_ dirtyRect: NSRect) {
         guard let owner, let context = NSGraphicsContext.current?.cgContext else { return }
         GhostSolutionArt.draw(enabled: owner.ghostEnabled, focused: isHighlighted, in: bounds,

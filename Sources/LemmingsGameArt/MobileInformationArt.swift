@@ -11,7 +11,7 @@ public enum MobileInformationArt {
         return page
     }
     public static func whatsNew(version: String) -> GameFrontEnd.Page {
-        .init(title: L10n.text("What's new in ") + version,
+        .init(title: L10n.text("What's new in \(version)"),
               details: [L10n.text("Classic + fans"), L10n.text("Hot Seat player HUD"), L10n.text("Bomb countdowns"), L10n.text("Smooth music loops"),
                         L10n.text("Rewind scratch"), L10n.text("Portrait controls"), L10n.text("Pointer targeting"), L10n.text("Shared saves/replays")],
               footer: [.init("welcomeContinue", L10n.text("Continue"), primary: true)])
@@ -28,7 +28,7 @@ public enum MobileInformationArt {
                      ("solo", L10n.text("Solo starts")), ("hotSeat", L10n.text("Hot Seat starts")),
                      ("music", L10n.text("All music chosen")), ("downloads", L10n.text("Music downloaded"))]
         let installs = shared ? counts["installs"].map(String.init) ?? "N/A" : "N/A"
-        let rows: [GameFrontEnd.Action] = [.init("count.installs", L10n.text("Opted-in installs (all-time): ") + installs, enabled: false)]
+        let rows: [GameFrontEnd.Action] = [.init("count.installs", L10n.text("Opted-in installs (all-time): \(installs)"), enabled: false)]
             + names.map { key, title in .init("count." + key, "\(title): \(counts[key, default: 0])", enabled: false) }
         return .init(title: L10n.text("Play Insights"), subtitle: !notice.isEmpty ? notice : loading ? L10n.text("Loading...") :
             shared ? L10n.text("Shared: \(days) days") : L10n.text("This device"), rows: rows,
@@ -38,8 +38,7 @@ public enum MobileInformationArt {
                      .init("insightsClear", L10n.text("Clear local counts")), .init("settingsGroup.privacy", L10n.text("Back"))])
     }
     public static func insightsToken(length: Int) -> GameFrontEnd.Page {
-        .init(title: L10n.text("Shared play counts"), rows: [.init("insightsTokenEdit", L10n.text("Access token: ") +
-            String(repeating: "*", count: min(16, max(0, length))))],
+        .init(title: L10n.text("Shared play counts"), rows: [.init("insightsTokenEdit", L10n.text("Access token: \(String(repeating: "*", count: min(16, max(0, length))))"))],
               footer: [.init("playInsights", L10n.text("Cancel")), .init("insightsLoad", L10n.text("Load"), enabled: length > 0, primary: true)])
     }
     public static func insightsClear() -> GameFrontEnd.Page {

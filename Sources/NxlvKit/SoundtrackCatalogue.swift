@@ -2,9 +2,16 @@ import Foundation
 
 /// Composition identity is separate from its port, source fidelity and arrangement.
 public struct SoundtrackCatalogue: Codable, Sendable {
+    public static func interfaceTitle(_ identifier: String) -> String {
+        switch identifier {
+        case "Original": L10n.text("Original")
+        case "Adaptive DJ": L10n.text("Adaptive DJ")
+        default: identifier
+        }
+    }
     public enum ShuffleScope: String, Codable, CaseIterable, Sendable {
         case sameTrack, allTracks
-        public var title: String { self == .sameTrack ? L10n.text(L10n.text("Same track")) : L10n.text(L10n.text("All tracks")) }
+        public var title: String { self == .sameTrack ? L10n.text("Same track") : L10n.text("All tracks") }
     }
     public struct Variant: Codable, Equatable, Sendable {
         public let id: String

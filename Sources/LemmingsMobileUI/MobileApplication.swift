@@ -82,7 +82,7 @@ public enum LemmingsMobileApplication {
                 preconditionFailure(L10n.text("The synthetic Lemmings 3 level must include an eligible tool holder."))
             }
             let selection = MobileTargetSelection(id: candidate.id, point: candidate.point, state: candidate.assignment)
-            let summary = MobileLevelSummary(index: 0, rank: L10n.text(L10n.text("UI TEST")), number: 1, title: L10n.text("L3 direction"))
+            let summary = MobileLevelSummary(index: 0, rank: L10n.text("UI TEST"), number: 1, title: L10n.text("L3 direction"))
             let checkpoint = MobileCheckpointStore(url: FileManager.default.temporaryDirectory
                 .appendingPathComponent("L3DirectionPicker-\(UUID().uuidString).json"))
             let game = MobileGameViewController(summary: summary, session: session,

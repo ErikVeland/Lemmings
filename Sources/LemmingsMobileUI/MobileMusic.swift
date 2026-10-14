@@ -45,13 +45,13 @@ import UIKit
     private var isTestAudioMuted: Bool { ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] == "muted" }
 
     var soundtrackNames: [String] {
-        [L10n.text("Original"), L10n.text("Adaptive DJ")] + (musicRoot.map { SoundtrackPlayer.soundtracks(at: $0).keys.sorted() } ?? [])
+        ["Original", "Adaptive DJ"] + (musicRoot.map { SoundtrackPlayer.soundtracks(at: $0).keys.sorted() } ?? [])
     }
     var soundtrack: String {
-        get { soundtrackNames.contains(settings.soundtrack) ? settings.soundtrack : L10n.text("Original") }
+        get { soundtrackNames.contains(settings.soundtrack) ? settings.soundtrack : "Original" }
         set {
             var value = settings; value.soundtrack = newValue
-            value.classic.music = newValue == L10n.text("Adaptive DJ") ? .adaptiveDJ : .amigaModules
+            value.classic.music = newValue == "Adaptive DJ" ? .adaptiveDJ : .amigaModules
             value.save(to: .standard, profileID: profileID)
             cachedSettings = value
             stop()
@@ -103,7 +103,7 @@ import UIKit
                 seasonal: !SoundtrackPlayer.isSeasonal(tune.folder)) {
                 pools[name, default: []].append(contentsOf: tracks)
             }
-            if let source { pools[L10n.text("Original"), default: []].append(source) }
+            if let source { pools["Original", default: []].append(source) }
             dj.load(soundtracks: pools, catalogueRoot: root)
             dj.setCelebrationAlternates(settings.classic.djIncludesOtherSoundtracks)
             let started: Bool
@@ -118,7 +118,7 @@ import UIKit
             if started {
                 module.stop(); recordings.stop(); usingDJ = true; usingRecording = false
                 playing = key
-                dj.onTrackChange = { [weak self] _ in self?.announce(self?.dj.currentURL, soundtrack: self?.soundtrack ?? L10n.text("Original")) }
+                dj.onTrackChange = { [weak self] _ in self?.announce(self?.dj.currentURL, soundtrack: self?.soundtrack ?? "Original") }
                 announce(dj.currentURL, soundtrack: soundtrack)
                 applyOutputState(); return
             }
@@ -133,7 +133,7 @@ import UIKit
         do {
             try module.start()
             guard module.play(url: source) != nil else { return }
-            playing = key; announce(source, soundtrack: L10n.text("Original"))
+            playing = key; announce(source, soundtrack: "Original")
             applyOutputState()
         } catch { playing = nil }
     }
@@ -151,7 +151,7 @@ import UIKit
         }
     }
     private func recordingURL(tune: MobileMusicAssignment.Tune) -> URL? {
-        guard soundtrack != L10n.text("Original"), soundtrack != L10n.text("Adaptive DJ"), let root = musicRoot,
+        guard soundtrack != "Original", soundtrack != "Adaptive DJ", let root = musicRoot,
               let tracks = SoundtrackPlayer.soundtracks(at: root)[soundtrack] else { return nil }
         return tracks.first {
             SoundtrackPlayer.matches($0, trackID: tune.game + "." + tune.track.lowercased(), root: root)

@@ -50,8 +50,9 @@ public enum TVMenuArt {
         context.setFillColor(CGColor(gray: 0, alpha: 1)); context.fill(CGRect(origin: .zero, size: size))
         GameMenuFrameArt.draw(in: context, board: layout.board)
         if page.home, let image = typography?.menuLogo {
-            let frame = GameMenuLogo.frame(canvasSize: CGSize(width: image.width, height: image.height),
-                originalWidth: CGFloat(typography?.interface.logo?.width ?? image.width),
+            let size = GameMenuLogo.logicalSize(of: image)
+            let frame = GameMenuLogo.frame(canvasSize: size,
+                originalWidth: typography?.interface.logo.map { CGFloat($0.width) } ?? size.width,
                 in: layout.heading, wholeNumberScale: false)
             GameStoneArt.drawImage(image, in: frame, context: context)
         } else { text(page.title, box: layout.heading, title: true, green: true, typography: typography, context: context) }

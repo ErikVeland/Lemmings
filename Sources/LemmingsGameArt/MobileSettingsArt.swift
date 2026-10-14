@@ -74,7 +74,7 @@ public enum MobileSettingsArt {
                     choice("effectsVolume", L10n.text("Effects volume"), "\(Int(c.soundVolume * 100))%"),
                     toggle("pauseBeat", L10n.text("Rhythm on pause"), c.pauseMusicBeatOnly),
                     toggle("fall", L10n.text("Fall sounds"), c.bottomFallSounds),
-                    choice("soundtrackChoice", L10n.text("Soundtrack"), settings.soundtrack),
+                    choice("soundtrackChoice", L10n.text("Soundtrack"), SoundtrackCatalogue.interfaceTitle(settings.soundtrack)),
                     toggle("djOther", L10n.text("DJ uses other soundtracks"), c.djIncludesOtherSoundtracks),
                     choice("djShuffleScope", L10n.text("DJ shuffle"), settings.djShuffleScope.title),
                     .init("soundtrack", L10n.text("Soundtrack libraries"))]

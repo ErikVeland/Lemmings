@@ -36,12 +36,11 @@ struct ReplaySkillUse {
         let historyWidth = (uses.map { textWidth($0.name) }.max() ?? 0) + tickWidth + 42
         return CGSize(width: max(300, stockWidth, historyWidth), height: CGFloat(58 + rows * 18 + 3 * 18))
     }
-    func update(stocks: [ReplaySkillStock], uses: [ReplaySkillUse], tick: Int, title: String = L10n.text(L10n.text("LEFT"))) {
+    func update(stocks: [ReplaySkillStock], uses: [ReplaySkillUse], tick: Int, title: String = L10n.text("LEFT")) {
         self.stocks = stocks; self.uses = Array(uses.suffix(3)); self.tick = tick; stockTitle = title
         setAccessibilityElement(true)
         setAccessibilityRole(.group)
-        setAccessibilityLabel(L10n.text("Tick \(tick). \(title): ") + stocks.map { "\($0.name) \($0.count)" }.joined(separator: ", ")
-            + ". Skills used: " + self.uses.map { L10n.text("\($0.name) at tick \($0.tick)") }.joined(separator: ", "))
+        setAccessibilityLabel(L10n.text("Tick \(tick). \(title): \(stocks.map { "\(SkillVocabulary.title($0.name)) \($0.count)" }.joined(separator: ", ")). Skills used: \(self.uses.map { L10n.text("\(SkillVocabulary.title($0.name)) at tick \($0.tick)") }.joined(separator: ", "))"))
         needsDisplay = true
     }
     override func draw(_ dirtyRect: NSRect) {
@@ -56,7 +55,7 @@ struct ReplaySkillUse {
         for (index, stock) in stocks.enumerated() {
             let row = CGRect(x: inner.minX + CGFloat(index % columns) * width,
                 y: inner.minY + 18 + CGFloat(index / columns) * 18, width: width - 6, height: 18)
-            GameControlText.draw(stock.name, in: CGRect(x: row.minX, y: row.minY, width: row.width - countWidth - 6, height: 18), enabled: stock.count != "0")
+            GameControlText.draw(SkillVocabulary.title(stock.name), in: CGRect(x: row.minX, y: row.minY, width: row.width - countWidth - 6, height: 18), enabled: stock.count != "0")
             GameControlText.draw(stock.count, in: CGRect(x: row.maxX - countWidth, y: row.minY, width: countWidth, height: 18), alignment: .right, enabled: stock.count != "0")
         }
         let historyY = inner.minY + 24 + CGFloat(rows) * 18
@@ -66,7 +65,7 @@ struct ReplaySkillUse {
             let current = use.tick == tick
             GameControlText.draw(current ? ">" : "", in: CGRect(x: row.minX, y: row.minY, width: 12, height: 18), role: .heading)
             GameControlText.draw(String(use.tick), in: CGRect(x: row.minX + 14, y: row.minY, width: tickWidth, height: 18), role: current ? .heading : .body)
-            GameControlText.draw(use.name, in: CGRect(x: row.minX + tickWidth + 26, y: row.minY, width: row.width - tickWidth - 26, height: 18), role: current ? .heading : .body)
+            GameControlText.draw(SkillVocabulary.title(use.name), in: CGRect(x: row.minX + tickWidth + 26, y: row.minY, width: row.width - tickWidth - 26, height: 18), role: current ? .heading : .body)
         }
     }
 }

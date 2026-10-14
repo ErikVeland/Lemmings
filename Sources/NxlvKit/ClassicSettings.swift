@@ -21,10 +21,10 @@ public enum ClassicGraphicsSource: Equatable, Codable, Sendable {
 
     public var displayName: String {
         switch self {
-        case .dosVGA: return L10n.text(L10n.text("DOS (VGA)"))
-        case .amiga: return L10n.text(L10n.text("Amiga"))
-        case .macintosh: return L10n.text(L10n.text("Macintosh"))
-        case .macintoshMonochrome: return L10n.text(L10n.text("Macintosh (1-bit)"))
+        case .dosVGA: return L10n.text("DOS (VGA)")
+        case .amiga: return L10n.text("Amiga")
+        case .macintosh: return L10n.text("Macintosh")
+        case .macintoshMonochrome: return L10n.text("Macintosh (1-bit)")
         case let .custom(name): return name
         }
     }
@@ -45,15 +45,15 @@ public enum ClassicMusicSource: Equatable, Codable, Sendable {
 
     public var displayName: String {
         switch self {
-        case .adaptiveDJ: return L10n.text(L10n.text("Adaptive DJ Mix (The True Choice) 🎧"))
-        case .amigaModules: return L10n.text(L10n.text("Amiga Modules"))
-        case .macintoshMIDI: return L10n.text(L10n.text("Macintosh (original)"))
-        case .dosAdlib: return L10n.text(L10n.text("DOS Ad-Lib (OPL2)"))
-        case .snesSPC: return L10n.text(L10n.text("SNES SPC Synth"))
-        case .genesisFM: return L10n.text(L10n.text("Sega Genesis FM"))
-        case .cdAudio: return L10n.text(L10n.text("CD Audio Stream"))
+        case .adaptiveDJ: return L10n.text("Adaptive DJ Mix (The True Choice) 🎧")
+        case .amigaModules: return L10n.text("Amiga Modules")
+        case .macintoshMIDI: return L10n.text("Macintosh (original)")
+        case .dosAdlib: return L10n.text("DOS Ad-Lib (OPL2)")
+        case .snesSPC: return L10n.text("SNES SPC Synth")
+        case .genesisFM: return L10n.text("Sega Genesis FM")
+        case .cdAudio: return L10n.text("CD Audio Stream")
         case let .remix(name): return name
-        case .silent: return L10n.text(L10n.text("None"))
+        case .silent: return L10n.text("None")
         }
     }
 }
@@ -70,13 +70,13 @@ public enum ClassicSoundSource: Equatable, Codable, Sendable {
 
     public var displayName: String {
         switch self {
-        case .macintoshResources: return L10n.text(L10n.text("Macintosh"))
-        case .amigaVoices: return L10n.text(L10n.text("Amiga Voices"))
-        case .dosAdlib: return L10n.text(L10n.text("DOS Ad-Lib"))
-        case .sampleBank: return L10n.text(L10n.text("Sample Bank"))
-        case .snes: return L10n.text(L10n.text("Super Nintendo"))
-        case .arcade: return L10n.text(L10n.text("Arcade"))
-        case .silent: return L10n.text(L10n.text("None"))
+        case .macintoshResources: return L10n.text("Macintosh")
+        case .amigaVoices: return L10n.text("Amiga Voices")
+        case .dosAdlib: return L10n.text("DOS Ad-Lib")
+        case .sampleBank: return L10n.text("Sample Bank")
+        case .snes: return L10n.text("Super Nintendo")
+        case .arcade: return L10n.text("Arcade")
+        case .silent: return L10n.text("None")
         }
     }
 }
@@ -92,9 +92,9 @@ public enum ClassicDisplayMode: String, Equatable, Codable, CaseIterable, Sendab
 
     public var displayName: String {
         switch self {
-        case .flat: return L10n.text(L10n.text("Flat Panel"))
-        case .monitor: return L10n.text(L10n.text("Monitor"))
-        case .television: return L10n.text(L10n.text("Television"))
+        case .flat: return L10n.text("Flat Panel")
+        case .monitor: return L10n.text("Monitor")
+        case .television: return L10n.text("Television")
         }
     }
 }
@@ -108,8 +108,8 @@ public enum ClassicColorDepth: String, Equatable, Codable, CaseIterable, Sendabl
 
     public var displayName: String {
         switch self {
-        case .full: return L10n.text(L10n.text("Full"))
-        case .amigaOCS: return L10n.text(L10n.text("Amiga (4 bit)"))
+        case .full: return L10n.text("Full")
+        case .amigaOCS: return L10n.text("Amiga (4 bit)")
         }
     }
 
@@ -131,8 +131,8 @@ public enum ClassicMusicStyle: String, Equatable, Codable, CaseIterable, Sendabl
 
     public var displayName: String {
         switch self {
-        case .faithful: return L10n.text(L10n.text("Faithful"))
-        case .modern: return L10n.text(L10n.text("Modern"))
+        case .faithful: return L10n.text("Faithful")
+        case .modern: return L10n.text("Modern")
         }
     }
 }
@@ -140,12 +140,12 @@ public enum ClassicMusicStyle: String, Equatable, Codable, CaseIterable, Sendabl
 public enum ClassicInterfaceSize: String, Codable, CaseIterable, Sendable {
     case standard, large, extraLarge
     public var scale: Double { switch self { case .standard: 1; case .large: 1.25; case .extraLarge: 1.5 } }
-    public var title: String { switch self { case .standard: L10n.text(L10n.text("Standard (100%)")); case .large: L10n.text(L10n.text("Large (125%)")); case .extraLarge: L10n.text(L10n.text("Extra large (150%)")) } }
+    public var title: String { switch self { case .standard: L10n.text("Standard (100%)"); case .large: L10n.text("Large (125%)"); case .extraLarge: L10n.text("Extra large (150%)") } }
 }
 
 public enum SkillCursorIconSize: String, CaseIterable, Codable, Sendable {
     case none, one = "double", two = "quadruple"
-    public var title: String { switch self { case .none: L10n.text(L10n.text("None")); case .one: "1×"; case .two: "2×" } }
+    public var title: String { switch self { case .none: L10n.text("None"); case .one: "1×"; case .two: "2×" } }
     public var multiplier: Int { switch self { case .none: 0; case .one: 2; case .two: 4 } }
 
     public init(from decoder: Decoder) throws {
@@ -162,22 +162,39 @@ public enum SkillCursorIconSize: String, CaseIterable, Codable, Sendable {
 
 public enum ClassicExperiencePreset: String, CaseIterable, Codable, Sendable {
     case original, modern, custom
-    public var title: String { rawValue.capitalized }
+    public var title: String {
+        switch self {
+        case .original: L10n.text("Original")
+        case .modern: L10n.text("Modern")
+        case .custom: L10n.text("Custom")
+        }
+    }
 }
 
 public enum GameplayCursorStyle: String, CaseIterable, Codable, Sendable {
     case original, modern
-    public var title: String { rawValue.capitalized }
+    public var title: String {
+        switch self {
+        case .original: L10n.text("Original")
+        case .modern: L10n.text("Modern")
+        }
+    }
 }
 
 public enum LemmingSelectionStyle: String, CaseIterable, Codable, Sendable {
     case none, obvious, modern
-    public var title: String { rawValue.capitalized }
+    public var title: String {
+        switch self {
+        case .none: L10n.text("None")
+        case .obvious: L10n.text("Obvious")
+        case .modern: L10n.text("Modern")
+        }
+    }
 }
 
 public enum ClassicCounterStyle: String, CaseIterable, Codable, Sendable {
     case game, macintosh
-    public var title: String { self == .macintosh ? L10n.text(L10n.text("Original Macintosh")) : L10n.text(L10n.text("Game lettering")) }
+    public var title: String { self == .macintosh ? L10n.text("Original Macintosh") : L10n.text("Game lettering") }
 }
 
 public struct ClassicSettings: Equatable, Codable, Sendable {

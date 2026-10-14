@@ -25,7 +25,7 @@ struct PlayingTrack: Equatable {
             let name = url.deletingPathExtension().lastPathComponent
             let title = catalogue?.track(id: gameID + "." + name)?.title ?? name.capitalized
             let game = family == "ohno" ? "Oh No! More Lemmings" : family == "xmas" ? "Holiday Lemmings" : "Lemmings"
-            let value = PlayingTrack(url: url, title: title, soundtrack: game + L10n.text(" - Macintosh (original)"))
+            let value = PlayingTrack(url: url, title: title, soundtrack: L10n.text("\(game) - Macintosh (original)"))
             cached[url] = value
             return value
         }

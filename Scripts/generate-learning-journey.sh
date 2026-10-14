@@ -23,6 +23,7 @@ LEARNING_EXPORT_POOL=1 "$build_dir/LearningJourneyTool" "$project_dir/Artifacts/
 
 resources="${1:-$project_dir/.build/local/Ultimate Lemmings.app/Contents/Resources}"
 swiftc -O -swift-version 6 -I "$module_dir" "${objects[@]}" \
+  "$project_dir/Sources/NxlvKit/InterfaceLocalisation.swift" \
   "$project_dir/Tools/DifficultyDiagnostics/JourneyResources/main.swift" \
   "$project_dir/Sources/LemmingsLocal/GameAssetCache.swift" \
   "$project_dir/Sources/LemmingsLocal/FanLevelLibrary.swift" \
@@ -33,6 +34,7 @@ python3 "$project_dir/Tools/DifficultyDiagnostics/human_journey.py"
 
 # A level count or stored win flag is not a proof. Re-run every selected route.
 swiftc -O -swift-version 6 -I "$module_dir" "${objects[@]}" \
+  "$project_dir/Sources/NxlvKit/InterfaceLocalisation.swift" \
   "$project_dir/Tools/DifficultyDiagnostics/JourneyReplays/main.swift" \
   "$project_dir/Sources/LemmingsLocal/GameAssetCache.swift" \
   "$project_dir/Sources/LemmingsLocal/FanLevelLibrary.swift" \

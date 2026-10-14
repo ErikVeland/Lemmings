@@ -89,7 +89,7 @@ import UIKit
         shuffle.numberOfTouchesRequired = 2
         shuffle.delegate = self
         addGestureRecognizer(shuffle)
-        accessibilityCustomActions = [UIAccessibilityCustomAction(name: "DJ shuffle") { [weak self] _ in
+        accessibilityCustomActions = [UIAccessibilityCustomAction(name: L10n.text("DJ shuffle")) { [weak self] _ in
             self?.onDJShuffle?() ?? false
         }]
         #endif

@@ -8,15 +8,15 @@ public enum TrolleyAchievement: String, Codable, CaseIterable, Sendable {
     case comeback, secondThoughts, targetApprentice, targetScholar, targetSage, greatDebate, philosopherKing, schoolOfThought, unbrokenArgument
     public var title: String {
         switch self {
-        case .falsifier: L10n.text(L10n.text("Karl Popper - The Falsifier"))
-        case .noLemmingLeftBehind: L10n.text(L10n.text("No Lemming left behind"))
-        case .aboveAndBeyond: L10n.text(L10n.text("Above and beyond"))
-        case .trolleyProblem: L10n.text(L10n.text("The Trolley Problem"))
-        case .greaterGood: L10n.text(L10n.text("The Greater Good"))
-        case .oneMore: L10n.text(L10n.text("One more"))
-        case .perfectlyAdequate: L10n.text(L10n.text("Perfectly adequate"))
-        case .moralSurplus: L10n.text(L10n.text("Moral surplus"))
-        case .absoluteMaximum: L10n.text(L10n.text("Absolute maximum"))
+        case .falsifier: L10n.text("Karl Popper - The Falsifier")
+        case .noLemmingLeftBehind: L10n.text("No Lemming left behind")
+        case .aboveAndBeyond: L10n.text("Above and beyond")
+        case .trolleyProblem: L10n.text("The Trolley Problem")
+        case .greaterGood: L10n.text("The Greater Good")
+        case .oneMore: L10n.text("One more")
+        case .perfectlyAdequate: L10n.text("Perfectly adequate")
+        case .moralSurplus: L10n.text("Moral surplus")
+        case .absoluteMaximum: L10n.text("Absolute maximum")
         default: Self.collection[self]!.title
         }
     }

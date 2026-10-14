@@ -4,6 +4,7 @@ project_dir="${0:A:h:h}"
 build_dir="$project_dir/.build/music-playback-tests"
 mkdir -p "$build_dir/modules"
 swiftc -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos12.3" \
+  "$project_dir/Sources/NxlvKit/InterfaceLocalisation.swift" \
   -module-cache-path "$build_dir/ModuleCache" -parse-as-library -emit-module -emit-library -module-name NxlvKit \
   -emit-module-path "$build_dir/modules/NxlvKit.swiftmodule" \
   -Xlinker -install_name -Xlinker @rpath/libNxlvKit.dylib -o "$build_dir/libNxlvKit.dylib" \

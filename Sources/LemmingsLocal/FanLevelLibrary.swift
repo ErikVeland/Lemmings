@@ -838,7 +838,7 @@ enum FanLevelLibrary {
     let files = graphicArchiveIndex.files(in: pack)
     for candidate in candidates {
       let matches = files.filter { $0.lowercased() == candidate.lowercased() }
-      guard matches.count <= 1 else { throw ClassicGraphicsError.missingFile(L10n.text("Unambiguous ") + candidate) }
+      guard matches.count <= 1 else { throw ClassicGraphicsError.missingFile(L10n.text("Unambiguous \(candidate)")) }
       if let path = matches.first {
         guard let data = contents(of: path, in: pack) else { throw ClassicGraphicsError.missingFile(path) }
         return data

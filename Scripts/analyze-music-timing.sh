@@ -6,6 +6,7 @@ music_dir="${1:-$project_dir/Sources/Music}"
 cache_dir="$project_dir/.build/music-timing"
 mkdir -p "$cache_dir"
 swiftc -O -swift-version 6 -warnings-as-errors \
+  "$project_dir/Sources/NxlvKit/InterfaceLocalisation.swift" \
   "$project_dir/Sources/NxlvKit/ProTrackerModule.swift" \
   "$project_dir/Tools/MusicTiming/main.swift" -o "$cache_dir/render-modules"
 "$cache_dir/render-modules" "$music_dir" "$cache_dir/modules"

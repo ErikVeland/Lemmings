@@ -1,6 +1,8 @@
 #if os(macOS)
 import AppKit
+#if canImport(NxlvKit)
 import NxlvKit
+#endif
 
 /// The real paused level remains visible beneath these annotations.
 @MainActor final class KeyboardOverlayView: NSView {
@@ -36,16 +38,16 @@ import NxlvKit
         }
         card(L10n.text("KEYBOARD"), L10n.text("ESC / ?  CLOSE"), "title")
         let camera = commands.filter { $0.group == L10n.text("Camera") }.map { "\($0.keys)  \($0.action)" }.joined(separator: "\n")
-        card(L10n.text(L10n.text("LOOK AROUND")), camera, "camera")
+        card(L10n.text("LOOK AROUND"), camera, "camera")
         let variable = commands.contains { $0.keys.contains(L10n.text("Shift +")) }
-        card(L10n.text("TIME & SPEED"), L10n.text("Space  Pause / resume\nF      Fast-forward / normal speed") + (variable ? L10n.text("\nHold F  Ramp to 10×; release to keep\nHold Shift  Temporary boost\nShift+[ / ]  Decrease / increase speed\nShift+\\     Immediately return to 1×") : ""), "speed")
-        let skillRows = commands.filter { $0.group == L10n.text("Skills") && $0.action.hasPrefix(L10n.text("Select ")) }
+        card(L10n.text("TIME & SPEED"), L10n.text("Space  Pause / resume\nF      Fast-forward / normal speed\((variable ? L10n.text("\nHold F  Ramp to 10×; release to keep\nHold Shift  Temporary boost\nShift+[ / ]  Decrease / increase speed\nShift+\\     Immediately return to 1×") : ""))"), "speed")
+        let skillRows = commands.filter { $0.group == L10n.text("Skills") }
         let skills = skillRows.map { "\($0.keys)  \($0.action.replacingOccurrences(of: L10n.text("Select "), with: "").components(separatedBy: " (")[0])" }.joined(separator: "   •   ")
         card(L10n.text("SELECT A SKILL → CLICK A LEMMING"), skills.isEmpty ? L10n.text("Skill bindings appear when a level is loaded.") : skills, "skills")
         let focus = modern ? L10n.text("[ / ]  Focus unassigned lemmings\n\\      Focus last assignment\nReturn Repeat last skill") : L10n.text("Number keys select skills.\nModern letter and focus shortcuts are off.")
         card(L10n.text("ASSIGN & FOCUS"), focus, "focus")
         let actions = commands.filter { $0.group != L10n.text("Controller") && ["R", "Z", ", / .", "X", "− / +"].contains($0.keys) }.map { "\($0.keys)  \($0.action)" }.joined(separator: "\n")
-        card(L10n.text(L10n.text("LEVEL CONTROLS")), actions + L10n.text("\nEsc  Save run and return to main menu\n     (after closing this overlay)"), "actions")
+        card(L10n.text("LEVEL CONTROLS"), L10n.text("\(actions)\nEsc  Save run and return to main menu\n     (after closing this overlay)"), "actions")
         for (title, action) in [(L10n.text("Close (Esc)"), #selector(closeOverlay)), (L10n.text("All commands"), #selector(allCommands))] + (hints ? [(L10n.text("Level hints"), #selector(levelHints))] : []) {
             let button = GameButton(title: title, target: self, action: action)
             button.bezelStyle = .rounded

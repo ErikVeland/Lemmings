@@ -42,7 +42,7 @@ public struct GameCenterAccount: Equatable, Sendable {
     }
     public private(set) var boardID: String?
     public private(set) var previousRank: Int?
-    public private(set) var status = L10n.text(L10n.text("Connect Game Center to compare worldwide."))
+    public private(set) var status = L10n.text("Connect Game Center to compare worldwide.")
     public private(set) var busy = false
     public var onChange: (() -> Void)?
     public var available: Bool { configuration?.enabled == true && configuration?.isValid == true }

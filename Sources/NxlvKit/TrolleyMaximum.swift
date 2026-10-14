@@ -13,7 +13,7 @@ public struct TrolleyMaximum: Codable, Equatable, Sendable {
     }
     public var isRescueTarget: Bool { status == .verified || status == .record }
     public var label: String {
-        switch status { case .unknown: L10n.text(L10n.text("Maximum unknown")); case .record: L10n.text(L10n.text("Best-known rescue")); case .observed: L10n.text(L10n.text("Local best")); case .verified: L10n.text(L10n.text("Verified maximum")) }
+        switch status { case .unknown: L10n.text("Maximum unknown"); case .record: L10n.text("Best-known rescue"); case .observed: L10n.text("Local best"); case .verified: L10n.text("Verified maximum") }
     }
     public func isValid(population: Int) -> Bool {
         if status == .unknown { return value == nil }

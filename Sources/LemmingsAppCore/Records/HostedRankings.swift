@@ -29,13 +29,13 @@ public enum HostedCategory: String, CaseIterable {
     case fastestClear, fastestAllSaved, mostSaved, leastSkills, stars, clears, perfect
     public var title: String {
         switch self {
-        case .fastestClear: L10n.text(L10n.text("Fastest clear"))
-        case .fastestAllSaved: L10n.text(L10n.text("Fastest 100%"))
-        case .mostSaved: L10n.text(L10n.text("Most saved"))
-        case .leastSkills: L10n.text(L10n.text("Least skills"))
-        case .stars: L10n.text(L10n.text("Career stars"))
-        case .clears: L10n.text(L10n.text("Levels cleared"))
-        case .perfect: L10n.text(L10n.text("Three-star levels"))
+        case .fastestClear: L10n.text("Fastest clear")
+        case .fastestAllSaved: L10n.text("Fastest 100%")
+        case .mostSaved: L10n.text("Most saved")
+        case .leastSkills: L10n.text("Least skills")
+        case .stars: L10n.text("Career stars")
+        case .clears: L10n.text("Levels cleared")
+        case .perfect: L10n.text("Three-star levels")
         }
     }
     public var career: Bool { [.stars, .clears, .perfect].contains(self) }

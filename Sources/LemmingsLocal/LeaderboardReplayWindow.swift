@@ -1,6 +1,8 @@
 #if os(macOS)
 import AppKit
+#if canImport(NxlvKit)
 import NxlvKit
+#endif
 import LemmingsAppCore
 
 /// A level supplies its shipped renderer and an independent starting simulation.
@@ -111,7 +113,7 @@ import LemmingsAppCore
     private func refresh() {
         skillPanel.update(stocks: ReplaySkillPresentation.stocks(cursor.state),
             uses: cursor.skillUses.suffix(3).map { .init(tick: $0.tick, name: $0.name) },
-            tick: cursor.state.tick, title: cursor.state.engine == "lemmings3" ? L10n.text(L10n.text("TOOLS HELD")) : L10n.text("LEFT"))
+            tick: cursor.state.tick, title: cursor.state.engine == "lemmings3" ? L10n.text("TOOLS HELD") : L10n.text("LEFT"))
         layoutSkillPanel()
         render(cursor.state); field.needsDisplay = true
         field.setAccessibilityLabel(L10n.text("Action replay. \(cursor.state.saved) of \(cursor.state.population) saved. Tick \(cursor.state.tick) of \(cursor.replay.ticks)."))

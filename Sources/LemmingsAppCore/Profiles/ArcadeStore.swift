@@ -360,7 +360,7 @@ import NxlvKit
                     try FileManager.default.removeItem(at: url)
                 }
                 return nil
-            } catch { return L10n.text("Player deleted. Some saved files could not be removed: ") + error.localizedDescription }
+            } catch { return L10n.text("Player deleted. Some saved files could not be removed: \(error.localizedDescription)") }
         }
         if backgroundCleanup {
             Task { [weak self] in
@@ -371,9 +371,9 @@ import NxlvKit
         hooks.profileSettingsRemoved(id)
         removeSavedProgress(of: id)
         do { try playlistDataRemover(id) }
-        catch { storageNotice = L10n.text("Player deleted. Some playlists could not be removed: ") + error.localizedDescription }
+        catch { storageNotice = L10n.text("Player deleted. Some playlists could not be removed: \(error.localizedDescription)") }
         do { try LevelPlaylistStore.removeDataChecked(at: collectionsFile(profileID: id)) }
-        catch { storageNotice = L10n.text("Player deleted. Some collections could not be removed: ") + error.localizedDescription }
+        catch { storageNotice = L10n.text("Player deleted. Some collections could not be removed: \(error.localizedDescription)") }
         return true
     }
     private func removeSavedProgress(of id: String) {

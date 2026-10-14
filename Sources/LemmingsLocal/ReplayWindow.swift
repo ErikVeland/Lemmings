@@ -13,7 +13,7 @@ import UniformTypeIdentifiers
   private var waiting: [(Result<URL, ReplayMovieError>) -> Void] = []
   private var generation = 0
   private var recordCompletions: [Int: (Result<URL, ReplayMovieError>) -> Void] = [:]
-  private var title = L10n.text(L10n.text("Lemmings"))
+  private var title = L10n.text("Lemmings")
   var hasFrames = false
   struct CaptureProfile {
     var frames = 0
@@ -218,8 +218,9 @@ import UniformTypeIdentifiers
   private func refresh() {
     bar.fraction = min(1, max(0, fraction.isFinite ? fraction : 0))
     let seconds = max(0, Int(player.currentTime().seconds.isFinite ? player.currentTime().seconds : 0))
-    bar.caption = String(format: "REPLAY  %d:%02d / %d:%02d   SPEED %gX", seconds / 60, seconds % 60,
-      Int(duration) / 60, Int(duration) % 60, playbackRate)
+    let elapsed = String(format: "%d:%02d", seconds / 60, seconds % 60)
+    let total = String(format: "%d:%02d", Int(duration) / 60, Int(duration) % 60)
+    bar.caption = L10n.text("REPLAY  \(elapsed) / \(total)   SPEED \(String(format: "%g", playbackRate))X")
     bar.playing = player.rate != 0
     if let exporter { bar.note = L10n.text("SAVING MOVIE  \(Int(exporter.progress * 100))%   ESC TO CANCEL") }
     bar.needsDisplay = true
@@ -247,9 +248,9 @@ import UniformTypeIdentifiers
           if FileManager.default.fileExists(atPath: destination.path) {
             _ = try FileManager.default.replaceItemAt(destination, withItemAt: temporary)
           } else { try FileManager.default.moveItem(at: temporary, to: destination) }
-          self.bar.note = L10n.text(L10n.text("MOVIE SAVED"))
-        } catch is CancellationError { self.bar.note = L10n.text(L10n.text("SAVE CANCELLED")) }
-        catch { self.bar.note = L10n.text(L10n.text("SAVE FAILED")); self.showError(error) }
+          self.bar.note = L10n.text("MOVIE SAVED")
+        } catch is CancellationError { self.bar.note = L10n.text("SAVE CANCELLED") }
+        catch { self.bar.note = L10n.text("SAVE FAILED"); self.showError(error) }
       }
     }
   }
@@ -334,7 +335,7 @@ import UniformTypeIdentifiers
   override func accessibilityRole() -> NSAccessibility.Role? { .group }
   override func accessibilityChildren() -> [Any]? {
     layoutControls()
-    let position = accessibleElements.element(id: L10n.text("position"), owner: self, label: L10n.text(L10n.text("Replay position")), frame: scrub.insetBy(dx: 0, dy: -7))
+    let position = accessibleElements.element(id: "position", owner: self, label: L10n.text("Replay position"), frame: scrub.insetBy(dx: 0, dy: -7))
     position.setAccessibilityRole(.slider)
     position.readNumber = { [weak self] in (self?.fraction ?? 0) * 100 }
     position.adjustValue = { [weak self] direction in
@@ -347,7 +348,7 @@ import UniformTypeIdentifiers
     position.setAccessibilityMinValue(0); position.setAccessibilityMaxValue(100)
     position.onFocus = { [weak self] in self?.keyboardIndex = 0; self?.needsDisplay = true }
     return [position] + buttons.enumerated().map { index, item in
-      let element = accessibleElements.element(id: L10n.text("replay-\(index)"), owner: self,
+      let element = accessibleElements.element(id: "replay-\(index)", owner: self,
         label: choices[index].1, frame: item.1) { [weak self] in self?.onAction?(item.0) }
       element.onFocus = { [weak self] in self?.keyboardIndex = index + 1; self?.needsDisplay = true }
       return element

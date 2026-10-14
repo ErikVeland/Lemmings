@@ -5,6 +5,12 @@ import NxlvKit
 
 /// Places the Ultimate badge across the original logo's upper-left L.
 public enum GameMenuLogo {
+    public static let resolutionScale: CGFloat = 2
+
+    public static func logicalSize(of image: CGImage) -> CGSize {
+        CGSize(width: CGFloat(image.width) / resolutionScale, height: CGFloat(image.height) / resolutionScale)
+    }
+
     /// Centres the original mark while allowing the badge to extend left.
     public static func frame(canvasSize: CGSize, originalWidth: CGFloat, in box: CGRect,
                              topAligned: Bool = false, wholeNumberScale: Bool = true) -> CGRect {
@@ -27,11 +33,16 @@ public enum GameMenuLogo {
         let url = letteringURL ?? Bundle.main.resourceURL?.appendingPathComponent("MenuArtwork/ultimate.png")
         guard let url, let source = CGImageSourceCreateWithURL(url as CFURL, nil),
               let lettering = CGImageSourceCreateImageAtIndex(source, 0, nil)
-        else { return original }
+        else {
+            guard let context = canvas(width: logo.width, height: logo.height) else { return nil }
+            context.interpolationQuality = .none
+            context.draw(original, in: CGRect(x: 0, y: 0, width: logo.width, height: logo.height))
+            return context.makeImage()
+        }
         let scale = CGFloat(logo.width) / 629
         let width = (242 * scale).rounded()
         let wordHeight = (width * CGFloat(lettering.height) / CGFloat(lettering.width)).rounded()
-        let angle = 8 * CGFloat.pi / 180
+        let angle = 4 * CGFloat.pi / 180
         let anchor = CGPoint(x: (55 * scale).rounded(), y: CGFloat(logo.height) - (50 * scale).rounded())
         // The visual centre of “ima” crosses the L stalk, independent of badge size.
         let wordRect = CGRect(x: -width * 0.59, y: -wordHeight / 2, width: width, height: wordHeight)
@@ -41,10 +52,8 @@ public enum GameMenuLogo {
         let topPadding = Int(ceil(max(0, badgeBounds.maxY - CGFloat(logo.height))))
         let canvasWidth = logo.width + leftPadding
         let height = logo.height + topPadding
-        guard let context = CGContext(data: nil, width: canvasWidth, height: height,
-            bitsPerComponent: 8, bytesPerRow: canvasWidth * 4, space: CGColorSpaceCreateDeviceRGB(),
-            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)
-        else { return original }
+        guard let context = canvas(width: canvasWidth, height: height)
+        else { return nil }
         // Draw original pixels at their native size. Only the new lettering is sampled.
         context.interpolationQuality = .none
         context.draw(original, in: CGRect(x: leftPadding, y: 0, width: logo.width, height: logo.height))
@@ -53,5 +62,15 @@ public enum GameMenuLogo {
         context.rotate(by: angle)
         context.draw(lettering, in: wordRect)
         return context.makeImage()
+    }
+
+    private static func canvas(width: Int, height: Int) -> CGContext? {
+        let pixelsWide = width * Int(resolutionScale)
+        let pixelsHigh = height * Int(resolutionScale)
+        guard let context = CGContext(data: nil, width: pixelsWide, height: pixelsHigh,
+            bitsPerComponent: 8, bytesPerRow: pixelsWide * 4, space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return nil }
+        context.scaleBy(x: resolutionScale, y: resolutionScale)
+        return context
     }
 }

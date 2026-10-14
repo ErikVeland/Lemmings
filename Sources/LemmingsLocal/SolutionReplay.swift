@@ -119,7 +119,7 @@ import LemmingsGameArt
         field.viewport = source.viewport
         field.viewport.levelSize = CGSize(width: width, height: height)
         marker.field = field
-        page.setAccessibilityLabel(L10n.text("Solution replay: ") + solution.replay.title)
+        page.setAccessibilityLabel(L10n.text("Solution replay: \(solution.replay.title)"))
         page.addSubview(field); page.addSubview(marker); page.addSubview(status); page.addSubview(skillPanel)
         selector.mode = .solution
         selector.onSelect = { [weak self] mode in if mode == .game { self?.close() } }

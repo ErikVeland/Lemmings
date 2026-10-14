@@ -180,7 +180,7 @@ public struct ClassicGroundSet: Codable, Equatable, Sendable {
             let maskOffset = Self.littleEndianWord(ground, at: offset + 4)
             let pixels = try Self.decodePlanarImage(
                 terrainGraphics,
-                label: "terrain piece \(id)",
+                label: L10n.text("terrain piece \(id)"),
                 width: width,
                 height: height,
                 imageOffset: imageOffset,
@@ -518,7 +518,7 @@ public enum ClassicLevelRenderer {
               level.specialStyle == 0 ||
                 (canvasWidth == ClassicLevel.width && canvasHeight == ClassicLevel.height) else {
             throw ClassicGraphicsError.invalidGraphicSize(
-                label: "level canvas", width: canvasWidth, height: canvasHeight)
+                label: L10n.text("level canvas"), width: canvasWidth, height: canvasHeight)
         }
         let width = canvasWidth
         let height = canvasHeight

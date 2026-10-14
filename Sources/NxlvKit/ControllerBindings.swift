@@ -28,13 +28,13 @@ public struct ControllerBindings {
     public static func roleName(_ button: Button) -> String {
         switch button {
         case .a: return L10n.text("Assign selected skill")
-        case .b: return L10n.text(L10n.text("Reset speed / cancel / pause menu"))
+        case .b: return L10n.text("Reset speed / cancel / pause menu")
         case .x: return L10n.text("Repeat last assignment")
         case .y: return L10n.text("Focus last assignment")
         case .leftShoulder: return L10n.text("Previous skill")
         case .rightShoulder: return L10n.text("Next skill")
-        case .leftTrigger: return L10n.text(L10n.text("Modifier for extra actions"))
-        case .rightTrigger: return L10n.text(L10n.text("Tap: toggle fast-forward; hold: temporary boost"))
+        case .leftTrigger: return L10n.text("Modifier for extra actions")
+        case .rightTrigger: return L10n.text("Tap: toggle fast-forward; hold: temporary boost")
         case .up: return L10n.text("Increase release rate")
         case .down: return L10n.text("Decrease release rate")
         case .left: return L10n.text("Previous unassigned lemming")

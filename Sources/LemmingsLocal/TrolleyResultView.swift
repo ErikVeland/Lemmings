@@ -11,8 +11,7 @@ import NxlvKit
     }
 
     func rescueSummary(_ run: ArcadeRun, maximum: TrolleyMaximum) -> String {
-        L10n.text("Rescued: \(run.saved). Required: \(run.level.required). ")
-        + (maximum.isRescueTarget ? "\(maximum.status == .verified ? L10n.text("Best possible") : L10n.text("Best known")): \(maximum.value.map(String.init) ?? "unknown")." : L10n.text("Maximum rescue unknown."))
+        L10n.text("Rescued: \(run.saved). Required: \(run.level.required). \((maximum.isRescueTarget ? "\(maximum.status == .verified ? L10n.text("Best possible") : L10n.text("Best known")): \(maximum.value.map(String.init) ?? "unknown")." : L10n.text("Maximum rescue unknown.")))")
     }
     func drawRescueTargets(_ run: ArcadeRun, maximum: TrolleyMaximum) {
         text(L10n.text("Required  \(run.level.required)"), 248, 350, 280, alignment: .center, alpha: 0.8)
@@ -41,7 +40,7 @@ import NxlvKit
         rewindFilter()
         let entries = ArcadeStore.shared.records.trolley.leaderboard(conditions: conditions, assisted: assisted, board: trolleyBoard)
         text(L10n.text("PLAYER"), 181, 272, 96)
-        text([.fastestClear, .fastestAllSaved].contains(trolleyBoard) ? L10n.text("REPLAY") : L10n.text(L10n.text("PLAY STYLE")), 280, 272, 304)
+        text([.fastestClear, .fastestAllSaved].contains(trolleyBoard) ? L10n.text("REPLAY") : L10n.text("PLAY STYLE"), 280, 272, 304)
         text(L10n.text("RESULT"), 589, 272, 220)
         text(L10n.text("SKILLS"), 821, 272, 86, alignment: .right)
         text(L10n.text("TIME"), 925, 272, 119, alignment: .right)
@@ -84,7 +83,7 @@ import NxlvKit
             }
         }
         pageFooter()
-        setAccessibilityLabel("\(boardTitle). Rewinds: \(assisted ? "used" : "unused"). W switches the rewind filter. \(entries.count) local records. \(ordering) Press 1 to 9 to choose a board. Escape returns.")
+        setAccessibilityLabel(L10n.text("\(boardTitle). Rewinds: \(assisted ? "used" : "unused"). W switches the rewind filter. \(entries.count) local records. \(ordering) Press 1 to 9 to choose a board. Escape returns."))
     }
 
     private func achievementPriority(_ award: TrolleyAchievement) -> Int {
@@ -141,9 +140,7 @@ import NxlvKit
         drawAwardEntries(entries, annotations: annotations, affinities: local.map { _ in nil } + awards.map(\.philosopherID), highlighted: highlighted)
         drawAwardGroupLinks()
         pageFooter()
-        setAccessibilityLabel(L10n.text("\(awardGroup.rawValue) achievements across all levels. Left and right change pages. Up and down or 1 to 4 change collections, and the collection names at the bottom of the page select them directly. ")
-            + (newAwards.isEmpty ? "" : L10n.text("New awards from this run are highlighted. \(newAwards.count > 1 ? L10n.text("Next new moves to the next new award. ") : "")"))
-            + entries.enumerated().map { "\(annotations[$0.offset]): \($0.element.0). \($0.element.1)" }.joined(separator: " "))
+        setAccessibilityLabel(L10n.text("\(awardGroup.rawValue) achievements across all levels. Left and right change pages. Up and down or 1 to 4 change collections, and the collection names at the bottom of the page select them directly. \((newAwards.isEmpty ? "" : L10n.text("New awards from this run are highlighted. \(newAwards.count > 1 ? L10n.text("Next new moves to the next new award. ") : "")")))\(entries.enumerated().map { "\(annotations[$0.offset]): \($0.element.0). \($0.element.1)" }.joined(separator: " "))"))
     }
 
     /// The collection row doubles as the keyboard legend, so each entry keeps its

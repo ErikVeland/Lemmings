@@ -19,21 +19,21 @@ extension MobileGameViewController {
         var commands: [(String, () -> Void)] = [
             (L10n.text("BACK"), { [weak self] in self?.pausePlay(showControls: true) }),
             (L10n.text("OVERVIEW"), { [weak self] in
-                self?.showOverlay(title: L10n.text(L10n.text("PAUSED")), actions: [
+                self?.showOverlay(title: L10n.text("PAUSED"), actions: [
                     (L10n.text("BACK"), { [weak self] in self?.showTVControls() }),
                 ])
             }),
             (L10n.text("SETTINGS"), { [weak self] in self?.showInGameSettings() }),
-            (L10n.text(L10n.text("CONTROLS HELP")), { [weak self] in self?.onControlsHelp?() }),
+            (L10n.text("CONTROLS HELP"), { [weak self] in self?.onControlsHelp?() }),
             (L10n.text("SKILLS"), { [weak self] in self?.showTVSkills() }),
             (L10n.text("CAMERA"), { [weak self] in self?.showTVCamera() }),
-            (L10n.text(L10n.text("NEXT LEMMING")), { [weak self] in self?.tvCommand(.focusUnassigned(1), stayInPlay: true) }),
-            (L10n.text(L10n.text("PREVIOUS LEMMING")), { [weak self] in self?.tvCommand(.focusUnassigned(-1), stayInPlay: true) }),
-            (L10n.text(L10n.text("LAST ASSIGNMENT")), { [weak self] in self?.tvCommand(.focusLast, stayInPlay: true) }),
-            (L10n.text(L10n.text("STEP FORWARD")), { [weak self] in self?.tvCommand(.step(1)) }),
+            (L10n.text("NEXT LEMMING"), { [weak self] in self?.tvCommand(.focusUnassigned(1), stayInPlay: true) }),
+            (L10n.text("PREVIOUS LEMMING"), { [weak self] in self?.tvCommand(.focusUnassigned(-1), stayInPlay: true) }),
+            (L10n.text("LAST ASSIGNMENT"), { [weak self] in self?.tvCommand(.focusLast, stayInPlay: true) }),
+            (L10n.text("STEP FORWARD"), { [weak self] in self?.tvCommand(.step(1)) }),
         ]
         if session is Lemmings2MobileSession, !session.isReadOnly {
-            commands.insert((fanMode ? L10n.text(L10n.text("SKILL MODE")) : L10n.text("FAN"), { [weak self] in
+            commands.insert((fanMode ? L10n.text("SKILL MODE") : L10n.text("FAN"), { [weak self] in
                 guard let self else { return }
                 self.fanMode.toggle()
                 self.resumePlay()
@@ -41,7 +41,7 @@ extension MobileGameViewController {
         }
         if session.supportsRewind {
             commands += [
-                (L10n.text(L10n.text("STEP BACK")), { [weak self] in self?.tvCommand(.step(-1)) }),
+                (L10n.text("STEP BACK"), { [weak self] in self?.tvCommand(.step(-1)) }),
                 (L10n.text("REWIND"), { [weak self] in self?.tvCommand(.rewind) }),
             ]
         }
@@ -63,8 +63,8 @@ extension MobileGameViewController {
         if !session.isReadOnly {
             commands += [
                 (L10n.text("HINT"), { [weak self] in self?.onHints?() }),
-                (L10n.text(L10n.text("RESTART LEVEL")), { [weak self] in self?.showRestartLevel() }),
-                (snapshot.isEndingRun ? L10n.text(L10n.text("UNDO END RUN")) : L10n.text(L10n.text("END RUN")), { [weak self] in self?.showTVEndRun() }),
+                (L10n.text("RESTART LEVEL"), { [weak self] in self?.showRestartLevel() }),
+                (snapshot.isEndingRun ? L10n.text("UNDO END RUN") : L10n.text("END RUN"), { [weak self] in self?.showTVEndRun() }),
             ]
         }
         tvPage(title: L10n.text("Game controls"), actions: commands)
@@ -92,7 +92,7 @@ extension MobileGameViewController {
             (L10n.text("PRECISION"), { [weak self] in self?.tvCommand(.zoom(true), stayInPlay: true) }),
             (L10n.text("ENTRANCE"), { [weak self] in self?.tvCommand(.centre(true), stayInPlay: true) }),
             (L10n.text("EXIT"), { [weak self] in self?.tvCommand(.centre(false), stayInPlay: true) }),
-            (L10n.text(L10n.text("MOVE CAMERA")), { [weak self] in self?.tvPlanning(); self?.tvCameraMode = true }),
+            (L10n.text("MOVE CAMERA"), { [weak self] in self?.tvPlanning(); self?.tvCameraMode = true }),
         ])
     }
 
@@ -100,7 +100,7 @@ extension MobileGameViewController {
         if session.snapshot.isEndingRun { tvCommand(.endRun); return }
         tvPage(title: L10n.text("End run?"), actions: [
             (L10n.text("CANCEL"), { [weak self] in self?.showTVControls() }),
-            (L10n.text(L10n.text("END RUN")), { [weak self] in
+            (L10n.text("END RUN"), { [weak self] in
                 guard let self, self.tvPlanning() else { return }
                 _ = self.session.beginEndRun()
                 self.renderCurrentFrame(force: true)

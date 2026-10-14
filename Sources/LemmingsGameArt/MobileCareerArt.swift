@@ -6,7 +6,7 @@ import NxlvKit
 public enum MobileCareerArt {
     private static func sourceLabel(_ level: ArcadeLevel) -> String {
         guard let conditions = level.conditions else { return "" }
-        if conditions.gameID == L10n.text("fan") || conditions.gameID == L10n.text("neolemmix") { return L10n.text(L10n.text("Fan-made")) }
+        if conditions.gameID == L10n.text("fan") || conditions.gameID == L10n.text("neolemmix") { return L10n.text("Fan-made") }
         return ClassicTitle(rawValue: conditions.gameID) == nil ? "" : L10n.text("Official")
     }
 
@@ -16,16 +16,16 @@ public enum MobileCareerArt {
                                hotSeatTurn: String? = nil) -> GameFrontEnd.Page {
         if let draft {
             return .init(title: creating ? L10n.text("New player") : L10n.text("Edit player"), subtitle: subtitle,
-                rows: [.init("nameField", L10n.text("Initials: ") + String(draft.uppercased().prefix(3)) + "_", selected: true),
+                rows: [.init("nameField", L10n.text("Initials: \(String(draft.uppercased().prefix(3)))_"), selected: true),
                        .init("playerPortrait", ArcadeProfile.portraitNames[portrait], portrait: portrait)],
                 footer: [.init("nameCancel", L10n.text("Cancel")), .init("nameDone", L10n.text("Done"), primary: true)])
         }
         var rows = profiles.players.map {
             GameFrontEnd.Action("player." + $0.id, $0.name, selected: $0.id == profiles.activeID, portrait: $0.portrait)
         }
-        rows.append(.init("playerRename", L10n.text("Edit: ") + profiles.active.name))
+        rows.append(.init("playerRename", L10n.text("Edit: \(profiles.active.name)")))
         rows.append(.init("playerNew", L10n.text("New player"), enabled: profiles.players.count < MobileProfiles.maximum))
-        rows.append(.init("hotSeat", hotSeatTurn.map { L10n.text("Hot Seat: ") + $0 } ?? L10n.text("Hot Seat")))
+        rows.append(.init("hotSeat", hotSeatTurn.map { L10n.text("Hot Seat: \($0)") } ?? L10n.text("Hot Seat")))
         return .init(title: L10n.text("Players"), subtitle: subtitle, rows: rows,
             footer: [.init("playerDelete", confirmingDelete ? L10n.text("Confirm delete") : L10n.text("Delete"),
                            enabled: canDelete, selected: confirmingDelete), .init("home", L10n.text("Back"))])
@@ -84,11 +84,11 @@ public enum MobileCareerArt {
         let time = runs.filter(\.qualifies).map(\.seconds).min()
         let stats = records.stats(level: level, profileID: profileID, assisted: assisted)
         var details = [L10n.text("Most saved: \(best)/\(level.total)"), L10n.text("Attempts: \(stats.attempts)  Clears: \(stats.clears)")]
-        if let time { details.append(String(format: "Best time: %.1f S", time)) }
+        if let time { details.append(L10n.text("Best time: \(String(format: "%.1f", time)) S")) }
         if let conditions = level.conditions {
             let maximum = records.trolley.maximum(conditions: conditions, assisted: assisted)
-            details.append(L10n.text("Maximum: ") + (maximum.value.map(String.init) ?? "?"))
-        } else { details.append(L10n.text("Maximum: ") + (best == level.total ? String(level.total) : "?")) }
+            details.append(L10n.text("Maximum: \((maximum.value.map(String.init) ?? "?"))"))
+        } else { details.append(L10n.text("Maximum: \((best == level.total ? String(level.total) : "?"))")) }
         let awards = stats.achievements.sorted { $0.rawValue < $1.rawValue }.map(\.title)
         return .init(title: level.title, subtitle: [subtitle.isEmpty ? profileName : subtitle, sourceLabel(level)].filter { !$0.isEmpty }.joined(separator: "\n"),
                      details: details + awards, footer: [.init("records", L10n.text("Back"))])

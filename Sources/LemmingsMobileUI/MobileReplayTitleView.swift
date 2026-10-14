@@ -15,7 +15,7 @@ import UIKit
     var level: MobileLevelSummary? {
         didSet {
             isHidden = level == nil
-            accessibilityLabel = level.map { L10n.text("Replay, ") + $0.locationLabel + ", " + $0.title }
+            accessibilityLabel = level.map { L10n.text("Replay, \($0.locationLabel), \($0.title)") }
             setNeedsDisplay()
         }
     }

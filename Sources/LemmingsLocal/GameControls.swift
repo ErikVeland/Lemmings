@@ -1,6 +1,8 @@
 #if os(macOS)
 import AppKit
+#if canImport(NxlvKit)
 import NxlvKit
+#endif
 
 /// Game artwork supplies the visible controls; AppKit retains input and accessibility.
 @MainActor enum GameControlText {

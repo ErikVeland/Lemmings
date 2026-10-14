@@ -390,7 +390,7 @@ import NxlvKit
         var sections = [help(), speedHelp]
         if modern() {
             let goal = selectGliderBeforeGoal == nil ? L10n.text("G / End: centre goal") : L10n.text("G: Glider, then goal\nEnd: centre goal")
-            sections.append(L10n.text("Tab / Shift-Tab: next / previous available skill\nH / Home: centre entrance\n") + goal + L10n.text("\n[ / ]: previous / next unassigned lemming\n\\: focus last assignment\nReturn: repeat last skill"))
+            sections.append(L10n.text("Tab / Shift-Tab: next / previous available skill\nH / Home: centre entrance\n\(goal)\n[ / ]: previous / next unassigned lemming\n\\: focus last assignment\nReturn: repeat last skill"))
         } else { sections.append(L10n.text("Modern keyboard shortcuts are off. Number keys select skills.")) }
         if step != nil { sections.append(L10n.text("⌘Z: rewind one tick")) }
         if djShuffle != nil { sections.append(L10n.text("J: DJ shuffle")) }
@@ -421,7 +421,7 @@ import NxlvKit
             }
             let shared = modern() && cyclesSharedSkillLetters && shortcuts.initials[index].map { initial in shortcuts.initials.filter { $0 == initial }.count > 1 } == true
             let detail = shared ? L10n.text(" (\(shortcuts.initials[index]!.uppercased()) cycles matching skills)") : ""
-            rows.append(KeyboardCommand(keys: keys.joined(separator: " / "), action: L10n.text("Select \(names[index])") + detail, group: L10n.text("Skills")))
+            rows.append(KeyboardCommand(keys: keys.joined(separator: " / "), action: L10n.text("Select \(SkillVocabulary.title(names[index]))\(detail)"), group: L10n.text("Skills")))
         }
         let controllerHeading = ControllerDevicePresentation.help(mapping: controllerMappings()).components(separatedBy: "\n").first
         var controllerSection = false

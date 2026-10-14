@@ -18,6 +18,7 @@ source += '\n'.join(f'suite.{method}()' for method in methods)
 source += '\nprint("PASS controller bindings, menu chords, RT tap/hold/rapid exit and interrupted input")\n'
 Path(sys.argv[1]).write_text(source)
 PY
-swiftc -swift-version 6 -module-cache-path "$module_cache" Sources/NxlvKit/GameplaySpeed.swift Sources/NxlvKit/ControllerBindings.swift \
+swiftc -swift-version 6 -module-cache-path "$module_cache" Sources/NxlvKit/GameplaySpeed.swift Sources/NxlvKit/ControllerBindings.swift Sources/NxlvKit/ControllerButtonEdge.swift \
+  "$project_dir/Sources/NxlvKit/InterfaceLocalisation.swift" \
   "$build_dir/main.swift" -o "$build_dir/ControllerTests"
 "$build_dir/ControllerTests"

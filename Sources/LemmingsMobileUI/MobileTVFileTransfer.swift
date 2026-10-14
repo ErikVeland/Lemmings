@@ -13,7 +13,7 @@ import Darwin
     private let canvas = MobileMenuCanvas()
     private let scrollView = UIScrollView()
     private let token = UUID().uuidString.replacingOccurrences(of: "-", with: "")
-    private let staging = FileManager.default.temporaryDirectory.appendingPathComponent(L10n.text("TVTransfer-") + UUID().uuidString)
+    private let staging = FileManager.default.temporaryDirectory.appendingPathComponent("TVTransfer-\(UUID().uuidString)")
     private let directory: Bool
     private let importName: String
     private let exportURL: URL?
@@ -199,7 +199,7 @@ import Darwin
             let body = Data(request.header[end.upperBound...])
             request.header.removeAll()
             request.remaining = length
-            if start[0] == L10n.text("GET") {
+            if start[0] == "GET" {
                 request.remaining = 0
                 if request.path == "/download", let exportURL { sendFile(exportURL, connection, request) }
                 else if request.path.isEmpty || request.path == "/" {
@@ -207,7 +207,7 @@ import Darwin
                 } else { reply(L10n.text("404 Not Found"), body: Data(), connection, request) }
                 return
             }
-            guard start[0] == L10n.text("POST"), exportURL == nil, !committed else { throw URLError(.unsupportedURL) }
+            guard start[0] == "POST", exportURL == nil, !committed else { throw URLError(.unsupportedURL) }
             if request.path == "/commit" {
                 guard length == 0, activeUploads == 0, !files.isEmpty,
                       directory || files.count == 1 else { throw URLError(.badServerResponse) }

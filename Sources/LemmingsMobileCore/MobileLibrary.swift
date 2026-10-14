@@ -10,7 +10,7 @@ public struct MobileLevelSummary: Codable, Equatable, Sendable {
     public enum Origin: String, Codable, Sendable {
         case official, fanMade, unspecified
         public var label: String {
-            switch self { case .official: L10n.text(L10n.text("Official")); case .fanMade: L10n.text(L10n.text("Fan-made")); case .unspecified: "" }
+            switch self { case .official: L10n.text("Official"); case .fanMade: L10n.text("Fan-made"); case .unspecified: "" }
         }
     }
     public let origin: Origin

@@ -7,11 +7,11 @@ public enum TrolleyTitle: String, Codable, CaseIterable, Sendable {
     case absolutist, lastLemming, pyrrhicVictor, trolleyOperator, falsifier
     public var title: String {
         switch self {
-        case .falsifier: L10n.text(L10n.text("The Falsifier"))
-        case .absolutist: L10n.text(L10n.text("The Absolutist"))
-        case .lastLemming: L10n.text(L10n.text("One Lemming left behind"))
-        case .pyrrhicVictor: L10n.text(L10n.text("The Pyrrhic Victor"))
-        case .trolleyOperator: L10n.text(L10n.text("The Trolley Operator"))
+        case .falsifier: L10n.text("The Falsifier")
+        case .absolutist: L10n.text("The Absolutist")
+        case .lastLemming: L10n.text("One Lemming left behind")
+        case .pyrrhicVictor: L10n.text("The Pyrrhic Victor")
+        case .trolleyOperator: L10n.text("The Trolley Operator")
         }
     }
 }
@@ -174,7 +174,7 @@ public enum TrolleyAnalyser {
         let context: String
         if titles.contains(.lastLemming) { context = L10n.text("One below the maximum rescue.") }
         else if metrics.unavoidableLosses ?? 0 > 0, metrics.avoidableLosses == 0 {
-            context = "\(metrics.unavoidableLosses!) " + (metrics.unavoidableLosses == 1 ? "loss was" : "losses were") + L10n.text(" unavoidable. None were avoidable.")
+            context = L10n.text("\(metrics.unavoidableLosses!) \((metrics.unavoidableLosses == 1 ? "loss was" : "losses were")) unavoidable. None were avoidable.")
         } else if maximum.status == .record { context = L10n.text("Best-known target: \(maximum.value ?? 0) saved; \(max(0, (maximum.value ?? 0) - run.saved)) below target. The minimum losses are not proved.") }
         else if maximum.status == .observed { context = "Maximum rescue unknown." }
         else if maximum.status == .unknown { context = "Maximum rescue unknown." }
