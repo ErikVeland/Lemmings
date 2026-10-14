@@ -56,6 +56,29 @@ public enum MobileNeoLemmixDataLayout {
     }
 }
 
+struct MobileContentImportBudget {
+    let maximumBytes: Int64
+    private(set) var copiedBytes: Int64 = 0
+
+    var remainingBytes: Int64 { maximumBytes - copiedBytes }
+
+    func copyLimit(forReportedFileSize fileSize: Int64) throws -> Int64 {
+        guard maximumBytes >= 0, copiedBytes >= 0, copiedBytes <= maximumBytes,
+              fileSize >= 0, fileSize <= remainingBytes else {
+            throw MobileContentStoreError.tooLarge
+        }
+        return remainingBytes
+    }
+
+    mutating func recordCopy(_ byteCount: Int64) throws {
+        guard byteCount >= 0, copiedBytes >= 0, copiedBytes <= maximumBytes,
+              byteCount <= remainingBytes else {
+            throw MobileContentStoreError.tooLarge
+        }
+        copiedBytes += byteCount
+    }
+}
+
 /// Stages and validates player-owned game data before replacing the live copy.
 public struct MobileContentStore: Sendable {
     public static let maximumImportBytes: Int64 = 2 * 1_024 * 1_024 * 1_024
@@ -143,7 +166,7 @@ public struct MobileContentStore: Sendable {
             includingPropertiesForKeys: [.isDirectoryKey, .isRegularFileKey, .isSymbolicLinkKey, .fileSizeKey],
             options: [.skipsHiddenFiles]
         ) else { throw MobileContentStoreError.unreadable }
-        var total: Int64 = 0
+        var budget = MobileContentImportBudget(maximumBytes: Self.maximumImportBytes)
         var entryCount = 0
         let sourceParts = source.standardizedFileURL.pathComponents
         for case let item as URL in walker {
@@ -167,16 +190,13 @@ public struct MobileContentStore: Sendable {
                     throw MobileContentStoreError.unreadable
                 }
                 let fileSize = Int64(reportedSize)
-                guard fileSize >= 0, fileSize <= Self.maximumImportBytes - total else {
-                    throw MobileContentStoreError.tooLarge
-                }
-                total += fileSize
+                let copyLimit = try budget.copyLimit(forReportedFileSize: fileSize)
                 try manager.createDirectory(
                     at: destination.deletingLastPathComponent(),
                     withIntermediateDirectories: true
                 )
-                let copiedBytes = try Self.copyFile(at: item, to: destination, maximumBytes: Self.maximumImportBytes - total)
-                total += copiedBytes
+                let copiedBytes = try Self.copyFile(at: item, to: destination, maximumBytes: copyLimit)
+                try budget.recordCopy(copiedBytes)
             }
         }
 
