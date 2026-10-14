@@ -25,9 +25,8 @@ remain in force. See the
 
 The macOS 1.9.7 build 82 candidate consolidates the current shared controls,
 performance, rewind audio, recovery and lettering improvements. Its universal
-local build and 53 release checks pass after the recorded repairs. Apple
-notarisation and public distribution await specific approval to upload the
-bundled game and music assets. This does not change the existing game
+local build and 53 release checks pass after the recorded repairs. The owner explicitly approved uploading the bundled game and music assets to
+Apple and publishing on GitHub on 15 October 2026. Notarisation is in progress. This does not change the existing game
 classifications or the separate mobile/TV gates. See the
 [candidate evidence](ReleaseReadiness/1.9.7-build82/README.md) and
 [1.9.7 notes](ReleaseNotes-1.9.7-build82.md).

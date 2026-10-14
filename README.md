@@ -18,7 +18,7 @@ before distributing a build.
 Download [1.9.6 build 81](https://github.com/ErikVeland/Lemmings/releases/tag/v1.9.6),
 the current public release. Installed copies update automatically. The macOS
 [1.9.7 build 82 candidate](Documentation/ReleaseReadiness/1.9.7-build82/README.md)
-is built and locally verified. Notarisation and publication await upload approval.
+is built and locally verified. The owner has approved Apple and GitHub uploads; notarisation is in progress.
 Read the [1.9.7 candidate notes](Documentation/ReleaseNotes-1.9.7-build82.md) and
 the [tester guide](Documentation/BetaTesting.md).
 

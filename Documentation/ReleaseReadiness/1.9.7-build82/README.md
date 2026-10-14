@@ -1,6 +1,6 @@
 # macOS 1.9.7 build 82 candidate
 
-Status: local candidate ready. Developer ID signing, Apple notarisation, Gatekeeper acceptance and public release remain pending. Automatic approval review rejected uploading the bundled application and its game/music assets to Apple. The owner has been asked to approve Apple notarisation and GitHub publication. No upload or publication of this candidate started.
+Status: local checks complete. The owner explicitly approved uploading 1.9.7 and its bundled game/music assets to Apple on 15 October 2026, then publishing the release and update feed on GitHub. Developer ID signing and notarisation are in progress. Public release remains pending.
 
 Release source: `94c11e613b128a1b19aa4fc84efc0cf52237fe0b`. The universal optimised executable and every project framework contain Apple silicon and Intel slices, targeting macOS 12.3. The final controller correction resets an active speed boost before Pause. The Mac controller path is shared by Classic, The Tribes and Chronicles. Mobile already applies its reset before pause.
 
