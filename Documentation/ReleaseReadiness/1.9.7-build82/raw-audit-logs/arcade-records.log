@@ -1,0 +1,26 @@
+/Users/veland/Lemmings/.build/release-1.9.7-current/source/Sources/LemmingsMobileCore/MobileStorage.swift:65:16: warning: value 'defaultsKey' was defined but never used; consider replacing with boolean test [#NoUsage]
+ 63 |         let data = try JSONEncoder().encode(value)
+ 64 |         // Keep only the small roster/session metadata in TV defaults. Large saves stay in caches.
+ 65 |         if let defaultsKey {
+    |                `- warning: value 'defaultsKey' was defined but never used; consider replacing with boolean test [#NoUsage]
+ 66 |             guard data.count <= 128 * 1_024 else { throw CocoaError(.fileWriteOutOfSpace) }
+ 67 |         }
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+Sources/LemmingsLocal/ReleaseWelcome.swift:51:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+49 |         scroll.hasHorizontalScroller = false
+50 |         scroll.drawsBackground = false
+51 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+52 |         scroll.scrollerStyle = .overlay
+53 |         scroll.setAccessibilityLabel(L10n.text("Release notes"))
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+UI test windows: offscreen; audio: muted
+PASS profile-owned playlist persistence, conflict detection, recovery and deletion cleanup
+PASS hot-seat roster, three-player rotation, removal, shared progress owner, separate result owner and retry action
+PASS player add-to-Hot-Seat, automatic edits, deletion cleanup, active-player deletion, discarded runs and unreadable records way out
+PASS rescue/efficiency/100% boards, record retention, awards, population/rules/assistance isolation and profile statistics
+PASS accepted-only classic and infinite NeoLemmix skill counts, rewind and nuke-undo accounting
+SKIP desktop focus after Retry: run with LEMMINGS_TEST_WINDOWS=foreground
+PASS atomic save/reload, corrupt-file preservation, legacy progress namespace, sprite profiles, in-game pages, nested Back and successful retry controls

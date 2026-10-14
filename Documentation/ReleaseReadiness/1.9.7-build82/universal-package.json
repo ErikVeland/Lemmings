@@ -1,0 +1,19 @@
+{
+  "releaseCommit": "94c11e613b128a1b19aa4fc84efc0cf52237fe0b",
+  "version": "1.9.7",
+  "build": 82,
+  "minimumOS": "12.3",
+  "universalBinaries": [
+    "Contents/MacOS/LemmingsLocal",
+    "Contents/Frameworks/libLemmingsGameArt.dylib",
+    "Contents/Frameworks/libLemmingsTVCore.dylib",
+    "Contents/Frameworks/libLemmingsAudio.dylib",
+    "Contents/Frameworks/libLemmingsMobileCore.dylib",
+    "Contents/Frameworks/libLemmingsAppCore.dylib",
+    "Contents/Frameworks/libNxlvKit.dylib"
+  ],
+  "frozenInputsVerified": true,
+  "currentProofsHintsAndCatalogueBundled": true,
+  "finalControllerExecutableRebuilt": true,
+  "shippingApp": "/Users/veland/Lemmings/.build/release-1.9.7-current/shipping/Ultimate Lemmings.app"
+}

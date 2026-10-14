@@ -1,0 +1,5 @@
+UI test windows: offscreen; audio: muted
+PASS shared Classic/L2/L3 controller reset priority, pause and held-trigger release
+PASS immediate reverse direction, repeat replacement, paused expiry and forward cancellation
+PASS Classic rendered one-tick reverse echoes, sharp solid sprites and HD opt-out
+PASS L2 and L3 rendered one-tick rewind, timeline targets and gaps, HD opt-out, reduced motion and reduced flashes

@@ -1,5 +1,6 @@
 import Foundation
 import NxlvKit
+import LemmingsMobileCore
 
 /// The information pages share their bitmap layout with the headless capture tool.
 public enum MobileInformationArt {
@@ -15,6 +16,13 @@ public enum MobileInformationArt {
               details: [L10n.text("Classic + fans"), L10n.text("Hot Seat player HUD"), L10n.text("Bomb countdowns"), L10n.text("Smooth music loops"),
                         L10n.text("Rewind scratch"), L10n.text("Portrait controls"), L10n.text("Pointer targeting"), L10n.text("Shared saves/replays")],
               footer: [.init("welcomeContinue", L10n.text("Continue"), primary: true)])
+    }
+    public static func whatsNew(build: MobileBuildInfo) -> GameFrontEnd.Page {
+        GameFrontEnd.Page(title: L10n.text("Latest build"),
+            subtitle: [build.label, build.dateLabel].filter { !$0.isEmpty }.joined(separator: "\n"),
+            details: (build.changes.isEmpty ? [L10n.text("No build changes supplied.")]
+                   : build.changes.map { L10n.text(InterfaceMessage(stringLiteral: $0)) }),
+            footer: [.init("welcomeContinue", L10n.text("Continue"), primary: true)])
     }
     public static func telemetryConsent() -> GameFrontEnd.Page {
         .init(title: L10n.text("Share play counts?"), details: [L10n.text("Opted-in installs"), L10n.text("Daily use"), L10n.text("Level results"), L10n.text("Saved lemmings"),

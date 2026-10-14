@@ -7,6 +7,19 @@ import UIKit
     var point: CGPoint? { didSet { setNeedsDisplay() } }
     var eligible = false
     var occupied = false
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        // This full-screen overlay must preserve the playfield and HUD beneath it.
+        backgroundColor = .clear
+        isOpaque = false
+        isUserInteractionEnabled = false
+        isAccessibilityElement = false
+        accessibilityElementsHidden = true
+    }
+
+    required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
+
     override func draw(_ rect: CGRect) {
         guard let point, let context = UIGraphicsGetCurrentContext() else { return }
         TVPlayfieldArt.drawAimPointer(at: point, eligible: eligible, occupied: occupied, context: context)

@@ -54,6 +54,14 @@ remain in force. See the
 [1.9.4 distribution record](ReleaseReadiness/1.9.4Build79Distribution.md) and
 [release notes](ReleaseNotes-1.9.4-build79.md).
 
+The macOS 1.9.7 build 82 candidate consolidates the current shared controls,
+performance, rewind audio, recovery and lettering improvements. Its universal
+local build and 53 release checks pass after the recorded repairs. The owner explicitly approved uploading the bundled game and music assets to
+Apple and publishing on GitHub on 15 October 2026. Notarisation is in progress. This does not change the existing game
+classifications or the separate mobile/TV gates. See the
+[candidate evidence](ReleaseReadiness/1.9.7-build82/README.md) and
+[1.9.7 notes](ReleaseNotes-1.9.7-build82.md).
+
 ## iOS 2.0 launch scope
 
 On 10 October 2026, the owner confirmed a full iOS release for iPad, iPhone and

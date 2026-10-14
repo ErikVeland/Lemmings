@@ -1,0 +1,8 @@
+UI test windows: offscreen; audio: muted
+PASS offline spatial output follows camera movement, offscreen distance and separate event positions
+Spatial audio: finite output, positioning, restart, mute and pause backlog passed (12.12081834405676, 0.10594426652483727) (0.1059441815677096, 12.120819783905379)
+PASS camera geometry at zoomed, standard and wide aspect ratios, elevation and invalid-coordinate fallback
+PASS silent-history silence, 480 ms backspin, reversed history, idle-source capture isolation, one-voice repeat cap, mute and suspension after 2400 requests
+PASS captured voice/distance gains, single master volume, sequel scrub continuation, proportional chorus headroom and falling effect pitch
+PASS 64 bounded full-gain overlapping yippees, isolated refusal gate, protected actions, mute and finite supplement envelopes
+PASS rescue overflow cleanup after silence, mute and suspend; final result chorus preserved

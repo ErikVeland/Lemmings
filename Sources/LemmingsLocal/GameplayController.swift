@@ -124,7 +124,7 @@ import NxlvKit
                     }
                     else { keyboard.speedControl?.setFast(true) }
                 } else { stopBoost(at: now, interrupted: false) }
-            default: keyboard.controllerAction(action == .cancel && wasFast ? .speedReset : action)
+            default: keyboard.controllerAction((action == .cancel || action == .pause) && wasFast ? .speedReset : action)
             }
             if context != keyboard.controllerContext || !keyboard.active() { stopBoost(at: now); break }
         }

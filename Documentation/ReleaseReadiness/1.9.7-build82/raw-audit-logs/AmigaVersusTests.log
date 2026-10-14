@@ -1,0 +1,18 @@
+PASS all 30 Amiga versus levels load with terrain, titles and sane counts
+PASS the block holds the versus levels and none of the one-player ones
+PASS every Oh No! versus level has the versus shape: 40 out, 40 needed, rate 1
+PASS each release numbers its versus levels from one
+PASS the pack holds 60 playable port-exclusive levels in 3 ranks
+PASS the 30 Mega Drive Sunsoft levels load with their own titles
+PASS a text level encodes its offsets, modifiers and skills correctly
+PASS a time limit is read whether it is written in seconds or minutes
+PASS malformed text levels reject shifted fields and overflowing coordinates or time without crashing
+PASS exact text steel, DOS export, legacy loading and invalid geometry
+PASS a .lvl file of the wrong size is reported rather than parsed
+PASS all 12 style names the fan packs use resolve to installed data
+PASS a style name resolves the same whatever its case or padding
+PASS a special graphic is told apart from a name nobody knows
+PASS 11 style names load a real ground set with objects in it
+PASS Holiday aliases select snow, support Xmas 1992 alone, and retain pack overrides
+PASS the pack is empty when no port data is installed
+Amiga versus tests passed.

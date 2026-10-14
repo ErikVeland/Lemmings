@@ -1,0 +1,19 @@
+{
+  "baseCommit": "5415158ee1337275de5b2d33bf19f85938e6cafc",
+  "releaseCommit": "94c11e613b128a1b19aa4fc84efc0cf52237fe0b",
+  "integratedPaths": [
+    "Documentation/LocalisationCatalogue.json",
+    "Documentation/ReleaseNotes-1.9.7-build82.md",
+    "Documentation/TrolleyVerification/presentation-fingerprint-migration.json",
+    "Resources/Hints/classic.json",
+    "Resources/Trolley/engine-fingerprint.txt",
+    "Resources/Trolley/verified-maxima.json",
+    "Sources/LemmingsLocal/GameplayController.swift",
+    "Sources/NxlvKit/Resources/Localization.bundle/en.lproj/Interface.strings",
+    "Tests/AppIntegrationTests/checks.swift",
+    "Tests/LemmingsMobileCoreTests/MobileLevelPreparationTests.swift",
+    "Tests/RewindFeedbackTests/checks.swift",
+    "Tools/TrolleyVerification/presentation-files.json"
+  ],
+  "unrelatedMobileAndXcodeEditsPreserved": true
+}

@@ -1,9 +1,9 @@
-# Ultimate Lemmings 1.9.7 — Ghost solutions, controls and bitmap lettering
+# Ultimate Lemmings 1.9.7 — Shared improvements, ghost solutions and controls
 
 Build: 82
 Release base: v1.9.6
 
-This macOS update adds optional Classic ghost solutions, clearer controls and help, shared save-recovery fixes, and broader bitmap lettering.
+This macOS update adds optional Classic ghost solutions, clearer controls and help, shared performance and save-recovery fixes, and broader bitmap lettering.
 
 ## Ghost solutions
 
@@ -13,6 +13,7 @@ Same-owner retries retain the choice. A different level or Hot Seat player clear
 
 ## Controls, help and presentation
 
+- Controller defaults use B for speed reset, pause and resume, X for speed reset, Y for end run or undo, and Menu for the game menu. Holding a speed boost does not skip the first reset to 1×.
 - Keyboard help follows the active engine and control settings. The searchable command reference and in-game annotations make available actions easier to find.
 - Closing sequel hints restores the previous pause state. An interruption keeps the game paused.
 - Classic, The Tribes and Chronicles keep Hot Seat retries, restored runs and handovers paused until the player is ready. Sequel playfields identify the current player.
@@ -20,6 +21,14 @@ Same-owner retries retain the choice. A different level or Hot Seat player clear
 - Macintosh monochrome skill backpacks use distinct pixel patterns for Climber, Floater and both skills.
 - Manual soundtrack shuffle follows the chosen music collection. Bomb countdowns use crisp digits above the lemming.
 - If an incoming Classic journey music deck stops, the outgoing track recovers while gameplay remains paused.
+
+## Shared performance and rewind
+
+- Classic, The Tribes and Chronicles use the shared vinyl backspin for rewind music and captured sound effects. Rewind keeps gameplay paused and respects mute, volume and interruptions.
+- Rendering adapts optional effects to available memory and sustained performance. Terrain caches and crowd limits reduce repeated work.
+- Saved journeys exclude unsupported multiplayer levels while retaining compatible progress and ownership. Learning journeys preserve their existing route evidence.
+- Background level preparation retains caller cancellation, including synchronous actor decoding.
+- Manual shuffle can change music when the essential soundtrack contains only one version of the current theme.
 
 ## Saves and profiles
 

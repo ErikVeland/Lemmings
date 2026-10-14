@@ -674,8 +674,8 @@ extension AppDelegate {
     keyboard.onInterruption = { interruptions += 1 }
     driver.disconnect()
     try check(interruptions == 0, "An unused controller paused keyboard play")
-    var assigned = 0, escaped = 0, retried = 0, rewound = 0, steps: [Int] = []
-    keyboard.assignSelected = { assigned += 1 }; keyboard.escape = { escaped += 1 }
+    var assigned = 0, escaped = 0, paused = 0, retried = 0, rewound = 0, steps: [Int] = []
+    keyboard.assignSelected = { assigned += 1 }; keyboard.escape = { escaped += 1 }; keyboard.togglePause = { paused += 1 }
     keyboard.retry = { retried += 1 }; keyboard.rewind = { rewound += 1 }; keyboard.step = { steps.append($0) }
     driver.processButtons([], at: 0, playing: true)
     for (index, rate) in [2.0, 1, 2, 1].enumerated() {
@@ -698,13 +698,16 @@ extension AppDelegate {
     driver.processButtons([.rightTrigger, .b], at: 12.5, playing: true)
     driver.processButtons([], at: 13, playing: true)
     try check(!speed.isFast && escaped == 0, "B's quick exit was undone on trigger release")
+    let pausesAtNormalSpeed = paused
     driver.processButtons([.b], at: 14, playing: true); driver.processButtons([], at: 14.1, playing: true)
-    try check(escaped == 1, "B at 1x did not open the pause menu")
+    try check(paused == pausesAtNormalSpeed + 1 && escaped == 0, "B at 1x did not pause gameplay")
+    driver.processButtons([.menu], at: 14.11, playing: true); driver.processButtons([], at: 14.12, playing: true)
+    try check(escaped == 1, "Menu did not open the game menu at 1x")
     speed.setFast(false)
     driver.processButtons([.rightTrigger], at: 14.2, playing: true)
     driver.processButtons([.b], at: 14.6, playing: true)
     driver.processButtons([], at: 14.7, playing: true)
-    try check(!speed.isFast && escaped == 1, "B opened a menu when cancelling a temporary legacy boost")
+    try check(!speed.isFast && escaped == 1 && paused == pausesAtNormalSpeed + 1, "B paused or opened a menu when cancelling a temporary legacy boost")
     speed.variableEnabled = true
     keyboard.controllerTapSpeed = { false }
     driver.processButtons([.rightTrigger], at: 15, playing: true); driver.processButtons([], at: 15.05, playing: true)
@@ -4445,8 +4448,10 @@ extension AppDelegate {
           let index = journey.lessons.firstIndex(where: { $0.entry.levelNameSnapshot == "Snuggle up to a Lemming" }) else {
       throw IntegrationFailure(message: "The completion regression lesson is missing")
     }
-    let entries = Array(journey.lessons[index...index + 1].map(\.entry))
-    try check(entries[1].identity.packID == "fan:lldb-547", "The completion fixture no longer crosses into the unopened fan pack")
+    guard let next = journey.lessons.first(where: { $0.entry.identity.packID == "fan:lldb-547" }) else {
+      throw IntegrationFailure(message: "The unopened fan-pack fixture is missing")
+    }
+    let entries = [journey.lessons[index].entry, next.entry]
     _ = arcade.addProfile(initials: "PAL", portrait: 2, select: false)
     for hotSeat in [false, true] {
       if hotSeat {

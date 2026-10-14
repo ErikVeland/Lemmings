@@ -1,0 +1,24 @@
+{
+  "version": "1.9.7",
+  "build": 82,
+  "sourceCommit": "94c11e613b128a1b19aa4fc84efc0cf52237fe0b",
+  "universal": true,
+  "signature": "ad-hoc local candidate",
+  "developerIDSigning": false,
+  "notarised": false,
+  "published": false,
+  "assets": [
+    {
+      "name": "UltimateLemmings-1.9.7-build82.zip",
+      "size": 2052867173,
+      "sha256": "1206ae491813aaaca02a5f1bf574205c76ecf9169b8dbf0827be7933e6ba0df3",
+      "path": "/Users/veland/Lemmings/.build/release-1.9.7-current/updates/UltimateLemmings-1.9.7-build82.zip"
+    },
+    {
+      "name": "UltimateLemmings-1.9.7-build82-slim.zip",
+      "size": 268810998,
+      "sha256": "30ec65a898f44952cb742f62e3982d8902e9b17280b8b7a506a8c43fcc5a4b38",
+      "path": "/Users/veland/Lemmings/.build/release-1.9.7-current/downloads/UltimateLemmings-1.9.7-build82-slim.zip"
+    }
+  ]
+}

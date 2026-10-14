@@ -1,0 +1,22 @@
+/Users/veland/Lemmings/.build/release-1.9.7-current/source/Sources/LemmingsMobileCore/MobileStorage.swift:65:16: warning: value 'defaultsKey' was defined but never used; consider replacing with boolean test [#NoUsage]
+ 63 |         let data = try JSONEncoder().encode(value)
+ 64 |         // Keep only the small roster/session metadata in TV defaults. Large saves stay in caches.
+ 65 |         if let defaultsKey {
+    |                `- warning: value 'defaultsKey' was defined but never used; consider replacing with boolean test [#NoUsage]
+ 66 |             guard data.count <= 128 * 1_024 else { throw CocoaError(.fileWriteOutOfSpace) }
+ 67 |         }
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+UI test windows: offscreen; audio: muted
+PASS selection release timing, repeated frames, reselection and reset
+PASS idle HDR overlay skips masks and clears the last effect
+PASS world-anchored explosions across camera pan, zoom, resize and offscreen travel
+PASS golden sprite aura, bounded SDR/HDR light, additive enhancement, preserved sprite pixels and idle cleanup
+PASS bitmap and Metal selection fade, including bloom and final cleanup
+Selection raster benchmark: 0.181 ms/frame (includes bitmap allocation and readback)
+PASS cached flat/CRT outlines, visible breathing halo, Retina, fractional zoom, mirror, clipping and idle HDR
+Display Studio Display: current EDR 1.0, potential 2.0
+Display Mi Monitor: current EDR 1.0, potential 1.0
+PASS actual FP16 GPU output: 8x HDR core, warm second tick, unchanged SDR/background, bounded headroom and expiry
+PASS cinematic nuclear blast: visible SDR exposure, HDR peak, animated fireball, pressure ring, origin, expiry and nuke limits
+PASS superheroic speed: animated SDR/HDR streaks, engagement, clear centre and controls, pause and resume

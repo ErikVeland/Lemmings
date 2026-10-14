@@ -1,0 +1,7 @@
+PASS capability seeds, software fallback and measured promotion on older devices
+PASS independent CPU/GPU pressure and resource budgets
+PASS frame interval, thermal restriction, effect cadence and slow recovery
+PASS concurrent surfaces, stale samples, lifecycle gaps and invalid measurements
+PASS unsupported Metal, memory-derived pixel bounds and native scale
+PASS 2/4/8/16 GiB memory ceilings, audio budgets, pressure release and conservative FX recovery
+PASS TV conservative startup, disabled full-screen effects, 4K bounds, bloom removal and measured recovery

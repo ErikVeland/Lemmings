@@ -1,0 +1,4 @@
+UI test windows: offscreen; audio: muted
+PASS shared Classic/L2/L3 controller reset priority, pause and held-trigger release
+PASS immediate reverse direction, repeat replacement, paused expiry and forward cancellation
+Swift/ErrorType.swift:254: Fatal error: Error raised at top level: views.RewindFailure(message: "Classic sprite echo mask was empty")

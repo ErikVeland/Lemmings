@@ -1,0 +1,112 @@
+Sources/LemmingsLocal/ReleaseWelcome.swift:51:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+49 |         scroll.hasHorizontalScroller = false
+50 |         scroll.drawsBackground = false
+51 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+52 |         scroll.scrollerStyle = .overlay
+53 |         scroll.setAccessibilityLabel(L10n.text("Release notes"))
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+/Users/veland/Lemmings/.build/release-1.9.7-current/controller-fix/native/main.swift:6284:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 6282 |       openPanel.canChooseFiles = true
+ 6283 |       openPanel.canChooseDirectories = false
+ 6284 |       openPanel.allowedFileTypes = ["nxlv"]
+      |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 6285 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+ 6286 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/.build/release-1.9.7-current/controller-fix/native/main.swift:7632:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 7630 |       openPanel.canChooseFiles = true
+ 7631 |       openPanel.canChooseDirectories = false
+ 7632 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+      |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 7633 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+ 7634 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/.build/release-1.9.7-current/controller-fix/native/main.swift:8381:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+ 8379 |     keyboard.controllerRewindHeld = { [weak self] held in
+ 8380 |       guard let self else { return }
+ 8381 |       if held { self.beginContinuousRewind() }
+      |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+ 8382 |       else if self.rewindHeld { self.endContinuousRewind() }
+ 8383 |     }
+
+/Users/veland/Lemmings/.build/release-1.9.7-current/controller-fix/native/main.swift:17015:14: warning: 'init(dictionary:)' is deprecated: Properties that depend on the system or application version are not supported when used with this initializer. The designated initializer is available in SUAppcastItem+Private.h. Please first explore other APIs or contact us to describe your use case. [#DeprecatedDeclaration]
+17013 |     && updates.responds(to: NSSelectorFromString("updater:didFinishUpdateCycleForUpdateCheck:error:")),
+17014 |     "Sparkle could not deliver session cleanup callbacks")
+17015 |   let item = SUAppcastItem(dictionary: ["enclosure": ["url": "https://example.invalid/update.zip",
+      |              `- warning: 'init(dictionary:)' is deprecated: Properties that depend on the system or application version are not supported when used with this initializer. The designated initializer is available in SUAppcastItem+Private.h. Please first explore other APIs or contact us to describe your use case. [#DeprecatedDeclaration]
+17016 |     "sparkle:version": "75", "sparkle:shortVersionString": "1.8.6"]])!
+17017 |   try check(updates.availableVersion == nil, "An unavailable update had a reminder")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+UI test windows: offscreen; audio: muted
+PASS unrecoverable-run failure mood decision
+PASS closing the main window preserves ownership for delayed screen refreshes
+PASS final single-step handles wins, losses, campaign and fan progress
+PASS first-launch HD/old-school choices, default action, live application, persistence and one-time presentation
+PASS seven home content families and the Settings control use distinct targets
+PASS home families filter the typed catalogue without changing release identities
+PASS context-aware help, scalable pages, accessible actions and turn badge
+PASS nearest eligible targeting, overlap, edge allowance, moving green target, exhausted skills and mutation-free Classic/fan probes
+PASS 25 available music source transitions and settings applied during shuffled playback
+PASS saved silence, volume and preset; Macintosh/Amiga sound coverage
+PASS global mute persists and title suspension stops all players
+PASS CRT-to-menu transition, mismatched phase, native menu resolution and full-screen resize
+PASS CRT dimensions, shader coordinates, held rate, release and minimap drag
+PASS overlapping DJ cues, fade completion and stop/start cancellation
+PASS R brakes the music like a record and the retry releases it
+PASS elapsed-time catch-up and audio interruption recovery
+PASS game typography, settings tab targets, title hierarchy, actions and bitmap search editing
+PASS same-window pages, paused clock, display changes, focus and resuming play
+PASS restart preserves selected skills, including empty slots, while level selection uses its default
+PASS level skips: offered only when owned, owner pays, next level opens, Hot Seat hands over
+PASS bundled proof matches live Classic conditions and replays to a full rescue
+PASS live Oh Yes! rank changes load the original, Oh No and Sunsoft artwork
+PASS super speed controls: flat/CRT, pause, resume, 1x, menus, results and independent explosion settings
+PASS actual controller dispatch: RT tiers/hold/release, rapid and B exits, reconnect, hints, sheets, settings and ownership
+PASS native mouse toggle, arrows, complete double-click sequence, hold and emergency release
+PASS real key events: tap/hold/release, repeats, rapid exits, shortcut routing, window attachment and OG mode
+PASS actual Classic simulation clock at 2x, 3x, 5x, 10x and quick return to 1x
+PASS completed player route persistence, exact live timing, deduplication and rejection of invalid wins
+PASS timeline controls: active, unavailable, hit regions and gap capture
+PASS checked hints, confirmed winning ghosts, exact before/after-tick playback, unchanged live runs, flat/CRT and fallback coaching
+SKIP controls-help focus checks: require an explicitly authorised foreground run
+PASS remapped speed/assignment, held-input reset, standard menu escape, settings swap/reset and persistence
+PASS Neo checkpoint round trip, assignment, queued rate/nuke, undo, counters, continuation, changed-content rejection and transactional rejection
+PASS disk checkpoint, rewind/undo journal, exact paused restoration, continuation, backups, corruption, version and stale-writer rejection
+PASS legacy text steel checkpoint, retry upgrade and exact current checkpoint restoration
+PASS legacy graphics checkpoint, retry upgrade and exact current checkpoint restoration
+PASS legacy Holiday graphics checkpoint, retry upgrade and exact current checkpoint restoration
+PASS pruned fan queue retains paused state and ownership and saves only surviving entries
+PASS Classic fan checkpoint, shuffled queue, exact paused restore, identity, continuation and missing-pack rejection
+PASS Escape returns directly to the main menu and saves the active run
+PASS checkbox box, label, release cancellation, disabled state, accessibility and menu input isolation
+PASS grouped targeting, Original/Modern/Custom presets, Flat/tube availability, mouse/keyboard targets, persistence and rendered states
+PASS Space and P pause once per press, ignore repeat and remain paused on release
+PASS Classic shared Space/P pause, focused control, repeat/release, modifiers, text and menu routing
+PASS Classic and fan Space pause independently of campaign menu state
+PASS a nuke before the drop ends the level from the panel and the frame loop
+PASS Classic 2-to-1 nuke slowdown, separate saturation and final-pop recovery with HD on and off
+PASS Classic focus loss, manual resume, interrupted hints/help and automatic pause opt-out
+PASS frozen Classic turn identity, confirmed player changes, cleared result actions and direct profile solo transition
+PASS green handover identity, mouse retry of the previous level as UVA, rightmost begin action, shared progress and solo boundaries
+PASS Hot Seat journey names both retries; same-player retry restarts paused with the attempt owner
+PASS all 16 music source transitions, seasonal DJ pools and campaign music boundaries
+PASS changed and removed level routes fail visibly
+PASS background fan preparation preserves the browser and Back, and cannot reopen after navigation
+PASS Playlist Play and Shuffle all revalidate fan archives at confirmation time
+PASS active sequences guard navigation and pending starts can be cancelled
+PASS legacy Classic level pop-up enforces progress and reflects the unlock override
+PASS typed CoverFlow selection, mouse, keyboard, controller, VoiceOver and reduced motion
+PASS Snuggle completion loads the unopened next fan pack in Solo and Hot Seat
+PASS all 227 journey lessons resolve and pass session preflight
+PASS community placement validation and saved Solo/Hot Seat migration
+PASS saved Solo journey is offered after a new Hot Seat; Continue confirms resumption and Back preserves the session
+PASS new solo and Hot Seat journeys start at the first curated lesson despite prior player progress; handover remains paused
+PASS Floating Down! uses Holiday snow artwork, retains collision through graphics changes; the current second lesson shows JOURNEY 2
+PASS saved Solo/Hot Seat choices, checkpoint, history, targets and Ready across Classic, L2 and L3
+PASS release notes stay clipped and scrollable at three sizes; Continue remains visible and usable
+PASS ghost toggle, sprite overlay, rewind, retained study cursor, Hot Seat readiness; retained solution ticks, camera, paused switches, move navigation, controller return, ownership, records and native targets
+App integration tests passed.
