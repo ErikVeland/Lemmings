@@ -1,0 +1,6 @@
+PASS synthetic native tile, animation, terrain and object graphics
+PASS native L3 sprite command interpreter, transparency and bounds
+PASS native L2 sprite command interpreter, anchors and pointer validation
+PASS L2 special object graphics, anchors, opacity and malformed pointers
+PASS native L2 airborne tick order, countdowns, drift and word arithmetic
+PASS synthetic decompression, truncation and size guards

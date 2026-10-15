@@ -1,0 +1,6 @@
+UI test windows: offscreen; audio: muted
+PASS seven home content families and the Settings control use distinct targets
+PASS frozen Classic turn identity, confirmed player changes, cleared result actions and direct profile solo transition
+PASS green handover identity, mouse retry of the previous level as UVA, rightmost begin action, shared progress and solo boundaries
+PASS Hot Seat journey names both retries; same-player retry restarts paused with the attempt owner
+PASS 2.0.2 native scope: hot-seat

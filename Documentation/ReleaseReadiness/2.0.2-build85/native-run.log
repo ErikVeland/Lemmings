@@ -1,0 +1,9 @@
+PASS quick-controls
+PASS rewards
+PASS level-skips
+PASS learning
+PASS solution-switch
+FAIL release-notes
+PASS home-backdrop
+PASS hot-seat
+PASS core

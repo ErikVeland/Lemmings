@@ -1,0 +1,21 @@
+{
+  "removedRebuildableCompilerCaches": [
+    "/Users/veland/Lemmings/.build/release-2.0-current/source/.build/ModuleCache",
+    "/Users/veland/Lemmings/.build/release-2.0-current/source/.build/asset-module-cache",
+    "/Users/veland/Lemmings/.build/release-2.0-current/source/.build/dialog-cursor-tests/ModuleCache",
+    "/Users/veland/Lemmings/.build/release-2.0-current/source/.build/localised-release/ModuleCache",
+    "/Users/veland/Lemmings/.build/release-2.0-current/source/.build/standard/ModuleCache",
+    "/Users/veland/Lemmings/.build/release-2.0-current/source/.build/gameplay-speed-tests/ModuleCache",
+    "/Users/veland/Lemmings/.build/release-2.0-current/source/.build/controller-qol-unit/ModuleCache",
+    "/Users/veland/Lemmings/.build/release-2.0-current/source/.build/explosion-hdr-tests/ModuleCache",
+    "/Users/veland/Lemmings/.build/release-2.0-current/source/.build/repaired-integration/ModuleCache",
+    "/Users/veland/Lemmings/.build/release-2.0-current/source/.build/remaining-integration/ModuleCache",
+    "/Users/veland/Lemmings/.build/release-2.0-current/source/.build/localisation-tools/ModuleCache",
+    "/Users/veland/Lemmings/.build/release-2.0-current/source/.build/pointer-capture-tests/ModuleCache",
+    "/Users/veland/Lemmings/.build/release-2.0-current/source/.build/release-audit-final/module-cache",
+    "/Users/veland/Lemmings/.build/release-2.0-current/source/.build/sequel-mac-artwork/ModuleCache",
+    "/Users/veland/Lemmings/.build/release-2.0.1/source/.build/gameplay-speed-tests/ModuleCache",
+    "/Users/veland/Lemmings/.build/release-2.0.1/source/.build/controller-qol-unit/ModuleCache"
+  ],
+  "releaseArchivesAppsSourcesAndEvidenceRetained": true
+}

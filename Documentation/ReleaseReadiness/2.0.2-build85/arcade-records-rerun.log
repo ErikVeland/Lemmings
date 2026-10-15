@@ -1,0 +1,8 @@
+UI test windows: offscreen; audio: muted
+PASS profile-owned playlist persistence, conflict detection, recovery and deletion cleanup
+PASS hot-seat roster, three-player rotation, removal, shared progress owner, separate result owner and retry action
+PASS player add-to-Hot-Seat, automatic edits, deletion cleanup, active-player deletion, discarded runs and unreadable records way out
+PASS rescue/efficiency/100% boards, record retention, awards, population/rules/assistance isolation and profile statistics
+PASS accepted-only classic and infinite NeoLemmix skill counts, rewind and nuke-undo accounting
+SKIP desktop focus after Retry: run with LEMMINGS_TEST_WINDOWS=foreground
+PASS atomic save/reload, corrupt-file preservation, legacy progress namespace, sprite profiles, in-game pages, nested Back and successful retry controls

@@ -1,0 +1,12 @@
+PASS 4 profiles, all uniquely identified
+PASS each profile describes its own machine
+
+  profile      levels  music   sound   complete  missing
+  amiga        yes     -       yes     -         music
+  dos-vga      yes     -       -       -         music, sound
+  macintosh    yes     yes     yes     yes       
+  modern       yes     -       yes     -         music
+
+PASS undecoded formats report as unavailable rather than claiming to work
+PASS at least one profile is fully deliverable
+Platform profile tests passed.

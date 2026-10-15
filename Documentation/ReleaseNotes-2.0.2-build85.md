@@ -1,6 +1,7 @@
 # Ultimate Lemmings 2.0.2 for Macintosh
 
 Build: 85
+Release commit: f956df19bc4ebf4b484c6553eda3157a81a258ab
 Release base: v2.0.1
 
 This maintenance release improves Hot Seat retries and result presentation.

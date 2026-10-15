@@ -1,0 +1,70 @@
+PASSED shared-library
+PASSED ClassicSoundCueTests
+PASSED AudioMatrixTests
+PASSED ClassicGameFlowTests
+PASSED ClassicSettingsTests
+PASSED NxlvStyleResolverTests
+PASSED NxlvRendererTests
+PASSED ClassicDOSRewindTests
+PASSED NeoLemmixSimulationTests
+PASSED ProTrackerTests
+PASSED ClassicDOSReplayTests
+PASSED PercussionTests
+PASSED AdaptiveDJDirectorTests
+PASSED ClassicDOSSimulationRegressions
+PASSED FLICTests
+PASSED Lemmings2IntroTests
+PASSED Lemmings3SoundTests
+PASSED UnifiedGameTests
+PASSED ClassicSagaTests
+PASSED PlatformProfileTests
+PASSED AmigaSoundTests
+PASSED AmigaVersusTests
+PASSED PlatformExclusiveTests
+PASSED NeoLemmixEndToEnd
+PASSED Lemmings3RuntimeTests
+PASSED ModernEngineTests
+PASSED PortableTests
+PASSED SequelDataTests
+PASSED BundledGameResourcesTests
+PASSED Lemmings2RuntimeTests
+PASSED save-recovery
+PASSED run-recovery-files
+PASSED cross-build-recovery
+PASSED fan-library
+PASSED preserved-solution-manifests
+PASSED audit-integrity
+PASSED package-closure
+PASSED automatic-updates
+PASSED classic-panel-art
+PASSED fan-pruning
+PASSED retained-rescue-targets
+PASSED hint-catalogue
+PASSED controller
+PASSED variable-speed
+PASSED pointer-capture
+PASSED dialog-cursor
+PASSED hdr-gpu
+PASSED rescue-certificates
+PASSED replay-movies
+PASSED mac-app-integration
+PASSED mac-sequence-checkpoint-recovery
+FAILED local-performance-measurement
+FAILED sequel-views
+FAILED arcade-records
+Traceback (most recent call last):
+  File "/Users/veland/Lemmings/.build/release-2.0.2/source/Tools/ReleaseReadiness/audit.py", line 288, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/Users/veland/Lemmings/.build/release-2.0.2/source/Tools/ReleaseReadiness/audit.py", line 252, in main
+    checks.append(run("hot-seat-ghosts", [["zsh", "Scripts/run-hot-seat-ghost-tests.sh"]],
+                  ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      dict(os.environ, LEMMINGS_TEST_RESOURCES=str(app / "Contents/Resources"))))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/veland/Lemmings/.build/release-2.0.2/source/Tools/ReleaseReadiness/audit.py", line 113, in run
+    with (logs / (name + ".log")).open("w") as output:
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 28] No space left on device: '/Users/veland/Lemmings/.build/release-2.0.2/audit/logs/hot-seat-ghosts.log'

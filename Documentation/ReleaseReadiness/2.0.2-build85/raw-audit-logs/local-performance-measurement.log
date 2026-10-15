@@ -1,0 +1,56 @@
+/Users/veland/Lemmings/.build/release-2.0.2/source/Sources/LemmingsLocal/ReleaseWelcome.swift:48:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+46 |         scroll.hasHorizontalScroller = false
+47 |         scroll.drawsBackground = false
+48 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+49 |         scroll.scrollerStyle = .overlay
+50 |         scroll.setAccessibilityLabel(L10n.text("Release notes"))
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+/Users/veland/Lemmings/.build/release-2.0.2/source/.build/app-integration-tests-arm64/main.swift:6479:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 6477 |       openPanel.canChooseFiles = true
+ 6478 |       openPanel.canChooseDirectories = false
+ 6479 |       openPanel.allowedFileTypes = ["nxlv"]
+      |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 6480 |       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
+ 6481 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/.build/release-2.0.2/source/.build/app-integration-tests-arm64/main.swift:7857:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 7855 |       openPanel.canChooseFiles = true
+ 7856 |       openPanel.canChooseDirectories = false
+ 7857 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+      |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 7858 |       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
+ 7859 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/Lemmings/.build/release-2.0.2/source/.build/app-integration-tests-arm64/main.swift:8618:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+ 8616 |     keyboard.controllerRewindHeld = { [weak self] held in
+ 8617 |       guard let self else { return }
+ 8618 |       if held { self.beginContinuousRewind() }
+      |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+ 8619 |       else if self.rewindHeld { self.endContinuousRewind() }
+ 8620 |     }
+
+/Users/veland/Lemmings/.build/release-2.0.2/source/.build/app-integration-tests-arm64/main.swift:17729:14: warning: 'init(dictionary:)' is deprecated: Properties that depend on the system or application version are not supported when used with this initializer. The designated initializer is available in SUAppcastItem+Private.h. Please first explore other APIs or contact us to describe your use case. [#DeprecatedDeclaration]
+17727 |     && updates.responds(to: NSSelectorFromString("updater:didFinishUpdateCycleForUpdateCheck:error:")),
+17728 |     "Sparkle could not deliver session cleanup callbacks")
+17729 |   let item = SUAppcastItem(dictionary: ["enclosure": ["url": "https://example.invalid/update.zip",
+      |              `- warning: 'init(dictionary:)' is deprecated: Properties that depend on the system or application version are not supported when used with this initializer. The designated initializer is available in SUAppcastItem+Private.h. Please first explore other APIs or contact us to describe your use case. [#DeprecatedDeclaration]
+17730 |     "sparkle:version": "75", "sparkle:shortVersionString": "1.8.6"]])!
+17731 |   try check(updates.availableVersion == nil, "An unavailable update had a reminder")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+UI test windows: offscreen; audio: muted
+PASS unrecoverable-run failure mood decision
+PASS closing the main window preserves ownership for delayed screen refreshes
+PASS final single-step handles wins, losses, campaign and fan progress
+PASS first-launch HD/old-school choices, default action, live application, persistence and one-time presentation
+PASS seven home content families and the Settings control use distinct targets
+PASS home families filter the typed catalogue without changing release identities
+PASS context-aware help, scalable pages, accessible actions and turn badge
+PASS nearest eligible targeting, overlap, edge allowance, moving green target, exhausted skills and mutation-free Classic/fan probes
+PERFORMANCE pass 1/1 flat 1x
+PERFORMANCE pass 1/1 flat 10x
+PERFORMANCE pass 1/1 monitor 10x
+FAIL IntegrationFailure(message: "Benchmark encoder failed in pass 1, monitor 10x: Optional(LemmingsAppCore.ReplayEncodingProfile(submittedFrames: 150, encodedFrames: 138, admissionSeconds: 0.5006455417606048, encodingSeconds: 0.17885012517217547, writerWaitSeconds: 0.00011400011135265231, maximumOutstandingFrames: 12))")

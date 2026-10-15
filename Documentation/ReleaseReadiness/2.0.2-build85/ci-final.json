@@ -1,0 +1,72 @@
+{
+  "status": "completed",
+  "conclusion": "success",
+  "headSha": "f956df19bc4ebf4b484c6553eda3157a81a258ab",
+  "url": "https://github.com/ErikVeland/Lemmings/actions/runs/38768851810",
+  "jobs": [
+    {
+      "id": 116539080839,
+      "name": "Shared tests and universal Mac build",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 38768851810,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Select Xcode",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Shared regression tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Universal Release executable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Release and iOS distribution tooling",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Retain universal executable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Post Run actions/checkout@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15
+        }
+      ]
+    }
+  ]
+}

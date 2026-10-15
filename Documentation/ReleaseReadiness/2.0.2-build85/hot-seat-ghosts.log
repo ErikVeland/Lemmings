@@ -1,0 +1,12 @@
+sandbox-exec: sandbox_apply: Operation not permitted
+sandbox-exec: sandbox_apply: Operation not permitted
+Sources/LemmingsLocal/ReleaseWelcome.swift:48:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+46 |         scroll.hasHorizontalScroller = false
+47 |         scroll.drawsBackground = false
+48 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+49 |         scroll.scrollerStyle = .overlay
+50 |         scroll.setAccessibilityLabel(L10n.text("Release notes"))
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+UI test windows: offscreen; audio: muted

@@ -1,0 +1,12 @@
+{
+  "build.zsh": "94068e9270b7e0644b383bceb43a7d17d98d26ca484bba1899aba7111290dd33",
+  "build-local.zsh": "852f0fccf4c21ab45e8dae6a943020ee41bae594903ae25a3ca4fb2dc215966a",
+  "prepare-resources.py": "22ccbd2a4a093c9ce558473e1b786cc01b0c49e958ec15f1768e1c7d4e7a6bea",
+  "package.zsh": "a340eb5079969f220e6a4cb6c1541c81fe26ef00453c59cabb7a6e0ea45518c2",
+  "prepare-publication.zsh": "1126e3f79859b21d99e6efd40c009f807ed412107db0a0b0217cc5472adaf35a",
+  "verify-delta.py": "fc06c58d7f4be5d01aa79541df65e687f05b07756d4f59739e8a18f82f6a015e",
+  "verify-live.py": "aed702df669e23f155e8afabfe6b1d0bcb289e4002092b540adeee787f6cd6f7",
+  "native.zsh": "3465f8bf36309dfea757cc2b2febdd9580a7ce23d5a8d6a0071b879b7cc3fd64",
+  "checks-202.swift": "fd0f339c2d227bae1f754152014aad53b24aae430dc3b32936274d0efa699893",
+  "run-native.py": "ee6e9ae8150ec654e26c12631465e97fcdc38ea70edf833f2ab5c99125722219"
+}

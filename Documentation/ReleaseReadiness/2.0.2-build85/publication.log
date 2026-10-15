@@ -1,0 +1,15 @@
+PASS final release gates, source identity, CI, Apple tickets and update reconstruction
+==> Creating GitHub release v2.0.2
+https://github.com/ErikVeland/Lemmings/releases/tag/v2.0.2
+==> Publishing appcast.xml to the main branch
+{"content":{"name":"appcast.xml","path":"appcast.xml","sha":"d4be8b0730381d230a99ac36fb955df9bfd0de25","size":68279,"url":"https://api.github.com/repos/ErikVeland/Lemmings/contents/appcast.xml?ref=main","html_url":"https://github.com/ErikVeland/Lemmings/blob/main/appcast.xml","git_url":"https://api.github.com/repos/ErikVeland/Lemmings/git/blobs/d4be8b0730381d230a99ac36fb955df9bfd0de25","download_url":"https://raw.githubusercontent.com/ErikVeland/Lemmings/main/appcast.xml","type":"file","_links":{"self":"https://api.github.com/repos/ErikVeland/Lemmings/contents/appcast.xml?ref=main","git":"https://api.github.com/repos/ErikVeland/Lemmings/git/blobs/d4be8b0730381d230a99ac36fb955df9bfd0de25","html":"https://github.com/ErikVeland/Lemmings/blob/main/appcast.xml"}},"commit":{"sha":"ed7a5fab33b4a6202bee18b2310eb5ce644ecfb7","node_id":"C_kwDOUm6QmtoAKGVkN2E1ZmFiMzNiNGE2MjAyYmVlMThiMjMxMGViNWNlNjQ0ZWNmYjc","url":"https://api.github.com/repos/ErikVeland/Lemmings/git/commits/ed7a5fab33b4a6202bee18b2310eb5ce644ecfb7","html_url":"https://github.com/ErikVeland/Lemmings/commit/ed7a5fab33b4a6202bee18b2310eb5ce644ecfb7","author":{"name":"Erik Veland","email":"erikveland@gmail.com","date":"2026-10-15T16:55:31Z"},"committer":{"name":"Erik Veland","email":"erikveland@gmail.com","date":"2026-10-15T16:55:31Z"},"tree":{"sha":"f1f01464fa541fea7b2d5677538b206489d27854","url":"https://api.github.com/repos/ErikVeland/Lemmings/git/trees/f1f01464fa541fea7b2d5677538b206489d27854"},"message":"Publish 2.0.2 update feed","parents":[{"sha":"43b2d28b4bc0262665c149dbcfa5c85d9261448d","url":"https://api.github.com/repos/ErikVeland/Lemmings/git/commits/43b2d28b4bc0262665c149dbcfa5c85d9261448d","html_url":"https://github.com/ErikVeland/Lemmings/commit/43b2d28b4bc0262665c149dbcfa5c85d9261448d"}],"verification":{"verified":false,"reason":"unsigned","signature":null,"payload":null,"verified_at":null}}}Published v2.0.2 and appcast.xml to ErikVeland/Lemmings
+PASS public release tag, both remote SHA256 digests/sizes/ZIP responses, and live main and raw Sparkle update feeds
+Processing: /Users/veland/Downloads/UltimateLemmings-2.0.2-build85/Ultimate Lemmings.app
+The validate action worked!
+/Users/veland/Downloads/UltimateLemmings-2.0.2-build85/Ultimate Lemmings.app: accepted
+source=Notarized Developer ID
+origin=Developer ID Application: Erik Veland (54WU29TRTY)
+PASS final notarised app and both verified public archives in /Users/veland/Downloads/UltimateLemmings-2.0.2-build85
+Error: No Keychain password item found for profile: lemmings-beta
+
+Run 'notarytool store-credentials' to create another credential profile.

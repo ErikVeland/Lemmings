@@ -1,0 +1,18 @@
+{
+  "version": "2.0.2",
+  "build": 85,
+  "platform": "Macintosh",
+  "authorisation": "Fix all of the things that should be in a 2.0.2 version and release it.",
+  "scope": "Maintenance release with current fixes, retaining published classifications and documented limits.",
+  "classifications": {
+    "Classic": "Complete",
+    "The Tribes": "Complete",
+    "Chronicles": "Beta",
+    "NeoLemmix": "Beta"
+  },
+  "automatedWindows": "offscreen",
+  "automatedAudio": "muted",
+  "fullContentClosure": "open",
+  "foregroundLaunchSmoke": "not run: owner requires background and headless automated checks",
+  "physicalHardwareAndHumanReview": "known validation gaps retained"
+}

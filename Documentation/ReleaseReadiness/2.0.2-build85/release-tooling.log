@@ -1,0 +1,10 @@
+................................................................................
+----------------------------------------------------------------------
+Ran 80 tests in 4.053s
+
+OK
+Delta base: shipped build 75 (base.zip)
+SKIP Lemm2 data in the unsigned source-only gate.
+SKIP LEM3CD data in the unsigned source-only gate.
+SKIP NeoLemmix data in the unsigned source-only gate.
+playback: 2 re-encoded entries

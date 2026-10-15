@@ -1,7 +1,7 @@
 # Ultimate Lemmings
 
 Ultimate Lemmings is an unofficial native Swift port of the 2D Lemmings games.
-The current macOS release is 2.0.1, with learning journey, control and reward improvements.
+The current macOS release is 2.0.2, with Hot Seat ghosts, clearer results and refreshed hints.
 Version 1.3 added an iPhone/iPad development target. The separate mobile 2.0
 work targets a full iOS release for iPad, iPhone and iPhone Duo,
 including Classic, Lemmings 2 and Lemmings 3. The app uses
@@ -16,11 +16,11 @@ before distributing a build.
 
 ## Download
 
-Download [2.0.1 build 84](https://github.com/ErikVeland/Lemmings/releases/tag/v2.0.1),
+Download [2.0.2 build 85](https://github.com/ErikVeland/Lemmings/releases/tag/v2.0.2),
 the current signed and notarised macOS release for Apple silicon and Intel.
 Installed copies update automatically. Read the
-[2.0.1 notes](Documentation/ReleaseNotes-2.0.1-build84.md),
-[release evidence](Documentation/ReleaseReadiness/2.0.1-build84/README.md) and
+[2.0.2 notes](Documentation/ReleaseNotes-2.0.2-build85.md),
+[release evidence](Documentation/ReleaseReadiness/2.0.2-build85/README.md) and
 the [tester guide](Documentation/BetaTesting.md).
 
 [Collections](Documentation/LevelCollections.md) keeps each player's favourite

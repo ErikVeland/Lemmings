@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "/Users/veland/Lemmings/.build/release-2.0.2/source/Tools/Localisation/catalogue.py", line 130, in <module>
+    main()
+    ~~~~^^
+  File "/Users/veland/Lemmings/.build/release-2.0.2/source/Tools/Localisation/catalogue.py", line 122, in main
+    validate_translations({r['key'] for r in data['messages'] if r['kind'] == 'text'}, {r['key'] for r in data['messages'] if r['kind'] == 'plural'})
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/veland/Lemmings/.build/release-2.0.2/source/Tools/Localisation/catalogue.py", line 71, in validate_translations
+    raise ValueError(f'{locale.name}: {len(missing)} missing texts; ' + '; '.join(errors[:5]))
+ValueError: de.lproj: 0 missing texts; English text requires an explicit unchanged-text review: 'RATE {0}'
+es-419: 3162/3162 texts; 8/8 plurals; 0 errors; PASS
+de: 3162/3162 texts; 8/8 plurals; 1 errors; INCOMPLETE
+  English text requires an explicit unchanged-text review: 'RATE {0}'
+fr: 3162/3162 texts; 8/8 plurals; 0 errors; PASS
+pt-BR: 3162/3162 texts; 8/8 plurals; 0 errors; PASS
+it: 3162/3162 texts; 8/8 plurals; 0 errors; PASS
+nl: 3162/3162 texts; 8/8 plurals; 0 errors; PASS
+nb: 3162/3162 texts; 8/8 plurals; 0 errors; PASS
+ta: 3162/3162 texts; 8/8 plurals; 0 errors; PASS

@@ -1,0 +1,11 @@
+UI test windows: offscreen; audio: muted
+PASS classic: two ghosts, pause, rewind, end, isolation, persistence and latest-per-player
+PASS classic: store ownership, resumed session, new session and solo boundaries
+PASS classic: native sprite colours and unchanged input surface
+PASS lemmings2: two ghosts, pause, rewind, end, isolation, persistence and latest-per-player
+PASS lemmings2: store ownership, resumed session, new session and solo boundaries
+PASS lemmings2: native sprite colours and unchanged input surface
+PASS lemmings3: two ghosts, pause, rewind, end, isolation, persistence and latest-per-player
+PASS lemmings3: store ownership, resumed session, new session and solo boundaries
+PASS lemmings3: native sprite colours and unchanged input surface
+Hot Seat ghost checks passed

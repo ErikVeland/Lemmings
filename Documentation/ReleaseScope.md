@@ -1,9 +1,9 @@
 # Release scope
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-The current public Macintosh release is 2.0.1 build 84. Its universal packages
+The current public Macintosh release is 2.0.2 build 85. Its universal packages
 are signed, notarised and accepted by Gatekeeper. The signed update feed and
-build-83 delta are live and verified. See the [2.0.1 distribution evidence](ReleaseReadiness/2.0.1-build84/README.md).
+build-84 delta are live and verified. See the [2.0.2 distribution evidence](ReleaseReadiness/2.0.2-build85/README.md).
 This release retains the existing classifications and documented limits. The stricter bundled-content closure remains open.
 
 The owner set a stricter bundled-content closure rule on 15 October 2026. Every
@@ -14,7 +14,7 @@ Automated evidence supports the recorded native routes. Original-engine
 fidelity, high-survivor endings and hardware acceptance retain their recorded
 limits. See the [gate register](ReleaseReadiness/gates.json).
 
-Macintosh 2.0.1 retains the published classifications and known limits. Fresh native checks cover the revised journey, controls, rewards and paused Hot Seat handovers. The full L2 route and continuous-chain gate passes. The NeoLemmix package now indexes all 794 physical levels, of which 719 have bundled styles. No stricter bundled-content or hardware gate is marked closed.
+Macintosh 2.0.2 retains the published classifications and known limits. Fresh native checks cover Hot Seat ghosts, retries, rewards, checkpoint recovery and records. The maintenance audit preserves campaign route manifests. Existing L2 chain and NeoLemmix inventory evidence remains in force. No stricter bundled-content or hardware gate is marked closed.
 
 ## Bundled content closure
 

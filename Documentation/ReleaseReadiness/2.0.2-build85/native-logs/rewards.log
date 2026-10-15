@@ -1,0 +1,4 @@
+UI test windows: offscreen; audio: muted
+PASS passive perk counts and brief glow: automatic once, reduced motion, actual award names and reasons, Classic/L2/L3, solo/both Hot Seat rules, three sizes, all page targets, mouse/keyboard/accessibility, no turn advance, repeats/previews/rewind guards
+PASS Classic/L2/L3 primary result placement and mouse targets across solo/Hot Seat success, partial success, failure and Try Later; Hot Seat confirmation/cancellation/saved exit and P shortcut; shared community navigation, loading/empty/offline states, legacy records, provider selection, account-free browsing and return targets
+PASS 2.0.2 native scope: rewards

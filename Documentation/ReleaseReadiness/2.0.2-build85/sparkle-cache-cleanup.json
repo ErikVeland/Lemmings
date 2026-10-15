@@ -1,0 +1,47 @@
+{
+  "removedObsoleteExtractedCaches": [
+    {
+      "cache": "/Users/veland/Library/Caches/Sparkle_generate_appcast/78458cf2756934ad64cda83bf48fd3ab9f983cdd48ec2c0405d13290d100f789",
+      "build": "77"
+    },
+    {
+      "cache": "/Users/veland/Library/Caches/Sparkle_generate_appcast/81acbfa3d44d4aa4124513474a59aee768fa212c2172a258ff92990d2c8c6d63",
+      "build": "81"
+    },
+    {
+      "cache": "/Users/veland/Library/Caches/Sparkle_generate_appcast/8aa73bb223b406de32d58463c4422f0f121921ef7aca56b024376d7c9fd0c74f",
+      "build": "75"
+    },
+    {
+      "cache": "/Users/veland/Library/Caches/Sparkle_generate_appcast/f4005c8bf89b974b4ffa6362dac7e45f139b016d0d928fb0182447af484c795c",
+      "build": "83"
+    },
+    {
+      "cache": "/Users/veland/Library/Caches/Sparkle_generate_appcast/8ff1403b8044abc4a2ef9f8d27b9c2b89a9642fc0a3706fe722b7d43ee8db49c",
+      "build": "79"
+    },
+    {
+      "cache": "/Users/veland/Library/Caches/Sparkle_generate_appcast/3237ad68355107a6f6926c148bacc14312a7989f8a22be82d117f988cd646b26",
+      "build": "76"
+    },
+    {
+      "cache": "/Users/veland/Library/Caches/Sparkle_generate_appcast/324767f84e0a3c9e6c8e7783a355b9c69d81fc8531f6ee7cd4f91bd476f25d75",
+      "build": "78"
+    },
+    {
+      "cache": "/Users/veland/Library/Caches/Sparkle_generate_appcast/8e518090d30fc87d233671b873a104d7f2a4451070dd2693a90f76f215c92e08",
+      "build": "82"
+    }
+  ],
+  "retainedCurrentDeltaInputs": [
+    {
+      "cache": "/Users/veland/Library/Caches/Sparkle_generate_appcast/62d66c10ed91dc7e69ea8f04bbf2c76526f57a98bbdeea82e0eb7dfd0c1530fc",
+      "build": "84"
+    },
+    {
+      "cache": "/Users/veland/Library/Caches/Sparkle_generate_appcast/f4d21a04460048be66759c26bfccf7bc069a1c74f821b193efc2679796b044e9",
+      "build": "85"
+    }
+  ],
+  "releaseAppsAndArchivesRetained": true
+}

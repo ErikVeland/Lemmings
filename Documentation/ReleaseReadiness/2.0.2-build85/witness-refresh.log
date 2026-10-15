@@ -1,0 +1,10 @@
+PASS classic-0
+PASS classic-1
+PASS classic-2
+PASS ports
+PASS classic-3
+PASS l3
+PASS l2
+Audited 562 levels (615 configurations): {'VERIFIED': 247, 'OBSERVED': 309, 'UNKNOWN': 6}
+Packaged 294 exact-condition certificates and 315 best-known rescue targets.
+PASS 294 proofs, 315 rescue records, and replay hashes
