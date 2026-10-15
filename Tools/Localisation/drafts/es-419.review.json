@@ -1,51 +1,590 @@
 {
-  "locale": "es-419",
-  "status": "not_language_reviewed",
-  "checkpoint_date": "2026-10-15",
-  "draft_modified_by_this_reviewer": false,
-  "verified_translation_edits": [],
-  "reviewed_scope": {
-    "complete_message_reviews": 0,
-    "notes": [
-      "Read AGENTS.md and Documentation/Localisation.md. Inspected candidate structure, counts, issue reports, catalogue plural metadata and initial entries only. No translations have passed a complete contextual review. Existing drafts were left intact."
-    ]
+  "candidate": {
+    "available": false,
+    "entry_count": 0,
+    "merged_into_draft": false,
+    "missing_catalogue_text_count": 0,
+    "path": ".build/localisation-tools/candidates/es-419.json"
   },
   "catalogue": {
-    "text_count": 3116,
-    "plural_count": 8
+    "plural_count": 8,
+    "text_count": 3118
   },
+  "checkpoint_date": "2026-10-15",
+  "deliberately_unchanged": [
+    {
+      "key": "+{0} extra",
+      "reason": "“Extra” is an established Spanish loanword and preserves the count suffix."
+    },
+    {
+      "key": "ALASDAIR HOUSTON",
+      "reason": "Credited person’s name."
+    },
+    {
+      "key": "Ad-Lib FM",
+      "reason": "Sound hardware / music format name."
+    },
+    {
+      "key": "All New World of Lemmings",
+      "reason": "Original game title."
+    },
+    {
+      "key": "Amiga",
+      "reason": "Computer platform name."
+    },
+    {
+      "key": "Arcade",
+      "reason": "Established Spanish term for the arcade game category."
+    },
+    {
+      "key": "Audio",
+      "reason": "Spanish term for the audio setting."
+    },
+    {
+      "key": "B",
+      "reason": "Controller button label."
+    },
+    {
+      "key": "BETA",
+      "reason": "Beta release label; technical state."
+    },
+    {
+      "key": "BO",
+      "reason": "Credited initials or original content name."
+    },
+    {
+      "key": "BRIAN JOHNSON",
+      "reason": "Credited person’s name."
+    },
+    {
+      "key": "Beta",
+      "reason": "Standard Spanish release-stage term."
+    },
+    {
+      "key": "C",
+      "reason": "Keyboard binding / controller label."
+    },
+    {
+      "key": "CL",
+      "reason": "Original content or platform abbreviation."
+    },
+    {
+      "key": "CLASSIC",
+      "reason": "Original edition name used as product branding."
+    },
+    {
+      "key": "Cavelems",
+      "reason": "Original level / pack name."
+    },
+    {
+      "key": "Classic",
+      "reason": "Original edition name used as product branding."
+    },
+    {
+      "key": "Cursor",
+      "reason": "Spanish word for the pointer setting."
+    },
+    {
+      "key": "D",
+      "reason": "Keyboard binding / controller label."
+    },
+    {
+      "key": "DAVID HALLY",
+      "reason": "Credited person’s name."
+    },
+    {
+      "key": "DAVID OSBORNE",
+      "reason": "Credited person’s name."
+    },
+    {
+      "key": "DAVID WHITTACKER",
+      "reason": "Credited person’s name."
+    },
+    {
+      "key": "DMA Design / Psygnosis",
+      "reason": "Company names."
+    },
+    {
+      "key": "DOS (VGA)",
+      "reason": "Operating system and display-mode identifier."
+    },
+    {
+      "key": "DOS Ad-Lib",
+      "reason": "Original sound hardware name."
+    },
+    {
+      "key": "DOS Ad-Lib (OPL2)",
+      "reason": "Original sound hardware / chip identifier."
+    },
+    {
+      "key": "DOS AdLib OPL2 FM",
+      "reason": "Original sound hardware and synthesis identifier."
+    },
+    {
+      "key": "DOUGLAS SMITH",
+      "reason": "Credited person’s name."
+    },
+    {
+      "key": "Data East / Sega",
+      "reason": "Company names."
+    },
+    {
+      "key": "Fan",
+      "reason": "Spanish loanword retained as a short category label."
+    },
+    {
+      "key": "G",
+      "reason": "Keyboard binding / controller label."
+    },
+    {
+      "key": "GARY TIMMONS",
+      "reason": "Credited person’s name."
+    },
+    {
+      "key": "GRAEME ANDERSON",
+      "reason": "Credited person’s name."
+    },
+    {
+      "key": "Game Center",
+      "reason": "Apple service name."
+    },
+    {
+      "key": "Game Center >",
+      "reason": "Apple service name followed by a navigation marker."
+    },
+    {
+      "key": "H",
+      "reason": "Keyboard binding / controller label."
+    },
+    {
+      "key": "Hadoken",
+      "reason": "Canonical move name."
+    },
+    {
+      "key": "Holiday Lemmings",
+      "reason": "Original game title."
+    },
+    {
+      "key": "Holiday Lemmings 1993",
+      "reason": "Original game title."
+    },
+    {
+      "key": "Holiday Lemmings 1994",
+      "reason": "Original game title."
+    },
+    {
+      "key": "Hot Seat: {0}",
+      "reason": "Named multiplayer mode followed by a variable player identity."
+    },
+    {
+      "key": "HotSeat.{0}.{1}",
+      "reason": "Stable preference/storage key; must not be translated."
+    },
+    {
+      "key": "Hudson Soft / Sunsoft",
+      "reason": "Company names."
+    },
+    {
+      "key": "INF",
+      "reason": "Original file-format identifier."
+    },
+    {
+      "key": "JAMIE GRANT",
+      "reason": "Technical identifier, controller label or original title; preserve its authored form."
+    },
+    {
+      "key": "JOHN WHYTE",
+      "reason": "Technical identifier, controller label or original title; preserve its authored form."
+    },
+    {
+      "key": "Joystick",
+      "reason": "Common Spanish term for this control device."
+    },
+    {
+      "key": "L1 / LB",
+      "reason": "Controller button labels."
+    },
+    {
+      "key": "L2 / LT",
+      "reason": "Controller button labels."
+    },
+    {
+      "key": "LEM",
+      "reason": "Original content abbreviation."
+    },
+    {
+      "key": "LEMMING",
+      "reason": "Game-character name."
+    },
+    {
+      "key": "LEMMINGS",
+      "reason": "Original game title."
+    },
+    {
+      "key": "LEMMINGS 3",
+      "reason": "Original series title and game branding."
+    },
+    {
+      "key": "Lemmings",
+      "reason": "Original game title."
+    },
+    {
+      "key": "Lemmings 2",
+      "reason": "Original game title."
+    },
+    {
+      "key": "Lemmings 2 + 3",
+      "reason": "Original game names in a combined library label."
+    },
+    {
+      "key": "Lemmings 2 - {0}",
+      "reason": "Original game title; placeholder is a player or level detail."
+    },
+    {
+      "key": "Lemmings 2 · {0}",
+      "reason": "Original game title followed by a variable subtitle."
+    },
+    {
+      "key": "Lemmings 2: The Tribes",
+      "reason": "Original game title."
+    },
+    {
+      "key": "Lemmings 3",
+      "reason": "Original game title."
+    },
+    {
+      "key": "Lemmings 3 · {0}",
+      "reason": "Original game title followed by a variable subtitle."
+    },
+    {
+      "key": "MARK IRELAND",
+      "reason": "Technical identifier, controller label or original title; preserve its authored form."
+    },
+    {
+      "key": "MARTIN GOOD",
+      "reason": "Technical identifier, controller label or original title; preserve its authored form."
+    },
+    {
+      "key": "MIKE DAILLY",
+      "reason": "Technical identifier, controller label or original title; preserve its authored form."
+    },
+    {
+      "key": "Macintosh",
+      "reason": "Computer platform name."
+    },
+    {
+      "key": "Macintosh (original)",
+      "reason": "Original platform-and-artwork mode name."
+    },
+    {
+      "key": "Maintune",
+      "reason": "Original music track name."
+    },
+    {
+      "key": "Manual",
+      "reason": "Same spelling and meaning in Spanish."
+    },
+    {
+      "key": "Medieval",
+      "reason": "Same spelling and meaning in Spanish."
+    },
+    {
+      "key": "Monitor",
+      "reason": "Same spelling and meaning in Spanish."
+    },
+    {
+      "key": "Mouse",
+      "reason": "Common Latin American term for this pointing device."
+    },
+    {
+      "key": "NEOLEMMIX  {0}/{1}",
+      "reason": "NeoLemmix product name and variable progress count."
+    },
+    {
+      "key": "NES / Famicom NSF",
+      "reason": "Platform and audio format names."
+    },
+    {
+      "key": "NeoLemmix",
+      "reason": "Product name."
+    },
+    {
+      "key": "OPL2 YM3812 / Sound Blaster / Tandy",
+      "reason": "Sound chip, product and platform names."
+    },
+    {
+      "key": "Oh No! More Lemmings",
+      "reason": "Original game title."
+    },
+    {
+      "key": "Oh Yes! More Lemmings",
+      "reason": "Original game title."
+    },
+    {
+      "key": "Oh Yes! More Lemmings!",
+      "reason": "Original game title."
+    },
+    {
+      "key": "Original",
+      "reason": "Same spelling and meaning in Spanish; original-audio choice."
+    },
+    {
+      "key": "P / M / I",
+      "reason": "Original keyboard binding labels."
+    },
+    {
+      "key": "PC Speaker / AdLib FM",
+      "reason": "Sound hardware names."
+    },
+    {
+      "key": "PERM%03d.BLK",
+      "reason": "Fixed asset filename pattern; do not translate."
+    },
+    {
+      "key": "PERM%03d.FRL",
+      "reason": "Fixed asset filename pattern; do not translate."
+    },
+    {
+      "key": "PERM%03d.OBJ",
+      "reason": "Fixed asset filename pattern; do not translate."
+    },
+    {
+      "key": "PLAT",
+      "reason": "Original content abbreviation."
+    },
+    {
+      "key": "Phil Snape",
+      "reason": "Same spelling is accepted in Latin American Spanish in this label; retain its standard term."
+    },
+    {
+      "key": "Polar",
+      "reason": "Original L2 tribe name."
+    },
+    {
+      "key": "PrecisionZoom.v1.{0}",
+      "reason": "Stable preference key; do not translate."
+    },
+    {
+      "key": "Presage Software / Psygnosis",
+      "reason": "Company names."
+    },
+    {
+      "key": "Q / Escape",
+      "reason": "Keyboard binding labels."
+    },
+    {
+      "key": "R / B",
+      "reason": "Controller or keyboard button labels."
+    },
+    {
+      "key": "R1 / RB",
+      "reason": "Controller button labels."
+    },
+    {
+      "key": "R2 / RT",
+      "reason": "Controller button labels."
+    },
+    {
+      "key": "RAYMOND USHER",
+      "reason": "Technical identifier, controller label or original title; preserve its authored form."
+    },
+    {
+      "key": "RIFF",
+      "reason": "Audio-file identifier."
+    },
+    {
+      "key": "RUSSELL KAY",
+      "reason": "Technical identifier, controller label or original title; preserve its authored form."
+    },
+    {
+      "key": "Redbook CD-Audio + HuC6280 PSG",
+      "reason": "Audio format and chip identifiers."
+    },
+    {
+      "key": "S",
+      "reason": "Keyboard binding / controller label."
+    },
+    {
+      "key": "SH",
+      "reason": "Original content abbreviation."
+    },
+    {
+      "key": "SHADOW",
+      "reason": "Original L2 tribe name."
+    },
+    {
+      "key": "SIMON LITTLE",
+      "reason": "Technical identifier, controller label or original title; preserve its authored form."
+    },
+    {
+      "key": "STACEY JAMIESON",
+      "reason": "Technical identifier, controller label or original title; preserve its authored form."
+    },
+    {
+      "key": "STEVE HAMMOND",
+      "reason": "Technical identifier, controller label or original title; preserve its authored form."
+    },
+    {
+      "key": "STEVEN REID",
+      "reason": "Technical identifier, controller label or original title; preserve its authored form."
+    },
+    {
+      "key": "SUPERLEM",
+      "reason": "Original skill name."
+    },
+    {
+      "key": "Shadow",
+      "reason": "Original L2 tribe name."
+    },
+    {
+      "key": "Sunsoft / DMA Design",
+      "reason": "Company names."
+    },
+    {
+      "key": "Sunsoft / Probe Software",
+      "reason": "Company names."
+    },
+    {
+      "key": "Super Nintendo",
+      "reason": "Platform name."
+    },
+    {
+      "key": "Superlem",
+      "reason": "Original skill name."
+    },
+    {
+      "key": "Superzoom",
+      "reason": "Superzoom feature name."
+    },
+    {
+      "key": "TEMP%03d.BLK",
+      "reason": "Fixed asset filename pattern; do not translate."
+    },
+    {
+      "key": "TEMP%03d.FRL",
+      "reason": "Fixed asset filename pattern; do not translate."
+    },
+    {
+      "key": "TEMP%03d.OBJ",
+      "reason": "Fixed asset filename pattern; do not translate."
+    },
+    {
+      "key": "The Lemmings Chronicles",
+      "reason": "Original game title."
+    },
+    {
+      "key": "U",
+      "reason": "Keyboard binding / controller label."
+    },
+    {
+      "key": "Ultimate Lemmings",
+      "reason": "Product name."
+    },
+    {
+      "key": "Ultimate Lemmings — {0}",
+      "reason": "Product name followed by a variable subtitle."
+    },
+    {
+      "key": "UltimateLemmings/0.1 (fan-pack updates; sequential requests)",
+      "reason": "HTTP user-agent identifier; do not translate."
+    },
+    {
+      "key": "V / S",
+      "reason": "Keyboard binding labels."
+    },
+    {
+      "key": "Video",
+      "reason": "Same spelling and meaning in Spanish."
+    },
+    {
+      "key": "WAVEfmt ",
+      "reason": "Audio-file chunk identifier; do not translate."
+    },
+    {
+      "key": "Xmas Lemmings 1991",
+      "reason": "Original game title."
+    },
+    {
+      "key": "Xmas Lemmings 1992",
+      "reason": "Original game title."
+    },
+    {
+      "key": "Z - {0}",
+      "reason": "Keyboard binding followed by a variable detail."
+    },
+    {
+      "key": "Z / Shift+Z: Zoom",
+      "reason": "Keyboard bindings and feature name."
+    },
+    {
+      "key": "ZOOM",
+      "reason": "Zoom feature name."
+    },
+    {
+      "key": "Zoom",
+      "reason": "Zoom feature name, a common Spanish borrowing."
+    },
+    {
+      "key": "Zoom 1×",
+      "reason": "Zoom feature name and multiplier."
+    },
+    {
+      "key": "Zoom {0}×",
+      "reason": "Zoom feature name and variable multiplier."
+    },
+    {
+      "key": "[MobileHUD] mode={0} bounds={1} safeInsets={2} controls={3} reserved={4}",
+      "reason": "Structured debug-log prefix and field names; do not translate."
+    },
+    {
+      "key": "fan",
+      "reason": "Spanish loanword retained as a content category."
+    },
+    {
+      "key": "hotseat",
+      "reason": "Stable storage name for saved multiplayer sessions; do not translate."
+    },
+    {
+      "key": "z - {0}",
+      "reason": "Keyboard binding followed by a variable detail."
+    },
+    {
+      "key": "{0} - Macintosh (original)",
+      "reason": "Variable source name plus the original Macintosh artwork mode."
+    },
+    {
+      "key": "{0} — {1} {2} — Beta",
+      "reason": "Variable release information; “Beta” is the standard Spanish release-stage term."
+    }
+  ],
   "draft": {
-    "path": "Tools/Localisation/drafts/es-419.json",
-    "entry_count": 458,
-    "missing_catalogue_text_count": 2664
+    "current_catalogue_text_count": 3118,
+    "entry_count": 3118,
+    "missing_catalogue_text_count": 0,
+    "obsolete_key_count": 0,
+    "path": "Tools/Localisation/drafts/es-419.json"
   },
-  "candidate": {
-    "path": ".build/localisation-tools/candidates/es-419.json",
-    "available": true,
-    "entry_count": 2927,
-    "missing_catalogue_text_count": 199,
-    "issue_report_path": ".build/localisation-tools/candidates/es-419.issues.json",
-    "merged_into_draft": false
+  "draft_modified_by_this_reviewer": true,
+  "handover_snapshot": {
+    "bundled_runtime_locale_exists": false,
+    "catalogue_plural_count": 8,
+    "catalogue_sha256": "dbfedf2a3900b0dff884cc0af9f46ea7244ad72f5c2b250820d72368d77f1357",
+    "catalogue_text_count": 3118,
+    "date": "2026-10-15",
+    "draft_current_text_count": 3118,
+    "draft_entry_count": 3118,
+    "draft_missing_current_text_count": 0,
+    "draft_obsolete_key_count": 0,
+    "draft_sha256": "c60242b0a7db4ca1a907a0baa29704cea22c46b66446b33802aef9853d95671d",
+    "linguistic_approval": false,
+    "plural_staging_entry_count": 8,
+    "plural_staging_sha256": "7ade6a651aa96e2bf18bc9f2a37b6f121badd9c770bf79616a597e57c30db4bb",
+    "structural_validation_result": "complete_after_review.unchanged_entries_are_merged_into_shared_allowlist"
   },
-  "remaining_work": [
-    "Merge candidate translations into the draft without losing any existing verified translations.",
-    "Review every message in source context using Documentation/LocalisationCatalogue.json.",
-    "Apply the locale column in Tools/Localisation/captions.tsv to exact and uppercase matching keys.",
-    "Correct game terminology, action meaning, informal tone, grammar and regional usage.",
-    "Translate the catalogue delta missing from the older candidate.",
-    "Resolve candidate issue reports and validate placeholders.",
-    "Create and review all eight plural entries.",
-    "Record deliberately unchanged brands, identities and formatting-only messages with reasons after review.",
-    "Run structural checks and complete the required rendered UI and input-target checks before enabling the language."
-  ],
-  "known_candidate_defects": [
-    "The keyboard overlay beginning “Hold F” mistranslates ramp/hold/release and needs a manual rewrite.",
-    "Initial candidate entry “Keep {0} available for later.” uses formal “Mantenga”; informal tone needs review."
-  ],
+  "locale": "es-419",
   "plural_work": {
-    "status": "not_started",
-    "path": "Tools/Localisation/drafts/es-419.plurals.json",
-    "file_exists": false,
+    "file_exists": true,
+    "foundation_selection_verified": false,
     "keys": [
       "count.commands",
       "count.lemmings",
@@ -55,35 +594,33 @@
       "count.savedLemmings",
       "count.secondStarGoal",
       "count.thirdStarGoal"
+    ],
+    "path": "Tools/Localisation/drafts/es-419.plurals.json",
+    "status": "complete_structural_only"
+  },
+  "quality_limitations": [
+    "This is an AI-generated Latin American Spanish draft. Human language approval is pending.",
+    "The locale remains disabled and no runtime bundle was changed.",
+    "No physical-device, rendered-language UI, accessibility or platform acceptance is claimed.",
+    "All eight Spanish plural entries use one/other categories and pass structural format checks; Foundation plural selection was not run."
+  ],
+  "remaining_work": [
+    "Complete human linguistic review of every Spanish message, including the 452 retained original entries and the new AI-generated translations.",
+    "Review captions.tsv usage and action/skill terms in all message contexts.",
+    "Merge the individually justified unchanged strings into the shared unchanged allowlist through the integration owner.",
+    "Exercise Spanish zero, one, two and large counts with Foundation plural selection.",
+    "Inspect rendered UI and input targets across Classic, L2 and L3 on Mac, iPhone/iPad and TV."
+  ],
+  "reviewed_scope": {
+    "complete_message_reviews": 2666,
+    "notes": [
+      "Translated all 2,666 current catalogue text keys absent from the original draft, including 10 newly added keys, directly from the English catalogue.",
+      "Retained the 452 current-key entries from the original draft. A final human linguistic review of those values and all new AI translations is still required.",
+      "Inspected source references for ambiguous dynamic accessibility, gameplay, identity and technical messages; applied the shared es-419 action and skill vocabulary where reviewed.",
+      "Removed all 8 obsolete keys. This draft is complete for current catalogue text coverage but is not language approved."
     ]
   },
-  "deliberately_unchanged": [],
-  "unchanged_terms_pending_review": [
-    "Lemmings",
-    "NeoLemmix",
-    "Hot Seat"
-  ],
-  "quality_limitations": [
-    "Machine-generated candidate translations are not language-reviewed.",
-    "No full translated-file read, source-context review, placeholder repair, plural translation or rendered language validation was completed by this reviewer."
-  ],
-  "handover_snapshot": {
-    "date": "2026-10-15",
-    "catalogue_sha256": "cb1597e02bbb23f777cb15824881436de54e9b9975d525888c227d348eee6721",
-    "catalogue_text_count": 3116,
-    "catalogue_plural_count": 8,
-    "draft_sha256": "a3ed472a14f4abc266771b9365386629fa1dbae59c1de4a7d2980f56b281e55d",
-    "draft_entry_count": 458,
-    "draft_missing_current_text_count": 2664,
-    "draft_obsolete_key_count": 6,
-    "candidate_sha256": "ca78cebbe3d548b98de2af2569d3f348f86c0ab5a412759c5983f9b653823ff2",
-    "candidate_entry_count": 2927,
-    "candidate_missing_current_text_count": 199,
-    "candidate_obsolete_key_count": 10,
-    "candidate_invalid_placeholder_count": 2,
-    "plural_staging_file_exists": false,
-    "bundled_runtime_locale_exists": false,
-    "structural_validation_result": "incomplete",
-    "linguistic_approval": false
-  }
+  "status": "complete_ai_draft_pending_human_language_review",
+  "unchanged_terms_pending_review": [],
+  "verified_translation_edits": []
 }
