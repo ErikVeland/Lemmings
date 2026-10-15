@@ -146,6 +146,26 @@ cell to 4 pixels and the refire interval to 75 ticks. It expanded 2,704,573
 candidates and returned the same 1-of-42 route. Neither search improved the
 Beach chain or proves a higher-survivor route is unavailable.
 
+### Current-main route probes
+
+After syncing to `main` revision `061e1b99`, bounded searches checked routes
+that feed the weak Highland and Beach chains. L2 source files did not change in
+that sync. The retained solver found no better route in these probes:
+
+| Route | Incoming population | Result | Search |
+| --- | ---: | ---: | --- |
+| Highland 1 | 60 | 60 saved | 120-second seed search, beam 2,048; 202,791 candidates |
+| Highland 2 | 60 | 3 saved | 180-second seed search, beam 2,048; 344,212 candidates |
+| Highland 2 | 60 | 3 saved | 180-second seed search, beam 4,096, cell 4, refire 75; 403,470 candidates |
+| Beach 1 | 60 | 42 saved | 180-second seed search, beam 4,096; 88,155 candidates |
+| Beach 2 carry-over | 42 | 42 saved | 180-second seed search, beam 4,096, cell 4, refire 75; 535,594 candidates |
+
+The current chain loses survivors later. Highland 2 carries only three forward,
+and Beach 3 carries one from 42. These searches do not prove that a better
+route is impossible. The strict current-main gate replayed all 120 standalone
+routes, 70 carry-over variants and twelve ten-level chains. It still fails the
+ark check because every tribe ends with one survivor.
+
 ## Commands
 
 | Task | Command |

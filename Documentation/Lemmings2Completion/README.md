@@ -11,10 +11,11 @@ The strict native gate passed on 10 October 2026: 120 routes, 70 carry-over
 variants and all twelve continuous tribe chains. Every witness passed two fresh
 replays with matching saved counts, ticks and state hashes.
 
-The gate passed again on 15 October 2026 against the current checkout. Strict
-ark mode replayed all routes and chains, then failed the ending conditions.
-Each tribe chain ends with one survivor and a Bronze talisman. The evidence does
-not prove a golden talisman or an ark ending.
+The gate passed again on 15 October 2026 at current `main` revision `061e1b99`
+with Xcode 26.6. Strict ark mode replayed all 120 routes and 70 carry-over
+variants twice, then replayed all twelve ten-level chains. Every chain ends
+with one survivor and a Bronze talisman, so the gate correctly fails the ark
+prerequisites. The evidence does not prove a golden talisman or an ark ending.
 
 A 15 October Cavelems route update now chains all ten levels from 60 lemmings.
 It records 59 saved on Level 1, then 36, 17, 4, 2, 2, 1, 1, 1 and 1. The
