@@ -74,10 +74,12 @@ The bundled Classic library contains 6,020 fan levels in 535 packs. The current
 native audit verifies 2,399 routes; 3,600 levels have no matching candidate and 21
 candidate or historical replays fail. The October CSV includes two additional
 imported levels outside that bundle. Imported content remains open-ended. The
-pinned NeoLemmix runnable gate passed 794 levels. The separate 788-level bundle has
-75 levels without bundled styles and exact-version winning replay evidence for
-158 levels. See [release scope](Documentation/ReleaseScope.md) for the current
-closure rule and status.
+pinned NeoLemmix runnable gate passed 794 levels. The bundled three-pack set
+has 788 levels. The 26 bundled DMA styles resolve the listed style-directory
+references for 713 levels. The other 75 need one or more of 44 player-supplied
+community styles. Exact-version
+winning replay evidence covers 158 levels. See
+[release scope](Documentation/ReleaseScope.md) for the closure status.
 
 ## Translation work
 
