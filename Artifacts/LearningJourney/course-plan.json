@@ -1709,16 +1709,16 @@
       "chapter": "precision",
       "identity": {
         "engine": "classic",
-        "levelID": "78:Taxing:19:4:3",
-        "packID": "lemmings-LEVEL-120"
+        "levelID": "49:Wild:10:2:5",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
       },
       "position": 723.0,
-      "previousStep": 61,
+      "previousStep": 141,
       "reason": "Practise familiar actions with timing and precision, first with recovery room, then under stricter stock and rescue conditions.",
-      "replayRevision": "34213caa09ceb07faf14061332ee577f3cc2f60de0395effcf113ef0fa1d7cce",
+      "replayRevision": "cca6b08c219cb37aa1c87a29fa3cefc049f90c824dc3ef410e154ef4edf9c8c7",
       "role": "practice",
-      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-      "title": "Bomboozal"
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Higgledy Piggledy"
     },
     {
       "chapter": "precision",
@@ -1739,16 +1739,16 @@
       "chapter": "precision",
       "identity": {
         "engine": "classic",
-        "levelID": "49:Wild:10:2:5",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
+        "levelID": "78:Taxing:19:4:3",
+        "packID": "lemmings-LEVEL-120"
       },
       "position": 729.0,
-      "previousStep": 141,
+      "previousStep": 61,
       "reason": "Practise familiar actions with timing and precision, first with recovery room, then under stricter stock and rescue conditions.",
-      "replayRevision": "cca6b08c219cb37aa1c87a29fa3cefc049f90c824dc3ef410e154ef4edf9c8c7",
+      "replayRevision": "34213caa09ceb07faf14061332ee577f3cc2f60de0395effcf113ef0fa1d7cce",
       "role": "practice",
-      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-      "title": "Higgledy Piggledy"
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Bomboozal"
     },
     {
       "chapter": "precision",
@@ -1904,31 +1904,31 @@
       "chapter": "hatches",
       "identity": {
         "engine": "classic",
-        "levelID": "65:Wicked:6:9:4",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
+        "levelID": "63:Taxing:4:2:5",
+        "packID": "lemmings-LEVEL-120"
       },
       "position": 760.0,
-      "previousStep": 113,
-      "reason": "Practise handling several hatches using one familiar skill family. The low rescue quota and long time-to-quota margin allow recovery even though the witness uses its four miners.",
-      "replayRevision": "7f031eb4f21559ea10562f00fa7a26cea4fe3e2d5577f633c1c486aec3cbfafd",
+      "previousStep": 167,
+      "reason": "Start with a generous rescue allowance and a simple skill family. Add group routing, pace, rescue pressure and restricted stock after separate rehearsals. Reported multi-hatch walls close the chapter.",
+      "replayRevision": "ccf1514c3fdb4bf46cdea3056ac33285cb973225954e9b8e926c4424c4fdd081",
       "role": "introduction",
-      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-      "title": "PoP TiL YoU DrOp!"
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Lend a helping hand...."
     },
     {
       "chapter": "hatches",
       "identity": {
         "engine": "classic",
-        "levelID": "63:Taxing:4:2:5",
-        "packID": "lemmings-LEVEL-120"
+        "levelID": "65:Wicked:6:9:4",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
       },
       "position": 762.294,
-      "previousStep": 167,
-      "reason": "Start with a generous rescue allowance and a simple skill family. Add group routing, pace, rescue pressure and restricted stock after separate rehearsals. Reported multi-hatch walls close the chapter.",
-      "replayRevision": "ccf1514c3fdb4bf46cdea3056ac33285cb973225954e9b8e926c4424c4fdd081",
-      "role": "recovery",
-      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-      "title": "Lend a helping hand...."
+      "previousStep": 113,
+      "reason": "Practise handling several hatches using one familiar skill family. The low rescue quota and long time-to-quota margin allow recovery even though the witness uses its four miners.",
+      "replayRevision": "7f031eb4f21559ea10562f00fa7a26cea4fe3e2d5577f633c1c486aec3cbfafd",
+      "role": "practice",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "PoP TiL YoU DrOp!"
     },
     {
       "chapter": "hatches",
@@ -2114,10 +2114,25 @@
       "chapter": "hatches",
       "identity": {
         "engine": "classic",
+        "levelID": "52:Mega Drive Sunsoft:23:0:52",
+        "packID": "ohYesMoreLemmings-OHYES-60"
+      },
+      "position": 792.118,
+      "previousStep": 147,
+      "reason": "Start with a generous rescue allowance and a simple skill family. Add group routing, pace, rescue pressure and restricted stock after separate rehearsals. Reported multi-hatch walls close the chapter.",
+      "replayRevision": "e37570c9dac1cad029f9a34a5b8ab5f83f46e9f6b79b65d12e8853dfb672f3e5",
+      "role": "practice",
+      "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
+      "title": "Move on in two separate groups."
+    },
+    {
+      "chapter": "hatches",
+      "identity": {
+        "engine": "classic",
         "levelID": "85:Taxing:26:5:2",
         "packID": "lemmings-LEVEL-120"
       },
-      "position": 792.118,
+      "position": 794.412,
       "previousStep": 108,
       "reason": "Start with a generous rescue allowance and a simple skill family. Add group routing, pace, rescue pressure and restricted stock after separate rehearsals. Reported multi-hatch walls close the chapter.",
       "replayRevision": "98a84c519b87aecef73b545ab3c6299fda4a634d8cbb0c22b6fbbf73f5bec6dc",
@@ -2132,7 +2147,7 @@
         "levelID": "58:Tricky:29:2:0",
         "packID": "lemmings-LEVEL-120"
       },
-      "position": 794.412,
+      "position": 796.706,
       "previousStep": 98,
       "reason": "Player-reported early wall. Prepare multi-hatch routing and faster release before this high-rescue three-hatch combination.",
       "replayRevision": "289466ebcf51b23ac8617701a6fbe48d8a52fce49a7d9dab7a8b5fd7b6838883",
@@ -2147,28 +2162,13 @@
         "levelID": "40:Wild:1:9:2",
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
-      "position": 796.706,
+      "position": 799.0,
       "previousStep": 107,
       "reason": "Player-reported early wall. Coordinate simpler entrances and groups first, then tackle four hatches with limited route tools.",
       "replayRevision": "a8674c5ac05993c5cbcffad3532716b66a97d22bdbd646135f27421a124f8bb0",
-      "role": "practice",
+      "role": "challenge",
       "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
       "title": "PoP YoR ToP!!!"
-    },
-    {
-      "chapter": "hatches",
-      "identity": {
-        "engine": "classic",
-        "levelID": "52:Mega Drive Sunsoft:23:0:52",
-        "packID": "ohYesMoreLemmings-OHYES-60"
-      },
-      "position": 799.0,
-      "previousStep": 147,
-      "reason": "Start with a generous rescue allowance and a simple skill family. Add group routing, pace, rescue pressure and restricted stock after separate rehearsals. Reported multi-hatch walls close the chapter.",
-      "replayRevision": "e37570c9dac1cad029f9a34a5b8ab5f83f46e9f6b79b65d12e8853dfb672f3e5",
-      "role": "challenge",
-      "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
-      "title": "Move on in two separate groups."
     },
     {
       "chapter": "combined-plans",
@@ -2564,31 +2564,31 @@
       "chapter": "clocks",
       "identity": {
         "engine": "classic",
-        "levelID": "30:Crazy:11:5:7",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "position": 841.485,
-      "previousStep": 154,
-      "reason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
-      "replayRevision": "d5ba01581b810129abbf5b4a0bff7d238f9de1b1d73b5e75868bfc38cb1ef533",
-      "role": "practice",
-      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-      "title": "No Problemming!"
-    },
-    {
-      "chapter": "clocks",
-      "identity": {
-        "engine": "classic",
         "levelID": "81:Havoc:2:5:3",
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
-      "position": 842.97,
+      "position": 841.485,
       "previousStep": 139,
       "reason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "replayRevision": "69736f9357b3fff66fa5c8a9b66bd2b771f8ccecd680ebf5c079347e9443ea7e",
       "role": "practice",
       "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
       "title": "Be more than just a number"
+    },
+    {
+      "chapter": "clocks",
+      "identity": {
+        "engine": "classic",
+        "levelID": "30:Crazy:11:5:7",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "position": 842.97,
+      "previousStep": 154,
+      "reason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
+      "replayRevision": "d5ba01581b810129abbf5b4a0bff7d238f9de1b1d73b5e75868bfc38cb1ef533",
+      "role": "practice",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "No Problemming!"
     },
     {
       "chapter": "clocks",
@@ -2639,31 +2639,31 @@
       "chapter": "clocks",
       "identity": {
         "engine": "classic",
-        "levelID": "116:Mayhem:27:8:5",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "position": 848.909,
-      "previousStep": 99,
-      "reason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
-      "replayRevision": "753446ebe53fb2d9e14a19d220e04bb0b46944f8127171929f014b782e7dc636",
-      "role": "practice",
-      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-      "title": "Just a Minute (Part Two)"
-    },
-    {
-      "chapter": "clocks",
-      "identity": {
-        "engine": "classic",
         "levelID": "105:Mayhem:16:7:4",
         "packID": "lemmings-LEVEL-120"
       },
-      "position": 850.394,
+      "position": 848.909,
       "previousStep": 92,
       "reason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "replayRevision": "3e7311226f3ec242ec7e9255c3e169e71827b537bfaadce2291a1aba4fc6869b",
       "role": "practice",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
       "title": "Just a Minute..."
+    },
+    {
+      "chapter": "clocks",
+      "identity": {
+        "engine": "classic",
+        "levelID": "116:Mayhem:27:8:5",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "position": 850.394,
+      "previousStep": 99,
+      "reason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
+      "replayRevision": "753446ebe53fb2d9e14a19d220e04bb0b46944f8127171929f014b782e7dc636",
+      "role": "practice",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Just a Minute (Part Two)"
     },
     {
       "chapter": "clocks",
@@ -2804,10 +2804,25 @@
       "chapter": "clocks",
       "identity": {
         "engine": "classic",
-        "levelID": "70:Wicked:11:4:1",
+        "levelID": "47:Wild:8:0:7",
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
       "position": 865.242,
+      "previousStep": 211,
+      "reason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
+      "replayRevision": "eb9ad6d9b2b4751091ffeb195eee966973d910fdd28819b19baaf0c67a7792b0",
+      "role": "practice",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "It`s a tight fit!"
+    },
+    {
+      "chapter": "clocks",
+      "identity": {
+        "engine": "classic",
+        "levelID": "70:Wicked:11:4:1",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "position": 866.727,
       "previousStep": 209,
       "reason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "replayRevision": "7f032979b75b3fe7fe1a1410d0d4d12ebc2686119807135cf199b71a68239011",
@@ -2822,7 +2837,7 @@
         "levelID": "37:Crazy:18:3:7",
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
-      "position": 866.727,
+      "position": 868.212,
       "previousStep": 138,
       "reason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "replayRevision": "29c0f0da0e3519cf6cc661329d8a727680fd9857695f5a8b45b0ea4df7168653",
@@ -2837,7 +2852,7 @@
         "levelID": "29:Crazy:10:5:4",
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
-      "position": 868.212,
+      "position": 869.697,
       "previousStep": 80,
       "reason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "replayRevision": "0134cd3437e6cef163b9ad293d6b0589ce3bb09b8b03ef1ae5321fd31691fb15",
@@ -2852,7 +2867,7 @@
         "levelID": "52:Wild:13:4:0",
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
-      "position": 869.697,
+      "position": 871.182,
       "previousStep": 103,
       "reason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "replayRevision": "350ddba9aaa78c1cc56841bdc7ef49e5de104032cbc6b0d6ad6cb4dadb22709f",
@@ -2867,7 +2882,7 @@
         "levelID": "54:Wild:15:4:4",
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
-      "position": 871.182,
+      "position": 872.667,
       "previousStep": 86,
       "reason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "replayRevision": "b95c5e9582d282673a99ce8c52bff210abc69418b133cd854d2074de035ca09b",
@@ -2882,7 +2897,7 @@
         "levelID": "46:Wild:7:8:6",
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
-      "position": 872.667,
+      "position": 874.152,
       "previousStep": 131,
       "reason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "replayRevision": "3b3cedf6ed8c7b3a0fc69dc3fd9cd6be0fcaa13309a5c43bfe6458630f4fa2b2",
@@ -2897,7 +2912,7 @@
         "levelID": "66:Taxing:7:3:0",
         "packID": "lemmings-LEVEL-120"
       },
-      "position": 874.152,
+      "position": 875.636,
       "previousStep": 182,
       "reason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "replayRevision": "3d4fd83f07c26569b68b148673738bd1ffe71da3102b1c35fc7c41fbcbe11f16",
@@ -2912,7 +2927,7 @@
         "levelID": "59:Mega Drive Sunsoft:30:0:59",
         "packID": "ohYesMoreLemmings-OHYES-60"
       },
-      "position": 875.636,
+      "position": 877.121,
       "previousStep": 186,
       "reason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "replayRevision": "68dc801dc705db0fb40103e7dd99dcb815b97a2e98d00a491021c032ba6683ed",
@@ -2927,7 +2942,7 @@
         "levelID": "98:Mayhem:9:6:5",
         "packID": "lemmings-LEVEL-120"
       },
-      "position": 877.121,
+      "position": 878.606,
       "previousStep": 170,
       "reason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "replayRevision": "3981e3e1b646eec1b909fdcde54a627712d1424eeb56bb813e06c4b707b2d502",
@@ -2942,28 +2957,13 @@
         "levelID": "21:Crazy:2:1:0",
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
-      "position": 878.606,
+      "position": 880.091,
       "previousStep": 109,
       "reason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
       "replayRevision": "bba1f8ff11e7dead44e51200ef326850d3ed93dccfb6efff38ee79fa90d206f1",
       "role": "practice",
       "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
       "title": "Dolly Dimple"
-    },
-    {
-      "chapter": "clocks",
-      "identity": {
-        "engine": "classic",
-        "levelID": "47:Wild:8:0:7",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "position": 880.091,
-      "previousStep": 211,
-      "reason": "Introduce clocks and fast releases in familiar routes, then combine them with limited stock, full rescue and multiple entrances. Use time to first rescue quota, not replay shutdown time.",
-      "replayRevision": "eb9ad6d9b2b4751091ffeb195eee966973d910fdd28819b19baaf0c67a7792b0",
-      "role": "practice",
-      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-      "title": "It`s a tight fit!"
     },
     {
       "chapter": "clocks",
@@ -3449,46 +3449,31 @@
       "chapter": "capstones",
       "identity": {
         "engine": "classic",
-        "levelID": "61:Wicked:2:4:6",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "position": 940.0,
-      "previousStep": 146,
-      "reason": "Special pacing is a separate challenge. Keep it behind ordinary routing, skill chains and fast-release practice.",
-      "replayRevision": "989ff81752fe5d07baba089b534a2eba512b1f577724722133e6aaaf34d55e64",
-      "role": "introduction",
-      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-      "title": "Inroducing SUPERLEMMING"
-    },
-    {
-      "chapter": "capstones",
-      "identity": {
-        "engine": "classic",
-        "levelID": "58:Mega Drive Sunsoft:29:0:58",
-        "packID": "ohYesMoreLemmings-OHYES-60"
-      },
-      "position": 949.0,
-      "previousStep": 185,
-      "reason": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
-      "replayRevision": "6d38849c56ea3db544ecb89425667c8bbb1f6fccfcc9bb25fb145a7d46f06732",
-      "role": "practice",
-      "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
-      "title": "I am A.T."
-    },
-    {
-      "chapter": "capstones",
-      "identity": {
-        "engine": "classic",
         "levelID": "35:Mega Drive Sunsoft:6:0:35",
         "packID": "ohYesMoreLemmings-OHYES-60"
       },
-      "position": 958.0,
+      "position": 940.0,
       "previousStep": 226,
       "reason": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
       "replayRevision": "b073ef2e1143dd27ce817398587846c5c7cd17b10afba55fea35b2009bf4b571",
-      "role": "practice",
+      "role": "introduction",
       "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
       "title": "Libra"
+    },
+    {
+      "chapter": "capstones",
+      "identity": {
+        "engine": "classic",
+        "levelID": "61:Wicked:2:4:6",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "position": 949.0,
+      "previousStep": 146,
+      "reason": "Special pacing is a separate challenge. Keep it behind ordinary routing, skill chains and fast-release practice.",
+      "replayRevision": "989ff81752fe5d07baba089b534a2eba512b1f577724722133e6aaaf34d55e64",
+      "role": "practice",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Inroducing SUPERLEMMING"
     },
     {
       "chapter": "capstones",
@@ -3497,13 +3482,28 @@
         "levelID": "64:Taxing:5:2:6",
         "packID": "lemmings-LEVEL-120"
       },
-      "position": 967.0,
+      "position": 958.0,
       "previousStep": 227,
       "reason": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
       "replayRevision": "c00e0cfa0f7937f0cb3d70b50152a5987d533cc0f5d922b7977ca21a86b6c39f",
       "role": "practice",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
       "title": "The Prison!"
+    },
+    {
+      "chapter": "capstones",
+      "identity": {
+        "engine": "classic",
+        "levelID": "58:Mega Drive Sunsoft:29:0:58",
+        "packID": "ohYesMoreLemmings-OHYES-60"
+      },
+      "position": 967.0,
+      "previousStep": 185,
+      "reason": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "replayRevision": "6d38849c56ea3db544ecb89425667c8bbb1f6fccfcc9bb25fb145a7d46f06732",
+      "role": "practice",
+      "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
+      "title": "I am A.T."
     },
     {
       "chapter": "capstones",

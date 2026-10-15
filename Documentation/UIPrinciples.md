@@ -505,7 +505,9 @@ Measure and wrap the result identity before placing the rescue summary. Omit the
 status row when it has no content. Size reward receipts and achievement details
 to their measured text and cards, with balances and navigation directly below.
 A single action fills its row. Keep drawing, keyboard, mouse and accessibility
-bounds in agreement when the panel height changes.
+bounds in agreement when the panel height changes. Anchor the action row at the
+same bottom position across result, reward and achievement pages. Short panels
+shrink above the actions, so pagination does not move the navigation targets.
 
 Earned rewards need an explicit award moment. Mac results automatically open a
 bitmap Rewards earned page for each newly saved award-bearing attempt. Show the

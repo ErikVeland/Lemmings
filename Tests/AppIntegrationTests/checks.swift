@@ -9448,7 +9448,7 @@ extension AppDelegate {
   guard [.result, .earnedRewards, .achievement].contains(view.mode) else { return }
   let elements = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
   let scale = min(GamePageLayout.scale(in: view.bounds.size), view.bounds.height / view.pageContentHeight)
-  let offset = CGPoint(x: (view.bounds.width - 1120 * scale) / 2, y: (view.bounds.height - view.pageContentHeight * scale) / 2)
+  let offset = CGPoint(x: (view.bounds.width - 1120 * scale) / 2, y: (view.bounds.height - max(720, view.pageContentHeight) * scale) / 2 + max(0, 720 - view.pageContentHeight) * scale)
   func logical(_ rect: CGRect) -> CGRect {
     CGRect(x: (rect.minX - offset.x) / scale, y: (rect.minY - offset.y) / scale, width: rect.width / scale, height: rect.height / scale)
   }

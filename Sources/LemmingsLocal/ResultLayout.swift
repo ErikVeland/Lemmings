@@ -49,7 +49,7 @@ import NxlvKit
     }
     var pageContentHeight: CGFloat {
         switch mode {
-        case .result: return resultActionsY + 99
+        case .result: return resultActionsY + 86
         case .earnedRewards: return earnedRewardsFooterY + 86
         case .achievement: return achievementFooterY + 86
         default: return 720

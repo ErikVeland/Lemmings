@@ -347,7 +347,10 @@ import NxlvKit
         replaceInitials = true; needsDisplay = true
     }
     private var scale: CGFloat { min(GamePageLayout.scale(in: bounds.size), bounds.height / pageContentHeight) }
-    private var offset: CGPoint { CGPoint(x: (bounds.width - 1120 * scale) / 2, y: (bounds.height - pageContentHeight * scale) / 2) }
+    private var offset: CGPoint {
+        CGPoint(x: (bounds.width - 1120 * scale) / 2,
+                y: (bounds.height - max(720, pageContentHeight) * scale) / 2 + max(0, 720 - pageContentHeight) * scale)
+    }
     override func draw(_ dirtyRect: NSRect) {
         NSColor.black.setFill(); bounds.fill(); buttons = []; disabledButtons = []; primaryButtonIndex = nil; accessibleText = []; achievementHints = []
         if let background {
@@ -360,7 +363,7 @@ import NxlvKit
         NSGraphicsContext.saveGraphicsState()
         let transform = NSAffineTransform(); transform.translateX(by: offset.x, yBy: offset.y)
         transform.scale(by: scale); transform.concat()
-        let panel = CGRect(x: 44, y: 20, width: 1032, height: pageContentHeight - (mode == .result ? 48 : 44))
+        let panel = CGRect(x: 44, y: 20, width: 1032, height: pageContentHeight - 44)
         GameStyle.fill(panel, NSColor.black.withAlphaComponent(0.94))
         GameMenuFrame.draw(panel)
         if mode == .result, report?.run.qualifies == true, let context = NSGraphicsContext.current?.cgContext {
