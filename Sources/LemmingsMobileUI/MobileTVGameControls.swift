@@ -7,6 +7,14 @@ import UIKit
 import GameController
 
 extension MobileGameViewController {
+    /// Apply every button edge now. Draw once on the next display frame.
+    func processTVControllerButtonEvent(_ process: () -> Void) {
+        let wasPolling = pollingController
+        pollingController = true
+        defer { pollingController = wasPolling }
+        process()
+    }
+
     /// Gameplay owns controller buttons. Menus and the L3 picker use native focus.
     func updateTVInputRouting() {
         let usesUIKit = !overlay.isHidden || isChoosingToolDirection || !lifecycle.isForeground

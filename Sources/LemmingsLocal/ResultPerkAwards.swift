@@ -42,6 +42,8 @@ import NxlvKit
     }
 
     func perkIsRevealed(_ perk: EarnedPerk) -> Bool { !celebratesNewRewards || revealedStars >= perk.star }
+    var perkCardHeight: CGFloat { earnedPerks.count == 1 ? 78 : 108 }
+    var perkSectionHeight: CGFloat { 44 + perkCardHeight }
     var perkSectionY: CGFloat { 247 + resultSummaryOffset + (resultStatus == nil ? 0 : 38) }
 
     func drawEarnedPerks() {
@@ -50,20 +52,24 @@ import NxlvKit
         text(L10n.text("NEW PERKS"), 80, perkSectionY, 620, height: 22, palette: .green)
         link(L10n.text("Rewards earned (\(savedEarnedRewards.count)) >"),
              CGRect(x: 720, y: perkSectionY - 2, width: 320, height: 28), alignment: .right) { [weak self] in self?.showEarnedRewards() }
-        let frames = resultActionFrames(count: perks.count, y: perkSectionY + 32, height: 98)
+        let frames = resultActionFrames(count: perks.count, y: perkSectionY + 32, height: perkCardHeight)
         for (perk, frame) in zip(perks, frames) {
             let earned = perkIsRevealed(perk)
             let stamped = celebratesNewRewards && stampedStar == perk.star
             GameStoneButton.draw(frame, selected: earned, pixel: 1)
-            GameStyle.fill(frame.insetBy(dx: 4, dy: 4), earned ? GameStyle.gold.withAlphaComponent(0.09) : .black)
+            GameStyle.fill(frame.insetBy(dx: 4, dy: 4), .black)
+            if earned { GameStyle.fill(frame.insetBy(dx: 4, dy: 4), GameStyle.gold.withAlphaComponent(0.09)) }
             NSGraphicsContext.saveGraphicsState()
             NSGraphicsContext.current?.cgContext.setAlpha(earned ? 1 : 0.28)
-            drawPerkIcon(perk.kind, at: CGPoint(x: frame.minX + 16, y: frame.minY + 12))
-            let quantity = CGRect(x: frame.minX + 53, y: frame.minY + 10, width: 52, height: 28)
+            drawPerkIcon(perk.kind, at: CGPoint(x: frame.minX + 16, y: frame.minY + 10))
+            let quantity = CGRect(x: frame.minX + 62, y: frame.minY + 10, width: 72, height: 40)
             title("+\(perk.quantity)", x: quantity.minX, y: quantity.minY, width: quantity.width, height: quantity.height)
-            text(perk.name, frame.minX + 112, frame.minY + 16, frame.width - 124, height: 22, palette: .green)
-            text(perk.milestone, frame.minX + 16, frame.minY + 48, frame.width - 32, height: 22)
-            text(perk.criterion, frame.minX + 16, frame.minY + 71, frame.width - 32, height: 22, alpha: 0.8)
+            text(perk.name, frame.minX + 144, frame.minY + 22, frame.width - 156, height: 22, palette: .green)
+            let reasonX = perks.count == 1 ? frame.midX : frame.minX + 16
+            let reasonY = frame.minY + (perks.count == 1 ? 16 : 56)
+            let reasonWidth = frame.maxX - reasonX - 16
+            text(perk.milestone, reasonX, reasonY, reasonWidth, height: 22)
+            text(perk.criterion, reasonX, reasonY + 23, reasonWidth, height: 22, alpha: 0.8)
             NSGraphicsContext.restoreGraphicsState()
             if earned {
                 GameStyle.fill(CGRect(x: frame.minX + 8, y: frame.maxY - 5, width: frame.width - 16, height: 2), GameStyle.gold)
@@ -90,12 +96,12 @@ import NxlvKit
         }
         for (y, row) in rows.enumerated() {
             for (x, pixel) in row.enumerated() where pixel == "#" {
-                GameStyle.fill(CGRect(x: origin.x + CGFloat(x * 2), y: origin.y + CGFloat(y * 2), width: 2, height: 2), GameStyle.gold)
+                GameStyle.fill(CGRect(x: origin.x + CGFloat(x * 3), y: origin.y + CGFloat(y * 3), width: 3, height: 3), GameStyle.gold)
             }
         }
         if kind == .superzoom {
-            GameStyle.fill(CGRect(x: origin.x + 8, y: origin.y + 4, width: 2, height: 8), GameStyle.accent)
-            GameStyle.fill(CGRect(x: origin.x + 5, y: origin.y + 7, width: 8, height: 2), GameStyle.accent)
+            GameStyle.fill(CGRect(x: origin.x + 12, y: origin.y + 6, width: 3, height: 12), GameStyle.accent)
+            GameStyle.fill(CGRect(x: origin.x + 8, y: origin.y + 10, width: 12, height: 3), GameStyle.accent)
         }
     }
 }

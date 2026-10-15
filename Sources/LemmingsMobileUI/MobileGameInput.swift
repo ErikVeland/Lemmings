@@ -74,6 +74,7 @@ extension MobileGameViewController {
         adapter.onForcedPause = { [weak self] in self?.pauseForPlanning() }
         adapter.onRewindHeld = { [weak self] in self?.setRewindHeld($0) }
         #if os(tvOS)
+        adapter.onControllerButtonEvent = { [weak self] process in self?.processTVControllerButtonEvent(process) }
         adapter.onTimelinePark = { [weak self] in self?.pauseForPlanning() }
         #endif
         adapter.onMenuPause = { [weak self] in

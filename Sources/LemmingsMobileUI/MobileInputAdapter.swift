@@ -30,6 +30,7 @@ import UIKit
     var isMenu: () -> Bool = { false }
     var isActive: () -> Bool = { true }
     #if os(tvOS)
+    var onControllerButtonEvent: ((() -> Void) -> Void)?
     private lazy var tvInput = MobileTVControllerInput(adapter: self)
     #endif
     private var bindings = ControllerBindings()

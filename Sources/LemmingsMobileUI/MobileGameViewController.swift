@@ -170,6 +170,7 @@ typealias MobileGameOverlay = UIScrollView
     var pollingController = false
     private var controllerRenderPending = false
     private var controllerHUDPending = false
+    private var controllerCheckpointPending = false
     private var lastCheckpointTick = -1
     private var endRunArmedUntil = 0.0
     var isChoosingToolDirection: Bool { pendingL3Use != nil }
@@ -533,11 +534,7 @@ typealias MobileGameOverlay = UIScrollView
             pollingController = false
             playfieldView.deferFrameUpdates = false
             #endif
-            let candidates = controllerRenderPending ? renderCurrentFrame(force: true) : nil
-            if controllerHUDPending {
-                controllerHUDPending = false
-                updateHUD(candidates: candidates)
-            }
+            flushControllerFrameUpdates()
             MobileDevicePerformance.recordCPU(ProcessInfo.processInfo.systemUptime - frameStarted, source: "frame")
             framePacing.observe(at: link.timestamp, cpuSeconds: MobileDevicePerformance.cpuFrameCost,
                 gpuSeconds: MobileDevicePerformance.gpuFrameCost,
@@ -667,6 +664,9 @@ typealias MobileGameOverlay = UIScrollView
             }
             highlightedTarget = previewPoint.flatMap(target)
             saveCheckpoint(reason: .periodic)
+            #if os(tvOS)
+            renderCurrentFrame(force: true)
+            #endif
         case .pause:
             if speed > 1 || inputSpeed.isHeld {
                 inputSpeed.reset(at: ProcessInfo.processInfo.systemUptime)
@@ -1359,6 +1359,10 @@ typealias MobileGameOverlay = UIScrollView
 
     private func saveCheckpoint(reason: MobileCheckpointReason) {
         guard !session.isReadOnly, !session.snapshot.isComplete else { return }
+        #if os(tvOS)
+        if reason == .periodic, pollingController { controllerCheckpointPending = true; return }
+        #endif
+        controllerCheckpointPending = false
         if reason == .periodic, checkpointSaveTask != nil { return }
         do {
             let encoding = try makeCheckpoint()
@@ -1550,6 +1554,18 @@ typealias MobileGameOverlay = UIScrollView
         renderCurrentFrame(force: true)
         updateHUD()
         view.setNeedsLayout()
+    }
+
+    func flushControllerFrameUpdates() {
+        let candidates = controllerRenderPending ? renderCurrentFrame(force: true) : nil
+        if controllerHUDPending {
+            controllerHUDPending = false
+            updateHUD(candidates: candidates)
+        }
+        if controllerCheckpointPending {
+            controllerCheckpointPending = false
+            saveCheckpoint(reason: .periodic)
+        }
     }
 
     func updateHUD(layout: MobileHUDLayout? = nil, snapshot: MobileGameSnapshot? = nil, candidates: [MobileTargetCandidate]? = nil) {

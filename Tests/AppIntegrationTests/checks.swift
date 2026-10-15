@@ -7741,6 +7741,7 @@ Task { @MainActor in
     try subject.testNeoRunRecovery()
     print("NeoLemmix recovery integration tests passed.")
     #elseif EARNED_REWARD_TESTS
+    try testPerkEarningStars()
     try await testEarnedRewardPresentation()
     try await subject.testResultNavigation()
     try await subject.testLevelSkipResult()
@@ -9472,6 +9473,46 @@ extension AppDelegate {
     let lastReason = elements.filter { entry in view.savedEarnedRewards.contains { $0.reason == entry.accessibilityLabel() } }.map { logical($0.localFrame).maxY }.max()!
     try check(footerY - lastReason <= 78, "Reward actions are detached from their content")
   }
+}
+
+@MainActor private func testPerkEarningStars() throws {
+  let previous = ArcadeStore.shared
+  let directory = FileManager.default.temporaryDirectory.appendingPathComponent("perk-stars-\(UUID())")
+  let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 900, height: 620), styleMask: [], backing: .buffered, defer: false)
+  defer { GameScreen.shared.dismissAll(); ArcadeStore.shared = previous; try? FileManager.default.removeItem(at: directory) }
+  for (before, earningStar) in [(1, 2), (2, 1)] {
+    let store = ArcadeStore(file: directory.appendingPathComponent("\(before).json"), bundledProofs: nil)
+    ArcadeStore.shared = store
+    let owner = store.records.activeProfileID
+    func level(_ number: Int) -> ArcadeLevel {
+      let conditions = TrolleyConditions(gameID: "lemmings", packID: "perk-stars", levelID: "\(number)", levelFingerprint: "\(number)", rulesetVersion: "test", physicsMode: "test", population: 3, rescueRequirement: 1, startingSkills: [:], timeLimitSeconds: 60)
+      return .init(id: "\(number)", title: "Star-linked Zoom", game: "lemmings", rules: "test", total: 3, required: 1, conditions: conditions)
+    }
+    for number in 0..<2 {
+      try store.acceptMaximum(.init(value: 3, status: .verified, source: "Perk test", date: Date(), buildVersion: "test"), conditions: level(number).conditions!, assisted: false)
+    }
+    _ = store.record(.init(profileID: owner, level: level(0), saved: before, didWin: true, skills: [:], seconds: 10, telemetry: .init(released: 3)))!
+    let report = store.record(.init(profileID: owner, level: level(1), saved: 3, didWin: true, skills: [:], seconds: 10, telemetry: .init(released: 3)))!
+    ArcadeWindow.shared.showResult(report, owner: host, retry: {}, next: {}, replay: { _ in })
+    let view = ArcadeWindow.shared.arcadeView
+    view.finishCelebration()
+    try check(view.celebration?.careerBefore.stars == before && view.earnedPerks.count == 1, "Perk threshold fixture is invalid")
+    let zoom = view.earnedPerks[0]
+    try check(zoom.kind == .zoom && zoom.star == earningStar, "Zoom did not attach to the exact earning star")
+    for star in 0...3 {
+      view.revealedStars = star
+      try check(view.perkIsRevealed(zoom) == (star >= earningStar), "Zoom appeared on the wrong star")
+    }
+    view.finishCelebration(); host.contentView?.layoutSubtreeIfNeeded()
+    let image = ReplayFrameCapture.image(size: view.bounds.size) { ReplayFrameCapture.draw(view, in: view.bounds) }!
+    let folder = URL(fileURLWithPath: ".build/earned-reward-renders")
+    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent("single-perk-star-\(earningStar).png"))
+    try checkCompactResultActions(view)
+    let perk = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.first { $0.accessibilityRole() == .button && $0.accessibilityLabel() == "+1 ZOOM" }!
+    try check(view.bounds.contains(perk.localFrame) && perk.accessibilityPerformPress() && view.mode == .earnedRewards, "Single perk card lost its details target")
+  }
+  print("PASS Zoom reveals on the exact first or second earning star; single-perk result and details target")
 }
 
 @MainActor private func testEarnedRewardPresentation() async throws {

@@ -509,19 +509,29 @@ bounds in agreement when the panel height changes. Anchor the action row at the
 same bottom position across result, reward and achievement pages. Short panels
 shrink above the actions, so pagination does not move the navigation targets.
 
-Earned rewards need an explicit award moment. Mac results automatically open a
-bitmap Rewards earned page for each newly saved award-bearing attempt. Show the
-attempt owner, each award's name and its earning reason. Zooms, Superzooms and
-Level Skips include the actual career counter change and the applicable threshold.
-Level awards state the achieved rescue or skill use. Career awards show their
-criteria. Paginate measured cards without clipping or automatic dismissal.
+Earned perks belong to the Mac result's star celebration. Open the result first.
+Place a complete row of pixel-art perk cards directly below the stars. Each card
+shows the new quantity, the perk name, the career counter change and the threshold.
+Use a magnifier for Zoom, a plus magnifier for Superzoom and a skip arrow with an
+end bar for Level Skip. Pending cards use a dim outline. The earning star fills
+the icon and gold reward edge. Retain the awarded cards after the animation.
+Do not animate balances or grant credit from presentation code.
 
-View result and Escape return to the result without retrying, advancing a level
-or passing the Hot Seat turn. Keep gameplay shortcuts inactive on the reward
-page. The result retains a Rewards earned action to reopen all reasons. Announce
-each saved attempt automatically only once per app session. Repeated clears and
-unsaved previews do not open an earned-reward page. Reduced motion uses the same static
-page. Normal star chimes start when the player reaches the result.
+Reveal Zoom when a newly improved star crosses the next career-star threshold.
+Reveal Superzoom and Level Skip with the third star that crosses the distinct
+three-star-level threshold. Keep the attempt owner visible in Hot Seat. Animate
+new perks only on the first presentation of a saved attempt. Reopening an old
+result keeps its perk cards filled. Reduced motion and cancelled animations show
+the final state immediately. No resource card appears for a preview, an assisted
+run or a repeat that earned no new credit.
+
+The Rewards earned action and each perk card open the full award details.
+Show the attempt owner, every award name and its earning reason. Level awards
+state the achieved rescue or skill use. Career awards show their criteria.
+Paginate measured cards without clipping or automatic dismissal. Returning to
+the result does not replay the celebration, retry, advance or pass a Hot Seat turn.
+Keep gameplay shortcuts inactive on the detail page. The normal star chimes run
+with the initial result. Keep one primary next action and stable navigation.
 
 Muted offscreen checks also verify complete action rows, disabled Skip targets,
 short and multi-page awards, single-action details, long result titles and compact

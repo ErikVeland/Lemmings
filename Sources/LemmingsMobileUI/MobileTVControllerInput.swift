@@ -97,7 +97,9 @@ import UIKit
         guard let owner else { return }
         buttonEvents.observe(owner) { [weak self, weak owner] state in
             guard let self, let owner, self.owner === owner else { return }
-            self.poll(at: ProcessInfo.processInfo.systemUptime, buttonState: state)
+            let process = { self.poll(at: ProcessInfo.processInfo.systemUptime, buttonState: state) }
+            if let processEvent = self.adapter?.onControllerButtonEvent { processEvent(process) }
+            else { process() }
         }
         remotePausePressed = owner.microGamepad?.buttonX.isPressed == true
         menuPressed = owner.extendedGamepad?.buttonMenu.isPressed == true
