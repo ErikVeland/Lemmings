@@ -1,0 +1,20 @@
+PASS all local checks, CI and accepted Apple tickets
+PASS accepted Apple tickets and final archive hashes recorded
+==> Creating GitHub release v2.0.1
+https://github.com/ErikVeland/Lemmings/releases/tag/v2.0.1
+==> Publishing appcast.xml to the main branch
+{"content":{"name":"appcast.xml","path":"appcast.xml","sha":"017d268752726e67b342772d6b0d2b54bd908d5c","size":64021,"url":"https://api.github.com/repos/ErikVeland/Lemmings/contents/appcast.xml?ref=main","html_url":"https://github.com/ErikVeland/Lemmings/blob/main/appcast.xml","git_url":"https://api.github.com/repos/ErikVeland/Lemmings/git/blobs/017d268752726e67b342772d6b0d2b54bd908d5c","download_url":"https://raw.githubusercontent.com/ErikVeland/Lemmings/main/appcast.xml","type":"file","_links":{"self":"https://api.github.com/repos/ErikVeland/Lemmings/contents/appcast.xml?ref=main","git":"https://api.github.com/repos/ErikVeland/Lemmings/git/blobs/017d268752726e67b342772d6b0d2b54bd908d5c","html":"https://github.com/ErikVeland/Lemmings/blob/main/appcast.xml"}},"commit":{"sha":"7ad1c0eaf0da377f5495f817b2fcb026bc8b3f22","node_id":"C_kwDOUm6QmtoAKDdhZDFjMGVhZjBkYTM3N2Y1NDk1ZjgxN2IyZmNiMDI2YmM4YjNmMjI","url":"https://api.github.com/repos/ErikVeland/Lemmings/git/commits/7ad1c0eaf0da377f5495f817b2fcb026bc8b3f22","html_url":"https://github.com/ErikVeland/Lemmings/commit/7ad1c0eaf0da377f5495f817b2fcb026bc8b3f22","author":{"name":"Erik Veland","email":"erikveland@gmail.com","date":"2026-10-15T14:56:09Z"},"committer":{"name":"Erik Veland","email":"erikveland@gmail.com","date":"2026-10-15T14:56:09Z"},"tree":{"sha":"c30d9d9effe2440e9d582de933d102261e0ab6f1","url":"https://api.github.com/repos/ErikVeland/Lemmings/git/trees/c30d9d9effe2440e9d582de933d102261e0ab6f1"},"message":"Publish 2.0.1 update feed","parents":[{"sha":"fc52cac4bc27e9d196f3cdfa348ac36571426f94","url":"https://api.github.com/repos/ErikVeland/Lemmings/git/commits/fc52cac4bc27e9d196f3cdfa348ac36571426f94","html_url":"https://github.com/ErikVeland/Lemmings/commit/fc52cac4bc27e9d196f3cdfa348ac36571426f94"}],"verification":{"verified":false,"reason":"unsigned","signature":null,"payload":null,"verified_at":null}}}Published v2.0.1 and appcast.xml to ErikVeland/Lemmings
+PASS public release tag, both remote SHA256 digests/sizes/ZIP responses, and live main and raw Sparkle update feeds
+Successfully downloaded submission log
+  id: f6d534e6-cd4e-4186-8b67-a5d5f43135f4
+  location: /Users/veland/Lemmings/.build/release-2.0.1/standard-notary-log.json
+Successfully downloaded submission log
+  id: 6aea80f6-c1ec-406b-8cf3-c93ad9caad46
+  location: /Users/veland/Lemmings/.build/release-2.0.1/slim-notary-log.json
+Processing: /Users/veland/Downloads/UltimateLemmings-2.0.1-build84/Ultimate Lemmings.app
+The validate action worked!
+/Users/veland/Downloads/UltimateLemmings-2.0.1-build84/Ultimate Lemmings.app: accepted
+source=Notarized Developer ID
+origin=Developer ID Application: Erik Veland (54WU29TRTY)
+PASS final notarised app and both verified public archives in /Users/veland/Downloads/UltimateLemmings-2.0.1-build84
+PASS public Macintosh 2.0.1, live signed update feed, delta and Downloads

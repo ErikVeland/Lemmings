@@ -1,0 +1,344 @@
+{
+  "version": "2.0.1",
+  "build": 84,
+  "releaseSourceCommit": "cb1772afe76b97fac18e7c2460c2254006473f31",
+  "scope": "Fresh minor-release engine audit plus focused native UI and full L2 campaign checks. Hardware and complete-content closure remain open.",
+  "checks": [
+    {
+      "name": "shared-library",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/shared-library.log"
+    },
+    {
+      "name": "AudioMatrixTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/AudioMatrixTests.log"
+    },
+    {
+      "name": "ClassicGameFlowTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/ClassicGameFlowTests.log"
+    },
+    {
+      "name": "ClassicSoundCueTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/ClassicSoundCueTests.log"
+    },
+    {
+      "name": "ClassicSettingsTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/ClassicSettingsTests.log"
+    },
+    {
+      "name": "NxlvStyleResolverTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/NxlvStyleResolverTests.log"
+    },
+    {
+      "name": "NxlvRendererTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/NxlvRendererTests.log"
+    },
+    {
+      "name": "ClassicDOSRewindTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/ClassicDOSRewindTests.log"
+    },
+    {
+      "name": "NeoLemmixSimulationTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/NeoLemmixSimulationTests.log"
+    },
+    {
+      "name": "ClassicDOSReplayTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/ClassicDOSReplayTests.log"
+    },
+    {
+      "name": "ProTrackerTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/ProTrackerTests.log"
+    },
+    {
+      "name": "PercussionTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/PercussionTests.log"
+    },
+    {
+      "name": "AdaptiveDJDirectorTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/AdaptiveDJDirectorTests.log"
+    },
+    {
+      "name": "ClassicDOSSimulationRegressions",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/ClassicDOSSimulationRegressions.log"
+    },
+    {
+      "name": "Lemmings2IntroTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/Lemmings2IntroTests.log"
+    },
+    {
+      "name": "FLICTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/FLICTests.log"
+    },
+    {
+      "name": "Lemmings3SoundTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/Lemmings3SoundTests.log"
+    },
+    {
+      "name": "UnifiedGameTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/UnifiedGameTests.log"
+    },
+    {
+      "name": "PlatformProfileTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/PlatformProfileTests.log"
+    },
+    {
+      "name": "ClassicSagaTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/ClassicSagaTests.log"
+    },
+    {
+      "name": "AmigaSoundTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/AmigaSoundTests.log"
+    },
+    {
+      "name": "AmigaVersusTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/AmigaVersusTests.log"
+    },
+    {
+      "name": "PlatformExclusiveTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/PlatformExclusiveTests.log"
+    },
+    {
+      "name": "NeoLemmixEndToEnd",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/NeoLemmixEndToEnd.log"
+    },
+    {
+      "name": "BundledGameResourcesTests",
+      "status": "passed",
+      "log": "shipping-resources.log",
+      "rerun": true
+    },
+    {
+      "name": "ModernEngineTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/ModernEngineTests.log"
+    },
+    {
+      "name": "Lemmings3RuntimeTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/Lemmings3RuntimeTests.log"
+    },
+    {
+      "name": "PortableTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/PortableTests.log"
+    },
+    {
+      "name": "SequelDataTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/SequelDataTests.log"
+    },
+    {
+      "name": "Lemmings2RuntimeTests",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/Lemmings2RuntimeTests.log"
+    },
+    {
+      "name": "save-recovery",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/save-recovery.log"
+    },
+    {
+      "name": "run-recovery-files",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/run-recovery-files.log"
+    },
+    {
+      "name": "cross-build-recovery",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/cross-build-recovery.log"
+    },
+    {
+      "name": "fan-library",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/fan-library.log"
+    },
+    {
+      "name": "preserved-solution-manifests",
+      "status": "passed",
+      "log": "audit-final-logs/preserved-solution-manifests.log",
+      "rerun": true
+    },
+    {
+      "name": "audit-integrity",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/audit-integrity.log"
+    },
+    {
+      "name": "package-closure",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/package-closure.log"
+    },
+    {
+      "name": "automatic-updates",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/automatic-updates.log"
+    },
+    {
+      "name": "classic-panel-art",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/classic-panel-art.log"
+    },
+    {
+      "name": "fan-pruning",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/fan-pruning.log"
+    },
+    {
+      "name": "retained-rescue-targets",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/retained-rescue-targets.log"
+    },
+    {
+      "name": "hint-catalogue",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/hint-catalogue.log"
+    },
+    {
+      "name": "controller",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/controller.log"
+    },
+    {
+      "name": "variable-speed",
+      "status": "passed",
+      "log": "/Users/veland/Lemmings/.build/release-2.0.1/audit-initial/logs/variable-speed.log"
+    },
+    {
+      "name": "pointer-capture",
+      "status": "passed",
+      "log": "audit-final-logs/pointer-capture.log",
+      "rerun": true
+    },
+    {
+      "name": "dialog-cursor",
+      "status": "passed",
+      "log": "audit-final-logs/dialog-cursor.log",
+      "rerun": false
+    },
+    {
+      "name": "hdr-gpu",
+      "status": "passed",
+      "log": "audit-final-logs/hdr-gpu.log",
+      "rerun": false
+    },
+    {
+      "name": "rescue-certificates",
+      "status": "passed",
+      "log": "audit-final-logs/rescue-certificates.log",
+      "rerun": false
+    },
+    {
+      "name": "native-quick-controls",
+      "status": "passed",
+      "log": "native-logs/quick-controls.log"
+    },
+    {
+      "name": "native-rewards",
+      "status": "passed",
+      "log": "native-logs/rewards.log"
+    },
+    {
+      "name": "native-level-skips",
+      "status": "passed",
+      "log": "native-logs/level-skips.log"
+    },
+    {
+      "name": "native-learning",
+      "status": "passed",
+      "log": "native-logs/learning.log"
+    },
+    {
+      "name": "native-solution-switch",
+      "status": "passed",
+      "log": "native-logs/solution-switch.log"
+    },
+    {
+      "name": "native-release-notes",
+      "status": "passed",
+      "log": "release-notes-rerun.log"
+    },
+    {
+      "name": "native-home-backdrop",
+      "status": "passed",
+      "log": "native-logs/home-backdrop.log"
+    },
+    {
+      "name": "native-hot-seat",
+      "status": "passed",
+      "log": "hot-seat-rerun.log"
+    },
+    {
+      "name": "native-core",
+      "status": "passed",
+      "log": "native-logs/core.log"
+    },
+    {
+      "name": "L2-full-campaign",
+      "status": "passed",
+      "log": "l2-completion-verified.log"
+    },
+    {
+      "name": "journey-curation",
+      "status": "passed",
+      "log": "journey-curation.log"
+    },
+    {
+      "name": "release-tooling",
+      "status": "passed",
+      "log": "release-tooling.log"
+    }
+  ],
+  "allRecordedChecksPassed": true,
+  "rawFailuresRetained": true,
+  "repairs": [
+    "NeoLemmix parent index omitted six existing Xmas levels; packaging now links the group and checks all 794 native-indexed levels.",
+    "Cavelem improved witness retained separately; continuous verified route restored.",
+    "Disk exhaustion interrupted pointer-capture and Intel build; obsolete cache and an independently hash-verified duplicate music snapshot removed, unfinished work rerun.",
+    "Release-note fixture capture folder created and Hot Seat fixture builds Home before its window-dependent checks."
+  ],
+  "proofs": 294,
+  "rescueRecords": 315,
+  "freshWitnessReplay": {
+    "classicWinningIdentities": 352,
+    "chroniclesStandaloneWins": 86,
+    "chroniclesKnownStandaloneGaps": 4
+  },
+  "automation": {
+    "windows": "offscreen",
+    "audio": "muted"
+  },
+  "visualInspection": [
+    "gameplay-quick-controls/lemmings3-visible-1600.png",
+    "earned-reward-renders/lemmings3-0-640-page-0.png",
+    "release-notes-layout/900-top.png"
+  ],
+  "notClaimed": [
+    "Full bundled winning-route closure",
+    "Physical Intel and minimum-OS acceptance",
+    "Foreground app launch, physical controllers, VoiceOver, audible audio, HDR hardware appearance, live cross-device sync",
+    "Fresh broad sustained-performance measurements and unchanged replay-movie/arcade-view suites"
+  ]
+}

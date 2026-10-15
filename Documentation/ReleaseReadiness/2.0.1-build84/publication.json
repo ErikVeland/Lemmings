@@ -1,0 +1,49 @@
+{
+  "version": "2.0.1",
+  "build": 84,
+  "sourceCommit": "cb1772afe76b97fac18e7c2460c2254006473f31",
+  "universal": true,
+  "developerIDSigning": true,
+  "notarised": true,
+  "notaries": {
+    "standard": {
+      "status": "Accepted",
+      "id": "f6d534e6-cd4e-4186-8b67-a5d5f43135f4",
+      "message": "Processing complete"
+    },
+    "slim": {
+      "status": "Accepted",
+      "id": "6aea80f6-c1ec-406b-8cf3-c93ad9caad46",
+      "message": "Processing complete"
+    }
+  },
+  "assets": [
+    {
+      "name": "UltimateLemmings-2.0.1-build84.zip",
+      "path": "/Users/veland/Lemmings/.build/release-2.0.1/updates/UltimateLemmings-2.0.1-build84.zip",
+      "size": 2053899553,
+      "sha256": "62d66c10ed91dc7e69ea8f04bbf2c76526f57a98bbdeea82e0eb7dfd0c1530fc",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.0.1/UltimateLemmings-2.0.1-build84.zip",
+      "remoteDigestVerified": true,
+      "zipResponseVerified": true
+    },
+    {
+      "name": "UltimateLemmings-2.0.1-build84-slim.zip",
+      "path": "/Users/veland/Lemmings/.build/release-2.0.1/downloads/UltimateLemmings-2.0.1-build84-slim.zip",
+      "size": 269843471,
+      "sha256": "8aeb2ef572db6251188bb758b88dda58cefe2c0cccb4812d808badbcd52c14a4",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.0.1/UltimateLemmings-2.0.1-build84-slim.zip",
+      "remoteDigestVerified": true,
+      "zipResponseVerified": true
+    }
+  ],
+  "authorisation": "Owner requested building and releasing Macintosh 2.0.1 with the latest changes. Existing classifications and limits are retained. Publication follows fresh candidate and package validation.",
+  "deltaRemoteDigestVerified": true,
+  "releaseNotesVerified": true,
+  "rawFeedVerified": true,
+  "rawFeedURL": "https://raw.githubusercontent.com/ErikVeland/Lemmings/main/appcast.xml",
+  "releaseURL": "https://github.com/ErikVeland/Lemmings/releases/tag/v2.0.1",
+  "publishedAt": "2026-10-15T14:56:07Z",
+  "remoteTagVerified": true,
+  "mainFeedVerified": true
+}

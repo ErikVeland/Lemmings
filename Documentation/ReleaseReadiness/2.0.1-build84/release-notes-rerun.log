@@ -1,0 +1,4 @@
+UI test windows: offscreen; audio: muted
+PASS Tribes Complete and Chronicles Beta in the bundled catalogue, library, home and window
+PASS release notes stay clipped and scrollable at three sizes; Continue remains visible and usable
+PASS 2.0.1 native scope: release-notes

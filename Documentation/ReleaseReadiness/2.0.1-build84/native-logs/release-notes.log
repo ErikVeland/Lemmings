@@ -1,0 +1,2 @@
+UI test windows: offscreen; audio: muted
+FAIL Error Domain=NSCocoaErrorDomain Code=4 "The file “home-status.png” doesn’t exist." UserInfo={NSFilePath=/Users/veland/Lemmings/.build/release-2.0.1/source/.build/release-1.9/home-status.png, NSURL=.build/release-1.9/home-status.png -- file:///Users/veland/Lemmings/.build/release-2.0.1/source/, NSUnderlyingError=0x7c55c08000 {Error Domain=NSPOSIXErrorDomain Code=2 "No such file or directory"}}

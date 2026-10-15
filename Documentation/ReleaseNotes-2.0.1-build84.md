@@ -1,6 +1,7 @@
 # Ultimate Lemmings 2.0.1 for Macintosh
 
 Build: 84
+Release commit: cb1772afe76b97fac18e7c2460c2254006473f31
 Release base: v2.0
 
 This maintenance release includes the latest Macintosh controls, learning journey, reward presentation and compatibility fixes since 2.0.

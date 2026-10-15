@@ -1,0 +1,9 @@
+{
+  "levels": 794,
+  "dmaStyleLevels": 719,
+  "styles": 26,
+  "method": "Recomputed manifest with current section parser against unchanged pinned bundled level/style/sound payload. No additional community styles included.",
+  "nativeIndexedLevels": 794,
+  "parentGroupRepair": "The pinned parent Original_Lemmings index did not reference the existing XmasLemmings group. Packaging adds that group, exposing all six existing 1991/1992 levels.",
+  "nativeShippingCheck": "shipping-resources.log"
+}

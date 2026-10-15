@@ -3,6 +3,29 @@
     <channel>
         <title>Ultimate Lemmings</title>
         <item>
+            <title>2.0.1</title>
+            <pubDate>Fri, 16 Oct 2026 00:40:12 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>84</sparkle:version>
+            <sparkle:shortVersionString>2.0.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><p>This maintenance release includes the latest Macintosh controls, learning journey, reward presentation and compatibility fixes since 2.0.</p>
+<h3>Learning journey</h3>
+<p>The revised teaching order prepares skills before harder puzzles and moves reported difficulty walls later. Placement now accounts for rescue requirements, skill reserves, release rate, hatch count and coordination. Existing journeys update unvisited lessons while preserving visited levels, completed records, run identity and player or Hot Seat ownership. Difficulty remains an editorial estimate that needs human playtesting.</p>
+<h3>Controls and results</h3>
+<ul><li>Pause, speed reset and frame stepping follow the selected control settings across Classic, The Tribes and Chronicles.</li><li>Gameplay quick controls and the solution selector handle pointer changes consistently, including flat and CRT views.</li><li>The Classic ghost solution selector uses the system pointer across its buttons, checkbox and gaps. Leaving the selector restores the gameplay cursor.</li><li>Results group newly earned Zooms, Superzooms and Level Skips. Rewards earned explains each award and can reopen without advancing the level or changing the attempt owner.</li><li>Failed Learning journey levels support earned skips under the shared campaign rules. Hot Seat retains explicit paused handovers.</li><li>Sequel targeting checks eligibility without copying the whole runtime. The Tribes includes an updated Cavelem carry-over route fixture.</li><li>Localisation resources and bundled NeoLemmix inventory checks include the latest corrections.</li></ul>
+<h3>Compatibility and known limits</h3>
+<p>The universal app supports Apple silicon and Intel Macs running macOS 12.3 or later. The slim download contains essential music and offers optional soundtrack libraries. Automatic updates retain the full soundtrack. This release is Macintosh only.</p>
+<p>Classic and The Tribes retain their published Complete classifications. Chronicles and NeoLemmix remain Beta. The stricter bundled-content closure remains open. The retained fan audit records 2,399 winning routes and 3,621 levels without verified wins. Seventy-five bundled NeoLemmix levels still need community styles, and exact-version winning evidence covers 158 levels. L3 standalone and carried-route gaps, the L2 golden-talisman ending, source-engine fidelity and media checks remain open.</p>
+<p>Human language review, complete translated-screen validation, physical controllers, VoiceOver journeys, audible listening, minimum-OS and Intel hardware, HDR appearance and live cross-device synchronisation retain their validation gaps. Automated native checks run offscreen with muted audio.</p>
+<p class="meta">Build: 84<br>Release commit: cb1772afe76b97fac18e7c2460c2254006473f31<br>Release base: v2.0</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.1/UltimateLemmings-2.0.1-build84.zip" length="2053899553" type="application/octet-stream" sparkle:edSignature="0f0iQm2w09fJdbVHcIw/3KJmZKLhFTnfvMirGDUgwI4BekbUu9lzli8sJVMkLw+q0Oc9w9hShU3bRPmOeo19Cg=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.1/UltimateLemmings-build84-from83.delta" sparkle:deltaFrom="83" length="2514406" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="7KmBktKDnfnmfFKI8WBp9VdMusDA1ZqUQm5nqV7TKKn0dXEFpw/psWoUjsr4YsjQXYT1b2mC2AluMEBoDxWcBw=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>2.0</title>
             <pubDate>Thu, 15 Oct 2026 15:03:37 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>

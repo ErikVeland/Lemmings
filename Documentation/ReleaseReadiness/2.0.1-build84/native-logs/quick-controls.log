@@ -1,0 +1,5 @@
+UI test windows: offscreen; audio: muted
+PASS classic Settings/graphics buttons, F2/Command-comma, renders, targets, fade/hover/focus, unavailable/text/menu/ownership guards
+PASS lemmings2 Settings/graphics buttons, F2/Command-comma, renders, targets, fade/hover/focus, unavailable/text/menu/ownership guards
+PASS lemmings3 Settings/graphics buttons, F2/Command-comma, renders, targets, fade/hover/focus, unavailable/text/menu/ownership guards
+PASS 2.0.1 native scope: quick-controls

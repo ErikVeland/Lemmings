@@ -1,0 +1,71 @@
+{
+  "version": "2.0.1",
+  "build": 84,
+  "sourceCommit": "cb1772afe76b97fac18e7c2460c2254006473f31",
+  "minimumOS": "12.3",
+  "universal": true,
+  "binaryInputs": {
+    "Contents/MacOS/LemmingsLocal": {
+      "sha256": "e304c3bb3758307453004da21bb98612d9e2df8cc343ae95ccbeda13b901fc6a",
+      "architectures": [
+        "x86_64",
+        "arm64"
+      ]
+    },
+    "Contents/Frameworks/libLemmingsGameArt.dylib": {
+      "sha256": "8c4c1c93045e9febedc29f1774bbbae2375534fe8daef24bf0a0ebf1f582c31e",
+      "architectures": [
+        "x86_64",
+        "arm64"
+      ]
+    },
+    "Contents/Frameworks/libLemmingsTVCore.dylib": {
+      "sha256": "26d8446e3b235bfe862edfbf8976b7476f0fffbb2fe3dd05f728bc295de1ddc0",
+      "architectures": [
+        "x86_64",
+        "arm64"
+      ]
+    },
+    "Contents/Frameworks/libLemmingsAudio.dylib": {
+      "sha256": "bab91886739f43fe976486c3171e483b7c64ad67dc8143d9003ed07a958b4987",
+      "architectures": [
+        "x86_64",
+        "arm64"
+      ]
+    },
+    "Contents/Frameworks/libLemmingsMobileCore.dylib": {
+      "sha256": "029af4ee73a60dacff739b91139471ec35bf677b6caa52c8a142b665211209b2",
+      "architectures": [
+        "x86_64",
+        "arm64"
+      ]
+    },
+    "Contents/Frameworks/libLemmingsAppCore.dylib": {
+      "sha256": "62b40c144569e22166e9965ad91f1b6660afce34e390e37b2e3de29c6822a049",
+      "architectures": [
+        "x86_64",
+        "arm64"
+      ]
+    },
+    "Contents/Frameworks/libNxlvKit.dylib": {
+      "sha256": "692d9bd5be6b55d49439320ea4735da28bd6a67432412ea11c4120ccc21502b4",
+      "architectures": [
+        "x86_64",
+        "arm64"
+      ]
+    }
+  },
+  "currentProofsHintsAndJourney": true,
+  "neoLemmix": {
+    "physicalLevels": 794,
+    "nativeIndexedLevels": 794,
+    "readyLevels": 719,
+    "missingStyleLevels": 75,
+    "packagingRepair": "Add the omitted parent Xmas subgroup index so the existing six Xmas 1991/1992 files are reachable."
+  },
+  "soundtrackPreserved": {
+    "MusicFiles": 649,
+    "MacMusicFiles": 32
+  },
+  "compiledAndTestedSourceCommit": "ca53335499ea80af8ed1b47eef4194a13009e961"
+}

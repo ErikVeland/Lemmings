@@ -1,0 +1,4 @@
+UI test windows: offscreen; audio: muted
+Ghost render: different=true, liveTick=120, ghostTick=120, title=nil, hidden=false, active=3, image=true
+PASS ghost toggle, sprite overlay, rewind, retained study cursor, Hot Seat readiness; retained solution ticks, camera, paused switches, move navigation, controller return, ownership, records and native targets
+PASS 2.0.1 native scope: solution-switch
